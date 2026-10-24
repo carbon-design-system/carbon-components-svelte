@@ -3,13 +3,13 @@
     Button,
     ButtonSet,
     Column,
-    DevToolbar,
     Grid,
     Row,
     Stack,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { DevToolbar } from "carbon-components-svelte/devtools";
 
   const none = {
     grid: false,

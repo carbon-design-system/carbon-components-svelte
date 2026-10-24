@@ -4,7 +4,6 @@
     Column,
     Content,
     Grid,
-    GridOverlay,
     Header,
     HeaderNav,
     HeaderNavItem,
@@ -14,6 +13,7 @@
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 </script>
 
 <Header companyName="IBM" platformName="Cloud">

@@ -3,11 +3,11 @@
     Column,
     Grid,
     Heading,
-    LayoutInspector,
     Row,
     Stack,
     Text,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 </script>
 
 <Grid padding>

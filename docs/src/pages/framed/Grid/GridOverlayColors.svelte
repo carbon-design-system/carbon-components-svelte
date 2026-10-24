@@ -3,11 +3,11 @@
     Box,
     Column,
     Grid,
-    GridOverlay,
     Layer,
     Row,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 </script>
 
 <Box fill="brand" minHeight="viewport">

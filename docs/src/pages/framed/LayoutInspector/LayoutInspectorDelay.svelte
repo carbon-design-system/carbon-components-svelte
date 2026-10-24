@@ -2,13 +2,13 @@
   import {
     Column,
     Grid,
-    LayoutInspector,
     Row,
     Slider,
     Stack,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   let enterDelayMs = 150;
   let leaveDelayMs = 100;

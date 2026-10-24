@@ -4,13 +4,13 @@
     Button,
     Column,
     Grid,
-    GridOverlay,
     Heading,
     Row,
     Stack,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let open = true;
 </script>

@@ -5,7 +5,6 @@
     Checkbox,
     Column,
     Grid,
-    LayoutInspector,
     Link,
     RadioButton,
     RadioButtonGroup,
@@ -13,6 +12,7 @@
     Stack,
     Text,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 

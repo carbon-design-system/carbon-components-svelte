@@ -3,7 +3,6 @@
     Button,
     Column,
     Grid,
-    GridOverlay,
     Heading,
     Row,
     Select,
@@ -14,6 +13,7 @@
     TextInput,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let baseline = 8;
 </script>

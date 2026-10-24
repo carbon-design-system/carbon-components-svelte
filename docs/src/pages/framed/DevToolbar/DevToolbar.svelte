@@ -2,7 +2,6 @@
   import {
     Button,
     Column,
-    DevToolbar,
     Grid,
     Heading,
     Row,
@@ -12,6 +11,7 @@
     TextInput,
     Tile,
   } from "carbon-components-svelte";
+  import { DevToolbar } from "carbon-components-svelte/devtools";
 </script>
 
 <Grid padding>

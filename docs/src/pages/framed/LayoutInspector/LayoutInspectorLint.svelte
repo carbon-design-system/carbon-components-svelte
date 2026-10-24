@@ -1,12 +1,6 @@
 <script>
-  import {
-    Button,
-    Column,
-    Grid,
-    LayoutInspector,
-    Row,
-    Toggle,
-  } from "carbon-components-svelte";
+  import { Button, Column, Grid, Row, Toggle } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   let includeCarbon = false;
 </script>

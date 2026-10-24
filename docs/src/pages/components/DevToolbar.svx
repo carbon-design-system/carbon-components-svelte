@@ -5,17 +5,33 @@ description: A floating toolbar that turns the development aids on and off, with
 
 `DevToolbar` puts every development aid behind one switch each: the grid, baseline rows, text baselines, the layout inspector, the spacing, contrast, target-size, and overflow checks, and a right-to-left flip. Add it once, in development only, and leave it in the app.
 
+
+It renders a [`GridOverlay`](/components/Grid#gridoverlay) and a [`LayoutInspector`](/components/LayoutInspector) for you, so you do not wire up either one.
+
+## Install
+
+The dev tools ship from their own entry, `carbon-components-svelte/devtools`, with their own stylesheet, so the main entry and the theme stylesheets carry none of their code. Load `devtools.css` with `all.css`, or the matching `devtools-<theme>.css` with a single-theme stylesheet, such as `devtools-g100.css` with `g100.css`.
+
+Import both behind `import.meta.env.DEV`. The bundler then drops them from a production build entirely, script and styles:
+
 ```svelte
 <script>
-  import { DevToolbar } from "carbon-components-svelte";
+  const devtools = import.meta.env.DEV
+    ? Promise.all([
+        import("carbon-components-svelte/devtools"),
+        import("carbon-components-svelte/css/devtools.css"),
+      ]).then(([module]) => module)
+    : null;
 </script>
 
-{#if import.meta.env.DEV}
-  <DevToolbar />
+{#if devtools}
+  {#await devtools then { DevToolbar }}
+    <DevToolbar />
+  {/await}
 {/if}
 ```
 
-It renders a [`GridOverlay`](/components/Grid#gridoverlay) and a [`LayoutInspector`](/components/LayoutInspector) for you, so you do not wire up either one.
+A static `import { DevToolbar } from "carbon-components-svelte/devtools"` works too, for example in a dev-only route, but it ships in whatever bundle imports it.
 
 ## Basic
 

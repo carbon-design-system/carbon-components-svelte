@@ -4,13 +4,13 @@
     Column,
     ContentSwitcher,
     Grid,
-    GridOverlay,
     Row,
     Stack,
     Switch,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   const anchors = ["page", "viewport"];
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import GridOverlay from "carbon-components-svelte/Grid/GridOverlay.svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   export let open = false;
   export let condensed = false;

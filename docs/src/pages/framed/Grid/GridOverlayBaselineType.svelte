@@ -3,7 +3,6 @@
     Box,
     Column,
     Grid,
-    GridOverlay,
     Heading,
     RadioButton,
     RadioButtonGroup,
@@ -11,6 +10,7 @@
     Stack,
     Text,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let baseline = 4;
 

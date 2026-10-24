@@ -3,12 +3,12 @@
     Box,
     Column,
     Grid,
-    LayoutInspector,
     RadioButton,
     RadioButtonGroup,
     Row,
     Text,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   let measureKey = "Alt";
 </script>

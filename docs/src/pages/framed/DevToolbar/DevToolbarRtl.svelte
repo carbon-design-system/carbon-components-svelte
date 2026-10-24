@@ -2,12 +2,12 @@
   import {
     Box,
     Column,
-    DevToolbar,
     Grid,
     Row,
     Stack,
     Text,
   } from "carbon-components-svelte";
+  import { DevToolbar } from "carbon-components-svelte/devtools";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 

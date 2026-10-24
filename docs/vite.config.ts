@@ -35,6 +35,10 @@ export default defineConfig({
     // needs its own entry. Array form: the first match wins.
     alias: [
       {
+        find: /^carbon-components-svelte\/devtools$/,
+        replacement: path.join(carbonRoot, "src/devtools/index.js"),
+      },
+      {
         find: /^carbon-components-svelte\/syntax$/,
         replacement: path.join(carbonRoot, "src/syntax/index.js"),
       },

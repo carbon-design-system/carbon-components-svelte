@@ -1,12 +1,6 @@
 <script>
-  import {
-    Box,
-    Column,
-    Grid,
-    GridOverlay,
-    Row,
-    Tile,
-  } from "carbon-components-svelte";
+  import { Box, Column, Grid, Row, Tile } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 </script>
 
 <Box marginTop={6}>

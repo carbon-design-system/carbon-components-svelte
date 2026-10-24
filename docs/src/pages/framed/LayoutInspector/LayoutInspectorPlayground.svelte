@@ -4,7 +4,6 @@
     Checkbox,
     Column,
     Grid,
-    LayoutInspector,
     NumberInput,
     Row,
     Stack,
@@ -13,6 +12,7 @@
     TextInput,
     Tile,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   let open = true;
   let spacing = true;

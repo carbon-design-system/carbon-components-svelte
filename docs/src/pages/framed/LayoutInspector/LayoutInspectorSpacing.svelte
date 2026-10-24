@@ -1,12 +1,6 @@
 <script>
-  import {
-    Box,
-    Column,
-    Grid,
-    LayoutInspector,
-    Row,
-    Text,
-  } from "carbon-components-svelte";
+  import { Box, Column, Grid, Row, Text } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 </script>
 
 <Grid padding>

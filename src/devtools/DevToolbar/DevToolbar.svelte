@@ -57,24 +57,24 @@
   export let inspectorProps = {};
 
   import { onMount } from "svelte";
-  import BadgeIndicator from "../BadgeIndicator/BadgeIndicator.svelte";
-  import Button from "../Button/Button.svelte";
-  import GridOverlay from "../Grid/GridOverlay.svelte";
-  import Close from "../icons/Close.svelte";
-  import Contrast from "../icons/Contrast.svelte";
-  import FitToWidth from "../icons/FitToWidth.svelte";
-  import GridIcon from "../icons/GridIcon.svelte";
-  import Inspection from "../icons/Inspection.svelte";
-  import Ruler from "../icons/Ruler.svelte";
-  import TextAlignRight from "../icons/TextAlignRight.svelte";
-  import TextLineSpacing from "../icons/TextLineSpacing.svelte";
-  import TextVerticalAlignment from "../icons/TextVerticalAlignment.svelte";
-  import Tools from "../icons/Tools.svelte";
-  import TouchInteraction from "../icons/TouchInteraction.svelte";
+  import BadgeIndicator from "../../BadgeIndicator/BadgeIndicator.svelte";
+  import Button from "../../Button/Button.svelte";
+  import Close from "../../icons/Close.svelte";
+  import Contrast from "../../icons/Contrast.svelte";
+  import FitToWidth from "../../icons/FitToWidth.svelte";
+  import GridIcon from "../../icons/GridIcon.svelte";
+  import Inspection from "../../icons/Inspection.svelte";
+  import Ruler from "../../icons/Ruler.svelte";
+  import TextAlignRight from "../../icons/TextAlignRight.svelte";
+  import TextLineSpacing from "../../icons/TextLineSpacing.svelte";
+  import TextVerticalAlignment from "../../icons/TextVerticalAlignment.svelte";
+  import Tools from "../../icons/Tools.svelte";
+  import TouchInteraction from "../../icons/TouchInteraction.svelte";
+  import ToggleButton from "../../ToggleButtonGroup/ToggleButton.svelte";
+  import ToggleButtonGroup from "../../ToggleButtonGroup/ToggleButtonGroup.svelte";
+  import TooltipGroup from "../../TooltipGroup/TooltipGroup.svelte";
+  import GridOverlay from "../GridOverlay/GridOverlay.svelte";
   import LayoutInspector from "../LayoutInspector/LayoutInspector.svelte";
-  import ToggleButton from "../ToggleButtonGroup/ToggleButton.svelte";
-  import ToggleButtonGroup from "../ToggleButtonGroup/ToggleButtonGroup.svelte";
-  import TooltipGroup from "../TooltipGroup/TooltipGroup.svelte";
 
   /** @type {{ id: DevToolbarTool; icon: any; key: string; title: string }[]} */
   const TOOLS = [

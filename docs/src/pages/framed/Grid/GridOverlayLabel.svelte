@@ -1,12 +1,6 @@
 <script>
-  import {
-    Column,
-    Grid,
-    GridOverlay,
-    Row,
-    Text,
-    Tile,
-  } from "carbon-components-svelte";
+  import { Column, Grid, Row, Text, Tile } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 </script>
 
 <Grid padding>

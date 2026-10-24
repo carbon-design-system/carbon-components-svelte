@@ -80,10 +80,10 @@
    */
   export let baselineColor = undefined;
 
-  import { observeBreakpoint } from "../Breakpoint/breakpoint-observer.js";
-  import Column from "./Column.svelte";
-  import Grid from "./Grid.svelte";
-  import Row from "./Row.svelte";
+  import { observeBreakpoint } from "../../Breakpoint/breakpoint-observer.js";
+  import Column from "../../Grid/Column.svelte";
+  import Grid from "../../Grid/Grid.svelte";
+  import Row from "../../Grid/Row.svelte";
 
   // 16 slots cover every breakpoint's column count (sm: 4, md: 8, lg/xlg/max: 16).
   // Each slot hides itself (span 0) once its index passes that breakpoint's
@@ -309,7 +309,7 @@
 
   $: onRhythm = marks.filter((m) => m.delta === 0).length;
 
-  /** @type {import("../Breakpoint/breakpoints").BreakpointSize | undefined} */
+  /** @type {import("../../Breakpoint/breakpoints").BreakpointSize | undefined} */
   let size = undefined;
   let viewportWidth = 0;
 

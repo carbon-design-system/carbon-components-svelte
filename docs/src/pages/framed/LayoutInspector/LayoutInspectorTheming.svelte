@@ -2,7 +2,6 @@
   import {
     Column,
     Grid,
-    LayoutInspector,
     Row,
     Stack,
     Text,
@@ -10,6 +9,7 @@
     Tile,
     Toggle,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   let custom = false;
 </script>

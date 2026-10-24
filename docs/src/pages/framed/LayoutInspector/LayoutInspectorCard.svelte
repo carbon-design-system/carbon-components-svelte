@@ -4,13 +4,13 @@
     Column,
     ContentSwitcher,
     Grid,
-    LayoutInspector,
     Row,
     Stack,
     Switch,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   const placements = ["cursor", "corner"];
 

@@ -3,7 +3,6 @@
     Box,
     Column,
     Content,
-    DevToolbar,
     Grid,
     Header,
     HeaderNav,
@@ -14,6 +13,7 @@
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { DevToolbar } from "carbon-components-svelte/devtools";
 </script>
 
 <Header companyName="IBM" platformName="Cloud">

@@ -2,13 +2,15 @@
   import {
     Column,
     Grid,
-    GridOverlay,
-    LayoutInspector,
     LocalStorage,
     Row,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import {
+    GridOverlay,
+    LayoutInspector,
+  } from "carbon-components-svelte/devtools";
 
   let grid = true;
   let inspector = true;

@@ -1,13 +1,11 @@
 <script>
+  import "carbon-components-svelte/css/devtools.css";
+  import { Button, Stack, Text, Tile } from "carbon-components-svelte";
   import {
-    Button,
     DevToolbar,
     GridOverlay,
     LayoutInspector,
-    Stack,
-    Text,
-    Tile,
-  } from "carbon-components-svelte";
+  } from "carbon-components-svelte/devtools";
 </script>
 
 <Stack gap={5}>

@@ -4,7 +4,6 @@
     Checkbox,
     Column,
     Grid,
-    GridOverlay,
     NumberInput,
     Row,
     Select,
@@ -12,6 +11,7 @@
     Stack,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let open = true;
   let columns = true;

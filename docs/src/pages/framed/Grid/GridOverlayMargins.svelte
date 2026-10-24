@@ -3,13 +3,13 @@
     Box,
     Column,
     Grid,
-    GridOverlay,
     Row,
     Stack,
     Text,
     Tile,
     Toggle,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let fullWidth = false;
 </script>

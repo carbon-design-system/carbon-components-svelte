@@ -2,12 +2,12 @@
   import {
     Column,
     Grid,
-    GridOverlay,
     LocalStorage,
     Row,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let open = false;
 </script>

@@ -4,12 +4,12 @@
     Button,
     Column,
     Grid,
-    LayoutInspector,
     Row,
     Stack,
     Text,
     Tile,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 </script>
 
 <Grid padding>

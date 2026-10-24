@@ -3,7 +3,6 @@
     Button,
     Column,
     Grid,
-    LayoutInspector,
     Row,
     Stack,
     Tag,
@@ -11,6 +10,7 @@
     Tile,
     Toggle,
   } from "carbon-components-svelte";
+  import { LayoutInspector } from "carbon-components-svelte/devtools";
 
   let open = true;
 </script>

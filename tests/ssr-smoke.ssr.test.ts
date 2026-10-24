@@ -3,6 +3,7 @@
 import { JSDOM } from "jsdom";
 import type { ComponentType, SvelteComponent } from "svelte";
 import { render } from "svelte/server";
+import devtoolsBarrel from "../src/devtools/index.js?raw";
 import barrel from "../src/index.js?raw";
 import { RANDOM_ID, renderSSR } from "./utils/ssr";
 
@@ -56,10 +57,22 @@ const ID_PROPS: Record<string, Record<string, string>> = {
   Tooltip: { tooltipId: "fixed-tooltip", triggerId: "fixed-trigger" },
 };
 
-const components = [...barrel.matchAll(BARREL_EXPORT)].map(([, name, file]) => {
-  const path = `../src/${file}`;
-  return { name, path, open: OPEN_PROP.test(sources[path] ?? "") };
-});
+// The main entry and the `devtools` subpath entry, each read relative to
+// its own folder.
+const components = [
+  ...[...barrel.matchAll(BARREL_EXPORT)].map(([, name, file]) => ({
+    name,
+    path: `../src/${file}`,
+  })),
+  ...[...devtoolsBarrel.matchAll(BARREL_EXPORT)].map(([, name, file]) => ({
+    name,
+    path: `../src/devtools/${file}`,
+  })),
+].map(({ name, path }) => ({
+  name,
+  path,
+  open: OPEN_PROP.test(sources[path] ?? ""),
+}));
 
 /** Attribute values and text that a missing or wrong prop renders. */
 function findBadValues(document: Document) {

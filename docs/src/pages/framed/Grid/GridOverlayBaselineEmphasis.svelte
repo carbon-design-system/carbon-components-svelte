@@ -2,12 +2,12 @@
   import {
     Column,
     Grid,
-    GridOverlay,
     Row,
     Slider,
     Stack,
     Text,
   } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let baselineEmphasis = 4;
 </script>
