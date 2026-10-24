@@ -23,6 +23,7 @@ const NO_EXPORTS = new Set([
   "_status-tokens.scss",
   "_text-tokens.scss",
   "_ui-shell-classic.scss",
+  "_user-avatar-tokens.scss",
 ]);
 
 /** `file:line` of every non-comment line in a partial matching `pattern`. */

@@ -627,9 +627,12 @@ test.describe("forced colors", () => {
       .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
   });
 
-  test("UserAvatar status dots keep their colors and a CanvasText edge", async ({
+  test("UserAvatar circles and status dots keep a CanvasText edge", async ({
     page,
   }) => {
+    expect
+      .soft(await style(page, ".bx--user-avatar"), ".bx--user-avatar")
+      .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
     const dots = ["online", "away", "busy", "offline"].map(
       (status) => `.bx--user-avatar__status--${status}`,
     );

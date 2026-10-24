@@ -28,11 +28,13 @@ $ccs-omit-token-fallbacks: true;
 @import "carbon-components/scss/components/content-switcher/tokens";
 @import "./status-tokens";
 @import "./text-tokens";
+@import "./user-avatar-tokens";
 
 @import "./carbon-styles";
 
 /// Declares a theme's tokens: Carbon's, the tag, notification, content
-/// switcher and status component tokens, and the library's own colors.
+/// switcher and status component tokens, and the library's own text and
+/// avatar colors.
 /// With `$base`, only the ones that differ from it.
 /// @param {Map} $theme - Theme to declare
 /// @param {Map} $base [null] - Theme the selector already declares
@@ -52,7 +54,8 @@ $ccs-omit-token-fallbacks: true;
     @include emit-component-tokens($content-switcher-colors, $difference);
     @include emit-component-tokens($status-colors, $difference);
   }
-  @include ccs-emit-text-colors($theme, $base);
+  @include ccs-emit-theme-colors($ccs-text-colors, $theme, $base);
+  @include ccs-emit-theme-colors($ccs-user-avatar-colors, $theme, $base);
 }
 
 // Theme zones (`ThemeZone`, Carbon React's `<Theme>`): a `.bx--{theme}`

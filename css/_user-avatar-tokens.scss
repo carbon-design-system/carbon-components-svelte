@@ -1,0 +1,23 @@
+// UserAvatar background colors per theme. Emits no CSS.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "./text-tokens";
+
+/// UserAvatar backgrounds. Carbon v11 drops a light theme's 60 step to 50
+/// in the dark themes, and draws the initials and icon in `text-inverse`,
+/// so both stay at 5:1 or more. Read with `ccs-theme-color`.
+/// @access private
+/// @group components
+// prettier-ignore
+$ccs-user-avatar-colors: (
+  "user-avatar-red": (white: $red-60, g10: $red-60, g80: $red-50, g90: $red-50, g100: $red-50),
+  "user-avatar-magenta": (white: $magenta-60, g10: $magenta-60, g80: $magenta-50, g90: $magenta-50, g100: $magenta-50),
+  "user-avatar-purple": (white: $purple-60, g10: $purple-60, g80: $purple-50, g90: $purple-50, g100: $purple-50),
+  "user-avatar-blue": (white: $blue-60, g10: $blue-60, g80: $blue-50, g90: $blue-50, g100: $blue-50),
+  "user-avatar-cyan": (white: $cyan-60, g10: $cyan-60, g80: $cyan-50, g90: $cyan-50, g100: $cyan-50),
+  "user-avatar-teal": (white: $teal-60, g10: $teal-60, g80: $teal-50, g90: $teal-50, g100: $teal-50),
+  "user-avatar-green": (white: $green-60, g10: $green-60, g80: $green-50, g90: $green-50, g100: $green-50),
+  "user-avatar-gray": (white: $gray-60, g10: $gray-60, g80: $gray-50, g90: $gray-50, g100: $gray-50),
+  "user-avatar-cool-gray": (white: $cool-gray-60, g10: $cool-gray-60, g80: $cool-gray-50, g90: $cool-gray-50, g100: $cool-gray-50),
+  "user-avatar-warm-gray": (white: $warm-gray-60, g10: $warm-gray-60, g80: $warm-gray-50, g90: $warm-gray-50, g100: $warm-gray-50),
+);

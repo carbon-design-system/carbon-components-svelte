@@ -63,8 +63,8 @@ test.describe("UserAvatarGroup", () => {
     const avatars = page.getByTestId("cascade").locator(".bx--user-avatar");
     const width = (el: Element) => el.getBoundingClientRect().width;
 
-    // First avatar inherits lg (2.5rem = 40px); the second keeps sm (1.5rem = 24px).
-    expect(await avatars.nth(0).evaluate(width)).toBeCloseTo(40, 0);
+    // First avatar inherits lg (3rem = 48px); the second keeps sm (1.5rem = 24px).
+    expect(await avatars.nth(0).evaluate(width)).toBeCloseTo(48, 0);
     expect(await avatars.nth(1).evaluate(width)).toBeCloseTo(24, 0);
   });
 
@@ -135,5 +135,74 @@ test.describe("UserAvatarGroup", () => {
       .first()
       .evaluate((el) => getComputedStyle(el).boxShadow);
     expect(boxShadow).toBe("none");
+  });
+
+  test("sizes avatars and their initials on Carbon's scale", async ({
+    page,
+  }) => {
+    const avatars = await page
+      .getByTestId("sizes")
+      .locator(".bx--user-avatar")
+      .evaluateAll((els) =>
+        els.map((el) => {
+          const text = el.querySelector(".bx--user-avatar__text");
+          return {
+            width: el.getBoundingClientRect().width,
+            height: el.getBoundingClientRect().height,
+            fontSize: text ? getComputedStyle(text).fontSize : "",
+          };
+        }),
+      );
+    expect(avatars).toEqual([
+      { width: 24, height: 24, fontSize: "12px" },
+      { width: 32, height: 32, fontSize: "14px" },
+      { width: 48, height: 48, fontSize: "20px" },
+      { width: 64, height: 64, fontSize: "28px" },
+    ]);
+  });
+
+  test("lightens the fill and darkens the initials in a dark theme", async ({
+    page,
+  }) => {
+    const colors = (testId: string) =>
+      page
+        .getByTestId(testId)
+        .locator(".bx--user-avatar")
+        .evaluate((el) => ({
+          background: getComputedStyle(el).backgroundColor,
+          color: getComputedStyle(el).color,
+        }));
+    // Red 60 with white initials; Red 50 with Gray 100 initials.
+    expect(await colors("white")).toEqual({
+      background: "rgb(218, 30, 40)",
+      color: "rgb(255, 255, 255)",
+    });
+    expect(await colors("g100")).toEqual({
+      background: "rgb(250, 77, 86)",
+      color: "rgb(22, 22, 22)",
+    });
+  });
+
+  test("draws the overlap ring in the surface color of a layer", async ({
+    page,
+  }) => {
+    const layer = page.getByTestId("layer");
+    const surface = await layer.evaluate(
+      (el) => getComputedStyle(el).backgroundColor,
+    );
+    const ring = await layer
+      .locator(".bx--user-avatar")
+      .first()
+      .evaluate((el) => getComputedStyle(el).boxShadow);
+    expect(ring.startsWith(surface)).toBe(true);
+  });
+
+  test("overlaps from the inline start in RTL", async ({ page }) => {
+    const items = page.getByTestId("rtl").locator(".bx--user-avatar");
+    const first = await items.nth(0).boundingBox();
+    const second = await items.nth(1).boundingBox();
+    if (!first || !second) throw new Error("avatars not laid out");
+    // The second avatar sits to the left and tucks 8px under the first.
+    expect(second.x + second.width - first.x).toBeCloseTo(8, 0);
   });
 });
