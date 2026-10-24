@@ -110,6 +110,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { fitIntrinsicAlign } from "../utils/fit-intrinsic-align.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -137,6 +138,30 @@
 
   let focusIndex = -1;
   let prevOpen = false;
+
+  // A menu above or below its anchor that runs past the window's side
+  // aligns to the anchor's other edge (or its center) for that open.
+  /** @type {null | "start" | "center" | "end"} */
+  let fittedAlign = null;
+  $: placementAlign = fittedAlign ?? intrinsicAlign;
+  $: if (!open) fittedAlign = null;
+  $: if (
+    open &&
+    intrinsicWidth &&
+    (direction === "top" || direction === "bottom")
+  ) {
+    void intrinsicAlign;
+    // After the portal's own placement passes: a tick, then a frame.
+    tick().then(() =>
+      requestAnimationFrame(() => requestAnimationFrame(fitMenu)),
+    );
+  }
+
+  function fitMenu() {
+    if (!(open && ref && anchor)) return;
+    const next = fitIntrinsicAlign(ref, anchor, placementAlign);
+    if (next !== placementAlign) fittedAlign = next;
+  }
 
   const typeahead = createTypeaheadBuffer();
 
@@ -313,7 +338,7 @@
   {verticalAlignOffsetRight}
   {zIndex}
   {intrinsicWidth}
-  {intrinsicAlign}
+  intrinsicAlign={placementAlign}
   {target}
   lockDirection="always"
   let:direction={portalDirection}

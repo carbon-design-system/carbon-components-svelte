@@ -307,6 +307,15 @@
 
   const scheduleUpdate = rafThrottle(updatePosition);
 
+  // Re-place when the alignment changes while open (the side doesn't move).
+  // Compared by value: `ref` is a `bind:this` target, re-invalidated on
+  // every update, so it can't gate this.
+  let placedAlign = intrinsicAlign;
+  $: if (intrinsicAlign !== placedAlign) {
+    placedAlign = intrinsicAlign;
+    if (open) scheduleUpdate();
+  }
+
   $: actualDirection = pos.actualDirection;
 
   $: useIntrinsicWidthVertical =
