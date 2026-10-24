@@ -65,6 +65,17 @@ export function compareDays(a: Date, b: Date): number;
 export function daysInMonth(year: number, month: number): number;
 
 /**
+ * The month and year of `date` in `locale`'s order and words: "March
+ * 2024", "2024年3月", "2024년 3월". The year keeps Latin digits, like the
+ * grid. English and locale objects write `monthNames` then the year.
+ */
+export function formatMonthYear(
+  date: Date,
+  locale: unknown,
+  monthNames: readonly string[],
+): string;
+
+/**
  * Whether `locale` orders the month before the year ("January 2000") as
  * opposed to year before month ("2000年1月").
  */

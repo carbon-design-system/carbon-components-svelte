@@ -5,7 +5,12 @@
    */
 
   import { createEventDispatcher, tick } from "svelte";
-  import { compareDays, getCalendarLocale, isoWeek } from "./calendar-dates.js";
+  import {
+    compareDays,
+    formatMonthYear,
+    getCalendarLocale,
+    isoWeek,
+  } from "./calendar-dates.js";
 
   /**
    * The picked date.
@@ -77,7 +82,7 @@
   $: firstDay = firstDayOfWeek ?? l10n.firstDayOfWeek;
   $: year = month.getFullYear();
   $: monthIndex = month.getMonth();
-  $: heading = `${l10n.months.longhand[monthIndex]} ${year}`;
+  $: heading = formatMonthYear(month, locale, l10n.months.longhand);
   $: weekdayLabels = [
     ...l10n.weekdays.shorthand.slice(firstDay),
     ...l10n.weekdays.shorthand.slice(0, firstDay),
