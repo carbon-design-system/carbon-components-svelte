@@ -253,6 +253,7 @@
   class:bx--date-picker-container={true}
   class:bx--date-picker--fluid--invalid={$isFluid && showInvalid}
   class:bx--date-picker--fluid--warn={$isFluid && showWarn}
+  class:bx--date-picker--fluid--neutral={$isFluid && !showInvalid && !showWarn}
   class:bx--date-picker--fluid--readonly={$isFluid &&
     readonly &&
     !showInvalid &&
