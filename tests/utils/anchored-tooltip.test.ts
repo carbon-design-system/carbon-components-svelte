@@ -94,6 +94,15 @@ describe("createAnchoredTooltip", () => {
     expect(open()).toBe(true);
   });
 
+  it("cancels a pending open on activation", () => {
+    const { node, open } = setup();
+
+    node.dispatchEvent(new MouseEvent("mouseenter"));
+    node.dispatchEvent(new MouseEvent("click"));
+    vi.advanceTimersByTime(100);
+    expect(open()).toBe(false);
+  });
+
   it.each([
     ["hover", new MouseEvent("mouseenter")],
     ["focus", new FocusEvent("focus")],
