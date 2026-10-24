@@ -132,7 +132,7 @@
     .#{$prefix}--date-picker--range
     .#{$prefix}--date-picker-container:not(
       .#{$prefix}--date-picker--fluid--invalid
-    ) {
+    ):not(.#{$prefix}--date-picker--fluid--warn) {
     border-block-end-width: 1px;
     border-block-end-style: solid;
   }
@@ -144,8 +144,33 @@
     .#{$prefix}--date-picker--range
     .#{$prefix}--date-picker-container:not(
       .#{$prefix}--date-picker--fluid--invalid
-    ):not(.#{$prefix}--date-picker--fluid--readonly) {
+    ):not(.#{$prefix}--date-picker--fluid--warn):not(
+      .#{$prefix}--date-picker--fluid--readonly
+    ) {
     border-block-end-color: $border-strong;
+  }
+
+  // Server markup only: the picker's `--neutral` is written before its cells
+  // register, so it can sit beside a cell that is already invalid or warn
+  // (once they register the picker drops `--neutral`, so the two never meet
+  // in the browser). That cell's own status is all the server markup has;
+  // it takes the divider off the next cell, as the picker's `--invalid` and
+  // `--warn` do after hydration. A cell before it keeps the divider until
+  // then: nothing selects backwards without `:has()`. The `:not()` matches
+  // the specificity of the divider color above, which this follows.
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
+    .#{$prefix}--date-picker--range
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid
+    + .#{$prefix}--date-picker-container:not(
+      .#{$prefix}--date-picker--fluid--readonly
+    ),
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
+    .#{$prefix}--date-picker--range
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--warn
+    + .#{$prefix}--date-picker-container:not(
+      .#{$prefix}--date-picker--fluid--readonly
+    ) {
+    border-block-end-color: transparent;
   }
 
   .#{$prefix}--date-picker--fluid
@@ -206,9 +231,29 @@
   // to call out which one of its two inputs is invalid, since the wrapper's
   // outline alone spans both; scope it there so single/simple draws once.
   // Only the range's containers match: the wrapper sits outside the range.
+  //
+  // Server markup only: the picker's `--invalid` is set once its cells
+  // register, after the wrapper's markup is written, so the server's wrapper
+  // is `--neutral` beside a cell that is already `--fluid--invalid` (the two
+  // never meet in the browser). With no wrapper outline to draw, the
+  // single/simple container is outlined instead, so the picker is not left
+  // bare until hydration; hydrated, the wrapper takes over and the container
+  // does not match. Its transparent bottom border stands in for the one
+  // `.date-picker` gets below, so the field is the same height.
   .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid,
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
+    .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid,
   .#{$prefix}--date-picker--range .#{$prefix}--date-picker--fluid--invalid {
     @include focus-outline("invalid");
+  }
+
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
+    .#{$prefix}--date-picker--single
+    > .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid,
+  .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--neutral
+    .#{$prefix}--date-picker--simple
+    > .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid {
+    border-block-end: 1px solid transparent;
   }
 
   .#{$prefix}--date-picker--fluid
