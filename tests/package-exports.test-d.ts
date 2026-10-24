@@ -66,6 +66,8 @@ import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/g10.css";
 import "carbon-components-svelte/css/g80.css";
 import "carbon-components-svelte/css/g90.css";
+import "carbon-components-svelte/css/prose-g100.css";
+import "carbon-components-svelte/css/prose.css";
 import "carbon-components-svelte/css/syntax-tokens-g100.css";
 import "carbon-components-svelte/css/syntax-tokens.css";
 import "carbon-components-svelte/css/syntax.css";

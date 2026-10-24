@@ -28,11 +28,14 @@ const ALL_ONLY_IMPORTS = [
   "./text-tokens",
 ];
 
-// Partials imported by other css/_*.scss partials, not by the manifest.
+// Partials imported by other css/_*.scss partials, or by an opt-in sheet
+// (`_prose.scss`, by `prose.scss` and `prose-<theme>.scss`), not by the
+// manifest.
 const UNREGISTERED_PARTIALS = [
   "_ai-tokens.scss",
   "_fill-tokens.scss",
   "_fluid-shared.scss",
+  "_prose.scss",
   "_spacing-scale.scss",
   "_status-tokens.scss",
   "_text-tokens.scss",
