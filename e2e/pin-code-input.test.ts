@@ -153,4 +153,33 @@ test.describe("PinCodeInput", () => {
     ).toHaveText("");
     await expect(segment(section, "Verification code", 1)).toHaveValue("");
   });
+
+  // Segments keep their size where there's room and shrink, down to a
+  // minimum, in a container too narrow for them.
+  test("fits six segments to a narrow container", async ({ page }) => {
+    const widths = (id: string) =>
+      page
+        .getByTestId(id)
+        .locator(".bx--pin-code-input__field")
+        .evaluateAll((fields) =>
+          fields.map((f) => Math.round(f.getBoundingClientRect().width)),
+        );
+    const overflow = (id: string) =>
+      page.getByTestId(id).evaluate((box) => {
+        const edge = box.getBoundingClientRect().right;
+        return Math.max(
+          0,
+          ...[...box.querySelectorAll("*")].map(
+            (el) => el.getBoundingClientRect().right - edge,
+          ),
+        );
+      });
+
+    expect(await widths("pin-code-input-400")).toEqual(Array(6).fill(40));
+    expect(await overflow("pin-code-input-400")).toBeLessThanOrEqual(0);
+
+    const narrow = await widths("pin-code-input-200");
+    expect(narrow.every((w) => w >= 24 && w < 40)).toBe(true);
+    expect(await overflow("pin-code-input-200")).toBeLessThanOrEqual(0);
+  });
 });
