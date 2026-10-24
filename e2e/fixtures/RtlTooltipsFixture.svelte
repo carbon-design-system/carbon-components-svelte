@@ -7,6 +7,7 @@
     OverflowMenu,
     OverflowMenuItem,
     Popover,
+    TagInput,
     Toggletip,
     Tooltip,
     TooltipDefinition,
@@ -166,6 +167,9 @@
       </BreadcrumbItem>
       <BreadcrumbItem href="#" isCurrentPage>الخطة</BreadcrumbItem>
     </Breadcrumb>
+  </div>
+  <div data-testid="tag-input">
+    <TagInput labelText="المناطق" value={["أوريغون", "أوهايو"]} />
   </div>
 </div>
 

@@ -175,6 +175,10 @@
   } from "../utils/field-status.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -182,6 +186,7 @@
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
   $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"
@@ -375,6 +380,17 @@
     )?.focus();
   }
 
+  /**
+   * The arrow key that points to the tags, at the field's inline start:
+   * ArrowLeft, or ArrowRight under `dir="rtl"`. Read when the key arrives.
+   * @param {string} key
+   */
+  function pointsToTags(key) {
+    if (key !== "ArrowLeft" && key !== "ArrowRight") return false;
+    const rtl = resolveLayoutDirection($layoutDirection, ref) === "rtl";
+    return key === (rtl ? "ArrowRight" : "ArrowLeft");
+  }
+
   /** @param {KeyboardEvent} event */
   function handleInputKeydown(event) {
     // Enter that commits an IME composition is not an add.
@@ -395,7 +411,7 @@
     if (event.key === "Backspace" && atStart && !event.repeat) {
       event.preventDefault();
       focusTag(-1);
-    } else if (event.key === "ArrowLeft" && atStart) {
+    } else if (atStart && pointsToTags(event.key)) {
       event.preventDefault();
       focusTag(-1);
     } else if (event.key === "Home" && draft === "" && value.length > 0) {
@@ -421,7 +437,9 @@
     if (
       event.key === "Escape" ||
       event.key === "End" ||
-      (event.key === "ArrowRight" && isLast)
+      (isLast &&
+        (event.key === "ArrowLeft" || event.key === "ArrowRight") &&
+        !pointsToTags(event.key))
     ) {
       event.preventDefault();
       ref?.focus();
