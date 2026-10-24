@@ -50,7 +50,8 @@
 
   /**
    * Specify the icon a clickable card shows in its bottom inline-end
-   * corner, such as `Launch` for an external link. The icon is decorative
+   * corner (mirrored in right-to-left layouts), such as `Launch` for an
+   * external link. The icon is decorative
    * and hidden from assistive technology. Named `icon` as on
    * `ClickableTile`; Carbon React calls it `renderFooterIcon`.
    * Only applies when `clickable` is `true`.

@@ -1,6 +1,8 @@
 <script>
   import {
     AILabel,
+    Card,
+    CardBody,
     Carousel,
     CarouselItem,
     ClickableTile,
@@ -18,6 +20,11 @@
 <div class="column">
   <div data-testid="clickable-tile">
     <ClickableTile href="#" icon={ArrowRight}>Billing settings</ClickableTile>
+  </div>
+  <div data-testid="card">
+    <Card clickable href="#" aria-label="Billing settings">
+      <CardBody>Billing settings</CardBody>
+    </Card>
   </div>
   <div data-testid="pagination">
     <Pagination totalItems={40} page={2} />

@@ -294,9 +294,13 @@ test.describe("right-to-left layout", () => {
   test("mirrors the UI Shell, closed list boxes and tree rows", async ({
     page,
   }) => {
-    const viewportWidth = await page.evaluate(
-      () => document.documentElement.clientWidth,
-    );
+    // Measure once the fonts load. Run first in a worker, the header
+    // name measured in the fallback font in LTR and in IBM Plex in RTL.
+    const viewportWidth = await page.evaluate(async () => {
+      const width = document.documentElement.clientWidth;
+      await document.fonts.ready;
+      return width;
+    });
     const ltr = await boxes(page, PARTS);
 
     await setDirection(page, "rtl");
@@ -790,6 +794,7 @@ test.describe("right-to-left layout", () => {
 // region inside an RTL page turns the mirror off again.
 const MIRRORED_ICONS = {
   clickableTile: "[data-testid=clickable-tile] .bx--tile--icon",
+  card: "[data-testid=card] .bx--card__clickable-footer svg",
   paginationBack:
     "[data-testid=pagination] .bx--pagination__button--backward svg",
   paginationForward:
