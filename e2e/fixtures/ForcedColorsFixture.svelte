@@ -68,6 +68,7 @@
     Tabs,
     Tag,
     TagInput,
+    TagSet,
     TextArea,
     TextInput,
     TimePicker,
@@ -306,6 +307,11 @@
   <UserAvatar name="Away" status="away" />
   <UserAvatar name="Busy" status="busy" />
   <UserAvatar name="Offline" status="offline" />
+
+  <TagSet overflowMode="popover" maxVisible={1} viewAllThreshold={0}>
+    <Tag>us-south</Tag>
+    <Tag>eu-de</Tag>
+  </TagSet>
 
   <Prose data-testid="prose">
     <pre><code>npm i carbon-components-svelte</code></pre>

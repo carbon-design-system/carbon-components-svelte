@@ -653,6 +653,13 @@ test.describe("forced colors", () => {
     });
   });
 
+  // A button would read as ButtonText; "View all" looks and acts as a link.
+  test("TagSet's View all reads as a link", async ({ page }) => {
+    expect
+      .soft((await style(page, ".bx--tag-set-overflow__view-all")).color)
+      .toBe(system.LinkText);
+  });
+
   // Forced colors drop the code block's surface; table rules, the quote's
   // border and the divider are borders, which stay.
   test("Prose code blocks, tables, quotes and rules keep their edges", async ({
