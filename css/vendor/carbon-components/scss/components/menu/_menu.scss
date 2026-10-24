@@ -114,8 +114,8 @@
   }
 
   // ccs: the submenu caret points to the inline end.
-  [dir='rtl'] .#{$prefix}--menu-option__info > svg {
-    transform: scaleX(-1);
+  .#{$prefix}--menu-option__info > svg {
+    @include ccs-mirror-rtl;
   }
 
   .#{$prefix}--menu-option__icon {

@@ -183,6 +183,12 @@
   .#{$prefix}--pagination-nav__accessibility-label {
     @include hidden();
   }
+
+  // ccs: only the previous and next buttons carry a button icon. They
+  // point to the inline start and end.
+  .#{$prefix}--pagination-nav__list-item .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
 }
 
 @include exports('pagination-nav') {

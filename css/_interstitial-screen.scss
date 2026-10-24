@@ -80,6 +80,11 @@
     flex: 1 1 0;
   }
 
+  // The start button's arrow points to the inline end.
+  .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
   @include carbon--breakpoint(md) {
     .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn {
       flex: 0 1 auto;

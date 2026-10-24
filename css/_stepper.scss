@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// Stepper: progress, the current step's content, then Back and Continue.
@@ -22,6 +23,11 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: $carbon--spacing-03;
+  }
+
+  // Back and Continue point to the inline start and end.
+  .#{$prefix}--stepper__actions .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
   }
 }
 
