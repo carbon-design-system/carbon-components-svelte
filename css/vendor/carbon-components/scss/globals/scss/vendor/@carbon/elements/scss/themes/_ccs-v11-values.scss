@@ -5,7 +5,7 @@
 // v11 has no g80 theme, so g80 keeps its palette and gains the new tokens:
 // g90's values, except chat surfaces and text, which take g80's own token in
 // the role g90's chat token plays (the chat shell is the page background, a
-// user bubble is layer-01, and so on). The few kept tokens it overrides are
+// user bubble is layer-01, and so on). The kept tokens it overrides are
 // listed first in its map.
 // text-placeholder keeps text-helper's value: v11's 40% gray is 2.6:1 on a
 // white field.
@@ -622,6 +622,23 @@ $ccs-v11-values: (
     // theme (#4589ff is 2.3:1 on layer-01).
     border-interactive: #78a9ff,
     text-helper: #c6c6c6,
+    // Layer states. g80's layer-01 is g90's layer-02, so each state takes
+    // g90's value for the same surface: hover and selected step lighter, and
+    // a selected border shows on a selected layer. layer-02 stays layer-01's
+    // gray: any lighter gray puts text-secondary under 4.5:1. Fields sit one
+    // step above the layer below them, as in g90, and hover the same way.
+    layer-hover-01: #636363,
+    layer-hover-02: #636363,
+    layer-active-01: #8d8d8d,
+    layer-selected-01: #6f6f6f,
+    layer-selected-02: #6f6f6f,
+    layer-selected-hover-01: #5e5e5e,
+    layer-accent-hover-01: #5e5e5e,
+    layer-accent-active-01: #393939,
+    field-hover-01: #636363,
+    field-hover-02: #5e5e5e,
+    border-subtle-02: #8d8d8d,
+    border-subtle-selected-01: #a8a8a8,
     // Values g80 shared with g90 in v10 follow g90 to v11.
     highlight: #002d9c,
     overlay: rgba(0, 0, 0, 0.6),
