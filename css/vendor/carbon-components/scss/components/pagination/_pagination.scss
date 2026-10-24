@@ -127,16 +127,16 @@ $css--helpers: true;
   }
 
   // ccs: the separators, gaps and padding on the inline axis are logical,
-  // so they sit on the mirrored side in RTL.
+  // so they sit on the mirrored side in RTL. Select puts the class on the
+  // `<select>` itself, so match both classes on one element: as
+  // descendants (v10 and v11 markup), neither separator rendered.
   .#{$prefix}--pagination
-    .#{$prefix}--select__item-count
-    .#{$prefix}--select-input {
-    border-inline-end: $spacing-4xs solid $border-subtle;
+    .#{$prefix}--select-input.#{$prefix}--select__item-count {
+    border-inline-end: 1px solid $border-subtle;
   }
 
   .#{$prefix}--pagination
-    .#{$prefix}--select__page-number
-    .#{$prefix}--select-input {
+    .#{$prefix}--select-input.#{$prefix}--select__page-number {
     border-inline-start: 1px solid $border-subtle;
   }
 
