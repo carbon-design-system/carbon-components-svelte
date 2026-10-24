@@ -79,10 +79,8 @@
 
   import { getContext, onMount } from "svelte";
   import Close from "../icons/Close.svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const {
@@ -107,32 +105,6 @@
   // `undefined` for a tab added after mount.
   const initialTab = claimTab?.(id);
 
-  // Icon-only tabs show `label` as a portalled tooltip on hover/focus.
-  // The portal keeps the tooltip from being clipped by the tab nav's overflow.
-
-  let hovered = false;
-  let focused = false;
-  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
-  const tooltipActive = tooltipHandoff.active;
-
-  // Gate on the active slot so only one tooltip shows at a time. When a
-  // neighbor claims it, this one closes even while still hovered.
-  $: tooltipOpen =
-    $iconOnly && !disabled && (hovered || focused) && $tooltipActive;
-
-  function showTooltip() {
-    tooltipHandoff.scheduleEnter(() => {
-      hovered = true;
-    });
-  }
-
-  function hideTooltip() {
-    tooltipHandoff.scheduleLeave(() => {
-      hovered = false;
-      if (!focused) tooltipHandoff.release();
-    });
-  }
-
   // Re-register when these change so `bx--tabs--tall` and the `dismiss`
   // detail follow the current props.
   $: hasOwnSecondaryLabel = Boolean(
@@ -152,8 +124,6 @@
 
   onMount(() => {
     return () => {
-      tooltipHandoff.cancel();
-      tooltipHandoff.release();
       remove(id);
     };
   });
@@ -259,20 +229,6 @@
         : $useAutoWidth
           ? "auto"
           : undefined}
-    on:mouseenter={$iconOnly ? showTooltip : undefined}
-    on:mouseleave={$iconOnly ? hideTooltip : undefined}
-    on:focus={$iconOnly
-      ? () => {
-          focused = true;
-          tooltipHandoff.claim();
-        }
-      : undefined}
-    on:blur={$iconOnly
-      ? () => {
-          focused = false;
-          if (!hovered) tooltipHandoff.release();
-        }
-      : undefined}
   >
     {#if $iconOnly}
       <div class:bx--tabs__nav-item--icon={true}>
@@ -346,16 +302,16 @@
     </div>
   {/if}
 
+  <!-- Icon-only tabs show `label` as a portalled tooltip on hover and
+       focus, so the tab nav's overflow can't clip it. -->
   {#if $iconOnly}
-    <PortalTooltip
+    <AnchoredTooltip
       anchor={ref}
-      direction={tooltipDirection}
-      open={tooltipOpen}
       text={label}
-      tooltipType="icon"
-      intrinsicAlign={tooltipAlignment}
-      gapTop={tooltipDirection === "top" ? 1 : 0}
-      gapBottom={tooltipDirection === "bottom" ? 1 : 0}
+      enabled={!disabled}
+      direction={tooltipDirection}
+      align={tooltipAlignment}
+      dismissOnClick={false}
     />
   {/if}
 </li>

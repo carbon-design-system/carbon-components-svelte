@@ -53,9 +53,7 @@
 
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
+  import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
@@ -97,36 +95,8 @@
     ctx.setIcon(id, hasIcon);
   }
 
-  // Icon-only switches show `text` as a portalled tooltip on hover/focus.
-  // The portal keeps the tooltip from being clipped by overflow ancestors.
-
-  let hovered = false;
-  let focused = false;
-  const tooltipHandoff = createTooltipHandoff({ group: getTooltipGroup() });
-  const tooltipActive = tooltipHandoff.active;
-
-  // Gate on the active slot so only one tooltip shows at a time. When a
-  // neighbor claims it, this one closes even while still hovered.
-  $: tooltipOpen =
-    hasIcon && !disabled && (hovered || focused) && $tooltipActive;
-
-  function showTooltip() {
-    tooltipHandoff.scheduleEnter(() => {
-      hovered = true;
-    });
-  }
-
-  function hideTooltip() {
-    tooltipHandoff.scheduleLeave(() => {
-      hovered = false;
-      if (!focused) tooltipHandoff.release();
-    });
-  }
-
   onMount(() => {
     return () => {
-      tooltipHandoff.cancel();
-      tooltipHandoff.release();
       ctx.remove(id);
       unsubscribe();
     };
@@ -155,27 +125,9 @@
   }}
   on:mouseover
   on:mouseenter
-  on:mouseenter={() => {
-    if (hasIcon) showTooltip();
-  }}
   on:mouseleave
-  on:mouseleave={() => {
-    if (hasIcon) hideTooltip();
-  }}
   on:focus
-  on:focus={() => {
-    if (hasIcon) {
-      focused = true;
-      tooltipHandoff.claim();
-    }
-  }}
   on:blur
-  on:blur={() => {
-    if (hasIcon) {
-      focused = false;
-      if (!hovered) tooltipHandoff.release();
-    }
-  }}
   on:keyup
   on:keydown
 >
@@ -188,14 +140,15 @@
   {/if}
 </button>
 
+<!-- Icon-only switches show `text` as a portalled tooltip on hover and
+     focus, so an overflow ancestor can't clip it. -->
 {#if hasIcon}
-  <PortalTooltip
+  <AnchoredTooltip
     anchor={ref}
-    direction="top"
-    open={tooltipOpen}
     {text}
-    tooltipType="icon"
-    gapTop={1}
-    intrinsicAlign={tooltipAlignment}
+    enabled={!disabled}
+    direction="top"
+    align={tooltipAlignment}
+    dismissOnClick={false}
   />
 {/if}
