@@ -20,7 +20,12 @@
   .#{$prefix}--slider-container {
     display: flex;
     max-width: 100%;
+    // ccs: wraps the number input onto a second line in a container too
+    // narrow for it beside even the shortest track (the track's flex basis
+    // below), instead of overflowing.
+    flex-wrap: wrap;
     align-items: center;
+    row-gap: $carbon--spacing-03;
     user-select: none;
   }
 
@@ -28,12 +33,13 @@
     position: relative;
     // ccs: 200px where there's room, as before, and down to 48px when the
     // container is narrower: a 200px minimum pushed the number input out
-    // of narrow containers. `width` (not `flex-basis`), so the container
-    // sizes to it.
+    // of narrow containers. `width` sizes a content-sized container to the
+    // 200px track; the 48px flex basis decides when the row wraps, and the
+    // track grows from it back to 200px.
     width: to-rem(200px);
     min-width: to-rem(48px);
-    max-width: to-rem(640px);
-    flex-shrink: 1;
+    max-width: to-rem(200px);
+    flex: 1 1 to-rem(48px);
     padding: $spacing-05 0;
     margin: 0 $carbon--spacing-05;
     cursor: pointer;
@@ -44,7 +50,7 @@
   }
 
   .#{$prefix}--slider-container--full-width .#{$prefix}--slider {
-    flex-grow: 1;
+    max-width: to-rem(640px);
   }
 
   // ccs: `hideRangeLabels`. The track's side margins space it from the range
