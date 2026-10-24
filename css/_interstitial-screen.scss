@@ -15,6 +15,12 @@
 /// @access private
 /// @group components
 @mixin interstitial-screen {
+  // The screen paints the page background, in a modal too, and sets its
+  // titled header on a layer above it, as Carbon v11 does.
+  .#{$prefix}--interstitial-screen {
+    background-color: $background;
+  }
+
   .#{$prefix}--interstitial-screen--full-screen {
     position: fixed;
     top: 0;
@@ -22,7 +28,6 @@
     bottom: 0;
     left: 0;
     z-index: z("modal");
-    background-color: $layer;
   }
 
   .#{$prefix}--interstitial-screen--full-screen
@@ -33,25 +38,41 @@
     inline-size: 100%;
   }
 
-  .#{$prefix}--interstitial-screen--full-screen .#{$prefix}--modal-header {
+  .#{$prefix}--interstitial-screen__header {
+    position: relative;
     flex: 0 0 auto;
+    padding-top: $carbon--spacing-06;
+    margin-bottom: 0;
+
+    @include carbon--breakpoint(md) {
+      padding-left: $carbon--spacing-07;
+    }
+  }
+
+  .#{$prefix}--interstitial-screen__header--has-title {
+    border-bottom: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--interstitial-screen__titles {
+    margin-bottom: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--interstitial-screen__title {
+    @include type-style("heading-04");
+
+    margin-bottom: $carbon--spacing-03;
+    color: $text-primary;
   }
 
   .#{$prefix}--interstitial-screen__subtitle {
-    @include type-style("body-compact-01");
+    @include type-style("heading-03");
 
-    margin-top: $carbon--spacing-03;
-    color: $text-secondary;
+    color: $text-primary;
   }
 
   .#{$prefix}--interstitial-screen__progress {
-    padding: 0 $carbon--spacing-05 $carbon--spacing-05;
-  }
-
-  .#{$prefix}--interstitial-screen--full-screen
-    .#{$prefix}--interstitial-screen__progress {
-    flex: 0 0 auto;
-    padding-top: $carbon--spacing-05;
+    margin-bottom: $carbon--spacing-04;
   }
 
   .#{$prefix}--interstitial-screen__body {
@@ -65,19 +86,40 @@
     min-block-size: 0;
   }
 
+  // From `md`, line the views up with the header's wider inset, as the
+  // modal's body padding does.
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--interstitial-screen--full-screen
+      .#{$prefix}--interstitial-screen__body {
+      padding-right: $carbon--spacing-05;
+      padding-left: $carbon--spacing-05;
+    }
+  }
+
+  // The scroll fade takes the screen's surface, not the modal's.
+  .#{$prefix}--interstitial-screen
+    .#{$prefix}--modal-content--overflow-indicator {
+    background-color: $background;
+  }
+
   .#{$prefix}--interstitial-screen-view {
     padding: $carbon--spacing-05;
   }
 
-  // Below `md`, every footer button shares the row equally; at/above `md`,
-  // Skip hugs the trailing edge while Back/Next/Get-Started take a fixed
-  // width, matching the v11 upstream breakpoint behavior.
+  // Below `md`, every footer button gets an equal share of the row. From
+  // `md`, Back, Next and Get Started take Carbon's fixed 15rem and Skip
+  // takes the rest.
+  // Equal grid columns, since flex shares space after each button's own
+  // padding, which differs by kind.
   .#{$prefix}--interstitial-screen__footer {
-    justify-content: flex-end;
+    display: grid;
+    border-top: 1px solid $border-subtle;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
   }
 
   .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn {
-    flex: 1 1 0;
+    max-width: none;
   }
 
   // The start button's arrow points to the inline end.
@@ -86,15 +128,19 @@
   }
 
   @include carbon--breakpoint(md) {
+    .#{$prefix}--interstitial-screen__footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn {
-      flex: 0 1 auto;
-      max-width: to-rem(240px);
+      flex: 0 0 auto;
+      width: to-rem(240px);
     }
 
     .#{$prefix}--interstitial-screen__footer .#{$prefix}--btn--ghost {
       flex: 1 1 auto;
-      max-width: none;
-      margin-right: auto;
+      width: auto;
     }
   }
 }

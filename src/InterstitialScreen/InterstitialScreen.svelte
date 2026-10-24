@@ -163,6 +163,7 @@
       aria-label={ariaLabel}
       class:bx--interstitial-screen={true}
       class:bx--interstitial-screen--full-screen={true}
+      class:bx--layer-one={true}
       {...$$restProps}
     >
       <div class:bx--interstitial-screen__container={true}>
