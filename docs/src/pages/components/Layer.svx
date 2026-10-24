@@ -6,11 +6,11 @@ description: Layer puts content on the next Carbon surface, so fields, tiles, an
   import { Layer, Search, Stack, Text, TextInput, Tile } from "carbon-components-svelte";
 </script>
 
+## Basic
+
 Carbon stacks surfaces in up to three layers. Components read contextual tokens (`layer`, `field`, `border-subtle`, …) instead of a fixed layer, and `Layer` re-points those tokens to the next level for everything inside it. A field on a layer-2 surface takes `field-02`, so it still stands out.
 
 `Layer` works with `all.css` and with the single-theme stylesheets.
-
-## Basic
 
 Each nested `Layer` steps up one level. Set `withBackground` to paint the layer's surface.
 

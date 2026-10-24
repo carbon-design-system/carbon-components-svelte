@@ -21,11 +21,11 @@ description: LazyMount defers rendering content until it nears the viewport or t
   let mountedAt = "";
 </script>
 
+## Basic
+
 `LazyMount` renders its default slot once the wrapper comes within `rootMargin` (600px by default) of the viewport, so the content is ready before the reader scrolls to it. Until then it shows the `placeholder` slot and reserves `estimatedHeight`. Once mounted, content stays mounted.
 
 Every instance shares one `IntersectionObserver` per `rootMargin`. Without `IntersectionObserver`, content renders right away.
-
-## Basic
 
 Wrap a heavy widget, and set `estimatedHeight` close to its rendered height so the page doesn't shift when it mounts. A number is in pixels; any CSS length works.
 
