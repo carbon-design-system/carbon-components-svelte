@@ -14,12 +14,21 @@
   export let size = 50;
 
   /**
-   * Set to `true` to collapse the start pane to `min`, and back to `false`
-   * to restore the size it had before. Moving the separator to `min` by
-   * any means also sets it to `true`.
+   * Set to `true` to collapse the start pane to `collapsedSize`, or `min`
+   * when that is unset, and back to `false` to restore the size it had
+   * before. Moving the separator there by any means also sets it to `true`.
    * @bindable writable
    */
   export let collapsed = false;
+
+  /**
+   * Set the size the start pane collapses to, below `min`, as a percentage
+   * or a pixel length. Dragging past halfway between `min` and this size
+   * snaps the pane collapsed, and dragging back snaps it open.
+   * Defaults to `min`, so the pane collapses no further than it resizes.
+   * @type {number | `${number}px` | undefined}
+   */
+  export let collapsedSize = undefined;
 
   /**
    * Set the minimum size of the start pane, as a percentage, or as a pixel
@@ -143,26 +152,41 @@
     return Math.round(clamp(percent, 0, 100) * 100) / 100;
   }
 
+  // Below `min`, a size snaps to `collapsedPercent` past the halfway point
+  // and back up to `min` before it. Without `collapsedSize` the two match,
+  // and this is a plain clamp.
+  // Reactive statements pass the bounds so Svelte sees them as dependencies.
+  function constrain(
+    value,
+    lower = minPercent,
+    upper = maxPercent,
+    collapsedTo = collapsedPercent,
+  ) {
+    if (value < lower && value <= (collapsedTo + lower) / 2) return collapsedTo;
+    return clamp(value, lower, upper);
+  }
+
   // Drag math yields long fractions; two decimals is finer than a pixel on
   // any realistic splitter and keeps `aria-valuenow` readable.
   function setSize(next) {
-    size = Math.round(clamp(next, minPercent, maxPercent) * 100) / 100;
+    size = Math.round(constrain(next) * 100) / 100;
   }
 
   // `bind:size` updates on every step of a drag; `resize` fires once per
   // gesture, for example to persist the final size.
   function dispatchResize(prevSize) {
-    const nextSize = clamp(size, minPercent, maxPercent);
+    const nextSize = constrain(size);
     if (nextSize === prevSize) return;
-    // Whatever moved it to `min` (Enter, Home, a drag), restoring goes back
-    // to where the gesture started.
-    if (nextSize <= minPercent && prevSize > minPercent)
+    // Whatever collapsed it (Enter, Home, a drag), restoring goes back to
+    // where the gesture started.
+    if (nextSize <= collapsedPercent && prevSize > collapsedPercent) {
       expandedSize = prevSize;
+    }
     dispatch("resize", { size: nextSize });
   }
 
   function restoreSize() {
-    return expandedSize > minPercent
+    return expandedSize > collapsedPercent
       ? expandedSize
       : (minPercent + maxPercent) / 2;
   }
@@ -170,16 +194,16 @@
   function syncCollapsed(nextCollapsed, currentSize) {
     if (nextCollapsed !== syncedCollapsed) {
       syncedCollapsed = nextCollapsed;
-      if (nextCollapsed && currentSize > minPercent) {
+      if (nextCollapsed && currentSize > collapsedPercent) {
         expandedSize = currentSize;
-        setSize(minPercent);
-      } else if (!nextCollapsed && currentSize <= minPercent) {
+        setSize(collapsedPercent);
+      } else if (!nextCollapsed && currentSize <= collapsedPercent) {
         setSize(restoreSize());
       }
       return;
     }
-    const atMin = currentSize <= minPercent;
-    if (atMin !== collapsed) collapsed = syncedCollapsed = atMin;
+    const atCollapsed = currentSize <= collapsedPercent;
+    if (atCollapsed !== collapsed) collapsed = syncedCollapsed = atCollapsed;
   }
 
   function getPointerAxis(event) {
@@ -225,7 +249,7 @@
       next = maxPercent;
     } else if (event.key === "Enter") {
       // Collapse the start pane, or restore it if already collapsed.
-      next = renderedSize > minPercent ? minPercent : restoreSize();
+      next = renderedSize > collapsedPercent ? collapsedPercent : restoreSize();
     } else {
       return;
     }
@@ -246,15 +270,27 @@
   // splitter is measured.
   $: minLength = typeof min === "string" ? min : undefined;
   $: maxLength = typeof max === "string" ? max : undefined;
-  $: observeContainer(ref, minLength !== undefined || maxLength !== undefined);
+  $: observeContainer(
+    ref,
+    [min, max, collapsedSize].some((bound) => typeof bound === "string"),
+  );
   $: vertical = orientation === "vertical";
   $: containerLength = vertical ? containerSize.height : containerSize.width;
   $: minPercent = toPercent(min, containerLength, 0);
   // As with CSS min/max sizes, a `min` larger than `max` wins.
   $: maxPercent = Math.max(toPercent(max, containerLength, 100), minPercent);
+  $: collapsedPercent =
+    collapsedSize === undefined
+      ? minPercent
+      : Math.min(toPercent(collapsedSize, containerLength, 0), minPercent);
   // Before `renderedSize`, so a size this sets renders in the same update.
-  $: syncCollapsed(collapsed, clamp(size, minPercent, maxPercent));
-  $: renderedSize = clamp(size, minPercent, maxPercent);
+  $: syncCollapsed(
+    collapsed,
+    constrain(size, minPercent, maxPercent, collapsedPercent),
+  );
+  $: renderedSize = constrain(size, minPercent, maxPercent, collapsedPercent);
+  // A pixel `min` mustn't hold the pane open once it collapses below it.
+  $: belowMin = renderedSize < minPercent;
   // Rest props go on the root, but naming and description belong on the
   // separator, the element that takes focus.
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
@@ -301,9 +337,9 @@
     class:bx--splitter__pane={true}
     class:bx--splitter__pane--start={true}
     style:flex-basis="{renderedSize}%"
-    style:min-width={vertical ? undefined : minLength}
+    style:min-width={vertical || belowMin ? undefined : minLength}
     style:max-width={vertical ? undefined : maxLength}
-    style:min-height={vertical ? minLength : undefined}
+    style:min-height={vertical && !belowMin ? minLength : undefined}
     style:max-height={vertical ? maxLength : undefined}
     inert={renderedSize === 0 || undefined}
   >
@@ -321,7 +357,7 @@
     aria-orientation={orientation === "vertical" ? "horizontal" : "vertical"}
     aria-controls="{id}-start"
     aria-valuenow={disabled ? undefined : renderedSize}
-    aria-valuemin={disabled ? undefined : minPercent}
+    aria-valuemin={disabled ? undefined : collapsedPercent}
     aria-valuemax={disabled ? undefined : maxPercent}
     class:bx--splitter__separator={true}
     class:bx--splitter__separator--disabled={disabled}
