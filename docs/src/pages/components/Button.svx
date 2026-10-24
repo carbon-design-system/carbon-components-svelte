@@ -84,7 +84,7 @@ Use the `icon` named slot to render custom icon markup instead of, or with diffe
 
 ### Icon-only
 
-Omit the label and provide an `iconDescription` for accessibility. This text is used as the button's tooltip and screen reader label. Press Escape to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus.
+Omit the label and provide an `iconDescription` for accessibility. This text is used as the button's tooltip and screen reader label. The pointer can move onto the tooltip, and the tooltip stays while the pointer is on it. Press Escape to hide the tooltip without moving the pointer or focus. It shows again on the next hover or focus. Focus that a component moves to the button, such as a modal's first focus or focus returned when a menu closes, doesn't show it.
 
 <Button iconDescription="Tooltip text" icon={Add} />
 
@@ -138,7 +138,7 @@ Set `isSelected` to `true` to enable the selected state for an icon-only, ghost 
 
 ### Adjacent
 
-When multiple icon-only buttons are placed next to each other, only one tooltip will be visible at a time. Hovering a new button automatically hides the previous tooltip, ensuring the correct button is always clicked.
+When multiple icon-only buttons are placed next to each other, only one tooltip will be visible at a time. Hovering a new button automatically hides the previous tooltip. A tooltip that covers the next button closes as soon as the pointer moves onto that part of it, so the click presses the button under the pointer. A click on the rest of a tooltip does nothing.
 
 <FileSource src="/framed/Button/AdjacentIconOnlyButtons" />
 

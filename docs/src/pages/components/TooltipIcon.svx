@@ -78,7 +78,7 @@ Use the default slot to fully customize the trigger content, replacing what the 
 
 ## Custom delay
 
-Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 0ms, so the tooltip hides as soon as the pointer leaves. Keyboard focus shows the tooltip at once.
+Customize hover delays with `enterDelayMs` and `leaveDelayMs`. Defaults are 100ms and 100ms. The tooltip stays while the pointer is on it. Keyboard focus shows the tooltip at once.
 
 <TooltipIcon tooltipText="Slow to appear" icon={Carbon} enterDelayMs={500} leaveDelayMs={500} />
 
