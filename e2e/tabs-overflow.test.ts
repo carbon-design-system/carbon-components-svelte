@@ -1,8 +1,22 @@
+import type { Locator } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
 const NEXT = ".bx--tab--overflow-nav-button--next";
 const PREV = ".bx--tab--overflow-nav-button--previous";
 const HIDDEN = "bx--tab--overflow-nav-button--hidden";
+
+/** Whether the tab lies within its tab list's scroll viewport. */
+function insideList(tab: Locator) {
+  return tab.evaluate((node) => {
+    const navRect = node.closest("[role=tablist]")?.getBoundingClientRect();
+    const tabRect = node.getBoundingClientRect();
+    return Boolean(
+      navRect &&
+        tabRect.left >= navRect.left - 1 &&
+        tabRect.right <= navRect.right + 1,
+    );
+  });
+}
 
 test.describe("Tabs overflow", () => {
   test.beforeEach(async ({ page }) => {
@@ -44,15 +58,9 @@ test.describe("Tabs overflow", () => {
     const focused = page.locator("[role=tab]:focus");
     await expect(focused).toHaveAttribute("aria-selected", "true");
 
-    const visible = await focused.evaluate((tab) => {
-      const nav = tab.closest(".bx--tabs__nav") as HTMLElement;
-      const navRect = nav.getBoundingClientRect();
-      const tabRect = tab.getBoundingClientRect();
-      return (
-        tabRect.left >= navRect.left - 1 && tabRect.right <= navRect.right + 1
-      );
-    });
-    expect(visible).toBe(true);
+    // The list scrolls the tab into view after the selection renders, so
+    // poll until it lands.
+    await expect.poll(() => insideList(focused)).toBe(true);
   });
 });
 
@@ -96,16 +104,7 @@ for (const variant of ["", "&vertical"]) {
       await expect(last).toHaveAttribute("aria-selected", "true");
       await expect(next).toHaveClass(hidden);
       await expect(prev).not.toHaveClass(hidden);
-      const inside = await last.evaluate((tab) => {
-        const navRect = tab.closest("[role=tablist]")?.getBoundingClientRect();
-        const tabRect = tab.getBoundingClientRect();
-        return Boolean(
-          navRect &&
-            tabRect.left >= navRect.left - 1 &&
-            tabRect.right <= navRect.right + 1,
-        );
-      });
-      expect(inside).toBe(true);
+      await expect.poll(() => insideList(last)).toBe(true);
 
       // The start button scrolls back toward the right.
       const end = await nav.evaluate((node) => node.scrollLeft);
