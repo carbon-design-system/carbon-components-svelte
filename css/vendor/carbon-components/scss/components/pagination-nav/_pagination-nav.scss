@@ -194,3 +194,25 @@
 @include exports('pagination-nav') {
   @include pagination-nav;
 }
+
+// carbon-components-svelte patch (pagination-nav-forced-colors)
+// The current page's underline is a background fill, which forced-colors
+// mode repaints as `Canvas`, so only the bold number marked the current
+// page. The underline paints in `Highlight`, as TableOfContents' active bar
+// does.
+
+/// PaginationNav current-page underline in forced-colors mode.
+/// @access private
+/// @group pagination-nav
+@mixin pagination-nav-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--pagination-nav__page::after,
+    .#{$prefix}--pagination-nav__select-icon-wrapper::after {
+      background-color: Highlight;
+    }
+  }
+}
+
+@include exports("pagination-nav-forced-colors") {
+  @include pagination-nav-forced-colors;
+}

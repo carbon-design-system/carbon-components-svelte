@@ -766,6 +766,87 @@ test.describe("forced colors", () => {
     }
   });
 
+  // The highlight was a tint, or a ring the rows' own edges matched.
+  test("a list box's highlighted option fills with Highlight", async ({
+    page,
+  }) => {
+    for (const [field, trigger] of [
+      ["dropdown", ".bx--list-box__field"],
+      ["combobox", "input"],
+      ["multiselect", ".bx--list-box__field"],
+    ]) {
+      const scope = `[data-testid=fields] [data-testid=${field}]`;
+      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+      await page.focus(`${scope} ${trigger}`);
+      const highlighted = `${scope} .bx--list-box__menu-item--highlighted`;
+      // The first press opens the menu; ComboBox highlights on the second.
+      await expect(async () => {
+        await page.keyboard.press("ArrowDown");
+        await expect(page.locator(highlighted)).toBeVisible({ timeout: 500 });
+      }).toPass();
+      // Polled: the fill transitions in.
+      await expect
+        .poll(() => style(page, highlighted), { message: field })
+        .toMatchObject({
+          background: system.Highlight,
+          color: system.HighlightText,
+        });
+      expect
+        .soft(
+          (await style(page, `${highlighted} .bx--list-box__menu-item__option`))
+            .color,
+          field,
+        )
+        .toBe(system.HighlightText);
+      expect.soft(await flatness(page, highlighted), field).toBeLessThan(0.95);
+      if (field === "multiselect") {
+        const checkbox = `${highlighted} .bx--checkbox-label`;
+        expect
+          .soft((await style(page, checkbox, "::before")).borderColor, field)
+          .toBe(system.HighlightText);
+      }
+      await page.keyboard.press("Escape");
+    }
+  });
+
+  test("an OverflowMenu option and a HeaderSearch result fill with Highlight when highlighted", async ({
+    page,
+  }) => {
+    // Every option's resting outline is forced too, so a 1px focus ring
+    // stood out less than its neighbors.
+    const option = ".bx--overflow-menu-options__btn";
+    await page.focus(option);
+    // Polled: the fill transitions in.
+    await expect
+      .poll(() => style(page, option), { message: option })
+      .toMatchObject({
+        background: system.Highlight,
+        color: system.HighlightText,
+      });
+    expect.soft(await flatness(page, option), option).toBeLessThan(0.95);
+
+    await page.click(".bx--header__search .bx--header-search-button");
+    await page.keyboard.press("ArrowDown");
+    const result = ".bx--header-search-menu-item--selected";
+    await expect
+      .poll(() => style(page, result), { message: result })
+      .toMatchObject({
+        background: system.Highlight,
+        color: system.HighlightText,
+      });
+    expect.soft(await flatness(page, result), result).toBeLessThan(0.95);
+  });
+
+  // The underline is a background fill, which forced colors repaint.
+  test("the current PaginationNav page keeps its underline", async ({
+    page,
+  }) => {
+    expect(
+      (await style(page, ".bx--pagination-nav__page--active", "::after"))
+        .background,
+    ).toBe(system.Highlight);
+  });
+
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so

@@ -751,10 +751,10 @@ $list-box-width: 100%;
     @include high-contrast-mode('outline');
   }
 
+  // ccs: the highlighted option fills with `Highlight` instead; see
+  // `_list-box-highlight-ring.scss`.
   .#{$prefix}--list-box__field:focus,
-  .#{$prefix}--multi-select .#{$prefix}--tag__close-icon:focus,
-  .#{$prefix}--list-box__menu-item--highlighted
-    .#{$prefix}--list-box__menu-item__option {
+  .#{$prefix}--multi-select .#{$prefix}--tag__close-icon:focus {
     @include high-contrast-mode('focus');
   }
 
