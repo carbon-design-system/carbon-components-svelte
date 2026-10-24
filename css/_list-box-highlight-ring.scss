@@ -38,6 +38,52 @@
     border-top-width: 1px;
     content: "";
   }
+
+  // Forced colors repaint the highlight ring as the rows' own edge color,
+  // so the keyboard highlight read like any other row. The row fills with
+  // `Highlight`, as a highlighted SearchMenu row does, and opts out of
+  // forcing: forced text sits on a `Canvas` backplate. Everything the row
+  // holds then needs a system color: the option text (also on hover), a
+  // checked MultiSelect label, the checkbox and the selected icon.
+  @media (forced-colors: active) {
+    .#{$prefix}--list-box__menu-item.#{$prefix}--list-box__menu-item--highlighted {
+      forced-color-adjust: none;
+      outline: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--list-box--option-highlighted
+      .#{$prefix}--list-box__menu-item--highlighted:first-child::before {
+      content: none;
+    }
+
+    .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--list-box__menu-item__option,
+    .#{$prefix}--list-box__menu-item--highlighted:hover
+      .#{$prefix}--list-box__menu-item__option,
+    .#{$prefix}--list-box__menu-item--highlighted .#{$prefix}--checkbox-label,
+    .#{$prefix}--multi-select
+      .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--checkbox:checked
+      ~ .#{$prefix}--checkbox-label-text {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--checkbox
+      + .#{$prefix}--checkbox-label::before,
+    .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--checkbox
+      + .#{$prefix}--checkbox-label::after {
+      border-color: HighlightText;
+      background-color: transparent;
+    }
+
+    .#{$prefix}--list-box__menu-item--highlighted svg {
+      fill: HighlightText;
+    }
+  }
 }
 
 @include exports("list-box-highlight-ring") {

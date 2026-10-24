@@ -23,6 +23,7 @@
     HeaderNavItem,
     HeaderPanelLink,
     HeaderPanelLinks,
+    HeaderSearch,
     HeaderUtilities,
     InlineEdit,
     Menu,
@@ -33,6 +34,7 @@
     NumberInput,
     OverflowMenu,
     OverflowMenuItem,
+    PaginationNav,
     PasswordInput,
     PinCodeInput,
     Popover,
@@ -320,6 +322,8 @@
     </svelte:fragment>
   </ToastNotification>
 
+  <PaginationNav total={5} page={2} />
+
   <div data-testid="fields">
     <div data-testid="text"><TextInput labelText="Text input" /></div>
     <div data-testid="password">
@@ -411,5 +415,15 @@
     <div data-testid="pin">
       <PinCodeInput fluid labelText="Fluid pin code" />
     </div>
+  </div>
+
+  <div style="height: 8rem;">
+    <HeaderSearch
+      value="api"
+      results={[
+        { href: "/", text: "payments-api" },
+        { href: "/", text: "orders-api" },
+      ]}
+    />
   </div>
 </main>

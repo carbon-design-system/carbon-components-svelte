@@ -354,8 +354,9 @@
 
   // Windows HCM fix
   /* stylelint-disable */
-  .#{$prefix}--overflow-menu:focus,
-  .#{$prefix}--overflow-menu-options__btn:focus {
+  // ccs: a focused option fills with `Highlight` instead; see
+  // `overflow-menu-forced-colors`.
+  .#{$prefix}--overflow-menu:focus {
     @include high-contrast-mode('focus');
   }
 
@@ -506,13 +507,33 @@
 // The OverflowMenu surface is separated from the page only by a box-shadow, which
 // forced-colors mode drops. A transparent outline is repainted as a visible
 // system colour there.
+//
+// Every option's resting outline is repainted too, so the focused option's
+// thinner `Highlight` ring stood out less than its neighbors. It fills with
+// `Highlight` and opts out of forcing, as a highlighted SearchMenu row does;
+// a danger option's red fill would come back without the doubled class.
 
-/// OverflowMenu surface edge in forced-colors mode.
+/// OverflowMenu surface edge and focused option in forced-colors mode.
 /// @access private
 /// @group overflow-menu
 @mixin overflow-menu-forced-colors {
   .#{$prefix}--overflow-menu-options {
     @include high-contrast-mode("outline");
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--overflow-menu-options__btn:focus,
+    .#{$prefix}--overflow-menu-options__option--danger
+      .#{$prefix}--overflow-menu-options__btn:focus {
+      forced-color-adjust: none;
+      outline: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--overflow-menu-options__btn:focus svg {
+      fill: HighlightText;
+    }
   }
 }
 

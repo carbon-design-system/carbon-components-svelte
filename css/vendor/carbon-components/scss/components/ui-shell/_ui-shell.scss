@@ -393,6 +393,23 @@
     transition-delay: inherit;
     transition-property: scrollbar-width;
   }
+
+  // Forced colors drop the selected result's fill, so the keyboard
+  // highlight in HeaderSearch's results vanished. It fills with
+  // `Highlight` and opts out of forcing, as a highlighted SearchMenu row
+  // does.
+  @media (forced-colors: active) {
+    .#{$prefix}--header-search-menu-item.#{$prefix}--header-search-menu-item--selected {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--header-search-menu-item--selected
+      .#{$prefix}--header-search-menu-description {
+      color: HighlightText;
+    }
+  }
 }
 
 @include exports('ccs-ui-shell') {
