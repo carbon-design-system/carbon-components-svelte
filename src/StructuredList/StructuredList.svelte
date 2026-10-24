@@ -46,6 +46,7 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
+  import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -76,6 +77,12 @@
   const multipleValue = writable(multiple);
   const selectionValue = writable(selection);
   const iconValue = writable(icon);
+  /**
+   * Values of the mounted `StructuredListInput`s, in registration order.
+   * @type {import("svelte/store").Writable<Value[]>}
+   */
+  const rowValues = writable([]);
+  const batchedRowValuesUpdate = batchStoreUpdates(rowValues);
 
   let prevSelectedValue = $selectedValue;
   let prevMultiple = multiple;
@@ -125,10 +132,14 @@
    */
   function register(value) {
     mountedValues.set(value, (mountedValues.get(value) ?? 0) + 1);
+    // Every input registers in the same synchronous mount pass, so publish
+    // the values once rather than once per input.
+    batchedRowValuesUpdate(() => [...mountedValues.keys()]);
     return () => {
       const count = (mountedValues.get(value) ?? 0) - 1;
       if (count > 0) mountedValues.set(value, count);
       else mountedValues.delete(value);
+      batchedRowValuesUpdate(() => [...mountedValues.keys()]);
       // An `{#if}` swap or re-render destroys an input before mounting its
       // replacement, so wait for the flush before deciding the value is
       // gone. Then drop a selection no input carries anymore, as the browser
@@ -176,6 +187,7 @@
     add,
     update,
     register,
+    rowValues: readonly(rowValues),
     multiple: readonly(multipleValue),
     selection: readonly(selectionValue),
     icon: readonly(iconValue),
