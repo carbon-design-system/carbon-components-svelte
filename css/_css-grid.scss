@@ -1,0 +1,268 @@
+@use "sass:math";
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/layout/breakpoint";
+
+/// Carbon v11's CSS Grid (`@carbon/grid` `css-grid`), for `CssGrid` and
+/// `CssColumn`. It has no v10 base to patch. Breakpoints, column counts and
+/// margins come from the vendored `$carbon--grid-breakpoints`, the map the
+/// flexbox grid reads, so the two grids cannot drift apart.
+///
+/// Differences from v11:
+/// - Nothing declares `--cds-grid-gutter`, `-columns` or `-margin`; v11
+///   declares them on `:root`. Each rule reads them with v11's default as
+///   the fallback, so a value set on `:root`, any ancestor, the grid or its
+///   `style` wins in any stylesheet order, and the theme tokens stay as
+///   they are.
+/// - Mode values (gutter start and end, column hang, a column's span) are
+///   private `--ccs-grid-*` properties. v11's condensed grid overwrites
+///   `--cds-grid-gutter`, which would hide the consumer's value from the
+///   subgrids inside it.
+/// - Subgrid gutters and row gaps, and the condensed column hang, follow
+///   `--cds-grid-gutter`; v11 fixes them for a 2rem gutter. Condensed keeps
+///   its 1px gutter.
+/// - v11's `[dir="rtl"]` twins for the column, the subgrid and the column
+///   hang are left out. The rules are logical already, so they mirror on
+///   their own; the twins swap start and end a second time and undo it.
+/// @access private
+/// @group components
+@mixin css-grid {
+  $gutter: var(--cds-grid-gutter, #{$carbon--grid-gutter});
+  $half: calc(#{$gutter} / 2);
+  $condensed-half: math.div($carbon--grid-gutter--condensed, 2);
+
+  .#{$prefix}--css-grid {
+    box-sizing: border-box;
+    inline-size: 100%;
+    margin-inline: auto;
+    max-inline-size: map-get(map-get($carbon--grid-breakpoints, max), width);
+  }
+
+  // Emit a column count or margin only at the breakpoint where it changes.
+  $prev-columns: null;
+  $prev-margin: null;
+  @each $bp, $values in $carbon--grid-breakpoints {
+    $columns: map-get($values, columns);
+    $margin: map-get($values, margin);
+
+    @if $columns != $prev-columns or $margin != $prev-margin {
+      @include carbon--breakpoint($bp) {
+        .#{$prefix}--css-grid {
+          @if $columns != $prev-columns {
+            --ccs-grid-columns: var(--cds-grid-columns, #{$columns});
+          }
+          @if $margin != $prev-margin {
+            padding-inline: var(--cds-grid-margin, #{$margin});
+          }
+        }
+      }
+    }
+
+    $prev-columns: $columns;
+    $prev-margin: $margin;
+  }
+
+  // Wide by default. Each grid sets the gutters of its own columns. A
+  // subgrid takes its track count from the span of the column it sits in.
+  .#{$prefix}--css-grid,
+  .#{$prefix}--subgrid {
+    --ccs-grid-gutter-start: #{$half};
+    --ccs-grid-gutter-end: #{$half};
+    // Separate from gutter-start, which narrow sets to 0.
+    --ccs-grid-column-hang: #{$half};
+
+    display: grid;
+    grid-template-columns: repeat(var(--ccs-grid-columns), minmax(0, 1fr));
+  }
+
+  .#{$prefix}--subgrid--wide {
+    --ccs-grid-column-hang: 0;
+  }
+
+  .#{$prefix}--css-grid--narrow,
+  .#{$prefix}--subgrid--narrow {
+    --ccs-grid-gutter-start: 0rem;
+  }
+
+  .#{$prefix}--css-grid--condensed,
+  .#{$prefix}--subgrid--condensed {
+    --ccs-grid-gutter-start: #{$condensed-half};
+    --ccs-grid-gutter-end: #{$condensed-half};
+    --ccs-grid-column-hang: calc(#{$gutter} / 2 - #{$condensed-half});
+  }
+
+  .#{$prefix}--css-grid--full-width {
+    max-inline-size: 100%;
+  }
+
+  // Gutters are margins, not `column-gap`: narrow drops only the leading one.
+  .#{$prefix}--css-grid-column {
+    // What a subgrid in this column pulls back with a negative margin.
+    --ccs-grid-mode-start: var(--ccs-grid-gutter-start);
+    --ccs-grid-mode-end: var(--ccs-grid-gutter-end);
+
+    margin-inline: var(--ccs-grid-gutter-start) var(--ccs-grid-gutter-end);
+  }
+
+  // The full gutter between two columns: 1rem in narrow, 1px in condensed.
+  .#{$prefix}--css-grid--with-row-gap,
+  .#{$prefix}--subgrid--with-row-gap {
+    row-gap: calc(var(--ccs-grid-gutter-start) + var(--ccs-grid-gutter-end));
+  }
+
+  .#{$prefix}--css-grid--start {
+    margin-inline-start: 0;
+  }
+
+  .#{$prefix}--css-grid--end {
+    margin-inline-end: 0;
+  }
+
+  .#{$prefix}--subgrid {
+    margin-inline: calc(var(--ccs-grid-mode-start) * -1)
+      calc(var(--ccs-grid-mode-end) * -1);
+  }
+
+  // Lines up text in a column whose leading gutter narrow or condensed
+  // removed.
+  .#{$prefix}--grid-column-hang {
+    margin-inline-start: var(--ccs-grid-column-hang);
+  }
+
+  // Every span rule comes before every start and end rule. `grid-column:
+  // span N` also resets grid-column-start, so a start class only holds
+  // beside a span class when it comes later.
+
+  // `span`: the same at every width. 0 hides the column.
+  @for $i from 0 through 16 {
+    .#{$prefix}--col-span-#{$i} {
+      @include -css-grid-span($i);
+    }
+  }
+
+  // `sm` to `max`. `\:` keeps the colon in `bx--md:col-span-4` literal.
+  // A percent resolves against that breakpoint's column count.
+  @each $bp, $values in $carbon--grid-breakpoints {
+    $columns: map-get($values, columns);
+
+    @include carbon--breakpoint($bp) {
+      @for $i from 0 through $columns {
+        .#{$prefix}--#{$bp}\:col-span-#{$i} {
+          @include -css-grid-span($i);
+        }
+      }
+
+      .#{$prefix}--#{$bp}\:col-span-auto {
+        grid-column: auto;
+      }
+
+      .#{$prefix}--#{$bp}\:col-span-100 {
+        grid-column: 1 / -1;
+      }
+
+      @each $pct in (75, 50, 25) {
+        .#{$prefix}--#{$bp}\:col-span-#{$pct} {
+          @include -css-grid-percent($columns, $pct);
+        }
+      }
+    }
+  }
+
+  .#{$prefix}--col-span-auto {
+    grid-column: auto;
+  }
+
+  .#{$prefix}--col-span-100 {
+    grid-column: 1 / -1;
+  }
+
+  // An unprefixed percent re-resolves where the column count changes, so
+  // `span="50%"` is half the grid at every width.
+  @each $pct in (75, 50, 25) {
+    $prev-columns: null;
+
+    @each $bp, $values in $carbon--grid-breakpoints {
+      $columns: map-get($values, columns);
+
+      @if $columns != $prev-columns {
+        @include carbon--breakpoint($bp) {
+          .#{$prefix}--col-span-#{$pct} {
+            @include -css-grid-percent($columns, $pct);
+          }
+        }
+      }
+
+      $prev-columns: $columns;
+    }
+  }
+
+  // Grid lines 1 to 16 and 2 to 17 at every breakpoint, as in v11, not
+  // capped by that breakpoint's column count.
+  @each $bp in join("", map-keys($carbon--grid-breakpoints)) {
+    $name: if($bp == "", "", "#{$bp}\\:");
+
+    @include -css-grid-at($bp) {
+      @for $i from 1 through 16 {
+        .#{$prefix}--#{$name}col-start-#{$i} {
+          grid-column-start: $i;
+        }
+      }
+
+      @for $i from 2 through 17 {
+        .#{$prefix}--#{$name}col-end-#{$i} {
+          grid-column-end: $i;
+        }
+      }
+
+      .#{$prefix}--#{$name}col-start-auto {
+        grid-column-start: auto;
+      }
+
+      .#{$prefix}--#{$name}col-end-auto {
+        grid-column-end: auto;
+      }
+    }
+  }
+}
+
+/// A column span. 0 hides the column.
+/// @access private
+/// @group components
+@mixin -css-grid-span($i) {
+  @if $i == 0 {
+    display: none;
+  } @else {
+    --ccs-grid-columns: #{$i};
+
+    display: block;
+    grid-column: span #{$i} / span #{$i};
+  }
+}
+
+/// A percent of the breakpoint's columns.
+/// @access private
+/// @group components
+@mixin -css-grid-percent($columns, $pct) {
+  $span: math.div($columns * $pct, 100);
+  --ccs-grid-columns: #{$span};
+
+  grid-column: span #{$span} / span #{$span};
+}
+
+/// Wrap in a breakpoint, or emit as is for `""`.
+/// @access private
+/// @group components
+@mixin -css-grid-at($bp) {
+  @if $bp != "" {
+    @include carbon--breakpoint($bp) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@include exports("css-grid") {
+  @include css-grid;
+}

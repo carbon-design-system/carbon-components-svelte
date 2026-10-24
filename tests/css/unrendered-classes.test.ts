@@ -24,6 +24,7 @@ const PUBLIC_UTILITIES = new Set([
   "bx--hang--left",
   "bx--hang--right",
   "bx--icon--mirror-rtl",
+  "bx--grid-column-hang",
 ]);
 
 // Styled but never rendered, as found when this check landed. Removing the

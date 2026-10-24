@@ -64,13 +64,17 @@ const TYPE_STYLES = [
   ...[1, 2, 3, 4].map((n) => `fluid-display-0${n}`),
 ];
 
-// Carbon v11 component hooks. A consumer sets them, and the CSS reads each
-// with the theme token as its fallback, so nothing declares them.
+// Carbon v11 hooks. A consumer sets them, and the CSS reads each with the
+// theme token or v11's default as its fallback, so nothing declares them.
 const V11_HOOKS = new Set([
   "link-text-color",
   "link-hover-text-color",
   "link-visited-text-color",
   "link-focus-text-color",
+  // The CSS Grid (`@carbon/grid` `css-grid`), which v11 declares on `:root`.
+  "grid-gutter",
+  "grid-columns",
+  "grid-margin",
 ]);
 
 describe("Carbon v11 tokens", () => {
@@ -99,6 +103,8 @@ describe("Carbon v11 tokens", () => {
     ).toEqual([]);
     // Each hook is still read, so a stale entry does not hide a typo.
     expect([...V11_HOOKS].filter((name) => !read().has(name))).toEqual([]);
+    // A declaration would shadow the value a consumer sets on an ancestor.
+    expect([...V11_HOOKS].filter((name) => names.has(name))).toEqual([]);
   });
 
   // A scope that re-points a token nothing reads has no effect, which is how
