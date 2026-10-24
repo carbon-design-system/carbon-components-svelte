@@ -29,6 +29,8 @@
    */
   export let tag = "div";
 
+  import { parseAspectRatio } from "../utils/aspect-ratio.js";
+
   const KNOWN_RATIOS = [
     "2x1",
     "2x3",
@@ -40,26 +42,9 @@
     "9x16",
     "1x2",
   ];
-  const CUSTOM_RATIO_PATTERN = /^(\d+(?:\.\d+)?)x(\d+(?:\.\d+)?)$/;
-
-  /**
-   * Parse a "WxH" string into positive width/height numbers, or `null` if
-   * it isn't one (not a string, wrong shape, or zero/negative on either side).
-   * @param {unknown} value
-   */
-  function parseCustomRatio(value) {
-    if (typeof value !== "string") return null;
-    const match = CUSTOM_RATIO_PATTERN.exec(value);
-    if (!match) return null;
-    const width = Number(match[1]);
-    const height = Number(match[2]);
-    if (!(width > 0) || !(height > 0)) return null;
-    return { width, height };
-  }
-
   $: customRatio = KNOWN_RATIOS.includes(ratio)
     ? null
-    : parseCustomRatio(ratio);
+    : parseAspectRatio(ratio);
   $: resolvedRatio = KNOWN_RATIOS.includes(ratio)
     ? ratio
     : customRatio
