@@ -114,6 +114,8 @@
   /** Specify the accessible name of the notifications landmark */
   export let labelText = "Notifications";
 
+  import { setContext, tick } from "svelte";
+  import { writable } from "svelte/store";
   import { focusActionableNotification } from "../utils/dismissible-notification.js";
   import NotificationActionButton from "./NotificationActionButton.svelte";
   import ToastNotification from "./ToastNotification.svelte";
@@ -131,6 +133,22 @@
   let notifications = [];
 
   let idCounter = 0;
+
+  let hovered = false;
+  let focused = false;
+
+  // As in React Aria's toast region, every toast's timer pauses while the
+  // pointer or focus is in the queue, then resumes with the time it had left.
+  const paused = writable(false);
+
+  setContext("carbon:NotificationQueue", { paused });
+
+  // The queue unmounts when it empties, which fires no leave events.
+  $: if (notifications.length === 0) {
+    hovered = false;
+    focused = false;
+  }
+  $: paused.set(hovered || focused);
 
   function generateId() {
     return `notification-${idCounter++}`;
@@ -162,6 +180,7 @@
       notifications.splice(dropIndex(notifications, top), 1);
     }
     notifications = notifications;
+    settleFocus();
 
     return id;
   }
@@ -192,6 +211,7 @@
 
     notifications.splice(index, 1);
     notifications = notifications;
+    settleFocus();
     return true;
   }
 
@@ -201,6 +221,14 @@
    */
   export function clear() {
     notifications = [];
+  }
+
+  // Firefox and Safari fire no `focusout` when they remove the focused toast.
+  function settleFocus() {
+    if (!focused) return;
+    tick().then(() => {
+      focused = !!queueRef?.contains(document.activeElement);
+    });
   }
 
   /**
@@ -282,6 +310,21 @@
       ? "translateX(-50%)"
       : undefined}
     style:z-index={zIndex}
+    on:pointerenter={(event) => {
+      // Touch has no hover. A tap would leave the queue paused.
+      if (event.pointerType !== "touch") hovered = true;
+    }}
+    on:pointerleave={() => {
+      hovered = false;
+    }}
+    on:focusin={() => {
+      focused = true;
+    }}
+    on:focusout={(event) => {
+      // Focus moving from one toast to another stays inside.
+      const next = event.relatedTarget;
+      focused = next instanceof Node && event.currentTarget.contains(next);
+    }}
   >
     <!-- `id` keys the queue; spreading it would set duplicate DOM ids across queues. -->
     {#each notifications as { id, action, ...notification } (id)}

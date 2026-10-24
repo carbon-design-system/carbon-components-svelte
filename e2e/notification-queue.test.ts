@@ -87,4 +87,34 @@ test.describe("NotificationQueue", () => {
       page.getByRole("region", { name: "Notifications" }),
     ).toBeVisible();
   });
+
+  test("pauses timers while the pointer is in the queue", async ({ page }) => {
+    await page.getByTestId("nq-slow").click();
+    const toast = toastWithText(page, "Slow");
+    await toast.hover();
+
+    await page.waitForTimeout(1200);
+    await expect(toast).toBeVisible();
+
+    await page.mouse.move(1, 1);
+    await expect(toast).toHaveCount(0, { timeout: 2000 });
+  });
+
+  test("pauses timers while focus is in the queue", async ({ page }) => {
+    const add = page.getByTestId("nq-slow");
+    await add.focus();
+    await page.keyboard.press("Enter");
+    const toast = toastWithText(page, "Slow");
+    await page.keyboard.press("F6");
+    await expect(
+      toast.getByRole("button", { name: "Close notification" }),
+    ).toBeFocused();
+
+    await page.waitForTimeout(1200);
+    await expect(toast).toBeVisible();
+
+    await page.keyboard.press("Shift+F6");
+    await expect(add).toBeFocused();
+    await expect(toast).toHaveCount(0, { timeout: 2000 });
+  });
 });

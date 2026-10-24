@@ -85,7 +85,12 @@
    */
   export let open = true;
 
-  import { createEventDispatcher, onMount, setContext } from "svelte";
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+  } from "svelte";
   import { writable } from "svelte/store";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
@@ -106,6 +111,10 @@
 
   setContext("carbon:NotificationAction", { describedBy, toast: true });
 
+  // A `NotificationQueue` holds every toast's timer while the pointer or
+  // focus is inside the queue.
+  const queuePaused = getContext("carbon:NotificationQueue")?.paused;
+
   const {
     close,
     sync,
@@ -115,6 +124,7 @@
     handleMouseleave,
     handleFocusIn,
     handleFocusOut,
+    setPaused,
     dispose,
   } = createDismissibleNotification({
     dispatch,
@@ -126,6 +136,7 @@
   });
 
   $: sync(open, timeout, actionable || !!$$slots.actions);
+  $: setPaused(Boolean($queuePaused));
   $: syncFocusOnOpen(open, actionable && focusOnOpen);
 
   $: hasTitle = !!(title || $$slots.titleChildren);

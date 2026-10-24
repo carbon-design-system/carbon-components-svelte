@@ -16,8 +16,13 @@
  * restarted the timer unpaused. `reset()` forgets it when the root unmounts,
  * which fires no `mouseleave`/`focusout`.
  *
+ * `getPaused` holds the timer paused regardless of hover and focus, as a
+ * `NotificationQueue` does for every toast while the pointer or focus is
+ * inside it.
+ *
  * @param {{ pause: () => void, resume: () => void }} dismiss
  * @param {() => boolean} getPauseOnHover
+ * @param {() => boolean} [getPaused]
  * @returns {{
  *   handleMouseenter: () => void,
  *   handleMouseleave: (event: MouseEvent) => void,
@@ -27,7 +32,11 @@
  *   reset: () => void,
  * }}
  */
-export function createHoverFocusPause(dismiss, getPauseOnHover) {
+export function createHoverFocusPause(
+  dismiss,
+  getPauseOnHover,
+  getPaused = () => false,
+) {
   let hovered = false;
   let focused = false;
 
@@ -44,8 +53,11 @@ export function createHoverFocusPause(dismiss, getPauseOnHover) {
 
   // Also resumes when `pauseOnHover` was turned off while paused.
   function apply() {
-    if (getPauseOnHover() && (hovered || focused)) dismiss.pause();
-    else dismiss.resume();
+    if (getPaused() || (getPauseOnHover() && (hovered || focused))) {
+      dismiss.pause();
+    } else {
+      dismiss.resume();
+    }
   }
 
   return {

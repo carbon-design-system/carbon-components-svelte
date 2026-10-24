@@ -54,6 +54,14 @@
     Add timed
   </Button>
   <Button
+    data-testid="nq-slow"
+    on:click={() => {
+      queue?.add({ title: "Slow", timeout: 800 });
+    }}
+  >
+    Add slow
+  </Button>
+  <Button
     data-testid="nq-action"
     on:click={() => {
       queue?.add({
