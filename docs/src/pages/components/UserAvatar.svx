@@ -4,7 +4,7 @@ description: User avatars display a photo, a custom icon, or initials derived fr
 ---
 
 <script>
-  import { UserAvatar } from "carbon-components-svelte";
+  import { Stack, UserAvatar } from "carbon-components-svelte";
   import CheckmarkFilled from "carbon-icons-svelte/lib/CheckmarkFilled.svelte";
   import UserAvatarFilledAlt from "carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte";
   import Bot from "carbon-icons-svelte/lib/Bot.svelte";
@@ -91,16 +91,23 @@ Pass HTML attributes to the image with `imageAttributes`. Use this for values su
 
 ## Sizes
 
-Set `size` to one of `"sm"`, `"md"` (default), `"lg"`, or `"xl"`. The size applies to any content; the image fills the frame at every size.
+Set `size` to control avatar size. The default is `"md"`. The sizes are 24, 32, 48 and 64 pixels, as in Carbon. The size applies to any content; the image fills the frame at every size, and initials step up the type scale.
 
 <UserAvatar size="sm" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
 <UserAvatar size="md" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
 <UserAvatar size="lg" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
 <UserAvatar size="xl" image="https://i.pravatar.cc/300?img=12" imageDescription="Richard Hendricks" />
 
+<Stack orientation="horizontal" gap={3} align="center">
+  <UserAvatar size="sm" name="Richard Hendricks" />
+  <UserAvatar size="md" name="Richard Hendricks" />
+  <UserAvatar size="lg" name="Richard Hendricks" />
+  <UserAvatar size="xl" name="Richard Hendricks" />
+</Stack>
+
 ## Background colors
 
-Set `backgroundColor` to choose the color rendered behind the initials or icon. The default is `"gray"`.
+Set `backgroundColor` to choose the color rendered behind the initials or icon. The default is `"gray"`. Dark themes use a lighter step of each color with dark initials, so the text keeps at least 5:1 contrast.
 
 <UserAvatar backgroundColor="red" name="Richard Hendricks" />
 <UserAvatar backgroundColor="magenta" name="Richard Hendricks" />
