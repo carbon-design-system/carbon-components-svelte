@@ -1,6 +1,7 @@
 <script>
   import {
     AILabel,
+    Box,
     Button,
     Card,
     CardAction,
@@ -333,6 +334,12 @@ export async function rollback(region, id) {
       {marks}
     />
   </LayoutDirection>
+  <Box data-testid="box-logical" paddingX={1} paddingStart={5} marginEnd={3}
+    >Logical sides</Box
+  >
+  <Box data-testid="box-logical-custom" marginX="2px" marginStart="20px"
+    >Custom logical sides</Box
+  >
 </Content>
 
 <style>

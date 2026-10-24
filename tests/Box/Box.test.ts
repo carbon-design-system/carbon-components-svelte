@@ -72,6 +72,11 @@ describe("Box", () => {
       { marginX: 2, marginRight: 3, marginBottom: 4, marginLeft: 5 },
       ["bx--box-mx-2", "bx--box-mr-3", "bx--box-mb-4", "bx--box-ml-5"],
     ],
+    [
+      "logical padding and margin",
+      { paddingStart: 3, paddingEnd: 5, marginStart: 2, marginEnd: 4 },
+      ["bx--box-ps-3", "bx--box-pe-5", "bx--box-ms-2", "bx--box-me-4"],
+    ],
     ["max height scale", { maxHeight: 6 }, ["bx--box-max-height-6"]],
     [
       "bottom and right offsets",
@@ -223,6 +228,33 @@ describe("Box", () => {
         marginRight: "1rem",
         marginBottom: "1rem",
         marginLeft: "1rem",
+      },
+    ],
+    [
+      "custom logical padding",
+      { paddingStart: "1.5rem" },
+      { paddingInlineStart: "1.5rem", paddingLeft: "", paddingRight: "" },
+    ],
+    [
+      "custom axis margin fills the other logical side",
+      { marginX: "1rem", marginStart: 2 },
+      {
+        marginInlineStart: "",
+        marginInlineEnd: "1rem",
+        marginLeft: "",
+        marginRight: "",
+      },
+    ],
+    [
+      "custom all-sides padding with a logical side",
+      { padding: "1rem", paddingEnd: "2rem" },
+      // jsdom folds logical sides into physical ones, so check only the
+      // logical values here; e2e/rtl.test.ts checks the real layout.
+      {
+        paddingTop: "1rem",
+        paddingBottom: "1rem",
+        paddingInlineStart: "1rem",
+        paddingInlineEnd: "2rem",
       },
     ],
     ["max width", { fullWidth: true, maxWidth: 480 }, { maxWidth: "480px" }],
