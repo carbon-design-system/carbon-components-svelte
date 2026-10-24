@@ -162,9 +162,11 @@
     align-items: center;
   }
 
+  // ccs: warn lays out like invalid
   .#{$prefix}--select--inline.#{$prefix}--select--invalid .#{$prefix}--label,
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
-    .#{$prefix}--form__helper-text {
+    .#{$prefix}--form__helper-text,
+  .#{$prefix}--select--inline.#{$prefix}--select--warning .#{$prefix}--label {
     align-self: flex-start;
     // Offset label text margin
     margin-top: to-rem(13px);
@@ -204,12 +206,18 @@
     right: $carbon--spacing-03;
   }
 
+  // ccs: warn lays out like invalid
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
+    .#{$prefix}--select-input,
+  .#{$prefix}--select--inline.#{$prefix}--select--warning
     .#{$prefix}--select-input {
     padding-right: to-rem(56px);
   }
 
   .#{$prefix}--select--inline.#{$prefix}--select--invalid
+    .#{$prefix}--select-input
+    ~ .#{$prefix}--select__invalid-icon,
+  .#{$prefix}--select--inline.#{$prefix}--select--warning
     .#{$prefix}--select-input
     ~ .#{$prefix}--select__invalid-icon {
     right: $spacing-07;
