@@ -13,7 +13,10 @@
   /** Set to `true` to use the low contrast variant */
   export let lowContrast = false;
 
-  /** Set the timeout duration (ms) to hide the notification after opening it */
+  /**
+   * Set the timeout duration (ms) to hide the notification after opening it.
+   * Ignored when the notification is `actionable` or has an `actions` slot.
+   */
   export let timeout = 0;
 
   /** Set to `true` to pause the auto-dismiss timeout while the pointer is over the notification or while focus is inside it. */
@@ -120,7 +123,7 @@
     getRef: () => notificationRef,
   });
 
-  $: sync(open, timeout);
+  $: sync(open, timeout, actionable || !!$$slots.actions);
   $: syncFocusOnOpen(open, actionable && focusOnOpen);
 
   $: hasTitle = !!(title || $$slots.titleChildren);

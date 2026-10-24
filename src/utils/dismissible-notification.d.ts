@@ -1,6 +1,7 @@
 export interface DismissibleNotification {
   close: (closeFromTimeout?: unknown) => void;
-  sync: (open: boolean, timeout: number) => void;
+  /** `hasAction` makes the notification ignore `timeout` (WCAG 2.2.1). */
+  sync: (open: boolean, timeout: number, hasAction?: boolean) => void;
   syncFocusOnOpen: (open: boolean, enabled: boolean) => void;
   handleActionableKeydown: (
     event: KeyboardEvent,

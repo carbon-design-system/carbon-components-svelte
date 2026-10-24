@@ -46,7 +46,7 @@ export function focusActionableNotification(root) {
  * @param {() => HTMLElement | null | undefined} [options.getRef]
  * @returns {{
  *   close: (closeFromTimeout?: unknown) => void,
- *   sync: (open: boolean, timeout: number) => void,
+ *   sync: (open: boolean, timeout: number, hasAction?: boolean) => void,
  *   syncFocusOnOpen: (open: boolean, enabled: boolean) => void,
  *   handleActionableKeydown: (
  *     event: KeyboardEvent,
@@ -140,10 +140,15 @@ export function createDismissibleNotification({
   }
 
   /**
+   * A notification that is actionable or holds an action ignores `timeout`.
+   * It stays open until users act on it or close it, as Carbon's usage
+   * guidance says. A timer could remove the action before a keyboard or
+   * screen reader user reaches it (WCAG 2.2.1).
    * @param {boolean} open
    * @param {number} timeout
+   * @param {boolean} [hasAction]
    */
-  function sync(open, timeout) {
+  function sync(open, timeout, hasAction = false) {
     // Also covers a consumer setting `open` to false (e.g. from an action
     // button), which skips `close()`.
     if (wasOpen && !open) {
@@ -151,7 +156,7 @@ export function createDismissibleNotification({
       reset();
     }
     wasOpen = open;
-    dismiss.sync(open, timeout, () => close(true));
+    dismiss.sync(open, hasAction ? 0 : timeout, () => close(true));
     // `dismiss.sync()` restarts the timer unpaused; keep it paused while
     // the pointer or focus is still inside (e.g. a queue `update()`).
     if (open) refresh();

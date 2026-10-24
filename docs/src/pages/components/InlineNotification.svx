@@ -23,6 +23,10 @@ Control notification visibility by binding to `open` to show, hide, and reuse th
 
 Automatically close the notification after a specified duration (in milliseconds) with `timeout`. Set `pauseOnHover` to pause the timeout while the pointer is over the notification or while focus is inside it, so users can finish reading (opt-in).
 
+A notification with an action, or an actionable notification, ignores
+`timeout`. It stays open until users act on it or close it, so the
+action never disappears before they reach it.
+
 <FileSource src="/framed/InlineNotification/InlineNotificationTimeout" />
 
 ## Full width
