@@ -28,8 +28,9 @@ press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle `clicked`.
 
 ## With icon
 
-Set `icon` to show an icon in the bottom-right corner, or the bottom-left in a
-right-to-left layout. Use `ArrowRight` for a page in your app and `Launch` for
+Set `icon` to show an icon in the bottom-right corner. In a right-to-left
+layout, it moves to the bottom-left corner and mirrors, so an arrow points
+left. Use `ArrowRight` for a page in your app and `Launch` for
 a link that opens another site. The icon is decorative and hidden from screen
 readers, so let the tile's text name the destination.
 
