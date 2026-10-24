@@ -904,6 +904,7 @@ const FIELD_CASES = [
   "fluid-combo-box-invalid",
   "fluid-date-picker-invalid",
   "fluid-time-picker-invalid",
+  "fluid-time-picker-selects",
   "fluid-pin-code-invalid",
 ];
 
@@ -945,6 +946,8 @@ const FIELD_PSEUDOS = [
   [".bx--number__control-btn", "::before"],
   [".bx--number__control-btn", "::after"],
   [".bx--search-close", "::before"],
+  // The fluid TimePicker's dividers between its cells.
+  [".bx--select-input__wrapper", "::before"],
 ] as const;
 
 /** Every visible part of each case, as start and end offsets from its box. */
