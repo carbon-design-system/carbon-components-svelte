@@ -7,6 +7,7 @@ description: LayoutDirection sets the writing direction for part of a page, such
   import {
     Button,
     ClickableTile,
+    CopyInput,
     Dropdown,
     LayoutDirection,
     Link,
@@ -120,6 +121,17 @@ Add the `bx--icon--mirror-rtl` class to mirror your own forward or back icon, su
       عرض سجل النشر
       <ArrowRight slot="icon" class="bx--icon--mirror-rtl" />
     </Link>
+  </Stack>
+</LayoutDirection>
+
+## Copy input
+
+`CopyInput` takes the direction of its value from the first letter of the value, so a URL or a token keeps its order in an RTL page, and Arabic or Hebrew text still reads right to left. Set `dir="ltr"` on a value that must read left to right whatever its first letter, such as a file path with Arabic folder names.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Stack gap={6}>
+    <CopyInput labelText="رابط الخدمة" value="https://api.example.com/v1/deployments/" />
+    <CopyInput labelText="اسم الخدمة" value="بوابة الدفع (الإنتاج)" />
   </Stack>
 </LayoutDirection>
 
