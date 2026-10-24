@@ -76,7 +76,10 @@
   // Fields read the size like any other form size; buttons read a height
   // match, the same way they read an `ActionSet`'s size.
   setContext(FORM_SIZE_CONTEXT_KEY, sharedSize);
+  // Controls that don't size like fields (ContentSwitcher, OverflowMenu,
+  // MenuButton, ComboButton) read `size` to match the row.
   setContext("carbon:InputGroup", {
+    size: sharedSize,
     buttonSize: derived(sharedSize, ($size) => BUTTON_SIZE[$size ?? "md"]),
   });
 

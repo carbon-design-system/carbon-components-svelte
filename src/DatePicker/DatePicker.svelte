@@ -398,7 +398,8 @@
 
   /**
    * Set to `true` to fill the parent's width instead of the fixed input width.
-   * A range splits the width between its two inputs.
+   * A range splits the width between its two inputs. Always on in an
+   * `InputGroup`.
    */
   export let fullWidth = false;
 
@@ -489,6 +490,8 @@
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const formContext = getContext(FORM_CONTEXT_KEY);
+  // In an InputGroup the picker takes its share of the row, like a field.
+  const inInputGroup = !!getContext("carbon:InputGroup");
 
   $: usesInline = inline;
   $: usesWeekNumbers = weekNumbers;
@@ -1877,7 +1880,7 @@
     {id}
     class:bx--date-picker={true}
     class:bx--date-picker--short={short}
-    class:bx--date-picker--full-width={fullWidth}
+    class:bx--date-picker--full-width={fullWidth || inInputGroup}
     class:bx--date-picker--simple={datePickerType === "simple"}
     class:bx--date-picker--single={datePickerType === "single" ||
       datePickerType === "month" ||

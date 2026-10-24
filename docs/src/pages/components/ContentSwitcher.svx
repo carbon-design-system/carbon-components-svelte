@@ -258,7 +258,7 @@ The low contrast, icon-only variant supports all sizes. Set `size` to `"sm"`, `"
 
 ## Sizes
 
-Set `size` to control height. The default is `md`.
+Set `size` to control height. The default is `md`. In an `InputGroup` the switcher takes the group's size, including `"xs"`, and sizes each switch to its label.
 
 ### Extra-large
 

@@ -18,8 +18,8 @@
 
   /**
    * Specify the size of the search input.
-   * Inherits the parent `Form` size when unset, otherwise `"lg"` (40px),
-   * as in Carbon v11. Also accepts Carbon v11's `"md"` (`"lg"`, 40px).
+   * Inherits the parent `Form` or `InputGroup` size when unset, otherwise `"lg"`
+   * (40px), as in Carbon v11. Also accepts Carbon v11's `"md"` (`"lg"`, 40px).
    * Carbon v11's 48px `lg` is `"xl"` here.
    * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    * @default "lg"

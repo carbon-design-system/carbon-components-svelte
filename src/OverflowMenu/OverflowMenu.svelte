@@ -13,7 +13,8 @@
 
   /**
    * Specify the size of the overflow menu.
-   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * Inherits the parent `InputGroup` size when unset. Also accepts Carbon
+   * v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
    * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = undefined;
@@ -114,7 +115,7 @@
     onMount,
     setContext,
   } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, readable, writable } from "svelte/store";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
@@ -146,8 +147,10 @@
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext(MODAL_CONTEXT_KEY);
-
-  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
+  // Beside a field in an InputGroup, the trigger takes the row's height.
+  const groupSize =
+    getContext("carbon:InputGroup")?.size ?? readable(undefined);
+  $: effectiveSize = normalizeSize(size ?? $groupSize, FIELD_SIZE_ALIASES);
 
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
