@@ -22,6 +22,7 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
  * @property {(index: number, event: KeyboardEvent) => void} [onMove] - New index after a navigation key.
  * @property {boolean} [focusOnMove] - Call `.focus()` on the new item. Default `false`.
  * @property {boolean} [itemsOnly] - Ignore keydown from elements outside `getItems()`, such as matching controls in a nested popover. Default `false`.
+ * @property {() => boolean} [rtl] - Read on each horizontal arrow key. When it returns `true`, ArrowLeft moves to the next item and ArrowRight to the previous one. Default: never.
  */
 
 /**
@@ -106,16 +107,19 @@ export function rovingFocus(node, options) {
       return;
     }
 
+    const inline =
+      horizontal && (event.key === "ArrowLeft" || event.key === "ArrowRight");
+    // Read when the key arrives: nothing reports a `dir` change.
+    const forward =
+      inline && currentOptions.rtl?.() ? "ArrowLeft" : "ArrowRight";
+
     let index = -1;
     if (
-      (horizontal && event.key === "ArrowRight") ||
+      (inline && event.key === forward) ||
       (vertical && event.key === "ArrowDown")
     ) {
       index = moveBy(items, 1);
-    } else if (
-      (horizontal && event.key === "ArrowLeft") ||
-      (vertical && event.key === "ArrowUp")
-    ) {
+    } else if (inline || (vertical && event.key === "ArrowUp")) {
       index = moveBy(items, -1);
     } else if (hasModifierKey(event)) {
       // Leave Ctrl/Cmd+Home/End (scroll to the top or bottom) to the browser.

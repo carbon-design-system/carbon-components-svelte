@@ -25,6 +25,8 @@ export type RovingFocusOptions = {
   focusOnMove?: boolean;
   /** Ignore keydown from elements outside `getItems()`, such as matching controls in a nested popover. @default false */
   itemsOnly?: boolean;
+  /** Read on each horizontal arrow key. When it returns `true`, ArrowLeft moves to the next item and ArrowRight to the previous one. @default () => false */
+  rtl?: () => boolean;
 };
 
 /** Arrow/Home/End keydown on `node` calls `onMove` with the next index. */

@@ -62,6 +62,10 @@
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
   import { keyBy } from "../utils/key-by.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
@@ -73,6 +77,7 @@
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
@@ -531,6 +536,9 @@
         orientation: listOrientation,
         skipDisabled: true,
         getActiveIndex,
+        // Only Left and Right swap, in the row layout.
+        rtl: () =>
+          resolveLayoutDirection($layoutDirection, refTabList) === "rtl",
         onMove: (index, event) => {
           // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
           if (hasModifierKey(event)) return;
