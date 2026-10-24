@@ -950,7 +950,10 @@ const FIELD_PSEUDOS = [
 /** Every visible part of each case, as start and end offsets from its box. */
 function fieldOffsets(page: Page) {
   return page.evaluate(
-    ({ cases, parts, text, pseudos }) => {
+    async ({ cases, parts, text, pseudos }) => {
+      // Run first in a worker, the labels measured in the fallback font in
+      // LTR and in IBM Plex in RTL.
+      await document.fonts.ready;
       const result: Record<string, { start: number; end: number }> = {};
       const rtl = document.documentElement.dir === "rtl";
       for (const name of cases) {
