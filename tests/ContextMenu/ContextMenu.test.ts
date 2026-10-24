@@ -370,6 +370,34 @@ describe("ContextMenu", () => {
     expect(screen.getByRole("menuitem", { name: expected })).toHaveFocus();
   });
 
+  it("opens a submenu with ArrowLeft and closes it with ArrowRight in RTL", async () => {
+    document.documentElement.style.direction = "rtl";
+    render(ContextMenu, {
+      props: { open: true, withSubmenu: true, x: 100, y: 100 },
+    });
+    const trigger = screen.getByRole("menuitem", {
+      name: "Option with submenu",
+    });
+
+    try {
+      trigger.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+
+      await user.keyboard("{ArrowLeft}");
+      expect(trigger).toHaveAttribute("aria-expanded", "true");
+      expect(
+        screen.getByRole("menuitem", { name: "Submenu option 1" }),
+      ).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(trigger).toHaveFocus();
+    } finally {
+      document.documentElement.style.removeProperty("direction");
+    }
+  });
+
   // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/1847
   // jsdom reports zero-sized rects, so the trigger and the submenu get mocked
   // widths. The submenu opens after the 150ms hover-intent delay.
@@ -438,6 +466,29 @@ describe("ContextMenu", () => {
 
       expect(submenu.style.left).toBe("50px");
     });
+
+    describe("in RTL", () => {
+      beforeEach(() => {
+        document.documentElement.style.direction = "rtl";
+      });
+
+      afterEach(() => {
+        document.documentElement.style.removeProperty("direction");
+      });
+
+      it.each([
+        ["opens the submenu to the left", 300, "150px"],
+        ["flips the submenu right near the left edge", 100, "250px"],
+      ])("%s", async (_, rootX, left) => {
+        const submenu = await openSubmenu(1024, rootX);
+        expect(submenu.style.left).toBe(left);
+      });
+
+      it("pins the submenu to the left edge when neither side fits", async () => {
+        const submenu = await openSubmenu(200, 100);
+        expect(submenu.style.left).toBe("0px");
+      });
+    });
   });
 
   describe("positioning", () => {
@@ -496,6 +547,22 @@ describe("ContextMenu", () => {
 
       expect(menu.style.left).toBe("120px");
       expect(menu.style.top).toBe("90px");
+    });
+
+    it.each([
+      ["opens left of the pointer in RTL", 200, "50px"],
+      ["flips right of the pointer near the left edge in RTL", 100, "100px"],
+    ])("%s", async (_, x, left) => {
+      document.documentElement.style.direction = "rtl";
+      const menu = renderClosedMenu();
+
+      try {
+        await rightClickAt(x, 80);
+        expect(menu.style.left).toBe(left);
+        expect(menu.style.top).toBe("80px");
+      } finally {
+        document.documentElement.style.removeProperty("direction");
+      }
     });
 
     it("reopens at the pointer after closing", async () => {

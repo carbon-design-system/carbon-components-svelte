@@ -68,6 +68,8 @@
 
   /**
    * Align the menu to the trigger button.
+   * `start` and `end` are the trigger's inline start and end, which swap
+   * under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let intrinsicAlign = "start";
@@ -200,7 +202,6 @@
   bind:open
   {labelText}
   data-carbon-menu-button-icon-only={iconOnly ? true : undefined}
-  data-carbon-align={iconOnly ? intrinsicAlign : undefined}
   on:close
 >
   <slot />

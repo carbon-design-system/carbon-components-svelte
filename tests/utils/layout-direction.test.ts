@@ -1,4 +1,7 @@
-import { resolveLayoutDirection } from "carbon-components-svelte/utils/layout-direction.js";
+import {
+  inlineKey,
+  resolveLayoutDirection,
+} from "carbon-components-svelte/utils/layout-direction.js";
 
 describe("resolveLayoutDirection", () => {
   afterEach(() => {
@@ -30,5 +33,28 @@ describe("resolveLayoutDirection", () => {
     expect(resolveLayoutDirection(undefined, node)).toBe("ltr");
     document.documentElement.style.direction = "rtl";
     expect(resolveLayoutDirection(undefined, node)).toBe("rtl");
+  });
+});
+
+describe("inlineKey", () => {
+  afterEach(() => {
+    document.documentElement.removeAttribute("style");
+  });
+
+  it.each([
+    ["ArrowLeft", "ltr", "ArrowLeft"],
+    ["ArrowRight", "ltr", "ArrowRight"],
+    ["ArrowLeft", "rtl", "ArrowRight"],
+    ["ArrowRight", "rtl", "ArrowLeft"],
+    ["ArrowUp", "rtl", "ArrowUp"],
+    ["Home", "rtl", "Home"],
+  ] as const)("reads %s in %s as %s", (key, direction, expected) => {
+    expect(inlineKey(key, direction)).toBe(expected);
+  });
+
+  it("reads the document's direction when called", () => {
+    expect(inlineKey("ArrowLeft", undefined)).toBe("ArrowLeft");
+    document.documentElement.style.direction = "rtl";
+    expect(inlineKey("ArrowLeft", undefined)).toBe("ArrowRight");
   });
 });

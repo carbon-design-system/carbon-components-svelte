@@ -288,8 +288,8 @@
     @include ccs-inset-inline($start: 0);
   }
 
-  // ccs: a menu that would run past the viewport's right edge aligns to its
-  // trigger's right edge instead (`HeaderNavMenu` sets the class on open).
+  // ccs: a menu that would run past the viewport's inline end aligns to its
+  // trigger's inline end instead (`HeaderNavMenu` sets the class on open).
   .#{$prefix}--header__menu-title[aria-expanded='true']
     + .#{$prefix}--header__menu--align-end {
     @include ccs-inset-inline($start: auto, $end: 0);

@@ -52,6 +52,11 @@
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocus } from "../utils/focus.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import {
+    getLayoutDirection,
+    inlineKey,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import {
     createTypeaheadBuffer,
@@ -62,6 +67,7 @@
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   /**
    * Ids of the selected items in the menu.
@@ -78,16 +84,18 @@
 
   let menuRef = null;
 
-  // Set when the menu, left-aligned under its trigger, would run past the
-  // viewport's right edge; it then aligns to the trigger's right edge.
+  // Set when the menu, aligned under its trigger's inline start, would run
+  // past the viewport's inline end; it then aligns to the trigger's end.
   let alignEnd = false;
   let wasExpanded = false;
 
   afterUpdate(() => {
     if (expanded && !wasExpanded && menuRef) {
+      const { left, right } = menuRef.getBoundingClientRect();
       alignEnd =
-        menuRef.getBoundingClientRect().right >
-        document.documentElement.clientWidth;
+        resolveLayoutDirection($layoutDirection, menuRef) === "rtl"
+          ? left < 0
+          : right > document.documentElement.clientWidth;
     } else if (!expanded) {
       // Measure from the default position on the next open.
       alignEnd = false;
@@ -229,7 +237,7 @@
     } else if (
       vertical &&
       expanded &&
-      event.key === "ArrowLeft" &&
+      inlineKey(event.key, $layoutDirection, menuRef) === "ArrowLeft" &&
       !event.defaultPrevented &&
       !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) &&
       menuRef.contains(event.target)
@@ -277,7 +285,8 @@
         // Ctrl/Cmd+ArrowDown scrolls. Alt+ArrowDown still opens the menu.
         !(event.ctrlKey || event.metaKey) &&
         (vertical
-          ? event.key === "ArrowRight" && !event.altKey
+          ? inlineKey(event.key, $layoutDirection, ref) === "ArrowRight" &&
+            !event.altKey
           : event.key === "ArrowDown" || event.key === "ArrowUp")
       ) {
         event.preventDefault();
