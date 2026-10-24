@@ -4,6 +4,7 @@
   let value = 10;
   let valueLocale = 1234.5;
   let valueNoWheel = 5;
+  let valueScrub = 40;
 </script>
 
 <NumberInput
@@ -60,3 +61,12 @@
   <NumberInput labelText="Seats" size="sm" value={4} min={0} />
   <NumberInput labelText="Budget" value={32000} min={0} />
 </div>
+
+<NumberInput
+  labelText="Opacity (%)"
+  bind:value={valueScrub}
+  scrubbable
+  min={0}
+  max={100}
+/>
+<div data-testid="number-input-scrub-value">{valueScrub}</div>
