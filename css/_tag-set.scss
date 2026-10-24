@@ -1,4 +1,5 @@
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// TagSet: a row of tags that collapses into a "+N" overflow indicator with
@@ -46,6 +47,48 @@
     gap: $carbon--spacing-03;
     list-style: none;
     overflow-y: auto;
+  }
+
+  // `overflowType="default"`: the hidden labels as text, one per line.
+  .#{$prefix}--tag-set-overflow__list--text {
+    @include type-style("body-compact-01");
+
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: $carbon--spacing-02;
+  }
+
+  // A link-styled button: it opens a modal, it doesn't navigate.
+  .#{$prefix}--tag-set-overflow__view-all {
+    display: block;
+    padding: 0;
+    border: 0;
+    margin-top: $carbon--spacing-04;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--tag-set-overflow__view-all {
+      color: LinkText;
+    }
+  }
+
+  .#{$prefix}--tag-set-modal__list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: $carbon--spacing-05 0 0;
+    gap: $carbon--spacing-03;
+    list-style: none;
+  }
+
+  .#{$prefix}--tag-set-modal__results {
+    @include type-style("body-compact-01");
+
+    margin-top: $carbon--spacing-05;
+    color: $text-secondary;
   }
 
   .#{$prefix}--tag-set-overflow__popover-trigger {

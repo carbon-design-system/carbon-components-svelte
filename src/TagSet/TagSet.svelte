@@ -18,7 +18,7 @@
    * content with the `overflowTooltip` slot, for example to add a link.
    *
    * @event {{ tag: TagSetItem; index: number }} close:tag - User clicks the close icon on a dismissible (`filter`) tag.
-   * @event {{ count: number }} click:overflow - User clicks the "+N" indicator.
+   * @event {{ count: number }} click:overflow - User clicks the "+N" indicator. Cancelable: prevent it to keep a tooltip-mode set from opening the "View all" modal.
    * @event {{ count: number }} overflow:change - Dispatched when the number of overflowing tags changes, from a resize, a slotted-children change, or a `maxVisible` change.
    * @slot {{ tags: TagSetItem[]; count: number }} overflowTooltip - Override what the "+N" indicator shows: its tooltip, or its popover with `overflowMode="popover"`. Defaults to the hidden labels as text, or as tags in the popover.
    * @restProps {div}
@@ -49,6 +49,47 @@
    * @type {"tooltip" | "popover"}
    */
   export let overflowMode = "tooltip";
+
+  /**
+   * How the "+N" indicator lists the hidden tags: `"default"` lists their
+   * labels as text, `"tag"` as tags in their own colors. In the popover and
+   * the "View all" modal, `"tag"` keeps dismissible tags closable.
+   * Defaults to `"default"` for the tooltip and `"tag"` for the popover.
+   * @type {"default" | "tag"}
+   */
+  export let overflowType = undefined;
+
+  /**
+   * With more hidden tags than this, the popover lists only this many and
+   * adds a "View all" button, and clicking a tooltip-mode "+N" opens the
+   * modal directly. The modal lists every tag, with a search field.
+   * Set to `Infinity` to never offer it.
+   * @type {number}
+   */
+  export let viewAllThreshold = 10;
+
+  /** Text of the popover's "View all" button. */
+  export let viewAllText = "View all";
+
+  /** Heading of the "View all" modal, also the name of its tag list. */
+  export let allTagsTitle = "All tags";
+
+  /** Label and placeholder of the "View all" modal's search field. */
+  export let allTagsSearchLabel = "Search tags";
+
+  /**
+   * Text announced, and shown when nothing matches, for the number of tags
+   * the "View all" search finds.
+   * @type {(count: number) => string}
+   */
+  export let allTagsResultsLabel = (count) =>
+    count === 0 ? "No matching tags" : count === 1 ? "1 tag" : `${count} tags`;
+
+  /**
+   * Set to `true` to open the "View all" modal.
+   * @bindable writable
+   */
+  export let allTagsOpen = false;
 
   /**
    * Accessible name of the "+N" overflow indicator. Keep the visible "+N"
@@ -121,6 +162,7 @@
   } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TagSetAllTags from "./TagSetAllTags.svelte";
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
   const dispatch = createEventDispatcher();
@@ -373,8 +415,71 @@
     });
   }
 
+  $: resolvedOverflowType =
+    overflowType ?? (overflowMode === "popover" ? "tag" : "default");
+  $: hasViewAll = overflowCount > viewAllThreshold;
+  // Keep the modal mounted while open, even if closing tags drops the
+  // count back under the threshold.
+  $: mountAllTags = hasViewAll || allTagsOpen;
+
+  let allTagsQuery = "";
+  let allTagsListRef = null;
+  $: allTagsMatches = allTagsOpen
+    ? filterTags($items, allTagsQuery.trim().toLocaleLowerCase())
+    : [];
+  // A fresh search each time the modal opens.
+  $: if (!allTagsOpen) allTagsQuery = "";
+
+  /**
+   * @param {TagSetItem[]} tags
+   * @param {string} query
+   */
+  function filterTags(tags, query) {
+    if (!query) return tags;
+    return tags.filter((tag) => tag.label.toLocaleLowerCase().includes(query));
+  }
+
+  function openAllTags() {
+    // The modal returns focus to what had it on open. The popover's
+    // "View all" button is about to unmount, so hand that to "+N" first.
+    overflowButtonRef?.focus();
+    overflowOpen = false;
+    allTagsOpen = true;
+  }
+
+  /**
+   * A dismissible tag in the modal was closed: close the original, as the
+   * popover does, then keep focus in the list.
+   * @param {TagSetItem} item
+   */
+  function handleAllTagsClose(item) {
+    const position = allTagsMatches.indexOf(item);
+    const hadFocus = allTagsListRef?.contains(document.activeElement);
+    handleOverflowTagClose({ detail: item });
+    if (!hadFocus) return;
+    tick().then(() => {
+      if (item.node?.isConnected) return;
+      const buttons = Array.from(
+        allTagsListRef?.querySelectorAll(
+          ".bx--tag__close-icon:not(:disabled)",
+        ) ?? [],
+      );
+      returnFocus(
+        /** @type {HTMLElement | undefined} */ (
+          buttons[Math.min(position, buttons.length - 1)]
+        ) ?? allTagsListRef?.closest(".bx--modal")?.querySelector("input"),
+        allTagsListRef,
+      );
+    });
+  }
+
   function handleTriggerClick() {
-    dispatch("click:overflow", { count: overflowCount });
+    const proceed = dispatch(
+      "click:overflow",
+      { count: overflowCount },
+      { cancelable: true },
+    );
+    if (proceed && overflowMode === "tooltip" && hasViewAll) openAllTags();
   }
 </script>
 
@@ -423,6 +528,9 @@
       bind:contentRef={overflowContentRef}
       bind:open={overflowOpen}
       mode={overflowMode}
+      type={resolvedOverflowType}
+      {viewAllThreshold}
+      {viewAllText}
       customContent={!!$$slots.overflowTooltip}
       tabindex={$tabStopId === null
         ? undefined
@@ -439,6 +547,7 @@
       on:trigger={handleTriggerClick}
       on:close={handleOverflowTagClose}
       on:empty={handleOverflowEmpty}
+      on:viewall={openAllTags}
     >
       <svelte:fragment slot="tooltip" let:tags let:count>
         <slot name="overflowTooltip" {tags} {count}>
@@ -448,3 +557,18 @@
     </TagSetOverflow>
   </Stack>
 </div>
+
+{#if mountAllTags}
+  <TagSetAllTags
+    bind:open={allTagsOpen}
+    bind:listRef={allTagsListRef}
+    bind:query={allTagsQuery}
+    tags={allTagsMatches}
+    closable={resolvedOverflowType === "tag"}
+    title={allTagsTitle}
+    searchLabel={allTagsSearchLabel}
+    resultsLabel={allTagsResultsLabel}
+    size={$sharedSize}
+    on:close={({ detail }) => handleAllTagsClose(detail)}
+  />
+{/if}

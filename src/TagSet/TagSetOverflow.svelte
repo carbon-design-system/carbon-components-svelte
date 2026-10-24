@@ -12,7 +12,11 @@
    * popover lists the hidden tags as tags, so dismissible ones can still be
    * closed.
    *
+   * With more hidden tags than `viewAllThreshold`, the popover lists the
+   * first ones and a "View all" button that dispatches `viewall`.
+   *
    * @event {null} trigger - The indicator was clicked.
+   * @event {null} viewall - The popover's "View all" button was clicked.
    * @event {import("./TagSet.svelte").TagSetItem} close - A dismissible tag in the popover was closed.
    * @event {null} empty - The popover held focus and has no tag left to take it.
    * @slot {{ tags: import("./TagSet.svelte").TagSetItem[]; count: number }} tooltip - Override the tooltip or popover content.
@@ -20,6 +24,18 @@
 
   /** @type {"tooltip" | "popover"} */
   export let mode = "tooltip";
+
+  /**
+   * How the hidden tags are listed: their labels as text, or as tags.
+   * @type {"default" | "tag"}
+   */
+  export let type = "default";
+
+  /** The popover lists at most this many hidden tags, then "View all". */
+  export let viewAllThreshold = 10;
+
+  /** Text of the popover's "View all" button. */
+  export let viewAllText = "View all";
 
   /** Set to `true` when the parent passes custom `tooltip` slot content. */
   export let customContent = false;
@@ -123,6 +139,11 @@
     else dispatch("empty");
   });
 
+  $: hasViewAll = count > viewAllThreshold;
+  // Past the threshold, list the first ones. Filtered in the `{#each}`
+  // over `tags`, not a derived array, so `afterUpdate` sees patched rows.
+  $: listLimit = hasViewAll ? viewAllThreshold : Number.POSITIVE_INFINITY;
+
   // The popover trigger is itself the measured tag.
   $: if (mode === "popover") triggerRef = buttonRef;
 
@@ -156,23 +177,46 @@
       <svelte:fragment slot="content">
         {#if customContent}
           <slot name="tooltip" {tags} {count} />
-        {:else}
+        {:else if type === "tag"}
           <ul class:bx--tag-set-overflow__list={true}>
-            {#each tags as tag (tag.id)}
-              <li>
-                <Tag
-                  type={tag.type}
-                  filter={tag.filter}
-                  disabled={tag.disabled}
-                  value={tag.value}
-                  {size}
-                  on:close={() => handleTagClose(tag)}
-                >
-                  {tag.label}
-                </Tag>
-              </li>
+            {#each tags as tag, index (tag.id)}
+              {#if index < listLimit}
+                <li>
+                  <Tag
+                    type={tag.type}
+                    filter={tag.filter}
+                    disabled={tag.disabled}
+                    value={tag.value}
+                    {size}
+                    on:close={() => handleTagClose(tag)}
+                  >
+                    {tag.label}
+                  </Tag>
+                </li>
+              {/if}
             {/each}
           </ul>
+        {:else}
+          <ul
+            class:bx--tag-set-overflow__list={true}
+            class:bx--tag-set-overflow__list--text={true}
+          >
+            {#each tags as tag, index (tag.id)}
+              {#if index < listLimit}
+                <li>{tag.label}</li>
+              {/if}
+            {/each}
+          </ul>
+        {/if}
+        {#if hasViewAll}
+          <button
+            type="button"
+            class:bx--link={true}
+            class:bx--tag-set-overflow__view-all={true}
+            on:click={() => dispatch("viewall")}
+          >
+            {viewAllText}
+          </button>
         {/if}
       </svelte:fragment>
     </OperationalTag>
@@ -189,7 +233,16 @@
     on:click={() => dispatch("trigger")}
   >
     <svelte:fragment slot="tooltip">
-      <slot name="tooltip" {tags} {count} />
+      {#if type === "tag" && !customContent}
+        <!-- A tooltip can't be interacted with, so its tags don't close. -->
+        <ul class:bx--tag-set-overflow__list={true}>
+          {#each tags as tag (tag.id)}
+            <li><Tag type={tag.type} {size}>{tag.label}</Tag></li>
+          {/each}
+        </ul>
+      {:else}
+        <slot name="tooltip" {tags} {count} />
+      {/if}
     </svelte:fragment>
     <span
       bind:this={triggerRef}
