@@ -32,6 +32,22 @@ describe("CopyInput", () => {
     expect(input).toHaveValue("secret-token-123");
   });
 
+  it.each([
+    ["a text value", {}],
+    ["a password", { type: "password" as const }],
+    ["a masked value", { maskedValue: "secr••••123" }],
+  ])("takes the direction of %s from its text", (_, props) => {
+    render(CopyInput, props);
+
+    expect(screen.getByLabelText("API token")).toHaveAttribute("dir", "auto");
+  });
+
+  it("lets a consumer's dir override auto", () => {
+    render(CopyInput, { dir: "ltr" });
+
+    expect(screen.getByLabelText("API token")).toHaveAttribute("dir", "ltr");
+  });
+
   it.each(["xs", "sm", "xl"] as const)("renders the %s size", (size) => {
     render(CopyInput, { size, inline: true });
 
