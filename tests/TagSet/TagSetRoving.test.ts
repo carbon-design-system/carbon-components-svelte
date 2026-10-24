@@ -58,6 +58,22 @@ describe("TagSet navigation=roving", () => {
     expect(closeButtonOf("Tag 1")).toHaveFocus();
   });
 
+  it("swaps ArrowLeft and ArrowRight in RTL", async () => {
+    document.documentElement.style.direction = "rtl";
+    await renderRoving();
+
+    try {
+      closeButtonOf("Tag 1").focus();
+      await user.keyboard("{ArrowLeft}");
+      expect(closeButtonOf("Tag 2")).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(closeButtonOf("Tag 1")).toHaveFocus();
+    } finally {
+      document.documentElement.style.removeProperty("direction");
+    }
+  });
+
   it("reaches a tag that became dismissible after mount", async () => {
     const { rerender } = await renderRoving();
     await rerender({ leadingFilter: true });

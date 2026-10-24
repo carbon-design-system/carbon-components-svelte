@@ -182,6 +182,21 @@ describe("HeaderNav menubar", () => {
       expect(trigger()).toHaveFocus();
     });
 
+    it("swaps Left and Right in RTL", async () => {
+      document.documentElement.style.direction = "rtl";
+      render(Fixture);
+
+      try {
+        link1().focus();
+        await user.keyboard("{ArrowLeft}");
+        expect(trigger()).toHaveFocus();
+        await user.keyboard("{ArrowRight}");
+        expect(link1()).toHaveFocus();
+      } finally {
+        document.documentElement.style.removeProperty("direction");
+      }
+    });
+
     it("follows DOM order for an item added after mount", async () => {
       const entries = [{ text: "Link 1" }, { text: "Link 2" }];
       const { rerender } = render(Fixture, { props: { items: entries } });

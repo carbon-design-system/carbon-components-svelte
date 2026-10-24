@@ -63,10 +63,15 @@
   import { afterUpdate, createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   const TOGGLE_BUTTON_SELECTOR = "button.bx--toggle-button";
 
@@ -241,6 +246,7 @@
   aria-orientation={orientation === "vertical" ? "vertical" : undefined}
   use:rovingFocus={{
     selector: TOGGLE_BUTTON_SELECTOR,
+    rtl: () => resolveLayoutDirection($layoutDirection, ref) === "rtl",
     orientation,
     wrap: true,
     skipDisabled: true,
