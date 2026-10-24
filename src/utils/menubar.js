@@ -35,7 +35,11 @@ import {
  * so is opening the next submenu when a horizontal bar's ArrowLeft or
  * ArrowRight leaves an open one.
  *
- * @param {{ orientation?: "horizontal" | "vertical" }} [options]
+ * In a horizontal bar, `rtl` is read on each ArrowLeft and ArrowRight. When
+ * it returns `true`, ArrowLeft moves to the next item and ArrowRight to the
+ * previous one.
+ *
+ * @param {{ orientation?: "horizontal" | "vertical", rtl?: () => boolean }} [options]
  * @returns {{
  *   orientation: "horizontal" | "vertical",
  *   register: (node: HTMLElement, submenu?: MenubarSubmenu) => void,
@@ -47,7 +51,7 @@ import {
  *   destroy: () => void,
  * }}
  */
-export function createMenubar({ orientation = "horizontal" } = {}) {
+export function createMenubar({ orientation = "horizontal", rtl } = {}) {
   const vertical = orientation === "vertical";
   const prevKey = vertical ? "ArrowUp" : "ArrowLeft";
   const nextKey = vertical ? "ArrowDown" : "ArrowRight";
@@ -136,7 +140,14 @@ export function createMenubar({ orientation = "horizontal" } = {}) {
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
         return;
       }
-      const { key } = event;
+      const key =
+        !vertical &&
+        (event.key === "ArrowLeft" || event.key === "ArrowRight") &&
+        rtl?.()
+          ? event.key === "ArrowLeft"
+            ? "ArrowRight"
+            : "ArrowLeft"
+          : event.key;
       if (
         key !== prevKey &&
         key !== nextKey &&

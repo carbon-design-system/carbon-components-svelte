@@ -33,7 +33,11 @@
   /** Set to `true` to disable the trigger button */
   export let disabled = false;
 
-  /** Set to `true` to flip the menu relative to the button */
+  /**
+   * Set to `true` to align the menu with the button's inline end instead of
+   * its start. Under `dir="rtl"` the default menu aligns with the button's
+   * right edge, and a flipped one with its left.
+   */
   export let flipped = false;
 
   /**
@@ -130,6 +134,10 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -146,6 +154,7 @@
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext(MODAL_CONTEXT_KEY);
+  const layoutDirection = getLayoutDirection();
 
   $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
 
@@ -196,13 +205,25 @@
     };
   });
 
+  // Read when the menu opens: nothing reports a `dir` change. A breadcrumb
+  // menu keeps its LTR place, as its caret has no RTL rule yet.
+  let rtl = false;
+  $: if (open) {
+    rtl =
+      !ctxBreadcrumbItem &&
+      resolveLayoutDirection($layoutDirection, buttonRef) === "rtl";
+  }
+  // `flipped` aligns the menu with the button's inline end. The class and
+  // the position below are physical: aligned with the button's right edge.
+  $: alignRight = flipped !== rtl;
+
   /**
    * Everything the menu's position depends on. `afterUpdate` re-measures only
    * when this changes; it used to re-read offset dimensions on every update
    * while open (each arrow key, hover).
    */
   $: positionKey = open
-    ? `${direction}|${flipped}|${effectiveSize}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
+    ? `${direction}|${alignRight}|${effectiveSize}|${effectivePortalMenu}|${menuRef ? 1 : 0}`
     : null;
 
   /**
@@ -385,7 +406,7 @@
           menuRef.style.top = `${offsetTop + height}px`;
         }
 
-        if (flipped) {
+        if (alignRight) {
           menuRef.style.left = `${offsetLeft + width - menuWidth}px`;
         } else {
           menuRef.style.left = `${offsetLeft}px`;
@@ -395,8 +416,6 @@
           menuRef.style.top = `${offsetTop + height + 10}px`;
           menuRef.style.left = `${offsetLeft - 11}px`;
         }
-      } else if (flipped && menuRef) {
-        menuRef.style.marginLeft = `${width - menuRef.offsetWidth}px`;
       }
     }
 
@@ -646,7 +665,7 @@
     aria-labelledby={ariaLabel === undefined ? id : undefined}
     data-floating-menu-direction={direction}
     class:bx--overflow-menu-options={true}
-    class:bx--overflow-menu--flip={flipped}
+    class:bx--overflow-menu--flip={alignRight}
     class:bx--overflow-menu-options--open={open}
     class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
     class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
@@ -664,10 +683,14 @@
 {/if}
 
 {#if effectivePortalMenu}
+  <!-- The portal takes the menu's width, so its place doesn't depend on the
+  portal's own direction. -->
   <FloatingPortal
     anchor={buttonRef}
     {direction}
     {open}
+    intrinsicWidth
+    intrinsicAlign={alignRight ? "end" : "start"}
     let:direction={portalDirection}
   >
     <ul
@@ -680,7 +703,7 @@
       aria-labelledby={ariaLabel === undefined ? id : undefined}
       data-floating-menu-direction={portalDirection}
       class:bx--overflow-menu-options={true}
-      class:bx--overflow-menu--flip={flipped}
+      class:bx--overflow-menu--flip={alignRight}
       class:bx--overflow-menu-options--open={open}
       class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
       class:bx--overflow-menu-options--sm={effectiveSize === "sm"}

@@ -58,6 +58,22 @@ describe("ToggleButtonGroup keyboard navigation", () => {
     }
   });
 
+  it("swaps ArrowLeft and ArrowRight in RTL", async () => {
+    document.documentElement.style.direction = "rtl";
+    render(ToggleButtonGroupFixture);
+
+    try {
+      await user.tab();
+      await user.keyboard("{ArrowLeft}");
+      expect(screen.getByRole("button", { name: "Italic" })).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}{ArrowRight}");
+      expect(screen.getByRole("button", { name: "Underline" })).toHaveFocus();
+    } finally {
+      document.documentElement.style.removeProperty("direction");
+    }
+  });
+
   it("skips a disabled button when moving focus", async () => {
     render(ToggleButtonGroupFixture, { props: { boldDisabled: true } });
 

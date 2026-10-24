@@ -87,7 +87,13 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    inlineKey,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
+  import { fitMenuAxis } from "../utils/menu-placement.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
@@ -99,6 +105,7 @@
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
   const ctx = getContext("carbon:ContextMenu");
   const ctxGroup = getContext("carbon:ContextMenuGroup");
   const ctxRadioGroup = getContext("carbon:ContextMenuRadioGroup");
@@ -179,20 +186,18 @@
   $: isRadio = !!ctxRadioGroup;
   $: subOptions = $$slots.default;
   $: ctx.setPopup(submenuOpen);
+  // The submenu opens toward the inline end (the left in RTL), flips when
+  // it doesn't fit, and pins to the viewport edge when it fits on neither
+  // side. The option spans its menu, which starts at `rootMenuPosition`.
   $: if (submenuOpen) {
     const { width, y } = ref.getBoundingClientRect();
-    let x = rootMenuPosition[0] + width;
-
-    const submenuWidth = submenuRef?.getBoundingClientRect().width ?? width;
-
-    if (x + submenuWidth > window.innerWidth) {
-      x = rootMenuPosition[0] - submenuWidth;
-
-      // On narrow screens, position submenu at edge to avoid clipping.
-      if (x < 0) {
-        x = Math.max(0, window.innerWidth - submenuWidth);
-      }
-    }
+    const x = fitMenuAxis({
+      before: rootMenuPosition[0],
+      after: rootMenuPosition[0] + width,
+      size: submenuRef?.getBoundingClientRect().width ?? width,
+      max: window.innerWidth,
+      reverse: resolveLayoutDirection($layoutDirection, ref) === "rtl",
+    });
 
     submenuPosition = [x, y];
   }
@@ -243,7 +248,8 @@
       subOptions &&
       // Keys from the flyout's own items bubble here; only the trigger opens it.
       event.target === ref &&
-      ((event.key === "ArrowRight" && !hasModifierKey(event)) ||
+      ((inlineKey(event.key, $layoutDirection, ref) === "ArrowRight" &&
+        !hasModifierKey(event)) ||
         event.key === " " ||
         event.key === "Enter")
     ) {
@@ -256,7 +262,7 @@
     }
 
     if (submenuOpen && !hasModifierKey(event)) {
-      if (event.key === "ArrowLeft") {
+      if (inlineKey(event.key, $layoutDirection, ref) === "ArrowLeft") {
         event.stopPropagation();
         submenuOpen = false;
         focusIndex = 0;

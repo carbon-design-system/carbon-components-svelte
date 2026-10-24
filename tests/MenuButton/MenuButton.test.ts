@@ -273,3 +273,39 @@ describe.each([
     });
   },
 );
+
+describe("MenuButton and ComboButton in RTL", () => {
+  afterEach(() => {
+    document.documentElement.style.removeProperty("direction");
+  });
+
+  // `data-carbon-align` and the portal's alignment are physical: `start` is
+  // the left edge, `end` the right.
+  const alignments = () => {
+    const menu = screen.getByRole("menu");
+    const portal = menu.closest("[data-floating-portal]");
+    return [
+      menu.getAttribute("data-carbon-align"),
+      portal?.getAttribute("data-floating-intrinsic-align"),
+    ];
+  };
+
+  it.each([
+    ["MenuButton", "Row actions", "start", "end"],
+    ["ComboButton", "Additional actions", "end", "start"],
+  ])(
+    "aligns the %s menu with the trigger's inline start or end",
+    async (name, trigger, ltr, rtl) => {
+      render(name === "MenuButton" ? MenuButtonIconOnly : ComboButtonFixture);
+      const button = screen.getByRole("button", { name: trigger });
+
+      await user.click(button);
+      expect(alignments()).toEqual([ltr, ltr]);
+      await user.click(button);
+
+      document.documentElement.style.direction = "rtl";
+      await user.click(button);
+      expect(alignments()).toEqual([rtl, rtl]);
+    },
+  );
+});

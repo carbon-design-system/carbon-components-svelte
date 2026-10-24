@@ -344,6 +344,27 @@ describe("HeaderNavMenu viewport edge", () => {
     expect(menu()).not.toHaveClass("bx--header__menu--align-end");
   });
 
+  it.each([
+    ["past the left edge", -30, true],
+    ["inside the viewport", 30, false],
+  ])(
+    "aligns the menu to the trigger's inline end in RTL when it runs %s",
+    async (_, left, alignEnd) => {
+      document.documentElement.style.direction = "rtl";
+      mockMenuRight(left + 200);
+      render(Menubar, { props });
+
+      try {
+        await user.click(screen.getByRole("menuitem", { name: "More" }));
+        expect(menu().classList.contains("bx--header__menu--align-end")).toBe(
+          alignEnd,
+        );
+      } finally {
+        document.documentElement.style.removeProperty("direction");
+      }
+    },
+  );
+
   it("measures again from the default alignment on the next open", async () => {
     mockMenuRight(VIEWPORT_WIDTH - 30);
     render(Menubar, { props });

@@ -40,4 +40,36 @@ test.describe("SideNav resize", () => {
     await expect(page.getByTestId("width")).toHaveText("480");
     await expect(page.getByTestId("resize-count")).toHaveText("1");
   });
+
+  test("resizes from the left edge in RTL", async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    const nav = page.getByRole("navigation", { name: "Side navigation" });
+    const handle = page.getByRole("separator", {
+      name: "Resize side navigation",
+    });
+    const [navBox, box] = await Promise.all([
+      nav.boundingBox(),
+      handle.boundingBox(),
+    ]);
+    if (!navBox || !box) throw new Error("missing box");
+    // The handle straddles the nav's left edge, its inline end.
+    expect(box.x).toBeLessThan(navBox.x);
+    expect(box.x + box.width).toBeGreaterThan(navBox.x);
+
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x - 100, y, { steps: 5 });
+    await page.mouse.up();
+    await expect(page.getByTestId("width")).toHaveText("356");
+    await expect.poll(async () => (await nav.boundingBox())?.width).toBe(356);
+
+    await handle.press("ArrowLeft");
+    await expect(page.getByTestId("width")).toHaveText("372");
+    await handle.press("ArrowRight");
+    await expect(page.getByTestId("width")).toHaveText("356");
+  });
 });

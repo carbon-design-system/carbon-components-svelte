@@ -85,6 +85,11 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    inlineKey,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { clamp } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
@@ -94,6 +99,7 @@
   const LARGE_STEP_MULTIPLIER = 10;
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   /** @type {undefined | { enterDelayMs: () => number }} */
   const parent = getContext("carbon:Splitter");
@@ -111,6 +117,7 @@
   let resizing = false;
   let dragStartPoint = 0;
   let dragStartSize = 0;
+  let dragDirection = 1;
   // Size that Enter or `collapsed = false` restores after the start pane
   // reaches `min`.
   let expandedSize = size;
@@ -194,6 +201,12 @@
     // The press focuses the separator natively, which, unlike a scripted
     // focus(), doesn't count as `:focus-visible` and draw the ring.
     resizing = true;
+    // In RTL the start pane is on the right, so dragging left grows it.
+    dragDirection =
+      orientation !== "vertical" &&
+      resolveLayoutDirection($layoutDirection, ref) === "rtl"
+        ? -1
+        : 1;
     dragStartPoint = getPointerAxis(event).point;
     dragStartSize = renderedSize;
   }
@@ -201,7 +214,9 @@
   function handleDragMove(event) {
     const { point, length } = getPointerAxis(event);
     if (!length) return;
-    setSize(dragStartSize + ((point - dragStartPoint) / length) * 100);
+    setSize(
+      dragStartSize + dragDirection * ((point - dragStartPoint) / length) * 100,
+    );
   }
 
   function handleDragEnd() {
@@ -214,10 +229,13 @@
     if (disabled || hasModifierKey(event)) return;
     const distance = step * (event.shiftKey ? LARGE_STEP_MULTIPLIER : 1);
     const vertical = orientation === "vertical";
+    // ArrowRight moves the separator toward the inline end, growing the
+    // start pane.
+    const key = inlineKey(event.key, $layoutDirection, ref);
     let next;
-    if (event.key === (vertical ? "ArrowUp" : "ArrowLeft")) {
+    if (key === (vertical ? "ArrowUp" : "ArrowLeft")) {
       next = renderedSize - distance;
-    } else if (event.key === (vertical ? "ArrowDown" : "ArrowRight")) {
+    } else if (key === (vertical ? "ArrowDown" : "ArrowRight")) {
       next = renderedSize + distance;
     } else if (event.key === "Home") {
       next = minPercent;

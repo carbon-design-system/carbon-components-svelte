@@ -179,6 +179,26 @@ describe("HeaderSideNavItems menubar", () => {
       expect(onClose).toHaveBeenCalledWith("Menu", "escape-key");
     });
 
+    it("opens on Left and closes on Right in RTL", async () => {
+      document.documentElement.style.direction = "rtl";
+      render(Fixture, { props });
+
+      try {
+        trigger().focus();
+        await user.keyboard("{ArrowRight}");
+        expect(trigger()).toHaveAttribute("aria-expanded", "false");
+
+        await user.keyboard("{ArrowLeft}");
+        expect(menuItem("Menu Item 1")).toHaveFocus();
+
+        await user.keyboard("{ArrowRight}");
+        expect(trigger()).toHaveFocus();
+        expect(trigger()).toHaveAttribute("aria-expanded", "false");
+      } finally {
+        document.documentElement.style.removeProperty("direction");
+      }
+    });
+
     it("closes an open menu when Down leaves its trigger", async () => {
       const onClose = vi.fn();
       render(Fixture, { props: { ...props, onClose } });
