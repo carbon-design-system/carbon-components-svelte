@@ -265,6 +265,9 @@
       on:mouseenter={() => (hovered = true)}
       on:mouseleave={() => (hovered = false)}
     >
+      <!-- dir="auto" takes the value's direction from its own text, so a
+           URL or a token keeps its order in an RTL page. A consumer's `dir`
+           wins; an undefined one falls back to "auto". -->
       <input
         bind:this={ref}
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
@@ -280,6 +283,7 @@
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}
         {...$$restProps}
+        dir={$$restProps.dir ?? "auto"}
         aria-describedby={joinDescribedBy(
           helperText && !isFluid ? helperId : undefined,
           $$restProps["aria-describedby"],
