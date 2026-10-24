@@ -169,6 +169,18 @@ Set `overflowMode="popover"` to turn the "+N" indicator into a button that opens
 
 <FileSource src="/framed/TagSet/TagSetOverflowPopover" />
 
+### Overflow type
+
+Set `overflowType` to choose how the hidden tags are listed: `"default"` lists their labels as text, and `"tag"` lists them as tags in their own colors. The popover defaults to `"tag"`, which keeps dismissible tags closable; the tooltip defaults to `"default"`.
+
+<FileSource src="/framed/TagSet/TagSetOverflowType" />
+
+## View all
+
+With more hidden tags than `viewAllThreshold` (10 by default), the popover lists the first ten and a "View all" button. It opens a modal of every tag with a search field, so long sets stay reachable from the keyboard and on touch screens. In tooltip mode, selecting "+N" opens the modal; call `preventDefault()` on `click:overflow` to handle the click yourself. Set `viewAllText`, `allTagsTitle`, `allTagsSearchLabel` and `allTagsResultsLabel` to translate it.
+
+<FileSource src="/framed/TagSet/TagSetViewAll" />
+
 ## Dismissible
 
 Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response. Set `value` on each `Tag` to read it back as `tag.value`, so you can remove by id rather than by position or label.
