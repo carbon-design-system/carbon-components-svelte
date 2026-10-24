@@ -26,6 +26,8 @@
     MenuButton,
     MenuItem,
     MultiSelect,
+    Pagination,
+    PaginationSkeleton,
     RangeSlider,
     SideNav,
     SideNavItems,
@@ -304,6 +306,11 @@ export async function rollback(region, id) {
     valueUpper={6}
     {marks}
   />
+  <div data-testid="pagination">
+    <Pagination totalItems={103} pageSizes={[10, 20, 50]} />
+    <Pagination totalItems={103} pageInputType="input" />
+    <PaginationSkeleton />
+  </div>
   <Button
     size="small"
     on:click={() => (regionDir = regionDir === "ltr" ? "rtl" : "ltr")}

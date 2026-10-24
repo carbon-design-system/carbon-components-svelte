@@ -126,16 +126,18 @@ $css--helpers: true;
     transform: translate(-0.5rem, -50%);
   }
 
+  // ccs: the separators, gaps and padding on the inline axis are logical,
+  // so they sit on the mirrored side in RTL.
   .#{$prefix}--pagination
     .#{$prefix}--select__item-count
     .#{$prefix}--select-input {
-    border-right: $spacing-4xs solid $border-subtle;
+    border-inline-end: $spacing-4xs solid $border-subtle;
   }
 
   .#{$prefix}--pagination
     .#{$prefix}--select__page-number
     .#{$prefix}--select-input {
-    border-left: 1px solid $border-subtle;
+    border-inline-start: 1px solid $border-subtle;
   }
 
   .#{$prefix}--pagination__left,
@@ -156,19 +158,20 @@ $css--helpers: true;
   }
 
   .#{$prefix}--pagination__left .#{$prefix}--pagination__text {
-    margin-right: to-rem(1px);
+    margin-inline-end: to-rem(1px);
   }
 
   .#{$prefix}--pagination__right .#{$prefix}--pagination__text {
-    margin-right: 1rem;
-    margin-left: to-rem(1px);
+    margin-inline-end: 1rem;
+    margin-inline-start: to-rem(1px);
   }
 
   .#{$prefix}--pagination__left {
-    padding: 0 $carbon--spacing-05 0 0;
+    padding-block: 0;
+    padding-inline: 0 $carbon--spacing-05;
 
     @include carbon--breakpoint('md') {
-      padding: 0 $carbon--spacing-05;
+      padding-inline: $carbon--spacing-05;
     }
   }
 
@@ -180,7 +183,7 @@ $css--helpers: true;
 
   // `span.`: the page-size `<label>` shares the class.
   span.#{$prefix}--pagination__text { // ccs: element
-    margin-left: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
     color: $text-secondary;
   }
 
@@ -195,7 +198,7 @@ $css--helpers: true;
     align-items: center;
     justify-content: center;
     border: none;
-    border-left: 1px solid $border-subtle;
+    border-inline-start: 1px solid $border-subtle;
     margin: 0;
     background: none;
     cursor: pointer;
@@ -226,7 +229,7 @@ $css--helpers: true;
   .#{$prefix}--btn--ghost:focus.#{$prefix}--pagination__button {
     @include focus-outline('outline');
 
-    border-left: 0;
+    border-inline-start: 0;
   }
 
   .#{$prefix}--pagination__button:hover,
@@ -258,7 +261,7 @@ $css--helpers: true;
   }
 
   .#{$prefix}--pagination.#{$prefix}--skeleton .#{$prefix}--skeleton__text {
-    margin-right: 1rem;
+    margin-inline-end: 1rem;
     margin-bottom: 0;
   }
 
@@ -299,12 +302,12 @@ $css--helpers: true;
 
     .#{$prefix}--pagination__left {
       min-width: 0;
-      padding: 0 $carbon--spacing-05;
+      padding-inline: $carbon--spacing-05;
     }
 
     .#{$prefix}--pagination__items-count {
       overflow: hidden;
-      margin-left: 0;
+      margin-inline-start: 0;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -359,14 +362,13 @@ $css--helpers: true;
   }
 
   .#{$prefix}--pagination--simple .#{$prefix}--pagination__right {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .#{$prefix}--pagination--simple
     .#{$prefix}--pagination__right
     > .#{$prefix}--pagination__text {
-    margin-left: $carbon--spacing-05;
-    margin-right: $carbon--spacing-05;
+    margin-inline: $carbon--spacing-05;
   }
 
   // Keep status text and buttons visible below the md breakpoint.
@@ -393,7 +395,7 @@ $css--helpers: true;
     .#{$prefix}--pagination__page-number-input {
     // Fit the widest page number. Pagination sets the digit count of
     // `totalPages`; `ch` plus letter-spacing covers each digit, then the
-    // padding and border-left. `min-width` keeps the 64px floor.
+    // padding and the start border. `min-width` keeps the 64px floor.
     width: calc(
       var(--ccs-pagination-page-input-digits, 1) * (1ch + #{to-rem(0.16px)}) +
         #{$carbon--spacing-05 * 2} + #{to-rem(4px)}
@@ -402,9 +404,8 @@ $css--helpers: true;
     height: $size-md;
     min-height: $size-md;
     border: none;
-    border-left: 1px solid $border-subtle;
-    padding-right: $carbon--spacing-05;
-    padding-left: $carbon--spacing-05;
+    border-inline-start: 1px solid $border-subtle;
+    padding-inline: $carbon--spacing-05;
     background-color: transparent;
   }
 
