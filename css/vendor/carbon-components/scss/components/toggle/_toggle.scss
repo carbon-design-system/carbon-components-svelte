@@ -439,7 +439,7 @@
   .#{$prefix}--toggle--readonly
     .#{$prefix}--toggle-input__label
     > .#{$prefix}--toggle__switch::before {
-    border: 1px solid $icon-disabled;
+    border: 1px solid $icon-secondary;
     background-color: transparent;
   }
 
