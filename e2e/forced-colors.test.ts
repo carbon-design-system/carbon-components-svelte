@@ -705,6 +705,67 @@ test.describe("forced colors", () => {
       outlineColor: system.Highlight,
     });
   });
+
+  // A field's resting outline is `transparent`, which forced colors paint
+  // as a 2px `CanvasText` ring, so a 2px `Highlight` focus ring changed
+  // only the color. Some palettes draw `Highlight` close to `CanvasText`.
+  // [field, element drawing the ring, pseudo-element]
+  const fieldRings: [string, string, string?][] = [
+    ["text", "input"],
+    ["password", "input"],
+    ["number", "input"],
+    ["textarea", "textarea"],
+    ["search", "input"],
+    ["select", "select"],
+    ["combobox", "input"],
+    ["dropdown", ".bx--list-box__field"],
+    ["multiselect", ".bx--list-box__field--wrapper--input-focused"],
+    ["multiselect-filterable", ".bx--list-box__field--wrapper--input-focused"],
+    ["date", "input"],
+    ["time", "input"],
+    ["tags", ".bx--tag-input"],
+    ["copy", "input"],
+    ["pin", "input"],
+  ];
+  const fluidRings: [string, string, string?][] = [
+    ["text", "input"],
+    ["password", "input"],
+    ["number", ".bx--number"],
+    ["textarea", ".bx--text-area__wrapper", "::after"],
+    ["search", "input"],
+    ["select", ".bx--select-input__wrapper"],
+    ["combobox", ".bx--list-box__field--wrapper--input-focused"],
+    ["dropdown", ".bx--list-box__field--wrapper--input-focused"],
+    ["multiselect", ".bx--list-box__field--wrapper--input-focused"],
+    ["date", "input"],
+    ["time", ".bx--time-picker__input .bx--text-input__field-wrapper"],
+    ["copy", "input"],
+    ["pin", "input"],
+  ];
+
+  test("fields focus with a 4px Highlight ring", async ({ page }) => {
+    for (const [group, rings] of [
+      ["fields", fieldRings],
+      ["fluid-fields", fluidRings],
+    ] as const) {
+      for (const [field, ring, pseudo] of rings) {
+        const scope = `[data-testid=${group}] [data-testid=${field}]`;
+        const target = `${scope} :is(input:not([type=hidden]):not([tabindex="-1"]), textarea, select, [role=combobox])`;
+        // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
+        await page.locator(target).first().focus();
+        expect
+          .soft(
+            await style(page, `${scope} ${ring}`, pseudo),
+            `${group} ${field}`,
+          )
+          .toMatchObject({
+            outline: "solid 4px",
+            outlineColor: system.Highlight,
+          });
+      }
+    }
+  });
+
 });
 
 // The subtle read-only border is a color cue that forced colors erases, so
