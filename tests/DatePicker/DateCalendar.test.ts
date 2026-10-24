@@ -20,4 +20,18 @@ describe("DateCalendar", () => {
       screen.getByRole("gridcell", { selected: true }),
     );
   });
+
+  it.each([
+    ["en", "March 2024"],
+    ["ja", "2024年3月"],
+    ["zh", "2024年3月"],
+    ["ar", "مارس 2024"],
+  ])("writes the %s heading in the locale's order", (locale, heading) => {
+    render(DateCalendar, { locale, month: new Date(2024, 2, 15) });
+
+    expect(screen.getByRole("grid")).toHaveAccessibleName(heading);
+    expect(
+      document.querySelector(".bx--date-picker__month-label"),
+    ).toHaveTextContent(heading);
+  });
 });
