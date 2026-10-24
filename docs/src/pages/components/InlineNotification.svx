@@ -53,7 +53,9 @@ Customize the notification content using slots for more flexibility.
 
 ## Actions
 
-Add interactive elements to notifications using the actions slot.
+Add interactive elements to notifications using the actions slot. The
+notification's title describes a `NotificationActionButton` for screen
+readers, with no extra setup.
 
 ### Action button
 

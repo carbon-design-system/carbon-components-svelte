@@ -23,13 +23,18 @@ Control notification visibility by binding to `open` to show, hide, and reuse th
 
 Automatically close the notification after a specified duration (in milliseconds) with `timeout`. Set `pauseOnHover` to pause the timeout while the pointer is over the toast or while focus is inside it, so users can finish reading (opt-in).
 
+A toast with an action, or an actionable toast, ignores `timeout`. It stays
+open until users act on it or close it, so the action never disappears
+before they reach it.
+
 <FileSource src="/framed/ToastNotification/ToastNotificationTimeout" />
 
 ## Actions
 
 Add an action, such as a retry, in the `actions` slot. A
 `NotificationActionButton` there renders as a small tertiary button
-under the text, in colors that read on every kind.
+under the text, in colors that read on every kind. The toast's title
+describes the button for screen readers, with no extra setup.
 
 <ToastNotification kind="error" title="Upload failed" subtitle="The connection timed out before quarterly-report.pdf finished." caption="{new Date().toLocaleString()}">
   <svelte:fragment slot="actions">
@@ -55,7 +60,8 @@ to where it was before, such as the button that opened it.
 Set `focusOnOpen` to `false` to leave focus in place, or
 `closeOnEscape` to `false` to keep it open on <DocKbd label="Escape" />.
 If the close button is also hidden, Tab can leave the toast, so
-keyboard users are never trapped. Avoid a `timeout` here, since the toast could close before users act.
+keyboard users are never trapped. The toast ignores `timeout`, so it
+cannot close before users act.
 [NotificationQueue](NotificationQueue) accepts the same options.
 
 <FileSource src="/framed/ToastNotification/ToastNotificationActionable" />
