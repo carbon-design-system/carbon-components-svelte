@@ -27,6 +27,7 @@ const ALLOWED: RegExp[] = [
   /^css\/[^/]+\.css$/,
   /^css\/css\.d\.ts$/,
   /^src\/.+\.(svelte|js|d\.ts)$/,
+  /^codemods\/.+\.(js|d\.ts)$/,
 ];
 
 /** Build outputs a release tarball must contain, keyed by description. */

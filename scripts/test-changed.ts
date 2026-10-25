@@ -52,6 +52,7 @@ const GRAPH_ROOTS = [
   "css",
   "scripts",
   "docs/src/pages/framed/DatePicker",
+  "codemods",
   "crassus.config.ts",
   "docs/src/token-reference.ts",
 ];

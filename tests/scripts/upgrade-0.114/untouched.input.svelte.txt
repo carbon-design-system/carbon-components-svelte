@@ -1,0 +1,22 @@
+<script lang="ts">
+  import { Button, Layer, TextInput } from "carbon-components-svelte";
+  import Card from "./Card.svelte";
+
+  const prefix = "--cds-";
+  const own: string = "--cds-ui-010";
+  const label = "light";
+</script>
+
+<Layer>
+  <TextInput labelText="Already migrated" />
+</Layer>
+<Card light fill="layer-03" type="body-short-01" selectOnFocus />
+<Button kind="ghost">ui-01 text-01</Button>
+<div style="color: var(--cds-text-primary); background: var(--cds-ui-010)"></div>
+
+<style>
+  .card {
+    color: var(--cds-text-primary);
+    border: 1px solid var(--cds-border-subtle);
+  }
+</style>

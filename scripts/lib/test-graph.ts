@@ -458,6 +458,7 @@ const GRAPH_ROOTS = [
   "e2e/",
   "css/",
   "scripts/",
+  "codemods/",
   "crassus.config.ts",
 ];
 

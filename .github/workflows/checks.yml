@@ -82,6 +82,7 @@ jobs:
               - 'scripts/**'
               - 'e2e/**'
               - 'crassus.config.ts'
+              - 'codemods/**'
               - 'vite.config.ts'
               - 'tsconfig*.json'
               - 'package.json'

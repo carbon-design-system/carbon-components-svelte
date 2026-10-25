@@ -1,0 +1,19 @@
+// A `var()` read in a string takes the property it sits in.
+export const card = "background: var(--cds-ui-03); color: var(--cds-text-01)";
+export const border = `border: 1px solid var(--cds-ui-03)`;
+export const inline = { backgroundColor: "var(--cds-ui-03)" };
+export const fallback = "var(--cds-text-02)";
+
+// A split token with no property is reported.
+export const accent = "var(--cds-ui-03)";
+
+// A bare name could be anything, so it is reported, not changed.
+export const own = "--cds-ui-01";
+document.documentElement.style.setProperty("--cds-interactive-01", "#d02670");
+
+// Type style classes.
+export const heading = "bx--type-productive-heading-02";
+
+// Look-alikes stay.
+export const lookAlike = "var(--cds-ui-010) var(--app-cds-text-01)";
+export const typeName = "body-short-01";

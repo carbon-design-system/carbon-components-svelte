@@ -7,6 +7,9 @@
   "svelte": "./src/index.js",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "bin": {
+    "carbon-components-svelte-upgrade": "./codemods/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
@@ -136,6 +139,7 @@
     "!src/**/.cache",
     "css/*.css",
     "css/css.d.ts",
+    "codemods",
     "telemetry.yml"
   ],
   "maintainers": [

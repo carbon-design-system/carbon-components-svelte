@@ -430,6 +430,16 @@ Documentation is available in LLM-friendly plain text for use with coding assist
 
 Every component ships TypeScript definitions for its props, events, and slots (`src/**/*.svelte.d.ts`), generated from the component source by [sveld](https://github.com/carbon-design-system/sveld).
 
+## Upgrading
+
+A release that renames APIs ships a codemod. Install the new version, then run it from your app's root:
+
+```sh
+npx carbon-components-svelte-upgrade 0.114 src
+```
+
+It prints the changes. Add `--write` to apply them. At the end, it lists what you need to change by hand. See the [0.114 migration guide](docs/migrations/v0.114.x.md).
+
 ## Contributing
 
 Refer to the [Contributing guidelines](CONTRIBUTING.md).
