@@ -2,6 +2,9 @@ import { $ } from "bun";
 import { sveld } from "sveld";
 
 const SVELD_OPTIONS = {
+  // Parse each `@example`'s markup, so a broken one fails static-checks
+  // instead of reaching editor hovers and the API docs.
+  checkExamples: "syntax" as const,
   glob: true,
   json: true,
   jsonOptions: {
