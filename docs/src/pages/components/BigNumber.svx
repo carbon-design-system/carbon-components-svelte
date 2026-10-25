@@ -50,9 +50,12 @@ Set `total` to render `value` as the numerator of a "value / total" fraction. Th
 
 ## Percentage
 
-Set `percentage` to `true` to append a percent sign after `value` instead of rendering `total` as a fraction.
+Set `percentage` to `true` to render `value` as a percentage instead of rendering `total` as a fraction. `value` is the number of percent, so `99.8` renders "99.8%". The percent sign follows `locale`, which puts it before the number in Turkish.
 
-<BigNumber labelText="Uptime" value={99.8} percentage />
+<Stack gap={5}>
+  <BigNumber labelText="Uptime" value={99.8} percentage />
+  <BigNumber labelText="Çalışma süresi" value={99.8} percentage locale="tr" />
+</Stack>
 
 ## Trending
 
