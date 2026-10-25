@@ -1,5 +1,6 @@
 <script>
   import {
+    Box,
     Button,
     FloatingPortal,
     Stack,
@@ -101,9 +102,11 @@
 </script>
 
 <Stack gap={5}>
-  <div
-    bind:this={containerBottom}
-    style="position: relative; min-height: 200px; min-width: 300px;"
+  <Box
+    bind:ref={containerBottom}
+    position="relative"
+    minHeight="200px"
+    minWidth="300px"
   >
     <div
       bind:this={anchorBottom}
@@ -128,11 +131,13 @@
     <FloatingPortal anchor={anchorBottom} open={openBottom} direction="bottom">
       <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
     </FloatingPortal>
-  </div>
+  </Box>
 
-  <div
-    bind:this={containerTop}
-    style="position: relative; min-height: 200px; min-width: 300px;"
+  <Box
+    bind:ref={containerTop}
+    position="relative"
+    minHeight="200px"
+    minWidth="300px"
   >
     <div
       bind:this={anchorTop}
@@ -155,5 +160,5 @@
     <FloatingPortal anchor={anchorTop} open={openTop} direction="top">
       <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
     </FloatingPortal>
-  </div>
+  </Box>
 </Stack>

@@ -54,13 +54,13 @@
       </Stack>
     </Column>
     <Column sm={0} md={2} lg={4}>
-      <div style="position: sticky; top: 2rem">
+      <Box position="sticky" top={7}>
         <TableOfContents labelText="On this page">
           {#each sections as section (section.id)}
             <TableOfContentsItem href="#{section.id}" text={section.title} />
           {/each}
         </TableOfContents>
-      </div>
+      </Box>
     </Column>
   </Row>
 </Grid>

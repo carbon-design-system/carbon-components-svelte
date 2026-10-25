@@ -1,5 +1,5 @@
 <script>
-  import { Button, FloatingPortal, Tile } from "carbon-components-svelte";
+  import { Box, Button, FloatingPortal, Tile } from "carbon-components-svelte";
   import { onMount } from "svelte";
 
   let anchor = null;
@@ -55,9 +55,11 @@
   }
 </script>
 
-<div
-  bind:this={container}
-  style="position: relative; min-height: 200px; min-width: 300px;"
+<Box
+  bind:ref={container}
+  position="relative"
+  minHeight="200px"
+  minWidth="300px"
 >
   <div
     bind:this={anchor}
@@ -77,7 +79,7 @@
       <Button on:click={() => (open = !open)}>View instance details</Button>
     </Tile>
   </div>
-</div>
+</Box>
 
 <FloatingPortal {anchor} {open}>
   <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>

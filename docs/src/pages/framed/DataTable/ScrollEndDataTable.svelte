@@ -1,5 +1,5 @@
 <script>
-  import { DataTable, InlineLoading } from "carbon-components-svelte";
+  import { Box, DataTable, InlineLoading } from "carbon-components-svelte";
 
   const PAGE_SIZE = 10;
   const TOTAL = 60;
@@ -47,14 +47,8 @@
   virtualize={{ containerHeight: 240, threshold: 1 }}
   on:scrollend={loadMore}
 />
-<div class="scrollend-loading">
+<Box minHeight={7}>
   {#if loading}
     <InlineLoading description="Loading more…" />
   {/if}
-</div>
-
-<style>
-  .scrollend-loading {
-    min-height: 2rem;
-  }
-</style>
+</Box>

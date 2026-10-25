@@ -42,13 +42,13 @@
 <Grid>
   <Row>
     <Column sm={0} md={2} lg={4}>
-      <div style="position: sticky; top: 2rem">
+      <Box position="sticky" top={7}>
         <TableOfContents>
           {#each sections as section (section.id)}
             <TableOfContentsItem href="#{section.id}" text={section.title} />
           {/each}
         </TableOfContents>
-      </div>
+      </Box>
     </Column>
     <Column sm={4} md={6} lg={12}>
       <Stack gap={9}>

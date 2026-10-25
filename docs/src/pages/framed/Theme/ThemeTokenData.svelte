@@ -2,6 +2,7 @@
   import {
     DataTable,
     Pagination,
+    Stack,
     Toolbar,
     ToolbarContent,
     ToolbarSearch,
@@ -34,14 +35,14 @@
     {#if cell.key === "id"}
       <code>{cell.value}</code>
     {:else}
-      <span class="value">
+      <Stack tag="span" orientation="horizontal" align="center" gap={3}>
         <span
           class="swatch"
           style:background={cell.value}
           aria-hidden="true"
         ></span>
         {cell.value}
-      </span>
+      </Stack>
     {/if}
   </svelte:fragment>
 </DataTable>
@@ -54,13 +55,7 @@
 />
 
 <style>
-  /* A long rgba() value wraps beside its swatch, not under it. */
-  .value {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
+  /* A swatch, not layout: border-subtle-01 outlines light values on the row. */
   .swatch {
     flex: none;
     width: 1rem;
