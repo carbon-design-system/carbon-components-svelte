@@ -86,6 +86,24 @@ Set `href` to make the whole card a link, which suits a dashboard whose cards op
 
 <KpiCard label="Open incidents" value={7} delta={-3} deltaFormat="number" deltaLabel="vs yesterday" positive="down" href="#" />
 
+## Subtitle, status, and freshness
+
+`subtitle` puts the unit, the definition, or the period under the name. `status` adds a [ShapeIndicator](/components/ShapeIndicator) beside it, with `statusLabel` for its text, for a metric over its threshold or a source that is degraded. `asOf` writes when the value was fetched under the card, so stale data says so.
+
+<Grid narrow fullWidth>
+  <Row>
+    <Column sm={4} md={4} lg={4}>
+      <KpiCard label="p95 latency" subtitle="API gateway, ms" value={262} format={(v) => `${v} ms`} delta={0.04} positive="down" status="cautious" statusLabel="Over target" asOf={new Date(2026, 9, 24, 9, 41)} />
+    </Column>
+  </Row>
+</Grid>
+
+## Error
+
+Set `error` when the value could not be loaded. The error text takes the value's place, and the `error` slot takes a retry action.
+
+<KpiCard label="Monthly revenue" error />
+
 ## Loading
 
 Set `loading` while the value is on its way. A skeleton holds the value's place, so nothing jumps when it lands, and the card is marked busy.

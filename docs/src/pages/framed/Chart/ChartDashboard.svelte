@@ -5,6 +5,8 @@
     DataTable,
     Grid,
     Layer,
+    OverflowMenu,
+    OverflowMenuItem,
     Row,
     Tile,
   } from "carbon-components-svelte";
@@ -99,11 +101,14 @@
         <Column sm={4} md={4} lg={4}>
           <KpiCard
             label="p95 latency"
+            subtitle="API gateway"
             value={214}
             format={(v) => `${v} ms`}
             delta={0.04}
             deltaLabel="vs last week"
             positive="down"
+            status="cautious"
+            statusLabel="Over target"
           />
         </Column>
         <Column sm={4} md={4} lg={4}>
@@ -126,10 +131,22 @@
               y="revenue"
               series="region"
               title="Revenue by region"
+              subtitle="USD, net of refunds"
+              asOf={new Date(2026, 8, 30, 9, 41)}
               height={240}
               brushable
               bind:brush={range}
-            />
+            >
+              <OverflowMenu
+                slot="actions"
+                flipped
+                size="sm"
+                aria-label="Chart options"
+              >
+                <OverflowMenuItem text="Open report" />
+                <OverflowMenuItem text="Set alert" />
+              </OverflowMenu>
+            </LineChart>
           </Tile>
         </Column>
         <Column sm={4} md={8} lg={6}>

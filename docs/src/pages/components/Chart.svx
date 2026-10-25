@@ -503,7 +503,7 @@ The presets share one vocabulary, so what you learn on one chart carries to the 
 | `data` | Rows, one per mark, read through accessor props such as `x`, `y`, `series`, `value`, `label`, `id`, `parent`, `group`. An accessor is a field name or a function of the row. |
 | `nodes`, `links` | A graph's rows and the pairs between them, read with `source` and `target`. |
 | `values`, `stages` | A plain array of numbers for a sparkline or strip; the stages of a funnel. |
-| `title` | The caption of a chart, also its accessible name. |
+| `title`, `subtitle` | The caption of a chart, also its accessible name, and the line under it: a unit, a definition, a period. |
 | `label` | On a micrographic, its accessible name. On a chart, the accessor for a mark's label. |
 | `size` | `"sm"`, `"md"`, or `"lg"`. Only `ScatterChart` uses `size` for the bubble accessor. |
 | `width`, `height`, `aspectRatio` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container, and `aspectRatio` to let the height follow the width. |
@@ -514,7 +514,8 @@ The presets share one vocabulary, so what you learn on one chart carries to the 
 | `selectable`, `selected` | Selection is opt in. `selected` is the row id, the index on an index-keyed strip, or `{ series, index, key }` on a Cartesian chart, where `key` is what identifies the datum within its series and finds it again when the data changes. |
 | `hidden` | Series keys the legend has hidden; bind it. |
 | `loading`, `emptyText`, `error`, `errorText` | A skeleton while data is on its way, the message when there is none, and the error state with an `error` slot for a retry action. Loading wins over error, error over empty. |
-| `asOf`, `asOfLabel` | When the data was fetched, written in the header so stale data says so. On charts built on `Chart`. |
+| `asOf`, `asOfLabel` | When the data was fetched, written in the header so stale data says so. On charts built on `Chart`, and on `KpiCard`. |
+| `actions` slot | A place in the header, beside the toolbar, for a card's own controls: an `OverflowMenu`, a link to the report. On charts built on `Chart`. |
 | `hover` | The hovered item, or `null` when the pointer leaves. |
 | `select` | `{ <item>, originalEvent }`, the same item `hover` carries, when `selectable` is set. |
 | `toggle`, `legend:toggle`, `threshold`, `brush`, `zoom` | `{ id, collapsed }`; `{ series, hidden }`; `{ threshold, direction, value }`; a brush or zoom range. |
