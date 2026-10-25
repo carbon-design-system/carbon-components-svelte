@@ -664,7 +664,7 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 
 Compile through `compileEntry()` from `tests/css/compile.ts`, not `compileAsync` directly. It caches per source hash so a dozen workers do not each compile the same sheet. A PR that touches `css/**` also gets two jobs. `css-size` runs `check:css:size` and fails over the limit in [Size growth](#size-growth). `css-cascade` shows the rule delta against the base branch in its summary and annotates each cascade flip at its `.scss` line; it is informational and never blocks.
 
-These come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes white --viewport 1280x900` or `--no-states`. They use Playwright's `chrome-headless-shell` when it's installed and half the cores, dropping to one tab while the machine is busy. `crassus --help` lists the options; `--format json` gives the same report as data.
+These come from [crassus](https://github.com/metonym/crassus), configured in `crassus.config.ts`. `check:css` and `check:css:overrides` compile `css/all.scss` and `css/white.scss` with a source map; `dead --fix` also proves its edits against the other themes. The browser checks build the e2e fixtures statically into `.crassus/fixtures` and load each page in `white` and `g100` at 320, 1280 and 1600 px wide, so every breakpoint rule applies somewhere. Narrow a run with `--only <fixture>`, `--themes white --viewport 1280x900` or `--no-states`. They use Playwright's `chrome-headless-shell` when it's installed and half the cores, dropping to one tab while the machine is busy. `--base` builds only `css/` (the config's `inputs`) at that ref and caches each build by that tree, so running it again, or against another commit with the same `css/`, takes under a second. `crassus --help` lists the options; `--format json` gives the same report as data.
 
 For an intended visual change, `crassus approve <id> --report <dir>` records its card in `crassus.approved.json`; `check:css:compare` then fails only on visible cards that file lacks. `crassus explain <id>`, `repro <id>`, `verify <id>` and `reduce <id>` (the fewest declaration edits that make the card) take the same `--report <dir>`.
 
@@ -783,10 +783,11 @@ Types and E2E:
 - `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
-Two process traps:
+Three process traps:
 
 - Read the exit code, not the tail. `bun run lint:changed | tail -1` prints "No fixes applied" and exits 0 even when Biome reported errors above it. Gate commits on the checks themselves: `bunx biome check <paths> && bun run test:types && git commit ...`.
 - `bun test:types` reporting that a new prop or event "does not exist" usually means the generated `.d.ts` is stale, not that the code is wrong. Run `bun build:docs` first. This bites after a rebase as well as after an API change.
+- Before calling a failure flaky, rerun it once and compare. The same assertion failing with the same value is deterministic, even if the file passes alone; run it together with the file before it to reproduce the order.
 
 Other runs that pass in CI but fail locally are stale local state too:
 
@@ -848,6 +849,7 @@ Import shared utilities (for example exported helpers) from the component file o
 - Keep imports, `vi.mock` paths, and `page.goto` URLs as string literals. CI picks tests by reading them ([`test-graph.ts`](scripts/lib/test-graph.ts)), and a computed path makes the test run on every pull request.
 - A test that reads files from disk (`node:fs`) must list them in a `// @depends-on <glob> [glob…]` comment, for example `// @depends-on css/**`. Without it the test runs on every pull request, and `tests/scripts/test-changed.test.ts` fails.
 - A file that only reads other files as text, not what they import, lists them in `// @reads <glob>` instead, so a change to their imports does not select it. `e2e/helpers/host.ts` reads fixture entries this way. A file whose `import.meta.glob` is a lookup table, with each caller naming the entry it loads, marks it `// @glob-registry` (`e2e/fixtures/host.ts`). Keep `goto(` out of e2e comments: the selector reads it as a navigation.
+- A `@depends-on` or `@reads` glob must match at least one tracked file. One that can't, such as a cache directory or a docs path the selector ignores, fails `tests/scripts/test-changed.test.ts` until it is listed in `DEAD_GLOBS` there, with the reason.
 - Narrow types with an assertion, not a cast. Write `assert(input instanceof HTMLInputElement)` instead of `as HTMLInputElement`. The global `assert` fails the test with a clear message when the element is wrong, and TypeScript narrows the variable after it. Use `assert(el)` for a nullable lookup. Do not use `expect.assert` or non-null `!`.
 - Skip the narrowing when a jest-dom matcher does the job. `expect(input).toHaveValue("a")`, `toBeChecked()`, and `toHaveFocus()` accept any element, so reading `.value` or `.checked` through a cast is rarely needed.
 - Type `querySelector` through its generic: `container.querySelector<HTMLInputElement>("input")`, then `assert(input)`.
@@ -1321,6 +1323,16 @@ A PR runs a whole suite when the selection can't be trusted. `bun run test:chang
 | A changed file outside the graph's roots | Add the file's directory to `GRAPH_ROOTS` in `scripts/test-changed.ts` if tests import it |
 | A changed setup or helper file that no test imports | None needed. It's wired in through config, so the whole suite runs |
 | A test whose dependencies the graph can't read: a computed import path or `page.goto` URL, or a disk read without `// @depends-on <glob>` (or `// @reads <glob>` for files read as text) | Fix the test. It otherwise runs on every PR |
+
+### Changing CI
+
+A PR that edits `.github/workflows/` runs every suite, so its own run can't show a selective path: a CSS-only change, a one-shard E2E selection, or a cache hit. To see one, open a draft PR based on your branch with the smallest change that takes that path (a comment in a `.scss` partial, a line in one component), read the run, and close it.
+
+| Do | Why |
+| --- | --- |
+| Compare step times with `gh run view <id> --json jobs --jq '.jobs[] \| .name as $j \| .steps[] \| "\($j) \| \(.name) \(((.completedAt\|fromdate)-(.startedAt\|fromdate)))s"'` | The run summary shows only job totals |
+| Expect a PR's `actions/cache` to restore only from master and the PR's own earlier runs | GitHub scopes caches by branch, so warming one from another PR does nothing |
+| When code that matches master fails, compare the `bun install vX` line with the last green run | `setup-bun` installs the latest Bun, so a Bun release can change behavior overnight |
 
 ### Open a PR
 
