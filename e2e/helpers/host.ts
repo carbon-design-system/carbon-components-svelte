@@ -126,6 +126,15 @@ export const test = base.extend<
     const size = hostPage.viewportSize() ?? { width: 1280, height: 720 };
     await hostPage.mouse.move(size.width - 1, size.height - 1);
     await use(hostPage);
+    // A click leaves Chrome's focus-visible heuristic in pointer mode, so a
+    // later test's `focus()` would match :focus but not :focus-visible. A
+    // fresh page starts out of pointer mode, and a key press puts it back.
+    // Unmount first, so no fixture hears the key.
+    const onHost = await hostPage.evaluate(() => {
+      window.__host?.clear();
+      return window.__host !== undefined;
+    });
+    if (onHost) await hostPage.keyboard.press("Shift");
     const { viewport } = testInfo.project.use;
     if (viewport) await hostPage.setViewportSize(viewport);
     await hostPage.emulateMedia({
