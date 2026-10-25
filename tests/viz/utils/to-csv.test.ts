@@ -49,6 +49,18 @@ describe("groupsToCsv", () => {
     ).toContain('"line\nbreak",a,1');
   });
 
+  test("leaves ghosts out, keeps to the zoom window, and quotes a formula", () => {
+    const csv = groupsToCsv(
+      [
+        { ...group("=SUM(A1)", [1, 2, 3], [1, 2, 3]) },
+        { ...group("a", [1, 2], [1, 2]), ghost: "a" },
+      ],
+      { range: [2, 3] },
+    );
+
+    expect(csv).toBe("x,series,y\r\n2,'=SUM(A1),2\r\n3,'=SUM(A1),3\r\n");
+  });
+
   test("uses custom column names", () => {
     expect(groupsToCsv([], { header: ["date", "region", "revenue"] })).toBe(
       "date,region,revenue\r\n",

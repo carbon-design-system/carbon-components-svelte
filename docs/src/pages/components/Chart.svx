@@ -353,7 +353,7 @@ Every chart takes the same two props. Flip them here to see a Cartesian chart ke
 
 ## Toolbar and data table
 
-`ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads the visible series as CSV, in the same long format the chart reads: ISO dates, plain numbers, and an empty field for a missing value. Anything in its default slot sits before the buttons.
+`ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads what the chart shows as CSV: the series that are not hidden, within the zoom window, in the same long format the chart reads with ISO dates, plain numbers, and an empty field for a missing value. A label that starts like a spreadsheet formula is quoted. Anything in its default slot sits before the buttons.
 
 The table is the chart's text alternative. `Chart` renders a `ChartDataTable` when `view` is `"table"`, so it is available even without the toolbar. Bind `view` to drive it from your own control, and use the `table` slot to replace it.
 

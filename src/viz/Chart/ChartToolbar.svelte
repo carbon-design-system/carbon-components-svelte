@@ -1,6 +1,10 @@
 <svelte:options immutable />
 
 <script>
+  /**
+   * @event {{ kind: "image" | "csv"; error: unknown }} export:error Fires when a download could not be produced, such as an image from a tainted canvas.
+   */
+
   /** @restProps {div} */
 
   /** Set to `false` to hide the button that switches to the data table */
@@ -40,7 +44,7 @@
   /** Specify the label of the fullscreen button while fullscreen */
   export let exitFullscreenLabel = "Exit fullscreen";
 
-  import { getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount } from "svelte";
   import Button from "../../Button/Button.svelte";
   import ChartLineSmooth from "../../icons/ChartLineSmooth.svelte";
   import Download from "../../icons/Download.svelte";
@@ -52,12 +56,15 @@
   import { groupsToCsv } from "../utils/to-csv.js";
   import { CHART_CONTEXT } from "./context.js";
 
+  const dispatch = createEventDispatcher();
+
   /** @type {import("./context.js").ChartContext} */
   const {
     groups,
     scales,
     view,
     setView,
+    zoom,
     fullscreen: isFullscreen,
     toggleFullscreen,
     exportImage,
@@ -71,23 +78,32 @@
 
   async function downloadImage() {
     if (!image) return;
-    const data = await exportImage(image);
-    downloadFile(
-      data,
-      `${filename}.${image}`,
-      image === "svg" ? "image/svg+xml;charset=utf-8" : "image/png",
-    );
+    try {
+      const data = await exportImage(image);
+      downloadFile(
+        data,
+        `${filename}.${image}`,
+        image === "svg" ? "image/svg+xml;charset=utf-8" : "image/png",
+      );
+    } catch (error) {
+      dispatch("export:error", { kind: "image", error });
+    }
   }
 
   function download() {
-    downloadFile(
-      groupsToCsv($groups, {
-        kind: $scales.kind,
-        categories: $scales.categories,
-      }),
-      `${filename}.csv`,
-      "text/csv;charset=utf-8",
-    );
+    try {
+      downloadFile(
+        groupsToCsv($groups, {
+          kind: $scales.kind,
+          categories: $scales.categories,
+          range: $zoom,
+        }),
+        `${filename}.csv`,
+        "text/csv;charset=utf-8",
+      );
+    } catch (error) {
+      dispatch("export:error", { kind: "csv", error });
+    }
   }
 </script>
 
