@@ -127,7 +127,7 @@ In RTL, the calendar runs from the right: the week starts at the right edge, and
 
 In RTL, `Slider` and `RangeSlider` put `min` at the right end of the track. Dragging, clicking the track, marks, and the arrow keys follow it: <DocKbd label="ArrowLeft" /> raises the value.
 
-A slider in a `LayoutDirection` follows its `dir` as it changes. Outside one, a slider reads the page direction when it mounts, and again when the pointer or keyboard focus reaches it.
+The thumbs, fill, and marks follow the nearest `dir` in the styles, in server-rendered markup and as it changes. A slider in a `LayoutDirection` reads its `dir` for the keys and the pointer as it changes. Outside one, it reads the page direction when it mounts, and again when the pointer or keyboard focus reaches it.
 
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={7}>
