@@ -172,7 +172,8 @@
       class="bx--tag-set-overflow__popover-trigger"
       on:click={() => dispatch("trigger")}
     >
-      <span aria-hidden="true">+{count}</span>
+      <!-- In RTL, bidi moves the sign to the far side of the count ("1+"). -->
+      <span aria-hidden="true" dir="ltr">+{count}</span>
       <span class:bx--visually-hidden={true}>{overflowLabel(count)}</span>
       <svelte:fragment slot="content">
         {#if customContent}
@@ -252,7 +253,7 @@
       class:bx--tag--sm={size === "sm"}
       class:bx--tag--lg={size === "lg"}
     >
-      <span aria-hidden="true">+{count}</span>
+      <span aria-hidden="true" dir="ltr">+{count}</span>
     </span>
     <span class:bx--visually-hidden={true}>{overflowLabel(count)}</span>
   </TooltipDefinition>

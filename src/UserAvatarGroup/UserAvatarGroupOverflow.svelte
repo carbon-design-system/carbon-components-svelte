@@ -40,6 +40,8 @@
 <UserAvatar
   class="bx--user-avatar-group__overflow"
   data-avatar-group-overflow="true"
-  initials={label}
   tooltipText={names}
-/>
+>
+  <!-- In RTL, bidi moves the sign to the far side of the count ("1+"). -->
+  <span class:bx--user-avatar__text={true} dir="ltr">{label}</span>
+</UserAvatar>

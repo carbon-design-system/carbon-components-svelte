@@ -1718,6 +1718,43 @@ test.describe("right-to-left tooltips and popovers", () => {
     await expect(input).toBeFocused();
   });
 
+  test('keeps "+N" overflow counts reading left to right', async ({ page }) => {
+    // Each count's characters in visual order, left to right. In an RTL
+    // paragraph, bidi moves a sign that sits next to a number to the far
+    // side: "+1" paints as "1+".
+    const counts = () =>
+      page.evaluate(() =>
+        [
+          ...document.querySelectorAll(
+            "[data-testid=plus-counts] .bx--tag-set-overflow__popover-trigger [aria-hidden=true], [data-testid=plus-counts] .bx--user-avatar-group__overflow .bx--user-avatar__text",
+          ),
+        ].map((count) => {
+          const range = document.createRange();
+          const chars: { char: string; left: number }[] = [];
+          const walker = document.createTreeWalker(count, NodeFilter.SHOW_TEXT);
+          for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            for (let i = 0; i < (node.textContent ?? "").length; i++) {
+              range.setStart(node, i);
+              range.setEnd(node, i + 1);
+              chars.push({
+                char: range.toString(),
+                left: range.getBoundingClientRect().left,
+              });
+            }
+          }
+          return chars
+            .sort((a, b) => a.left - b.left)
+            .map(({ char }) => char)
+            .join("");
+        }),
+      );
+    const expected = ["+1", "+2", "+1", "99+"];
+    await page.goto("/rtl-tooltips.html");
+    expect(await counts()).toEqual(expected);
+    await page.goto("/rtl-tooltips.html?dir=rtl");
+    expect(await counts()).toEqual(expected);
+  });
+
   test("moves between PinCodeInput segments with the inline arrows", async ({
     page,
   }) => {
