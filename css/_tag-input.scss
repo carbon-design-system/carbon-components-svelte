@@ -136,3 +136,8 @@
 @include exports("tag-input") {
   @include tag-input;
 }
+
+// probe (do not merge)
+.bx--tag {
+  --ccs-probe: 1;
+}
