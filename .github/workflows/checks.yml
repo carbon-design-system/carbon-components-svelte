@@ -128,6 +128,14 @@ jobs:
         if: github.event_name == 'pull_request'
       - run: bun ci --ignore-scripts
         if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
+      # Compiled CSS by css/ tree hash, so a rerun or a later push that
+      # leaves css/ alone skips both compiles.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
+        with:
+          path: node_modules/.cache/test-changed-css
+          key: test-changed-css-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
+          restore-keys: test-changed-css-
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'

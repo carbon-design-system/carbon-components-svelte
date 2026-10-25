@@ -11,6 +11,7 @@ import { builtinModules } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { cachedSheets, compileKey } from "./lib/css-cache";
 import {
   BARREL,
   buildGraph,
@@ -197,6 +198,34 @@ export function checkoutCss(rev: string): string {
   return dir;
 }
 
+/** Compiled stylesheets by `css/` tree; CI restores it between runs. */
+const CSS_CACHE = join(ROOT, "node_modules/.cache/test-changed-css");
+
+/**
+ * The cache key for compiling `entries` from `rev`'s committed `css/` tree,
+ * or `undefined` when the tree has no name.
+ */
+function cssKey(rev: string, entries: string[]): string | undefined {
+  const tree = spawnSync("git", ["rev-parse", `${rev}:css`], {
+    cwd: ROOT,
+    encoding: "utf-8",
+  });
+  if (tree.status !== 0) return undefined;
+  const sass = JSON.parse(read("node_modules/sass-embedded/package.json"));
+  return compileKey([
+    tree.stdout.trim(),
+    entries.join(","),
+    read("crassus.config.ts"),
+    sass.version,
+  ]);
+}
+
+/** Whether the working tree's `css/` matches HEAD, so HEAD's key names it. */
+function cssCommitted(): boolean {
+  const status = git("status", "--porcelain", "--untracked-files=all", "css");
+  return status.trim() === "";
+}
+
 type Styles = StyleSeeds & { selectors?: string[] };
 
 /** The sources a `css/` change can show up in, from the compiled diff. */
@@ -211,10 +240,13 @@ async function styleSeeds(
     const { changedSelectors, selectorSources } = await import(
       "./lib/css-delta"
     );
-    base = checkoutCss(mergeBase);
+    const headKey = cssCommitted() ? cssKey("HEAD", entries) : undefined;
     const [before, after] = await Promise.all([
-      compileCss(base, entries),
-      compileCss(ROOT, entries),
+      cachedSheets(CSS_CACHE, cssKey(mergeBase, entries), () => {
+        base = checkoutCss(mergeBase);
+        return compileCss(base, entries);
+      }),
+      cachedSheets(CSS_CACHE, headKey, () => compileCss(ROOT, entries)),
     ]);
     const selectors = new Set<string>();
     for (const [i, entry] of entries.entries()) {

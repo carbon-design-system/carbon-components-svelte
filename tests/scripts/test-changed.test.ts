@@ -73,10 +73,12 @@ describe("declared dependencies", () => {
 
   // Globs the selector can't act on, so a change to what they match selects
   // nothing. The docs ones are ignored (docs-only changes skip CI entirely);
-  // the lockfile is outside the graph, so a change runs every test instead.
+  // the lockfile is outside the graph, so a change runs every test instead;
+  // the CSS compile cache is untracked.
   const DEAD_GLOBS = [
     "e2e/date-picker-examples.test.ts depends-on /^docs\\/src\\/pages\\/framed\\/DatePicker\\/[^/]*\\.svelte$/",
     "e2e/fixtures/date-picker-examples.ts depends-on /^docs\\/src\\/pages\\/framed\\/DatePicker\\/[^/]*\\.svelte$/",
+    "scripts/lib/css-cache.ts reads /^node_modules\\/\\.cache\\/test-changed-css\\/.*$/",
     "scripts/lib/syntax-tokens.ts depends-on /^bun\\.lock$/",
     "tests/css/v11-tokens.test.ts depends-on /^docs\\/src\\/.*$/",
     "tests/css/v11-tokens.test.ts depends-on /^docs\\/svelte\\.config\\.ts$/",
