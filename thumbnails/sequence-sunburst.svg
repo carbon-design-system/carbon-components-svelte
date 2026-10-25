@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>sequence-sunburst</title>
+    <g id="sequence-sunburst" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="ring1-1" fill="var(--cds-background-brand, #0f62fe)" d="M160.6,58 A32,32 0 0 1 192,90.3 L176,90.1 A16,16 0 0 0 160.3,74 Z"></path>
+        <path id="ring1-2" fill="var(--cds-text-disabled, #c6c6c6)" d="M192,91.6 A32,32 0 0 1 149.4,120.2 L154.7,105.1 A16,16 0 0 0 176,90.8 Z"></path>
+        <path id="ring1-3" fill="var(--cds-border-subtle, #e0e0e0)" d="M148.2,119.7 A32,32 0 0 1 159.3,58 L159.6,74 A16,16 0 0 0 154.1,104.9 Z"></path>
+        <path id="ring2-1" fill="var(--cds-background-brand, #0f62fe)" d="M161,42 A48,48 0 0 1 197,59.4 L186.2,68.3 A34,34 0 0 0 160.7,56 Z" fill-opacity="0.65"></path>
+        <path id="ring2-2" fill="var(--cds-background-brand, #0f62fe)" d="M198.2,60.9 A48,48 0 0 1 208,90.4 L194,90.3 A34,34 0 0 0 187.1,69.4 Z" fill-opacity="0.35"></path>
+        <path id="ring2-3" fill="var(--cds-text-disabled, #c6c6c6)" d="M207.9,92.4 A48,48 0 0 1 185.6,130.6 L178.1,118.8 A34,34 0 0 0 194,91.7 Z"></path>
+        <path id="ring2-4" fill="var(--cds-border-subtle, #e0e0e0)" d="M183.9,131.6 A48,48 0 0 1 144.1,135.3 L148.7,122.1 A34,34 0 0 0 176.9,119.5 Z"></path>
+        <path id="ring2-5" fill="var(--cds-border-subtle, #e0e0e0)" d="M142.3,134.6 A48,48 0 0 1 113.7,77.3 L127.2,81 A34,34 0 0 0 147.4,121.6 Z"></path>
+        <path id="ring2-6" fill="var(--cds-border-subtle, #e0e0e0)" d="M114.3,75.5 A48,48 0 0 1 158.9,42 L159.2,56 A34,34 0 0 0 127.6,79.7 Z"></path>
+        <path id="ring3-1" fill="var(--cds-background-brand, #0f62fe)" d="M161.3,26 A64,64 0 0 1 189.6,33.2 L183.1,45.7 A50,50 0 0 0 161,40 Z" fill-opacity="0.4"></path>
+        <path id="ring3-2" fill="var(--cds-background-brand, #0f62fe)" d="M191.8,34.5 A64,64 0 0 1 209.3,49.2 L198.5,58.1 A50,50 0 0 0 184.8,46.6 Z" fill-opacity="0.2"></path>
+        <path id="ring3-3" fill="var(--cds-border-subtle, #e0e0e0)" d="M210.9,51.2 A64,64 0 0 1 221.3,71.7 L207.9,75.7 A50,50 0 0 0 199.8,59.7 Z"></path>
+        <path id="ring3-4" fill="var(--cds-border-subtle, #e0e0e0)" d="M223.9,93.1 A64,64 0 0 1 212.5,126.6 L201,118.6 A50,50 0 0 0 209.9,92.5 Z"></path>
+        <path id="ring3-5" fill="var(--cds-border-subtle, #e0e0e0)" d="M191.9,145.5 A64,64 0 0 1 163.9,153.9 L163.1,139.9 A50,50 0 0 0 184.9,133.4 Z"></path>
+        <path id="ring3-6" fill="var(--cds-border-subtle, #e0e0e0)" d="M136.4,149.5 A64,64 0 0 1 104.9,122.5 L116.9,115.4 A50,50 0 0 0 141.5,136.5 Z"></path>
+    </g>
+</svg>

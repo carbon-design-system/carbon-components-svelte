@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>pareto-chart</title>
+    <g id="pareto-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <rect id="axis-right" fill="var(--cds-border-strong, #8d8d8d)" x="244" y="40" width="1" height="97"></rect>
+        <rect id="bar-1" fill="var(--cds-text-disabled, #c6c6c6)" x="86" y="52" width="16" height="84"></rect>
+        <rect id="bar-2" fill="var(--cds-text-disabled, #c6c6c6)" x="114" y="80" width="16" height="56"></rect>
+        <rect id="bar-3" fill="var(--cds-text-disabled, #c6c6c6)" x="142" y="100" width="16" height="36"></rect>
+        <rect id="bar-4" fill="var(--cds-text-disabled, #c6c6c6)" x="170" y="112" width="16" height="24"></rect>
+        <rect id="bar-5" fill="var(--cds-text-disabled, #c6c6c6)" x="198" y="120" width="16" height="16"></rect>
+        <rect id="bar-6" fill="var(--cds-text-disabled, #c6c6c6)" x="226" y="126" width="16" height="10"></rect>
+        <polyline id="cumulative" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="94,104 122,82 150,68 178,58 206,52 234,48"></polyline>
+        <circle id="share-1" fill="var(--cds-background-brand, #0f62fe)" cx="94" cy="104" r="3"></circle>
+        <circle id="share-2" fill="var(--cds-background-brand, #0f62fe)" cx="122" cy="82" r="3"></circle>
+        <circle id="share-3" fill="var(--cds-background-brand, #0f62fe)" cx="150" cy="68" r="3"></circle>
+        <circle id="share-4" fill="var(--cds-background-brand, #0f62fe)" cx="178" cy="58" r="3"></circle>
+        <circle id="share-5" fill="var(--cds-background-brand, #0f62fe)" cx="206" cy="52" r="3"></circle>
+        <circle id="share-6" fill="var(--cds-background-brand, #0f62fe)" cx="234" cy="48" r="3"></circle>
+    </g>
+</svg>

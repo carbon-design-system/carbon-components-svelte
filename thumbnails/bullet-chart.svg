@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>bullet-chart</title>
+    <g id="bullet-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="64" y="78" width="40" height="8"></rect>
+        <rect id="band-1" fill="var(--cds-border-subtle, #e0e0e0)" x="112" y="70" width="144" height="24"></rect>
+        <rect id="band-2" fill="var(--cds-text-disabled, #c6c6c6)" x="112" y="70" width="108" height="24"></rect>
+        <rect id="band-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="112" y="70" width="64" height="24"></rect>
+        <rect id="measure" fill="var(--cds-background-brand, #0f62fe)" x="112" y="78" width="88" height="8"></rect>
+        <rect id="target" fill="var(--cds-icon-primary, #161616)" x="207" y="66" width="2" height="32"></rect>
+    </g>
+</svg>

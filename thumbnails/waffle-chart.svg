@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>waffle-chart</title>
+    <g id="waffle-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="filled" fill="var(--cds-background-brand, #0f62fe)">
+            <rect x="112" y="100" width="8" height="8"></rect>
+            <rect x="122" y="100" width="8" height="8"></rect>
+            <rect x="132" y="100" width="8" height="8"></rect>
+            <rect x="142" y="100" width="8" height="8"></rect>
+            <rect x="152" y="100" width="8" height="8"></rect>
+            <rect x="162" y="100" width="8" height="8"></rect>
+            <rect x="172" y="100" width="8" height="8"></rect>
+            <rect x="182" y="100" width="8" height="8"></rect>
+            <rect x="112" y="110" width="8" height="8"></rect>
+            <rect x="122" y="110" width="8" height="8"></rect>
+            <rect x="132" y="110" width="8" height="8"></rect>
+            <rect x="142" y="110" width="8" height="8"></rect>
+            <rect x="152" y="110" width="8" height="8"></rect>
+            <rect x="162" y="110" width="8" height="8"></rect>
+            <rect x="172" y="110" width="8" height="8"></rect>
+            <rect x="182" y="110" width="8" height="8"></rect>
+            <rect x="192" y="110" width="8" height="8"></rect>
+            <rect x="202" y="110" width="8" height="8"></rect>
+            <rect x="112" y="120" width="8" height="8"></rect>
+            <rect x="122" y="120" width="8" height="8"></rect>
+            <rect x="132" y="120" width="8" height="8"></rect>
+            <rect x="142" y="120" width="8" height="8"></rect>
+            <rect x="152" y="120" width="8" height="8"></rect>
+            <rect x="162" y="120" width="8" height="8"></rect>
+            <rect x="172" y="120" width="8" height="8"></rect>
+            <rect x="182" y="120" width="8" height="8"></rect>
+            <rect x="192" y="120" width="8" height="8"></rect>
+            <rect x="202" y="120" width="8" height="8"></rect>
+            <rect x="112" y="130" width="8" height="8"></rect>
+            <rect x="122" y="130" width="8" height="8"></rect>
+            <rect x="132" y="130" width="8" height="8"></rect>
+            <rect x="142" y="130" width="8" height="8"></rect>
+            <rect x="152" y="130" width="8" height="8"></rect>
+            <rect x="162" y="130" width="8" height="8"></rect>
+            <rect x="172" y="130" width="8" height="8"></rect>
+            <rect x="182" y="130" width="8" height="8"></rect>
+            <rect x="192" y="130" width="8" height="8"></rect>
+            <rect x="202" y="130" width="8" height="8"></rect>
+        </g>
+        <g id="rest" fill="var(--cds-border-subtle, #e0e0e0)">
+            <rect x="112" y="40" width="8" height="8"></rect>
+            <rect x="122" y="40" width="8" height="8"></rect>
+            <rect x="132" y="40" width="8" height="8"></rect>
+            <rect x="142" y="40" width="8" height="8"></rect>
+            <rect x="152" y="40" width="8" height="8"></rect>
+            <rect x="162" y="40" width="8" height="8"></rect>
+            <rect x="172" y="40" width="8" height="8"></rect>
+            <rect x="182" y="40" width="8" height="8"></rect>
+            <rect x="192" y="40" width="8" height="8"></rect>
+            <rect x="202" y="40" width="8" height="8"></rect>
+            <rect x="112" y="50" width="8" height="8"></rect>
+            <rect x="122" y="50" width="8" height="8"></rect>
+            <rect x="132" y="50" width="8" height="8"></rect>
+            <rect x="142" y="50" width="8" height="8"></rect>
+            <rect x="152" y="50" width="8" height="8"></rect>
+            <rect x="162" y="50" width="8" height="8"></rect>
+            <rect x="172" y="50" width="8" height="8"></rect>
+            <rect x="182" y="50" width="8" height="8"></rect>
+            <rect x="192" y="50" width="8" height="8"></rect>
+            <rect x="202" y="50" width="8" height="8"></rect>
+            <rect x="112" y="60" width="8" height="8"></rect>
+            <rect x="122" y="60" width="8" height="8"></rect>
+            <rect x="132" y="60" width="8" height="8"></rect>
+            <rect x="142" y="60" width="8" height="8"></rect>
+            <rect x="152" y="60" width="8" height="8"></rect>
+            <rect x="162" y="60" width="8" height="8"></rect>
+            <rect x="172" y="60" width="8" height="8"></rect>
+            <rect x="182" y="60" width="8" height="8"></rect>
+            <rect x="192" y="60" width="8" height="8"></rect>
+            <rect x="202" y="60" width="8" height="8"></rect>
+            <rect x="112" y="70" width="8" height="8"></rect>
+            <rect x="122" y="70" width="8" height="8"></rect>
+            <rect x="132" y="70" width="8" height="8"></rect>
+            <rect x="142" y="70" width="8" height="8"></rect>
+            <rect x="152" y="70" width="8" height="8"></rect>
+            <rect x="162" y="70" width="8" height="8"></rect>
+            <rect x="172" y="70" width="8" height="8"></rect>
+            <rect x="182" y="70" width="8" height="8"></rect>
+            <rect x="192" y="70" width="8" height="8"></rect>
+            <rect x="202" y="70" width="8" height="8"></rect>
+            <rect x="112" y="80" width="8" height="8"></rect>
+            <rect x="122" y="80" width="8" height="8"></rect>
+            <rect x="132" y="80" width="8" height="8"></rect>
+            <rect x="142" y="80" width="8" height="8"></rect>
+            <rect x="152" y="80" width="8" height="8"></rect>
+            <rect x="162" y="80" width="8" height="8"></rect>
+            <rect x="172" y="80" width="8" height="8"></rect>
+            <rect x="182" y="80" width="8" height="8"></rect>
+            <rect x="192" y="80" width="8" height="8"></rect>
+            <rect x="202" y="80" width="8" height="8"></rect>
+            <rect x="112" y="90" width="8" height="8"></rect>
+            <rect x="122" y="90" width="8" height="8"></rect>
+            <rect x="132" y="90" width="8" height="8"></rect>
+            <rect x="142" y="90" width="8" height="8"></rect>
+            <rect x="152" y="90" width="8" height="8"></rect>
+            <rect x="162" y="90" width="8" height="8"></rect>
+            <rect x="172" y="90" width="8" height="8"></rect>
+            <rect x="182" y="90" width="8" height="8"></rect>
+            <rect x="192" y="90" width="8" height="8"></rect>
+            <rect x="202" y="90" width="8" height="8"></rect>
+            <rect x="192" y="100" width="8" height="8"></rect>
+            <rect x="202" y="100" width="8" height="8"></rect>
+        </g>
+    </g>
+</svg>

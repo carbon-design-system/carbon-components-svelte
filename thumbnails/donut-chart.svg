@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>donut-chart</title>
+    <g id="donut-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="slice-1" fill="var(--cds-background-brand, #0f62fe)" d="M160.8,42 A48,48 0 0 1 183.9,131.7 L174.9,116 A30,30 0 0 0 160.5,60 Z"></path>
+        <path id="slice-2" fill="var(--cds-border-strong, #8d8d8d)" d="M182.4,132.5 A48,48 0 0 1 114.6,105.6 L131.6,99.8 A30,30 0 0 0 174,116.5 Z"></path>
+        <path id="slice-3" fill="var(--cds-text-disabled, #c6c6c6)" d="M114.1,104 A48,48 0 0 1 126.5,55.6 L139.1,68.5 A30,30 0 0 0 131.3,98.8 Z"></path>
+        <path id="slice-4" fill="var(--cds-border-subtle, #e0e0e0)" d="M127.8,54.4 A48,48 0 0 1 159.2,42 L159.5,60 A30,30 0 0 0 139.8,67.8 Z"></path>
+        <rect id="total" fill="var(--cds-layer-accent-active, #a8a8a8)" x="146" y="86" width="28" height="8"></rect>
+    </g>
+</svg>

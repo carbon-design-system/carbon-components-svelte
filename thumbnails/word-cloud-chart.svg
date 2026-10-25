@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>word-cloud-chart</title>
+    <g id="word-cloud-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="word-1" fill="var(--cds-background-brand, #0f62fe)" x="108" y="76" width="104" height="20"></rect>
+        <rect id="word-2" fill="var(--cds-border-strong, #8d8d8d)" x="96" y="56" width="52" height="12"></rect>
+        <rect id="word-3" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="54" width="60" height="14"></rect>
+        <rect id="word-4" fill="var(--cds-border-strong, #8d8d8d)" x="84" y="104" width="64" height="12"></rect>
+        <rect id="word-5" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="104" width="40" height="10"></rect>
+        <rect id="word-6" fill="var(--cds-border-strong, #8d8d8d)" x="204" y="100" width="40" height="16"></rect>
+        <rect id="word-7" fill="var(--cds-text-disabled, #c6c6c6)" x="218" y="56" width="24" height="10"></rect>
+        <rect id="word-8" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="80" width="24" height="8"></rect>
+        <rect id="word-9" fill="var(--cds-text-disabled, #c6c6c6)" x="116" y="122" width="44" height="8"></rect>
+        <rect id="word-10" fill="var(--cds-text-disabled, #c6c6c6)" x="176" y="122" width="56" height="10"></rect>
+    </g>
+</svg>

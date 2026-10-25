@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>sunburst-chart</title>
+    <g id="sunburst-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="hole" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" cx="160" cy="90" r="14"></circle>
+        <path id="ring1-a" fill="var(--cds-background-brand, #0f62fe)" d="M160,58 A32,32 0 0 1 181.6,113.6 L170.8,101.8 A16,16 0 0 0 160,74 Z"></path>
+        <path id="ring1-b" fill="var(--cds-border-strong, #8d8d8d)" d="M180.4,114.6 A32,32 0 0 1 132.1,105.7 L146.1,97.8 A16,16 0 0 0 170.2,102.3 Z"></path>
+        <path id="ring1-c" fill="var(--cds-text-disabled, #c6c6c6)" d="M131.4,104.3 A32,32 0 0 1 158.4,58 L159.2,74 A16,16 0 0 0 145.7,97.1 Z"></path>
+        <path id="ring2-a" fill="var(--cds-background-brand, #0f62fe)" d="M160,42 A48,48 0 0 1 206.3,77.2 L192.8,80.9 A34,34 0 0 0 160,56 Z" fill-opacity="0.7"></path>
+        <path id="ring2-b" fill="var(--cds-background-brand, #0f62fe)" d="M206.8,79.5 A48,48 0 0 1 192.4,125.4 L183,115.1 A34,34 0 0 0 193.2,82.6 Z" fill-opacity="0.45"></path>
+        <path id="ring2-c" fill="var(--cds-text-disabled, #c6c6c6)" d="M190.6,127 A48,48 0 0 1 147.7,136.4 L151.3,122.9 A34,34 0 0 0 181.7,116.2 Z"></path>
+        <path id="ring2-d" fill="var(--cds-border-subtle, #e0e0e0)" d="M145.4,135.7 A48,48 0 0 1 118.2,113.5 L130.4,106.7 A34,34 0 0 0 149.7,122.4 Z"></path>
+        <path id="ring2-e" fill="var(--cds-border-subtle, #e0e0e0)" d="M117,111.4 A48,48 0 0 1 117.6,67.5 L130,74.1 A34,34 0 0 0 129.6,105.2 Z"></path>
+    </g>
+</svg>

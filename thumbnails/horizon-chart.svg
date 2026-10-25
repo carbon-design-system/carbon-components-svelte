@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>horizon-chart</title>
+    <g id="horizon-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="row-1" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="40" width="168" height="24"></rect>
+        <path id="band-1-1" fill="var(--cds-background-brand, #0f62fe)" d="M76,64 L76,60.4 L97,56.8 L118,49.6 L139,43.6 L160,52 L181,58 L202,54.4 L223,47.2 L244,56.8 L244,64 Z" fill-opacity="0.35"></path>
+        <path id="band-1-2" fill="var(--cds-background-brand, #0f62fe)" d="M76,64 L76,64 L97,64 L118,54 L139,44 L160,58 L181,64 L202,62 L223,50 L244,64 L244,64 Z" fill-opacity="0.8"></path>
+        <rect id="row-2" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="72" width="168" height="24"></rect>
+        <path id="band-2-1" fill="var(--cds-background-brand, #0f62fe)" d="M76,96 L76,85.2 L97,78 L118,82.8 L139,91.2 L160,87.6 L181,74.4 L202,78 L223,86.4 L244,82.8 L244,96 Z" fill-opacity="0.35"></path>
+        <path id="band-2-2" fill="var(--cds-background-brand, #0f62fe)" d="M76,96 L76,92 L97,80 L118,88 L139,96 L160,96 L181,74 L202,80 L223,94 L244,88 L244,96 Z" fill-opacity="0.8"></path>
+        <rect id="row-3" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="104" width="168" height="24"></rect>
+        <path id="band-3-1" fill="var(--cds-background-brand, #0f62fe)" d="M76,128 L76,125.6 L97,123.2 L118,119.6 L139,116 L160,107.6 L181,105.2 L202,112.4 L223,120.8 L244,124.4 L244,128 Z" fill-opacity="0.35"></path>
+        <path id="band-3-2" fill="var(--cds-background-brand, #0f62fe)" d="M76,128 L76,128 L97,128 L118,128 L139,122 L160,108 L181,104 L202,116 L223,128 L244,128 L244,128 Z" fill-opacity="0.8"></path>
+    </g>
+</svg>

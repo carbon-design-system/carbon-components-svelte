@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>alluvial-chart</title>
+    <g id="alluvial-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="flow-1" fill="var(--cds-background-brand, #0f62fe)" d="M100,40 C140,40 180,40 220,40 L220,72 C180,72 140,72 100,72 Z" fill-opacity="0.35"></path>
+        <path id="flow-3" fill="var(--cds-text-disabled, #c6c6c6)" d="M100,92 C140,92 180,76 220,76 L220,121 C180,121 140,137 100,137 Z" fill-opacity="0.5"></path>
+        <path id="flow-2" fill="var(--cds-background-brand, #0f62fe)" d="M100,72 C140,72 180,121 220,121 L220,137 C180,137 140,88 100,88 Z" fill-opacity="0.25"></path>
+        <rect id="node-a1" fill="var(--cds-background-brand, #0f62fe)" x="88" y="40" width="12" height="48"></rect>
+        <rect id="node-a2" fill="var(--cds-border-strong, #8d8d8d)" x="88" y="92" width="12" height="45"></rect>
+        <rect id="node-b1" fill="var(--cds-background-brand, #0f62fe)" x="220" y="40" width="12" height="32"></rect>
+        <rect id="node-b2" fill="var(--cds-border-strong, #8d8d8d)" x="220" y="76" width="12" height="61"></rect>
+    </g>
+</svg>

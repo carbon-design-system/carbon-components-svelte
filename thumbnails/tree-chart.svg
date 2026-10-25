@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>tree-chart</title>
+    <g id="tree-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="link-1" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M92,90 C120,90 120,60 148,60"></path>
+        <path id="link-2" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M92,90 C120,90 120,120 148,120"></path>
+        <path id="link-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M148,60 C176,60 176,44 204,44"></path>
+        <path id="link-4" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M148,60 C176,60 176,76 204,76"></path>
+        <path id="link-5" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M148,120 C176,120 176,104 204,104"></path>
+        <path id="link-6" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M148,120 C176,120 176,136 204,136"></path>
+        <circle id="root" fill="var(--cds-background-brand, #0f62fe)" cx="92" cy="90" r="7"></circle>
+        <circle id="node-1" fill="var(--cds-border-strong, #8d8d8d)" cx="148" cy="60" r="6"></circle>
+        <circle id="node-2" fill="var(--cds-border-strong, #8d8d8d)" cx="148" cy="120" r="6"></circle>
+        <circle id="leaf-1" fill="var(--cds-text-disabled, #c6c6c6)" cx="204" cy="44" r="5"></circle>
+        <circle id="leaf-2" fill="var(--cds-text-disabled, #c6c6c6)" cx="204" cy="76" r="5"></circle>
+        <circle id="leaf-3" fill="var(--cds-text-disabled, #c6c6c6)" cx="204" cy="104" r="5"></circle>
+        <circle id="leaf-4" fill="var(--cds-text-disabled, #c6c6c6)" cx="204" cy="136" r="5"></circle>
+    </g>
+</svg>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>parallel-coordinates</title>
+    <g id="parallel-coordinates" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-1" fill="var(--cds-border-strong, #8d8d8d)" x="88" y="40" width="1" height="97"></rect>
+        <rect id="axis-2" fill="var(--cds-border-strong, #8d8d8d)" x="136" y="40" width="1" height="97"></rect>
+        <rect id="axis-3" fill="var(--cds-border-strong, #8d8d8d)" x="184" y="40" width="1" height="97"></rect>
+        <rect id="axis-4" fill="var(--cds-border-strong, #8d8d8d)" x="232" y="40" width="1" height="97"></rect>
+        <polyline id="row-1" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="88,60 136,96 184,56 232,100"></polyline>
+        <polyline id="row-2" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="88,88 136,60 184,116 232,72"></polyline>
+        <polyline id="row-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="88,120 136,112 184,84 232,120"></polyline>
+        <polyline id="row-4" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="88,72 136,52 184,96 232,56"></polyline>
+        <polyline id="row-5" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="88,104 136,80 184,68 232,88"></polyline>
+    </g>
+</svg>

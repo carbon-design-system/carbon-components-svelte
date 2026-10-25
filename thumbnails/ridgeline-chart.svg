@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>ridgeline-chart</title>
+    <g id="ridgeline-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="ridge-1" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M66,75.7 L80,74.8 L94,71.8 L108,65.3 L122,55 L136,44.5 L150,40 L164,44.5 L178,55 L192,65.3 L206,71.8 L220,74.8 L234,75.7 Z"></path>
+        <path id="ridge-2" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M82,99.7 L96,98.6 L110,95.3 L124,88.1 L138,76.6 L152,65 L166,60 L180,65 L194,76.6 L208,88.1 L222,95.3 L236,98.6 L250,99.7 Z"></path>
+        <path id="ridge-3" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M92,123.7 L106,122.5 L120,118.9 L134,110.9 L148,98.3 L162,85.5 L176,80 L190,85.5 L204,98.3 L218,110.9 L232,118.9 L246,122.5 L260,123.7 Z"></path>
+    </g>
+</svg>

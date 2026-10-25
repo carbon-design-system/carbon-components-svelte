@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>kpi-card</title>
+    <g id="kpi-card" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="surface" fill="var(--cds-field-01, #f4f4f4)" x="64" y="36" width="192" height="108"></rect>
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="80" y="52" width="56" height="8"></rect>
+        <rect id="value" fill="var(--cds-layer-accent-active, #a8a8a8)" x="80" y="68" width="72" height="28"></rect>
+        <g id="trend-icon" transform="translate(166, 76) scale(0.5)" fill="var(--cds-support-success, #198038)">
+            <path d="M16 4L6 14 7.41 15.41 15 7.83 15 28 17 28 17 7.83 24.59 15.41 26 14 16 4z"></path>
+        </g>
+        <rect id="delta" fill="var(--cds-support-success, #198038)" x="186" y="80" width="32" height="8"></rect>
+        <polyline id="sparkline" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="80,128 104,118 128,124 152,108 176,114 200,98 240,104"></polyline>
+    </g>
+</svg>

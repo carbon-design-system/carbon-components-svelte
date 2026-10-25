@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>marimekko-chart</title>
+    <g id="marimekko-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="cell-1-1" fill="var(--cds-background-brand, #0f62fe)" x="76" y="40" width="56" height="40"></rect>
+        <rect id="cell-1-2" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="82" width="56" height="30"></rect>
+        <rect id="cell-1-3" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="114" width="56" height="23"></rect>
+        <rect id="cell-2-1" fill="var(--cds-background-brand, #0f62fe)" x="134" y="40" width="40" height="24"></rect>
+        <rect id="cell-2-2" fill="var(--cds-border-strong, #8d8d8d)" x="134" y="66" width="40" height="46"></rect>
+        <rect id="cell-2-3" fill="var(--cds-text-disabled, #c6c6c6)" x="134" y="114" width="40" height="23"></rect>
+        <rect id="cell-3-1" fill="var(--cds-background-brand, #0f62fe)" x="176" y="40" width="32" height="56"></rect>
+        <rect id="cell-3-2" fill="var(--cds-border-strong, #8d8d8d)" x="176" y="98" width="32" height="16"></rect>
+        <rect id="cell-3-3" fill="var(--cds-text-disabled, #c6c6c6)" x="176" y="116" width="32" height="21"></rect>
+        <rect id="cell-4-1" fill="var(--cds-background-brand, #0f62fe)" x="210" y="40" width="34" height="32"></rect>
+        <rect id="cell-4-2" fill="var(--cds-border-strong, #8d8d8d)" x="210" y="74" width="34" height="24"></rect>
+        <rect id="cell-4-3" fill="var(--cds-text-disabled, #c6c6c6)" x="210" y="100" width="34" height="37"></rect>
+    </g>
+</svg>

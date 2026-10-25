@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>chord-diagram</title>
+    <g id="chord-diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="node-1" fill="var(--cds-background-brand, #0f62fe)" d="M163.7,38.1 A52,52 0 0 1 207.9,110.2 L202.4,107.9 A46,46 0 0 0 163.3,44.1 Z"></path>
+        <path id="node-2" fill="var(--cds-border-strong, #8d8d8d)" d="M205.6,114.9 A52,52 0 0 1 129.4,132 L132.9,127.2 A46,46 0 0 0 200.4,112.1 Z"></path>
+        <path id="node-3" fill="var(--cds-text-disabled, #c6c6c6)" d="M125.4,128.8 A52,52 0 0 1 113.4,67 L118.7,69.6 A46,46 0 0 0 129.4,124.3 Z"></path>
+        <path id="node-4" fill="var(--cds-border-subtle, #e0e0e0)" d="M115.9,62.4 A52,52 0 0 1 159.4,38 L159.4,44 A46,46 0 0 0 121,65.6 Z"></path>
+        <path id="chord-1" fill="var(--cds-background-brand, #0f62fe)" d="M163.3,44.1 A46,46 0 0 1 202.4,72.1 Q160,90 200.4,112.1 A46,46 0 0 1 167.8,135.3 Q160,90 163.3,44.1 Z" fill-opacity="0.3"></path>
+        <path id="chord-2" fill="var(--cds-background-brand, #0f62fe)" d="M202.4,72.1 A46,46 0 0 1 202.4,107.9 Q160,90 129.4,124.3 A46,46 0 0 1 114.5,96.5 Q160,90 202.4,72.1 Z" fill-opacity="0.15"></path>
+        <path id="chord-3" fill="var(--cds-text-disabled, #c6c6c6)" d="M167.8,135.3 A46,46 0 0 1 132.9,127.2 Q160,90 121,65.6 A46,46 0 0 1 159.4,44 Q160,90 167.8,135.3 Z" fill-opacity="0.45"></path>
+    </g>
+</svg>

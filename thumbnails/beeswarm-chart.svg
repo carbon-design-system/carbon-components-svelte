@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>beeswarm-chart</title>
+    <g id="beeswarm-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <circle id="dot-1-1" fill="var(--cds-text-disabled, #c6c6c6)" cx="112" cy="120" r="4"></circle>
+        <circle id="dot-1-2" fill="var(--cds-text-disabled, #c6c6c6)" cx="112" cy="108" r="4"></circle>
+        <circle id="dot-1-3" fill="var(--cds-text-disabled, #c6c6c6)" cx="103" cy="102" r="4"></circle>
+        <circle id="dot-1-4" fill="var(--cds-text-disabled, #c6c6c6)" cx="121" cy="102" r="4"></circle>
+        <circle id="dot-1-5" fill="var(--cds-text-disabled, #c6c6c6)" cx="112" cy="94" r="4"></circle>
+        <circle id="dot-1-6" fill="var(--cds-text-disabled, #c6c6c6)" cx="103" cy="86" r="4"></circle>
+        <circle id="dot-1-7" fill="var(--cds-text-disabled, #c6c6c6)" cx="121" cy="86" r="4"></circle>
+        <circle id="dot-1-8" fill="var(--cds-text-disabled, #c6c6c6)" cx="112" cy="78" r="4"></circle>
+        <circle id="dot-2-1" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="124" r="4"></circle>
+        <circle id="dot-2-2" fill="var(--cds-background-brand, #0f62fe)" cx="151" cy="118" r="4"></circle>
+        <circle id="dot-2-3" fill="var(--cds-background-brand, #0f62fe)" cx="169" cy="118" r="4"></circle>
+        <circle id="dot-2-4" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="110" r="4"></circle>
+        <circle id="dot-2-5" fill="var(--cds-background-brand, #0f62fe)" cx="142" cy="106" r="4"></circle>
+        <circle id="dot-2-6" fill="var(--cds-background-brand, #0f62fe)" cx="178" cy="106" r="4"></circle>
+        <circle id="dot-2-7" fill="var(--cds-background-brand, #0f62fe)" cx="151" cy="100" r="4"></circle>
+        <circle id="dot-2-8" fill="var(--cds-background-brand, #0f62fe)" cx="169" cy="100" r="4"></circle>
+        <circle id="dot-2-9" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="92" r="4"></circle>
+        <circle id="dot-2-10" fill="var(--cds-background-brand, #0f62fe)" cx="151" cy="84" r="4"></circle>
+        <circle id="dot-2-11" fill="var(--cds-background-brand, #0f62fe)" cx="169" cy="84" r="4"></circle>
+        <circle id="dot-2-12" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="76" r="4"></circle>
+        <circle id="dot-2-13" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="64" r="4"></circle>
+        <circle id="dot-3-1" fill="var(--cds-text-disabled, #c6c6c6)" cx="208" cy="116" r="4"></circle>
+        <circle id="dot-3-2" fill="var(--cds-text-disabled, #c6c6c6)" cx="199" cy="110" r="4"></circle>
+        <circle id="dot-3-3" fill="var(--cds-text-disabled, #c6c6c6)" cx="217" cy="110" r="4"></circle>
+        <circle id="dot-3-4" fill="var(--cds-text-disabled, #c6c6c6)" cx="208" cy="102" r="4"></circle>
+        <circle id="dot-3-5" fill="var(--cds-text-disabled, #c6c6c6)" cx="208" cy="90" r="4"></circle>
+    </g>
+</svg>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>micro-donut</title>
+    <g id="micro-donut" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="fill" fill="var(--cds-background-brand, #0f62fe)" d="M112,64 A26,26 0 1 1 92,106.6 L99.7,100.2 A16,16 0 1 0 112,74 Z"></path>
+        <path id="rest" fill="var(--cds-border-subtle, #e0e0e0)" d="M92,106.6 A26,26 0 0 1 112,64 L112,74 A16,16 0 0 0 99.7,100.2 Z"></path>
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="152" y="78" width="56" height="8"></rect>
+        <rect id="value" fill="var(--cds-layer-accent-active, #a8a8a8)" x="152" y="94" width="36" height="8"></rect>
+    </g>
+</svg>

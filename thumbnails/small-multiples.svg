@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>small-multiples</title>
+    <g id="small-multiples" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="panel-1" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="46" width="52" height="40"></rect>
+        <polyline id="line-1" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="80,78 92,70 104,74 116,62 124,66"></polyline>
+        <rect id="panel-2" fill="var(--cds-border-subtle, #e0e0e0)" x="134" y="46" width="52" height="40"></rect>
+        <polyline id="line-2" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="138,58 150,66 162,62 174,74 182,70"></polyline>
+        <rect id="panel-3" fill="var(--cds-border-subtle, #e0e0e0)" x="192" y="46" width="52" height="40"></rect>
+        <polyline id="line-3" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="196,70 208,62 220,70 232,58 240,62"></polyline>
+        <rect id="panel-4" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="94" width="52" height="40"></rect>
+        <polyline id="line-4" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="80,128 92,122 104,112 116,108 124,102"></polyline>
+        <rect id="panel-5" fill="var(--cds-border-subtle, #e0e0e0)" x="134" y="94" width="52" height="40"></rect>
+        <polyline id="line-5" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="138,110 150,118 162,106 174,114 182,122"></polyline>
+        <rect id="panel-6" fill="var(--cds-border-subtle, #e0e0e0)" x="192" y="94" width="52" height="40"></rect>
+        <polyline id="line-6" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="196,122 208,118 220,126 232,120 240,124"></polyline>
+    </g>
+</svg>

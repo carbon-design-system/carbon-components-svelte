@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>radial-progress</title>
+    <g id="radial-progress" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="track" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" d="M128.9,123.1 A44,44 0 1 1 191.1,123.1"></path>
+        <path id="fill" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" d="M128.9,123.1 A44,44 0 1 1 193,62.9"></path>
+        <rect id="value" fill="var(--cds-layer-accent-active, #a8a8a8)" x="144" y="86" width="32" height="12"></rect>
+    </g>
+</svg>

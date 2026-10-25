@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>hive-plot</title>
+    <g id="hive-plot" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <line id="axis-1" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" x1="160" y1="92" x2="160" y2="36"></line>
+        <line id="axis-2" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" x1="160" y1="92" x2="208.5" y2="120"></line>
+        <line id="axis-3" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" x1="160" y1="92" x2="111.5" y2="120"></line>
+        <path id="link-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" d="M160,52 Q160,92 196,113"></path>
+        <path id="link-2" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" d="M160,66 Q160,92 120,115"></path>
+        <path id="link-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" d="M187,108 Q160,92 122,114"></path>
+        <path id="link-4" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" d="M160,40 Q160,92 205,118"></path>
+        <circle id="node-1" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="40" r="3.5"></circle>
+        <circle id="node-2" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="52" r="3.5"></circle>
+        <circle id="node-3" fill="var(--cds-border-strong, #8d8d8d)" cx="160" cy="66" r="3.5"></circle>
+        <circle id="node-4" fill="var(--cds-border-strong, #8d8d8d)" cx="187" cy="108" r="3.5"></circle>
+        <circle id="node-5" fill="var(--cds-background-brand, #0f62fe)" cx="196" cy="113" r="3.5"></circle>
+        <circle id="node-6" fill="var(--cds-border-strong, #8d8d8d)" cx="205" cy="118" r="3.5"></circle>
+        <circle id="node-7" fill="var(--cds-border-strong, #8d8d8d)" cx="120" cy="115" r="3.5"></circle>
+        <circle id="node-8" fill="var(--cds-border-strong, #8d8d8d)" cx="122" cy="114" r="3.5"></circle>
+        <circle id="node-9" fill="var(--cds-text-disabled, #c6c6c6)" cx="133" cy="108" r="3.5"></circle>
+    </g>
+</svg>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>event-timeline</title>
+    <g id="event-timeline" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="96" width="168" height="1"></rect>
+        <rect id="tick-1" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="93" width="1" height="7"></rect>
+        <rect id="tick-2" fill="var(--cds-border-strong, #8d8d8d)" x="118" y="93" width="1" height="7"></rect>
+        <rect id="tick-3" fill="var(--cds-border-strong, #8d8d8d)" x="160" y="93" width="1" height="7"></rect>
+        <rect id="tick-4" fill="var(--cds-border-strong, #8d8d8d)" x="202" y="93" width="1" height="7"></rect>
+        <rect id="tick-5" fill="var(--cds-border-strong, #8d8d8d)" x="244" y="93" width="1" height="7"></rect>
+        <circle id="event-1" fill="var(--cds-border-strong, #8d8d8d)" cx="92" cy="96" r="5"></circle>
+        <circle id="event-2" fill="var(--cds-border-strong, #8d8d8d)" cx="110" cy="96" r="5"></circle>
+        <circle id="event-3" fill="var(--cds-background-brand, #0f62fe)" cx="144" cy="96" r="5"></circle>
+        <circle id="event-4" fill="var(--cds-border-strong, #8d8d8d)" cx="188" cy="96" r="5"></circle>
+        <circle id="event-5" fill="var(--cds-border-strong, #8d8d8d)" cx="216" cy="96" r="5"></circle>
+        <circle id="event-6" fill="var(--cds-border-strong, #8d8d8d)" cx="230" cy="96" r="5"></circle>
+        <rect id="label" fill="var(--cds-border-subtle, #e0e0e0)" x="120" y="66" width="48" height="16"></rect>
+        <polygon id="caret" fill="var(--cds-border-subtle, #e0e0e0)" points="140,82 148,82 144,88"></polygon>
+        <rect id="label-text" fill="var(--cds-text-secondary, #525252)" x="128" y="71" width="24" height="6"></rect>
+    </g>
+</svg>
