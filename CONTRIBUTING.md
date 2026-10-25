@@ -1116,15 +1116,17 @@ bunx ostia bench bench/treeCheckboxState.bench.ts
 bunx ostia bench bench/treeCheckboxState.bench.ts --filter "no cascade"
 ```
 
+To check a change against master, `bun run bench:ab` runs every pure-logic file with `ostia ab --base origin/master`: both trees in one process, in alternating rounds, so machine load cancels out. It confirms flagged tasks in fresh processes and fails on the geometric mean, which catches a broad slowdown more reliably than one task's. Pass `--filter` to narrow it.
+
 Numbers from this tier are representative of real-browser V8 behavior (no jsdom involved), so it's the right tier for validating algorithmic or data-structure choices — proving a `Set`-over-`Array` change actually helps, or that a function stays O(n) instead of drifting to O(n²), with real measurements instead of a guess.
 
-**Component tier** (`bench/*.dom.bench.ts`) mounts a real component. ostia itself is Bun-native and has no jsdom or `.svelte`-compile support built in, so this tier supplies both itself via `--preload ./bench/dom-preload.ts` (see that file) — a script that installs jsdom globals (`document`, `window`, the same `matchMedia`/`ResizeObserver`/etc. mocks `tests/utils/setup-globals.ts` uses for the unit-test suite) and registers a `Bun.plugin()` loader that compiles `.svelte` files with the Svelte compiler directly (stripping `<script lang="ts">` via `Bun.Transpiler` first, where used — `bench/fixtures/*.svelte` all use it, `src/**/*.svelte` doesn't). `ostia.config.ts`'s `bench` section points at this tier's suites/preload/bunFlags/jobs defaults, so running the whole tier is just:
+**Component tier** (`bench/*.dom.bench.ts`) mounts a real component. ostia itself is Bun-native and has no jsdom or `.svelte`-compile support built in, so this tier supplies both itself via `--preload ./bench/dom-preload.ts` (see that file) — a script that installs jsdom globals (`document`, `window`, the same `matchMedia`/`ResizeObserver`/etc. mocks `tests/utils/setup-globals.ts` uses for the unit-test suite) and registers a `Bun.plugin()` loader that compiles `.svelte` files with the Svelte compiler directly (stripping `<script lang="ts">` via `Bun.Transpiler` first, where used — `bench/fixtures/*.svelte` all use it, `src/**/*.svelte` doesn't). A `projects` entry in `ostia.config.ts` gives `bench/*.dom.bench.ts` that preload and the `browser` condition below, so pure-logic files run without them. Running the whole component tier is just:
 
 ```sh
 bun run bench
 ```
 
-`bench/*.dom.bench.ts` also needs `svelte`'s package.json `exports` to resolve to its `browser` condition (the client runtime) instead of `default` (the server-rendering build, which throws `lifecycle_function_unavailable` on `mount()`) — that's what `ostia.config.ts`'s `bunFlags: ["--conditions=browser"]` is for. Running a single file directly works the same way: a suite file given on the command line replaces the config's `suites` list, but `preload`/`bunFlags`/`jobs` still apply from config:
+`bench/*.dom.bench.ts` also needs `svelte`'s package.json `exports` to resolve to its `browser` condition (the client runtime) instead of `default` (the server-rendering build, which throws `lifecycle_function_unavailable` on `mount()`) — that's what `ostia.config.ts`'s `bunFlags: ["--conditions=browser"]` is for. Running a single file directly works the same way: a file given on the command line replaces the config's `suites` list, and the `projects` entry still supplies its preload and flags:
 
 ```sh
 bunx ostia bench bench/dropdown.dom.bench.ts
