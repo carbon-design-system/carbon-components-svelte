@@ -355,6 +355,11 @@
           isSelected={$isActive($url("/server-rendering"))}
         />
         <SideNavLink
+          text="Right-to-left"
+          href={$url("/right-to-left")}
+          isSelected={$isActive($url("/right-to-left"))}
+        />
+        <SideNavLink
           text="Component index"
           href={$url("/component-index")}
           isSelected={$isActive($url("/component-index"))}

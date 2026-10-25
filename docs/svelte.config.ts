@@ -345,6 +345,30 @@ function plugin() {
   };
 }
 
+/**
+ * Imports `Preview` and `DocKbd` into a guide page that uses them, as the
+ * markup preprocessor does for component pages. The remark plugin wraps
+ * each live example in `Preview`, so a page never imports it itself.
+ */
+function importGuideHelpers(code: string, filename: string): string {
+  const dir = path
+    .relative(path.dirname(filename), path.join(__dirname, "src/components"))
+    .split(path.sep)
+    .join("/");
+  const imports: string[] = [];
+  if (code.includes("<Preview") && !code.includes("import Preview")) {
+    imports.push(`  import Preview from "${dir}/Preview.svelte";`);
+  }
+  if (DOC_KBD_USAGE_RE.test(code) && !DOC_KBD_IMPORT_RE.test(code)) {
+    imports.push(`  import DocKbd from "${dir}/DocKbd.svelte";`);
+  }
+  if (imports.length === 0) return code;
+  const block = imports.join("\n");
+  return SCRIPT_TAG_REGEX.test(code)
+    ? code.replace(SCRIPT_TAG_REGEX, `$1\n${block}`)
+    : `<script>\n${block}\n</script>\n\n${code}`;
+}
+
 const HEADING_REGEX = /<h([23])[^>]+id="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
 const HEADING_ANCHOR_TAG_RE =
   /<a\b[^>]*\bclass="heading-anchor"[^>]*>[\s\S]*?<\/a\s*>/g;
@@ -701,7 +725,11 @@ export default {
     {
       markup({ content, filename }: { content: string; filename: string }) {
         if (NODE_MODULES_REGEX.test(filename)) return null;
-        if (!filename.match(PAGES_COMPONENTS_REGEX)) return null;
+        if (!filename.match(PAGES_COMPONENTS_REGEX)) {
+          return filename.endsWith(".svx")
+            ? { code: importGuideHelpers(content, filename) }
+            : null;
+        }
 
         const toc: { id: string; text: string; level: number }[] = [];
 

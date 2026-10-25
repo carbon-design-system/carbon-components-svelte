@@ -149,6 +149,8 @@ Set `dir="rtl"` and `lang` on `<html>` in `src/app.html`, so the first paint is 
 </LayoutDirection>
 ```
 
+See the [right-to-left guide](/right-to-left) for what flips and what stays left to right.
+
 ## Side navigation
 
 Before hydration `SideNav` is neither expanded nor collapsed, since nothing has measured the window. The library's CSS lays out `Content` beside the nav on screens 66rem and wider, at the `resizable` width, and at the edge below that, so `Content` does not move on hydration. Two setups still move it: a `Header` with `expandedByDefault={false}`, and an `expansionBreakpoint` other than the default.
