@@ -447,7 +447,6 @@
   }
   /** @param {number | Date} value */
   const asNumber = (value) => (value instanceof Date ? value.getTime() : value);
-  $: brushStore.set(brush ? [asNumber(brush[0]), asNumber(brush[1])] : null);
   $: asOfText =
     asOf === undefined || asOf === null || asOf === ""
       ? ""
@@ -514,6 +513,8 @@
     selected = keys.at(-1) ?? null;
   }
   // The x range with no zoom applied, which the zoom bar spans.
+  /** Whether `fullX` has been set from data, so a brush may be judged by it. */
+  let measuredOnce = false;
   const fullX = writable(
     /** @type {{ domain: [number, number]; kind: "time" | "linear" | "category" }} */ ({
       domain: [0, 1],
@@ -524,6 +525,25 @@
   const clip = derived(zoomStore, ($zoom) =>
     $zoom ? `url(#${clipId})` : undefined,
   );
+
+  // The brush keeps to the data: clamped when the range moves, dropped when
+  // nothing is left under it.
+  $: brushed = brush
+    ? clampToData([asNumber(brush[0]), asNumber(brush[1])], $fullX.domain)
+    : null;
+  $: brushStore.set(brushed);
+  $: if (brush && brushed === null && measuredOnce) setBrush(null);
+
+  /**
+   * @param {[number, number]} range
+   * @param {[number, number]} full
+   * @returns {[number, number] | null}
+   */
+  function clampToData(range, full) {
+    const lo = Math.max(range[0], full[0]);
+    const hi = Math.min(range[1], full[1]);
+    return lo < hi ? [lo, hi] : null;
+  }
 
   /** @param {[number, number] | null} range */
   function setZoom(range) {
@@ -552,13 +572,28 @@
   function onFullscreenChange() {
     const on = ref !== null && document.fullscreenElement === ref;
     fullscreenStore.set(on);
+    fitFullscreen(on);
+  }
+
+  /**
+   * The chrome is the figure's children other than the plot and the table,
+   * so the measure holds in table view too, where the plot is hidden.
+   * @param {boolean} on
+   */
+  function fitFullscreen(on) {
     if (!on || !ref || !plot) {
       fullscreenHeight = 0;
       return;
     }
-    const chrome = ref.scrollHeight - plot.clientHeight;
+    let chrome = 0;
+    for (const child of ref.children) {
+      if (child === plot || child.classList.contains("bx--viz-chart__table"))
+        continue;
+      chrome += /** @type {HTMLElement} */ (child).offsetHeight;
+    }
     fullscreenHeight = Math.max(200, window.innerHeight - chrome);
   }
+  $: if ($fullscreenStore && view) fitFullscreen(true);
 
   /**
    * The plot as an image, with the title above and the series below.
@@ -856,12 +891,35 @@
     ) {
       fullX.set({ domain: unzoomed, kind: built.kind });
     }
-    const zoomed = zoomRange
+    if (rows.length > 0) measuredOnce = true;
+    let zoomed = zoomRange
       ? /** @type {[number, number]} */ ([
           Number(zoomRange[0]),
           Number(zoomRange[1]),
         ])
       : null;
+    // Data that moved from under a zoom, as a sliding window does, leaves it
+    // clamped to what is there, or gone when nothing is left under it. The
+    // prop follows, so `bind:zoom` agrees with the plot.
+    if (zoomed && zoomRange && rows.length > 0) {
+      const lo = Math.max(zoomed[0], unzoomed[0]);
+      const hi = Math.min(zoomed[1], unzoomed[1]);
+      const clamped =
+        lo < hi && (lo > unzoomed[0] || hi < unzoomed[1])
+          ? /** @type {[number, number]} */ ([lo, hi])
+          : null;
+      if (
+        clamped === null ||
+        clamped[0] !== zoomed[0] ||
+        clamped[1] !== zoomed[1]
+      ) {
+        zoomed = clamped;
+        zoom =
+          clamped && zoomRange[0] instanceof Date
+            ? [new Date(clamped[0]), new Date(clamped[1])]
+            : clamped;
+      }
+    }
     const current = get(zoomStore);
     if (
       (zoomed === null) !== (current === null) ||
@@ -883,7 +941,22 @@
     // Publish a new domain only when it plots differently, so an in-range
     // append leaves the scales, axes, and grid alone.
     if (!sameDomain(get(domain), next)) domain.set(next);
-    hover.set(null);
+    // A hovered x that is still drawn stays hovered, with its new points; one
+    // the data no longer holds goes, so a streaming chart does not flicker.
+    const hovered = get(hover);
+    if (hovered) {
+      const still = built.groups.some(
+        (group) =>
+          !group.hidden &&
+          group.xs[bisectNearest(group.xs, hovered.x)] === hovered.x,
+      );
+      if (still) {
+        hover.set(null);
+        hoverAt(hovered.x, true);
+      } else {
+        clearHover(true);
+      }
+    }
 
     updateDetail = { xDomain: next.x, yDomain: next.y, count: rows.length };
   }

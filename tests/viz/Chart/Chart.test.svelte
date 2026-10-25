@@ -25,6 +25,7 @@
   export let includeY: number | undefined = undefined;
   export let withProbe = true;
   export let tickle = 0;
+  export let zoom: [number, number] | null = null;
   export let onScales: (scales: unknown) => void = () => {};
   export let onselect: (detail: unknown) => void = () => {};
   export let onhover: (detail: unknown) => void = () => {};
@@ -50,6 +51,7 @@
   emptyText="Nothing to show"
   bind:hidden
   bind:selected
+  bind:zoom
   data-testid="chart"
   on:select={(e) => onselect(e.detail)}
   on:hover={(e) => onhover(e.detail)}
@@ -62,6 +64,7 @@
 </Chart>
 
 <output data-testid="hidden">{hidden.join(",")}</output>
+<output data-testid="zoom">{zoom ? zoom.join(",") : ""}</output>
 <output data-testid="selected"
   >{selected ? `${selected.series}:${selected.index}` : ""}</output
 >

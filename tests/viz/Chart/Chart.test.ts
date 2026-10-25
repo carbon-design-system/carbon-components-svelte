@@ -71,6 +71,46 @@ describe("Chart", () => {
       expect(probe().getAttribute("data-y-ticks")).toMatch(/400$/);
     });
 
+    it("keeps a hovered x that the new data still holds, with its new points", async () => {
+      const onhover = vi.fn();
+      const base = [
+        { day: 0, region: "a", revenue: 10 },
+        { day: 1, region: "a", revenue: 20 },
+      ];
+      const { rerender } = render(Chart, { data: base, onhover });
+      svg().focus();
+      await user.keyboard("{ArrowRight}");
+      expect(onhover).toHaveBeenLastCalledWith(
+        expect.objectContaining({ x: 0 }),
+      );
+
+      await rerender({ data: [{ ...base[0], revenue: 15 }, base[1]] });
+      expect(onhover).toHaveBeenLastCalledWith({
+        x: 0,
+        points: [{ datum: expect.anything(), series: "a", index: 0, y: 15 }],
+      });
+
+      await rerender({ data: [base[1], { day: 2, region: "a", revenue: 5 }] });
+      expect(onhover).toHaveBeenLastCalledWith(null);
+    });
+
+    it("clamps the zoom to data that slid from under it, and drops it when none is left", async () => {
+      const rows = (from: number) =>
+        Array.from({ length: 5 }, (_, i) => ({
+          day: from + i,
+          region: "a",
+          revenue: 10,
+        }));
+      const { rerender } = render(Chart, { data: rows(0), zoom: [1, 3] });
+      expect(screen.getByTestId("zoom")).toHaveTextContent("1,3");
+
+      await rerender({ data: rows(2) });
+      expect(screen.getByTestId("zoom")).toHaveTextContent("2,3");
+
+      await rerender({ data: rows(10) });
+      expect(screen.getByTestId("zoom")).toHaveTextContent("");
+    });
+
     it("drops a hidden series from the domain", async () => {
       const { rerender } = render(Chart);
       expect(probe()).toHaveAttribute("data-y-ticks", "0,20,40,60,80");
