@@ -1,0 +1,78 @@
+name: Perf
+
+# Compares the pure-logic benches (bench/*.bench.ts) with `ostia ab`: the
+# base and this tree in one process, alternating rounds, so runner noise
+# hits both sides alike. A task that moves past the threshold is confirmed
+# in fresh processes, and the run fails when the geometric mean of every
+# ratio is more than 4% slower. ostia's default of 1.5% sits inside runner
+# noise: master against itself measured a 2.5% noise floor and a -1.8%
+# geomean. The component tier (jsdom) is too noisy on shared runners to
+# gate on.
+#
+# Runs on a `perf:` PR or one labeled "performance" (against its base
+# branch), and nightly on master against the commit the previous nightly
+# ran on, so an accepted slowdown fails one night, not every night until
+# the next release.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+  schedule:
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  # To find the previous nightly's commit.
+  actions: read
+
+env:
+  IBM_TELEMETRY_DISABLED: true
+
+jobs:
+  bench-ab:
+    # The "performance" label that pr-labels.yml adds to a `perf:` PR is
+    # applied with GITHUB_TOKEN, which starts no workflow, so match the
+    # title too.
+    if: |
+      github.event_name != 'pull_request' ||
+      startsWith(github.event.pull_request.title, 'perf') ||
+      contains(github.event.pull_request.labels.*.name, 'performance')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci --ignore-scripts
+
+      - name: Compare benches with the base
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          if [ -n "$BASE_REF" ]; then
+            base="origin/$BASE_REF"
+          else
+            base=$(gh run list -R "$GITHUB_REPOSITORY" --workflow perf.yml \
+              --event schedule --branch master --status completed --limit 1 \
+              --json headSha --jq '.[0].headSha // empty') || true
+            if [ -z "$base" ] || ! git cat-file -e "$base^{commit}"; then
+              base=$(git rev-list -1 --before="25 hours ago" HEAD)
+            fi
+            if git diff --quiet "$base" HEAD -- src bench package.json bun.lock; then
+              echo "No source or bench changes since $base." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+          fi
+          echo "## Benches against $base" >> "$GITHUB_STEP_SUMMARY"
+          suites=()
+          for suite in bench/*.bench.ts; do
+            [[ $suite == *.dom.bench.ts ]] || suites+=("$suite")
+          done
+          bunx ostia ab --base "$base" --geomean-threshold 4 --format markdown "${suites[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
