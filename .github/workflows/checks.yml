@@ -128,10 +128,36 @@ jobs:
         if: github.event_name == 'pull_request'
       - run: bun ci --ignore-scripts
         if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
+      # Compiled CSS by css/ tree hash, so the merge base's compile comes
+      # from master (warmed by css-compile-cache) or an earlier run of this
+      # PR. A PR can't read another PR's caches.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
+        with:
+          path: node_modules/.cache/test-changed-css
+          key: test-changed-css-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
+          restore-keys: test-changed-css-
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'
         run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
+
+  # Compiles master's CSS into the cache the PR test selection reads, off the
+  # critical path, so a PR based on it skips the merge base's compile.
+  css-compile-cache:
+    needs: [changes]
+    if: github.event_name == 'push' && needs.changes.outputs.css == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci --ignore-scripts
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/test-changed-css
+          key: test-changed-css-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
+          restore-keys: test-changed-css-
+      - run: bun scripts/test-changed.ts --warm-css
 
   # Informational: prints the compiled-rule delta, specificity histogram and
   # size movement against the base branch in the job summary, and annotates
