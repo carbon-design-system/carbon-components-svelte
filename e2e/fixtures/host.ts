@@ -39,7 +39,8 @@ function styleNodes() {
   return new Set(document.head.querySelectorAll("style, link[rel=stylesheet]"));
 }
 
-async function mountFixture(name: string, search: string, keepStorage = false) {
+/** Unmounts the fixture and drops what it left on the page. */
+function clear() {
   if (current) unmount(current);
   current = undefined;
 
@@ -55,6 +56,10 @@ async function mountFixture(name: string, search: string, keepStorage = false) {
   restoreAttributes(document.body, bodyAttributes);
   (document.activeElement as HTMLElement | null)?.blur();
   window.scrollTo(0, 0);
+}
+
+async function mountFixture(name: string, search: string, keepStorage = false) {
+  clear();
   // A reload keeps storage, which the storage and theme tests rely on.
   if (!keepStorage) {
     localStorage.clear();
@@ -86,8 +91,8 @@ async function mountFixture(name: string, search: string, keepStorage = false) {
 
 declare global {
   interface Window {
-    __host: { mount: typeof mountFixture };
+    __host: { mount: typeof mountFixture; clear: typeof clear };
   }
 }
 
-window.__host = { mount: mountFixture };
+window.__host = { mount: mountFixture, clear };

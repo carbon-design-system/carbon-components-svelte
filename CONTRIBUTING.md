@@ -1030,7 +1030,7 @@ Keep the entry to exactly that: one fixture import, `./mount`, and the `mount()`
 
 A test that imports from [`e2e/helpers/host.ts`](e2e/helpers/host.ts) runs on one page per Playwright worker ([`e2e/fixtures/host.html`](e2e/fixtures/host.html)) that loads the CSS and Svelte once. `page.goto("/my-component.html")` remounts that fixture in place instead of loading a page, which made the median test about four times faster. Any URL whose entry does more than mount one fixture navigates as usual.
 
-Between tests the host unmounts the fixture and resets what a fresh page would not have: leftover portals, `<style>` tags a test added, `<html>` and `<body>` attributes, focus, scroll, storage, the URL query, viewport, media emulation and permissions. It parks the pointer in the bottom-right corner, since Chrome sends hover events for content that mounts under a pointer it has seen. `page.reload()` remounts the fixture and keeps storage, and the `context` fixture is the host page's context.
+Between tests the host unmounts the fixture and resets what a fresh page would not have: leftover portals, `<style>` tags a test added, `<html>` and `<body>` attributes, focus and the pointer focus mode a click leaves (a key press clears it, so `focus()` matches `:focus-visible` again), scroll, storage, the URL query, viewport, media emulation and permissions. It parks the pointer in the bottom-right corner, since Chrome sends hover events for content that mounts under a pointer it has seen. `page.reload()` remounts the fixture and keeps storage, and the `context` fixture is the host page's context.
 
 | Do | Why |
 | --- | --- |
