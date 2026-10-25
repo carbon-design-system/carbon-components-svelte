@@ -1538,6 +1538,19 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
   self.jumpToDate = jumpToDate;
 
+  /**
+   * Whether `date` falls in one of the months on show.
+   *
+   * @param {Date} date
+   */
+  function isMonthShown(date) {
+    const offset =
+      date.getFullYear() * 12 +
+      date.getMonth() -
+      (self.currentYear * 12 + self.currentMonth);
+    return offset >= 0 && offset < config.showMonths;
+  }
+
   function redraw() {
     updateNavigation();
     buildDays();
@@ -2400,7 +2413,10 @@ export function createCalendarEngine(element, userConfig = {}) {
       on(self._input, "focus", () => {
         self.latestSelectedDateObj = self.selectedDates[0];
         secondFocused = false;
-        if (self.selectedDates[0]) jumpToDate(self.selectedDates[0]);
+        // Show the start's month, unless it already is: focus returns here
+        // after every range pick, and a jump rebuilds the grid.
+        const [start] = self.selectedDates;
+        if (start && !isMonthShown(start)) jumpToDate(start);
       });
     }
   }
