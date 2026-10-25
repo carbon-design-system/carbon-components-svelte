@@ -4,7 +4,7 @@ description: Search menus filter and highlight typeahead suggestions as users ty
 ---
 
 <script>
-  import { Layer, SearchMenu, SearchMenuGroup, SearchMenuItem } from "carbon-components-svelte";
+  import { Box, Layer, SearchMenu, SearchMenuGroup, SearchMenuItem } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
 </script>
@@ -59,11 +59,13 @@ Set `menuMaxHeight` to override the results menu's max height (360px by default)
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <SearchMenu labelText="Search" placeholder="Search...">
-    <SearchMenuItem text="Databases for TestSQL" />
-    <SearchMenuItem text="Data Store for Memcache" />
-  </SearchMenu>
+<Layer withBackground>
+  <Box padding={5}>
+    <SearchMenu labelText="Search" placeholder="Search...">
+      <SearchMenuItem text="Databases for TestSQL" />
+      <SearchMenuItem text="Data Store for Memcache" />
+    </SearchMenu>
+  </Box>
 </Layer>
 
 ## Custom icon

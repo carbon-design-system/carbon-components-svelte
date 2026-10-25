@@ -561,12 +561,18 @@ Use the extra-large size for prominent selections by setting `size` to `"xl"`.
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <MultiSelect labelText="Contact" label="Select contact methods..."
-      items="{[{id: "0", text: "Slack"},
-      {id: "1", text: "Email"},
-      {id: "2", text: "Fax"}]}"
+<Layer withBackground>
+  <Box padding={5}>
+    <MultiSelect
+      labelText="Contact"
+      label="Select contact methods..."
+      items={[
+        { id: "0", text: "Slack" },
+        { id: "1", text: "Email" },
+        { id: "2", text: "Fax" },
+      ]}
     />
+  </Box>
 </Layer>
 
 ## Inline

@@ -4,7 +4,7 @@ description: Text inputs provide a single-line field for short text like usernam
 ---
 
 <script>
-  import { AILabel, FluidTextInputSkeleton, Layer, TextInput, TextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, Box, FluidTextInputSkeleton, Layer, TextInput, TextInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -97,8 +97,10 @@ Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <TextInput labelText="Workspace name" placeholder="Enter workspace name..." />
+<Layer withBackground>
+  <Box padding={5}>
+    <TextInput labelText="Workspace name" placeholder="Enter workspace name..." />
+  </Box>
 </Layer>
 
 ## Fluid

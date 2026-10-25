@@ -307,8 +307,10 @@ The upper input sits beside the `max` label and the lower input beside the `min`
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+<Layer withBackground>
+  <Box padding={5}>
+    <Slider labelText="Runtime memory (MB)" min={10} max={990} maxLabel="990 MB" value={100} step={10} />
+  </Box>
 </Layer>
 
 ## Events

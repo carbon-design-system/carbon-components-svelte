@@ -146,17 +146,19 @@ Hide the label visually by setting `hideLabel` to `true`. The label remains avai
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <TimePicker labelText="Cron job" placeholder="hh:mm">
-    <TimePickerSelect labelText="Period" value="pm">
-      <SelectItem value="am" text="AM" />
-      <SelectItem value="pm" text="PM" />
-    </TimePickerSelect>
-    <TimePickerSelect labelText="Timezone" value="pdt">
-      <SelectItem value="pdt" text="PDT" />
-      <SelectItem value="gmt" text="GMT" />
-    </TimePickerSelect>
-  </TimePicker>
+<Layer withBackground>
+  <Box padding={5}>
+    <TimePicker labelText="Cron job" placeholder="hh:mm">
+      <TimePickerSelect labelText="Period" value="pm">
+        <SelectItem value="am" text="AM" />
+        <SelectItem value="pm" text="PM" />
+      </TimePickerSelect>
+      <TimePickerSelect labelText="Timezone" value="pdt">
+        <SelectItem value="pdt" text="PDT" />
+        <SelectItem value="gmt" text="GMT" />
+      </TimePickerSelect>
+    </TimePicker>
+  </Box>
 </Layer>
 
 ## Fluid
