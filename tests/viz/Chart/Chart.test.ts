@@ -254,6 +254,18 @@ describe("Chart", () => {
     });
   });
 
+  it("paints at the container's width from the first frame", () => {
+    const measure = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockReturnValue(320);
+    try {
+      render(Chart, { width: "auto" });
+      expect(svg()).toHaveAttribute("viewBox", "0 0 320 288");
+    } finally {
+      measure.mockRestore();
+    }
+  });
+
   it("opts into motion with a class the stylesheet animates under, from the second frame", async () => {
     const { container } = render(Chart, { transition: true });
     const figure = container.querySelector("figure");

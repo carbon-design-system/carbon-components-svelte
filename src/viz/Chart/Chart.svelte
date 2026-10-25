@@ -1011,12 +1011,21 @@
       settleAfterPaint();
       return;
     }
-    let first = true;
+    // Measure now, so the first paint is at the container's width and not
+    // the nominal one, which showed for a frame while the observer's first
+    // delivery was on its way. The observer takes over for every change
+    // after; in a container with no width yet it also brings the first.
+    const initial = Math.round(ref.clientWidth);
+    let awaited = initial <= 0;
+    if (!awaited) {
+      resize(initial, effectiveHeight, true);
+      settleAfterPaint();
+    }
     return observeResize(ref, (measured) => {
       const rounded = Math.round(measured);
       if (rounded > 0) resize(rounded, effectiveHeight, true);
-      if (first) {
-        first = false;
+      if (awaited) {
+        awaited = false;
         settleAfterPaint();
       }
     });
