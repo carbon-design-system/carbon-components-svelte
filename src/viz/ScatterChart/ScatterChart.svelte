@@ -190,6 +190,20 @@
   export let ref = null;
 
   import Chart from "../Chart/Chart.svelte";
+
+  /** @type {Chart<T> | undefined} */
+  let chart;
+
+  /**
+   * Append rows, or one row, after `data`. Rows pushed in one frame draw
+   * once, on the next; with `maxRows`, the oldest fall off the front.
+   * @param {T | ReadonlyArray<T>} rows
+   * @returns {void}
+   */
+  export function push(rows) {
+    chart?.push(rows);
+  }
+
   import ChartAxis from "../Chart/ChartAxis.svelte";
   import ChartBrush from "../Chart/ChartBrush.svelte";
   import ChartContours from "../Chart/ChartContours.svelte";
@@ -213,6 +227,7 @@
 
 <!-- Both axes are measures, so neither is forced to zero and x rounds out. -->
 <Chart
+  bind:this={chart}
   bind:zoom
   bind:hidden
   bind:selected

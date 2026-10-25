@@ -27,6 +27,10 @@
   export let tickle = 0;
   export let width: number | "auto" = 640;
   export let aspectRatio: number | undefined = undefined;
+  export let maxRows: number | undefined = undefined;
+  let chart: Chart<Row> | undefined;
+  // biome-ignore lint/correctness/noUnusedVariables: read in the template
+  let nextDay = 100;
   export let zoom: [number, number] | null = null;
   export let onScales: (scales: unknown) => void = () => {};
   export let onselect: (detail: unknown) => void = () => {};
@@ -36,8 +40,20 @@
 </script>
 
 <span data-testid="tickle">{tickle}</span>
+<button
+  type="button"
+  on:click={() =>
+    chart?.push([
+      { day: nextDay++, region: "a", revenue: 5 },
+      { day: nextDay++, region: "a", revenue: 6 },
+    ])}
+>
+  push
+</button>
 
 <Chart
+  bind:this={chart}
+  {maxRows}
   {transition}
   {data}
   {x}

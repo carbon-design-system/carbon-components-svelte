@@ -44,16 +44,22 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import Sparkline from "../Sparkline/Sparkline.svelte";
+  import { createSampleWindow } from "../utils/sample-window.js";
   import { normalizeSparklineValues } from "../utils/sparkline.js";
 
   const dispatch = createEventDispatcher();
 
   /** @type {Array<number | null>} */
   let values = normalizeSparklineValues(seed).slice(-capacity);
-  /** @type {Array<number | null>} */
-  let queue = [];
-  let frame = 0;
-  let mounted = false;
+  const window = createSampleWindow({
+    capacity: () => capacity,
+    onFlush: (batch) => {
+      const next = values.concat(batch);
+      values =
+        next.length > capacity ? next.slice(next.length - capacity) : next;
+      if (emitUpdate) dispatch("update", { values });
+    },
+  });
 
   /**
    * Append a sample, or an array of them. Many in one frame draw once: the
@@ -65,54 +71,18 @@
    * @returns {void}
    */
   export function push(samples) {
-    for (const sample of Array.isArray(samples) ? samples : [samples]) {
-      queue.push(
+    window.push(
+      (Array.isArray(samples) ? samples : [samples]).map((sample) =>
         typeof sample === "number" && Number.isFinite(sample) ? sample : null,
-      );
-    }
-    // The queue never needs more than the window.
-    if (queue.length > capacity) queue.splice(0, queue.length - capacity);
-    schedule();
-  }
-
-  function schedule() {
-    if (frame || paused || queue.length === 0) return;
-    // Before mount, and on the server, the sample is part of the first
-    // render and nobody is listening yet.
-    if (!mounted || typeof requestAnimationFrame !== "function") {
-      flush(false);
-      return;
-    }
-    if (typeof document !== "undefined" && document.hidden) return;
-    frame = requestAnimationFrame(flush);
-  }
-
-  function flush() {
-    frame = 0;
-    if (queue.length === 0) return;
-    const next = values.concat(queue);
-    queue = [];
-    values = next.length > capacity ? next.slice(next.length - capacity) : next;
-    if (emitUpdate) dispatch("update", { values });
-  }
-
-  function onVisibility() {
-    if (!document.hidden) schedule();
+      ),
+    );
   }
 
   $: if (value !== undefined) push(value);
-  $: if (!paused) schedule();
+  $: window.pause(paused);
   $: if (values.length > capacity) values = values.slice(-capacity);
 
-  onMount(() => {
-    mounted = true;
-    document.addEventListener("visibilitychange", onVisibility);
-    schedule();
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  });
+  onMount(() => window.mount());
 </script>
 
 <Sparkline {values} {label} bind:ref {...$$restProps} />

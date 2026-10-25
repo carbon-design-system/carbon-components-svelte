@@ -24,10 +24,18 @@
 
   /**
    * Specify the rows, in long format: one row per x and series.
-   * Reassign the array to update.
+   * Reassign the array to update; rows that stream in go through `push`.
    * @type {ReadonlyArray<T>}
    */
   export let data = [];
+
+  /**
+   * Specify the most rows to keep as rows arrive through `push`: the
+   * oldest fall off the front, a sliding window. Unset, pushed rows
+   * accumulate. Setting `data` starts the window over.
+   * @type {number | undefined}
+   */
+  export let maxRows = undefined;
 
   /**
    * Specify the x accessor: a property name or a function.
@@ -326,6 +334,7 @@
   import { bisectNearest, createGridIndex } from "../utils/nearest-point.js";
   import { nextId } from "../utils/next-id.js";
   import { observeResize } from "../utils/resize-pool.js";
+  import { createSampleWindow } from "../utils/sample-window.js";
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import ChartDataTable from "./ChartDataTable.svelte";
   import { createCanvasLayer } from "./canvas-layer.js";
@@ -869,8 +878,45 @@
       ? Math.max(MIN_HEIGHT, Math.round($size.width / aspectRatio))
       : height);
   $: resize(width, effectiveHeight);
+  // Rows pushed since `data` was last set. Many pushes in one frame become
+  // one rebuild, and none happen in a hidden tab.
+  /** @type {T[]} */
+  let pushed = [];
+  let seed = data;
+  $: if (data !== seed) {
+    seed = data;
+    pushed = [];
+  }
+  const incoming = createSampleWindow({
+    capacity: () => maxRows,
+    onFlush: (/** @type {T[]} */ batch) => {
+      const next = pushed.concat(batch);
+      pushed =
+        maxRows !== undefined && next.length > maxRows
+          ? next.slice(next.length - maxRows)
+          : next;
+    },
+  });
+  onMount(() => incoming.mount());
+
+  /**
+   * Append rows, or one row, after `data`. Rows pushed in one frame draw
+   * once, on the next; with `maxRows`, the oldest fall off the front.
+   * @param {T | ReadonlyArray<T>} rows
+   * @returns {void}
+   */
+  export function push(rows) {
+    incoming.push(Array.isArray(rows) ? rows : [/** @type {T} */ (rows)]);
+  }
+
+  $: rows =
+    pushed.length === 0
+      ? data
+      : maxRows !== undefined && data.length + pushed.length > maxRows
+        ? data.concat(pushed).slice(data.length + pushed.length - maxRows)
+        : data.concat(pushed);
   $: compared = withPrior(
-    data,
+    rows,
     xAccessor,
     yAccessor,
     seriesAccessor,

@@ -272,6 +272,53 @@ describe("Chart", () => {
     });
   });
 
+  it("appends pushed rows on the next frame, keeps the window, and starts over with data", async () => {
+    const frames: FrameRequestCallback[] = [];
+    const raf = vi
+      .spyOn(window, "requestAnimationFrame")
+      .mockImplementation((cb) => {
+        frames.push(cb);
+        return frames.length;
+      });
+    try {
+      const base = [
+        { day: 0, region: "a", revenue: 10 },
+        { day: 1, region: "a", revenue: 20 },
+        { day: 2, region: "a", revenue: 30 },
+      ];
+      const onupdate = vi.fn();
+      const { rerender } = render(Chart, {
+        data: base,
+        maxRows: 4,
+        emitUpdate: true,
+        onupdate,
+      });
+      // The first update lands a microtask after mount.
+      await tick();
+      await tick();
+      const before = onupdate.mock.calls.length;
+
+      await user.click(screen.getByText("push"));
+      await user.click(screen.getByText("push"));
+      expect(onupdate).toHaveBeenCalledTimes(before);
+      // Four rows pushed in one frame draw once, and only the last four stay.
+      for (const frame of frames.splice(0)) frame(0);
+      await tick();
+      await tick();
+      expect(onupdate).toHaveBeenCalledTimes(before + 1);
+      expect(onupdate.mock.lastCall?.[0]).toMatchObject({
+        count: 4,
+        xDomain: [100, 103],
+      });
+
+      await rerender({ data: base.slice(0, 2) });
+      await tick();
+      expect(onupdate.mock.lastCall?.[0]).toMatchObject({ count: 2 });
+    } finally {
+      raf.mockRestore();
+    }
+  });
+
   it("lets the height follow the width under an aspect ratio", () => {
     render(Chart, { aspectRatio: 2 });
     expect(svg()).toHaveAttribute("viewBox", "0 0 640 320");
