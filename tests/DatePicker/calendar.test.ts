@@ -268,6 +268,19 @@ describe("range mode", () => {
     );
   });
 
+  it("keeps the days when the start input is focused on a month in view", () => {
+    const second = rangeInputs();
+    const { instance, input } = create({ mode: "range", secondInput: second });
+    instance.jumpToDate("2024-03-01");
+    day(instance, 4).click();
+    day(instance, 9).click();
+    const start = day(instance, 4);
+
+    input.dispatchEvent(new FocusEvent("focus"));
+
+    expect(start.isConnected).toBe(true);
+  });
+
   it("writes each end to its own input", () => {
     const second = rangeInputs();
     const { instance, input } = create({
