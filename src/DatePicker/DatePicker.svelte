@@ -462,6 +462,7 @@
     getContext,
     onMount,
     setContext,
+    tick,
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import {
@@ -475,6 +476,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
+    declaredDirection,
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
@@ -603,10 +605,38 @@
     ) === "rtl";
 
   $: if (engine?.calendarContainer) {
-    if (effectivePortalMenu && $layoutDirection) {
-      engine.calendarContainer.setAttribute("dir", $layoutDirection);
+    setCalendarDirection(
+      engine.calendarContainer,
+      effectivePortalMenu,
+      $layoutDirection,
+    );
+    // A `dir` around the picker can change in the same update, after this
+    // runs, so read again once the update is done.
+    tick().then(() => {
+      if (!engine?.calendarContainer) return;
+      setCalendarDirection(
+        engine.calendarContainer,
+        effectivePortalMenu,
+        $layoutDirection,
+      );
+    });
+  }
+
+  /**
+   * A portalled calendar takes the nearest `dir` around the picker, else
+   * the LayoutDirection's.
+   * @param {HTMLElement} container
+   * @param {boolean} portalled
+   * @param {"ltr" | "rtl" | undefined} contextDirection
+   */
+  function setCalendarDirection(container, portalled, contextDirection) {
+    const dir = portalled
+      ? declaredDirection(contextDirection, datePickerRef)
+      : undefined;
+    if (dir) {
+      container.setAttribute("dir", dir);
     } else {
-      engine.calendarContainer.removeAttribute("dir");
+      container.removeAttribute("dir");
     }
   }
   /** @type {Set<string>} */

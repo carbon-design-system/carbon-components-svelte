@@ -13,7 +13,8 @@
    * part, as it does for the styles.
    *
    * Content that a component portals out of the subtree, such as a
-   * `portalMenu` or a tooltip, keeps the direction.
+   * `portalMenu` or a tooltip, keeps the direction, or a nearer plain
+   * `dir`.
    *
    * @example
    * ```svelte

@@ -6,4 +6,8 @@ import type { Readable } from "svelte/store";
  */
 export function getLayoutDirection(): Readable<"ltr" | "rtl" | undefined>;
 
-export { inlineKey, resolveLayoutDirection } from "./inline-direction.js";
+export {
+  declaredDirection,
+  inlineKey,
+  resolveLayoutDirection,
+} from "./inline-direction.js";

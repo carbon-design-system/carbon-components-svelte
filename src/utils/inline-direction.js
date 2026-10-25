@@ -5,6 +5,24 @@
 /** @typedef {"ltr" | "rtl"} Direction */
 
 /**
+ * The direction the markup sets for `node`: its nearest `dir` attribute,
+ * else the nearest `LayoutDirection`'s. `undefined` when neither sets one.
+ * Content portalled out of `node`'s subtree takes this as its `dir`.
+ * Returns the `LayoutDirection`'s on the server.
+ * @param {Direction | undefined} contextDirection - From `getLayoutDirection`.
+ * @param {Element | null} [node]
+ * @returns {Direction | undefined}
+ */
+export function declaredDirection(contextDirection, node) {
+  if (typeof document === "undefined" || !node?.isConnected) {
+    return contextDirection;
+  }
+  const dir = node.closest("[dir]")?.getAttribute("dir")?.toLowerCase();
+  if (dir === "rtl" || dir === "ltr") return dir;
+  return contextDirection;
+}
+
+/**
  * Resolve the writing direction as the styles do: the nearest `dir`
  * attribute on the element or an ancestor wins, so a plain `dir` inside a
  * `LayoutDirection` overrides it. Then the nearest `LayoutDirection`, then
@@ -16,11 +34,9 @@
  */
 export function resolveLayoutDirection(contextDirection, node) {
   if (typeof document === "undefined") return contextDirection ?? "ltr";
-  const connected = node?.isConnected ? node : null;
-  const dir = connected?.closest("[dir]")?.getAttribute("dir")?.toLowerCase();
-  if (dir === "rtl" || dir === "ltr") return dir;
-  if (contextDirection) return contextDirection;
-  const element = connected ?? document.documentElement;
+  const declared = declaredDirection(contextDirection, node);
+  if (declared) return declared;
+  const element = node?.isConnected ? node : document.documentElement;
   return getComputedStyle(element).direction === "rtl" ? "rtl" : "ltr";
 }
 
