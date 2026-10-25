@@ -76,9 +76,10 @@ describe("Text", () => {
   it("clamps a single line from the front", () => {
     render(Text);
 
-    const node = screen.getByText("Front clamped");
-    expect(node).toHaveClass("bx--text-truncate--front");
-    expect(node).not.toHaveClass("bx--text-truncate--end");
+    const text = screen.getByText("Front clamped");
+    expect(text.tagName).toBe("BDI");
+    expect(text.parentElement).toHaveClass("bx--text-truncate--front");
+    expect(text.parentElement).not.toHaveClass("bx--text-truncate--end");
   });
 
   it.each([

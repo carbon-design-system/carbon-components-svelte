@@ -1,4 +1,8 @@
 interface TruncateOptions {
+  /**
+   * `"front"` keeps the end of the text visible. Wrap the content in
+   * `<bdi>` so a leading slash or a trailing period stays in place.
+   */
   clamp?: "end" | "front";
   /** Number of visible lines before truncating. Values above 1 use multiline mode (end clamp only). */
   lines?: number;

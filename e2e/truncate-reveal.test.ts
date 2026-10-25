@@ -51,6 +51,23 @@ test.describe("Truncate reveal", () => {
     await expect(page.locator(tooltip)).toBeVisible();
   });
 
+  test("the front clamp keeps a leading slash in front", async ({ page }) => {
+    // Under `direction: rtl`, a bare leading slash would render at the end.
+    const [slash, next] = await page.getByTestId("front").evaluate((el) => {
+      const text = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      const node = text.nextNode();
+      if (!node?.textContent) throw new Error("no text");
+      const start = node.textContent.indexOf("/");
+      const range = document.createRange();
+      return [start, start + 1].map((offset) => {
+        range.setStart(node, offset);
+        range.setEnd(node, offset + 1);
+        return range.getBoundingClientRect().left;
+      });
+    });
+    expect(slash).toBeLessThan(next);
+  });
+
   test("the toggle expands and collapses the text", async ({ page }) => {
     const text = page.getByTestId("expand");
     const button = page.locator(toggle);

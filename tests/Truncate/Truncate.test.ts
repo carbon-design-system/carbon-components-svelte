@@ -6,14 +6,19 @@ import TruncateAction from "./TruncateAction.test.svelte";
 
 describe("Truncate", () => {
   describe("component", () => {
-    it.each([
-      ["end", "bx--text-truncate--end"],
-      ["front", "bx--text-truncate--front"],
-    ] as const)("should support %s clamp", (clamp, expectedClass) => {
-      render(Truncate, { props: { clamp } });
+    it("should support end clamp", () => {
+      render(Truncate, { props: { clamp: "end" } });
 
       const element = screen.getByText(/This is a long text/);
-      expect(element).toHaveClass(expectedClass);
+      expect(element).toHaveClass("bx--text-truncate--end");
+    });
+
+    it("should isolate the text of a front clamp", () => {
+      render(Truncate, { props: { clamp: "front" } });
+
+      const text = screen.getByText(/This is a long text/);
+      expect(text.tagName).toBe("BDI");
+      expect(text.parentElement).toHaveClass("bx--text-truncate--front");
     });
 
     it("should truncate multiple lines when lines > 1", () => {

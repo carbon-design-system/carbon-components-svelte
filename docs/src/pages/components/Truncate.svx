@@ -94,11 +94,11 @@ Use the `truncate` action on any element for the same behavior without the `Trun
 
 ### Clamp front
 
-Pass `clamp: "front"` to keep the end of the text visible.
+Pass `clamp: "front"` to keep the end of the text visible. Wrap the text in `<bdi>`, as the component does, so a leading slash or a trailing period stays in place.
 
 <Box maxWidth="20rem">
   <h4 use:truncate={{ clamp: "front" }}>
-    /var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log
+    <bdi>/var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log</bdi>
   </h4>
 </Box>
 
