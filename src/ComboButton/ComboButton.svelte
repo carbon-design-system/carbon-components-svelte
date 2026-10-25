@@ -73,6 +73,14 @@
   export let intrinsicAlign = "end";
 
   /**
+   * Specify the maximum height of the menu.
+   * A number is treated as pixels; a string is used as a CSS length.
+   * The menu scrolls once its items exceed the height.
+   * @type {number | string}
+   */
+  export let maxHeight = undefined;
+
+  /**
    * Set to `true` to open the menu.
    * @bindable writable
    */
@@ -209,6 +217,7 @@
     {intrinsicAlign}
     intrinsicWidth={true}
     {size}
+    {maxHeight}
     {labelText}
     on:close
   >
