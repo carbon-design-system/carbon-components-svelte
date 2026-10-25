@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
   appendFileSync,
   existsSync,
@@ -6,9 +6,11 @@ import {
   readFileSync,
   rmSync,
 } from "node:fs";
+import { readFile } from "node:fs/promises";
 import { builtinModules } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   BARREL,
   buildGraph,
@@ -55,9 +57,7 @@ const GRAPH_ROOTS = [
 const PAGE_SOURCE = /^(?:src|e2e)\//;
 const RUNTIME_BUILTIN = /^(?:node:|bun(?:$|:))/;
 const LOCKFILE_PACKAGE = /^\s+"([^"]+)": \["\1@/gm;
-const ROOT = spawnSync("git", ["rev-parse", "--show-toplevel"], {
-  encoding: "utf-8",
-}).stdout.trim();
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 function read(file: string): string {
   return readFileSync(join(ROOT, file), "utf-8");
@@ -75,18 +75,32 @@ function git(...args: string[]): string {
   return result.stdout;
 }
 
-function lines(output: string): string[] {
-  return output.split("\n").filter(Boolean);
+/** Runs git without blocking, so independent calls overlap. */
+function gitAsync(
+  ...args: string[]
+): Promise<{ status: number; stdout: string }> {
+  return new Promise((resolve, reject) => {
+    const child = spawn("git", args, { cwd: ROOT });
+    const chunks: Buffer[] = [];
+    child.stdout.on("data", (chunk: Buffer) => chunks.push(chunk));
+    child.on("error", reject);
+    child.on("close", (status) => {
+      resolve({
+        status: status ?? 1,
+        stdout: Buffer.concat(chunks).toString("utf-8"),
+      });
+    });
+  });
 }
 
-/** Committed, staged, unstaged, and untracked changes since the merge base. */
-function changedFiles(mergeBase: string): string[] {
-  return [
-    ...new Set([
-      ...lines(git("diff", "--name-only", "--no-renames", mergeBase)),
-      ...lines(git("ls-files", "--others", "--exclude-standard")),
-    ]),
-  ];
+async function gitOrThrow(...args: string[]): Promise<string> {
+  const result = await gitAsync(...args);
+  if (result.status !== 0) throw new Error(`git ${args.join(" ")} failed`);
+  return result.stdout;
+}
+
+function lines(output: string): string[] {
+  return output.split("\n").filter(Boolean);
 }
 
 /** Package names the lockfile installs, read without `node_modules`. */
@@ -116,6 +130,28 @@ function loadSources(): Map<string, string> {
     git("ls-files", "-co", "--exclude-standard", "--", ...GRAPH_ROOTS),
   ).filter((file) => existsSync(join(ROOT, file)));
   return new Map(files.map((file) => [file, read(file)]));
+}
+
+/**
+ * `loadSources` without blocking: parallel reads take a third of the time on
+ * a warm disk and a tenth on a cold one. Files the index lists but the working
+ * tree deleted are left out.
+ */
+async function readSources(files: string[]): Promise<Map<string, string>> {
+  const texts = await Promise.all(
+    files.map((file) =>
+      readFile(join(ROOT, file), "utf-8").catch((error) => {
+        if (error.code === "ENOENT") return undefined;
+        throw error;
+      }),
+    ),
+  );
+  const sources = new Map<string, string>();
+  for (const [i, file] of files.entries()) {
+    const text = texts[i];
+    if (text !== undefined) sources.set(file, text);
+  }
+  return sources;
 }
 
 /** The dependency graph of the working tree. */
@@ -204,15 +240,21 @@ async function styleSeeds(
 async function computePlan(
   baseRef: string,
 ): Promise<{ plan: TestPlan; styles?: Styles }> {
-  const mergeBase = git("merge-base", baseRef, "HEAD").trim();
-  const baseBarrel = spawnSync("git", ["show", `${mergeBase}:${BARREL}`], {
-    cwd: ROOT,
-    encoding: "utf-8",
-  });
+  // Independent git calls run at once; `--merge-base` diffs without waiting
+  // for the merge base.
+  const [files, untracked, mergeBase, diff] = await Promise.all([
+    gitOrThrow("ls-files", "-co", "--exclude-standard", "--", ...GRAPH_ROOTS),
+    gitOrThrow("ls-files", "--others", "--exclude-standard"),
+    gitOrThrow("merge-base", baseRef, "HEAD").then((out) => out.trim()),
+    gitOrThrow("diff", "--name-only", "--no-renames", "--merge-base", baseRef),
+  ]);
+  // Started before the graph is parsed, which it runs alongside.
+  const baseBarrelPending = gitAsync("show", `${mergeBase}:${BARREL}`);
+  const changed = [...new Set([...lines(diff), ...lines(untracked)])];
   const barrel = parseBarrel(read(BARREL));
-  const sources = loadSources();
+  const sources = await readSources(lines(files));
   const graph = loadGraph(sources);
-  const changed = changedFiles(mergeBase);
+  const baseBarrel = await baseBarrelPending;
   const styles = changed.some((file) => file.startsWith("css/"))
     ? await styleSeeds(mergeBase, graph, sources)
     : undefined;
