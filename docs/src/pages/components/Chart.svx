@@ -355,13 +355,15 @@ Every chart takes the same two props. Flip them here to see a Cartesian chart ke
 
 `ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads what the chart shows as CSV: the series that are not hidden, within the zoom window, in the same long format the chart reads with ISO dates, plain numbers, and an empty field for a missing value. A label that starts like a spreadsheet formula is quoted. Anything in its default slot sits before the buttons.
 
+Set `copy` for a button that copies the same data to the clipboard, as tab-separated cells by default so they paste into a spreadsheet, or as CSV or JSON rows with `copyFormat`. A reset button appears while a zoom, a brush, or a selection is set, and clears all three. Each button has a label prop for translation, and a failed download or copy fires `export:error` instead of throwing. On a preset, `toolbar` takes the toolbar's own props: `toolbar={{ filename: "revenue", copy: true }}`.
+
 The table is the chart's text alternative. `Chart` renders a `ChartDataTable` when `view` is `"table"`, so it is available even without the toolbar. Bind `view` to drive it from your own control, and use the `table` slot to replace it.
 
 <Chart {data} x="date" y="revenue" series="region" title="Revenue by region" height={240}>
   <ChartAxis position="bottom" />
   <ChartAxis position="left" />
   <ChartLine />
-  <ChartToolbar slot="toolbar" filename="revenue-by-region" />
+  <ChartToolbar slot="toolbar" filename="revenue-by-region" copy />
   <ChartLegend slot="legend" />
 </Chart>
 

@@ -156,9 +156,9 @@ Set `zoomBar` for a bar under the plot that narrows the categories shown: drag a
 
 ## Data table and export
 
-Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or the visible series as CSV, and show the chart fullscreen. Bind `view` to control it yourself.
+Set `toolbar` to add buttons that swap the chart for a table of every value, download the plot as a PNG or what the chart shows as CSV, and show the chart fullscreen; a reset appears while a zoom or a selection is set. Pass the toolbar's own props instead of `true` to name the file or add a copy button. Bind `view` to control it yourself.
 
-<BarChart {data} x="quarter" y="revenue" series="product" title="Revenue by quarter" toolbar />
+<BarChart {data} x="quarter" y="revenue" series="product" title="Revenue by quarter" toolbar={{ filename: "revenue-by-quarter", copy: true }} />
 
 ## Without chrome
 
