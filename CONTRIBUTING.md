@@ -1168,7 +1168,7 @@ bunx ostia bench bench/treeCheckboxState.bench.ts
 bunx ostia bench bench/treeCheckboxState.bench.ts --filter "no cascade"
 ```
 
-To check a change against master, `bun run bench:ab` runs every pure-logic file with `ostia ab --base origin/master`: both trees in one process, in alternating rounds, so machine load cancels out. It confirms flagged tasks in fresh processes and fails on the geometric mean, which catches a broad slowdown more reliably than one task's. Pass `--filter` to narrow it.
+To check a change against master, `bun run bench:ab` runs every pure-logic file with `ostia ab --base origin/master`: both trees in one process, in alternating rounds, so machine load cancels out. It confirms flagged tasks in fresh processes and fails on the geometric mean, which catches a broad slowdown more reliably than one task's. Pass `--filter` to narrow it. The Perf workflow runs the same comparison on a `perf:` PR, or one labeled `performance`, and nightly on master against the commit the previous nightly ran on, with the table in the job summary. It fails at a 4% geomean, not ostia's 1.5%, since runners measure about 2.5% noise.
 
 Numbers from this tier are representative of real-browser V8 behavior (no jsdom involved), so it's the right tier for validating algorithmic or data-structure choices — proving a `Set`-over-`Array` change actually helps, or that a function stays O(n) instead of drifting to O(n²), with real measurements instead of a guess.
 
@@ -1366,6 +1366,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
 | `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
+| `bench-ab` (Perf workflow) | `perf:` PRs and PRs labeled `performance`. Fails past a 4% [bench](#performance-benchmarks) geomean |
 
 Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
 
