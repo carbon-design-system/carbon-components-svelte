@@ -1306,7 +1306,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 | `static-checks` | Always: builds docs, then `test:src-types`, `test:src-js` and `test:src-svelte` |
 | `test` (2 shards) | The selected unit tests. `test:types` runs on the first shard |
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
-| `test-e2e` (2 shards, Chromium) | The selected E2E tests |
+| `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
 | `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
 
 Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
