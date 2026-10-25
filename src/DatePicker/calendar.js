@@ -13,6 +13,7 @@ import {
   parseDate,
   yearSuffix,
 } from "./calendar-dates.js";
+import { DAY_STATE_CLASSES, dayState } from "./day-state.js";
 
 const PREV_ARROW =
   '<svg width="16px" height="16px" viewBox="0 0 16 16"><polygon points="5,8 10,3 10.7,3.7 6.4,8 10.7,12.3 10,13 "/><rect width="16" height="16" style="fill: none" /></svg>';
@@ -592,16 +593,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     );
   }
 
-  /** @param {Date} date */
-  function isDateInRange(date) {
-    return (
-      isRange &&
-      self.selectedDates.length === 2 &&
-      compareDays(date, self.selectedDates[0]) >= 0 &&
-      compareDays(date, self.selectedDates[1]) <= 0
-    );
-  }
-
   // --- Value ------------------------------------------------------------
 
   /** @param {string} [format] */
@@ -885,11 +876,13 @@ export function createCalendarEngine(element, userConfig = {}) {
    *
    * @param {Date} date
    * @param {number} index
+   * @param {import("./day-state.js").DayStateContext} context
    * @param {{ outside?: "previous" | "next"; hidden?: boolean; base?: string }} [kind]
    */
   function createDay(
     date,
     index,
+    context,
     { outside, hidden, base = "bx--date-picker__day" } = {},
   ) {
     const day = createElement("span", base, String(date.getDate()));
@@ -912,12 +905,12 @@ export function createCalendarEngine(element, userConfig = {}) {
     const extraClass = config.dayClass?.(date);
     if (extraClass)
       day.classList.add(...extraClass.split(WHITESPACE).filter(Boolean));
-    if (!hidden && compareDays(date, self.now) === 0) {
+    const state = applyDayState(day, context, true);
+    if (!hidden && state.today) {
       self.todayDateElem = day;
       day.classList.add("bx--date-picker__day--today");
       day.setAttribute("aria-current", "date");
     }
-    applyDayState(day, true);
     if (
       self.weekNumbers &&
       config.showMonths === 1 &&
@@ -964,60 +957,72 @@ export function createCalendarEngine(element, userConfig = {}) {
     else if (on) day.classList.add(name);
   }
 
+  /** @param {Date} date */
+  const isEnabledDay = (date) => isEnabled(date, true);
+  /** @param {Date} date */
+  const isBlockedDay = (date) => !!config.isDayBlocked?.(date, self);
+
   /**
-   * The part of a day's look that follows the selection: picked, range
-   * ends, in range, and disabled by a pending range's limits. A pick
-   * updates it on the cells already built rather than rebuilding them.
+   * What `dayState` reads, built once for each pass over the cells.
+   * @returns {import("./day-state.js").DayStateContext}
+   */
+  function dayContext() {
+    return {
+      selected: self.selectedDates,
+      range: isRange,
+      today: self.now,
+      isEnabled: isEnabledDay,
+      isBlocked: isBlockedDay,
+    };
+  }
+
+  /** The states a pick can change; `today` never does. */
+  const SELECTION_STATES = /** @type {const} */ ([
+    "selected",
+    "rangeStart",
+    "rangeEnd",
+    "inRange",
+    "disabled",
+  ]);
+
+  /**
+   * Draws a day's state from `dayState`. A pick updates the cells already
+   * built rather than rebuilding them.
    *
    * @param {any} day
+   * @param {import("./day-state.js").DayStateContext} context
    * @param {boolean} [fresh] Whether the cell was just created.
    */
-  function applyDayState(day, fresh = false) {
-    const date = day.dateObj;
-    const enabled = isEnabled(date, true);
-    const blocked = enabled && !!config.isDayBlocked?.(date, self);
-    const disabled = !enabled || blocked;
-    const picked = selectedIndex(date) !== -1;
-    const selected = enabled && picked;
-    const isEnd = (/** @type {number} */ end) =>
-      selected &&
-      isRange &&
-      !!self.selectedDates[end] &&
-      compareDays(date, self.selectedDates[end]) === 0;
-    if (selected) self.selectedDateElem = day;
-    setDayClass(day, "bx--date-picker__day--selected", selected, fresh);
-    setDayClass(day, RANGE_START, isEnd(0), fresh);
-    setDayClass(day, RANGE_END, isEnd(1), fresh);
-    setDayClass(
-      day,
-      IN_RANGE,
-      (selected && isRange && day.$outside === "next") ||
-        (isDateInRange(date) && !picked),
-      fresh,
-    );
+  function applyDayState(day, context, fresh = false) {
+    const state = dayState(day.dateObj, context, day.$outside);
+    if (state.selected) self.selectedDateElem = day;
+    for (const key of SELECTION_STATES) {
+      setDayClass(day, DAY_STATE_CLASSES[key], state[key], fresh);
+    }
     // axe only exempts inactive text from the contrast check when it is
     // marked `aria-disabled`, not by a CSS class.
-    setDayClass(day, "bx--date-picker__day--disabled", disabled, fresh);
     if (fresh) {
-      if (enabled) day.tabIndex = -1;
-      if (selected) day.setAttribute("aria-selected", "true");
-      if (disabled) day.setAttribute("aria-disabled", "true");
-      return;
+      if (!state.disabled || state.blocked) day.tabIndex = -1;
+      if (state.selected) day.setAttribute("aria-selected", "true");
+      if (state.disabled) day.setAttribute("aria-disabled", "true");
+      return state;
     }
-    setAttributeIfChanged(day, "aria-selected", selected ? "true" : null);
-    setAttributeIfChanged(day, "aria-disabled", disabled ? "true" : null);
+    setAttributeIfChanged(day, "aria-selected", state.selected ? "true" : null);
+    setAttributeIfChanged(day, "aria-disabled", state.disabled ? "true" : null);
     // Left by a range preview or a week highlight; both are redrawn after.
     toggleClass(day, "bx--date-picker__day--blocked", false);
     toggleClass(day, "bx--date-picker__day--week", false);
+    return state;
   }
 
   /** Updates the built days for a new selection, in place. */
   function refreshDays() {
     self.selectedDateElem = undefined;
+    const context = dayContext();
     for (const day of self.daysContainer.querySelectorAll(
       ".bx--date-picker__day",
     )) {
-      applyDayState(day);
+      applyDayState(day, context);
     }
     if (pickerMode === "week") highlightWeek();
     if (isRange && self.selectedDates.length === 1) previewRange();
@@ -1033,18 +1038,19 @@ export function createCalendarEngine(element, userConfig = {}) {
     const prevDays = daysInMonth(year, month - 1);
     const days = daysInMonth(year, month);
     const hidden = config.showMonths > 1;
+    const context = dayContext();
     const fragment = document.createDocumentFragment();
     let index = 0;
     for (let n = prevDays + 1 - offset; n <= prevDays; n++, index++) {
       fragment.appendChild(
-        createDay(new Date(year, month - 1, n), index, {
+        createDay(new Date(year, month - 1, n), index, context, {
           outside: "previous",
           hidden,
         }),
       );
     }
     for (let n = 1; n <= days; n++, index++) {
-      fragment.appendChild(createDay(new Date(year, month, n), index));
+      fragment.appendChild(createDay(new Date(year, month, n), index, context));
     }
     for (
       let n = days + 1;
@@ -1052,7 +1058,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       n++, index++
     ) {
       fragment.appendChild(
-        createDay(new Date(year, month + 1, n % days), index, {
+        createDay(new Date(year, month + 1, n % days), index, context, {
           outside: "next",
           hidden,
         }),
@@ -1122,12 +1128,15 @@ export function createCalendarEngine(element, userConfig = {}) {
     const now = self.now;
     /** @param {Date} date */
     const quarterOf = (date) => Math.floor(date.getMonth() / 3);
+    const context = dayContext();
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < (isQuarter ? 4 : 12); i++) {
       const date = isYear
         ? new Date(start + i, 0, 1)
         : new Date(self.currentYear, isQuarter ? i * 3 : i);
-      const cell = createDay(date, i, { base: "bx--date-picker__grid-cell" });
+      const cell = createDay(date, i, context, {
+        base: "bx--date-picker__grid-cell",
+      });
       cell.classList.remove(
         "bx--date-picker__day--disabled",
         "bx--date-picker__day--selected",
