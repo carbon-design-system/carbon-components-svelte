@@ -40,7 +40,7 @@ Pass long `data` with a `value` and a `category` accessor. Rows that share a cat
 
 ## Center
 
-Fill the default slot to put content in the hole. The slot receives `total`, `formattedTotal`, and the `active` slice while one is hovered or focused.
+The hole holds the formatted total by default; set `center="none"` to leave it empty. Fill the default slot to put your own content there. The slot receives `total`, `formattedTotal`, and the `active` slice while one is hovered or focused.
 
 <DonutChart data={sessions} value="sessions" category="device" title="Sessions by device" let:total let:active>
   <BigNumber

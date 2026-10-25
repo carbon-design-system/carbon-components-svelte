@@ -85,6 +85,19 @@ Start from the question the chart has to answer. Each preset is one import from 
 | One number on a dashboard? | [KpiCard](/components/KpiCard), or [BigNumber](/components/BigNumber) from the core library |
 | Many small charts to compare? | [SmallMultiples](/components/SmallMultiples) with any chart inside |
 
+## Principles
+
+The defaults follow a few rules, and the props are there to follow them further.
+
+| Rule | In the charts |
+| --- | --- |
+| Show the data, erase the rest | No frames, no 3D, gridlines in `border-subtle` on one axis, points only where they have room, a legend only with more than one series. Prefer `labels="end"` on a line to a legend for two or three series. |
+| Scales are promises | Bars start at zero and cannot be made not to; lines may not, with `zero` to insist. A log axis says so on its ticks. A second y axis is opt in, and reads as secondary. |
+| Color is a name, not decoration | One hue per series, fixed with `colors` across a page; status colors only for status; a symbol or pattern as the second channel for anyone who cannot see the hue apart. |
+| Numbers keep their digits where they are read | Ticks are compact, `41K`; a tooltip, the table, and the announcement write `41,250` unless a format says otherwise. |
+| Compare, do not just show | A previous period with `compare`, a threshold, an annotation, small multiples. A number without a comparison is decoration. |
+| Shape follows the data, not the box | `aspectRatio` holds a chart's proportions as its container changes, so the same series does not read steep on a phone and flat on a desk. |
+
 ## Composition
 
 `Chart` reads the `data` and shares series, scales, and hover state with the marks inside it. Marks that draw in the plot go in the default slot. The tooltip and the legend are HTML, so they go in the `tooltip` and `legend` slots.
@@ -493,7 +506,7 @@ The presets share one vocabulary, so what you learn on one chart carries to the 
 | `title` | The caption of a chart, also its accessible name. |
 | `label` | On a micrographic, its accessible name. On a chart, the accessor for a mark's label. |
 | `size` | `"sm"`, `"md"`, or `"lg"`. Only `ScatterChart` uses `size` for the bubble accessor. |
-| `width`, `height` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container. |
+| `width`, `height`, `aspectRatio` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container, and `aspectRatio` to let the height follow the width. |
 | `format`, `xFormat`, `yFormat` | `Intl.NumberFormat` options or a function of the value. `locale` goes with them. |
 | `palette`, `colors`, `color` | A group option number, or a sequential hue on heat charts; a map from series to a token; one token. Values are `--cds-viz-*` names, never colors. |
 | `legend`, `legendPosition`, `maxLegendItems` | Whether to draw the legend, where (`bottom`, `right`, `top`, `left`), and how many items show before the rest fold behind a "more" button. Pointing at an item dims the other series. |

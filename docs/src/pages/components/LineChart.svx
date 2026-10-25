@@ -101,7 +101,7 @@ Set `labels` to `"end"` to name each line where it stops, which reads faster tha
 
 ### Points
 
-Set `points` to `"all"` to mark every datum, `"hover"` for only the focused one, or `"none"`.
+By default, `"auto"`, a point marks every datum while each has about 24 px of room, so a sparse series shows where it was sampled, and only the hovered one in a dense series. Set `points` to `"all"`, `"hover"`, or `"none"` to decide.
 
 <LineChart data={quarters} x="quarter" y="value" series="kind" title="Every point" points="all" height={220} />
 
