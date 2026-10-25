@@ -75,7 +75,7 @@ $ccs-side-panel-sizes: (
     @include ccs-inset-inline($end: 0);
 
     [dir="rtl"] & {
-      --ccs-side-panel-shift: #{to-rem(-320px)};
+      --ccs-side-panel-shift: #{ccs-dir(to-rem(320px), to-rem(-320px))};
     }
   }
 
@@ -86,7 +86,7 @@ $ccs-side-panel-sizes: (
     @include ccs-inset-inline($start: 0);
 
     [dir="rtl"] & {
-      --ccs-side-panel-shift: #{to-rem(320px)};
+      --ccs-side-panel-shift: #{ccs-dir(to-rem(-320px), to-rem(320px))};
     }
   }
 

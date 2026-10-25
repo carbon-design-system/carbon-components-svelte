@@ -2015,3 +2015,61 @@ test.describe("right-to-left plain dir", () => {
     });
   }
 });
+
+test.describe("right-to-left nested regions", () => {
+  // Every element's box and inline padding in each field, relative to the
+  // field. A region lays out by its own `dir`, whatever the page's is.
+  function layout(page: Page, dir: "ltr" | "rtl") {
+    return page.evaluate(async (dir) => {
+      await document.fonts.ready;
+      const region = document.querySelector(`[data-testid=region-${dir}]`);
+      const fields: Record<string, string[]> = {};
+      for (const field of region?.querySelectorAll("[data-field]") ?? []) {
+        const origin = field.getBoundingClientRect();
+        // A closed select's options sit where the page puts them.
+        fields[field.getAttribute("data-field") ?? ""] = [
+          ...field.querySelectorAll(":not(option)"),
+        ].map((el) => {
+          const rect = el.getBoundingClientRect();
+          const style = getComputedStyle(el);
+          return [
+            el.tagName.toLowerCase(),
+            Math.round(rect.left - origin.left),
+            Math.round(rect.top - origin.top),
+            Math.round(rect.width),
+            style.paddingLeft,
+            style.paddingRight,
+            style.transform,
+          ].join(" ");
+        });
+      }
+      return fields;
+    }, dir);
+  }
+
+  test("lays out a region by its own dir, not the page's", async ({ page }) => {
+    await page.goto("/rtl-nested.html");
+    await page.evaluate(() =>
+      document.documentElement.setAttribute("dir", "ltr"),
+    );
+    const ltr = await layout(page, "ltr");
+    const rtlInLtr = await layout(page, "rtl");
+    await page.evaluate(() =>
+      document.documentElement.setAttribute("dir", "rtl"),
+    );
+    const rtl = await layout(page, "rtl");
+    const ltrInRtl = await layout(page, "ltr");
+
+    expect(Object.keys(ltr)).toEqual([
+      "password",
+      "select",
+      "date-picker",
+      "search",
+    ]);
+    for (const field of Object.keys(ltr)) {
+      expect.soft(rtl[field], `${field} mirrors`).not.toEqual(ltr[field]);
+      expect.soft(ltrInRtl[field], `LTR ${field} in RTL`).toEqual(ltr[field]);
+      expect.soft(rtlInLtr[field], `RTL ${field} in LTR`).toEqual(rtl[field]);
+    }
+  });
+});

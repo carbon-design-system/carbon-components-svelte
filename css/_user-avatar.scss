@@ -120,7 +120,7 @@
     pointer-events: none;
 
     [dir="rtl"] & {
-      transform: translate(-50%, 50%);
+      transform: ccs-dir(translate(50%, 50%), translate(-50%, 50%));
     }
   }
 

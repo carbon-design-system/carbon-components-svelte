@@ -12,17 +12,24 @@
 /// otherwise. Multiply an inline offset that has no logical property, such
 /// as a box shadow's, by it: `calc(-1px * var(--ccs-inline-sign, 1))`. A
 /// `[dir="rtl"]` twin of such a rule outweighs every rule it ties.
+///
+/// `--ccs-rtl` and `--ccs-ltr` are the switches `ccs-dir()` reads: empty
+/// for the nearest `dir`, `initial` for the other.
 /// @access private
 /// @group components
 @mixin mirror-rtl {
   [dir="rtl"] {
     --ccs-mirror-rtl: scaleX(-1);
     --ccs-inline-sign: -1;
+    --ccs-rtl: ;
+    --ccs-ltr: initial;
   }
 
   [dir="ltr"] {
     --ccs-mirror-rtl: initial;
     --ccs-inline-sign: initial;
+    --ccs-rtl: initial;
+    --ccs-ltr: ;
   }
 
   .#{$prefix}--icon--mirror-rtl {

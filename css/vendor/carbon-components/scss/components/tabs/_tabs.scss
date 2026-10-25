@@ -318,9 +318,7 @@
 
       // ccs: in RTL each fade sits at the other end of the list, so its
       // gradient turns around.
-      [dir="rtl"] & {
-        transform: scaleX(-1);
-      }
+      @include ccs-mirror-rtl;
     }
 
     // ccs: the fades overlap the list on its inline side in either direction.

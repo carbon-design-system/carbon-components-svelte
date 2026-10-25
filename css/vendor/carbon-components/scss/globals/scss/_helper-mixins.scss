@@ -279,29 +279,41 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
 // `inset-inline-end` into `:lang()` rules for the Safari 14 baseline, and
 // `:dir()` is newer than it, so a `[dir="rtl"]` ancestor mirrors them.
 
-/// Sets `left` to `$start` and `right` to `$end`, and swaps them under a
-/// `[dir="rtl"]` ancestor. A side left `null` stays unset in LTR and resets
-/// to `auto` in RTL. Include it after the rule's declarations: Sass splits a
-/// rule around the nested one.
+/// The value for the nearest `dir`: `$ltr` under `dir="ltr"` (or no
+/// `dir`), `$rtl` under `dir="rtl"`. Use it in a `[dir="rtl"]` twin. The
+/// twin matches any RTL ancestor, so without it a `dir="ltr"` region
+/// inside an RTL page would keep the RTL value, while logical properties
+/// follow the region. It reads `--ccs-rtl` and `--ccs-ltr`, which every
+/// `[dir]` element sets to an empty value (on) or `initial` (off), so the
+/// one that is off falls back to its value and the other adds nothing.
+/// @access private
+/// @group global-helpers
+/// @example transform: ccs-dir(translateX(-100%), translateX(100%));
+@function ccs-dir($ltr, $rtl) {
+  @if $ltr == $rtl {
+    @return $ltr;
+  }
+
+  @return unquote("var(--ccs-rtl, #{$ltr}) var(--ccs-ltr, #{$rtl})");
+}
+
+/// Sets `left` to `$start` and `right` to `$end`, and swaps them under the
+/// nearest `dir="rtl"`. A side left `null` stays unset in LTR and is
+/// `auto` in RTL, and in an LTR region inside an RTL page. Include it after
+/// the rule's declarations: Sass splits a rule around the nested one.
 /// @access private
 /// @group global-helpers
 /// @example @include ccs-inset-inline($end: $carbon--spacing-05);
 @mixin ccs-inset-inline($start: null, $end: null) {
+  $start-or-auto: if($start == null, auto, $start);
+  $end-or-auto: if($end == null, auto, $end);
+
   left: $start;
   right: $end;
 
   [dir="rtl"] & {
-    @if $start == null {
-      right: auto;
-    } @else {
-      right: $start;
-    }
-
-    @if $end == null {
-      left: auto;
-    } @else {
-      left: $end;
-    }
+    right: ccs-dir($end-or-auto, $start-or-auto);
+    left: ccs-dir($start-or-auto, $end-or-auto);
   }
 }
 
