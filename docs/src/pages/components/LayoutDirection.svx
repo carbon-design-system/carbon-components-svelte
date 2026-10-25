@@ -308,15 +308,19 @@ A menu or tooltip that renders in a portal leaves the subtree in the DOM, so it 
 
 ## Mixed directions
 
-Nest a `LayoutDirection` to switch back for one part, such as an English field in an RTL form. A `CodeSnippet` needs no wrapper: its code always reads left to right. See [CodeSnippet](/components/CodeSnippet#right-to-left).
+Nest a `LayoutDirection` to switch back for one part, such as English fields in an RTL form. The nearest direction wins, so the password toggle and the search icons sit where they do in an LTR page. A `CodeSnippet` needs no wrapper: its code always reads left to right. See [CodeSnippet](/components/CodeSnippet#right-to-left).
 
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={5}>
-    <Text>أدخل عنوان الخادم باللغة الإنجليزية:</Text>
+    <Text>أدخل بيانات الخادم باللغة الإنجليزية:</Text>
     <LayoutDirection dir="ltr" lang="en">
-      <TextInput labelText="Server URL" placeholder="https://api.example.com" />
+      <Stack gap={5}>
+        <TextInput labelText="Server URL" placeholder="https://api.example.com" />
+        <PasswordInput labelText="API key" value="sk-live-4f2a9c71" />
+        <Search labelText="Search services" value="payments-api" />
+      </Stack>
     </LayoutDirection>
-    <Text>نستخدم هذا العنوان في كل طلب.</Text>
+    <Text>نستخدم هذا العنوان والمفتاح في كل طلب.</Text>
   </Stack>
 </LayoutDirection>
 
