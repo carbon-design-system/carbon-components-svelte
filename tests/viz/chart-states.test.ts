@@ -32,6 +32,7 @@ import SequenceSunburst from "../../src/viz/SequenceSunburst/SequenceSunburst.sv
 import SlopeChart from "../../src/viz/SlopeChart/SlopeChart.svelte";
 import SpanWaterfall from "../../src/viz/SpanWaterfall/SpanWaterfall.svelte";
 import StateTimeline from "../../src/viz/StateTimeline/StateTimeline.svelte";
+import StatusGrid from "../../src/viz/StatusGrid/StatusGrid.svelte";
 import SunburstChart from "../../src/viz/SunburstChart/SunburstChart.svelte";
 import TileGridMap from "../../src/viz/TileGridMap/TileGridMap.svelte";
 import TreeChart from "../../src/viz/TreeChart/TreeChart.svelte";
@@ -201,6 +202,7 @@ const cases: Array<[string, unknown, Record<string, unknown>]> = [
     FlameGraph,
     { data: [], id: "id", parent: "parent", value: "ms", label: "fn" },
   ],
+  ["StatusGrid", StatusGrid, { data: [], id: "name", status: "state" }],
 ];
 
 describe.each(cases)("%s states", (_, component, props) => {
@@ -217,7 +219,7 @@ describe.each(cases)("%s states", (_, component, props) => {
     expectTitleAndOrder(figure());
     unmount();
 
-    render(component as AnyChart, {
+    const { unmount: unmount2 } = render(component as AnyChart, {
       props: { ...props, title: "Chart", emptyText: "Nothing yet" },
     });
     expect(figure()).not.toHaveAttribute("aria-busy");
@@ -225,6 +227,23 @@ describe.each(cases)("%s states", (_, component, props) => {
       "Nothing yet",
     );
     expect(figure().querySelector(".bx--viz-chart__skeleton")).toBeNull();
+    expectTitleAndOrder(figure());
+    unmount2();
+
+    // An error shows its text in place of the data, and never the skeleton.
+    render(component as AnyChart, {
+      props: {
+        ...props,
+        title: "Chart",
+        error: true,
+        errorText: "Lost the connection",
+      },
+    });
+    expect(figure()).not.toHaveAttribute("aria-busy");
+    expect(figure().querySelector(".bx--viz-chart__error")).toHaveTextContent(
+      "Lost the connection",
+    );
+    expect(figure().querySelector(".bx--viz-chart__empty")).toBeNull();
     expectTitleAndOrder(figure());
   });
 });
