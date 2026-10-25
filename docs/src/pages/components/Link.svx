@@ -42,7 +42,7 @@ Set `muted` to `true` so the link inherits the surrounding text color instead of
 
 ## Custom colors
 
-Set `--cds-link-text-color` on a link, or on an element that holds links, to recolor it. `--cds-link-hover-text-color`, `--cds-link-visited-text-color` and `--cds-link-focus-text-color` set the hover color, the `visited` color and the focus ring. Each falls back to its theme token.
+Set `--cds-link-text-color` on a link, or on an element that holds links, to recolor it. `--cds-link-hover-text-color`, `--cds-link-visited-text-color` and `--cds-link-focus-text-color` set the hover color, the `visited` color and the focus ring. Each falls back to its theme token. `Toggletip` sets them to the inverse link colors on its content, so set them on an element inside the content to recolor its links.
 
 <Link
   href="/billing/invoices"

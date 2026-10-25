@@ -547,6 +547,16 @@ const REPOINTED_CDS_TOKENS = new Set([
   "--cds-background-inverse",
 ]);
 
+// v11's link hooks, re-pointed for the links inside a scope, as v11 does
+// (`_toggletip.scss`, `_ai-label.scss`). `v11-tokens.test.ts` pins the
+// scopes.
+const REPOINTED_V11_HOOKS = new Set([
+  "--cds-link-text-color",
+  "--cds-link-hover-text-color",
+  "--cds-link-visited-text-color",
+  "--cds-link-focus-text-color",
+]);
+
 const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
   // `z("…")` covers anything that floats over the page; one digit is local
   // stacking inside the component's own box.
@@ -559,7 +569,8 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
       [...line.split("//")[0].matchAll(/(?:^|[{;\s])(--cds-[\w-]+)\s*:/g)].some(
         ([, property]) =>
           !LEGACY_CDS_PROPERTIES.has(property) &&
-          !REPOINTED_CDS_TOKENS.has(property),
+          !REPOINTED_CDS_TOKENS.has(property) &&
+          !REPOINTED_V11_HOOKS.has(property),
       )
         ? [index + 1]
         : [],
@@ -596,6 +607,19 @@ describe("hand-authored conventions (partials and patch blocks)", () => {
     expect(HAND_AUTHORED.length).toBeGreaterThan(PARTIALS.length);
     expect(changed).toEqual([]);
     expect(counts).toEqual(KNOWN_SHARED_VIOLATIONS);
+  });
+
+  it("re-points each allowed v11 hook somewhere", () => {
+    const declared = HAND_AUTHORED.flatMap(({ lines }) =>
+      lines.flatMap((line) =>
+        [
+          ...line.split("//")[0].matchAll(/(?:^|[{;\s])(--cds-[\w-]+)\s*:/g),
+        ].map(([, property]) => property),
+      ),
+    );
+    expect(
+      [...REPOINTED_V11_HOOKS].filter((hook) => !declared.includes(hook)),
+    ).toEqual([]);
   });
 
   it("still flags an !important declaration", () => {

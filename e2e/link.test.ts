@@ -116,6 +116,21 @@ test.describe("Link", () => {
     });
   }
 
+  test("recolors the links in one toggletip through a hook", async ({
+    page,
+  }) => {
+    const aiLabel = await color(page, "link-ai-label");
+    await page
+      .getByTestId("link-toggletip")
+      .evaluate((el) =>
+        el
+          .closest(".bx--toggletip-actions")
+          ?.setAttribute("style", "--cds-link-text-color: rgb(0, 128, 0)"),
+      );
+    expect(await style(page, "link-toggletip", "color")).toBe("rgb(0, 128, 0)");
+    expect(await style(page, "link-ai-label", "color")).toBe(aiLabel);
+  });
+
   test("wraps a long inline link across lines", async ({ page }) => {
     const rects = await page
       .getByTestId("link-wrap")
