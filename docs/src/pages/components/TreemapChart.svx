@@ -23,6 +23,7 @@ description: Treemap shows how a total divides among many parts, and their paren
 
   let selected = null;
   let hidden = [];
+  let team = null;
 </script>
 
 `TreemapChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
@@ -40,6 +41,12 @@ Pass long `data` with `value` and `label` accessors. Rows that share a label are
 Set `group` to a parent accessor. Cells of one parent sit together, share its color, and are set apart by a wider gap, and the legend names the parents.
 
 <TreemapChart data={spend} value="cost" label="service" group="team" title="Cloud spend by team and service" />
+
+## Drill
+
+Bind `root` to a group and only its services tile the box; the button above steps back out. Set it from `select`, whose leaf names its group, to drill in with a click.
+
+<TreemapChart data={spend} value="cost" label="service" group="team" title="Click a tile to drill into its team" bind:root={team} on:select={(e) => (team = e.detail.leaf.group)} upLabel="All teams" />
 
 ## Values
 

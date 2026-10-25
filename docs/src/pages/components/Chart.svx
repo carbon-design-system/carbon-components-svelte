@@ -1,22 +1,30 @@
 ---
-components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartCandles", "ChartViolins", "ChartSwarm", "ChartHexbin", "ChartContours", "ChartDumbbells", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartBand", "ChartAnomalies", "ChartToolbar", "ChartDataTable", "ChartZoomBar", "ChartWaterfall"]
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartCandles", "ChartViolins", "ChartSwarm", "ChartHexbin", "ChartContours", "ChartDumbbells", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartBand", "ChartAnomalies", "ChartAnnotations", "ChartBrush", "ChartCrosshair", "ChartErrorBars", "ChartToolbar", "ChartDataTable", "ChartZoomBar", "ChartWaterfall"]
 description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
 ---
 
 <script>
+  import { Link } from "carbon-components-svelte";
   import {
+    BarChart,
     Chart,
+    ChartAnnotations,
     ChartAxis,
     ChartBars,
+    ChartBrush,
+    ChartCrosshair,
+    ChartErrorBars,
     ChartGrid,
     ChartLegend,
     ChartLine,
+    ChartPoints,
     ChartRuler,
     ChartThreshold,
     ChartToolbar,
     ChartTooltip,
     ChartTooltipRow,
     ChartZoomBar,
+    LineChart,
   } from "carbon-components-svelte/viz";
 
   const DAY = 86_400_000;
@@ -28,6 +36,12 @@ description: Chart is the root that chart primitives compose inside. It turns lo
       revenue: Math.round(30000 + r * 9000 + Math.sin(i / 5 + r) * 9000 + ((i * 7919 * (r + 1)) % 4000)),
     })),
   );
+  const withError = data.map((row) => ({ ...row, lo: row.revenue * 0.9, hi: row.revenue * 1.1 }));
+  const compact = (value) => new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
+  const quarters = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
+    ["Q1", "Q2", "Q3", "Q4"].map((quarter, i) => ({ quarter, region, revenue: 40 + r * 15 + i * 6 + ((i * 7 + r * 3) % 9) })),
+  );
+  let brushed = null;
   const growth = ["Free", "Team"].flatMap((product, p) =>
     [2021, 2022, 2023, 2024, 2025, 2026].map((year, i) => ({
       year: String(year),
@@ -153,11 +167,69 @@ Set `orientation` to `"horizontal"` to run the x scale down the left side and th
   <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
 </Chart>
 
+## Tooltip timing
+
+Every chart's tooltip follows one clock, whether the chart is built on `Chart` or draws its own.
+
+| Moment | What happens |
+| --- | --- |
+| A pointer arrives on an item | The tooltip shows after it has rested 150 ms, so a sweep across the chart flashes nothing. `ChartTooltip` takes `delay` to change it. |
+| A key press or a tap | Shows at once. |
+| A hover synced from another chart | The ruler follows at once; the tooltip waits with the source's and shows when it does, so a sweep across small multiples flashes nothing. |
+| The pointer moves to another item | Swaps at once. |
+| The pointer leaves an item or the chart | Stays 100 ms, so crossing the gap to a neighbor never flickers, then hides and the hover clears. |
+| The pointer comes back within 300 ms of hiding | Shows at once; later it waits again. |
+| A click or a tap | Pins it until another click, <DocKbd label="Escape" />, or a press outside the chart. |
+
+## Tooltip anatomy
+
+A tooltip is a title, the hovered x, over one row per series: a swatch, the label, and the value pushed to the right. Presets add rows of their own, such as a candle's change or a task's dates, and a row without a swatch is one that names no series. The gallery lays every composition out still, to check spacing without hovering.
+
+| Class | Part |
+| --- | --- |
+| `bx--viz-chart-tooltip` | The box: inverse background, a shadow, 8 px by 16 px padding, 128 px minimum width. |
+| `bx--viz-chart-tooltip__title` | The x label or item name, semibold, with a 4 px gap below. |
+| `bx--viz-chart-tooltip__row` | A flex row, 8 px gap, from `ChartTooltipRow`. |
+| `bx--viz-chart-tooltip__swatch`, `__label`, `__value` | The 8 px square, the name, and the value pushed to the right by at least 16 px. |
+| `--flipped`, `--above`, `--fixed`, `--pinned` | Placement past the middle, over a row, in a facet corner, and held in place. |
+
+<FileSource src="/framed/Chart/ChartTooltipGallery" />
+
+## Tooltip rows
+
+Rows come in series order. `sort` reorders them, `maxRows` folds the rest into one "+N more" line, and both reach a preset through its `tooltip` prop, which takes `false` or an options object. A stacked bar or area lists the top of the stack first by default, since that is how the eye reads it.
+
+| `sort` | Order |
+| --- | --- |
+| `"series"` | As the series are. The default. |
+| `"stack"` | The top of the stack first. The default when a preset stacks. |
+| `"value"`, `"value-asc"` | Largest first, or smallest. |
+| `(a, b) => number` | Any order, over the hovered points. Each point's `datum` is the row, typed from `data`. |
+
+<Chart {data} x="date" y="revenue" series="region" title="Largest first, two rows" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" sort="value" maxRows={2} />
+</Chart>
+
+## Crosshair
+
+`ChartCrosshair` is the ruler plus the values: the hovered x written on the bottom axis, a line and the hovered y on the left one, each in a badge. It reads at a glance where a tooltip would be too much, and pairs with `tooltip={false}` on a preset. `series` picks whose y the badge shows; `yBadge={false}` leaves the x alone.
+
+<Chart {data} x="date" y="revenue" series="region" title="Values on the axes" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartCrosshair />
+</Chart>
+
 ## Custom tooltip
 
 `ChartTooltip` passes `x`, `xLabel`, and the hovered `points` to its slot. Each point carries its `series`, `datum`, `color`, and a formatted `value`.
 
-A click, or a tap on a touch screen, pins the tooltip on its point so it can be read and its text selected; another click, <DocKbd label="Escape" />, or a press outside the chart releases it. A tap shows the tooltip at once, where a mouse has to settle for a moment.
+A click, or a tap on a touch screen, pins the tooltip on its point so it can be read and its text selected; another click, <DocKbd label="Escape" />, or a press outside the chart releases it.
 
 <Chart {data} x="date" y="revenue" series="region" title="Custom tooltip" height={240}>
   <ChartAxis position="bottom" />
@@ -197,9 +269,67 @@ Set `to` for a second value, and the space between the two is shaded: an accepta
   <ChartLine />
 </Chart>
 
-## Loading and empty
+## Labels
+
+Marks write their values when asked. `ChartBars` takes `labels`: `"outside"` past the bar's end, `"inside"` on the bar, or `"auto"`, outside where the bar is wide enough and nothing where it is not. A stacked chart labels its totals. `ChartLine` takes `"end"` for the series name at the line's end, or `"all"` for every value; `ChartPoints` takes a `label` accessor. Every label yields to a neighbor rather than cover it, so a dense chart keeps the ones that read.
+
+<Chart {data} x="date" y="revenue" series="region" title="Labelled bars" height={260}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartBars labels="auto" />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+<Chart {data} x="date" y="revenue" series="region" title="Lines named at their ends" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine labels="end" />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+## Error bars
+
+`ChartErrorBars` draws an interval per datum from `lo` and `hi` accessors, or `y ± error` with `error`. With `bars` set to the bars' options it centers on each bar of a grouped chart; otherwise it sits on the x position, for lines and points. The tooltip reads the interval from each point's `datum`.
+
+<Chart data={withError} x="date" y="revenue" series="region" title="Revenue with a confidence interval" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartBars />
+  <ChartErrorBars lo="lo" hi="hi" bars={{}} />
+  <svelte:fragment slot="tooltip">
+    <ChartTooltip let:points let:xLabel>
+      <strong>{xLabel}</strong>
+      {#each points as point (point.series)}
+        <ChartTooltipRow color={point.color} label={String(point.series)} value={`${point.value} (${compact(point.datum.lo)} to ${compact(point.datum.hi)})`} />
+      {/each}
+    </ChartTooltip>
+  </svelte:fragment>
+</Chart>
+
+## Annotations
+
+`ChartAnnotations` marks moments and points with a short label. An item with `x` alone is a dashed rule across the plot; one with `y` too is a ring on that point, which the chart keeps inside its domain. `kind` colors the marker with a status token. Labels take the first free corner around their anchor and a leader line connects them.
+
+<Chart {data} x="date" y="revenue" series="region" title="Annotated" height={260}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartAnnotations items={[{ x: data[20].date, label: "Pricing change", kind: "info" }, { x: data[40].date, y: data[40].revenue, label: "Outage", kind: "error" }]} />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+## Loading, empty, and error
 
 Set `loading` while the data is on its way. A skeleton covers the plot, the axes stay in place so nothing jumps when the data lands, and the chart is marked busy for assistive technology. The wrappers, such as `LineChart`, take the same props.
+
+Set `error` when the fetch failed. The chart keeps its box and title, writes `errorText` in the error color where the data would be, and the `error` slot takes an action such as a retry button. Dashboards fail more often than they are empty, so the state is first class. `asOf` writes when the data was fetched in the header, so a cached chart says so.
+
+<Chart data={[]} x="date" y="revenue" title="Error" height={200} error asOf={new Date(2026, 9, 24, 9, 41)}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <svelte:fragment slot="error">Could not reach the revenue service. <Link href="#">Retry</Link></svelte:fragment>
+</Chart>
 
 <Chart data={[]} x="date" y="revenue" title="Loading" height={200} loading>
   <ChartGrid />
@@ -247,9 +377,43 @@ Both are on the chart context for a control of your own: `exportImage("png" | "s
 
 ## Motion
 
-Set `transition` to animate bars and points to their new place when the data changes, instead of snapping. Lines redraw at once. Nothing moves where the user prefers reduced motion. `TreemapChart` takes the same prop for its cells.
+Set `transition` to animate bars and points to their new place when the data changes, instead of snapping. A chart arrives in place: nothing moves on its first paint, only after. Lines redraw at once. Nothing moves where the user prefers reduced motion. `TreemapChart` takes the same prop for its cells, each of which moves in a straight line to its new place.
 
 <FileSource src="/framed/Chart/ChartMotion" />
+
+## Compare periods
+
+Set `compare` to overlay the previous period. Every row shifted forward by `period`, milliseconds on a time axis, becomes a ghost of its series: dashed, in the same color, out of the legend, and written under its series in the tooltip with the change. The data holds both periods; the chart draws the earlier one on top of the later.
+
+<Chart {data} x="date" y="revenue" series="region" title="Against the previous eight weeks" height={260} compare={{ period: 8 * 7 * 86400000 }}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" />
+  <ChartLegend slot="legend" />
+</Chart>
+
+## Brush
+
+`ChartBrush` lets a drag across the plot pick an x range. The range binds as `brush`, in data space, and fires `brush` when the drag ends; a click on the plot clears it, as does <DocKbd label="Escape" />. Presets take `brushable` and bind `brush` the same way. The brush is a range to act on, a filter for a table or a window for another chart, where the zoom bar changes what this chart shows.
+
+<Chart {data} x="date" y="revenue" series="region" title="Drag across the plot" height={240} bind:brush={brushed}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartBrush />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+<p>{brushed ? `${new Date(brushed[0]).toDateString()} to ${new Date(brushed[1]).toDateString()}` : "Nothing brushed"}</p>
+
+## Linked charts
+
+Charts that share a `syncId` share hover: one ruler across all of them. `sync` says what else travels: the zoom range, the brush, and the selection. A click in one chart then selects the same x in the others, in the same series where they have it, which is how a dashboard filters by a bar without any wiring. Shift-click adds to `selection` instead of replacing it.
+
+<BarChart data={quarters} x="quarter" y="revenue" series="region" title="Click a bar" syncId="linked" sync={["hover", "selection"]} height={220} />
+<LineChart data={quarters} x="quarter" y="revenue" series="region" title="The line follows" syncId="linked" sync={["hover", "selection"]} height={220} />
 
 ## Zoom
 
@@ -267,6 +431,20 @@ While zoomed, marks are clipped to the plot and the y axis keeps its full range,
   <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
 </Chart>
 
+## Shapes and patterns
+
+Color is the first channel for a series and should not be the only one. `ChartPoints` takes `symbol`, `ChartBars` and `ChartArea` take `pattern`: `"auto"` gives each series its own symbol or fill in order, a map names them. The legend draws the same shape in its swatch, so the chart reads in print, under forced colors, and to a reader who does not see the hues apart. The presets expose them as `symbols` on `ScatterChart` and `patterns` on `BarChart` and `AreaChart`.
+
+<Chart {data} x="date" y="revenue" series="region" title="A symbol per series" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartPoints symbol="auto" />
+  <ChartLegend slot="legend" />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+<BarChart data={quarters} x="quarter" y="revenue" series="region" title="A pattern per series" patterns="auto" height={220} />
+
 ## Color palettes
 
 Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it follows the theme and can be overridden like any other token. Pass a name without the prefix, such as `"cat-03"`, anywhere a color is accepted, or resolve one with `vizColor()`. Switch the theme in the page header to see each palette change.
@@ -277,6 +455,17 @@ Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it foll
 - **Diverging**: seventeen steps around a neutral midpoint at 09, in two palettes: `div-<low>-<high>-01` to `-17`. The midpoint matches the background, so the extremes are always the loudest steps.
 - **Labels on a ramp**: `seq-on-<step>` and `div-on-<step>` are the text colors that hold 4.5:1 on each step. Which steps need dark text differs by theme, which is why they are tokens. `contrastTextColor()` names the right one.
 - **Semantic**: `interactive`, `neutral`, `success`, `error`, `warning`, and `info`, aliases of core theme tokens for marks that carry status. Status never rests on these alone: components pair them with an icon, a shape, or text.
+
+`colors` and `hidden` are keyed by series values, which TypeScript cannot read off the row type. Name the union yourself and let `satisfies` check the keys:
+
+```svelte
+<script lang="ts">
+  import type { VizColor } from "carbon-components-svelte/viz";
+
+  type Region = "EMEA" | "APAC" | "AMER";
+  const colors = { EMEA: "cat-01", APAC: "cat-03" } satisfies Partial<Record<Region, VizColor>>;
+</script>
+```
 
 <FileSource src="/framed/Chart/VizPalettes" />
 
@@ -301,11 +490,12 @@ The presets share one vocabulary, so what you learn on one chart carries to the 
 | `width`, `height` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container. |
 | `format`, `xFormat`, `yFormat` | `Intl.NumberFormat` options or a function of the value. `locale` goes with them. |
 | `palette`, `colors`, `color` | A group option number, or a sequential hue on heat charts; a map from series to a token; one token. Values are `--cds-viz-*` names, never colors. |
-| `legend`, `legendPosition`, `maxLegendItems` | Whether to draw the legend, where, and how many items show before the rest fold behind a "more" button. |
+| `legend`, `legendPosition`, `maxLegendItems` | Whether to draw the legend, where (`bottom`, `right`, `top`, `left`), and how many items show before the rest fold behind a "more" button. Pointing at an item dims the other series. |
 | `sort`, `valueType` | Enums: `"none" \| "value"`; `"value" \| "percent"`, with `"both"` or `"none"` where a chart can write them. |
 | `selectable`, `selected` | Selection is opt in. `selected` is the row id, the index on an index-keyed strip, or `{ series, index }` on a Cartesian chart. |
 | `hidden` | Series keys the legend has hidden; bind it. |
-| `loading`, `emptyText` | A skeleton while data is on its way, and the message when there is none. |
+| `loading`, `emptyText`, `error`, `errorText` | A skeleton while data is on its way, the message when there is none, and the error state with an `error` slot for a retry action. Loading wins over error, error over empty. |
+| `asOf`, `asOfLabel` | When the data was fetched, written in the header so stale data says so. On charts built on `Chart`. |
 | `hover` | The hovered item, or `null` when the pointer leaves. |
 | `select` | `{ <item>, originalEvent }`, the same item `hover` carries, when `selectable` is set. |
 | `toggle`, `legend:toggle`, `threshold`, `brush`, `zoom` | `{ id, collapsed }`; `{ series, hidden }`; `{ threshold, direction, value }`; a brush or zoom range. |

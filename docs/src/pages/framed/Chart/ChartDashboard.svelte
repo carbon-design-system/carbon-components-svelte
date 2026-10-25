@@ -27,6 +27,13 @@
       ),
     })),
   );
+  // A brush on the revenue line narrows the revenue KPI to that range.
+  let range = null;
+  $: inRange = range
+    ? revenue.filter((row) => row.date >= range[0] && row.date <= range[1])
+    : revenue;
+  $: revenueTotal = inRange.reduce((sum, row) => sum + row.revenue, 0);
+  $: revenueLabel = range ? "Revenue, brushed range" : "Revenue, 30 days";
   const devices = [
     { device: "Desktop", sessions: 52000 },
     { device: "Mobile", sessions: 31000 },
@@ -73,8 +80,8 @@
       <Row>
         <Column sm={4} md={4} lg={4}>
           <KpiCard
-            label="Revenue, 30 days"
-            value={1280000}
+            label={revenueLabel}
+            value={revenueTotal}
             format={{ style: "currency", currency: "USD", notation: "compact" }}
             delta={0.123}
             deltaLabel="vs prior 30 days"
@@ -120,6 +127,8 @@
               series="region"
               title="Revenue by region"
               height={240}
+              brushable
+              bind:brush={range}
             />
           </Tile>
         </Column>

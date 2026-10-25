@@ -1,0 +1,50 @@
+---
+components: ["StatusGrid"]
+description: Status grid shows one cell per item colored by its state, wrapping to fit, so hundreds of pods, hosts, or checks read at a glance.
+---
+
+<script>
+  import { StatusGrid } from "carbon-components-svelte/viz";
+
+  const STATES = ["healthy", "healthy", "healthy", "healthy", "degraded", "healthy", "failed", "pending"];
+  const pods = Array.from({ length: 180 }, (_, i) => ({
+    name: `pod-${String(i + 1).padStart(3, "0")}`,
+    zone: ["us-east-1a", "us-east-1b", "us-east-1c"][i % 3],
+    state: STATES[(i * 7) % STATES.length],
+  }));
+  let selected = null;
+</script>
+
+`StatusGrid` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+
+Each row is a cell, colored by its state, in a grid that wraps to the container. The legend counts the states. It is the shape an operations page needs for pods, hosts, test runs, or checks, where the question is "how many are red, and which".
+
+## Basic
+
+Pass one row per item with `id` and `status` accessors. `status` names one of the `states`, which default to `healthy`, `degraded`, `failed`, and `pending` in the status colors. Hover a cell for its label and state.
+
+<StatusGrid data={pods} id="name" status="state" title="Pods by state" />
+
+## States and sizes
+
+`states` sets the states in legend order, each with a color and a label; a state the data names but `states` does not takes the neutral color. `size` sets the cell: `"sm"` for thousands, `"lg"` for a few dozen.
+
+<StatusGrid data={pods.slice(0, 36)} id="name" status="state" label={(row) => `${row.name} in ${row.zone}`} title="Large cells" size="lg" states={{ healthy: { color: "success", label: "Up" }, degraded: { color: "warning", label: "Slow" }, failed: { color: "error", label: "Down" }, pending: { color: "info", label: "Starting" } }} />
+
+## Selection
+
+Set `selectable` and each cell is a toggle button; `selected` binds the id, and `select` fires with the row.
+
+<StatusGrid data={pods.slice(0, 60)} id="name" status="state" title="Pick a pod" selectable bind:selected />
+
+<p>{selected ? `Selected ${selected}` : "Nothing selected"}</p>
+
+## Loading, empty, and error
+
+The grid keeps its box and legend row through `loading`, an empty `data`, and `error`, with the `error` slot for a retry action.
+
+<StatusGrid data={[]} id="name" status="state" title="Error" error />
+
+## Accessibility
+
+Without `selectable`, each cell carries its label and state as hidden text, so a screen reader lists them. With it, each cell is a button named by its label and state, with `aria-pressed` for the selection, and the grid is one tab stop whose arrows move between cells. The legend counts read the state of the whole grid in a sentence. Color never stands alone: the tooltip and the hidden text name the state.

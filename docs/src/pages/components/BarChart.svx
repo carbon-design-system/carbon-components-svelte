@@ -14,6 +14,12 @@ description: Bar chart compares values across categories, grouped side by side, 
       revenue: 24 + p * 9 + i * (6 - p) + ((i * 7 + p * 5) % 8),
     })),
   );
+  const likert = ["Easy to use", "Fast", "Reliable"].flatMap((statement, i) => [
+    { statement, answer: "Strongly disagree", share: -[0.05, 0.12, 0.03][i] },
+    { statement, answer: "Disagree", share: -[0.15, 0.2, 0.1][i] },
+    { statement, answer: "Agree", share: [0.5, 0.4, 0.47][i] },
+    { statement, answer: "Strongly agree", share: [0.3, 0.28, 0.4][i] },
+  ]);
   const teams = [
     ["Customer success", 182],
     ["Platform engineering", 141],
@@ -60,6 +66,26 @@ Set `mode` to `"stacked"` to pile the series up. The y axis grows to fit the tal
 Set `mode` to `"normalized"` to show each series as a share of its category. The axis runs from 0% to 100%.
 
 <BarChart {data} x="quarter" y="revenue" series="product" title="Revenue mix" mode="normalized" />
+
+## Labels
+
+Set `labels` to write each bar's value: `"outside"` past its end, `"inside"` on it, or `"auto"`, which labels the bars wide enough to carry one and leaves the rest. Stacked bars label their totals. Labels never overlap; where two would, the later one is dropped.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Labelled" labels="auto" />
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="Stack totals" mode="stacked" labels="outside" />
+
+## Diverging
+
+A stacked chart piles positive values up and negative values down from the baseline, so a Likert scale or a population pyramid is a stacked chart whose unfavorable side is negative. Format the axis with the absolute value when the sign is only a side.
+
+<BarChart data={likert} x="statement" y="share" series="answer" title="Agreement by statement" mode="stacked" orientation="horizontal" yFormat={(v) => `${Math.abs(Math.round(v * 100))}%`} colors={{ "Strongly disagree": "cat-13", Disagree: "cat-10", Agree: "cat-02", "Strongly agree": "cat-01" }} height={220} />
+
+## Patterns
+
+Set `patterns` to `"auto"` for a fill per series, or map series to `"solid"`, `"diagonal"`, `"dots"`, `"crosshatch"`, `"horizontal"`, or `"vertical"`. Print and contrast themes keep the series apart without the hues.
+
+<BarChart {data} x="quarter" y="revenue" series="product" title="A pattern per product" mode="stacked" patterns="auto" />
 
 ## Orientation
 

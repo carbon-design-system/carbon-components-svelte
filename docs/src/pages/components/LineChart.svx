@@ -25,6 +25,7 @@ description: Line chart shows how one or more series change over a continuous or
   }
 
   const data = make(48);
+  let range = null;
   const single = make(48, ["EMEA"]);
   const gaps = make(24, ["EMEA"]).map((row, i) => (i > 8 && i < 12 ? { ...row, revenue: null } : row));
   const large = make(20000, ["EMEA"]);
@@ -92,6 +93,12 @@ Set `curve` to `"monotone"` for a smooth line that never overshoots the data, or
 
 <LineChart data={single} x="date" y="revenue" title="Monotone curve" curve="monotone" height={220} />
 
+### End labels
+
+Set `labels` to `"end"` to name each line where it stops, which reads faster than a legend when the lines are few, or to `"all"` for every value that fits.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Named at the end" labels="end" legend={false} height={220} />
+
 ### Points
 
 Set `points` to `"all"` to mark every datum, `"hover"` for only the focused one, or `"none"`.
@@ -131,6 +138,26 @@ Set `xTitle` and `yTitle` to label the axes, and `yFormat` to `Intl.NumberFormat
   yTitle="Revenue"
   yFormat={{ style: "currency", currency: "USD", notation: "compact" }}
 />
+
+## Tooltip rows
+
+`tooltip` takes `false`, or an options object: `sort` for the order of the rows, `maxRows` to fold the rest into one line, `delay` for how long a pointer rests before it shows. See [Chart](/components/Chart#tooltip-rows) for the orders.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Largest first" tooltip={{ sort: "value", maxRows: 2 }} height={200} />
+
+## Previous period
+
+Set `compare` to overlay the previous period: each series gains a dashed ghost in its color, shifted forward by `period`, and the tooltip writes the prior value with the change. The legend lists the series only.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Against the prior eight weeks" compare={{ period: 8 * 7 * 86400000 }} height={240} />
+
+## Brush
+
+Set `brushable` and a drag across the plot picks a range, bound as `brush`. Use it to drive something else, a table or a KPI, where `zoomBar` changes the chart itself.
+
+<LineChart {data} x="date" y="revenue" series="region" title="Brush a range" brushable bind:brush={range} height={220} />
+
+<p>{range ? `${new Date(range[0]).toDateString()} to ${new Date(range[1]).toDateString()}` : "Drag across the plot"}</p>
 
 ## Thresholds
 

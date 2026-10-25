@@ -68,6 +68,18 @@ Set `size` to a third accessor. A circle's area follows the value, because a rad
   yTitle="Latency (ms)"
 />
 
+## Labels
+
+Set `label` to the accessor that names a point and `labels` to `"auto"` to write the names that fit, right of the point first, then left, above, or below. `"all"` writes every one.
+
+<ScatterChart data={few} x="cpu" y="latency" series="tier" label={(row) => `${row.tier} ${row.cpu}%`} title="Named points" labels="auto" height={260} />
+
+## Symbols
+
+Set `symbols` to `"auto"` for a symbol per series, or map series to `"circle"`, `"square"`, `"triangle"`, `"diamond"`, `"cross"`, or `"star"`. The legend swatches match.
+
+<ScatterChart data={few} x="cpu" y="latency" series="tier" title="A symbol per tier" symbols="auto" height={260} />
+
 ## Hover and keyboard
 
 Points rarely share an x, so hover follows the nearest point in both directions, within 32 pixels, instead of the nearest x. The arrow keys sweep through the points in reading order, left to right. The nearest point comes from a grid index that is built once for the data and the size, so a pointer move costs one lookup whatever the number of points.
