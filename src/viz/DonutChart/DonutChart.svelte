@@ -43,6 +43,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /**
    * Specify the most slices to draw. The smallest categories past the limit
    * fold into one neutral slice.
@@ -180,7 +186,7 @@
     selected = selected === slice.id ? null : slice.id;
     dispatch("select", { slice, originalEvent });
   }
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
 </script>
 
 <figure
@@ -210,6 +216,12 @@
             class:bx--viz-chart__skeleton={true}
             class:bx--skeleton__placeholder={true}
           ></div>
+        </div>
+      {:else if error}
+        <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+          <div class:bx--viz-chart__error={true}>
+            <slot name="error">{errorText}</slot>
+          </div>
         </div>
       {:else if empty}
         <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">

@@ -1,5 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
+import type { ComponentType, SvelteComponent } from "svelte";
 import StockChart from "../../../src/viz/StockChart/StockChart.svelte";
+
+// The row type is not inferred through `render`, so the component is widened.
+type AnyChart = ComponentType<SvelteComponent<Record<string, unknown>>>;
 
 const days = Array.from({ length: 40 }, (_, i) => {
   const open = 100 + Math.sin(i / 5) * 8;
@@ -16,7 +20,7 @@ const days = Array.from({ length: 40 }, (_, i) => {
 
 describe("StockChart", () => {
   it("draws the price with overlays and volume, and a pane per indicator sharing the zoom", () => {
-    render(StockChart, {
+    render(StockChart as unknown as AnyChart, {
       props: {
         data: days,
         x: "date",

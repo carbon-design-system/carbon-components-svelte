@@ -6,6 +6,10 @@
    */
 
   /**
+   * @template [L=any]
+   */
+
+  /**
    * The node type is written inline: a typedef cannot carry the generic
    * into the generated declarations.
    * @event {{ series: string; hidden: boolean }} legend:toggle Fires when a group is shown or hidden from the legend.
@@ -24,7 +28,7 @@
 
   /**
    * Specify the edges, one row each, read with `source` and `target`.
-   * @type {ReadonlyArray<any>}
+   * @type {ReadonlyArray<L>}
    */
   export let links = [];
 
@@ -106,13 +110,13 @@
 
   /**
    * Specify how to read an edge's source id.
-   * @type {import("../utils/accessor.js").Accessor<any, string | number>}
+   * @type {import("../utils/accessor.js").Accessor<L, string | number>}
    */
   export let source = "source";
 
   /**
    * Specify how to read an edge's target id.
-   * @type {import("../utils/accessor.js").Accessor<any, string | number>}
+   * @type {import("../utils/accessor.js").Accessor<L, string | number>}
    */
   export let target = "target";
 
@@ -124,6 +128,12 @@
 
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
+
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
 
   /**
    * Specify the direction ranks run: down the page, or left to right.
@@ -431,12 +441,13 @@
     hidden = next;
     dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
   }
-  $: empty = !loading && nodes.length === 0;
+  $: empty = !loading && !error && nodes.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-graph={true}
@@ -607,6 +618,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true}>
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true}>

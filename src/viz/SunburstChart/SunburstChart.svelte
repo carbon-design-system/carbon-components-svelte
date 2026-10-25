@@ -63,6 +63,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /** Set to `true` to make arcs selectable */
   export let selectable = false;
 
@@ -184,6 +190,7 @@
   const dispatch = createEventDispatcher();
   const tooltipTiming = createTooltipTiming(150, {
     onUnpin: () => setActive(-1),
+    onHide: () => setActive(-1),
   });
   const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
 
@@ -322,12 +329,13 @@
     hidden = next;
     dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
   }
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-sunburst={true}
@@ -352,7 +360,7 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:pointerleave={tooltipTiming.leave}
       on:click={() => tooltipTiming.togglePin()}
       on:blur={() => $tooltipPinned || setActive(-1)}
     >
@@ -367,7 +375,8 @@
             d={arc.d}
             style:--bx-viz-color={arc.color}
             style:--bx-viz-ring={group === undefined ? arc.ring : 0}
-            on:mouseenter={() => $tooltipPinned || setActive(i)}
+            on:mouseenter={() => tooltipTiming.enter(() => setActive(i))}
+            on:mouseleave={tooltipTiming.leave}
           />
         {/each}
       </g>
@@ -467,6 +476,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">

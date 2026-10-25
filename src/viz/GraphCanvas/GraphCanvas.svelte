@@ -6,6 +6,10 @@
    */
 
   /**
+   * @template [L=any]
+   */
+
+  /**
    * @event {{ node: { id: string; label: string; lane: string | undefined; group: string | undefined; rank: number; children: number; parents: number; collapsed: boolean; hidden: number; datum: T }; originalEvent: Event }} select Fires when a node is activated by click, Enter, or Space.
    * @event {{ id: string; collapsed: boolean }} toggle Fires when a node's descendants are folded away or shown.
    * @event {{ id: string; label: string; lane: string | undefined; group: string | undefined; rank: number; children: number; parents: number; collapsed: boolean; hidden: number; datum: T } | null} hover Fires when the pointer or focus moves to another node, and with `null` when it leaves.
@@ -23,7 +27,7 @@
 
   /**
    * Specify the edges, one row each, read with `source` and `target`.
-   * @type {ReadonlyArray<any>}
+   * @type {ReadonlyArray<L>}
    */
   export let links = [];
 
@@ -53,13 +57,13 @@
 
   /**
    * Specify how to read an edge's source id.
-   * @type {import("../utils/accessor.js").Accessor<any, string | number>}
+   * @type {import("../utils/accessor.js").Accessor<L, string | number>}
    */
   export let source = "source";
 
   /**
    * Specify how to read an edge's target id.
-   * @type {import("../utils/accessor.js").Accessor<any, string | number>}
+   * @type {import("../utils/accessor.js").Accessor<L, string | number>}
    */
   export let target = "target";
 
@@ -71,6 +75,12 @@
 
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
+
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
 
   /**
    * Specify the direction ranks run.
@@ -507,12 +517,13 @@
       stageHeight = Math.round(h);
     });
   });
-  $: empty = !loading && nodes.length === 0;
+  $: empty = !loading && !error && nodes.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-graph-canvas={true}
@@ -738,6 +749,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true} style:block-size="{height}px">
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true} style:block-size="{height}px">

@@ -67,6 +67,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /**
    * Specify how column sizes are written: `Intl.NumberFormat` options or
    * a function. Shares are always written as percentages.
@@ -178,6 +184,7 @@
   const dispatch = createEventDispatcher();
   const tooltipTiming = createTooltipTiming(150, {
     onUnpin: () => setActive(-1, -1),
+    onHide: () => setActive(-1, -1),
   });
   const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const HEADER = 28;
@@ -362,12 +369,13 @@
     hidden = next;
     dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
   }
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-marimekko={true}
@@ -390,7 +398,7 @@
       tabindex="0"
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:pointerleave={() => $tooltipPinned || setActive(-1, -1)}
+      on:pointerleave={tooltipTiming.leave}
       on:click={() => tooltipTiming.togglePin()}
       on:blur={() => $tooltipPinned || setActive(-1, -1)}
     >
@@ -425,7 +433,8 @@
                   `${cell.column}\u0000${cell.key}`}
                 style:--bx-viz-color={cell.color}
                 on:click={(event) => select(c, i, event)}
-                on:mouseenter={() => $tooltipPinned || setActive(c, i)}
+                on:mouseenter={() => tooltipTiming.enter(() => setActive(c, i))}
+                on:mouseleave={tooltipTiming.leave}
               >
                 <rect
                   class:bx--viz-marimekko__box={true}
@@ -491,6 +500,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true} style:block-size="{height}px">
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true} style:block-size="{height}px">

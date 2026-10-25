@@ -96,8 +96,14 @@
   /** Set to `false` to hide the grid */
   export let grid = true;
 
-  /** Set to `false` to hide the tooltip */
+  /**
+   * Set to `false` to hide the tooltip and the ruler, or pass options:
+   * `sort` for the order of its rows, `maxRows` to fold the rest into one
+   * line, `delay` for how long a pointer rests before it shows.
+   * @type {boolean | import("../Chart/model.js").TooltipOptions<T>}
+   */
   export let tooltip = true;
+  $: tooltipProps = tooltip === true ? {} : tooltip === false ? null : tooltip;
 
   /** Set to `true` to show the toolbar, which swaps in a data table */
   export let toolbar = false;
@@ -241,14 +247,15 @@
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="tooltip">
-    {#if tooltip}
+    {#if tooltipProps}
       <slot name="tooltip">
-        <ChartTooltip let:xLabel let:points>
+        <ChartTooltip {...tooltipProps} let:xLabel let:points>
           <div class:bx--viz-chart-tooltip__title={true}>{xLabel}</div>
           {#each points as point (point.series)}
             <ChartTooltipRow label={String(point.series)} value={point.value} />
           {/each}
           <ChartTooltipRow
+            indent
             label={labels.change}
             value={formatChange(changes.get(xLabel) ?? 0)}
           />

@@ -102,8 +102,14 @@
   /** Set to `false` to hide the grid */
   export let grid = true;
 
-  /** Set to `false` to hide the tooltip */
+  /**
+   * Set to `false` to hide the tooltip and the ruler, or pass options:
+   * `sort` for the order of its rows, `maxRows` to fold the rest into one
+   * line, `delay` for how long a pointer rests before it shows.
+   * @type {boolean | import("../Chart/model.js").TooltipOptions<T>}
+   */
   export let tooltip = true;
+  $: tooltipProps = tooltip === true ? {} : tooltip === false ? null : tooltip;
 
   /** Set to `true` to show the toolbar, which swaps in a data table */
   export let toolbar = false;
@@ -229,8 +235,8 @@
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="tooltip">
-    {#if tooltip}
-      <slot name="tooltip"><ChartTooltip /></slot>
+    {#if tooltipProps}
+      <slot name="tooltip"><ChartTooltip {...tooltipProps} /></slot>
     {/if}
   </svelte:fragment>
 </Chart>

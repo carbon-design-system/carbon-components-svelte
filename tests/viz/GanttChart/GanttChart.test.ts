@@ -1,7 +1,11 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import type { ComponentType, SvelteComponent } from "svelte";
 import GanttChartRaw from "../../../src/viz/GanttChart/GanttChart.svelte";
 import { user } from "../../utils/user";
 import GanttChart from "./GanttChart.test.svelte";
+
+// The row type is not inferred through `render`, so the component is widened.
+type AnyChart = ComponentType<SvelteComponent<Record<string, unknown>>>;
 
 const geometry = vi.hoisted(() => ({ calls: 0 }));
 
@@ -166,7 +170,7 @@ describe("GanttChart", () => {
   });
 
   it("fits a narrow container: labels cut to their column, ticks kept apart", () => {
-    render(GanttChartRaw, {
+    render(GanttChartRaw as unknown as AnyChart, {
       props: {
         data: [
           {

@@ -6,7 +6,7 @@
    */
 
   /**
-   * @extends {"../FunnelBars/FunnelBars.svelte"} FunnelBarsProps
+   * @extends {"../FunnelBars/FunnelBars.svelte"} FunnelBarsProps<Id>
    * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number }} select Fires when a stage is activated by click or keyboard. Requires `selectable`.
    * @event {{ stage: import("../utils/funnel.js").FunnelStage<Id>; stats: import("../utils/funnel.js").FunnelStageStats; index: number } | null} hover Fires when the pointer or focus enters a stage, and with `null` when it leaves. Requires `selectable`.
    * @event {{ count: number; domain: [number, number]; stats: { overallRate: number | null; largestDropIndex: number; total: number } }} update Fires after the stages change. Requires `emitUpdate`.

@@ -84,6 +84,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /** Specify the diameter, in pixels. It scales down with its container. */
   export let diameter = 400;
 
@@ -298,12 +304,13 @@
     const x = Math.sin(entry.angle);
     return x > 0.1 ? "start" : x < -0.1 ? "end" : "middle";
   }
-  $: empty = !loading && nodes.length === 0;
+  $: empty = !loading && !error && nodes.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-hive={true}
@@ -388,6 +395,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true} style:block-size="{diameter}px">

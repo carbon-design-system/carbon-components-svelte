@@ -45,6 +45,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /** Specify how many layers each series is cut into */
   export let bands = 3;
 
@@ -148,6 +154,7 @@
   const dispatch = createEventDispatcher();
   const tooltipTiming = createTooltipTiming(150, {
     onUnpin: () => setActive(-1),
+    onHide: () => setActive(-1),
   });
   const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const AXIS = 20;
@@ -157,6 +164,15 @@
   let svg = null;
   /** Index into the distinct xs, or -1. */
   let active = -1;
+  // Whether the chart that drives a synced hover shows its tooltip.
+  let syncShown = false;
+  let tooltipVisible = false;
+  tooltipTiming.shown.subscribe((value) => {
+    tooltipVisible = value;
+    if (value && active >= 0 && !syncShown) {
+      sync?.publish({ kind: "hover", x: horizon.xs[active], shown: true });
+    }
+  });
   /** @type {ReturnType<typeof joinSync> | null} */
   let sync = null;
   let mounted = false;
@@ -219,8 +235,10 @@
   function setActive(index, fromSync = false) {
     if (index === active) return;
     active = index;
+    if (!fromSync) syncShown = false;
     const value = index >= 0 ? horizon.xs[index] : null;
-    if (!fromSync) sync?.publish(value);
+    if (!fromSync)
+      sync?.publish({ kind: "hover", x: value, shown: tooltipVisible });
     dispatch(
       "hover",
       value === null ? null : { x: value, points: pointsAt(value) },
@@ -235,17 +253,22 @@
     sync?.leave();
     sync =
       ready && id
-        ? joinSync(id, (value) =>
+        ? joinSync(id, (message) => {
+            if (message.kind !== "hover") return;
+            // The tooltip keeps the source's timing: it waits while the
+            // source's waits and shows when the source's has.
+            syncShown = message.shown;
             setActive(
-              value === null ? -1 : bisectNearest(horizon.xs, value),
+              message.x === null ? -1 : bisectNearest(horizon.xs, message.x),
               true,
-            ),
-          )
+            );
+          })
         : null;
   }
 
   const onPointerMove = rafThrottle((/** @type {PointerEvent} */ event) => {
     if ($tooltipPinned) return;
+    tooltipTiming.enter();
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
@@ -313,7 +336,7 @@
       sync?.leave();
     };
   });
-  $: tooltipTiming.settle(at);
+  $: tooltipTiming.settle(at, syncShown ? "sync" : undefined);
 
   onMount(() => {
     if (width !== "auto" || !ref) return;
@@ -322,7 +345,7 @@
       if (rounded > 0) measuredWidth = rounded;
     });
   });
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
   $: placeholderHeight = placeholderRows * rowHeight + AXIS;
 </script>
 
@@ -331,6 +354,7 @@
   class:bx--viz-horizon={true}
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   {...$$restProps}
 >
@@ -350,7 +374,7 @@
       aria-label={title || undefined}
       tabindex="0"
       on:pointermove={onPointerMove}
-      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:pointerleave={tooltipTiming.leave}
       on:click={() => tooltipTiming.togglePin()}
       on:click={select}
       on:keydown={onKeydown}
@@ -487,6 +511,15 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+    >
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div

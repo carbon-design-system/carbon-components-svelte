@@ -58,6 +58,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /**
    * Specify the time range shown. Defaults to the first and last event.
    * @type {readonly [TimeLike, TimeLike]}
@@ -216,12 +222,13 @@
     sync(enabled);
     return { update: sync, destroy: () => sync(false) };
   }
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-timeline={true}
@@ -318,7 +325,7 @@
       </tr>
     </tfoot>
   </table>
-  {#if title && (loading || empty)}
+  {#if title && (loading || empty || error)}
     <!-- The table, and its caption with it, is hidden while there is no
          data; the title stays as the figure's own. -->
     <div class:bx--viz-chart__title={true}>{title}</div>
@@ -329,6 +336,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true}>
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true}>

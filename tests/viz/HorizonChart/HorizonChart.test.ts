@@ -98,9 +98,9 @@ describe("HorizonChart", () => {
     const { joinSync } = await import("../../../src/viz/Chart/sync.js");
     const peer = joinSync("ops", () => {});
 
-    peer.publish(2);
+    peer.publish({ kind: "hover", x: 2, shown: true });
     expect(onhover).toHaveBeenLastCalledWith(expect.objectContaining({ x: 2 }));
-    peer.publish(null);
+    peer.publish({ kind: "hover", x: null, shown: false });
     expect(onhover).toHaveBeenLastCalledWith(null);
     peer.leave();
   });

@@ -89,8 +89,10 @@ describe("TileGridMap", () => {
     );
     expect(geometry.calls).toBe(painted);
 
+    // Leaving clears the hover once the tooltip's grace has passed.
     await fireEvent.mouseLeave(tile("TX"));
-    expect(onhover).toHaveBeenLastCalledWith(null);
+    expect(onhover).not.toHaveBeenLastCalledWith(null);
+    await waitFor(() => expect(onhover).toHaveBeenLastCalledWith(null));
   });
 
   it("is a set of toggles with arrow key navigation when selectable", async () => {

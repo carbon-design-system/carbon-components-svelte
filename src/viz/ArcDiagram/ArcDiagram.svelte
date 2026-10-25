@@ -82,6 +82,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /**
    * Specify the width in pixels, or `"auto"` to fill the container.
    * @type {number | "auto"}
@@ -310,12 +316,13 @@
     hidden = next;
     dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
   }
-  $: empty = !loading && nodes.length === 0;
+  $: empty = !loading && !error && nodes.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-arc={true}
@@ -393,6 +400,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true}>
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true}>

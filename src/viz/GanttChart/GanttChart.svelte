@@ -75,6 +75,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /** Set to `true` to make tasks selectable */
   export let selectable = false;
 
@@ -210,6 +216,7 @@
   const dispatch = createEventDispatcher();
   const tooltipTiming = createTooltipTiming(150, {
     onUnpin: () => setActive(-1),
+    onHide: () => setActive(-1),
   });
   const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
   const AXIS = 24;
@@ -367,13 +374,14 @@
     hidden = next;
     dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
   }
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
   $: placeholderHeight = AXIS + placeholderRows * rowHeight + PAD;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-gantt={true}
@@ -398,7 +406,7 @@
       on:keydown={onKeydown}
       use:tooltipTiming.track
       on:click={selectActive}
-      on:pointerleave={() => $tooltipPinned || setActive(-1)}
+      on:pointerleave={tooltipTiming.leave}
       on:click={() => tooltipTiming.togglePin()}
       on:blur={() => $tooltipPinned || setActive(-1)}
     >
@@ -472,7 +480,8 @@
               class:bx--viz-gantt__task--active={i === active}
               class:bx--viz-gantt__task--selected={task.id === selected}
               style:--bx-viz-color={task.color}
-              on:mouseenter={() => $tooltipPinned || setActive(i)}
+              on:mouseenter={() => tooltipTiming.enter(() => setActive(i))}
+              on:mouseleave={tooltipTiming.leave}
             >
               <rect
                 class:bx--viz-gantt__hit={true}
@@ -544,12 +553,18 @@
           value={formatDuration(current.duration, { locale, largest: 1 })}
         />
         <ChartTooltipRow
+          indent
           label={headers.start}
           value={gantt.xLabel(current.from)}
         />
-        <ChartTooltipRow label={headers.end} value={gantt.xLabel(current.to)} />
+        <ChartTooltipRow
+          indent
+          label={headers.end}
+          value={gantt.xLabel(current.to)}
+        />
         {#if current.progress !== null}
           <ChartTooltipRow
+            indent
             label={headers.progress}
             value={formatPercent(current.progress, { locale, digits: 0 })}
           />
@@ -609,6 +624,15 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+    >
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div

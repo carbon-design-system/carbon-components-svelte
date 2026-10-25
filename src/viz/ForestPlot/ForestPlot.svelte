@@ -77,6 +77,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /**
    * Specify how values are written: `Intl.NumberFormat` options or a function.
    * @type {import("../utils/format-compact.js").NumberFormat}
@@ -263,13 +269,14 @@
       if (rounded > 0) measuredWidth = rounded;
     });
   });
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
   $: placeholderHeight = placeholderRows * rowHeight + AXIS;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-forest={true}
@@ -497,6 +504,15 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div
+      class:bx--viz-chart__state={true}
+      style:block-size="{placeholderHeight}px"
+    >
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div

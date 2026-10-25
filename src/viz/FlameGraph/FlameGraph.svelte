@@ -6,7 +6,7 @@
    */
 
   /**
-   * @extends {"../IcicleChart/IcicleChart.svelte"} IcicleChartProps
+   * @extends {"../IcicleChart/IcicleChart.svelte"} IcicleChartProps<T>
    * @event {{ id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; datum: T; index: number } | null} hover Fires when the pointer or focus enters a frame, and with `null` when it leaves.
    * @event {{ node: { id: string; parent: string | null; label: string; depth: number; value: number; own: number; share: number; leaf: boolean; datum: T; index: number }; originalEvent: Event }} select Fires when a frame is activated by click or keyboard. Requires `selectable`.
    */

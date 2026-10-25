@@ -6,7 +6,7 @@
    */
 
   /**
-   * @extends {"../LineChart/LineChart.svelte"} LineChartProps
+   * @extends {"../LineChart/LineChart.svelte"} LineChartProps<T>
    * @event {{ datum: T; series: string | number; index: number; originalEvent: Event }} select Fires when the focused datum is activated by click, Enter, or Space.
    * @event {{ x: number; points: Array<{ datum: T; series: string | number; index: number; y: number }> } | null} hover Fires when the pointer or keyboard focus moves to another x, and with `null` when it leaves.
    * @event {{ series: string | number; hidden: boolean }} legend:toggle Fires when a cohort is shown or hidden.

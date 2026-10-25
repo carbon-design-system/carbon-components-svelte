@@ -6,7 +6,7 @@
    */
 
   /**
-   * @extends {"../Chart/Chart.svelte"} ChartProps
+   * @extends {"../Chart/Chart.svelte"} ChartProps<T>
    * @event {{ datum: T; series: string | number; index: number; originalEvent: Event }} select Fires when the focused datum is activated by click, Enter, or Space.
    * @event {{ x: number; points: Array<{ datum: T; series: string | number; index: number; y: number }> } | null} hover Fires when the pointer or keyboard focus moves to another category, and with `null` when it leaves.
    * @event {{ series: string | number; hidden: boolean }} legend:toggle Fires when a series is shown or hidden.
@@ -44,8 +44,14 @@
   /** Specify how many legend items show before the rest fold behind a "more" button */
   export let maxLegendItems = 8;
 
-  /** Set to `false` to hide the tooltip */
+  /**
+   * Set to `false` to hide the tooltip and the ruler, or pass options:
+   * `sort` for the order of its rows, `maxRows` to fold the rest into one
+   * line, `delay` for how long a pointer rests before it shows.
+   * @type {boolean | import("../Chart/model.js").TooltipOptions<T>}
+   */
   export let tooltip = true;
+  $: tooltipProps = tooltip === true ? {} : tooltip === false ? null : tooltip;
 
   /** Set to `true` to show the toolbar, which swaps in a data table */
   export let toolbar = false;
@@ -123,8 +129,8 @@
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="tooltip">
-    {#if tooltip}
-      <slot name="tooltip"><ChartTooltip /></slot>
+    {#if tooltipProps}
+      <slot name="tooltip"><ChartTooltip {...tooltipProps} /></slot>
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="legend">

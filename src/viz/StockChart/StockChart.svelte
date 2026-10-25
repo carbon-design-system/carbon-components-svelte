@@ -4,6 +4,11 @@
    */
 
   /**
+   * @event {{ datum: T; series: string | number; index: number; originalEvent: Event }} select Fires when the focused price is activated by click, Enter, or Space.
+   * @event {{ x: number; points: Array<{ datum: T; series: string | number; index: number; y: number }> } | null} hover Fires when the pointer or keyboard focus moves to another period, and with `null` when it leaves.
+   */
+
+  /**
    * Specify the rows, one per period, with the open, high, low, and close
    * prices and optionally the volume. Reassign the array to update.
    * @type {ReadonlyArray<T>}
@@ -104,8 +109,14 @@
   /** Set to `false` to hide the grid */
   export let grid = true;
 
-  /** Set to `false` to hide the tooltip */
+  /**
+   * Set to `false` to hide the tooltip and the ruler, or pass options:
+   * `sort` for the order of its rows, `maxRows` to fold the rest into one
+   * line, `delay` for how long a pointer rests before it shows.
+   * @type {boolean | import("../Chart/model.js").TooltipOptions<T>}
+   */
   export let tooltip = true;
+  $: tooltipProps = tooltip === true ? {} : tooltip === false ? null : tooltip;
 
   /** Set to `true` to show the toolbar */
   export let toolbar = false;
@@ -417,13 +428,14 @@
       {/if}
     </svelte:fragment>
     <svelte:fragment slot="tooltip">
-      {#if tooltip}
-        <ChartTooltip let:xLabel let:points>
+      {#if tooltipProps}
+        <ChartTooltip {...tooltipProps} let:xLabel let:points>
           <div class:bx--viz-chart-tooltip__title={true}>{xLabel}</div>
           {#each points as point (point.series)}
             <ChartTooltipRow label={String(point.series)} value={point.value} />
           {/each}
           <ChartTooltipRow
+            indent
             label={text.change}
             value={formatChange(changes.get(xLabel) ?? 0)}
           />
@@ -483,8 +495,8 @@
       {/if}
       <ChartLine series={pane.lines} curve="monotone" points="none" />
       <svelte:fragment slot="tooltip">
-        {#if tooltip}
-          <ChartTooltip />
+        {#if tooltipProps}
+          <ChartTooltip {...tooltipProps} />
         {/if}
       </svelte:fragment>
       <svelte:fragment slot="zoom">

@@ -59,6 +59,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /** Specify the diameter of the circle, in pixels. It scales down with its container. */
   export let diameter = 360;
 
@@ -120,6 +126,7 @@
   const dispatch = createEventDispatcher();
   const tooltipTiming = createTooltipTiming(150, {
     onUnpin: () => setActive(null),
+    onHide: () => setActive(null),
   });
   const { shown: tooltipShown, pinned: tooltipPinned } = tooltipTiming;
 
@@ -295,12 +302,13 @@
     return `rotate(${degrees}) translate(${radius + 8} 0)${group.flip ? " rotate(180)" : ""}`;
   }
   $: tooltipTiming.settle(active !== null && anchor);
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-chord={true}
@@ -323,7 +331,7 @@
       tabindex="0"
       on:keydown={onKeydown}
       use:tooltipTiming.track
-      on:pointerleave={() => $tooltipPinned || setActive(null)}
+      on:pointerleave={tooltipTiming.leave}
       on:click={() => tooltipTiming.togglePin()}
       on:blur={() => $tooltipPinned || setActive(null)}
     >
@@ -341,7 +349,10 @@
             style:--bx-viz-color={link.color}
             d={link.d}
             on:mouseenter={() =>
-              $tooltipPinned || setActive({ kind: "ribbon", index: i })}
+              tooltipTiming.enter(() =>
+                setActive({ kind: "ribbon", index: i }),
+              )}
+            on:mouseleave={tooltipTiming.leave}
           />
         {/each}
         {#each chord.groups as group, i (group.key)}
@@ -356,7 +367,8 @@
             style:--bx-viz-color={group.color}
             on:click={(event) => selectGroup(i, event)}
             on:mouseenter={() =>
-              $tooltipPinned || setActive({ kind: "group", index: i })}
+              tooltipTiming.enter(() => setActive({ kind: "group", index: i }))}
+            on:mouseleave={tooltipTiming.leave}
           >
             <path class:bx--viz-chord__arc={true} d={group.d} />
             <text
@@ -456,6 +468,12 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div class:bx--viz-chart__state={true} style:block-size="{size}px">
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div class:bx--viz-chart__state={true} style:block-size="{size}px">
