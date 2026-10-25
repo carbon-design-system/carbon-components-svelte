@@ -101,6 +101,8 @@ export type ChartContext<T> = {
   isolateSeries(key: ChartSeriesKey): void;
   /** Clear the hover state, as Escape does. */
   clearHover(): void;
+  /** Clears `selection` and `selected`. */
+  clearSelection(): void;
   /** The brushed x range in data space, or `null`. */
   brush: Readable<[number, number] | null>;
   /** Set the brush; `live` while a drag is in progress, so nothing fires until it ends. */

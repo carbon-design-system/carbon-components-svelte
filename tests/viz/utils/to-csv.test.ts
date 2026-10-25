@@ -1,4 +1,4 @@
-import { groupsToCsv } from "../../../src/viz/utils/to-csv.js";
+import { groupsToCsv, groupsToRows } from "../../../src/viz/utils/to-csv.js";
 
 const group = (key: string, xs: number[], ys: number[], hidden = false) => ({
   key,
@@ -60,6 +60,16 @@ describe("groupsToCsv", () => {
     );
 
     expect(csv).toBe("x,series,y\r\n2,'=SUM(A1),2\r\n3,'=SUM(A1),3\r\n");
+  });
+
+  test("separates with a tab for TSV, and lists the rows for JSON", () => {
+    expect(groupsToCsv([group("a,b", [1], [2])], { delimiter: "\t" })).toBe(
+      "x\tseries\ty\r\n1\ta,b\t2\r\n",
+    );
+    expect(groupsToRows([group("a", [1, 2], [2, Number.NaN])])).toEqual([
+      { x: 1, series: "a", y: 2 },
+      { x: 2, series: "a", y: null },
+    ]);
   });
 
   test("uses custom column names", () => {

@@ -810,6 +810,10 @@
       return () => reserved.update((list) => list.filter((e) => e !== entry));
     },
     clearHover: () => clearHover(),
+    clearSelection() {
+      selection = [];
+      selected = null;
+    },
     brush: brushStore,
     setBrush,
     selectedKeys,

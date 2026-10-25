@@ -11,6 +11,15 @@ vi.mock("../../../src/utils/download-file.js", () => ({
   },
 }));
 
+const clipboard = vi.hoisted(() => ({ text: "" }));
+
+vi.mock("../../../src/utils/copy-text.js", () => ({
+  copyText: (text: string) => {
+    clipboard.text = text;
+    return Promise.resolve();
+  },
+}));
+
 beforeEach(() => {
   download.calls = [];
 });
@@ -117,6 +126,33 @@ describe("Chart table view", () => {
     expect(csv).toBe(
       "x,series,y\r\nQ1,a,1200\r\nQ2,a,1500\r\nQ1,b,800\r\nQ3,b,\r\n",
     );
+  });
+
+  it("copies what the chart shows as tab-separated cells, and says so for a moment", async () => {
+    render(ChartTable, { copy: true, hidden: ["b"] });
+
+    await user.click(screen.getByRole("button", { name: "Copy data" }));
+    expect(clipboard.text).toBe(
+      "x\tseries\ty\r\nQ1\ta\t1200\r\nQ2\ta\t1500\r\n",
+    );
+    expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument();
+  });
+
+  it("offers a reset only while something is set, and clears the zoom", async () => {
+    const { rerender } = render(ChartTable);
+    expect(
+      screen.queryByRole("button", { name: "Reset zoom and selection" }),
+    ).toBeNull();
+
+    await rerender({ zoom: [0, 1] });
+    expect(screen.getByTestId("zoom")).toHaveTextContent("0,1");
+    await user.click(
+      screen.getByRole("button", { name: "Reset zoom and selection" }),
+    );
+    expect(screen.getByTestId("zoom")).toHaveTextContent("");
+    expect(
+      screen.queryByRole("button", { name: "Reset zoom and selection" }),
+    ).toBeNull();
   });
 
   it("can drop the CSV button", () => {

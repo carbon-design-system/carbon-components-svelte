@@ -12,7 +12,19 @@ export type CsvOptions = {
   header?: readonly [string, string, string];
   /** Keep to this x range, the zoom window. @default null */
   range?: readonly [number, number] | null;
+  /** The field separator: a comma, or a tab for TSV. @default "," */
+  delimiter?: string;
 };
+
+/**
+ * The rows a chart shows, in long format: one per x and series, with x as
+ * the file would write it. Hidden series, the ghosts of a prior period, and
+ * anything outside `range` are left out.
+ */
+export function groupsToRows(
+  groups: ReadonlyArray<ChartGroup<unknown>>,
+  options?: CsvOptions,
+): Array<{ x: string | number; series: string | number; y: number | null }>;
 
 /**
  * CSV text with one row per x and series. Values are unformatted so the file

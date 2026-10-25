@@ -7,6 +7,8 @@
   export let hidden: ReadonlyArray<string | number> = [];
   export let csv = true;
   export let image: "png" | "svg" | false = "svg";
+  export let copy = false;
+  export let zoom: [number, number] | null = null;
 
   const data = [
     { quarter: "Q1", region: "a", revenue: 1200 },
@@ -25,9 +27,11 @@
   width={640}
   {hidden}
   bind:view
+  bind:zoom
 >
   <ChartLine />
-  <ChartToolbar slot="toolbar" {csv} {image} filename="revenue" />
+  <ChartToolbar slot="toolbar" {csv} {image} {copy} filename="revenue" />
 </Chart>
 
 <output data-testid="view">{view}</output>
+<output data-testid="zoom">{zoom ? zoom.join(",") : ""}</output>

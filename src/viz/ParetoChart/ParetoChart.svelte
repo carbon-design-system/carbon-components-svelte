@@ -43,8 +43,13 @@
   export let tooltip = true;
   $: tooltipProps = tooltip === true ? {} : tooltip === false ? null : tooltip;
 
-  /** Set to `true` to show the toolbar */
+  /**
+   * Set to `true` to show a toolbar with a data table view and downloads,
+   * or pass the toolbar's own props, such as `filename` or `copy`.
+   * @type {boolean | Partial<import("../Chart/ChartToolbar.svelte").ChartToolbarProps>}
+   */
   export let toolbar = false;
+  $: toolbarProps = toolbar === true ? {} : toolbar || {};
 
   /**
    * Specify the view: the chart, or its data table.
@@ -165,7 +170,7 @@
   <slot />
   <svelte:fragment slot="toolbar">
     {#if toolbar}
-      <ChartToolbar />
+      <ChartToolbar {...toolbarProps} />
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="tooltip">

@@ -381,7 +381,9 @@ test.describe("Data visualization", () => {
       Number(await end.getAttribute("aria-valuenow")) - panned,
     ).toBeCloseTo(width, -3);
 
-    await figure.getByRole("button", { name: "Reset zoom" }).click();
+    await figure
+      .getByRole("button", { name: "Reset zoom", exact: true })
+      .click();
     await expect(start).toHaveAttribute("aria-valuenow", String(before));
   });
 });

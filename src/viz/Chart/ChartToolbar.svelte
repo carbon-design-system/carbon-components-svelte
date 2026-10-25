@@ -2,7 +2,9 @@
 
 <script>
   /**
-   * @event {{ kind: "image" | "csv"; error: unknown }} export:error Fires when a download could not be produced, such as an image from a tainted canvas.
+   * @event {{ kind: "image" | "csv" | "copy"; error: unknown }} export:error Fires when a download or a copy could not be produced, such as an image from a tainted canvas.
+   * @event {{ format: "csv" | "tsv" | "json"; rows: number }} copy Fires when the shown data has been copied to the clipboard.
+   * @event {null} reset Fires when the zoom, brush, and selection have been reset from the toolbar.
    */
 
   /** @restProps {div} */
@@ -19,6 +21,26 @@
    * @type {"png" | "svg" | false}
    */
   export let image = "png";
+
+  /**
+   * Set to `true` to show a button that copies what the chart shows to the
+   * clipboard, as `copyFormat`: the series that are not hidden, within the
+   * zoom window.
+   */
+  export let copy = false;
+
+  /**
+   * Specify what the copy button writes: CSV, tab-separated values, which
+   * paste into a spreadsheet as cells, or JSON rows of `x`, `series`, `y`.
+   * @type {"csv" | "tsv" | "json"}
+   */
+  export let copyFormat = "tsv";
+
+  /**
+   * Set to `false` to hide the reset button. It shows only while a zoom, a
+   * brush, or a selection is set, and clears all three.
+   */
+  export let reset = true;
 
   /** Set to `false` to hide the fullscreen button */
   export let fullscreen = true;
@@ -38,6 +60,15 @@
   /** Specify the label of the image download button */
   export let imageLabel = "Download as image";
 
+  /** Specify the label of the copy button */
+  export let copyLabel = "Copy data";
+
+  /** Specify the label of the copy button for a moment after a copy */
+  export let copiedLabel = "Copied";
+
+  /** Specify the label of the reset button */
+  export let resetLabel = "Reset zoom and selection";
+
   /** Specify the label of the fullscreen button */
   export let fullscreenLabel = "Show fullscreen";
 
@@ -47,13 +78,16 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Button from "../../Button/Button.svelte";
   import ChartLineSmooth from "../../icons/ChartLineSmooth.svelte";
+  import Copy from "../../icons/Copy.svelte";
   import Download from "../../icons/Download.svelte";
   import ImageDownload from "../../icons/ImageDownload.svelte";
   import Maximize from "../../icons/Maximize.svelte";
   import Minimize from "../../icons/Minimize.svelte";
+  import Reset from "../../icons/Reset.svelte";
   import TableSplit from "../../icons/TableSplit.svelte";
+  import { copyText } from "../../utils/copy-text.js";
   import { downloadFile } from "../../utils/download-file.js";
-  import { groupsToCsv } from "../utils/to-csv.js";
+  import { groupsToCsv, groupsToRows } from "../utils/to-csv.js";
   import { CHART_CONTEXT } from "./context.js";
 
   const dispatch = createEventDispatcher();
@@ -65,6 +99,11 @@
     view,
     setView,
     zoom,
+    setZoom,
+    brush,
+    setBrush,
+    selectedKeys,
+    clearSelection,
     fullscreen: isFullscreen,
     toggleFullscreen,
     exportImage,
@@ -87,6 +126,48 @@
       );
     } catch (error) {
       dispatch("export:error", { kind: "image", error });
+    }
+  }
+
+  /** Whether anything is set that the reset button would clear. */
+  $: resettable = $zoom !== null || $brush !== null || $selectedKeys.size > 0;
+
+  function resetAll() {
+    if ($zoom !== null) setZoom(null);
+    if ($brush !== null) setBrush(null);
+    if ($selectedKeys.size > 0) clearSelection();
+    dispatch("reset", null);
+  }
+
+  let copied = false;
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let copiedTimer;
+  onMount(() => () => clearTimeout(copiedTimer));
+
+  async function copyData() {
+    const options = {
+      kind: $scales.kind,
+      categories: $scales.categories,
+      range: $zoom,
+    };
+    try {
+      const rows = groupsToRows($groups, options);
+      const text =
+        copyFormat === "json"
+          ? JSON.stringify(rows, null, 2)
+          : groupsToCsv($groups, {
+              ...options,
+              delimiter: copyFormat === "tsv" ? "\t" : ",",
+            });
+      await copyText(text);
+      copied = true;
+      clearTimeout(copiedTimer);
+      copiedTimer = setTimeout(() => {
+        copied = false;
+      }, 2000);
+      dispatch("copy", { format: copyFormat, rows: rows.length });
+    } catch (error) {
+      dispatch("export:error", { kind: "copy", error });
     }
   }
 
@@ -140,6 +221,28 @@
       tooltipPosition="bottom"
       tooltipAlignment="end"
       on:click={download}
+    />
+  {/if}
+  {#if copy}
+    <Button
+      kind="ghost"
+      size="small"
+      icon={Copy}
+      iconDescription={copied ? copiedLabel : copyLabel}
+      tooltipPosition="bottom"
+      tooltipAlignment="end"
+      on:click={copyData}
+    />
+  {/if}
+  {#if reset && resettable}
+    <Button
+      kind="ghost"
+      size="small"
+      icon={Reset}
+      iconDescription={resetLabel}
+      tooltipPosition="bottom"
+      tooltipAlignment="end"
+      on:click={resetAll}
     />
   {/if}
   {#if fullscreen && canFullscreen}
