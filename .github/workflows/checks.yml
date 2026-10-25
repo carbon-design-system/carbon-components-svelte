@@ -1,15 +1,23 @@
+# `paths`, not `paths-ignore`, so the docs files a test imports can opt back
+# in. Keep them in step with the `unit` and `e2e` filters below.
 on:
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "examples/**"
+    paths:
+      - "**"
+      - "!**.md"
+      - "!docs/**"
+      - "!examples/**"
+      - "docs/src/token-reference.ts"
+      - "docs/src/pages/framed/DatePicker/**"
   push:
     branches: [master]
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - "examples/**"
+    paths:
+      - "**"
+      - "!**.md"
+      - "!docs/**"
+      - "!examples/**"
+      - "docs/src/token-reference.ts"
+      - "docs/src/pages/framed/DatePicker/**"
   workflow_dispatch:
 
 concurrency:
@@ -79,6 +87,7 @@ jobs:
               - 'package.json'
               - 'bun.lock'
               - '.github/**'
+              - 'docs/src/token-reference.ts'
             e2e:
               - 'src/**'
               - 'css/**'
@@ -89,6 +98,7 @@ jobs:
               - 'package.json'
               - 'bun.lock'
               - '.github/**'
+              - 'docs/src/pages/framed/DatePicker/**'
             css:
               - 'css/**'
               - 'crassus.config.ts'

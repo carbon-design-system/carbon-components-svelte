@@ -54,6 +54,8 @@ const REPO: Record<string, string> = {
   "scripts/build-css.ts": `import { watch } from "node:fs";\n// @depends-on css/**`,
   "crassus.config.ts": `import path from "node:path";`,
   "tests/scripts/crassus-config.test.ts": `import config from "../../crassus.config";`,
+  "docs/src/token-reference.ts": "export const groups = [];",
+  "tests/docs/token-reference.test.ts": `import { groups } from "../../docs/src/token-reference";`,
 };
 
 function context(files: Iterable<string> = Object.keys(REPO)): ParseContext {
@@ -570,6 +572,14 @@ describe("planTests", () => {
       reasons: [],
     });
     expect(plan(["tests/Gone/Gone.test.ts"]).reasons).toEqual([]);
+  });
+
+  it("selects the tests that import an ignored file", () => {
+    expect(plan(["docs/src/token-reference.ts"])).toEqual({
+      unit: "tests/css/unknown.test.ts tests/docs/token-reference.test.ts",
+      e2e: "none",
+      reasons: [],
+    });
   });
 
   it("runs a whole suite when a deleted helper leaves no importer", () => {

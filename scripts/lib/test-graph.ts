@@ -497,14 +497,17 @@ export function planTests(
   const relevant: string[] = [];
 
   for (const file of changed) {
-    if (IGNORED.some((re) => re.test(file))) continue;
+    // The graph reads a few files under ignored paths, such as the token
+    // page's data, because a test imports them.
+    const read = graph.has(file);
+    if (!read && IGNORED.some((re) => re.test(file))) continue;
     if (SELECTOR.includes(file)) {
       reasons.push(`${file}: test selector changed`);
       full.unit = full.e2e = true;
     } else if (COMPAT_HARNESS.test(file)) {
       reasons.push(`${file}: Svelte 3/4 harness changed`);
       full.unit = true;
-    } else if (GRAPH_ROOTS.some((root) => file.startsWith(root))) {
+    } else if (read || GRAPH_ROOTS.some((root) => file.startsWith(root))) {
       relevant.push(file);
     } else {
       reasons.push(`${file}: outside the dependency graph`);
