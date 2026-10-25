@@ -29,6 +29,8 @@
   export let width: number | "auto" = 640;
   export let aspectRatio: number | undefined = undefined;
   export let maxRows: number | undefined = undefined;
+  export let zoomable = false;
+  export let brush: [number, number] | null = null;
   let chart: Chart<Row> | undefined;
   // biome-ignore lint/correctness/noUnusedVariables: read in the template
   let nextDay = 100;
@@ -55,6 +57,8 @@
 <Chart
   bind:this={chart}
   {maxRows}
+  {zoomable}
+  bind:brush
   {transition}
   {data}
   {x}
@@ -91,6 +95,7 @@
 
 <output data-testid="hidden">{hidden.join(",")}</output>
 <output data-testid="zoom">{zoom ? zoom.join(",") : ""}</output>
+<output data-testid="brush">{brush ? brush.join(",") : ""}</output>
 <output data-testid="selected"
   >{selected ? `${selected.series}:${selected.index}` : ""}</output
 >

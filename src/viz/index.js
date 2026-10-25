@@ -23,6 +23,7 @@ export { default as ChartBins } from "./Chart/ChartBins.svelte";
 export { default as ChartBoxes } from "./Chart/ChartBoxes.svelte";
 export { default as ChartBrush } from "./Chart/ChartBrush.svelte";
 export { default as ChartCandles } from "./Chart/ChartCandles.svelte";
+export { default as ChartColors } from "./Chart/ChartColors.svelte";
 export { default as ChartContours } from "./Chart/ChartContours.svelte";
 export { default as ChartCrosshair } from "./Chart/ChartCrosshair.svelte";
 export { default as ChartDataTable } from "./Chart/ChartDataTable.svelte";

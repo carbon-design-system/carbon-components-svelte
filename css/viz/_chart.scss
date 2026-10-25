@@ -101,11 +101,15 @@
   }
 
   // Title on one side, toolbar on the other.
+  // The heading and the end group share a row while there is room, and
+  // the end group drops under the heading when there is not: a title never
+  // wraps letter by letter to make room for buttons.
   .#{$prefix}--viz-chart__header {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: $carbon--spacing-05;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
     margin-block-end: $carbon--spacing-03;
     min-block-size: to-rem(32px);
   }
@@ -230,9 +234,15 @@
 
   .#{$prefix}--viz-chart__heading {
     display: flex;
+    flex: 1 1 to-rem(160px);
     flex-direction: column;
     min-inline-size: 0;
     row-gap: to-rem(2px);
+  }
+
+  .#{$prefix}--viz-chart__title,
+  .#{$prefix}--viz-chart__subtitle {
+    overflow-wrap: normal;
   }
 
   .#{$prefix}--viz-chart__subtitle {
@@ -244,8 +254,9 @@
   // Freshness, actions, and the toolbar, pushed to the end of the header.
   .#{$prefix}--viz-chart__end {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    column-gap: $carbon--spacing-03;
+    gap: $carbon--spacing-02 $carbon--spacing-03;
     margin-inline-start: auto;
   }
 
@@ -433,8 +444,11 @@
   // A long label wraps rather than widening the box without end; a value
   // never wraps or truncates.
   .#{$prefix}--viz-chart-tooltip__label {
+    // Wraps between words, never inside one.
+    min-inline-size: to-rem(48px);
     max-inline-size: 16rem;
     white-space: normal;
+    overflow-wrap: normal;
   }
 
   .#{$prefix}--viz-chart-tooltip__value {
@@ -643,26 +657,8 @@
     outline-offset: 1px;
   }
 
-  .#{$prefix}--viz-zoom__reset {
-    padding: 0;
-    border: 0;
-    appearance: none;
-    background: none;
-    color: $link-primary;
-    cursor: pointer;
-    margin-block-start: $carbon--spacing-02;
 
-    @include type-style("label-01");
-  }
 
-  .#{$prefix}--viz-zoom__reset:hover {
-    text-decoration: underline;
-  }
-
-  .#{$prefix}--viz-zoom__reset:focus {
-    outline: 2px solid $focus;
-    outline-offset: 1px;
-  }
 
   // Direction is the whole point of a waterfall, so it gets the status
   // colors, and a total the neutral. Connectors keep the steps readable

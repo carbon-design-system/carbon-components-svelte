@@ -301,10 +301,27 @@
   export let syncId = undefined;
 
   /**
+   * Set to `false` to hide the reset button in the header. It shows only
+   * while a zoom, a brush, or a selection is set, and clears all three.
+   */
+  export let reset = true;
+
+  /** Specify the label of the reset button */
+  export let resetLabel = "Reset zoom";
+
+  /**
+   * Set to `true` to zoom from the plot itself: Ctrl or Cmd with the wheel
+   * or a pinch zooms about the pointer, Shift with a drag pans while
+   * zoomed, and `+`, `-`, and `0` zoom from the keyboard. Scrolling the page
+   * over a chart is left alone.
+   */
+  export let zoomable = false;
+
+  /**
    * Specify what the channel shares: hover alone by default, or also the
-   * zoom range, the brush, and the selection, so a click in one chart
-   * reaches the others.
-   * @type {ReadonlyArray<"hover" | "zoom" | "brush" | "selection">}
+   * zoom range, the brush, the selection, and the series the legend has
+   * hidden, so a click in one chart reaches the others.
+   * @type {ReadonlyArray<"hover" | "zoom" | "brush" | "selection" | "hidden">}
    */
   export let sync = ["hover"];
 
@@ -328,8 +345,16 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+    tick,
+  } from "svelte";
   import { derived, get, writable } from "svelte/store";
+  import Button from "../../Button/Button.svelte";
+  import Reset from "../../icons/Reset.svelte";
   import { rafThrottle } from "../../utils/raf-throttle.js";
   import { toAccessor } from "../utils/accessor.js";
   import { afterFirstPaint } from "../utils/after-first-paint.js";
@@ -345,7 +370,7 @@
   import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import ChartDataTable from "./ChartDataTable.svelte";
   import { createCanvasLayer } from "./canvas-layer.js";
-  import { CHART_CONTEXT } from "./context.js";
+  import { CHART_COLORS_CONTEXT, CHART_CONTEXT } from "./context.js";
   import {
     buildScales,
     decorateGroups,
@@ -796,6 +821,7 @@
       }
       hidden = isHidden ? hidden.filter((k) => k !== key) : [...hidden, key];
       dispatch("legend:toggle", { series: key, hidden: !isHidden });
+      publishSync({ kind: "hidden", hidden });
     },
     /** @param {string | number} key */
     isolateSeries(key) {
@@ -813,6 +839,7 @@
           dispatch("legend:toggle", { series: k, hidden: next.includes(k) });
         }
       }
+      publishSync({ kind: "hidden", hidden });
     },
     usePointHover() {
       pointRequests += 1;
@@ -946,7 +973,18 @@
     band: wantsBand,
     locale,
   });
-  $: built = decorateGroups(grouped, { hidden, secondary, colors, palette });
+  // Colors a `ChartColors` around the page pinned to series keys, under
+  // this chart's own.
+  /** @type {import("svelte/store").Readable<Record<string, import("../utils/tokens.js").VizColor>> | undefined} */
+  const pageColors = getContext(CHART_COLORS_CONTEXT);
+  $: pinned_ = pageColors ? $pageColors : undefined;
+  $: mergedColors = pinned_ ? { ...pinned_, ...colors } : colors;
+  $: built = decorateGroups(grouped, {
+    hidden,
+    secondary,
+    colors: mergedColors,
+    palette,
+  });
   $: settle(built, xDomain, yDomain, zero, $included, y2Domain, yScale, zoom);
 
   /**
@@ -1210,6 +1248,8 @@
             zoom = message.range;
           } else if (message.kind === "brush" && sync.includes("brush")) {
             brush = message.range;
+          } else if (message.kind === "hidden" && sync.includes("hidden")) {
+            hidden = [...message.hidden];
           } else if (
             message.kind === "selection" &&
             sync.includes("selection")
@@ -1377,6 +1417,7 @@
   }
 
   const onPointerMove = rafThrottle((/** @type {PointerEvent} */ event) => {
+    if (onPanMove(event)) return;
     if (!svg || get(pinned)) return;
     // Back over the plot: a pending hide from leaving is off.
     tooltipTiming.enter();
@@ -1421,7 +1462,105 @@
    * @param {PointerEvent} event
    */
   function onPointerDown(event) {
+    if (onPanStart(event)) return;
     if (event.pointerType !== "mouse") onPointerMove(event);
+  }
+
+  /**
+   * The x range the plot shows, zoomed or not, in data units.
+   * @returns {[number, number]}
+   */
+  function shownRange() {
+    const current = get(zoomStore);
+    return current ? [current[0], current[1]] : get(fullX).domain;
+  }
+
+  /**
+   * Zoom the shown range by `factor` about `anchor`, kept inside the data.
+   * @param {number} factor Under 1 zooms in.
+   * @param {number} [anchor] A data x; the middle by default.
+   */
+  function zoomBy(factor, anchor) {
+    const [lo, hi] = shownRange();
+    const full = get(fullX).domain;
+    const at = anchor ?? (lo + hi) / 2;
+    const minSpan = (full[1] - full[0]) / 1000;
+    const span = Math.max(minSpan, (hi - lo) * factor);
+    let from = at - (at - lo) * (span / (hi - lo));
+    let to = from + span;
+    if (from < full[0]) {
+      to += full[0] - from;
+      from = full[0];
+    }
+    if (to > full[1]) {
+      from -= to - full[1];
+      to = full[1];
+    }
+    setZoom([Math.max(full[0], from), Math.min(full[1], to)]);
+  }
+
+  /** @param {WheelEvent} event */
+  function onWheel(event) {
+    if (!zoomable || !(event.ctrlKey || event.metaKey) || !svg) return;
+    event.preventDefault();
+    const rect = svg.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const current = get(scales);
+    const box = svg.viewBox.baseVal;
+    const px = current.horizontal
+      ? ((event.clientY - rect.top) / rect.height) * box.height
+      : ((event.clientX - rect.left) / rect.width) * box.width;
+    zoomBy(Math.exp(event.deltaY * 0.002), current.x.invert(px));
+  }
+
+  // Shift with a drag pans the zoom window across the data.
+  /** @type {{ pointerId: number; at: number; range: [number, number] } | null} */
+  let pan = null;
+
+  /** @param {PointerEvent} event */
+  function onPanStart(event) {
+    if (!zoomable || !event.shiftKey || !get(zoomStore) || !svg) return false;
+    pan = {
+      pointerId: event.pointerId,
+      at: event.clientX,
+      range: shownRange(),
+    };
+    svg.setPointerCapture(event.pointerId);
+    return true;
+  }
+
+  /** @param {PointerEvent} event */
+  function onPanMove(event) {
+    if (!pan || !svg) return false;
+    const rect = svg.getBoundingClientRect();
+    const full = get(fullX).domain;
+    const [lo, hi] = pan.range;
+    const perPixel = (hi - lo) / Math.max(1, rect.width);
+    let shift = -(event.clientX - pan.at) * perPixel;
+    shift = Math.max(full[0] - lo, Math.min(full[1] - hi, shift));
+    zoom = [lo + shift, hi + shift];
+    return true;
+  }
+
+  /** @param {PointerEvent} event */
+  function onPanEnd(event) {
+    if (!pan) return;
+    svg?.releasePointerCapture(event.pointerId);
+    pan = null;
+    setZoom(get(zoomStore));
+  }
+
+  /** Whether anything is set that the reset button would clear. */
+  $: resettable =
+    $zoomStore !== null || $brushStore !== null || $selectedKeys.size > 0;
+
+  function resetAll() {
+    if (get(zoomStore) !== null) setZoom(null);
+    if (get(brushStore) !== null) setBrush(null);
+    if (selection.length > 0 || selected) {
+      selection = [];
+      selected = null;
+    }
   }
 
   /** @param {MouseEvent} event */
@@ -1528,7 +1667,25 @@
   }
 
   /** @param {KeyboardEvent} event */
+  /** The x the brush grew from, while Shift and an arrow key extend it. */
+  /** @type {number | null} */
+  let brushAnchor = null;
+
   function onKeydown(event) {
+    if (zoomable) {
+      if (event.key === "+" || event.key === "=") {
+        event.preventDefault();
+        return zoomBy(0.5);
+      }
+      if (event.key === "-") {
+        event.preventDefault();
+        return zoomBy(2);
+      }
+      if (event.key === "0" && get(zoomStore)) {
+        event.preventDefault();
+        return setZoom(null);
+      }
+    }
     if (pointRequests > 0) return onPointKeydown(event);
     const visible = get(groups).filter(
       (group) => !group.hidden && group.xs.length > 0,
@@ -1544,6 +1701,7 @@
     const [next, previous, seriesNext, seriesPrevious] = flipped
       ? ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"]
       : ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"];
+    const wasAt = focusIndex < 0 ? 0 : Math.min(last, focusIndex);
 
     switch (event.key) {
       case next:
@@ -1571,6 +1729,7 @@
         return;
       case "Escape":
         focusIndex = -1;
+        brushAnchor = null;
         pinned.set(false);
         clearHover();
         if (brush) setBrush(null);
@@ -1581,6 +1740,15 @@
     event.preventDefault();
     if (focusIndex < 0) focusIndex = 0;
     const target = visible[Math.min(focusSeries, visible.length - 1)];
+    // Shift with an arrow along the x scale grows a brush from where the
+    // focus was, the keyboard's drag.
+    if (event.shiftKey && (event.key === next || event.key === previous)) {
+      if (brushAnchor === null) brushAnchor = group.xs[wasAt];
+      const at = target.xs[Math.min(focusIndex, target.xs.length - 1)];
+      setBrush([Math.min(brushAnchor, at), Math.max(brushAnchor, at)]);
+    } else {
+      brushAnchor = null;
+    }
     hoverAt(target.xs[Math.min(focusIndex, target.xs.length - 1)]);
   }
 
@@ -1635,6 +1803,17 @@
       {#if asOfText}
         <div class:bx--viz-chart__as-of={true}>{asOfLabel} {asOfText}</div>
       {/if}
+      {#if reset && resettable}
+        <Button
+          kind="ghost"
+          size="small"
+          icon={Reset}
+          iconDescription={resetLabel}
+          tooltipPosition="bottom"
+          tooltipAlignment="end"
+          on:click={resetAll}
+        />
+      {/if}
       <slot name="actions" />
       <slot name="toolbar" />
     </div>
@@ -1671,7 +1850,10 @@
       tabindex="0"
       on:pointermove={onPointerMove}
       on:pointerdown={onPointerDown}
+      on:pointerup={onPanEnd}
+      on:pointercancel={onPanEnd}
       on:pointerleave={onPointerLeave}
+      on:wheel={onWheel}
       on:click={onClick}
       on:keydown={onKeydown}
       on:blur={() => clearHover()}

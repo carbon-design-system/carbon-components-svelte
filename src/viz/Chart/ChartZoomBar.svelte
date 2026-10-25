@@ -22,9 +22,6 @@
   /** Specify the label of the end handle */
   export let endLabel = "Range end";
 
-  /** Specify the label of the button that shows everything again */
-  export let resetLabel = "Reset zoom";
-
   /**
    * Specify the shape drawn in the bar, as `{ x, y }` points in data space,
    * instead of the sum of the chart's own series. A chart in a stack of
@@ -203,14 +200,5 @@
         ></button>
       {/each}
     </div>
-    {#if $zoom}
-      <button
-        type="button"
-        class:bx--viz-zoom__reset={true}
-        on:click={() => apply([full[0], full[1]])}
-      >
-        {resetLabel}
-      </button>
-    {/if}
   </div>
 {/if}

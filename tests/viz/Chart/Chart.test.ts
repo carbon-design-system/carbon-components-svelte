@@ -335,6 +335,40 @@ describe("Chart", () => {
     ).toBeInTheDocument();
   });
 
+  it("zooms from the keyboard when zoomable, about the middle, and resets with 0", async () => {
+    render(Chart, { zoomable: true });
+    svg().focus();
+    await user.keyboard("+");
+    expect(screen.getByTestId("zoom")).toHaveTextContent("0.5,1.5");
+    await user.keyboard("-");
+    expect(screen.getByTestId("zoom")).toHaveTextContent("");
+    await user.keyboard("+");
+    await user.keyboard("0");
+    expect(screen.getByTestId("zoom")).toHaveTextContent("");
+  });
+
+  it("offers a reset in the header only while something is set, and clears it", async () => {
+    const { rerender } = render(Chart);
+    expect(screen.queryByRole("button", { name: "Reset zoom" })).toBeNull();
+
+    await rerender({ zoom: [0, 1] });
+    await user.click(screen.getByRole("button", { name: "Reset zoom" }));
+    expect(screen.getByTestId("zoom")).toHaveTextContent("");
+    expect(screen.queryByRole("button", { name: "Reset zoom" })).toBeNull();
+  });
+
+  it("grows a brush from the focused point with Shift and an arrow key", async () => {
+    render(Chart);
+    svg().focus();
+    await user.keyboard("{ArrowRight}");
+    await user.keyboard("{Shift>}{ArrowRight}{ArrowRight}{/Shift}");
+    expect(screen.getByTestId("brush")).toHaveTextContent("0,2");
+    await user.keyboard("{Shift>}{ArrowLeft}{/Shift}");
+    expect(screen.getByTestId("brush")).toHaveTextContent("0,1");
+    await user.keyboard("{Escape}");
+    expect(screen.getByTestId("brush")).toHaveTextContent("");
+  });
+
   it("lets the height follow the width under an aspect ratio", () => {
     render(Chart, { aspectRatio: 2 });
     expect(svg()).toHaveAttribute("viewBox", "0 0 640 320");

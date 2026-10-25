@@ -2,7 +2,7 @@
  * Shared state between charts that declare the same `syncId`.
  */
 
-export type SyncKind = "hover" | "zoom" | "brush" | "selection";
+export type SyncKind = "hover" | "zoom" | "brush" | "selection" | "hidden";
 
 export type SyncMessage =
   | {
@@ -14,6 +14,7 @@ export type SyncMessage =
     }
   | { kind: "zoom"; range: [number, number] | null }
   | { kind: "brush"; range: [number, number] | null }
+  | { kind: "hidden"; hidden: ReadonlyArray<string | number> }
   | {
       kind: "selection";
       /** Data-space x of the selected datum, and its series. */

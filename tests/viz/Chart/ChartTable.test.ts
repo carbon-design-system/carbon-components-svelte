@@ -138,23 +138,6 @@ describe("Chart table view", () => {
     expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument();
   });
 
-  it("offers a reset only while something is set, and clears the zoom", async () => {
-    const { rerender } = render(ChartTable);
-    expect(
-      screen.queryByRole("button", { name: "Reset zoom and selection" }),
-    ).toBeNull();
-
-    await rerender({ zoom: [0, 1] });
-    expect(screen.getByTestId("zoom")).toHaveTextContent("0,1");
-    await user.click(
-      screen.getByRole("button", { name: "Reset zoom and selection" }),
-    );
-    expect(screen.getByTestId("zoom")).toHaveTextContent("");
-    expect(
-      screen.queryByRole("button", { name: "Reset zoom and selection" }),
-    ).toBeNull();
-  });
-
   it("can drop the CSV button", () => {
     render(ChartTable, { csv: false });
 
