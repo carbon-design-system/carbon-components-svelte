@@ -1,7 +1,7 @@
 // @ts-check
 // Shared value/label logic for Slider and RangeSlider.
 
-import { resolveLayoutDirection } from "./layout-direction.js";
+import { resolveLayoutDirection } from "./inline-direction.js";
 
 /**
  * Resolve the `aria-valuetext` for a numeric slider value. A value sitting

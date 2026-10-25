@@ -1,5 +1,5 @@
 // @ts-check
-import { resolveLayoutDirection } from "../utils/layout-direction.js";
+import { resolveLayoutDirection } from "../utils/inline-direction.js";
 
 /**
  * Native `<dialog>` / `[popover]` ancestors used when portalling the flatpickr
