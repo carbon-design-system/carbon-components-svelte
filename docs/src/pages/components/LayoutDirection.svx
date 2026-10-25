@@ -291,7 +291,7 @@ This covers Tooltip, TooltipIcon, TooltipDefinition, Toggletip, the AILabel expl
 
 ## Portalled menus
 
-A menu or tooltip that renders in a portal leaves the subtree in the DOM, so it would lose the direction. `LayoutDirection` carries it to the portal. This covers `portalMenu` on Dropdown, ComboBox, and MultiSelect, a portalled DatePicker calendar, and every component that portals a tooltip or menu.
+A menu or tooltip that renders in a portal leaves the subtree in the DOM, so it would lose the direction. `LayoutDirection` carries it to the portal. A plain `dir` nearer the trigger wins, as for the styles. This covers `portalMenu` on Dropdown, ComboBox, and MultiSelect, a portalled DatePicker calendar, and every component that portals a tooltip or menu.
 
 <LayoutDirection dir="rtl" lang="ar">
   <Dropdown

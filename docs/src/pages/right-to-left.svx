@@ -148,7 +148,7 @@ OverflowMenu's `flipped` moves the menu to the button's inline end, which is its
 
 ## Portals
 
-A component that renders a menu, calendar, or tooltip in a [Portal](/components/Portal) moves it to the end of `<body>`. Inside a `LayoutDirection`, the portal takes its direction. A bare `dir` attribute on a wrapper does not reach the portal, which takes the direction of `<html>`. Set `dir` on `<html>` or use `LayoutDirection`.
+A component that renders a menu, calendar, or tooltip in a [Portal](/components/Portal) moves it to the end of `<body>`. The portal keeps the direction of the place it left: the nearest `dir` attribute, as for the styles, else the `LayoutDirection`'s. So a `Dropdown` with `portalMenu` in a `dir="ltr"` field of an Arabic form opens left to right.
 
 ## When the direction is read
 
