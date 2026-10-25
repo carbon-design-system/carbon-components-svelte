@@ -13,23 +13,17 @@
     display: inline-flex;
   }
 
+  // The divider sits at the trigger's inline start. In RTL the trigger sits
+  // left of the primary action, so it moves to the trigger's right edge.
   .#{$prefix}--combo-button .#{$prefix}--combo-button__trigger:not(:focus) {
-    box-shadow: to-rem(-1px) 0 0 0 $button-separator;
-
-    // In RTL the trigger sits left of the primary action, so the divider
-    // moves to the trigger's right edge.
-    [dir="rtl"] & {
-      box-shadow: to-rem(1px) 0 0 0 $button-separator;
-    }
+    box-shadow: calc(#{to-rem(-1px)} * var(--ccs-inline-sign, 1)) 0 0 0
+      $button-separator;
   }
 
   .#{$prefix}--combo-button
     .#{$prefix}--combo-button__trigger.#{$prefix}--btn--disabled {
-    box-shadow: to-rem(-1px) 0 0 0 $text-on-color-disabled;
-
-    [dir="rtl"] & {
-      box-shadow: to-rem(1px) 0 0 0 $text-on-color-disabled;
-    }
+    box-shadow: calc(#{to-rem(-1px)} * var(--ccs-inline-sign, 1)) 0 0 0
+      $text-on-color-disabled;
   }
 
   .#{$prefix}--combo-button__trigger .#{$prefix}--btn__icon {

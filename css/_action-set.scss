@@ -42,7 +42,7 @@
     .#{$prefix}--btn--ghost,
   .#{$prefix}--action-set:not(.#{$prefix}--action-set--stacking)
     .#{$prefix}--btn--danger-ghost {
-    padding-left: $carbon--spacing-05;
+    padding-inline-start: $carbon--spacing-05;
   }
 
   // Order: ghost/danger-ghost first, tertiary next, danger then primary
@@ -172,9 +172,9 @@
   .#{$prefix}--action-set .#{$prefix}--btn .#{$prefix}--inline-loading {
     position: absolute;
     top: 50%;
-    right: 0;
     width: $carbon--spacing-07;
     transform: translateY(-50%);
+    @include ccs-inset-inline($end: 0);
   }
 
   // Sticks to the nearest scroll container, not the viewport, so a save

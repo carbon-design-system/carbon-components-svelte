@@ -468,18 +468,18 @@
             withOverlay={false}
             description={loadingDescription}
             class="bx--btn__loading"
-            style={hasIconOnly ? "margin-left: 0" : undefined}
+            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
           />
         {:else if $$slots.icon}
           <slot
             name="icon"
-            style={hasIconOnly ? "margin-left: 0" : undefined}
+            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
             {...iconProps}
           />
         {:else if icon}
           <svelte:component
             this={icon}
-            style={hasIconOnly ? "margin-left: 0" : undefined}
+            style={hasIconOnly ? "margin-inline-start: 0" : undefined}
             {...iconProps}
           />
         {/if}
@@ -520,18 +520,18 @@
           withOverlay={false}
           description={loadingDescription}
           class="bx--btn__loading"
-          style={hasIconOnly ? "margin-left: 0" : undefined}
+          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
         />
       {:else if $$slots.icon}
         <slot
           name="icon"
-          style={hasIconOnly ? "margin-left: 0" : undefined}
+          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
           {...iconProps}
         />
       {:else if icon}
         <svelte:component
           this={icon}
-          style={hasIconOnly ? "margin-left: 0" : undefined}
+          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
           {...iconProps}
         />
       {/if}
@@ -573,18 +573,18 @@
           withOverlay={false}
           description={loadingDescription}
           class="bx--btn__loading"
-          style={hasIconOnly ? "margin-left: 0" : undefined}
+          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
         />
       {:else if $$slots.icon}
         <slot
           name="icon"
-          style={hasIconOnly ? "margin-left: 0" : undefined}
+          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
           {...iconProps}
         />
       {:else if icon}
         <svelte:component
           this={icon}
-          style={hasIconOnly ? "margin-left: 0" : undefined}
+          style={hasIconOnly ? "margin-inline-start: 0" : undefined}
           {...iconProps}
         />
       {/if}
@@ -626,18 +626,18 @@
         withOverlay={false}
         description={loadingDescription}
         class="bx--btn__loading"
-        style={hasIconOnly ? "margin-left: 0" : undefined}
+        style={hasIconOnly ? "margin-inline-start: 0" : undefined}
       />
     {:else if $$slots.icon}
       <slot
         name="icon"
-        style={hasIconOnly ? "margin-left: 0" : undefined}
+        style={hasIconOnly ? "margin-inline-start: 0" : undefined}
         {...iconProps}
       />
     {:else if icon}
       <svelte:component
         this={icon}
-        style={hasIconOnly ? "margin-left: 0" : undefined}
+        style={hasIconOnly ? "margin-inline-start: 0" : undefined}
         {...iconProps}
       />
     {/if}

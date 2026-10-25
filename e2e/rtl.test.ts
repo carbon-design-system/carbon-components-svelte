@@ -1069,3 +1069,134 @@ test.describe("right-to-left text fields", () => {
     expect(await shadow()).toBe(ltr.replace("-2px 0px", "2px 0px"));
   });
 });
+
+/**
+ * Every button in each case of the buttons fixture, its label and its icon,
+ * as start and end offsets from the case's box, plus each button's divider
+ * as its box shadow's x offset.
+ */
+function buttonOffsets(page: Page) {
+  return page.evaluate(async () => {
+    await document.fonts.ready;
+    const rtl = document.documentElement.dir === "rtl";
+    const parts: Record<string, { start: number; end: number }> = {};
+    const dividers: Record<string, number> = {};
+    for (const root of document.querySelectorAll<HTMLElement>(
+      "[data-testid]",
+    )) {
+      const name = root.dataset.testid;
+      // A modal case is measured from its footer.
+      const frame = root.querySelector(".bx--modal-footer") ?? root;
+      const box = frame.getBoundingClientRect();
+      const record = (key: string, left: number, right: number) => {
+        if (right - left <= 0) return;
+        parts[key] = rtl
+          ? {
+              start: Math.round(box.right - right),
+              end: Math.round(box.right - left),
+            }
+          : {
+              start: Math.round(left - box.left),
+              end: Math.round(right - box.left),
+            };
+      };
+      const buttons = root.matches(".bx--btn")
+        ? [root]
+        : [...frame.querySelectorAll(".bx--btn")];
+      buttons.forEach((button, i) => {
+        const key = `${name} button[${i}]`;
+        const rect = button.getBoundingClientRect();
+        record(key, rect.left, rect.right);
+
+        // The label's own text, not the box it sits in.
+        const text = [...button.childNodes].filter(
+          (node) =>
+            node.nodeType === Node.TEXT_NODE && node.textContent?.trim(),
+        );
+        if (text.length > 0) {
+          const range = document.createRange();
+          range.setStartBefore(text[0]);
+          range.setEndAfter(text[text.length - 1]);
+          const label = range.getBoundingClientRect();
+          record(`${key} label`, label.left, label.right);
+        }
+
+        for (const part of [".bx--btn__icon", ".bx--btn__loading"]) {
+          const node = button.querySelector(part)?.getBoundingClientRect();
+          if (node) record(`${key} ${part}`, node.left, node.right);
+        }
+
+        const shadow = getComputedStyle(button).boxShadow;
+        const x = shadow.match(/(-?[\d.]+)px/);
+        dividers[key] = x ? Number.parseFloat(x[1]) : 0;
+      });
+    }
+    return { parts, dividers };
+  });
+}
+
+const BUTTON_KINDS = [
+  "primary",
+  "secondary",
+  "tertiary",
+  "ghost",
+  "danger",
+  "danger-tertiary",
+  "danger-ghost",
+];
+
+test.describe("right-to-left buttons", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/rtl-buttons.html");
+  });
+
+  test("mirrors labels, icons, sets and modal footers", async ({ page }) => {
+    const ltr = await buttonOffsets(page);
+    // Guard against a selector that stops matching.
+    expect(Object.keys(ltr.parts).length).toBeGreaterThan(100);
+
+    await setDirection(page, "rtl");
+    const rtl = await buttonOffsets(page);
+    expect
+      .soft(Object.keys(rtl.parts).sort())
+      .toEqual(Object.keys(ltr.parts).sort());
+    // One list, so a failure names every part that stayed put.
+    const unmirrored = Object.entries(ltr.parts).flatMap(([name, box]) => {
+      const actual = rtl.parts[name];
+      if (!actual) return [];
+      const off =
+        Math.abs(actual.start - box.start) > 1 ||
+        Math.abs(actual.end - box.end) > 1;
+      return off
+        ? [
+            `${name}: ${box.start}-${box.end} became ${actual.start}-${actual.end}`,
+          ]
+        : [];
+    });
+    expect.soft(unmirrored).toEqual([]);
+
+    // The label starts as far in as in LTR (16px, 17px for ghosts), and the
+    // icon follows it, at the inline end.
+    for (const kind of BUTTON_KINDS) {
+      const button = `kind-${kind} button[0]`;
+      const label = rtl.parts[`${button} label`];
+      const icon = rtl.parts[`${button} .bx--btn__icon`];
+      expect
+        .soft(label?.start, `${kind} label start`)
+        .toBe(ltr.parts[`${button} label`]?.start);
+      expect
+        .soft(icon && label && icon.start >= label.end, `${kind} icon side`)
+        .toBe(true);
+    }
+
+    // Dividers sit at each later button's inline start.
+    expect(
+      Object.values(ltr.dividers).filter((x) => x !== 0).length,
+    ).toBeGreaterThan(2);
+    expect(rtl.dividers).toEqual(
+      Object.fromEntries(
+        Object.entries(ltr.dividers).map(([name, x]) => [name, -x || 0]),
+      ),
+    );
+  });
+});
