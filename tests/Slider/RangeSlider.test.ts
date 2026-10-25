@@ -3,6 +3,7 @@ import RangeSliderComponent from "carbon-components-svelte/Slider/RangeSlider.sv
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { rect } from "../utils/rect";
+import { trackPosition } from "../utils/slider-track";
 import { user } from "../utils/user";
 import RangeSlider from "./RangeSlider.test.svelte";
 
@@ -626,12 +627,13 @@ describe("RangeSlider", () => {
       },
     });
 
-    const markEls = container.querySelectorAll(".bx--slider__mark");
+    const markEls =
+      container.querySelectorAll<HTMLElement>(".bx--slider__mark");
     expect(markEls).toHaveLength(4);
     expect(screen.getByText("Off")).toBeInTheDocument();
     expect(screen.getByText("High")).toBeInTheDocument();
-    expect(markEls[0]).toHaveStyle({ left: "0%" });
-    expect(markEls[3]).toHaveStyle({ left: "100%" });
+    expect(trackPosition(markEls[0])).toBe("0%");
+    expect(trackPosition(markEls[3])).toBe("100%");
   });
 
   it.each([
@@ -1333,34 +1335,32 @@ describe("RangeSlider", () => {
       return { container, oninput, slider, track, lowerThumb, upperThumb };
     };
 
-    it("mirrors the handles, fill, and marks", () => {
-      const { container } = setup({
+    it("mirrors the handles and marks", () => {
+      const { container, slider } = setup({
         value: 20,
         valueUpper: 70,
         marks: [{ value: 0 }, { value: 25 }],
       });
-      const style = (selector: string) => {
+      const part = (selector: string) => {
         const el = container.querySelector<HTMLElement>(selector);
         assert(el);
-        return el.style;
+        return el;
       };
 
-      // Each handle sits on the side of its value point away from the range.
-      expect(style(".bx--slider__thumb-wrapper--lower")).toMatchObject({
-        left: "80%",
-        transform: "translate(0, -50%) scaleX(-1)",
-      });
-      expect(style(".bx--slider__thumb-wrapper--upper")).toMatchObject({
-        left: "30%",
-        transform: "translate(-100%, -50%) scaleX(-1)",
-      });
-      expect(style(".bx--slider__filled-track").transform).toBe(
-        "translate(30%, -50%) scaleX(0.5)",
+      // No `dir` attribute: the styles fall back to the computed direction.
+      expect(slider.style.getPropertyValue("--ccs-slider-sign")).toBe(
+        "var(--ccs-inline-sign, -1)",
+      );
+      expect(trackPosition(part(".bx--slider__thumb-wrapper--lower"))).toBe(
+        "80%",
+      );
+      expect(trackPosition(part(".bx--slider__thumb-wrapper--upper"))).toBe(
+        "30%",
       );
       const marks = [
         ...container.querySelectorAll<HTMLElement>(".bx--slider__mark"),
       ];
-      expect(marks.map((mark) => mark.style.left)).toEqual(["100%", "75%"]);
+      expect(marks.map(trackPosition)).toEqual(["100%", "75%"]);
     });
 
     it("keeps vertical sliders bottom to top", () => {

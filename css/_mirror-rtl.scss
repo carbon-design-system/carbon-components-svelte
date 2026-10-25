@@ -8,10 +8,12 @@
 /// `dir="ltr"` region inside an RTL page stops the mirror. Emits last so the
 /// class wins a tie with a component's own icon rule.
 ///
-/// `--ccs-inline-sign` is `-1` under `dir="rtl"` and unset (read as `1`)
-/// otherwise. Multiply an inline offset that has no logical property, such
-/// as a box shadow's, by it: `calc(-1px * var(--ccs-inline-sign, 1))`. A
-/// `[dir="rtl"]` twin of such a rule outweighs every rule it ties.
+/// `--ccs-inline-sign` is `-1` under `dir="rtl"`, `1` under `dir="ltr"`,
+/// and unset outside any `dir`. Multiply an inline offset that has no
+/// logical property, such as a box shadow's, by it:
+/// `calc(-1px * var(--ccs-inline-sign, 1))`. A `[dir="rtl"]` twin of such
+/// a rule outweighs every rule it ties. Slider reads the unset case to
+/// fall back to the direction its script read.
 ///
 /// `--ccs-rtl` and `--ccs-ltr` are the switches `ccs-dir()` reads: empty
 /// for the nearest `dir`, `initial` for the other.
@@ -27,7 +29,7 @@
 
   [dir="ltr"] {
     --ccs-mirror-rtl: initial;
-    --ccs-inline-sign: initial;
+    --ccs-inline-sign: 1;
     --ccs-rtl: initial;
     --ccs-ltr: ;
   }

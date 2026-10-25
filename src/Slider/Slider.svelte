@@ -189,6 +189,9 @@
     getValueText,
     isTrackRtl,
     snapToStep,
+    TRACK_MIRROR,
+    trackLeft,
+    trackSign,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -279,12 +282,13 @@
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
 
   // In RTL, `min` sits at the right end of a horizontal track. The
-  // track's nearest `dir` gives the direction, else a LayoutDirection
-  // (which also gives it on the server), else the computed direction.
-  // Read at mount, when a LayoutDirection changes, and again when the
-  // pointer enters, the thumb takes focus, or a key is pressed. Nothing
-  // reports a `dir` change on an ancestor, so until then the slider
-  // keeps the direction it last read.
+  // styles place the thumbs, fill and marks by the nearest `dir` (see
+  // `trackSign`), so server-rendered markup sits right before the script
+  // runs, and follows a `dir` change. The script reads the direction for
+  // the keys and the pointer: the track's nearest `dir`, else a
+  // LayoutDirection, else the computed direction. Read at mount, when a
+  // LayoutDirection changes, and again when the pointer enters, the thumb
+  // takes focus, or a key is pressed.
   const layoutDirection = getLayoutDirection();
   let horizontalRtl = false;
 
@@ -303,14 +307,6 @@
 
   $: syncDirection(orientation, $layoutDirection, trackRef);
 
-  /**
-   * @param {number} percent
-   * @param {boolean} rtl
-   * @returns {string}
-   */
-  function toLeft(percent, rtl) {
-    return `${rtl ? 100 - percent : percent}%`;
-  }
   $: resolvedMarks = resolveSliderMarks(marks, min, max, step);
   $: markLabels = getMarkLabels(resolvedMarks);
   $: hasMarkLabels = markLabels.size > 0;
@@ -366,6 +362,9 @@
       class:bx--slider--with-mark-labels={hasMarkLabels}
       class:bx--slider--vertical={orientation === "vertical"}
       style:max-width={fullWidth ? "none" : undefined}
+      style:--ccs-slider-sign={orientation === "vertical"
+        ? undefined
+        : trackSign(horizontalRtl)}
       use:pointerDrag={{
         onStart: handleDragStart,
         onMove: calcValue,
@@ -379,9 +378,7 @@
         aria-disabled={disabled || undefined}
         tabindex={disabled ? undefined : 0}
         class:bx--slider__thumb={true}
-        style:left={orientation === "vertical"
-          ? undefined
-          : toLeft(left, horizontalRtl)}
+        style:left={orientation === "vertical" ? undefined : trackLeft(left)}
         style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
         aria-valuemax={max}
         aria-valuemin={min}
@@ -463,9 +460,7 @@
         class:bx--slider__filled-track={true}
         style:transform={orientation === "vertical"
           ? `translate(-50%, 0) scaleY(${left / 100})`
-          : horizontalRtl
-            ? `translate(100%, -50%) scaleX(${-left / 100})`
-            : `translate(0, -50%) scaleX(${left / 100})`}
+          : `${TRACK_MIRROR} translate(0, -50%) scaleX(${left / 100})`}
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
@@ -476,7 +471,7 @@
               class:bx--slider__mark={true}
               style:left={orientation === "vertical"
                 ? undefined
-                : toLeft(percent, horizontalRtl)}
+                : trackLeft(percent)}
               style:top={orientation === "vertical"
                 ? `${100 - percent}%`
                 : undefined}
