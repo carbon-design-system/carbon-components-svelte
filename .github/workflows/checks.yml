@@ -65,6 +65,7 @@ jobs:
       # `all`, `none`, or space-separated test files; empty (= all) off PRs.
       unit-tests: ${{ steps.select.outputs.unit-tests }}
       e2e-tests: ${{ steps.select.outputs.e2e-tests }}
+      e2e-shards: ${{ steps.shards.outputs.e2e }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -140,6 +141,20 @@ jobs:
         id: select
         if: github.event_name == 'pull_request'
         run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
+
+      # One e2e shard for a small selection. A second one costs a runner and
+      # ~40 s of container start, install and CSS build to save ~0.27 s of
+      # tests per file, so it only pays for itself past ~20 files.
+      - name: Pick e2e shards
+        id: shards
+        env:
+          TESTS: ${{ steps.select.outputs.e2e-tests }}
+        run: |
+          case "$TESTS" in
+            "" | all) shards="[1,2]" ;;
+            *) [ "$(wc -w <<< "$TESTS")" -le 20 ] && shards="[1]" || shards="[1,2]" ;;
+          esac
+          echo "e2e=$shards" >> "$GITHUB_OUTPUT"
 
   # Informational: prints the compiled-rule delta, specificity histogram and
   # size movement against the base branch in the job summary, and annotates
@@ -237,7 +252,7 @@ jobs:
   # Starts as soon as the test selection is known, alongside the unit tests,
   # rather than after them: waiting put both suites on the critical path.
   test-e2e:
-    name: test-e2e (${{ matrix.shard }}/2)
+    name: test-e2e (${{ matrix.shard }}/${{ strategy.job-total }})
     needs: [changes]
     if: |
       (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true') &&
@@ -246,7 +261,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2]
+        shard: ${{ fromJSON(needs.changes.outputs.e2e-shards) }}
     # Official image includes Chromium/Firefox/WebKit + system deps
     # Bump tag with @playwright/test in bun.lock.
     container:
@@ -284,7 +299,7 @@ jobs:
         shell: bash
         env:
           TESTS: ${{ needs.changes.outputs.e2e-tests }}
-          SHARD: ${{ matrix.shard }}/2
+          SHARD: ${{ matrix.shard }}/${{ strategy.job-total }}
         run: |
           case "$TESTS" in
             "" | all) bunx playwright test --project=chromium --shard="$SHARD" --pass-with-no-tests ;;
