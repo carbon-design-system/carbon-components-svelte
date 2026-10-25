@@ -55,6 +55,7 @@ export { default as DeltaIndicator } from "./DeltaIndicator/DeltaIndicator.svelt
 export { default as DonutChart } from "./DonutChart/DonutChart.svelte";
 export { default as DumbbellChart } from "./DumbbellChart/DumbbellChart.svelte";
 export { default as EventTimeline } from "./EventTimeline/EventTimeline.svelte";
+export { default as FilterChips } from "./FilterChips/FilterChips.svelte";
 export { default as FlameGraph } from "./FlameGraph/FlameGraph.svelte";
 export { default as ForestPlot } from "./ForestPlot/ForestPlot.svelte";
 export { default as FunnelBars } from "./FunnelBars/FunnelBars.svelte";
@@ -103,6 +104,7 @@ export { default as StockChart } from "./StockChart/StockChart.svelte";
 export { default as SunburstChart } from "./SunburstChart/SunburstChart.svelte";
 export { default as TargetIndicator } from "./TargetIndicator/TargetIndicator.svelte";
 export { default as TileGridMap } from "./TileGridMap/TileGridMap.svelte";
+export { default as TimeRangePicker } from "./TimeRangePicker/TimeRangePicker.svelte";
 export { default as TreeChart } from "./TreeChart/TreeChart.svelte";
 export { default as TreemapChart } from "./TreemapChart/TreemapChart.svelte";
 // biome-ignore lint/performance/noReExportAll: a types-only module, which sveld keeps in index.d.ts
@@ -121,6 +123,11 @@ export {
   sequentialColor,
   sequentialStep,
 } from "./utils/color-scale.js";
+export {
+  createDashboard,
+  filterRows,
+  withinRange,
+} from "./utils/dashboard.js";
 export { describeSeries } from "./utils/describe-series.js";
 export { lttb } from "./utils/downsample-lttb.js";
 export {
@@ -166,6 +173,13 @@ export {
 } from "./utils/thresholds.js";
 export { niceDomain, tickStep, ticks } from "./utils/ticks.js";
 export { resolveTiles, TILE_LAYOUTS } from "./utils/tile-grid.js";
+export {
+  createTimeRange,
+  presetLabel,
+  presetLength,
+  timeRangeFromParam,
+  timeRangeToParam,
+} from "./utils/time-range.js";
 export {
   niceTimeDomain,
   timeTickFormat,

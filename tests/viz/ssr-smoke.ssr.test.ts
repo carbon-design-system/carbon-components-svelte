@@ -4,11 +4,12 @@ import { JSDOM } from "jsdom";
 import type { ComponentType, SvelteComponent } from "svelte";
 import { render } from "svelte/server";
 import barrel from "../../src/viz/index.js?raw";
-import { stripHydrationMarkers } from "../utils/ssr";
+import { RANDOM_ID, stripHydrationMarkers } from "../utils/ssr";
 
 // Every chart renders on the server with default props, and twice the same.
 // Charts built on `Chart` take an `id`, under which every id they write is
-// fixed; the rest count ids from a module counter, which this normalizes.
+// fixed; the rest count ids from a module counter, and a core control inside
+// one may draw a random id, which this normalizes.
 
 const BARREL_EXPORT = /default as (\w+) } from "\.\/(.+\.svelte)"/g;
 const BAD_VALUE = /\bundefined\b|\[object Object\]|\bNaN\b/;
@@ -54,6 +55,14 @@ function findBadValues(document: Document) {
 function normalize(html: string) {
   const ids = new Map<string, string>();
   return stripHydrationMarkers(html)
+    .replace(RANDOM_ID, (id) => {
+      let stable = ids.get(id);
+      if (stable === undefined) {
+        stable = `id-${ids.size + 1}`;
+        ids.set(id, stable);
+      }
+      return stable;
+    })
     .replace(COUNTED_ID, (id) => {
       let stable = ids.get(id);
       if (stable === undefined) {

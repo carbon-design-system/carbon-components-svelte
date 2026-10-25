@@ -1,0 +1,19 @@
+/// TimeRangePicker: a switcher of presets, with two dates behind "Custom".
+/// @access private
+/// @group viz
+@mixin viz-time-range-picker {
+  .#{$prefix}--viz-time-range {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-time-range .#{$prefix}--content-switcher {
+    inline-size: auto;
+  }
+}
+
+@include exports("viz-time-range-picker") {
+  @include viz-time-range-picker;
+}
