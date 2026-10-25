@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "rm -rf ../tests/.svelte-check && svelte-check --workspace ../tests --tsconfig ./tsconfig.check.json --tsgo --fail-on-warnings"
+    "test:types": "rm -rf ../tests/.svelte-check && svelte-check --workspace ../tests --tsconfig ../tests-svelte4/tsconfig.check.json --tsgo --fail-on-warnings"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
