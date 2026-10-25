@@ -6,7 +6,9 @@
     Heatmap,
     LineChart,
     SequenceDiagram,
+    Sparkline,
     TreemapChart,
+    WordCloudChart,
   } from "carbon-components-svelte/viz";
 
   const revenue = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
@@ -49,6 +51,12 @@
       requests: day.length * block.length,
     })),
   );
+  const terms = [
+    { term: "timeout", mentions: 42 },
+    { term: "retry", mentions: 30 },
+    { term: "latency", mentions: 18 },
+    { term: "quota", mentions: 9 },
+  ];
   const messages = [
     { from: "Browser", to: "API", label: "GET /items" },
     { from: "API", to: "Browser", label: "200 OK", kind: "return" },
@@ -106,5 +114,11 @@
     label="label"
     kind="kind"
     title="Sequence"
+  />
+  <WordCloudChart data={terms} word="term" value="mentions" title="Words" />
+  <Sparkline
+    values={[4, 7, 3, 9, 5, 12, 8]}
+    color="success"
+    label="Requests, last week"
   />
 </div>

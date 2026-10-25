@@ -51,6 +51,14 @@
   .#{$prefix}--sparkline--info {
     --bx-viz-color: #{$support-info};
   }
+
+  // The color is the reading: success, error, warning. Forced colors would
+  // paint every sparkline the same, so it keeps its own, as a swatch does.
+  @media (forced-colors: active) {
+    .#{$prefix}--sparkline {
+      forced-color-adjust: none;
+    }
+  }
 }
 
 @include exports("viz-sparkline") {

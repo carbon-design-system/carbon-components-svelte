@@ -19,6 +19,20 @@ test.describe("Data visualization a11y", () => {
     });
   }
 
+  test("has no detectable accessibility violations under forced colors", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName === "webkit", "WebKit does not force colors");
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/viz-forced-colors.html");
+    await expect(page.locator("figure").first()).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).include("#app").analyze();
+
+    expect(results.violations).toEqual([]);
+  });
+
   test("has no detectable accessibility violations in the data table view", async ({
     page,
   }) => {

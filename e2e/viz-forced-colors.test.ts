@@ -23,7 +23,26 @@ test.describe("viz forced colors", () => {
     test.setTimeout(120_000);
     await page.emulateMedia({ forcedColors: "active" });
     await page.goto("/viz-forced-colors.html");
-    await expect(page.locator("figure")).toHaveCount(8);
+    await expect(page.locator("figure")).toHaveCount(9);
+  });
+
+  test("words take the canvas text color, and a sparkline keeps its status color", async ({
+    page,
+  }) => {
+    const canvasText = await systemColor(page, "CanvasText");
+    const words = await page.evaluate(() =>
+      [...document.querySelectorAll(".bx--viz-word-cloud__word")].map(
+        (el) => getComputedStyle(el).fill,
+      ),
+    );
+    expect(words.length).toBeGreaterThan(0);
+    for (const fill of words) expect.soft(fill).toBe(canvasText);
+
+    const stroke = await page
+      .locator(".bx--sparkline__line")
+      .first()
+      .evaluate((el) => getComputedStyle(el).stroke);
+    expect(stroke).not.toBe(canvasText);
   });
 
   test("SVG text takes the canvas text color", async ({ page }) => {
@@ -119,7 +138,7 @@ test("print hides the pointer-driven parts and keeps a chart whole", async ({
 }) => {
   test.setTimeout(120_000);
   await page.goto("/viz-forced-colors.html");
-  await expect(page.locator("figure")).toHaveCount(8);
+  await expect(page.locator("figure")).toHaveCount(9);
   const line = page.locator("figure[aria-label='Line'] .bx--viz-chart__svg");
   const box = await line.boundingBox();
   if (!box) throw new Error("no line plot");
@@ -135,4 +154,14 @@ test("print hides the pointer-driven parts and keeps a chart whole", async ({
     .locator("figure[aria-label='Line']")
     .evaluate((el) => getComputedStyle(el).breakInside);
   expect(breakInside).toBe("avoid");
+  // A cell drawn as a background keeps its color on paper.
+  const adjust = await page
+    .locator("[style*='--bx-viz-color']")
+    .first()
+    .evaluate(
+      (el) =>
+        getComputedStyle(el).getPropertyValue("print-color-adjust") ||
+        getComputedStyle(el).getPropertyValue("-webkit-print-color-adjust"),
+    );
+  expect(adjust).toBe("exact");
 });

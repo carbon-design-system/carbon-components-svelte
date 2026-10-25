@@ -892,15 +892,26 @@
     .#{$prefix}--viz-crosshair__badge text,
     .#{$prefix}--viz-axis__label,
     .#{$prefix}--viz-axis__title,
-    .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__label,
-    .#{$prefix}--viz-threshold--success .#{$prefix}--viz-threshold__label,
-    .#{$prefix}--viz-threshold--info .#{$prefix}--viz-threshold__label,
+    .#{$prefix}--viz-threshold__label,
     .#{$prefix}--viz-marker__label {
       fill: CanvasText;
     }
 
-    .#{$prefix}--viz-axis__line {
+    .#{$prefix}--viz-axis__line,
+    .#{$prefix}--viz-ruler,
+    .#{$prefix}--viz-crosshair__y,
+    .#{$prefix}--viz-waterfall__connector,
+    .#{$prefix}--viz-dumbbells__bar,
+    .#{$prefix}--viz-violins__box {
       stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-hexbin__cell--active {
+      stroke: Highlight;
+    }
+
+    .#{$prefix}--viz-zoom__overview {
+      fill: GrayText;
     }
 
     .#{$prefix}--viz-labels__label,
@@ -951,6 +962,14 @@
       break-inside: avoid;
     }
 
+    // Browsers drop backgrounds on paper. A mark drawn as a background, as
+    // a heatmap cell, a status cell, or a legend swatch is, carries its
+    // color inline, and that color is the data.
+    [style*="--bx-viz-color"] {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
     .#{$prefix}--viz-chart-tooltip,
     .#{$prefix}--viz-chart-toolbar,
     .#{$prefix}--viz-ruler,
@@ -965,8 +984,19 @@
     .#{$prefix}--viz-dumbbells__pair,
     .#{$prefix}--viz-waterfall__bar,
     .#{$prefix}--viz-boxes__box,
+    .#{$prefix}--viz-candles__candle,
+    .#{$prefix}--viz-violins__violin,
+    .#{$prefix}--viz-swarm__group,
+    .#{$prefix}--viz-bars__bar,
+    .#{$prefix}--viz-line__path--dimmed,
+    .#{$prefix}--viz-area__fill--dimmed,
+    .#{$prefix}--viz-area__line--dimmed,
     .#{$prefix}--viz-lollipops__pop {
       transition: none;
+    }
+
+    .#{$prefix}--viz-chart__skeleton {
+      animation: none;
     }
   }
 

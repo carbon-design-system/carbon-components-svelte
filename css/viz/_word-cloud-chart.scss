@@ -54,6 +54,14 @@
       transition: none;
     }
   }
+
+  // A word is text: forced colors leave an SVG fill alone, so a word in the
+  // theme's gray would vanish on a contrast canvas.
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-word-cloud__word {
+      fill: CanvasText;
+    }
+  }
 }
 
 @include exports("viz-word-cloud-chart") {
