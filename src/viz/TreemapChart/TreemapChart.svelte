@@ -53,6 +53,12 @@
   /** Specify the text shown when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
   /** Specify the width of the map over its height. The width follows the container. */
   export let aspectRatio = 2;
 
@@ -120,6 +126,17 @@
   export let selected = null;
 
   /**
+   * Specify the group to show on its own, its leaves filling the box.
+   * Bind it to drill in from `select`, whose leaf names its group; the
+   * button above the tiles steps back out.
+   * @type {string | null}
+   */
+  export let root = null;
+
+  /** Specify the label of the button that steps back out of a group */
+  export let upLabel = "All";
+
+  /**
    * Specify the locale.
    * @type {string}
    */
@@ -132,9 +149,10 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { rovingFocus } from "../../utils/roving-focus.js";
   import { toAccessor } from "../utils/accessor.js";
+  import { afterFirstPaint } from "../utils/after-first-paint.js";
   import { formatPercent, resolveFormat } from "../utils/format-compact.js";
   import {
     colorGroups,
@@ -150,6 +168,19 @@
   const MIN_WIDTH = 0.06;
   const MIN_HEIGHT = 0.1;
   const MIN_HEIGHT_FOR_VALUE = 0.16;
+  // The gap around a group, in pixels, which shows the hierarchy when
+  // neighbors share a hue. Cells sit in the box's own space, inset by it,
+  // so each moves in a straight line when the data changes, instead of
+  // riding a group that is moving too.
+  const GAP = 2;
+
+  // Cells may move once the map has painted in place; never on the way in.
+  let settled = false;
+  onMount(() =>
+    afterFirstPaint(() => {
+      settled = true;
+    }),
+  );
 
   let focusedIndex = 0;
   /** @type {string | null} */
@@ -161,12 +192,21 @@
   $: groupKeysAll = listGroups(data, groupOf);
   $: groupColorMap = colorGroups(groupKeysAll, palette, colors);
   $: hiddenSet = new Set(hidden.map(String));
-  $: visibleRows = dropGroups(data, groupOf, hiddenSet);
+  // Inside a group, only its rows tile, with no grouping of their own.
+  $: drilled = root !== null && groupOf !== undefined;
+  $: visibleRows = drilled
+    ? data.filter(
+        (row, i) =>
+          String(
+            /** @type {NonNullable<typeof groupOf>} */ (groupOf)(row, i),
+          ) === root,
+      )
+    : dropGroups(data, groupOf, hiddenSet);
   // Depends on the data and the shape only, so hover never rebuilds it.
   $: map = buildTreemap(visibleRows, {
     value: valueOf,
     label: labelOf,
-    group: groupOf,
+    group: drilled ? undefined : groupOf,
     aspect: aspectRatio,
     palette,
     colors: groupColorMap,
@@ -248,22 +288,35 @@
     hidden = next;
     dispatch("legend:toggle", { series: key, hidden: !hiddenSet.has(key) });
   }
-  $: empty = !loading && data.length === 0;
+  $: empty = !loading && !error && data.length === 0;
 </script>
 
 <figure
   class:bx--viz-chart--loading={loading}
   class:bx--viz-chart--empty={empty}
+  class:bx--viz-chart--error={error}
   aria-busy={loading ? "true" : undefined}
   bind:this={ref}
   class:bx--viz-treemap={true}
-  class:bx--viz-treemap--transition={transition}
+  class:bx--viz-treemap--transition={transition && settled}
   class:bx--viz-treemap--selectable={selectable}
   class:bx--viz-treemap--emphasis={activeId !== null}
   {...$$restProps}
 >
   {#if title}
     <figcaption class:bx--viz-chart__title={true}>{title}</figcaption>
+  {/if}
+  {#if drilled}
+    <button
+      type="button"
+      class:bx--viz-treemap__up={true}
+      on:click={() => {
+        root = null;
+      }}
+    >
+      <span class:bx--viz-treemap__up-label={true}>{upLabel}</span>
+      <span class:bx--viz-treemap__up-current={true}>{root}</span>
+    </button>
   {/if}
   <!-- The box keeps its shape through padding, so it needs no measurement. -->
   <div
@@ -276,10 +329,6 @@
         <li
           class:bx--viz-treemap__group={true}
           style:--bx-viz-color={entry.color}
-          style:left="{entry.rect.x}%"
-          style:top="{entry.rect.y}%"
-          style:width="{entry.rect.width}%"
-          style:height="{entry.rect.height}%"
         >
           {#if map.grouped}
             <span class:bx--visually-hidden={true}>{entry.key}</span>
@@ -297,10 +346,16 @@
                 class:bx--viz-treemap__leaf--active={leaf.id === activeId}
                 class:bx--viz-treemap__leaf--selected={selectable &&
                   leaf.id === selected}
-                style:left="{leaf.rect.x}%"
-                style:top="{leaf.rect.y}%"
-                style:width="{leaf.rect.width}%"
-                style:height="{leaf.rect.height}%"
+                style:left="calc({leaf.rect.x}% + {GAP *
+                  (1 - 2 * leaf.within.x)}px)"
+                style:top="calc({leaf.rect.y}% + {GAP *
+                  (1 - 2 * leaf.within.y)}px)"
+                style:width="calc({leaf.rect.width}% - {2 *
+                  GAP *
+                  leaf.within.width}px)"
+                style:height="calc({leaf.rect.height}% - {2 *
+                  GAP *
+                  leaf.within.height}px)"
                 title="{leaf.key}: {write(leaf)}"
                 on:mouseenter={() => setActive(leaf)}
                 on:mouseleave={() => setActive(null)}
@@ -353,6 +408,16 @@
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
       ></div>
+    </div>
+  {:else if error}
+    <div
+      class:bx--viz-chart__state={true}
+      style:padding-block-start="calc(100% / {aspectRatio})"
+      style:min-block-size="0"
+    >
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     </div>
   {:else if empty}
     <div

@@ -25,19 +25,18 @@
     inset: 0;
   }
 
-  .#{$prefix}--viz-treemap__group,
+  // A group spans the box and names its cells; the cells carry its gap, so
+  // each moves on its own, in a straight line, when the data changes.
+  .#{$prefix}--viz-treemap__group {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
   .#{$prefix}--viz-treemap__leaf {
     position: absolute;
-  }
-
-  // The gap between groups is wider than the one between their cells, which
-  // is what shows the hierarchy when neighbors share a hue.
-  .#{$prefix}--viz-treemap__group {
-    border: to-rem(2px) solid $background;
-  }
-
-  .#{$prefix}--viz-treemap__leaf {
     overflow: hidden;
+    pointer-events: auto;
     border: to-rem(1px) solid $background;
     background: var(--bx-viz-color, #{$border-interactive});
     transition: opacity $duration--fast-02 carbon--motion(standard, productive);
@@ -112,7 +111,6 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .#{$prefix}--viz-treemap--transition .#{$prefix}--viz-treemap__group,
     .#{$prefix}--viz-treemap--transition .#{$prefix}--viz-treemap__leaf {
       transition:
         left $duration--moderate-02 motion(standard, productive),
@@ -150,6 +148,38 @@
     .#{$prefix}--viz-treemap__leaf {
       transition: none;
     }
+  }
+
+  // Inside a group: a breadcrumb back out, as the sunburst's center is.
+  .#{$prefix}--viz-treemap__up {
+    display: inline-flex;
+    align-items: baseline;
+    gap: $carbon--spacing-03;
+    margin-block-end: $carbon--spacing-03;
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    border: 0;
+    background: $layer;
+    color: $text-primary;
+    cursor: pointer;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-treemap__up:hover {
+    background: $layer-hover;
+  }
+
+  .#{$prefix}--viz-treemap__up:focus {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--viz-treemap__up-label {
+    color: $link-primary;
+  }
+
+  .#{$prefix}--viz-treemap__up-current {
+    font-weight: 600;
   }
 
   @media (forced-colors: active) {

@@ -23,8 +23,10 @@ export type TreemapLeaf<T> = {
   rows: T[];
   /** Width and height as shares of the whole box, to judge what text fits. */
   span: { width: number; height: number };
-  /** Percentages of the group's box. */
+  /** Percentages of the whole box. */
   rect: TreemapRect;
+  /** Fractions of its group's box, 0 to 1. */
+  within: TreemapRect;
 };
 
 export type TreemapGroup<T> = {

@@ -14,6 +14,7 @@
   export let selectable = false;
   export let valueType: "value" | "percent" | "none" = "value";
   export let selected: string | null = null;
+  export let root: string | null = null;
   export let onselect: (detail: unknown) => void = () => {};
   export let onhover: (detail: unknown) => void = () => {};
 </script>
@@ -28,6 +29,7 @@
   {valueType}
   {selectable}
   bind:selected
+  bind:root
   data-testid="treemap"
   on:select={(e) => onselect(e.detail)}
   on:hover={(e) => onhover(e.detail)}

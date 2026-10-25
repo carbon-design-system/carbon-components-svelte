@@ -7,10 +7,12 @@ import { squarify } from "../utils/treemap.js";
 
 /**
  * Sum `rows` by label, tile the groups into a box of the given aspect ratio,
- * then tile each group's leaves inside it. Rectangles are percentages: a
- * group's of the whole, a leaf's of its group, which is how nested absolutely
- * positioned elements want them. Without a `group` accessor every leaf is its
- * own group. Groups and leaves come out largest first.
+ * then tile each group's leaves inside it. Rectangles are percentages of
+ * the whole box, for groups and leaves alike, so a leaf moves straight to
+ * its new place when the data changes; `within` is the leaf's share of its
+ * group, from which the component insets it by the group gap. Without a
+ * `group` accessor every leaf is its own group. Groups and leaves come out
+ * largest first.
  *
  * @template T
  * @param {ReadonlyArray<T>} rows
@@ -94,10 +96,16 @@ export function buildTreemap(rows, options) {
             rows: leaf.rows,
             span: { width: cell.width / aspect, height: cell.height },
             rect: {
-              x: box.width > 0 ? ((cell.x - box.x) / box.width) * 100 : 0,
-              y: box.height > 0 ? ((cell.y - box.y) / box.height) * 100 : 0,
-              width: box.width > 0 ? (cell.width / box.width) * 100 : 0,
-              height: box.height > 0 ? (cell.height / box.height) * 100 : 0,
+              x: (cell.x / aspect) * 100,
+              y: cell.y * 100,
+              width: (cell.width / aspect) * 100,
+              height: cell.height * 100,
+            },
+            within: {
+              x: box.width > 0 ? (cell.x - box.x) / box.width : 0,
+              y: box.height > 0 ? (cell.y - box.y) / box.height : 0,
+              width: box.width > 0 ? cell.width / box.width : 0,
+              height: box.height > 0 ? cell.height / box.height : 0,
             },
           };
         }),

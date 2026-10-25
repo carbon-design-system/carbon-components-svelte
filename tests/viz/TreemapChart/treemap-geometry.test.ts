@@ -36,7 +36,7 @@ describe("buildTreemap", () => {
     expect(map.groups[2].leaves.map((leaf) => leaf.key)).toEqual(["cdn"]);
   });
 
-  test("gives each group a share of the box, and each leaf a share of its group", () => {
+  test("gives each group and each leaf a share of the box, and each leaf its share of its group", () => {
     const map = buildTreemap(rows, { ...base, group: (row: Row) => row.team });
     const area = (r: { width: number; height: number }) =>
       (r.width * r.height) / 100;
@@ -44,16 +44,18 @@ describe("buildTreemap", () => {
     expect(area(map.groups[0].rect)).toBeCloseTo(60);
     expect(area(map.groups[1].rect)).toBeCloseTo(35);
     const [compute, storage] = map.groups[0].leaves;
-    expect(area(compute.rect)).toBeCloseTo((40 / 60) * 100);
-    expect(area(storage.rect)).toBeCloseTo((20 / 60) * 100);
+    expect(area(compute.rect)).toBeCloseTo(40);
+    expect(area(storage.rect)).toBeCloseTo(20);
+    expect(compute.within.width * compute.within.height).toBeCloseTo(40 / 60);
     // `span` is a leaf's size as a share of the whole box.
     expect(compute.span.width * compute.span.height).toBeCloseTo(0.4);
     // The lone leaf of a group fills it.
-    expect(map.groups[1].leaves[0].rect).toEqual({
+    expect(map.groups[1].leaves[0].rect).toEqual(map.groups[1].rect);
+    expect(map.groups[1].leaves[0].within).toEqual({
       x: 0,
       y: 0,
-      width: 100,
-      height: 100,
+      width: 1,
+      height: 1,
     });
   });
 

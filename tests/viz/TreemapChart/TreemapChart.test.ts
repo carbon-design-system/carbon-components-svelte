@@ -49,14 +49,17 @@ describe("TreemapChart", () => {
     ]);
   });
 
-  it("sizes cells in percentages and colors them by group", () => {
+  it("sizes cells as shares of the box, inset by the group gap, and colors them by group", () => {
     render(TreemapChart);
 
     const [compute, storage] = leaves();
+    const share = (length: string) =>
+      Number.parseFloat(/([\d.]+)%/.exec(length)?.[1] ?? "NaN");
     const area = (node: HTMLElement) =>
-      Number.parseFloat(node.style.width) *
-      Number.parseFloat(node.style.height);
+      share(node.style.width) * share(node.style.height);
     expect(area(compute) / area(storage)).toBeCloseTo(2);
+    // The gap comes off each cell's edge, not off the group's.
+    expect(compute.style.left).toMatch(/^calc\(0% \+ 2px\)$/);
     const groups = Array.from(
       document.querySelectorAll<HTMLElement>(".bx--viz-treemap__group"),
     );
@@ -136,5 +139,24 @@ describe("TreemapChart", () => {
     expect(onselect.mock.calls[0][0]).toMatchObject({
       leaf: { key: "warehouse", group: "Data" },
     });
+  });
+
+  it("drills into a group under `root` and steps back out with the button", async () => {
+    const { rerender } = render(TreemapChart);
+    const before = document.querySelectorAll(".bx--viz-treemap__leaf").length;
+    expect(document.querySelector(".bx--viz-treemap__up")).toBeNull();
+
+    // Inside a group its services tile on their own, as an ungrouped treemap.
+    await rerender({ root: "Platform" });
+    expect(document.querySelectorAll(".bx--viz-treemap__leaf")).toHaveLength(2);
+    const up = document.querySelector(
+      ".bx--viz-treemap__up",
+    ) as HTMLButtonElement;
+    expect(up).toHaveTextContent("Platform");
+
+    await user.click(up);
+    expect(document.querySelectorAll(".bx--viz-treemap__leaf")).toHaveLength(
+      before,
+    );
   });
 });
