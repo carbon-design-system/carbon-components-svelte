@@ -155,8 +155,8 @@ jobs:
         run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
 
       # One e2e shard for a small selection. A second one costs a runner and
-      # ~40 s of container start, install and CSS build to save ~0.27 s of
-      # tests per file, so it only pays for itself past ~20 files.
+      # its own install, browser and CSS setup to save ~0.3 s of tests per
+      # file, so it only pays for itself past ~20 files.
       - name: Pick e2e shards
         id: shards
         env:
@@ -275,27 +275,28 @@ jobs:
       fail-fast: false
       matrix:
         shard: ${{ fromJSON(needs.changes.outputs.e2e-shards) }}
-    # Official image includes Chromium/Firefox/WebKit + system deps
-    # Bump tag with @playwright/test in bun.lock.
-    container:
-      image: mcr.microsoft.com/playwright:v1.63.0-noble
-      options: --ipc=host --init
+    # The bare runner with Chromium's headless shell, not the Playwright
+    # image: starting that container took 26-34 s, more than the ~20% the
+    # runner adds to the tests (#5064).
     timeout-minutes: 15
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
-      HOME: /root
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      # Playwright image is minimal; setup-bun extracts a zip and needs unzip.
-      # Try installing first (fast path) and only refresh apt lists if needed.
-      - run: DEBIAN_FRONTEND=noninteractive apt-get install -y unzip || { apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y unzip; }
-
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       # --ignore-scripts skips the ibmtelemetry postinstall (already disabled
-      # via IBM_TELEMETRY_DISABLED) and Playwright's browser download (browsers
-      # are baked into the image at PLAYWRIGHT_BROWSERS_PATH).
+      # via IBM_TELEMETRY_DISABLED) and Playwright's browser download, which
+      # the cache below covers.
       - run: bun ci --ignore-scripts
+
+      - id: playwright
+        run: echo "version=$(bunx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: browsers
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-chromium-shell
+      - name: Install Chromium headless shell
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: bunx playwright install --only-shell chromium
 
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: css
@@ -308,8 +309,6 @@ jobs:
         run: bun run build:css
 
       - name: E2E tests
-        # The container's default shell is `sh`, which has no `read -a`/`<<<`.
-        shell: bash
         env:
           TESTS: ${{ needs.changes.outputs.e2e-tests }}
           SHARD: ${{ matrix.shard }}/${{ strategy.job-total }}
