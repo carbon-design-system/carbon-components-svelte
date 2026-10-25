@@ -38,6 +38,8 @@
    * @example
    * ```svelte
    * <Breadcrumb separator={ArrowRight}>
+   *   <BreadcrumbItem href="/">Home</BreadcrumbItem>
+   * </Breadcrumb>
    * ```
    */
   export let separator = /** @type {string | Separator} */ ("/");
