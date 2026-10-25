@@ -157,11 +157,11 @@ The styles always follow the current `dir`. Script reads the direction in one of
 - A `dir` attribute on the component or an ancestor wins, as it does for the styles. Inside a `LayoutDirection` with no nearer `dir`, components read it from context and follow a change at once.
 - Outside one, components read the element's computed direction when it is needed: when a key arrives, when a menu or tooltip opens, or when a drag starts.
 
-Nothing reports a change to `dir` on an ancestor. Outside a `LayoutDirection`, a menu or tooltip that is open when `dir` changes keeps its side until it opens again. `Slider` and `RangeSlider` read the page direction when they mount, and again when the pointer or keyboard focus reaches them. To switch the direction at runtime, use `LayoutDirection`.
+Nothing reports a change to `dir` on an ancestor. Outside a `LayoutDirection`, a menu or tooltip that is open when `dir` changes keeps its side until it opens again. `Slider` and `RangeSlider` place their thumbs in the styles, so the thumbs follow a change at once. Their keys and pointer read the page direction again when the pointer or keyboard focus reaches them. To switch the direction at runtime, use `LayoutDirection`.
 
 ## Server rendering
 
-Set `dir` and `lang` on `<html>` in `src/app.html`, so the first paint is mirrored. On the server, script cannot read that attribute and takes the direction as left to right. `Slider` then renders left to right and flips on hydration. Wrap the root layout in `LayoutDirection` to render it mirrored from the server.
+Set `dir` and `lang` on `<html>` in `src/app.html`, so the first paint is mirrored. `Slider` and `RangeSlider` place their thumbs by the nearest `dir` in the styles, so they render mirrored from the server too. On the server, script cannot read the attribute and takes the direction as left to right. Wrap the root layout in `LayoutDirection` so components read the direction from context before hydration too.
 
 ```svelte
 <!-- src/routes/+layout.svelte -->

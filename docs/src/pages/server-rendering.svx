@@ -136,7 +136,7 @@ export function handle({ event, resolve }) {
 
 ## Right-to-left
 
-Set `dir="rtl"` and `lang` on `<html>` in `src/app.html`, so the first paint is mirrored. The attribute alone doesn't reach script: `Slider` reads the direction after mount, so it renders left to right on the server and flips on hydration. Wrap the root layout in `LayoutDirection` to render it mirrored from the server. Portalled menus and tooltips keep the direction too.
+Set `dir="rtl"` and `lang` on `<html>` in `src/app.html`, so the first paint is mirrored. `Slider` and `RangeSlider` place their thumbs by the nearest `dir` in the styles, so they render mirrored from the server too. The attribute alone doesn't reach script on the server. Wrap the root layout in `LayoutDirection` so components read the direction from context before hydration too. Portalled menus and tooltips keep the direction too.
 
 ```svelte
 <!-- src/routes/+layout.svelte -->
