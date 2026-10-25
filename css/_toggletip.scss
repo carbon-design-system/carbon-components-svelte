@@ -68,8 +68,16 @@
     letter-spacing: inherit;
   }
 
+  // The content sits on the inverse (dark) popover surface, so its links
+  // read the inverse link colors through Link's hooks, as in v11. Set a
+  // hook inside the content to recolor its links.
   .#{$prefix}--toggletip-content {
     @include type-style("body-compact-01");
+
+    --cds-link-text-color: #{$link-inverse};
+    --cds-link-hover-text-color: #{ccs-token("link-inverse-hover")};
+    --cds-link-visited-text-color: #{ccs-token("link-inverse-visited")};
+    --cds-link-focus-text-color: #{$focus-inverse};
 
     display: grid;
     max-width: to-rem(288px);
@@ -77,41 +85,17 @@
     row-gap: $carbon--spacing-05;
   }
 
-  // The content sits on the inverse (dark) popover surface, so links use
-  // the inverse link colors in every state, as v11's toggletip does.
-  .#{$prefix}--toggletip-content .#{$prefix}--link,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:visited {
-    color: $link-inverse;
-  }
-
-  .#{$prefix}--toggletip-content .#{$prefix}--link--visited:visited {
-    color: ccs-token("link-inverse-visited");
-  }
-
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
     .#{$prefix}--toggletip-button:hover svg {
       fill: $icon-primary;
     }
-
-    .#{$prefix}--toggletip-content .#{$prefix}--link:hover,
-    .#{$prefix}--toggletip-content .#{$prefix}--link:visited:hover {
-      color: ccs-token("link-inverse-hover");
-    }
   }
 
-  // A pressed link keeps its color, as in v11. The `:hover` entry restates
-  // it over the base link's pressed hover rule.
-  .#{$prefix}--toggletip-content .#{$prefix}--link:active,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited,
-  .#{$prefix}--toggletip-content .#{$prefix}--link:active:visited:hover {
-    color: $link-inverse;
-  }
-
-  // A pressed link shows the focus ring too (v11), so it needs the inverse one.
+  // The focus ring (also shown while pressed) clears the text on the dark
+  // surface. Its color comes from the hook above.
   .#{$prefix}--toggletip-content .#{$prefix}--link:focus,
   .#{$prefix}--toggletip-content .#{$prefix}--link:active {
-    outline: 1px solid $focus-inverse;
     outline-offset: 2px;
   }
 

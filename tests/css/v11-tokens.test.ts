@@ -65,7 +65,8 @@ const TYPE_STYLES = [
 ];
 
 // Carbon v11 hooks. A consumer sets them, and the CSS reads each with the
-// theme token or v11's default as its fallback, so nothing declares them.
+// theme token or v11's default as its fallback. Only HOOK_SCOPES declare
+// them.
 const V11_HOOKS = new Set([
   "link-text-color",
   "link-hover-text-color",
@@ -75,6 +76,15 @@ const V11_HOOKS = new Set([
   "grid-gutter",
   "grid-columns",
   "grid-margin",
+]);
+
+// Scopes that re-point the link hooks for the links inside them, as v11
+// does: the toggletip's inverse surface sets the inverse link colors, and
+// AILabel's light callout resets them. Anywhere else, a declaration would
+// shadow the value a consumer sets on an ancestor.
+const HOOK_SCOPES = new Set([
+  ".bx--toggletip-content",
+  ".bx--ai-label-popover .bx--toggletip-content",
 ]);
 
 describe("Carbon v11 tokens", () => {
@@ -103,8 +113,21 @@ describe("Carbon v11 tokens", () => {
     ).toEqual([]);
     // Each hook is still read, so a stale entry does not hide a typo.
     expect([...V11_HOOKS].filter((name) => !read().has(name))).toEqual([]);
-    // A declaration would shadow the value a consumer sets on an ancestor.
-    expect([...V11_HOOKS].filter((name) => names.has(name))).toEqual([]);
+  });
+
+  it("declares a hook only in a scope that re-points it", () => {
+    const scopes = parseRules(css)
+      .filter((r) =>
+        [...r.decls.keys()].some((prop) =>
+          V11_HOOKS.has(prop.replace(/^--cds-/, "")),
+        ),
+      )
+      .map((r) => (r.context ? `${r.context} ${r.selector}` : r.selector));
+    expect(scopes.filter((scope) => !HOOK_SCOPES.has(scope))).toEqual([]);
+    // Each scope still declares a hook, so a stale entry does not linger.
+    expect([...HOOK_SCOPES].filter((scope) => !scopes.includes(scope))).toEqual(
+      [],
+    );
   });
 
   // A scope that re-points a token nothing reads has no effect, which is how
