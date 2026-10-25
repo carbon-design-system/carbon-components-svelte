@@ -6,6 +6,7 @@ description: LayoutDirection sets the writing direction for part of a page, such
 <script>
   import {
     Button,
+    ButtonSet,
     Card,
     CardBody,
     CardHeader,
@@ -28,7 +29,9 @@ description: LayoutDirection sets the writing direction for part of a page, such
     TextInput,
     TreeView,
   } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 </script>
 
 ## Basic
@@ -63,6 +66,28 @@ In RTL, a field's icons and buttons sit at its left end: the password toggle, th
       invalidText="الحد الأقصى ١٠ نسخ"
     />
     <Search labelText="بحث في الحوادث" value="فشل النشر" />
+  </Stack>
+</LayoutDirection>
+
+## Buttons
+
+In RTL, a button's label starts at its right edge and its icon sits at its left end. `ButtonSet`, `ComboButton` and `ActionSet` draw each divider on the right side of the button after it, and modal footers run from right to left.
+
+<LayoutDirection dir="rtl" lang="ar">
+  <Stack gap={6}>
+    <Stack orientation="horizontal" wrap="wrap" gap={5}>
+      <Button icon={Add}>إضافة خدمة</Button>
+      <Button kind="secondary" icon={Add}>إضافة خدمة</Button>
+      <Button kind="tertiary" icon={Add}>إضافة خدمة</Button>
+      <Button kind="ghost" icon={Add}>إضافة خدمة</Button>
+      <Button kind="danger" icon={TrashCan}>حذف الخدمة</Button>
+      <Button kind="danger-tertiary" icon={TrashCan}>حذف الخدمة</Button>
+      <Button kind="danger-ghost" icon={TrashCan}>حذف الخدمة</Button>
+    </Stack>
+    <ButtonSet>
+      <Button kind="secondary">إلغاء</Button>
+      <Button>نشر</Button>
+    </ButtonSet>
   </Stack>
 </LayoutDirection>
 
