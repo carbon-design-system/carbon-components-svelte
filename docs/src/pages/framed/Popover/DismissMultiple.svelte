@@ -1,5 +1,5 @@
 <script>
-  import { Button, dismiss, Tile } from "carbon-components-svelte";
+  import { Box, Button, dismiss, Tile } from "carbon-components-svelte";
 
   let open = false;
   let trigger;
@@ -20,27 +20,28 @@
   }
 </script>
 
-<div bind:this={trigger} style="display: inline-block">
+<Box bind:ref={trigger} display="inline-flex">
   <Button kind="tertiary" on:click={() => (open = !open)}>
     Open notifications
   </Button>
-</div>
+</Box>
 
 {#if open}
-  <div
-    bind:this={panel}
-    use:dismiss={{
-      enabled: open,
-      listeners: [
-        { type: "keydown", handler: handleKeydown },
-        { type: "click", handler: handleClick },
-      ],
-    }}
-    style="margin-top: var(--cds-spacing-03); max-width: 20rem"
-  >
-    <Tile>
-      <p>Build 4821 passed on main.</p>
-      <p>Deployment to staging is waiting for approval.</p>
-    </Tile>
-  </div>
+  <Box marginTop={3} maxWidth="20rem">
+    <div
+      bind:this={panel}
+      use:dismiss={{
+        enabled: open,
+        listeners: [
+          { type: "keydown", handler: handleKeydown },
+          { type: "click", handler: handleClick },
+        ],
+      }}
+    >
+      <Tile>
+        <p>Build 4821 passed on main.</p>
+        <p>Deployment to staging is waiting for approval.</p>
+      </Tile>
+    </div>
+  </Box>
 {/if}

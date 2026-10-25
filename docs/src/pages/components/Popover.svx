@@ -3,7 +3,7 @@ description: Popovers display floating content relative to a trigger element, wi
 ---
 
 <script>
-  import { Layer, Popover, Stack } from "carbon-components-svelte";
+  import { Box, Layer, Popover, Stack } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -137,13 +137,15 @@ Appearance variants for different backgrounds.
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <div>
-      Parent
-      <Popover open>
-          Content
-      </Popover>
-  </div>
+<Layer withBackground>
+  <Box padding={5}>
+    <div>
+        Parent
+        <Popover open>
+            Content
+        </Popover>
+    </div>
+  </Box>
 </Layer>
 
 ### Without a drop shadow
