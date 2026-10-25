@@ -722,6 +722,18 @@ The prebundled CSS targets the [Svelte 5 browser support](https://svelte.dev/doc
 
 See [Best practices](#best-practices) for scoping. Run checks against what you changed. Full-repo runs are slow and surface unrelated failures.
 
+The shortest loop, in order:
+
+| Step | Command | Cost |
+| --- | --- | --- |
+| Lint what you touched | `bunx biome check --write <paths>` | Seconds |
+| Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
+| Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
+| Run the E2E tests your branch can reach | `bun run test:changed --e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
+| See what CI will run | `bun run test:changed --print` | Same plan as CI, with the reason for any full run |
+
+Don't run `bun run test` or `bun run test:e2e` to check a change. CI runs the same selection on the PR, and master runs everything after a merge.
+
 For format and lint, scope Biome to what you touched:
 
 ```sh
@@ -762,7 +774,7 @@ A full run can be killed for lack of memory, with exit code 137. Pass `--maxWork
 
 `bun run test:changed` runs every unit test your branch can affect, including uncommitted edits. CI uses the same selection on pull requests for unit and E2E tests. It follows imports, so a `Button` change also runs the `Modal` tests that render a `Button`. Pass `--print` to see the plan without running it.
 
-A `css/` change compiles `all.css` at the merge base and on your branch, then runs only the E2E tests whose pages render a changed rule ([`css-delta.ts`](scripts/lib/css-delta.ts)). It finds those pages by the classes a rule requires, so spell class names in source: literally (`"bx--tag--red"`) or as a prefix before an interpolation (`bx--tag--{type}`, `` `bx--btn--${kind}` ``). A rule that requires no class (`:root`, a theme token, `@keyframes`) or only classes no source spells (flatpickr's) runs every E2E test.
+For the E2E selection (`--e2e`, `--print`, and CI), a `css/` change compiles the stylesheets E2E pages load at the merge base and on your branch, then selects only the E2E tests whose pages render a changed rule ([`css-delta.ts`](scripts/lib/css-delta.ts)). A plain `bun run test:changed` skips that compile, since it runs unit tests only. Compiles are cached in `node_modules/.cache/test-changed-css` by `css/` tree, so planning again after a commit is instant. It finds those pages by the classes a rule requires, so spell class names in source: literally (`"bx--tag--red"`) or as a prefix before an interpolation (`bx--tag--{type}`, `` `bx--btn--${kind}` ``). A rule that requires no class (`:root`, a theme token, `@keyframes`) or only classes no source spells (flatpickr's) runs every E2E test.
 
 Types and E2E:
 
@@ -775,6 +787,15 @@ Two process traps:
 
 - Read the exit code, not the tail. `bun run lint:changed | tail -1` prints "No fixes applied" and exits 0 even when Biome reported errors above it. Gate commits on the checks themselves: `bunx biome check <paths> && bun run test:types && git commit ...`.
 - `bun test:types` reporting that a new prop or event "does not exist" usually means the generated `.d.ts` is stale, not that the code is wrong. Run `bun build:docs` first. This bites after a rebase as well as after an API change.
+
+Other runs that pass in CI but fail locally are stale local state too:
+
+| Symptom | Fix |
+| --- | --- |
+| Biome: "configuration schema version does not match", after a rebase | `bun install` |
+| CSS tests time out at exactly 30 s or 60 s | A killed run left a lock. With no test running, remove `node_modules/.cache/ccs-css-tests/*.lock` |
+| Local E2E runs another checkout's code, or can't find a fixture | Another checkout's server holds port 4173, and Playwright reuses it. Check `lsof -iTCP:4173 -sTCP:LISTEN` |
+| Svelte 3/4 tests run against Svelte 5 | Install each harness: `cd tests-svelte3 && bun install`, and the same in `tests-svelte4` |
 
 ## Testing
 
@@ -1275,6 +1296,29 @@ git merge upstream/master
 - no list entry or import appears twice
 - imports are still sorted (`bunx biome check --write <file>`)
 - the spec still passes locally
+
+### What CI runs on a pull request
+
+The `changes` job picks the tests once, from the same graph as `bun run test:changed`, without installing dependencies. A `css/` change is the exception: it installs and compiles CSS, about 8 s, cached for reruns and for later pushes that leave `css/` alone. The other jobs start from its selection.
+
+| Job | Runs on a PR |
+| --- | --- |
+| `static-checks` | Always: builds docs, then `test:src-types`, `test:src-js` and `test:src-svelte` |
+| `test` (2 shards) | The selected unit tests. `test:types` runs on the first shard |
+| `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
+| `test-e2e` (2 shards, Chromium) | The selected E2E tests |
+| `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
+
+Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
+
+A PR runs a whole suite when the selection can't be trusted. `bun run test:changed --print` lists each reason under `reasons`:
+
+| Cause | Fix |
+| --- | --- |
+| A change to the selector (`scripts/test-changed.ts`, `scripts/lib/test-graph.ts`, `scripts/lib/css-delta.ts`) | None needed. The selector can't vouch for itself |
+| A changed file outside the graph's roots | Add the file's directory to `GRAPH_ROOTS` in `scripts/test-changed.ts` if tests import it |
+| A changed setup or helper file that no test imports | None needed. It's wired in through config, so the whole suite runs |
+| A test whose dependencies the graph can't read: a computed import path or `page.goto` URL, or a disk read without `// @depends-on <glob>` (or `// @reads <glob>` for files read as text) | Fix the test. It otherwise runs on every PR |
 
 ### Open a PR
 
