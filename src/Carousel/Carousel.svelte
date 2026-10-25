@@ -75,7 +75,22 @@
 
   /** @type {import("svelte/store").Writable<Element[]>} */
   const views = writable([]);
-  setContext("carbon:Carousel", { views });
+
+  // The active slide's index. Before mount it is the requested slide, so the
+  // server's markup and the first client paint show only that slide.
+  /** @type {import("svelte/store").Writable<number>} */
+  const active = writable(Math.max(0, selectedIndex));
+
+  // Each slide claims its position as it initializes, in document order on
+  // the server and during hydration, before `views` knows it. Slides added
+  // after mount wait for `views`.
+  let claimed = 0;
+  /** @returns {number} */
+  function claimSlide() {
+    return mounted ? -1 : claimed++;
+  }
+
+  setContext("carbon:Carousel", { views, active, claimSlide });
 
   /** @type {null | HTMLDivElement} */
   let viewportRef = null;
@@ -99,6 +114,7 @@
     if (index < 0) return;
     currentIndex = index;
     selectedIndex = index;
+    active.set(index);
   }
 
   /** @param {number} index */
