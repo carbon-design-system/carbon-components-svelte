@@ -141,14 +141,14 @@ jobs:
         if: github.event_name == 'pull_request'
       - run: bun ci --ignore-scripts
         if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
-      # Compiled CSS by css/ tree hash, so a rerun or a later push that
-      # leaves css/ alone skips both compiles.
+      # crassus caches each compile by css/ tree, so a rerun or a later push
+      # that leaves css/ alone skips both.
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
         with:
-          path: node_modules/.cache/test-changed-css
-          key: test-changed-css-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
-          restore-keys: test-changed-css-
+          path: node_modules/.cache/crassus
+          key: crassus-select-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
+          restore-keys: crassus-select-
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'
@@ -184,6 +184,11 @@ jobs:
           fetch-depth: 0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/crassus
+          key: crassus-cascade-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
+          restore-keys: crassus-cascade-
       - name: Cascade diff against the base branch
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -205,6 +210,13 @@ jobs:
           fetch-depth: 0
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci --ignore-scripts
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            node_modules/.cache/crassus
+            node_modules/.cache/ccs-css-size
+          key: crassus-size-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock', 'scripts/lib/css-size.ts', 'scripts/lib/css-targets.ts') }}
+          restore-keys: crassus-size-
       - name: Size growth against the base branch
         env:
           BASE_REF: ${{ github.base_ref }}

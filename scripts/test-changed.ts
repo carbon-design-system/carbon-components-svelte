@@ -1,17 +1,9 @@
 import { spawn, spawnSync } from "node:child_process";
-import {
-  appendFileSync,
-  existsSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-} from "node:fs";
+import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { builtinModules } from "node:module";
-import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cachedSheets, compileKey } from "./lib/css-cache";
 import {
   BARREL,
   buildGraph,
@@ -171,62 +163,6 @@ export function loadGraph(sources = loadSources()): Graph {
   });
 }
 
-/** Compiles `entries` from the `css/` tree under `root`. */
-export async function compileCss(
-  root: string,
-  entries: string[],
-): Promise<string[]> {
-  const { default: config } = await import("../crassus.config");
-  if (!config.compile) throw new Error("crassus.config.ts has no compile");
-  const sheets = await config.compile(root, { entries });
-  return entries.map((entry) => sheets[entry].css);
-}
-
-/** The `css/` tree at `rev`, extracted into a temporary directory. */
-export function checkoutCss(rev: string): string {
-  const dir = mkdtempSync(join(tmpdir(), "test-changed-css-"));
-  const archive = spawnSync("git", ["archive", rev, "css"], {
-    cwd: ROOT,
-    maxBuffer: 256 * 1024 * 1024,
-  });
-  const extract = spawnSync("tar", ["-x", "-C", dir], {
-    input: archive.stdout,
-  });
-  if (archive.status !== 0 || extract.status !== 0) {
-    rmSync(dir, { recursive: true, force: true });
-    throw new Error(`couldn't extract css/ at ${rev}`);
-  }
-  return dir;
-}
-
-/** Compiled stylesheets by `css/` tree; CI restores it between runs. */
-const CSS_CACHE = join(ROOT, "node_modules/.cache/test-changed-css");
-
-/**
- * The cache key for compiling `entries` from `rev`'s committed `css/` tree,
- * or `undefined` when the tree has no name.
- */
-function cssKey(rev: string, entries: string[]): string | undefined {
-  const tree = spawnSync("git", ["rev-parse", `${rev}:css`], {
-    cwd: ROOT,
-    encoding: "utf-8",
-  });
-  if (tree.status !== 0) return undefined;
-  const sass = JSON.parse(read("node_modules/sass-embedded/package.json"));
-  return compileKey([
-    tree.stdout.trim(),
-    entries.join(","),
-    read("crassus.config.ts"),
-    sass.version,
-  ]);
-}
-
-/** Whether the working tree's `css/` matches HEAD, so HEAD's key names it. */
-function cssCommitted(): boolean {
-  const status = git("status", "--porcelain", "--untracked-files=all", "css");
-  return status.trim() === "";
-}
-
 type Styles = StyleSeeds & { selectors?: string[] };
 
 /** The sources a `css/` change can show up in, from the compiled diff. */
@@ -236,22 +172,24 @@ async function styleSeeds(
   sources: Map<string, string>,
 ): Promise<Styles> {
   const entries = stylesheetEntries(graph);
-  let base: string | undefined;
   try {
     const { changedSelectors, selectorSources } = await import(
       "./lib/css-delta"
     );
-    const headKey = cssCommitted() ? cssKey("HEAD", entries) : undefined;
+    // Imported here, since crassus needs the install a css/ change does.
+    // It builds just `inputs` (css/) at the ref and caches each build by
+    // that tree, the working tree's while css/ matches HEAD.
+    const { compileAt } = await import("crassus/git");
     const [before, after] = await Promise.all([
-      cachedSheets(CSS_CACHE, cssKey(mergeBase, entries), () => {
-        base = checkoutCss(mergeBase);
-        return compileCss(base, entries);
-      }),
-      cachedSheets(CSS_CACHE, headKey, () => compileCss(ROOT, entries)),
+      compileAt(mergeBase, { cwd: ROOT, entries }),
+      compileAt(undefined, { cwd: ROOT, entries }),
     ]);
     const selectors = new Set<string>();
-    for (const [i, entry] of entries.entries()) {
-      const change = changedSelectors(before[i], after[i]);
+    for (const entry of entries) {
+      const change = changedSelectors(
+        before.sheets[entry].css,
+        after.sheets[entry].css,
+      );
       if ("reason" in change) {
         return { reason: `${entry}.css: ${change.reason}` };
       }
@@ -265,8 +203,6 @@ async function styleSeeds(
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return { reason: `couldn't diff the compiled CSS: ${message}` };
-  } finally {
-    if (base) rmSync(base, { recursive: true, force: true });
   }
 }
 

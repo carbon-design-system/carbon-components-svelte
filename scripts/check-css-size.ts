@@ -5,11 +5,11 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
-  rmSync,
   writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
+import { compileAt } from "crassus/git";
 import {
   ALLOWANCE_TRAILER,
   type Allowance,
@@ -24,7 +24,6 @@ import {
   suggestAllowance,
   type Verdict,
 } from "./lib/css-size";
-import { checkoutCss, compileCss } from "./test-changed";
 
 /**
  * Fails when this branch grows `all.css` or `white.css` by more than
@@ -80,12 +79,17 @@ const TOOLCHAIN = createHash("sha1")
   )
   .digest("hex");
 
-async function measure(root: string): Promise<Record<string, Size>> {
-  const sheets = await compileCss(root, GUARDED_ENTRIES);
+/** Sizes of the stylesheets at `rev`, or of the working tree. */
+async function measure(rev?: string): Promise<Record<string, Size>> {
+  const { sheets } = await compileAt(rev, {
+    cwd: ROOT,
+    entries: GUARDED_ENTRIES,
+    cache: !values["no-cache"],
+  });
   return Object.fromEntries(
-    GUARDED_ENTRIES.map((entry, i) => [
+    GUARDED_ENTRIES.map((entry) => [
       entry,
-      measureCss(sheets[i], `${entry}.css`),
+      measureCss(sheets[entry].css, `${entry}.css`),
     ]),
   );
 }
@@ -97,7 +101,7 @@ function sizesAt(rev?: string): Promise<Record<string, Size>> {
   // The working tree has a tree hash only while css/ matches HEAD.
   const clean =
     rev !== undefined || git("status", "--porcelain", "--", "css") === "";
-  if (!clean) return measure(ROOT);
+  if (!clean) return measure();
   const tree = git("rev-parse", `${rev ?? "HEAD"}:css`);
   const key = createHash("sha1").update(TOOLCHAIN).update(tree).digest("hex");
   // A branch that leaves css/ alone compiles it once for both sides.
@@ -117,15 +121,10 @@ async function cachedSizes(
   if (!values["no-cache"] && existsSync(cached)) {
     return JSON.parse(readFileSync(cached, "utf-8"));
   }
-  const dir = checkoutCss(rev);
-  try {
-    const sizes = await measure(dir);
-    mkdirSync(CACHE_DIR, { recursive: true });
-    writeFileSync(cached, JSON.stringify(sizes));
-    return sizes;
-  } finally {
-    rmSync(dir, { recursive: true, force: true });
-  }
+  const sizes = await measure(rev);
+  mkdirSync(CACHE_DIR, { recursive: true });
+  writeFileSync(cached, JSON.stringify(sizes));
+  return sizes;
 }
 
 /** The allowances in the trailers of this branch's commits. */
