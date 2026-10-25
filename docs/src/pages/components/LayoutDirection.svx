@@ -53,7 +53,7 @@ description: LayoutDirection sets the writing direction for part of a page, such
 
 Set `dir` to `"rtl"` or `"ltr"`. `LayoutDirection` renders a `div` with that `dir`, and components inside it read the direction from context. Use `tag` to render another element, such as `section` or `form`. A plain `dir` attribute inside it wins for its part, for the arrow keys as for the styles.
 
-It matches Carbon React's `LayoutDirection`. To set the direction for the whole page, set `dir` on `<html>` instead.
+It matches Carbon React's `LayoutDirection`. To set the direction for the whole page, set `dir` on `<html>` instead. See the [right-to-left guide](/right-to-left) to set up an app, and for what flips and what stays left to right.
 
 <LayoutDirection dir="rtl" lang="ar" tag="form">
   <Stack gap={6}>
