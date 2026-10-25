@@ -13,6 +13,10 @@ const ENTRIES = ["all", "white"];
 const FIXTURES = ".crassus/fixtures";
 
 export default defineConfig({
+  // Everything `compile` reads (the vendored Carbon SCSS is under
+  // css/vendor), so `--base` builds and `compileAt` check out only css/ and
+  // cache each build by that tree.
+  inputs: "css",
   async compile(root, options) {
     const compiler = await initAsyncCompiler();
     try {
