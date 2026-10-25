@@ -485,10 +485,23 @@ function select(affected: Set<string>, tests: string[]): Selection {
   return { mode: "some", files };
 }
 
-/** Compiled stylesheet names (`all`) some file in the graph imports. */
+/**
+ * Compiled stylesheet names (`all`) some e2e test loads. Only those can change
+ * which e2e tests a `css/` change selects, so the theme sheets that only a type
+ * test imports aren't compiled. A sheet counts through the files that import
+ * it, not through `css/**` globs that match its path.
+ */
 export function stylesheetEntries(graph: Graph): string[] {
+  const { dependents } = reverseIndex(graph);
+  const e2eTests = [...graph.keys()].filter((file) => E2E_TEST.test(file));
   return [...graph.keys()]
-    .filter((file) => BUILT_CSS.test(file))
+    .filter((file) => {
+      if (!BUILT_CSS.test(file)) return false;
+      const reach = affectedBy(graph, dependents.get(file) ?? [], {
+        includeUnknown: false,
+      });
+      return e2eTests.some((test) => reach.has(test));
+    })
     .map((file) => posix.basename(file, ".css"))
     .sort();
 }
