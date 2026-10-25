@@ -126,6 +126,7 @@
         <Column sm={4} md={8} lg={10}>
           <Tile>
             <LineChart
+              grid={false}
               data={revenue}
               x="date"
               y="revenue"

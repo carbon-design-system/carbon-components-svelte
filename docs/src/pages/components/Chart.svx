@@ -368,7 +368,7 @@ Every chart takes the same two props. Flip them here to see a Cartesian chart ke
 
 `ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads what the chart shows as CSV: the series that are not hidden, within the zoom window, in the same long format the chart reads with ISO dates, plain numbers, and an empty field for a missing value. A label that starts like a spreadsheet formula is quoted. Anything in its default slot sits before the buttons.
 
-Set `copy` for a button that copies the same data to the clipboard, as tab-separated cells by default so they paste into a spreadsheet, or as CSV or JSON rows with `copyFormat`. A reset button appears while a zoom, a brush, or a selection is set, and clears all three. Each button has a label prop for translation, and a failed download or copy fires `export:error` instead of throwing. On a preset, `toolbar` takes the toolbar's own props: `toolbar={{ filename: "revenue", copy: true }}`.
+Set `copy` for a button that copies the same data to the clipboard, as tab-separated cells by default so they paste into a spreadsheet, or as CSV or JSON rows with `copyFormat`; `copyImage` copies the plot as a PNG where the browser allows it, and `print` prints the page. Each button has a label prop for translation, and a failed download or copy fires `export:error` instead of throwing. On a preset, `toolbar` takes the toolbar's own props: `toolbar={{ filename: "revenue", copy: true }}`.
 
 The table is the chart's text alternative. `Chart` renders a `ChartDataTable` when `view` is `"table"`, so it is available even without the toolbar. Bind `view` to drive it from your own control, and use the `table` slot to replace it.
 
@@ -411,7 +411,7 @@ Set `compare` to overlay the previous period. Every row shifted forward by `peri
 
 ## Brush
 
-`ChartBrush` lets a drag across the plot pick an x range. The range binds as `brush`, in data space, and fires `brush` when the drag ends; a click on the plot clears it, as does <DocKbd label="Escape" />. Presets take `brushable` and bind `brush` the same way. The brush is a range to act on, a filter for a table or a window for another chart, where the zoom bar changes what this chart shows.
+`ChartBrush` lets a drag across the plot pick an x range. The range binds as `brush`, in data space, and fires `brush` when the drag ends; a click on the plot clears it, as does <DocKbd label="Escape" />. From the keyboard, <DocKbd label="Shift" /> with an arrow key grows a brush from the focused point. Presets take `brushable` and bind `brush` the same way. The brush is a range to act on, a filter for a table or a window for another chart, where the zoom bar changes what this chart shows.
 
 <Chart {data} x="date" y="revenue" series="region" title="Drag across the plot" height={240} bind:brush={brushed}>
   <ChartAxis position="bottom" />
@@ -425,16 +425,16 @@ Set `compare` to overlay the previous period. Every row shifted forward by `peri
 
 ## Linked charts
 
-Charts that share a `syncId` share hover: one ruler across all of them. `sync` says what else travels: the zoom range, the brush, and the selection. A click in one chart then selects the same x in the others, in the same series where they have it, which is how a dashboard filters by a bar without any wiring. Shift-click adds to `selection` instead of replacing it.
+Charts that share a `syncId` share hover: one ruler across all of them. `sync` says what else travels: the zoom range, the brush, the selection, and `"hidden"`, the series a legend has hidden. A click in one chart then selects the same x in the others, in the same series where they have it, which is how a dashboard filters by a bar without any wiring. Shift-click adds to `selection` instead of replacing it.
 
 <BarChart data={quarters} x="quarter" y="revenue" series="region" title="Click a bar" syncId="linked" sync={["hover", "selection"]} height={220} />
 <LineChart data={quarters} x="quarter" y="revenue" series="region" title="The line follows" syncId="linked" sync={["hover", "selection"]} height={220} />
 
 ## Zoom
 
-`ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. Bind `zoom` on the chart to read or set the range yourself. On a category axis the range is category indexes, and the slots shown grow to fill the plot.
+`ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. While a zoom, a brush, or a selection is set, a reset button sits in the chart's header, by the title; `reset={false}` drops it. Bind `zoom` on the chart to read or set the range yourself. On a category axis the range is category indexes, and the slots shown grow to fill the plot.
 
-While zoomed, marks are clipped to the plot and the y axis keeps its full range, so values stay comparable as the window moves.
+While zoomed, marks are clipped to the plot and the y axis keeps its full range, so values stay comparable as the window moves. Set `zoomable` to zoom from the plot itself, without a bar: Ctrl or Cmd with the wheel or a pinch zooms about the pointer, Shift and a drag pans while zoomed, and `+`, `-`, and `0` zoom from the keyboard. Plain scrolling over a chart still scrolls the page.
 
 <Chart {data} x="date" y="revenue" series="region" title="Revenue by region" height={220}>
   <ChartGrid />
@@ -462,7 +462,7 @@ Color is the first channel for a series and should not be the only one. `ChartPo
 
 ## Color palettes
 
-Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it follows the theme and can be overridden like any other token. Pass a name without the prefix, such as `"cat-03"`, anywhere a color is accepted, or resolve one with `vizColor()`. Switch the theme in the page header to see each palette change.
+Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it follows the theme and can be overridden like any other token. On a page of charts, wrap them in `ChartColors` with a map from series key to color, so a series keeps one color everywhere however many series each chart has; a chart's own `colors` win over it. Pass a name without the prefix, such as `"cat-03"`, anywhere a color is accepted, or resolve one with `vizColor()`. Switch the theme in the page header to see each palette change.
 
 - **Categorical**: fourteen colors, in the order Carbon prescribes, for six series or more: `cat-01` to `cat-14`. A categorical index, as in `color={3}`, picks from these.
 - **Groups**: for one to five series, whole groups chosen to contrast with each other, several options each: `group-<size>-<option>-<index>`. Charts use option 1 unless `palette` says otherwise.
