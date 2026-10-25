@@ -1,3 +1,5 @@
+<svelte:options immutable />
+
 <script>
   /**
    * @template T
