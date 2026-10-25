@@ -240,15 +240,24 @@ export function parseDependencies(
   for (const [, specifier] of source.matchAll(SIDE_EFFECT_IMPORT)) {
     add(specifier);
   }
-  for (const [, , specifier] of source.matchAll(CALL_WITH_LITERAL)) {
+  // Each pattern below needs a literal substring; `includes` skips the
+  // regex for the files that lack it.
+  const calls =
+    source.includes("import(") ||
+    source.includes("require(") ||
+    source.includes("vi.");
+  for (const [, , specifier] of calls
+    ? source.matchAll(CALL_WITH_LITERAL)
+    : []) {
     add(specifier);
   }
-  if (NON_LITERAL_CALL.test(source) || TEMPLATE_CALL.test(source)) {
+  if (calls && (NON_LITERAL_CALL.test(source) || TEMPLATE_CALL.test(source))) {
     deps.unknown.push("non-literal dynamic import");
   }
 
-  const globs = [...source.matchAll(GLOB_CALL)];
-  if (globs.length !== [...source.matchAll(GLOB_CALL_ANY)].length) {
+  const globbing = source.includes("import.meta.glob");
+  const globs = globbing ? [...source.matchAll(GLOB_CALL)] : [];
+  if (globbing && globs.length !== [...source.matchAll(GLOB_CALL_ANY)].length) {
     deps.unknown.push("non-literal glob import");
   }
   for (const [, argument] of GLOB_REGISTRY.test(source) ? [] : globs) {
@@ -277,15 +286,19 @@ export function parseDependencies(
     }
   }
 
-  const declared = [...source.matchAll(DEPENDS_ON)].flatMap(([, list]) =>
-    list.split(LIST_SEPARATOR).filter(Boolean),
-  );
+  const declared = [
+    ...(source.includes("@depends-on") ? source.matchAll(DEPENDS_ON) : []),
+  ].flatMap(([, list]) => list.split(LIST_SEPARATOR).filter(Boolean));
   for (const glob of declared) deps.patterns.push(globToRegExp(glob));
-  const reads = [...source.matchAll(READS)].flatMap(([, list]) =>
-    list.split(LIST_SEPARATOR).filter(Boolean),
-  );
+  const reads = [
+    ...(source.includes("@reads") ? source.matchAll(READS) : []),
+  ].flatMap(([, list]) => list.split(LIST_SEPARATOR).filter(Boolean));
   for (const glob of reads) deps.reads.push(globToRegExp(glob));
-  if (READS_DISK.test(source) && declared.length + reads.length === 0) {
+  const disk =
+    source.includes("fs") ||
+    source.includes("child_process") ||
+    source.includes("Bun.");
+  if (disk && READS_DISK.test(source) && declared.length + reads.length === 0) {
     deps.unknown.push("reads the disk without @depends-on");
   }
 
