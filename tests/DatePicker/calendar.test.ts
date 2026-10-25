@@ -247,6 +247,27 @@ describe("range mode", () => {
     return second;
   };
 
+  it("updates the days in place when a range is picked", () => {
+    const { instance } = create({ mode: "range" });
+    instance.jumpToDate("2024-03-01");
+    const [start, middle, end] = [4, 6, 9].map((n) => day(instance, n));
+
+    start.click();
+    end.click();
+
+    for (const cell of [start, middle, end])
+      expect(cell.isConnected).toBe(true);
+    expect(start).toHaveClass(
+      "bx--date-picker__day--selected",
+      "bx--date-picker__day--range-start",
+    );
+    expect(middle).toHaveClass("bx--date-picker__day--in-range");
+    expect(end).toHaveClass(
+      "bx--date-picker__day--selected",
+      "bx--date-picker__day--range-end",
+    );
+  });
+
   it("writes each end to its own input", () => {
     const second = rangeInputs();
     const { instance, input } = create({
