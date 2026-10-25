@@ -16,6 +16,15 @@ test.describe("ExpandableTile a11y", () => {
       "aria-expanded",
       "true",
     );
+    // The content below the fold fades in. Scan once it is opaque: mid-fade,
+    // axe reads the faint text and reports a contrast failure.
+    await page
+      .locator("#app")
+      .evaluate((app) =>
+        Promise.all(
+          app.getAnimations({ subtree: true }).map((a) => a.finished),
+        ),
+      );
 
     const expandedResults = await new AxeBuilder({ page })
       .include("#app")
