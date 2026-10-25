@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { openCalendar } from "../DatePicker/helpers";
+import LayoutDirectionPlain from "./LayoutDirection.plain.test.svelte";
 import LayoutDirectionTest from "./LayoutDirection.test.svelte";
 
 const portal = (testId: string) =>
@@ -37,6 +38,14 @@ describe("LayoutDirection", () => {
   });
 
   describe("portals", () => {
+    afterEach(() => {
+      for (const el of document.body.querySelectorAll(
+        ".bx--date-picker__calendar",
+      )) {
+        el.remove();
+      }
+    });
+
     it("gives portalled content the nearest direction", async () => {
       render(LayoutDirectionTest);
       await tick();
@@ -99,15 +108,50 @@ describe("LayoutDirection", () => {
       expect(container).toHaveAttribute("dir", "rtl");
     });
 
-    describe("DatePicker", () => {
-      afterEach(() => {
-        for (const el of document.body.querySelectorAll(
-          ".bx--date-picker__calendar",
-        )) {
-          el.remove();
-        }
+    describe("with a plain dir inside", () => {
+      it.each([
+        ["rtl", "ltr"],
+        ["ltr", "rtl"],
+      ] as const)(
+        "in a %s one, portals take the plain %s",
+        async (dir, plainDir) => {
+          render(LayoutDirectionPlain, { props: { dir, plainDir } });
+          const option = await screen.findByRole("option", {
+            name: "eu-west-1",
+          });
+          for (const container of [
+            portal("bare-plain"),
+            portal("floating-plain"),
+            option.closest("[data-portal]"),
+          ]) {
+            expect(container?.parentElement).toBe(document.body);
+            expect(container).toHaveAttribute("dir", plainDir);
+          }
+        },
+      );
+
+      it("reads the plain dir again when the LayoutDirection changes", async () => {
+        const { rerender } = render(LayoutDirectionPlain, {
+          props: { datePicker: true },
+        });
+        const calendar = await openCalendar();
+        expect(calendar).toHaveAttribute("dir", "ltr");
+        await rerender({ dir: "ltr", plainDir: "rtl" });
+        await tick();
+        expect(portal("bare-plain")).toHaveAttribute("dir", "rtl");
+        expect(portal("floating-plain")).toHaveAttribute("dir", "rtl");
+        expect(calendar).toHaveAttribute("dir", "rtl");
       });
 
+      it("takes a plain dir outside any LayoutDirection", async () => {
+        render(LayoutDirectionPlain);
+        await tick();
+        expect(portal("bare-no-context")?.parentElement).toBe(document.body);
+        expect(portal("bare-no-context")).toHaveAttribute("dir", "rtl");
+      });
+    });
+
+    describe("DatePicker", () => {
       it("keeps a portalled calendar in the direction", async () => {
         const { rerender } = render(LayoutDirectionTest, {
           props: { datePicker: true },
@@ -118,6 +162,21 @@ describe("LayoutDirection", () => {
         await rerender({ dir: "ltr" });
         expect(calendar).toHaveAttribute("dir", "ltr");
       });
+
+      it.each([
+        ["rtl", "ltr"],
+        ["ltr", "rtl"],
+      ] as const)(
+        "lets a plain dir win in a %s one (%s)",
+        async (dir, plainDir) => {
+          render(LayoutDirectionPlain, {
+            props: { dir, plainDir, datePicker: true },
+          });
+          const calendar = await openCalendar();
+          expect(calendar.parentElement).toBe(document.body);
+          expect(calendar).toHaveAttribute("dir", plainDir);
+        },
+      );
 
       it("adds no dir to a calendar that stays in the subtree", async () => {
         render(LayoutDirectionTest, {

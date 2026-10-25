@@ -17,4 +17,8 @@ export function getLayoutDirection() {
   return getContext(LAYOUT_DIRECTION_CONTEXT_KEY) ?? outside;
 }
 
-export { inlineKey, resolveLayoutDirection } from "./inline-direction.js";
+export {
+  declaredDirection,
+  inlineKey,
+  resolveLayoutDirection,
+} from "./inline-direction.js";

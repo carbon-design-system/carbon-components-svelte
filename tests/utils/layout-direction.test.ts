@@ -1,4 +1,5 @@
 import {
+  declaredDirection,
   inlineKey,
   resolveLayoutDirection,
 } from "carbon-components-svelte/utils/layout-direction.js";
@@ -54,6 +55,35 @@ describe("resolveLayoutDirection", () => {
     expect(resolveLayoutDirection(undefined, node)).toBe("ltr");
     document.documentElement.style.direction = "rtl";
     expect(resolveLayoutDirection(undefined, node)).toBe("rtl");
+  });
+});
+
+describe("declaredDirection", () => {
+  afterEach(() => {
+    document.body.replaceChildren();
+  });
+
+  it("reads the nearest dir, then the context, and ignores computed direction", () => {
+    const region = document.createElement("div");
+    region.style.direction = "rtl";
+    const node = document.createElement("span");
+    region.append(node);
+    document.body.append(region);
+    expect(declaredDirection(undefined, node)).toBeUndefined();
+    expect(declaredDirection("ltr", node)).toBe("ltr");
+    region.setAttribute("dir", "auto");
+    expect(declaredDirection("ltr", node)).toBe("ltr");
+    region.setAttribute("dir", "RTL");
+    expect(declaredDirection("ltr", node)).toBe("rtl");
+  });
+
+  it.each([
+    ["no element", null],
+    ["a detached element", document.createElement("div")],
+  ])("returns the context with %s", (_, node) => {
+    node?.setAttribute("dir", "rtl");
+    expect(declaredDirection("ltr", node)).toBe("ltr");
+    expect(declaredDirection(undefined, node)).toBeUndefined();
   });
 });
 

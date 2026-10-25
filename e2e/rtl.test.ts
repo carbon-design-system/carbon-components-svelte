@@ -2016,6 +2016,52 @@ test.describe("right-to-left plain dir", () => {
   }
 });
 
+test.describe("right-to-left plain dir portals", () => {
+  // Portalled content takes the plain `dir` around its trigger, not the
+  // LayoutDirection's.
+  for (const dir of ["ltr", "rtl"] as const) {
+    test(`opens portalled content ${dir} under a plain dir="${dir}"`, async ({
+      page,
+    }) => {
+      await page.goto("/rtl-plain-dir.html");
+      const region = page.getByTestId(`plain-${dir}`);
+      const direction = (locator: Locator) =>
+        locator.evaluate((node) => getComputedStyle(node).direction);
+
+      await region.getByRole("combobox", { name: `Region (${dir})` }).click();
+      const menu = page.locator("[data-portal] .bx--list-box__menu");
+      await expect(menu).toBeVisible();
+      expect.soft(await direction(menu), "Dropdown").toBe(dir);
+      await page.keyboard.press("Escape");
+      await expect(menu).toHaveCount(0);
+
+      await region.getByRole("button", { name: `Billing (${dir})` }).click();
+      const tooltip = page.locator("[data-portal] .bx--tooltip__content");
+      await expect(tooltip).toBeVisible();
+      expect.soft(await direction(tooltip), "Tooltip").toBe(dir);
+      await page.keyboard.press("Escape");
+      await expect(tooltip).toHaveCount(0);
+
+      const input = region.getByRole("textbox", { name: `Date (${dir})` });
+      await input.click();
+      const calendar = page.locator(".bx--date-picker__calendar--open");
+      await expect(calendar).toBeVisible();
+      expect.soft(await direction(calendar), "DatePicker").toBe(dir);
+      // The calendar opens at the field's inline start.
+      const [field, box] = await Promise.all(
+        [input, calendar].map((locator) =>
+          locator.evaluate((node) => {
+            const { left, right } = node.getBoundingClientRect();
+            return { left: Math.round(left), right: Math.round(right) };
+          }),
+        ),
+      );
+      const side = dir === "ltr" ? "left" : "right";
+      expect.soft(box[side], "DatePicker side").toBe(field[side]);
+    });
+  }
+});
+
 test.describe("right-to-left nested regions", () => {
   // Every element's box and inline padding in each field, relative to the
   // field. A region lays out by its own `dir`, whatever the page's is.
