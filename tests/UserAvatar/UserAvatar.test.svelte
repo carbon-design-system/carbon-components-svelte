@@ -67,6 +67,20 @@
 
 <UserAvatar data-testid="color-auto" backgroundColor="auto" name="John Doe" />
 
+<UserAvatar
+  data-testid="color-cyan-strong"
+  backgroundColor="cyan"
+  shade="strong"
+  name="John Doe"
+/>
+
+<UserAvatar
+  data-testid="color-auto-strong"
+  backgroundColor="auto"
+  shade="strong"
+  name="John Doe"
+/>
+
 <UserAvatar data-testid="tooltip" name="Jane Roe" tooltipText="Jane Roe" />
 
 <UserAvatar

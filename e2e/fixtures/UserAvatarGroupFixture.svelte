@@ -99,10 +99,12 @@
 
 <div data-testid="white">
   <UserAvatar backgroundColor="red" name="Monica Hall" />
+  <UserAvatar backgroundColor="cyan" shade="strong" name="Monica Hall" />
 </div>
 
 <ThemeZone theme="g100" data-testid="g100">
   <UserAvatar backgroundColor="red" name="Monica Hall" />
+  <UserAvatar backgroundColor="cyan" shade="strong" name="Monica Hall" />
 </ThemeZone>
 
 <Layer withBackground data-testid="layer">
