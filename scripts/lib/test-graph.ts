@@ -463,6 +463,8 @@ const GRAPH_ROOTS = [
 
 const COMPAT_HARNESS = /^tests-svelte[34]\//;
 
+const FIXTURE_PAGE = /^e2e\/fixtures\/.+\.html$/;
+
 /** Changes to the selector itself can't be trusted to select themselves. */
 const SELECTOR = [
   "scripts/test-changed.ts",
@@ -561,6 +563,12 @@ export function planTests(
       if (!tests[suite].some((test) => reach.has(test))) {
         const deleted = !graph.has(file);
         if (deleted && (suite === "unit" ? UNIT_TEST : E2E_TEST).test(file)) {
+          continue;
+        }
+        // A fixture page is opened by a test's goto(), which the graph reads,
+        // so a page no test reaches (the index, pages only crassus renders)
+        // and the files only such pages load are wired to no test at all.
+        if (suite === "e2e" && [...reach].some((f) => FIXTURE_PAGE.test(f))) {
           continue;
         }
         reasons.push(`${file}: no ${suite} test imports it`);
