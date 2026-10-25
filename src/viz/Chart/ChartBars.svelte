@@ -54,6 +54,7 @@
 
   import { getContext, onMount } from "svelte";
   import { resolveFormat } from "../utils/format-compact.js";
+  import { nextId } from "../utils/next-id.js";
   import { vizColor } from "../utils/tokens.js";
   import { buildBars, stackedExtent } from "./bar-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
@@ -109,7 +110,7 @@
   }
 
   $: mine = pickGroups($groups, series);
-  const patternId = `bx-viz-pattern-${Math.random().toString(36).slice(2, 8)}`;
+  const patternId = nextId("bx-viz-pattern");
   $: patterns = assignShapes(
     mine.map((group) => group.key),
     pattern,
