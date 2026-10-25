@@ -177,7 +177,7 @@
     transform: translateX(mini-units(-32));
 
     [dir='rtl'] & {
-      transform: translateX(mini-units(32));
+      transform: ccs-dir(translateX(mini-units(-32)), translateX(mini-units(32)));
     }
   }
 
@@ -706,7 +706,7 @@
     transform: translateX(-100%);
 
     [dir='rtl'] & {
-      transform: translateX(100%);
+      transform: ccs-dir(translateX(-100%), translateX(100%));
     }
   }
 

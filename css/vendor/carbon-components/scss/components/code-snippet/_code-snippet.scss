@@ -217,8 +217,8 @@
     // ccs: the code area is LTR, so physical sides: in RTL the room for
     // the copy button moves to the left, where the button is
     [dir="rtl"] & {
-      padding-right: 0;
-      padding-left: $carbon--spacing-08;
+      padding-right: ccs-dir($carbon--spacing-08, 0);
+      padding-left: ccs-dir(0, $carbon--spacing-08);
     }
   }
 

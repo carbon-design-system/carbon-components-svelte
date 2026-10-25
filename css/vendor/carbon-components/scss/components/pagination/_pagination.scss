@@ -130,7 +130,7 @@ $css--helpers: true;
     // ccs: Select's chevron sits at the inline end, so the nudge toward
     // the text flips with it.
     [dir="rtl"] & {
-      transform: translate(0.5rem, -50%);
+      transform: ccs-dir(translate(-0.5rem, -50%), translate(0.5rem, -50%));
     }
   }
 

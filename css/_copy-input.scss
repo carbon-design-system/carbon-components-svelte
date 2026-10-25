@@ -13,8 +13,8 @@
   padding-right: $value;
 
   [dir="rtl"] & {
-    padding-right: $carbon--spacing-05;
-    padding-left: $value;
+    padding-right: ccs-dir($value, $carbon--spacing-05);
+    padding-left: ccs-dir($carbon--spacing-05, $value);
   }
 }
 

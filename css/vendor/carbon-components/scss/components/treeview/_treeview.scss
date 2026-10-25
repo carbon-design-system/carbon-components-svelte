@@ -128,7 +128,7 @@
       // ccs: in RTL, child rows indent toward the left, so a collapsed
       // caret points left. Expanded, it points down in both directions.
       [dir='rtl'] &:not(.#{$prefix}--tree-parent-node__toggle-icon--expanded) {
-        transform: rotate(90deg);
+        transform: ccs-dir(rotate(-90deg), rotate(90deg));
       }
     }
 

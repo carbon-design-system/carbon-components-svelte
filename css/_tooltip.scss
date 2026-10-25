@@ -206,7 +206,7 @@
     .#{$prefix}--tooltip__trigger.#{$prefix}--tooltip__trigger--definition
     + .#{$prefix}--assistive-text,
   .#{$prefix}--tooltip-portal .#{$prefix}--tooltip-portal__content[dir="rtl"] {
-    text-align: right;
+    text-align: ccs-dir(left, right);
   }
 }
 
