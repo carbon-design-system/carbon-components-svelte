@@ -4,7 +4,7 @@
   /**
    * @event {{ kind: "image" | "csv" | "copy"; error: unknown }} export:error Fires when a download or a copy could not be produced, such as an image from a tainted canvas.
    * @event {{ format: "csv" | "tsv" | "json"; rows: number }} copy Fires when the shown data has been copied to the clipboard.
-   * @event {null} reset Fires when the zoom, brush, and selection have been reset from the toolbar.
+   * @event {null} copy:image Fires when the plot has been copied to the clipboard as a PNG.
    */
 
   /** @restProps {div} */
@@ -37,10 +37,14 @@
   export let copyFormat = "tsv";
 
   /**
-   * Set to `false` to hide the reset button. It shows only while a zoom, a
-   * brush, or a selection is set, and clears all three.
+   * Set to `true` to show a button that copies the plot to the clipboard as
+   * a PNG. Needs a secure context and a browser with `ClipboardItem`; the
+   * button stays out otherwise.
    */
-  export let reset = true;
+  export let copyImage = false;
+
+  /** Set to `true` to show a button that prints the page */
+  export let print = false;
 
   /** Set to `false` to hide the fullscreen button */
   export let fullscreen = true;
@@ -66,8 +70,11 @@
   /** Specify the label of the copy button for a moment after a copy */
   export let copiedLabel = "Copied";
 
-  /** Specify the label of the reset button */
-  export let resetLabel = "Reset zoom and selection";
+  /** Specify the label of the copy image button */
+  export let copyImageLabel = "Copy image";
+
+  /** Specify the label of the print button */
+  export let printLabel = "Print";
 
   /** Specify the label of the fullscreen button */
   export let fullscreenLabel = "Show fullscreen";
@@ -80,10 +87,11 @@
   import ChartLineSmooth from "../../icons/ChartLineSmooth.svelte";
   import Copy from "../../icons/Copy.svelte";
   import Download from "../../icons/Download.svelte";
+  import ImageCopy from "../../icons/ImageCopy.svelte";
   import ImageDownload from "../../icons/ImageDownload.svelte";
   import Maximize from "../../icons/Maximize.svelte";
   import Minimize from "../../icons/Minimize.svelte";
-  import Reset from "../../icons/Reset.svelte";
+  import Printer from "../../icons/Printer.svelte";
   import TableSplit from "../../icons/TableSplit.svelte";
   import { copyText } from "../../utils/copy-text.js";
   import { downloadFile } from "../../utils/download-file.js";
@@ -99,11 +107,6 @@
     view,
     setView,
     zoom,
-    setZoom,
-    brush,
-    setBrush,
-    selectedKeys,
-    clearSelection,
     fullscreen: isFullscreen,
     toggleFullscreen,
     exportImage,
@@ -111,9 +114,26 @@
 
   // Browsers without the Fullscreen API, such as Safari on iPhone, get no button.
   let canFullscreen = false;
+  let canCopyImage = false;
   onMount(() => {
     canFullscreen = document.fullscreenEnabled === true;
+    canCopyImage =
+      typeof ClipboardItem === "function" &&
+      typeof navigator.clipboard?.write === "function";
   });
+
+  async function copyPlot() {
+    try {
+      // Safari wants the blob as a promise, and the promise made at once.
+      const blob = exportImage("png");
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": /** @type {Promise<Blob>} */ (blob) }),
+      ]);
+      dispatch("copy:image", null);
+    } catch (error) {
+      dispatch("export:error", { kind: "copy", error });
+    }
+  }
 
   async function downloadImage() {
     if (!image) return;
@@ -127,16 +147,6 @@
     } catch (error) {
       dispatch("export:error", { kind: "image", error });
     }
-  }
-
-  /** Whether anything is set that the reset button would clear. */
-  $: resettable = $zoom !== null || $brush !== null || $selectedKeys.size > 0;
-
-  function resetAll() {
-    if ($zoom !== null) setZoom(null);
-    if ($brush !== null) setBrush(null);
-    if ($selectedKeys.size > 0) clearSelection();
-    dispatch("reset", null);
   }
 
   let copied = false;
@@ -234,15 +244,26 @@
       on:click={copyData}
     />
   {/if}
-  {#if reset && resettable}
+  {#if copyImage && canCopyImage && $view === "chart"}
     <Button
       kind="ghost"
       size="small"
-      icon={Reset}
-      iconDescription={resetLabel}
+      icon={ImageCopy}
+      iconDescription={copyImageLabel}
       tooltipPosition="bottom"
       tooltipAlignment="end"
-      on:click={resetAll}
+      on:click={copyPlot}
+    />
+  {/if}
+  {#if print}
+    <Button
+      kind="ghost"
+      size="small"
+      icon={Printer}
+      iconDescription={printLabel}
+      tooltipPosition="bottom"
+      tooltipAlignment="end"
+      on:click={() => window.print()}
     />
   {/if}
   {#if fullscreen && canFullscreen}
