@@ -1,5 +1,5 @@
 // @ts-check
-import { resolveLayoutDirection } from "./layout-direction.js";
+import { resolveLayoutDirection } from "./inline-direction.js";
 
 /**
  * Determine whether a horizontally scrollable element can still scroll

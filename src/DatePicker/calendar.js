@@ -1,7 +1,7 @@
 // @ts-check
 
 import { isImeComposition } from "../utils/ime-composition.js";
-import { resolveLayoutDirection } from "../utils/layout-direction.js";
+import { resolveLayoutDirection } from "../utils/inline-direction.js";
 import {
   compareDays,
   DAY_MS,
