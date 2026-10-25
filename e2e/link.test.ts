@@ -104,6 +104,48 @@ test.describe("Link", () => {
     }
   });
 
+  test("shows each state's color on a visited link", async ({ page }) => {
+    const plain = page.getByTestId("link-press");
+    const linkColor = await style(page, "link-press", "color");
+    await plain.hover();
+    const hoverColor = await style(page, "link-press", "color");
+    const disabledColor = await style(page, "link-disabled", "color");
+
+    const visited = page.getByTestId("link-visited");
+    const visitedColor = await style(page, "link-visited", "color");
+    expect.soft(visitedColor, "rest").not.toBe(linkColor);
+
+    await visited.hover();
+    expect
+      .soft(await style(page, "link-visited", "color"), "hover")
+      .toBe(hoverColor);
+    await page.mouse.down();
+    expect
+      .soft(await style(page, "link-visited", "color"), "active")
+      .toBe(linkColor);
+    await page.mouse.up();
+
+    const visitedDisabled = page.getByTestId("link-visited-disabled");
+    expect
+      .soft(await style(page, "link-visited-disabled", "color"), "disabled")
+      .toBe(disabledColor);
+    await visitedDisabled.hover();
+    expect
+      .soft(
+        await style(page, "link-visited-disabled", "color"),
+        "disabled hover",
+      )
+      .toBe(disabledColor);
+    await page.mouse.down();
+    expect
+      .soft(
+        await style(page, "link-visited-disabled", "color"),
+        "disabled active",
+      )
+      .toBe(disabledColor);
+    await page.mouse.up();
+  });
+
   // A press outside one popover closes the other, so each gets a fresh page.
   for (const testId of ["link-toggletip", "link-ai-label"]) {
     test(`keeps the ${testId} color while pressed`, async ({ page }) => {

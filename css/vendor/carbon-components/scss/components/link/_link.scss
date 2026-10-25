@@ -43,7 +43,20 @@ $link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
       color: $link-hover-text-color;
       text-decoration: underline;
     }
+  }
 
+  // ccs: the `visited` prop shows the visited color whatever the
+  // browser's `:visited` state (v10 only styles `:visited`). These sit
+  // before the pressed and disabled rules, which tie them and win by order.
+  .#{$prefix}--link--visited {
+    color: $link-visited-text-color;
+  }
+
+  .#{$prefix}--link--visited:hover {
+    color: $link-hover-text-color;
+  }
+
+  .#{$prefix}--link {
     // ccs: v11 keeps the link color while pressed and adds the focus ring
     &:active,
     &:active:visited,
@@ -184,27 +197,6 @@ $link-focus-text-color: var(--cds-link-focus-text-color, #{$focus});
 
 @include exports("link-muted") {
   @include link-muted;
-}
-
-/// The `visited` prop lets a consumer force the visited color regardless of
-/// the browser's actual `:visited` state (e.g. to preview it, or because the
-/// consumer tracks visited state themselves). v10 only styles the real
-/// `:visited` pseudo-class, so the prop alone had no visual effect on an
-/// unvisited link.
-/// @access private
-/// @group components
-@mixin link-visited {
-  .#{$prefix}--link--visited {
-    color: $link-visited-text-color;
-  }
-
-  .#{$prefix}--link--visited:hover {
-    color: $link-hover-text-color;
-  }
-}
-
-@include exports("link-visited") {
-  @include link-visited;
 }
 
 // carbon-components-svelte patch (link-forced-colors)
