@@ -183,6 +183,7 @@
 
 <!-- A box plot shows spread, which forcing zero onto the axis would squash. -->
 <Chart
+  band
   bind:view
   bind:ref
   {...$$restProps}

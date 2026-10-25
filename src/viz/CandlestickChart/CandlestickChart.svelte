@@ -212,6 +212,7 @@
 
 <!-- Prices move within a band far from zero, which the axis must not include. -->
 <Chart
+  band
   bind:view
   bind:ref
   {...$$restProps}

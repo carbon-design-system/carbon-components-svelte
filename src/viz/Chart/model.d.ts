@@ -45,6 +45,49 @@ export type BuiltGroups<T> = {
   y2Extent: [number, number] | null;
 };
 
+/** A series as `groupRows` reads it: the data, before colors and flags. */
+export type GroupedSeries<T> = {
+  key: ChartSeriesKey;
+  rows: T[];
+  xs: number[];
+  ys: number[];
+  /** Extent of this series alone, over every row. `null` when it has none. */
+  xExtent: [number, number] | null;
+  yExtent: [number, number] | null;
+  ghost?: ChartSeriesKey;
+};
+
+export type GroupedRows<T> = {
+  groups: GroupedSeries<T>[];
+  kind: ChartXKind;
+  categories: string[];
+};
+
+export type GroupRowsOptions<T> = {
+  x: (row: T, index: number) => number | Date | string;
+  y: (row: T, index: number) => number | null | undefined;
+  series: (row: T, index: number) => ChartSeriesKey;
+  /** Series that are ghosts of another, keyed by their own key: `{ "EMEA (prior)": "EMEA" }`. */
+  ghosts?: Record<string, ChartSeriesKey>;
+  /**
+   * Give every distinct x its own slot, as bars need. A numeric or time x
+   * becomes categories in ascending order.
+   */
+  band?: boolean;
+  /** Used to label time and number categories in band mode. */
+  locale?: string;
+};
+
+export type DecorateGroupsOptions = {
+  hidden?: ReadonlyArray<ChartSeriesKey>;
+  /** Series plotted on a secondary y axis, with its own domain. */
+  secondary?: ReadonlyArray<ChartSeriesKey>;
+  /** Fixed color per series key. */
+  colors?: Record<string, VizColor>;
+  /** Which of Carbon's prescribed color groups to use, 1-based. */
+  palette?: number;
+};
+
 export type BuildGroupsOptions<T> = {
   x: (row: T, index: number) => number | Date | string;
   y: (row: T, index: number) => number | null | undefined;
@@ -151,6 +194,16 @@ export const GLYPH_WIDTH: number;
  * Group rows into series and measure their extents. A string `x` makes the
  * axis categorical: `xs` then holds indexes into `categories`.
  */
+export function groupRows<T>(
+  rows: ReadonlyArray<T>,
+  options: GroupRowsOptions<T>,
+): GroupedRows<T>;
+
+export function decorateGroups<T>(
+  grouped: GroupedRows<T>,
+  options: DecorateGroupsOptions,
+): BuiltGroups<T>;
+
 export function buildGroups<T>(
   rows: ReadonlyArray<T>,
   options: BuildGroupsOptions<T>,

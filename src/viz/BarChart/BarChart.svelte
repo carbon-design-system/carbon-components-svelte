@@ -150,6 +150,7 @@
 </script>
 
 <Chart
+  band
   bind:zoom
   bind:hidden
   bind:selected

@@ -8,6 +8,8 @@ import { buildLinePath } from "../src/viz/Chart/line-geometry.js";
 import {
   buildGroups,
   buildScales,
+  decorateGroups,
+  groupRows,
   resolveDomain,
 } from "../src/viz/Chart/model.js";
 
@@ -52,6 +54,20 @@ group("line chart, rows to paths, 3 series", () => {
   }
   const rows = buildRows(10_000);
   task("10000 points each, every point drawn", () => lineChart(rows));
+});
+
+// What a zoom step or a legend toggle costs now that the rows are read once:
+// the decorate and domain stages over the cached groups.
+group("stages after the rows are grouped, 3 series x 10000", () => {
+  const grouped = groupRows(buildRows(10_000), accessors);
+  task("zoom step: decorate + domain", () =>
+    resolveDomain(decorateGroups(grouped, {}), {
+      xDomain: [START + 1_000_000, START + 2_000_000],
+    }),
+  );
+  task("legend toggle: decorate + domain", () =>
+    resolveDomain(decorateGroups(grouped, { hidden: ["APAC"] }), {}),
+  );
 });
 
 group("bar chart, rows to rects, 3 series", () => {

@@ -86,6 +86,7 @@
      goes, which the mark registers. Every bar floats from zero at some point,
      so the axis always includes it. -->
 <Chart
+  band
   bind:selected
   bind:view
   bind:ref

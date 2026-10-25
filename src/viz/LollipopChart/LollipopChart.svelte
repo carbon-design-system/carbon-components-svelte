@@ -89,6 +89,7 @@
 
 <!-- Stem length encodes the value, so the axis always includes zero. -->
 <Chart
+  band
   bind:hidden
   bind:selected
   bind:view

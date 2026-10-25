@@ -372,6 +372,7 @@
   <!-- Prices move within a band far from zero, which the axis must not include. -->
   <Chart
     bind:zoom
+    band={mode === "candles" || Boolean(volumeOf)}
     {title}
     {description}
     {height}
@@ -458,6 +459,7 @@
   {#each panes as pane, i (pane.key)}
     <Chart
       bind:zoom
+      band={pane.bars.length > 0}
       title={pane.key}
       height={indicatorHeight}
       {width}

@@ -23,36 +23,26 @@ export const GLYPH_WIDTH = 6.6;
 const DAY = 86_400_000;
 
 /**
- * Group rows into series and measure their extents in one pass per series.
- * A string `x` makes the axis categorical: `xs` then holds indexes into
- * `categories`, in first-seen order.
+ * Group rows into series and measure each series' extent in one pass. A
+ * string `x` makes the axis categorical: `xs` then holds indexes into
+ * `categories`, in first-seen order. Under `band`, a numeric or time x
+ * becomes categories too, one per distinct value, as bars need.
+ *
+ * This is the stage that reads every row. It depends on the data and the
+ * accessors only, so a zoom, a legend toggle, or a color change never comes
+ * back here; `decorateGroups` layers those on at the cost of the series
+ * count.
  *
  * @template T
  * @param {ReadonlyArray<T>} rows
- * @param {import("./model.d.ts").BuildGroupsOptions<T>} options
- * @returns {import("./model.d.ts").BuiltGroups<T>}
+ * @param {import("./model.d.ts").GroupRowsOptions<T>} options
+ * @returns {import("./model.d.ts").GroupedRows<T>}
  */
-export function buildGroups(
+export function groupRows(
   rows,
-  {
-    x,
-    y,
-    series,
-    hidden = [],
-    secondary = [],
-    colors,
-    palette = 1,
-    band = false,
-    locale,
-    ghosts = {},
-  },
+  { x, y, series, band = false, locale, ghosts = {} },
 ) {
   const grouped = groupBy(rows, series);
-  // A ghost takes its base series' color, so it does not count for the palette.
-  const ghostCount = [...grouped.keys()].filter(
-    (key) => ghosts[/** @type {string} */ (key)] !== undefined,
-  ).length;
-  const defaults = categoricalColors(grouped.size - ghostCount, palette);
   /** @type {string[]} */
   const categories = [];
   /** @type {Map<string, number>} */
@@ -60,24 +50,18 @@ export function buildGroups(
   /** @type {"time" | "linear" | "category"} */
   let kind = "linear";
 
-  let xMin = Number.POSITIVE_INFINITY;
-  let xMax = Number.NEGATIVE_INFINITY;
-  let yMin = Number.POSITIVE_INFINITY;
-  let yMax = Number.NEGATIVE_INFINITY;
-  let y2Min = Number.POSITIVE_INFINITY;
-  let y2Max = Number.NEGATIVE_INFINITY;
-
-  /** @type {import("./model.d.ts").ChartGroup<T>[]} */
+  /** @type {import("./model.d.ts").GroupedSeries<T>[]} */
   const groups = [];
-  let i = 0;
   for (const [key, groupRows] of grouped) {
-    const isHidden = hidden.includes(key);
-    const onSecondary = secondary.includes(key);
     const n = groupRows.length;
     /** @type {number[]} */
     const xs = new Array(n);
     /** @type {number[]} */
     const ys = new Array(n);
+    let xMin = Number.POSITIVE_INFINITY;
+    let xMax = Number.NEGATIVE_INFINITY;
+    let yMin = Number.POSITIVE_INFINITY;
+    let yMax = Number.NEGATIVE_INFINITY;
     for (let j = 0; j < n; j++) {
       const xv = x(groupRows[j], j);
       if (xv instanceof Date) {
@@ -98,43 +82,22 @@ export function buildGroups(
       // `Number(null)` is 0, which would plot a missing sample at zero.
       const yv = y(groupRows[j], j);
       ys[j] = yv === null || yv === undefined ? Number.NaN : Number(yv);
-      if (isHidden) continue;
       if (xs[j] < xMin) xMin = xs[j];
       if (xs[j] > xMax) xMax = xs[j];
       if (!Number.isFinite(ys[j])) continue;
-      if (onSecondary) {
-        if (ys[j] < y2Min) y2Min = ys[j];
-        if (ys[j] > y2Max) y2Max = ys[j];
-      } else {
-        if (ys[j] < yMin) yMin = ys[j];
-        if (ys[j] > yMax) yMax = ys[j];
-      }
+      if (ys[j] < yMin) yMin = ys[j];
+      if (ys[j] > yMax) yMax = ys[j];
     }
-    const override = colors?.[/** @type {string} */ (key)];
     const ghostOf = ghosts[/** @type {string} */ (key)];
     groups.push({
       key,
       rows: groupRows,
       xs,
       ys,
-      color:
-        ghostOf === undefined
-          ? ((override === undefined ? undefined : vizColor(override)) ??
-            defaults[i] ??
-            /** @type {string} */ (vizColor(i + 1)))
-          : "",
-      hidden: isHidden,
-      axis: onSecondary ? "y2" : "y",
+      xExtent: xMin <= xMax ? [xMin, xMax] : null,
+      yExtent: yMin <= yMax ? [yMin, yMax] : null,
       ...(ghostOf === undefined ? {} : { ghost: ghostOf }),
     });
-    if (ghostOf === undefined) i++;
-  }
-  // Ghosts resolve after every base series has its color.
-  for (const group of groups) {
-    if (group.ghost === undefined) continue;
-    const base = groups.find((candidate) => candidate.key === group.ghost);
-    group.color = base?.color ?? /** @type {string} */ (vizColor("neutral"));
-    if (base?.hidden) group.hidden = true;
   }
 
   // Bars need one slot per x. A numeric or time x becomes categories: its
@@ -159,23 +122,121 @@ export function buildGroups(
       categories.push(label(value));
     });
     for (const group of groups) {
+      let lo = Number.POSITIVE_INFINITY;
+      let hi = Number.NEGATIVE_INFINITY;
       for (let j = 0; j < group.xs.length; j++) {
-        group.xs[j] = slot.get(group.xs[j]) ?? Number.NaN;
+        const index = slot.get(group.xs[j]) ?? Number.NaN;
+        group.xs[j] = index;
+        if (index < lo) lo = index;
+        if (index > hi) hi = index;
       }
+      group.xExtent = lo <= hi ? [lo, hi] : null;
     }
     kind = "category";
-    xMin = 0;
-    xMax = Math.max(0, values.length - 1);
+  }
+
+  return { groups, kind, categories };
+}
+
+/**
+ * Give grouped series their colors, hidden flags, and axes, and combine the
+ * extents of the series that show. Costs the series count, not the rows:
+ * the arrays from `groupRows` are shared, not copied.
+ *
+ * @template T
+ * @param {import("./model.d.ts").GroupedRows<T>} grouped
+ * @param {import("./model.d.ts").DecorateGroupsOptions} options
+ * @returns {import("./model.d.ts").BuiltGroups<T>}
+ */
+export function decorateGroups(
+  grouped,
+  { hidden = [], secondary = [], colors, palette = 1 },
+) {
+  // A ghost takes its base series' color, so it does not count for the palette.
+  const ghostCount = grouped.groups.filter(
+    (group) => group.ghost !== undefined,
+  ).length;
+  const defaults = categoricalColors(
+    grouped.groups.length - ghostCount,
+    palette,
+  );
+
+  let xMin = Number.POSITIVE_INFINITY;
+  let xMax = Number.NEGATIVE_INFINITY;
+  let yMin = Number.POSITIVE_INFINITY;
+  let yMax = Number.NEGATIVE_INFINITY;
+  let y2Min = Number.POSITIVE_INFINITY;
+  let y2Max = Number.NEGATIVE_INFINITY;
+
+  /** @type {import("./model.d.ts").ChartGroup<T>[]} */
+  const groups = [];
+  let i = 0;
+  for (const base of grouped.groups) {
+    const override = colors?.[/** @type {string} */ (base.key)];
+    const color =
+      base.ghost === undefined
+        ? ((override === undefined ? undefined : vizColor(override)) ??
+          defaults[i] ??
+          /** @type {string} */ (vizColor(i + 1)))
+        : "";
+    if (base.ghost === undefined) i++;
+    groups.push({
+      key: base.key,
+      rows: base.rows,
+      xs: base.xs,
+      ys: base.ys,
+      color,
+      hidden: hidden.includes(base.key),
+      axis: secondary.includes(base.key) ? "y2" : "y",
+      ...(base.ghost === undefined ? {} : { ghost: base.ghost }),
+    });
+  }
+  // Ghosts resolve after every base series has its color.
+  for (const group of groups) {
+    if (group.ghost === undefined) continue;
+    const base = groups.find((candidate) => candidate.key === group.ghost);
+    group.color = base?.color ?? /** @type {string} */ (vizColor("neutral"));
+    if (base?.hidden) group.hidden = true;
+  }
+  for (let g = 0; g < groups.length; g++) {
+    const group = groups[g];
+    if (group.hidden) continue;
+    const { xExtent, yExtent } = grouped.groups[g];
+    if (xExtent) {
+      if (xExtent[0] < xMin) xMin = xExtent[0];
+      if (xExtent[1] > xMax) xMax = xExtent[1];
+    }
+    if (!yExtent) continue;
+    if (group.axis === "y2") {
+      if (yExtent[0] < y2Min) y2Min = yExtent[0];
+      if (yExtent[1] > y2Max) y2Max = yExtent[1];
+    } else {
+      if (yExtent[0] < yMin) yMin = yExtent[0];
+      if (yExtent[1] > yMax) yMax = yExtent[1];
+    }
   }
 
   return {
     groups,
-    kind,
-    categories,
+    kind: grouped.kind,
+    categories: grouped.categories,
     xExtent: xMin <= xMax ? [xMin, xMax] : null,
     yExtent: yMin <= yMax ? [yMin, yMax] : null,
     y2Extent: y2Min <= y2Max ? [y2Min, y2Max] : null,
   };
+}
+
+/**
+ * Both stages in one call, for a caller that has no reason to keep them
+ * apart, such as a geometry test.
+ *
+ * @template T
+ * @param {ReadonlyArray<T>} rows
+ * @param {import("./model.d.ts").BuildGroupsOptions<T>} options
+ * @returns {import("./model.d.ts").BuiltGroups<T>}
+ */
+export function buildGroups(rows, options) {
+  return decorateGroups(groupRows(rows, options), options);
 }
 
 /**

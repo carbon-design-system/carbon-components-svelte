@@ -135,6 +135,7 @@
 
 <!-- Bar length encodes the value, so the axes always include zero. -->
 <Chart
+  band
   bind:hidden
   bind:selected
   bind:view

@@ -135,6 +135,7 @@
 </script>
 
 <Chart
+  band
   bind:view
   bind:ref
   bind:selected

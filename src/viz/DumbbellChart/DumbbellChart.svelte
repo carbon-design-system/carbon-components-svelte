@@ -98,6 +98,7 @@
 
 <!-- The bar is the gap between two values, not a length from zero. -->
 <Chart
+  band
   bind:hidden
   bind:selected
   bind:view

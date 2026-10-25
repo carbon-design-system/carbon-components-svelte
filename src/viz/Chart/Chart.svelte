@@ -156,6 +156,13 @@
   export let secondary = [];
 
   /**
+   * Set to `true` to give every distinct x its own slot, as bars do. The
+   * marks that need one ask for it themselves; a preset sets it so the first
+   * pass over the rows already has it.
+   */
+  export let band = false;
+
+  /**
    * Override the secondary y domain. `"nice"` rounds it out to tick values.
    * @type {[number, number] | "auto" | "nice"}
    */
@@ -298,8 +305,9 @@
   import { createCanvasLayer } from "./canvas-layer.js";
   import { CHART_CONTEXT } from "./context.js";
   import {
-    buildGroups,
     buildScales,
+    decorateGroups,
+    groupRows,
     resolveDomain,
     sameDomain,
     yScaleOf,
@@ -767,25 +775,23 @@
   $: effectiveHeight = fullscreenHeight || height;
   $: resize(width, effectiveHeight);
   $: compared = withPrior(data, xAccessor, yAccessor, seriesAccessor, compare);
-  $: rebuild(
-    compared.rows,
-    compared.x,
-    compared.y,
-    compared.series,
-    hidden,
-    colors,
-    palette,
-    xDomain,
-    yDomain,
-    zero,
-    $included,
-    $bandRequests > 0,
+  // Three stages, each costing what its inputs deserve: the rows are read
+  // once per data change; colors, hidden flags, and axes cost the series
+  // count; the domain costs the series count again. A zoom or a legend
+  // toggle never comes back to the rows.
+  // A boolean in between, so a mark's band request re-runs nothing when the
+  // preset already asked for one.
+  $: wantsBand = band || $bandRequests > 0;
+  $: grouped = groupRows(compared.rows, {
+    x: compared.x,
+    y: compared.y,
+    series: compared.series,
+    ghosts: compared.ghosts,
+    band: wantsBand,
     locale,
-    secondary,
-    y2Domain,
-    yScale,
-    zoom,
-  );
+  });
+  $: built = decorateGroups(grouped, { hidden, secondary, colors, palette });
+  $: settle(built, xDomain, yDomain, zero, $included, y2Domain, yScale, zoom);
 
   /**
    * The rows plus, under `compare`, a prior row per row: the same values
@@ -846,37 +852,29 @@
     };
   }
 
-  function rebuild(
-    /** @type {ReadonlyArray<T>} */ rows,
-    /** @type {any} */ xA,
-    /** @type {any} */ yA,
-    /** @type {any} */ sA,
-    /** @type {ReadonlyArray<string | number>} */ hiddenKeys,
-    /** @type {any} */ colorMap,
-    /** @type {number} */ paletteOption,
-    /** @type {any} */ xD,
-    /** @type {any} */ yD,
-    /** @type {boolean} */ includeZero,
-    /** @type {number[]} */ include,
-    /** @type {boolean} */ band,
-    /** @type {string | undefined} */ bandLocale,
-    /** @type {ReadonlyArray<string | number>} */ secondaryKeys,
-    /** @type {any} */ y2D,
-    /** @type {"linear" | "log"} */ scaleKind,
-    /** @type {[number | Date, number | Date] | null} */ zoomRange,
+  /**
+   * The domain stage: the zoom bar's full range, the zoom clamped to the
+   * data, the resolved domain, and what follows a change of either.
+   * @param {import("./model.js").BuiltGroups<T>} built
+   * @param {any} xD
+   * @param {any} yD
+   * @param {boolean} includeZero
+   * @param {number[]} include
+   * @param {any} y2D
+   * @param {"linear" | "log"} scaleKind
+   * @param {[number | Date, number | Date] | null} zoomRange
+   */
+  function settle(
+    built,
+    xD,
+    yD,
+    includeZero,
+    include,
+    y2D,
+    scaleKind,
+    zoomRange,
   ) {
-    const built = buildGroups(rows, {
-      x: xA,
-      y: yA,
-      series: sA,
-      hidden: hiddenKeys,
-      secondary: secondaryKeys,
-      colors: colorMap,
-      palette: paletteOption,
-      band,
-      locale: bandLocale,
-      ghosts: compared.ghosts,
-    });
+    const rows = compared.rows;
     // The zoom bar spans the range with no zoom applied. A category axis
     // has no domain of its own to fix: its bounds are only ever a zoom.
     const category = built.kind === "category";
