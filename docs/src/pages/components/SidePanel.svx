@@ -14,7 +14,7 @@ description: Side panels keep users in the context of a page while they view det
 
 ## Basic
 
-Bind `open` to show the panel. It docks under the UI Shell header and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. Put footer buttons in the `actions` slot; the panel lays them out in an [ActionSet](/components/ActionSet) sized to the panel.
+Bind `open` to show the panel. It docks under the UI Shell header and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. A panel already open when the page loads leaves focus where it is, unless it's modal. Put footer buttons in the `actions` slot; the panel lays them out in an [ActionSet](/components/ActionSet) sized to the panel.
 
 <FileSource src="/framed/SidePanel/SidePanel" />
 
