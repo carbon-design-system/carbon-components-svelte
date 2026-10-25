@@ -1,7 +1,10 @@
 <script lang="ts">
   import Chart from "carbon-components-svelte/viz/Chart/Chart.svelte";
+  import ChartBars from "carbon-components-svelte/viz/Chart/ChartBars.svelte";
+  import ChartCrosshair from "carbon-components-svelte/viz/Chart/ChartCrosshair.svelte";
   import ChartLegend from "carbon-components-svelte/viz/Chart/ChartLegend.svelte";
   import ChartLine from "carbon-components-svelte/viz/Chart/ChartLine.svelte";
+  import ChartPoints from "carbon-components-svelte/viz/Chart/ChartPoints.svelte";
   import ChartRuler from "carbon-components-svelte/viz/Chart/ChartRuler.svelte";
   import ChartThreshold from "carbon-components-svelte/viz/Chart/ChartThreshold.svelte";
   import ChartTooltip from "carbon-components-svelte/viz/Chart/ChartTooltip.svelte";
@@ -24,6 +27,11 @@
   export let thresholdKind: "error" | "warning" = "error";
   export let customTooltip = false;
   export let delay = 150;
+  export let crosshair = false;
+  export let shapes = false;
+  export let compare: { period: number; label?: string } | null = null;
+  export let sort: "series" | "stack" | "value" | "value-asc" = "series";
+  export let maxRows = Number.POSITIVE_INFINITY;
   export let ontoggle: (detail: unknown) => void = () => {};
 </script>
 
@@ -35,6 +43,7 @@
   title="Revenue"
   width={640}
   bind:hidden
+  {compare}
   on:legend:toggle={(e) => ontoggle(e.detail)}
 >
   {#if threshold !== undefined}
@@ -47,10 +56,25 @@
     />
   {/if}
   <ChartLine data-testid="line" />
+  {#if shapes}
+    <ChartBars pattern="auto" />
+    <ChartPoints symbol="auto" />
+  {/if}
   <ChartRuler data-testid="ruler" />
+  {#if crosshair}
+    <ChartCrosshair data-testid="crosshair" />
+  {/if}
   <svelte:fragment slot="tooltip">
     {#if customTooltip}
-      <ChartTooltip data-testid="tooltip" {delay} let:points let:xLabel>
+      <ChartTooltip
+        data-testid="tooltip"
+        {delay}
+        {sort}
+        {maxRows}
+        let:points
+        let:xLabel
+        let:hidden
+      >
         <strong>Day {xLabel}</strong>
         {#each points as point (point.series)}
           <ChartTooltipRow
@@ -59,9 +83,12 @@
             color={point.color}
           />
         {/each}
+        {#if hidden > 0}
+          <em data-testid="folded">{hidden}</em>
+        {/if}
       </ChartTooltip>
     {:else}
-      <ChartTooltip data-testid="tooltip" {delay} />
+      <ChartTooltip data-testid="tooltip" {delay} {sort} {maxRows} />
     {/if}
   </svelte:fragment>
   <ChartLegend slot="legend" data-testid="legend" />

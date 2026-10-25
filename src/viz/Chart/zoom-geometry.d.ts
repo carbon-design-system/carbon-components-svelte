@@ -1,5 +1,3 @@
-import type { ChartGroup } from "./model.js";
-
 /**
  * Keep a window inside `full`, at least `minSpan` wide, and in order. Moving
  * one edge past the other pushes that other edge along rather than crossing.

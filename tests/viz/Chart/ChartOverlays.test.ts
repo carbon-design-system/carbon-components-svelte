@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import ChartTooltipRow from "../../../src/viz/Chart/ChartTooltipRow.svelte";
 import { user } from "../../utils/user";
 import ChartOverlays from "./ChartOverlays.test.svelte";
 
@@ -77,13 +78,16 @@ describe("ChartRuler and ChartTooltip", () => {
     expect(tooltip).toHaveTextContent("$60");
   });
 
-  it("never takes the pointer, and closes as soon as the pointer leaves the chart", async () => {
+  it("never takes the pointer, and closes once the pointer has left the chart for a moment", async () => {
     render(ChartOverlays);
     await focusSecondPoint();
     const tooltip = screen.getByTestId("tooltip");
     expect(tooltip).toHaveClass("bx--viz-chart-tooltip");
 
+    // The grace covers the gap to a neighbor; a pointer that stays away hides it.
     await fireEvent.pointerLeave(chart(), { relatedTarget: tooltip });
+    expect(screen.getByTestId("tooltip")).toBeInTheDocument();
+    await new Promise((r) => setTimeout(r, 130));
     expect(screen.queryByTestId("tooltip")).toBeNull();
   });
 
@@ -123,6 +127,7 @@ describe("ChartRuler and ChartTooltip", () => {
     await wait(30);
     expect(screen.getByTestId("tooltip")).toBeInTheDocument();
     await fireEvent.pointerLeave(svg);
+    await wait(130);
     expect(screen.queryByTestId("tooltip")).toBeNull();
 
     // A key press shows it at once.
@@ -306,5 +311,132 @@ describe("ChartThreshold", () => {
       legend().getByRole("button", { name: "Show less", expanded: true }),
     );
     expect(items()).toHaveLength(8);
+  });
+});
+
+describe("ChartTooltip rows", () => {
+  const values = () =>
+    Array.from(
+      screen
+        .getByTestId("tooltip")
+        .querySelectorAll(".bx--viz-chart-tooltip__value"),
+    ).map((el) => Number(el.textContent?.replace(/[^0-9.-]/g, "")));
+
+  it("lists rows in series order, by value when asked, and folds the rest", async () => {
+    const { unmount } = render(ChartOverlays, { sort: "value" });
+    await focusSecondPoint();
+    const byValue = values();
+    expect(byValue).toEqual([...byValue].sort((a, b) => b - a));
+    expect(byValue.length).toBeGreaterThan(1);
+    unmount();
+
+    render(ChartOverlays, { customTooltip: true, sort: "value", maxRows: 1 });
+    await focusSecondPoint();
+    expect(values()).toEqual([byValue[0]]);
+    expect(screen.getByTestId("folded")).toHaveTextContent(
+      String(byValue.length - 1),
+    );
+  });
+
+  it("writes the fold line itself when the default body is used", async () => {
+    render(ChartOverlays, { maxRows: 1 });
+    await focusSecondPoint();
+    expect(screen.getByTestId("tooltip")).toHaveTextContent(/\+\d more/);
+  });
+});
+
+describe("compare", () => {
+  it("overlays the prior period as a ghost in the series' color, out of the legend, under its row in the tooltip", async () => {
+    render(ChartOverlays, { compare: { period: 1 } });
+    const paths = Array.from(
+      document.querySelectorAll<SVGPathElement>(".bx--viz-line__path"),
+    );
+    // Three series and their ghosts; a ghost shares its base's color and is dashed.
+    expect(paths).toHaveLength(6);
+    const ghosts = paths.filter((p) =>
+      p.classList.contains("bx--viz-line__path--ghost"),
+    );
+    expect(ghosts).toHaveLength(3);
+    expect(
+      ghosts.every((p) => p.classList.contains("bx--viz-line__path--dashed")),
+    ).toBe(true);
+    expect(ghosts[0].style.getPropertyValue("--bx-viz-color")).toBe(
+      paths[0].style.getPropertyValue("--bx-viz-color"),
+    );
+    expect(
+      document.querySelectorAll(
+        ".bx--viz-legend__item:not(.bx--viz-legend__more)",
+      ),
+    ).toHaveLength(3);
+
+    await focusSecondPoint();
+    const tooltip = screen.getByTestId("tooltip");
+    expect(
+      tooltip.querySelectorAll(".bx--viz-chart-tooltip__prior"),
+    ).toHaveLength(3);
+    expect(tooltip).toHaveTextContent(/prior.*\(\+100\.0%\)/);
+  });
+});
+
+describe("legend emphasis and crosshair", () => {
+  it("dims the other series while the pointer rests on a legend item", async () => {
+    render(ChartOverlays);
+    const [first] = Array.from(
+      document.querySelectorAll<HTMLElement>(".bx--viz-legend__item"),
+    );
+    await fireEvent.mouseEnter(first);
+    const dimmed = document.querySelectorAll(".bx--viz-line__path--dimmed");
+    expect(dimmed).toHaveLength(2);
+    await fireEvent.mouseLeave(first);
+    expect(
+      document.querySelectorAll(".bx--viz-line__path--dimmed"),
+    ).toHaveLength(0);
+  });
+
+  it("writes the hovered x and y on the axes", async () => {
+    render(ChartOverlays, { crosshair: true });
+    await focusSecondPoint();
+    const badges = Array.from(
+      document.querySelectorAll(".bx--viz-crosshair__badge text"),
+    ).map((el) => el.textContent?.trim());
+    expect(badges).toHaveLength(2);
+    expect(badges[0]).toBe("1");
+  });
+});
+
+describe("shapes", () => {
+  it("draws a symbol per series on points and a pattern per series on bars, and the legend shows them", () => {
+    render(ChartOverlays, { shapes: true });
+    // Three series: a circle, then a square and a triangle as paths.
+    expect(
+      document.querySelectorAll("circle.bx--viz-points__point").length,
+    ).toBeGreaterThan(0);
+    expect(
+      document.querySelectorAll("path.bx--viz-points__point").length,
+    ).toBeGreaterThan(0);
+    const patterns = document.querySelectorAll("pattern.bx--viz-pattern");
+    expect(patterns).toHaveLength(2);
+    const filled = Array.from(
+      document.querySelectorAll<SVGRectElement>(".bx--viz-bars__bar"),
+    ).filter((rect) => rect.style.fill.startsWith("url("));
+    expect(filled.length).toBeGreaterThan(0);
+    expect(
+      document.querySelectorAll(".bx--viz-legend__swatch--shape").length,
+    ).toBe(2);
+  });
+});
+
+describe("ChartTooltipRow", () => {
+  it("keeps the swatch's room when asked, so a plain row lines up with colored ones", () => {
+    const { unmount } = render(ChartTooltipRow, {
+      label: "Change",
+      value: "+1",
+    });
+    expect(document.querySelector(".bx--viz-chart-tooltip__swatch")).toBeNull();
+    unmount();
+    render(ChartTooltipRow, { label: "Change", value: "+1", indent: true });
+    expect(
+      document.querySelector(".bx--viz-chart-tooltip__swatch--blank"),
+    ).not.toBeNull();
   });
 });

@@ -26,6 +26,49 @@
     grid-column: 1 / -1;
   }
 
+  // The legend on the left: the same grid, mirrored.
+  .#{$prefix}--viz-chart--legend-left {
+    display: grid;
+    column-gap: $carbon--spacing-05;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .#{$prefix}--viz-chart--legend-left > * {
+    grid-column: 2;
+  }
+
+  .#{$prefix}--viz-chart--legend-left > .#{$prefix}--viz-chart__header {
+    grid-column: 1 / -1;
+  }
+
+  .#{$prefix}--viz-chart--legend-left > .#{$prefix}--viz-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: start;
+    grid-column: 1;
+    grid-row: 2;
+    margin-block-start: 0;
+  }
+
+  // The legend on top: right after the header, before the plot.
+  .#{$prefix}--viz-chart--legend-top {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--viz-chart--legend-top > * {
+    order: 2;
+  }
+
+  .#{$prefix}--viz-chart--legend-top > .#{$prefix}--viz-chart__header {
+    order: 0;
+  }
+
+  .#{$prefix}--viz-chart--legend-top > .#{$prefix}--viz-legend {
+    order: 1;
+    margin-block: 0 $carbon--spacing-03;
+  }
+
   .#{$prefix}--viz-chart--legend-right > .#{$prefix}--viz-legend {
     flex-direction: column;
     align-items: flex-start;
@@ -153,7 +196,8 @@
   // The legend row stays, empty, so the chart below it does not move when
   // the series arrive.
   .#{$prefix}--viz-chart--loading > :not(.#{$prefix}--viz-chart__state):not(.#{$prefix}--viz-chart__title):not(.#{$prefix}--viz-chart__header):not(.#{$prefix}--viz-legend):not(.#{$prefix}--viz-treemap__legend),
-  .#{$prefix}--viz-chart--empty > :not(.#{$prefix}--viz-chart__state):not(.#{$prefix}--viz-chart__title):not(.#{$prefix}--viz-chart__header):not(.#{$prefix}--viz-legend):not(.#{$prefix}--viz-treemap__legend) {
+  .#{$prefix}--viz-chart--empty > :not(.#{$prefix}--viz-chart__state):not(.#{$prefix}--viz-chart__title):not(.#{$prefix}--viz-chart__header):not(.#{$prefix}--viz-legend):not(.#{$prefix}--viz-treemap__legend),
+  .#{$prefix}--viz-chart--error > :not(.#{$prefix}--viz-chart__state):not(.#{$prefix}--viz-chart__title):not(.#{$prefix}--viz-chart__header):not(.#{$prefix}--viz-legend):not(.#{$prefix}--viz-treemap__legend) {
     display: none;
   }
 
@@ -167,6 +211,29 @@
     pointer-events: none;
 
     @include type-style("body-compact-01");
+  }
+
+  // The error state reads like the empty one, in the error color, with
+  // room for the action the `error` slot supplies.
+  .#{$prefix}--viz-chart__error {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    inset: 0;
+    pointer-events: none;
+
+    @include type-style("body-compact-01");
+      color: $text-error;
+  }
+
+  .#{$prefix}--viz-chart__as-of {
+    margin-inline-start: auto;
+    color: $text-secondary;
+    white-space: nowrap;
+
+    @include type-style("label-01");
   }
 
   .#{$prefix}--viz-chart__svg {
@@ -216,6 +283,42 @@
 
   .#{$prefix}--viz-line__path--dashed {
     stroke-dasharray: 6 4;
+  }
+
+  // The legend points at one series: the rest step back.
+  .#{$prefix}--viz-line__path--dimmed,
+  .#{$prefix}--viz-area__fill--dimmed,
+  .#{$prefix}--viz-area__line--dimmed {
+    opacity: 0.2;
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // A crosshair: the ruler, a line at the point's y, and the values written
+  // on the axes in a badge of the inverse surface.
+  .#{$prefix}--viz-crosshair__y {
+    shape-rendering: crispEdges;
+    stroke: $border-strong;
+    stroke-dasharray: 2 2;
+  }
+
+  .#{$prefix}--viz-crosshair__badge rect {
+    fill: $background-inverse;
+  }
+
+  .#{$prefix}--viz-crosshair__badge text {
+    fill: $text-inverse;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  // A prior period sits behind its series: the same color, lighter.
+  .#{$prefix}--viz-line__path--ghost {
+    opacity: 0.55;
+  }
+
+  .#{$prefix}--viz-chart-tooltip__prior {
+    opacity: 0.8;
   }
 
   .#{$prefix}--viz-line__point {
@@ -276,9 +379,11 @@
     font-weight: 600;
   }
 
+  // Rows align to their first line, so a label that wraps keeps the swatch
+  // and the value beside its first line, not floating mid-height.
   .#{$prefix}--viz-chart-tooltip__row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: $carbon--spacing-03;
   }
 
@@ -290,9 +395,38 @@
     inline-size: to-rem(8px);
   }
 
+  // A swatch sits on the inverse background, where a light palette color
+  // can vanish: a hairline in a mid gray keeps every color visible.
+  .#{$prefix}--viz-chart-tooltip__swatch {
+    // Centered on the 16px first line of label-01.
+    margin-block-start: $carbon--spacing-02;
+    box-shadow: inset 0 0 0 1px $border-strong;
+  }
+
+  // A row that names no series, in a tooltip whose rows do, keeps the
+  // swatch's room so the labels line up.
+  .#{$prefix}--viz-chart-tooltip__swatch--blank {
+    box-shadow: none;
+    background: transparent;
+  }
+
+  // A long label wraps rather than widening the box without end; a value
+  // never wraps or truncates.
+  .#{$prefix}--viz-chart-tooltip__label {
+    max-inline-size: 16rem;
+    white-space: normal;
+  }
+
   .#{$prefix}--viz-chart-tooltip__value {
     margin-inline-start: auto;
     padding-inline-start: $carbon--spacing-05;
+  }
+
+  // The rows past `maxRows`, as one line. Inverse surfaces have one text
+  // token, so it reads in the same color as the rows and sits where their
+  // labels start.
+  .#{$prefix}--viz-chart-tooltip__more {
+    color: $text-inverse;
   }
 
   .#{$prefix}--viz-legend {
@@ -330,6 +464,33 @@
     border: 1px solid var(--bx-viz-color);
     block-size: to-rem(12px);
     inline-size: to-rem(12px);
+  }
+
+  // A swatch that draws the series' symbol or pattern instead of a square.
+  .#{$prefix}--viz-legend__swatch--shape {
+    border: 0;
+    background: none;
+  }
+
+  .#{$prefix}--viz-legend__symbol {
+    fill: var(--bx-viz-color);
+  }
+
+  // A pattern: a tint of the series color under strokes of it.
+  .#{$prefix}--viz-pattern__tint {
+    fill: var(--bx-viz-color);
+    fill-opacity: 0.2;
+  }
+
+  .#{$prefix}--viz-pattern__stroke {
+    fill: none;
+    stroke: var(--bx-viz-color);
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-pattern__stroke--dots {
+    stroke-linecap: round;
+    stroke-width: 2.5;
   }
 
   // A hidden series reads as off three ways: hollow swatch, struck text,
@@ -720,6 +881,9 @@
     }
 
     // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-labels__label,
+    .#{$prefix}--viz-annotations__label,
+    .#{$prefix}--viz-crosshair__badge text,
     .#{$prefix}--viz-axis__label,
     .#{$prefix}--viz-axis__title,
     .#{$prefix}--viz-threshold--warning .#{$prefix}--viz-threshold__label,
@@ -731,6 +895,16 @@
 
     .#{$prefix}--viz-axis__line {
       stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-labels__label,
+    .#{$prefix}--viz-annotations__label {
+      stroke: Canvas;
+    }
+
+    .#{$prefix}--viz-labels__label--inside {
+      fill: Canvas;
+      stroke: none;
     }
 
     .#{$prefix}--viz-grid__line {
@@ -788,6 +962,105 @@
     .#{$prefix}--viz-lollipops__pop {
       transition: none;
     }
+  }
+
+  // Data labels: the value beside its mark, with a halo of the background
+  // so it reads over gridlines and neighbors.
+  .#{$prefix}--viz-labels__label {
+    fill: $text-secondary;
+    paint-order: stroke;
+    pointer-events: none;
+    stroke: $background;
+    stroke-linejoin: round;
+    stroke-width: 3;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  // Inside a bar, the label sits on the series color.
+  .#{$prefix}--viz-labels__label--inside {
+    fill: $text-on-color;
+    stroke: none;
+  }
+
+  .#{$prefix}--viz-errors__bar {
+    fill: none;
+    shape-rendering: crispEdges;
+    stroke: $text-secondary;
+    stroke-width: 1;
+  }
+
+  // Annotations: a marker or a moment, a leader, and a short label.
+  .#{$prefix}--viz-annotations__marker {
+    fill: $background;
+    stroke: $text-primary;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-annotations__line {
+    shape-rendering: crispEdges;
+    stroke: $text-primary;
+    stroke-dasharray: 2 2;
+  }
+
+  .#{$prefix}--viz-annotations__leader {
+    stroke: $border-strong;
+  }
+
+  .#{$prefix}--viz-annotations__label {
+    fill: $text-primary;
+    paint-order: stroke;
+    stroke: $background;
+    stroke-linejoin: round;
+    stroke-width: 3;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-annotations__item--info .#{$prefix}--viz-annotations__marker,
+  .#{$prefix}--viz-annotations__item--info .#{$prefix}--viz-annotations__line {
+    stroke: $support-info;
+  }
+
+  .#{$prefix}--viz-annotations__item--success .#{$prefix}--viz-annotations__marker,
+  .#{$prefix}--viz-annotations__item--success .#{$prefix}--viz-annotations__line {
+    stroke: $support-success;
+  }
+
+  .#{$prefix}--viz-annotations__item--warning .#{$prefix}--viz-annotations__marker,
+  .#{$prefix}--viz-annotations__item--warning .#{$prefix}--viz-annotations__line {
+    stroke: $support-warning;
+  }
+
+  .#{$prefix}--viz-annotations__item--error .#{$prefix}--viz-annotations__marker,
+  .#{$prefix}--viz-annotations__item--error .#{$prefix}--viz-annotations__line {
+    stroke: $support-error;
+  }
+
+  // A brush: the plot takes the pointer, and the range reads as a tint
+  // with edges, as the zoom bar's window does.
+  .#{$prefix}--viz-brush__hit {
+    cursor: crosshair;
+    fill: transparent;
+  }
+
+  .#{$prefix}--viz-brush__area {
+    fill: $interactive;
+    fill-opacity: 0.08;
+    pointer-events: none;
+    stroke: $interactive;
+  }
+
+  // A selected mark keeps its color and gains an outline.
+  .#{$prefix}--viz-bars__bar--selected {
+    stroke: $focus;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-points__point--selected {
+    stroke: $focus;
+    stroke-width: 2;
   }
 
   .#{$prefix}--viz-marker__line {

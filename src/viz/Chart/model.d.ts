@@ -28,6 +28,8 @@ export type ChartGroup<T> = {
   hidden: boolean;
   /** Which y scale the series is plotted on. Defaults to the first. */
   axis?: "y" | "y2";
+  /** Set when the series is a ghost of another, as a prior period is: it shares that series' color and hides with it. */
+  ghost?: ChartSeriesKey;
 };
 
 export type ChartXKind = "time" | "linear" | "category";
@@ -54,6 +56,8 @@ export type BuildGroupsOptions<T> = {
   colors?: Record<string, VizColor>;
   /** Which of Carbon's prescribed color groups to use, 1-based. */
   palette?: number;
+  /** Series that are ghosts of another, keyed by their own key: `{ "EMEA (prior)": "EMEA" }`. */
+  ghosts?: Record<string, ChartSeriesKey>;
   /**
    * Give every distinct x its own slot, as bars need. A numeric or time x
    * becomes categories in ascending order.
@@ -196,3 +200,41 @@ export function pickGroups<G extends { key: ChartSeriesKey }>(
   groups: ReadonlyArray<G>,
   keys: ReadonlyArray<ChartSeriesKey> | undefined,
 ): ReadonlyArray<G>;
+
+/** A point the tooltip lists: the hovered x's value in one series. */
+// biome-ignore lint/suspicious/noExplicitAny: the row type defaults to any, as the generated component types do
+export type TooltipPoint<T = any> = {
+  series: ChartSeriesKey;
+  datum: T;
+  index: number;
+  y: number;
+  color: string;
+  axis?: "y" | "y2";
+  /** The value in its axis's format. */
+  value: string;
+};
+
+/**
+ * The order of the tooltip's rows: as the series are, the stack's top first,
+ * by value, or a comparison of two points.
+ */
+// biome-ignore lint/suspicious/noExplicitAny: the row type defaults to any, as the generated component types do
+export type TooltipSort<T = any> =
+  | "series"
+  | "stack"
+  | "value"
+  | "value-asc"
+  | ((a: TooltipPoint<T>, b: TooltipPoint<T>) => number);
+
+/** Options a preset's `tooltip` prop forwards to `ChartTooltip`. */
+// biome-ignore lint/suspicious/noExplicitAny: the row type defaults to any, as the generated component types do
+export type TooltipOptions<T = any> = {
+  /** Milliseconds a pointer rests before the tooltip shows. Default 150. */
+  delay?: number;
+  /** The order of the rows. Default `"series"`, or `"stack"` on a stacked preset. A comparator sees each point's `datum` as the row type. */
+  sort?: TooltipSort<T>;
+  /** Rows shown before the rest fold into one "+N more" line. */
+  maxRows?: number;
+  /** The text of that line. */
+  moreLabel?: (count: number) => string;
+};

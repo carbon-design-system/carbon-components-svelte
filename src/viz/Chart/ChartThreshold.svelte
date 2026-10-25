@@ -27,11 +27,21 @@
    */
   export let kind = "error";
 
+  /**
+   * Specify which y axis the value is on: the first, or the secondary one a
+   * `secondary` series uses.
+   * @type {"y" | "y2"}
+   */
+  export let axis = "y";
+
   import { getContext, onMount } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
 
   /** @type {import("./context.js").ChartContext} */
   const { scales, includeY, reserveMargin } = getContext(CHART_CONTEXT);
+
+  /** Keeps the label off the axis: `$carbon--spacing-03`. */
+  const INSET = 8;
 
   /** @type {Array<() => void>} */
   let releases = [];
@@ -67,11 +77,12 @@
     releaseMargin = needed ? reserveMargin("top", 12) : undefined;
   }
 
-  $: register(y, to);
+  // A secondary-axis threshold cannot grow that axis's domain; it is drawn where it falls.
+  $: register(axis === "y2" ? undefined : y, axis === "y2" ? undefined : to);
+  $: scale = axis === "y2" && $scales.y2 ? $scales.y2 : $scales.y;
   $: reserve(Boolean(label) && $scales.horizontal);
-  $: py = $scales.y.map(y);
-  $: pTo =
-    typeof to === "number" && Number.isFinite(to) ? $scales.y.map(to) : null;
+  $: py = scale.map(y);
+  $: pTo = typeof to === "number" && Number.isFinite(to) ? scale.map(to) : null;
 
   onMount(() => () => {
     for (const release of releases) release();
@@ -111,7 +122,7 @@
     {#if label}
       <text
         class:bx--viz-threshold__label={true}
-        x={$scales.horizontal ? py : $scales.plot.x1}
+        x={$scales.horizontal ? py : $scales.plot.x1 - INSET}
         y={$scales.horizontal ? $scales.plot.y0 - 6 : py - 6}
         text-anchor={$scales.horizontal ? "middle" : "end"}
       >

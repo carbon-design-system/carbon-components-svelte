@@ -34,13 +34,23 @@
    */
   export let series = undefined;
 
+  /**
+   * Specify a fill pattern per series: `"auto"` cycles solid, diagonal,
+   * dots, crosshatch, horizontal, vertical in series order, or a map names
+   * one per series.
+   * @type {"auto" | Partial<Record<string, import("./shapes.js").Pattern>> | undefined}
+   */
+  export let pattern = undefined;
+
   import { getContext, onMount } from "svelte";
   import { areaExtent, buildAreas } from "./area-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
   import { pickGroups } from "./model.js";
+  import { assignShapes, PATTERNS, patternTile } from "./shapes.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, includeY, clip } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, includeY, clip, emphasis, setShapes } =
+    getContext(CHART_CONTEXT);
 
   /** @type {Array<() => void>} */
   let releases = [];
@@ -73,6 +83,24 @@
   $: mine = pickGroups($groups, series);
   $: include(mine, stack);
   // Depends on groups and scales only, so hover never rebuilds a layer.
+  const patternId = `bx-viz-pattern-${Math.random().toString(36).slice(2, 8)}`;
+  $: patterns = assignShapes(
+    pickGroups($groups, series).map((group) => group.key),
+    pattern,
+    PATTERNS,
+  );
+  $: setShapes(patterns, "pattern");
+  $: tiles = pickGroups($groups, series)
+    .filter((group) => (patterns.get(group.key) ?? "solid") !== "solid")
+    .map((group) => ({
+      key: group.key,
+      id: `${patternId}-${String(group.key).replace(/[^\w-]/g, "_")}`,
+      color: group.color,
+      ...patternTile(
+        /** @type {import("./shapes.js").Pattern} */ (patterns.get(group.key)),
+      ),
+    }));
+  $: fillOf = new Map(tiles.map((tile) => [tile.key, `url(#${tile.id})`]));
   $: layers = buildAreas(mine, $scales, { stack, curve });
   $: fill = opacity ?? (stack === "none" ? 0.3 : 0.8);
   $: dots =
@@ -92,17 +120,49 @@
 </script>
 
 <g clip-path={$clip} class:bx--viz-area={true} {...$$restProps}>
+  {#if tiles.length > 0}
+    <defs>
+      {#each tiles as tile (tile.id)}
+        <pattern
+          id={tile.id}
+          class:bx--viz-pattern={true}
+          patternUnits="userSpaceOnUse"
+          x={$scales.plot.x0}
+          y={$scales.plot.y1}
+          width={tile.size}
+          height={tile.size}
+          style:--bx-viz-color={tile.color}
+        >
+          <rect
+            class:bx--viz-pattern__tint={true}
+            width={tile.size}
+            height={tile.size}
+          />
+          <path
+            class:bx--viz-pattern__stroke={true}
+            class:bx--viz-pattern__stroke--dots={tile.dots}
+            d={tile.d}
+          />
+        </pattern>
+      {/each}
+    </defs>
+  {/if}
   {#each layers as layer (layer.key)}
     <path
       class:bx--viz-area__fill={true}
+      class:bx--viz-area__fill--dimmed={$emphasis !== null &&
+        $emphasis !== layer.key}
       d={layer.area}
-      fill-opacity={fill}
+      fill-opacity={fillOf.has(layer.key) ? 1 : fill}
       style:--bx-viz-color={layer.color}
+      style:fill={fillOf.get(layer.key)}
     />
   {/each}
   {#each layers as layer (layer.key)}
     <path
       class:bx--viz-area__line={true}
+      class:bx--viz-area__line--dimmed={$emphasis !== null &&
+        $emphasis !== layer.key}
       d={layer.line}
       style:--bx-viz-color={layer.color}
     />

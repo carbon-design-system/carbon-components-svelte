@@ -9,7 +9,8 @@
    * Row and event types are written inline: a typedef cannot carry the
    * generic into the generated declarations.
    * @restProps {figure}
-   * @event {{ datum: T; series: string | number; index: number; originalEvent: Event }} select Fires when the focused datum is activated by click, Enter, or Space.
+   * @event {{ datum: T; series: string | number; index: number; originalEvent: Event; selection: Array<{ series: string | number; index: number }> }} select Fires when the focused datum is activated by click, Enter, or Space.
+   * @event {{ range: [number, number] | null }} brush Fires when a `ChartBrush` drag ends or the brush clears.
    * @event {{ x: number; points: Array<{ datum: T; series: string | number; index: number; y: number }> } | null} hover Fires when the pointer or keyboard focus moves to another x, and with `null` when it leaves.
    * @event {{ series: string | number; hidden: boolean }} legend:toggle Fires when a series is shown or hidden.
    * @event {{ xDomain: [number, number]; yDomain: [number, number]; count: number }} update Fires after the data or its domain changes. Requires `emitUpdate`.
@@ -53,7 +54,7 @@
   /**
    * Specify where the legend goes: under the plot, or in a column to its
    * right.
-   * @type {"bottom" | "right"}
+   * @type {"bottom" | "right" | "top" | "left"}
    */
   export let legendPosition = "bottom";
 
@@ -201,6 +202,22 @@
   /** Specify the text shown in place of the plot when there is no data */
   export let emptyText = "No data";
 
+  /** Set to `true` to show the error state instead of the data */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this chart";
+
+  /**
+   * Specify when the data was last fetched, written in the header as
+   * "As of …", so stale data says so.
+   * @type {Date | number | string | undefined}
+   */
+  export let asOf = undefined;
+
+  /** Specify the label before the time in the header */
+  export let asOfLabel = "As of";
+
   /**
    * Specify whether to show the chart or its data as a table.
    * The table is the text alternative: every value, reachable without a pointer.
@@ -219,11 +236,42 @@
   export let emitUpdate = false;
 
   /**
+   * Overlay the previous period: every row shifted forward by `period`,
+   * milliseconds on a time axis or units on a linear one, becomes a ghost
+   * of its series, dashed in the same color, left out of the legend, and
+   * written under its series in the tooltip with the change. `label` is
+   * the suffix on the ghost's name.
+   * @type {{ period: number; label?: string } | null}
+   */
+  export let compare = null;
+
+  /**
    * Share hover with every other chart that has the same id, so a dashboard
    * shows one crosshair across all of them. The charts should share an x axis.
    * @type {string}
    */
   export let syncId = undefined;
+
+  /**
+   * Specify what the channel shares: hover alone by default, or also the
+   * zoom range, the brush, and the selection, so a click in one chart
+   * reaches the others.
+   * @type {ReadonlyArray<"hover" | "zoom" | "brush" | "selection">}
+   */
+  export let sync = ["hover"];
+
+  /**
+   * Specify the brushed x range, as `ChartBrush` sets it. `null` for none.
+   * @type {[number | Date, number | Date] | null}
+   */
+  export let brush = null;
+
+  /**
+   * Specify every selected datum, for multi-select: Shift-click adds to
+   * it, a plain click replaces it. `selected` is the last one.
+   * @type {ReadonlyArray<{ series: string | number; index: number }>}
+   */
+  export let selection = [];
 
   /**
    * Obtain a reference to the figure element.
@@ -236,6 +284,7 @@
   import { derived, get, writable } from "svelte/store";
   import { rafThrottle } from "../../utils/raf-throttle.js";
   import { toAccessor } from "../utils/accessor.js";
+  import { afterFirstPaint } from "../utils/after-first-paint.js";
   import {
     backgroundBehind,
     rasterizeSvg,
@@ -244,6 +293,7 @@
   import { bisectNearest, createGridIndex } from "../utils/nearest-point.js";
   import { nextId } from "../utils/next-id.js";
   import { observeResize } from "../utils/resize-pool.js";
+  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import ChartDataTable from "./ChartDataTable.svelte";
   import { createCanvasLayer } from "./canvas-layer.js";
   import { CHART_CONTEXT } from "./context.js";
@@ -261,7 +311,9 @@
   /** Width used until the container is measured, and on the server. */
   const NOMINAL_WIDTH = 640;
 
-  const groups = writable(/** @type {any[]} */ ([]));
+  const groups = writable(
+    /** @type {import("./model.js").ChartGroup<T>[]} */ ([]),
+  );
   const domain = writable(
     /** @type {import("./model.js").ChartDomain} */ ({
       x: [0, 1],
@@ -276,7 +328,9 @@
     height,
   });
   const scaleOptions = writable({});
-  const hover = writable(/** @type {any} */ (null));
+  const hover = writable(
+    /** @type {import("./context.js").ChartHover<T> | null} */ (null),
+  );
   // What last moved the hover: the tooltip waits for a pointer to settle,
   // but a key press shows it at once.
   const hoverOrigin = writable(
@@ -285,8 +339,24 @@
   // A click holds the tooltip on its point until Escape, another click, or
   // a press outside the chart.
   const pinned = writable(false);
+  // The tooltip's show and hide timing; `ChartTooltip` reads it. Leaving
+  // the plot clears the hover only once the tooltip has hidden.
+  /** @type {import("../utils/tooltip-timing.js").TooltipTiming} */
+  const tooltipTiming = createTooltipTiming(150, {
+    onHide: () => clearHover(),
+  });
+  // Followers on the sync channel hear when the tooltip shows, so theirs
+  // show then too rather than before.
+  let tooltipShown = false;
+  tooltipTiming.shown.subscribe((value) => {
+    tooltipShown = value;
+    const current = get(hover);
+    if (value && current && get(hoverOrigin) !== "sync") {
+      channel?.publish({ kind: "hover", x: current.x, shown: true });
+    }
+  });
   const hiddenStore = writable(hidden);
-  /** @type {import("svelte/store").Writable<"ready" | "loading" | "empty">} */
+  /** @type {import("svelte/store").Writable<"ready" | "loading" | "empty" | "error">} */
   const stateStore = writable("ready");
   const viewStore = writable(view);
   const titleStore = writable(title);
@@ -326,14 +396,14 @@
   }
 
   /** @type {ReturnType<typeof joinSync> | null} */
-  let sync = null;
+  let channel = null;
 
   /** @param {boolean} [fromSync] A synced chart must not echo back. */
   function clearHover(fromSync = false) {
     if (get(hover) === null) return;
     hover.set(null);
     dispatch("hover", null);
-    if (!fromSync) sync?.publish(null);
+    if (!fromSync) channel?.publish({ kind: "hover", x: null, shown: false });
   }
 
   // Marks that paint pixels share one canvas behind the SVG.
@@ -345,6 +415,104 @@
 
   const clipId = nextId("bx-viz-clip");
   const zoomStore = writable(/** @type {[number, number] | null} */ (null));
+  // The brushed range in data space, and the keys of the selected data.
+  const brushStore = writable(/** @type {[number, number] | null} */ (null));
+  const selectedKeys = writable(/** @type {ReadonlySet<string>} */ (new Set()));
+  // The series the legend is pointing at: the others dim while it is.
+  const emphasis = writable(/** @type {string | number | null} */ (null));
+  // The symbol or pattern each series draws with, so the legend can match.
+  const shapes = writable(
+    /** @type {ReadonlyMap<string | number, { symbol?: import("./shapes.js").Symbol; pattern?: import("./shapes.js").Pattern }>} */ (
+      new Map()
+    ),
+  );
+  /**
+   * @param {ReadonlyMap<string | number, import("./shapes.js").Symbol | import("./shapes.js").Pattern>} assigned
+   * @param {"symbol" | "pattern"} kind
+   */
+  function setShapes(assigned, kind) {
+    shapes.update((current) => {
+      const next = new Map(current);
+      for (const [key, value] of next) {
+        if (value[kind] !== undefined && !assigned.has(key)) {
+          const { [kind]: _, ...rest } = value;
+          next.set(key, rest);
+        }
+      }
+      for (const [key, value] of assigned) {
+        next.set(key, { ...(next.get(key) ?? {}), [kind]: value });
+      }
+      return next;
+    });
+  }
+  /** @param {number | Date} value */
+  const asNumber = (value) => (value instanceof Date ? value.getTime() : value);
+  $: brushStore.set(brush ? [asNumber(brush[0]), asNumber(brush[1])] : null);
+  $: asOfText =
+    asOf === undefined || asOf === null || asOf === ""
+      ? ""
+      : typeof asOf === "string"
+        ? asOf
+        : new Intl.DateTimeFormat(locale, {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }).format(asOf instanceof Date ? asOf : new Date(asOf));
+  $: selectedKeys.set(
+    new Set(
+      [...selection, ...(selected ? [selected] : [])].map(
+        (key) => `${key.series}:${key.index}`,
+      ),
+    ),
+  );
+
+  /**
+   * Set the brush. A live update, while a drag is in progress, moves the
+   * range without telling anyone; the final one fires `brush` and reaches
+   * the synced charts.
+   * @param {[number, number] | null} range
+   * @param {boolean} [live]
+   */
+  function setBrush(range, live = false) {
+    brush = range;
+    if (live) return;
+    dispatch("brush", { range });
+    publishSync({ kind: "brush", range });
+  }
+
+  /**
+   * Publish on the channel, when the message's kind is one this chart shares.
+   * @param {import("./sync.js").SyncMessage} message
+   */
+  function publishSync(message) {
+    if (!sync.includes(message.kind)) return;
+    channel?.publish(message);
+  }
+
+  /**
+   * Select what another chart selected: the same x in the same series, or
+   * in the first visible one when this chart lacks that series.
+   * @param {Extract<import("./sync.js").SyncMessage, { kind: "selection" }>} message
+   */
+  function followSelection(message) {
+    const current = get(scales);
+    const visible = get(groups).filter((group) => !group.hidden);
+    /** @type {Array<{ series: string | number; index: number }>} */
+    const keys = [];
+    for (const item of message.selection) {
+      const x =
+        current.kind === "category" && item.category !== undefined
+          ? current.categories.indexOf(item.category)
+          : item.x;
+      const group =
+        visible.find((candidate) => candidate.key === item.series) ??
+        visible[0];
+      if (!group) continue;
+      const index = group.xs.indexOf(x);
+      if (index !== -1) keys.push({ series: group.key, index });
+    }
+    selection = keys;
+    selected = keys.at(-1) ?? null;
+  }
   // The x range with no zoom applied, which the zoom bar spans.
   const fullX = writable(
     /** @type {{ domain: [number, number]; kind: "time" | "linear" | "category" }} */ ({
@@ -365,6 +533,7 @@
       range && (range[0] > full[0] || range[1] < full[1])
         ? [range[0], range[1]]
         : null;
+    publishSync({ kind: "zoom", range: zoom });
   }
 
   const fullscreenStore = writable(false);
@@ -436,13 +605,16 @@
     return resolved || color;
   }
 
-  setContext(CHART_CONTEXT, {
+  // Typed as the published context, so marks and the generated types agree.
+  /** @type {import("./context.js").ChartContext<T>} */
+  const context = {
     groups,
     scales,
     size,
     hover,
     hoverOrigin,
     pinned,
+    tooltipTiming,
     banded,
     state: stateStore,
     hidden: hiddenStore,
@@ -521,7 +693,14 @@
       return () => reserved.update((list) => list.filter((e) => e !== entry));
     },
     clearHover: () => clearHover(),
-  });
+    brush: brushStore,
+    setBrush,
+    selectedKeys,
+    emphasis,
+    shapes,
+    setShapes,
+  };
+  setContext(CHART_CONTEXT, context);
 
   const defaultSeries = () => title || "value";
 
@@ -552,11 +731,12 @@
   });
   $: effectiveHeight = fullscreenHeight || height;
   $: resize(width, effectiveHeight);
+  $: compared = withPrior(data, xAccessor, yAccessor, seriesAccessor, compare);
   $: rebuild(
-    data,
-    xAccessor,
-    yAccessor,
-    seriesAccessor,
+    compared.rows,
+    compared.x,
+    compared.y,
+    compared.series,
     hidden,
     colors,
     palette,
@@ -571,6 +751,65 @@
     yScale,
     zoom,
   );
+
+  /**
+   * The rows plus, under `compare`, a prior row per row: the same values
+   * one period later, under a ghost series name.
+   * @param {ReadonlyArray<T>} rows
+   * @param {(row: T, index: number) => number | Date | string} xA
+   * @param {(row: T, index: number) => number | null | undefined} yA
+   * @param {(row: T, index: number) => string | number} sA
+   * @param {{ period: number; label?: string } | null} options
+   */
+  function withPrior(rows, xA, yA, sA, options) {
+    if (!options) {
+      return { rows, x: xA, y: yA, series: sA, ghosts: {} };
+    }
+    const suffix = options.label ?? " (prior)";
+    /** @param {unknown} value */
+    const toNumber = (value) =>
+      value instanceof Date
+        ? value.getTime()
+        : typeof value === "number"
+          ? value
+          : Number.NaN;
+    let max = Number.NEGATIVE_INFINITY;
+    let dates = false;
+    rows.forEach((row, i) => {
+      const raw = xA(row, i);
+      if (raw instanceof Date) dates = true;
+      const value = toNumber(raw);
+      if (value > max) max = value;
+    });
+    /** @type {Record<string, string | number>} */
+    const ghosts = {};
+    /** @type {Array<{ prior: true; source: T; index: number; x: number; key: string }>} */
+    const prior = [];
+    rows.forEach((row, i) => {
+      const value = toNumber(xA(row, i));
+      if (!Number.isFinite(value)) return;
+      const shifted = value + options.period;
+      if (shifted > max) return;
+      const base = sA(row, i);
+      const key = `${base}${suffix}`;
+      ghosts[key] = base;
+      prior.push({ prior: true, source: row, index: i, x: shifted, key });
+    });
+    /** @param {any} row */
+    const isPrior = (row) =>
+      row !== null && typeof row === "object" && row.prior === true;
+    return {
+      rows: /** @type {ReadonlyArray<T>} */ ([...rows, ...prior]),
+      /** @type {(row: any, index: number) => number | Date | string} */
+      x: (row, i) =>
+        isPrior(row) ? (dates ? new Date(row.x) : row.x) : xA(row, i),
+      /** @type {(row: any, index: number) => number | null | undefined} */
+      y: (row, i) => (isPrior(row) ? yA(row.source, row.index) : yA(row, i)),
+      /** @type {(row: any, index: number) => string | number} */
+      series: (row, i) => (isPrior(row) ? row.key : sA(row, i)),
+      ghosts,
+    };
+  }
 
   function rebuild(
     /** @type {ReadonlyArray<T>} */ rows,
@@ -601,6 +840,7 @@
       palette: paletteOption,
       band,
       locale: bandLocale,
+      ghosts: compared.ghosts,
     });
     // The zoom bar spans the range with no zoom applied. A category axis
     // has no domain of its own to fix: its bounds are only ever a zoom.
@@ -669,6 +909,7 @@
     return { destroy: detach };
   }
 
+  onMount(() => () => tooltipTiming.destroy());
   onMount(() => {
     /** @param {Event} event */
     const release = (event) => {
@@ -681,23 +922,57 @@
     return () => document.removeEventListener("pointerdown", release, true);
   });
 
+  // Marks may move once the chart has painted in place, which is after its
+  // first measurement when the container sizes it; never on the way in.
+  let settled = false;
+  /** @type {(() => void) | null} */
+  let cancelSettle = null;
+  function settleAfterPaint() {
+    cancelSettle?.();
+    cancelSettle = afterFirstPaint(() => {
+      settled = true;
+    });
+  }
+  onMount(() => () => cancelSettle?.());
+
   onMount(() => {
-    if (width !== "auto" || !ref) return;
+    if (width !== "auto" || !ref || typeof ResizeObserver === "undefined") {
+      settleAfterPaint();
+      return;
+    }
+    let first = true;
     return observeResize(ref, (measured) => {
       const rounded = Math.round(measured);
       if (rounded > 0) resize(rounded, effectiveHeight, true);
+      if (first) {
+        first = false;
+        settleAfterPaint();
+      }
     });
   });
 
   /** @param {string | undefined} id */
   function joinChannel(id) {
-    sync?.leave();
-    sync = id
-      ? joinSync(id, (x) => {
-          if (get(pinned)) return;
-          hoverOrigin.set("sync");
-          if (x === null) clearHover(true);
-          else hoverAt(x, true);
+    channel?.leave();
+    channel = id
+      ? joinSync(id, (message) => {
+          if (message.kind === "hover") {
+            if (get(pinned)) return;
+            // The ruler follows at once; the tooltip waits as the source's
+            // does, and shows when the source's has.
+            hoverOrigin.set(message.shown ? "sync" : "pointer");
+            if (message.x === null) clearHover(true);
+            else hoverAt(message.x, true);
+          } else if (message.kind === "zoom" && sync.includes("zoom")) {
+            zoom = message.range;
+          } else if (message.kind === "brush" && sync.includes("brush")) {
+            brush = message.range;
+          } else if (
+            message.kind === "selection" &&
+            sync.includes("selection")
+          ) {
+            followSelection(message);
+          }
         })
       : null;
   }
@@ -706,7 +981,7 @@
   let mounted = false;
   onMount(() => {
     mounted = true;
-    return () => sync?.leave();
+    return () => channel?.leave();
   });
   $: if (mounted) joinChannel(syncId);
 
@@ -845,7 +1120,8 @@
       });
     }
     hover.set({ x: nearest, px: current.x.map(nearest), points });
-    if (!fromSync) sync?.publish(nearest);
+    if (!fromSync)
+      channel?.publish({ kind: "hover", x: nearest, shown: tooltipShown });
     dispatch("hover", {
       x: nearest,
       points: points.map(({ datum, series: key, index, y: value }) => ({
@@ -859,6 +1135,8 @@
 
   const onPointerMove = rafThrottle((/** @type {PointerEvent} */ event) => {
     if (!svg || get(pinned)) return;
+    // Back over the plot: a pending hide from leaving is off.
+    tooltipTiming.enter();
     const rect = svg.getBoundingClientRect();
     if (rect.width === 0) return;
     hoverOrigin.set(
@@ -892,7 +1170,7 @@
    */
   function onPointerLeave() {
     if (get(pinned)) return;
-    clearHover();
+    tooltipTiming.leave();
   }
 
   /**
@@ -916,12 +1194,47 @@
     if (!current || current.points.length === 0) return;
     const point =
       current.points[Math.min(focusSeries, current.points.length - 1)];
-    selected = { series: point.series, index: point.index };
+    const key = { series: point.series, index: point.index };
+    // Shift adds to or removes from the selection; a plain press replaces it.
+    const additive = "shiftKey" in event && Boolean(event.shiftKey);
+    const already = selection.some(
+      (item) => item.series === key.series && item.index === key.index,
+    );
+    if (additive && already) {
+      selection = selection.filter(
+        (item) => !(item.series === key.series && item.index === key.index),
+      );
+      selected = selection.at(-1) ?? null;
+    } else {
+      selection = additive ? [...selection, key] : [key];
+      selected = key;
+    }
     dispatch("select", {
       datum: point.datum,
       series: point.series,
       index: point.index,
       originalEvent: event,
+      selection,
+    });
+    const scale = get(scales);
+    const byKey = new Map(get(groups).map((group) => [group.key, group]));
+    publishSync({
+      kind: "selection",
+      x: current.x,
+      series: point.series,
+      selection: selection.flatMap((item) => {
+        const group = byKey.get(item.series);
+        const x = group?.xs[item.index];
+        if (x === undefined) return [];
+        return [
+          {
+            x,
+            series: item.series,
+            category:
+              scale.kind === "category" ? scale.categories[x] : undefined,
+          },
+        ];
+      }),
     });
   }
 
@@ -958,6 +1271,7 @@
         focusPoint = -1;
         pinned.set(false);
         clearHover();
+        if (brush) setBrush(null);
         return;
       default:
         return;
@@ -1012,6 +1326,7 @@
         focusIndex = -1;
         pinned.set(false);
         clearHover();
+        if (brush) setBrush(null);
         return;
       default:
         return;
@@ -1022,8 +1337,11 @@
     hoverAt(target.xs[Math.min(focusIndex, target.xs.length - 1)]);
   }
 
-  $: empty = !loading && $groups.every((group) => group.xs.length === 0);
-  $: stateStore.set(loading ? "loading" : empty ? "empty" : "ready");
+  $: empty =
+    !loading && !error && $groups.every((group) => group.xs.length === 0);
+  $: stateStore.set(
+    loading ? "loading" : error ? "error" : empty ? "empty" : "ready",
+  );
 
   $: announcement = $hover
     ? `${$scales.xLabel($hover.x)}: ${$hover.points
@@ -1042,7 +1360,9 @@
   class:bx--viz-chart={true}
   class:bx--viz-chart--fullscreen={$fullscreenStore}
   class:bx--viz-chart--legend-right={legendPosition === "right"}
-  class:bx--viz-chart--transition={transition}
+  class:bx--viz-chart--legend-left={legendPosition === "left"}
+  class:bx--viz-chart--legend-top={legendPosition === "top"}
+  class:bx--viz-chart--transition={transition && settled}
   on:fullscreenchange={onFullscreenChange}
   aria-busy={loading ? "true" : undefined}
   aria-label={title || undefined}
@@ -1054,6 +1374,9 @@
   <div class:bx--viz-chart__header={true}>
     {#if title}
       <div class:bx--viz-chart__title={true}>{title}</div>
+    {/if}
+    {#if asOfText}
+      <div class:bx--viz-chart__as-of={true}>{asOfLabel} {asOfText}</div>
     {/if}
     <slot name="toolbar" />
   </div>
@@ -1114,6 +1437,10 @@
           $scales.plot.x1}px {$size.height - $scales.plot.y1}px {$scales.plot
           .x0}px"
       ></div>
+    {:else if error}
+      <div class:bx--viz-chart__error={true}>
+        <slot name="error">{errorText}</slot>
+      </div>
     {:else if empty}
       <div class:bx--viz-chart__empty={true}>
         <slot name="empty">{emptyText}</slot>

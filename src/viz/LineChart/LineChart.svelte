@@ -6,7 +6,7 @@
    */
 
   /**
-   * @extends {"../Chart/Chart.svelte"} ChartProps
+   * @extends {"../Chart/Chart.svelte"} ChartProps<T>
    * @event {{ datum: T; series: string | number; index: number; originalEvent: Event }} select Fires when the focused datum is activated by click, Enter, or Space.
    * @event {{ x: number; points: Array<{ datum: T; series: string | number; index: number; y: number }> } | null} hover Fires when the pointer or keyboard focus moves to another x, and with `null` when it leaves.
    * @event {{ series: string | number; hidden: boolean }} legend:toggle Fires when a series is shown or hidden.
@@ -50,6 +50,29 @@
    */
   export let zero = false;
 
+  /**
+   * Specify labels along the lines: the series name at each line's end,
+   * or every value where it fits.
+   * @type {"none" | "end" | "all"}
+   */
+  export let labels = "none";
+
+  /** Set to `true` to let a drag across the plot brush an x range */
+  export let brushable = false;
+
+  /**
+   * Specify the brushed x range. Bind it; `null` for none.
+   * @type {[number | Date, number | Date] | null}
+   */
+  export let brush = null;
+
+  /**
+   * Specify every selected datum: Shift-click adds to it, a plain click
+   * replaces it. Bind it.
+   * @type {ReadonlyArray<{ series: string | number; index: number }>}
+   */
+  export let selection = [];
+
   /** Set to `false` to hide the grid */
   export let grid = true;
 
@@ -59,8 +82,14 @@
   /** Specify how many legend items show before the rest fold behind a "more" button */
   export let maxLegendItems = 8;
 
-  /** Set to `false` to hide the tooltip and the ruler */
+  /**
+   * Set to `false` to hide the tooltip and the ruler, or pass options:
+   * `sort` for the order of its rows, `maxRows` to fold the rest into one
+   * line, `delay` for how long a pointer rests before it shows.
+   * @type {boolean | import("../Chart/model.js").TooltipOptions<T>}
+   */
   export let tooltip = true;
+  $: tooltipProps = tooltip === true ? {} : tooltip === false ? null : tooltip;
 
   /** Set to `true` to show a toolbar with a data table view and a CSV download */
   export let toolbar = false;
@@ -109,6 +138,7 @@
 
   import Chart from "../Chart/Chart.svelte";
   import ChartAxis from "../Chart/ChartAxis.svelte";
+  import ChartBrush from "../Chart/ChartBrush.svelte";
   import ChartGrid from "../Chart/ChartGrid.svelte";
   import ChartLegend from "../Chart/ChartLegend.svelte";
   import ChartLine from "../Chart/ChartLine.svelte";
@@ -126,6 +156,9 @@
   bind:selected
   bind:view
   bind:ref
+  bind:brush
+  bind:selection
+  on:brush
   {...$$restProps}
   on:select
   on:hover
@@ -137,12 +170,15 @@
   {/if}
   <ChartAxis position="bottom" title={xTitle} />
   <ChartAxis position="left" title={yTitle} />
+  {#if brushable}
+    <ChartBrush />
+  {/if}
   <slot />
   {#if forecastFrom !== undefined}
     <ChartMarker x={forecastFrom} label={forecastLabel} />
   {/if}
-  <ChartLine {curve} {points} {dashed} {downsample} {forecastFrom} />
-  {#if tooltip}
+  <ChartLine {labels} {curve} {points} {dashed} {downsample} {forecastFrom} />
+  {#if tooltipProps}
     <ChartRuler />
   {/if}
   <svelte:fragment slot="toolbar">
@@ -151,8 +187,8 @@
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="tooltip">
-    {#if tooltip}
-      <slot name="tooltip"><ChartTooltip /></slot>
+    {#if tooltipProps}
+      <slot name="tooltip"><ChartTooltip {...tooltipProps} /></slot>
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="zoom">

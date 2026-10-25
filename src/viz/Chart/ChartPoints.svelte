@@ -9,7 +9,7 @@
   /**
    * Specify how to read a size from a row, for a bubble chart: a key or a
    * function. The circle's area follows the value.
-   * @type {string | ((row: any, index: number) => unknown)}
+   * @type {string | ((row: any, index: number) => number | null | undefined)}
    */
   export let size = undefined;
 
@@ -41,15 +41,52 @@
    */
   export let renderer = "svg";
 
+  /**
+   * Specify whether to label the points: `"auto"` keeps the labels that
+   * do not collide, `"all"` draws every one.
+   * @type {"none" | "auto" | "all"}
+   */
+  export let labels = "none";
+
+  /**
+   * Specify how to read a point's label from its row. Defaults to the
+   * formatted y value.
+   * @type {import("../utils/accessor.js").Accessor<any, string | number> | undefined}
+   */
+  export let label = undefined;
+
+  /**
+   * Specify a symbol per series, so series tell apart without color:
+   * `"auto"` cycles circle, square, triangle, diamond, cross, star in
+   * series order, or a map names one per series.
+   * @type {"auto" | Partial<Record<string, import("./shapes.js").Symbol>> | undefined}
+   */
+  export let symbol = undefined;
+
   import { getContext, onMount } from "svelte";
   import { toAccessor } from "../utils/accessor.js";
   import { CHART_CONTEXT } from "./context.js";
+  import { labelWidth, placeLabels } from "./label-layout.js";
   import { pickGroups } from "./model.js";
   import { buildPoints, paintPoints } from "./point-geometry.js";
+  import { assignShapes, SYMBOLS, symbolPath } from "./shapes.js";
+
+  const LABEL_HEIGHT = 14;
+  const LABEL_GAP = 3;
+  const MAX_LABELS = 300;
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, usePointHover, clip, canvas } =
-    getContext(CHART_CONTEXT);
+  const {
+    groups,
+    scales,
+    hover,
+    usePointHover,
+    clip,
+    canvas,
+    selectedKeys,
+    emphasis,
+    setShapes,
+  } = getContext(CHART_CONTEXT);
 
   /** @type {(() => void) | null} */
   let unregister = null;
@@ -83,11 +120,64 @@
 
   $: sizeOf = size === undefined ? undefined : toAccessor(size);
   // Depends on groups and scales only, so hover never rebuilds a circle.
-  $: circles = buildPoints(pickGroups($groups, series), $scales, {
+  $: circles = buildPoints(mine, $scales, {
     radius,
     size: sizeOf,
     sizeRange,
   });
+  $: labelOf = label === undefined ? undefined : toAccessor(label);
+  $: symbols = assignShapes(
+    $groups.map((group) => group.key),
+    symbol,
+    SYMBOLS,
+  );
+  $: setShapes(symbols, "symbol");
+  $: mine = pickGroups($groups, series);
+  // A label beside its point, to the right first, then left, then above.
+  $: labelBoxes =
+    labels === "none" || circles.length > MAX_LABELS
+      ? []
+      : (() => {
+          const rowsOf = new Map(mine.map((group) => [group.key, group]));
+          const boxes = circles.map((circle) => {
+            const group = rowsOf.get(circle.series);
+            const row = group?.rows[circle.index];
+            const text =
+              labelOf && row !== undefined
+                ? String(labelOf(row, circle.index))
+                : $scales.yFormat(group?.ys[circle.index] ?? Number.NaN);
+            const width = labelWidth(text);
+            return {
+              key: circle.key,
+              text,
+              x: circle.cx + circle.r + LABEL_GAP,
+              y: circle.cy - LABEL_HEIGHT / 2,
+              width,
+              height: LABEL_HEIGHT,
+              alternatives: [
+                {
+                  x: circle.cx - circle.r - LABEL_GAP - width,
+                  y: circle.cy - LABEL_HEIGHT / 2,
+                },
+                {
+                  x: circle.cx - width / 2,
+                  y: circle.cy - circle.r - LABEL_GAP - LABEL_HEIGHT,
+                },
+                {
+                  x: circle.cx - width / 2,
+                  y: circle.cy + circle.r + LABEL_GAP,
+                },
+              ],
+            };
+          });
+          if (labels === "all")
+            return boxes.map((box) => ({ ...box, moved: false }));
+          const byKey = new Map(boxes.map((box) => [box.key, box]));
+          return placeLabels(boxes, { bounds: $scales.plot }).map((box) => ({
+            ...box,
+            text: byKey.get(box.key)?.text ?? "",
+          }));
+        })();
   $: active =
     $hover && $hover.points.length > 0
       ? `${$hover.points[0].series}:${$hover.points[0].index}`
@@ -102,18 +192,44 @@
 >
   {#each circles as circle (circle.key)}
     {#if (!hidden && renderer !== "canvas") || circle.key === active}
-      <circle
-        class:bx--viz-points__point={true}
-        class:bx--viz-points__point--active={circle.key === active}
-        class:bx--viz-points__point--dimmed={!hidden &&
-          renderer !== "canvas" &&
-          active !== null &&
-          circle.key !== active}
-        cx={circle.cx}
-        cy={circle.cy}
-        r={circle.r}
-        style:--bx-viz-color={circle.color}
-      />
+      {@const shape = symbols.get(circle.series) ?? "circle"}
+      {#if shape === "circle"}
+        <circle
+          class:bx--viz-points__point={true}
+          class:bx--viz-points__point--active={circle.key === active}
+          class:bx--viz-points__point--selected={$selectedKeys.has(circle.key)}
+          class:bx--viz-points__point--dimmed={!hidden &&
+            renderer !== "canvas" &&
+            ((active !== null && circle.key !== active) ||
+              ($emphasis !== null && $emphasis !== circle.series))}
+          cx={circle.cx}
+          cy={circle.cy}
+          r={circle.r}
+          style:--bx-viz-color={circle.color}
+        />
+      {:else}
+        <path
+          class:bx--viz-points__point={true}
+          class:bx--viz-points__point--active={circle.key === active}
+          class:bx--viz-points__point--selected={$selectedKeys.has(circle.key)}
+          class:bx--viz-points__point--dimmed={!hidden &&
+            renderer !== "canvas" &&
+            ((active !== null && circle.key !== active) ||
+              ($emphasis !== null && $emphasis !== circle.series))}
+          d={symbolPath(shape, circle.r)}
+          transform="translate({circle.cx} {circle.cy})"
+          style:--bx-viz-color={circle.color}
+        />
+      {/if}
     {/if}
+  {/each}
+  {#each labelBoxes as box (box.key)}
+    <text
+      class:bx--viz-labels__label={true}
+      x={box.x}
+      y={box.y + box.height - 3}
+    >
+      {box.text}
+    </text>
   {/each}
 </g>

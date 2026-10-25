@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { user } from "../../utils/user";
 import Chart from "./Chart.test.svelte";
 
@@ -213,10 +214,28 @@ describe("Chart", () => {
     });
   });
 
-  it("opts into motion with a class the stylesheet animates under", () => {
+  it("opts into motion with a class the stylesheet animates under, from the second frame", async () => {
     const { container } = render(Chart, { transition: true });
-    expect(container.querySelector("figure")).toHaveClass(
-      "bx--viz-chart--transition",
+    const figure = container.querySelector("figure");
+    expect(figure).not.toHaveClass("bx--viz-chart--transition");
+
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
     );
+    await tick();
+    expect(figure).toHaveClass("bx--viz-chart--transition");
+  });
+
+  it("writes when the data is from in the header, and shows the error state with its slot", async () => {
+    const { rerender } = render(Chart, { asOf: new Date(2026, 9, 24, 9, 41) });
+    expect(document.querySelector(".bx--viz-chart__as-of")).toHaveTextContent(
+      /^As of .*9:41/,
+    );
+
+    await rerender({ error: true, errorText: "Lost the connection" });
+    expect(document.querySelector(".bx--viz-chart__error")).toHaveTextContent(
+      "Lost the connection",
+    );
+    expect(document.querySelector(".bx--viz-chart__skeleton")).toBeNull();
   });
 });

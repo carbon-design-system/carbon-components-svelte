@@ -3,19 +3,42 @@
 <script>
   /**
    * @restProps {div}
-   * @slot {{ x: number; xLabel: string; points: Array<{ series: string | number; datum: any; index: number; y: number; color: string; value: string }> }}
+   * @slot {{ x: number; xLabel: string; points: Array<import("./model.js").TooltipPoint>; hidden: number }}
    */
 
   /**
    * Specify how long a pointer must rest on the chart before the tooltip
    * shows, in milliseconds, so a pointer passing over never flashes it.
-   * A key press shows it at once, and once shown it follows without delay.
+   * A key press shows it at once; once shown it follows without delay,
+   * stays a moment after the pointer leaves, and shows at once again to a
+   * pointer back soon after.
    */
   export let delay = 150;
 
-  import { getContext, onMount } from "svelte";
+  /**
+   * Specify the order of the rows: as the series are, the top of a stack
+   * first, by value, or a comparison of two points.
+   * @type {import("./model.js").TooltipSort}
+   */
+  export let sort = "series";
+
+  /**
+   * Specify how many rows show before the rest fold into one "+N more"
+   * line. The slot receives the rows that fit, and `hidden` for the count.
+   */
+  export let maxRows = Number.POSITIVE_INFINITY;
+
+  /**
+   * Specify the text of the fold line.
+   * @type {(count: number) => string}
+   */
+  export let moreLabel = (count) => `+${count} more`;
+
+  /** Specify the label of a prior-period row, under `compare` */
+  export let priorLabel = "prior";
+
+  import { getContext } from "svelte";
   import { readable } from "svelte/store";
-  import { createTooltipTiming } from "../utils/tooltip-timing.js";
   import ChartTooltipRow from "./ChartTooltipRow.svelte";
   import { CHART_CONTEXT, FACETS_CONTEXT } from "./context.js";
   import {
@@ -25,14 +48,21 @@
   } from "./tooltip-placement.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, size, hover, hoverOrigin, banded, pinned } =
-    getContext(CHART_CONTEXT);
+  const {
+    groups,
+    scales,
+    size,
+    hover,
+    hoverOrigin,
+    banded,
+    pinned,
+    tooltipTiming: timing,
+  } = getContext(CHART_CONTEXT);
 
-  const timing = createTooltipTiming(delay);
   const { shown } = timing;
 
+  $: timing.configure({ delay });
   $: timing.settle($hover, $hoverOrigin);
-  onMount(() => () => timing.destroy());
   // Inside a facet grid the tooltip sits in a corner of the plot that no
   // series crosses, top left first, so the tooltips of a row line up and
   // cover nothing. When every corner is taken it follows the point as
@@ -41,13 +71,35 @@
   const facets = getContext(FACETS_CONTEXT);
   const tooltipAlign = facets ? facets.tooltipAlign : readable("follow");
 
-  $: points = $hover
-    ? $hover.points.map((point) => ({
-        ...point,
-        value: (point.axis === "y2" ? $scales.y2Format : $scales.yFormat)(
-          point.y,
-        ),
-      }))
+  // The rows in order, then only as many as fit; the slot sees the same.
+  $: ordered = orderPoints(all, sort);
+  $: points = ordered.slice(0, Math.max(0, maxRows));
+  $: hiddenCount = ordered.length - points.length;
+  $: ghostOf = new Map(
+    $groups
+      .filter((group) => group.ghost !== undefined)
+      .map((group) => [
+        group.key,
+        /** @type {string | number} */ (group.ghost),
+      ]),
+  );
+  // A ghost point is the prior period of its base: it rides under that row.
+  $: priors = new Map(
+    $hover
+      ? $hover.points
+          .filter((point) => ghostOf.has(point.series))
+          .map((point) => [ghostOf.get(point.series), point])
+      : [],
+  );
+  $: all = $hover
+    ? $hover.points
+        .filter((point) => !ghostOf.has(point.series))
+        .map((point) => ({
+          ...point,
+          value: (point.axis === "y2" ? $scales.y2Format : $scales.yFormat)(
+            point.y,
+          ),
+        }))
     : [];
   // `px` runs along the x scale and `py` along the y scale. A horizontal
   // chart draws the x scale down the plot, so the tooltip sits under the
@@ -116,6 +168,34 @@
             ) - 16,
           )
     : 0;
+
+  /**
+   * The prior value, and the change from it as a signed percentage.
+   * @param {{ y: number; axis?: "y" | "y2" }} point
+   * @param {{ y: number; axis?: "y" | "y2" } | undefined} prior
+   */
+  function priorValue(point, prior) {
+    if (!prior) return "";
+    const format = prior.axis === "y2" ? $scales.y2Format : $scales.yFormat;
+    const written = format(prior.y);
+    if (!Number.isFinite(prior.y) || prior.y === 0) return written;
+    const change = ((point.y - prior.y) / Math.abs(prior.y)) * 100;
+    const sign = change > 0 ? "+" : "";
+    return `${written} (${sign}${change.toFixed(1)}%)`;
+  }
+
+  /**
+   * @param {import("./model.js").TooltipPoint[]} list
+   * @param {import("./model.js").TooltipSort} by
+   */
+  function orderPoints(list, by) {
+    if (by === "series") return list;
+    const copy = [...list];
+    if (by === "stack") return copy.reverse();
+    if (by === "value") return copy.sort((a, b) => b.y - a.y);
+    if (by === "value-asc") return copy.sort((a, b) => a.y - b.y);
+    return copy.sort(by);
+  }
 </script>
 
 <!--
@@ -134,7 +214,12 @@
     style:top="{top}px"
     {...$$restProps}
   >
-    <slot x={$hover.x} xLabel={$scales.xLabel($hover.x)} {points}>
+    <slot
+      x={$hover.x}
+      xLabel={$scales.xLabel($hover.x)}
+      {points}
+      hidden={hiddenCount}
+    >
       <div class:bx--viz-chart-tooltip__title={true}>
         {$scales.xLabel($hover.x)}
       </div>
@@ -144,7 +229,23 @@
           label={String(point.series)}
           value={point.value}
         />
+        {#if priors.has(point.series)}
+          {@const prior = priors.get(point.series)}
+          <ChartTooltipRow
+            indent
+            class="bx--viz-chart-tooltip__prior"
+            label={priorLabel}
+            value={priorValue(point, prior)}
+          />
+        {/if}
       {/each}
+      {#if hiddenCount > 0}
+        <ChartTooltipRow
+          indent
+          class="bx--viz-chart-tooltip__more"
+          label={moreLabel(hiddenCount)}
+        />
+      {/if}
     </slot>
   </div>
 {/if}

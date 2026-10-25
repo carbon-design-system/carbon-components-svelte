@@ -25,7 +25,9 @@ const SHEETS: Record<string, { floor: number; ceiling?: Size }> = {
   // The data visualization entry, loaded only by apps that import it, keeps
   // a ceiling about 10% above its size for the same reason as prose.
   // min 130,043 and gzip 15,334 measured 2026-10-22
-  "viz.scss": { floor: 104_000, ceiling: { min: 143_000, gzip: 17_000 } },
+  // min 144,216 and gzip 16,9xx measured 2026-10-24, after labels, annotations,
+  // brush, crosshair, patterns, states, and StatusGrid.
+  "viz.scss": { floor: 115_000, ceiling: { min: 152_000, gzip: 18_000 } },
 };
 
 describe("css size", () => {

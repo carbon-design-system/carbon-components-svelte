@@ -1,7 +1,7 @@
 /**
  * Context shared by `Chart` and the marks composed inside it.
  */
-import type { Readable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
 import type {
   ChartGroup,
   ChartMargins,
@@ -44,10 +44,12 @@ export type ChartContext<T> = {
   hoverOrigin: Readable<"pointer" | "keyboard" | "touch" | "sync">;
   /** Whether a click holds the tooltip on its point. */
   pinned: Readable<boolean>;
+  /** The tooltip's show and hide timing, shared so leaving the plot waits for the tooltip. */
+  tooltipTiming: import("../utils/tooltip-timing.js").TooltipTiming;
   /** Whether a mounted mark fills from the baseline, as bars do. */
   banded: Readable<boolean>;
   /** Whether the chart is loading, has no data, or is ready. The legend keeps its row in the first two. */
-  state: Readable<"ready" | "loading" | "empty">;
+  state: Readable<"ready" | "loading" | "empty" | "error">;
   hidden: Readable<ReadonlyArray<ChartSeriesKey>>;
   /** Whether the chart or its data table is showing. */
   view: Readable<"chart" | "table">;
@@ -99,6 +101,32 @@ export type ChartContext<T> = {
   isolateSeries(key: ChartSeriesKey): void;
   /** Clear the hover state, as Escape does. */
   clearHover(): void;
+  /** The brushed x range in data space, or `null`. */
+  brush: Readable<[number, number] | null>;
+  /** Set the brush; `live` while a drag is in progress, so nothing fires until it ends. */
+  setBrush(range: [number, number] | null, live?: boolean): void;
+  /** `"series:index"` of every selected datum. */
+  selectedKeys: Readable<ReadonlySet<string>>;
+  /** The series the legend points at, which the other series dim for, or `null`. */
+  emphasis: Writable<ChartSeriesKey | null>;
+  /** The symbol or pattern each series draws with, for the legend's swatches. */
+  shapes: Readable<
+    ReadonlyMap<
+      ChartSeriesKey,
+      {
+        symbol?: import("./shapes.js").Symbol;
+        pattern?: import("./shapes.js").Pattern;
+      }
+    >
+  >;
+  /** A mark reports its symbols or patterns per series; an empty map clears its kind. */
+  setShapes(
+    assigned: ReadonlyMap<
+      ChartSeriesKey,
+      import("./shapes.js").Symbol | import("./shapes.js").Pattern
+    >,
+    kind: "symbol" | "pattern",
+  ): void;
 };
 
 export const CHART_CONTEXT: "carbon:viz:Chart";

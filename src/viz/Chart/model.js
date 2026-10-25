@@ -44,10 +44,15 @@ export function buildGroups(
     palette = 1,
     band = false,
     locale,
+    ghosts = {},
   },
 ) {
   const grouped = groupBy(rows, series);
-  const defaults = categoricalColors(grouped.size, palette);
+  // A ghost takes its base series' color, so it does not count for the palette.
+  const ghostCount = [...grouped.keys()].filter(
+    (key) => ghosts[/** @type {string} */ (key)] !== undefined,
+  ).length;
+  const defaults = categoricalColors(grouped.size - ghostCount, palette);
   /** @type {string[]} */
   const categories = [];
   /** @type {Map<string, number>} */
@@ -106,19 +111,30 @@ export function buildGroups(
       }
     }
     const override = colors?.[/** @type {string} */ (key)];
+    const ghostOf = ghosts[/** @type {string} */ (key)];
     groups.push({
       key,
       rows: groupRows,
       xs,
       ys,
       color:
-        (override === undefined ? undefined : vizColor(override)) ??
-        defaults[i] ??
-        /** @type {string} */ (vizColor(i + 1)),
+        ghostOf === undefined
+          ? ((override === undefined ? undefined : vizColor(override)) ??
+            defaults[i] ??
+            /** @type {string} */ (vizColor(i + 1)))
+          : "",
       hidden: isHidden,
       axis: onSecondary ? "y2" : "y",
+      ...(ghostOf === undefined ? {} : { ghost: ghostOf }),
     });
-    i++;
+    if (ghostOf === undefined) i++;
+  }
+  // Ghosts resolve after every base series has its color.
+  for (const group of groups) {
+    if (group.ghost === undefined) continue;
+    const base = groups.find((candidate) => candidate.key === group.ghost);
+    group.color = base?.color ?? /** @type {string} */ (vizColor("neutral"));
+    if (base?.hidden) group.hidden = true;
   }
 
   // Bars need one slot per x. A numeric or time x becomes categories: its

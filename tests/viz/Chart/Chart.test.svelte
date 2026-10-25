@@ -19,6 +19,9 @@
   export let title = "Revenue by region";
   export let emitUpdate = false;
   export let loading = false;
+  export let error = false;
+  export let errorText = "Could not load this chart";
+  export let asOf: Date | undefined = undefined;
   export let includeY: number | undefined = undefined;
   export let withProbe = true;
   export let tickle = 0;
@@ -41,6 +44,9 @@
   width={640}
   {emitUpdate}
   {loading}
+  {error}
+  {errorText}
+  {asOf}
   emptyText="Nothing to show"
   bind:hidden
   bind:selected

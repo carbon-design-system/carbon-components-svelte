@@ -46,15 +46,26 @@
    */
   export let series = undefined;
 
+  /**
+   * Specify labels along the line: the series name at its end, or every
+   * value, each kept only where it does not collide.
+   * @type {"none" | "end" | "all"}
+   */
+  export let labels = "none";
+
   import { getContext } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
+  import { labelWidth, placeLabels } from "./label-layout.js";
   import { buildLinePath, splitAt } from "./line-geometry.js";
   import { yScaleOf } from "./model.js";
+
+  const LABEL_HEIGHT = 14;
+  const LABEL_GAP = 4;
 
   const MAX_POINTS = 500;
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, clip } = getContext(CHART_CONTEXT);
+  const { groups, scales, hover, clip, emphasis } = getContext(CHART_CONTEXT);
 
   $: drawn = $groups.filter(
     (group) => !group.hidden && (!series || series.includes(group.key)),
@@ -71,13 +82,16 @@
   // Depends on groups and scales only, so hover never rebuilds a path.
   $: paths = drawn.flatMap((group) => {
     const wantsDash =
-      dashed === true || (Array.isArray(dashed) && dashed.includes(group.key));
+      dashed === true ||
+      (Array.isArray(dashed) && dashed.includes(group.key)) ||
+      group.ghost !== undefined;
     if (cut === undefined) {
       return [
         {
           key: group.key,
           color: group.color,
           dashed: wantsDash,
+          ghost: group.ghost !== undefined,
           d: buildLinePath(group, $scales, { curve, budget }),
         },
       ];
@@ -122,6 +136,69 @@
               .filter((point) => point.ok),
           }))
       : [];
+  // End labels name the series where it stops; value labels sit over each
+  // point. Either kind yields to a neighbor rather than overlapping it.
+  $: labelBoxes =
+    labels === "none"
+      ? []
+      : (() => {
+          const boxes = [];
+          for (const group of drawn) {
+            const y = yScaleOf($scales, group);
+            if (labels === "end") {
+              let last = -1;
+              for (let i = group.xs.length - 1; i >= 0; i--) {
+                if (Number.isFinite(group.ys[i])) {
+                  last = i;
+                  break;
+                }
+              }
+              if (last === -1) continue;
+              const text = String(group.key);
+              const width = labelWidth(text);
+              const px = $scales.x.map(group.xs[last]);
+              const py = y.map(group.ys[last]);
+              boxes.push({
+                key: `end:${group.key}`,
+                text,
+                color: group.color,
+                x: px + LABEL_GAP,
+                y: py - LABEL_HEIGHT / 2,
+                width,
+                height: LABEL_HEIGHT,
+                alternatives: [
+                  { x: px + LABEL_GAP, y: py - LABEL_HEIGHT - LABEL_GAP },
+                  { x: px + LABEL_GAP, y: py + LABEL_GAP },
+                ],
+              });
+            } else if (group.xs.length <= MAX_POINTS) {
+              for (let i = 0; i < group.xs.length; i++) {
+                if (!Number.isFinite(group.ys[i])) continue;
+                const text = $scales.yFormat(group.ys[i]);
+                const width = labelWidth(text);
+                const px = $scales.x.map(group.xs[i]);
+                const py = y.map(group.ys[i]);
+                boxes.push({
+                  key: `${group.key}:${i}`,
+                  text,
+                  color: group.color,
+                  x: px - width / 2,
+                  y: py - LABEL_GAP - LABEL_HEIGHT - 2,
+                  width,
+                  height: LABEL_HEIGHT,
+                  alternatives: [{ x: px - width / 2, y: py + LABEL_GAP + 2 }],
+                });
+              }
+            }
+          }
+          const byKey = new Map(boxes.map((box) => [box.key, box]));
+          const bounds = labels === "end" ? undefined : $scales.plot;
+          return placeLabels(boxes, { bounds }).map((box) => ({
+            ...box,
+            text: byKey.get(box.key)?.text ?? "",
+            color: byKey.get(box.key)?.color,
+          }));
+        })();
   $: hovered =
     points !== "none" && $hover
       ? $hover.points.filter(
@@ -135,6 +212,10 @@
     <path
       class:bx--viz-line__path={true}
       class:bx--viz-line__path--dashed={path.dashed}
+      class:bx--viz-line__path--ghost={path.ghost}
+      class:bx--viz-line__path--dimmed={$emphasis !== null &&
+        $emphasis !== path.key &&
+        !(path.ghost && String(path.key).startsWith(String($emphasis)))}
       d={path.d}
       stroke-width={strokeWidth}
       style:--bx-viz-color={path.color}
@@ -160,5 +241,16 @@
       r="4"
       style:--bx-viz-color={point.color}
     />
+  {/each}
+  {#each labelBoxes as box (box.key)}
+    <text
+      class:bx--viz-labels__label={true}
+      class:bx--viz-labels__label--series={labels === "end"}
+      x={box.x}
+      y={box.y + box.height - 3}
+      style:--bx-viz-color={box.color}
+    >
+      {box.text}
+    </text>
   {/each}
 </g>

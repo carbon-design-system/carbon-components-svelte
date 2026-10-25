@@ -156,4 +156,21 @@ describe("BarChart", () => {
       }),
     );
   });
+
+  it("lists the top of a stack first in the tooltip, and series order when grouped", async () => {
+    const rows = () =>
+      Array.from(
+        document.querySelectorAll(".bx--viz-chart-tooltip__label"),
+      ).map((el) => el.textContent?.trim());
+    const { rerender } = render(BarChart);
+    chart().focus();
+    await user.keyboard("{ArrowRight}");
+    const grouped = rows();
+    expect(grouped.length).toBeGreaterThan(1);
+
+    await rerender({ mode: "stacked" });
+    chart().focus();
+    await user.keyboard("{ArrowRight}");
+    expect(rows()).toEqual([...grouped].reverse());
+  });
 });
