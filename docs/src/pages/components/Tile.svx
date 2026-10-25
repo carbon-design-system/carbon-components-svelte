@@ -40,8 +40,10 @@ Set `rounded` to `true` to round the corners of a tile with a decorator. Carbon 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <Tile>Object storage — 82% capacity used</Tile>
+<Layer withBackground>
+  <Box padding={5}>
+    <Tile>Object storage — 82% capacity used</Tile>
+  </Box>
 </Layer>
 
 ## Full height

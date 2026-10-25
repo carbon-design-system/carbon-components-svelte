@@ -3,7 +3,7 @@ description: Layer puts content on the next Carbon surface, so fields, tiles, an
 ---
 
 <script>
-  import { Layer, Search, Stack, Text, TextInput, Tile } from "carbon-components-svelte";
+  import { Box, Layer, Search, Stack, Text, TextInput, Tile } from "carbon-components-svelte";
 </script>
 
 Carbon stacks surfaces in up to three layers. Components read contextual tokens (`layer`, `field`, `border-subtle`, …) instead of a fixed layer, and `Layer` re-points those tokens to the next level for everything inside it. A field on a layer-2 surface takes `field-02`, so it still stands out.
@@ -17,14 +17,16 @@ Each nested `Layer` steps up one level. Set `withBackground` to paint the layer'
 <Stack gap={5}>
   <TextInput labelText="Page (layer 1)" placeholder="field-01" />
   <Layer withBackground>
-    <Stack gap={5} style="padding: 1rem">
-      <TextInput labelText="Layer 2" placeholder="field-02" />
-      <Layer withBackground>
-        <Stack gap={5} style="padding: 1rem">
-          <TextInput labelText="Layer 3" placeholder="field-03" />
-        </Stack>
-      </Layer>
-    </Stack>
+    <Box padding={5}>
+      <Stack gap={5}>
+        <TextInput labelText="Layer 2" placeholder="field-02" />
+        <Layer withBackground>
+          <Box padding={5}>
+            <TextInput labelText="Layer 3" placeholder="field-03" />
+          </Box>
+        </Layer>
+      </Stack>
+    </Box>
   </Layer>
 </Stack>
 
@@ -33,17 +35,21 @@ Each nested `Layer` steps up one level. Set `withBackground` to paint the layer'
 A `Tile` paints the `layer` token, so a tile inside a `Layer` takes the next surface.
 
 <Tile>
-  <Text>Tile on layer 1</Text>
-  <Layer>
-    <Tile style="margin-top: 1rem">
-      <Text>Tile on layer 2</Text>
-      <Layer>
-        <Tile style="margin-top: 1rem">
-          <Text>Tile on layer 3</Text>
-        </Tile>
-      </Layer>
-    </Tile>
-  </Layer>
+  <Stack gap={5}>
+    <Text>Tile on layer 1</Text>
+    <Layer>
+      <Tile>
+        <Stack gap={5}>
+          <Text>Tile on layer 2</Text>
+          <Layer>
+            <Tile>
+              <Text>Tile on layer 3</Text>
+            </Tile>
+          </Layer>
+        </Stack>
+      </Tile>
+    </Layer>
+  </Stack>
 </Tile>
 
 ## Level
@@ -51,9 +57,9 @@ A `Tile` paints the `layer` token, so a tile inside a `Layer` takes the next sur
 Set `level` to pick a level instead of counting from the parent: `0` is the page surface, `2` the highest. Nested layers continue from it.
 
 <Layer level={2} withBackground>
-  <div style="padding: 1rem">
+  <Box padding={5}>
     <Search placeholder="Search on layer 3" />
-  </div>
+  </Box>
 </Layer>
 
 ## Modals
@@ -65,7 +71,7 @@ Set `level` to pick a level instead of counting from the parent: `0` is the page
 The default slot receives the layer's `level`.
 
 <Layer withBackground let:level>
-  <div style="padding: 1rem">
+  <Box padding={5}>
     <Text>This layer is level {level}.</Text>
-  </div>
+  </Box>
 </Layer>

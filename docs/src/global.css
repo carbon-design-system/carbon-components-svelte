@@ -327,7 +327,9 @@ html {
   outline: 1px solid var(--cds-interactive);
 }
 
-[data-component="Popover"] .preview-viewer > div:not(.bx--stack),
+[data-component="Popover"]
+  .preview-viewer
+  > div:not(.bx--stack, .bx--layer__with-background),
 [data-component="Stack"]
   .preview-viewer
   .bx--stack:not(:has(> .bx--divider))
@@ -336,8 +338,15 @@ html {
   outline: 1px solid var(--cds-interactive);
 }
 
-[data-component="Popover"] .preview-viewer > div:not(.bx--stack),
-[data-component="Popover"] .preview-viewer > .bx--stack > div {
+[data-component="Popover"]
+  .preview-viewer
+  > div:not(.bx--stack, .bx--layer__with-background),
+[data-component="Popover"] .preview-viewer > .bx--stack > div,
+[data-component="Popover"]
+  .preview-viewer
+  > .bx--layer__with-background
+  > *
+  > div {
   position: relative;
   padding: 0.125rem 0.25rem;
   outline: 1px solid var(--cds-interactive);

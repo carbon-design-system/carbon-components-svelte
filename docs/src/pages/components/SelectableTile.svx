@@ -4,7 +4,7 @@ description: Selectable tiles provide a tile-based interface for choosing multip
 ---
 
 <script>
-  import { AILabel, Layer, SelectableTile, SelectableTileGroup } from "carbon-components-svelte";
+  import { AILabel, Box, Layer, SelectableTile, SelectableTileGroup } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -136,18 +136,20 @@ Set `size="sm"` on the SelectableTileGroup for compact tiles, such as rows in a 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <SelectableTileGroup legendText="Deployment regions" name="options-layer" selected={["us-east-1", "us-west-2"]}>
-    <SelectableTile value="us-east-1">
-      US East (N. Virginia)
-    </SelectableTile>
-    <SelectableTile value="us-west-2">
-      US West (Oregon)
-    </SelectableTile>
-    <SelectableTile value="eu-central-1">
-      EU Central (Frankfurt)
-    </SelectableTile>
-  </SelectableTileGroup>
+<Layer withBackground>
+  <Box padding={5}>
+    <SelectableTileGroup legendText="Deployment regions" name="options-layer" selected={["us-east-1", "us-west-2"]}>
+      <SelectableTile value="us-east-1">
+        US East (N. Virginia)
+      </SelectableTile>
+      <SelectableTile value="us-west-2">
+        US West (Oregon)
+      </SelectableTile>
+      <SelectableTile value="eu-central-1">
+        EU Central (Frankfurt)
+      </SelectableTile>
+    </SelectableTileGroup>
+  </Box>
 </Layer>
 
 ## Disabled

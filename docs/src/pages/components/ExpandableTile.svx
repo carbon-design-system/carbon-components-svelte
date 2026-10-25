@@ -63,7 +63,7 @@ Display the tile expanded by default with `expanded`.
 Put an `AILabel` in the `decorator` slot to mark the tile's content as AI-generated. The tile shows the AI surface, and the label sits in the top-right corner at the `"xs"` size.
 
 <ExpandableTile>
-  <div slot="above" style="height: 8rem">Incident summary</div>
+  <Box slot="above" height="8rem">Incident summary</Box>
   <div slot="below">The primary database failed over after a storage node stopped responding.</div>
   <AILabel slot="decorator">
     <p>Written from the incident timeline and the database logs.</p>
@@ -86,11 +86,13 @@ Set `rounded` to `true` to round the corners of a tile with a decorator. Carbon 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <ExpandableTile>
-    <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
-    <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
-  </ExpandableTile>
+<Layer withBackground>
+  <Box padding={5}>
+    <ExpandableTile>
+      <svelte:fragment slot="above">Payments API — Operational, 99.98% uptime over the last 30 days</svelte:fragment>
+      <svelte:fragment slot="below">No open incidents. Last deployment: 2 hours ago.</svelte:fragment>
+    </ExpandableTile>
+  </Box>
 </Layer>
 
 ## Content height

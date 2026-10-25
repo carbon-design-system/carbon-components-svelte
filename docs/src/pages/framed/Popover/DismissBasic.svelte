@@ -1,5 +1,5 @@
 <script>
-  import { Button, dismiss, Tile } from "carbon-components-svelte";
+  import { Box, Button, dismiss, Tile } from "carbon-components-svelte";
 
   let open = false;
   let trigger;
@@ -16,22 +16,27 @@
   }
 </script>
 
-<div bind:this={trigger} style="display: inline-block">
+<Box bind:ref={trigger} display="inline-flex">
   <Button kind="tertiary" on:click={() => (open = !open)}>
     Filter by region
   </Button>
-</div>
+</Box>
 
 {#if open}
-  <div
-    bind:this={panel}
-    use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
-    style="margin-top: var(--cds-spacing-03); max-width: 20rem"
-  >
-    <Tile>
-      <p>US East (N. Virginia)</p>
-      <p>EU West (Frankfurt)</p>
-      <p>Asia Pacific (Tokyo)</p>
-    </Tile>
-  </div>
+  <Box marginTop={3} maxWidth="20rem">
+    <div
+      bind:this={panel}
+      use:dismiss={{
+        enabled: open,
+        type: "click",
+        handler: handleOutsideClick,
+      }}
+    >
+      <Tile>
+        <p>US East (N. Virginia)</p>
+        <p>EU West (Frankfurt)</p>
+        <p>Asia Pacific (Tokyo)</p>
+      </Tile>
+    </div>
+  </Box>
 {/if}

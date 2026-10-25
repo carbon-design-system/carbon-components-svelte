@@ -1,5 +1,11 @@
 <script>
-  import { Button, TextInput, trapFocus } from "carbon-components-svelte";
+  import {
+    Box,
+    Button,
+    Stack,
+    TextInput,
+    trapFocus,
+  } from "carbon-components-svelte";
 
   let open = false;
   let container;
@@ -13,23 +19,27 @@
 <Button on:click={() => (open = true)}>Invite teammate</Button>
 
 {#if open}
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-  <div
-    bind:this={container}
+  <Box
+    bind:ref={container}
     role="dialog"
     aria-label="Invite teammate"
     tabindex="-1"
     on:keydown={handleKeydown}
-    style="margin-top: var(--cds-spacing-05); padding: var(--cds-spacing-05); max-width: 20rem; background: var(--cds-layer)"
+    marginTop={5}
+    padding={5}
+    maxWidth="20rem"
+    fill="layer-01"
   >
-    <TextInput labelText="Email" placeholder="ada@acme-corp.com" />
-    <div
-      style="display: flex; gap: var(--cds-spacing-03); margin-top: var(--cds-spacing-05)"
-    >
-      <Button size="small" on:click={() => (open = false)}>Send invite</Button>
-      <Button size="small" kind="ghost" on:click={() => (open = false)}>
-        Cancel
-      </Button>
-    </div>
-  </div>
+    <Stack gap={5}>
+      <TextInput labelText="Email" placeholder="ada@acme-corp.com" />
+      <Stack orientation="horizontal" gap={3}>
+        <Button size="small" on:click={() => (open = false)}
+          >Send invite</Button
+        >
+        <Button size="small" kind="ghost" on:click={() => (open = false)}>
+          Cancel
+        </Button>
+      </Stack>
+    </Stack>
+  </Box>
 {/if}

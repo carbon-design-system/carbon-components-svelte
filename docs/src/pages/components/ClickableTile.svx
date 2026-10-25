@@ -3,7 +3,7 @@ description: Clickable tiles are interactive content areas that link to another 
 ---
 
 <script>
-  import { AILabel, ClickableTile, Layer, Stack } from "carbon-components-svelte";
+  import { AILabel, Box, ClickableTile, Layer, Stack } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 </script>
@@ -87,10 +87,12 @@ Set `rounded` to `true` to round the corners of a tile with a decorator. Carbon 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <ClickableTile href="/services/object-storage">
-  Object storage
-  </ClickableTile>
+<Layer withBackground>
+  <Box padding={5}>
+    <ClickableTile href="/services/object-storage">
+    Object storage
+    </ClickableTile>
+  </Box>
 </Layer>
 
 ## Disabled

@@ -66,12 +66,14 @@ Set `direction` to `"top"` to position the menu above the button.
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <OverflowMenu>
-    <OverflowMenuItem text="Manage credentials" />
-    <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
-    <OverflowMenuItem danger text="Delete service" />
-  </OverflowMenu>
+<Layer withBackground>
+  <Box padding={5}>
+    <OverflowMenu>
+      <OverflowMenuItem text="Manage credentials" />
+      <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
+      <OverflowMenuItem danger text="Delete service" />
+    </OverflowMenu>
+  </Box>
 </Layer>
 
 ## Sizes
