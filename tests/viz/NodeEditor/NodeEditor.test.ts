@@ -72,6 +72,25 @@ describe("NodeEditor", () => {
     expect(out("nodes")).toBe("src@0,0 map@272,16 sink@480,0");
   });
 
+  it("forgets its undo history when the nodes arrive from outside", async () => {
+    const { rerender } = render(NodeEditor);
+    await pointer(nodes()[1], "pointerdown", 0, 0);
+    await pointer(nodes()[1], "pointermove", 35, 12);
+    await pointer(nodes()[1], "pointerup", 35, 12);
+    expect(out("nodes")).toBe("src@0,0 map@272,16 sink@480,0");
+
+    await rerender({
+      nodes: [
+        { id: "src", name: "source", x: 0, y: 0 },
+        { id: "sink", name: "sink", x: 480, y: 0 },
+      ],
+      links: [],
+    });
+    nodes()[0].focus();
+    await user.keyboard("{Control>}z{/Control}");
+    expect(out("nodes")).toBe("src@0,0 sink@480,0");
+  });
+
   it("connects with the keyboard, refuses through the cancelable event, and never duplicates", async () => {
     const onconnect = vi.fn();
     const { rerender } = render(NodeEditor, { onconnect });

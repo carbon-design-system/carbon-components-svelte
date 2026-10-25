@@ -392,12 +392,28 @@
    * @param {{ label: string; do: () => void; undo: () => void; key?: string }} command
    */
   function edit(command) {
-    stack.execute(command);
+    const own = (/** @type {() => void} */ run) => () => {
+      run();
+      written.add(nodes);
+      written.add(links);
+    };
+    const owned = { ...command, do: own(command.do), undo: own(command.undo) };
+    stack.execute(owned);
     dispatch("change", {
       label: command.label,
-      undo: command.undo,
-      redo: command.do,
+      undo: owned.undo,
+      redo: owned.do,
     });
+  }
+
+  // Undo holds the arrays each edit replaced. Arrays that arrive from outside
+  // are a new history, so the stack empties rather than restoring stale ones.
+  /** @type {WeakSet<object>} */
+  const written = new WeakSet();
+  $: if (!written.has(nodes) || !written.has(links)) {
+    stack.clear();
+    written.add(nodes);
+    written.add(links);
   }
 
   /**
@@ -478,10 +494,14 @@
 
   function removeSelected() {
     if (readonly) return;
-    const goneNodes = nodes.filter((row, i) =>
-      selectedNodes.has(String(idOf(row, i))),
-    );
-    const goneIds = new Set(goneNodes.map((row, i) => String(idOf(row, i))));
+    /** @type {Set<string>} */
+    const goneIds = new Set();
+    const goneNodes = nodes.filter((row, i) => {
+      const id = String(idOf(row, i));
+      if (!selectedNodes.has(id)) return false;
+      goneIds.add(id);
+      return true;
+    });
     const goneEdges = links.filter((row) => {
       const rec = /** @type {Record<string, unknown>} */ (row);
       return (
