@@ -610,6 +610,23 @@ describe("planTests", () => {
     });
   });
 
+  it("skips deleted fixtures, type-check inputs and workflows without tests", () => {
+    for (const file of [
+      "tests/Gone/Gone.test.svelte",
+      "tests/types.test-d.ts",
+      "tests/tsconfig.compat-check.json",
+      ".github/workflows/release.yml",
+    ]) {
+      const { unit, e2e, reasons } = plan([file]);
+      expect({ unit: unit === "all", e2e, reasons }).toEqual({
+        unit: false,
+        e2e: "none",
+        reasons: [],
+      });
+    }
+    expect(plan([".github/workflows/checks.yml"]).unit).toBe("all");
+  });
+
   it("runs a whole suite when a deleted helper leaves no importer", () => {
     expect(plan(["tests/gone-helper.ts"]).unit).toBe("all");
   });
