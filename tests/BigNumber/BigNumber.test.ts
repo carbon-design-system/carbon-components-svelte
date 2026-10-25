@@ -324,6 +324,63 @@ describe("BigNumber", () => {
     });
   });
 
+  describe("direction", () => {
+    const numbers = () =>
+      [
+        ".bx--big-number__value",
+        ".bx--big-number__denominator",
+        ".bx--big-number__delta-value",
+      ].map((selector) => {
+        const bdi = screen
+          .getByTestId("metric")
+          .querySelector(`${selector} bdi`);
+        assert(bdi);
+        return [bdi.getAttribute("dir"), bdi.textContent];
+      });
+
+    it.each([
+      ["en-US", "ltr"],
+      ["ar-EG", "rtl"],
+    ])("isolates the value, total and delta in %s as %s", (locale, dir) => {
+      render(BigNumberProps, {
+        props: {
+          options: {
+            locale,
+            value: 1200,
+            total: 2000,
+            delta: 12,
+            deltaPercentage: true,
+          },
+        },
+      });
+
+      expect(numbers().map(([direction]) => direction)).toEqual([
+        dir,
+        dir,
+        dir,
+      ]);
+    });
+
+    it("lets the text of a custom format set its own direction", () => {
+      render(BigNumberProps, {
+        props: {
+          options: {
+            value: 7,
+            total: 8,
+            delta: 1,
+            format: (value: number) => `${value}h`,
+          },
+        },
+      });
+
+      expect(numbers()).toEqual([
+        ["auto", "7h"],
+        ["auto", "8h"],
+        ["auto", "+1h"],
+      ]);
+    });
+  });
+
   describe("footer slot", () => {
     it("renders slotted content inside the footer", () => {
       render(BigNumber);
