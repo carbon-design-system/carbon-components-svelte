@@ -4,6 +4,7 @@ import FluidDatePickerSkeleton from "carbon-components-svelte/DatePicker/FluidDa
 import { user } from "../utils/user";
 import DatePickerSkeletonInForm from "./DatePickerSkeleton.form.test.svelte";
 import DatePickerSkeleton from "./DatePickerSkeleton.test.svelte";
+import FluidDatePickerSkeletonEvents from "./FluidDatePickerSkeletonEvents.test.svelte";
 
 describe("DatePickerSkeleton", () => {
   it("renders the simple variant by default", () => {
@@ -100,18 +101,14 @@ describe("DatePickerSkeleton", () => {
     expect(container.querySelectorAll("span.bx--label")).toHaveLength(2);
   });
 
-  it("forwards mouse and click events", async () => {
-    const onclick = vi.fn();
+  it("forwards mouse events", async () => {
     const onmouseover = vi.fn();
     const onmouseleave = vi.fn();
     render(DatePickerSkeleton, {
-      props: { onclick, onmouseover, onmouseleave },
+      props: { onmouseover, onmouseleave },
     });
 
     const element = screen.getByTestId("date-picker-skeleton");
-
-    await user.click(element);
-    expect(onclick).toHaveBeenCalled();
 
     await user.hover(element);
     expect(onmouseover).toHaveBeenCalled();
@@ -166,5 +163,21 @@ describe("FluidDatePickerSkeleton", () => {
     expect(
       skeleton.querySelectorAll(".bx--date-picker--fluid__skeleton--container"),
     ).toHaveLength(2);
+  });
+
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidDatePickerSkeletonEvents);
+
+    const element = screen.getByTestId("fluid-date-picker-skeleton");
+
+    await user.click(element);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(element);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(element);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import DataTableSkeleton from "../../src/DataTable/DataTableSkeleton.svelte";
+import { user } from "../utils/user";
+import DataTableSkeletonEvents from "./DataTableSkeletonEvents.test.svelte";
 
 describe("DataTableSkeleton", () => {
   it("applies the medium size class", () => {
@@ -61,5 +63,21 @@ describe("DataTableSkeleton", () => {
     });
 
     expect(container.querySelectorAll("thead th")[1]).toHaveTextContent("");
+  });
+
+  it("does not forward click but forwards mouse events on the table", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(DataTableSkeletonEvents);
+
+    const table = screen.getByRole("table");
+
+    await user.click(table);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(table);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(table);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

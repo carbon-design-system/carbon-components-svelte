@@ -20,7 +20,6 @@
   class:bx--structured-list--condensed={condensed}
   class:bx--structured-list--flush={flush}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

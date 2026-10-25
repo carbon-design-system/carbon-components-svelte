@@ -15,6 +15,7 @@ import ComboBoxIconSlots from "./ComboBoxIconSlots.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
 import ComboBoxItemIcon from "./ComboBoxItemIcon.test.svelte";
 import ComboBoxItemSlot from "./ComboBoxItemSlot.test.svelte";
+import FluidComboBoxSkeletonEvents from "./FluidComboBoxSkeletonEvents.test.svelte";
 import { getClearButton, getInput } from "./helpers";
 
 describe("ComboBox", () => {
@@ -2434,5 +2435,21 @@ describe("ComboBox", () => {
         expect(onSelect).not.toHaveBeenCalled();
       },
     );
+  });
+
+  it("does not forward click but forwards mouse events", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidComboBoxSkeletonEvents);
+
+    const element = screen.getByTestId("fluid-combo-box-skeleton");
+
+    await user.click(element);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(element);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+    await user.unhover(element);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

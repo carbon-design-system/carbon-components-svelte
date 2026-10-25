@@ -13,6 +13,7 @@ import CodeSnippetCopyButtonMouseEnter from "./CodeSnippetCopyButtonMouseEnter.t
 import CodeSnippetCopyRef from "./CodeSnippetCopyRef.test.svelte";
 import CodeSnippetDispatchGuard from "./CodeSnippetDispatchGuard.test.svelte";
 import CodeSnippetMouseEnter from "./CodeSnippetMouseEnter.test.svelte";
+import CodeSnippetSkeletonForwardedEvents from "./CodeSnippetSkeleton.forwarded-events.test.svelte";
 import CodeSnippetSlotCopy from "./CodeSnippetSlotCopy.test.svelte";
 import {
   mockClipboard,
@@ -1101,5 +1102,20 @@ describe("CodeSnippet", () => {
       getComputedStyle.mockRestore();
       vi.unstubAllGlobals();
     }
+  });
+
+  it("should not forward click on CodeSnippetSkeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(CodeSnippetSkeletonForwardedEvents);
+
+    const skeleton = document.querySelector(".bx--skeleton.bx--snippet");
+    assert(skeleton);
+
+    // Click should not fire
+    await user.click(skeleton);
+    const clickCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click",
+    );
+    expect(clickCalls).toHaveLength(0);
   });
 });

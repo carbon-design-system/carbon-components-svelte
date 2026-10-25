@@ -9,7 +9,6 @@
   class:bx--pin-code-input--fluid__skeleton={true}
   style:--ccs-pin-code-count={count}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

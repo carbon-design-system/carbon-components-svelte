@@ -8,7 +8,6 @@
   class:bx--text-area--fluid__skeleton={true}
   style:--ccs-text-area-rows={rows}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

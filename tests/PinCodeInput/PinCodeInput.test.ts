@@ -3,6 +3,7 @@ import PinCodeInputSkeletonComponent from "carbon-components-svelte/PinCodeInput
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
+import FluidPinCodeInputSkeletonEvents from "./FluidPinCodeInputSkeletonEvents.test.svelte";
 import { getPinCodeInputs as getInputs } from "./helpers";
 import PinCodeInputSkeleton from "./PinCodeInput.skeleton.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
@@ -1034,5 +1035,39 @@ describe("PinCodeInput", () => {
     const skeleton = screen.getByTestId("pin-code-input-skeleton");
     expect(skeleton.children).toHaveLength(1);
     expect(skeleton.children[0]).toHaveClass("bx--pin-code-input__segments");
+  });
+
+  it("does not forward click but forwards mouse events on fluid skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(FluidPinCodeInputSkeletonEvents);
+
+    const skeleton = screen.getByTestId("fluid-pin-code-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+  });
+
+  it("does not forward click but forwards mouse events on skeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(PinCodeInputSkeleton);
+
+    const skeleton = screen.getByTestId("pin-code-input-skeleton");
+
+    await user.click(skeleton);
+    expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+    await user.hover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseover");
+    expect(consoleLog).toHaveBeenCalledWith("mouseenter");
+
+    await user.unhover(skeleton);
+    expect(consoleLog).toHaveBeenCalledWith("mouseleave");
   });
 });

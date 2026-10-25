@@ -41,7 +41,6 @@
     : undefined}
   style:--ccs-code-snippet-max-rows={multi ? maxRows : undefined}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

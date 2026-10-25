@@ -15,7 +15,6 @@
   class:bx--progress--space-equal={spaceEqually && !vertical}
   class:bx--skeleton={true}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

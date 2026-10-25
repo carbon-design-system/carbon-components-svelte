@@ -19,7 +19,9 @@ import DropdownGenerics from "./DropdownGenerics.test.svelte";
 import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
+import DropdownSkeleton from "./DropdownSkeleton.test.svelte";
 import DropdownSlot from "./DropdownSlot.test.svelte";
+import FluidDropdownSkeletonEvents from "./FluidDropdownSkeletonEvents.test.svelte";
 
 const items = [
   { id: "0", text: "Slack" },
@@ -2599,6 +2601,42 @@ describe("Dropdown", () => {
       expect(wrapper).toHaveClass(
         "bx--list-box__field--wrapper--input-focused",
       );
+    });
+  });
+
+  describe("DropdownSkeleton", () => {
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(DropdownSkeleton);
+
+      const element = screen.getByTestId("dropdown-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
+    });
+  });
+
+  describe("FluidDropdownSkeleton", () => {
+    it("does not forward click but forwards mouse events", async () => {
+      const consoleLog = vi.spyOn(console, "log");
+      render(FluidDropdownSkeletonEvents);
+
+      const element = screen.getByTestId("fluid-dropdown-skeleton");
+
+      await user.click(element);
+      expect(consoleLog).not.toHaveBeenCalledWith("click");
+
+      await user.hover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseover");
+
+      await user.unhover(element);
+      expect(consoleLog).toHaveBeenCalledWith("mouseleave");
     });
   });
 });

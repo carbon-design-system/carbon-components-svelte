@@ -10,7 +10,6 @@
   class:bx--time-picker--fluid--skeleton={true}
   class:bx--time-picker--equal-width={isOnlyTwo}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

@@ -36,7 +36,6 @@
   class:bx--search--lg={effectiveSize === "lg"}
   class:bx--search--xl={effectiveSize === "xl"}
   {...$$restProps}
-  on:click
   on:mouseover
   on:mouseenter
   on:mouseleave

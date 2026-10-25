@@ -7,6 +7,7 @@ import AccordionLazy from "./Accordion.lazy.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";
 import Accordion from "./Accordion.test.svelte";
+import AccordionSkeletonForwardedEvents from "./AccordionSkeleton.forwarded-events.test.svelte";
 
 describe("Accordion", () => {
   const itemIsDisabled = (name: string | RegExp) => {
@@ -603,5 +604,19 @@ describe("Accordion", () => {
     await rerender({ open: false });
 
     expect(onToggle).not.toHaveBeenCalled();
+  });
+
+  it("should not forward click but should forward mouse events on AccordionSkeleton", async () => {
+    const consoleLog = vi.spyOn(console, "log");
+    render(AccordionSkeletonForwardedEvents);
+
+    const accordion = screen.getByRole("list");
+
+    // Click should not fire
+    await user.click(accordion);
+    const clickCalls = consoleLog.mock.calls.filter(
+      (call) => call[0] === "click",
+    );
+    expect(clickCalls).toHaveLength(0);
   });
 });
