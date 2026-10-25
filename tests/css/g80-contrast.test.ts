@@ -4,7 +4,7 @@ import { contrast, themeTokens } from "./helpers";
 // v11 has no Gray 80, so its values are this library's own and nothing
 // upstream checks them. Its layer-01 is #525252, one step lighter than Gray
 // 90's, so a value that passes in Gray 90 can fail here.
-const SURFACES = ["background", "layer-01", "layer-02"];
+const SURFACES = ["background", "layer-01", "layer-02", "layer-03"];
 
 // Small text and icons need 4.5:1 on every surface. link-primary,
 // link-visited and the support colors drop below it on #525252, as they do
@@ -45,6 +45,53 @@ describe("Gray 80 contrast", () => {
           contrast(tokens[token], background),
           `${token} on ${surface}`,
         ).toBeGreaterThanOrEqual(min);
+      }
+    },
+    30_000,
+  );
+});
+
+// A zebra row or table header is layer-accent, and a field is field-0N, so
+// secondary text, helper text and placeholders sit on them at every level.
+// No gray lighter than layer-01's #525252 holds them at 4.5:1, so these
+// surfaces step darker. Each still reads on its layer and on the surface one
+// level down, where a field, track or tab sits, by 1.15:1. Gray 10's zebra
+// step (#e0e0e0 on #f4f4f4) is 1.2:1.
+const TEXT = [
+  "text-primary",
+  "text-secondary",
+  "text-helper",
+  "text-placeholder",
+  "icon-secondary",
+];
+
+describe("Gray 80 accents and fields", () => {
+  it.each(["01", "02", "03"])(
+    "level %s holds secondary text",
+    async (level) => {
+      const tokens = (await themeTokens()).themes.g80;
+      const color = (name: string) => {
+        const value = tokens[`--cds-${name}`];
+        expect(value, name).toMatch(/^#[\da-f]{6}$/);
+        return value;
+      };
+      const below = level === "01" ? "background" : `layer-0${+level - 1}`;
+      for (const [fill, surfaces] of [
+        [`layer-accent-${level}`, [`layer-${level}`, below]],
+        [`field-${level}`, [below]],
+      ] as const) {
+        for (const text of TEXT) {
+          expect(
+            contrast(color(text), color(fill)),
+            `${text} on ${fill}`,
+          ).toBeGreaterThanOrEqual(4.5);
+        }
+        for (const surface of surfaces) {
+          expect(
+            contrast(color(fill), color(surface)),
+            `${fill} on ${surface}`,
+          ).toBeGreaterThanOrEqual(1.15);
+        }
       }
     },
     30_000,

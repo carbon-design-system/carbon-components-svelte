@@ -623,19 +623,22 @@ $ccs-v11-values: (
     text-helper: #c6c6c6,
     // Layer states. g80's layer-01 is g90's layer-02, so each state takes
     // g90's value for the same surface: hover and selected step lighter, and
-    // a selected border shows on a selected layer. layer-02 stays layer-01's
-    // gray: any lighter gray puts text-secondary under 4.5:1. Fields sit one
-    // step above the layer below them, as in g90, and hover the same way.
+    // a selected border shows on a selected layer. layer-02 and layer-03 stay
+    // layer-01's gray: any lighter gray puts text-secondary under 4.5:1.
+    // For the same reason, accents (zebra rows, table headers) step down to
+    // #474747, and fields inside a layer to g90's field-01 and its hover.
     layer-hover-01: #636363,
     layer-hover-02: #636363,
     layer-active-01: #8d8d8d,
     layer-selected-01: #6f6f6f,
     layer-selected-02: #6f6f6f,
     layer-selected-hover-01: #5e5e5e,
+    layer-accent-01: #474747,
     layer-accent-hover-01: #5e5e5e,
     layer-accent-active-01: #393939,
     field-hover-01: #636363,
-    field-hover-02: #5e5e5e,
+    field-02: #393939,
+    field-hover-02: #474747,
     border-subtle-02: #8d8d8d,
     border-subtle-selected-01: #a8a8a8,
     // Background states and disabled colors are translucent, as in every v11

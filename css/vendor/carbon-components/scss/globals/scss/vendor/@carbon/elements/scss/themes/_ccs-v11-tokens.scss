@@ -3,8 +3,9 @@
 // reference to its v11 name changes no pixels. Net-new tokens take their
 // @carbon/themes v11 values. v11 has no g80 theme. Its surfaces are g90's one
 // level up (layer-01 is g90's layer-02), so each g80 token takes g90's value
-// for the same surface: level 3 matches g90's level 3, and fields sit one
-// step above the layer below them. See the g80 map in _ccs-v11-values.scss.
+// for the same surface. No gray lighter than layer-01's holds secondary text
+// at 4.5:1, so levels 2 and 3 repeat level 1, and accents and the fields
+// inside a layer step darker. See the g80 map in _ccs-v11-values.scss.
 
 $ccs-v11-derived-tokens: (
   layer-01: 'ui-01',
@@ -81,20 +82,20 @@ $ccs-v11-new-tokens: (
     border-tile-03: #a8a8a8,
   ),
   g80: (
-    layer-03: #6f6f6f,
-    layer-active-03: #393939,
-    layer-hover-03: #5e5e5e,
-    layer-selected-03: #525252,
+    layer-03: #525252,
+    layer-active-03: #8d8d8d,
+    layer-hover-03: #636363,
+    layer-selected-03: #6f6f6f,
     layer-selected-hover-02: #5e5e5e,
-    layer-selected-hover-03: #636363,
-    layer-accent-02: #6f6f6f,
-    layer-accent-03: #8d8d8d,
+    layer-selected-hover-03: #5e5e5e,
+    layer-accent-02: #474747,
+    layer-accent-03: #474747,
     layer-accent-active-02: #393939,
-    layer-accent-active-03: #525252,
+    layer-accent-active-03: #393939,
     layer-accent-hover-02: #5e5e5e,
-    layer-accent-hover-03: #7a7a7a,
-    field-03: #6f6f6f,
-    field-hover-03: #5e5e5e,
+    layer-accent-hover-03: #5e5e5e,
+    field-03: #393939,
+    field-hover-03: #474747,
     border-subtle-03: #8d8d8d,
     border-strong-02: #c6c6c6,
     border-strong-03: #c6c6c6,
