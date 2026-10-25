@@ -252,14 +252,14 @@
   export let maxHeight = undefined;
 
   /**
-   * Set the CSS position. `"sticky"` is relative to the nearest scroll container, not the viewport.
-   * @type {"relative" | "sticky" | undefined}
+   * Set the CSS position. `"absolute"` places the box against its nearest positioned ancestor, such as a Box with `position="relative"`. `"sticky"` is relative to the nearest scroll container, not the viewport.
+   * @type {"relative" | "absolute" | "sticky" | undefined}
    */
   export let position = undefined;
 
   /**
-   * Set the CSS display.
-   * @type {"block" | "flex" | "inline-flex" | "grid" | undefined}
+   * Set the CSS display. `"none"` hides the box and keeps its content mounted.
+   * @type {"block" | "inline-block" | "flex" | "inline-flex" | "grid" | "none" | undefined}
    */
   export let display = undefined;
 

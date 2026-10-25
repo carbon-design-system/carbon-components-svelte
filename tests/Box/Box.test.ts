@@ -39,6 +39,12 @@ describe("Box", () => {
     ],
     ["shadow", { shadow: true }, ["bx--box-shadow"]],
     ["display", { display: "flex" }, ["bx--box-display-flex"]],
+    [
+      "inline-block display",
+      { display: "inline-block" },
+      ["bx--box-display-inline-block"],
+    ],
+    ["hidden display", { display: "none" }, ["bx--box-display-none"]],
     ["overflow", { overflow: "auto" }, ["bx--box-overflow-auto"]],
     [
       "axis overflow",
@@ -139,6 +145,11 @@ describe("Box", () => {
       "position and left offset",
       { position: "sticky", left: 0 },
       ["bx--box-position-sticky", "bx--box-left-0"],
+    ],
+    [
+      "absolute position and offsets",
+      { position: "absolute", left: 0, right: 0 },
+      ["bx--box-position-absolute", "bx--box-left-0", "bx--box-right-0"],
     ],
   ])("adds utility classes: %s", (_, props, classes) => {
     render(Box, { props });
