@@ -1148,6 +1148,11 @@ const BUTTON_KINDS = [
 test.describe("right-to-left buttons", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/rtl-buttons.html");
+    // The loading spinner rotates, and a rotated box's bounds grow, so the
+    // two directions would measure it at different points in its turn.
+    await page.addStyleTag({
+      content: "*, *::before, *::after { animation: none !important; }",
+    });
   });
 
   test("mirrors labels, icons, sets and modal footers", async ({ page }) => {
