@@ -13,6 +13,7 @@ test("viz charts fit a narrow container and fold long legends", async ({
 
   for (const width of [240, 320, 390, 480]) {
     const box = page.getByTestId(`box-${width}`);
+    // biome-ignore lint/performance/noAwaitInLoops: one box at a time
     const spills = await box.evaluate((el) =>
       [...el.querySelectorAll("figure")].map((figure) => ({
         title: figure

@@ -44,6 +44,11 @@ test.describe("Data visualization a11y", () => {
     ["/viz-narrow.html", "narrow containers with folded legends"],
     ["/viz-dashboard.html", "the dashboard composition"],
     ["/viz-stock.html", "the stock chart panes"],
+    ["/viz-marks.html", "labels, error bars, and annotations"],
+    [
+      "/viz-features.html",
+      "linked charts, compare, crosshair, shapes, Pareto, status grid, drill, error",
+    ],
   ] as const;
   for (const [url, what] of pages) {
     test(`has no detectable accessibility violations in ${what}`, async ({
