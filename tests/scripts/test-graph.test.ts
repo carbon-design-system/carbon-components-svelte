@@ -533,8 +533,16 @@ describe("planTests", () => {
     expect(formatSelection(e2e)).toBe("all");
   });
 
-  it("lists the compiled stylesheets the graph imports", () => {
-    expect(stylesheetEntries(graph)).toEqual(["all"]);
+  it("lists the compiled stylesheets an e2e test loads", () => {
+    const files = {
+      ...REPO,
+      "tests/themes.test.ts": `import "carbon-components-svelte/css/g10.css";`,
+    };
+    const themed = buildGraph(
+      new Map(Object.entries(files)),
+      context(Object.keys(files)),
+    );
+    expect(stylesheetEntries(themed)).toEqual(["all"]);
   });
 
   it("runs a root-level config's importers, not everything", () => {
