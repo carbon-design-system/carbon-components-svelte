@@ -134,11 +134,17 @@ describe("theme zones", () => {
 
   // A rule scoped under `[theme=…]` reads the page theme, not the nearest
   // zone, so a component inside a zone would take the page's colors. Per
-  // theme values belong in the theme blocks, as custom properties.
+  // theme values belong in the theme blocks, as custom properties. A
+  // `UIShellContainer` with a `theme` joins those blocks.
   it("scopes nothing under a theme attribute but the theme blocks", () => {
     const scoped = rules
       .filter((r) => r.selector.includes("[theme"))
-      .filter((r) => !/^:root\[theme=\w+\]$/.test(r.selector))
+      .filter(
+        (r) =>
+          !/^(:root|\.bx--ui-shell-container)\[theme(=\w+)?\]$/.test(
+            r.selector,
+          ),
+      )
       .map((r) => r.selector);
     expect(scoped).toEqual([]);
   });

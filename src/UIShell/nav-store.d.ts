@@ -1,4 +1,4 @@
-import type { Writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
 
 export declare const shouldRenderHamburgerMenu: Writable<boolean>;
 export declare const isSideNavCollapsed: Writable<boolean>;
@@ -22,3 +22,31 @@ export declare const hamburgerMenuRef: Writable<HTMLButtonElement | null>;
  * last one unmounts. Returns the callback to run on unmount.
  */
 export declare function trackHeaderRendered(): () => void;
+
+/** Context key for a `UIShellContainer`'s own nav stores. */
+export declare const NAV_STORES_CONTEXT: "carbon:UIShellNav";
+
+export interface NavStores {
+  shouldRenderHamburgerMenu: Writable<boolean>;
+  isSideNavCollapsed: Writable<boolean>;
+  isSideNavRail: Writable<boolean>;
+  isSideNavMobile: Writable<boolean>;
+  sideNavWidth: Writable<number | undefined>;
+  isHeaderRendered: Writable<boolean>;
+  hamburgerMenuRef: Writable<HTMLButtonElement | null>;
+  trackHeaderRendered: () => () => void;
+  /** The container's width in pixels; `undefined` outside a container. */
+  containerWidth: Readable<number | undefined>;
+  contained: boolean;
+  /** The default id of the shell's `Content`, which `SkipToContent` links to. */
+  contentId: string;
+}
+
+/** Fresh stores for one contained shell. */
+export declare function createNavStores(
+  containerWidth: Readable<number | undefined>,
+  contentId: string,
+): NavStores;
+
+/** The nav stores for the shell a component belongs to. Call during init. */
+export declare function getNavStores(): NavStores;
