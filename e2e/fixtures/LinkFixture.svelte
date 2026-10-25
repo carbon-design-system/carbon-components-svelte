@@ -90,6 +90,19 @@
   Themed
 </Link>
 
+<Link
+  data-testid="link-visited"
+  visited
+  href="#"
+  on:click={(event) => event.preventDefault()}
+>
+  Visited
+</Link>
+
+<Link data-testid="link-visited-disabled" visited disabled href="#">
+  Visited and disabled
+</Link>
+
 <Toggletip open>
   Usage-based charges are calculated at the end of the cycle.
   <ToggletipFooter>
