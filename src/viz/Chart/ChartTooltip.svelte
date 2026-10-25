@@ -96,7 +96,7 @@
         .filter((point) => !ghostOf.has(point.series))
         .map((point) => ({
           ...point,
-          value: (point.axis === "y2" ? $scales.y2Format : $scales.yFormat)(
+          value: (point.axis === "y2" ? $scales.y2Value : $scales.yValue)(
             point.y,
           ),
         }))
@@ -176,7 +176,7 @@
    */
   function priorValue(point, prior) {
     if (!prior) return "";
-    const format = prior.axis === "y2" ? $scales.y2Format : $scales.yFormat;
+    const format = prior.axis === "y2" ? $scales.y2Value : $scales.yValue;
     const written = format(prior.y);
     if (!Number.isFinite(prior.y) || prior.y === 0) return written;
     const change = ((point.y - prior.y) / Math.abs(prior.y)) * 100;

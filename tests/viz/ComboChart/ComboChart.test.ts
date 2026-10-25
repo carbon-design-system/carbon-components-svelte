@@ -57,10 +57,10 @@ describe("ComboChart", () => {
     chart().focus();
     await user.keyboard("{ArrowRight}{ArrowRight}");
     const tooltip = document.querySelector(".bx--viz-chart-tooltip");
-    expect(tooltip).toHaveTextContent(/Revenue\s*1.8K/);
+    expect(tooltip).toHaveTextContent(/Revenue\s*1,800/);
     expect(tooltip).toHaveTextContent(/Margin\s*40%/);
     expect(document.querySelector("[aria-live]")).toHaveTextContent(
-      "Q2: Revenue 1.8K, Cost 1.1K, Margin 40%",
+      "Q2: Revenue 1,800, Cost 1,100, Margin 40%",
     );
     unmount();
 
@@ -74,6 +74,6 @@ describe("ComboChart", () => {
       Array.from(within(table).getAllByRole("row")[2].children).map((cell) =>
         cell.textContent?.trim(),
       ),
-    ).toEqual(["Q2", "1.8K", "1.1K", "40%"]);
+    ).toEqual(["Q2", "1,800", "1,100", "40%"]);
   });
 });

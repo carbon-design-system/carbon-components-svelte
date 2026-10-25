@@ -86,8 +86,8 @@ describe("Chart table view", () => {
           .map((cell) => cell.textContent?.trim()),
       );
     expect(cells).toEqual([
-      ["1.2K", "800"],
-      ["1.5K", "–"],
+      ["1,200", "800"],
+      ["1,500", "–"],
       ["–", "–"],
     ]);
 

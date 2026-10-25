@@ -35,6 +35,14 @@
     grid-area: 1 / 1;
   }
 
+  // The total in the hole, the one number a ring is read for.
+  .#{$prefix}--viz-donut__total {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("heading-03");
+  }
+
   .#{$prefix}--viz-donut__svg {
     display: block;
     max-inline-size: 100%;

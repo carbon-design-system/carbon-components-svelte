@@ -109,6 +109,13 @@
    */
   export let colors = {};
 
+  /**
+   * Specify what the hole holds when the default slot is empty: the
+   * formatted total, or nothing.
+   * @type {"total" | "none"}
+   */
+  export let center = "total";
+
   /** Set to `true` to make slices selectable */
   export let selectable = false;
 
@@ -268,13 +275,17 @@
             {/if}
           {/each}
         </svg>
-        {#if innerRadius > 0 && $$slots.default}
+        {#if innerRadius > 0 && ($$slots.default || center === "total")}
           <div class:bx--viz-donut__center={true}>
             <slot
               total={donut.total}
               formattedTotal={formatValue(donut.total)}
               {active}
-            />
+            >
+              <span class:bx--viz-donut__total={true}>
+                {formatValue(donut.total)}
+              </span>
+            </slot>
           </div>
         {/if}
       {/if}

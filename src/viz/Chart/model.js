@@ -2,7 +2,10 @@
 // Pure data model for `Chart`: rows to series groups, extents to scales.
 // Kept DOM-free so the staging rules can be tested without rendering.
 
-import { getDateTimeFormatter } from "../../utils/intl-formatter-cache.js";
+import {
+  getDateTimeFormatter,
+  getNumberFormatter,
+} from "../../utils/intl-formatter-cache.js";
 import { groupBy } from "../utils/accessor.js";
 import { formatCompact, resolveFormat } from "../utils/format-compact.js";
 import { scaleLinear } from "../utils/scale-linear.js";
@@ -474,6 +477,12 @@ export function buildScales(domain, size, options = {}) {
   const yFormat = options.yFormat
     ? resolveFormat(options.yFormat, locale)
     : (/** @type {number} */ value) => formatCompact(value, { locale });
+  // Ticks are compact; a value the reader came for, in a tooltip or the
+  // table, keeps its digits unless a format was given for both.
+  const full = getNumberFormatter(locale, { maximumFractionDigits: 2 });
+  const fullNumber = (/** @type {number} */ value) => full.format(value);
+  const yValue = options.yFormat ? yFormat : fullNumber;
+  const y2Value = options.y2Format ? y2Format : fullNumber;
   const plotHeight = Math.max(1, size.height - top - bottom);
 
   /**
@@ -653,6 +662,8 @@ export function buildScales(domain, size, options = {}) {
     yTicks,
     xFormat: band.xFormat,
     yFormat,
+    yValue,
+    y2Value,
     xLabel: band.xLabel,
     step: band.step,
     kind: domain.kind,

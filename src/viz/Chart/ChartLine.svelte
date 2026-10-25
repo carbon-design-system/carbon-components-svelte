@@ -27,11 +27,14 @@
   export let forecastFrom = undefined;
 
   /**
-   * Specify when to draw a point on each datum.
-   * `"all"` falls back to `"hover"` for a series of more than 500 points.
-   * @type {"none" | "hover" | "all"}
+   * Specify when to draw a point on each datum: `"auto"` draws them while
+   * the data is sparse enough that each has room, about 24 px, and shows
+   * only the hovered one otherwise, so a line between samples never passes
+   * for one. `"all"` falls back to `"hover"` for a series of more than 500
+   * points.
+   * @type {"none" | "hover" | "all" | "auto"}
    */
-  export let points = "hover";
+  export let points = "auto";
 
   /**
    * Set to `false` to draw every point of a long series.
@@ -116,26 +119,36 @@
     }
     return out;
   });
-  $: dots =
-    points === "all"
-      ? drawn
-          .filter((group) => group.xs.length <= MAX_POINTS)
-          .map((group) => ({
-            key: group.key,
-            color: group.color,
-            at: group.xs
-              .map((value, index) => {
-                const along = $scales.x.map(value);
-                const across = yScaleOf($scales, group).map(group.ys[index]);
-                return {
-                  x: $scales.horizontal ? across : along,
-                  y: $scales.horizontal ? along : across,
-                  ok: Number.isFinite(group.ys[index]),
-                };
-              })
-              .filter((point) => point.ok),
-          }))
-      : [];
+  /** Pixels per datum under which `"auto"` stops drawing every point. */
+  const ROOM_PER_POINT = 24;
+  $: longest = drawn.reduce(
+    (most, group) => Math.max(most, group.xs.length),
+    0,
+  );
+  $: everyPoint =
+    points === "all" ||
+    (points === "auto" &&
+      longest > 0 &&
+      ($scales.plot.x1 - $scales.plot.x0) / longest >= ROOM_PER_POINT);
+  $: dots = everyPoint
+    ? drawn
+        .filter((group) => group.xs.length <= MAX_POINTS)
+        .map((group) => ({
+          key: group.key,
+          color: group.color,
+          at: group.xs
+            .map((value, index) => {
+              const along = $scales.x.map(value);
+              const across = yScaleOf($scales, group).map(group.ys[index]);
+              return {
+                x: $scales.horizontal ? across : along,
+                y: $scales.horizontal ? along : across,
+                ok: Number.isFinite(group.ys[index]),
+              };
+            })
+            .filter((point) => point.ok),
+        }))
+    : [];
   // End labels name the series where it stops; value labels sit over each
   // point. Either kind yields to a neighbor rather than overlapping it.
   $: labelBoxes =

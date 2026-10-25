@@ -64,8 +64,8 @@
             <td class:bx--viz-data-table__number={true}>
               {value !== undefined && Number.isFinite(value)
                 ? (secondaryKeys.has(table.series[i])
-                    ? $scales.y2Format
-                    : $scales.yFormat)(value)
+                    ? $scales.y2Value
+                    : $scales.yValue)(value)
                 : emptyText}
             </td>
           {/each}

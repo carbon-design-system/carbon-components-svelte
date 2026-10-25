@@ -26,6 +26,7 @@
   export let withProbe = true;
   export let tickle = 0;
   export let width: number | "auto" = 640;
+  export let aspectRatio: number | undefined = undefined;
   export let zoom: [number, number] | null = null;
   export let onScales: (scales: unknown) => void = () => {};
   export let onselect: (detail: unknown) => void = () => {};
@@ -44,6 +45,7 @@
   series="region"
   {title}
   {width}
+  {aspectRatio}
   {emitUpdate}
   {loading}
   {error}

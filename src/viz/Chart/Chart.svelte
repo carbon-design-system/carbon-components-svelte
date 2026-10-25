@@ -87,6 +87,14 @@
   export let height = 288;
 
   /**
+   * Specify the plot's width-to-height ratio, such as `16 / 9`, for a chart
+   * that fills its container: the height then follows the measured width
+   * and `height` is ignored. Unset, the height is fixed.
+   * @type {number | undefined}
+   */
+  export let aspectRatio = undefined;
+
+  /**
    * Specify the width in pixels, or `"auto"` to fill the container.
    * @type {number | "auto"}
    */
@@ -852,7 +860,14 @@
     y2Format,
     orientation,
   });
-  $: effectiveHeight = fullscreenHeight || height;
+  // A ratio keeps a chart's shape as its container changes, where a fixed
+  // height makes the same series read steep on a phone and flat on a desk.
+  const MIN_HEIGHT = 120;
+  $: effectiveHeight =
+    fullscreenHeight ||
+    (aspectRatio
+      ? Math.max(MIN_HEIGHT, Math.round($size.width / aspectRatio))
+      : height);
   $: resize(width, effectiveHeight);
   $: compared = withPrior(
     data,
@@ -1527,8 +1542,8 @@
         .map(
           (/** @type {any} */ point) =>
             `${point.series} ${(point.axis === "y2"
-              ? $scales.y2Format
-              : $scales.yFormat)(point.y)}`,
+              ? $scales.y2Value
+              : $scales.yValue)(point.y)}`,
         )
         .join(", ")}`
     : "";

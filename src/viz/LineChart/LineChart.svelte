@@ -20,10 +20,11 @@
   export let curve = "linear";
 
   /**
-   * Specify when to draw a point on each datum.
-   * @type {"none" | "hover" | "all"}
+   * Specify when to draw a point on each datum: `"auto"` draws them while
+   * each has room, and only the hovered one in a dense series.
+   * @type {"none" | "hover" | "all" | "auto"}
    */
-  export let points = "hover";
+  export let points = "auto";
 
   /**
    * Set to `true` to dash every line, or pass the series keys to dash.

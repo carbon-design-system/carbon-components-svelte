@@ -272,6 +272,11 @@ describe("Chart", () => {
     });
   });
 
+  it("lets the height follow the width under an aspect ratio", () => {
+    render(Chart, { aspectRatio: 2 });
+    expect(svg()).toHaveAttribute("viewBox", "0 0 640 320");
+  });
+
   it("paints at the container's width from the first frame", () => {
     const measure = vi
       .spyOn(HTMLElement.prototype, "clientWidth", "get")

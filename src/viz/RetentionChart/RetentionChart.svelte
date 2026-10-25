@@ -32,7 +32,7 @@
   /**
    * Specify when to draw a point on each datum. Every period is a
    * measurement, so by default all are marked.
-   * @type {"none" | "hover" | "all"}
+   * @type {"none" | "hover" | "all" | "auto"}
    */
   export let points = "all";
 

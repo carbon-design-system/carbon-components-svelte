@@ -170,6 +170,12 @@ export type ChartScales = {
   /** Full-precision x label, for tooltips and announcements. */
   xLabel(value: number): string;
   /**
+   * Value formatters for tooltips, the table, and announcements: every
+   * digit by default, the tick format when `yFormat` or `y2Format` is given.
+   */
+  yValue(value: number): string;
+  y2Value(value: number): string;
+  /**
    * Width of one category slot. `x.map(index)` is the slot's center.
    * `undefined` on a time or linear axis.
    */
