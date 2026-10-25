@@ -366,7 +366,7 @@ test.describe("Data visualization", () => {
     expect(zoomed).toBeGreaterThan(before);
     await expect(figure.locator(".bx--viz-line")).toHaveAttribute(
       "clip-path",
-      /url\(#bx-viz-clip-/,
+      /url\(#bx-viz-\d+-clip\)/,
     );
 
     // Drag the window left: both ends move, and the width holds.

@@ -9,7 +9,7 @@
    * Row and event types are written inline: a typedef cannot carry the
    * generic into the generated declarations.
    * @restProps {figure}
-   * @event {{ datum: T; series: string | number; index: number; originalEvent: Event; selection: Array<{ series: string | number; index: number }> }} select Fires when the focused datum is activated by click, Enter, or Space.
+   * @event {{ datum: T; series: string | number; index: number; key: string | number | undefined; originalEvent: Event; selection: Array<{ series: string | number; index: number; key?: string | number }> }} select Fires when the focused datum is activated by click, Enter, or Space.
    * @event {{ range: [number, number] | null }} brush Fires when a `ChartBrush` drag ends or the brush clears.
    * @event {{ x: number; points: Array<{ datum: T; series: string | number; index: number; y: number }> } | null} hover Fires when the pointer or keyboard focus moves to another x, and with `null` when it leaves.
    * @event {{ series: string | number; hidden: boolean }} legend:toggle Fires when a series is shown or hidden.
@@ -47,6 +47,22 @@
    * @type {(keyof T & string) | ((row: T, index: number) => string | number)}
    */
   export let series = undefined;
+
+  /**
+   * Specify what identifies a row within its series, as a property name or
+   * a function, so selection and motion follow a datum when rows are added
+   * or trimmed. Defaults to the x value.
+   * @type {(keyof T & string) | ((row: T, index: number) => string | number) | undefined}
+   */
+  export let key = undefined;
+
+  /**
+   * Specify an id, set on the figure and used as the prefix of every id the
+   * chart writes into its SVG, such as a clip path or a pattern, so a server
+   * render and the client agree. Read once, when the chart is created.
+   * @type {string | undefined}
+   */
+  export let id = undefined;
 
   /** Specify the title. It names the chart for assistive technology. */
   export let title = "";
@@ -108,8 +124,10 @@
   export let hidden = [];
 
   /**
-   * Specify the selected datum.
-   * @type {{ series: string | number; index: number } | null}
+   * Specify the selected datum. `key` is what identifies it within its
+   * series (see the `key` prop); given, the datum is found again by it when
+   * the data changes.
+   * @type {{ series: string | number; index: number; key?: string | number } | null}
    */
   export let selected = null;
 
@@ -276,7 +294,7 @@
   /**
    * Specify every selected datum, for multi-select: Shift-click adds to
    * it, a plain click replaces it. `selected` is the last one.
-   * @type {ReadonlyArray<{ series: string | number; index: number }>}
+   * @type {ReadonlyArray<{ series: string | number; index: number; key?: string | number }>}
    */
   export let selection = [];
 
@@ -421,7 +439,18 @@
   // Anything a painter draws from: the data, the scales, the hidden series.
   $: canvasLayer.invalidate($groups, $scales);
 
-  const clipId = nextId("bx-viz-clip");
+  // Every id the chart writes, under one prefix: the `id` prop when given,
+  // else a document-unique one.
+  const idPrefix = id ?? nextId("bx-viz");
+  let issued = 0;
+  const ids = {
+    /** @param {string} kind */
+    next(kind) {
+      issued += 1;
+      return `${idPrefix}-${kind}-${issued}`;
+    },
+  };
+  const clipId = `${idPrefix}-clip`;
   const zoomStore = writable(/** @type {[number, number] | null} */ (null));
   // The brushed range in data space, and the keys of the selected data.
   const brushStore = writable(/** @type {[number, number] | null} */ (null));
@@ -464,13 +493,56 @@
             dateStyle: "medium",
             timeStyle: "short",
           }).format(asOf instanceof Date ? asOf : new Date(asOf));
+  /**
+   * `"series:key"` of a selected datum. An item from before the data
+   * changed, or from outside, may carry no key; its index names it then.
+   * @param {{ series: string | number; index: number; key?: string | number }} item
+   * @param {ReadonlyArray<import("./model.js").ChartGroup<T>>} current
+   */
+  function identityOf(item, current) {
+    const k =
+      item.key ??
+      current.find((group) => group.key === item.series)?.keys[item.index] ??
+      item.index;
+    return `${item.series}:${k}`;
+  }
   $: selectedKeys.set(
     new Set(
-      [...selection, ...(selected ? [selected] : [])].map(
-        (key) => `${key.series}:${key.index}`,
+      [...selection, ...(selected ? [selected] : [])].map((item) =>
+        identityOf(item, $groups),
       ),
     ),
   );
+
+  /**
+   * Selected data follow their rows when the data changes: an item is found
+   * again by its key, at its new index, or dropped when the row is gone.
+   * @param {ReadonlyArray<import("./model.js").ChartGroup<T>>} current
+   */
+  function followData(current) {
+    if (selection.length === 0 && !selected) return;
+    const byKey = new Map(current.map((group) => [group.key, group]));
+    /** @param {{ series: string | number; index: number; key?: string | number }} item */
+    const resolve = (item) => {
+      const group = byKey.get(item.series);
+      if (!group) return null;
+      const k = item.key ?? group.keys[item.index];
+      const index = group.keys.indexOf(k);
+      if (index === -1) return null;
+      return index === item.index && item.key === k
+        ? item
+        : { series: item.series, index, key: k };
+    };
+    const next = selection.map(resolve).filter((item) => item !== null);
+    const nextSelected = selected ? resolve(selected) : null;
+    const same =
+      next.length === selection.length &&
+      next.every((item, i) => item === selection[i]) &&
+      nextSelected === selected;
+    if (same) return;
+    selection = /** @type {typeof selection} */ (next);
+    selected = nextSelected;
+  }
 
   /**
    * Set the brush. A live update, while a drag is in progress, moves the
@@ -503,7 +575,7 @@
   function followSelection(message) {
     const current = get(scales);
     const visible = get(groups).filter((group) => !group.hidden);
-    /** @type {Array<{ series: string | number; index: number }>} */
+    /** @type {Array<{ series: string | number; index: number; key?: string | number }>} */
     const keys = [];
     for (const item of message.selection) {
       const x =
@@ -515,7 +587,9 @@
         visible[0];
       if (!group) continue;
       const index = group.xs.indexOf(x);
-      if (index !== -1) keys.push({ series: group.key, index });
+      if (index !== -1) {
+        keys.push({ series: group.key, index, key: group.keys[index] });
+      }
     }
     selection = keys;
     selected = keys.at(-1) ?? null;
@@ -739,6 +813,7 @@
     brush: brushStore,
     setBrush,
     selectedKeys,
+    ids,
     emphasis,
     shapes,
     setShapes,
@@ -750,6 +825,7 @@
   $: xAccessor = toAccessor(x);
   $: yAccessor = toAccessor(y);
   $: seriesAccessor = series ? toAccessor(series) : defaultSeries;
+  $: keyAccessor = key === undefined ? undefined : toAccessor(key);
   $: hiddenStore.set(hidden);
   $: viewStore.set(view);
   $: titleStore.set(title);
@@ -774,7 +850,14 @@
   });
   $: effectiveHeight = fullscreenHeight || height;
   $: resize(width, effectiveHeight);
-  $: compared = withPrior(data, xAccessor, yAccessor, seriesAccessor, compare);
+  $: compared = withPrior(
+    data,
+    xAccessor,
+    yAccessor,
+    seriesAccessor,
+    keyAccessor,
+    compare,
+  );
   // Three stages, each costing what its inputs deserve: the rows are read
   // once per data change; colors, hidden flags, and axes cost the series
   // count; the domain costs the series count again. A zoom or a legend
@@ -786,6 +869,7 @@
     x: compared.x,
     y: compared.y,
     series: compared.series,
+    key: compared.key,
     ghosts: compared.ghosts,
     band: wantsBand,
     locale,
@@ -800,11 +884,12 @@
    * @param {(row: T, index: number) => number | Date | string} xA
    * @param {(row: T, index: number) => number | null | undefined} yA
    * @param {(row: T, index: number) => string | number} sA
+   * @param {((row: T, index: number) => string | number) | undefined} kA
    * @param {{ period: number; label?: string } | null} options
    */
-  function withPrior(rows, xA, yA, sA, options) {
+  function withPrior(rows, xA, yA, sA, kA, options) {
     if (!options) {
-      return { rows, x: xA, y: yA, series: sA, ghosts: {} };
+      return { rows, x: xA, y: yA, series: sA, key: kA, ghosts: {} };
     }
     const suffix = options.label ?? " (prior)";
     /** @param {unknown} value */
@@ -848,6 +933,11 @@
       y: (row, i) => (isPrior(row) ? yA(row.source, row.index) : yA(row, i)),
       /** @type {(row: any, index: number) => string | number} */
       series: (row, i) => (isPrior(row) ? row.key : sA(row, i)),
+      // A ghost row is its source row, one period on.
+      /** @type {((row: any, index: number) => string | number) | undefined} */
+      key: kA
+        ? (row, i) => (isPrior(row) ? kA(row.source, row.index) : kA(row, i))
+        : undefined,
       ghosts,
     };
   }
@@ -936,6 +1026,7 @@
       include,
     });
     groups.set(built.groups);
+    followData(built.groups);
     // Publish a new domain only when it plots differently, so an in-range
     // append leaves the scales, axes, and grid alone.
     if (!sameDomain(get(domain), next)) domain.set(next);
@@ -1274,16 +1365,19 @@
     if (!current || current.points.length === 0) return;
     const point =
       current.points[Math.min(focusSeries, current.points.length - 1)];
-    const key = { series: point.series, index: point.index };
+    const all = get(groups);
+    const key = {
+      series: point.series,
+      index: point.index,
+      key: all.find((group) => group.key === point.series)?.keys[point.index],
+    };
+    const sameAs = (/** @type {typeof key} */ item) =>
+      identityOf(item, all) === identityOf(key, all);
     // Shift adds to or removes from the selection; a plain press replaces it.
     const additive = "shiftKey" in event && Boolean(event.shiftKey);
-    const already = selection.some(
-      (item) => item.series === key.series && item.index === key.index,
-    );
+    const already = selection.some(sameAs);
     if (additive && already) {
-      selection = selection.filter(
-        (item) => !(item.series === key.series && item.index === key.index),
-      );
+      selection = selection.filter((item) => !sameAs(item));
       selected = selection.at(-1) ?? null;
     } else {
       selection = additive ? [...selection, key] : [key];
@@ -1293,6 +1387,7 @@
       datum: point.datum,
       series: point.series,
       index: point.index,
+      key: key.key,
       originalEvent: event,
       selection,
     });
@@ -1443,6 +1538,7 @@
   class:bx--viz-chart--legend-left={legendPosition === "left"}
   class:bx--viz-chart--legend-top={legendPosition === "top"}
   class:bx--viz-chart--transition={transition && settled}
+  {id}
   on:fullscreenchange={onFullscreenChange}
   aria-busy={loading ? "true" : undefined}
   aria-label={title || undefined}

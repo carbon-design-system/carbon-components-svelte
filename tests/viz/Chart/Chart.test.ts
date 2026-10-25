@@ -180,6 +180,24 @@ describe("Chart", () => {
       expect(screen.getByTestId("selected")).toHaveTextContent("b:1");
     });
 
+    it("keeps a selection on its datum when rows are added before it, and drops it when the row goes", async () => {
+      const base = [
+        { day: 0, region: "a", revenue: 10 },
+        { day: 1, region: "a", revenue: 20 },
+        { day: 2, region: "a", revenue: 30 },
+      ];
+      const { rerender } = render(Chart, { data: base });
+      svg().focus();
+      await user.keyboard("{ArrowRight}{ArrowRight}{Enter}");
+      expect(screen.getByTestId("selected")).toHaveTextContent("a:1");
+
+      await rerender({ data: [{ day: -1, region: "a", revenue: 5 }, ...base] });
+      expect(screen.getByTestId("selected")).toHaveTextContent("a:2");
+
+      await rerender({ data: base.filter((row) => row.day !== 1) });
+      expect(screen.getByTestId("selected")).toHaveTextContent("");
+    });
+
     it("does not dispatch select when selected is set from outside", async () => {
       const onselect = vi.fn();
       const { rerender } = render(Chart, { onselect });

@@ -23,6 +23,8 @@ export type ChartGroup<T> = {
   xs: number[];
   /** y per row. Non-finite for a missing value. */
   ys: number[];
+  /** What identifies each row within the series: the `key` accessor's value, else its x as given, made unique. */
+  keys: Array<string | number>;
   /** Resolved CSS color, usually a `var(--cds-viz-*)` reference. */
   color: string;
   hidden: boolean;
@@ -51,6 +53,7 @@ export type GroupedSeries<T> = {
   rows: T[];
   xs: number[];
   ys: number[];
+  keys: Array<string | number>;
   /** Extent of this series alone, over every row. `null` when it has none. */
   xExtent: [number, number] | null;
   yExtent: [number, number] | null;
@@ -67,6 +70,8 @@ export type GroupRowsOptions<T> = {
   x: (row: T, index: number) => number | Date | string;
   y: (row: T, index: number) => number | null | undefined;
   series: (row: T, index: number) => ChartSeriesKey;
+  /** What identifies a row within its series. Defaults to the x as given. */
+  key?: (row: T, index: number) => string | number;
   /** Series that are ghosts of another, keyed by their own key: `{ "EMEA (prior)": "EMEA" }`. */
   ghosts?: Record<string, ChartSeriesKey>;
   /**

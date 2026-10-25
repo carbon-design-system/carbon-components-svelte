@@ -40,7 +40,7 @@ const DAY = 86_400_000;
  */
 export function groupRows(
   rows,
-  { x, y, series, band = false, locale, ghosts = {} },
+  { x, y, series, key: keyOf, band = false, locale, ghosts = {} },
 ) {
   const grouped = groupBy(rows, series);
   /** @type {string[]} */
@@ -58,12 +58,30 @@ export function groupRows(
     const xs = new Array(n);
     /** @type {number[]} */
     const ys = new Array(n);
+    // What identifies a row within its series: the `key` accessor, else the
+    // x as given. Repeats within a series get a suffix, so an `{#each}` can
+    // key on it; the suffix is in first-seen order, so it is as stable as
+    // an index for rows that share an x.
+    /** @type {Array<string | number>} */
+    const keys = new Array(n);
+    /** @type {Map<string, number>} */
+    const seen = new Map();
     let xMin = Number.POSITIVE_INFINITY;
     let xMax = Number.NEGATIVE_INFINITY;
     let yMin = Number.POSITIVE_INFINITY;
     let yMax = Number.NEGATIVE_INFINITY;
     for (let j = 0; j < n; j++) {
       const xv = x(groupRows[j], j);
+      const raw = keyOf
+        ? keyOf(groupRows[j], j)
+        : xv instanceof Date
+          ? xv.getTime()
+          : typeof xv === "string"
+            ? xv
+            : Number(xv);
+      const repeat = seen.get(String(raw)) ?? 0;
+      seen.set(String(raw), repeat + 1);
+      keys[j] = repeat === 0 ? raw : `${raw}#${repeat + 1}`;
       if (xv instanceof Date) {
         kind = "time";
         xs[j] = xv.getTime();
@@ -94,6 +112,7 @@ export function groupRows(
       rows: groupRows,
       xs,
       ys,
+      keys,
       xExtent: xMin <= xMax ? [xMin, xMax] : null,
       yExtent: yMin <= yMax ? [yMin, yMax] : null,
       ...(ghostOf === undefined ? {} : { ghost: ghostOf }),
@@ -185,6 +204,7 @@ export function decorateGroups(
       rows: base.rows,
       xs: base.xs,
       ys: base.ys,
+      keys: base.keys,
       color,
       hidden: hidden.includes(base.key),
       axis: secondary.includes(base.key) ? "y2" : "y",

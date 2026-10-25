@@ -105,8 +105,10 @@ export type ChartContext<T> = {
   brush: Readable<[number, number] | null>;
   /** Set the brush; `live` while a drag is in progress, so nothing fires until it ends. */
   setBrush(range: [number, number] | null, live?: boolean): void;
-  /** `"series:index"` of every selected datum. */
+  /** `"series:key"` of every selected datum, with the key from `ChartGroup.keys`. */
   selectedKeys: Readable<ReadonlySet<string>>;
+  /** Ids for SVG references, under the chart's `id` so a server render and the client agree. */
+  ids: { next(kind: string): string };
   /** The series the legend points at, which the other series dim for, or `null`. */
   emphasis: Writable<ChartSeriesKey | null>;
   /** The symbol or pattern each series draws with, for the legend's swatches. */

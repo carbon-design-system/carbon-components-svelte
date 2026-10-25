@@ -54,7 +54,6 @@
 
   import { getContext, onMount } from "svelte";
   import { resolveFormat } from "../utils/format-compact.js";
-  import { nextId } from "../utils/next-id.js";
   import { vizColor } from "../utils/tokens.js";
   import { buildBars, stackedExtent } from "./bar-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
@@ -76,6 +75,7 @@
     selectedKeys,
     emphasis,
     setShapes,
+    ids,
   } = getContext(CHART_CONTEXT);
 
   // Bars need one slot per x, asked for up front so the server render has it.
@@ -110,7 +110,7 @@
   }
 
   $: mine = pickGroups($groups, series);
-  const patternId = nextId("bx-viz-pattern");
+  const patternId = ids.next("pattern");
   $: patterns = assignShapes(
     mine.map((group) => group.key),
     pattern,

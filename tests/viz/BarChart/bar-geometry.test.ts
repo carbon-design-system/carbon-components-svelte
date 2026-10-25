@@ -143,14 +143,14 @@ describe("buildBars", () => {
     }
   });
 
-  test("keys stay stable for a series and datum", () => {
+  test("keys name the series and the datum's identity, its x by default", () => {
     const { groups, scales } = setup(rows);
 
     expect(buildBars(groups, scales).map((bar) => bar.key)).toEqual([
-      "a:0",
-      "a:1",
-      "b:0",
-      "b:1",
+      "a:Q1",
+      "a:Q2",
+      "b:Q1",
+      "b:Q2",
     ]);
   });
 });

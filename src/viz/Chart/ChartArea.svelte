@@ -43,14 +43,13 @@
   export let pattern = undefined;
 
   import { getContext, onMount } from "svelte";
-  import { nextId } from "../utils/next-id.js";
   import { areaExtent, buildAreas } from "./area-geometry.js";
   import { CHART_CONTEXT } from "./context.js";
   import { pickGroups } from "./model.js";
   import { assignShapes, PATTERNS, patternTile } from "./shapes.js";
 
   /** @type {import("./context.js").ChartContext} */
-  const { groups, scales, hover, includeY, clip, emphasis, setShapes } =
+  const { groups, scales, hover, includeY, clip, emphasis, setShapes, ids } =
     getContext(CHART_CONTEXT);
 
   /** @type {Array<() => void>} */
@@ -84,7 +83,7 @@
   $: mine = pickGroups($groups, series);
   $: include(mine, stack);
   // Depends on groups and scales only, so hover never rebuilds a layer.
-  const patternId = nextId("bx-viz-pattern");
+  const patternId = ids.next("pattern");
   $: patterns = assignShapes(
     pickGroups($groups, series).map((group) => group.key),
     pattern,

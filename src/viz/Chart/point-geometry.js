@@ -56,7 +56,7 @@ export function buildPoints(groups, scales, options = {}) {
         r = Math.sqrt(areaMin + areaSpan * t);
       }
       circles.push({
-        key: `${group.key}:${j}`,
+        key: `${group.key}:${group.keys[j]}`,
         series: group.key,
         index: j,
         cx: scales.horizontal ? across : along,

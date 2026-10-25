@@ -21,6 +21,7 @@ describe("buildTableRows", () => {
     rows: [],
     xs,
     ys,
+    keys: xs,
     color: "",
     hidden,
   });

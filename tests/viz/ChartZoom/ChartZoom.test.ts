@@ -32,7 +32,7 @@ describe("ChartZoomBar", () => {
     expect(labels()[0]).toBe("10");
     expect(document.querySelector(".bx--viz-line")).toHaveAttribute(
       "clip-path",
-      expect.stringMatching(/^url\(#bx-viz-clip-\d+\)$/),
+      expect.stringMatching(/^url\(#bx-viz-\d+-clip\)$/),
     );
     // The y axis keeps its full range while the window moves.
     const top = Array.from(
@@ -80,7 +80,7 @@ describe("ChartZoomBar", () => {
     expect(start).toHaveAttribute("aria-valuetext", "Tue");
     expect(document.querySelector(".bx--viz-line")).toHaveAttribute(
       "clip-path",
-      expect.stringMatching(/^url\(#bx-viz-clip-\d+\)$/),
+      expect.stringMatching(/^url\(#bx-viz-\d+-clip\)$/),
     );
   });
 });

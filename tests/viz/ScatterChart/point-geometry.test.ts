@@ -37,7 +37,7 @@ describe("buildPoints", () => {
     const { groups, scales } = setup();
     const circles = buildPoints(groups, scales);
 
-    expect(circles.map((c) => c.key)).toEqual(["a:0", "a:1", "b:0"]);
+    expect(circles.map((c) => c.key)).toEqual(["a:1", "a:2", "b:2"]);
     expect(circles[0]).toMatchObject({
       cx: scales.x.map(1),
       cy: scales.y.map(10),
@@ -54,7 +54,7 @@ describe("buildPoints", () => {
       sizeRange: [2, 10],
     });
 
-    expect(circles.map((c) => c.key)).toEqual(["b:0", "a:1", "a:0"]);
+    expect(circles.map((c) => c.key)).toEqual(["b:2", "a:2", "a:1"]);
     const [big, mid, small] = circles;
     expect(big.r).toBeCloseTo(10);
     expect(small.r).toBeCloseTo(2);

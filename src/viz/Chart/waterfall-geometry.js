@@ -52,7 +52,7 @@ export function buildWaterfall(groups, scales, options = {}) {
     const length = Math.max(1, Math.abs(b - a));
     const along = center - width / 2;
     bars.push({
-      key: `${group.key}:${j}`,
+      key: `${group.key}:${group.keys[j]}`,
       series: group.key,
       index: j,
       slot,

@@ -76,7 +76,7 @@
 
   /**
    * Specify the selected datum.
-   * @type {{ series: string | number; index: number } | null}
+   * @type {{ series: string | number; index: number; key?: string | number } | null}
    */
   export let selected = null;
 

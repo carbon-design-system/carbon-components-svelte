@@ -46,7 +46,7 @@
   /**
    * Specify every selected datum: Shift-click adds to it, a plain click
    * replaces it. Bind it.
-   * @type {ReadonlyArray<{ series: string | number; index: number }>}
+   * @type {ReadonlyArray<{ series: string | number; index: number; key?: string | number }>}
    */
   export let selection = [];
 
@@ -120,7 +120,7 @@
 
   /**
    * Specify the selected datum.
-   * @type {{ series: string | number; index: number } | null}
+   * @type {{ series: string | number; index: number; key?: string | number } | null}
    */
   export let selected = null;
 

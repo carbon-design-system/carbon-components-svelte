@@ -98,7 +98,7 @@ export function buildBars(groups, scales, options = {}) {
       const start = Math.min(y0, y1);
       const length = Math.abs(y1 - y0);
       rects.push({
-        key: `${group.key}:${j}`,
+        key: `${group.key}:${group.keys[j]}`,
         series: group.key,
         index: j,
         slot: index,

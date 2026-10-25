@@ -5,6 +5,7 @@ const group = (key: string, xs: number[], ys: number[], hidden = false) => ({
   rows: [],
   xs,
   ys,
+  keys: xs,
   color: "",
   hidden,
 });

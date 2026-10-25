@@ -178,10 +178,14 @@
             text: byKey.get(box.key)?.text ?? "",
           }));
         })();
-  $: active =
-    $hover && $hover.points.length > 0
-      ? `${$hover.points[0].series}:${$hover.points[0].index}`
-      : null;
+  // The hovered point's key, as the circles are keyed: by what identifies
+  // the row, not its index.
+  $: active = (() => {
+    const point = $hover?.points[0];
+    if (!point) return null;
+    const group = $groups.find((candidate) => candidate.key === point.series);
+    return `${point.series}:${group?.keys[point.index] ?? point.index}`;
+  })();
 </script>
 
 <g
