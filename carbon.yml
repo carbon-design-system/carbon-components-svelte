@@ -802,6 +802,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/FileUploader
+  filter-chips:
+    name: Filter chips
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/filter-chips.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FilterChips
   flame-graph:
     name: Flame graph
     status: stable
@@ -2229,6 +2241,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TimePicker
+  time-range-picker:
+    name: Time range picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/time-range-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TimeRangePicker
   toast-notification:
     name: Toast notification
     status: stable
