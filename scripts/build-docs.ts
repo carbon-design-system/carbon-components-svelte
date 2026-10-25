@@ -47,8 +47,11 @@ console.time("[build-docs]");
 
 await $`rm -f src/index.d.ts && find src -name "*.svelte.d.ts" -delete`;
 // `strict` fails the build on any sveld diagnostic, like a type that fell
-// back to `any` or a JSDoc tag with nothing to attach to.
-const { exitCode } = await sveld({ ...SVELD_OPTIONS, strict: true });
+// back to `any` or a JSDoc tag with nothing to attach to. CI's test jobs
+// pass `--no-strict` because they only need the types; static-checks is the
+// one job a diagnostic fails.
+const strict = !process.argv.includes("--no-strict");
+const { exitCode } = await sveld({ ...SVELD_OPTIONS, strict });
 
 console.timeEnd("[build-docs]");
 process.exitCode = exitCode;
