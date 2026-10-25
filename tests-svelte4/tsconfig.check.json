@@ -1,0 +1,15 @@
+{
+  "extends": "../tests/tsconfig.compat-check.json",
+  "compilerOptions": {
+    // tsgo checks the transpiled tests from tests/, where `svelte` would
+    // resolve to the root's Svelte 5.
+    "paths": {
+      "carbon-components-svelte": ["../src"],
+      "carbon-components-svelte/*": ["../src/*"],
+      "svelte": ["./node_modules/svelte"],
+      "svelte/*": ["./node_modules/svelte/*"]
+    }
+  },
+  "include": ["../tests"],
+  "exclude": ["../tests/Snippets/**", "../tests/**/*.svelte5.test.*"]
+}
