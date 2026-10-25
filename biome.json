@@ -101,6 +101,10 @@
   },
   "overrides": [
     {
+      "includes": ["src/tokens/tailwind.css"],
+      "css": { "parser": { "tailwindDirectives": true } }
+    },
+    {
       "includes": ["**/*.svelte"],
       "linter": {
         "rules": {

@@ -27,6 +27,8 @@ const ALLOWED: RegExp[] = [
   /^css\/[^/]+\.css$/,
   /^css\/css\.d\.ts$/,
   /^src\/.+\.(svelte|js|d\.ts)$/,
+  // The Tailwind v4 theme and the DTCG JSON.
+  /^src\/tokens\/[^/]+\.(css|json)$/,
 ];
 
 /** Build outputs a release tarball must contain, keyed by description. */

@@ -191,6 +191,79 @@ The table below lists every theme color. The [token reference](/tokens) shows ev
 
 <FileSource src="/framed/Theme/ThemeTokenData" />
 
+### Tailwind CSS
+
+Use Carbon tokens as Tailwind utilities. Colors read `var(--cds-*)`, so a utility follows `Theme`, `ThemeZone`, and `Layer`. Import `all.css` too, since it declares the custom properties.
+
+For Tailwind CSS v4, import the theme after Tailwind.
+
+```css
+@import "tailwindcss";
+@import "carbon-components-svelte/tailwind.css";
+```
+
+For Tailwind CSS v3, add the preset.
+
+```js
+// tailwind.config.js
+import carbon from "carbon-components-svelte/tailwind";
+
+export default {
+  presets: [carbon],
+  content: ["./src/**/*.{html,js,svelte,ts}"],
+};
+```
+
+Utilities use Carbon token names. Text and border colors also take the token name alone.
+
+| Tokens | Utilities |
+| :--- | :--- |
+| Colors | `bg-layer`, `bg-layer-01`, `text-icon-primary`, `bg-button-primary` |
+| Text colors | `text-primary`, `text-secondary`, `text-helper` |
+| Border colors | `border-subtle`, `border-strong-01`, `border-interactive` |
+| Spacing and sizes | `p-spacing-05`, `gap-spacing-03`, `h-size-medium` |
+| Type styles | `text-body-01`, `text-heading-03`, `text-label-01` |
+
+A type style sets font size, line height, letter spacing, and font weight. The default Tailwind scales stay available. In v3, an opacity modifier such as `bg-layer/50` has no effect on a Carbon color; v4 supports it.
+
+```svelte
+<div class="bg-layer border border-subtle p-spacing-05">
+  <h2 class="text-heading-02 text-primary">Deployment</h2>
+  <p class="text-body-01 text-secondary">Last deployed 4 minutes ago</p>
+</div>
+```
+
+### Design token JSON
+
+Import `carbon-components-svelte/tokens.json` for the same tokens in the [Design Tokens Community Group](https://www.designtokens.org/) format. Each top-level key is a token set: `core` holds type styles, spacing, and sizes, and `white`, `g10`, `g80`, `g90`, and `g100` hold each theme's colors. `$themes` pairs `core` with each theme, as Tokens Studio expects.
+
+Build one theme with [Style Dictionary](https://styledictionary.com/) by merging `core` with that theme's set. A `cds` prefix gives the same custom property names as `all.css`.
+
+```js
+// build-tokens.js
+import tokens from "carbon-components-svelte/tokens.json" with { type: "json" };
+import StyleDictionary from "style-dictionary";
+
+const sd = new StyleDictionary({
+  tokens: { ...tokens.core, ...tokens.g100 },
+  expand: { typography: true },
+  platforms: {
+    css: {
+      transformGroup: "css",
+      prefix: "cds",
+      buildPath: "build/",
+      files: [{ destination: "g100.css", format: "css/variables" }],
+    },
+  },
+});
+
+await sd.buildAllPlatforms();
+// --cds-layer-01: #262626;
+// --cds-body-01-font-size: 0.875rem;
+```
+
+Colors are hex. A color that refers to another token, such as a notification background on a dark theme, is an alias like `{layer}`. Fluid spacing is left out, since token dimensions take only `px` and `rem`.
+
 ## Controls
 
 Render a built-in control instead of managing `theme` yourself. Set `render` to `"toggle"`, `"select"`, or `"dropdown"`.
