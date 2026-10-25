@@ -1,6 +1,7 @@
 <script>
   import {
     AILabel,
+    BigNumber,
     Button,
     Card,
     CardAction,
@@ -333,6 +334,25 @@ export async function rollback(region, id) {
       {marks}
     />
   </LayoutDirection>
+  <div data-testid="big-numbers">
+    <BigNumber
+      labelText="Cost change"
+      locale="en-US"
+      value={-1200}
+      total={2000}
+      delta={12}
+      deltaPercentage
+    />
+    <BigNumber
+      labelText="Uptime"
+      locale="ar-EG"
+      value={12}
+      percentage
+      delta={12}
+      deltaPercentage
+    />
+    <BigNumber labelText="Requests" locale="ar" value={2} delta={-1200000} />
+  </div>
 </Content>
 
 <style>

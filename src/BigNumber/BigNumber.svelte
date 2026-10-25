@@ -125,6 +125,7 @@
   import Tooltip from "../Tooltip/Tooltip.svelte";
   import { formatDelta } from "../utils/format-delta.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
+  import { localeDirection } from "../utils/locale-direction.js";
   import BigNumberSkeleton from "./BigNumberSkeleton.svelte";
 
   const DASH = "–";
@@ -167,6 +168,10 @@
     format,
   });
   $: deltaColor = trend ? resolvedTrendColor : "neutral";
+  // Each number sits in a `<bdi>` in its locale's direction. Without one, an
+  // RTL page moves the sign of "+12%" to the far side ("12%+"). A custom
+  // `format` has no known locale, so its text sets its own direction.
+  $: numberDir = format ? "auto" : localeDirection(locale);
 </script>
 
 {#if loading}
@@ -197,7 +202,7 @@
       <span
         class:bx--big-number__value={true}
         title={formattedValue === fullValue ? undefined : fullValue}
-        >{displayValue}</span
+        ><bdi dir={numberDir}>{displayValue}</bdi></span
       >
       {#if TrendIcon}
         <svelte:component
@@ -213,7 +218,7 @@
         <span class:bx--big-number__denominator={true}>
           <span class:bx--visually-hidden={true}>of</span>
           <span aria-hidden="true">/</span>
-          {formattedTotal}
+          <bdi dir={numberDir}>{formattedTotal}</bdi>
         </span>
       {/if}
     </div>
@@ -224,7 +229,7 @@
           class:bx--big-number__delta-value--success={deltaColor === "success"}
           class:bx--big-number__delta-value--error={deltaColor === "error"}
           class:bx--big-number__delta-value--neutral={deltaColor === "neutral"}
-          >{formattedDelta}</span
+          ><bdi dir={numberDir}>{formattedDelta}</bdi></span
         >
         {#if deltaLabel}
           <span class:bx--big-number__delta-label={true}>{deltaLabel}</span>

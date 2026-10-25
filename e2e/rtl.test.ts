@@ -1912,3 +1912,71 @@ test.describe("right-to-left date picker", () => {
     }
   });
 });
+
+test.describe("right-to-left numbers", () => {
+  test("keeps BigNumber values, totals and deltas in their locale's order", async ({
+    page,
+  }) => {
+    // Each number's characters in screen order, left to right, without
+    // spaces, bidi marks and the total's slash. In an RTL paragraph, bidi moves the sign of
+    // "+12%" to the far side, so it paints as "12%+".
+    const numbers = () =>
+      page.evaluate(() =>
+        [...document.querySelectorAll("[data-testid=big-numbers] figure")].map(
+          (figure) =>
+            [
+              ".bx--big-number__value",
+              ".bx--big-number__denominator",
+              ".bx--big-number__delta-value",
+            ].flatMap((selector) => {
+              const part = figure.querySelector(selector);
+              if (!part) return [];
+              const range = document.createRange();
+              const chars: { char: string; left: number }[] = [];
+              const walker = document.createTreeWalker(
+                part,
+                NodeFilter.SHOW_TEXT,
+              );
+              for (
+                let node = walker.nextNode();
+                node;
+                node = walker.nextNode()
+              ) {
+                if (
+                  node.parentElement?.closest(
+                    ".bx--visually-hidden, [aria-hidden=true]",
+                  )
+                ) {
+                  continue;
+                }
+                const text = node.textContent ?? "";
+                for (let i = 0; i < text.length; i++) {
+                  if (/[\s‎‏؜]/.test(text[i])) continue;
+                  range.setStart(node, i);
+                  range.setEnd(node, i + 1);
+                  chars.push({
+                    char: text[i],
+                    left: range.getBoundingClientRect().left,
+                  });
+                }
+              }
+              return [
+                chars
+                  .sort((a, b) => a.left - b.left)
+                  .map(({ char }) => char)
+                  .join(""),
+              ];
+            }),
+        ),
+      );
+    const expected = [
+      ["-1.2K", "2K", "+12%"],
+      ["%١٢", "%١٢+"],
+      ["2", "نويلم-1.2"],
+    ];
+    await page.goto("/rtl.html");
+    expect(await numbers()).toEqual(expected);
+    await setDirection(page, "rtl");
+    expect(await numbers()).toEqual(expected);
+  });
+});
