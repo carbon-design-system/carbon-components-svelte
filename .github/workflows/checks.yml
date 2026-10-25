@@ -136,10 +136,31 @@ jobs:
           path: node_modules/.cache/test-changed-css
           key: test-changed-css-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
           restore-keys: test-changed-css-
+      # The e2e shards restore css/*.css from this cache. Building it here,
+      # alongside the selection's own compile, takes the build off each shard.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: built-css
+        if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
+        with:
+          path: css/*.css
+          key: css-${{ runner.os }}-${{ hashFiles('css/**/*.scss', 'scripts/build-css.ts', 'package.json', 'bun.lock') }}
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'
-        run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
+        env:
+          BUILD_CSS: ${{ steps.filter.outputs.css == 'true' && steps.built-css.outputs.cache-hit != 'true' }}
+        run: |
+          if [ "$BUILD_CSS" = true ]; then
+            bun run build:css > "$RUNNER_TEMP/build-css.log" 2>&1 &
+            build=$!
+          fi
+          bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
+          # A failed build leaves nothing to cache, so the e2e shards build
+          # it again and report the error themselves.
+          if [ -n "${build:-}" ] && ! wait "$build"; then
+            cat "$RUNNER_TEMP/build-css.log"
+            rm -f css/*.css
+          fi
 
   # Informational: prints the compiled-rule delta, specificity histogram and
   # size movement against the base branch in the job summary, and annotates
