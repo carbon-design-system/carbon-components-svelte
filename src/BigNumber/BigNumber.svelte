@@ -35,7 +35,10 @@
   export let total = undefined;
 
   /**
-   * Set to `true` to append a percent sign (%) after `value` and hide `total`.
+   * Set to `true` to format `value` as a percentage and hide `total`.
+   * `value` is the number of percent (`12` renders "12%"), never abbreviated.
+   * The percent sign takes the locale's place and spacing ("%12" in Turkish,
+   * "12 %" in French).
    */
   export let percentage = false;
 
@@ -114,7 +117,10 @@
    */
   export let delta = undefined;
 
-  /** Set to `true` to format `delta` as a percentage instead of a plain number. */
+  /**
+   * Set to `true` to format `delta` as a percentage instead of a plain number.
+   * `delta` is the number of percent, as for `percentage`.
+   */
   export let deltaPercentage = false;
 
   /** Trailing context rendered after the formatted `delta`, such as "vs last week". */
@@ -131,23 +137,69 @@
 
   const DASH = "–";
 
-  function formatNumber(num, digits, doTruncate) {
+  /**
+   * Format `num` as text runs. A run with `mark` set is the percent sign,
+   * with any space the locale puts beside it; it takes the total's type.
+   * @param {number} num
+   * @param {number} digits
+   * @param {boolean} doTruncate
+   * @param {boolean} [percent]
+   * @returns {{ text: string; mark: boolean }[] | undefined}
+   */
+  function formatRuns(num, digits, doTruncate, percent = false) {
     if (typeof num !== "number" || Number.isNaN(num)) return undefined;
-    if (format) return format(num);
+    if (format) {
+      const text = format(num);
+      return percent
+        ? [
+            { text, mark: false },
+            { text: "%", mark: true },
+          ]
+        : [{ text, mark: false }];
+    }
+    /** @type {Intl.NumberFormatOptions} */
     const options = { maximumFractionDigits: digits };
-    if (doTruncate) {
+    if (percent) {
+      // The "percent" unit takes `num` as given, where `style: "percent"`
+      // would need `num / 100` and can print float noise. A percentage is
+      // never abbreviated: ICU's compact percent patterns move the sign in
+      // Turkish ("%+4" for "+%4") and drop French's no-break space.
+      options.style = "unit";
+      options.unit = "percent";
+    } else if (doTruncate) {
       options.notation = "compact";
       options.compactDisplay = "short";
     }
     Object.assign(options, formatOptions);
-    return getNumberFormatter(locale, options).format(num);
+    const parts = getNumberFormatter(locale, options).formatToParts(num);
+    const sign = (part) =>
+      percent && (part?.type === "unit" || part?.type === "percentSign");
+    /** @type {{ text: string; mark: boolean }[]} */
+    const runs = [];
+    parts.forEach((part, index) => {
+      const mark =
+        sign(part) ||
+        ((sign(parts[index - 1]) || sign(parts[index + 1])) &&
+          part.type === "literal" &&
+          !part.value.trim());
+      const last = runs[runs.length - 1];
+      if (last?.mark === mark) last.text += part.value;
+      else runs.push({ text: part.value, mark });
+    });
+    return runs;
+  }
+
+  /** @param {{ text: string }[] | undefined} runs */
+  function joinRuns(runs) {
+    return runs?.map((run) => run.text).join("");
   }
 
   $: hasTotal = typeof total === "number";
-  $: formattedValue = formatNumber(value, fractionDigits, !fullNumber);
-  $: fullValue = formatNumber(value, fractionDigits, false);
+  $: valueRuns = formatRuns(value, fractionDigits, !fullNumber, percentage);
+  $: formattedValue = joinRuns(valueRuns);
+  $: fullValue = joinRuns(formatRuns(value, fractionDigits, false, percentage));
   $: formattedTotal = hasTotal
-    ? formatNumber(total, fractionDigits, !fullNumber)
+    ? joinRuns(formatRuns(total, fractionDigits, !fullNumber))
     : undefined;
   $: showDenominator =
     hasTotal &&
@@ -204,9 +256,9 @@
         class:bx--big-number__value={true}
         title={formattedValue === fullValue ? undefined : fullValue}
         ><bdi dir={numberDir}
-          >{formattedValue ?? DASH}{#if percentage}<span
-              class:bx--big-number__percentage-mark={true}>%</span
-            >{/if}</bdi
+          >{#if valueRuns}{#each valueRuns as run, index (index)}{#if run.mark}<span
+                  class:bx--big-number__percentage-mark={true}>{run.text}</span
+                >{:else}{run.text}{/if}{/each}{:else}{DASH}{/if}</bdi
         ></span
       >
       {#if TrendIcon}

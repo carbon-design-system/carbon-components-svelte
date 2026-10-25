@@ -105,6 +105,76 @@ describe("BigNumber", () => {
       ).toBeNull();
     });
 
+    it.each([
+      ["en-US", "12%", "%", "+4.2%"],
+      ["tr", "%12", "%", "+%4,2"],
+      ["fr", "12\u00a0%", "\u00a0%", "+4,2\u00a0%"],
+      ["ar-EG", "١٢٪\u061c", "٪", "\u061c+٤٫٢٪\u061c"],
+    ])("follows the %s percent pattern: %j", (locale, value, mark, delta) => {
+      render(BigNumberProps, {
+        props: {
+          options: {
+            locale,
+            value: 12,
+            percentage: true,
+            delta: 4.2,
+            deltaPercentage: true,
+          },
+        },
+      });
+
+      const el = screen.getByTestId("metric");
+      const bdi = el.querySelector(".bx--big-number__value bdi");
+      expect(bdi?.textContent).toBe(value);
+      expect(
+        bdi?.querySelector(".bx--big-number__percentage-mark")?.textContent,
+      ).toBe(mark);
+      expect(
+        el.querySelector(".bx--big-number__delta-value")?.textContent,
+      ).toBe(delta);
+    });
+
+    it("does not abbreviate a percentage", () => {
+      render(BigNumberProps, {
+        props: {
+          options: {
+            value: 1234.5,
+            percentage: true,
+            delta: 1500,
+            deltaPercentage: true,
+          },
+        },
+      });
+
+      const el = screen.getByTestId("metric");
+      const value = el.querySelector(".bx--big-number__value");
+      expect(value?.textContent).toBe("1,234.5%");
+      expect(value).not.toHaveAttribute("title");
+      expect(
+        el.querySelector(".bx--big-number__delta-value")?.textContent,
+      ).toBe("+1,500%");
+    });
+
+    it("appends a percent sign to a custom format", () => {
+      render(BigNumberProps, {
+        props: {
+          options: {
+            value: 7,
+            percentage: true,
+            format: (n: number) => `${n}`,
+          },
+        },
+      });
+
+      const bdi = screen
+        .getByTestId("metric")
+        .querySelector(".bx--big-number__value bdi");
+      expect(bdi?.textContent).toBe("7%");
+      expect(
+        bdi?.querySelector(".bx--big-number__percentage-mark"),
+      ).toHaveTextContent("%");
+    });
+
     it("hides the total even when it would otherwise be shown", () => {
       render(BigNumber);
 
