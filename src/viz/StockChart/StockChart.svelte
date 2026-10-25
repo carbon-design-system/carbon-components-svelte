@@ -69,6 +69,14 @@
   /** Specify a description, for assistive technology */
   export let description = "";
 
+  /**
+   * Specify an id, set on the wrapper and used as the prefix of every id the
+   * price pane and the indicator panes write into their SVGs, so a server
+   * render and the client agree. Read once, when the chart is created.
+   * @type {string | undefined}
+   */
+  export let id = undefined;
+
   /** Specify the height of the price pane in pixels */
   export let height = 288;
 
@@ -367,12 +375,14 @@
   class:bx--viz-stock={true}
   role="group"
   aria-label={title || undefined}
+  {id}
   {...$$restProps}
 >
   <!-- Prices move within a band far from zero, which the axis must not include. -->
   <Chart
     bind:zoom
     band={mode === "candles" || Boolean(volumeOf)}
+    id={id === undefined ? undefined : `${id}-price`}
     {title}
     {description}
     {height}
@@ -460,6 +470,9 @@
     <Chart
       bind:zoom
       band={pane.bars.length > 0}
+      id={id === undefined
+        ? undefined
+        : `${id}-${String(pane.key).replace(/[^\w-]/g, "-")}`}
       title={pane.key}
       height={indicatorHeight}
       {width}
