@@ -32,6 +32,7 @@ import {
  * needed, so CI computes the selection once in a cheap job.
  *
  *   bun scripts/test-changed.ts [base]                   # run affected unit tests
+ *   bun scripts/test-changed.ts [base] --e2e             # run affected e2e tests (Chromium)
  *   bun scripts/test-changed.ts [base] --print           # print the plan as JSON
  *   bun scripts/test-changed.ts [base] --github-output   # write unit-tests/e2e-tests outputs
  *
@@ -323,11 +324,12 @@ function logSelection(label: string, selection: Selection) {
 if (import.meta.main) {
   const args = process.argv.slice(2);
   const baseRef = args.find((arg) => !arg.startsWith("--")) ?? "origin/master";
-  // Only the e2e selection reads the CSS diff, and running locally runs
-  // unit tests alone, so only the outputs that list e2e tests compile it.
+  const e2e = args.includes("--e2e");
+  // Only the e2e selection reads the CSS diff, so only the modes that list
+  // or run e2e tests compile it.
   const { plan, styles } = await computePlan(
     baseRef,
-    args.includes("--print") || args.includes("--github-output"),
+    e2e || args.includes("--print") || args.includes("--github-output"),
   );
 
   if (args.includes("--print")) {
@@ -354,12 +356,18 @@ if (import.meta.main) {
     process.exit(0);
   }
 
-  if (plan.unit.mode === "none") {
-    console.log(`No unit tests affected against ${baseRef}; skipping.`);
+  const suite = e2e ? "e2e" : "unit";
+  const selection = plan[suite];
+  if (selection.mode === "none") {
+    console.log(`No ${suite} tests affected against ${baseRef}; skipping.`);
     process.exit(0);
   }
-  const files = plan.unit.mode === "some" ? plan.unit.files : [];
-  const result = spawnSync("bunx", ["vitest", "run", ...files], {
+  const files = selection.mode === "some" ? selection.files : [];
+  // Chromium only, as CI runs it.
+  const command = e2e
+    ? ["playwright", "test", "--project=chromium", ...files]
+    : ["vitest", "run", ...files];
+  const result = spawnSync("bunx", command, {
     cwd: ROOT,
     stdio: "inherit",
   });
