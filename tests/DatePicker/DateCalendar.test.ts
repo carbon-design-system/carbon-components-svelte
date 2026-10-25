@@ -21,6 +21,19 @@ describe("DateCalendar", () => {
     );
   });
 
+  it("disables days when minDate changes after mount", async () => {
+    const { rerender } = render(DateCalendar, {
+      month: new Date(2024, 2, 15),
+    });
+    const day = () =>
+      screen.getByRole("gridcell", { name: "Friday, March 8, 2024" });
+    expect(day()).not.toHaveAttribute("aria-disabled");
+
+    await rerender({ minDate: new Date(2024, 2, 10) });
+
+    expect(day()).toHaveAttribute("aria-disabled", "true");
+  });
+
   it.each([
     ["en", "March 2024"],
     ["ja", "2024年3月"],

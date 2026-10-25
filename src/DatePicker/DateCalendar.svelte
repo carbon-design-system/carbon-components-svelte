@@ -15,6 +15,7 @@
     getCalendarLocale,
     isoWeek,
   } from "./calendar-dates.js";
+  import { dayClassName, dayState } from "./day-state.js";
 
   /**
    * The picked date.
@@ -93,26 +94,27 @@
     ...l10n.weekdays.shorthand.slice(0, firstDay),
   ];
   $: weeks = buildWeeks(year, monthIndex, firstDay);
+  // Every input a day's state reads is named here, so Svelte 3 and 4 redo
+  // the days when any of them changes.
+  $: dayContext = {
+    selected: value ? [value] : [],
+    today,
+    isEnabled: (/** @type {Date} */ date) =>
+      !isOutOfRange(date, minDate, maxDate) && !isDateDisabled(date),
+  };
   // Everything a cell shows, worked out once per change so each cell
   // updates a handful of attributes.
   $: rows = weeks.map((week) =>
     week.map((date) => {
       const outside = date.getMonth() !== monthIndex;
-      const selected = sameDay(date, value);
-      const isToday = sameDay(date, today);
-      const disabled = isDisabled(date);
-      let className = "bx--date-picker__day";
-      if (outside) className += " bx--date-picker__day--outside-month";
-      if (selected) className += " bx--date-picker__day--selected";
-      if (isToday) className += " bx--date-picker__day--today";
-      if (disabled) className += " bx--date-picker__day--disabled";
+      const state = dayState(date, dayContext);
       return {
         date,
         outside,
-        selected,
-        isToday,
-        disabled,
-        className,
+        selected: state.selected,
+        isToday: state.today,
+        disabled: state.disabled,
+        className: dayClassName(state, outside),
         key: date.toDateString(),
         tabindex: sameDay(date, focusTarget) ? 0 : -1,
         label: `${l10n.weekdays.longhand[date.getDay()]}, ${l10n.months.longhand[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`,
@@ -154,12 +156,15 @@
     return y * 12 + m - (date.getFullYear() * 12 + date.getMonth());
   }
 
-  /** @param {Date} date */
-  function isDisabled(date) {
+  /**
+   * @param {Date} date
+   * @param {Date | null} min
+   * @param {Date | null} max
+   */
+  function isOutOfRange(date, min, max) {
     return (
-      (minDate != null && compareDays(date, minDate) < 0) ||
-      (maxDate != null && compareDays(date, maxDate) > 0) ||
-      isDateDisabled(date)
+      (min != null && compareDays(date, min) < 0) ||
+      (max != null && compareDays(date, max) > 0)
     );
   }
 
@@ -175,7 +180,7 @@
 
   /** @param {Date} date */
   function select(date) {
-    if (isDisabled(date)) return;
+    if (!dayContext.isEnabled(date)) return;
     value = date;
     focusTarget = date;
     if (date.getMonth() !== monthIndex) month = date;
