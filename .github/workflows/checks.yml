@@ -291,6 +291,41 @@ jobs:
             *) read -ra files <<< "$TESTS" && bunx playwright test --project=chromium --shard="$SHARD" --pass-with-no-tests "${files[@]}" ;;
           esac
 
+  # Probe (do not merge): the full e2e suite on the bare runner with a
+  # cached Chromium headless shell, to compare with the container shards.
+  e2e-runner-probe:
+    name: e2e-runner-probe (${{ matrix.shard }}/2)
+    needs: [changes]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci --ignore-scripts
+      - id: pw
+        run: echo "version=$(bunx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: browsers
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium-shell
+      - name: Install Chromium headless shell
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: bunx playwright install --only-shell chromium
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: css
+        with:
+          path: css/*.css
+          key: css-${{ runner.os }}-${{ hashFiles('css/**/*.scss', 'scripts/build-css.ts', 'package.json', 'bun.lock') }}
+      - name: Build CSS
+        if: steps.css.outputs.cache-hit != 'true'
+        run: bun run build:css
+      - name: E2E tests
+        run: bunx playwright test --project=chromium --shard=${{ matrix.shard }}/2
+
   test-svelte-compat:
     name: test-svelte-compat (${{ matrix.label }}, ${{ matrix.shard }}/2)
     needs: [changes]
