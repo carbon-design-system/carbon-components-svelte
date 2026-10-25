@@ -62,6 +62,7 @@ jobs:
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
       css: ${{ steps.filter.outputs.css }}
       css-size: ${{ steps.filter.outputs.css-size }}
+      types: ${{ steps.types.outputs.types }}
       # `all`, `none`, or space-separated test files; empty (= all) off PRs.
       unit-tests: ${{ steps.select.outputs.unit-tests }}
       e2e-tests: ${{ steps.select.outputs.e2e-tests }}
@@ -117,6 +118,17 @@ jobs:
               - 'package.json'
               - 'bun.lock'
               - '.github/**'
+
+      # Type checks read src/, tests/ and what they import, never the Sass
+      # sources, so a PR that only changes .scss skips them.
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: types
+        with:
+          predicate-quantifier: every
+          filters: |
+            types:
+              - '**'
+              - '!css/**/*.scss'
 
       # PRs run only the unit and e2e tests the diff can reach in the static
       # dependency graph (scripts/lib/test-graph.ts). Zero-dependency, so no
@@ -201,7 +213,7 @@ jobs:
         run: bun run build:docs
 
       - name: Test types (Svelte 5)
-        if: matrix.shard == 1
+        if: matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
         run: bun run test:types
 
       # Each shard runs half of the selected files, so an empty half passes.
@@ -320,7 +332,7 @@ jobs:
         run: bun run build:docs
 
       - name: Test types (${{ matrix.label }})
-        if: matrix.shard == 1
+        if: matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
         run: |
           cd ${{ matrix.dir }}
           bun run test:types
