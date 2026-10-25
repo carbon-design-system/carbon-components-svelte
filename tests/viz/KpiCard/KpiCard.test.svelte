@@ -4,6 +4,7 @@
   import Sparkline from "carbon-components-svelte/viz/Sparkline/Sparkline.svelte";
 
   export let loading = false;
+  export let error = false;
   export let value: number | null = 1280000;
 </script>
 
@@ -15,6 +16,11 @@
   deltaLabel="vs last month"
   locale="en-US"
   {loading}
+  {error}
+  subtitle="Net of refunds"
+  status="cautious"
+  statusLabel="Over target"
+  asOf={new Date(2026, 9, 24, 9, 41)}
   data-testid="full"
 >
   <Sparkline slot="chart" values={[3, 5, 4, 8, 9]} label="Trend" />

@@ -5,12 +5,42 @@
    * @slot {{ formattedValue: string }} value
    * @slot {{}} chart
    * @slot {{}} footer
+   * @slot {{}} error
    */
 
   /** @restProps {div | a} */
 
   /** Specify the name of the metric */
   export let label = "";
+
+  /** Specify a line under the name: the unit, the definition, the period */
+  export let subtitle = "";
+
+  /**
+   * Specify a status beside the name, as a shape indicator, for a metric
+   * over a threshold or a source that is degraded.
+   * @type {"failed" | "critical" | "high" | "medium" | "low" | "cautious" | "undefined" | "stable" | "informative" | "incomplete" | "draft" | undefined}
+   */
+  export let status = undefined;
+
+  /** Specify the text beside the status shape. Defaults to the status. */
+  export let statusLabel = "";
+
+  /**
+   * Specify when the value was fetched, written under the card so stale
+   * data says so: a `Date`, a timestamp, or ready-made text.
+   * @type {Date | number | string | undefined}
+   */
+  export let asOf = undefined;
+
+  /** Specify the words before `asOf` */
+  export let asOfLabel = "As of";
+
+  /** Set to `true` to show the error state instead of the value */
+  export let error = false;
+
+  /** Specify the text shown in the error state */
+  export let errorText = "Could not load this metric";
 
   /**
    * Obtain a reference to the tile element
@@ -68,6 +98,7 @@
    */
   export let locale = undefined;
 
+  import ShapeIndicator from "../../ShapeIndicator/ShapeIndicator.svelte";
   import SkeletonText from "../../SkeletonText/SkeletonText.svelte";
   import ClickableTile from "../../Tile/ClickableTile.svelte";
   import Tile from "../../Tile/Tile.svelte";
@@ -79,7 +110,16 @@
     typeof value === "number" && Number.isFinite(value)
       ? formatValue(value)
       : "–";
-  $: hasDelta = delta !== undefined && !loading;
+  $: hasDelta = delta !== undefined && !loading && !error;
+  $: asOfText =
+    asOf === undefined || asOf === null || asOf === ""
+      ? ""
+      : typeof asOf === "string"
+        ? asOf
+        : new Intl.DateTimeFormat(locale, {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }).format(asOf instanceof Date ? asOf : new Date(asOf));
 </script>
 
 <svelte:component
@@ -90,10 +130,22 @@
   aria-busy={loading ? "true" : undefined}
   {...$$restProps}
 >
-  <div class:bx--viz-kpi__label={true}>{label}</div>
+  <div class:bx--viz-kpi__head={true}>
+    <div class:bx--viz-kpi__label={true}>{label}</div>
+    {#if status}
+      <ShapeIndicator kind={status} label={statusLabel || status} />
+    {/if}
+  </div>
+  {#if subtitle}
+    <div class:bx--viz-kpi__subtitle={true}>{subtitle}</div>
+  {/if}
   {#if loading}
     <div class:bx--viz-kpi__skeleton={true}>
       <SkeletonText heading width="60%" />
+    </div>
+  {:else if error}
+    <div class:bx--viz-kpi__error={true}>
+      <slot name="error">{errorText}</slot>
     </div>
   {:else}
     <div class:bx--viz-kpi__row={true}>
@@ -121,5 +173,8 @@
     <div class:bx--viz-kpi__footer={true}>
       <slot name="footer" />
     </div>
+  {/if}
+  {#if asOfText}
+    <div class:bx--viz-kpi__as-of={true}>{asOfLabel} {asOfText}</div>
   {/if}
 </svelte:component>

@@ -53,6 +53,24 @@ describe("KpiCard", () => {
     );
   });
 
+  it("writes the subtitle, the status, and the freshness, and shows the error state in the value's place", async () => {
+    const { rerender } = render(KpiCard);
+    const full = screen.getByTestId("full");
+    expect(full.querySelector(".bx--viz-kpi__subtitle")).toHaveTextContent(
+      "Net of refunds",
+    );
+    expect(full).toHaveTextContent("Over target");
+    expect(full.querySelector(".bx--viz-kpi__as-of")).toHaveTextContent(
+      /^As of .*9:41/,
+    );
+
+    await rerender({ error: true });
+    expect(full.querySelector(".bx--viz-kpi__error")).toHaveTextContent(
+      "Could not load this metric",
+    );
+    expect(full.querySelector(".bx--viz-kpi__value")).toBeNull();
+  });
+
   it("holds its place with a skeleton while loading, and writes a dash for no value", async () => {
     const { rerender } = render(KpiCard, { loading: true });
 

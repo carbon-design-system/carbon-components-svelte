@@ -228,8 +228,28 @@
       color: $text-error;
   }
 
-  .#{$prefix}--viz-chart__as-of {
+  .#{$prefix}--viz-chart__heading {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    row-gap: to-rem(2px);
+  }
+
+  .#{$prefix}--viz-chart__subtitle {
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  // Freshness, actions, and the toolbar, pushed to the end of the header.
+  .#{$prefix}--viz-chart__end {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
     margin-inline-start: auto;
+  }
+
+  .#{$prefix}--viz-chart__as-of {
     color: $text-secondary;
     white-space: nowrap;
 

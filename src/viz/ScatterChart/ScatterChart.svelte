@@ -274,6 +274,7 @@
     <ChartBrush />
   {/if}
   <slot />
+  <svelte:fragment slot="actions"><slot name="actions" /></svelte:fragment>
   <svelte:fragment slot="toolbar">
     {#if toolbar}
       <ChartToolbar {...toolbarProps} />

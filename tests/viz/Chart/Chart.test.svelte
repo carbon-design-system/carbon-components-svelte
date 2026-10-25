@@ -17,6 +17,7 @@
   export let transition = false;
   export let selected: { series: string | number; index: number } | null = null;
   export let title = "Revenue by region";
+  export let subtitle = "";
   export let emitUpdate = false;
   export let loading = false;
   export let error = false;
@@ -60,6 +61,7 @@
   y="revenue"
   series="region"
   {title}
+  {subtitle}
   {width}
   {aspectRatio}
   {emitUpdate}
@@ -80,6 +82,11 @@
   {#if withProbe}
     <ChartProbe {includeY} {onScales} />
   {/if}
+  <svelte:fragment slot="actions">
+    {#if subtitle}
+      <button type="button">Card menu</button>
+    {/if}
+  </svelte:fragment>
 </Chart>
 
 <output data-testid="hidden">{hidden.join(",")}</output>

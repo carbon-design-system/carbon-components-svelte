@@ -247,6 +247,7 @@
   <ChartAxis position="left" title={yTitle} />
   <ChartCandles {candles} {padding} {hollow} {upColor} {downColor} />
   <slot />
+  <svelte:fragment slot="actions"><slot name="actions" /></svelte:fragment>
   <svelte:fragment slot="toolbar">
     {#if toolbar}
       <ChartToolbar {...toolbarProps} />

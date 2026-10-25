@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../../utils/user";
 import Chart from "./Chart.test.svelte";
@@ -317,6 +317,22 @@ describe("Chart", () => {
     } finally {
       raf.mockRestore();
     }
+  });
+
+  it("writes a subtitle under the title, names the chart with it, and takes actions in the header", () => {
+    render(Chart, { subtitle: "USD, net" });
+
+    const header = document.querySelector(".bx--viz-chart__header");
+    expect(header?.querySelector(".bx--viz-chart__subtitle")).toHaveTextContent(
+      "USD, net",
+    );
+    expect(document.querySelector(".bx--viz-chart__svg")).toHaveAttribute(
+      "aria-label",
+      "Revenue by region. USD, net",
+    );
+    expect(
+      within(header as HTMLElement).getByRole("button", { name: "Card menu" }),
+    ).toBeInTheDocument();
   });
 
   it("lets the height follow the width under an aspect ratio", () => {

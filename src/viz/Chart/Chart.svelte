@@ -15,6 +15,7 @@
    * @event {{ series: string | number; hidden: boolean }} legend:toggle Fires when a series is shown or hidden.
    * @event {{ xDomain: [number, number]; yDomain: [number, number]; count: number }} update Fires after the data or its domain changes. Requires `emitUpdate`.
    * @slot {{}} toolbar
+   * @slot {{}} actions
    * @slot {{}} tooltip
    * @slot {{}} legend
    * @slot {{}} table
@@ -87,6 +88,12 @@
    * data changes. Off where the user prefers reduced motion.
    */
   export let transition = false;
+
+  /**
+   * Specify a line under the title: the unit, the metric's definition, or
+   * the period. Read to assistive technology with the title.
+   */
+  export let subtitle = "";
 
   /** Specify a longer description, announced after the title */
   export let description = "";
@@ -1613,13 +1620,24 @@
        through `aria-label` rather than as a `figcaption`, which must be
        the figure's own child. -->
   <div class:bx--viz-chart__header={true}>
-    {#if title}
-      <div class:bx--viz-chart__title={true}>{title}</div>
+    {#if title || subtitle}
+      <div class:bx--viz-chart__heading={true}>
+        {#if title}
+          <div class:bx--viz-chart__title={true}>{title}</div>
+        {/if}
+        {#if subtitle}
+          <div class:bx--viz-chart__subtitle={true}>{subtitle}</div>
+        {/if}
+      </div>
     {/if}
-    {#if asOfText}
-      <div class:bx--viz-chart__as-of={true}>{asOfLabel} {asOfText}</div>
-    {/if}
-    <slot name="toolbar" />
+    <!-- Freshness, the card's own actions, and the toolbar sit at the end. -->
+    <div class:bx--viz-chart__end={true}>
+      {#if asOfText}
+        <div class:bx--viz-chart__as-of={true}>{asOfLabel} {asOfText}</div>
+      {/if}
+      <slot name="actions" />
+      <slot name="toolbar" />
+    </div>
   </div>
   <!-- The plot stays mounted behind the table, so switching back is instant. -->
   <div
@@ -1648,7 +1666,8 @@
       height={$size.height}
       role="application"
       aria-roledescription="chart"
-      aria-label={[title, description].filter(Boolean).join(". ") || undefined}
+      aria-label={[title, subtitle, description].filter(Boolean).join(". ") ||
+        undefined}
       tabindex="0"
       on:pointermove={onPointerMove}
       on:pointerdown={onPointerDown}

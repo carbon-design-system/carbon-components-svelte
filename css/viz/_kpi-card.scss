@@ -9,10 +9,37 @@
     row-gap: $carbon--spacing-03;
   }
 
-  .#{$prefix}--viz-kpi__label {
+  .#{$prefix}--viz-kpi__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-kpi__label,
+  .#{$prefix}--viz-kpi__subtitle,
+  .#{$prefix}--viz-kpi__as-of {
     color: $text-secondary;
 
     @include type-style("label-01");
+  }
+
+  // The subtitle hangs off the name, closer than the row gap.
+  .#{$prefix}--viz-kpi__subtitle {
+    margin-block-start: -#{$carbon--spacing-02};
+  }
+
+  .#{$prefix}--viz-kpi__error {
+    color: $text-error;
+    // As tall as the value it stands in for.
+    min-block-size: to-rem(40px);
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--viz-kpi__as-of {
+    margin-block-start: auto;
   }
 
   .#{$prefix}--viz-kpi__row {
