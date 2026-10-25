@@ -2153,6 +2153,20 @@ describe("DatePicker", () => {
     });
   });
 
+  it("doesn't re-apply a range the calendar just picked", async () => {
+    render(DatePickerRange, {});
+    const calendar = await openCalendar("Start date");
+    const engine = getCalendarInstance(screen.getByLabelText("Start date"));
+    const setDate = vi.spyOn(engine, "setDate");
+
+    await user.click(dayByLabel(calendar, 10));
+    await user.click(dayByLabel(calendar, 14));
+    await tick();
+
+    expect(engine.selectedDates).toHaveLength(2);
+    expect(setDate).not.toHaveBeenCalled();
+  });
+
   describe("range length limits", () => {
     async function pickStart(props: Record<string, unknown>) {
       const result = render(DatePickerRange, props);

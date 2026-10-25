@@ -662,6 +662,19 @@
       .join(conjunction);
   }
 
+  /**
+   * Whether the calendar already holds exactly this range, as it does right
+   * after the user picks one.
+   * @param {string} from
+   * @param {string} to
+   */
+  function isRangePicked(from, to) {
+    const [start = "", end = ""] = engine.selectedDates.map((date) =>
+      engine.formatDate(date, engine.config.dateFormat),
+    );
+    return from === start && to === end;
+  }
+
   function currentDateStr() {
     return $range
       ? { from: inputRef.value, to: inputRefTo.value }
@@ -1622,6 +1635,15 @@
     if (engine) {
       if ($range) {
         if (
+          ($inputValueFrom !== prevValueFrom ||
+            $inputValueTo !== prevValueTo) &&
+          isRangePicked($inputValueFrom, $inputValueTo)
+        ) {
+          // The calendar just picked these ends itself; re-applying them
+          // would redraw both months twice for nothing.
+          prevValueFrom = $inputValueFrom;
+          prevValueTo = $inputValueTo;
+        } else if (
           $inputValueFrom !== prevValueFrom ||
           $inputValueTo !== prevValueTo
         ) {
