@@ -227,6 +227,9 @@
     isTrackRtl,
     shiftRange,
     snapToStep,
+    TRACK_MIRROR,
+    trackLeft,
+    trackSign,
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -636,14 +639,22 @@
   $: leftUpper = range === 0 ? 0 : ((valueUpper - min) / range) * 100;
 
   // In RTL, `min` sits at the right end of a horizontal track. The
-  // track's nearest `dir` gives the direction, else a LayoutDirection
-  // (which also gives it on the server), else the computed direction.
-  // Read at mount, when a LayoutDirection changes, and again when the
-  // pointer enters, a thumb takes focus, or a key is pressed. Nothing
-  // reports a `dir` change on an ancestor, so until then the slider
-  // keeps the direction it last read.
+  // styles place the thumbs, fill and marks by the nearest `dir` (see
+  // `trackSign`), so server-rendered markup sits right before the script
+  // runs, and follows a `dir` change. The script reads the direction for
+  // the keys and the pointer: the track's nearest `dir`, else a
+  // LayoutDirection, else the computed direction. Read at mount, when a
+  // LayoutDirection changes, and again when the pointer enters, a thumb
+  // takes focus, or a key is pressed.
   const layoutDirection = getLayoutDirection();
   let horizontalRtl = false;
+
+  // Each handle hangs off its value point, away from the range. See the
+  // markup.
+  const LOWER_HANDLE_TRANSFORM =
+    "translate(calc(-50% - 50% * var(--ccs-slider-sign, 1)), -50%) scaleX(var(--ccs-slider-sign, 1))";
+  const UPPER_HANDLE_TRANSFORM =
+    "translate(calc(-50% + 50% * var(--ccs-slider-sign, 1)), -50%) scaleX(var(--ccs-slider-sign, 1))";
 
   /**
    * @param {"horizontal" | "vertical"} axis
@@ -660,14 +671,6 @@
 
   $: syncDirection(orientation, $layoutDirection, trackRef);
 
-  /**
-   * @param {number} percent
-   * @param {boolean} rtl
-   * @returns {string}
-   */
-  function toLeft(percent, rtl) {
-    return `${rtl ? 100 - percent : percent}%`;
-  }
   // Furthest each handle may travel toward the other, kept within bounds.
   // Same as clampLower(max)/clampUpper(min), inlined so Svelte tracks
   // valueUpper, value, and minGap as dependencies.
@@ -826,6 +829,9 @@
       class:bx--slider--vertical={orientation === "vertical"}
       class:bx--slider--moving-range={dragMode !== "handle"}
       style:max-width={fullWidth ? "none" : undefined}
+      style:--ccs-slider-sign={orientation === "vertical"
+        ? undefined
+        : trackSign(horizontalRtl)}
       style:cursor={dragMode === "range"
         ? "grabbing"
         : dragMode === "brush"
@@ -845,13 +851,11 @@
       <div
         class:bx--slider__thumb-wrapper={true}
         class:bx--slider__thumb-wrapper--lower={true}
-        style:left={orientation === "vertical"
-          ? undefined
-          : toLeft(left, horizontalRtl)}
+        style:left={orientation === "vertical" ? undefined : trackLeft(left)}
         style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
-        style:transform={horizontalRtl
-          ? "translate(0, -50%) scaleX(-1)"
-          : undefined}
+        style:transform={orientation === "vertical"
+          ? undefined
+          : LOWER_HANDLE_TRANSFORM}
       >
         <div
           bind:this={lowerThumbRef}
@@ -923,13 +927,13 @@
         class:bx--slider__thumb-wrapper--upper={true}
         style:left={orientation === "vertical"
           ? undefined
-          : toLeft(leftUpper, horizontalRtl)}
+          : trackLeft(leftUpper)}
         style:top={orientation === "vertical"
           ? `${100 - leftUpper}%`
           : undefined}
-        style:transform={horizontalRtl
-          ? "translate(-100%, -50%) scaleX(-1)"
-          : undefined}
+        style:transform={orientation === "vertical"
+          ? undefined
+          : UPPER_HANDLE_TRANSFORM}
       >
         <div
           bind:this={upperThumbRef}
@@ -1001,7 +1005,7 @@
         class:bx--slider__filled-track={true}
         style:transform={orientation === "vertical"
           ? `translate(-50%, ${-left}%) scaleY(${(leftUpper - left) / 100})`
-          : `translate(${horizontalRtl ? 100 - leftUpper : left}%, -50%) scaleX(${(leftUpper - left) / 100})`}
+          : `${TRACK_MIRROR} translate(${left}%, -50%) scaleX(${(leftUpper - left) / 100})`}
       ></div>
       {#if resolvedMarks.length > 0}
         <div class:bx--slider__marks={true} aria-hidden="true">
@@ -1012,7 +1016,7 @@
               class:bx--slider__mark={true}
               style:left={orientation === "vertical"
                 ? undefined
-                : toLeft(percent, horizontalRtl)}
+                : trackLeft(percent)}
               style:top={orientation === "vertical"
                 ? `${100 - percent}%`
                 : undefined}

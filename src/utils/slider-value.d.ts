@@ -81,6 +81,29 @@ export function isTrackRtl(
 ): boolean;
 
 /**
+ * The sign a horizontal track's styles mirror its parts by, for the
+ * track's `--ccs-slider-sign`: `-1` in RTL. `--ccs-inline-sign` from the
+ * nearest `dir` attribute decides, so markup rendered on the server sits
+ * right for any `dir` before the script runs. Without a `dir` attribute,
+ * such as for a `direction` set in CSS, `rtl` as the script read it does.
+ */
+export function trackSign(rtl: boolean): string;
+
+/**
+ * CSS `left` for the point `percent` of the way along a horizontal track
+ * from its inline start. Where `--ccs-slider-sign` is `-1`, the point
+ * mirrors across the middle of the track.
+ */
+export function trackLeft(percent: number): string;
+
+/**
+ * A transform that mirrors a box as wide as the track, with its transform
+ * origin on the left, across the middle of the track where
+ * `--ccs-slider-sign` is `-1`. Put it before the box's own transform.
+ */
+export const TRACK_MIRROR: string;
+
+/**
  * Resolve a track rect into its start and signed length along the slider
  * axis. Values increase upward when vertical, so the start is the bottom
  * edge and the length is negative. In RTL, values increase leftward, so

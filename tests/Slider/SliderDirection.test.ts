@@ -1,15 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { trackPosition } from "../utils/slider-track";
 import SliderDirection from "./SliderDirection.test.svelte";
 
-/** Where each part sits from the track's left edge, as inline `left`. */
+/** Where each part sits from the track's left edge. */
 const positions = (container: HTMLElement) => {
   const left = (selector: string) =>
-    [...container.querySelectorAll<HTMLElement>(selector)].map(
-      (el) => el.style.left,
-    );
+    [...container.querySelectorAll<HTMLElement>(selector)].map(trackPosition);
   return {
-    sliderThumb: screen.getByRole("slider", { name: "Replicas" }).style.left,
+    sliderThumb: trackPosition(
+      screen.getByRole("slider", { name: "Replicas" }),
+    ),
     rangeHandles: left(".bx--slider__thumb-wrapper"),
     marks: left(".bx--slider__mark"),
   };

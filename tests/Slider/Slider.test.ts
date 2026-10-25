@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { rect } from "../utils/rect";
+import { trackPosition } from "../utils/slider-track";
 import { user } from "../utils/user";
 import Slider from "./Slider.test.svelte";
 
@@ -141,8 +142,7 @@ describe("Slider", () => {
       },
     });
 
-    const slider = screen.getByRole("slider");
-    expect(slider.style.left).toBe("0%");
+    expect(trackPosition(screen.getByRole("slider"))).toBe("0%");
   });
 
   it.each([
@@ -964,16 +964,17 @@ describe("Slider", () => {
     });
 
     const marksEl = container.querySelector(".bx--slider__marks");
-    const markEls = container.querySelectorAll(".bx--slider__mark");
+    const markEls =
+      container.querySelectorAll<HTMLElement>(".bx--slider__mark");
     expect(marksEl).toBeInTheDocument();
     expect(markEls).toHaveLength(4);
     expect(screen.getByText("Off")).toBeInTheDocument();
     expect(screen.getByText("Low")).toBeInTheDocument();
     expect(screen.getByText("Med")).toBeInTheDocument();
     expect(screen.getByText("High")).toBeInTheDocument();
-    expect(markEls[0]).toHaveStyle({ left: "0%" });
-    expect(markEls[1]).toHaveStyle({ left: `${(1 / 3) * 100}%` });
-    expect(markEls[3]).toHaveStyle({ left: "100%" });
+    expect(trackPosition(markEls[0])).toBe("0%");
+    expect(trackPosition(markEls[1])).toBe(`${(1 / 3) * 100}%`);
+    expect(trackPosition(markEls[3])).toBe("100%");
     expect(container.querySelector(".bx--slider")).toHaveClass(
       "bx--slider--with-marks",
       "bx--slider--with-mark-labels",
@@ -985,11 +986,10 @@ describe("Slider", () => {
       props: { min: 0, max: 10, step: 5, marks: true },
     });
 
-    const markEls = container.querySelectorAll(".bx--slider__mark");
+    const markEls =
+      container.querySelectorAll<HTMLElement>(".bx--slider__mark");
     expect(markEls).toHaveLength(3);
-    expect(markEls[0]).toHaveStyle({ left: "0%" });
-    expect(markEls[1]).toHaveStyle({ left: "50%" });
-    expect(markEls[2]).toHaveStyle({ left: "100%" });
+    expect([...markEls].map(trackPosition)).toEqual(["0%", "50%", "100%"]);
     expect(container.querySelector(".bx--slider__mark-label")).toBeNull();
   });
 
