@@ -1657,9 +1657,11 @@ test.describe("right-to-left tooltips and popovers", () => {
   test("mirrors the Breadcrumb trail, its overflow menu and caret", async ({
     page,
   }) => {
-    // Each item's edges, from the trail's start edge inward.
+    // Each item's edges, from the trail's start edge inward, once the
+    // fonts load: the fallback font's widths differ by a pixel or two.
     const items = (dir: "ltr" | "rtl") =>
-      page.evaluate((dir) => {
+      page.evaluate(async (dir) => {
+        await document.fonts.ready;
         const trail = document
           .querySelector("[data-testid=breadcrumb] .bx--breadcrumb")
           ?.getBoundingClientRect();
