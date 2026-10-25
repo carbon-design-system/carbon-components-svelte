@@ -222,15 +222,26 @@ viewport, such as a sign-in card.
 
 ## Position
 
-Set `position` to `"relative"` or `"sticky"`, then use `top`, `bottom`,
-`left`, or `right` to offset the box using the same layout scale as padding
-and margin (`0`–`13`), or pass a string for any CSS length. A sticky box
-sticks to the nearest scroll container, not the browser viewport.
+Set `position` to `"relative"`, `"absolute"` or `"sticky"`, then use `top`,
+`bottom`, `left`, or `right` to offset the box using the same layout scale as
+padding and margin (`0`–`13`), or pass a string for any CSS length. A sticky
+box sticks to the nearest scroll container, not the browser viewport.
 
 <Box height="8rem" border="subtle" overflow="auto">
   <Box height="12rem">Scroll to see the sticky box below.</Box>
   <Box position="sticky" bottom={0} fill="layer-01" padding={3} border="subtle" borderSide="top">
     Sticky footer bar
+  </Box>
+</Box>
+
+### Absolute
+
+Set `position="absolute"` to place a box against its nearest positioned ancestor, such as a Box with `position="relative"`.
+
+<Box position="relative" height="8rem" border="subtle" padding={5}>
+  Build 4127 deployed to production.
+  <Box position="absolute" bottom={3} right={3} fill="layer-01" padding={3} border="subtle">
+    2 minutes ago
   </Box>
 </Box>
 
@@ -249,7 +260,7 @@ Use `left` or `right` to pin a box to a horizontal edge, such as a sticky first 
 
 ## Display
 
-Set `display` to control the CSS display mode. Use `"flex"` or `"inline-flex"` to lay out children without a separate flex wrapper.
+Set `display` to control the CSS display mode. Use `"flex"` or `"inline-flex"` to lay out children without a separate flex wrapper, and `"inline-block"` to size a box inside running text. `"none"` hides the box and keeps its content mounted, so a component inside keeps its state.
 
 <Box display="flex">
   <Box fill="layer-01" padding={4} border="subtle" marginX={2}>Flex item</Box>
@@ -444,11 +455,14 @@ Apply Box utilities directly when you do not need the component. Classes use the
 | `bx--box-min-height-viewport` | Full viewport min height (`100dvh`, `100vh` fallback) |
 | `bx--box-max-height-{1-13}` | Max height |
 | `bx--box-position-relative` | `position: relative` |
+| `bx--box-position-absolute` | `position: absolute` |
 | `bx--box-position-sticky` | `position: sticky` |
 | `bx--box-display-block` | `display: block` |
+| `bx--box-display-inline-block` | `display: inline-block` |
 | `bx--box-display-flex` | `display: flex` |
 | `bx--box-display-inline-flex` | `display: inline-flex` |
 | `bx--box-display-grid` | `display: grid` |
+| `bx--box-display-none` | `display: none` |
 | `bx--box-gap-{1-13}` | Gap between flex or grid children |
 | `bx--box-align-{start,center,end,stretch,baseline}` | `align-items` for flex or grid children |
 | `bx--box-justify-{start,center,end,space-between,space-around,space-evenly}` | `justify-content` for flex or grid children |
