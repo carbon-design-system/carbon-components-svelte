@@ -1973,7 +1973,7 @@ test.describe("right-to-left numbers", () => {
       );
     const expected = [
       ["-1.2K", "2K", "+12%"],
-      ["%١٢", "%١٢+"],
+      ["٪١٢", "٪١٢+"],
       ["2", "نويلم-1.2"],
     ];
     await page.goto("/rtl.html");

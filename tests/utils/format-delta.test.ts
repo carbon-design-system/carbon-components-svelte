@@ -18,8 +18,37 @@ describe("formatDelta", () => {
     expect(formatDelta(1500, { compact: true, digits: 1 })).toBe("+1.5K");
   });
 
-  it("percent: 'literal' appends % to the number as given", () => {
+  it("percent: 'literal' reads the number as percent", () => {
     expect(formatDelta(12, { percent: "literal" })).toBe("+12%");
+  });
+
+  it.each([
+    ["en-US", "+12%", "-0.3%"],
+    ["tr", "+%12", "-%0,3"],
+    ["fr", "+12\u00a0%", "-0,3\u00a0%"],
+    ["ar-EG", "\u061c+١٢٪\u061c", "\u061c-٠٫٣٪\u061c"],
+  ])(
+    "percent: 'literal' follows the %s percent pattern",
+    (locale, up, down) => {
+      expect(formatDelta(12, { locale, percent: "literal" })).toBe(up);
+      expect(formatDelta(-0.3, { locale, percent: "literal" })).toBe(down);
+      expect(formatDelta(0.12, { locale, percent: "ratio" })).toBe(up);
+    },
+  );
+
+  it("does not abbreviate a percentage", () => {
+    expect(formatDelta(1500, { compact: true, percent: "literal" })).toBe(
+      "+1,500%",
+    );
+    expect(formatDelta(15, { compact: true, percent: "ratio" })).toBe(
+      "+1,500%",
+    );
+  });
+
+  it("percent: 'literal' prints no float noise", () => {
+    expect(formatDelta(12.3, { percent: "literal", digits: 20 })).toBe(
+      "+12.3%",
+    );
   });
 
   it("percent: 'ratio' treats the value as a fraction", () => {

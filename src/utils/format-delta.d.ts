@@ -6,11 +6,13 @@ export type FormatDeltaOptions = {
   locale?: string;
   /** Maximum fraction digits. */
   digits?: number;
-  /** Use compact notation, such as `1.2K`. @default false */
+  /** Use compact notation, such as `1.2K`. Ignored with `percent`. @default false */
   compact?: boolean;
   /**
-   * `"literal"` appends `%` to the number as given (`12` is `+12%`).
+   * `"literal"` reads the number as percent (`12` is `+12%`).
    * `"ratio"` treats it as a fraction (`0.12` is `+12%`).
+   * Both follow the locale's percent pattern (`+%12` in Turkish), and
+   * neither is abbreviated.
    */
   percent?: "literal" | "ratio";
   /** Extra `Intl.NumberFormat` options. Ignored by `percent: "literal"`. */
