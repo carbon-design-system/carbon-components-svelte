@@ -120,6 +120,21 @@ Set `backgroundColor` to choose the color rendered behind the initials or icon. 
 <UserAvatar backgroundColor="cool-gray" name="Richard Hendricks" />
 <UserAvatar backgroundColor="warm-gray" name="Richard Hendricks" />
 
+### Strong shade
+
+Set `shade` to `"strong"` for a fill that stands further from the page: a darker step in light themes and a lighter one in dark themes, as in Carbon's `order-7` to `order-12` colors. Every color has a strong shade, and `"auto"` keeps its hue.
+
+<UserAvatar backgroundColor="red" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="magenta" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="purple" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="blue" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="cyan" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="teal" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="green" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="gray" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="cool-gray" shade="strong" name="Richard Hendricks" />
+<UserAvatar backgroundColor="warm-gray" shade="strong" name="Richard Hendricks" />
+
 ### Automatic background color
 
 Set `backgroundColor` to `"auto"` to pick a color from `name` (or `initials`). The name is hashed into one of the palette swatches. The same name always gets the same color.
