@@ -237,8 +237,13 @@ async function styleSeeds(
   }
 }
 
+/**
+ * `diffCss` compiles the stylesheets for a `css/` change to narrow the e2e
+ * tests. Without it, a `css/` change selects every e2e test that loads one.
+ */
 async function computePlan(
   baseRef: string,
+  diffCss: boolean,
 ): Promise<{ plan: TestPlan; styles?: Styles }> {
   // Independent git calls run at once; `--merge-base` diffs without waiting
   // for the merge base.
@@ -255,9 +260,12 @@ async function computePlan(
   const sources = await readSources(lines(files));
   const graph = loadGraph(sources);
   const baseBarrel = await baseBarrelPending;
-  const styles = changed.some((file) => file.startsWith("css/"))
-    ? await styleSeeds(mergeBase, graph, sources)
-    : undefined;
+  let styles: Styles | undefined;
+  if (changed.some((file) => file.startsWith("css/"))) {
+    styles = diffCss
+      ? await styleSeeds(mergeBase, graph, sources)
+      : { reason: "not compiled when only unit tests run" };
+  }
   const plan = planTests(
     graph,
     changed,
@@ -283,7 +291,12 @@ function logSelection(label: string, selection: Selection) {
 if (import.meta.main) {
   const args = process.argv.slice(2);
   const baseRef = args.find((arg) => !arg.startsWith("--")) ?? "origin/master";
-  const { plan, styles } = await computePlan(baseRef);
+  // Only the e2e selection reads the CSS diff, and running locally runs
+  // unit tests alone, so only the outputs that list e2e tests compile it.
+  const { plan, styles } = await computePlan(
+    baseRef,
+    args.includes("--print") || args.includes("--github-output"),
+  );
 
   if (args.includes("--print")) {
     console.log(JSON.stringify({ ...plan, styles }, null, 2));
