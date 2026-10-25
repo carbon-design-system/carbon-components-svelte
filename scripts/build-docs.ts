@@ -51,7 +51,10 @@ await $`rm -f src/index.d.ts && find src -name "*.svelte.d.ts" -delete`;
 // pass `--no-strict` because they only need the types; static-checks is the
 // one job a diagnostic fails.
 const strict = !process.argv.includes("--no-strict");
-const { exitCode } = await sveld({ ...SVELD_OPTIONS, strict });
+// In GitHub Actions, each diagnostic is also an annotation on its line in
+// the PR diff.
+const format = process.env.GITHUB_ACTIONS ? "github" : "text";
+const { exitCode } = await sveld({ ...SVELD_OPTIONS, strict, format });
 
 console.timeEnd("[build-docs]");
 process.exitCode = exitCode;
