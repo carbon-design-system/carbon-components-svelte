@@ -449,6 +449,10 @@ const IGNORED = [
   "LICENSE",
   ".gitignore",
   ".github/FUNDING.yml",
+  // Workflows that run no tests and config only they read. checks.yml is
+  // left out: a change to it has to run the suites it runs.
+  ".github/labeler.yml",
+  ".github/workflows/{deploy-docs,docs-examples,perf,pr-labels,release}.yml",
 ].map(globToRegExp);
 
 /** Roots the graph reads; any other changed file runs everything. */
@@ -464,6 +468,13 @@ const GRAPH_ROOTS = [
 const COMPAT_HARNESS = /^tests-svelte[34]\//;
 
 const FIXTURE_PAGE = /^e2e\/fixtures\/.+\.html$/;
+
+/**
+ * Read only by `test:types` (svelte-check), which runs whenever the unit
+ * suite's job does. `tests/tsconfig.json` isn't one: Vite reads it to
+ * transform the tests.
+ */
+const TYPE_CHECK_ONLY = /(?:\.test-d\.ts|\/tsconfig\.compat-check\.json)$/;
 
 /** Changes to the selector itself can't be trusted to select themselves. */
 const SELECTOR = [
@@ -565,6 +576,10 @@ export function planTests(
         if (deleted && (suite === "unit" ? UNIT_TEST : E2E_TEST).test(file)) {
           continue;
         }
+        // Only an import reaches a component, and an importer left pointing
+        // at a deleted one can't resolve it, so it runs as unknown anyway.
+        if (deleted && file.endsWith(".svelte")) continue;
+        if (suite === "unit" && TYPE_CHECK_ONLY.test(file)) continue;
         // A fixture page is opened by a test's goto(), which the graph reads,
         // so a page no test reaches (the index, pages only crassus renders)
         // and the files only such pages load are wired to no test at all.
