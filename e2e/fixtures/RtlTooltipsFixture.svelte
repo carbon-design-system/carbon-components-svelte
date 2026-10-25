@@ -8,11 +8,15 @@
     OverflowMenuItem,
     PinCodeInput,
     Popover,
+    Tag,
     TagInput,
+    TagSet,
     Toggletip,
     Tooltip,
     TooltipDefinition,
     TooltipIcon,
+    UserAvatar,
+    UserAvatarGroup,
   } from "carbon-components-svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";
 
@@ -174,6 +178,24 @@
   </div>
   <div data-testid="pin-code">
     <PinCodeInput labelText="الرمز" />
+  </div>
+  <div data-testid="plus-counts">
+    <TagSet maxVisible={1}>
+      <Tag>الفوترة</Tag>
+      <Tag>الأمان</Tag>
+    </TagSet>
+    <TagSet overflowMode="popover" maxVisible={1}>
+      <Tag>الفوترة</Tag>
+      <Tag>الأمان</Tag>
+      <Tag>التخزين</Tag>
+    </TagSet>
+    <UserAvatarGroup max={1}>
+      <UserAvatar name="Monica Hall" />
+      <UserAvatar name="Jared Dunn" />
+    </UserAvatarGroup>
+    <UserAvatarGroup max={1} total={120}>
+      <UserAvatar name="Monica Hall" />
+    </UserAvatarGroup>
   </div>
 </div>
 
