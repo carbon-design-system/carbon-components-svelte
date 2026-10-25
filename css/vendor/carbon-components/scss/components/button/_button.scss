@@ -113,7 +113,7 @@
 
     .#{$prefix}--btn__icon {
       position: static;
-      margin-left: $carbon--spacing-03;
+      margin-inline-start: $carbon--spacing-03;
     }
 
     &:hover,
@@ -324,7 +324,7 @@
 
       .#{$prefix}--btn__icon {
         position: static;
-        margin-left: $carbon--spacing-03;
+        margin-inline-start: $carbon--spacing-03;
       }
 
       &:hover,
@@ -362,13 +362,13 @@
 
   .#{$prefix}--btn--sm {
     min-height: to-rem(32px);
-    padding: $button-padding-sm;
+    @include button-padding($button-padding-sm);
   }
 
   // ccs: xs size (Carbon React IconButton `size="xs"`), 24px tall
   .#{$prefix}--btn--xs {
     min-height: to-rem(24px);
-    padding: to-rem(2px) to-rem(40px) to-rem(2px) to-rem(12px);
+    @include button-padding(to-rem(2px) to-rem(40px) to-rem(2px) to-rem(12px));
   }
 
   // V11: change xl to 2xl
@@ -388,7 +388,7 @@
   // V11: Remove field
   .#{$prefix}--btn--field { // ccs: dropped unrendered --md alias
     min-height: to-rem(40px);
-    padding: $button-padding-field;
+    @include button-padding($button-padding-field);
   }
 
   .#{$prefix}--btn--expressive {
@@ -427,8 +427,11 @@
     flex: 1 1 0; // ccs: allow shrink below max-width
     min-width: 0; // ccs: allow shrink below max-width
 
+    // ccs: the divider sits at the inline start, `--ccs-inline-sign` flips it
+    // under `dir="rtl"`
     &:not(:focus) {
-      box-shadow: to-rem(-1px) 0 0 0 $button-separator;
+      box-shadow: calc(#{to-rem(-1px)} * var(--ccs-inline-sign, 1)) 0 0 0
+        $button-separator;
     }
 
     &:first-of-type:not(:focus) {
@@ -454,7 +457,8 @@
   }
 
   .#{$prefix}--btn-set .#{$prefix}--btn.#{$prefix}--btn--disabled {
-    box-shadow: to-rem(-1px) 0 0 0 $text-on-color-disabled;
+    box-shadow: calc(#{to-rem(-1px)} * var(--ccs-inline-sign, 1)) 0 0 0
+      $text-on-color-disabled;
 
     &:first-of-type {
       box-shadow: none;

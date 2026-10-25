@@ -1,5 +1,6 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// Button `loading` prop (absent from v10; new pattern for this library).
@@ -11,8 +12,8 @@
 @mixin button-loading {
   .#{$prefix}--btn__loading {
     position: absolute;
-    right: to-rem(16px);
     flex-shrink: 0;
+    @include ccs-inset-inline($end: to-rem(16px));
   }
 
   .#{$prefix}--btn--icon-only .#{$prefix}--btn__loading {
@@ -23,12 +24,12 @@
   .#{$prefix}--btn--danger-ghost .#{$prefix}--btn__loading {
     position: static;
     line-height: 0;
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
   }
 
   .#{$prefix}--btn--icon-only.#{$prefix}--btn--ghost .#{$prefix}--btn__loading,
   .#{$prefix}--btn--icon-only.#{$prefix}--btn--danger-ghost .#{$prefix}--btn__loading {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .#{$prefix}--btn .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {

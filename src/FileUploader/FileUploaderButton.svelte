@@ -293,7 +293,7 @@
   {#if icon}
     <svelte:component
       this={icon}
-      style={hasIconOnly ? "margin-left: 0" : undefined}
+      style={hasIconOnly ? "margin-inline-start: 0" : undefined}
       {...iconProps}
     />
   {/if}

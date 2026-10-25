@@ -15,7 +15,7 @@
 
   // Without an icon, the end padding Button keeps for it closes up.
   .#{$prefix}--chat-btn:not(.#{$prefix}--chat-btn--with-icon) {
-    padding-right: to-rem(15px);
+    padding-inline-end: to-rem(15px);
   }
 
   .#{$prefix}--chat-btn.#{$prefix}--btn--field {

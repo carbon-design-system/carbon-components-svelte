@@ -7,15 +7,22 @@
 /// icons. A custom property, not a `[dir="rtl"]` selector alone, so a
 /// `dir="ltr"` region inside an RTL page stops the mirror. Emits last so the
 /// class wins a tie with a component's own icon rule.
+///
+/// `--ccs-inline-sign` is `-1` under `dir="rtl"` and unset (read as `1`)
+/// otherwise. Multiply an inline offset that has no logical property, such
+/// as a box shadow's, by it: `calc(-1px * var(--ccs-inline-sign, 1))`. A
+/// `[dir="rtl"]` twin of such a rule outweighs every rule it ties.
 /// @access private
 /// @group components
 @mixin mirror-rtl {
   [dir="rtl"] {
     --ccs-mirror-rtl: scaleX(-1);
+    --ccs-inline-sign: -1;
   }
 
   [dir="ltr"] {
     --ccs-mirror-rtl: initial;
+    --ccs-inline-sign: initial;
   }
 
   .#{$prefix}--icon--mirror-rtl {
