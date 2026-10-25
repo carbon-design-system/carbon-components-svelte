@@ -16,9 +16,30 @@ describe("resolveLayoutDirection", () => {
     return node;
   }
 
-  it("uses the context first", () => {
+  it("uses the context over a computed direction", () => {
     expect(resolveLayoutDirection("rtl", attach("ltr"))).toBe("rtl");
     expect(resolveLayoutDirection("ltr", attach("rtl"))).toBe("ltr");
+  });
+
+  it.each(["ltr", "rtl", "RTL"])(
+    "lets the nearest dir=%s win over the context",
+    (dir) => {
+      const region = attach();
+      region.setAttribute("dir", dir);
+      const node = document.createElement("span");
+      region.append(node);
+      const expected = dir.toLowerCase();
+      const other = expected === "rtl" ? "ltr" : "rtl";
+      expect(resolveLayoutDirection(other, node)).toBe(expected);
+      expect(resolveLayoutDirection(other, region)).toBe(expected);
+    },
+  );
+
+  it("reads dir=auto through the context, then the computed direction", () => {
+    const node = attach("rtl");
+    node.setAttribute("dir", "auto");
+    expect(resolveLayoutDirection("ltr", node)).toBe("ltr");
+    expect(resolveLayoutDirection(undefined, node)).toBe("rtl");
   });
 
   it("falls back to the element's computed direction", () => {

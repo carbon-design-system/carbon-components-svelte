@@ -4,6 +4,7 @@ import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
 import { getPinCodeInputs as getInputs } from "./helpers";
+import PinCodeInputDirection from "./PinCodeInput.direction.test.svelte";
 import PinCodeInputSkeleton from "./PinCodeInput.skeleton.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
 
@@ -634,6 +635,18 @@ describe("PinCodeInput", () => {
       expect(inputs[1]).toHaveFocus();
       await user.keyboard("{ArrowRight}");
       expect(inputs[0]).toHaveFocus();
+    });
+
+    it.each([
+      ["a LayoutDirection", undefined, "ArrowLeft"],
+      ["its own dir over a LayoutDirection", "ltr" as const, "ArrowRight"],
+    ])("reads the direction from %s", async (_, dir, next) => {
+      render(PinCodeInputDirection, { props: { dir } });
+      const inputs = getInputs();
+
+      inputs[0].focus();
+      await user.keyboard(`{${next}}`);
+      expect(inputs[1]).toHaveFocus();
     });
 
     it("keeps focus on ArrowLeft in the first segment", async () => {

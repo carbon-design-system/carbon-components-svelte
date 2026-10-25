@@ -5,17 +5,22 @@
 /** @typedef {"ltr" | "rtl"} Direction */
 
 /**
- * Resolve the writing direction: the nearest `LayoutDirection` first, then
- * the element's computed direction, then the document's. Returns `"ltr"`
- * on the server.
+ * Resolve the writing direction as the styles do: the nearest `dir`
+ * attribute on the element or an ancestor wins, so a plain `dir` inside a
+ * `LayoutDirection` overrides it. Then the nearest `LayoutDirection`, then
+ * the computed direction (for `dir="auto"`, or a `direction` set in CSS).
+ * Returns the `LayoutDirection`'s, or `"ltr"`, on the server.
  * @param {Direction | undefined} contextDirection - From `getLayoutDirection`.
  * @param {Element | null} [node]
  * @returns {Direction}
  */
 export function resolveLayoutDirection(contextDirection, node) {
+  if (typeof document === "undefined") return contextDirection ?? "ltr";
+  const connected = node?.isConnected ? node : null;
+  const dir = connected?.closest("[dir]")?.getAttribute("dir")?.toLowerCase();
+  if (dir === "rtl" || dir === "ltr") return dir;
   if (contextDirection) return contextDirection;
-  if (typeof document === "undefined") return "ltr";
-  const element = node?.isConnected ? node : document.documentElement;
+  const element = connected ?? document.documentElement;
   return getComputedStyle(element).direction === "rtl" ? "rtl" : "ltr";
 }
 

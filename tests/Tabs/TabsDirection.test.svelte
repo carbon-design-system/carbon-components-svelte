@@ -8,20 +8,24 @@
   export let context = true;
   /** Renders `TabsVertical` in the given orientation instead of `Tabs`. */
   export let vertical: "horizontal" | "vertical" | undefined = undefined;
+  /** A plain `dir` on an element between the LayoutDirection and the tabs. */
+  export let innerDir: "ltr" | "rtl" | undefined = undefined;
 
   $: Component = (vertical ? TabsVertical : Tabs) as typeof Tabs;
 </script>
 
 {#if context}
   <LayoutDirection {dir}>
-    <svelte:component
-      this={Component}
-      {...vertical ? { orientation: vertical } : {}}
-    >
-      <Tab label="Overview" />
-      <Tab label="Logs" />
-      <Tab label="Settings" />
-    </svelte:component>
+    <div dir={innerDir}>
+      <svelte:component
+        this={Component}
+        {...vertical ? { orientation: vertical } : {}}
+      >
+        <Tab label="Overview" />
+        <Tab label="Logs" />
+        <Tab label="Settings" />
+      </svelte:component>
+    </div>
   </LayoutDirection>
 {:else}
   <svelte:component

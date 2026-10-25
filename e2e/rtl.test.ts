@@ -1982,3 +1982,36 @@ test.describe("right-to-left numbers", () => {
     expect(await numbers()).toEqual(expected);
   });
 });
+
+test.describe("right-to-left plain dir", () => {
+  // A plain `dir` inside a LayoutDirection wins for the keys, as it does
+  // for the styles.
+  for (const dir of ["ltr", "rtl"] as const) {
+    test(`reads the keys by a plain dir="${dir}" inside a LayoutDirection`, async ({
+      page,
+    }) => {
+      await page.goto("/rtl-plain-dir.html");
+      // The key that moves toward the inline end.
+      const forward = dir === "ltr" ? "ArrowRight" : "ArrowLeft";
+      const region = page.getByTestId(`plain-${dir}`);
+
+      const segments = region.locator(".bx--pin-code-input__field");
+      await segments.first().focus();
+      await page.keyboard.press(forward);
+      await expect.soft(segments.nth(1), "PinCodeInput").toBeFocused();
+
+      const slider = region.getByRole("slider");
+      await slider.focus();
+      await page.keyboard.press(forward);
+      await expect
+        .soft(slider, "Slider")
+        .toHaveAttribute("aria-valuenow", "21");
+
+      await region.getByRole("tab", { name: `Overview (${dir})` }).focus();
+      await page.keyboard.press(forward);
+      await expect
+        .soft(region.getByRole("tab", { name: `Logs (${dir})` }), "Tabs")
+        .toBeFocused();
+    });
+  }
+});

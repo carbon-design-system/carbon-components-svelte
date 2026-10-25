@@ -1,7 +1,9 @@
 /**
- * Resolve the writing direction: the nearest `LayoutDirection` first, then
- * the element's computed direction, then the document's. Returns `"ltr"`
- * on the server.
+ * Resolve the writing direction as the styles do: the nearest `dir`
+ * attribute on the element or an ancestor wins, so a plain `dir` inside a
+ * `LayoutDirection` overrides it. Then the nearest `LayoutDirection`, then
+ * the computed direction (for `dir="auto"`, or a `direction` set in CSS).
+ * Returns the `LayoutDirection`'s, or `"ltr"`, on the server.
  */
 export function resolveLayoutDirection(
   contextDirection: "ltr" | "rtl" | undefined,
