@@ -553,6 +553,26 @@ describe("planTests", () => {
     });
   });
 
+  it("skips fixture pages no test opens, and what only they load", () => {
+    const files = {
+      ...REPO,
+      "e2e/fixtures/index.html": `<a href="/accordion.html">Accordion</a>`,
+      "e2e/fixtures/matrix.html": `<script type="module" src="./matrix.ts"></script>`,
+      "e2e/fixtures/matrix.ts": `import { mount } from "./mount";`,
+    };
+    const pages = buildGraph(
+      new Map(Object.entries(files)),
+      context(Object.keys(files)),
+    );
+    for (const file of Object.keys(files).slice(-3)) {
+      const { e2e, reasons } = planTests(pages, [file]);
+      expect({ e2e: formatSelection(e2e), reasons }).toEqual({
+        e2e: "none",
+        reasons: [],
+      });
+    }
+  });
+
   it("runs a whole suite when its setup file changes", () => {
     expect(plan(["tests/setup-tests.ts"]).unit).toBe("all");
     expect(plan(["e2e/vite.config.ts"]).e2e).toBe("all");
