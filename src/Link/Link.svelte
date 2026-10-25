@@ -1,4 +1,5 @@
 <script>
+  // probe (do not merge)
   /**
    * @template [Icon=any]
    */
