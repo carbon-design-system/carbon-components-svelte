@@ -65,7 +65,7 @@ Set `reveal` to `"expand"` to add a button that shows the full text. The button 
 Truncating a span mid-sentence needs a normal block ancestor so the truncated text keeps the surrounding line height, otherwise descenders get clipped.
 
 <Box tag="p" maxWidth="20rem">
-  Deploy failed for image <Truncate tag="span" style="display: inline-block; max-width: 9rem; vertical-align: bottom">ghcr.io/acme-corp/payments-api:2.4.1-rc3</Truncate> during rollout.
+  Deploy failed for image <Box tag="span" display="inline-flex" maxWidth="9rem"><Truncate tag="span">ghcr.io/acme-corp/payments-api:2.4.1-rc3</Truncate></Box> during rollout.
 </Box>
 
 ### Nested text

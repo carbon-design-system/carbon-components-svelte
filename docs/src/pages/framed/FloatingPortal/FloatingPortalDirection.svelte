@@ -108,26 +108,28 @@
     minHeight="200px"
     minWidth="300px"
   >
-    <div
-      bind:this={anchorBottom}
-      role="button"
-      tabindex="0"
-      draggable="true"
-      style="position: absolute; left: {xBottom}px; top: {yBottom}px; cursor: move; user-select: none;"
-      on:dragstart={handleDragStartBottom}
-      on:drag={handleDragBottom}
-      on:dragend={handleDragEndBottom}
-      on:keydown={(e) => {
-        if (e.key === "Enter") openBottom = !openBottom;
-      }}
-      title="Drag to move, click to toggle"
-    >
-      <Tile>
-        <Button on:click={() => (openBottom = !openBottom)}>
-          Direction: bottom (default)
-        </Button>
-      </Tile>
-    </div>
+    <Box position="absolute" left="{xBottom}px" top="{yBottom}px">
+      <div
+        bind:this={anchorBottom}
+        role="button"
+        tabindex="0"
+        draggable="true"
+        style="cursor: move; user-select: none;"
+        on:dragstart={handleDragStartBottom}
+        on:drag={handleDragBottom}
+        on:dragend={handleDragEndBottom}
+        on:keydown={(e) => {
+          if (e.key === "Enter") openBottom = !openBottom;
+        }}
+        title="Drag to move, click to toggle"
+      >
+        <Tile>
+          <Button on:click={() => (openBottom = !openBottom)}>
+            Direction: bottom (default)
+          </Button>
+        </Tile>
+      </div>
+    </Box>
     <FloatingPortal anchor={anchorBottom} open={openBottom} direction="bottom">
       <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
     </FloatingPortal>
@@ -139,24 +141,26 @@
     minHeight="200px"
     minWidth="300px"
   >
-    <div
-      bind:this={anchorTop}
-      role="button"
-      tabindex="0"
-      draggable="true"
-      style="position: absolute; left: {xTop}px; top: {yTop}px; cursor: move; user-select: none;"
-      on:dragstart={handleDragStartTop}
-      on:drag={handleDragTop}
-      on:dragend={handleDragEndTop}
-      on:keydown={(e) => {
-        if (e.key === "Enter") openTop = !openTop;
-      }}
-      title="Drag to move, click to toggle"
-    >
-      <Tile>
-        <Button on:click={() => (openTop = !openTop)}>Direction: top</Button>
-      </Tile>
-    </div>
+    <Box position="absolute" left="{xTop}px" top="{yTop}px">
+      <div
+        bind:this={anchorTop}
+        role="button"
+        tabindex="0"
+        draggable="true"
+        style="cursor: move; user-select: none;"
+        on:dragstart={handleDragStartTop}
+        on:drag={handleDragTop}
+        on:dragend={handleDragEndTop}
+        on:keydown={(e) => {
+          if (e.key === "Enter") openTop = !openTop;
+        }}
+        title="Drag to move, click to toggle"
+      >
+        <Tile>
+          <Button on:click={() => (openTop = !openTop)}>Direction: top</Button>
+        </Tile>
+      </div>
+    </Box>
     <FloatingPortal anchor={anchorTop} open={openTop} direction="top">
       <Tile>Instance i-0a1b2c3d: 3 of 4 health checks passing</Tile>
     </FloatingPortal>

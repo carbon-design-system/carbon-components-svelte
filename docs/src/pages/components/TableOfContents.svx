@@ -108,10 +108,17 @@ By default a section becomes active when its top reaches the top of the scroller
             </section>
           </Prose>
         </Box>
-        <div
+        <Box
           aria-hidden="true"
-          style="position: absolute; left: 0; right: 0; top: min({Number(activationLine) * 100}%, calc(100% - 1px)); border-top: 1px dashed var(--cds-border-strong); pointer-events: none"
-        ></div>
+          position="absolute"
+          left={0}
+          right={0}
+          top="min({Number(activationLine) * 100}%, calc(100% - 1px))"
+          border="strong"
+          borderStyle="dashed"
+          borderSide="top"
+          style="pointer-events: none"
+        />
       </Box>
     </Column>
   </Row>

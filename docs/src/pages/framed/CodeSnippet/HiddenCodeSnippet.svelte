@@ -1,5 +1,5 @@
 <script>
-  import { CodeSnippet, Stack, Toggle } from "carbon-components-svelte";
+  import { Box, CodeSnippet, Stack, Toggle } from "carbon-components-svelte";
 
   let toggled = false;
 
@@ -8,11 +8,7 @@
 
 <Stack gap={5}>
   <Toggle size="sm" labelText="Show code snippet" bind:toggled />
-  <div class:hidden={!toggled}><CodeSnippet type="multi" {code} /></div>
+  <Box display={toggled ? undefined : "none"}>
+    <CodeSnippet type="multi" {code} />
+  </Box>
 </Stack>
-
-<style>
-  .hidden {
-    display: none;
-  }
-</style>

@@ -61,24 +61,26 @@
   minHeight="200px"
   minWidth="300px"
 >
-  <div
-    bind:this={anchor}
-    role="button"
-    tabindex="0"
-    draggable="true"
-    style="position: absolute; left: {x}px; top: {y}px; cursor: move; user-select: none;"
-    on:dragstart={handleDragStart}
-    on:drag={handleDrag}
-    on:dragend={handleDragEnd}
-    on:keydown={(e) => {
-      if (e.key === "Enter") open = !open;
-    }}
-    title="Drag to move, click to toggle"
-  >
-    <Tile>
-      <Button on:click={() => (open = !open)}>View instance details</Button>
-    </Tile>
-  </div>
+  <Box position="absolute" left="{x}px" top="{y}px">
+    <div
+      bind:this={anchor}
+      role="button"
+      tabindex="0"
+      draggable="true"
+      style="cursor: move; user-select: none;"
+      on:dragstart={handleDragStart}
+      on:drag={handleDrag}
+      on:dragend={handleDragEnd}
+      on:keydown={(e) => {
+        if (e.key === "Enter") open = !open;
+      }}
+      title="Drag to move, click to toggle"
+    >
+      <Tile>
+        <Button on:click={() => (open = !open)}>View instance details</Button>
+      </Tile>
+    </div>
+  </Box>
 </Box>
 
 <FloatingPortal {anchor} {open} intrinsicWidth={true}>
