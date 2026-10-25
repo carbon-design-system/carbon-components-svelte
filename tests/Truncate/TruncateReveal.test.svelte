@@ -4,6 +4,7 @@
 
   export let reveal: ComponentProps<Truncate>["reveal"] = "tooltip";
   export let lines: ComponentProps<Truncate>["lines"] = 1;
+  export let clamp: ComponentProps<Truncate>["clamp"] = "end";
   export let expanded = false;
   export let labels: Pick<
     ComponentProps<Truncate>,
@@ -21,7 +22,15 @@
 </script>
 
 <div role="presentation" on:keydown={handleKeydown}>
-  <Truncate {reveal} {lines} {id} {...labels} bind:expanded data-testid="text">
+  <Truncate
+    {reveal}
+    {lines}
+    {clamp}
+    {id}
+    {...labels}
+    bind:expanded
+    data-testid="text"
+  >
     {text}
   </Truncate>
 </div>

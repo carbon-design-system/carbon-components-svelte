@@ -81,6 +81,7 @@
 
   $: truncated = lines !== undefined;
   $: multiline = truncated && lines > 1;
+  $: front = truncated && !multiline && clamp === "front";
 
   $: textClass = [
     type && type !== "inherit" && `bx--type-${type}`,
@@ -106,8 +107,14 @@
   style:--ccs-truncate-lines={multiline ? lines : undefined}
   class={textClass}
   class:bx--text-truncate--multiline={multiline}
-  class:bx--text-truncate--front={truncated && !multiline && clamp === "front"}
+  class:bx--text-truncate--front={front}
   class:bx--text-truncate--end={truncated && !multiline && clamp !== "front"}
 >
-  <slot />
+  <!-- The front clamp sets `direction: rtl`, which would move a leading
+    slash or a trailing period to the other end. -->
+  {#if front}
+    <bdi><slot /></bdi>
+  {:else}
+    <slot />
+  {/if}
 </svelte:element>

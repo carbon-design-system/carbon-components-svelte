@@ -163,6 +163,17 @@ describe("Truncate reveal", () => {
       expect(text).toHaveClass("bx--text-truncate--end");
     });
 
+    it("keeps a front clamp's text node while expanded", async () => {
+      const { text } = await renderReveal({ reveal: "expand", clamp: "front" });
+      const isolate = text.querySelector("bdi");
+      expect(isolate).not.toBeNull();
+
+      await user.click(screen.getByRole("button", { name: "View more" }));
+
+      expect(text).not.toHaveClass("bx--text-truncate--front");
+      expect(text.querySelector("bdi")).toBe(isolate);
+    });
+
     it("unclamps multiline text", async () => {
       const { text } = await renderReveal(
         { reveal: "expand", lines: 3, expanded: true },

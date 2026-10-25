@@ -73,6 +73,8 @@
   let stopObserving = noop;
 
   $: multiline = lines > 1;
+  // Kept while expanded, so toggling doesn't remount the slot.
+  $: front = !multiline && clamp === "front";
   $: clamped = !(reveal === "expand" && expanded);
   $: style = multiline
     ? `--ccs-truncate-lines: ${lines};${
@@ -124,7 +126,7 @@
   this={tag}
   bind:this={textRef}
   class:bx--text-truncate--end={clamped && !multiline && clamp === "end"}
-  class:bx--text-truncate--front={clamped && !multiline && clamp === "front"}
+  class:bx--text-truncate--front={clamped && front}
   class:bx--text-truncate--multiline={clamped && multiline}
   class:bx--text-truncate--focusable={focusable}
   {...$$restProps}
@@ -132,7 +134,13 @@
   tabindex={focusable ? 0 : $$restProps.tabindex}
   {style}
 >
-  <slot />
+  <!-- The front clamp sets `direction: rtl`, which would move a leading
+    slash or a trailing period to the other end. -->
+  {#if front}
+    <bdi><slot /></bdi>
+  {:else}
+    <slot />
+  {/if}
 </svelte:element>
 {#if showToggle}
   <button
