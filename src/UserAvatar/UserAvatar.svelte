@@ -24,6 +24,15 @@
   export let backgroundColor = "gray";
 
   /**
+   * Set to `"strong"` for a fill that stands further from the page: the 80
+   * step in light themes and the 30 step in dark themes, as in Carbon's
+   * `order-7` to `order-12` colors. Applies to every `backgroundColor`,
+   * including `"auto"`.
+   * @type {"default" | "strong"}
+   */
+  export let shade = "default";
+
+  /**
    * Specify the user's full name. Initials are derived from the name when `initials` is not set.
    * Also the default alt text for `image`. Set `imageDescription=""` to mark the
    * image decorative when the name is already visible next to the avatar.
@@ -208,10 +217,14 @@
     backgroundColor === "auto"
       ? getAvatarBackgroundColor(name ?? initials ?? "")
       : backgroundColor;
+  $: fill =
+    shade === "strong"
+      ? `${resolvedBackgroundColor}-strong`
+      : resolvedBackgroundColor;
   $: avatarClass = [
     "bx--user-avatar",
     `bx--user-avatar--${resolvedSize}`,
-    `bx--user-avatar--${resolvedBackgroundColor}`,
+    `bx--user-avatar--${fill}`,
     isInteractive && "bx--user-avatar--interactive",
     $$restProps.class,
   ]

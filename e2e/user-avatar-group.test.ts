@@ -168,19 +168,22 @@ test.describe("UserAvatarGroup", () => {
       page
         .getByTestId(testId)
         .locator(".bx--user-avatar")
-        .evaluate((el) => ({
-          background: getComputedStyle(el).backgroundColor,
-          color: getComputedStyle(el).color,
-        }));
-    // Red 60 with white initials; Red 50 with Gray 100 initials.
-    expect(await colors("white")).toEqual({
-      background: "rgb(218, 30, 40)",
-      color: "rgb(255, 255, 255)",
-    });
-    expect(await colors("g100")).toEqual({
-      background: "rgb(250, 77, 86)",
-      color: "rgb(22, 22, 22)",
-    });
+        .evaluateAll((els) =>
+          els.map((el) => ({
+            background: getComputedStyle(el).backgroundColor,
+            color: getComputedStyle(el).color,
+          })),
+        );
+    // Red 60 and strong Cyan 80 with white initials; Red 50 and strong
+    // Cyan 30 with Gray 100 initials.
+    expect(await colors("white")).toEqual([
+      { background: "rgb(218, 30, 40)", color: "rgb(255, 255, 255)" },
+      { background: "rgb(0, 58, 109)", color: "rgb(255, 255, 255)" },
+    ]);
+    expect(await colors("g100")).toEqual([
+      { background: "rgb(250, 77, 86)", color: "rgb(22, 22, 22)" },
+      { background: "rgb(130, 207, 255)", color: "rgb(22, 22, 22)" },
+    ]);
   });
 
   test("draws the overlap ring in the surface color of a layer", async ({

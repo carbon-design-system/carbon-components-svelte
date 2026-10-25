@@ -85,11 +85,13 @@
     "cool-gray" "warm-gray";
 
   @each $color in $colors {
-    .#{$prefix}--user-avatar--#{$color} {
-      background-color: ccs-theme-color(
-        $ccs-user-avatar-colors,
-        "user-avatar-#{$color}"
-      );
+    @each $suffix in "" "-strong" {
+      .#{$prefix}--user-avatar--#{$color}#{$suffix} {
+        background-color: ccs-theme-color(
+          $ccs-user-avatar-colors,
+          "user-avatar-#{$color}#{$suffix}"
+        );
+      }
     }
   }
 

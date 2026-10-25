@@ -130,6 +130,7 @@ describe("UserAvatar", () => {
     ["size-lg", "bx--user-avatar--lg"],
     ["color-blue", "bx--user-avatar--blue"],
     ["color-cool-gray", "bx--user-avatar--cool-gray"],
+    ["color-cyan-strong", "bx--user-avatar--cyan-strong"],
   ])("applies the class for %s", (testId, className) => {
     render(UserAvatar);
 
@@ -141,6 +142,15 @@ describe("UserAvatar", () => {
 
     const expected = `bx--user-avatar--${getAvatarBackgroundColor("John Doe")}`;
     expect(screen.getByTestId("color-auto")).toHaveClass(expected);
+  });
+
+  it('applies the strong shade to the "auto" color', () => {
+    render(UserAvatar);
+
+    const avatar = screen.getByTestId("color-auto-strong");
+    const color = getAvatarBackgroundColor("John Doe");
+    expect(avatar).toHaveClass(`bx--user-avatar--${color}-strong`);
+    expect(avatar).not.toHaveClass(`bx--user-avatar--${color}`);
   });
 
   it("wraps the avatar in a floating-portal tooltip by default", () => {
