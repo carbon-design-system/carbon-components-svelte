@@ -3,13 +3,14 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:types": "svelte-check --workspace ../tests --tsconfig ../tests/tsconfig.compat-check.json --fail-on-warnings"
+    "test:types": "rm -rf ../tests/.svelte-check && svelte-check --workspace ../tests --tsconfig ../tests/tsconfig.compat-check.json --tsgo --fail-on-warnings"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/svelte": "^5.4.2",
     "@testing-library/user-event": "^14.6.7",
+    "@typescript/native-preview": "^7.0.0-dev.20260707.2",
     "jsdom": "^30.0.1",
     "svelte": "^3.59.1",
     "svelte-check": "^4.7.6",
