@@ -56,6 +56,22 @@ describe("Slider and RangeSlider writing direction", () => {
     expect(positions(container)).toEqual(LTR);
   });
 
+  it("lets a plain dir inside a LayoutDirection win", async () => {
+    const { container } = render(SliderDirection, {
+      props: { innerDir: "ltr" },
+    });
+    await tick();
+    expect(positions(container)).toEqual(LTR);
+
+    const thumb = screen.getByRole("slider", { name: "Replicas" });
+    await fireEvent.keyDown(thumb, { key: "ArrowRight" });
+    expect(thumb).toHaveAttribute("aria-valuenow", "21");
+
+    const [lower] = screen.getAllByRole("slider", { name: /Window/ });
+    await fireEvent.keyDown(lower, { key: "ArrowRight" });
+    expect(lower).toHaveAttribute("aria-valuenow", "21");
+  });
+
   it.each([
     [
       "the pointer enters",

@@ -45,6 +45,14 @@ describe("Tabs writing direction", () => {
     await press("ArrowRight", "Logs");
   });
 
+  it("lets a plain dir inside a LayoutDirection win", async () => {
+    render(TabsDirection, { props: { innerDir: "ltr" } });
+    screen.getByRole("tab", { name: "Overview" }).focus();
+
+    await press("ArrowRight", "Logs");
+    await press("ArrowLeft", "Overview");
+  });
+
   it("reads a page direction change on the next key", async () => {
     render(TabsDirection, { props: { context: false } });
     screen.getByRole("tab", { name: "Overview" }).focus();

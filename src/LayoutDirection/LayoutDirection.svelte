@@ -9,7 +9,8 @@
    * LayoutDirection sets the writing direction for part of a page. It
    * renders an element with `dir`, and components inside it read the
    * direction from context. Nest one to switch back, such as an LTR code
-   * block in an RTL page.
+   * block in an RTL page. A plain `dir` attribute inside it wins for its
+   * part, as it does for the styles.
    *
    * Content that a component portals out of the subtree, such as a
    * `portalMenu` or a tooltip, keeps the direction.

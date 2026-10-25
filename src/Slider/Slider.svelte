@@ -278,12 +278,13 @@
   $: range = max - min;
   $: left = range === 0 ? 0 : ((value - min) / range) * 100;
 
-  // In RTL, `min` sits at the right end of a horizontal track. A
-  // LayoutDirection gives the direction, on the server too, and updates
-  // it. Without one, read the track's computed direction at mount and
-  // again when the pointer enters, the thumb takes focus, or a key is
-  // pressed. Nothing reports a `dir` change on an ancestor, so until then
-  // the slider keeps the direction it last read.
+  // In RTL, `min` sits at the right end of a horizontal track. The
+  // track's nearest `dir` gives the direction, else a LayoutDirection
+  // (which also gives it on the server), else the computed direction.
+  // Read at mount, when a LayoutDirection changes, and again when the
+  // pointer enters, the thumb takes focus, or a key is pressed. Nothing
+  // reports a `dir` change on an ancestor, so until then the slider
+  // keeps the direction it last read.
   const layoutDirection = getLayoutDirection();
   let horizontalRtl = false;
 

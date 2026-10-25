@@ -69,9 +69,10 @@ export function getPointerPosition(
 
 /**
  * Whether values increase leftward along a track: a horizontal track in
- * RTL. The nearest `LayoutDirection` decides first, then the track's
- * computed direction. Before mount, without a `LayoutDirection`, the
- * track counts as LTR, so nothing reads the document on the server.
+ * RTL, as `resolveLayoutDirection` reads it: the track's nearest `dir`,
+ * then the nearest `LayoutDirection`, then the computed direction. Before
+ * mount, without a `LayoutDirection`, the track counts as LTR, so nothing
+ * reads the document on the server.
  */
 export function isTrackRtl(
   orientation: "horizontal" | "vertical",
