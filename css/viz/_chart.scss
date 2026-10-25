@@ -880,6 +880,12 @@
       fill: Canvas;
     }
 
+    // The badge's inverse surface would hide its text; it becomes a box.
+    .#{$prefix}--viz-crosshair__badge rect {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+
     // SVG text keeps its class fill under forced colors; take the page's.
     .#{$prefix}--viz-labels__label,
     .#{$prefix}--viz-annotations__label,
