@@ -157,8 +157,10 @@ Set `disabled` to disable the input and copy button.
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <CopyInput labelText="API endpoint" value="https://api.acme.io/v1" />
+<Layer withBackground>
+  <Box padding={5}>
+    <CopyInput labelText="API endpoint" value="https://api.acme.io/v1" />
+  </Box>
 </Layer>
 
 ## Custom feedback

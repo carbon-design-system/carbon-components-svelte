@@ -47,15 +47,16 @@
 
 <SearchMenu bind:value {placeholder} labelText="Search">
   <Stack slot="before" orientation="horizontal" align="stretch" gap={0}>
-    <Dropdown
-      hideLabel
-      size="xl"
-      labelText="Scope"
-      style="width: 12rem"
-      bind:selectedId={scopeId}
-      items={scopeItems}
-      on:select={() => (value = "")}
-    />
+    <Box width="12rem">
+      <Dropdown
+        hideLabel
+        size="xl"
+        labelText="Scope"
+        bind:selectedId={scopeId}
+        items={scopeItems}
+        on:select={() => (value = "")}
+      />
+    </Box>
     <Box aria-hidden="true" width={1} fill="layer-03" />
   </Stack>
 

@@ -5,7 +5,7 @@ description: Pin code inputs collect a short verification code across a row of s
 
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
-  import { FluidPinCodeInputSkeleton, Layer, Link, PinCodeInput, PinCodeInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { Box, FluidPinCodeInputSkeleton, Layer, Link, PinCodeInput, PinCodeInputSkeleton, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -121,8 +121,10 @@ Set `size` to `"xl"` to render extra-large segments.
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <PinCodeInput labelText="Verification code" />
+<Layer withBackground>
+  <Box padding={5}>
+    <PinCodeInput labelText="Verification code" />
+  </Box>
 </Layer>
 
 ## Select on focus

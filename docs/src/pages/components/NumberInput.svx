@@ -4,7 +4,7 @@ description: Number inputs provide a controlled field for numeric values, with s
 ---
 
 <script>
-  import { AILabel, FluidNumberInputSkeleton, Layer, NumberInput, NumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, Box, FluidNumberInputSkeleton, Layer, NumberInput, NumberInputSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -229,8 +229,10 @@ Use the extra-small size for dense layouts, such as toolbars and table rows, by 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <NumberInput labelText="Clusters" value={0} />
+<Layer withBackground>
+  <Box padding={5}>
+    <NumberInput labelText="Clusters" value={0} />
+  </Box>
 </Layer>
 
 ## Fluid

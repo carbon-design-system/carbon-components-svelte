@@ -502,10 +502,18 @@ Set `readonly` to `true` to display a non-editable value. The field stays focusa
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <Dropdown labelText="Contact" selectedId="0" items="{[{id: "0", text: "Slack"},
-    {id: "1", text: "Email"},
-    {id: "2", text: "Fax"}]}" />
+<Layer withBackground>
+  <Box padding={5}>
+    <Dropdown
+      labelText="Contact"
+      selectedId="0"
+      items={[
+        { id: "0", text: "Slack" },
+        { id: "1", text: "Email" },
+        { id: "2", text: "Fax" },
+      ]}
+    />
+  </Box>
 </Layer>
 
 ## Inline

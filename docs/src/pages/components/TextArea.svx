@@ -4,7 +4,7 @@ description: Text areas provide a multi-line field for longer text like descript
 ---
 
 <script>
-  import { AILabel, FluidTextAreaSkeleton, Layer, TextArea, TextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
+  import { AILabel, Box, FluidTextAreaSkeleton, Layer, TextArea, TextAreaSkeleton, TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>
 
@@ -106,8 +106,10 @@ Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The 
 
 Place the component in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below. `Layer` replaces the v10 `light` prop.
 
-<Layer withBackground style="padding: 1rem">
-  <TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
+<Layer withBackground>
+  <Box padding={5}>
+    <TextArea labelText="Incident summary" placeholder="Describe what happened, the impact, and any mitigation steps taken so far..." />
+  </Box>
 </Layer>
 
 ## Fluid
