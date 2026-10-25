@@ -55,7 +55,7 @@ Gradients appear independently for each axis. Set a width to overflow horizontal
 
 ## Colors
 
-Set `color` to retint the gradient and `background` to repaint the content area. Both default to the `layer-01` theme token.
+Set `color` to retint the gradient and `background` to repaint the content area. Both default to the `layer` token, which follows the enclosing [Layer](/components/Layer).
 
 ### Theme tokens
 

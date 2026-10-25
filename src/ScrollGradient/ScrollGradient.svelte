@@ -18,7 +18,8 @@
 
   /**
    * Specify the gradient color: a fill token name, the same set as Box
-   * `fill`, or any CSS color. Defaults to the `layer-01` theme token.
+   * `fill`, or any CSS color. Defaults to the `layer` token, which follows
+   * the enclosing Layer.
    * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand" | (string & {}) | undefined}
    */
   export let color = undefined;
@@ -26,8 +27,8 @@
   /**
    * Specify the background color of the scrollable content area: a fill
    * token name, the same set as Box `fill`, or any CSS color. Defaults to
-   * the `layer-01` theme token. Does not affect the gradient color — use
-   * `color` for that.
+   * the `layer` token, which follows the enclosing Layer. Does not affect
+   * the gradient color; use `color` for that.
    * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand" | (string & {}) | undefined}
    */
   export let background = undefined;
