@@ -12,20 +12,20 @@
     return { time: new Date(now), cpu: Math.round(value) };
   }
 
-  let data = Array.from({ length: 30 }, next);
-
-  function append() {
-    // Reassign to update. A fixed window keeps the cost flat.
-    data = [...data.slice(-59), next()];
-  }
+  const data = Array.from({ length: 30 }, next);
+  let chart;
 </script>
 
 <ButtonSet>
-  <Button size="small" kind="tertiary" on:click={append}>Add a minute</Button>
+  <Button size="small" kind="tertiary" on:click={() => chart.push(next())}>
+    Add a minute
+  </Button>
 </ButtonSet>
 
 <LineChart
+  bind:this={chart}
   {data}
+  maxRows={60}
   x="time"
   y="cpu"
   title="CPU utilization"

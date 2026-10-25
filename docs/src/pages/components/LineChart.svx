@@ -220,7 +220,7 @@ Set `toolbar` to add buttons that swap the chart for a table of every value, dow
 
 ## Live data
 
-Reassign `data` to update. An appended point that stays inside the current domain leaves the axes and grid untouched.
+Push rows as they arrive, through the chart's `push` method and a `maxRows` window; rows pushed in one frame draw once, and nothing draws in a hidden tab. An appended point that stays inside the current domain leaves the axes and grid untouched. Reassigning `data` works too, and starts the window over.
 
 <FileSource src="/framed/LineChart/LineChartLive" />
 

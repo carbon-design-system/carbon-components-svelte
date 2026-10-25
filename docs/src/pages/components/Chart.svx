@@ -117,7 +117,7 @@ The defaults follow a few rules, and the props are there to follow them further.
 
 `data` is long format: one row per x and series. `x`, `y`, and `series` name the fields, or take a function. Dates make a time axis, numbers a linear one, and strings a categorical one.
 
-Reassign `data` to update it; the chart treats rows and arrays as immutable, so a `push` into the same array changes nothing. Within a series, rows are told apart by their x, or by `key` when one row's x is not enough: selection, hover, and motion follow a datum by it when rows are added before it or trimmed away, as a sliding window does. If your data is wide, with one column per series, reshape it first with `pivotLonger`.
+Reassign `data` to update it; the chart treats rows and arrays as immutable, so a `push` into the same array changes nothing. Rows that stream in go through the chart's `push` method, reached with `bind:this`: rows pushed in one frame draw once, nothing draws in a hidden tab, and `maxRows` keeps a sliding window. For the reassign idiom, `appendWindow(data, rows, max)` does the same copy and trim. Within a series, rows are told apart by their x, or by `key` when one row's x is not enough: selection, hover, and motion follow a datum by it when rows are added before it or trimmed away, as a sliding window does. If your data is wide, with one column per series, reshape it first with `pivotLonger`.
 
 ```js
 import { pivotLonger } from "carbon-components-svelte/viz";
