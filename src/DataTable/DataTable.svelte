@@ -145,9 +145,11 @@
   /**
    * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
-   * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
+   * @slot {{ header: DataTableNonEmptyHeader<Row>; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
-   * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
+   * @slot {{ header: DataTableNonEmptyHeader<Row>; index: number; }} footerCell
+   * @slot {{ header: DataTableNonEmptyHeader<Row>; }} headerDecorator
+   * @slot {{ row: Row; }} rowDecorator
    */
 
   /**
