@@ -47,7 +47,8 @@
 </script>
 
 <!-- No whitespace after the slot: an inline link would underline it. -->
-<!-- biome-ignore format: whitespace between these nodes renders as text -->
+<!-- Whitespace between these nodes renders as text -->
+<!-- prettier-ignore -->
 <a
   bind:this={ref}
   role={disabled ? "link" : undefined}

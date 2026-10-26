@@ -7,20 +7,13 @@
     "defaultBranch": "master"
   },
   "formatter": {
-    "indentStyle": "space"
+    "enabled": false
   },
   "html": {
     "experimentalFullSupportEnabled": true,
     "formatter": {
-      "enabled": true,
-      "indentScriptAndStyle": true
+      "enabled": false
     }
-  },
-  "markdown": {
-    "formatter": { "enabled": false }
-  },
-  "yaml": {
-    "formatter": { "enabled": false }
   },
   "files": {
     "includes": [
@@ -81,7 +74,9 @@
           "options": {
             "paths": {
               "svelte": {
-                "importNames": ["onDestroy"],
+                "importNames": [
+                  "onDestroy"
+                ],
                 "message": "Use the return function from onMount instead of onDestroy."
               }
             }
@@ -101,7 +96,9 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.svelte"],
+      "includes": [
+        "**/*.svelte"
+      ],
       "linter": {
         "rules": {
           "correctness": {
@@ -129,7 +126,9 @@
       }
     },
     {
-      "includes": ["src/**/*.svelte"],
+      "includes": [
+        "src/**/*.svelte"
+      ],
       "linter": {
         "rules": {
           "nursery": {
@@ -139,7 +138,11 @@
       }
     },
     {
-      "includes": ["**/*.test.ts", "**/*.test.svelte", "docs/**/*.svelte"],
+      "includes": [
+        "**/*.test.ts",
+        "**/*.test.svelte",
+        "docs/**/*.svelte"
+      ],
       "linter": {
         "rules": {
           "performance": {
@@ -161,7 +164,10 @@
       }
     },
     {
-      "includes": ["tests/**", "!tests/package-exports.test-d.ts"],
+      "includes": [
+        "tests/**",
+        "!tests/package-exports.test-d.ts"
+      ],
       "linter": {
         "rules": {
           "style": {
@@ -183,7 +189,9 @@
       }
     },
     {
-      "includes": ["src/**"],
+      "includes": [
+        "src/**"
+      ],
       "linter": {
         "rules": {
           "style": {
@@ -192,13 +200,18 @@
               "options": {
                 "paths": {
                   "svelte": {
-                    "importNames": ["onDestroy"],
+                    "importNames": [
+                      "onDestroy"
+                    ],
                     "message": "Use the return function from onMount instead of onDestroy."
                   }
                 },
                 "patterns": [
                   {
-                    "group": ["carbon-icons-svelte", "carbon-icons-svelte/**"],
+                    "group": [
+                      "carbon-icons-svelte",
+                      "carbon-icons-svelte/**"
+                    ],
                     "message": "Use the local icon in src/icons instead of importing from carbon-icons-svelte."
                   }
                 ]
@@ -208,5 +221,8 @@
         }
       }
     }
-  ]
+  ],
+  "assist": {
+    "enabled": false
+  }
 }

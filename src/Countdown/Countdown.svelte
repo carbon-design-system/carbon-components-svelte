@@ -197,7 +197,8 @@
 
 <!-- No whitespace around the time: a countdown inside a sentence, as in
      "held for 9:42.", would otherwise add a space before the punctuation. -->
-<!-- biome-ignore format: whitespace between these nodes renders as text -->
+<!-- Whitespace between these nodes renders as text -->
+<!-- prettier-ignore -->
 <span class:bx--countdown={true} {...rest}
   >{#if $$slots.default}<slot {remaining} {formatted} {fraction} />{:else}<span
       role="timer"

@@ -28,5 +28,5 @@ const { js, dts } = renderTokens(extractTokens(css));
 await mkdir("src/tokens", { recursive: true });
 await Bun.write("src/tokens/index.js", js);
 await Bun.write("src/tokens/index.d.ts", dts);
-await $`bunx biome check --write src/tokens`.quiet();
+await $`bun fmt src/tokens && bunx biome check --write src/tokens`.quiet();
 console.log("[build-tokens] wrote src/tokens/index.js and index.d.ts");
