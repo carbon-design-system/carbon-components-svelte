@@ -58,20 +58,22 @@
   export let ref = null;
 
   /**
-   * Set to `true` to render the tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set to `true` to always render the tooltip in a portal, or `false` to
+   * keep it in place. Left unset, the tooltip opens in a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`, such
+   * as a `DataTable`) would cut it off.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
 
-  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { clippedBy } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -85,8 +87,19 @@
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
 
+  // Set for one open when the in-place tooltip turns out to be cut off by
+  // a box around it (a scrolling panel, a DataTable): it shows in a portal
+  // instead. Only when `portalTooltip` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined
+      ? !!insideModal || portalWhenClipped
+      : portalTooltip;
+
+  /** @type {null | HTMLDivElement} */
+  let tooltipRef = null;
 
   // Naming and description belong on the trigger button, not the wrapper.
   // A consumer `aria-describedby` joins the tooltip id, which in portal mode
@@ -164,6 +177,16 @@
 
   $: notifyOpenChange(open);
 
+  $: inlineOpen = !effectivePortalTooltip && shown;
+  // The in-place tooltip is laid out while hidden, so it measures where it
+  // shows. Measured after the update, so the swap lands before paint.
+  $: if (inlineOpen) tick().then(portalIfClipped);
+
+  function portalIfClipped() {
+    if (portalTooltip !== undefined || !inlineOpen || !tooltipRef) return;
+    if (clippedBy(tooltipRef)) portalWhenClipped = true;
+  }
+
   // The portal places the tooltip by physical side, and its caret styles
   // follow. The in-place tooltip flips in CSS instead. Read when the tooltip
   // shows: nothing reports a `dir` change. A `bind:this` ref in `$:` would
@@ -224,7 +247,7 @@
     class:bx--tooltip__trigger={true}
     class:bx--tooltip__trigger--definition={true}
     class:bx--tooltip--hidden={!effectivePortalTooltip && !shown}
-    class:bx--tooltip--visible={!effectivePortalTooltip && shown}
+    class:bx--tooltip--visible={inlineOpen}
     class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
     class:bx--tooltip--top={!effectivePortalTooltip && direction === "top"}
     class:bx--tooltip--bottom={!effectivePortalTooltip &&
@@ -247,7 +270,12 @@
     <slot />
   </button>
   {#if !effectivePortalTooltip}
-    <div role="tooltip" {id} class:bx--assistive-text={true}>
+    <div
+      bind:this={tooltipRef}
+      role="tooltip"
+      {id}
+      class:bx--assistive-text={true}
+    >
       <slot name="tooltip">{tooltipText}</slot>
     </div>
   {/if}

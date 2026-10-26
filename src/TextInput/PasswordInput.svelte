@@ -98,9 +98,10 @@
   export let ref = null;
 
   /**
-   * Set to `true` to render the tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set to `true` to always render the tooltip in a portal, or `false` to
+   * keep it in place. Left unset, the tooltip opens in a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`, such
+   * as a `DataTable`) would cut it off.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -127,6 +128,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -147,11 +149,19 @@
     readonly,
   }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
+  // Set for one open when the in-place tooltip turns out to be cut off by
+  // a box around it (a scrolling panel, a DataTable): it shows in a portal
+  // instead. Only when `portalTooltip` is left unset.
+  let portalWhenClipped = false;
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined
+      ? !!insideModal || portalWhenClipped
+      : portalTooltip;
 
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;
+  /** @type {null | HTMLSpanElement} */
+  let tooltipRef = null;
 
   // The toggle's tooltip opens without a delay, but still takes the tooltip
   // group's active slot so it never overlaps another tooltip, and skips the
@@ -177,6 +187,17 @@
   }
 
   $: if (disabled) tooltip.hide();
+
+  $: if (!$tooltipOpen) portalWhenClipped = false;
+  $: inlineOpen = !effectivePortalTooltip && $tooltipOpen;
+  // The in-place tooltip is laid out while hidden, so it measures where it
+  // shows. Measured after the update, so the swap lands before paint.
+  $: if (inlineOpen) tick().then(portalIfClipped);
+
+  function portalIfClipped() {
+    if (portalTooltip !== undefined || !inlineOpen || !tooltipRef) return;
+    if (clippedBy(tooltipRef)) portalWhenClipped = true;
+  }
 
   onMount(() => {
     return () => {
@@ -366,7 +387,7 @@
         class:bx--tooltip--align-center={tooltipAlignment === "center"}
         class:bx--tooltip--align-end={tooltipAlignment === "end"}
         class:bx--tooltip--hidden={!effectivePortalTooltip && $tooltipHidden}
-        class:bx--tooltip--visible={!effectivePortalTooltip && $tooltipOpen}
+        class:bx--tooltip--visible={inlineOpen}
         class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
         aria-label={effectivePortalTooltip || disabled
           ? tooltipLabel
@@ -376,7 +397,9 @@
         }}
       >
         {#if !disabled && !effectivePortalTooltip}
-          <span class:bx--assistive-text={true}> {tooltipLabel} </span>
+          <span bind:this={tooltipRef} class:bx--assistive-text={true}>
+            {tooltipLabel}
+          </span>
         {/if}
         {#if type === "text"}
           <ViewOff class="bx--icon-visibility-off" />

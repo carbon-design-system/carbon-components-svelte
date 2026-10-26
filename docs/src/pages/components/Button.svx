@@ -114,9 +114,9 @@ Control the tooltip position and alignment with `tooltipPosition` and `tooltipAl
 
 ### Portalled tooltip
 
-Set `portalTooltip` to `true` to render the icon-only tooltip in a portal. This prevents the tooltip from being clipped by `overflow: hidden` containers and auto-flips when the preferred direction lacks viewport space.
+An icon-only tooltip that a container would cut off, such as a box with `overflow: hidden`, a scroll area or a [DataTable](/components/DataTable), opens in a portal. Inside a Modal, the tooltip always opens in a portal.
 
-By default, the tooltip is portalled only when the button is inside a Modal. Set `portalTooltip={false}` to always use the inline (non-portalled) tooltip.
+Set `portalTooltip` to `true` to always render the tooltip in a portal, where it also flips when the preferred direction lacks viewport space, or to `false` to keep it in place. A portalled tooltip leaves its container in the DOM, so CSS that targets the tooltip as a descendant of the container does not match it.
 
 <Button portalTooltip iconDescription="Tooltip text" icon={Add} />
 
