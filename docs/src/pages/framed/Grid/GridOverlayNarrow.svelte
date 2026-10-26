@@ -1,12 +1,6 @@
 <script>
-  import {
-    Button,
-    Column,
-    Grid,
-    GridOverlay,
-    Row,
-    Tile,
-  } from "carbon-components-svelte";
+  import { Button, Column, Grid, Row, Tile } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let open = true;
 </script>
