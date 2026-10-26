@@ -32,7 +32,7 @@
    * Specify the tag name.
    * @type {Tag}
    */
-  export let tag = "div";
+  export let tag = /** @type {Tag} */ ("div");
 
   /**
    * Obtain a reference to the HTML element.
