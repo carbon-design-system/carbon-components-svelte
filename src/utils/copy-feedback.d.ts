@@ -1,3 +1,6 @@
+/** Default time (ms) copy feedback stays visible. */
+export const COPY_FEEDBACK_TIMEOUT_MS: number;
+
 export type CopyFeedbackAnimation = "fade-in" | "fade-out" | undefined;
 
 export type CopyFeedbackState = {
