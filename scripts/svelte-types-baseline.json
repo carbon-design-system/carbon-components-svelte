@@ -99,7 +99,7 @@
   "Toggletip/Toggletip.svelte": 2,
   "Tooltip/Tooltip.svelte": 3,
   "TooltipIcon/TooltipIcon.svelte": 1,
-  "TreeView/TreeView.svelte": 28,
+  "TreeView/TreeView.svelte": 23,
   "TreeView/TreeViewNode.svelte": 2,
   "TreeView/TreeViewNodeList.svelte": 5,
   "TreeView/TreeViewNodeVirtual.svelte": 1,

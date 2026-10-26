@@ -770,7 +770,7 @@
     multiselectModifierActive = false;
   }
 
-  /** @param {Event} e */
+  /** @param {Event} event */
   function handleMultiselectSelectStart(event) {
     if (isMultiselect && multiselectModifierActive) {
       event.preventDefault();
@@ -1341,7 +1341,7 @@
 
     treeWalker.currentNode = treeItem;
 
-    /** @type {Node | null} */
+    /** @type {globalThis.Node | null} */
     let nextFocusNode = null;
 
     if (event.key === "ArrowUp") {
