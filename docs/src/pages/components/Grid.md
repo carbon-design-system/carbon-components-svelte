@@ -181,6 +181,8 @@ actual columns instead of eyeballing it. `GridOverlay` renders a fixed,
 the same way a regular `Column`'s numeric span does — so it lines up with
 `sm`/`md`/`lg`/`xlg`/`max` exactly.
 
+`GridOverlay` is a developer tool. Import it from `carbon-components-svelte/devtools` and load `devtools.css` (or `devtools-<theme>.css`).
+
 `GridOverlay` never toggles its own visibility; the caller owns `open`.
 
 <FileSource src="/framed/Grid/GridOverlay" />
