@@ -435,7 +435,7 @@
   let fieldFocused = false;
   /** Set when a required, empty combo box blocked form submission. */
   let requiredError = false;
-  let selectedItem = undefined;
+  let selectedItem;
   let prevSelectedId = null;
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);

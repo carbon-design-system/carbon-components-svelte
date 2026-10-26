@@ -8,7 +8,7 @@
 
   const header = new URLSearchParams(location.search).has("header");
   let open = true;
-  let width = undefined;
+  let width;
 </script>
 
 {#if header}

@@ -9,7 +9,7 @@
   } from "carbon-components-svelte";
 
   let open = false;
-  let launcherButtonRef = undefined;
+  let launcherButtonRef;
 </script>
 
 <Button bind:ref={launcherButtonRef} on:click={() => (open = true)}>

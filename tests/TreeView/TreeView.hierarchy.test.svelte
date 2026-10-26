@@ -7,7 +7,7 @@
 
   type HierarchyNode = TreeNode<number> & { pid?: number };
   let treeview: TreeView<HierarchyNode>;
-  let activeId: number | undefined = undefined;
+  let activeId: number | undefined;
   let selectedIds: number[] = [];
   let expandedIds: number[] = [];
   let nodes = toHierarchy<HierarchyNode, "pid">(

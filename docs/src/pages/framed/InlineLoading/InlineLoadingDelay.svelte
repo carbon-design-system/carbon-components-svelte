@@ -6,7 +6,7 @@
     finished: "Saved",
   };
 
-  let status = undefined;
+  let status;
 
   async function simulateSave(duration) {
     status = "active";

@@ -102,7 +102,7 @@
    * shifts `switches[committedIndex]` before afterUpdate can re-anchor.
    * @type {string | undefined}
    */
-  let committedId = undefined;
+  let committedId;
   let focusedIndex = -1;
   /**
    * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }>>}

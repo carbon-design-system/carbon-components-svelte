@@ -8,7 +8,7 @@
   }));
 
   let value = "";
-  let selectedId = undefined;
+  let selectedId;
 </script>
 
 <ComboBox

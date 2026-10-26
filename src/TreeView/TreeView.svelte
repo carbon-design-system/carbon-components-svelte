@@ -930,7 +930,7 @@
    * row), so `selectNode` skips it.
    * @type {Node["id"] | undefined}
    */
-  let gestureActiveId = undefined;
+  let gestureActiveId;
 
   /**
    * Ctrl/Cmd+click semantics: toggle `node`'s multiselect unit and make it
@@ -1588,7 +1588,7 @@
   /** Row id that currently owns keyboard focus in the virtual path.
    * Kept separate from `activeId` so arrow moves match non-virtual
    * (focus only) while still anchoring tabindex across remounts. */
-  let virtualFocusedId = undefined;
+  let virtualFocusedId;
 
   /** Pixel height of the scroll container, measured from the DOM when
    * `containerHeight` is set to a non-numeric value (e.g. `"80%"`).

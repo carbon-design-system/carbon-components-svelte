@@ -101,7 +101,7 @@
   import PageHeaderBody from "./PageHeaderBody.svelte";
 
   /** The first `Tabs` slotted into the header, shared with the body. */
-  let tabsContext = undefined;
+  let tabsContext;
 
   /** @type {null | HTMLElement} */
   let bodyRef = null;
@@ -110,7 +110,7 @@
    * The registered `Tabs`' `type`, reported by `Tabs` itself.
    * @type {undefined | "default" | "container"}
    */
-  let tabsType = undefined;
+  let tabsType;
 
   setContext("carbon:PageHeader", {
     /**

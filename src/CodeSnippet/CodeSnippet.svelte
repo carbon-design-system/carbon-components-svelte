@@ -251,7 +251,7 @@
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
   /** @type {"fade-in" | "fade-out"} */
-  let animation = undefined;
+  let animation;
   let feedbackOpen = false;
   let copyPending = false;
   let copyFailed = false;
@@ -269,11 +269,11 @@
   const rowHeightInPixels = 16;
 
   /** @type {number | undefined} */
-  let minHeight = undefined;
+  let minHeight;
   /** @type {string | undefined} */
-  let maxHeight = undefined;
+  let maxHeight;
   /** @type {"auto" | undefined} */
-  let overflowY = undefined;
+  let overflowY;
 
   function syncCopyFeedback() {
     animation = copyFeedback.animation;

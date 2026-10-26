@@ -108,9 +108,6 @@
             "noSelfAssign": "off",
             "noDuplicateAttributes": "off"
           },
-          "complexity": {
-            "noUselessUndefinedInitialization": "off"
-          },
           "suspicious": {
             "noGlobalAssign": "off"
           },

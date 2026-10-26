@@ -8,7 +8,7 @@
     StructuredListRow,
   } from "carbon-components-svelte";
 
-  let selected = undefined;
+  let selected;
 </script>
 
 <StructuredList data-testid="structured-list" bind:selected selection>
