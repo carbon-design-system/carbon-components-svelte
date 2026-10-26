@@ -183,8 +183,8 @@
     // cycle, not this one's), so the tab stop would otherwise keep pointing
     // at a detached node. The child reports its own teardown instead of a
     // full registry.
-    /** @type {(node: HTMLElement) => void} */
-    notifyUnmount: (node) => {
+    /** @param {HTMLElement} node */
+    notifyUnmount(node) {
       if (get(tabStopElement) === node) {
         tabStopElement.set(findDefaultTabStop());
       }

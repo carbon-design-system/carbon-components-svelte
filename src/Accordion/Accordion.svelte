@@ -61,10 +61,7 @@
   }
   $: typeStore.set(type);
 
-  /**
-   * @param {object} id
-   * @returns {void}
-   */
+  /** @param {object} id */
   function notifyOpen(id) {
     if (type === "single") {
       openId.set(id);

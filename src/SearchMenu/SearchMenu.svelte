@@ -268,12 +268,12 @@
     shouldFilter: sharedShouldFilter,
     match: sharedMatch,
     highlightedId,
-    /** @type {(next: string | null) => void} */
-    setActiveId: (next) => {
+    /** @param {string | null} next */
+    setActiveId(next) {
       setPointerActive(next);
     },
-    /** @type {(detail: { value: string; item: { text?: string; value?: string; href?: string }; event: Event }) => void} */
-    selectItem: (detail) => {
+    /** @param {{ value: string; item: { text?: string; value?: string; href?: string }; event: Event }} detail */
+    selectItem(detail) {
       dispatchSearch?.cancel();
       value = detail.value ?? value;
       dispatch("select", detail);
@@ -282,8 +282,12 @@
       highlightedId.set(null);
     },
     hasPrimaryItems,
-    /** @type {(itemId: string, filterable: boolean, inDividerGroup?: boolean) => void} */
-    registerItem: (itemId, filterable, inDividerGroup = false) => {
+    /**
+     * @param {string} itemId
+     * @param {boolean} filterable
+     * @param {boolean} [inDividerGroup]
+     */
+    registerItem(itemId, filterable, inDividerGroup = false) {
       itemIds.add(itemId);
       if (filterable) filterableIds.add(itemId);
       else filterableIds.delete(itemId);
@@ -293,8 +297,8 @@
       filterableIds = filterableIds;
       primaryItemIds = primaryItemIds;
     },
-    /** @type {(itemId: string) => void} */
-    unregisterItem: (itemId) => {
+    /** @param {string} itemId */
+    unregisterItem(itemId) {
       itemIds.delete(itemId);
       filterableIds.delete(itemId);
       primaryItemIds.delete(itemId);
