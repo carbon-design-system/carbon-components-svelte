@@ -8,6 +8,7 @@
 
   const id = uniqueId();
   const ctx = getContext("carbon:InterstitialScreen");
+  /** @type {import("svelte/store").Readable<ReadonlyArray<{ id: string }>>} */
   const views = ctx?.views ?? readable([]);
   const progStep = ctx?.progStep ?? readable(0);
 
