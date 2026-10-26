@@ -1,27 +1,37 @@
 // @ts-check
 import { tokenize } from "./tokenize.js";
 
-/**
- * @typedef {{ language: string; code?: string }} HighlightCodeOptions
- * `code` is not read; pass it so the action re-highlights when it changes.
- */
+/** @typedef {{ language: string }} HighlightCodeOptions */
 
 /**
  * Color the code inside `node` with the CSS Custom Highlight API: one
- * tokenize, one `Range` per token, registered under `syntax-<type>` (styled
- * by `syntax.css`). The DOM is untouched, so selection and copy see plain
- * text. Highlights the first `<code>` inside `node`, or `node` itself, so it
- * works on a `<pre>`, a `<code>`, or a wrapper around a CodeSnippet.
+ * tokenize, one `StaticRange` per token, registered under `syntax-<type>`
+ * (styled by `syntax.css`). The DOM is untouched, so selection and copy see
+ * plain text. Highlights the first `<code>` inside `node`, or `node` itself,
+ * so it works on a `<pre>`, a `<code>`, or a wrapper around a CodeSnippet.
  *
- * A Svelte action: `<pre use:highlightCode={{ language: "ts", code }}>`.
+ * A static range costs the page nothing on a DOM change, unlike a live
+ * `Range`, which the browser updates on every change anywhere in the
+ * document. It also does not follow its text, so a `MutationObserver` on
+ * `node` re-highlights when the code's text or nodes change, whether
+ * Svelte or other code changes them.
+ *
+ * A Svelte action: `<pre use:highlightCode={"ts"}>`.
  * Without Highlight API support (`CSS.highlights`) it does nothing.
  * @param {HTMLElement} node
  * @param {string | HighlightCodeOptions} options - a language, or options
  * @returns {{ update: (options: string | HighlightCodeOptions) => void; destroy: () => void }}
  */
 export function highlightCode(node, options) {
-  /** @type {Map<string, Range[]>} */
+  if (typeof CSS === "undefined" || !("highlights" in CSS)) {
+    return { update: () => {}, destroy: () => {} };
+  }
+
+  let language = typeof options === "string" ? options : options.language;
+  /** @type {Map<string, StaticRange[]>} */
   let owned = new Map();
+  const target = () => node.querySelector("code") ?? node;
+  let root = target();
 
   const clear = () => {
     for (const [name, ranges] of owned) {
@@ -33,12 +43,11 @@ export function highlightCode(node, options) {
     owned = new Map();
   };
 
-  /** @param {string | HighlightCodeOptions} next */
-  const paint = (next) => {
-    if (typeof CSS === "undefined" || !("highlights" in CSS)) return;
+  const paint = () => {
+    // This paint reads the current DOM, so drop changes queued before it.
+    observer.takeRecords();
     clear();
-    const language = typeof next === "string" ? next : next.language;
-    const root = node.querySelector("code") ?? node;
+    root = target();
     const texts = textNodes(root);
     const tokens = tokenize(texts.map((text) => text.data).join(""), language);
     if (!tokens) return;
@@ -63,9 +72,14 @@ export function highlightCode(node, options) {
       const start = offset;
       offset += token.text.length;
       if (!token.type) continue;
-      const range = new Range();
-      range.setStart(...locate(start));
-      range.setEnd(...locate(offset));
+      const [startContainer, startOffset] = locate(start);
+      const [endContainer, endOffset] = locate(offset);
+      const range = new StaticRange({
+        startContainer,
+        startOffset,
+        endContainer,
+        endOffset,
+      });
       const name = `syntax-${token.type}`;
       let registered = CSS.highlights.get(name);
       if (!registered) {
@@ -79,12 +93,31 @@ export function highlightCode(node, options) {
     }
   };
 
-  paint(options);
+  // Skip changes beside the code, such as a CodeSnippet's button text.
+  const observer = new MutationObserver((records) => {
+    if (
+      target() !== root ||
+      records.some((record) => root.contains(record.target))
+    ) {
+      paint();
+    }
+  });
+  observer.observe(node, {
+    characterData: true,
+    childList: true,
+    subtree: true,
+  });
+
+  paint();
 
   return {
-    update: paint,
+    update: (next) => {
+      language = typeof next === "string" ? next : next.language;
+      paint();
+    },
     destroy: () => {
-      if (typeof CSS !== "undefined" && "highlights" in CSS) clear();
+      observer.disconnect();
+      clear();
     },
   };
 }

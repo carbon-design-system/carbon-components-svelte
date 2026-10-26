@@ -249,7 +249,7 @@ import "carbon-components-svelte/css/syntax.css";
 
 ### Highlight API
 
-`highlightCode` colors the first `<code>` inside the element it's on, so put it on a wrapper around the snippet. Selection and copy see plain text. Pass `code` so it re-highlights when the code changes. The [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API) is supported in Chrome 105, Safari 17.2, and Firefox 140; elsewhere the code stays plain.
+`highlightCode` colors the first `<code>` inside the element it's on, so put it on a wrapper around the snippet. Selection and copy see plain text. It re-highlights when the code's text changes, whether Svelte or your own code changes it. The [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API) is supported in Chrome 105, Safari 17.2, and Firefox 140; elsewhere the code stays plain.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetSyntaxHighlightApi" />
 

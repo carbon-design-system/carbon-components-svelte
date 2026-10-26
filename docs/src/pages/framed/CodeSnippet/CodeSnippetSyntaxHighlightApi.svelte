@@ -11,6 +11,6 @@
 {/if}`;
 </script>
 
-<div use:highlightCode={{ language: "svelte", code }}>
+<div use:highlightCode={"svelte"}>
   <CodeSnippet type="multi" {code} />
 </div>
