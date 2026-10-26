@@ -190,6 +190,62 @@ function pointToBox(x, y, box) {
 }
 
 /**
+ * The targets that fail WCAG 2.2 target size (2.5.8), each with the target
+ * that crowds it most and how many pixels more room it needs. A target
+ * passes when it is at least `size` pixels in both dimensions, or when it
+ * is spaced: a circle of diameter `size` centered on it intersects no
+ * other target and no other undersized target's circle. Targets nested in
+ * each other count as one. With `layers`, only targets in the same layer
+ * meet: a fixed header that scrolls over the page does not crowd the
+ * page's targets.
+ * @param {Box[]} targets
+ * @param {number} size
+ * @param {unknown[]} [layers] one key per target
+ * @returns {{ index: number; by: number; needs: number }[]}
+ */
+export function targetConflicts(targets, size, layers) {
+  const radius = size / 2;
+  const small = targets.map((t) => t.width < size || t.height < size);
+  const centers = targets.map((t) => [
+    t.left + t.width / 2,
+    t.top + t.height / 2,
+  ]);
+  /** @type {{ index: number; by: number; needs: number }[]} */
+  const conflicts = [];
+  targets.forEach((target, i) => {
+    if (!small[i]) return;
+    const [cx, cy] = centers[i];
+    let by = -1;
+    let needs = 0;
+    targets.forEach((other, j) => {
+      if (
+        j === i ||
+        (layers && layers[i] !== layers[j]) ||
+        contains(target, other) ||
+        contains(other, target)
+      ) {
+        return;
+      }
+      // How far the circle reaches into the other target, or into the
+      // other small target's circle.
+      const intoBox = radius - pointToBox(cx, cy, other);
+      const intoCircle = small[j]
+        ? size - Math.hypot(cx - centers[j][0], cy - centers[j][1])
+        : 0;
+      const overlap = Math.max(intoBox, intoCircle);
+      if (overlap > 0.01 && overlap > needs) {
+        by = j;
+        needs = overlap;
+      }
+    });
+    if (by !== -1) {
+      conflicts.push({ index: i, by, needs: Math.ceil(needs * 10) / 10 });
+    }
+  });
+  return conflicts;
+}
+
+/**
  * Indexes of the targets that fail WCAG 2.2 target size (2.5.8). A target
  * passes when it is at least `size` pixels in both dimensions, or when it
  * is spaced: a circle of diameter `size` centered on it intersects no
@@ -203,35 +259,7 @@ function pointToBox(x, y, box) {
  * @returns {number[]}
  */
 export function failingTargets(targets, size, layers) {
-  const radius = size / 2;
-  const small = targets.map((t) => t.width < size || t.height < size);
-  const centers = targets.map((t) => [
-    t.left + t.width / 2,
-    t.top + t.height / 2,
-  ]);
-  /** @type {number[]} */
-  const failing = [];
-  targets.forEach((target, i) => {
-    if (!small[i]) return;
-    const [cx, cy] = centers[i];
-    const crowded = targets.some((other, j) => {
-      if (
-        j === i ||
-        (layers && layers[i] !== layers[j]) ||
-        contains(target, other) ||
-        contains(other, target)
-      ) {
-        return false;
-      }
-      if (pointToBox(cx, cy, other) < radius - 0.01) return true;
-      return (
-        small[j] &&
-        Math.hypot(cx - centers[j][0], cy - centers[j][1]) < size - 0.01
-      );
-    });
-    if (crowded) failing.push(i);
-  });
-  return failing;
+  return targetConflicts(targets, size, layers).map((c) => c.index);
 }
 
 /**
