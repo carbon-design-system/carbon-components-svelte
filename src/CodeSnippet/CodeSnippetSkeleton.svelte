@@ -1,9 +1,15 @@
 <script>
   /**
    * Set the type of code snippet.
-   * @type {"single" | "multi"}
+   * @type {"single" | "multi" | "inline"}
    */
   export let type = "single";
+
+  /**
+   * Specify the number of characters of the inline snippet it stands in
+   * for. The inline skeleton is about that wide.
+   */
+  export let chars = 12;
 
   /**
    * Specify the number of code rows of the multi-line snippet it stands
@@ -30,27 +36,42 @@
     maxCollapsedNumberOfRows > 0 ? maxCollapsedNumberOfRows : rows + 2;
 </script>
 
-<div
-  class:bx--skeleton={true}
-  class:bx--snippet={true}
-  class:bx--snippet--single={type === "single"}
-  class:bx--snippet--multi={type === "multi"}
-  style:--ccs-code-snippet-rows={multi ? rows : undefined}
-  style:--ccs-code-snippet-min-rows={multi
-    ? Math.max(minCollapsedNumberOfRows, 0)
-    : undefined}
-  style:--ccs-code-snippet-max-rows={multi ? maxRows : undefined}
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
-  <div class:bx--snippet-container={true}>
-    {#if type === "single"}
-      <span></span>
-    {:else if type === "multi"}
-      <span></span> <span></span> <span></span>
-    {/if}
+{#if type === "inline"}
+  <!-- A span, so it sits in a line of text like the snippet it stands in for. -->
+  <span
+    class:bx--skeleton={true}
+    class:bx--snippet={true}
+    class:bx--snippet--inline={true}
+    style:--ccs-code-snippet-chars={chars}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  ></span>
+{:else}
+  <div
+    class:bx--skeleton={true}
+    class:bx--snippet={true}
+    class:bx--snippet--single={type === "single"}
+    class:bx--snippet--multi={type === "multi"}
+    style:--ccs-code-snippet-rows={multi ? rows : undefined}
+    style:--ccs-code-snippet-min-rows={multi
+      ? Math.max(minCollapsedNumberOfRows, 0)
+      : undefined}
+    style:--ccs-code-snippet-max-rows={multi ? maxRows : undefined}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <div class:bx--snippet-container={true}>
+      {#if type === "single"}
+        <span></span>
+      {:else if type === "multi"}
+        <span></span> <span></span> <span></span>
+      {/if}
+    </div>
   </div>
-</div>
+{/if}

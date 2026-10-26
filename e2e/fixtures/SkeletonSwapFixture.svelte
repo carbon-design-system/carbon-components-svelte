@@ -414,6 +414,15 @@
     </div>
     <div data-part="skeleton"><CodeSnippetSkeleton /></div>
   </div>
+  <div data-testid="code-snippet-inline">
+    <p data-part="real">
+      Run <CodeSnippet type="inline" code="rm -rf node_modules/" /> to clean up.
+    </p>
+    <p data-part="skeleton">
+      Run <CodeSnippet type="inline" skeleton code="rm -rf node_modules/" /> to clean
+      up.
+    </p>
+  </div>
   <div data-testid="code-snippet-multi">
     <div data-part="real">
       <CodeSnippet type="multi" code={"one\ntwo\nthree"} />
