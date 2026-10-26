@@ -1,5 +1,7 @@
 import { cascadeDiff, parseRules, type Rule } from "crassus";
-import type { StyleSeeds } from "./test-graph";
+
+// The sources a `css/` change can show up in, or why it can't be narrowed.
+type StyleSeeds = { files: string[] } | { reason: string };
 
 /**
  * Narrows a stylesheet change to the sources that can render it, so a `css/`

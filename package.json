@@ -44,7 +44,9 @@
   "scripts": {
     "setup": "bun ci && bun build:docs && bun build:css && cd docs && bun ci",
     "test": "vitest",
-    "test:changed": "bun scripts/test-changed.ts",
+    "test:changed": "bunx --bun bivium run --suite unit",
+    "test:changed:e2e": "bunx --bun bivium run --suite e2e",
+    "test:plan": "bunx --bun bivium plan --json",
     "test:perf": "NODE_ENV=production vitest run --config vite.config.perf.ts --no-file-parallelism",
     "bench": "ostia bench",
     "bench:ab": "ostia ab --base origin/master $(ls bench/*.bench.ts | grep -v '\\.dom\\.')",
@@ -104,6 +106,7 @@
     "@types/node": "^26.6.2",
     "@typescript/native-preview": "^7.0.0-dev.20260707.2",
     "acorn": "^8.18.0",
+    "bivium": "^0.1.1",
     "browserslist": "^4.29.1",
     "carbon-icons-svelte": "^13.15.0",
     "crassus": "^0.3.1",
