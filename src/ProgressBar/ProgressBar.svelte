@@ -175,7 +175,7 @@
   >
     <div
       class:bx--progress-bar__bar={true}
-      style:transform={status === "active" && `scaleX(${ratio})`}
+      style:transform={status === "active" ? `scaleX(${ratio})` : undefined}
     ></div>
   </div>
   {#if statusText}
