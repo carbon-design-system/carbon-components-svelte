@@ -160,7 +160,7 @@
    * `loadingDescription` (defaults to `"Loading"`) pass through to Button /
    * the loading state. With two entries plus a primary button, the footer
    * uses the three-button layout.
-   * @type {ReadonlyArray<{ text: string; kind?: string; disabled?: boolean; loading?: boolean; loadingDescription?: string }>}
+   * @type {ReadonlyArray<{ text: string; kind?: import("../Button/Button.svelte").ButtonProps["kind"]; disabled?: boolean; loading?: boolean; loadingDescription?: string }>}
    */
   export let secondaryButtons = [];
 
