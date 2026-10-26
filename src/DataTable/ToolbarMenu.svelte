@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
+  /** @extendProps {"../OverflowMenu/OverflowMenu.svelte"} OverflowMenuProps */
 
   import { getContext, onMount } from "svelte";
   import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";

@@ -74,9 +74,15 @@
    * @template {DataTableRow} [Row=DataTableRow]
    */
 
+  /** @typedef {any} DataTableValue */
+
   /**
-   * @typedef {any} DataTableValue
-   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow<Id=any>
+   * @template [Id=any]
+   * @typedef {{ id: Id; [key: string]: DataTableValue; }} DataTableRow
+   */
+
+  /**
+   * @template [Row=DataTableRow]
    * @typedef {(
    *   [keyof import('./data-table-utils.d.ts').KeysWithoutIndexSignature<Row>] extends [never]
    *     ? import('./data-table-utils.d.ts').PropertyPath<Row>
@@ -85,9 +91,17 @@
    *       : Row extends DataTableRow
    *         ? import('./data-table-utils.d.ts').PropertyPathIgnoringIndexSignatures<Row>
    *         : import('./data-table-utils.d.ts').PropertyPath<Row>
-   * )} DataTableKey<Row=DataTableRow> Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
-   * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue<Row=DataTableRow>
-   * @typedef {object} DataTableEmptyHeader<Row=DataTableRow>
+   * )} DataTableKey Path keys for sort, headers, and cells; mirrors PropertyPath / PropertyPathIgnoringIndexSignatures in ./data-table-utils.d.ts.
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {import('./data-table-utils.d.ts').DataTableSortValue<Row>} DataTableSortValue
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {object} DataTableEmptyHeader
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
@@ -97,7 +111,11 @@
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
-   * @typedef {object} DataTableNonEmptyHeader<Row=DataTableRow>
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {object} DataTableNonEmptyHeader
    * @property {DataTableKey<Row>} key
    * @property {false} [empty]
    * @property {DataTableValue} value
@@ -109,63 +127,111 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
-   * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader<Row=DataTableRow>
-   * @typedef {object} DataTableCell<Row=DataTableRow>
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {object} DataTableCell
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
+   */
+
+  /**
    * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @slot {{ header: DataTableNonEmptyHeader; index: number; }} footerCell
+   */
+
+  /**
    * @event click
    * @type {object}
    * @property {DataTableHeader<Row>} [header]
    * @property {Row} [row]
    * @property {DataTableCell<Row>} [cell]
+   */
+
+  /**
    * @event click:header--expand
    * @type {object}
    * @property {boolean} expanded
+   */
+
+  /**
    * @event click:header
    * @type {object}
    * @property {DataTableHeader<Row>} header
    * @property {"ascending" | "descending" | "none"} [sortDirection] - The intended next sort direction for this click, reported regardless of whether the `sort` event was cancelled.
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
+   */
+
+  /**
    * @event click:header--select
    * @type {object}
    * @property {boolean} indeterminate
    * @property {boolean} selected
+   */
+
+  /**
    * @event click:row
    * @type {object}
    * @property {Row} row
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
+   */
+
+  /**
    * @event {Row} mouseenter:row
    * @event {Row} mouseleave:row
+   */
+
+  /**
    * @event click:row--expand
    * @type {object}
    * @property {boolean} expanded
    * @property {Row} row
+   */
+
+  /**
    * @event click:row--select
    * @type {object}
    * @property {boolean} selected
    * @property {Row} row
+   */
+
+  /**
    * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
    * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
+   */
+
+  /**
    * @event click:cell
    * @type {object}
    * @property {DataTableCell<Row>} cell
    * @property {EventTarget} target
    * @property {EventTarget} currentTarget
-   * @typedef {{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }} DataTableRowClassArgs<Row=DataTableRow>
-   * @typedef {string | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass<Row=DataTableRow>
-   * @type {object}
-   * @property {DataTableRowClass<Row>} [rowClass]
-   * @restProps {div}
    */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }} DataTableRowClassArgs
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {string | ((row: DataTableRowClassArgs<Row>) => string | undefined)} DataTableRowClass
+   */
+
+  /** @restProps {div} */
 
   /**
    * Dispatched when the virtualized table body is scrolled near the bottom

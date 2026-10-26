@@ -1,5 +1,11 @@
 <script context="module">
   /**
+   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
+   * @typedef {0 | SpacingScale | string} SpacingValue
+   * @typedef {0 | SpacingScale | string} OffsetValue
+   */
+
+  /**
    * Whether `value` is a spacing-scale step (rendered as a class rather than
    * inline style). Spacing steps start at 1; offsets also allow 0.
    * @param {unknown} value @param {number} min
@@ -87,13 +93,9 @@
 </script>
 
 <script>
-  /**
-   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
-   * @typedef {0 | SpacingScale | string} SpacingValue
-   * @typedef {0 | SpacingScale | string} OffsetValue
-   * @template {keyof HTMLElementTagNameMap} [Tag="div"]
-   * @slot {{}}
-   */
+  /** @template {keyof HTMLElementTagNameMap} [Tag="div"] */
+
+  /** @slot {{}} */
 
   /**
    * Set the background fill using a Carbon theme token.

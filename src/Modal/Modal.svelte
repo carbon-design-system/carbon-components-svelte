@@ -1,16 +1,27 @@
 <script>
+  /** @template [Icon=any] */
+
   /**
-   * @template [Icon=any]
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "close-button" | "programmatic"} trigger
-   * @event {null} open
+   */
+
+  /** @event {null} open */
+
+  /**
    * @event transitionend
    * @type {object}
    * @property {boolean} open
+   */
+
+  /**
    * @event click:button--secondary
    * @type {object}
    * @property {string} text
+   */
+
+  /**
    * @event {null} loading:success - Dispatched when `loadingStatus` is `"finished"`, after the `InlineLoading` success delay.
    * @restProps {div}
    */

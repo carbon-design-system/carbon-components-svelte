@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"../Button/Button.svelte"} ButtonProps */
+  /** @extendProps {"../Button/Button.svelte"} ButtonProps */
 
   import { getContext } from "svelte";
   import Button from "../Button/Button.svelte";

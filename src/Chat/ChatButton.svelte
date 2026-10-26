@@ -1,7 +1,7 @@
 <script>
   /**
    * @template [Icon=any]
-   * @extends {"../Button/Button.svelte"} ButtonProps
+   * @extendProps {"../Button/Button.svelte"} ButtonProps
    */
 
   /**

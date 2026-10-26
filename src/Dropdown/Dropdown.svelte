@@ -3,14 +3,19 @@
    * @template {DropdownItem<any>} [Item=DropdownItem<any>]
    */
 
+  /** @restProps {div} */
+
   /**
-   * @restProps {div}
-   * @typedef {object} DropdownItem<Id=any>
+   * @template [Id=any]
+   * @typedef {object} DropdownItem
    * @property {Id} id
    * @property {string} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @property {any} [icon] - Icon component shown left of the item text
    * @property {string} [group] - Group label. Items sharing a label render together under a non-selectable header, ungrouped items first and groups in order of first appearance.
+   */
+
+  /**
    * @event select
    * @type {object}
    * @property {Item["id"]} selectedId
