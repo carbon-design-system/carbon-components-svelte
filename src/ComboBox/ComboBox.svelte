@@ -28,12 +28,16 @@
    */
 
   /**
-   * @typedef {object} ComboBoxItem<Id=any>
+   * @template [Id=any]
+   * @typedef {object} ComboBoxItem
    * @property {Id} id
    * @property {string} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @property {any} [icon] - Icon component shown left of the item text
    * @property {string} [group] - Group label. Items sharing a label render together under a non-selectable header, ungrouped items first and groups in order of first appearance. A group with no items matching the filter is hidden.
+   */
+
+  /**
    * @event select
    * @type {object}
    * @property {Item["id"]} selectedId

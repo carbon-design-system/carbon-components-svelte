@@ -2,10 +2,16 @@
   /**
    * @template {import("./DataTable.svelte").DataTableRow} [Row=import("./DataTable.svelte").DataTableRow]
    * @restProps {button}
+   */
+
+  /**
    * @event change
    * @type {object}
    * @property {ReadonlyArray<import("./DataTable.svelte").DataTableHeader<Row>>} headers
    * @property {import("../utils/column-settings.js").ColumnSettings} settings
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "select"} trigger

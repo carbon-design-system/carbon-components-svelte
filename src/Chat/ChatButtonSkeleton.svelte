@@ -1,6 +1,6 @@
 <script>
   /**
-   * @extends {"../Button/ButtonSkeleton.svelte"} ButtonSkeletonProps
+   * @extendProps {"../Button/ButtonSkeleton.svelte"} ButtonSkeletonProps
    */
 
   /**

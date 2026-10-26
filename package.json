@@ -111,7 +111,7 @@
     "lightningcss": "^1.33.0",
     "ostia": "^0.2.12",
     "sass-embedded": "^1.105.0",
-    "sveld": "^0.38.10",
+    "sveld": "^0.38.12",
     "svelte": "^5.57.1",
     "svelte-check": "^4.7.6",
     "typescript": "^6.0.3",

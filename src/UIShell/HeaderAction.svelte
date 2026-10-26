@@ -1,9 +1,13 @@
 <script>
+  /** @template [Icon=any] */
+
   /**
-   * @template [Icon=any]
    * @event open
    * @type {object}
    * @property {"toggle"} trigger
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"outside-click" | "toggle" | "escape-key" | "select"} trigger

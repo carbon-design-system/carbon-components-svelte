@@ -275,9 +275,11 @@
 </script>
 
 <script>
+  /** @template {TreeNode<any>} [Node=TreeNode<any>] */
+
   /**
-   * @generics {Node extends TreeNode<any> = TreeNode<any>} Node
-   * @typedef {object} TreeNode<Id=(string|number)>
+   * @template [Id=(string|number)]
+   * @typedef {object} TreeNode
    * @property {Id} id
    * @property {any} text
    * @property {any} [icon]
@@ -286,37 +288,76 @@
    * @property {string} [target] - Optional link target (e.g., "_blank")
    * @property {boolean} [hasChildren] - Whether the node has children that have not been loaded yet. Renders an expander even without a `nodes` array; expanding fires `toggle` so children can be loaded lazily.
    * @property {TreeNode<Id>[]} [nodes]
+   */
+
+  /**
    * @typedef {object} ShowNodeOptions
    * @property {boolean} [expand] - Whether to expand the node and its ancestors (default: true)
    * @property {boolean} [select] - Whether to select the node (default: true)
    * @property {boolean} [focus] - Whether to focus the node (default: true)
-   * @typedef {object} TreeViewExpandedChange<Id=(string|number)>
+   */
+
+  /**
+   * @template [Id=(string|number)]
+   * @typedef {object} TreeViewExpandedChange
    * @property {ReadonlyArray<Id>} expandedIds - The full set of expanded node ids after the change
    * @property {Array<Id>} added - Node ids expanded since the previous change
    * @property {Array<Id>} removed - Node ids collapsed since the previous change
-   * @typedef {object} TreeViewSelectionChange<Id=(string|number)>
+   */
+
+  /**
+   * @template [Id=(string|number)]
+   * @typedef {object} TreeViewSelectionChange
    * @property {ReadonlyArray<Id>} selectedIds - The full set of selected node ids after the change
    * @property {Array<Id>} added - Node ids selected since the previous change
    * @property {Array<Id>} removed - Node ids deselected since the previous change
-   * @typedef {object} TreeViewCheckChange<Id=(string|number)>
+   */
+
+  /**
+   * @template [Id=(string|number)]
+   * @typedef {object} TreeViewCheckChange
    * @property {ReadonlyArray<Id>} checkedIds - The full set of checked node ids after the change
    * @property {Array<Id>} added - Node ids checked since the previous change
    * @property {Array<Id>} removed - Node ids unchecked since the previous change
    * @property {ReadonlyArray<Id>} indeterminateIds - The partially checked node ids after the change
+   */
+
+  /**
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }}
    * @slot {{ node: Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean; } }} childNodes
+   */
+
+  /**
    * @event select
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   */
+
+  /**
    * @event toggle
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   */
+
+  /**
    * @event toggle:change
    * @type {TreeViewExpandedChange<Node["id"]>}
+   */
+
+  /**
    * @event focus
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   */
+
+  /**
    * @event select:change
    * @type {TreeViewSelectionChange<Node["id"]>}
+   */
+
+  /**
    * @event check
    * @type {Node & { expanded: boolean; leaf: boolean; selected: boolean; checked: boolean; indeterminate: boolean }}
+   */
+
+  /**
    * @event check:change
    * @type {TreeViewCheckChange<Node["id"]>}
    */

@@ -49,14 +49,19 @@
    * @template {MultiSelectItem<any>} [Item=MultiSelectItem<any>]
    */
 
+  /** @typedef {string} MultiSelectItemText */
+
   /**
-   * @typedef {string} MultiSelectItemText
-   * @typedef {object} MultiSelectItem<Id=any>
+   * @template [Id=any]
+   * @typedef {object} MultiSelectItem
    * @property {Id} id
    * @property {MultiSelectItemText} text
    * @property {boolean} [disabled] - Whether the item is disabled
    * @property {boolean} [isSelectAll] - Whether this item acts as a "select all" toggle
    * @property {string} [group] - Group label. Items sharing a label render together under a non-selectable header, groups in order of first appearance and `sortItem` sorting within each group.
+   */
+
+  /**
    * @event select
    * @type {object}
    * @property {Item["id"][]} selectedIds

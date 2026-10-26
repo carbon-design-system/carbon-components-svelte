@@ -1,6 +1,5 @@
-<script>
+<script generics="Node extends RecursiveListNode = RecursiveListNode">
   /**
-   * @template {RecursiveListNode} [Node=RecursiveListNode]
    * @typedef {object} RecursiveListNode
    * @property {string | number} [id] - Unique node identifier; used as the each-block key when provided
    * @property {string} [text] - Node text content

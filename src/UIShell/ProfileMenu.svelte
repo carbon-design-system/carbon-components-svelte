@@ -3,11 +3,15 @@
    * @event open
    * @type {object}
    * @property {"toggle"} trigger
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"outside-click" | "toggle" | "escape-key" | "select"} trigger
-   * @slot {{}} avatar - Trigger avatar. Falls back to a placeholder.
    */
+
+  /** @slot {{}} avatar - Trigger avatar. Falls back to a placeholder. */
 
   /**
    * Set to `true` to open the menu.

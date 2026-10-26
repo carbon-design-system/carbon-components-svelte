@@ -1,4 +1,6 @@
 <script context="module">
+  /** @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme */
+
   /** @type {Record<CarbonTheme, string>} */
   export const themes = {
     white: "White",
@@ -16,7 +18,6 @@
    */
 
   /**
-   * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
    * @typedef {import("./carbon-tokens").CarbonToken} CarbonToken
    * @event update
    * @type {object}

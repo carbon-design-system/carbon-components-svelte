@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"../SkeletonPlaceholder/SkeletonPlaceholder.svelte"} SkeletonPlaceholderProps */
+  /** @extendProps {"../SkeletonPlaceholder/SkeletonPlaceholder.svelte"} SkeletonPlaceholderProps */
 
   import SkeletonPlaceholder from "../SkeletonPlaceholder/SkeletonPlaceholder.svelte";
 

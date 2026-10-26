@@ -1,4 +1,9 @@
 <script context="module">
+  /**
+   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
+   * @typedef {SpacingScale | string} SpacingValue
+   */
+
   /** @param {unknown} value */
   function isScaleStep(value) {
     return typeof value === "number" && value >= 1 && value <= 13;
@@ -20,12 +25,9 @@
 </script>
 
 <script>
-  /**
-   * @typedef {1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13} SpacingScale
-   * @typedef {SpacingScale | string} SpacingValue
-   * @template {keyof HTMLElementTagNameMap} [Tag="div"]
-   * @slot {{}}
-   */
+  /** @template {keyof HTMLElementTagNameMap} [Tag="div"] */
+
+  /** @slot {{}} */
 
   /**
    * Set a negative margin on the left and right edges. Numbers `1`–`13` use the shared layout scale, cancelling `Box`'s `paddingX` at the same step; strings accept any CSS length. Overridden per side by `left`/`right`.

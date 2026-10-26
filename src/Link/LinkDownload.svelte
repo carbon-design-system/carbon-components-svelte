@@ -1,5 +1,5 @@
 <script>
-  /** @extends {"./Link.svelte"} LinkProps */
+  /** @extendProps {"./Link.svelte"} LinkProps */
 
   /**
    * @event download

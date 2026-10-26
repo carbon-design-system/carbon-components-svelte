@@ -5,9 +5,15 @@
    * @slot {{}} titleChildren
    * @event confirm
    * @event {{ error: unknown }} confirm:error
+   */
+
+  /**
    * @event cancel
    * @type {object}
    * @property {"escape-key" | "outside-click" | "close-button" | "cancel-button"} trigger
+   */
+
+  /**
    * @event close
    * @type {object}
    * @property {"escape-key" | "outside-click" | "close-button" | "programmatic"} trigger
