@@ -75,7 +75,7 @@
    */
   export let overflowTooltipText = undefined;
 
-  import { setContext } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
@@ -85,7 +85,7 @@
 
   /** @type {import("svelte/store").Writable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
   const items = writable([]);
-  const sharedMax = writable(0);
+  const sharedMax = writable(Number.isFinite(max) && max > 0 ? max : 0);
   const sharedSize = writable(size);
   // Avatar tooltips hand off to each other, and to the rest of an enclosing
   // `TooltipGroup`.
@@ -108,10 +108,38 @@
   // still missing not-yet-flushed registrations.
   const batchedItemsUpdate = batchStoreUpdates(items);
 
+  // Avatars register once mounted. Before that, each claims its place (and
+  // name) as it initializes, in document order on the server and during
+  // hydration, so the first paint already hides the avatars past `max` and
+  // shows the "+N" avatar. A closure, not state: the overflow avatar reads
+  // the claims once, after the avatars have rendered.
+  let mounted = false;
+  const claims = (() => {
+    /** @type {(string | undefined)[]} */
+    const names = [];
+    return {
+      /** @type {(name: string | undefined) => number} */
+      claim: (name) => (mounted ? -1 : names.push(name) - 1),
+      names: () => names,
+    };
+  })();
+  onMount(() => {
+    mounted = true;
+  });
+
+  /**
+   * @param {string | undefined} name
+   * @returns {number}
+   */
+  function claimAvatar(name) {
+    return claims.claim(name);
+  }
+
   setContext("carbon:UserAvatarGroup", {
     items,
     max: sharedMax,
     size: sharedSize,
+    claimAvatar,
     /** @param {{ id: string; name: string; node?: HTMLElement }} item */
     register: ({ id, name, node }) => {
       batchedItemsUpdate((current) =>
@@ -146,20 +174,44 @@
     },
   });
 
-  // Number of avatars actually shown: capped at `max` unless `max` is 0.
-  $: visibleCount = hasLimit ? Math.min($items.length, max) : $items.length;
-  // The total represented; defaults to the slotted count. Overflow is everyone
-  // past the visible slots, including people not rendered when `total` is set.
-  $: effectiveTotal = total ?? $items.length;
-  $: overflowCount = Math.max(0, effectiveTotal - visibleCount);
-  // Cap the label so it always fits the circle; counts above 99 read as "99+".
-  $: overflowLabel = overflowCount > 99 ? "99+" : `+${overflowCount}`;
-  // Names are known only for the slotted avatars past the visible ones.
-  $: hiddenNames = $items
-    .slice(visibleCount)
-    .map((item) => item.name)
-    .filter(Boolean);
-  $: overflowTooltip = overflowTooltipText ?? hiddenNames.join(", ");
+  /**
+   * The "+N" avatar for avatars with these names, in order. Arguments, not
+   * component state, so Svelte 3 and 4 re-run it when they change.
+   * @param {(string | undefined)[]} names
+   * @param {number} limit
+   * @param {number | undefined} totalCount
+   * @param {string | undefined} tooltipText
+   */
+  function overflowFor(names, limit, totalCount, tooltipText) {
+    // Shown: capped at `max` unless `max` is 0 (no limit).
+    const limited = Number.isFinite(limit) && limit > 0;
+    const visible = limited ? Math.min(names.length, limit) : names.length;
+    // The total represented; defaults to the slotted count. Overflow is
+    // everyone past the visible slots, including people not rendered when
+    // `total` is set.
+    const count = Math.max(0, (totalCount ?? names.length) - visible);
+    return {
+      count,
+      // Capped so it always fits the circle; above 99 reads as "99+".
+      label: count > 99 ? "99+" : `+${count}`,
+      // Names are known only for the slotted avatars past the visible ones.
+      names: tooltipText ?? names.slice(visible).filter(Boolean).join(", "),
+    };
+  }
+
+  $: overflow = overflowFor(
+    $items.map((item) => item.name),
+    max,
+    total,
+    overflowTooltipText,
+  );
+
+  /** @type {(isMounted: boolean, registered: ReturnType<typeof overflowFor>) => ReturnType<typeof overflowFor>} */
+  function shownOverflow(isMounted, registered) {
+    return isMounted
+      ? registered
+      : overflowFor(claims.names(), max, total, overflowTooltipText);
+  }
 
   // Overlap (stacked) when no gap is set, or when a negative gap tightens the
   // stack; a positive gap switches to a spaced row.
@@ -211,7 +263,10 @@
   style={groupStyle}
 >
   <slot />
-  {#if overflowCount > 0}
-    <UserAvatarGroupOverflow label={overflowLabel} names={overflowTooltip} />
+  {#if shownOverflow(mounted, overflow).count > 0}
+    <UserAvatarGroupOverflow
+      label={shownOverflow(mounted, overflow).label}
+      names={shownOverflow(mounted, overflow).names}
+    />
   {/if}
 </Stack>

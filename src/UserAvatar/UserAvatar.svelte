@@ -162,6 +162,8 @@
   const groupItems = userAvatarGroup?.items ?? readable([]);
   const groupMax = userAvatarGroup?.max ?? readable(0);
   const groupSize = userAvatarGroup?.size ?? readable(undefined);
+  // This avatar's place before it registers on mount (see `claimAvatar`).
+  const claimed = userAvatarGroup?.claimAvatar?.(name) ?? -1;
 
   if (userAvatarGroup) {
     // Register once mounted so the group can sort registrations into DOM order
@@ -183,11 +185,12 @@
     : -1;
   // Avatars past the group's `max` are hidden (the group renders a "+N" overflow
   // avatar in their place). `$groupMax` of 0 means "no limit."
+  $: placeIndex = groupIndex >= 0 ? groupIndex : claimed;
   $: groupOverflow =
     userAvatarGroup &&
     $groupMax > 0 &&
-    groupIndex >= 0 &&
-    groupIndex >= $groupMax;
+    placeIndex >= 0 &&
+    placeIndex >= $groupMax;
   // Fall back to the group's size, then to "md".
   $: resolvedSize = size ?? $groupSize ?? "md";
   $: imageAlt = imageDescription ?? imageAttributes?.alt ?? name ?? "";
