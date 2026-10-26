@@ -565,9 +565,9 @@
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
           data-invalid={showInvalid || undefined}
-          aria-invalid={showInvalid || undefined}
+          aria-invalid={showInvalid ? "true" : undefined}
           aria-label={labelText ? undefined : ariaLabel}
-          aria-readonly={readonly || undefined}
+          aria-readonly={readonly ? "true" : undefined}
           {disabled}
           {id}
           {max}
@@ -615,9 +615,9 @@
           inputmode="decimal"
           aria-errormessage={hasErrorMessage ? errorId : undefined}
           data-invalid={showInvalid || undefined}
-          aria-invalid={showInvalid || undefined}
+          aria-invalid={showInvalid ? "true" : undefined}
           aria-label={labelText ? undefined : ariaLabel}
-          aria-readonly={readonly || undefined}
+          aria-readonly={readonly ? "true" : undefined}
           {disabled}
           {id}
           {name}

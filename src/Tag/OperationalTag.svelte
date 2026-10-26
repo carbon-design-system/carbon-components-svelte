@@ -251,7 +251,7 @@
     type="button"
     {id}
     {disabled}
-    aria-expanded={hasContent ? open : undefined}
+    aria-expanded={hasContent ? String(open) : undefined}
     aria-controls={hasContent ? contentId : undefined}
     tabindex={$rovingTabindex}
     title={disabled && truncated ? truncationLabel : undefined}

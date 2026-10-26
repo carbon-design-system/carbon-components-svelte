@@ -194,7 +194,7 @@
                   use:formReset={handleFormReset}
                   bind:value
                   type="text"
-                  aria-invalid={showInvalid || undefined}
+                  aria-invalid={showInvalid ? "true" : undefined}
                   aria-errormessage={showInvalid && invalidText
                     ? errorId
                     : undefined}
@@ -300,7 +300,7 @@
               bind:value
               type="text"
               data-invalid={showInvalid || undefined}
-              aria-invalid={showInvalid || undefined}
+              aria-invalid={showInvalid ? "true" : undefined}
               aria-errormessage={showInvalid && invalidText
                 ? errorId
                 : undefined}

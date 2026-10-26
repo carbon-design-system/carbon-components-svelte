@@ -10,7 +10,7 @@
 
   $: labelled = $$props["aria-label"] || $$props["aria-labelledby"] || title;
   $: attributes = {
-    "aria-hidden": labelled ? undefined : true,
+    "aria-hidden": labelled ? undefined : "true",
     role: labelled ? "img" : undefined,
     focusable: Number($$props.tabindex) === 0 ? "true" : undefined,
   };

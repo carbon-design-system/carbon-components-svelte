@@ -297,7 +297,7 @@
     href={disabled ? undefined : href}
     role={disabled ? "link" : undefined}
     {id}
-    aria-disabled={disabled || undefined}
+    aria-disabled={disabled ? "true" : undefined}
     tabindex={$rovingTabindex}
     rel={resolveLinkRel($$restProps.target)}
     data-overflow={$groupOverflow ? "true" : undefined}
@@ -348,7 +348,7 @@
     type="button"
     {id}
     {disabled}
-    aria-disabled={disabled}
+    aria-disabled={String(disabled)}
     tabindex={disabled ? -1 : $rovingTabindex}
     title={nativeTitle}
     data-overflow={$groupOverflow ? "true" : undefined}

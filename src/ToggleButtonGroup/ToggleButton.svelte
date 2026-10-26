@@ -158,7 +158,7 @@
 <button
   bind:this={ref}
   type="button"
-  aria-pressed={pressed}
+  aria-pressed={String(pressed)}
   aria-label={hasIconOnly ? iconDescription : undefined}
   disabled={isDisabled || undefined}
   tabindex={isTabStop ? 0 : -1}

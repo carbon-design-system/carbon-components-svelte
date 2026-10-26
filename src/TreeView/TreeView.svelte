@@ -2223,7 +2223,7 @@
       (hideLabel ? labelText : undefined)}
     aria-labelledby={$$restProps["aria-labelledby"] ??
       (hideLabel || $$restProps["aria-label"] ? undefined : labelId)}
-    aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
+    aria-multiselectable={isMultiselect || isCheckboxMode ? "true" : undefined}
     on:mousedown|capture={syncModifierFromEvent}
     on:selectstart|capture={handleMultiselectSelectStart}
     on:scroll={handleVirtualScroll}
@@ -2268,7 +2268,7 @@
       (hideLabel ? labelText : undefined)}
     aria-labelledby={$$restProps["aria-labelledby"] ??
       (hideLabel || $$restProps["aria-label"] ? undefined : labelId)}
-    aria-multiselectable={isMultiselect || isCheckboxMode || undefined}
+    aria-multiselectable={isMultiselect || isCheckboxMode ? "true" : undefined}
     on:mousedown|capture={syncModifierFromEvent}
     on:selectstart|capture={handleMultiselectSelectStart}
     on:keydown

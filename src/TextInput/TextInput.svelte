@@ -325,7 +325,7 @@
         use:preserveFocusSelection={selectTextOnFocus && !disabled}
         use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
-        aria-invalid={showInvalid || undefined}
+        aria-invalid={showInvalid ? "true" : undefined}
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid && invalidText ? errorId : undefined}
         {disabled}

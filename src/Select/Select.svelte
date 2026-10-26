@@ -298,8 +298,8 @@
         >
           <select
             bind:this={ref}
-            aria-invalid={showInvalid || undefined}
-            aria-readonly={readonly || undefined}
+            aria-invalid={showInvalid ? "true" : undefined}
+            aria-readonly={readonly ? "true" : undefined}
             disabled={disabled || undefined}
             required={required || undefined}
             {id}
@@ -383,8 +383,8 @@
           {name}
           disabled={disabled || undefined}
           required={required || undefined}
-          aria-invalid={showInvalid || undefined}
-          aria-readonly={readonly || undefined}
+          aria-invalid={showInvalid ? "true" : undefined}
+          aria-readonly={readonly ? "true" : undefined}
           class:bx--select-input={true}
           class:bx--select-input--xs={effectiveSize === "xs"}
           class:bx--select-input--sm={effectiveSize === "sm"}

@@ -1683,18 +1683,18 @@
             use:preserveFocusSelection={selectTextOnFocus && !disabled}
             use:formReset={handleFilterFormReset}
             bind:value
-            aria-invalid={showInvalid || undefined}
-            aria-required={required || undefined}
+            aria-invalid={showInvalid ? "true" : undefined}
+            aria-required={required ? "true" : undefined}
             {...$$restProps}
             role="combobox"
             tabindex="0"
             autocomplete="off"
             aria-autocomplete="list"
             aria-haspopup="listbox"
-            aria-expanded={open}
+            aria-expanded={String(open)}
             aria-activedescendant={activeDescendantId}
-            aria-disabled={disabled || undefined}
-            aria-readonly={readonly || undefined}
+            aria-disabled={disabled ? "true" : undefined}
+            aria-readonly={readonly ? "true" : undefined}
             aria-controls={open ? menuId : undefined}
             aria-describedby={joinDescribedBy(
               fieldDescribedById,
@@ -1834,7 +1834,7 @@
           {...$$restProps}
           role="combobox"
           tabindex="0"
-          aria-expanded={open}
+          aria-expanded={String(open)}
           aria-activedescendant={activeDescendantId}
           aria-controls={open ? menuId : undefined}
           aria-describedby={joinDescribedBy(

@@ -405,7 +405,7 @@
       trapFocus({ container: navRef, event });
     }
   }}
-  aria-hidden={rail ? undefined : !isOpen}
+  aria-hidden={rail ? undefined : String(!isOpen)}
   aria-label={ariaLabel}
   class:bx--side-nav__navigation={true}
   class:bx--side-nav={true}

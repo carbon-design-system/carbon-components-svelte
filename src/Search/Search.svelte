@@ -321,9 +321,9 @@
       {readonly}
       {id}
       {placeholder}
-      aria-busy={loading || undefined}
+      aria-busy={loading ? "true" : undefined}
       data-invalid={showInvalid || undefined}
-      aria-invalid={showInvalid || undefined}
+      aria-invalid={showInvalid ? "true" : undefined}
       data-warn={showWarn || undefined}
       aria-errormessage={showInvalid && invalidText ? errorId : undefined}
       {...$$restProps}

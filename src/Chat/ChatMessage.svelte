@@ -98,7 +98,7 @@
   class:bx--chat-message--continued={continued}
   class:bx--chat-message--streaming={streaming}
   class:bx--chat-message--with-status={!!status && !typing}
-  aria-busy={streaming || undefined}
+  aria-busy={streaming ? "true" : undefined}
   {...$$restProps}
 >
   {#if from === "them"}

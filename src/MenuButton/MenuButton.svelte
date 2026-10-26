@@ -149,7 +149,7 @@
     {...$$restProps}
     class={iconTriggerClass}
     aria-haspopup="menu"
-    aria-expanded={open}
+    aria-expanded={String(open)}
     aria-label={$$restProps["aria-label"] ?? labelText}
     on:mousedown|preventDefault
     on:mousedown

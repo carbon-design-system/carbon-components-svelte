@@ -122,7 +122,7 @@
   <button
     type="button"
     bind:this={ref}
-    aria-expanded={expanded}
+    aria-expanded={String(expanded)}
     class:bx--side-nav__submenu={true}
     {...$$restProps}
     on:click

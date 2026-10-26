@@ -131,7 +131,7 @@
 <div
   bind:this={ref}
   style:min-height={shown ? undefined : toCssLength(estimatedHeight)}
-  aria-busy={!shown || undefined}
+  aria-busy={shown ? undefined : "true"}
   {...$$restProps}
 >
   {#if shown}

@@ -445,7 +445,7 @@
       use:preserveFocusSelection={selectTextOnFocus && !disabled}
       use:formReset={handleFormReset}
       bind:value
-      aria-invalid={showInvalid || overCount || undefined}
+      aria-invalid={showInvalid || overCount ? "true" : undefined}
       aria-errormessage={errorMessageId}
       data-warn={showWarn || undefined}
       {disabled}

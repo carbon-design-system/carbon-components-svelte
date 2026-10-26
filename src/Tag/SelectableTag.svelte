@@ -108,11 +108,11 @@
 <button
   bind:this={buttonRef}
   type="button"
-  aria-pressed={selected}
+  aria-pressed={String(selected)}
   data-overflow={$groupOverflow ? "true" : undefined}
   {id}
   {disabled}
-  aria-disabled={disabled}
+  aria-disabled={String(disabled)}
   tabindex={disabled ? -1 : $rovingTabindex}
   title={disabled && truncated ? truncationLabel : undefined}
   class:bx--tag={true}

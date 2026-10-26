@@ -641,7 +641,7 @@
   type="button"
   {disabled}
   aria-haspopup="menu"
-  aria-expanded={open}
+  aria-expanded={String(open)}
   aria-controls={open ? menuId : undefined}
   {id}
   class:bx--overflow-menu={true}
