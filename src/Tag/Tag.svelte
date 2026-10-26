@@ -348,7 +348,7 @@
     type="button"
     {id}
     {disabled}
-    aria-disabled={String(disabled)}
+    aria-disabled={disabled ? "true" : "false"}
     tabindex={disabled ? -1 : $rovingTabindex}
     title={nativeTitle}
     data-overflow={$groupOverflow ? "true" : undefined}

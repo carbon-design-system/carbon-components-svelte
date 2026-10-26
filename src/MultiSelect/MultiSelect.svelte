@@ -1691,7 +1691,7 @@
             autocomplete="off"
             aria-autocomplete="list"
             aria-haspopup="listbox"
-            aria-expanded={String(open)}
+            aria-expanded={open ? "true" : "false"}
             aria-activedescendant={activeDescendantId}
             aria-disabled={disabled ? "true" : undefined}
             aria-readonly={readonly ? "true" : undefined}
@@ -1834,7 +1834,7 @@
           {...$$restProps}
           role="combobox"
           tabindex="0"
-          aria-expanded={String(open)}
+          aria-expanded={open ? "true" : "false"}
           aria-activedescendant={activeDescendantId}
           aria-controls={open ? menuId : undefined}
           aria-describedby={joinDescribedBy(

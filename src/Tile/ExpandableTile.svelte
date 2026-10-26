@@ -254,7 +254,7 @@
     bind:this={ref}
     type={interactive ? undefined : "button"}
     {id}
-    aria-expanded={interactive ? undefined : String(expanded)}
+    aria-expanded={interactive ? undefined : expanded ? "true" : "false"}
     aria-controls={interactive ? undefined : `${id}-content`}
     tabindex={interactive ? undefined : tabindex}
     title={interactive ? undefined : iconText}

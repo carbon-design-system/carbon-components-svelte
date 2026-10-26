@@ -454,7 +454,11 @@
       role={richMenu ? "combobox" : undefined}
       aria-autocomplete="list"
       aria-controls={active ? menuId : undefined}
-      aria-expanded={richMenu ? String(richMenuVisible) : undefined}
+      aria-expanded={richMenu
+        ? richMenuVisible
+          ? "true"
+          : "false"
+        : undefined}
       aria-activedescendant={active
         ? richMenu
           ? ($highlightedId ?? undefined)
