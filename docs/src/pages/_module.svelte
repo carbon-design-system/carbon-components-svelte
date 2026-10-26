@@ -377,6 +377,11 @@
           href={$url("/tokens")}
           isSelected={$isActive($url("/tokens"))}
         />
+        <SideNavLink
+          text="Dev tools kitchen sink"
+          href={$url("/dev-tools-kitchen-sink")}
+          isSelected={$isActive($url("/dev-tools-kitchen-sink"))}
+        />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
           <Text

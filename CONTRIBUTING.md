@@ -143,6 +143,11 @@ Patterns:
 - Move an overlay that a box would cut off to a portal by default. Leave `portalMenu` or `portalTooltip` unset for that; `false` keeps the overlay in place, and `true` always portals it. Dropdown, OverflowMenu, TooltipIcon and Toggletip work this way. Two things follow:
   - Consumer CSS that reaches the overlay through a descendant selector stops matching in the portal. `.sidebar .bx--list-box__menu` no longer finds a menu that moved out of `.sidebar`.
   - Key handlers on the component's root no longer see key presses from inside the portal. When focusable content moves into a portal, add a keyboard e2e: focus stays on the active item, and Escape returns focus to the trigger. See [`portal-when-clipped.test.ts`](e2e/portal-when-clipped.test.ts).
+- Give text that mixes numbers, symbols, and Latin letters `dir="ltr"` when the page can be RTL. Under `dir="rtl"`, the bidi algorithm reorders strings like `#161616`, `16.4:1`, `+4`, and `58 × 287px` (they read as `161616#` and `4+`). Set it on the element that renders the string, or on the root of a tool whose whole UI is English measurements, such as [`LayoutInspector.svelte`](src/devtools/LayoutInspector/LayoutInspector.svelte). Leave layout that should mirror, such as a grid, in the page's direction.
+- Put a label at the inline end of what it labels by reading that element's computed `direction`, not the page's. One page can mix both directions.
+- Code that measures the page must measure again when `dir`, `lang`, `class`, or `style` changes on `<html>`. These move content without resizing the page, so a `ResizeObserver` misses them, and `<html>` is outside a `MutationObserver` on `document.body`. Observe `document.documentElement` too. See `observePage` in [`page-scan.js`](src/devtools/page-scan.js).
+- A dev tool that scans the page uses `observePage` too. It throttles scans, runs them when the browser is idle, and passes a band around the viewport to scan. Mark anything a tool adds to the page, even a short-lived probe, with `data-ccs-dev-tool`. Otherwise the tool's own DOM changes trigger the next scan, and it loops forever.
+- A runtime `dir` change on `<html>` reaches everything except a `LayoutDirection` subtree, where the wrapper's own `dir` wins. Do not cache the page direction at mount; resolve it when you need it.
 - Keep state per instance. Do not write module-level stores or variables while a component renders: on a server, one request's values leak into the next, and two instances on one page share them. Put per-instance state in context (`setContext` in the owner). SideNav's rail state leaked across requests this way ([#4981](https://github.com/carbon-design-system/carbon-components-svelte/pull/4981)).
 - Check whether a difference from Carbon React is deliberate before you change it to match. Read the `// ccs:` comments, `git log -S`, the tests that pin the behavior, `e2e/forced-colors.test.ts`, and this file. If it is deliberate, keep it. Carbon React has bugs of its own, and this library is ahead in places: forced colors, the Toggletip caret, RTL keys in TreeView. Never regress a forced-colors row or an accessibility test for parity.
 
@@ -620,6 +625,7 @@ Values:
 - Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
 - Spacing tokens: `$carbon--spacing-01` … `-13`. Not the `$spacing-0N` aliases.
 - Color: Carbon v11 theme tokens (`$layer`, `$field`, `$support-error`, …). Prefer the contextual tokens (`$layer`, `$field`, `$border-subtle`), so a surface follows the `Layer` it sits in. Read a numbered one (`$layer-01`) only where v11 pins the level, and list it in `PINNED` in `tests/css/layer.test.ts`. No hex, and no v10 names (`$ui-01`, `$text-01`): `all.css` no longer declares them, and `tests/css/v11-tokens.test.ts` fails on any that reach the CSS. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
+  - Categorical colors with no semantic token (legends, annotations, data marks) come from the Tag token pairs: `get-token-value($tag-colors, "tag-background-magenta")` for the fill and `"tag-color-magenta"` for the line and text on it. Not palette colors such as `$carbon--orange-40`, which stay fixed in every theme. Each pair follows the theme and is contrast-checked as a pair.
 - Give a `<button>` a `color` when no Carbon rule sets one. The browser's default is pure black or white, picked by the page's color scheme, not a theme token. It is a near miss in most themes (`#000` for `#161616`), so review misses it, and on a dark surface in a light page it fails contrast. HeaderSwitcher's trigger sat outside the rule that colors header actions and rendered black on the classic header at 1.3:1 ([#5120](https://github.com/carbon-design-system/carbon-components-svelte/pull/5120)).
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
@@ -654,6 +660,17 @@ Naming:
 - Token utilities are `bx--{block}-{property}-{step}` (`bx--box-p-5`, `bx--type-mono`). Docs, props and SCSS all use the same Carbon v11 token names (`layer-01` is `$layer-01`). Share spacing scale values through [`css/_spacing-scale.scss`](css/_spacing-scale.scss).
 
 Document the mixin with SassDoc (`/// @access private`, `/// @group components`) and use `//` for everything else. Use double quotes. When a partial overrides a single vendored component, say in its header why it could not live in the vendored file.
+
+#### Forced colors
+
+Forced colors (Windows contrast themes) repaint author colors with a few system colors (`Canvas`, `CanvasText`, `Highlight`, `GrayText`, …), drop `box-shadow` and `text-shadow`, and set `background-image` to `none`, so gradients vanish. Check every component that draws with a fill, a shadow, or a gradient.
+
+- A surface that only a shadow sets off from the page (menu, popover, floating bar, card) gets `outline: 1px solid transparent` inside `@include high-contrast-mode { … }`. Forced mode paints the outline in `CanvasText`.
+- Information drawn as a fill or a gradient (grid lines, hatching, chart areas) opts out with `forced-color-adjust: none` and draws in system colors, so it follows the user's palette. Do not keep theme colors when you opt out.
+- Do not tint a large area in forced mode. A system color such as `GrayText` is often bright (green in contrast-black), and a fill over the whole page washes it out. Keep lines and narrow bands.
+- Something that shows a real color, such as a color swatch, opts out and keeps that color. Give it a `CanvasText` edge.
+- Do not carry status in color alone. Off-scale, failing, or selected states also need words, shape, or an outline style, because forced mode can paint them all the same.
+- Put the `@media (forced-colors: active)` block last in the mixin. Cover each fix with a row in `e2e/forced-colors.test.ts`. A component that covers the whole viewport (an overlay) gets its own fixture page instead, so it does not hide the components that page screenshots. See [`dev-aids.test.ts`](e2e/dev-aids.test.ts).
 
 #### Winning the cascade
 
@@ -708,7 +725,7 @@ Tests in `tests/css/` that budget the compiled sheet, each with the number to lo
 
 | Test | Holds |
 | --- | --- |
-| `size-budget.test.ts` | A floor under each sheet, so a compile that drops a module fails, and a ceiling on the opt-in `prose.css`. `all.css` and `white.css` growth is limited per PR instead; see [Size growth](#size-growth). |
+| `size-budget.test.ts` | A floor under each sheet, so a compile that drops a module fails, and a ceiling on the opt-in `prose.css` and `devtools.css`. `all.css` and `white.css` growth is limited per PR instead; see [Size growth](#size-growth). |
 | `not-chains.test.ts` | Selectors with three or more `:not()`. |
 | `media-query-grouping.test.ts` | Number of `(any-hover: hover)` blocks. |
 | `unrendered-classes.test.ts` | Styled `bx--*` classes nothing in `src/` renders. |
@@ -744,7 +761,7 @@ The failing run prints a trailer with the measured amounts. The trailer applies 
 | Extend an existing invariant (`conventions`, `overrides`, `unrendered-*`) before writing a new file | One scan over the sheet is cheaper than another compile-and-find. |
 | Cover forced-colors and `prefers-contrast` fixes with a row in `e2e/forced-colors.test.ts`, not here | Chromium reports forced values from `getComputedStyle`, so the row checks what the user sees, hover and focus cascades included. One fixture page keeps it to a few seconds. |
 | Don't assert that a selector carries the declaration you just added | It fails only if someone deletes that line, breaks on harmless selector refactors, and says nothing about whether the rule wins the cascade (`overrides.test.ts` checks that for every rule). |
-| Don't raise a size limit to fit a feature | `css-size` limits each PR's growth. A PR that needs more says why in a `CSS-Size-Growth` trailer, which reviewers see. Raise `prose.css`'s ceiling only with the same kind of reason. |
+| Don't raise a size limit to fit a feature | `css-size` limits each PR's growth. A PR that needs more says why in a `CSS-Size-Growth` trailer, which reviewers see. Raise the `prose.css` or `devtools.css` ceiling only with the same kind of reason. |
 
 When `check:css:overrides` reports a pair, work out which of the two values is the intended one before deleting anything. The checker proves the earlier declaration never wins; it does not know whether the later one is right. Deleting the flagged half of a `right: $carbon--spacing-03` / `right: auto` pair is how the fluid `CopyInput` button lost its offset.
 
@@ -1030,6 +1047,8 @@ it("marks the `selected` option", () => {
 
 - `onMount`, `afterUpdate`, `bind:this`, and actions do not run on the server, and `window`, `document`, and DOM classes such as `HTMLElement` do not exist. A `$:` block does run, so guard browser APIs in it with `typeof window === "undefined"` or move them into `onMount` or an action such as `dismiss`.
 - A `tick().then()` queued from a `$:` block runs after a server render too. Return early when the element ref is unset; a rejection there is unhandled.
+- A component that measures the page (an overlay, an inspector) reads the DOM only in actions, `onMount`, and event handlers. Its module scope, `$:` blocks, and markup stay free of `window` and `document`, so it server-renders its shell and fills in after mount.
+- Read saved state (`localStorage`, `sessionStorage`) in `onMount`, not during init. The server cannot read it, so a value read at init makes the server and the first client render disagree. See `persist` in [`DevToolbar.svelte`](src/devtools/DevToolbar/DevToolbar.svelte).
 - When the server output is wrong, resolve the initial state synchronously (a registration index each child claims in script order) and let the store win once it is set. Do not move the work into `onMount`.
 - Only test files in the `node` environment compile components for the server. A jsdom test file compiles every `.svelte` import for the client, so it cannot server-render the same fixture. To check hydration, see [Hydration tests](#hydration-tests).
 - [`ssr-smoke.ssr.test.ts`](tests/ssr-smoke.ssr.test.ts) renders every component in [`src/index.js`](src/index.js) with default props, and again with `open` when it has one, and fails on a throw or on `undefined`, `[object Object]`, or `NaN` in the output. A new child component that needs its parent's context goes in its `NEEDS_PARENT` list.
