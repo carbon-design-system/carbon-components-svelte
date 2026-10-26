@@ -339,6 +339,31 @@
     height: $carbon--spacing-08;
   }
 
+  // ccs: an inline snippet's skeleton sits in its line of text, as tall as
+  // the snippet and about as wide as its code: `--ccs-code-snippet-chars`
+  // characters of the code font, plus the code's padding and the border.
+  .#{$prefix}--snippet--inline.#{$prefix}--skeleton {
+    @include skeleton($omit: (padding));
+    @include type-style('code-01');
+
+    display: inline-block;
+    width: calc(
+      var(--ccs-code-snippet-chars, 12) * 1ch + #{2 * $carbon--spacing-03} +
+        4px
+    );
+    // Stands in for the snippet's 2px border, which `skeleton` removes.
+    padding: 2px 0;
+    border-radius: 4px;
+
+    // A hidden character of the code font gives the skeleton the snippet's
+    // baseline, so it lines up with the text around it as the snippet does.
+    // ASCII, so the stylesheet's encoding can't garble it.
+    &::after {
+      content: '0';
+      visibility: hidden;
+    }
+  }
+
   .#{$prefix}--snippet.#{$prefix}--skeleton span {
     @include skeleton;
 

@@ -476,6 +476,7 @@
   <CodeSnippetSkeleton
     {type}
     rows={code ? code.replace(/\n$/, "").split("\n").length : undefined}
+    chars={code ? code.length : undefined}
     {minCollapsedNumberOfRows}
     {maxCollapsedNumberOfRows}
     {...$$restProps}

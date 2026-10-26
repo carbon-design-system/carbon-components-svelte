@@ -69,6 +69,17 @@ describe("CodeSnippet", () => {
     expect(onCollapse).not.toHaveBeenCalled();
   });
 
+  it("renders the inline variant's skeleton inline, as wide as its code", () => {
+    const { container } = render(CodeSnippet, {
+      props: { type: "inline", skeleton: true, code: "rm -rf node_modules/" },
+    });
+
+    const skeleton = container.querySelector(".bx--skeleton");
+    expect(skeleton?.tagName).toBe("SPAN");
+    expect(skeleton).toHaveClass("bx--snippet--inline");
+    expectInlineStyle(skeleton, { "--ccs-code-snippet-chars": "20" });
+  });
+
   it("announces copy feedback for the inline variant", async () => {
     mockClipboard();
 

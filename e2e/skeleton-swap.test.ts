@@ -66,6 +66,8 @@ const cases = [
   "page-header-sm",
   "code-snippet-single",
   "code-snippet-multi",
+  // In a line of text, so a skeleton that breaks or grows the line fails.
+  "code-snippet-inline",
   ...[1, 4, 8, 15].flatMap((lines) => [
     `code-snippet-multi-${lines}`,
     `code-snippet-skeleton-prop-${lines}`,
