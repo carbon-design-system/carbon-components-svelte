@@ -82,6 +82,7 @@
   /** @type {(node: HTMLElement) => void} */
   const unregisterMenuItem = menuItemRegistry.unregister;
 
+  /** @type {null | HTMLUListElement} */
   let menuRef = null;
 
   // Set when the menu, aligned under its trigger's inline start, would run

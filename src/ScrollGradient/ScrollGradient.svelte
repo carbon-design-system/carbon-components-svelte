@@ -62,10 +62,15 @@
   import { onMount } from "svelte";
   import { observeResize } from "../utils/shared-observer.js";
 
+  /** @type {null | HTMLDivElement} */
   let contentRef = null;
+  /** @type {null | HTMLDivElement} */
   let sentinelTop = null;
+  /** @type {null | HTMLDivElement} */
   let sentinelBottom = null;
+  /** @type {null | HTMLDivElement} */
   let sentinelLeft = null;
+  /** @type {null | HTMLDivElement} */
   let sentinelRight = null;
 
   let xScrollable = false;

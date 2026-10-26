@@ -98,6 +98,7 @@
     "[contenteditable]:not([contenteditable='false'])",
   ].join(", ");
 
+  /** @type {null | HTMLDivElement} */
   let refAbove = null;
   let chevronRef = null;
   let mounted = false;

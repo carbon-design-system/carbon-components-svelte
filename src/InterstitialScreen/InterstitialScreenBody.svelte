@@ -16,6 +16,7 @@
 
   $: isMultiStep = $views.length > 1;
 
+  /** @type {null | HTMLDivElement} */
   let carouselContainer = null;
   /** @type {import("../utils/carousel.js").Carousel | null} */
   let carousel = null;

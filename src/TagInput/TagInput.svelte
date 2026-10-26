@@ -199,7 +199,9 @@
   // Restored when the owning form resets.
   const initialValue = value.slice();
 
+  /** @type {null | HTMLDivElement} */
   let rootRef = null;
+  /** @type {null | HTMLDivElement} */
   let fieldRef = null;
   let draft = "";
   let focused = false;

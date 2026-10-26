@@ -120,9 +120,11 @@
     tabindex: rovingTabindex,
   } = group;
 
+  /** @type {null | HTMLSpanElement} */
   let wrapperRef = null;
   // The popover, in place or in a portal.
   let popoverRef = null;
+  /** @type {null | HTMLSpanElement} */
   let labelRef = null;
   let truncated = false;
   let stopObservingLabel = noop;

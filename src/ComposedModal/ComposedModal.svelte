@@ -98,6 +98,7 @@
     body: `${value}-body`,
   }));
 
+  /** @type {null | HTMLDivElement} */
   let innerModalRef = null;
   let mounted = false;
   // Live ModalFooters. Without one the modal is passive (Carbon v11).

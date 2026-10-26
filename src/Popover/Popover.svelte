@@ -81,6 +81,7 @@
 
   // Marks the popover's place while it's portalled. Its parent is the
   // anchor, as it is for the popover in place.
+  /** @type {null | HTMLSpanElement} */
   let markerRef = null;
 
   // Read when the popover opens: nothing reports a `dir` change. A

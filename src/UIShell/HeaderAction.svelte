@@ -94,6 +94,7 @@
 
   const dispatch = createEventDispatcher();
 
+  /** @type {null | HTMLDivElement} */
   let refPanel = null;
 
   $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);

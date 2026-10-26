@@ -31,6 +31,7 @@
 
   /** @type {ReadonlyArray<any>} */
   let batchSelectedIds = [];
+  /** @type {null | HTMLDivElement} */
   let wrapperRef = null;
   let prevShowActions = false;
 

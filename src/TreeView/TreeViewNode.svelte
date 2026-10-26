@@ -109,6 +109,7 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   let ref = null;
+  /** @type {null | HTMLDivElement} */
   let refLabel = null;
   let prevActiveId;
 

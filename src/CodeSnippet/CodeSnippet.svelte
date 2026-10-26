@@ -264,6 +264,7 @@
   let mounted = false;
   let stopObserving = noop;
 
+  /** @type {null | HTMLDivElement} */
   let containerRef = null;
   let yScrollable = false;
   let atTop = true;

@@ -77,8 +77,11 @@
   const views = writable([]);
   setContext("carbon:Carousel", { views });
 
+  /** @type {null | HTMLDivElement} */
   let viewportRef = null;
+  /** @type {null | HTMLButtonElement} */
   let prevButton = null;
+  /** @type {null | HTMLButtonElement} */
   let nextButton = null;
   let mounted = false;
   let currentIndex = 0;

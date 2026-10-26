@@ -206,6 +206,7 @@
   const layoutDirection = getLayoutDirection();
 
   let closeButtonRef = null;
+  /** @type {null | HTMLDivElement} */
   let innerContentRef = null;
   let mounted = false;
   // Stays `true` through the exit animation, so the panel can play it.

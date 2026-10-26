@@ -222,6 +222,7 @@
 
   let buttonRef = null;
   let primaryButtonRef = null;
+  /** @type {null | HTMLDivElement} */
   let innerModalRef = null;
 
   function focus(node) {

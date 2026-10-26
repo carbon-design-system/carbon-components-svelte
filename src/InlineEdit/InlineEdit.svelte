@@ -130,7 +130,9 @@
   let draft = value;
   let initialValue = value;
   let focused = false;
+  /** @type {null | HTMLDivElement} */
   let containerRef = null;
+  /** @type {null | HTMLInputElement} */
   let inputRef = null;
 
   // Guards ported from Carbon React's EditInPlace: `escaping` suppresses the

@@ -54,7 +54,9 @@
 
   const dispatch = createEventDispatcher();
 
+  /** @type {null | HTMLButtonElement} */
   let buttonRef = null;
+  /** @type {null | HTMLSpanElement} */
   let labelRef = null;
   let truncated = false;
   let stopObservingLabel = noop;
