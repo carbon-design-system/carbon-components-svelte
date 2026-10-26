@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.js-check.json",
+  "compilerOptions": {
+    // Component scripts start without `strict`; `test:src-svelte-types`
+    // holds each one to its error count in scripts/svelte-types-baseline.json.
+    "strict": false
+  },
+  "include": ["src/**/*.svelte", "src/**/*.js"],
+  "exclude": ["node_modules", "src/node_modules", "src/**/index.js"]
+}
