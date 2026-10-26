@@ -16,7 +16,7 @@
   "ContainedList/ContainedListItem.svelte": 2,
   "ContentSwitcher/Switch.svelte": 2,
   "ContextMenu/ContextMenu.svelte": 1,
-  "ContextMenu/ContextMenuOption.svelte": 5,
+  "ContextMenu/ContextMenuOption.svelte": 4,
   "CopyButton/CopyButton.svelte": 2,
   "CopyInput/CopyInput.svelte": 1,
   "DataTable/DataTable.svelte": 26,

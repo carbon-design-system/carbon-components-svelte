@@ -130,6 +130,14 @@ describe("ContextMenuOption does not clobber bound icon and indented props in a 
     const option = screen.getByRole("menuitemcheckbox", { name: "Option 1" });
     expect(option.querySelector(".bx--menu-option__icon")).toBeInTheDocument();
   });
+
+  it("renders no `indented` attribute on an indented option", () => {
+    render(ContextMenuOptionSelectableIconBind);
+
+    expect(
+      screen.getByRole("menuitemcheckbox", { name: "Option 1" }),
+    ).not.toHaveAttribute("indented");
+  });
 });
 
 describe("ContextMenuOption keep open on selection", () => {
