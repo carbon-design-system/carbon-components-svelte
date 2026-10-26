@@ -213,7 +213,7 @@
       <svelte:component this={closeIcon} size={20} />
     </slot>
   {:else}
-    <slot name="icon"> <svelte:component this={icon} size={20} /> </slot>
+    <slot name="icon"><svelte:component this={icon} size={20} /></slot>
   {/if}
   <slot name="textChildren">
     {#if text}

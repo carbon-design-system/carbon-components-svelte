@@ -26,7 +26,6 @@
   export let selectedIds = [];
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-
   import Button from "../Button/Button.svelte";
   import { returnFocus } from "../utils/focus.js";
 

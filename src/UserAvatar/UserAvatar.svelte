@@ -145,8 +145,8 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import User from "../icons/User.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import User from "../icons/User.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { getAvatarBackgroundColor } from "../utils/avatar-color.js";
   import { getInitials } from "../utils/initials.js";
@@ -284,7 +284,7 @@
               src={image}
               alt={imageAlt}
               on:error={handleImageError}
-            >
+            />
           {:else if icon}
             <svelte:component this={icon} size={glyphSize[resolvedSize]} />
           {:else if avatarInitials}
@@ -330,7 +330,7 @@
             src={image}
             alt={imageAlt}
             on:error={handleImageError}
-          >
+          />
         {:else if icon}
           <svelte:component this={icon} size={glyphSize[resolvedSize]} />
         {:else if avatarInitials}
@@ -373,7 +373,7 @@
           src={image}
           alt={imageAlt}
           on:error={handleImageError}
-        >
+        />
       {:else if icon}
         <svelte:component this={icon} size={glyphSize[resolvedSize]} />
       {:else if avatarInitials}
@@ -425,7 +425,7 @@
         src={image}
         alt={imageAlt}
         on:error={handleImageError}
-      >
+      />
     {:else if icon}
       <svelte:component this={icon} size={glyphSize[resolvedSize]} />
     {:else if avatarInitials}

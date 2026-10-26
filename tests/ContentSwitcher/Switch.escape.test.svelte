@@ -13,5 +13,5 @@
     <Switch text="Grid view" icon={Grid} />
     <Switch text="List view" icon={List} />
   </ContentSwitcher>
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

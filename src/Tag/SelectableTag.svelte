@@ -142,7 +142,7 @@
 >
   {#if $$slots.icon || icon}
     <div class:bx--tag__custom-icon={true}>
-      <slot name="icon"> <svelte:component this={icon} /> </slot>
+      <slot name="icon"><svelte:component this={icon} /></slot>
     </div>
   {/if}
   <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>

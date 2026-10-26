@@ -2,11 +2,11 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
-import { mockScrollMetrics, renderManual } from "./helpers";
 import Tabs from "./Tabs.test.svelte";
 import TabsKeyed from "./TabsKeyed.test.svelte";
 import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
+import { mockScrollMetrics, renderManual } from "./helpers";
 
 /**
  * Behavior `Tabs` and `TabsVertical` share. Each row picks the component the

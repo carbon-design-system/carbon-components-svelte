@@ -277,7 +277,7 @@
                   if (allowDeselect && value === star) select(0);
                 }}
                 on:change={() => select(star)}
-              >
+              />
               <span class:bx--visually-hidden={true}
                 >{valueText(star, max)}</span
               >

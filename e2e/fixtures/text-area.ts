@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import TextAreaFixture from "./TextAreaFixture.svelte";
+import { mount } from "./mount";
 
 mount(TextAreaFixture);

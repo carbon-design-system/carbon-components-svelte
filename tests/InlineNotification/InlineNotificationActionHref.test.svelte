@@ -11,8 +11,7 @@
   <svelte:fragment slot="actions">
     <NotificationActionButton
       href="https://example.com/releases"
-      target="_blank"
-      >View release notes</NotificationActionButton
+      target="_blank">View release notes</NotificationActionButton
     >
   </svelte:fragment>
 </InlineNotification>

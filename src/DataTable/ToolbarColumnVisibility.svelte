@@ -50,10 +50,10 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
-  import ColumnIcon from "../icons/ColumnIcon.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuButton from "../MenuButton/MenuButton.svelte";
+  import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
+  import ColumnIcon from "../icons/ColumnIcon.svelte";
   import {
     setColumnHidden,
     toColumnSettings,

@@ -21,9 +21,8 @@
   export let step = 1;
   export let stepMultiplier = 4;
   export let marks:
-    | boolean
-    | ReadonlyArray<{ value: number; label?: string }>
-    | undefined = false;
+    boolean | ReadonlyArray<{ value: number; label?: string }> | undefined =
+    false;
   export let snapToMarks = false;
   export let markSnapDistance = 0;
   export let hideLabel = false;

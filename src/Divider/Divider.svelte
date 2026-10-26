@@ -63,4 +63,4 @@
     ? marginStyleValue
     : undefined}
   class={dividerClass}
->
+/>

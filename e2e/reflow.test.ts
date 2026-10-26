@@ -3,8 +3,8 @@ import {
   expectMenuReadsContinuously,
   filterBy,
   readOptionBoxes,
-  SLACK,
   scrollToEnd,
+  SLACK,
 } from "./measured-menu";
 
 /**

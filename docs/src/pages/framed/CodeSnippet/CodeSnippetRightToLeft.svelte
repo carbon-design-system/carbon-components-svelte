@@ -13,8 +13,7 @@
 <LayoutDirection dir="rtl" lang="ar">
   <Stack gap={5}>
     <Text>
-      شغّل <CodeSnippet type="inline" code="rm -rf node_modules/" /> قبل إعادة
-      التثبيت.
+      شغّل <CodeSnippet type="inline" code="rm -rf node_modules/" /> قبل إعادة التثبيت.
     </Text>
     <CodeSnippet code={'npm run deploy -- --service="api-gateway"'} />
     <CodeSnippet type="multi" {code} />

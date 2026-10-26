@@ -126,7 +126,7 @@
   >
     {#if $$slots.icon || icon}
       <span class:bx--side-nav__icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
+        <slot name="icon"><svelte:component this={icon} /></slot>
       </span>
     {/if}
     <span class:bx--side-nav__submenu-title={true}>{text}</span>

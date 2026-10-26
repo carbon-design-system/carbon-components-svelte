@@ -48,8 +48,7 @@
   <ClickableTile href="#">Open<AILabel slot="decorator" /></ClickableTile>
 </div>
 <div data-testid="selectable-tile">
-  <SelectableTile bind:selected
-    >Plan<AILabel slot="decorator" /></SelectableTile
+  <SelectableTile bind:selected>Plan<AILabel slot="decorator" /></SelectableTile
   >
 </div>
 <div data-testid="radio-tile">

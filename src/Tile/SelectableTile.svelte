@@ -222,7 +222,7 @@
         );
       }
     }}
-  >
+  />
   <label
     for={id}
     class:bx--tile={true}

@@ -34,8 +34,10 @@
       </li>
     </ul>
     <h3>Request</h3>
-    <pre data-testid="raw-pre"><code>curl -H "Authorization: Bearer $KEY" \
-  https://api.example.com/v1/usage</code></pre>
+    <pre data-testid="raw-pre"><code
+        >curl -H "Authorization: Bearer $KEY" \
+  https://api.example.com/v1/usage</code
+      ></pre>
     <blockquote>
       <p>
         Choose the region when you create the project. It can't be changed
@@ -68,15 +70,14 @@
     <h5 data-testid="h5">Per key</h5>
     <h6 data-testid="h6">Bursts</h6>
     <p>Short bursts over the limit are allowed.</p>
-    <hr>
+    <hr />
     <h2 id="markdown-extras" data-testid="anchored-heading">
       Markdown extras
       <a
         class="bx--prose__heading-anchor"
         href="#markdown-extras"
         aria-label="Link to Markdown extras"
-        data-testid="heading-anchor"
-        >#</a
+        data-testid="heading-anchor">#</a
       >
     </h2>
     <table>
@@ -98,12 +99,12 @@
     <ul class="contains-task-list">
       <li class="task-list-item" data-testid="task-li">
         <label
-          ><input type="checkbox" disabled checked>
+          ><input type="checkbox" disabled checked />
           Create the project</label
         >
       </li>
       <li class="task-list-item">
-        <label><input type="checkbox" disabled> Generate an API key</label>
+        <label><input type="checkbox" disabled /> Generate an API key</label>
       </li>
     </ul>
     <blockquote
@@ -154,8 +155,7 @@
             <a
               href="#fnref-1"
               class="footnote-backref"
-              aria-label="Back to reference 1"
-              >↩</a
+              aria-label="Back to reference 1">↩</a
             >
           </p>
         </li>
@@ -197,8 +197,7 @@
         class="bx--prose__heading-anchor"
         href="#muted-heading"
         aria-label="Link to Muted links"
-        data-testid="muted-anchor"
-        >#</a
+        data-testid="muted-anchor">#</a
       >
     </h2>
     <p>Read the <a href="#setup" data-testid="muted-link">setup guide</a>.</p>
@@ -290,16 +289,14 @@
     </Prose>
   </div>
   <Prose data-testid="page-prose">
-    <pre
-      data-testid="page-pre"
-    ><code>npm i carbon-components-svelte</code></pre>
+    <pre data-testid="page-pre"><code>npm i carbon-components-svelte</code
+      ></pre>
   </Prose>
   <Layer>
     <Prose>
       <p>Code on a layer: <code data-testid="layer-code">value</code></p>
-      <pre
-        data-testid="layer-pre"
-      ><code>npm i carbon-components-svelte</code></pre>
+      <pre data-testid="layer-pre"><code>npm i carbon-components-svelte</code
+        ></pre>
       <blockquote
         data-alert="note"
         data-alert-title="Note"
@@ -315,9 +312,8 @@
         <li>عنصر</li>
       </ul>
       <blockquote data-testid="rtl-quote"><p>اقتباس</p></blockquote>
-      <pre
-        data-testid="rtl-pre"
-      ><code>npm i carbon-components-svelte</code></pre>
+      <pre data-testid="rtl-pre"><code>npm i carbon-components-svelte</code
+        ></pre>
       <table>
         <tbody>
           <tr>
@@ -331,9 +327,8 @@
   <!-- Pushes the deferred block below the viewport. -->
   <div style="height: 150vh"></div>
   <Prose deferOffscreen>
-    <pre
-      data-testid="deferred-pre"
-    ><code>npm i carbon-components-svelte</code></pre>
+    <pre data-testid="deferred-pre"><code>npm i carbon-components-svelte</code
+      ></pre>
     <table data-testid="deferred-table">
       <tbody>
         <tr>

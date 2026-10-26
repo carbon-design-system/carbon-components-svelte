@@ -21,7 +21,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
 </Header>
 
 <SideNav bind:isOpen={isSideNavOpen}>
@@ -60,7 +60,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Deployments</h1> </Column>
+      <Column><h1>Deployments</h1></Column>
     </Row>
   </Grid>
 </Content>

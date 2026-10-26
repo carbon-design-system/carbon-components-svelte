@@ -146,7 +146,7 @@
       class:bx--progress-bar__label-text--slotted={!!$$slots.labelChildren}
       class:bx--visually-hidden={hideLabel}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </span>
     {#if hasStatusIcon}
       <svelte:component

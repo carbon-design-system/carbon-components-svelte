@@ -18,7 +18,6 @@
     on:click={(event) => {
       event.preventDefault();
       clicks += 1;
-    }}
-    >Alpha</HeaderPanelLink
+    }}>Alpha</HeaderPanelLink
   >
 </HeaderPanelLinks>

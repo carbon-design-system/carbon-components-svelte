@@ -4,8 +4,9 @@
   import type { ComponentProps } from "svelte";
 
   export let renders = 0;
-  export let oncalendar: (cal: ComponentProps<DatePicker>["calendar"]) => void =
-    () => {};
+  export let oncalendar: (
+    cal: ComponentProps<DatePicker>["calendar"],
+  ) => void = () => {};
 
   let calendar: ComponentProps<DatePicker>["calendar"] = null;
 

@@ -112,8 +112,7 @@
     {#if author}
       <span
         class:bx--chat-message__author={true}
-        class:bx--visually-hidden={!showAuthor || continued}
-        >{author}</span
+        class:bx--visually-hidden={!showAuthor || continued}>{author}</span
       >
     {/if}
     <div class:bx--chat-message__line={true}>

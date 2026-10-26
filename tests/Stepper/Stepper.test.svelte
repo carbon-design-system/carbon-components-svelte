@@ -46,7 +46,7 @@
     {#if current === 1}
       <TextInput labelText="Address" invalid={addressInvalid} />
       <div aria-invalid={wrapperInvalid ? "true" : undefined}>
-        <input aria-label="Wrapped">
+        <input aria-label="Wrapped" />
       </div>
     {/if}
   {/if}

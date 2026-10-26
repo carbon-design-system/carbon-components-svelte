@@ -19,7 +19,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderNav>
     <HeaderNavItem href="/catalog" text="Catalog" />
     <HeaderNavItem href="/resources" text="Resource list" />
@@ -64,7 +64,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Dashboard</h1> </Column>
+      <Column><h1>Dashboard</h1></Column>
     </Row>
   </Grid>
 </Content>

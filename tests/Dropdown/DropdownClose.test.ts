@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
-import { contacts } from "../ListBox/family/cases";
 import ListBoxHost from "../ListBox/family/ListBoxHost.test.svelte";
+import { contacts } from "../ListBox/family/cases";
 import { user } from "../utils/user";
 
 /**

@@ -74,7 +74,7 @@
   <meta
     name="description"
     content="Build a brand theme from one color: preview it, check contrast, and copy the tokens or CSS."
-  >
+  />
 </svelte:head>
 
 <Content>
@@ -146,14 +146,12 @@
                 placeholder="text-on-color: #161616"
                 rows={4}
                 warn={invalid.length > 0}
-                warnText="Not a color token: {invalid.join(", ")}"
+                warnText="Not a color token: {invalid.join(', ')}"
                 bind:value={overridesText}
               />
 
               <Stack gap={3}>
-                <Text tag="h2" type="heading-02" color="primary">
-                  Contrast
-                </Text>
+                <Text tag="h2" type="heading-02" color="primary">Contrast</Text>
                 {#if result.warnings.length > 0}
                   <InlineNotification
                     kind="warning"
@@ -163,8 +161,7 @@
                     title="Below WCAG AA:"
                   >
                     <UnorderedList slot="subtitleChildren">
-                      {#each result.warnings as warning (warning.foreground +
-                        warning.background)}
+                      {#each result.warnings as warning (warning.foreground + warning.background)}
                         <ListItem>
                           {warning.foreground}
                           on {warning.background} is
@@ -226,8 +223,7 @@
                     <Tab label="Settings" />
                     <svelte:fragment slot="content">
                       <TabContent>
-                        <Text color="primary"
-                          >api-gateway runs in us-east.</Text
+                        <Text color="primary">api-gateway runs in us-east.</Text
                         >
                       </TabContent>
                       <TabContent>

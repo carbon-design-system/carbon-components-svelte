@@ -32,7 +32,7 @@
   theme="classic"
   bind:isSideNavOpen
 >
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderNav>
     <HeaderNavItem href="/catalog" text="Catalog" />
     <HeaderNavItem href="/docs" text="Docs" />
@@ -76,7 +76,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Dashboard</h1> </Column>
+      <Column><h1>Dashboard</h1></Column>
     </Row>
   </Grid>
 </Content>

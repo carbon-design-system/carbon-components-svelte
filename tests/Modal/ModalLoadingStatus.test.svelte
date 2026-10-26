@@ -27,5 +27,5 @@
   on:click:button--secondary={() => onsecondary?.()}
   on:loading:success={() => onloadingsuccess?.()}
 >
-  <input data-testid="field">
+  <input data-testid="field" />
 </Modal>

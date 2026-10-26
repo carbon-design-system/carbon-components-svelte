@@ -16,7 +16,7 @@
     { id: "2", text: "Fax" },
   ]}
 />
-<br>
+<br />
 <Button on:click={() => ref.clear()}>Clear</Button>
 <Button on:click={() => ref.clear({ focus: false })}>Clear (no focus)</Button>
 <Button on:click={() => ref.clear({ open: true })}>Clear (reopen menu)</Button>

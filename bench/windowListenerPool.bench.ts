@@ -23,9 +23,8 @@ const capturedListeners = new Map<string, (event: Event) => void>();
   removeEventListener() {},
 };
 
-const { addPooledListener } = await import(
-  "../src/utils/window-listener-pool.js"
-);
+const { addPooledListener } =
+  await import("../src/utils/window-listener-pool.js");
 
 const FAKE_EVENT = {} as Event;
 

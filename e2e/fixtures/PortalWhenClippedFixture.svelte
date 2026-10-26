@@ -17,10 +17,7 @@
   ].map((text, i) => ({ id: String(i), text }));
 </script>
 
-{#each [
-  ["scroll", "overflow: auto; height: 10rem"],
-  ["card", "overflow: hidden"],
-] as [id, style] (id)}
+{#each [["scroll", "overflow: auto; height: 10rem"], ["card", "overflow: hidden"]] as [id, style] (id)}
   <div
     data-testid={id}
     style="{style}; display: flex; align-items: flex-end; gap: 1rem; padding: 1rem; margin: 2rem 1rem; border: 1px solid #c6c6c6"

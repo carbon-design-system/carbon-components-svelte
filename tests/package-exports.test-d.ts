@@ -1,10 +1,9 @@
 import type {
-  Button as BarrelButton,
-  DataTable as BarrelDataTable,
-  ThemeZone as BarrelThemeZone,
   breakpointObserver,
   breakpoints,
+  Button as BarrelButton,
   createTheme,
+  DataTable as BarrelDataTable,
   dismiss,
   floatingPosition,
   formatFileSize,
@@ -17,6 +16,7 @@ import type {
   queryParam,
   rovingFocus,
   themeScript,
+  ThemeZone as BarrelThemeZone,
   trapFocus,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
@@ -28,15 +28,15 @@ import type LayoutDirection from "carbon-components-svelte/src/LayoutDirection/L
 import type { LayoutDirectionProps } from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
 import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
 import type {
-  ContrastWarning,
-  CreateThemeOptions,
-  CreateThemeResult,
-} from "carbon-components-svelte/src/Theme/create-theme.js";
-import type {
   CarbonTheme,
   ThemeProps,
   themes,
 } from "carbon-components-svelte/src/Theme/Theme.svelte";
+import type {
+  ContrastWarning,
+  CreateThemeOptions,
+  CreateThemeResult,
+} from "carbon-components-svelte/src/Theme/create-theme.js";
 import type ThemeZone from "carbon-components-svelte/src/ThemeZone/ThemeZone.svelte";
 import type { ThemeZoneProps } from "carbon-components-svelte/src/ThemeZone/ThemeZone.svelte";
 import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
@@ -51,8 +51,8 @@ import {
   highlight,
   highlightCode,
   type Token,
-  type TokenType,
   tokenize,
+  type TokenType,
 } from "carbon-components-svelte/syntax";
 import type {
   ColorToken,

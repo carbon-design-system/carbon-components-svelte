@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import ProgressIndicatorFixture from "./ProgressIndicatorFixture.svelte";
+import { mount } from "./mount";
 
 mount(ProgressIndicatorFixture);

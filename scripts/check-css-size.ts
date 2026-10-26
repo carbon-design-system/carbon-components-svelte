@@ -11,12 +11,12 @@ import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { compileAt } from "crassus/git";
 import {
-  ALLOWANCE_TRAILER,
   type Allowance,
+  ALLOWANCE_TRAILER,
   formatKB,
   GROWTH_LIMIT,
-  GUARDED_ENTRIES,
   growthLimit,
+  GUARDED_ENTRIES,
   judge,
   measureCss,
   parseAllowance,

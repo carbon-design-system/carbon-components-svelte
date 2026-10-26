@@ -151,8 +151,7 @@
         data-testid="progress-step-icon-1"
         data-complete={complete}
         data-current={current}
-        data-invalid={invalid}
-        >1</span
+        data-invalid={invalid}>1</span
       >
     {/snippet}
   </ProgressStep>
@@ -162,8 +161,7 @@
         data-testid="progress-step-icon-2"
         data-complete={complete}
         data-current={current}
-        data-invalid={invalid}
-        >2</span
+        data-invalid={invalid}>2</span
       >
     {/snippet}
   </ProgressStep>
@@ -173,8 +171,7 @@
         data-testid="progress-step-icon-3"
         data-complete={complete}
         data-current={current}
-        data-invalid={invalid}
-        >3</span
+        data-invalid={invalid}>3</span
       >
     {/snippet}
   </ProgressStep>
@@ -224,8 +221,7 @@
     >
   {/snippet}
   {#snippet footerCell({ header, index })}
-    <span data-testid="datatable-footer-cell-{index}"
-      >Footer: {header.key}</span
+    <span data-testid="datatable-footer-cell-{index}">Footer: {header.key}</span
     >
   {/snippet}
 </DataTable>

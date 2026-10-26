@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import TabsFixture from "./TabsFixture.svelte";
+import { mount } from "./mount";
 
 mount(TabsFixture);

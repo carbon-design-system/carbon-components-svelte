@@ -326,55 +326,59 @@ describe("rendered day cells match flatpickr", () => {
 // day was skipped (Pacific/Apia, December 2011). Two decades of months reach
 // every switch in each.
 // 252 months in two calendars: about a second, more on a busy machine.
-describe("every month from 2010 to 2030 matches flatpickr", {
-  timeout: 20_000,
-}, () => {
-  const months = Array.from(
-    { length: 21 * 12 },
-    (_, i) => new Date(2010, i, 1),
-  );
-  const view = (instance: Instance) =>
-    dayCells(instance)
-      .map(({ text, classes }) => `${text} ${classes}`)
-      .join(",");
+describe(
+  "every month from 2010 to 2030 matches flatpickr",
+  {
+    timeout: 20_000,
+  },
+  () => {
+    const months = Array.from(
+      { length: 21 * 12 },
+      (_, i) => new Date(2010, i, 1),
+    );
+    const view = (instance: Instance) =>
+      dayCells(instance)
+        .map(({ text, classes }) => `${text} ${classes}`)
+        .join(",");
 
-  it("renders each month with week numbers", () => {
-    const { reference, engine } = both({
-      weekNumbers: true,
-      now: new Date(2020, 0, 1),
+    it("renders each month with week numbers", () => {
+      const { reference, engine } = both({
+        weekNumbers: true,
+        now: new Date(2020, 0, 1),
+      });
+      reference.open();
+      engine.open();
+      const mismatches: string[] = [];
+      for (const month of months) {
+        reference.jumpToDate(month);
+        engine.jumpToDate(month);
+        if (view(engine) !== view(reference))
+          mismatches.push(month.toDateString());
+      }
+      expect(mismatches.slice(0, 5)).toEqual([]);
     });
-    reference.open();
-    engine.open();
-    const mismatches: string[] = [];
-    for (const month of months) {
-      reference.jumpToDate(month);
-      engine.jumpToDate(month);
-      if (view(engine) !== view(reference))
-        mismatches.push(month.toDateString());
-    }
-    expect(mismatches.slice(0, 5)).toEqual([]);
-  });
 
-  it("highlights a range spanning each month", () => {
-    const { reference, engine } = both({
-      mode: "range",
-      now: new Date(2020, 0, 1),
+    it("highlights a range spanning each month", () => {
+      const { reference, engine } = both({
+        mode: "range",
+        now: new Date(2020, 0, 1),
+      });
+      reference.open();
+      engine.open();
+      const mismatches: string[] = [];
+      for (const month of months) {
+        const range = [
+          new Date(month.getFullYear(), month.getMonth(), 1),
+          new Date(month.getFullYear(), month.getMonth() + 1, 0),
+        ];
+        reference.setDate(range);
+        engine.setDate(range);
+        reference.jumpToDate(month);
+        engine.jumpToDate(month);
+        if (view(engine) !== view(reference))
+          mismatches.push(month.toDateString());
+      }
+      expect(mismatches.slice(0, 5)).toEqual([]);
     });
-    reference.open();
-    engine.open();
-    const mismatches: string[] = [];
-    for (const month of months) {
-      const range = [
-        new Date(month.getFullYear(), month.getMonth(), 1),
-        new Date(month.getFullYear(), month.getMonth() + 1, 0),
-      ];
-      reference.setDate(range);
-      engine.setDate(range);
-      reference.jumpToDate(month);
-      engine.jumpToDate(month);
-      if (view(engine) !== view(reference))
-        mismatches.push(month.toDateString());
-    }
-    expect(mismatches.slice(0, 5)).toEqual([]);
-  });
-});
+  },
+);

@@ -590,7 +590,7 @@
       </legend>
     {/if}
     {#if name}
-      <input type="hidden" {name} {value} {form}>
+      <input type="hidden" {name} {value} {form} />
     {/if}
     <div
       data-invalid={hasError || undefined}
@@ -637,7 +637,7 @@
             on:keydown={(event) => handleKeydown(index, event)}
             on:paste={(event) => handlePaste(index, event)}
             on:focus={handleFocus}
-          >
+          />
         {/each}
         {#if !isFluid}
           {#if hasError}
@@ -650,7 +650,7 @@
         {/if}
       </div>
       {#if isFluid}
-        <hr class:bx--pin-code-input__divider={true}>
+        <hr class:bx--pin-code-input__divider={true} />
         {#if hasError}
           <div class:bx--pin-code-input__message={true}>
             <WarningFilled class="bx--pin-code-input__icon" />

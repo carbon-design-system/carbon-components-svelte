@@ -13,5 +13,5 @@
     <Tab label="Dashboard" icon={Dashboard} />
     <Tab label="Settings" icon={Settings} />
   </Tabs>
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

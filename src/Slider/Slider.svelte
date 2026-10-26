@@ -337,7 +337,7 @@
     class:bx--label--disabled={disabled}
     class:bx--visually-hidden={hideLabel}
   >
-    <slot name="labelChildren"> {labelText} </slot>
+    <slot name="labelChildren">{labelText}</slot>
   </label>
   <div
     class:bx--slider-container={true}
@@ -551,7 +551,7 @@
         on:focus
         on:focus={handleTextInputFocus}
         on:blur
-      >
+      />
       <!-- NVDA announces a read-only number input as editable, so a read-only
         slider shows its value as text. The thumb already exposes the value. -->
       {#if readonly && !hideTextInput}

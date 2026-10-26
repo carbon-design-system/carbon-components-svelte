@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import TagSetViewAllFixture from "./TagSetViewAllFixture.svelte";
+import { mount } from "./mount";
 
 mount(TagSetViewAllFixture);

@@ -22,8 +22,8 @@
   export let actions = [];
 
   import { setContext } from "svelte";
-  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
   import Form from "../Form/Form.svelte";
+  import { FORM_CONTEXT_KEY } from "../constants/context-keys.js";
 
   /**
    * Context published under the key `"carbon:Form"` for descendant inputs.

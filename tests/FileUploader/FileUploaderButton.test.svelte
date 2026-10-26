@@ -6,8 +6,7 @@
 
   export let files: ComponentProps<FileUploaderButton>["files"] = [];
   export let onchange:
-    | ((e: CustomEvent<ReadonlyArray<File>>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ReadonlyArray<File>>) => void) | undefined = undefined;
   export let onrejected:
     | ((
         e: CustomEvent<Array<{ file: File; reason: "size" | "duplicate" }>>,

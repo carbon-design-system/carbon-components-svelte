@@ -27,15 +27,12 @@
         tooltipPosition="top"
         tooltipAlignment="end"
         style="margin-left: auto;"
-      > </Button>
+      ></Button>
     </div>
   {/if}
   <div class="preview-viewer" class:framed>
     {#if framed}
-      <iframe
-        loading="lazy"
-        title={src.split("/").pop()}
-        src={themedSrcUrl}
+      <iframe loading="lazy" title={src.split("/").pop()} src={themedSrcUrl}
       ></iframe>
     {:else}
       <slot />

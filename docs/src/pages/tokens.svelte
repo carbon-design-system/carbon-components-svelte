@@ -28,16 +28,16 @@
   import TokenName from "../components/TokenName.svelte";
   import { theme } from "../store";
   import {
-    type ColorRow,
     colorGroups,
+    type ColorRow,
     componentGroups,
     filterGroups,
     normalizeQuery,
     remToPx,
-    type ScaleRow,
     scaleGroups,
-    type TypeRow,
+    type ScaleRow,
     typeGroups,
+    type TypeRow,
   } from "../token-reference";
 
   // A row of a color table: the name cell plus five swatch cells.
@@ -99,7 +99,7 @@
   <meta
     name="description"
     content="Every Carbon v11 token in Carbon Components Svelte, with live values in all five themes: colors, component colors, type styles, spacing and sizes."
-  >
+  />
 </svelte:head>
 
 <Content class="tokens-page">

@@ -33,8 +33,7 @@
     <Stack gap={5}>
       <TextInput labelText="Email" placeholder="ada@acme-corp.com" />
       <Stack orientation="horizontal" gap={3}>
-        <Button size="small" on:click={() => (open = false)}
-          >Send invite</Button
+        <Button size="small" on:click={() => (open = false)}>Send invite</Button
         >
         <Button size="small" kind="ghost" on:click={() => (open = false)}>
           Cancel

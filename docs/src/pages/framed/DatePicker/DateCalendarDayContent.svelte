@@ -16,8 +16,7 @@
     {#if !outside && fares.has(date.getDate())}
       <Stack gap={0} align="center">
         {date.getDate()}
-        <Text type="label-01" color="success"
-          >${fares.get(date.getDate())}</Text
+        <Text type="label-01" color="success">${fares.get(date.getDate())}</Text
         >
       </Stack>
     {:else}

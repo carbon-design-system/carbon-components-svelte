@@ -20,7 +20,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud">
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderUtilities>
     <HeaderAction
       icon={Settings}

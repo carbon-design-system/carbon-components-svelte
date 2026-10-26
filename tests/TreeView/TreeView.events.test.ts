@@ -1,19 +1,19 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import type TreeViewComponent from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type {
+  TreeNode,
   TreeViewExpandedChange as ExpandedChangeDetail,
   TreeViewSelectionChange as SelectionChangeDetail,
-  TreeNode,
 } from "carbon-components-svelte/TreeView/TreeView.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { cloudProductsSubset } from "./fixtures";
-import { expectOneUnhandledRejection, getAllExpandedItems } from "./helpers";
 import TreeViewChangeEvents from "./TreeView.changeEvents.test.svelte";
 import TreeViewActiveSelect from "./TreeViewActiveSelect.test.svelte";
+import { cloudProductsSubset } from "./fixtures";
+import { expectOneUnhandledRejection, getAllExpandedItems } from "./helpers";
 
 type ToggleChangeDetail = {
   expandedIds: ReadonlyArray<string | number>;

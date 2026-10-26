@@ -26,7 +26,7 @@
   bind:isSideNavOpen
   expansionBreakpoint={Number.POSITIVE_INFINITY}
 >
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderNav>
     <HeaderNavItem href="/deployments" text="Deployments" />
     <HeaderNavItem href="/incidents" text="Incidents" />

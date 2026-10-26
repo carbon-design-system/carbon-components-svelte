@@ -29,8 +29,8 @@
   import CheckmarkOutline from "../icons/CheckmarkOutline.svelte";
   import CircleDash from "../icons/CircleDash.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
-  import Incomplete from "../icons/Incomplete.svelte";
   import InProgress from "../icons/InProgress.svelte";
+  import Incomplete from "../icons/Incomplete.svelte";
   import PendingFilled from "../icons/PendingFilled.svelte";
   import UndefinedFilled from "../icons/UndefinedFilled.svelte";
   import UnknownFilled from "../icons/UnknownFilled.svelte";

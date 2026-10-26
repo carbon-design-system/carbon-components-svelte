@@ -791,7 +791,7 @@
         )}
         on:focus={handleLowerInputFocus}
         on:blur={handleLowerInputBlur}
-      >
+      />
       <!-- NVDA announces a read-only number input as editable, so a read-only
         slider shows its value as text. The thumb already exposes the value. -->
       {#if readonly && !hideTextInput}
@@ -1094,7 +1094,7 @@
         )}
         on:focus={handleUpperInputFocus}
         on:blur={handleUpperInputBlur}
-      >
+      />
       {#if readonly && !hideTextInput}
         <div
           aria-hidden="true"

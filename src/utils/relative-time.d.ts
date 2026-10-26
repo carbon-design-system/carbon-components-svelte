@@ -1,11 +1,5 @@
 export type RelativeTimeUnit =
-  | "second"
-  | "minute"
-  | "hour"
-  | "day"
-  | "week"
-  | "month"
-  | "year";
+  "second" | "minute" | "hour" | "day" | "week" | "month" | "year";
 
 /** Convert a `Date`, epoch number, or date string to epoch milliseconds. */
 export function toTimestamp(input: Date | number | string): number;

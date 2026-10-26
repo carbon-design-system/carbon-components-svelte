@@ -18,7 +18,7 @@ export function isExpired(expiresAt: number) {
   );
 </script>
 
-<CodeSnippet type="multi" {code}> {@html highlighted} </CodeSnippet>
+<CodeSnippet type="multi" {code}>{@html highlighted}</CodeSnippet>
 
 <style>
   /* Color Prism's token classes with the Carbon syntax tokens. */

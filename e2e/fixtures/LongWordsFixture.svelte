@@ -52,10 +52,7 @@
      way, so each label keeps its words whole and the row stays inside its
      box. -->
 <div style="display: grid; gap: 1rem">
-  {#each [
-    { id: "dropdown", label: "Region" },
-    { id: "multiselect", label: "Regions" },
-  ] as { id, label }}
+  {#each [{ id: "dropdown", label: "Region" }, { id: "multiselect", label: "Regions" }] as { id, label }}
     <div data-testid="rows-{id}" style="display: flex; gap: 1rem; width: 22rem">
       {#if id === "dropdown"}
         <Dropdown

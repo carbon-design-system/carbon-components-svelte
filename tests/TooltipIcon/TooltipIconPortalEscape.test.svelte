@@ -20,5 +20,5 @@
     on:open={onOpen}
     on:close={onClose}
   />
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

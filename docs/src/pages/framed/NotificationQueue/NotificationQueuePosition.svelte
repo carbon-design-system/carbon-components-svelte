@@ -52,7 +52,7 @@
     Add top right
   </Button>
 </ButtonSet>
-<br>
+<br />
 <ButtonSet>
   <Button
     on:click={() => {

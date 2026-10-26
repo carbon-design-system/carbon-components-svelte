@@ -1,13 +1,7 @@
 import type { CalendarLocale } from "./calendar-dates.js";
 
 export type CalendarMode =
-  | "single"
-  | "multiple"
-  | "range"
-  | "week"
-  | "month"
-  | "quarter"
-  | "year";
+  "single" | "multiple" | "range" | "week" | "month" | "quarter" | "year";
 
 export type CalendarHook = (
   selectedDates: Date[],
@@ -37,8 +31,9 @@ export type DateRule =
   | { from: string | Date; to: string | Date }
   | ((date: Date) => boolean);
 
-export interface CalendarOptions
-  extends Partial<Record<CalendarHookName, CalendarHook | CalendarHook[]>> {
+export interface CalendarOptions extends Partial<
+  Record<CalendarHookName, CalendarHook | CalendarHook[]>
+> {
   allowInput?: boolean;
   allowInvalidPreload?: boolean;
   altFormat?: string;

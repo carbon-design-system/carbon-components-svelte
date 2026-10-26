@@ -2,9 +2,9 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
-import { optionTexts } from "./helpers";
 import Pagination from "./Pagination.test.svelte";
 import PaginationPageSelectSlot from "./PaginationPageSelectSlot.test.svelte";
+import { optionTexts } from "./helpers";
 
 describe("Pagination", () => {
   // Regression test for initial event dispatch in Svelte 5

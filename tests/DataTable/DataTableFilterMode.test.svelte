@@ -36,7 +36,7 @@
   </Toolbar>
   <svelte:fragment slot="cell" let:cell let:row>
     {#if cell.key === "note"}
-      <input data-testid="note-{row.id}">
+      <input data-testid="note-{row.id}" />
     {:else}
       {cell.value}
     {/if}

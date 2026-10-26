@@ -58,11 +58,11 @@
   export let open = false;
 
   import { createEventDispatcher, getContext } from "svelte";
-  import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
-  import RowExpand from "../icons/RowExpand.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuItemRadioGroup from "../Menu/MenuItemRadioGroup.svelte";
   import MenuButton from "../MenuButton/MenuButton.svelte";
+  import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
+  import RowExpand from "../icons/RowExpand.svelte";
   import {
     DATA_TABLE_SIZE_ALIASES,
     normalizeSize,

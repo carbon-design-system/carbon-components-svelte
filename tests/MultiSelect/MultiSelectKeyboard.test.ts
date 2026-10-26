@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
-import { closeMenu, openMenu } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectHighlightedId from "./MultiSelectHighlightedId.test.svelte";
+import { closeMenu, openMenu } from "./helpers";
 
 const items = [
   { id: "0", text: "Alpha" },

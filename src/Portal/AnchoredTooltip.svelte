@@ -42,8 +42,8 @@
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { iconTooltipPortalGaps } from "./icon-tooltip-portal-gaps.js";
   import PortalTooltip from "./PortalTooltip.svelte";
+  import { iconTooltipPortalGaps } from "./icon-tooltip-portal-gaps.js";
 
   const tooltip = createAnchoredTooltip({
     group: getTooltipGroup(),

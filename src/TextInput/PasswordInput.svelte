@@ -109,6 +109,7 @@
   export let selectTextOnFocus = false;
 
   import { getContext, onMount, tick } from "svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -119,7 +120,6 @@
   import ViewOff from "../icons/ViewOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import {
     buildFieldIds,
@@ -234,7 +234,7 @@
         class:bx--label--inline--xl={inline && effectiveSize === "xl"}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
-        <slot name="labelChildren"> {labelText} </slot>
+        <slot name="labelChildren">{labelText}</slot>
       </label>
       {#if !isFluid && helperText}
         <div
@@ -260,7 +260,7 @@
       class:bx--label--inline--xl={inline && effectiveSize === "xl"}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
   <div
@@ -335,9 +335,9 @@
         on:focus={handleFocus}
         on:blur
         on:paste
-      >
+      />
       {#if isFluid}
-        <hr class:bx--text-input__divider={true}>
+        <hr class:bx--text-input__divider={true} />
       {/if}
       {#if isFluid && showInvalid && invalidText}
         <div class:bx--form-requirement={true} id={errorId} role="alert">

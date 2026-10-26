@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import SearchFixture from "./SearchFixture.svelte";
+import { mount } from "./mount";
 
 mount(SearchFixture);

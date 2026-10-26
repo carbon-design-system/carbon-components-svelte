@@ -16,9 +16,9 @@
 
 <Stack gap={5}>
   <p>
-    With <code>intrinsicWidth</code>, use <code>intrinsicAlign</code> to pin the
-    floating box to the start, center, or end of the anchor along the cross axis
-    (horizontal for top/bottom).
+    With <code>intrinsicWidth</code>, use <code>intrinsicAlign</code> to pin the floating
+    box to the start, center, or end of the anchor along the cross axis (horizontal
+    for top/bottom).
   </p>
 
   <Stack orientation="horizontal" gap={9} wrap="wrap" align="start">

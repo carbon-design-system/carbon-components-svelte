@@ -160,14 +160,14 @@
   export let loadingDescription = undefined;
 
   import { getContext, onMount } from "svelte";
+  import Loading from "../Loading/Loading.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { observeModalClose } from "../Portal/portal-utils.js";
   import {
     FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import Loading from "../Loading/Loading.svelte";
-  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { observeModalClose } from "../Portal/portal-utils.js";
   import { dismiss } from "../utils/dismiss.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { isImeComposition } from "../utils/ime-composition.js";

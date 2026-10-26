@@ -27,11 +27,11 @@
   export let controlled = false;
   export let moveFocusOnDelete = false;
   export let ondelete:
-    | ((ids: ComponentProps<DataTable>["selectedRowIds"]) => void)
-    | undefined = undefined;
+    ((ids: ComponentProps<DataTable>["selectedRowIds"]) => void) | undefined =
+    undefined;
   export let onrestart:
-    | ((ids: ComponentProps<DataTable>["selectedRowIds"]) => void)
-    | undefined = undefined;
+    ((ids: ComponentProps<DataTable>["selectedRowIds"]) => void) | undefined =
+    undefined;
 
   let elsewhere: HTMLInputElement;
 </script>
@@ -59,10 +59,10 @@
       >
         Delete
       </Button>
-      <Button on:click={() => onrestart?.(selectedRowIds)}> Restart </Button>
+      <Button on:click={() => onrestart?.(selectedRowIds)}>Restart</Button>
     </ToolbarBatchActions>
-    <ToolbarContent> <Button>Create balancer</Button> </ToolbarContent>
+    <ToolbarContent><Button>Create balancer</Button></ToolbarContent>
   </Toolbar>
 </DataTable>
 
-<input aria-label="Elsewhere" bind:this={elsewhere}>
+<input aria-label="Elsewhere" bind:this={elsewhere} />

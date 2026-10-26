@@ -189,11 +189,11 @@
   import { readable, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import Button from "../Button/Button.svelte";
+  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import {
     LAYER_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";

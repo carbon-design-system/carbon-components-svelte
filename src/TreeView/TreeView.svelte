@@ -2227,7 +2227,7 @@
     on:keydown|stopPropagation={handleKeydown}
   >
     <TreeViewNodeList root nodes={stableNodes} let:node>
-      <slot {node}> {node.text} </slot>
+      <slot {node}>{node.text}</slot>
       <svelte:fragment slot="childNodes" let:node>
         <slot name="childNodes" {node} />
       </svelte:fragment>

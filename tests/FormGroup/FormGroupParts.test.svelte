@@ -20,7 +20,7 @@
   {disabled}
   messageText="Group note"
 >
-  <input type="checkbox" aria-label="Email">
+  <input type="checkbox" aria-label="Email" />
   <FormHelperText>Pick at least one</FormHelperText>
   {#if error}
     <FormRequirement>{error}</FormRequirement>
@@ -28,7 +28,7 @@
   <FormLabel>Loose label</FormLabel>
   <FormItem controlId="phone" let:control>
     <FormLabel>Phone</FormLabel>
-    <input use:control>
+    <input use:control />
     <FormHelperText>Mobile only</FormHelperText>
   </FormItem>
 </FormGroup>

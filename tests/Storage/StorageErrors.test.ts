@@ -5,8 +5,8 @@ import {
   CONSUMER_BOOM,
   isConsumerBoom,
 } from "../utils/absorb-unhandled-rejection";
-import { storageCases } from "./helpers";
 import StorageHarness from "./Storage.test.svelte";
+import { storageCases } from "./helpers";
 
 describe.each(storageCases)("$name errors", ({ Component, area }) => {
   const store = () => window[area];

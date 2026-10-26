@@ -17,7 +17,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud" bind:isSideNavOpen>
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderUtilities>
     <HeaderActionLink
       href="https://github.com/carbon-design-system/carbon-components-svelte"
@@ -36,7 +36,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Dashboard</h1> </Column>
+      <Column><h1>Dashboard</h1></Column>
     </Row>
   </Grid>
 </Content>

@@ -4,8 +4,8 @@ import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
 import { virtualWindowLayer } from "../utils/virtual-window-layer";
-import { scrollListTo } from "./helpers";
 import VirtualList from "./VirtualList.test.svelte";
+import { scrollListTo } from "./helpers";
 
 describe("VirtualList", () => {
   afterEach(vi.restoreAllMocks);

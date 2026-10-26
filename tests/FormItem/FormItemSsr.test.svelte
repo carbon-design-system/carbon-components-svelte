@@ -9,7 +9,7 @@
 
 <FormItem controlId="email" let:control let:controlId>
   <FormLabel>Email</FormLabel>
-  <input id={controlId} use:control>
+  <input id={controlId} use:control />
   <FormHelperText>Use your work email</FormHelperText>
   {#if error}
     <FormRequirement>{error}</FormRequirement>

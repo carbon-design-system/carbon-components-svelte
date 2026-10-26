@@ -56,8 +56,8 @@
 
   import { afterUpdate, getContext, onMount } from "svelte";
   import { get, readable } from "svelte/store";
-  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";

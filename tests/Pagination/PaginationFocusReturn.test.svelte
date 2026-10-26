@@ -15,4 +15,4 @@
   }}
 />
 
-<input aria-label="Elsewhere" bind:this={elsewhere}>
+<input aria-label="Elsewhere" bind:this={elsewhere} />

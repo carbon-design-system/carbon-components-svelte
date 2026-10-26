@@ -36,10 +36,14 @@
     undefined;
   export let backButtonDisabled: ComponentProps<Pagination>["backButtonDisabled"] =
     undefined;
-  export let onChange: (detail: { page?: number; pageSize?: number }) => void =
-    () => {};
-  export let onUpdate: (detail: { page: number; pageSize: number }) => void =
-    () => {};
+  export let onChange: (detail: {
+    page?: number;
+    pageSize?: number;
+  }) => void = () => {};
+  export let onUpdate: (detail: {
+    page: number;
+    pageSize: number;
+  }) => void = () => {};
   export let onPrevious: (detail: { page: number }) => void = () => {};
   export let onNext: (detail: { page: number }) => void = () => {};
 </script>

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { closeButtonOf } from "./helpers";
 import TagSetRoving from "./TagSetRoving.test.svelte";
+import { closeButtonOf } from "./helpers";
 
 /** Wait for the set's post-mount measure to pick a tab stop. */
 async function renderRoving(props: Record<string, unknown> = {}) {

@@ -3,7 +3,6 @@ import type SelectableTileGroupComponent from "carbon-components-svelte/Tile/Sel
 import { type ComponentEvents, type ComponentProps, tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
-import { recordGroupEvents } from "./helpers";
 import SelectableTileGroupSlot from "./SelectableTileGroup.slot.test.svelte";
 import SelectableTileGroup from "./SelectableTileGroup.test.svelte";
 import SelectableTileGroupAnchor from "./SelectableTileGroupAnchor.test.svelte";
@@ -12,6 +11,7 @@ import SelectableTileGroupNested from "./SelectableTileGroupNested.test.svelte";
 import SelectableTileGroupNotify from "./SelectableTileGroupNotify.test.svelte";
 import SelectableTileGroupRange from "./SelectableTileGroupRange.test.svelte";
 import SelectableTileGroupReactive from "./SelectableTileGroupReactive.test.svelte";
+import { recordGroupEvents } from "./helpers";
 
 describe("SelectableTileGroup", () => {
   it("should render with default props", () => {

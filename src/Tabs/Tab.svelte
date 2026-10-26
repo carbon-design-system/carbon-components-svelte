@@ -78,8 +78,8 @@
   export let tooltipAlignment = "center";
 
   import { getContext, onMount } from "svelte";
-  import Close from "../icons/Close.svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
+  import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { uniqueId } from "../utils/unique-id.js";
 

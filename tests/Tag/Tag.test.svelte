@@ -44,7 +44,7 @@
 
 <Tag icon={Add}>Custom icon</Tag>
 
-<Tag interactive on:click={() => onInteractiveClick()}> Text </Tag>
+<Tag interactive on:click={() => onInteractiveClick()}>Text</Tag>
 
 <Tag skeleton />
 

@@ -36,8 +36,7 @@
     <OperationalTag align="start"
       >Tag at the end
       <svelte:fragment slot="content"
-        ><span style="display: block; width: 16rem"
-          >{text}</span
+        ><span style="display: block; width: 16rem">{text}</span
         ></svelte:fragment
       >
     </OperationalTag>
@@ -110,8 +109,7 @@
   data-testid="bottom"
   style="position: relative; display: inline-block; margin: 0 1rem 0.5rem"
 >
-  <Button size="sm" on:click={() => (open.bottom = !open.bottom)}
-    >Bottom</Button
+  <Button size="sm" on:click={() => (open.bottom = !open.bottom)}>Bottom</Button
   >
   <Popover open={open.bottom} caret align="bottom-left"
     ><div style="padding: 1rem; width: 16rem">{text}</div></Popover

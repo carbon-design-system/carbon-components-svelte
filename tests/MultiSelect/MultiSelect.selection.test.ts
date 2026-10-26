@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { closeMenu, openMenu, toggleOption } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectCustom from "./MultiSelectCustom.test.svelte";
+import { closeMenu, openMenu, toggleOption } from "./helpers";
 
 const items = [
   { id: "0", text: "Slack" },

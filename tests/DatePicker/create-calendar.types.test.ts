@@ -1,7 +1,7 @@
 // @vitest-environment node
 import type {
-  CreateCalendarArgs,
   createCalendar,
+  CreateCalendarArgs,
 } from "../../src/DatePicker/create-calendar.js";
 
 describe("create-calendar declarations", () => {

@@ -68,11 +68,11 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, readable, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
+  import { trackModal } from "../Modal/modal-store.js";
   import {
     LAYER_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import { trackModal } from "../Modal/modal-store.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";

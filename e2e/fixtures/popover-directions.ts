@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import PopoverDirectionsFixture from "./PopoverDirectionsFixture.svelte";
+import { mount } from "./mount";
 
 mount(PopoverDirectionsFixture);

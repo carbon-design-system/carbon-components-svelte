@@ -2,8 +2,11 @@
   import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 
   export let group = ["option-2"];
-  export let onCheck: (value: string, checked: boolean, count: number) => void =
-    () => {};
+  export let onCheck: (
+    value: string,
+    checked: boolean,
+    count: number,
+  ) => void = () => {};
 
   const checkCounts = {
     "option-1": 0,

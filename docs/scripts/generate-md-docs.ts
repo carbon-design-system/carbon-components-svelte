@@ -464,8 +464,7 @@ function injectImportsIntoSvelteSnippet(code: string): string {
         else inlineComponents.add(node.name);
       } else if (node.type === "MustacheTag") {
         const expr = node.expression as
-          | { type?: string; name?: string }
-          | undefined;
+          { type?: string; name?: string } | undefined;
         if (expr?.type === "Identifier" && expr.name && isIconName(expr.name)) {
           icons.add(expr.name);
         }

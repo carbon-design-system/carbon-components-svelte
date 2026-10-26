@@ -18,7 +18,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Carbon Svelte">
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderUtilities>
     <ProfileMenu iconDescription="Profile">
       <UserAvatar

@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import TagInputSizesFixture from "./TagInputSizesFixture.svelte";
+import { mount } from "./mount";
 
 mount(TagInputSizesFixture);

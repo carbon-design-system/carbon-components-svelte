@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import { getFilteredIds } from "./helpers";
 import ToolbarSearchGenerics from "./ToolbarSearchGenerics.test.svelte";
+import { getFilteredIds } from "./helpers";
 
 describe("ToolbarSearch Generics", () => {
   describe("String literal IDs with `as const`", () => {

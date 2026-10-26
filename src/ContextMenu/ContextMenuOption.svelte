@@ -336,7 +336,7 @@
     >
       {#if isIndented}
         <div class:bx--menu-option__icon={true}>
-          <slot name="icon"> <svelte:component this={resolvedIcon} /> </slot>
+          <slot name="icon"><svelte:component this={resolvedIcon} /></slot>
         </div>
       {/if}
       <span
@@ -369,7 +369,7 @@
     >
       {#if isIndented}
         <div class:bx--menu-option__icon={true}>
-          <slot name="icon"> <svelte:component this={resolvedIcon} /> </slot>
+          <slot name="icon"><svelte:component this={resolvedIcon} /></slot>
         </div>
       {/if}
       <span

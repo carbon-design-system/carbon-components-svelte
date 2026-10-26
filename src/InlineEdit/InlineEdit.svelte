@@ -106,12 +106,12 @@
 
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
+  import Toggletip from "../Toggletip/Toggletip.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import Close from "../icons/Close.svelte";
   import Edit from "../icons/Edit.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import Toggletip from "../Toggletip/Toggletip.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -302,7 +302,7 @@
         showInvalid && errorId,
         ariaDescribedBy,
       )}
-    >
+    />
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class="bx--edit-in-place__toolbar"
@@ -354,8 +354,8 @@
           iconDescription={editLabel}
           tooltipPosition="top"
           class="bx--edit-in-place__btn bx--edit-in-place__btn-edit {editAlwaysVisible
-            ? "bx--edit-in-place__btn-edit--always-visible"
-            : ""}"
+            ? 'bx--edit-in-place__btn-edit--always-visible'
+            : ''}"
           on:click={handleFocus}
         />
       {/if}

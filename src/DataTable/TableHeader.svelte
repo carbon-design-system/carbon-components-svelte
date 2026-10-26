@@ -38,8 +38,8 @@
   import { getContext, onMount } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import ArrowsVertical from "../icons/ArrowsVertical.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
+  import ArrowsVertical from "../icons/ArrowsVertical.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const defaultTranslations = {

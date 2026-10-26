@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import StatusIconsFixture from "./StatusIconsFixture.svelte";
+import { mount } from "./mount";
 
 mount(StatusIconsFixture);

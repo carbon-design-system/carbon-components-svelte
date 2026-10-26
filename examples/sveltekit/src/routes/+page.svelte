@@ -1,5 +1,5 @@
 <script>
-  import { Button, breakpoints } from "carbon-components-svelte";
+  import { breakpoints, Button } from "carbon-components-svelte";
   import { Airplane } from "carbon-pictograms-svelte";
 </script>
 

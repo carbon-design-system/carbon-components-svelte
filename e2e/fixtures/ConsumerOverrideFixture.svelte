@@ -82,7 +82,7 @@
   hideCloseButton
 >
   <svelte:fragment slot="subtitleChildren">
-    Done. <Link data-testid="toast-link" href="#"> Undo </Link>
+    Done. <Link data-testid="toast-link" href="#">Undo</Link>
   </svelte:fragment>
 </ToastNotification>
 

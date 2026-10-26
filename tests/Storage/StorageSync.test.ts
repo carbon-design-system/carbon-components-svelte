@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { fireStorageEvent, storageCases } from "./helpers";
 import StorageHarness from "./Storage.test.svelte";
+import { fireStorageEvent, storageCases } from "./helpers";
 
 describe.each(storageCases)("$name sync", ({ Component, area, other }) => {
   const store = () => window[area];

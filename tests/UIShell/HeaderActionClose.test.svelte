@@ -26,7 +26,7 @@
     >
       <p data-testid="panel-content">Panel content</p>
       {#if withInput}
-        <input aria-label="Filter">
+        <input aria-label="Filter" />
       {/if}
     </HeaderAction>
   </HeaderUtilities>

@@ -17,6 +17,5 @@
   {type}
   {...copy ? { copy } : {}}
   {...code === undefined ? {} : { code }}
-  on:copy={onCopy}
-  >{@html slotHtml}</CodeSnippet
+  on:copy={onCopy}>{@html slotHtml}</CodeSnippet
 >

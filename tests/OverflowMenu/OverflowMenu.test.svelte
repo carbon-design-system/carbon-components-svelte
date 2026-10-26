@@ -60,5 +60,5 @@
   />
 </OverflowMenu>
 {#if withNextField}
-  <input aria-label="Next field">
+  <input aria-label="Next field" />
 {/if}

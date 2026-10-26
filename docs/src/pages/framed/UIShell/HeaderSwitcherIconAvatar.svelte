@@ -25,7 +25,7 @@
 </script>
 
 <Header>
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderSwitcher text={active.name}>
     <svelte:fragment slot="avatar">
       <Enterprise size={16} />
@@ -56,8 +56,8 @@
       <Column>
         <h1>{active.name}</h1>
         <p>
-          A plain icon in the <code>avatar</code> slot replaces the
-          per-workspace photo with a fixed brand icon.
+          A plain icon in the <code>avatar</code> slot replaces the per-workspace
+          photo with a fixed brand icon.
         </p>
       </Column>
     </Row>

@@ -15,7 +15,7 @@
   >
     Thanks!
     <button slot="actions" type="button">Reply</button>
-    <img slot="attachments" alt="Receipt" src="receipt.png">
+    <img slot="attachments" alt="Receipt" src="receipt.png" />
     <span slot="meta">9:41</span>
   </ChatMessage>
 </ChatLog>

@@ -28,10 +28,10 @@
     filterComponents,
     parseCategoryFilterParam,
     SEARCH_FILTER_PARAM,
-    type SortDirection,
-    type SortKey,
     serializeCategoryFilterParam,
     sortComponents,
+    type SortDirection,
+    type SortKey,
     sourceRepoUrl,
   } from "../component-index";
   import { markdownBytesFor } from "../component-md-sizes";
@@ -179,7 +179,7 @@
   <meta
     name="description"
     content="Searchable, sortable index of every Carbon Components Svelte component, with category and version metadata."
-  >
+  />
 </svelte:head>
 
 <!-- Content supplies the SideNav offset; min-height fills the viewport so the
@@ -320,9 +320,7 @@
 
           {#if visible.length === 0}
             <Box display="flex" direction="column" gap={3} paddingY={4}>
-              <Text tag="p" type="heading-03" color="primary">
-                No results
-              </Text>
+              <Text tag="p" type="heading-03" color="primary">No results</Text>
               <Text type="body-01" color="secondary" balance maxWidth="52ch">
                 No components match your search or category filters. Try a
                 different query or broaden the category selection.

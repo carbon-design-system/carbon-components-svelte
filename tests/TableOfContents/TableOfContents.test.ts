@@ -2,9 +2,9 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
-import { renderMeasured } from "./helpers";
 import TableOfContentsItems from "./TableOfContents.items.test.svelte";
 import TableOfContents from "./TableOfContents.test.svelte";
+import { renderMeasured } from "./helpers";
 
 // Viewport-relative section tops, keyed by element id.
 let tops: Record<string, number> = {};

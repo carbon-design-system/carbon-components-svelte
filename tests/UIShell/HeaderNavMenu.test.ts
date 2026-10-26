@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import HeaderNavContent from "./HeaderNavContent.test.svelte";
-import Menubar from "./HeaderNavMenubar.test.svelte";
 import HeaderNavMenuInsert from "./HeaderNavMenuInsert.test.svelte";
+import Menubar from "./HeaderNavMenubar.test.svelte";
 
 const item = (name: string) => screen.getByRole("menuitem", { name });
 

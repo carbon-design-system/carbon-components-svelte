@@ -53,9 +53,8 @@ describe("getInitials", () => {
     it("falls back to a code point per word", async () => {
       vi.stubGlobal("Intl", { ...Intl, Segmenter: undefined });
       vi.resetModules();
-      const { getInitials: getInitialsFallback } = await import(
-        "../../src/utils/initials.js"
-      );
+      const { getInitials: getInitialsFallback } =
+        await import("../../src/utils/initials.js");
 
       expect(getInitialsFallback("John Doe")).toBe("JD");
       expect(getInitialsFallback("😀 x")).toBe("😀X");
@@ -74,9 +73,8 @@ describe("getInitials", () => {
 
   it("skips the segmenter for names that start with two Latin code units", async () => {
     vi.resetModules();
-    const { getInitials: getInitialsFresh } = await import(
-      "../../src/utils/initials.js"
-    );
+    const { getInitials: getInitialsFresh } =
+      await import("../../src/utils/initials.js");
     const constructorSpy = vi.spyOn(Intl, "Segmenter");
 
     expect(getInitialsFresh("John Doe")).toBe("JD");

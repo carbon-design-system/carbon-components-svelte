@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import StructuredListFixture from "./StructuredListFixture.svelte";
+import { mount } from "./mount";
 
 mount(StructuredListFixture);

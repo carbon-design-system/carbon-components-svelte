@@ -3,8 +3,8 @@ import { tick } from "svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
-import { getCalendarInstance } from "./calendar-instance";
 import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
+import { getCalendarInstance } from "./calendar-instance";
 import { dayByLabel } from "./helpers";
 
 const getDates = () => screen.getByTestId("dates").textContent?.trim();

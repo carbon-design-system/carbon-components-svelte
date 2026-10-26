@@ -29,8 +29,7 @@
   // ToolbarSearch infer its `Row` generic from `shouldFilterRows`; a bare
   // boolean carries no row type, so `Row` would fall back to `DataTableRow`.
   const filterRowsDefault = true as
-    | boolean
-    | ((row: Row, value: string | number) => boolean);
+    boolean | ((row: Row, value: string | number) => boolean);
 
   const numericRows = [
     { id: 1, name: "Item 1", category: "Electronics" },
@@ -50,8 +49,7 @@
   let numericSearchValue = "";
 
   const numericFilterRowsDefault = true as
-    | boolean
-    | ((row: NumericRow, value: string | number) => boolean);
+    boolean | ((row: NumericRow, value: string | number) => boolean);
 
   interface ProductRow extends DataTableRow<string> {
     name: string;

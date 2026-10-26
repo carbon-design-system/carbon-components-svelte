@@ -5,7 +5,6 @@ import { tick } from "svelte";
 import { netListenerCalls } from "../utils/net-listener-calls";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
-import { closeDetails, openMenu } from "./helpers";
 import OverflowMenuCustomTrigger from "./OverflowMenu.customTrigger.test.svelte";
 import OverflowMenuDisabled from "./OverflowMenu.disabled.test.svelte";
 import OverflowMenuDynamicItems from "./OverflowMenu.dynamicItems.test.svelte";
@@ -15,6 +14,7 @@ import OverflowMenuInBreadcrumb from "./OverflowMenuInBreadcrumb.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
 import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
 import OverflowMenuPrimaryFocus from "./OverflowMenuPrimaryFocus.test.svelte";
+import { closeDetails, openMenu } from "./helpers";
 
 describe("OverflowMenu", () => {
   afterEach(() => {

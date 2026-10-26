@@ -10,8 +10,9 @@
   export let tabindex: ComponentProps<ExpandableTile>["tabindex"] = "0";
   export let onFocus: (e: FocusEvent) => void = () => {};
   export let onBlur: (e: FocusEvent) => void = () => {};
-  export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
-    () => {};
+  export let onToggle: (
+    e: CustomEvent<{ expanded: boolean }>,
+  ) => void = () => {};
 </script>
 
 <ExpandableTile
@@ -34,7 +35,7 @@
     >
       Test link
     </a>
-    <br><br>
+    <br /><br />
     <Button
       data-testid="test-button"
       on:click={(e) => {

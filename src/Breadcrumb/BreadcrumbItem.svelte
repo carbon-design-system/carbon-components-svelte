@@ -69,7 +69,7 @@
     >
       {#if $$slots.icon || icon}
         <div class:bx--breadcrumb-item__icon={true}>
-          <slot name="icon"> <svelte:component this={icon} /> </slot>
+          <slot name="icon"><svelte:component this={icon} /></slot>
         </div>
       {/if}
       <slot />
@@ -77,7 +77,7 @@
   {:else}
     {#if $$slots.icon || icon}
       <div class:bx--breadcrumb-item__icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
+        <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
     <slot

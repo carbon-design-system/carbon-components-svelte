@@ -11,4 +11,4 @@
   bind:value
   on:focus={(e) => e.currentTarget.select()}
   use:preserveFocusSelection={true}
->
+/>

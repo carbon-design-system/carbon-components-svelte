@@ -7,7 +7,7 @@
 </script>
 
 <TimePicker {fluid} labelText="Time" placeholder="hh:mm">
-  <svelte:fragment slot="labelChildren"> Time </svelte:fragment>
+  <svelte:fragment slot="labelChildren">Time</svelte:fragment>
   <TimePickerSelect labelText="Clock" value="am">
     <svelte:fragment slot="labelChildren">Custom label content</svelte:fragment>
     <SelectItem value="am" text="AM" />

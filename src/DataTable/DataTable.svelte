@@ -457,13 +457,6 @@
     DEFAULT_VIRTUAL_LIST_CONFIG,
     virtualize as virtualizeUtil,
   } from "../utils/virtualize.js";
-  import {
-    compareValues,
-    formatHeaderWidth,
-    getDisplayedRows,
-    resolvePath,
-    shouldIgnoreRowClick,
-  } from "./data-table-utils.js";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableContainer from "./TableContainer.svelte";
@@ -471,6 +464,13 @@
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
+  import {
+    compareValues,
+    formatHeaderWidth,
+    getDisplayedRows,
+    resolvePath,
+    shouldIgnoreRowClick,
+  } from "./data-table-utils.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -1242,11 +1242,7 @@
 </script>
 
 <TableContainer {id} {useStaticWidth} {...wrapperProps}>
-  {#if title ||
-    $$slots.titleChildren ||
-    description ||
-    $$slots.descriptionChildren ||
-    $$slots.decorator}
+  {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren || $$slots.decorator}
     <div
       class:bx--data-table-header={true}
       class:bx--data-table-header--decorator={$$slots.decorator}
@@ -1313,16 +1309,16 @@
       {#if hasCustomHeaderWidth}
         <colgroup>
           {#if hasRowDecorator}
-            <col>
+            <col />
           {/if}
           {#if expandable}
-            <col>
+            <col />
           {/if}
           {#if isSelectionEnabled}
-            <col>
+            <col />
           {/if}
           {#each visibleHeaders as header (header.key)}
-            <col style={formatHeaderWidth(header)}>
+            <col style={formatHeaderWidth(header)} />
           {/each}
         </colgroup>
       {/if}
@@ -1505,18 +1501,18 @@
             <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
-              class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded
-                ? "bx--expandable-row"
-                : ""} {expandable ? "bx--parent-row" : ""} {expandable &&
+              class="{isSelected ? 'bx--data-table--selected' : ''} {isExpanded
+                ? 'bx--expandable-row'
+                : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
               parentRowId === row.id
-                ? "bx--expandable-row--hover"
-                : ""} {isHighlighted
-                ? "bx--data-table--highlighted-row"
-                : ""} {expandable && isSelectionEnabled
-                ? "bx--expandable-row--with-selection"
-                : ""} {$rowAILabelStates.get(row.id) === "active"
-                ? "bx--data-table--ai-label-row"
-                : ""} {rowClassValue ?? ""}"
+                ? 'bx--expandable-row--hover'
+                : ''} {isHighlighted
+                ? 'bx--data-table--highlighted-row'
+                : ''} {expandable && isSelectionEnabled
+                ? 'bx--expandable-row--with-selection'
+                : ''} {$rowAILabelStates.get(row.id) === 'active'
+                ? 'bx--data-table--ai-label-row'
+                : ''} {rowClassValue ?? ''}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
@@ -1616,18 +1612,16 @@
                               selected: true,
                             });
                           }}
-                        >
+                        />
                         <label
                           class:bx--radio-button__label={true}
                           for={inputId}
                         >
-                          <span
-                            class:bx--radio-button__appearance={true}
+                          <span class:bx--radio-button__appearance={true}
                           ></span>
                           <span
                             class:bx--radio-button__label-text={true}
-                            class:bx--visually-hidden={true}
-                            >Select row</span
+                            class:bx--visually-hidden={true}>Select row</span
                           >
                         </label>
                       </div>
@@ -1666,7 +1660,7 @@
                               selected: checked,
                             });
                           }}
-                        >
+                        />
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                         <label
@@ -1730,8 +1724,7 @@
                   parentRowId = null;
                 }}
               >
-                {#if expandedRowIdsSet.has(row.id) &&
-                  !nonExpandableRowIdsSet.has(row.id)}
+                {#if expandedRowIdsSet.has(row.id) && !nonExpandableRowIdsSet.has(row.id)}
                   <td colspan={totalColumns}>
                     <div class:bx--child-row-inner-container={true}>
                       <slot
@@ -1782,18 +1775,18 @@
               data-zebra-even={zebraVisibleEvenIds?.has(row.id)
                 ? ""
                 : undefined}
-              class="{isSelected ? "bx--data-table--selected" : ""} {isExpanded
-                ? "bx--expandable-row"
-                : ""} {expandable ? "bx--parent-row" : ""} {expandable &&
+              class="{isSelected ? 'bx--data-table--selected' : ''} {isExpanded
+                ? 'bx--expandable-row'
+                : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
               parentRowId === row.id
-                ? "bx--expandable-row--hover"
-                : ""} {isHighlighted
-                ? "bx--data-table--highlighted-row"
-                : ""} {expandable && isSelectionEnabled
-                ? "bx--expandable-row--with-selection"
-                : ""} {$rowAILabelStates.get(row.id) === "active"
-                ? "bx--data-table--ai-label-row"
-                : ""} {rowClassValue ?? ""}"
+                ? 'bx--expandable-row--hover'
+                : ''} {isHighlighted
+                ? 'bx--data-table--highlighted-row'
+                : ''} {expandable && isSelectionEnabled
+                ? 'bx--expandable-row--with-selection'
+                : ''} {$rowAILabelStates.get(row.id) === 'active'
+                ? 'bx--data-table--ai-label-row'
+                : ''} {rowClassValue ?? ''}"
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
@@ -1891,18 +1884,16 @@
                               selected: true,
                             });
                           }}
-                        >
+                        />
                         <label
                           class:bx--radio-button__label={true}
                           for={inputId}
                         >
-                          <span
-                            class:bx--radio-button__appearance={true}
+                          <span class:bx--radio-button__appearance={true}
                           ></span>
                           <span
                             class:bx--radio-button__label-text={true}
-                            class:bx--visually-hidden={true}
-                            >Select row</span
+                            class:bx--visually-hidden={true}>Select row</span
                           >
                         </label>
                       </div>
@@ -1941,7 +1932,7 @@
                               selected: checked,
                             });
                           }}
-                        >
+                        />
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
                         <label
@@ -2024,9 +2015,7 @@
         <TableFoot>
           <TableRow>
             {#if hasRowDecorator}
-              <td
-                aria-hidden="true"
-                class:bx--table-column-decorator={true}
+              <td aria-hidden="true" class:bx--table-column-decorator={true}
               ></td>
             {/if}
             {#if expandable}

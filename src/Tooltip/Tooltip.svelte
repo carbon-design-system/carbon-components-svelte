@@ -116,9 +116,9 @@
     tick,
   } from "svelte";
   import { get, writable } from "svelte/store";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";

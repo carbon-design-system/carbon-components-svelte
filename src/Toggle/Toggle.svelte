@@ -195,7 +195,7 @@
     {name}
     {form}
     {value}
-  >
+  />
   <label
     aria-label={labelText || $$slots.labelChildren || ariaLabel !== undefined
       ? undefined
@@ -205,7 +205,7 @@
   >
     {#if labelText || $$slots.labelChildren}
       <span class:bx--visually-hidden={hideLabel}>
-        <slot name="labelChildren"> {labelText} </slot>
+        <slot name="labelChildren">{labelText}</slot>
       </span>
     {/if}
     <span
@@ -216,10 +216,10 @@
         margin would widen an otherwise bare switch. -->
       {#if labelA || labelB || $$slots.labelA || $$slots.labelB}
         <span aria-hidden="true" class:bx--toggle__text--off={true}>
-          <slot name="labelA"> {labelA} </slot>
+          <slot name="labelA">{labelA}</slot>
         </span>
         <span aria-hidden="true" class:bx--toggle__text--on={true}>
-          <slot name="labelB"> {labelB} </slot>
+          <slot name="labelB">{labelB}</slot>
         </span>
       {/if}
     </span>

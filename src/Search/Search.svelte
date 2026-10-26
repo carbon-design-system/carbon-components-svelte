@@ -128,6 +128,7 @@
   export let debounce = 0;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Loading from "../Loading/Loading.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -136,7 +137,6 @@
   import IconSearch from "../icons/IconSearch.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import Loading from "../Loading/Loading.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import {
     buildFieldIds,
@@ -304,7 +304,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
@@ -379,7 +379,7 @@
       }}
       on:keyup
       on:paste
-    >
+    />
     {#if showInvalid}
       <WarningFilled class="bx--search__invalid-icon" />
     {/if}
@@ -408,7 +408,7 @@
     {#if isFluid && (showInvalid || showWarn)}
       <!-- Fluid: the message sits inside the field, under a divider, with
            the status icon beside it, as on the other fluid fields. -->
-      <hr class:bx--search__divider={true}>
+      <hr class:bx--search__divider={true} />
       {#if showInvalid}
         {#if invalidText}
           <div id={errorId} class:bx--form-requirement={true} role="alert">

@@ -6,11 +6,9 @@
 
   export let files: ComponentProps<FileUploaderDropContainer>["files"] = [];
   export let onadd:
-    | ((e: CustomEvent<ReadonlyArray<File>>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ReadonlyArray<File>>) => void) | undefined = undefined;
   export let onchange:
-    | ((e: CustomEvent<ReadonlyArray<File>>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ReadonlyArray<File>>) => void) | undefined = undefined;
   export let onrejected:
     | ((
         e: CustomEvent<

@@ -19,8 +19,10 @@
 
   let outer: HTMLElement | undefined;
 
-  export let onTagClose: (detail: { tag: unknown; index: number }) => void =
-    () => {};
+  export let onTagClose: (detail: {
+    tag: unknown;
+    index: number;
+  }) => void = () => {};
   export let onOverflowClick: (event: CustomEvent) => void = () => {};
   export let onOverflowChange: (detail: { count: number }) => void = () => {};
 </script>

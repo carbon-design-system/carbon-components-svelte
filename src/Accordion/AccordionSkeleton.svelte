@@ -24,8 +24,8 @@
   /** Set to `false` to close the first accordion item */
   export let open = true;
 
-  import ChevronRight from "../icons/ChevronRight.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import ChevronRight from "../icons/ChevronRight.svelte";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
 
   $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
@@ -61,10 +61,7 @@
       </div>
     </li>
   {/if}
-  {#each Array.from(
-    { length: open ? count - 1 : count },
-    (_, i) => i,
-  ) as item (item)}
+  {#each Array.from({ length: open ? count - 1 : count }, (_, i) => i) as item (item)}
     <li class:bx--accordion__item={true}>
       <span class:bx--accordion__heading={true}>
         <ChevronRight class="bx--accordion__arrow" />

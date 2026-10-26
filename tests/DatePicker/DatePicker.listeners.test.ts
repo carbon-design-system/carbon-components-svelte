@@ -4,9 +4,9 @@ import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar
 import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";
-import { renderCalendar } from "./calendar-instance";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerHost from "./DatePickerHost.test.svelte";
+import { renderCalendar } from "./calendar-instance";
 import { openCalendar } from "./helpers";
 
 const mountRange = () => renderCalendar({ datePickerType: "range" });
@@ -60,9 +60,7 @@ describe("DatePicker window listeners", () => {
     const cycle = async (index: number) => {
       const { instance, unmount } = await renderCalendar({
         datePickerType: ["single", "range", "multiple"][index % 3] as
-          | "single"
-          | "range"
-          | "multiple",
+          "single" | "range" | "multiple",
       });
       instance.open();
       await tick();

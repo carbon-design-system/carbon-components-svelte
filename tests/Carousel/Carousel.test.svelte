@@ -9,8 +9,7 @@
   export let wrap = false;
   export let showCounter = false;
   export let counterText:
-    | ((current: number, total: number) => string)
-    | undefined = undefined;
+    ((current: number, total: number) => string) | undefined = undefined;
 
   export let moveFocusOnChange = false;
   export let useMaxHeight = true;
@@ -83,4 +82,4 @@
   Add and select slide
 </button>
 
-<input aria-label="Elsewhere" bind:this={elsewhere}>
+<input aria-label="Elsewhere" bind:this={elsewhere} />

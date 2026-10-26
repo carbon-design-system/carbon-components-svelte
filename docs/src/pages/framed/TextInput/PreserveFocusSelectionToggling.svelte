@@ -19,4 +19,4 @@
     if (selectTextOnFocus) e.currentTarget.select();
   }}
   use:preserveFocusSelection={selectTextOnFocus && !disabled}
->
+/>

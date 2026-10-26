@@ -22,7 +22,7 @@
     { id: "9", text: "Product" },
   ]}
 />
-<br>
+<br />
 <Button
   disabled={selectedId === undefined}
   on:click={() => (selectedId = undefined)}

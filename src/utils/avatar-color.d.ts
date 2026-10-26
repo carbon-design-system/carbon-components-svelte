@@ -1,12 +1,6 @@
 /** Chromatic `UserAvatar` background colors for auto mode. Grays are left out. */
 type AvatarBackgroundColor =
-  | "red"
-  | "magenta"
-  | "purple"
-  | "blue"
-  | "cyan"
-  | "teal"
-  | "green";
+  "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green";
 
 /**
  * Pick a stable avatar background color from a string. Empty or falsy input

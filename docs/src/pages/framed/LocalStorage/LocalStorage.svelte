@@ -23,6 +23,6 @@
 
 <Toggle size="sm" labelText="Dark mode" bind:toggled />
 
-<br>
+<br />
 
 <pre>{JSON.stringify(events, null, 2)}</pre>

@@ -8,8 +8,7 @@
 <main style="padding: 4rem 1rem; max-width: 16rem;">
   <button type="button" data-testid="before">Before</button>
   <Truncate reveal="tooltip" data-testid="clipped">{message}</Truncate>
-  <Truncate reveal="tooltip" data-testid="fits"
-    >Deployed revision 215.</Truncate
+  <Truncate reveal="tooltip" data-testid="fits">Deployed revision 215.</Truncate
   >
   <Truncate reveal="tooltip" clamp="front" data-testid="front">
     /var/log/kubernetes/production/payments-api/pods/payments-api-7f9c8d6b4d-x2kql/container.log

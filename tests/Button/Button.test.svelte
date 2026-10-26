@@ -50,7 +50,7 @@
 
 <Button href="https://example.com" target="_blank">External link</Button>
 
-<Button as let:props> <p {...props}>Custom element</p> </Button>
+<Button as let:props><p {...props}>Custom element</p></Button>
 
 <Button disabled>Disabled button</Button>
 
@@ -62,7 +62,7 @@
 
 <Button icon={Add}>With icon</Button>
 
-<Button data-testid="btn" on:click={onClick}> Test button </Button>
+<Button data-testid="btn" on:click={onClick}>Test button</Button>
 
 <Button data-testid="btn-skeleton" skeleton style="width: 200px" />
 <Button skeleton size="field" />

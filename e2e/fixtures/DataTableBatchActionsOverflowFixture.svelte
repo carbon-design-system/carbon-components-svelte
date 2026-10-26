@@ -27,7 +27,7 @@
         <Button>Restart</Button>
         <Button>Archive</Button>
       </ToolbarBatchActions>
-      <ToolbarContent> <Button>Create balancer</Button> </ToolbarContent>
+      <ToolbarContent><Button>Create balancer</Button></ToolbarContent>
     </Toolbar>
   </DataTable>
 </div>

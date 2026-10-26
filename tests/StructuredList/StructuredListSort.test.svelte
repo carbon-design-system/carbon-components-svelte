@@ -13,6 +13,5 @@
   {active}
   {sortDirection}
   {sortAlways}
-  on:sort={(e) => onSort(e.detail)}
-  >Column</StructuredListCell
+  on:sort={(e) => onSort(e.detail)}>Column</StructuredListCell
 >

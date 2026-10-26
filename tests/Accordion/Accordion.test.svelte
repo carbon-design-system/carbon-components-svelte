@@ -42,8 +42,7 @@
   {:else if noTitle}
     <AccordionItem>No title content</AccordionItem>
   {:else}
-    <AccordionItem title="Natural Language Classifier" bind:ref
-      >1</AccordionItem
+    <AccordionItem title="Natural Language Classifier" bind:ref>1</AccordionItem
     >
     <AccordionItem title="Natural Language Understanding" disabled
       >2</AccordionItem
@@ -55,8 +54,7 @@
       on:focus={() => onFocus()}
       on:blur={() => onBlur()}
       on:keydown={(e) => onKeydown(e.key)}
-      on:toggle={(e) => onToggle(e.detail.open)}
-      >3</AccordionItem
+      on:toggle={(e) => onToggle(e.detail.open)}>3</AccordionItem
     >
   {/if}
 </Accordion>

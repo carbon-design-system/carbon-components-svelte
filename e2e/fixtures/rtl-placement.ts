@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import RtlPlacementFixture from "./RtlPlacementFixture.svelte";
+import { mount } from "./mount";
 
 mount(RtlPlacementFixture);

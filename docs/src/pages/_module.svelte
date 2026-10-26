@@ -33,12 +33,12 @@
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import MiniSearch from "minisearch";
   import { onMount } from "svelte";
+  import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import {
     assertCategoriesCover,
     COMPONENT_CATEGORIES,
   } from "../component-categories";
   import { subscribeRoutifyGoto } from "../routify-nav";
-  import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import { theme } from "../store";
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
@@ -74,15 +74,13 @@
   $: results = miniSearch
     .search(value)
     .slice(0, 10)
-    .map(
-      (r): ModuleSearchResult => ({
-        id: String(r.id),
-        href: String(r.href),
-        text: String(r.text),
-        description: r.description == null ? undefined : String(r.description),
-        isComponent: Boolean(r.isComponent),
-      }),
-    );
+    .map((r): ModuleSearchResult => ({
+      id: String(r.id),
+      href: String(r.href),
+      text: String(r.text),
+      description: r.description == null ? undefined : String(r.description),
+      isComponent: Boolean(r.isComponent),
+    }));
 
   // Split MiniSearch hits into two groups. MiniSearch already ranks and filters,
   // so pass shouldFilter={false} and let `matchQuery` highlight labels.
@@ -214,7 +212,7 @@
     expandedByDefault={true}
     bind:isSideNavOpen
   >
-    <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+    <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
 
     <span slot="platform" class="platform-name" class:hidden={active}>
       Carbon<span class="platform-name-full">&nbsp;Components</span>&nbsp;Svelte
@@ -434,9 +432,7 @@
 </svelte:head>
 
 <footer>
-  <dds-footer-container
-    disable-locale-button="true"
-    size="micro"
+  <dds-footer-container disable-locale-button="true" size="micro"
   ></dds-footer-container>
 </footer>
 

@@ -36,8 +36,9 @@
       <Column sm={4} md={3} lg={6} class="bx--full-page-error__column">
         <h1 class:bx--full-page-error__title={true}>
           <span class:bx--full-page-error__label={true}>
-            <span aria-hidden="true">↳ </span
-            ><slot name="labelChildren">{labelText}</slot>
+            <span aria-hidden="true">↳ </span><slot name="labelChildren"
+              >{labelText}</slot
+            >
           </span>
           <span><slot name="titleChildren">{title}</slot></span>
         </h1>

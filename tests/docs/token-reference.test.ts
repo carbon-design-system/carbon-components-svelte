@@ -6,8 +6,8 @@ import {
 } from "carbon-components-svelte/tokens";
 import {
   COLOR_GROUPS,
-  COMPONENT_GROUPS,
   colorGroups,
+  COMPONENT_GROUPS,
   filterGroups,
   groupMatches,
   groupNames,

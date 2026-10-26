@@ -12,8 +12,8 @@ function insideList(tab: Locator) {
     const tabRect = node.getBoundingClientRect();
     return Boolean(
       navRect &&
-        tabRect.left >= navRect.left - 1 &&
-        tabRect.right <= navRect.right + 1,
+      tabRect.left >= navRect.left - 1 &&
+      tabRect.right <= navRect.right + 1,
     );
   });
 }

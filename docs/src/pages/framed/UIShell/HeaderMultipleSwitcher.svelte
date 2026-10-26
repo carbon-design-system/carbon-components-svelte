@@ -17,7 +17,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud" isSideNavOpen>
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderUtilities>
     <HeaderAction
       iconDescription="Notifications"
@@ -55,7 +55,7 @@
 <Content>
   <Grid>
     <Row>
-      <Column> <h1>Dashboard</h1> </Column>
+      <Column><h1>Dashboard</h1></Column>
     </Row>
   </Grid>
 </Content>

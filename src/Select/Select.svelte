@@ -274,7 +274,7 @@
         class:bx--label--disabled={disabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
-        <slot name="labelChildren"> {labelText} </slot>
+        <slot name="labelChildren">{labelText}</slot>
       </label>
     {/if}
     {#if inline}
@@ -413,7 +413,7 @@
           />
         {/if}
         {#if isFluid}
-          <hr class:bx--select__divider={true}>
+          <hr class:bx--select__divider={true} />
           {#if showInvalid && invalidText}
             <div id={errorId} class:bx--form-requirement={true} role="alert">
               {invalidText}

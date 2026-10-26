@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { openThenStart } from "./helpers";
 import InterstitialScreenTest from "./InterstitialScreen.test.svelte";
+import { openThenStart } from "./helpers";
 
 describe("InterstitialScreen", () => {
   it("renders modal-hosted by default", () => {

@@ -21,8 +21,9 @@
     undefined;
   export let customClass = "";
   export let useSlot = false;
-  export let onChange: (selected: ReadonlyArray<string | number>) => void =
-    () => {};
+  export let onChange: (
+    selected: ReadonlyArray<string | number>,
+  ) => void = () => {};
   export let onCheck: (value: string, checked: boolean) => void = () => {};
 </script>
 

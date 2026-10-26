@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
-import { expectSelected, getParts } from "./ssr-helpers";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
+import { expectSelected, getParts } from "./ssr-helpers";
 
 describe("Tabs server render", () => {
   it("renders the first tab and panel as selected by default", () => {

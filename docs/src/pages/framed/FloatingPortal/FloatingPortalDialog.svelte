@@ -18,8 +18,8 @@
     <p>
       Carbon components that portal their floating content (dropdowns, overflow
       menus, tooltips, date pickers, etc.) are automatically mounted into the
-      nearest <code>&lt;dialog&gt;</code> ancestor, so they render above the
-      modal backdrop in the top layer.
+      nearest <code>&lt;dialog&gt;</code> ancestor, so they render above the modal
+      backdrop in the top layer.
     </p>
     <Dropdown
       portalMenu

@@ -4,6 +4,7 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
+import MultiSelect from "./MultiSelect.test.svelte";
 import {
   buildItems,
   closeMenu,
@@ -12,7 +13,6 @@ import {
   optionTexts,
   toggleOption,
 } from "./helpers";
-import MultiSelect from "./MultiSelect.test.svelte";
 
 describe("MultiSelect", () => {
   describe("sorting behavior", () => {

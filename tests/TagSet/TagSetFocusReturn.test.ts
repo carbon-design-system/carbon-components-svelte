@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { closeButtonOf } from "./helpers";
 import TagSetFocusReturn from "./TagSetFocusReturn.test.svelte";
+import { closeButtonOf } from "./helpers";
 
 describe("TagSet focus after closing a tag", () => {
   it("moves focus to the next tag's close button", async () => {

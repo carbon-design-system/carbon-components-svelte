@@ -11,7 +11,7 @@
 
 <FormItem controlId="email" {disabled} let:control let:describedBy>
   <FormLabel>Email</FormLabel>
-  <input use:control>
+  <input use:control />
   {#if showHelper}
     <FormHelperText>Use your work email</FormHelperText>
   {/if}

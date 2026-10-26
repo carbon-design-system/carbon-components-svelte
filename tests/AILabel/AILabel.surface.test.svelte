@@ -21,7 +21,6 @@
   import RadioTile from "carbon-components-svelte/Tile/RadioTile.svelte";
   import SelectableTile from "carbon-components-svelte/Tile/SelectableTile.svelte";
   import Tile from "carbon-components-svelte/Tile/Tile.svelte";
-
   import AILabelOrIcon from "./AILabelOrIcon.test.svelte";
 
   export let ai = true;

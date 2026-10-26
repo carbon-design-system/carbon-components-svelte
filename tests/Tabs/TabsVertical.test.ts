@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { expectClass, mockScrollMetrics } from "./helpers";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
 import TabsVerticalOrientationToggle from "./TabsVerticalOrientationToggle.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
+import { expectClass, mockScrollMetrics } from "./helpers";
 
 describe("TabsVertical", () => {
   it("should render with default props", async () => {

@@ -186,8 +186,7 @@
         class:bx--header__action-text={true}
         class:bx--header-switcher__text={true}
         class:bx--header-switcher__text--flush={!$$slots.avatar}
-        style:max-width={maxWidthStyle}
-        >{text}</span
+        style:max-width={maxWidthStyle}>{text}</span
       >
     {/if}
     <span

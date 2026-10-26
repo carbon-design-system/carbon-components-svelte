@@ -15,7 +15,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud">
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderNav>
     <HeaderNavItem href="/catalog" text="Catalog" isSelected />
     <HeaderNavItem href="/resources" text="Resources" />

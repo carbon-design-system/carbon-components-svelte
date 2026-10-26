@@ -94,11 +94,11 @@
   export let contentRef = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Popover from "../Popover/Popover.svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { isImeComposition } from "../utils/ime-composition.js";

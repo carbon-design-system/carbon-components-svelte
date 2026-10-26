@@ -12,4 +12,4 @@
 <p>See the <a href="#rendered-html">export guide</a> to set one up.</p>`;
 </script>
 
-<Prose> {@html html} </Prose>
+<Prose>{@html html}</Prose>

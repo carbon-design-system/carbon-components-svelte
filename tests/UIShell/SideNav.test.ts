@@ -2,13 +2,13 @@ import { render, screen } from "@testing-library/svelte";
 import axe from "axe-core";
 import { tick } from "svelte";
 import { get } from "svelte/store";
+import SideNav from "../../src/UIShell/SideNav.svelte";
 import {
   hamburgerMenuRef,
   isSideNavMobile,
   shouldRenderHamburgerMenu,
   sideNavWidth,
 } from "../../src/UIShell/nav-store.js";
-import SideNav from "../../src/UIShell/SideNav.svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import { setViewportWidth } from "../utils/viewport";

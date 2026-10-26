@@ -62,7 +62,7 @@
 
   <Toggle labelText="Maintenance mode" />
 
-  <Tile> <p>Deployment pipeline — 2 builds queued</p> </Tile>
+  <Tile><p>Deployment pipeline — 2 builds queued</p></Tile>
 
   <InlineNotification
     kind="info"

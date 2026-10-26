@@ -328,7 +328,7 @@
         </tr>
       </tbody>
     </table>
-    <hr>
+    <hr />
   </Prose>
 
   <RangeSlider

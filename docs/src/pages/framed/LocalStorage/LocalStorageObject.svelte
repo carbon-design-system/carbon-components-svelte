@@ -27,8 +27,8 @@
 
   <div>
     Edit the nested fields below, then refresh the page to confirm the changes
-    survive. The two-way bindings mutate <code>settings</code> in place; the
-    component still persists them.
+    survive. The two-way bindings mutate <code>settings</code> in place; the component
+    still persists them.
   </div>
 
   <TextInput

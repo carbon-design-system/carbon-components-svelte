@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import UIShellVariantsFixture from "./UIShellVariantsFixture.svelte";
+import { mount } from "./mount";
 
 mount(UIShellVariantsFixture);

@@ -9,14 +9,11 @@
   export let fileUploader: FileUploader | undefined = undefined;
 
   export let onAdd:
-    | ((e: CustomEvent<ReadonlyArray<File>>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ReadonlyArray<File>>) => void) | undefined = undefined;
   export let onRemove:
-    | ((e: CustomEvent<ReadonlyArray<File>>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ReadonlyArray<File>>) => void) | undefined = undefined;
   export let onChange:
-    | ((e: CustomEvent<ReadonlyArray<File>>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ReadonlyArray<File>>) => void) | undefined = undefined;
   export let onClear: ((e: CustomEvent<void>) => void) | undefined = undefined;
   export let onClick: ((e: MouseEvent) => void) | undefined = undefined;
   export let onKeydown: ((e: KeyboardEvent) => void) | undefined = undefined;

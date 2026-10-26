@@ -415,9 +415,7 @@ export function affectedBy(
 }
 
 export type Selection =
-  | { mode: "all" }
-  | { mode: "none" }
-  | { mode: "some"; files: string[] };
+  { mode: "all" } | { mode: "none" } | { mode: "some"; files: string[] };
 
 /**
  * The sources that spell a class a `css/` change touched in the compiled

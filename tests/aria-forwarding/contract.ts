@@ -5,9 +5,7 @@ import type { RenderResult } from "@testing-library/svelte";
  * element that takes focus or carries the role, never on a wrapper.
  */
 export type AriaAttribute =
-  | "aria-label"
-  | "aria-labelledby"
-  | "aria-describedby";
+  "aria-label" | "aria-labelledby" | "aria-describedby";
 
 export const CONSUMER_LABEL = "Contract label";
 export const CONSUMER_LABEL_ID = "contract-label";

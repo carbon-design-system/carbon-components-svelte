@@ -550,7 +550,7 @@
             value={value ?? ""}
             {disabled}
             form={$$restProps.form}
-          >
+          />
         {/if}
         <input
           bind:this={ref}
@@ -599,7 +599,7 @@
           on:wheel|nonpassive={(event) => {
             if (disableWheel) event.preventDefault();
           }}
-        >
+        />
       {:else}
         <!-- NVDA ignores `readonly` on a number input and announces it as
           editable, so a read-only field renders as a text input. -->
@@ -651,7 +651,7 @@
           on:wheel|nonpassive={(event) => {
             if (disableWheel) event.preventDefault();
           }}
-        >
+        />
       {/if}
       {#if readonly && hideSteppers && !isFluid}
         <!-- Read-only steppers stay visible but inert and mark the state
@@ -715,7 +715,7 @@
         </div>
       {/if}
       {#if isFluid}
-        <hr class:bx--number-input__divider={true}>
+        <hr class:bx--number-input__divider={true} />
         {#if hasErrorMessage}
           <div id={errorId} class:bx--form-requirement={true} role="alert">
             {invalidText}

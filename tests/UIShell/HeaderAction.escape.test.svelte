@@ -11,5 +11,5 @@
   <HeaderAction bind:isOpen iconDescription="Notifications" icon={Notification}>
     <a href="#alerts">Alert settings</a>
   </HeaderAction>
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

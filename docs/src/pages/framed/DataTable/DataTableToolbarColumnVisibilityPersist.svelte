@@ -3,10 +3,10 @@
     applyColumnSettings,
     DataTable,
     LocalStorage,
+    toColumnSettings,
     Toolbar,
     ToolbarColumnVisibility,
     ToolbarContent,
-    toColumnSettings,
   } from "carbon-components-svelte";
 
   const defaultHeaders = [

@@ -39,9 +39,9 @@
   export let size = "md";
 
   import { createEventDispatcher, onMount } from "svelte";
+  import Loading from "../Loading/Loading.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
-  import Loading from "../Loading/Loading.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
 
   const dispatch = createEventDispatcher();

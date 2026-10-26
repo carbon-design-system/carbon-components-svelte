@@ -36,10 +36,7 @@
       <code>{cell.value}</code>
     {:else}
       <Stack tag="span" orientation="horizontal" align="center" gap={3}>
-        <span
-          class="swatch"
-          style:background={cell.value}
-          aria-hidden="true"
+        <span class="swatch" style:background={cell.value} aria-hidden="true"
         ></span>
         {cell.value}
       </Stack>

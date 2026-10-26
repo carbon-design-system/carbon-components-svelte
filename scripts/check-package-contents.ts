@@ -8,8 +8,8 @@
  */
 import { $ } from "bun";
 import {
-  type PackedFile,
   packageContentProblems,
+  type PackedFile,
 } from "./lib/package-contents";
 
 const [pack] = (await $`npm pack --dry-run --json --ignore-scripts`

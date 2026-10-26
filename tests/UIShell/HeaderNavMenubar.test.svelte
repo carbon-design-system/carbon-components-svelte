@@ -91,7 +91,7 @@
 {#if after === "button"}
   <button type="button">After</button>
 {:else if after === "input"}
-  <input aria-label="Search docs">
+  <input aria-label="Search docs" />
 {:else if after === "item"}
   <HeaderNavItem href="/" text="Standalone" />
 {/if}

@@ -2,11 +2,11 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { checkboxFor } from "./helpers";
 import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
 import TreeViewHref from "./TreeView.href.test.svelte";
 import TreeViewVirtualizeLazy from "./TreeView.virtualize.lazy.test.svelte";
 import TreeViewVirtualize from "./TreeView.virtualize.test.svelte";
+import { checkboxFor } from "./helpers";
 
 const countRows = () => screen.queryAllByRole("treeitem").length;
 

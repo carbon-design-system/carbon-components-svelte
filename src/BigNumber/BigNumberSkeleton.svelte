@@ -22,8 +22,7 @@
     <span
       class:bx--big-number__skeleton-bar={true}
       class:bx--big-number__skeleton-bar--label={true}
-    ></span
-    >&nbsp;
+    ></span>&nbsp;
   </figcaption>
   <div class:bx--big-number__value-row={true}>
     <span class:bx--big-number__skeleton-bar={true}></span>&nbsp;
