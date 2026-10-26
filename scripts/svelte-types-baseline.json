@@ -11,7 +11,6 @@
   "CopyButton/CopyButton.svelte": 1,
   "DataTable/DataTable.svelte": 14,
   "DataTable/DataTableSkeleton.svelte": 2,
-  "DataTable/TableHeader.svelte": 2,
   "DataTable/ToolbarColumnVisibility.svelte": 1,
   "DataTable/ToolbarSearch.svelte": 1,
   "Dropdown/Dropdown.svelte": 8,
