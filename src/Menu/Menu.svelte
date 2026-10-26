@@ -108,8 +108,9 @@
     setContext,
     tick,
   } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, readable, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
@@ -158,8 +159,8 @@
   // Reads layout only, so it runs with the other frame jobs' reads.
   const fitJob = createFrameJob([
     () => {
-      if (!(open && ref && anchor)) return;
-      const { left, right } = anchor.getBoundingClientRect();
+      if (!(open && ref && placementAnchor)) return;
+      const { left, right } = placementAnchor.getBoundingClientRect();
       const fitted = fitIntrinsicAlign({
         before: left,
         after: right,
@@ -234,6 +235,14 @@
   // just as the root unmounts it, dropping focus to <body>.
   const parentCtx = getContext("carbon:Menu");
   const isSubmenu = !!parentCtx;
+
+  // A ComboButton's menu lines up with the whole button group, as in Carbon
+  // React, while `anchor` (the chevron) keeps focus. Submenus place against
+  // their parent item.
+  /** @type {import("svelte/store").Readable<null | HTMLElement>} */
+  const placementGroup =
+    (!isSubmenu && getContext(MENU_PLACEMENT_CONTEXT_KEY)) || readable(null);
+  $: placementAnchor = $placementGroup ?? anchor;
 
   // Ids of `selected` items a `MenuItemGroup` has already seeded. Items and
   // submenus remount on every open, so this lives on the root menu.
@@ -358,7 +367,7 @@
 </script>
 
 <FloatingPortal
-  {anchor}
+  anchor={placementAnchor}
   {direction}
   {open}
   {gapTop}

@@ -48,3 +48,10 @@ export const AI_LABEL_HOST_CONTEXT_KEY: "carbon:AILabelHost";
  * content they move out of the zone keeps its theme.
  */
 export const THEME_ZONE_CONTEXT_KEY: "carbon:ThemeZone";
+
+/**
+ * Set by `ComboButton` to a readable store of its button group; read by a
+ * root `Menu`, which places itself against the group. Focus still returns
+ * to the menu's `anchor`, the trigger.
+ */
+export const MENU_PLACEMENT_CONTEXT_KEY: "carbon:MenuPlacement";

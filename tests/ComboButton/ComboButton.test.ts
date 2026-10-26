@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import ComboButtonSlot from "./ComboButton.slot.test.svelte";
 import ComboButtonFixture from "./ComboButton.test.svelte";
@@ -164,4 +165,68 @@ describe("ComboButton", () => {
     expect(trigger).toHaveClass("bx--btn--icon-only--right");
     expect(trigger).not.toHaveClass("bx--btn--icon-only--top");
   });
+});
+
+describe("ComboButton menu placement", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.documentElement.style.removeProperty("direction");
+  });
+
+  // A 146px group at `left` (a 106px primary action, then a 40px chevron)
+  // and a 200px menu in a 1000px window.
+  const layout = (left: number) => {
+    vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+      1000,
+    );
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: Element) {
+        if (this.matches("[role='menu']")) return rect({ width: 200 });
+        if (this.matches(".bx--combo-button")) {
+          return rect({ left, width: 146 });
+        }
+        if (this.matches(".bx--combo-button__trigger")) {
+          return rect({ left: left + 106, width: 40 });
+        }
+        if (this.matches("button")) return rect({ left, width: 106 });
+        return rect();
+      },
+    );
+  };
+
+  // The portal's `left` is the group edge or center its alignment names.
+  it.each([
+    ["start", "ltr", 300, "300px"],
+    ["center", "ltr", 300, "373px"],
+    ["end", "ltr", 300, "446px"],
+    ["start", "rtl", 300, "446px"],
+    ["center", "rtl", 300, "373px"],
+    ["end", "rtl", 300, "300px"],
+    ["end", "ltr", 0, "0px"],
+    ["center", "ltr", 0, "0px"],
+    ["start", "rtl", 0, "0px"],
+    ["start", "ltr", 854, "1000px"],
+    ["end", "rtl", 854, "1000px"],
+  ] as const)(
+    "lines %s up with the group (%s, group at %ipx)",
+    async (intrinsicAlign, dir, left, expected) => {
+      document.documentElement.style.direction = dir;
+      layout(left);
+      render(ComboButtonFixture, { props: { intrinsicAlign } });
+
+      const trigger = screen.getByRole("button", {
+        name: "Additional actions",
+      });
+      await user.click(trigger);
+
+      const portal = screen
+        .getByRole("menu")
+        .closest<HTMLElement>("[data-floating-portal]");
+      assert(portal);
+      await vi.waitFor(() => expect(portal.style.left).toBe(expected));
+
+      await user.keyboard("{Escape}");
+      expect(trigger).toHaveFocus();
+    },
+  );
 });
