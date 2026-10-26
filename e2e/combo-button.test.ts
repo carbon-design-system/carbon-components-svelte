@@ -1,4 +1,22 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+
+// The menu fits its alignment a frame after it opens (`fitIntrinsicAlign`),
+// so read its box once that frame has run.
+async function openMenu(page: Page, trigger: string) {
+  const button = page.getByRole("button", { name: trigger });
+  await button.click();
+  const menu = page.getByRole("menu");
+  await expect(menu).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
+  );
+  const [b, m] = await Promise.all([button.boundingBox(), menu.boundingBox()]);
+  const width = await page.evaluate(() => document.documentElement.clientWidth);
+  if (!b || !m) throw new Error("no layout");
+  return { b, m, width };
+}
 
 test.describe("ComboButton", () => {
   test.beforeEach(async ({ page }) => {
@@ -32,21 +50,6 @@ test.describe("ComboButton", () => {
     await expect(page.getByRole("menu")).not.toBeVisible();
   });
 
-  test("aligns the menu to the right edge of the trigger group", async ({
-    page,
-  }) => {
-    await page.getByRole("button", { name: "Additional actions" }).click();
-
-    const triggerBox = await page
-      .getByRole("button", { name: "Additional actions" })
-      .boundingBox();
-    const menuBox = await page.getByRole("menu").boundingBox();
-
-    expect(Math.round(menuBox.x + menuBox.width)).toBe(
-      Math.round(triggerBox.x + triggerBox.width),
-    );
-  });
-
   test("does not leave the trigger focused after closing it with a mouse click", async ({
     page,
   }) => {
@@ -74,3 +77,36 @@ test.describe("ComboButton", () => {
     await expect(trigger).toBeFocused();
   });
 });
+
+// The menu trigger sits at the group's inline end, so the trigger's inline
+// end edge is the group's.
+for (const dir of ["ltr", "rtl"] as const) {
+  test.describe(`ComboButton menu alignment (${dir})`, () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/combo-button.html");
+      await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+      }, dir);
+    });
+
+    test("with room, the menu lines up with the group's inline end", async ({
+      page,
+    }) => {
+      const { b, m } = await openMenu(page, "Additional actions");
+      if (dir === "ltr")
+        expect(Math.abs(m.x + m.width - (b.x + b.width))).toBeLessThan(1);
+      else expect(Math.abs(m.x - b.x)).toBeLessThan(1);
+    });
+
+    test("at the window's side, the menu stays in the window", async ({
+      page,
+    }) => {
+      const { b, m, width } = await openMenu(page, "More export actions");
+      expect(m.x).toBeGreaterThanOrEqual(0);
+      expect(m.x + m.width).toBeLessThanOrEqual(width);
+      // It lines up with the trigger's inline start edge instead.
+      if (dir === "ltr") expect(Math.abs(m.x - b.x)).toBeLessThan(1);
+      else expect(Math.abs(m.x + m.width - (b.x + b.width))).toBeLessThan(1);
+    });
+  });
+}
