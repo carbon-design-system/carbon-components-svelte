@@ -1,13 +1,14 @@
 <script>
   /**
    * @restProps {div}
-   * @event {ReadonlyArray<string | number>} change
+   * @template {string | number} [Value=string | number]
+   * @event {ReadonlyArray<Value>} change
    */
 
   /**
    * Set the values of the pressed buttons.
    * Always an array, even in `single` mode (0 or 1 entries).
-   * @type {ReadonlyArray<string | number>}
+   * @type {ReadonlyArray<Value>}
    * @bindable writable
    */
   export let selected = [];
@@ -76,7 +77,7 @@
   const TOGGLE_BUTTON_SELECTOR = "button.bx--toggle-button";
 
   /**
-   * @type {import("svelte/store").Writable<Set<string | number>>}
+   * @type {import("svelte/store").Writable<Set<Value>>}
    */
   const selectedValues = writable(new Set());
   const groupDisabled = writable(disabled);
@@ -100,7 +101,7 @@
   $: groupAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
   /**
-   * @type {(value: string | number) => void}
+   * @type {(value: Value) => void}
    */
   function toggle(value) {
     if (disabled) return;
@@ -114,6 +115,7 @@
       if (effectiveSelected.length <= 1) return;
     }
 
+    /** @type {Value[]} */
     let next;
     if (selectionMode === "single") {
       next = isPressed ? [] : [value];
@@ -153,7 +155,7 @@
    * render (server or client) already has one `tabindex="0"` without
    * reading the DOM: the first enabled button when nothing is pressed,
    * otherwise the first enabled pressed button.
-   * @type {(value: string | number, isDisabled: boolean) => boolean}
+   * @type {(value: Value, isDisabled: boolean) => boolean}
    */
   function claimInitialTabStop(value, isDisabled) {
     if (initialTabStopClaimed || isDisabled) return false;

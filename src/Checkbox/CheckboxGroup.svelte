@@ -1,12 +1,13 @@
 <script>
   /**
    * @restProps {div}
-   * @event {ReadonlyArray<string | number>} change
+   * @template {string | number} [Value=string | number]
+   * @event {ReadonlyArray<Value>} change
    */
 
   /**
    * Set the selected checkbox values.
-   * @type {ReadonlyArray<string | number>}
+   * @type {ReadonlyArray<Value>}
    * @bindable writable
    */
   export let selected = [];
@@ -111,7 +112,7 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<string | number>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<Value>>}
    */
   const selectedValues = writable(selected);
   const groupName = writable(name);
@@ -128,7 +129,7 @@
   let resettingFromForm = false;
 
   /**
-   * @type {(value: string | number, checked: boolean, fromReset?: boolean) => void}
+   * @type {(value: Value, checked: boolean, fromReset?: boolean) => void}
    */
   function update(value, checked, fromReset = false) {
     resettingFromForm = fromReset;
