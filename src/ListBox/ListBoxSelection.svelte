@@ -20,10 +20,10 @@
   export let readonly = false;
 
   /** Default translation ids */
-  export const translationIds = {
+  export const translationIds = /** @type {const} */ ({
     clearAll: "clearAll",
     clearSelection: "clearSelection",
-  };
+  });
 
   /**
    * Override the default translation ids.
