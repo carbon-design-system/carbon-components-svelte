@@ -12,6 +12,10 @@
       "types": "./src/index.d.ts",
       "svelte": "./src/index.js"
     },
+    "./devtools": {
+      "types": "./src/devtools/index.d.ts",
+      "svelte": "./src/devtools/index.js"
+    },
     "./syntax": {
       "types": "./src/syntax/index.d.ts",
       "svelte": "./src/syntax/index.js",

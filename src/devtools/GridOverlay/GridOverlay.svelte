@@ -1,7 +1,7 @@
 <script>
-  import Column from "./Column.svelte";
-  import Grid from "./Grid.svelte";
-  import Row from "./Row.svelte";
+  import Column from "../../Grid/Column.svelte";
+  import Grid from "../../Grid/Grid.svelte";
+  import Row from "../../Grid/Row.svelte";
 
   /**
    * @restProps {div}

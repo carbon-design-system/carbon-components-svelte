@@ -1,4 +1,10 @@
 declare module "carbon-components-svelte/css/all.css";
+declare module "carbon-components-svelte/css/devtools-g10.css";
+declare module "carbon-components-svelte/css/devtools-g100.css";
+declare module "carbon-components-svelte/css/devtools-g80.css";
+declare module "carbon-components-svelte/css/devtools-g90.css";
+declare module "carbon-components-svelte/css/devtools-white.css";
+declare module "carbon-components-svelte/css/devtools.css";
 declare module "carbon-components-svelte/css/g10.css";
 declare module "carbon-components-svelte/css/g100.css";
 declare module "carbon-components-svelte/css/g80.css";

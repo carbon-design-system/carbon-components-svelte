@@ -1,4 +1,6 @@
 /// <reference types="vite/client" />
+
+import devtoolsBarrel from "../../src/devtools/index.js?raw";
 import barrel from "../../src/index.js?raw";
 import { entries } from "./cases";
 
@@ -46,12 +48,16 @@ for (let grew = true; grew;) {
   }
 }
 
-const exported = new Map(
-  [...barrel.matchAll(BARREL_EXPORT)].map(([, name, path]) => [
-    name,
-    `../../src/${path}`,
-  ]),
-);
+// The main entry and the `devtools` subpath entry, each relative to its
+// own folder.
+const exported = new Map([
+  ...[...barrel.matchAll(BARREL_EXPORT)].map(
+    ([, name, path]) => [name, `../../src/${path}`] as const,
+  ),
+  ...[...devtoolsBarrel.matchAll(BARREL_EXPORT)].map(
+    ([, name, path]) => [name, `../../src/devtools/${path}`] as const,
+  ),
+]);
 
 /**
  * Components that forward rest props and render something focusable or
