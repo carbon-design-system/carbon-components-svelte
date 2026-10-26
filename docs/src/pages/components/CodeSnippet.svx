@@ -342,3 +342,9 @@ Use `CodeSnippetSkeleton` to show a loading state. Defaults to `"single"` type.
 Set `type="multi"` on `CodeSnippetSkeleton` to show a multi-line loading state.
 
 <CodeSnippetSkeleton type="multi" />
+
+### Inline
+
+Set `type="inline"` on `CodeSnippetSkeleton` to hold the place of an inline snippet in a line of text. Set `chars` to the length of the code it stands in for; `CodeSnippet` with `skeleton` sets it from `code`.
+
+Run <CodeSnippetSkeleton type="inline" chars={20} /> to clean up the install.
