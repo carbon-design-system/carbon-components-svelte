@@ -460,7 +460,9 @@
   function handleAllTagsClose(item) {
     const position = allTagsMatches.indexOf(item);
     const hadFocus = allTagsListRef?.contains(document.activeElement);
-    handleOverflowTagClose({ detail: item });
+    handleOverflowTagClose(
+      /** @type {CustomEvent<TagSetItem>} */ ({ detail: item }),
+    );
     if (!hadFocus) return;
     tick().then(() => {
       if (item.node?.isConnected) return;

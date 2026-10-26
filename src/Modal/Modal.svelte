@@ -474,7 +474,7 @@
       class:bx--layer-two={true}
       class:bx--modal-content--with-form={hasForm}
       class:bx--modal-scroll-content={hasScrollingContent}
-      tabindex={hasScrollingContent ? "0" : undefined}
+      tabindex={hasScrollingContent ? 0 : undefined}
       role={hasScrollingContent ? "region" : undefined}
       aria-label={hasScrollingContent ? builtInLabel : undefined}
       aria-labelledby={modalLabel ? modalLabelId : modalHeadingId}

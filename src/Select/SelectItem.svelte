@@ -7,7 +7,7 @@
    * Specify the option value.
    * @type {Value}
    */
-  export let value = "";
+  export let value = /** @type {Value} */ ("");
 
   /**
    * Specify the option text.

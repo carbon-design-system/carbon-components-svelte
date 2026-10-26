@@ -597,7 +597,7 @@
     <div
       {id}
       role="textbox"
-      tabindex={disabled ? undefined : "0"}
+      tabindex={disabled ? undefined : 0}
       aria-readonly="true"
       aria-multiline={type === "multi" ? "true" : undefined}
       aria-label={ariaLabel ?? codeLabel}

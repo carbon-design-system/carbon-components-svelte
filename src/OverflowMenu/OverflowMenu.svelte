@@ -252,7 +252,7 @@
   let menuPlacement = direction;
 
   $: if (ctxBreadcrumbItem) {
-    icon = OverflowMenuHorizontal;
+    icon = /** @type {Icon} */ (OverflowMenuHorizontal);
   }
 
   // Items mount only while open, so they re-register on every open. The

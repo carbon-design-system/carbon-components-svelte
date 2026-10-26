@@ -498,6 +498,7 @@
   }
   // Roving focus follows the visual orientation: arrow Up/Down in the vertical
   // column, arrow Left/Right in the horizontal row.
+  /** @type {"horizontal" | "vertical"} */
   $: listOrientation = isRow ? "horizontal" : "vertical";
   // Recompute overflow when the tabs change or the layout flips.
   $: if ($tabs || isRow) {

@@ -45,7 +45,7 @@
    * Specify the value of the selectable tile.
    * @type {Value}
    */
-  export let value = "value";
+  export let value = /** @type {Value} */ ("value");
 
   /**
    * Specify the tabindex

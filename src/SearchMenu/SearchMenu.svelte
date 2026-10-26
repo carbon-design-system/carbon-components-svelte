@@ -482,7 +482,7 @@
       bind:value
       bind:ref
       role="combobox"
-      tabindex="0"
+      tabindex={0}
       aria-autocomplete="list"
       aria-expanded={menuVisible}
       aria-controls={menuVisible ? menuDomId : undefined}

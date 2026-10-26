@@ -4,7 +4,7 @@ export type MenuWindowUpdateOptions<
   Item extends Record<string, unknown> = Record<string, unknown>,
 > = {
   /** The collection the menu renders, filtered where there is a filter. */
-  items: Item[];
+  items: ReadonlyArray<Item>;
   /** What identifies an option across a rebuild of `items`. */
   getKey?: (item: Item, index: number) => unknown;
   /** The threshold gate, from `shouldVirtualizeMenu`. */

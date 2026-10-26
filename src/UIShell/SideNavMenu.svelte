@@ -143,7 +143,7 @@
   </button>
   <ul
     bind:this={menuRef}
-    inert={expanded ? undefined : "true"}
+    inert={expanded ? undefined : true}
     class:bx--side-nav__menu={true}
     style:max-height={expanded ? "none" : undefined}
     style:--ccs-side-nav-menu-depth={depth > 1 ? depth : undefined}

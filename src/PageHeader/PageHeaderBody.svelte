@@ -19,8 +19,9 @@
 
   // The header's `Tabs` can mount after this body or be replaced, so resolve
   // them on each access instead of capturing them once.
-  /** @type {import("../Tabs/Tabs.svelte").CarbonTabsContext} */
-  const tabs = new Proxy({}, { get: (_, key) => pageHeader?.getTabs()?.[key] });
+  const tabs = /** @type {import("../Tabs/Tabs.svelte").CarbonTabsContext} */ (
+    new Proxy({}, { get: (_, key) => pageHeader?.getTabs()?.[key] })
+  );
 
   if (pageHeader) setContext("carbon:Tabs", tabs);
 

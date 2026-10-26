@@ -37,7 +37,7 @@
   export let root = false;
 
   /** @type {Id} */
-  export let id = "";
+  export let id = /** @type {Id} */ ("");
 
   /** Specify the node text. */
   export let text = "";

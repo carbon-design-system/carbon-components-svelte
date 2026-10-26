@@ -19,7 +19,7 @@
    * Specify the value of the input.
    * @type {Value}
    */
-  export let value = "value";
+  export let value = /** @type {Value} */ ("value");
 
   /** Set an id for the input element */
   export let id = uniqueId();

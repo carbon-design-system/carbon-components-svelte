@@ -45,7 +45,7 @@
       class:bx--card__label={true}
       class:bx--card__label--truncate={labelTruncate === true}
       class:bx--card__label--truncate-multi={labelClamped}
-      style:--ccs-card-label-line-clamp={labelClamped
+      style:--ccs-card-label-line-clamp={typeof labelTruncate === "number"
         ? labelTruncate
         : undefined}
     >
@@ -61,7 +61,9 @@
     style:--ccs-card-title-max-width={titleTruncate === false
       ? undefined
       : maxWidth}
-    style:--ccs-card-title-line-clamp={titleClamped ? titleTruncate : undefined}
+    style:--ccs-card-title-line-clamp={typeof titleTruncate === "number"
+      ? titleTruncate
+      : undefined}
   >
     {#if $$slots.titleStart}
       <span class:bx--card__title-start-icon={true}>
@@ -80,7 +82,8 @@
       class:bx--card__description={true}
       class:bx--card__description--truncate={descriptionTruncate === true}
       class:bx--card__description--truncate-multi={descriptionClamped}
-      style:--ccs-card-description-line-clamp={descriptionClamped
+      style:--ccs-card-description-line-clamp={typeof descriptionTruncate ===
+      "number"
         ? descriptionTruncate
         : undefined}
     >

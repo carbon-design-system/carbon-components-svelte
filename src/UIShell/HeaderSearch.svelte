@@ -423,7 +423,7 @@
       type="button"
       aria-label="Search"
       aria-expanded={active}
-      tabindex={active ? "-1" : "0"}
+      tabindex={active ? -1 : 0}
       class:bx--header-search-button={true}
       class:bx--header__action={true}
       class:bx--header-search-button--disabled={active}

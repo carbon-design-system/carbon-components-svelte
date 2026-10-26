@@ -77,8 +77,7 @@
     hideLabel: false,
   };
 
-  /** @type {CarbonTheme} */
-  const themeKeys = Object.keys(themes);
+  const themeKeys = /** @type {CarbonTheme[]} */ (Object.keys(themes));
 
   /**
    * Override the default select props.

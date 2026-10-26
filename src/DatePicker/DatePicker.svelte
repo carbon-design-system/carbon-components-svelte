@@ -51,7 +51,8 @@
    */
   function dateStrChanged(atOpen, atClose) {
     if (typeof atClose === "object") {
-      return atOpen.from !== atClose.from || atOpen.to !== atClose.to;
+      const open = /** @type {{ from: string; to: string }} */ (atOpen);
+      return open.from !== atClose.from || open.to !== atClose.to;
     }
     return atOpen !== atClose;
   }
@@ -1585,7 +1586,10 @@
   function handleBlockedInteraction(event) {
     if (!interactionBlocked) return;
     event.stopImmediatePropagation();
-    if (event.type !== "keydown" || event.key !== "Tab") {
+    if (
+      event.type !== "keydown" ||
+      /** @type {KeyboardEvent} */ (event).key !== "Tab"
+    ) {
       event.preventDefault();
     }
   }
