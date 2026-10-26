@@ -17,4 +17,11 @@ $css--reset: true;
 $css--default-type: true;
 $css--plex: true;
 
+@import "./theme-token-properties";
 @import "./carbon-styles";
+
+// The theme's tokens as custom properties, so app CSS can use
+// `var(--cds-…)` with this sheet too, not only with all.css.
+:root {
+  @include ccs-theme-tokens($carbon--theme);
+}

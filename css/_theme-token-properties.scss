@@ -1,0 +1,43 @@
+// The theme token maps and `ccs-theme-tokens`, which declares a theme's
+// tokens as custom properties: all.scss for every theme, each single-theme
+// entry for its own. Variables and mixins only; no CSS of its own.
+@import "carbon-components/scss/globals/scss/component-tokens";
+// Token maps only (no CSS) for `ccs-theme-tokens` below; the component CSS
+// itself emits from `_carbon-styles.scss`.
+@import "carbon-components/scss/components/tag/tokens";
+@import "carbon-components/scss/components/notification/tokens";
+@import "carbon-components/scss/components/content-switcher/tokens";
+@import "./status-tokens";
+@import "./text-tokens";
+@import "./user-avatar-tokens";
+
+/// Declares a theme's tokens: Carbon's, the tag, notification, content
+/// switcher and status component tokens, and the library's own text and
+/// avatar colors.
+/// With `$base`, only the ones that differ from it.
+/// @param {Map} $theme - Theme to declare
+/// @param {Map} $base [null] - Theme the selector already declares
+/// @access private
+/// @group themes
+@mixin ccs-theme-tokens($theme, $base: null) {
+  $dark: lightness(map-get($theme, "background")) < 50%;
+  $difference: if($base, ($base,), ());
+
+  // Both ways: a light theme on `<html>` must not inherit a page's
+  // `<meta name="color-scheme" content="light dark">` and get dark
+  // scrollbars and native controls on a dark system.
+  @if $dark {
+    color-scheme: dark;
+  } @else {
+    color-scheme: light;
+  }
+
+  @include carbon--theme($theme, true, if($base, $difference, false)) {
+    @include emit-component-tokens($tag-colors, $difference);
+    @include emit-component-tokens($notification-colors, $difference);
+    @include emit-component-tokens($content-switcher-colors, $difference);
+    @include emit-component-tokens($status-colors, $difference);
+  }
+  @include ccs-emit-theme-colors($ccs-text-colors, $theme, $base);
+  @include ccs-emit-theme-colors($ccs-user-avatar-colors, $theme, $base);
+}

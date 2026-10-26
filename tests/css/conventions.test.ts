@@ -22,6 +22,7 @@ const NO_EXPORTS = new Set([
   "_spacing-scale.scss",
   "_status-tokens.scss",
   "_text-tokens.scss",
+  "_theme-token-properties.scss",
   "_ui-shell-classic.scss",
   "_user-avatar-tokens.scss",
 ]);

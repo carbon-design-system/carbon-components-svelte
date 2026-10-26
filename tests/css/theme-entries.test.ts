@@ -14,21 +14,10 @@ const THEME_ENTRIES = [
   "g100.scss",
 ];
 
-// all.scss needs the component token maps before its `:root` theme blocks;
-// these imports define variables only and emit no CSS. `./ai-tokens` and
-// `./status-tokens` hold v11 tokens that v10 does not vendor; `./text-tokens`
-// and `./user-avatar-tokens` the library's own text and avatar colors,
-// declared as `--ccs-*`.
-const ALL_ONLY_IMPORTS = [
-  "carbon-components/scss/globals/scss/component-tokens",
-  "carbon-components/scss/components/tag/tokens",
-  "carbon-components/scss/components/notification/tokens",
-  "carbon-components/scss/components/content-switcher/tokens",
-  "./ai-tokens",
-  "./status-tokens",
-  "./text-tokens",
-  "./user-avatar-tokens",
-];
+// Every entry declares theme tokens on `:root` (all.scss every theme, each
+// single-theme entry its own) through `_theme-token-properties.scss`, which
+// imports the token maps; it defines variables and mixins only.
+const TOKEN_PARTIAL = "./theme-token-properties";
 
 // Partials imported by other css/_*.scss partials, or by an opt-in sheet
 // (`_prose.scss`, by `prose.scss` and `prose-<theme>.scss`), not by the
@@ -41,6 +30,7 @@ const UNREGISTERED_PARTIALS = [
   "_spacing-scale.scss",
   "_status-tokens.scss",
   "_text-tokens.scss",
+  "_theme-token-properties.scss",
   "_user-avatar-tokens.scss",
   MANIFEST,
 ];
@@ -56,12 +46,12 @@ const localImports = (file: string) =>
   importsOf(file).filter((specifier) => specifier.startsWith("./"));
 
 describe("theme entry files", () => {
-  it("every theme entry imports only the shared manifest locally", () => {
+  it("every theme entry imports only the token partial and the manifest locally", () => {
     for (const entry of [...THEME_ENTRIES, "all.scss"]) {
-      const locals = localImports(entry).filter(
-        (specifier) => !ALL_ONLY_IMPORTS.includes(specifier),
-      );
-      expect(locals, entry).toEqual(["./carbon-styles"]);
+      expect(localImports(entry), entry).toEqual([
+        TOKEN_PARTIAL,
+        "./carbon-styles",
+      ]);
     }
   });
 
@@ -72,11 +62,8 @@ describe("theme entry files", () => {
     }
   });
 
-  it("all.scss adds only token-map imports over a theme entry", () => {
-    const all = importsOf("all.scss").filter(
-      (specifier) => !ALL_ONLY_IMPORTS.includes(specifier),
-    );
-    expect(all).toEqual(importsOf("white.scss"));
+  it("all.scss imports what a theme entry does", () => {
+    expect(importsOf("all.scss")).toEqual(importsOf("white.scss"));
   });
 
   it("all.scss alone enables the theme-switching guard", () => {
