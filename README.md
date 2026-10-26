@@ -51,6 +51,8 @@ Before importing components, you will need to first apply Carbon component style
 - **g100.css**: Gray 100 theme (dark)
 - **all.css**: All five themes (White, Gray 10, Gray 80, Gray 90, Gray 100) using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 
+Every StyleSheet declares its theme's tokens as custom properties on `:root`, so your own CSS can use `var(--cds-text-primary)`, `var(--cds-spacing-05)` and the rest with any of them.
+
 Each StyleSheet is [compiled](scripts/build-css.ts) from Carbon's component SCSS ([carbon-components@10.58](css/vendor/carbon-components), vendored) themed with Carbon v11 tokens, and this library's own partials in [css](css).
 
 The compiled CSS is generated from the following `.scss` files:
