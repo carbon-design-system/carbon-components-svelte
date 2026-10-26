@@ -7,5 +7,6 @@
 // `css/devtools-<theme>.css` (with a single-theme sheet).
 // May import from core; core must never import from here.
 
+export { default as DevToolbar } from "./DevToolbar/DevToolbar.svelte";
 export { default as GridOverlay } from "./GridOverlay/GridOverlay.svelte";
 export { default as LayoutInspector } from "./LayoutInspector/LayoutInspector.svelte";
