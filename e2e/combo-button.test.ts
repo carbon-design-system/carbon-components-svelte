@@ -2,20 +2,33 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
 // The menu fits its alignment a frame after it opens (`fitIntrinsicAlign`),
-// so read its box once that frame has run.
-async function openMenu(page: Page, trigger: string) {
-  const button = page.getByRole("button", { name: trigger });
-  await button.click();
+// and the portal moves a frame after that. Read the boxes once the menu has
+// held still for a frame.
+async function openMenu(page: Page, id: string) {
+  const group = page.getByTestId(id);
+  await group.locator(".bx--combo-button__trigger").click();
   const menu = page.getByRole("menu");
   await expect(menu).toBeVisible();
-  await page.evaluate(
-    () =>
-      new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
+  await menu.evaluate(
+    (node) =>
+      new Promise<void>((resolve) => {
+        let prev = "";
+        const check = () => {
+          const { left, width } = node.getBoundingClientRect();
+          const box = `${left},${width}`;
+          if (box === prev) resolve();
+          else {
+            prev = box;
+            requestAnimationFrame(check);
+          }
+        };
+        requestAnimationFrame(check);
+      }),
   );
-  const [b, m] = await Promise.all([button.boundingBox(), menu.boundingBox()]);
+  const [g, m] = await Promise.all([group.boundingBox(), menu.boundingBox()]);
   const width = await page.evaluate(() => document.documentElement.clientWidth);
-  if (!b || !m) throw new Error("no layout");
-  return { b, m, width };
+  if (!g || !m) throw new Error("no layout");
+  return { g, m, width };
 }
 
 test.describe("ComboButton", () => {
@@ -78,35 +91,54 @@ test.describe("ComboButton", () => {
   });
 });
 
-// The menu trigger sits at the group's inline end, so the trigger's inline
-// end edge is the group's.
+// The menu lines up with the whole button group, not the chevron, as in
+// Carbon React. With room, `start` and `end` are the group's inline sides.
+// At a side of the window, every alignment takes the group edge on that
+// side, so the menu stays in the window.
+const cases = (["start", "center", "end"] as const).flatMap((align) =>
+  (["room", "inline-start", "inline-end"] as const).map(
+    (where) => [align, where] as const,
+  ),
+);
+
 for (const dir of ["ltr", "rtl"] as const) {
-  test.describe(`ComboButton menu alignment (${dir})`, () => {
-    test.beforeEach(async ({ page }) => {
-      await page.goto("/combo-button.html");
-      await page.evaluate((dir) => {
-        document.documentElement.dir = dir;
-      }, dir);
-    });
+  test(`ComboButton menu lines up with the group (${dir})`, async ({
+    page,
+  }) => {
+    await page.goto("/combo-button.html");
+    await page.evaluate((dir) => {
+      document.documentElement.dir = dir;
+    }, dir);
+    await page.evaluate(() => document.fonts.ready);
 
-    test("with room, the menu lines up with the group's inline end", async ({
-      page,
-    }) => {
-      const { b, m } = await openMenu(page, "Additional actions");
-      if (dir === "ltr")
-        expect(Math.abs(m.x + m.width - (b.x + b.width))).toBeLessThan(1);
-      else expect(Math.abs(m.x - b.x)).toBeLessThan(1);
-    });
+    for (const [align, where] of cases) {
+      const name = `${align}, ${where}`;
+      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+      const { g, m, width } = await openMenu(page, `${align}-${where}`);
+      const left = Math.abs(m.x - g.x);
+      const right = Math.abs(m.x + m.width - (g.x + g.width));
+      const center = Math.abs(m.x + m.width / 2 - (g.x + g.width / 2));
 
-    test("at the window's side, the menu stays in the window", async ({
-      page,
-    }) => {
-      const { b, m, width } = await openMenu(page, "More export actions");
-      expect(m.x).toBeGreaterThanOrEqual(0);
-      expect(m.x + m.width).toBeLessThanOrEqual(width);
-      // It lines up with the trigger's inline start edge instead.
-      if (dir === "ltr") expect(Math.abs(m.x - b.x)).toBeLessThan(1);
-      else expect(Math.abs(m.x + m.width - (b.x + b.width))).toBeLessThan(1);
-    });
+      if (where === "room") {
+        const side =
+          align === "center"
+            ? center
+            : (align === "start") === (dir === "ltr")
+              ? left
+              : right;
+        expect.soft(side, name).toBeLessThan(1);
+      } else {
+        expect
+          .soft(m.width, `${name}: menu wider than the group`)
+          .toBeGreaterThan(g.width);
+        expect.soft(m.x, name).toBeGreaterThanOrEqual(0);
+        expect.soft(m.x + m.width, name).toBeLessThanOrEqual(width);
+        const atLeftEdge = (where === "inline-start") === (dir === "ltr");
+        expect.soft(atLeftEdge ? left : right, name).toBeLessThan(1);
+      }
+
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("menu")).toBeHidden();
+    }
   });
 }

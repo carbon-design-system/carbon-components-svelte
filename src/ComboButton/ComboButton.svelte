@@ -65,9 +65,9 @@
   export let direction = "bottom";
 
   /**
-   * Align the menu to the trigger button's intrinsic width.
-   * `start` and `end` are the trigger's inline start and end, which swap
-   * under `dir="rtl"`.
+   * Align the menu to the button group, the primary action and the
+   * trigger together. `start` and `end` are the group's inline start and
+   * end, which swap under `dir="rtl"`.
    * A menu that would run past a side of the window takes another
    * alignment for that open.
    * @type {"start" | "center" | "end"}
@@ -109,9 +109,11 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Menu from "../Menu/Menu.svelte";
+  import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -129,6 +131,10 @@
   } = splitAriaNaming($$restProps));
 
   let triggerRef = null;
+
+  const placementGroup = writable(null);
+  setContext(MENU_PLACEMENT_CONTEXT_KEY, placementGroup);
+  $: placementGroup.set(ref);
 
   /**
    * @type {(name: string) => (event: Event) => void}

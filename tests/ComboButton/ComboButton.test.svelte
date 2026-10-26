@@ -9,6 +9,8 @@
     undefined;
   export let size: ComponentProps<ComboButton>["size"] = undefined;
   export let direction: ComponentProps<ComboButton>["direction"] = undefined;
+  export let intrinsicAlign: ComponentProps<ComboButton>["intrinsicAlign"] =
+    undefined;
   export let tooltipPosition: ComponentProps<ComboButton>["tooltipPosition"] =
     undefined;
   export let tooltipAlignment: ComponentProps<ComboButton>["tooltipAlignment"] =
@@ -32,6 +34,7 @@
   {loadingDescription}
   {size}
   {direction}
+  {intrinsicAlign}
   {tooltipPosition}
   {tooltipAlignment}
   {iconDescription}
