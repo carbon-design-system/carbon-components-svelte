@@ -15,9 +15,12 @@
   import { getContext } from "svelte";
   import { readable } from "svelte/store";
 
-  const { views, active, claimSlide } = getContext("carbon:Carousel") ?? {
+  const { views, active, stacked, claimSlide } = getContext(
+    "carbon:Carousel",
+  ) ?? {
     views: readable([]),
     active: readable(-1),
+    stacked: readable(false),
   };
 
   // This slide's position before `views` knows it (see `claimSlide`).
@@ -33,12 +36,15 @@
   // The same `hidden` the carousel sets, so the server's markup shows only
   // the active slide and a re-render never undoes the carousel's own.
   $: index = position < 0 ? claimed : position;
-  $: hidden = index >= 0 && index !== $active;
+  $: inactive = index >= 0 && index !== $active;
+  // Stacked slides stay in the layout, invisible, until the carousel mounts.
+  $: hidden = inactive && !$stacked;
 </script>
 
 <div
   bind:this={node}
   class:bx--carousel__item={true}
+  class:bx--carousel__item--stacked={inactive && $stacked}
   role="group"
   aria-roledescription="slide"
   aria-label={label ??

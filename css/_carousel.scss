@@ -20,6 +20,24 @@
     overflow: hidden;
   }
 
+  // Before mount with `useMaxHeight`, every slide shares one cell and the
+  // inactive ones are invisible, so the viewport starts as tall as the
+  // tallest slide, the height `initCarousel` then gives it.
+  .#{$prefix}--carousel__viewport--stacked {
+    display: grid;
+    // A `1fr` track with a zero minimum, so a wide image or long word
+    // can't widen the cell past the viewport.
+    grid-template-columns: minmax(0, 1fr);
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  .#{$prefix}--carousel__item--stacked {
+    visibility: hidden;
+  }
+
   .#{$prefix}--carousel__controls {
     display: flex;
     justify-content: flex-end;

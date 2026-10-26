@@ -81,16 +81,45 @@
   /** @type {import("svelte/store").Writable<number>} */
   const active = writable(Math.max(0, selectedIndex));
 
+  // Before mount with `useMaxHeight`, the slides share one grid cell and the
+  // inactive ones are invisible, so the viewport is already as tall as the
+  // tallest slide, as `initCarousel` then sizes it.
+  const stacked = writable(useMaxHeight);
+
   // Each slide claims its position as it initializes, in document order on
   // the server and during hydration, before `views` knows it. Slides added
-  // after mount wait for `views`.
-  let claimed = 0;
+  // after mount wait for `views`. A closure, not component state: the
+  // controls read the count once, after the slides have rendered.
+  const claims = (() => {
+    let count = 0;
+    return {
+      /** @returns {number} */
+      claim: () => (mounted ? -1 : count++),
+      /** @returns {number} */
+      count: () => count,
+    };
+  })();
+
   /** @returns {number} */
   function claimSlide() {
-    return mounted ? -1 : claimed++;
+    return claims.claim();
   }
 
-  setContext("carbon:Carousel", { views, active, claimSlide });
+  setContext("carbon:Carousel", { views, active, stacked, claimSlide });
+
+  /**
+   * The slide count and active index before mount, from the claimed slides.
+   * The controls render after the slides, so the count is complete.
+   * @param {number} startIndex
+   * @returns {{ total: number; index: number }}
+   */
+  function initialState(startIndex) {
+    const total = claims.count();
+    return {
+      total,
+      index: Math.max(0, Math.min(startIndex, total - 1)),
+    };
+  }
 
   /** @type {null | HTMLDivElement} */
   let viewportRef = null;
@@ -166,6 +195,7 @@
   }
 
   onMount(() => {
+    stacked.set(false);
     setup();
     mounted = true;
 
@@ -194,6 +224,19 @@
   $: atEnd = !wrap && currentIndex >= $views.length - 1;
   $: prevDisabled = $views.length <= 1 || atStart;
   $: nextDisabled = $views.length <= 1 || atEnd;
+
+  /**
+   * @param {"start" | "end"} edge
+   * @param {number} startIndex
+   * @param {boolean} wraps
+   * @returns {boolean}
+   */
+  function initialDisabled(edge, startIndex, wraps) {
+    const { total, index } = initialState(startIndex);
+    if (total <= 1) return true;
+    if (wraps) return false;
+    return edge === "start" ? index <= 0 : index >= total - 1;
+  }
 
   /** @param {1 | -1} step */
   async function navigate(step) {
@@ -255,14 +298,20 @@
     bind:this={viewportRef}
     id="{id}-viewport"
     class:bx--carousel__viewport={true}
+    class:bx--carousel__viewport--stacked={$stacked}
     aria-live="polite"
   >
     <slot />
   </div>
   <div class:bx--carousel__controls={true}>
-    {#if showCounter && $views.length > 0}
+    {#if showCounter && (mounted ? $views.length : initialState(selectedIndex).total) > 0}
       <span class:bx--carousel__counter={true}>
-        {counterText(currentIndex + 1, $views.length)}
+        {mounted
+          ? counterText(currentIndex + 1, $views.length)
+          : counterText(
+              initialState(selectedIndex).index + 1,
+              initialState(selectedIndex).total,
+            )}
       </span>
     {/if}
     <button
@@ -272,7 +321,9 @@
       class:bx--carousel__button--previous={true}
       aria-label={prevButtonLabelText}
       aria-controls="{id}-viewport"
-      disabled={prevDisabled}
+      disabled={mounted
+        ? prevDisabled
+        : initialDisabled("start", selectedIndex, wrap)}
       on:click={() => navigate(-1)}
     >
       <ChevronLeft />
@@ -284,7 +335,9 @@
       class:bx--carousel__button--next={true}
       aria-label={nextButtonLabelText}
       aria-controls="{id}-viewport"
-      disabled={nextDisabled}
+      disabled={mounted
+        ? nextDisabled
+        : initialDisabled("end", selectedIndex, wrap)}
       on:click={() => navigate(1)}
     >
       <ChevronRight />
