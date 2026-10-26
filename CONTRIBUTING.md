@@ -760,8 +760,8 @@ The shortest loop, in order:
 | Format and lint what you touched | `bun fmt <paths> && bunx biome check --write <paths>` | Seconds |
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
-| Run the E2E tests your branch can reach | `bun run test:changed --e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
-| See what CI will run | `bun run test:changed --print` | Same plan as CI, with the reason for any full run |
+| Run the E2E tests your branch can reach | `bun run test:changed:e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
+| See what CI will run | `bun run test:plan` | Same plan as CI, with the reason for any full run. `bunx bivium why <test>` shows why a test was picked |
 
 Don't run `bun run test` or `bun run test:e2e` to check a change. CI runs the same selection on the PR, and master runs everything after a merge.
 
@@ -803,9 +803,9 @@ The full suite (`bun run test`) is slow and can hit unrelated flaky UIShell focu
 
 A full run can be killed for lack of memory, with exit code 137. Pass `--maxWorkers=4` to limit the workers.
 
-`bun run test:changed` runs every unit test your branch can affect, including uncommitted edits. CI uses the same selection on pull requests for unit and E2E tests. It follows imports, so a `Button` change also runs the `Modal` tests that render a `Button`. Pass `--print` to see the plan without running it.
+`bun run test:changed` runs every unit test your branch can affect, including uncommitted edits. CI uses the same selection on pull requests for unit and E2E tests. The selection comes from [bivium](https://github.com/metonym/bivium), configured in [`bivium.config.ts`](bivium.config.ts). It follows imports, so a `Button` change also runs the `Modal` tests that render a `Button`. `bun run test:plan` prints the plan without running it.
 
-For the E2E selection (`--e2e`, `--print`, and CI), a `css/` change compiles the stylesheets E2E pages load at the merge base and on your branch, then selects only the E2E tests whose pages render a changed rule ([`css-delta.ts`](scripts/lib/css-delta.ts)). A plain `bun run test:changed` skips that compile, since it runs unit tests only. crassus's `compileAt` caches each compile in `node_modules/.cache/crassus` by `css/` tree, so planning again after a commit is instant. It finds those pages by the classes a rule requires, so spell class names in source: literally (`"bx--tag--red"`) or as a prefix before an interpolation (`bx--tag--{type}`, `` `bx--btn--${kind}` ``). A rule that requires no class (`:root`, a theme token, `@keyframes`) or only classes no source spells (flatpickr's) runs every E2E test.
+For the E2E selection (`test:changed:e2e`, `test:plan`, and CI), a `css/` change compiles the stylesheets E2E pages load at the merge base and on your branch, then selects only the E2E tests whose pages render a changed rule ([`css-narrower.ts`](scripts/lib/css-narrower.ts) over [`css-delta.ts`](scripts/lib/css-delta.ts)). A plain `bun run test:changed` skips that compile, since it runs unit tests only. crassus's `compileAt` caches each compile in `node_modules/.cache/crassus` by `css/` tree, so planning again after a commit is instant. It finds those pages by the classes a rule requires, so spell class names in source: literally (`"bx--tag--red"`) or as a prefix before an interpolation (`bx--tag--{type}`, `` `bx--btn--${kind}` ``). A rule that requires no class (`:root`, a theme token, `@keyframes`) or only classes no source spells (flatpickr's) runs every E2E test.
 
 Types and E2E:
 
@@ -879,10 +879,10 @@ Import shared utilities (for example exported helpers) from the component file o
 
 - Write cases with `it(...)`, not `test(...)`. `describe`, `it`, `expect`, `vi`, `assert`, and `expectTypeOf` are globals; do not import them from `vitest`.
 - Start a test file that never touches the DOM (pure utils, CSS compile checks, scripts) with `// @vitest-environment node`. Creating a jsdom environment is the largest fixed cost per file, and setup skips the DOM stubs when there is no `document`. Leave the pragma off if the file needs `Element`, `KeyboardEvent`, `localStorage`, or a rendered component, even indirectly.
-- Keep imports, `vi.mock` paths, and `page.goto` URLs as string literals. CI picks tests by reading them ([`test-graph.ts`](scripts/lib/test-graph.ts)), and a computed path makes the test run on every pull request.
-- A test that reads files from disk (`node:fs`) must list them in a `// @depends-on <glob> [glob…]` comment, for example `// @depends-on css/**`. Without it the test runs on every pull request, and `tests/scripts/test-changed.test.ts` fails.
+- Keep imports, `vi.mock` paths, and `page.goto` URLs as string literals. CI picks tests by reading them with bivium, and a computed path makes the test run on every pull request.
+- A test that reads files from disk (`node:fs`) must list them in a `// @depends-on <glob> [glob…]` comment, for example `// @depends-on css/**`. Without it the test runs on every pull request, and `bivium check` in `static-checks` fails. `bunx bivium check` lists each unreadable file with a fix.
 - A file that only reads other files as text, not what they import, lists them in `// @reads <glob>` instead, so a change to their imports does not select it. `e2e/helpers/host.ts` reads fixture entries this way. A file whose `import.meta.glob` is a lookup table, with each caller naming the entry it loads, marks it `// @glob-registry` (`e2e/fixtures/host.ts`). Keep `goto(` out of e2e comments: the selector reads it as a navigation.
-- A `@depends-on` or `@reads` glob must match at least one tracked file. One that can't, such as a cache directory or a docs path the selector ignores, fails `tests/scripts/test-changed.test.ts` until it is listed in `DEAD_GLOBS` there, with the reason.
+- A `@depends-on`, `@reads` or `import.meta.glob` glob must reach files the selector reads. One that matches nothing, or files it ignores (`docs/**`), fails `bivium check`, since a change to them would never select the file. List an intended one under `deadGlobs` in `bivium.config.ts`, with the reason.
 - Narrow types with an assertion, not a cast. Write `assert(input instanceof HTMLInputElement)` instead of `as HTMLInputElement`. The global `assert` fails the test with a clear message when the element is wrong, and TypeScript narrows the variable after it. Use `assert(el)` for a nullable lookup. Do not use `expect.assert` or non-null `!`.
 - Skip the narrowing when a jest-dom matcher does the job. `expect(input).toHaveValue("a")`, `toBeChecked()`, and `toHaveFocus()` accept any element, so reading `.value` or `.checked` through a cast is rarely needed.
 - Type `querySelector` through its generic: `container.querySelector<HTMLInputElement>("input")`, then `assert(input)`.
@@ -1350,12 +1350,12 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 
 Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
 
-A PR runs a whole suite when the selection can't be trusted. `bun run test:changed --print` lists each reason under `reasons`:
+A PR runs a whole suite when the selection can't be trusted. `bun run test:plan` lists each reason under `reasons`:
 
 | Cause | Fix |
 | --- | --- |
-| A change to the selector (`scripts/test-changed.ts`, `scripts/lib/test-graph.ts`, `scripts/lib/css-delta.ts`) | None needed. The selector can't vouch for itself |
-| A changed file outside the graph's roots | Add the file's directory to `GRAPH_ROOTS` in `scripts/test-changed.ts` if tests import it |
+| A change to the selector (`bivium.config.ts`, `scripts/lib/css-narrower.ts`, `scripts/lib/css-delta.ts`) | None needed. The selector can't vouch for itself |
+| A changed file outside the graph's roots | Add the file's directory to `roots` in `bivium.config.ts` if tests import it |
 | A changed setup or helper file that no test imports | None needed. It's wired in through config, so the whole suite runs |
 | A test whose dependencies the graph can't read: a computed import path or `page.goto` URL, or a disk read without `// @depends-on <glob>` (or `// @reads <glob>` for files read as text) | Fix the test. It otherwise runs on every PR |
 
