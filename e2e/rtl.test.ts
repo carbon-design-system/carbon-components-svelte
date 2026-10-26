@@ -2072,9 +2072,10 @@ test.describe("right-to-left nested regions", () => {
       const fields: Record<string, string[]> = {};
       for (const field of region?.querySelectorAll("[data-field]") ?? []) {
         const origin = field.getBoundingClientRect();
-        // A closed select's options sit where the page puts them.
+        // A closed select's options sit where the page puts them, and a
+        // hidden tooltip where the window does.
         fields[field.getAttribute("data-field") ?? ""] = [
-          ...field.querySelectorAll(":not(option)"),
+          ...field.querySelectorAll(":not(option, .bx--assistive-text)"),
         ].map((el) => {
           const rect = el.getBoundingClientRect();
           const style = getComputedStyle(el);

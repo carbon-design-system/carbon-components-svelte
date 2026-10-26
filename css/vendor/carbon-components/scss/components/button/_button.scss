@@ -164,6 +164,7 @@
     &.#{$prefix}--btn.#{$prefix}--btn--disabled.#{$prefix}--tooltip--a11y::before, // ccs: specificity
     &.#{$prefix}--btn.#{$prefix}--btn--disabled.#{$prefix}--tooltip--a11y::after, // ccs: specificity
     &.#{$prefix}--btn.#{$prefix}--btn--disabled .#{$prefix}--assistive-text { // ccs: specificity
+      position: fixed; // ccs: hidden, see `tooltip--trigger`
       overflow: hidden;
       margin: -1px;
       clip: rect(0, 0, 0, 0);

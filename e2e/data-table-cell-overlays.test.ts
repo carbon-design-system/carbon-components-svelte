@@ -51,6 +51,31 @@ function scrollArea(box: Locator) {
     .evaluate((el) => el.scrollHeight - el.clientHeight);
 }
 
+// A hidden in-place tooltip and its caret are laid out against the window,
+// so they don't stretch the table's scroll box before anything opens.
+test("closed overlays add nothing to a cell's scroll area", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1100, height: 900 });
+  await page.goto("/data-table-cell-overlays.html");
+  const overflow = await page.evaluate(
+    (names) => {
+      return names.map((name) => {
+        const el = document.querySelector(
+          `[data-testid="${name}"] .bx--data-table-content`,
+        );
+        return el
+          ? [el.scrollWidth - el.clientWidth, el.scrollHeight - el.clientHeight]
+          : null;
+      });
+    },
+    CASES.map(([name]) => name),
+  );
+  CASES.forEach(([name], index) => {
+    expect.soft(overflow[index], name).toEqual([0, 0]);
+  });
+});
+
 for (const [name, trigger, how, overlay] of CASES)
   test(`${name} in a DataTable cell opens in full view`, async ({ page }) => {
     await page.setViewportSize({ width: 1100, height: 900 });
