@@ -59,7 +59,8 @@ export const PROGRESS_BAR_SIZE_ALIASES: ReadonlyMap<
  * Resolve a size alias to the component's own name. Returns any other
  * value unchanged, including `undefined`.
  */
-export function normalizeSize<T>(
-  size: T,
-  aliases: ReadonlyMap<string, string | undefined>,
-): T | string | undefined;
+export function normalizeSize<
+  T,
+  From extends string,
+  To extends string | undefined,
+>(size: T, aliases: ReadonlyMap<From, To>): Exclude<T, From> | To;
