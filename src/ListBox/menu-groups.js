@@ -162,10 +162,11 @@ export function createGroupRows() {
 }
 
 /**
+ * @template [Row=unknown]
  * @typedef {Object} GroupRun
  * @property {unknown} key Stable key for a keyed `{#each}`.
  * @property {number} start Row index of the run's first row.
- * @property {unknown[]} rows
+ * @property {Row[]} rows
  * @property {number} groupIndex Index into `headers`, `-1` when ungrouped.
  */
 
@@ -176,10 +177,11 @@ export function createGroupRows() {
  *
  * Without `groupRows`, the whole window is one ungrouped run.
  *
- * @param {ReadonlyArray<unknown>} rows The rendered rows.
+ * @template Row
+ * @param {ReadonlyArray<Row>} rows The rendered rows.
  * @param {number} start Row index of `rows[0]`.
  * @param {GroupRows<Groupable> | null} groupRows
- * @returns {GroupRun[]}
+ * @returns {GroupRun<Row>[]}
  */
 export function splitGroupRuns(rows, start, groupRows) {
   if (!groupRows) {
@@ -187,13 +189,13 @@ export function splitGroupRuns(rows, start, groupRows) {
       {
         key: "rows",
         start,
-        rows: /** @type {unknown[]} */ (rows),
+        rows: /** @type {Row[]} */ (rows),
         groupIndex: -1,
       },
     ];
   }
 
-  /** @type {GroupRun[]} */
+  /** @type {GroupRun<Row>[]} */
   const runs = [];
   for (let offset = 0; offset < rows.length; offset++) {
     const groupIndex = groupRows.groupIndexByRow[start + offset];

@@ -55,12 +55,12 @@ export declare function createGroupRows<Item extends Groupable>(): (
   items: ReadonlyArray<Item>,
 ) => GroupRows<Item>;
 
-export type GroupRun = {
+export type GroupRun<Row = unknown> = {
   /** Stable key for a keyed `{#each}`. */
   key: unknown;
   /** Row index of the run's first row. */
   start: number;
-  rows: unknown[];
+  rows: Row[];
   /** Index into `headers`, `-1` when ungrouped. */
   groupIndex: number;
 };
@@ -72,8 +72,8 @@ export type GroupRun = {
  *
  * Without `groupRows`, the whole window is one ungrouped run.
  */
-export declare function splitGroupRuns(
-  rows: ReadonlyArray<unknown>,
+export declare function splitGroupRuns<Row>(
+  rows: ReadonlyArray<Row>,
   start: number,
   groupRows: GroupRows<Groupable> | null,
-): GroupRun[];
+): GroupRun<Row>[];
