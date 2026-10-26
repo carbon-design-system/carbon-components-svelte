@@ -343,6 +343,9 @@ describe("PasswordInput", () => {
       const button = screen.getByRole("button", { name: "Show password" });
       expect(button).toHaveClass("bx--tooltip--portal-active");
       expect(button).toHaveAttribute("aria-label", "Show password");
+      // The position classes would also show the in-place caret.
+      expect(button).not.toHaveClass("bx--tooltip--bottom");
+      expect(button).not.toHaveClass("bx--tooltip--align-end");
     });
 
     it("should render tooltip in FloatingPortal when portalTooltip is true", async () => {
