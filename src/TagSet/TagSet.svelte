@@ -5,7 +5,7 @@
    * @property {HTMLElement} node
    * @property {string} label
    * @property {string | number} [value]
-   * @property {string} [type]
+   * @property {import("../Tag/Tag.svelte").TagProps["type"]} [type]
    * @property {string} size
    * @property {boolean} disabled
    * @property {boolean} filter
