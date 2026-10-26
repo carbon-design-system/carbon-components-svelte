@@ -3,6 +3,8 @@
 // start or end alignment that fit better, a slide back into the window, or
 // the box that cuts it off, so it can move to a portal.
 
+import { observeResize } from "./shared-observer.js";
+
 /**
  * The edges of the area `box` clips its content to: its padding box, inside
  * the borders and scrollbars.
@@ -161,6 +163,42 @@ export function windowShift(el, applied, margin = 8) {
   }
   if (left < margin) return margin - left;
   return 0;
+}
+
+/**
+ * Keeps a portalled tooltip's body inside the window while the tooltip
+ * sits above or below its anchor. The body slides sideways by `windowShift`
+ * each time the portal places it and each time the body resizes. The caret
+ * is a sibling of the body, so it stays on the anchor.
+ * @param {HTMLElement} node The body, inside a `FloatingPortal`.
+ */
+export function slideIntoWindow(node) {
+  const portal = node.closest("[data-floating-portal]");
+  function slide() {
+    const side = portal?.getAttribute("data-floating-direction");
+    const applied = Number.parseFloat(node.style.left) || 0;
+    const next =
+      side === "top" || side === "bottom" ? windowShift(node, applied) : 0;
+    // A slide moves the body, not the portal, so this settles. Skip
+    // sub-pixel changes.
+    if (Math.abs(next - applied) < 0.5) return;
+    node.style.position = next ? "relative" : "";
+    node.style.left = next ? `${next}px` : "";
+  }
+  const observer = new MutationObserver(slide);
+  if (portal) {
+    observer.observe(portal, {
+      attributes: true,
+      attributeFilter: ["style", "data-floating-direction"],
+    });
+  }
+  const unobserve = observeResize(node, slide);
+  return {
+    destroy() {
+      observer.disconnect();
+      unobserve();
+    },
+  };
 }
 
 /**

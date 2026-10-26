@@ -73,7 +73,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { clippedBy } from "../utils/fit-align.js";
+  import { clippedBy, slideIntoWindow } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -304,6 +304,7 @@
       <!-- The box lays out left to right (see _tooltip.scss); the text
       keeps the trigger's direction. -->
       <span
+        use:slideIntoWindow
         {id}
         role="tooltip"
         class:bx--tooltip-portal__content={true}
