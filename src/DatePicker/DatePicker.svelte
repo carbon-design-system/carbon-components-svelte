@@ -411,8 +411,10 @@
   export let fluid = false;
 
   /**
-   * Set to `true` to render the calendar in a portal to prevent clipping.
-   * When inside a Modal, defaults to `true` unless explicitly set to `false`.
+   * Set to `true` to always render the calendar in a portal, or `false` to
+   * keep it in place. Left unset, the calendar opens in a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`, such
+   * as a `DataTable`) would cut it off.
    *
    * When the date picker is inside a native `<dialog>` (opened with
    * `showModal()`) or an open `[popover]` element, the calendar auto-mounts
@@ -474,6 +476,7 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { clippedBy } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
     declaredDirection,
@@ -501,6 +504,11 @@
   // An inline calendar lives in the layout, so there is nothing to portal.
   $: effectivePortalMenu =
     !usesInline && (portalMenu === undefined ? !!insideModal : portalMenu);
+  // Set for one open when the in-place calendar turns out to be cut off by
+  // a box around it (a scrolling panel, a DataTable): it moves to a portal
+  // instead. Only when `portalMenu` is left unset.
+  let portalWhenClipped = false;
+  $: calendarPortalled = effectivePortalMenu || portalWhenClipped;
   $: isFluid = fluid || !!formContext?.isFluid;
 
   const inputs = writable([]);
@@ -589,7 +597,7 @@
     for (const name of Object.values(themeZoneClasses)) {
       engine.calendarContainer.classList.toggle(
         name,
-        effectivePortalMenu && name === $zoneClass,
+        calendarPortalled && name === $zoneClass,
       );
     }
   }
@@ -607,7 +615,7 @@
   $: if (engine?.calendarContainer) {
     setCalendarDirection(
       engine.calendarContainer,
-      effectivePortalMenu,
+      calendarPortalled,
       $layoutDirection,
     );
     // A `dir` around the picker can change in the same update, after this
@@ -616,7 +624,7 @@
       if (!engine?.calendarContainer) return;
       setCalendarDirection(
         engine.calendarContainer,
-        effectivePortalMenu,
+        calendarPortalled,
         $layoutDirection,
       );
     });
@@ -639,6 +647,35 @@
       container.removeAttribute("dir");
     }
   }
+  // The engine reports `open` once the calendar shows under the field, so
+  // it can be measured there before it paints. A clipped one moves out to
+  // the page, or into the dialog or popover it opened in (as a portalled
+  // calendar would), and comes back on close for the next open to measure.
+  function portalIfClipped() {
+    if (portalMenu !== undefined || effectivePortalMenu || !engine) return;
+    if (!clippedBy(engine.calendarContainer)) return;
+    portalWhenClipped = true;
+    topLayerAncestor = getTopLayerAncestor(datePickerRef);
+    calendarUsesFixedPositioning = !!topLayerAncestor;
+    engine.set({
+      appendTo: topLayerAncestor ?? undefined,
+      position: topLayerAncestor
+        ? positionFlatpickrCalendarFixed
+        : propOptions.position,
+      static: false,
+    });
+  }
+
+  function unportal() {
+    portalWhenClipped = false;
+    calendarUsesFixedPositioning = false;
+    engine?.set({
+      appendTo: datePickerRef,
+      position: propOptions.position,
+      static: true,
+    });
+  }
+
   /** @type {Set<string>} */
   const reportedWarnings = new Set();
   /** @param {string} message */
@@ -1427,12 +1464,14 @@
             closeTrigger = undefined;
             refreshCloseBaselineOnOpen();
             applyInitialMonth();
+            portalIfClipped();
           } else if (event === "close") {
             calendarOpen = false;
             open = false;
             if (calendarUsesFixedPositioning) {
               detachFixedRepositionListeners();
             }
+            if (portalWhenClipped) unportal();
             clearRangePreview();
             queueMicrotask(dispatchDeferredClose);
             return;

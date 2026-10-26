@@ -68,6 +68,7 @@ const QUIET_OPTIONS = new Set([
   "prevLabel",
   "nextLabel",
   "rtl",
+  "static",
 ]);
 
 /** Options that change only the field's text: `set` rewrites the value. */
@@ -1445,17 +1446,59 @@ export function createCalendarEngine(element, userConfig = {}) {
           config.appendTo.appendChild(container);
         }
       }
-      if (config.static) {
-        const wrapper = createElement("div", "bx--date-picker__anchor");
-        element.parentNode?.insertBefore(wrapper, element);
-        wrapper.appendChild(element);
-        if (self.altInput) wrapper.appendChild(self.altInput);
-        wrapper.appendChild(container);
-      }
+      if (config.static) staticAnchor().appendChild(container);
     }
     if (!config.static && !config.inline) {
       (config.appendTo ?? document.body).appendChild(container);
     }
+  }
+
+  /** @type {HTMLElement | undefined} */
+  let anchor;
+  /**
+   * The wrapper a static calendar opens from, around the field.
+   * @returns {HTMLElement}
+   */
+  function staticAnchor() {
+    if (anchor) return anchor;
+    const wrapper = createElement("div", "bx--date-picker__anchor");
+    element.parentNode?.insertBefore(wrapper, element);
+    wrapper.appendChild(element);
+    if (self.altInput) wrapper.appendChild(self.altInput);
+    anchor = wrapper;
+    return wrapper;
+  }
+
+  /**
+   * Moves the calendar to match `static`: under the field, or out to
+   * `appendTo` (else the page) and placed there, as if built that way.
+   * Focus inside the calendar stays where it was.
+   */
+  function placeContainer() {
+    const container = self.calendarContainer;
+    if (!container || config.inline) return;
+    const active = document.activeElement;
+    const focused =
+      active instanceof HTMLElement && container.contains(active)
+        ? active
+        : null;
+    container.classList.toggle(
+      "bx--date-picker__calendar--static",
+      config.static,
+    );
+    if (config.static) {
+      container.style.removeProperty("top");
+      container.style.removeProperty("left");
+      container.style.removeProperty("right");
+      staticAnchor().appendChild(container);
+    } else {
+      (config.appendTo ?? document.body).appendChild(container);
+    }
+    if (self.isOpen) {
+      bindOpenListeners();
+      positionCalendar();
+    }
+    focused?.focus({ preventScroll: true });
   }
 
   // --- Navigation -------------------------------------------------------
@@ -1757,6 +1800,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       },
     ],
     clickOpens: [bindOpenTriggers],
+    static: [placeContainer],
   };
 
   /**
@@ -2463,21 +2507,15 @@ export function createCalendarEngine(element, userConfig = {}) {
     triggerListeners.clear();
     openListeners.clear();
     clearTimeout(resizeTimer);
-    const container = self.calendarContainer;
-    if (container?.parentNode) {
-      if (config.static) {
-        const wrapper = container.parentNode;
-        if (wrapper.lastChild) wrapper.removeChild(wrapper.lastChild);
-        if (wrapper.parentNode) {
-          while (wrapper.firstChild) {
-            wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
-          }
-          wrapper.parentNode.removeChild(wrapper);
-        }
-      } else {
-        container.parentNode.removeChild(container);
+    self.calendarContainer?.remove();
+    // Unwrap the field, wherever `static` left the calendar.
+    if (anchor?.parentNode) {
+      while (anchor.firstChild) {
+        anchor.parentNode.insertBefore(anchor.firstChild, anchor);
       }
+      anchor.remove();
     }
+    anchor = undefined;
     if (self.altInput) {
       self.input.type = "text";
       self.altInput.parentNode?.removeChild(self.altInput);

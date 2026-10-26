@@ -162,6 +162,38 @@ describe("createCalendarEngine", () => {
     expect(input.parentElement).toBe(host);
   });
 
+  it("moves an open calendar out of the field and back with `static`", () => {
+    const { instance, host } = create({ static: true });
+    const anchor = host.querySelector(".bx--date-picker__anchor");
+    const container = instance.calendarContainer;
+    instance.open();
+    const day15 = day(instance, 15);
+    day15.focus();
+
+    instance.set("static", false);
+    expect(container.parentElement).toBe(document.body);
+    expect(container).not.toHaveClass("bx--date-picker__calendar--static");
+    expect(container.style.top).not.toBe("");
+    expect(day15).toHaveFocus();
+
+    instance.set("static", true);
+    expect(container.parentElement).toBe(anchor);
+    expect(container).toHaveClass("bx--date-picker__calendar--static");
+    expect(container.style.top).toBe("");
+    expect(day15).toHaveFocus();
+  });
+
+  it("unwraps the field on destroy after the calendar moved out", () => {
+    const { instance, input, host } = create({ static: true });
+    instance.set("static", false);
+
+    instance.destroy();
+
+    expect(host.querySelector(".bx--date-picker__anchor")).toBeNull();
+    expect(document.querySelector(".bx--date-picker__calendar")).toBeNull();
+    expect(input.parentElement).toBe(host);
+  });
+
   it("takes down a calendar whose build throws", () => {
     const host = document.createElement("div");
     const input = document.createElement("input");
