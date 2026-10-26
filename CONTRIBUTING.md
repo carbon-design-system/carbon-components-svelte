@@ -611,6 +611,7 @@ Values:
 - Sizes: `to-rem(Npx)` or a spacing token. Not Carbon's bare `rem()`, not a raw rem literal. Hairlines (`1px`/`2px` borders, outlines, and offsets) stay in `px`.
 - Spacing tokens: `$carbon--spacing-01` … `-13`. Not the `$spacing-0N` aliases.
 - Color: Carbon v11 theme tokens (`$layer`, `$field`, `$support-error`, …). Prefer the contextual tokens (`$layer`, `$field`, `$border-subtle`), so a surface follows the `Layer` it sits in. Read a numbered one (`$layer-01`) only where v11 pins the level, and list it in `PINNED` in `tests/css/layer.test.ts`. No hex, and no v10 names (`$ui-01`, `$text-01`): `all.css` no longer declares them, and `tests/css/v11-tokens.test.ts` fails on any that reach the CSS. In `all.css` tokens compile to `var(--cds-*)` strings, so Sass color functions (`mix()`, `lightness()`, `rgba($token, …)`) and unary minus (`-$token`) silently drop the rule or no-op.
+- Give a `<button>` a `color` when no Carbon rule sets one. The browser's default is pure black or white, picked by the page's color scheme, not a theme token. It is a near miss in most themes (`#000` for `#161616`), so review misses it, and on a dark surface in a light page it fails contrast. HeaderSwitcher's trigger sat outside the rule that colors header actions and rendered black on the classic header at 1.3:1 ([#5120](https://github.com/carbon-design-system/carbon-components-svelte/pull/5120)).
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
@@ -1280,6 +1281,10 @@ Subject line:
 - `fix` is for bugs in a published release. If the buggy code was only
   ever on an unreleased commit (introduced since the last tag), use
   `chore` instead, since it never shipped as a bug
+- PRs land with a rebase merge, so each commit reaches master and the
+  changelog. Fold a fix or refactor of code that the same PR adds into
+  the commit that adds it. Otherwise the changelog lists a fix for
+  something that never shipped
 - `perf` bodies must state the measured effect: a before/after number
   (bundle size, benchmark timing, operation count), not just a
   description of the change. See [Performance benchmarks](#performance-benchmarks)
@@ -1363,6 +1368,8 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 | `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
 
 Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
+
+GitHub runs no `pull_request` workflow while a PR has merge conflicts. If a PR shows no checks at all, rebase it.
 
 A PR runs a whole suite when the selection can't be trusted. `bun run test:plan` lists each reason under `reasons`:
 
