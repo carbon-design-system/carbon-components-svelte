@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>layout-inspector</title>
+    <defs>
+        <filter id="layout-inspector-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="layout-inspector" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="margin" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="64.5" y="44.5" width="111" height="91"></rect>
+        <rect id="padding" fill="none" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1" x="76.5" y="56.5" width="87" height="67"></rect>
+        <rect id="content" fill="var(--cds-border-subtle, #e0e0e0)" x="88" y="68" width="64" height="44"></rect>
+        <rect id="shadow" fill="black" filter="url(#layout-inspector-shadow)" x="184" y="64" width="72" height="52"></rect>
+        <rect id="card" fill="var(--cds-layer-02, #ffffff)" x="184" y="64" width="72" height="52"></rect>
+        <rect id="card-title" fill="var(--cds-text-secondary, #525252)" x="192" y="72" width="40" height="8"></rect>
+        <rect id="card-token" fill="var(--cds-text-disabled, #c6c6c6)" x="192" y="88" width="48" height="6"></rect>
+        <rect id="card-value" fill="var(--cds-text-disabled, #c6c6c6)" x="192" y="100" width="36" height="6"></rect>
+    </g>
+</svg>
