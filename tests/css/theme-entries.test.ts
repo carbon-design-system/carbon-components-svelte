@@ -29,6 +29,7 @@ const UNREGISTERED_PARTIALS = [
   "_fill-tokens.scss",
   "_fluid-shared.scss",
   "_grid-overlay.scss",
+  "_layout-inspector.scss",
   "_prose.scss",
   "_spacing-scale.scss",
   "_status-tokens.scss",

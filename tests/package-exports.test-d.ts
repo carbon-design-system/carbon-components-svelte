@@ -19,7 +19,10 @@ import type {
   ThemeZone as BarrelThemeZone,
   trapFocus,
 } from "carbon-components-svelte";
-import type { GridOverlay } from "carbon-components-svelte/devtools";
+import type {
+  GridOverlay,
+  LayoutInspector,
+} from "carbon-components-svelte/devtools";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBoxSkeleton.svelte";
@@ -78,6 +81,7 @@ import "carbon-components-svelte/css/white.css";
 
 type _BarrelButton = BarrelButton;
 type _GridOverlay = typeof GridOverlay;
+type _LayoutInspector = typeof LayoutInspector;
 type _BarrelDataTable = BarrelDataTable;
 type _BreakpointObserver = ReturnType<typeof breakpointObserver>;
 type _BreakpointSize = BreakpointSize;
