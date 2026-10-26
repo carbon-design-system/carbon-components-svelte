@@ -182,7 +182,7 @@ Pass your own `id` or `name` to make the markup identical on every render. Ids m
 
 | Component | Props that fix its ids |
 | :--- | :--- |
-| TextInput, PasswordInput, TextArea, NumberInput, Search, Slider, Toggle, Select, Dropdown, ComboBox, MultiSelect, Modal, ComposedModal, InterstitialScreen, Pagination, CodeSnippet, CopyInput, Tag, TooltipIcon, TooltipDefinition, Disclosure, Carousel, Toggletip, HeaderSearch, TreeView, TableContainer, FormGroup, ProgressBar, Meter, FileUploader | `id` |
+| TextInput, PasswordInput, TextArea, NumberInput, Search, Slider, Toggle, Select, Dropdown, ComboBox, MultiSelect, Modal, ComposedModal, InterstitialScreen, Pagination, CodeSnippet, CopyInput, Tag, TooltipIcon, TooltipDefinition, Disclosure, Carousel, Toggletip, HeaderSearch, HeaderSwitcher, ProfileMenu, InlineNotification, ToastNotification, TreeView, TableContainer, FormGroup, ProgressBar, Meter, FileUploader | `id` |
 | DataTable | `id` (`inputName` sets the selection name) |
 | OverflowMenu | `id`, and `id` on each `OverflowMenuItem` |
 | Tooltip | `tooltipId` and `triggerId` |
@@ -194,8 +194,6 @@ Pass your own `id` or `name` to make the markup identical on every render. Ids m
 | RadioButtonGroup, TileGroup, StructuredList | `name` on the group |
 | TagSet | `id` on `TagSet` and on each `Tag` |
 | DatePicker | `id` on `DatePicker` and on each `DatePickerInput` |
-
-Two cases still render a random id on the server: `InlineNotification` and `ToastNotification` with `actionable` and a `title` or `subtitle`, and `HeaderSwitcher` and `ProfileMenu` rendered open. <!-- FIX: SSR-20 -->
 
 ## Locale and time
 

@@ -53,6 +53,13 @@
   /** Set to `true` to prevent the menu from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
 
+  /**
+   * Set an id for the trigger button. The menu id derives from it as
+   * `{id}-menu`, so the server and the browser render the same id.
+   * @type {string | undefined}
+   */
+  export let id = undefined;
+
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { get } from "svelte/store";
   import { slide } from "svelte/transition";
@@ -70,7 +77,8 @@
 
   const dispatch = createEventDispatcher();
 
-  const menuId = `${uniqueId()}-menu`;
+  const fallbackId = uniqueId();
+  $: menuId = `${id ?? fallbackId}-menu`;
 
   let refMenu = null;
 
@@ -158,6 +166,7 @@
     aria-expanded={isOpen}
     aria-controls={isOpen ? menuId : undefined}
     aria-label={text ? undefined : iconDescription}
+    {id}
     class:bx--header__action={true}
     class:bx--header__action--active={isOpen}
     class:bx--header__action--text={true}
