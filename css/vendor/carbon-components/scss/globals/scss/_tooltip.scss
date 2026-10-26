@@ -121,7 +121,12 @@
   &::after,
   .#{$prefix}--assistive-text,
   + .#{$prefix}--assistive-text {
-    position: absolute;
+    // ccs: was `absolute`. A hidden tooltip keeps its full size, so it
+    // stretched the scroll area of a box around the trigger, such as a
+    // DataTable's. A fixed box is placed against the window and adds
+    // nothing there. `tooltip--trigger-state` sets `absolute` while it
+    // shows, before the component measures it.
+    position: fixed;
     z-index: z('floating');
     display: flex;
     align-items: center;
@@ -249,18 +254,21 @@
     .#{$prefix}--assistive-text,
     + .#{$prefix}--assistive-text,
     &.#{$prefix}--tooltip--a11y::before {
+      position: absolute; // ccs: fixed while hidden, see `tooltip--trigger`
       animation: tooltip-fade $duration--fast-01 motion(standard, productive);
     }
   }
 
   &.#{$prefix}--tooltip--hidden .#{$prefix}--assistive-text,
   &.#{$prefix}--tooltip--hidden + .#{$prefix}--assistive-text {
+    position: fixed; // ccs
     overflow: hidden;
     margin: -1px;
     clip: rect(0, 0, 0, 0);
   }
 
   &.#{$prefix}--tooltip--hidden.#{$prefix}--tooltip--a11y::before {
+    position: fixed; // ccs
     animation: none;
     opacity: 0;
   }
