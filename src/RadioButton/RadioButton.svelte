@@ -135,7 +135,7 @@
   /** @type {(() => void) | null} */
   let registryUnsubscribe = null;
   /** @type {string | undefined} */
-  let prevName = undefined;
+  let prevName;
 
   /**
    * Initialize registry for standalone mode with name.

@@ -78,7 +78,7 @@
   /** @type {string | null} */
   let defaultItemId = null;
   /** @type {string | number | undefined} */
-  let defaultItemValue = undefined;
+  let defaultItemValue;
   let hasEmptyItem = false;
 
   /**

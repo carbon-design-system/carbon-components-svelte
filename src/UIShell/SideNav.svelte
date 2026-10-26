@@ -255,8 +255,8 @@
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
 
-  let navRef = undefined;
-  let winWidth = undefined;
+  let navRef;
+  let winWidth;
 
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
   const sharedWinWidth = writable(undefined);

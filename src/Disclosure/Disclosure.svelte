@@ -51,7 +51,7 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
-  let animation = undefined;
+  let animation;
 
   function toggle() {
     open = !open;

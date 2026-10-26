@@ -2,7 +2,7 @@
   import { Button, ToastNotification } from "carbon-components-svelte";
   import { fade } from "svelte/transition";
 
-  let timeout = undefined;
+  let timeout;
   $: showNotification = timeout !== undefined;
 </script>
 

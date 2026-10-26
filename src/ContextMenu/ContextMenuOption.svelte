@@ -110,8 +110,8 @@
   const ctxGroup = getContext("carbon:ContextMenuGroup");
   const ctxRadioGroup = getContext("carbon:ContextMenuRadioGroup");
 
-  let unsubCurrentIds = undefined;
-  let unsubCurrentId = undefined;
+  let unsubCurrentIds;
+  let unsubCurrentId;
   let rootMenuPosition = [0, 0];
   let focusIndex = 0;
   let options = [];

@@ -102,7 +102,7 @@
 
   let ref = null;
   let refLabel = null;
-  let prevActiveId = undefined;
+  let prevActiveId;
 
   const {
     treeId,

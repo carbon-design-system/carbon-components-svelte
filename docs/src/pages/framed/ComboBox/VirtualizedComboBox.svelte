@@ -7,7 +7,7 @@
   }));
 
   let value = "";
-  let selectedId = undefined;
+  let selectedId;
   $: selectedItem = items.find((item) => item.id === selectedId);
 </script>
 

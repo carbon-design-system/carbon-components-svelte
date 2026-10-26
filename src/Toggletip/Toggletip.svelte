@@ -173,7 +173,7 @@
   // A start- or end-aligned popover that would overflow its container, such
   // as a table's scroll area, opens on the other side when it fits better
   // there. It starts from `align` again each time it opens.
-  let flippedAlign = undefined;
+  let flippedAlign;
   $: if (!open) flippedAlign = undefined;
   $: effectiveAlign = flippedAlign ?? align;
   // `toggletipRef` binds only in the browser, so this never runs during SSR.

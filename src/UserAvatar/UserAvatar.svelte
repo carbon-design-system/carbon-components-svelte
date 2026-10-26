@@ -234,7 +234,7 @@
   // Fall back to icon/initials when the photo URL fails. Comparing against the
   // failed URL means a new `image` value automatically retries. Forget the
   // failure once `image` moves off it, so returning to that URL retries too.
-  let failedImage = undefined;
+  let failedImage;
   $: if (failedImage !== undefined && image !== failedImage) {
     failedImage = undefined;
   }

@@ -434,7 +434,7 @@
 
   // The rendered width, for the handle's value and a slide-in panel's
   // page offset. It follows `size`, the user's width and the CSS caps.
-  let measuredWidth = undefined;
+  let measuredWidth;
   let stopMeasuring = noop;
 
   function measure(node, enabled) {
@@ -454,7 +454,7 @@
   // page keeps the transition class while the panel is mounted, so the
   // content slides back too.
   let pageContent = null;
-  let pageMarginProperty = undefined;
+  let pageMarginProperty;
   let pagePushed = false;
   let prevPageMargin = "";
 

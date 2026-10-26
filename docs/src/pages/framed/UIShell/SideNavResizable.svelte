@@ -19,7 +19,7 @@
   import Settings from "carbon-icons-svelte/lib/Settings.svelte";
 
   let width = 256;
-  let lastResize = undefined;
+  let lastResize;
 </script>
 
 <LocalStorage key="side-nav-width" bind:value={width} />

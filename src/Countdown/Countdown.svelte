@@ -71,7 +71,7 @@
   /** Whether the countdown stopped by reaching zero, not by a pause. */
   let ended = false;
   /** @type {ReturnType<typeof setInterval> | undefined} */
-  let interval = undefined;
+  let interval;
 
   /** @param {Date | number} deadline */
   function secondsUntil(deadline) {

@@ -110,8 +110,8 @@
   onMount(() => trackHeaderRendered());
 
   /** @type {undefined | number} */
-  let winWidth = undefined;
-  let wasAboveBreakpoint = undefined;
+  let winWidth;
+  let wasAboveBreakpoint;
 
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
   const sharedWinWidth = writable(undefined);

@@ -138,7 +138,7 @@
 
   $: hasValueText = !!valueText?.trim() || !!$$slots.valueChildren;
 
-  let prevStatus = undefined;
+  let prevStatus;
   let statusAnnouncement = "";
 
   $: overCapacity = value > max;

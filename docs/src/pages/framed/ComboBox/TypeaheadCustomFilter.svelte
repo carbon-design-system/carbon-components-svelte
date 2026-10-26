@@ -1,7 +1,7 @@
 <script>
   import { ComboBox, fuzzyMatch } from "carbon-components-svelte";
 
-  let selectedId = undefined;
+  let selectedId;
 
   // Reuse the built-in fuzzy matcher as the filter predicate. Each typed
   // character must appear in order within the item text, so "acc" matches

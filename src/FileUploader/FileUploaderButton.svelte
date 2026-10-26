@@ -154,7 +154,7 @@
   let initialLabelText = labelText;
   // The label a pick last wrote. Any other `labelText` came from the
   // consumer (e.g. a locale change), so clearing restores that instead.
-  let fileLabel = undefined;
+  let fileLabel;
 
   // Determine if this is icon-only (has icon but no label content)
   $: hasIconOnly =

@@ -11,7 +11,7 @@
   const actions = ["Send reminders", "Export as CSV", "Show the oldest"];
 
   // The chosen reply stays selected, and the others are disabled.
-  let chosen = undefined;
+  let chosen;
 </script>
 
 <ChatLog labelText="Conversation with the assistant">

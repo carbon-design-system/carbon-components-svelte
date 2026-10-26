@@ -625,7 +625,7 @@
   // Last filter applied via `filterRows`, replayed when `rows` changes so
   // an active search is not silently dropped on row reassignment.
   let prevSearchValue = "";
-  let prevCustomFilter = undefined;
+  let prevCustomFilter;
 
   /**
    * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}

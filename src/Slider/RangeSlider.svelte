@@ -265,7 +265,7 @@
   let rangeAnchor = 0;
   let rangeStart = { lower: 0, upper: 0 };
   /** @type {"grab" | "crosshair" | undefined} */
-  let hoverCursor = undefined;
+  let hoverCursor;
   // Snapped value and pointer position of a `trackDrag="brush"` press
   // outside the range. It moves the nearer handle until the pointer travels
   // `BRUSH_THRESHOLD` pixels, then paints from `brushAnchor` instead.

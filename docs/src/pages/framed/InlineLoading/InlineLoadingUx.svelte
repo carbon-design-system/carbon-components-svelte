@@ -14,7 +14,7 @@
     finished: "dormant",
   };
 
-  let timeout = undefined;
+  let timeout;
   let state = "dormant"; // "dormant" | "active" | "finished" | "inactive"
 
   function reset(incomingState) {

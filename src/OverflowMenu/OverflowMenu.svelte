@@ -180,7 +180,7 @@
   const focusedId = writable(undefined);
   const focusedIndex = writable(-1);
 
-  let buttonWidth = undefined;
+  let buttonWidth;
   let mounted = false;
 
   // Whether opening moves focus into the menu: only when it opens after

@@ -2,7 +2,7 @@
   import { Button, Content, Header, SidePanel } from "carbon-components-svelte";
 
   let open = true;
-  let width = undefined;
+  let width;
 </script>
 
 <Header companyName="IBM" platformName="Cloud" />

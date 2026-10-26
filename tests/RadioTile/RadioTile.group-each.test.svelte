@@ -5,7 +5,7 @@
   const values = ["monthly", "annual"];
 
   let checked = [true, false];
-  let selected: string | undefined = undefined;
+  let selected: string | undefined;
 </script>
 
 <TileGroup bind:selected legendText="Billing cycle">

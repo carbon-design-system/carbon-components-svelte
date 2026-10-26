@@ -112,7 +112,7 @@
     previousType = value;
   });
 
-  let animation = undefined;
+  let animation;
   let openedOnce = open;
 
   $: if (open) openedOnce = true;

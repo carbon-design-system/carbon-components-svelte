@@ -46,7 +46,7 @@
   /** The action result, like SvelteKit's `form` prop. */
   let form = null;
   /** Dropdown does not restore itself on reset, so track it and clear it in `on:reset`. */
-  let region = undefined;
+  let region;
   let submitting = false;
 
   $: values = form?.type === "failure" ? form.data.values : {};
