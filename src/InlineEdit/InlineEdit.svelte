@@ -185,6 +185,7 @@
     );
   }
 
+  /** @param {FocusEvent} event */
   function handleFocus(event) {
     if (!isTargetingChild(event?.relatedTarget)) {
       inputRef?.focus();
@@ -219,6 +220,7 @@
     }
   }
 
+  /** @param {FocusEvent} event */
   function handleBlur(event) {
     const clickedWithin = clickingWithin;
     const targetingChild = isTargetingChild(event.relatedTarget);
@@ -265,6 +267,7 @@
     escaping = false;
   }
 
+  /** @param {MouseEvent} event */
   function handleToolbarMouseDown(event) {
     const button = /** @type {HTMLElement} */ (event.target).closest("button");
     if (!button) return;

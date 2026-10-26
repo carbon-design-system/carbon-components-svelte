@@ -403,6 +403,7 @@
     class: "bx--btn__icon",
   };
 
+  /** @param {MouseEvent} event */
   function handleClick(event) {
     if (loading) {
       event.preventDefault();

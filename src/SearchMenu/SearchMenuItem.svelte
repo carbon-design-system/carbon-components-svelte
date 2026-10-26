@@ -144,6 +144,7 @@
 
   onMount(() => () => updateRegistration(false, false, false));
 
+  /** @param {MouseEvent} event */
   function handleClick(event) {
     if (disabled) {
       event.preventDefault();

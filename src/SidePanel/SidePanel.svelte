@@ -274,6 +274,7 @@
     if (target) focusQuietly(target);
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (!open || slideIn) return;
     if (event.key === "Escape") {
@@ -319,6 +320,7 @@
     rendered = false;
   }
 
+  /** @param {AnimationEvent} event */
   function handleAnimationend(event) {
     if (event.target === ref && closing) finishClosing();
   }
@@ -394,6 +396,7 @@
     if (width !== prevWidth) dispatch("resize", { width });
   }
 
+  /** @param {KeyboardEvent} event */
   function handleResizeKeydown(event) {
     const step = event.shiftKey
       ? RESIZE_KEYBOARD_LARGE_STEP
@@ -423,6 +426,7 @@
 
   // Touch has no hover, and a pen or mouse passing over the handle
   // shouldn't flash it.
+  /** @param {PointerEvent} event */
   function handleResizePointerenter(event) {
     if (event.pointerType === "touch") return;
     scheduleResizeHover(resizeEnterDelayMs, () => {

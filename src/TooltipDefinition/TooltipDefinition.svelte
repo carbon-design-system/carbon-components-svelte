@@ -145,6 +145,7 @@
   // activates the button with a click whose `detail` is 0, so the click
   // still reaches `on:click` listeners. A pointer click toggles only with
   // `clickToOpen`.
+  /** @param {MouseEvent} event */
   function handleClick(event) {
     if (clickToOpen || event.detail === 0) toggle();
   }
