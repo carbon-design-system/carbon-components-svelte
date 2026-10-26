@@ -58,3 +58,9 @@ export function sideTokens(
   off: boolean;
   withBorder: string | null;
 }[];
+
+/** The spacing token closest to `px`, for a fix suggestion. */
+export function nearestSpacing(
+  px: number,
+  remPx?: number,
+): { token: string; px: number };
