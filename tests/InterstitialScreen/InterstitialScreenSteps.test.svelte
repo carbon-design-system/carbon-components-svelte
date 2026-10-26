@@ -8,8 +8,7 @@
   <InterstitialScreenBody>
     <InterstitialScreenView stepTitle="One">Step one</InterstitialScreenView>
     <InterstitialScreenView stepTitle="Two">Step two</InterstitialScreenView>
-    <InterstitialScreenView stepTitle="Three"
-      >Step three</InterstitialScreenView
+    <InterstitialScreenView stepTitle="Three">Step three</InterstitialScreenView
     >
   </InterstitialScreenBody>
 </InterstitialScreen>
