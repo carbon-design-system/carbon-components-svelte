@@ -213,10 +213,10 @@
   bind:this={ref}
   {role}
   tabindex="-1"
-  aria-disabled={String(disabled)}
-  aria-checked={isIndented ? String(selected) : undefined}
+  aria-disabled={disabled ? "true" : "false"}
+  aria-checked={isIndented ? (selected ? "true" : "false") : undefined}
   aria-haspopup={hasSubmenu ? true : undefined}
-  aria-expanded={hasSubmenu ? String(submenuOpen) : undefined}
+  aria-expanded={hasSubmenu ? (submenuOpen ? "true" : "false") : undefined}
   title={labelText}
   class:bx--menu-option={true}
   class:bx--menu-option--disabled={disabled}

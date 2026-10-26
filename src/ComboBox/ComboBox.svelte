@@ -1211,7 +1211,7 @@
           autocomplete="off"
           aria-autocomplete={typeahead ? "both" : "list"}
           aria-haspopup="listbox"
-          aria-expanded={String(open)}
+          aria-expanded={open ? "true" : "false"}
           aria-activedescendant={highlightedId ?? ""}
           aria-disabled={disabled ? "true" : undefined}
           aria-readonly={readonly ? "true" : undefined}

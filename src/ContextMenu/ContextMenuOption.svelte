@@ -230,14 +230,18 @@
   bind:this={ref}
   {role}
   tabindex="-1"
-  aria-disabled={String(disabled)}
+  aria-disabled={disabled ? "true" : "false"}
   aria-haspopup={subOptions ? true : undefined}
-  aria-expanded={subOptions ? String(submenuOpen) : undefined}
+  aria-expanded={subOptions ? (submenuOpen ? "true" : "false") : undefined}
   class:bx--menu-option={true}
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={subOptions && submenuOpen}
   class:bx--menu-option--danger={!subOptions && kind === "danger"}
-  aria-checked={isSelectable || isRadio ? String(selected) : undefined}
+  aria-checked={isSelectable || isRadio
+    ? selected
+      ? "true"
+      : "false"
+    : undefined}
   data-nested={ctx.level === 2}
   data-sub={subOptions}
   data-id={id}

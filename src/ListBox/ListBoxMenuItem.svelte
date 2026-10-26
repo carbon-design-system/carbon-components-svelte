@@ -80,7 +80,7 @@
   tabindex="-1"
   class:bx--list-box__menu-item={true}
   class:bx--list-box__menu-item--active={active}
-  aria-selected={String(active)}
+  aria-selected={active ? "true" : "false"}
   aria-disabled={disabled ? "true" : undefined}
   disabled={disabled ? true : undefined}
   {...$$restProps}

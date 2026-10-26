@@ -111,7 +111,7 @@
   tabindex={$tabStopId === id || ($tabStopId === null && selected && !disabled)
     ? 0
     : -1}
-  aria-selected={String(selected)}
+  aria-selected={selected ? "true" : "false"}
   aria-label={hasIcon ? text : undefined}
   aria-controls={$pairs.panelBySwitch[id]}
   {disabled}

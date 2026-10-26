@@ -173,7 +173,7 @@
   hidden={shouldRender ? undefined : true}
   role="option"
   tabindex="-1"
-  aria-selected={String(highlighted)}
+  aria-selected={highlighted ? "true" : "false"}
   aria-disabled={disabled ? "true" : undefined}
   data-search-menu-filterable={isFilterable || undefined}
   class:bx--search-menu-item={true}

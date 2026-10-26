@@ -257,7 +257,7 @@
     role="menuitem"
     {tabindex}
     aria-haspopup="menu"
-    aria-expanded={String(expanded)}
+    aria-expanded={expanded ? "true" : "false"}
     id={triggerId}
     {href}
     class:bx--header__menu-item={true}

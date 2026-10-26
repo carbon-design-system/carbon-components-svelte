@@ -55,7 +55,7 @@
   {id}
   {role}
   aria-controls={expanded ? menuId : undefined}
-  aria-disabled={String(disabled)}
+  aria-disabled={disabled ? "true" : "false"}
   aria-readonly={readonly ? "true" : undefined}
   tabindex={disabled ? "-1" : tabindex}
   class:bx--list-box__field={true}

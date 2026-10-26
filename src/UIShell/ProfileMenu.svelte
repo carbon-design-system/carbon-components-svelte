@@ -149,7 +149,7 @@
     ],
   }}
   type="button"
-  aria-expanded={String(isOpen)}
+  aria-expanded={isOpen ? "true" : "false"}
   aria-controls={isOpen ? menuId : undefined}
   aria-label={iconDescription}
   {id}

@@ -46,7 +46,7 @@
   type="button"
   title={ariaLabel}
   aria-label={ariaLabel}
-  aria-expanded={String(isOpen)}
+  aria-expanded={isOpen ? "true" : "false"}
   class:bx--header__action={true}
   class:bx--header__menu-trigger={true}
   class:bx--header__menu-toggle={true}
