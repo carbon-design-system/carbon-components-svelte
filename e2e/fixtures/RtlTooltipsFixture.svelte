@@ -4,6 +4,7 @@
     Breadcrumb,
     BreadcrumbItem,
     Button,
+    OperationalTag,
     OverflowMenu,
     OverflowMenuItem,
     PinCodeInput,
@@ -196,6 +197,18 @@
     <UserAvatarGroup max={1} total={120}>
       <UserAvatar name="Monica Hall" />
     </UserAvatarGroup>
+  </div>
+  <div class="case" data-testid="operational-tag-start">
+    <OperationalTag open id="operational-tag-start">
+      السياسات
+      <div slot="content" class="content">تُحسب الرسوم كل شهر.</div>
+    </OperationalTag>
+  </div>
+  <div class="case" data-testid="operational-tag-end">
+    <OperationalTag open align="end" direction="top" id="operational-tag-end">
+      السياسات
+      <div slot="content" class="content">تُحسب الرسوم كل شهر.</div>
+    </OperationalTag>
   </div>
 </div>
 

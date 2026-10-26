@@ -1530,6 +1530,16 @@ const FLOAT_CASES: Record<string, FloatCase> = {
     floating: "[data-testid=button-tooltip] .bx--assistive-text",
     inline: true,
   },
+  operationalTagStart: {
+    anchor: "[data-testid=operational-tag-start] .bx--tag",
+    floating: "#operational-tag-start-content .bx--popover-contents",
+    inline: true,
+  },
+  operationalTagEnd: {
+    anchor: "[data-testid=operational-tag-end] .bx--tag",
+    floating: "#operational-tag-end-content .bx--popover-contents",
+    inline: true,
+  },
 };
 
 type FloatOffsets = { start: number; end: number; caret: number | null };

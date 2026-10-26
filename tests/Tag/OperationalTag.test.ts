@@ -29,6 +29,45 @@ describe("OperationalTag", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  describe("align", () => {
+    afterEach(() => {
+      document.documentElement.removeAttribute("style");
+    });
+
+    it.each([
+      ["bottom", "start", "bottom-left"],
+      ["bottom", "center", "bottom"],
+      ["top", "end", "top-right"],
+    ] as const)(
+      "maps direction %s and align %s to %s",
+      (direction, align, placement) => {
+        const { container } = render(OperationalTag, {
+          open: true,
+          direction,
+          align,
+        });
+        expect(popover(container)).toHaveClass(`bx--popover--${placement}`);
+      },
+    );
+
+    // `start` and `end` name inline sides, as in Toggletip.
+    it.each([
+      ["bottom", "start", "bottom-right"],
+      ["top", "end", "top-left"],
+    ] as const)(
+      "maps direction %s and align %s to %s in RTL",
+      (direction, align, placement) => {
+        document.documentElement.style.direction = "rtl";
+        const { container } = render(OperationalTag, {
+          open: true,
+          direction,
+          align,
+        });
+        expect(popover(container)).toHaveClass(`bx--popover--${placement}`);
+      },
+    );
+  });
+
   it("closes on Escape and returns focus to the tag", async () => {
     render(OperationalTag, { open: true });
 

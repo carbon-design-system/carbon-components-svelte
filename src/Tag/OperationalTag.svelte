@@ -1,11 +1,3 @@
-<script context="module">
-  // "bottom" + "start" -> "bottom-left", and so on.
-  function toPopoverAlign(dir, intrinsic) {
-    if (intrinsic === "center") return dir;
-    return `${dir}-${intrinsic === "start" ? "left" : "right"}`;
-  }
-</script>
-
 <script>
   /**
    * @template [Icon=any]
@@ -54,6 +46,7 @@
 
   /**
    * Set the alignment of the popover relative to the tag.
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
    * @type {"start" | "center" | "end"}
    */
   export let align = "start";
@@ -150,7 +143,8 @@
     portalTooltip === undefined ? !!insideModal : portalTooltip;
   // Left unset outside a `Modal`, Popover moves to a portal when clipped.
   $: portalPopover = portalTooltip ?? (insideModal ? true : undefined);
-  $: popoverAlign = toPopoverAlign(direction, align);
+  // Popover resolves `start` and `end` to physical sides when it opens.
+  $: popoverAlign = align === "center" ? direction : `${direction}-${align}`;
   $: insideElements = [wrapperRef, popoverRef];
   $: if (disabled || !hasContent) open = false;
   $: hasIcon = Boolean(icon || $$slots.icon);
