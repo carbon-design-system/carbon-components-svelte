@@ -51,7 +51,6 @@ test.describe("Tabs overflow", () => {
     // Arrow through several variable-width tabs; the focused tab must stay
     // within the scroll viewport rather than drifting off-screen.
     for (let i = 0; i < 6; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: arrow presses are sequential
       await page.keyboard.press("ArrowRight");
     }
 

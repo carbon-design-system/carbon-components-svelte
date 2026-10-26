@@ -1341,6 +1341,7 @@ describe("TreeView Generics", () => {
     });
 
     it("should work with 'as const' for literal type inference", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const nodes = [
         { id: "node1", text: "Node 1" },
         { id: "node2", text: "Node 2" },
@@ -1756,7 +1757,7 @@ describe("TreeView autoCollapse", () => {
       type ComponentType = TreeViewNodeComponent<TreeNode>;
       type Props = ComponentProps<ComponentType>;
 
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
   });
@@ -1856,7 +1857,7 @@ describe("TreeView autoCollapse", () => {
       type ComponentType = TreeViewNodeListComponent<string>;
       type Props = ComponentProps<ComponentType>;
 
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
   });

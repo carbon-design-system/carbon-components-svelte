@@ -20,7 +20,6 @@ test("Dropdown menu aligns to its field", async ({ page }) => {
   for (const portal of [false, true]) {
     const prefix = portal ? "portal" : "inline";
 
-    // biome-ignore lint/performance/noAwaitInLoops: one menu open at a time
     await test.step(`${prefix}: keeps the inline width, left edge on the field`, async () => {
       const { field, menu } = await openMenu(page, `${prefix}-start`);
       expect.soft(menu.width).toBeGreaterThan(field.width);

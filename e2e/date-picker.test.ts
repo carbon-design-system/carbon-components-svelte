@@ -149,7 +149,6 @@ test.describe("DatePicker", () => {
 
     await page.keyboard.press("ArrowDown");
     for (let i = 0; i < 5; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: arrow presses are sequential
       await page.keyboard.press("ArrowRight");
     }
 
@@ -421,7 +420,6 @@ test.describe("DatePicker", () => {
 
     await calendar.getByLabel("March 10, 2024").focus();
     for (let i = 0; i < 4; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: arrow presses are sequential
       await page.keyboard.press("ArrowRight");
     }
 

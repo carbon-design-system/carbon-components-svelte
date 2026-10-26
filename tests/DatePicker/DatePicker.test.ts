@@ -2262,7 +2262,7 @@ describe("DatePicker", () => {
           ArrowDown: 40,
         }[key];
         for (let i = 0; i < times; i++) {
-          // biome-ignore lint/performance/noAwaitInLoops: key presses are sequential
+          // eslint-disable-next-line no-await-in-loop -- key presses are sequential
           await fireEvent.keyDown(document.activeElement as HTMLElement, {
             key,
             keyCode,

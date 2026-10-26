@@ -24,7 +24,6 @@ test("accordion content padding follows the accordion's width", async ({
 
   // A parent that sizes to its content doesn't collapse the accordion.
   for (const testid of ["flex-row", "inline-block"]) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one parent at a time
     const box = await page
       .getByTestId(testid)
       .locator(".bx--accordion")

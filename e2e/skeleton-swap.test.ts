@@ -85,7 +85,6 @@ test("skeletons are as tall as the components they stand in for", async ({
 
   for (const id of cases) {
     const pair = page.getByTestId(id);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const real = await pair.locator("[data-part=real]").boundingBox();
     const skeleton = await pair.locator("[data-part=skeleton]").boundingBox();
     expect.soft(real && skeleton, `${id} rendered`).toBeTruthy();
@@ -137,7 +136,6 @@ test("skeleton fields are as wide as the fields they stand in for", async ({
         .evaluateAll((els) =>
           els.map((el) => el.getBoundingClientRect().width),
         );
-    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
     const real = await widths("real");
     const skeleton = await widths("skeleton");
     expect.soft(real.length, `${id} rendered`).toBeGreaterThan(0);
@@ -172,7 +170,6 @@ test("TimePickerSkeleton's input and first select are as wide as an AM/PM picker
         );
     // The time zone select sizes to its options, so only the input and
     // the AM/PM select are compared.
-    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
     const real = await boxes(
       "[data-part=real] :is(.bx--time-picker__input-field, .bx--time-picker__select)",
     );

@@ -1,4 +1,98 @@
-# Options for `bun fmt`.
+# `bun lint` and `bun fmt` (Bun canary).
+
+[lint]
+maxWarnings = 0
+
+# ESLint and typescript-eslint recommended are on by default; these add the
+# stricter checks the project enforces on top.
+[lint.rules]
+"@typescript-eslint/ban-ts-comment" = [
+  "error",
+  { "ts-expect-error" = false, "ts-nocheck" = false },
+]
+"@typescript-eslint/no-explicit-any" = "error"
+"@typescript-eslint/no-unnecessary-type-constraint" = "error"
+"@typescript-eslint/no-useless-empty-export" = "error"
+"default-param-last" = "error"
+"dot-notation" = "error"
+"no-await-in-loop" = "error"
+"no-empty" = ["error", { allowEmptyCatch = true }]
+"no-extra-label" = "error"
+"no-lone-blocks" = "error"
+"no-negated-condition" = "error"
+"no-param-reassign" = "error"
+"no-restricted-imports" = [
+  "error",
+  { paths = [
+    { name = "svelte", importNames = ["onDestroy"], message = "Use the return function from onMount instead of onDestroy." },
+  ] },
+]
+"no-restricted-syntax" = [
+  "error",
+  { selector = "UnaryExpression[operator='delete'] > MemberExpression[computed=false]", message = "Avoid the delete operator; assign undefined or rebuild the object." },
+  { selector = "CallExpression[callee.property.name='forEach'][arguments.0.params.length<2]", message = "Use a for...of loop instead of forEach." },
+  { selector = "ExportAllDeclaration", message = "Export names explicitly instead of re-exporting everything." },
+  { selector = "ForInStatement", message = "Use for...of over Object.keys or Object.entries instead of for...in." },
+  { selector = "ImportDeclaration[importKind!='type'] > ImportNamespaceSpecifier", message = "Import names explicitly instead of a namespace." },
+  { selector = ":function Literal[regex]:not([regex.flags=/[gy]/])", message = "Hoist the regular expression to the top level so it compiles once." },
+]
+"no-sequences" = "error"
+"no-template-curly-in-string" = "error"
+"no-undef-init" = "error"
+"no-unused-vars" = [
+  "error",
+  { args = "all", argsIgnorePattern = "^_", caughtErrors = "none" },
+]
+"no-useless-assignment" = "off"
+"no-useless-constructor" = "error"
+"no-useless-rename" = "error"
+"no-var" = "error"
+"one-var" = ["error", "never"]
+"oxc/no-accumulating-spread" = "error"
+"prefer-arrow-callback" = "error"
+"prefer-const" = "error"
+"prefer-exponentiation-operator" = "error"
+"require-await" = "error"
+"import/no-commonjs" = "error"
+"unicorn/no-lonely-if" = "error"
+"unicorn/no-useless-switch-case" = "error"
+"unicorn/prefer-array-find" = "error"
+"unicorn/prefer-node-protocol" = "error"
+"unicorn/prefer-number-properties" = "error"
+
+# The steps of a browser test run one after another.
+[[lint.overrides]]
+files = ["e2e/**"]
+rules = { "no-await-in-loop" = "off" }
+
+[[lint.overrides]]
+files = ["**/*.test.ts", "docs/**"]
+rules = { "no-restricted-syntax" = [
+  "error",
+  { selector = "UnaryExpression[operator='delete'] > MemberExpression[computed=false]", message = "Avoid the delete operator; assign undefined or rebuild the object." },
+  { selector = "CallExpression[callee.property.name='forEach'][arguments.0.params.length<2]", message = "Use a for...of loop instead of forEach." },
+  { selector = "ExportAllDeclaration", message = "Export names explicitly instead of re-exporting everything." },
+  { selector = "ForInStatement", message = "Use for...of over Object.keys or Object.entries instead of for...in." },
+  { selector = "ImportDeclaration[importKind!='type'] > ImportNamespaceSpecifier", message = "Import names explicitly instead of a namespace." },
+] }
+
+[[lint.overrides]]
+files = ["tests/**"]
+excludeFiles = ["tests/package-exports.test-d.ts"]
+rules = { "no-restricted-imports" = [
+  "error",
+  { paths = [
+    { name = "carbon-components-svelte", message = "Avoid the barrel import in tests; import directly (e.g. \"carbon-components-svelte/Button/Button.svelte\") to keep Vitest transforms fast." },
+    { name = "vitest", message = "Vitest functions are automatically imported." },
+  ] },
+] }
+
+[[lint.overrides]]
+files = ["src/**"]
+rules = { "no-restricted-imports" = [
+  "error",
+  { paths = [{ name = "svelte", importNames = ["onDestroy"], message = "Use the return function from onMount instead of onDestroy." }], patterns = [{ group = ["carbon-icons-svelte", "carbon-icons-svelte/**"], message = "Use the local icon in src/icons instead of importing from carbon-icons-svelte." }] },
+] }
 
 [fmt]
 # Sass, Markdown and YAML stay hand-formatted.

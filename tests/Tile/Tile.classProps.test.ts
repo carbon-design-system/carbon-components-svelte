@@ -11,8 +11,10 @@ const clickable = [
   ClickableTile,
   { href: "/details" },
 ] as const;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
 const selectable = ["SelectableTile", SelectableTile, {}] as const;
 const radio = ["RadioTile", RadioTile, { value: "a", name: "tiles" }] as const;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
 const expandable = ["ExpandableTile", ExpandableTile, {}] as const;
 type TileCase =
   | typeof tile

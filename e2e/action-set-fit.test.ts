@@ -38,7 +38,6 @@ test("a narrow ActionSet stacks its buttons, primary first", async ({
     [3, 320],
     [4, 320],
   ]) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one set at a time
     const narrow = await layout(page, `set-${count}-${width}`);
     expect.soft(narrow, `${count} at ${width}px`).toEqual({
       rows: count,
@@ -48,7 +47,6 @@ test("a narrow ActionSet stacks its buttons, primary first", async ({
   }
   expect.soft((await layout(page, "set-2-320")).rows, "2 at 320px").toBe(1);
   for (const count of [2, 3, 4]) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one set at a time
     const wide = await layout(page, `set-${count}-1000`);
     expect.soft(wide.rows, `${count} at 1000px`).toBe(1);
   }

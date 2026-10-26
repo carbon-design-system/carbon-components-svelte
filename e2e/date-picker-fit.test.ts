@@ -9,7 +9,6 @@ test("date pickers fit a narrow container", async ({ page }) => {
 
   for (const id of ["single-200", "range-200", "single-260", "range-260"]) {
     const box = page.getByTestId(id);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const outer = await box.boundingBox();
     const inputs = await box
       .locator(".bx--date-picker__input")

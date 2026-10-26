@@ -347,7 +347,6 @@ async function main(): Promise<void> {
 
     // Warmup: let selector/style caches settle before timed runs.
     for (let i = 0; i < 3; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by design
       await forward();
       await backward();
     }
@@ -360,7 +359,6 @@ async function main(): Promise<void> {
     };
 
     for (let i = 0; i < RUNS; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by design
       const before = await getMetrics();
       await forward();
       const after = await getMetrics();

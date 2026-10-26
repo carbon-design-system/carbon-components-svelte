@@ -21,7 +21,6 @@ test("a modal in a container sizes to the container", async ({ page }) => {
     [1100, 0.6],
   ] as const) {
     const box = page.getByTestId(`box-${width}`);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const overlay = await box.locator(".bx--modal").boundingBox();
     const dialog = await box.locator(".bx--modal-container").boundingBox();
     expect.soft(overlay?.width, `${width}px overlay`).toBeCloseTo(width, 0);

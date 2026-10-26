@@ -39,7 +39,6 @@ test("hideLabel leaves no space for the hidden label", async ({ page }) => {
 
   for (const { id, control, axes = ["x", "y"] as const } of cases) {
     const wrapper = page.getByTestId(id);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const wrapperBox = await wrapper.boundingBox();
     const controlBox = await wrapper.locator(control).first().boundingBox();
     expect.soft(wrapperBox && controlBox, `${id} rendered`).toBeTruthy();

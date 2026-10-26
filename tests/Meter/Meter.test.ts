@@ -4,10 +4,10 @@ import MeterComponent from "carbon-components-svelte/Meter/Meter.svelte";
 // declaration file, for reasons independent of file content (reproduces
 // even for a trivial one-line fixture unrelated to Meter). @ts-expect-error
 // would itself fail under Svelte 5, where this import has no real error.
-// biome-ignore lint/suspicious/noTsIgnore: see comment above
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- see comment above
 // @ts-ignore
 import Meter from "./Meter.test.svelte";
-// biome-ignore lint/suspicious/noTsIgnore: see comment above
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment -- see comment above
 // @ts-ignore
 import MeterStatus from "./MeterStatus.test.svelte";
 

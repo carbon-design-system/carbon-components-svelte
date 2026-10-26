@@ -1257,7 +1257,7 @@ describe("Modal", () => {
       type ComponentType = ModalComponent;
       type Props = ComponentProps<ComponentType>;
 
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<Props["primaryButtonIcon"]>().toEqualTypeOf<any>();
     });
   });

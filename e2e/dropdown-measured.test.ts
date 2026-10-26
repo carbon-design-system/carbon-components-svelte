@@ -152,7 +152,6 @@ for (const optimizeFastScroll of [false, true]) {
       // options of all three heights.
       const outOfView: number[] = [];
       for (let step = 0; step < 12; step++) {
-        // biome-ignore lint/performance/noAwaitInLoops: a step has to land before the next is judged
         const inView = await stepDown(page, field, highlighted);
         if (inView !== true) outOfView.push(step);
       }

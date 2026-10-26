@@ -79,7 +79,6 @@ test.describe("Modal with Dropdowns", () => {
     for (const name of picks) {
       const option = menu.getByRole("option", { name });
       // Click label text, not the checkbox input. That path double-toggled.
-      // biome-ignore lint/performance/noAwaitInLoops: each click must finish before the next
       await option.getByText(name, { exact: true }).click();
       // The option checkbox is decorative (hidden from the accessibility
       // tree), so query the underlying <input> directly rather than by role.

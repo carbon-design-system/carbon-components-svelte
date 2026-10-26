@@ -12,7 +12,7 @@ export const CONSUMER_LABEL_ID = "contract-label";
 export const CONSUMER_DESCRIPTION_ID = "contract-description";
 
 // `RenderResult<any>` pins the default queries; `render` returns generic ones.
-// biome-ignore lint/suspicious/noExplicitAny: cases render many component types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- cases render many component types
 type Rendered = RenderResult<any, any>;
 
 export type AriaCase = {

@@ -76,7 +76,7 @@ describe("Checkbox", () => {
 
     for (let i = 0; i < 3; i++) {
       onCheck.mockClear();
-      // biome-ignore lint/performance/noAwaitInLoops: each click must settle before the next
+      // eslint-disable-next-line no-await-in-loop -- each click must settle before the next
       await user.click(input);
       expect(onCheck).toHaveBeenCalledTimes(1);
     }
@@ -483,10 +483,10 @@ describe("Checkbox", () => {
       type ComponentType = CheckboxComponent;
       type Props = ComponentProps<ComponentType>;
 
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<Props["value"]>().toEqualTypeOf<any>();
       expectTypeOf<Props["group"]>().toEqualTypeOf<
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         ReadonlyArray<any> | undefined
       >();
     });

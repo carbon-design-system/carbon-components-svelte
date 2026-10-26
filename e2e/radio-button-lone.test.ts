@@ -11,7 +11,6 @@ test("a radio button outside a group sits at the start of its box", async ({
 
   for (const id of ["lone", "lone-label-left"]) {
     const box = page.getByTestId(id);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const wrapper = await box.boundingBox();
     const label = await box.locator(".bx--radio-button__label").boundingBox();
     // Where the circle or the text, whichever comes first, starts.

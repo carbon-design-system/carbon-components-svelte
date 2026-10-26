@@ -585,7 +585,7 @@ describe("TooltipIcon", () => {
       type ComponentType = TooltipIconComponent;
       type GenericProps = ComponentProps<ComponentType>;
 
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<GenericProps["icon"]>().toEqualTypeOf<any>();
     });
   });

@@ -109,7 +109,7 @@ describe("TreeView (virtualize)", () => {
 
     // Press ArrowDown 20 times — crosses past the initial window (~13 rows).
     for (let i = 0; i < 20; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential focus ops
+      // eslint-disable-next-line no-await-in-loop -- sequential focus ops
       await user.keyboard("{ArrowDown}");
     }
 

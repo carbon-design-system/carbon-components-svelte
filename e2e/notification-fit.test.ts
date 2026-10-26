@@ -9,7 +9,6 @@ test("notifications fit a narrow container", async ({ page }) => {
 
   for (const id of ["inline-200", "inline-320", "toast-200", "toast-320"]) {
     const box = page.getByTestId(id);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const outer = await box.boundingBox();
     const notification = await box
       .locator(".bx--inline-notification, .bx--toast-notification")

@@ -727,7 +727,7 @@ The shortest loop, in order:
 
 | Step | Command | Cost |
 | --- | --- | --- |
-| Format and lint what you touched | `bun fmt <paths> && bunx biome check --write <paths>` | Seconds |
+| Format and lint what you touched | `bun fmt <paths> && bun lint --fix <paths>` | Under a second |
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
 | Run the E2E tests your branch can reach | `bun run test:changed --e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
@@ -735,33 +735,23 @@ The shortest loop, in order:
 
 Don't run `bun run test` or `bun run test:e2e` to check a change. CI runs the same selection on the PR, and master runs everything after a merge.
 
-`bun fmt` formats JavaScript, TypeScript, JSON, HTML and Svelte, with the options in [`bunfig.toml`](bunfig.toml). Sass, Markdown and YAML are left as written. Biome lints. Scope both to what you touched, with the same `<paths>`, `--staged` or `--changed` (Bun's `--changed` takes no `--since`):
+`bun lint` needs a [canary build](https://bun.com/docs/installation#canary-builds) of Bun until it ships in a stable release: `bun upgrade --canary`. `bun fmt` formats JavaScript, TypeScript, JSON, HTML and Svelte; Sass, Markdown and YAML are left as written. `bun lint` lints JavaScript and TypeScript. It can't parse `.svelte` files without ESLint, so Biome still lints those. The options for both live in [`bunfig.toml`](bunfig.toml).
 
 ```sh
-# Specific paths — always lints the current working tree
-bunx biome check --write src/DataTable
+# Specific paths: whatever is on disk now
+bun fmt src/DataTable && bun lint --fix src/DataTable
 
-# Staged files only (what a commit would include) — also `bun run lint:changed`
-bunx biome check --write --staged
+# Staged files only (what a commit would include): also `bun run lint:changed`,
+# which runs Biome on the staged .svelte files too
+bun fmt --staged && bun lint --staged --fix
 
-# Files committed on this branch relative to master (CI-style, not aliased in package.json)
-bunx biome check --write --changed --since=master
+# Files that differ from master, committed or not
+bun fmt --changed && bun lint --changed
 ```
 
-Pick the form that matches your state. `--changed` and `--staged` resolve their file
-list from git, so each sees a different slice:
+`bun run lint:all` formats and lints the entire repository. Reserve it for broad sweeps.
 
-- Path scoping (`src/DataTable`) lints whatever is on disk now, committed or not. Use it
-  while editing.
-- `--staged` lints the git index. Run it after `git add`. `bun run lint:changed` is an
-  alias for this — despite the name, it does **not** use `--changed`.
-- `--changed` diffs *committed* changes against the default branch and, per Biome, is
-  "intended for CI." It ignores staged and unstaged edits entirely, so on a long-lived
-  branch it can also pull in every file changed since the branch diverged from master —
-  not just your latest commit. Reach for it deliberately (e.g. auditing a whole branch
-  before a PR), not as a pre-commit habit.
-
-`bun run lint` runs `bun fmt` and Biome over the entire repository. Reserve it for broad sweeps.
+There is no `lint` script. `bun lint` is the built-in linter, and a `lint` script that called it would run itself under a stable Bun, which has no linter.
 
 For unit tests, match a pattern against test file paths instead of running the whole suite:
 
@@ -786,7 +776,7 @@ Types and E2E:
 
 Three process traps:
 
-- Read the exit code, not the tail. `bun run lint:changed | tail -1` prints "No fixes applied" and exits 0 even when Biome reported errors above it. Gate commits on the checks themselves: `bunx biome check <paths> && bun run test:types && git commit ...`.
+- Read the exit code, not the tail. A tail can hide the errors above it. Gate commits on the checks themselves: `bun fmt --check <paths> && bun lint <paths> && bun run test:types && git commit ...`.
 - `bun test:types` reporting that a new prop or event "does not exist" usually means the generated `.d.ts` is stale, not that the code is wrong. Run `bun build:docs` first. This bites after a rebase as well as after an API change.
 - Before calling a failure flaky, rerun it once and compare. The same assertion failing with the same value is deterministic, even if the file passes alone; run it together with the file before it to reproduce the order.
 

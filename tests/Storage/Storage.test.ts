@@ -121,7 +121,7 @@ describe.each(storageCases)("$name", ({ Component, area, defaultKey }) => {
 
       // Mutate in place, then self-assign to trigger Svelte reactivity.
       (component.value as typeof settings).theme = "light";
-      // biome-ignore lint/correctness/noSelfAssign: the `value = value` idiom is the behavior under test
+      // eslint-disable-next-line no-self-assign -- the `value = value` idiom is the behavior under test
       component.value = component.value;
       await tick();
 
@@ -302,16 +302,16 @@ describe("LocalStorage Generics", () => {
     type Props = ComponentProps<ComponentType>;
     type Events = ComponentEvents<ComponentType>;
 
-    // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
     expectTypeOf<Props["value"]>().toEqualTypeOf<any>();
 
     type UpdateEvent = Events["update"];
     type UpdateEventDetail =
       UpdateEvent extends CustomEvent<infer T> ? T : never;
     expectTypeOf<UpdateEventDetail>().toEqualTypeOf<{
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       prevValue: any;
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       value: any;
     }>();
   });
@@ -341,16 +341,16 @@ describe("SessionStorage Generics", () => {
     type Props = ComponentProps<ComponentType>;
     type Events = ComponentEvents<ComponentType>;
 
-    // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
     expectTypeOf<Props["value"]>().toEqualTypeOf<any>();
 
     type UpdateEvent = Events["update"];
     type UpdateEventDetail =
       UpdateEvent extends CustomEvent<infer T> ? T : never;
     expectTypeOf<UpdateEventDetail>().toEqualTypeOf<{
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       prevValue: any;
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       value: any;
     }>();
   });

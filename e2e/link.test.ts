@@ -93,7 +93,6 @@ test.describe("Link", () => {
     // Focus underlines, and inline links keep their underline.
     for (const testId of ["link-md", "link-default"]) {
       const link = page.getByTestId(testId);
-      // biome-ignore lint/performance/noAwaitInLoops: one focus at a time
       await link.focus();
       await expect
         .soft(link, `${testId} focus underline`)

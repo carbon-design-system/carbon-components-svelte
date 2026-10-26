@@ -31,7 +31,6 @@ test.describe("Icon-only Button and CopyButton tooltips with Escape", () => {
 
     // The portalled Button tooltip, then the CopyButton's.
     for (const name of ["Edit item", "Copy link"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: keys go one at a time
       await page.keyboard.press("Tab");
       await expect(page.getByRole("button", { name })).toBeFocused();
       await expect(portalTooltips).toHaveText([name]);
