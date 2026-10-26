@@ -1798,7 +1798,6 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
-              {open}
             />
           {/if}
           <ListBoxMenuIcon

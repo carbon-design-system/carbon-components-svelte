@@ -48,7 +48,7 @@
   "Menu/MenuItem.svelte": 1,
   "MenuButton/MenuButton.svelte": 1,
   "Modal/Modal.svelte": 4,
-  "MultiSelect/MultiSelect.svelte": 67,
+  "MultiSelect/MultiSelect.svelte": 66,
   "Notification/NotificationButton.svelte": 1,
   "OverflowMenu/OverflowMenu.svelte": 4,
   "OverflowMenu/OverflowMenuItem.svelte": 6,
