@@ -76,9 +76,9 @@ describe("OverflowMenu close event trigger", () => {
   });
 
   it.each([
-    ["toggle", async (button: HTMLElement) => user.click(button)],
-    ["outside-click", async () => user.click(document.body)],
-    ["item-select", async () => user.click(screen.getAllByRole("menuitem")[0])],
+    ["toggle", (button: HTMLElement) => user.click(button)],
+    ["outside-click", () => user.click(document.body)],
+    ["item-select", () => user.click(screen.getAllByRole("menuitem")[0])],
   ] as const)(
     "keeps the menu open when the %s close is canceled",
     async (trigger, act) => {

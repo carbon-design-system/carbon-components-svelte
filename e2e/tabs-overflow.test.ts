@@ -38,7 +38,7 @@ test.describe("Tabs overflow", () => {
     await page.locator(NEXT).click();
 
     await expect
-      .poll(async () => nav.evaluate((n) => n.scrollLeft))
+      .poll(() => nav.evaluate((n) => n.scrollLeft))
       .toBeGreaterThan(0);
     await expect(page.locator(PREV)).not.toHaveClass(new RegExp(HIDDEN));
   });
