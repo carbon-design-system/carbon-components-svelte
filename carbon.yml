@@ -745,6 +745,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/LayoutDirection
+  layout-inspector:
+    name: Layout inspector
+    description: A development overlay that shows the box model, spacing, type, and color tokens of any element, and checks a page for off-scale spacing, low contrast, small targets, and overflow.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/layout-inspector.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LayoutInspector
   lazy-mount:
     name: Lazy mount
     status: stable

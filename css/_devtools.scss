@@ -1,5 +1,7 @@
-// Developer tools for `carbon-components-svelte/devtools`. Imported by the
-// opt-in `devtools.scss` and `devtools-<theme>.scss` sheets, never by the
-// theme manifest, so the theme sheets do not carry them. The components
-// they build on (Grid) stay in the theme sheets.
+// Developer tools: GridOverlay and LayoutInspector, for
+// `carbon-components-svelte/devtools`. Imported by the opt-in
+// `devtools.scss` and `devtools-<theme>.scss` sheets, never by the theme
+// manifest, so the theme sheets do not carry them. The components they
+// build on (Grid) stay in the theme sheets.
 @import "./grid-overlay";
+@import "./layout-inspector";

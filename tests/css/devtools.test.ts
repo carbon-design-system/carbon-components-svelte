@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { compileEntry } from "./compile";
 
-const ROOTS = [".bx--grid-overlay"] as const;
+const ROOTS = [".bx--grid-overlay", ".bx--layout-inspector"] as const;
 
 describe("devtools", () => {
   it("ships in devtools.css, not in the theme sheets", async () => {
