@@ -102,7 +102,9 @@ Prevent interaction with `disabled`.
 
 ## Portal
 
-Set `portalTooltip` to render the tooltip in a portal so it is not clipped by overflow containers. This is enabled automatically inside a Modal. Direction and alignment match the non-portal path.
+A tooltip that a container would cut off, such as a box with `overflow: hidden`, a scroll area or a [DataTable](/components/DataTable), opens in a portal. Inside a Modal, the tooltip always opens in a portal.
+
+Set `portalTooltip` to `true` to always render the tooltip in a portal, or to `false` to keep it in place. Direction and alignment match the in-place tooltip. A portalled tooltip leaves its container in the DOM, so CSS that targets the tooltip as a descendant of the container does not match it.
 
 <TooltipIcon portalTooltip tooltipText="Metrics are aggregated across every workspace in your organization." icon={Carbon} />
 

@@ -137,10 +137,11 @@
   export let ref = null;
 
   /**
-   * Set to `true` to render the icon-only tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers
-   * and enabling auto-flipping when the preferred direction lacks space.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set to `true` to always render the icon-only tooltip in a portal, which
+   * also flips it when the preferred direction lacks space, or `false` to
+   * keep it in place. Left unset, the tooltip opens in a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`, such
+   * as a `DataTable`) would cut it off.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -159,7 +160,7 @@
    */
   export let loadingDescription = undefined;
 
-  import { getContext, onMount } from "svelte";
+  import { getContext, onMount, tick } from "svelte";
   import Loading from "../Loading/Loading.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
@@ -169,6 +170,7 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { clippedBy } from "../utils/fit-align.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
@@ -196,8 +198,14 @@
   // While loading, Loading's own <title> + aria-live carries the accessible
   // name instead, so the tooltip is suppressed to avoid double-announcing.
   $: hasTooltipContent = hasIconOnly && Boolean(iconDescription) && !loading;
+  // Set for one open when the in-place tooltip turns out to be cut off by
+  // a box around it (a scrolling panel, a DataTable): it shows in a portal
+  // instead. Only when `portalTooltip` is left unset.
+  let portalWhenClipped = false;
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined
+      ? !!insideModal || portalWhenClipped
+      : portalTooltip;
   $: usePortal = hasTooltipContent && !hideTooltip && effectivePortalTooltip;
   $: hasTooltip = hasTooltipContent && !hideTooltip && !usePortal;
 
@@ -231,6 +239,25 @@
   // onto the tooltip.
   $: inlineOpen =
     hasTooltip && !disabled && !dismissed && tooltipShown && $tooltipActive;
+
+  // The in-place tooltip is laid out while hidden, so it measures where it
+  // shows. Measured after the update, so the swap lands before paint.
+  $: if (inlineOpen) tick().then(portalIfClipped);
+  $: if (!inlineOpen && !portalOpen) endClippedOpen();
+
+  function portalIfClipped() {
+    const tooltip = ref?.querySelector(":scope > .bx--assistive-text");
+    if (portalTooltip !== undefined || !inlineOpen || !tooltip) return;
+    if (clippedBy(tooltip)) portalWhenClipped = true;
+  }
+
+  // Back in place for the next open to measure, and closed there too:
+  // the portal path never clears `tooltipShown`.
+  function endClippedOpen() {
+    if (!portalWhenClipped) return;
+    portalWhenClipped = false;
+    tooltipShown = false;
+  }
 
   function dismissPortalTooltip() {
     tooltipHandoff.cancel();
