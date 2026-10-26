@@ -18,7 +18,7 @@
   type="button"
   data-navigation={$navigation}
   data-overflow={$overflow}
-  tabindex={$tabindex === undefined ? undefined : Number($tabindex)}
+  tabindex={$tabindex}
 >
   {label}
 </button>

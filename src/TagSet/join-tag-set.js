@@ -34,7 +34,7 @@ import { uniqueId } from "../utils/unique-id.js";
  * @property {import("svelte/store").Readable<"sm" | "default" | "lg" | undefined>} size - The set's `size`.
  * @property {import("svelte/store").Readable<"tab" | "roving">} navigation - The set's `navigation`.
  * @property {import("svelte/store").Readable<boolean>} overflow - Whether the tag is collapsed into the "+N" indicator.
- * @property {import("svelte/store").Readable<"0" | "-1" | undefined>} tabindex - Roving `tabindex`; `undefined` keeps the native tab order.
+ * @property {import("svelte/store").Readable<0 | -1 | undefined>} tabindex - Roving `tabindex`; `undefined` keeps the native tab order.
  * @property {(patch: Partial<TagSetMemberItem>) => void} update - Sync changed fields to the set.
  * @property {() => void} notifyClose - Tell the set the tag's close button was clicked.
  */
@@ -81,8 +81,8 @@ export function joinTagSet(getItem) {
       ([navigation, tabStopId]) =>
         navigation === "roving" && tabStopId !== null
           ? tabStopId === id
-            ? "0"
-            : "-1"
+            ? 0
+            : -1
           : undefined,
     ),
     update: (patch) => tagSet.update(id, patch),
