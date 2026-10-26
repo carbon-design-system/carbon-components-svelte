@@ -1,5 +1,5 @@
 <script>
-  import { DataTable } from "carbon-components-svelte";
+  import { DataTable, Text } from "carbon-components-svelte";
 
   let selectedRowIds = ["a", "c"];
   let expandedRowIds = ["b"];
@@ -38,16 +38,18 @@
 >
   <svelte:fragment slot="cell" let:row let:cell let:rowSelected let:rowExpanded>
     {#if cell.key === "status"}
-      <span
-        style="color: {rowSelected
-          ? '#0f62fe'
-          : cell.value === 'Active'
-            ? 'green'
-            : 'gray'}"
+      <Text
+        tag="span"
+        type="inherit"
+        color={rowSelected
+          ? "primary"
+          : cell.value === "Active"
+            ? "success"
+            : "secondary"}
       >
         {cell.value}
         {rowExpanded ? "(expanded)" : ""}
-      </span>
+      </Text>
     {:else}
       {cell.value}
     {/if}
