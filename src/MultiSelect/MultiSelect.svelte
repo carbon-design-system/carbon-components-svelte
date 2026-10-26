@@ -657,10 +657,10 @@
   function declareRef({ key, ref }) {
     switch (key) {
       case "field":
-        fieldRef = ref;
+        fieldRef = /** @type {HTMLButtonElement} */ (ref);
         break;
       case "selection":
-        selectionRef = ref;
+        selectionRef = /** @type {HTMLDivElement} */ (ref);
         break;
     }
   }
@@ -1556,6 +1556,7 @@
   function handleOptionFormReset() {
     if (!listRef) return;
     for (const option of listRef.querySelectorAll('[role="option"]')) {
+      /** @type {HTMLInputElement | null} */
       const input = option.querySelector('input[type="checkbox"]');
       if (input)
         input.checked = option.getAttribute("aria-selected") === "true";
@@ -1569,7 +1570,7 @@
    * @param {string | undefined} title
    */
   function optionOverflowTitle(node, title) {
-    const measure = node.firstElementChild;
+    const measure = /** @type {HTMLElement | null} */ (node.firstElementChild);
     const action = overflowTitle(node, { title, measure });
     return {
       update: (next) => action.update({ title: next, measure }),

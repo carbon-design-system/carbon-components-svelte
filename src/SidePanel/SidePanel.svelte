@@ -257,7 +257,9 @@
       // A slide-in panel sits beside the page, so only an element the
       // consumer asked for takes focus.
       target = selectorPrimaryFocus
-        ? ref.querySelector(selectorPrimaryFocus)
+        ? /** @type {HTMLElement | null} */ (
+            ref.querySelector(selectorPrimaryFocus)
+          )
         : null;
     } else {
       target = initialFocus({

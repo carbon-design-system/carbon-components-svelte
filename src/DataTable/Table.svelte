@@ -123,7 +123,7 @@
   }
 
   /**
-   * @param {null | HTMLDivElement} content
+   * @param {null | HTMLElement} content
    * @param {null | HTMLTableElement} table
    */
   function observeOverflow(content, table) {

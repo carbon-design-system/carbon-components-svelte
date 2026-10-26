@@ -643,6 +643,7 @@
           return;
         }
         const selector = treeRowIdSelector(id);
+        /** @type {HTMLElement | null | undefined} */
         let target = ref?.querySelector(selector);
         for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
           // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
@@ -1279,7 +1280,7 @@
     const items = [];
     let n = treeWalker.nextNode();
     while (n) {
-      items.push(n);
+      items.push(/** @type {Element} */ (n));
       n = treeWalker.nextNode();
     }
     return items;
@@ -1864,7 +1865,9 @@
     if (nextScrollTop !== null) virtualSetScrollTop(nextScrollTop);
 
     tick().then(() => {
-      scrollContainerRef?.querySelector(treeRowIdSelector(targetId))?.focus();
+      /** @type {HTMLElement | null | undefined} */ (
+        scrollContainerRef?.querySelector(treeRowIdSelector(targetId))
+      )?.focus();
     });
   }
 
@@ -1899,9 +1902,9 @@
     }
     await tick();
     if (gen !== virtualMoveGen) return;
-    scrollContainerRef
-      ?.querySelector(treeRowIdSelector(target.node.id))
-      ?.focus();
+    /** @type {HTMLElement | null | undefined} */ (
+      scrollContainerRef?.querySelector(treeRowIdSelector(target.node.id))
+    )?.focus();
   }
 
   /**

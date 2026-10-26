@@ -103,7 +103,7 @@
   /** The first `Tabs` slotted into the header, shared with the body. */
   let tabsContext;
 
-  /** @type {null | HTMLElement} */
+  /** @type {null | HTMLDivElement} */
   let bodyRef = null;
 
   /**

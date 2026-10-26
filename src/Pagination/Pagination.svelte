@@ -7,8 +7,8 @@
    * browser blurs it (moving focus to the body). Refocus the other button
    * so keyboard/AT users don't lose their place, unless a `change` handler
    * moved focus elsewhere in the meantime.
-   * @param {HTMLElement | null} clickedRef
-   * @param {HTMLElement | null} otherRef
+   * @param {HTMLButtonElement | null} clickedRef
+   * @param {HTMLButtonElement | null} otherRef
    */
   async function refocusIfDisabled(clickedRef, otherRef) {
     if (document.activeElement !== clickedRef) return;

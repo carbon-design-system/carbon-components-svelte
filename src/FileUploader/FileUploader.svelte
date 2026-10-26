@@ -292,7 +292,10 @@
     const hadFocus = row?.contains(document.activeElement);
     const neighbours = hadFocus
       ? [...rows.slice(index + 1), ...rows.slice(0, index).reverse()].map(
-          (other) => other.querySelector(".bx--file-close"),
+          (other) =>
+            /** @type {HTMLElement | null} */ (
+              other.querySelector(".bx--file-close")
+            ),
         )
       : [];
 
@@ -303,9 +306,12 @@
     tick().then(() => {
       if (row.isConnected) return;
       returnFocus(
-        [...neighbours, root?.querySelector(":scope > .bx--btn")].find(
-          (el) => el?.isConnected,
-        ),
+        [
+          ...neighbours,
+          /** @type {HTMLElement | null | undefined} */ (
+            root?.querySelector(":scope > .bx--btn")
+          ),
+        ].find((el) => el?.isConnected),
       );
     });
   }

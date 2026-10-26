@@ -194,7 +194,9 @@
       month = date;
     }
     await tick();
-    grid?.querySelector(`[data-date="${date.toDateString()}"]`)?.focus?.();
+    /** @type {HTMLElement | null | undefined} */ (
+      grid?.querySelector(`[data-date="${date.toDateString()}"]`)
+    )?.focus?.();
   }
 
   /** @param {KeyboardEvent} event */
