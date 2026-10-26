@@ -111,7 +111,7 @@ Set `direction` to `"top"` or `"bottom"` (default) for which side of the trigger
 
 ### Alignment
 
-Set `intrinsicAlign` to `"start"`, `"center"`, or `"end"` (default) to align the menu edge with the trigger.
+Set `intrinsicAlign` to `"start"`, `"center"`, or `"end"` (default) to align the menu with the button group: the primary action and the trigger together.
 
 <ComboButton labelText="Save" intrinsicAlign="start">
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
