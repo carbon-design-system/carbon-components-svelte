@@ -7,7 +7,7 @@ description: A development aid that shows the box model, Carbon spacing and type
 
 `LayoutInspector` answers the questions a design review asks: is this padding a spacing token, how far apart are these two elements, which type style is this text. Turn it on, hover the page, and read the answers in place.
 
-`LayoutInspector` is a developer tool. Import it from `carbon-components-svelte/devtools` and load `devtools.css` (or `devtools-<theme>.css`).
+`LayoutInspector` is a developer tool. Import it from `carbon-components-svelte/devtools` and load `devtools.css` (or `devtools-<theme>.css`); see [Install](/components/DevToolbar#install).
 
 The inspector is a fixed, `pointer-events: none` layer, so the page stays fully clickable while it is open. Like [`GridOverlay`](/components/Grid#gridoverlay), it never toggles itself; the caller owns `open`.
 
@@ -202,11 +202,11 @@ On a right-to-left page, the card and labels still read left to right, so values
 
 ## With GridOverlay
 
-Use both together, each behind its own shortcut. This example keeps both settings in `LocalStorage`.
+To get every tool behind one toolbar, use [`DevToolbar`](/components/DevToolbar) instead. To wire them up yourself, use both together, each behind its own shortcut. This example keeps both settings in `LocalStorage`.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorWithGridOverlay" />
 
-To keep both out of production builds, render them only in development, behind `import.meta.env.DEV`.
+To keep both out of production builds, import them only in development. See [Install](/components/DevToolbar#install).
 
 ## Playground
 

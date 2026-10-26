@@ -34,6 +34,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Grid",
       "CssGrid",
       "LayoutInspector",
+      "DevToolbar",
       "Stack",
       "Box",
       "Layer",

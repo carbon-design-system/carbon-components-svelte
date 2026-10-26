@@ -182,7 +182,7 @@ the same way a regular `Column`'s numeric span does — so it lines up with
 `sm`/`md`/`lg`/`xlg`/`max` exactly. It can also draw [baseline rows](#baseline-rows)
 to check vertical rhythm.
 
-`GridOverlay` is a developer tool. Import it from `carbon-components-svelte/devtools` and load `devtools.css` (or `devtools-<theme>.css`).
+`GridOverlay` is a developer tool. Import it from `carbon-components-svelte/devtools` and load `devtools.css` (or `devtools-<theme>.css`); see [Install](/components/DevToolbar#install).
 
 `GridOverlay` never toggles its own visibility; the caller owns `open`.
 
@@ -338,13 +338,7 @@ In forced colors (Windows contrast themes), the overlay draws in the user's syst
 
 <FileSource src="/framed/Grid/GridOverlayKeyboard" />
 
-To keep the overlay out of production builds, render it only in development. With Vite:
-
-```svelte
-{#if import.meta.env.DEV}
-  <GridOverlay {open} baseline={8} label />
-{/if}
-```
+To keep the overlay out of production builds, import it only in development. See [Install](/components/DevToolbar#install).
 
 ### Playground
 

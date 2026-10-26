@@ -200,6 +200,11 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("button"),
   },
   {
+    name: "DevToolbar",
+    exempt:
+      "dev-only bar; its section is named Developer tools and each ToggleButtonGroup and Button names its own controls",
+  },
+  {
     name: "Disclosure",
     render: (attrs) =>
       render(Disclosure, { props: { summary: "More", ...attrs } }),

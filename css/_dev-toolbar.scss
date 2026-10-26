@@ -1,0 +1,63 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+
+/// DevToolbar: a floating bar of icon toggles for the dev aids.
+///
+/// Built from library parts: each group is a small `ToggleButtonGroup` of
+/// icon-only `ToggleButton`s (with their own tooltips), and the collapse
+/// and expand controls are small ghost `Button`s; a `BadgeIndicator`
+/// counts the tools that are on while collapsed.
+/// This partial only adds the floating surface, which is styled like a
+/// Carbon menu: `$layer`, the standard shadow, no radius.
+/// @access private
+/// @group components
+@mixin dev-toolbar {
+  .#{$prefix}--dev-toolbar {
+    @include box-shadow;
+
+    position: fixed;
+    bottom: $carbon--spacing-05;
+    left: 50%;
+    // Above GridOverlay and LayoutInspector.
+    z-index: z("dropdown") + 3;
+    display: flex;
+    max-width: calc(100vw - #{$carbon--spacing-05 * 2});
+    align-items: center;
+    background-color: $layer;
+    transform: translateX(-50%);
+  }
+
+  // Groups sit flush on the bar, which already has their background.
+  .#{$prefix}--dev-toolbar .#{$prefix}--toggle-button-group {
+    flex: none;
+  }
+
+  // The collapsed handle is a small button, so the count badge sits on
+  // its corner instead of inset as on a large one.
+  .#{$prefix}--dev-toolbar .#{$prefix}--badge-indicator {
+    margin: 0;
+  }
+
+  .#{$prefix}--dev-toolbar__divider {
+    width: 1px;
+    height: $carbon--spacing-05;
+    flex: none;
+    margin: 0 $carbon--spacing-02;
+    background-color: $border-subtle;
+  }
+
+  // Forced colors drop the shadow that separated the bar from the page;
+  // forced mode paints the transparent outline instead.
+  @include high-contrast-mode {
+    .#{$prefix}--dev-toolbar {
+      outline: 1px solid transparent;
+    }
+  }
+}
+
+@include exports("dev-toolbar") {
+  @include dev-toolbar;
+}

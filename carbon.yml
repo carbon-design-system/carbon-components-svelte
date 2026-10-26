@@ -467,6 +467,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/DescriptionList
+  dev-toolbar:
+    name: Dev toolbar
+    description: A floating toolbar for development builds that turns layout overlays and checks on and off, with shortcuts and saved state.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/dev-toolbar.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DevToolbar
   dialog:
     name: Dialog
     status: stable
