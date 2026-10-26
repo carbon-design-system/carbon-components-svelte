@@ -37,10 +37,10 @@
   export let sortAlways = false;
 
   /** Default translation ids */
-  export const translationIds = {
+  export const translationIds = /** @type {const} */ ({
     columnSortAscending: "columnSortAscending",
     columnSortDescending: "columnSortDescending",
-  };
+  });
 
   /**
    * Override the default translation ids.

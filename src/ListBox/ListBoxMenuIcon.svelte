@@ -7,7 +7,10 @@
   export let open = false;
 
   /** Default translation ids */
-  export const translationIds = { close: "close", open: "open" };
+  export const translationIds = /** @type {const} */ ({
+    close: "close",
+    open: "open",
+  });
 
   /**
    * Override the default translation ids.
