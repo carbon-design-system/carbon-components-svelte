@@ -236,7 +236,6 @@
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={subOptions && submenuOpen}
   class:bx--menu-option--danger={!subOptions && kind === "danger"}
-  indented={isIndented}
   aria-checked={isSelectable || isRadio ? selected : undefined}
   data-nested={ctx.level === 2}
   data-sub={subOptions}
