@@ -436,7 +436,9 @@
     on:focusin={(event) => {
       // A click focuses an item without going through `onMove`, so sync the
       // index; otherwise the next arrow key starts from the stale one.
-      const index = getEnabledItems().indexOf(event.target);
+      const index = getEnabledItems().indexOf(
+        /** @type {HTMLElement} */ (event.target),
+      );
       if (index > -1) focusIndex = index;
     }}
     on:mouseenter

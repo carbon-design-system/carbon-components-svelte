@@ -351,7 +351,7 @@
       ) {
         // Enter that commits an IME composition is not a submit.
         if (isImeComposition(event)) return;
-        const target = event.target;
+        const target = /** @type {HTMLElement | null} */ (event.target);
         const tag = target?.tagName;
         if (
           tag === "BUTTON" ||

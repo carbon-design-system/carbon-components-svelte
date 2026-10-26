@@ -910,7 +910,7 @@
       if (disabled || readonly) return;
       // Options close the menu themselves. Anything else in the menu, such
       // as a group header, is not a dismissal.
-      if (listRef?.contains(event.target)) return;
+      if (listRef?.contains(/** @type {Node} */ (event.target))) return;
       if (open || !ref.contains(event.target)) open = false;
       else openMenu("click");
     }}

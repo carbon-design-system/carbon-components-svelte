@@ -183,7 +183,7 @@
   function handleMousedown(event) {
     if (readonly) {
       event.preventDefault();
-      event.currentTarget.focus();
+      /** @type {HTMLSelectElement} */ (event.currentTarget).focus();
     }
   }
 

@@ -1462,14 +1462,17 @@
                 on:change={(event) => {
                   dispatch("click:header--select", {
                     indeterminate,
-                    selected: !indeterminate && event.target.checked,
+                    selected:
+                      !indeterminate &&
+                      /** @type {HTMLInputElement} */ (event.target).checked,
                   });
 
                   if (indeterminate) {
-                    event.target.checked = false;
+                    /** @type {HTMLInputElement} */ (event.target).checked =
+                      false;
                   }
 
-                  if (event.target.checked) {
+                  if (/** @type {HTMLInputElement} */ (event.target).checked) {
                     const next = new Set(selectedRowIds);
                     for (const id of selectableRowIds) next.add(id);
                     selectedRowIds = [...next];
@@ -1704,7 +1707,9 @@
                           aria-checked={selectedRowIdsSet.has(row.id)}
                           class:bx--checkbox={true}
                           on:click={(event) => {
-                            const checked = event.target.checked;
+                            const checked = /** @type {HTMLInputElement} */ (
+                              event.target
+                            ).checked;
                             const usedRange =
                               event.shiftKey &&
                               rangeAnchorRowId !== null &&
@@ -1976,7 +1981,9 @@
                           aria-checked={isSelected}
                           class:bx--checkbox={true}
                           on:click={(event) => {
-                            const checked = event.target.checked;
+                            const checked = /** @type {HTMLInputElement} */ (
+                              event.target
+                            ).checked;
                             const usedRange =
                               event.shiftKey &&
                               rangeAnchorRowId !== null &&

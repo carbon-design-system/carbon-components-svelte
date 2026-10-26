@@ -353,7 +353,7 @@
         on:change
         on:input
         on:input={(event) => {
-          value = event.target.value;
+          value = /** @type {HTMLInputElement} */ (event.target).value;
         }}
         on:keydown
         on:keyup

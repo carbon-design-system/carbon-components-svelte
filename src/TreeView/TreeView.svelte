@@ -1040,7 +1040,9 @@
       const isKeyboardActivation = event?.type === "keydown";
       const clickedCheckbox =
         isKeyboardActivation ||
-        event?.target?.closest?.(".bx--checkbox-wrapper") != null;
+        /** @type {Element | undefined} */ (event?.target)?.closest?.(
+          ".bx--checkbox-wrapper",
+        ) != null;
 
       if (!clickedCheckbox) return;
 

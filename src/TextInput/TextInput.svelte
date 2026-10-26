@@ -156,13 +156,16 @@
 
   /** @type {(e: Event) => void} */
   function handleInput(event) {
-    value = parse(event.target.value);
+    value = parse(/** @type {HTMLInputElement} */ (event.target).value);
     dispatch("input", value);
   }
 
   /** @type {(e: Event) => void} */
   function handleChange(event) {
-    dispatch("change", parse(event.target.value));
+    dispatch(
+      "change",
+      parse(/** @type {HTMLInputElement} */ (event.target).value),
+    );
   }
 
   function handleFocus() {

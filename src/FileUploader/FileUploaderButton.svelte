@@ -319,11 +319,11 @@
   class:bx--visually-hidden={true}
   {...inputRestProps}
   on:change|stopPropagation={(event) => {
-    processIncoming([...event.target.files]);
+    processIncoming([.../** @type {HTMLInputElement} */ (event.target).files]);
   }}
   on:click
   on:click={(event) => {
-    event.target.value = "";
+    /** @type {HTMLInputElement} */ (event.target).value = "";
   }}
   on:cancel={() => {
     // The click cleared the input so the same file can be picked again; a
