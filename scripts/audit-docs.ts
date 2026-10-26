@@ -2,13 +2,18 @@
  * Runs the dev tools' page checks (`audit` from `carbon-components-svelte/
  * devtools`) on every framed docs example and writes a report.
  *
- *   bun run audit:docs [--carbon] [--width 1056] [--filter Button]
+ *   bun run audit:docs [--carbon] [--width 1056] [--dir ltr] [--theme white]
+ *     [--filter Button]
  *     [--concurrency 4] [--base http://localhost:4175] [--out dir]
  *     [--include-seeded] [--baseline] [--update-baseline]
  *
  * Without `--base`, it serves `docs/dist` with `vite preview`; build it
  * first with `cd docs && bun run build:audit`. The audit is bundled from
  * source and injected into each page, so the docs need no changes.
+ *
+ * `--width`, `--dir`, and `--theme` take comma lists, and every combination
+ * runs: `--width 320,1056 --dir ltr,rtl --theme white,g100` is 8 variants.
+ * Each finding names its variant, such as `320-rtl-g100`.
  *
  * With `--baseline`, it compares the findings with
  * `scripts/audit-docs.baseline[-carbon].json` and fails on any finding the
@@ -31,6 +36,7 @@ const ROOT = resolve(import.meta.dir, "..");
 const SVELTE_FILE = /\.svelte$/;
 const FIRST_BLOCK = /\bbx--([a-z0-9-]+)/;
 const BEM_SEPARATOR = /__|--/;
+const CAPITAL = /[A-Z]/g;
 const FRAMED = join(ROOT, "docs/src/pages/framed");
 
 // Dev tools demos seed layout bugs on purpose, and draw over the page.
@@ -49,7 +55,25 @@ function arg(name: string, fallback?: string) {
 
 const carbon = arg("carbon") === "true";
 const includeSeeded = arg("include-seeded") === "true";
-const width = Number(arg("width", "1056"));
+type Variant = {
+  width: number;
+  dir: "ltr" | "rtl";
+  theme: string;
+  id: string;
+};
+
+const list = (name: string, fallback: string) =>
+  (arg(name, fallback) as string).split(",").map((value) => value.trim());
+const variants: Variant[] = list("width", "1056").flatMap((width) =>
+  list("dir", "ltr").flatMap((dir) =>
+    list("theme", "white").map((theme) => ({
+      width: Number(width),
+      dir: dir === "rtl" ? ("rtl" as const) : ("ltr" as const),
+      theme,
+      id: `${width}${dir === "rtl" ? "-rtl" : ""}${theme === "white" ? "" : `-${theme}`}`,
+    })),
+  ),
+);
 const concurrency = Number(arg("concurrency", "4"));
 const filter = arg("filter");
 const compare = arg("baseline") === "true";
@@ -67,11 +91,14 @@ function framedUrls(dir = FRAMED): string[] {
 }
 
 /**
- * Likely component for each Carbon block: the first component whose
- * markup starts with it, such as `bx--btn` for Button.
+ * Likely component for each Carbon block, such as `bx--btn` for Button.
+ * A component named after the block wins (`bx--data-table` is DataTable,
+ * though Table's markup starts with it too); otherwise, the first
+ * component whose markup starts with the block.
  */
 function componentsByBlock() {
-  const map = new Map<string, string>();
+  const first = new Map<string, string>();
+  const named = new Map<string, string>();
   const walk = (dir: string) => {
     for (const name of readdirSync(dir).sort()) {
       const path = join(dir, name);
@@ -80,15 +107,18 @@ function componentsByBlock() {
         continue;
       }
       if (!name.endsWith(".svelte")) continue;
+      const component = name.replace(SVELTE_FILE, "");
       const markup = readFileSync(path, "utf8").split("</script>").pop() ?? "";
+      const kebab = `bx--${component.replace(CAPITAL, (c, i) => `${i ? "-" : ""}${c.toLowerCase()}`)}`;
+      if (markup.includes(kebab)) named.set(kebab, component);
       const match = FIRST_BLOCK.exec(markup);
       if (!match) continue;
       const block = `bx--${match[1].split(BEM_SEPARATOR)[0]}`;
-      if (!map.has(block)) map.set(block, name.replace(SVELTE_FILE, ""));
+      if (!first.has(block)) first.set(block, component);
     }
   };
   walk(join(ROOT, "src"));
-  return map;
+  return new Map([...first, ...named]);
 }
 
 const COMPONENTS = componentsByBlock();
@@ -181,6 +211,7 @@ async function settle(page: Page) {
 
 type PageResult = {
   url: string;
+  variant: string;
   findings: {
     check: string;
     severity: "error" | "warning" | "info";
@@ -202,11 +233,20 @@ async function auditPage(
   page: Page,
   url: string,
   script: string,
+  variant: Variant,
 ): Promise<PageResult> {
   const start = performance.now();
   try {
-    await page.goto(base + url, { waitUntil: "load" });
+    // Framed pages take a theme from the query, without saving it.
+    const query = variant.theme === "white" ? "" : `?theme=${variant.theme}`;
+    await page.goto(base + url + query, { waitUntil: "load" });
     await settle(page);
+    if (variant.dir === "rtl") {
+      await page.evaluate(() =>
+        document.documentElement.setAttribute("dir", "rtl"),
+      );
+      await settle(page);
+    }
     const loadMs = Math.round(performance.now() - start);
     await page.addScriptTag({ content: script });
     const result = await page.evaluate(
@@ -225,10 +265,17 @@ async function auditPage(
       ...f,
       component: (f.carbon && COMPONENTS.get(f.carbon)) || undefined,
     }));
-    return { url, findings, auditMs: result.ms, loadMs };
+    return {
+      url,
+      variant: variant.id,
+      findings,
+      auditMs: result.ms,
+      loadMs,
+    };
   } catch (error) {
     return {
       url,
+      variant: variant.id,
       findings: [],
       auditMs: 0,
       loadMs: Math.round(performance.now() - start),
@@ -248,8 +295,9 @@ function percentile(values: number[], p: number) {
 
 function markdown(results: PageResult[], skipped: string[], wallMs: number) {
   const findings = results.flatMap((r) =>
-    r.findings.map((f) => ({ ...f, url: r.url })),
+    r.findings.map((f) => ({ ...f, url: r.url, variant: r.variant })),
   );
+  const several = variants.length > 1;
   const total = findings.reduce((sum, f) => sum + (f.count ?? 1), 0);
   const byCheck = new Map<string, number>();
   const bySeverity = new Map<string, number>();
@@ -262,7 +310,7 @@ function markdown(results: PageResult[], skipped: string[], wallMs: number) {
   }
   const byMessage = new Map<string, { count: number; pages: Set<string> }>();
   for (const f of findings) {
-    const key = `${f.severity} · ${f.check} · ${f.component ?? f.carbon ?? "app"} · ${f.message}`;
+    const key = `${several ? `${f.variant} · ` : ""}${f.severity} · ${f.check} · ${f.component ?? f.carbon ?? "app"} · ${f.message}`;
     const entry = byMessage.get(key) ?? { count: 0, pages: new Set() };
     entry.count += f.count ?? 1;
     entry.pages.add(f.url);
@@ -277,7 +325,7 @@ function markdown(results: PageResult[], skipped: string[], wallMs: number) {
   return [
     `# Docs audit${carbon ? " (with Carbon)" : ""}`,
     "",
-    `${results.length} pages at ${width}px, ${skipped.length} skipped as seeded demos, ${errors.length} errors. Wall time ${(wallMs / 1000).toFixed(1)}s with ${concurrency} pages at once.`,
+    `${results.length / variants.length} pages in ${variants.length} variant(s) (${variants.map((v) => v.id).join(", ")}), ${skipped.length} skipped as seeded demos, ${errors.length} errors. Wall time ${(wallMs / 1000).toFixed(1)}s with ${concurrency} pages at once.`,
     "",
     "| | p50 | p95 | max |",
     "| :--- | ---: | ---: | ---: |",
@@ -289,6 +337,17 @@ function markdown(results: PageResult[], skipped: string[], wallMs: number) {
     ...[...bySeverity].map(([severity, count]) => `- ${severity}: ${count}`),
     "",
     ...[...byCheck].map(([check, count]) => `- ${check}: ${count}`),
+    ...(several
+      ? [
+          "",
+          "| Variant | Findings | Pages |",
+          "| :--- | ---: | ---: |",
+          ...variants.map((v) => {
+            const mine = findings.filter((f) => f.variant === v.id);
+            return `| ${v.id} | ${mine.reduce((sum, f) => sum + (f.count ?? 1), 0)} | ${new Set(mine.map((f) => f.url)).size} |`;
+          }),
+        ]
+      : []),
     "",
     "## Most common",
     "",
@@ -303,7 +362,12 @@ function markdown(results: PageResult[], skipped: string[], wallMs: number) {
     "",
     "## Pages with the most findings",
     "",
-    ...pages.slice(0, 30).map((r) => `- ${r.url}: ${r.findings.length}`),
+    ...pages
+      .slice(0, 30)
+      .map(
+        (r) =>
+          `- ${r.url}${several ? ` (${r.variant})` : ""}: ${r.findings.length}`,
+      ),
     ...(errors.length
       ? ["", "## Errors", "", ...errors.map((r) => `- ${r.url}: ${r.error}`)]
       : []),
@@ -325,38 +389,48 @@ const script = await bundleAudit();
 const browser: Browser = await chromium.launch();
 const started = performance.now();
 const results: PageResult[] = [];
-const queue = [...urls];
 
-await Promise.all(
-  Array.from({ length: Math.min(concurrency, queue.length) }, async () => {
-    const context = await browser.newContext({
-      viewport: { width, height: 800 },
-    });
-    const page = await context.newPage();
-    for (let url = queue.shift(); url; url = queue.shift()) {
-      // biome-ignore lint/performance/noAwaitInLoops: one page at a time per context
-      results.push(await auditPage(page, url, script));
-    }
-    await context.close();
-  }),
-);
+for (const variant of variants) {
+  const queue = [...urls];
+  // biome-ignore lint/performance/noAwaitInLoops: one variant at a time, each with its own viewport
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, queue.length) }, async () => {
+      const context = await browser.newContext({
+        viewport: { width: variant.width, height: 800 },
+      });
+      const page = await context.newPage();
+      for (let url = queue.shift(); url; url = queue.shift()) {
+        // biome-ignore lint/performance/noAwaitInLoops: one page at a time per context
+        results.push(await auditPage(page, url, script, variant));
+      }
+      await context.close();
+    }),
+  );
+}
 
 const wallMs = performance.now() - started;
 await browser.close();
 preview?.kill();
 
-results.sort((a, b) => a.url.localeCompare(b.url));
+results.sort(
+  (a, b) => a.url.localeCompare(b.url) || a.variant.localeCompare(b.variant),
+);
 mkdirSync(out, { recursive: true });
 const suffix = carbon ? "-carbon" : "";
 writeFileSync(
   join(out, `report${suffix}.json`),
-  JSON.stringify({ width, carbon, skipped, results }, null, 2),
+  JSON.stringify({ variants, carbon, skipped, results }, null, 2),
 );
 // Findings only, without timings, to diff two runs.
 writeFileSync(
   join(out, `findings${suffix}.json`),
   JSON.stringify(
-    results.map((r) => ({ url: r.url, error: r.error, findings: r.findings })),
+    results.map((r) => ({
+      url: r.url,
+      variant: r.variant,
+      error: r.error,
+      findings: r.findings,
+    })),
     null,
     2,
   ),
@@ -372,6 +446,7 @@ console.log(`\nWrote ${relative(ROOT, out)}/report${suffix}.{json,md}`);
 
 type BaselineEntry = {
   url: string;
+  variant: string;
   check: string;
   selector: string;
   message: string;
@@ -380,10 +455,14 @@ type BaselineEntry = {
 
 const BASELINE = join(ROOT, `scripts/audit-docs.baseline${suffix}.json`);
 const keyOf = (e: Omit<BaselineEntry, "reason">) =>
-  `${e.url}|${e.check}|${e.selector}|${e.message}`;
+  `${e.url}|${e.variant}|${e.check}|${e.selector}|${e.message}`;
+// Pages and variants this run covered; baseline entries outside them stay.
+const audited = new Set(results.map((r) => `${r.url}|${r.variant}`));
+const covered = (e: BaselineEntry) => audited.has(`${e.url}|${e.variant}`);
 const current: BaselineEntry[] = results.flatMap((r) =>
   r.findings.map((f) => ({
     url: r.url,
+    variant: r.variant,
     check: f.check,
     selector: f.selector,
     message: f.message,
@@ -392,7 +471,11 @@ const current: BaselineEntry[] = results.flatMap((r) =>
 
 function readBaseline(): BaselineEntry[] {
   try {
-    return JSON.parse(readFileSync(BASELINE, "utf8")).findings;
+    const entries: BaselineEntry[] = JSON.parse(
+      readFileSync(BASELINE, "utf8"),
+    ).findings;
+    // Entries from before variants were recorded ran at 1056px, LTR, white.
+    return entries.map((e) => ({ ...e, variant: e.variant ?? "1056" }));
   } catch {
     return [];
   }
@@ -403,32 +486,31 @@ if (failed) console.error("\nSome pages failed to load; see the report.");
 
 if (updateBaseline) {
   const reasons = new Map(readBaseline().map((e) => [keyOf(e), e.reason]));
-  const findings = current.map((e) => {
-    const reason = reasons.get(keyOf(e));
-    return reason ? { ...e, reason } : e;
-  });
-  writeFileSync(
-    BASELINE,
-    `${JSON.stringify({ width, carbon, findings }, null, 2)}\n`,
-  );
+  const findings = [
+    ...readBaseline().filter((e) => !covered(e)),
+    ...current.map((e) => {
+      const reason = reasons.get(keyOf(e));
+      return reason ? { ...e, reason } : e;
+    }),
+  ].sort((a, b) => keyOf(a).localeCompare(keyOf(b)));
+  writeFileSync(BASELINE, `${JSON.stringify({ carbon, findings }, null, 2)}\n`);
   console.log(
     `Wrote ${findings.length} findings to ${relative(ROOT, BASELINE)}`,
   );
 } else if (compare) {
-  const audited = new Set(results.map((r) => r.url));
   const known = new Set(readBaseline().map(keyOf));
   const fresh = current.filter((e) => !known.has(keyOf(e)));
   const now = new Set(current.map(keyOf));
-  const fixed = readBaseline().filter(
-    (e) => audited.has(e.url) && !now.has(keyOf(e)),
-  );
+  const fixed = readBaseline().filter((e) => covered(e) && !now.has(keyOf(e)));
   if (fresh.length) {
     failed = true;
     console.error(
       `\n${fresh.length} new finding(s), not in ${relative(ROOT, BASELINE)}:`,
     );
     for (const e of fresh) {
-      console.error(`  ${e.url}  ${e.check}  ${e.message}\n    ${e.selector}`);
+      console.error(
+        `  ${e.url} (${e.variant})  ${e.check}  ${e.message}\n    ${e.selector}`,
+      );
     }
     console.error(
       "\nFix them, or accept them with `bun run audit:docs --update-baseline` and add a `reason`.",
