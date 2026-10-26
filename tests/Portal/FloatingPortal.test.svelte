@@ -24,6 +24,9 @@
     "none";
   export let dialogAncestor = false;
   export let popoverAncestor = false;
+
+  // Svelte 3's element typings predate the `popover` attribute.
+  const popoverAttrs: Record<string, string> = { popover: "manual" };
 </script>
 
 {#if scrollableContainer}
@@ -35,7 +38,7 @@
     <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
   </dialog>
 {:else if popoverAncestor}
-  <div data-testid="popover-ancestor" popover="manual">
+  <div data-testid="popover-ancestor" {...popoverAttrs}>
     <div data-testid="anchor" bind:this={anchor}>Anchor element</div>
   </div>
 {:else}

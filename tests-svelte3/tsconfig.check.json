@@ -1,0 +1,12 @@
+{
+  "extends": "../tests/tsconfig.compat-check.json",
+  "compilerOptions": {
+    "typeRoots": ["./types", "./node_modules/@types", "../node_modules/@types"],
+    "paths": {
+      "carbon-components-svelte": ["../src"],
+      "carbon-components-svelte/*": ["../src/*"],
+      "svelte": ["./node_modules/svelte/types/runtime/index.d.ts"],
+      "svelte/*": ["./node_modules/svelte/*"]
+    }
+  }
+}

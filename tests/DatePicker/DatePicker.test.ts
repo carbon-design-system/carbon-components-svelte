@@ -565,7 +565,7 @@ describe("DatePicker", () => {
   });
 
   it("keeps allowInput={false} across mount and readonly toggles", async () => {
-    const props: ComponentProps<typeof DatePicker> = {
+    const props: ComponentProps<DatePicker> = {
       datePickerType: "single",
       allowInput: false,
     };
@@ -1417,7 +1417,7 @@ describe("DatePicker", () => {
       const formatDate = vi.fn((): string => {
         throw new Error("format failed");
       });
-      const props: ComponentProps<typeof DatePicker> = {
+      const props: ComponentProps<DatePicker> = {
         datePickerType: "single",
         value: "03/15/2024",
         formatDate,
@@ -1434,7 +1434,7 @@ describe("DatePicker", () => {
     });
 
     it("does not re-apply a range rule that is rebuilt with equal contents", async () => {
-      function props(to = 14): ComponentProps<typeof DatePicker> {
+      function props(to = 14): ComponentProps<DatePicker> {
         return {
           datePickerType: "single",
           disabledDates: [{ from: "03/10/2024", to: new Date(2024, 2, to) }],
@@ -1457,7 +1457,7 @@ describe("DatePicker", () => {
     it("re-applies anchor when it points at another element", async () => {
       const first = document.createElement("div");
       const second = document.createElement("div");
-      const props: ComponentProps<typeof DatePicker> = {
+      const props: ComponentProps<DatePicker> = {
         datePickerType: "single",
         portalMenu: true,
       };
@@ -1475,7 +1475,7 @@ describe("DatePicker", () => {
     });
 
     it("does not re-apply a Date that is rebuilt with an equal value", async () => {
-      function props(): ComponentProps<typeof DatePicker> {
+      function props(): ComponentProps<DatePicker> {
         return {
           datePickerType: "single",
           minDate: new Date(2024, 0, 1),

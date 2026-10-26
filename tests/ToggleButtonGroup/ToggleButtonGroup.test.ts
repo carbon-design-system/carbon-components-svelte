@@ -230,7 +230,7 @@ describe("ToggleButtonGroup", () => {
 
     it.each<{
       name: string;
-      props: ComponentProps<typeof ToggleButtonGroupIconOnly>;
+      props: ComponentProps<ToggleButtonGroupIconOnly>;
       dir: string;
     }>([
       { name: "bottom when horizontal", props: {}, dir: "bottom" },

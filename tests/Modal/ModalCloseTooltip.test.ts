@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
-import { type Component, tick } from "svelte";
+import { tick } from "svelte";
 import ComposedModalTest from "../ComposedModal/ComposedModal.test.svelte";
 import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
@@ -8,8 +8,8 @@ import ModalCloseTooltipInitialFocus from "./ModalCloseTooltipInitialFocus.test.
 
 type Case = {
   name: string;
-  // biome-ignore lint/suspicious/noExplicitAny: the two fixtures differ in props
-  component: Component<any>;
+  // `Component` is Svelte 5-only; this also types the Svelte 3/4 harnesses.
+  component: Parameters<typeof render>[0];
   props: Record<string, unknown>;
   label: string;
 };
