@@ -99,7 +99,7 @@
    * visible option checkbox. `name`/`value` do not reach the option
    * checkbox itself -- it is decorative and excluded from form
    * participation, even while the menu is open.
-   * @type {(item: Item) => { name?: string; labelText?: any; title?: string; value?: string }}
+   * @type {(item: Item) => { name?: string; labelText?: string; title?: string; value?: string }}
    */
   export let itemToInput = function itemToInput(_item) {
     return {};
@@ -2131,7 +2131,7 @@
                                 selected={optionChecked}
                                 {highlighted}
                               >
-                                {itemToString(item)}
+                                {optionInput.labelText ?? itemToString(item)}
                               </slot>
                             </span>
                           </label>
@@ -2260,7 +2260,7 @@
                               selected={optionChecked}
                               {highlighted}
                             >
-                              {itemToString(item)}
+                              {optionInput.labelText ?? itemToString(item)}
                             </slot>
                           </span>
                         </label>
