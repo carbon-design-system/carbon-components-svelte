@@ -164,6 +164,12 @@ When you edit multiple painted rows in place, call `refreshCells()` once to rebu
 
 <FileSource src="/framed/DataTable/DataTableEditableCellsRefreshCells" />
 
+### Menus and tooltips
+
+The table's content scrolls, so it cuts off anything that opens past its edges. A menu, tooltip, popover or calendar in a cell that the table would cut off opens in a portal instead, over the page. Set the component's `portalMenu` or `portalTooltip` to `false` to keep it in the table.
+
+<FileSource src="/framed/DataTable/DataTableCellOverlays" />
+
 ## Title and description
 
 Add a title and description above the table.
