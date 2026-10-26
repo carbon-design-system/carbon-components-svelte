@@ -24,7 +24,7 @@
 </script>
 
 <Header>
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderSwitcher text={active.name}>
     <svelte:fragment slot="avatar">
       <UserAvatar name={active.name} backgroundColor="auto" size="sm" />
@@ -49,8 +49,8 @@
         <h1>{active.name}</h1>
         <p>
           No <code>companyName</code> or <code>platformName</code> is set, so
-          the header renders without a name link. <code>HeaderSwitcher</code> is
-          the only brand element.
+          the header renders without a name link. <code>HeaderSwitcher</code> is the
+          only brand element.
         </p>
       </Column>
     </Row>

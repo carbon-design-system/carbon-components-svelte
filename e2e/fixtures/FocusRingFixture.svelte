@@ -87,8 +87,8 @@
     ><RadioTile value="a">Radio tile</RadioTile></TileGroup
   >
   <ExpandableTile hasInteractiveContent tileCollapsedLabel="More"
-    ><span slot="above">Expandable</span
-    ><span slot="below">b</span></ExpandableTile
+    ><span slot="above">Expandable</span><span slot="below">b</span
+    ></ExpandableTile
   >
   <PinCodeInput labelText="Pin" />
   <FluidForm>

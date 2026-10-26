@@ -33,8 +33,6 @@
     <Button kind="tertiary" on:click={selectCurrentYear}>
       Select current year
     </Button>
-    <Button kind="tertiary" on:click={viewNextDecade}>
-      View next decade
-    </Button>
+    <Button kind="tertiary" on:click={viewNextDecade}>View next decade</Button>
   </Stack>
 </Stack>

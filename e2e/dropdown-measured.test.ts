@@ -7,8 +7,8 @@ import {
   readMenuMetrics,
   readMenuScrollTop,
   readOptionBoxes,
-  SLACK,
   scrollToEnd,
+  SLACK,
   stepDown,
 } from "./measured-menu";
 

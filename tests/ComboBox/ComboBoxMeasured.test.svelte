@@ -11,8 +11,11 @@
   export let virtualize: ComponentProps<ComboBox>["virtualize"] = undefined;
   export let wrapOptions: ComponentProps<ComboBox>["wrapOptions"] = false;
   export let filterMode: ComponentProps<ComboBox>["filterMode"] = undefined;
-  export let shouldFilterItem: (item: MeasuredItem, value: string) => boolean =
-    (item, value) => item.text.toLowerCase().includes(value.toLowerCase());
+  export let shouldFilterItem: (
+    item: MeasuredItem,
+    value: string,
+  ) => boolean = (item, value) =>
+    item.text.toLowerCase().includes(value.toLowerCase());
 </script>
 
 <!-- The height each option renders at travels on the option itself, so the

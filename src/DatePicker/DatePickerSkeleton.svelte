@@ -54,10 +54,7 @@
     class:bx--date-picker--single={type !== "simple" && !isRange}
     class:bx--date-picker--short={short}
   >
-    {#each Array.from(
-      { length: isRange ? 2 : 1 },
-      (_, i) => i,
-    ) as input (input)}
+    {#each Array.from({ length: isRange ? 2 : 1 }, (_, i) => i) as input (input)}
       <div class:bx--date-picker-container={true}>
         <span class:bx--label={true}></span>
         <div

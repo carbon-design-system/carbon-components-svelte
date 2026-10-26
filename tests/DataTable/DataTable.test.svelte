@@ -1,10 +1,10 @@
 <script lang="ts">
   import type DataTableComponent from "carbon-components-svelte/DataTable/DataTable.svelte";
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
-  import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
   import Toolbar from "carbon-components-svelte/DataTable/Toolbar.svelte";
   import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
+  import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
   import type { ComponentEvents, ComponentProps } from "svelte";
 
   type BaseRow = {
@@ -97,8 +97,8 @@
   export let tableHeaderTranslateWithId: ComponentProps<DataTable>["tableHeaderTranslateWithId"] =
     undefined;
   export let onsort:
-    | ((e: ComponentEvents<DataTableComponent>["sort"]) => void)
-    | undefined = undefined;
+    ((e: ComponentEvents<DataTableComponent>["sort"]) => void) | undefined =
+    undefined;
   export let rowClass: ComponentProps<DataTable>["rowClass"] = undefined;
   /** When true, `on:sort` calls preventDefault() so the table does not apply client-side sort. */
   export let preventSortDefault = false;

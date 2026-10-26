@@ -3,8 +3,8 @@ import type LocalStorageComponent from "carbon-components-svelte/LocalStorage/Lo
 import type SessionStorageComponent from "carbon-components-svelte/SessionStorage/SessionStorage.svelte";
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
-import { blockStorage, storageCases } from "./helpers";
 import StorageHarness from "./Storage.test.svelte";
+import { blockStorage, storageCases } from "./helpers";
 
 describe.each(storageCases)("$name", ({ Component, area, defaultKey }) => {
   const store = () => window[area];

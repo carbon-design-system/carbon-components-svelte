@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import RadioButtonGroupFixture from "./RadioButtonGroupFixture.svelte";
+import { mount } from "./mount";
 
 mount(RadioButtonGroupFixture);

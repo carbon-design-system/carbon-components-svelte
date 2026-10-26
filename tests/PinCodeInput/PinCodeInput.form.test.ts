@@ -4,9 +4,9 @@ import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
-import { getPinCodeInputs } from "./helpers";
 import PinCodeInputForm from "./PinCodeInput.form.test.svelte";
 import PinCodeInputFormAttribute from "./PinCodeInput.formAttribute.test.svelte";
+import { getPinCodeInputs } from "./helpers";
 
 const getSegments = () => getPinCodeInputs().map((input) => input.value);
 describe("PinCodeInput form participation", () => {

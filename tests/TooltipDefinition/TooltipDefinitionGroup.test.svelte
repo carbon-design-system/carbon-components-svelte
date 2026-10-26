@@ -7,7 +7,6 @@
 
 <TooltipGroup>
   <Button portalTooltip kind="ghost" icon={Edit} iconDescription="Edit" />
-  <TooltipDefinition tooltipText="Annual percentage rate"
-    >APR</TooltipDefinition
+  <TooltipDefinition tooltipText="Annual percentage rate">APR</TooltipDefinition
   >
 </TooltipGroup>

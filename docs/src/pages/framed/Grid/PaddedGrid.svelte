@@ -16,7 +16,7 @@
     </Row>
   </Grid>
 
-  <Box padding={5}> Adding padding to a Row only applies to its columns: </Box>
+  <Box padding={5}>Adding padding to a Row only applies to its columns:</Box>
 
   <Grid>
     <Row padding>

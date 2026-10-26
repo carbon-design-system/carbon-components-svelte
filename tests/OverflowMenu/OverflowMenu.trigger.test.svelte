@@ -31,5 +31,5 @@
     <span slot="menu">Service actions</span>
     <OverflowMenuItem text="Manage credentials" />
   </OverflowMenu>
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

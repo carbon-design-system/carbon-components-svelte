@@ -240,7 +240,7 @@
         style:padding-inline-start="{inset}rem"
       >
         <svelte:component this={icon} class="bx--tree-node__icon" />
-        <slot {node}> {text} </slot>
+        <slot {node}>{text}</slot>
       </div>
     </a>
   </li>
@@ -327,7 +327,7 @@
         />
       {/if}
       <svelte:component this={icon} class="bx--tree-node__icon" />
-      <slot {node}> {text} </slot>
+      <slot {node}>{text}</slot>
     </div>
   </li>
 {/if}

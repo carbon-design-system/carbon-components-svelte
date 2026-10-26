@@ -64,10 +64,10 @@
         class:bx--side-nav__icon={true}
         class:bx--side-nav__icon--small={true}
       >
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
+        <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
-    <span class:bx--side-nav__link-text={true}> <slot> {text} </slot> </span>
+    <span class:bx--side-nav__link-text={true}> <slot>{text}</slot> </span>
     {#if $$slots.badge}
       <div class:bx--side-nav__link-badge={true}><slot name="badge" /></div>
     {/if}

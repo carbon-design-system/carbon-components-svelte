@@ -8,5 +8,5 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:keydown={onParentKeydown}>
   <PasswordInput labelText="API key" {portalTooltip} />
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

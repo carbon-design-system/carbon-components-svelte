@@ -2,10 +2,10 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { levelNodes } from "./fixtures";
 import TreeViewGetNode from "./TreeView.getNode.test.svelte";
 import TreeViewShowNodeIdEscape from "./TreeView.showNode.idEscape.test.svelte";
 import TreeViewShowNode from "./TreeView.showNode.test.svelte";
+import { levelNodes } from "./fixtures";
 
 describe("TreeView.getNode / getNodes", () => {
   const getButton = (testId: string) => screen.getByTestId(testId);

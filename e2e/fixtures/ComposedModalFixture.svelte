@@ -36,7 +36,7 @@
       data-modal-primary-focus
       data-testid="modal-primary-focus"
       aria-label="Primary focus input"
-    >
+    />
     <Select data-testid="modal-select" labelText="Contact method">
       <SelectItem value="slack" text="Slack" />
       <SelectItem value="email" text="Email" />

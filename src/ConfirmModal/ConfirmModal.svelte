@@ -99,9 +99,9 @@
   export let ref = null;
 
   import { afterUpdate, createEventDispatcher, tick } from "svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import Modal from "../Modal/Modal.svelte";
   import TextInput from "../TextInput/TextInput.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -269,8 +269,7 @@
           {:else}
             {phraseLabel.slice(0, phraseAt)}<span
               class="bx--confirm-modal__phrase-text notranslate"
-              translate="no"
-              >{confirmationPhrase}</span
+              translate="no">{confirmationPhrase}</span
             >{phraseLabel.slice(phraseAt + confirmationPhrase.length)}
           {/if}
         </svelte:fragment>

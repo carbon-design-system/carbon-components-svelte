@@ -2,8 +2,8 @@ import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { checkboxFor } from "./helpers";
 import TreeViewCheckbox from "./TreeView.checkbox.test.svelte";
+import { checkboxFor } from "./helpers";
 
 // Collapsed subtrees stay mounted, so accessible-name computation in jsdom
 // picks up descendant text. Look rows up by id instead, matching the

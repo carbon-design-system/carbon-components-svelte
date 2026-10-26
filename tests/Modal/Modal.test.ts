@@ -6,13 +6,6 @@ import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import { setViewportWidth } from "../utils/viewport";
-import {
-  closeVia,
-  finishClose,
-  flushProgrammaticClose,
-  getOverlay,
-  reportClosingTransition,
-} from "./helpers";
 import ModalTest from "./Modal.test.svelte";
 import ModalEnterTargetTest from "./ModalEnterTarget.test.svelte";
 import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
@@ -22,6 +15,13 @@ import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
 import ModalTwoBodyLockTest from "./ModalTwoBodyLock.test.svelte";
 import ModalUnmountOnCloseTest from "./ModalUnmountOnClose.test.svelte";
+import {
+  closeVia,
+  finishClose,
+  flushProgrammaticClose,
+  getOverlay,
+  reportClosingTransition,
+} from "./helpers";
 
 describe("Modal", () => {
   it("renders with default props", () => {

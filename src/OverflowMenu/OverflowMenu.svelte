@@ -120,13 +120,13 @@
     setContext,
   } from "svelte";
   import { derived, writable } from "svelte/store";
+  import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
+  import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
-  import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
-  import PortalTooltip from "../Portal/PortalTooltip.svelte";
-  import { observeModalClose } from "../Portal/portal-utils.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";

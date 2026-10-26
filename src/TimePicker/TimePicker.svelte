@@ -82,13 +82,13 @@
 
   import { getContext, setContext, tick } from "svelte";
   import { readonly as readOnly, writable } from "svelte/store";
+  import Stack from "../Stack/Stack.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import Stack from "../Stack/Stack.svelte";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -182,7 +182,7 @@
                 class:bx--label--readonly={readonly}
                 class:bx--label--slotted={$$slots.labelChildren}
               >
-                <slot name="labelChildren"> {labelText} </slot>
+                <slot name="labelChildren">{labelText}</slot>
               </label>
             {/if}
             <div class:bx--text-input__field-outer-wrapper={true}>
@@ -227,7 +227,7 @@
                   on:focus={handleFocus}
                   on:blur
                   on:paste
-                >
+                />
               </div>
             </div>
           </div>
@@ -235,7 +235,7 @@
         <slot />
       </div>
       {#if showInvalid || showWarn}
-        <hr class:bx--time-picker__divider={true}>
+        <hr class:bx--time-picker__divider={true} />
         <div
           id={showInvalid ? errorId : warnId}
           role={showInvalid ? "alert" : undefined}
@@ -273,7 +273,7 @@
             class:bx--label--disabled={disabled}
             class:bx--label--readonly={readonly}
           >
-            <slot name="labelChildren"> {labelText} </slot>
+            <slot name="labelChildren">{labelText}</slot>
           </label>
         {/if}
         <!-- Wraps so the selects move to a second row in a narrow container. -->
@@ -337,7 +337,7 @@
               on:focus={handleFocus}
               on:blur
               on:paste
-            >
+            />
           </div>
           <slot />
         </Stack>

@@ -10,8 +10,9 @@
   export let onToggle: (detail: unknown) => void = () => {};
   export let onFocus: (detail: unknown) => void = () => {};
   /** Spy for every `selectedIds` value, including the initial one. */
-  export let onSelectedIds: (ids: ReadonlyArray<string | number>) => void =
-    () => {};
+  export let onSelectedIds: (
+    ids: ReadonlyArray<string | number>,
+  ) => void = () => {};
 
   let treeview: TreeView;
   let activeId: string | number = "";

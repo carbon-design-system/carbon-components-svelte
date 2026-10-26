@@ -13,9 +13,7 @@ import type {
 import { escapeSvelte, mdsvex } from "mdsvex";
 import { format, version as prettierVersion } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
-import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with {
-  type: "json",
-};
+import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with { type: "json" };
 import rehypeSlug from "rehype-slug";
 import { parse } from "svelte/compiler";
 import { visit } from "unist-util-visit";

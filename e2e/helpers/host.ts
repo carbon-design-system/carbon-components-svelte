@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type BrowserContext, test as base, type Page } from "@playwright/test";
+import { type BrowserContext, type Page, test as base } from "@playwright/test";
 
 export { expect } from "@playwright/test";
 

@@ -49,35 +49,35 @@
 </script>
 
 <li
-  class:bx--contained-list-item="{true}"
-  class:bx--contained-list-item--clickable="{isClickable}"
-  class:bx--contained-list-item--selected="{isClickable && selected}"
-  class:bx--contained-list-item--with-icon="{icon}"
-  class:bx--contained-list-item--with-action="{$$slots.action}"
+  class:bx--contained-list-item={true}
+  class:bx--contained-list-item--clickable={isClickable}
+  class:bx--contained-list-item--selected={isClickable && selected}
+  class:bx--contained-list-item--with-icon={icon}
+  class:bx--contained-list-item--with-action={$$slots.action}
 >
   <svelte:element
-    this="{tag}"
+    this={tag}
     {...props}
     {...$$restProps}
-    on:click="{(event) => {
+    on:click={(event) => {
       if (!isDisabledLink) return;
       // Runs before the forwarded `click`, so a disabled link never reaches
       // a consumer's handler.
       event.preventDefault();
       event.stopImmediatePropagation();
-    }}"
+    }}
     on:click
-    class:bx--contained-list-item__content="{true}"
+    class:bx--contained-list-item__content={true}
   >
     {#if icon}
-      <div class:bx--contained-list-item__icon="{true}">
-        <svelte:component this="{icon}" />
+      <div class:bx--contained-list-item__icon={true}>
+        <svelte:component this={icon} />
       </div>
     {/if}
     <div><slot /></div>
   </svelte:element>
   {#if $$slots.action}
-    <div class:bx--contained-list-item__action="{true}">
+    <div class:bx--contained-list-item__action={true}>
       <slot name="action" />
     </div>
   {/if}

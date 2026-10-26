@@ -34,7 +34,7 @@
     on:change
     on:focus
     on:blur
-  >
+  />
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <!-- Server markup can't set `indeterminate`, so the label carries the

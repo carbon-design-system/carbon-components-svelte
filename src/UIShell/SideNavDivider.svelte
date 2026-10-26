@@ -1,1 +1,1 @@
-<li class:bx--side-nav__divider={true} {...$$restProps}><hr></li>
+<li class:bx--side-nav__divider={true} {...$$restProps}><hr /></li>

@@ -2,10 +2,10 @@ import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { flushFormReset } from "../utils/flush-form-reset";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
-import { hover, star } from "./helpers";
 import StarRating from "./StarRating.test.svelte";
 import StarRatingForm from "./StarRatingForm.test.svelte";
 import StarRatingText from "./StarRatingText.test.svelte";
+import { hover, star } from "./helpers";
 
 const filled = (container: HTMLElement) =>
   container.querySelectorAll(".bx--star-rating__star--on").length;

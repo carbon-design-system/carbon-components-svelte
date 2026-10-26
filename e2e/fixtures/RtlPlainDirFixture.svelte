@@ -13,10 +13,7 @@
 </script>
 
 <!-- A plain `dir` inside a LayoutDirection, each way round. -->
-{#each [
-  ["rtl", "ltr"],
-  ["ltr", "rtl"],
-] as [outer, inner] (outer)}
+{#each [["rtl", "ltr"], ["ltr", "rtl"]] as [outer, inner] (outer)}
   <LayoutDirection dir={outer}>
     <div data-testid="plain-{inner}" dir={inner}>
       <PinCodeInput labelText="Verification code ({inner})" />

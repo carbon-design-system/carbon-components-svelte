@@ -1,7 +1,7 @@
 import { render } from "@testing-library/svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
-import { contacts } from "../ListBox/family/cases";
 import ListBoxHost from "../ListBox/family/ListBoxHost.test.svelte";
+import { contacts } from "../ListBox/family/cases";
 import { user } from "../utils/user";
 import { getInput } from "./helpers";
 

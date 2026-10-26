@@ -326,8 +326,7 @@
                     selected={cell.selected}
                     today={cell.isToday}
                     disabled={cell.disabled}
-                    outside={cell.outside}
-                    >{cell.date.getDate()}</slot
+                    outside={cell.outside}>{cell.date.getDate()}</slot
                   >
                 </span>
               {/each}

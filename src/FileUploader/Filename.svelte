@@ -78,10 +78,10 @@
     iconDescription,
   );
 
+  import Loading from "../Loading/Loading.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import Close from "../icons/Close.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import Loading from "../Loading/Loading.svelte";
 </script>
 
 {#if status === "uploading"}

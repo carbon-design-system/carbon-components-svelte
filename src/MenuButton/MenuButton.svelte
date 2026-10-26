@@ -98,10 +98,10 @@
   export let ref = null;
 
   import Button from "../Button/Button.svelte";
+  import Menu from "../Menu/Menu.svelte";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
-  import Menu from "../Menu/Menu.svelte";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
 
   /**

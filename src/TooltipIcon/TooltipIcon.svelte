@@ -6,8 +6,8 @@
    */
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";

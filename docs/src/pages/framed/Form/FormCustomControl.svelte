@@ -25,7 +25,7 @@
     data-invalid={invalid || undefined}
     bind:value={workEmail}
     use:control
-  >
+  />
   <FormHelperText>We send the invite here</FormHelperText>
   {#if workEmailError}
     <FormRequirement>{workEmailError}</FormRequirement>

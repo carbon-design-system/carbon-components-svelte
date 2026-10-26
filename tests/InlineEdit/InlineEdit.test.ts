@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import { describeBindValueInRow } from "./bind-value-suite";
 import InlineEdit from "./InlineEdit.test.svelte";
 import InlineEditEachRow from "./InlineEditEachRow.test.svelte";
+import { describeBindValueInRow } from "./bind-value-suite";
 
 const editButton = () => screen.getByRole("button", { name: "Edit" });
 const saveButton = () => screen.getByRole("button", { name: "Save" });

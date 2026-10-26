@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import SelectInlineStatusFixture from "./SelectInlineStatusFixture.svelte";
+import { mount } from "./mount";
 
 mount(SelectInlineStatusFixture);

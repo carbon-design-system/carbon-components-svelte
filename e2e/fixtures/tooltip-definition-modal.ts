@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import TooltipDefinitionModalFixture from "./TooltipDefinitionModalFixture.svelte";
+import { mount } from "./mount";
 
 mount(TooltipDefinitionModalFixture);

@@ -169,18 +169,18 @@
     tick,
   } from "svelte";
   import { readable, writable } from "svelte/store";
-  import ActionSet from "../ActionSet/ActionSet.svelte";
   import Decorator from "../AILabel/Decorator.svelte";
+  import ActionSet from "../ActionSet/ActionSet.svelte";
   import Button from "../Button/Button.svelte";
+  import Heading from "../Heading/Heading.svelte";
+  import { isHeaderRendered } from "../UIShell/nav-store.js";
   import {
     LAYER_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { SEPARATOR_HOVER_DELAY_MS } from "../constants/timing.js";
-  import Heading from "../Heading/Heading.svelte";
   import ArrowLeft from "../icons/ArrowLeft.svelte";
   import Close from "../icons/Close.svelte";
-  import { isHeaderRendered } from "../UIShell/nav-store.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import {
     acquireBodyScrollLock,

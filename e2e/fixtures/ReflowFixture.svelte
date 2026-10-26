@@ -139,10 +139,7 @@
   portalMenu={false}
   let:item
 >
-  {#each highlightSegments(
-    item.text,
-    matchIndices(item.text, highlightValue),
-  ) as segment}
+  {#each highlightSegments(item.text, matchIndices(item.text, highlightValue)) as segment}
     {#if segment.match}
       <mark data-testid="match">{segment.text}</mark>
     {:else}

@@ -3,6 +3,7 @@ import DataTableComponent from "carbon-components-svelte/DataTable/DataTable.sve
 import { isSvelte5 } from "../utils/svelte-version";
 import { user } from "../utils/user";
 import DataTable from "./DataTable.test.svelte";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 import {
   createSortFn,
   eventDetails,
@@ -12,7 +13,6 @@ import {
   getFirstBodyRow,
   getRowTexts,
 } from "./helpers";
-import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("DataTable new-but-equal rows", () => {
   const buildHeaders = (sortFn: ReturnType<typeof createSortFn>) => [
@@ -249,8 +249,7 @@ describe("DataTable tableCellsByRowId caching", () => {
   const lastClickedCell = (onevent: ReturnType<typeof vi.fn>) =>
     (
       eventDetails(onevent, "click:cell").at(-1) as
-        | { cell: unknown }
-        | undefined
+        { cell: unknown } | undefined
     )?.cell;
 
   it("reuses cell objects when rows is a new array but row references are unchanged", async () => {

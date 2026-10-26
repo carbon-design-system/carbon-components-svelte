@@ -24,7 +24,5 @@
       />
     </svelte:fragment>
   </MenuItem>
-  <MenuItem on:click={() => console.log("View details")}>
-    View details
-  </MenuItem>
+  <MenuItem on:click={() => console.log("View details")}>View details</MenuItem>
 </Menu>

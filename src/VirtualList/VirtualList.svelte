@@ -316,10 +316,7 @@
     style:display={spacerTag === "li" ? "block" : undefined}
     style:height="{virtualData.offsetY}px"
   />
-  {#each virtualData.visibleItems as item, index (getKey(
-    item,
-    virtualData.startIndex + index,
-  ))}
+  {#each virtualData.visibleItems as item, index (getKey(item, virtualData.startIndex + index))}
     <slot {item} index={virtualData.startIndex + index} />
   {/each}
   <!-- Rendered only when items follow the window, so the true last item
@@ -348,10 +345,7 @@
       {pinned}
       {measured}
     >
-      {#each virtualData.visibleItems as item, index (getKey(
-        item,
-        virtualData.startIndex + index,
-      ))}
+      {#each virtualData.visibleItems as item, index (getKey(item, virtualData.startIndex + index))}
         <div
           data-virtual-index={measured
             ? virtualData.startIndex + index

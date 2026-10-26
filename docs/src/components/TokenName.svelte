@@ -12,10 +12,7 @@
     {name}
   </Text>
   {#if copyable}
-    {#each [
-      { label: "CSS variable", text: cssVar(name) },
-      { label: "Sass variable", text: sassVar(name) },
-    ] as copy (copy.label)}
+    {#each [{ label: "CSS variable", text: cssVar(name) }, { label: "Sass variable", text: sassVar(name) }] as copy (copy.label)}
       <Stack orientation="horizontal" gap={1} align="center">
         <Text tag="code" type="code-01" color="secondary" wrap="break-word">
           {copy.text}

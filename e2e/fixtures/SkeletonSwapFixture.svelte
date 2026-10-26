@@ -334,14 +334,7 @@
       </div>
     </div>
   {/each}
-  {#each [
-    {},
-    { dismissible: true },
-    { dismissible: true, size: "sm" },
-    { dismissible: true, size: "xl" },
-    { type: "container" },
-    { type: "container", dismissible: true },
-  ] as variant, i}
+  {#each [{}, { dismissible: true }, { dismissible: true, size: "sm" }, { dismissible: true, size: "xl" }, { type: "container" }, { type: "container", dismissible: true }] as variant, i}
     <div data-testid="tabs-{i}">
       <div data-part="real">
         <Tabs {...variant}>

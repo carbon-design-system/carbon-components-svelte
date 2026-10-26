@@ -13,7 +13,7 @@
     on:input={(e) =>
       (preview = `https://acme-corp.com/${e.currentTarget.value}`)}
     use:formReset={() => (preview = "")}
-  >
+  />
   <p>Preview: {preview || "Enter a slug"}</p>
   <Button type="reset" kind="secondary">Reset</Button>
 </Form>

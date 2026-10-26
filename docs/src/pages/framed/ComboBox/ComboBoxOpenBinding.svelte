@@ -14,5 +14,5 @@
     { id: "2", text: "Webhook" },
   ]}
 />
-<br>
+<br />
 <Button on:click={() => (open = !open)}>Toggle menu</Button>

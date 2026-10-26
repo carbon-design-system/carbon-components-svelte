@@ -2,13 +2,13 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import ProgressIndicatorSkeleton from "carbon-components-svelte/ProgressIndicator/ProgressIndicatorSkeleton.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { makeSteps } from "./helpers";
 import ProgressIndicator from "./ProgressIndicator.test.svelte";
 import ProgressIndicatorConditional from "./ProgressIndicatorConditional.test.svelte";
 import ProgressIndicatorReactive from "./ProgressIndicatorReactive.test.svelte";
 import ProgressIndicatorSelectedId from "./ProgressIndicatorSelectedId.test.svelte";
 import ProgressStepIconSlot from "./ProgressStepIconSlot.test.svelte";
 import ProgressStepStandalone from "./ProgressStepStandalone.test.svelte";
+import { makeSteps } from "./helpers";
 
 describe("ProgressIndicator", () => {
   describe("Default (horizontal)", () => {

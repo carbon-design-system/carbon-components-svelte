@@ -245,8 +245,8 @@
   import { overflowTitle } from "../utils/overflow-title.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import Filename from "./Filename.svelte";
   import FileUploaderButton from "./FileUploaderButton.svelte";
+  import Filename from "./Filename.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -396,7 +396,7 @@
       class:bx--file--label={true}
       class:bx--label-description--disabled={disabled}
     >
-      <slot name="labelTitle"> {labelTitle} </slot>
+      <slot name="labelTitle">{labelTitle}</slot>
     </p>
   {/if}
   {#if hasDescription}
@@ -405,7 +405,7 @@
       class:bx--label-description={true}
       class:bx--label-description--disabled={disabled}
     >
-      <slot name="labelDescription"> {labelDescription} </slot>
+      <slot name="labelDescription">{labelDescription}</slot>
     </p>
   {/if}
   <FileUploaderButton

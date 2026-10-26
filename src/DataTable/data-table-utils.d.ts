@@ -123,11 +123,9 @@ type Join<K, P> = K extends string | number
  * otherwise widen `PropertyPath` to plain `string`.
  */
 export type KeysWithoutIndexSignature<T> = {
-  [K in keyof T as string extends K
-    ? never
-    : number extends K
-      ? never
-      : K]: T[K];
+  [
+    K in keyof T as string extends K ? never : number extends K ? never : K
+  ]: T[K];
 };
 
 // For performance, the maximum traversal depth is 3.
@@ -152,15 +150,14 @@ export type PropertyPathIgnoringIndexSignatures<T, D extends number = 3> = [
   : T extends object
     ? {
         [K in keyof KeysWithoutIndexSignature<T>]-?: K extends string | number
-          ?
-              | `${K}`
-              | Join<
-                  K,
-                  PropertyPathIgnoringIndexSignatures<
-                    KeysWithoutIndexSignature<T>[K],
-                    PathDepth[D]
-                  >
+          ? | `${K}`
+            | Join<
+                K,
+                PropertyPathIgnoringIndexSignatures<
+                  KeysWithoutIndexSignature<T>[K],
+                  PathDepth[D]
                 >
+              >
           : never;
       }[keyof KeysWithoutIndexSignature<T>]
     : "";

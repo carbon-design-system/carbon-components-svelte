@@ -24,10 +24,7 @@
       </TimePickerSelect>
     </TimePicker>
   </div>
-  {#each [
-    { id: "invalid", invalid: true },
-    { id: "warning", warn: true },
-  ] as status (status.id)}
+  {#each [{ id: "invalid", invalid: true }, { id: "warning", warn: true }] as status (status.id)}
     <div data-testid={status.id}>
       <TimePicker
         fluid

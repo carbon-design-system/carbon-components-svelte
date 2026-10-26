@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { stepsWith } from "./helpers";
 import Stepper from "./Stepper.test.svelte";
+import { stepsWith } from "./helpers";
 
 const continueButton = () => screen.getByRole("button", { name: "Continue" });
 

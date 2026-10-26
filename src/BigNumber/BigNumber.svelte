@@ -126,10 +126,10 @@
   /** Trailing context rendered after the formatted `delta`, such as "vs last week". */
   export let deltaLabel = "";
 
+  import Tooltip from "../Tooltip/Tooltip.svelte";
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Subtract from "../icons/Subtract.svelte";
-  import Tooltip from "../Tooltip/Tooltip.svelte";
   import { formatDelta } from "../utils/format-delta.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import { localeDirection } from "../utils/locale-direction.js";

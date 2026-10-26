@@ -10,8 +10,9 @@
   export let id: ComponentProps<CheckboxGroup>["id"] = undefined;
   export let readonlyText: ComponentProps<CheckboxGroup>["readonlyText"] =
     undefined;
-  export let onChange: (selected: ReadonlyArray<string | number>) => void =
-    () => {};
+  export let onChange: (
+    selected: ReadonlyArray<string | number>,
+  ) => void = () => {};
 </script>
 
 <CheckboxGroup

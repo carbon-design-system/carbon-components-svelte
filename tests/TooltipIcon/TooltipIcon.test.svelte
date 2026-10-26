@@ -45,5 +45,5 @@
   <slot />
 </TooltipIcon>
 {#if withInput}
-  <input aria-label="Unrelated">
+  <input aria-label="Unrelated" />
 {/if}

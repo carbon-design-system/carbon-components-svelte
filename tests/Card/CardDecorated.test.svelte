@@ -20,7 +20,7 @@
   <svelte:fragment slot="media">
     {#if media}
       <CardMedia ratio="16x9" mediaWidth="40%">
-        <img src="/chart.png" alt="Usage chart">
+        <img src="/chart.png" alt="Usage chart" />
       </CardMedia>
     {/if}
   </svelte:fragment>

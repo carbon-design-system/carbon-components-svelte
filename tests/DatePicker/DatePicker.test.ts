@@ -5,7 +5,6 @@ import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
-import { getCalendarInstance, renderCalendar } from "./calendar-instance";
 import DatePickerFluidRange from "./DatePicker.fluidRange.test.svelte";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerDisplayFormat from "./DatePickerDisplayFormat.test.svelte";
@@ -14,6 +13,7 @@ import DatePickerIgnoredFocus from "./DatePickerIgnoredFocus.test.svelte";
 import DatePickerInlineOptions from "./DatePickerInlineOptions.test.svelte";
 import DatePickerRange from "./DatePickerRange.test.svelte";
 import DatePickerSelectedDates from "./DatePickerSelectedDates.test.svelte";
+import { getCalendarInstance, renderCalendar } from "./calendar-instance";
 import {
   clickNextMonth,
   dayByLabel,

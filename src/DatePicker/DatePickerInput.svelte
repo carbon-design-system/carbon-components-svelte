@@ -268,7 +268,7 @@
       class:bx--label--disabled={disabled}
       class:bx--label--readonly={readonly}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
   <div
@@ -335,7 +335,7 @@
         blurInput(event.relatedTarget);
       }}
       on:paste
-    >
+    />
     {#if $multiple}
       <div
         class:bx--date-picker__input={true}

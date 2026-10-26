@@ -55,12 +55,12 @@
 
   import { onMount } from "svelte";
   import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
+  import { subscribeRelativeTimeTick } from "../utils/relative-time-timer-pool.js";
   import {
     formatRelativeTime,
     getRelativeTimeRefreshMs,
     toTimestamp,
   } from "../utils/relative-time.js";
-  import { subscribeRelativeTimeTick } from "../utils/relative-time-timer-pool.js";
 
   let tickNow = Date.now();
   let unsubscribe;

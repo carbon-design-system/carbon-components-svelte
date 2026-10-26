@@ -358,15 +358,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
   import ListBox from "../ListBox/ListBox.svelte";
   import ListBoxMenu from "../ListBox/ListBoxMenu.svelte";
@@ -395,6 +387,15 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
+  import Checkmark from "../icons/Checkmark.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -415,7 +416,6 @@
   import { submitAttempts } from "../utils/submit-attempt.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
-  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -1167,7 +1167,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
   <ListBox
@@ -1423,7 +1423,7 @@
               requiredError = true;
             }
           }}
-        >
+        />
         {#if showInvalid}
           <WarningFilled class="bx--list-box__invalid-icon" />
         {/if}
@@ -1745,7 +1745,7 @@
     {/if}
   </ListBox>
   {#if isFluid}
-    <hr class:bx--list-box__divider={true}>
+    <hr class:bx--list-box__divider={true} />
   {/if}
   {#if showInvalid && shownInvalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">

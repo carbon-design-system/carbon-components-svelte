@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import RtlDatePickerFixture from "./RtlDatePickerFixture.svelte";
+import { mount } from "./mount";
 
 mount(RtlDatePickerFixture);

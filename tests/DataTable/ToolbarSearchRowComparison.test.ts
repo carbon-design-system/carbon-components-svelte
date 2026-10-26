@@ -1,6 +1,6 @@
 import { render } from "@testing-library/svelte";
-import { getFilteredIds } from "./helpers";
 import ToolbarSearchRowComparison from "./ToolbarSearchRowComparison.test.svelte";
+import { getFilteredIds } from "./helpers";
 
 // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/2143
 describe("ToolbarSearch row comparison behavior", () => {

@@ -40,9 +40,9 @@
         </TabContent>
       {/if}
       {#if showSettingsTab}
-        <TabContent> <p>Settings and configuration options.</p> </TabContent>
+        <TabContent><p>Settings and configuration options.</p></TabContent>
       {/if}
-      <TabContent> <p>User profile and account information.</p> </TabContent>
+      <TabContent><p>User profile and account information.</p></TabContent>
     </svelte:fragment>
   </Tabs>
 </Stack>

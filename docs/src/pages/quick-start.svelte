@@ -79,7 +79,7 @@
   <meta
     name="description"
     content="Install Carbon Components Svelte, apply a Carbon theme, and start composing UI."
-  >
+  />
 </svelte:head>
 
 <Content class="quick-start-page">
@@ -216,8 +216,8 @@
             >
               carbon-preprocess-svelte
             </OutboundLink>
-            trims build times and bundle size with three drop-in tools: faster
-            HMR in development, and leaner CSS and JavaScript when you ship.
+            trims build times and bundle size with three drop-in tools: faster HMR
+            in development, and leaner CSS and JavaScript when you ship.
           </Text>
         </svelte:fragment>
       </DocSectionHeader>
@@ -314,7 +314,7 @@
       <Row class="example-row">
         <Column sm={4} md={8} lg={8} class="code-col">
           <Stack gap={5}>
-            <Text tag="h3" type="heading-03" color="primary"> Icons </Text>
+            <Text tag="h3" type="heading-03" color="primary">Icons</Text>
             <Stack gap={3}>
               <div class="glyph-desc">
                 <Text type="body-01" color="secondary" maxWidth="40ch">
@@ -421,7 +421,7 @@
 
         <Column sm={4} md={8} lg={8} class="code-col">
           <Stack gap={5}>
-            <Text tag="h3" type="heading-03" color="primary"> Pictograms </Text>
+            <Text tag="h3" type="heading-03" color="primary">Pictograms</Text>
             <Stack gap={3}>
               <div class="glyph-desc">
                 <Text type="body-01" color="secondary" maxWidth="40ch">

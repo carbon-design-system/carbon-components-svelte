@@ -81,10 +81,10 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";
-  import Copy from "../icons/Copy.svelte";
-  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
+  import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
+  import Copy from "../icons/Copy.svelte";
   import {
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,

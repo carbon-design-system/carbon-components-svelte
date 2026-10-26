@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import AccordionBatchDisable from "./Accordion.batch-disable.test.svelte";
-import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionDisabledOpen from "./Accordion.disabled-open.test.svelte";
+import AccordionDisabled from "./Accordion.disabled.test.svelte";
 import AccordionLazy from "./Accordion.lazy.test.svelte";
 import AccordionSingle from "./Accordion.single.test.svelte";
 import AccordionSkeleton from "./Accordion.skeleton.test.svelte";

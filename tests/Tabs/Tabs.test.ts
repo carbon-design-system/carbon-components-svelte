@@ -4,7 +4,6 @@ import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import Calendar from "../../src/icons/Calendar.svelte";
 import { user } from "../utils/user";
-import { expectClass, mockScrollMetrics } from "./helpers";
 import Tab from "./Tab.test.svelte";
 import TabIcon from "./TabIcon.test.svelte";
 import TabIconSecondaryLabel from "./TabIconSecondaryLabel.test.svelte";
@@ -19,6 +18,7 @@ import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
+import { expectClass, mockScrollMetrics } from "./helpers";
 
 describe("Tabs", () => {
   it("should render with default props", async () => {

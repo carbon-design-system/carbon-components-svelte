@@ -173,7 +173,7 @@
         src={currentSrc}
         {alt}
         transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
-      >
+      />
     {/if}
   {/key}
   {#if error}
@@ -182,10 +182,7 @@
 {:else}
   <AspectRatio {ratio}>
     {#if deferLoad}
-      <span
-        bind:this={sentinel}
-        style:display="block"
-        aria-hidden="true"
+      <span bind:this={sentinel} style:display="block" aria-hidden="true"
       ></span>
     {/if}
     {#if loading}
@@ -199,7 +196,7 @@
           src={currentSrc}
           {alt}
           transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
-        >
+        />
       {/if}
     {/key}
     {#if error}
@@ -226,5 +223,5 @@
     loading={lazy ? "lazy" : undefined}
     {src}
     {alt}
-  >
+  />
 {/if}

@@ -3,10 +3,10 @@ import PinCodeInputSkeletonComponent from "carbon-components-svelte/PinCodeInput
 import { tick } from "svelte";
 import { clickToFocus } from "../utils/click-to-focus";
 import { user } from "../utils/user";
-import { getPinCodeInputs as getInputs } from "./helpers";
 import PinCodeInputDirection from "./PinCodeInput.direction.test.svelte";
 import PinCodeInputSkeleton from "./PinCodeInput.skeleton.test.svelte";
 import PinCodeInput from "./PinCodeInput.test.svelte";
+import { getPinCodeInputs as getInputs } from "./helpers";
 
 const getFieldset = (container: HTMLElement) =>
   container.querySelector(".bx--pin-code-input__fieldset");

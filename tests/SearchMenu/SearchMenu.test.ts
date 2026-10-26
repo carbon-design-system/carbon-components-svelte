@@ -3,7 +3,6 @@ import SearchMenuSkeletonMenu from "carbon-components-svelte/SearchMenu/SearchMe
 import { tick } from "svelte";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
-import { openMenu } from "./helpers";
 import SearchMenu from "./SearchMenu.test.svelte";
 import SearchMenuBar from "./SearchMenuBar.test.svelte";
 import SearchMenuDisabledItem from "./SearchMenuDisabledItem.test.svelte";
@@ -13,6 +12,7 @@ import SearchMenuHighlight from "./SearchMenuHighlight.test.svelte";
 import SearchMenuMatch from "./SearchMenuMatch.test.svelte";
 import SearchMenuNoResults from "./SearchMenuNoResults.test.svelte";
 import SearchMenuSkeleton from "./SearchMenuSkeleton.test.svelte";
+import { openMenu } from "./helpers";
 
 describe("SearchMenu", () => {
   it("renders a combobox input and no menu until focused", () => {

@@ -12,9 +12,8 @@
   export let orientation: ComponentProps<RangeSlider>["orientation"] =
     "horizontal";
   export let marks:
-    | boolean
-    | ReadonlyArray<{ value: number; label?: string }>
-    | undefined = false;
+    boolean | ReadonlyArray<{ value: number; label?: string }> | undefined =
+    false;
   export let snapToMarks = false;
   export let markSnapDistance = 0;
   export let trackDrag: ComponentProps<RangeSlider>["trackDrag"] = "handle";

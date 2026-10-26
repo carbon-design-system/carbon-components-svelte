@@ -2,9 +2,9 @@ import { render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { createItems } from "../utils/create-items";
 import { user } from "../utils/user";
-import { openMenu } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectInModal from "./MultiSelectInModal.test.svelte";
+import { openMenu } from "./helpers";
 
 describe("MultiSelect", () => {
   // Shared windowing behavior is in tests/ListBox/family/virtualize.test.ts.

@@ -4,8 +4,8 @@ import type { ComponentProps } from "svelte";
 import { user } from "../utils/user";
 import DataTableRefilterOnRowsChange from "./DataTableRefilterOnRowsChange.test.svelte";
 import DataTableSearch from "./DataTableSearch.test.svelte";
-import { getTableRows } from "./helpers";
 import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
+import { getTableRows } from "./helpers";
 
 describe("DataTableSearch", () => {
   const getNextPageButton = () =>

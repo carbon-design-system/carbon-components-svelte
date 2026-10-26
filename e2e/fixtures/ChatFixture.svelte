@@ -12,8 +12,7 @@
     {#each messages as text, index (text)}
       <ChatMessage
         from={index % 2 ? "me" : "them"}
-        author={index % 2 ? "You" : "Sam"}
-        >{text}</ChatMessage
+        author={index % 2 ? "You" : "Sam"}>{text}</ChatMessage
       >
     {/each}
   </ChatLog>

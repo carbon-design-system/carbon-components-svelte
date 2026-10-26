@@ -55,9 +55,7 @@
     <Link icon={ArrowUpRight} href={sourceCode} target="_blank">
       Source code
     </Link>
-    <Link icon={ArrowUpRight} href={markdownUrl} target="_blank">
-      Markdown
-    </Link>
+    <Link icon={ArrowUpRight} href={markdownUrl} target="_blank">Markdown</Link>
     <div class="bar-actions__group">
       <TooltipGroup>
         <CopyMarkdownButton

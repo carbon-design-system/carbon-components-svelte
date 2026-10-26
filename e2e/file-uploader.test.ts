@@ -60,7 +60,9 @@ test.describe("FileUploader", () => {
 
     const firstChooser = page.waitForEvent("filechooser");
     await addFile.click();
-    await (await firstChooser).setFiles({
+    await (
+      await firstChooser
+    ).setFiles({
       name: "kept.txt",
       mimeType: "text/plain",
       buffer: Buffer.from("content"),
@@ -110,7 +112,9 @@ test.describe("FileUploader (advanced)", () => {
 
     const chooser1 = page.waitForEvent("filechooser");
     await uploader.locator("button").filter({ hasText: "Add files" }).click();
-    await (await chooser1).setFiles({
+    await (
+      await chooser1
+    ).setFiles({
       name: "first.txt",
       mimeType: "text/plain",
       buffer: Buffer.from("a"),
@@ -119,7 +123,9 @@ test.describe("FileUploader (advanced)", () => {
 
     const chooser2 = page.waitForEvent("filechooser");
     await uploader.locator("button").filter({ hasText: "Add files" }).click();
-    await (await chooser2).setFiles({
+    await (
+      await chooser2
+    ).setFiles({
       name: "second.txt",
       mimeType: "text/plain",
       buffer: Buffer.from("b"),
@@ -157,7 +163,9 @@ test.describe("FileUploader (advanced)", () => {
     const uploader = page.getByTestId("uploader-file-size");
     const chooser = page.waitForEvent("filechooser");
     await uploader.locator("button").filter({ hasText: "Add file" }).click();
-    await (await chooser).setFiles({
+    await (
+      await chooser
+    ).setFiles({
       name: `${"very-long-file-name-".repeat(6)}.txt`,
       mimeType: "text/plain",
       buffer: Buffer.alloc(1500),

@@ -14,4 +14,4 @@
   <HeaderNavItem href="#compute" text="Compute" />
   <HeaderNavItem href="#storage" text="Storage" />
 </HeaderNavMenu>
-<input aria-label="Search docs">
+<input aria-label="Search docs" />

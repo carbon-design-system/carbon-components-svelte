@@ -37,7 +37,7 @@
     {slotContent}
   {/if}
   {#if withNativeInput}
-    <input type="text" aria-label="Nested input">
+    <input type="text" aria-label="Nested input" />
   {/if}
   <slot />
 </FormGroup>

@@ -239,7 +239,7 @@
       class:bx--file__drop-container={true}
       class:bx--file__drop-container--drag-over={over}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </div>
   </div>
   <input
@@ -269,5 +269,5 @@
       // dismissed picker fires no change, so put the current files back.
       if (ref) syncInputFiles(ref, files);
     }}
-  >
+  />
 </div>

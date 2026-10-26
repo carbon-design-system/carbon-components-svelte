@@ -4,9 +4,9 @@ import { getBoundText } from "../utils/get-bound-text";
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
-import { getCalendarInstance } from "./calendar-instance";
 import DatePickerForm from "./DatePicker.form.test.svelte";
 import DatePickerDisplayFormatForm from "./DatePickerDisplayFormat.test.svelte";
+import { getCalendarInstance } from "./calendar-instance";
 import { visibleInput } from "./helpers";
 
 const getValueFrom = () => getBoundText("valueFrom");

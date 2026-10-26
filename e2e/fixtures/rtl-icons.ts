@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import RtlIconsFixture from "./RtlIconsFixture.svelte";
+import { mount } from "./mount";
 
 mount(RtlIconsFixture);

@@ -16,8 +16,9 @@
   export let tabindex: ComponentProps<ExpandableTile>["tabindex"] = "0";
   export let id: ComponentProps<ExpandableTile>["id"] = "ccs-test";
   export let ref: ComponentProps<ExpandableTile>["ref"] = null;
-  export let onToggle: (e: CustomEvent<{ expanded: boolean }>) => void =
-    () => {};
+  export let onToggle: (
+    e: CustomEvent<{ expanded: boolean }>,
+  ) => void = () => {};
   export let onClick: (e: MouseEvent) => void = () => {};
   export let onKeydown: (e: KeyboardEvent) => void = () => {};
   export let onMouseover: (e: MouseEvent) => void = () => {};

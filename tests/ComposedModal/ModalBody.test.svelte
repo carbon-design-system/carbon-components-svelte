@@ -21,7 +21,7 @@
     {/if}
     <slot />
     {#if includeInput}
-      <input data-testid="test-focus">
+      <input data-testid="test-focus" />
     {/if}
   </ModalBody>
 </ComposedModal>

@@ -5,7 +5,6 @@ import MultiSelectReal from "carbon-components-svelte/MultiSelect/MultiSelect.sv
 import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
-import { closeMenu, openMenu, toggleOption } from "./helpers";
 import MultiSelectLabelSlot from "./MultiSelect.slot.test.svelte";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectDuplicateIds from "./MultiSelectDuplicateIds.test.svelte";
@@ -14,6 +13,7 @@ import MultiSelectItemSlot from "./MultiSelectItemSlot.test.svelte";
 import MultiSelectItemToStringId from "./MultiSelectItemToStringId.test.svelte";
 import MultiSelectRestProps from "./MultiSelectRestProps.test.svelte";
 import MultiSelectSlot from "./MultiSelectSlot.test.svelte";
+import { closeMenu, openMenu, toggleOption } from "./helpers";
 
 const items = [
   { id: "0", text: "Slack" },

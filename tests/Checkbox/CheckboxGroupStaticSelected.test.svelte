@@ -2,8 +2,9 @@
   import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
   import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 
-  export let onChange: (selected: ReadonlyArray<string | number>) => void =
-    () => {};
+  export let onChange: (
+    selected: ReadonlyArray<string | number>,
+  ) => void = () => {};
 </script>
 
 <CheckboxGroup

@@ -14,5 +14,5 @@
     iconDescription="Add item"
     {portalTooltip}
   />
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

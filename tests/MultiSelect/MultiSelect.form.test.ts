@@ -3,9 +3,9 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import { getForm } from "../utils/get-form";
 import { resetForm } from "../utils/reset-form";
 import { user } from "../utils/user";
-import { openMenu } from "./helpers";
 import MultiSelectForm from "./MultiSelect.form.test.svelte";
 import MultiSelectFormAttribute from "./MultiSelect.formAttribute.test.svelte";
+import { openMenu } from "./helpers";
 
 const items = [
   { id: "0", text: "Slack" },

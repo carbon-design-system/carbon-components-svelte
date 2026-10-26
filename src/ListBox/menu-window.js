@@ -594,15 +594,13 @@ export function scheduleHighlightScroll({
   highlightOrigin,
   menuWindow,
 }) {
-  if (
-    !(
-      open &&
-      shouldVirtualize &&
-      highlightedIndex !== prevHighlightedIndex &&
-      highlightedIndex >= 0 &&
-      listRef
-    )
-  ) {
+  if (!(
+    open &&
+    shouldVirtualize &&
+    highlightedIndex !== prevHighlightedIndex &&
+    highlightedIndex >= 0 &&
+    listRef
+  )) {
     return prevHighlightedIndex;
   }
 

@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
-import { createTarget, renderPortal } from "./helpers";
 import PortalFocusTest from "./Portal.focus.test.svelte";
 import PortalTest from "./Portal.test.svelte";
+import { createTarget, renderPortal } from "./helpers";
 
 describe("Portal", () => {
   it("each portal instance is independent", async () => {

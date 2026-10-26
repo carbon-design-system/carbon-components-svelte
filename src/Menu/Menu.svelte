@@ -109,8 +109,8 @@
     tick,
   } from "svelte";
   import { derived, writable } from "svelte/store";
-  import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";

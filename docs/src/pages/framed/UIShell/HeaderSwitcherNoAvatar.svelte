@@ -25,7 +25,7 @@
 </script>
 
 <Header companyName="IBM" platformName="Cloud">
-  <svelte:fragment slot="skipToContent"> <SkipToContent /> </svelte:fragment>
+  <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderSwitcher text={active.name} bind:isOpen>
     <ProfileMenuList>
       {#each accounts as account (account.id)}

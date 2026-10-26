@@ -76,11 +76,11 @@
 
   import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import {
     registerRadioButton,
     updateGroupSelection,
   } from "../RadioButton/radio-button-registry.js";
+  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
@@ -244,7 +244,7 @@
         if (!event.currentTarget.checked) event.currentTarget.click();
       }
     }}
-  >
+  />
   <label
     for={id}
     class:bx--tile={true}

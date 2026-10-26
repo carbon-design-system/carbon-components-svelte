@@ -36,8 +36,7 @@
   export let onclickbuttonprimary: ((event: CustomEvent) => void) | undefined =
     undefined;
   export let onclickbuttonsecondary:
-    | ((event: CustomEvent) => void)
-    | undefined = undefined;
+    ((event: CustomEvent) => void) | undefined = undefined;
   export let closeOnSecondary = false;
   export let includeInput = true;
   export let includeSecondInput = false;
@@ -79,9 +78,9 @@
 >
   <slot />
   {#if includeInput}
-    <input id="test-focus" data-testid="test-focus">
+    <input id="test-focus" data-testid="test-focus" />
   {/if}
   {#if includeSecondInput}
-    <input id="test-focus-last" data-testid="test-focus-last">
+    <input id="test-focus-last" data-testid="test-focus-last" />
   {/if}
 </Modal>

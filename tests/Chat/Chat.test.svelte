@@ -8,12 +8,8 @@
   export let typing = false;
   export let streaming = false;
   export let status:
-    | "sending"
-    | "sent"
-    | "delivered"
-    | "read"
-    | "failed"
-    | undefined = undefined;
+    "sending" | "sent" | "delivered" | "read" | "failed" | undefined =
+    undefined;
   export let retries = 0;
 </script>
 
@@ -41,7 +37,7 @@
     on:retry={() => (retries += 1)}
   >
     Thanks!
-    <img slot="attachments" alt="Receipt" src="receipt.png">
+    <img slot="attachments" alt="Receipt" src="receipt.png" />
     <span slot="meta">9:41</span>
   </ChatMessage>
   {#if typing}

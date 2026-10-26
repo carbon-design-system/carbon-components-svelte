@@ -20,7 +20,7 @@
   }}
 />
 
-<br>
+<br />
 
 <Button
   kind="tertiary"

@@ -22,7 +22,7 @@
   aria-label="Quarterly report"
 >
   <CardMedia slot="media" mediaWidth="40%">
-    <img src="/chart.png" alt="Usage chart">
+    <img src="/chart.png" alt="Usage chart" />
   </CardMedia>
   <AILabel slot="decorator" />
   <CardBody>Usage grew 12% over the last quarter.</CardBody>

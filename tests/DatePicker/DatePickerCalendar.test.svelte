@@ -6,8 +6,9 @@
   export let datePickerType: ComponentProps<DatePicker>["datePickerType"] =
     "single";
   export let dateFormat: ComponentProps<DatePicker>["dateFormat"] = "m/d/Y";
-  export let oncalendar: (cal: ComponentProps<DatePicker>["calendar"]) => void =
-    () => {};
+  export let oncalendar: (
+    cal: ComponentProps<DatePicker>["calendar"],
+  ) => void = () => {};
   export let onerror: ((event: CustomEvent) => void) | undefined = undefined;
 
   let calendar: ComponentProps<DatePicker>["calendar"] = null;

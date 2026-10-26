@@ -21,7 +21,7 @@
 >
   <textarea data-testid="modal-textarea"></textarea>
   <a href="#details" data-testid="modal-link">Learn more</a>
-  <input data-testid="modal-input">
+  <input data-testid="modal-input" />
   <select data-testid="modal-select">
     <option>One</option>
   </select>

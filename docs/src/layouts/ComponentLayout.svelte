@@ -113,7 +113,7 @@
   <link
     rel="canonical"
     href="https://svelte.carbondesignsystem.com/components/{component}"
-  >
+  />
 </svelte:head>
 
 <Content data-component={component}>
@@ -131,7 +131,7 @@
     >
       {#if category}
         <Breadcrumb noTrailingSlash size="sm">
-          <BreadcrumbItem href="/component-index"> Categories </BreadcrumbItem>
+          <BreadcrumbItem href="/component-index">Categories</BreadcrumbItem>
           <BreadcrumbItem href={categoryHref}>{category}</BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>{component}</BreadcrumbItem>
         </Breadcrumb>
@@ -194,8 +194,7 @@
           <a
             class="heading-anchor"
             href="#component-api"
-            aria-label="Copy link to this heading"
-            >#</a
+            aria-label="Copy link to this heading">#</a
           >
         </Text>
         <Text type="body-02" color="secondary">

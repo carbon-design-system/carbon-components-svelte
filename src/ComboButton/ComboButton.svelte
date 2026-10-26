@@ -111,9 +111,9 @@
 
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
+  import Menu from "../Menu/Menu.svelte";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
-  import Menu from "../Menu/Menu.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
 
@@ -185,8 +185,8 @@
     {tooltipPosition}
     {tooltipAlignment}
     class="bx--combo-button__trigger {open
-      ? "bx--combo-button__trigger--open"
-      : ""}"
+      ? 'bx--combo-button__trigger--open'
+      : ''}"
     aria-haspopup="menu"
     aria-expanded={open}
     on:mousedown={(event) => event.preventDefault()}

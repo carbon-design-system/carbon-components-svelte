@@ -14,14 +14,7 @@
 
 <div data-testid="grid-wide" style="width: 420px">
   <ToggleButtonGroup labelText="Times" size="sm" selectionMode="single" grid>
-    {#each [
-      "9:00 AM",
-      "9:30 AM",
-      "10:00 AM",
-      "10:30 AM",
-      "11:00 AM",
-      "2:00 PM",
-    ] as time (time)}
+    {#each ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "2:00 PM"] as time (time)}
       <ToggleButton value={time}>{time}</ToggleButton>
     {/each}
   </ToggleButtonGroup>
@@ -34,14 +27,7 @@
     selectionMode="single"
     grid
   >
-    {#each [
-      "9:00 AM",
-      "9:30 AM",
-      "10:00 AM",
-      "10:30 AM",
-      "11:00 AM",
-      "2:00 PM",
-    ] as time (time)}
+    {#each ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "2:00 PM"] as time (time)}
       <ToggleButton value={time}>{time}</ToggleButton>
     {/each}
   </ToggleButtonGroup>

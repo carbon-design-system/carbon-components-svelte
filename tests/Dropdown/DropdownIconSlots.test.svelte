@@ -9,8 +9,8 @@
   $: items = [
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
-  ].map(
-    (item): DropdownItem => (withItemIcons ? { ...item, icon: Edit } : item),
+  ].map((item): DropdownItem =>
+    withItemIcons ? { ...item, icon: Edit } : item,
   );
 </script>
 

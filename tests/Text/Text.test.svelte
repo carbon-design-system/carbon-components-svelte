@@ -22,7 +22,6 @@
 <Text type="body-01" maxWidth={320}>Max width px</Text>
 <Text type="body-01" maxWidth="38ch">Max width ch</Text>
 <Text type="body-01" fullWidth>Full width text</Text>
-<Text type={truncatedType} style={truncatedStyle} lines={3}
-  >Truncated text</Text
+<Text type={truncatedType} style={truncatedStyle} lines={3}>Truncated text</Text
 >
 <Text lines={1} clamp="front">Front clamped</Text>

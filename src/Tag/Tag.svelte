@@ -84,10 +84,10 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import Close from "../icons/Close.svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
@@ -329,7 +329,7 @@
   >
     {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
+        <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
@@ -379,7 +379,7 @@
   >
     {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
+        <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
     <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
@@ -423,7 +423,7 @@
   >
     {#if $$slots.icon || icon}
       <div class:bx--tag__custom-icon={true}>
-        <slot name="icon"> <svelte:component this={icon} /> </slot>
+        <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
     {#if showTruncationTooltip}

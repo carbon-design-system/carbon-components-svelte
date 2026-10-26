@@ -20,6 +20,7 @@ import DataTableCustomSlots from "./DataTableCustomSlots.test.svelte";
 import DataTableExpandIcon from "./DataTableExpandIcon.test.svelte";
 import DataTableFooter from "./DataTableFooter.test.svelte";
 import DataTableSlotProps from "./DataTableSlotProps.test.svelte";
+import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 import {
   clickHeader,
   eventDetails,
@@ -34,7 +35,6 @@ import {
   getRowTexts,
   getSelectAll,
 } from "./helpers";
-import ToolbarSearchHost from "./ToolbarSearchHost.test.svelte";
 
 describe("DataTable", () => {
   const headers = [

@@ -173,9 +173,8 @@ async function styleSeeds(
 ): Promise<Styles> {
   const entries = stylesheetEntries(graph);
   try {
-    const { changedSelectors, selectorSources } = await import(
-      "./lib/css-delta"
-    );
+    const { changedSelectors, selectorSources } =
+      await import("./lib/css-delta");
     // Imported here, since crassus needs the install a css/ change does.
     // It builds just `inputs` (css/) at the ref and caches each build by
     // that tree, the working tree's while css/ matches HEAD.

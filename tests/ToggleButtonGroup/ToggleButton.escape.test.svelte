@@ -13,5 +13,5 @@
     <ToggleButton value="bold" icon={TextBold} iconDescription="Bold" />
     <ToggleButton value="italic" icon={TextItalic} iconDescription="Italic" />
   </ToggleButtonGroup>
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

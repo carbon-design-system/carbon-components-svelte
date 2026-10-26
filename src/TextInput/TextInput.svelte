@@ -230,7 +230,7 @@
             class:bx--label--inline--xl={effectiveSize === "xl"}
             class:bx--label--slotted={isFluid && $$slots.labelChildren}
           >
-            <slot name="labelChildren"> {labelText} </slot>
+            <slot name="labelChildren">{labelText}</slot>
           </label>
           {#if maxCount != null}
             <div
@@ -266,7 +266,7 @@
         class:bx--label--inline={inline}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
       >
-        <slot name="labelChildren"> {labelText} </slot>
+        <slot name="labelChildren">{labelText}</slot>
       </label>
       {#if maxCount != null}
         <div
@@ -364,7 +364,7 @@
         on:focus={handleFocus}
         on:blur
         on:paste
-      >
+      />
       {#if $$slots.decorator}
         <Decorator
           class="bx--field-decorator bx--text-input__field-inner-wrapper--decorator"
@@ -375,7 +375,7 @@
         </Decorator>
       {/if}
       {#if isFluid}
-        <hr class:bx--text-input__divider={true}>
+        <hr class:bx--text-input__divider={true} />
       {/if}
       {#if isFluid && showInvalid && invalidText}
         <div class:bx--form-requirement={true} id={errorId} role="alert">

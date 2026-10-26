@@ -100,8 +100,8 @@
   import Menu from "../icons/MenuIcon.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import HamburgerMenu from "./HamburgerMenu.svelte";
+  import { EXPANSION_BREAKPOINT } from "./expansion-breakpoint.js";
   import {
     shouldRenderHamburgerMenu,
     trackHeaderRendered,
@@ -184,8 +184,7 @@
   class:bx--header--ui-shell-classic={theme === "classic"}
 >
   <slot name="skipToContent" />
-  {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) ||
-    persistentHamburgerMenu}
+  {#if ($shouldRenderHamburgerMenu && winWidth < expansionBreakpoint) || persistentHamburgerMenu}
     <HamburgerMenu
       bind:isOpen={isSideNavOpen}
       on:click={() => {

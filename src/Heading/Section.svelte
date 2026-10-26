@@ -79,4 +79,4 @@
   setContext("carbon:Section", readonly(internalLevel));
 </script>
 
-<svelte:element this="{tag}" {...$$restProps}><slot /></svelte:element>
+<svelte:element this={tag} {...$$restProps}><slot /></svelte:element>

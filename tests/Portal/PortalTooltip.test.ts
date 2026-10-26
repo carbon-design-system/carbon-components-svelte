@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/svelte";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
-import { stubLayout } from "./helpers";
 import PortalTooltipTest from "./PortalTooltip.test.svelte";
+import { stubLayout } from "./helpers";
 
 describe("PortalTooltip", () => {
   afterEach(() => {

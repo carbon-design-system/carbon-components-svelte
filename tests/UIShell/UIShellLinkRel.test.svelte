@@ -37,8 +37,7 @@
 <ProfileMenuItem
   href="https://cloud.ibm.com/settings"
   target="_blank"
-  {...relProps}
-  >Settings</ProfileMenuItem
+  {...relProps}>Settings</ProfileMenuItem
 >
 <SideNav isOpen>
   <SideNavItems>

@@ -82,8 +82,7 @@
             <span
               class:bx--page-header__skeleton-bar={true}
               class:bx--page-header__skeleton-bar--subtitle={true}
-            ></span
-            >&nbsp;
+            ></span>&nbsp;
           </p>
         {/if}
       </div>

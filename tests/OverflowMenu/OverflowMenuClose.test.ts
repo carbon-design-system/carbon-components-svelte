@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
-import { closeDetails, openMenu } from "./helpers";
 import OverflowMenu from "./OverflowMenu.test.svelte";
+import { closeDetails, openMenu } from "./helpers";
 
 describe("OverflowMenu close event trigger", () => {
   it('dispatches close with trigger "escape-key" when Escape is pressed on the trigger', async () => {

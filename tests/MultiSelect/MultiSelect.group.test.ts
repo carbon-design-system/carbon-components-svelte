@@ -3,9 +3,9 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import { createItems } from "../utils/create-items";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
-import { optionTexts, toggleOption } from "./helpers";
 import MultiSelect from "./MultiSelect.test.svelte";
 import MultiSelectGroupSlot from "./MultiSelectGroupSlot.test.svelte";
+import { optionTexts, toggleOption } from "./helpers";
 
 const regions: MultiSelectItem[] = [
   { id: "us-west-2", text: "US West (Oregon)", group: "Americas" },

@@ -15,9 +15,9 @@
 </ButtonSet>
 
 {#if showPortal1}
-  <Portal> System alert: API latency is elevated </Portal>
+  <Portal>System alert: API latency is elevated</Portal>
 {/if}
 
 {#if showPortal2}
-  <Portal> Maintenance notice: scheduled downtime at 2:00 AM UTC </Portal>
+  <Portal>Maintenance notice: scheduled downtime at 2:00 AM UTC</Portal>
 {/if}

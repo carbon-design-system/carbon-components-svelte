@@ -32,7 +32,7 @@ const resolve = (from: string, spec: string) => {
 const interactive = new Set(
   Object.keys(sources).filter((path) => FOCUSABLE_OR_ROLE.test(sources[path])),
 );
-for (let grew = true; grew; ) {
+for (let grew = true; grew;) {
   grew = false;
   for (const [path, source] of Object.entries(sources)) {
     if (interactive.has(path) || path.includes("Skeleton")) continue;

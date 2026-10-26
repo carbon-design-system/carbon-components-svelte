@@ -466,15 +466,11 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
+  import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
+  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     ListBox,
     ListBoxField,
@@ -483,9 +479,6 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox/index.js";
-  import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
-  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
-  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
@@ -508,6 +501,14 @@
   } from "../ListBox/menu-window.js";
   import Tag from "../Tag/Tag.svelte";
   import TagSet from "../TagSet/TagSet.svelte";
+  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
@@ -535,7 +536,6 @@
   } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
-  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -1604,7 +1604,7 @@
       value={itemInput.value ?? (name ? item.id : "")}
       {disabled}
       form={$$restProps.form}
-    >
+    />
   {/each}
   {#if labelText || $$slots.labelChildren}
     <label
@@ -1614,7 +1614,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
   <ListBox
@@ -1774,7 +1774,7 @@
             {readonly}
             {placeholder}
             {id}
-          >
+          />
           {#if value}
             <ListBoxSelection
               on:clear={() => {
@@ -2099,7 +2099,7 @@
                             indeterminate={optionIndeterminate}
                             disabled={itemDisabled}
                             aria-readonly={readonly || undefined}
-                          >
+                          />
                           <label
                             for="checkbox-{id}-{item.id}"
                             use:optionOverflowTitle={"title" in optionInput
@@ -2228,7 +2228,7 @@
                           indeterminate={optionIndeterminate}
                           disabled={itemDisabled}
                           aria-readonly={readonly || undefined}
-                        >
+                        />
                         <label
                           for="checkbox-{id}-{item.id}"
                           use:optionOverflowTitle={"title" in optionInput
@@ -2281,7 +2281,7 @@
     {/if}
   </ListBox>
   {#if isFluid}
-    <hr class:bx--list-box__divider={true}>
+    <hr class:bx--list-box__divider={true} />
   {/if}
   {#if isFluid && showInvalid && shownInvalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">

@@ -2,8 +2,8 @@ import { screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ContentSwitcherPanels from "./ContentSwitcher.panels.test.svelte";
-import { renderAndFlush } from "./helpers";
 import SwitchPanelAriaLabel from "./SwitchPanel.ariaLabel.test.svelte";
+import { renderAndFlush } from "./helpers";
 
 function panel(id: string) {
   const element = document.getElementById(id);

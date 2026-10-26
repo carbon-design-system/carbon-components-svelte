@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/svelte";
+import ShapeIndicatorIncomplete from "carbon-components-svelte/ShapeIndicator/ShapeIndicatorIncomplete.svelte";
 import Caution from "carbon-components-svelte/icons/Caution.svelte";
 import CheckmarkFilled from "carbon-components-svelte/icons/CheckmarkFilled.svelte";
 import CheckmarkOutline from "carbon-components-svelte/icons/CheckmarkOutline.svelte";
@@ -9,8 +10,8 @@ import Critical from "carbon-components-svelte/icons/Critical.svelte";
 import CriticalSeverity from "carbon-components-svelte/icons/CriticalSeverity.svelte";
 import DiamondFill from "carbon-components-svelte/icons/DiamondFill.svelte";
 import ErrorFilled from "carbon-components-svelte/icons/ErrorFilled.svelte";
-import Incomplete from "carbon-components-svelte/icons/Incomplete.svelte";
 import InProgress from "carbon-components-svelte/icons/InProgress.svelte";
+import Incomplete from "carbon-components-svelte/icons/Incomplete.svelte";
 import LowSeverity from "carbon-components-svelte/icons/LowSeverity.svelte";
 import PendingFilled from "carbon-components-svelte/icons/PendingFilled.svelte";
 import UndefinedFilled from "carbon-components-svelte/icons/UndefinedFilled.svelte";
@@ -18,7 +19,6 @@ import UnknownFilled from "carbon-components-svelte/icons/UnknownFilled.svelte";
 import WarningAltFilled from "carbon-components-svelte/icons/WarningAltFilled.svelte";
 import WarningAltInvertedFilled from "carbon-components-svelte/icons/WarningAltInvertedFilled.svelte";
 import WarningSquareFilled from "carbon-components-svelte/icons/WarningSquareFilled.svelte";
-import ShapeIndicatorIncomplete from "carbon-components-svelte/ShapeIndicator/ShapeIndicatorIncomplete.svelte";
 import ShapeIndicatorFixture from "../ShapeIndicator/ShapeIndicator.test.svelte";
 import IconIndicatorFixture from "./IconIndicator.test.svelte";
 

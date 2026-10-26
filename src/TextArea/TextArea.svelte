@@ -398,7 +398,7 @@
           class:bx--label--disabled={disabled}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
         >
-          <slot name="labelChildren"> {labelText} </slot>
+          <slot name="labelChildren">{labelText}</slot>
         </label>
       {/if}
       {#if hasMaxCount}
@@ -471,8 +471,7 @@
       on:focus={handleFocus}
       on:blur
       on:paste
-      on:beforeinput={handleBeforeInput}
-    ></textarea>
+      on:beforeinput={handleBeforeInput}></textarea>
     {#if $$slots.decorator}
       <Decorator
         class="bx--field-decorator bx--text-area__inner-wrapper--decorator"
@@ -482,7 +481,7 @@
       </Decorator>
     {/if}
     {#if isFluid}
-      <hr class:bx--text-area__divider={true}>
+      <hr class:bx--text-area__divider={true} />
       {#if showInvalid}
         <div
           id={errorId}

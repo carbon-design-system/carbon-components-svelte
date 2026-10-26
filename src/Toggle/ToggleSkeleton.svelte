@@ -33,7 +33,7 @@
     class:bx--toggle-input={true}
     class:bx--toggle-input--small={size === "sm"}
     class:bx--skeleton={true}
-  >
+  />
   <label
     aria-label={labelText && !hideLabel
       ? undefined
@@ -43,7 +43,7 @@
     class:bx--skeleton={true}
   >
     {#if (labelText || $$slots.labelChildren) && !hideLabel}
-      <div><slot name="labelChildren"> {labelText} </slot></div>
+      <div><slot name="labelChildren">{labelText}</slot></div>
     {/if}
     <span
       class:bx--toggle__switch={true}

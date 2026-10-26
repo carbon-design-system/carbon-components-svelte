@@ -6,6 +6,5 @@
 
 <!-- Type-check fixture: a span-only descriptor (no `offset` key) must be
      assignable to `sm`, confirming `offset` is optional in the generated types. -->
-<Column sm={{ span: 4 }} data-testid="test-col-span-only"
-  >Column content</Column
+<Column sm={{ span: 4 }} data-testid="test-col-span-only">Column content</Column
 >

@@ -4,6 +4,6 @@
 
 <div>
   <div>Rendered inside the dashboard panel</div>
-  <br>
+  <br />
   <Portal>Rendered outside the panel, directly in document.body</Portal>
 </div>

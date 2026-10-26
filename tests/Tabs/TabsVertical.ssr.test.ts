@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { renderSSR } from "../utils/ssr";
-import { expectSelected } from "./ssr-helpers";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
+import { expectSelected } from "./ssr-helpers";
 
 describe("TabsVertical server render", () => {
   it("renders the `selected` tab and panel as selected", () => {

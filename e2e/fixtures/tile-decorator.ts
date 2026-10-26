@@ -1,4 +1,4 @@
-import { mount } from "./mount";
 import TileDecoratorFixture from "./TileDecoratorFixture.svelte";
+import { mount } from "./mount";
 
 mount(TileDecoratorFixture);

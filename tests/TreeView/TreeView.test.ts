@@ -8,7 +8,6 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { findRowById, treeItemById } from "../utils/tree-item-by-id";
 import { user } from "../utils/user";
-import { getAllExpandedItems } from "./helpers";
 import TreeViewAutoCollapse from "./TreeView.autoCollapse.test.svelte";
 import TreeViewHierarchy from "./TreeView.hierarchy.test.svelte";
 import TreeViewHref from "./TreeView.href.test.svelte";
@@ -19,6 +18,7 @@ import TreeViewSlot from "./TreeView.slot.test.svelte";
 import TreeView from "./TreeView.test.svelte";
 import TreeViewDuplicateIds from "./TreeViewDuplicateIds.test.svelte";
 import TreeViewGenerics from "./TreeViewGenerics.test.svelte";
+import { getAllExpandedItems } from "./helpers";
 
 /**
  * Primary row label: parent markup uses `.bx--tree-node__label__text`.

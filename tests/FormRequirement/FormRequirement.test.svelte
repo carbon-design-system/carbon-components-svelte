@@ -12,7 +12,7 @@
 
 <FormItem controlId="email" let:control let:invalid let:warn>
   <FormLabel>Email</FormLabel>
-  <input use:control>
+  <input use:control />
   <FormHelperText>Use your work email</FormHelperText>
   {#if error}
     <FormRequirement>{error}</FormRequirement>

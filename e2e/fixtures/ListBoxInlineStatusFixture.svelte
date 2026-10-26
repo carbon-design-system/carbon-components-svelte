@@ -7,10 +7,7 @@
   ];
 </script>
 
-{#each [
-  { invalid: true, invalidText: "Fix this" },
-  { warn: true, warnText: "Check this" },
-] as status, i (i)}
+{#each [{ invalid: true, invalidText: "Fix this" }, { warn: true, warnText: "Check this" }] as status, i (i)}
   <div data-status={status.invalid ? "invalid" : "warn"}>
     <Dropdown
       type="inline"

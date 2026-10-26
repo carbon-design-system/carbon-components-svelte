@@ -32,9 +32,9 @@
     {:else if content === "button"}
       <button type="button">Upgrade</button>
     {:else if content === "input"}
-      <input aria-label="Seats" type="number">
+      <input aria-label="Seats" type="number" />
     {:else if content === "hidden-input"}
-      <input type="hidden" name="plan" value="team">
+      <input type="hidden" name="plan" value="team" />
     {:else if content === "tabindex"}
       <span tabindex="-1">Usage</span>
     {:else if content === "contenteditable"}

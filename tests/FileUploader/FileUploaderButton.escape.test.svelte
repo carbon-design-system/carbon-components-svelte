@@ -12,5 +12,5 @@
     icon={Upload}
     iconDescription="Upload files"
   />
-  <input aria-label="Other control">
+  <input aria-label="Other control" />
 </div>

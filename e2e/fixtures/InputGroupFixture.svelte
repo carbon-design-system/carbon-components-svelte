@@ -12,7 +12,7 @@
 
 {#each ["xs", "sm", undefined, "xl"] as size}
   <div
-    data-testid="group-{size ?? "md"}"
+    data-testid="group-{size ?? 'md'}"
     style:width="480px"
     style:margin-bottom="24px"
   >

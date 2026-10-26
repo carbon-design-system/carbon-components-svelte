@@ -44,7 +44,7 @@
       aria-invalid={ariaInvalid}
       use:control
       data-testid="control"
-    >
+    />
   {/if}
   {#if helper}
     <FormHelperText id={helperId} disabled={helperDisabled}>

@@ -9,7 +9,7 @@
 <svelte:head>
   <title>{title} · Carbon Components Svelte</title>
   {#if description}
-    <meta name="description" content={description}>
+    <meta name="description" content={description} />
   {/if}
 </svelte:head>
 

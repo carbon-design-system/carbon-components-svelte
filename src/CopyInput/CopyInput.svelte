@@ -225,7 +225,7 @@
           class:bx--label--inline--xl={effectiveSize === "xl"}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
         >
-          <slot name="labelChildren"> {labelText} </slot>
+          <slot name="labelChildren">{labelText}</slot>
         </label>
       {/if}
       {#if !isFluid && helperText}
@@ -249,7 +249,7 @@
       class:bx--label--disabled={disabled}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
   <div
@@ -292,13 +292,19 @@
         on:focus={handleFocus}
         on:blur
         on:blur={handleBlur}
-      >
+      />
       {#if masked && name}
         <!-- The form submits the value, not the mask. -->
-        <input type="hidden" {name} {value} {disabled} form={$$restProps.form}>
+        <input
+          type="hidden"
+          {name}
+          {value}
+          {disabled}
+          form={$$restProps.form}
+        />
       {/if}
       {#if isFluid}
-        <hr class:bx--text-input__divider={true}>
+        <hr class:bx--text-input__divider={true} />
       {/if}
       <CopyButton
         text={value}

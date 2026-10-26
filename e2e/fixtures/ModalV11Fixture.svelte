@@ -76,7 +76,7 @@
   <ModalHeader label="Account settings" title="Rename workspace" />
   <ModalBody>
     <label for="workspace-name">Workspace name</label>
-    <input id="workspace-name" value="Cloudant team">
+    <input id="workspace-name" value="Cloudant team" />
   </ModalBody>
   <ModalFooter
     primaryButtonText="Rename"

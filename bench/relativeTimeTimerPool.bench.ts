@@ -24,9 +24,8 @@ let nextIntervalId = 0;
 };
 (globalThis as unknown as { clearInterval: unknown }).clearInterval = () => {};
 
-const { subscribeRelativeTimeTick } = await import(
-  "../src/utils/relative-time-timer-pool.js"
-);
+const { subscribeRelativeTimeTick } =
+  await import("../src/utils/relative-time-timer-pool.js");
 
 group(
   "N instances subscribing + unsubscribing on one cadence",

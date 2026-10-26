@@ -1,6 +1,5 @@
 <script lang="ts">
   import TabsVerticalSkeleton from "carbon-components-svelte/Tabs/TabsVerticalSkeleton.svelte";
-
   import type { ComponentProps } from "svelte";
 
   export let count = 4;

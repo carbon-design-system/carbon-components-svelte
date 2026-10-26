@@ -250,11 +250,11 @@
 
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
-  import CaretLeft from "../icons/CaretLeft.svelte";
-  import CaretRight from "../icons/CaretRight.svelte";
   import NumberInput from "../NumberInput/NumberInput.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
+  import CaretLeft from "../icons/CaretLeft.svelte";
+  import CaretRight from "../icons/CaretRight.svelte";
   import { clamp } from "../utils/numeric-format.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -479,8 +479,8 @@
         iconDescription={backwardText}
         disabled={internalBackButtonDisabled}
         class="bx--pagination__button bx--pagination__button--backward {internalBackButtonDisabled
-          ? "bx--pagination__button--no-index"
-          : ""}"
+          ? 'bx--pagination__button--no-index'
+          : ''}"
         on:click={() => {
           // `backButtonDisabled={false}` force-enables the button, but pages
           // still start at 1.
@@ -502,8 +502,8 @@
         iconDescription={forwardText}
         disabled={internalForwardButtonDisabled}
         class="bx--pagination__button bx--pagination__button--forward {internalForwardButtonDisabled
-          ? "bx--pagination__button--no-index"
-          : ""}"
+          ? 'bx--pagination__button--no-index'
+          : ''}"
         on:click={() => {
           // `forwardButtonDisabled={false}` force-enables the button; only
           // unknown pages may go past the last one.

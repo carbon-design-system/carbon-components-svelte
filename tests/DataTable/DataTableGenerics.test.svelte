@@ -102,8 +102,7 @@
   export let onProductRowExpand: ((row: ProductRow) => void) | undefined =
     undefined;
   export let onProductSort:
-    | ((e: CustomEvent<ProductSortDetail>) => void)
-    | undefined = undefined;
+    ((e: CustomEvent<ProductSortDetail>) => void) | undefined = undefined;
 </script>
 
 <DataTable

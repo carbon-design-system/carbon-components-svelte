@@ -55,12 +55,12 @@
   <meta
     name="description"
     content="{exampleName} example for the {componentName} component in Carbon Components Svelte."
-  >
+  />
   <link
     rel="canonical"
     href="https://svelte.carbondesignsystem.com{$activeRoute?.leaf?.node
-      ?.path ?? ""}"
-  >
+      ?.path ?? ''}"
+  />
 </svelte:head>
 
 <slot />

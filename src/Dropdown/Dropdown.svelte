@@ -306,16 +306,11 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import {
-    FORM_CONTEXT_KEY,
-    FORM_SIZE_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
-  import Checkmark from "../icons/Checkmark.svelte";
-  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import WarningFilled from "../icons/WarningFilled.svelte";
   import HighlightSlot from "../ListBox/HighlightSlot.svelte";
+  import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
+  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
+  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     ListBox,
     ListBoxMenu,
@@ -323,9 +318,6 @@
     ListBoxMenuItem,
     ListBoxSelection,
   } from "../ListBox/index.js";
-  import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
-  import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
-  import ListBoxRequiredInput from "../ListBox/ListBoxRequiredInput.svelte";
   import {
     MENU_PAGE_STEP,
     shouldVirtualizeMenu,
@@ -345,6 +337,15 @@
     createMenuWindow,
     scheduleHighlightScroll,
   } from "../ListBox/menu-window.js";
+  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
+  import {
+    FORM_CONTEXT_KEY,
+    FORM_SIZE_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
+  import Checkmark from "../icons/Checkmark.svelte";
+  import WarningAltFilled from "../icons/WarningAltFilled.svelte";
+  import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -367,7 +368,6 @@
   } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
-  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -891,11 +891,11 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
-      <slot name="labelChildren"> {labelText} </slot>
+      <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
   {#if name}
-    <input type="hidden" {name} value={hiddenInputValue} {disabled} {form}>
+    <input type="hidden" {name} value={hiddenInputValue} {disabled} {form} />
   {/if}
   <ListBox
     {type}
@@ -1392,7 +1392,7 @@
     {/if}
   </ListBox>
   {#if isFluid}
-    <hr class:bx--list-box__divider={true}>
+    <hr class:bx--list-box__divider={true} />
   {/if}
   {#if showInvalid && shownInvalidText}
     <div id={errorId} class:bx--form-requirement={true} role="alert">

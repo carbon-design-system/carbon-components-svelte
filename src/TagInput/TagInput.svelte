@@ -161,12 +161,12 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
+  import Tag from "../Tag/Tag.svelte";
+  import TagSet from "../TagSet/TagSet.svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
-  import Tag from "../Tag/Tag.svelte";
-  import TagSet from "../TagSet/TagSet.svelte";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -642,7 +642,7 @@
         on:focus
         on:blur={handleBlur}
         on:blur
-      >
+      />
     </TagSet>
   </div>
   {#if tagPlacement === "below" && value.length > 0}
@@ -681,7 +681,7 @@
   {/if}
   {#if name}
     {#each value as tag, index (index)}
-      <input type="hidden" {name} value={tag} {disabled}>
+      <input type="hidden" {name} value={tag} {disabled} />
     {/each}
   {/if}
   <span id={instructionsId} class:bx--visually-hidden={true}

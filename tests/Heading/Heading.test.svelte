@@ -18,13 +18,13 @@
           <Heading>Nested Heading 5</Heading>
           <Section>
             <Heading>Nested Heading 6</Heading>
-            <Section> <Heading>Nested Capped at Heading 6</Heading> </Section>
+            <Section><Heading>Nested Capped at Heading 6</Heading></Section>
           </Section>
         </Section>
       </Section>
     </Section>
   </Section>
-  <Section> <Heading>Sibling Heading 2</Heading> </Section>
+  <Section><Heading>Sibling Heading 2</Heading></Section>
 </Section>
 
 <Section level={5}>
@@ -33,7 +33,7 @@
 
 <Section>
   <Heading>Reset Outer Heading 1</Heading>
-  <Section level={1}> <Heading>Reset Heading 1</Heading> </Section>
+  <Section level={1}><Heading>Reset Heading 1</Heading></Section>
 </Section>
 
 <Section level={overflowLevel}>
@@ -48,12 +48,11 @@
   <Heading type="heading-03">Sized heading</Heading>
 </Section>
 
-<Heading type="heading-03" class="custom-heading"
-  >Typed classed heading</Heading
+<Heading type="heading-03" class="custom-heading">Typed classed heading</Heading
 >
 
 <div data-testid="custom-tag-wrapper">
-  <Section tag="div"> <Heading>Custom Tag Heading 1</Heading> </Section>
+  <Section tag="div"><Heading>Custom Tag Heading 1</Heading></Section>
 </div>
 
 <Heading>Heading without Section</Heading>

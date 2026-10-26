@@ -132,9 +132,9 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
-  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
@@ -523,7 +523,7 @@
         }
       }}
       on:paste
-    >
+    />
     {#if active}
       <button
         type="button"
