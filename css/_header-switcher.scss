@@ -83,6 +83,13 @@
   // only swaps the border color instead of growing the border, which would
   // otherwise shift this auto-width trigger's content by a couple of pixels.
   .#{$prefix}--header-switcher__trigger {
+    // The trigger sits outside `HeaderUtilities`, so the
+    // `.#{$prefix}--header__global .#{$prefix}--header__action` rule that
+    // gives header actions the header's text color does not reach it. A
+    // `<button>` then keeps the browser's own color: pure black or white
+    // from the page's color scheme, which on the classic UI Shell's dark
+    // header in a light page is black on dark.
+    color: inherit;
     border-width: $button-border-width;
     border-color: transparent;
     // Offset the reserved border so the avatar lands at the same inset as
