@@ -64,7 +64,7 @@
    * original unsized height. Line tabs (`type="default"`) support up to
    * `"lg"`; container tabs support the full range up to `"xl"` — an
    * out-of-range value clamps to the type's max.
-   * @type {"sm" | "md" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 

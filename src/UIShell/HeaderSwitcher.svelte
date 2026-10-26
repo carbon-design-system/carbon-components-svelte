@@ -23,7 +23,7 @@
 
   /**
    * Specify the workspace or account name shown next to the avatar.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 

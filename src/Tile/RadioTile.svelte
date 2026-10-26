@@ -14,7 +14,7 @@
    * Set the size: `"sm"` for a compact tile, such as a row in a list of
    * choices, with less padding, no minimum height, and the checkmark
    * pulled in. Defaults to the size of a parent tile group.
-   * @type {"sm" | "md"}
+   * @type {"sm" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -57,7 +57,7 @@
 
   /**
    * Specify a name attribute for the radio tile input.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

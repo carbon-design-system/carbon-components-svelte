@@ -12,7 +12,7 @@
   /**
    * Specify the option text.
    * If not specified, the value will be used as the text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 
@@ -32,7 +32,7 @@
 
   /**
    * Specify the style of the `option` element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let style = undefined;
 

@@ -12,14 +12,14 @@
    * Set the id of the control this label is for.
    * @deprecated use `for` instead. Despite its name, this sets the
    * label's `for` attribute, not its `id`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 
   /**
    * Set to `true` to use disabled styles.
    * Inside a `FormItem`, defaults to the item's `disabled`.
-   * @type {boolean}
+   * @type {boolean | undefined}
    */
   export let disabled = undefined;
 

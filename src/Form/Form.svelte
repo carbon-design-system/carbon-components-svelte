@@ -56,7 +56,7 @@
    * Set the size of every field in the form.
    * A field's own `size` takes precedence.
    * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 

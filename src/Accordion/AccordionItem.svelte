@@ -29,7 +29,7 @@
   /**
    * Specify a custom label for the accordion button.
    * This is important for accessibility when the accordion has no visible title.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let ariaLabel = undefined;
 

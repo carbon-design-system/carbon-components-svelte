@@ -27,7 +27,7 @@
    * Also accepts Carbon v11's `"sm"` (`"small"`), `"md"` (`"field"`) and
    * `"2xl"` (`"xl"`). `"lg"` and `"xl"` keep this library's 64px and 80px;
    * Carbon v11's 48px `lg` and 64px `xl` are `"default"` and `"lg"` here.
-   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl" | "sm" | "md" | "2xl"}
+   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl" | "sm" | "md" | "2xl" | undefined}
    * @default "default"
    */
   export let size = undefined;
@@ -57,7 +57,7 @@
    * Specify the icon to render.
    * Alternatively, use the named slot "icon".
    *
-   * @type {Icon}
+   * @type {Icon | undefined}
    * @example
    * ```svelte
    * <Button>
@@ -72,7 +72,7 @@
    * On an icon-only button, this also drives Carbon's tooltip. If omitted,
    * the icon-only button renders without a tooltip; supply your own
    * `aria-label` or `aria-labelledby` for accessibility in that case.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconDescription = undefined;
 
@@ -116,7 +116,7 @@
 
   /**
    * Set the `href` to use an anchor link.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
@@ -157,7 +157,7 @@
 
   /**
    * Specify the accessible description for the loading spinner.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let loadingDescription = undefined;
 

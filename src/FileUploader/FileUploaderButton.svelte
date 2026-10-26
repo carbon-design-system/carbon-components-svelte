@@ -67,7 +67,7 @@
    * Inherits the height of the parent `Form` size when unset,
    * otherwise defaults to `"small"`.
    * Accepts the same Carbon v11 aliases as `Button`.
-   * @type {import("../Button/Button.svelte").ButtonProps["size"]}
+   * @type {import("../Button/Button.svelte").ButtonProps["size"] | undefined}
    */
   export let size = undefined;
 
@@ -92,13 +92,13 @@
 
   /**
    * Specify the icon to render.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the ARIA label for the button icon.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconDescription = undefined;
 

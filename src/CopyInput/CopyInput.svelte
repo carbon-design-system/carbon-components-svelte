@@ -28,7 +28,7 @@
    * masked to `sk_live_••••4f2a`. The copy button still copies `value`,
    * and `revealMode` shows `value` on interaction.
    * Unlike `type="password"`, browsers don't offer to save it.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let maskedValue = undefined;
 
@@ -38,7 +38,7 @@
    * - `"focus"`: reveal while the input is focused.
    * - `"hover-focus"`: reveal while the input is hovered or focused.
    * When unset, the value stays obscured; the copy button still copies the full value.
-   * @type {"focus" | "hover-focus"}
+   * @type {"focus" | "hover-focus" | undefined}
    */
   export let revealMode = undefined;
 
@@ -53,7 +53,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -88,7 +88,7 @@
 
   /**
    * Specify a name attribute for the input.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
@@ -108,7 +108,7 @@
   /**
    * Specify an icon to render during the feedback window (for example, after copying).
    * When unset, the copy icon is always shown.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let feedbackIcon = /** @type {Icon} */ (undefined);
 

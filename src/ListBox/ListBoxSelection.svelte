@@ -9,7 +9,7 @@
 
   /**
    * Specify the number of selected items.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let selectionCount = undefined;
 

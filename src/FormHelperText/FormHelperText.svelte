@@ -8,14 +8,14 @@
    * Inside a `FormItem`, defaults to `helper-{controlId}` (`-1`, `-2`,
    * and so on for later helper texts), and the item's control lists it
    * in `aria-describedby`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 
   /**
    * Set to `true` to use disabled styles.
    * Inside a `FormItem`, defaults to the item's `disabled`.
-   * @type {boolean}
+   * @type {boolean | undefined}
    */
   export let disabled = undefined;
 

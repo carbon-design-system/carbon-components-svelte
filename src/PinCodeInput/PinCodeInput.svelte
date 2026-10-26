@@ -89,7 +89,7 @@
    * Set the size of the input.
    * Inherits the parent `Form` size when unset, otherwise `"default"`.
    * Also accepts Carbon v11's `"md"` (`"default"`) and `"lg"` (`"xl"`).
-   * @type {"default" | "xs" | "sm" | "xl" | "md" | "lg"}
+   * @type {"default" | "xs" | "sm" | "xl" | "md" | "lg" | undefined}
    * @default "default"
    */
   export let size = undefined;

@@ -60,7 +60,7 @@
 
   /**
    * Specify the input placeholder text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let placeholder = undefined;
 
@@ -80,14 +80,14 @@
   /**
    * Label for the "edit off" icon shown in readonly mode. Defaults to
    * `"Edit off"`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let readonlyLabel = undefined;
 
   /**
    * Toggletip text shown in readonly mode, explaining why the field can't
    * be edited. Defaults to `"This field is read-only and cannot be edited"`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let readonlyToggletipText = undefined;
 

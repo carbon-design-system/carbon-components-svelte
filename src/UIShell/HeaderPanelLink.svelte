@@ -7,21 +7,21 @@
   /**
    * Specify the `href` attribute to render an anchor.
    * Omit it to render a button (for actions that do not navigate).
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
   /**
    * Specify the label text.
    * Alternatively, use the default slot.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 
   /**
    * Specify an icon to render after the label.
    * Alternatively, use the "icon" slot.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

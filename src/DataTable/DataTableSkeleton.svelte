@@ -11,7 +11,7 @@
   /**
    * Set the size of the data table.
    * Accepts the same Carbon v11 aliases as `DataTable`.
-   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 

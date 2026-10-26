@@ -22,7 +22,7 @@
 
   /**
    * The primary value to display (the "numerator" of a fraction).
-   * @type {number}
+   * @type {number | undefined}
    */
   export let value = undefined;
 
@@ -30,7 +30,7 @@
    * The number to render after the slash (the "denominator" of a fraction).
    * Hidden when it formats identically to `value`, or when `percentage` is `true`;
    * see `forceShowTotal`.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let total = undefined;
 
@@ -55,7 +55,7 @@
 
   /**
    * Render a trend indicator next to the value.
-   * @type {"up" | "down" | "flat"}
+   * @type {"up" | "down" | "flat" | undefined}
    */
   export let trend = undefined;
 
@@ -64,7 +64,7 @@
    * `"error"` for `trend="down"`, and `"neutral"` for `trend="flat"` — set this when
    * the direction's meaning is reversed for the metric (e.g. a falling error rate,
    * or a rising failure count).
-   * @type {"success" | "error" | "neutral"}
+   * @type {"success" | "error" | "neutral" | undefined}
    */
   export let trendColor = undefined;
 
@@ -79,7 +79,7 @@
 
   /**
    * Determines how `value` and `total` are formatted. Defaults to the runtime locale.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let locale = undefined;
 
@@ -89,7 +89,7 @@
   /**
    * Additional options merged into the `Intl.NumberFormat` options used to format
    * `value` and `total`. Consumer keys take precedence over the component's defaults.
-   * @type {Intl.NumberFormatOptions}
+   * @type {Intl.NumberFormatOptions | undefined}
    * @example
    * `{ style: "currency", currency: "USD" }`
    * @example
@@ -100,20 +100,20 @@
   /**
    * Provide a custom formatter for `value` and `total`, replacing Intl formatting
    * entirely. Non-number inputs still render the dash.
-   * @type {(value: number) => string}
+   * @type {((value: number) => string) | undefined}
    */
   export let format = undefined;
 
   /**
    * Override the text announced to assistive technology for the trend indicator.
    * Defaults to "Trending up", "Trending down", or "No change" based on `trend`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let trendDescription = undefined;
 
   /**
    * The signed change in `value` since the last period.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let delta = undefined;
 

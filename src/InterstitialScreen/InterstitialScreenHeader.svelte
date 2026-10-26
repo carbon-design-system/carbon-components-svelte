@@ -13,7 +13,7 @@
    * Specify the heading level of the title, to fit the page outline.
    * A full-screen takeover defaults to 1, or one level below an enclosing
    * `Section`'s heading. In a modal it defaults to 2, as a modal title.
-   * @type {1 | 2 | 3 | 4 | 5 | 6}
+   * @type {1 | 2 | 3 | 4 | 5 | 6 | undefined}
    */
   export let headingLevel = undefined;
 

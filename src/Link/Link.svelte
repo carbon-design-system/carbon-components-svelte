@@ -11,7 +11,7 @@
 
   /**
    * Specify the href value.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
@@ -21,7 +21,7 @@
   /**
    * Specify the icon to render.
    * `inline` must be `false`.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

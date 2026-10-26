@@ -3,7 +3,7 @@
    * Set the size of the list box.
    * Also accepts Carbon v11's `"md"` (the 40px default). `"lg"` and `"xl"`
    * are both 48px.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -27,7 +27,7 @@
 
   /**
    * Specify an id for the invalid state text
-   * @type {string}
+   * @type {string | undefined}
    */
   export let invalidId = undefined;
 
@@ -39,7 +39,7 @@
 
   /**
    * Specify an id for the warning state text
-   * @type {string}
+   * @type {string | undefined}
    */
   export let warnId = undefined;
 

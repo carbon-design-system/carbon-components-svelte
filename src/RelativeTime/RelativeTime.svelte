@@ -6,19 +6,19 @@
 
   /**
    * Target instant. Invalid or missing renders an empty `<time>` with no `datetime`.
-   * @type {Date | number | string}
+   * @type {Date | number | string | undefined}
    */
   export let date = undefined;
 
   /**
    * Fixed reference instant. When set, live updates are off (deterministic docs and tests).
-   * @type {Date | number}
+   * @type {Date | number | undefined}
    */
   export let now = undefined;
 
   /**
    * Runtime locale when unset.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let locale = undefined;
 
@@ -27,7 +27,7 @@
    * unset. Set a fixed value so the server and the client print the same
    * `title`. Equivalent to `titleFormatOptions={{ timeZone }}`, and overrides
    * `titleFormatOptions.timeZone` when both are set.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let timeZone = undefined;
 

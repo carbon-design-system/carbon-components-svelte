@@ -43,7 +43,7 @@
    * Set the size of the fields in the group. Buttons in the group match
    * the field height. Defaults to the size of a parent `Form`.
    * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 

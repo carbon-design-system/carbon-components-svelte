@@ -14,7 +14,7 @@
    * Specify the number of cols.
    * If specified, the textarea will not be resizable.
    * Override this using the `resize` style attribute.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let cols = undefined;
 
@@ -37,7 +37,7 @@
   /**
    * Specify the max count.
    * Counts characters by default; see `counterMode`.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let maxCount = undefined;
 
@@ -50,14 +50,14 @@
 
   /**
    * Override the counter text read by screen readers.
-   * @type {(count: number, max: number) => string}
+   * @type {((count: number, max: number) => string) | undefined}
    * @default `${count} of ${max} characters`, or `${count} of ${max} words` when `counterMode` is `"word"`
    */
   export let counterText = undefined;
 
   /**
    * Specify the text announced when the limit is reached.
-   * @type {string}
+   * @type {string | undefined}
    * @default "Character limit reached", or "Word limit reached" when `counterMode` is `"word"`
    */
   export let limitReachedText = undefined;
@@ -101,7 +101,7 @@
 
   /**
    * Specify a name attribute for the input.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

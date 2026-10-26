@@ -17,7 +17,7 @@
   /**
    * Specify the icon to render.
    * Alternatively, use the named slot "icon".
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 
@@ -25,7 +25,7 @@
    * Specify the accessible label for an icon-only button.
    * Required when no default slot content is provided; also used as the
    * hover/focus tooltip text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconDescription = undefined;
 

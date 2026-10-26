@@ -11,7 +11,7 @@
   /**
    * Specify the size of the accordion.
    * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
-   * @type {"sm" | "md" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 

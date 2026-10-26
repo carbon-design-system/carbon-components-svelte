@@ -26,7 +26,7 @@
    * Alternatively, use the default slot.
    *
    * When `code` is unset, the copy button copies the rendered text of the default slot.
-   * @type {string}
+   * @type {string | undefined}
    * @example
    * ```svelte
    * <CodeSnippet>{code}</CodeSnippet>
@@ -74,7 +74,7 @@
 
   /**
    * Specify the ARIA label for the copy button icon.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let copyButtonDescription = undefined;
 
@@ -103,7 +103,7 @@
    * (e.g. after copying). When unset, the copy icon is always shown.
    *
    * NOTE: this prop does not apply to the `type="inline"` variant.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let feedbackIcon = /** @type {Icon} */ (undefined);
 

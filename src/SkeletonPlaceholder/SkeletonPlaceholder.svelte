@@ -10,21 +10,21 @@
   /**
    * Shorthand size that sets both width and height.
    * Accepts a number (px) or string (e.g., "12rem").
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let size = undefined;
 
   /**
    * Width of the placeholder.
    * Accepts a number (px) or string (e.g., "12rem").
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let width = undefined;
 
   /**
    * Height of the placeholder.
    * Accepts a number (px) or string (e.g., "12rem").
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let height = undefined;
 

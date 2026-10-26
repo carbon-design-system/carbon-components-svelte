@@ -36,7 +36,7 @@
 
   /**
    * Specify an icon to show before the name, such as for the file type.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

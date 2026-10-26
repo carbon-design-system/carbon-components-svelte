@@ -12,7 +12,7 @@
   /**
    * Specify the size of the avatar.
    * Defaults to `"md"`, or to the `size` of a parent `UserAvatarGroup`.
-   * @type {"sm" | "md" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -36,13 +36,13 @@
    * Specify the user's full name. Initials are derived from the name when `initials` is not set.
    * Also the default alt text for `image`. Set `imageDescription=""` to mark the
    * image decorative when the name is already visible next to the avatar.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
   /**
    * Specify the initials to display. Takes priority over initials derived from `name`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let initials = undefined;
 
@@ -51,7 +51,7 @@
    * Takes priority over the icon and initials.
    * If the image fails to load, the avatar falls back to the icon or initials
    * and dispatches `image:error`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let image = undefined;
 
@@ -61,7 +61,7 @@
    * image is marked decorative (`alt=""`).
    * Set to `""` to mark the image decorative when the name is already visible
    * next to the avatar, which avoids announcing it twice.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let imageDescription = undefined;
 
@@ -69,20 +69,20 @@
    * Pass additional attributes through to the image element
    * (for example `loading`, `srcset`, or `referrerPolicy`).
    * Does not replace `image` or `imageDescription`. Rest props stay on the host.
-   * @type {Record<string, string>}
+   * @type {Record<string, string> | undefined}
    */
   export let imageAttributes = undefined;
 
   /**
    * Specify the icon to render. Falls back to a default user icon.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify a presence status. Renders a status indicator as the default
    * `badge` slot content. A custom `badge` slot overrides this.
-   * @type {"online" | "away" | "busy" | "offline"}
+   * @type {"online" | "away" | "busy" | "offline" | undefined}
    */
   export let status = undefined;
 
@@ -90,14 +90,14 @@
    * Specify the tooltip text. When set, the avatar is wrapped in a tooltip.
    * Do not combine with `interactive` or `href` — the tooltip trigger is already
    * focusable, and nesting an interactive avatar inside it is invalid.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let tooltipText = undefined;
 
   /**
    * Set an id for the avatar element.
    * With `tooltipText`, the tooltip id derives from it as `{id}-tooltip`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 
@@ -132,7 +132,7 @@
   /**
    * Set an `href` to render an anchor element instead of a `span`.
    * Takes priority over `interactive`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 

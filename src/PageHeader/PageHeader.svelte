@@ -33,7 +33,7 @@
 
   /**
    * Specify an icon to render before the eyebrow text.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let eyebrowIcon = /** @type {Icon} */ (undefined);
 

@@ -17,7 +17,7 @@
   /**
    * Set the size of the number input.
    * Inherits `"xs"` from a parent `Form`.
-   * @type {"xs"}
+   * @type {"xs" | undefined}
    */
   export let size = undefined;
 

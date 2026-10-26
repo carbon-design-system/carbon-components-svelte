@@ -93,7 +93,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size). `"lg"` and `"xl"` are both 48px.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -179,7 +179,7 @@
 
   /**
    * Specify the list box label.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let label = undefined;
 
@@ -189,14 +189,14 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+   * @type {((id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string) | undefined}
    */
   export let translateWithId = undefined;
 
   /**
    * Override the label of the clear button when a selection is present.
    * Defaults to "Clear selected item" since a dropdown can only have one selection.
-   * @type {(id: "clearSelection") => string}
+   * @type {((id: "clearSelection") => string) | undefined}
    */
   export let translateWithIdSelection = undefined;
 
@@ -263,7 +263,7 @@
    * (empty string when nothing is selected, or when the
    * selected item is disabled). Omitted from submission
    * when the dropdown is disabled.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

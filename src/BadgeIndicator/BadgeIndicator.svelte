@@ -4,7 +4,7 @@
    * Omit or set to `0` to render an empty dot.
    * A numeric count greater than `999` displays as "999+".
    * Pass a string to override the displayed value (e.g. `"1.2k"`).
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let count = undefined;
 

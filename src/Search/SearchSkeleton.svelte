@@ -4,7 +4,7 @@
    * Inherits the parent `Form` size when unset, otherwise `"lg"` (40px),
    * as in Carbon v11. Also accepts Carbon v11's `"md"` (`"lg"`, 40px).
    * Carbon v11's 48px `lg` is `"xl"` here.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    * @default "lg"
    */
   export let size = undefined;

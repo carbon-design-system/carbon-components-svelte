@@ -38,7 +38,7 @@
    * Specify the total number of people represented. Defaults to the number of
    * slotted avatars. Set this when you render only a subset (large groups) so
    * the overflow count stays right without mounting every avatar.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let total = undefined;
 
@@ -48,7 +48,7 @@
    * accepting a Carbon layout scale (`0`–`13`) or a CSS length string. A
    * negative length string (for example `"-1rem"`) overlaps them by that
    * amount.
-   * @type {import("../Stack/Stack.svelte").StackScale | string}
+   * @type {import("../Stack/Stack.svelte").StackScale | string | undefined}
    */
   export let gap = undefined;
 
@@ -71,7 +71,7 @@
    * Specify the tooltip text for the "+N" overflow avatar. Defaults to a
    * comma-separated list of hidden slotted `name` values. Set this when using
    * `total` for people who are not mounted.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let overflowTooltipText = undefined;
 

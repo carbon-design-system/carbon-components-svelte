@@ -15,7 +15,7 @@
   /**
    * Set the size: `"sm"` for a compact tile, such as a row in a list of
    * choices, with less padding and no minimum height.
-   * @type {"sm" | "md"}
+   * @type {"sm" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -39,13 +39,13 @@
    * mirrored in right-to-left layouts), such as `ArrowRight` for a link
    * within the app or `Launch` for an external link. The icon is
    * decorative and hidden from assistive technology.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Set the `href`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 

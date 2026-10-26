@@ -19,7 +19,7 @@
 
   /**
    * Option element id. Used by the listbox highlight cursor.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 

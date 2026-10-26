@@ -29,7 +29,7 @@
    * Specify the icon to render.
    * Icon is rendered to the left of the label text.
    * Overridden with a checkmark icon when the option is selectable or part of a radio group.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

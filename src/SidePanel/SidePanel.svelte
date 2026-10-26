@@ -56,7 +56,7 @@
   /**
    * Specify a CSS selector for the page content that a `slideIn` panel
    * pushes aside. Without a match, the panel covers the content.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let selectorPageContent = undefined;
 
@@ -79,19 +79,19 @@
 
   /**
    * Specify the title. It names the panel.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let title = undefined;
 
   /**
    * Specify the subtitle. It describes the panel.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let subtitle = undefined;
 
   /**
    * Specify a label above the title. Renders only with a `title`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let labelText = undefined;
 

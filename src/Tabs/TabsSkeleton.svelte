@@ -12,7 +12,7 @@
    * Specify the size to match a sized `Tabs`. Unset by default.
    * Line tabs (`type="default"`) support up to `"lg"`; container tabs
    * support up to `"xl"`. An out-of-range value clamps to the type's max.
-   * @type {"sm" | "md" | "lg" | "xl"}
+   * @type {"sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 

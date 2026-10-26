@@ -47,7 +47,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -61,7 +61,7 @@
    * Specify the Regular Expression for the input value.
    * By default, the pattern is derived from the parent
    * `DatePicker`'s `dateFormat` prop.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let pattern = undefined;
 
@@ -100,7 +100,7 @@
 
   /**
    * Set a name for the input element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
