@@ -255,6 +255,7 @@
     },
   });
 
+  /** @type {null | HTMLDivElement} */
   let wrapperRef = null;
   let visibleCount = 0;
 

@@ -210,6 +210,7 @@
     }
   }
 
+  /** @type {null | HTMLSpanElement} */
   let labelRef = null;
 
   /** @type {(nextChecked: boolean) => void} */

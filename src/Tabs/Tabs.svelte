@@ -155,7 +155,9 @@
   // of an enclosing `TooltipGroup`.
   provideTooltipGroup();
 
+  /** @type {null | HTMLUListElement} */
   let refTabList = null;
+  /** @type {null | HTMLDivElement} */
   let refRoot = null;
 
   // Carbon React v11 replaces the legacy mobile dropdown with a horizontally

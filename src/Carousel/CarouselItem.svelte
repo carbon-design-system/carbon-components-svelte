@@ -17,6 +17,7 @@
 
   const { views } = getContext("carbon:Carousel") ?? { views: readable([]) };
 
+  /** @type {null | HTMLDivElement} */
   let node = null;
 
   // `views` is a fresh array of the viewport's children on every add, remove,

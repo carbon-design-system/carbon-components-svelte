@@ -568,6 +568,7 @@
       _ === "multiple",
   );
 
+  /** @type {null | HTMLDivElement} */
   let datePickerRef = null;
   let inputRef = null;
   let inputRefTo = null;

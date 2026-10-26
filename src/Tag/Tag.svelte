@@ -117,7 +117,9 @@
     tabindex: rovingTabindex,
   } = group;
 
+  /** @type {null | HTMLSpanElement} */
   let labelRef = null;
+  /** @type {null | HTMLButtonElement} */
   let closeRef = null;
   let truncated = false;
   let truncationLabel = "";

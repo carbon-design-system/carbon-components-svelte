@@ -4,6 +4,7 @@
 
   import { getContext, onMount } from "svelte";
 
+  /** @type {null | HTMLDivElement} */
   let footerRef = null;
   let open = false;
   let openedByHover = false;

@@ -60,6 +60,7 @@
   const stepsById = derived(steps, (steps) => keyBy(steps));
   const sharedPreventChangeOnClick = writable(preventChangeOnClick);
 
+  /** @type {null | HTMLUListElement} */
   let listRef = null;
 
   /**

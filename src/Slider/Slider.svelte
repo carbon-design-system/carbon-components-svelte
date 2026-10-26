@@ -211,8 +211,11 @@
   } = splitAriaNaming($$restProps));
   $: controlLabelledBy = ariaLabelledBy ?? (ariaLabel ? undefined : labelId);
 
+  /** @type {null | HTMLDivElement} */
   let trackRef = null;
+  /** @type {null | HTMLDivElement} */
   let thumbRef = null;
+  /** @type {null | HTMLInputElement} */
   let textInputRef = null;
 
   /** @type {(label: string, numericValue: number) => string | number} */

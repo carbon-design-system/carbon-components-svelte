@@ -40,6 +40,7 @@
   // _header.scss); Header has no prop to override it.
   const UI_SHELL_HEADER_HEIGHT = 48;
 
+  /** @type {null | HTMLElement} */
   let ref = null;
 
   const dataTableCtx = getContext("carbon:DataTable");

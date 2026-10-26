@@ -255,6 +255,7 @@
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
 
+  /** @type {null | HTMLElement} */
   let navRef;
   let winWidth;
 

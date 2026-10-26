@@ -60,6 +60,7 @@
 
   const menuId = `${uniqueId()}-menu`;
 
+  /** @type {null | HTMLDivElement} */
   let refMenu = null;
 
   const menuItemRegistry = createDomNodeRegistry();

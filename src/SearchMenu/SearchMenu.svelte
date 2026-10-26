@@ -188,7 +188,9 @@
 
   const dispatch = createEventDispatcher();
 
+  /** @type {null | HTMLDivElement} */
   let anchorRef = null;
+  /** @type {null | HTMLDivElement} */
   let searchAnchorRef = null;
   let focused = false;
   let dismissed = false;

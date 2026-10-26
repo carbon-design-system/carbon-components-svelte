@@ -78,6 +78,7 @@
 
   $: parentMenu?.setCurrent(key, isActive || current);
 
+  /** @type {null | HTMLUListElement} */
   let menuRef = null;
 
   $: if ($rail && $collapsed) {

@@ -156,6 +156,7 @@
   let refSearch = null;
   /** @type {null | HTMLElement} */
   let menuRef = null;
+  /** @type {null | HTMLButtonElement} */
   let searchButtonRef = null;
   let prevActive;
   // Escape closes the menu but leaves the search bar open.

@@ -141,7 +141,9 @@
   // of an enclosing `TooltipGroup`.
   provideTooltipGroup();
 
+  /** @type {null | HTMLUListElement} */
   let refTabList = null;
+  /** @type {null | HTMLDivElement} */
   let refRoot = null;
 
   // The row layout reuses the same overflow scroll buttons as the horizontal

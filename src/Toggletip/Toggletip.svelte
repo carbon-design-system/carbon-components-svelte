@@ -100,6 +100,7 @@
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
+  /** @type {null | HTMLSpanElement} */
   let toggletipRef = null;
   // The popover, in place or in a portal.
   let popoverRef = null;

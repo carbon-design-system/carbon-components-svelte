@@ -33,7 +33,9 @@
   const HIGHLIGHT_CLASS = "bx--list-box__menu-item--highlighted";
   const highlightCursor = getContext(HIGHLIGHT_CURSOR_KEY);
 
+  /** @type {null | HTMLDivElement} */
   let optionRef = null;
+  /** @type {null | HTMLDivElement} */
   let ref = null;
   let unregisterHighlight = noop;
 

@@ -74,7 +74,9 @@
   // this recurses via a self-import instead.
   import Self from "./TreeViewNodeList.svelte";
 
+  /** @type {null | HTMLLIElement} */
   let ref = null;
+  /** @type {null | HTMLDivElement} */
   let refLabel = null;
   let prevActiveId;
 
