@@ -66,10 +66,15 @@ export const PROGRESS_BAR_SIZE_ALIASES = new Map([
  * value unchanged, including `undefined`.
  *
  * @template T
+ * @template {string} From
+ * @template {string | undefined} To
  * @param {T} size
- * @param {ReadonlyMap<unknown, string | undefined>} aliases
- * @returns {T | string | undefined}
+ * @param {ReadonlyMap<From, To>} aliases
+ * @returns {Exclude<T, From> | To}
  */
 export function normalizeSize(size, aliases) {
-  return aliases.has(size) ? aliases.get(size) : size;
+  const key = /** @type {From} */ (/** @type {unknown} */ (size));
+  return aliases.has(key)
+    ? /** @type {To} */ (aliases.get(key))
+    : /** @type {Exclude<T, From>} */ (size);
 }
