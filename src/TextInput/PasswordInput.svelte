@@ -158,6 +158,11 @@
       ? !!insideModal || portalWhenClipped
       : portalTooltip;
 
+  // The position classes place the in-place tooltip and its caret. A
+  // portalled one has its own, so the toggle drops them, as Button does.
+  $: inlinePosition = effectivePortalTooltip ? undefined : tooltipPosition;
+  $: inlineAlignment = effectivePortalTooltip ? undefined : tooltipAlignment;
+
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;
   /** @type {null | HTMLSpanElement} */
@@ -379,13 +384,13 @@
         class:bx--tooltip__trigger={true}
         class:bx--tooltip--a11y={true}
         class:bx--tooltip--portal-active={effectivePortalTooltip}
-        class:bx--tooltip--top={tooltipPosition === "top"}
-        class:bx--tooltip--right={tooltipPosition === "right"}
-        class:bx--tooltip--bottom={tooltipPosition === "bottom"}
-        class:bx--tooltip--left={tooltipPosition === "left"}
-        class:bx--tooltip--align-start={tooltipAlignment === "start"}
-        class:bx--tooltip--align-center={tooltipAlignment === "center"}
-        class:bx--tooltip--align-end={tooltipAlignment === "end"}
+        class:bx--tooltip--top={inlinePosition === "top"}
+        class:bx--tooltip--right={inlinePosition === "right"}
+        class:bx--tooltip--bottom={inlinePosition === "bottom"}
+        class:bx--tooltip--left={inlinePosition === "left"}
+        class:bx--tooltip--align-start={inlineAlignment === "start"}
+        class:bx--tooltip--align-center={inlineAlignment === "center"}
+        class:bx--tooltip--align-end={inlineAlignment === "end"}
         class:bx--tooltip--hidden={!effectivePortalTooltip && $tooltipHidden}
         class:bx--tooltip--visible={inlineOpen}
         class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
