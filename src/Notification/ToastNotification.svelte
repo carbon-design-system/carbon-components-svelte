@@ -85,6 +85,14 @@
    */
   export let open = true;
 
+  /**
+   * Set an id for the top-level element. The title and subtitle ids derive
+   * from it as `{id}-title` and `{id}-subtitle`, so the server and the
+   * browser render the same ids.
+   * @type {string | undefined}
+   */
+  export let id = undefined;
+
   import {
     createEventDispatcher,
     getContext,
@@ -101,8 +109,9 @@
   import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
-  const titleId = uniqueId();
-  const subtitleId = uniqueId();
+  const fallbackId = uniqueId();
+  $: titleId = `${id ?? fallbackId}-title`;
+  $: subtitleId = `${id ?? fallbackId}-subtitle`;
 
   /** @type {null | HTMLDivElement} */
   let notificationRef = null;
@@ -190,6 +199,7 @@
     class:bx--toast-notification--low-contrast-warning-alt={lowContrast &&
       kind === "warning-alt"}
     style:width={fullWidth ? "100%" : undefined}
+    {id}
     {...rest}
     on:click
     on:mouseover

@@ -83,6 +83,14 @@
    */
   export let open = true;
 
+  /**
+   * Set an id for the top-level element. The title and subtitle ids derive
+   * from it as `{id}-title` and `{id}-subtitle`, so the server and the
+   * browser render the same ids.
+   * @type {string | undefined}
+   */
+  export let id = undefined;
+
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -94,8 +102,9 @@
   import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
-  const titleId = uniqueId();
-  const subtitleId = uniqueId();
+  const fallbackId = uniqueId();
+  $: titleId = `${id ?? fallbackId}-title`;
+  $: subtitleId = `${id ?? fallbackId}-subtitle`;
 
   /** @type {null | HTMLDivElement} */
   let notificationRef = null;
@@ -178,6 +187,7 @@
     class:bx--inline-notification--warning-alt={kind === "warning-alt"}
     class:bx--inline-notification--low-contrast-warning-alt={lowContrast &&
       kind === "warning-alt"}
+    {id}
     {...rest}
     on:click
     on:mouseover
