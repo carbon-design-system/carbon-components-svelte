@@ -261,7 +261,9 @@
   let navRef;
   let winWidth;
 
+  /** @type {import("svelte/store").Writable<number>} */
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
+  /** @type {import("svelte/store").Writable<number | undefined>} */
   const sharedWinWidth = writable(undefined);
   const sharedRail = writable(rail);
   const collapsed = writable(false);

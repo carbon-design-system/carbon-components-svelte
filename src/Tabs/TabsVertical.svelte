@@ -83,6 +83,7 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
    */
   const tabs = writable([]);
+  /** @type {import("svelte/store").Readable<Record<string, { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>} */
   const tabsById = derived(tabs, (_) => keyBy(_));
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
@@ -113,6 +114,7 @@
 
   // Vertical tabs are always the contained type, so a secondary label renders
   // whenever any tab provides one.
+  /** @type {import("svelte/store").Readable<boolean>} */
   const hasSecondaryLabel = derived(tabs, (_) =>
     _.some((tab) => tab.hasSecondaryLabel),
   );

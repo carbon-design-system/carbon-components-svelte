@@ -106,7 +106,10 @@
   const parent = getContext("carbon:Splitter");
 
   // Nested splitters without their own delay use this one's.
-  setContext("carbon:Splitter", { enterDelayMs: () => resolvedEnterDelayMs });
+  setContext("carbon:Splitter", {
+    /** @type {() => number} */
+    enterDelayMs: () => resolvedEnterDelayMs,
+  });
 
   const scheduleHover = createDelayedSetter();
   // Set once the pointer has rested on the separator for the enter delay.

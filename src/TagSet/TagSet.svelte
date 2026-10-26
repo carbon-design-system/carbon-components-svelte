@@ -176,6 +176,7 @@
   const items = writable([]);
   /** @type {import("svelte/store").Writable<Set<string>>} */
   const overflowIds = writable(new Set());
+  /** @type {import("svelte/store").Writable<"sm" | "default" | "lg" | undefined>} */
   const sharedSize = writable(normalizeSize(size, TAG_SIZE_ALIASES));
   $: sharedSize.set(normalizeSize(size, TAG_SIZE_ALIASES));
   const sharedNavigation = writable(navigation);
@@ -234,6 +235,7 @@
     size: sharedSize,
     navigation: sharedNavigation,
     tabStopId,
+    /** @type {(item: TagSetItem) => void} */
     register: (item) => {
       batchedItemsUpdate((current) =>
         current.some((existing) => existing.id === item.id)
@@ -241,14 +243,17 @@
           : insertByDomOrder(current, item),
       );
     },
+    /** @type {(id: string) => void} */
     unregister: (id) => {
       batchedItemsUpdate((current) => current.filter((item) => item.id !== id));
     },
+    /** @type {(id: string, patch: Partial<Omit<TagSetItem, "id">>) => void} */
     update: (id, patch) => {
       batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, ...patch } : item)),
       );
     },
+    /** @type {(id: string) => void} */
     notifyClose: (id) => {
       const item = $items.find((item) => item.id === id);
       if (item) handleTagClose(item);

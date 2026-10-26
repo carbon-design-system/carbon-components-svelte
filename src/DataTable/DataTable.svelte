@@ -870,6 +870,7 @@
   /**
    * @param {string} headerId
    * @param {boolean} active
+   * @returns {void}
    */
   function setColumnAILabel(headerId, active) {
     aiLabelColumns.update((columns) => {

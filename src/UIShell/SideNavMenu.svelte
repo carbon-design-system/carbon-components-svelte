@@ -61,6 +61,11 @@
   /** Descendant links and menus that contain the current page. */
   let currentKeys = new Set();
 
+  /**
+   * @param {object} key
+   * @param {boolean} selected
+   * @returns {void}
+   */
   function setCurrent(key, selected) {
     if (selected === currentKeys.has(key)) return;
     if (selected) currentKeys.add(key);

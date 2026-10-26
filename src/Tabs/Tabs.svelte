@@ -108,6 +108,7 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
    */
   const tabs = writable([]);
+  /** @type {import("svelte/store").Readable<Record<string, { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>} */
   const tabsById = derived(tabs, (_) => keyBy(_));
   /**
    * @type {import("svelte/store").Writable<boolean>}
@@ -218,6 +219,7 @@
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
 
+  /** @type {import("svelte/store").Readable<boolean>} */
   const hasSecondaryLabel = derived(
     [tabs, useContainer],
     ([_, container]) => container && _.some((tab) => tab.hasSecondaryLabel),

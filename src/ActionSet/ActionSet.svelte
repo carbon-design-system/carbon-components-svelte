@@ -4,13 +4,13 @@
    * from ActionSet's v11-derived scale. Same idea as the size table in
    * ComboButton.svelte.
    */
-  const BUTTON_SIZES = {
+  const BUTTON_SIZES = /** @type {const} */ ({
     sm: "small",
     md: "field",
     lg: "default",
     xl: "lg",
     "2xl": "xl",
-  };
+  });
 
   const KINDS = [
     "primary",
@@ -90,6 +90,7 @@
   import { writable } from "svelte/store";
   import ButtonSet from "../Button/ButtonSet.svelte";
 
+  /** @type {import("svelte/store").Writable<"small" | "field" | "default" | "lg" | "xl">} */
   const buttonSize = writable(BUTTON_SIZES[size]);
   $: buttonSize.set(BUTTON_SIZES[size]);
 

@@ -107,6 +107,7 @@
   /** @type {null | HTMLDivElement} */
   let notificationRef = null;
 
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const describedBy = writable(undefined);
 
   setContext("carbon:NotificationAction", { describedBy, toast: true });

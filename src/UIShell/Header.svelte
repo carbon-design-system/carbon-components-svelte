@@ -114,7 +114,9 @@
   let winWidth;
   let wasAboveBreakpoint;
 
+  /** @type {import("svelte/store").Writable<number>} */
   const sharedExpansionBreakpoint = writable(expansionBreakpoint);
+  /** @type {import("svelte/store").Writable<number | undefined>} */
   const sharedWinWidth = writable(undefined);
 
   // `HeaderNav` reads these to switch at a custom `expansionBreakpoint`.

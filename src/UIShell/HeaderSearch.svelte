@@ -220,10 +220,12 @@
     shouldFilter: sharedShouldFilter,
     match: sharedMatch,
     highlightedId,
-    setActiveId(next) {
+    /** @type {(next: string | null) => void} */
+    setActiveId: (next) => {
       setPointerActive(next);
     },
-    selectItem(detail) {
+    /** @type {(detail: { value: string; item: { text?: string; value?: string; href?: string }; event: Event }) => void} */
+    selectItem: (detail) => {
       value = detail.value ?? value;
       dispatch("select", detail);
       reset();
@@ -231,7 +233,8 @@
       focusSearchButton();
     },
     hasPrimaryItems,
-    registerItem(itemId, filterable, inDividerGroup = false) {
+    /** @type {(itemId: string, filterable: boolean, inDividerGroup?: boolean) => void} */
+    registerItem: (itemId, filterable, inDividerGroup = false) => {
       itemIds.add(itemId);
       if (filterable) filterableIds.add(itemId);
       else filterableIds.delete(itemId);
@@ -241,7 +244,8 @@
       filterableIds = filterableIds;
       primaryItemIds = primaryItemIds;
     },
-    unregisterItem(itemId) {
+    /** @type {(itemId: string) => void} */
+    unregisterItem: (itemId) => {
       itemIds.delete(itemId);
       filterableIds.delete(itemId);
       primaryItemIds.delete(itemId);
