@@ -19,4 +19,10 @@ describe("ProgressBar server render", () => {
     expect(html).toContain('id="upload-status"');
     expect(html).toContain('aria-describedby="upload-helper upload-status"');
   });
+
+  it("leaves the bar unstyled when not active", () => {
+    const html = renderRaw(ProgressBar, props);
+
+    expect(html).not.toContain("transform:");
+  });
 });
