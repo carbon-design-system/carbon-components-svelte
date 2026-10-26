@@ -190,7 +190,9 @@
     if (readonly) {
       // Read-only keeps its state; put the DOM back to match it instead of
       // leaving the browser's native-reset default (every radio unchecked).
-      for (const input of fieldsetRef.querySelectorAll('input[type="radio"]')) {
+      /** @type {NodeListOf<HTMLInputElement>} */
+      const radios = fieldsetRef.querySelectorAll('input[type="radio"]');
+      for (const input of radios) {
         input.checked =
           selected !== undefined && String(selected) === input.value;
       }

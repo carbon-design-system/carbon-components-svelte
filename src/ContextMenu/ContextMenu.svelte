@@ -142,7 +142,9 @@
       if (returnFocus?.isConnected) {
         focusQuietly(returnFocus, { preventScroll: true });
       }
-      if (ref.contains(document.activeElement)) document.activeElement.blur();
+      if (ref.contains(document.activeElement)) {
+        /** @type {HTMLElement} */ (document.activeElement).blur();
+      }
     }
     returnFocus = null;
 

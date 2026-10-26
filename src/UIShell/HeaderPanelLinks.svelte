@@ -10,7 +10,9 @@
 <ul
   use:verticalListFocus={{
     selector: ".bx--switcher__item-link",
-    isDisabled: (link) => link.disabled === true,
+    // A link without `href` renders as a button, which can be disabled.
+    isDisabled: (link) =>
+      /** @type {HTMLButtonElement} */ (link).disabled === true,
   }}
   class:bx--switcher__item={true}
   {...$$restProps}

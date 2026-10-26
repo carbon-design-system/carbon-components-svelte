@@ -1740,7 +1740,9 @@
                           on:click={(event) =>
                             forwardShiftClick(
                               event,
-                              event.currentTarget.previousElementSibling,
+                              /** @type {HTMLInputElement} */ (
+                                event.currentTarget.previousElementSibling
+                              ),
                             )}
                         ></label>
                       </div>
@@ -2014,7 +2016,9 @@
                           on:click={(event) =>
                             forwardShiftClick(
                               event,
-                              event.currentTarget.previousElementSibling,
+                              /** @type {HTMLInputElement} */ (
+                                event.currentTarget.previousElementSibling
+                              ),
                             )}
                         ></label>
                       </div>
