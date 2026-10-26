@@ -73,6 +73,7 @@
   const ownSize = writable(normalizeSize(size, FIELD_SIZE_ALIASES));
   $: ownSize.set(normalizeSize(size, FIELD_SIZE_ALIASES));
 
+  /** @type {import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const sharedSize = derived(
     [ownSize, formSize],
     ([$ownSize, $formSize]) => $ownSize ?? $formSize,
