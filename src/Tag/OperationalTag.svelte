@@ -144,7 +144,13 @@
   // Left unset outside a `Modal`, Popover moves to a portal when clipped.
   $: portalPopover = portalTooltip ?? (insideModal ? true : undefined);
   // Popover resolves `start` and `end` to physical sides when it opens.
-  $: popoverAlign = align === "center" ? direction : `${direction}-${align}`;
+  /** @type {import("../Popover/Popover.svelte").PopoverProps["align"]} */
+  $: popoverAlign =
+    align === "center"
+      ? direction
+      : /** @type {`${typeof direction}-${typeof align}`} */ (
+          `${direction}-${align}`
+        );
   $: insideElements = [wrapperRef, popoverRef];
   $: if (disabled || !hasContent) open = false;
   $: hasIcon = Boolean(icon || $$slots.icon);

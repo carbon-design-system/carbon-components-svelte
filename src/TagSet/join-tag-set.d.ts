@@ -18,7 +18,7 @@ export type TagSetMember = {
   /** Whether the tag is collapsed into the "+N" indicator. */
   overflow: Readable<boolean>;
   /** Roving `tabindex`; `undefined` keeps the native tab order. */
-  tabindex: Readable<"0" | "-1" | undefined>;
+  tabindex: Readable<0 | -1 | undefined>;
   /** Sync changed fields to the set. */
   update: (patch: Partial<TagSetMemberItem>) => void;
   /** Tell the set the tag's close button was clicked. */

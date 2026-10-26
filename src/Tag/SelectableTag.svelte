@@ -111,7 +111,7 @@
   {id}
   {disabled}
   aria-disabled={disabled}
-  tabindex={disabled ? "-1" : $rovingTabindex}
+  tabindex={disabled ? -1 : $rovingTabindex}
   title={disabled && truncated ? truncationLabel : undefined}
   class:bx--tag={true}
   class:bx--tag--selectable={true}
