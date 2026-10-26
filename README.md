@@ -292,24 +292,26 @@ export default {
 **SvelteKit**
 
 ```js
-// vite.config.js
+// svelte.config.js
 import adapter from "@sveltejs/adapter-static";
-import { sveltekit } from "@sveltejs/kit/vite";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { optimizeCss, optimizeImports } from "carbon-preprocess-svelte";
+import { optimizeImports } from "carbon-preprocess-svelte";
 
 export default {
-  plugins: [
-    sveltekit({
-      preprocess: [vitePreprocess(), optimizeImports()],
-      adapter: adapter(),
-    }),
-    optimizeCss(),
-  ],
+  preprocess: [vitePreprocess(), optimizeImports()],
+  kit: { adapter: adapter() },
 };
 ```
 
-On SvelteKit 2, pass the same `preprocess` in `svelte.config.js` and the adapter under `kit`.
+```js
+// vite.config.js
+import { sveltekit } from "@sveltejs/kit/vite";
+import { optimizeCss } from "carbon-preprocess-svelte";
+
+export default {
+  plugins: [sveltekit(), optimizeCss()],
+};
+```
 
 **Rollup**
 
