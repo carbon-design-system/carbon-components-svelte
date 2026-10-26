@@ -64,7 +64,9 @@ jobs:
         working-directory: docs
 
       - name: Audit docs examples
-        run: bun run audit:docs --baseline --out audit-docs
+        # 320px finds overflow that 1056px hides. A sweep of RTL and the g100
+        # theme found nothing more, so they run on demand, not on every PR.
+        run: bun run audit:docs --baseline --width 320,1056 --out audit-docs
 
       - name: Upload report
         if: failure()

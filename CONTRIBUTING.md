@@ -1285,11 +1285,14 @@ Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the ind
 bun run audit:docs                      # the examples' own code
 bun run audit:docs --carbon             # Carbon's components too
 bun run audit:docs --filter DataTable   # some examples only
+bun run audit:docs --width 320,1056 --dir ltr,rtl --theme white,g100
 ```
+
+`--width`, `--dir`, and `--theme` take comma lists and run every combination, so the last line runs 8 variants. Each finding names its variant, such as `320-rtl-g100`. A full sweep of 3 widths, both directions, and 2 themes takes about 6 minutes.
 
 It writes `.context/audit-docs/report.md` and `report.json`. Each finding has a severity, a CSS path, the Carbon component it sits in, and data to act on: both colors and a passing token for contrast, the crowding neighbor and the room needed for a target, the nearest token for spacing.
 
-The `Docs audit` workflow runs it with `--baseline` and fails on any finding that `scripts/audit-docs.baseline.json` does not list. Fix a new finding. To accept one, run `bun run audit:docs --update-baseline` and add a `reason` to its entry. When a baseline finding is fixed, the run says so; update the baseline to drop it.
+The `Docs audit` workflow runs it at 320px and 1056px with `--baseline` and fails on any finding that `scripts/audit-docs.baseline.json` does not list. Fix a new finding. To accept one, run `bun run audit:docs --update-baseline` and add a `reason` to its entry. When a baseline finding is fixed, the run says so; update the baseline to drop it.
 
 `--carbon` mode reports Carbon's v10 values that sit off the v11 spacing scale, as `info`. It is for checking a component change or a custom theme, not a CI gate. The dev tools demos seed bugs on purpose, so the script skips them unless you pass `--include-seeded`.
 
