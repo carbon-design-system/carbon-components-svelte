@@ -1321,6 +1321,7 @@
     return true;
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     event.stopPropagation();
 

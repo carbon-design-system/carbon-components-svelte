@@ -42,6 +42,7 @@
 
   // Runs after the forwarded `click` handler so it can opt out with
   // `event.preventDefault()`.
+  /** @param {MouseEvent} event */
   function handleClick(event) {
     if (!event.defaultPrevented) panel?.select();
   }

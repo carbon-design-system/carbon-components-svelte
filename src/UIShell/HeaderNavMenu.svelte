@@ -158,7 +158,10 @@
 
   const typeahead = createTypeaheadBuffer();
 
-  /** Typing focuses the next item whose label starts with the typed text. */
+  /**
+   * Typing focuses the next item whose label starts with the typed text.
+   * @param {KeyboardEvent} event
+   */
   function handleMenuKeydown(event) {
     if (event.defaultPrevented || !isTypeaheadKey(event)) return;
     const index = $menuItems.indexOf(event.target);

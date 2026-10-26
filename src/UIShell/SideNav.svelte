@@ -203,6 +203,7 @@
     if (nextWidth !== prevWidth) dispatch("resize", { width: nextWidth });
   }
 
+  /** @param {KeyboardEvent} event */
   function handleResizeKeydown(event) {
     const step = event.shiftKey
       ? RESIZE_KEYBOARD_LARGE_STEP
@@ -240,6 +241,7 @@
 
   // Touch has no hover, and a pen or mouse pass over the handle shouldn't
   // flash it.
+  /** @param {PointerEvent} event */
   function handleResizeHandlePointerenter(event) {
     if (event.pointerType === "touch") return;
     scheduleResizeHover(resizeEnterDelayMs, () => {

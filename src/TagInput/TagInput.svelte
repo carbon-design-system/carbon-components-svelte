@@ -513,7 +513,10 @@
     if (addOnBlur && interactive) commitDraft("blur");
   }
 
-  /** Clicking the field's empty space focuses the text input. */
+  /**
+   * Clicking the field's empty space focuses the text input.
+   * @param {MouseEvent} event
+   */
   function handleFieldClick(event) {
     if (!interactive) return;
     const target = event.target;

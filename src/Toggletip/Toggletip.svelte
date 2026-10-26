@@ -149,6 +149,7 @@
     open = false;
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (open && event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
@@ -167,6 +168,7 @@
     return insideElements.some((node) => node?.contains(target));
   }
 
+  /** @param {FocusEvent} event */
   function handleFocusout(event) {
     // Keep open when focus moves to the toggletip content itself (relatedTarget
     // is null on some browsers when clicking non-focusable content).

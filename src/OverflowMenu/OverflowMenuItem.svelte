@@ -151,6 +151,7 @@
     "aria-describedby": ariaDescribedBy,
   };
 
+  /** @param {MouseEvent} event */
   function handleClick(event) {
     event.stopPropagation();
 

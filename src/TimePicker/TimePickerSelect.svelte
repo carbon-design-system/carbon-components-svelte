@@ -118,19 +118,23 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
+  /** @param {Event} event */
   function handleSelectChange(event) {
-    let next = event.target.value;
+    const select = /** @type {HTMLSelectElement} */ (event.target);
+    let next = select.value;
     if (itemTypesByValue[next] === "number") next = Number(next);
     selectedValue.set(next);
   }
 
+  /** @param {MouseEvent} event */
   function handleSelectMousedown(event) {
     if (effectiveReadonly) {
       event.preventDefault();
-      event.currentTarget.focus();
+      /** @type {HTMLSelectElement} */ (event.currentTarget).focus();
     }
   }
 
+  /** @param {KeyboardEvent} event */
   function handleSelectKeydown(event) {
     // Ctrl/Cmd shortcuts (copy, find, reload) never change the value.
     if (

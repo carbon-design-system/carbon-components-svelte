@@ -209,6 +209,7 @@
     });
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (event.key === "Escape") {
       // Escape that cancels an IME composition is not a close.
@@ -240,8 +241,9 @@
   // wrapper catch focus leaving any of its descendants, since `blur` doesn't
   // bubble. Without this, tabbing out of content past the trigger's own
   // blur never closes the tooltip, leaving it open indefinitely.
+  /** @param {FocusEvent} event */
   function handleFocusout(event) {
-    const next = event.relatedTarget;
+    const next = /** @type {Node | null} */ (event.relatedTarget);
     const stillInside = ref?.contains(next) || refTooltip?.contains(next);
     if (!stillInside) {
       open = false;

@@ -225,6 +225,7 @@
     dispatchResize(dragStartSize);
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
     if (disabled || hasModifierKey(event)) return;
@@ -288,6 +289,7 @@
 
   // Touch has no hover, and a pen or mouse pass over the separator
   // shouldn't flash it.
+  /** @param {PointerEvent} event */
   function handlePointerenter(event) {
     if (disabled || event.pointerType === "touch") return;
     scheduleHover(resolvedEnterDelayMs, () => {

@@ -401,38 +401,38 @@
         : parse(raw);
   }
 
+  /** @param {Event} event */
   function handleInput(event) {
+    const input = /** @type {HTMLInputElement} */ (event.target);
     if (useTextMode) {
       userInputActive = true;
-      inputValue = event.target.value;
+      inputValue = input.value;
       const parsed = locale
-        ? parseLocaleValue(event.target.value, groupSeparator, decimalSeparator)
-        : parse(event.target.value);
+        ? parseLocaleValue(input.value, groupSeparator, decimalSeparator)
+        : parse(input.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
       // This provides better UX by letting users see and correct typos without losing data.
-      if (
-        parsed !== null ||
-        event.target.value === "" ||
-        event.target.value === "-"
-      ) {
+      if (parsed !== null || input.value === "" || input.value === "-") {
         value = parsed;
       }
     } else {
-      value = parse(event.target.value);
+      value = parse(input.value);
     }
 
     dispatch("input", value);
   }
 
+  /** @param {Event} event */
   function handleChange(event) {
+    const input = /** @type {HTMLInputElement} */ (event.target);
     userInputActive = false;
     let parsedValue = locale
-      ? parseLocaleValue(event.target.value, groupSeparator, decimalSeparator)
-      : parse(event.target.value, useTextMode);
+      ? parseLocaleValue(input.value, groupSeparator, decimalSeparator)
+      : parse(input.value, useTextMode);
 
     // If allowEmpty is false and value would be null, use default value
     // This prevents the input from staying empty when allowEmpty is false
-    if (!allowEmpty && parsedValue === null && event.target.value === "") {
+    if (!allowEmpty && parsedValue === null && input.value === "") {
       parsedValue = getDefaultValue(stepStartValue, min);
       // Update the input to show the default value
       if (useTextMode) {
@@ -447,7 +447,7 @@
     } else if (
       useTextMode &&
       parsedValue === null &&
-      event.target.value !== "" &&
+      input.value !== "" &&
       value !== null
     ) {
       // In text mode, normalize invalid input (e.g., "1.5.") back to
@@ -465,6 +465,7 @@
     dispatch("change", value);
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (readonly || disabled) return;
 
@@ -490,6 +491,7 @@
     }
   }
 
+  /** @param {FocusEvent} event */
   function handleBlur(event) {
     if (isFluid) inputFocused = false;
     dispatch("blur", { event, value });

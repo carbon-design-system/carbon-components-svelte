@@ -368,10 +368,12 @@
   // tell tabbing out apart from a click elsewhere (left to the mouseup check).
   let tabbing = false;
 
+  /** @param {KeyboardEvent} event */
   function trackTab(event) {
     tabbing = event.key === "Tab";
   }
 
+  /** @param {FocusEvent} event */
   function handleFocusout(event) {
     const next = event.relatedTarget;
     const leaving = !(next instanceof Node && refSearch?.contains(next));
