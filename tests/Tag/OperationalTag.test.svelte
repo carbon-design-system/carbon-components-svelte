@@ -8,6 +8,8 @@
   export let inSet = false;
   export let action = false;
   export let withIcon = false;
+  export let align: "start" | "center" | "end" = "start";
+  export let direction: "top" | "bottom" = "bottom";
   export let onClick: () => void = () => {};
   export let onOpen: () => void = () => {};
   export let onClose: () => void = () => {};
@@ -28,6 +30,8 @@
     id="policies"
     bind:open
     {disabled}
+    {align}
+    {direction}
     on:open={onOpen}
     on:close={onClose}
   >
