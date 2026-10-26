@@ -12,13 +12,21 @@
  * docs need no changes.
  */
 import { type ChildProcess, spawn } from "node:child_process";
-import { mkdirSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
 import { type Browser, chromium, type Page } from "@playwright/test";
 
 const ROOT = resolve(import.meta.dir, "..");
 const SVELTE_FILE = /\.svelte$/;
+const FIRST_BLOCK = /\bbx--([a-z0-9-]+)/;
+const BEM_SEPARATOR = /__|--/;
 const FRAMED = join(ROOT, "docs/src/pages/framed");
 
 // Dev tools demos seed layout bugs on purpose, and draw over the page.
@@ -51,6 +59,33 @@ function framedUrls(dir = FRAMED): string[] {
     return [`/framed/${relative(FRAMED, path).replace(SVELTE_FILE, "")}`];
   });
 }
+
+/**
+ * Likely component for each Carbon block: the first component whose
+ * markup starts with it, such as `bx--btn` for Button.
+ */
+function componentsByBlock() {
+  const map = new Map<string, string>();
+  const walk = (dir: string) => {
+    for (const name of readdirSync(dir).sort()) {
+      const path = join(dir, name);
+      if (statSync(path).isDirectory()) {
+        if (name !== "devtools") walk(path);
+        continue;
+      }
+      if (!name.endsWith(".svelte")) continue;
+      const markup = readFileSync(path, "utf8").split("</script>").pop() ?? "";
+      const match = FIRST_BLOCK.exec(markup);
+      if (!match) continue;
+      const block = `bx--${match[1].split(BEM_SEPARATOR)[0]}`;
+      if (!map.has(block)) map.set(block, name.replace(SVELTE_FILE, ""));
+    }
+  };
+  walk(join(ROOT, "src"));
+  return map;
+}
+
+const COMPONENTS = componentsByBlock();
 
 async function bundleAudit() {
   const entry = join(tmpdir(), "ccs-audit-entry.js");
@@ -142,6 +177,10 @@ type PageResult = {
   url: string;
   findings: {
     check: string;
+    severity: "error" | "warning" | "info";
+    component?: string;
+    related?: string;
+    count?: number;
     selector: string;
     carbon: string | null;
     message: string;
@@ -168,15 +207,19 @@ async function auditPage(
       (carbon) =>
         (
           window as unknown as {
-            __ccsAudit: (options: { carbon: boolean }) => {
+            __ccsAudit: (options: { carbon: boolean; group: boolean }) => {
               findings: PageResult["findings"];
               ms: number;
             };
           }
-        ).__ccsAudit({ carbon }),
+        ).__ccsAudit({ carbon, group: true }),
       carbon,
     );
-    return { url, findings: result.findings, auditMs: result.ms, loadMs };
+    const findings = result.findings.map((f) => ({
+      ...f,
+      component: (f.carbon && COMPONENTS.get(f.carbon)) || undefined,
+    }));
+    return { url, findings, auditMs: result.ms, loadMs };
   } catch (error) {
     return {
       url,
@@ -201,14 +244,21 @@ function markdown(results: PageResult[], skipped: string[], wallMs: number) {
   const findings = results.flatMap((r) =>
     r.findings.map((f) => ({ ...f, url: r.url })),
   );
+  const total = findings.reduce((sum, f) => sum + (f.count ?? 1), 0);
   const byCheck = new Map<string, number>();
-  for (const f of findings)
-    byCheck.set(f.check, (byCheck.get(f.check) ?? 0) + 1);
+  const bySeverity = new Map<string, number>();
+  for (const f of findings) {
+    byCheck.set(f.check, (byCheck.get(f.check) ?? 0) + (f.count ?? 1));
+    bySeverity.set(
+      f.severity,
+      (bySeverity.get(f.severity) ?? 0) + (f.count ?? 1),
+    );
+  }
   const byMessage = new Map<string, { count: number; pages: Set<string> }>();
   for (const f of findings) {
-    const key = `${f.check} · ${f.carbon ?? "app"} · ${f.message}`;
+    const key = `${f.severity} · ${f.check} · ${f.component ?? f.carbon ?? "app"} · ${f.message}`;
     const entry = byMessage.get(key) ?? { count: 0, pages: new Set() };
-    entry.count += 1;
+    entry.count += f.count ?? 1;
     entry.pages.add(f.url);
     byMessage.set(key, entry);
   }
@@ -228,7 +278,9 @@ function markdown(results: PageResult[], skipped: string[], wallMs: number) {
     `| audit() | ${percentile(audits, 50)}ms | ${percentile(audits, 95)}ms | ${Math.max(0, ...audits)}ms |`,
     `| load + settle | ${percentile(loads, 50)}ms | ${percentile(loads, 95)}ms | ${Math.max(0, ...loads)}ms |`,
     "",
-    `## Findings: ${findings.length} on ${pages.length} pages`,
+    `## Findings: ${total} on ${pages.length} pages (${findings.length} after grouping)`,
+    "",
+    ...[...bySeverity].map(([severity, count]) => `- ${severity}: ${count}`),
     "",
     ...[...byCheck].map(([check, count]) => `- ${check}: ${count}`),
     "",

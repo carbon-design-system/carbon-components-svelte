@@ -88,72 +88,21 @@
   import { createDelayedSetter } from "../../utils/delayed-setter.js";
   import { createFrameJob } from "../../utils/frame-batch.js";
   import { addPooledListener } from "../../utils/window-listener-pool.js";
-  import {
-    AUDIT_CHECKS,
-    carbonOwned,
-    formatRatio,
-    hasOwnText,
-    runChecks,
-  } from "../audit.js";
+  import { AUDIT_CHECKS, formatRatio, runChecks } from "../audit.js";
   import {
     boxes,
     distanceSegments,
     mergeLabels,
     ringLabels,
   } from "../geometry.js";
+  import { inspectElement, resetTypeTable } from "../inspect.js";
   import { createLayerLookup, DEV_TOOL, observePage } from "../page-scan.js";
   import {
     formatPx,
-    gaps,
     paddingToken,
     sideTokens,
     spacingToken,
   } from "../spacing.js";
-  import {
-    colorTokens,
-    effectiveBackground,
-    hasTokens,
-    normalizeColor,
-    textContrast,
-    toHex,
-    toRgba,
-  } from "./colors.js";
-
-  // Carbon v11 type styles, matching the library's `bx--type-*` classes.
-  const TYPE_TOKENS = [
-    "label-01",
-    "label-02",
-    "helper-text-01",
-    "helper-text-02",
-    "legal-01",
-    "legal-02",
-    "body-compact-01",
-    "body-compact-02",
-    "body-01",
-    "body-02",
-    "code-01",
-    "code-02",
-    "heading-compact-01",
-    "heading-compact-02",
-    "heading-01",
-    "heading-02",
-    "heading-03",
-    "heading-04",
-    "heading-05",
-    "heading-06",
-    "heading-07",
-    "fluid-heading-03",
-    "fluid-heading-04",
-    "fluid-heading-05",
-    "fluid-heading-06",
-    "fluid-paragraph-01",
-    "fluid-quotation-01",
-    "fluid-quotation-02",
-    "fluid-display-01",
-    "fluid-display-02",
-    "fluid-display-03",
-    "fluid-display-04",
-  ];
 
   /** Root font size in px, read again on every hover and scan. */
   let remPx = 16;
@@ -162,89 +111,6 @@
     remPx =
       Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
       16;
-  }
-
-  /**
-   * @param {CSSStyleDeclaration} style
-   * @param {"margin" | "padding" | "border"} prop
-   * @returns {[number, number, number, number]} top, right, bottom, left
-   */
-  function sides(style, prop) {
-    const suffix = prop === "border" ? "-width" : "";
-    return /** @type {[number, number, number, number]} */ (
-      ["top", "right", "bottom", "left"].map(
-        (side) =>
-          Number.parseFloat(
-            style.getPropertyValue(`${prop}-${side}${suffix}`),
-          ) || 0,
-      )
-    );
-  }
-
-  /**
-   * Type token table, measured from the library's own `bx--type-*` classes
-   * at the current viewport, so fluid and responsive tokens match too.
-   * @type {{ name: string; size: number; lineHeight: number; weight: string; letterSpacing: number; family: string }[] | null}
-   */
-  let typeTable = null;
-
-  function buildTypeTable() {
-    const box = document.createElement("div");
-    box.style.cssText =
-      "position:absolute;visibility:hidden;pointer-events:none";
-    // Marked as a dev tool, so adding it does not trigger a page scan.
-    box.setAttribute("data-ccs-dev-tool", "");
-    for (const name of TYPE_TOKENS) {
-      const probe = document.createElement("span");
-      probe.className = `bx--type-${name}`;
-      probe.textContent = "x";
-      box.append(probe);
-    }
-    // In <body>, not in the inspector, so the probes inherit the page's
-    // font family.
-    document.body.append(box);
-    typeTable = [...box.children].map((probe, index) => {
-      const style = getComputedStyle(probe);
-      return {
-        name: TYPE_TOKENS[index],
-        size: Number.parseFloat(style.fontSize),
-        lineHeight: Number.parseFloat(style.lineHeight),
-        weight: style.fontWeight,
-        letterSpacing: Number.parseFloat(style.letterSpacing) || 0,
-        family: style.fontFamily,
-      };
-    });
-    box.remove();
-  }
-
-  /**
-   * Type tokens whose size, line height, weight, letter spacing, and family
-   * all match `style`. Aliases such as `label-01` and `legal-01`
-   * can match together.
-   * @param {CSSStyleDeclaration} style
-   */
-  function typeTokens(style) {
-    if (!typeTable) buildTypeTable();
-    const size = Number.parseFloat(style.fontSize);
-    const lineHeight = Number.parseFloat(style.lineHeight);
-    const letterSpacing = Number.parseFloat(style.letterSpacing) || 0;
-    return (typeTable ?? [])
-      .filter(
-        (token) =>
-          Math.abs(token.size - size) < 0.5 &&
-          Math.abs(token.lineHeight - lineHeight) < 0.5 &&
-          token.weight === style.fontWeight &&
-          Math.abs(token.letterSpacing - letterSpacing) < 0.05 &&
-          token.family === style.fontFamily,
-      )
-      .map((token) => token.name);
-  }
-
-  /** @param {Element} el */
-  function describe(el) {
-    const tag = el.tagName.toLowerCase();
-    const cls = [...el.classList].find((c) => !c.startsWith("svelte-"));
-    return cls ? `${tag}.${cls}` : tag;
   }
 
   // ---------------------------------------------------------------------
@@ -342,85 +208,11 @@
    * @typedef {import("../geometry.js").Segment} Segment
    */
 
-  /** @type {null | { rect: DOMRect; marginBox: Box; marginWidths: number[]; paddingBox: Box; paddingWidths: number[]; contentBox: Box; labels: (SideLabel & { kind: "margin" | "padding"; off: boolean })[]; info: { name: string; size: string; margin: number[]; padding: number[]; border: number[]; carbon: boolean; gap: { row: number; column: number } | null; type: string[] | null; typeSpec: string; colors: ColorInfo | null } }} */
+  /** @type {null | { rect: DOMRect; marginBox: Box; marginWidths: number[]; paddingBox: Box; paddingWidths: number[]; contentBox: Box; labels: (SideLabel & { kind: "margin" | "padding"; off: boolean })[]; info: { name: string; size: string; margin: number[]; padding: number[]; border: number[]; carbon: boolean; gap: { row: number; column: number } | null; type: string[] | null; typeSpec: string; colors: import("../inspect.js").ColorInfo | null } }} */
   let hover = null;
 
   /** @type {null | { a: DOMRect; b: DOMRect; segments: (Segment & { token: string | null })[] }} */
   let distance = null;
-
-  /**
-   * @typedef {{ key: string; label: string; hex: string; swatch: string; tokens: string[]; inherited?: boolean; note?: boolean }} ColorRow
-   * @typedef {{ rows: ColorRow[]; contrast: { ratio: number; aa: number; aaa: number; large: boolean; approximate: boolean } | null; tokens: boolean }} ColorInfo
-   */
-
-  /** @type {Record<string, string>} */
-  const COLOR_LABELS = {
-    text: "Text color",
-    bg: "Background",
-    border: "Border color",
-  };
-
-  /**
-   * Text, background, and border colors of `el`, each named with the
-   * theme tokens that resolve to it, plus the contrast of its own text.
-   * @param {Element} el
-   * @param {CSSStyleDeclaration} style
-   * @param {number[]} border
-   * @param {boolean} ownText
-   * @returns {ColorInfo}
-   */
-  function describeColors(el, style, border, ownText) {
-    /** @type {ColorRow[]} */
-    const rows = [];
-    /**
-     * @param {string} key
-     * @param {string} value
-     * @param {import("./colors.js").ColorRole} role
-     * @param {boolean} [inherited]
-     */
-    function add(key, value, role, inherited) {
-      const rgba = toRgba(normalizeColor(value));
-      if (!rgba || rgba[3] === 0) return;
-      rows.push({
-        key,
-        label: COLOR_LABELS[key],
-        hex: toHex(rgba),
-        swatch: value,
-        tokens: colorTokens(el, value, role),
-        inherited,
-      });
-    }
-    if (ownText) add("text", style.color, "text");
-    const bg = effectiveBackground(el);
-    if (bg.image) {
-      rows.push({
-        key: "bg",
-        label: COLOR_LABELS.bg,
-        hex: "Image or gradient",
-        swatch: "transparent",
-        tokens: [],
-        note: true,
-      });
-    } else if (bg.own && bg.source) {
-      add(
-        "bg",
-        getComputedStyle(bg.source).backgroundColor,
-        "background",
-        bg.source !== el,
-      );
-    }
-    if (border.some((w) => w > 0)) {
-      const side = ["top", "right", "bottom", "left"][
-        border.findIndex((w) => w > 0)
-      ];
-      add("border", style.getPropertyValue(`border-${side}-color`), "border");
-    }
-    return {
-      rows,
-      contrast: ownText ? textContrast(el) : null,
-      tokens: hasTokens(),
-    };
-  }
 
   function updateHover() {
     readRemPx();
@@ -453,22 +245,18 @@
       return;
     }
 
-    const rect = hovered.getBoundingClientRect();
-    const style = getComputedStyle(hovered);
-    const margin = sides(style, "margin");
-    const border = sides(style, "border");
-    const padding = sides(style, "padding");
+    const { rect, info } = inspectElement(hovered, {
+      checkCarbon,
+      typography,
+      colors,
+    });
+    const { margin, border, padding, carbon } = info;
     const { marginBox, paddingBox, contentBox, marginWidths } = boxes(
       rect,
       margin,
       border,
       padding,
     );
-    const ownText = hasOwnText(hovered);
-    // Carbon's own elements keep a few deliberate off-scale values (the
-    // small button's 60px icon gutter). Users cannot change them, so they
-    // read as "set by Carbon" rather than as errors, unless `checkCarbon`.
-    const carbon = !checkCarbon && carbonOwned(hovered);
     const sideIndex = ["top", "right", "bottom", "left"];
 
     hover = {
@@ -498,18 +286,7 @@
             })),
           ]
         : [],
-      info: {
-        name: describe(hovered),
-        size: `${formatPx(rect.width)} × ${formatPx(rect.height)}px`,
-        margin,
-        padding,
-        border,
-        carbon,
-        gap: gaps(style),
-        type: typography && ownText ? typeTokens(style) : null,
-        typeSpec: `${formatPx(Number.parseFloat(style.fontSize))}/${formatPx(Number.parseFloat(style.lineHeight) || 0)}px · weight ${style.fontWeight}`,
-        colors: colors ? describeColors(hovered, style, border, ownText) : null,
-      },
+      info,
     };
   }
 
@@ -643,7 +420,7 @@
     }
 
     function handleResize() {
-      typeTable = null;
+      resetTypeTable();
       hoverJob.schedule();
     }
 
