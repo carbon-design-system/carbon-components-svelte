@@ -57,8 +57,8 @@
       <Text
         tag="span"
         type="inherit"
-        color={node.selected ? "link" : undefined}
-        style="text-decoration: {node.disabled ? 'inherit' : 'underline'}"
+        color={node.selected ? "primary" : undefined}
+        class={node.disabled ? undefined : "underlined"}
       >
         {node.text}
         (id: {node.id})
@@ -66,3 +66,9 @@
     </TreeView>
   </div>
 </Stack>
+
+<style>
+  :global(.underlined) {
+    text-decoration: underline;
+  }
+</style>
