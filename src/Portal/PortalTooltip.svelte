@@ -89,6 +89,7 @@
    */
   export let intrinsicAlign = "center";
 
+  import { slideIntoWindow } from "../utils/fit-align.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
     getLayoutDirection,
@@ -141,6 +142,7 @@
     <!-- The box lays out left to right (see _tooltip.scss); the text keeps
     the anchor's direction. -->
     <span
+      use:slideIntoWindow
       class:bx--tooltip-portal__content={true}
       class:bx--assistive-text={Boolean(tooltipType)}
       role={id ? "tooltip" : undefined}

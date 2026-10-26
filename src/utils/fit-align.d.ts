@@ -51,6 +51,14 @@ export function windowShift(
 ): number;
 
 /**
+ * Keeps a portalled tooltip's body inside the window while the tooltip
+ * sits above or below its anchor: slides it sideways by `windowShift` each
+ * time the portal places it or the body resizes. The caret, a sibling,
+ * stays on the anchor.
+ */
+export function slideIntoWindow(node: HTMLElement): { destroy(): void };
+
+/**
  * The first box that cuts `el` off: an ancestor whose overflow isn't
  * `visible` on an axis where `el` reaches past its edge, counting only
  * boxes that position `el`. `null` when nothing clips it or `el` has no

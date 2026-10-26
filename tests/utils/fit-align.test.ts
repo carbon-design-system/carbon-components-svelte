@@ -2,9 +2,11 @@ import {
   clippedBy,
   fitPopoverAlign,
   shouldFlipAlign,
+  slideIntoWindow,
   windowShift,
 } from "../../src/utils/fit-align.js";
 import { popoverPlacement } from "../../src/utils/inline-align.js";
+import { flushMacrotask } from "./flush-macrotask";
 import { rect } from "./rect";
 
 describe("shouldFlipAlign", () => {
@@ -58,6 +60,54 @@ describe("windowShift", () => {
     // jsdom: the window itself has no width.
     windowWidth(0);
     expect(windowShift(box({ left: 300, width: 100 }), 12)).toBe(12);
+  });
+});
+
+describe("slideIntoWindow", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    document.body.replaceChildren();
+  });
+
+  // A tooltip body 100px wide at `left` before any slide, in a portal on
+  // `side` of its anchor, in a 1000px window.
+  function tooltipBody(left: number, side: string) {
+    vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+      1000,
+    );
+    const portal = document.createElement("div");
+    portal.setAttribute("data-floating-portal", "");
+    portal.setAttribute("data-floating-direction", side);
+    const body = document.createElement("span");
+    body.getBoundingClientRect = () =>
+      rect({
+        left: left + (Number.parseFloat(body.style.left) || 0),
+        width: 100,
+      });
+    portal.append(body);
+    document.body.append(portal);
+    const action = slideIntoWindow(body);
+    return { portal, body, action };
+  }
+
+  it("slides a body above or below the anchor back inside the window", async () => {
+    const { portal, body, action } = tooltipBody(950, "bottom");
+    await flushMacrotask();
+    expect(body.style.left).toBe("-58px");
+    expect(body.style.position).toBe("relative");
+
+    // The portal moves again: the slide is measured from the new spot.
+    portal.style.top = "10px";
+    await flushMacrotask();
+    expect(body.style.left).toBe("-58px");
+    action.destroy();
+  });
+
+  it("leaves a body beside the anchor in place", async () => {
+    const { body, action } = tooltipBody(950, "right");
+    await flushMacrotask();
+    expect(body.style.left).toBe("");
+    action.destroy();
   });
 });
 
