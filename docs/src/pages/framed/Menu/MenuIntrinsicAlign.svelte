@@ -5,7 +5,7 @@
   let open = false;
 </script>
 
-<Box width="320px">
+<Box fullWidth maxWidth="320px">
   <Button bind:ref={anchor} on:click={() => (open = !open)}>
     Actions on this wide button
   </Button>
