@@ -64,7 +64,6 @@
   /**
    * @param {object} key
    * @param {boolean} selected
-   * @returns {void}
    */
   function setCurrent(key, selected) {
     if (selected === currentKeys.has(key)) return;

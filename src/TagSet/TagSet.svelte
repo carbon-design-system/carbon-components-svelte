@@ -235,7 +235,7 @@
     size: sharedSize,
     navigation: sharedNavigation,
     tabStopId,
-    /** @type {(item: TagSetItem) => void} */
+    /** @param {TagSetItem} item */
     register: (item) => {
       batchedItemsUpdate((current) =>
         current.some((existing) => existing.id === item.id)
@@ -243,17 +243,20 @@
           : insertByDomOrder(current, item),
       );
     },
-    /** @type {(id: string) => void} */
+    /** @param {string} id */
     unregister: (id) => {
       batchedItemsUpdate((current) => current.filter((item) => item.id !== id));
     },
-    /** @type {(id: string, patch: Partial<Omit<TagSetItem, "id">>) => void} */
+    /**
+     * @param {string} id
+     * @param {Partial<Omit<TagSetItem, "id">>} patch
+     */
     update: (id, patch) => {
       batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, ...patch } : item)),
       );
     },
-    /** @type {(id: string) => void} */
+    /** @param {string} id */
     notifyClose: (id) => {
       const item = $items.find((item) => item.id === id);
       if (item) handleTagClose(item);

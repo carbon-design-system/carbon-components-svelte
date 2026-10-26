@@ -112,7 +112,7 @@
     items,
     max: sharedMax,
     size: sharedSize,
-    /** @type {(item: { id: string; name: string; node?: HTMLElement }) => void} */
+    /** @param {{ id: string; name: string; node?: HTMLElement }} item */
     register: ({ id, name, node }) => {
       batchedItemsUpdate((current) =>
         current.some((item) => item.id === id)
@@ -120,11 +120,14 @@
           : insertByDomOrder(current, { id, name, node }),
       );
     },
-    /** @type {(id: string) => void} */
+    /** @param {string} id */
     unregister: (id) => {
       batchedItemsUpdate((current) => current.filter((item) => item.id !== id));
     },
-    /** @type {(id: string, name: string) => void} */
+    /**
+     * @param {string} id
+     * @param {string} name
+     */
     updateName: (id, name) => {
       batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, name } : item)),
@@ -132,7 +135,10 @@
     },
     // Toggling `tooltipText`, `interactive` or `href` swaps an avatar's root
     // element. The replacement sits in the same slot, so the order holds.
-    /** @type {(id: string, node: HTMLElement) => void} */
+    /**
+     * @param {string} id
+     * @param {HTMLElement} node
+     */
     updateNode: (id, node) => {
       batchedItemsUpdate((current) =>
         current.map((item) => (item.id === id ? { ...item, node } : item)),
