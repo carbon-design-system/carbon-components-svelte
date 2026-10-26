@@ -52,7 +52,6 @@
   "SearchMenu/SearchMenuItem.svelte": 2,
   "Select/Select.svelte": 1,
   "Select/SelectItem.svelte": 1,
-  "Slider/RangeSlider.svelte": 3,
   "Stepper/Stepper.svelte": 2,
   "StructuredList/StructuredList.svelte": 1,
   "StructuredList/StructuredListCell.svelte": 1,

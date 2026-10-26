@@ -238,9 +238,9 @@
   /** @typedef {"lower" | "upper"} ActiveHandle */
   /** @typedef {RangeSliderChangeDetail & { handle: ActiveHandle }} RangeSliderFocusDetail */
 
-  /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
   $: textInputWidth = getTextInputWidth(min, max, step);
 
+  /** @type {(type: "change" | "input" | "focus" | "blur", detail: RangeSliderChangeDetail | RangeSliderFocusDetail) => void} */
   const dispatch = createEventDispatcher();
 
   /** @type {HTMLDivElement | null} */
