@@ -133,6 +133,7 @@
 
   let triggerRef = null;
 
+  /** @type {import("svelte/store").Writable<null | HTMLDivElement>} */
   const placementGroup = writable(null);
   setContext(MENU_PLACEMENT_CONTEXT_KEY, placementGroup);
   $: placementGroup.set(ref);

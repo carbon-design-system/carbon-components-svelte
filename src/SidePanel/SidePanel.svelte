@@ -240,6 +240,7 @@
 
   // The title is one level below the enclosing `Section`, or an `h2`.
   const parentSection = getContext("carbon:Section") ?? readable(1);
+  /** @type {import("svelte/store").Writable<number>} */
   const sectionLevel = writable(Math.min($parentSection + 1, 6));
   $: sectionLevel.set(Math.min($parentSection + 1, 6));
   setContext("carbon:Section", sectionLevel);

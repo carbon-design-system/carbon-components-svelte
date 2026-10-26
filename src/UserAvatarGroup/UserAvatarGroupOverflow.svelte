@@ -22,6 +22,7 @@
   // `size`. The chip's tooltip joins the group's tooltip handoff through
   // the `TooltipGroup` context, which this does not shadow.
   setContext("carbon:UserAvatarGroup", {
+    /** @type {import("svelte/store").Readable<Array<{ id: string; name: string; node?: HTMLElement }>>} */
     items: readable([]),
     max: readable(0),
     /** @type {import("svelte/store").Readable<import("./UserAvatarGroup.svelte").UserAvatarGroupProps["size"]>} */
