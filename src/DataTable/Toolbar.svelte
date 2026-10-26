@@ -92,6 +92,7 @@
     overflowVisible,
     setOverflowVisible,
     batchActionsActive,
+    /** @type {() => HTMLElement | null} */
     getRef: () => ref,
     toolbarSize,
   });

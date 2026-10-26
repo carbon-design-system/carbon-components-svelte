@@ -172,6 +172,7 @@
   // The selected switch holds the tab stop unless it is disabled; then the
   // first enabled switch does, so the switcher stays reachable by keyboard.
   // Derived so it updates in the same flush as `currentId`.
+  /** @type {import("svelte/store").Readable<string | null>} */
   const tabStopId = derived([sharedSwitches, currentId], ([list, id]) => {
     const current = list.find((s) => s.id === id);
     if (current && !current.disabled) return current.id;

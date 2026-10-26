@@ -62,7 +62,12 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   /** Button size whose height matches a field of each size. */
-  const BUTTON_SIZE = { xs: "xs", sm: "small", md: "field", xl: undefined };
+  const BUTTON_SIZE = /** @type {const} */ ({
+    xs: "xs",
+    sm: "small",
+    md: "field",
+    xl: undefined,
+  });
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
   const ownSize = writable(normalizeSize(size, FIELD_SIZE_ALIASES));
@@ -76,9 +81,9 @@
   // Fields read the size like any other form size; buttons read a height
   // match, the same way they read an `ActionSet`'s size.
   setContext(FORM_SIZE_CONTEXT_KEY, sharedSize);
-  setContext("carbon:InputGroup", {
-    buttonSize: derived(sharedSize, ($size) => BUTTON_SIZE[$size ?? "md"]),
-  });
+  /** @type {import("svelte/store").Readable<"xs" | "small" | "field" | undefined>} */
+  const buttonSize = derived(sharedSize, ($size) => BUTTON_SIZE[$size ?? "md"]);
+  setContext("carbon:InputGroup", { buttonSize });
 
   $: labelId = `label-${id}`;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));

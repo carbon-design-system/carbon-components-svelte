@@ -1217,6 +1217,7 @@
     focusNode,
     toggleNode,
     treeKey,
+    /** @type {() => boolean} */
     isInitialRender: () => !initialRenderComplete,
   });
 

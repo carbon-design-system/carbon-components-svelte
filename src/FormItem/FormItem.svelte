@@ -41,6 +41,7 @@
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
   const fluid = !!formContext?.isFluid;
 
+  /** @type {import("svelte/store").Writable<string>} */
   const sharedControlId = writable(controlId);
   const sharedDisabled = writable(disabled);
 

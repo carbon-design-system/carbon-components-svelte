@@ -100,7 +100,10 @@
   import Text from "../Text/Text.svelte";
   import PageHeaderBody from "./PageHeaderBody.svelte";
 
-  /** The first `Tabs` slotted into the header, shared with the body. */
+  /**
+   * The first `Tabs` slotted into the header, shared with the body.
+   * @type {undefined | import("../Tabs/Tabs.svelte").CarbonTabsContext}
+   */
   let tabsContext;
 
   /** @type {null | HTMLDivElement} */
@@ -117,6 +120,7 @@
      * Returns the element holding the tab panels, a setter for the tabs'
      * `type` and an `unregister` for when the tabs are destroyed, or
      * `undefined` when another `Tabs` already registered.
+     * @type {(context: import("../Tabs/Tabs.svelte").CarbonTabsContext) => undefined | { getBody: () => HTMLDivElement | null; setType: (type: "default" | "container") => void; unregister: () => void }}
      */
     registerTabs: (context) => {
       if (tabsContext) return undefined;
@@ -132,6 +136,7 @@
         },
       };
     },
+    /** @type {() => undefined | import("../Tabs/Tabs.svelte").CarbonTabsContext} */
     getTabs: () => tabsContext,
   });
 

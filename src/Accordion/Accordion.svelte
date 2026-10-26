@@ -61,12 +61,20 @@
   }
   $: typeStore.set(type);
 
+  /**
+   * @param {object} id
+   * @returns {void}
+   */
   function notifyOpen(id) {
     if (type === "single") {
       openId.set(id);
     }
   }
 
+  /**
+   * @param {object} id
+   * @returns {boolean}
+   */
   function claimSingle(id) {
     const currentId = get(openId);
     if (currentId === null) {

@@ -48,6 +48,7 @@
   import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
   import { uniqueId } from "../utils/unique-id.js";
 
+  /** @type {import("svelte/store").Writable<string>} */
   const sharedId = writable(id);
   const sharedDisabled = writable(disabled);
   const formParts = createFormParts();

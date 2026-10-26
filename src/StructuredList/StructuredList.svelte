@@ -70,6 +70,7 @@
 
   // Radios need a shared name to move on the arrow keys.
   const fallbackName = uniqueId("structured-list");
+  /** @type {import("svelte/store").Writable<string>} */
   const inputName = writable(
     selection && !multiple ? name || fallbackName : "",
   );

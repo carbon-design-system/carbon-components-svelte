@@ -38,11 +38,13 @@
   setContext("carbon:SearchMenuGroup", {
     divider,
     filter: sharedFilter,
-    registerItem(id) {
+    /** @type {(id: string) => void} */
+    registerItem: (id) => {
       childIds.add(id);
       childIds = childIds;
     },
-    unregisterItem(id) {
+    /** @type {(id: string) => void} */
+    unregisterItem: (id) => {
       childIds.delete(id);
       childIds = childIds;
     },

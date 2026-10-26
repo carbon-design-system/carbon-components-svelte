@@ -54,6 +54,7 @@
   import NotificationIcon from "./NotificationIcon.svelte";
   import { statusIconLabel } from "./status-icon-label.js";
 
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const describedBy = writable(undefined);
 
   setContext("carbon:NotificationAction", { describedBy, toast: false });

@@ -134,6 +134,7 @@
    * @type {import("svelte/store").Writable<Value | undefined>}
    */
   const selectedValue = writable(selected);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const groupName = writable(name || undefined);
   const groupForm = writable(form);
   // Unnamed radios are separate controls, so arrow keys would not move the

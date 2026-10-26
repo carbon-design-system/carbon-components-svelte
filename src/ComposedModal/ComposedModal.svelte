@@ -83,8 +83,11 @@
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const label = writable(undefined);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const title = writable(undefined);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const bodyId = writable(undefined);
   const focusReturn = restoreFocus();
 
@@ -92,6 +95,7 @@
   // `hasScrollingContent`) can name its region via `aria-labelledby`.
   const modalId = writable(id);
   $: modalId.set(id);
+  /** @type {import("svelte/store").Readable<{ label: string; title: string; body: string }>} */
   const ids = derived(modalId, (value) => ({
     label: `${value}-label`,
     title: `${value}-title`,
