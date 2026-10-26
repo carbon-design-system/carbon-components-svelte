@@ -51,7 +51,7 @@
   "TooltipIcon/TooltipIcon.svelte": 1,
   "TreeView/TreeView.svelte": 18,
   "TreeView/TreeViewNode.svelte": 2,
-  "TreeView/TreeViewNodeList.svelte": 4,
+  "TreeView/TreeViewNodeList.svelte": 2,
   "TreeView/TreeViewNodeVirtual.svelte": 1,
   "UIShell/HamburgerMenu.svelte": 1,
   "UIShell/HeaderAction.svelte": 2,
