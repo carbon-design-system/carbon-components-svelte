@@ -19,11 +19,7 @@
    * @event {null} active
    * @event {null} inactive
    * @event {null} clear
-   * @event select
-   * @type {object}
-   * @property {string} value
-   * @property {number} selectedResultIndex
-   * @property {Result} selectedResult
+   * @event {{ value: string; selectedResultIndex: number; selectedResult: Result } | { value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select - A result from `results` was chosen (`selectedResult`), or an item in the `menu` slot (`item`).
    * @event {{ value: string }} submit
    * @event {string} search
    * @slot {{ result: Result; index: number; selected: boolean; }}

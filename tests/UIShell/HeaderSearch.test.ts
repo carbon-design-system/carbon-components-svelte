@@ -469,9 +469,14 @@ describe("HeaderSearch Generics", () => {
     type CustomResult = HeaderSearchResult & { category: "document" | "user" };
     type Component = HeaderSearchComponent<CustomResult>;
 
+    type SelectDetail = ComponentEvents<Component>["select"]["detail"];
+
     expectTypeOf<
-      ComponentEvents<Component>["select"]["detail"]["selectedResult"]
+      Extract<SelectDetail, { selectedResult: unknown }>["selectedResult"]
     >().toEqualTypeOf<CustomResult>();
+    expectTypeOf<
+      Extract<SelectDetail, { item: unknown }>["item"]["href"]
+    >().toEqualTypeOf<string | undefined>();
     expectTypeOf<
       Component["$$slot_def"]["default"]["result"]
     >().toEqualTypeOf<CustomResult>();
