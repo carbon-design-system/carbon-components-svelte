@@ -42,6 +42,9 @@ export function textContrast(
   aaa: number;
   large: boolean;
   approximate: boolean;
+  text: Rgba;
+  background: Rgba;
+  source: Element | null;
 };
 
 /** Whether the page has any theme tokens to name colors with. */
@@ -53,3 +56,11 @@ export function colorTokens(
   color: string,
   role: ColorRole,
 ): string[];
+
+/** The text token that passes `needs` against `background`, closest to `text`. */
+export function suggestTextToken(
+  el: Element,
+  text: Rgba,
+  background: Rgba,
+  needs: number,
+): { token: string; hex: string; ratio: number } | null;

@@ -72,13 +72,9 @@
   import Row from "../../Grid/Row.svelte";
   import { createFrameJob } from "../../utils/frame-batch.js";
   import { addPooledListener } from "../../utils/window-listener-pool.js";
+  import { measureBaselines } from "../baselines.js";
   import { rowDelta } from "../geometry.js";
-  import {
-    createLayerLookup,
-    DEV_TOOL,
-    inBand,
-    observePage,
-  } from "../page-scan.js";
+  import { observePage } from "../page-scan.js";
 
   // 16 slots cover every breakpoint's column count (sm: 4, md: 8, lg/xlg/max: 16).
   // Each slot hides itself (span 0) once its index passes that breakpoint's
@@ -99,45 +95,8 @@
    * @typedef {MeasuredLine & { delta: number | null }} TextBaselineMark
    */
 
-  // Caps the number of marks so a huge page cannot stall the overlay.
-  const MAX_TEXT_MARKS = 2000;
-
   /** @type {TextBaselineMark[]} */
   let marks = [];
-
-  /**
-   * Distance from the top of a font's content area to its alphabetic
-   * baseline, measured with a zero-size inline-block, whose top edge sits
-   * on the baseline. The probe goes inside the overlay, so adding it does
-   * not count as a page change.
-   * @param {HTMLElement} node
-   * @param {CSSStyleDeclaration} style
-   * @param {Map<string, number>} cache
-   */
-  function measureAscent(node, style, cache) {
-    const font = [
-      style.fontStyle,
-      style.fontWeight,
-      style.fontStretch,
-      style.fontSize,
-      style.fontFamily,
-    ].join(" ");
-    const cached = cache.get(font);
-    if (cached !== undefined) return cached;
-
-    const probe = document.createElement("span");
-    probe.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;line-height:normal;font-style:${style.fontStyle};font-weight:${style.fontWeight};font-stretch:${style.fontStretch};font-size:${style.fontSize};font-family:${style.fontFamily}`;
-    probe.textContent = "x";
-    const marker = document.createElement("span");
-    marker.style.cssText = "display:inline-block;width:0;height:0";
-    probe.append(marker);
-    node.append(probe);
-    const ascent =
-      marker.getBoundingClientRect().top - probe.getBoundingClientRect().top;
-    probe.remove();
-    cache.set(font, ascent);
-    return ascent;
-  }
 
   /**
    * @param {MeasuredLine[]} a
@@ -188,72 +147,22 @@
 
     /** @param {import("../page-scan.js").ScanBand} band */
     function measure(band) {
-      // A font may have loaded since the last pass, changing its metrics.
-      /** @type {Map<string, number>} */
-      const ascents = new Map();
       /** @type {Map<string, number>} */
       const seen = new Map();
       /** @type {MeasuredLine[]} */
-      const next = [];
-      const walker = document.createTreeWalker(
-        document.body,
-        NodeFilter.SHOW_TEXT,
-        {
-          acceptNode(text) {
-            const parent = text.parentElement;
-            if (!parent || !text.nodeValue?.trim()) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            if (parent.closest(`${DEV_TOOL}, script, style`)) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            return NodeFilter.FILTER_ACCEPT;
-          },
-        },
-      );
-      const range = document.createRange();
-      const fixedBox = createLayerLookup(["fixed"]);
-      const scrollX = window.scrollX;
-      const scrollY = window.scrollY;
-
-      for (
-        let text = walker.nextNode();
-        text && next.length < MAX_TEXT_MARKS;
-        text = walker.nextNode()
-      ) {
-        const parent = /** @type {HTMLElement} */ (text.parentElement);
-        // Skip text far from the viewport before paying for its style.
-        if (!inBand(parent.getBoundingClientRect(), band, scrollY)) continue;
-        const style = getComputedStyle(parent);
-        if (style.visibility === "hidden") continue;
-        range.selectNodeContents(text);
-        const ascent = measureAscent(node, style, ascents);
-        // Text in a fixed box stays put while the page scrolls, so its
-        // marks are in viewport coordinates.
-        const pinned = fixedBox(parent) !== null;
-        const dx = pinned ? 0 : scrollX;
-        const dy = pinned ? 0 : scrollY;
-        for (const rect of range.getClientRects()) {
-          if (rect.width < 1 || rect.height < 1) continue;
-          const x = Math.round((rect.left + dx) * 10) / 10;
-          const y = Math.round((rect.top + dy + ascent) * 10) / 10;
-          const width = Math.round(rect.width * 10) / 10;
-          const base = `${pinned}|${x}|${y}|${width}`;
-          const count = seen.get(base) ?? 0;
-          seen.set(base, count + 1);
-          next.push({
-            key: count ? `${base}|${count}` : base,
-            x,
-            y,
-            width,
-            // Right-to-left text ends on the left, so its offset label goes
-            // there.
-            rtl: style.direction === "rtl",
-            pinned,
-          });
-        }
-      }
-      range.detach();
+      const next = measureBaselines({ host: node, band }).map((line) => {
+        const base = `${line.pinned}|${line.x}|${line.y}|${line.width}`;
+        const count = seen.get(base) ?? 0;
+        seen.set(base, count + 1);
+        return {
+          key: count ? `${base}|${count}` : base,
+          x: line.x,
+          y: line.y,
+          width: line.width,
+          rtl: line.rtl,
+          pinned: line.pinned,
+        };
+      });
       if (sameLines(measured, next)) return;
       measured = next;
       applyDeltas();

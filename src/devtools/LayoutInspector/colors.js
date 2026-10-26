@@ -195,6 +195,8 @@ export function effectiveBackground(el, cache) {
 /**
  * WCAG contrast check for the text of `el`. Large text (24px, or 18.66px
  * bold) needs 3:1 for AA and 4.5:1 for AAA; other text 4.5:1 and 7:1.
+ * `text` and `background` are the opaque colors compared, and `source` is
+ * the element whose background is nearest.
  * @param {Element} el
  * @param {BackgroundCache} [cache]
  */
@@ -202,7 +204,8 @@ export function textContrast(el, cache) {
   const style = getComputedStyle(el);
   const bg = effectiveBackground(el, cache);
   const fg = toRgba(normalizeColor(style.color)) ?? [0, 0, 0, 1];
-  const ratio = contrastRatio(blend(fg, bg.color), bg.color);
+  const text = blend(fg, bg.color);
+  const ratio = contrastRatio(text, bg.color);
   const size = Number.parseFloat(style.fontSize);
   const weight = Number.parseInt(style.fontWeight, 10) || 400;
   const large = size >= 24 || (size >= 18.66 && weight >= 700);
@@ -212,6 +215,9 @@ export function textContrast(el, cache) {
     aaa: large ? 4.5 : 7,
     large,
     approximate: bg.image,
+    text,
+    background: bg.color,
+    source: bg.source,
   };
 }
 
@@ -319,4 +325,45 @@ export function colorTokens(el, color, role) {
   const names = tokenMap(el).get(normalized) ?? [];
   const fit = ROLE_PREFIXES[role];
   return [...names].sort((a, b) => Number(fit.test(b)) - Number(fit.test(a)));
+}
+
+// Theme tokens meant for text, for a contrast fix suggestion.
+const TEXT_TOKEN = /^(text|link)-/;
+
+/**
+ * The text token that passes `needs` against `background` and is closest
+ * to the current text color, or `null` when no theme token passes. Reads
+ * the theme tokens that resolve for `el`.
+ * @param {Element} el
+ * @param {Rgba} text current text color
+ * @param {Rgba} background opaque background
+ * @param {number} needs contrast ratio to reach
+ * @returns {{ token: string; hex: string; ratio: number } | null}
+ */
+export function suggestTextToken(el, text, background, needs) {
+  /** @type {{ token: string; hex: string; ratio: number; distance: number } | null} */
+  let best = null;
+  for (const [color, names] of tokenMap(el)) {
+    const name = names.find((n) => TEXT_TOKEN.test(n));
+    if (!name) continue;
+    const rgba = toRgba(color);
+    if (!rgba || rgba[3] < 1) continue;
+    const ratio = contrastRatio(rgba, background);
+    if (ratio < needs) continue;
+    const distance = Math.hypot(
+      rgba[0] - text[0],
+      rgba[1] - text[1],
+      rgba[2] - text[2],
+    );
+    if (!best || distance < best.distance) {
+      best = { token: name, hex: toHex(rgba), ratio, distance };
+    }
+  }
+  return best
+    ? {
+        token: best.token,
+        hex: best.hex,
+        ratio: Math.floor(best.ratio * 100) / 100,
+      }
+    : null;
 }
