@@ -22,7 +22,7 @@
 
   /**
    * @template Id
-   * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; }} TreeNode
+   * @typedef {{ id: Id; text: string; disabled?: boolean; expanded?: boolean; hasChildren?: boolean; }} TreeNode
    */
 
   /**
