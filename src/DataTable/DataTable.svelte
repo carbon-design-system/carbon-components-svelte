@@ -1233,6 +1233,7 @@
       const currentSortDirection =
         sortKey === header.key ? sortDirection : "none";
       const effectiveSortAlways = header.sortAlways ?? sortAlways;
+      /** @type {Record<"none" | "ascending" | "descending", "none" | "ascending" | "descending">} */
       const sortDirectionMap = effectiveSortAlways
         ? {
             none: "ascending",

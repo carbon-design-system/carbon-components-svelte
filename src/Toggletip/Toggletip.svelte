@@ -122,7 +122,13 @@
   // The v11 placement: above and below the button, `start` and `end` are
   // inline sides, so Popover swaps them in RTL. Popover also fits it to the
   // window and the button's container, and places the caret.
-  $: popoverAlign = align === "center" ? direction : `${direction}-${align}`;
+  /** @type {import("../Popover/Popover.svelte").PopoverProps["align"]} */
+  $: popoverAlign =
+    align === "center"
+      ? direction
+      : /** @type {`${typeof direction}-${typeof align}`} */ (
+          `${direction}-${align}`
+        );
 
   // Window listeners are enabled on the animation frame after opening. Svelte
   // flushes the open state synchronously while the triggering click is still

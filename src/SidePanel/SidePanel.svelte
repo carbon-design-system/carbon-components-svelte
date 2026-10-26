@@ -573,6 +573,7 @@
   } = splitAriaNaming($$restProps));
   // Footer buttons are 64px in large panels, so the header's buttons grow
   // to 40px to match, as in Carbon React.
+  /** @type {"field" | "small"} */
   $: headerButtonSize =
     $$slots.actions && /l/.test(sizeName) ? "field" : "small";
   $: resizeMax =

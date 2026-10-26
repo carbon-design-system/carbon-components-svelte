@@ -17,7 +17,9 @@
   /**
    * Resolve "inside"/"outside" to a concrete side for the previous ("start")
    * or next ("end") button; concrete positions pass through.
-   * @param {string} position @param {"start" | "end"} edge
+   * @param {"top" | "right" | "bottom" | "left" | "outside" | "inside"} position
+   * @param {"start" | "end"} edge
+   * @returns {"top" | "right" | "bottom" | "left"}
    */
   function edgeTooltipPosition(position, edge) {
     if (position === "inside") return edge === "start" ? "right" : "left";
