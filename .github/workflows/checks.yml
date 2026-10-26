@@ -57,6 +57,11 @@ jobs:
 
       - run: bun run thumbnails catalog
 
+      # Fails when a test reaches a file whose dependencies bivium can't read,
+      # which would make that test run on every PR, or when a `@depends-on`,
+      # `@reads` or `import.meta.glob` glob can never select its file.
+      - run: bunx --bun bivium check --max-unknown 0
+
   changes:
     runs-on: ubuntu-latest
     outputs:
@@ -134,12 +139,12 @@ jobs:
               - '**'
               - '!css/**/*.scss'
 
-      # PRs run only the unit and e2e tests the diff can reach in the static
-      # dependency graph (scripts/lib/test-graph.ts). Zero-dependency, so no
-      # install, except to compile and diff the CSS for a css/ change, which
-      # narrows the e2e tests to the pages that render a changed class
-      # (scripts/lib/css-delta.ts). Pushes to master run everything, which
-      # catches any miss.
+      # PRs run only the unit and e2e tests the diff can reach in bivium's
+      # static dependency graph (bivium.config.ts). bivium has no
+      # dependencies, so it plans without an install, except to compile and
+      # diff the CSS for a css/ change, which narrows the e2e tests to the
+      # pages that render a changed class (scripts/lib/css-narrower.ts).
+      # Pushes to master run everything, which catches any miss.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
         if: github.event_name == 'pull_request'
       - run: bun ci --ignore-scripts
@@ -152,10 +157,25 @@ jobs:
           path: node_modules/.cache/crassus
           key: crassus-select-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
           restore-keys: crassus-select-
+      # bivium caches what it reads from each file by git blob, so only the
+      # files a PR changed are read again.
+      - name: Find the merge base
+        id: merge-base
+        if: github.event_name == 'pull_request'
+        run: echo "sha=$(git merge-base "origin/${{ github.base_ref }}" HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: github.event_name == 'pull_request'
+        with:
+          path: .bivium/cache
+          key: bivium-${{ steps.merge-base.outputs.sha }}
+          restore-keys: bivium-
+      # The version package.json pins, run without the install when no css/
+      # change needed one. `--bun` because the config is TypeScript, which the
+      # runner's Node can't load.
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'
-        run: bun scripts/test-changed.ts "origin/${{ github.base_ref }}" --github-output
+        run: bunx --bun "bivium@$(jq -r '.devDependencies.bivium' package.json)" plan "origin/${{ github.base_ref }}" --github
 
       # One e2e shard for a small selection. A second one costs a runner and
       # its own install, browser and CSS setup to save ~0.3 s of tests per
