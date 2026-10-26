@@ -39,7 +39,6 @@ async function flick(page: Page, list: Locator, delta: number, count = 20) {
   if (!box) throw new Error("list has no box");
   await page.mouse.move(box.x + 20, box.y + 20);
   for (let i = 0; i < count; i++) {
-    // biome-ignore lint/performance/noAwaitInLoops: each wheel is its own frame
     await page.mouse.wheel(0, delta);
     await page.waitForTimeout(16);
   }
@@ -94,7 +93,6 @@ test.describe("VirtualList optimizeFastScroll", () => {
 
     for (const scrollTop of [0, 12_345, 1_000_000]) {
       for (const list of [plain, optimized]) {
-        // biome-ignore lint/performance/noAwaitInLoops: positions settle per list
         await list.evaluate((el, top) => {
           el.scrollTop = top;
         }, scrollTop);
@@ -150,7 +148,6 @@ test.describe("VirtualList optimizeFastScroll", () => {
 
     // Scroll to the end until the measured height stops moving it.
     for (let pass = 0; pass < 10; pass++) {
-      // biome-ignore lint/performance/noAwaitInLoops: each pass measures more rows
       await list.evaluate((el) => {
         el.scrollTop = el.scrollHeight;
       });
@@ -224,7 +221,6 @@ test.describe("Dropdown optimizeFastScroll", () => {
     expect(await highlightedInView(page)).toBe(true);
 
     for (let step = 0; step < 12; step++) {
-      // biome-ignore lint/performance/noAwaitInLoops: each step lands before the next
       await field.press("ArrowDown");
       await page.waitForTimeout(60);
     }

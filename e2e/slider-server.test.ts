@@ -76,7 +76,6 @@ test("places a server-rendered Slider by a plain dir before the script runs", as
   await serverPage.setContent(`<head>${styles}</head><body>${body}</body>`);
 
   for (const testId of ["plain-rtl", "plain-ltr"]) {
-    // biome-ignore lint/performance/noAwaitInLoops: one region at a time
     const server = await layout(serverPage, testId);
     const hydrated = await layout(page, testId);
     expect.soft(Object.keys(hydrated), testId).toHaveLength(7);

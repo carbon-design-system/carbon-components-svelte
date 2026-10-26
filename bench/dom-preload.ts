@@ -47,7 +47,7 @@ const KEEP_BUN_GLOBAL = new Set([
 for (const key of Object.getOwnPropertyNames(dom.window)) {
   if (KEEP_BUN_GLOBAL.has(key)) continue;
   try {
-    // biome-ignore lint/suspicious/noExplicitAny: bulk global copy
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- bulk global copy
     (globalThis as any)[key] = (dom.window as any)[key];
   } catch {
     // A handful of jsdom window properties are getter-only on globalThis

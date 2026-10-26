@@ -23,7 +23,6 @@ test("read-only field icons contrast with the field in every theme", async ({
   await page.goto("/readonly-icons.html");
 
   for (const theme of THEMES) {
-    // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
     await page.evaluate(
       (t) => document.documentElement.setAttribute("theme", t),
       theme,

@@ -26,7 +26,6 @@ export async function fixtures(only?: string): Promise<string[]> {
 export async function waitForServer(url: string): Promise<void> {
   for (let i = 0; i < 100; i++) {
     try {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by design
       const res = await fetch(url);
       if (res.ok || res.status === 404) return;
     } catch {}

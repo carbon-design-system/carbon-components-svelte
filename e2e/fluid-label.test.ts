@@ -127,7 +127,6 @@ test("fluid labels are not tab stops", async ({ page, browserName }) => {
   // landing on <body>, so waiting for <body> never ends there.
   const stops: string[] = [];
   for (let i = 1; i < expected.length; i++) {
-    // biome-ignore lint/performance/noAwaitInLoops: tabs one stop at a time
     await page.keyboard.press("Tab");
     stops.push(
       await page.evaluate(() => {

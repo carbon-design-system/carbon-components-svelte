@@ -21,7 +21,6 @@ test("sliders fit their container", async ({ page }) => {
   ];
   for (const id of fits) {
     const box = page.getByTestId(id);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const right = await box.evaluate((el) => {
       const edge = el.getBoundingClientRect().right;
       return Math.max(

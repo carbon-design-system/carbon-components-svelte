@@ -248,7 +248,7 @@ try {
   await Promise.all(
     openViews.map(async (view) => {
       for (let name = queue.shift(); name; name = queue.shift()) {
-        // biome-ignore lint/performance/noAwaitInLoops: one shot at a time per view
+        // eslint-disable-next-line no-await-in-loop -- one shot at a time per view
         await shoot(view, name);
       }
     }),

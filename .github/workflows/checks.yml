@@ -35,9 +35,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # `bun lint` is only in canary builds.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: canary
       - run: bun ci
       - run: bun fmt --check
+      - run: bun lint
+      # Biome lints .svelte files, which bun lint can't parse natively.
       - run: bunx biome ci --error-on-warnings
 
       - name: Build docs

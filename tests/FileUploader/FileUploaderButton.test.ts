@@ -380,7 +380,7 @@ describe("FileUploaderButton", () => {
       type ComponentType = FileUploaderButtonComponent;
       type Props = ComponentProps<ComponentType>;
 
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
     });
   });

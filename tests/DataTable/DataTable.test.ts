@@ -2204,8 +2204,11 @@ describe("DataTable", () => {
       type Paths = PropertyPath<FlatRow>;
       expectTypeOf<Paths>().toEqualTypeOf<"id" | "name" | "age" | "active">();
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validPath1: Paths = "id";
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validPath2: Paths = "name";
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validPath3: Paths = "age";
       expectTypeOf<typeof validPath1>().toEqualTypeOf<"id">();
       expectTypeOf<typeof validPath2>().toEqualTypeOf<"name">();
@@ -2225,9 +2228,13 @@ describe("DataTable", () => {
 
       type Keys = DataTableKey<NestedRow>;
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validKey1: Keys = "id";
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validKey2: Keys = "contact";
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validKey3: Keys = "contact.company";
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validKey4: Keys = "contact.address";
 
       expectTypeOf<typeof validKey1>().toEqualTypeOf<"id">();
@@ -2255,6 +2262,7 @@ describe("DataTable", () => {
       type Props = ComponentProps<ComponentType>;
       type Headers = NonNullable<Props["headers"]>;
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const validHeaders: Headers = [
         { key: "id", value: "ID" },
         { key: "user.name", value: "Name" },
@@ -2391,6 +2399,7 @@ describe("DataTable", () => {
     });
 
     it('should use Row["id"] for literal type unions with as const', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const rows = [
         { id: "row-1", name: "Item 1" },
         { id: "row-2", name: "Item 2" },
@@ -2416,7 +2425,7 @@ describe("DataTable", () => {
       expectTypeOf<NumberDataTableRow["id"]>().toEqualTypeOf<number>();
 
       type DefaultDataTableRow = DataTableRow;
-      // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
       expectTypeOf<DefaultDataTableRow["id"]>().toEqualTypeOf<any>();
     });
 

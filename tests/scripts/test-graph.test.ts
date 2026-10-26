@@ -246,11 +246,11 @@ describe("parseDependencies", () => {
   });
 
   it.each([
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    // eslint-disable-next-line no-template-curly-in-string -- source text
     "const m = await import(`./x/${name}.svelte`);",
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    // eslint-disable-next-line no-template-curly-in-string -- source text
     "const m = require(`./${name}`);",
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    // eslint-disable-next-line no-template-curly-in-string -- source text
     "vi.mock(`./${name}`);",
   ])("flags a templated module path as unreadable: %s", (source) => {
     expect(deps("tests/x.test.ts", source).unknown).toEqual([
@@ -294,7 +294,7 @@ describe("parseDependencies", () => {
     ],
     [
       "a template literal with an interpolated query",
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+      // eslint-disable-next-line no-template-curly-in-string -- source text
       "await page.goto(`/accordion.html?v=${v}`);",
       fixturePage,
     ],
@@ -305,9 +305,9 @@ describe("parseDependencies", () => {
     ],
     [
       "an interpolated page name",
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+      // eslint-disable-next-line no-template-curly-in-string -- source text
       "await page.goto(`/${name}.html?v=1`);",
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+      // eslint-disable-next-line no-template-curly-in-string -- source text
       { unknown: ["non-literal goto(`/${name}.html?v=1`)"] },
     ],
     [

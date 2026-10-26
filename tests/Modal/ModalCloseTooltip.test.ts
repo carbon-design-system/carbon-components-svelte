@@ -8,7 +8,7 @@ import ModalCloseTooltipInitialFocus from "./ModalCloseTooltipInitialFocus.test.
 
 type Case = {
   name: string;
-  // biome-ignore lint/suspicious/noExplicitAny: the two fixtures differ in props
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the two fixtures differ in props
   component: Component<any>;
   props: Record<string, unknown>;
   label: string;

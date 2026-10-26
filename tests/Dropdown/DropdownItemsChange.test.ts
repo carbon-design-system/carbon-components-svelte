@@ -21,7 +21,7 @@ describe("Dropdown items change while open", () => {
     await fireEvent.click(trigger);
 
     for (let i = 0; i < 6; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential execution is intentional
+      // eslint-disable-next-line no-await-in-loop -- sequential execution is intentional
       await fireEvent.keyDown(trigger, { key: "ArrowDown" });
     }
     expect(trigger).toHaveAttribute(

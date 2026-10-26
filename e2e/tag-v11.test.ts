@@ -77,7 +77,6 @@ test.describe("Tag (Carbon v11)", () => {
     const borderDisabled = await token(page, "border-disabled");
     const layer = await token(page, "layer");
     for (const id of ["operational-disabled", "selectable-disabled"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: reads one tag at a time
       const disabled = await style(page, id);
       expect.soft(disabled.borderColor, id).toBe(borderDisabled);
       expect.soft(disabled.background, id).toBe(layer);
@@ -157,7 +156,6 @@ test.describe("Tag (Carbon v11)", () => {
   }) => {
     const focus = await token(page, "focus");
     for (const id of ["interactive", "operational", "selectable"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
       await page.getByTestId(id).focus();
       const focused = await style(page, id);
       expect.soft(focused.outline, id).toBe("solid 2px 1px");
@@ -175,7 +173,6 @@ test.describe("Tag (Carbon v11)", () => {
       "long-operational",
       "long-selectable",
     ]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
       await expect(async () => {
         await page.getByTestId(id).blur();
         await page.getByTestId(id).focus();

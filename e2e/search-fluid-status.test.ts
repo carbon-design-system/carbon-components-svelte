@@ -13,7 +13,6 @@ test("a fluid Search's status icon sits on its message, clear of the clear butto
   for (const id of ["search-invalid", "search-warn"]) {
     const box = page.getByTestId(id);
     const search = box.locator(".bx--search");
-    // biome-ignore lint/performance/noAwaitInLoops: reads one field at a time
     const field = await search.boundingBox();
     const icon = await box.locator(".bx--search__invalid-icon").boundingBox();
     const close = await box.locator(".bx--search-close").boundingBox();

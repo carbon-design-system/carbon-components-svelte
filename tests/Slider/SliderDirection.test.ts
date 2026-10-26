@@ -101,7 +101,7 @@ describe("Slider and RangeSlider writing direction", () => {
     for (const slider of container.querySelectorAll<HTMLElement>(
       ".bx--slider",
     )) {
-      // biome-ignore lint/performance/noAwaitInLoops: one slider at a time
+      // eslint-disable-next-line no-await-in-loop -- one slider at a time
       await interact(slider);
     }
     expect(positions(container)).toEqual(RTL);

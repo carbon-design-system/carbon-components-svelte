@@ -17,11 +17,9 @@
   },
   "files": {
     "includes": [
-      "**",
+      "**/*.svelte",
       "!!**/.*/**/*",
-      "!!**/docs/src/pages/index.svelte",
-      "!**/*.svg",
-      "!**/*.scss"
+      "!!**/docs/src/pages/index.svelte"
     ]
   },
   "linter": {

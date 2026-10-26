@@ -11,7 +11,6 @@ test("focus rings snap instead of fading in", async ({ page }) => {
   const fading = new Set<string>();
   let first = -1;
   for (let i = 0; i < 120; i++) {
-    // biome-ignore lint/performance/noAwaitInLoops: each Tab must land before the next
     await page.keyboard.press("Tab");
     const { focused, transitions } = await page.evaluate(() => {
       const focused = document.activeElement

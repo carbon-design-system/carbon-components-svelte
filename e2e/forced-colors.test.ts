@@ -151,7 +151,6 @@ test.describe("forced colors", () => {
     page,
   }) => {
     for (const [on, off] of selected) {
-      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(on);
       // Polled: a hover transition can still be running at the first read.
       await expect
@@ -187,7 +186,6 @@ test.describe("forced colors", () => {
   test("selected and pressed labels show on their fill", async ({ page }) => {
     // An icon-only button has no visible label.
     for (const [on] of selected.filter(([on]) => !on.includes("bx--btn"))) {
-      // biome-ignore lint/performance/noAwaitInLoops: one screenshot at a time
       expect.soft(await flatness(page, on), on).toBeLessThan(0.95);
     }
   });
@@ -206,7 +204,6 @@ test.describe("forced colors", () => {
       ".bx--card--disabled .bx--card__label",
       ".bx--card--disabled .bx--card__title-text-row",
     ]) {
-      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
       await expect
         .poll(async () => (await style(page, selector)).color, {
@@ -409,7 +406,6 @@ test.describe("forced colors", () => {
   }) => {
     await page.locator(".bx--text-truncate__toggle").waitFor();
     for (const [target, ring, pseudo, color] of rings) {
-      // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
       await page.focus(target);
       expect.soft(await style(page, ring, pseudo), target).toMatchObject({
         outline: "solid 2px",
@@ -566,7 +562,6 @@ test.describe("forced colors", () => {
       ".bx--checkbox:disabled:not(:checked) + .bx--checkbox-label",
       ".bx--checkbox:disabled:checked + .bx--checkbox-label",
     ]) {
-      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(label, { force: true });
       const [text, box, check] = await Promise.all([
         style(page, label),
@@ -786,7 +781,6 @@ test.describe("forced colors", () => {
       for (const [field, ring, pseudo] of rings) {
         const scope = `[data-testid=${group}] [data-testid=${field}]`;
         const target = `${scope} :is(input:not([type=hidden]):not([tabindex="-1"]), textarea, select, [role=combobox])`;
-        // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
         await page.locator(target).first().focus();
         expect
           .soft(
@@ -811,7 +805,6 @@ test.describe("forced colors", () => {
       ["multiselect", ".bx--list-box__field"],
     ]) {
       const scope = `[data-testid=fields] [data-testid=${field}]`;
-      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
       await page.focus(`${scope} ${trigger}`);
       const highlighted = `${scope} .bx--list-box__menu-item--highlighted`;
       // The first press opens the menu; ComboBox highlights on the second.

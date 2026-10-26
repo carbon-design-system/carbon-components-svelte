@@ -1125,14 +1125,14 @@ describe("MultiSelect", () => {
         type Events = ComponentEvents<ComponentType>;
 
         expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
-          // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
           readonly any[] | undefined
         >();
 
         type SelectEvent = Events["select"];
         type SelectEventDetail =
           SelectEvent extends CustomEvent<infer T> ? T : never;
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<SelectEventDetail["selectedIds"]>().toEqualTypeOf<any[]>();
       });
 
@@ -1161,6 +1161,7 @@ describe("MultiSelect", () => {
       });
 
       it("should work with 'as const' for literal type inference", () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
         const items = [
           { id: "option1", text: "Option 1" },
           { id: "option2", text: "Option 2" },
