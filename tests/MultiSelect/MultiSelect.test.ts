@@ -832,6 +832,22 @@ describe("MultiSelect", () => {
       expect(checkbox).not.toHaveAttribute("name", "contact_0");
       expect(checkbox).toHaveAttribute("value", "slack");
     });
+
+    it("labels options with itemToInput's labelText", async () => {
+      render(MultiSelect, {
+        props: {
+          items,
+          itemToInput: (item: MultiSelectItem) => ({
+            labelText: `${item.text} (label)`,
+          }),
+        },
+      });
+
+      await openMenu();
+      expect(
+        screen.getByRole("option", { name: "Slack (label)" }),
+      ).toBeInTheDocument();
+    });
   });
 
   // Inline shows it under the field, as inline TextInput and Select do;
