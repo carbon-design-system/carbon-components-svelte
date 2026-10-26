@@ -275,6 +275,11 @@ export const interactive: AriaEntry[] = [
       "header container; its close button is a fixed control named by iconDescription",
   },
   {
+    name: "LayoutInspector",
+    exempt:
+      "aria-hidden overlay with no focusable content; tabindex only appears in its target-size selector",
+  },
+  {
     name: "Link",
     render: (attrs) => render(Link, { props: { href: "/docs", ...attrs } }),
     target: () => screen.getByRole("link"),
