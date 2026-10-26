@@ -177,7 +177,7 @@ describe("Theme", () => {
     /** The themes picked in order, starting from "white". */
     picks: [CarbonTheme, CarbonTheme];
     /** Reads the rendered options, when the render mode lists them. */
-    readOptions?: (control: HTMLElement) => Promise<string[]>;
+    readOptions?: (control: HTMLElement) => string[] | Promise<string[]>;
     expectedOptions?: string[];
   }>([
     {
@@ -233,7 +233,7 @@ describe("Theme", () => {
       pick: (control, theme) => user.selectOptions(control, theme),
       expectShows: (control, theme) => expect(control).toHaveValue(theme),
       picks: ["g100", "white"],
-      readOptions: async (control) =>
+      readOptions: (control) =>
         within(control)
           .getAllByRole("option")
           .map((option) => option.getAttribute("value") ?? ""),

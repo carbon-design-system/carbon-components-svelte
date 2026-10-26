@@ -123,8 +123,7 @@ describe("theme zones", () => {
       rules
         .filter((r) => r.selector === `.bx--${theme}` && r.context === "")
         .map((r) => r.decls.get("color-scheme"))
-        .filter(Boolean)
-        .at(-1);
+        .findLast(Boolean);
     expect(scheme("white")).toBe("light");
     expect(scheme("g10")).toBe("light");
     expect(scheme("g80")).toBe("dark");

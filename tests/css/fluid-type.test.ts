@@ -112,10 +112,10 @@ describe("fluid type styles", () => {
       // At each breakpoint the style lists, v11's value is the base merged
       // with every breakpoint up to it.
       const { breakpoints = {}, ...base } = style;
-      let expected: Record<string, unknown> = { ...base };
+      const expected: Record<string, unknown> = { ...base };
       for (const [bp, rem] of Object.entries(BREAKPOINTS)) {
         const own = breakpoints[bp as Breakpoint];
-        expected = { ...expected, ...own };
+        Object.assign(expected, own);
         // Between two of the style's breakpoints the size is interpolated.
         if (bp !== "sm" && !own) continue;
         const widthPx = rem * 16;

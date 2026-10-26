@@ -153,8 +153,7 @@ test.describe("ComposedModal", () => {
     // before sending Tab so we do not race parallel updates.
     await expect
       .poll(
-        async () =>
-          primaryFocus.evaluate((el) => el === document.activeElement),
+        () => primaryFocus.evaluate((el) => el === document.activeElement),
         { timeout: 10_000 },
       )
       .toBeTruthy();
