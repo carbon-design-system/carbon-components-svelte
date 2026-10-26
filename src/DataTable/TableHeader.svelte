@@ -15,7 +15,10 @@
   /** Set to `true` if the column sorting */
   export let active = false;
 
-  /** Specify the `scope` attribute */
+  /**
+   * Specify the `scope` attribute
+   * @type {"col" | "row" | "colgroup" | "rowgroup"}
+   */
   export let scope = "col";
 
   /** Default translation ids */
