@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @restProps {a | button | div}
    */
 
@@ -29,7 +29,7 @@
    * Icon is rendered to the left of the item content.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   import { resolveLinkRel } from "../utils/link-rel.js";
 

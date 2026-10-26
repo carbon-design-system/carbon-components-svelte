@@ -1,7 +1,7 @@
 <script>
   /**
    * @template [T=any]
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @event {null} expand
    * @event {null} collapse
    * @event {T} search

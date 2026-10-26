@@ -1,7 +1,7 @@
 <script>
   /**
    * @template {HeaderSearchResult} [Result=HeaderSearchResult]
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**

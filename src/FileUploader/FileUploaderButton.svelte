@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @event {ReadonlyArray<File>} change
    * @event {Array<{ file: File; reason: "size" | "duplicate" }>} rejected
    * @restProps {input}
@@ -94,7 +94,7 @@
    * Specify the icon to render.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the ARIA label for the button icon.

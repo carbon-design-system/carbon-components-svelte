@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @restProps {a | button}
    */
 
@@ -23,7 +23,7 @@
    * Alternatively, use the "icon" slot.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /** Set to `true` to mark the link as the current selection */
   export let isSelected = false;

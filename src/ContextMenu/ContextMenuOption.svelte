@@ -7,7 +7,7 @@
    */
 
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -31,7 +31,7 @@
    * Overridden with a checkmark icon when the option is selectable or part of a radio group.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the label text.

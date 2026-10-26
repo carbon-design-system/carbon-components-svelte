@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @restProps {li}
    */
 
@@ -33,7 +33,7 @@
    * </OverflowMenuItem>
    * ```
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify an icon to render pinned to the right edge of the item.
@@ -46,7 +46,7 @@
    * </OverflowMenuItem>
    * ```
    */
-  export let iconRight = /** @type {Icon} */ (undefined);
+  export let iconRight = /** @type {Icon | undefined} */ (undefined);
 
   /** Specify the `href` attribute if the item is a link */
   export let href = "";

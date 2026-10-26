@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -35,7 +35,7 @@
    * Specify an icon to render before the eyebrow text.
    * @type {Icon | undefined}
    */
-  export let eyebrowIcon = /** @type {Icon} */ (undefined);
+  export let eyebrowIcon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the page subtitle.

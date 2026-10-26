@@ -2,7 +2,7 @@
   import { copyText } from "../utils/copy-text.js";
 
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @event {null} copy
    * @event {{ error: unknown }} copy:error
    */
@@ -21,7 +21,7 @@
    * When unset, the copy icon is always shown.
    * @type {Icon | undefined}
    */
-  export let feedbackIcon = /** @type {Icon} */ (undefined);
+  export let feedbackIcon = /** @type {Icon | undefined} */ (undefined);
 
   /** Set the title and ARIA label for the copy button */
   export let iconDescription = "Copy to clipboard";
