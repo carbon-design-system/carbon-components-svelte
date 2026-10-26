@@ -49,6 +49,8 @@ jobs:
 
       - run: bun run test:src-svelte
 
+      - run: bun run test:src-svelte-types
+
       - run: bun run test:package-exports
 
       - run: bun run check:package

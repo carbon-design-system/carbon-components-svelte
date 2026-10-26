@@ -238,7 +238,7 @@ The auto-generated Props / Typedefs / Slots / Events tables at the bottom of eac
 | `@event` | Dispatched custom events (with payload type) |
 | `@slot` | Named/default slot props |
 | `@restProps` | Where `$$restProps` land |
-| `@extends` | Inherit props from another component (skeleton wrappers) |
+| `@extendProps` | Inherit props from another component (skeleton wrappers) |
 | `@default`, `@example` | Docs metadata |
 
 Reference [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte) for `@template`, `@typedef`, `@event`, `@slot`, and typed props. For generics in plain JS, see [`src/utils/debounce.js`](src/utils/debounce.js).
@@ -265,6 +265,20 @@ bun test:types   # svelte-check on tests/
 `bun setup` already runs `build:docs` once. Repeat `build:docs` only when the component API changes.
 
 When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/framed/` for the old name. Nothing type-checks the e2e fixtures, and the docs examples are type-checked only on PRs that change `docs/`. Svelte ignores an unknown prop, so a stale one passes until an E2E assertion fails or the next docs PR does.
+
+#### Component script types
+
+`bun test:src-svelte-types` type-checks the component scripts themselves (`checkJs`, without `strict` for now, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)). Most components still have errors, so it holds each one to its count in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): a component that gains an error fails, and so does a new component with any. When you fix errors, run `bun test:src-svelte-types --update` to lower the baseline; the check fails until you do. Run `bun build:docs` first.
+
+sveld also reads some JSDoc that TypeScript rejects. Write the form both accept:
+
+| Write | Not |
+| --- | --- |
+| `@template [Id=any]` above `@typedef {object} Item` | `@typedef {object} Item<Id=any>` |
+| `@template` for component generics, in a block without a `@typedef` (TypeScript gives a `@template` to the `@typedef` beside it) | `@generics {T extends Item = Item} T` |
+| `@extendProps {"./Button.svelte"} ButtonProps` | `@extends {"./Button.svelte"} ButtonProps` |
+| One `@event` with its `@type`/`@property` tags per block, or `@event {{ trigger: string }} close` | Several `@event` + `@type {object}` groups in one block |
+| A typedef the module script uses, declared in the module script | Declared in the instance script |
 
 ### Creating a component
 
@@ -797,6 +811,7 @@ Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
 - `bun test:src-svelte` runs `svelte-check` compiler diagnostics on `src/` (a11y, unused CSS)
+- `bun test:src-svelte-types` type-checks the component scripts in `src/` against a per-component error baseline (see [Component script types](#component-script-types))
 - `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
@@ -1327,7 +1342,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 
 | Job | Runs on a PR |
 | --- | --- |
-| `static-checks` | Always: builds docs, then `test:src-types`, `test:src-js` and `test:src-svelte` |
+| `static-checks` | Always: builds docs, then `test:src-types`, `test:src-js`, `test:src-svelte` and `test:src-svelte-types` |
 | `test` (2 shards) | The selected unit tests. `test:types` runs on the first shard |
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
