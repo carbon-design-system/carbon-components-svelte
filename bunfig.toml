@@ -1,0 +1,27 @@
+# Options for `bun fmt`.
+
+[fmt]
+# Sass, Markdown and YAML stay hand-formatted.
+ignorePatterns = [
+  "**/*.scss",
+  "**/*.md",
+  "**/*.yml",
+  "**/*.yaml",
+  "docs/src/pages/index.svelte",
+]
+
+[fmt.sortImports]
+groups = [
+  "builtin",
+  "external",
+  ["internal", "subpath"],
+  "parent",
+  ["sibling", "index"],
+  "style",
+  "unknown",
+]
+newlinesBetween = false
+ignoreCase = false
+
+[fmt.svelte]
+sortOrder = "none"

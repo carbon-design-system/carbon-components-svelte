@@ -37,6 +37,7 @@ tooling:
           - "scripts/**"
           - "bench/**"
           - "biome.json"
+          - "bunfig.toml"
           - "vite.config*.ts"
           - "playwright.config.ts"
           - "ostia.config.ts"

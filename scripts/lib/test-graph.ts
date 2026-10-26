@@ -444,6 +444,7 @@ const IGNORED = [
   "thumbnails/**",
   "ostia.config.ts",
   "biome.json",
+  "bunfig.toml",
   "carbon.yml",
   "telemetry.yml",
   "LICENSE",

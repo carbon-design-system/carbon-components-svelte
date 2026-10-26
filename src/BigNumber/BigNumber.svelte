@@ -251,7 +251,8 @@
       {/if}
     </figcaption>
     <div class:bx--big-number__value-row={true}>
-      <!-- biome-ignore format: whitespace between these nodes renders as text -->
+      <!-- Whitespace between these nodes renders as text -->
+      <!-- prettier-ignore -->
       <span
         class:bx--big-number__value={true}
         title={formattedValue === fullValue ? undefined : fullValue}

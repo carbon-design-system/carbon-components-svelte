@@ -727,7 +727,7 @@ The shortest loop, in order:
 
 | Step | Command | Cost |
 | --- | --- | --- |
-| Lint what you touched | `bunx biome check --write <paths>` | Seconds |
+| Format and lint what you touched | `bun fmt <paths> && bunx biome check --write <paths>` | Seconds |
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
 | Run the E2E tests your branch can reach | `bun run test:changed --e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
@@ -735,7 +735,7 @@ The shortest loop, in order:
 
 Don't run `bun run test` or `bun run test:e2e` to check a change. CI runs the same selection on the PR, and master runs everything after a merge.
 
-For format and lint, scope Biome to what you touched:
+`bun fmt` formats JavaScript, TypeScript, JSON, HTML and Svelte, with the options in [`bunfig.toml`](bunfig.toml). Sass, Markdown and YAML are left as written. Biome lints. Scope both to what you touched, with the same `<paths>`, `--staged` or `--changed` (Bun's `--changed` takes no `--since`):
 
 ```sh
 # Specific paths — always lints the current working tree
@@ -761,7 +761,7 @@ list from git, so each sees a different slice:
   not just your latest commit. Reach for it deliberately (e.g. auditing a whole branch
   before a PR), not as a pre-commit habit.
 
-`bun run lint` runs Biome over the entire repository. Reserve it for broad sweeps.
+`bun run lint` runs `bun fmt` and Biome over the entire repository. Reserve it for broad sweeps.
 
 For unit tests, match a pattern against test file paths instead of running the whole suite:
 
@@ -1299,7 +1299,7 @@ git merge upstream/master
 
 - each new test sits inside the right `describe`, not inside another test
 - no list entry or import appears twice
-- imports are still sorted (`bunx biome check --write <file>`)
+- imports are still sorted (`bun fmt <file>`)
 - the spec still passes locally
 
 ### What CI runs on a pull request
