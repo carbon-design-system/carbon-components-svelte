@@ -60,6 +60,17 @@ describe("Select", () => {
     expect(onUpdate).toHaveBeenCalledWith("option-2");
   });
 
+  it("keeps its value when a script sets a value it doesn't list", async () => {
+    const onUpdate = vi.fn();
+    render(Select, { selected: "option-2", onUpdate });
+
+    const selectElement = screen.getByLabelText("Select label");
+    await fireEvent.change(selectElement, { target: { value: "option-9" } });
+
+    expect(onUpdate).not.toHaveBeenCalled();
+    expect(selectElement).toHaveValue("option-2");
+  });
+
   // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/2871
   it("does not dispatch update event on initial render", () => {
     const onUpdate = vi.fn();

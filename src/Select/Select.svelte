@@ -163,6 +163,13 @@
   });
 
   function handleChange(event) {
+    // A person can only pick a listed option. No option selected means a
+    // script set a value the select doesn't list, so keep the current one.
+    if (event.target.selectedIndex === -1) {
+      syncNativeSelectValue();
+      return;
+    }
+
     let value = event.target.value;
 
     if ($itemTypesByValue[value] === "number") {

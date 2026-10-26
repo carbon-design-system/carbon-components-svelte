@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
+import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import Pagination from "./Pagination.test.svelte";
@@ -530,6 +531,49 @@ describe("Pagination", () => {
     await user.selectOptions(pageSelect[1], "2");
     expect(onChange).toHaveBeenCalledWith({ page: 2 });
     expect(onUpdate).toHaveBeenCalledWith({ pageSize: 15, page: 2 });
+  });
+
+  it("keeps the page when the page select is set to a page it doesn't list", async () => {
+    const onChange = vi.fn();
+    const onUpdate = vi.fn();
+    const { container } = render(Pagination, {
+      props: {
+        totalItems: 100_000,
+        pageWindow: 100,
+        page: 3,
+        onChange,
+        onUpdate,
+      },
+    });
+
+    const select = screen.getByLabelText(/Page number, of 10000 pages/);
+    // Page 5000 is outside the window, so the browser sets the value to "".
+    await fireEvent.change(select, { target: { value: "5000" } });
+    await tick();
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(onUpdate).not.toHaveBeenCalled();
+    expect(select).toHaveValue("3");
+    expect(container).toHaveTextContent("21–30 of 100,000 items");
+  });
+
+  it("keeps the page size when the size select is set to a size it doesn't list", async () => {
+    const onChange = vi.fn();
+    render(Pagination, {
+      props: {
+        totalItems: 102,
+        pageSizes: [5, 10, 15],
+        pageSize: 10,
+        onChange,
+      },
+    });
+
+    const select = screen.getAllByRole("combobox")[0];
+    await fireEvent.change(select, { target: { value: "7" } });
+    await tick();
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(select).toHaveValue("10");
   });
 
   it("resets pageSize and page when an updated pageSizes array drops the current pageSize", async () => {
