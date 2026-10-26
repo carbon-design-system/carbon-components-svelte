@@ -211,6 +211,46 @@
   /** @type {null | { rect: DOMRect; marginBox: Box; marginWidths: number[]; paddingBox: Box; paddingWidths: number[]; contentBox: Box; labels: (SideLabel & { kind: "margin" | "padding"; off: boolean })[]; info: { name: string; size: string; margin: number[]; padding: number[]; border: number[]; carbon: boolean; gap: { row: number; column: number } | null; type: string[] | null; typeSpec: string; colors: import("../inspect.js").ColorInfo | null } }} */
   let hover = null;
 
+  /**
+   * The card's spacing rows: margin, padding (measured with its border),
+   * and the gap of a flex or grid box.
+   * @type {{ key: string; label: string; values: number[]; borders?: number[] }[]}
+   */
+  $: spacingGroups = hover
+    ? [
+        { key: "margin", label: "Margin", values: hover.info.margin },
+        {
+          key: "padding",
+          label: "Padding",
+          values: hover.info.padding,
+          borders: hover.info.border,
+        },
+        ...(hover.info.gap
+          ? [
+              {
+                key: "gap",
+                label: "Gap",
+                values: [hover.info.gap.row, hover.info.gap.column],
+              },
+            ]
+          : []),
+      ]
+    : [];
+
+  /**
+   * Whether a color row gets a second line: its token names, "Inherited",
+   * or "Off-palette" when the page has theme tokens and none match.
+   * @param {import("../inspect.js").ColorRow} row
+   * @param {boolean} themeTokens
+   */
+  function hasTokenLine(row, themeTokens) {
+    return (
+      row.tokens.length > 0 ||
+      Boolean(row.inherited) ||
+      (themeTokens && !row.note)
+    );
+  }
+
   /** @type {null | { a: DOMRect; b: DOMRect; segments: (Segment & { token: string | null })[] }} */
   let distance = null;
 
@@ -741,7 +781,7 @@
         </div>
         <dl class="bx--layout-inspector__list">
           {#if spacing}
-            {#each [{ key: "margin", label: "Margin", values: hover.info.margin }, { key: "padding", label: "Padding", values: hover.info.padding, borders: hover.info.border }, ...(hover.info.gap ? [{ key: "gap", label: "Gap", values: [hover.info.gap.row, hover.info.gap.column] }] : [])] as group (group.key)}
+            {#each spacingGroups as group (group.key)}
               {@const lines = sideTokens(group.values, {
                 borders: group.borders,
                 carbon: hover.info.carbon,
@@ -807,7 +847,7 @@
                     {row.hex}
                   {/if}
                 </dd>
-                {#if row.tokens.length || row.inherited || (hover.info.colors.tokens && !row.note)}
+                {#if hasTokenLine(row, hover.info.colors.tokens)}
                   <dd
                     class="bx--layout-inspector__desc bx--layout-inspector__secondary"
                   >
