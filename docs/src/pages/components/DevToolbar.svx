@@ -34,6 +34,8 @@ A static `import { DevToolbar } from "carbon-components-svelte/devtools"` works 
 
 It renders a [`GridOverlay`](/components/Grid#gridoverlay) and a [`LayoutInspector`](/components/LayoutInspector) for you, so you do not wire up either one.
 
+To try every tool on a full app page built from Carbon components, see the [dev tools kitchen sink](/dev-tools-kitchen-sink).
+
 Click a tool to turn it on; click again to turn it off. Hover or focus a tool to see its name and shortcut. The close button collapses the toolbar to a small tools button that counts the tools still on.
 
 The toolbar is built from this library's own components: each group of tools is a small icon-only `ToggleButtonGroup`, so every tool has a tooltip with its name and shortcut, and arrow keys move between the tools in a group. The whole bar is one [`TooltipGroup`](/components/TooltipGroup): after the first tooltip opens, moving across the bar, even between groups, shows each tooltip at once. Collapse and expand are small ghost `Button`s, and the collapsed handle shows a `BadgeIndicator` with the number of tools still on. The bar itself is styled like a Carbon menu: `$layer-01` with the standard shadow.

@@ -210,6 +210,9 @@ To keep both out of production builds, import them only in development. See [Ins
 
 ## Playground
 
+To try every check on a full app page, see the [dev tools kitchen sink](/dev-tools-kitchen-sink).
+
+
 Try every option together. The card on the right has a few off-scale values and a small link on purpose.
 
 <FileSource src="/framed/LayoutInspector/LayoutInspectorPlayground" />
