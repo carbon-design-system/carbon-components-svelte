@@ -1,7 +1,7 @@
 {
   "Accordion/Accordion.svelte": 1,
   "BigNumber/BigNumber.svelte": 3,
-  "Bleed/Bleed.svelte": 10,
+  "Bleed/Bleed.svelte": 9,
   "Breadcrumb/BreadcrumbItem.svelte": 2,
   "Button/Button.svelte": 4,
   "Card/Card.svelte": 3,
@@ -101,10 +101,5 @@
   "UIShell/SideNavMenu.svelte": 2,
   "UIShell/SkipToContent.svelte": 1,
   "UserAvatar/UserAvatar.svelte": 6,
-  "VirtualList/VirtualList.svelte": 1,
-  "Box/Box.svelte": 1,
-  "LayoutDirection/LayoutDirection.svelte": 1,
-  "Stack/Stack.svelte": 1,
-  "Text/Text.svelte": 1,
-  "ThemeZone/ThemeZone.svelte": 1
+  "VirtualList/VirtualList.svelte": 1
 }

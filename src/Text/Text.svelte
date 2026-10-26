@@ -70,7 +70,7 @@
    * Specify the tag name.
    * @type {Tag}
    */
-  export let tag = "p";
+  export let tag = /** @type {Tag} */ ("p");
 
   $: resolvedMaxWidth =
     maxWidth == null
