@@ -1277,6 +1277,24 @@ To cover an opt-in mode with existing assertions, have the fixture read a query 
 
 Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the index page.
 
+### Audit the docs examples
+
+`bun run audit:docs` runs the dev tools' page checks on every framed docs example: off-scale spacing, low contrast, small targets, and overflow. It serves `docs/dist`, so build it first with `cd docs && bun run build:audit`. A full run takes about 30 seconds.
+
+```sh
+bun run audit:docs                      # the examples' own code
+bun run audit:docs --carbon             # Carbon's components too
+bun run audit:docs --filter DataTable   # some examples only
+```
+
+It writes `.context/audit-docs/report.md` and `report.json`. Each finding has a severity, a CSS path, the Carbon component it sits in, and data to act on: both colors and a passing token for contrast, the crowding neighbor and the room needed for a target, the nearest token for spacing.
+
+The `Docs audit` workflow runs it with `--baseline` and fails on any finding that `scripts/audit-docs.baseline.json` does not list. Fix a new finding. To accept one, run `bun run audit:docs --update-baseline` and add a `reason` to its entry. When a baseline finding is fixed, the run says so; update the baseline to drop it.
+
+`--carbon` mode reports Carbon's v10 values that sit off the v11 spacing scale, as `info`. It is for checking a component change or a custom theme, not a CI gate. The dev tools demos seed bugs on purpose, so the script skips them unless you pass `--include-seeded`.
+
+The same checks are a library API, for a script or an agent driving a browser: `audit()`, `inspect(element)`, and `baselines()` from `carbon-components-svelte/devtools`. See [`audit.js`](src/devtools/audit.js).
+
 ### Performance benchmarks
 
 Benchmarks live in `bench/`, split into two tiers by filename convention. Both tiers run on [ostia](https://github.com/metonym/ostia) (Bun-native) — no vitest, no mitata.
@@ -1500,6 +1518,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
 | `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
 | `bench-ab` (Perf workflow) | `perf:` PRs and PRs labeled `performance`. Fails past a 4% [bench](#performance-benchmarks) geomean |
+| `Docs audit` (separate workflow) | `docs/`, `src/`, or `css/` changes. Fails on a docs example finding the baseline does not list. See [Audit the docs examples](#audit-the-docs-examples) |
 
 Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
 

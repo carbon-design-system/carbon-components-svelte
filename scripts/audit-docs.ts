@@ -2,14 +2,18 @@
  * Runs the dev tools' page checks (`audit` from `carbon-components-svelte/
  * devtools`) on every framed docs example and writes a report.
  *
- *   bun scripts/audit-docs.ts [--carbon] [--width 1056] [--filter Button]
+ *   bun run audit:docs [--carbon] [--width 1056] [--filter Button]
  *     [--concurrency 4] [--base http://localhost:4175] [--out dir]
- *     [--include-seeded]
+ *     [--include-seeded] [--baseline] [--update-baseline]
  *
  * Without `--base`, it serves `docs/dist` with `vite preview`; build it
- * first with `cd docs && bun run build:index-docs && bunx vite build`.
- * The audit is bundled from source and injected into each page, so the
- * docs need no changes.
+ * first with `cd docs && bun run build:audit`. The audit is bundled from
+ * source and injected into each page, so the docs need no changes.
+ *
+ * With `--baseline`, it compares the findings with
+ * `scripts/audit-docs.baseline[-carbon].json` and fails on any finding the
+ * baseline does not list. `--update-baseline` rewrites the file and keeps
+ * each entry's `reason`. CI runs the default mode with `--baseline`.
  */
 import { type ChildProcess, spawn } from "node:child_process";
 import {
@@ -48,6 +52,8 @@ const includeSeeded = arg("include-seeded") === "true";
 const width = Number(arg("width", "1056"));
 const concurrency = Number(arg("concurrency", "4"));
 const filter = arg("filter");
+const compare = arg("baseline") === "true";
+const updateBaseline = arg("update-baseline") === "true";
 const out = resolve(arg("out", join(ROOT, ".context/audit-docs")) as string);
 let base = arg("base");
 
@@ -363,3 +369,77 @@ console.log(
   markdown(results, skipped, wallMs).split("\n").slice(0, 14).join("\n"),
 );
 console.log(`\nWrote ${relative(ROOT, out)}/report${suffix}.{json,md}`);
+
+type BaselineEntry = {
+  url: string;
+  check: string;
+  selector: string;
+  message: string;
+  reason?: string;
+};
+
+const BASELINE = join(ROOT, `scripts/audit-docs.baseline${suffix}.json`);
+const keyOf = (e: Omit<BaselineEntry, "reason">) =>
+  `${e.url}|${e.check}|${e.selector}|${e.message}`;
+const current: BaselineEntry[] = results.flatMap((r) =>
+  r.findings.map((f) => ({
+    url: r.url,
+    check: f.check,
+    selector: f.selector,
+    message: f.message,
+  })),
+);
+
+function readBaseline(): BaselineEntry[] {
+  try {
+    return JSON.parse(readFileSync(BASELINE, "utf8")).findings;
+  } catch {
+    return [];
+  }
+}
+
+let failed = results.some((r) => r.error);
+if (failed) console.error("\nSome pages failed to load; see the report.");
+
+if (updateBaseline) {
+  const reasons = new Map(readBaseline().map((e) => [keyOf(e), e.reason]));
+  const findings = current.map((e) => {
+    const reason = reasons.get(keyOf(e));
+    return reason ? { ...e, reason } : e;
+  });
+  writeFileSync(
+    BASELINE,
+    `${JSON.stringify({ width, carbon, findings }, null, 2)}\n`,
+  );
+  console.log(
+    `Wrote ${findings.length} findings to ${relative(ROOT, BASELINE)}`,
+  );
+} else if (compare) {
+  const audited = new Set(results.map((r) => r.url));
+  const known = new Set(readBaseline().map(keyOf));
+  const fresh = current.filter((e) => !known.has(keyOf(e)));
+  const now = new Set(current.map(keyOf));
+  const fixed = readBaseline().filter(
+    (e) => audited.has(e.url) && !now.has(keyOf(e)),
+  );
+  if (fresh.length) {
+    failed = true;
+    console.error(
+      `\n${fresh.length} new finding(s), not in ${relative(ROOT, BASELINE)}:`,
+    );
+    for (const e of fresh) {
+      console.error(`  ${e.url}  ${e.check}  ${e.message}\n    ${e.selector}`);
+    }
+    console.error(
+      "\nFix them, or accept them with `bun run audit:docs --update-baseline` and add a `reason`.",
+    );
+  }
+  if (fixed.length) {
+    console.log(
+      `\n${fixed.length} baseline finding(s) are gone. Run \`bun run audit:docs --update-baseline\` to drop them.`,
+    );
+  }
+  if (!fresh.length) console.log("\nNo new findings.");
+}
+
+process.exit(failed ? 1 : 0);

@@ -92,3 +92,26 @@ To react only when a person turns a tool on or off, listen to `change`. It fires
 The RTL tool sets `dir="rtl"` on the `<html>` element, to catch layouts that use physical sides (`margin-right`) where they need logical ones (`margin-inline-end`). Turning it off restores the page; if the page was already right-to-left, the toolbar leaves it alone. The bar itself always reads left to right, and so do the inspector card and the grid badge, so measurements like `16.4:1` keep their order. A subtree inside a [`LayoutDirection`](/components/LayoutDirection) keeps its own `dir`; the RTL tool cannot flip it.
 
 <FileSource src="/framed/DevToolbar/DevToolbarRtl" />
+
+## Scripts and agents
+
+The checks behind the toolbar are also functions, for a test, a script, or an agent driving a browser. They return data instead of drawing:
+
+```js
+import { audit, baselines, inspect } from "carbon-components-svelte/devtools";
+
+// Every page check, once, over the whole page.
+const { findings } = audit({ group: true });
+// → [{ check: "contrast", severity: "error", selector: "td > span",
+//      message: "3.7:1 · needs 4.5:1",
+//      values: { text: "#0f62fe", background: "#e0e0e0", setBy: "inline",
+//                suggest: { token: "link-secondary", ratio: 5.9 } } }]
+
+// The inspector card for one element: spacing, type, and color tokens.
+inspect("#save-button");
+
+// Each text line's distance to 8px baseline rows, with its type style.
+baselines({ step: 8, offset: 48 });
+```
+
+`audit` does not wait, throttle, or stop at the viewport, so the same page gives the same result. Unlike the toolbar, it skips nothing for speed. Set `carbon: true` to check Carbon's own components too, and `scope` to check one part of the page.
