@@ -84,6 +84,7 @@
   /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
+   * @type {null | HTMLInputElement}
    */
   export let ref = null;
 

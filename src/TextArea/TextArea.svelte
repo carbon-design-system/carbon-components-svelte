@@ -108,6 +108,7 @@
   /**
    * Obtain a reference to the textarea HTML element.
    * @bindable readonly
+   * @type {null | HTMLTextAreaElement}
    */
   export let ref = null;
 

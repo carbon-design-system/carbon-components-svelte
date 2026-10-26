@@ -94,12 +94,14 @@
   /**
    * Obtain a reference to the trigger button element.
    * @bindable readonly
+   * @type {null | HTMLButtonElement}
    */
   export let buttonRef = null;
 
   /**
    * Obtain a reference to the overflow menu element.
    * @bindable readonly
+   * @type {null | HTMLUListElement}
    */
   export let menuRef = null;
 

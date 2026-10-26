@@ -64,6 +64,7 @@
   /**
    * Obtain a reference to the top-level element.
    * @bindable readonly
+   * @type {null | HTMLElement}
    */
   export let ref = null;
 

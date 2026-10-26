@@ -86,6 +86,7 @@
   /**
    * Obtain a reference to the HTML element.
    * @bindable readonly
+   * @type {null | HTMLAnchorElement | HTMLButtonElement}
    */
   export let ref = null;
 

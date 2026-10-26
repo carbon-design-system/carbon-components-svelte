@@ -66,6 +66,7 @@
   /**
    * Obtain a reference to the root element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 

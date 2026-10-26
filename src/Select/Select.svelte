@@ -62,6 +62,7 @@
   /**
    * Obtain a reference to the select HTML element.
    * @bindable readonly
+   * @type {null | HTMLSelectElement}
    */
   export let ref = null;
 

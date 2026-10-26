@@ -34,6 +34,7 @@
   /**
    * Obtain a reference to the HTML button element.
    * @bindable readonly
+   * @type {null | HTMLButtonElement}
    */
   export let ref = null;
 
