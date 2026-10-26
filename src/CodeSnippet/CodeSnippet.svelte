@@ -491,9 +491,7 @@
       class:bx--snippet--expand={expanded}
       class:bx--snippet--no-copy={hideCopyButton}
       class:bx--snippet--wraptext={wrapText}
-      class:bx--snippet--single={type === "single"}
-      class:bx--snippet--inline={type === "inline"}
-      class:bx--snippet--multi={type === "multi"}
+      class:bx--snippet--inline={true}
       {...$$restProps}
     >
       <code {id}> <slot>{code}</slot> </code>
@@ -588,9 +586,8 @@
     class:bx--snippet--no-copy={hideCopyButton}
     class:bx--snippet--wraptext={wrapText}
     class:bx--snippet--single={type === "single"}
-    class:bx--snippet--inline={type === "inline"}
     class:bx--snippet--multi={type === "multi"}
-    class:bx--snippet--disabled={type !== "inline" && disabled}
+    class:bx--snippet--disabled={disabled}
     class:bx--snippet--full-width={fullWidth}
     {...wrapperProps}
     on:mouseover
