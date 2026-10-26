@@ -100,9 +100,10 @@
   export let refIcon = null;
 
   /**
-   * Set to `true` to render the tooltip in a portal,
-   * preventing it from being clipped by `overflow: hidden` containers.
-   * By default, the tooltip is portalled when inside a `Modal`.
+   * Set to `true` to always render the tooltip in a portal, or `false` to
+   * keep it in place. Left unset, the tooltip moves to a portal inside a
+   * `Modal`, or when a box around it (`overflow` other than `visible`)
+   * would cut it off.
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
@@ -122,7 +123,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { windowShift } from "../utils/fit-align.js";
+  import { clippedBy, windowShift } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -152,8 +153,16 @@
 
   let focusByMouse = false;
 
+  // Set for one open when the in-place tooltip turns out to be cut off by
+  // a box around it (a scrolling panel, an `overflow: hidden` card): it
+  // moves to a portal instead. Only when `portalTooltip` is left unset.
+  let portalWhenClipped = false;
+  $: if (!open) portalWhenClipped = false;
+
   $: effectivePortalTooltip =
-    portalTooltip === undefined ? !!insideModal : portalTooltip;
+    portalTooltip === undefined
+      ? !!insideModal || portalWhenClipped
+      : portalTooltip;
 
   // The side the tooltip opens on: `direction`, unless it doesn't fit there
   // and fits on the other side (in place; a portalled tooltip flips itself).
@@ -369,6 +378,10 @@
         ? windowShift(refTooltip, 0)
         : 0;
     refTooltip.style.left = `${offsetX + shift}px`;
+
+    if (portalTooltip === undefined && clippedBy(refTooltip)) {
+      portalWhenClipped = true;
+    }
   }
 
   // A portalled tooltip is placed by `FloatingPortal`, which rewrites the
@@ -588,6 +601,7 @@
         style="position: relative; transform: none; display: block; margin-top: 0;"
         style:left="{shift}px"
         on:mouseenter={handleMouseenter}
+        on:mouseleave={handleMouseleave}
         on:focusout={handleFocusout}
         on:keydown={handleKeydown}
       >
