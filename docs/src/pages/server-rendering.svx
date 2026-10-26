@@ -35,7 +35,7 @@ The rest change between the first server paint and the end of hydration.
 
 | Component | Server output | After hydration |
 | :--- | :--- | :--- |
-| Carousel | No slide label or counter, buttons disabled | Count, active slide, buttons enabled <!-- FIX: SSR-04 --> |
+| Carousel | No slide labels | Each slide labeled "Slide 2 of 3" |
 | InterstitialScreen with `open` | No progress indicator | Progress indicator appears <!-- FIX: SSR-04 --> |
 | Dialog with `open` and `modal` | Closed | Open, since `showModal()` needs the browser |
 | TreeView | Nested nodes not indented | Indented <!-- FIX: SSR-10 --> |
