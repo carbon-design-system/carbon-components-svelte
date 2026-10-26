@@ -1211,12 +1211,12 @@
           autocomplete="off"
           aria-autocomplete={typeahead ? "both" : "list"}
           aria-haspopup="listbox"
-          aria-expanded={open}
+          aria-expanded={String(open)}
           aria-activedescendant={highlightedId ?? ""}
-          aria-disabled={disabled || undefined}
-          aria-readonly={readonly || undefined}
+          aria-disabled={disabled ? "true" : undefined}
+          aria-readonly={readonly ? "true" : undefined}
           aria-controls={open ? menuId : undefined}
-          aria-invalid={showInvalid || undefined}
+          aria-invalid={showInvalid ? "true" : undefined}
           aria-errormessage={showInvalid && shownInvalidText
             ? errorId
             : undefined}
@@ -1453,7 +1453,7 @@
           />
         {/if}
         <ListBoxMenuIcon
-          aria-hidden={readonly || undefined}
+          aria-hidden={readonly ? "true" : undefined}
           on:click={(event) => {
             if (disabled || readonly) return;
             event.stopPropagation();
@@ -1476,7 +1476,7 @@
         {highlightedId}
         {wrapOptions}
         highlightScroll={highlightOrigin !== "pointer"}
-        aria-busy={loading || undefined}
+        aria-busy={loading ? "true" : undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         on:mouseleave={() => {

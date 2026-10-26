@@ -513,7 +513,7 @@
       }}
       type="button"
       {disabled}
-      aria-busy={copyPending || undefined}
+      aria-busy={copyPending ? "true" : undefined}
       class:bx--copy={true}
       class:bx--btn--copy={true}
       class:bx--copy-btn--animating={animation}

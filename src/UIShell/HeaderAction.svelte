@@ -197,7 +197,7 @@
     ],
   }}
   type="button"
-  aria-expanded={isOpen}
+  aria-expanded={String(isOpen)}
   aria-controls={isOpen ? `${id}-panel` : undefined}
   {id}
   class:bx--header__action={true}

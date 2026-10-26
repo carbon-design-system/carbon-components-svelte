@@ -256,7 +256,7 @@
     options: { capture: true },
   }}
   type="button"
-  aria-busy={copyPending || undefined}
+  aria-busy={copyPending ? "true" : undefined}
   class:bx--copy-btn={true}
   class:bx--copy={true}
   class:bx--copy-btn--animating={animation}

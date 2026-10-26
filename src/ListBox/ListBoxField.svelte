@@ -42,7 +42,10 @@
     if (declaredRef) ctx?.releaseRef?.({ key: "field", ref: declaredRef });
   });
 
+  // `aria-expanded` reaches the button through `$$restProps`; callers pass
+  // a string, so Svelte 3 and 4 write `"true"` on the server.
   $: ariaExpanded = $$props["aria-expanded"];
+  $: expanded = ariaExpanded === true || ariaExpanded === "true";
   $: menuId = `menu-${id}`;
 </script>
 
@@ -51,10 +54,9 @@
   type="button"
   {id}
   {role}
-  aria-expanded={ariaExpanded}
-  aria-controls={(ariaExpanded && menuId) || undefined}
-  aria-disabled={disabled}
-  aria-readonly={readonly || undefined}
+  aria-controls={expanded ? menuId : undefined}
+  aria-disabled={String(disabled)}
+  aria-readonly={readonly ? "true" : undefined}
   tabindex={disabled ? "-1" : tabindex}
   class:bx--list-box__field={true}
   {...$$restProps}

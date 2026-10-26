@@ -99,7 +99,7 @@
         ? ""
         : download}
     role={disabled ? "link" : undefined}
-    aria-disabled={disabled || undefined}
+    aria-disabled={disabled ? "true" : undefined}
     class:bx--file__selected-file={true}
     class:bx--file-download-item={true}
     class:bx--file-download-item--with-icon={!!icon}

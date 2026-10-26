@@ -67,7 +67,7 @@
   role="tabpanel"
   tabindex="0"
   aria-labelledby={$$restProps["aria-label"] ? undefined : tabId}
-  aria-hidden={!selected}
+  aria-hidden={String(!selected)}
   {hidden}
   {id}
   class:bx--tab-content={true}

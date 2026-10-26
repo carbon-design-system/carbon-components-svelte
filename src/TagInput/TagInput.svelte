@@ -615,7 +615,7 @@
         use:formReset={handleFormReset}
         type="text"
         autocomplete="off"
-        aria-invalid={showInvalid || undefined}
+        aria-invalid={showInvalid ? "true" : undefined}
         aria-errormessage={showInvalid && errorText ? errorId : undefined}
         {disabled}
         {id}

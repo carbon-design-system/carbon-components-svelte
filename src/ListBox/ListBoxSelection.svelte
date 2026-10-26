@@ -101,7 +101,7 @@
     class:bx--tag--filter={true}
     class:bx--tag--high-contrast={true}
     class:bx--tag--disabled={disabled}
-    aria-hidden={readonly || undefined}
+    aria-hidden={readonly ? "true" : undefined}
     {...rest}
   >
     <span
@@ -139,7 +139,7 @@
     class:bx--list-box__selection={true}
     class:bx--tag--filter={selectionCount}
     class:bx--list-box__selection--multi={selectionCount}
-    aria-disabled={readonly || undefined}
+    aria-disabled={readonly ? "true" : undefined}
     {...$$restProps}
     on:click|preventDefault|stopPropagation={handleClear}
     on:keydown|stopPropagation={handleClearKeydown}
