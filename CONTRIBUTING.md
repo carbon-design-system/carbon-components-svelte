@@ -268,7 +268,7 @@ When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/fra
 
 #### Component script types
 
-`bun test:src-svelte-types` type-checks the component scripts themselves (`checkJs`, without `strict` for now, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)). Most components still have errors, so it holds each one to its count in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): a component that gains an error fails, and so does a new component with any. When you fix errors, run `bun test:src-svelte-types --update` to lower the baseline; the check fails until you do. Run `bun build:docs` first.
+`bun test:src-svelte-types` type-checks the component scripts themselves (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)). Most components still have errors, so it holds each one to its count in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): a component that gains an error fails, and so does a new component with any. When you fix errors, run `bun test:src-svelte-types --update` to lower the baseline; the check fails until you do. Run `bun build:docs` first.
 
 sveld also reads some JSDoc that TypeScript rejects. Write the form both accept:
 
