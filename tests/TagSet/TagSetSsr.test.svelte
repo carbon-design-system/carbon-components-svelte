@@ -5,9 +5,10 @@
   export let id: string | undefined = undefined;
   export let firstId: string | undefined = undefined;
   export let secondId: string | undefined = undefined;
+  export let multiline = false;
 </script>
 
-<TagSet {id}>
+<TagSet {id} {multiline}>
   <Tag id={firstId}>First</Tag>
   <Tag id={secondId}>Second</Tag>
 </TagSet>

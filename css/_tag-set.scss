@@ -16,6 +16,12 @@
     min-width: 0;
   }
 
+  // Until it measures (the server's markup), a one-line set clips its tags
+  // to its width instead of running past it. The "+N" takes over on mount.
+  .#{$prefix}--tag-set--unmeasured {
+    overflow: hidden;
+  }
+
   .#{$prefix}--tag-set__space > * {
     // Every child is either shown at natural width or pulled out of flow via
     // `data-overflow` below — never squeeze one to fit, which would force its
