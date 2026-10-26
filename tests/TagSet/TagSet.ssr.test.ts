@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { renderRaw } from "../utils/ssr";
+import { renderRaw, renderSSR } from "../utils/ssr";
 import TagSetSsr from "./TagSetSsr.test.svelte";
 
 describe("TagSet server render", () => {
@@ -17,5 +17,16 @@ describe("TagSet server render", () => {
     expect(html).toContain('id="tags-overflow"');
     expect(html).toContain('id="first"');
     expect(html).toContain('id="second"');
+  });
+
+  const root = (multiline = false) =>
+    renderSSR(TagSetSsr, { multiline }).document.querySelector(".bx--tag-set");
+
+  it("clips a one-line set until it measures", () => {
+    expect(root()).toHaveClass("bx--tag-set--unmeasured");
+  });
+
+  it("lets a multiline set wrap", () => {
+    expect(root(true)).not.toHaveClass("bx--tag-set--unmeasured");
   });
 });

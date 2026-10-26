@@ -353,6 +353,10 @@
     target.click();
   }
 
+  // False until the first measure, as in the server's markup: a one-line
+  // set clips its tags to its width until it knows how many fit.
+  let measured = false;
+
   function measure() {
     if (multiline) {
       visibleCount =
@@ -380,6 +384,7 @@
 
     overflowIds.set(new Set($items.slice(visibleCount).map((item) => item.id)));
     syncTabStop();
+    measured = true;
   }
 
   const throttledMeasure = rafThrottle(measure);
@@ -522,6 +527,7 @@
     itemsOnly: true,
   }}
   class:bx--tag-set={true}
+  class:bx--tag-set--unmeasured={!multiline && !measured}
   {...$$restProps}
   on:focusin={handleFocusIn}
   on:keydown={handleKeydown}
