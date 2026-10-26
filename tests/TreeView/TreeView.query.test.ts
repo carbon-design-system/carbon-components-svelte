@@ -81,7 +81,7 @@ describe("TreeView.showNode with options", () => {
     ).toHaveFocus();
     expect(component.activeId).toBe(3);
     expect(component.selectedIds).toEqual([3]);
-    expect([...component.expandedIds].sort()).toEqual([1, 2]);
+    expect(component.expandedIds?.toSorted()).toEqual([1, 2]);
   });
 
   it("expands node without selecting (expand: true, select: false, focus: false)", async () => {

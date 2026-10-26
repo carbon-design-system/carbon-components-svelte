@@ -255,7 +255,7 @@ describe("TreeView (virtualize)", () => {
     await tick();
 
     expect(
-      [...component.selectedIds].sort((a, b) => Number(a) - Number(b)),
+      component.selectedIds?.toSorted((a, b) => Number(a) - Number(b)),
     ).toEqual([0, 2]);
   });
 

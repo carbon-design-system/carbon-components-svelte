@@ -74,7 +74,7 @@ describe("ContentSwitcher", () => {
     expect(tabs[1]).toHaveClass("bx--content-switcher--selected");
   });
 
-  it.each<[ComponentProps<typeof ContentSwitcherModifiers>, string]>([
+  it.each<[ComponentProps<ContentSwitcherModifiers>, string]>([
     [{ size: "sm" }, "bx--content-switcher--sm"],
     [{ size: "xl" }, "bx--content-switcher--xl"],
     [{ lowContrast: true }, "bx--content-switcher--low-contrast"],

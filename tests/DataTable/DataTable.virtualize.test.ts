@@ -155,9 +155,7 @@ describe("DataTable virtualized rows", () => {
   const headers = [{ key: "name", value: "Name" }];
   const rows = makeRows(500);
 
-  const renderVirtual = (
-    props: Partial<ComponentProps<typeof DataTable>> = {},
-  ) =>
+  const renderVirtual = (props: Partial<ComponentProps<DataTable>> = {}) =>
     render(DataTable, { props: { headers, rows, virtualize: true, ...props } });
 
   it("highlights the rows named by highlightedRowIds", () => {

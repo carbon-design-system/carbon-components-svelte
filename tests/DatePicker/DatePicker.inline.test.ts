@@ -67,7 +67,7 @@ describe("DatePicker inline", () => {
     it.each(["readonly", "disabled"] as const)(
       "blocks selection while the input is %s and restores it after",
       async (state) => {
-        const props: ComponentProps<typeof DatePicker> = {
+        const props: ComponentProps<DatePicker> = {
           datePickerType: "single",
           value: "03/15/2024",
           inline: true,
@@ -97,7 +97,7 @@ describe("DatePicker inline", () => {
   });
 
   it("leaves Carbon's markup intact when an inline calendar is rebuilt", async () => {
-    const props: ComponentProps<typeof DatePicker> = {
+    const props: ComponentProps<DatePicker> = {
       helperText: "Pick a weekday",
       inline: true,
     };

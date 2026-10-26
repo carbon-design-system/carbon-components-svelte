@@ -56,10 +56,9 @@ describe("Stepper", () => {
       await user.click(continueButton());
 
       await vi.waitFor(() => expect(component.validateErrors).toHaveLength(1));
-      expect(component.validateErrors[0]).toEqual({
-        error: new Error("Offline"),
-        index: 0,
-      });
+      expect(component.validateErrors).toEqual([
+        { error: new Error("Offline"), index: 0 },
+      ]);
       expect(screen.getByText("Step 1 content")).toBeVisible();
       expect(continueButton()).toBeEnabled();
     },

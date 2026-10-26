@@ -1,11 +1,13 @@
 import { render } from "@testing-library/svelte";
-import type { Component } from "svelte";
 import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.test.svelte";
 import TooltipIcon from "../TooltipIcon/TooltipIcon.test.svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
 
-describe.each<[string, Component<{ open: boolean }>]>([
+// `Component` is Svelte 5-only; this also types the Svelte 3/4 harnesses.
+type Fixture = Parameters<typeof render>[0];
+
+describe.each<[string, Fixture]>([
   ["TooltipIcon", TooltipIcon],
   ["TooltipDefinition", TooltipDefinition],
 ])("%s window listeners", (_name, Fixture) => {

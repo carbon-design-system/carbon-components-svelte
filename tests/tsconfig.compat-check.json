@@ -1,5 +1,11 @@
 {
   "extends": "../tsconfig.json",
   "include": ["."],
-  "exclude": ["./Snippets/**", "./**/*.svelte5.test.*"]
+  "exclude": [
+    "./Snippets/**",
+    "./**/*.svelte5.test.*",
+    "./**/*.ssr.test.ts",
+    "./utils/ssr.ts",
+    "./utils/ssr.test.ts"
+  ]
 }
