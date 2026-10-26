@@ -241,7 +241,7 @@ By default, clicking anywhere outside the calendar closes it. Pass the elements 
 
 ### Position relative to another element
 
-When `portalMenu` is enabled, set `anchor` to position the calendar against an element other than the input, and `align` (`"start"`, `"center"`, `"end"`; `"start"` is the right edge in a right-to-left layout) and `direction` (`"auto"`, `"bottom"`, `"top"`) to place it. They have no effect with the default static positioning, where the calendar is placed below the input by CSS.
+When `portalMenu` is enabled, set `anchor` to position the calendar against an element other than the input, and `align` (`"start"`, `"center"`, `"end"`; `"start"` is the right edge in a right-to-left layout) and `direction` (`"auto"`, `"bottom"`, `"top"`) to place it. They have no effect while the calendar opens in place, where it is placed below the input by CSS.
 
 <FileSource src="/framed/DatePicker/DatePickerPositionElement" />
 
@@ -327,7 +327,9 @@ In a right-to-left layout, the calendar runs from the right: the week starts at 
 
 ## Portal
 
-Set `portalMenu` to `true` to render the calendar in a floating portal. This prevents the calendar from being clipped by parent containers with `overflow: hidden` or z-index stacking contexts. Inside a [Modal](/components/Modal), `portalMenu` defaults to `true` unless explicitly set to `false`.
+A calendar that a container would cut off, such as a box with `overflow: hidden`, a scroll area or a [DataTable](/components/DataTable), opens in a portal for that open. Inside a [Modal](/components/Modal), the calendar always opens in a portal.
+
+Set `portalMenu` to `true` to always render the calendar in a floating portal, which also escapes z-index stacking contexts, or to `false` to keep it in place. A portalled calendar leaves its container in the DOM, so CSS that targets the calendar as a descendant of the container does not match it.
 
 <FileSource src="/framed/DatePicker/DatePickerModal" />
 
