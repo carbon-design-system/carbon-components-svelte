@@ -4,13 +4,13 @@
 
   /**
    * Specify the `href` attribute.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
   /**
    * Specify the item text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 

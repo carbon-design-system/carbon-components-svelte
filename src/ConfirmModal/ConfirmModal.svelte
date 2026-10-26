@@ -42,7 +42,7 @@
 
   /**
    * Specify the modal label.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let label = undefined;
 
@@ -55,7 +55,7 @@
   /**
    * When set, the user must type this exact phrase before the confirm
    * button becomes enabled.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let confirmationPhrase = undefined;
 

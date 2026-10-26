@@ -10,7 +10,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -38,7 +38,7 @@
 
   /**
    * Specify a name attribute for the input.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
@@ -51,20 +51,20 @@
   /**
    * Specify the max character count allowed for the input.
    * Displays a character counter to the right of the label.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let maxCount = undefined;
 
   /**
    * Override the counter text read by screen readers.
-   * @type {(count: number, max: number) => string}
+   * @type {((count: number, max: number) => string) | undefined}
    * @default `${count} of ${max} characters`
    */
   export let counterText = undefined;
 
   /**
    * Specify the text announced when the limit is reached.
-   * @type {string}
+   * @type {string | undefined}
    * @default "Character limit reached"
    */
   export let limitReachedText = undefined;

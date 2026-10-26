@@ -2,7 +2,7 @@
   /**
    * Set the size of the table.
    * Accepts the same Carbon v11 aliases as `DataTable`.
-   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -25,13 +25,13 @@
 
   /**
    * Set the style attribute on the `table` element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let tableStyle = undefined;
 
   /**
    * Set the style attribute on the outer `section` element when `stickyHeader` is `true`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let containerStyle = undefined;
 

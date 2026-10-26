@@ -20,14 +20,14 @@
 
   /**
    * Specify the text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 
   /**
    * Specify an icon to render after the text, before the chevron.
    * Alternatively, use the "icon" slot.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

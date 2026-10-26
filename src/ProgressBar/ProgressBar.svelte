@@ -5,7 +5,7 @@
 
   /**
    * Specify the current value.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let value = undefined;
 

@@ -15,13 +15,13 @@
 
   /**
    * Specify the ARIA label for the header.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let uiShellAriaLabel = undefined;
 
   /**
    * Specify the `href` attribute.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
@@ -29,7 +29,7 @@
    * Specify the company name.
    *
    * Alternatively, use the named slot "company".
-   * @type {string}
+   * @type {string | undefined}
    * @example
    * ```svelte
    * <Header>
@@ -83,7 +83,7 @@
   /**
    * Specify the ARIA label for the hamburger menu.
    * Defaults to "Open menu" or "Close menu" based on `isSideNavOpen` state.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let ariaLabelMenu = undefined;
 

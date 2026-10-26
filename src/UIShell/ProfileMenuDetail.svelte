@@ -3,7 +3,7 @@
 
   /**
    * Specify the label describing the value (for example, "Plan" or "Location").
-   * @type {string}
+   * @type {string | undefined}
    */
   export let label = undefined;
 

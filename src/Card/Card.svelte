@@ -21,7 +21,7 @@
   /**
    * Set the `href` to render a clickable card as a link.
    * Only applies when `clickable` is `true`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 

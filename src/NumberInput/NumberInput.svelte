@@ -32,7 +32,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -51,19 +51,19 @@
 
   /**
    * Specify the maximum value.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let max = undefined;
 
   /**
    * Specify the minimum value.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let min = undefined;
 
   /**
    * Provide the value stepping should begin at when the input is empty.
-   * @type {number}
+   * @type {number | undefined}
    */
   export let stepStartValue = undefined;
 
@@ -96,7 +96,7 @@
    * Specify a BCP 47 locale for number formatting.
    * When set, forces type="text" with inputmode="decimal"
    * and formats the display value using Intl.NumberFormat.
-   * @type {string}
+   * @type {string | undefined}
    * @example
    * ```svelte
    * <NumberInput locale="de-DE" value={1234.5} />
@@ -107,7 +107,7 @@
 
   /**
    * Specify Intl.NumberFormat options when `locale` is set.
-   * @type {Intl.NumberFormatOptions}
+   * @type {Intl.NumberFormatOptions | undefined}
    * @example
    * ```svelte
    * <NumberInput locale="en-US" formatOptions={{ minimumFractionDigits: 2 }} value={1234.5} />
@@ -185,7 +185,7 @@
    * Specify a name attribute for the input.
    * With `locale` or `allowDecimal`, the form submits the numeric value
    * (for example `1234.5`), not the formatted display text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

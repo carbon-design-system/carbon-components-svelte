@@ -20,14 +20,14 @@
   /**
    * Specify the `href` attribute.
    * Renders an anchor with clickable styles. Takes precedence over `interactive`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
   /**
    * Specify the icon to render.
    * Icon is rendered to the left of the item content.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

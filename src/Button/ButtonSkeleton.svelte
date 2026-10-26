@@ -1,7 +1,7 @@
 <script>
   /**
    * Set the `href` to use an anchor link.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
@@ -9,7 +9,7 @@
    * Specify the size of button skeleton.
    * Falls back to the height of a parent `Form`'s size, as Button does.
    * Accepts the same Carbon v11 aliases as Button.
-   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl" | "sm" | "md" | "2xl"}
+   * @type {"default" | "field" | "small" | "xs" | "lg" | "xl" | "sm" | "md" | "2xl" | undefined}
    * @default "default"
    */
   export let size = undefined;

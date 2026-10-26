@@ -10,7 +10,7 @@
 
   /**
    * Specify the primary button icon.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let primaryButtonIcon = /** @type {Icon} */ (undefined);
 
@@ -44,13 +44,13 @@
   /**
    * Specify the description for the primary button loading icon.
    * Passed to `InlineLoading` as `iconDescription`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let primaryButtonLoadingIconDescription = undefined;
 
   /**
    * Specify a class for the primary button.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let primaryClass = undefined;
 
@@ -83,7 +83,7 @@
 
   /**
    * Specify a class for the secondary button.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let secondaryClass = undefined;
 

@@ -4,7 +4,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -14,7 +14,7 @@
    * one full-width input, as on DatePicker.
    * Takes precedence over `range`; unset, it's `"range"` when `range` is
    * set, otherwise `"simple"`.
-   * @type {"simple" | "single" | "range" | "month" | "year" | "week" | "multiple"}
+   * @type {"simple" | "single" | "range" | "month" | "year" | "week" | "multiple" | undefined}
    */
   export let datePickerType = undefined;
 

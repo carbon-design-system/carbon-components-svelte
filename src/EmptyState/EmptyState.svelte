@@ -30,7 +30,7 @@
    * Specify the heading level of the title, to fit the page outline.
    * Inside a `Section`, defaults to one level below the section's heading;
    * otherwise to 3.
-   * @type {1 | 2 | 3 | 4 | 5 | 6}
+   * @type {1 | 2 | 3 | 4 | 5 | 6 | undefined}
    */
   export let headingLevel = undefined;
 

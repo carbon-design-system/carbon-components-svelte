@@ -20,7 +20,7 @@
 
   /**
    * Specify the title of the icon.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let title = undefined;
 

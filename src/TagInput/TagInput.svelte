@@ -21,7 +21,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -149,7 +149,7 @@
 
   /**
    * Specify a name to submit each tag as a hidden input with the form.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

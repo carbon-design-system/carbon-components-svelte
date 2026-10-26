@@ -34,37 +34,37 @@
 
   /**
    * Specify the aspect ratio of the column.
-   * @type {"2x1" | "2x3" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "3x2" | "1x1"}
+   * @type {"2x1" | "2x3" | "16x9" | "9x16" | "1x2" | "4x3" | "3x4" | "3x2" | "1x1" | undefined}
    */
   export let aspectRatio = undefined;
 
   /**
    * Set the small breakpoint.
-   * @type {ColumnBreakpoint}
+   * @type {ColumnBreakpoint | undefined}
    */
   export let sm = undefined;
 
   /**
    * Set the medium breakpoint.
-   * @type {ColumnBreakpoint}
+   * @type {ColumnBreakpoint | undefined}
    */
   export let md = undefined;
 
   /**
    * Set the large breakpoint.
-   * @type {ColumnBreakpoint}
+   * @type {ColumnBreakpoint | undefined}
    */
   export let lg = undefined;
 
   /**
    * Set the extra large breakpoint.
-   * @type {ColumnBreakpoint}
+   * @type {ColumnBreakpoint | undefined}
    */
   export let xlg = undefined;
 
   /**
    * Set the maximum breakpoint.
-   * @type {ColumnBreakpoint}
+   * @type {ColumnBreakpoint | undefined}
    */
   export let max = undefined;
 

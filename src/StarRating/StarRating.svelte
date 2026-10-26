@@ -45,7 +45,7 @@
 
   /**
    * Set to `true` to require a rating.
-   * @type {boolean}
+   * @type {boolean | undefined}
    */
   export let required = undefined;
 
@@ -77,7 +77,7 @@
 
   /**
    * Specify a name attribute for the radio inputs, for form submission.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

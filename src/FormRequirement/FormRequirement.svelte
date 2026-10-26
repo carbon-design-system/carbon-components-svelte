@@ -17,7 +17,7 @@
    * same kind), and the item's control lists it in `aria-describedby`.
    * An invalid message also sets the control's `aria-invalid` while it's
    * mounted.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 

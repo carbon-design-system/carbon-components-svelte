@@ -6,7 +6,7 @@
   /**
    * Specify the size of the skeleton, to match the ChatButton it stands in for.
    * Falls back to the height of a parent `Form`'s size, as ButtonSkeleton does.
-   * @type {"default" | "field" | "small"}
+   * @type {"default" | "field" | "small" | undefined}
    * @default "default"
    */
   export let size = undefined;

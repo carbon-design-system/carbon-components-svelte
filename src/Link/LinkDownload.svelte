@@ -10,7 +10,7 @@
 
   /**
    * Specify the content to download.
-   * @type {string | Blob}
+   * @type {string | Blob | undefined}
    */
   export let data = undefined;
 
@@ -19,7 +19,7 @@
 
   /**
    * Specify the MIME type used to build the `Blob` when `data` is a string.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let type = undefined;
 

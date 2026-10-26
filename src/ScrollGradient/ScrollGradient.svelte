@@ -36,7 +36,7 @@
   /**
    * Specify the height of the component. Set a height so the content
    * can overflow vertically.
-   * @type {"100%" | "100vh" | (string & {})}
+   * @type {"100%" | "100vh" | (string & {}) | undefined}
    */
   export let height = undefined;
 

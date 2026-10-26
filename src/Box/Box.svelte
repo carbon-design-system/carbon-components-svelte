@@ -99,7 +99,7 @@
 
   /**
    * Set the background fill using a Carbon theme token.
-   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand"}
+   * @type {"background" | "layer-01" | "layer-02" | "layer-03" | "layer-accent" | "field" | "inverse" | "brand" | undefined}
    */
   export let fill = undefined;
 
@@ -189,7 +189,7 @@
 
   /**
    * Set the border using a Carbon border token.
-   * @type {"subtle" | "strong" | "interactive" | "disabled"}
+   * @type {"subtle" | "strong" | "interactive" | "disabled" | undefined}
    */
   export let border = undefined;
 

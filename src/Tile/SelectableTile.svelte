@@ -19,7 +19,7 @@
    * Set the size: `"sm"` for a compact tile, such as a row in a list of
    * choices, with less padding, no minimum height, and the checkbox
    * pulled in. Defaults to the size of a parent tile group.
-   * @type {"sm" | "md"}
+   * @type {"sm" | "md" | undefined}
    */
   export let size = undefined;
 

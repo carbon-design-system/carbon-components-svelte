@@ -34,7 +34,7 @@
   /**
    * Specify the text displayed next to the icon.
    * Alternatively, use the named slot "textChildren".
-   * @type {string}
+   * @type {string | undefined}
    * @example
    * ```svelte
    * <HeaderAction>
@@ -47,7 +47,7 @@
   /**
    * Specify an icon tooltip. The tooltip will not be displayed
    * if either the `text` prop or a named slot="textChildren" is used.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconDescription = undefined;
 

@@ -13,7 +13,7 @@
 
   /**
    * Specify the type of tag.
-   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline"}
+   * @type {"red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" | "high-contrast" | "outline" | undefined}
    */
   export let type = undefined;
 
@@ -21,7 +21,7 @@
    * Specify the size of the tag.
    * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
    * Also accepts Carbon v11's `"md"` (`"default"`).
-   * @type {"sm" | "default" | "lg" | "md"}
+   * @type {"sm" | "default" | "lg" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -30,7 +30,7 @@
 
   /**
    * Specify the icon to render.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

@@ -61,7 +61,7 @@
 
   /**
    * Render a toggle, select, or dropdown to control the theme.
-   * @type {"toggle" | "select" | "dropdown"}
+   * @type {"toggle" | "select" | "dropdown" | undefined}
    */
   export let render = undefined;
 

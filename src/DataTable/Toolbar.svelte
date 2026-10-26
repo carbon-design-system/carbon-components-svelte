@@ -4,7 +4,7 @@
    * If unset, the size is inherited from the parent `DataTable`
    * ("xs" for "compact", "sm" for "short", "default" otherwise).
    * Also accepts Carbon v11's `"lg"` (`"default"`).
-   * @type {"xs" | "sm" | "default" | "lg"}
+   * @type {"xs" | "sm" | "default" | "lg" | undefined}
    */
   export let size = undefined;
 
@@ -23,7 +23,7 @@
    * If unset, defaults to `0`, or to the fixed UI Shell header height
    * (48px) when a `Header` is rendered on the page, so the toolbar doesn't
    * stick underneath it. Set explicitly (including `0`) to opt out.
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let stickyOffset = undefined;
 

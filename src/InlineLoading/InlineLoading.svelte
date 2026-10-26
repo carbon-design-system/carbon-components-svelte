@@ -11,14 +11,14 @@
 
   /**
    * Set the loading description.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let description = undefined;
 
   /**
    * Specify a description for the loading icon.
    * Defaults to the `status` prop for the "error" and "finished" states.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconDescription = undefined;
 

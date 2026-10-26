@@ -85,7 +85,7 @@
   /**
    * Set the selected item by value id.
    * Follows the field when the owning form resets.
-   * @type {Item["id"]}
+   * @type {Item["id"] | undefined}
    * @bindable writable
    */
   export let selectedId = undefined;
@@ -108,7 +108,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size). `"lg"` and `"xl"` are both 48px.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -232,14 +232,14 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+   * @type {((id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string) | undefined}
    */
   export let translateWithId = undefined;
 
   /**
    * Override the label of the clear button when the input has a selection.
    * Defaults to "Clear selected item" since a combo box can only have one selection.
-   * @type {(id: "clearSelection") => string}
+   * @type {((id: "clearSelection") => string) | undefined}
    */
   export let translateWithIdSelection = undefined;
 
@@ -275,7 +275,7 @@
 
   /**
    * Specify a name attribute for the input.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

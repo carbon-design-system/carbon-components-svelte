@@ -65,7 +65,7 @@
    * Defaults to the input `size`.
    * Also accepts Carbon v11's `"md"` (`"lg"`, 40px). `"lg"` keeps this
    * library's 40px; Carbon v11's 48px `lg` is `"xl"` here.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let menuSize = undefined;
 
@@ -124,7 +124,7 @@
 
   /**
    * Specify the icon to render.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

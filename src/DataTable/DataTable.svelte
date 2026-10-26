@@ -258,7 +258,7 @@
    * Also accepts Carbon v11's row heights: `"xs"` (`"compact"`), `"sm"`
    * (`"short"`), `"md"` (`"medium"`), `"lg"` (the 48px default) and `"xl"`
    * (`"tall"`).
-   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -279,7 +279,7 @@
    *   return `row-${rowIndex} ${selected ? 'selected' : ''} ${expanded ? 'expanded' : ''}`;
    * }} />
    * ```
-   * @type {DataTableRowClass<Row>}
+   * @type {DataTableRowClass<Row> | undefined}
    */
   export let rowClass = undefined;
 
@@ -296,7 +296,7 @@
    * When the table is inside a form, this name will
    * be included in the form data on submit.
    * Defaults to the table `id`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let inputName = undefined;
 
@@ -354,7 +354,7 @@
    *   }}
    * />
    * ```
-   * @type {(a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number}
+   * @type {((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number) | undefined}
    */
   export let sort = undefined;
 
@@ -436,7 +436,7 @@
    * Override the maximum height of the sticky header table, replacing the
    * default `300px`. Only applies when `stickyHeader` is `true`. Pass a number
    * (interpreted as `px`) or a CSS length string (e.g. `"100%"`, `"24rem"`).
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let stickyHeaderMaxHeight = undefined;
 
@@ -499,7 +499,7 @@
 
   /**
    * Override the default table header translation ids.
-   * @type {(id: import("./TableHeader.svelte").TableHeaderTranslationId) => string}
+   * @type {((id: import("./TableHeader.svelte").TableHeaderTranslationId) => string) | undefined}
    */
   export let tableHeaderTranslateWithId = undefined;
 

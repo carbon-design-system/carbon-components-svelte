@@ -1,13 +1,13 @@
 <script>
   /**
    * Specify the display name.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
   /**
    * Specify the secondary text below the name (for example, a username).
-   * @type {string}
+   * @type {string | undefined}
    */
   export let username = undefined;
 
@@ -20,7 +20,7 @@
 
   /**
    * Specify the `href` attribute. When set, the entire block is a link.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 

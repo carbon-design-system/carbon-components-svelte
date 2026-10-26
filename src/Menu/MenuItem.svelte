@@ -21,7 +21,7 @@
   /**
    * Specify the icon to render.
    * Icon is rendered to the left of the label text.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

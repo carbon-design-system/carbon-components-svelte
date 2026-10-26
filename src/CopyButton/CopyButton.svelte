@@ -19,7 +19,7 @@
   /**
    * Specify an icon to render during the feedback window (for example, after copying).
    * When unset, the copy icon is always shown.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let feedbackIcon = /** @type {Icon} */ (undefined);
 
@@ -42,7 +42,7 @@
 
   /**
    * Specify the text to copy.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 

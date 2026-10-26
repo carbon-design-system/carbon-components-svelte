@@ -38,7 +38,7 @@
   /**
    * Specify the ARIA label and title for the icon-only trigger's icon.
    * Defaults to `labelText`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconDescription = undefined;
 
@@ -80,7 +80,7 @@
    * Specify the maximum height of the menu.
    * A number is treated as pixels; a string is used as a CSS length.
    * The menu scrolls once its items exceed the height.
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let maxHeight = undefined;
 

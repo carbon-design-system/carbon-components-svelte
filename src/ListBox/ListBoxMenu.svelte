@@ -48,7 +48,7 @@
   /**
    * Class applied to a wrapper element inside the portal.
    * Only used when `portal` is `true`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let portalHostClass = undefined;
 

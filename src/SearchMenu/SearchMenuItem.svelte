@@ -62,13 +62,13 @@
 
   /**
    * Specify the icon rendered before the label.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 
   /**
    * Specify the icon rendered after the label, for example an external-link affordance.
-   * @type {IconRight}
+   * @type {IconRight | undefined}
    */
   export let iconRight = /** @type {IconRight} */ (undefined);
 

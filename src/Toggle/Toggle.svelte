@@ -62,7 +62,7 @@
 
   /**
    * Specify a name attribute for the checkbox input.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

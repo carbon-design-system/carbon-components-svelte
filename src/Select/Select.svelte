@@ -16,7 +16,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -31,7 +31,7 @@
 
   /**
    * Specify a name attribute for the select element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

@@ -33,7 +33,7 @@
 
   /**
    * Specify a name attribute for the select element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

@@ -53,7 +53,7 @@
    * When the parent `Tabs` is `dismissible`, the icon is rendered to the left.
    * When the parent `Tabs` is `iconOnly`, only the icon is rendered and the
    * `label` is used as the accessible name and the tooltip shown on hover/focus.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

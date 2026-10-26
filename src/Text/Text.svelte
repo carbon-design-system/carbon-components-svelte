@@ -14,13 +14,13 @@
 
   /**
    * Set the text color using a Carbon text token.
-   * @type {"primary" | "secondary" | "placeholder" | "helper" | "on-color" | "inverse" | "error" | "success" | "link" | "disabled"}
+   * @type {"primary" | "secondary" | "placeholder" | "helper" | "on-color" | "inverse" | "error" | "success" | "link" | "disabled" | undefined}
    */
   export let color = undefined;
 
   /**
    * Set the font weight.
-   * @type {"light" | "regular" | "semibold"}
+   * @type {"light" | "regular" | "semibold" | undefined}
    */
   export let weight = undefined;
 
@@ -29,13 +29,13 @@
 
   /**
    * Set the font family.
-   * @type {"mono" | "sans" | "serif" | "sans-condensed" | "sans-hebrew"}
+   * @type {"mono" | "sans" | "serif" | "sans-condensed" | "sans-hebrew" | undefined}
    */
   export let family = undefined;
 
   /**
    * Set text wrapping behavior.
-   * @type {"break-word" | "nowrap"}
+   * @type {"break-word" | "nowrap" | undefined}
    */
   export let wrap = undefined;
 

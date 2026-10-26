@@ -15,7 +15,7 @@
    * Specify the size of button.
    * A quick action is always `"small"`.
    * Falls back to the height of a parent `Form`'s size, as Button does.
-   * @type {"default" | "field" | "small"}
+   * @type {"default" | "field" | "small" | undefined}
    * @default "default"
    */
   export let size = undefined;
@@ -35,7 +35,7 @@
 
   /**
    * Specify the icon to render.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

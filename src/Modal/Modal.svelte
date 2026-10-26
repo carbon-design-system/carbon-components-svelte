@@ -29,7 +29,7 @@
   /**
    * Set the size of the modal.
    * Also accepts Carbon v11's `"md"`, the default width.
-   * @type {"xs" | "sm" | "md" | "lg"}
+   * @type {"xs" | "sm" | "md" | "lg" | undefined}
    */
   export let size = undefined;
 
@@ -53,19 +53,19 @@
 
   /**
    * Specify the modal heading.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let modalHeading = undefined;
 
   /**
    * Specify the modal label.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let modalLabel = undefined;
 
   /**
    * Specify the ARIA label for the modal.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let modalAriaLabel = undefined;
 
@@ -81,7 +81,7 @@
   /**
    * Specify the ID of a form element to associate with the primary button.
    * This enables the primary button to submit the form from outside the form element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let formId = undefined;
 
@@ -121,13 +121,13 @@
   /**
    * Specify the description for the primary button loading icon.
    * Passed to `InlineLoading` as `iconDescription`.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let primaryButtonLoadingIconDescription = undefined;
 
   /**
    * Specify the primary button icon.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let primaryButtonIcon = /** @type {Icon} */ (undefined);
 

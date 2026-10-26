@@ -23,7 +23,7 @@
    * Render an icon-only switch.
    * The parent `ContentSwitcher` becomes icon-only when every `Switch` sets `icon`.
    * `text` is used as the accessible label and the tooltip shown on hover and focus.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

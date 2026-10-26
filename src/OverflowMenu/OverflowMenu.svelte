@@ -14,7 +14,7 @@
   /**
    * Specify the size of the overflow menu.
    * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -44,13 +44,13 @@
    * Specify the maximum height of the menu.
    * A number is treated as pixels; a string is used as a CSS length.
    * The menu scrolls once its items exceed the height.
-   * @type {number | string}
+   * @type {number | string | undefined}
    */
   export let maxHeight = undefined;
 
   /**
    * Specify the menu options class.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let menuOptionsClass = undefined;
 
@@ -63,7 +63,7 @@
 
   /**
    * Specify the icon class.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let iconClass = undefined;
 

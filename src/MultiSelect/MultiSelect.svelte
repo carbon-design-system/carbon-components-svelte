@@ -123,7 +123,7 @@
    * Inherits the parent `Form` size when unset.
    * Also accepts Carbon v11's `"md"` (the 40px default, which overrides a
    * `Form` size). `"lg"` and `"xl"` are both 48px.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -239,14 +239,14 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
-   * @type {(id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string}
+   * @type {((id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string) | undefined}
    */
   export let translateWithId = undefined;
 
   /**
    * Override the label of the clear button when the input has a selection.
    * Defaults to "Clear selected item" and "Clear all items" if more than one item is selected.
-   * @type {(id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string}
+   * @type {((id: import("../ListBox/ListBoxSelection.svelte").ListBoxSelectionTranslationId) => string) | undefined}
    */
   export let translateWithIdSelection = undefined;
 
@@ -348,7 +348,7 @@
    * Not applied to the
    * filterable text input, which is a query box, not the form value.
    * Omitted from submission when the multi-select is disabled.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

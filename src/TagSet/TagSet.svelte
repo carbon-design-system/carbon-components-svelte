@@ -55,7 +55,7 @@
    * labels as text, `"tag"` as tags in their own colors. In the popover and
    * the "View all" modal, `"tag"` keeps dismissible tags closable.
    * Defaults to `"default"` for the tooltip and `"tag"` for the popover.
-   * @type {"default" | "tag"}
+   * @type {"default" | "tag" | undefined}
    */
   export let overflowType = undefined;
 
@@ -127,7 +127,7 @@
    * Size of every tag, including the "+N" overflow indicator. Applies to
    * slotted `Tag` children without their own `size`.
    * Also accepts Carbon v11's `"md"` (`"default"`).
-   * @type {"sm" | "default" | "lg" | "md"}
+   * @type {"sm" | "default" | "lg" | "md" | undefined}
    */
   export let size = undefined;
 

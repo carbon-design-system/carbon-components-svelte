@@ -68,13 +68,13 @@
 
   /**
    * Specify the warning and error thresholds, in the same units as `value`.
-   * @type {MeterThresholds}
+   * @type {MeterThresholds | undefined}
    */
   export let thresholds = undefined;
 
   /**
    * Override the derived status. When unset, the status is derived from `thresholds`.
-   * @type {"default" | "success" | "warning" | "error"}
+   * @type {"default" | "success" | "warning" | "error" | undefined}
    */
   export let status = undefined;
 
@@ -102,7 +102,7 @@
   /**
    * Specify the locale used to format the numbers in the generated `aria-valuetext`
    * and threshold description. Defaults to the runtime locale.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let locale = undefined;
 

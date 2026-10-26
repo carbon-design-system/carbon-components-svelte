@@ -7,14 +7,14 @@
   /**
    * Specify the `href` attribute to render an anchor.
    * Omit it to render a button (for actions like "Log out" or "Change theme").
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
   /**
    * Specify an icon to render at the end of the item.
    * Use the `icon` slot for full control over the rendered icon.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

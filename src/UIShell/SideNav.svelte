@@ -17,7 +17,7 @@
 
   /**
    * Specify the ARIA label for the nav.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let ariaLabel = undefined;
 

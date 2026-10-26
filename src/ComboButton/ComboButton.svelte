@@ -47,7 +47,7 @@
   /**
    * Specify the accessible description for the primary action's loading
    * spinner.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let loadingDescription = undefined;
 

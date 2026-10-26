@@ -11,7 +11,7 @@
 
   /**
    * Determine the current Carbon grid breakpoint size.
-   * @type {BreakpointSize}
+   * @type {BreakpointSize | undefined}
    * @bindable readonly
    */
   export let size = undefined;

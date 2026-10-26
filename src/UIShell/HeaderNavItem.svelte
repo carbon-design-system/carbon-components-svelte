@@ -5,20 +5,20 @@
 
   /**
    * Specify the `href` attribute.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
   /**
    * Specify the text.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let text = undefined;
 
   /**
    * Specify an icon to render after the text.
    * Alternatively, use the "icon" slot.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

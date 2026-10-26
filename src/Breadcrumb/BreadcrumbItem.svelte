@@ -18,7 +18,7 @@
 
   /**
    * Set the `href` to use an anchor link.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let href = undefined;
 
@@ -27,7 +27,7 @@
 
   /**
    * Specify the icon to render before the label.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
   export let icon = /** @type {Icon} */ (undefined);
 

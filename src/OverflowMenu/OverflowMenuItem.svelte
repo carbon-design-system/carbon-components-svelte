@@ -25,7 +25,7 @@
   /**
    * Specify an icon to render to the left of the item text.
    * Alternatively, use the "icon" slot.
-   * @type {Icon}
+   * @type {Icon | undefined}
    * @example
    * ```svelte
    * <OverflowMenuItem>
@@ -38,7 +38,7 @@
   /**
    * Specify an icon to render pinned to the right edge of the item.
    * Alternatively, use the "iconRight" slot.
-   * @type {Icon}
+   * @type {Icon | undefined}
    * @example
    * ```svelte
    * <OverflowMenuItem>
@@ -61,7 +61,7 @@
    * Specify the `rel` attribute if the item is a link.
    * By default, `noopener noreferrer` is added if
    * `target="_blank"` unless `rel` is specified.
-   * @type {import("svelte/elements").SvelteHTMLElements["a"]["rel"]}
+   * @type {import("svelte/elements").SvelteHTMLElements["a"]["rel"] | undefined}
    */
   export let rel = undefined;
 

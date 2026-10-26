@@ -2,7 +2,7 @@
   /**
    * Set the size: `"sm"` for a compact tile, such as a row in a list of
    * choices, with less padding and no minimum height.
-   * @type {"sm" | "md"}
+   * @type {"sm" | "md" | undefined}
    */
   export let size = undefined;
 

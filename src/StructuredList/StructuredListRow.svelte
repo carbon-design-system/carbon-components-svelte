@@ -14,7 +14,7 @@
    * row can show its own selected state: a selected fill, with no hover
    * highlight. Only relevant when `selection` is `true` on the parent
    * `StructuredList`.
-   * @type {Value}
+   * @type {Value | undefined}
    */
   export let value = undefined;
 

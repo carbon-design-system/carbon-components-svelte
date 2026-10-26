@@ -61,7 +61,7 @@
    * Set the alignment of the explanation relative to the button.
    * Defaults to `"end"` inside a field or tile `decorator` slot,
    * otherwise `"start"`.
-   * @type {"start" | "center" | "end"}
+   * @type {"start" | "center" | "end" | undefined}
    */
   export let align = undefined;
 

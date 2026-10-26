@@ -195,7 +195,7 @@
    * Inherits the height of the parent `Form` size when unset,
    * otherwise defaults to `"small"`.
    * Accepts the same Carbon v11 aliases as `Button`.
-   * @type {import("../Button/Button.svelte").ButtonProps["size"]}
+   * @type {import("../Button/Button.svelte").ButtonProps["size"] | undefined}
    */
   export let size = undefined;
 

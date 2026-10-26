@@ -90,7 +90,7 @@
 
   /**
    * Specify the title attribute for the label element.
-   * @type {string}
+   * @type {string | undefined}
    * @bindable readonly
    */
   export let title = undefined;

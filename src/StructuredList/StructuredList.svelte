@@ -31,7 +31,7 @@
    * in `multiple` mode the checkboxes are not named.
    * When unset, the radios share a generated id so they form one group;
    * set a name explicitly for stable server-rendered markup.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 

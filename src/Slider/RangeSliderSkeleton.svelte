@@ -5,7 +5,7 @@
   /**
    * Set the size of the number input it stands in for.
    * Inherits `"xs"` from a parent `Form`.
-   * @type {"xs"}
+   * @type {"xs" | undefined}
    */
   export let size = undefined;
 
