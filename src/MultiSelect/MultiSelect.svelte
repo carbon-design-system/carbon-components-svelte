@@ -370,12 +370,14 @@
   /**
    * Obtain a reference to the input HTML element.
    * @bindable readonly
+   * @type {null | HTMLInputElement}
    */
   export let inputRef = null;
 
   /**
    * Obtain a reference to the outer div element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let multiSelectRef = null;
 

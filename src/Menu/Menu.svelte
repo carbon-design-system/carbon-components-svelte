@@ -31,6 +31,7 @@
   /**
    * Obtain a reference to the unordered list HTML element.
    * @bindable readonly
+   * @type {null | HTMLUListElement}
    */
   export let ref = null;
 

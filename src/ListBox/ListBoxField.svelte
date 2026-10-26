@@ -20,6 +20,7 @@
   /**
    * Obtain a reference to the top-level HTML element.
    * @bindable readonly
+   * @type {null | HTMLButtonElement}
    */
   export let ref = null;
 

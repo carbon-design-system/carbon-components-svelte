@@ -79,6 +79,7 @@
   /**
    * Obtain a reference to the list item HTML element.
    * @bindable readonly
+   * @type {null | HTMLLIElement}
    */
   export let ref = null;
 

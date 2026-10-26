@@ -106,6 +106,7 @@
   /**
    * Obtain a reference to the outer HTML element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 

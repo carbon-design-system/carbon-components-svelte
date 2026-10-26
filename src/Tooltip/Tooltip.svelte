@@ -84,18 +84,21 @@
   /**
    * Obtain a reference to the trigger text HTML element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 
   /**
    * Obtain a reference to the tooltip HTML element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let refTooltip = null;
 
   /**
    * Obtain a reference to the icon HTML element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let refIcon = null;
 

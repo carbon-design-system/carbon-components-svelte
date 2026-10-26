@@ -26,6 +26,7 @@
   /**
    * Obtain a reference to the top-level HTML element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 

@@ -133,6 +133,7 @@
    * Obtain a reference to the HTML element.
    * Stays `null` when `as` is set; use `bind:this` on your own element instead.
    * @bindable readonly
+   * @type {null | HTMLAnchorElement | HTMLButtonElement}
    */
   export let ref = null;
 

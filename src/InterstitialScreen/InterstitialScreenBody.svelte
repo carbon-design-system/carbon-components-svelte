@@ -2,6 +2,7 @@
   /**
    * Obtain a reference to the scrollable body element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 

@@ -9,6 +9,7 @@
   /**
    * Obtain a reference to the HTML element.
    * @bindable readonly
+   * @type {null | HTMLDivElement}
    */
   export let ref = null;
 </script>

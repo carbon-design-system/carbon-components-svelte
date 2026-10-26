@@ -21,6 +21,7 @@
   /**
    * Obtain a reference to the HTML anchor element.
    * @bindable readonly
+   * @type {null | HTMLAnchorElement}
    */
   export let ref = null;
 

@@ -77,7 +77,10 @@
    */
   export let tooltipAlignment = "center";
 
-  /** Obtain a reference to the underlying button element. */
+  /**
+   * Obtain a reference to the underlying button element.
+   * @type {null | HTMLButtonElement}
+   */
   export let ref = null;
 
   import { createEventDispatcher, onMount } from "svelte";

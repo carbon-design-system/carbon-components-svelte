@@ -178,10 +178,14 @@
   /**
    * Obtain a reference to the pre HTML element.
    * @bindable readonly
+   * @type {null | HTMLPreElement}
    */
   export let ref = null;
 
-  /** Obtain a reference to the underlying copy button element. */
+  /**
+   * Obtain a reference to the underlying copy button element.
+   * @type {null | HTMLButtonElement}
+   */
   export let copyRef = null;
 
   /**

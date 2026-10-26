@@ -36,6 +36,7 @@
   /**
    * Obtain a reference to the heading button HTML element.
    * @bindable readonly
+   * @type {null | HTMLButtonElement}
    */
   export let ref = null;
 
