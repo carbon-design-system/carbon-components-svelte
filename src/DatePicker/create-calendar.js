@@ -218,6 +218,14 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
     onDestroy: [disconnectAltInputObserver],
   };
 
+  // Building moves the input into the calendar's wrapper, which blurs it.
+  // A reader can focus the server-rendered input before hydration, so note
+  // the focus and caret to hand back once the calendar is built.
+  const focused = [base, input].find(
+    (field) => field && field === document.activeElement,
+  );
+  const caret = focused && [focused.selectionStart, focused.selectionEnd];
+
   /** @type {CalendarInstance | null} */
   let instance = null;
   try {
@@ -244,5 +252,21 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
     return null;
   }
   if (!instance) return null;
+  if (focused)
+    restoreFocus(
+      focused === base && instance.altInput ? instance.altInput : focused,
+      caret,
+    );
   return instance;
+}
+
+/**
+ * @param {HTMLInputElement} field
+ * @param {(number | null)[] | undefined} caret
+ */
+function restoreFocus(field, caret) {
+  if (document.activeElement === field) return;
+  field.focus({ preventScroll: true });
+  const [start, end] = caret ?? [];
+  if (start != null && end != null) field.setSelectionRange(start, end);
 }

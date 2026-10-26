@@ -22,6 +22,24 @@ describe("createCalendar", () => {
     }
   });
 
+  it("keeps focus and the caret in an input focused before it builds", async () => {
+    const { base, input, dispatch } = setup();
+    base.value = "03/15";
+    base.focus();
+    base.setSelectionRange(1, 3);
+
+    const instance = await createCalendar({
+      options: { mode: "single" },
+      base,
+      input,
+      dispatch,
+    });
+
+    expect(document.activeElement).toBe(base);
+    expect([base.selectionStart, base.selectionEnd]).toEqual([1, 3]);
+    instance?.destroy();
+  });
+
   it("writes the second input of a range", async () => {
     const { base, input, dispatch } = setup();
     const instance = await createCalendar({
