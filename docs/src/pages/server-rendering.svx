@@ -29,7 +29,7 @@ Nothing in the library needs `{#if browser}` to avoid a server error. Every expo
 
 Components hydrate in place, and Svelte reports no warnings for them. Most keep every DOM node; generated ids change (see [Stable ids](#stable-ids)) and Svelte 5 rebuilds `<option>` elements, neither of which you can see.
 
-These hydrate with no visible change: Accordion, Breadcrumb, Button, Checkbox, ComboBox, ComposedModal and Modal when closed, ContentSwitcher, CopyButton, DataTable, Dropdown, FileUploader, Form, Link, Menu when closed, MultiSelect, InlineNotification, ToastNotification, NumberInput, PageHeader, Pagination, ProgressIndicator, RadioButton, Search, Select, Slider, StructuredList, Tabs, TabsVertical, TextArea, TextInput, Tile, TimePicker, Toggle, ToggleButtonGroup, and every skeleton.
+These hydrate with no visible change: Accordion, Breadcrumb, Button, Checkbox, ComboBox, ComposedModal and Modal when closed, ContentSwitcher, CopyButton, DataTable, Dropdown, FileUploader, Form, Link, Menu when closed, MultiSelect, InlineNotification, ToastNotification, NumberInput, PageHeader, Pagination, ProgressIndicator, RadioButton, Search, Select, Slider, StructuredList, Tabs, TabsVertical, TextArea, TextInput, Tile, TimePicker, Toggle, ToggleButtonGroup, UserAvatarGroup, and every skeleton. The text fields among them lose text typed before hydration (see the table).
 
 The rest change between the first server paint and the end of hydration.
 
@@ -38,11 +38,10 @@ The rest change between the first server paint and the end of hydration.
 | Carousel | No slide labels | Each slide labeled "Slide 2 of 3" |
 | InterstitialScreen with `open` | No progress indicator | Progress indicator appears <!-- FIX: SSR-04 --> |
 | Dialog with `open` and `modal` | Closed | Open, since `showModal()` needs the browser |
-| TreeView | Nested nodes not indented | Indented <!-- FIX: SSR-10 --> |
 | SideNav | See [Side navigation](#side-navigation) | Hamburger appears on small screens <!-- FIX: SSR-12 --> |
-| UserAvatarGroup, TagSet | All items, no overflow counter | Overflow collapses after measuring <!-- FIX: SSR-05 --> |
+| TagSet | One row, clipped to its width, no overflow counter | Overflow counter appears after measuring |
 | Open `Menu`, portalled menus and tooltips, Portal | Not in the server HTML | Mounted in the body |
-| ExpandableTile | Full height. A `<button>` around links or inputs. | Collapsed. A `<div>` with a chevron button when it holds interactive content. |
+| ExpandableTile | A `<button>` around links or inputs | A `<div>` with a chevron button when it holds interactive content |
 | LazyMount | The placeholder slot | The content, once near the viewport |
 | Breakpoint | The slot sees `size` as `undefined` | The slot sees the real size |
 | LocalStorage, SessionStorage | The default value | The stored value |
@@ -50,7 +49,7 @@ The rest change between the first server paint and the end of hydration.
 | ImageLoader | A hidden `<img>` | Image shown after load |
 | NotificationQueue | Empty by design | Notifications added in `onMount` appear |
 | Modal, ComposedModal with `open` | Visible, body scroll not locked | Body gets `bx--body--with-modal-open` |
-| ToolbarSearch, DatePicker | Plain input | Text typed before hydration is cleared in ToolbarSearch; DatePicker input loses focus <!-- FIX: SSR-18 SSR-19 --> |
+| TextInput, TextArea, Search, ToolbarSearch, HeaderSearch, ComboBox, filterable MultiSelect, TimePicker, DatePicker | Plain input | Text typed before hydration is cleared, a Svelte bug ([sveltejs/svelte#19096](https://github.com/sveltejs/svelte/issues/19096)) |
 
 On Svelte 3 and 4 the server writes boolean ARIA attributes without a value (`aria-hidden` instead of `aria-hidden="true"`), so icons are not hidden from assistive technology until hydration. <!-- FIX: SSR-15 -->
 
@@ -62,7 +61,6 @@ Svelte repairs mismatched attributes and text without a warning, so a quiet cons
 | Avoid `{#if browser}` around markup. | `browser` is already `true` during hydration, so the branches differ and Svelte rebuilds the nodes without a warning. |
 | Prefer CSS media queries over `Breakpoint` for layout. | The server has no viewport, so `Breakpoint` renders its fallback until mount. |
 | Set `hasInteractiveContent` on an `ExpandableTile` that holds links or inputs. | The server renders the `<div>` and chevron button from the start, instead of a `<button>` the browser has to split. |
-| Pass `tileMaxHeight` and `tilePadding` to `ExpandableTile`. | The server renders it collapsed, so it doesn't shrink on hydration. |
 | Pass `estimatedHeight` to `LazyMount`. | The placeholder holds the space, so the page doesn't shift when the content mounts. |
 
 ```svelte
