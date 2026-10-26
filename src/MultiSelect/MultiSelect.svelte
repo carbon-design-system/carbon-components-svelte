@@ -1390,6 +1390,7 @@
     selectionDisplay === "tags"
       ? items.filter((item) => !item.isSelectAll && selectedIdsSet.has(item.id))
       : [];
+  /** @type {"sm" | "default"} */
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm" ? "sm" : "default";
   // Scope select-all to the currently visible (filtered) items, so it

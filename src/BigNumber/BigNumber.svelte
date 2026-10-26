@@ -223,6 +223,7 @@
   // Each number sits in a `<bdi>` in its locale's direction. Without one, an
   // RTL page moves the sign of "+12%" to the far side ("12%+"). A custom
   // `format` has no known locale, so its text sets its own direction.
+  /** @type {"auto" | "ltr" | "rtl"} */
   $: numberDir = format ? "auto" : localeDirection(locale);
 </script>
 

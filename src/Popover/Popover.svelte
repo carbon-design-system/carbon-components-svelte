@@ -175,6 +175,7 @@
 
   // `FloatingPortal` places by side, and by start, center or end along it.
   $: [side, edge = ""] = placement.split("-");
+  /** @type {"start" | "end" | "center"} */
   $: intrinsicAlign =
     edge === "left" || edge === "top"
       ? "start"
