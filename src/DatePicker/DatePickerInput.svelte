@@ -311,11 +311,17 @@
       class:bx--date-picker__input--ghost-text={$multiple}
       on:input
       on:input={(event) => {
-        overlayValue = event.target.value;
-        updateValue({ type: "input", value: event.target.value });
+        const { value: inputValue } = /** @type {HTMLInputElement} */ (
+          event.target
+        );
+        overlayValue = inputValue;
+        updateValue({ type: "input", value: inputValue });
       }}
       on:change={(event) => {
-        updateValue({ type: "change", value: event.target.value });
+        updateValue({
+          type: "change",
+          value: /** @type {HTMLInputElement} */ (event.target).value,
+        });
       }}
       on:keydown
       on:keydown={(event) => {

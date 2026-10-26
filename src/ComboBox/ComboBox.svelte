@@ -1245,14 +1245,20 @@
             // any old selection so that reset cannot restore its label over
             // the filled text.
             if (disabled || readonly || inputHasFocus()) return;
-            selectedId = findExactMatch(items, event.target.value)?.id;
+            selectedId = findExactMatch(
+              items,
+              /** @type {HTMLInputElement} */ (event.target).value,
+            )?.id;
           }}
           on:input
           on:input={(event) => {
             // An unfocused fill leaves the menu and focus alone.
             if (!inputHasFocus()) return;
 
-            if (!open && event.target.value.length > 0) {
+            if (
+              !open &&
+              /** @type {HTMLInputElement} */ (event.target).value.length > 0
+            ) {
               openMenu("input");
             }
 
@@ -1415,8 +1421,8 @@
             if (isFluid) fieldFocused = false;
             if (!open || !event.relatedTarget) return;
             if (
-              fieldRef?.contains(event.relatedTarget) ||
-              listRef?.contains(event.relatedTarget)
+              fieldRef?.contains(/** @type {Node} */ (event.relatedTarget)) ||
+              listRef?.contains(/** @type {Node} */ (event.relatedTarget))
             ) {
               ref.focus();
             }

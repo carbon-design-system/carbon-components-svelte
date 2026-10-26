@@ -258,11 +258,11 @@
     {multiple}
     class:bx--file-input={true}
     on:change={({ target }) => {
-      processIncoming([...target.files]);
+      processIncoming([.../** @type {HTMLInputElement} */ (target).files]);
     }}
     on:click
     on:click={(event) => {
-      event.target.value = null;
+      /** @type {HTMLInputElement} */ (event.target).value = null;
     }}
     on:cancel={() => {
       // The click cleared the input so the same file can be picked again; a

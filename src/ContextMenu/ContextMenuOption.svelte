@@ -302,7 +302,7 @@
     if (event.key === " " || event.key === "Enter") {
       handleClick(event, {
         fromKeyboard: true,
-        id: event.target.getAttribute("data-id"),
+        id: /** @type {Element} */ (event.target).getAttribute("data-id"),
       });
     }
   }}
@@ -321,7 +321,8 @@
   on:click={(event) => {
     if (subOptions) {
       event.stopPropagation();
-      if (disabled || submenuRef?.contains(event.target)) return;
+      if (disabled || submenuRef?.contains(/** @type {Node} */ (event.target)))
+        return;
       submenuOpen = true;
       return;
     }

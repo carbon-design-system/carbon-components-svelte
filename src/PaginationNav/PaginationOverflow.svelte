@@ -28,7 +28,11 @@
         class:bx--pagination-nav__page--select={true}
         on:change={(event) => {
           value = "";
-          dispatch("select", { index: Number(event.target.value) });
+          dispatch("select", {
+            index: Number(
+              /** @type {HTMLSelectElement} */ (event.target).value,
+            ),
+          });
         }}
       >
         <option value="" hidden></option>

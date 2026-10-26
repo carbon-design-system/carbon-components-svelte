@@ -523,14 +523,17 @@
         on:change={(event) => {
           if (readonly) return;
           // An empty or unparsable entry keeps the current value.
-          const next = parse(event.target.value.trim(), true);
+          const next = parse(
+            /** @type {HTMLInputElement} */ (event.target).value.trim(),
+            true,
+          );
           if (next !== null) {
             value = clamp(next, min, max);
             dispatch("change", value);
           }
           // Show the value the slider holds. Svelte skips the update when a
           // clamped or rejected entry leaves `value` unchanged.
-          event.target.value = String(value);
+          /** @type {HTMLInputElement} */ (event.target).value = String(value);
         }}
         data-invalid={showInvalid || null}
         data-warn={showWarn || null}
