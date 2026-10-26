@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -20,7 +20,7 @@
    * Alternatively, use the "icon" slot.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /** Set to `true` to select the item */
   export let isSelected = false;

@@ -1,7 +1,7 @@
 <script>
   /**
    * @template {string} [Value=string]
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @event {Value | Value[]} change
    */
 

@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @restProps {button}
    * @event {{ selected: boolean }} "change"
    */
@@ -32,7 +32,7 @@
    * Specify the icon to render.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify a value that identifies the tag inside a `TagSet`.

@@ -1,5 +1,5 @@
 <script>
-  /** @template [Icon=any] */
+  /** @template {import("../utils/icon-component.js").IconComponent} [Icon=any] */
 
   /**
    * Custom avatar content via the default slot overrides the computed image, icon, and initials.
@@ -77,7 +77,7 @@
    * Specify the icon to render. Falls back to a default user icon.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify a presence status. Renders a status indicator as the default

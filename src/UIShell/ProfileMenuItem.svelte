@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @slot {{}} avatar - Leading avatar rendered before the label. The label truncates to make room for it.
    */
 
@@ -16,7 +16,7 @@
    * Use the `icon` slot for full control over the rendered icon.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Obtain a reference to the HTML element (anchor or button).

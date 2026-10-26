@@ -1,5 +1,5 @@
 <script>
-  /** @template [Icon=any] */
+  /** @template {import("../utils/icon-component.js").IconComponent} [Icon=any] */
 
   /**
    * @restProps {a | button}
@@ -38,7 +38,7 @@
    * Specify an icon to show before the name, such as for the file type.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify what the download icon means, as text screen readers hear

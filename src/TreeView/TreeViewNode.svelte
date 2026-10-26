@@ -54,7 +54,7 @@
 <script>
   /**
    * @template {TreeNode<any>} [Node=TreeNode<any>]
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -99,9 +99,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   import { getContext } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";

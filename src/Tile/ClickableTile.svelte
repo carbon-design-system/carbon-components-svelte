@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /** @restProps {a} */
@@ -41,7 +41,7 @@
    * decorative and hidden from assistive technology.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Set the `href`.

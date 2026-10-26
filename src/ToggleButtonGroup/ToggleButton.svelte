@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -19,7 +19,7 @@
    * Alternatively, use the named slot "icon".
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the accessible label for an icon-only button.

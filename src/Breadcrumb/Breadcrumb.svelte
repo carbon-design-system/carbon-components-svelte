@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Separator=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Separator=any]
    */
 
   /** @extendProps {"./BreadcrumbSkeleton.svelte"} BreadcrumbSkeletonProps */

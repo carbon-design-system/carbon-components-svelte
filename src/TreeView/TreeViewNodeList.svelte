@@ -17,7 +17,7 @@
 <script>
   /**
    * @template {string | number} [Id=string | number]
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -57,9 +57,9 @@
 
   /**
    * Specify the icon to render.
-   * @type {Icon}
+   * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   import { getContext, tick } from "svelte";
   import Checkbox from "../Checkbox/Checkbox.svelte";

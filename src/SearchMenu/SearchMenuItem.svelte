@@ -32,8 +32,8 @@
 
 <script>
   /**
-   * @template [Icon=any]
-   * @template [IconRight=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [IconRight=any]
    */
 
   /**
@@ -64,13 +64,13 @@
    * Specify the icon rendered before the label.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the icon rendered after the label, for example an external-link affordance.
    * @type {IconRight | undefined}
    */
-  export let iconRight = /** @type {IconRight} */ (undefined);
+  export let iconRight = /** @type {IconRight | undefined} */ (undefined);
 
   /** Set to `true` to disable the item */
   export let disabled = false;

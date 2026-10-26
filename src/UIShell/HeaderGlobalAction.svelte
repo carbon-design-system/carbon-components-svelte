@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @extendProps {"../Button/Button.svelte"} ButtonProps
    */
 
@@ -11,7 +11,7 @@
    * Specify the icon to render.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Obtain a reference to the HTML button element.

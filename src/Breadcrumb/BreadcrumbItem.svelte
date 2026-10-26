@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -29,7 +29,7 @@
    * Specify the icon to render before the label.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   import { getContext, setContext } from "svelte";
   import Link from "../Link/Link.svelte";

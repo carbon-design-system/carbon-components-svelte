@@ -2,7 +2,7 @@
   import { copyText } from "../utils/copy-text.js";
 
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -105,7 +105,7 @@
    * NOTE: this prop does not apply to the `type="inline"` variant.
    * @type {Icon | undefined}
    */
-  export let feedbackIcon = /** @type {Icon} */ (undefined);
+  export let feedbackIcon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the show less text.

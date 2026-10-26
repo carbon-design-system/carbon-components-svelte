@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @restProps {li}
    */
 
@@ -55,7 +55,7 @@
    * `label` is used as the accessible name and the tooltip shown on hover/focus.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Obtain a reference to the anchor HTML element.

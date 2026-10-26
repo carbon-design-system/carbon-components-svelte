@@ -1,6 +1,6 @@
 <script>
   /**
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @event {{ text: string }} click:button--secondary - Dispatched when a secondary button is clicked. For `secondaryButtonText`, the event is cancelable: call `preventDefault()` to keep the modal open. If not cancelled, the modal closes. Array `secondaryButtons` never auto-close.
    * @event {null} loading:success - Dispatched when `loadingStatus` is `"finished"`, after the `InlineLoading` success delay.
    */
@@ -12,7 +12,7 @@
    * Specify the primary button icon.
    * @type {Icon | undefined}
    */
-  export let primaryButtonIcon = /** @type {Icon} */ (undefined);
+  export let primaryButtonIcon = /** @type {Icon | undefined} */ (undefined);
 
   /** Set to `true` to disable the primary button */
   export let primaryButtonDisabled = false;

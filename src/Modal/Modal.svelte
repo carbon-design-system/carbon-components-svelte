@@ -1,5 +1,5 @@
 <script>
-  /** @template [Icon=any] */
+  /** @template {import("../utils/icon-component.js").IconComponent} [Icon=any] */
 
   /**
    * @event close
@@ -129,7 +129,7 @@
    * Specify the primary button icon.
    * @type {Icon | undefined}
    */
-  export let primaryButtonIcon = /** @type {Icon} */ (undefined);
+  export let primaryButtonIcon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Set to `true` for the "submit" and "click:button--primary" events

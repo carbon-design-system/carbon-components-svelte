@@ -1,7 +1,7 @@
 <script>
   /**
    * @template [T=string]
-   * @template [Icon=any]
+   * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
   /**
@@ -126,7 +126,7 @@
    * Specify the icon to render.
    * @type {Icon | undefined}
    */
-  export let icon = /** @type {Icon} */ (undefined);
+  export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
    * Specify the direction of the results menu.

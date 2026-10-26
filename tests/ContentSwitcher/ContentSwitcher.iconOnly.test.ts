@@ -142,7 +142,7 @@ describe("ContentSwitcher (icon-only)", () => {
 
   describe("Generics", () => {
     it("types the `icon` prop through the @template parameter", () => {
-      type MyIcon = { $$prop_def: Record<string, never> };
+      type MyIcon = typeof List;
       type ComponentType = SwitchComponent<MyIcon>;
       type Props = ComponentProps<ComponentType>;
 
