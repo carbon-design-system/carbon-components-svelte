@@ -37,7 +37,7 @@
    * Specify the value of the radio input.
    * @type {Value}
    */
-  export let value = "";
+  export let value = /** @type {Value} */ ("");
 
   /**
    * Specify the tabindex

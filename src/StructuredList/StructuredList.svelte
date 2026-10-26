@@ -41,7 +41,7 @@
    * The icon is decorative; selection state is conveyed by each row's `aria-checked`.
    * @type {Icon}
    */
-  export let icon = CheckmarkFilled;
+  export let icon = /** @type {Icon} */ (CheckmarkFilled);
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";

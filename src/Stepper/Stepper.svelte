@@ -129,7 +129,11 @@
     let valid;
     try {
       const result = validate(index);
-      if (typeof result?.then === "function") {
+      if (
+        typeof (
+          /** @type {PromiseLike<unknown> | undefined} */ (result)?.then
+        ) === "function"
+      ) {
         checking = true;
         valid = await result;
       } else {
@@ -156,7 +160,11 @@
     if (!submit) return;
     try {
       const result = submit();
-      if (typeof result?.then === "function") {
+      if (
+        typeof (
+          /** @type {PromiseLike<unknown> | undefined} */ (result)?.then
+        ) === "function"
+      ) {
         pending = true;
         await result;
       }

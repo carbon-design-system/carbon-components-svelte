@@ -9,7 +9,7 @@
     return typeof value === "number" && value >= 1 && value <= 13;
   }
 
-  /** @param {"top" | "right" | "bottom" | "left"} side @param {SpacingValue | undefined} value */
+  /** @param {"top" | "right" | "bottom" | "left"} side @param {0 | SpacingValue | undefined} value */
   function scaleClass(side, value) {
     return isScaleStep(value) ? `bx--bleed-${side}-${value}` : undefined;
   }
@@ -17,7 +17,7 @@
   /**
    * Negate a custom length. `calc()` keeps CSS variables and `calc()`
    * expressions valid, where a bare `-` prefix would not.
-   * @param {SpacingValue | undefined} value
+   * @param {0 | SpacingValue | undefined} value
    */
   function negatedStyle(value) {
     return typeof value === "string" ? `calc(-1 * (${value}))` : undefined;

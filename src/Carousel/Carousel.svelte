@@ -219,7 +219,7 @@
       event.currentTarget instanceof Element ? event.currentTarget : null;
     const step = event.key === "ArrowLeft" ? -1 : 1;
     const rtl = resolveLayoutDirection($layoutDirection, node) === "rtl";
-    navigate(rtl ? -step : step);
+    navigate(rtl ? /** @type {1 | -1} */ (-step) : step);
   }
 </script>
 

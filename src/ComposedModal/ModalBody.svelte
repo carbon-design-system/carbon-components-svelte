@@ -46,7 +46,7 @@
 <div
   bind:this={ref}
   id={resolvedId}
-  tabindex={hasScrollingContent ? "0" : undefined}
+  tabindex={hasScrollingContent ? 0 : undefined}
   role={hasScrollingContent ? "region" : undefined}
   aria-labelledby={hasScrollingContent ? regionLabelledby : undefined}
   class:bx--modal-content={true}

@@ -8,7 +8,7 @@ export type ItemHeights = ArrayLike<number | undefined>;
 export type VirtualizeConfig<
   Item extends Record<string, unknown> = Record<string, unknown>,
 > = {
-  items: Item[];
+  items: ReadonlyArray<Item>;
   itemHeight: number;
   containerHeight: number;
   scrollTop: number;
@@ -103,7 +103,7 @@ export const DEFAULT_VIRTUAL_LIST_CONFIG: VirtualListConfig;
 export type VirtualListStateOptions<
   Item extends Record<string, unknown> = Record<string, unknown>,
 > = {
-  items: Item[];
+  items: ReadonlyArray<Item>;
   scrollTop: number;
   shouldVirtualize: boolean;
   virtualize: boolean | Partial<VirtualListConfig> | undefined;

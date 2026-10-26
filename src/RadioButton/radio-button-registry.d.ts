@@ -1,6 +1,6 @@
 import type { Writable } from "svelte/store";
 
-type InstanceKey = Record<string, never>;
+type InstanceKey = object;
 
 type RadioGroup = {
   selectedKey: Writable<InstanceKey | undefined>;

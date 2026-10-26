@@ -105,7 +105,7 @@
   >
     <span
       class:bx--tag__label={true}
-      title={selectionCount}
+      title={selectionCount?.toString()}
       aria-hidden={readonly || undefined}
     >
       {selectionCount}

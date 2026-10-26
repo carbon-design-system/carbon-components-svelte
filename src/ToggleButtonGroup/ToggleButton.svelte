@@ -161,7 +161,7 @@
   aria-pressed={pressed}
   aria-label={hasIconOnly ? iconDescription : undefined}
   disabled={isDisabled || undefined}
-  tabindex={isTabStop ? "0" : "-1"}
+  tabindex={isTabStop ? 0 : -1}
   class:bx--toggle-button={true}
   class:bx--toggle-button--pressed={pressed}
   class:bx--toggle-button--icon-only={hasIconOnly}

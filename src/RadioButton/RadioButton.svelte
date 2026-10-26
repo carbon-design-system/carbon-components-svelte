@@ -8,7 +8,7 @@
    * Specify the value of the radio button.
    * @type {Value}
    */
-  export let value = "";
+  export let value = /** @type {Value} */ ("");
 
   /**
    * Set to `true` to check the radio button.

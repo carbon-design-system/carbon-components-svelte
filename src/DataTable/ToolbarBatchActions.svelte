@@ -29,6 +29,7 @@
   import Button from "../Button/Button.svelte";
   import { returnFocus } from "../utils/focus.js";
 
+  /** @type {ReadonlyArray<any>} */
   let batchSelectedIds = [];
   let wrapperRef = null;
   let prevShowActions = false;

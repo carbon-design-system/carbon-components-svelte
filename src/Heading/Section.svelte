@@ -71,10 +71,14 @@
   const parentLevel = getContext("carbon:Section") ?? readable(0);
 
   /** @type {import("svelte/store").Writable<SectionLevel>} */
-  const internalLevel = writable(Math.min(level ?? $parentLevel + 1, 6));
+  const internalLevel = writable(
+    /** @type {SectionLevel} */ (Math.min(level ?? $parentLevel + 1, 6)),
+  );
 
   // Custom level should override the inferred parent level.
-  $: internalLevel.set(Math.min(level ?? $parentLevel + 1, 6));
+  $: internalLevel.set(
+    /** @type {SectionLevel} */ (Math.min(level ?? $parentLevel + 1, 6)),
+  );
 
   setContext("carbon:Section", readonly(internalLevel));
 </script>

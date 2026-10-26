@@ -103,7 +103,7 @@
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={ariaDescribedBy}
-    tabindex={disabled ? "-1" : "0"}
+    tabindex={disabled ? -1 : 0}
     class:bx--progress-step-button={true}
     class:bx--progress-step-button--unclickable={current ||
       !complete ||

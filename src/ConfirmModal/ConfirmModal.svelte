@@ -168,7 +168,11 @@
       dispatch("confirm:error", { error });
       return;
     }
-    if (typeof result?.then !== "function") {
+    if (
+      typeof (
+        /** @type {PromiseLike<unknown> | undefined} */ (result)?.then
+      ) !== "function"
+    ) {
       open = false;
       return;
     }
