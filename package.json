@@ -88,6 +88,7 @@
     "release:screenshots": "bun scripts/release-screenshots.ts",
     "build:docs": "bun scripts/build-docs",
     "audit:docs": "bun scripts/audit-docs.ts",
+    "audit:watch": "bun scripts/audit-watch.ts",
     "release:build": "bun scripts/release-build",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "release": "bun scripts/release-changelog",
