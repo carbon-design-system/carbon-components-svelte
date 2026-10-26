@@ -72,6 +72,18 @@ describe("MultiSelect", () => {
       },
     );
 
+    it("renders no `open` attribute on the clear-filter button", async () => {
+      render(MultiSelect, {
+        props: { items, filterable: true, placeholder: "Filter items..." },
+      });
+
+      await user.type(screen.getByPlaceholderText("Filter items..."), "em");
+
+      expect(
+        screen.getByRole("button", { name: "Clear selected item" }),
+      ).not.toHaveAttribute("open");
+    });
+
     it("filters case-insensitively and ignores surrounding whitespace by default", async () => {
       render(MultiSelect, {
         props: {
