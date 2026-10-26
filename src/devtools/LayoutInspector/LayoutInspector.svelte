@@ -89,22 +89,22 @@
   import { createFrameJob } from "../../utils/frame-batch.js";
   import { addPooledListener } from "../../utils/window-listener-pool.js";
   import {
+    AUDIT_CHECKS,
+    carbonOwned,
+    formatRatio,
+    hasOwnText,
+    runChecks,
+  } from "../audit.js";
+  import {
     boxes,
     distanceSegments,
-    failingTargets,
     mergeLabels,
     ringLabels,
   } from "../geometry.js";
-  import {
-    createLayerLookup,
-    DEV_TOOL,
-    inBand,
-    observePage,
-  } from "../page-scan.js";
+  import { createLayerLookup, DEV_TOOL, observePage } from "../page-scan.js";
   import {
     formatPx,
     gaps,
-    offScale,
     paddingToken,
     sideTokens,
     spacingToken,
@@ -154,36 +154,6 @@
     "fluid-display-03",
     "fluid-display-04",
   ];
-
-  const INTERACTIVE = [
-    "a[href]",
-    "button",
-    "input:not([type='hidden'])",
-    "select",
-    "textarea",
-    "summary",
-    "[role='button']",
-    "[role='link']",
-    "[role='checkbox']",
-    "[role='radio']",
-    "[role='switch']",
-    "[role='tab']",
-    "[role='menuitem']",
-    "[role='option']",
-    "[tabindex]:not([tabindex='-1'])",
-  ].join(", ");
-
-  // Carbon's own elements: anything with a `bx--` class, and the unstyled
-  // elements directly inside one, such as the `<input>` in `NumberInput`.
-  const CARBON_ELEMENTS =
-    "[class*='bx--'], [class*='bx--'] > :not([class]):not([style*=':'])";
-
-  // For text, only a `bx--` class of its own: a classless `<p>` in a Grid
-  // column is the app's text, not Carbon's.
-  const CARBON_TEXT = "[class*='bx--']";
-
-  // Caps each check so a huge page cannot stall the inspector.
-  const MAX_MARKS = 500;
 
   /** Root font size in px, read again on every hover and scan. */
   let remPx = 16;
@@ -271,46 +241,10 @@
   }
 
   /** @param {Element} el */
-  function hasOwnText(el) {
-    for (const node of el.childNodes) {
-      if (node.nodeType === Node.TEXT_NODE && node.nodeValue?.trim()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /** @param {Element} el */
   function describe(el) {
     const tag = el.tagName.toLowerCase();
     const cls = [...el.classList].find((c) => !c.startsWith("svelte-"));
     return cls ? `${tag}.${cls}` : tag;
-  }
-
-  /**
-   * @param {Element} el
-   * @param {string} selector
-   */
-  function matchesSafe(el, selector) {
-    if (!selector) return false;
-    try {
-      return el.matches(selector);
-    } catch {
-      return false;
-    }
-  }
-
-  /**
-   * @param {Element} el
-   * @param {string} selector
-   */
-  function closestSafe(el, selector) {
-    if (!selector) return false;
-    try {
-      return el.closest(selector) !== null;
-    } catch {
-      return false;
-    }
   }
 
   // ---------------------------------------------------------------------
@@ -488,11 +422,6 @@
     };
   }
 
-  /** @param {number} ratio */
-  function formatRatio(ratio) {
-    return `${Math.floor(ratio * 10) / 10}:1`;
-  }
-
   function updateHover() {
     readRemPx();
 
@@ -539,7 +468,7 @@
     // Carbon's own elements keep a few deliberate off-scale values (the
     // small button's 60px icon gutter). Users cannot change them, so they
     // read as "set by Carbon" rather than as errors, unless `checkCarbon`.
-    const carbon = !checkCarbon && matchesSafe(hovered, CARBON_ELEMENTS);
+    const carbon = !checkCarbon && carbonOwned(hovered);
     const sideIndex = ["top", "right", "bottom", "left"];
 
     hover = {
@@ -768,364 +697,29 @@
   $: pinnedMarks = allMarks.filter((m) => m.pinned);
 
   /**
-   * A mark in page coordinates, or in viewport coordinates when `el` sits
-   * in a fixed box.
-   * @param {LayoutInspectorCheck} check
-   * @param {Element} el
-   * @param {{ left: number; top: number; width: number; height: number }} rect viewport rect
-   * @param {string} text
-   * @param {ScanContext} context
+   * A finding as a mark, in page coordinates, or in viewport coordinates
+   * when its element sits in a fixed box.
+   * @param {import("../audit.js").Finding} finding
+   * @param {{ sx: number; sy: number; fixedBox: (el: Element) => Element | null }} context
    * @returns {LayoutInspectorMark}
    */
-  function mark(check, el, rect, text, context) {
+  function mark({ check, el, rect, message }, context) {
     const pinned = context.fixedBox(el) !== null;
     const x = Math.round((rect.left + (pinned ? 0 : context.sx)) * 10) / 10;
     const y = Math.round((rect.top + (pinned ? 0 : context.sy)) * 10) / 10;
     const width = Math.round(rect.width * 10) / 10;
     const height = Math.round(rect.height * 10) / 10;
     return {
-      key: `${check}|${pinned}|${x}|${y}|${width}|${height}|${text}`,
+      key: `${check}|${pinned}|${x}|${y}|${width}|${height}|${message}`,
       check,
       x,
       y,
       width,
       height,
-      text,
-      label: text,
+      text: message,
+      label: message,
       pinned,
     };
-  }
-
-  /**
-   * Union of an element's box and its `<label>`s, since a label click
-   * activates the control too.
-   * @param {Element} el
-   */
-  function targetRect(el) {
-    let { left, top, right, bottom } = el.getBoundingClientRect();
-    const labels = /** @type {HTMLInputElement} */ (el).labels;
-    if (labels) {
-      for (const label of labels) {
-        const r = label.getBoundingClientRect();
-        if (r.width < 1 || r.height < 1) continue;
-        left = Math.min(left, r.left);
-        top = Math.min(top, r.top);
-        right = Math.max(right, r.right);
-        bottom = Math.max(bottom, r.bottom);
-      }
-    }
-    return { left, top, width: right - left, height: bottom - top };
-  }
-
-  /**
-   * @typedef {{ band: import("../page-scan.js").ScanBand; sx: number; sy: number; carbon: boolean; ignore: string; targetSize: number; fixedBox: (el: Element) => Element | null; layer: (el: Element) => Element | null }} ScanContext
-   */
-
-  /**
-   * Whether a check skips `el`: Carbon's own elements, unless
-   * `checkCarbon`, and anything inside `checkIgnore`.
-   * @param {Element} el
-   * @param {string} carbonSelector
-   * @param {ScanContext} context
-   */
-  function skipped(el, carbonSelector, context) {
-    return (
-      (!context.carbon && matchesSafe(el, carbonSelector)) ||
-      closestSafe(el, context.ignore)
-    );
-  }
-
-  /**
-   * Elements with off-scale margin, padding, or gap.
-   * @param {ScanContext} context
-   */
-  function scanSpacing(context) {
-    const { band, sy } = context;
-    /** @type {LayoutInspectorMark[]} */
-    const marks = [];
-    for (const el of document.body.querySelectorAll("*")) {
-      if (marks.length >= MAX_MARKS) break;
-      const r = el.getBoundingClientRect();
-      if (r.width < 1 && r.height < 1) continue;
-      if (!inBand(r, band, sy)) continue;
-      if (el.closest(DEV_TOOL) || skipped(el, CARBON_ELEMENTS, context)) {
-        continue;
-      }
-      const style = getComputedStyle(el);
-      if (style.display === "none" || style.display === "contents") continue;
-      const off = offScale(style, remPx);
-      if (!off.length) continue;
-      marks.push(
-        mark(
-          "spacing",
-          el,
-          r,
-          off.length > 3
-            ? `${off.slice(0, 3).join(" · ")} · +${off.length - 3}`
-            : off.join(" · "),
-          context,
-        ),
-      );
-    }
-    return marks;
-  }
-
-  /**
-   * Interactive elements that fail WCAG 2.5.8. Every target near the
-   * viewport counts for spacing, including ignored ones, but only the
-   * others are flagged.
-   * @param {ScanContext} context
-   */
-  function scanTargets(context) {
-    const { band, sy, targetSize } = context;
-    /** @type {{ el: Element; rect: { left: number; top: number; width: number; height: number }; flag: boolean; layer: Element | null }[]} */
-    const targets = [];
-
-    for (const el of document.body.querySelectorAll(INTERACTIVE)) {
-      // Check the band on the element's own box first: reading `labels`
-      // is slow, and most targets are far from the viewport. A label sits
-      // next to its control, so the control's box is close enough.
-      if (!inBand(el.getBoundingClientRect(), band, sy)) continue;
-      if (el.closest(DEV_TOOL)) continue;
-      const rect = targetRect(el);
-      // Zero-size and visually hidden (1px) controls have no target of
-      // their own; their label is checked instead.
-      if (rect.width <= 1 || rect.height <= 1) continue;
-      if (
-        !inBand({ top: rect.top, bottom: rect.top + rect.height }, band, sy)
-      ) {
-        continue;
-      }
-      const style = getComputedStyle(el);
-      if (style.visibility === "hidden") continue;
-      // Targets in a sentence are exempt in WCAG 2.5.8: skip inline
-      // elements whose parent also holds running text.
-      if (
-        style.display.startsWith("inline") &&
-        el.parentElement &&
-        hasOwnText(el.parentElement)
-      ) {
-        continue;
-      }
-      targets.push({
-        el,
-        rect,
-        flag: !skipped(el, CARBON_ELEMENTS, context),
-        layer: context.layer(el),
-      });
-    }
-    return failingTargets(
-      targets.map((target) => target.rect),
-      targetSize,
-      targets.map((target) => target.layer),
-    )
-      .filter((index) => targets[index].flag)
-      .slice(0, MAX_MARKS)
-      .map((index) => {
-        const { el, rect } = targets[index];
-        return mark(
-          "targets",
-          el,
-          rect,
-          `${formatPx(rect.width)} × ${formatPx(rect.height)}`,
-          context,
-        );
-      });
-  }
-
-  /**
-   * Text below WCAG AA contrast. Disabled controls are exempt in WCAG
-   * 1.4.3, so text inside `disabled` or `aria-disabled` elements is skipped.
-   * @param {ScanContext} context
-   */
-  function scanContrast(context) {
-    const { band, sy } = context;
-    /** @type {LayoutInspectorMark[]} */
-    const marks = [];
-    /** @type {Set<Element>} */
-    const seen = new Set();
-    /** @type {import("./colors.js").BackgroundCache} */
-    const backgrounds = new Map();
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-    );
-    for (
-      let text = walker.nextNode();
-      text && marks.length < MAX_MARKS;
-      text = walker.nextNode()
-    ) {
-      const el = text.parentElement;
-      if (!el || seen.has(el) || !text.nodeValue?.trim()) continue;
-      seen.add(el);
-      const r = el.getBoundingClientRect();
-      if (r.width <= 1 || r.height <= 1) continue;
-      if (!inBand(r, band, sy)) continue;
-      if (
-        el.closest(
-          `${DEV_TOOL}, script, style, [disabled], [aria-disabled='true']`,
-        ) ||
-        skipped(el, CARBON_TEXT, context)
-      ) {
-        continue;
-      }
-      const style = getComputedStyle(el);
-      if (style.visibility === "hidden") continue;
-      const result = textContrast(el, backgrounds);
-      // A background image hides the real background; leave it to a person.
-      if (result.approximate || result.ratio >= result.aa) continue;
-      marks.push(
-        mark(
-          "contrast",
-          el,
-          r,
-          `${formatRatio(result.ratio)} · needs ${result.aa}:1`,
-          context,
-        ),
-      );
-    }
-    return marks;
-  }
-
-  const CLIPS = new Set(["hidden", "clip"]);
-
-  // Caps the descendants `clipsVisibleContent` reads per box.
-  const MAX_CLIP_DESCENDANTS = 300;
-
-  /**
-   * Whether a clipping box hides something a person could see: its own
-   * text (as with an ellipsis), or a visible descendant that reaches
-   * past its edges. A collapsed menu or disclosure clips content that is
-   * hidden anyway (`visibility: hidden`, `inert`, `hidden`, or
-   * `aria-hidden`), so it does not count.
-   * @param {Element} el
-   * @param {CSSStyleDeclaration} style
-   */
-  function clipsVisibleContent(el, style) {
-    if (style.visibility === "visible" && hasOwnText(el)) return true;
-    const box = el.getBoundingClientRect();
-    const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT, {
-      acceptNode(node) {
-        const child = /** @type {HTMLElement} */ (node);
-        if (
-          child.hidden ||
-          child.inert ||
-          child.getAttribute("aria-hidden") === "true"
-        ) {
-          return NodeFilter.FILTER_REJECT;
-        }
-        return NodeFilter.FILTER_ACCEPT;
-      },
-    });
-    let read = 0;
-    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-      if (++read > MAX_CLIP_DESCENDANTS) return true;
-      // The walker shows elements only.
-      const child = /** @type {Element} */ (node);
-      const r = child.getBoundingClientRect();
-      if (r.width < 1 || r.height < 1) continue;
-      const outside =
-        r.right > box.right + 1 ||
-        r.bottom > box.bottom + 1 ||
-        r.left < box.left - 1 ||
-        r.top < box.top - 1;
-      if (outside && getComputedStyle(child).visibility === "visible") {
-        return true;
-      }
-    }
-    return false;
-  }
-  const SCROLLS = new Set(["auto", "scroll", "hidden", "clip"]);
-
-  /**
-   * Two kinds of overflow:
-   * - Culprits of horizontal page scroll: elements that reach past the
-   *   right (or, in RTL, left) edge of the page while their parent does
-   *   not, and that no ancestor clips or scrolls.
-   * - Clipped content: `overflow: hidden` or `clip` boxes whose content is
-   *   larger than the box, including `text-overflow: ellipsis` truncation.
-   *   Scrollable boxes are left alone, and so are 1px visually hidden
-   *   helpers.
-   * @param {ScanContext} context
-   */
-  function scanOverflow(context) {
-    const { band, sx, sy } = context;
-    /** @type {LayoutInspectorMark[]} */
-    const marks = [];
-    const pageWidth = document.documentElement.clientWidth;
-    const pageScrolls = document.documentElement.scrollWidth > pageWidth + 1;
-
-    for (const el of document.body.querySelectorAll("*")) {
-      if (marks.length >= MAX_MARKS) break;
-      const r = el.getBoundingClientRect();
-      if (r.width <= 1 || r.height <= 1) continue;
-      if (!inBand(r, band, sy)) continue;
-      if (el.closest(DEV_TOOL) || skipped(el, CARBON_ELEMENTS, context)) {
-        continue;
-      }
-      const style = getComputedStyle(el);
-
-      if (pageScrolls && style.position !== "fixed") {
-        const right = r.right + sx - pageWidth;
-        const left = -(r.left + sx);
-        const past = Math.max(right, left);
-        if (past > 0.5) {
-          const parent = el.parentElement?.getBoundingClientRect();
-          const parentPast = parent
-            ? Math.max(parent.right + sx - pageWidth, -(parent.left + sx))
-            : 0;
-          let contained = false;
-          for (
-            let ancestor = el.parentElement;
-            ancestor && ancestor !== document.body;
-            ancestor = ancestor.parentElement
-          ) {
-            if (SCROLLS.has(getComputedStyle(ancestor).overflowX)) {
-              contained = true;
-              break;
-            }
-          }
-          if (parentPast <= 0.5 && !contained) {
-            marks.push(
-              mark(
-                "overflow",
-                el,
-                r,
-                `${formatPx(past)}px past the page`,
-                context,
-              ),
-            );
-            continue;
-          }
-        }
-      }
-
-      const clipsX = CLIPS.has(style.overflowX);
-      const clipsY = CLIPS.has(style.overflowY);
-      if (!clipsX && !clipsY) continue;
-      const overX = clipsX ? el.scrollWidth - el.clientWidth : 0;
-      const overY = clipsY ? el.scrollHeight - el.clientHeight : 0;
-      if (overX <= 1 && overY <= 1) continue;
-      if (!clipsVisibleContent(el, style)) continue;
-      const truncated = style.textOverflow === "ellipsis" && overX > 1;
-      marks.push(
-        mark(
-          "overflow",
-          el,
-          r,
-          truncated
-            ? `truncated · ${formatPx(overX)}px hidden`
-            : [
-                overX > 1 && `clips ${formatPx(overX)}px across`,
-                overY > 1 && `clips ${formatPx(overY)}px down`,
-              ]
-                .filter(Boolean)
-                .join(" · "),
-          context,
-        ),
-      );
-    }
-    return marks;
   }
 
   /**
@@ -1170,26 +764,28 @@
     /** @param {import("../page-scan.js").ScanBand} band */
     function scan(band) {
       readRemPx();
-      /** @type {ScanContext} */
       const context = {
-        band,
         sx: window.scrollX,
         sy: window.scrollY,
+        fixedBox: createLayerLookup(["fixed"]),
+      };
+      const findings = runChecks({
+        checks: AUDIT_CHECKS.filter((check) => current[check]),
+        band,
         carbon: current.carbon,
         ignore: current.ignore,
         targetSize: current.targetSize,
-        fixedBox: createLayerLookup(["fixed"]),
+        remPx,
         // A sticky box moves over the page too, so its targets do not
         // crowd the page's.
         layer: createLayerLookup(["fixed", "sticky"]),
-      };
+      });
       /** @type {Record<LayoutInspectorCheck, LayoutInspectorMark[]>} */
-      const next = {
-        spacing: uniqueKeys(current.spacing ? scanSpacing(context) : []),
-        targets: uniqueKeys(current.targets ? scanTargets(context) : []),
-        contrast: uniqueKeys(current.contrast ? scanContrast(context) : []),
-        overflow: uniqueKeys(current.overflow ? scanOverflow(context) : []),
-      };
+      const next = { spacing: [], targets: [], contrast: [], overflow: [] };
+      for (const finding of findings) {
+        next[finding.check].push(mark(finding, context));
+      }
+      for (const check of AUDIT_CHECKS) uniqueKeys(next[check]);
       // Crowded labels share one, so a row of small targets stays legible.
       const all = [
         ...next.spacing,
