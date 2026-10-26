@@ -2085,6 +2085,16 @@ describe("DataTable", () => {
   });
 
   describe("Generics", () => {
+    it("lets an empty header set columnAlign", () => {
+      // The assertion is the annotation: an inline literal gets excess
+      // property checks, which reject an unknown `columnAlign`.
+      const headers: ComponentProps<DataTableComponent>["headers"] = [
+        { key: "actions", empty: true, columnAlign: "end" },
+      ];
+
+      expect(headers).toHaveLength(1);
+    });
+
     it("should support generic types with ComponentProps and ComponentEvents", () => {
       type CustomRow = {
         id: string;
