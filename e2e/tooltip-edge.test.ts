@@ -87,3 +87,94 @@ test("a tooltip open while off-screen keeps its direction", async ({
   );
   await expect(tooltip).toHaveClass(/bx--tooltip--bottom/);
 });
+// A box around an in-place tooltip that would cut it off: the tooltip
+// opens in a portal, whole, and the box doesn't grow a scrollbar.
+for (const [box, name] of [
+  ["scroll", "In a panel"],
+  ["card", "In a card"],
+] as const)
+  test(`a tooltip ${box === "scroll" ? "in a scrolling panel" : "in a clipping card"} shows whole`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
+    await page.goto("/tooltip-edge.html");
+    await page.locator(`[aria-label="${name}"]`).focus();
+    const tooltip = page.locator(SHOWN).last();
+    await expect(tooltip).toBeVisible();
+    await page.evaluate(
+      () =>
+        new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r)),
+        ),
+    );
+    const hidden = await tooltip.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return [
+        [r.left + 6, r.top + 10],
+        [r.right - 6, r.top + 10],
+        [r.left + 6, r.bottom - 6],
+        [r.right - 6, r.bottom - 6],
+      ].filter(([x, y]) => !el.contains(document.elementFromPoint(x, y)));
+    });
+    expect(hidden).toEqual([]);
+    const scroll = await page
+      .getByTestId(box)
+      .evaluate((el) => el.scrollHeight - el.clientHeight);
+    expect(scroll).toBeLessThanOrEqual(1);
+  });
+
+// The clipped tooltip moves into the portal after it first renders in
+// place. Escape and hover must still work on the portalled copy.
+test("Escape closes a clipped tooltip and keeps focus on its trigger", async ({
+  page,
+}) => {
+  await page.goto("/tooltip-edge.html");
+  // The fixture opens one tooltip off-screen, and Escape closes one open
+  // tooltip at a time. Close it first.
+  await page.keyboard.press("Escape");
+  const trigger = page.locator('[aria-label="In a card"]');
+  await trigger.focus();
+  const portalled = page.locator(`[data-floating-portal] ${SHOWN}`);
+  await expect(portalled).toBeVisible();
+  await expect(page.getByTestId("card").locator(SHOWN)).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(portalled).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test("a clipped tooltip opened by hover stays open over its content", async ({
+  page,
+}) => {
+  await page.goto("/tooltip-edge.html");
+  // The fixture opens one tooltip off-screen, and Escape closes one open
+  // tooltip at a time. Close it first.
+  await page.keyboard.press("Escape");
+  const trigger = page.locator('[aria-label="In a card"]');
+  await trigger.hover();
+  const portalled = page.locator(`[data-floating-portal] ${SHOWN}`);
+  await expect(portalled).toBeVisible();
+
+  // The pointer crosses onto the tooltip: it stays open (WCAG 1.4.13).
+  const box = await portalled.boundingBox();
+  if (!box) throw new Error("no tooltip box");
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
+    steps: 5,
+  });
+  await page.waitForTimeout(400);
+  await expect(portalled).toBeVisible();
+
+  // Escape closes a hover-opened tooltip wherever focus is.
+  await page.keyboard.press("Escape");
+  await expect(portalled).toHaveCount(0);
+
+  // Leaving the tooltip closes it.
+  await trigger.hover();
+  await expect(portalled).toBeVisible();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
+    steps: 5,
+  });
+  await page.mouse.move(5, 5, { steps: 5 });
+  await expect(portalled).toHaveCount(0);
+});
