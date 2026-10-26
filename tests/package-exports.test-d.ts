@@ -20,6 +20,7 @@ import type {
   trapFocus,
 } from "carbon-components-svelte";
 import type {
+  DevToolbar,
   GridOverlay,
   LayoutInspector,
 } from "carbon-components-svelte/devtools";
@@ -80,6 +81,7 @@ import "carbon-components-svelte/css/syntax.css";
 import "carbon-components-svelte/css/white.css";
 
 type _BarrelButton = BarrelButton;
+type _DevToolbar = typeof DevToolbar;
 type _GridOverlay = typeof GridOverlay;
 type _LayoutInspector = typeof LayoutInspector;
 type _BarrelDataTable = BarrelDataTable;
