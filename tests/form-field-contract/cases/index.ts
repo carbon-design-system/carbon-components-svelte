@@ -338,8 +338,6 @@ export const exempt: Exemptions = {
     StarRating: NOT_AUDITED,
   },
   reset: {
-    ListBoxRequiredInput:
-      "a hidden validation proxy, covered by tests/ListBox/required-invalid.test.ts",
     NumberInput: "keeps its value on reset unless allowEmpty is set",
     Checkbox: NOT_A_TEXT_FIELD,
     DataTable: NOT_A_TEXT_FIELD,
