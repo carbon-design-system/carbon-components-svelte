@@ -749,6 +749,31 @@ test.describe("forced colors", () => {
     }
   });
 
+  // The keycap's edge is a border, not a shadow, so it stays; the muted
+  // variant has no box and reads as plain text.
+  test("a Kbd keycap keeps its edges and a muted one stays plain text", async ({
+    page,
+  }) => {
+    const keycap = '[data-testid="kbd"] .bx--kbd:not(.bx--kbd--muted)';
+    const edges = await page.evaluate((selector) => {
+      const el = document.querySelector(selector);
+      if (!el) throw new Error(`no ${selector}`);
+      const s = getComputedStyle(el);
+      return {
+        top: [s.borderTopColor, s.borderTopWidth],
+        bottom: [s.borderBottomColor, s.borderBottomWidth],
+      };
+    }, keycap);
+    expect.soft(edges.top[0]).toBe(system.CanvasText);
+    expect.soft(edges.bottom[0]).toBe(system.CanvasText);
+    expect.soft(edges.top[1]).toBe("1px");
+    expect.soft(edges.bottom[1]).toBe("2px");
+    const muted = '[data-testid="kbd"] .bx--kbd--muted';
+    expect
+      .soft((await style(page, muted)).color, muted)
+      .toBe(system.CanvasText);
+  });
+
   test("a range drag shows both handles in their focus color", async ({
     page,
   }) => {

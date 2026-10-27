@@ -29,6 +29,7 @@
     HeaderSearch,
     HeaderUtilities,
     InlineEdit,
+    Kbd,
     Menu,
     MenuItem,
     Meter,
@@ -243,6 +244,11 @@
   <Menu anchor={menuAnchor} open labelText="Menu">
     <MenuItem labelText="Item" />
   </Menu>
+
+  <div data-testid="kbd">
+    <Kbd>K</Kbd>
+    <Kbd size="sm" variant="muted">Esc</Kbd>
+  </div>
 
   <ShapeIndicator kind="medium" label="Medium" />
   <div theme="g100">

@@ -134,6 +134,7 @@ export { default as InterstitialScreenBody } from "./InterstitialScreen/Intersti
 export { default as InterstitialScreenFooter } from "./InterstitialScreen/InterstitialScreenFooter.svelte";
 export { default as InterstitialScreenHeader } from "./InterstitialScreen/InterstitialScreenHeader.svelte";
 export { default as InterstitialScreenView } from "./InterstitialScreen/InterstitialScreenView.svelte";
+export { default as Kbd } from "./Kbd/Kbd.svelte";
 export { default as Layer } from "./Layer/Layer.svelte";
 export { default as LayoutDirection } from "./LayoutDirection/LayoutDirection.svelte";
 export { default as LazyMount } from "./LazyMount/LazyMount.svelte";

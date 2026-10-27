@@ -1,0 +1,84 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Kbd: a display-only key cap. The same look as `Prose`'s `kbd` (a flat
+/// key with a heavier bottom edge, or unboxed muted text), as a component
+/// so a hint can sit in a button, a tooltip or a menu. The bottom edge is
+/// a border, not a `box-shadow`, so forced colors keeps it.
+/// @access private
+/// @group components
+@mixin kbd {
+  .#{$prefix}--kbd {
+    --ccs-kbd-min-inline-size: #{to-rem(24px)};
+    --ccs-kbd-block-size: #{to-rem(24px)};
+    --ccs-kbd-padding-inline: #{$carbon--spacing-02};
+    --ccs-kbd-background: #{$layer};
+    --ccs-kbd-border-color: #{$border-subtle};
+    --ccs-kbd-border-bottom-color: #{$border-strong};
+    --ccs-kbd-color: #{$text-primary};
+    --ccs-kbd-font-size: #{to-rem(12px)};
+
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--ccs-kbd-padding-inline);
+    border: 1px solid var(--ccs-kbd-border-color);
+    border-bottom: 2px solid var(--ccs-kbd-border-bottom-color);
+    background-color: var(--ccs-kbd-background);
+    block-size: var(--ccs-kbd-block-size);
+    border-radius: to-rem(2px);
+    color: var(--ccs-kbd-color);
+    font-size: var(--ccs-kbd-font-size);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1;
+    min-inline-size: var(--ccs-kbd-min-inline-size);
+    vertical-align: middle;
+    white-space: nowrap;
+
+    @include carbon--font-family("mono");
+  }
+
+  .#{$prefix}--kbd--sm {
+    --ccs-kbd-min-inline-size: #{to-rem(20px)};
+    --ccs-kbd-block-size: #{to-rem(20px)};
+  }
+
+  // A button lays its content out as flex items, which drops the space
+  // between its label and the key.
+  .#{$prefix}--btn > .#{$prefix}--kbd {
+    margin-inline-start: $carbon--spacing-03;
+  }
+
+  // Unboxed: the text takes the surrounding size and family, so it reads as
+  // part of the row it sits in.
+  .#{$prefix}--kbd--muted {
+    --ccs-kbd-min-inline-size: 0;
+    --ccs-kbd-block-size: auto;
+    --ccs-kbd-padding-inline: 0;
+    --ccs-kbd-background: transparent;
+    --ccs-kbd-color: #{$text-secondary};
+    --ccs-kbd-font-size: inherit;
+
+    border: 0;
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  // The secondary text color is for the layer surfaces. On a button or an
+  // inverse surface (tooltips, toggletips) it fails contrast, so the key
+  // takes the color the surface gives its text.
+  .#{$prefix}--btn .#{$prefix}--kbd--muted,
+  .#{$prefix}--tooltip .#{$prefix}--kbd--muted,
+  .#{$prefix}--tooltip-portal__content .#{$prefix}--kbd--muted,
+  .#{$prefix}--toggletip-content .#{$prefix}--kbd--muted {
+    --ccs-kbd-color: currentcolor;
+  }
+}
+
+@include exports("kbd") {
+  @include kbd;
+}
