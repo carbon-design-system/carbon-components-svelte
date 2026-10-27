@@ -299,6 +299,14 @@ test.describe("DataTable", () => {
     ).toHaveAttribute("tabindex", "0");
   });
 
+  test("fixedLayout gives the selection column a width", async ({ page }) => {
+    const table = page.getByTestId("data-table-fixed-layout-selectable");
+    const header = table.getByRole("columnheader").first();
+    await expect(header).toBeAttached();
+    const box = await header.boundingBox();
+    expect(box?.width).toBeGreaterThan(0);
+  });
+
   test("a hand-written td keeps the cell color and background", async ({
     page,
   }) => {

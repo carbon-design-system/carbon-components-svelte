@@ -49,6 +49,11 @@
 
   const selectRangeHeaders = [{ key: "name", value: "Product" }];
 
+  const fixedLayoutHeaders = [
+    { key: "name", value: "Product", width: "12rem" },
+    { key: "price", value: "Price", width: "8rem" },
+  ];
+
   const selectRangeRows = [
     { id: "r1", name: "Item A" },
     { id: "r2", name: "Item B" },
@@ -140,6 +145,15 @@
 
 <div data-testid="data-table-select-range">
   <DataTable selectable headers={selectRangeHeaders} rows={selectRangeRows} />
+</div>
+
+<div data-testid="data-table-fixed-layout-selectable" style:width="300px">
+  <DataTable
+    selectable
+    fixedLayout
+    headers={fixedLayoutHeaders}
+    rows={selectRangeRows}
+  />
 </div>
 
 <div data-testid="data-table-radio-deselect">
