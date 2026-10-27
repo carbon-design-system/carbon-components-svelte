@@ -954,6 +954,27 @@ test.describe("right-to-left layout", () => {
     const axis = Math.round(region.x * 2 + region.width);
     expectMirrored(await boxes(page, parts), mirror(ltr, axis));
   });
+
+  // Both platforms' keys share one grid cell as wide as the wider set. The
+  // keys run left to right, but the narrower set still sits at the inline
+  // end, next to whatever follows the label.
+  test("keeps Kbd's narrower key set at the inline end", async ({ page }) => {
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      const offsets = await page.getByTestId("kbd").evaluate((node, dir) => {
+        const root = node.querySelector(".bx--kbd")?.getBoundingClientRect();
+        if (!root) throw new Error("no kbd");
+        return [...node.querySelectorAll(".bx--kbd__platform")].map((set) => {
+          const box = set.getBoundingClientRect();
+          return Math.round(
+            dir === "rtl" ? box.left - root.left : root.right - box.right,
+          );
+        });
+      }, dir);
+      expect.soft(offsets, `${dir} end offsets`).toEqual([0, 0]);
+    }
+  });
 });
 
 // Icons that point forward or back, by meaning, mirror in RTL. A `dir="ltr"`

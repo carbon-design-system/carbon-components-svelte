@@ -24,6 +24,7 @@
     HeaderNavItem,
     HeaderNavMenu,
     HeaderUtilities,
+    Kbd,
     LayoutDirection,
     MenuButton,
     MenuItem,
@@ -399,6 +400,9 @@ export async function rollback(region, id) {
   </div>
   <div data-testid="tabs-default-skeleton">
     <TabsSkeleton count={3} />
+  </div>
+  <div data-testid="kbd">
+    <Kbd shortcut="mod+shift+k" />
   </div>
 </Content>
 
