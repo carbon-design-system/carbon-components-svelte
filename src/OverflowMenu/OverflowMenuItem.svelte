@@ -96,7 +96,7 @@
     getContext,
     onMount,
   } from "svelte";
-  import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { splitAria } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -127,28 +127,22 @@
     }
   });
 
-  // Naming and description belong on the menuitem, not the `role="none"` li.
-  $: ({
-    ariaLabel,
-    ariaLabelledBy,
-    ariaDescribedBy,
-    rest: wrapperProps,
-  } = splitAriaNaming($$restProps));
+  // Every `aria-*` attribute belongs on the menuitem, not the `role="none"`
+  // li: naming, description, `aria-keyshortcuts` and the rest.
+  $: ({ aria: ariaProps, rest: wrapperProps } = splitAria($$restProps));
 
   $: buttonProps = {
+    ...ariaProps,
     role: "menuitem",
     tabindex: "-1",
     class: "bx--overflow-menu-options__btn",
     type: href ? undefined : "button",
     disabled: href ? undefined : disabled,
-    "aria-disabled": href && disabled ? "true" : undefined,
+    "aria-disabled": href && disabled ? "true" : ariaProps["aria-disabled"],
     href: href ? href : undefined,
     target: href && target ? target : undefined,
     rel: resolveLinkRel(target, rel),
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
-    "aria-label": ariaLabel,
-    "aria-labelledby": ariaLabelledBy,
-    "aria-describedby": ariaDescribedBy,
   };
 
   /** @param {MouseEvent} event */

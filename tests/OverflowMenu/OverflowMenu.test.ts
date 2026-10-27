@@ -12,6 +12,7 @@ import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 import OverflowMenuInBreadcrumb from "./OverflowMenuInBreadcrumb.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
+import OverflowMenuItemAria from "./OverflowMenuItem.aria.test.svelte";
 import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
 import OverflowMenuPrimaryFocus from "./OverflowMenuPrimaryFocus.test.svelte";
 import { closeDetails, openMenu } from "./helpers";
@@ -726,6 +727,25 @@ describe("OverflowMenu", () => {
         slotIcon.closest(".bx--overflow-menu-options__option-icon--right"),
       ).toBeInTheDocument();
     });
+  });
+
+  it("puts aria attributes on the menu item, and the rest on the wrapper", () => {
+    render(OverflowMenuItemAria);
+
+    const button = screen.getByRole("menuitem", { name: "Save" });
+    expect(button).toHaveAttribute("aria-keyshortcuts", "Control+S");
+    expect(button).toHaveAttribute("aria-describedby", "save-hint");
+    expect(button).toHaveAccessibleDescription("Saves the draft");
+
+    const link = screen.getByRole("menuitem", { name: "Docs" });
+    expect(link).toHaveAttribute("aria-keyshortcuts", "Control+D");
+    expect(link).toHaveAttribute("aria-current", "page");
+
+    const wrapper = screen.getByTestId("save");
+    expect(wrapper).toHaveAttribute("role", "none");
+    for (const name of wrapper.getAttributeNames()) {
+      expect(name.startsWith("aria-")).toBe(false);
+    }
   });
 
   it("focuses the primaryFocus item, not the first item, when opened", async () => {

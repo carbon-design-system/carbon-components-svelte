@@ -16,3 +16,22 @@ export function splitAriaNaming(restProps) {
   } = restProps;
   return { ariaLabel, ariaLabelledBy, ariaDescribedBy, rest };
 }
+
+/**
+ * Split every `aria-*` attribute out of a component's rest props, for a
+ * component whose root is a wrapper with no role, such as a presentational
+ * `li`. Those attributes describe the control inside it. The rest stay on
+ * the wrapper.
+ *
+ * @param {Record<string, any>} restProps
+ */
+export function splitAria(restProps) {
+  /** @type {Record<string, any>} */
+  const aria = {};
+  /** @type {Record<string, any>} */
+  const rest = {};
+  for (const [name, value] of Object.entries(restProps)) {
+    (name.startsWith("aria-") ? aria : rest)[name] = value;
+  }
+  return { aria, rest };
+}
