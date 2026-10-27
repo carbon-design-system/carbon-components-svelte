@@ -96,6 +96,14 @@
       padding-left: $size;
     }
 
+    .#{$prefix}--box-ps-#{$step} {
+      padding-inline-start: $size;
+    }
+
+    .#{$prefix}--box-pe-#{$step} {
+      padding-inline-end: $size;
+    }
+
     .#{$prefix}--box-mt-#{$step} {
       margin-top: $size;
     }
@@ -110,6 +118,14 @@
 
     .#{$prefix}--box-ml-#{$step} {
       margin-left: $size;
+    }
+
+    .#{$prefix}--box-ms-#{$step} {
+      margin-inline-start: $size;
+    }
+
+    .#{$prefix}--box-me-#{$step} {
+      margin-inline-end: $size;
     }
   }
 
