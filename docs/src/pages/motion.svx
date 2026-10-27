@@ -154,6 +154,44 @@ element.animate(keyframes, {
 
 Svelte 3 and 4 run a transition by injecting a `<style>` rule with keyframes. A policy with a strict `style-src` blocks it, and the transition snaps. Svelte 5 uses the Web Animations API and is not affected.
 
+## Component props
+
+Components that mount and unmount take a `transition` prop. It is off by default, so nothing animates until you opt in.
+
+| Value | Result |
+| :--- | :--- |
+| `undefined` or `false` | No animation |
+| `true` | The component's own preset |
+| An object of parameters | The preset, with those parameters changed |
+| An object with `fn` | `fn` instead of the preset, with the rest of the object as its parameters |
+
+```svelte
+<script>
+  import { InlineLoading } from "carbon-components-svelte";
+  import { fly } from "carbon-components-svelte/motion";
+</script>
+
+{#if saving}
+  <InlineLoading transition description="Saving..." />
+{/if}
+
+<InlineLoading transition={{ fn: fly, y: -8, duration: "moderate02" }} />
+```
+
+| Component | Preset | Directive |
+| :--- | :--- | :--- |
+| [InlineLoading](/components/InlineLoading#transition) | `fade`, `fast02` | Global: the parent's `{#if}` plays it |
+| [Loading](/components/Loading#transition) | `fade`, `moderate02`, overlay included | Global: the parent's `{#if}` plays it |
+| [ImageLoader](/components/ImageLoader#fade-in) | `fade`, `fast02` | Local: its own `{#if}` plays it |
+| [HeaderAction, HeaderSwitcher, ProfileMenu](/components/UIShell#app-switcher) | `slide`, `moderate02` | Local: their own `{#if}` plays it |
+
+A component adds the directive only when `transition` is on. Svelte 3 and 4 remove an element that carries a `transition:` directive one frame late even at zero duration, so with the prop off the element leaves at once. When a swapped `fn` brings its own parameters, the preset's are dropped, because a preset's `x` means nothing to `blur`.
+
+| Do | Why |
+| :--- | :--- |
+| Prefer `transition` on the component over a wrapper `<div transition:fade>`. | A wrapper's margin collapses outside it, and some elements, such as a table row, cannot be wrapped. |
+| Listen for `on:outroend` to run code after the exit. | The element is still in the page while it leaves, and a leaving `Loading` overlay is inert. |
+
 ## Reduced motion
 
 Under `prefers-reduced-motion: reduce`, the transitions run in zero time. They skip the animation altogether instead of fading in place, so nothing moves and the element still mounts and unmounts on schedule, and `introend` and `outroend` still fire.
