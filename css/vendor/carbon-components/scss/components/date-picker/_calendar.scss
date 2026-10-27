@@ -244,6 +244,10 @@
       background-color: $layer;
       pointer-events: none;
     }
+
+    .#{$prefix}--date-picker__preset:enabled:hover {
+      background-color: $layer-hover;
+    }
   }
 
   .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up {
@@ -424,6 +428,63 @@
 
   .#{$prefix}--date-picker__week-numbers {
     flex: none;
+  }
+
+  // ccs: presets (`presets`) put a rail of shortcut buttons at the inline
+  // start, beside everything else, which moves into a wrapper as is. Three
+  // classes to beat the static and inline display rules above.
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--presets.#{$prefix}--date-picker__calendar--open,
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--presets.#{$prefix}--date-picker__calendar--inline {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: max-content;
+  }
+
+  .#{$prefix}--date-picker__calendar-main {
+    flex: none;
+  }
+
+  .#{$prefix}--date-picker__presets {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    width: to-rem(160px);
+    margin-inline-end: $carbon--spacing-02;
+    padding-block: $carbon--spacing-02;
+    overflow-y: auto;
+    border-inline-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--date-picker__preset {
+    @include type-style('body-compact-01');
+
+    flex: none;
+    min-height: to-rem(32px);
+    padding-block: $carbon--spacing-02;
+    padding-inline: $carbon--spacing-04;
+    color: $text-primary;
+    text-align: start;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+
+    &:focus {
+      @include focus-outline('outline');
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      cursor: not-allowed;
+    }
+  }
+
+  // Bold plus a bar, so the current shortcut doesn't rest on color alone.
+  // Only it has a border: forced colors would draw a transparent one too.
+  .#{$prefix}--date-picker__preset.#{$prefix}--date-picker__preset--active {
+    padding-inline-start: calc(#{$carbon--spacing-04} - #{to-rem(2px)});
+    font-weight: 600;
+    border-inline-start: to-rem(2px) solid $border-interactive;
   }
 
   // Same wrapping box as the month days so the rows line up.

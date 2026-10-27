@@ -2087,6 +2087,10 @@ const CALENDAR_PARTS = {
   rangeEndInput: "[data-testid=range] .bx--date-picker-container + * input",
   firstMonth: "[data-testid=month] .bx--date-picker__grid-cell",
   selectedMonth: "[data-testid=month] .bx--date-picker__grid-cell--selected",
+  // The preset rail sits at the inline start, its bar on the inline start.
+  presetRail: "[data-testid=presets] .bx--date-picker__presets",
+  presetMonth: "[data-testid=presets] .bx--date-picker__month-days",
+  activePreset: "[data-testid=presets] .bx--date-picker__preset--active",
 };
 
 test.describe("right-to-left date picker", () => {

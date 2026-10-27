@@ -98,6 +98,18 @@
     { id: "us-west", text: "US West" },
     { id: "eu-central", text: "EU Central" },
   ];
+
+  const releasePresets = [
+    {
+      label: "Launch week",
+      value: () => [new Date(2024, 2, 11), new Date(2024, 2, 15)],
+    },
+    {
+      label: "Code freeze",
+      value: () => new Date(2024, 2, 18),
+      disabled: true,
+    },
+  ];
 </script>
 
 <Header companyName="E2E" platformName="Forced colors" href="/">
@@ -384,6 +396,18 @@
     <div data-testid="date">
       <DatePicker datePickerType="single">
         <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
+      </DatePicker>
+    </div>
+    <div data-testid="date-presets">
+      <DatePicker
+        datePickerType="range"
+        inline
+        valueFrom="03/11/2024"
+        valueTo="03/15/2024"
+        presets={releasePresets}
+      >
+        <DatePickerInput labelText="Release start" />
+        <DatePickerInput labelText="Release end" />
       </DatePicker>
     </div>
     <div data-testid="time"><TimePicker labelText="Time" /></div>
