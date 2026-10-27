@@ -432,6 +432,24 @@ Pinning works with `stickyHeader`. A pinned header cell stays in the corner whil
 
 <FileSource src="/framed/DataTable/DataTablePinnedColumnsStickyHeader" />
 
+### Timetable
+
+A timetable is read along two axes: stations down and trains across, or the reverse. Pin the label column and set `stickyHeader` so both sets of labels stay in view while the grid scrolls inside a fixed-height box.
+
+Set `crosshair` to tint the row and the column under the pointer, header included. Set `cellFocus` to make the cells a keyboard grid: <DocKbd label="Tab" /> moves into the table, the arrow keys move between cells, <DocKbd label="Home" /> and <DocKbd label="End" /> go to the ends of a row, and <DocKbd label="Ctrl" />+<DocKbd label="Home" /> or <DocKbd label="Ctrl" />+<DocKbd label="End" /> to the ends of the table. In right-to-left text the horizontal arrows swap. The focused cell drives the cross, and scrolls clear of the pinned column and the header.
+
+The example highlights the next departure from each station. It marks a skipped stop with a dash and visually hidden text, and gives the highlight an outline so it holds in forced colors.
+
+| Do | Why |
+| --- | --- |
+| Set `crosshair` on a grid of values read along two axes. | A list of records is read along its rows, where the row hover Carbon already draws is enough. |
+| Keep buttons, links and inputs out of the cells when you set `cellFocus`. | A cell is one tab stop and takes the arrow keys. A control inside it takes its own keys, so the two compete. |
+| Give every column a `width` and set `fixedLayout`. | The server output and the first paint are right, and 40 trains do not squeeze into the width of the box. |
+| Keep the pinned column under half the width of a phone. | A pinned column leaves the rest of the box to scroll in. At 9.5rem the station names still leave room for two trains on a 375px screen. |
+| Print the table as it is. | Print drops the height cap, the scroll region and the sticky positions, so every row prints. A table wider than the paper is still cut at its edge. |
+
+<FileSource src="/framed/DataTable/DataTableTimetable" />
+
 ## Column visibility
 
 Control which columns render without editing the `headers` definition.
