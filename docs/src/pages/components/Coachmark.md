@@ -92,14 +92,23 @@ Focus moves into the coachmark only when the user opened it, through the target 
 
 `close` reports what closed it. A close by the user fires before the coachmark closes, and `preventDefault()` keeps it open. A `"programmatic"` close fires after it closes and cannot be canceled.
 
+`change` fires with the new index when `step` changes.
+
 | `detail.trigger` | Closed by |
 | --- | --- |
 | `"close-button"` | The close button. |
 | `"escape-key"` | <DocKbd label="Escape" /> from inside the coachmark. |
 | `"outside-click"` | A click outside the target and the dialog. |
 | `"target"` | A click on the target while it was open. |
+| `"done"` | Done on the last step. |
 | `"action"` | `close()` from a slot, such as a button in `"actions"`. |
 | `"programmatic"` | `open` set to `false`, or an ancestor [Modal](/components/Modal) closing. |
+
+## Steps
+
+Set `stepCount` above `1` to add a footer with the progress, Back and Next. The last step shows Done, which closes the coachmark. Bind `step` to follow along or to change the heading and body for each step: the default slot also receives `step`. Moving to another step moves focus to the heading, and the progress text, such as "2 of 3", is a live region that announces it. Closing the coachmark resets `step` to `0`. Set `stepText`, `backText`, `nextText` and `doneText` to translate the footer.
+
+<FileSource src="/framed/Coachmark/CoachmarkSteps" />
 
 ## Persisting dismissal
 
