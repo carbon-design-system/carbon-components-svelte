@@ -105,6 +105,9 @@
     color: $text-primary;
     text-overflow: ellipsis;
     white-space: nowrap;
+    // ccs: a date reads in its own direction, so in RTL "03/15/2024 2:30
+    // PM" keeps its order instead of showing as "PM 2:30 03/15/2024".
+    unicode-bidi: plaintext;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     &:focus { // ccs: dropped unrendered .bx--focused
@@ -173,6 +176,7 @@
       min-width: 0;
       white-space: nowrap;
       text-overflow: ellipsis;
+      unicode-bidi: plaintext; // ccs: as on the input
     }
   }
 
@@ -629,4 +633,19 @@
 
 @include exports("date-picker-full-width") {
   @include date-picker-full-width;
+}
+
+// carbon-components-svelte patch
+// `unicode-bidi: plaintext` on the input aligns a left-to-right date to the
+// left, even on an RTL page. Keep it at the page's start.
+/// @access private
+/// @group components
+@mixin date-picker-rtl-text {
+  [dir="rtl"] .#{$prefix}--date-picker__input {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("date-picker-rtl-text") {
+  @include date-picker-rtl-text;
 }
