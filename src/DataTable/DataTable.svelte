@@ -350,7 +350,7 @@
 
   /**
    * Specify the header key to sort by.
-   * @type {DataTableKey<Row>}
+   * @type {DataTableKey<Row> | null}
    * @bindable writable
    */
   export let sortKey = null;
@@ -1120,11 +1120,12 @@
   $: sorting =
     sortKey != null &&
     (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
+  $: sortPath = sortKey == null ? "" : String(sortKey);
   $: sortedRows =
     sorting && sortDirection !== "none"
       ? [...$tableRows].sort((a, b) => {
-          const itemA = resolvePath(a, sortKey);
-          const itemB = resolvePath(b, sortKey);
+          const itemA = resolvePath(a, sortPath);
+          const itemB = resolvePath(b, sortPath);
           const headerSort = sortingHeader?.sort;
 
           if (typeof headerSort === "function") {
