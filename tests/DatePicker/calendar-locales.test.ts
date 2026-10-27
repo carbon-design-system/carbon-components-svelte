@@ -1,8 +1,10 @@
 import {
+  formatDate,
   getCalendarLocale,
   isMonthFirst,
   yearSuffix,
 } from "../../src/DatePicker/calendar-dates.js";
+import { dateFormatToPattern } from "../../src/DatePicker/date-format-pattern.js";
 
 // Each language tag's calendar strings, checked against the runtime's own
 // Intl data: Gregorian names (the grid is Gregorian), the first day of the
@@ -38,6 +40,16 @@ const TAGS = [
   "el",
   "hu",
   "da",
+];
+
+// Formats whose output the input's derived `pattern` must accept.
+const INPUT_FORMATS = ["m/d/Y", "Y-m-d", "d.m.y", "m/d/Y H:i:S", "m/d/Y h:i K"];
+
+// Single and double digits, both sides of noon.
+const INPUT_DATES = [
+  new Date(2026, 0, 5, 9, 5, 7),
+  new Date(2026, 5, 15, 12, 0, 0),
+  new Date(2026, 10, 25, 23, 59, 59),
 ];
 
 const gregorian = (tag: string, options: Intl.DateTimeFormatOptions) =>
@@ -100,6 +112,19 @@ describe.each(TAGS)("%s", (tag) => {
             .trim()
         : "";
     expect(yearSuffix(tag)).toBe(between);
+  });
+
+  it("formats dates the input's derived pattern accepts", () => {
+    const rejected: string[] = [];
+    for (const format of INPUT_FORMATS) {
+      // Browsers compile the pattern attribute with the `v` flag.
+      const pattern = new RegExp(`^(?:${dateFormatToPattern(format)})$`, "v");
+      for (const date of INPUT_DATES) {
+        const text = formatDate(date, format, locale);
+        if (!pattern.test(text)) rejected.push(`${format}: ${text}`);
+      }
+    }
+    expect(rejected).toEqual([]);
   });
 });
 

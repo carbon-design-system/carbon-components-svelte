@@ -1,46 +1,3 @@
-<script context="module">
-  const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
-
-  const dateFormatTokens = {
-    d: "\\d{1,2}",
-    j: "\\d{1,2}",
-    m: "\\d{1,2}",
-    n: "\\d{1,2}",
-    Y: "\\d{4}",
-    Q: "[1-4]",
-    y: "\\d{2}",
-    F: "\\w+",
-    M: "\\w+",
-    D: "\\w+",
-    l: "\\w+",
-  };
-
-  function dateFormatToPattern(fmt) {
-    let result = "";
-    for (let i = 0; i < fmt.length; i++) {
-      const ch = fmt[i];
-      if (ch === "\\" && i + 1 < fmt.length) {
-        result += fmt[++i].replace(REGEX_SPECIAL_CHARS, "\\$&");
-      } else if (dateFormatTokens[ch]) {
-        result += dateFormatTokens[ch];
-      } else {
-        result += ch.replace(REGEX_SPECIAL_CHARS, "\\$&");
-      }
-    }
-    return result;
-  }
-
-  /**
-   * `datePickerType="multiple"` joins each selected date with Flatpickr's
-   * default `", "` conjunction into one input value, so the derived pattern
-   * must allow one or more repetitions instead of a single date.
-   */
-  function dateFormatToMultiplePattern(fmt) {
-    const single = dateFormatToPattern(fmt);
-    return `${single}(, ${single})*`;
-  }
-</script>
-
 <script>
   /**
    * Set the size of the input.
@@ -132,6 +89,10 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import {
+    dateFormatToMultiplePattern,
+    dateFormatToPattern,
+  } from "./date-format-pattern.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
