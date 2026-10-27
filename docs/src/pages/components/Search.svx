@@ -69,6 +69,16 @@ Set `closeButtonLabelText` to customize the accessible label of the clear button
 
 <Search value="Cloud functions" closeButtonLabelText="Clear catalog search" />
 
+## Keyboard shortcut
+
+Set `shortcut` to focus the field from anywhere on the page, such as `"/"` or `"mod+k"` (`mod` is Command on Apple platforms and Ctrl elsewhere). The keys show at the end of the empty field until it's focused, and the input announces them with `aria-keyshortcuts`. A key without a modifier, such as `/`, doesn't fire while typing in another field. An expandable search expands first, and its search button announces the keys while it's collapsed. To do something else, handle `on:shortcut` and call `preventDefault()`.
+
+This site already uses <DocKbd label="/" /> and <DocKbd label="⌘" />+<DocKbd label="K" /> for its own search, so the example uses `"mod+shift+f"`.
+
+<Search shortcut="mod+shift+f" placeholder="Search components" />
+
+Let users turn off a single-key shortcut such as `/`, or add a modifier to it. Speech input and stray key presses fire it by accident, and WCAG 2.1.4 asks for a way to turn it off or remap it.
+
 ## Expandable
 
 Enable the expandable variant to show a compact search icon that expands on focus. While collapsed, the input is marked `inert` and removed from the tab order, hiding it from assistive technology until it expands — only the search icon button is reachable. That icon renders as a `<button>`, so pressing <DocKbd label="Enter" /> opens the field without a pointer. Pressing <DocKbd label="Escape" /> clears a non-empty value first, then collapses the field on the next press.
