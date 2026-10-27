@@ -1456,13 +1456,20 @@ In this incident table, row order reflects severity and should not be disturbed 
 
 ### Server-side
 
-When rows and sort order come from an API, the canonical order is usually defined on the server (collation, nullable fields, joined columns, security filters).
+When rows and sort order come from an API, the canonical order is usually defined on the server (collation, nullable fields, joined columns, security filters). Set `externalSort` so the table renders `rows` in the order given. The headers still show `sortKey` and `sortDirection`, and a header click still updates both and dispatches `sort`, so read them to build the request.
 
-Client-side sorting on the same payload can disagree with that behavior or waste work on large datasets. In those cases, call `preventDefault()` on the `sort` event so the table does not reorder rows or apply its own sort for that click. Use event.detail.key and event.detail.direction as your sort parameters (query string, GraphQL variables, RPC args), wait for the response, then assign the new rows. The sort indicators should match what the server applied: bind sortKey and sortDirection from the parent and set them after the response (as in the example), or pass them as one-way props if you do not need child-to-parent sync.
+Without `externalSort`, the table sorts the rows it receives again. A server page that arrives sorted by code point (`Zebra`, `apple`) is shown re-ordered by the client's collation (`apple`, `Zebra`), and the indicator no longer matches the data.
 
-The framed example uses setTimeout to simulate a network request; `preventDefault()` runs first, then simulated sorted rows replace rows and the bound sort props update the header.
+| Do | Why |
+| --- | --- |
+| Pass only the current page as `rows` and bind `page` and `pageSize` on `Pagination`. | `pageSize` on `DataTable` slices `rows` client side. A 3-row response with `page` 2 and `pageSize` 3 renders no rows. |
+| Reset `page` to 1 in `on:sort`. | The new order has a different first page, and page 5 of the old order may not exist. |
+| Bind `sortKey` and `sortDirection` and fetch from them in a `$:` statement. | The headers and the request read the same state, so the indicator always names the order the server applied. |
+| Leave `sort` and `header.sort` unset. | `externalSort` never calls them. |
 
-<FileSource src="/framed/DataTable/DataTableSortPreventDefault" />
+The framed example simulates a request with `setTimeout`. It sorts names by code point, which differs from the browser's collation.
+
+<FileSource src="/framed/DataTable/DataTableExternalSort" />
 
 ### Sort always
 
