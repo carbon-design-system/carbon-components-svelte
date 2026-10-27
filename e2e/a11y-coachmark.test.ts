@@ -34,6 +34,14 @@ test.describe("Coachmark a11y", () => {
     await page.getByTestId("start-tour").click();
     await expect(page.locator("#cm-tour-0-content")).toBeVisible();
     expect((await violations(page)).violations).toEqual([]);
+
+    await page.getByRole("button", { name: "Show the walkthrough" }).click();
+    await page
+      .locator("#cm-steps-content")
+      .getByRole("button", { name: "Next" })
+      .click();
+    await expect(page.locator("#cm-steps-content")).toContainText("2 of 3");
+    expect((await violations(page)).violations).toEqual([]);
   });
 
   test("has none inside a Modal", async ({ page }) => {

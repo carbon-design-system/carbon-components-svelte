@@ -170,6 +170,65 @@ test.describe("Coachmark", () => {
     });
   });
 
+  test.describe("steps", () => {
+    test("walks the steps by keyboard, with focus on the heading", async ({
+      page,
+    }) => {
+      const content = dialog(page, "cm-steps");
+      await page.getByRole("button", { name: "Show the walkthrough" }).focus();
+      await page.keyboard.press("Enter");
+      await expect(content).toBeVisible();
+      await expect(content.getByText("1 of 3")).toBeVisible();
+
+      await content.getByRole("button", { name: "Next" }).focus();
+      await page.keyboard.press("Enter");
+      await expect(
+        content.getByRole("heading", { name: "Open the toolbar" }),
+      ).toBeFocused();
+      await expect(page.getByTestId("step")).toHaveText("1");
+
+      await content.getByRole("button", { name: "Back" }).focus();
+      await page.keyboard.press("Enter");
+      await expect(
+        content.getByRole("heading", { name: "Select rows" }),
+      ).toBeFocused();
+      await expect(content.getByRole("button", { name: "Back" })).toHaveCount(
+        0,
+      );
+    });
+
+    test("ends on Done and returns focus to the target", async ({ page }) => {
+      const content = dialog(page, "cm-steps");
+      const beacon = page.getByRole("button", { name: "Show the walkthrough" });
+      await beacon.click();
+      await content.getByRole("button", { name: "Next" }).click();
+      await content.getByRole("button", { name: "Next" }).click();
+      await content.getByRole("button", { name: "Done" }).click();
+
+      await expect(content).toBeHidden();
+      await expect(beacon).toBeFocused();
+      await expect(page.getByTestId("step")).toHaveText("0");
+    });
+
+    test("keeps Back and Next apart in RTL", async ({ page }) => {
+      await page.evaluate(() =>
+        document.documentElement.setAttribute("dir", "rtl"),
+      );
+      const content = dialog(page, "cm-steps");
+      await page.getByRole("button", { name: "Show the walkthrough" }).click();
+      await content.getByRole("button", { name: "Next" }).click();
+
+      const progress = await content.getByText("2 of 3").boundingBox();
+      const next = await content
+        .getByRole("button", { name: "Next" })
+        .boundingBox();
+      expect(progress && next).toBeTruthy();
+      if (!(progress && next)) return;
+      // The progress text leads at the inline start, which is the right.
+      expect(progress.x).toBeGreaterThan(next.x);
+    });
+  });
+
   test.describe("persisted dismissal", () => {
     test("opens until closed, then stays shut after a reload", async ({
       page,

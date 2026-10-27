@@ -18,6 +18,20 @@ describe("Coachmark server render", () => {
     expect(html).toContain("bx--popover--open");
   });
 
+  it("renders the step footer", () => {
+    const html = renderRaw(Coachmark, {
+      id: "tip",
+      title: "Export",
+      open: true,
+      stepCount: 3,
+      step: 1,
+    });
+
+    expect(html).toContain("2 of 3");
+    expect(html).toContain("Back");
+    expect(html).toContain("Next");
+  });
+
   it("renders only the beacon and a closed dialog by default", () => {
     const html = renderRaw(Coachmark, { id: "tip", title: "Export" });
 
