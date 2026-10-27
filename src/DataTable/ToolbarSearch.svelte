@@ -97,6 +97,10 @@
   import { rowsEqual } from "./data-table-utils.js";
 
   const ctx = getContext("carbon:DataTable") ?? {};
+  // The search matches the toolbar's height (48px, or 32px in a small
+  // toolbar), not the 40px of a field on its own.
+  const toolbarSize = getContext("carbon:Toolbar")?.toolbarSize;
+  $: searchSize = $$restProps.size ?? ($toolbarSize === "sm" ? "sm" : "xl");
 
   /** @type {null | ReadonlyArray<Row>} */
   let rows = null;
@@ -235,16 +239,17 @@
     .join(" ");
 </script>
 
-<!-- The toolbar is 48px tall, so its search keeps the xl size. A persistent
-  search sits on the toolbar's own surface, so it takes the ghost look. -->
+<!-- The toolbar is 48px tall (32px when small), so its search keeps that
+  height. A persistent search sits on the toolbar's own surface, so it takes
+  the ghost look. -->
 <Search
-  size="xl"
   variant={persistent ? "ghost" : "default"}
   {labelText}
   tabindex={tabindexAttribute(tabindex)}
   {disabled}
   {selectTextOnFocus}
   {...$$restProps}
+  size={searchSize}
   searchClass={classes}
   bind:ref
   bind:value

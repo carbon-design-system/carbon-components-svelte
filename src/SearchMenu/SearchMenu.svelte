@@ -54,11 +54,13 @@
 
   /**
    * Specify the size of the search input.
-   * Also accepts Carbon v11's `"md"` (`"lg"`, 40px). `"lg"` keeps this
-   * library's 40px; Carbon v11's 48px `lg` is `"xl"` here.
-   * @type {"xs" | "sm" | "md" | "lg" | "xl"}
+   * Inherits the parent `Form` or `InputGroup` size when unset, otherwise
+   * `"lg"` (40px), the height of the other fields. Also accepts Carbon
+   * v11's `"md"` (`"lg"`, 40px). Carbon v11's 48px `lg` is `"xl"` here.
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
+   * @default "lg"
    */
-  export let size = "xl";
+  export let size = undefined;
 
   /**
    * Specify the size of the results menu, independent of the input `size`.
@@ -179,11 +181,17 @@
    */
   export let debounce = 0;
 
-  import { createEventDispatcher, onMount, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+  } from "svelte";
+  import { readable, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import Search from "../Search/Search.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { toCssLength } from "../utils/css-length.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
@@ -285,7 +293,10 @@
   $: describedById = joinDescribedBy(readonly ? readonlyId : null);
   $: menuLabel = labelText || placeholder;
   $: menuAnchor = $$slots.before ? searchAnchorRef : anchorRef;
-  $: resolvedMenuSize = normalizeSearchSize(menuSize ?? size);
+  /** @type {import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
+  $: effectiveSize = normalizeSearchSize(size ?? $formSize ?? "lg");
+  $: resolvedMenuSize = normalizeSearchSize(menuSize ?? effectiveSize);
   $: resolvedMenuMaxHeight = toCssLength(menuMaxHeight);
   $: menuClass = [
     "bx--search-menu__menu",
@@ -522,7 +533,7 @@
       `search` on every Enter, which would duplicate `select`/`submit`. -->
     <Search
       bind:this={search}
-      {size}
+      size={effectiveSize}
       {disabled}
       {readonly}
       {hideLabel}

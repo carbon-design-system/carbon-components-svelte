@@ -69,7 +69,8 @@
     padding: 0;
   }
 
-  .#{$prefix}--toolbar-search-container-expandable
+  // Both classes, so the icon beats a size's own inset (`--sm`: 8px).
+  .#{$prefix}--toolbar-search-container-expandable.#{$prefix}--search
     .#{$prefix}--search-magnifier-icon {
     width: $spacing-09;
     height: $spacing-09;

@@ -25,6 +25,20 @@ describe("DataTableSearch", () => {
     expect(getPrevPageButton()).toBeDisabled();
   };
 
+  it.each([
+    [undefined, "bx--search--xl"],
+    ["sm", "bx--search--sm"],
+  ] as const)(
+    "matches the search to a %s toolbar's height",
+    (toolbarSize, cls) => {
+      render(DataTableSearch, { props: { toolbarSize } });
+
+      expect(
+        document.querySelector(".bx--table-toolbar .bx--search"),
+      ).toHaveClass(cls);
+    },
+  );
+
   it("renders non-persistent search input", async () => {
     render(DataTableSearch);
 
