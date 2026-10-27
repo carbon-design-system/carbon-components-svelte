@@ -1,0 +1,119 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Kbd shows a key, or the keys of a shortcut, as caps: the look of Prose's
+/// `kbd` (a 1px edge, a heavier bottom edge on the layer) sized for UI
+/// chrome. The keys keep their left-to-right order in right-to-left text,
+/// as platform menus do.
+/// @access private
+/// @group components
+@mixin kbd {
+  .#{$prefix}--kbd {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-01;
+    unicode-bidi: isolate;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  // One platform's keys. With both rendered (`--both`), they share one grid
+  // cell, so the cell is as wide as the wider set; the hidden set keeps its
+  // room. `<html data-ccs-platform>`, set before paint by `platformScript`,
+  // drops the other set instead, for an exact width from the first paint.
+  // The keys run left to right here, while the grid follows the text, so a
+  // narrower set sits at the inline end in either direction.
+  .#{$prefix}--kbd__platform {
+    display: inline-flex;
+    align-items: center;
+    gap: inherit;
+    direction: ltr;
+  }
+
+  .#{$prefix}--kbd--both {
+    display: inline-grid;
+    justify-items: end;
+  }
+
+  .#{$prefix}--kbd--both .#{$prefix}--kbd__platform {
+    grid-area: 1 / 1;
+  }
+
+  // Only ever hides the other set, never shows one: a Kbd inside something
+  // hidden (a closed menu, a tooltip, keys under a spinner) stays hidden.
+  :root:not([data-ccs-platform])
+    .#{$prefix}--kbd--both:not(.#{$prefix}--kbd--apple)
+    .#{$prefix}--kbd__platform--apple,
+  :root:not([data-ccs-platform])
+    .#{$prefix}--kbd--both.#{$prefix}--kbd--apple
+    .#{$prefix}--kbd__platform--other {
+    visibility: hidden;
+  }
+
+  :root[data-ccs-platform="apple"]
+    .#{$prefix}--kbd--both
+    .#{$prefix}--kbd__platform--other,
+  :root[data-ccs-platform="other"]
+    .#{$prefix}--kbd--both
+    .#{$prefix}--kbd__platform--apple {
+    display: none;
+  }
+
+  .#{$prefix}--kbd__key {
+    @include type-style("label-01");
+
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    min-width: to-rem(24px);
+    height: to-rem(24px);
+    padding: 0 $carbon--spacing-02;
+    border: 1px solid $border-subtle;
+    border-bottom: 2px solid $border-strong;
+    border-radius: to-rem(2px);
+    background-color: $layer;
+    color: $text-primary;
+    font-family: inherit;
+  }
+
+  .#{$prefix}--kbd--sm .#{$prefix}--kbd__key {
+    min-width: to-rem(20px);
+    height: to-rem(20px);
+    padding: 0 to-rem(3px);
+  }
+
+  // Muted: the keys as text in the surrounding type, run together on Apple
+  // platforms (⇧⌘P) and joined by a plus elsewhere (Ctrl+Shift+P). After
+  // `--sm`, which it overrides.
+  .#{$prefix}--kbd--muted {
+    gap: 0;
+  }
+
+  .#{$prefix}--kbd--muted .#{$prefix}--kbd__key {
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    color: $text-secondary;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+  }
+
+  .#{$prefix}--kbd--muted
+    .#{$prefix}--kbd__platform--other
+    .#{$prefix}--kbd__key
+    + .#{$prefix}--kbd__key::before {
+    content: "+";
+  }
+}
+
+@include exports("kbd") {
+  @include kbd;
+}
