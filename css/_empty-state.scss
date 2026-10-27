@@ -21,10 +21,22 @@
     color: $icon-secondary;
   }
 
+  // The art keeps the size its own attributes give it, within bounds. A
+  // Carbon icon (16 to 32px) grows to 32px, the size its 32-unit drawing
+  // is made for. A pictogram (64px) keeps its size, and bigger art shrinks
+  // to fit.
   .#{$prefix}--empty-state__illustration svg {
+    min-width: to-rem(32px);
+    min-height: to-rem(32px);
+    max-width: to-rem(64px);
+    max-height: to-rem(64px);
+    fill: currentColor;
+  }
+
+  // Art with no size of its own fills the bounds.
+  .#{$prefix}--empty-state__illustration svg:not([width]) {
     width: to-rem(64px);
     height: to-rem(64px);
-    fill: currentColor;
   }
 
   .#{$prefix}--empty-state__title {
@@ -61,8 +73,8 @@
   }
 
   .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__illustration svg {
-    width: to-rem(48px);
-    height: to-rem(48px);
+    max-width: to-rem(48px);
+    max-height: to-rem(48px);
   }
 
   .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__title {
