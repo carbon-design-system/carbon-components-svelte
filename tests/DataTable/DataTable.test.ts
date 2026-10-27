@@ -2095,6 +2095,13 @@ describe("DataTable", () => {
       expect(headers).toHaveLength(1);
     });
 
+    it("lets sortKey be null to clear the sort", () => {
+      type Props = ComponentProps<DataTableComponent<{ id: string }>>;
+
+      expectTypeOf<null>().toExtend<Props["sortKey"]>();
+      expectTypeOf<"id">().toExtend<Props["sortKey"]>();
+    });
+
     it("should support generic types with ComponentProps and ComponentEvents", () => {
       type CustomRow = {
         id: string;
