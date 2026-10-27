@@ -1428,6 +1428,7 @@
   <div
     bind:this={scrollContainerRef}
     use:formReset={handleFormReset}
+    class:bx--data-table-virtual={virtualScrollContainer}
     style:max-height={virtualScrollContainer
       ? `${calculatedContainerHeight}px`
       : undefined}
