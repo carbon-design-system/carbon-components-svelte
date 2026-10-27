@@ -67,7 +67,12 @@ group("createTreeVirtualIndex build — bushy, all expanded", () => {
   for (const size of range(100, 10_000)) {
     const nodes = buildTree(size, 4);
     const expandedIds = allIds(nodes);
-    task(`${size} nodes`, () => createTreeVirtualIndex(nodes, expandedIds));
+    // The count, not the index: ostia ab compares each side's return value,
+    // and the index's methods are new functions on every build.
+    task(
+      `${size} nodes`,
+      () => createTreeVirtualIndex(nodes, expandedIds).totalCount,
+    );
   }
 });
 
