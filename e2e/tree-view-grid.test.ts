@@ -1,0 +1,85 @@
+import AxeBuilder from "@axe-core/playwright";
+import { expect, test } from "./helpers/host";
+
+test.describe("TreeViewGrid", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/tree-view-grid.html");
+    await expect(page.getByRole("treegrid")).toBeVisible();
+  });
+
+  test("has no detectable accessibility violations", async ({ page }) => {
+    const initial = await new AxeBuilder({ page }).include("#app").analyze();
+    expect(initial.violations).toEqual([]);
+
+    await page
+      .locator("[data-tree-row-id=us-east-api]")
+      .locator(".bx--tree-grid__toggle")
+      .click();
+    await page.locator("[data-tree-row-id=us-east-cache] td").nth(1).click();
+    await expect(page.getByTestId("selected")).toHaveText("us-east-cache");
+
+    const expanded = await new AxeBuilder({ page }).include("#app").analyze();
+    expect(expanded.violations).toEqual([]);
+  });
+
+  test("is one tab stop however many controls the cells hold", async ({
+    page,
+  }) => {
+    // 12 controls (links, toggles, menus) and a roving row: one Tab enters,
+    // the next leaves.
+    await page.keyboard.press("Tab");
+    await expect(page.locator("[data-tree-row-id=us-east]")).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.locator("tbody").locator(":focus")).toHaveCount(0);
+  });
+
+  test("reaches an overflow menu and a toggle with the arrow keys", async ({
+    page,
+  }) => {
+    const row = page.locator("[data-tree-row-id=us-east]");
+    await row.focus();
+    for (let i = 0; i < 6; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: keys go in order
+      await page.keyboard.press("ArrowRight");
+    }
+    await expect(row.locator("td").nth(5)).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    const trigger = row.getByRole("button", { name: "Actions for US East" });
+    await expect(trigger).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("menuitem", { name: "Restart" })).toBeFocused();
+    // Escape closes the menu first, and a second one returns to the cell.
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(row.locator("td").nth(5)).toBeFocused();
+
+    await page.keyboard.press("ArrowLeft");
+    await page.keyboard.press("F2");
+    const toggle = row.getByRole("switch");
+    await expect(toggle).toBeFocused();
+    await page.keyboard.press("Space");
+    await expect(toggle).toBeChecked();
+    await page.keyboard.press("Escape");
+    await expect(row.locator("td").nth(4)).toBeFocused();
+    await expect(page.getByTestId("selected")).toHaveText("");
+  });
+
+  test("does not select a row for a click on its link", async ({ page }) => {
+    await page
+      .locator("[data-tree-row-id=us-east]")
+      .getByRole("link", { name: "Platform" })
+      .click();
+    await expect(page.getByTestId("selected")).toHaveText("");
+  });
+
+  test("draws a focus ring on a row and on a cell", async ({ page }) => {
+    const row = page.locator("[data-tree-row-id=us-east]");
+    await row.focus();
+    await expect(row).toHaveCSS("outline-style", "solid");
+    await page.keyboard.press("ArrowRight");
+    await expect(row.locator("td").first()).toHaveCSS("outline-style", "solid");
+    await expect(row).not.toBeFocused();
+  });
+});
