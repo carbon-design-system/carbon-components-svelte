@@ -276,6 +276,13 @@
     },
     {
       "component": "Coachmark",
+      "prop": "backText",
+      "type": "string",
+      "default": "Back",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Coachmark",
       "prop": "beaconDescription",
       "type": "string",
       "default": "Show coachmark",
@@ -287,6 +294,27 @@
       "type": "string",
       "default": "Close",
       "defaultKind": "text"
+    },
+    {
+      "component": "Coachmark",
+      "prop": "doneText",
+      "type": "string",
+      "default": "Done",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Coachmark",
+      "prop": "nextText",
+      "type": "string",
+      "default": "Next",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Coachmark",
+      "prop": "stepText",
+      "type": "(step: number, count: number) => string",
+      "default": "(current, count) => `${current} of ${count}`",
+      "defaultKind": "function"
     },
     {
       "component": "Coachmark",
