@@ -8,3 +8,14 @@ export {
   type MotionMode,
   motion,
 } from "./tokens.js";
+export {
+  type FadeParams,
+  type FlipParams,
+  type FlyParams,
+  type MotionParams,
+  type SlideParams,
+  fade,
+  flip,
+  fly,
+  slide,
+} from "./transitions.js";
