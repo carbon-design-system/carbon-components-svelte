@@ -216,6 +216,7 @@
     class:bx--tag--filter={filter}
     class:bx--tag--truncate={maxWidth != null}
     class:bx--tag--xs={resolvedSize === "xs"}
+    class:bx--tag--with-icon={hasIcon}
     class:bx--tag--sm={resolvedSize === "sm"}
     class:bx--tag--lg={resolvedSize === "lg"}
     class:bx--tag--red={type === "red"}
@@ -237,6 +238,11 @@
     on:mouseenter
     on:mouseleave
   >
+    {#if $$slots.icon || icon}
+      <div class:bx--tag__custom-icon={true}>
+        <slot name="icon"><svelte:component this={icon} /></slot>
+      </div>
+    {/if}
     {#if showTruncationTooltip}
       <TooltipDefinition
         class="bx--tag__label-tooltip"
