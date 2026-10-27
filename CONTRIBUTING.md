@@ -747,8 +747,6 @@ When `check:css:overrides` reports a pair, work out which of the two values is t
 
 Delete a selector family only after confirming no component in `src/` renders the class, including classes built from interpolated strings. Then add its pattern to `tests/css/unrendered-selectors.test.ts` so a vendored re-sync cannot bring it back, and drop its class from `KNOWN_UNRENDERED` in `tests/css/unrendered-classes.test.ts`.
 
-A guard that asserts absence (`not.toMatch`, an upper bound on a count, an empty offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of the declarations it inspected. Match whole declarations up to `;` instead of single lines, since the formatter wraps long values. Then break the source on purpose once and confirm the test fails.
-
 jsdom does not resolve `::before`/`::after` or `:hover` cascades. To confirm one, load the built `css/all.css` into Playwright with `page.setContent(...)` and a minimal copy of the component markup, `page.hover()` the trigger, and read `getComputedStyle(el, "::before")`. Record the values before your change and compare them after.
 
 #### Rebuild
@@ -956,6 +954,8 @@ Skip or avoid:
 - A compiled-CSS test for a CSS-only change. See [What belongs in tests/css](#what-belongs-in-testscss).
 
 Add tests proportional to the change. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
+
+A test that asserts absence (`not.toMatch`, an upper bound on a count, `toEqual([])` on an offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of what it inspected. A test that reads source text matches whole declarations up to `;`, not single lines, since the formatter wraps long values. Break the source on purpose once and confirm the test fails.
 
 ComboBox, Dropdown, and MultiSelect tests started as copies of each other, so a duplicate in one usually exists in the other two. Check all three when you prune one.
 
@@ -1192,8 +1192,6 @@ For components that hide content with CSS (for example ComposedModal), `toBeVisi
 
 `getByText("Row 1")` also matches "Row 10", "Row 11", and so on. Use `getByRole("cell", { name: "Row 1", exact: true })` or a more specific selector when content can overlap.
 
-Locally, Playwright reuses any server already on port 4173, including one started from another worktree. That server serves the other worktree's fixtures, so a new fixture loads the index page instead. Check with `lsof -i :4173` before trusting a failure.
-
 Scroll anchoring corrections can land more than two animation frames after a scroll. To catch them, wait with a timeout between scroll steps (80ms is enough), not `requestAnimationFrame`. Check that the test fails with the fix reverted. See [`virtual-list-spacer.test.ts`](e2e/virtual-list-spacer.test.ts).
 
 To measure blank frames in a virtualized list, listen for `scroll` on `document` in the capture phase. That listener runs before the component's own handler, while the DOM still holds the previous window, so the part of the viewport no row covers is what the browser painted. See `recordGaps` in [`virtual-list-fast-scroll.test.ts`](e2e/virtual-list-fast-scroll.test.ts).
@@ -1253,7 +1251,6 @@ A new bench file, either tier, follows the same shape as an existing one — cop
 When the claim is "this expensive call should not happen", count the call instead of timing it. Counts are deterministic, jsdom times are not. A throwaway vitest file is enough, no bench harness needed:
 
 - Wrap the expensive method on the live instance AFTER mount, so mount-time calls are excluded, then drive 200 updates and report the count plus a `performance.now()` range. If the instance is created before the test can reach it, wrap the constructor with `vi.mock` (see [`DatePickerRedundantSet.test.ts`](tests/DatePicker/DatePickerRedundantSet.test.ts)).
-- Always include a control case that must NOT re-run (a constant prop). If the control re-runs, the counter is measuring something else.
 - Get the "before" number from the parent commit in a temporary `git worktree` with `node_modules` symlinked, not from a stash. The stash stack is shared across worktrees. DatePicker's month and week tests fail in such a worktree because flatpickr's plugins don't resolve through the symlink; run those in a real install.
 - Report counts as exact and times as a range over 2 to 3 runs, and say when ranges overlap. "Median 5.3 to 3.7 ms, ranges overlap" is an honest result. A lone best-case number is not.
 - Turn the finding into a permanent test with both halves: equal values do not call the method, and a genuinely different value does. A guard that never updates is worse than no guard.
