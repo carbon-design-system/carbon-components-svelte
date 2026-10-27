@@ -605,6 +605,14 @@ Show an invalid state when the input value is not valid.
   <DatePickerInput invalid invalidText="Invalid date" labelText="License expiration date" placeholder="mm/dd/yyyy" />
 </DatePicker>
 
+### Required and format errors
+
+Set `required` to keep a surrounding form from submitting while the date is empty. In the `simple` type, which has no calendar to parse what's typed, a date that doesn't match `dateFormat` also blocks submission. Either way, the field shows its invalid state instead of the browser's error bubble, and the first such field takes focus. The state clears once the input changes or the form resets.
+
+Set `requiredInvalidText` and `patternInvalidText` to change the messages, which default to "Enter a date" and "Enter a valid date". Your own `invalid` and `invalidText` take precedence.
+
+<FileSource src="/framed/DatePicker/DatePickerRequired" />
+
 ### Warning
 
 Show a warning state to indicate potential issues with the input.
