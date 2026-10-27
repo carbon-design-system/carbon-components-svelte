@@ -1,4 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
+import type FormComponent from "carbon-components-svelte/Form/Form.svelte";
+import type { ComponentProps } from "svelte";
+import type { Action } from "svelte/action";
 import { getForm } from "../utils/get-form";
 import { user } from "../utils/user";
 import FormActionsTest from "./Form.actions.test.svelte";
@@ -40,6 +43,14 @@ describe("Form", () => {
       });
       const form = getForm();
       expect(action).toHaveBeenCalledWith(form, parameter);
+    });
+
+    it("accepts a readonly array of actions and tuples", () => {
+      type Actions = NonNullable<ComponentProps<FormComponent>["actions"]>;
+      const action: Action<HTMLFormElement, { id: string }> = () => {};
+      const actions = [action, [action, { id: "a" }]] as const;
+
+      expectTypeOf(actions).toExtend<Actions>();
     });
 
     it("preserves bind:ref alongside actions", () => {
