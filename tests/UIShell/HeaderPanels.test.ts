@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { flushDismiss } from "../utils/flush-dismiss";
 import { expectInlineStyle } from "../utils/inline-style";
@@ -137,6 +137,17 @@ describe.each(hosts)(
       if (variant === "action") {
         expect(screen.getByRole("region", { name: triggerName })).toBe(panel);
       }
+    });
+
+    it("removes the panel as soon as the update flushes when the transition is off", async () => {
+      const { container } = render(HeaderPanelHost, { props: { variant } });
+      const button = screen.getByRole("button", { name: triggerName });
+
+      await fireEvent.click(button);
+      expect(container.querySelector(`.${panelClass}`)).toBeInTheDocument();
+
+      await fireEvent.click(button);
+      expect(container.querySelector(`.${panelClass}`)).not.toBeInTheDocument();
     });
   },
 );
