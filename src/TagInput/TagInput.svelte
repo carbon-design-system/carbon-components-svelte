@@ -619,7 +619,7 @@
         aria-errormessage={showInvalid && errorText ? errorId : undefined}
         {disabled}
         {id}
-        {placeholder}
+        placeholder={readonly && value.length > 0 ? undefined : placeholder}
         {readonly}
         required={required && value.length === 0}
         class:bx--tag-input__input={true}

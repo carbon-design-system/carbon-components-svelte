@@ -531,6 +531,23 @@ describe("TagInput", () => {
       expect(input()).toHaveAttribute("readonly");
     });
 
+    it("drops the placeholder when read-only with tags", () => {
+      render(TagInput, {
+        value: ["a"],
+        config: { readonly: true, placeholder: "Add a topic" },
+      });
+
+      expect(input()).not.toHaveAttribute("placeholder");
+    });
+
+    it("keeps the placeholder when read-only and empty", () => {
+      render(TagInput, {
+        config: { readonly: true, placeholder: "No topics" },
+      });
+
+      expect(input()).toHaveAttribute("placeholder", "No topics");
+    });
+
     it("disables the remove buttons when disabled", () => {
       render(TagInput, { value: ["a"], config: { disabled: true } });
 
