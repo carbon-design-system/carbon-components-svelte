@@ -1605,7 +1605,10 @@ $tabs-sizes: (
 /// @group tabs
 @mixin tabs-forced-colors {
   @media (forced-colors: active) {
-    .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected {
+    // The vertical variant ties TabsVertical's selected link rule, which
+    // sets `color`, and wins on order.
+    .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected,
+    .#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected {
       forced-color-adjust: none;
       border-color: Highlight;
       background-color: Highlight;

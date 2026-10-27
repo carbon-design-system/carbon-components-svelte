@@ -66,6 +66,7 @@
     TableOfContents,
     TableOfContentsItem,
     Tabs,
+    TabsVertical,
     Tag,
     TagInput,
     TagSet,
@@ -497,4 +498,12 @@
   <ul style="list-style: none; padding: 0;">
     <ChatDivider>Today</ChatDivider>
   </ul>
+
+  <div data-testid="tabs-vertical">
+    <TabsVertical orientation="vertical" selected={1}>
+      <Tab label="Vertical tab" />
+      <Tab label="Selected vertical tab" />
+      <Tab label="Disabled vertical tab" disabled />
+    </TabsVertical>
+  </div>
 </main>

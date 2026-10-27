@@ -61,6 +61,8 @@ async function flatness(page: Page, selector: string) {
   const clip = await page.evaluate((selector) => {
     const el = document.querySelector(selector);
     if (!el) throw new Error(`no ${selector}`);
+    // The clip is in viewport coordinates.
+    el.scrollIntoView({ block: "center" });
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
       acceptNode: (node) =>
         node.textContent?.trim()
@@ -142,6 +144,10 @@ test.describe("forced colors", () => {
       ".bx--tabs__nav-item--default .bx--tabs__nav-link",
     ],
     [
+      "[data-testid=tabs-vertical] .bx--tabs__nav-link--selected",
+      "[data-testid=tabs-vertical] .bx--tabs__nav-item--default .bx--tabs__nav-link",
+    ],
+    [
       ".bx--btn--icon-only.bx--btn--selected",
       ".bx--btn--icon-only:not(.bx--btn--selected)",
     ],
@@ -198,6 +204,7 @@ test.describe("forced colors", () => {
       ".bx--toggle-button:disabled",
       ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected)[disabled]",
       ".bx--tabs__nav-item--disabled .bx--tabs__nav-link",
+      "[data-testid=tabs-vertical] .bx--tabs__nav-item--disabled .bx--tabs__nav-link",
       ".bx--tag--disabled",
       ".bx--tile--clickable.bx--link--disabled",
       ".bx--tile--selectable.bx--tile--disabled",
