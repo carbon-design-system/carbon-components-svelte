@@ -71,6 +71,7 @@
   <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderUtilities>
     <HeaderSearch
+      shortcut="mod+k"
       bind:ref
       bind:active
       bind:value
