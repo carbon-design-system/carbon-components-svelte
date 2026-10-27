@@ -50,6 +50,16 @@ describe("RelativeTime", () => {
     expect(el).toHaveTextContent("");
   });
 
+  it.each([
+    ["basic", "ltr"],
+    ["arabic", "rtl"],
+    ["slot-fixture", "auto"],
+  ])("isolates the %s text with dir=%s", (testId, dir) => {
+    render(RelativeTime);
+
+    expect(screen.getByTestId(testId)).toHaveAttribute("dir", dir);
+  });
+
   it("lets a consumer's title override the default absolute time", () => {
     render(RelativeTime);
 
