@@ -74,6 +74,15 @@
   /** Set to `true` to include a divider */
   export let hasDivider = false;
 
+  /**
+   * Specify a keyboard shortcut to show, such as `"mod+d"`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The keys show at the end
+   * of the item, and it gets `aria-keyshortcuts`. Display only: bind the
+   * command itself with `onShortcut`, since the menu is usually closed. A
+   * value that isn't a shortcut, such as `"⌘D"`, shows as written.
+   */
+  export let shortcut = "";
+
   /** Set to `true` to use the danger variant */
   export let danger = false;
 
@@ -96,7 +105,13 @@
     getContext,
     onMount,
   } from "svelte";
+  import Kbd from "../Kbd/Kbd.svelte";
   import { splitAria } from "../utils/aria-naming.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    parseShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -109,12 +124,16 @@
 
   // Arrow keys, typeahead and the `close` detail read the registry, so keep
   // it current while the menu is open.
-  $: patch(id, { text, disabled });
+  $: patch(id, { text, disabled, shortcut });
 
   $: focused = $focusedId === id;
 
+  // A shortcut that doesn't parse, such as Carbon React's free-text "⌘C",
+  // shows as written, with no `aria-keyshortcuts`.
+  $: parsable = parseShortcut(shortcut) !== null;
+
   onMount(() => {
-    add({ id, text, primaryFocus, disabled, node: ref });
+    add({ id, text, primaryFocus, disabled, shortcut, node: ref });
     return () => remove(id);
   });
 
@@ -143,6 +162,9 @@
     target: href && target ? target : undefined,
     rel: resolveLinkRel(target, rel),
     title: requireTitle ? ($$slots.default ? undefined : text) : undefined,
+    "aria-keyshortcuts":
+      (parsable && ariaKeyShortcuts(shortcut, { apple: $applePlatform })) ||
+      ariaProps["aria-keyshortcuts"],
   };
 
   /** @param {MouseEvent} event */
@@ -185,6 +207,15 @@
       <slot>
         <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
+      {#if shortcut}
+        <span class:bx--overflow-menu-options__option-shortcut={true}>
+          {#if parsable}
+            <Kbd {shortcut} variant="muted" aria-hidden="true" />
+          {:else}
+            {shortcut}
+          {/if}
+        </span>
+      {/if}
       {#if $$slots.iconRight || iconRight}
         <div
           class:bx--overflow-menu-options__option-icon={true}
@@ -213,6 +244,15 @@
       <slot>
         <div class:bx--overflow-menu-options__option-content={true}>{text}</div>
       </slot>
+      {#if shortcut}
+        <span class:bx--overflow-menu-options__option-shortcut={true}>
+          {#if parsable}
+            <Kbd {shortcut} variant="muted" aria-hidden="true" />
+          {:else}
+            {shortcut}
+          {/if}
+        </span>
+      {/if}
       {#if $$slots.iconRight || iconRight}
         <div
           class:bx--overflow-menu-options__option-icon={true}

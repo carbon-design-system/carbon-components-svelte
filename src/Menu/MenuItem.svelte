@@ -49,6 +49,16 @@
   export let shortcutText = "";
 
   /**
+   * Specify a keyboard shortcut to show, such as `"mod+s"`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The keys show where
+   * `shortcutText` goes, and the item gets `aria-keyshortcuts`. Display only:
+   * bind the command itself with `onShortcut`, since the menu is usually
+   * closed. `shortcutText` and its slot take precedence. A value that isn't
+   * a shortcut, such as `"⌘C"`, shows as written.
+   */
+  export let shortcut = "";
+
+  /**
    * Set to `true` to select the item.
    * Only applies to a selectable item or one inside
    * `MenuItemGroup` or `MenuItemRadioGroup`.
@@ -79,10 +89,16 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import Kbd from "../Kbd/Kbd.svelte";
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    parseShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import {
     getLayoutDirection,
     inlineKey,
@@ -112,6 +128,9 @@
   let selectedOnce = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
+  // A shortcut that doesn't parse, such as Carbon React's free-text "⌘C",
+  // shows as written, as `shortcutText` would.
+  $: parsable = parseShortcut(shortcut) !== null;
   // A submenu opens toward the inline end: the left in RTL. Read when it
   // opens, since nothing reports a `dir` change.
   $: if (submenuOpen) {
@@ -222,6 +241,9 @@
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={hasSubmenu && submenuOpen}
   class:bx--menu-option--danger={!hasSubmenu && kind === "danger"}
+  aria-keyshortcuts={shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+    : undefined}
   {...$$restProps}
   on:keydown
   on:keydown={(event) => {
@@ -303,6 +325,14 @@
     {:else if shortcutText || $$slots.shortcutText}
       <div class:bx--menu-option__info={true}>
         <slot name="shortcutText">{shortcutText}</slot>
+      </div>
+    {:else if shortcut}
+      <div class:bx--menu-option__info={true}>
+        {#if parsable}
+          <Kbd {shortcut} variant="muted" aria-hidden="true" />
+        {:else}
+          {shortcut}
+        {/if}
       </div>
     {/if}
   </div>

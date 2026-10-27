@@ -177,13 +177,16 @@
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }>>}
    */
   const items = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }>>}
+   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }>>}
    */
   const itemsById = derived(items, (_) => keyBy(_));
+  // A menu whose items show shortcuts sizes to its content, so the keys
+  // don't squeeze the labels.
+  $: hasShortcuts = $items.some((item) => item.shortcut);
   const currentId = writable(undefined);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
@@ -263,7 +266,7 @@
   const batchedItemsUpdate = batchStoreUpdates(items);
 
   /**
-   * @type {(item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }) => void}
+   * @type {(item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }) => void}
    */
   function add(item) {
     batchedItemsUpdate((_) => {
@@ -718,6 +721,7 @@
     class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
     class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
     class:bx--overflow-menu-options--scrollable={!!maxHeight}
+    class:bx--overflow-menu-options--shortcuts={hasShortcuts}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
     class:bx--overflow-menu-options--below-left={belowLeft}
     class={menuOptionsClass}
@@ -757,6 +761,7 @@
       class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
       class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
       class:bx--overflow-menu-options--scrollable={!!maxHeight}
+      class:bx--overflow-menu-options--shortcuts={hasShortcuts}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
       style:position="relative"
