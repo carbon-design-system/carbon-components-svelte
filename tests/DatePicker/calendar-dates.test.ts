@@ -78,6 +78,14 @@ describe("parseDate", () => {
     );
   });
 
+  // calendar.conformance.test.ts checks `K` against flatpickr, which
+  // misreads a 12 o'clock hour after a leading period.
+  it("parses an AM/PM token that comes before the hour", () => {
+    expect(parseDate("PM 12:15 10/26/2026", context("K h:i m/d/Y"))).toEqual(
+      new Date(2026, 9, 26, 12, 15),
+    );
+  });
+
   it("accepts dates, timestamps, and today", () => {
     const now = new Date(2024, 2, 5, 13, 30);
 
