@@ -322,7 +322,6 @@
   use:rovingFocus={{
     selector: "li[data-nested='false']",
     orientation: "vertical",
-    wrap: false,
     getActiveIndex: () => focusIndex,
     onMove: (index, event) => {
       if ($hasPopup || hasModifierKey(event)) return;

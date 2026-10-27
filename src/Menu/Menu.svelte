@@ -419,7 +419,6 @@
   const rovingOptions = {
     selector: MENUITEM_SELECTOR,
     orientation: /** @type {const} */ ("vertical"),
-    wrap: false,
     focusOnMove: false,
     getActiveIndex: () => focusIndex,
     /** @type {(index: number, event: KeyboardEvent) => void} */
