@@ -67,6 +67,19 @@ Set tooltip position relative to the navigation buttons with `tooltipPosition`.
 
 <PaginationNav tooltipPosition="outside" total={3} loop />
 
+## Translations
+
+Set `pageText` to name each page and `pageSelectLabelText` to name the overflow select. When the page changes, screen readers hear the page text followed by `pageRangeText`, as in "Page 3 of 20". These props work like the Pagination props of the same names.
+
+<PaginationNav
+  total={20}
+  forwardText="Página siguiente"
+  backwardText="Página anterior"
+  pageText={(page) => `Página ${page}`}
+  pageRangeText={(_current, total) => `de ${total}`}
+  pageSelectLabelText={() => "Seleccionar página"}
+/>
+
 ## Events
 
 Respond to page changes and button clicks.
