@@ -67,6 +67,39 @@
     column-gap: $carbon--spacing-03;
   }
 
+  // The dialog takes focus only from code, when a step has no heading.
+  .#{$prefix}--coachmark-popover:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--coachmark__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: $carbon--spacing-05;
+  }
+
+  // The text reads in the direction of its own first letter. A numeral
+  // sentence like "2 of 3" would otherwise reorder around its numerals in an
+  // RTL page.
+  .#{$prefix}--coachmark__progress {
+    @include type-style("label-01");
+
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--coachmark__nav {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+  }
+
+  // A ghost button reads the link color, which is blue on the dark surface.
+  // The inverse link color and fills keep it readable.
+  .#{$prefix}--coachmark-content .#{$prefix}--btn--ghost {
+    color: $link-inverse;
+  }
+
   // A 32px button pulled into the content's padding, so the icon sits on
   // the corner as a bare 16px icon would.
   .#{$prefix}--coachmark__close {
@@ -114,9 +147,25 @@
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
   @media (any-hover: hover) {
-    .#{$prefix}--coachmark__close:hover {
+    .#{$prefix}--coachmark__close:hover,
+    .#{$prefix}--coachmark-content .#{$prefix}--btn--ghost:hover {
       background-color: ccs-token("background-inverse-hover");
     }
+
+    .#{$prefix}--coachmark-content .#{$prefix}--btn--ghost:hover {
+      color: ccs-token("link-inverse-hover");
+    }
+  }
+
+  .#{$prefix}--coachmark-content .#{$prefix}--btn--ghost:active {
+    background-color: ccs-token("background-inverse-hover");
+    color: ccs-token("link-inverse-hover");
+  }
+
+  // The focus ring clears the dark surface.
+  .#{$prefix}--coachmark-content .#{$prefix}--btn--ghost:focus {
+    border-color: $focus-inverse;
+    box-shadow: inset 0 0 0 1px $focus-inverse, inset 0 0 0 2px $background-inverse;
   }
 }
 

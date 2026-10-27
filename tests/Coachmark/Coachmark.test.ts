@@ -189,6 +189,82 @@ describe("Coachmark", () => {
     });
   });
 
+  describe("steps", () => {
+    const next = () => screen.getByRole("button", { name: "Next" });
+
+    it("shows no footer for a single step", () => {
+      render(Coachmark, { props: { open: true } });
+
+      expect(screen.queryByRole("button", { name: "Next" })).toBeNull();
+    });
+
+    it("moves through the steps, reports them and keeps focus on the heading", async () => {
+      const onChange = vi.fn();
+      render(Coachmark, { props: { open: true, stepCount: 3, onChange } });
+
+      expect(screen.getByText("1 of 3")).toHaveAttribute("aria-live", "polite");
+      expect(screen.queryByRole("button", { name: "Back" })).toBeNull();
+
+      await user.click(next());
+      await tick();
+
+      expect(screen.getByText("2 of 3")).toBeInTheDocument();
+      expect(screen.getByTestId("bound-step")).toHaveTextContent("1");
+      expect(onChange).toHaveBeenLastCalledWith(1);
+      expect(
+        screen.getByRole("heading", { name: "Export in bulk" }),
+      ).toHaveFocus();
+
+      await user.click(screen.getByRole("button", { name: "Back" }));
+      await tick();
+
+      expect(screen.getByText("1 of 3")).toBeInTheDocument();
+      expect(onChange).toHaveBeenLastCalledWith(0);
+      expect(
+        screen.getByRole("heading", { name: "Export in bulk" }),
+      ).toHaveFocus();
+    });
+
+    it("ends on Done, which closes and returns focus", async () => {
+      const onClose = vi.fn();
+      render(Coachmark, { props: { stepCount: 2, onClose } });
+
+      await user.click(beacon());
+      await user.click(next());
+      await user.click(screen.getByRole("button", { name: "Done" }));
+      await tick();
+
+      expect(onClose).toHaveBeenCalledWith({ trigger: "done" });
+      expect(beacon()).toHaveFocus();
+    });
+
+    it("starts over when it opens again, without reporting a change", async () => {
+      const onChange = vi.fn();
+      render(Coachmark, { props: { stepCount: 2, onChange } });
+
+      await user.click(beacon());
+      await user.click(next());
+      await user.click(screen.getByRole("button", { name: "Close" }));
+      onChange.mockClear();
+      await user.click(beacon());
+
+      expect(screen.getByText("1 of 2")).toBeInTheDocument();
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("takes a custom progress text", () => {
+      render(Coachmark, {
+        props: {
+          open: true,
+          stepCount: 4,
+          stepText: (n: number, count: number) => `Step ${n}/${count}`,
+        },
+      });
+
+      expect(screen.getByText("Step 1/4")).toBeInTheDocument();
+    });
+  });
+
   it("types the close trigger and the focus props", () => {
     type Close = ComponentEvents<CoachmarkComponent>["close"];
     expectTypeOf<Close["detail"]["trigger"]>().toEqualTypeOf<
@@ -197,6 +273,7 @@ describe("Coachmark", () => {
       | "close-button"
       | "target"
       | "action"
+      | "done"
       | "programmatic"
     >();
 

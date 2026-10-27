@@ -1,13 +1,14 @@
 <script>
   /**
-   * @typedef {"outside-click" | "escape-key" | "close-button" | "target" | "action" | "programmatic"} CoachmarkCloseTrigger
+   * @typedef {"outside-click" | "escape-key" | "close-button" | "target" | "action" | "done" | "programmatic"} CoachmarkCloseTrigger
    */
 
   /**
    * @restProps {span}
    * @event {null} open
    * @event {{ trigger: CoachmarkCloseTrigger }} close
-   * @slot {{ close: () => void }} - The coachmark body. Call `close` to dismiss it and return focus to the target.
+   * @event {number} change - Fires when `step` changes.
+   * @slot {{ step: number; close: () => void }} - The coachmark body. Call `close` to dismiss it and return focus to the target.
    * @slot {{ open: boolean; toggle: () => void; triggerProps: { id: string; "aria-haspopup": "dialog"; "aria-expanded": boolean; "aria-controls": string } }} target - The element that opens the coachmark. Spread `triggerProps` on it and call `toggle` on click. Defaults to a `CoachmarkBeacon`.
    * @slot {{}} title - A rich heading. Overrides `title`.
    * @slot {{ close: () => void }} actions - Buttons in the footer.
@@ -45,6 +46,35 @@
 
   /** Set to `false` to keep the coachmark open on a click outside of it */
   export let closeOnOutsideClick = true;
+
+  /**
+   * Specify the index of the current step.
+   * It resets to `0` when the coachmark closes.
+   * @bindable writable
+   */
+  export let step = 0;
+
+  /**
+   * Specify the number of steps. Above `1`, a footer shows the progress
+   * with Back and Next buttons, and Done on the last step.
+   */
+  export let stepCount = 1;
+
+  /**
+   * Specify the progress text, such as `"2 of 4"`, for the footer.
+   * It is also the live region that announces a step change.
+   * @type {(step: number, count: number) => string}
+   */
+  export let stepText = defaultStepText;
+
+  /** Specify the text of the Back button */
+  export let backText = "Back";
+
+  /** Specify the text of the Next button */
+  export let nextText = "Next";
+
+  /** Specify the text of the Done button on the last step */
+  export let doneText = "Done";
 
   /**
    * Set to `true` to always move focus into the dialog when it opens, or
@@ -94,6 +124,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Button from "../Button/Button.svelte";
   import Popover from "../Popover/Popover.svelte";
   import { observeModalClose } from "../Portal/portal-utils.js";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
@@ -107,6 +138,14 @@
   import { uniqueId } from "../utils/unique-id.js";
   import CoachmarkBeacon from "./CoachmarkBeacon.svelte";
 
+  /**
+   * @param {number} current The 1-based step.
+   * @param {number} count
+   */
+  function defaultStepText(current, count) {
+    return `${current} of ${count}`;
+  }
+
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
@@ -114,6 +153,9 @@
   let anchorRef = null;
   /** @type {null | HTMLButtonElement} */
   let closeRef = null;
+  /** @type {null | HTMLHeadingElement} */
+  let titleRef = null;
+  let prevStep = step;
   let disconnectModalObserver = noop;
 
   /** @type {boolean | undefined} */
@@ -129,6 +171,10 @@
   $: titleId = `${id}-title`;
   $: triggerId = `${id}-target`;
   $: hasTitle = !!(title || $$slots.title);
+  $: lastStep = Math.max(stepCount, 1) - 1;
+  $: keepStepInRange(step, lastStep);
+  $: hasSteps = stepCount > 1;
+  $: notifyStepChange(step);
 
   $: triggerProps = {
     id: triggerId,
@@ -171,6 +217,22 @@
         : () => {};
   }
 
+  /**
+   * @param {number} current
+   * @param {number} last
+   */
+  function keepStepInRange(current, last) {
+    const inRange = Math.min(Math.max(current, 0), last);
+    if (current !== inRange) step = inRange;
+  }
+
+  /** @param {number} next */
+  function notifyStepChange(next) {
+    if (next === prevStep) return;
+    prevStep = next;
+    dispatch("change", next);
+  }
+
   /** @param {boolean} next */
   function handleOpenChange(next) {
     if (prevOpen === next) return;
@@ -192,6 +254,9 @@
       pendingFocus = false;
       const trigger = pendingTrigger ?? "programmatic";
       pendingTrigger = null;
+      // Reopening starts the tour over, without reporting a change.
+      step = 0;
+      prevStep = 0;
       dispatch("close", { trigger });
     }
   }
@@ -220,6 +285,23 @@
     tick().then(() => {
       returnFocus(document.getElementById(triggerId), region);
     });
+  }
+
+  // The buttons that moved the step may be gone (Back on the first step),
+  // so focus goes to the heading, which a screen reader reads.
+  /** @param {number} next */
+  function goToStep(next) {
+    step = next;
+    tick().then(() => (titleRef ?? ref)?.focus({ preventScroll: true }));
+  }
+
+  function next() {
+    if (step < lastStep) goToStep(step + 1);
+    else close("done");
+  }
+
+  function back() {
+    if (step > 0) goToStep(step - 1);
   }
 
   function closeFromSlot() {
@@ -278,6 +360,7 @@
     {portalPopover}
     id={dialogId}
     role="dialog"
+    tabindex={-1}
     aria-label={ariaLabel}
     aria-labelledby={labelledBy}
     aria-describedby={ariaDescribedBy}
@@ -292,7 +375,12 @@
     <div class:bx--coachmark-content={true} on:keydown={handleKeydown}>
       <div class:bx--coachmark__header={true}>
         {#if hasTitle}
-          <h2 id={titleId} class:bx--coachmark__title={true} tabindex="-1">
+          <h2
+            bind:this={titleRef}
+            id={titleId}
+            class:bx--coachmark__title={true}
+            tabindex="-1"
+          >
             <slot name="title">{title}</slot>
           </h2>
         {/if}
@@ -307,11 +395,28 @@
         </button>
       </div>
       <div class:bx--coachmark__body={true}>
-        <slot close={closeFromSlot} />
+        <slot {step} close={closeFromSlot} />
       </div>
       {#if $$slots.actions}
         <div class:bx--coachmark__actions={true}>
           <slot name="actions" close={closeFromSlot} />
+        </div>
+      {/if}
+      {#if hasSteps}
+        <div class:bx--coachmark__footer={true}>
+          <span class:bx--coachmark__progress={true} aria-live="polite">
+            {stepText(step + 1, stepCount)}
+          </span>
+          <div class:bx--coachmark__nav={true}>
+            {#if step > 0}
+              <Button kind="ghost" size="small" on:click={back}>
+                {backText}
+              </Button>
+            {/if}
+            <Button size="small" on:click={next}>
+              {step < lastStep ? nextText : doneText}
+            </Button>
+          </div>
         </div>
       {/if}
     </div>

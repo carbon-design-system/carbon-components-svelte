@@ -33,6 +33,14 @@
   let tourStep = -1;
   let tabTip = false;
 
+  const stepTitles = ["Select rows", "Open the toolbar", "Export"];
+  const stepTexts = [
+    "Tick the rows you want.",
+    "Batch actions appear above the table.",
+    "Download them together.",
+  ];
+  let step = 0;
+
   // The "seen" flag outlives the page.
   let seen = false;
   let seenOpen = false;
@@ -197,6 +205,22 @@
         </svelte:fragment>
       </Coachmark>
     {/each}
+  </section>
+
+  <section data-testid="steps">
+    <h3>Steps</h3>
+    <Coachmark
+      id="cm-steps"
+      title={stepTitles[step]}
+      align="bottom-start"
+      stepCount={stepTitles.length}
+      bind:step
+      on:change={(e) => (events = [...events, `step:${e.detail}`])}
+      beaconLabel="Show the walkthrough"
+    >
+      <p>{stepTexts[step]}</p>
+    </Coachmark>
+    <p data-testid="step">{step}</p>
   </section>
 
   <section data-testid="persist">
