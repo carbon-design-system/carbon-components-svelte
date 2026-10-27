@@ -15,6 +15,7 @@ import type {
   preserveFocusSelection,
   queryParam,
   rovingFocus,
+  scrollEdges,
   themeScript,
   ThemeZone as BarrelThemeZone,
   trapFocus,
@@ -47,6 +48,10 @@ import type {
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
+import type {
+  ScrollEdgesParams,
+  ScrollEdgeState,
+} from "carbon-components-svelte/src/utils/scroll-edges.js";
 import {
   highlight,
   highlightCode,
@@ -116,6 +121,9 @@ type _FormReset = ReturnType<typeof formReset>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
+type _ScrollEdges = ReturnType<typeof scrollEdges>;
+type _ScrollEdgesParams = ScrollEdgesParams;
+type _ScrollEdgeState = ScrollEdgeState;
 type _TrapFocus = ReturnType<typeof trapFocus>;
 
 const _tokens: Token[] | undefined = tokenize("let a", "js");
