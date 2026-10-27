@@ -46,8 +46,11 @@ export interface CalendarOptions extends Partial<
   conjunction?: string;
   dateFormat?: string;
   defaultDate?: string | number | Date | Array<string | number | Date>;
-  /** 24-hour `"HH:mm"` or `"HH:mm:ss"` given to a day picked with no time set. */
-  defaultTime?: string;
+  /**
+   * 24-hour `"HH:mm"` or `"HH:mm:ss"` given to a day picked with no time
+   * set. A pair is a range's start and end.
+   */
+  defaultTime?: string | [string, string];
   disable?: DateRule[];
   enable?: DateRule[];
   errorHandler?: (error: Error) => void;
@@ -112,10 +115,16 @@ export interface CalendarOptions extends Partial<
   shorthandCurrentMonth?: boolean;
   showMonths?: number;
   static?: boolean;
-  /** Shows a time row below the days, down to this unit. Single mode only. */
+  /**
+   * Shows a time row below the days, down to this unit: one in single mode,
+   * one per end in range mode.
+   */
   timeGranularity?: "hour" | "minute" | "second";
-  /** Accessible name of the time row. Defaults to `"Time"`. */
-  timeLabel?: string;
+  /**
+   * Name of the time row, or a range's two rows. Defaults to `"Time"`, and
+   * to `["Start time", "End time"]` for a range.
+   */
+  timeLabel?: string | [string, string];
   weekNumbers?: boolean;
 }
 

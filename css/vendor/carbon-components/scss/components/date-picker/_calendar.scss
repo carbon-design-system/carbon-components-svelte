@@ -453,8 +453,9 @@
   }
 
   // ccs: the time row (`timeGranularity`) under the days: hour, minute
-  // and second fields, and an AM/PM select on a 12-hour clock. The open
-  // calendar grows by the row.
+  // and second fields, and an AM/PM select on a 12-hour clock. A range
+  // has a named start and end row, side by side under two months. The
+  // open calendar grows by the rows.
   .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--open {
     height: to-rem(384px);
   }
@@ -464,16 +465,52 @@
     height: to-rem(372px);
   }
 
-  .#{$prefix}--date-picker__time {
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--range.#{$prefix}--date-picker__calendar--open {
+    height: to-rem(424px);
+  }
+
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--range.#{$prefix}--date-picker__calendar--week-numbers.#{$prefix}--date-picker__calendar--open {
+    height: to-rem(412px);
+  }
+
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--range.#{$prefix}--date-picker__calendar--multi-month.#{$prefix}--date-picker__calendar--open {
+    height: to-rem(372px);
+  }
+
+  .#{$prefix}--date-picker__times {
     display: flex;
+    flex-direction: column;
     gap: $carbon--spacing-03;
-    align-items: center;
-    justify-content: center;
     box-sizing: border-box;
     width: 100%;
     margin-block-start: $carbon--spacing-02;
     padding-block-start: $carbon--spacing-03;
     border-block-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--date-picker__calendar--multi-month .#{$prefix}--date-picker__times {
+    flex-direction: row;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--date-picker__time {
+    display: flex;
+    flex: 1;
+    gap: $carbon--spacing-03;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}--date-picker__calendar--range .#{$prefix}--date-picker__time {
+    padding-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--date-picker__time-label {
+    @include type-style('label-01');
+
+    flex: 1;
+    color: $text-secondary;
+    text-align: start;
   }
 
   .#{$prefix}--date-picker__time-fields {

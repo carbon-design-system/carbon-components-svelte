@@ -236,6 +236,15 @@
     max-width: 100%;
   }
 
+  // ccs: with time rows (`timeGranularity`), each end holds a date and a
+  // time, "10/15/2026 2:30 PM" in code-02 beside the icon.
+  .#{$prefix}--date-picker--range.#{$prefix}--date-picker--time
+    .#{$prefix}--date-picker-container,
+  .#{$prefix}--date-picker--range.#{$prefix}--date-picker--time
+    .#{$prefix}--date-picker__input {
+    width: to-rem(216px);
+  }
+
   // ccs: the icon spans 16-32px from the right edge. The 3rem default
   // leaves a 143.5px range input ~80px of text, clipping a code-02
   // `mm/dd/yyyy` (~87px); 2rem still keeps the text clear of the icon.

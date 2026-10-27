@@ -30,6 +30,8 @@ export function isTimeOnDay(date: Date, time: TimeParts): boolean;
 
 export type TimeRowOptions = {
   label: string;
+  /** Show the label, as a range's rows do. */
+  showLabel?: boolean;
   granularity: TimeGranularity;
   hourCycle: HourCycle;
   minuteStep: number;
