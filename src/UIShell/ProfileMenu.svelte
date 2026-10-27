@@ -33,9 +33,10 @@
   export let ref = null;
 
   /**
-   * Customize the menu slide transition (for example, `{ duration: 200 }`).
-   * By default, the menu does not animate.
-   * @type {false | import("svelte/transition").SlideParams}
+   * Animate the menu. Set to `true` for Carbon's slide, to slide params
+   * (for example, `{ duration: "slow01" }`) to customize it, or to `{ fn }`
+   * to use another transition. By default, the menu does not animate.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
    */
   export let transition = false;
 
@@ -51,9 +52,10 @@
 
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { get } from "svelte/store";
-  import { slide } from "svelte/transition";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { slide } from "../motion/transitions.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createDomNodeRegistry } from "../utils/dom-node-registry.js";
   import { returnFocusOnClose } from "../utils/focus.js";
@@ -70,6 +72,14 @@
 
   /** @type {null | HTMLDivElement} */
   let refMenu = null;
+
+  const slidePreset = { fn: slide };
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition, slidePreset));
 
   const menuItemRegistry = createDomNodeRegistry();
   /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
@@ -174,17 +184,24 @@
     <slot name="avatar"><UserAvatar size="md" /></slot>
   </span>
 </button>
-{#if isOpen}
+{#if isOpen && animated}
   <div
     bind:this={refMenu}
     use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
     id={menuId}
     aria-label={iconDescription}
     class:bx--profile-menu={true}
-    transition:slide|local={{
-      ...transition,
-      duration: transition === false ? 0 : transition.duration,
-    }}
+    transition:transitionFn|local={transitionParams}
+  >
+    <slot />
+  </div>
+{:else if isOpen}
+  <div
+    bind:this={refMenu}
+    use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
+    id={menuId}
+    aria-label={iconDescription}
+    class:bx--profile-menu={true}
   >
     <slot />
   </div>

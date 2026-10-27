@@ -4,6 +4,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Set the loading status.
    * @type {"active" | "inactive" | "finished" | "error"}
    */
@@ -38,15 +45,31 @@
    */
   export let size = "md";
 
+  /**
+   * Animate the status as it appears and leaves, when a parent's `{#if}`
+   * adds or removes it. Set to `true` for Carbon's fade, to fade params
+   * (e.g., `{ duration: "moderate02" }`) to customize it, or to `{ fn }` to
+   * use another transition. The status does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
+   */
+  export let transition = undefined;
+
   import { createEventDispatcher, onMount } from "svelte";
-  import Loading from "../Loading/Loading.svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fade } from "../motion/transitions.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import InlineLoadingContent from "./InlineLoadingContent.svelte";
 
   const dispatch = createEventDispatcher();
   const schedule = createDelayedSetter();
   const scheduleSuccess = createDelayedSetter();
+  const fadePreset = { fn: fade };
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition, fadePreset));
 
   // `delay > 0` renders nothing during SSR while `status` is "active", since the timer only fires client-side.
   let visible = false;
@@ -83,7 +106,26 @@
   }
 </script>
 
-{#if visible}
+{#if visible && animated}
+  <div
+    class:bx--inline-loading={true}
+    class:bx--inline-loading--sm={size === "sm"}
+    role={status === "error" ? "alert" : "status"}
+    aria-live={status === "error" ? "assertive" : "polite"}
+    {...$$restProps}
+    transition:transitionFn|global={transitionParams}
+    on:introstart
+    on:introend
+    on:outrostart
+    on:outroend
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <InlineLoadingContent {status} {description} {iconDescription} />
+  </div>
+{:else if visible}
   <div
     class:bx--inline-loading={true}
     class:bx--inline-loading--sm={size === "sm"}
@@ -95,28 +137,6 @@
     on:mouseenter
     on:mouseleave
   >
-    <div class:bx--inline-loading__animation={true}>
-      {#if status === "error"}
-        <ErrorFilled
-          class="bx--inline-loading--error"
-          title={iconDescription || status}
-        />
-      {:else if status === "finished"}
-        <CheckmarkFilled
-          class="bx--inline-loading__checkmark-container"
-          title={iconDescription || status}
-        />
-      {:else if status === "inactive" || status === "active"}
-        <Loading
-          small
-          description={iconDescription}
-          withOverlay={false}
-          active={status === "active"}
-        />
-      {/if}
-    </div>
-    {#if description}
-      <div class:bx--inline-loading__text={true}>{description}</div>
-    {/if}
+    <InlineLoadingContent {status} {description} {iconDescription} />
   </div>
 {/if}
