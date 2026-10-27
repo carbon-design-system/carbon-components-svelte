@@ -89,6 +89,34 @@ test.describe("Swatch", () => {
     expect(dot && label && dot.x > label.x).toBe(true);
   });
 
+  test("keeps the same space beside the icon in RTL as in LTR", async ({
+    page,
+  }) => {
+    await page.goto("/swatch.html");
+    const tag = page.getByTestId("hashed").locator(".bx--tag").first();
+    // Distance from the inline start edge to the dot, and from the label to
+    // the inline end edge.
+    const gaps = () =>
+      tag.evaluate((el) => {
+        const rtl = getComputedStyle(el).direction === "rtl";
+        const box = el.getBoundingClientRect();
+        const dot = el.querySelector(".bx--swatch")?.getBoundingClientRect();
+        const label = el
+          .querySelector(".bx--tag__label")
+          ?.getBoundingClientRect();
+        if (!dot || !label) throw new Error("no dot or label");
+        return rtl
+          ? [box.right - dot.right, label.left - box.left]
+          : [dot.left - box.left, box.right - label.right];
+      });
+
+    const ltr = await gaps();
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    expect(await gaps()).toEqual(ltr);
+  });
+
   test("keeps the dot's fill and rings it in forced colors", async ({
     page,
     browserName,
