@@ -389,7 +389,6 @@
     use:rovingFocus={{
       selector: NON_DISABLED_MENUITEM_SELECTOR,
       orientation: "vertical",
-      wrap: false,
       focusOnMove: false,
       getActiveIndex: () => focusIndex,
       onMove: (index, event) => {
