@@ -1,0 +1,111 @@
+// CoachmarkBeacon: a pulsing dot that opens a coachmark. Carbon v10 has no
+// onboarding beacon, so the partial is new.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// CoachmarkBeacon component
+/// @access private
+/// @group components
+@mixin coachmark-beacon {
+  // The size of the hit area. The dot is a third of it, and the ring grows
+  // from the dot to the whole hit area and past it.
+  .#{$prefix}--coachmark-beacon {
+    position: relative;
+    display: inline-flex;
+    width: var(--ccs-coachmark-beacon-size, #{to-rem(24px)});
+    height: var(--ccs-coachmark-beacon-size, #{to-rem(24px)});
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--coachmark-beacon:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--coachmark-beacon__core {
+    width: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
+    height: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
+    background-color: $interactive;
+    border-radius: 50%;
+  }
+
+  // The ring is decoration: it takes no pointer events and the button
+  // names itself.
+  .#{$prefix}--coachmark-beacon__ring {
+    position: absolute;
+    width: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
+    height: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
+    animation: coachmark-beacon-pulse $duration--slow-02 * 3
+      motion(entrance, expressive) infinite;
+    background-color: $support-info;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  @keyframes coachmark-beacon-pulse {
+    0% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(4);
+    }
+  }
+
+  // The coachmark is open: the dot has done its job.
+  .#{$prefix}--coachmark-beacon[aria-expanded="true"] .#{$prefix}--coachmark-beacon__ring {
+    animation: none;
+    opacity: 0;
+  }
+
+  // The corner of the nearest positioned parent: the dot's center sits on
+  // the end edge and the top edge.
+  .#{$prefix}--coachmark-beacon--overlay {
+    position: absolute;
+    top: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / -2);
+
+    @include ccs-inset-inline(
+      $end: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / -2)
+    );
+  }
+
+  // Reduced motion shows the ring still instead of pulsing it.
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--coachmark-beacon__ring {
+      animation: none;
+      opacity: 0.4;
+      transform: scale(2.5);
+    }
+  }
+
+  // Forced colors drop backgrounds, so the dot and ring read system colors.
+  @media (forced-colors: active) {
+    .#{$prefix}--coachmark-beacon__core {
+      background-color: ButtonText;
+    }
+
+    .#{$prefix}--coachmark-beacon__ring {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--coachmark-beacon:focus {
+      outline-color: Highlight;
+    }
+  }
+}
+
+@include exports("coachmark-beacon") {
+  @include coachmark-beacon;
+}

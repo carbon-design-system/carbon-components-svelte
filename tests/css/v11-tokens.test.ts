@@ -79,11 +79,12 @@ const V11_HOOKS = new Set([
 ]);
 
 // Scopes that re-point the link hooks for the links inside them, as v11
-// does: the toggletip's inverse surface sets the inverse link colors, and
-// AILabel's light callout resets them. Anywhere else, a declaration would
+// does: the toggletip's and the coachmark's inverse surfaces set the inverse
+// link colors, and AILabel's light callout resets them. Anywhere else, a declaration would
 // shadow the value a consumer sets on an ancestor.
 const HOOK_SCOPES = new Set([
   ".bx--toggletip-content",
+  ".bx--coachmark-content",
   ".bx--ai-label-popover .bx--toggletip-content",
 ]);
 

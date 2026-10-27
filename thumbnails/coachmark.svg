@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>coachmark</title>
+    <defs>
+        <filter id="coachmark-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="coachmark" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="bubble-shadow" fill="black" filter="url(#coachmark-shadow)" x="96" y="42" width="128" height="58" rx="2"></rect>
+        <rect id="bubble" fill="var(--cds-background-inverse, #393939)" x="96" y="42" width="128" height="58" rx="2"></rect>
+        <polygon id="caret" fill="var(--cds-background-inverse, #393939)" points="155 100 165 100 160 106"></polygon>
+        <rect id="title" fill="var(--cds-text-inverse, #ffffff)" x="108" y="54" width="56" height="8"></rect>
+        <path id="close" stroke="var(--cds-icon-inverse, #ffffff)" stroke-width="1.5" d="M206 54.5 214 62.5 M214 54.5 206 62.5"></path>
+        <rect id="text-1" fill="var(--cds-text-inverse, #ffffff)" x="108" y="72" width="92" height="6"></rect>
+        <rect id="text-2" fill="var(--cds-text-inverse, #ffffff)" x="108" y="84" width="64" height="6"></rect>
+        <circle id="beacon-ring" fill="var(--cds-background-brand, #0f62fe)" fill-opacity="0.2" cx="160" cy="126" r="12"></circle>
+        <circle id="beacon" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="126" r="4"></circle>
+    </g>
+</svg>

@@ -1,0 +1,125 @@
+// Coachmark: an onboarding callout anchored to a target. The dialog reuses
+// the popover's inverse surface and caret; this partial adds the anchor,
+// heading, close button and body.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Coachmark component
+/// @access private
+/// @group components
+@mixin coachmark {
+  // The anchor: the popover places itself against this box.
+  .#{$prefix}--coachmark {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  // A bare paragraph keeps the content's type style, as in Toggletip.
+  .#{$prefix}--coachmark__body p:not([class]) {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  // The content sits on the inverse (dark) popover surface, so its links
+  // read the inverse link colors through Link's hooks, as in Toggletip.
+  .#{$prefix}--coachmark-content {
+    @include type-style("body-compact-01");
+
+    --cds-link-text-color: #{$link-inverse};
+    --cds-link-hover-text-color: #{ccs-token("link-inverse-hover")};
+    --cds-link-visited-text-color: #{ccs-token("link-inverse-visited")};
+    --cds-link-focus-text-color: #{$focus-inverse};
+
+    display: grid;
+    box-sizing: border-box;
+    max-width: var(--ccs-coachmark-width, #{to-rem(288px)});
+    padding: $carbon--spacing-05;
+    row-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--coachmark__header {
+    display: flex;
+    align-items: flex-start;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--coachmark__title {
+    @include type-style("heading-compact-01");
+
+    flex: 1;
+    margin: 0;
+  }
+
+  // The heading takes focus when the step changes, and the text says where
+  // focus is already.
+  .#{$prefix}--coachmark__title:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--coachmark__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: $carbon--spacing-03;
+  }
+
+  // A 32px button pulled into the content's padding, so the icon sits on
+  // the corner as a bare 16px icon would.
+  .#{$prefix}--coachmark__close {
+    display: flex;
+    width: to-rem(32px);
+    height: to-rem(32px);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    margin: (-$carbon--spacing-03) (-$carbon--spacing-03) (-$carbon--spacing-03) auto;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--coachmark__close svg {
+    fill: $icon-inverse;
+  }
+
+  .#{$prefix}--coachmark__close:focus {
+    @include focus-outline("outline");
+
+    outline-color: $focus-inverse;
+  }
+
+  // The focus ring (also shown while pressed) clears the text on the dark
+  // surface. Its color comes from the hook above.
+  .#{$prefix}--coachmark-content .#{$prefix}--link:focus,
+  .#{$prefix}--coachmark-content .#{$prefix}--link:active {
+    outline-offset: 2px;
+  }
+
+  // Forced colors drop the SVG fill and the shadow. The close icon reads
+  // `ButtonText`, and the popover keeps its outline.
+  @media (forced-colors: active) {
+    .#{$prefix}--coachmark__close svg {
+      fill: ButtonText;
+    }
+
+    .#{$prefix}--coachmark__close:focus {
+      outline-color: Highlight;
+    }
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--coachmark__close:hover {
+      background-color: ccs-token("background-inverse-hover");
+    }
+  }
+}
+
+@include exports("coachmark") {
+  @include coachmark;
+}

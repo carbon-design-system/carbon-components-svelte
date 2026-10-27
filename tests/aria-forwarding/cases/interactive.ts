@@ -4,6 +4,8 @@ import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
 import ChatLog from "carbon-components-svelte/Chat/ChatLog.svelte";
+import Coachmark from "carbon-components-svelte/Coachmark/Coachmark.svelte";
+import CoachmarkBeacon from "carbon-components-svelte/Coachmark/CoachmarkBeacon.svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
 import ComboButton from "carbon-components-svelte/ComboButton/ComboButton.svelte";
 import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.svelte";
@@ -523,6 +525,19 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(BreadcrumbItemFixture, { props: { href: "", ...attrs } }),
     target: () => screen.getByRole("listitem"),
+  },
+  {
+    // Naming lands on the dialog, not the wrapper.
+    name: "Coachmark",
+    render: (attrs) =>
+      render(Coachmark, { props: { open: true, title: "Tip", ...attrs } }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "CoachmarkBeacon",
+    render: (attrs) =>
+      render(CoachmarkBeacon, { props: { label: "Show", ...attrs } }),
+    target: () => screen.getByRole("button"),
   },
   {
     name: "ComboButton",
