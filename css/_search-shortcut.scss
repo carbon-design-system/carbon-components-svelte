@@ -1,0 +1,42 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Search's `shortcut`: the keys at the end of the empty field, where the
+/// clear button goes, until the field is focused. The input makes room for
+/// them: their width in `ch` (`--ccs-search-shortcut-width`, set by the
+/// component) and the end padding on both sides.
+/// @access private
+/// @group components
+@mixin search-shortcut {
+  .#{$prefix}--search__shortcut {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
+  }
+
+  .#{$prefix}--search--sm .#{$prefix}--search__shortcut,
+  .#{$prefix}--search--xs .#{$prefix}--search__shortcut {
+    @include ccs-inset-inline($end: $carbon--spacing-04);
+  }
+
+  .#{$prefix}--search-input:focus ~ .#{$prefix}--search__shortcut {
+    display: none;
+  }
+
+  .#{$prefix}--search.#{$prefix}--search--shortcut
+    .#{$prefix}--search-input:not(:focus) {
+    padding-inline-end: calc(
+      var(--ccs-search-shortcut-width) + #{$carbon--spacing-05 * 2}
+    );
+  }
+}
+
+@include exports("search-shortcut") {
+  @include search-shortcut;
+}
