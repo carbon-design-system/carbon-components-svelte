@@ -664,6 +664,7 @@
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
+  import { revealFocus } from "./reveal-focus.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -1580,6 +1581,7 @@
    * @param {Row["id"]} rowId
    */
   function handleCellFocus(event, rowId) {
+    if (pinnedLayouts !== null || stickyHeader) revealFocus(event.target);
     if (!cellFocus) return;
     const cell = /** @type {Element} */ (event.target).closest("td[tabindex]");
     const key = columnKeyAt(cell);
