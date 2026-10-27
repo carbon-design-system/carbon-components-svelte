@@ -37,6 +37,53 @@
   }
 }
 
+/// HeaderSearch's `shortcut`: while closed, the keys sit beside the search
+/// icon and the closed search is as wide as the two. Below the medium
+/// breakpoint, mostly touch screens, it's the icon alone.
+/// @access private
+/// @group components
+@mixin header-search-shortcut {
+  .#{$prefix}--header__search.#{$prefix}--header__search--shortcut {
+    max-width: fit-content;
+  }
+
+  .#{$prefix}--header__search--shortcut .#{$prefix}--header__search-input {
+    width: 0;
+  }
+
+  .#{$prefix}--header__search--shortcut .#{$prefix}--header-search-button {
+    gap: $carbon--spacing-03;
+    width: auto;
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // Focus thickens the button's border from 1px to 2px; the padding gives
+  // the 1px back, so the button keeps its width.
+  .#{$prefix}--header__search--shortcut
+    .#{$prefix}--header-search-button:focus {
+    padding-inline: calc(#{$carbon--spacing-05} - 1px);
+  }
+
+  .#{$prefix}--header__search-shortcut {
+    display: inline-flex;
+  }
+
+  @include carbon--breakpoint-down("md") {
+    .#{$prefix}--header__search--shortcut .#{$prefix}--header-search-button {
+      width: to-rem(48px);
+      padding-inline: 0;
+    }
+
+    .#{$prefix}--header__search-shortcut {
+      display: none;
+    }
+  }
+}
+
+@include exports("header-search-shortcut") {
+  @include header-search-shortcut;
+}
+
 @include exports("search-shortcut") {
   @include search-shortcut;
 }

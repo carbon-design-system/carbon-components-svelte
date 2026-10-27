@@ -13,6 +13,12 @@ const press = (init: KeyboardEventInit, target: EventTarget = window) => {
   return event;
 };
 
+const keys = (root: Element | null | undefined) =>
+  [
+    ...(root?.querySelectorAll(".bx--kbd__platform--other .bx--kbd__key") ??
+      []),
+  ].map((key) => key.textContent);
+
 const input = (testId: string) =>
   screen.getByTestId(testId).querySelector("input") as HTMLInputElement;
 
@@ -73,5 +79,25 @@ describe("Search shortcut", () => {
     await tick();
     await tick();
     expect(input("expandable")).toHaveFocus();
+  });
+
+  it("opens HeaderSearch and shows the keys beside its icon", async () => {
+    render(SearchShortcut);
+    const header = screen.getByTestId("header");
+    const button = header.querySelector("button") as HTMLButtonElement;
+
+    expect(button).toHaveAttribute("aria-keyshortcuts", "Control+K");
+    expect(header.querySelector(".bx--header__search")).toHaveClass(
+      "bx--header__search--shortcut",
+    );
+    expect(keys(button.querySelector(".bx--header__search-shortcut"))).toEqual([
+      "Ctrl",
+      "K",
+    ]);
+
+    press({ key: "k", ctrlKey: true });
+    await tick();
+    expect(input("header")).toHaveFocus();
+    expect(header.querySelector(".bx--header__search--active")).not.toBeNull();
   });
 });
