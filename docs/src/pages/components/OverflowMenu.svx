@@ -199,6 +199,16 @@ Set `icon` for a left icon or `iconRight` for a right icon; the label fills the 
   <OverflowMenuItem hasDivider danger icon={TrashCan} text="Delete" />
 </OverflowMenu>
 
+### Keyboard shortcuts
+
+Set `shortcut` to show an item's keys at the end of the row, such as `"mod+d"`: ⌘D on Apple platforms, Ctrl+D elsewhere. The item announces them with `aria-keyshortcuts`, and the menu widens, up to 20rem, so the keys don't squeeze the labels. The menu only shows the keys: bind the command itself with `onShortcut`.
+
+<OverflowMenu>
+  <OverflowMenuItem text="Edit" shortcut="mod+e" />
+  <OverflowMenuItem text="Duplicate" shortcut="mod+d" />
+  <OverflowMenuItem text="Delete" shortcut="mod+backspace" danger hasDivider />
+</OverflowMenu>
+
 ### Primary focus
 
 Set `primaryFocus` to `true` on a menu item to focus it when opening the dropdown.

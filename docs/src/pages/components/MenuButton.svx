@@ -181,12 +181,12 @@ Pass a Carbon icon to `icon`.
 
 ### Shortcuts
 
-Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+Set `shortcut` to show its keys on the right of the row, such as `"mod+x"`: ⌘X on Apple platforms, Ctrl+X elsewhere. The item announces them with `aria-keyshortcuts`. The menu only shows the keys, since it's usually closed when they're pressed: bind the command itself with `onShortcut`. For other content, use `shortcutText` or its slot, which take precedence.
 
 <MenuButton labelText="Actions">
-  <MenuItem icon={Cut} shortcutText="⌘X" on:click={() => console.log("Cut")}>Cut</MenuItem>
-  <MenuItem icon={Copy} shortcutText="⌘C" on:click={() => console.log("Copy")}>Copy</MenuItem>
-  <MenuItem shortcutText="⌘V" on:click={() => console.log("Paste")}>Paste</MenuItem>
+  <MenuItem icon={Cut} shortcut="mod+x" on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem icon={Copy} shortcut="mod+c" on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem shortcut="mod+v" on:click={() => console.log("Paste")}>Paste</MenuItem>
 </MenuButton>
 
 ### Danger
