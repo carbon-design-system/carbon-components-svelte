@@ -253,7 +253,7 @@ These names apply to new components and new props. Shipped components keep their
 - Do not animate initial render, hydration, data updates (sort, filter, new rows) or decoration.
 - A looping animation, such as a pulsing beacon, stops after at most 5 seconds or a few cycles, and stops at once under `prefers-reduced-motion` (WCAG 2.2.2).
 - Measure in a `ResizeObserver` callback and write in the next frame (`createFrameJob`), so a resize does not trigger a ResizeObserver loop error.
-- Durations come from the motion tokens: `$duration--fast-01` (70 ms), `fast-02` (110 ms), `moderate-01` (150 ms), `moderate-02` (240 ms), `slow-01` (400 ms), `slow-02` (720 ms).
+- Durations come from the motion tokens: `$duration--fast-01` (70 ms), `fast-02` (110 ms), `moderate-01` (150 ms), `moderate-02` (240 ms), `slow-01` (400 ms), `slow-02` (700 ms).
   - Color, icon and small state changes: `fast-01` or `fast-02`.
   - Menus, expanding rows and small panels: `moderate-01` or `moderate-02`.
   - Full-height panels and modals: `slow-01` at most.
