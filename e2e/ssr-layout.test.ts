@@ -39,3 +39,21 @@ test("an open OverflowMenu sits under its button before it's positioned", async 
   });
   expect(await rect(page, selector)).toEqual(mounted);
 });
+
+test("an open Tearsheet keeps its layout when its scrolling body takes a tab stop", async ({
+  page,
+}) => {
+  const container = ".bx--tearsheet__container";
+  const main = `${container} .bx--tearsheet__main`;
+  const mounted = [await rect(page, container), await rect(page, main)];
+  // The server renders the body before it measures an overflow, so it has
+  // no tab stop or region role yet.
+  await page.locator(main).evaluate((el) => {
+    el.removeAttribute("tabindex");
+    el.removeAttribute("role");
+    el.removeAttribute("aria-labelledby");
+  });
+  expect([await rect(page, container), await rect(page, main)]).toEqual(
+    mounted,
+  );
+});

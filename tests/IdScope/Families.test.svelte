@@ -45,6 +45,7 @@
   import TabsVertical from "carbon-components-svelte/Tabs/TabsVertical.svelte";
   import Tag from "carbon-components-svelte/Tag/Tag.svelte";
   import TagSet from "carbon-components-svelte/TagSet/TagSet.svelte";
+  import Tearsheet from "carbon-components-svelte/Tearsheet/Tearsheet.svelte";
   import RadioTile from "carbon-components-svelte/Tile/RadioTile.svelte";
   import SelectableTile from "carbon-components-svelte/Tile/SelectableTile.svelte";
   import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
@@ -199,6 +200,10 @@
   </StructuredList>
 {:else if family === "Pagination"}
   <Pagination id="fixed" totalItems={100} pageSizes={[10, 20]} />
+{:else if family === "Tearsheet"}
+  <Tearsheet id="fixed" open titleText="Create">
+    <Dropdown labelText="Source" selectedId="a" {items} />
+  </Tearsheet>
 {:else if family === "Tooltip"}
   <Tooltip id="fixed" triggerText="Hint" open>Body</Tooltip>
 {:else if family === "SelectableTileGroup"}
