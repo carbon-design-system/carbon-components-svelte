@@ -1,10 +1,4 @@
-import {
-  fireEvent,
-  render,
-  screen,
-  waitForElementToBeRemoved,
-  within,
-} from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type HeaderActionComponent from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 import HeaderGlobalAction from "carbon-components-svelte/UIShell/HeaderGlobalAction.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
@@ -52,14 +46,7 @@ describe("HeaderAction", () => {
 
       await user.keyboard("{Escape}");
 
-      const panel = screen.queryByTestId("panel-content");
-      if (panel) {
-        // The panel's outro is a real (if duration: 0) transition driven by
-        // Svelte's rAF-based transition loop. Under CI's parallel worker
-        // load, jsdom's setTimeout-based rAF polyfill can lag well past the
-        // default 1s timeout even though nothing is actually stuck.
-        await waitForElementToBeRemoved(panel, { timeout: 5000 });
-      }
+      expect(screen.queryByTestId("panel-content")).not.toBeInTheDocument();
       expect(button).toHaveFocus();
     });
 
