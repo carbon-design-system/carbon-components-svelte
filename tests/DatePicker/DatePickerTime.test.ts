@@ -168,3 +168,64 @@ describe("DatePicker range time rows", () => {
     expect(rangeText()).toBe(`${dayText(12)} 11:00|${dayText(12)} 11:00`);
   });
 });
+
+describe("DatePicker time window", () => {
+  const hours = () => screen.getByRole("spinbutton", { name: "Hours" });
+
+  it("skips times outside minTime and maxTime when stepping", async () => {
+    render(DatePickerTime, {
+      props: {
+        hourFormat: "24",
+        defaultTime: "17:00",
+        minTime: "08:00",
+        maxTime: "18:00",
+      },
+    });
+    await pickDay(15);
+    await user.click(hours());
+    await user.keyboard("{ArrowUp}");
+    expect(valueText()).toBe(`${dayText(15)} 18:00`);
+
+    await user.keyboard("{ArrowUp}");
+    expect(valueText()).toBe(`${dayText(15)} 08:00`);
+  });
+
+  it("wraps a window that ends after midnight", async () => {
+    render(DatePickerTime, {
+      props: {
+        hourFormat: "24",
+        defaultTime: "22:00",
+        minTime: "22:00",
+        maxTime: "06:00",
+      },
+    });
+    await pickDay(15);
+    await user.click(hours());
+    await user.keyboard("{ArrowDown}");
+
+    expect(valueText()).toBe(`${dayText(15)} 06:00`);
+  });
+
+  it("brings a typed time into the window", async () => {
+    render(DatePickerTime, {
+      props: { hourFormat: "24", minTime: "08:00", maxTime: "18:00" },
+    });
+    await pickDay(15);
+    await user.click(hours());
+    await user.keyboard("20");
+
+    expect(valueText()).toBe(`${dayText(15)} 18:00`);
+  });
+
+  it("keeps a minDate's day from starting before its time", async () => {
+    const now = new Date();
+    render(DatePickerTime, {
+      props: {
+        minDate: new Date(now.getFullYear(), now.getMonth(), 15, 14, 30),
+      },
+    });
+    await pickDay(15);
+
+    expect(valueText()).toBe(`${dayText(15)} 2:30 PM`);
+  });
+});

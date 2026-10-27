@@ -10,6 +10,9 @@
   export let hourFormat: ComponentProps<DatePicker>["hourFormat"] = "12";
   export let minuteStep = 1;
   export let defaultTime: ComponentProps<DatePicker>["defaultTime"] = "09:00";
+  export let minTime: ComponentProps<DatePicker>["minTime"] = undefined;
+  export let maxTime: ComponentProps<DatePicker>["maxTime"] = undefined;
+  export let minDate: ComponentProps<DatePicker>["minDate"] = null;
   export let value: ComponentProps<DatePicker>["value"] = "";
   export let valueFrom = "";
   export let valueTo = "";
@@ -26,6 +29,9 @@
   {minuteStep}
   {defaultTime}
   {inline}
+  {minTime}
+  {maxTime}
+  {minDate}
   bind:value
   bind:valueFrom
   bind:valueTo
