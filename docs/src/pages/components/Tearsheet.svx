@@ -42,6 +42,14 @@ The `close` event fires with `trigger` set to `"close-button"`, `"escape-key"`, 
 
 ## Slots
 
+### Influencer
+
+Put context for the task in the `influencer` slot, such as a list of steps. It sits beside the body, on the layer surface so fields in it contrast. Set `influencerPosition` to `"start"` or `"end"` for the side, and `influencerWidth` to `"narrow"` (256px, the default) or `"wide"` (320px). The rail comes before or after the body in the document, so keyboard focus follows the layout. Below the `md` breakpoint it stacks with the body instead. Wide tearsheets only.
+
+Keep `slot="influencer"` outside an `{#if}` block under Svelte 5, where a slotted element inside a block does not compile. Render the content conditionally inside the slot instead.
+
+<FileSource src="/framed/Tearsheet/TearsheetInfluencer" />
+
 ### Header actions
 
 Put buttons in the `headerActions` slot to place them beside the title. Wide tearsheets only.
@@ -53,6 +61,14 @@ Put buttons in the `headerActions` slot to place them beside the title. Wide tea
 Put an [AILabel](/components/AILabel) in the `decorator` slot to mark AI-generated content. The tearsheet takes the AI surface.
 
 <FileSource src="/framed/Tearsheet/TearsheetAILabel" />
+
+## Stacking
+
+Opening a tearsheet over another stacks them: the first scales back and rises so its upper edge shows, and the page dims in steps. Stacking follows the order the tearsheets open, wherever they sit in the markup. The tearsheet beneath is inert, and closing the top one returns focus to where it was in the one beneath. Three levels show; more open tearsheets share the last level, and the first one that goes past three warns once.
+
+Render the tearsheets as siblings. A tearsheet written inside another one's content is placed and clipped by the one it sits in, which is scaled back and inert once it is covered. Wrap it in a [Portal](/components/Portal) to open it from there.
+
+<FileSource src="/framed/Tearsheet/TearsheetStacking" />
 
 ## Layering
 
@@ -75,4 +91,6 @@ To open a tearsheet from inside a modal, or from another overlay with a `transfo
 | Use `actions` for transactional work, and leave the slot out for read-only content | Its presence decides the close button and the outside-click rule, as in Carbon v11. |
 | Put a Modal that a tearsheet opens inside the tearsheet | A page-level Modal that comes earlier in the document sits under the tearsheet, which shares its z-index. |
 | Wrap a tearsheet rendered inside a modal or other transformed container in a Portal | The tearsheet is fixed to the window, and a transformed ancestor becomes its containing block. |
+| Open a second tearsheet from the first, not from the page | Focus returns into the first, and it scales back. |
+| Render stacked tearsheets as siblings, or wrap a nested one in a Portal | A tearsheet inside another is placed by the one it sits in, and goes inert with it. |
 | Give a tearsheet a `title`, or an `aria-label` | The dialog needs a name, and the title provides it. |
