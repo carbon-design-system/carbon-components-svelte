@@ -266,7 +266,7 @@ A `HeaderAction` reveals a panel from the right edge.
 
 ### App switcher
 
-The panel does not animate by default. Enable a slide transition by passing [transition:slide params](https://svelte.dev/docs#slide) to `transition`, for example `{ duration: 200 }`, to customize duration, delay, and easing.
+The panel does not animate by default. Set `transition` to `true` for Carbon's [slide](/motion#transitions), which runs for 240 ms (`moderate02`). Pass slide parameters to customize it, for example `{ duration: "slow01" }`, or `{ fn }` to use another transition. The `HeaderAction`, `HeaderSwitcher`, and `ProfileMenu` panels all take the same prop. Under `prefers-reduced-motion: reduce` the panel opens and closes at once.
 
 <FileSource src="/framed/UIShell/HeaderSwitcher" />
 
@@ -430,7 +430,7 @@ Add `ProfileMenuDetail` for labelled values with a trailing action, and pass an 
 
 ### Events
 
-`ProfileMenu` dispatches `open` and `close` as the menu toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, `"escape-key"`, or `"select"` (`close` only). Activating a `ProfileMenuItem` closes the menu and dispatches `close` with `trigger: "select"`. Call `event.preventDefault()` in the item's `click` handler to keep the menu open. Focus returns to the trigger only if it would otherwise be lost. Set `preventCloseOnClickOutside` to keep the menu open when the user clicks elsewhere on the page, and `transition` (for example `{ duration: 200 }`) to animate the menu open and closed — by default it does not animate.
+`ProfileMenu` dispatches `open` and `close` as the menu toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, `"escape-key"`, or `"select"` (`close` only). Activating a `ProfileMenuItem` closes the menu and dispatches `close` with `trigger: "select"`. Call `event.preventDefault()` in the item's `click` handler to keep the menu open. Focus returns to the trigger only if it would otherwise be lost. Set `preventCloseOnClickOutside` to keep the menu open when the user clicks elsewhere on the page, and `transition` (`true`, or slide parameters such as `{ duration: "slow01" }`) to animate the menu open and closed. By default it does not animate.
 
 ```svelte
 <ProfileMenu
