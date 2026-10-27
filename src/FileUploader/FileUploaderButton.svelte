@@ -336,7 +336,7 @@
   aria-label={hasIconOnly ? iconDescription : labelText}
   class:bx--visually-hidden={true}
   {...inputRestProps}
-  on:change|stopPropagation={(event) => {
+  on:change={(event) => {
     processIncoming([.../** @type {HTMLInputElement} */ (event.target).files]);
   }}
   on:click
