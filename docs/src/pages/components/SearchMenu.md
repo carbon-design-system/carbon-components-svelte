@@ -17,17 +17,17 @@ Render `SearchMenuItem` children to display suggestions. Each item highlights th
 
 ## Sizes
 
-Set `size` to control the search input height, matching the [Search](/components/Search) input sizing. The default is extra-large (`"xl"`). By default the results menu adjusts to match the input: row height, text inset, and the leading-icon gutter all align with the input for the chosen size.
+Set `size` to control the search input height, matching the [Search](/components/Search) input sizing. The default is large (`"lg"`, 40px), the height of the other fields; a `Form` or `InputGroup` passes its size down. By default the results menu adjusts to match the input: row height, text inset, and the leading-icon gutter all align with the input for the chosen size.
 
 ### Extra large
 
-The default. Set `size` to `"xl"` for an extra-large search input.
+Set `size` to `"xl"` for an extra-large search input.
 
 <FileSource src="/framed/SearchMenu/SizeExtraLarge" />
 
 ### Large
 
-Set `size` to `"lg"` for a large search input.
+The default, `"lg"`.
 
 <FileSource src="/framed/SearchMenu/SizeLarge" />
 
