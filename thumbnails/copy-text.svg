@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>copy-text</title>
+    <g id="copy-text" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="line-1" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="66" width="168" height="6"></rect>
+        <rect id="line-2-start" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="87" width="36" height="6"></rect>
+        <rect id="value" fill="var(--cds-layer-accent-active, #a8a8a8)" x="120" y="86" width="88" height="8"></rect>
+        <path id="copy-icon" fill="var(--cds-icon-primary, #161616)" transform="translate(212, 82) scale(0.5)" d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2ZM4,18H2V4A2,2,0,0,1,4,2H18V4H4Z"></path>
+        <rect id="line-3" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="107" width="120" height="6"></rect>
+    </g>
+</svg>
