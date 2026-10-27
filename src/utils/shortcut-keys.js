@@ -206,3 +206,50 @@ export function shortcutKeys(shortcut, apple) {
   }
   return keys;
 }
+
+/** @type {Record<string, string>} */
+const ARIA_KEYS = {
+  " ": "Space",
+  escape: "Escape",
+  enter: "Enter",
+  tab: "Tab",
+  backspace: "Backspace",
+  delete: "Delete",
+  arrowup: "ArrowUp",
+  arrowdown: "ArrowDown",
+  arrowleft: "ArrowLeft",
+  arrowright: "ArrowRight",
+  pageup: "PageUp",
+  pagedown: "PageDown",
+  home: "Home",
+  end: "End",
+};
+
+/**
+ * The `aria-keyshortcuts` value for one or more shortcuts, such as
+ * `"Meta+K"` on Apple platforms and `"Control+K"` elsewhere.
+ * @param {string | ReadonlyArray<string>} shortcut
+ * @param {{ apple?: boolean }} [options]
+ * @returns {string}
+ */
+export function ariaKeyShortcuts(shortcut, options = {}) {
+  const apple = options.apple ?? isApplePlatform();
+  const list = typeof shortcut === "string" ? [shortcut] : [...shortcut];
+  return list
+    .map((entry) => {
+      const parsed = parseShortcut(entry);
+      if (!parsed) return "";
+      const parts = [];
+      if (parsed.ctrl || (parsed.mod && !apple)) parts.push("Control");
+      if (parsed.alt) parts.push("Alt");
+      if (parsed.shift) parts.push("Shift");
+      if (parsed.meta || (parsed.mod && apple)) parts.push("Meta");
+      parts.push(
+        ARIA_KEYS[parsed.key] ??
+          (parsed.key.length === 1 ? parsed.key.toUpperCase() : parsed.key),
+      );
+      return parts.join("+");
+    })
+    .filter(Boolean)
+    .join(" ");
+}

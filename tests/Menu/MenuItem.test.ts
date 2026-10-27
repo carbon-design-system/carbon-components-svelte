@@ -1,9 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { syncPlatform } from "../../src/utils/shortcut-keys.js";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import MenuItemRadioGroupFixture from "./MenuItem.radioGroup.test.svelte";
 import MenuItemSelectableFixture from "./MenuItem.selectable.test.svelte";
+import MenuItemShortcut from "./MenuItem.shortcut.test.svelte";
 import MenuItemSlot from "./MenuItem.slot.test.svelte";
 import MenuItemFixture from "./MenuItem.test.svelte";
 
@@ -620,5 +622,63 @@ describe("MenuItem", () => {
         expect(screen.getByRole(role, { name: second })).toHaveFocus();
       }
     });
+  });
+});
+
+/** The text of an element with the whitespace between its keys removed. */
+const compact = (element: Element | null) =>
+  element?.textContent?.replace(/\s+/g, "");
+
+describe("MenuItem shortcut", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    syncPlatform();
+  });
+
+  async function openMenu() {
+    render(MenuItemShortcut);
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+  }
+
+  it("sets aria-keyshortcuts and shows the keys without changing the name", async () => {
+    await openMenu();
+
+    const item = screen.getByRole("menuitem", { name: "Palette" });
+    expect(item).toHaveAttribute("aria-keyshortcuts", "Control+Shift+P");
+    const info = item.querySelector(".bx--menu-option__info");
+    expect(info?.querySelector(".bx--keyboard-shortcut")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+    expect(compact(info)).toBe("Ctrl+Shift+P");
+  });
+
+  it("follows the platform", async () => {
+    vi.spyOn(window.navigator, "platform", "get").mockReturnValue("MacIntel");
+    await openMenu();
+    await tick();
+
+    const item = screen.getByRole("menuitem", { name: "Palette" });
+    expect(item).toHaveAttribute("aria-keyshortcuts", "Shift+Meta+P");
+    expect(compact(item.querySelector(".bx--menu-option__info"))).toBe("⇧⌘P");
+  });
+
+  it("lets shortcutText replace the keys and keeps aria-keyshortcuts", async () => {
+    await openMenu();
+
+    const item = screen.getByRole("menuitem", { name: "Save Save it" });
+    expect(item).toHaveAttribute("aria-keyshortcuts", "Control+S");
+    expect(item.querySelector(".bx--menu-option__info")).toHaveTextContent(
+      "Save it",
+    );
+    expect(item.querySelector(".bx--keyboard-shortcut")).toBeNull();
+  });
+
+  it("renders nothing for an item with no shortcut", async () => {
+    await openMenu();
+
+    const item = screen.getByRole("menuitem", { name: "Plain" });
+    expect(item).not.toHaveAttribute("aria-keyshortcuts");
+    expect(item.querySelector(".bx--menu-option__info")).toBeNull();
   });
 });

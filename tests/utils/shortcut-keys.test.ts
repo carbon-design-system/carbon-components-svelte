@@ -1,4 +1,5 @@
 import {
+  ariaKeyShortcuts,
   isApplePlatform,
   parseShortcut,
   shortcutKeys,
@@ -83,6 +84,27 @@ describe("shortcutKeys", () => {
 
   it("returns no keys for an unparseable shortcut", () => {
     expect(shortcutKeys("hyper+k", true)).toEqual([]);
+  });
+});
+
+describe("ariaKeyShortcuts", () => {
+  it("names mod Meta on Apple platforms and Control elsewhere", () => {
+    expect(ariaKeyShortcuts("mod+shift+p", { apple: true })).toBe(
+      "Shift+Meta+P",
+    );
+    expect(ariaKeyShortcuts("mod+shift+p", { apple: false })).toBe(
+      "Control+Shift+P",
+    );
+  });
+
+  it("uses the ARIA names for named keys and joins several shortcuts", () => {
+    expect(ariaKeyShortcuts(["esc", "alt+up"], { apple: false })).toBe(
+      "Escape Alt+ArrowUp",
+    );
+  });
+
+  it("skips an unparseable shortcut", () => {
+    expect(ariaKeyShortcuts("hyper+k", { apple: false })).toBe("");
   });
 });
 

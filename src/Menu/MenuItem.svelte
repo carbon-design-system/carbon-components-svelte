@@ -49,6 +49,16 @@
   export let shortcutText = "";
 
   /**
+   * Specify the keyboard shortcut, such as `"mod+s"`.
+   * `mod` is Command on Apple platforms and Control elsewhere. It sets
+   * `aria-keyshortcuts` and shows the keys with `KeyboardShortcut`.
+   * `shortcutText` and the "shortcutText" slot replace the visible keys
+   * and leave `aria-keyshortcuts` set.
+   * Display only; does not register a keybinding.
+   */
+  export let shortcut = "";
+
+  /**
    * Set to `true` to select the item.
    * Only applies to a selectable item or one inside
    * `MenuItemGroup` or `MenuItemRadioGroup`.
@@ -79,6 +89,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
+  import KeyboardShortcut from "../KeyboardShortcut/KeyboardShortcut.svelte";
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
@@ -88,6 +99,7 @@
     inlineKey,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { applePlatform, ariaKeyShortcuts } from "../utils/shortcut-keys.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Menu from "./Menu.svelte";
@@ -112,6 +124,9 @@
   let selectedOnce = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
+  $: keyShortcuts = shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform })
+    : "";
   // A submenu opens toward the inline end: the left in RTL. Read when it
   // opens, since nothing reports a `dir` change.
   $: if (submenuOpen) {
@@ -217,6 +232,7 @@
   aria-checked={isIndented ? (selected ? "true" : "false") : undefined}
   aria-haspopup={hasSubmenu ? true : undefined}
   aria-expanded={hasSubmenu ? (submenuOpen ? "true" : "false") : undefined}
+  aria-keyshortcuts={keyShortcuts || undefined}
   title={labelText}
   class:bx--menu-option={true}
   class:bx--menu-option--disabled={disabled}
@@ -300,9 +316,16 @@
       <div class:bx--menu-option__info={true}>
         <CaretRight />
       </div>
-    {:else if shortcutText || $$slots.shortcutText}
+    {:else if shortcutText || $$slots.shortcutText || shortcut}
       <div class:bx--menu-option__info={true}>
-        <slot name="shortcutText">{shortcutText}</slot>
+        <slot name="shortcutText"
+          >{#if shortcutText}{shortcutText}{:else}<KeyboardShortcut
+              {shortcut}
+              size="sm"
+              variant="muted"
+              decorative
+            />{/if}</slot
+        >
       </div>
     {/if}
   </div>

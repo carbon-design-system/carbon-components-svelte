@@ -19,6 +19,7 @@
     --ccs-kbd-border-bottom-color: #{$border-strong};
     --ccs-kbd-color: #{$text-primary};
     --ccs-kbd-font-size: #{to-rem(12px)};
+    --ccs-kbd-font-weight: 400;
 
     display: inline-flex;
     box-sizing: border-box;
@@ -32,7 +33,7 @@
     border-radius: to-rem(2px);
     color: var(--ccs-kbd-color);
     font-size: var(--ccs-kbd-font-size);
-    font-weight: 400;
+    font-weight: var(--ccs-kbd-font-weight);
     letter-spacing: 0;
     line-height: 1;
     min-inline-size: var(--ccs-kbd-min-inline-size);
@@ -62,10 +63,10 @@
     --ccs-kbd-background: transparent;
     --ccs-kbd-color: #{$text-secondary};
     --ccs-kbd-font-size: inherit;
+    --ccs-kbd-font-weight: 600;
 
     border: 0;
     font-family: inherit;
-    font-weight: 600;
   }
 
   // The secondary text color is for the layer surfaces. On a button or an
@@ -76,6 +77,14 @@
   .#{$prefix}--tooltip-portal__content .#{$prefix}--kbd--muted,
   .#{$prefix}--toggletip-content .#{$prefix}--kbd--muted {
     --ccs-kbd-color: currentcolor;
+  }
+
+  // A menu row recolors its text for the disabled state and the danger
+  // hover, and `shortcutText` has always matched the label's color and
+  // weight. A shortcut keeps both, so the keys differ only in their glyphs.
+  .#{$prefix}--menu-option__info .#{$prefix}--kbd--muted {
+    --ccs-kbd-color: currentcolor;
+    --ccs-kbd-font-weight: 400;
   }
 }
 

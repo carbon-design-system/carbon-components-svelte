@@ -71,6 +71,16 @@
   export let shortcutText = "";
 
   /**
+   * Specify the keyboard shortcut, such as `"mod+s"`.
+   * `mod` is Command on Apple platforms and Control elsewhere. It sets
+   * `aria-keyshortcuts` and shows the keys with `KeyboardShortcut`.
+   * `shortcutText` and the "shortcutText" slot replace the visible keys
+   * and leave `aria-keyshortcuts` set.
+   * Display only; does not register a keybinding.
+   */
+  export let shortcut = "";
+
+  /**
    * Specify the id.
    * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    */
@@ -84,6 +94,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import KeyboardShortcut from "../KeyboardShortcut/KeyboardShortcut.svelte";
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
@@ -96,6 +107,7 @@
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitMenuAxis } from "../utils/menu-placement.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
+  import { applePlatform, ariaKeyShortcuts } from "../utils/shortcut-keys.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -186,6 +198,9 @@
   $: isSelectable = !!ctxGroup || selectable;
   $: isRadio = !!ctxRadioGroup;
   $: subOptions = $$slots.default;
+  $: keyShortcuts = shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform })
+    : "";
   $: ctx.setPopup(submenuOpen);
   // The submenu opens toward the inline end (the left in RTL), flips when
   // it doesn't fit, and pins to the viewport edge when it fits on neither
@@ -233,6 +248,7 @@
   aria-disabled={disabled ? "true" : "false"}
   aria-haspopup={subOptions ? true : undefined}
   aria-expanded={subOptions ? (submenuOpen ? "true" : "false") : undefined}
+  aria-keyshortcuts={keyShortcuts || undefined}
   class:bx--menu-option={true}
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={subOptions && submenuOpen}
@@ -385,7 +401,14 @@
         <slot name="labelChildren">{labelText}</slot>
       </span>
       <div class:bx--menu-option__info={true}>
-        <slot name="shortcutText">{shortcutText}</slot>
+        <slot name="shortcutText"
+          >{#if shortcutText || !shortcut}{shortcutText}{:else}<KeyboardShortcut
+              {shortcut}
+              size="sm"
+              variant="muted"
+              decorative
+            />{/if}</slot
+        >
       </div>
     </div>
   {/if}

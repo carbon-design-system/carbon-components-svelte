@@ -35,3 +35,12 @@ export function parseShortcut(shortcut: string): ParsedShortcut | null;
 
 /** The key caps for a shortcut in platform order. Empty when unparseable. */
 export function shortcutKeys(shortcut: string, apple: boolean): ShortcutKey[];
+
+/**
+ * The `aria-keyshortcuts` value for one or more shortcuts, such as
+ * `"Meta+K"` on Apple platforms and `"Control+K"` elsewhere.
+ */
+export function ariaKeyShortcuts(
+  shortcut: string | ReadonlyArray<string>,
+  options?: { apple?: boolean },
+): string;

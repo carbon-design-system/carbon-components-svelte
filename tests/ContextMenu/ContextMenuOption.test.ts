@@ -1,11 +1,13 @@
 import { render, screen, waitFor } from "@testing-library/svelte";
 import CopyFile from "carbon-icons-svelte/lib/CopyFile.svelte";
 import { tick } from "svelte";
+import { syncPlatform } from "../../src/utils/shortcut-keys.js";
 import { user } from "../utils/user";
 import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuGroup from "./ContextMenuGroup.test.svelte";
 import ContextMenuOptionKeepOpenFixture from "./ContextMenuOption.keepOpen.test.svelte";
 import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
+import ContextMenuOptionShortcut from "./ContextMenuOption.shortcut.test.svelte";
 import ContextMenuOptionSelectableIconBind from "./ContextMenuOptionSelectableIconBind.test.svelte";
 import ContextMenuSelection from "./ContextMenuSelection.test.svelte";
 import { getSelectedIds } from "./helpers";
@@ -268,5 +270,45 @@ describe("ContextMenuOption hover transfer to a flush submenu", () => {
     await wait(HOVER_DELAY);
 
     expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+});
+
+/** The text of an element with the whitespace between its keys removed. */
+const compact = (element: Element | null) =>
+  element?.textContent?.replace(/\s+/g, "");
+
+describe("ContextMenuOption shortcut", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    syncPlatform();
+  });
+
+  it("sets aria-keyshortcuts and shows the keys without changing the name", () => {
+    render(ContextMenuOptionShortcut);
+
+    const option = screen.getByRole("menuitem", { name: "Palette" });
+    expect(option).toHaveAttribute("aria-keyshortcuts", "Control+Shift+P");
+    const info = option.querySelector(".bx--menu-option__info");
+    expect(info?.querySelector(".bx--keyboard-shortcut")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+    expect(compact(info)).toBe("Ctrl+Shift+P");
+  });
+
+  it("lets shortcutText replace the keys and keeps aria-keyshortcuts", () => {
+    render(ContextMenuOptionShortcut);
+
+    const option = screen.getByRole("menuitem", { name: "Save Save it" });
+    expect(option).toHaveAttribute("aria-keyshortcuts", "Control+S");
+    expect(option.querySelector(".bx--keyboard-shortcut")).toBeNull();
+  });
+
+  it("leaves an option with no shortcut without the attribute", () => {
+    render(ContextMenuOptionShortcut);
+
+    expect(screen.getByRole("menuitem", { name: "Plain" })).not.toHaveAttribute(
+      "aria-keyshortcuts",
+    );
   });
 });
