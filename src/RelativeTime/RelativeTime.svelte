@@ -55,6 +55,7 @@
 
   import { onMount } from "svelte";
   import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
+  import { localeDirection } from "../utils/locale-direction.js";
   import { subscribeRelativeTimeTick } from "../utils/relative-time-timer-pool.js";
   import {
     formatRelativeTime,
@@ -84,6 +85,11 @@
         style,
       })
     : "";
+  // Intl writes the text for its own locale. Lay it out in that direction,
+  // isolated from the page, so "1 hr. ago" does not read "hr. ago 1" on an
+  // RTL page. A custom slot has no known locale, so its text picks its own.
+  /** @type {"auto" | "ltr" | "rtl"} */
+  $: dir = $$slots.default ? "auto" : localeDirection(locale);
   $: isoString = valid ? new Date(timestamp).toISOString() : undefined;
   $: absoluteTitle = valid
     ? getDateTimeFormatter(
@@ -113,6 +119,6 @@
   });
 </script>
 
-<time datetime={isoString} title={absoluteTitle} {...$$restProps}>
+<time datetime={isoString} title={absoluteTitle} {dir} {...$$restProps}>
   <slot {formatted}>{formatted}</slot>
 </time>
