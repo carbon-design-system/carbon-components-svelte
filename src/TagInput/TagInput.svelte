@@ -188,10 +188,10 @@
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
   $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
-  /** @type {"sm" | "lg" | "default"} */
+  /** @type {"xs" | "sm" | "lg" | "default"} */
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"
-      ? "sm"
+      ? effectiveSize
       : effectiveSize === "xl"
         ? "lg"
         : "default";

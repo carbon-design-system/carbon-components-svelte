@@ -40,7 +40,7 @@
   /** @type {(count: number) => string} */
   export let resultsLabel;
 
-  /** @type {"sm" | "default" | "lg" | "md" | undefined} */
+  /** @type {"xs" | "sm" | "default" | "lg" | "md" | undefined} */
   export let size = undefined;
 
   import { createEventDispatcher, setContext } from "svelte";

@@ -653,13 +653,13 @@ describe("MultiSelect", () => {
     });
 
     // The count tag follows the field's size like the selected-item tags:
-    // an 18px tag fits a 24px or 32px field.
+    // a 16px tag fits a 24px field, an 18px tag a 32px one.
     it.each([
-      ["xs", true],
-      ["sm", true],
-      [undefined, false],
-      ["lg", false],
-    ] as const)("sizes the count tag for a %s field", (size, small) => {
+      ["xs", "bx--tag--xs"],
+      ["sm", "bx--tag--sm"],
+      [undefined, undefined],
+      ["lg", undefined],
+    ] as const)("sizes the count tag for a %s field", (size, sizeClass) => {
       render(MultiSelect, {
         props: { items, selectedIds: ["0", "1"], size },
       });
@@ -667,7 +667,10 @@ describe("MultiSelect", () => {
       const tag = screen
         .getByRole("button", { name: "Clear all selected items" })
         .closest(".bx--tag");
-      expect(tag?.classList.contains("bx--tag--sm")).toBe(small);
+      const sizeClasses = [...(tag?.classList ?? [])].filter((name) =>
+        /^bx--tag--(xs|sm|lg)$/.test(name),
+      );
+      expect(sizeClasses).toEqual(sizeClass ? [sizeClass] : []);
     });
 
     it("moves focus directly to the next control when tabbing away with the menu open", async () => {

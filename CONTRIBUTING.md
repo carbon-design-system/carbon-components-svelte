@@ -182,7 +182,7 @@ Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/ut
 | ComboBox, Dropdown, MultiSelect, ListBox, their skeletons | `xs` 24, `sm` 32, unset 40, `lg` 48, `xl` 48 | `md` → unset | none |
 | Search, SearchSkeleton, SearchMenu, SearchMenuSkeleton | `xs` 24, `sm` 32, `lg` 40, `xl` 48 | `md` → `lg` | `lg` (v11 48) |
 | Accordion, ContentSwitcher, their skeletons, OverflowMenu | `xs` 24 (OverflowMenu only), `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
-| Tag, SelectableTag, OperationalTag, TagSkeleton, TagSet | `sm`, `default`, `lg` | `md` → `default` | none |
+| Tag, SelectableTag, OperationalTag, TagSkeleton, TagSet | `xs`, `sm`, `default`, `lg` | `md` → `default` | none |
 | Toggle, ToggleSkeleton | `sm`, `default` | `md` → `default` | none |
 | Modal, ComposedModal, ConfirmModal | `xs`, `sm`, unset, `lg` | `md` → unset | none |
 | TreeView, TreeViewSkeleton | `compact` 24, `default` 32 | `xs` → `compact`, `sm` → `default` | none |
