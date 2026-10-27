@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>unsaved-changes</title>
+    <g id="unsaved-changes" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="92" y="40" width="48" height="6"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="92" y="52" width="136" height="28"></rect>
+        <rect id="border" fill="var(--cds-border-strong, #8d8d8d)" x="92" y="79" width="136" height="1"></rect>
+        <rect id="value" fill="var(--cds-text-secondary, #525252)" x="104" y="62" width="64" height="8"></rect>
+        <circle id="dirty-dot" fill="var(--cds-support-warning, #f1c21b)" cx="214" cy="66" r="5"></circle>
+        <rect id="dialog" fill="var(--cds-layer-02, #ffffff)" x="92" y="92" width="136" height="56"></rect>
+        <rect id="dialog-title" fill="var(--cds-text-secondary, #525252)" x="104" y="102" width="72" height="6"></rect>
+        <rect id="dialog-body" fill="var(--cds-layer-accent-active, #a8a8a8)" x="104" y="114" width="96" height="4"></rect>
+        <rect id="keep" fill="var(--cds-button-secondary, #393939)" x="164" y="128" width="32" height="20"></rect>
+        <rect id="discard" fill="var(--cds-support-error, #da1e28)" x="196" y="128" width="32" height="20"></rect>
+    </g>
+</svg>

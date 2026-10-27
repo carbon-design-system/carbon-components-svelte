@@ -1533,6 +1533,20 @@ assets:
     tags:
       - data-display
       
+  unsaved-changes:
+    name: Unsaved changes
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/unsaved-changes.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UnsavedChanges
+    tags:
+      - input-control
   user-avatar:
     name: User avatar
     status: stable
