@@ -2,6 +2,7 @@
   import {
     AILabel,
     BigNumber,
+    Box,
     Button,
     Card,
     CardAction,
@@ -353,6 +354,12 @@ export async function rollback(region, id) {
     />
     <BigNumber labelText="Requests" locale="ar" value={2} delta={-1200000} />
   </div>
+  <Box data-testid="box-logical" paddingX={1} paddingStart={5} marginEnd={3}
+    >Logical sides</Box
+  >
+  <Box data-testid="box-logical-custom" marginX="2px" marginStart="20px"
+    >Custom logical sides</Box
+  >
 </Content>
 
 <style>
