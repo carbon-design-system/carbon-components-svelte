@@ -8,5 +8,12 @@
 </script>
 
 <ul>
-  <PaginationOverflow {fromIndex} {count} on:select={onSelect} />
+  <PaginationOverflow
+    {fromIndex}
+    {count}
+    total={10}
+    pageText={(page) => `Page ${page}`}
+    pageSelectLabelText={() => "Select page number"}
+    on:select={onSelect}
+  />
 </ul>
