@@ -67,7 +67,7 @@ $duration--slow-01: 400ms;
 /// @type Number
 /// @access public
 /// @group global-motion
-$duration--slow-02: 720ms;
+$duration--slow-02: 700ms; // ccs: match @carbon/motion and Carbon v11 (was 720ms)
 
 /// Default ease-out for components
 /// @access public
