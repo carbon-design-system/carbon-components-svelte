@@ -242,6 +242,7 @@
   <button bind:this={menuAnchor} type="button">Menu anchor</button>
   <Menu anchor={menuAnchor} open labelText="Menu">
     <MenuItem labelText="Item" />
+    <MenuItem labelText="Disabled item" shortcutText="⌘S" disabled />
   </Menu>
 
   <ShapeIndicator kind="medium" label="Medium" />
