@@ -721,6 +721,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Kbd
+  keyboard-shortcut:
+    name: Keyboard shortcut
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/keyboard-shortcut.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/KeyboardShortcut
   layer:
     name: Layer
     status: stable

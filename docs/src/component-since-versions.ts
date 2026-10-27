@@ -56,6 +56,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   InlineNotification: "0.2.0",
   InterstitialScreen: "0.112.0",
   Kbd: "0.114.0",
+  KeyboardShortcut: "0.114.0",
   Layer: "0.114.0",
   LayoutDirection: "0.114.0",
   Link: "0.2.0",

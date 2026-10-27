@@ -1,0 +1,84 @@
+---
+components: ["KeyboardShortcut"]
+description: KeyboardShortcut shows a shortcut such as Command + K as key caps in the form the reader's platform uses, as a hint beside a control or in a menu row.
+---
+
+<script>
+  import { Button, KeyboardShortcut, Stack, Text, Tooltip } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `shortcut` to the keys joined by `+`. `mod` is Command on Apple platforms and Control elsewhere, so one value serves every reader. `KeyboardShortcut` is display-only: it never listens for key presses, so you bind the keys yourself (see [Binding](#binding)).
+
+The other modifiers are `ctrl`, `alt`, `shift`, and `meta`. The last part is the key: a letter or digit, or a name such as `esc`, `enter`, `tab`, `space`, `up`, or `backspace`. A value that can't be parsed renders nothing.
+
+<Stack gap={5}>
+  <KeyboardShortcut shortcut="mod+k" />
+  <KeyboardShortcut shortcut="mod+shift+p" />
+  <KeyboardShortcut shortcut="alt+up" />
+</Stack>
+
+## Sizes
+
+Set `size` to control the height of each key. The default is `"default"` (24px). Use `"sm"` (20px) in dense rows and buttons.
+
+<Stack gap={5}>
+  <KeyboardShortcut shortcut="mod+k" />
+  <KeyboardShortcut shortcut="mod+k" size="sm" />
+</Stack>
+
+## Variants
+
+Set `variant` to `"muted"` for semibold text in the secondary color with no box, the way `Menu` shows shortcuts. On Apple platforms the glyphs run together (⇧⌘P); elsewhere the keys are joined by `+` (Ctrl+Shift+P).
+
+<Stack gap={5}>
+  <KeyboardShortcut shortcut="mod+shift+p" />
+  <KeyboardShortcut shortcut="mod+shift+p" variant="muted" />
+</Stack>
+
+## Custom keys
+
+Set `keys` to show exact caps instead of a parsed shortcut, such as a sequence of keys pressed one after another. Each string is drawn as written, so it does not change by platform.
+
+<KeyboardShortcut keys={["G", "I"]} />
+
+## Platform
+
+By default the keys follow the reader's browser. Set `apple` to `true` or `false` to force a form, for example in documentation that shows both.
+
+<Stack gap={5}>
+  <KeyboardShortcut shortcut="mod+alt+enter" apple />
+  <KeyboardShortcut shortcut="mod+alt+enter" apple={false} />
+</Stack>
+
+The server can't tell the platform, so it renders the form for other platforms (Ctrl) and the browser switches to Command once the page loads. Every `KeyboardShortcut` on the page switches together. When the server knows the platform, for example from the `User-Agent` header, pass `apple` so the first paint is already correct. To avoid the switch entirely, show the hint only after mount.
+
+## Screen readers
+
+Glyphs such as `⌘` and `⇧` are hidden from assistive technology and replaced by their names, so a reader hears "Shift Command P" and not a symbol name. Set `decorative` to `true` to hide the whole row when another attribute already names the shortcut, such as `aria-keyshortcuts` on the control.
+
+<Button>Search <KeyboardShortcut shortcut="mod+k" size="sm" decorative /></Button>
+
+## In a tooltip
+
+Place the hint in the tooltip's content. A muted hint takes the tooltip's text color.
+
+<Tooltip triggerText="Save" open>
+  <p>Save changes <KeyboardShortcut shortcut="mod+s" size="sm" variant="muted" /></p>
+</Tooltip>
+
+## Binding
+
+`KeyboardShortcut` only shows the keys. Handle the key press yourself and keep the two in step. Set `aria-keyshortcuts` on the control so assistive technology announces the shortcut, and hide the visual hint with `decorative`.
+
+<FileSource src="/framed/KeyboardShortcut/KeyboardShortcutBinding" />
+
+## Usage
+
+| Want | Use |
+| --- | --- |
+| A hint beside a control that already has its own key handler | `KeyboardShortcut` with `decorative`, and `aria-keyshortcuts` on the control. |
+| A single key in a button or tooltip, with no platform difference | [Kbd](/components/Kbd). |
+| Keys written inside running copy | [Prose](/components/Prose). |
+| A shortcut that also has to fire | Your own key handler. `KeyboardShortcut` never binds keys. |
