@@ -6,8 +6,9 @@ the page in kebab case (`ToggleButtonGroup.svx` →
 `thumbnailPath`, and they're the preview a catalog shows next to the
 component name.
 
-New components usually ship without one, and without the `carbon.yml`
-entry that makes the catalog show it. Check both before each release.
+A new component needs both a thumbnail and the `carbon.yml` entry that
+makes the catalog show it. CI runs `bun run thumbnails catalog` on every
+PR, and it fails when either is missing.
 
 ## Find what's missing
 

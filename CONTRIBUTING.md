@@ -81,7 +81,7 @@ Patterns:
 - Take an `id` prop and derive every inner id from it (`{id}-title`). Fall back to `uniqueId()` from [`unique-id.js`](src/utils/unique-id.js) only when `id` is unset, so prerendered HTML stays the same and hydration keeps the ids. See `fallbackId` in [`InlineNotification.svelte`](src/Notification/InlineNotification.svelte).
 - Key `{#each}` blocks, for example `(item.id ?? index)` (see [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte)).
 - For large lists, iterate ids, not objects. In Svelte 5's legacy mode, an `{#each}` over objects treats every item as changed whenever the array is reassigned, so a sort or filter re-runs every row's markup even when no row changed. Iterating a primitive id array and looking the row up by id lets a reorder only move rows. See `rowIdsToRender` in [`DataTable.svelte`](src/DataTable/DataTable.svelte), which cut a 1,000-row sort from about 61 ms to 45 ms. Svelte 3 and 4 compare keyed items by reference and don't have this cost.
-- Put shared logic in `src/utils/`, for example [`debounce.js`](src/utils/debounce.js) and [`is-outside-click.js`](src/utils/is-outside-click.js). Prefer pure, DOM-free functions for layout, geometry, and state-decision math (see [`virtualize.js`](src/utils/virtualize.js)). They are unit-testable in isolation, so edge cases get covered once in a util test instead of through expensive component renders.
+- In `src/utils/`, prefer pure, DOM-free functions for layout, geometry, and state-decision math (see [`virtualize.js`](src/utils/virtualize.js)). They are unit-testable in isolation, so edge cases get covered once in a util test instead of through expensive component renders.
 - ComboBox, Dropdown, and MultiSelect share listbox behavior (virtualization, keyboard navigation, outside-click) through `src/utils/`. When you change shared menu behavior, apply and test the change in all three. The per-component wiring is parallel but not abstracted.
 - Use Carbon v10 markup: `bx--` BEM classes in templates; SCSS patches use `$prefix` and tokens. See [Custom styles](#custom-styles-patching-carbon-v10).
 - Do not add themeable styles in per-component `<style>` blocks (see [Custom styles](#custom-styles-patching-carbon-v10)).
@@ -575,7 +575,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 4. Add framed examples only where interactivity requires them
 5. Add the page to a category in `docs/src/component-categories.ts` and its first version to `docs/src/component-since-versions.ts`
 6. Preview with `cd docs && bun dev`
-7. Add a catalog thumbnail at `thumbnails/{component-name}.svg`. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
+7. Add a catalog thumbnail at `thumbnails/{component-name}.svg` and its `carbon.yml` entry. CI runs `bun run thumbnails catalog`, which fails when either is missing. See [`thumbnails/README.md`](thumbnails/README.md) for the design principles and recipe
 8. Add an aria-forwarding case in `tests/aria-forwarding/cases/`, or an exemption with the reason. `tests/aria-forwarding/coverage.test.ts` fails for an interactive component that has neither
 
 ### Custom styles (patching Carbon v10)
@@ -1469,12 +1469,6 @@ The following applies only to project maintainers.
 This library publishes to NPM with [provenance](https://docs.npmjs.com/generating-provenance-statements) via a [GitHub workflow](https://github.com/carbon-design-system/carbon-components-svelte/blob/master/.github/workflows/release.yml).
 
 Pushing a tag that starts with `v` (for example `v0.81.1`) triggers the workflow. It runs `bun ci` and `bun run release:build` (generates docs and types, strips doc comments, builds every CSS theme, and prunes `package.json`), checks the package contents with `scripts/check-package-contents.ts`, then publishes to NPM.
-
-Maintainers still do a few things locally before tagging.
-
-Check that every component added since the last release has a
-thumbnail: `bun run thumbnails missing`. See
-[`thumbnails/README.md`](thumbnails/README.md) for drawing them.
 
 On a clean `master` branch, run `bun run release`. That will:
 
