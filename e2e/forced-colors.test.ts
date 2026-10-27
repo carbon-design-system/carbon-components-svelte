@@ -710,6 +710,28 @@ test.describe("forced colors", () => {
     }
   });
 
+  // A key cap is drawn by its border; keys inside a button take the
+  // button's text color, GrayText when it's disabled.
+  test("Kbd keeps its edge, and shortcut keys follow their button", async ({
+    page,
+  }) => {
+    expect
+      .soft(await style(page, "#fc-kbd .bx--kbd__key"), "#fc-kbd")
+      .toMatchObject({ borderColor: system.CanvasText });
+    const ids = ["#fc-kbd-button", "#fc-kbd-button-disabled"];
+    const pairs = await Promise.all(
+      ids.map((id) =>
+        Promise.all([style(page, id), style(page, `${id} .bx--kbd__key`)]),
+      ),
+    );
+    pairs.forEach(([button, key], i) => {
+      expect.soft(key, ids[i]).toMatchObject({ color: button.color });
+    });
+    expect
+      .soft(await style(page, "#fc-kbd-button-disabled"))
+      .toMatchObject({ color: system.GrayText });
+  });
+
   // A button would read as ButtonText; "View all" looks and acts as a link.
   // The popover builds it on the first open.
   test("TagSet's View all reads as a link", async ({ page }) => {
