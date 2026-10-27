@@ -108,6 +108,28 @@ function weekdayShorthand(locale, dateAt) {
 }
 
 /**
+ * The locale's AM and PM names ("午前", "午後"), read from a 12-hour
+ * format of 01:00 and 13:00.
+ *
+ * @param {string} locale
+ * @returns {[string, string] | undefined}
+ */
+function dayPeriodNames(locale) {
+  const formatter = getDateTimeFormatter(locale, {
+    hour: "numeric",
+    hour12: true,
+  });
+  /** @param {number} hour */
+  const period = (hour) =>
+    formatter
+      .formatToParts(new Date(2000, 0, 1, hour))
+      .find((part) => part.type === "dayPeriod")?.value;
+  const am = period(1);
+  const pm = period(13);
+  return am && pm ? [am, pm] : undefined;
+}
+
+/**
  * @param {string} locale BCP 47 language tag
  * @returns {CalendarLocale}
  */
@@ -144,6 +166,7 @@ function buildIntlLocale(locale) {
     },
     firstDayOfWeek: resolveWeekInfo(resolved).firstDay,
     rangeSeparator: CARBON_ENGLISH.rangeSeparator,
+    amPM: dayPeriodNames(gregorian),
   };
   localeCache.set(locale, built);
   return built;
