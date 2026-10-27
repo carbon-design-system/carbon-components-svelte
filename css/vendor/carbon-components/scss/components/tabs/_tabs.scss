@@ -991,6 +991,10 @@
 /// @access private
 /// @group components
 @mixin tabs-vertical-row($root) {
+  // A box shadow has no logical form; `--ccs-inline-sign` puts the
+  // divider at each later tab's inline start under `dir="rtl"`.
+  $divider-x: calc(1px * var(--ccs-inline-sign, 1));
+
   // The nav is an absolutely-positioned dropdown overlay by default. It is
   // no longer an overlay here, so unlike the vendor original it stays
   // transparent (matching contained `Tabs`) rather than painting a solid
@@ -1020,7 +1024,7 @@
   #{$root}
     .#{$prefix}--tabs__nav-item
     + .#{$prefix}--tabs__nav-item {
-    box-shadow: inset 1px 0 0 0 $border-strong;
+    box-shadow: inset $divider-x 0 0 0 $border-strong;
   }
 
   // Outranks the base hover rule (`item:hover + item { box-shadow: none }`)
@@ -1095,12 +1099,17 @@
   }
 }
 
-/// Vertical tabs as a fixed left column with a per-item left indicator.
+/// Vertical tabs as a fixed column at the inline start, with a per-item
+/// indicator on its inline-start edge.
 /// `$root` is the orientation marker the rules key off (see
 /// `tabs-vertical`).
 /// @access private
 /// @group components
 @mixin tabs-vertical-column($root) {
+  // A box shadow has no logical form; `--ccs-inline-sign` moves the
+  // indicator to the inline start under `dir="rtl"`.
+  $indicator-x: calc(3px * var(--ccs-inline-sign, 1));
+
   #{$root} {
     flex: 0 0 auto;
     // Fluid width (Carbon React spans a fixed ~25% of its Grid), bounded
@@ -1137,7 +1146,7 @@
   // so the indicator is not stripped.
   #{$root}
     .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled) {
-    box-shadow: inset 3px 0 0 0 $border-subtle;
+    box-shadow: inset $indicator-x 0 0 0 $border-subtle;
   }
 
   // Re-assert the bottom separator that the base `--selected { border: none }`
@@ -1146,13 +1155,13 @@
     .#{$prefix}--tabs__nav-item--selected:not(.#{$prefix}--tabs__nav-item--disabled) {
     border-block-end: 1px solid $border-subtle;
     border-inline-end: 1px solid transparent;
-    box-shadow: inset 3px 0 0 0 $interactive;
+    box-shadow: inset $indicator-x 0 0 0 $interactive;
   }
 
   #{$root}
     .#{$prefix}--tabs__nav-item--disabled {
     background-color: $layer;
-    box-shadow: inset 3px 0 0 0 $border-subtle;
+    box-shadow: inset $indicator-x 0 0 0 $border-subtle;
   }
 
   // ccs: hover rules for this breakpoint, guarded together, same relative
@@ -1161,13 +1170,13 @@
     #{$root}
       .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
       background-color: $layer-hover;
-      box-shadow: inset 3px 0 0 0 $border-strong;
+      box-shadow: inset $indicator-x 0 0 0 $border-strong;
     }
 
     #{$root}
       .#{$prefix}--tabs__nav-item--disabled:hover {
       background-color: $layer;
-      box-shadow: inset 3px 0 0 0 $border-subtle;
+      box-shadow: inset $indicator-x 0 0 0 $border-subtle;
     }
 
     // Remove the base hover-link bottom border, which would shift the label.
@@ -1245,7 +1254,7 @@
 
 /// Vertical tabs (Carbon v11 `TabsVertical` parity), authored from the v11 token
 /// map since Carbon v10 ships no vertical variant. At `md` and up the tab list
-/// is a fixed left column with a per-item left indicator; below `md` it is a
+/// is a fixed inline-start column with a per-item indicator; below `md` it is a
 /// horizontal, scrollable row of contained tabs. The component drops
 /// `bx--tabs--container`, so these rules refine the default-tab rules. Each
 /// layout keys off one marker class the component always renders:

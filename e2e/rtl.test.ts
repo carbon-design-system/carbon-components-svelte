@@ -786,6 +786,48 @@ test.describe("right-to-left layout", () => {
     expect(caretBox && labelBox && caretBox.x < labelBox.x).toBe(true);
   });
 
+  // Inset box shadows draw the indicator and the row dividers. A box
+  // shadow has no logical form, so each x offset follows the direction.
+  test("draws TabsVertical indicators and dividers at the inline start", async ({
+    page,
+  }) => {
+    const column = page
+      .getByTestId("tabs-vertical")
+      .locator(".bx--tabs__nav-item");
+    const row = page
+      .getByTestId("tabs-vertical-row")
+      .locator(".bx--tabs__nav-item");
+    const shadow = (locator: Locator) =>
+      locator.evaluate((node) => getComputedStyle(node).boxShadow);
+    const offset = async (locator: Locator) => {
+      const x = (await shadow(locator)).match(/(-?[\d.]+)px/);
+      return x ? Number.parseFloat(x[1]) : 0;
+    };
+
+    for (const [dir, sign] of [
+      ["ltr", 1],
+      ["rtl", -1],
+    ] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      expect
+        .soft(await offset(column.nth(0)), `${dir} selected`)
+        .toBe(3 * sign);
+      expect.soft(await offset(column.nth(1)), `${dir} plain`).toBe(3 * sign);
+      expect
+        .soft(await offset(column.nth(2)), `${dir} disabled`)
+        .toBe(3 * sign);
+      expect.soft(await offset(row.nth(2)), `${dir} row divider`).toBe(sign);
+
+      // The hover rule repaints the indicator; wait for its color.
+      const rest = await shadow(column.nth(1));
+      await column.nth(1).hover();
+      await expect.poll(() => shadow(column.nth(1))).not.toBe(rest);
+      expect.soft(await offset(column.nth(1)), `${dir} hover`).toBe(3 * sign);
+      await page.mouse.move(0, 0);
+    }
+  });
+
   test("mirrors a Slider and a RangeSlider once the pointer reaches them", async ({
     page,
   }) => {

@@ -38,6 +38,8 @@
     SideNavMenuItem,
     SkipToContent,
     Slider,
+    Tab,
+    TabsVertical,
     TreeView,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
@@ -360,6 +362,20 @@ export async function rollback(region, id) {
   <Box data-testid="box-logical-custom" marginX="2px" marginStart="20px"
     >Custom logical sides</Box
   >
+  <div data-testid="tabs-vertical">
+    <TabsVertical orientation="vertical">
+      <Tab label="Overview" />
+      <Tab label="Logs" />
+      <Tab label="Settings" disabled />
+    </TabsVertical>
+  </div>
+  <div data-testid="tabs-vertical-row">
+    <TabsVertical orientation="horizontal">
+      <Tab label="Overview" />
+      <Tab label="Logs" />
+      <Tab label="Settings" />
+    </TabsVertical>
+  </div>
 </Content>
 
 <style>
