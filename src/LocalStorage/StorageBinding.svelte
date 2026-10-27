@@ -13,11 +13,16 @@
   /** @type {any} */
   export let value;
 
-  /** @type {"on" | "off"} */
+  /**
+   * `"tabs"` also shares changes with other tabs over BroadcastChannel; only
+   * SessionStorage offers it, since localStorage already reaches other tabs.
+   * @type {"on" | "off" | "tabs"}
+   */
   export let sync = "on";
 
   import { createEventDispatcher, onMount, tick } from "svelte";
   import {
+    joinTabChannel,
     parseStoredValue,
     safeBrowserStorage,
     serializeStoredValue,
@@ -58,6 +63,54 @@
     }
   }
 
+  /** @type {null | ReturnType<typeof joinTabChannel>} */
+  let tabs = null;
+  // False while `key` holds only the seeded default: not hydrated from
+  // storage, written locally or received from another tab. Such a tab asks
+  // other tabs for the value and does not answer them, so two new tabs do
+  // not hand each other their defaults.
+  let hasState = false;
+
+  function requestTabState() {
+    if (!hasState) tabs?.post({ type: "hello", key });
+  }
+
+  /** @param {import("../utils/storage.js").TabMessage} message */
+  function handleTabMessage(message) {
+    if (message.type === "clear") {
+      applyRemoteChange(null);
+      return;
+    }
+    if (message.key !== key) return;
+
+    if (message.type === "hello") {
+      const item = storage.getItem(key);
+      if (hasState && item !== null) {
+        tabs?.post({ type: "state", key, value: item });
+      }
+      return;
+    }
+
+    if (message.type === "set" || (message.type === "state" && !hasState)) {
+      applyRemoteChange(message.value);
+    }
+  }
+
+  /**
+   * Another tab has no access to this tab's sessionStorage, so store the
+   * change here as well. Not re-broadcast.
+   * @param {string | null} serialized
+   */
+  function applyRemoteChange(serialized) {
+    hasState = true;
+    if (serialized === null) {
+      storage.removeItem(key);
+    } else {
+      setItem(serialized);
+    }
+    applyChange(serialized);
+  }
+
   /** @param {string | null} newValue */
   function applyChange(newValue) {
     // A null value means the key was removed or storage cleared. Reset so
@@ -78,6 +131,7 @@
 
   onMount(() => {
     const item = storage.getItem(key);
+    hasState = item != null;
 
     if (item == null) {
       setItem();
@@ -92,6 +146,7 @@
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       stopPeerChange?.();
+      tabs?.leave();
     };
   });
 
@@ -99,20 +154,29 @@
   let stopPeerChange = null;
 
   // Attach listeners for other tabs (storage event) and other instances on
-  // this page when sync is on. Re-run when sync changes.
+  // this page unless sync is off, plus the tab channel for "tabs". Re-run
+  // when sync changes.
   $: if (mounted) {
     window.removeEventListener("storage", handleStorageChange);
     stopPeerChange?.();
     stopPeerChange = null;
+    tabs?.leave();
+    tabs = null;
 
-    if (sync === "on") {
+    if (sync !== "off") {
       window.addEventListener("storage", handleStorageChange);
       stopPeerChange = storage.onPeerChange(handlePeerChange);
+    }
+
+    if (sync === "tabs") {
+      tabs = joinTabChannel(handleTabMessage);
+      requestTabState();
     }
   }
 
   $: if (mounted && key !== prevKey) {
     const item = storage.getItem(key);
+    hasState = item != null;
 
     if (item == null) {
       setItem();
@@ -122,6 +186,7 @@
 
     prevKey = key;
     prevSerialized = serializeStoredValue(value);
+    requestTabState();
   }
 
   $: if (mounted) {
@@ -134,6 +199,8 @@
       // synchronous dispatch that throws can abort the flush and block later writes.
       setItem(serialized);
       prevSerialized = serialized;
+      hasState = true;
+      tabs?.post({ type: "set", key, value: serialized });
       tick().then(() => dispatch("update", { prevValue, value: nextValue }));
     }
   }
@@ -147,6 +214,7 @@
     // Reset as a remote removal does, so the write block does not re-persist
     // the key that was just cleared.
     applyChange(null);
+    tabs?.post({ type: "set", key, value: null });
   }
 
   /**
@@ -156,5 +224,6 @@
   export function clearAll() {
     storage.clear();
     applyChange(null);
+    tabs?.post({ type: "clear" });
   }
 </script>
