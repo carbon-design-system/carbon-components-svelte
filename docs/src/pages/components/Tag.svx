@@ -1,10 +1,10 @@
 ---
-components: ["Tag", "SelectableTag", "OperationalTag", "TagSkeleton"]
+components: ["Tag", "SelectableTag", "SelectableTagGroup", "OperationalTag", "TagSkeleton"]
 description: Tags categorize content with a keyword or label, with various styles, sizes, and interactive states like filterable and selectable.
 ---
 
 <script>
-  import { AILabel, Box, Link, OperationalTag, Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
+  import { AILabel, Box, Link, OperationalTag, Stack, Tag, SelectableTag, SelectableTagGroup, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -279,6 +279,55 @@ Use the small size variant for selectable tags.
 Use the large size variant for selectable tags.
 
 <SelectableTag size="lg">Compliant</SelectableTag>
+
+### Group
+
+Wrap tags in `SelectableTagGroup` to own the selection for a set of filter chips. Give each tag a `value` and bind `selected`, an array of the selected values. `change` dispatches with the new array when a click changes the selection, and not when `selected` is set from outside.
+
+The group renders `role="group"` named by `legendText`; set `hideLegend` to hide the legend visually. Tags stay in the tab order and wrap onto more lines in a narrow parent. Press <DocKbd label="Space" /> or <DocKbd label="Enter" /> to toggle the focused tag. A tag in a group takes its selected state from the group, so a `selected` set on the tag is ignored. A tag without a `value` is identified by its `id`.
+
+<FileSource src="/framed/Tag/SelectableTagGroup" />
+
+### Single selection
+
+Set `selectionMode="single"` so at most one tag is selected. Selecting the selected tag clears it. Set `required` so the last selected tag can't be cleared, which works in both modes.
+
+<SelectableTagGroup selectionMode="single" legendText="Priority" selected={["medium"]}>
+  <SelectableTag value="low">Low</SelectableTag>
+  <SelectableTag value="medium">Medium</SelectableTag>
+  <SelectableTag value="high">High</SelectableTag>
+</SelectableTagGroup>
+
+<SelectableTagGroup selectionMode="single" required legendText="Priority (required)" selected={["medium"]}>
+  <SelectableTag value="low">Low</SelectableTag>
+  <SelectableTag value="medium">Medium</SelectableTag>
+  <SelectableTag value="high">High</SelectableTag>
+</SelectableTagGroup>
+
+### Group size
+
+Set `size` on the group to size every tag. A tag's own `size` wins. Set `disabled` to disable every tag.
+
+<Stack gap={6}>
+  <SelectableTagGroup size="sm" legendText="Small">
+    <SelectableTag value="a">Alpha</SelectableTag>
+    <SelectableTag value="b">Beta</SelectableTag>
+  </SelectableTagGroup>
+  <SelectableTagGroup size="lg" legendText="Large, with one small tag">
+    <SelectableTag value="a">Alpha</SelectableTag>
+    <SelectableTag value="b" size="sm">Beta</SelectableTag>
+  </SelectableTagGroup>
+  <SelectableTagGroup disabled selected={["a"]} legendText="Disabled">
+    <SelectableTag value="a">Alpha</SelectableTag>
+    <SelectableTag value="b">Beta</SelectableTag>
+  </SelectableTagGroup>
+</Stack>
+
+| Do | Why |
+| --- | --- |
+| Give each tag a `value` and identify it by that | The label is for people and changes with translation. `selected` holds the values. |
+| Bind `selected` rather than listening to each tag's `change` | The group already keeps the array in step, and `required` and `single` apply to it. |
+| Use `ToggleButtonGroup` for a command such as bold | Tags filter or label content. Toggle buttons act on it right away. |
 
 ## Skeleton
 
