@@ -1634,7 +1634,10 @@ $tabs-sizes: (
       color: HighlightText;
     }
 
+    // The container variant ties the contained disabled link rule, which
+    // sets `color`, and wins on order.
     .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link,
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-link,
     .#{$prefix}--tabs__nav-item--disabled .#{$prefix}--tabs__nav-item-secondary-label {
       border-color: GrayText;
       color: GrayText;

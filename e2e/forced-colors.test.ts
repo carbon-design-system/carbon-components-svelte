@@ -148,6 +148,10 @@ test.describe("forced colors", () => {
       "[data-testid=tabs-vertical] .bx--tabs__nav-item--default .bx--tabs__nav-link",
     ],
     [
+      "[data-testid=tabs-container] .bx--tabs__nav-link--selected",
+      "[data-testid=tabs-container] .bx--tabs__nav-item--default .bx--tabs__nav-link",
+    ],
+    [
       ".bx--btn--icon-only.bx--btn--selected",
       ".bx--btn--icon-only:not(.bx--btn--selected)",
     ],
@@ -205,6 +209,7 @@ test.describe("forced colors", () => {
       ".bx--chat-btn--quick-action:not(.bx--chat-btn--quick-action--selected)[disabled]",
       ".bx--tabs__nav-item--disabled .bx--tabs__nav-link",
       "[data-testid=tabs-vertical] .bx--tabs__nav-item--disabled .bx--tabs__nav-link",
+      "[data-testid=tabs-container] .bx--tabs__nav-item--disabled .bx--tabs__nav-link",
       ".bx--tag--disabled",
       ".bx--tile--clickable.bx--link--disabled",
       ".bx--tile--selectable.bx--tile--disabled",
@@ -659,6 +664,48 @@ test.describe("forced colors", () => {
       background: system.Canvas,
       borderColor: system.GrayText,
     });
+  });
+
+  // Forced colors drop the box shadows that divide contained tabs. Each
+  // link keeps its own edge instead: the focus reset's transparent outline
+  // turns into a frame in the link's color.
+  test("contained Tabs keep an edge per tab, in both directions", async ({
+    page,
+  }) => {
+    const links = page.locator(
+      "[data-testid=tabs-container] .bx--tabs__nav-link",
+    );
+    // Overview, Logs (selected), Metrics, Alerts, Settings (disabled)
+    const colors: SystemColor[] = [
+      "LinkText",
+      "HighlightText",
+      "LinkText",
+      "LinkText",
+      "GrayText",
+    ];
+
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+      }, dir);
+      const outlines = await links.evaluateAll((els) =>
+        els.map((el) => {
+          const s = getComputedStyle(el);
+          return {
+            outline: `${s.outlineStyle} ${s.outlineWidth}`,
+            outlineColor: s.outlineColor,
+          };
+        }),
+      );
+      expect(outlines).toHaveLength(colors.length);
+      colors.forEach((color, i) => {
+        expect.soft(outlines[i], `${dir} tab ${i + 1}`).toEqual({
+          outline: "solid 2px",
+          outlineColor: system[color],
+        });
+      });
+    }
   });
 
   // A button would read as ButtonText; "View all" looks and acts as a link.

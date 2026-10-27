@@ -506,4 +506,14 @@
       <Tab label="Disabled vertical tab" disabled />
     </TabsVertical>
   </div>
+
+  <div data-testid="tabs-container">
+    <Tabs type="container" selected={1}>
+      <Tab label="Overview" />
+      <Tab label="Logs" />
+      <Tab label="Metrics" />
+      <Tab label="Alerts" />
+      <Tab label="Settings" disabled />
+    </Tabs>
+  </div>
 </main>
