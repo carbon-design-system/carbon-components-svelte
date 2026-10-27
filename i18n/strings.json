@@ -2361,6 +2361,34 @@
       "defaultKind": "text"
     },
     {
+      "component": "Tearsheet",
+      "prop": "closeIconDescription",
+      "type": "string",
+      "default": "Close",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Tearsheet",
+      "prop": "descriptionText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Tearsheet",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Tearsheet",
+      "prop": "titleText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
       "component": "TextArea",
       "prop": "counterText",
       "type": "((count: number, max: number) => string) | undefined",

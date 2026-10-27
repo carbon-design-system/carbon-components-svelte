@@ -32,6 +32,7 @@ import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte
 import QRCode from "carbon-components-svelte/QRCode/QRCode.svelte";
 import SavingStatus from "carbon-components-svelte/SavingStatus/SavingStatus.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
+import Tearsheet from "carbon-components-svelte/Tearsheet/Tearsheet.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import TileGrid from "carbon-components-svelte/TileGrid/TileGrid.svelte";
@@ -519,6 +520,14 @@ export const interactive: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("group"),
+  },
+  {
+    name: "Tearsheet",
+    render: (attrs) =>
+      render(Tearsheet, {
+        props: { open: true, title: "Create integration", ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "Toggletip",
