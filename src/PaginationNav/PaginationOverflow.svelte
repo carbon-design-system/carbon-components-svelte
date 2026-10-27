@@ -9,6 +9,21 @@
   /** Specify the pivot end index */
   export let count = 0;
 
+  /** Specify the total number of pages */
+  export let total = 0;
+
+  /**
+   * Specify the page text, which names a page button.
+   * @type {(page: number) => string}
+   */
+  export let pageText;
+
+  /**
+   * Specify the accessible label for the page select.
+   * @type {(total: number) => string}
+   */
+  export let pageSelectLabelText;
+
   import { createEventDispatcher } from "svelte";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import PaginationItem from "./PaginationItem.svelte";
@@ -22,7 +37,7 @@
   <li class:bx--pagination-nav__list-item={true}>
     <div class:bx--pagination-nav__select={true}>
       <select
-        aria-label="Select Page number"
+        aria-label={pageSelectLabelText(total)}
         {value}
         class:bx--pagination-nav__page={true}
         class:bx--pagination-nav__page--select={true}
@@ -53,10 +68,9 @@
 {:else if count === 1}
   <PaginationItem
     page={fromIndex + 1}
+    label={pageText(fromIndex + 1)}
     on:click={() => {
       dispatch("select", { index: fromIndex + 1 });
     }}
-  >
-    Page
-  </PaginationItem>
+  />
 {/if}

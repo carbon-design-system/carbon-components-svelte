@@ -8,7 +8,7 @@ test.describe("PaginationNav", () => {
   test("renders pagination nav", async ({ page }) => {
     await expect(page.getByTestId("pagination-nav")).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Active, Page 1", exact: true }),
+      page.getByRole("button", { name: "Page 1", exact: true }),
     ).toBeVisible();
   });
 
@@ -24,7 +24,7 @@ test.describe("PaginationNav", () => {
     await page.getByRole("button", { name: "Next page" }).click();
     await page.getByRole("button", { name: "Previous page" }).click();
     await expect(
-      page.getByRole("button", { name: "Active, Page 1", exact: true }),
+      page.getByRole("button", { name: "Page 1", exact: true }),
     ).toHaveAttribute("aria-current", "page");
   });
 

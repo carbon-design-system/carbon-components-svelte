@@ -65,6 +65,31 @@
    */
   export let tooltipPosition = "bottom";
 
+  /**
+   * Override the page text, which names each page button.
+   * @type {(page: number) => string}
+   */
+  export let pageText = function pageText(page) {
+    return `Page ${page}`;
+  };
+
+  /**
+   * Override the page range text. It follows the page text in the
+   * announcement made when the page changes ("Page 3 of 10").
+   * @type {(current: number, total: number) => string}
+   */
+  export let pageRangeText = function pageRangeText(_current, total) {
+    return `of ${total}`;
+  };
+
+  /**
+   * Override the accessible label for the overflow page select.
+   * @type {(total: number) => string}
+   */
+  export let pageSelectLabelText = function pageSelectLabelText(_total) {
+    return "Select page number";
+  };
+
   import { createEventDispatcher } from "svelte";
   import Button from "../Button/Button.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
@@ -138,16 +163,18 @@
     {#if fit > MIN || (fit <= MIN && page <= 1)}
       <PaginationItem
         page={1}
+        label={pageText(1)}
         active={page === 1}
         on:click={() => {
           page = 1;
           dispatch("change", { page });
         }}
-      >
-        {page === 1 ? "Active, Page" : "Page"}
-      </PaginationItem>
+      />
     {/if}
     <PaginationOverflow
+      {total}
+      {pageText}
+      {pageSelectLabelText}
       fromIndex={startOffset}
       count={front}
       on:select={(event) => {
@@ -158,16 +185,18 @@
     {#each items as item (item)}
       <PaginationItem
         page={item + 1}
+        label={pageText(item + 1)}
         active={page === item + 1}
         on:click={() => {
           page = item + 1;
           dispatch("change", { page });
         }}
-      >
-        {page === item + 1 ? "Active, Page" : "Page"}
-      </PaginationItem>
+      />
     {/each}
     <PaginationOverflow
+      {total}
+      {pageText}
+      {pageSelectLabelText}
       fromIndex={total - back - 1}
       count={back}
       on:select={(event) => {
@@ -178,14 +207,13 @@
     {#if total > 1}
       <PaginationItem
         page={total}
+        label={pageText(total)}
         active={page === total}
         on:click={() => {
           page = total;
           dispatch("change", { page });
         }}
-      >
-        {page === total ? "Active, Page" : "Page"}
-      </PaginationItem>
+      />
     {/if}
     <li class:bx--pagination-nav__list-item={true}>
       <Button
@@ -213,6 +241,7 @@
     aria-atomic="true"
     class:bx--pagination-nav__accessibility-label={true}
   >
-    Page {page}{" of "}{total}
+    {pageText(page)}
+    {pageRangeText(page, total)}
   </div>
 </nav>

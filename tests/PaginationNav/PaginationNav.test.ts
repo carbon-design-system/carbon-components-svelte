@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
 
@@ -52,7 +52,7 @@ describe("PaginationNav", () => {
     // `shown` counts the overflow too: 1, 2, 3, overflow, 20.
     expect(pages).toEqual([1, 2, 3, 20]);
     // Only the back overflow exists at page 1.
-    expect(screen.getAllByLabelText("Select Page number")).toHaveLength(1);
+    expect(screen.getAllByLabelText("Select page number")).toHaveLength(1);
     // Previous, Next, the four page items and the overflow.
     expect(screen.getAllByRole("listitem")).toHaveLength(7);
   });
@@ -150,14 +150,14 @@ describe("PaginationNav", () => {
     expect(screen.getByText("Page 1 of 10")).toBeInTheDocument();
   });
 
-  it("should announce active middle page with 'Active, Page' label", () => {
+  it("names the current page like any other, leaving aria-current to mark it", () => {
     render(PaginationNav, {
       props: { page: 3, total: 5 },
     });
 
     const activeButton = screen.getByRole("button", { current: "page" });
     expect(activeButton).toHaveAttribute("data-page", "3");
-    expect(within(activeButton).getByText("Active, Page")).toBeInTheDocument();
+    expect(activeButton).toHaveAccessibleName("Page 3");
   });
 
   it("clamps the page when total shrinks below it", async () => {
@@ -266,7 +266,7 @@ describe("PaginationNav", () => {
       props: { total: 100, shown: 5, onChange },
     });
 
-    const overflowIndicator = screen.getByLabelText("Select Page number");
+    const overflowIndicator = screen.getByLabelText("Select page number");
 
     await user.selectOptions(overflowIndicator, "4");
 
