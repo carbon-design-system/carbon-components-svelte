@@ -41,6 +41,12 @@ describe("getCalendarLocale", () => {
     }
   });
 
+  it("names the day periods through Intl", () => {
+    const afternoon = new Date(2024, 0, 1, 14);
+
+    expect(formatDate(afternoon, "K", getCalendarLocale("ja"))).toBe("午後");
+  });
+
   it("merges a partial locale object over English", () => {
     const locale = getCalendarLocale({ firstDayOfWeek: 1 });
 
