@@ -209,7 +209,7 @@ const FORMATTERS = {
   // a value carries a time, as with flatpickr when its time picker is off.
   G: (date) => pad(date.getHours() % 12 || 12),
   H: (date) => pad(date.getHours()),
-  K: (date, l10n) => (l10n.amPM ?? ["AM", "PM"])[date.getHours() > 11 ? 1 : 0],
+  K: (date, l10n) => dayPeriods(l10n)[date.getHours() > 11 ? 1 : 0],
   S: (date) => pad(date.getSeconds()),
   h: (date) => date.getHours() % 12 || 12,
   i: (date) => pad(date.getMinutes()),
@@ -262,6 +262,11 @@ const ENGLISH = /^en(-|$)/i;
 const ZONED = /Z$|GMT$/;
 const NUMBER = "(\\d\\d|\\d)";
 
+/** @param {CalendarLocale} l10n */
+function dayPeriods(l10n) {
+  return l10n.amPM ?? ["AM", "PM"];
+}
+
 /** @type {Record<string, (l10n: CalendarLocale) => string>} */
 const TOKEN_PATTERNS = {
   D: (l10n) => `(${l10n.weekdays.shorthand.join("|")})`,
@@ -273,6 +278,10 @@ const TOKEN_PATTERNS = {
   i: () => NUMBER,
   s: () => NUMBER,
   J: () => `${NUMBER}\\w+`,
+  K: (l10n) => {
+    const [am, pm] = dayPeriods(l10n);
+    return `(${am}|${pm}|${am.toLowerCase()}|${pm.toLowerCase()})`;
+  },
   M: (l10n) => `(${l10n.months.shorthand.join("|")})`,
   U: () => "(.+)",
   W: () => NUMBER,
@@ -314,6 +323,10 @@ const REVERSE = {
   },
   J: (date, value) => {
     date.setDate(Number.parseFloat(value));
+  },
+  K: (date, value, l10n) => {
+    const pm = value.toLowerCase() === dayPeriods(l10n)[1].toLowerCase();
+    date.setHours((date.getHours() % 12) + (pm ? 12 : 0));
   },
   M: (date, value, l10n) => {
     date.setMonth(l10n.months.shorthand.indexOf(value));
@@ -421,6 +434,9 @@ export function parseDate(value, context, givenFormat, timeless = false) {
           pattern += ".";
         }
       }
+      // AM/PM shifts the hour, so it applies after `h` or `G` wherever it
+      // sits in the format.
+      ops.sort((a, b) => Number(a.token === "K") - Number(b.token === "K"));
       let date = new Date(new Date().getFullYear(), 0, 1);
       for (const op of ops) {
         date =

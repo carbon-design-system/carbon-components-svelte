@@ -1,6 +1,6 @@
 import flatpickr from "flatpickr";
+import l10n from "flatpickr/dist/l10n";
 import { German } from "flatpickr/dist/l10n/de";
-import { english } from "flatpickr/dist/l10n/default";
 import {
   type CalendarOptions,
   createCalendarEngine,
@@ -83,7 +83,10 @@ function dayCells(instance: Instance) {
   });
 }
 
-/** Deterministic dates at local midnight, so a failure always reproduces. */
+/**
+ * Deterministic dates and times, so a failure always reproduces. The
+ * calendar edges fall at midnight; noon and midnight minutes test AM/PM.
+ */
 function sampleDates(count: number, seed = 1) {
   let state = seed;
   const next = () => {
@@ -95,7 +98,10 @@ function sampleDates(count: number, seed = 1) {
     const year = 1950 + Math.floor(next() * 130);
     const month = Math.floor(next() * 12);
     const day = 1 + Math.floor(next() * 28);
-    dates.push(new Date(year, month, day));
+    const hour = Math.floor(next() * 24);
+    const minute = Math.floor(next() * 60);
+    const second = Math.floor(next() * 60);
+    dates.push(new Date(year, month, day, hour, minute, second));
   }
   // ISO week and year edges.
   for (const year of [2015, 2020, 2021, 2026, 2027]) {
@@ -104,6 +110,7 @@ function sampleDates(count: number, seed = 1) {
     for (let day = 1; day <= 5; day++) dates.push(new Date(year, 0, day));
   }
   dates.push(new Date(2024, 1, 29), new Date(2000, 1, 29));
+  dates.push(new Date(2024, 2, 5, 0, 15), new Date(2024, 2, 5, 12, 15));
   return dates;
 }
 
@@ -131,14 +138,23 @@ const DATE_FORMATS = [
   "l, F J, Y",
   "D M j y",
   "\\W\\e\\e\\k W, Y",
+  "H",
+  "G",
+  "h",
+  "i",
+  "S",
+  "s",
+  "K",
+  "Y-m-d H:i:S",
+  "m/d/Y h:i K",
 ];
 
+// Every locale flatpickr ships, keyed by its name ("default" is English).
+const LOCALES = Object.entries(l10n);
+
 describe("formatDate matches flatpickr", () => {
-  for (const [name, locale] of [
-    ["English", english],
-    ["German", German],
-  ] as const) {
-    it(`formats every date token (${name})`, () => {
+  for (const [name, locale] of LOCALES) {
+    it(`formats every token (${name})`, () => {
       const { reference, engine } = both({ locale });
       const mismatches: string[] = [];
       for (const date of sampleDates(200)) {
@@ -155,29 +171,6 @@ describe("formatDate matches flatpickr", () => {
       expect(mismatches.slice(0, 10)).toEqual([]);
     });
   }
-
-  it("formats time tokens as midnight, like a date-only flatpickr", () => {
-    const { reference, engine } = both();
-    const date = new Date(2024, 2, 5);
-    for (const format of ["Y-m-d H:i", "h:i K", "G:i:S", "Y-m-d H:i:s"]) {
-      expect(engine.formatDate(date, format)).toBe(
-        reference.formatDate(date, format),
-      );
-    }
-  });
-
-  it("parses time tokens the same way", () => {
-    const { reference, engine } = both();
-    for (const [text, format] of [
-      ["2024-03-05 14:30", "Y-m-d H:i"],
-      ["2024-03-05 2:30:15", "Y-m-d h:i:S"],
-      ["2024-03-05 00:00", "Y-m-d H:i"],
-    ]) {
-      expect(engine.parseDate(text, format)?.getTime()).toBe(
-        reference.parseDate(text, format)?.getTime(),
-      );
-    }
-  });
 });
 
 describe("parseDate matches flatpickr", () => {
@@ -191,10 +184,17 @@ describe("parseDate matches flatpickr", () => {
     "d/m/y",
     "Ymd",
     "U",
+    "Y-m-d H:i",
+    "Y-m-d h:i:S",
+    // flatpickr misreads a 12 o'clock hour after a leading `K`, so the
+    // period trails the hour here; calendar-dates.test.ts covers the other
+    // order.
+    "m/d/Y h:i K",
+    "F j, Y h:i K",
   ];
 
-  it("round-trips formatted dates", () => {
-    const { reference, engine } = both();
+  it.each(LOCALES)("round-trips formatted dates (%s)", (_, locale) => {
+    const { reference, engine } = both({ locale });
     const mismatches: string[] = [];
     for (const date of sampleDates(150, 7)) {
       for (const format of PARSE_FORMATS) {
