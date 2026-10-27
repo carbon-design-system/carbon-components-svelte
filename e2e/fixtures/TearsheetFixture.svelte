@@ -9,22 +9,32 @@
     OverflowMenu,
     OverflowMenuItem,
     Portal,
+    ProgressIndicator,
+    ProgressStep,
     Stack,
     Tearsheet,
     TextInput,
   } from "carbon-components-svelte";
 
-  // `?size=narrow`, `?passive` (no actions), `?long` (scrolling body),
+  // `?influencer=end`, `?wide-influencer`, `?size=narrow`, `?passive` (no actions), `?long` (scrolling body),
   // `?closed`, `?modal` (a Modal inside the tearsheet) and `?inmodal` (a
   // Tearsheet inside a Modal, rendered through a Portal).
   const params = new URLSearchParams(location.search);
   const size = params.get("size") === "narrow" ? "narrow" : "wide";
   const passive = params.has("passive");
   const long = params.has("long");
+  const influencerPosition =
+    params.get("influencer") === "end" ? "end" : "start";
+  const influencerWidth = params.has("wide-influencer") ? "wide" : "narrow";
+  // `?stack` opens a second tearsheet from the first, as a sibling. With
+  // `?stack=portal` it sits inside the first, in a Portal, and with
+  // `?stack=nested` it sits inside the first with no Portal.
+  const stack = params.get("stack");
   const withModal = params.has("modal");
   const inModal = params.has("inmodal");
 
   let open = !params.has("closed") && !inModal;
+  let secondOpen = false;
   let modalOpen = false;
   let outerModalOpen = inModal;
   let closeTriggers = [];
@@ -62,9 +72,18 @@
     title="Create integration"
     label="Step 2 of 4"
     description="Connect a data source and map its fields."
+    {influencerPosition}
+    {influencerWidth}
     on:close={(event) =>
       (closeTriggers = [...closeTriggers, event.detail.trigger])}
   >
+    <nav slot="influencer" aria-label="Steps">
+      <ProgressIndicator vertical currentIndex={1}>
+        <ProgressStep label="Source" />
+        <ProgressStep label="Mapping" />
+        <ProgressStep label="Schedule" />
+      </ProgressIndicator>
+    </nav>
     <svelte:fragment slot="headerActions">
       <Button kind="ghost" size="small">Preview</Button>
     </svelte:fragment>
@@ -97,6 +116,24 @@
           <p>Unsaved mappings are lost.</p>
         </Modal>
       {/if}
+      {#if stack}
+        <Button on:click={() => (secondOpen = true)}>Review</Button>
+      {/if}
+      {#if stack === "nested"}
+        <Tearsheet bind:open={secondOpen} size="narrow" title="Review mappings">
+          <TextInput labelText="Owner" />
+        </Tearsheet>
+      {:else if stack === "portal"}
+        <Portal>
+          <Tearsheet
+            bind:open={secondOpen}
+            size="narrow"
+            title="Review mappings"
+          >
+            <TextInput labelText="Owner" />
+          </Tearsheet>
+        </Portal>
+      {/if}
       {#if long}
         {#each Array.from({ length: 24 }, (_, index) => index) as index (index)}
           <TextInput labelText="Field mapping {index + 1}" />
@@ -107,6 +144,12 @@
       <Button kind="secondary" on:click={() => (open = false)}>Cancel</Button>
       <Button>Next</Button>
     </svelte:fragment>
+  </Tearsheet>
+{/if}
+
+{#if stack === "sibling"}
+  <Tearsheet bind:open={secondOpen} size="narrow" title="Review mappings">
+    <TextInput labelText="Owner" />
   </Tearsheet>
 {/if}
 

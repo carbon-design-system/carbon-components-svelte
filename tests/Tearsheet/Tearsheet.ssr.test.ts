@@ -10,6 +10,9 @@ describe("Tearsheet (server)", () => {
     expect(root?.classList).toContain("is-visible");
     expect(root?.hasAttribute("inert")).toBe(false);
     expect(root?.classList).toContain("bx--tearsheet--ai-label");
+    // The stack is only written after mount, so the server shows a lone sheet.
+    expect(root?.classList).not.toContain("bx--tearsheet--behind-1");
+    expect(root?.classList).not.toContain("bx--tearsheet--stacked");
 
     const dialog = document.querySelector("[role=dialog]");
     expect(dialog?.getAttribute("aria-modal")).toBe("true");

@@ -12,6 +12,8 @@
   export let size: Props["size"] = "wide";
   export let preventCloseOnClickOutside: boolean | undefined = undefined;
   export let hideCloseButton: Props["hideCloseButton"] = undefined;
+  export let influencerPosition: Props["influencerPosition"] = "start";
+  export let influencerWidth: Props["influencerWidth"] = "narrow";
 </script>
 
 <Tearsheet
@@ -19,11 +21,14 @@
   {size}
   {preventCloseOnClickOutside}
   {hideCloseButton}
+  {influencerPosition}
+  {influencerWidth}
   title="Create integration"
   label="Step 2 of 4"
   description="Connect a data source."
 >
   Body
+  <nav slot="influencer">Steps</nav>
   <Button slot="headerActions" kind="ghost" size="small">Preview</Button>
   <AILabel slot="decorator" />
   <svelte:fragment slot="actions">
