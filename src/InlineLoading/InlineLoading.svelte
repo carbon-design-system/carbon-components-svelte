@@ -4,6 +4,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Set the loading status.
    * @type {"active" | "inactive" | "finished" | "error"}
    */
@@ -43,14 +50,31 @@
    */
   export let size = "md";
 
+  /**
+   * Animate the status as it appears and leaves, when a parent's `{#if}`
+   * adds or removes it. Set to `true` for Carbon's fade, to fade params
+   * (e.g., `{ duration: "moderate02" }`) to customize it, or to `{ fn }` to
+   * use another transition. The status does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
+   */
+  export let transition = undefined;
+
   import { createEventDispatcher, onMount } from "svelte";
-  import Loading from "../Loading/Loading.svelte";
-  import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fade } from "../motion/transitions.js";
   import { createLoadingDelay } from "../utils/delayed-loading.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import InlineLoadingContent from "./InlineLoadingContent.svelte";
 
   const dispatch = createEventDispatcher();
   const scheduleSuccess = createDelayedSetter();
+  const fadePreset = { fn: fade };
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition, fadePreset));
 
   // `shown` is the spinner the user sees. With a delay, an active spinner
   // first renders `waiting`: in the page but hidden, and CSS reveals it
@@ -124,53 +148,51 @@
   }
 </script>
 
-<div
-  class:bx--inline-loading={true}
-  class:bx--inline-loading--sm={size === "sm"}
-  class:bx--inline-loading--delayed={waiting}
-  style:animation-duration={revealAfter}
-  role={shownStatus === "error" ? "alert" : "status"}
-  aria-live={shownStatus === "error" ? "assertive" : "polite"}
-  {...$$restProps}
-  on:click
-  on:mouseover
-  on:mouseenter
-  on:mouseleave
->
-  <div class:bx--inline-loading__animation={true}>
-    {#if shownStatus === "error"}
-      <ErrorFilled
-        class="bx--inline-loading--error"
-        title={shownIconDescription || shownStatus}
-      />
-    {:else if shownStatus === "finished"}
-      <svg
-        class="bx--inline-loading__checkmark-container"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 32 32"
-        width="16"
-        height="16"
-        preserveAspectRatio="xMidYMid meet"
-        role="img"
-      >
-        <title>{shownIconDescription || shownStatus}</title>
-        <circle cx="16" cy="16" r="14"></circle>
-        <polyline
-          class:bx--inline-loading__checkmark={true}
-          class:bx--inline-loading__checkmark--draw={drawCheck}
-          points="9.8 15.8 14 20 22.2 11.8"
-        ></polyline>
-      </svg>
-    {:else if shownStatus === "inactive" || shownStatus === "active"}
-      <Loading
-        small
-        description={shownIconDescription}
-        withOverlay={false}
-        active={shownStatus === "active"}
-      />
-    {/if}
+{#if animated}
+  <div
+    class:bx--inline-loading={true}
+    class:bx--inline-loading--sm={size === "sm"}
+    class:bx--inline-loading--delayed={waiting}
+    style:animation-duration={revealAfter}
+    role={shownStatus === "error" ? "alert" : "status"}
+    aria-live={shownStatus === "error" ? "assertive" : "polite"}
+    {...$$restProps}
+    transition:transitionFn|global={transitionParams}
+    on:introstart
+    on:introend
+    on:outrostart
+    on:outroend
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <InlineLoadingContent
+      status={shownStatus}
+      description={shownDescription}
+      iconDescription={shownIconDescription}
+      {drawCheck}
+    />
   </div>
-  {#if shownDescription}
-    <div class:bx--inline-loading__text={true}>{shownDescription}</div>
-  {/if}
-</div>
+{:else}
+  <div
+    class:bx--inline-loading={true}
+    class:bx--inline-loading--sm={size === "sm"}
+    class:bx--inline-loading--delayed={waiting}
+    style:animation-duration={revealAfter}
+    role={shownStatus === "error" ? "alert" : "status"}
+    aria-live={shownStatus === "error" ? "assertive" : "polite"}
+    {...$$restProps}
+    on:click
+    on:mouseover
+    on:mouseenter
+    on:mouseleave
+  >
+    <InlineLoadingContent
+      status={shownStatus}
+      description={shownDescription}
+      iconDescription={shownIconDescription}
+      {drawCheck}
+    />
+  </div>
+{/if}
