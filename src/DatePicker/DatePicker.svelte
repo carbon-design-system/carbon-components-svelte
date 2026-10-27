@@ -1120,6 +1120,18 @@
   }
 
   /**
+   * Tabbing past the last control of the popup moves focus out of the
+   * calendar without a click, so close it as an outside dismissal. Focus
+   * moving to an input, within the calendar or to a `keepOpenFor` element
+   * keeps it open, as with an input blur.
+   *
+   * @param {FocusEvent} event
+   */
+  function handleCalendarFocusOut(event) {
+    blurInput(event.relatedTarget);
+  }
+
+  /**
    * @type {() => void}
    */
   function openCalendar() {
@@ -1552,6 +1564,10 @@
       handleCalendarKeydown,
       { capture: true },
     );
+    engine.calendarContainer?.addEventListener(
+      "focusout",
+      handleCalendarFocusOut,
+    );
     if (engine.config.inline) {
       for (const type of BLOCKED_EVENTS) {
         engine.calendarContainer?.addEventListener(
@@ -1681,6 +1697,10 @@
       "keydown",
       handleCalendarKeydown,
       { capture: true },
+    );
+    engine.calendarContainer?.removeEventListener(
+      "focusout",
+      handleCalendarFocusOut,
     );
     for (const type of BLOCKED_EVENTS) {
       engine.calendarContainer?.removeEventListener(
