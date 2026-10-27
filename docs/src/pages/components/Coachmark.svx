@@ -1,0 +1,112 @@
+---
+components: ["Coachmark", "CoachmarkBeacon"]
+description: Coachmarks introduce one feature in a dismissible callout anchored to a pulsing beacon or to any control, for first-run onboarding.
+---
+
+<script>
+  import { Box, Button, Coachmark, CoachmarkBeacon, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Click the beacon to open the coachmark. It stays open while the user keeps working, until they close it, press <DocKbd label="Escape" />, or click outside it. The dialog is named by `title`.
+
+| Do | Why |
+| --- | --- |
+| Show one coachmark per feature, once. | It interrupts, so repeated dismissal teaches users to ignore it. |
+| Keep the body to a sentence or two. | The callout is 288 px wide. |
+| Use [Toggletip](/components/Toggletip) for help that is always available. | A coachmark is first-run onboarding, and a toggletip is reference. |
+| Don't open several coachmarks at once. | Only one dialog should compete for the user's attention. |
+
+<Coachmark title="Export in bulk" align="bottom-start">
+  <p>Select rows, then use the toolbar to export them together.</p>
+</Coachmark>
+
+## Alignment
+
+Set `align` to place the coachmark relative to its target. `start` and `end` name inline sides above and below the target, so they swap in RTL. The default is `"bottom"`.
+
+| Value | Placement |
+| --- | --- |
+| `"top"`, `"bottom"` | Centered on the target. |
+| `"top-start"`, `"bottom-start"` | Aligned to the target's inline start. |
+| `"top-end"`, `"bottom-end"` | Aligned to the target's inline end. |
+| `"left"`, `"right"`, with `-start` or `-end` | Beside the target. |
+
+The coachmark stays in view. Near a window edge, or the edge of a box that clips it, it flips to the side with room. A coachmark that a box with `overflow` would cut off opens in a portal. Inside a [Modal](/components/Modal) it always does. Set `portalTooltip` to `true` or `false` to override this.
+
+<Stack orientation="horizontal" gap={10}>
+  <Coachmark title="Top" align="top-start" beaconLabel="Show top coachmark">
+    A coachmark above its target.
+  </Coachmark>
+  <Coachmark title="End" align="right" beaconLabel="Show end coachmark">
+    A coachmark beside its target.
+  </Coachmark>
+</Stack>
+
+## Custom target
+
+### Existing control
+
+Use the `"target"` slot to open the coachmark from a control you already have. Spread `triggerProps` on it, which sets `aria-haspopup`, `aria-expanded` and `aria-controls`, and call `toggle` on click.
+
+<Coachmark title="Filters" align="bottom-start">
+  <Button slot="target" kind="tertiary" size="small" let:triggerProps let:toggle {...triggerProps} on:click={toggle}>
+    Filter
+  </Button>
+  Filter by owner or status.
+</Coachmark>
+
+### Overlay beacon
+
+Set `overlay` on a `CoachmarkBeacon` to place it on the end and top corner of its positioned parent, so it can mark an existing control without a button inside a button. The coachmark's wrapper is that parent.
+
+<Coachmark title="New" align="right-start">
+  <svelte:fragment slot="target" let:triggerProps let:toggle>
+    <Button kind="tertiary" size="small">Share</Button>
+    <CoachmarkBeacon overlay label="Show what is new about Share" {...triggerProps} on:click={toggle} />
+  </svelte:fragment>
+  Share a view with a link.
+</Coachmark>
+
+## Actions
+
+Use the `"actions"` slot for buttons in the footer. Focus moves to the element that matches `selectorPrimaryFocus` (default `"[data-modal-primary-focus]"`), then to the first form field, then to the close button. Set it to `null` to move no focus.
+
+Focus moves into the coachmark only when the user opened it, through the target or from a control inside it. A coachmark that opens by itself on page load leaves focus where it is, so it never takes it from a form. There is no focus trap, so <DocKbd label="Tab" /> leaves the coachmark and it stays open.
+
+<DocKbd label="Escape" /> closes the coachmark when focus is on its target or inside it, and focus returns to the target. Pressing <DocKbd label="Escape" /> in an unrelated field does not close it. Inside a [Modal](/components/Modal), the coachmark closes first. The close button and a click on the target also return focus to the target, and an outside click leaves focus where the user put it.
+
+<Coachmark title="Saved views" align="bottom-start">
+  Pick up where you left off.
+  <svelte:fragment slot="actions">
+    <Button size="small" data-modal-primary-focus>Open views</Button>
+  </svelte:fragment>
+</Coachmark>
+
+## Events
+
+`open` fires when the coachmark opens, and `close` when it closes. The `close` event reports what closed it.
+
+| `detail.trigger` | Closed by |
+| --- | --- |
+| `"close-button"` | The close button. |
+| `"escape-key"` | <DocKbd label="Escape" /> from inside the coachmark. |
+| `"outside-click"` | A click outside the target and the dialog. |
+| `"target"` | A click on the target while it was open. |
+| `"action"` | `close()` from a slot, such as a button in `"actions"`. |
+| `"programmatic"` | `open` set to `false`, or an ancestor [Modal](/components/Modal) closing. |
+
+## Persisting dismissal
+
+Keep a coachmark from returning once the user has seen it by saving the flag with [LocalStorage](/components/LocalStorage). Open it from `onMount`, after the storage has loaded, so a returning user never sees it flash. Test `!seen`, because `clearItem()` resets the bound value to `undefined`.
+
+<FileSource src="/framed/Coachmark/CoachmarkPersisted" />
+
+## Tour
+
+A tour that spans several controls is one coachmark per stop, opened by the consumer. Set `focusOnOpen` so focus follows the user from one stop to the next, since the next coachmark is opened by code, not by the user.
+
+<FileSource src="/framed/Coachmark/CoachmarkTour" />
+
+A tab is itself a control, so a beacon inside one would nest a button in a button. For a stop on a tab, anchor the coachmark to an inert marker in the tab, set `portalTooltip` so the dialog is rendered outside the tab and out of its name, and open it from the tour.
