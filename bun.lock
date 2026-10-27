@@ -22,7 +22,7 @@
         "@types/node": "^26.6.2",
         "@typescript/native-preview": "^7.0.0-dev.20260707.2",
         "acorn": "^8.18.0",
-        "bivium": "^0.1.2",
+        "bivium": "^0.2.0",
         "browserslist": "^4.29.1",
         "carbon-icons-svelte": "^13.15.0",
         "crassus": "^0.3.1",
@@ -249,7 +249,7 @@
 
     "bidi-js": ["bidi-js@1.1.0", "", { "dependencies": { "require-from-string": "^2.0.2" } }, "sha512-fX1Onk0tdVPC7obPWB5EbJ1z7NVhLq4m2xZLq2YXBkxzMXIGRpNMU88n0EPgWseKl12J7zXs7qrDxPK4sRs2fg=="],
 
-    "bivium": ["bivium@0.1.2", "", { "bin": { "bivium": "cli.js" } }, "sha512-o2bVzPYfimOlbQqm3oDToPcJPkt9Jsz5wN7VwPq9GxmLRfksA37DAEhO4pAoxQFNS7PCQX9mE6O8NJWTjCtyfQ=="],
+    "bivium": ["bivium@0.2.0", "", { "bin": { "bivium": "cli.js" } }, "sha512-Vp1ZtnEKYkz2YrOdQprfOfyiOxX+PxdldN/l7OIbpS43MN5VlQTusPGX13HXRA7au2qDuCLNip+E/TO8JASyNA=="],
 
     "braces": ["braces@3.0.3", "", { "dependencies": { "fill-range": "^7.1.1" } }, "sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA=="],
 
