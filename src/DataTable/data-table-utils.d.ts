@@ -109,6 +109,52 @@ export function toCsv<Row extends Record<string, unknown>>(
   options?: ToCsvOptions,
 ): string;
 
+export type ToJsonOptions = {
+  /**
+   * Indentation passed to `JSON.stringify`.
+   * @default 2
+   */
+  space?: number | string;
+  /**
+   * Key each object by the header `key` or by its label (`value`).
+   * @default "key"
+   */
+  keys?: "key" | "label";
+};
+
+/**
+ * Serializes data table headers and rows to a JSON string: an array with one
+ * object per row. Skips empty and hidden columns and applies `display`
+ * formatting, like `toCsv`. A missing value becomes `null`, so every object
+ * has every column.
+ */
+export function toJson<Row extends Record<string, unknown>>(
+  headers: ReadonlyArray<ToCsvHeader<Row>>,
+  rows: ReadonlyArray<Row>,
+  options?: ToJsonOptions,
+): string;
+
+export type SerializedRows = {
+  content: string;
+  mimeType: string;
+  extension: string;
+};
+
+export type SerializeRowsOptions = {
+  bom?: boolean;
+  csv?: ToCsvOptions;
+  json?: ToJsonOptions;
+};
+
+export function serializeRows<Row extends Record<string, unknown>>(
+  headers: ReadonlyArray<ToCsvHeader<Row>>,
+  rows: ReadonlyArray<Row>,
+  format: "csv" | "tsv" | "json",
+  options?: SerializeRowsOptions,
+): SerializedRows;
+
+export function withExtension(filename: string, extension: string): string;
+
 type PathDepth = [never, 0, 1, 2, ...0[]];
 
 type Join<K, P> = K extends string | number

@@ -70,7 +70,7 @@ export { default as CopyText } from "./CopyText/CopyText.svelte";
 export { default as Countdown } from "./Countdown/Countdown.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
-export { toCsv } from "./DataTable/data-table-utils.js";
+export { toCsv, toJson } from "./DataTable/data-table-utils.js";
 export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";
@@ -84,6 +84,7 @@ export { default as ToolbarBatchActions } from "./DataTable/ToolbarBatchActions.
 export { default as ToolbarColumnVisibility } from "./DataTable/ToolbarColumnVisibility.svelte";
 export { default as ToolbarContent } from "./DataTable/ToolbarContent.svelte";
 export { default as ToolbarDensity } from "./DataTable/ToolbarDensity.svelte";
+export { default as ToolbarExport } from "./DataTable/ToolbarExport.svelte";
 export { default as ToolbarMenu } from "./DataTable/ToolbarMenu.svelte";
 export { default as ToolbarMenuItem } from "./DataTable/ToolbarMenuItem.svelte";
 export { default as ToolbarSearch } from "./DataTable/ToolbarSearch.svelte";
