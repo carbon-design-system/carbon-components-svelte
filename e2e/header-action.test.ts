@@ -49,4 +49,24 @@ test.describe("HeaderAction", () => {
     expect(await tooltipShown(help)).toBe(true);
     expect(await tooltipShown(notifications)).toBe(false);
   });
+
+  test("panel width follows --ccs-header-panel-width on an ancestor", async ({
+    page,
+  }) => {
+    const action = page.getByRole("button", { name: "Help" });
+    await action.click();
+    const panel = page.getByRole("region", { name: "Help" });
+    await expect(panel).toHaveCSS("width", "256px");
+
+    await page.evaluate(() => {
+      const utilities = document.querySelector<HTMLElement>(
+        ".bx--header__global",
+      );
+      utilities?.style.setProperty("--ccs-header-panel-width", "22rem");
+    });
+    await expect(panel).toHaveCSS("width", "352px");
+
+    await page.setViewportSize({ width: 320, height: 640 });
+    await expect(panel).toHaveCSS("width", "320px");
+  });
 });
