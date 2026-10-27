@@ -8,8 +8,10 @@ on:
     paths:
       - "docs/**"
 
+# Key on the PR number, not the branch name: two fork PRs can both come
+# from a branch named `patch-1`.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 permissions:
