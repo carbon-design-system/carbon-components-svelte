@@ -30,10 +30,14 @@
       value: false,
     },
     1: {
-      text: "Slide (duration: 200ms)",
-      value: { duration: 200 },
+      text: "Carbon slide (transition: true)",
+      value: true,
     },
     2: {
+      text: "Slow slide (duration: slow01)",
+      value: { duration: "slow01" },
+    },
+    3: {
       text: "Custom (duration: 600ms, delay: 50ms, easing: expoIn)",
       value: { duration: 600, delay: 50, easing: expoIn },
     },
