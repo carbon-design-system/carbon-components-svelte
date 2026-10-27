@@ -276,9 +276,20 @@ sveld also reads some JSDoc that TypeScript rejects. Write the form both accept:
 | --- | --- |
 | `@template [Id=any]` above `@typedef {object} Item` | `@typedef {object} Item<Id=any>` |
 | `@template` for component generics, in a block without a `@typedef` (TypeScript gives a `@template` to the `@typedef` beside it) | `@generics {T extends Item = Item} T` |
+| The script's `generics` attribute when a `@template` can't express the generic, as in [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte): `<script generics="Node extends RecursiveListNode = RecursiveListNode">`. svelte-check and editors read it in plain JS too | The same generic in both the attribute and a `@template` (sveld reports it; the attribute wins) |
 | `@extendProps {"./Button.svelte"} ButtonProps` | `@extends {"./Button.svelte"} ButtonProps` |
 | One `@event` with its `@type`/`@property` tags per block, or `@event {{ trigger: string }} close` | Several `@event` + `@type {object}` groups in one block |
 | A typedef the module script uses, declared in the module script | Declared in the instance script |
+| `@template {import("../utils/icon-component.js").IconComponent} [Icon=any]` for a component prop such as `icon` | An unconstrained `@template [Icon=any]` |
+
+sveld writes a `CarbonXContext` type for each `setContext` value. Where it can only infer `any`, or a type with `any` inside it, `bun build:docs` fails with `sveld/context-any-type`:
+
+| Context value | Annotate with |
+| --- | --- |
+| A store from `writable(undefined)`, `writable(null)` or `derived(...)` | `/** @type {import("svelte/store").Writable<string \| undefined>} */` on the declaration |
+| A function, declared outside the object or as a method in it | `@param` tags. Without `@returns`, the return type is read off the body |
+
+`bun test:src-svelte-types` ignores a JSDoc cast in a `$:` statement or a template expression, so the cast doesn't fix an error there. Put a `/** @type {T} */` line above the `$:` declaration, or move the expression into a script variable.
 
 ### Creating a component
 
@@ -956,7 +967,10 @@ describe("Generics", () => {
     type ComponentType = ComboBoxComponent<Product>;
     type Props = ComponentProps<ComponentType>;
 
-    expectTypeOf<Props["items"]>().toEqualTypeOf<readonly Product[]>();
+    // Optional props include `undefined`.
+    expectTypeOf<NonNullable<Props["items"]>>().toEqualTypeOf<
+      readonly Product[]
+    >();
 
     const itemToString = (item: Product) => item.text;
     expectTypeOf(itemToString).parameter(0).toEqualTypeOf<Product>();
