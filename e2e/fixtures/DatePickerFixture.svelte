@@ -46,6 +46,17 @@
   </DatePicker>
 </div>
 
+<div data-testid="date-picker-range-time">
+  <DatePicker datePickerType="range" timeGranularity="minute">
+    <DatePickerInput
+      data-testid="date-picker-range-time-input"
+      labelText="Freeze starts"
+      placeholder="mm/dd/yyyy hh:mm"
+    />
+    <DatePickerInput labelText="Freeze ends" placeholder="mm/dd/yyyy hh:mm" />
+  </DatePicker>
+</div>
+
 <div data-testid="outside-date-picker" style="margin-top: 1rem; padding: 1rem;">
   Click target (outside pickers)
 </div>

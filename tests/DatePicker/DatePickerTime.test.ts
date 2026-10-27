@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DatePickerTime from "./DatePickerTime.test.svelte";
 import { dayByLabel, openCalendar } from "./helpers";
@@ -125,5 +125,46 @@ describe("DatePicker time row", () => {
 
     await rerender({ readonly: false });
     expect(hours).not.toHaveAttribute("readonly");
+  });
+});
+
+describe("DatePicker range time rows", () => {
+  const rangeText = () => screen.getByTestId("range").textContent;
+
+  async function pickRange(from: number, to: number) {
+    const calendar = await openCalendar("Start date");
+    await user.click(dayByLabel(calendar, from));
+    await user.click(dayByLabel(calendar, to));
+    return calendar;
+  }
+
+  it("gives each end its row's time, and edits one end at a time", async () => {
+    render(DatePickerTime, {
+      props: { datePickerType: "range", defaultTime: ["09:00", "17:00"] },
+    });
+    await pickRange(12, 14);
+
+    expect(rangeText()).toBe(`${dayText(12)} 9:00 AM|${dayText(14)} 5:00 PM`);
+
+    const end = screen.getByRole("group", { name: "End time" });
+    await user.click(within(end).getByRole("spinbutton", { name: "Hours" }));
+    await user.keyboard("{ArrowUp}");
+    expect(rangeText()).toBe(`${dayText(12)} 9:00 AM|${dayText(14)} 6:00 PM`);
+  });
+
+  it("keeps a one-day range from ending before it starts", async () => {
+    render(DatePickerTime, {
+      props: {
+        datePickerType: "range",
+        hourFormat: "24",
+        defaultTime: ["09:00", "10:00"],
+      },
+    });
+    await pickRange(12, 12);
+    const start = screen.getByRole("group", { name: "Start time" });
+    await user.click(within(start).getByRole("spinbutton", { name: "Hours" }));
+    await user.keyboard("{ArrowUp}{ArrowUp}");
+
+    expect(rangeText()).toBe(`${dayText(12)} 11:00|${dayText(12)} 11:00`);
   });
 });

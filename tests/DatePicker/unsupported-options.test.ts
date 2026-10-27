@@ -28,10 +28,10 @@ it("flags a time row outside the single type and an uneven minuteStep", () => {
   expect(
     getPropWarnings({
       ...base,
-      datePickerType: "range",
+      datePickerType: "week",
       timeGranularity: "minute",
     }),
-  ).toEqual([expect.stringMatching(/timeGranularity.*"single"/)]);
+  ).toEqual([expect.stringMatching(/timeGranularity.*"single" or "range"/)]);
   expect(
     getPropWarnings({
       ...base,

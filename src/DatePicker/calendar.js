@@ -612,76 +612,141 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   // --- Time -------------------------------------------------------------
 
-  /** Whether the calendar shows a time row. */
+  /** Whether the calendar shows time rows: one, or one per range end. */
   function hasTime() {
-    return !!config.timeGranularity && pickerMode === "single";
+    return !!config.timeGranularity && (pickerMode === "single" || isRange);
+  }
+
+  /** @type {import("./calendar-time.js").TimeParts} */
+  const MIDNIGHT = { hours: 0, minutes: 0, seconds: 0 };
+
+  /**
+   * The time a row starts at: `defaultTime`, or its entry for this end of
+   * a range.
+   *
+   * @param {number} index
+   */
+  function defaultTimeAt(index) {
+    const { defaultTime } = config;
+    const value = Array.isArray(defaultTime)
+      ? (defaultTime[index] ?? defaultTime[0])
+      : defaultTime;
+    return parseTimeString(value) ?? MIDNIGHT;
   }
 
   /**
-   * A time set in the row before any day was picked, given to the day
-   * picked next.
-   * @type {import("./calendar-time.js").TimeParts | undefined}
+   * Times set in a row before its day was picked, given to that day.
+   * @type {Array<import("./calendar-time.js").TimeParts | undefined>}
    */
-  let pendingTime;
+  let pendingTimes = [];
 
-  /** The time the row shows, and a picked day gets. */
-  function currentTime() {
-    const [selected] = self.selectedDates;
-    if (selected instanceof Date) return timeOf(selected);
-    return (
-      pendingTime ??
-      parseTimeString(config.defaultTime) ?? {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-      }
-    );
+  /**
+   * The time row `index` shows, and the day at that index gets.
+   *
+   * @param {number} index
+   */
+  function timeAt(index) {
+    const date = self.selectedDates[index];
+    if (date instanceof Date) return timeOf(date);
+    return pendingTimes[index] ?? defaultTimeAt(index);
   }
 
-  /** @type {ReturnType<typeof createTimeRow> | undefined} */
-  let timeRow;
+  /**
+   * Gives each selected date its row's time. A range that starts and ends
+   * on one day can't end before it starts, so the end catches up with the
+   * start, or the start with an edited end.
+   *
+   * @param {Array<import("./calendar-time.js").TimeParts>} times
+   * @param {number} [edited] The row whose time just changed.
+   */
+  function applyTimes(times, edited = 0) {
+    const next = self.selectedDates.map(
+      (/** @type {unknown} */ date, /** @type {number} */ i) =>
+        date instanceof Date
+          ? withTime(date, times[i] ?? times[0], config.timeGranularity)
+          : date,
+    );
+    if (isRange && next.length === 2 && next[1] < next[0]) {
+      next[1 - edited] = new Date(next[edited]);
+    }
+    self.selectedDates = next;
+  }
 
-  /** @param {import("./calendar-time.js").TimeParts} time */
-  function commitTime(time) {
-    const [selected] = self.selectedDates;
-    if (!(selected instanceof Date)) {
-      pendingTime = time;
+  /** @type {Array<ReturnType<typeof createTimeRow>>} */
+  let timeRows = [];
+  /** @type {HTMLElement | undefined} */
+  let timeContainer;
+
+  /** Each row's time, built or not. */
+  function rowTimes() {
+    return (isRange ? [0, 1] : [0]).map(timeAt);
+  }
+
+  /**
+   * @param {number} index
+   * @param {import("./calendar-time.js").TimeParts} time
+   */
+  function commitTime(index, time) {
+    if (!(self.selectedDates[index] instanceof Date)) {
+      pendingTimes[index] = time;
       return;
     }
-    const next = withTime(selected, time, config.timeGranularity);
-    self.selectedDates = [next];
-    self.latestSelectedDateObj = next;
+    const times = rowTimes();
+    times[index] = time;
+    applyTimes(times, index);
+    self.latestSelectedDateObj = self.selectedDates[index];
     updateValue();
     triggerEvent("onChange");
   }
 
-  /** Builds, rebuilds, or removes the time row to match the options. */
+  /**
+   * The rows' names. A range's two rows show theirs, so the start and end
+   * can be told apart.
+   * @returns {string[]}
+   */
+  function timeLabels() {
+    const { timeLabel } = config;
+    if (!isRange) {
+      return [Array.isArray(timeLabel) ? timeLabel[0] : (timeLabel ?? "Time")];
+    }
+    return Array.isArray(timeLabel) ? timeLabel : ["Start time", "End time"];
+  }
+
+  /** Builds, rebuilds, or removes the time rows to match the options. */
   function buildTimeRow() {
     if (!filled) return;
-    timeRow?.element.remove();
-    timeRow = undefined;
+    timeContainer?.remove();
+    timeContainer = undefined;
+    timeRows = [];
     toggleClass(
       self.calendarContainer,
       "bx--date-picker__calendar--time",
       hasTime(),
     );
     if (!hasTime()) return;
-    timeRow = createTimeRow({
-      label: config.timeLabel,
-      granularity: config.timeGranularity,
-      hourCycle: config.hourFormat === "24" ? "24" : "12",
-      minuteStep: config.minuteStep,
-      l10n: self.l10n,
-      idPrefix: `${self.element.id || "date-picker"}-time`,
-      onChange: commitTime,
-      onEnter: focusAndClose,
-      // Steps skip the hour a daylight saving change removes.
-      isAllowed: (time) => {
-        const [selected] = self.selectedDates;
-        return !(selected instanceof Date) || isTimeOnDay(selected, time);
-      },
-    });
-    self.innerContainer.after(timeRow.element);
+    const prefix = `${self.element.id || "date-picker"}-time`;
+    timeRows = timeLabels().map((label, index) =>
+      createTimeRow({
+        label,
+        showLabel: isRange,
+        granularity: config.timeGranularity,
+        hourCycle: config.hourFormat === "24" ? "24" : "12",
+        minuteStep: config.minuteStep,
+        l10n: self.l10n,
+        idPrefix: isRange ? `${prefix}-${index}` : prefix,
+        onChange: (time) => commitTime(index, time),
+        onEnter: focusAndClose,
+        // Steps skip the hour a daylight saving change removes.
+        isAllowed: (time) => {
+          const date = self.selectedDates[index];
+          return !(date instanceof Date) || isTimeOnDay(date, time);
+        },
+      }),
+    );
+    const container = createElement("div", "bx--date-picker__times");
+    container.append(...timeRows.map((row) => row.element));
+    self.innerContainer.after(container);
+    timeContainer = container;
     syncTimeRow();
     applyBlocked();
   }
@@ -694,8 +759,10 @@ export function createCalendarEngine(element, userConfig = {}) {
   let blocked;
 
   function applyBlocked() {
-    timeRow?.setDisabled(blocked === "disabled");
-    timeRow?.setReadOnly(blocked === "readonly");
+    for (const row of timeRows) {
+      row.setDisabled(blocked === "disabled");
+      row.setReadOnly(blocked === "readonly");
+    }
   }
 
   /** @param {undefined | "disabled" | "readonly"} state */
@@ -706,7 +773,9 @@ export function createCalendarEngine(element, userConfig = {}) {
   self.setBlocked = setBlocked;
 
   function syncTimeRow() {
-    timeRow?.setTime(currentTime());
+    timeRows.forEach((row, index) => {
+      row.setTime(timeAt(index));
+    });
   }
 
   // --- Value ------------------------------------------------------------
@@ -1730,10 +1799,9 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   /** @param {Date} date */
   function selectDateValue(date) {
-    // A picked day keeps the time already set.
-    const selected = hasTime()
-      ? withTime(date, currentTime(), config.timeGranularity)
-      : new Date(date.getTime());
+    // Picked days keep the times already set in the rows.
+    const times = hasTime() ? rowTimes() : undefined;
+    const selected = new Date(date.getTime());
     self.latestSelectedDateObj = selected;
     if (isMultiple) {
       const index = selectedIndex(selected);
@@ -1766,6 +1834,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     } else {
       self.selectedDates = [selected];
     }
+    if (times) applyTimes(times);
     return selected;
   }
 
@@ -1845,7 +1914,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (self.altInput) self.altInput.value = "";
     self.selectedDates = [];
     self.latestSelectedDateObj = undefined;
-    pendingTime = undefined;
+    pendingTimes = [];
     syncTimeRow();
     if (toInitial) {
       self.currentYear = self._initialDate.getFullYear();

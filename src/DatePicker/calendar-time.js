@@ -145,6 +145,7 @@ const pad = (value) => String(value).padStart(2, "0");
 /**
  * @typedef {{
  *   label: string;
+ *   showLabel?: boolean;
  *   granularity: TimeGranularity;
  *   hourCycle: HourCycle;
  *   minuteStep: number;
@@ -186,7 +187,17 @@ export function createTimeRow(options) {
   const row = document.createElement("div");
   row.className = "bx--date-picker__time";
   row.setAttribute("role", "group");
-  row.setAttribute("aria-label", options.label);
+  if (options.showLabel) {
+    // A range's rows show their names, so the start and end tell apart.
+    const label = document.createElement("span");
+    label.className = "bx--date-picker__time-label";
+    label.id = `${idPrefix}-label`;
+    label.textContent = options.label;
+    row.setAttribute("aria-labelledby", label.id);
+    row.appendChild(label);
+  } else {
+    row.setAttribute("aria-label", options.label);
+  }
 
   // Digits and separators read left to right in every language.
   const fields = document.createElement("div");
