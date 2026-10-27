@@ -389,6 +389,17 @@ export async function rollback(region, id) {
   <div data-testid="tabs-container-skeleton">
     <TabsSkeleton type="container" count={3} />
   </div>
+  <div data-testid="tabs-default">
+    <Tabs>
+      <Tab label="Overview" />
+      <Tab label="Logs" />
+      <Tab label="Metrics" />
+      <Tab label="Settings" disabled />
+    </Tabs>
+  </div>
+  <div data-testid="tabs-default-skeleton">
+    <TabsSkeleton count={3} />
+  </div>
 </Content>
 
 <style>

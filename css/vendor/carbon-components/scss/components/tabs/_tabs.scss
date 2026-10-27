@@ -81,7 +81,9 @@
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     + .#{$prefix}--tabs__nav-item {
-      margin-left: to-rem(1px);
+      // ccs: the gap sits at each later tab's inline start, so it stays
+      // between tabs under `dir="rtl"`
+      margin-inline-start: to-rem(1px);
     }
   }
 
@@ -97,7 +99,7 @@
 
   .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item {
     + .#{$prefix}--tabs__nav-item {
-      margin-left: 0;
+      margin-inline-start: 0; // ccs: logical, as above
       // Draws the border without affecting the inner-content
       // ccs: the divider sits at the inline start, `--ccs-inline-sign` flips
       // it under `dir="rtl"`
@@ -413,7 +415,9 @@
 
     .#{$prefix}--tabs--scrollable__nav-item
       + .#{$prefix}--tabs--scrollable__nav-item {
-      margin-left: to-rem(1px);
+      // ccs: the gap sits at each later tab's inline start, so it stays
+      // between tabs under `dir="rtl"`
+      margin-inline-start: to-rem(1px);
     }
 
     &.#{$prefix}--tabs--scrollable--container
@@ -424,7 +428,7 @@
     &.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs--scrollable__nav-item
       + .#{$prefix}--tabs--scrollable__nav-item {
-      margin-left: 0;
+      margin-inline-start: 0; // ccs: logical, as above
       // Draws the border without affecting the inner-content
       // ccs: the divider sits at the inline start, `--ccs-inline-sign` flips
       // it under `dir="rtl"`
