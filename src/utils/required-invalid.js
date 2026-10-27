@@ -14,6 +14,9 @@ import { addPooledListener } from "./window-listener-pool.js";
  * @property {boolean} [proxy] Set for a hidden input that validates on
  * behalf of a list box: its `invalid` event is always cancelled, so the
  * browser never focuses it or anchors a bubble to it.
+ * @property {boolean} [pattern] Also handle a `pattern` mismatch, for a
+ * field whose pattern the user never wrote and can't read in the bubble,
+ * such as the one DatePicker derives from `dateFormat`.
  * @property {boolean} [enabled] Set to `false` while the field isn't
  * required, so it adds no listeners. Defaults to `true`.
  */
@@ -42,8 +45,9 @@ function isUserInvalid(control) {
  *
  * Listens for `invalid` on `node` and, in the capture phase, on the controls
  * inside it, so it serves a single input or a fieldset of checkboxes or
- * radios. Only a missing value is handled; other constraint failures, such
- * as `pattern`, keep the browser's own message. Errors show on a submit
+ * radios. Only a missing value is handled, plus a `pattern` mismatch with
+ * the `pattern` option; other constraint failures keep the browser's own
+ * message. Errors show on a submit
  * attempt, not when code calls `checkValidity()`. The event is then
  * cancelled, which suppresses the bubble but still blocks submission, and
  * the field is focused if it's the first invalid control in the form.
@@ -57,7 +61,7 @@ function isUserInvalid(control) {
  * @returns {{ update: (options: RequiredInvalidOptions) => void, destroy: () => void }}
  */
 export function requiredInvalid(node, options) {
-  let { onChange, getFocusTarget, proxy = false } = options;
+  let { onChange, getFocusTarget, proxy = false, pattern = false } = options;
   /** @type {ReturnType<typeof setTimeout> | undefined} */
   let timeout;
   /** @type {(() => void) | undefined} */
@@ -66,7 +70,10 @@ export function requiredInvalid(node, options) {
   /** @param {Event} event */
   function handleInvalid(event) {
     const control = /** @type {Control} */ (event.target);
-    if (!control.validity?.valueMissing) return;
+    const validity = control.validity;
+    if (!validity?.valueMissing && !(pattern && validity?.patternMismatch)) {
+      return;
+    }
     const show = isUserInvalid(control);
     if (show || proxy) event.preventDefault();
     if (!show) return;
@@ -120,7 +127,7 @@ export function requiredInvalid(node, options) {
 
   return {
     update(next) {
-      ({ onChange, getFocusTarget, proxy = false } = next);
+      ({ onChange, getFocusTarget, proxy = false, pattern = false } = next);
       const enabled = next.enabled ?? true;
       if (enabled && !stop) stop = start();
       else if (!enabled && stop) {
