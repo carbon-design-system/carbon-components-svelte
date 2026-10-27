@@ -128,9 +128,12 @@
     setContext,
     tick,
   } from "svelte";
-  import { derived, readable, writable } from "svelte/store";
+  import { derived, get, readable, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    MENU_OPEN_CONTEXT_KEY,
+    MENU_PLACEMENT_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
@@ -150,6 +153,7 @@
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitIntrinsicAlign, physicalAlign } from "../utils/menu-placement.js";
   import { makeInert, makeLive, menuPreset } from "../utils/menu-transition.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -270,6 +274,10 @@
     (!isSubmenu && getContext(MENU_PLACEMENT_CONTEXT_KEY)) || readable(null);
   $: placementAnchor = $placementGroup ?? anchor;
 
+  // Set by MenuButton and ComboButton when an arrow key opened the menu.
+  /** @type {undefined | import("svelte/store").Writable<null | "ArrowDown" | "ArrowUp">} */
+  const openKey = isSubmenu ? undefined : getContext(MENU_OPEN_CONTEXT_KEY);
+
   // Ids of `selected` items a `MenuItemGroup` has already seeded. Items and
   // submenus remount on every open, so this lives on the root menu.
   /** @type {Set<string>} */
@@ -308,10 +316,15 @@
       tick().then(() => {
         // `ref` stays unset during server rendering, which has no DOM.
         if (!open || !ref) return;
-        const firstItem = ref.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
-        if (firstItem instanceof HTMLElement) {
-          focusIndex = getItems().indexOf(firstItem);
-          focusMenuItem(firstItem);
+        const enabled = /** @type {HTMLElement[]} */ (
+          Array.from(ref.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR))
+        );
+        const key = openKey ? get(openKey) : null;
+        openKey?.set(null);
+        const item = key ? pickEdgeMenuItem(key, enabled) : enabled[0];
+        if (item) {
+          focusIndex = getItems().indexOf(item);
+          focusMenuItem(item);
         } else {
           ref.focus({ preventScroll: true });
         }
