@@ -90,6 +90,13 @@
     flex: 1 1 auto;
   }
 
+  // Wrapped rows in an xs field sit 4px apart, the same as its edges: the
+  // tag set's 8px gap made the edges look cramped beside it. Tags in a row
+  // stay 8px apart.
+  .#{$prefix}--tag-input--xs .#{$prefix}--tag-input__tags .#{$prefix}--tag-set__space {
+    row-gap: $carbon--spacing-02;
+  }
+
   // Grows to fill the row, and wraps to a new row rather than narrowing
   // below 64px. `.bx--tag-set__space > *` pins children at
   // `flex-shrink: 0`; let the input shrink in a field narrower than that.
