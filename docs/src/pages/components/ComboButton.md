@@ -11,7 +11,7 @@ description: ComboButton pairs a primary action with a menu of related secondary
 
 ## Basic
 
-Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu. See [Events](#events) for the trigger's other events and the menu's `close` event.
+Wrap `MenuItem` components in `ComboButton` and set `labelText` for the primary action button. Clicking the label fires `on:click`; clicking the chevron trigger opens the menu. With the chevron focused, <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> open the menu on its first or last item. See [Events](#events) for the trigger's other events and the menu's `close` event.
 
 <ComboButton labelText="Save">
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
