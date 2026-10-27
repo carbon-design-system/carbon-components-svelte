@@ -392,7 +392,7 @@ Set `columnAlign` in `headers` to align a column's header and cells. Values are 
 
 ### Horizontal scroll
 
-When a table's columns need more space than its container, the table becomes horizontally scrollable.
+When a table's columns need more space than its container, the table becomes horizontally scrollable. To keep a column in view while it scrolls, see [Pinned](#pinned).
 
 <DataTable
   headers={[
@@ -411,6 +411,26 @@ When a table's columns need more space than its container, the table becomes hor
     { id: "3", name: "Fatima Al-Sayed", email: "fatima.alsayed@example.com", department: "Customer Success", role: "Customer Success Lead", location: "Dubai, UAE", status: "Away", lastActive: "Yesterday" },
   ]}
 />
+
+### Pinned
+
+Set `columnPinned` to `"start"` or `"end"` in `headers` to keep a column in view while the table scrolls horizontally. Values are logical: `start` is the left edge in left-to-right text and the right edge in right-to-left text.
+
+A pinned column renders at its edge wherever it sits in `headers`, and the columns on one edge keep their `headers` order. The expand and selection columns pin with the start group, and footer cells pin with their columns. `cellIndex` in the `cell` slot is the rendered index.
+
+| Do | Why |
+| --- | --- |
+| Give each pinned column a `width` in `px`, `rem` or `em`, and set `fixedLayout`. | The offsets are summed from the declared widths, so the server output and the first paint are right. An auto layout can lay a column out narrower than its `width`; the table then measures the pinned headers and corrects the offsets after mount. |
+| Pin a few narrow columns. | Pinned columns take room from the scrolling area. A pinned group wider than the container leaves nothing to scroll. |
+| Leave a percentage `width` off a pinned column. | A percentage can't be summed into an offset. The column counts as zero wide until the table measures it. |
+
+<FileSource src="/framed/DataTable/DataTablePinnedColumns" />
+
+### Pinned (sticky header)
+
+Pinning works with `stickyHeader`. A pinned header cell stays in the corner while the body scrolls in both directions.
+
+<FileSource src="/framed/DataTable/DataTablePinnedColumnsStickyHeader" />
 
 ## Column visibility
 
