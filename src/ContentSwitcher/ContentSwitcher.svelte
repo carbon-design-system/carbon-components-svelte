@@ -23,8 +23,9 @@
 
   /**
    * Specify the size of the content switcher.
-   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
-   * @type {"sm" | "md" | "lg" | "xl" | undefined}
+   * Inherits the parent `InputGroup` size when unset. Also accepts Carbon
+   * v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
 
@@ -40,7 +41,8 @@
 
   /**
    * Set to `true` to size each switch to its label instead of splitting the
-   * width evenly. The switcher shrinks to fit its switches.
+   * width evenly. The switcher shrinks to fit its switches. Always on in an
+   * `InputGroup`.
    */
   export let autoWidth = false;
 
@@ -70,11 +72,12 @@
   import {
     afterUpdate,
     createEventDispatcher,
+    getContext,
     onMount,
     setContext,
     tick,
   } from "svelte";
-  import { derived, get, writable } from "svelte/store";
+  import { derived, get, readable, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
@@ -100,7 +103,11 @@
       ? labelId
       : undefined;
 
-  $: effectiveSize = normalizeFieldSize(size);
+  // Beside a field in an InputGroup, the switcher takes the row's height
+  // and is as wide as its switches.
+  const inputGroup = getContext("carbon:InputGroup");
+  const groupSize = inputGroup?.size ?? readable(undefined);
+  $: effectiveSize = normalizeFieldSize(size ?? $groupSize);
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -551,11 +558,12 @@
       aria-labelledby={labelledBy}
       use:rovingFocus={rovingFocusOptions}
       class:bx--content-switcher={true}
+      class:bx--content-switcher--xs={effectiveSize === "xs"}
       class:bx--content-switcher--sm={effectiveSize === "sm"}
       class:bx--content-switcher--xl={effectiveSize === "xl"}
       class:bx--content-switcher--icon-only={isIconOnly}
       class:bx--content-switcher--low-contrast={lowContrast}
-      class:bx--content-switcher--auto-width={autoWidth}
+      class:bx--content-switcher--auto-width={autoWidth || !!inputGroup}
       {...$$restProps}
       on:click
       on:mouseover
@@ -573,11 +581,12 @@
     role="tablist"
     use:rovingFocus={rovingFocusOptions}
     class:bx--content-switcher={true}
+    class:bx--content-switcher--xs={effectiveSize === "xs"}
     class:bx--content-switcher--sm={effectiveSize === "sm"}
     class:bx--content-switcher--xl={effectiveSize === "xl"}
     class:bx--content-switcher--icon-only={isIconOnly}
     class:bx--content-switcher--low-contrast={lowContrast}
-    class:bx--content-switcher--auto-width={autoWidth}
+    class:bx--content-switcher--auto-width={autoWidth || !!inputGroup}
     {...$$restProps}
     on:click
     on:mouseover

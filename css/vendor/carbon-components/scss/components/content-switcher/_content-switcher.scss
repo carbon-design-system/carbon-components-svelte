@@ -34,6 +34,11 @@
     outline-color: $border-strong; // ccs: as v11, to match its switches
   }
 
+  // ccs: xs, to sit beside 24px fields in an InputGroup.
+  .#{$prefix}--content-switcher--xs {
+    height: to-rem(24px);
+  }
+
   .#{$prefix}--content-switcher--sm {
     height: to-rem(32px);
   }
@@ -247,6 +252,11 @@
     width: to-rem(40px);
   }
 
+  .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--xs
+    .#{$prefix}--content-switcher__skeleton-switch {
+    width: to-rem(24px);
+  }
+
   .#{$prefix}--content-switcher--icon-only.#{$prefix}--content-switcher--sm
     .#{$prefix}--content-switcher__skeleton-switch {
     width: to-rem(32px);
@@ -313,6 +323,16 @@
     width: to-rem(40px);
     justify-content: center;
     padding: 0;
+  }
+
+  // The default 8px block padding would leave no room for the label.
+  .#{$prefix}--content-switcher--xs .#{$prefix}--content-switcher-btn {
+    padding-block: 0;
+  }
+
+  .#{$prefix}--content-switcher--xs
+    .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon {
+    width: to-rem(24px);
   }
 
   .#{$prefix}--content-switcher--sm
