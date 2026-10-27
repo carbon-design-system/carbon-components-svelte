@@ -545,3 +545,19 @@
 @include exports("data-table-crosshair") {
   @include data-table-crosshair;
 }
+
+// carbon-components-svelte patch (cell focus)
+
+/// The focus ring of a navigable cell (`DataTable`'s `cellFocus`), drawn
+/// inside the cell so a neighbor or a pinned column does not clip it.
+/// @access private
+/// @group components
+@mixin data-table-cell-focus {
+  .#{$prefix}--data-table td:focus {
+    @include focus-outline("outline");
+  }
+}
+
+@include exports("data-table-cell-focus") {
+  @include data-table-cell-focus;
+}

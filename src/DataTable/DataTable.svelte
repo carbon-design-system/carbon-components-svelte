@@ -505,6 +505,17 @@
    */
   export let crosshair = false;
 
+  /**
+   * Set to `true` to make the body cells keyboard navigable, as in a grid.
+   * One cell is a tab stop; the arrow keys move between cells (`ArrowLeft`
+   * and `ArrowRight` follow the text direction), `Home` and `End` go to the
+   * ends of the row, and `Ctrl` with them to the ends of the table. The
+   * table gets `role="grid"`. With `crosshair`, the focused cell drives the
+   * cross. Use it for read-only values: an interactive control inside a
+   * cell takes its own keys, so keep those cells out of a navigable table.
+   */
+  export let cellFocus = false;
+
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
@@ -620,6 +631,7 @@
   import { toCssLength } from "../utils/css-length.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
+  import { inlineKey } from "../utils/inline-direction.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
@@ -640,6 +652,7 @@
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
+  import { findCellTarget } from "./cell-navigation.js";
   import {
     compareValues,
     computePinnedOffsets,
@@ -1495,8 +1508,46 @@
    * @type {null | { rowId: Row["id"]; key: string | undefined }}
    */
   let hoverCell = null;
-  $: crossRowId = crosshair && hoverCell ? hoverCell.rowId : undefined;
-  $: crossKey = crosshair && hoverCell ? hoverCell.key : undefined;
+  /**
+   * The cell holding focus, when `cellFocus` is set.
+   * @type {null | { rowId: Row["id"]; key: string | undefined }}
+   */
+  let focusCell = null;
+  /**
+   * The cell the next Tab lands on: the last one focused, else the first
+   * painted. It is dropped when a filter or page change removes its row.
+   * @type {null | { rowId: Row["id"]; key: string }}
+   */
+  let tabCell = null;
+  $: crossCell = hoverCell || focusCell;
+  $: crossRowId = crosshair && crossCell ? crossCell.rowId : undefined;
+  $: crossKey = crosshair && crossCell ? crossCell.key : undefined;
+
+  $: tabRowId = cellFocus
+    ? resolveTabRow(tabCell, rowIdsToRender, hideMode, matchedRowIdsSet)
+    : undefined;
+  $: tabKey = cellFocus ? resolveTabKey(tabCell, visibleHeaders) : undefined;
+
+  /**
+   * @param {null | { rowId: Row["id"]; key: string }} cell
+   * @param {ReadonlyArray<Row["id"]>} ids
+   * @param {boolean} hidden Whether rows outside `matched` are hidden.
+   * @param {Set<Row["id"]>} matched
+   */
+  function resolveTabRow(cell, ids, hidden, matched) {
+    if (cell && ids.includes(cell.rowId)) return cell.rowId;
+    return ids.find((rowId) => !hidden || matched.has(rowId));
+  }
+
+  /**
+   * @param {null | { rowId: Row["id"]; key: string }} cell
+   * @param {ReadonlyArray<{ key: string; empty?: boolean }>} columns
+   */
+  function resolveTabKey(cell, columns) {
+    const keys = columns.filter((column) => !column.empty);
+    if (cell && keys.some((column) => column.key === cell.key)) return cell.key;
+    return keys[0]?.key;
+  }
 
   /**
    * The key of the column a body cell belongs to, read from the `headers`
@@ -1522,6 +1573,48 @@
     const key = columnKeyAt(event.target);
     if (hoverCell?.rowId === rowId && hoverCell.key === key) return;
     hoverCell = { rowId, key };
+  }
+
+  /**
+   * @param {FocusEvent} event
+   * @param {Row["id"]} rowId
+   */
+  function handleCellFocus(event, rowId) {
+    if (!cellFocus) return;
+    const cell = /** @type {Element} */ (event.target).closest("td[tabindex]");
+    const key = columnKeyAt(cell);
+    if (key === undefined) return;
+    if (tabCell?.rowId !== rowId || tabCell.key !== key) {
+      tabCell = { rowId, key };
+    }
+    if (focusCell?.rowId !== rowId || focusCell.key !== key) {
+      focusCell = { rowId, key };
+    }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleCellKeydown(event) {
+    const cell = event.target;
+    if (
+      !cellFocus ||
+      !(cell instanceof HTMLTableCellElement) ||
+      !cell.hasAttribute("tabindex") ||
+      event.altKey ||
+      event.shiftKey
+    ) {
+      return;
+    }
+    const ctrl = event.ctrlKey || event.metaKey;
+    // Only `Home` and `End` take `Ctrl`; the arrows are left to the browser with it.
+    if (ctrl && event.key !== "Home" && event.key !== "End") return;
+    const target = findCellTarget(
+      cell,
+      inlineKey(event.key, undefined, cell),
+      ctrl,
+    );
+    if (!target) return;
+    event.preventDefault();
+    target.focus();
   }
 
   /**
@@ -1643,6 +1736,7 @@
       {useStaticWidth}
       {fixedLayout}
       pinnedColumns={pinnedLayouts !== null}
+      grid={cellFocus}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
       aria-label={ariaLabel}
@@ -1881,7 +1975,7 @@
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isHighlighted =
-              highlightedRowIdsSet.has(row.id) || row.id === crossRowId}
+              highlightedRowIdsSet.has(row.id) || rowId === crossRowId}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -1923,7 +2017,10 @@
               on:mouseenter={() => {
                 dispatch("mouseenter:row", row);
               }}
-              on:mouseover={(event) => handleCellPointer(event, row.id)}
+              on:mouseover={(event) => handleCellPointer(event, rowId)}
+              on:focusin={(event) => handleCellFocus(event, rowId)}
+              on:focusout={() => (focusCell = null)}
+              on:keydown={handleCellKeydown}
               on:mouseleave={() => {
                 hoverCell = null;
                 dispatch("mouseleave:row", row);
@@ -2120,6 +2217,11 @@
                     `${id}-${cell.key}`,
                   )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
+                  tabindex={cellFocus && !cell.empty
+                    ? rowId === tabRowId && cell.key === tabKey
+                      ? 0
+                      : -1
+                    : undefined}
                   on:click={(event) => {
                     if (cell.empty) return;
                     dispatch("click", { row, cell });
@@ -2192,7 +2294,7 @@
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
             {@const isHighlighted =
-              highlightedRowIdsSet.has(row.id) || row.id === crossRowId}
+              highlightedRowIdsSet.has(row.id) || rowId === crossRowId}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -2240,7 +2342,10 @@
               on:mouseenter={() => {
                 dispatch("mouseenter:row", row);
               }}
-              on:mouseover={(event) => handleCellPointer(event, row.id)}
+              on:mouseover={(event) => handleCellPointer(event, rowId)}
+              on:focusin={(event) => handleCellFocus(event, rowId)}
+              on:focusout={() => (focusCell = null)}
+              on:keydown={handleCellKeydown}
               on:mouseleave={() => {
                 hoverCell = null;
                 dispatch("mouseleave:row", row);
@@ -2435,6 +2540,11 @@
                     `${id}-${cell.key}`,
                   )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
+                  tabindex={cellFocus && !cell.empty
+                    ? rowId === tabRowId && cell.key === tabKey
+                      ? 0
+                      : -1
+                    : undefined}
                   on:click={(event) => {
                     if (cell.empty) return;
                     dispatch("click", { row, cell });
