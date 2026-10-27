@@ -174,3 +174,5 @@ Use low contrast variants for less prominent notifications.
 <ToastNotification lowContrast kind="success" title="Export complete" subtitle="Your report has been exported and is ready for download." caption="{new Date().toLocaleString()}" />
 <ToastNotification lowContrast kind="warning" title="Disk space low" subtitle="The application server has less than 10% of disk space remaining." caption="{new Date().toLocaleString()}" />
 <ToastNotification lowContrast kind="warning-alt" title="Disk space low" subtitle="The application server has less than 10% of disk space remaining." caption="{new Date().toLocaleString()}" />
+
+Replace the status icon with the "icon" slot, as a [NotificationQueue](/components/NotificationQueue#promise) does for a spinner while a promise is pending. Give the replacement the `bx--toast-notification__icon` class so it keeps the icon's spacing, and hide it from screen readers when the title already says what it shows.
