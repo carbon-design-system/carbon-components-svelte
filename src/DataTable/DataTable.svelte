@@ -496,6 +496,15 @@
    */
   export let highlightedRowIds = [];
 
+  /**
+   * Set to `true` to highlight the row and column of the cell under the
+   * pointer, including the column's header. Use it on a grid of values read
+   * across two axes, such as a timetable. Rows get
+   * `bx--data-table--highlighted-row`, and the column's header and cells get
+   * `bx--data-table--highlighted-column`.
+   */
+  export let crosshair = false;
+
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
@@ -1479,6 +1488,57 @@
 
   $: hasRowDecorator = $$slots.rowDecorator;
 
+  /**
+   * The cell under the pointer. Only the row id and column key are read, so
+   * moving within a row or a column changes at most one of them and a cell
+   * that is neither re-renders nothing.
+   * @type {null | { rowId: Row["id"]; key: string | undefined }}
+   */
+  let hoverCell = null;
+  $: crossRowId = crosshair && hoverCell ? hoverCell.rowId : undefined;
+  $: crossKey = crosshair && hoverCell ? hoverCell.key : undefined;
+
+  /**
+   * The key of the column a body cell belongs to, read from the `headers`
+   * attribute that ties it to its header (`{id}-{key}`). The expand and
+   * selection cells have none.
+   * @param {EventTarget | null} target
+   */
+  function columnKeyAt(target) {
+    const cell = /** @type {Element | null} */ (target)?.closest?.("td");
+    const ref = cell?.getAttribute("headers");
+    const prefix = `${id}-`;
+    return ref?.startsWith(prefix) && ref !== `${id}-expand`
+      ? ref.slice(prefix.length)
+      : undefined;
+  }
+
+  /**
+   * @param {MouseEvent} event
+   * @param {Row["id"]} rowId
+   */
+  function handleCellPointer(event, rowId) {
+    if (!crosshair) return;
+    const key = columnKeyAt(event.target);
+    if (hoverCell?.rowId === rowId && hoverCell.key === key) return;
+    hoverCell = { rowId, key };
+  }
+
+  /**
+   * @param {{ key: string; columnAlign?: string }} header
+   * @param {import("./data-table-utils.js").PinnedColumnLayout | undefined} pin
+   * @param {string | undefined} highlightedKey Passed in, not read from the
+   * component, so a template call re-runs when the highlighted column moves.
+   */
+  function formatHeaderClass(header, pin, highlightedKey) {
+    return joinClasses(
+      formatColumnClass(header.columnAlign, pin),
+      highlightedKey !== undefined && header.key === highlightedKey
+        ? "bx--data-table--highlighted-column"
+        : undefined,
+    );
+  }
+
   // The title decorator has no AI surface, so its state is not read.
   const titleAILabelState = { set() {} };
 
@@ -1740,7 +1800,10 @@
               {#if header.columnMenu}
                 <th
                   scope="col"
-                  class={formatPinnedClass(pin, "bx--table-column-menu")}
+                  class={joinClasses(
+                    formatHeaderClass(header, pin, crossKey),
+                    "bx--table-column-menu",
+                  )}
                   style={formatColumnStyle(header, pin)}
                   >{#if header.value}<span class:bx--visually-hidden={true}
                       >{header.value}</span
@@ -1749,7 +1812,7 @@
               {:else}
                 <th
                   scope="col"
-                  class={formatPinnedClass(pin)}
+                  class={formatHeaderClass(header, pin, crossKey)}
                   style={formatColumnStyle(header, pin)}
                 >
                   <div class:bx--table-header-label={true}>
@@ -1763,7 +1826,7 @@
               {#if $$slots.headerDecorator}
                 <TableHeader
                   id="{id}-{header.key}"
-                  class={formatColumnClass(header.columnAlign, pin)}
+                  class={formatHeaderClass(header, pin, crossKey)}
                   style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
@@ -1783,7 +1846,7 @@
               {:else}
                 <TableHeader
                   id="{id}-{header.key}"
-                  class={formatColumnClass(header.columnAlign, pin)}
+                  class={formatHeaderClass(header, pin, crossKey)}
                   style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
@@ -1817,7 +1880,8 @@
             {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
+            {@const isHighlighted =
+              highlightedRowIdsSet.has(row.id) || row.id === crossRowId}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -1827,6 +1891,7 @@
                     expanded: isExpanded,
                   })
                 : rowClass}
+            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
             <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
@@ -1858,7 +1923,9 @@
               on:mouseenter={() => {
                 dispatch("mouseenter:row", row);
               }}
+              on:mouseover={(event) => handleCellPointer(event, row.id)}
               on:mouseleave={() => {
+                hoverCell = null;
                 dispatch("mouseleave:row", row);
               }}
             >
@@ -2041,6 +2108,9 @@
                 <td
                   class={joinClasses(
                     formatColumnClass(cell.columnAlign, pin),
+                    cell.key === crossKey
+                      ? "bx--data-table--highlighted-column"
+                      : undefined,
                     cellClassValue,
                   )}
                   style={formatInsetStyle(pin)}
@@ -2121,7 +2191,8 @@
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
+            {@const isHighlighted =
+              highlightedRowIdsSet.has(row.id) || row.id === crossRowId}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -2131,6 +2202,7 @@
                     expanded: isExpanded,
                   })
                 : rowClass}
+            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
             <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
@@ -2168,7 +2240,9 @@
               on:mouseenter={() => {
                 dispatch("mouseenter:row", row);
               }}
+              on:mouseover={(event) => handleCellPointer(event, row.id)}
               on:mouseleave={() => {
+                hoverCell = null;
                 dispatch("mouseleave:row", row);
               }}
             >
@@ -2349,6 +2423,9 @@
                 <td
                   class={joinClasses(
                     formatColumnClass(cell.columnAlign, pin),
+                    cell.key === crossKey
+                      ? "bx--data-table--highlighted-column"
+                      : undefined,
                     cellClassValue,
                   )}
                   style={formatInsetStyle(pin)}

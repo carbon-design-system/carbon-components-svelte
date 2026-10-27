@@ -507,3 +507,41 @@
 @include exports("data-table-pinned-columns") {
   @include data-table-pinned-columns;
 }
+
+// carbon-components-svelte patch (crosshair)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The column half of `DataTable`'s `crosshair`. The row half is the
+/// highlighted row above. A header and its cells in the column the pointer
+/// is over take the row hover fill, so the two axes read as one cross.
+///
+/// A selected row keeps its own fill: its selection must stay legible, and
+/// the cell where the pointer is already takes the selected hover fill from
+/// the row. Zebra rows set their fill on `tr:not(.parent-row) > td`, so the
+/// zebra table gets its own rule at that weight, naming the same two `:not()`s.
+/// @access private
+/// @group components
+@mixin data-table-crosshair {
+  .#{$prefix}--data-table thead .#{$prefix}--data-table--highlighted-column {
+    background-color: $layer-accent-hover;
+  }
+
+  .#{$prefix}--data-table
+    tbody
+    tr:not(.#{$prefix}--data-table--selected)
+    > .#{$prefix}--data-table--highlighted-column {
+    background-color: $layer-hover;
+  }
+
+  .#{$prefix}--data-table--zebra
+    > tbody
+    > tr:not(.#{$prefix}--parent-row):not(.#{$prefix}--data-table--selected)
+    > .#{$prefix}--data-table--highlighted-column {
+    background-color: $layer-hover;
+  }
+}
+
+@include exports("data-table-crosshair") {
+  @include data-table-crosshair;
+}
