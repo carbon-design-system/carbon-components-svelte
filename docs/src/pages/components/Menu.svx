@@ -46,7 +46,7 @@ Pass a Carbon icon to `icon`.
 
 ### Shortcuts
 
-Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+Set `shortcut` to show its keys on the right of the row, such as `"mod+x"`: ⌘X on Apple platforms, Ctrl+X elsewhere. The item announces them with `aria-keyshortcuts`. The menu only shows the keys, since it's usually closed when they're pressed: bind the command itself with `onShortcut`. For other content, use `shortcutText` or its slot, which take precedence. A value that isn't a shortcut, such as `"⌘C"` from Carbon React's free-text `shortcut`, shows as written, with no `aria-keyshortcuts`.
 
 <FileSource src="/framed/Menu/MenuItemShortcuts" />
 
