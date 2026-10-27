@@ -238,6 +238,7 @@ export { default as Tabs } from "./Tabs/Tabs.svelte";
 export { default as TabsSkeleton } from "./Tabs/TabsSkeleton.svelte";
 export { default as TabsVertical } from "./Tabs/TabsVertical.svelte";
 export { default as TabsVerticalSkeleton } from "./Tabs/TabsVerticalSkeleton.svelte";
+export { default as ColorTag } from "./Tag/ColorTag.svelte";
 export { default as OperationalTag } from "./Tag/OperationalTag.svelte";
 export { default as SelectableTag } from "./Tag/SelectableTag.svelte";
 export { default as Swatch } from "./Tag/Swatch.svelte";

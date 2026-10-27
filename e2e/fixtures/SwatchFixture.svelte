@@ -1,5 +1,5 @@
 <script>
-  import { Stack, Swatch, Tag } from "carbon-components-svelte";
+  import { ColorTag, Stack, Swatch, Tag } from "carbon-components-svelte";
 
   const colors = [
     "red",
@@ -61,6 +61,14 @@
       <Swatch slot="icon" color="red" />
       On a blue tag
     </Tag>
+  </Stack>
+
+  <Stack orientation="horizontal" gap={3} wrap="wrap" data-testid="color-tag">
+    <ColorTag colorKey="Platform">Platform</ColorTag>
+    <ColorTag colorKey="Design" filter title="Remove Design">Design</ColorTag>
+    <ColorTag colorKey="Billing" interactive>Billing</ColorTag>
+    <ColorTag cssColor="#ff7eb6" size="sm">Custom</ColorTag>
+    <ColorTag colorKey="Data" showSwatch={false}>No swatch</ColorTag>
   </Stack>
 
   <Stack orientation="horizontal" gap={5} data-testid="legend">
