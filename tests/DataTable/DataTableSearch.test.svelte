@@ -10,6 +10,7 @@
   export let value = "";
   export let persistent = false;
   export let shouldFilterRows: ComponentProps<ToolbarSearch>["shouldFilterRows"] = true;
+  export let toolbarSize: ComponentProps<Toolbar>["size"] = undefined;
 
   const initialRows = Array.from({ length: 10 }).map((_, i) => ({
     id: i,
@@ -56,7 +57,7 @@
   {pageSize}
   {page}
 >
-  <Toolbar>
+  <Toolbar size={toolbarSize}>
     <ToolbarContent>
       <ToolbarSearch
         {persistent}

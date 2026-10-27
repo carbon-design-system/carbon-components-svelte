@@ -390,7 +390,13 @@ describe("SearchMenu", () => {
 
 describe("SearchMenu sizes", () => {
   it.each([
-    ["defaults the input and menu to xl", {}, "xl", "xl", "sm"],
+    [
+      "defaults the input and menu to lg, like other fields",
+      {},
+      "lg",
+      "lg",
+      "xl",
+    ],
     [
       "sizes the menu to match the input size",
       { size: "sm" },
