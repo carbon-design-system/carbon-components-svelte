@@ -155,6 +155,19 @@ async function shadowX(locator: Locator) {
   return x ? Number.parseFloat(x[1]) : 0;
 }
 
+/** The space before each item after the first, at its inline start, in px. */
+function inlineGaps(locator: Locator, dir: "rtl" | "ltr") {
+  return locator.evaluateAll((items, dir) => {
+    const rects = items.map((item) => item.getBoundingClientRect());
+    return rects.slice(1).map((rect, index) => {
+      const prev = rects[index];
+      const gap =
+        dir === "ltr" ? rect.left - prev.right : prev.left - rect.right;
+      return Math.round(gap * 100) / 100;
+    });
+  }, dir);
+}
+
 /** Each LTR box reflected across the viewport's vertical center. */
 function mirror(ltr: Record<string, Box | null>, viewportWidth: number) {
   return Object.fromEntries(
@@ -859,6 +872,30 @@ test.describe("right-to-left layout", () => {
       expect
         .soft(await shadowX(skeleton.nth(1)), `${dir} skeleton`)
         .toBe(-sign);
+    }
+  });
+
+  // Default tabs keep a 1px gap at each later tab's inline start.
+  // Contained tabs sit flush and draw a divider there instead.
+  test("spaces Tabs at the inline start", async ({ page }) => {
+    const cases = [
+      ["tabs-default", ".bx--tabs__nav-item", [1, 1, 1]],
+      ["tabs-default-skeleton", ".bx--tabs--scrollable__nav-item", [1, 1]],
+      ["tabs-container", ".bx--tabs__nav-item", [0, 0, 0]],
+      ["tabs-container-skeleton", ".bx--tabs--scrollable__nav-item", [0, 0]],
+    ] as const;
+
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      const measured = await Promise.all(
+        cases.map(([testId, item]) =>
+          inlineGaps(page.getByTestId(testId).locator(item), dir),
+        ),
+      );
+      cases.forEach(([testId, , gaps], index) => {
+        expect.soft(measured[index], `${dir} ${testId}`).toEqual(gaps);
+      });
     }
   });
 
