@@ -82,9 +82,11 @@
   // Fields read the size like any other form size; buttons read a height
   // match, the same way they read an `ActionSet`'s size.
   setContext(FORM_SIZE_CONTEXT_KEY, sharedSize);
+  // Controls that don't size like fields (ContentSwitcher, OverflowMenu,
+  // MenuButton, ComboButton) read `size` to match the row.
   /** @type {import("svelte/store").Readable<"xs" | "small" | "field" | undefined>} */
   const buttonSize = derived(sharedSize, ($size) => BUTTON_SIZE[$size ?? "md"]);
-  setContext("carbon:InputGroup", { buttonSize });
+  setContext("carbon:InputGroup", { size: sharedSize, buttonSize });
 
   $: labelId = `label-${id}`;
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));

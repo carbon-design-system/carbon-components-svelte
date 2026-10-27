@@ -53,9 +53,10 @@
 
   /**
    * Specify the size of both buttons and the menu row height.
-   * @type {"xs" | "sm" | "md" | "lg"}
+   * Inherits the parent `InputGroup` size when unset, otherwise `"md"`.
+   * @type {"xs" | "sm" | "md" | "lg" | undefined}
    */
-  export let size = "md";
+  export let size = undefined;
 
   /**
    * Set the preferred direction the menu opens toward.
@@ -110,8 +111,8 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { createEventDispatcher, getContext, setContext } from "svelte";
+  import { readable, writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Menu from "../Menu/Menu.svelte";
   import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
@@ -154,17 +155,24 @@
     dispatch("click:trigger", event);
     blurOnMouseClose(wasOpen, event, triggerRef);
   }
+
+  // In an InputGroup an unsized menu button takes the row's height.
+  /** @type {Record<string, "xs" | "sm" | "lg">} */
+  const MENU_SIZE_BY_GROUP_SIZE = { xs: "xs", sm: "sm", xl: "lg" };
+  const groupSize =
+    getContext("carbon:InputGroup")?.size ?? readable(undefined);
+  $: effectiveSize = size ?? MENU_SIZE_BY_GROUP_SIZE[$groupSize] ?? "md";
 </script>
 
 <div
   bind:this={ref}
   class:bx--combo-button={true}
-  class:bx--combo-button--xs={size === "xs"}
+  class:bx--combo-button--xs={effectiveSize === "xs"}
   {...wrapperProps}
 >
   <Button
     kind="primary"
-    size={BUTTON_SIZE_BY_MENU_SIZE[size]}
+    size={BUTTON_SIZE_BY_MENU_SIZE[effectiveSize]}
     {disabled}
     {loading}
     {loadingDescription}
@@ -187,7 +195,7 @@
     icon={ChevronDown}
     {iconDescription}
     kind="primary"
-    size={BUTTON_SIZE_BY_MENU_SIZE[size]}
+    size={BUTTON_SIZE_BY_MENU_SIZE[effectiveSize]}
     {disabled}
     hideTooltip={open}
     {tooltipPosition}
@@ -218,7 +226,7 @@
     {direction}
     {intrinsicAlign}
     intrinsicWidth={true}
-    {size}
+    size={effectiveSize}
     {labelText}
     on:close
   >
