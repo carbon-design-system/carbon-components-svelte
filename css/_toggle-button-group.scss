@@ -194,6 +194,16 @@
     padding: 0;
   }
 
+  // xs, to sit beside 24px fields in an InputGroup.
+  .#{$prefix}--toggle-button-group--xs .#{$prefix}--toggle-button {
+    min-height: to-rem(24px);
+    padding-block: 0;
+  }
+
+  .#{$prefix}--toggle-button-group--xs .#{$prefix}--toggle-button--icon-only {
+    width: to-rem(24px);
+  }
+
   .#{$prefix}--toggle-button-group--sm .#{$prefix}--toggle-button {
     min-height: to-rem(32px);
   }

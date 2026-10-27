@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import { getBoundText } from "../utils/get-bound-text";
 import InputGroupLegend from "./InputGroup.legend.test.svelte";
 import InputGroup from "./InputGroup.test.svelte";
+import InputGroupControls from "./InputGroupControls.test.svelte";
 
 describe("InputGroup", () => {
   it("names the group with its label", () => {
@@ -161,4 +162,66 @@ describe("InputGroup", () => {
       expect(getBoundText()).toBe(expected);
     },
   );
+});
+
+describe("InputGroup controls", () => {
+  const overflowTrigger = () => {
+    const trigger = document.querySelector("button.bx--overflow-menu");
+    assert(trigger);
+    return trigger;
+  };
+
+  it.each([
+    ["xs", "xs", "bx--overflow-menu--xs", "bx--menu-button__trigger--xs"],
+    ["sm", "sm", "bx--overflow-menu--sm", null],
+    ["xl", "xl", "bx--overflow-menu--xl", null],
+  ] as const)(
+    "sizes switchers and menu buttons with the %s row",
+    (size, switcher, overflow, menuButton) => {
+      render(InputGroupControls, { props: { size } });
+
+      expect(screen.getByTestId("switcher")).toHaveClass(
+        `bx--content-switcher--${switcher}`,
+      );
+      expect(screen.getByTestId("toggles")).toHaveClass(
+        `bx--toggle-button-group--${size === "xl" ? "lg" : size}`,
+      );
+      expect(overflowTrigger()).toHaveClass(overflow);
+      if (menuButton)
+        expect(screen.getByRole("button", { name: "Actions" })).toHaveClass(
+          menuButton,
+        );
+      expect(screen.getByRole("searchbox").closest(".bx--search")).toHaveClass(
+        `bx--search--${size === "xl" ? "xl" : size}`,
+      );
+    },
+  );
+
+  it("leaves controls at their default size in an unsized row", () => {
+    render(InputGroupControls);
+
+    expect(screen.getByTestId("switcher").className).not.toMatch(
+      /bx--content-switcher--(xs|sm|xl)/,
+    );
+    expect(overflowTrigger().className).not.toMatch(
+      /bx--overflow-menu--(xs|sm|xl)/,
+    );
+    expect(screen.getByRole("searchbox").closest(".bx--search")).toHaveClass(
+      "bx--search--lg",
+    );
+  });
+
+  it("sizes a switcher to its labels and a date picker to the row", () => {
+    render(InputGroupControls);
+
+    expect(screen.getByTestId("switcher")).toHaveClass(
+      "bx--content-switcher--auto-width",
+    );
+    expect(screen.getByTestId("alone")).not.toHaveClass(
+      "bx--content-switcher--auto-width",
+    );
+    expect(
+      document.querySelector(".bx--input-group .bx--date-picker"),
+    ).toHaveClass("bx--date-picker--full-width");
+  });
 });

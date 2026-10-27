@@ -29,11 +29,15 @@
     flex: none;
   }
 
-  // Fields share the rest of the row and can shrink.
+  // Fields split the rest of the row evenly and can shrink. Each would be
+  // full width on its own, so they start from nothing rather than from their
+  // width; give one a fixed width by wrapping it in a Box.
   .#{$prefix}--input-group__fields > .#{$prefix}--form-item,
-  .#{$prefix}--input-group__fields > .#{$prefix}--list-box__wrapper {
+  .#{$prefix}--input-group__fields > .#{$prefix}--list-box__wrapper,
+  .#{$prefix}--input-group__fields > .#{$prefix}--search,
+  .#{$prefix}--input-group__fields > .#{$prefix}--search-menu {
     min-width: 0;
-    flex: 1 1 auto;
+    flex: 1 1 0;
   }
 }
 

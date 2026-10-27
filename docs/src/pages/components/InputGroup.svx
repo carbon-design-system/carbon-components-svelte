@@ -4,7 +4,8 @@ description: Input groups attach a button or a second field to an input, such as
 ---
 
 <script>
-  import { Box, Button, InputGroup, NumberInput, Select, SelectItem, TextInput } from "carbon-components-svelte";
+  import { Box, Button, ContentSwitcher, DatePicker, DatePickerInput, Dropdown, InputGroup, NumberInput, Search, Select, SelectItem, Switch, TextInput } from "carbon-components-svelte";
+  import Filter from "carbon-icons-svelte/lib/Filter.svelte";
   import Send from "carbon-icons-svelte/lib/Send.svelte";
 </script>
 
@@ -50,9 +51,37 @@ When several fields make up one value, set `legendText` to name the set, and giv
   </Box>
 </InputGroup>
 
+## Search and filters
+
+A search and the controls that narrow it read as one bar. Fields split the row evenly; wrap one in a Box to give it a fixed width. A ContentSwitcher is as wide as its switches, and a DatePicker fills its share of the row.
+
+<InputGroup>
+  <Search labelText="Search components" placeholder="Search components" />
+  <Box width="16rem">
+    <Dropdown hideLabel labelText="Category" selectedId="all" items={[{ id: "all", text: "All categories" }, { id: "inputs", text: "Inputs" }]} />
+  </Box>
+  <Button kind="tertiary" icon={Filter} iconDescription="More filters" />
+</InputGroup>
+
+<InputGroup>
+  <Search labelText="Search orders" placeholder="Order number or product" />
+  <ContentSwitcher>
+    <Switch text="All" />
+    <Switch text="In progress" />
+    <Switch text="Delivered" />
+  </ContentSwitcher>
+</InputGroup>
+
+<InputGroup>
+  <DatePicker datePickerType="single">
+    <DatePickerInput hideLabel labelText="Since" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+  <Dropdown hideLabel labelText="Status" selectedId="any" items={[{ id: "any", text: "Any status" }, { id: "open", text: "Open" }]} />
+</InputGroup>
+
 ## Sizes
 
-Set `size` on the group to size its fields; buttons match their height. The group inherits the `size` of a parent `Form`.
+Set `size` on the group to size its fields; buttons, content switchers, overflow menus and menu buttons match their height. The group inherits the `size` of a parent `Form`.
 
 <InputGroup size="sm">
   <TextInput labelText="Promo code" placeholder="WELCOME10" />
