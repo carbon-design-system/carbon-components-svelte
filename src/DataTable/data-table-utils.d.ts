@@ -189,3 +189,40 @@ export type DataTableSortValue<Row> = Row extends object
       : never
     : never
   : never;
+
+/** The narrowest a resized column gets. */
+export const MIN_COLUMN_WIDTH: number;
+
+/** Where a column without a `maxWidth` stops growing. */
+export const MAX_COLUMN_WIDTH: number;
+
+/**
+ * A length in pixels: a number, or `"120px"`. Anything else has no pixel
+ * width until it is laid out.
+ */
+export function parsePixelWidth(
+  value: string | number | null | undefined,
+): number | undefined;
+
+/** The pixel range a column can be resized to. */
+export function resolveColumnBounds(header: {
+  minWidth?: string | number | null;
+  maxWidth?: string | number | null;
+}): { min: number; max: number };
+
+/**
+ * The table's width once every column has a pixel width, or `undefined`
+ * while any is unsized.
+ */
+export function formatTableWidth(
+  leading: ReadonlyArray<string>,
+  headers: ReadonlyArray<{ key: string }>,
+  widths: Record<string, number | undefined>,
+): string | undefined;
+
+/** CSS lengths of the leading columns in render order. */
+export function leadingColumnLengths(
+  decorator: boolean,
+  expand: boolean,
+  selection: boolean,
+): string[];

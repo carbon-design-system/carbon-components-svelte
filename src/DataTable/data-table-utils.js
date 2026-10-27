@@ -123,6 +123,89 @@ export function formatHeaderWidth(header) {
   return styles.join(";");
 }
 
+const RE_PIXEL_LENGTH = /^\s*(\d*\.?\d+)px\s*$/;
+
+/** The narrowest a resized column gets, so its handle and label stay reachable. */
+export const MIN_COLUMN_WIDTH = 48;
+
+/** Where a column without a `maxWidth` stops growing. */
+export const MAX_COLUMN_WIDTH = 1600;
+
+/**
+ * A length in whole pixels: a number, or `"120px"`. Anything else (`rem`,
+ * `%`, `auto`) depends on the layout, so it has no pixel width yet.
+ * @param {string | number | null | undefined} value
+ * @returns {number | undefined}
+ */
+export function parsePixelWidth(value) {
+  if (typeof value === "number")
+    return Number.isFinite(value) ? value : undefined;
+  if (typeof value !== "string") return undefined;
+  const match = RE_PIXEL_LENGTH.exec(value);
+  return match ? Number.parseFloat(match[1]) : undefined;
+}
+
+/**
+ * The pixel range a column can be resized to. `minWidth` is the lower
+ * bound, never below `MIN_COLUMN_WIDTH`; `maxWidth` the upper one.
+ * @param {{ minWidth?: string | number | null; maxWidth?: string | number | null }} header
+ * @returns {{ min: number; max: number }}
+ */
+export function resolveColumnBounds(header) {
+  const min = Math.max(
+    MIN_COLUMN_WIDTH,
+    parsePixelWidth(header.minWidth) ?? MIN_COLUMN_WIDTH,
+  );
+  const max = Math.max(
+    min,
+    parsePixelWidth(header.maxWidth) ?? MAX_COLUMN_WIDTH,
+  );
+  return { min, max };
+}
+
+/**
+ * The table's width once every column has a pixel width: the leading
+ * columns' lengths plus the columns' pixels. `undefined` while any column
+ * is unsized, so the table keeps filling its container.
+ * @param {ReadonlyArray<string>} leading - CSS lengths of the leading columns.
+ * @param {ReadonlyArray<{ key: string }>} headers - The rendered columns.
+ * @param {Record<string, number | undefined>} widths
+ * @returns {string | undefined}
+ */
+export function formatTableWidth(leading, headers, widths) {
+  let total = 0;
+  for (const header of headers) {
+    const width = widths[header.key];
+    if (width === undefined) return undefined;
+    total += width;
+  }
+  return leading.length > 0
+    ? `calc(${[...leading, `${total}px`].join(" + ")})`
+    : `${total}px`;
+}
+
+const LEADING_COLUMN_LENGTHS = {
+  decorator: "1rem",
+  expand: "2.5rem",
+  selection: "2.5rem",
+};
+
+/**
+ * CSS lengths of the leading columns in render order, as Carbon sizes them:
+ * the AI label column, the expand column and the selection column.
+ * @param {boolean} decorator
+ * @param {boolean} expand
+ * @param {boolean} selection
+ * @returns {string[]}
+ */
+export function leadingColumnLengths(decorator, expand, selection) {
+  return [
+    decorator && LEADING_COLUMN_LENGTHS.decorator,
+    expand && LEADING_COLUMN_LENGTHS.expand,
+    selection && LEADING_COLUMN_LENGTHS.selection,
+  ].filter((length) => typeof length === "string");
+}
+
 // Cached collator for compareValues' string fast path. localeCompare(str,
 // locale, options) rebuilds the full ICU collator on every call when an
 // options object is passed — reusing one Intl.Collator's .compare() instead
