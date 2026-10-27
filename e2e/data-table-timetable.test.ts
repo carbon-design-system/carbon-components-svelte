@@ -157,6 +157,50 @@ test.describe("DataTable timetable", () => {
     expect(Number.parseFloat(outline.width)).toBeGreaterThan(0);
   });
 
+  test("prints every row and column without sticking or scrolling", async ({
+    page,
+  }) => {
+    await open(page);
+    const probe = () =>
+      page.evaluate(() => {
+        const container = document.querySelector(
+          ".bx--data-table_inner-container",
+        ) as HTMLElement;
+        const position = (selector: string) =>
+          getComputedStyle(document.querySelector(selector) as Element)
+            .position;
+        const { maxHeight, overflowY } = getComputedStyle(container);
+        return {
+          maxHeight,
+          overflowY,
+          clipped: container.scrollHeight > container.clientHeight,
+          header: position("thead th:last-child"),
+          pinnedHeader: position("thead th:first-child"),
+          pinned: position("tbody td:first-child"),
+        };
+      });
+
+    expect(await probe()).toEqual({
+      maxHeight: "320px",
+      overflowY: "auto",
+      clipped: true,
+      header: "sticky",
+      pinnedHeader: "sticky",
+      pinned: "sticky",
+    });
+
+    await page.emulateMedia({ media: "print" });
+
+    expect(await probe()).toEqual({
+      maxHeight: "none",
+      overflowY: "visible",
+      clipped: false,
+      header: "static",
+      pinnedHeader: "static",
+      pinned: "static",
+    });
+  });
+
   test("has no detectable accessibility violations", async ({ page }) => {
     await open(page);
     const results = await new AxeBuilder({ page }).include("#app").analyze();

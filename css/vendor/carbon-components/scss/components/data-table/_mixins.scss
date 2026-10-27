@@ -14,9 +14,11 @@
   }
 
   // ccs: keep table layout. Max-height now bounds the scroll container
-  // (the section wrapping the table), not the table itself.
+  // (the section wrapping the table), not the table itself. `DataTable`'s
+  // `stickyHeaderMaxHeight` arrives as a custom property, not an inline
+  // `max-height`, so the print rules can lift it.
   .#{$prefix}--data-table_inner-container {
-    max-height: $max-height;
+    max-height: var(--ccs-sticky-header-max-height, $max-height);
   }
 
   @if $min-width {

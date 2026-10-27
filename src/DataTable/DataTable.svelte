@@ -1746,7 +1746,7 @@
       aria-describedby={ariaDescribedBy}
       tableStyle={tableStyle || undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
-        ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
+        ? `--ccs-sticky-header-max-height: ${toCssLength(stickyHeaderMaxHeight)}`
         : undefined}
     >
       {#if hasCustomHeaderWidth}
