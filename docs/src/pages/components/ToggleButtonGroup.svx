@@ -139,7 +139,7 @@ Set `grid` to `true` to lay the buttons out as an even grid that wraps onto as m
 
 ## Sizes
 
-Set `size` to `"sm"`, `"md"` (default), or `"lg"`.
+Set `size` to `"xs"`, `"sm"`, `"md"` (default), or `"lg"`. In an `InputGroup` the buttons take the group's size.
 
 ### Small
 
