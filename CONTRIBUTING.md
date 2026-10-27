@@ -322,11 +322,9 @@ Update documentation when the change is user-facing:
 
 Skip doc updates for internal refactors with no API or behavior change.
 
-Ship docs as their own commit, separate from the `feat`/`fix` commit
-that adds the behavior (which should carry its own `src/` + `tests/`
-changes and nothing under `docs/`). Title a new-example commit after
-the example's exact heading: `docs(slider): add "Select on focus"
-example`.
+Ship docs as their own commit (see [What each commit holds](#what-each-commit-holds)).
+Title a new-example commit after the example's exact heading:
+`docs(slider): add "Select on focus" example`.
 
 #### Where docs live
 
@@ -1322,14 +1320,14 @@ Subject line:
 - Common types: `fix`, `feat`, `docs`, `chore`, `test`, `refactor`
 - Scope is the component or area; multi-word names are lowercase with dashes: `combo-box`, `code-snippet`, `data-table`, `ui-shell`, `accordion-item`
 - Omit scope when the change spans many areas (`docs: …`, `chore: …`)
-- Append `!` after the scope for breaking changes: `fix(accordion-item)!: …`
+- Append `!` after the scope for breaking changes: `fix(accordion-item)!: …`.
+  A change is breaking when it changes what a form submits, what
+  `bind:value` holds, or a default behavior, even when no type changes.
+  Add a `BREAKING CHANGE:` footer with a short before and after
 - `fix` is for bugs in a published release. If the buggy code was only
   ever on an unreleased commit (introduced since the last tag), use
-  `chore` instead, since it never shipped as a bug
-- PRs land with a rebase merge, so each commit reaches master and the
-  changelog. Fold a fix or refactor of code that the same PR adds into
-  the commit that adds it. Otherwise the changelog lists a fix for
-  something that never shipped
+  `chore` instead, since it never shipped as a bug. See also
+  [What each commit holds](#what-each-commit-holds)
 - `perf` bodies must state the measured effect: a before/after number
   (bundle size, benchmark timing, operation count), not just a
   description of the change. See [Performance benchmarks](#performance-benchmarks)
@@ -1349,7 +1347,7 @@ A body is not required. Add one when context helps reviewers or when closing an 
 - Lead with the root cause or prior (broken) behavior, naming the
   specific selector, function, or mechanism at fault, then state the
   fix. Don't just restate the diff; a reviewer can already read that
-- Reference the issue: `Fixes #1000` or `Closes #1000` (GitHub auto-closes on merge)
+- Reference the issue: `Fixes #1000` or `Closes #1000` (GitHub auto-closes on merge). Open the link first: a reference to a missing issue closes nothing
 - At most 2-3 sentences, full sentences, no bullet lists
 - Wrap lines at 72 characters for readability in `git log`
 
@@ -1381,15 +1379,24 @@ Avoid vague subjects (`fix bug`), PascalCase or camelCase scopes (`fix(ComboBox)
 
 Follow [Commit messages](#commit-messages) for each commit in your branch.
 
-### Sync your fork
+### What each commit holds
 
-Before you open a PR, sync your fork with upstream:
+PRs land with a rebase merge, so each commit reaches master and the changelog.
+
+- A `feat` or `fix` commit holds its own `src/` and `tests/` changes and nothing under `docs/`. Ship docs as a separate `docs(...)` commit.
+- Fold a fix or refactor of code that the same PR adds into the commit that adds it. Otherwise the changelog lists a fix for something that never shipped.
+- Resolve rebase conflicts inside the commits they touch. Never push a "resolve rebase onto master" commit.
+
+### Keep your branch current
+
+Rebase your branch onto current `master` before you ask for a merge. Do not merge `master` into it. Master adds checks often (strict component script types, `sveld/context-any-type`, `bun fmt --check`, aria-forwarding coverage, `require-leading-heading`), so a green run on an old base does not show that the PR passes them.
 
 ```sh
 git fetch upstream
-git checkout master
-git merge upstream/master
+git rebase upstream/master
 ```
+
+A branch older than the `bun fmt` reformat (0dedc0007) conflicts in almost every file it touches. Rebase it onto 2ef731752, which adds the `bun fmt` config but not the reformat, run `bun fmt` on the files each commit changes, then rebase onto `master`.
 
 ### Resolve conflicts in shared test files
 
@@ -1406,7 +1413,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 
 | Job | Runs on a PR |
 | --- | --- |
-| `static-checks` | Always: builds docs, then `test:src-types`, `test:src-js`, `test:src-svelte` and `test:src-svelte-types` |
+| `static-checks` | Always: `bun fmt --check`, `biome ci --error-on-warnings`, `build:docs`, `test:src-types`, `test:src-js`, `test:src-svelte`, `test:src-svelte-types`, `test:package-exports`, `check:package`, `thumbnails catalog` and `bivium check` |
 | `test` (2 shards) | The selected unit tests, skipped when there are none and types didn't change. `test:types` runs on the first shard |
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
