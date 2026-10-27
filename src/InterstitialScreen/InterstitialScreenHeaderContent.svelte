@@ -23,6 +23,9 @@
   /** @type {(status: "complete" | "invalid") => string} */
   export let statusText;
 
+  /** @type {(step: number) => string} */
+  export let stepLabelText;
+
   import { getContext } from "svelte";
   import ProgressIndicator from "../ProgressIndicator/ProgressIndicator.svelte";
   import ProgressStep from "../ProgressIndicator/ProgressStep.svelte";
@@ -55,7 +58,7 @@
     >
       {#each $views as view, index (view.id)}
         <ProgressStep
-          label={view.stepTitle || `Step ${index + 1}`}
+          label={view.stepTitle || stepLabelText(index + 1)}
           complete={index < $progStep}
         />
       {/each}

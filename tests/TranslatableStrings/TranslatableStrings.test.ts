@@ -55,10 +55,18 @@ describe("translatable strings", () => {
     });
   });
 
-  it("InterstitialScreenHeader announces the step with stepText", () => {
-    render(TranslatableStrings, { props: { example: "InterstitialScreen" } });
+  it("InterstitialScreenHeader announces the step with stepText and labels untitled steps with stepLabelText", () => {
+    const { container } = render(TranslatableStrings, {
+      props: { example: "InterstitialScreen" },
+    });
 
     expect(screen.getByText("Schritt 1 von 2")).toBeInTheDocument();
+    expect(
+      Array.from(
+        container.querySelectorAll(".bx--progress-label"),
+        (label) => label.textContent,
+      ),
+    ).toEqual(["Eins", "Schritt 2"]);
   });
 
   it("MultiSelect describes the selection with selectionCountText", () => {
