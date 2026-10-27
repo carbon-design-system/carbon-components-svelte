@@ -169,6 +169,74 @@ export function isTimeOnDay(date, time) {
   return moved.getHours() === time.hours && moved.getMinutes() === time.minutes;
 }
 
+const DAY_SECONDS = 86_400;
+
+/** Seconds since midnight. @param {TimeParts} time */
+export function secondsOf(time) {
+  return time.hours * 3600 + time.minutes * 60 + time.seconds;
+}
+
+/** @param {number} seconds @returns {TimeParts} */
+function partsOf(seconds) {
+  return {
+    hours: Math.floor(seconds / 3600),
+    minutes: Math.floor(seconds / 60) % 60,
+    seconds: seconds % 60,
+  };
+}
+
+/**
+ * The times a day allows, in seconds since midnight. `min` and `max` are
+ * the daily window, which wraps past midnight when `min` is later than
+ * `max` ("22:00" to "06:00"). `from` and `to` are the day's own limits,
+ * from a `minDate` or `maxDate` with a time.
+ *
+ * @typedef {{ min?: number; max?: number; from?: number; to?: number }} TimeWindow
+ */
+
+/**
+ * @param {TimeParts} time
+ * @param {TimeWindow} [window]
+ */
+export function isTimeAllowed(time, window) {
+  if (!window) return true;
+  const t = secondsOf(time);
+  const { min, max, from, to } = window;
+  if ((from !== undefined && t < from) || (to !== undefined && t > to)) {
+    return false;
+  }
+  const lo = min ?? 0;
+  const hi = max ?? DAY_SECONDS - 1;
+  return lo <= hi ? t >= lo && t <= hi : t >= lo || t <= hi;
+}
+
+/**
+ * `time`, or the allowed time closest to it: one of the window's edges.
+ * Left as is when nothing is allowed.
+ *
+ * @param {TimeParts} time
+ * @param {TimeWindow} [window]
+ */
+export function clampTime(time, window) {
+  if (!window || isTimeAllowed(time, window)) return time;
+  const t = secondsOf(time);
+  /** @param {number} edge */
+  const distance = (edge) => {
+    const d = Math.abs(edge - t);
+    return Math.min(d, DAY_SECONDS - d);
+  };
+  const edges = [window.min, window.max, window.from, window.to]
+    .filter(
+      (edge) => edge !== undefined && isTimeAllowed(partsOf(edge), window),
+    )
+    .sort(
+      (a, b) =>
+        distance(/** @type {number} */ (a)) -
+        distance(/** @type {number} */ (b)),
+    );
+  return edges.length ? partsOf(/** @type {number} */ (edges[0])) : time;
+}
+
 /** @param {number} value */
 const pad = (value) => String(value).padStart(2, "0");
 
