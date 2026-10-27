@@ -5,7 +5,7 @@
    * library's 40px; Carbon v11's 48px `lg` is `"xl"` here.
    * @type {"xs" | "sm" | "md" | "lg" | "xl"}
    */
-  export let size = "xl";
+  export let size = "lg";
 
   /** Specify the number of skeleton menu items to render */
   export let count = 4;
