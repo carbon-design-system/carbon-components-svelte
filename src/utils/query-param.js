@@ -33,7 +33,7 @@ function parseAsDefault(raw, defaultValue) {
 }
 
 /** @param {string} href */
-function replaceHistory(href) {
+export function replaceHistory(href) {
   try {
     history.replaceState(history.state, "", href);
   } catch {

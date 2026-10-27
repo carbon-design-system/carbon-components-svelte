@@ -32,6 +32,38 @@ export type TableStateOptions<State extends TableState = TableState> = {
   pageSizes?: ReadonlyArray<number>;
   /** Allowed sort keys. Any other key falls back to the default. */
   sortKeys?: ReadonlyArray<string>;
+  /**
+   * Mirror `sortKey`, `sortDirection`, `page`, `pageSize`, `search` and the
+   * keys that have a codec to the URL's search parameters. A parameter
+   * left out of the URL reads as the initial value. Writes replace the
+   * current history entry, one per frame, and keep other parameters.
+   * The URL is read in the browser when the first subscriber arrives, and
+   * again on back and forward navigation.
+   */
+  url?:
+    | boolean
+    | {
+        /** Prepended to every parameter name, to avoid a collision. */
+        prefix?: string;
+        /** Rename the built-in parameters. */
+        params?: TableStateSearchParamsOptions["params"];
+        /** Write the new URL. Defaults to `history.replaceState`; pass a router's navigation API instead. */
+        replace?: (href: string) => void;
+      };
+  /**
+   * Mirror state to `localStorage` or `sessionStorage`, read when the first
+   * subscriber arrives in the browser. A parameter in the URL wins over the
+   * stored value, and the stored value over the initial state.
+   */
+  persist?: {
+    key: string;
+    area?: "local" | "session";
+    /**
+     * The keys to keep. Defaults to every key but `selectedRowIds`,
+     * `search` and `page`.
+     */
+    pick?: ReadonlyArray<Extract<keyof State, string>>;
+  };
 };
 
 export type TableStateSearchParamsOptions<

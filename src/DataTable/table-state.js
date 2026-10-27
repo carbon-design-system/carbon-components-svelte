@@ -1,6 +1,8 @@
 // @ts-check
 import { writable } from "svelte/store";
 import { deepEqual } from "../utils/deep-equal.js";
+import { replaceHistory } from "../utils/query-param.js";
+import { safeBrowserStorage } from "../utils/storage.js";
 
 /**
  * @typedef {import("../utils/column-settings.js").ColumnSettings} ColumnSettings
@@ -29,6 +31,8 @@ import { deepEqual } from "../utils/deep-equal.js";
  * @property {Record<string, TableStateCodec>} [codecs] - Search-param codecs for keys beyond the built-in ones
  * @property {ReadonlyArray<number>} [pageSizes] - Allowed page sizes; anything else falls back to the default
  * @property {ReadonlyArray<string>} [sortKeys] - Allowed sort keys; anything else falls back to the default
+ * @property {boolean | { prefix?: string; params?: SearchParamsOptions["params"]; replace?: (href: string) => void }} [url] - Mirror the state to the URL's search parameters
+ * @property {{ key: string; area?: "local" | "session"; pick?: ReadonlyArray<string> }} [persist] - Mirror the state to web storage
  */
 
 /**
@@ -52,6 +56,8 @@ const BUILT_IN_KEYS = [
   "selectedRowIds",
   "columns",
 ];
+const URL_KEYS = ["sortKey", "sortDirection", "page", "pageSize", "search"];
+const UNPERSISTED_KEYS = ["selectedRowIds", "search", "page"];
 const RESET_PAGE_KEYS = ["search", "pageSize", "sortKey", "sortDirection"];
 const DEFAULT_PAGE_SIZE = 10;
 const MAX_PAGE_SIZE = 1000;
@@ -187,12 +193,25 @@ export function tableStateFromSearchParams(params, options = {}) {
   const names = { ...PARAM_NAMES, ...options.params };
   /** @param {keyof typeof PARAM_NAMES} key */
   const read = (key) => input.get(prefix + names[key]);
-  const defaults = normalize(options.defaults, createDefaults());
+  const extraKeys = [
+    ...new Set([
+      ...Object.keys(codecs),
+      ...Object.keys(options.defaults ?? {}).filter(
+        (key) => !BUILT_IN_KEYS.includes(key),
+      ),
+    ]),
+  ];
+  const defaults = normalize(options.defaults, createDefaults(), { extraKeys });
 
   /** @type {Record<string, unknown>} */
   const found = {};
   const sort = read("sort");
-  if (sort) Object.assign(found, parseSort(sort));
+  if (sort) {
+    const parsed = parseSort(sort);
+    if (!sortKeys || sortKeys.includes(parsed.sortKey)) {
+      Object.assign(found, parsed);
+    }
+  }
   const page = read("page");
   if (page !== null && WHOLE_NUMBER.test(page)) found.page = Number(page);
   const pageSize = read("pageSize");
@@ -202,8 +221,7 @@ export function tableStateFromSearchParams(params, options = {}) {
   const search = read("search");
   if (search !== null) found.search = search;
 
-  const extraKeys = Object.keys(codecs);
-  for (const key of extraKeys) {
+  for (const key of Object.keys(codecs)) {
     const raw = input.get(prefix + key);
     const value = raw === null ? undefined : codecs[key].parse(raw);
     if (value !== undefined) found[key] = value;
@@ -313,27 +331,153 @@ export function createTableState(initial = {}, options = {}) {
   };
   config.defaults = normalize(initial, config.defaults, config);
 
+  const urlOptions = options.url === true ? {} : options.url || null;
+  const urlParams = {
+    prefix: urlOptions?.prefix,
+    params: urlOptions?.params,
+    codecs,
+    pageSizes,
+    sortKeys,
+  };
+  const urlKeys = [...URL_KEYS, ...Object.keys(codecs)];
+  const replace = urlOptions?.replace ?? replaceHistory;
+
+  const { persist } = options;
+  const storage = persist
+    ? safeBrowserStorage(
+        persist.area === "session" ? "sessionStorage" : "localStorage",
+      )
+    : null;
+  const persistKeys =
+    persist?.pick ??
+    [...BUILT_IN_KEYS, ...extraKeys].filter(
+      (key) => !UNPERSISTED_KEYS.includes(key),
+    );
+
   /** @type {TableState & Record<string, unknown>} */
   let current = copyState(config.defaults);
-  const store = writable(copyState(current));
+  let active = false;
+  /** @type {ReturnType<typeof setTimeout> | number | null} */
+  let frame = null;
+  /** @type {string | undefined} */
+  let lastStored;
 
   /**
    * @param {unknown} value
-   * @param {boolean} [resetPage]
+   * @param {boolean} [external] - A read from the URL or storage, not a user action
    */
-  function commit(value, resetPage = true) {
-    const next = nextTableState(current, value, config, resetPage);
+  function commit(value, external = false) {
+    const next = nextTableState(current, value, config, !external);
     if (next === current) return;
     current = next;
     // `bind:x={$store.f}` mutates the subscribed object and sets it back.
     // Subscribers get a copy, so the store never diffs against an object a
     // consumer can change.
     store.set(copyState(current));
+    if (!external && active) {
+      writeStorage();
+      scheduleUrlWrite();
+    }
   }
+
+  function readStorage() {
+    const raw = storage?.getItem(persist?.key ?? "");
+    if (raw === null || raw === undefined) return undefined;
+    try {
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        return undefined;
+      }
+      return Object.fromEntries(
+        persistKeys
+          .filter((key) => key in parsed)
+          .map((key) => [key, parsed[key]]),
+      );
+    } catch {
+      return undefined;
+    }
+  }
+
+  function writeStorage() {
+    if (!persist || !storage) return;
+    const raw = JSON.stringify(
+      Object.fromEntries(
+        persistKeys
+          .filter((key) => current[key] !== undefined)
+          .map((key) => [key, current[key]]),
+      ),
+    );
+    if (raw === lastStored) return;
+    lastStored = raw;
+    storage.setItem(persist.key, raw);
+  }
+
+  /**
+   * The URL's value for each URL key. A key the URL leaves out falls back to
+   * `base`.
+   * @param {TableState & Record<string, unknown>} base
+   */
+  function readUrl(base) {
+    const parsed = tableStateFromSearchParams(window.location.search, {
+      ...urlParams,
+      defaults: base,
+    });
+    return Object.fromEntries(urlKeys.map((key) => [key, parsed[key]]));
+  }
+
+  function writeUrl() {
+    frame = null;
+    const href = new URL(window.location.href);
+    href.search = tableStateToSearchParams(current, {
+      ...urlParams,
+      defaults: config.defaults,
+      base: href.search,
+    }).toString();
+    if (href.href !== window.location.href) replace(href.href);
+  }
+
+  // Safari rate-limits `history.replaceState`, so a burst of writes, such as
+  // typing in a search box, becomes one `replace` per frame.
+  function scheduleUrlWrite() {
+    if (!urlOptions || frame !== null) return;
+    frame =
+      typeof requestAnimationFrame === "function"
+        ? requestAnimationFrame(writeUrl)
+        : setTimeout(writeUrl, 16);
+  }
+
+  function handlePopstate() {
+    commit({ ...current, ...readUrl(config.defaults) }, true);
+  }
+
+  // Reading from the URL and storage starts with the first subscriber and
+  // stops with the last, and only in a browser. A subscriber gets the value
+  // `start` sets before its first call, so there is no flash of the defaults.
+  const store = writable(copyState(current), () => {
+    if (typeof window === "undefined") return;
+    active = true;
+    let next = current;
+    const stored = readStorage();
+    if (stored) next = { ...next, ...stored };
+    if (urlOptions) next = { ...next, ...readUrl(next) };
+    commit(next, true);
+    if (urlOptions) window.addEventListener("popstate", handlePopstate);
+
+    return () => {
+      if (urlOptions) window.removeEventListener("popstate", handlePopstate);
+      if (frame !== null) {
+        if (typeof requestAnimationFrame === "function") {
+          cancelAnimationFrame(/** @type {number} */ (frame));
+        } else clearTimeout(frame);
+        writeUrl();
+      }
+      active = false;
+    };
+  });
 
   return {
     subscribe: store.subscribe,
-    set: commit,
+    set: (value) => commit(value),
     update: (callback) => commit(callback(copyState(current))),
     patch: (partial) => commit({ ...current, ...partial }),
     reset: () => commit(config.defaults),
