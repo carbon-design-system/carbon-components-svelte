@@ -63,10 +63,11 @@
   <InterstitialScreen open>
     <InterstitialScreenHeader
       stepText={(step, total) => `Schritt ${step} von ${total}`}
+      stepLabelText={(step) => `Schritt ${step}`}
     />
     <InterstitialScreenBody>
       <InterstitialScreenView stepTitle="Eins">Inhalt 1</InterstitialScreenView>
-      <InterstitialScreenView stepTitle="Zwei">Inhalt 2</InterstitialScreenView>
+      <InterstitialScreenView>Inhalt 2</InterstitialScreenView>
     </InterstitialScreenBody>
   </InterstitialScreen>
 {:else if example === "MultiSelect"}

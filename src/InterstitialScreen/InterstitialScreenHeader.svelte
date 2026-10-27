@@ -39,6 +39,14 @@
     return status;
   };
 
+  /**
+   * Specify the progress label of a step whose view sets no `stepTitle`.
+   * @type {(step: number) => string}
+   */
+  export let stepLabelText = function stepLabelText(step) {
+    return `Step ${step}`;
+  };
+
   import { getContext } from "svelte";
   import Button from "../Button/Button.svelte";
   import ModalHeader from "../ComposedModal/ModalHeader.svelte";
@@ -73,6 +81,7 @@
       {hideProgressIndicator}
       {stepText}
       {statusText}
+      {stepLabelText}
     >
       <slot />
     </InterstitialScreenHeaderContent>
@@ -104,6 +113,7 @@
       {hideProgressIndicator}
       {stepText}
       {statusText}
+      {stepLabelText}
     >
       <slot />
     </InterstitialScreenHeaderContent>
