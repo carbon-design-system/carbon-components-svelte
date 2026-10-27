@@ -31,7 +31,7 @@
   "DataTable/ToolbarMenu.svelte": 3,
   "DataTable/ToolbarSearch.svelte": 18,
   "DatePicker/DatePicker.svelte": 59,
-  "DatePicker/DatePickerInput.svelte": 8,
+  "DatePicker/DatePickerInput.svelte": 4,
   "Dialog/Dialog.svelte": 4,
   "Disclosure/Disclosure.svelte": 3,
   "Dropdown/Dropdown.svelte": 16,
