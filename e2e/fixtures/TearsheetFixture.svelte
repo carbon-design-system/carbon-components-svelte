@@ -28,11 +28,16 @@
   const influencerPosition =
     params.get("influencer") === "end" ? "end" : "start";
   const influencerWidth = params.has("wide-influencer") ? "wide" : "narrow";
+  // `?stack` opens a second tearsheet from the first, as a sibling. With
+  // `?stack=portal` it sits inside the first, in a Portal, and with
+  // `?stack=nested` it sits inside the first with no Portal.
+  const stack = params.get("stack");
   const withModal = params.has("modal");
   const withPageModal = params.has("pagemodal");
   const inModal = params.has("inmodal");
 
   let open = !params.has("closed") && !inModal;
+  let secondOpen = false;
   let modalOpen = false;
   let pageModalOpen = false;
   let outerModalOpen = inModal;
@@ -131,6 +136,28 @@
           <p>Unsaved mappings are lost.</p>
         </Modal>
       {/if}
+      {#if stack}
+        <Button on:click={() => (secondOpen = true)}>Review</Button>
+      {/if}
+      {#if stack === "nested"}
+        <Tearsheet
+          bind:open={secondOpen}
+          size="narrow"
+          titleText="Review mappings"
+        >
+          <TextInput labelText="Owner" />
+        </Tearsheet>
+      {:else if stack === "portal"}
+        <Portal>
+          <Tearsheet
+            bind:open={secondOpen}
+            size="narrow"
+            titleText="Review mappings"
+          >
+            <TextInput labelText="Owner" />
+          </Tearsheet>
+        </Portal>
+      {/if}
       {#if long}
         {#each Array.from({ length: 24 }, (_, index) => index) as index (index)}
           <TextInput labelText="Field mapping {index + 1}" />
@@ -141,6 +168,12 @@
       <Button kind="secondary" on:click={() => (open = false)}>Cancel</Button>
       <Button>Next</Button>
     </svelte:fragment>
+  </Tearsheet>
+{/if}
+
+{#if stack === "sibling"}
+  <Tearsheet bind:open={secondOpen} size="narrow" titleText="Review mappings">
+    <TextInput labelText="Owner" />
   </Tearsheet>
 {/if}
 
