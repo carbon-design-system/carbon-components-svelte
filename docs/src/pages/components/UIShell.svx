@@ -302,6 +302,24 @@ Set `isSelected` on `HeaderPanelLink` to mark the current selection — see "Clo
 </HeaderPanelLinks>
 ```
 
+### Panel width
+
+The panel is 16rem wide. Set `--ccs-header-panel-width` on `HeaderUtilities`, or any other ancestor of the action, to widen it for content such as rows of text. The panel never grows past the viewport.
+
+```svelte
+<Header>
+  <HeaderUtilities style="--ccs-header-panel-width: 22rem">
+    <HeaderAction iconDescription="Notifications" icon={Notification}>
+      <!-- Panel content -->
+    </HeaderAction>
+  </HeaderUtilities>
+</Header>
+```
+
+| Do | Why |
+| --- | --- |
+| Set the property on an ancestor of the action | The panel is a sibling of the action's button, so a `style` on `HeaderAction` lands on the button and never reaches the panel. |
+
 ### Panel items
 
 `HeaderPanelLink` renders an anchor when `href` is set. Omit `href` for an action that does not navigate, such as switching a theme; it renders a `<button>` that is reachable with Tab and styled like the link. Set `text` instead of the default slot for a plain label, and `icon` (or the `icon` slot) to render an icon after it. Long labels wrap onto more lines while the icon keeps its size.

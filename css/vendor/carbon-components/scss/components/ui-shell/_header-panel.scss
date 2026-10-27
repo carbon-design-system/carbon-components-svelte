@@ -35,7 +35,9 @@
   }
 
   .#{$prefix}--header-panel--expanded {
-    width: carbon--mini-units(32);
+    // ccs: an ancestor sets `--ccs-header-panel-width` to widen the panel.
+    width: var(--ccs-header-panel-width, #{carbon--mini-units(32)});
+    max-width: 100vw;
     border-right: 1px solid $shell-panel-border;
     border-left: 1px solid $shell-panel-border;
   }
