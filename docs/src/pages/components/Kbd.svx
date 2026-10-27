@@ -1,0 +1,62 @@
+---
+components: ["Kbd"]
+description: Kbd shows a single key as a key cap, for shortcut hints in buttons, tooltips, menus, and other interface chrome.
+---
+
+<script>
+  import { Button, Kbd, Stack, Tooltip } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Put the key's label in the default slot. `Kbd` renders a `kbd` element and is display-only: it does not listen for key presses.
+
+<Stack orientation="horizontal" gap={3} align="center">
+  <Kbd>Esc</Kbd>
+  <Kbd>Tab</Kbd>
+  <Kbd>K</Kbd>
+</Stack>
+
+## Sizes
+
+Set `size` to control the key's height. The default is `"default"` (24px). Use `"sm"` (20px) in dense rows and buttons.
+
+<Stack orientation="horizontal" gap={3} align="center">
+  <Kbd>Enter</Kbd>
+  <Kbd size="sm">Enter</Kbd>
+</Stack>
+
+## Variants
+
+Set `variant` to change how the key looks. The default is `"keycap"`, a flat key with a heavier bottom edge. Set `"muted"` for semibold text in the secondary color with no box, the way `Menu` shows shortcuts. Use it for dense rows and long key sequences.
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Kbd>Shift</Kbd>
+  <Kbd variant="muted">Shift</Kbd>
+</Stack>
+
+## In a button
+
+A direct `Kbd` child of `Button` follows the label with a gap. Use `size="sm"` so the key stays inside the button's height.
+
+<Stack orientation="horizontal" gap={5}>
+  <Button>Search <Kbd size="sm">/</Kbd></Button>
+  <Button kind="tertiary">Search <Kbd size="sm">/</Kbd></Button>
+</Stack>
+
+## In a tooltip
+
+The key takes its colors from the theme token for the surface it sits on, so it stays legible on the inverse surface of a tooltip.
+
+<Tooltip triggerText="Save" open>
+  <p>Save changes <Kbd size="sm">S</Kbd></p>
+</Tooltip>
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Use `Kbd` for one key in interface chrome, such as a button, a tooltip, or a custom row. | It is sized and aligned as a control, so it does not disturb the row it sits in. |
+| Use [Prose](/components/Prose) for keys written inside running copy. | Prose sets keys inline so they never change line spacing. |
+| Give each key its own `Kbd`. | A combination such as Shift + P reads as two keys, and each one wraps and mirrors on its own. |
+| Name the key in full where the symbol is not obvious to every reader. | A glyph such as `⌘` is not always read out as "Command" by assistive technology. |
