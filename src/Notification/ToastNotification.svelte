@@ -2,6 +2,7 @@
   /**
    * @event close
    * @property {boolean} timeout
+   * @slot {{}} icon - Replace the status icon.
    */
 
   /**
@@ -215,11 +216,13 @@
       }
     }}
   >
-    <NotificationIcon
-      {kind}
-      {lowContrast}
-      iconDescription={statusIconDescription || statusIconLabel(kind)}
-    />
+    <slot name="icon">
+      <NotificationIcon
+        {kind}
+        {lowContrast}
+        iconDescription={statusIconDescription || statusIconLabel(kind)}
+      />
+    </slot>
     <div class:bx--toast-notification__details={true}>
       {#if hasTitle}
         <h3 id={titleId} class:bx--toast-notification__title={true}>
