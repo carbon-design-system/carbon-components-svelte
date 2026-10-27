@@ -99,7 +99,9 @@
     + .#{$prefix}--tabs__nav-item {
       margin-left: 0;
       // Draws the border without affecting the inner-content
-      box-shadow: -1px 0 0 0 $border-strong;
+      // ccs: the divider sits at the inline start, `--ccs-inline-sign` flips
+      // it under `dir="rtl"`
+      box-shadow: calc(-1px * var(--ccs-inline-sign, 1)) 0 0 0 $border-strong;
     }
 
     + .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--selected,
@@ -424,7 +426,10 @@
       + .#{$prefix}--tabs--scrollable__nav-item {
       margin-left: 0;
       // Draws the border without affecting the inner-content
-      box-shadow: to-rem(-1px) 0 0 0 $border-strong;
+      // ccs: the divider sits at the inline start, `--ccs-inline-sign` flips
+      // it under `dir="rtl"`
+      box-shadow: calc(#{to-rem(-1px)} * var(--ccs-inline-sign, 1)) 0 0 0
+        $border-strong;
     }
 
     .#{$prefix}--tab-content {

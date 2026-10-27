@@ -145,6 +145,16 @@ function setDirection(page: Page, dir: "rtl" | "ltr") {
   }, dir);
 }
 
+function boxShadow(locator: Locator) {
+  return locator.evaluate((node) => getComputedStyle(node).boxShadow);
+}
+
+/** The x offset of an element's first box shadow, in px. */
+async function shadowX(locator: Locator) {
+  const x = (await boxShadow(locator)).match(/(-?[\d.]+)px/);
+  return x ? Number.parseFloat(x[1]) : 0;
+}
+
 /** Each LTR box reflected across the viewport's vertical center. */
 function mirror(ltr: Record<string, Box | null>, viewportWidth: number) {
   return Object.fromEntries(
@@ -797,12 +807,6 @@ test.describe("right-to-left layout", () => {
     const row = page
       .getByTestId("tabs-vertical-row")
       .locator(".bx--tabs__nav-item");
-    const shadow = (locator: Locator) =>
-      locator.evaluate((node) => getComputedStyle(node).boxShadow);
-    const offset = async (locator: Locator) => {
-      const x = (await shadow(locator)).match(/(-?[\d.]+)px/);
-      return x ? Number.parseFloat(x[1]) : 0;
-    };
 
     for (const [dir, sign] of [
       ["ltr", 1],
@@ -811,20 +815,50 @@ test.describe("right-to-left layout", () => {
       // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       expect
-        .soft(await offset(column.nth(0)), `${dir} selected`)
+        .soft(await shadowX(column.nth(0)), `${dir} selected`)
         .toBe(3 * sign);
-      expect.soft(await offset(column.nth(1)), `${dir} plain`).toBe(3 * sign);
+      expect.soft(await shadowX(column.nth(1)), `${dir} plain`).toBe(3 * sign);
       expect
-        .soft(await offset(column.nth(2)), `${dir} disabled`)
+        .soft(await shadowX(column.nth(2)), `${dir} disabled`)
         .toBe(3 * sign);
-      expect.soft(await offset(row.nth(2)), `${dir} row divider`).toBe(sign);
+      expect.soft(await shadowX(row.nth(2)), `${dir} row divider`).toBe(sign);
 
       // The hover rule repaints the indicator; wait for its color.
-      const rest = await shadow(column.nth(1));
+      const rest = await boxShadow(column.nth(1));
       await column.nth(1).hover();
-      await expect.poll(() => shadow(column.nth(1))).not.toBe(rest);
-      expect.soft(await offset(column.nth(1)), `${dir} hover`).toBe(3 * sign);
+      await expect.poll(() => boxShadow(column.nth(1))).not.toBe(rest);
+      expect.soft(await shadowX(column.nth(1)), `${dir} hover`).toBe(3 * sign);
       await page.mouse.move(0, 0);
+    }
+  });
+
+  // An outset box shadow draws the divider between contained tabs, at
+  // each later tab's inline start.
+  test("draws contained Tabs dividers at the inline start", async ({
+    page,
+  }) => {
+    const tabs = page
+      .getByTestId("tabs-container")
+      .locator(".bx--tabs__nav-item");
+    const skeleton = page
+      .getByTestId("tabs-container-skeleton")
+      .locator(".bx--tabs--scrollable__nav-item");
+
+    for (const [dir, sign] of [
+      ["ltr", 1],
+      ["rtl", -1],
+    ] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      // The first tab is selected, so the second has no divider.
+      expect
+        .soft(await boxShadow(tabs.nth(1)), `${dir} after selected`)
+        .toBe("none");
+      expect.soft(await shadowX(tabs.nth(2)), `${dir} divider`).toBe(-sign);
+      expect.soft(await shadowX(tabs.nth(3)), `${dir} disabled`).toBe(-sign);
+      expect
+        .soft(await shadowX(skeleton.nth(1)), `${dir} skeleton`)
+        .toBe(-sign);
     }
   });
 

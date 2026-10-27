@@ -39,6 +39,8 @@
     SkipToContent,
     Slider,
     Tab,
+    Tabs,
+    TabsSkeleton,
     TabsVertical,
     TreeView,
   } from "carbon-components-svelte";
@@ -375,6 +377,17 @@ export async function rollback(region, id) {
       <Tab label="Logs" />
       <Tab label="Settings" />
     </TabsVertical>
+  </div>
+  <div data-testid="tabs-container">
+    <Tabs type="container">
+      <Tab label="Overview" />
+      <Tab label="Logs" />
+      <Tab label="Metrics" />
+      <Tab label="Settings" disabled />
+    </Tabs>
+  </div>
+  <div data-testid="tabs-container-skeleton">
+    <TabsSkeleton type="container" count={3} />
   </div>
 </Content>
 
