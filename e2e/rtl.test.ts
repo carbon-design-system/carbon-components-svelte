@@ -2108,6 +2108,76 @@ test.describe("right-to-left date picker", () => {
         .toBeLessThanOrEqual(width);
     }
   });
+
+  test("keeps a date and time in reading order", async ({ page }) => {
+    // Bidi reordered "03/15/2024 2:30 PM" by the page's direction, so an
+    // RTL page showed "PM 2:30 03/15/2024". Read left to right, the field's
+    // caret offsets must run from the start of the text to its end, and the
+    // overlay's characters must spell the date in order.
+    const read = (testId: string) =>
+      page.getByTestId(testId).evaluate((root) => {
+        const input = root.querySelector("input");
+        if (!input) throw new Error("no input");
+        input.scrollIntoView({ block: "center" });
+        const rect = input.getBoundingClientRect();
+        const y = rect.top + rect.height / 2;
+        const offsets: number[] = [];
+        const xs: number[] = [];
+        for (let x = Math.ceil(rect.left); x < rect.right; x++) {
+          const position = document.caretPositionFromPoint(x, y);
+          if (position?.offsetNode !== input) continue;
+          if (offsets.at(-1) !== position.offset) {
+            offsets.push(position.offset);
+            xs.push(x);
+          }
+        }
+        const chars: { char: string; left: number }[] = [];
+        const text = root.querySelector(
+          ".bx--date-picker__input-overlay span",
+        )?.firstChild;
+        const range = document.createRange();
+        for (let i = 0; text && i < (text.textContent ?? "").length; i++) {
+          if (/\s/.test(text.textContent?.[i] ?? "")) continue;
+          range.setStart(text, i);
+          range.setEnd(text, i + 1);
+          chars.push({
+            char: text.textContent?.[i] ?? "",
+            left: range.getBoundingClientRect().left,
+          });
+        }
+        return {
+          offsets,
+          length: input.value.length,
+          // Space before the text's first character and after its last.
+          startGap: (xs[1] ?? rect.left) - rect.left,
+          endGap: rect.right - (xs.at(-1) ?? rect.right),
+          overlay: chars
+            .sort((a, b) => a.left - b.left)
+            .map(({ char }) => char)
+            .join(""),
+        };
+      });
+
+    await page.evaluate(() => document.fonts.ready);
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      const field = await read("time");
+      expect(field.length, dir).toBeGreaterThan(0);
+      expect(field.offsets, dir).toEqual(
+        Array.from({ length: field.length + 1 }, (_, index) => index),
+      );
+      // The text stays at the page's inline start.
+      if (dir === "rtl") {
+        expect(field.endGap).toBeLessThan(field.startGap);
+      } else {
+        expect(field.startGap).toBeLessThan(field.endGap);
+      }
+      expect((await read("time-multiple")).overlay, dir).toBe(
+        "03/15/20242:30PM",
+      );
+    }
+  });
 });
 
 test.describe("right-to-left numbers", () => {
