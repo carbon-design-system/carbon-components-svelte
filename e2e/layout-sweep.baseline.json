@@ -3186,6 +3186,14 @@
   {
     "fixture": "rtl-date-picker.html",
     "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--time:nth-of-type(2) > span.bx--assistive-text",
+    "message": "div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--time:nth-of-type(2) > span.bx--assistive-text: 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--time:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
     "check": "ring",
     "kind": "ring",
     "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3)",

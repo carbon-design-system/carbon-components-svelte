@@ -13,6 +13,12 @@ import {
   parseDate,
   yearSuffix,
 } from "./calendar-dates.js";
+import {
+  createTimeRow,
+  parseTimeString,
+  timeOf,
+  withTime,
+} from "./calendar-time.js";
 import { DAY_STATE_CLASSES, dayState } from "./day-state.js";
 
 const PREV_ARROW =
@@ -69,6 +75,12 @@ const QUIET_OPTIONS = new Set([
   "nextLabel",
   "rtl",
   "static",
+  // The time row redraws itself.
+  "defaultTime",
+  "hourFormat",
+  "minuteStep",
+  "timeGranularity",
+  "timeLabel",
 ]);
 
 /** Options that change only the field's text: `set` rewrites the value. */
@@ -214,9 +226,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     dateFormat: "Y-m-d",
     errorHandler: (/** @type {Error} */ error) => console.warn(error),
     getWeek: isoWeek,
+    hourFormat: "12",
     ignoredFocusElements: [],
     inline: false,
     locale: "en",
+    minuteStep: 1,
     mode: "single",
     nextArrow: NEXT_ARROW,
     position: "auto",
@@ -224,6 +238,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     shorthandCurrentMonth: false,
     showMonths: 1,
     static: false,
+    timeLabel: "Time",
     weekNumbers: false,
   };
   self.config = config;
@@ -594,6 +609,80 @@ export function createCalendarEngine(element, userConfig = {}) {
     );
   }
 
+  // --- Time -------------------------------------------------------------
+
+  /** Whether the calendar shows a time row. */
+  function hasTime() {
+    return !!config.timeGranularity && pickerMode === "single";
+  }
+
+  /**
+   * A time set in the row before any day was picked, given to the day
+   * picked next.
+   * @type {import("./calendar-time.js").TimeParts | undefined}
+   */
+  let pendingTime;
+
+  /** The time the row shows, and a picked day gets. */
+  function currentTime() {
+    const [selected] = self.selectedDates;
+    if (selected instanceof Date) return timeOf(selected);
+    return (
+      pendingTime ??
+      parseTimeString(config.defaultTime) ?? {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      }
+    );
+  }
+
+  /** @type {ReturnType<typeof createTimeRow> | undefined} */
+  let timeRow;
+
+  /** @param {import("./calendar-time.js").TimeParts} time */
+  function commitTime(time) {
+    const [selected] = self.selectedDates;
+    if (!(selected instanceof Date)) {
+      pendingTime = time;
+      return;
+    }
+    const next = withTime(selected, time, config.timeGranularity);
+    self.selectedDates = [next];
+    self.latestSelectedDateObj = next;
+    updateValue();
+    triggerEvent("onChange");
+  }
+
+  /** Builds, rebuilds, or removes the time row to match the options. */
+  function buildTimeRow() {
+    if (!filled) return;
+    timeRow?.element.remove();
+    timeRow = undefined;
+    toggleClass(
+      self.calendarContainer,
+      "bx--date-picker__calendar--time",
+      hasTime(),
+    );
+    if (!hasTime()) return;
+    timeRow = createTimeRow({
+      label: config.timeLabel,
+      granularity: config.timeGranularity,
+      hourCycle: config.hourFormat === "24" ? "24" : "12",
+      minuteStep: config.minuteStep,
+      l10n: self.l10n,
+      idPrefix: `${self.element.id || "date-picker"}-time`,
+      onChange: commitTime,
+      onEnter: focusAndClose,
+    });
+    self.innerContainer.after(timeRow.element);
+    syncTimeRow();
+  }
+
+  function syncTimeRow() {
+    timeRow?.setTime(currentTime());
+  }
+
   // --- Value ------------------------------------------------------------
 
   /** @param {string} [format] */
@@ -627,6 +716,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       self.input.value = dateString(config.dateFormat);
       if (self.altInput) self.altInput.value = dateString(config.altFormat);
     }
+    syncTimeRow();
     if (notify) triggerEvent("onValueUpdate");
   }
 
@@ -1393,6 +1483,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.viewAnnouncer = createElement("span", "bx--assistive-text");
     self.viewAnnouncer.setAttribute("aria-live", "polite");
     self.innerContainer.after(self.viewAnnouncer);
+    buildTimeRow();
     buildDays();
     updateNavigation();
     bindContentEvents();
@@ -1613,7 +1704,10 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   /** @param {Date} date */
   function selectDateValue(date) {
-    const selected = new Date(date.getTime());
+    // A picked day keeps the time already set.
+    const selected = hasTime()
+      ? withTime(date, currentTime(), config.timeGranularity)
+      : new Date(date.getTime());
     self.latestSelectedDateObj = selected;
     if (isMultiple) {
       const index = selectedIndex(selected);
@@ -1689,7 +1783,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     } else {
       self.selectedDateElem?.focus();
     }
-    if (config.closeOnSelect) {
+    // With a time row, the time still has to be set.
+    if (config.closeOnSelect && !hasTime()) {
       if (!isRange && !isMultiple) focusAndClose();
       else if (isRange && self.selectedDates.length === 2) focusAndClose();
     }
@@ -1724,6 +1819,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (self.altInput) self.altInput.value = "";
     self.selectedDates = [];
     self.latestSelectedDateObj = undefined;
+    pendingTime = undefined;
+    syncTimeRow();
     if (toInitial) {
       self.currentYear = self._initialDate.getFullYear();
       self.currentMonth = self._initialDate.getMonth();
@@ -1758,6 +1855,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function applyL10n() {
     self.l10n = resolveL10n();
     if (self.weekdayContainer) buildWeekdays();
+    buildTimeRow();
   }
 
   /** @type {Record<string, Array<() => void>>} */
@@ -1801,6 +1899,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     ],
     clickOpens: [bindOpenTriggers],
     static: [placeContainer],
+    timeGranularity: [buildTimeRow],
+    hourFormat: [buildTimeRow],
+    minuteStep: [buildTimeRow],
+    timeLabel: [buildTimeRow],
+    defaultTime: [syncTimeRow],
   };
 
   /**

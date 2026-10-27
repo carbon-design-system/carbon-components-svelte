@@ -42,6 +42,17 @@
       <DatePickerInput labelText="Start date" />
     </DatePicker>
   </div>
+  <!-- The time row's fields read left to right in either direction. -->
+  <div data-testid="time-row">
+    <DatePicker
+      datePickerType="single"
+      inline
+      timeGranularity="minute"
+      value="03/15/2024 2:30 PM"
+    >
+      <DatePickerInput labelText="Start time" />
+    </DatePicker>
+  </div>
   <!-- At the inline end: the calendar lines up with the field's far edge
        to stay in view. -->
   <div class="end">

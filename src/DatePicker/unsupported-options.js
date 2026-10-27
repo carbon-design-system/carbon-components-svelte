@@ -9,10 +9,19 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
  *   months: number;
  *   anchor: HTMLElement | undefined;
  *   portalled: boolean;
+ *   timeGranularity?: string;
+ *   minuteStep?: number;
  * }} props
  * @returns {string[]}
  */
-export function getPropWarnings({ datePickerType, months, anchor, portalled }) {
+export function getPropWarnings({
+  datePickerType,
+  months,
+  anchor,
+  portalled,
+  timeGranularity,
+  minuteStep = 1,
+}) {
   /** @type {string[]} */
   const messages = [];
   if (months > 1 && datePickerType === "week") {
@@ -22,6 +31,19 @@ export function getPropWarnings({ datePickerType, months, anchor, portalled }) {
   }
   if (anchor && !portalled) {
     messages.push(`${PREFIX}anchor has no effect unless portalMenu is set.`);
+  }
+  if (timeGranularity && datePickerType !== "single") {
+    messages.push(
+      `${PREFIX}timeGranularity is only supported with datePickerType="single".`,
+    );
+  }
+  if (
+    timeGranularity &&
+    !(Number.isInteger(minuteStep) && minuteStep > 0 && 60 % minuteStep === 0)
+  ) {
+    messages.push(
+      `${PREFIX}minuteStep must divide 60; ${minuteStep} falls back to 1.`,
+    );
   }
   return messages;
 }
