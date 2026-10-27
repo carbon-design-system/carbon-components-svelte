@@ -20,7 +20,8 @@
 
   /**
    * Specify the size of the overflow menu.
-   * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
+   * Inherits the parent `InputGroup` size when unset. Also accepts Carbon
+   * v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
    * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
    */
   export let size = undefined;
@@ -149,7 +150,7 @@
     onMount,
     setContext,
   } from "svelte";
-  import { derived, writable } from "svelte/store";
+  import { derived, readable, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
@@ -193,7 +194,10 @@
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
 
-  $: effectiveSize = normalizeFieldSize(size);
+  // Beside a field in an InputGroup, the trigger takes the row's height.
+  const groupSize =
+    getContext("carbon:InputGroup")?.size ?? readable(undefined);
+  $: effectiveSize = normalizeFieldSize(size ?? $groupSize);
 
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];
@@ -665,7 +669,7 @@
   // instance, causing overhead when many OverflowMenu components are rendered.
   // The button's width per size until it's measured, so a menu open in the
   // server's markup joins its button as it does once mounted.
-  /** @type {Partial<Record<"xs" | "sm" | "md" | "xl", string>>} */
+  /** @type {Record<string, string | undefined>} */
   const BUTTON_WIDTHS = { xs: "1.5rem", sm: "2rem", xl: "3rem" };
   $: overflowMenuOptionsAfterWidth = buttonWidth
     ? `${buttonWidth}px`

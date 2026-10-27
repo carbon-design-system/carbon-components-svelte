@@ -59,9 +59,10 @@
 
   /**
    * Specify the size of the trigger button and the menu's row height.
-   * @type {"xs" | "sm" | "md" | "lg"}
+   * Inherits the parent `InputGroup` size when unset, otherwise `"md"`.
+   * @type {"xs" | "sm" | "md" | "lg" | undefined}
    */
-  export let size = "md";
+  export let size = undefined;
 
   /** Set to `true` to disable the trigger button */
   export let disabled = false;
@@ -114,8 +115,8 @@
    */
   export let ref = null;
 
-  import { onMount, setContext } from "svelte";
-  import { writable } from "svelte/store";
+  import { getContext, onMount, setContext } from "svelte";
+  import { readable, writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Menu from "../Menu/Menu.svelte";
   import { MENU_OPEN_CONTEXT_KEY } from "../constants/context-keys.js";
@@ -138,7 +139,7 @@
 
   $: triggerClass = [
     "bx--menu-button__trigger",
-    size === "xs" && "bx--menu-button__trigger--xs",
+    effectiveSize === "xs" && "bx--menu-button__trigger--xs",
     open && "bx--menu-button__trigger--open",
     $$restProps.class,
   ]
@@ -150,7 +151,10 @@
   // `close` does not fire.
   $: if (disabled && open) open = false;
 
-  $: iconTriggerClass = [ICON_TRIGGER_SIZE_CLASSES[size], $$restProps.class]
+  $: iconTriggerClass = [
+    ICON_TRIGGER_SIZE_CLASSES[effectiveSize],
+    $$restProps.class,
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -190,6 +194,13 @@
   }
   $: listenToTrigger(ref);
   onMount(() => () => stopArrowOpen());
+
+  // In an InputGroup an unsized menu button takes the row's height.
+  /** @type {Record<string, "xs" | "sm" | "lg">} */
+  const MENU_SIZE_BY_GROUP_SIZE = { xs: "xs", sm: "sm", xl: "lg" };
+  const groupSize =
+    getContext("carbon:InputGroup")?.size ?? readable(undefined);
+  $: effectiveSize = size ?? MENU_SIZE_BY_GROUP_SIZE[$groupSize] ?? "md";
 </script>
 
 {#if iconOnly}
@@ -226,7 +237,7 @@
   <Button
     bind:ref
     {kind}
-    size={BUTTON_SIZE_BY_MENU_SIZE[size]}
+    size={BUTTON_SIZE_BY_MENU_SIZE[effectiveSize]}
     {disabled}
     icon={ChevronDown}
     {...$$restProps}
@@ -252,7 +263,7 @@
   anchor={ref}
   {direction}
   {intrinsicAlign}
-  {size}
+  size={effectiveSize}
   {maxHeight}
   {transition}
   intrinsicWidth

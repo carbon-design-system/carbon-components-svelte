@@ -200,7 +200,7 @@ Write each helper as a chain of `if (size === "sm") return "small";` checks. CSS
 | PinCodeInput, PinCodeInputSkeleton | `xs`, `sm`, `default` 40, `xl` 48 | `md` → `default`, `lg` → `xl` | none |
 | ComboBox, Dropdown, MultiSelect, ListBox, their skeletons | `xs` 24, `sm` 32, unset 40, `lg` 48, `xl` 48 | `md` → unset | none |
 | Search, SearchSkeleton, SearchMenu, SearchMenuSkeleton | `xs` 24, `sm` 32, `lg` 40, `xl` 48 | `md` → `lg` | `lg` (v11 48) |
-| Accordion, ContentSwitcher, their skeletons, OverflowMenu | `xs` 24 (OverflowMenu only), `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
+| Accordion, ContentSwitcher, their skeletons, OverflowMenu | `xs` 24 (ContentSwitcher and OverflowMenu only), `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
 | Tag, SelectableTag, OperationalTag, TagSkeleton, TagSet | `xs`, `sm`, `default`, `lg` | `md` → `default` | none |
 | Toggle, ToggleSkeleton | `sm`, `default` | `md` → `default` | none |
 | Modal, ComposedModal, ConfirmModal | `xs`, `sm`, unset, `lg` | `md` → unset | none |
@@ -210,7 +210,7 @@ Write each helper as a chain of `if (size === "sm") return "small";` checks. CSS
 | FileUploaderItem, FileDownloadItem | `xs`, `small` 32, `field` 40, `default` 48 | `sm` → `small`, `md` → `field`, `lg` → `default` | none |
 | ProgressBar | `sm`, `md` | `small` → `sm`, `big` → `md` | none |
 
-An explicit `md` on a field wins over a parent `Form` size, as any field size does. Components such as ActionSet, Tabs, ContainedList, Pagination and Menu already use v11 names.
+An explicit `md` on a field wins over a parent `Form` size, as any field size does. Components such as ActionSet, Tabs, ContainedList, Pagination, Menu and ToggleButtonGroup (with `xs` 24) already use v11 names.
 
 API, docs, and workflow:
 
