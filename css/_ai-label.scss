@@ -913,12 +913,12 @@ $ai-label-sizes: (
     position: absolute;
     z-index: 1;
     top: $carbon--spacing-03;
-    right: $carbon--spacing-09;
     display: flex;
+    @include ccs-inset-inline($end: $carbon--spacing-09);
   }
 
   .#{$prefix}--modal--decorator .#{$prefix}--modal-header {
-    padding-right: to-rem(88px);
+    padding-inline-end: to-rem(88px);
   }
 
   .#{$prefix}--modal--ai-label {

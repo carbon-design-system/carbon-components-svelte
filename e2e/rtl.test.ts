@@ -1386,6 +1386,49 @@ test.describe("right-to-left buttons", () => {
       ),
     );
   });
+
+  test("seats the modal close button at the inline end, clear of the heading", async ({
+    page,
+  }) => {
+    const measure = () =>
+      page.evaluate(() => {
+        const modal = document.querySelector("[data-testid=modal]");
+        const box = (selector: string) => {
+          const rect = modal?.querySelector(selector)?.getBoundingClientRect();
+          if (!rect) throw new Error(`no ${selector}`);
+          return rect;
+        };
+        const container = box(".bx--modal-container");
+        const close = box(".bx--modal-close");
+        const header = modal?.querySelector(".bx--modal-header");
+        const style = getComputedStyle(header as Element);
+        return {
+          // The button's offsets from each edge of the dialog.
+          fromLeft: Math.round(close.left - container.left),
+          fromRight: Math.round(container.right - close.right),
+          // The header keeps the button's width clear on the same side.
+          paddingLeft: style.paddingLeft,
+          paddingRight: style.paddingRight,
+        };
+      });
+
+    const ltr = await measure();
+    expect(ltr.fromRight).toBeLessThan(ltr.fromLeft);
+    expect({ left: ltr.paddingLeft, right: ltr.paddingRight }).toEqual({
+      left: "16px",
+      right: "48px",
+    });
+
+    // Every offset mirrors.
+    await setDirection(page, "rtl");
+    const rtl = await measure();
+    expect(rtl.fromLeft).toBe(ltr.fromRight);
+    expect(rtl.fromRight).toBe(ltr.fromLeft);
+    expect({ left: rtl.paddingLeft, right: rtl.paddingRight }).toEqual({
+      left: "48px",
+      right: "16px",
+    });
+  });
 });
 
 type Rect = { left: number; right: number };
