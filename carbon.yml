@@ -275,6 +275,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ClickableTile
     tags:
       - contextual-navigation
+  coachmark:
+    name: Coachmark
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/coachmark.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Coachmark
   code-snippet:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/code-snippet/usage
