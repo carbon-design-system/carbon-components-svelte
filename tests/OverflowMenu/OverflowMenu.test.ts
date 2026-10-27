@@ -266,6 +266,22 @@ describe("OverflowMenu", () => {
     expect(menuItems[0]).toHaveFocus();
   });
 
+  it("opens with ArrowDown on the first item and ArrowUp on the last", async () => {
+    render(OverflowMenu);
+    const menuButton = screen.getByRole("button");
+
+    menuButton.focus();
+    await user.keyboard("{ArrowDown}");
+    let items = screen.getAllByRole("menuitem");
+    expect(items[0]).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    expect(menuButton).toHaveFocus();
+    await user.keyboard("{ArrowUp}");
+    items = screen.getAllByRole("menuitem");
+    await vi.waitFor(() => expect(items[items.length - 1]).toHaveFocus());
+  });
+
   it("opens with focus on the first enabled item", async () => {
     render(OverflowMenuDisabled, { firstDisabled: true });
 
