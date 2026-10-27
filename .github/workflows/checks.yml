@@ -248,7 +248,11 @@ jobs:
   test:
     name: test (${{ matrix.shard }}/2)
     needs: [changes]
-    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
+    # Skipped when bivium selects no unit tests, unless `test:types` has to run.
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (needs.changes.outputs.unit == 'true' &&
+        (needs.changes.outputs.unit-tests != 'none' || needs.changes.outputs.types == 'true'))
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -356,7 +360,11 @@ jobs:
   test-svelte-compat:
     name: test-svelte-compat (${{ matrix.label }}, ${{ matrix.shard }}/2)
     needs: [changes]
-    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.unit == 'true'
+    # Skipped when bivium selects no unit tests, unless `test:types` has to run.
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (needs.changes.outputs.unit == 'true' &&
+        (needs.changes.outputs.unit-tests != 'none' || needs.changes.outputs.types == 'true'))
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

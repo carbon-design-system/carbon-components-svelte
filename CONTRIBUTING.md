@@ -1362,7 +1362,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 | Job | Runs on a PR |
 | --- | --- |
 | `static-checks` | Always: builds docs, then `test:src-types`, `test:src-js`, `test:src-svelte` and `test:src-svelte-types` |
-| `test` (2 shards) | The selected unit tests. `test:types` runs on the first shard |
+| `test` (2 shards) | The selected unit tests, skipped when there are none and types didn't change. `test:types` runs on the first shard |
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
 | `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
