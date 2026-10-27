@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @typedef {import("./calendar-dates.js").CalendarLocale} CalendarLocale */
+
 const REGEX_SPECIAL_CHARS = /[/\\^$*+?.()|[\]{}]/g;
 
 /** @type {Record<string, string>} */
@@ -11,10 +13,6 @@ const dateFormatTokens = {
   Y: "\\d{4}",
   Q: "[1-4]",
   y: "\\d{2}",
-  F: "\\w+",
-  M: "\\w+",
-  D: "\\w+",
-  l: "\\w+",
   H: "\\d{1,2}",
   G: "\\d{1,2}",
   h: "\\d{1,2}",
@@ -26,11 +24,24 @@ const dateFormatTokens = {
 };
 
 /**
+ * Month and weekday names come from the locale, as the parser reads them,
+ * so "févr." or "März" pass where `\w+` (ASCII only) would not.
+ * @type {Record<string, (l10n: CalendarLocale) => string[]>}
+ */
+const dateNameTokens = {
+  F: (l10n) => l10n.months.longhand,
+  M: (l10n) => l10n.months.shorthand,
+  D: (l10n) => l10n.weekdays.shorthand,
+  l: (l10n) => l10n.weekdays.longhand,
+};
+
+/**
  * The input's `pattern` for a `dateFormat`.
  *
  * @param {string} fmt
+ * @param {CalendarLocale} l10n
  */
-export function dateFormatToPattern(fmt) {
+export function dateFormatToPattern(fmt, l10n) {
   let result = "";
   for (let i = 0; i < fmt.length; i++) {
     const ch = fmt[i];
@@ -38,6 +49,11 @@ export function dateFormatToPattern(fmt) {
       result += fmt[++i].replace(REGEX_SPECIAL_CHARS, "\\$&");
     } else if (dateFormatTokens[ch]) {
       result += dateFormatTokens[ch];
+    } else if (dateNameTokens[ch]) {
+      const names = dateNameTokens[ch](l10n).map((name) =>
+        name.replace(REGEX_SPECIAL_CHARS, "\\$&"),
+      );
+      result += `(?:${names.join("|")})`;
     } else {
       result += ch.replace(REGEX_SPECIAL_CHARS, "\\$&");
     }
@@ -51,8 +67,9 @@ export function dateFormatToPattern(fmt) {
  * must allow one or more repetitions instead of a single date.
  *
  * @param {string} fmt
+ * @param {CalendarLocale} l10n
  */
-export function dateFormatToMultiplePattern(fmt) {
-  const single = dateFormatToPattern(fmt);
+export function dateFormatToMultiplePattern(fmt, l10n) {
+  const single = dateFormatToPattern(fmt, l10n);
   return `${single}(, ${single})*`;
 }
