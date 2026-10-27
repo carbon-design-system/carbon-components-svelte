@@ -29,6 +29,7 @@
     HeaderSearch,
     HeaderUtilities,
     InlineEdit,
+    Kbd,
     Menu,
     MenuItem,
     Meter,
@@ -516,5 +517,13 @@
       <Tab label="Alerts" />
       <Tab label="Settings" disabled />
     </Tabs>
+  </div>
+
+  <div>
+    <Kbd id="fc-kbd" shortcut="ctrl+k" apple={false} />
+    <Button id="fc-kbd-button" shortcut="ctrl+alt+s">Save</Button>
+    <Button id="fc-kbd-button-disabled" shortcut="ctrl+alt+d" disabled>
+      Delete
+    </Button>
   </div>
 </main>

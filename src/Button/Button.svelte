@@ -9,6 +9,7 @@
    * @slot {{ props: { role: "button"; type?: string; tabindex: any; disabled: boolean; href?: string; class: string; [key: string]: any; } }}
    * @slot {{ style: undefined | string; }} icon
    * @slot {{}} badge - Compose a `BadgeIndicator` overlaid on an icon-only button. Size is set to `lg` automatically.
+   * @event {KeyboardEvent} shortcut - Dispatched when `shortcut` is pressed, before the button is clicked. Call `preventDefault()` to skip the click.
    */
 
   /**
@@ -75,6 +76,16 @@
    * @type {string | undefined}
    */
   export let iconDescription = undefined;
+
+  /**
+   * Specify a keyboard shortcut for the button, such as `"mod+s"`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The button shows the
+   * keys (in its tooltip when icon-only), sets `aria-keyshortcuts`, and is
+   * clicked when the shortcut is pressed while it's enabled and shown, and,
+   * while a modal is open, inside it. A shortcut the app binds with
+   * `onShortcut` takes precedence.
+   */
+  export let shortcut = "";
 
   /**
    * Set the alignment of the tooltip relative to the icon.
@@ -161,7 +172,8 @@
    */
   export let loadingDescription = undefined;
 
-  import { getContext, onMount, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Kbd from "../Kbd/Kbd.svelte";
   import Loading from "../Loading/Loading.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
@@ -174,6 +186,11 @@
   import { clippedBy } from "../utils/fit-align.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    keyboardShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
@@ -411,6 +428,20 @@
     }
   }
 
+  const dispatch = createEventDispatcher();
+
+  // Pressing the shortcut clicks the button, so it takes the same path as a
+  // pointer: `on:click`, a form submit, a link's navigation.
+  /** @param {KeyboardEvent} event */
+  function runShortcut(event) {
+    if (dispatch("shortcut", event, { cancelable: true })) ref?.click();
+  }
+
+  $: shortcutParams = { shortcut, run: runShortcut };
+  $: hasShortcutHint = Boolean(shortcut) && !hasIconOnly;
+  // Without an icon for the spinner to replace, it takes the keys' place
+  // instead, and the hidden keys keep the button's width.
+  $: spinnerInShortcut = hasShortcutHint && !icon && !$$slots.icon;
   $: buttonProps = {
     type: href && !isDisabled ? undefined : type,
     tabindex,
@@ -420,6 +451,9 @@
     "aria-pressed":
       hasIconOnly && kind === "ghost" && !href ? isSelected : undefined,
     "aria-busy": loading || undefined,
+    "aria-keyshortcuts": shortcut
+      ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+      : undefined,
     "aria-disabled": loading || undefined,
     ...$$restProps,
     class: [
@@ -434,6 +468,9 @@
       fullWidth && "bx--btn--full-width",
       isVisuallyDisabled && "bx--btn--disabled",
       hasIconOnly && "bx--btn--icon-only",
+      hasShortcutHint && "bx--btn--shortcut",
+      spinnerInShortcut && "bx--btn--shortcut-end",
+      hasShortcutHint && !spinnerInShortcut && "bx--btn--shortcut-icon",
       hasTooltip && "bx--tooltip__trigger",
       hasTooltip && "bx--tooltip--a11y",
       hasTooltip && tooltipPosition && `bx--btn--icon-only--${tooltipPosition}`,
@@ -478,6 +515,7 @@
       <a
         bind:this={ref}
         use:dismiss={escapeListener}
+        use:keyboardShortcut={shortcutParams}
         use:ignoreTooltipClicks
         use:closeOverControls={{ onCover: handleTooltipCover }}
         {...buttonProps}
@@ -497,14 +535,30 @@
         on:mouseleave={handlePortalMouseLeave}
       >
         {#if hasIconOnly && iconDescription && !loading}
-          <span class:bx--assistive-text={true}>
-            {iconDescription}
-          </span>
+          <span class:bx--assistive-text={true}
+            >{iconDescription}{#if shortcut}<span
+                class:bx--btn__tooltip-shortcut={true}
+                aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+              >{/if}</span
+          >
         {/if}
         {#if !hasIconOnly}
           <slot />
+          {#if shortcut}
+            <span class:bx--btn__shortcut={true}>
+              {#if loading && spinnerInShortcut}
+                <Loading
+                  small
+                  withOverlay={false}
+                  description={loadingDescription}
+                  class="bx--btn__loading"
+                />
+              {/if}
+              <Kbd {shortcut} variant="muted" aria-hidden="true" />
+            </span>
+          {/if}
         {/if}
-        {#if loading}
+        {#if loading && !spinnerInShortcut}
           <Loading
             small
             withOverlay={false}
@@ -532,6 +586,7 @@
     <a
       bind:this={ref}
       use:dismiss={escapeListener}
+      use:keyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
       {...buttonProps}
@@ -551,14 +606,30 @@
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription && !loading}
-        <span class:bx--assistive-text={true}>
-          {iconDescription}
-        </span>
+        <span class:bx--assistive-text={true}
+          >{iconDescription}{#if shortcut}<span
+              class:bx--btn__tooltip-shortcut={true}
+              aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+            >{/if}</span
+        >
       {/if}
       {#if !hasIconOnly}
         <slot />
+        {#if shortcut}
+          <span class:bx--btn__shortcut={true}>
+            {#if loading && spinnerInShortcut}
+              <Loading
+                small
+                withOverlay={false}
+                description={loadingDescription}
+                class="bx--btn__loading"
+              />
+            {/if}
+            <Kbd {shortcut} variant="muted" aria-hidden="true" />
+          </span>
+        {/if}
       {/if}
-      {#if loading}
+      {#if loading && !spinnerInShortcut}
         <Loading
           small
           withOverlay={false}
@@ -587,6 +658,7 @@
       type="button"
       bind:this={ref}
       use:dismiss={escapeListener}
+      use:keyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
       {...buttonProps}
@@ -606,14 +678,30 @@
       on:mouseleave={handlePortalMouseLeave}
     >
       {#if hasIconOnly && iconDescription && !loading}
-        <span class:bx--assistive-text={true}>
-          {iconDescription}
-        </span>
+        <span class:bx--assistive-text={true}
+          >{iconDescription}{#if shortcut}<span
+              class:bx--btn__tooltip-shortcut={true}
+              aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+            >{/if}</span
+        >
       {/if}
       {#if !hasIconOnly}
         <slot />
+        {#if shortcut}
+          <span class:bx--btn__shortcut={true}>
+            {#if loading && spinnerInShortcut}
+              <Loading
+                small
+                withOverlay={false}
+                description={loadingDescription}
+                class="bx--btn__loading"
+              />
+            {/if}
+            <Kbd {shortcut} variant="muted" aria-hidden="true" />
+          </span>
+        {/if}
       {/if}
-      {#if loading}
+      {#if loading && !spinnerInShortcut}
         <Loading
           small
           withOverlay={false}
@@ -642,6 +730,7 @@
     type="button"
     bind:this={ref}
     use:dismiss={escapeListener}
+    use:keyboardShortcut={shortcutParams}
     use:ignoreTooltipClicks
     use:closeOverControls={{ onCover: handleTooltipCover }}
     {...buttonProps}
@@ -661,14 +750,30 @@
     on:mouseleave={handlePortalMouseLeave}
   >
     {#if hasIconOnly && iconDescription && !loading}
-      <span class:bx--assistive-text={true}>
-        {iconDescription}
-      </span>
+      <span class:bx--assistive-text={true}
+        >{iconDescription}{#if shortcut}<span
+            class:bx--btn__tooltip-shortcut={true}
+            aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+          >{/if}</span
+      >
     {/if}
     {#if !hasIconOnly}
       <slot />
+      {#if shortcut}
+        <span class:bx--btn__shortcut={true}>
+          {#if loading && spinnerInShortcut}
+            <Loading
+              small
+              withOverlay={false}
+              description={loadingDescription}
+              class="bx--btn__loading"
+            />
+          {/if}
+          <Kbd {shortcut} variant="muted" aria-hidden="true" />
+        </span>
+      {/if}
     {/if}
-    {#if loading}
+    {#if loading && !spinnerInShortcut}
       <Loading
         small
         withOverlay={false}
@@ -709,5 +814,9 @@
     on:mouseenter={handleTooltipMouseenter}
     on:mouseleave={handlePortalMouseLeave}
     on:cover={handleTooltipCover}
-  />
+    >{iconDescription}{#if shortcut}<span
+        class:bx--btn__tooltip-shortcut={true}
+        aria-hidden="true"><Kbd {shortcut} variant="muted" /></span
+      >{/if}</PortalTooltip
+  >
 {/if}
