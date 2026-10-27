@@ -1,5 +1,6 @@
 // @ts-check
 import { BoundedFifoCache } from "../utils/bounded-fifo-cache.js";
+import { toCssLength } from "../utils/css-length.js";
 import { deepEqual } from "../utils/deep-equal.js";
 
 /**
@@ -121,6 +122,166 @@ export function formatHeaderWidth(header) {
   ].filter(Boolean);
   if (styles.length === 0) return undefined;
   return styles.join(";");
+}
+
+/**
+ * Indices of the rendered columns, in render order. Hidden columns drop out
+ * and pinned columns move to their edge: `"start"` pins first, `"end"` pins
+ * last, each group keeping its order in `headers`. A pin then never needs a
+ * reorder of `headers`, and DOM order stays equal to visual order.
+ * @param {ReadonlyArray<{ columnHidden?: boolean; columnPinned?: "start" | "end" }>} headers
+ * @returns {number[]}
+ */
+export function resolveColumnOrder(headers) {
+  /** @type {number[]} */
+  const start = [];
+  /** @type {number[]} */
+  const center = [];
+  /** @type {number[]} */
+  const end = [];
+  headers.forEach((header, index) => {
+    if (header.columnHidden) return;
+    if (header.columnPinned === "start") start.push(index);
+    else if (header.columnPinned === "end") end.push(index);
+    else center.push(index);
+  });
+  return start.length || end.length ? [...start, ...center, ...end] : center;
+}
+
+// `%` is relative to a different box for `width` (the table) and for an
+// inset (the scrollport), so only absolute units can be summed up front.
+const RE_NUMBER = /^\d*\.?\d+/;
+const RE_ABSOLUTE_LENGTH = /^\d*\.?\d+(?:px|rem|em|ch|ex|vw|vh|vmin|vmax)$/;
+
+/**
+ * @param {string | number | undefined} width
+ * @param {number | undefined} measured
+ * @returns {string}
+ */
+function columnLength(width, measured) {
+  if (measured !== undefined) return `${measured}px`;
+  const length = toCssLength(width);
+  return typeof length === "string" && RE_ABSOLUTE_LENGTH.test(length.trim())
+    ? length.trim()
+    : "0px";
+}
+
+/** @param {string[]} terms */
+function sumLengths(terms) {
+  const nonZero = terms.filter((term) => Number.parseFloat(term) !== 0);
+  if (nonZero.length === 0) return "0px";
+  if (nonZero.length === 1) return nonZero[0];
+  // One unit sums to one number, so an all-px or all-rem run stays a plain length.
+  const unit = nonZero[0].replace(RE_NUMBER, "");
+  if (nonZero.every((term) => term.replace(RE_NUMBER, "") === unit)) {
+    const total = nonZero.reduce(
+      (sum, term) => sum + Number.parseFloat(term),
+      0,
+    );
+    return `${Math.round(total * 100) / 100}${unit}`;
+  }
+  return `calc(${nonZero.join(" + ")})`;
+}
+
+/**
+ * @typedef {object} PinnedColumnLayout
+ * @property {"start" | "end"} side - The edge the column is pinned to.
+ * @property {string} offset - CSS length from that edge, the summed widths of the pinned columns before it.
+ * @property {boolean} edge - Whether the column is the pinned column nearest the scrolling area.
+ */
+
+/**
+ * Where each pinned column sticks. `columns` are the rendered columns in
+ * render order, leading ones included (expand, selection and decorator
+ * columns, flagged `leading`). The leading columns pin with the start group
+ * and are left alone when there is none.
+ *
+ * Offsets come from declared widths, so server output and first paint are
+ * right. A `measured` width (in px, by column index) wins over a declared
+ * one. A column with neither counts as zero wide.
+ * @param {ReadonlyArray<{ pin?: "start" | "end"; leading?: boolean; width?: string | number }>} columns
+ * @param {ReadonlyArray<number | undefined>} [measured]
+ * @returns {null | Array<PinnedColumnLayout | undefined>} `null` when no column is pinned.
+ */
+export function computePinnedOffsets(columns, measured = []) {
+  const hasStart = columns.some(
+    (column) => !column.leading && column.pin === "start",
+  );
+  const hasEnd = columns.some(
+    (column) => !column.leading && column.pin === "end",
+  );
+  if (!hasStart && !hasEnd) return null;
+
+  /** @type {Array<PinnedColumnLayout | undefined>} */
+  const layouts = new Array(columns.length).fill(undefined);
+  const lengths = columns.map((column, index) =>
+    columnLength(column.width, measured[index]),
+  );
+
+  /** @type {string[]} */
+  let terms = [];
+  let startEdge = -1;
+  for (let i = 0; i < columns.length; i++) {
+    const column = columns[i];
+    if (column.leading ? !hasStart : column.pin !== "start") continue;
+    layouts[i] = { side: "start", offset: sumLengths(terms), edge: false };
+    terms.push(lengths[i]);
+    startEdge = i;
+  }
+
+  terms = [];
+  let endEdge = -1;
+  for (let i = columns.length - 1; i >= 0; i--) {
+    if (columns[i].leading || columns[i].pin !== "end") continue;
+    layouts[i] = { side: "end", offset: sumLengths(terms), edge: false };
+    terms.push(lengths[i]);
+    endEdge = i;
+  }
+
+  if (startEdge >= 0)
+    /** @type {PinnedColumnLayout} */ (layouts[startEdge]).edge = true;
+  if (endEdge >= 0)
+    /** @type {PinnedColumnLayout} */ (layouts[endEdge]).edge = true;
+  return layouts;
+}
+
+/**
+ * Class attribute for a cell: `classes` plus, for a pinned column, the pin
+ * classes. `undefined` when there is nothing to set.
+ * @param {PinnedColumnLayout | undefined} pin
+ * @param {...(string | undefined)} classes
+ * @returns {string | undefined}
+ */
+export function formatPinnedClass(pin, ...classes) {
+  const names = classes.filter(Boolean);
+  if (pin) {
+    names.push(`bx--table-column--pinned-${pin.side}`);
+    if (pin.edge) names.push(`bx--table-column--pinned-${pin.side}-edge`);
+  }
+  return names.length > 0 ? names.join(" ") : undefined;
+}
+
+/**
+ * Inline style for a pinned cell: its offset from its edge. The stylesheet
+ * turns it into `left` or `right` by direction.
+ * @param {PinnedColumnLayout | undefined} pin
+ * @returns {string | undefined}
+ */
+export function formatInsetStyle(pin) {
+  return pin ? `--ccs-pinned-offset: ${pin.offset}` : undefined;
+}
+
+/**
+ * Inline style for a header cell: its width, and for a pinned column the
+ * logical inset from its edge.
+ * @param {{ width?: string | null | number; minWidth?: string | null | number }} header
+ * @param {PinnedColumnLayout | undefined} pin
+ * @returns {string | undefined}
+ */
+export function formatColumnStyle(header, pin) {
+  const width = formatHeaderWidth(header);
+  const inset = formatInsetStyle(pin);
+  return width && inset ? `${width};${inset}` : (width ?? inset);
 }
 
 // Cached collator for compareValues' string fast path. localeCompare(str,
