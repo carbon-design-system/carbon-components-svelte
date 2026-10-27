@@ -543,6 +543,7 @@
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
   const sharedDateFormat = writable(dateFormat);
+  const sharedLocale = writable(locale);
   const sharedClearable = writable(clearable);
   const sharedClearButtonLabelText = writable(clearButtonLabelText);
   /**
@@ -1286,6 +1287,7 @@
     inputIds,
     hasCalendar,
     dateFormat: sharedDateFormat,
+    locale: sharedLocale,
     clearable: sharedClearable,
     clearButtonLabelText: sharedClearButtonLabelText,
     clear,
@@ -1748,6 +1750,7 @@
   });
 
   $: sharedDateFormat.set(dateFormat);
+  $: sharedLocale.set(locale);
   // Repaint a pending range's window when the limits change.
   $: if (
     minRangeDays !== prevMinRangeDays ||

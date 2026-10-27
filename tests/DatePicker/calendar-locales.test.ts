@@ -43,7 +43,16 @@ const TAGS = [
 ];
 
 // Formats whose output the input's derived `pattern` must accept.
-const INPUT_FORMATS = ["m/d/Y", "Y-m-d", "d.m.y", "m/d/Y H:i:S", "m/d/Y h:i K"];
+const INPUT_FORMATS = [
+  "m/d/Y",
+  "Y-m-d",
+  "d.m.y",
+  "m/d/Y H:i:S",
+  "m/d/Y h:i K",
+  "F j, Y",
+  "j M Y",
+  "l, D j",
+];
 
 // Single and double digits, both sides of noon.
 const INPUT_DATES = [
@@ -118,7 +127,10 @@ describe.each(TAGS)("%s", (tag) => {
     const rejected: string[] = [];
     for (const format of INPUT_FORMATS) {
       // Browsers compile the pattern attribute with the `v` flag.
-      const pattern = new RegExp(`^(?:${dateFormatToPattern(format)})$`, "v");
+      const pattern = new RegExp(
+        `^(?:${dateFormatToPattern(format, locale)})$`,
+        "v",
+      );
       for (const date of INPUT_DATES) {
         const text = formatDate(date, format, locale);
         if (!pattern.test(text)) rejected.push(`${format}: ${text}`);

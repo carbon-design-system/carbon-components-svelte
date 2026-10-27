@@ -89,6 +89,7 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { getCalendarLocale } from "./calendar-dates.js";
   import {
     dateFormatToMultiplePattern,
     dateFormatToPattern,
@@ -128,6 +129,7 @@
     clearable,
     clearButtonLabelText,
     clear,
+    locale,
   } = getContext("carbon:DatePicker");
 
   add({ id, labelText });
@@ -136,6 +138,7 @@
     pattern ??
     ($multiple ? dateFormatToMultiplePattern : dateFormatToPattern)(
       $dateFormat ?? "m/d/Y",
+      getCalendarLocale($locale),
     );
   $: if (ref) declareRef({ id, ref });
   $: setReadonly(id, readonly);

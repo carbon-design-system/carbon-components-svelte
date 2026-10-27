@@ -919,7 +919,11 @@ describe("DatePicker", () => {
       ["Y-m-d", "\\d{4}-\\d{1,2}-\\d{1,2}", "2026-02-10"],
       ["d.m.Y", "\\d{1,2}\\.\\d{1,2}\\.\\d{4}", "10.02.2026"],
       ["d/m/y", "\\d{1,2}\\/\\d{1,2}\\/\\d{2}", "10/02/26"],
-      ["M j, Y", "\\w+ \\d{1,2}, \\d{4}", "Feb 10, 2026"],
+      [
+        "M j, Y",
+        "(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{1,2}, \\d{4}",
+        "Feb 10, 2026",
+      ],
     ])(
       "derives a Unicode (u) flag valid pattern for %s",
       (dateFormat, expectedPattern, sampleValue) => {
