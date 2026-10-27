@@ -337,6 +337,10 @@ Add a global search component to the header.
 
 <FileSource src="/framed/UIShell/HeaderSearch" />
 
+### Keyboard shortcut
+
+Set `shortcut` to open the search from anywhere on the page, such as `"mod+k"` (Command K on Apple platforms, Ctrl K elsewhere). While closed, the search shows the keys beside its icon, or the icon alone on small screens, and announces them with `aria-keyshortcuts`. The global search above uses `mod+k`. To do something else, such as opening a command palette, handle `on:shortcut` and call `preventDefault()`.
+
 ### Custom results
 
 Override the default slot to customize each result. The slot exposes `let:result`, `let:index`, and `let:selected` for the highlighted row.
