@@ -1,10 +1,10 @@
 ---
-components: ["Tag", "SelectableTag", "OperationalTag", "TagSkeleton"]
+components: ["Tag", "ColorTag", "Swatch", "SelectableTag", "OperationalTag", "TagSkeleton"]
 description: Tags categorize content with a keyword or label, with various styles, sizes, and interactive states like filterable and selectable.
 ---
 
 <script>
-  import { AILabel, Box, Link, OperationalTag, Stack, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
+  import { AILabel, Box, ColorTag, Link, OperationalTag, Stack, Swatch, Tag, SelectableTag, TagSkeleton, TooltipDefinition } from "carbon-components-svelte";
   import IbmCloud from "carbon-icons-svelte/lib/IbmCloud.svelte";
 </script>
 
@@ -279,6 +279,88 @@ Use the small size variant for selectable tags.
 Use the large size variant for selectable tags.
 
 <SelectableTag size="lg">Compliant</SelectableTag>
+
+## Color
+
+A `Swatch` is a small color dot. Put one in a tag's `icon` slot to mark a category, such as a team or a label, on a neutral tag. The tag keeps its own `type`, so the dot never has to match a tag fill. Color alone must not be the only signal: always pair a swatch with text, and use [ShapeIndicator](/components/ShapeIndicator) for status, not a swatch.
+
+### Palette
+
+Set `color` to one of the palette colors. The fill is the `-strong` [UserAvatar](/components/UserAvatar) color, which stays visible on a gray tag in every theme.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag type="gray"><Swatch slot="icon" color="red" />Red</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="magenta" />Magenta</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="purple" />Purple</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="blue" />Blue</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="cyan" />Cyan</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="teal" />Teal</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="green" />Green</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="gray" />Gray</Tag>
+</Stack>
+
+### Hashed from a key
+
+Set `colorKey` to pick a color from a string: the same string always gives the same color, on the server and in the browser. It is the color [getAvatarBackgroundColor](/components/UserAvatar) picks, so a tag and a `UserAvatar` with `backgroundColor="auto"` for one team match. Use it for categories. Don't use it for severity, since a hash can give any status any color.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag type="gray"><Swatch slot="icon" colorKey="Platform" />Platform</Tag>
+  <Tag type="gray"><Swatch slot="icon" colorKey="Design" />Design</Tag>
+  <Tag type="gray"><Swatch slot="icon" colorKey="Billing" />Billing</Tag>
+  <Tag type="gray"><Swatch slot="icon" colorKey="Security" />Security</Tag>
+</Stack>
+
+### Custom color
+
+Set `cssColor` to any CSS color, for a color you get from your data. It sets the `--ccs-swatch-color` custom property.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag type="gray"><Swatch slot="icon" cssColor="#ff7eb6" />Pink</Tag>
+  <Tag type="gray"><Swatch slot="icon" cssColor="rebeccapurple" />Rebecca purple</Tag>
+</Stack>
+
+### Size
+
+`size="sm"` draws an 8px dot, for a small tag. The default is 12px.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <Tag type="gray" size="sm"><Swatch slot="icon" size="sm" color="green" />Small</Tag>
+  <Tag type="gray"><Swatch slot="icon" color="green" />Default</Tag>
+  <Tag type="gray" size="lg"><Swatch slot="icon" color="green" />Large</Tag>
+</Stack>
+
+### Legend
+
+A swatch also stands alone, such as in a chart legend. Set `label` to name it, which gives it `role="img"`. Leave `label` empty when the text beside it names the category, which hides the swatch from assistive technologies.
+
+<Stack orientation="horizontal" gap={5}>
+  <Stack orientation="horizontal" gap={3} align="center">
+    <Swatch color="magenta" />
+    <span>Open</span>
+  </Stack>
+  <Stack orientation="horizontal" gap={3} align="center">
+    <Swatch color="teal" />
+    <span>Closed</span>
+  </Stack>
+</Stack>
+
+### ColorTag
+
+`ColorTag` is a gray `Tag` with the swatch already in its `icon` slot. It takes `colorKey`, `color`, `cssColor` and `showSwatch`, passes the rest of its props to `Tag`, and forwards `click`, `close` and the mouse events. A filter `ColorTag` keeps its swatch and its close button.
+
+<Stack orientation="horizontal" gap={3} wrap="wrap">
+  <ColorTag colorKey="Platform">Platform</ColorTag>
+  <ColorTag colorKey="Design" filter>Design</ColorTag>
+  <ColorTag colorKey="Billing" interactive>Billing</ColorTag>
+  <ColorTag colorKey="Data" showSwatch={false}>No swatch</ColorTag>
+</Stack>
+
+| Do | Why |
+| --- | --- |
+| Pair every swatch with text | The label carries the name. A color alone fails for color-blind users and in forced colors. |
+| Use `colorKey` for categories | The same name gets the same color everywhere. |
+| Use `ShapeIndicator` for status | A hashed color has no meaning, and a shape works without color. |
+| Leave a swatch beside text unlabelled | The text already names it, so a label makes a screen reader say it twice. |
 
 ## Skeleton
 
