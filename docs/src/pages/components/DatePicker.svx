@@ -112,6 +112,20 @@ Set `timeGranularity="second"` to add a seconds field, and `minuteStep` to step 
   <DatePickerInput labelText="Report delivery" placeholder="mm/dd/yyyy hh:mm" />
 </DatePicker>
 
+### Time window
+
+Set `minTime` and `maxTime` (24-hour `"HH:mm"`) to allow only part of the day. The arrows skip times outside the window, and a typed or picked time moves to its nearest edge. A `minTime` later than `maxTime` wraps past midnight, as an overnight maintenance window does.
+
+<DatePicker datePickerType="single" timeGranularity="minute" minTime="22:00" maxTime="06:00" defaultTime="22:00">
+  <DatePickerInput labelText="Maintenance window starts" placeholder="mm/dd/yyyy hh:mm" />
+</DatePicker>
+
+A `minDate` or `maxDate` that carries a time also limits its own day, so `minDate={new Date()}` allows today only from now on.
+
+<DatePicker datePickerType="single" timeGranularity="minute" minDate={new Date()} minuteStep={15}>
+  <DatePickerInput labelText="Send report at" placeholder="mm/dd/yyyy hh:mm" />
+</DatePicker>
+
 ### Range
 
 A range gets a start and an end row, named "Start time" and "End time" by default (set `timeLabelText` to a pair to rename them). Picking days keeps each row's time, and a range on one day can't end before it starts. Pass `defaultTime` a pair to start the two rows at different times.
