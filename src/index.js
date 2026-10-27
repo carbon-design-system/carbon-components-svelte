@@ -331,6 +331,12 @@ export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
+export {
+  formatShortcut,
+  matchesShortcut,
+  onShortcut,
+  platformScript,
+} from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
