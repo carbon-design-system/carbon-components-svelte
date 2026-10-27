@@ -467,6 +467,56 @@ test.describe("right-to-left layout", () => {
     ]);
   });
 
+  test("mirrors the TreeViewGrid indent, caret and selection bar", async ({
+    page,
+  }) => {
+    const parts = {
+      engineLabel:
+        "[data-testid=tree-grid] [data-tree-row-id=engine] .bx--tree-grid__label",
+      caret:
+        "[data-testid=tree-grid] [data-tree-row-id=storage] .bx--tree-grid__toggle",
+      engineCell:
+        "[data-testid=tree-grid] [data-tree-row-id=engine] td:first-child",
+    };
+    const viewportWidth = await page.evaluate(
+      () => document.documentElement.clientWidth,
+    );
+    const ltr = await boxes(page, parts);
+    await setDirection(page, "rtl");
+    await expect
+      .poll(async () => (await boxes(page, parts)).caret?.right)
+      .toBe(mirror(ltr, viewportWidth).caret?.right);
+    expectMirrored(await boxes(page, parts), mirror(ltr, viewportWidth));
+
+    // A collapsed row's caret points toward the children: where the down
+    // chevron's tip lands is right (+1) in LTR and left (-1) in RTL. The bar
+    // is a shadow on the cell's inline start.
+    const direction = () =>
+      page.locator(parts.caret).evaluate((node) => {
+        const matrix = new DOMMatrix(getComputedStyle(node).transform);
+        return Math.round(matrix.transformPoint({ x: 0, y: 1 }).x);
+      });
+    await expect.poll(direction).toBe(-1);
+    const shadow = await page
+      .locator(parts.engineCell)
+      .evaluate((node) => getComputedStyle(node).boxShadow);
+    expect(shadow).toContain("-4px 0px 0px 0px");
+  });
+
+  test("expands a TreeViewGrid row with Left and collapses it with Right", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const row = page
+      .getByTestId("tree-grid")
+      .locator("[data-tree-row-id=storage]");
+    await row.focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(row).toHaveAttribute("aria-expanded", "true");
+    await page.keyboard.press("ArrowRight");
+    await expect(row).toHaveAttribute("aria-expanded", "false");
+  });
+
   test("keeps the Slider gaps beside the text input", async ({ page }) => {
     // Each pair is a part and the text input beside it, in the fixture's
     // Slider, hideRangeLabels Slider, RangeSlider and vertical RangeSlider.

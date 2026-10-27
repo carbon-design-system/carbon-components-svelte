@@ -279,6 +279,7 @@ export { default as TooltipGroup } from "./TooltipGroup/TooltipGroup.svelte";
 export { default as TooltipIcon } from "./TooltipIcon/TooltipIcon.svelte";
 export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as TreeViewSkeleton } from "./TreeView/TreeViewSkeleton.svelte";
+export { default as TreeViewGrid } from "./TreeViewGrid/TreeViewGrid.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";
 export { truncate } from "./Truncate/truncate.js";
 export { default as Content } from "./UIShell/Content.svelte";

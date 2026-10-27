@@ -43,6 +43,7 @@
     TabsSkeleton,
     TabsVertical,
     TreeView,
+    TreeViewGrid,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
@@ -292,6 +293,31 @@ export async function rollback(region, id) {
       {nodes}
       {expandedIds}
       checkedIds={["spark"]}
+    />
+  </div>
+  <div data-testid="tree-grid" class="field">
+    <TreeViewGrid
+      labelText="Services"
+      headers={[
+        { key: "text", value: "Name" },
+        { key: "owner", value: "Owner" },
+      ]}
+      nodes={[
+        {
+          id: "storage",
+          text: "Storage",
+          owner: "Ana",
+          nodes: [{ id: "buckets", text: "Buckets", owner: "Ben" }],
+        },
+        {
+          id: "analytics",
+          text: "Analytics",
+          owner: "Cy",
+          nodes: [{ id: "engine", text: "Engine", owner: "Di" }],
+        },
+      ]}
+      expandedIds={["analytics"]}
+      selectedIds={["engine"]}
     />
   </div>
   <div data-testid="tree-virtual" class="field">

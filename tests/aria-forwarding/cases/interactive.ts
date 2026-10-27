@@ -34,6 +34,7 @@ import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
+import TreeViewGrid from "carbon-components-svelte/TreeViewGrid/TreeViewGrid.svelte";
 import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
@@ -509,6 +510,19 @@ export const interactive: AriaEntry[] = [
         props: { labelText: "Files", nodes, virtualize: true, ...attrs },
       }),
     target: () => screen.getByRole("tree"),
+  },
+  {
+    name: "TreeViewGrid",
+    render: (attrs) =>
+      render(TreeViewGrid, {
+        props: {
+          labelText: "Files",
+          headers: [{ key: "text", value: "Name" }],
+          nodes,
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("treegrid"),
   },
   {
     name: "BreadcrumbItem",

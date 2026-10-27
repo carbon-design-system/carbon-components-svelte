@@ -115,7 +115,7 @@
   "Tooltip/TooltipFooter.svelte": 3,
   "TooltipDefinition/TooltipDefinition.svelte": 1,
   "TooltipIcon/TooltipIcon.svelte": 1,
-  "TreeView/TreeView.svelte": 67,
+  "TreeView/TreeView.svelte": 50,
   "TreeView/TreeViewNode.svelte": 6,
   "TreeView/TreeViewNodeList.svelte": 7,
   "TreeView/TreeViewNodeVirtual.svelte": 3,

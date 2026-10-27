@@ -1,0 +1,123 @@
+---
+components: ["TreeViewGrid"]
+description: A tree view grid shows hierarchical rows that share columns, with expandable parents, row selection, and interactive cells reachable from the keyboard.
+---
+
+## Basic
+
+Create a tree view grid with `nodes` and `headers`. The first header is the tree column: it holds the expand toggle, the node `icon`, and the node text. Every other header reads the node field of the same `key`.
+
+Use `TreeViewGrid` when rows nest and share columns. For a single column of nested items, use [TreeView](/components/TreeView). For flat rows, use [DataTable](/components/DataTable).
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGrid" />
+
+## Columns
+
+### Widths and alignment
+
+Set `width` or `minWidth` on a header to size its column. Set `columnAlign` to `"end"` to align a numeric column to the inline end, which is the left edge in right-to-left layouts.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridWidths" />
+
+### Custom cells
+
+Use the `cell` slot to render a cell. The slot receives the `node`, the `cell` (`key`, `value`, `display` and `header`), and the `cellIndex`. For the tree column, the slot replaces only the text, so the toggle and icon stay. Set `display` on a header to format a value without a slot.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridCustomCells" />
+
+## Sizes
+
+Set `size` to control row height. The default is 48px, as in [DataTable](/components/DataTable#sizes). Use `"short"` for dense trees such as a file browser.
+
+| Size | Alias | Height |
+| --- | --- | --- |
+| `"compact"` | `"xs"` | 24px |
+| `"short"` | `"sm"` | 32px |
+| `"medium"` | `"md"` | 40px |
+| unset | `"lg"` | 48px |
+| `"tall"` | `"xl"` | 64px |
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridSizes" />
+
+## Zebra
+
+Set `zebra` to alternate row backgrounds.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridZebra" />
+
+## Interactive cells
+
+Cells can hold links, inputs, toggles, and menus. By default (`widgetNavigation="arrow"`) the grid is one tab stop, so a tree with many controls does not trap <DocKbd label="Tab" />. Arrow keys move between rows and cells, <DocKbd label="Enter" /> or <DocKbd label="F2" /> on a cell moves focus to its first control, and <DocKbd label="Escape" /> returns to the cell. While focus is in a cell, <DocKbd label="Tab" /> walks the controls of that cell.
+
+Clicks on a control do not select the row.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridInteractive" />
+
+Set `widgetNavigation` to `"tab"` to keep each control in the page tab order.
+
+| Do | Why |
+| --- | --- |
+| Keep the default `"arrow"` for trees with a control in most rows | One <DocKbd label="Tab" /> enters the grid and the next leaves it, instead of one stop per control. |
+| Give each control an accessible name that includes the row, such as `labelText="Auto scale {node.text}"` | Screen readers read the control and the row header together, but a bare "Toggle" repeats on every row. |
+| Use `"tab"` for a few widgets in a small tree | Users who expect <DocKbd label="Tab" /> to reach a control find it without learning the arrow keys. |
+| Don't build the controls' tab order yourself with `tabindex` | In `"arrow"` mode the grid removes the tab stop of every link, button, and input in a cell, and puts it back while the cell has focus. |
+
+## Selection
+
+### Highlight
+
+Click a row, or press <DocKbd label="Enter" /> or <DocKbd label="Space" />, to select it. Bind `selectedIds` and `activeId` to read the selection. The grid fires `select` and `select:change`.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridSelection" />
+
+### Multiselect
+
+Set `multiselect` to select more than one row. <DocKbd label="Ctrl" />/<DocKbd label="⌘" /> and click toggles a row, <DocKbd label="Shift" /> and click selects a range of visible rows, <DocKbd label="Shift" /> with an arrow key toggles the row focus moves to, and <DocKbd label="Ctrl" />/<DocKbd label="⌘" /> with <DocKbd label="A" /> selects every enabled visible row.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridMultiselect" />
+
+## Expand and collapse
+
+### Initial state
+
+Set `expandedIds` to expand rows at first render. Bind it to read and set the expanded rows. The grid fires `toggle` for a gesture and `toggle:change` with the added and removed ids.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridExpanded" />
+
+### Programmatic
+
+Call `expandAll`, `collapseAll`, `expandNodes`, `collapseNodes`, or `showNode` on a bound instance. `showNode` expands the ancestors of a row, selects it, and focuses it.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridProgrammatic" />
+
+### Lazy loading
+
+Set `hasChildren` on a node whose children are not loaded. The row gets a toggle, and expanding it fires `toggle` so you can load them. Assign `node.nodes`, then reassign `nodes`.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridLazy" />
+
+## Sticky header
+
+Set `stickyHeader` to keep the header in view while the rows scroll. The scroll area is capped at 300px. Set `stickyHeaderMaxHeight` to change it.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridSticky" />
+
+## Keyboard
+
+The grid follows the WAI-ARIA treegrid pattern. Focus is on a row or on one of its cells. Left and Right swap in right-to-left layouts.
+
+| Focus on | Key | Action |
+| --- | --- | --- |
+| Row | <DocKbd label="↑" /> / <DocKbd label="↓" /> | Move to the previous or next enabled row. |
+| Row | <DocKbd label="→" /> | Expand a collapsed row. On an expanded or leaf row, move to its first cell. |
+| Row | <DocKbd label="←" /> | Collapse an expanded row. Otherwise move to the parent row. |
+| Cell | <DocKbd label="←" /> / <DocKbd label="→" /> | Move to the previous or next cell. Left from the first cell returns to the row. |
+| Cell | <DocKbd label="↑" /> / <DocKbd label="↓" /> | Move to the same column in the previous or next enabled row. |
+| Row or cell | <DocKbd label="Home" /> / <DocKbd label="End" /> | On a row, move to the first or last row. On a cell, move to the first or last cell of the row. |
+| Cell | <DocKbd label="Ctrl" /> + <DocKbd label="Home" /> / <DocKbd label="End" /> | Move to the first or last row. |
+| Row or cell | <DocKbd label="Page Up" /> / <DocKbd label="Page Down" /> | Move ten rows. |
+| Row or cell | <DocKbd label="Enter" /> | Toggle an expandable row and select it. On a cell with a control, move focus to the control. |
+| Row or cell | <DocKbd label="Space" /> | Select the row. |
+| Cell | <DocKbd label="F2" /> | Move focus to the first control in the cell. |
+| Control in a cell | <DocKbd label="Escape" /> | Return to the cell. |
+| Row | Printable characters | Move to the next row whose tree column text starts with them. |

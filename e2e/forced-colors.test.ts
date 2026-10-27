@@ -202,6 +202,44 @@ test.describe("forced colors", () => {
     }
   });
 
+  // A selected fill would need `forced-color-adjust: none`, which reaches the
+  // links and toggles in the cells. A selected row draws Highlight borders
+  // instead, and its cells stay forced.
+  test("a selected TreeViewGrid row is marked with Highlight borders", async ({
+    page,
+  }) => {
+    const on = await page
+      .locator("[data-tree-row-id=g-selected] td:first-child")
+      .evaluate((el) => {
+        const s = getComputedStyle(el);
+        return {
+          top: s.borderTopColor,
+          start: s.borderInlineStartColor,
+          startWidth: s.borderInlineStartWidth,
+          forcedAdjust: s.forcedColorAdjust,
+        };
+      });
+    expect(on.top).toBe(system.Highlight);
+    expect(on.start).toBe(system.Highlight);
+    expect(on.startWidth).toBe("4px");
+    expect(on.forcedAdjust).toBe("auto");
+    expect(
+      (await style(page, "[data-tree-row-id=g-plain] td:first-child"))
+        .borderColor,
+    ).not.toBe(system.Highlight);
+  });
+
+  test("a disabled TreeViewGrid row reads GrayText", async ({ page }) => {
+    const selectors = [
+      "[data-tree-row-id=g-disabled] td:first-child",
+      "[data-tree-row-id=g-disabled] td:last-child",
+    ];
+    const colors = await Promise.all(
+      selectors.map(async (selector) => (await style(page, selector)).color),
+    );
+    expect(colors).toEqual([system.GrayText, system.GrayText]);
+  });
+
   test("disabled items read GrayText, also on hover", async ({ page }) => {
     for (const selector of [
       ".bx--tree-node--disabled > .bx--tree-node__label",

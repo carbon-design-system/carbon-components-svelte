@@ -1,0 +1,166 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TreeViewGrid: a `role="treegrid"` table that shares DataTable's header,
+/// borders, density, zebra, sticky header and selected rows. The table
+/// carries `bx--data-table`, and a selected row `bx--data-table--selected`,
+/// so those come from the vendored DataTable rules. This partial adds what a
+/// tree needs on top: the indent, the toggle, the row icon, the focus rings
+/// on rows and cells, the selection bar and the disabled rows.
+/// @access private
+/// @group components
+@mixin tree-view-grid {
+  // DataTable aligns text with a physical `left`. Cells read the writing
+  // direction here; `columnAlign` still wins through its own class.
+  .#{$prefix}--tree-grid th,
+  .#{$prefix}--tree-grid td {
+    text-align: start;
+  }
+
+  // The toggle, icon and text of the tree column. Each level indents the
+  // whole label by one level's width; the level is a custom property on the
+  // row, so the server renders the indent.
+  .#{$prefix}--tree-grid__label {
+    display: flex;
+    align-items: center;
+    padding-inline-start: calc(
+      (var(--ccs-tree-grid-level, 1) - 1) * #{$carbon--spacing-05}
+    );
+  }
+
+  // Every row has a toggle box, so leaf text lines up with a parent's.
+  .#{$prefix}--tree-grid__toggle {
+    display: inline-flex;
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    margin-inline-end: $carbon--spacing-03;
+    color: $icon-secondary;
+    transform: rotate(-90deg);
+    transition: transform $duration--fast-02 motion(standard, productive);
+    @include ccs-mirror-rtl(rotate(-90deg));
+  }
+
+  .#{$prefix}--tree-grid__toggle--expanded {
+    transform: rotate(0);
+    @include ccs-mirror-rtl(rotate(0));
+  }
+
+  .#{$prefix}--tree-grid__icon {
+    flex: none;
+    margin-inline-end: $carbon--spacing-03;
+    fill: $icon-secondary;
+  }
+
+  .#{$prefix}--tree-grid .#{$prefix}--data-table--selected .#{$prefix}--tree-grid__toggle {
+    color: $icon-primary;
+  }
+
+  .#{$prefix}--tree-grid .#{$prefix}--data-table--selected .#{$prefix}--tree-grid__icon {
+    fill: $icon-primary;
+  }
+
+  // The accent bar marks a selected row at its inline start, as the active
+  // node of a TreeView does. A box shadow, not a pseudo-element: table cells
+  // cannot be positioned. A shadow's x offset has no logical form.
+  .#{$prefix}--tree-grid .#{$prefix}--data-table--selected > td:first-child {
+    box-shadow: inset calc(#{to-rem(4px)} * var(--ccs-inline-sign, 1)) 0 0 $interactive;
+  }
+
+  // A disabled row is not interactive, so it takes no pointer events: the
+  // DataTable row hover never matches it.
+  .#{$prefix}--tree-grid__row--disabled {
+    pointer-events: none;
+  }
+
+  .#{$prefix}--tree-grid .#{$prefix}--tree-grid__row--disabled td {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--tree-grid .#{$prefix}--tree-grid__row--disabled .#{$prefix}--tree-grid__toggle {
+    color: $icon-disabled;
+  }
+
+  .#{$prefix}--tree-grid .#{$prefix}--tree-grid__row--disabled .#{$prefix}--tree-grid__icon {
+    fill: $icon-disabled;
+  }
+
+  // Rows and cells take focus; a ring inside each keeps it clear of the
+  // neighbouring rows' borders.
+  .#{$prefix}--tree-grid tbody tr:focus,
+  .#{$prefix}--tree-grid td:focus {
+    @include focus-outline("outline");
+  }
+
+  // The sticky header would cover a row that focus scrolls to the top.
+  .#{$prefix}--tree-grid.#{$prefix}--data-table--sticky-header tbody tr,
+  .#{$prefix}--tree-grid.#{$prefix}--data-table--sticky-header td {
+    scroll-margin-top: $carbon--spacing-09;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--tree-grid tbody tr:hover .#{$prefix}--tree-grid__toggle {
+      color: $icon-primary;
+    }
+
+    .#{$prefix}--tree-grid tbody tr:hover .#{$prefix}--tree-grid__icon {
+      fill: $icon-primary;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--tree-grid__toggle {
+      transition: none;
+    }
+  }
+}
+
+@include exports("tree-view-grid") {
+  @include tree-view-grid;
+}
+
+// Forced colors repaint the selection fill, the accent bar's shadow and the
+// disabled text colour, so selected, disabled and plain rows looked alike.
+// System colors only. A selected row is marked with borders, not a
+// `Highlight` fill: a fill needs `forced-color-adjust: none` to keep its
+// `HighlightText`, and that inherits into the links, toggles and menus the
+// cells hold, leaving them unforced on a Highlight surface.
+/// TreeViewGrid selection and disabled rows in forced-colors mode.
+/// @access private
+/// @group components
+@mixin tree-view-grid-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--tree-grid {
+      // The DataTable hover rule for a selected row outranks the resting
+      // one, so the hover state is restated beside it.
+      .#{$prefix}--data-table--selected:not(.#{$prefix}--tree-grid__row--disabled) > td,
+      .#{$prefix}--data-table--selected:not(.#{$prefix}--tree-grid__row--disabled):hover > td {
+        border-top: to-rem(2px) solid Highlight;
+        border-bottom: to-rem(2px) solid Highlight;
+      }
+
+      .#{$prefix}--data-table--selected:not(.#{$prefix}--tree-grid__row--disabled) > td:first-child {
+        border-inline-start: to-rem(4px) solid Highlight;
+      }
+
+      .#{$prefix}--tree-grid__row--disabled > td {
+        color: GrayText;
+      }
+
+      .#{$prefix}--tree-grid__row--disabled .#{$prefix}--tree-grid__toggle {
+        color: GrayText;
+      }
+
+      .#{$prefix}--tree-grid__row--disabled .#{$prefix}--tree-grid__icon {
+        fill: GrayText;
+      }
+    }
+  }
+}
+
+@include exports("tree-view-grid-forced-colors") {
+  @include tree-view-grid-forced-colors;
+}

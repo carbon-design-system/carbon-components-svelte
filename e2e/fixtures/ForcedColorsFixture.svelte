@@ -79,6 +79,7 @@
     ToggleButtonGroup,
     Toggletip,
     TreeView,
+    TreeViewGrid,
     Truncate,
     UserAvatar,
   } from "carbon-components-svelte";
@@ -516,4 +517,18 @@
       <Tab label="Settings" disabled />
     </Tabs>
   </div>
+
+  <TreeViewGrid
+    labelText="Tree grid"
+    headers={[
+      { key: "text", value: "Name" },
+      { key: "owner", value: "Owner" },
+    ]}
+    nodes={[
+      { id: "g-plain", text: "Plain", owner: "Ana" },
+      { id: "g-selected", text: "Selected", owner: "Ben" },
+      { id: "g-disabled", text: "Disabled", owner: "Cy", disabled: true },
+    ]}
+    selectedIds={["g-selected"]}
+  />
 </main>
