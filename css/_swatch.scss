@@ -1,0 +1,63 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./user-avatar-tokens";
+
+/// Swatch (absent from v10): a small color dot that marks a category, such
+/// as a leading marker in a tag or a legend. The fill reads the `-strong`
+/// UserAvatar tokens (80 in the light themes, 30 in the dark ones), not the
+/// `tag-background-*` tokens, which a colored tag paints as its own
+/// background. The default avatar fills (60 and 50) are 3.8:1 on a gray tag
+/// in the light themes but only 1.5 to 2.3:1 in the dark ones.
+/// @access private
+/// @group components
+@mixin swatch {
+  .#{$prefix}--swatch {
+    --ccs-swatch-size: #{to-rem(12px)};
+
+    display: inline-block;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: var(--ccs-swatch-size);
+    height: var(--ccs-swatch-size);
+    border-radius: 50%;
+    background-color: var(--ccs-swatch-color);
+  }
+
+  .#{$prefix}--swatch--sm {
+    --ccs-swatch-size: #{to-rem(8px)};
+  }
+
+  $colors: "red" "magenta" "purple" "blue" "cyan" "teal" "green" "gray";
+
+  // `--ccs-swatch-color` set inline wins over these, for a custom color.
+  @each $color in $colors {
+    .#{$prefix}--swatch--#{$color} {
+      --ccs-swatch-color: #{ccs-theme-color(
+          $ccs-user-avatar-colors,
+          "user-avatar-#{$color}-strong"
+        )};
+    }
+  }
+
+  // The tag's icon box is 16px and not a flex container, so center the dot
+  // in it; the box already supplies the gap to the label.
+  .#{$prefix}--tag__custom-icon > .#{$prefix}--swatch {
+    display: block;
+    margin-block: calc((#{to-rem(16px)} - var(--ccs-swatch-size)) / 2);
+    margin-inline: auto;
+  }
+
+  // Forced colors drop background colors, which would erase the dot. Keep
+  // the fill and ring it so it also reads on a dark `Canvas`.
+  @media (forced-colors: active) {
+    .#{$prefix}--swatch {
+      border: 1px solid CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("swatch") {
+  @include swatch;
+}
