@@ -26,6 +26,8 @@ import {
   easingCss,
   motion,
   type MotionMode,
+  prefersReducedMotion,
+  shouldReduceMotion,
 } from "carbon-components-svelte/motion";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
@@ -139,3 +141,7 @@ const _mode: MotionMode = "expressive";
 const _ease: number = easing.exit[_mode](0.5);
 const _css: string = easingCss.standard.productive;
 const _motion: string = motion("entrance", _mode);
+const _reduce: boolean = shouldReduceMotion();
+const _reduceStore: () => void = prefersReducedMotion.subscribe(
+  (_v: boolean) => {},
+);
