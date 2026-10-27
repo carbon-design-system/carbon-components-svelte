@@ -7,6 +7,7 @@
 
   /**
    * Set to `true` to select the tag.
+   * Ignored inside a `SelectableTagGroup`, which owns the selection.
    * @bindable writable
    */
   export let selected = false;
@@ -19,13 +20,14 @@
 
   /**
    * Specify the size of the tag.
-   * Defaults to `"default"`, or to the `size` of a parent `TagSet`.
+   * Defaults to `"default"`, or to the `size` of a parent
+   * `SelectableTagGroup` or `TagSet`.
    * Also accepts Carbon v11's `"md"` (`"default"`).
    * @type {"xs" | "sm" | "default" | "lg" | "md" | undefined}
    */
   export let size = undefined;
 
-  /** Set to `true` to disable the tag */
+  /** Set to `true` to disable the tag. Also disabled by a disabled `SelectableTagGroup`. */
   export let disabled = false;
 
   /**
@@ -35,7 +37,8 @@
   export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
-   * Specify a value that identifies the tag inside a `TagSet`.
+   * Specify a value that identifies the tag inside a `TagSet`, or in the
+   * `selected` array of a `SelectableTagGroup` (falls back to `id`).
    * Returned as `tag.value` in the set's `close:tag` event.
    * @type {string | number | undefined}
    */
@@ -44,7 +47,15 @@
   /** Set an id for the tag */
   export let id = uniqueId();
 
-  import { createEventDispatcher, onMount } from "svelte";
+  /**
+   * Obtain a reference to the HTML element.
+   * @type {null | HTMLButtonElement}
+   * @bindable readonly
+   */
+  export let ref = null;
+
+  import { createEventDispatcher, getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { noop } from "../utils/noop.js";
@@ -54,21 +65,35 @@
 
   const dispatch = createEventDispatcher();
 
-  /** @type {null | HTMLButtonElement} */
-  let buttonRef = null;
   /** @type {null | HTMLSpanElement} */
   let labelRef = null;
   let truncated = false;
   let stopObservingLabel = noop;
 
+  // Inside a `SelectableTagGroup`, the group owns the selection. Outside
+  // one, `selectedValues` is `null` and the tag keeps its own `selected`.
+  const selectionGroup = getContext("carbon:SelectableTagGroup") ?? {
+    selectedValues: readable(/** @type {Set<string | number> | null} */ (null)),
+    disabled: readable(false),
+    size: readable(
+      /** @type {"sm" | "default" | "lg" | undefined} */ (undefined),
+    ),
+    toggle: () => /** @type {boolean | null} */ (null),
+  };
+  const {
+    selectedValues: groupSelectedValues,
+    disabled: groupDisabled,
+    size: selectionGroupSize,
+  } = selectionGroup;
+
   // Inside a `TagSet`, register like `Tag` does.
   const group = joinTagSet(() => ({
-    node: buttonRef,
-    label: buttonRef?.textContent?.trim() ?? "",
+    node: ref,
+    label: ref?.textContent?.trim() ?? "",
     value,
     type,
     size: resolvedSize,
-    disabled,
+    disabled: isDisabled,
     filter: false,
   }));
   const {
@@ -77,9 +102,23 @@
     tabindex: rovingTabindex,
   } = group;
 
+  $: identity = value ?? id;
+  $: inSelectionGroup = $groupSelectedValues !== null;
+  $: isSelected = $groupSelectedValues
+    ? $groupSelectedValues.has(identity)
+    : selected;
+  $: isDisabled = disabled || $groupDisabled;
   $: resolvedSize =
-    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
-  $: group.update({ value, type, size: resolvedSize, disabled });
+    normalizeSize(size, TAG_SIZE_ALIASES) ??
+    $selectionGroupSize ??
+    $groupSize ??
+    "default";
+  $: group.update({
+    value,
+    type,
+    size: resolvedSize,
+    disabled: isDisabled,
+  });
   $: hasIcon = Boolean(icon || $$slots.icon);
 
   // A truncated label shows its full text in a tooltip on the tag. A
@@ -99,26 +138,32 @@
   });
 
   function toggle() {
-    if (disabled) return;
+    if (isDisabled) return;
+    if (inSelectionGroup) {
+      // The group may decline, e.g. to keep the last selected tag (`required`).
+      const next = selectionGroup.toggle(identity);
+      if (next !== null) dispatch("change", { selected: next });
+      return;
+    }
     selected = !selected;
     dispatch("change", { selected });
   }
 </script>
 
 <button
-  bind:this={buttonRef}
+  bind:this={ref}
   type="button"
-  aria-pressed={selected ? "true" : "false"}
+  aria-pressed={isSelected ? "true" : "false"}
   data-overflow={$groupOverflow ? "true" : undefined}
   {id}
-  {disabled}
-  aria-disabled={disabled ? "true" : "false"}
-  tabindex={disabled ? -1 : $rovingTabindex}
-  title={disabled && truncated ? truncationLabel : undefined}
+  disabled={isDisabled}
+  aria-disabled={isDisabled ? "true" : "false"}
+  tabindex={isDisabled ? -1 : $rovingTabindex}
+  title={isDisabled && truncated ? truncationLabel : undefined}
   class:bx--tag={true}
   class:bx--tag--selectable={true}
-  class:bx--tag--selectable-selected={selected}
-  class:bx--tag--disabled={disabled}
+  class:bx--tag--selectable-selected={isSelected}
+  class:bx--tag--disabled={isDisabled}
   class:bx--tag--with-icon={hasIcon}
   class:bx--tag--xs={resolvedSize === "xs"}
   class:bx--tag--sm={resolvedSize === "sm"}
@@ -152,7 +197,7 @@
 </button>
 <AnchoredTooltip
   passEscapeWhenFocused
-  anchor={buttonRef}
+  anchor={ref}
   text={truncationLabel}
-  enabled={truncated && !disabled}
+  enabled={truncated && !isDisabled}
 />
