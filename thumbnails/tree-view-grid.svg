@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>tree-view-grid</title>
+    <g id="tree-view-grid" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="header" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="50" width="200" height="20"></rect>
+        <rect id="header-col-1" fill="var(--cds-text-secondary, #525252)" x="68" y="57" width="50" height="6"></rect>
+        <rect id="header-col-2" fill="var(--cds-text-secondary, #525252)" x="180" y="57" width="30" height="6"></rect>
+        <rect id="header-col-3" fill="var(--cds-text-secondary, #525252)" x="226" y="57" width="24" height="6"></rect>
+        <rect id="row-divider-1" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="90" width="200" height="1"></rect>
+        <rect id="row-divider-2" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="110" width="200" height="1"></rect>
+        <rect id="row-divider-3" fill="var(--cds-border-subtle, #e0e0e0)" x="60" y="130" width="200" height="1"></rect>
+        <g id="caret-root" transform="translate(64, 73) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M24 12L16 22 8 12z"></path>
+        </g>
+        <rect id="row-1-col-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="82" y="77" width="45" height="6"></rect>
+        <rect id="row-1-col-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="180" y="77" width="26" height="6"></rect>
+        <rect id="row-1-col-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="226" y="77" width="20" height="6"></rect>
+        <rect id="row-2-selected" fill="var(--cds-layer-selected, #e0e0e0)" x="60" y="91" width="200" height="19"></rect>
+        <rect id="row-2-bar" fill="var(--cds-interactive, #0f62fe)" x="60" y="91" width="3" height="19"></rect>
+        <rect id="row-2-col-1" fill="var(--cds-text-secondary, #525252)" x="96" y="97" width="38" height="6"></rect>
+        <rect id="row-2-col-2" fill="var(--cds-text-secondary, #525252)" x="180" y="97" width="30" height="6"></rect>
+        <rect id="row-2-col-3" fill="var(--cds-text-secondary, #525252)" x="226" y="97" width="24" height="6"></rect>
+        <rect id="row-3-col-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="96" y="117" width="50" height="6"></rect>
+        <rect id="row-3-col-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="180" y="117" width="22" height="6"></rect>
+        <rect id="row-3-col-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="226" y="117" width="18" height="6"></rect>
+    </g>
+</svg>

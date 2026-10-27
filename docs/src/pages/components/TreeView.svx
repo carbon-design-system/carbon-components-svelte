@@ -11,6 +11,8 @@ description: A tree view displays hierarchical data in a collapsible structure, 
 
 Create a basic tree view using the `nodes` prop. Each node needs a unique id and display text; icons, disabled state, and nested children are optional.
 
+Need columns, or controls such as links and menus in each row? Use [TreeViewGrid](/components/TreeViewGrid).
+
 By default, only one node is selected at a time. For multiple selection, see Multi-select ([Node](#node), [Shallow](#shallow), [Deep](#deep)).
 
 <FileSource src="/framed/TreeView/TreeView" />

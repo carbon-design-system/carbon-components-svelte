@@ -123,6 +123,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   TooltipGroup: "0.114.0",
   TooltipIcon: "0.2.0",
   TreeView: "0.39.0",
+  TreeViewGrid: "0.114.0",
   Truncate: "0.29.0",
   UIShell: "0.3.0",
   UnorderedList: "0.2.0",

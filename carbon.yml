@@ -1494,6 +1494,20 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TreeView
+  tree-view-grid:
+    name: Tree view grid
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tree-view-grid.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TreeViewGrid
+    tags:
+      - content-element
   truncate:
     name: Truncate
     status: stable

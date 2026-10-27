@@ -1911,6 +1911,8 @@ Render a `DataTable` inside `expandedRow` to show related rows. Its container ge
 
 <FileSource src="/framed/DataTable/DataTableExpandableNestedTable" />
 
+For rows that nest and share the parent's columns, use [TreeViewGrid](/components/TreeViewGrid).
+
 ### Custom widths
 
 Setting `width` on a header keeps the expand column at its usual size.
