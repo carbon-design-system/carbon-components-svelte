@@ -144,6 +144,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Popover",
       "HoverCard",
       "Toggletip",
+      "Coachmark",
       "Tooltip",
       "TooltipDefinition",
       "TooltipGroup",
