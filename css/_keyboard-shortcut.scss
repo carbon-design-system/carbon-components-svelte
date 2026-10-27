@@ -1,0 +1,46 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// KeyboardShortcut: a row of `Kbd` keys for one shortcut. The keys sit in
+/// an inner `dir="ltr"` row, which isolates them from the page's direction,
+/// so "⌘ ⇧ P" and "Ctrl Shift P" keep their order in right-to-left text. The
+/// outer element has no `dir`, so its margins and placement follow the page.
+/// @access private
+/// @group components
+@mixin keyboard-shortcut {
+  .#{$prefix}--keyboard-shortcut {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--keyboard-shortcut__keys {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    white-space: nowrap;
+  }
+
+  // Unboxed keys read as one run of text, as in a macOS menu ("⇧⌘P").
+  .#{$prefix}--keyboard-shortcut--muted .#{$prefix}--keyboard-shortcut__keys {
+    gap: 0;
+  }
+
+  // IBM Plex Mono has no ⌘ ⇧ ⌥ ↵ glyphs, and the monospace fallback draws
+  // them small and uneven beside the letters of a 12px key. Set them in the
+  // sans stack, whose fallback covers them, and scale them up.
+  .#{$prefix}--keyboard-shortcut .#{$prefix}--keyboard-shortcut__glyph {
+    font-size: calc(var(--ccs-kbd-font-size) * 1.25);
+
+    @include carbon--font-family("sans");
+  }
+
+  .#{$prefix}--btn > .#{$prefix}--keyboard-shortcut {
+    margin-inline-start: $carbon--spacing-03;
+  }
+}
+
+@include exports("keyboard-shortcut") {
+  @include keyboard-shortcut;
+}
