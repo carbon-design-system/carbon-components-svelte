@@ -57,6 +57,17 @@ Set `delay` to wait a number of milliseconds after `status` becomes `"active"` b
 
 <FileSource src="/framed/InlineLoading/InlineLoadingDelay" />
 
+## Transition
+
+The status appears and disappears at once by default. Set `transition` to fade it as the `{#if}` that holds it adds and removes it. `true` uses Carbon's fade (`fast02`, 110 ms), fade parameters such as `{ duration: "moderate02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` it still appears and disappears at once. The status forwards `introstart`, `introend`, `outrostart`, and `outroend`.
+
+<FileSource src="/framed/InlineLoading/InlineLoadingTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Put the `{#if}` around `InlineLoading`, not inside a wrapper element. | The transition plays on the status itself, so there is no extra box whose margin collapses. |
+| Leave `transition` off where the status sits in a fixed slot, such as a button. | The slot does not move, so a fade only delays the change. |
+
 ## Events
 
 Listen for `on:success`, dispatched `successDelay` milliseconds (default `1500`) after `status` is set to `"finished"`.
