@@ -40,6 +40,8 @@
     // ccs: v11 drops v10's outer margin; the container spaces tags
     border-radius: to-rem(15px);
     cursor: default;
+    // ccs: a link tag (`href`) drops the anchor's underline
+    text-decoration: none;
     vertical-align: middle;
     word-break: break-word;
   }
