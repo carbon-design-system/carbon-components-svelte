@@ -4,7 +4,7 @@ description: KeyboardShortcut shows a shortcut such as Command + K as key caps i
 ---
 
 <script>
-  import { Button, KeyboardShortcut, Stack, Text, Tooltip } from "carbon-components-svelte";
+  import { Button, KeyboardShortcut, OverflowMenu, OverflowMenuItem, Stack, Text, Tooltip } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -67,6 +67,19 @@ Place the hint in the tooltip's content. A muted hint takes the tooltip's text c
 <Tooltip triggerText="Save" open>
   <p>Save changes <KeyboardShortcut shortcut="mod+s" size="sm" variant="muted" /></p>
 </Tooltip>
+
+## In a menu
+
+`MenuItem` and `ContextMenuOption` take a `shortcut` prop, which sets `aria-keyshortcuts` and shows a muted `KeyboardShortcut` on the right of the row. See [Menu](/components/Menu#shortcuts) and [ContextMenu](/components/ContextMenu).
+
+`OverflowMenuItem` has no `shortcut` prop. Put a `KeyboardShortcut` in its `iconRight` slot. Leave `decorative` off: the item is named from its content, so the keys are how a screen reader learns the shortcut, and rest props land on the wrapping `li`, not the menu item that `aria-keyshortcuts` belongs on.
+
+<OverflowMenu iconDescription="Row actions">
+  <OverflowMenuItem text="Rename">
+    <KeyboardShortcut slot="iconRight" shortcut="f2" size="sm" variant="muted" />
+  </OverflowMenuItem>
+  <OverflowMenuItem text="Duplicate" />
+</OverflowMenu>
 
 ## Binding
 

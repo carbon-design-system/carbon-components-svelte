@@ -46,9 +46,15 @@ Pass a Carbon icon to `icon`.
 
 ### Shortcuts
 
-Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+Set `shortcut` to show a keyboard hint on the right of the row, written as keys joined by `+`, such as `"mod+shift+p"`. `mod` is Command on Apple platforms and Control elsewhere, so one value serves every reader. The item also sets `aria-keyshortcuts` and hides the hint from assistive technology, so a screen reader announces the shortcut once. The hint is display-only; it does not register a keybinding. See [KeyboardShortcut](/components/KeyboardShortcut) for the key syntax and how the keys switch by platform.
 
 <FileSource src="/framed/Menu/MenuItemShortcuts" />
+
+### Shortcut text
+
+Set `shortcutText`, or use the `shortcutText` slot, for hint content that is not a key combination. It replaces the keys `shortcut` would show and leaves `aria-keyshortcuts` set, so set both to keep the announcement.
+
+<FileSource src="/framed/Menu/MenuItemShortcutText" />
 
 ### Danger
 

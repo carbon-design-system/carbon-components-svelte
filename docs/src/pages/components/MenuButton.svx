@@ -181,12 +181,20 @@ Pass a Carbon icon to `icon`.
 
 ### Shortcuts
 
-Set `shortcutText` to show a keyboard hint on the right of the row. Use the `shortcutText` slot for custom content. The hint is display-only; it does not register a keybinding.
+Set `shortcut` to show a keyboard hint on the right of the row, such as `"mod+c"`. `mod` is Command on Apple platforms and Control elsewhere. The item also sets `aria-keyshortcuts`. The hint is display-only; it does not register a keybinding.
 
 <MenuButton labelText="Actions">
-  <MenuItem icon={Cut} shortcutText="⌘X" on:click={() => console.log("Cut")}>Cut</MenuItem>
-  <MenuItem icon={Copy} shortcutText="⌘C" on:click={() => console.log("Copy")}>Copy</MenuItem>
-  <MenuItem shortcutText="⌘V" on:click={() => console.log("Paste")}>Paste</MenuItem>
+  <MenuItem icon={Cut} shortcut="mod+x" on:click={() => console.log("Cut")}>Cut</MenuItem>
+  <MenuItem icon={Copy} shortcut="mod+c" on:click={() => console.log("Copy")}>Copy</MenuItem>
+  <MenuItem shortcut="mod+v" on:click={() => console.log("Paste")}>Paste</MenuItem>
+</MenuButton>
+
+### Shortcut text
+
+Set `shortcutText`, or use the `shortcutText` slot, for hint content that is not a key combination. It replaces the keys `shortcut` would show.
+
+<MenuButton labelText="Actions">
+  <MenuItem icon={Cut} shortcutText="Alt+Shift+X" on:click={() => console.log("Cut")}>Cut</MenuItem>
 </MenuButton>
 
 ### Danger
