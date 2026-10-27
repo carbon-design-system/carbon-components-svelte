@@ -236,6 +236,75 @@ test.describe("Tearsheet", () => {
     expect(influencer.bottom).toBeLessThanOrEqual(main.top);
   });
 
+  for (const placement of ["sibling", "portal"]) {
+    test(`stacks a ${placement} tearsheet over the first, and restores it on close`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto(`/tearsheet.html?stack=${placement}`);
+      const first = page.locator(".bx--tearsheet").first();
+      const second = page.getByRole("dialog", { name: "Review mappings" });
+      await expect(first).toHaveClass(/is-visible/);
+      const [firstNode, secondNode] = [
+        first.locator(DIALOG),
+        second.locator(
+          "xpath=ancestor::div[contains(@class, 'bx--tearsheet')]",
+        ),
+      ];
+
+      await page.getByRole("button", { name: "Review", exact: true }).click();
+      await expect(second).toBeVisible();
+      await expect(first).toHaveClass(/bx--tearsheet--behind-1/);
+      // Scaled back, and risen so its upper edge shows above the front one.
+      await expect
+        .poll(() =>
+          firstNode.evaluate((node) => getComputedStyle(node).transform),
+        )
+        .toBe("matrix(0.95, 0, 0, 0.95, 0, -16)");
+      const zIndex = (selector: string) =>
+        page.evaluate(
+          (selector) =>
+            Number(
+              getComputedStyle(document.querySelector(selector) as Element)
+                .zIndex,
+            ),
+          selector,
+        );
+      expect(await zIndex(".bx--tearsheet--behind-1")).toBeLessThan(
+        await zIndex(".bx--tearsheet--stacked"),
+      );
+      expect(await first.evaluate((node) => (node as HTMLElement).inert)).toBe(
+        true,
+      );
+      expect(
+        await secondNode.evaluate((node) => (node as HTMLElement).inert),
+      ).toBe(false);
+
+      const box = await second.boundingBox();
+      if (!box) throw new Error("no box");
+      expect(
+        await topmostIsIn(
+          page,
+          ".bx--tearsheet--stacked .bx--tearsheet__container",
+          box.x + box.width / 2,
+          box.y + box.height / 2,
+        ),
+      ).toBe(true);
+
+      await page.keyboard.press("Escape");
+      await expect(second).toBeHidden();
+      await expect(first).not.toHaveClass(/bx--tearsheet--behind-1/);
+      await expect
+        .poll(() =>
+          firstNode.evaluate((node) => getComputedStyle(node).transform),
+        )
+        .toBe("none");
+      await expect(
+        page.getByRole("button", { name: "Review", exact: true }),
+      ).toBeFocused();
+    });
+  }
+
   test("a long body scrolls under a fixed header and footer, and takes a tab stop", async ({
     page,
   }) => {

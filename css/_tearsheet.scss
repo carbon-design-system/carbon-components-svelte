@@ -51,6 +51,7 @@
     background-color: $overlay;
     content: "";
     inset: 0;
+    transition: opacity $duration--moderate-02 motion(standard, expressive);
   }
 
   .#{$prefix}--tearsheet__container {
@@ -68,6 +69,7 @@
     // Keeps the edge visible in forced colors.
     outline: 3px solid transparent;
     outline-offset: -3px;
+    transform-origin: top center;
     // The slide covers at most 500px, so a tall window doesn't speed it up.
     transform: translate3d(0, calc(min(95vh, 500px)), 0);
     transition: transform $duration--moderate-02 motion(exit, expressive);
@@ -103,6 +105,39 @@
     .#{$prefix}--tearsheet--narrow .#{$prefix}--tearsheet__container {
       width: 42%;
     }
+  }
+
+  // Open tearsheets stack. Each one beneath the top scales back from its
+  // top edge and rises 16px, so its upper edge shows above the one in
+  // front, and the overlays of the stack dim the page in steps. Older
+  // tearsheets than the second share the last level. The component sets
+  // these classes after mount, so the server renders a lone tearsheet.
+  .#{$prefix}--tearsheet--stacked::before {
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--tearsheet--behind-1 {
+    z-index: z("modal") - 1;
+  }
+
+  .#{$prefix}--tearsheet--behind-2 {
+    z-index: z("modal") - 2;
+  }
+
+  .#{$prefix}--tearsheet--behind-1::before {
+    opacity: 0.67;
+  }
+
+  .#{$prefix}--tearsheet--behind-2::before {
+    opacity: 0.22;
+  }
+
+  .#{$prefix}--tearsheet--behind-1.is-visible .#{$prefix}--tearsheet__container {
+    transform: translate3d(0, -#{$carbon--spacing-05}, 0) scale(0.95);
+  }
+
+  .#{$prefix}--tearsheet--behind-2.is-visible .#{$prefix}--tearsheet__container {
+    transform: translate3d(0, -#{$carbon--spacing-07}, 0) scale(0.9);
   }
 
   .#{$prefix}--tearsheet__header {
@@ -303,6 +338,7 @@
   @media (prefers-reduced-motion: reduce) {
     .#{$prefix}--tearsheet,
     .#{$prefix}--tearsheet.is-visible,
+    .#{$prefix}--tearsheet::before,
     .#{$prefix}--tearsheet__container,
     .#{$prefix}--tearsheet.is-visible .#{$prefix}--tearsheet__container {
       transition: none;

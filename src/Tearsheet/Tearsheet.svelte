@@ -132,6 +132,12 @@
   import { observeResize } from "../utils/shared-observer.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import {
+    joinStack,
+    leaveStack,
+    stackPosition,
+    tearsheetStack,
+  } from "./tearsheet-stack.js";
 
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();
@@ -251,6 +257,23 @@
     };
   }
 
+  // Open tearsheets stack, whichever way they are placed in the markup.
+  // The stack is only written after mount, so the server renders each one
+  // as the top of its own stack.
+  const stackKey = Symbol("tearsheet");
+  let position = stackPosition([], stackKey);
+  let mounted = false;
+
+  /**
+   * @param {boolean} ready
+   * @param {boolean} nextOpen
+   */
+  function syncStack(ready, nextOpen) {
+    if (!ready) return;
+    if (nextOpen) joinStack(stackKey);
+    else leaveStack(stackKey);
+  }
+
   const sharedOpen = writable(open);
   $: $sharedOpen = open;
   trackModal(sharedOpen);
@@ -261,7 +284,11 @@
   let compact = false;
 
   onMount(() => {
+    mounted = true;
     lifecycle.setMounted();
+    const unsubscribe = tearsheetStack.subscribe((list) => {
+      position = stackPosition(list, stackKey);
+    });
     if (open) {
       tick().then(() => {
         if (open) focus();
@@ -277,16 +304,20 @@
     return () => {
       stopObserving();
       query.removeEventListener("change", handleChange);
+      unsubscribe();
+      leaveStack(stackKey);
     };
   });
 
   $: lifecycle.syncOpen(open);
+  $: syncStack(mounted, open);
   $: observeOverflow(mainRef);
 
   // Closed content is built on the first open and kept after that.
   let openedOnce = open;
   $: if (open) openedOnce = true;
 
+  $: behind = open && position.level > 0;
   $: narrow = size === "narrow";
   $: titleId = `${id}-title`;
   $: descriptionId = `${id}-description`;
@@ -347,9 +378,12 @@
   class:is-visible={open}
   class:bx--tearsheet--wide={!narrow}
   class:bx--tearsheet--narrow={narrow}
+  class:bx--tearsheet--stacked={open && position.stacked}
+  class:bx--tearsheet--behind-1={behind && position.level === 1}
+  class:bx--tearsheet--behind-2={behind && position.level === 2}
   class:bx--tearsheet--decorator={$$slots.decorator}
   class:bx--tearsheet--ai-label={$aiLabelState === "active"}
-  inert={open ? undefined : true}
+  inert={open && !behind ? undefined : true}
   on:keydown
   on:keydown={handleKeydown}
   on:mousedown={(event) => {
