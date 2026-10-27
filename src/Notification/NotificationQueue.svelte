@@ -86,8 +86,11 @@
    */
   export let position = "top-right";
 
-  /** Specify the top offset (CSS value) */
-  export let offsetTop = "3rem";
+  /**
+   * Specify the top offset (CSS value). The default clears the UI Shell
+   * header, and an above-header `ShellBanner` above it.
+   */
+  export let offsetTop = "calc(var(--ccs-shell-offset, 0px) + 3rem)";
 
   /** Specify the bottom offset (CSS value) */
   export let offsetBottom = "1rem";

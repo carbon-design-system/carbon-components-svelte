@@ -22,7 +22,7 @@
     // so a `carbon--motion` easing curve here would always be dead.
     position: fixed;
     z-index: z('header');
-    top: carbon--mini-units(6);
+    top: calc(var(--ccs-shell-offset, 0px) + #{carbon--mini-units(6)}); // ccs: below a `ShellBanner`
     bottom: 0;
     overflow: hidden;
     overflow-y: auto; // ccs: long panels scroll

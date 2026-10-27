@@ -58,7 +58,7 @@
     // counts it, so the card ran off the far edge by its width.
     max-width: 100%;
     // Scroll within the card when the menu is taller than the viewport.
-    max-height: calc(100vh - to-rem(48px));
+    max-height: calc(100vh - to-rem(48px) - var(--ccs-shell-offset, 0px));
     overflow-y: auto;
     padding: 0;
     background-color: $layer;

@@ -16,6 +16,7 @@ import HeaderSideNavItems from "carbon-components-svelte/UIShell/HeaderSideNavIt
 import HeaderSwitcher from "carbon-components-svelte/UIShell/HeaderSwitcher.svelte";
 import ProfileMenu from "carbon-components-svelte/UIShell/ProfileMenu.svelte";
 import ProfileMenuHeader from "carbon-components-svelte/UIShell/ProfileMenuHeader.svelte";
+import ShellBanner from "carbon-components-svelte/UIShell/ShellBanner.svelte";
 import SideNav from "carbon-components-svelte/UIShell/SideNav.svelte";
 import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import SkipToContent from "carbon-components-svelte/UIShell/SkipToContent.svelte";
@@ -259,6 +260,12 @@ export const navigation: AriaEntry[] = [
     name: "TagSet",
     exempt:
       "Layout container for tags; its overflow trigger is named by overflowLabel",
+  },
+  {
+    name: "ShellBanner",
+    render: (attrs) =>
+      render(ShellBanner, { props: { title: "Staging", ...attrs } }),
+    target: () => screen.getByRole("region"),
   },
   {
     name: "SideNav",
