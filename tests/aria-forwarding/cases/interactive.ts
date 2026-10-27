@@ -291,6 +291,13 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("dialog"),
   },
   {
+    name: "Loading",
+    variant: "transition",
+    render: (attrs) =>
+      render(Loading, { props: { transition: true, ...attrs } }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
     name: "Menu",
     render: (attrs) => render(Menu, { props: attrs }),
     target: () => screen.getByRole("menu"),
@@ -604,6 +611,15 @@ export const interactive: AriaEntry[] = [
     name: "InlineLoading",
     render: (attrs) =>
       render(InlineLoading, { props: { description: "Saving", ...attrs } }),
+    target: () => screen.getByRole("status"),
+  },
+  {
+    name: "InlineLoading",
+    variant: "transition",
+    render: (attrs) =>
+      render(InlineLoading, {
+        props: { description: "Saving", transition: true, ...attrs },
+      }),
     target: () => screen.getByRole("status"),
   },
   {
