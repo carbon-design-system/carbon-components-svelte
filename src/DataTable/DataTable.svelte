@@ -123,6 +123,8 @@
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
+   * @property {string | number} [maxWidth] - The widest a resized column gets. A number is pixels.
+   * @property {boolean} [columnResizable] - Whether the column has a resize handle. Defaults to the table's `resizable`. `true` adds a handle to one column of a table that is not `resizable`.
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
    */
 
@@ -139,6 +141,8 @@
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
    * @property {string} [width]
    * @property {string} [minWidth]
+   * @property {string | number} [maxWidth] - The widest a resized column gets. A number is pixels.
+   * @property {boolean} [columnResizable] - Whether the column has a resize handle. Defaults to the table's `resizable`. `true` adds a handle to one column of a table that is not `resizable`.
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
    */
 
@@ -263,6 +267,11 @@
    * (load-more signal). Not the browser's native `scrollend` (scroll stopped).
    * Only fires when `virtualize` is enabled.
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
+   */
+
+  /**
+   * Dispatched once per resize gesture, when a drag is released or after a key press or double click. `widths` holds the width in pixels of every column.
+   * @event {{ key: DataTableKey<Row>; width: number; widths: Record<string, number> }} resize
    */
 
   /**
@@ -487,6 +496,20 @@
   export let fixedLayout = false;
 
   /**
+   * Set to `true` to render a drag handle on every header, so a column can be resized by pointer or keyboard.
+   * Implies `fixedLayout`. A header's `columnResizable` opts one column out (or, if this is `false`, in).
+   */
+  export let resizable = false;
+
+  /**
+   * Column widths in pixels, by header key.
+   * A drag, key press or double click updates it on release. Seed it to restore a saved layout: seeded widths render on the server. Resizing never writes into `headers`.
+   * @type {Record<string, number>}
+   * @bindable writable
+   */
+  export let columnWidths = {};
+
+  /**
    * Set the filtering strategy used by `ToolbarSearch`.
    * - `"remove"`: remove non-matching rows from the DOM and recreate them when the
    *   filter clears.
@@ -601,7 +624,11 @@
   import {
     compareValues,
     formatHeaderWidth,
+    formatTableWidth,
     getDisplayedRows,
+    leadingColumnLengths,
+    parsePixelWidth,
+    resolveColumnBounds,
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
@@ -1175,7 +1202,8 @@
   // With `stickyHeader`, the `<table>` itself scrolls. Render its bounds from
   // props so the server output is already height-bounded.
   $: tableStyle = [
-    fixedLayout ? "table-layout: fixed" : undefined,
+    fixedLayout || hasResizableColumn ? "table-layout: fixed" : undefined,
+    tableWidth ? `width: ${tableWidth}` : undefined,
     virtualConfig && stickyHeader && calculatedContainerHeight
       ? `max-height: ${calculatedContainerHeight}px; overflow-y: auto`
       : undefined,
@@ -1274,9 +1302,131 @@
         })()
       : null;
 
-  $: hasCustomHeaderWidth = visibleHeaders.some(
-    (header) => header.width ?? header.minWidth,
+  $: hasCustomHeaderWidth =
+    hasResizableColumn ||
+    visibleHeaders.some((header) => header.width ?? header.minWidth);
+
+  // A resizable column needs the fixed layout, so one drag moves only the
+  // columns to its inline end and the table keeps the widths it was given.
+  $: hasResizableColumn = visibleHeaders.some(
+    (header) => header.columnResizable ?? resizable,
   );
+  $: leadingLengths = leadingColumnLengths(
+    hasRowDecorator,
+    expandable,
+    isSelectionEnabled,
+  );
+  // Once every column has a width the table is as wide as their sum, so a
+  // drag moves one column's edge and nothing else, instead of the fixed
+  // layout spreading the change over the table's width.
+  $: tableWidth = hasResizableColumn
+    ? formatTableWidth(leadingLengths, visibleHeaders, renderedWidths ?? {})
+    : undefined;
+
+  /**
+   * Props for a header's resize handle: its width and bounds.
+   * @param {DataTableHeader<Row>} header
+   * @param {Record<string, number>} widths
+   */
+  function resizeProps(header, widths) {
+    if (!(header.columnResizable ?? resizable)) return {};
+    const { min, max } = resolveColumnBounds(header);
+    return {
+      resizable: true,
+      resizeWidth: widths?.[header.key] ?? parsePixelWidth(header.width),
+      resizeMin: min,
+      resizeMax: max,
+    };
+  }
+
+  /**
+   * @param {DataTableHeader<Row>} header
+   * @param {Record<string, number>} widths
+   */
+  function columnStyle(header, widths) {
+    const width = widths?.[header.key];
+    return width === undefined
+      ? formatHeaderWidth(header)
+      : `width: ${width}px`;
+  }
+
+  /**
+   * Fill in the pixel width of every column from the rendered table. The
+   * first press on a handle does this, so the table stops redistributing
+   * space as it resizes and keeps each column where it is.
+   */
+  function freezeColumnWidths() {
+    const cells = scrollContainerRef?.querySelector("thead tr")?.children;
+    if (!cells) return;
+    const offset = leadingLengths.length;
+    const next = { ...columnWidths };
+    let changed = false;
+    visibleHeaders.forEach((header, index) => {
+      if (next[header.key] !== undefined || !cells[offset + index]) return;
+      // Two decimals: whole pixels would shift every column by up to half a
+      // pixel, and the table by their sum, the moment it freezes.
+      next[header.key] =
+        Math.round(cells[offset + index].getBoundingClientRect().width * 100) /
+        100;
+      changed = true;
+    });
+    if (changed) columnWidths = next;
+  }
+
+  // The width of the column being dragged, held here so `columnWidths`, which
+  // a consumer may bind and persist, changes once on release, not per move.
+  // Only the head and the `<col>` list read it: the body cells don't, so a
+  // move writes no row. Writing the `<col>` by hand instead saved about 1ms
+  // a frame at 1,000 rows, against about 29ms of layout at 4x CPU throttle.
+  /** @type {null | { key: string; width: number }} */
+  let liveWidth = null;
+  $: renderedWidths = liveWidth
+    ? { ...columnWidths, [liveWidth.key]: liveWidth.width }
+    : columnWidths;
+
+  /**
+   * @param {DataTableHeader<Row>} header
+   * @param {number} width
+   */
+  function commitColumnWidth(header, width) {
+    columnWidths = { ...columnWidths, [header.key]: width };
+    dispatch("resize", { key: header.key, width, widths: columnWidths });
+  }
+
+  // Columns the first drag rendered at their natural width, which a double
+  // click restores when the header declares none in pixels.
+  /** @type {Record<string, number>} */
+  let initialWidths = {};
+
+  /**
+   * @param {DataTableHeader<Row>} header
+   * @param {CustomEvent<{ phase: string; width?: number }>} event
+   */
+  function handleColumnResize(header, event) {
+    const { phase } = event.detail;
+    // Every phase but `start`, `cancel` and `reset` carries a width.
+    const width = /** @type {number} */ (event.detail.width);
+    if (phase === "start") {
+      freezeColumnWidths();
+      initialWidths = { ...columnWidths, ...initialWidths };
+    } else if (phase === "move") {
+      liveWidth = { key: header.key, width };
+    } else if (phase === "end") {
+      liveWidth = null;
+      commitColumnWidth(header, width);
+    } else if (phase === "cancel") {
+      liveWidth = null;
+    } else if (phase === "set") {
+      freezeColumnWidths();
+      commitColumnWidth(header, width);
+    } else if (phase === "reset") {
+      freezeColumnWidths();
+      const reset = parsePixelWidth(header.width) ?? initialWidths[header.key];
+      if (reset !== undefined && reset !== columnWidths[header.key]) {
+        commitColumnWidth(header, reset);
+      }
+    }
+  }
 
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
@@ -1444,7 +1594,7 @@
       {stickyHeader}
       {sortable}
       {useStaticWidth}
-      {fixedLayout}
+      fixedLayout={fixedLayout || hasResizableColumn}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
       aria-label={ariaLabel}
@@ -1467,7 +1617,7 @@
             <col />
           {/if}
           {#each visibleHeaders as header (header.key)}
-            <col style={formatHeaderWidth(header)} />
+            <col style={columnStyle(header, renderedWidths)} />
           {/each}
         </colgroup>
       {/if}
@@ -1603,6 +1753,8 @@
                   id="{id}-{header.key}"
                   class={formatAlignClass(header.columnAlign)}
                   style={formatHeaderWidth(header)}
+                  {...resizeProps(header, renderedWidths)}
+                  on:resize={(event) => handleColumnResize(header, event)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
                     ? sortDirection
@@ -1623,6 +1775,8 @@
                   id="{id}-{header.key}"
                   class={formatAlignClass(header.columnAlign)}
                   style={formatHeaderWidth(header)}
+                  {...resizeProps(header, renderedWidths)}
+                  on:resize={(event) => handleColumnResize(header, event)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
                     ? sortDirection
