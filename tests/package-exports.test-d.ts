@@ -33,6 +33,8 @@ import {
   prefersReducedMotion,
   shouldReduceMotion,
   slide,
+  type SlideParams,
+  type TransitionProp,
 } from "carbon-components-svelte/motion";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
@@ -163,3 +165,11 @@ const _flip: number | undefined = flip(
   { from: new DOMRect(), to: new DOMRect() },
   { duration: (distance) => distance },
 ).duration;
+const _transitionProps: TransitionProp<SlideParams>[] = [
+  undefined,
+  true,
+  false,
+  {},
+  { duration: "slow01", axis: "x" },
+  { fn: fly, y: 8 },
+];
