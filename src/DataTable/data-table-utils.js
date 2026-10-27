@@ -129,7 +129,7 @@ export function formatHeaderWidth(header) {
  * and pinned columns move to their edge: `"start"` pins first, `"end"` pins
  * last, each group keeping its order in `headers`. A pin then never needs a
  * reorder of `headers`, and DOM order stays equal to visual order.
- * @param {ReadonlyArray<{ columnHidden?: boolean; columnPinned?: "start" | "end" }>} headers
+ * @param {ReadonlyArray<{ columnHidden?: boolean; columnPinned?: "start" | "end"; [key: string]: unknown }>} headers
  * @returns {number[]}
  */
 export function resolveColumnOrder(headers) {

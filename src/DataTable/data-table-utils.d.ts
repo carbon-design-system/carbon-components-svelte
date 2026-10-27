@@ -199,6 +199,7 @@ export function resolveColumnOrder(
   headers: ReadonlyArray<{
     columnHidden?: boolean;
     columnPinned?: "start" | "end";
+    [key: string]: unknown;
   }>,
 ): number[];
 
