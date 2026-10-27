@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>kbd</title>
+    <g id="kbd" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="command">
+            <rect x="120.5" y="72.5" width="35" height="35" rx="2" fill="var(--cds-layer-01, #f4f4f4)" stroke="var(--cds-border-subtle-01, #c6c6c6)"></rect>
+            <rect x="120" y="105" width="36" height="3" fill="var(--cds-border-strong-01, #8d8d8d)"></rect>
+            <rect x="130" y="86" width="16" height="4" fill="var(--cds-text-primary, #161616)"></rect>
+        </g>
+        <g id="k">
+            <rect x="164.5" y="72.5" width="35" height="35" rx="2" fill="var(--cds-layer-01, #f4f4f4)" stroke="var(--cds-border-subtle-01, #c6c6c6)"></rect>
+            <rect x="164" y="105" width="36" height="3" fill="var(--cds-border-strong-01, #8d8d8d)"></rect>
+            <rect x="178" y="86" width="8" height="4" fill="var(--cds-text-primary, #161616)"></rect>
+        </g>
+    </g>
+</svg>
