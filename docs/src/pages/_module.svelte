@@ -354,6 +354,11 @@
           href="/theme-builder"
           isSelected={$isActive("/theme-builder")}
         />
+        <SideNavLink
+          text="Motion"
+          href="/motion"
+          isSelected={$isActive("/motion")}
+        />
         <SideNavDivider />
         <Text
           tag="li"
