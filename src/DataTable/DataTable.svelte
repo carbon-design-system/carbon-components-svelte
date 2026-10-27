@@ -223,7 +223,7 @@
    */
 
   /**
-   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
+   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side, unless `externalSort` is set. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
    * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
    */
@@ -364,6 +364,14 @@
   export let sortDirection = "none";
 
   /**
+   * Set to `true` when `rows` already arrive in sorted order, for example
+   * from a server. The headers still reflect `sortKey` and `sortDirection`,
+   * and a header click still dispatches `sort` and updates both, but rows
+   * render in the order given. `sort` and `header.sort` are not called.
+   */
+  export let externalSort = false;
+
+  /**
    * Set to `true` to only toggle between "ascending" and
    * "descending" sort directions, skipping "none".
    */
@@ -502,7 +510,11 @@
    */
   export let filterMode = "remove";
 
-  /** Specify the number of items to display in a page */
+  /**
+   * Specify the number of items to display in a page. This slices `rows`
+   * client side. For server pagination, pass only the current page as `rows`
+   * and bind `page` and `pageSize` on `Pagination` instead.
+   */
   export let pageSize = 0;
 
   /** Set to `number` to set current page */
@@ -1123,7 +1135,7 @@
     (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
   $: sortPath = sortKey == null ? "" : String(sortKey);
   $: sortedRows =
-    sorting && sortDirection !== "none"
+    !externalSort && sorting && sortDirection !== "none"
       ? [...$tableRows].sort((a, b) => {
           const itemA = resolvePath(a, sortPath);
           const itemB = resolvePath(b, sortPath);

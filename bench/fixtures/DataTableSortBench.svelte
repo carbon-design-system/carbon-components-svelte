@@ -5,6 +5,7 @@
 
   export let rows = [];
   export let virtualize = false;
+  export let externalSort = false;
 
   const headers = [
     { key: "name", value: "Name" },
@@ -14,4 +15,4 @@
   ];
 </script>
 
-<DataTable sortable size="short" {headers} {rows} {virtualize} />
+<DataTable sortable size="short" {headers} {rows} {virtualize} {externalSort} />
