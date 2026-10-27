@@ -1529,7 +1529,11 @@
             </th>
           {/if}
           {#if isSelectionEnabled && (radio || !batchSelection)}
-            <th scope="col">
+            <th
+              scope="col"
+              class:bx--table-column-checkbox={true}
+              class:bx--table-column-radio={radio}
+            >
               <span class:bx--visually-hidden={true}
                 >{translateWithId("selectRow")}</span
               >
