@@ -1,0 +1,77 @@
+import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
+import SearchShortcutTranslations from "./Search.shortcut-translations.test.svelte";
+import SearchShortcut from "./Search.shortcut.test.svelte";
+
+const press = (init: KeyboardEventInit, target: EventTarget = window) => {
+  const event = new KeyboardEvent("keydown", {
+    bubbles: true,
+    cancelable: true,
+    ...init,
+  });
+  target.dispatchEvent(event);
+  return event;
+};
+
+const input = (testId: string) =>
+  screen.getByTestId(testId).querySelector("input") as HTMLInputElement;
+
+describe("Search shortcut", () => {
+  it("shows the keys in the empty field and announces them", async () => {
+    const { rerender } = render(SearchShortcut);
+    const field = screen.getByTestId("search");
+
+    expect(input("search")).toHaveAttribute("aria-keyshortcuts", "/");
+    expect(field.querySelector(".bx--search")).toHaveClass(
+      "bx--search--shortcut",
+    );
+    expect(field.querySelector(".bx--search__shortcut")).toHaveTextContent("/");
+
+    await rerender({ value: "button" });
+    expect(field.querySelector(".bx--search__shortcut")).toBeNull();
+  });
+
+  it("focuses the field, but not while typing in another", () => {
+    render(SearchShortcut);
+
+    press({ key: "/" }, screen.getByTestId("other"));
+    expect(input("search")).not.toHaveFocus();
+
+    press({ key: "/" });
+    expect(input("search")).toHaveFocus();
+  });
+
+  it("skips the focus when on:shortcut prevents it", () => {
+    render(SearchShortcut, { props: { preventShortcut: true } });
+
+    press({ key: "/" });
+    expect(input("search")).not.toHaveFocus();
+  });
+
+  it("makes room for the keys in their translated names", () => {
+    render(SearchShortcut);
+    render(SearchShortcutTranslations);
+    const width = (testId: string) =>
+      screen
+        .getByTestId(testId)
+        .querySelector<HTMLElement>(".bx--search")
+        ?.style.getPropertyValue("--ccs-search-shortcut-width");
+
+    expect(width("search")).toBe("1ch");
+    // "Strg+Umschalt+F", not "Ctrl+Shift+F"
+    expect(width("translated")).toBe("15ch");
+  });
+
+  it("expands a collapsed search and focuses it", async () => {
+    render(SearchShortcut);
+    const magnifier = screen
+      .getByTestId("expandable")
+      .querySelector(".bx--search-magnifier");
+    expect(magnifier).toHaveAttribute("aria-keyshortcuts", "Control+Shift+F");
+
+    press({ key: "f", ctrlKey: true, shiftKey: true });
+    await tick();
+    await tick();
+    expect(input("expandable")).toHaveFocus();
+  });
+});
