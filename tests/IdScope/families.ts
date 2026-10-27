@@ -23,6 +23,7 @@ export const FAMILIES = [
   "StructuredList",
   "Pagination",
   "Tooltip",
+  "Tearsheet",
   "SelectableTileGroup",
   "ProfileMenu",
   "HeaderNav",

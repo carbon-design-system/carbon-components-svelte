@@ -1,8 +1,10 @@
 <script lang="ts">
   import {
+    Button,
     ExpandableTile,
     OverflowMenu,
     OverflowMenuItem,
+    Tearsheet,
   } from "carbon-components-svelte";
 </script>
 
@@ -22,3 +24,13 @@
     <OverflowMenuItem text="Delete" />
   </OverflowMenu>
 </div>
+
+<Tearsheet open titleText="Create integration" size="narrow">
+  <div data-testid="tearsheet-body" style="height: 120vh">
+    A body taller than the window scrolls.
+  </div>
+  <svelte:fragment slot="actions">
+    <Button kind="secondary">Cancel</Button>
+    <Button>Next</Button>
+  </svelte:fragment>
+</Tearsheet>
