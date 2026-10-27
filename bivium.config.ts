@@ -75,6 +75,10 @@ export default {
   // An importer left pointing at a deleted component can't resolve it, so it
   // already runs as unknown.
   importOnly: ["**/*.svelte"],
+  // The e2e host reads only the fixture entry of the URL each test opens,
+  // which the test's own navigation already reaches. A blanket `@reads` on
+  // every entry made any fixture change select every e2e test.
+  hermetic: ["e2e/helpers/host.ts"],
   narrowers: [cssNarrower],
   // Globs that select nothing on purpose. A docs-only PR skips this workflow,
   // and master runs every test after a docs change.

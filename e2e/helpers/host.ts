@@ -12,8 +12,9 @@ export { expect } from "@playwright/test";
  * URL navigates as usual.
  */
 
-// Entries are read as text, to learn which component each one mounts.
-// @reads e2e/fixtures/*.ts
+// Entries are read as text, to learn which component each one mounts. Only
+// the entry of the URL a test opens is read, and the test already reaches it
+// through that navigation, so this file is `hermetic` in bivium.config.ts.
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "../fixtures");
 const entries = new Map<string, string | null>();
 const FIXTURE_IMPORT = /^import \w+ from "\.\/(\w+Fixture)\.svelte";$/gm;
