@@ -311,6 +311,7 @@ export { default as SideNavMenu } from "./UIShell/SideNavMenu.svelte";
 export { default as SideNavMenuItem } from "./UIShell/SideNavMenuItem.svelte";
 export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
+export { default as UnsavedChangesPrompt } from "./UnsavedChanges/UnsavedChangesPrompt.svelte";
 export { trackUnsavedChanges } from "./UnsavedChanges/track-unsaved-changes.js";
 export {
   createUnsavedChanges,
