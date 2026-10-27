@@ -193,8 +193,24 @@
     padding: $carbon--spacing-02;
   }
 
-  // The body scrolls on its own, between the header and the footer.
+  // The body sits between the header and the footer. The influencer and
+  // the main area each scroll on their own: side by side from `md`, and
+  // stacked in DOM order below it, where the rail would leave no room.
+  .#{$prefix}--tearsheet__body {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet__body {
+      flex-direction: row;
+    }
+  }
+
   .#{$prefix}--tearsheet__main {
+    min-width: 0;
     min-height: 0;
     flex: 1 1 auto;
     overflow-x: hidden;
@@ -216,6 +232,43 @@
   @include carbon--breakpoint(md) {
     .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__content {
       padding: $carbon--spacing-07;
+    }
+  }
+
+  // The influencer rail is 256px, or 320px when wide, plus its border.
+  .#{$prefix}--tearsheet__influencer {
+    max-height: 40%;
+    flex: 0 1 auto;
+    overflow-y: auto;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--tearsheet__influencer--start {
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--tearsheet__influencer--end {
+    border-top: 1px solid $border-subtle;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet__influencer {
+      max-height: none;
+      flex: 0 0 to-rem(257px);
+      border-top: 0;
+      border-bottom: 0;
+    }
+
+    .#{$prefix}--tearsheet__influencer--wide {
+      flex-basis: to-rem(321px);
+    }
+
+    .#{$prefix}--tearsheet__influencer--start {
+      border-inline-end: 1px solid $border-subtle;
+    }
+
+    .#{$prefix}--tearsheet__influencer--end {
+      border-inline-start: 1px solid $border-subtle;
     }
   }
 

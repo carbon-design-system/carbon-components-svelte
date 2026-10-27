@@ -256,7 +256,7 @@ describe("Tearsheet", () => {
     vi.unstubAllGlobals();
   });
 
-  it("renders `headerActions` on a wide tearsheet only, and warns on a narrow one", () => {
+  it("renders `headerActions` and `influencer` on a wide tearsheet only, and warns once each on a narrow one", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const { unmount } = render(TearsheetSlots);
     expect(screen.getByRole("button", { name: "Preview" })).toBeInTheDocument();
@@ -265,9 +265,42 @@ describe("Tearsheet", () => {
 
     render(TearsheetSlots, { props: { size: "narrow" } });
     expect(screen.queryByRole("button", { name: "Preview" })).toBeNull();
-    expect(warn).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText("Steps")).toBeNull();
+    expect(warn).toHaveBeenCalledTimes(2);
     warn.mockRestore();
   });
+
+  it.each([
+    ["start", "start", "before"],
+    ["left", "start", "before"],
+    ["end", "end", "after"],
+    ["right", "end", "after"],
+  ] as const)(
+    "puts an influencer at %s on the %s side, %s the body in DOM order",
+    async (influencerPosition, side, order) => {
+      const { component } = render(TearsheetSlots, {
+        props: { influencerPosition },
+      });
+      const influencer = screen
+        .getByText("Steps")
+        .closest<HTMLElement>(".bx--tearsheet__influencer");
+      assert(influencer);
+      expect(influencer).toHaveClass(`bx--tearsheet__influencer--${side}`);
+      const main = document.querySelector(".bx--tearsheet__main");
+      assert(main);
+      expect(
+        influencer.compareDocumentPosition(main) &
+          (order === "before"
+            ? Node.DOCUMENT_POSITION_FOLLOWING
+            : Node.DOCUMENT_POSITION_PRECEDING),
+      ).toBeTruthy();
+
+      expect(influencer).not.toHaveClass("bx--tearsheet__influencer--wide");
+      component.influencerWidth = "wide";
+      await tick();
+      expect(influencer).toHaveClass("bx--tearsheet__influencer--wide");
+    },
+  );
 
   it("takes the AI surface from a filled decorator slot", () => {
     render(TearsheetSlots);

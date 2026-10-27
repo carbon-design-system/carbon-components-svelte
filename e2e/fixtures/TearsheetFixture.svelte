@@ -9,18 +9,23 @@
     OverflowMenu,
     OverflowMenuItem,
     Portal,
+    ProgressIndicator,
+    ProgressStep,
     Stack,
     Tearsheet,
     TextInput,
   } from "carbon-components-svelte";
 
-  // `?size=narrow`, `?passive` (no actions), `?long` (scrolling body),
+  // `?influencer=end`, `?wide-influencer`, `?size=narrow`, `?passive` (no actions), `?long` (scrolling body),
   // `?closed`, `?modal` (a Modal inside the tearsheet) and `?inmodal` (a
   // Tearsheet inside a Modal, rendered through a Portal).
   const params = new URLSearchParams(location.search);
   const size = params.get("size") === "narrow" ? "narrow" : "wide";
   const passive = params.has("passive");
   const long = params.has("long");
+  const influencerPosition =
+    params.get("influencer") === "end" ? "end" : "start";
+  const influencerWidth = params.has("wide-influencer") ? "wide" : "narrow";
   const withModal = params.has("modal");
   const inModal = params.has("inmodal");
 
@@ -62,9 +67,18 @@
     title="Create integration"
     label="Step 2 of 4"
     description="Connect a data source and map its fields."
+    {influencerPosition}
+    {influencerWidth}
     on:close={(event) =>
       (closeTriggers = [...closeTriggers, event.detail.trigger])}
   >
+    <nav slot="influencer" aria-label="Steps">
+      <ProgressIndicator vertical currentIndex={1}>
+        <ProgressStep label="Source" />
+        <ProgressStep label="Mapping" />
+        <ProgressStep label="Schedule" />
+      </ProgressIndicator>
+    </nav>
     <svelte:fragment slot="headerActions">
       <Button kind="ghost" size="small">Preview</Button>
     </svelte:fragment>

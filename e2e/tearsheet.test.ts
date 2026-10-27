@@ -196,6 +196,46 @@ test.describe("Tearsheet", () => {
     ).toBe(true);
   });
 
+  test("places the influencer rail beside the body, and mirrors it in RTL", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/tearsheet.html");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const container = await rect(page, DIALOG);
+    const start = await rect(page, ".bx--tearsheet__influencer");
+    expect(start.left).toBe(container.left + 1);
+    expect(start.width).toBe(257);
+    expect((await rect(page, ".bx--tearsheet__main")).left).toBe(start.right);
+
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    const rtl = await rect(page, ".bx--tearsheet__influencer");
+    expect(rtl.right).toBe(container.right - 1);
+
+    await page.evaluate(() => {
+      document.documentElement.dir = "ltr";
+    });
+    await page.goto("/tearsheet.html?influencer=end&wide-influencer");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const end = await rect(page, ".bx--tearsheet__influencer");
+    expect(end.right).toBe(container.right - 1);
+    expect(end.width).toBe(321);
+  });
+
+  test("stacks the influencer above the body in a narrow window", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto("/tearsheet.html");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const influencer = await rect(page, ".bx--tearsheet__influencer");
+    const main = await rect(page, ".bx--tearsheet__main");
+    expect(influencer.width).toBe(358);
+    expect(influencer.bottom).toBeLessThanOrEqual(main.top);
+  });
+
   test("a long body scrolls under a fixed header and footer, and takes a tab stop", async ({
     page,
   }) => {

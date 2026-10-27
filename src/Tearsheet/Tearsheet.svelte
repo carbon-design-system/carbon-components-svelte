@@ -9,6 +9,7 @@
    * @slot {{}}
    * @slot {{}} actions - Footer buttons. The tearsheet lays them out in an `ActionSet`.
    * @slot {{}} headerActions - Buttons in the header, beside the title. Wide only.
+   * @slot {{}} influencer - A rail beside the body for context, such as a step list. Wide only.
    * @slot {{}} decorator - An `AILabel`, beside the close button.
    * @slot {{}} descriptionChildren - Rich description content. Overrides `description`.
    */
@@ -22,7 +23,7 @@
   /**
    * Set the width. A wide tearsheet spans the window with a margin on
    * each side. A narrow one is a single column, as wide as a small modal,
-   * and has no `headerActions`.
+   * and has no `headerActions` or `influencer`.
    * @type {"narrow" | "wide"}
    */
   export let size = "wide";
@@ -44,6 +45,21 @@
    * @type {string | undefined}
    */
   export let description = undefined;
+
+  /**
+   * Set the side the `influencer` rail sits on. `"start"` is the left in a
+   * left-to-right layout and the right in a right-to-left one. Also
+   * accepts Carbon React's `"left"` and `"right"`, which map to `"start"`
+   * and `"end"`.
+   * @type {"start" | "end" | "left" | "right"}
+   */
+  export let influencerPosition = "start";
+
+  /**
+   * Set the width of the `influencer` rail: 256px or 320px.
+   * @type {"narrow" | "wide"}
+   */
+  export let influencerWidth = "narrow";
 
   /**
    * Control whether the header shows a close button. By default a
@@ -276,6 +292,18 @@
   $: descriptionId = `${id}-description`;
   $: hasDescription = Boolean(description) || $$slots.descriptionChildren;
   $: showHeaderActions = $$slots.headerActions && !narrow;
+  $: showInfluencer = $$slots.influencer && !narrow;
+  $: influencerEnd =
+    influencerPosition === "end" || influencerPosition === "right";
+  $: influencerClass = [
+    "bx--tearsheet__influencer",
+    influencerEnd
+      ? "bx--tearsheet__influencer--end"
+      : "bx--tearsheet__influencer--start",
+    influencerWidth === "wide" && "bx--tearsheet__influencer--wide",
+  ]
+    .filter(Boolean)
+    .join(" ");
   $: showClose =
     hideCloseButton === undefined ? !$$slots.actions : !hideCloseButton;
   $: hasHeader =
@@ -293,13 +321,22 @@
     rest: containerProps,
   } = splitAriaNaming($$restProps));
 
-  let warnedHeaderActions = false;
-  $: if (narrow && $$slots.headerActions && !warnedHeaderActions) {
-    warnedHeaderActions = true;
+  const warnedSlots = new Set();
+
+  /**
+   * @param {string} name
+   * @param {boolean} filled
+   */
+  function warnNarrowSlot(name, filled) {
+    if (!filled || warnedSlots.has(name)) return;
+    warnedSlots.add(name);
     console.warn(
-      '[Tearsheet.svelte] the `headerActions` slot needs `size="wide"`; a narrow tearsheet does not render it.',
+      `[Tearsheet.svelte] the \`${name}\` slot needs \`size="wide"\`; a narrow tearsheet does not render it.`,
     );
   }
+
+  $: warnNarrowSlot("headerActions", narrow && $$slots.headerActions);
+  $: warnNarrowSlot("influencer", narrow && $$slots.influencer);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -401,20 +438,40 @@
         {/if}
       </div>
     {/if}
-    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <div
-      bind:this={mainRef}
-      class:bx--tearsheet__main={true}
-      class:bx--layer-two={narrow}
-      role={scrollable && title ? "region" : undefined}
-      aria-labelledby={scrollable && title ? titleId : undefined}
-      tabindex={scrollable ? 0 : undefined}
-    >
-      <Section tag="div" level={contentLevel} class="bx--tearsheet__content">
-        {#if openedOnce}
-          <slot />
-        {/if}
-      </Section>
+    <div class:bx--tearsheet__body={true}>
+      {#if showInfluencer && !influencerEnd}
+        <Section tag="div" level={contentLevel} class={influencerClass}>
+          <div class:bx--layer-two={true}>
+            {#if openedOnce}
+              <slot name="influencer" />
+            {/if}
+          </div>
+        </Section>
+      {/if}
+      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+      <div
+        bind:this={mainRef}
+        class:bx--tearsheet__main={true}
+        class:bx--layer-two={narrow}
+        role={scrollable && title ? "region" : undefined}
+        aria-labelledby={scrollable && title ? titleId : undefined}
+        tabindex={scrollable ? 0 : undefined}
+      >
+        <Section tag="div" level={contentLevel} class="bx--tearsheet__content">
+          {#if openedOnce}
+            <slot />
+          {/if}
+        </Section>
+      </div>
+      {#if showInfluencer && influencerEnd}
+        <Section tag="div" level={contentLevel} class={influencerClass}>
+          <div class:bx--layer-two={true}>
+            {#if openedOnce}
+              <slot name="influencer" />
+            {/if}
+          </div>
+        </Section>
+      {/if}
     </div>
     {#if $$slots.actions}
       <ActionSet
