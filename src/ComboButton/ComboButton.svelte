@@ -110,15 +110,19 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, setContext } from "svelte";
+  import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Menu from "../Menu/Menu.svelte";
-  import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    MENU_OPEN_CONTEXT_KEY,
+    MENU_PLACEMENT_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
+  import { listenMenuArrowOpen } from "../utils/menu-arrow-open.js";
 
   const dispatch = createEventDispatcher();
 
@@ -131,6 +135,7 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let triggerRef = null;
 
   /** @type {import("svelte/store").Writable<null | HTMLDivElement>} */
@@ -154,6 +159,34 @@
     dispatch("click:trigger", event);
     blurOnMouseClose(wasOpen, event, triggerRef);
   }
+
+  // ArrowDown or ArrowUp on the closed trigger opens the menu on its first
+  // or last item.
+  /** @type {import("svelte/store").Writable<null | "ArrowDown" | "ArrowUp">} */
+  const openKey = writable(null);
+  setContext(MENU_OPEN_CONTEXT_KEY, openKey);
+
+  /** @type {(key: "ArrowDown" | "ArrowUp") => boolean} */
+  function openFromArrow(key) {
+    if (open || disabled) return false;
+    openKey.set(key);
+    open = true;
+    return true;
+  }
+
+  /** @type {HTMLElement | null} */
+  let arrowTrigger = null;
+  let stopArrowOpen = () => {};
+  /** @param {HTMLElement | null} node */
+  function listenToTrigger(node) {
+    // A bound ref invalidates on every update; only rebind a new element.
+    if (node === arrowTrigger) return;
+    stopArrowOpen();
+    arrowTrigger = node;
+    stopArrowOpen = listenMenuArrowOpen(node, openFromArrow);
+  }
+  $: listenToTrigger(triggerRef);
+  onMount(() => () => stopArrowOpen());
 </script>
 
 <div

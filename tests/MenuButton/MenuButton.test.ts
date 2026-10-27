@@ -7,6 +7,35 @@ import MenuButtonSlot from "./MenuButton.slot.test.svelte";
 import MenuButtonFixture from "./MenuButton.test.svelte";
 
 describe("MenuButton", () => {
+  it.each([
+    ["labelled", MenuButtonFixture, "Actions"],
+    ["icon-only", MenuButtonIconOnly, "Row actions"],
+  ] as const)(
+    "opens the %s menu with ArrowDown on the first item and ArrowUp on the last",
+    async (_, Fixture, name) => {
+      render(Fixture);
+      const trigger = screen.getByRole("button", { name });
+
+      trigger.focus();
+      await user.keyboard("{ArrowDown}");
+      let items = screen.getAllByRole("menuitem");
+      expect(items[0]).toHaveFocus();
+
+      await user.keyboard("{Escape}");
+      expect(trigger).toHaveFocus();
+      await user.keyboard("{ArrowUp}");
+      items = screen.getAllByRole("menuitem");
+      expect(items[items.length - 1]).toHaveFocus();
+    },
+  );
+
+  it("leaves arrow keys alone on a disabled trigger", async () => {
+    render(MenuButtonFixture, { props: { disabled: true } });
+
+    screen.getByRole("button", { name: "Actions" }).focus();
+    await user.keyboard("{ArrowDown}");
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
   it("opens the menu on trigger click and closes on a second click", async () => {
     render(MenuButtonFixture);
 

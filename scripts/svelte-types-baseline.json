@@ -13,7 +13,6 @@
   "Checkbox/InlineCheckbox.svelte": 3,
   "CodeSnippet/CodeSnippet.svelte": 2,
   "ComboBox/ComboBox.svelte": 38,
-  "ComboButton/ComboButton.svelte": 4,
   "ComposedModal/ComposedModal.svelte": 2,
   "ConfirmModal/ConfirmModal.svelte": 3,
   "ContainedList/ContainedListItem.svelte": 1,
