@@ -83,7 +83,7 @@ describe("ContextMenu", () => {
     expect(options[0]).toHaveFocus();
 
     await user.keyboard("{ArrowUp}");
-    expect(options[0]).toHaveFocus();
+    expect(options[options.length - 1]).toHaveFocus();
 
     await user.keyboard("{End}");
     expect(options[options.length - 1]).toHaveFocus();

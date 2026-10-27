@@ -106,7 +106,7 @@ describe("Menu", () => {
     document.body.removeChild(outsideInput);
   });
 
-  it("navigates items with arrow keys without wrapping", async () => {
+  it("navigates items with arrow keys, wrapping at either end", async () => {
     render(MenuFixture);
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
@@ -121,12 +121,11 @@ describe("Menu", () => {
     await user.keyboard("{ArrowDown}");
     expect(items[2]).toHaveFocus();
 
-    // Clamps at the last item instead of wrapping.
     await user.keyboard("{ArrowDown}");
-    expect(items[2]).toHaveFocus();
+    expect(items[0]).toHaveFocus();
 
     await user.keyboard("{ArrowUp}");
-    expect(items[1]).toHaveFocus();
+    expect(items[2]).toHaveFocus();
   });
 
   it("supports Home and End to jump to the first/last item", async () => {
