@@ -21,6 +21,9 @@ function buildRows(count: number) {
 const plain = render(DataTableSortBench, {
   props: { rows: buildRows(1000) },
 });
+const external = render(DataTableSortBench, {
+  props: { rows: buildRows(1000), externalSort: true },
+});
 const virtual = render(DataTableSortBench, {
   props: { rows: buildRows(1000), virtualize: true },
 });
@@ -50,4 +53,8 @@ registerSortCase("sort click, DataTable 1000 rows", plainButton);
 registerSortCase(
   "sort click, DataTable 1000 rows, virtualized",
   getPortButton(virtual),
+);
+registerSortCase(
+  "sort click, DataTable 1000 rows, externalSort",
+  getPortButton(external),
 );
