@@ -71,6 +71,16 @@
   export let shortcutText = "";
 
   /**
+   * Specify a keyboard shortcut to show, such as `"mod+s"`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The keys show where
+   * `shortcutText` goes, and the item gets `aria-keyshortcuts`. Display only:
+   * bind the command itself with `onShortcut`, since the menu is usually
+   * closed. `shortcutText` and its slot take precedence. A value that isn't
+   * a shortcut, such as `"⌘C"`, shows as written.
+   */
+  export let shortcut = "";
+
+  /**
    * Specify the id.
    * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    */
@@ -84,10 +94,16 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Kbd from "../Kbd/Kbd.svelte";
   import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    parseShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import {
     getLayoutDirection,
     inlineKey,
@@ -186,6 +202,9 @@
   $: isSelectable = !!ctxGroup || selectable;
   $: isRadio = !!ctxRadioGroup;
   $: subOptions = $$slots.default;
+  // A shortcut that doesn't parse, such as Carbon React's free-text "⌘C",
+  // shows as written, as `shortcutText` would.
+  $: parsable = parseShortcut(shortcut) !== null;
   $: ctx.setPopup(submenuOpen);
   // The submenu opens toward the inline end (the left in RTL), flips when
   // it doesn't fit, and pins to the viewport edge when it fits on neither
@@ -245,6 +264,9 @@
   data-nested={ctx.level === 2}
   data-sub={subOptions}
   data-id={id}
+  aria-keyshortcuts={shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+    : undefined}
   {...$$restProps}
   on:keydown
   on:keydown={async (event) => {
@@ -385,7 +407,15 @@
         <slot name="labelChildren">{labelText}</slot>
       </span>
       <div class:bx--menu-option__info={true}>
-        <slot name="shortcutText">{shortcutText}</slot>
+        <slot name="shortcutText">
+          {#if shortcutText || !shortcut}
+            {shortcutText}
+          {:else if parsable}
+            <Kbd {shortcut} variant="muted" aria-hidden="true" />
+          {:else}
+            {shortcut}
+          {/if}
+        </slot>
       </div>
     </div>
   {/if}
