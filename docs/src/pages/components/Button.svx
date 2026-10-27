@@ -337,6 +337,26 @@ Unlike `disabled`, a loading button stays focusable and keeps its place in the t
 <Button expressive size="xl" kind="ghost" loading>Loading</Button>
 <Button expressive size="xl" kind="danger" loading>Loading</Button>
 
+## Keyboard shortcut
+
+Set `shortcut` to show its keys after the label, in the tooltip of an icon-only button, and to the screen reader through `aria-keyshortcuts`. Pressing the keys clicks the button, so `on:click` runs, as does a form's submit or a link's navigation. `mod` is Command on Apple platforms and Ctrl elsewhere. The examples run in a frame, so click in one before you press its keys.
+
+<FileSource src="/framed/Button/ButtonShortcut" />
+
+The button only answers while it's enabled and shown, and while a modal is open, only if it's inside it, so a page's Save never fires behind a dialog. When two shown buttons share a shortcut, the one rendered last answers. A shortcut you bind yourself with `onShortcut` comes first.
+
+To do something other than click, handle `on:shortcut`, dispatched before the click, and call `preventDefault()` to skip the click.
+
+<FileSource src="/framed/Button/ButtonShortcutEvent" />
+
+| Do | Why |
+| :--- | :--- |
+| Use `mod` for Command or Ctrl | One shortcut reads and works on every platform |
+| Pick shortcuts the browser doesn't keep, such as ⌘ S over ⌘ W | Browsers don't let a page take ⌘ W, ⌘ T or ⌘ N |
+| Avoid the editing keys: `mod+a`, `mod+c`, `mod+v`, `mod+x` and `mod+z` | A shortcut with a modifier also fires in text fields, so it takes select all, copy, paste, cut or undo from every field |
+| Keep single-key shortcuts such as `/` for actions that make sense while reading | They don't fire while typing in a field, but they do everywhere else |
+| Let users turn off single-key shortcuts, or add a modifier to them | Speech input and stray key presses fire them by accident. WCAG 2.1.4 asks for a way to turn them off or remap them |
+
 ## Expressive styles
 
 Set `expressive` to `true` to use Carbon's expressive typesetting. Use expressive styles with the default, "lg", or "xl" button sizes.
