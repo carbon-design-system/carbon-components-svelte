@@ -137,6 +137,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Popconfirm",
       "Popover",
       "Toggletip",
+      "Coachmark",
       "Tooltip",
       "TooltipDefinition",
       "TooltipGroup",
