@@ -24,6 +24,7 @@ import Modal from "carbon-components-svelte/Modal/Modal.svelte";
 import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
 import NotificationButton from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
+import NotificationsPanel from "carbon-components-svelte/NotificationsPanel/NotificationsPanel.svelte";
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
@@ -737,6 +738,11 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(ChatLog, { props: { labelText: "Conversation", ...attrs } }),
     target: () => screen.getByRole("log"),
+  },
+  {
+    name: "NotificationsPanel",
+    render: (attrs) => render(NotificationsPanel, { props: { ...attrs } }),
+    target: () => screen.getByRole("region"),
   },
   {
     // The text takes focus while clipped; the expand toggle has its own

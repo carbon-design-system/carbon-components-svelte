@@ -1,9 +1,7 @@
 // @ts-check
 
-import {
-  getDateTimeFormatter,
-  getRelativeTimeFormatter,
-} from "./intl-formatter-cache.js";
+import { dayLabel } from "./day-label.js";
+import { getDateTimeFormatter } from "./intl-formatter-cache.js";
 
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
@@ -20,11 +18,6 @@ function startOfDay(time) {
   return date.getTime();
 }
 
-/** @param {string} text */
-function capitalize(text) {
-  return text.charAt(0).toLocaleUpperCase() + text.slice(1);
-}
-
 /**
  * The default divider label: "Today" or "Yesterday", a date for an older
  * day, and the time for a gap within the same day.
@@ -37,10 +30,7 @@ function defaultLabel(time, { newDay, now, locale }) {
     return getDateTimeFormatter(locale, { timeStyle: "short" }).format(time);
   }
   const daysAgo = Math.round((startOfDay(now) - startOfDay(time)) / DAY);
-  if (daysAgo === 0 || daysAgo === 1) {
-    const relative = getRelativeTimeFormatter(locale, { numeric: "auto" });
-    return capitalize(relative.format(-daysAgo, "day"));
-  }
+  if (daysAgo === 0 || daysAgo === 1) return dayLabel(daysAgo, locale);
   return getDateTimeFormatter(locale, { dateStyle: "medium" }).format(time);
 }
 
