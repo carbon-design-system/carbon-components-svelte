@@ -280,7 +280,7 @@ Control tooltip alignment with `tooltipAlignment`. Providing button text overrid
 
 ### Panel composition
 
-Compose the panel content from `HeaderPanelLinks` and `HeaderPanelLink`, as shown in both examples above. `HeaderPanelLinks` renders the list wrapper and `HeaderPanelLink` renders each item. Group related links under a heading with `HeaderPanelGroup`, and separate groups that have no heading with a plain `HeaderPanelDivider`. The same components compose the notification and help panels in the multiple-switchers example — panel composition is not specific to the app switcher icon.
+Compose the panel content from `HeaderPanelLinks` and `HeaderPanelLink`, as shown in both examples above. `HeaderPanelLinks` renders the list wrapper and `HeaderPanelLink` renders each item. Group related links under a heading with `HeaderPanelGroup`, and separate groups that have no heading with a plain `HeaderPanelDivider`. The same components compose the notification and help panels in the multiple-switchers example — panel composition is not specific to the app switcher icon. For a notification list with unread state, dismissal and grouping by day, use [`NotificationsPanel`](/components/NotificationsPanel) instead.
 
 | Component | Use it for |
 | :-------- | :--------- |

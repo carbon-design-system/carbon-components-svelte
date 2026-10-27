@@ -141,6 +141,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "InlineNotification",
       "ToastNotification",
       "NotificationQueue",
+      "NotificationsPanel",
       "BadgeIndicator",
     ],
   },
