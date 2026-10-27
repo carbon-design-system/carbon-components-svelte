@@ -22,6 +22,26 @@ describe("getPropWarnings", () => {
   });
 });
 
+it("flags a time row outside the single type and an uneven minuteStep", () => {
+  const base = { months: 1, anchor: undefined, portalled: false };
+
+  expect(
+    getPropWarnings({
+      ...base,
+      datePickerType: "range",
+      timeGranularity: "minute",
+    }),
+  ).toEqual([expect.stringMatching(/timeGranularity.*"single"/)]);
+  expect(
+    getPropWarnings({
+      ...base,
+      datePickerType: "single",
+      timeGranularity: "minute",
+      minuteStep: 7,
+    }),
+  ).toEqual([expect.stringMatching(/minuteStep must divide 60/)]);
+});
+
 describe("getShortWarning", () => {
   it("returns nothing for a simple picker", () => {
     expect(getShortWarning("simple")).toBeUndefined();

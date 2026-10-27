@@ -8,6 +8,11 @@ export interface CalendarLocale {
   weekAbbreviation?: string;
   /** Label of the year input. Defaults to `"Year"`. */
   yearAriaLabel?: string;
+  /** Labels of the time row's fields. Default to `"Hours"`, `"Minutes"`, `"Seconds"` and `"AM/PM"`. */
+  hourAriaLabel?: string;
+  minuteAriaLabel?: string;
+  secondAriaLabel?: string;
+  periodAriaLabel?: string;
   /** Labels for the `K` format token. Defaults to `["AM", "PM"]`. */
   amPM?: [string, string];
 }

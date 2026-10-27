@@ -46,6 +46,8 @@ export interface CalendarOptions extends Partial<
   conjunction?: string;
   dateFormat?: string;
   defaultDate?: string | number | Date | Array<string | number | Date>;
+  /** 24-hour `"HH:mm"` or `"HH:mm:ss"` given to a day picked with no time set. */
+  defaultTime?: string;
   disable?: DateRule[];
   enable?: DateRule[];
   errorHandler?: (error: Error) => void;
@@ -60,6 +62,8 @@ export interface CalendarOptions extends Partial<
    */
   firstDayOfWeek?: number;
   getWeek?: (date: Date) => number;
+  /** The time row's clock. Defaults to `"12"`. */
+  hourFormat?: "12" | "24";
   ignoredFocusElements?: HTMLElement[];
   inline?: boolean;
   /**
@@ -76,6 +80,8 @@ export interface CalendarOptions extends Partial<
   locale?: string | Partial<CalendarLocale>;
   maxDate?: string | number | Date;
   minDate?: string | number | Date;
+  /** Minutes per step in the time row; must divide 60. */
+  minuteStep?: number;
   mode?: CalendarMode;
   nextArrow?: string;
   /** The date the calendar treats as today. Defaults to the current date. */
@@ -106,6 +112,10 @@ export interface CalendarOptions extends Partial<
   shorthandCurrentMonth?: boolean;
   showMonths?: number;
   static?: boolean;
+  /** Shows a time row below the days, down to this unit. Single mode only. */
+  timeGranularity?: "hour" | "minute" | "second";
+  /** Accessible name of the time row. Defaults to `"Time"`. */
+  timeLabel?: string;
   weekNumbers?: boolean;
 }
 

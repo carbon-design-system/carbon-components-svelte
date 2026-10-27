@@ -11,6 +11,10 @@ import { resolveWeekInfo } from "./week-info.js";
  *   ordinal?: (day: number) => string;
  *   weekAbbreviation?: string;
  *   yearAriaLabel?: string;
+ *   hourAriaLabel?: string;
+ *   minuteAriaLabel?: string;
+ *   secondAriaLabel?: string;
+ *   periodAriaLabel?: string;
  *   amPM?: [string, string];
  * }} CalendarLocale
  */

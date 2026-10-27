@@ -244,6 +244,11 @@
       background-color: $layer;
       pointer-events: none;
     }
+
+    .#{$prefix}--date-picker__time-input:hover,
+    .#{$prefix}--date-picker__time-period-select:hover {
+      background-color: $field-hover;
+    }
   }
 
   .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up {
@@ -445,6 +450,97 @@
     height: to-rem(40px);
     color: $text-secondary;
     cursor: default;
+  }
+
+  // ccs: the time row (`timeGranularity`) under the days: hour, minute
+  // and second fields, and an AM/PM select on a 12-hour clock. The open
+  // calendar grows by the row.
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--open {
+    height: to-rem(384px);
+  }
+
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--week-numbers.#{$prefix}--date-picker__calendar--open,
+  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--time.#{$prefix}--date-picker__calendar--multi-month.#{$prefix}--date-picker__calendar--open {
+    height: to-rem(372px);
+  }
+
+  .#{$prefix}--date-picker__time {
+    display: flex;
+    gap: $carbon--spacing-03;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin-block-start: $carbon--spacing-02;
+    padding-block-start: $carbon--spacing-03;
+    border-block-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--date-picker__time-fields {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--date-picker__time-separator {
+    @include type-style('body-compact-01');
+
+    padding-inline: $carbon--spacing-01;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--date-picker__time-input,
+  .#{$prefix}--date-picker__time-period-select {
+    @include type-style('body-compact-01');
+
+    box-sizing: border-box;
+    height: to-rem(32px);
+    margin: 0;
+    color: $text-primary;
+    background-color: $field;
+    border: none;
+    border-bottom: 1px solid $border-strong;
+    border-radius: 0;
+
+    &:focus {
+      @include focus-outline('outline');
+    }
+
+    &[disabled] {
+      color: $text-disabled;
+      border-bottom-color: transparent;
+      cursor: not-allowed;
+    }
+  }
+
+  .#{$prefix}--date-picker__time-input {
+    width: to-rem(40px);
+    padding: 0;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .#{$prefix}--date-picker__time-period {
+    position: relative;
+  }
+
+  .#{$prefix}--date-picker__time-period-select {
+    padding-inline: $carbon--spacing-04 $carbon--spacing-07;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  // The select's chevron, drawn in the text color so forced colors keep it.
+  .#{$prefix}--date-picker__time-period::after {
+    position: absolute;
+    top: 50%;
+    width: to-rem(6px);
+    height: to-rem(6px);
+    border-right: to-rem(1.5px) solid currentColor;
+    border-bottom: to-rem(1.5px) solid currentColor;
+    transform: translateY(-75%) rotate(45deg);
+    content: '';
+    pointer-events: none;
+    @include ccs-inset-inline($end: $carbon--spacing-04);
   }
 
   .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today {

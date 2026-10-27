@@ -36,6 +36,16 @@
   </p>
 </div>
 
+<div data-testid="date-picker-time">
+  <DatePicker datePickerType="single" timeGranularity="minute">
+    <DatePickerInput
+      data-testid="date-picker-time-input"
+      labelText="Maintenance starts"
+      placeholder="mm/dd/yyyy hh:mm"
+    />
+  </DatePicker>
+</div>
+
 <div data-testid="outside-date-picker" style="margin-top: 1rem; padding: 1rem;">
   Click target (outside pickers)
 </div>
