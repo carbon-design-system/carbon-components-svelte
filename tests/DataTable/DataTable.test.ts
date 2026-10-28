@@ -1500,7 +1500,7 @@ describe("DataTable", () => {
       const emptyHeader = screen.getAllByRole("columnheader")[1];
       // A label wrapper keeps the <th> from matching `:empty`, so it escapes
       // Carbon's `th:empty { max-width: 2.25rem }` cap and flexes full width.
-      expect(emptyHeader).not.toBeEmptyDOMElement();
+      expect(emptyHeader.matches(":empty")).toBe(false);
       expect(
         emptyHeader.querySelector(".bx--table-header-label"),
       ).toBeInTheDocument();
@@ -1521,7 +1521,7 @@ describe("DataTable", () => {
       // The header stays truly empty (narrow) and carries the class so the
       // sticky-header rule can match it...
       const emptyHeader = screen.getAllByRole("columnheader")[1];
-      expect(emptyHeader).toBeEmptyDOMElement();
+      expect(emptyHeader.matches(":empty")).toBe(true);
       expect(emptyHeader).toHaveClass("bx--table-column-menu");
 
       // ...and every body cell in that column carries the same class, so head
