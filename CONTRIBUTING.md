@@ -1426,6 +1426,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
 | `css-size`, `css-cascade` | `css/` changes only. `css-size` fails past the [growth limit](#size-growth); `css-cascade` is informational |
 | `bench-ab` (Perf workflow) | `perf:` PRs and PRs labeled `performance`. Fails past a 4% [bench](#performance-benchmarks) geomean |
+| `api-type` (PR labels workflow) | `fix`, `chore`, `refactor` and `perf` PRs. Fails when a changed component adds a prop, slot, event or typedef field, which makes it a `feat` (see [Commit messages](#commit-messages)). A breaking title (`!` or a `BREAKING CHANGE:` footer) passes |
 
 Pushes to master and manual runs run everything, which catches any miss. A PR that only touches `docs/**` or Markdown skips the workflow.
 

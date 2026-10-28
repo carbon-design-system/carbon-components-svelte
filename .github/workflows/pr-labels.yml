@@ -2,7 +2,8 @@ name: PR labels
 
 # `pull_request_target` gives fork PRs a write token. Nothing here checks out
 # or runs PR code: the labeler reads .github/labeler.yml from the base branch,
-# and the title step reads the title as data, never via `${{ }}`.
+# the title step reads the title as data, never via `${{ }}`, and `api-type`
+# runs the base branch's script on the PR's files, read as text.
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, edited]
@@ -104,3 +105,90 @@ jobs:
             if (add.length) {
               await github.rest.issues.addLabels({ ...issue, labels: add });
             }
+
+  # A `fix`, `chore`, `refactor` or `perf` PR that adds a prop, slot, event
+  # or typedef field is a feature (CONTRIBUTING, Commit messages). Compares
+  # each changed component at the merge base and the head. Runs on every
+  # push and title edit, and fails rather than labels: the type is in the
+  # title, which the author fixes.
+  api-type:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: scripts/lib/public-api.ts
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const { NON_FEATURE_TYPES, isComponent, misfiledApi, parseTitle } =
+              await import(
+                `${process.env.GITHUB_WORKSPACE}/scripts/lib/public-api.ts`
+              );
+
+            const pr = context.payload.pull_request;
+            const body = pr.body ?? "";
+            const { type, breaking } = parseTitle(pr.title, body);
+            if (!NON_FEATURE_TYPES.includes(type) || breaking) return;
+
+            const changed = (
+              await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo,
+                pull_number: pr.number,
+                per_page: 100,
+              })
+            ).filter((file) => isComponent(file.filename));
+            if (!changed.length) return;
+
+            const { data: compare } =
+              await github.rest.repos.compareCommitsWithBasehead({
+                ...context.repo,
+                basehead: `${pr.base.sha}...${pr.head.sha}`,
+                per_page: 1,
+              });
+            const mergeBase = compare.merge_base_commit.sha;
+
+            // A fork's head is readable here by SHA through REST, not
+            // through GraphQL's `object(expression:)`.
+            const read = async (path, ref) => {
+              try {
+                const { data } = await github.rest.repos.getContent({
+                  ...context.repo,
+                  path,
+                  ref,
+                  mediaType: { format: "raw" },
+                });
+                return String(data);
+              } catch (error) {
+                if (error.status === 404) return "";
+                throw error;
+              }
+            };
+            const files = await Promise.all(
+              changed.map(async (file) => ({
+                path: file.filename,
+                base:
+                  file.status === "added"
+                    ? ""
+                    : await read(
+                        file.previous_filename ?? file.filename,
+                        mergeBase,
+                      ),
+                head:
+                  file.status === "removed"
+                    ? ""
+                    : await read(file.filename, pr.head.sha),
+              })),
+            );
+
+            const added = misfiledApi(pr.title, body, files);
+            if (!added.length) return;
+            core.setFailed(
+              [
+                `A "${type}" PR adds public API. Retitle it "feat", or move ` +
+                  "the new API to a feat PR. A breaking change takes a `!`.",
+                ...added.map(({ path, api }) => `  ${path}: ${api}`),
+              ].join("\n"),
+            );
