@@ -1,4 +1,5 @@
 import type {
+  applySort,
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
@@ -15,6 +16,7 @@ import type {
   preserveFocusSelection,
   queryParam,
   rovingFocus,
+  sortable,
   themeScript,
   ThemeZone as BarrelThemeZone,
   trapFocus,
@@ -47,6 +49,10 @@ import type {
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
+import type {
+  SortableOptions,
+  SortDetail,
+} from "carbon-components-svelte/src/utils/sortable.js";
 import {
   highlight,
   highlightCode,
@@ -117,6 +123,10 @@ type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
 type _TrapFocus = ReturnType<typeof trapFocus>;
+type _Sortable = ReturnType<typeof sortable>;
+type _SortableOptions = SortableOptions;
+type _SortDetail = SortDetail;
+type _ApplySort = typeof applySort;
 
 const _tokens: Token[] | undefined = tokenize("let a", "js");
 const _type: TokenType | null | undefined = _tokens?.[0]?.type;

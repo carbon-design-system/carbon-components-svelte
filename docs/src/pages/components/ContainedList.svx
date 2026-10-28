@@ -200,6 +200,63 @@ Set `selected` on the interactive or link item whose details show beside the lis
   {/each}
 </ContainedList>
 
+## Reordering
+
+Let users change the order of items with the `sortable` action. It reads the DOM and never moves an item or changes your data: a drop dispatches a cancelable `sort` event, and you apply the move in its handler with `applySort`. Components do not take actions, so apply `sortable` to an element around the `ContainedList`, and set `itemSelector` to `.bx--contained-list-item`.
+
+Give each item an id with a `data-sortable-id` attribute, and a grip with `data-sortable-handle` in the `action` slot, selected by `handleSelector`. The handle takes the keyboard: <DocKbd label="Tab" /> reaches the list once, the arrow keys move between handles, and <DocKbd label="Space" /> picks an item up. While an item is lifted, the arrow keys move it, <DocKbd label="Home" /> and <DocKbd label="End" /> send it to either end, <DocKbd label="Space" /> drops it, and <DocKbd label="Escape" /> puts it back. Each step is announced in a live region.
+
+### Handle
+
+Pick up an item by its handle, with a pointer or the keyboard. A pointer drag starts after the pointer moves a few pixels, so a click on a link or button inside an item still works. A finger drags from the handle only, and scrolls everywhere else.
+
+<FileSource src="/framed/ContainedList/ContainedListReorder" />
+
+### Whole item
+
+Leave out `handleSelector` to make the whole item the drag source and the keyboard target. Use this for items that hold no links or buttons. A finger on the item scrolls the page, so touch users have no way to drag; prefer a handle when touch matters.
+
+<FileSource src="/framed/ContainedList/ContainedListReorderWhole" />
+
+### Connected lists
+
+Give lists the same `group` to move items between them. Each list takes a `name`, the key in your data, and a `label` that announcements speak. While an item is lifted, the arrow keys that point across the list, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> for a vertical list, hand it to the neighbor list. The `sort` event fires once, on the list the item lands in, with different `from` and `to`. Pass a record of arrays to `applySort` to apply it.
+
+<FileSource src="/framed/ContainedList/ContainedListReorderGroups" />
+
+### Refusing a move
+
+Call `preventDefault()` on the `sort` event to refuse a move. Nothing moves, and the drop is announced as cancelled. Use it for pinned items or ranges the order must respect.
+
+<FileSource src="/framed/ContainedList/ContainedListReorderPinned" />
+
+### Large lists
+
+The index of an item comes from its `aria-posinset` when it has one, which [VirtualList](/components/VirtualList) stamps on every row it renders with `spacerTag="li"`. A drag auto-scrolls near the edge of the scroll box, and the keyboard moves can reach rows that are not rendered yet. The example below holds 1,000 rows and renders about a dozen. It keeps the scroll box in a [Box](/components/Box), inside the element that has the action.
+
+<FileSource src="/framed/ContainedList/ContainedListReorderVirtual" />
+
+### Options
+
+| Option | Description |
+| --- | --- |
+| `itemSelector` | Selects the items. By default, the children of the element. |
+| `handleSelector` | Selects the drag source and keyboard target inside each item. By default, the item. |
+| `name`, `label`, `group` | Identify the list in events and announcements, and connect lists. |
+| `orientation` | `"vertical"` or `"horizontal"`. In a horizontal list, the inline arrows move the item, and swap in right-to-left. |
+| `getId`, `getLabel` | Read an item's id and the text spoken for it. By default, `data-sortable-id` and the item's text without its handle. |
+| `disabled`, `roving`, `threshold` | Turn it off, keep the list as one tab stop, and set the pointer distance before a drag starts. |
+
+Every spoken string is an option, so a translation replaces them: `roleDescriptionText`, `instructionsText`, `handleLabelText`, `pickedUpText`, `movedText`, `droppedText` and `cancelledText`. The last four take `label`, `position`, `count`, `name` and `listChanged`.
+
+The `sort` event carries `id`, `from`, `to`, `oldIndex`, `newIndex` and `source`. `newIndex` counts with the item already out of its old place, so use it as is. Moving an item to where it was fires no event.
+
+| Do | Why |
+| --- | --- |
+| Give the handle an accessible name, or leave it unnamed so the action names it "Reorder" and the item's text. | Every handle is a button, and axe reports one with no name. |
+| Key the `{#each}` block by id. | The action slides the items that moved from their old place to their new one. A block keyed by index has no elements to slide. |
+| Offer a way to move an item that is not a drag, such as a menu, when order is the point of the screen. | The keyboard path is a pattern users learn once per site; a menu is discoverable. |
+
 ## Virtualization
 
 Render thousands of items with [VirtualList](/components/VirtualList). Set `spacerTag` to `"li"` so it renders only the items in view, straight into the list. Each item overlaps the one above by 1px, so set `itemHeight` to the item height less 1px. Set `measured` if items can wrap. Wrap the `ContainedList` in a [ScrollGradient](/components/ScrollGradient) and pass its `scrollElementRef` as `scrollElement`.
