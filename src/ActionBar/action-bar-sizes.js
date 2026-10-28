@@ -1,0 +1,23 @@
+// @ts-check
+
+/**
+ * The square size of an icon-only button, and of the "More" trigger, per
+ * bar size, in pixels.
+ */
+export const ACTION_BAR_SIZE_PX = Object.freeze({
+  xs: 24,
+  sm: 32,
+  md: 40,
+  lg: 48,
+});
+
+/**
+ * `Button` size for a bar size. `Button`'s own names are offset from the
+ * v11 scale: its "default" is 48px and its "lg" is 64px.
+ */
+export const BUTTON_SIZE_BY_ACTION_BAR_SIZE = Object.freeze({
+  xs: "xs",
+  sm: "small",
+  md: "field",
+  lg: "default",
+});
