@@ -1,0 +1,375 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Gantt: a `TreeViewGrid` of tasks beside a time axis, in one scroll
+/// container. The list is `position: sticky` at the inline start and the axis
+/// at the top, so the two panes share one vertical scroll and every row has
+/// one height. The component computes every bar's position from the day
+/// width and the row height, and passes them in custom properties; the rules
+/// here only draw. The axis and the bars are placed from the inline start,
+/// and the link layer mirrors itself under `dir="rtl"`, so time runs toward
+/// the inline end in both directions.
+/// @access private
+/// @group components
+@mixin gantt {
+  .#{$prefix}--gantt {
+    --ccs-gantt-weekend: #{$layer-accent};
+    --ccs-gantt-line: #{$border-subtle};
+  }
+
+  .#{$prefix}--gantt__scroller {
+    position: relative;
+    overflow: auto;
+    max-block-size: var(--ccs-gantt-height);
+    border: 1px solid $border-subtle;
+  }
+
+  // The list is a flex item, not a grid area: a sticky box moves only
+  // inside its containing block, and a grid area is exactly as wide as the
+  // list.
+  .#{$prefix}--gantt__body {
+    display: flex;
+    min-inline-size: 100%;
+    inline-size: max-content;
+  }
+
+  .#{$prefix}--gantt__list {
+    position: sticky;
+    z-index: 3;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--ccs-gantt-list-width);
+    background: $layer;
+    border-inline-end: 1px solid $border-strong;
+    @include ccs-inset-inline(0, null);
+  }
+
+  // The tree grid scrolls its own table sideways. Here the one scroller
+  // does, and a scroll container in between would stop the header sticking.
+  .#{$prefix}--gantt__list .#{$prefix}--data-table-content {
+    overflow: visible;
+  }
+
+  .#{$prefix}--gantt__list .#{$prefix}--data-table {
+    inline-size: var(--ccs-gantt-list-width);
+    table-layout: fixed;
+  }
+
+  // A row that grew would push the list out of line with the bars, so cells
+  // clip their text.
+  .#{$prefix}--gantt__list td,
+  .#{$prefix}--gantt__list th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--gantt__list .#{$prefix}--data-table thead th {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    height: var(--ccs-gantt-header-height);
+  }
+
+  .#{$prefix}--gantt__list tbody tr {
+    scroll-margin-top: var(--ccs-gantt-header-height);
+  }
+
+  .#{$prefix}--gantt__timeline {
+    position: relative;
+    flex: 1 0 var(--ccs-gantt-timeline-width);
+    min-inline-size: var(--ccs-gantt-timeline-width);
+  }
+
+  .#{$prefix}--gantt__axis {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    box-sizing: border-box;
+    block-size: var(--ccs-gantt-header-height);
+    background: $layer-accent;
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--gantt__axis-tier {
+    position: relative;
+    block-size: 50%;
+  }
+
+  .#{$prefix}--gantt__axis-cell {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    overflow: hidden;
+    box-sizing: border-box;
+    align-items: center;
+    padding-right: $carbon--spacing-03;
+    padding-left: $carbon--spacing-03;
+    border-inline-start: 1px solid $border-subtle;
+    color: $text-primary;
+    white-space: nowrap;
+    @include type-style("body-compact-01");
+    @include ccs-inset-inline(var(--ccs-gantt-x), null);
+  }
+
+  // Weekend stripes and row lines are backgrounds, so the canvas holds only
+  // the bars, the links and the today line however long the chart is.
+  .#{$prefix}--gantt__canvas {
+    position: relative;
+    background-color: $layer;
+    background-image:
+      var(--ccs-gantt-weekends, none),
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(var(--ccs-gantt-row-height) - 1px),
+        var(--ccs-gantt-line) calc(var(--ccs-gantt-row-height) - 1px),
+        var(--ccs-gantt-line) var(--ccs-gantt-row-height)
+      );
+    user-select: none;
+  }
+
+  .#{$prefix}--gantt__canvas[data-gantt-drag="move"] {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--gantt__canvas[data-gantt-drag="start"],
+  .#{$prefix}--gantt__canvas[data-gantt-drag="end"] {
+    cursor: ew-resize;
+  }
+
+  // SVG has no logical coordinates: the paths are drawn for left-to-right
+  // and the layer is mirrored in place.
+  .#{$prefix}--gantt__links {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    pointer-events: none;
+    @include ccs-inset-inline(0, null);
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--gantt__link {
+    fill: none;
+    stroke: $icon-secondary;
+    stroke-linejoin: round;
+    stroke-width: 1.5px;
+  }
+
+  // A successor that starts before its predecessor ends. Dashed as well as
+  // red, so the link does not depend on colour.
+  .#{$prefix}--gantt__link--conflict {
+    stroke: $support-error;
+    stroke-dasharray: 4 3;
+  }
+
+  .#{$prefix}--gantt__today {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    bottom: 0;
+    inline-size: 2px;
+    background: $support-error;
+    pointer-events: none;
+    @include ccs-inset-inline(var(--ccs-gantt-x), null);
+  }
+
+  // The progress fill is an element, not a gradient: forced colors drop
+  // background images but keep a system-colour background.
+  .#{$prefix}--gantt__bar {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    box-sizing: border-box;
+    border: 1px solid $border-interactive;
+    border-radius: to-rem(2px);
+    background-color: $highlight;
+    scroll-margin-block-start: var(--ccs-gantt-header-height);
+    scroll-margin-inline-start: var(--ccs-gantt-list-width);
+    @include ccs-inset-inline(var(--ccs-gantt-x), null);
+  }
+
+  .#{$prefix}--gantt__progress {
+    flex: none;
+    block-size: 100%;
+    inline-size: var(--ccs-gantt-progress, 0%);
+    background-color: $interactive;
+  }
+
+  .#{$prefix}--gantt__bar:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--gantt__bar--editable {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  // The resize zones are the outer 8px of the bar, drawn only to set the
+  // cursor. The component reads where the press landed.
+  .#{$prefix}--gantt__bar--resizable::before,
+  .#{$prefix}--gantt__bar--resizable::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    content: "";
+    cursor: ew-resize;
+  }
+
+  .#{$prefix}--gantt__bar--resizable::before {
+    @include ccs-inset-inline(0, null);
+  }
+
+  .#{$prefix}--gantt__bar--resizable::after {
+    @include ccs-inset-inline(null, 0);
+  }
+
+  .#{$prefix}--gantt__bar--selected {
+    border-color: $text-primary;
+    box-shadow: inset 0 0 0 1px $text-primary;
+  }
+
+  .#{$prefix}--gantt__bar--milestone {
+    background-color: $interactive;
+    transform: rotate(45deg);
+  }
+
+  // A bracket: a bar across the top with a point at each end. The visible
+  // shape is clipped, so the element keeps its full box for the focus ring.
+  .#{$prefix}--gantt__bar--summary {
+    border: 0;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--gantt__bar--summary::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(
+      calc(90deg * var(--ccs-inline-sign, 1)),
+      $text-primary var(--ccs-gantt-progress, 0%),
+      $icon-secondary var(--ccs-gantt-progress, 0%)
+    );
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% 100%,
+      calc(100% - #{to-rem(6px)}) 55%,
+      #{to-rem(6px)} 55%,
+      0 100%
+    );
+    content: "";
+  }
+
+  .#{$prefix}--gantt__bar--summary.#{$prefix}--gantt__bar--selected {
+    box-shadow: none;
+  }
+
+  .#{$prefix}--gantt__bar--summary.#{$prefix}--gantt__bar--selected::before {
+    background-image: linear-gradient(
+      calc(90deg * var(--ccs-inline-sign, 1)),
+      $interactive var(--ccs-gantt-progress, 0%),
+      $border-interactive var(--ccs-gantt-progress, 0%)
+    );
+  }
+}
+
+@include exports("gantt") {
+  @include gantt;
+}
+
+// Forced colors repaint every background to Canvas and every border to
+// CanvasText. Progress is a gradient and the milestone, summary and links are
+// fills and strokes, so each takes a system colour of its own. Selection and
+// the today line use Highlight.
+/// Gantt in forced-colors mode.
+/// @access private
+/// @group components
+@mixin gantt-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--gantt {
+      --ccs-gantt-weekend: transparent;
+      --ccs-gantt-line: GrayText;
+    }
+
+    .#{$prefix}--gantt__bar {
+      border-color: CanvasText;
+      background-color: Canvas;
+    }
+
+    .#{$prefix}--gantt__progress {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--gantt__bar--selected {
+      border-color: Highlight;
+      border-width: 3px;
+    }
+
+    .#{$prefix}--gantt__bar--milestone {
+      background-color: CanvasText;
+    }
+
+    .#{$prefix}--gantt__bar--summary {
+      background-color: transparent;
+    }
+
+    .#{$prefix}--gantt__bar--summary::before,
+    .#{$prefix}--gantt__bar--summary.#{$prefix}--gantt__bar--selected::before {
+      background-color: CanvasText;
+      background-image: none;
+    }
+
+    .#{$prefix}--gantt__bar--summary.#{$prefix}--gantt__bar--selected::before {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--gantt__link {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--gantt__today {
+      background-color: Highlight;
+    }
+  }
+}
+
+@include exports("gantt-forced-colors") {
+  @include gantt-forced-colors;
+}
+
+// A printed chart is the whole chart: nothing scrolls or sticks, and bars
+// keep their fills.
+/// Gantt when printed.
+/// @access private
+/// @group components
+@mixin gantt-print {
+  @media print {
+    .#{$prefix}--gantt__scroller {
+      overflow: visible;
+      max-block-size: none;
+    }
+
+    .#{$prefix}--gantt__list,
+    .#{$prefix}--gantt__axis,
+    .#{$prefix}--gantt__list .#{$prefix}--data-table thead th {
+      position: static;
+    }
+
+    .#{$prefix}--gantt__canvas,
+    .#{$prefix}--gantt__axis,
+    .#{$prefix}--gantt__bar,
+    .#{$prefix}--gantt__today {
+      print-color-adjust: exact;
+    }
+  }
+}
+
+@include exports("gantt-print") {
+  @include gantt-print;
+}
