@@ -2,6 +2,34 @@
   "generatedBy": "scripts/generate-strings.ts (bun run build:strings)",
   "text": [
     {
+      "component": "ActionBar",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ActionBar",
+      "prop": "moreText",
+      "type": "string",
+      "default": "More",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ActionBarButton",
+      "prop": "labelText",
+      "type": "string",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ActionBarGroup",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
       "component": "AILabel",
       "prop": "aiText",
       "type": "string",
