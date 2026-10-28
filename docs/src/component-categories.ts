@@ -95,6 +95,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   {
     label: "Forms",
     components: [
+      "CodeEditor",
       "CopyInput",
       "DatePicker",
       "FileUploader",
