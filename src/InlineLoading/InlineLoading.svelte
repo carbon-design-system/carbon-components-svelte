@@ -39,7 +39,7 @@
   export let size = "md";
 
   import { createEventDispatcher, onMount } from "svelte";
-  import Loading from "../Loading/Loading.svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
@@ -107,10 +107,9 @@
           title={iconDescription || status}
         />
       {:else if status === "inactive" || status === "active"}
-        <Loading
+        <LoadingSpinner
           small
           description={iconDescription}
-          withOverlay={false}
           active={status === "active"}
         />
       {/if}

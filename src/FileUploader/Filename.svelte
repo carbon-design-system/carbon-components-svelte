@@ -78,18 +78,17 @@
     iconDescription,
   );
 
-  import Loading from "../Loading/Loading.svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import Close from "../icons/Close.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
 </script>
 
 {#if status === "uploading"}
-  <Loading
+  <LoadingSpinner
     description={resolvedIconLabel ?? "uploading"}
     {...$$restProps}
     small
-    withOverlay={false}
   />
 {/if}
 
