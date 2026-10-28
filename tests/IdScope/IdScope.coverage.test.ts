@@ -24,6 +24,7 @@ const EXEMPT: Record<string, string> = {
   "Modal/Modal": "ambient",
   "SidePanel/SidePanel": "ambient",
   // Groups that only render inside a parent that starts the scope.
+  "ActionBar/ActionBarGroup": "inside ActionBar",
   "ContextMenu/ContextMenuGroup": "inside ContextMenu",
   "ContextMenu/ContextMenuRadioGroup": "inside ContextMenu",
   "Menu/MenuItemGroup": "inside Menu",
