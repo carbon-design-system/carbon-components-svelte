@@ -1,6 +1,7 @@
 export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   AILabel: "0.114.0",
   Accordion: "0.2.0",
+  ActionBar: "0.115.0",
   ActionSet: "0.112.0",
   Announcer: "0.115.0",
   AspectRatio: "0.17.0",
