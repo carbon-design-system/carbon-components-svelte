@@ -491,7 +491,7 @@ Set `stickyHeader` to `true` to fix the header in place. This adds a maximum hei
 
 ### Empty column
 
-A header with `empty: true` has no label, but body cells can still render content. For row-actions overflow menus, also set `columnMenu: true` so the column stays narrow and the menu trigger stays centered. With stickyHeader enabled, the empty column stays aligned with its body cells.
+A header with `empty: true` shows no label, but body cells can still render content. Set its `value` to name the column for screen readers. The name stays visually hidden. Without a `value`, the header has no accessible name, and axe reports an empty table header. For row-actions overflow menus, also set `columnMenu: true` so the column stays narrow and the menu trigger stays centered. With stickyHeader enabled, the empty column stays aligned with its body cells.
 
 <DataTable
   stickyHeader
@@ -500,7 +500,7 @@ A header with `empty: true` has no label, but body cells can still render conten
     { key: "protocol", value: "Protocol" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" },
-    { key: "overflow", empty: true, columnMenu: true },
+    { key: "overflow", empty: true, value: "Actions", columnMenu: true },
   ]}
   rows={Array.from({ length: 20 }).map((_, i) => ({
     id: i,
@@ -1772,7 +1772,7 @@ Pair a compact table with extra small (xs) pagination.
 
 ## Empty column (overflow menu)
 
-Set `empty: true` in a header to create an empty column—for overflow menus without a header label.
+Set `empty: true` in a header to create an empty column—for overflow menus without a header label. Its `value` stays visually hidden and names the column for screen readers.
 
 <FileSource src="/framed/DataTable/DataTableAppendColumns" />
 
@@ -2324,9 +2324,9 @@ Pass header objects to customize the skeleton.
 
 ### Empty header
 
-Add an empty header column with `empty: true`.
+Add an empty header column with `empty: true`. As in `DataTable`, its `value` stays visually hidden.
 
-<DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}, { empty: true }]} rows={10} />
+<DataTableSkeleton headers={[{ value: "Name" }, {value: "Protocol"}, {value:"Port"}, { value: "Rule"}, { empty: true, value: "Actions" }]} rows={10} />
 
 ### No header or toolbar
 

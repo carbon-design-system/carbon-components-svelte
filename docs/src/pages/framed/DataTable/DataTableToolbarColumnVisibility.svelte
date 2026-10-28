@@ -11,7 +11,7 @@
     { key: "protocol", value: "Protocol" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" },
-    { key: "overflow", empty: true },
+    { key: "overflow", empty: true, value: "Actions" },
   ];
 
   const rows = [
