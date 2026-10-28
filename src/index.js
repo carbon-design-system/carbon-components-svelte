@@ -149,6 +149,7 @@ export { default as ListBoxSelection } from "./ListBox/ListBoxSelection.svelte";
 export { default as ListItem } from "./ListItem/ListItem.svelte";
 export { default as Loading } from "./Loading/Loading.svelte";
 export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
+export { default as LogViewer } from "./LogViewer/LogViewer.svelte";
 export { default as Menu } from "./Menu/Menu.svelte";
 export { default as MenuDivider } from "./Menu/MenuDivider.svelte";
 export { default as MenuItem } from "./Menu/MenuItem.svelte";
@@ -313,6 +314,7 @@ export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
+export { parseAnsi, stripAnsi } from "./utils/ansi.js";
 export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
 export {
   applyColumnSettings,
