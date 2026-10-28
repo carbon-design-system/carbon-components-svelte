@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>code-editor</title>
+    <g id="code-editor" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="56" y="40" width="208" height="100"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="56" y="139" width="208" height="1"></rect>
+        <rect id="active-line" fill="var(--cds-layer-accent-active, #a8a8a8)" opacity="0.4" x="57" y="68" width="207" height="14"></rect>
+        <rect id="gutter-rule" fill="var(--cds-border-subtle, #c6c6c6)" x="88" y="40" width="1" height="99"></rect>
+        <rect id="number-1" fill="var(--cds-text-disabled, #c6c6c6)" x="68" y="56" width="10" height="6"></rect>
+        <rect id="number-2" fill="var(--cds-text-secondary, #525252)" x="68" y="72" width="10" height="6"></rect>
+        <rect id="number-3" fill="var(--cds-text-disabled, #c6c6c6)" x="68" y="86" width="10" height="6"></rect>
+        <rect id="number-4" fill="var(--cds-text-disabled, #c6c6c6)" x="68" y="100" width="10" height="6"></rect>
+        <rect id="number-5" fill="var(--cds-text-disabled, #c6c6c6)" x="68" y="114" width="10" height="6"></rect>
+        <rect id="line-1" fill="var(--cds-text-secondary, #525252)" x="100" y="56" width="92" height="6"></rect>
+        <rect id="line-2" fill="var(--cds-text-secondary, #525252)" x="112" y="72" width="64" height="6"></rect>
+        <rect id="line-3" fill="var(--cds-text-secondary, #525252)" x="112" y="86" width="100" height="6"></rect>
+        <rect id="line-4" fill="var(--cds-text-secondary, #525252)" x="124" y="100" width="56" height="6"></rect>
+        <rect id="line-5" fill="var(--cds-text-secondary, #525252)" x="100" y="114" width="20" height="6"></rect>
+        <rect id="caret" fill="var(--cds-background-brand, #0f62fe)" x="178" y="70" width="2" height="10"></rect>
+    </g>
+</svg>

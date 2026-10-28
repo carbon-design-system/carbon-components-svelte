@@ -275,6 +275,15 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ClickableTile
     tags:
       - contextual-navigation
+  code-editor:
+    status: experimental
+    framework: svelte
+    thumbnailPath: './thumbnails/code-editor.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CodeEditor
   code-snippet:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/code-snippet/usage
