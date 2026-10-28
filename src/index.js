@@ -1,6 +1,11 @@
 export { default as Accordion } from "./Accordion/Accordion.svelte";
 export { default as AccordionItem } from "./Accordion/AccordionItem.svelte";
 export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svelte";
+export { default as ActionBar } from "./ActionBar/ActionBar.svelte";
+export { default as ActionBarButton } from "./ActionBar/ActionBarButton.svelte";
+export { default as ActionBarDivider } from "./ActionBar/ActionBarDivider.svelte";
+export { default as ActionBarGroup } from "./ActionBar/ActionBarGroup.svelte";
+export { default as ActionBarItem } from "./ActionBar/ActionBarItem.svelte";
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
 export { default as AILabel } from "./AILabel/AILabel.svelte";
 export { default as AILabelActions } from "./AILabel/AILabelActions.svelte";

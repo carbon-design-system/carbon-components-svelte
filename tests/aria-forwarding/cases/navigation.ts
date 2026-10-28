@@ -20,6 +20,7 @@ import SideNav from "carbon-components-svelte/UIShell/SideNav.svelte";
 import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import SkipToContent from "carbon-components-svelte/UIShell/SkipToContent.svelte";
 import type { AriaEntry } from "../contract";
+import ActionBarFixture from "../fixtures/ActionBar.test.svelte";
 import ContentSwitcherFixture from "../fixtures/ContentSwitcher.test.svelte";
 import HeaderGlobalActionFixture from "../fixtures/HeaderGlobalAction.test.svelte";
 import HeaderNavFixture from "../fixtures/HeaderNav.test.svelte";
@@ -322,6 +323,38 @@ export const navigation: AriaEntry[] = [
         props: { under: "button", iconOnly: true, ...attrs },
       }),
     target: () => first("button"),
+  },
+  {
+    name: "ActionBar",
+    render: (attrs) => render(ActionBarFixture, { props: attrs }),
+    target: () => screen.getByRole("toolbar"),
+  },
+  {
+    name: "ActionBarButton",
+    render: (attrs) =>
+      render(ActionBarFixture, { props: { under: "button", ...attrs } }),
+    target: () => first("button"),
+  },
+  {
+    name: "ActionBarButton",
+    variant: "icon only",
+    render: (attrs) =>
+      render(ActionBarFixture, {
+        props: { under: "button", iconOnly: true, ...attrs },
+      }),
+    target: () => first("button"),
+  },
+  {
+    name: "ActionBarGroup",
+    render: (attrs) =>
+      render(ActionBarFixture, { props: { under: "group", ...attrs } }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "ActionBarDivider",
+    render: (attrs) =>
+      render(ActionBarFixture, { props: { under: "divider", ...attrs } }),
+    target: () => screen.getByRole("separator"),
   },
   {
     name: "ToggleButtonGroup",
