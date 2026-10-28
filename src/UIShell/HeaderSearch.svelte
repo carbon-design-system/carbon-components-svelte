@@ -150,7 +150,7 @@
   import {
     applePlatform,
     ariaKeyShortcuts,
-    keyboardShortcut,
+    lazyKeyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
@@ -458,7 +458,7 @@
   >
     <button
       bind:this={searchButtonRef}
-      use:keyboardShortcut={shortcutParams}
+      use:lazyKeyboardShortcut={shortcutParams}
       type="button"
       aria-label={labelText}
       aria-expanded={active}

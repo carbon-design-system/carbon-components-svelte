@@ -40,16 +40,6 @@ export function platformScript(): string;
 export function parseShortcut(shortcut: string): ParsedShortcut | null;
 
 /**
- * Whether a keyboard event matches a shortcut. `mod` is Command on Apple
- * platforms and Control elsewhere. A symbol key such as `"?"` ignores Shift.
- */
-export function matchesShortcut(
-  event: KeyboardEvent,
-  shortcut: string | ReadonlyArray<string>,
-  options?: ShortcutPlatformOptions,
-): boolean;
-
-/**
  * The keys of a shortcut in the order the platform shows them: Control,
  * Option, Shift, Command on Apple platforms, and Ctrl, Meta, Alt, Shift
  * elsewhere, then the key. Modifiers are `"ctrl"`, `"alt"`, `"shift"` and
@@ -76,37 +66,29 @@ export function ariaKeyShortcuts(
 ): string;
 
 /**
- * Call `callback` when a shortcut is pressed anywhere on the page. Returns a
- * function that removes the listener. Nothing listens until you call it.
- * A shortcut without Command, Control, Alt or `mod` does not fire while the
- * user types in a field.
- */
-export function onShortcut(
-  shortcut: string | ReadonlyArray<string>,
-  callback: (event: KeyboardEvent) => void,
-): () => void;
-
-/**
  * Whether the platform is Apple's. `false` on the server and for the first
  * client render; the first subscriber in the browser reads the platform
  * after hydration.
  */
 export const applePlatform: import("svelte/store").Readable<boolean>;
 
-export type KeyboardShortcutParams = {
-  shortcut?: string | ReadonlyArray<string>;
-  run: (event: KeyboardEvent) => void;
-};
+export type { KeyboardShortcutParams } from "./keyboard-shortcut-binding.js";
+
+/** Load the shortcut binding code once, on first use. */
+export function loadShortcutBinding(): Promise<
+  typeof import("./keyboard-shortcut-binding.js")
+>;
 
 /**
- * Bind a shortcut to an element: `run` is called when it's pressed while the
- * element is connected, enabled, shown and not inert, and, while a modal
- * dialog is open, inside it. The element bound last wins a shared shortcut.
+ * `keyboardShortcut`, loaded on demand. A component with no `shortcut`
+ * never loads the binding code; the shortcut answers once it loads.
  */
-export function keyboardShortcut(
+export function lazyKeyboardShortcut(
   node: HTMLElement,
-  params: KeyboardShortcutParams,
+  params: import("./keyboard-shortcut-binding.js").KeyboardShortcutParams,
 ): {
-  update: (params: KeyboardShortcutParams) => void;
+  update: (
+    params: import("./keyboard-shortcut-binding.js").KeyboardShortcutParams,
+  ) => void;
   destroy: () => void;
 };

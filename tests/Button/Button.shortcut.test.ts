@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { loadShortcutBinding } from "../../src/utils/keyboard-shortcut.js";
 import ButtonShortcut from "./Button.shortcut.test.svelte";
 
 const press = (init: KeyboardEventInit) => {
@@ -45,6 +46,7 @@ describe("Button shortcut", () => {
 
   it("clicks the button when the shortcut is pressed", async () => {
     render(ButtonShortcut);
+    await loadShortcutBinding();
 
     const event = press({ key: "s", ctrlKey: true });
     await tick();
@@ -55,6 +57,7 @@ describe("Button shortcut", () => {
 
   it("skips the click when on:shortcut prevents it", async () => {
     render(ButtonShortcut, { props: { preventShortcut: true } });
+    await loadShortcutBinding();
 
     press({ key: "s", ctrlKey: true });
     await tick();
@@ -64,6 +67,7 @@ describe("Button shortcut", () => {
 
   it("doesn't answer while disabled", async () => {
     render(ButtonShortcut, { props: { disabled: true } });
+    await loadShortcutBinding();
 
     const event = press({ key: "s", ctrlKey: true });
     await tick();
