@@ -186,7 +186,7 @@ Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/ut
 | Toggle, ToggleSkeleton | `sm`, `default` | `md` → `default` | none |
 | Modal, ComposedModal, ConfirmModal | `xs`, `sm`, unset, `lg` | `md` → unset | none |
 | TreeView, TreeViewSkeleton | `compact` 24, `default` 32 | `xs` → `compact`, `sm` → `default` | none |
-| DataTable, Table, DataTableSkeleton, ToolbarDensity, TreeViewGrid | `compact` 24, `short` 32, `medium` 40, unset 48, `tall` 64 | `xs`, `sm`, `md`, `lg` → unset, `xl` | none |
+| DataTable, Table, DataTableSkeleton, ToolbarDensity, TreeViewGrid, Gantt | `compact` 24, `short` 32, `medium` 40, unset 48, `tall` 64 | `xs`, `sm`, `md`, `lg` → unset, `xl` | none |
 | Toolbar | `xs` 24, `sm` 32, `default` 48 | `lg` → `default` | none |
 | FileUploaderItem, FileDownloadItem | `xs`, `small` 32, `field` 40, `default` 48 | `sm` → `small`, `md` → `field`, `lg` → `default` | none |
 | ProgressBar | `sm`, `md` | `small` → `sm`, `big` → `md` | none |
