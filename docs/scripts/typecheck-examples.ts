@@ -34,6 +34,8 @@ const IGNORED = [
   /^Type '(string|number|boolean)(\[\])?' is not assignable to type/,
   // `const headers = [{ key: "name" }]` widens `key` to `string`.
   /^Type '.*\bkey: string\b.*\[\]' is not assignable to type 'readonly DataTableHeader</,
+  // `const columns = [{ key: "cost", align: "end" }]` widens `align` to `string`.
+  /^Type '.*\balign: string\b.*\[\]' is not assignable to type 'readonly DataGridColumn\[\]'/,
   // `e.target.value`: the target is typed `EventTarget`.
   /^Property '\w+' does not exist on type '(EventTarget|Element)'/,
   // `new Date(a) - new Date(b)`, and `a - b` on a `string | number` cell.

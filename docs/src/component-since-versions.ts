@@ -32,6 +32,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   CopyText: "0.114.0",
   CssGrid: "0.114.0",
   Countdown: "0.114.0",
+  DataGrid: "0.114.0",
   DataTable: "0.5.0",
   DatePicker: "0.2.0",
   DescriptionList: "0.113.0",
