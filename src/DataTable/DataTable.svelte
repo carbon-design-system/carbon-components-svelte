@@ -115,6 +115,7 @@
    * @typedef {object} DataTableEmptyHeader
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
+   * @property {DataTableValue} [value] - Name of the column for screen readers. Visually hidden. Without it, the header has no accessible name.
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
@@ -159,7 +160,7 @@
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader<Row>; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
-   * @slot {{ header: DataTableNonEmptyHeader<Row>; index: number; }} footerCell
+   * @slot {{ header: DataTableHeader<Row>; index: number; }} footerCell
    * @slot {{ header: DataTableNonEmptyHeader<Row>; }} headerDecorator
    * @slot {{ row: Row; }} rowDecorator
    */
@@ -1583,10 +1584,17 @@
                   scope="col"
                   class:bx--table-column-menu={true}
                   style={formatHeaderWidth(header)}
-                ></th>
+                  >{#if header.value}<span class:bx--visually-hidden={true}
+                      >{header.value}</span
+                    >{/if}</th
+                >
               {:else}
                 <th scope="col" style={formatHeaderWidth(header)}>
-                  <div class:bx--table-header-label={true}></div>
+                  <div class:bx--table-header-label={true}>
+                    {#if header.value}<span class:bx--visually-hidden={true}
+                        >{header.value}</span
+                      >{/if}
+                  </div>
                 </th>
               {/if}
             {:else}

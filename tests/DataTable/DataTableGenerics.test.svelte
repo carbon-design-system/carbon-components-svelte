@@ -62,7 +62,7 @@
 
   const discriminantHeaders = [
     { key: "name", value: "Name" },
-    { key: "overflow", empty: true },
+    { key: "overflow", empty: true, value: "Actions" },
   ] as const satisfies ReadonlyArray<DataTableHeader<Row>>;
 
   function readHeader(h: DataTableHeader<Row>) {
@@ -112,7 +112,12 @@
   batchSelection
   bind:selectedRowIds
   on:click:row--select={(e) => onRowSelect?.(e.detail.row)}
-/>
+>
+  <!-- The footer gets every visible header, empty ones included. -->
+  <svelte:fragment slot="footerCell" let:header>
+    {#if header.empty === true}{:else}{header.value}{/if}
+  </svelte:fragment>
+</DataTable>
 
 <DataTable
   headers={numericHeaders}

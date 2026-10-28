@@ -1485,6 +1485,30 @@ describe("DataTable", () => {
     }
   });
 
+  describe("empty header name", () => {
+    it.each([
+      ["a plain header", false],
+      ["a columnMenu header", true],
+    ])("names %s with its value, visually hidden", (_, columnMenu) => {
+      const emptyHeaders = [
+        { key: "name", value: "Name" },
+        { key: "actions", value: "Actions", empty: true, columnMenu },
+      ] as const;
+
+      render(DataTable, {
+        props: { headers: emptyHeaders, rows, sortable: true },
+      });
+
+      const header = screen.getByRole("columnheader", { name: "Actions" });
+      expect(within(header).getByText("Actions")).toHaveClass(
+        "bx--visually-hidden",
+      );
+      // The value names the column but does not make it sortable.
+      expect(screen.getByRole("button", { name: /Name/ })).toBeInTheDocument();
+      expect(within(header).queryByRole("button")).not.toBeInTheDocument();
+    });
+  });
+
   describe("empty column alignment in sticky header", () => {
     const stickyHeaders = [
       { key: "name", value: "Name" },
@@ -1518,8 +1542,9 @@ describe("DataTable", () => {
         props: { headers: columnMenuHeaders, rows, stickyHeader: true },
       });
 
-      // The header stays truly empty (narrow) and carries the class so the
-      // sticky-header rule can match it...
+      // The header stays truly empty, so Carbon's `th:empty` cap keeps it
+      // narrow, and carries the class so the sticky-header rule can match
+      // it...
       const emptyHeader = screen.getAllByRole("columnheader")[1];
       expect(emptyHeader.matches(":empty")).toBe(true);
       expect(emptyHeader).toHaveClass("bx--table-column-menu");
