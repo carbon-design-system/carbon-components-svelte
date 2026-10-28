@@ -20,6 +20,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "DataTable",
       "TreeView",
       "TreeViewGrid",
+      "Gantt",
       "StructuredList",
       "ContainedList",
       "OrderedList",

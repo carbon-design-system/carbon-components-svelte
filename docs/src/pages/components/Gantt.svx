@@ -1,0 +1,96 @@
+---
+components: ["Gantt"]
+description: A Gantt chart shows tasks as bars on a time axis beside a hierarchical task list, with progress, milestones, summaries, dependencies, and bars that can be moved and resized with a pointer or the keyboard.
+---
+
+## Basic
+
+Create a chart with `tasks` and `links`. A task is a [TreeViewGrid](/components/TreeViewGrid) node with dates: `start` and `end` are `Date` objects or `YYYY-MM-DD` strings, and `end` is the last day of the task, so a task that starts and ends on the same day takes one day. A task with `nodes` is a summary: its bar spans its children and its progress is theirs, weighted by length. Set `milestone` for a diamond on `start`, and `progress` (0 to 100) to fill a bar. A task without `start` has a row and no bar.
+
+A link is `{ from, to }`: the task `to` starts after `from` finishes. The line is dashed and red when the successor starts on or before the last day of its predecessor.
+
+Use `Gantt` when the dates are the point. For rows that share columns and have no time axis, use [TreeViewGrid](/components/TreeViewGrid). For flat records, use [DataTable](/components/DataTable).
+
+<FileSource src="/framed/Gantt/Gantt" />
+
+## Time axis
+
+### Zoom
+
+Set `zoom` to `"day"`, `"week"`, `"month"` or `"quarter"`. The header has two tiers: months over days or weeks, and years over months or quarters. Headers come from `Intl`, so `locale` sets the language, the first day of the week, and which days are the weekend. Weekends are shaded where a day is wide enough to see (day and week zoom). The today line sits at the current day; set `today` to pin it, or to `false` to hide it. Set `rangeStart` and `rangeEnd` to fix the span of the axis. By default it runs from a week before the first task to a week after the last.
+
+<FileSource src="/framed/Gantt/GanttZoom" />
+
+### Locale
+
+Set `locale` on the server as well as the client. Its default is `"en"`, not the browser's language, so a server render and the hydrated page agree. `Intl` has no format for a quarter, so `formatQuarter` makes the label.
+
+<FileSource src="/framed/Gantt/GanttLocale" />
+
+## Sizes
+
+Set `size` to control row height. The list and the bars share it, so they stay on the same rows. The sizes are the same as [DataTable](/components/DataTable#sizes).
+
+| Size | Alias | Height |
+| --- | --- | --- |
+| `"compact"` | `"xs"` | 24px |
+| `"short"` | `"sm"` | 32px |
+| `"medium"` | `"md"` | 40px |
+| unset | `"lg"` | 48px |
+| `"tall"` | `"xl"` | 64px |
+
+<FileSource src="/framed/Gantt/GanttSizes" />
+
+## Task list
+
+The list is a [TreeViewGrid](/components/TreeViewGrid). By default it has Task, Start and End columns; a summary shows the dates it derives from its children. Set `headers` for other columns and `listWidth` for the width. A column reads the task field of the same `key`, and `display` formats it.
+
+The list does not wrap text, and a cell that grows taller than the row would push the list out of line with the bars, so cells clip their text.
+
+<FileSource src="/framed/Gantt/GanttColumns" />
+
+## Editing
+
+Drag a bar to move it, or drag either end to change its first or last day. Dates snap to a day at day and week zoom and to a week at month and quarter zoom. The bar shows the new dates while you drag, and the task is written when you let go. Press <DocKbd label="Escape" /> to cancel a drag.
+
+The `change` event fires before the write and is cancelable. Its detail is `{ id, start, end, previous, mode, source }`, with `start` and `end` in the same kind as the task holds, a `Date` or a string. Call `preventDefault()` to keep the task as it is. Otherwise the chart writes the new dates into `tasks`, so bind `tasks` to receive them. The chart never moves other tasks: a successor that now starts too early is drawn dashed, and a listener can shift it from the same event.
+
+A summary, a task with `readonly: true`, and every task when `readonly` is set on the chart cannot be moved.
+
+<FileSource src="/framed/Gantt/GanttChange" />
+
+| Do | Why |
+| --- | --- |
+| Bind `tasks`, or write the dates yourself in a `change` listener | The chart writes only when the event is not canceled, and only into its own `tasks`. |
+| Cancel the event to enforce a rule, such as no start before a deadline | A canceled change leaves the bar where it was, with no flicker. |
+| Keep `start` and `end` in one kind, strings or dates | The event returns the kind the task holds. |
+| Don't edit a summary's dates | They derive from the children. Change a child. |
+
+## Keyboard
+
+The list is a treegrid with one tab stop. The bars are a second tab stop: <DocKbd label="Tab" /> enters the timeline at the last focused bar, or the first. <DocKbd label="←" /> and <DocKbd label="→" /> swap in right-to-left layouts, where <DocKbd label="←" /> moves a task later.
+
+| Focus on | Key | Action |
+| --- | --- | --- |
+| Bar | <DocKbd label="→" /> / <DocKbd label="←" /> | Move the task one day later or earlier (one week at month and quarter zoom). |
+| Bar | <DocKbd label="Shift" /> + <DocKbd label="→" /> / <DocKbd label="←" /> | Move the last day later or earlier. |
+| Bar | <DocKbd label="Alt" /> + <DocKbd label="Shift" /> + <DocKbd label="→" /> / <DocKbd label="←" /> | Move the first day later or earlier. |
+| Bar | <DocKbd label="↑" /> / <DocKbd label="↓" /> | Focus the previous or next bar. Rows without a bar are skipped. |
+| Bar | <DocKbd label="Home" /> / <DocKbd label="End" /> | Focus the first or last bar. |
+| Bar | <DocKbd label="Enter" /> / <DocKbd label="Space" /> | Select the task's row. |
+
+A milestone moves but does not resize. A summary and a locked task take no arrow keys.
+
+## Accessibility
+
+A screen reader gets a bar's dates from its name, not from the axis, which is hidden. The bar is a focusable `button` whose name is the task, its kind, its dates, its progress and the tasks it follows: "Design review, Mar 9 – 13, 2026, 60% complete, after Write the brief". The dates come from `Intl.DateTimeFormat`, so `locale` and `dateFormat` set their language and shape. Set `barLabel` to write the name yourself, and `hintText` for the hint that a bar can be moved.
+
+The task list is also a table of the same data, with a Start and an End column for each row, so the dates are available without the bars. A keyboard change is announced in a live region. The dependency lines are decoration: they are hidden from assistive technology, and the name carries what they show.
+
+## Right-to-left
+
+Time runs from the inline start to the inline end, as the rest of the layout does: under `dir="rtl"` the list is on the right and later dates are further left. The links are drawn for left-to-right and mirrored, so they follow the bars. Drag direction and the arrow keys follow the layout.
+
+## Forced colors and print
+
+In forced colors every bar has a border, progress is a system-color fill, the milestone and summary are solid, and the links keep their stroke. A dashed link marks a conflict by its dashes, not its color. Selection is a thicker `Highlight` border. When printed the chart is as wide as its axis, with nothing sticky or scrolling; choose a zoom whose axis fits the page.
