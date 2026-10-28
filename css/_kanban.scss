@@ -1,0 +1,333 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+
+/// A board of columns of cards that move by pointer, touch or keyboard.
+/// Columns are `Layer`s and cards are `Tile`s on the layer above, so the
+/// board follows the theme and any `Layer` it sits in. `--ccs-kanban-column-width`
+/// sets the column width. Give the board a height and each column scrolls
+/// on its own; without one the board grows with its tallest column.
+/// @access private
+/// @group components
+@mixin kanban {
+  .#{$prefix}--kanban {
+    position: relative;
+    min-block-size: 0;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--kanban__scroller {
+    display: flex;
+    align-items: stretch;
+    block-size: 100%;
+    gap: $carbon--spacing-05;
+    overflow-x: auto;
+    padding-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--kanban__column {
+    display: flex;
+    min-block-size: 0;
+    flex: 0 0 var(--ccs-kanban-column-width, #{to-rem(288px)});
+    flex-direction: column;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--kanban__column--collapsed {
+    flex-basis: to-rem(48px);
+    align-items: center;
+  }
+
+  .#{$prefix}--kanban__header {
+    display: flex;
+    align-items: center;
+    padding: $carbon--spacing-04 $carbon--spacing-04 $carbon--spacing-03;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--kanban__column--collapsed .#{$prefix}--kanban__header {
+    flex-direction: column;
+    padding-inline: 0;
+  }
+
+  .#{$prefix}--kanban__title {
+    @include type-style("heading-compact-01");
+
+    min-inline-size: 0;
+    flex: 1 1 auto;
+    margin: 0;
+    color: $text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  // The title runs down the strip, so it must not wrap letter by letter.
+  .#{$prefix}--kanban__column--collapsed .#{$prefix}--kanban__title {
+    flex: 0 0 auto;
+    overflow-wrap: normal;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+  }
+
+  .#{$prefix}--kanban__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: none;
+    block-size: to-rem(24px);
+    color: $icon-secondary;
+    cursor: pointer;
+    flex: none;
+    inline-size: to-rem(24px);
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  // Collapse points to the inline start in RTL as in LTR.
+  .#{$prefix}--kanban__toggle .#{$prefix}--kanban__toggle-icon {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--kanban__count {
+    flex: none;
+    margin: 0;
+  }
+
+  .#{$prefix}--kanban__body {
+    position: relative;
+    min-block-size: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: $carbon--spacing-02 $carbon--spacing-03 $carbon--spacing-03;
+    // A column scrolls without handing the scroll on to the page.
+    overscroll-behavior-y: contain;
+  }
+
+  .#{$prefix}--kanban__list {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    gap: $carbon--spacing-03;
+    list-style: none;
+  }
+
+  .#{$prefix}--kanban__list[hidden] {
+    display: none;
+  }
+
+  .#{$prefix}--kanban__empty {
+    @include type-style("label-01");
+
+    padding: $carbon--spacing-05 $carbon--spacing-03;
+    margin: 0;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  // Cards below the fold skip layout and paint until they scroll near, which
+  // keeps a column of hundreds of cards cheap. The size is a guess for the
+  // skipped ones; `auto` swaps in the real height once one has rendered.
+  .#{$prefix}--kanban__item {
+    contain-intrinsic-size: auto to-rem(88px);
+    content-visibility: auto;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--kanban__card {
+    display: flex;
+    min-block-size: 0;
+    min-inline-size: 0;
+    align-items: flex-start;
+    padding: $carbon--spacing-03 $carbon--spacing-02 $carbon--spacing-03
+      $carbon--spacing-02;
+    cursor: grab;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--kanban__card-body {
+    display: flex;
+    min-inline-size: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding-block: $carbon--spacing-02;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--kanban__card-title {
+    @include type-style("body-compact-01");
+
+    margin: 0;
+    color: $text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--kanban__card-description {
+    @include type-style("label-01");
+
+    margin: 0;
+    color: $text-secondary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--kanban__card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  // `touch-action: none` lets a finger on the handle drag the card at once
+  // instead of scrolling the column. A press elsewhere on a card scrolls, and
+  // a long press lifts it.
+  .#{$prefix}--kanban__handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: none;
+    block-size: to-rem(24px);
+    color: $icon-secondary;
+    cursor: grab;
+    flex: none;
+    inline-size: to-rem(24px);
+    touch-action: none;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--kanban__menu {
+    flex: none;
+  }
+
+  // A keyboard focus ring on the card, set by the component, since the
+  // control that holds focus is only a corner of the card.
+  .#{$prefix}--kanban__item--focus .#{$prefix}--kanban__card,
+  .#{$prefix}--kanban__item--picked .#{$prefix}--kanban__card {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--kanban__item--picked .#{$prefix}--kanban__card {
+    background-color: $layer-hover;
+  }
+
+  .#{$prefix}--kanban__item--dragging .#{$prefix}--kanban__card {
+    opacity: 0.4;
+    outline: 1px dashed $border-strong;
+    outline-offset: -1px;
+  }
+
+  // Where the dragged card would land. It sits over the gap between cards,
+  // so showing it moves nothing.
+  .#{$prefix}--kanban__indicator {
+    position: absolute;
+    z-index: 1;
+    background-color: $interactive;
+    block-size: 2px;
+    inset-inline: $carbon--spacing-03;
+    margin-block-start: -1px;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--kanban__column--target {
+    outline: 2px dashed $interactive;
+  }
+
+  .#{$prefix}--kanban__column--blocked {
+    cursor: not-allowed;
+    outline: 2px solid $support-error;
+  }
+
+  // The card under the pointer. `left` and `top` are set in script, in
+  // viewport pixels, because the card is placed with a `transform` from the
+  // top-left corner of the window in every writing direction.
+  .#{$prefix}--kanban__ghost {
+    position: fixed;
+    z-index: z("floating");
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    opacity: 0.95;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--kanban__ghost .#{$prefix}--kanban__item {
+    content-visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .#{$prefix}--kanban__card {
+      transition:
+        background-color $duration--fast-02 motion(standard, productive),
+        opacity $duration--fast-02 motion(standard, productive);
+    }
+  }
+
+  // Forced colors repaint with system colors and drop shadows and the
+  // fill that tells a lifted card from the rest. The card keeps the tile's
+  // transparent outline as its edge. The drop line opts out of the repaint
+  // so it keeps a color that stands out from the page, and the target and
+  // blocked columns differ in line style as well as color.
+  @media (forced-colors: active) {
+    .#{$prefix}--kanban__indicator {
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--kanban__column--target {
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--kanban__column--blocked {
+      outline-color: GrayText;
+      outline-style: dotted;
+    }
+
+    .#{$prefix}--kanban__item--dragging .#{$prefix}--kanban__card {
+      outline-color: GrayText;
+    }
+
+    .#{$prefix}--kanban__item--picked .#{$prefix}--kanban__card,
+    .#{$prefix}--kanban__item--focus .#{$prefix}--kanban__card {
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--kanban__handle,
+    .#{$prefix}--kanban__toggle {
+      color: ButtonText;
+    }
+
+    .#{$prefix}--kanban__handle svg,
+    .#{$prefix}--kanban__toggle svg {
+      fill: currentColor;
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--kanban__card:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--kanban__handle:hover,
+    .#{$prefix}--kanban__toggle:hover {
+      color: $text-primary;
+    }
+  }
+}
+
+@include exports("kanban") {
+  @include kanban;
+}

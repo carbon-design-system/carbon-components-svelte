@@ -51,10 +51,11 @@ describe("any-hover media query grouping", () => {
     // hides the status divider under a hovered field (_fluid-select.scss).
     // Raised again from 74 to 75 for menu shortcuts' one hover block, which
     // gives a hovered danger option's keys its color (_menu-shortcut.scss).
+    // Raised again from 75 to 76 for Kanban's one hover block (_kanban.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(75);
+    expect(blocks.length).toBeLessThanOrEqual(76);
   }, 30_000);
 });
