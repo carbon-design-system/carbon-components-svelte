@@ -174,7 +174,7 @@
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
-  import Loading from "../Loading/Loading.svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { observeModalClose } from "../Portal/portal-utils.js";
@@ -547,9 +547,8 @@
           {#if shortcut}
             <span class:bx--btn__shortcut={true}>
               {#if loading && spinnerInShortcut}
-                <Loading
+                <LoadingSpinner
                   small
-                  withOverlay={false}
                   description={loadingDescription}
                   class="bx--btn__loading"
                 />
@@ -559,9 +558,8 @@
           {/if}
         {/if}
         {#if loading && !spinnerInShortcut}
-          <Loading
+          <LoadingSpinner
             small
-            withOverlay={false}
             description={loadingDescription}
             class="bx--btn__loading"
             style={hasIconOnly ? "margin-inline-start: 0" : undefined}
@@ -618,9 +616,8 @@
         {#if shortcut}
           <span class:bx--btn__shortcut={true}>
             {#if loading && spinnerInShortcut}
-              <Loading
+              <LoadingSpinner
                 small
-                withOverlay={false}
                 description={loadingDescription}
                 class="bx--btn__loading"
               />
@@ -630,9 +627,8 @@
         {/if}
       {/if}
       {#if loading && !spinnerInShortcut}
-        <Loading
+        <LoadingSpinner
           small
-          withOverlay={false}
           description={loadingDescription}
           class="bx--btn__loading"
           style={hasIconOnly ? "margin-inline-start: 0" : undefined}
@@ -690,9 +686,8 @@
         {#if shortcut}
           <span class:bx--btn__shortcut={true}>
             {#if loading && spinnerInShortcut}
-              <Loading
+              <LoadingSpinner
                 small
-                withOverlay={false}
                 description={loadingDescription}
                 class="bx--btn__loading"
               />
@@ -702,9 +697,8 @@
         {/if}
       {/if}
       {#if loading && !spinnerInShortcut}
-        <Loading
+        <LoadingSpinner
           small
-          withOverlay={false}
           description={loadingDescription}
           class="bx--btn__loading"
           style={hasIconOnly ? "margin-inline-start: 0" : undefined}
@@ -762,9 +756,8 @@
       {#if shortcut}
         <span class:bx--btn__shortcut={true}>
           {#if loading && spinnerInShortcut}
-            <Loading
+            <LoadingSpinner
               small
-              withOverlay={false}
               description={loadingDescription}
               class="bx--btn__loading"
             />
@@ -774,9 +767,8 @@
       {/if}
     {/if}
     {#if loading && !spinnerInShortcut}
-      <Loading
+      <LoadingSpinner
         small
-        withOverlay={false}
         description={loadingDescription}
         class="bx--btn__loading"
         style={hasIconOnly ? "margin-inline-start: 0" : undefined}

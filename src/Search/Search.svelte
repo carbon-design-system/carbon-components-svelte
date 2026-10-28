@@ -145,7 +145,7 @@
   import Kbd from "../Kbd/Kbd.svelte";
   import { KBD_TRANSLATIONS, kbdKeys } from "../Kbd/kbd-keys.js";
   import { getKbdTranslations } from "../Kbd/kbd-translations.js";
-  import Loading from "../Loading/Loading.svelte";
+  import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
@@ -341,11 +341,7 @@
       >
         {#if loading}
           <span class:bx--search-magnifier-icon={true}>
-            <Loading
-              small
-              withOverlay={false}
-              description={loadingDescription}
-            />
+            <LoadingSpinner small description={loadingDescription} />
           </span>
         {:else}
           <svelte:component this={icon} class="bx--search-magnifier-icon" />
@@ -363,11 +359,7 @@
       >
         {#if loading}
           <span class:bx--search-magnifier-icon={true}>
-            <Loading
-              small
-              withOverlay={false}
-              description={loadingDescription}
-            />
+            <LoadingSpinner small description={loadingDescription} />
           </span>
         {:else}
           <svelte:component this={icon} class="bx--search-magnifier-icon" />
