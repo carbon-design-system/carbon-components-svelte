@@ -1,0 +1,151 @@
+---
+components: ["Scheduler"]
+description: Schedulers show events on a day, week or month calendar, and let people create, move and resize them with the pointer or the keyboard.
+---
+
+<script>
+  import { Scheduler } from "carbon-components-svelte";
+
+  // Times are UTC so each example reads the same for every visitor.
+  const at = (day, hour, minute = 0) =>
+    new Date(Date.UTC(2026, 9, 26 + day, hour, minute));
+
+  const events = [
+    { id: 1, title: "Incident review", start: at(0, 9), end: at(0, 10), color: "red" },
+    { id: 2, title: "Capacity planning", start: at(1, 10), end: at(1, 11, 30), color: "purple" },
+    { id: 3, title: "us-south rollout", start: at(1, 10, 30), end: at(1, 12), color: "teal" },
+    { id: 4, title: "Quarterly planning", start: at(2, 0), end: at(5, 0), allDay: true, color: "cyan" },
+    { id: 5, title: "On-call: platform", start: at(3, 14), end: at(3, 15), color: "green" },
+    { id: 6, title: "Release night", start: at(4, 22), end: at(5, 2), color: "magenta" },
+  ];
+
+  const dstEvents = [
+    // 01:30 EDT to 01:30 EST: one hour passes while the wall clock reads the same.
+    { id: 1, title: "Backup", start: new Date(Date.UTC(2026, 10, 1, 5, 30)), end: new Date(Date.UTC(2026, 10, 1, 6, 30)), color: "teal" },
+    // 00:30 EDT to 03:30 EST: four hours pass on a 25-hour day.
+    { id: 2, title: "Maintenance", start: new Date(Date.UTC(2026, 10, 1, 4, 30)), end: new Date(Date.UTC(2026, 10, 1, 8, 30)), color: "purple" },
+  ];
+</script>
+
+## Basic
+
+Pass `events` and a `date`. Each event takes a unique `id`, a `title`, a `start` and an `end`, which are `Date`s. The week view shows the week that holds `date`, scrolled to `scrollHour`.
+
+`end` is exclusive, as in iCalendar and Google Calendar: a meeting from 10:00 to 11:00 has an `end` of 11:00, and an all-day event on Monday has an `end` of Tuesday's midnight. An event without an `end` lasts no time, or one day when it is all-day, and the grid shows it one slot tall.
+
+Use `bind:view` and `bind:date` to read or set the view and the date. `bind:events` keeps the array in step when the user moves or resizes an event; see [Change events](#change-events).
+
+<FileSource src="/framed/Scheduler/SchedulerBasic" />
+
+## Views
+
+Set `view` to `"day"`, `"week"` or `"month"`. The toolbar switches views and steps through time; set `toolbar` to `false` to hide it and drive `view` and `date` yourself.
+
+### Day
+
+<Scheduler {events} view="day" date={at(1, 12)} timeZone="UTC" height="22rem" />
+
+### Month
+
+The month view shows each week as a row. Events that cover whole days run across the row as bars, and timed events show as a dot and a line of text. A day that has more than `monthEventLimit` lines (default `3`) ends with a "+N more" link, which opens that day. Clicking a day number does too.
+
+<Scheduler {events} view="month" date={at(2, 12)} timeZone="UTC" height="30rem" />
+
+## Events
+
+### All-day and multi-day
+
+Set `allDay` to show an event in the all-day row. A timed event that lasts 24 hours or more also goes in the all-day row, as in Google Calendar and Outlook, and keeps its times in the label. A timed event shorter than 24 hours that crosses midnight is split: each day shows its own part, with a dashed edge where it continues.
+
+### Overlapping
+
+Events that overlap sit side by side, as in Google Calendar. An event grows into lanes that nothing else uses at its time, so a lone meeting beside a busy hour fills the row. An event shorter than one slot renders one slot tall, and the layout counts that height, so text never overlaps.
+
+### Colors
+
+Set `color` to one of the Carbon tag colors: `"gray"`, `"red"`, `"magenta"`, `"purple"`, `"blue"` (the default), `"cyan"`, `"teal"` or `"green"`. Each event has a border and a bar on its inline-start edge as well as its tint, so it stays visible in forced colors and in print.
+
+### Read-only
+
+Set `readonly: true` on an event to stop the user moving or resizing it. It can still be opened. Set `readonly` on the scheduler to stop creating, moving and resizing events everywhere.
+
+## Create events
+
+Click a slot to pick it, or drag across slots to pick a range. The scheduler highlights the pick and fires `create` with `{ start, end, allDay, trigger }`. Dragging in the all-day row or across days in the month view picks whole days. `end` is exclusive.
+
+`create` is cancelable. Without `preventDefault()` the highlight stays, and `bind:selection` holds the range, so you can open a dialog beside it and set `selection` to `null` when it closes. With `preventDefault()` the highlight is dropped, which suits an app that adds the event at once.
+
+The scheduler never adds the event itself, since only your code knows its title and id.
+
+To create from the keyboard, move to a slot with the arrow keys and press <DocKbd label="Enter" />. <DocKbd label="Shift" /> + <DocKbd label="Up" /> or <DocKbd label="Down" /> extends the pick to a range.
+
+<FileSource src="/framed/Scheduler/SchedulerCreate" />
+
+## Change events
+
+Drag an event to move it, and drag its bottom edge to resize it. Times snap to `snapMinutes` (default `15`). The scheduler fires `change` with `{ event, start, end, allDay, kind, trigger }`, where `kind` is `"move"` or `"resize"`.
+
+`change` is cancelable. Unless you call `preventDefault()`, the scheduler replaces the event in `events` with a copy that has the new times, so `bind:events` stays current. Cancel the change to reject it, or to wait for a server before updating `events` yourself. <DocKbd label="Escape" /> during a drag cancels it with no event.
+
+A moved event keeps the time that passes between its start and its end. Moving a one-hour event over a DST change leaves it an hour long, even when the wall clock jumps.
+
+<FileSource src="/framed/Scheduler/SchedulerValidate" />
+
+With the keyboard, focus an event and press <DocKbd label="Alt" /> + <DocKbd label="Up" /> or <DocKbd label="Down" /> to move it by one snap step, <DocKbd label="Alt" /> + <DocKbd label="Left" /> or <DocKbd label="Right" /> to move it a day, and <DocKbd label="Shift" /> + <DocKbd label="Up" /> or <DocKbd label="Down" /> to move its end. An all-day event extends or shortens by a day with <DocKbd label="Shift" /> + <DocKbd label="Left" /> or <DocKbd label="Right" />. Each key press fires `change` with `trigger: "keyboard"`.
+
+## Time
+
+### Time zone
+
+Event dates are instants. The `timeZone` prop, an IANA name such as `"America/New_York"`, decides which day and clock time each one falls on, so a team in Berlin can look at a calendar in Los Angeles time. It defaults to the browser's own zone. The scheduler reads zones through `Intl`, so it adds no dependency.
+
+### Daylight saving time
+
+The grid always shows the 24 wall-clock hours, so the columns line up. On a day the clocks change, the day is 23 or 25 hours long:
+
+| Day | What the grid shows |
+| --- | --- |
+| Spring forward (23 hours) | The skipped hour is hatched and nothing can start in it. An event that spans it is taller than its length, since the grid follows the wall clock. |
+| Fall back (25 hours) | The repeated hour shows once. An event inside it keeps at least one slot of height. The column's name says it is a 25 hour day. |
+
+Times in the repeated hour belong to the first occurrence, and times in the skipped hour land after it, as `Temporal`'s default does. Moving an event never changes how long it lasts.
+
+<Scheduler events={dstEvents} view="day" date={new Date(Date.UTC(2026, 10, 1, 17))} timeZone="America/New_York" scrollHour={0} height="22rem" />
+
+### Locale and clock
+
+`locale` sets the names and the clock. The week starts on the locale's first day, which comes from the same CLDR table as the [DatePicker](/components/DatePicker); set `weekStartsOn` (`0` for Sunday) to override it. `hourFormat` is `"auto"`, `"12"` or `"24"`.
+
+<FileSource src="/framed/Scheduler/SchedulerLocale" />
+
+## Layout
+
+`slotMinutes` sets the minutes a row covers, from `5` to `60`, and `snapMinutes` the step a drag snaps to. `height` sets the scrolling grid's height, and `--ccs-scheduler-slot-height` the height of a row. The header and the all-day row stay in view as the grid scrolls. Below the `md` breakpoint a week keeps readable columns and scrolls sideways, so use the day view on phones.
+
+The line that marks the current time appears after the page loads, so server-rendered HTML matches the first client render. Set `nowIndicator` to `false` to hide it.
+
+## Accessibility
+
+Each day is a group named by its date, such as "Tuesday, October 27, 2026, today", with a list of its events. Each event is a button named by its title, times and date: "Standup, 9:00 AM to 9:30 AM, Tuesday, October 27, 2026". Use `eventLabelText`, `dayText` and `slotText` to change the wording, for example to translate it.
+
+The month view is a grid: each day is a cell in a row.
+
+Keyboard:
+
+- <DocKbd label="Tab" /> enters the grid on one day, which has a visible cursor, and then reaches that day's events.
+- <DocKbd label="Up" /> and <DocKbd label="Down" /> move the cursor by a slot, or between a day's events when one has focus. In the month view they move by a week.
+- <DocKbd label="Left" /> and <DocKbd label="Right" /> move to the previous or next day. They swap in right-to-left languages. Moving past the shown range changes `date`.
+- <DocKbd label="Home" /> and <DocKbd label="End" /> go to the first and last day of the week.
+- <DocKbd label="Page Up" /> and <DocKbd label="Page Down" /> go to the previous or next period.
+- <DocKbd label="Enter" /> or <DocKbd label="Space" /> opens the focused event, or creates at the cursor.
+
+The scheduler announces the slot under the cursor and the result of a keyboard move through a live region.
+
+A pointer press on a slot or an event is captured, so a drag keeps working when the pointer leaves the grid. Touch scrolls the page: tap a slot to pick it and an event to open it. Moving and resizing by touch is not supported yet.
+
+| Do | Why |
+| --- | --- |
+| Give every event a unique `id` | The scheduler finds an event by `id` for focus, drag and its keys. |
+| Pass `end` as the first instant after the event | A one-hour meeting ending at 11:00 and one starting at 11:00 then never overlap. |
+| Pass a fixed `date` when you render on the server | The default is the time the component is created, which can differ between the server and the browser. |
+| Keep `events` in one array and use `bind:events`, or cancel `change` | Updating `events` in a `change` handler as well as binding it applies a move twice. |

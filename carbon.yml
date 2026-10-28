@@ -1047,6 +1047,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/RelativeTime
+  scheduler:
+    name: Scheduler
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/scheduler.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Scheduler
   scroll-gradient:
     name: Scroll gradient
     status: stable

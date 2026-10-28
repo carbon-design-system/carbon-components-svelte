@@ -1,0 +1,710 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/components/tag/tokens";
+
+$ccs-scheduler-colors: ("gray", "red", "magenta", "purple", "blue", "cyan", "teal", "green");
+
+// One lane of the month view, and the room the date number takes above them.
+$ccs-scheduler-lane: to-rem(22px);
+$ccs-scheduler-date: to-rem(28px);
+
+/// Scheduler: an event calendar with day, week and month views.
+///
+/// The time grid is one tall column per day. Its height is the slot height
+/// times the slots in a day, so every row is a fixed size and a pointer
+/// position maps to a time by proportion alone. The component places an
+/// event with `top` and `height` in percent of the column, and its lane
+/// among overlapping events with `--ccs-scheduler-column`, `-columns` and
+/// `-span`. Month bars sit in the week row, not the day cell, because a bar
+/// spans cells. The header sticks to the top of the one scroll box, so its
+/// columns line up with the grid under the scroll bar.
+///
+/// `--ccs-scheduler-slot-height` sets the height of a row (1.5rem), and
+/// `--ccs-scheduler-height` the height of the scroll box.
+/// @access private
+/// @group components
+@mixin scheduler {
+  .#{$prefix}--scheduler {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    color: $text-primary;
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--scheduler__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--scheduler__nav {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--scheduler__title {
+    min-width: 0;
+    flex: 1 1 auto;
+
+    @include type-style("heading-03");
+  }
+
+  // Wide enough that three short names fit.
+  .#{$prefix}--scheduler__views {
+    flex: 0 0 auto;
+    min-width: to-rem(264px);
+  }
+
+  .#{$prefix}--scheduler__scroller {
+    position: relative;
+    overflow: auto;
+    max-height: var(--ccs-scheduler-height, #{to-rem(640px)});
+  }
+
+  // Below the md breakpoint the week keeps a readable column width and
+  // scrolls sideways under the sticky header, rather than crush seven days
+  // into a phone.
+  .#{$prefix}--scheduler__grid {
+    min-width: calc(
+      #{to-rem(48px)} + var(--ccs-scheduler-days, 7) * #{to-rem(88px)}
+    );
+  }
+
+  .#{$prefix}--scheduler__head {
+    position: sticky;
+    z-index: 4;
+    top: 0;
+    display: grid;
+    background-color: $layer;
+    border-block-end: 1px solid $border-subtle;
+    grid-template-columns: to-rem(48px) minmax(0, 1fr);
+  }
+
+  .#{$prefix}--scheduler__gutter {
+    // The corner above the axis is empty; the label row names the all-day row.
+    border-inline-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--scheduler__gutter--label {
+    padding: $carbon--spacing-02 $carbon--spacing-02 0;
+    color: $text-secondary;
+    overflow-wrap: anywhere;
+    text-align: end;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--scheduler__headings {
+    display: grid;
+    grid-template-columns: repeat(var(--ccs-scheduler-days, 7), minmax(0, 1fr));
+  }
+
+  .#{$prefix}--scheduler__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: $carbon--spacing-03 0;
+    border-inline-start: 1px solid $border-subtle;
+    gap: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--scheduler__heading-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 $carbon--spacing-03;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    gap: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--scheduler__weekday {
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--scheduler__day-number {
+    display: flex;
+    width: to-rem(32px);
+    height: to-rem(32px);
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    @include type-style("heading-03");
+  }
+
+  // The transparent outline shows in forced colors, which repaint the
+  // background that marks the current day away.
+  .#{$prefix}--scheduler__heading--today .#{$prefix}--scheduler__day-number {
+    background-color: $interactive;
+    color: $text-on-color;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--scheduler__heading--today .#{$prefix}--scheduler__weekday {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--scheduler__heading-button:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--scheduler__allday {
+    position: relative;
+    display: grid;
+    min-height: to-rem(32px);
+    padding: $carbon--spacing-02 0;
+    grid-auto-rows: to-rem(24px);
+    grid-template-columns: repeat(var(--ccs-scheduler-days, 7), minmax(0, 1fr));
+  }
+
+  .#{$prefix}--scheduler__allday-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    gap: to-rem(2px) 0;
+    grid-auto-rows: to-rem(24px);
+    grid-column: 1 / -1;
+    grid-row: 1;
+    grid-template-columns: repeat(var(--ccs-scheduler-days, 7), minmax(0, 1fr));
+    list-style: none;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scheduler__allday-list > .#{$prefix}--scheduler__item {
+    min-width: 0;
+    padding-inline: to-rem(2px);
+    pointer-events: auto;
+  }
+
+  .#{$prefix}--scheduler__body {
+    display: grid;
+    grid-template-columns: to-rem(48px) minmax(0, 1fr);
+  }
+
+  .#{$prefix}--scheduler__axis {
+    position: relative;
+    border-inline-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--scheduler__hour {
+    position: absolute;
+    padding-inline-end: $carbon--spacing-02;
+    color: $text-secondary;
+    inset-inline: 0;
+    text-align: end;
+    transform: translateY(-50%);
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--scheduler__plane {
+    position: relative;
+    display: grid;
+    height: calc(
+      var(--ccs-scheduler-slot-height, #{to-rem(24px)}) *
+        var(--ccs-scheduler-slots, 48)
+    );
+    grid-template-columns: repeat(var(--ccs-scheduler-days, 7), minmax(0, 1fr));
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .#{$prefix}--scheduler__lines {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scheduler__line {
+    flex: 1 1 0;
+    border-block-start: 1px dotted $border-subtle;
+  }
+
+  .#{$prefix}--scheduler__line--hour {
+    border-block-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--scheduler__line--hour:first-child {
+    border-block-start: 0;
+  }
+
+  .#{$prefix}--scheduler__column {
+    position: relative;
+    border-inline-start: 1px solid $border-subtle;
+    // The cursor, not the whole column, shows keyboard focus.
+    outline: none;
+  }
+
+  .#{$prefix}--scheduler__lines + .#{$prefix}--scheduler__column {
+    border-inline-start: 0;
+  }
+
+  // Wall-clock hours a spring-forward day skips: nothing can start in them.
+  .#{$prefix}--scheduler__skipped {
+    position: absolute;
+    right: 0;
+    left: 0;
+    border-block: 1px dashed $border-strong;
+    background-image: repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent to-rem(4px),
+      $layer-accent to-rem(4px),
+      $layer-accent to-rem(5px)
+    );
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scheduler__selection {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    left: 0;
+    background-color: $layer-selected;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+    pointer-events: none;
+  }
+
+  // In the all-day row and a month cell the grid or the cell places it.
+  .#{$prefix}--scheduler__allday > .#{$prefix}--scheduler__selection {
+    position: static;
+    margin: to-rem(2px);
+  }
+
+  .#{$prefix}--scheduler__cursor {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    left: 0;
+    display: none;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scheduler__column:focus-visible
+    > .#{$prefix}--scheduler__cursor {
+    display: block;
+
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--scheduler__now {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    left: 0;
+    border-block-start: 2px solid $support-error;
+    pointer-events: none;
+
+    &::before {
+      position: absolute;
+      top: to-rem(-6px);
+      width: 0;
+      height: 0;
+      border: 5px solid $support-error;
+      border-radius: 50%;
+      content: "";
+
+      @include ccs-inset-inline($start: to-rem(-5px));
+    }
+  }
+
+  .#{$prefix}--scheduler__events {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--scheduler__events > .#{$prefix}--scheduler__item {
+    position: absolute;
+    width: calc(
+      var(--ccs-scheduler-span) / var(--ccs-scheduler-columns) * 100%
+    );
+    padding-block-end: 1px;
+    padding-inline-end: to-rem(2px);
+    pointer-events: auto;
+
+    @include ccs-inset-inline(
+      $start:
+        calc(
+          var(--ccs-scheduler-column) / var(--ccs-scheduler-columns) * 100%
+        )
+    );
+  }
+
+  .#{$prefix}--scheduler__event {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: to-rem(2px) $carbon--spacing-03;
+    border: 1px solid get-token-value($tag-colors, "tag-border-blue");
+    background-color: get-token-value($tag-colors, "tag-background-blue");
+    color: get-token-value($tag-colors, "tag-color-blue");
+    cursor: pointer;
+    touch-action: pan-y;
+    user-select: none;
+
+    @include type-style("label-01");
+  }
+
+  @each $name in $ccs-scheduler-colors {
+    .#{$prefix}--scheduler__event[data-color="#{$name}"] {
+      border-color: get-token-value($tag-colors, "tag-border-#{$name}");
+      background-color: get-token-value($tag-colors, "tag-background-#{$name}");
+      color: get-token-value($tag-colors, "tag-color-#{$name}");
+    }
+  }
+
+  .#{$prefix}--scheduler__event-title {
+    overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--scheduler__event-time {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // A one-slot event has room for one line: the title.
+  .#{$prefix}--scheduler__event--compact
+    .#{$prefix}--scheduler__event-time {
+    display: none;
+  }
+
+  .#{$prefix}--scheduler__event--block {
+    // A bar on the inline-start edge marks the event the way Carbon's tag
+    // border does, and survives forced colors as a border.
+    border-inline-start-width: to-rem(4px);
+  }
+
+  .#{$prefix}--scheduler__event--bar {
+    flex-direction: row;
+    align-items: center;
+    padding-block: 0;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--block {
+    border-block-start-style: dashed;
+  }
+
+  .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--block {
+    border-block-end-style: dashed;
+  }
+
+  .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--bar,
+  .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--chip {
+    border-inline-start-style: dashed;
+  }
+
+  .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--bar,
+  .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--chip {
+    border-inline-end-style: dashed;
+  }
+
+  // A timed event in a month cell reads as a dot and a line of text. The
+  // dot is a border, so forced colors keep it.
+  .#{$prefix}--scheduler__event--chip {
+    flex-direction: row;
+    align-items: center;
+    padding-block: 0;
+    border-color: transparent;
+    background-color: transparent;
+    color: $text-primary;
+    gap: $carbon--spacing-02;
+
+    &::before {
+      width: 0;
+      height: 0;
+      flex: none;
+      border: 4px solid get-token-value($tag-colors, "tag-border-blue");
+      border-radius: 50%;
+      content: "";
+    }
+  }
+
+  @each $name in $ccs-scheduler-colors {
+    .#{$prefix}--scheduler__event--chip[data-color="#{$name}"]::before {
+      border-color: get-token-value($tag-colors, "tag-border-#{$name}");
+    }
+
+    .#{$prefix}--scheduler__event--chip[data-color="#{$name}"] {
+      border-color: transparent;
+      background-color: transparent;
+      color: $text-primary;
+    }
+  }
+
+  .#{$prefix}--scheduler__event--dragging {
+    z-index: 3;
+    cursor: grabbing;
+    opacity: 0.8;
+  }
+
+  .#{$prefix}--scheduler__event-resize {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: to-rem(8px);
+    cursor: ns-resize;
+    touch-action: none;
+  }
+
+  .#{$prefix}--scheduler__event:focus-visible {
+    z-index: 3;
+
+    @include focus-outline("outline");
+  }
+
+  // Month view.
+
+  .#{$prefix}--scheduler__month-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--scheduler__month-head {
+    display: grid;
+    border-block-end: 1px solid $border-subtle;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .#{$prefix}--scheduler__month-heading {
+    padding: $carbon--spacing-03 $carbon--spacing-03;
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--scheduler__month-body {
+    display: grid;
+    grid-template-rows: repeat(
+      var(--ccs-scheduler-weeks, 5),
+      minmax(#{$ccs-scheduler-date + 4 * $ccs-scheduler-lane}, 1fr)
+    );
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .#{$prefix}--scheduler__week {
+    position: relative;
+    display: grid;
+    border-block-end: 1px solid $border-subtle;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .#{$prefix}--scheduler__week:last-child {
+    border-block-end: 0;
+  }
+
+  .#{$prefix}--scheduler__cell {
+    min-width: 0;
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    border-inline-start: 1px solid $border-subtle;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--scheduler__cell:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--scheduler__cell[aria-selected="true"] {
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--scheduler__cell--outside .#{$prefix}--scheduler__date {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--scheduler__date {
+    display: flex;
+    width: to-rem(24px);
+    height: to-rem(24px);
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $text-primary;
+    cursor: pointer;
+    font: inherit;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--scheduler__cell--today .#{$prefix}--scheduler__date {
+    background-color: $interactive;
+    color: $text-on-color;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--scheduler__date:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--scheduler__item--month,
+  .#{$prefix}--scheduler__more {
+    position: absolute;
+    z-index: 1;
+    top: calc(
+      #{$ccs-scheduler-date} + var(--ccs-scheduler-lane, 0) * #{$ccs-scheduler-lane}
+    );
+    width: calc(var(--ccs-scheduler-span, 1) / 7 * 100% - #{to-rem(4px)});
+    height: $ccs-scheduler-lane - to-rem(2px);
+
+    @include ccs-inset-inline(
+      $start: calc(var(--ccs-scheduler-start, 0) / 7 * 100% + #{to-rem(2px)})
+    );
+  }
+
+  .#{$prefix}--scheduler__more {
+    display: flex;
+    align-items: center;
+    padding: 0 $carbon--spacing-02;
+    border: 0;
+    background: transparent;
+    color: $text-secondary;
+    cursor: pointer;
+    font: inherit;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--scheduler__more:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--scheduler--readonly .#{$prefix}--scheduler__event-resize {
+    display: none;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--scheduler__event:hover {
+      background-color: get-token-value($tag-colors, "tag-hover-blue");
+    }
+
+    @each $name in $ccs-scheduler-colors {
+      .#{$prefix}--scheduler__event[data-color="#{$name}"]:hover {
+        background-color: get-token-value($tag-colors, "tag-hover-#{$name}");
+      }
+    }
+
+    .#{$prefix}--scheduler__event--chip:hover,
+    .#{$prefix}--scheduler__more:hover,
+    .#{$prefix}--scheduler__date:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--scheduler__cell--today .#{$prefix}--scheduler__date:hover {
+      background-color: $interactive;
+    }
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--scheduler__head,
+    .#{$prefix}--scheduler__body {
+      grid-template-columns: to-rem(64px) minmax(0, 1fr);
+    }
+
+    .#{$prefix}--scheduler__grid {
+      min-width: calc(
+        #{to-rem(64px)} + var(--ccs-scheduler-days, 7) * #{to-rem(88px)}
+      );
+    }
+  }
+
+  @media (forced-colors: active) {
+    // The tinted today ring, the selection and a month cell's selection are
+    // backgrounds, which forced colors drop. Each keeps an outline.
+    .#{$prefix}--scheduler__selection,
+    .#{$prefix}--scheduler__cell[aria-selected="true"] {
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--scheduler__heading--today .#{$prefix}--scheduler__day-number,
+    .#{$prefix}--scheduler__cell--today .#{$prefix}--scheduler__date {
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--scheduler__now {
+      border-block-start-color: Highlight;
+
+      &::before {
+        border-color: Highlight;
+      }
+    }
+  }
+
+  @media print {
+    .#{$prefix}--scheduler__scroller {
+      overflow: visible;
+      max-height: none;
+    }
+
+    .#{$prefix}--scheduler__head {
+      position: static;
+    }
+
+    .#{$prefix}--scheduler__nav,
+    .#{$prefix}--scheduler__views,
+    .#{$prefix}--scheduler__cursor {
+      display: none;
+    }
+
+    .#{$prefix}--scheduler__event {
+      print-color-adjust: exact;
+    }
+
+    .#{$prefix}--scheduler__item {
+      break-inside: avoid;
+    }
+  }
+}
+
+@include exports("scheduler") {
+  @include scheduler;
+}
