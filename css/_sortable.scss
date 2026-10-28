@@ -1,0 +1,82 @@
+// New feature: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// Styles for the `sortable` action: the drop indicator and drag preview it
+/// appends to the page, the state it puts on a lifted item, and its handle.
+/// The action sets the position of both overlays with `left` and `top`,
+/// which are physical on purpose: they are viewport coordinates.
+/// @access private
+/// @group components
+@mixin sortable {
+  // A finger on a handle drags; anywhere else it scrolls.
+  [data-sortable-handle] {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  // The item that is picked up stays where it is, so a windowed list can
+  // scroll it out of view. The drop indicator shows where it will land. A
+  // fill or a lower opacity would put its links under 4.5:1.
+  [data-sortable-lifted] {
+    outline: 2px dashed $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--sortable__indicator {
+    position: fixed;
+    z-index: z("floating");
+    background-color: $focus;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--sortable__indicator[data-orientation="vertical"] {
+    height: 2px;
+  }
+
+  .#{$prefix}--sortable__indicator[data-orientation="horizontal"] {
+    width: 2px;
+  }
+
+  .#{$prefix}--sortable__ghost {
+    position: fixed;
+    z-index: z("floating");
+    overflow: hidden;
+    max-inline-size: to-rem(256px);
+    padding: $carbon--spacing-02 $carbon--spacing-05;
+    background-color: $background-inverse;
+    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
+    color: $text-inverse;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    @include type-style("body-compact-01");
+  }
+
+  @media (forced-colors: active) {
+    // Forced colors repaint a background, which would erase a bar that is
+    // only a background. A system color keeps it.
+    .#{$prefix}--sortable__indicator {
+      background-color: Highlight;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--sortable__ghost {
+      border: 1px solid CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+
+    [data-sortable-lifted] {
+      outline-color: Highlight;
+    }
+  }
+}
+
+@include exports("sortable") {
+  @include sortable;
+}
