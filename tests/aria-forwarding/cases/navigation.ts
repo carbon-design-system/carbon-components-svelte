@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import DataGrid from "carbon-components-svelte/DataGrid/DataGrid.svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
@@ -96,6 +97,18 @@ export const navigation: AriaEntry[] = [
       "aria-label":
         "hidden panels have no name until pairing; SwitchPanel.test.ts covers it",
     },
+  },
+  {
+    name: "DataGrid",
+    render: (attrs) =>
+      render(DataGrid, {
+        props: {
+          columns: [{ key: "name", title: "Name" }],
+          rows: [{ name: "Load balancer" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("grid"),
   },
   {
     name: "DataTable",
