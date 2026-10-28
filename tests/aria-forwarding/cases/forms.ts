@@ -36,6 +36,7 @@ import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+import TreeSelect from "carbon-components-svelte/TreeSelect/TreeSelect.svelte";
 import type { AriaEntry } from "../contract";
 import DatePickerInputFixture from "../fixtures/DatePickerInput.test.svelte";
 import RadioButtonGroupFixture from "../fixtures/RadioButtonGroup.test.svelte";
@@ -45,6 +46,11 @@ import TimePickerSelectFixture from "../fixtures/TimePickerSelect.test.svelte";
 
 const items = [
   { id: "1", text: "One" },
+  { id: "2", text: "Two" },
+];
+
+const treeNodes = [
+  { id: "1", text: "One", nodes: [{ id: "1a", text: "One A" }] },
   { id: "2", text: "Two" },
 ];
 
@@ -226,6 +232,34 @@ export const forms: AriaEntry[] = [
           filterable: true,
           labelText: "Fruit",
           helperText: "Pick any",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "TreeSelect",
+    render: (attrs) =>
+      render(TreeSelect, {
+        props: {
+          nodes: treeNodes,
+          labelText: "Place",
+          helperText: "Pick one",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "TreeSelect",
+    variant: "filterable",
+    render: (attrs) =>
+      render(TreeSelect, {
+        props: {
+          nodes: treeNodes,
+          filterable: true,
+          labelText: "Place",
+          helperText: "Pick one",
           ...attrs,
         },
       }),

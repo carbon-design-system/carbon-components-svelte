@@ -692,6 +692,37 @@ test.describe("right-to-left layout", () => {
     });
   });
 
+  test("indents TreeSelect rows from the inline start and mirrors the expander", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const root = page.getByTestId("treeselect");
+    await root.locator(".bx--list-box__field").click();
+
+    const rows = root.locator(".bx--list-box__menu-item__option");
+    const margins = await rows.evaluateAll((nodes) =>
+      nodes.map((node) => {
+        const style = getComputedStyle(node);
+        return [style.marginRight, style.marginLeft];
+      }),
+    );
+    // Europe, Germany one level in, North America, Antarctica.
+    expect(margins).toEqual([
+      ["16px", "16px"],
+      ["32px", "16px"],
+      ["16px", "16px"],
+      ["16px", "16px"],
+    ]);
+
+    const toggle = root.locator(".bx--tree-select__toggle svg").nth(1);
+    await expect(toggle).toBeVisible();
+    const transform = await toggle.evaluate(
+      (node) => getComputedStyle(node).transform,
+    );
+    // A collapsed expander points toward the inline end, which is left.
+    expect(transform).toBe("matrix(-1, 0, 0, 1, 0, 0)");
+  });
+
   test("puts Pagination separators and gaps on the mirrored side", async ({
     page,
   }) => {
