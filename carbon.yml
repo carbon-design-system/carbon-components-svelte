@@ -285,6 +285,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/CodeSnippet
+  color-picker:
+    name: Color picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/color-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ColorPicker
   combo-box:
     status: stable
     framework: svelte
