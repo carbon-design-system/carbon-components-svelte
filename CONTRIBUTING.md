@@ -919,6 +919,7 @@ Check [`tests/utils/`](tests/utils/) before writing a helper:
 | [`flushMacrotask`](tests/utils/flush-macrotask.ts) | Wait one macrotask for a timer or deferred listener; replaces `await new Promise((resolve) => setTimeout(resolve))` |
 | [`netListenerCalls`](tests/utils/net-listener-calls.ts) | Outstanding `window` listener count from an add/remove spy pair |
 | [`expectInlineStyle`](tests/utils/inline-style.ts) | Authored inline styles with relative units, which `toHaveStyle` resolves to `px` |
+| [`expectNoContent`](tests/utils/no-content.ts) | No child elements and no visible text. Use it instead of `toBeEmptyDOMElement`, which fails on the whitespace Svelte 3 and 4 keep |
 | [`openTooltips`](tests/utils/open-tooltips.ts) | Every portalled tooltip in the document |
 | [`setMenuMetrics`](tests/utils/set-menu-metrics.ts) | Stub the scroll metrics jsdom leaves at zero |
 | [`treeItemById`](tests/utils/tree-item-by-id.ts) | A tree node by `id`, narrowed |
@@ -953,7 +954,7 @@ Skip or avoid:
 - Large fixture setups when a focused unit test on a util suffices
 - A case another test already covers. Search the component's folder before adding one, since behaviors such as close events often have a dedicated file (`OverflowMenuClose.test.ts`) beside the main one. Extend the existing test or add a row to its table instead.
 - A compiled-CSS test for a CSS-only change. See [What belongs in tests/css](#what-belongs-in-testscss).
-- `toBeEmptyDOMElement` to test that an element is empty. Svelte 3 and 4 keep whitespace text nodes in an element that looks empty. Check for no child elements and no visible text.
+- `toBeEmptyDOMElement` to test that an element is empty. Svelte 3 and 4 keep whitespace text nodes in an element that looks empty. Use `expectNoContent`, or `el.matches(":empty")` when the CSS `:empty` selector is what the test is about.
 
 Add tests proportional to the change. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
 
