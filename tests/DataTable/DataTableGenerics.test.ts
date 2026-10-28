@@ -1,4 +1,4 @@
-import { render } from "@testing-library/svelte";
+import { render, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import DataTableGenerics from "./DataTableGenerics.test.svelte";
 
@@ -148,7 +148,11 @@ describe("DataTable Generics", () => {
       const headerCells = fourthTable.querySelectorAll("thead th");
       expect(headerCells).toHaveLength(2);
       expect(headerCells[0]?.textContent?.trim()).toBe("Name");
-      expect(headerCells[1]?.textContent?.trim()).toBe("");
+      const emptyHeader = headerCells[1];
+      assert(emptyHeader instanceof HTMLElement);
+      expect(within(emptyHeader).getByText("Actions")).toHaveClass(
+        "bx--visually-hidden",
+      );
     });
   });
 });
