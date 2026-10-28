@@ -1,0 +1,158 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// QueryBuilder: nested groups of condition rows. A row is a flow of
+/// field, operator and value cells that wraps by itself when its container
+/// is narrow, so the sentence never overflows and needs no breakpoint.
+/// @access private
+/// @group components
+@mixin query-builder {
+  .#{$prefix}--query-builder {
+    --ccs-query-builder-field-height: #{to-rem(40px)};
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder--sm {
+    --ccs-query-builder-field-height: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--query-builder__group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder__group--nested {
+    padding: $carbon--spacing-05;
+    border: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--query-builder__body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--query-builder__group-header,
+  .#{$prefix}--query-builder__condition {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  // The word that joins a row to the one above ("and", "or"). It sits level
+  // with the fields, whatever their height.
+  .#{$prefix}--query-builder__connector {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-width: to-rem(48px);
+    min-height: var(--ccs-query-builder-field-height);
+    flex: 0 0 auto;
+    align-items: center;
+    color: $text-secondary;
+  }
+
+  // Cells share a line while they fit and wrap, in source order, when they
+  // don't. Source order is tab order, so nothing is reordered.
+  .#{$prefix}--query-builder__cell {
+    min-width: 0;
+    flex: 1 1 to-rem(128px);
+  }
+
+  .#{$prefix}--query-builder__cell--logic {
+    flex: 0 1 to-rem(240px);
+  }
+
+  .#{$prefix}--query-builder__cell--value {
+    flex: 2 1 to-rem(200px);
+  }
+
+  // Two inputs for a range share the cell.
+  .#{$prefix}--query-builder__cell--pair {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder__cell--pair > * {
+    min-width: to-rem(160px);
+    flex: 1 1 0;
+  }
+
+  .#{$prefix}--query-builder__cell .#{$prefix}--form-item,
+  .#{$prefix}--query-builder__cell .#{$prefix}--select,
+  .#{$prefix}--query-builder__cell .#{$prefix}--list-box__wrapper,
+  .#{$prefix}--query-builder__cell .#{$prefix}--text-input,
+  .#{$prefix}--query-builder__cell .#{$prefix}--number,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker-container {
+    width: 100%;
+    max-width: none;
+  }
+
+  // A toggle is shorter than a field; center it on the row's fields.
+  .#{$prefix}--query-builder__cell--value .#{$prefix}--form-item {
+    min-height: var(--ccs-query-builder-field-height);
+    justify-content: center;
+  }
+
+  // An operator with nothing to choose is plain text.
+  .#{$prefix}--query-builder__static {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: var(--ccs-query-builder-field-height);
+    align-items: center;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--query-builder__actions {
+    display: flex;
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--query-builder__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder__empty {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--query-builder__summary {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-05;
+    border-inline-start: 3px solid $border-strong;
+    background: $layer;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--query-builder__summary .#{$prefix}--label {
+    margin-bottom: 0;
+  }
+
+  .#{$prefix}--query-builder__summary-text {
+    @include type-style("body-01");
+
+    color: $text-primary;
+  }
+}
+
+@include exports("query-builder") {
+  @include query-builder;
+}

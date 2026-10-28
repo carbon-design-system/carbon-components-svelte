@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>query-builder</title>
+    <g id="query-builder" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="row-1-field" fill="var(--cds-field-01, #f4f4f4)" x="56" y="38" width="56" height="24"></rect>
+        <rect id="row-1-field-border" fill="var(--cds-border-strong, #8d8d8d)" x="56" y="61" width="56" height="1"></rect>
+        <rect id="row-1-operator" fill="var(--cds-field-01, #f4f4f4)" x="118" y="38" width="48" height="24"></rect>
+        <rect id="row-1-operator-border" fill="var(--cds-border-strong, #8d8d8d)" x="118" y="61" width="48" height="1"></rect>
+        <rect id="row-1-value" fill="var(--cds-field-01, #f4f4f4)" x="172" y="38" width="92" height="24"></rect>
+        <rect id="row-1-value-border" fill="var(--cds-border-strong, #8d8d8d)" x="172" y="61" width="92" height="1"></rect>
+        <rect id="group-border" stroke="var(--cds-border-subtle, #c6c6c6)" x="56.5" y="74.5" width="207" height="68"></rect>
+        <rect id="connector" fill="var(--cds-text-secondary, #525252)" x="68" y="88" width="14" height="4"></rect>
+        <rect id="row-2-field" fill="var(--cds-field-01, #f4f4f4)" x="90" y="82" width="52" height="24"></rect>
+        <rect id="row-2-field-border" fill="var(--cds-border-strong, #8d8d8d)" x="90" y="105" width="52" height="1"></rect>
+        <rect id="row-2-operator" fill="var(--cds-field-01, #f4f4f4)" x="148" y="82" width="44" height="24"></rect>
+        <rect id="row-2-operator-border" fill="var(--cds-border-strong, #8d8d8d)" x="148" y="105" width="44" height="1"></rect>
+        <rect id="row-2-value" fill="var(--cds-field-01, #f4f4f4)" x="198" y="82" width="54" height="24"></rect>
+        <rect id="row-2-value-border" fill="var(--cds-border-strong, #8d8d8d)" x="198" y="105" width="54" height="1"></rect>
+        <rect id="connector-2" fill="var(--cds-text-secondary, #525252)" x="68" y="120" width="14" height="4"></rect>
+        <rect id="row-3-field" fill="var(--cds-field-01, #f4f4f4)" x="90" y="112" width="52" height="24"></rect>
+        <rect id="row-3-field-border" fill="var(--cds-border-strong, #8d8d8d)" x="90" y="135" width="52" height="1"></rect>
+        <rect id="row-3-operator" fill="var(--cds-field-01, #f4f4f4)" x="148" y="112" width="44" height="24"></rect>
+        <rect id="row-3-operator-border" fill="var(--cds-border-strong, #8d8d8d)" x="148" y="135" width="44" height="1"></rect>
+        <rect id="add" fill="var(--cds-link-primary, #0f62fe)" x="56" y="152" width="48" height="4"></rect>
+    </g>
+</svg>

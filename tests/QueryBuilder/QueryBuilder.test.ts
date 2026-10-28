@@ -1,0 +1,346 @@
+import { render, screen, within } from "@testing-library/svelte";
+import type { QueryGroup } from "../../src/QueryBuilder/QueryBuilder.svelte";
+import { user } from "../utils/user";
+import QueryBuilder from "./QueryBuilder.test.svelte";
+
+function bound() {
+  return JSON.parse(screen.getByTestId("bound").textContent ?? "{}");
+}
+
+const nameRow = {
+  field: "name",
+  operator: "contains",
+  value: "Acme",
+};
+
+describe("QueryBuilder", () => {
+  it("labels the root group and describes each condition by its sentence", () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [nameRow, { field: "seats", operator: "gte", value: 5 }],
+        },
+      },
+    });
+
+    expect(screen.getByRole("group", { name: "Filter" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", {
+        name: "Condition 1 of 2: Where Name contains “Acme”",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("group", {
+        name: "Condition 2 of 2: and Seats is at least 5",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("fills in ids and writes them back to the bound value", () => {
+    render(QueryBuilder, {
+      props: { value: { operator: "or", conditions: [nameRow] } },
+    });
+
+    const button = screen.getByRole("button", { name: "Remove condition 1" });
+    expect(button.id).toMatch(/^qb-q\d+-remove$/);
+  });
+
+  it("adds a condition with the first field, focuses it, and fires change", async () => {
+    const onchange = vi.fn();
+    render(QueryBuilder, { props: { onchange } });
+
+    await user.click(screen.getByRole("button", { name: "Add condition" }));
+
+    expect(bound().conditions).toEqual([
+      { field: "name", operator: "is", value: "" },
+    ]);
+    expect(onchange).toHaveBeenCalledTimes(1);
+    expect(onchange.mock.calls[0][0].conditions).toHaveLength(1);
+    expect(screen.getByRole("combobox", { name: "Field" })).toHaveFocus();
+    expect(screen.getByRole("status")).toHaveTextContent("Condition added");
+  });
+
+  it("resets the operator and value when the field changes kind", async () => {
+    render(QueryBuilder, {
+      props: { value: { operator: "and", conditions: [nameRow] } },
+    });
+
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Field" }),
+      "seats",
+    );
+
+    expect(bound().conditions[0]).toEqual({
+      field: "seats",
+      operator: "eq",
+      value: null,
+    });
+    expect(screen.getByRole("spinbutton")).toBeInTheDocument();
+  });
+
+  it("keeps the value when the field changes within a kind", async () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [
+            { field: "name", operator: "startsWith", value: "Acme" },
+          ],
+        },
+      },
+    });
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Field" }),
+      "seats",
+    );
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Field" }),
+      "name",
+    );
+
+    expect(bound().conditions[0].operator).toBe("is");
+  });
+
+  it("carries a value across operators of the same shape and reshapes it otherwise", async () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [{ field: "seats", operator: "gt", value: 7 }],
+        },
+      },
+    });
+    const operator = screen.getByRole("combobox", { name: "Operator" });
+
+    await user.selectOptions(operator, "lte");
+    expect(bound().conditions[0].value).toBe(7);
+
+    await user.selectOptions(operator, "between");
+    expect(bound().conditions[0].value).toEqual([null, null]);
+    expect(screen.getAllByRole("spinbutton")).toHaveLength(2);
+
+    await user.selectOptions(operator, "isEmpty");
+    expect(bound().conditions[0].value).toBeNull();
+    expect(screen.queryByRole("spinbutton")).not.toBeInTheDocument();
+  });
+
+  it("edits the value of each kind", async () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [
+            nameRow,
+            { field: "active", operator: "is", value: true },
+          ],
+        },
+      },
+    });
+
+    const text = screen.getByRole("textbox", { name: "Value" });
+    await user.clear(text);
+    await user.type(text, "Globex");
+    expect(bound().conditions[0].value).toBe("Globex");
+
+    await user.click(screen.getByRole("switch", { name: "Value" }));
+    expect(bound().conditions[1].value).toBe(false);
+  });
+
+  it("reorders a row and keeps focus on the button that still works", async () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [nameRow, { field: "seats", operator: "gte", value: 5 }],
+        },
+      },
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Move condition 1 down" }),
+    );
+
+    expect(bound().conditions.map((c: { field: string }) => c.field)).toEqual([
+      "seats",
+      "name",
+    ]);
+    expect(
+      screen.getByRole("button", { name: "Move condition 2 up" }),
+    ).toHaveFocus();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Condition moved to position 2 of 2",
+    );
+  });
+
+  it("removes a row and focuses the next one, or the add button when none is left", async () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [nameRow, { field: "seats", operator: "gte", value: 5 }],
+        },
+      },
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Remove condition 1" }),
+    );
+    expect(bound().conditions).toHaveLength(1);
+    expect(screen.getByRole("combobox", { name: "Field" })).toHaveFocus();
+
+    await user.click(
+      screen.getByRole("button", { name: "Remove condition 1" }),
+    );
+    expect(screen.getByRole("button", { name: "Add condition" })).toHaveFocus();
+    expect(screen.getByText("No conditions yet.")).toBeInTheDocument();
+  });
+
+  it("adds a group seeded with a condition, and stops offering groups at maxDepth", async () => {
+    render(QueryBuilder, { props: { maxDepth: 2 } });
+
+    await user.click(screen.getByRole("button", { name: "Add group" }));
+
+    expect(bound().conditions[0].operator).toBe("and");
+    expect(bound().conditions[0].conditions).toHaveLength(1);
+    expect(screen.getAllByRole("button", { name: "Add group" })).toHaveLength(
+      1,
+    );
+    expect(
+      screen.getAllByRole("button", { name: "Add condition" }),
+    ).toHaveLength(2);
+  });
+
+  it("switches a group between all and any", async () => {
+    render(QueryBuilder);
+
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Match" }),
+      "or",
+    );
+
+    expect(bound().operator).toBe("or");
+  });
+
+  it("shows an error once the value is left, and at once with showErrors", async () => {
+    const value: QueryGroup = {
+      operator: "and",
+      conditions: [{ field: "name", operator: "contains", value: "" }],
+    };
+    const { unmount } = render(QueryBuilder, { props: { value } });
+    const input = screen.getByRole("textbox", { name: "Value" });
+    expect(input).not.toHaveAttribute("aria-invalid", "true");
+
+    await user.click(input);
+    await user.tab();
+
+    expect(input).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByText("Enter a value")).toBeInTheDocument();
+    unmount();
+
+    render(QueryBuilder, { props: { value, showErrors: true } });
+    expect(screen.getByRole("textbox", { name: "Value" })).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+  });
+
+  it("flags an unknown field and offers a choice", () => {
+    render(QueryBuilder, {
+      props: {
+        showErrors: true,
+        value: {
+          operator: "and",
+          conditions: [{ field: "gone", operator: "is", value: "x" }],
+        },
+      },
+    });
+
+    expect(screen.getByRole("combobox", { name: "Field" })).toHaveValue("");
+    expect(
+      screen.getByText("Choose a field", { selector: "option" }),
+    ).toBeInTheDocument();
+  });
+
+  it("reads the query as a sentence", () => {
+    render(QueryBuilder, {
+      props: {
+        showSummary: true,
+        value: {
+          operator: "and",
+          conditions: [
+            nameRow,
+            {
+              operator: "or",
+              conditions: [
+                { field: "seats", operator: "gte", value: 5 },
+                { field: "plan", operator: "isAnyOf", value: ["team", "free"] },
+              ],
+            },
+          ],
+        },
+      },
+    });
+
+    expect(
+      screen.getByText(
+        "Where Name contains “Acme” and (Seats is at least 5 or Plan is any of Team, Free)",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Filter" })).toHaveAttribute(
+      "aria-describedby",
+      expect.stringContaining("qb-summary"),
+    );
+  });
+
+  it("takes every string from translateWithId", () => {
+    render(QueryBuilder, {
+      props: {
+        translateWithId: (id: string) => `[${id}]`,
+        value: { operator: "and", conditions: [nameRow] },
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "[addCondition]" }),
+    ).toBeInTheDocument();
+    expect(
+      within(screen.getByRole("group", { name: "[conditionLabel]" })).getByRole(
+        "combobox",
+        { name: "[operator]" },
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the English default for an id translateWithId leaves out", () => {
+    render(QueryBuilder, {
+      props: {
+        translateWithId: (id: string) =>
+          id === "addCondition" ? "Agregar condición" : undefined,
+        value: { operator: "and", conditions: [nameRow] },
+      },
+    });
+
+    expect(
+      screen.getByRole("button", { name: "Agregar condición" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add group" }),
+    ).toBeInTheDocument();
+  });
+
+  it("offers no editing when read only, and no controls when disabled", () => {
+    const value: QueryGroup = { operator: "and", conditions: [nameRow] };
+    const { unmount } = render(QueryBuilder, {
+      props: { value, readonly: true },
+    });
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    unmount();
+
+    render(QueryBuilder, { props: { value, disabled: true } });
+    for (const button of screen.getAllByRole("button")) {
+      expect(button).toBeDisabled();
+    }
+    expect(screen.getByRole("textbox", { name: "Value" })).toBeDisabled();
+  });
+});
