@@ -36,3 +36,38 @@ describe("[dir=rtl] twins", () => {
     ).toEqual([]);
   }, 30_000);
 });
+
+// `ccs-dir()` expands to `var(--ccs-rtl, $ltr) var(--ccs-ltr, $rtl)`. Only
+// a `[dir]` element sets those switches, so on a page with no `dir` both
+// fall back, and a base rule gets both values at once. Two transforms
+// cancel: that held every checked Toggle handle at the start (#5190).
+const DIR_SWITCH = /var\(--ccs-(rtl|ltr)\b/;
+const RTL_QUALIFIER = /\[dir=rtl\]|:dir\(rtl\)/;
+
+describe("ccs-dir()", () => {
+  it.each(["all.scss", "white.scss"])(
+    "only appears in a [dir=rtl] twin in %s",
+    async (entry) => {
+      const rules = parseRules(await compileEntry(entry)).filter((rule) =>
+        [...rule.decls.values()].some((value) => DIR_SWITCH.test(value)),
+      );
+
+      expect(rules.length).toBeGreaterThan(200);
+      expect(
+        rules
+          .filter(
+            (rule) =>
+              !RTL_QUALIFIER.test(rule.selector.replace(/:not\([^)]*\)/g, "")),
+          )
+          .flatMap((rule) =>
+            [...rule.decls]
+              .filter(([, value]) => DIR_SWITCH.test(value))
+              .map(
+                ([property, value]) => `${rule.selector} ${property}: ${value}`,
+              ),
+          ),
+      ).toEqual([]);
+    },
+    30_000,
+  );
+});
