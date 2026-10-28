@@ -1,10 +1,10 @@
 ---
-components: ["ColorPicker"]
+components: ["ColorPicker", "ColorInput"]
 description: Color pickers let people choose a color by dragging, typing a value, or picking a preset, and warn when the color is too close to the surface it sits on.
 ---
 
 <script>
-  import { ColorPicker } from "carbon-components-svelte";
+  import { ColorInput, ColorPicker } from "carbon-components-svelte";
 
   const swatches = [
     { value: "#da1e28", label: "Red 60" },
@@ -69,6 +69,28 @@ Set `background` to the color the chosen color sits on, and the picker warns whe
 In browsers that have the EyeDropper API (Chromium), a button beside the preview picks any color on the screen. It is not rendered on the server or in other browsers, so the layout there has no gap for it. Set `hideEyeDropper` to remove it.
 
 <ColorPicker hideEyeDropper />
+
+## Field
+
+`ColorInput` is a text field with a swatch button that opens `ColorPicker` in a popover, for a form that asks for one color. Typing a color, in any form the picker reads, writes it in `format` when the field changes, and the picker writes it as you drag. Text that is not a color marks the field invalid and leaves `value` as it was. An empty field is no color, and its swatch shows a slash.
+
+It takes the picker's props (`format`, `alpha`, `swatches`, `recent`, `background`, `minContrast`) and the text input's (`labelText`, `helperText`, `invalid`, `warn`, `disabled`, `readonly`, `size`, `name`). The popover opens from the swatch button and moves focus to the area, and <DocKbd label="Escape" /> closes it and returns focus to the button. `recent` outlives the popover, so the colors you chose are there the next time it opens.
+
+<FileSource src="/framed/ColorPicker/ColorInputField" />
+
+### Sizes
+
+Set `size` to `"sm"` or `"xl"`, as on `TextInput`.
+
+<ColorInput labelText="Accent color" size="sm" value="#8a3ffc" />
+
+### States
+
+Reflect validation and interaction states.
+
+<ColorInput labelText="Accent color" value="#8a3ffc" invalid invalidText="Pick a color with more contrast" />
+
+<ColorInput labelText="Accent color" value="#8a3ffc" disabled />
 
 ## Text fields
 
