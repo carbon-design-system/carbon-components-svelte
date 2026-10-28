@@ -1707,6 +1707,14 @@ Control sorting programmatically with `sortKey` and `sortDirection`. Set sortKey
 
 <FileSource src="/framed/DataTable/DataTableProgrammaticSorting" />
 
+## Reordering rows
+
+Let users put rows in an order that matters, such as the priority of firewall rules. The table needs no change: apply the `sortable` action to an element around it, select the body rows with `itemSelector`, and render a handle in a column through the `cell` slot. Read each row's id from its `data-row` attribute with `getId`, and set `getLabel` to the cell that names the row, so announcements do not read the whole row. Apply the `sort` event to `rows` with `applySort`.
+
+Reordering sets the order of `rows`, so leave `sortable` off the headers: a sorted table shows an order the event cannot change. See [ContainedList](/components/ContainedList#reordering) for the keyboard, connected lists, and the options.
+
+<FileSource src="/framed/DataTable/DataTableSortableRows" />
+
 ## Pagination
 
 Combine the table with Pagination.
