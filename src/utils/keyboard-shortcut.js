@@ -47,24 +47,6 @@ const KEY_ALIASES = Object.assign(Object.create(null), {
   comma: ",",
 });
 
-/** @type {Record<string, [apple: string, other: string]>} */
-const KEY_LABELS = Object.assign(Object.create(null), {
-  escape: ["Esc", "Esc"],
-  enter: ["↵", "Enter"],
-  " ": ["Space", "Space"],
-  tab: ["⇥", "Tab"],
-  backspace: ["⌫", "Backspace"],
-  delete: ["⌦", "Delete"],
-  arrowup: ["↑", "↑"],
-  arrowdown: ["↓", "↓"],
-  arrowleft: ["←", "←"],
-  arrowright: ["→", "→"],
-  pageup: ["Page Up", "Page Up"],
-  pagedown: ["Page Down", "Page Down"],
-  home: ["Home", "Home"],
-  end: ["End", "End"],
-});
-
 /** @type {Record<string, string>} */
 const ARIA_KEYS = Object.assign(Object.create(null), {
   " ": "Space",
@@ -122,12 +104,7 @@ export function platformScript() {
  * @returns {boolean}
  */
 function isKnownKey(key) {
-  return (
-    key.length === 1 ||
-    key in KEY_LABELS ||
-    key in ARIA_KEYS ||
-    FUNCTION_KEY.test(key)
-  );
+  return key.length === 1 || key in ARIA_KEYS || FUNCTION_KEY.test(key);
 }
 
 /**
@@ -268,6 +245,26 @@ export function shortcutKeys(shortcut, options = {}) {
   keys.push(parsed.key);
   return keys;
 }
+
+// Read only by `formatShortcut`, for keys `parseShortcut` accepted. As a
+// plain object it drops out of an app's bundle with `formatShortcut`.
+/** @type {Record<string, [apple: string, other: string]>} */
+const KEY_LABELS = {
+  escape: ["Esc", "Esc"],
+  enter: ["↵", "Enter"],
+  " ": ["Space", "Space"],
+  tab: ["⇥", "Tab"],
+  backspace: ["⌫", "Backspace"],
+  delete: ["⌦", "Delete"],
+  arrowup: ["↑", "↑"],
+  arrowdown: ["↓", "↓"],
+  arrowleft: ["←", "←"],
+  arrowright: ["→", "→"],
+  pageup: ["Page Up", "Page Up"],
+  pagedown: ["Page Down", "Page Down"],
+  home: ["Home", "Home"],
+  end: ["End", "End"],
+};
 
 /** @type {Record<string, [apple: string, other: string]>} */
 const MODIFIER_LABELS = {
