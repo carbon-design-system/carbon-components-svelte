@@ -148,6 +148,13 @@
   export let moreText = defaultMoreText;
 
   /**
+   * Specify the accessible name of a month day's "more" link. Start it with
+   * the visible text from `moreText`, so voice control can find it.
+   * @type {(info: { count: number; date: string }) => string}
+   */
+  export let moreLabelText = defaultMoreLabelText;
+
+  /**
    * Specify the accessible name of an event. `info` holds the event's dates
    * and times, already formatted for the locale and zone.
    * @type {(event: Item, info: SchedulerLabelInfo) => string}
@@ -259,6 +266,11 @@
   /** @param {number} count */
   function defaultMoreText(count) {
     return `+${count} more`;
+  }
+
+  /** @param {{ count: number; date: string }} info */
+  function defaultMoreLabelText(info) {
+    return `+${info.count} more ${info.count === 1 ? "event" : "events"} on ${info.date}`;
   }
 
   /**
@@ -1783,6 +1795,14 @@
                   <button
                     type="button"
                     class="bx--scheduler__more"
+                    aria-label={moreLabelText({
+                      count: week.hidden[index],
+                      date: formats.full(day),
+                    })}
+                    title={moreLabelText({
+                      count: week.hidden[index],
+                      date: formats.full(day),
+                    })}
                     style:--ccs-scheduler-start={index}
                     style:--ccs-scheduler-lane={lineLimit}
                     on:click={() => openDay(day)}

@@ -392,7 +392,11 @@ describe("Scheduler", () => {
       });
       expect(screen.getAllByRole("row")).toHaveLength(1 + 5);
       expect(screen.getAllByRole("gridcell")).toHaveLength(35);
-      await user.click(screen.getByRole("button", { name: "+1 more" }));
+      await user.click(
+        screen.getByRole("button", {
+          name: "+1 more event on Wednesday, October 28, 2026",
+        }),
+      );
       expect(onClickDay).toHaveBeenCalledTimes(1);
       expect(screen.getByTestId("view")).toHaveTextContent("month");
     });
@@ -407,7 +411,11 @@ describe("Scheduler", () => {
       render(Scheduler, {
         props: { events: crowd, view: "month", monthEventLimit: 1 },
       });
-      await user.click(screen.getByRole("button", { name: "+1 more" }));
+      await user.click(
+        screen.getByRole("button", {
+          name: "+1 more event on Wednesday, October 28, 2026",
+        }),
+      );
       expect(screen.getByTestId("view")).toHaveTextContent("day");
     });
   });

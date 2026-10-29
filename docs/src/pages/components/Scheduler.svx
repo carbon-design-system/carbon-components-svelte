@@ -47,7 +47,7 @@ Set `view` to `"day"`, `"week"` or `"month"`. The toolbar switches views and ste
 
 ### Month
 
-The month view shows each week as a row. Events that cover whole days run across the row as bars, and timed events show as a dot and a line of text. A day that has more than `monthEventLimit` lines (default `3`) ends with a "+N more" link, which opens that day. Clicking a day number does too.
+The month view shows each week as a row. Events that cover whole days run across the row as bars, and timed events show as a dot and a line of text. A day that has more than `monthEventLimit` lines (default `3`) ends with a "+N more" link, which opens that day. Its name adds the date, such as "+2 more events on Tuesday, October 27, 2026"; change it with `moreLabelText`. Clicking a day number opens the day too.
 
 <Scheduler {events} view="month" date={at(2, 12)} timeZone="UTC" height="30rem" />
 

@@ -404,6 +404,20 @@ test.describe("Scheduler month", () => {
     for (const delta of centers) expect(Math.abs(delta)).toBeLessThan(0.5);
   });
 
+  test("names each more link and keeps it on one line", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto("/scheduler.html?view=month&stress");
+    const more = page.locator(".bx--scheduler__more").first();
+    await expect(more).toHaveAccessibleName(
+      /^\+\d+ more events on \w+day, October \d+, 2026$/,
+    );
+    const lines = await page
+      .locator(".bx--scheduler__more")
+      .evaluateAll((els) => els.map((el) => el.scrollHeight - el.clientHeight));
+    expect(lines.length).toBeGreaterThan(0);
+    expect(Math.max(...lines)).toBe(0);
+  });
+
   test("keeps a timed event inside the cell of the day it starts", async ({
     page,
   }) => {

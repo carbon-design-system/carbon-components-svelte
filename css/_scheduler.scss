@@ -652,17 +652,27 @@ $ccs-scheduler-date: to-rem(28px);
     );
   }
 
+  // "More" opens the day, so it reads as a link. On one line it keeps its
+  // count whole and cuts the word after it; its name and `title` give the
+  // full text.
   .#{$prefix}--scheduler__more {
     display: flex;
     align-items: center;
     padding: 0 $carbon--spacing-02;
     border: 0;
     background: transparent;
-    color: $text-secondary;
+    color: $link-primary;
     cursor: pointer;
     font: inherit;
 
     @include type-style("label-01");
+
+    > bdi {
+      overflow: hidden;
+      min-width: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   .#{$prefix}--scheduler__more:focus-visible {
@@ -685,9 +695,13 @@ $ccs-scheduler-date: to-rem(28px);
     }
 
     .#{$prefix}--scheduler__event--chip:hover,
-    .#{$prefix}--scheduler__more:hover,
     .#{$prefix}--scheduler__date:hover {
       background-color: $layer-hover;
+    }
+
+    .#{$prefix}--scheduler__more:hover {
+      color: $link-primary-hover;
+      text-decoration: underline;
     }
 
     .#{$prefix}--scheduler__cell--today .#{$prefix}--scheduler__date:hover {
