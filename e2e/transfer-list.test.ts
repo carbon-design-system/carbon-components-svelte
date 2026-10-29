@@ -197,6 +197,45 @@ test.describe("TransferList", () => {
     expect(colors.cursor.outline).toBe("solid");
   });
 
+  test("draws one edge per list and one line per divider in forced colors", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName === "webkit", "WebKit does not force colors");
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/transfer-list-states.html");
+    const group = page.getByRole("group", { name: "Default" });
+    await expect(group).toBeVisible();
+
+    const edges = await group
+      .getByRole("listbox", { name: "Available" })
+      .evaluate((menu) => {
+        const probe = document.createElement("div");
+        document.body.append(probe);
+        probe.style.backgroundColor = "Canvas";
+        const canvas = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        const [first, second] = [
+          ...menu.querySelectorAll(".bx--list-box__menu-item__option"),
+        ].map((option) => getComputedStyle(option));
+        return {
+          canvas,
+          list: getComputedStyle(menu.parentElement as Element).borderTopStyle,
+          menu: getComputedStyle(menu).outlineStyle,
+          firstTop: first.borderTopColor,
+          firstBottom: first.borderBottomColor,
+          secondTop: second.borderTopColor,
+        };
+      });
+
+    expect(edges.list).toBe("solid");
+    expect(edges.menu).toBe("none");
+    expect(edges.firstTop).toBe(edges.canvas);
+    // One line between two rows: the lower row's top edge.
+    expect(edges.firstBottom).toBe(edges.canvas);
+    expect(edges.secondTop).not.toBe(edges.canvas);
+  });
+
   test("dims every row when disabled", async ({ page }) => {
     await page.goto("/transfer-list-states.html");
     const color = (group: string, text: string) =>

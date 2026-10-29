@@ -345,6 +345,33 @@
       color: GrayText;
     }
 
+    // The list's border is its edge, and one 1px line divides two rows.
+    // Forced colors repaint Carbon's transparent edges: the menu's popup
+    // outline, the first row's top edge, and each row's bottom edge, which
+    // doubled every divider. The focus ring still wins on `:focus`. A
+    // marked row is not forced, so its transparent edges stay and a
+    // `Canvas` one would cut its `Highlight` fill.
+    .#{$prefix}--transfer-list__list > .#{$prefix}--list-box__menu {
+      outline: none;
+    }
+
+    .#{$prefix}--transfer-list__list
+      .#{$prefix}--list-box__menu-item:not(.#{$prefix}--list-box__menu-item--active)
+      > .#{$prefix}--list-box__menu-item__option {
+      border-bottom-color: Canvas;
+    }
+
+    .#{$prefix}--transfer-list__list
+      .#{$prefix}--list-box__menu-item:first-of-type:not(.#{$prefix}--list-box__menu-item--active)
+      > .#{$prefix}--list-box__menu-item__option,
+    .#{$prefix}--transfer-list__list
+      > .#{$prefix}--list-box__menu
+      > [aria-hidden="true"]
+      + .#{$prefix}--list-box__menu-item:not(.#{$prefix}--list-box__menu-item--active)
+      > .#{$prefix}--list-box__menu-item__option {
+      border-top-color: Canvas;
+    }
+
     .#{$prefix}--transfer-list__list--dropping > .#{$prefix}--list-box__menu::after {
       background-color: Highlight;
     }
