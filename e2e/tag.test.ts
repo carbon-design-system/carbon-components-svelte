@@ -65,4 +65,29 @@ test.describe("Tag", () => {
       });
     }
   });
+
+  test("a truncated tag with tabindex -1 adds no tab stop in a TagSet", async ({
+    page,
+  }) => {
+    const region = page.getByTestId("tag-focus-order");
+    // Each label overflows the 208px cap, so it renders a tooltip trigger.
+    await expect(region.locator(".bx--tag__label-tooltip")).toHaveCount(3);
+
+    await region.getByRole("button", { name: "Before" }).focus();
+    const order: string[] = [];
+    for (let step = 0; step < 5; step++) {
+      // biome-ignore lint/performance/noAwaitInLoops: each Tab depends on the last
+      await page.keyboard.press("Tab");
+      const name = await page.evaluate(
+        () => document.activeElement?.textContent?.trim() ?? "",
+      );
+      order.push(name);
+      if (name === "After") break;
+    }
+
+    expect(order).toEqual([
+      "status:active AND region:us-south AND service:storage three",
+      "After",
+    ]);
+  });
 });

@@ -153,6 +153,20 @@
     truncated && !showTruncationTooltip && !showHostTooltip
       ? truncationLabel
       : undefined;
+  // As in Carbon v11, `tabindex` applies to the tooltip trigger, the element
+  // that takes focus, so a composite parent can pass `-1` to keep a
+  // truncated tag out of the tab order.
+  $: rootProps = showTruncationTooltip
+    ? omitTabindex($$restProps)
+    : $$restProps;
+  $: filterRootProps = showTruncationTooltip
+    ? omitTabindex(filterProps)
+    : filterProps;
+
+  /** @param {Record<string, any>} props */
+  function omitTabindex({ tabindex, ...props }) {
+    return props;
+  }
 
   /** @param {boolean} overflowing */
   function setTruncated(overflowing) {
@@ -231,7 +245,7 @@
     class:bx--tag--warm-gray={type === "warm-gray"}
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
-    {...filterProps}
+    {...filterRootProps}
     style:max-width={maxWidth}
     on:click
     on:mouseover
@@ -247,6 +261,7 @@
       <TooltipDefinition
         class="bx--tag__label-tooltip"
         tooltipText={truncationLabel}
+        tabindex={$$restProps.tabindex}
         portalTooltip
       >
         <span bind:this={labelRef} id="{id}-label" class:bx--tag__label={true}>
@@ -427,7 +442,7 @@
     class:bx--tag--warm-gray={type === "warm-gray"}
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
-    {...$$restProps}
+    {...rootProps}
     style:max-width={maxWidth}
     on:mouseover
     on:mouseenter
@@ -442,6 +457,7 @@
       <TooltipDefinition
         class="bx--tag__label-tooltip"
         tooltipText={truncationLabel}
+        tabindex={$$restProps.tabindex}
         portalTooltip
       >
         <span bind:this={labelRef} class:bx--tag__label={true}> <slot /> </span>
