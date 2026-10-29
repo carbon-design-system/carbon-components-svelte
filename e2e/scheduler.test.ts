@@ -359,6 +359,26 @@ test.describe("Scheduler month", () => {
     await expect(page.getByRole("button", { name: /^Offsite/ })).toBeVisible();
   });
 
+  test("centers each weekday over the date numbers below it", async ({
+    page,
+  }) => {
+    const centers = await page.evaluate(() => {
+      const center = (el: Element) => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const box = range.getBoundingClientRect();
+        return (box.left + box.right) / 2;
+      };
+      const week = document.querySelector(".bx--scheduler__week") as Element;
+      const dates = [...week.querySelectorAll(".bx--scheduler__date")];
+      return [
+        ...document.querySelectorAll(".bx--scheduler__month-heading"),
+      ].map((heading, index) => center(dates[index]) - center(heading));
+    });
+    expect(centers).toHaveLength(7);
+    for (const delta of centers) expect(Math.abs(delta)).toBeLessThan(0.5);
+  });
+
   test("keeps a timed event inside the cell of the day it starts", async ({
     page,
   }) => {

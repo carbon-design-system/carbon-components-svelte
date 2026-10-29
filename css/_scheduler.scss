@@ -540,9 +540,13 @@ $ccs-scheduler-date: to-rem(28px);
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
+  // The weekday centers over the date number, as in the week view. The
+  // transparent edge matches the cell's border, so both center on one x.
   .#{$prefix}--scheduler__month-heading {
     padding: $carbon--spacing-03 $carbon--spacing-03;
+    border-inline-start: 1px solid transparent;
     color: $text-secondary;
+    text-align: center;
 
     @include type-style("label-01");
   }
@@ -594,6 +598,7 @@ $ccs-scheduler-date: to-rem(28px);
     height: to-rem(24px);
     align-items: center;
     justify-content: center;
+    margin-inline: auto;
     padding: 0;
     border: 0;
     border-radius: 50%;
