@@ -111,6 +111,8 @@ carbon-components
 
 Tags cap at 208px, as in Carbon v11. A longer label truncates with an ellipsis, and a tooltip shows the full text on hover and focus. Set `maxWidth` to change the cap, for example `"100%"` to fit the container. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
 
+The tooltip trigger is a tab stop. Inside a widget that is one tab stop, such as a card or a grid cell, set `tabindex="-1"` on the tag. The trigger then leaves the tab order, and the tag keeps the full text as its accessible name.
+
 <Stack gap={5}>
   <div>
     <div>Default (208px)</div>
