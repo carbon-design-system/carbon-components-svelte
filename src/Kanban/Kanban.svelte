@@ -198,7 +198,7 @@
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
-    applyMove,
+    applyKanbanMove,
     edgeSpeed,
     finalIndex,
     groupByColumn,
@@ -547,7 +547,7 @@
     };
     if (!dispatch("move", detail, { cancelable: true })) return false;
     items = /** @type {ReadonlyArray<Item>} */ (
-      applyMove(items, { id: cardId, to, index })
+      applyKanbanMove(items, { id: cardId, to, index })
     );
     return true;
   }

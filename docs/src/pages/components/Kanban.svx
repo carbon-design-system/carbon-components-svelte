@@ -41,7 +41,7 @@ Each card has a menu with "Move up", "Move down", and "Move to" each other colum
 
 The `move` event fires once per move, on drop, with the card's `id`, the column it left (`from`) and entered (`to`), its new position among the other cards of `to` (`index`, where `0` is the top), where it was (`fromIndex`), and how it moved (`source`: `"pointer"`, `"keyboard"`, or `"menu"`).
 
-The event is cancelable. Call `preventDefault()` to refuse the move, or to hold it until a server call settles and then set `items` yourself.
+The event is cancelable. Call `preventDefault()` to refuse the move, or to hold it until a server call settles. Then apply it with `applyKanbanMove(items, event.detail)`, which returns a new array and leaves yours and its cards as they were. It runs on the server too.
 
 <FileSource src="/framed/Kanban/KanbanMoveEvent" />
 

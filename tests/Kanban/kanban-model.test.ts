@@ -1,6 +1,6 @@
 // @vitest-environment node
 import {
-  applyMove,
+  applyKanbanMove,
   edgeSpeed,
   finalIndex,
   groupByColumn,
@@ -40,43 +40,39 @@ describe("groupByColumn", () => {
   });
 });
 
-describe("applyMove", () => {
+describe("applyKanbanMove", () => {
   it("moves across columns to an index, without touching the input", () => {
     const frozen = Object.freeze(items.map((item) => Object.freeze(item)));
-    const next = applyMove(frozen, { id: "2", to: "a", index: 1 });
+    const next = applyKanbanMove(frozen, { id: "2", to: "a", index: 1 });
     expect(layout(next)).toEqual(["1234", "", "5"]);
     expect(next.find((item) => item.id === "2")?.column).toBe("a");
     expect(layout(frozen)).toEqual(["134", "2", "5"]);
   });
 
   it("reads index as the final position when reordering in a column", () => {
-    expect(layout(applyMove(items, { id: "1", to: "a", index: 2 }))).toEqual([
-      "341",
-      "2",
-      "5",
-    ]);
-    expect(layout(applyMove(items, { id: "4", to: "a", index: 0 }))).toEqual([
-      "413",
-      "2",
-      "5",
-    ]);
+    expect(
+      layout(applyKanbanMove(items, { id: "1", to: "a", index: 2 })),
+    ).toEqual(["341", "2", "5"]);
+    expect(
+      layout(applyKanbanMove(items, { id: "4", to: "a", index: 0 })),
+    ).toEqual(["413", "2", "5"]);
   });
 
   it("appends to an empty column and clamps a large index", () => {
     const single = [{ id: "1", column: "a" }];
-    expect(applyMove(single, { id: "1", to: "b", index: 9 })).toEqual([
+    expect(applyKanbanMove(single, { id: "1", to: "b", index: 9 })).toEqual([
       { id: "1", column: "b" },
     ]);
-    expect(layout(applyMove(items, { id: "1", to: "c", index: 99 }))).toEqual([
-      "34",
-      "2",
-      "51",
-    ]);
+    expect(
+      layout(applyKanbanMove(items, { id: "1", to: "c", index: 99 })),
+    ).toEqual(["34", "2", "51"]);
   });
 
   it("returns the same array when the card stays where it stands in its column", () => {
-    expect(applyMove(items, { id: "3", to: "a", index: 1 })).toBe(items);
-    expect(applyMove(items, { id: "nope", to: "a", index: 0 })).toBe(items);
+    expect(applyKanbanMove(items, { id: "3", to: "a", index: 1 })).toBe(items);
+    expect(applyKanbanMove(items, { id: "nope", to: "a", index: 0 })).toBe(
+      items,
+    );
   });
 });
 

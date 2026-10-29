@@ -1,5 +1,11 @@
 <script>
-  import { Box, Kanban, Stack, Text } from "carbon-components-svelte";
+  import {
+    applyKanbanMove,
+    Box,
+    Kanban,
+    Stack,
+    Text,
+  } from "carbon-components-svelte";
 
   const columns = [
     { id: "queued", title: "Queued" },
@@ -26,15 +32,7 @@
       log = `Refused: ${move.id} must run before it is released.`;
       return;
     }
-    // `index` counts the other cards of the target column.
-    const rest = items.filter((item) => item.id !== move.id);
-    const moved = {
-      ...items.find((item) => item.id === move.id),
-      column: move.to,
-    };
-    const before = rest.filter((item) => item.column === move.to)[move.index];
-    const at = before ? rest.indexOf(before) : rest.length;
-    items = [...rest.slice(0, at), moved, ...rest.slice(at)];
+    items = applyKanbanMove(items, move);
     log = `Saved ${move.id} in ${move.to} (${move.source}).`;
   }
 </script>

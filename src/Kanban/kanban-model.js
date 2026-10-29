@@ -97,7 +97,7 @@ export function slotAt(count, midpoint, point) {
  * @param {{ id: string, to: string, index: number }} move
  * @returns {ReadonlyArray<Item>}
  */
-export function applyMove(items, { id, to, index }) {
+export function applyKanbanMove(items, { id, to, index }) {
   const from = items.findIndex((item) => item.id === id);
   if (from === -1) return items;
   const card = items[from];

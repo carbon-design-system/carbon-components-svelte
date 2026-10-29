@@ -41,8 +41,15 @@ export function slotAt(
   point: number,
 ): number;
 
-/** Apply a move without mutating; returns `items` when nothing changes. */
-export function applyMove<Item extends KanbanItemLike>(
+/**
+ * Apply a Kanban `move` event's detail to `items`, as the board does.
+ * Returns a new array and leaves `items` and its cards unchanged; returns
+ * `items` itself when the card lands where it was or is not found. Pure,
+ * so it runs on the server.
+ * @example
+ * items = applyKanbanMove(items, event.detail);
+ */
+export function applyKanbanMove<Item extends KanbanItemLike>(
   items: ReadonlyArray<Item>,
   move: { id: string; to: string; index: number },
 ): ReadonlyArray<Item>;
