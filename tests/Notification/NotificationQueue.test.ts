@@ -913,7 +913,12 @@ describe("NotificationQueue", () => {
     it("resumes when the focused toast is removed", async () => {
       const { component } = render(NotificationQueueTest);
       getQueue(component.queue).add({ title: "Saved" });
-      getQueue(component.queue).add({ title: "Synced", timeout: 1000 });
+      // No control in "Synced", so focus leaves the queue.
+      getQueue(component.queue).add({
+        title: "Synced",
+        timeout: 1000,
+        hideCloseButton: true,
+      });
       await tick();
 
       const saved = screen.getByText("Saved").closest('[role="status"]');
@@ -1042,6 +1047,129 @@ describe("NotificationQueue", () => {
       });
       window.dispatchEvent(event);
       expect(event.defaultPrevented).toBe(false);
+    });
+  });
+
+  describe("focus after close", () => {
+    function closeButton(title: string) {
+      const toast = screen
+        .getByText(title)
+        .closest<HTMLElement>(".bx--toast-notification");
+      assert(toast);
+      return within(toast).getByRole("button", { name: "Close notification" });
+    }
+
+    async function setup(
+      position: "top-right" | "bottom-right",
+      notifications: Parameters<NotificationQueueComponent["add"]>[0][],
+    ) {
+      const { component } = render(NotificationQueueTest, {
+        props: { position },
+      });
+      const queue = getQueue(component.queue);
+      const before = document.createElement("button");
+      document.body.append(before);
+      onTestFinished(() => before.remove());
+      before.focus();
+
+      for (const notification of notifications) queue.add(notification);
+      await tick();
+      await tick();
+      return { queue, before };
+    }
+
+    // Top positions show the newest toast first: C, B, A.
+    it.each([
+      { position: "top-right", close: "B", next: "A" },
+      { position: "top-right", close: "A", next: "B" },
+      { position: "bottom-right", close: "B", next: "C" },
+      { position: "bottom-right", close: "C", next: "B" },
+    ] as const)(
+      "moves focus from $close to $next ($position)",
+      async ({ position, close, next }) => {
+        await setup(position, [{ title: "A" }, { title: "B" }, { title: "C" }]);
+        closeButton(close).focus();
+
+        await fireEvent.click(closeButton(close));
+        await tick();
+
+        expect(screen.queryByText(close)).not.toBeInTheDocument();
+        expect(closeButton(next)).toHaveFocus();
+      },
+    );
+
+    it("moves focus to the next toast when Escape closes an actionable one", async () => {
+      const { queue, before } = await setup("top-right", [
+        { title: "A", actionable: true },
+      ]);
+      before.focus();
+      queue.add({ title: "B", actionable: true });
+      await tick();
+      await tick();
+      expect(closeButton("B")).toHaveFocus();
+
+      await fireEvent.keyDown(closeButton("B"), { key: "Escape" });
+      await tick();
+
+      expect(closeButton("A")).toHaveFocus();
+    });
+
+    it("moves focus to the next toast when an action closes its toast", async () => {
+      const { before } = await setup("top-right", [
+        { title: "A", action: { label: "Undo A" } },
+        { title: "B", action: { label: "Undo B" } },
+      ]);
+      await fireEvent.keyDown(before, { key: "F6" });
+
+      await fireEvent.click(screen.getByRole("button", { name: "Undo B" }));
+      await tick();
+
+      expect(screen.getByRole("button", { name: "Undo A" })).toHaveFocus();
+    });
+
+    it("returns focus to where F6 took it from once the queue empties", async () => {
+      const { before } = await setup("top-right", [
+        { title: "A" },
+        { title: "B" },
+      ]);
+      await fireEvent.keyDown(before, { key: "F6" });
+
+      await fireEvent.click(closeButton("B"));
+      await tick();
+      expect(closeButton("A")).toHaveFocus();
+
+      await fireEvent.click(closeButton("A"));
+      await tick();
+      expect(screen.queryByRole("region")).not.toBeInTheDocument();
+      expect(before).toHaveFocus();
+    });
+
+    it("keeps focus in place when a timeout closes a toast", async () => {
+      const { before } = await setup("top-right", [
+        { title: "A", timeout: 1000 },
+        { title: "B" },
+      ]);
+
+      vi.advanceTimersByTime(1000);
+      await tick();
+
+      expect(screen.queryByText("A")).not.toBeInTheDocument();
+      expect(before).toHaveFocus();
+    });
+
+    it("keeps focus in place when a toast closes without focus", async () => {
+      const { queue, before } = await setup("top-right", [
+        { id: "a", title: "A" },
+        { id: "b", title: "B" },
+        { id: "c", title: "C" },
+      ]);
+      await fireEvent.keyDown(before, { key: "F6" });
+      closeButton("A").focus();
+
+      queue.remove("b");
+      await tick();
+
+      expect(closeButton("A")).toHaveFocus();
     });
   });
 });

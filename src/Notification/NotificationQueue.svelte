@@ -117,6 +117,7 @@
   import { setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import { focusActionableNotification } from "../utils/dismissible-notification.js";
+  import { returnFocus } from "../utils/focus.js";
   import NotificationActionButton from "./NotificationActionButton.svelte";
   import ToastNotification from "./ToastNotification.svelte";
 
@@ -209,6 +210,7 @@
     const index = notifications.findIndex((n) => n.id === id);
     if (index === -1) return false;
 
+    moveFocusFrom(index);
     notifications.splice(index, 1);
     notifications = notifications;
     settleFocus();
@@ -221,6 +223,34 @@
    */
   export function clear() {
     notifications = [];
+  }
+
+  /**
+   * When the toast at `index` holds focus, move it to the next toast in
+   * visual order, else the previous one, else back to where F6 took it
+   * from. The toast's own focus return then finds focus taken and stays
+   * put, so the user keeps their place in the queue.
+   * @param {number} index
+   */
+  function moveFocusFrom(index) {
+    if (!queueRef) return;
+    const toasts = Array.from(
+      queueRef.querySelectorAll(".bx--toast-notification"),
+    );
+    const current = toasts[index];
+    if (!current?.contains(document.activeElement)) return;
+
+    const nearest = [
+      ...toasts.slice(index + 1),
+      ...toasts.slice(0, index).reverse(),
+    ];
+    for (const toast of nearest) {
+      if (toast instanceof HTMLElement) focusActionableNotification(toast);
+      if (!current.contains(document.activeElement)) return;
+    }
+
+    returnFocus(prevFocus, current);
+    prevFocus = null;
   }
 
   // Firefox and Safari fire no `focusout` when they remove the focused toast.

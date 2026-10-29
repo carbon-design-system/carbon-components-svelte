@@ -75,6 +75,29 @@ test.describe("NotificationQueue", () => {
     await expect(add).toBeFocused();
   });
 
+  test("closing a toast moves focus to the next toast", async ({ page }) => {
+    const origin = page.getByTestId("nq-t2");
+    await page.getByTestId("nq-t1").click();
+    await origin.click();
+    const closeT1 = toastWithText(page, "T1").getByRole("button", {
+      name: "Close notification",
+    });
+    const closeT2 = toastWithText(page, "T2").getByRole("button", {
+      name: "Close notification",
+    });
+
+    await page.keyboard.press("F6");
+    await expect(closeT2).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    await expect(toastWithText(page, "T2")).toHaveCount(0);
+    await expect(closeT1).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    await expect(page.locator(".bx--toast-notification")).toHaveCount(0);
+    await expect(origin).toBeFocused();
+  });
+
   test("Shift+F6 returns focus from the queue", async ({ page }) => {
     const add = page.getByTestId("nq-action");
     await add.click();
