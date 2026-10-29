@@ -51,6 +51,9 @@
   /** Set to `true` when the event ends after this slice. */
   export let continuesAfter = false;
 
+  /** Set to `true` to mark an event the user cannot move or resize. */
+  export let readonly = false;
+
   /** Set to `true` to show the bottom resize handle. */
   export let resizable = false;
 
@@ -62,6 +65,8 @@
 
   /** Specify the tab index. */
   export let tabindex = -1;
+
+  import EditOff from "../icons/EditOff.svelte";
 </script>
 
 <div
@@ -83,6 +88,9 @@
   {tabindex}
 >
   <span class="bx--scheduler__event-line">
+    {#if readonly}
+      <EditOff class="bx--scheduler__event-icon" />
+    {/if}
     <span class="bx--scheduler__event-title" dir="auto">{title}</span>
     {#if timeText && variant !== "block"}
       <span class="bx--scheduler__event-time" dir={timeDir}>{timeText}</span>

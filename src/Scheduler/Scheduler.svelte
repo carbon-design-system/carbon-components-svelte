@@ -161,6 +161,7 @@
    * @property {string} date - The date of a single-day event, such as "Tuesday, October 21, 2026".
    * @property {string} start - The start time, or the start date and time of a multi-day event.
    * @property {string} end - The end time, or the end date and time of a multi-day event.
+   * @property {boolean} readonly - The event sets `readonly`, so the user cannot move or resize it.
    */
 
   /**
@@ -265,14 +266,15 @@
    * @param {SchedulerLabelInfo} info
    */
   function defaultEventLabelText(event, info) {
+    const status = info.readonly ? ", read-only" : "";
     if (info.allDay) {
       return info.multiDay
-        ? `${event.title}, all day, ${info.start} to ${info.end}`
-        : `${event.title}, all day, ${info.date}`;
+        ? `${event.title}, all day, ${info.start} to ${info.end}${status}`
+        : `${event.title}, all day, ${info.date}${status}`;
     }
     return info.multiDay
-      ? `${event.title}, ${info.start} to ${info.end}`
-      : `${event.title}, ${info.start} to ${info.end}, ${info.date}`;
+      ? `${event.title}, ${info.start} to ${info.end}${status}`
+      : `${event.title}, ${info.start} to ${info.end}, ${info.date}${status}`;
   }
 
   /**
@@ -577,6 +579,7 @@
       if (described) return described;
       const multiDay = record.lastDay > record.startDay;
       const allDayEvent = record.banner;
+      const locked = Boolean(record.event.readonly);
       /** @type {SchedulerLabelInfo} */
       let info;
       let timeText = "";
@@ -588,6 +591,7 @@
           date: formats.full(record.startDay),
           start: formats.full(record.startDay),
           end: formats.full(record.lastDay),
+          readonly: locked,
         };
       } else {
         const startTime = formats.time(record.startMs);
@@ -604,6 +608,7 @@
           end: multiDay
             ? `${formats.full(record.lastDay)}, ${endTime}`
             : endTime,
+          readonly: locked,
         };
       }
       described = {
@@ -1542,6 +1547,7 @@
                     timeDir={localeDir}
                     label={described.label}
                     color={bar.record.event.color}
+                    readonly={!readonly && Boolean(bar.record.event.readonly)}
                     continuesBefore={bar.continuesBefore}
                     continuesAfter={bar.continuesAfter}
                     dragging={preview !== null && preview.id === bar.record.id}
@@ -1648,6 +1654,8 @@
                         timeDir={localeDir}
                         label={described.label}
                         color={segment.record.event.color}
+                        readonly={!readonly &&
+                          Boolean(segment.record.event.readonly)}
                         continuesBefore={segment.continuesBefore}
                         continuesAfter={segment.continuesAfter}
                         compact={segment.visualEnd - segment.startMin <
@@ -1758,6 +1766,8 @@
                         timeDir={localeDir}
                         label={described.label}
                         color={bar.record.event.color}
+                        readonly={!readonly &&
+                          Boolean(bar.record.event.readonly)}
                         continuesBefore={bar.continuesBefore}
                         continuesAfter={bar.continuesAfter}
                         dragging={preview !== null &&

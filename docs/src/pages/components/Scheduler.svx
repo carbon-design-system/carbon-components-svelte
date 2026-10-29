@@ -67,7 +67,7 @@ Set `color` to one of the Carbon tag colors: `"gray"`, `"red"`, `"magenta"`, `"p
 
 ### Read-only
 
-Set `readonly: true` on an event to stop the user moving or resizing it. It can still be opened. Set `readonly` on the scheduler to stop creating, moving and resizing events everywhere.
+Set `readonly: true` on an event to stop the user moving or resizing it. It shows the read-only icon and adds "read-only" to its name. It can still be opened. Set `readonly` on the scheduler to stop creating, moving and resizing events everywhere.
 
 ## Create events
 

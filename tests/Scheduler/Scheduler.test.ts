@@ -37,6 +37,23 @@ const cursorCell = () =>
   ) as HTMLElement;
 
 describe("Scheduler", () => {
+  it("marks a read-only event with an icon and its name", async () => {
+    const { rerender } = render(Scheduler, {
+      props: {
+        events: [{ ...events[2], readonly: true }],
+      },
+    });
+    const event = screen.getByRole("button", {
+      name: "Lunch, 12:00 PM to 1:00 PM, Wednesday, October 28, 2026, read-only",
+    });
+    const icon = event.querySelector(".bx--scheduler__event-icon");
+    expect(icon).toHaveAttribute("aria-hidden", "true");
+
+    // A read-only grid locks every event, so none needs the mark.
+    await rerender({ readonly: true });
+    expect(event.querySelector(".bx--scheduler__event-icon")).toBeNull();
+  });
+
   it("shows the week, the events and their accessible names", () => {
     render(Scheduler, { props: { events } });
 

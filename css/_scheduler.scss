@@ -441,6 +441,14 @@ $ccs-scheduler-date: to-rem(28px);
     white-space: nowrap;
   }
 
+  // A read-only event leads with the icon read-only fields use, so the
+  // state does not rest on its gray fill.
+  .#{$prefix}--scheduler__event-icon {
+    flex: none;
+    margin-inline-end: $carbon--spacing-02;
+    fill: currentColor;
+  }
+
   .#{$prefix}--scheduler__event-title + .#{$prefix}--scheduler__event-time,
   .#{$prefix}--scheduler__event-time + .#{$prefix}--scheduler__event-time {
     margin-inline-start: $carbon--spacing-02;
