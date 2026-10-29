@@ -713,3 +713,20 @@
 @include exports('data-table-toolbar-sticky') {
   @include data-table-toolbar-sticky;
 }
+
+// carbon-components-svelte patch (collapsed toolbar search)
+/// A collapsed expandable search is a fixed square, and its input has a
+/// percentage width that adds no minimum size. Beside a persistent search
+/// at full width, flexbox shrank it below its magnifier, which then ran
+/// past the toolbar's end.
+/// @access private
+/// @group data-table
+@mixin data-table-toolbar-search-collapsed {
+  .#{$prefix}--toolbar-search-container-expandable:not(.#{$prefix}--toolbar-search-container-active) {
+    flex-shrink: 0;
+  }
+}
+
+@include exports('data-table-toolbar-search-collapsed') {
+  @include data-table-toolbar-search-collapsed;
+}
