@@ -197,6 +197,22 @@ test.describe("TransferList", () => {
     expect(colors.cursor.outline).toBe("solid");
   });
 
+  test("dims every row when disabled", async ({ page }) => {
+    await page.goto("/transfer-list-states.html");
+    const color = (group: string, text: string) =>
+      page
+        .getByRole("group", { name: group })
+        .locator(".bx--list-box__menu-item__option", { hasText: text })
+        .evaluate((option) => getComputedStyle(option).color);
+
+    const disabledItem = await color("Default", "Configure single sign-on");
+    expect(await color("Disabled", "Billing administrator")).toBe(disabledItem);
+    expect(await color("Disabled", "Audit log viewer")).toBe(disabledItem);
+    expect(await color("Default", "Billing administrator")).not.toBe(
+      disabledItem,
+    );
+  });
+
   test("stays quick with 2,000 items", async ({ page }) => {
     await page.goto("/transfer-list-large.html");
     await expect(available(page)).toBeVisible();

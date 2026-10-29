@@ -153,12 +153,22 @@
     pointer-events: none;
   }
 
+  // Carbon colors the option inside each row, so the row's own color does
+  // not reach the text. A marked row keeps its fill, as a disabled
+  // MultiSelect's checked rows do.
   .#{$prefix}--transfer-list__list--disabled {
     cursor: not-allowed;
 
     .#{$prefix}--list-box__menu-item {
-      color: $text-disabled;
       pointer-events: none;
+    }
+
+    .#{$prefix}--list-box__menu-item__option {
+      color: $text-disabled;
+    }
+
+    .#{$prefix}--list-box__menu-item__selected-icon {
+      fill: $icon-disabled;
     }
   }
 
@@ -329,6 +339,10 @@
       .#{$prefix}--list-box__menu-item__option {
         color: GrayText;
       }
+    }
+
+    .#{$prefix}--transfer-list__list--disabled .#{$prefix}--list-box__menu-item__option {
+      color: GrayText;
     }
 
     .#{$prefix}--transfer-list__list--dropping > .#{$prefix}--list-box__menu::after {
