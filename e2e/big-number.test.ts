@@ -141,3 +141,23 @@ for (const dir of ["ltr", "rtl"]) {
     });
   }
 }
+
+// The trend icon's hidden description sits at the row's inline start. A
+// -1px inline margin on `.bx--visually-hidden` put it 1px past the right
+// edge under `dir="rtl"`, so the page scrolled sideways.
+test("BigNumber's hidden trend text stays inside the page in RTL", async ({
+  page,
+}) => {
+  await page.goto("/big-number.html");
+  await page.evaluate(() => document.fonts.ready);
+
+  const { hidden, scrollWidth, clientWidth } = await page.evaluate(() => ({
+    hidden: document.querySelectorAll(
+      '[dir="rtl"] .bx--big-number__value-row > .bx--visually-hidden',
+    ).length,
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(hidden).toBeGreaterThan(0);
+  expect(scrollWidth).toBe(clientWidth);
+});
