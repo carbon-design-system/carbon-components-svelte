@@ -35,6 +35,17 @@ describe("Kanban", () => {
     expect(stops[0]).toBe(handle("Alpha"));
   });
 
+  it("adds and removes collapse buttons when collapsible changes", async () => {
+    const { rerender } = render(Kanban, { collapsible: false });
+    const toggles = () =>
+      screen.queryAllByRole("button", { name: /^Collapse/ });
+    expect(toggles()).toHaveLength(0);
+    await rerender({ collapsible: true });
+    expect(toggles()).toHaveLength(3);
+    await rerender({ collapsible: false });
+    expect(toggles()).toHaveLength(0);
+  });
+
   it("announces moves politely", () => {
     render(Kanban);
     // Moves are status, not errors that block the user.

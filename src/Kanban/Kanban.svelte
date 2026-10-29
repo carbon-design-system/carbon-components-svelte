@@ -1038,9 +1038,14 @@
       : [...collapsedColumns, columnId];
   }
 
-  /** @param {KanbanColumn} column */
-  function canCollapse(column) {
-    return collapsible && column.collapsible !== false;
+  /**
+   * Takes `enabled` as an argument: the template only re-runs a call when
+   * one of the names in it changes.
+   * @param {KanbanColumn} column
+   * @param {boolean} enabled
+   */
+  function canCollapse(column, enabled) {
+    return enabled && column.collapsible !== false;
   }
 
   /**
@@ -1102,7 +1107,7 @@
         data-kanban-column={column.id}
       >
         <div class:bx--kanban__header={true}>
-          {#if canCollapse(column)}
+          {#if canCollapse(column, collapsible)}
             <button
               type="button"
               class:bx--kanban__toggle={true}
