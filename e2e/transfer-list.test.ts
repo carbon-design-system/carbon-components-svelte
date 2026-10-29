@@ -236,6 +236,44 @@ test.describe("TransferList", () => {
     expect(edges.secondTop).not.toBe(edges.canvas);
   });
 
+  test("draws one focus ring: on the cursor row, or on an empty list", async ({
+    page,
+  }) => {
+    await page.goto("/transfer-list.html");
+    const outline = (locator: ReturnType<typeof available>) =>
+      locator.evaluate((el) => getComputedStyle(el).outlineStyle);
+
+    await available(page).focus();
+    await page.keyboard.press("ArrowDown");
+    const cursor = available(page).locator(
+      ".bx--list-box__menu-item--highlighted",
+    );
+    await expect(cursor).toHaveText("Deploy to production");
+    expect(await outline(cursor)).toBe("solid");
+    expect(await outline(available(page))).toBe("none");
+
+    await page
+      .getByRole("searchbox", { name: "Search available items" })
+      .fill("zzz");
+    await available(page).focus();
+    expect(await outline(available(page))).toBe("solid");
+  });
+
+  test("puts the cursor on the row a drag lifts", async ({ page }) => {
+    await page.goto("/transfer-list.html");
+    const row = available(page).getByText("Manage API keys");
+    const from = await row.boundingBox();
+    if (!from) throw new Error("list is not laid out");
+
+    await page.mouse.move(from.x + 20, from.y + 10);
+    await page.mouse.down();
+    await page.mouse.move(from.x + 20, from.y + 60, { steps: 4 });
+    await expect(
+      available(page).locator(".bx--list-box__menu-item--highlighted"),
+    ).toHaveText("Manage API keys");
+    await page.mouse.up();
+  });
+
   test("dims every row when disabled", async ({ page }) => {
     await page.goto("/transfer-list-states.html");
     const color = (group: string, text: string) =>

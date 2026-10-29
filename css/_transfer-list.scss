@@ -97,6 +97,12 @@
     }
   }
 
+  // While a row holds the cursor, its ring shows where focus is, so the
+  // list draws none around it.
+  .#{$prefix}--transfer-list__list--cursor > .#{$prefix}--list-box__menu:focus {
+    outline: none;
+  }
+
   .#{$prefix}--transfer-list--sm .#{$prefix}--transfer-list__list > .#{$prefix}--list-box__menu {
     block-size: calc(var(--ccs-transfer-list-rows, 8) * #{to-rem(32px)});
   }

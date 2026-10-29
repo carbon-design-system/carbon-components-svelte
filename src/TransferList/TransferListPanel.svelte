@@ -509,6 +509,8 @@
         press.dragging = true;
         const row = rows[press.index];
         dragIds = marked.has(row.id) ? targets() : [row.id];
+        // The press focused the list; put the cursor on the lifted row.
+        activeId = row.id;
         dispatch("dragstart", { ids: dragIds, event });
       }
       dispatch("dragmove", { ids: dragIds, event });
@@ -592,6 +594,7 @@
     class:bx--transfer-list__list--dropping={dropAt !== null}
     class:bx--transfer-list__list--disabled={disabled}
     class:bx--transfer-list__list--invalid={invalid}
+    class:bx--transfer-list__list--cursor={focused && activeIndex !== -1}
     style:--ccs-transfer-list-rows={visibleRows}
     style:--ccs-transfer-list-drop="{dropAt === null
       ? 0
