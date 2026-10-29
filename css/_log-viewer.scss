@@ -95,23 +95,50 @@
     flex: none;
     border-block-end: 1px solid $border-subtle;
 
+    // Groups sit 16px apart; wrapped rows touch, as each fills its height.
     .#{$prefix}--toolbar-content {
       flex-wrap: wrap;
       align-items: center;
-      gap: $carbon--spacing-02;
+      justify-content: flex-start;
+      column-gap: $carbon--spacing-05;
     }
   }
 
+  // Icon buttons in a group touch, as in DataTable's toolbar.
+  .#{$prefix}--log-viewer__group {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--log-viewer__actions {
+    margin-inline-start: auto;
+  }
+
   .#{$prefix}--log-viewer__search {
-    min-width: to-rem(160px);
-    flex: 1 1 to-rem(224px);
+    position: relative;
+    min-width: to-rem(224px);
+    flex: 0 1 to-rem(320px);
   }
 
   // ToolbarSearch's proportions in a small toolbar: the toolbar places the
   // magnifier 16px in, so the text starts 48px in. ToolbarSearch gets this
-  // from Search's `xl` size, which also draws a 20px close icon.
+  // from Search's `xl` size, which also draws a 20px close icon. The end
+  // leaves room for the clear button and the two toggles after it.
   .#{$prefix}--log-viewer__search .#{$prefix}--search-input {
+    padding-inline-end: to-rem(96px);
     padding-inline-start: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--log-viewer__search .#{$prefix}--search-close {
+    @include ccs-inset-inline($end: $carbon--spacing-10);
+  }
+
+  .#{$prefix}--log-viewer__search-options {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    display: flex;
+    @include ccs-inset-inline($end: 0);
   }
 
   .#{$prefix}--log-viewer__count {
@@ -130,12 +157,6 @@
     .#{$prefix}--tag {
       margin: 0;
     }
-  }
-
-  .#{$prefix}--log-viewer__divider {
-    width: 1px;
-    height: $carbon--spacing-06;
-    background-color: $border-subtle;
   }
 
   .#{$prefix}--log-viewer__body {

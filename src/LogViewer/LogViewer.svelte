@@ -968,63 +968,71 @@
       aria-label={toolbarLabelText}
     >
       <div class:bx--toolbar-content={true}>
-        <Search
-          size="sm"
-          id="{id}-search"
-          searchClass="bx--toolbar-search-container-persistent bx--log-viewer__search"
-          bind:value={query}
-          labelText={searchLabelText}
-          hideLabel
-          placeholder={searchPlaceholder}
-          {invalid}
-          on:keydown={handleSearchKeydown}
-        />
-        <span class:bx--log-viewer__count={true} aria-hidden="true">
-          <!-- The count has letters, so its direction follows its own text: "1 of 12" stays in order on an RTL page. -->
-          <bdi>
-            {#if invalid}
-              {invalidRegexText}
-            {:else if query !== ""}
-              {searchTotal > 0
-                ? matchCountText(matchIndex + 1, searchTotal)
-                : noMatchesText}
-            {/if}
-          </bdi>
-        </span>
-        <Button
-          kind="ghost"
-          size="sm"
-          icon={ArrowUp}
-          iconDescription={previousMatchText}
-          disabled={searchTotal === 0}
-          on:click={() => stepMatch(-1)}
-        />
-        <Button
-          kind="ghost"
-          size="sm"
-          icon={ArrowDown}
-          iconDescription={nextMatchText}
-          disabled={searchTotal === 0}
-          on:click={() => stepMatch(1)}
-        />
-        <Button
-          kind="ghost"
-          size="sm"
-          icon={LetterAa}
-          iconDescription={caseSensitiveText}
-          isSelected={caseSensitive}
-          on:click={() => (caseSensitive = !caseSensitive)}
-        />
-        <Button
-          kind="ghost"
-          size="sm"
-          icon={RegularExpression}
-          iconDescription={regexText}
-          isSelected={regex}
-          on:click={() => (regex = !regex)}
-        />
-        <span class:bx--log-viewer__divider={true} aria-hidden="true"></span>
+        <!-- The toggles change how the query is read, so they sit in the
+             field, after the clear button. -->
+        <div class:bx--log-viewer__search={true}>
+          <Search
+            size="sm"
+            id="{id}-search"
+            searchClass="bx--toolbar-search-container-persistent"
+            bind:value={query}
+            labelText={searchLabelText}
+            hideLabel
+            placeholder={searchPlaceholder}
+            {invalid}
+            on:keydown={handleSearchKeydown}
+          />
+          <div class:bx--log-viewer__search-options={true}>
+            <Button
+              kind="ghost"
+              size="sm"
+              icon={LetterAa}
+              iconDescription={caseSensitiveText}
+              isSelected={caseSensitive}
+              on:click={() => (caseSensitive = !caseSensitive)}
+            />
+            <Button
+              kind="ghost"
+              size="sm"
+              icon={RegularExpression}
+              iconDescription={regexText}
+              isSelected={regex}
+              on:click={() => (regex = !regex)}
+            />
+          </div>
+        </div>
+        <div class:bx--log-viewer__group={true}>
+          <span class:bx--log-viewer__count={true} aria-hidden="true">
+            <!-- The count has letters, so its direction follows its own text: "1 of 12" stays in order on an RTL page. -->
+            <bdi>
+              {#if invalid}
+                {invalidRegexText}
+              {:else if query !== ""}
+                {searchTotal > 0
+                  ? matchCountText(matchIndex + 1, searchTotal)
+                  : noMatchesText}
+              {/if}
+            </bdi>
+          </span>
+          <Button
+            kind="ghost"
+            size="sm"
+            icon={ArrowUp}
+            iconDescription={previousMatchText}
+            disabled={searchTotal === 0}
+            on:click={() => stepMatch(-1)}
+          />
+          <Button
+            kind="ghost"
+            size="sm"
+            icon={ArrowDown}
+            iconDescription={nextMatchText}
+            disabled={searchTotal === 0}
+            on:click={() => stepMatch(1)}
+          />
+        </div>
         <div
+          class:bx--log-viewer__group={true}
           class:bx--log-viewer__levels={true}
           role="group"
           aria-label={levelsLabelText}
@@ -1046,25 +1054,29 @@
             >
           {/each}
         </div>
-        <span class:bx--log-viewer__divider={true} aria-hidden="true"></span>
-        <Button
-          kind="ghost"
-          size="sm"
-          icon={TextWrap}
-          iconDescription={wrapText}
-          isSelected={wrap}
-          on:click={() => (wrap = !wrap)}
-        />
-        <CopyButton
-          kind="ghost"
-          size="sm"
-          iconDescription={copyButtonText}
-          feedback={copiedText}
-          errorFeedback={copyErrorText}
-          copy={copyFromButton}
-          on:copy={dispatchCopy}
-          on:copy:error={(event) => dispatchCopyError(event.detail.error)}
-        />
+        <div
+          class:bx--log-viewer__group={true}
+          class:bx--log-viewer__actions={true}
+        >
+          <Button
+            kind="ghost"
+            size="sm"
+            icon={TextWrap}
+            iconDescription={wrapText}
+            isSelected={wrap}
+            on:click={() => (wrap = !wrap)}
+          />
+          <CopyButton
+            kind="ghost"
+            size="sm"
+            iconDescription={copyButtonText}
+            feedback={copiedText}
+            errorFeedback={copyErrorText}
+            copy={copyFromButton}
+            on:copy={dispatchCopy}
+            on:copy:error={(event) => dispatchCopyError(event.detail.error)}
+          />
+        </div>
       </div>
     </div>
   {/if}
