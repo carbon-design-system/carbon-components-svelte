@@ -299,7 +299,7 @@ test.describe("QueryBuilder", () => {
 });
 
 test.describe("QueryBuilder layout", () => {
-  // Left edges of a part in every row that has it, in tree order.
+  // One edge of every match, in tree order.
   function edges(page: Page, selector: string, side: "left" | "right") {
     return page
       .locator(selector)
@@ -315,6 +315,36 @@ test.describe("QueryBuilder layout", () => {
     const ends = await edges(page, ".bx--query-builder__actions", "right");
     expect(ends.length).toBeGreaterThan(5);
     for (const end of ends) expect(Math.abs(end - ends[0])).toBeLessThan(0.5);
+  });
+
+  test("lines up the columns of every row, offset only by the indent", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    // Each column's x from the row's own connector: equal on every row of
+    // every level when the columns have fixed widths.
+    const rows = await page
+      .locator(".bx--query-builder__condition")
+      .evaluateAll((els) =>
+        els.map((row) => {
+          const left = (selector: string) =>
+            row.querySelector(selector)?.getBoundingClientRect().left ??
+            Number.NaN;
+          const start = left(".bx--query-builder__connector");
+          return {
+            field: left(".bx--query-builder__cell--field") - start,
+            operator: left(".bx--query-builder__cell--operator") - start,
+            value: left(".bx--query-builder__cell--value") - start,
+          };
+        }),
+      );
+    expect(rows.length).toBeGreaterThan(4);
+    for (const row of rows) {
+      for (const part of ["field", "operator", "value"] as const) {
+        expect(Math.abs(row[part] - rows[0][part])).toBeLessThan(0.5);
+      }
+    }
   });
 });
 

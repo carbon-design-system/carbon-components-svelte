@@ -2,13 +2,17 @@
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// QueryBuilder: nested groups of condition rows. A row is a flow of
-/// field, operator and value cells that wraps by itself when its container
-/// is narrow, so the sentence never overflows and needs no breakpoint.
+/// connector, field, operator and value cells. The connector, field and
+/// operator have fixed widths, so they line up across the rows of a level,
+/// and the value fills the rest. When the value no longer fits, it wraps
+/// to the next line by itself, so the row needs no breakpoint.
 /// @access private
 /// @group components
 @mixin query-builder {
   .#{$prefix}--query-builder {
     --ccs-query-builder-field-height: #{to-rem(40px)};
+    --ccs-query-builder-connector-width: #{to-rem(48px)};
+    --ccs-query-builder-column-width: #{to-rem(192px)};
 
     display: flex;
     min-width: 0;
@@ -57,26 +61,22 @@
     @include type-style("body-compact-01");
 
     display: flex;
-    min-width: to-rem(48px);
     min-height: var(--ccs-query-builder-field-height);
-    flex: 0 0 auto;
+    flex: 0 0 var(--ccs-query-builder-connector-width);
     align-items: center;
     color: $text-secondary;
   }
 
   // Cells share a line while they fit and wrap, in source order, when they
-  // don't. Source order is tab order, so nothing is reordered.
+  // don't. Source order is tab order, so nothing is reordered. A cell
+  // shrinks only when it is alone on a line narrower than its width.
   .#{$prefix}--query-builder__cell {
     min-width: 0;
-    flex: 1 1 to-rem(128px);
-  }
-
-  .#{$prefix}--query-builder__cell--logic {
-    flex: 0 1 to-rem(240px);
+    flex: 0 1 var(--ccs-query-builder-column-width);
   }
 
   .#{$prefix}--query-builder__cell--value {
-    flex: 2 1 to-rem(200px);
+    flex: 1 1 to-rem(160px);
   }
 
   // Two inputs for a range share the cell.
