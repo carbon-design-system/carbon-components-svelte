@@ -223,6 +223,30 @@ test.describe("Kanban pointer", () => {
   });
 });
 
+test.describe("Kanban layout", () => {
+  // These checks can move to the layout helpers of #5240 once it merges.
+  test("keeps the board and its columns inside their boxes at 320px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto("/kanban.html?long");
+    // A count's hidden label in a column past the fold does not widen
+    // the page.
+    const size = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      client: document.documentElement.clientWidth,
+    }));
+    expect(size.scroll).toBe(size.client);
+    // A long tag does not widen its column.
+    const widths = await page
+      .locator("[data-kanban-column]")
+      .evaluateAll((columns) =>
+        columns.map((column) => column.getBoundingClientRect().width),
+      );
+    expect(new Set(widths)).toEqual(new Set([288]));
+  });
+});
+
 test.describe("Kanban modes", () => {
   test("keeps the drop line and the picked card visible in forced colors", async ({
     page,

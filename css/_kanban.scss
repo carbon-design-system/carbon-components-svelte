@@ -21,7 +21,11 @@
     block-size: 100%;
   }
 
+  // The scroller is the containing block for absolutely positioned text in
+  // the columns, such as a count's visually hidden label. Without it, that
+  // text escapes the scroll box and widens the page.
   .#{$prefix}--kanban__scroller {
+    position: relative;
     display: flex;
     align-items: stretch;
     block-size: 100%;
@@ -30,9 +34,12 @@
     padding-block-end: $carbon--spacing-03;
   }
 
+  // `min-inline-size: 0` keeps the column at its width when a card holds
+  // wide content, such as a tag at its 208px maximum.
   .#{$prefix}--kanban__column {
     display: flex;
     min-block-size: 0;
+    min-inline-size: 0;
     flex: 0 0 var(--ccs-kanban-column-width, #{to-rem(288px)});
     flex-direction: column;
     outline: 2px solid transparent;

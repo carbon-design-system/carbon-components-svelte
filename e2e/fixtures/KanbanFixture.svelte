@@ -36,6 +36,16 @@
     },
     { id: "e", column: "review", title: "Fix the focus ring" },
     { id: "f", column: "done", title: "Ship the changelog" },
+    ...(params.has("long")
+      ? [
+          {
+            id: "g",
+            column: "review",
+            title: "Rotate the keys",
+            tags: [{ text: "A tag name long enough to truncate in a card" }],
+          },
+        ]
+      : []),
   ];
   let collapsedColumns = [];
   let moves = [];
