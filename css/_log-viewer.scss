@@ -88,26 +88,30 @@
     @include log-viewer-palette(dark);
   }
 
+  // The toolbar is DataTable's small toolbar: its items fill its height with
+  // no padding, and the search field has no border of its own, so the
+  // toolbar's border is the field's bottom edge. It wraps in a narrow viewer.
   .#{$prefix}--log-viewer__toolbar {
-    display: flex;
     flex: none;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: $carbon--spacing-02 $carbon--spacing-03;
     border-block-end: 1px solid $border-subtle;
-    gap: $carbon--spacing-02;
+
+    .#{$prefix}--toolbar-content {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: $carbon--spacing-02;
+    }
   }
 
   .#{$prefix}--log-viewer__search {
-    display: flex;
     min-width: to-rem(160px);
     flex: 1 1 to-rem(224px);
-    align-items: center;
-    gap: $carbon--spacing-03;
+  }
 
-    .#{$prefix}--search {
-      flex: 1 1 auto;
-    }
+  // ToolbarSearch's proportions in a small toolbar: the toolbar places the
+  // magnifier 16px in, so the text starts 48px in. ToolbarSearch gets this
+  // from Search's `xl` size, which also draws a 20px close icon.
+  .#{$prefix}--log-viewer__search .#{$prefix}--search-input {
+    padding-inline-start: $carbon--spacing-09;
   }
 
   .#{$prefix}--log-viewer__count {

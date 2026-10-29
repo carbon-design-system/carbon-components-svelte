@@ -958,15 +958,20 @@
   {...wrapperProps}
 >
   {#if !hideToolbar}
+    <!-- DataTable's toolbar layout: items fill its height, and the search
+         field's bottom edge is the toolbar's border. -->
     <div
+      class:bx--table-toolbar={true}
+      class:bx--table-toolbar--small={true}
       class:bx--log-viewer__toolbar={true}
       role="toolbar"
       aria-label={toolbarLabelText}
     >
-      <div class:bx--log-viewer__search={true}>
+      <div class:bx--toolbar-content={true}>
         <Search
           size="sm"
           id="{id}-search"
+          searchClass="bx--toolbar-search-container-persistent bx--log-viewer__search"
           bind:value={query}
           labelText={searchLabelText}
           hideLabel
@@ -986,81 +991,81 @@
             {/if}
           </bdi>
         </span>
+        <Button
+          kind="ghost"
+          size="sm"
+          icon={ArrowUp}
+          iconDescription={previousMatchText}
+          disabled={searchTotal === 0}
+          on:click={() => stepMatch(-1)}
+        />
+        <Button
+          kind="ghost"
+          size="sm"
+          icon={ArrowDown}
+          iconDescription={nextMatchText}
+          disabled={searchTotal === 0}
+          on:click={() => stepMatch(1)}
+        />
+        <Button
+          kind="ghost"
+          size="sm"
+          icon={LetterAa}
+          iconDescription={caseSensitiveText}
+          isSelected={caseSensitive}
+          on:click={() => (caseSensitive = !caseSensitive)}
+        />
+        <Button
+          kind="ghost"
+          size="sm"
+          icon={RegularExpression}
+          iconDescription={regexText}
+          isSelected={regex}
+          on:click={() => (regex = !regex)}
+        />
+        <span class:bx--log-viewer__divider={true} aria-hidden="true"></span>
+        <div
+          class:bx--log-viewer__levels={true}
+          role="group"
+          aria-label={levelsLabelText}
+        >
+          {#each LOG_LEVELS as level (level)}
+            <SelectableTag
+              id="{id}-level-{level}"
+              size="sm"
+              type={level === "error"
+                ? "red"
+                : level === "warn"
+                  ? "magenta"
+                  : level === "info"
+                    ? "blue"
+                    : "gray"}
+              selected={levels.includes(level)}
+              on:change={(event) => toggleLevel(level, event.detail.selected)}
+              >{levelText(level)} {counts[level]}</SelectableTag
+            >
+          {/each}
+        </div>
+        <span class:bx--log-viewer__divider={true} aria-hidden="true"></span>
+        <Button
+          kind="ghost"
+          size="sm"
+          icon={TextWrap}
+          iconDescription={wrapText}
+          isSelected={wrap}
+          on:click={() => (wrap = !wrap)}
+        />
+        <CopyButton
+          kind="ghost"
+          size="sm"
+          iconDescription={copyButtonText}
+          feedback={copiedText}
+          errorFeedback={copyErrorText}
+          copy={copyFromButton}
+          on:copy={dispatchCopy}
+          on:copy:error={(event) => dispatchCopyError(event.detail.error)}
+        />
       </div>
-      <Button
-        kind="ghost"
-        size="sm"
-        icon={ArrowUp}
-        iconDescription={previousMatchText}
-        disabled={searchTotal === 0}
-        on:click={() => stepMatch(-1)}
-      />
-      <Button
-        kind="ghost"
-        size="sm"
-        icon={ArrowDown}
-        iconDescription={nextMatchText}
-        disabled={searchTotal === 0}
-        on:click={() => stepMatch(1)}
-      />
-      <Button
-        kind="ghost"
-        size="sm"
-        icon={LetterAa}
-        iconDescription={caseSensitiveText}
-        isSelected={caseSensitive}
-        on:click={() => (caseSensitive = !caseSensitive)}
-      />
-      <Button
-        kind="ghost"
-        size="sm"
-        icon={RegularExpression}
-        iconDescription={regexText}
-        isSelected={regex}
-        on:click={() => (regex = !regex)}
-      />
-      <span class:bx--log-viewer__divider={true} aria-hidden="true"></span>
-      <div
-        class:bx--log-viewer__levels={true}
-        role="group"
-        aria-label={levelsLabelText}
-      >
-        {#each LOG_LEVELS as level (level)}
-          <SelectableTag
-            id="{id}-level-{level}"
-            size="sm"
-            type={level === "error"
-              ? "red"
-              : level === "warn"
-                ? "magenta"
-                : level === "info"
-                  ? "blue"
-                  : "gray"}
-            selected={levels.includes(level)}
-            on:change={(event) => toggleLevel(level, event.detail.selected)}
-            >{levelText(level)} {counts[level]}</SelectableTag
-          >
-        {/each}
-      </div>
-      <span class:bx--log-viewer__divider={true} aria-hidden="true"></span>
-      <Button
-        kind="ghost"
-        size="sm"
-        icon={TextWrap}
-        iconDescription={wrapText}
-        isSelected={wrap}
-        on:click={() => (wrap = !wrap)}
-      />
-      <CopyButton
-        kind="ghost"
-        size="sm"
-        iconDescription={copyButtonText}
-        feedback={copiedText}
-        errorFeedback={copyErrorText}
-        copy={copyFromButton}
-        on:copy={dispatchCopy}
-        on:copy:error={(event) => dispatchCopyError(event.detail.error)}
-      />
     </div>
   {/if}
   <div bind:this={bodyRef} class:bx--log-viewer__body={true}>
