@@ -242,16 +242,15 @@ $ccs-scheduler-date: to-rem(28px);
     pointer-events: none;
   }
 
+  // One line style for the grid: a solid `$border-subtle` line per hour, as
+  // between the days. Slots finer than an hour show while the user picks or
+  // drags, in the selection and the event.
   .#{$prefix}--scheduler__line {
     flex: 1 1 0;
-    border-block-start: 1px dotted $border-subtle;
-  }
-
-  .#{$prefix}--scheduler__line--hour {
     border-block-start: 1px solid $border-subtle;
   }
 
-  .#{$prefix}--scheduler__line--hour:first-child {
+  .#{$prefix}--scheduler__line:first-child {
     border-block-start: 0;
   }
 

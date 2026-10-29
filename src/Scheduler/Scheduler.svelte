@@ -1578,11 +1578,8 @@
             on:click={handleClick}
           >
             <div class="bx--scheduler__lines" aria-hidden="true">
-              {#each { length: slotCount } as _, index (index)}
-                <div
-                  class="bx--scheduler__line"
-                  class:bx--scheduler__line--hour={(index * slot) % 60 === 0}
-                ></div>
+              {#each HOURS as hour (hour)}
+                <div class="bx--scheduler__line"></div>
               {/each}
             </div>
             {#each days as day, index (day)}
