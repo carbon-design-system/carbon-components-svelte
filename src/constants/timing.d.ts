@@ -54,3 +54,10 @@ export const LOADING_DELAY_MS: 300;
  * flash.
  */
 export const LOADING_MIN_DURATION_MS: 500;
+
+/**
+ * How long `NotificationQueue` waits before it removes the empty space a
+ * closed toast held under the pointer. It matches the collapse transition
+ * (Carbon moderate-01), and the space is already zero under reduced motion.
+ */
+export const NOTIFICATION_QUEUE_COLLAPSE_MS: 150;

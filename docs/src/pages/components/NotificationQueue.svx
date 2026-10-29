@@ -15,6 +15,11 @@ While the pointer or focus is in the queue, every toast's timer pauses, so
 users can finish reading. Each timer then resumes with the time it had
 left.
 
+The toasts also stay in place while the pointer is in the queue. A closed
+toast leaves an empty space, so the next close button does not slide under
+the pointer. A new toast appears at the end away from the screen edge, and
+a full queue drops its oldest toast only when the pointer and focus leave.
+
 <FileSource src="/framed/NotificationQueue/NotificationQueueBasic" />
 
 ## Positioning
@@ -69,7 +74,7 @@ Use `update(id, patch)` to change an existing notification in place. The patch m
 
 ### Max notifications
 
-By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is removed automatically.
+By default, the queue displays a maximum of 3 notifications. When the limit is exceeded, the oldest notification is removed automatically. While the pointer or focus is in the queue, the removal waits until both leave.
 
 Customize the limit with `maxNotifications`.
 
