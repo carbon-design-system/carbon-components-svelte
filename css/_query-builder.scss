@@ -27,9 +27,12 @@
     gap: $carbon--spacing-03;
   }
 
+  // A nested group is marked by a rule on its inline start and an indent.
+  // It keeps no inline-end padding, so the row actions of every level end
+  // at the builder's inline end.
   .#{$prefix}--query-builder__group--nested {
-    padding: $carbon--spacing-05;
-    border: 1px solid $border-subtle;
+    padding-inline-start: $carbon--spacing-05;
+    border-inline-start: 2px solid $border-subtle;
   }
 
   .#{$prefix}--query-builder__body {

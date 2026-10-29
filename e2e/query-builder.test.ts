@@ -298,6 +298,26 @@ test.describe("QueryBuilder", () => {
   });
 });
 
+test.describe("QueryBuilder layout", () => {
+  // Left edges of a part in every row that has it, in tree order.
+  function edges(page: Page, selector: string, side: "left" | "right") {
+    return page
+      .locator(selector)
+      .evaluateAll(
+        (els, side) => els.map((el) => el.getBoundingClientRect()[side]),
+        side,
+      );
+  }
+
+  test("ends the row actions of every level at one x", async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    const ends = await edges(page, ".bx--query-builder__actions", "right");
+    expect(ends.length).toBeGreaterThan(5);
+    for (const end of ends) expect(Math.abs(end - ends[0])).toBeLessThan(0.5);
+  });
+});
+
 test.describe("QueryBuilder forced colors", () => {
   test.use({ colorScheme: "light" });
 
@@ -310,13 +330,13 @@ test.describe("QueryBuilder forced colors", () => {
     const border = await nested.evaluate((el) => {
       const style = getComputedStyle(el);
       return {
-        width: style.borderTopWidth,
-        style: style.borderTopStyle,
-        color: style.borderTopColor,
+        width: style.borderInlineStartWidth,
+        style: style.borderInlineStartStyle,
+        color: style.borderInlineStartColor,
       };
     });
     expect(border.style).toBe("solid");
-    expect(border.width).toBe("1px");
+    expect(border.width).toBe("2px");
     const canvas = await page.evaluate(() => {
       const probe = document.createElement("div");
       probe.style.color = "CanvasText";
