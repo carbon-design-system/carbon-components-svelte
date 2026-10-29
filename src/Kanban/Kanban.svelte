@@ -63,7 +63,7 @@
    * @type {ReadonlyArray<string>}
    * @bindable writable
    */
-  export let collapsedColumns = [];
+  export let collapsedIds = [];
 
   /** Set to `true` to give each column a button that collapses it */
   export let collapsible = false;
@@ -90,7 +90,7 @@
    * handle, menu and announcements.
    * @type {(item: Item) => string}
    */
-  export let itemLabel = defaultItemLabel;
+  export let itemToString = defaultItemToString;
 
   /** Specify the text that tells keyboard users how to move a card */
   export let instructionsText =
@@ -244,7 +244,7 @@
   }
 
   /** @param {Item} item */
-  function defaultItemLabel(item) {
+  function defaultItemToString(item) {
     return item.title ?? String(item.id);
   }
 
@@ -360,7 +360,7 @@
   }
 
   $: ({ ids: columnIds, byId } = groupByColumn(columns, items));
-  $: collapsedSet = new Set(collapsedColumns);
+  $: collapsedSet = new Set(collapsedIds);
   $: columnsById = new Map(columns.map((column) => [column.id, column]));
   $: order = columns.map((column) => column.id);
   $: firstCardId = firstCard(columns, columnIds, collapsedSet);
@@ -422,7 +422,7 @@
   function describe(cardId, mode, place) {
     const item = byId.get(cardId);
     return {
-      label: item ? itemLabel(item) : cardId,
+      label: item ? itemToString(item) : cardId,
       column: titleOf(place.column),
       index: place.index,
       count: sizeWithout(place.column) + 1,
@@ -1034,9 +1034,9 @@
 
   /** @param {string} columnId */
   function toggleColumn(columnId) {
-    collapsedColumns = collapsedSet.has(columnId)
-      ? collapsedColumns.filter((value) => value !== columnId)
-      : [...collapsedColumns, columnId];
+    collapsedIds = collapsedSet.has(columnId)
+      ? collapsedIds.filter((value) => value !== columnId)
+      : [...collapsedIds, columnId];
   }
 
   /**
@@ -1180,7 +1180,7 @@
               {#each ids as cardId, index (cardId)}
                 {@const item = byId.get(cardId)}
                 {#if item}
-                  {@const label = itemLabel(item)}
+                  {@const label = itemToString(item)}
                   {@const stop = cardId === tabStop}
                   <li
                     class:bx--kanban__item={true}

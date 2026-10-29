@@ -25,7 +25,7 @@
 
   // The consumer's own array, to see whether the board writes to it.
   let items: Item[] = initial.slice();
-  let collapsedColumns: string[] = [];
+  let collapsedIds: string[] = [];
   const snapshot = (list: Item[]) =>
     columns
       .map(
@@ -43,7 +43,7 @@
     aria-label="Board"
     {columns}
     bind:items
-    bind:collapsedColumns
+    bind:collapsedIds
     {limitMode}
     {collapsible}
     {disabled}
@@ -67,4 +67,4 @@
   />
 {/if}
 <div data-testid="consumer">{snapshot(items)}</div>
-<div data-testid="collapsed">{collapsedColumns.join(",")}</div>
+<div data-testid="collapsed">{collapsedIds.join(",")}</div>

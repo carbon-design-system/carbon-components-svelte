@@ -28,7 +28,7 @@ describe("Kanban server render", () => {
   });
 
   it("builds a collapsed column's cards only once it opens", () => {
-    const { document } = renderSSR(KanbanSsr, { collapsedColumns: ["done"] });
+    const { document } = renderSSR(KanbanSsr, { collapsedIds: ["done"] });
     expect(document.querySelectorAll("[data-kanban-item]")).toHaveLength(2);
     expect(document.querySelector('[data-kanban-column="done"]')).toHaveClass(
       "bx--kanban__column--collapsed",

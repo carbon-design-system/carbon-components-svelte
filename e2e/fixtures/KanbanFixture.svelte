@@ -47,7 +47,7 @@
         ]
       : []),
   ];
-  let collapsedColumns = [];
+  let collapsedIds = [];
   let moves = [];
   let cancel = false;
 
@@ -76,7 +76,7 @@
       aria-label="Sprint board"
       {columns}
       bind:items
-      bind:collapsedColumns
+      bind:collapsedIds
       {collapsible}
       {limitMode}
       on:move={handleMove}

@@ -13,7 +13,7 @@
     { id: "3", column: "triaged", title: "Dark theme loses focus rings" },
     { id: "4", column: "closed", title: "Typo in the invoice footer" },
   ];
-  let collapsedColumns = ["triaged"];
+  let collapsedIds = ["triaged"];
 </script>
 
 <Box height="18rem">
@@ -21,7 +21,7 @@
     aria-label="Issue board"
     {columns}
     bind:items
-    bind:collapsedColumns
+    bind:collapsedIds
     collapsible
   />
 </Box>

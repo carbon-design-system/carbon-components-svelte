@@ -61,7 +61,7 @@ Set `limit` on a column to cap the cards it should hold. Its count reads "3 / 4"
 
 ## Collapsible columns
 
-Set `collapsible` to give each column a button that collapses it to a narrow strip with its title and count. Set `collapsible: false` on a column to keep it open. Bind `collapsedColumns` to read or set the collapsed ids.
+Set `collapsible` to give each column a button that collapses it to a narrow strip with its title and count. Set `collapsible: false` on a column to keep it open. Bind `collapsedIds` to read or set the collapsed ids.
 
 A collapsed column is still a place to drop a card with the pointer, and the card goes to its bottom. Keyboard moves skip it, and a collapsed column builds its cards only when it first opens.
 
@@ -69,7 +69,7 @@ A collapsed column is still a place to drop a card with the pointer, and the car
 
 ## Custom cards
 
-Fill the `card` slot to replace a card's content, with the `item`, its `column`, and its `index`. The `columnHeader` slot replaces a column's title and count, and `empty` replaces the text of an empty column. Set `itemLabel` to name cards for assistive technology when they have no `title`.
+Fill the `card` slot to replace a card's content, with the `item`, its `column`, and its `index`. The `columnHeader` slot replaces a column's title and count, and `empty` replaces the text of an empty column. Set `itemToString` to name cards for assistive technology when they have no `title`.
 
 <FileSource src="/framed/Kanban/KanbanCustomCard" />
 

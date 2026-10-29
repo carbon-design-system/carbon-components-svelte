@@ -2,7 +2,7 @@
   import Kanban from "carbon-components-svelte/Kanban/Kanban.svelte";
 
   export let id = "board";
-  export let collapsedColumns: string[] = [];
+  export let collapsedIds: string[] = [];
 
   const columns = [
     { id: "todo", title: "To do" },
@@ -15,4 +15,4 @@
   ];
 </script>
 
-<Kanban aria-label="Board" {id} {columns} {items} {collapsedColumns} />
+<Kanban aria-label="Board" {id} {columns} {items} {collapsedIds} />
