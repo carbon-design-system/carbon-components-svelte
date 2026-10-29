@@ -49,14 +49,23 @@
     align-items: center;
   }
 
+  // The header lines up with the cards below it. The 16px inset puts the
+  // title over the 16px grip icons. The 18px count sits on the title's
+  // first 18px line, so a wrapped title keeps its count at the top. Baseline
+  // alignment would take an over-limit count's baseline from its icon and
+  // make that header taller than the others. The minimum height keeps the
+  // cards on the 4px grid.
   .#{$prefix}--kanban__header {
     display: flex;
-    align-items: center;
-    padding: $carbon--spacing-04 $carbon--spacing-04 $carbon--spacing-03;
+    min-block-size: to-rem(40px);
+    align-items: flex-start;
+    padding: $carbon--spacing-04 $carbon--spacing-04 $carbon--spacing-03
+      $carbon--spacing-05;
     gap: $carbon--spacing-03;
   }
 
   .#{$prefix}--kanban__column--collapsed .#{$prefix}--kanban__header {
+    align-items: center;
     flex-direction: column;
     padding-inline: 0;
   }
@@ -96,6 +105,19 @@
     &:focus-visible {
       @include focus-outline("outline");
     }
+  }
+
+  // The 24px button sits where a card's grip button sits, so the chevron
+  // and the grip share a 16px icon box and the title starts over the card
+  // titles. It centers on the title's first 18px line.
+  .#{$prefix}--kanban__header .#{$prefix}--kanban__toggle {
+    align-self: flex-start;
+    margin-block: calc((#{to-rem(18px)} - #{to-rem(24px)}) / 2);
+    margin-inline: (-$carbon--spacing-02);
+  }
+
+  .#{$prefix}--kanban__column--collapsed .#{$prefix}--kanban__toggle {
+    margin: 0;
   }
 
   // Collapse points to the inline start in RTL as in LTR.

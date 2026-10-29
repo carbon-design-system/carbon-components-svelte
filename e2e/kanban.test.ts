@@ -275,6 +275,62 @@ test.describe("Kanban layout", () => {
   });
 });
 
+test.describe("Kanban header alignment", () => {
+  // These checks can move to the layout helpers of #5240 once it merges.
+  const measure = (page: Page) =>
+    page.locator('[data-kanban-column="todo"]').evaluate((column) => {
+      // Where an element's first visible text starts.
+      const textStart = (selector: string) => {
+        const el = column.querySelector(selector) as Element;
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+          acceptNode: (node) =>
+            node.textContent?.trim()
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_SKIP,
+        });
+        const range = document.createRange();
+        range.selectNodeContents(walker.nextNode() as Text);
+        return range.getClientRects()[0].left;
+      };
+      const box = (selector: string) =>
+        column.querySelector(selector)?.getBoundingClientRect() ?? null;
+      const title = box(".bx--kanban__title");
+      const count = box(".bx--kanban__count");
+      const toggle = box(".bx--kanban__toggle svg");
+      return {
+        title: textStart(".bx--kanban__title"),
+        cardTitle: textStart(".bx--kanban__card-title"),
+        toggleIcon: toggle?.left ?? null,
+        gripIcon: box(".bx--kanban__handle svg")?.left ?? null,
+        // Centers of the title's first 18px line, the count and the chevron.
+        lineCenter: (title?.top ?? 0) + 9,
+        countCenter: (count?.top ?? 0) + (count?.height ?? 0) / 2,
+        toggleCenter: toggle ? toggle.top + toggle.height / 2 : null,
+      };
+    });
+
+  test("lines the header up with the cards below it", async ({ page }) => {
+    await page.goto("/kanban.html?collapsible");
+    const withToggle = await measure(page);
+    // The chevron and the grip share a 16px icon box, and the title
+    // starts over the card titles.
+    expect(withToggle.toggleIcon).toBeCloseTo(withToggle.gripIcon ?? 0, 0);
+    expect(
+      Math.abs(withToggle.title - withToggle.cardTitle),
+    ).toBeLessThanOrEqual(0.5);
+    // The chevron and the count center on the title's first line.
+    expect(withToggle.toggleCenter).toBeCloseTo(withToggle.lineCenter, 0);
+    expect(withToggle.countCenter).toBeCloseTo(withToggle.lineCenter, 0);
+
+    await page.goto("/kanban.html");
+    const plain = await measure(page);
+    // With no toggle, the title starts over the grip's icon box.
+    expect(Math.abs(plain.title - (plain.gripIcon ?? 0))).toBeLessThanOrEqual(
+      0.5,
+    );
+  });
+});
+
 test.describe("Kanban focus ring", () => {
   test("draws one ring on a focused or picked card", async ({ page }) => {
     await page.goto("/kanban.html");
