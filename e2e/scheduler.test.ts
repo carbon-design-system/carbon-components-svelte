@@ -404,6 +404,21 @@ test.describe("Scheduler month", () => {
     for (const delta of centers) expect(Math.abs(delta)).toBeLessThan(0.5);
   });
 
+  test("rings only the focused or selected cell in forced colors", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.locator('[data-cell][tabindex="0"]').focus();
+    const rings = await page
+      .locator(".bx--scheduler__cell")
+      .evaluateAll(
+        (cells) =>
+          cells.filter((cell) => getComputedStyle(cell).outlineStyle !== "none")
+            .length,
+      );
+    expect(rings).toBe(1);
+  });
+
   test("names each more link and keeps it on one line", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto("/scheduler.html?view=month&stress");

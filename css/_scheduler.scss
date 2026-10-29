@@ -592,16 +592,19 @@ $ccs-scheduler-date: to-rem(28px);
     min-width: 0;
     padding: $carbon--spacing-02 $carbon--spacing-03;
     border-inline-start: 1px solid $border-subtle;
+  }
+
+  // Only a selected cell carries the transparent outline that forced colors
+  // draw in place of its fill. On every cell it drew a ring around each day,
+  // and the focused one differed by color alone.
+  .#{$prefix}--scheduler__cell[aria-selected="true"] {
+    background-color: $layer-selected;
     outline: 2px solid transparent;
     outline-offset: -2px;
   }
 
   .#{$prefix}--scheduler__cell:focus-visible {
     @include focus-outline("outline");
-  }
-
-  .#{$prefix}--scheduler__cell[aria-selected="true"] {
-    background-color: $layer-selected;
   }
 
   .#{$prefix}--scheduler__cell--outside .#{$prefix}--scheduler__date {
