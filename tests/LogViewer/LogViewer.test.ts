@@ -301,7 +301,9 @@ describe("LogViewer", () => {
       expect(
         document.querySelector(".bx--log-viewer__count"),
       ).toHaveTextContent("No results");
-      expect(screen.getByRole("button", { name: "Next match" })).toBeDisabled();
+      expect(
+        screen.getByRole("button", { name: "Next match" }),
+      ).toHaveAttribute("aria-disabled", "true");
     });
   });
 

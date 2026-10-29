@@ -40,6 +40,19 @@ describe("LogViewer on the server", () => {
     expect(row?.textContent).not.toContain(ESC);
   });
 
+  it("gives the toolbar buttons one tab stop in the server HTML", () => {
+    const { document } = renderSSR(LogViewer, { lines: ["INFO a"] });
+
+    const buttons = [
+      ...document.querySelectorAll("[role=toolbar] button"),
+    ].filter((button) => !button.classList.contains("bx--search-close"));
+    expect(buttons.length).toBe(7);
+    expect(
+      buttons.filter((button) => button.getAttribute("tabindex") === "0"),
+    ).toHaveLength(1);
+    expect(buttons[0].textContent).toContain("Match case");
+  });
+
   it("shows the empty state when there are no lines", () => {
     const { document } = renderSSR(LogViewer, { lines: [] });
 

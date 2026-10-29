@@ -114,6 +114,15 @@
     margin-inline-start: auto;
   }
 
+  // Previous and next stay focusable with no match, as toolbar buttons do,
+  // so arrow keys do not skip them. They look disabled and keep the focus
+  // ring, which Carbon's `--disabled` class removes.
+  .#{$prefix}--log-viewer__group > .#{$prefix}--btn--ghost[aria-disabled="true"] {
+    background-color: transparent;
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
   .#{$prefix}--log-viewer__search {
     position: relative;
     min-width: to-rem(224px);

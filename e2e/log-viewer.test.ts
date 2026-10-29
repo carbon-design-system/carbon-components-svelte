@@ -361,6 +361,100 @@ test("the message starts at one x on every row", async ({ page }) => {
   expect(Math.max(...lefts) - Math.min(...lefts)).toBeLessThanOrEqual(0.5);
 });
 
+test.describe("toolbar keyboard", () => {
+  const focused = (page: Page) =>
+    page.evaluate(
+      () =>
+        document.activeElement?.getAttribute("aria-label") ??
+        document.activeElement?.textContent?.trim(),
+    );
+
+  test("the search field and the toolbar buttons are one tab stop each", async ({
+    page,
+  }) => {
+    await page.goto("/log-viewer.html?lines=60");
+    await expect(page.getByRole("log")).toBeVisible();
+    await page.getByRole("searchbox").focus();
+
+    await page.keyboard.press("Tab");
+    expect(await focused(page)).toBe("Match case");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("log")).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    expect(await focused(page)).toBe("Match case");
+    expect(
+      await page.getByRole("toolbar").locator("button[tabindex='0']").count(),
+    ).toBe(1);
+  });
+
+  test("arrow keys, Home and End move between the buttons", async ({
+    page,
+  }) => {
+    await page.goto("/log-viewer.html?lines=60");
+    await expect(page.getByRole("log")).toBeVisible();
+    await page.getByRole("button", { name: "Match case" }).focus();
+
+    await page.keyboard.press("ArrowRight");
+    expect(await focused(page)).toBe("Use regular expression");
+    // With no query, Previous match is unavailable but still focusable.
+    await page.keyboard.press("ArrowRight");
+    expect(await focused(page)).toBe("Previous match");
+    await expect(
+      page.getByRole("button", { name: "Previous match" }),
+    ).toHaveAttribute("aria-disabled", "true");
+    await page.keyboard.press("End");
+    expect(await focused(page)).toBe("Copy lines");
+    await page.keyboard.press("ArrowRight");
+    expect(await focused(page)).toBe("Match case");
+    await page.keyboard.press("ArrowLeft");
+    expect(await focused(page)).toBe("Copy lines");
+    await page.keyboard.press("Home");
+    expect(await focused(page)).toBe("Match case");
+
+    // The toolbar keeps the last button as its tab stop.
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Shift+Tab");
+    expect(await focused(page)).toBe("Use regular expression");
+  });
+
+  test("Left and Right swap under dir=rtl", async ({ page }) => {
+    await page.goto("/log-viewer.html?lines=60");
+    await expect(page.getByRole("log")).toBeVisible();
+    await page.evaluate(() =>
+      document.documentElement.setAttribute("dir", "rtl"),
+    );
+    await page.getByRole("button", { name: "Match case" }).focus();
+
+    await page.keyboard.press("ArrowLeft");
+    expect(await focused(page)).toBe("Use regular expression");
+    await page.keyboard.press("ArrowRight");
+    expect(await focused(page)).toBe("Match case");
+  });
+
+  test("the Levels menu keeps its own arrow keys once open", async ({
+    page,
+  }) => {
+    await page.goto("/log-viewer.html?lines=60");
+    await expect(page.getByRole("log")).toBeVisible();
+    // Levels sits two buttons before the last one.
+    await page.getByRole("button", { name: "Match case" }).focus();
+    await page.keyboard.press("End");
+    await page.keyboard.press("ArrowLeft");
+    await page.keyboard.press("ArrowLeft");
+    expect(await focused(page)).toBe("Levels");
+
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("menu")).toBeVisible();
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      page.getByRole("menuitemcheckbox", { name: /^INFO/ }),
+    ).toBeFocused();
+    await page.keyboard.press("Escape");
+    expect(await focused(page)).toBe("Levels");
+  });
+});
+
 test("the match arrows stay put while the count changes width", async ({
   page,
 }) => {

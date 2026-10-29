@@ -232,13 +232,19 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { relativeLuminance } from "../utils/color-contrast.js";
   import { copyText } from "../utils/copy-text.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import {
     createLogBuffer,
     LOG_LEVELS,
     logRowText,
   } from "../utils/log-lines.js";
   import { createMatcher, createSearchIndex } from "../utils/log-search.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
   import LogViewerLineComponent from "./LogViewerLine.svelte";
@@ -307,6 +313,33 @@
   }
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
+
+  /**
+   * The toolbar's buttons, in order. The search field and its clear button
+   * are text-field controls with their own tab stops, so they are left out.
+   */
+  const TOOL_SELECTOR =
+    ".bx--log-viewer__search-options > button, .bx--log-viewer__group > button, .bx--toolbar-content > button";
+
+  /** @type {null | HTMLDivElement} */
+  let toolbarRef = null;
+  /** Which toolbar button has the toolbar's one tab stop. */
+  let toolStop = 0;
+
+  function toolItems() {
+    return /** @type {HTMLElement[]} */ (
+      Array.from(toolbarRef?.querySelectorAll(TOOL_SELECTOR) ?? [])
+    );
+  }
+
+  /** @param {FocusEvent} event */
+  function handleToolFocus(event) {
+    const index = toolItems().indexOf(
+      /** @type {HTMLElement} */ (event.target),
+    );
+    if (index !== -1) toolStop = index;
+  }
 
   $: ({
     ariaLabel,
@@ -977,12 +1010,31 @@
   {#if !hideToolbar}
     <!-- DataTable's toolbar layout: items fill its height, and the search
          field's bottom edge is the toolbar's border. -->
+    <!-- The buttons share one tab stop and arrow keys move between them, as
+         in a toolbar. The search field keeps its own tab stop before them,
+         since its arrow keys move the caret. -->
     <div
+      bind:this={toolbarRef}
       class:bx--table-toolbar={true}
       class:bx--table-toolbar--small={true}
       class:bx--log-viewer__toolbar={true}
       role="toolbar"
       aria-label={toolbarLabelText}
+      use:rovingFocus={{
+        selector: TOOL_SELECTOR,
+        getItems: toolItems,
+        itemsOnly: true,
+        rtl: () =>
+          resolveLayoutDirection($layoutDirection, toolbarRef) === "rtl",
+        getActiveIndex: () => toolStop,
+        onMove: (index, event) => {
+          if (hasModifierKey(event)) return;
+          event.preventDefault();
+          toolStop = index;
+          toolItems()[index]?.focus();
+        },
+      }}
+      on:focusin={handleToolFocus}
     >
       <div class:bx--toolbar-content={true}>
         <!-- The toggles change how the query is read, so they sit in the
@@ -1003,6 +1055,7 @@
             <Button
               kind="ghost"
               size="sm"
+              tabindex={toolStop === 0 ? "0" : "-1"}
               icon={LetterAa}
               iconDescription={caseSensitiveText}
               isSelected={caseSensitive}
@@ -1011,6 +1064,7 @@
             <Button
               kind="ghost"
               size="sm"
+              tabindex={toolStop === 1 ? "0" : "-1"}
               icon={RegularExpression}
               iconDescription={regexText}
               isSelected={regex}
@@ -1038,17 +1092,19 @@
           <Button
             kind="ghost"
             size="sm"
+            tabindex={toolStop === 2 ? "0" : "-1"}
             icon={ArrowUp}
             iconDescription={previousMatchText}
-            disabled={searchTotal === 0}
+            aria-disabled={searchTotal === 0 ? "true" : undefined}
             on:click={() => stepMatch(-1)}
           />
           <Button
             kind="ghost"
             size="sm"
+            tabindex={toolStop === 3 ? "0" : "-1"}
             icon={ArrowDown}
             iconDescription={nextMatchText}
-            disabled={searchTotal === 0}
+            aria-disabled={searchTotal === 0 ? "true" : undefined}
             on:click={() => stepMatch(1)}
           />
         </div>
@@ -1056,6 +1112,7 @@
              column visibility menu does. The label shows how many are on
              while some are off. -->
         <MenuButton
+          tabindex={toolStop === 4 ? "0" : "-1"}
           kind="ghost"
           size="sm"
           labelText={levels.length < LOG_LEVELS.length
@@ -1082,12 +1139,14 @@
           <Button
             kind="ghost"
             size="sm"
+            tabindex={toolStop === 5 ? "0" : "-1"}
             icon={TextWrap}
             iconDescription={wrapText}
             isSelected={wrap}
             on:click={() => (wrap = !wrap)}
           />
           <CopyButton
+            tabindex={toolStop === 6 ? "0" : "-1"}
             kind="ghost"
             size="sm"
             iconDescription={copyButtonText}
