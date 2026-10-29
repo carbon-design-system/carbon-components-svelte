@@ -34,3 +34,15 @@ export const SEPARATOR_HOVER_DELAY_MS: 150;
 
 /** Idle time before a type-ahead search buffer resets. */
 export const TYPEAHEAD_RESET_MS: 500;
+
+/**
+ * Default time `loading` stays `true` before a loading indicator shows, so
+ * fast work shows none.
+ */
+export const LOADING_DELAY_MS: 300;
+
+/**
+ * Default minimum time a loading indicator stays once shown, so it does not
+ * flash.
+ */
+export const LOADING_MIN_DURATION_MS: 500;
