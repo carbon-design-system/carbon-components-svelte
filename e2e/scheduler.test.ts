@@ -340,6 +340,31 @@ test.describe("Scheduler layout", () => {
       () => document.documentElement.scrollWidth,
     );
     expect(page_).toBeLessThanOrEqual(390);
+
+    // Three whole days show, and a sideways scroll moves by a whole day
+    // while the time axis stays.
+    const cut = () =>
+      scroller.evaluate((el) => {
+        const box = el.getBoundingClientRect();
+        const axis = (
+          el.querySelector(".bx--scheduler__axis") as Element
+        ).getBoundingClientRect();
+        return [...el.querySelectorAll("[data-cell][data-day]")]
+          .map((column) => column.getBoundingClientRect())
+          .filter(
+            (column) =>
+              column.right > axis.right + 1 && column.left < box.right - 1,
+          )
+          .map(
+            (column) =>
+              column.left < axis.right - 1 || column.right > box.right + 1,
+          );
+      });
+    expect(await cut()).toEqual([false, false, false]);
+    await scroller.evaluate((el) =>
+      el.scrollBy({ left: 40, behavior: "instant" }),
+    );
+    await expect.poll(cut).toEqual([false, false, false]);
   });
 });
 

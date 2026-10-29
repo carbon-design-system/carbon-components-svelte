@@ -69,24 +69,29 @@ $ccs-scheduler-date: to-rem(28px);
     min-width: to-rem(264px);
   }
 
+  // Sideways, the grid snaps to whole days and the time axis stays put, so
+  // no day shows cut at the inline end.
   .#{$prefix}--scheduler__scroller {
     position: relative;
     overflow: auto;
     max-height: var(--ccs-scheduler-height, #{to-rem(640px)});
+    scroll-padding: 0 to-rem(48px);
+    scroll-snap-type: x mandatory;
   }
 
-  // Below the md breakpoint the week keeps a readable column width and
-  // scrolls sideways under the sticky header, rather than crush seven days
-  // into a phone.
+  // Below the md breakpoint the week shows three whole days at a time and
+  // scrolls sideways by day, rather than crush seven days into a phone or
+  // cut the fourth.
   .#{$prefix}--scheduler__grid {
     min-width: calc(
-      #{to-rem(48px)} + var(--ccs-scheduler-days, 7) * #{to-rem(88px)}
+      #{to-rem(48px)} + (100% - #{to-rem(48px)}) *
+        var(--ccs-scheduler-days, 7) / 3
     );
   }
 
   .#{$prefix}--scheduler__head {
     position: sticky;
-    z-index: 4;
+    z-index: 5;
     top: 0;
     display: grid;
     background-color: $layer;
@@ -94,9 +99,17 @@ $ccs-scheduler-date: to-rem(28px);
     grid-template-columns: to-rem(48px) minmax(0, 1fr);
   }
 
-  .#{$prefix}--scheduler__gutter {
-    // The corner above the axis is empty; the label row names the all-day row.
+  // The time axis and the corners above it stay at the inline start while
+  // the days scroll sideways. The top corner is empty; the next one names
+  // the all-day row.
+  .#{$prefix}--scheduler__gutter,
+  .#{$prefix}--scheduler__axis {
+    position: sticky;
+    z-index: 4;
     border-inline-end: 1px solid $border-subtle;
+    background-color: $layer;
+
+    @include ccs-inset-inline($start: 0);
   }
 
   .#{$prefix}--scheduler__gutter--label {
@@ -202,11 +215,6 @@ $ccs-scheduler-date: to-rem(28px);
     grid-template-columns: to-rem(48px) minmax(0, 1fr);
   }
 
-  .#{$prefix}--scheduler__axis {
-    position: relative;
-    border-inline-end: 1px solid $border-subtle;
-  }
-
   .#{$prefix}--scheduler__hour {
     position: absolute;
     padding-inline-end: $carbon--spacing-02;
@@ -256,6 +264,7 @@ $ccs-scheduler-date: to-rem(28px);
 
   .#{$prefix}--scheduler__column {
     position: relative;
+    scroll-snap-align: start;
     border-inline-start: 1px solid $border-subtle;
     // The cursor, not the whole column, shows keyboard focus.
     outline: none;
@@ -682,6 +691,10 @@ $ccs-scheduler-date: to-rem(28px);
     .#{$prefix}--scheduler__head,
     .#{$prefix}--scheduler__body {
       grid-template-columns: to-rem(64px) minmax(0, 1fr);
+    }
+
+    .#{$prefix}--scheduler__scroller {
+      scroll-padding: 0 to-rem(64px);
     }
 
     .#{$prefix}--scheduler__grid {
