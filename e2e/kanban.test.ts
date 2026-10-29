@@ -245,6 +245,34 @@ test.describe("Kanban layout", () => {
       );
     expect(new Set(widths)).toEqual(new Set([288]));
   });
+
+  test("draws one box deep in forced colors, with the focus ring widest", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/kanban.html");
+    await handle(page, "Write the API spec").focus();
+    const outline = (selector: string) =>
+      page
+        .locator(selector)
+        .first()
+        .evaluate((el) => {
+          const style = getComputedStyle(el);
+          return `${style.outlineStyle} ${style.outlineWidth}`;
+        });
+    // No box around a column, and none around a card's menu button.
+    expect(await outline('[data-kanban-column="todo"]')).toMatch(/^none/);
+    expect(await outline('[data-kanban-item="a"] .bx--kanban__menu')).toMatch(
+      /^none/,
+    );
+    // Cards keep a 1px edge; the focused card's ring is 2px.
+    expect(await outline('[data-kanban-item="a"] .bx--kanban__card')).toBe(
+      "solid 1px",
+    );
+    expect(await outline('[data-kanban-item="b"] .bx--kanban__card')).toBe(
+      "solid 2px",
+    );
+  });
 });
 
 test.describe("Kanban modes", () => {

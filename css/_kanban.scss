@@ -42,8 +42,6 @@
     min-inline-size: 0;
     flex: 0 0 var(--ccs-kanban-column-width, #{to-rem(288px)});
     flex-direction: column;
-    outline: 2px solid transparent;
-    outline-offset: -2px;
   }
 
   .#{$prefix}--kanban__column--collapsed {
@@ -251,13 +249,18 @@
     pointer-events: none;
   }
 
+  // A column draws an outline only while a drag targets it. A resting
+  // transparent outline would turn into a box around every column in
+  // forced colors.
   .#{$prefix}--kanban__column--target {
     outline: 2px dashed $interactive;
+    outline-offset: -2px;
   }
 
   .#{$prefix}--kanban__column--blocked {
     cursor: not-allowed;
     outline: 2px solid $support-error;
+    outline-offset: -2px;
   }
 
   // The card under the pointer. `left` and `top` are set in script, in
@@ -285,10 +288,22 @@
 
   // Forced colors repaint with system colors and drop shadows and the
   // fill that tells a lifted card from the rest. The card keeps the tile's
-  // transparent outline as its edge. The drop line opts out of the repaint
-  // so it keeps a color that stands out from the page, and the target and
-  // blocked columns differ in line style as well as color.
+  // transparent outline as its edge, at 1px so the 2px `Highlight` ring of
+  // the focused card stands out. The menu button drops its resting
+  // outline, which would draw a box inside every card. The drop line opts
+  // out of the repaint so it keeps a color that stands out from the page,
+  // and the target and blocked columns differ in line style as well as
+  // color.
   @media (forced-colors: active) {
+    .#{$prefix}--kanban__card {
+      outline-offset: -1px;
+      outline-width: 1px;
+    }
+
+    .#{$prefix}--kanban__menu {
+      outline-style: none;
+    }
+
     .#{$prefix}--kanban__indicator {
       forced-color-adjust: none;
       background-color: Highlight;
