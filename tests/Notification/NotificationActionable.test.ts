@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import NotificationActionable from "./NotificationActionable.test.svelte";
@@ -140,6 +140,23 @@ describe.each(["inline", "toast"] as const)("actionable (%s)", (type) => {
       screen.getByRole("button", { name: "Close notification" }),
     );
 
+    expect(trigger).toHaveFocus();
+  });
+
+  it("returns focus to its trigger, not a notification beside it", async () => {
+    const { container } = render(NotificationActionable, { props: { type } });
+    render(NotificationActionable, {
+      props: { type, open: true, focusOnOpen: false },
+    });
+
+    const trigger = within(container).getByRole("button", { name: "Delete" });
+    await user.click(trigger);
+    await tick();
+    await user.click(
+      within(container).getByRole("button", { name: "Close notification" }),
+    );
+
+    expect(screen.getAllByRole("alertdialog")).toHaveLength(1);
     expect(trigger).toHaveFocus();
   });
 
