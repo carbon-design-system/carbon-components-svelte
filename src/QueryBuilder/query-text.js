@@ -6,6 +6,8 @@ export const DEFAULT_TEXT = {
   where: "Where",
   and: "and",
   or: "or",
+  connectorAnd: "And",
+  connectorOr: "Or",
   matchAll: "All of the following",
   matchAny: "Any of the following",
   groupLogic: "Match",

@@ -26,6 +26,8 @@ export type QueryTextId =
   | "where"
   | "and"
   | "or"
+  | "connectorAnd"
+  | "connectorOr"
   | "matchAll"
   | "matchAny"
   | "groupLogic"

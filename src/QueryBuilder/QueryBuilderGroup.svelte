@@ -68,7 +68,11 @@
   $: menuSize = size === "sm" ? "sm" : undefined;
   $: logic = translate(node.operator === "and" ? "matchAll" : "matchAny");
   $: count = node.conditions.length;
-  $: connector = index === 0 ? translate("where") : translate(groupOperator);
+  // Shown at the start of the row, so in sentence case.
+  $: connectorText =
+    index === 0
+      ? translate("where")
+      : translate(groupOperator === "and" ? "connectorAnd" : "connectorOr");
   $: label = translate("groupLabel", { level: depth, logic, count });
   $: canNest = depth < maxDepth;
   $: canAdd = fields.length > 0;
@@ -95,7 +99,7 @@
     <!-- The root has no group before it, so its connector column names the
       select instead. The select keeps its own hidden label. -->
     <span class="bx--query-builder__connector" aria-hidden="true"
-      >{root ? translate("groupLogic") : connector}</span
+      >{root ? translate("groupLogic") : connectorText}</span
     >
     <div class="bx--query-builder__cell bx--query-builder__cell--logic">
       <Select

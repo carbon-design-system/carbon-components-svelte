@@ -89,6 +89,12 @@
       })
     : "";
   $: connector = index === 0 ? translate("where") : translate(groupOperator);
+  // Shown at the start of the row, so in sentence case; the accessible name
+  // and the summary keep the lowercase word inside their sentence.
+  $: connectorText =
+    index === 0
+      ? translate("where")
+      : translate(groupOperator === "and" ? "connectorAnd" : "connectorOr");
   $: sentence = conditionToText(node, field, translate);
   $: label = translate("conditionLabel", {
     n: index + 1,
@@ -177,7 +183,7 @@
   aria-label={label}
 >
   <span class="bx--query-builder__connector" aria-hidden="true"
-    >{connector}</span
+    >{connectorText}</span
   >
   <div class="bx--query-builder__cell bx--query-builder__cell--field">
     <Select

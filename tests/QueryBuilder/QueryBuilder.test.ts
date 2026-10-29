@@ -147,6 +147,28 @@ describe("QueryBuilder", () => {
     expect(bound().conditions[1].value).toBe(false);
   });
 
+  it("writes the connector at the start of each row in sentence case", () => {
+    const { container } = render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "or",
+          conditions: [nameRow, { field: "seats", operator: "gte", value: 5 }],
+        },
+      },
+    });
+
+    const connectors = [
+      ...container.querySelectorAll(".bx--query-builder__connector"),
+    ].map((connector) => connector.textContent?.trim());
+    expect(connectors).toEqual(["Match", "Where", "Or"]);
+    // The name keeps the word inside its sentence.
+    expect(
+      screen.getByRole("group", {
+        name: "Condition 2 of 2: or Seats is at least 5",
+      }),
+    ).toBeInTheDocument();
+  });
+
   it("shows a field's only operator in a read-only select", () => {
     render(QueryBuilder, {
       props: {
