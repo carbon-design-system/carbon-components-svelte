@@ -172,6 +172,15 @@
    */
   export let loadingDescription = undefined;
 
+  /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the spinner. Once shown, the spinner stays for at least 500 ms, so fast
+   * work shows nothing and slow work never flashes. The button blocks clicks
+   * and sets `aria-busy` as soon as `loading` is `true`.
+   * Set to `0` to show the spinner at once.
+   */
+  export let loadingDelay = 0;
+
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
   import Loading from "../Loading/Loading.svelte";
@@ -182,6 +191,7 @@
     FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import { createLoadingDelay } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formButtonSize } from "../utils/form-button-size.js";
@@ -209,13 +219,31 @@
 
   $: hasIconOnly =
     Boolean(icon || $$slots.icon) && (iconOnly ?? !$$slots.default);
+
+  // `loading` blocks clicks and sets aria-busy at once. Only the spinner, and
+  // the disabled look that comes with it, wait for `loadingDelay`. With no
+  // delay the spinner follows `loading` exactly, as before.
+  let showSpinner = loading;
+  /** @type {import("../utils/delayed-loading.js").LoadingDelay | undefined} */
+  let loadingTimer;
+  $: {
+    loadingTimer?.cancel();
+    loadingTimer = createLoadingDelay(
+      (shown) => {
+        showSpinner = shown;
+      },
+      { delay: loadingDelay, minDuration: loadingDelay > 0 ? undefined : 0 },
+    );
+  }
+  $: loadingTimer?.(loading);
   // Without an iconDescription there is nothing to show in a tooltip or
   // announce as the accessible name via the assistive-text span; skip the
   // whole tooltip apparatus and let the consumer's own aria-label/
   // aria-labelledby (passed through $$restProps) carry accessibility instead.
   // While loading, Loading's own <title> + aria-live carries the accessible
   // name instead, so the tooltip is suppressed to avoid double-announcing.
-  $: hasTooltipContent = hasIconOnly && Boolean(iconDescription) && !loading;
+  $: hasTooltipContent =
+    hasIconOnly && Boolean(iconDescription) && !showSpinner;
   // Set for one open when the in-place tooltip turns out to be cut off by
   // a box around it (a scrolling panel, a DataTable): it shows in a portal
   // instead. Only when `portalTooltip` is left unset.
@@ -394,6 +422,7 @@
   onMount(() => {
     return () => {
       tooltipHandoff.cancel();
+      loadingTimer?.cancel();
       disconnectModalObserver();
       tooltipHandoff.release();
     };
@@ -407,7 +436,7 @@
   // handleClick) — the same pattern Modal's primaryButtonLoading already
   // uses, minus the focus loss.
   $: isDisabled = Boolean(disabled);
-  $: isVisuallyDisabled = isDisabled || loading;
+  $: isVisuallyDisabled = isDisabled || showSpinner;
   $: effectiveSize = $$slots.badge
     ? "lg"
     : (normalizeSize(size, BUTTON_SIZE_ALIASES) ??
@@ -534,7 +563,7 @@
         on:mouseleave={handleMouseleave}
         on:mouseleave={handlePortalMouseLeave}
       >
-        {#if hasIconOnly && iconDescription && !loading}
+        {#if hasIconOnly && iconDescription && !showSpinner}
           <span class:bx--assistive-text={true}
             >{iconDescription}{#if shortcut}<span
                 class:bx--btn__tooltip-shortcut={true}
@@ -546,7 +575,7 @@
           <slot />
           {#if shortcut}
             <span class:bx--btn__shortcut={true}>
-              {#if loading && spinnerInShortcut}
+              {#if showSpinner && spinnerInShortcut}
                 <Loading
                   small
                   withOverlay={false}
@@ -558,7 +587,7 @@
             </span>
           {/if}
         {/if}
-        {#if loading && !spinnerInShortcut}
+        {#if showSpinner && !spinnerInShortcut}
           <Loading
             small
             withOverlay={false}
@@ -605,7 +634,7 @@
       on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
-      {#if hasIconOnly && iconDescription && !loading}
+      {#if hasIconOnly && iconDescription && !showSpinner}
         <span class:bx--assistive-text={true}
           >{iconDescription}{#if shortcut}<span
               class:bx--btn__tooltip-shortcut={true}
@@ -617,7 +646,7 @@
         <slot />
         {#if shortcut}
           <span class:bx--btn__shortcut={true}>
-            {#if loading && spinnerInShortcut}
+            {#if showSpinner && spinnerInShortcut}
               <Loading
                 small
                 withOverlay={false}
@@ -629,7 +658,7 @@
           </span>
         {/if}
       {/if}
-      {#if loading && !spinnerInShortcut}
+      {#if showSpinner && !spinnerInShortcut}
         <Loading
           small
           withOverlay={false}
@@ -677,7 +706,7 @@
       on:mouseleave={handleMouseleave}
       on:mouseleave={handlePortalMouseLeave}
     >
-      {#if hasIconOnly && iconDescription && !loading}
+      {#if hasIconOnly && iconDescription && !showSpinner}
         <span class:bx--assistive-text={true}
           >{iconDescription}{#if shortcut}<span
               class:bx--btn__tooltip-shortcut={true}
@@ -689,7 +718,7 @@
         <slot />
         {#if shortcut}
           <span class:bx--btn__shortcut={true}>
-            {#if loading && spinnerInShortcut}
+            {#if showSpinner && spinnerInShortcut}
               <Loading
                 small
                 withOverlay={false}
@@ -701,7 +730,7 @@
           </span>
         {/if}
       {/if}
-      {#if loading && !spinnerInShortcut}
+      {#if showSpinner && !spinnerInShortcut}
         <Loading
           small
           withOverlay={false}
@@ -749,7 +778,7 @@
     on:mouseleave={handleMouseleave}
     on:mouseleave={handlePortalMouseLeave}
   >
-    {#if hasIconOnly && iconDescription && !loading}
+    {#if hasIconOnly && iconDescription && !showSpinner}
       <span class:bx--assistive-text={true}
         >{iconDescription}{#if shortcut}<span
             class:bx--btn__tooltip-shortcut={true}
@@ -761,7 +790,7 @@
       <slot />
       {#if shortcut}
         <span class:bx--btn__shortcut={true}>
-          {#if loading && spinnerInShortcut}
+          {#if showSpinner && spinnerInShortcut}
             <Loading
               small
               withOverlay={false}
@@ -773,7 +802,7 @@
         </span>
       {/if}
     {/if}
-    {#if loading && !spinnerInShortcut}
+    {#if showSpinner && !spinnerInShortcut}
       <Loading
         small
         withOverlay={false}

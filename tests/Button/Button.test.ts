@@ -510,6 +510,78 @@ describe("Button", () => {
       await rerender({ loading: false });
       expect(button.querySelector(".bx--btn__loading")).toBeNull();
     });
+
+    describe("loadingDelay", () => {
+      beforeEach(() => {
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it("blocks clicks at once but shows the spinner only after the delay", async () => {
+        const onClick = vi.fn();
+        const { rerender } = render(ButtonLoading, {
+          loading: false,
+          loadingDelay: 300,
+          onClick,
+        });
+        const button = screen.getByTestId("btn-labeled-loading");
+        const guard = screen.getByTestId("btn-click-guard");
+
+        await rerender({ loading: true });
+        expect(button).toHaveAttribute("aria-busy", "true");
+        expect(button).toHaveAttribute("aria-disabled", "true");
+        expect(button).not.toHaveClass("bx--btn--disabled");
+        expect(button.querySelector(".bx--btn__loading")).toBeNull();
+        guard.click();
+        expect(onClick).not.toHaveBeenCalled();
+
+        await vi.advanceTimersByTimeAsync(300);
+        expect(button).toHaveClass("bx--btn--disabled");
+        expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
+      });
+
+      it("shows nothing when loading ends within the delay", async () => {
+        const { rerender } = render(ButtonLoading, {
+          loading: false,
+          loadingDelay: 300,
+        });
+        const button = screen.getByTestId("btn-labeled-loading");
+
+        await rerender({ loading: true });
+        await vi.advanceTimersByTimeAsync(200);
+        await rerender({ loading: false });
+        await vi.advanceTimersByTimeAsync(1000);
+        expect(button.querySelector(".bx--btn__loading")).toBeNull();
+        expect(button).not.toHaveAttribute("aria-busy");
+      });
+
+      it("keeps the spinner for the minimum duration once shown", async () => {
+        const { rerender } = render(ButtonLoading, {
+          loading: false,
+          loadingDelay: 300,
+        });
+        const button = screen.getByTestId("btn-labeled-loading");
+
+        await rerender({ loading: true });
+        await vi.advanceTimersByTimeAsync(350);
+        await rerender({ loading: false });
+        expect(button).not.toHaveAttribute("aria-busy");
+        expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
+
+        await vi.advanceTimersByTimeAsync(450);
+        expect(button.querySelector(".bx--btn__loading")).toBeNull();
+      });
+
+      it("shows the spinner on the first render when loading starts true", () => {
+        render(ButtonLoading, { loading: true, loadingDelay: 300 });
+
+        const button = screen.getByTestId("btn-labeled-loading");
+        expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
+      });
+    });
   });
 
   describe("Generics", () => {
