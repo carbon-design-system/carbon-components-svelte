@@ -227,6 +227,13 @@
     @include focus-outline("outline");
   }
 
+  // The card's ring stands for the grip's focus, so the grip draws none
+  // inside it. Ties the grip's `:focus-visible` rule and wins on order.
+  .#{$prefix}--kanban__item--focus .#{$prefix}--kanban__handle,
+  .#{$prefix}--kanban__item--picked .#{$prefix}--kanban__handle {
+    outline-style: none;
+  }
+
   .#{$prefix}--kanban__item--picked .#{$prefix}--kanban__card {
     background-color: $layer-hover;
   }

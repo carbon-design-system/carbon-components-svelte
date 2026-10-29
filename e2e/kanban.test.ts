@@ -275,6 +275,26 @@ test.describe("Kanban layout", () => {
   });
 });
 
+test.describe("Kanban focus ring", () => {
+  test("draws one ring on a focused or picked card", async ({ page }) => {
+    await page.goto("/kanban.html");
+    await handle(page, "Write the API spec").focus();
+    const rings = () =>
+      page
+        .locator('[data-kanban-item="b"]')
+        .evaluate((item) =>
+          [
+            item.querySelector(".bx--kanban__card"),
+            item.querySelector("button"),
+          ].map((el) => getComputedStyle(el as Element).outlineStyle),
+        );
+    // The card draws the ring; the grip inside it draws none.
+    expect(await rings()).toEqual(["solid", "none"]);
+    await page.keyboard.press("Space");
+    expect(await rings()).toEqual(["solid", "none"]);
+  });
+});
+
 test.describe("Kanban modes", () => {
   test("keeps the drop line and the picked card visible in forced colors", async ({
     page,
