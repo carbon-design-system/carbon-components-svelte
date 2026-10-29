@@ -97,12 +97,16 @@
    */
   export let ref = null;
 
+  import { onMount, setContext } from "svelte";
+  import { writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Menu from "../Menu/Menu.svelte";
+  import { MENU_OPEN_CONTEXT_KEY } from "../constants/context-keys.js";
   import { BUTTON_SIZE_BY_MENU_SIZE } from "../constants/sizes.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
+  import { listenMenuArrowOpen } from "../utils/menu-arrow-open.js";
 
   /**
    * The overflow menu scale is offset from MenuButton's: its unclassed
@@ -136,6 +140,34 @@
     open = !open;
     blurOnMouseClose(wasOpen, event, ref);
   }
+
+  // ArrowDown or ArrowUp on the closed trigger opens the menu on its first
+  // or last item.
+  /** @type {import("svelte/store").Writable<null | "ArrowDown" | "ArrowUp">} */
+  const openKey = writable(null);
+  setContext(MENU_OPEN_CONTEXT_KEY, openKey);
+
+  /** @type {(key: "ArrowDown" | "ArrowUp") => boolean} */
+  function openFromArrow(key) {
+    if (open || disabled) return false;
+    openKey.set(key);
+    open = true;
+    return true;
+  }
+
+  /** @type {HTMLElement | null} */
+  let arrowTrigger = null;
+  let stopArrowOpen = () => {};
+  /** @param {HTMLElement | null} node */
+  function listenToTrigger(node) {
+    // A bound ref invalidates on every update; only rebind a new element.
+    if (node === arrowTrigger) return;
+    stopArrowOpen();
+    arrowTrigger = node;
+    stopArrowOpen = listenMenuArrowOpen(node, openFromArrow);
+  }
+  $: listenToTrigger(ref);
+  onMount(() => () => stopArrowOpen());
 </script>
 
 {#if iconOnly}

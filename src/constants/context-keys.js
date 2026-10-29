@@ -60,3 +60,10 @@ export const THEME_ZONE_CONTEXT_KEY = "carbon:ThemeZone";
  * to the menu's `anchor`, the trigger.
  */
 export const MENU_PLACEMENT_CONTEXT_KEY = "carbon:MenuPlacement";
+
+/**
+ * Set by `MenuButton` and `ComboButton` to a writable store of the arrow
+ * key that opened their `Menu`, or `null`; read by a root `Menu` to focus
+ * its first or last item.
+ */
+export const MENU_OPEN_CONTEXT_KEY = "carbon:MenuOpenKey";

@@ -12,7 +12,7 @@ description: MenuButton is a labeled button that opens a dropdown of actions, in
 
 ## Basic
 
-Wrap `MenuItem` components in `MenuButton` and set `labelText` for the trigger label. Use the `labelChildren` slot for custom trigger content. Unlike [Menu](/components/Menu), `MenuButton` includes the trigger; you don't pass an anchor. See [Events](#events) for the menu's `close` event.
+Wrap `MenuItem` components in `MenuButton` and set `labelText` for the trigger label. Use the `labelChildren` slot for custom trigger content. Unlike [Menu](/components/Menu), `MenuButton` includes the trigger; you don't pass an anchor. With the trigger focused, <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> open the menu on its first or last item. See [Events](#events) for the menu's `close` event.
 
 <MenuButton labelText="Actions">
   <MenuItem on:click={() => console.log("Cut")}>Cut</MenuItem>

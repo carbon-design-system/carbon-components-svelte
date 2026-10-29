@@ -294,7 +294,6 @@
   use:rovingFocus={{
     selector: "li[data-nested='false']",
     orientation: "vertical",
-    wrap: false,
     skipDisabled: true,
     getActiveIndex: () => focusIndex,
     onMove: (index, event) => {

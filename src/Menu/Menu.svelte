@@ -109,9 +109,12 @@
     setContext,
     tick,
   } from "svelte";
-  import { derived, readable, writable } from "svelte/store";
+  import { derived, get, readable, writable } from "svelte/store";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
+  import {
+    MENU_OPEN_CONTEXT_KEY,
+    MENU_PLACEMENT_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
@@ -127,6 +130,7 @@
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitIntrinsicAlign, physicalAlign } from "../utils/menu-placement.js";
+  import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -245,6 +249,10 @@
     (!isSubmenu && getContext(MENU_PLACEMENT_CONTEXT_KEY)) || readable(null);
   $: placementAnchor = $placementGroup ?? anchor;
 
+  // Set by MenuButton and ComboButton when an arrow key opened the menu.
+  /** @type {undefined | import("svelte/store").Writable<null | "ArrowDown" | "ArrowUp">} */
+  const openKey = isSubmenu ? undefined : getContext(MENU_OPEN_CONTEXT_KEY);
+
   // Ids of `selected` items a `MenuItemGroup` has already seeded. Items and
   // submenus remount on every open, so this lives on the root menu.
   /** @type {Set<string>} */
@@ -267,10 +275,13 @@
       tick().then(() => {
         // `ref` stays unset during server rendering, which has no DOM.
         if (!open || !ref) return;
-        const firstItem = ref.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
-        if (firstItem instanceof HTMLElement) {
-          focusIndex = 0;
-          focusMenuItem(firstItem);
+        const items = getEnabledItems();
+        const key = openKey ? get(openKey) : null;
+        openKey?.set(null);
+        const item = key ? pickEdgeMenuItem(key, items) : items[0];
+        if (item) {
+          focusIndex = items.indexOf(item);
+          focusMenuItem(item);
         } else {
           ref.focus({ preventScroll: true });
         }
@@ -389,7 +400,6 @@
     use:rovingFocus={{
       selector: NON_DISABLED_MENUITEM_SELECTOR,
       orientation: "vertical",
-      wrap: false,
       focusOnMove: false,
       getActiveIndex: () => focusIndex,
       onMove: (index, event) => {

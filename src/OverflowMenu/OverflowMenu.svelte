@@ -400,6 +400,16 @@
     },
   };
 
+  // Set when ArrowUp opens the menu. Items mount only while open, so the
+  // last one is known once they register.
+  let openOnLast = false;
+  $: if (!open) {
+    openOnLast = false;
+  } else if (openOnLast && $items.length > 0) {
+    openOnLast = false;
+    last();
+  }
+
   afterUpdate(() => {
     if (open && $moveFocus && $focusedIndex < 0) {
       menuRef?.focus({ preventScroll: true });
@@ -696,6 +706,14 @@
         event.stopPropagation();
         closeFromKeyboard();
       }
+    } else if (
+      (event.key === "ArrowDown" || event.key === "ArrowUp") &&
+      !hasModifierKey(event)
+    ) {
+      // Open on the first item, or on the last for ArrowUp.
+      event.preventDefault();
+      openOnLast = event.key === "ArrowUp";
+      open = true;
     }
   }}
 >
