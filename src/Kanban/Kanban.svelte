@@ -1074,7 +1074,7 @@
   <div
     class:bx--visually-hidden={true}
     role="status"
-    aria-live="assertive"
+    aria-live="polite"
     aria-atomic="true"
   >
     {announcement}

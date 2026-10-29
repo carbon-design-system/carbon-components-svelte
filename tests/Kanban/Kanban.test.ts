@@ -35,6 +35,12 @@ describe("Kanban", () => {
     expect(stops[0]).toBe(handle("Alpha"));
   });
 
+  it("announces moves politely", () => {
+    render(Kanban);
+    // Moves are status, not errors that block the user.
+    expect(screen.getByRole("status")).toHaveAttribute("aria-live", "polite");
+  });
+
   it("moves a card with the keyboard and fires a cancelable move once, on drop", async () => {
     const onMove = vi.fn();
     render(Kanban, { onMove });
