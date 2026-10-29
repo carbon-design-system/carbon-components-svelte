@@ -211,7 +211,9 @@
     background-color: $layer-selected;
   }
 
-  // The gutter stays put while a long line scrolls sideways beneath it.
+  // The gutter stays put while a long line scrolls sideways beneath it. Its
+  // 16px start padding matches the search icon's inset in the toolbar, so
+  // the line numbers and the toolbar share one edge.
   .#{$prefix}--log-viewer__gutter {
     position: sticky;
     z-index: 1;
@@ -220,7 +222,7 @@
     flex: none;
     align-items: flex-start;
     align-self: stretch;
-    padding-left: $carbon--spacing-04;
+    padding-left: $carbon--spacing-05;
     background-color: inherit;
     color: $text-secondary;
     gap: $carbon--spacing-04;

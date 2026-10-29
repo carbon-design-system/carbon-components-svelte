@@ -315,6 +315,27 @@ test("the log keeps its direction on an RTL page, and the toolbar flips", async 
   expect(rtl.searchFromRight).toBeLessThan(rtl.searchFromLeft);
 });
 
+test("the line numbers start at the edge of the toolbar's search icon", async ({
+  page,
+}) => {
+  await page.goto("/log-viewer.html?lines=9");
+  await expect(page.getByRole("log")).toBeVisible();
+
+  const edges = await page.evaluate(() => {
+    const icon = document.querySelector(".bx--search-magnifier-icon");
+    const number = document.querySelector(".bx--log-viewer__line-number");
+    if (!icon || !number) throw new Error("missing");
+    const box = icon.getBoundingClientRect();
+    const inset = Number.parseFloat(getComputedStyle(icon).paddingLeft);
+    return {
+      icon: Math.round(box.left + inset),
+      number: Math.round(number.getBoundingClientRect().left),
+    };
+  });
+
+  expect(edges.number).toBe(edges.icon);
+});
+
 test("has no detectable accessibility violations in White and Gray 100", async ({
   page,
 }) => {
