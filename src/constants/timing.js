@@ -29,6 +29,14 @@ export const TOOLTIP_SKIP_DELAY_MS = 300;
 export const SUBMENU_HOVER_DELAY_MS = 150;
 
 /**
+ * Interval to re-check a pointer that left a submenu's item while moving
+ * toward the submenu. Each check holds the close for one more interval
+ * while the pointer keeps aiming at it, so a pointer still for this long
+ * has paused and the close goes ahead.
+ */
+export const SUBMENU_AIM_PAUSE_MS = 100;
+
+/**
  * Default hover delay before a resize separator (`Splitter`) highlights and
  * shows the resize cursor (Carbon moderate-01).
  */

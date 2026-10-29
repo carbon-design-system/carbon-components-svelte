@@ -90,7 +90,10 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
-  import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
+  import {
+    SUBMENU_AIM_PAUSE_MS,
+    SUBMENU_HOVER_DELAY_MS,
+  } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
@@ -117,11 +120,18 @@
   let submenuOpen = false;
   /** @type {"left" | "right"} */
   let submenuDirection = "right";
+  /** @type {HTMLUListElement | null} */
+  let submenuRef = null;
   const hoverIntent = createSubmenuHoverIntent(
     (value) => {
       submenuOpen = value;
     },
-    { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
+    {
+      openDelay: SUBMENU_HOVER_DELAY_MS,
+      closeDelay: SUBMENU_HOVER_DELAY_MS,
+      aimPause: SUBMENU_AIM_PAUSE_MS,
+      getSubmenu: () => (submenuOpen ? submenuRef : null),
+    },
   );
   // `selected` implies the checkbox variant. Latch it instead of writing back
   // to `selectable` so deselecting the item keeps its role and indentation.
@@ -288,8 +298,10 @@
   on:mouseenter={() => {
     if (hasSubmenu) scheduleOpenSubmenu();
   }}
-  on:mouseleave={() => {
-    if (hasSubmenu) scheduleCloseSubmenu();
+  on:mouseleave={(event) => {
+    // The event's position lets the close wait while the pointer aims at
+    // the submenu across the items below.
+    if (hasSubmenu) hoverIntent.scheduleClose(event);
   }}
 >
   <div
@@ -339,6 +351,7 @@
 
   {#if hasSubmenu}
     <Menu
+      bind:ref={submenuRef}
       anchor={ref}
       direction={submenuDirection}
       intrinsicWidth
