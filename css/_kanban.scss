@@ -172,9 +172,11 @@
     user-select: none;
   }
 
+  // At least 48px tall: a one-line card keeps a 56px pitch while its menu
+  // button overhangs the padding (see `.bx--kanban__menu`).
   .#{$prefix}--kanban__card {
     display: flex;
-    min-block-size: 0;
+    min-block-size: to-rem(48px);
     min-inline-size: 0;
     align-items: flex-start;
     padding: $carbon--spacing-03 $carbon--spacing-02 $carbon--spacing-03
@@ -217,14 +219,16 @@
 
   // `touch-action: none` lets a finger on the handle drag the card at once
   // instead of scrolling the column. A press elsewhere on a card scrolls, and
-  // a long press lifts it.
+  // a long press lifts it. The top margin centers the 24px button on the
+  // title's first 18px line, which starts below the body's 4px padding.
   .#{$prefix}--kanban__handle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     border: 0;
-    margin: 0;
+    margin: calc(#{$carbon--spacing-02} + (#{to-rem(18px)} - #{to-rem(24px)}) / 2)
+      0 0;
     background: none;
     block-size: to-rem(24px);
     color: $icon-secondary;
@@ -238,8 +242,13 @@
     }
   }
 
+  // The menu icon centers on the title's first 18px line, as the grip
+  // does (see `.bx--kanban__handle`).
   .#{$prefix}--kanban__menu {
     flex: none;
+    margin-block: calc(
+      #{$carbon--spacing-02} + (#{to-rem(18px)} - #{to-rem(32px)}) / 2
+    );
   }
 
   // A keyboard focus ring on the card, set by the component, since the

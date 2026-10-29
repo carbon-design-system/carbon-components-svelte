@@ -331,6 +331,43 @@ test.describe("Kanban header alignment", () => {
   });
 });
 
+test.describe("Kanban card icons", () => {
+  // These checks can move to the layout helpers of #5240 once it merges.
+  test("centers the grip and the menu icon on the title's first line", async ({
+    page,
+  }) => {
+    await page.goto("/kanban.html");
+    for (const id of ["a", "b", "c"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one card at a time
+      const centers = await page
+        .locator(`[data-kanban-item="${id}"]`)
+        .evaluate((item) => {
+          const center = (selector: string) => {
+            const box = item.querySelector(selector)?.getBoundingClientRect();
+            return box ? box.top + box.height / 2 : Number.NaN;
+          };
+          const title = item.querySelector(".bx--kanban__card-title");
+          const line = Number.parseFloat(
+            getComputedStyle(title as Element).lineHeight,
+          );
+          const top = title?.getBoundingClientRect().top ?? Number.NaN;
+          return {
+            line: top + line / 2,
+            grip: center(".bx--kanban__handle svg"),
+            menu: center(".bx--kanban__menu svg"),
+          };
+        });
+      expect(Math.abs(centers.grip - centers.line)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(centers.menu - centers.line)).toBeLessThanOrEqual(0.5);
+    }
+    // A one-line card keeps a 48px height, so the pitch stays 56px.
+    const card = await boxOf(
+      page.locator('[data-kanban-item="c"] .bx--kanban__card'),
+    );
+    expect(card.height).toBe(48);
+  });
+});
+
 test.describe("Kanban focus ring", () => {
   test("draws one ring on a focused or picked card", async ({ page }) => {
     await page.goto("/kanban.html");
