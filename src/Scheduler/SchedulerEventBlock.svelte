@@ -24,8 +24,17 @@
   /** Specify the title. */
   export let title = "";
 
-  /** Specify the time text, such as `"10:00 AM"`. */
+  /** Specify the start time text, such as `"10:00 AM"`. */
   export let timeText = "";
+
+  /** Specify the end time text. A block shows it after the start time. */
+  export let endText = "";
+
+  /**
+   * Specify the direction of the locale that formatted the times.
+   * @type {"ltr" | "rtl"}
+   */
+  export let timeDir = "ltr";
 
   /** Specify the accessible name. */
   export let label = "";
@@ -70,11 +79,25 @@
   data-event-id={eventId}
   data-slice-key={sliceKey}
   aria-label={label}
+  title={label}
   {tabindex}
 >
-  <span class="bx--scheduler__event-title" dir="auto">{title}</span>
-  {#if timeText}
-    <span class="bx--scheduler__event-time" dir="auto">{timeText}</span>
+  <span class="bx--scheduler__event-line">
+    <span class="bx--scheduler__event-title" dir="auto">{title}</span>
+    {#if timeText && variant !== "block"}
+      <span class="bx--scheduler__event-time" dir={timeDir}>{timeText}</span>
+    {/if}
+  </span>
+  {#if timeText && variant === "block"}
+    <span
+      class="bx--scheduler__event-line bx--scheduler__event-line--time"
+      dir={timeDir}
+    >
+      <span class="bx--scheduler__event-time">{timeText}</span>
+      {#if endText}
+        <span class="bx--scheduler__event-time">– {endText}</span>
+      {/if}
+    </span>
   {/if}
   {#if resizable}
     <span class="bx--scheduler__event-resize" data-resize aria-hidden="true"

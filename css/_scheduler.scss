@@ -392,22 +392,50 @@ $ccs-scheduler-date: to-rem(28px);
     }
   }
 
+  // A line of event text shows a part only when it fits. The empty first
+  // item is as tall as the line and holds its first row, so a part too wide
+  // for the rest of it wraps to a second row, which the line's height
+  // hides. A time is never cut: it
+  // shows whole or not at all. A title shows when at least 32px is free, and
+  // ends in an ellipsis; below that the block is color alone, and its name
+  // and `title` still give the event.
+  .#{$prefix}--scheduler__event-line {
+    display: flex;
+    overflow: hidden;
+    min-width: 0;
+    height: to-rem(16px);
+    flex: none;
+    flex-wrap: wrap;
+
+    &::before {
+      height: 100%;
+      content: "";
+    }
+  }
+
   .#{$prefix}--scheduler__event-title {
     overflow: hidden;
+    min-width: to-rem(32px);
+    max-width: max-content;
+    flex: 1 1 0;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .#{$prefix}--scheduler__event-time {
-    overflow: hidden;
-    text-overflow: ellipsis;
+    flex: none;
     white-space: nowrap;
+  }
+
+  .#{$prefix}--scheduler__event-title + .#{$prefix}--scheduler__event-time,
+  .#{$prefix}--scheduler__event-time + .#{$prefix}--scheduler__event-time {
+    margin-inline-start: $carbon--spacing-02;
   }
 
   // A one-slot event has room for one line: the title.
   .#{$prefix}--scheduler__event--compact
-    .#{$prefix}--scheduler__event-time {
+    .#{$prefix}--scheduler__event-line--time {
     display: none;
   }
 
@@ -421,7 +449,11 @@ $ccs-scheduler-date: to-rem(28px);
     flex-direction: row;
     align-items: center;
     padding-block: 0;
-    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--scheduler__event--bar > .#{$prefix}--scheduler__event-line,
+  .#{$prefix}--scheduler__event--chip > .#{$prefix}--scheduler__event-line {
+    flex: 1 1 0;
   }
 
   .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--block {

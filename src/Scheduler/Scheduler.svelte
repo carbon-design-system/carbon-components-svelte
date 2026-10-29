@@ -569,7 +569,7 @@
    * @param {typeof eventLabelText} labelText
    */
   function createDescriber(formats, labelText) {
-    /** @type {WeakMap<object, { label: string; timeText: string }>} */
+    /** @type {WeakMap<object, { label: string; timeText: string; endText: string }>} */
     const memo = new WeakMap();
     /** @param {(typeof records)[number]} record */
     function describeRecord(record) {
@@ -580,6 +580,7 @@
       /** @type {SchedulerLabelInfo} */
       let info;
       let timeText = "";
+      let endText = "";
       if (allDayEvent && record.allDay) {
         info = {
           allDay: true,
@@ -591,8 +592,8 @@
       } else {
         const startTime = formats.time(record.startMs);
         const endTime = formats.time(record.endMs);
-        timeText =
-          multiDay || record.banner ? startTime : `${startTime} – ${endTime}`;
+        timeText = startTime;
+        if (!multiDay && !record.banner) endText = endTime;
         info = {
           allDay: false,
           multiDay,
@@ -611,6 +612,7 @@
           info,
         ),
         timeText,
+        endText,
       };
       memo.set(record, described);
       return described;
@@ -1537,6 +1539,7 @@
                     sliceKey="{bar.record.id}:0"
                     title={bar.record.event.title}
                     timeText={bar.record.allDay ? "" : described.timeText}
+                    timeDir={localeDir}
                     label={described.label}
                     color={bar.record.event.color}
                     continuesBefore={bar.continuesBefore}
@@ -1642,6 +1645,10 @@
                         timeText={segment.continuesBefore
                           ? ""
                           : described.timeText}
+                        endText={segment.continuesBefore
+                          ? ""
+                          : described.endText}
+                        timeDir={localeDir}
                         label={described.label}
                         color={segment.record.event.color}
                         continuesBefore={segment.continuesBefore}
@@ -1750,7 +1757,8 @@
                         title={bar.record.event.title}
                         timeText={bar.record.banner || bar.continuesBefore
                           ? ""
-                          : described.timeText.split(" – ")[0]}
+                          : described.timeText}
+                        timeDir={localeDir}
                         label={described.label}
                         color={bar.record.event.color}
                         continuesBefore={bar.continuesBefore}

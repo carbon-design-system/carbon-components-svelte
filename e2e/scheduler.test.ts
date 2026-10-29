@@ -246,6 +246,29 @@ test.describe("Scheduler layout", () => {
     expect(label.y).toBeGreaterThanOrEqual(head.y + head.height - 0.5);
   });
 
+  for (const view of ["week", "month"]) {
+    test(`shows each ${view} time whole or not at all`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 800 });
+      await page.goto(`/scheduler.html?view=${view}`);
+      await expect(page.locator("[data-event-id]").first()).toBeVisible();
+      const parts = await page
+        .locator(".bx--scheduler__event-line > *")
+        .evaluateAll((els) =>
+          els.map((el) => {
+            const box = el.getBoundingClientRect();
+            const line = (el.parentElement as Element).getBoundingClientRect();
+            return {
+              shown: box.top < line.bottom - 0.5,
+              inside:
+                box.left >= line.left - 0.5 && box.right <= line.right + 0.5,
+            };
+          }),
+        );
+      expect(parts.length).toBeGreaterThan(0);
+      expect(parts.filter((part) => part.shown && !part.inside)).toEqual([]);
+    });
+  }
+
   test("lays out the 12-hour axis in English", async ({ page }) => {
     await expect(page.locator(".bx--scheduler__hour").nth(12)).toHaveText(
       "1 PM",
