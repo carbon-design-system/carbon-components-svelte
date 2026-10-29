@@ -235,6 +235,17 @@ test.describe("Scheduler layout", () => {
     );
   });
 
+  test("shows the first hour label whole below the header", async ({
+    page,
+  }) => {
+    const head = await page.locator(".bx--scheduler__head").boundingBox();
+    const label = await page
+      .locator(".bx--scheduler__hour", { hasText: /^8 AM$/ })
+      .boundingBox();
+    if (!head || !label) throw new Error("no box");
+    expect(label.y).toBeGreaterThanOrEqual(head.y + head.height - 0.5);
+  });
+
   test("lays out the 12-hour axis in English", async ({ page }) => {
     await expect(page.locator(".bx--scheduler__hour").nth(12)).toHaveText(
       "1 PM",

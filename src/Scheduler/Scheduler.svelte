@@ -679,13 +679,23 @@
   /** @type {null | HTMLDivElement} */
   let monthRef = null;
 
-  /** @param {HTMLElement} node */
+  /**
+   * Scrolls the grid so the hour's line sits below the sticky header. Hour
+   * labels center on their line, so the scroll stops one label height early
+   * and the first label shows whole.
+   * @param {HTMLElement} node
+   */
   function scrollToHour(node) {
     const body = node.querySelector(".bx--scheduler__body");
     if (body) {
-      node.scrollTop =
+      const label = node.querySelector(".bx--scheduler__hour");
+      const room = label ? label.getBoundingClientRect().height : 0;
+      node.scrollTop = Math.max(
+        0,
         (scrollHourMinute(scrollHour) / MINUTES_PER_DAY) *
-        body.getBoundingClientRect().height;
+          body.getBoundingClientRect().height -
+          room,
+      );
     }
   }
 
