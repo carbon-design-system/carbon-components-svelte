@@ -295,9 +295,10 @@
     color: inherit;
   }
 
+  // The current match keeps the highlight and adds a focus-colored ring, so
+  // it does not read as ANSI reverse video, which inverts the colors.
   .#{$prefix}--log-viewer__mark--current {
-    background-color: $background-inverse;
-    color: $text-inverse;
+    box-shadow: inset 0 0 0 2px $focus;
   }
 
   .#{$prefix}--log-viewer__empty {
