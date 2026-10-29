@@ -67,4 +67,21 @@ test.describe("TextArea", () => {
 
     await expect(textarea).toHaveValue("abc");
   });
+
+  // The counter's hidden text is a 1px absolute box at the end of the
+  // count. Flush with the page edge, it scrolled the page 1px sideways.
+  test("the counter keeps the page from scrolling sideways", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    for (const dir of ["ltr", "rtl"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      const { scrollWidth, clientWidth } = await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+        const { scrollWidth, clientWidth } = document.documentElement;
+        return { scrollWidth, clientWidth };
+      }, dir);
+      expect.soft(scrollWidth, dir).toBe(clientWidth);
+    }
+  });
 });
