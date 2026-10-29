@@ -117,16 +117,6 @@
     justify-content: center;
   }
 
-  // An operator with nothing to choose is plain text.
-  .#{$prefix}--query-builder__static {
-    @include type-style("body-compact-01");
-
-    display: flex;
-    min-height: var(--ccs-query-builder-field-height);
-    align-items: center;
-    color: $text-primary;
-  }
-
   .#{$prefix}--query-builder__actions {
     display: flex;
     flex: 0 0 auto;

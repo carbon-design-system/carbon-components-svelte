@@ -147,6 +147,21 @@ describe("QueryBuilder", () => {
     expect(bound().conditions[1].value).toBe(false);
   });
 
+  it("shows a field's only operator in a read-only select", () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [{ field: "active", operator: "is", value: true }],
+        },
+      },
+    });
+
+    const operator = screen.getByRole("combobox", { name: "Operator" });
+    expect(operator).toHaveAttribute("aria-readonly", "true");
+    expect(operator).toHaveDisplayValue("is");
+  });
+
   it("reorders a row and keeps focus on the button that still works", async () => {
     render(QueryBuilder, {
       props: {

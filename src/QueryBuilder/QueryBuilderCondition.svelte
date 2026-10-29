@@ -201,7 +201,9 @@
     </Select>
   </div>
   <div class="bx--query-builder__cell bx--query-builder__cell--operator">
-    {#if operators.length > 1}
+    {#if operators.length > 0}
+      <!-- A field with one operator shows it read only, so the column
+        keeps its field and its text lines up with the rows around it. -->
       <Select
         id="{base}-operator"
         size={controlSize}
@@ -209,17 +211,13 @@
         hideLabel
         selected={node.operator}
         {disabled}
-        {readonly}
+        readonly={readonly || operators.length === 1}
         on:update={(event) => setOperator(String(event.detail))}
       >
         {#each operators as operator (operator)}
           <SelectItem value={operator} text={translate(`op.${operator}`)} />
         {/each}
       </Select>
-    {:else if operators.length === 1}
-      <span class="bx--query-builder__static" id="{base}-operator"
-        >{translate(`op.${operators[0]}`)}</span
-      >
     {/if}
   </div>
   {#if field && arity !== "none"}

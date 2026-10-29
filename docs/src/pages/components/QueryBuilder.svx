@@ -90,7 +90,7 @@ Changing a row's field keeps its operator and value when the new field is of the
 
 ### Operators
 
-Set `operators` on a field to offer only some of its kind's operators, in the order you list them. A field left with one operator shows it as plain text.
+Set `operators` on a field to offer only some of its kind's operators, in the order you list them. A field left with one operator shows it in a read-only select.
 
 <QueryBuilder fields={operatorFields} value={flat} />
 
