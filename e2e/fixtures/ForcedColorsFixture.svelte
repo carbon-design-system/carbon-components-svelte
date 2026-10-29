@@ -526,4 +526,17 @@
       Delete
     </Button>
   </div>
+
+  <ul data-testid="overflow-menus" style="list-style: none; padding: 0;">
+    {#each [1, 2, 3] as row}
+      <li>
+        <OverflowMenu
+          id="fc-overflow-{row}"
+          iconDescription="Row {row} actions"
+        >
+          <OverflowMenuItem text="Edit" />
+        </OverflowMenu>
+      </li>
+    {/each}
+  </ul>
 </main>

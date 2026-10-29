@@ -952,6 +952,55 @@ test.describe("forced colors", () => {
     expect.soft(await flatness(page, result), result).toBeLessThan(0.95);
   });
 
+  // A transparent resting outline is forced to a visible color, so a list
+  // with a menu per row drew a box on every row.
+  test("an OverflowMenu trigger draws a ring only when focused or open", async ({
+    page,
+  }) => {
+    const edges = (selector: string) =>
+      page.evaluate((selector) => {
+        const el = document.querySelector(selector);
+        if (!el) throw new Error(`no ${selector}`);
+        const s = getComputedStyle(el);
+        return {
+          border: s.borderTopStyle,
+          outline: s.outlineStyle,
+          outlineWidth: s.outlineWidth,
+          outlineColor: s.outlineColor,
+        };
+      }, selector);
+    const ring = (color: SystemColor) => ({
+      outline: "solid",
+      outlineWidth: "2px",
+      outlineColor: system[color],
+    });
+
+    for (const trigger of ["#fc-overflow-1", "#fc-overflow-2"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: reads one trigger at a time
+      expect.soft(await edges(trigger), trigger).toMatchObject({
+        border: "none",
+        outline: "none",
+      });
+    }
+
+    await page.focus("#fc-overflow-1");
+    expect
+      .soft(await edges("#fc-overflow-1"), "focused")
+      .toMatchObject(ring("Highlight"));
+    expect
+      .soft(await edges("#fc-overflow-2"), "beside the focused trigger")
+      .toMatchObject({ outline: "none" });
+
+    await page.click("#fc-overflow-2");
+    await expect(page.locator("#fc-overflow-2")).toHaveClass(
+      /bx--overflow-menu--open/,
+    );
+    expect
+      .soft(await edges("#fc-overflow-2"), "open")
+      .toMatchObject(ring("CanvasText"));
+    await page.keyboard.press("Escape");
+  });
+
   // The underline is a background fill, which forced colors repaint.
   test("the current PaginationNav page keeps its underline", async ({
     page,
