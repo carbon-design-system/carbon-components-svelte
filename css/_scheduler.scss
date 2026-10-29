@@ -365,7 +365,12 @@ $ccs-scheduler-date: to-rem(28px);
     );
   }
 
+  // An event shows its color twice: the fill, and a bar on its inline-start
+  // edge. Its other edges get a border only in forced colors, which drop
+  // the fill.
   .#{$prefix}--scheduler__event {
+    --ccs-scheduler-accent: #{get-token-value($tag-colors, "tag-border-blue")};
+
     position: relative;
     display: flex;
     overflow: hidden;
@@ -374,7 +379,7 @@ $ccs-scheduler-date: to-rem(28px);
     box-sizing: border-box;
     flex-direction: column;
     padding: to-rem(2px) $carbon--spacing-03;
-    border: 1px solid get-token-value($tag-colors, "tag-border-blue");
+    border: 0 solid transparent;
     background-color: get-token-value($tag-colors, "tag-background-blue");
     color: get-token-value($tag-colors, "tag-color-blue");
     cursor: pointer;
@@ -386,7 +391,8 @@ $ccs-scheduler-date: to-rem(28px);
 
   @each $name in $ccs-scheduler-colors {
     .#{$prefix}--scheduler__event[data-color="#{$name}"] {
-      border-color: get-token-value($tag-colors, "tag-border-#{$name}");
+      --ccs-scheduler-accent: #{get-token-value($tag-colors, "tag-border-#{$name}")};
+
       background-color: get-token-value($tag-colors, "tag-background-#{$name}");
       color: get-token-value($tag-colors, "tag-color-#{$name}");
     }
@@ -395,10 +401,9 @@ $ccs-scheduler-date: to-rem(28px);
   // A line of event text shows a part only when it fits. The empty first
   // item is as tall as the line and holds its first row, so a part too wide
   // for the rest of it wraps to a second row, which the line's height
-  // hides. A time is never cut: it
-  // shows whole or not at all. A title shows when at least 32px is free, and
-  // ends in an ellipsis; below that the block is color alone, and its name
-  // and `title` still give the event.
+  // hides. A time is never cut: it shows whole or not at all. A title shows
+  // when at least 32px is free, and ends in an ellipsis; below that the
+  // block is color alone, and its name and `title` still give the event.
   .#{$prefix}--scheduler__event-line {
     display: flex;
     overflow: hidden;
@@ -439,10 +444,9 @@ $ccs-scheduler-date: to-rem(28px);
     display: none;
   }
 
-  .#{$prefix}--scheduler__event--block {
-    // A bar on the inline-start edge marks the event the way Carbon's tag
-    // border does, and survives forced colors as a border.
-    border-inline-start-width: to-rem(4px);
+  .#{$prefix}--scheduler__event--block,
+  .#{$prefix}--scheduler__event--bar {
+    border-inline-start: to-rem(4px) solid var(--ccs-scheduler-accent);
   }
 
   .#{$prefix}--scheduler__event--bar {
@@ -456,22 +460,22 @@ $ccs-scheduler-date: to-rem(28px);
     flex: 1 1 0;
   }
 
+  // A dashed edge in the event's color marks where it runs on past what
+  // the view shows.
   .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--block {
-    border-block-start-style: dashed;
+    border-block-start: 1px dashed var(--ccs-scheduler-accent);
   }
 
   .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--block {
-    border-block-end-style: dashed;
+    border-block-end: 1px dashed var(--ccs-scheduler-accent);
   }
 
-  .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--bar,
-  .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--chip {
+  .#{$prefix}--scheduler__event--before.#{$prefix}--scheduler__event--bar {
     border-inline-start-style: dashed;
   }
 
-  .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--bar,
-  .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--chip {
-    border-inline-end-style: dashed;
+  .#{$prefix}--scheduler__event--after.#{$prefix}--scheduler__event--bar {
+    border-inline-end: 1px dashed var(--ccs-scheduler-accent);
   }
 
   // A timed event in a month cell reads as a dot and a line of text. The
@@ -480,7 +484,6 @@ $ccs-scheduler-date: to-rem(28px);
     flex-direction: row;
     align-items: center;
     padding-block: 0;
-    border-color: transparent;
     background-color: transparent;
     color: $text-primary;
     gap: $carbon--spacing-02;
@@ -489,19 +492,14 @@ $ccs-scheduler-date: to-rem(28px);
       width: 0;
       height: 0;
       flex: none;
-      border: 4px solid get-token-value($tag-colors, "tag-border-blue");
+      border: 4px solid var(--ccs-scheduler-accent);
       border-radius: 50%;
       content: "";
     }
   }
 
   @each $name in $ccs-scheduler-colors {
-    .#{$prefix}--scheduler__event--chip[data-color="#{$name}"]::before {
-      border-color: get-token-value($tag-colors, "tag-border-#{$name}");
-    }
-
     .#{$prefix}--scheduler__event--chip[data-color="#{$name}"] {
-      border-color: transparent;
       background-color: transparent;
       color: $text-primary;
     }
@@ -690,6 +688,15 @@ $ccs-scheduler-date: to-rem(28px);
   }
 
   @media (forced-colors: active) {
+    .#{$prefix}--scheduler__event {
+      border-width: 1px;
+    }
+
+    .#{$prefix}--scheduler__event--block,
+    .#{$prefix}--scheduler__event--bar {
+      border-inline-start-width: to-rem(4px);
+    }
+
     // The tinted today ring, the selection and a month cell's selection are
     // backgrounds, which forced colors drop. Each keeps an outline.
     .#{$prefix}--scheduler__selection,
