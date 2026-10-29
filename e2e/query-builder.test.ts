@@ -346,6 +346,30 @@ test.describe("QueryBuilder layout", () => {
       }
     }
   });
+
+  test("keeps each footer with its group, 32 px before the next footer", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    const footers = await page
+      .locator(".bx--query-builder__footer")
+      .evaluateAll((els) =>
+        els.map((footer) => {
+          const body = footer.previousElementSibling as HTMLElement;
+          return {
+            top: footer.getBoundingClientRect().top,
+            bottom: footer.getBoundingClientRect().bottom,
+            body: body.getBoundingClientRect().bottom,
+          };
+        }),
+      );
+    // A footer follows its body, so document order is innermost first.
+    const [level3, level2, root] = footers;
+    expect(level3.top - level3.body).toBeCloseTo(8, 0);
+    expect(level2.top - level3.bottom).toBeCloseTo(32, 0);
+    expect(root.top - level2.bottom).toBeCloseTo(32, 0);
+  });
 });
 
 test.describe("QueryBuilder forced colors", () => {

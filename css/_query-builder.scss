@@ -37,6 +37,15 @@
   .#{$prefix}--query-builder__group--nested {
     padding-inline-start: $carbon--spacing-05;
     border-inline-start: 2px solid $border-subtle;
+    // Rows are 16 px apart, so a group ends 32 px before the next row,
+    // twice the gap inside it.
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  // The parent's footer follows 8 px after its body. Keep the same 32 px
+  // between the two footers, so each reads with its own group.
+  .#{$prefix}--query-builder__group--nested:last-child {
+    margin-block-end: $carbon--spacing-06;
   }
 
   .#{$prefix}--query-builder__body {
