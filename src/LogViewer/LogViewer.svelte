@@ -177,7 +177,7 @@
   export let levelsLabelText = "Show levels";
 
   /**
-   * Specify the label of a level, on its badge and its filter.
+   * Specify the label of a level, in its column and its filter.
    * @type {(level: LogViewerLevel) => string}
    */
   export let levelText = defaultLevelText;

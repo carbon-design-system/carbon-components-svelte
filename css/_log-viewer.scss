@@ -183,12 +183,15 @@
     }
   }
 
+  // A whole pixel of line height, as `code-02`'s 1.43 rounds to 19.98px and
+  // the window places rows at a fixed pitch.
   .#{$prefix}--log-viewer__line {
     display: flex;
     width: max-content;
     min-width: 100%;
     align-items: flex-start;
     background-color: $layer;
+    line-height: to-rem(20px);
   }
 
   .#{$prefix}--log-viewer--wrap .#{$prefix}--log-viewer__line {
@@ -198,7 +201,7 @@
 
   // The bar sits on the gutter, which fills the line's height, so a wrapped
   // line has it beside every row. It is a shadow, which forced colors drop:
-  // the badge's text is what tells the levels apart there.
+  // the level's text is what tells the levels apart there.
   .#{$prefix}--log-viewer__line--warn > .#{$prefix}--log-viewer__gutter {
     box-shadow: inset 3px 0 0 $support-warning;
   }
@@ -259,20 +262,18 @@
     min-width: 12ch;
   }
 
-  // Every badge is as wide as the longest label, so the message starts the
-  // same distance after each one. The labels are monospace.
+  // The level is text in the time column's style, as wide as the longest
+  // label, so the message starts the same distance after each one. Warnings
+  // and errors take the primary text color; their bar carries the status
+  // color, so each status has one color and one label.
   .#{$prefix}--log-viewer__level {
-    display: flex;
-    height: to-rem(20px);
+    min-width: calc(var(--ccs-log-level-chars, 5) * 1ch);
     flex: none;
-    align-items: center;
+  }
 
-    .#{$prefix}--tag {
-      min-width: calc(var(--ccs-log-level-chars, 5) * 1ch + #{$carbon--spacing-05});
-      margin: 0;
-      // Tracking would make a label wider than its count of `ch`.
-      letter-spacing: 0;
-    }
+  .#{$prefix}--log-viewer__line--warn .#{$prefix}--log-viewer__level,
+  .#{$prefix}--log-viewer__line--error .#{$prefix}--log-viewer__level {
+    color: $text-primary;
   }
 
   .#{$prefix}--log-viewer__text {

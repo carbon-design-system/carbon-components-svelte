@@ -43,7 +43,7 @@ description: Log viewers show a stream of text lines, such as build output or se
 
 ## Basic
 
-LogViewer shows `lines` in a monospace font, oldest first, with line numbers. A line is a string, and the viewer reads a leading ISO timestamp and level word, such as `ERROR` or `[warn]`, into a time and a level badge. It starts at the newest line. Name it with `labelText`, and set its `height` as a CSS length, or `"100%"` to fill a parent that has a height.
+LogViewer shows `lines` in a monospace font, oldest first, with line numbers. A line is a string, and the viewer reads a leading ISO timestamp and level word, such as `ERROR` or `[warn]`, into a time and a level label. It starts at the newest line. Name it with `labelText`, and set its `height` as a CSS length, or `"100%"` to fill a parent that has a height.
 
 Only the lines in view are in the page, so a log of 100,000 lines costs about as much as one of 100. The toolbar searches the whole log, not only the lines drawn.
 
@@ -79,7 +79,7 @@ The 16 colors come from the Carbon palette in two sets, one for light themes and
 
 <LogViewer lines={colors} labelText="Terminal colors" height="14rem" lineNumbers={false} />
 
-In forced colors, the system draws all text in its own colors, so ANSI colors collapse. Bold, underline and the other styles stay, and a level is always written out in its badge, so nothing is carried by color alone.
+In forced colors, the system draws all text in its own colors, so ANSI colors collapse. Bold, underline and the other styles stay, and a level is always written out as text, so nothing is carried by color alone.
 
 ## Lines
 

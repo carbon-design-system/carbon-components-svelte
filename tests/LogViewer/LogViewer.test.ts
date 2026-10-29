@@ -56,7 +56,7 @@ describe("LogViewer", () => {
 
     const row = rows()[0];
     expect(row).toHaveClass("bx--log-viewer__line--error");
-    expect(within(row).getByText("ERROR")).toHaveClass("bx--tag--red");
+    expect(within(row).getByText("ERROR")).toHaveClass("bx--log-viewer__level");
     expect(row.querySelector(".bx--log-viewer__text")).toHaveTextContent(
       /^disk full$/,
     );

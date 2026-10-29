@@ -25,7 +25,7 @@
   /** Set to `true` to show the time. */
   export let timestamps = false;
 
-  /** Set to `true` to leave room for a level badge. */
+  /** Set to `true` to leave room for a level label. */
   export let levelColumn = false;
 
   /** Set to `true` to link the URLs in the line. */
@@ -45,7 +45,7 @@
   export let minContrast = 4.5;
 
   /**
-   * Specify the label of a level badge.
+   * Specify the label of a level.
    * @type {(level: import("../utils/log-lines.js").LogLevel) => string}
    */
   export let levelText;
@@ -176,19 +176,9 @@
         <span class:bx--log-viewer__time={true}>{formatLogTime(row.time)}</span>
       {/if}
       {#if levelColumn}
-        <span class:bx--log-viewer__level={true}>
-          {#if row.level}
-            <span
-              class:bx--tag={true}
-              class:bx--tag--sm={true}
-              class:bx--tag--gray={row.level === "debug"}
-              class:bx--tag--blue={row.level === "info"}
-              class:bx--tag--magenta={row.level === "warn"}
-              class:bx--tag--red={row.level === "error"}
-              >{levelText(row.level)}</span
-            >
-          {/if}
-        </span>
+        <span class:bx--log-viewer__level={true}
+          >{row.level ? levelText(row.level) : ""}</span
+        >
       {/if}
     </span>
   {/if}

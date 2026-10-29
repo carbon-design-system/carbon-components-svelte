@@ -25,7 +25,9 @@ describe("LogViewer on the server", () => {
     });
 
     const row = document.querySelector("[data-line-id]");
-    expect(row?.querySelector(".bx--tag--red")?.textContent).toBe("ERROR");
+    expect(row?.querySelector(".bx--log-viewer__level")?.textContent).toBe(
+      "ERROR",
+    );
     expect(row?.querySelector(".bx--log-viewer__time")?.textContent).toBe(
       "09:41:07.123",
     );

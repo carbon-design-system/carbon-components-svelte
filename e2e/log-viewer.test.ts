@@ -241,7 +241,9 @@ test("levels carry a text label, so forced colors keep them apart", async ({
 
   const result = await page.evaluate(() => {
     const el = document.querySelector("[role=log]");
-    const badge = el?.querySelector(".bx--log-viewer__line--error .bx--tag");
+    const level = el?.querySelector(
+      ".bx--log-viewer__line--error .bx--log-viewer__level",
+    );
     const current = el?.querySelector(".bx--log-viewer__mark--current");
     const link = el?.querySelector<HTMLElement>("a");
     const mark = el?.querySelector(
@@ -254,7 +256,7 @@ test("levels carry a text label, so forced colors keep them apart", async ({
       return getComputedStyle(probe).backgroundColor;
     };
     const out = {
-      badgeText: badge?.textContent?.trim(),
+      levelText: level?.textContent?.trim(),
       currentOutline: current ? getComputedStyle(current).outlineStyle : null,
       currentBackground: current
         ? getComputedStyle(current).backgroundColor
@@ -268,7 +270,7 @@ test("levels carry a text label, so forced colors keep them apart", async ({
     return out;
   });
 
-  expect(result.badgeText).toBe("ERROR");
+  expect(result.levelText).toBe("ERROR");
   expect(result.currentOutline).toBe("solid");
   expect(result.currentBackground).toBe(result.highlight);
   if (result.linkColor) expect(result.linkColor).toBe(result.linkText);
@@ -344,7 +346,7 @@ test("the message starts the same distance after every level", async ({
 
   const gaps = await page.evaluate(() =>
     [...document.querySelectorAll(".bx--log-viewer__line")].map((line) => {
-      const level = line.querySelector(".bx--log-viewer__level > *");
+      const level = line.querySelector(".bx--log-viewer__level");
       const text = line.querySelector(".bx--log-viewer__text");
       if (!level || !text) throw new Error("missing");
       return Math.round(
