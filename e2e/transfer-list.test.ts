@@ -72,6 +72,30 @@ test.describe("TransferList", () => {
     );
   });
 
+  test("keeps the cursor on the next row after a move", async ({ page }) => {
+    await page.goto("/transfer-list.html");
+
+    // "Billing administrator", "Deploy to production", "Manage API keys".
+    await available(page).focus();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("selected")).toHaveText("audit,alerts,keys");
+
+    const cursor = available(page).locator(
+      ".bx--list-box__menu-item--highlighted",
+    );
+    await expect(cursor).toHaveText("Invite members");
+    const id = await cursor.getAttribute("id");
+    await expect(available(page)).toHaveAttribute(
+      "aria-activedescendant",
+      id ?? "",
+    );
+
+    await page.keyboard.press("ArrowDown");
+    await expect(cursor).toHaveText("Restore backups");
+  });
+
   test("keeps a button's focus in the list when the last item moves", async ({
     page,
   }) => {

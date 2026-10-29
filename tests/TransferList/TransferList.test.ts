@@ -62,6 +62,25 @@ describe("TransferList", () => {
     expect(value()).toBe("b,c,e");
   });
 
+  it("keeps the cursor on the next row after a move", async () => {
+    render(TransferList);
+
+    // Alpha, Charlie, Delta, Echo: the cursor starts on Alpha.
+    available().focus();
+    await user.keyboard("{ArrowDown}{Enter}");
+    expect(value()).toBe("b,c");
+
+    // Charlie left, so the cursor skips the disabled Delta to Echo.
+    const echo = within(available()).getByText("Echo").closest("[role=option]");
+    expect(available()).toHaveAttribute("aria-activedescendant", echo?.id);
+
+    await user.keyboard("{ArrowUp}");
+    const alpha = within(available())
+      .getByText("Alpha")
+      .closest("[role=option]");
+    expect(available()).toHaveAttribute("aria-activedescendant", alpha?.id);
+  });
+
   it("toggles the row under the cursor with Space and clears with Escape", async () => {
     render(TransferList);
 

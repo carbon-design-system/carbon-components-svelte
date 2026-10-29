@@ -209,6 +209,12 @@
   let rowIndex = new Map();
   $: rowIndex = new Map(rows.map((row, index) => [row.id, index]));
 
+  // Marks and the cursor follow the rows: a row a search hides, or a move
+  // takes away, is no longer marked, and the cursor lands where it was.
+  // Runs before `activeIndex` reads the cursor: a `$:` block does not run
+  // again in a flush when a later block assigns what it read.
+  $: reconcile(rows);
+
   /** @type {number} */
   let activeIndex = -1;
   $: activeIndex = activeId === null ? -1 : (rowIndex.get(activeId) ?? -1);
@@ -220,10 +226,6 @@
 
   $: activeOptionId =
     activeIndex === -1 ? undefined : optionId(rows[activeIndex].id);
-
-  // Marks and the cursor follow the rows: a row a search hides, or a move
-  // takes away, is no longer marked, and the cursor lands where it was.
-  $: reconcile(rows);
 
   /** @param {ReadonlyArray<Row>} next */
   function reconcile(next) {
