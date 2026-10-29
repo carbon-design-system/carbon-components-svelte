@@ -38,6 +38,7 @@
     align-items: baseline;
     gap: var(--ccs-big-number-gap);
     color: $text-primary;
+    font-variant-numeric: tabular-nums;
 
     @include type-style("heading-04");
   }
@@ -132,6 +133,7 @@
     display: flex;
     gap: $carbon--spacing-02;
     margin-block-start: $carbon--spacing-02;
+    font-variant-numeric: tabular-nums;
 
     @include type-style("body-compact-01");
   }

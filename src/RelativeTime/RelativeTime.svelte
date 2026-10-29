@@ -119,6 +119,12 @@
   });
 </script>
 
-<time datetime={isoString} title={absoluteTitle} {dir} {...$$restProps}>
+<time
+  class:bx--relative-time={true}
+  datetime={isoString}
+  title={absoluteTitle}
+  {dir}
+  {...$$restProps}
+>
   <slot {formatted}>{formatted}</slot>
 </time>

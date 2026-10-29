@@ -1,0 +1,16 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// RelativeTime: the relative string, in tabular figures so the digits
+/// hold still as a live value counts.
+/// @access private
+/// @group components
+@mixin relative-time {
+  .#{$prefix}--relative-time {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@include exports("relative-time") {
+  @include relative-time;
+}
