@@ -109,7 +109,7 @@ The toolbar searches every line, including the ones not drawn. Type to highlight
 
 Bind `query`, `regex` and `caseSensitive` to drive the search from outside. The browser's own find only sees the lines that are drawn, so use this instead.
 
-The level tags filter the log and count how many lines each level holds. Bind `levels` to read or set the levels shown. Searching and stepping through matches stops following the end, so the match stays where you left it.
+The Levels menu filters the log and counts how many lines each level holds. While a level is hidden, the button shows how many are shown, such as "Levels (3/4)". Bind `levels` to read or set the levels shown. Searching and stepping through matches stops following the end, so the match stays where you left it.
 
 <LogViewer lines={build} labelText="Release build search" height="16rem" query="auth" levels={["info", "warn", "error"]} />
 

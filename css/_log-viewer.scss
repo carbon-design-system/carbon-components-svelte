@@ -149,16 +149,6 @@
     white-space: nowrap;
   }
 
-  .#{$prefix}--log-viewer__levels {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $carbon--spacing-02;
-
-    .#{$prefix}--tag {
-      margin: 0;
-    }
-  }
-
   .#{$prefix}--log-viewer__body {
     position: relative;
     min-height: 0;

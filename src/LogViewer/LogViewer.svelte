@@ -173,8 +173,11 @@
   /** Specify the text shown when copying fails. */
   export let copyErrorText = "Failed to copy";
 
-  /** Specify the label of the group of level filters. */
-  export let levelsLabelText = "Show levels";
+  /**
+   * Specify the label of the level filter menu. While some levels are
+   * hidden, it is followed by how many are shown, such as "(3/4)".
+   */
+  export let levelsLabelText = "Levels";
 
   /**
    * Specify the label of a level, in its column and its filter.
@@ -215,8 +218,9 @@
   import { createEventDispatcher, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
   import CopyButton from "../CopyButton/CopyButton.svelte";
+  import MenuItem from "../Menu/MenuItem.svelte";
+  import MenuButton from "../MenuButton/MenuButton.svelte";
   import Search from "../Search/Search.svelte";
-  import SelectableTag from "../Tag/SelectableTag.svelte";
   import VirtualList from "../VirtualList/VirtualList.svelte";
   import ArrowDown from "../icons/ArrowDown.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
@@ -1036,29 +1040,29 @@
             on:click={() => stepMatch(1)}
           />
         </div>
-        <div
-          class:bx--log-viewer__group={true}
-          class:bx--log-viewer__levels={true}
-          role="group"
-          aria-label={levelsLabelText}
+        <!-- A menu of checkable levels, each with its count, as DataTable's
+             column visibility menu does. The label shows how many are on
+             while some are off. -->
+        <MenuButton
+          kind="ghost"
+          size="sm"
+          labelText={levels.length < LOG_LEVELS.length
+            ? `${levelsLabelText} (${levels.length}/${LOG_LEVELS.length})`
+            : levelsLabelText}
         >
           {#each LOG_LEVELS as level (level)}
-            <SelectableTag
-              id="{id}-level-{level}"
-              size="sm"
-              type={level === "error"
-                ? "red"
-                : level === "warn"
-                  ? "magenta"
-                  : level === "info"
-                    ? "blue"
-                    : "gray"}
+            <MenuItem
+              selectable
+              labelText={levelText(level)}
+              shortcutText={String(counts[level])}
               selected={levels.includes(level)}
-              on:change={(event) => toggleLevel(level, event.detail.selected)}
-              >{levelText(level)} {counts[level]}</SelectableTag
-            >
+              on:click={(event) => {
+                event.preventDefault();
+                toggleLevel(level, !levels.includes(level));
+              }}
+            />
           {/each}
-        </div>
+        </MenuButton>
         <div
           class:bx--log-viewer__group={true}
           class:bx--log-viewer__actions={true}

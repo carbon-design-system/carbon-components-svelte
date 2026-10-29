@@ -6,6 +6,13 @@ import LogViewer from "./LogViewer.test.svelte";
 
 const ESC = "\u001b";
 
+async function toggleLevel(name: string) {
+  await user.click(screen.getByRole("button", { name: /^Levels/ }));
+  await user.click(
+    screen.getByRole("menuitemcheckbox", { name: new RegExp(`^${name}`) }),
+  );
+}
+
 function numbered(count: number) {
   return Array.from({ length: count }, (_, i) => `line ${i + 1}`);
 }
@@ -301,28 +308,30 @@ describe("LogViewer", () => {
   describe("levels", () => {
     const lines = ["ERROR boom", "INFO fine", "WARN hmm", "DEBUG noise"];
 
-    it("counts each level in its filter", () => {
+    it("counts each level in its filter menu", async () => {
       render(LogViewer, { props: { lines } });
 
-      const group = screen.getByRole("group", { name: "Show levels" });
+      await user.click(screen.getByRole("button", { name: "Levels" }));
       expect(
-        within(group)
-          .getAllByRole("button")
-          .map((b) => b.textContent?.trim()),
+        screen
+          .getAllByRole("menuitemcheckbox")
+          .map((item) => item.textContent?.replace(/\s+/g, " ").trim()),
       ).toEqual(["DEBUG 1", "INFO 1", "WARN 1", "ERROR 1"]);
     });
 
     it("hides the lines of a level that is turned off", async () => {
       render(LogViewer, { props: { lines } });
-      const group = screen.getByRole("group", { name: "Show levels" });
 
-      await user.click(within(group).getByRole("button", { name: /ERROR/ }));
+      await toggleLevel("ERROR");
 
       expect(screen.queryByText("boom")).not.toBeInTheDocument();
       expect(screen.getByText("fine")).toBeInTheDocument();
       expect(
-        within(group).getByRole("button", { name: /ERROR/ }),
-      ).toHaveAttribute("aria-pressed", "false");
+        screen.getByRole("menuitemcheckbox", { name: /^ERROR/ }),
+      ).toHaveAttribute("aria-checked", "false");
+      expect(
+        screen.getByRole("button", { name: "Levels (3/4)" }),
+      ).toBeInTheDocument();
     });
 
     it("can start with a level hidden", () => {
@@ -332,6 +341,9 @@ describe("LogViewer", () => {
 
       expect(screen.getByText("boom")).toBeInTheDocument();
       expect(screen.queryByText("noise")).not.toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Levels (2/4)" }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -375,8 +387,7 @@ describe("LogViewer", () => {
 
     it("selects every line shown with Ctrl+A", async () => {
       render(LogViewer, { props: { lines: ["ERROR a", "INFO b", "INFO c"] } });
-      const group = screen.getByRole("group", { name: "Show levels" });
-      await user.click(within(group).getByRole("button", { name: /ERROR/ }));
+      await toggleLevel("ERROR");
 
       await fireEvent.keyDown(log(), { key: "a", ctrlKey: true });
 
