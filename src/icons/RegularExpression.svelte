@@ -34,8 +34,10 @@
   {#if title}
     <title>{title}</title>
   {/if}
-  <circle cx="9" cy="22" r="2.5"></circle>
-  <rect x="21" y="5" width="2" height="18"></rect>
-  <rect x="21" y="5" width="2" height="18" transform="rotate(60 22 14)"></rect>
-  <rect x="21" y="5" width="2" height="18" transform="rotate(-60 22 14)"></rect>
+  <!-- A dot on the baseline and a raised six-armed asterisk, filling the
+       artboard as the arrows do, with Carbon's 2-unit stroke. -->
+  <rect x="4" y="22" width="4" height="4"></rect>
+  <rect x="19" y="4" width="2" height="16"></rect>
+  <rect x="19" y="4" width="2" height="16" transform="rotate(60 20 12)"></rect>
+  <rect x="19" y="4" width="2" height="16" transform="rotate(-60 20 12)"></rect>
 </svg>

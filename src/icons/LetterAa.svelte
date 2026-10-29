@@ -34,9 +34,11 @@
   {#if title}
     <title>{title}</title>
   {/if}
-  <path
-    d="M23,13H18v2h5v2H19a2,2,0,0,0-2,2v2a2,2,0,0,0,2,2h6V15A2,2,0,0,0,23,13Zm0,8H19V19h4Z"
+  <!-- Carbon's letter--Aa, scaled to fill the artboard as the arrows do: a
+       20-unit cap height with Carbon's 2-unit stroke. -->
+  <path d="M13,6H6A2,2,0,0,0,4,8V26H6V17h7v9h2V8A2,2,0,0,0,13,6ZM6,15V8h7v7Z"
   ></path>
-  <path d="M13,9H9a2,2,0,0,0-2,2V23H9V18h4v5h2V11A2,2,0,0,0,13,9ZM9,16V11h4v5Z"
+  <path
+    d="M26,12H19v2h7v4H20a2,2,0,0,0-2,2v4a2,2,0,0,0,2,2h8V14A2,2,0,0,0,26,12Zm0,12H20V20h6Z"
   ></path>
 </svg>
