@@ -25,12 +25,11 @@
 
   import { getContext } from "svelte";
   import Button from "../Button/Button.svelte";
+  import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
+  import OverflowMenuItem from "../OverflowMenu/OverflowMenuItem.svelte";
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
   import Add from "../icons/Add.svelte";
-  import ArrowDown from "../icons/ArrowDown.svelte";
-  import ArrowUp from "../icons/ArrowUp.svelte";
-  import Close from "../icons/Close.svelte";
   import QueryBuilderCondition from "./QueryBuilderCondition.svelte";
   // Recurses through a self-import; see `TreeViewNodeList.svelte`.
   import Self from "./QueryBuilderGroup.svelte";
@@ -57,6 +56,8 @@
   let buttonSize;
   /** @type {"sm" | undefined} */
   let selectSize;
+  /** @type {"sm" | undefined} */
+  let menuSize;
   let nodeId = "";
 
   $: nodeId = node.id ?? "";
@@ -64,6 +65,7 @@
   $: base = `${id}-${nodeId}`;
   $: buttonSize = size === "sm" ? "small" : "field";
   $: selectSize = size === "sm" ? "sm" : undefined;
+  $: menuSize = size === "sm" ? "sm" : undefined;
   $: logic = translate(node.operator === "and" ? "matchAll" : "matchAny");
   $: count = node.conditions.length;
   $: connector = index === 0 ? translate("where") : translate(groupOperator);
@@ -111,34 +113,36 @@
       </Select>
     </div>
     {#if !root && !readonly}
+      <!-- One menu for the group's actions, so they do not read as the
+        actions of the condition below. -->
       <div class="bx--query-builder__actions">
-        <Button
-          id="{base}-up"
-          kind="ghost"
-          size={buttonSize}
-          icon={ArrowUp}
-          iconDescription={translate("moveGroupUp", { n: index + 1 })}
-          disabled={disabled || index === 0}
-          on:click={() => move(nodeId, -1)}
-        />
-        <Button
-          id="{base}-down"
-          kind="ghost"
-          size={buttonSize}
-          icon={ArrowDown}
-          iconDescription={translate("moveGroupDown", { n: index + 1 })}
-          disabled={disabled || index === total - 1}
-          on:click={() => move(nodeId, 1)}
-        />
-        <Button
-          id="{base}-remove"
-          kind="ghost"
-          size={buttonSize}
-          icon={Close}
-          iconDescription={translate("removeGroup", { n: index + 1 })}
+        <OverflowMenu
+          id="{base}-menu"
+          size={menuSize}
+          flipped
+          iconDescription={translate("groupActions", { n: index + 1 })}
           {disabled}
-          on:click={() => remove(nodeId)}
-        />
+        >
+          <OverflowMenuItem
+            id="{base}-up"
+            text={translate("moveGroupUp", { n: index + 1 })}
+            disabled={index === 0}
+            on:click={() => move(nodeId, -1)}
+          />
+          <OverflowMenuItem
+            id="{base}-down"
+            text={translate("moveGroupDown", { n: index + 1 })}
+            disabled={index === total - 1}
+            on:click={() => move(nodeId, 1)}
+          />
+          <OverflowMenuItem
+            id="{base}-remove"
+            text={translate("removeGroup", { n: index + 1 })}
+            danger
+            hasDivider
+            on:click={() => remove(nodeId)}
+          />
+        </OverflowMenu>
       </div>
     {/if}
   </div>

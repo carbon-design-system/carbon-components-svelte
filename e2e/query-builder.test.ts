@@ -172,6 +172,29 @@ test.describe("QueryBuilder", () => {
     );
   });
 
+  test("moves and removes a group from its options menu", async ({ page }) => {
+    await page.goto("/query-builder.html?preset=nested");
+    const menu = page.getByRole("button", { name: "Group 2 options" });
+    await menu.focus();
+    await page.keyboard.press("Enter");
+    await page.getByRole("menuitem", { name: "Move group 2 up" }).click();
+    const query = await readJson(page);
+    expect(query.conditions[0].operator).toBe("or");
+    // The menu closes and focus returns to the moved group's menu button.
+    const moved = page.getByRole("button", { name: "Group 1 options" });
+    await expect(moved).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("menuitem", { name: "Move group 1 up" }),
+    ).toBeDisabled();
+    await page.getByRole("menuitem", { name: "Remove group 1" }).click();
+    expect((await readJson(page)).conditions).toHaveLength(1);
+    await expect(page.locator(".bx--query-builder > [role=status]")).toHaveText(
+      "Group removed",
+    );
+  });
+
   test("keeps no more than maxDepth levels", async ({ page }) => {
     await page.goto("/query-builder.html?preset=nested");
     const groups = page.locator(".bx--query-builder__group");

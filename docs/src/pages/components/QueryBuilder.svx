@@ -96,7 +96,7 @@ Set `operators` on a field to offer only some of its kind's operators, in the or
 
 ## Groups
 
-Each group matches all or any of its conditions, chosen from the list at the top of the group. "Add group" starts a nested group with one condition in it. Reorder a condition or a group within its group with the move buttons; the buttons are disabled at the ends.
+Each group matches all or any of its conditions, chosen from the list at the top of the group. "Add group" starts a nested group with one condition in it. Reorder a condition with its move buttons. A group's moves and its remove action are in the options menu on its first line. Moves are disabled at the ends.
 
 Set `maxDepth` to cap nesting. The root group is level 1, so the default of `3` allows a group in a group. At the deepest level only "Add condition" is offered.
 

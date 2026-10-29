@@ -315,6 +315,12 @@
         total: found?.parent?.conditions.length ?? 1,
       }),
     );
+    // A group's actions are in its menu, which closes on a choice; focus
+    // returns to the menu button.
+    if (found && isQueryGroup(found.node)) {
+      focusById(`${id}-${nodeId}-menu`);
+      return;
+    }
     // The button that was pressed may be disabled at the new end; hand
     // focus to the other so it stays on the row.
     const atEdge =
