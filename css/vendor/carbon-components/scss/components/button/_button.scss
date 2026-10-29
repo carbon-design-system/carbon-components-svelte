@@ -166,7 +166,7 @@
     &.#{$prefix}--btn.#{$prefix}--btn--disabled .#{$prefix}--assistive-text { // ccs: specificity
       position: fixed; // ccs: hidden, see `tooltip--trigger`
       overflow: hidden;
-      margin: -1px;
+      margin: -1px 0; // ccs: no inline margin, see `.bx--visually-hidden`
       clip: rect(0, 0, 0, 0);
       opacity: 0;
     }

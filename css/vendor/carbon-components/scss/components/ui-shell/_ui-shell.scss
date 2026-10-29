@@ -166,7 +166,7 @@
     position: absolute;
     width: 1px;
     height: 1px;
-    margin: -1px;
+    margin: -1px 0; // ccs: no inline margin, see `.bx--visually-hidden`
     padding: 0;
     overflow: hidden;
     white-space: nowrap;
