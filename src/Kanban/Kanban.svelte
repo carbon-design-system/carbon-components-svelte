@@ -1146,10 +1146,11 @@
             id="{titleId}-count"
             class="bx--kanban__count"
           >
-            <span aria-hidden="true"
+            <!-- An isolate keeps "3 / 4" in that order in right-to-left text. -->
+            <bdi aria-hidden="true"
               >{typeof column.limit === "number"
                 ? `${count} / ${column.limit}`
-                : count}</span
+                : count}</bdi
             >
             <span class:bx--visually-hidden={true}
               >{typeof column.limit === "number"

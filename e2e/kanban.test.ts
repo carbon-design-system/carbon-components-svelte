@@ -275,6 +275,34 @@ test.describe("Kanban layout", () => {
   });
 });
 
+test.describe("Kanban count in RTL", () => {
+  test('keeps "3 / 4" in reading order in right-to-left text', async ({
+    page,
+  }) => {
+    await page.goto("/kanban.html");
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    // The count first, then the limit, from left to right.
+    const [first, last] = await page
+      .locator('[data-kanban-column="todo"] .bx--kanban__count bdi')
+      .evaluate((bdi) => {
+        const text = bdi.firstChild as Text;
+        const at = (index: number) => {
+          const range = document.createRange();
+          range.setStart(text, index);
+          range.setEnd(text, index + 1);
+          return range.getBoundingClientRect().left;
+        };
+        return [at(0), at((text.textContent ?? "").length - 1)];
+      });
+    expect(
+      await page.locator('[data-kanban-column="todo"] bdi').textContent(),
+    ).toBe("3 / 4");
+    expect(first).toBeLessThan(last);
+  });
+});
+
 test.describe("Kanban header alignment", () => {
   // These checks can move to the layout helpers of #5240 once it merges.
   const measure = (page: Page) =>
