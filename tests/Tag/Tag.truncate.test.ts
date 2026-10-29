@@ -158,6 +158,30 @@ describe("Tag truncation", () => {
     },
   );
 
+  it.each([
+    ["static tag", {}],
+    ["filter tag", { filter: true }],
+  ])(
+    "applies `tabindex` to a truncated %s label's tooltip trigger",
+    async (_, props) => {
+      mockOverflow(true);
+      await renderTag({ ...props, tabindex: -1 });
+
+      expect(
+        tagOf(label)?.querySelector(".bx--tooltip__trigger"),
+      ).toHaveAttribute("tabindex", "-1");
+      expect(tagOf(label)).not.toHaveAttribute("tabindex");
+    },
+  );
+
+  it("keeps `tabindex` on a static tag whose label fits", async () => {
+    mockOverflow(false);
+    await renderTag({ label: "Short", tabindex: -1 });
+
+    expect(tagOf("Short")).toHaveAttribute("tabindex", "-1");
+    expect(document.querySelector(".bx--tooltip__trigger")).toBeNull();
+  });
+
   it("uses a native title, not a focusable tooltip, inside a roving TagSet", async () => {
     mockOverflow(true);
     await renderTag({ filter: true, roving: true });
