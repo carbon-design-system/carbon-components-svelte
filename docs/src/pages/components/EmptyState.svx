@@ -13,7 +13,7 @@ description: Empty states fill a panel, card or table that has nothing to show y
 
 ## Basic
 
-Give the empty state a `title`, a `subtitle` that says why it's empty, and the action that fills it in the default slot. Put an icon or pictogram in the `illustration` slot; it is hidden from screen readers.
+Give the empty state a `title`, a `subtitle` that says why it's empty, and the action that fills it in the default slot. Put a pictogram or an icon in the `illustration` slot; it is hidden from screen readers. A pictogram keeps its size, up to 64px (48px at `sm`). An icon renders at 32px at either size.
 
 <EmptyState
   title="Create your first project"
