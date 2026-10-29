@@ -368,6 +368,26 @@ test.describe("QueryBuilder layout", () => {
         expect(Math.abs(row[part] - rows[0][part])).toBeLessThan(0.5);
       }
     }
+
+    // Every group's logic select, the root's included, sits in the field
+    // column of its level.
+    const headers = await page
+      .locator(".bx--query-builder__group-header")
+      .evaluateAll((els) =>
+        els.map(
+          (header) =>
+            (header
+              .querySelector(".bx--query-builder__cell--logic")
+              ?.getBoundingClientRect().left ?? Number.NaN) -
+            (header
+              .querySelector(".bx--query-builder__connector")
+              ?.getBoundingClientRect().left ?? Number.NaN),
+        ),
+      );
+    expect(headers).toHaveLength(3);
+    for (const offset of headers) {
+      expect(Math.abs(offset - rows[0].field)).toBeLessThan(0.5);
+    }
   });
 
   test("keeps each footer with its group, 32 px before the next footer", async ({

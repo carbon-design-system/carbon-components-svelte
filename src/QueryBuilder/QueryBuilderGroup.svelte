@@ -92,11 +92,11 @@
   aria-describedby={root ? describedBy : undefined}
 >
   <div class="bx--query-builder__group-header">
-    {#if !root}
-      <span class="bx--query-builder__connector" aria-hidden="true"
-        >{connector}</span
-      >
-    {/if}
+    <!-- The root has no group before it, so its connector column names the
+      select instead. The select keeps its own hidden label. -->
+    <span class="bx--query-builder__connector" aria-hidden="true"
+      >{root ? translate("groupLogic") : connector}</span
+    >
     <div class="bx--query-builder__cell bx--query-builder__cell--logic">
       <Select
         id="{base}-logic"
