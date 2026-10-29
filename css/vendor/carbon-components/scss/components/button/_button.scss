@@ -129,7 +129,7 @@
     &.#{$prefix}--btn--disabled:focus {
       border-color: transparent;
       background: transparent;
-      color: $text-on-color-disabled;
+      color: $text-disabled; // ccs: v11, ghost text has no fill behind it
       outline: none;
     }
 

@@ -78,6 +78,47 @@ test.describe("Button", () => {
   });
 });
 
+// Carbon v11 draws a disabled ghost button's text and icon in
+// `$text-disabled`, and an icon-only one in `$icon-on-color-disabled`.
+test("disabled ghost buttons use v11's disabled colors", async ({ page }) => {
+  await page.goto("/button-icon-kinds.html");
+  for (const theme of ["white", "g100"]) {
+    // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
+    const read = await page.evaluate((theme) => {
+      document.documentElement.setAttribute("theme", theme);
+      const token = (name: string) => {
+        const probe = document.createElement("span");
+        probe.style.color = `var(${name})`;
+        document.body.append(probe);
+        const color = getComputedStyle(probe).color;
+        probe.remove();
+        return color;
+      };
+      const ghost = document.querySelector("[data-testid=kind-ghost]");
+      const text = ghost?.querySelector(
+        ".bx--btn:disabled:not(.bx--btn--icon-only)",
+      );
+      const iconOnly = ghost?.querySelector(".bx--btn--icon-only:disabled");
+      const fill = (button?: Element | null) => {
+        const icon = button?.querySelector(".bx--btn__icon");
+        return icon ? getComputedStyle(icon).fill : "";
+      };
+      return {
+        textDisabled: token("--cds-text-disabled"),
+        iconOnColorDisabled: token("--cds-icon-on-color-disabled"),
+        text: text ? getComputedStyle(text).color : "",
+        textIcon: fill(text),
+        iconOnly: fill(iconOnly),
+      };
+    }, theme);
+    expect.soft(read.text, `${theme} text`).toBe(read.textDisabled);
+    expect.soft(read.textIcon, `${theme} text icon`).toBe(read.textDisabled);
+    expect
+      .soft(read.iconOnly, `${theme} icon-only icon`)
+      .toBe(read.iconOnColorDisabled);
+  }
+});
+
 type Rgb = [number, number, number];
 
 function parse(color: string): Rgb {
