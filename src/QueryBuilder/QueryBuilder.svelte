@@ -360,13 +360,15 @@
       >{labelText}</span
     >
   {/if}
-  <QueryBuilderGroup node={value} />
+  <!-- Helper and error text follow the label. Below the builder they would
+    sit after every row and the add buttons, far from the label. -->
   {#if helperText && !invalid}
     <div id="{id}-helper" class="bx--form__helper-text">{helperText}</div>
   {/if}
   {#if invalid && invalidText}
     <div id="{id}-error" class="bx--form-requirement">{invalidText}</div>
   {/if}
+  <QueryBuilderGroup node={value} />
   {#if showSummary}
     <div class="bx--query-builder__summary">
       <span class="bx--label">{translate("summaryLabel")}</span>

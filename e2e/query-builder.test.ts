@@ -390,6 +390,18 @@ test.describe("QueryBuilder layout", () => {
     }
   });
 
+  test("puts the helper text under the label", async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    const label = await box(page.locator(".bx--query-builder > .bx--label"));
+    const helper = await box(page.getByText("Match accounts by any field."));
+    const header = await box(
+      page.locator(".bx--query-builder__group-header").first(),
+    );
+    expect(helper.y - (label.y + label.height)).toBeCloseTo(8, 0);
+    expect(header.y - (helper.y + helper.height)).toBeCloseTo(16, 0);
+  });
+
   test("gives headers and conditions one row pitch", async ({ page }) => {
     await page.setViewportSize({ width: 1100, height: 900 });
     await page.goto("/query-builder.html?preset=nested");

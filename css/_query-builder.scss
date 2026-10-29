@@ -20,6 +20,17 @@
     gap: $carbon--spacing-03;
   }
 
+  // The label, then its helper or error text, 8 px apart as in a form
+  // item. The text ends 16 px above the first row, the gap between rows.
+  .#{$prefix}--query-builder > .#{$prefix}--label {
+    margin-bottom: 0;
+  }
+
+  .#{$prefix}--query-builder > .#{$prefix}--form__helper-text,
+  .#{$prefix}--query-builder > .#{$prefix}--form-requirement {
+    margin: 0 0 $carbon--spacing-03;
+  }
+
   .#{$prefix}--query-builder--sm {
     --ccs-query-builder-field-height: #{to-rem(32px)};
   }
