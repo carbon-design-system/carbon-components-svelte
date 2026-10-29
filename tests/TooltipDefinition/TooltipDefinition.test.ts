@@ -256,6 +256,16 @@ describe("TooltipDefinition", () => {
     expect(tooltip).toHaveClass("bx--assistive-text");
   });
 
+  it("applies `tabindex` to the trigger, not the wrapper", () => {
+    render(TooltipDefinition, { props: { tabindex: -1 } });
+
+    const trigger = screen.getByRole("button", { name: "Tooltip trigger" });
+    expect(trigger).toHaveAttribute("tabindex", "-1");
+    expect(trigger.closest(".bx--tooltip--definition")).not.toHaveAttribute(
+      "tabindex",
+    );
+  });
+
   it("controls the tooltip and reflects it in aria-expanded", async () => {
     render(TooltipDefinition);
 
