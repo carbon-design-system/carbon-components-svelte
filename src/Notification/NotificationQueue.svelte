@@ -23,31 +23,36 @@
    * @param {{ action?: unknown, actionable?: boolean, timeout?: number }} notification
    * @returns {number}
    */
-  function resolveTimeout({ action, actionable, timeout }) {
-    return persists({ action, actionable }) ? 0 : (timeout ?? 0);
+  function resolveTimeout({ action, actionable, timeout }, undoable = false) {
+    return persists({ action, actionable }, undoable) ? 0 : (timeout ?? 0);
   }
 
   /**
+   * An `undoable` toast holds an action but times out, since its commit
+   * waits on the timer. It is the one exception to the rule above.
    * @param {{ action?: unknown, actionable?: boolean }} notification
+   * @param {boolean} [undoable]
    * @returns {boolean}
    */
-  function persists({ action, actionable }) {
-    return !!action || !!actionable;
+  function persists({ action, actionable }, undoable = false) {
+    return (!!action && !undoable) || !!actionable;
   }
 
   /**
    * The toast to drop when the queue is full: the oldest one that does not
    * persist, so a new toast does not push out an action the user has not
    * reached. The newest toast always shows.
-   * @param {Array<{ action?: unknown, actionable?: boolean }>} list
+   * @template {{ action?: unknown, actionable?: boolean }} Row
+   * @param {Row[]} list
    * @param {boolean} top - Newest first, as in top positions
+   * @param {(row: Row) => boolean} [holds] - Whether a row persists
    * @returns {number}
    */
-  function dropIndex(list, top) {
+  function dropIndex(list, top, holds = persists) {
     const oldestFirst = list.map((_, index) => index);
     if (top) oldestFirst.reverse();
     const older = oldestFirst.slice(0, -1);
-    return older.find((index) => !persists(list[index])) ?? oldestFirst[0];
+    return older.find((index) => !holds(list[index])) ?? oldestFirst[0];
   }
 </script>
 
@@ -78,6 +83,20 @@
    * @property {boolean} [focusOnOpen]
    * @property {boolean} [closeOnEscape]
    * @property {NotificationAction} [action] - Add an action button. The toast keeps focus where it is and does not time out.
+   * @property {boolean} [loading] - Show a spinner in place of the status icon, as `promise()` does while it waits
+   */
+
+  /**
+   * @typedef {string | NotificationData} NotificationMessage - A string is the title
+   */
+
+  /**
+   * @typedef {NotificationData & {
+   *   commit: () => unknown,
+   *   undo?: () => void,
+   *   actionText?: string,
+   *   timeout?: number,
+   * }} UndoableData
    */
 
   /**
@@ -114,10 +133,12 @@
   /** Specify the accessible name of the notifications landmark */
   export let labelText = "Notifications";
 
-  import { setContext, tick } from "svelte";
+  import { onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import { focusActionableNotification } from "../utils/dismissible-notification.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
   import NotificationActionButton from "./NotificationActionButton.svelte";
+  import NotificationQueueIcon from "./NotificationQueueIcon.svelte";
   import ToastNotification from "./ToastNotification.svelte";
 
   /** @type {null | HTMLDivElement} */
@@ -141,7 +162,13 @@
   // pointer or focus is in the queue, then resumes with the time it had left.
   const paused = writable(false);
 
-  setContext("carbon:NotificationQueue", { paused });
+  /**
+   * An undoable toast waits on its timer: `commit` runs when the toast
+   * leaves the list for any reason but Undo. Kept per queue, never at
+   * module scope, so server renders do not share it.
+   * @type {Map<string, () => void>}
+   */
+  const pending = new Map();
 
   // The queue unmounts when it empties, which fires no leave events.
   $: if (notifications.length === 0) {
@@ -177,7 +204,11 @@
       : [...notifications, newNotification];
 
     while (notifications.length > Math.max(maxNotifications, 0)) {
-      notifications.splice(dropIndex(notifications, top), 1);
+      const [dropped] = notifications.splice(
+        dropIndex(notifications, top, holds),
+        1,
+      );
+      settle(dropped.id);
     }
     notifications = notifications;
     settleFocus();
@@ -211,17 +242,178 @@
 
     notifications.splice(index, 1);
     notifications = notifications;
+    settle(id);
     settleFocus();
     return true;
   }
 
   /**
-   * Clear all notifications.
+   * Clear all notifications. An undoable notification commits.
    * @returns {void}
    */
   export function clear() {
+    const cleared = notifications;
     notifications = [];
+    for (const { id } of cleared) settle(id);
   }
+
+  /**
+   * Show a loading toast while `promise` is pending, then update it in
+   * place to the success or error message. Returns `promise` itself, so
+   * `await queue.promise(save(), ...)` still rejects on failure.
+   *
+   * A string message is the title. The loading toast does not time out,
+   * and closing it hides the outcome. The success toast times out after 5 seconds,
+   * and the error toast stays until it is closed, unless the message sets
+   * its own `timeout`. If the loading toast has gone by the time the
+   * promise fails, the error shows as a new toast. A success is dropped.
+   * @type {<T>(
+   *   task: Promise<T>,
+   *   messages: {
+   *     loading: NotificationMessage,
+   *     success?: NotificationMessage | ((value: T) => NotificationMessage),
+   *     error?: NotificationMessage | ((reason: unknown) => NotificationMessage),
+   *   },
+   * ) => Promise<T>}
+   */
+  export function promise(task, messages) {
+    const id = add({
+      kind: "info",
+      timeout: 0,
+      ...asData(messages.loading),
+      loading: true,
+    });
+
+    /**
+     * @param {NotificationData} defaults
+     * @param {NotificationMessage | undefined} message
+     */
+    function settleWith(defaults, message) {
+      if (message === undefined) {
+        remove(id);
+        return;
+      }
+      const patch = {
+        loading: false,
+        ...defaults,
+        ...asData(message),
+      };
+      if (!update(id, patch) && patch.kind === "error") {
+        add({ ...patch, id: undefined });
+      }
+    }
+
+    task.then(
+      (value) => {
+        const { success } = messages;
+        settleWith(
+          { kind: "success", timeout: 5000 },
+          typeof success === "function" ? success(value) : success,
+        );
+      },
+      (reason) => {
+        const { error } = messages;
+        settleWith(
+          { kind: "error", timeout: 0 },
+          typeof error === "function" ? error(reason) : error,
+        );
+      },
+    );
+
+    return task;
+  }
+
+  /**
+   * Show a toast with an Undo action, and run `commit` only once the toast
+   * leaves without Undo: its timeout (10 seconds by default), its close
+   * button, overflow, `clear()`, `remove()`, the queue unmounting, or the
+   * page hiding. Resolves `true` when `commit` ran, `false` when the user
+   * chose Undo, and rejects with what `commit` throws or rejects with.
+   *
+   * It is the one toast with an action that times out, so the commit does
+   * not wait on a decision nobody makes. The timer pauses while the
+   * pointer or focus is in the queue, and F6 reaches the action.
+   * Pass `timeout: 0` for a toast that commits only when it is closed.
+   * @type {(data: UndoableData) => Promise<boolean>}
+   */
+  export function undoable({
+    commit,
+    undo,
+    actionText = "Undo",
+    timeout = 10000,
+    ...data
+  }) {
+    return new Promise((resolve, reject) => {
+      const id = data.id ?? generateId();
+      // Replacing a toast with the same id commits the one it replaces.
+      remove(id);
+      pending.set(id, () => {
+        try {
+          Promise.resolve(commit()).then(() => resolve(true), reject);
+        } catch (error) {
+          reject(error);
+        }
+      });
+      add({
+        kind: "info",
+        ...data,
+        id,
+        timeout,
+        action: {
+          label: actionText,
+          onClick() {
+            pending.delete(id);
+            resolve(false);
+            undo?.();
+          },
+        },
+      });
+    });
+  }
+
+  /**
+   * @param {NotificationMessage} message
+   * @returns {NotificationData}
+   */
+  function asData(message) {
+    return typeof message === "string" ? { title: message } : message;
+  }
+
+  /**
+   * Run the commit of an undoable toast that has left the list.
+   * @param {string} id
+   */
+  function settle(id) {
+    const commit = pending.get(id);
+    if (!commit) return;
+    pending.delete(id);
+    commit();
+  }
+
+  function settleAll() {
+    for (const id of [...pending.keys()]) settle(id);
+  }
+
+  /** @param {NotificationData & { id: string }} row */
+  function holds(row) {
+    return persists(row, pending.has(row.id));
+  }
+
+  /** @type {import("./notification-queue-context.js").NotificationQueueApi} */
+  const queue = { add, update, remove, clear, promise, undoable };
+
+  setContext("carbon:NotificationQueue", { paused, queue });
+
+  // A commit must not depend on a toast's exit animation: when an ancestor
+  // tears down, `|local` outros never run. Destroying the queue and
+  // `pagehide` commit directly.
+  onMount(() => {
+    const stop = addPooledListener("pagehide", settleAll);
+    return () => {
+      stop();
+      settleAll();
+    };
+  });
 
   // Firefox and Safari fire no `focusout` when they remove the focused toast.
   function settleFocus() {
@@ -327,14 +519,23 @@
     }}
   >
     <!-- `id` keys the queue; spreading it would set duplicate DOM ids across queues. -->
-    {#each notifications as { id, action, ...notification } (id)}
-      {@const timeout = resolveTimeout({ action, ...notification })}
-      {#if action}
+    {#each notifications as { id, action, loading, ...notification } (id)}
+      {@const held = pending.has(id)}
+      {@const timeout = resolveTimeout({ action, ...notification }, held)}
+      {#if action && !held}
         <ToastNotification
           {...notification}
           {timeout}
           on:close={() => remove(id)}
         >
+          <svelte:fragment slot="icon">
+            <NotificationQueueIcon
+              {loading}
+              kind={notification.kind}
+              lowContrast={notification.lowContrast}
+              statusIconDescription={notification.statusIconDescription}
+            />
+          </svelte:fragment>
           <svelte:fragment slot="actions">
             <NotificationActionButton
               href={action.href}
@@ -349,8 +550,30 @@
           {...notification}
           {timeout}
           on:close={() => remove(id)}
-        />
+        >
+          <svelte:fragment slot="icon">
+            <NotificationQueueIcon
+              {loading}
+              kind={notification.kind}
+              lowContrast={notification.lowContrast}
+              statusIconDescription={notification.statusIconDescription}
+            />
+          </svelte:fragment>
+          {#if action}
+            <!-- An undoable toast times out, and a toast times out only when it has no `actions` slot. The wrapper is the one that slot renders. -->
+            <div class:bx--toast-notification__actions={true}>
+              <NotificationActionButton
+                href={action.href}
+                on:click={(event) => handleAction(id, action, event)}
+              >
+                {action.label}
+              </NotificationActionButton>
+            </div>
+          {/if}
+        </ToastNotification>
       {/if}
     {/each}
   </div>
 {/if}
+
+<slot />

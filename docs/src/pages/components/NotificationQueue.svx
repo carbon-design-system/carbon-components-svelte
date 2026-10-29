@@ -45,6 +45,42 @@ Specify the stacking order of the queue with `zIndex`. Defaults to `9000`, match
 
 Lower the value if the queue should render behind other fixed UI instead.
 
+## Use from any component
+
+Wrap your app, or the part of it that shows toasts, in a `NotificationQueue`, and call `getNotificationQueue()` while a descendant initializes. It returns the same `add`, `update`, `remove`, `clear`, `promise` and `undoable` methods as `bind:this`, without passing a reference down to each component. It throws when no `NotificationQueue` wraps the component.
+
+```svelte
+<!-- App.svelte -->
+<NotificationQueue>
+  <Settings />
+</NotificationQueue>
+```
+
+```svelte
+<!-- Settings.svelte -->
+<script>
+  import { Button, getNotificationQueue } from "carbon-components-svelte";
+
+  const queue = getNotificationQueue();
+</script>
+
+<Button on:click={() => queue.add({ kind: "success", title: "Saved" })}>
+  Save
+</Button>
+```
+
+The queue reaches its descendants through Svelte context, not a module store, so every queue and every server render keeps its own state.
+
+### Promise
+
+Use `promise(task, messages)` to show a loading toast while a promise is pending, then change it in place to the result. A string message is the title, and an object takes any notification field. `success` and `error` also accept a function of the result or the reason. `promise` returns the promise it was given, so `await` still rejects on failure.
+
+The loading toast does not time out. Pass `hideCloseButton: true` in `loading` to remove its close button. The success toast times out after 5 seconds. The error toast stays until it is closed. Set `timeout` in a message to change that. If the loading toast is gone when the promise settles, because the user closed it or after `clear()`, a failure shows as a new toast. A success is dropped.
+
+The spinner is hidden from screen readers, so write a `loading` title that says what is happening, such as "Saving changes...". Updating the toast's text in place announces the result.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueuePromise" />
+
 ## Managing notifications
 
 The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.
@@ -92,6 +128,23 @@ The toast does not take focus when it opens, so focus stays where the user is wo
 Set `actionable` to `true` only when the toast answers something the user just did and needs a response. The toast then becomes an `alertdialog` and takes focus, as in [ToastNotification](/components/ToastNotification#actionable).
 
 <FileSource src="/framed/NotificationQueue/NotificationQueueActions" />
+
+### Undoable
+
+Use `undoable({ commit, undo, ... })` for a destructive action that the user can take back, such as deleting a message. Apply the change in the UI at once, and pass the work that can't be taken back as `commit`. The toast shows an "Undo" action, and `commit` runs only once the toast leaves without Undo: its timeout, its close button, `remove()`, `clear()`, the queue being full, the queue unmounting, or the page hiding. `undo` runs when the user chooses Undo.
+
+`undoable` returns a promise that resolves to `true` when `commit` ran and `false` when the user chose Undo. It rejects with what `commit` throws or rejects with.
+
+It is the one toast with an action that times out, 10 seconds by default, since `commit` waits on the timer. The timer pauses while the pointer or focus is in the queue, and <DocKbd label="F6" /> reaches the action. Set `timeout` to `0` for a toast that commits only when it is closed.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueUndoable" />
+
+| Do | Why |
+| :-- | :-- |
+| Change the UI first, and commit in `commit` | Undo then only has to put the UI back |
+| Keep the default `timeout` of 10 seconds, or longer | A timer can remove the action before a keyboard or screen reader user reaches it |
+| Make `commit` safe to run when the tab closes | The page hiding commits, and the page may not wait for it |
+| Don't use it for something that must not happen without a decision | Missing the window commits the change |
 
 ## Persistent
 

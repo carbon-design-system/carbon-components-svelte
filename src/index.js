@@ -168,6 +168,7 @@ export { default as NotificationActionButton } from "./Notification/Notification
 export { default as NotificationButton } from "./Notification/NotificationButton.svelte";
 export { default as NotificationIcon } from "./Notification/NotificationIcon.svelte";
 export { default as NotificationQueue } from "./Notification/NotificationQueue.svelte";
+export { getNotificationQueue } from "./Notification/notification-queue-context.js";
 export { default as ToastNotification } from "./Notification/ToastNotification.svelte";
 export { default as FluidNumberInputSkeleton } from "./NumberInput/FluidNumberInputSkeleton.svelte";
 export { default as NumberInput } from "./NumberInput/NumberInput.svelte";

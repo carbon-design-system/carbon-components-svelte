@@ -4,4 +4,5 @@ export { default as NotificationActionButton } from "./NotificationActionButton.
 export { default as NotificationButton } from "./NotificationButton.svelte";
 export { default as NotificationIcon } from "./NotificationIcon.svelte";
 export { default as NotificationQueue } from "./NotificationQueue.svelte";
+export { getNotificationQueue } from "./notification-queue-context.js";
 export { default as ToastNotification } from "./ToastNotification.svelte";

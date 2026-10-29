@@ -369,3 +369,44 @@
 @include exports("toast-notification-actions") {
   @include toast-notification-actions;
 }
+
+// carbon-components-svelte patch
+// The spinner a queued toast shows in place of its status icon while its
+// `promise()` is pending. It takes the 20px box the icon leaves and the
+// toast's own icon color, since the default blue stroke is unreadable on the
+// dark high-contrast toast.
+/// @access private
+/// @group notification
+@mixin toast-notification-loading {
+  .#{$prefix}--toast-notification__loading {
+    display: flex;
+    width: to-rem(20px);
+    height: to-rem(20px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__loading {
+    color: $icon-inverse;
+  }
+
+  .#{$prefix}--toast-notification--low-contrast
+    .#{$prefix}--toast-notification__loading {
+    color: $icon-primary;
+  }
+
+  .#{$prefix}--toast-notification__loading .#{$prefix}--loading__svg,
+  .#{$prefix}--toast-notification__loading .#{$prefix}--loading__stroke {
+    stroke: currentColor;
+  }
+
+  .#{$prefix}--toast-notification__loading .#{$prefix}--loading__background {
+    stroke: currentColor;
+    opacity: 0.3;
+  }
+}
+
+@include exports("toast-notification-loading") {
+  @include toast-notification-loading;
+}
