@@ -6,6 +6,7 @@
   const showErrors = params.get("errors") === "1";
   const readonly = params.get("readonly") === "1";
   const disabled = params.get("disabled") === "1";
+  const invalid = params.get("invalid") === "1";
   const size = params.get("size") === "sm" ? "sm" : "md";
   const count = Number(params.get("count") ?? 0);
 
@@ -94,6 +95,8 @@
     {showErrors}
     {readonly}
     {disabled}
+    {invalid}
+    invalidText="Add a condition on the plan."
     {size}
     showSummary
     labelText="Account filter"

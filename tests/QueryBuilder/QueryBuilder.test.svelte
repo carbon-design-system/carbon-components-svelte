@@ -29,6 +29,9 @@
   export let showErrors = false;
   export let showSummary = false;
   export let disabled = false;
+  export let invalid = false;
+  export let invalidText = "";
+  export let helperText = "";
   export let translateWithId: ComponentProps<QueryBuilder>["translateWithId"] =
     undefined;
   export let onchange: (detail: QueryGroup) => void = () => {};
@@ -44,6 +47,9 @@
   {showErrors}
   {showSummary}
   {disabled}
+  {invalid}
+  {invalidText}
+  {helperText}
   {...translateWithId ? { translateWithId } : {}}
   on:change={(event) => onchange(event.detail)}
 />

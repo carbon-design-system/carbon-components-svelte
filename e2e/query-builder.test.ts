@@ -277,6 +277,27 @@ test.describe("QueryBuilder", () => {
     );
   });
 
+  test("shows invalidText under the label in the error color", async ({
+    page,
+  }) => {
+    await page.goto("/query-builder.html?preset=nested&invalid=1");
+    const message = page.getByRole("alert");
+    await expect(message).toBeVisible();
+    await expect(message).toHaveText("Add a condition on the plan.");
+    const colors = await message.evaluate((el) => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--cds-text-error)";
+      el.append(probe);
+      const expected = getComputedStyle(probe).color;
+      probe.remove();
+      return { actual: getComputedStyle(el).color, expected };
+    });
+    expect(colors.actual).toBe(colors.expected);
+    const label = await box(page.locator(".bx--query-builder > .bx--label"));
+    const text = await box(message);
+    expect(text.y - (label.y + label.height)).toBeCloseTo(8, 0);
+  });
+
   test("shows no controls to edit when read only", async ({ page }) => {
     await page.goto("/query-builder.html?preset=nested&readonly=1");
     await expect(

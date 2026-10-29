@@ -366,7 +366,15 @@
     <div id="{id}-helper" class="bx--form__helper-text">{helperText}</div>
   {/if}
   {#if invalid && invalidText}
-    <div id="{id}-error" class="bx--form-requirement">{invalidText}</div>
+    <!-- The modifier shows the message, which Carbon hides unless it follows
+      an invalid input; role="alert" announces it, as FormRequirement does. -->
+    <div
+      id="{id}-error"
+      class="bx--form-requirement bx--form-requirement--invalid"
+      role="alert"
+    >
+      {invalidText}
+    </div>
   {/if}
   <QueryBuilderGroup node={value} />
   {#if showSummary}

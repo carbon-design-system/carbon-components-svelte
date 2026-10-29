@@ -366,6 +366,29 @@ describe("QueryBuilder", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows and announces invalidText in place of the helper text", () => {
+    render(QueryBuilder, {
+      props: {
+        value: { operator: "and", conditions: [nameRow] },
+        helperText: "Match accounts by any field.",
+        invalid: true,
+        invalidText: "Add a condition on the plan.",
+      },
+    });
+
+    const message = screen.getByRole("alert");
+    expect(message).toHaveTextContent("Add a condition on the plan.");
+    expect(message).toHaveClass(
+      "bx--form-requirement",
+      "bx--form-requirement--invalid",
+    );
+    expect(screen.queryByText("Match accounts by any field.")).toBeNull();
+    expect(screen.getByRole("group", { name: "Filter" })).toHaveAttribute(
+      "aria-describedby",
+      message.id,
+    );
+  });
+
   it("offers no editing when read only, and no controls when disabled", () => {
     const value: QueryGroup = { operator: "and", conditions: [nameRow] };
     const { unmount } = render(QueryBuilder, {
