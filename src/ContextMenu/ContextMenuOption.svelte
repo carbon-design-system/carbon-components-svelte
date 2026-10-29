@@ -95,7 +95,10 @@
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
-  import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
+  import {
+    SUBMENU_AIM_PAUSE_MS,
+    SUBMENU_HOVER_DELAY_MS,
+  } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
@@ -144,7 +147,12 @@
     (value) => {
       submenuOpen = value;
     },
-    { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
+    {
+      openDelay: SUBMENU_HOVER_DELAY_MS,
+      closeDelay: SUBMENU_HOVER_DELAY_MS,
+      aimPause: SUBMENU_AIM_PAUSE_MS,
+      getSubmenu: () => (submenuOpen ? submenuRef : null),
+    },
   );
 
   const unsubPosition = ctx.position.subscribe((position) => {
@@ -340,9 +348,9 @@
     }
   }}
   on:mouseleave
-  on:mouseleave={() => {
+  on:mouseleave={(event) => {
     if (subOptions) {
-      hoverIntent.scheduleClose();
+      hoverIntent.scheduleClose(event);
     }
   }}
   on:click={(event) => {
