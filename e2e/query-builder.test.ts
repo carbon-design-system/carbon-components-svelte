@@ -370,6 +370,25 @@ test.describe("QueryBuilder layout", () => {
     expect(level2.top - level3.bottom).toBeCloseTo(32, 0);
     expect(root.top - level2.bottom).toBeCloseTo(32, 0);
   });
+
+  test("ends a date at the same x as the other values", async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    const text = await box(
+      page.getByRole("textbox", { name: "Value" }).first(),
+    );
+    const row = page.getByRole("group", { name: /Renewal date/ });
+    const date = await box(row.locator(".bx--date-picker__input"));
+    expect(Math.abs(date.x + date.width - (text.x + text.width))).toBeLessThan(
+      0.5,
+    );
+
+    await row
+      .getByRole("combobox", { name: "Operator" })
+      .selectOption("between");
+    const to = await box(row.getByRole("textbox", { name: "To" }));
+    expect(Math.abs(to.x + to.width - (text.x + text.width))).toBeLessThan(0.5);
+  });
 });
 
 test.describe("QueryBuilder forced colors", () => {

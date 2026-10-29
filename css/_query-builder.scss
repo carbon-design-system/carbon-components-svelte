@@ -106,9 +106,24 @@
   .#{$prefix}--query-builder__cell .#{$prefix}--text-input,
   .#{$prefix}--query-builder__cell .#{$prefix}--number,
   .#{$prefix}--query-builder__cell .#{$prefix}--date-picker,
-  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker-container {
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker-container,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker-input__wrapper,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker__anchor {
     width: 100%;
     max-width: none;
+  }
+
+  // DatePicker sets its inputs to 288 px (one date) and 143.5 px (a range).
+  // In a cell they fill it, so a date ends at the same x as the other
+  // values. Each selector ties the vendored one and wins on order.
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker--single .#{$prefix}--date-picker__input,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input {
+    width: 100%;
+  }
+
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker--range .#{$prefix}--date-picker-container {
+    min-width: 0;
+    flex: 1 1 0;
   }
 
   // A toggle is shorter than a field; center it on the row's fields.
