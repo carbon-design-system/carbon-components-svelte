@@ -409,10 +409,13 @@
           class:bx--text-area__label-counter={true}
           class:bx--text-area__label-counter--error={overCount}
         >
-          <span aria-hidden="true">{count}/{maxCount}</span>
+          <!-- The hidden text comes first, so its 1px box sits at the start
+               of the count. After it, the box would hang 1px past a counter
+               flush with the page edge and scroll the page. -->
           <span id={counterId} class:bx--visually-hidden={true}>
             {resolvedCounterText(count, maxCount)}
           </span>
+          <span aria-hidden="true">{count}/{maxCount}</span>
         </div>
       {/if}
     </div>
