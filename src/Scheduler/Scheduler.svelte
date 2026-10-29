@@ -1765,8 +1765,8 @@
                         continuesAfter={bar.continuesAfter}
                         dragging={preview !== null &&
                           preview.id === bar.record.id}
-                        tabindex={bar.record.startDay <= cursorDay &&
-                        bar.record.lastDay >= cursorDay
+                        tabindex={week.first + bar.start <= cursorDay &&
+                        week.first + bar.start + bar.span > cursorDay
                           ? 0
                           : -1}
                       />

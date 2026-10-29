@@ -226,7 +226,8 @@ function overlaps(a, b) {
 /**
  * Packs events that cover whole days into lanes, as the all-day row and the
  * month weeks show them. A longer bar takes the higher lane when two start
- * together.
+ * together. A timed event shorter than a day keeps to the day it starts on,
+ * even when it ends after midnight, so its text stays in that day's cell.
  *
  * @param {ReadonlyArray<EventRecord>} records
  * @param {CivilDay} firstDay
@@ -235,9 +236,12 @@ function overlaps(a, b) {
  * @returns {{ bars: Bar[]; lanes: number }}
  */
 export function packBars(records, firstDay, lastDay, bannersOnly = true) {
+  /** @param {EventRecord} record */
+  const lastShown = (record) =>
+    record.banner ? record.lastDay : record.startDay;
   const inRange = records.filter(
     (record) =>
-      record.lastDay >= firstDay &&
+      lastShown(record) >= firstDay &&
       record.startDay <= lastDay &&
       (record.banner || !bannersOnly),
   );
@@ -245,7 +249,7 @@ export function packBars(records, firstDay, lastDay, bannersOnly = true) {
     (a, b) =>
       Math.max(a.startDay, firstDay) - Math.max(b.startDay, firstDay) ||
       Number(b.banner) - Number(a.banner) ||
-      b.lastDay - b.startDay - (a.lastDay - a.startDay) ||
+      lastShown(b) - b.startDay - (lastShown(a) - a.startDay) ||
       a.startMs - b.startMs ||
       a.order - b.order,
   );
@@ -256,7 +260,7 @@ export function packBars(records, firstDay, lastDay, bannersOnly = true) {
   const bars = [];
   for (const record of inRange) {
     const start = Math.max(record.startDay, firstDay) - firstDay;
-    const end = Math.min(record.lastDay, lastDay) - firstDay;
+    const end = Math.min(lastShown(record), lastDay) - firstDay;
     let lane = laneEnds.findIndex((laneEnd) => laneEnd < start);
     if (lane === -1) lane = laneEnds.length;
     laneEnds[lane] = end;
@@ -267,7 +271,7 @@ export function packBars(records, firstDay, lastDay, bannersOnly = true) {
       span: end - start + 1,
       lane,
       continuesBefore: record.startDay < firstDay,
-      continuesAfter: record.lastDay > lastDay,
+      continuesAfter: lastShown(record) > lastDay,
     });
   }
   return { bars, lanes: laneEnds.length };

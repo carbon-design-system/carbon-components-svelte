@@ -55,7 +55,7 @@ The month view shows each week as a row. Events that cover whole days run across
 
 ### All-day and multi-day
 
-Set `allDay` to show an event in the all-day row. A timed event that lasts 24 hours or more also goes in the all-day row, as in Google Calendar and Outlook, and keeps its times in the label. A timed event shorter than 24 hours that crosses midnight is split: each day shows its own part, with a dashed edge where it continues.
+Set `allDay` to show an event in the all-day row. A timed event that lasts 24 hours or more also goes in the all-day row, as in Google Calendar and Outlook, and keeps its times in the label. A timed event shorter than 24 hours that crosses midnight is split in the day and week views: each day shows its own part, with a dashed edge where it continues. The month view shows it on the day it starts.
 
 ### Overlapping
 

@@ -359,6 +359,27 @@ test.describe("Scheduler month", () => {
     await expect(page.getByRole("button", { name: /^Offsite/ })).toBeVisible();
   });
 
+  test("keeps a timed event inside the cell of the day it starts", async ({
+    page,
+  }) => {
+    // "Release night" runs from 10 PM to 2 AM.
+    const outside = await page
+      .locator(".bx--scheduler__event--chip")
+      .evaluateAll((els) =>
+        els.flatMap((el) => {
+          const cell = (
+            el.closest("[data-cell]") as Element
+          ).getBoundingClientRect();
+          const box = el.getBoundingClientRect();
+          return box.left >= cell.left - 0.5 && box.right <= cell.right + 0.5
+            ? []
+            : [el.getAttribute("data-event-id")];
+        }),
+      );
+    await expect(page.locator('[data-event-id="late"]')).toHaveCount(1);
+    expect(outside).toEqual([]);
+  });
+
   test("creates an all-day range by dragging across days", async ({ page }) => {
     const box = await page.locator(".bx--scheduler__month-body").boundingBox();
     if (!box) throw new Error("no box");

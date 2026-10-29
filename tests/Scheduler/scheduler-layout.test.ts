@@ -274,6 +274,21 @@ describe("packBars", () => {
     expect(packBars(records, MON, MON + 6, false).bars).toHaveLength(1);
   });
 
+  it("keeps a timed event that ends after midnight to its first day", () => {
+    const records = readEvents(
+      [
+        timed("late", at(2, 22), at(3, 2)),
+        timed("sunday", at(6, 22), at(7, 2)),
+      ],
+      zone,
+    );
+    const { bars } = packBars(records, MON, MON + 6, false);
+    expect(
+      Object.fromEntries(bars.map((b) => [b.record.id, [b.start, b.span]])),
+    ).toEqual({ late: [2, 1], sunday: [6, 1] });
+    expect(packBars(records, MON + 7, MON + 13, false).bars).toHaveLength(0);
+  });
+
   it("counts what each day hides past the lane limit", () => {
     const records = readEvents(
       [range(0, 1, "a"), range(0, 1, "b"), range(1, 1, "c")],
