@@ -188,6 +188,10 @@
   import Tag from "../Tag/Tag.svelte";
   import Tile from "../Tile/Tile.svelte";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
+  import {
+    EDGE_SCROLL_RAMP_MS,
+    TOUCH_LIFT_DELAY_MS,
+  } from "../constants/timing.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import Draggable from "../icons/Draggable.svelte";
@@ -210,16 +214,12 @@
 
   /** Pixels a mouse must move before a press becomes a drag. */
   const DRAG_THRESHOLD = 4;
-  /** Milliseconds a touch or pen must rest on a card body to lift it. */
-  const LONG_PRESS_MS = 250;
   /** Pixels a touch may drift during the long press. */
   const LONG_PRESS_SLOP = 10;
   /** Width of the band at each edge of a scroll box that scrolls it. */
   const EDGE_ZONE = 72;
   /** Edge scroll speed at the very edge, in px/s. */
   const EDGE_MAX_SPEED = 960;
-  /** Milliseconds in the band before edge scrolling reaches full speed. */
-  const EDGE_RAMP_MS = 300;
   /** @type {Record<string, "up" | "down" | "start" | "end" | "previous" | "next">} */
   const STEP_KEYS = {
     ArrowUp: "up",
@@ -789,7 +789,8 @@
       // Non-passive so a lifted card can cancel the scroll; only for the
       // length of the press, since the compositor waits on such a listener.
       ref?.addEventListener("touchmove", handleTouchmove, { passive: false });
-      if (!handle) press.timer = setTimeout(beginPointerDrag, LONG_PRESS_MS);
+      if (!handle)
+        press.timer = setTimeout(beginPointerDrag, TOUCH_LIFT_DELAY_MS);
     }
     return true;
   }
@@ -901,7 +902,7 @@
       return 0;
     }
     edgeSince[axis] ??= now;
-    return speed * Math.min(1, (now - edgeSince[axis]) / EDGE_RAMP_MS);
+    return speed * Math.min(1, (now - edgeSince[axis]) / EDGE_SCROLL_RAMP_MS);
   }
 
   /**

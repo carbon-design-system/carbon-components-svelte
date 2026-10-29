@@ -36,3 +36,17 @@ export const SEPARATOR_HOVER_DELAY_MS = 150;
 
 /** Idle time before a type-ahead search buffer resets. */
 export const TYPEAHEAD_RESET_MS = 500;
+
+/**
+ * Press time before a touch or pen on a Kanban card lifts it. Shorter than
+ * a context-menu long press (about 500 ms), since the card follows the
+ * finger at once; movement beyond a few pixels first lets the page scroll.
+ */
+export const TOUCH_LIFT_DELAY_MS = 250;
+
+/**
+ * Time a dragged item rests near a scroll box's edge before edge scrolling
+ * reaches full speed, so passing the edge on the way to a target scrolls
+ * little.
+ */
+export const EDGE_SCROLL_RAMP_MS = 300;
