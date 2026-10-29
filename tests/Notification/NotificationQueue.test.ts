@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
 import type NotificationQueueComponent from "carbon-components-svelte/Notification/NotificationQueue.svelte";
 import { tick } from "svelte";
+import { NOTIFICATION_QUEUE_COLLAPSE_MS } from "../../src/constants/timing.js";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
 import NotificationQueueTest from "./NotificationQueue.test.svelte";
@@ -963,6 +964,88 @@ describe("NotificationQueue", () => {
       await advance(1000);
 
       expect(screen.queryByText("Synced")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("layout hold", () => {
+    function getRegion() {
+      return screen.getByRole("region", { name: "Notifications" });
+    }
+
+    function getTitles() {
+      return Array.from(
+        document.querySelectorAll(".bx--toast-notification__title"),
+        (node) => node.textContent,
+      );
+    }
+
+    it("keeps a closed toast's space until the pointer leaves", async () => {
+      const { component } = render(NotificationQueueTest);
+      getQueue(component.queue).add({ title: "Saved" });
+      getQueue(component.queue).add({ title: "Synced" });
+      await tick();
+
+      await fireEvent.pointerEnter(getRegion(), { pointerType: "mouse" });
+      // The newest toast, at the top. "Saved" would slide into its place.
+      await fireEvent.click(
+        screen.getAllByRole("button", { name: "Close notification" })[0],
+      );
+      const placeholder = getRegion().querySelector(
+        ".bx--notification-queue__placeholder",
+      );
+      expect(placeholder).toHaveAttribute("aria-hidden", "true");
+      expect(getTitles()).toEqual(["Saved"]);
+
+      await fireEvent.pointerLeave(getRegion(), { pointerType: "mouse" });
+      expect(placeholder).toBeInTheDocument();
+      vi.advanceTimersByTime(NOTIFICATION_QUEUE_COLLAPSE_MS);
+      await tick();
+      expect(placeholder).not.toBeInTheDocument();
+    });
+
+    it("holds drops while focus is in the queue", async () => {
+      const { component } = render(NotificationQueueTest, {
+        props: { maxNotifications: 2 },
+      });
+      const before = document.createElement("button");
+      document.body.append(before);
+      onTestFinished(() => before.remove());
+      getQueue(component.queue).add({ title: "First" });
+      getQueue(component.queue).add({ title: "Second" });
+      await tick();
+
+      screen.getAllByRole("button", { name: "Close notification" })[0].focus();
+      getQueue(component.queue).add({ title: "Third" });
+      await tick();
+      expect(getTitles()).toEqual(["Second", "First", "Third"]);
+
+      before.focus();
+      await tick();
+      expect(getTitles()).toEqual(["Third", "Second"]);
+    });
+
+    it("moves focus to the newest toast on F6 during a hold", async () => {
+      const { component } = render(NotificationQueueTest);
+      const before = document.createElement("button");
+      document.body.append(before);
+      onTestFinished(() => before.remove());
+      before.focus();
+      getQueue(component.queue).add({
+        title: "First",
+        action: { label: "Undo first" },
+      });
+      await tick();
+
+      await fireEvent.pointerEnter(getRegion(), { pointerType: "mouse" });
+      getQueue(component.queue).add({
+        title: "Second",
+        action: { label: "Undo second" },
+      });
+      await tick();
+      expect(getTitles()).toEqual(["First", "Second"]);
+
+      await fireEvent.keyDown(before, { key: "F6" });
+      expect(screen.getByRole("button", { name: "Undo second" })).toHaveFocus();
     });
   });
 

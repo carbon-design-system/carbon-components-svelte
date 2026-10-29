@@ -114,12 +114,18 @@
   /** Specify the accessible name of the notifications landmark */
   export let labelText = "Notifications";
 
-  import { setContext, tick } from "svelte";
+  import { onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import { NOTIFICATION_QUEUE_COLLAPSE_MS } from "../constants/timing.js";
   import { focusActionableNotification } from "../utils/dismissible-notification.js";
   import { returnFocus } from "../utils/focus.js";
   import NotificationActionButton from "./NotificationActionButton.svelte";
   import ToastNotification from "./ToastNotification.svelte";
+
+  /**
+   * @typedef {NotificationData & { id: string, placeholder?: undefined }} QueuedNotification
+   * @typedef {{ id?: undefined, placeholder: { height: number } }} Placeholder
+   */
 
   /** @type {null | HTMLDivElement} */
   let queueRef = null;
@@ -130,13 +136,29 @@
    */
   let prevFocus = null;
 
-  /** @type {Array<NotificationData & { id: string }>} */
+  /**
+   * Toasts, and the empty space of toasts that closed under the pointer.
+   * Each entry renders one element, so `queueRef.children[index]` is its node.
+   * @type {Array<QueuedNotification | Placeholder>}
+   */
   let notifications = [];
 
+  /**
+   * Arrival order of each toast. A toast that arrives during a hold is out
+   * of place until the hold ends.
+   * @type {Map<string, number>}
+   */
+  const arrivals = new Map();
+
   let idCounter = 0;
+  let arrivalCounter = 0;
 
   let hovered = false;
   let focused = false;
+  let collapsing = false;
+
+  /** @type {undefined | ReturnType<typeof setTimeout>} */
+  let collapseTimer;
 
   // As in React Aria's toast region, every toast's timer pauses while the
   // pointer or focus is in the queue, then resumes with the time it had left.
@@ -151,8 +173,40 @@
   }
   $: paused.set(hovered || focused);
 
+  onMount(() => () => clearTimeout(collapseTimer));
+
   function generateId() {
     return `notification-${idCounter++}`;
+  }
+
+  /**
+   * @param {QueuedNotification | Placeholder} entry
+   * @returns {entry is QueuedNotification}
+   */
+  function isToast(entry) {
+    return !entry.placeholder;
+  }
+
+  /**
+   * The props a queued notification passes to ToastNotification.
+   * @param {QueuedNotification} entry
+   */
+  function toastProps(entry) {
+    const {
+      id: _id,
+      action: _action,
+      placeholder: _placeholder,
+      ...props
+    } = entry;
+    return props;
+  }
+
+  /**
+   * @param {QueuedNotification} entry
+   * @returns {number}
+   */
+  function arrivalOf(entry) {
+    return arrivals.get(entry.id) ?? 0;
   }
 
   /**
@@ -169,21 +223,78 @@
       return id;
     }
 
-    /** @type {NotificationData & { id: string }} */
+    /** @type {QueuedNotification} */
     const newNotification = { ...notification, id };
+    arrivals.set(id, arrivalCounter++);
 
-    const top = isTopPosition(position);
-    notifications = top
-      ? [newNotification, ...notifications]
-      : [...notifications, newNotification];
+    // The newest toast goes at the screen edge. While the pointer or focus
+    // is in the queue, it goes at the other end instead, so the toasts
+    // already there stay in place, and none drops out. It is still a live
+    // region, so a screen reader announces it now.
+    const held = hovered || focused;
+    notifications =
+      isTopPosition(position) === held
+        ? [...notifications, newNotification]
+        : [newNotification, ...notifications];
 
-    while (notifications.length > Math.max(maxNotifications, 0)) {
-      notifications.splice(dropIndex(notifications, top), 1);
-    }
-    notifications = notifications;
+    if (!held) trim();
     settleFocus();
 
     return id;
+  }
+
+  // Drop the oldest toasts over `maxNotifications`.
+  function trim() {
+    const oldestFirst = notifications
+      .filter(isToast)
+      .sort((a, b) => arrivalOf(a) - arrivalOf(b));
+    if (oldestFirst.length <= Math.max(maxNotifications, 0)) return;
+    while (oldestFirst.length > Math.max(maxNotifications, 0)) {
+      const [dropped] = oldestFirst.splice(dropIndex(oldestFirst, false), 1);
+      arrivals.delete(dropped.id);
+      notifications.splice(notifications.indexOf(dropped), 1);
+    }
+    notifications = notifications;
+  }
+
+  // Once the pointer and focus leave, put toasts that arrived during the
+  // hold in order and drop the extras.
+  function settle() {
+    if (hovered || focused || collapsing) return;
+    const sign = isTopPosition(position) ? -1 : 1;
+    const sorted = notifications
+      .filter(isToast)
+      .sort((a, b) => sign * (arrivalOf(a) - arrivalOf(b)));
+    if (sorted.some((entry, index) => entry !== notifications[index])) {
+      notifications = sorted;
+    }
+    trim();
+  }
+
+  // A placeholder at the end away from the screen edge holds nothing in
+  // place.
+  function pruneFarEnd() {
+    const top = isTopPosition(position);
+    while (notifications.length > 0) {
+      const index = top ? notifications.length - 1 : 0;
+      if (isToast(notifications[index])) break;
+      notifications.splice(index, 1);
+    }
+  }
+
+  function collapse() {
+    if (notifications.every(isToast)) {
+      settle();
+      return;
+    }
+    collapsing = true;
+    clearTimeout(collapseTimer);
+    // Not `transitionend`, which does not fire under reduced motion.
+    collapseTimer = setTimeout(() => {
+      collapsing = false;
+      notifications = notifications.filter(isToast);
+      settle();
+    }, NOTIFICATION_QUEUE_COLLAPSE_MS);
   }
 
   /**
@@ -194,9 +305,10 @@
    */
   export function update(id, patch) {
     const index = notifications.findIndex((n) => n.id === id);
-    if (index === -1) return false;
+    const entry = notifications[index];
+    if (!entry || !isToast(entry)) return false;
 
-    notifications[index] = { ...notifications[index], ...patch, id };
+    notifications[index] = { ...entry, ...patch, id };
     notifications = notifications;
     return true;
   }
@@ -211,7 +323,17 @@
     if (index === -1) return false;
 
     moveFocusFrom(index);
-    notifications.splice(index, 1);
+    arrivals.delete(id);
+    const node = queueRef?.children[index];
+    if (hovered && node instanceof HTMLElement) {
+      // The toasts after it would slide under the pointer, and a second
+      // click would close one of them. Keep its space until the pointer
+      // leaves. Focus inside it has already moved to the next toast.
+      notifications[index] = { placeholder: { height: node.offsetHeight } };
+    } else {
+      notifications.splice(index, 1);
+    }
+    pruneFarEnd();
     notifications = notifications;
     settleFocus();
     return true;
@@ -222,6 +344,9 @@
    * @returns {void}
    */
   export function clear() {
+    clearTimeout(collapseTimer);
+    collapsing = false;
+    arrivals.clear();
     notifications = [];
   }
 
@@ -234,17 +359,17 @@
    */
   function moveFocusFrom(index) {
     if (!queueRef) return;
-    const toasts = Array.from(
-      queueRef.querySelectorAll(".bx--toast-notification"),
-    );
-    const current = toasts[index];
+    // Children, so `index` also counts placeholders, which never take focus.
+    const nodes = Array.from(queueRef.children);
+    const current = nodes[index];
     if (!current?.contains(document.activeElement)) return;
 
     const nearest = [
-      ...toasts.slice(index + 1),
-      ...toasts.slice(0, index).reverse(),
+      ...nodes.slice(index + 1),
+      ...nodes.slice(0, index).reverse(),
     ];
     for (const toast of nearest) {
+      if (!toast.classList.contains("bx--toast-notification")) continue;
       if (toast instanceof HTMLElement) focusActionableNotification(toast);
       if (!current.contains(document.activeElement)) return;
     }
@@ -258,6 +383,7 @@
     if (!focused) return;
     tick().then(() => {
       focused = !!queueRef?.contains(document.activeElement);
+      settle();
     });
   }
 
@@ -292,13 +418,15 @@
       return;
     }
 
-    const toasts = Array.from(
-      queueRef.querySelectorAll(".bx--toast-notification"),
-    );
-    // The newest toast first: `add` puts it nearest the screen edge.
-    if (!isTopPosition(position)) toasts.reverse();
+    // The newest toast first. During a hold it may not be at the edge.
+    const newestFirst = notifications
+      .flatMap((entry, index) =>
+        isToast(entry) ? [{ index, arrival: arrivalOf(entry) }] : [],
+      )
+      .sort((a, b) => b.arrival - a.arrival);
 
-    for (const toast of toasts) {
+    for (const { index } of newestFirst) {
+      const toast = queueRef.children[index];
       if (!(toast instanceof HTMLElement)) continue;
       focusActionableNotification(toast);
       if (queueRef.contains(document.activeElement)) {
@@ -342,10 +470,15 @@
     style:z-index={zIndex}
     on:pointerenter={(event) => {
       // Touch has no hover. A tap would leave the queue paused.
-      if (event.pointerType !== "touch") hovered = true;
+      if (event.pointerType === "touch") return;
+      hovered = true;
+      // Back in before the space collapsed: the transition reverses.
+      clearTimeout(collapseTimer);
+      collapsing = false;
     }}
     on:pointerleave={() => {
       hovered = false;
+      collapse();
     }}
     on:focusin={() => {
       focused = true;
@@ -354,32 +487,43 @@
       // Focus moving from one toast to another stays inside.
       const next = event.relatedTarget;
       focused = next instanceof Node && event.currentTarget.contains(next);
+      settle();
     }}
   >
     <!-- `id` keys the queue; spreading it would set duplicate DOM ids across queues. -->
-    {#each notifications as { id, action, ...notification } (id)}
-      {@const timeout = resolveTimeout({ action, ...notification })}
-      {#if action}
-        <ToastNotification
-          {...notification}
-          {timeout}
-          on:close={() => remove(id)}
-        >
-          <svelte:fragment slot="actions">
-            <NotificationActionButton
-              href={action.href}
-              on:click={(event) => handleAction(id, action, event)}
-            >
-              {action.label}
-            </NotificationActionButton>
-          </svelte:fragment>
-        </ToastNotification>
+    {#each notifications as entry (entry.placeholder ?? entry.id)}
+      {#if entry.placeholder}
+        <div
+          aria-hidden="true"
+          class:bx--notification-queue__placeholder={true}
+          style:block-size="{collapsing ? 0 : entry.placeholder.height}px"
+        ></div>
       {:else}
-        <ToastNotification
-          {...notification}
-          {timeout}
-          on:close={() => remove(id)}
-        />
+        {@const id = entry.id}
+        {@const action = entry.action}
+        {@const timeout = resolveTimeout(entry)}
+        {#if action}
+          <ToastNotification
+            {...toastProps(entry)}
+            {timeout}
+            on:close={() => remove(id)}
+          >
+            <svelte:fragment slot="actions">
+              <NotificationActionButton
+                href={action.href}
+                on:click={(event) => handleAction(id, action, event)}
+              >
+                {action.label}
+              </NotificationActionButton>
+            </svelte:fragment>
+          </ToastNotification>
+        {:else}
+          <ToastNotification
+            {...toastProps(entry)}
+            {timeout}
+            on:close={() => remove(id)}
+          />
+        {/if}
       {/if}
     {/each}
   </div>

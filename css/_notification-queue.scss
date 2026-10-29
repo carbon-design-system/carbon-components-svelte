@@ -1,0 +1,31 @@
+// `NotificationQueue` holds the space of a toast that closes under the
+// pointer, so the toasts after it stay in place until the pointer leaves.
+// Carbon v10 has no queue, so this lives in its own partial.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/motion";
+
+/// The empty box a closed toast leaves while the pointer is in the queue.
+/// Its margins match the toast's, so the space it takes is the same.
+/// @access private
+/// @group notification
+@mixin notification-queue-placeholder {
+  .#{$prefix}--notification-queue__placeholder {
+    margin-top: $carbon--spacing-03;
+    margin-bottom: $carbon--spacing-03;
+    transition: block-size $duration--moderate-01 motion(exit, productive);
+
+    &:first-child {
+      margin-top: $carbon--spacing-05;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}
+
+@include exports("notification-queue-placeholder") {
+  @include notification-queue-placeholder;
+}

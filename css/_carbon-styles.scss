@@ -72,6 +72,7 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/notification/inline-notification";
 @import "./callout";
 @import "carbon-components/scss/components/notification/toast-notification";
+@import "./notification-queue";
 @import "carbon-components/scss/components/number-input/number-input";
 @import "carbon-components/scss/components/overflow-menu/overflow-menu";
 @import "carbon-components/scss/components/pagination-nav/pagination-nav";
