@@ -259,15 +259,19 @@
     min-width: 12ch;
   }
 
+  // Every badge is as wide as the longest label, so the message starts the
+  // same distance after each one. The labels are monospace.
   .#{$prefix}--log-viewer__level {
     display: flex;
-    width: to-rem(64px);
     height: to-rem(20px);
     flex: none;
     align-items: center;
 
     .#{$prefix}--tag {
+      min-width: calc(var(--ccs-log-level-chars, 5) * 1ch + #{$carbon--spacing-05});
       margin: 0;
+      // Tracking would make a label wider than its count of `ch`.
+      letter-spacing: 0;
     }
   }
 

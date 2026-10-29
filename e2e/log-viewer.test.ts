@@ -336,6 +336,26 @@ test("the line numbers start at the edge of the toolbar's search icon", async ({
   expect(edges.number).toBe(edges.icon);
 });
 
+test("the message starts the same distance after every level", async ({
+  page,
+}) => {
+  await page.goto("/log-viewer.html?lines=60");
+  await expect(page.getByRole("log")).toBeVisible();
+
+  const gaps = await page.evaluate(() =>
+    [...document.querySelectorAll(".bx--log-viewer__line")].map((line) => {
+      const level = line.querySelector(".bx--log-viewer__level > *");
+      const text = line.querySelector(".bx--log-viewer__text");
+      if (!level || !text) throw new Error("missing");
+      return Math.round(
+        text.getBoundingClientRect().left - level.getBoundingClientRect().right,
+      );
+    }),
+  );
+
+  expect(new Set(gaps).size).toBe(1);
+});
+
 test("has no detectable accessibility violations in White and Gray 100", async ({
   page,
 }) => {

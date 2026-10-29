@@ -318,6 +318,10 @@
   /** Digits in the highest line number, which sets the width of the column. */
   let numberDigits = 1;
   let levelColumn = false;
+  /** Characters in the longest level label, which sets the width of the column. */
+  $: levelChars = Math.max(
+    ...LOG_LEVELS.map((level) => String(levelText(level)).length),
+  );
   /** Lines added since the reader scrolled away from the end. */
   let unseen = 0;
   let containerHeight = 320;
@@ -955,6 +959,7 @@
     backgroundLuminance < DARK_LUMINANCE}
   style:height
   style:--ccs-log-number-width="{numberDigits}ch"
+  style:--ccs-log-level-chars={levelChars}
   {...wrapperProps}
 >
   {#if !hideToolbar}
