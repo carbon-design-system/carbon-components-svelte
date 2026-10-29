@@ -1435,8 +1435,7 @@
   {#if toolbar}
     <div class="bx--scheduler__toolbar">
       <div class="bx--scheduler__nav">
-        <Button kind="tertiary" size="sm" on:click={goToday}>{todayText}</Button
-        >
+        <Button kind="ghost" size="sm" on:click={goToday}>{todayText}</Button>
         <Button
           kind="ghost"
           size="sm"
