@@ -28,7 +28,6 @@
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: $carbon--spacing-03;
   }
 
   // A nested group is marked by a rule on its inline start and an indent.
@@ -48,10 +47,13 @@
     margin-block-end: $carbon--spacing-06;
   }
 
+  // The header and the rows share one 16 px gap, so every row of a group,
+  // its header included, has the same pitch.
   .#{$prefix}--query-builder__body {
     display: flex;
     min-width: 0;
     flex-direction: column;
+    margin-block-start: $carbon--spacing-05;
     gap: $carbon--spacing-05;
   }
 
@@ -141,6 +143,8 @@
   .#{$prefix}--query-builder__footer {
     display: flex;
     flex-wrap: wrap;
+    // Closer than the rows, so it reads as part of the group.
+    margin-block-start: $carbon--spacing-03;
     gap: $carbon--spacing-03;
   }
 

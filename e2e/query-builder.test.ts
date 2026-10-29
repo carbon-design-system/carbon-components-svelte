@@ -323,7 +323,7 @@ test.describe("QueryBuilder", () => {
 
 test.describe("QueryBuilder layout", () => {
   // One edge of every match, in tree order.
-  function edges(page: Page, selector: string, side: "left" | "right") {
+  function edges(page: Page, selector: string, side: "left" | "right" | "top") {
     return page
       .locator(selector)
       .evaluateAll(
@@ -387,6 +387,21 @@ test.describe("QueryBuilder layout", () => {
     expect(headers).toHaveLength(3);
     for (const offset of headers) {
       expect(Math.abs(offset - rows[0].field)).toBeLessThan(0.5);
+    }
+  });
+
+  test("gives headers and conditions one row pitch", async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    // In this preset no footer falls between two rows.
+    const tops = await edges(
+      page,
+      ".bx--query-builder__group-header, .bx--query-builder__condition",
+      "top",
+    );
+    expect(tops).toHaveLength(8);
+    for (let i = 1; i < tops.length; i++) {
+      expect(Math.abs(tops[i] - tops[i - 1] - 56)).toBeLessThan(0.5);
     }
   });
 
