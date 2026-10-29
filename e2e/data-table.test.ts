@@ -325,3 +325,17 @@ test.describe("DataTable", () => {
     expect(await look("Hand-written cell")).toEqual(await look("Table cell"));
   });
 });
+
+// Carbon v11 draws the search close icon at 16px. ToolbarSearch keeps
+// Search's xl size, which draws it at 20px, too large for the 32px
+// close button of a small toolbar.
+test("a small toolbar's search draws a 16px close icon", async ({ page }) => {
+  await page.goto("/data-table-variants.html");
+  const icon = page
+    .getByTestId("toolbar")
+    .locator(".bx--table-toolbar--small .bx--search-close svg")
+    .first();
+  const box = await icon.boundingBox();
+  expect(box?.width).toBe(16);
+  expect(box?.height).toBe(16);
+});

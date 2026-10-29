@@ -677,6 +677,24 @@
   @include data-table-toolbar-xs;
 }
 
+// carbon-components-svelte patch (toolbar search close icon)
+/// ToolbarSearch keeps Search's xl size, which draws a 20px close icon.
+/// Carbon v11 draws it at 16px, which fits the 32px and 24px close
+/// buttons of the small and xs toolbars.
+/// @access private
+/// @group data-table
+@mixin data-table-toolbar-search-close {
+  .#{$prefix}--table-toolbar--small .#{$prefix}--search-close svg,
+  .#{$prefix}--table-toolbar--xs .#{$prefix}--search-close svg {
+    width: to-rem(16px);
+    height: to-rem(16px);
+  }
+}
+
+@include exports('data-table-toolbar-search-close') {
+  @include data-table-toolbar-search-close;
+}
+
 // carbon-components-svelte patch (sticky toolbar)
 /// @access private
 /// @group data-table
