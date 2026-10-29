@@ -441,6 +441,46 @@ test.describe("QueryBuilder layout", () => {
     expect(root.top - level2.bottom).toBeCloseTo(32, 0);
   });
 
+  test("keeps every field box at one top edge when one shows an error", async ({
+    page,
+  }) => {
+    // The tops of a row's field boxes and action buttons.
+    function tops(row: Locator) {
+      return row
+        .locator(
+          "select, input:not([type=hidden]), .bx--query-builder__actions button",
+        )
+        .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top));
+    }
+
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    const pair = page.getByRole("group", { name: /Where Seats/ });
+    await pair
+      .getByRole("combobox", { name: "Operator" })
+      .selectOption("between");
+    await pair.getByRole("spinbutton", { name: "From" }).fill("500");
+    await pair.getByRole("spinbutton", { name: "To" }).fill("100");
+    await page.locator("body").click({ position: { x: 1, y: 1 } });
+    await expect(
+      pair.getByText("The start must not be after the end"),
+    ).toBeVisible();
+    const pairTops = await tops(pair);
+    expect(pairTops).toHaveLength(7);
+    for (const top of pairTops) {
+      expect(Math.abs(top - pairTops[0])).toBeLessThan(0.5);
+    }
+
+    await page.goto("/query-builder.html?preset=incomplete&errors=1");
+    const row = page.locator(".bx--query-builder__condition").first();
+    await expect(row.getByText("Enter a value")).toBeVisible();
+    const rowTops = await tops(row);
+    expect(rowTops).toHaveLength(6);
+    for (const top of rowTops) {
+      expect(Math.abs(top - rowTops[0])).toBeLessThan(0.5);
+    }
+  });
+
   test("ends a date at the same x as the other values", async ({ page }) => {
     await page.setViewportSize({ width: 1100, height: 900 });
     await page.goto("/query-builder.html?preset=nested");

@@ -101,10 +101,13 @@
     flex: 1 1 to-rem(160px);
   }
 
-  // Two inputs for a range share the cell.
+  // Two inputs for a range share the cell. Like the row, the pair aligns
+  // to the top of its field boxes, so an error under one input does not
+  // move the other.
   .#{$prefix}--query-builder__cell--pair {
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
     gap: $carbon--spacing-03;
   }
 
@@ -139,8 +142,9 @@
     flex: 1 1 0;
   }
 
-  // A toggle is shorter than a field; center it on the row's fields.
-  .#{$prefix}--query-builder__cell--value .#{$prefix}--form-item {
+  // A toggle is shorter than a field. Center the toggle itself in a box of
+  // the field's height; the form item stays top-aligned with its neighbors.
+  .#{$prefix}--query-builder__cell--value .#{$prefix}--toggle-input__label {
     min-height: var(--ccs-query-builder-field-height);
     justify-content: center;
   }
