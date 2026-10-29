@@ -211,7 +211,9 @@
 
   // The gutter stays put while a long line scrolls sideways beneath it. Its
   // 16px start padding matches the search icon's inset in the toolbar, so
-  // the line numbers and the toolbar share one edge.
+  // the line numbers and the toolbar share one edge. Its columns have fixed
+  // widths in `ch`, with no tracking, which would make a value wider than
+  // its count of `ch`, so the message starts at one x on every row.
   .#{$prefix}--log-viewer__gutter {
     position: sticky;
     z-index: 1;
@@ -224,11 +226,12 @@
     background-color: inherit;
     color: $text-secondary;
     gap: $carbon--spacing-04;
+    letter-spacing: 0;
     user-select: none;
   }
 
   .#{$prefix}--log-viewer__line-number {
-    min-width: var(--ccs-log-number-width, 4ch);
+    width: var(--ccs-log-number-width, 4ch);
     padding: 0;
     border: 0;
     margin: 0;
@@ -254,15 +257,16 @@
   }
 
   .#{$prefix}--log-viewer__time {
-    min-width: 12ch;
+    width: 12ch;
+    flex: none;
   }
 
   // The level is text in the time column's style, as wide as the longest
-  // label, so the message starts the same distance after each one. Warnings
+  // label. Warnings
   // and errors take the primary text color; their bar carries the status
   // color, so each status has one color and one label.
   .#{$prefix}--log-viewer__level {
-    min-width: calc(var(--ccs-log-level-chars, 5) * 1ch);
+    width: calc(var(--ccs-log-level-chars, 5) * 1ch);
     flex: none;
   }
 

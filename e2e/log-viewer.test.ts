@@ -338,24 +338,27 @@ test("the line numbers start at the edge of the toolbar's search icon", async ({
   expect(edges.number).toBe(edges.icon);
 });
 
-test("the message starts the same distance after every level", async ({
-  page,
-}) => {
-  await page.goto("/log-viewer.html?lines=60");
+test("the message starts at one x on every row", async ({ page }) => {
+  // Lines 1 to 12 hold every level, and one- and two-digit line numbers.
+  await page.goto("/log-viewer.html?lines=12&time");
   await expect(page.getByRole("log")).toBeVisible();
 
-  const gaps = await page.evaluate(() =>
+  const rows = await page.evaluate(() =>
     [...document.querySelectorAll(".bx--log-viewer__line")].map((line) => {
-      const level = line.querySelector(".bx--log-viewer__level");
       const text = line.querySelector(".bx--log-viewer__text");
-      if (!level || !text) throw new Error("missing");
-      return Math.round(
-        text.getBoundingClientRect().left - level.getBoundingClientRect().right,
-      );
+      if (!text) throw new Error("missing");
+      return {
+        level: line.querySelector(".bx--log-viewer__level")?.textContent,
+        left: text.getBoundingClientRect().left,
+      };
     }),
   );
 
-  expect(new Set(gaps).size).toBe(1);
+  expect(new Set(rows.map((row) => row.level))).toEqual(
+    new Set(["DEBUG", "INFO", "WARN", "ERROR"]),
+  );
+  const lefts = rows.map((row) => row.left);
+  expect(Math.max(...lefts) - Math.min(...lefts)).toBeLessThanOrEqual(0.5);
 });
 
 test("the match arrows stay put while the count changes width", async ({
