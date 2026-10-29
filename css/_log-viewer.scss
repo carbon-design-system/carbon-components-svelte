@@ -141,11 +141,16 @@
     @include ccs-inset-inline($end: 0);
   }
 
+  // The count reserves the width of its widest value for the current total,
+  // in `ch` with tabular digits, so stepping from "9 of 12" to "10 of 12"
+  // does not move the arrows after it.
   .#{$prefix}--log-viewer__count {
     @include type-style("label-01");
 
-    min-width: to-rem(56px);
+    min-width: max(#{to-rem(56px)}, var(--ccs-log-count-width, 0px));
     color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
     white-space: nowrap;
   }
 

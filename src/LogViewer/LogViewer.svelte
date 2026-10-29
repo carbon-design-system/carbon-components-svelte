@@ -353,6 +353,14 @@
   let searchStatus = "";
   /** The first line id the search index has not read. */
   let indexedUntil = 0;
+  /**
+   * Characters in the count's widest value for this total, such as "12 of
+   * 12", which it reserves so the arrows after it do not move.
+   */
+  $: countChars =
+    searchTotal > 0
+      ? String(matchCountText(searchTotal, searchTotal)).length
+      : 0;
 
   let announcement = "";
   let announcedLines = 0;
@@ -1011,7 +1019,11 @@
           </div>
         </div>
         <div class:bx--log-viewer__group={true}>
-          <span class:bx--log-viewer__count={true} aria-hidden="true">
+          <span
+            class:bx--log-viewer__count={true}
+            style:--ccs-log-count-width="{countChars}ch"
+            aria-hidden="true"
+          >
             <!-- The count has letters, so its direction follows its own text: "1 of 12" stays in order on an RTL page. -->
             <bdi>
               {#if invalid}

@@ -358,6 +358,32 @@ test("the message starts the same distance after every level", async ({
   expect(new Set(gaps).size).toBe(1);
 });
 
+test("the match arrows stay put while the count changes width", async ({
+  page,
+}) => {
+  await page.goto("/log-viewer.html?lines=400");
+  await expect(page.getByRole("log")).toBeVisible();
+  const search = page.getByRole("searchbox");
+  await search.fill("request");
+  const count = page.locator(".bx--log-viewer__count");
+  const previous = page.getByRole("button", { name: "Previous match" });
+
+  // Step past the last match, so the count goes from "320 of 320" to
+  // "1 of 320".
+  const seen = new Set<string>();
+  const lefts = new Set<number>();
+  for (let step = 0; step < 40 && !seen.has("1 of 320"); step++) {
+    // biome-ignore lint/performance/noAwaitInLoops: each step reads the last
+    seen.add((await count.textContent())?.trim() ?? "");
+    lefts.add(Math.round((await previous.boundingBox())?.x ?? -1));
+    await search.press("Enter");
+  }
+
+  expect(seen).toContain("320 of 320");
+  expect(seen).toContain("1 of 320");
+  expect([...lefts]).toHaveLength(1);
+});
+
 test("has no detectable accessibility violations in White and Gray 100", async ({
   page,
 }) => {
