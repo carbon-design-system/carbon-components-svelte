@@ -1,5 +1,10 @@
 <script>
-  import { DataGrid, Stack, Text } from "carbon-components-svelte";
+  import {
+    applyDataGridPaste,
+    DataGrid,
+    Stack,
+    Text,
+  } from "carbon-components-svelte";
 
   const columns = [
     { key: "service", title: "Service", width: 160 },
@@ -23,7 +28,7 @@
     const { matrix, range, truncated } = event.detail;
 
     // Only the numeric columns take pasted values.
-    const numeric = matrix.every((line, i) =>
+    const numeric = matrix.every((line) =>
       line.every((text, j) => {
         const key = columns[range.startColumn + j]?.key;
         return key === "service" || Number.isFinite(Number(text));
@@ -36,19 +41,9 @@
     }
 
     // The grid never edits a row. Write the values, then reassign `rows`.
-    const next = rows.slice();
-    matrix.forEach((line, i) => {
-      const r = range.startRow + i;
-      if (r > range.endRow) return;
-      next[r] = { ...next[r] };
-      line.forEach((text, j) => {
-        const c = range.startColumn + j;
-        if (c > range.endColumn) return;
-        const { key } = columns[c];
-        next[r][key] = key === "service" ? text : Number(text);
-      });
-    });
-    rows = next;
+    rows = applyDataGridPaste(rows, columns, event.detail, (text, column) =>
+      column.key === "service" ? text : Number(text),
+    );
     message = truncated
       ? "Pasted what fits. The rest ran past the grid."
       : `Pasted ${matrix.length} by ${matrix[0].length} cells.`;

@@ -1,4 +1,5 @@
 import {
+  applyDataGridPaste,
   buildColumnLayout,
   findOffsetIndex,
   getCellAtPoint,
@@ -516,6 +517,60 @@ describe("data-grid-utils", () => {
           active: { row: 0, column: 0 },
         }),
       ).toBeNull();
+    });
+  });
+
+  describe("applyDataGridPaste", () => {
+    const columns = [{ key: "a" }, { key: "b" }, { key: "c" }];
+    const rows = [
+      { a: 1, b: 2, c: 3 },
+      { a: 4, b: 5, c: 6 },
+      { a: 7, b: 8, c: 9 },
+    ];
+
+    it("writes the matrix over the range and leaves the input alone", () => {
+      const next = applyDataGridPaste(rows, columns, {
+        matrix: [
+          ["x", "y"],
+          ["z", "w"],
+        ],
+        range: { startRow: 1, startColumn: 1, endRow: 2, endColumn: 2 },
+      });
+
+      expect(next).toEqual([
+        { a: 1, b: 2, c: 3 },
+        { a: 4, b: "x", c: "y" },
+        { a: 7, b: "z", c: "w" },
+      ]);
+      expect(next[0]).toBe(rows[0]);
+      expect(rows[1]).toEqual({ a: 4, b: 5, c: 6 });
+    });
+
+    it("fills a larger range with one value, through toValue", () => {
+      const next = applyDataGridPaste(
+        rows,
+        columns,
+        {
+          matrix: [["10"]],
+          range: { startRow: 0, startColumn: 0, endRow: 1, endColumn: 1 },
+        },
+        (text, column) => (column.key === "a" ? Number(text) : text),
+      );
+
+      expect(next.slice(0, 2)).toEqual([
+        { a: 10, b: "10", c: 3 },
+        { a: 10, b: "10", c: 6 },
+      ]);
+    });
+
+    it("stops at the last row and column", () => {
+      const next = applyDataGridPaste(rows, columns, {
+        matrix: [["x", "y"]],
+        range: { startRow: 2, startColumn: 2, endRow: 5, endColumn: 5 },
+      });
+
+      expect(next).toHaveLength(3);
+      expect(next[2]).toEqual({ a: 7, b: 8, c: "x" });
     });
   });
 });

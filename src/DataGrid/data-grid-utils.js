@@ -482,3 +482,45 @@ export function getPasteRange({
     truncated: endRow > rowCount - 1 || endColumn > columnCount - 1,
   };
 }
+
+/**
+ * New rows with a pasted matrix written over `range`, by each column's
+ * `key`. A matrix smaller than the range repeats, so one value fills it.
+ * Rows outside the range are the same objects, and nothing passed in
+ * changes. Runs on the server.
+ * @template {object} Row
+ * @param {ReadonlyArray<Row>} rows
+ * @param {ReadonlyArray<{ key: string }>} columns
+ * @param {{ matrix: ReadonlyArray<ReadonlyArray<string>>; range: DataGridRange }} paste - The `paste` event's `detail`.
+ * @param {(text: string, column: { key: string }, row: Row) => any} [toValue] - Turns pasted text into a value. Defaults to the text.
+ * @returns {Row[]}
+ */
+export function applyDataGridPaste(
+  rows,
+  columns,
+  { matrix, range },
+  toValue = (text) => text,
+) {
+  const next = rows.slice();
+  const height = matrix.length;
+  const width = matrix[0]?.length ?? 0;
+  if (height === 0 || width === 0) return next;
+  const endRow = Math.min(range.endRow, rows.length - 1);
+  const endColumn = Math.min(range.endColumn, columns.length - 1);
+  for (let r = range.startRow; r <= endRow; r++) {
+    const source = rows[r];
+    const line = matrix[(r - range.startRow) % height];
+    /** @type {Record<string, any>} */
+    const row = { ...source };
+    for (let c = range.startColumn; c <= endColumn; c++) {
+      const column = columns[c];
+      row[column.key] = toValue(
+        line[(c - range.startColumn) % width] ?? "",
+        column,
+        source,
+      );
+    }
+    next[r] = /** @type {Row} */ (row);
+  }
+  return next;
+}

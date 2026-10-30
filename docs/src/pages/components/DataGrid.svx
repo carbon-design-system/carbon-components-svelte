@@ -106,13 +106,13 @@ Bind `activeCell` and `selection` to read them. A selection is `null` while it c
 
 <DocKbd label="Ctrl" /> + <DocKbd label="C" /> copies the selection, or the active cell, as tab-separated text and as an HTML table. Spreadsheets paste either one with its cells in place. The `copy` event fires first, with the matrix, and `preventDefault` cancels the copy.
 
-A paste hands the cells to you. The grid parses the clipboard's tab-separated text into a matrix, picks the range it would cover from the top left of the selection, and dispatches `paste` with `matrix`, `range`, and `truncated`. It does not write anything: apply the values to `rows` yourself. One pasted value over a larger selection fills the whole selection.
+A paste hands the cells to you. The grid parses the clipboard's tab-separated text into a matrix, picks the range it would cover from the top left of the selection, and dispatches `paste` with `matrix`, `range`, and `truncated`. It does not write anything: apply the values to `rows` yourself, or pass `rows`, `columns` and the event's `detail` to `applyDataGridPaste`, which returns new rows. Its optional fourth argument turns pasted text into a value, such as a number. One pasted value over a larger selection fills the whole selection.
 
 If you do not call `preventDefault`, the pasted range becomes the selection, as in a spreadsheet. Call it to reject a paste, and the selection stays put.
 
 | Do | Why |
 | :--- | :--- |
-| Write the values in the `paste` handler and reassign `rows` | The grid reads `rows` and never changes it. |
+| Write the values in the `paste` handler with `applyDataGridPaste` and reassign `rows` | The grid reads `rows` and never changes it. |
 | Call `event.preventDefault()` to reject a paste | The selection stays and nothing is announced as pasted. |
 | Check `detail.truncated` | The block ran past the last row or column, and `range` is cut to fit. |
 | Leave editing to the cell | A grid that edits in place, with validation, is a separate concern. |

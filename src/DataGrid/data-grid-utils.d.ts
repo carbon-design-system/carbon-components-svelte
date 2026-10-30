@@ -138,3 +138,19 @@ export function getPasteRange(options: {
   rowCount: number;
   columnCount: number;
 }): { range: DataGridRange; truncated: boolean } | null;
+
+/**
+ * New rows with a pasted matrix written over `range`, by each column's
+ * `key`. A matrix smaller than the range repeats, so one value fills it.
+ * Rows outside the range are the same objects, and nothing passed in
+ * changes. Runs on the server.
+ */
+export function applyDataGridPaste<Row extends object>(
+  rows: ReadonlyArray<Row>,
+  columns: ReadonlyArray<{ key: string }>,
+  paste: {
+    matrix: ReadonlyArray<ReadonlyArray<string>>;
+    range: DataGridRange;
+  },
+  toValue?: (text: string, column: { key: string }, row: Row) => unknown,
+): Row[];

@@ -1,5 +1,5 @@
 <script>
-  import { DataGrid } from "carbon-components-svelte";
+  import { applyDataGridPaste, DataGrid } from "carbon-components-svelte";
 
   const params = new URLSearchParams(location.search);
   const rowCount = Number(params.get("rows") ?? 40);
@@ -57,18 +57,7 @@
       return;
     }
     // The grid never edits a row: the consumer writes the values.
-    const next = rows.slice();
-    matrix.forEach((line, i) => {
-      const r = range.startRow + i;
-      if (r > range.endRow) return;
-      next[r] = { ...next[r] };
-      line.forEach((value, j) => {
-        const c = range.startColumn + j;
-        if (c > range.endColumn) return;
-        next[r][`c${c}`] = value;
-      });
-    });
-    rows = next;
+    rows = applyDataGridPaste(rows, columns, event.detail);
   }
 </script>
 
