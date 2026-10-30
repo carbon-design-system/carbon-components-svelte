@@ -565,10 +565,12 @@
   data-transfer-list-panel={id}
 >
   <div class:bx--transfer-list__header={true}>
-    <span id="{id}-title" class:bx--transfer-list__title={true}>{title}</span>
-    <span id="{id}-count" class:bx--transfer-list__count={true}
-      >{countLabel}</span
-    >
+    <div class:bx--transfer-list__heading={true}>
+      <span id="{id}-title" class:bx--transfer-list__title={true}>{title}</span>
+      <span id="{id}-count" class:bx--transfer-list__count={true}
+        >{countLabel}</span
+      >
+    </div>
     <slot name="actions" />
   </div>
   {#if filterable}

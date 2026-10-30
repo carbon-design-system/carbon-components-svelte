@@ -274,6 +274,37 @@ test.describe("TransferList", () => {
     await page.mouse.up();
   });
 
+  test("sets a list's title and count on one baseline", async ({ page }) => {
+    await page.goto("/transfer-list.html");
+    await expect(available(page)).toBeVisible();
+    const baselines = await page.evaluate(() => {
+      // A zero-height inline block sits on its line's baseline.
+      const baseline = (el: Element) => {
+        const probe = document.createElement("span");
+        probe.style.display = "inline-block";
+        el.append(probe);
+        const y = probe.getBoundingClientRect().bottom;
+        probe.remove();
+        return y;
+      };
+      return [...document.querySelectorAll(".bx--transfer-list__header")].map(
+        (header) => [
+          baseline(
+            header.querySelector(".bx--transfer-list__title") as Element,
+          ),
+          baseline(
+            header.querySelector(".bx--transfer-list__count") as Element,
+          ),
+        ],
+      );
+    });
+
+    expect(baselines).toHaveLength(2);
+    for (const [title, count] of baselines) {
+      expect(Math.abs(title - count)).toBeLessThanOrEqual(0.5);
+    }
+  });
+
   test("dims every row when disabled", async ({ page }) => {
     await page.goto("/transfer-list-states.html");
     const color = (group: string, text: string) =>

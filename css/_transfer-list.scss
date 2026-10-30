@@ -51,6 +51,16 @@
     column-gap: $carbon--spacing-03;
   }
 
+  // The title and count differ in size, so they share a baseline; the
+  // group centers in the header beside the reorder buttons.
+  .#{$prefix}--transfer-list__heading {
+    display: flex;
+    min-inline-size: 0;
+    flex: 1;
+    align-items: baseline;
+    column-gap: $carbon--spacing-03;
+  }
+
   .#{$prefix}--transfer-list__title {
     @include type-style("heading-compact-01");
 
