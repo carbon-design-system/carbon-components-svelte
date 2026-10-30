@@ -148,13 +148,14 @@ An `ActionBarItem` holds a control that is not a button, such as a `Dropdown` or
 | `Dropdown` | <DocKbd label="↑" /> <DocKbd label="↓" />, and every arrow while open | <DocKbd label="←" /> <DocKbd label="→" /> |
 | Button | None | Every arrow key |
 
+A field takes the bar's `size` when its own is unset, so it fills the height of the bar and its bottom border is the bar's bottom edge.
+
 An item never collapses into the menu, since a control cannot be copied into it. Give the bar room for its items, or move them out of it on narrow screens.
 
 <ActionBar labelText="Table tools">
   <ActionBarButton labelText="Add row" icon={Add} />
   <ActionBarItem>
     <Dropdown
-      size="sm"
       hideLabel
       labelText="Style"
       selectedId="paragraph"
@@ -165,7 +166,7 @@ An item never collapses into the menu, since a control cannot be copied into it.
     />
   </ActionBarItem>
   <ActionBarItem>
-    <Search size="sm" labelText="Find" placeholder="Find" />
+    <Search labelText="Find" placeholder="Find" />
   </ActionBarItem>
   <ActionBarButton labelText="Copy" icon={Copy} />
 </ActionBar>

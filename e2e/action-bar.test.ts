@@ -338,6 +338,21 @@ test.describe("ActionBar", () => {
     await expect(page.getByRole("combobox")).toBeFocused();
   });
 
+  test("fills the bar's height with its fields", async ({ page }) => {
+    await page.goto("/action-bar-fields.html");
+    const edges = await page.getByRole("toolbar").evaluate((toolbar) => {
+      const bottom = (node: Element | null) =>
+        node?.getBoundingClientRect().bottom;
+      return {
+        bar: bottom(toolbar),
+        search: bottom(toolbar.querySelector(".bx--search-input")),
+        dropdown: bottom(toolbar.querySelector(".bx--dropdown")),
+      };
+    });
+    expect(edges.search).toBe(edges.bar);
+    expect(edges.dropdown).toBe(edges.bar);
+  });
+
   test("keeps a field's hidden label inside the bar at 320 px", async ({
     page,
   }) => {

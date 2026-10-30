@@ -19,7 +19,6 @@
     <ActionBarButton labelText="Add row" icon={Add} />
     <ActionBarItem>
       <Dropdown
-        size="sm"
         hideLabel
         labelText="Style"
         bind:selectedId={dropdownId}
@@ -30,15 +29,10 @@
       />
     </ActionBarItem>
     <ActionBarItem>
-      <Search
-        size="sm"
-        labelText="Find"
-        placeholder="Find"
-        bind:value={query}
-      />
+      <Search labelText="Find" placeholder="Find" bind:value={query} />
     </ActionBarItem>
     <ActionBarItem>
-      <TextInput size="sm" hideLabel labelText="Page" value="3" />
+      <TextInput hideLabel labelText="Page" value="3" />
     </ActionBarItem>
     <ActionBarButton labelText="Copy" icon={Copy} />
   </ActionBar>

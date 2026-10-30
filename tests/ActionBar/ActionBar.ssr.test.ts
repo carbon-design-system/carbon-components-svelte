@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { renderSSR } from "../utils/ssr";
 import ActionBar from "./ActionBar.test.svelte";
+import ActionBarFields from "./ActionBarFields.test.svelte";
 
 describe("ActionBar server render", () => {
   it("renders every button, with no trigger and nothing collapsed", () => {
@@ -24,6 +25,38 @@ describe("ActionBar server render", () => {
     for (const button of document.querySelectorAll(".bx--action-bar button")) {
       expect(button.getAttribute("tabindex")).toBe("0");
     }
+  });
+
+  it("gives the fields in its items the bar's height", () => {
+    const sizes = (size: "xs" | "sm" | "md" | "lg") => {
+      const { document } = renderSSR(ActionBarFields, { size });
+      return [
+        document.querySelector(".bx--dropdown")?.className,
+        ...[...document.querySelectorAll(".bx--search")].map(
+          (node) => node.className,
+        ),
+        document.querySelector(".bx--text-input")?.className,
+      ];
+    };
+    expect(sizes("sm")).toEqual([
+      expect.stringContaining("bx--dropdown--sm"),
+      expect.stringContaining("bx--search--sm"),
+      // A field's own size wins.
+      expect.stringContaining("bx--search--xl"),
+      expect.stringContaining("bx--text-input--sm"),
+    ]);
+    expect(sizes("md")).toEqual([
+      expect.not.stringMatching(/--(sm|xs|xl)\b/),
+      expect.stringContaining("bx--search--lg"),
+      expect.stringContaining("bx--search--xl"),
+      expect.not.stringMatching(/--(sm|xs|xl)\b/),
+    ]);
+    expect(sizes("lg")).toEqual([
+      expect.stringContaining("bx--dropdown--xl"),
+      expect.stringContaining("bx--search--xl"),
+      expect.stringContaining("bx--search--xl"),
+      expect.stringContaining("bx--text-input--xl"),
+    ]);
   });
 
   it("renders the states of the buttons", () => {

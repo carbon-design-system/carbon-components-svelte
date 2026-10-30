@@ -28,3 +28,14 @@ export const BUTTON_SIZE_BY_ACTION_BAR_SIZE = Object.freeze({
  * larger one, so a width near the boundary does not toggle it.
  */
 export const ACTION_BAR_EXPAND_SLACK_PX = 16;
+
+/**
+ * `Form` size for a bar size, which fields in an `ActionBarItem` take when
+ * their own `size` is unset, so they fill the bar's height.
+ */
+export const FORM_SIZE_BY_ACTION_BAR_SIZE = Object.freeze({
+  xs: "xs",
+  sm: "sm",
+  md: "md",
+  lg: "xl",
+});

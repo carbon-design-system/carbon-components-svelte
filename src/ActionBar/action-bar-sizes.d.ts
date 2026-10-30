@@ -13,3 +13,11 @@ export const BUTTON_SIZE_BY_ACTION_BAR_SIZE: Readonly<{
 
 /** Room a collapsed button needs beyond its own size to come back, in pixels. */
 export const ACTION_BAR_EXPAND_SLACK_PX: number;
+
+/** `Form` size for a bar size: fields in an item take it. */
+export const FORM_SIZE_BY_ACTION_BAR_SIZE: Readonly<{
+  xs: "xs";
+  sm: "sm";
+  md: "md";
+  lg: "xl";
+}>;

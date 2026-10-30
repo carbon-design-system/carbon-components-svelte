@@ -88,12 +88,13 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
-  import { writable } from "svelte/store";
+  import { derived, writable } from "svelte/store";
   import Button from "../Button/Button.svelte";
   import Menu from "../Menu/Menu.svelte";
   import MenuDivider from "../Menu/MenuDivider.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
   import MenuItemRadioGroup from "../Menu/MenuItemRadioGroup.svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
@@ -111,6 +112,7 @@
     ACTION_BAR_EXPAND_SLACK_PX,
     ACTION_BAR_SIZE_PX,
     BUTTON_SIZE_BY_ACTION_BAR_SIZE,
+    FORM_SIZE_BY_ACTION_BAR_SIZE,
   } from "./action-bar-sizes.js";
 
   const MORE = "more";
@@ -138,6 +140,14 @@
   const sharedOrientation = writable(orientation);
   $: sharedSize.set(size);
   $: sharedOrientation.set(orientation);
+  // A field in an item takes the bar's height, as fields in a `Form` take
+  // the form's size, so its bottom border is the bar's bottom edge.
+  /** @type {import("svelte/store").Readable<"xs" | "sm" | "md" | "xl">} */
+  const fieldSize = derived(
+    sharedSize,
+    (value) => FORM_SIZE_BY_ACTION_BAR_SIZE[value],
+  );
+  setContext(FORM_SIZE_CONTEXT_KEY, fieldSize);
 
   /** Sizes read from the observer, by entry id. Hidden entries keep theirs. */
   /** @type {Map<string, number>} */
