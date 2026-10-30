@@ -1009,6 +1009,15 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Prose
+  query-builder:
+    status: experimental
+    framework: svelte
+    thumbnailPath: './thumbnails/query-builder.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/QueryBuilder
   radio-button:
     status: stable
     framework: svelte
