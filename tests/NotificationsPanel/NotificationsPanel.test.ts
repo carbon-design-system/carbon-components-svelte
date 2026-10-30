@@ -62,6 +62,17 @@ describe("NotificationsPanel", () => {
     expect(within(read).queryByText("Unread")).toBeNull();
   });
 
+  it("names the status icon from statusIconDescription", () => {
+    render(NotificationsPanel, {
+      notifications: [
+        { ...items()[0], kind: "warning", statusIconDescription: "Attention" },
+      ],
+    });
+
+    expect(screen.getByTitle("Attention")).toBeInTheDocument();
+    expect(screen.queryByTitle("Warning")).toBeNull();
+  });
+
   it("shows a caption in place of the relative time", () => {
     render(NotificationsPanel, {
       notifications: [{ ...items()[0], caption: "Run 42" }, items()[1]],
@@ -148,6 +159,20 @@ describe("NotificationsPanel", () => {
       const toggle = screen.getByRole("switch", { name: "Do not disturb" });
       await user.click(toggle);
       expect(screen.getByTestId("dnd")).toHaveTextContent("true");
+    });
+
+    it("takes the toggle's state text from props", async () => {
+      render(NotificationsPanel, {
+        notifications: items(),
+        doNotDisturbLabel: "Ne pas déranger",
+        doNotDisturbOffText: "Désactivé",
+        doNotDisturbOnText: "Activé",
+      });
+
+      expect(screen.getByText("Désactivé")).toBeInTheDocument();
+      await user.click(screen.getByRole("switch"));
+      expect(screen.getByText("Activé")).toBeInTheDocument();
+      expect(screen.queryByText("Off")).toBeNull();
     });
   });
 

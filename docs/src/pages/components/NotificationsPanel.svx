@@ -80,7 +80,7 @@ When a dismissed row was holding focus and your handler removes it, focus moves 
 
 ## Content
 
-Mark a row `unread` for a dot, a bolder title and a hidden "Unread" for screen readers. Add a `subtitle` for detail, or a `caption`, such as "Run 42", to replace the relative time. A row with an `href` is a link. In a `HeaderAction`, following it closes the panel. An `action` adds a button or link beside the text, with the same shape as the `NotificationQueue` action. Set `dismissible` to `false` to hide a row's dismiss button.
+Mark a row `unread` for a dot, a bolder title and a hidden "Unread" for screen readers. Add a `subtitle` for detail, or a `caption`, such as "Run 42", to replace the relative time. A row with an `href` is a link. In a `HeaderAction`, following it closes the panel. An `action` adds a button or link beside the text, with the same shape as the `NotificationQueue` action. Set `dismissible` to `false` to hide a row's dismiss button. Set `statusIconDescription` to name a row's status icon in another language; it defaults to the English name of its `kind`.
 
 `kind` picks the icon, with the same names as `ToastNotification`. Its label for screen readers is the kind's default, such as "Warning".
 
@@ -123,7 +123,7 @@ Use `actions` for controls beside "Dismiss all", such as a settings button. Use 
 
 ## Do Not Disturb
 
-Set `doNotDisturbLabel` to show a toggle, and bind `doNotDisturb` to its state. The panel only holds the state. Your app decides what it silences, such as the toasts a [`NotificationQueue`](/components/NotificationQueue) shows. Pair it with `LocalStorage` to remember the choice.
+Set `doNotDisturbLabel` to show a toggle, and bind `doNotDisturb` to its state. The panel only holds the state. Your app decides what it silences, such as the toasts a [`NotificationQueue`](/components/NotificationQueue) shows. Pair it with `LocalStorage` to remember the choice. Set `doNotDisturbOffText` and `doNotDisturbOnText` to translate the toggle's "Off" and "On".
 
 <FileSource src="/framed/NotificationsPanel/NotificationsPanelDoNotDisturb" />
 

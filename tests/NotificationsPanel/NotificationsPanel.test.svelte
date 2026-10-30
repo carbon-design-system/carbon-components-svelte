@@ -12,6 +12,8 @@
   export let remove = true;
   export let doNotDisturbLabel = "";
   export let doNotDisturb = false;
+  export let doNotDisturbOffText = "Off";
+  export let doNotDisturbOnText = "On";
   export let viewAllText = "";
   export let grouped = true;
   export let interactive = true;
@@ -39,6 +41,8 @@
   timeZone="UTC"
   {doNotDisturbLabel}
   bind:doNotDisturb
+  {doNotDisturbOffText}
+  {doNotDisturbOnText}
   {viewAllText}
   {grouped}
   {interactive}

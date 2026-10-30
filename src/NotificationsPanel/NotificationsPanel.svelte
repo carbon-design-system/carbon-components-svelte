@@ -10,6 +10,7 @@
    * @typedef {object} PanelNotification
    * @property {string} id - Stable across updates, so the row keeps its focus and state
    * @property {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"} [kind] - Defaults to `"info"`
+   * @property {string} [statusIconDescription] - Names the status icon. Defaults to the English name of `kind`, such as "Warning"
    * @property {string} title
    * @property {string} [subtitle]
    * @property {string} [caption] - Replaces the relative time, for example "Run 42"
@@ -101,6 +102,12 @@
 
   /** Specify the Do Not Disturb label. Setting it shows the toggle. */
   export let doNotDisturbLabel = "";
+
+  /** Specify the toggle's text when Do Not Disturb is off. */
+  export let doNotDisturbOffText = "Off";
+
+  /** Specify the toggle's text when Do Not Disturb is on. */
+  export let doNotDisturbOnText = "On";
 
   /** Specify the "View all" text. Set it to show the footer button. */
   export let viewAllText = "";
@@ -406,8 +413,8 @@
       <Toggle
         size="sm"
         labelText={doNotDisturbLabel}
-        labelA="Off"
-        labelB="On"
+        labelA={doNotDisturbOffText}
+        labelB={doNotDisturbOnText}
         bind:toggled={doNotDisturb}
       />
     </div>
@@ -467,7 +474,8 @@
                   {kind}
                   notificationType="inline"
                   lowContrast
-                  iconDescription={statusIconLabel(kind)}
+                  iconDescription={notification.statusIconDescription ||
+                    statusIconLabel(kind)}
                 />
               </div>
               <div class:bx--notifications-panel__content={true}>
