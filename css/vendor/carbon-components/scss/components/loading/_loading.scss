@@ -98,6 +98,23 @@
   .#{$prefix}--loading-overlay--stop {
     display: none;
   }
+
+  // ccs: with `delay`, an active spinner renders at once, so server HTML
+  // holds it, but stays hidden until the delay passes. The component sets
+  // `animation-duration` to the delay and drops the class once its own
+  // timer shows the spinner. `.bx--loading` already runs the spin, so the
+  // svg inside it carries the animation.
+  @keyframes loading-delay {
+    from,
+    to {
+      visibility: hidden;
+    }
+  }
+
+  .#{$prefix}--loading--delayed .#{$prefix}--loading__svg,
+  .#{$prefix}--loading-overlay--delayed {
+    animation-name: loading-delay;
+  }
 }
 
 @include exports('loading') {

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import { tick } from "svelte";
 import Loading from "./Loading.test.svelte";
 import LoadingDelay from "./LoadingDelay.test.svelte";
 
@@ -100,44 +101,137 @@ describe("Loading", () => {
       vi.useRealTimers();
     });
 
-    it("does not render the spinner until the delay elapses", async () => {
-      const { getByTestId } = render(LoadingDelay, {
-        props: { active: true, delay: 200 },
+    function getSpinner() {
+      return screen.getByTestId("delayed").querySelector(".bx--loading");
+    }
+
+    it("renders a waiting spinner hidden until the delay elapses", async () => {
+      render(LoadingDelay, { props: { active: true, delay: 200 } });
+      const spinner = getSpinner();
+
+      expect(spinner).toHaveClass("bx--loading--delayed");
+      expect(spinner?.querySelector("svg")).toHaveStyle({
+        animationDuration: "200ms",
       });
-      const wrapper = getByTestId("delayed");
 
-      expect(wrapper.querySelector(".bx--loading")).not.toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(199);
+      expect(getSpinner()).toHaveClass("bx--loading--delayed");
 
-      await vi.advanceTimersByTimeAsync(200);
-
-      expect(wrapper.querySelector(".bx--loading")).toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(1);
+      expect(getSpinner()).toBe(spinner);
+      expect(spinner).not.toHaveClass("bx--loading--delayed");
+      expect(spinner).not.toHaveClass("bx--loading--stop");
     });
 
-    it("cancels the pending spinner when active becomes false before the delay elapses", async () => {
-      const { getByTestId, rerender } = render(LoadingDelay, {
+    it("never shows a spinner for work that ends within the delay", async () => {
+      const { rerender } = render(LoadingDelay, {
         props: { active: true, delay: 200 },
       });
-      const wrapper = getByTestId("delayed");
 
       await vi.advanceTimersByTimeAsync(100);
       await rerender({ active: false, delay: 200 });
-      await vi.advanceTimersByTimeAsync(200);
+      expect(getSpinner()).not.toBeInTheDocument();
 
-      expect(wrapper.querySelector(".bx--loading")).not.toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(getSpinner()).not.toBeInTheDocument();
     });
 
-    it("keeps the spinner visible with the stop animation when active becomes false after it appeared", async () => {
-      const { getByTestId, rerender } = render(LoadingDelay, {
-        props: { active: true, delay: 200 },
+    it("waits the delay when active turns on after mount", async () => {
+      const { rerender } = render(LoadingDelay, {
+        props: { active: false, delay: 200 },
       });
-      const wrapper = getByTestId("delayed");
+      expect(getSpinner()).not.toBeInTheDocument();
+
+      await rerender({ active: true, delay: 200 });
+      expect(getSpinner()).toHaveClass("bx--loading--delayed");
 
       await vi.advanceTimersByTimeAsync(200);
+      expect(getSpinner()).not.toHaveClass("bx--loading--delayed");
+    });
+
+    it("holds a shown spinner for the minimum, then plays the stop animation", async () => {
+      const { rerender } = render(LoadingDelay, {
+        props: { active: true, delay: 200 },
+      });
+
+      await vi.advanceTimersByTimeAsync(300);
+      await rerender({ active: false, delay: 200 });
+      expect(getSpinner()).not.toHaveClass("bx--loading--stop");
+      expect(getSpinner()).toHaveAttribute("aria-live", "assertive");
+
+      // Shown at 200 ms, so the 500 ms minimum ends at 700 ms.
+      await vi.advanceTimersByTimeAsync(399);
+      expect(getSpinner()).not.toHaveClass("bx--loading--stop");
+
+      await vi.advanceTimersByTimeAsync(1);
+      expect(getSpinner()).toHaveClass("bx--loading--stop");
+      expect(getSpinner()).toHaveAttribute("aria-live", "off");
+    });
+
+    it("stops at once when the work outlasts the minimum", async () => {
+      const { rerender } = render(LoadingDelay, {
+        props: { active: true, delay: 200 },
+      });
+
+      await vi.advanceTimersByTimeAsync(1000);
       await rerender({ active: false, delay: 200 });
 
-      const loader = wrapper.querySelector(".bx--loading");
-      expect(loader).toBeInTheDocument();
-      expect(loader).toHaveClass("bx--loading--stop");
+      expect(getSpinner()).toHaveClass("bx--loading--stop");
+    });
+
+    it("keeps the spinner up when work restarts inside the minimum", async () => {
+      const { rerender } = render(LoadingDelay, {
+        props: { active: true, delay: 200 },
+      });
+
+      await vi.advanceTimersByTimeAsync(300);
+      await rerender({ active: false, delay: 200 });
+      await vi.advanceTimersByTimeAsync(100);
+      await rerender({ active: true, delay: 200 });
+      await vi.advanceTimersByTimeAsync(1000);
+
+      expect(getSpinner()).not.toHaveClass("bx--loading--stop");
+      expect(getSpinner()).not.toHaveClass("bx--loading--delayed");
+    });
+
+    it("does not restart the delay when other props change", async () => {
+      const { rerender } = render(LoadingDelay, {
+        props: { active: true, delay: 200 },
+      });
+
+      await vi.advanceTimersByTimeAsync(150);
+      await rerender({ active: true, delay: 200, description: "Saving" });
+      await vi.advanceTimersByTimeAsync(50);
+
+      expect(getSpinner()).not.toHaveClass("bx--loading--delayed");
+    });
+
+    it("follows active exactly with no delay", async () => {
+      const { rerender } = render(LoadingDelay, { props: { active: true } });
+      expect(getSpinner()).not.toHaveClass("bx--loading--delayed");
+
+      await rerender({ active: false });
+      expect(getSpinner()).toHaveClass("bx--loading--stop");
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it("moves focus into the overlay only once it shows", async () => {
+      render(LoadingDelay, {
+        props: { active: true, delay: 200, withOverlay: true },
+      });
+      const overlay = screen
+        .getByTestId("delayed")
+        .querySelector(".bx--loading-overlay");
+
+      expect(overlay).toHaveClass("bx--loading-overlay--delayed");
+      expect(overlay).toHaveStyle({ animationDuration: "200ms" });
+      expect(overlay).not.toHaveFocus();
+
+      await vi.advanceTimersByTimeAsync(200);
+      await tick();
+
+      expect(overlay).not.toHaveClass("bx--loading-overlay--delayed");
+      expect(overlay).toHaveFocus();
     });
 
     it("clears the pending timer when unmounted during the delay", () => {
