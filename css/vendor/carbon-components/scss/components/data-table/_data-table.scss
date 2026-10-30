@@ -374,3 +374,24 @@
 @include exports("data-table-virtual") {
   @include data-table-virtual;
 }
+
+// carbon-components-svelte patch (small tag in a cell)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Keep a small `Tag` inside the cell's line. The tag is 18px, the cell's
+/// `body-compact-01` line height, but `vertical-align: middle` centers it
+/// on the font's x-height, which sits below the line's center, so the line
+/// grew to 19.39px and `compact` and `short` rows to 24.39px and 33.39px.
+/// Aligned to the top, the tag fills the line exactly.
+/// @access private
+/// @group components
+@mixin data-table-tag-sm {
+  .#{$prefix}--data-table .#{$prefix}--tag--sm {
+    vertical-align: top;
+  }
+}
+
+@include exports("data-table-tag-sm") {
+  @include data-table-tag-sm;
+}
