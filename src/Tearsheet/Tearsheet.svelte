@@ -199,13 +199,61 @@
     }
   }
 
+  // A close ends when the container's slide does, or after the slide's
+  // duration if no `transitionend` comes. A close at the start of the
+  // opening slide cancels it with no new one, and reduced motion or a
+  // hidden container run none.
+  /** @type {undefined | ReturnType<typeof setTimeout>} */
+  let closeTimer;
+  let wasOpen = open;
+
+  function finishClose() {
+    clearTimeout(closeTimer);
+    closeTimer = undefined;
+    dispatch("transitionend", { open: false });
+    focusReturn.restore(ref);
+  }
+
+  /** @param {boolean} nextOpen */
+  function syncCloseTimer(nextOpen) {
+    const closing = wasOpen && !nextOpen;
+    wasOpen = nextOpen;
+    clearTimeout(closeTimer);
+    closeTimer =
+      closing && ref ? setTimeout(finishClose, slideMs(ref)) : undefined;
+  }
+
+  /**
+   * The longest transition on the element, with its delay, in ms.
+   * @param {Element} element
+   */
+  function slideMs(element) {
+    const style = getComputedStyle(element);
+    /** @param {string} value */
+    const toMs = (value) =>
+      value
+        .split(",")
+        .map(
+          (part) =>
+            Number.parseFloat(part) * (part.trim().endsWith("ms") ? 1 : 1000) ||
+            0,
+        );
+    const delays = toMs(style.transitionDelay);
+    return Math.max(
+      0,
+      ...toMs(style.transitionDuration).map(
+        (duration, index) => duration + (delays[index % delays.length] ?? 0),
+      ),
+    );
+  }
+
   /** @param {TransitionEvent} event */
   function handleTransitionend(event) {
     // Only the container's slide ends the exit. A control inside can
     // transition its own `transform`, and that event bubbles up here.
     if (event.target !== ref || event.propertyName !== "transform") return;
-    dispatch("transitionend", { open });
-    if (!open) focusReturn.restore(ref);
+    if (open) dispatch("transitionend", { open: true });
+    else if (closeTimer !== undefined) finishClose();
   }
 
   // The body scrolls. Once it overflows it takes a tab stop, so a
@@ -249,10 +297,12 @@
     }
     return () => {
       stopObserving();
+      clearTimeout(closeTimer);
     };
   });
 
   $: lifecycle.syncOpen(open);
+  $: syncCloseTimer(open);
   $: observeOverflow(mainRef);
 
   // Closed content is built on the first open and kept after that.
