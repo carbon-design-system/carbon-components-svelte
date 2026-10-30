@@ -454,6 +454,23 @@ test.describe("Scheduler month", () => {
     expect(outside).toEqual([]);
   });
 
+  // A chip has no fill at rest, so on hover it takes the layer's hover fill.
+  // The tag color's darker fill is for filled events.
+  test("fills a hovered chip with the layer hover color", async ({ page }) => {
+    const chip = page.locator(".bx--scheduler__event--chip").first();
+    await chip.hover();
+    const read = () =>
+      chip.evaluate((el) => {
+        const probe = document.createElement("span");
+        probe.style.backgroundColor = "var(--cds-layer-hover)";
+        document.body.append(probe);
+        const layerHover = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        return getComputedStyle(el).backgroundColor === layerHover;
+      });
+    await expect.poll(read).toBe(true);
+  });
+
   test("creates an all-day range by dragging across days", async ({ page }) => {
     const box = await page.locator(".bx--scheduler__month-body").boundingBox();
     if (!box) throw new Error("no box");

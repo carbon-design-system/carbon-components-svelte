@@ -691,8 +691,11 @@ $ccs-scheduler-date: to-rem(28px);
       background-color: get-token-value($tag-colors, "tag-hover-blue");
     }
 
+    // Only filled events darken their fill. A chip has none, and this
+    // rule would outweigh the chip's own hover below.
     @each $name in $ccs-scheduler-colors {
-      .#{$prefix}--scheduler__event[data-color="#{$name}"]:hover {
+      .#{$prefix}--scheduler__event--block[data-color="#{$name}"]:hover,
+      .#{$prefix}--scheduler__event--bar[data-color="#{$name}"]:hover {
         background-color: get-token-value($tag-colors, "tag-hover-#{$name}");
       }
     }
