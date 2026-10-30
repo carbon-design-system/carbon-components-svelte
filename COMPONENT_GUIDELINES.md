@@ -296,7 +296,7 @@ Follow [Carbon's content guidelines](https://carbondesignsystem.com/guidelines/c
 
 ### Avoid flicker and layout shift
 
-- Show an indicator only if the operation runs longer than about 300 ms. Once shown, keep it for at least 500 ms. Use `createLoadingDelay` (a callback, for a `loading` prop inside a component) or `delayedLoading` (a store) from `delayed-loading.js`. Button takes `loadingDelay`; Loading and InlineLoading take `delay` and render a waiting spinner hidden, so server HTML holds it. The defaults are `LOADING_DELAY_MS` and `LOADING_MIN_DURATION_MS`. A delayed indicator blocks clicks and sets `aria-busy` at once; only the visual waits.
+- Show an indicator only if the operation runs longer than about 300 ms. Once shown, keep it for at least 500 ms. Use `createLoadingDelay` (a callback, for a `loading` prop inside a component) or `delayedLoading` (a store) from `delayed-loading.js`. Button, Dropdown, ComboBox, MultiSelect, Search and SearchMenu take `loadingDelay`, wired through `createLoadingIndicator`; Loading and InlineLoading take `delay` and render a waiting spinner hidden, so server HTML holds it. The defaults are `LOADING_DELAY_MS` and `LOADING_MIN_DURATION_MS`. A delayed indicator blocks clicks and sets `aria-busy` at once; only the visual waits.
 - Reserve space for indicators, status text and error messages so that showing them does not move other content. Field error text replaces helper text in the same row.
 - Insert new items without moving the content the user is reading. Keep the scroll position anchored, or show a "Show N new items" control instead of inserting above the viewport.
 - Render the loading state on the server when data is not available at render time. Do not replace server HTML with a client-only spinner.
