@@ -10,6 +10,8 @@
     { id: "e", text: "Echo" },
   ];
   export let changes: string[] = [];
+  export let moves: string[] = [];
+  export let cancelMoves = false;
 </script>
 
 <form>
@@ -17,6 +19,11 @@
     {items}
     bind:selectedIds
     legendText="Teams"
+    on:move={(event) => {
+      const { ids, from, to, selectedIds: next } = event.detail;
+      moves = [...moves, `${from}>${to}:${ids.join(",")}=${next.join(",")}`];
+      if (cancelMoves) event.preventDefault();
+    }}
     on:change={(event) => {
       changes = [
         ...changes,
@@ -30,3 +37,4 @@
 </form>
 <p data-testid="selected">{selectedIds.join(",")}</p>
 <p data-testid="changes">{changes.join("|")}</p>
+<p data-testid="moves">{moves.join("|")}</p>

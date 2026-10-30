@@ -2,6 +2,7 @@
   /**
    * @template {TransferListItem} [Item=TransferListItem]
    * @restProps {fieldset}
+   * @event {{ ids: ReadonlyArray<string | number>; from: "available" | "selected"; to: "available" | "selected"; selectedIds: ReadonlyArray<string | number> }} move - Cancelable. Dispatched before items move, with the `selectedIds` the move would set; call `preventDefault()` to keep the lists as they are.
    * @event {{ selectedIds: ReadonlyArray<string | number>; movedIds: ReadonlyArray<string | number>; direction: "add" | "remove" | "reorder" }} change
    * @slot {{}} legendChildren
    */
@@ -385,12 +386,22 @@
   $: canReorder = !idle && reorderable && selectedMarked.size > 0;
 
   /**
-   * Hand the new selection to the consumer, then say what moved.
+   * Offer the move to the consumer, who may cancel it. Then hand over the
+   * new selection and say what moved.
    * @param {ReadonlyArray<string | number>} next
    * @param {ReadonlyArray<string | number>} moved
    * @param {"add" | "remove" | "reorder"} direction
    */
   function commit(next, moved, direction) {
+    const from = direction === "add" ? "available" : "selected";
+    const to = direction === "remove" ? "available" : "selected";
+    const proceed = dispatch(
+      "move",
+      { ids: moved, from, to, selectedIds: next },
+      { cancelable: true },
+    );
+    if (!proceed) return;
+
     selectedIds = next;
     dispatch("change", { selectedIds: next, movedIds: moved, direction });
 

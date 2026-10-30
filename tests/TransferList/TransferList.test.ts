@@ -35,6 +35,39 @@ describe("TransferList", () => {
     ).toBeInTheDocument();
   });
 
+  it("dispatches a cancelable move with from, to and the next selection", async () => {
+    render(TransferList);
+
+    await user.click(within(available()).getByText("Alpha"));
+    await user.click(
+      screen.getByRole("button", { name: "Add selected items" }),
+    );
+    selected().focus();
+    await user.keyboard("{End}{Alt>}{ArrowUp}{/Alt}{Delete}");
+
+    expect(screen.getByTestId("moves")).toHaveTextContent(
+      "available>selected:a=b,a|selected>selected:a=a,b|selected>available:a=b",
+    );
+    expect(value()).toBe("b");
+  });
+
+  it("keeps the lists as they are when a move is canceled", async () => {
+    render(TransferList, { cancelMoves: true });
+
+    await user.click(within(available()).getByText("Alpha"));
+    await user.click(
+      screen.getByRole("button", { name: "Add selected items" }),
+    );
+    await user.click(screen.getByRole("button", { name: "Remove all items" }));
+
+    expect(screen.getByTestId("moves")).toHaveTextContent(
+      "available>selected:a=b,a|selected>available:b=",
+    );
+    expect(value()).toBe("b");
+    expect(names(available())).toEqual(["Alpha", "Charlie", "Delta", "Echo"]);
+    expect(screen.getByTestId("changes")).toHaveTextContent("");
+  });
+
   it("moves every enabled item with the all buttons", async () => {
     render(TransferList);
 

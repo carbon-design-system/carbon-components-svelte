@@ -165,6 +165,27 @@ puts the selection back to what it was on first render.
 
 <FileSource src="/framed/TransferList/TransferListForm" />
 
+## Cancel a move
+
+Each move dispatches `move` before the lists change. Its `detail` holds the
+`ids` that would move, the list they come `from` and go `to`, and the
+`selectedIds` the move would set. Call `preventDefault()` to keep the lists as
+they are, for example to save the change first and set `selectedIds` when the
+save succeeds. `change` follows each move that is not canceled.
+
+```svelte
+<TransferList
+  {items}
+  bind:selectedIds
+  on:move={(event) => {
+    event.preventDefault();
+    save(event.detail.selectedIds).then(() => {
+      selectedIds = event.detail.selectedIds;
+    });
+  }}
+/>
+```
+
 ## Text
 
 Every string is a prop, so the component can be translated. Set `countText` and
