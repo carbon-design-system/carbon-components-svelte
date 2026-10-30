@@ -68,7 +68,7 @@ Pass the `fields` people can filter on and bind `value`. The query is a root gro
 
 Each row reads left to right as a sentence: "Where Plan is any of Team, Enterprise and Seats is at least 50". The builder gives every group and condition without an `id` a unique one. The ids reach `value` with the first edit, so mounting the builder does not change a bound value.
 
-The `change` event fires on every edit with the whole query as `event.detail`.
+The `change` event fires on every edit with the whole query as `event.detail`. To put a link or a tooltip in the label, fill the `labelChildren` slot in place of `labelText`.
 
 <FileSource src="/framed/QueryBuilder/QueryBuilderBasic" />
 

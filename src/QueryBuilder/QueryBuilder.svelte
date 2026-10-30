@@ -74,6 +74,7 @@
 <script>
   /**
    * @restProps {div}
+   * @slot {{}} labelChildren - Replace the content of the label, for example to add a link or a tooltip.
    * @event {QueryGroup} change - Dispatched after every edit, with the whole query.
    * @event {{ id: string; item: QueryCondition | QueryGroup; from: number; to: number }} move - Cancelable. Dispatched before a condition or group moves within its group; `from` and `to` are its positions there. Call `preventDefault()` to keep it in place.
    * @event {{ id: string; item: QueryCondition | QueryGroup }} remove - Cancelable. Dispatched before a condition or group is removed. Call `preventDefault()` to keep it.
@@ -211,7 +212,8 @@
   // The naming attributes belong on the root group, which carries the role.
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
     splitAriaNaming($$restProps));
-  $: labelId = ariaLabelledBy ?? (labelText ? `${id}-label` : undefined);
+  $: hasLabel = Boolean(labelText) || Boolean($$slots.labelChildren);
+  $: labelId = ariaLabelledBy ?? (hasLabel ? `${id}-label` : undefined);
   $: describedBy = joinDescribedBy(
     ariaDescribedBy,
     helperText && !invalid ? `${id}-helper` : "",
@@ -448,12 +450,13 @@
   class:bx--query-builder--invalid={invalid}
   {...rest}
 >
-  {#if labelText}
+  {#if hasLabel}
     <span
-      id={labelId}
+      id="{id}-label"
       class:bx--label={true}
       class:bx--label--disabled={disabled}
-      class:bx--visually-hidden={hideLabel}>{labelText}</span
+      class:bx--visually-hidden={hideLabel}
+      ><slot name="labelChildren">{labelText}</slot></span
     >
   {/if}
   <!-- Helper and error text follow the label. Below the builder they would

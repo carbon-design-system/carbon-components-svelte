@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/svelte";
 import type { QueryGroup } from "../../src/QueryBuilder/QueryBuilder.svelte";
 import { user } from "../utils/user";
 import QueryBuilder from "./QueryBuilder.test.svelte";
+import QueryBuilderLabel from "./QueryBuilderLabel.test.svelte";
 
 function bound() {
   return JSON.parse(screen.getByTestId("bound").textContent ?? "{}");
@@ -406,6 +407,16 @@ describe("QueryBuilder", () => {
         (date) => date.textContent,
       ),
     ).toEqual(["2027-01-01"]);
+  });
+
+  it("names the root group from the labelChildren slot", () => {
+    render(QueryBuilderLabel);
+
+    const label = document.getElementById("qb-label");
+    expect(label?.querySelector("strong")).toHaveTextContent("filter");
+    expect(
+      screen.getByRole("group", { name: "Account filter" }),
+    ).toHaveAttribute("aria-labelledby", "qb-label");
   });
 
   it("switches a group between all and any", async () => {
