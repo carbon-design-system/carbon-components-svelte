@@ -208,27 +208,6 @@
     Side panel
   </SidePanel>
 
-  <Button
-    data-testid="command-palette-open"
-    on:click={() => (commandPaletteOpen = true)}
-  >
-    Open command palette
-  </Button>
-  <CommandPalette
-    bind:open={commandPaletteOpen}
-    items={[
-      {
-        id: "deploy",
-        text: "Deploy",
-        description: "Latest commit",
-        icon: Add,
-        shortcut: "mod+d",
-      },
-      { id: "restart", text: "Restart", shortcut: "mod+r" },
-      { id: "delete", text: "Delete", disabled: true },
-    ]}
-  />
-
   <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
   <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>
 
@@ -562,4 +541,25 @@
       </li>
     {/each}
   </ul>
+
+  <Button
+    data-testid="command-palette-open"
+    on:click={() => (commandPaletteOpen = true)}
+  >
+    Open command palette
+  </Button>
+  <CommandPalette
+    bind:open={commandPaletteOpen}
+    items={[
+      {
+        id: "deploy",
+        text: "Deploy",
+        description: "Latest commit",
+        icon: Add,
+        shortcut: "mod+d",
+      },
+      { id: "restart", text: "Restart", shortcut: "mod+r" },
+      { id: "delete", text: "Delete", disabled: true },
+    ]}
+  />
 </main>
