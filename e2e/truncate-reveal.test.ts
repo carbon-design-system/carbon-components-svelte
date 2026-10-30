@@ -98,6 +98,29 @@ test.describe("Truncate reveal", () => {
       .toBe(collapsed);
   });
 
+  test("the toggle takes a 24 by 24 px press around its center", async ({
+    page,
+  }) => {
+    const button = page.locator(toggle);
+    // Each corner of a 24 px square on the label's center, 0.5 px inside.
+    const missed = await button.evaluate((node) => {
+      const box = node.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      return [
+        [-11.5, -11.5],
+        [11.5, -11.5],
+        [-11.5, 11.5],
+        [11.5, 11.5],
+      ]
+        .filter(
+          ([dx, dy]) => document.elementFromPoint(x + dx, y + dy) !== node,
+        )
+        .map(([dx, dy]) => `${dx},${dy} of ${box.width}x${box.height}`);
+    });
+    expect(missed).toEqual([]);
+  });
+
   test("has no detectable accessibility violations", async ({ page }) => {
     await page.getByTestId("clipped").focus();
     await expect(page.locator(tooltip)).toBeVisible();
