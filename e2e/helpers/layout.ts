@@ -25,8 +25,24 @@ export type Edge =
 
 type Scope = Page | Locator;
 
+export type Check =
+  "aligned" | "pitch" | "fits" | "borders" | "overflow" | "ring";
+
+/**
+ * One problem a check found. `kind` and `path` name it the same way on
+ * every run and machine; `message` adds what was measured.
+ */
+export interface LayoutFinding {
+  check: Check;
+  kind: string;
+  path: string;
+  message: string;
+}
+
+type Problem = Omit<LayoutFinding, "check">;
+
 interface Request {
-  check: "aligned" | "pitch" | "fits" | "borders" | "overflow" | "ring";
+  check: Check;
   tolerance: number;
   edge?: Edge;
   /** Measure the text and icons instead of the box; unset means auto. */
@@ -39,7 +55,7 @@ interface Request {
 
 interface Result {
   checked: number;
-  problems: string[];
+  problems: Problem[];
   summary: string;
   /**
    * Truncated text with no full text at rest, each marked with
@@ -47,7 +63,7 @@ interface Result {
    * on `mouseenter` or a tooltip anchored from a portal only appears then,
    * and reports `problem` if the full text is still missing.
    */
-  hover?: { id: string; full: string; problem: string }[];
+  hover?: { id: string; full: string; problem: Problem }[];
 }
 
 const TOLERANCE = 0.5;
@@ -64,13 +80,16 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
   const px = (n: number) => `${Math.round(n * 100) / 100}px`;
 
   // A short CSS path: up to four steps, ending early at an id or test id.
+  // Ids from `uniqueId` (src/utils/unique-id.js), and ids built from them
+  // such as `menu-ccs-…`, change on every mount, so the path steps past them.
+  const generated = /(^|-)(ccs|ctag|cua|structured-list)-/;
   const path = (el: Element) => {
     const steps: string[] = [];
     let node: Element | null = el;
     while (node && node !== document.documentElement && steps.length < 4) {
       const tag = node.tagName.toLowerCase();
       const testId = node.getAttribute("data-testid");
-      if (node.id) {
+      if (node.id && !generated.test(node.id)) {
         steps.unshift(`${tag}#${CSS.escape(node.id)}`);
         break;
       }
@@ -403,7 +422,13 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
   };
 
   const elements = () => roots.flatMap((root) => all(root));
-  const problems: string[] = [];
+  const problems: Problem[] = [];
+  // `at` is the element's path or, for the page as a whole, a fixed label.
+  const problem = (at: string, kind: string, message: string): Problem => ({
+    kind,
+    path: at,
+    message,
+  });
   const hover: NonNullable<Result["hover"]> = [];
 
   switch (request.check) {
@@ -413,7 +438,11 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       for (const { el, value } of values) {
         if (value === null)
           problems.push(
-            `${path(el)}: ${edge === "baseline" ? "no text for a baseline" : "no text or icon to measure"}`,
+            problem(
+              path(el),
+              "no text",
+              `${path(el)}: ${edge === "baseline" ? "no text for a baseline" : "no text or icon to measure"}`,
+            ),
           );
       }
       const measured = values.filter(
@@ -431,7 +460,11 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
         for (const { el, value } of measured) {
           if (near(value, reference.value)) continue;
           problems.push(
-            `${path(el)}: ${edge} at ${px(value)}, ${px(value - reference.value)} from ${path(reference.el)} at ${px(reference.value)}`,
+            problem(
+              path(el),
+              `off ${edge}`,
+              `${path(el)}: ${edge} at ${px(value)}, ${px(value - reference.value)} from ${path(reference.el)} at ${px(reference.value)}`,
+            ),
           );
         }
       }
@@ -469,13 +502,21 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       for (const { el, pitch } of pitches) {
         if (Math.abs(pitch - first) > tolerance)
           problems.push(
-            `${path(el)}: next row ${px(pitch)} below, the first pitch is ${px(first)}`,
+            problem(
+              path(el),
+              "uneven pitch",
+              `${path(el)}: next row ${px(pitch)} below, the first pitch is ${px(first)}`,
+            ),
           );
       }
       const offGrid = Math.abs(first - Math.round(first / grid) * grid);
       if (pitches.length && offGrid > tolerance)
         problems.unshift(
-          `${path(rows[0])}: pitch ${px(first)} is not a multiple of ${grid}px`,
+          problem(
+            path(rows[0]),
+            "off grid",
+            `${path(rows[0])}: pitch ${px(first)} is not a multiple of ${grid}px`,
+          ),
         );
       return {
         checked: pitches.length,
@@ -556,13 +597,21 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
             hover.push({
               id,
               full,
-              problem: `${path(truncator)}: truncated "${full}" (${truncator.scrollWidth}px in ${truncator.clientWidth}px) with no title, aria-label or tooltip holding it, at rest or on hover`,
+              problem: problem(
+                path(truncator),
+                "no full text",
+                `${path(truncator)}: truncated "${full}" (${truncator.scrollWidth}px in ${truncator.clientWidth}px) with no title, aria-label or tooltip holding it, at rest or on hover`,
+              ),
             });
           }
           const { shown, hidden } = splitAtCut(truncator);
           if (/\d[:./,-]?$/.test(shown) && /^[:./,-]?\d/.test(hidden))
             problems.push(
-              `${path(truncator)}: cuts a number: shows "${shown}", hides "${hidden}"`,
+              problem(
+                path(truncator),
+                "cuts a number",
+                `${path(truncator)}: cuts a number: shows "${shown}", hides "${hidden}"`,
+              ),
             );
           continue;
         }
@@ -586,7 +635,11 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
           );
           if (over > tolerance) {
             problems.push(
-              `${path(el)}: text overflows ${holder === el ? "its box" : path(holder)} by ${px(over)} (text ${px(text.right - text.left)} x ${px(text.bottom - text.top)})`,
+              problem(
+                path(el),
+                "overflows box",
+                `${path(el)}: text overflows ${holder === el ? "its box" : path(holder)} by ${px(over)} (text ${px(text.right - text.left)} x ${px(text.bottom - text.top)})`,
+              ),
             );
             continue;
           }
@@ -609,7 +662,11 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
             const over = spill(paddingBox(node), clipX, clipY);
             if (over > tolerance) {
               problems.push(
-                `${path(el)}: text is cut by ${path(node)} by ${px(over)}`,
+                problem(
+                  path(el),
+                  "cut by ancestor",
+                  `${path(el)}: text is cut by ${path(node)} by ${px(over)}`,
+                ),
               );
               break;
             }
@@ -694,7 +751,11 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
         const around = background(outer);
         if (inner === around)
           problems.push(
-            `${path(el)}: ${kind} inside ${edge(outer)} ${path(outer)}, both on ${inner}`,
+            problem(
+              path(el),
+              "nested edge",
+              `${path(el)}: ${kind} inside ${edge(outer)} ${path(outer)}, both on ${inner}`,
+            ),
           );
       }
       return { checked, problems, summary: "boxes with an edge" };
@@ -728,16 +789,28 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
             !inClip(el),
         );
         problems.push(
-          `page scrolls sideways: scrollWidth ${doc.scrollWidth}px, clientWidth ${doc.clientWidth}px`,
+          problem(
+            "page",
+            "scrolls sideways",
+            `page scrolls sideways: scrollWidth ${doc.scrollWidth}px, clientWidth ${doc.clientWidth}px`,
+          ),
           ...culprits.slice(0, 5).map((el) => {
             const box = el.getBoundingClientRect();
-            return `${path(el)}: spans ${px(box.left)} to ${px(box.right)}`;
+            return problem(
+              path(el),
+              "widens page",
+              `${path(el)}: spans ${px(box.left)} to ${px(box.right)}`,
+            );
           }),
         );
       }
       if (request.vertical && tall > tolerance)
         problems.push(
-          `page scrolls down: scrollHeight ${doc.scrollHeight}px, clientHeight ${doc.clientHeight}px`,
+          problem(
+            "page",
+            "scrolls down",
+            `page scrolls down: scrollHeight ${doc.scrollHeight}px, clientHeight ${doc.clientHeight}px`,
+          ),
         );
       return {
         checked: document.body.querySelectorAll("*").length,
@@ -761,7 +834,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       // Each element in scope is one group, such as one pane of a split
       // view, with at most one ring of its own.
       for (const root of roots) {
-        const rings: string[] = [];
+        const rings: Problem[] = [];
         for (const el of all(root)) {
           const owner = request.skip ? el.closest(request.skip) : null;
           if ((owner && owner !== root && root.contains(owner)) || !shown(el))
@@ -791,11 +864,18 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
             )
               parts.push(`${on}border ${highlight}`);
           }
-          if (parts.length) rings.push(`${path(el)}: ${parts.join(", ")}`);
+          if (parts.length)
+            rings.push(
+              problem(path(el), "ring", `${path(el)}: ${parts.join(", ")}`),
+            );
         }
         if (rings.length > 1)
           problems.push(
-            `${rings.length} rings${roots.length > 1 ? ` in ${path(root)}` : ""}, at most 1 allowed`,
+            problem(
+              root === document.documentElement ? "page" : path(root),
+              "rings",
+              `${rings.length} rings${roots.length > 1 ? ` in ${path(root)}` : ""}, at most 1 allowed`,
+            ),
             ...rings,
           );
       }
@@ -862,17 +942,19 @@ async function fullTextOnHover(
   return found;
 }
 
-async function run(scope: Scope | Locator[], request: Request) {
-  const name = {
-    aligned: "expectAligned",
-    pitch: "expectOnePitch",
-    fits: "expectTextFits",
-    borders: "expectNoNestedBorders",
-    overflow: "expectNoPageOverflow",
-    ring: "expectSingleRing",
-  }[request.check];
+const NAMES: Record<Check, string> = {
+  aligned: "expectAligned",
+  pitch: "expectOnePitch",
+  fits: "expectTextFits",
+  borders: "expectNoNestedBorders",
+  overflow: "expectNoPageOverflow",
+  ring: "expectSingleRing",
+};
+
+/** Runs one check and returns what it found, without throwing. */
+async function collect(scope: Scope | Locator[], request: Request) {
   if (Array.isArray(scope) && !scope.length)
-    throw new Error(`${name}: no locators to check`);
+    throw new Error(`${NAMES[request.check]}: no locators to check`);
   const locator = Array.isArray(scope)
     ? scope.reduce((a, b) => a.or(b))
     : "evaluateAll" in scope
@@ -894,7 +976,20 @@ async function run(scope: Scope | Locator[], request: Request) {
       });
     }
   }
-  const problems = [...new Set(result.problems)];
+  const seen = new Set<string>();
+  const findings: LayoutFinding[] = [];
+  for (const problem of result.problems) {
+    if (seen.has(problem.message)) continue;
+    seen.add(problem.message);
+    findings.push({ check: request.check, ...problem });
+  }
+  return { checked: result.checked, summary: result.summary, findings };
+}
+
+async function run(scope: Scope | Locator[], request: Request) {
+  const name = NAMES[request.check];
+  const result = await collect(scope, request);
+  const problems = result.findings.map((finding) => finding.message);
   if (problems.length) throw new Error(`${name}:\n  ${problems.join("\n  ")}`);
   const least = request.check === "aligned" ? 2 : 1;
   if (result.checked < least)
@@ -1004,4 +1099,19 @@ export function expectSingleRing(
   { skip }: { skip?: string } = {},
 ) {
   return run(scope, { check: "ring", skip, tolerance: TOLERANCE });
+}
+
+/**
+ * Runs one of the page-wide checks and returns its findings instead of
+ * throwing, so a sweep can report every finding in one run. It applies the
+ * same rules as `expectTextFits`, `expectNoNestedBorders`,
+ * `expectNoPageOverflow` and `expectSingleRing`, with their defaults, and
+ * does not fail when it finds nothing to check.
+ */
+export async function findLayoutProblems(
+  scope: Scope,
+  check: "fits" | "borders" | "overflow" | "ring",
+) {
+  const { findings } = await collect(scope, { check, tolerance: TOLERANCE });
+  return findings;
 }
