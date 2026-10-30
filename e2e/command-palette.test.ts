@@ -84,7 +84,8 @@ test("mirrors the icon, the highlight bar and the key caps in RTL", async ({
         keys: [keys.left - container.left, container.right - keys.right],
         bar: getComputedStyle(row).boxShadow,
         // Key caps from left to right on screen.
-        caps: [...row.querySelectorAll("kbd")]
+        caps: [...row.querySelectorAll(".bx--kbd__key")]
+          .filter((key) => key.checkVisibility({ visibilityProperty: true }))
           .sort(
             (a, b) =>
               a.getBoundingClientRect().left - b.getBoundingClientRect().left,

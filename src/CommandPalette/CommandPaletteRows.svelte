@@ -29,13 +29,13 @@
   /**
    * Internal. The rows `CommandPalette` renders, in or out of a virtual
    * window: group headers and command options.
-   * @slot {{ row: any; index: number; highlighted: boolean; segments: Array<{ text: string; match: boolean }>; }}
+   * @slot {{ item: any; index: number; highlighted: boolean; segments: Array<{ text: string; match: boolean }>; }}
    * @slot {{ group: string; items: ReadonlyArray<any>; }} group
    */
 
   /**
    * Runs of rows from `splitGroupRuns`.
-   * @type {ReadonlyArray<import("../ListBox/menu-groups.js").GroupRun>}
+   * @type {ReadonlyArray<import("../ListBox/menu-groups.js").GroupRun<any>>}
    */
   export let runs = [];
 
@@ -44,46 +44,53 @@
    */
   export let groupRows = null;
 
-  /** The palette's id; option ids are `{id}-{item.id}`. */
+  /** The palette's id; option ids are `{id}-option-{index in items}`. */
   export let id = "";
 
-  /** @type {string | undefined} */
-  export let highlightedId = undefined;
+  /**
+   * The index in `items` of the highlighted command, or -1.
+   */
+  export let highlightedKey = -1;
 
   /**
-   * Character indices to highlight, by item id.
-   * @type {Map<any, { text: number[]; description: number[] }>}
+   * Character indices to highlight, by index in `items`.
+   * @type {Map<number, { text: number[]; description: number[] }>}
    */
   export let matches = new Map();
-
-  export let highlightMatches = true;
 
   /** The number of results, for `aria-setsize`. */
   export let count = 0;
 
   export let measured = false;
 
-  /** Whether to format shortcuts for an Apple platform. */
+  /** Whether `aria-keyshortcuts` names Apple's keys. */
   export let apple = false;
 
   /** Whether the palette has a default slot for the row content. */
   export let customRow = false;
 
-  /** @type {(item: any, event: Event) => void} */
+  /** @type {(entry: any, event: Event) => void} */
   export let onSelect = noop;
 
   /** @type {(index: number) => void} */
   export let onHighlight = noop;
 
+  import Kbd from "../Kbd/Kbd.svelte";
   import ListBoxMenuGroup from "../ListBox/ListBoxMenuGroup.svelte";
   import { highlightSegments } from "../utils/fuzzy-match.js";
-  import {
-    ariaKeyShortcuts,
-    formatShortcut,
-  } from "../utils/keyboard-shortcut.js";
+  import { ariaKeyShortcuts } from "../utils/keyboard-shortcut.js";
   import { noop } from "../utils/noop.js";
 
+  /** @type {number[]} */
   const NO_INDICES = [];
+
+  /**
+   * @param {ReadonlyArray<{ item: any }>} entries
+   * @returns {any[]}
+   */
+  function itemsOf(entries) {
+    return entries.map((entry) => entry.item);
+  }
 </script>
 
 {#each runs as run (run.key)}
@@ -105,19 +112,18 @@
           class:bx--command-palette__group-header={true}
           on:mousedown|preventDefault
         >
-          <slot name="group" group={row.group} items={row.items} />
+          <slot name="group" group={row.group} items={itemsOf(row.items)} />
         </div>
       {:else}
-        {@const optionId = `${id}-${row.id}`}
-        {@const found = highlightMatches ? matches.get(row.id) : undefined}
+        {@const found = matches.get(row.index)}
         {@const segments = highlightSegments(
           row.text,
           found?.text ?? NO_INDICES,
         )}
-        {@const highlighted = optionId === highlightedId}
+        {@const highlighted = row.index === highlightedKey}
         <svelte:element
           this={row.href ? "a" : "div"}
-          id={optionId}
+          id="{id}-option-{row.index}"
           href={row.href || undefined}
           role="option"
           tabindex="-1"
@@ -132,7 +138,7 @@
           class:bx--command-palette__item={true}
           class:bx--command-palette__item--highlighted={highlighted}
           class:bx--command-palette__item--disabled={row.disabled}
-          on:click={(event) => onSelect(row, event)}
+          on:click={onSelect.bind(null, row)}
           on:mousedown|preventDefault
           on:mousemove={() => {
             if (!row.disabled && !highlighted) onHighlight(index);
@@ -145,7 +151,7 @@
           {/if}
           <span class:bx--command-palette__item-content={true}>
             {#if customRow}
-              <slot {row} {index} {highlighted} {segments} />
+              <slot item={row.item} {index} {highlighted} {segments} />
             {:else}
               <span class:bx--command-palette__item-text={true}
                 >{@html segmentsToHtml(segments)}</span
@@ -163,12 +169,9 @@
             {/if}
           </span>
           {#if row.shortcut}
+            <!-- The option names its keys in `aria-keyshortcuts`. -->
             <span aria-hidden="true" class:bx--command-palette__shortcut={true}>
-              {#each formatShortcut(row.shortcut, {
-                apple,
-              }) as key, keyIndex (keyIndex)}
-                <kbd class:bx--command-palette__key={true}>{key}</kbd>
-              {/each}
+              <Kbd shortcut={row.shortcut} size="sm" />
             </span>
           {/if}
         </svelte:element>

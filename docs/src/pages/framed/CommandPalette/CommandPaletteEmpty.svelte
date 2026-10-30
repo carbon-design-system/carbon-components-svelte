@@ -15,5 +15,5 @@
   bind:open
   {items}
   value="database"
-  emptyText={(value) => `No commands match "${value}"`}
+  noResultsText={(value) => `No commands match "${value}"`}
 />

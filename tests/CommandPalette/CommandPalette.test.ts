@@ -4,6 +4,7 @@ import type { ComponentEvents, ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import CommandPalette from "./CommandPalette.test.svelte";
+import CommandPaletteAccessors from "./CommandPaletteAccessors.test.svelte";
 import CommandPaletteGroups from "./CommandPaletteGroups.test.svelte";
 import CommandPaletteSlot from "./CommandPaletteSlot.test.svelte";
 
@@ -183,13 +184,13 @@ describe("CommandPalette", () => {
   });
 
   it.each([
-    [false, "false"],
-    [true, "true"],
+    [true, "false"],
+    [false, "true"],
   ])(
-    "closes on an outside click unless preventCloseOnClickOutside is %s",
-    async (preventCloseOnClickOutside, stillOpen) => {
+    "closes on an outside click when closeOnOutsideClick is %s",
+    async (closeOnOutsideClick, stillOpen) => {
       const { container } = render(CommandPalette, {
-        props: { preventCloseOnClickOutside },
+        props: { closeOnOutsideClick },
       });
       const root = container.querySelector(".bx--command-palette");
       assert(root);
@@ -218,6 +219,7 @@ describe("CommandPalette", () => {
     await tick();
     expect(getInput()).toHaveFocus();
     expect(document.body).toHaveClass("bx--body--with-modal-open");
+    expect(screen.getByTestId("opened-by")).toHaveTextContent("programmatic");
 
     await user.type(getInput(), "logs");
     await user.keyboard("{Escape}");
@@ -239,7 +241,7 @@ describe("CommandPalette", () => {
     expect(getInput()).toHaveFocus();
   });
 
-  it("shows the empty text and announces the result count", async () => {
+  it("shows the no-results text and announces the result count", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     try {
       render(CommandPalette);
@@ -255,6 +257,13 @@ describe("CommandPalette", () => {
     }
   });
 
+  it("shows the empty text when there are no commands", () => {
+    render(CommandPalette, { props: { items: [] } });
+
+    expect(screen.getByText("No commands available")).toBeInTheDocument();
+    expect(screen.queryByText("No results found")).not.toBeInTheDocument();
+  });
+
   it("marks the list busy and shows a loading row", () => {
     render(CommandPalette, { props: { loading: true } });
 
@@ -262,17 +271,37 @@ describe("CommandPalette", () => {
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
-  it("debounces filtering and dispatches search with the settled query", async () => {
+  it("marks the list busy at once and shows the loading row after loadingDelay", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const { rerender } = render(CommandPalette, {
+        props: { items: [], loadingDelay: 300 },
+      });
+      await rerender({ loading: true });
+
+      expect(screen.getByRole("listbox")).toHaveAttribute("aria-busy", "true");
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("No commands available"),
+      ).not.toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(300);
+      expect(screen.getByText("Loading...")).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("filters on every key and debounces only search", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     try {
       render(CommandPalette, { props: { debounce: 300 } });
       await fireEvent.input(getInput(), { target: { value: "logs" } });
 
-      expect(getInput()).toHaveValue("logs");
-      expect(screen.getAllByRole("option")).toHaveLength(4);
+      expect(optionTexts()).toEqual(["View logs"]);
+      expect(screen.getByTestId("searched")).toHaveTextContent("");
 
       await vi.advanceTimersByTimeAsync(300);
-      expect(optionTexts()).toEqual(["View logs"]);
       expect(screen.getByTestId("searched")).toHaveTextContent("logs");
     } finally {
       vi.useRealTimers();
@@ -283,9 +312,9 @@ describe("CommandPalette", () => {
     render(CommandPalette);
 
     const deploy = screen.getAllByRole("option")[0];
-    const keys = [...deploy.querySelectorAll("kbd")].map(
-      (key) => key.textContent,
-    );
+    const keys = [
+      ...deploy.querySelectorAll(".bx--kbd__platform--other .bx--kbd__key"),
+    ].map((key) => key.textContent);
     expect(keys).toEqual(["Ctrl", "D"]);
     expect(deploy).toHaveAttribute("aria-keyshortcuts", "Control+D");
     expect(
@@ -318,6 +347,34 @@ describe("CommandPalette", () => {
     expect(optionTexts()).toEqual(["Service 1999"]);
   });
 
+  it("builds option ids from the palette id and the item's index", () => {
+    render(CommandPalette, {
+      props: {
+        items: [
+          { id: "deploy service", text: "Deploy service" },
+          { id: "view logs", text: "View logs" },
+        ],
+      },
+    });
+
+    const ids = screen.getAllByRole("option").map((option) => option.id);
+    expect(ids.every((id) => !/\s/.test(id))).toBe(true);
+    expect(ids[1]).toBe(ids[0].replace(/-0$/, "-1"));
+  });
+
+  it("reads ids, labels and groups through the accessors", async () => {
+    render(CommandPaletteAccessors);
+
+    expect(screen.getAllByRole("group")[0]).toHaveAccessibleName("Payments");
+    expect(
+      screen.getAllByRole("option").map((option) => option.textContent?.trim()),
+    ).toEqual(["checkout-api", "billing-worker", "search-indexer"]);
+
+    await user.type(getInput(), "bill");
+    await user.keyboard("{Enter}");
+    expect(screen.getByTestId("selected")).toHaveTextContent("svc-2");
+  });
+
   describe("groups", () => {
     it("renders labelled groups with a custom header", () => {
       render(CommandPaletteGroups);
@@ -344,7 +401,7 @@ describe("CommandPalette", () => {
   });
 
   describe("slots", () => {
-    it("passes match segments to the default slot and the value to empty", async () => {
+    it("passes match segments to the default slot and the value to noResults", async () => {
       render(CommandPaletteSlot);
 
       await user.type(getInput(), "dep");
@@ -367,9 +424,21 @@ describe("CommandPalette", () => {
       expectTypeOf<Props["items"]>().toEqualTypeOf<
         ReadonlyArray<Command> | undefined
       >();
-      expectTypeOf<Events["select"]>().toEqualTypeOf<
-        CustomEvent<{ item: Command }>
-      >();
+      expectTypeOf<
+        Events["select"]["detail"]["item"]
+      >().toEqualTypeOf<Command>();
+    });
+
+    it("reads items of any shape through the accessors", () => {
+      type Service = { key: number; name: string; region: string };
+      type Props = ComponentProps<CommandPaletteComponent<Service>>;
+
+      expectTypeOf<NonNullable<Props["itemToString"]>>()
+        .parameter(0)
+        .toEqualTypeOf<Service>();
+      expectTypeOf<NonNullable<Props["itemToGroup"]>>()
+        .parameter(0)
+        .toEqualTypeOf<Service>();
     });
   });
 });

@@ -10,14 +10,30 @@ describe("CommandPalette (SSR)", () => {
     expect(root?.classList.contains("bx--command-palette--open")).toBe(true);
     expect(root?.hasAttribute("inert")).toBe(false);
     const options = [...document.querySelectorAll('[role="option"]')];
-    expect(options.map((option) => option.textContent?.trim())).toEqual([
-      "Deploy serviceCtrlD",
+    expect(
+      options.map(
+        (option) =>
+          option.querySelector(".bx--command-palette__item-text")?.textContent,
+      ),
+    ).toEqual([
+      "Deploy service",
       "View logs",
-      "Edit environmentVariables and secrets",
+      "Edit environment",
       "Delete service",
     ]);
+    expect(options[0].id).toMatch(/-option-0$/);
+    // Both platforms' key caps ship in the server HTML; CSS shows one.
+    expect(options[0].querySelectorAll(".bx--kbd__platform")).toHaveLength(2);
     const input = document.querySelector('[role="combobox"]');
     expect(input?.getAttribute("aria-activedescendant")).toBe(options[0].id);
+  });
+
+  it("renders the empty text for no commands", () => {
+    const { document } = renderSSR(CommandPalette, { open: true, items: [] });
+
+    expect(
+      document.querySelector(".bx--list-box__menu-status")?.textContent?.trim(),
+    ).toBe("No commands available");
   });
 
   it("renders a closed palette inert, without rows", () => {

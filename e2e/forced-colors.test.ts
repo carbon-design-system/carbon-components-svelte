@@ -752,7 +752,7 @@ test.describe("forced colors", () => {
     expect
       .soft((await style(page, description)).color, description)
       .toBe(system.HighlightText);
-    const highlightedKey = `${highlighted} .bx--command-palette__key`;
+    const highlightedKey = `${highlighted} .bx--kbd__platform--other .bx--kbd__key`;
     expect
       .soft((await style(page, highlightedKey)).color, highlightedKey)
       .toBe(system.HighlightText);
@@ -760,7 +760,7 @@ test.describe("forced colors", () => {
       .soft((await style(page, `${highlighted} svg`)).fill, "icon")
       .toBe(system.HighlightText);
     const key =
-      ".bx--command-palette__item:not(.bx--command-palette__item--highlighted) .bx--command-palette__key";
+      ".bx--command-palette__item:not(.bx--command-palette__item--highlighted) .bx--kbd__platform--other .bx--kbd__key";
     expect
       .soft((await style(page, key)).borderColor, key)
       .toBe(system.CanvasText);

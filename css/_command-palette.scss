@@ -198,45 +198,13 @@
     font-weight: 600;
   }
 
-  // A shortcut is Latin key names, which read left to right in any
-  // language, so the keys keep their order in RTL. Only their place moves.
+  // `Kbd` keeps the keys in left-to-right order in RTL; only their place
+  // moves.
   .#{$prefix}--command-palette__shortcut {
     display: flex;
     flex: 0 0 auto;
     align-items: center;
     margin-inline-start: $carbon--spacing-05;
-
-    [dir="rtl"] & {
-      flex-direction: ccs-dir(row, row-reverse);
-    }
-  }
-
-  .#{$prefix}--command-palette__key {
-    @include type-style("code-01");
-
-    display: inline-flex;
-    box-sizing: border-box;
-    min-width: to-rem(20px);
-    height: to-rem(20px);
-    align-items: center;
-    justify-content: center;
-    padding: 0 $carbon--spacing-02;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    background-color: $layer-accent;
-    color: $text-secondary;
-  }
-
-  // `layer-accent` and `layer-selected` share a value, so a highlighted
-  // row's key caps take the palette's surface instead.
-  .#{$prefix}--command-palette__item--highlighted
-    .#{$prefix}--command-palette__key {
-    background-color: $layer;
-  }
-
-  // Physical: the keys run left to right in both directions.
-  .#{$prefix}--command-palette__key + .#{$prefix}--command-palette__key {
-    margin-left: $carbon--spacing-02;
   }
 
   .#{$prefix}--command-palette__footer {
@@ -280,7 +248,7 @@
   // Forced colors drop the highlight's fill and bar, so arrow keys showed
   // no row. The highlighted row fills with `Highlight`, as a native list's
   // current option does, and opts out of forcing, so everything it holds
-  // needs a system color. Key caps keep an edge; a disabled row reads
+  // needs a system color, the key caps' edges too. A disabled row reads
   // `GrayText`.
   @media (forced-colors: active) {
     .#{$prefix}--command-palette__item--highlighted {
@@ -305,14 +273,10 @@
     }
 
     .#{$prefix}--command-palette__item--highlighted
-      .#{$prefix}--command-palette__key {
+      .#{$prefix}--kbd__key {
       border-color: HighlightText;
       background-color: transparent;
       color: HighlightText;
-    }
-
-    .#{$prefix}--command-palette__key {
-      border-color: CanvasText;
     }
 
     // Forced colors leave an SVG fill alone, so the theme fill stayed.

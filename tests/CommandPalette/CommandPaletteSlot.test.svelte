@@ -19,6 +19,6 @@
       {/if}
     {/each}</span
   >
-  <p slot="empty" let:value>Nothing for {value}</p>
+  <p slot="noResults" let:value>Nothing for {value}</p>
   <span slot="footer">Press Enter to run</span>
 </CommandPalette>

@@ -34,6 +34,6 @@
     {items}
     placeholder="ابحث عن أمر"
     labelText="ابحث عن أمر"
-    emptyText="لا توجد نتائج"
+    noResultsText="لا توجد نتائج"
   />
 </LayoutDirection>

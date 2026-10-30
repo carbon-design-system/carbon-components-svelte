@@ -30,7 +30,7 @@ Set `size` to control the height of the search field and the rows. The default i
 
 Typing filters the commands with fuzzy matching and ranks the best matches first: a prefix, then a word start, then a match inside a word, then scattered letters. Matched characters are emphasized. A description matches only when it holds the query as one run, so scattered letters in long text don't pull in unrelated commands. Add `keywords` to match terms that the label does not show. Screen readers hear the number of results as the user types.
 
-Set `highlightMatches` to `false` to drop the emphasis. Pass `match` to change how text is matched; it receives the text and the query and returns whether it matched, an optional score and the indices to emphasize.
+Pass `match` to change how text is matched. It receives the text and the query and returns whether it matched, an optional score and the indices to emphasize. Return no indices to drop the emphasis.
 
 ## Groups
 
@@ -58,9 +58,9 @@ Use the default slot to render a row's content. The slot receives the `item`, wh
 
 <FileSource src="/framed/CommandPalette/CommandPaletteCustomRow" />
 
-## Empty state
+## Empty states
 
-Set `emptyText` to the message shown when nothing matches, or pass a function to build it from the query. Use the `empty` slot for richer content.
+Set `noResultsText` to the message shown when nothing matches the query, or pass a function to build it from the query. Set `emptyText` to the message shown when there are no commands at all. Use the `noResults` and `empty` slots for richer content.
 
 <FileSource src="/framed/CommandPalette/CommandPaletteEmpty" />
 

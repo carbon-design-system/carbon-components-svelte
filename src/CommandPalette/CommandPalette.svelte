@@ -1,30 +1,58 @@
 <script>
   /**
-   * @template {CommandPaletteItem<any>} [Item=CommandPaletteItem<any>]
+   * @template [Item=CommandPaletteItem<any>]
    */
 
   /**
-   * @typedef {object} CommandPaletteItem<Id=any>
-   * @property {Id} id
-   * @property {string} text
-   * @property {string} [description] - Secondary text under the label. Matched and highlighted like `text`.
+   * @template [Id=any]
+   * @typedef {object} CommandPaletteItem
+   * @property {Id} [id] - Unique id. Read through `itemToId`.
+   * @property {string} [text] - Label. Read through `itemToString`.
+   * @property {string} [description] - Secondary text under the label. Matched and highlighted like the label.
    * @property {ReadonlyArray<string>} [keywords] - Extra search terms. Matched but not shown.
-   * @property {string} [group] - Group label. Items sharing a label render together under a header, ungrouped items first. While filtering, groups follow their best match.
+   * @property {string} [group] - Group label, read through `itemToGroup`. Items sharing a label render together under a header, ungrouped items first. While filtering, groups follow their best match.
    * @property {any} [icon] - Icon component shown before the label
    * @property {string} [shortcut] - Keyboard shortcut to display, such as `"mod+shift+p"`. `mod` reads ⌘ on Apple platforms and Ctrl elsewhere. Display only: run it with `onShortcut`.
    * @property {string} [href] - Render the command as a link. Selecting it follows the link unless `select` is canceled.
    * @property {boolean} [disabled] - Whether the command is disabled
-   * @event {{ item: Item }} select The "select" event is cancelable. Call `event.preventDefault()` to keep the palette open and, for a link, stay on the page.
-   * @event {null} open
-   * @event close
-   * @type {object}
-   * @property {"escape-key" | "outside-click" | "select" | "programmatic"} trigger
-   * @event {string} search Dispatched with the query the results filter by, after `debounce` ms.
+   */
+
+  /**
    * @restProps {input}
    * @slot {{ item: Item; index: number; highlighted: boolean; segments: Array<{ text: string; match: boolean }>; }}
    * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
-   * @slot {{ value: string; }} empty
+   * @slot {{}} empty
+   * @slot {{ value: string; }} noResults
    * @slot {{}} footer
+   */
+
+  /**
+   * Dispatched before a command runs. Call `event.preventDefault()` to keep
+   * the palette open and, for a link, stay on the page.
+   * @event select
+   * @type {object}
+   * @property {any} id
+   * @property {Item} item
+   */
+
+  /**
+   * @event open
+   * @type {object}
+   * @property {"programmatic"} trigger
+   */
+
+  /**
+   * Dispatched before the palette closes from the keyboard, a click outside
+   * or a selection. Call `event.preventDefault()` to keep it open.
+   * @event close
+   * @type {object}
+   * @property {"escape-key" | "outside-click" | "select" | "programmatic"} trigger
+   */
+
+  /**
+   * Dispatched with the query while the palette is open, after `debounce`
+   * ms without typing. Clearing the field dispatches at once.
+   * @event {string} search
    */
 
   /**
@@ -40,6 +68,31 @@
   export let items = [];
 
   /**
+   * Override the id of a command. Ids must be unique.
+   * @type {(item: Item) => any}
+   */
+  export let itemToId = function itemToId(item) {
+    return /** @type {CommandPaletteItem} */ (item).id;
+  };
+
+  /**
+   * Override the label of a command. The label is matched and shown.
+   * @type {(item: Item) => string}
+   */
+  export let itemToString = function itemToString(item) {
+    return /** @type {CommandPaletteItem} */ (item).text ?? "";
+  };
+
+  /**
+   * Override the group label of a command. Return `undefined` or `""` for
+   * an ungrouped command.
+   * @type {(item: Item) => string | undefined}
+   */
+  export let itemToGroup = function itemToGroup(item) {
+    return /** @type {CommandPaletteItem} */ (item).group;
+  };
+
+  /**
    * Specify the search value. Cleared when the palette closes.
    * @bindable writable
    */
@@ -52,40 +105,52 @@
   export let shouldFilter = true;
 
   /**
-   * Override how the query is matched against an item's `text`,
+   * Override how the query is matched against a command's label,
    * `description` and `keywords`. Returns whether it `matched`, an optional
    * `score` from 0 to 1 that ranks results, and the `indices` of characters
-   * to highlight. Defaults to fuzzy matching. A description needs a score
-   * of 0.5 or more, which the default gives only to a substring.
+   * to highlight. Defaults to fuzzy matching. Return no `indices` to show
+   * no emphasis. A description needs a score of 0.5 or more, which the
+   * default gives only to a substring.
    * @type {(text: string, query: string) => { matched: boolean; score?: number; indices?: number[] }}
    */
   export let match = fuzzyMatch;
 
-  /** Set to `false` to stop emphasizing matched characters */
-  export let highlightMatches = true;
-
   /**
-   * Milliseconds to wait after the last keystroke before the results filter
-   * and `search` fires. `value` updates at once; clearing the field applies
-   * at once.
+   * Milliseconds to wait after the last keystroke before `search` fires.
+   * The results filter on every keystroke; only `search` waits.
    */
   export let debounce = 0;
 
   /**
-   * Set to `true` while results load, for example after `search`. Shows a
-   * loading row after the results and marks the list busy.
+   * Set to `true` while results load, for example after `search`. Marks
+   * the list busy at once and shows a loading row after the results.
    */
   export let loading = false;
+
+  /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the loading row. Once shown, it stays for at least 500 ms, so fast work
+   * shows nothing and slow work never flashes. Set to `0` to show it at
+   * once.
+   */
+  export let loadingDelay = 0;
 
   /** Specify the text of the loading row */
   export let loadingText = "Loading...";
 
   /**
-   * Specify the message shown when no command matches. Pass a function to
-   * build it from the search value.
+   * Specify the message shown when there are no commands. Set to `""` to
+   * show nothing. Use the `empty` slot for richer content.
+   */
+  export let emptyText = "No commands available";
+
+  /**
+   * Specify the message shown when no command matches the query. Pass a
+   * function to build it from the query. Use the `noResults` slot for
+   * richer content.
    * @type {string | ((value: string) => string)}
    */
-  export let emptyText = "No results found";
+  export let noResultsText = "No results found";
 
   /**
    * Build the message announced to screen readers when the number of
@@ -125,10 +190,10 @@
   /** Specify the clear button label text */
   export let closeButtonLabelText = "Clear search input";
 
-  /** Set to `true` to keep the palette open on an outside click */
-  export let preventCloseOnClickOutside = false;
+  /** Set to `false` to keep the palette open on a click outside it */
+  export let closeOnOutsideClick = true;
 
-  /** Set an id for the search input */
+  /** Set an id for the search input. Option ids derive from it. */
   export let id = uniqueId();
 
   /**
@@ -140,10 +205,6 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { readable, writable } from "svelte/store";
-  import {
-    LAYER_CONTEXT_KEY,
-    MODAL_CONTEXT_KEY,
-  } from "../constants/context-keys.js";
   import InlineLoading from "../InlineLoading/InlineLoading.svelte";
   import ListBoxMenuStatus from "../ListBox/ListBoxMenuStatus.svelte";
   import {
@@ -159,26 +220,55 @@
   import { createMenuWindow } from "../ListBox/menu-window.js";
   import { trackModal } from "../Modal/modal-store.js";
   import Search from "../Search/Search.svelte";
+  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
+  import {
+    LAYER_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
+  } from "../constants/context-keys.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { restoreFocus } from "../utils/focus.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { isApplePlatform } from "../utils/keyboard-shortcut.js";
+  import { applePlatform } from "../utils/keyboard-shortcut.js";
   import { moveIndex } from "../utils/move-index.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
   import CommandPaletteRows from "./CommandPaletteRows.svelte";
+
+  /**
+   * A command as the palette reads it: the consumer's item with its id,
+   * label and group resolved once per `items`.
+   * @typedef {object} Entry
+   * @property {any} id
+   * @property {number} index - Position in `items`; option ids use it.
+   * @property {Item} item
+   * @property {string} text
+   * @property {string | undefined} group
+   * @property {string | undefined} description
+   * @property {ReadonlyArray<string>} keywords
+   * @property {any} icon
+   * @property {string | undefined} shortcut
+   * @property {string | undefined} href
+   * @property {boolean} disabled
+   */
 
   /** Rows shown before the list scrolls: 9.6 rows at 40px, so one peeks. */
   const LIST_HEIGHT = 384;
+  /** @type {Record<string, "sm" | "lg" | "xl">} */
   const SEARCH_SIZES = { sm: "sm", md: "lg", lg: "xl" };
   /** `fuzzyMatch` scores a substring 0.5 or more, scattered letters less. */
   const CONTIGUOUS_SCORE = 0.5;
+  /** @type {number[]} */
   const NO_INDICES = [];
+  /** @type {ReadonlyArray<string>} */
+  const NO_KEYWORDS = [];
+  /** @type {Entry[]} */
+  const NO_ENTRIES = [];
+  /** @type {Map<number, { text: number[]; description: number[] }>} */
   const NO_MATCHES = new Map();
 
   const dispatch = createEventDispatcher();
@@ -194,13 +284,14 @@
 
   /** Whether the results render: while open, and while the exit runs. */
   let rendered = open;
-  let apple = false;
   let query = String(value ?? "");
-  let prevValue = query;
+  let prevQuery = query;
   let highlightedIndex = -1;
+  /** @type {null | Entry[]} */
   let prevList = null;
   let listScrollTop = 0;
   let statusText = "";
+  let showLoading = loading;
 
   /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
   let menuState;
@@ -216,11 +307,17 @@
   });
 
   const lifecycle = createDialogLifecycle({
-    dispatch,
+    // The lifecycle dispatches `open` bare; every event detail is an object.
+    dispatch: (name, detail, options) =>
+      dispatch(
+        name,
+        name === "open" ? { trigger: "programmatic" } : detail,
+        options,
+      ),
     setOpen: (next) => {
       open = next;
     },
-    preventCloseOnClickOutside: () => preventCloseOnClickOutside,
+    preventCloseOnClickOutside: () => !closeOnOutsideClick,
     passive: () => true,
     saveFocusReturn: focusReturn.save,
     restoreFocusReturn: finishClose,
@@ -241,23 +338,33 @@
 
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
   const announceResults = debounceFn((count) => {
-    announceStatus(filterResultsText(count));
+    announceStatus(filterResultsText(Number(count)));
   }, 800);
 
+  // `loading` marks the list busy and holds back the empty states at once.
+  // Only the loading row waits for `loadingDelay`.
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
+
   /** @type {null | ReturnType<typeof debounceFn>} */
-  let pendingQuery = null;
+  let dispatchSearch = null;
   $: {
-    pendingQuery?.cancel();
-    pendingQuery = debounce > 0 ? debounceFn(applyQuery, debounce) : null;
+    dispatchSearch?.cancel();
+    dispatchSearch =
+      debounce > 0
+        ? debounceFn((next) => dispatch("search", next), debounce)
+        : null;
   }
 
   onMount(() => {
-    apple = isApplePlatform();
     lifecycle.setMounted();
     if (open) ref?.focus();
     return () => {
-      pendingQuery?.cancel();
+      dispatchSearch?.cancel();
       announceResults.cancel();
+      loadingIndicator.cancel();
       menuWindow.destroy();
     };
   });
@@ -265,29 +372,57 @@
   $: lifecycle.syncOpen(open);
   $: if (open) rendered = true;
 
-  $: syncQuery(String(value ?? ""));
-
-  /** @param {string} next */
-  function syncQuery(next) {
-    if (next === prevValue) return;
-    prevValue = next;
-    if (pendingQuery && next !== "") pendingQuery(next);
-    else {
-      pendingQuery?.cancel();
-      applyQuery(next);
-    }
-  }
-
-  /** @param {string} next */
-  function applyQuery(next) {
-    query = next;
-    if (open) dispatch("search", next);
+  $: query = String(value ?? "");
+  $: if (query !== prevQuery) {
+    prevQuery = query;
+    notifySearch(query, open);
   }
 
   /**
-   * The results for `query`: matched items ranked by score, then grouped,
-   * with the character indices to highlight. Runs only while rendered.
+   * @param {string} next
+   * @param {boolean} isOpen
+   */
+  function notifySearch(next, isOpen) {
+    if (!isOpen) return;
+    if (dispatchSearch && next !== "") {
+      dispatchSearch(next);
+    } else {
+      dispatchSearch?.cancel();
+      dispatch("search", next);
+    }
+  }
+
+  /**
+   * Read each item once through the accessors. Runs only while rendered.
    * @param {ReadonlyArray<Item>} source
+   * @param {(item: Item) => any} toId
+   * @param {(item: Item) => string} toLabel
+   * @param {(item: Item) => string | undefined} toGroup
+   * @returns {Entry[]}
+   */
+  function buildEntries(source, toId, toLabel, toGroup) {
+    return source.map((item, index) => {
+      const fields = /** @type {CommandPaletteItem} */ (item);
+      return {
+        id: toId(item),
+        index,
+        item,
+        text: String(toLabel(item) ?? ""),
+        group: toGroup(item) || undefined,
+        description: fields.description || undefined,
+        keywords: fields.keywords ?? NO_KEYWORDS,
+        icon: fields.icon,
+        shortcut: fields.shortcut || undefined,
+        href: fields.href || undefined,
+        disabled: Boolean(fields.disabled),
+      };
+    });
+  }
+
+  /**
+   * The results for `search`: matched entries ranked by score, then
+   * grouped, with the character indices to highlight.
+   * @param {Entry[]} source
    * @param {string} search
    * @param {boolean} filter
    * @param {typeof match} matcher
@@ -302,19 +437,19 @@
       };
     }
 
-    /** @type {Map<Item["id"], { text: number[]; description: number[] }>} */
+    /** @type {Map<number, { text: number[]; description: number[] }>} */
     const matches = new Map();
+    /** @type {Array<{ entry: Entry; score: number }>} */
     const ranked = [];
-    for (let index = 0; index < source.length; index++) {
-      const item = source[index];
-      const text = runMatch(matcher, item.text, needle);
+    for (const entry of source) {
+      const text = runMatch(matcher, entry.text, needle);
       // Scattered letters in a long description match almost any query,
       // so a description has to hold the query as one run.
-      const description = item.description
-        ? runMatch(matcher, item.description, needle, CONTIGUOUS_SCORE)
+      const description = entry.description
+        ? runMatch(matcher, entry.description, needle, CONTIGUOUS_SCORE)
         : null;
       let keywordScore = -1;
-      for (const keyword of item.keywords ?? []) {
+      for (const keyword of entry.keywords) {
         const result = runMatch(matcher, keyword, needle);
         if (result.matched) keywordScore = Math.max(keywordScore, result.score);
       }
@@ -325,14 +460,16 @@
         description?.matched ? description.score * 0.8 : -1,
       );
       if (filter && score === -1) continue;
-      matches.set(item.id, {
+      matches.set(entry.index, {
         text: text.matched ? text.indices : NO_INDICES,
         description: description?.matched ? description.indices : NO_INDICES,
       });
-      ranked.push({ item, score, index });
+      ranked.push({ entry, score });
     }
-    if (filter) ranked.sort((a, b) => b.score - a.score || a.index - b.index);
-    const list = ranked.map((entry) => entry.item);
+    if (filter) {
+      ranked.sort((a, b) => b.score - a.score || a.entry.index - b.entry.index);
+    }
+    const list = ranked.map((ranking) => ranking.entry);
     return {
       list: isGrouped ? orderByGroup(list, getGroup) : list,
       matches,
@@ -346,7 +483,7 @@
    * @param {number} [minScore]
    */
   function runMatch(matcher, text, needle, minScore = 0) {
-    const result = matcher(String(text ?? ""), needle);
+    const result = matcher(text, needle);
     const score = result?.matched ? (result.score ?? 1) : 0;
     const matched = Boolean(result?.matched) && score >= minScore;
     return {
@@ -356,17 +493,14 @@
     };
   }
 
-  /** @param {Item} item */
-  function getGroup(item) {
-    return item.group;
+  /** @param {Entry} entry */
+  function getGroup(entry) {
+    return entry.group;
   }
 
-  /**
-   * @param {ReadonlyArray<Item>} list
-   * @returns {number}
-   */
-  function firstEnabledIndex(list) {
-    return list.findIndex((item) => !item.disabled);
+  /** @param {Entry} entry */
+  function optionId(entry) {
+    return `${id}-option-${entry.index}`;
   }
 
   /**
@@ -383,8 +517,8 @@
         menuWindow.scrollIntoView(target, "nearest");
         return;
       }
-      const item = results.list[index];
-      const node = item ? document.getElementById(`${id}-${item.id}`) : null;
+      const entry = results.list[index];
+      const node = entry ? document.getElementById(optionId(entry)) : null;
       if (node instanceof HTMLElement) {
         const header = target === row ? null : node.previousElementSibling;
         if (header instanceof HTMLElement) scrollIntoViewWithin(header);
@@ -419,19 +553,24 @@
   }
 
   /**
-   * @param {Item} item
+   * @param {Entry} entry
    * @param {Event} [event]
    */
-  function select(item, event) {
-    if (item.disabled) {
+  function select(entry, event) {
+    if (entry.disabled) {
       event?.preventDefault();
       return;
     }
-    const proceed = dispatch("select", { item }, { cancelable: true });
+    const proceed = dispatch(
+      "select",
+      { id: entry.id, item: entry.item },
+      { cancelable: true },
+    );
     if (!proceed) {
       event?.preventDefault();
       return;
     }
+    dispatchSearch?.cancel();
     close("select");
   }
 
@@ -452,13 +591,15 @@
         break;
       case "Enter": {
         event.preventDefault();
-        const item = results.list[highlightedIndex];
-        if (!item || item.disabled) return;
-        const node = document.getElementById(`${id}-${item.id}`);
+        const entry = results.list[highlightedIndex];
+        if (!entry || entry.disabled) return;
+        const node = document.getElementById(optionId(entry));
         // A click follows a link's `href`, as a pointer would.
-        if (node instanceof HTMLElement && listRef?.contains(node))
+        if (node instanceof HTMLElement && listRef?.contains(node)) {
           node.click();
-        else select(item);
+        } else {
+          select(entry);
+        }
         break;
       }
       case "Escape":
@@ -503,15 +644,18 @@
     menuWindow.noteScroll(target.scrollTop);
   }
 
-  $: grouped = items.some((item) => Boolean(item.group));
+  $: entries = rendered
+    ? buildEntries(items, itemToId, itemToString, itemToGroup)
+    : NO_ENTRIES;
+  $: grouped = entries.some((entry) => entry.group !== undefined);
   $: results = rendered
-    ? computeResults(items, query, shouldFilter, match, grouped)
-    : { list: [], matches: NO_MATCHES };
+    ? computeResults(entries, query, shouldFilter, match, grouped)
+    : { list: NO_ENTRIES, matches: NO_MATCHES };
   // A new result list starts at the top with its first command highlighted,
   // so Enter runs the best match.
   $: if (results.list !== prevList) {
     prevList = results.list;
-    highlightedIndex = firstEnabledIndex(results.list);
+    highlightedIndex = results.list.findIndex((entry) => !entry.disabled);
     listScrollTop = 0;
     if (listRef) listRef.scrollTop = 0;
   }
@@ -525,7 +669,8 @@
       }
     : virtualize;
   // Headers and descriptions make rows unequal, so measure them.
-  $: measuredRows = grouped || items.some((item) => Boolean(item.description));
+  $: measuredRows =
+    grouped || entries.some((entry) => entry.description !== undefined);
   $: menuState = menuWindow.update({
     items: menuRows,
     getKey: (row) => row.id,
@@ -552,9 +697,11 @@
   );
   $: if (rendered && menuRuns) tick().then(() => menuWindow.sync());
 
-  $: highlightedItem = results.list[highlightedIndex];
-  $: highlightedId =
-    highlightedItem == null ? undefined : `${id}-${highlightedItem.id}`;
+  $: highlightedEntry = results.list[highlightedIndex];
+  $: highlightedKey = highlightedEntry ? highlightedEntry.index : -1;
+  $: highlightedId = highlightedEntry
+    ? `${id}-option-${highlightedEntry.index}`
+    : undefined;
   $: hasQuery = query.trim() !== "";
   $: if (open && hasQuery && shouldFilter) {
     announceResults(results.list.length);
@@ -562,13 +709,16 @@
     announceResults.cancel();
   }
   $: if (!open) statusText = "";
-  $: noResults = rendered && !loading && results.list.length === 0;
-  $: emptyMessage = noResults
-    ? typeof emptyText === "function"
-      ? emptyText(query)
-      : emptyText
-    : "";
-  $: showEmpty = noResults && ($$slots.empty || emptyMessage !== "");
+  $: settled = rendered && !loading && results.list.length === 0;
+  $: showEmpty = settled && !hasQuery && ($$slots.empty || emptyText !== "");
+  $: noResultsMessage =
+    settled && hasQuery
+      ? typeof noResultsText === "function"
+        ? noResultsText(query)
+        : noResultsText
+      : "";
+  $: showNoResults =
+    settled && hasQuery && ($$slots.noResults || noResultsMessage !== "");
   $: listId = `${id}-list`;
   $: labelId = `${id}-search`;
   $: searchSize = SEARCH_SIZES[size] ?? "lg";
@@ -616,7 +766,7 @@
       {closeButtonLabelText}
       searchClass="bx--command-palette__search"
       role="combobox"
-      tabindex="0"
+      tabindex={0}
       aria-autocomplete="list"
       aria-expanded={true}
       aria-controls={listId}
@@ -658,21 +808,20 @@
             runs={menuRuns}
             {groupRows}
             {id}
-            {highlightedId}
+            {highlightedKey}
             matches={results.matches}
-            {highlightMatches}
             count={results.list.length}
             measured={isMeasured}
-            {apple}
+            apple={$applePlatform}
             customRow={$$slots.default}
             onSelect={select}
             onHighlight={highlight}
-            let:row
+            let:item
             let:index
             let:highlighted
             let:segments
           >
-            <slot item={row} {index} {highlighted} {segments} />
+            <slot {item} {index} {highlighted} {segments} />
             <svelte:fragment slot="group" let:group let:items={groupItems}>
               <slot name="group" {group} items={groupItems}>{group}</slot>
             </svelte:fragment>
@@ -683,21 +832,20 @@
           runs={menuRuns}
           {groupRows}
           {id}
-          {highlightedId}
+          {highlightedKey}
           matches={results.matches}
-          {highlightMatches}
           count={results.list.length}
           measured={isMeasured}
-          {apple}
+          apple={$applePlatform}
           customRow={$$slots.default}
           onSelect={select}
           onHighlight={highlight}
-          let:row
+          let:item
           let:index
           let:highlighted
           let:segments
         >
-          <slot item={row} {index} {highlighted} {segments} />
+          <slot {item} {index} {highlighted} {segments} />
           <svelte:fragment slot="group" let:group let:items={groupItems}>
             <slot name="group" {group} items={groupItems}>{group}</slot>
           </svelte:fragment>
@@ -706,10 +854,15 @@
     </div>
     {#if showEmpty}
       <ListBoxMenuStatus>
-        <slot name="empty" value={query}>{emptyMessage}</slot>
+        <slot name="empty">{emptyText}</slot>
       </ListBoxMenuStatus>
     {/if}
-    {#if loading}
+    {#if showNoResults}
+      <ListBoxMenuStatus>
+        <slot name="noResults" value={query}>{noResultsMessage}</slot>
+      </ListBoxMenuStatus>
+    {/if}
+    {#if showLoading}
       <ListBoxMenuStatus>
         <InlineLoading description={loadingText} />
       </ListBoxMenuStatus>
