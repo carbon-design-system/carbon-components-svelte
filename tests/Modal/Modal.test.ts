@@ -10,6 +10,7 @@ import ModalTest from "./Modal.test.svelte";
 import ModalEnterTargetTest from "./ModalEnterTarget.test.svelte";
 import ModalFocusReturnTest from "./ModalFocusReturn.test.svelte";
 import ModalFocusTrapTest from "./ModalFocusTrap.test.svelte";
+import ModalFocusTrapLinkTest from "./ModalFocusTrapLink.test.svelte";
 import ModalFormIdTest from "./ModalFormId.test.svelte";
 import ModalNullishAriaLabel from "./ModalNullishAriaLabel.test.svelte";
 import ModalSideNavBodyLockTest from "./ModalSideNavBodyLock.test.svelte";
@@ -879,6 +880,23 @@ describe("Modal", () => {
       }
     });
   });
+
+  it.each([
+    ["Service name", "Tab", "Region"],
+    ["Region", "Shift+Tab", "Service name"],
+  ])(
+    "skips a link with tabindex -1: %s, %s, %s",
+    async (start, key, expected) => {
+      render(ModalFocusTrapLinkTest, { props: { open: true } });
+      await tick();
+
+      screen.getByLabelText(start).focus();
+      await user.keyboard(key === "Tab" ? "{Tab}" : "{Shift>}{Tab}{/Shift}");
+      await tick();
+
+      expect(screen.getByLabelText(expected)).toHaveFocus();
+    },
+  );
 
   // Regression tests for https://github.com/carbon-design-system/carbon-components-svelte/issues/310
   describe("formId prop (issue #310)", () => {

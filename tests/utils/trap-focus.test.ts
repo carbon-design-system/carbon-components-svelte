@@ -63,6 +63,21 @@ describe("trapFocus", () => {
     expect(preventDefault).toHaveBeenCalledOnce();
   });
 
+  it("skips a link with tabindex -1, such as a combobox's link option", () => {
+    const { container, buttons } = setup(2);
+    const option = document.createElement("a");
+    option.href = "/docs";
+    option.tabIndex = -1;
+    stubVisibleGeometry(option);
+    container.insertBefore(option, buttons[1]);
+    buttons[0].focus();
+    const { event } = tabEvent();
+
+    trapFocus({ container, event });
+
+    expect(document.activeElement).toBe(buttons[1]);
+  });
+
   it("Shift+Tab from the first element wraps to the last", () => {
     const { container, buttons } = setup(3);
     buttons[0].focus();

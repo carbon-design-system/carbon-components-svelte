@@ -2,7 +2,8 @@
 
 // taken from github.com/carbon-design-system/carbon/packages/react/src/internal/keyboard/navigation.js
 export const selectorTabbable = `
-  a[href], area[href], input:not([disabled]):not([tabindex='-1']),
+  a[href]:not([tabindex='-1']), area[href]:not([tabindex='-1']),
+  input:not([disabled]):not([tabindex='-1']),
   button:not([disabled]):not([tabindex='-1']),select:not([disabled]):not([tabindex='-1']),
   textarea:not([disabled]):not([tabindex='-1']),
   iframe, object, embed, *[tabindex]:not([tabindex='-1']):not([disabled]), *[contenteditable=true]
