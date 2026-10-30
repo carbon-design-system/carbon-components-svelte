@@ -97,6 +97,12 @@
     background-color: $support-info;
   }
 
+  // A removed row keeps its space while the pointer rests on the rows, so
+  // the next row does not move under the pointer.
+  .#{$prefix}--notifications-panel__item--held {
+    visibility: hidden;
+  }
+
   .#{$prefix}--notifications-panel__icon {
     display: flex;
     height: to-rem(18px);

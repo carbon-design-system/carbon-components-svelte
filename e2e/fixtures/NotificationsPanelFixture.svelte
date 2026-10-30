@@ -75,6 +75,25 @@
     notifications = [];
   }
 
+  let arrivals = 0;
+
+  function addArrival() {
+    arrivals += 1;
+    notifications = [
+      {
+        id: `new${arrivals}`,
+        kind: "info",
+        title: `New notification ${arrivals}`,
+        timestamp: now - 60_000,
+        unread: true,
+      },
+      ...notifications,
+    ];
+  }
+
+  // Called from tests: a click anywhere outside the panel would close it.
+  window.addNotification = addArrival;
+
   function handleClick(event) {
     log(`click:${event.detail.notification.id}`);
   }

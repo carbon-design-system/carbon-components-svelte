@@ -163,6 +163,11 @@
   let prevIds = null;
   /** @type {PanelNotification[]} */
   let arrivals = [];
+  // While a pointer that can hover rests on the rows, they hold still: a new
+  // row waits, and a removed row leaves a hidden space of its own height.
+  let holding = false;
+  /** @type {ReadonlyArray<PanelNotification>} */
+  let heldItems = [];
 
   const flushAnnouncement = debounce(() => {
     const added = arrivals;
@@ -170,19 +175,25 @@
     announcement = announce ? announce(added) : "";
   }, ANNOUNCE_DELAY_MS);
 
+  $: byId = new Map(notifications.map((item) => [item.id, item]));
+  // A held row shows its latest data. One that is gone keeps its last data
+  // and renders hidden.
+  $: shown = holding
+    ? heldItems.map((item) => byId.get(item.id) ?? item)
+    : notifications;
+
   $: groups = grouped
-    ? groupNotificationsByRecency(notifications, {
+    ? groupNotificationsByRecency(shown, {
         now,
         locale,
         timeZone,
         labels: groupLabels,
       })
-    : [{ key: "all", label: "", items: [...notifications] }];
+    : [{ key: "all", label: "", items: [...shown] }];
 
   // Intl text is written for its own locale's direction, so an English time
   // reads "1 hr. ago" on an RTL page.
   $: timeDirection = localeDirection(locale);
-  $: byId = new Map(notifications.map((item) => [item.id, item]));
 
   // Arrivals only: the first render and removals stay silent. Ids are
   // compared, so a changed row (a read one) is not an arrival.
@@ -204,12 +215,43 @@
 
   onMount(() => flushAnnouncement.cancel);
 
+  const LIVE_ROW =
+    ".bx--notifications-panel__item:not(.bx--notifications-panel__item--held)";
+
   function rowElements() {
     return ref
       ? /** @type {HTMLElement[]} */ (
-          Array.from(ref.querySelectorAll(".bx--notifications-panel__item"))
+          Array.from(ref.querySelectorAll(LIVE_ROW))
         )
       : [];
+  }
+
+  /** @param {PointerEvent} event */
+  function handlePointerMove(event) {
+    if (holding || event.pointerType === "touch") return;
+    heldItems = notifications;
+    holding = true;
+  }
+
+  /**
+   * A press on a held row's space lands on its list. Keep focus where the
+   * dismissal put it, and select no text, as a second click of a double
+   * click would.
+   * @param {MouseEvent} event
+   */
+  function handleMouseDown(event) {
+    if (
+      event.target instanceof Element &&
+      event.target.classList.contains("bx--notifications-panel__list")
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  function release() {
+    if (!holding) return;
+    holding = false;
+    heldItems = [];
   }
 
   /**
@@ -223,9 +265,12 @@
     if (!row) return;
     const index = rowElements().indexOf(row);
     await tick();
-    if (row.isConnected) return;
+    const gone =
+      !row.isConnected ||
+      row.classList.contains("bx--notifications-panel__item--held");
+    if (!gone) return;
     const active = document.activeElement;
-    if (active && active !== document.body) return;
+    if (active && active !== document.body && !row.contains(active)) return;
     const rows = rowElements();
     const next = rows[Math.min(index, rows.length - 1)];
     const control =
@@ -367,11 +412,18 @@
       />
     </div>
   {/if}
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
-    use:verticalListFocus={{ selector: ".bx--notifications-panel__main" }}
+    use:verticalListFocus={{
+      selector: `${LIVE_ROW} .bx--notifications-panel__main`,
+    }}
     class:bx--notifications-panel__body={true}
+    on:pointermove={handlePointerMove}
+    on:pointerleave={release}
+    on:mousedown={handleMouseDown}
+    on:scroll={release}
   >
-    {#if notifications.length === 0}
+    {#if shown.length === 0}
       <div class:bx--notifications-panel__empty={true}>
         <slot name="empty">{emptyText}</slot>
       </div>
@@ -404,6 +456,10 @@
               class:bx--notifications-panel__item={true}
               class:bx--notifications-panel__item--unread={notification.unread}
               class:bx--notifications-panel__item--interactive={interactive}
+              class:bx--notifications-panel__item--held={!byId.has(
+                notification.id,
+              )}
+              aria-hidden={byId.has(notification.id) ? undefined : "true"}
               on:keydown={(event) => handleRowKeydown(notification, event)}
             >
               <div class:bx--notifications-panel__icon={true}>

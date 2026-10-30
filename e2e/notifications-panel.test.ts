@@ -109,6 +109,51 @@ test.describe("NotificationsPanel", () => {
     await expect(page.getByText("You're all caught up")).toBeVisible();
   });
 
+  test("holds the rows still while the pointer rests on them", async ({
+    page,
+  }) => {
+    await page.goto("/notifications-panel.html?count=12&open");
+    const dismiss = (title: string) =>
+      page.getByRole("button", {
+        name: `Dismiss notification: ${title}`,
+        exact: true,
+      });
+    const second = dismiss("Notification 2");
+    await second.hover();
+    const before = await second.boundingBox();
+    if (!before) throw new Error("no dismiss button");
+
+    // A new notification waits; the live region announces it at once.
+    await page.evaluate(() =>
+      (window as unknown as { addNotification: () => void }).addNotification(),
+    );
+    await expect(
+      page.locator(".bx--notifications-panel [role=status]"),
+    ).toHaveText("New notification 1");
+    await expect(page.locator(ROW)).toHaveCount(12);
+    expect(await second.boundingBox()).toEqual(before);
+
+    // A dismissed row leaves its space, so a second click lands on nothing.
+    await second.click();
+    // Notification 3 has no dismiss button, so its main button takes focus.
+    await expect(
+      page.getByRole("button", { name: /^Notification 3/ }),
+    ).toBeFocused();
+    await page.mouse.click(before.x + 16, before.y + 16);
+    expect(await events(page)).toBe("dismiss:n1");
+    await expect(
+      page.getByRole("button", { name: /^Notification 3/ }),
+    ).toBeFocused();
+
+    // Leaving the rows shows the new row and closes the space.
+    await page.mouse.move(0, 400);
+    await expect(page.locator(ROW)).toHaveCount(12);
+    await expect(
+      page.getByRole("button", { name: /^Unread New notification 1/ }),
+    ).toBeVisible();
+    await expect(page.locator(`${ROW}[aria-hidden]`)).toHaveCount(0);
+  });
+
   test("shows the unread count on the bell and updates it", async ({
     page,
   }) => {

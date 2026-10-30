@@ -143,6 +143,8 @@ The groups and the relative times depend on the clock and the time zone. A serve
 
 When notifications arrive while the panel is open, a polite live region announces them: the title for one, or "N new notifications" for several in a short burst. The first render and removals are silent. Pass a function to `announce` to write your own text, such as in another language, or `null` to turn it off.
 
+While a mouse or pen rests on the rows, they hold still. A new notification renders when the pointer leaves the rows or the list scrolls; the live region announces it at once. A row you remove leaves an empty space of its own height until then, so a double click on a dismiss button dismisses one row.
+
 | Do | Why |
 | --- | --- |
 | Remove a notification from your array in the `dismiss` handler. | The panel never changes `notifications`, so the list stays yours. |
