@@ -226,6 +226,12 @@
   export let hideLabel = false;
 
   /**
+   * Specify the text shown when there are no tasks. Say why the chart is
+   * empty and what to do next. Use the `empty` slot to add an action.
+   */
+  export let emptyText = "";
+
+  /**
    * Set an id for the task list. The label id derives from it, for example
    * `{id}-label`.
    */
@@ -1079,6 +1085,11 @@
         </div>
       </div>
     </div>
+    {#if rows.length === 0 && (emptyText || $$slots.empty)}
+      <div class:bx--gantt__empty={true}>
+        <slot name="empty">{emptyText}</slot>
+      </div>
+    {/if}
   </div>
   <span id={hintId} class:bx--visually-hidden={true}>{hintText}</span>
   <span class:bx--visually-hidden={true} role="status">{announcement}</span>

@@ -42,6 +42,7 @@
   export let dir: "ltr" | "rtl" | undefined = undefined;
   export let cancel = false;
   export let translateWithId: Props["translateWithId"] = undefined;
+  export let emptyText = "";
   type Change = {
     id: string;
     start: string | Date;
@@ -66,6 +67,7 @@
       {readonly}
       {today}
       {translateWithId}
+      {emptyText}
       bind:tasks
       bind:zoom
       bind:expandedIds
@@ -79,6 +81,7 @@
     {readonly}
     {today}
     {translateWithId}
+    {emptyText}
     bind:tasks
     bind:zoom
     bind:expandedIds

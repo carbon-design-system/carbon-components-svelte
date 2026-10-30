@@ -5,7 +5,7 @@ description: A Gantt chart shows tasks as bars on a time axis beside a hierarchi
 
 ## Basic
 
-Create a chart with `tasks` and `links`. A task is a [TreeViewGrid](/components/TreeViewGrid) node with dates: `start` and `end` are `Date` objects or `YYYY-MM-DD` strings, and `end` is the last day of the task, so a task that starts and ends on the same day takes one day. A task with `nodes` is a summary: its bar spans its children and its progress is theirs, weighted by length. Set `milestone` for a diamond on `start`, and `progress` (0 to 100) to fill a bar. A task without `start` has a row and no bar.
+Create a chart with `tasks` and `links`. A task is a [TreeViewGrid](/components/TreeViewGrid) node with dates: `start` and `end` are `Date` objects or `YYYY-MM-DD` strings, and `end` is the last day of the task, so a task that starts and ends on the same day takes one day. A task with `nodes` is a summary: its bar spans its children and its progress is theirs, weighted by length. Set `milestone` for a diamond on `start`, and `progress` (0 to 100) to fill a bar. A task without `start` has a row and no bar. With no tasks the chart shows `emptyText` under the header. Say why it is empty and what to do next, and use the `empty` slot to add an action.
 
 A link is `{ from, to }`: the task `to` starts after `from` finishes. The line is dashed and red when the successor starts on or before the last day of its predecessor.
 

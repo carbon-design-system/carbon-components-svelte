@@ -150,6 +150,19 @@
     content: "";
   }
 
+  // With no tasks the message spans the visible width under the header, at
+  // the inline start however far the axis scrolls.
+  .#{$prefix}--gantt__empty {
+    position: sticky;
+    box-sizing: border-box;
+    padding: $carbon--spacing-05;
+    background: $layer;
+    color: $text-secondary;
+    inline-size: 100cqi;
+    @include type-style("body-compact-01");
+    @include ccs-inset-inline(0, null);
+  }
+
   // Weekend stripes and row lines are backgrounds, so the canvas holds only
   // the bars, the links and the today line however long the chart is. A bar
   // that crosses an end of the axis is clipped there, so it neither slides

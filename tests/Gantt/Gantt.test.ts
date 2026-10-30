@@ -64,6 +64,16 @@ describe("Gantt", () => {
       ).toEqual(["Tarea", "Inicio", "End"]);
     });
 
+    it("shows the empty text only when there are no tasks", () => {
+      const text = "No tasks yet. Add a task to start the plan.";
+      const { unmount } = render(Gantt, { props: { emptyText: text } });
+      expect(screen.queryByText(text)).not.toBeInTheDocument();
+      unmount();
+
+      render(Gantt, { props: { tasks: [], emptyText: text } });
+      expect(screen.getByText(text)).toHaveClass("bx--gantt__empty");
+    });
+
     it("draws no link between two tasks hidden under the same summary", () => {
       render(Gantt, { props: { expandedIds: [] } });
 
