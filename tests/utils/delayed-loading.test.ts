@@ -2,6 +2,7 @@
 import { get, writable } from "svelte/store";
 import {
   createLoadingDelay,
+  createLoadingIndicator,
   delayedLoading,
 } from "../../src/utils/delayed-loading.js";
 
@@ -202,5 +203,75 @@ describe("delayedLoading", () => {
     unsubscribe();
     vi.advanceTimersByTime(1000);
     expect(values).toEqual([true]);
+  });
+});
+
+describe("createLoadingIndicator", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("follows loading exactly with no delay", () => {
+    const onChange = vi.fn();
+    const update = createLoadingIndicator(onChange);
+    update(true, 0);
+    update(false, 0);
+    update(true, 0);
+
+    expect(onChange.mock.calls).toEqual([[true], [false], [true]]);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("waits the delay, then holds the default minimum", () => {
+    const onChange = vi.fn();
+    const update = createLoadingIndicator(onChange);
+    update(false, 300);
+    update(true, 300);
+    vi.advanceTimersByTime(299);
+    expect(onChange.mock.calls).toEqual([[false]]);
+
+    vi.advanceTimersByTime(1);
+    update(false, 300);
+    vi.advanceTimersByTime(499);
+    expect(onChange.mock.calls).toEqual([[false], [true]]);
+
+    vi.advanceTimersByTime(1);
+    expect(onChange.mock.calls).toEqual([[false], [true], [false]]);
+  });
+
+  it("applies the first value at once, even with a delay", () => {
+    const onChange = vi.fn();
+    createLoadingIndicator(onChange)(true, 300);
+
+    expect(onChange.mock.calls).toEqual([[true]]);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("keeps a shown indicator when the delay changes", () => {
+    const onChange = vi.fn();
+    const update = createLoadingIndicator(onChange);
+    update(true, 0);
+    update(true, 300);
+    update(false, 300);
+    vi.advanceTimersByTime(499);
+
+    expect(onChange.mock.calls).toEqual([[true]]);
+    vi.advanceTimersByTime(1);
+    expect(onChange.mock.calls).toEqual([[true], [false]]);
+  });
+
+  it("cancel drops a pending change", () => {
+    const onChange = vi.fn();
+    const update = createLoadingIndicator(onChange);
+    update(false, 300);
+    update(true, 300);
+    update.cancel();
+    vi.advanceTimersByTime(1000);
+
+    expect(onChange.mock.calls).toEqual([[false]]);
   });
 });

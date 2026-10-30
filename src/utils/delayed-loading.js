@@ -80,6 +80,56 @@ export function createLoadingDelay(onChange, options = {}) {
 }
 
 /**
+ * Follows a component's `loading` prop and its `loadingDelay` prop with
+ * {@link createLoadingDelay}. With a delay, the indicator also stays for the
+ * default minimum; with none, it follows `loading` exactly, as before the
+ * prop existed. A new delay starts from what is on screen, so changing it
+ * never hides a shown indicator. The first call applies at once, so a server
+ * render and the first client render agree.
+ * @param {(shown: boolean) => void} onChange Called with each new state.
+ * @returns {((loading: boolean, delay: number) => void) & { cancel: () => void }}
+ */
+export function createLoadingIndicator(onChange) {
+  /** @type {ReturnType<typeof createLoadingDelay> | undefined} */
+  let timer;
+  /** @type {number | undefined} */
+  let timerDelay;
+  /** @type {boolean | undefined} */
+  let shown;
+
+  /** @param {boolean} next */
+  function handleChange(next) {
+    if (next === shown) return;
+    shown = next;
+    onChange(next);
+  }
+
+  /**
+   * @param {boolean} loading
+   * @param {number} delay
+   */
+  function update(loading, delay) {
+    if (!timer || delay !== timerDelay) {
+      const restart = timer !== undefined;
+      timer?.cancel();
+      timer = createLoadingDelay(handleChange, {
+        delay,
+        minDuration: delay > 0 ? undefined : 0,
+      });
+      timerDelay = delay;
+      if (restart) timer(Boolean(shown));
+    }
+    timer(loading);
+  }
+
+  update.cancel = () => {
+    timer?.cancel();
+  };
+
+  return update;
+}
+
+/**
  * Creates a readable store that follows a `loading` store with
  * {@link createLoadingDelay}: `true` only when the work outlasts `delay`, and
  * then for at least `minDuration`.

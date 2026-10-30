@@ -29,6 +29,16 @@ export function createLoadingDelay(
 ): LoadingDelay;
 
 /**
+ * Follows a component's `loading` prop and its `loadingDelay` prop. With a
+ * delay, the indicator also stays for the default minimum; with none, it
+ * follows `loading` exactly. A new delay starts from what is on screen.
+ * @param onChange - Called with each new state.
+ */
+export function createLoadingIndicator(
+  onChange: (shown: boolean) => void,
+): ((loading: boolean, delay: number) => void) & { cancel: () => void };
+
+/**
  * Creates a readable store that follows a `loading` store: `true` only when
  * the work outlasts `delay`, and then for at least `minDuration`.
  */

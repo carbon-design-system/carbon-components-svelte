@@ -7,6 +7,7 @@
   export let selectTextOnFocus = false;
   export let value = "";
   export let loading = false;
+  export let loadingDelay = 0;
   export let readonly = false;
   export let helperText = "";
   export let hideLabel = false;
@@ -23,6 +24,7 @@
   {fluid}
   {selectTextOnFocus}
   {loading}
+  {loadingDelay}
   {readonly}
   {helperText}
   {hideLabel}
