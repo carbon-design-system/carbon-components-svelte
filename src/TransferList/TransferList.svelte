@@ -680,6 +680,36 @@
       on:reset={() => (requiredError = false)}
     />
   {/if}
+  <!-- Helper text and messages sit under the legend, before the tall lists. -->
+  <div class:bx--transfer-list__validation-msg={true}>
+    {#if showInvalid}
+      <WarningFilled class="bx--transfer-list__invalid-icon" />
+      {#if shownInvalidText}
+        <div id={errorId} class:bx--form-requirement={true} role="alert">
+          {shownInvalidText}
+        </div>
+      {/if}
+    {:else if showWarn}
+      <WarningAltFilled
+        class="bx--transfer-list__invalid-icon bx--transfer-list__invalid-icon--warning"
+      />
+      {#if warnText}
+        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
+      {/if}
+    {/if}
+  </div>
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
+  {/if}
+  {#if helperText && !showInvalid && !showWarn}
+    <div
+      id={helperId}
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
+    </div>
+  {/if}
   <div class:bx--transfer-list__body={true}>
     <TransferListPanel
       bind:this={availablePanel}
@@ -796,35 +826,6 @@
       </svelte:fragment>
     </TransferListPanel>
   </div>
-  <div class:bx--transfer-list__validation-msg={true}>
-    {#if showInvalid}
-      <WarningFilled class="bx--transfer-list__invalid-icon" />
-      {#if shownInvalidText}
-        <div id={errorId} class:bx--form-requirement={true} role="alert">
-          {shownInvalidText}
-        </div>
-      {/if}
-    {:else if showWarn}
-      <WarningAltFilled
-        class="bx--transfer-list__invalid-icon bx--transfer-list__invalid-icon--warning"
-      />
-      {#if warnText}
-        <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
-      {/if}
-    {/if}
-  </div>
-  {#if readonly}
-    <span id={readonlyId} class:bx--visually-hidden={true}>{readonlyText}</span>
-  {/if}
-  {#if helperText && !showInvalid && !showWarn}
-    <div
-      id={helperId}
-      class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
-    >
-      {helperText}
-    </div>
-  {/if}
   <span role="status" aria-live="polite" class:bx--visually-hidden={true}
     >{announcement}</span
   >

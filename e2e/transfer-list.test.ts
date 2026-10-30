@@ -305,6 +305,35 @@ test.describe("TransferList", () => {
     }
   });
 
+  test("shows helper text and errors under the legend, in one row", async ({
+    page,
+  }) => {
+    await page.goto("/transfer-list-states.html");
+    const layout = (name: string) =>
+      page.getByRole("group", { name }).evaluate((group) => {
+        const top = (selector: string) =>
+          group.querySelector(selector)?.getBoundingClientRect().top ??
+          Number.NaN;
+        const legend = group.querySelector("legend")?.getBoundingClientRect();
+        return {
+          legend: legend?.bottom ?? Number.NaN,
+          message: top(".bx--form__helper-text, .bx--form-requirement"),
+          lists: top(".bx--transfer-list__header"),
+        };
+      });
+
+    const helper = await layout("Default");
+    const invalid = await layout("Invalid");
+    for (const { legend, message, lists } of [helper, invalid]) {
+      expect(message).toBeGreaterThan(legend);
+      expect(message).toBeLessThan(lists);
+    }
+    // The error takes the helper text's row, so the lists start level.
+    expect(
+      Math.abs(invalid.lists - invalid.legend - (helper.lists - helper.legend)),
+    ).toBeLessThanOrEqual(0.5);
+  });
+
   test("dims every row when disabled", async ({ page }) => {
     await page.goto("/transfer-list-states.html");
     const color = (group: string, text: string) =>

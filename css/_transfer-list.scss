@@ -244,10 +244,16 @@
     @include ccs-mirror-rtl;
   }
 
+  // Helper text and the messages sit under the legend and before the
+  // lists, in one row: an error or warning replaces the helper text.
   .#{$prefix}--transfer-list__validation-msg {
     display: none;
     align-items: flex-start;
-    margin-block-start: $carbon--spacing-02;
+    margin-block: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--transfer-list > .#{$prefix}--form__helper-text {
+    margin-block: 0 $carbon--spacing-03;
   }
 
   .#{$prefix}--transfer-list--invalid .#{$prefix}--transfer-list__validation-msg,
@@ -270,8 +276,9 @@
   }
 
   .#{$prefix}--transfer-list__invalid-icon {
+    // 16px tall in the message's 16px line, so the row is as tall as the
+    // helper text it replaces.
     min-inline-size: to-rem(16px);
-    margin-block: to-rem(1px) 0;
     margin-inline: to-rem(1px) 0;
     fill: $support-error;
   }
