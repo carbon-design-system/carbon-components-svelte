@@ -47,9 +47,9 @@ Pass a function to `copy` to replace the default clipboard behavior. It receives
 
 ## Tooltip
 
-The button shows a portalled tooltip on hover and focus, and the same surface shows the feedback after copying. Set `tooltipPosition` and `tooltipAlignment` to place it; see [CopyButton](/components/CopyButton#hover-tooltip) for the full behavior.
+The button shows a portalled tooltip on hover and focus, and the same surface shows the feedback after copying. Set `tooltipAlign` to place it, with Popover's `align` names; see [CopyButton](/components/CopyButton#hover-tooltip) for the full behavior.
 
-<CopyText text="f8a2c91d" tooltipPosition="right" />
+<CopyText text="f8a2c91d" tooltipAlign="right" />
 
 ## Description list
 
