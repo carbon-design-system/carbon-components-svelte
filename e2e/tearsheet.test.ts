@@ -141,6 +141,27 @@ test.describe("Tearsheet", () => {
     await expect(page.locator(".bx--tearsheet")).not.toHaveClass(/is-visible/);
   });
 
+  test("returns focus when closed at the start of the opening slide", async ({
+    page,
+  }) => {
+    await page.goto("/tearsheet.html?closed");
+    await page.getByTestId("open").focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("textbox", { name: "Connection name" }),
+    ).toBeFocused();
+    // Hold the slide at its start, so the close cancels it and no
+    // `transitionend` fires.
+    await page.evaluate(() => {
+      for (const animation of document.getAnimations()) {
+        animation.pause();
+        animation.currentTime = 0;
+      }
+    });
+    await page.keyboard.press("Escape");
+    await expect(page.getByTestId("open")).toBeFocused();
+  });
+
   test("menus in the body portal out of it and stay on top", async ({
     page,
   }) => {
