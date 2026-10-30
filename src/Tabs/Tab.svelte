@@ -66,8 +66,18 @@
   export let ref = null;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipDirection` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the direction of the tooltip relative to the tab.
    * Only used when the tab is rendered icon-only.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "bottom"}
    */
   export let tooltipDirection = "bottom";
@@ -75,6 +85,7 @@
   /**
    * Set the alignment of the tooltip relative to the tab.
    * Only used when the tab is rendered icon-only.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -83,6 +94,7 @@
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const {
@@ -166,6 +178,11 @@
   $: panelId = registered
     ? $contentByIndex[$tabsById[id].index]
     : initialTab?.panelId;
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipDirection, tooltipAlignment));
 </script>
 
 <li
@@ -327,8 +344,8 @@
       anchor={ref}
       text={label}
       enabled={!disabled}
-      direction={tooltipDirection}
-      align={tooltipAlignment}
+      direction={effectiveTooltipPosition}
+      align={effectiveTooltipAlignment}
       dismissOnClick={false}
     />
   {/if}

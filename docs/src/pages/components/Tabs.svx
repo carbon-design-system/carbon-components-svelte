@@ -430,15 +430,17 @@ Set `iconSize` to `"lg"` for large icon-only tabs. The tabs and their icons are 
 
 #### Tooltip placement
 
-The tooltip renders below the tab by default. Use `tooltipDirection` and
-`tooltipAlignment` to control placement. The tooltip automatically flips to the
+The tooltip renders below the tab by default. Use `tooltipAlign` to control
+placement, with Popover's `align` names: `"top"`, `"bottom-start"` and so on.
+It replaces `tooltipDirection` and `tooltipAlignment`, which still work and are
+deprecated. The tooltip automatically flips to the
 opposite side if there is not enough space.
 
 <Tabs iconOnly>
-  <Tab label="Search" icon={Search} tooltipDirection="top" tooltipAlignment="start" />
-  <Tab label="Activity" icon={Activity} tooltipDirection="top" />
-  <Tab label="Notifications" icon={Notification} tooltipDirection="top" />
-  <Tab label="Chat" icon={Chat} tooltipDirection="top" tooltipAlignment="end" />
+  <Tab label="Search" icon={Search} tooltipAlign="top-start" />
+  <Tab label="Activity" icon={Activity} tooltipAlign="top" />
+  <Tab label="Notifications" icon={Notification} tooltipAlign="top" />
+  <Tab label="Chat" icon={Chat} tooltipAlign="top-end" />
   <svelte:fragment slot="content">
     <TabContent>Tab Panel 1</TabContent>
     <TabContent>Tab Panel 2</TabContent>
