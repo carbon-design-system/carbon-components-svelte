@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import TearsheetComponent from "carbon-components-svelte/Tearsheet/Tearsheet.svelte";
 import { tick } from "svelte";
 import { stubViewport } from "../utils/match-media";
 import { user } from "../utils/user";
@@ -46,12 +47,20 @@ describe("Tearsheet", () => {
     render(Tearsheet, {
       props: {
         open: true,
-        label: "Step 2 of 4",
-        description: "Connect a data source.",
+        labelText: "Step 2 of 4",
+        descriptionText: "Connect a data source.",
       },
     });
     expect(getDialog()).toHaveAccessibleDescription("Connect a data source.");
     expect(screen.getByText("Step 2 of 4")).toHaveClass("bx--tearsheet__label");
+  });
+
+  it("passes a `title` attribute to the dialog, apart from `titleText`", () => {
+    render(TearsheetComponent, {
+      props: { open: true, titleText: "Create integration", title: "Tip" },
+    });
+    const dialog = screen.getByRole("dialog", { name: "Create integration" });
+    expect(dialog).toHaveAttribute("title", "Tip");
   });
 
   it("sets the narrow class", () => {

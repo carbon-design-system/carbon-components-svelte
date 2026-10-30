@@ -27,7 +27,7 @@
   <Button on:click={() => (open = true)}>Schedule a backup</Button>
 </Content>
 
-<Tearsheet bind:open title="Schedule a backup" preventCloseOnClickOutside>
+<Tearsheet bind:open titleText="Schedule a backup" preventCloseOnClickOutside>
   <Stack gap={6}>
     <Dropdown labelText="Region" selectedId="us-east" items={regions} />
     <ComboBox
