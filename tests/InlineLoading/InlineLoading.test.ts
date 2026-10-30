@@ -257,56 +257,133 @@ describe("InlineLoading", () => {
   });
 
   describe("delay", () => {
-    it("does not render until the delay elapses while active", async () => {
-      const { getByTestId } = render(InlineLoadingDelay, {
-        props: { status: "active", delay: 200 },
+    function getStatus() {
+      return screen.getByTestId("delayed").querySelector(".bx--inline-loading");
+    }
+
+    it("renders a waiting spinner hidden until the delay elapses", async () => {
+      render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200, description: "Saving" },
       });
-      const wrapper = getByTestId("delayed");
+      const container = getStatus();
 
-      expect(
-        wrapper.querySelector(".bx--inline-loading"),
-      ).not.toBeInTheDocument();
+      expect(container).toHaveClass("bx--inline-loading--delayed");
+      expect(container).toHaveStyle({ animationDuration: "200ms" });
+      expect(container?.querySelector(".bx--loading")).toBeInTheDocument();
 
-      await vi.advanceTimersByTimeAsync(200);
+      await vi.advanceTimersByTimeAsync(199);
+      expect(getStatus()).toHaveClass("bx--inline-loading--delayed");
 
-      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+      await vi.advanceTimersByTimeAsync(1);
+      expect(getStatus()).toBe(container);
+      expect(container).not.toHaveClass("bx--inline-loading--delayed");
     });
 
-    it("renders immediately when status leaves active before the delay elapses", async () => {
-      const { getByTestId, rerender } = render(InlineLoadingDelay, {
-        props: { status: "active", delay: 200 },
+    it("shows the result at once when work ends within the delay", async () => {
+      const { rerender } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200, description: "Saving" },
       });
-      const wrapper = getByTestId("delayed");
 
       await vi.advanceTimersByTimeAsync(100);
+      await rerender({ status: "finished", delay: 200, description: "Saved" });
+
+      expect(getStatus()).not.toHaveClass("bx--inline-loading--delayed");
+      expect(
+        getStatus()?.querySelector(".bx--inline-loading__checkmark-container"),
+      ).toBeInTheDocument();
+      expect(getStatus()).toHaveTextContent("Saved");
+    });
+
+    it("holds a shown spinner and its text for the minimum before the result", async () => {
+      const onSuccess = vi.fn();
+      const { rerender } = render(InlineLoadingDelay, {
+        props: {
+          status: "active",
+          delay: 200,
+          description: "Saving",
+          onSuccess,
+        },
+      });
+
+      await vi.advanceTimersByTimeAsync(300);
+      await rerender({
+        status: "finished",
+        delay: 200,
+        description: "Saved",
+        onSuccess,
+      });
+      expect(getStatus()?.querySelector(".bx--loading")).toBeInTheDocument();
+      expect(getStatus()).toHaveTextContent("Saving");
+
+      // Shown at 200 ms, so the 500 ms minimum ends at 700 ms.
+      await vi.advanceTimersByTimeAsync(399);
+      expect(getStatus()?.querySelector(".bx--loading")).toBeInTheDocument();
+
+      await vi.advanceTimersByTimeAsync(1);
+      expect(
+        getStatus()?.querySelector(".bx--inline-loading__checkmark-container"),
+      ).toBeInTheDocument();
+      expect(getStatus()).toHaveTextContent("Saved");
+
+      // `success` waits `successDelay` from when the checkmark shows.
+      await vi.advanceTimersByTimeAsync(999);
+      expect(onSuccess).not.toHaveBeenCalled();
+      await vi.advanceTimersByTimeAsync(1);
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
+
+    it("holds the spinner before an error too", async () => {
+      const { rerender } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200 },
+      });
+
+      await vi.advanceTimersByTimeAsync(300);
+      await rerender({ status: "error", delay: 200 });
+      expect(getStatus()).toHaveAttribute("role", "status");
+
+      await vi.advanceTimersByTimeAsync(400);
+      expect(getStatus()).toHaveAttribute("role", "alert");
+    });
+
+    it("shows the result at once when the work outlasts the minimum", async () => {
+      const { rerender } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200 },
+      });
+
+      await vi.advanceTimersByTimeAsync(1000);
       await rerender({ status: "finished", delay: 200 });
 
-      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
       expect(
-        wrapper.querySelector(".bx--inline-loading__checkmark-container"),
+        getStatus()?.querySelector(".bx--inline-loading__checkmark-container"),
       ).toBeInTheDocument();
     });
 
     // Regression: a resting status renders immediately, but re-entering
     // "active" from that resting state must still honor the delay rather
     // than inheriting the already-true visibility.
-    it("re-hides when re-entering active from a resting status", async () => {
-      const { getByTestId, rerender } = render(InlineLoadingDelay, {
+    it("waits again when re-entering active from a resting status", async () => {
+      const { rerender } = render(InlineLoadingDelay, {
         props: { status: "inactive", delay: 200 },
       });
-      const wrapper = getByTestId("delayed");
-
-      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+      expect(getStatus()).not.toHaveClass("bx--inline-loading--delayed");
 
       await rerender({ status: "active", delay: 200 });
-
-      expect(
-        wrapper.querySelector(".bx--inline-loading"),
-      ).not.toBeInTheDocument();
+      expect(getStatus()).toHaveClass("bx--inline-loading--delayed");
 
       await vi.advanceTimersByTimeAsync(200);
+      expect(getStatus()).not.toHaveClass("bx--inline-loading--delayed");
+    });
 
-      expect(wrapper.querySelector(".bx--inline-loading")).toBeInTheDocument();
+    it("does not restart the delay when the description changes", async () => {
+      const { rerender } = render(InlineLoadingDelay, {
+        props: { status: "active", delay: 200, description: "Saving" },
+      });
+
+      await vi.advanceTimersByTimeAsync(150);
+      await rerender({ status: "active", delay: 200, description: "Saving 2" });
+      await vi.advanceTimersByTimeAsync(50);
+
+      expect(getStatus()).not.toHaveClass("bx--inline-loading--delayed");
     });
 
     it("clears the pending timer when unmounted during the delay", () => {
