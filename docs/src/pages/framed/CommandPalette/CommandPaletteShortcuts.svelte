@@ -2,7 +2,7 @@
   import {
     Button,
     CommandPalette,
-    formatShortcut,
+    Kbd,
     onShortcut,
     Stack,
   } from "carbon-components-svelte";
@@ -23,7 +23,7 @@
 
 <Stack gap={5}>
   <Button on:click={() => (open = true)}>Open command palette</Button>
-  <p>Or press {formatShortcut("mod+k").join(" ")} anywhere on the page.</p>
+  <p>Or press <Kbd shortcut="mod+k" /> anywhere on the page.</p>
 </Stack>
 
 <CommandPalette bind:open {items} />

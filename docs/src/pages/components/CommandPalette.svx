@@ -3,20 +3,13 @@ components: ["CommandPalette"]
 description: Command palettes let users find and run commands, jump to pages and change settings from the keyboard, without leaving what they are doing.
 ---
 
-<script>
-  import { Callout } from "carbon-components-svelte";
-</script>
-
-<Callout
-  title="Experimental"
-  subtitle="Carbon has no command palette. CommandPalette follows Carbon's modal, search and list box patterns, and its API may change in a minor release."
-/>
-
 ## Basic
 
-Pass the commands as `items`, each with a unique id and display text, and bind `open`. Focus moves to the search field when the palette opens and returns to the trigger when it closes. The first match is highlighted, so <DocKbd label="Enter" /> runs it. Arrow keys move the highlight, and <DocKbd label="Escape" /> or a click outside closes the palette.
+Pass the commands as `items`, each with a unique id and display text, and bind `open`. Focus moves to the search field when the palette opens and returns to the trigger when it closes. The first match is highlighted, so <DocKbd label="Enter" /> runs it. The arrow keys move the highlight, <DocKbd label="Page Up" /> and <DocKbd label="Page Down" /> move it by ten, and <DocKbd label="Escape" /> or a click outside closes the palette.
 
-Listen for `select` to run a command. The palette closes after it; call `event.preventDefault()` to keep it open. The query clears on close.
+Listen for `select` to run a command. Its detail holds the command's id and item. The palette closes after it; call `event.preventDefault()` to keep it open. The query clears on close.
+
+Carbon has no command palette. This one follows Carbon's modal, search and list box patterns, is marked experimental, and its API may change in a minor release.
 
 <FileSource src="/framed/CommandPalette/CommandPalette" />
 
@@ -26,23 +19,31 @@ Set `size` to control the height of the search field and the rows. The default i
 
 <FileSource src="/framed/CommandPalette/CommandPaletteSizes" />
 
+## Item data
+
+Commands can keep the shape your data already has. Set `itemToId`, `itemToString` and `itemToGroup` to read the id, the label and the group from each item. The palette does not change the items, and `select` passes back the item you gave it.
+
+<FileSource src="/framed/CommandPalette/CommandPaletteAccessors" />
+
 ## Matching
 
-Typing filters the commands with fuzzy matching and ranks the best matches first: a prefix, then a word start, then a match inside a word, then scattered letters. Matched characters are emphasized. A description matches only when it holds the query as one run, so scattered letters in long text don't pull in unrelated commands. Add `keywords` to match terms that the label does not show. Screen readers hear the number of results as the user types.
+Typing filters the commands with fuzzy matching and ranks the best matches first: a prefix, then a word start, then a match inside a word, then scattered letters. Matched characters are emphasized. A description matches only when it holds the query as one run, so scattered letters in long text don't pull in unrelated commands. Add `keywords` to match terms that the label does not show. Screen readers hear the number of results once the user stops typing.
 
 Pass `match` to change how text is matched. It receives the text and the query and returns whether it matched, an optional score and the indices to emphasize. Return no indices to drop the emphasis.
 
+Labels and descriptions wrap. On small screens the key caps are hidden first, so the label keeps the row.
+
 ## Groups
 
-Set `group` on items to show them under a header. Ungrouped items come first. While the user types, each group moves by its best match. Use the `group` slot to render the header yourself.
+Set `group` on items to show them under a header, or read the group with `itemToGroup`. Ungrouped items come first. While the user types, each group moves by its best match. Use the `group` slot to render the header yourself.
 
 <FileSource src="/framed/CommandPalette/CommandPaletteGroups" />
 
 ## Keyboard shortcuts
 
-Set `shortcut` on an item to show its key caps, such as `"mod+shift+d"`. `mod` reads <DocKbd label="⌘" /> on macOS and iOS and <DocKbd label="Ctrl" /> elsewhere. The palette shows shortcuts but does not run them.
+Set `shortcut` on an item to show its keys, such as `"mod+shift+d"`. `mod` reads <DocKbd label="⌘" /> on macOS and iOS and <DocKbd label="Ctrl" /> elsewhere. The option names the keys in `aria-keyshortcuts`. The palette shows shortcuts but does not run them, and it adds no listener to the page.
 
-To open the palette from anywhere, call `onShortcut` in `onMount`. It returns the function that removes the listener, so `onMount` cleans it up. Nothing listens until you call it. A shortcut without a modifier, such as <DocKbd label="/" />, does not fire while the user types in a field. `formatShortcut` returns the key caps for your own labels.
+To open the palette from anywhere, call `onShortcut` in `onMount`. It returns the function that removes the listener, so `onMount` cleans it up. Nothing listens until you call it. A shortcut without a modifier, such as <DocKbd label="/" />, does not fire while the user types in a field. Show the shortcut next to your trigger with [Kbd](/components/Kbd).
 
 <FileSource src="/framed/CommandPalette/CommandPaletteShortcuts" />
 
@@ -72,7 +73,7 @@ Use the `footer` slot for hints or secondary actions under the results.
 
 ## Layering
 
-The palette starts a [Layer](/components/Layer) wherever it renders, like a modal, so it looks the same when it opens from a layered surface.
+The palette starts a [Layer](/components/Layer) wherever it renders, like a modal, so it looks the same when it opens from a layered surface. It stacks above an open [Modal](/components/Modal), whatever their order on the page.
 
 <FileSource src="/framed/CommandPalette/CommandPaletteLayer" />
 
@@ -82,13 +83,15 @@ The palette is 640px wide, or the window width on small screens. Set the `--ccs-
 
 ## Right-to-left
 
-Inside a `dir="rtl"` page or a [LayoutDirection](/components/LayoutDirection), the icons, the highlight bar and the key caps move to the other side. To render the palette outside a transformed container, wrap it in a [Portal](/components/Portal), which keeps the direction and the [ThemeZone](/components/ThemeZone) theme.
+Inside a `dir="rtl"` page or a [LayoutDirection](/components/LayoutDirection), the icons, the highlight bar and the keys move to the other side. The keys keep their left-to-right order, as platform menus show them. To render the palette outside a transformed container, wrap it in a [Portal](/components/Portal), which keeps the direction and the [ThemeZone](/components/ThemeZone) theme.
 
 <FileSource src="/framed/CommandPalette/CommandPaletteRtl" />
 
 ## Async results
 
-For results from a server, set `shouldFilter` to `false` and update `items` on `search`. Set `debounce` to wait for a pause in typing before `search` fires, and set `loading` while the request runs.
+For results from a server, set `shouldFilter` to `false` and update `items` on `search`. Set `debounce` to wait for a pause in typing before `search` fires; the field and the emphasis still update on every key. Set `loading` while the request runs. The list is marked busy at once, and `loadingDelay` holds the loading row back so fast responses show none.
+
+Drop a response that a newer search replaced. When a search fails, keep the results you have and show the error with a retry button in the `footer` slot. In this example, a query with "cron" fails.
 
 <FileSource src="/framed/CommandPalette/CommandPaletteAsync" />
 

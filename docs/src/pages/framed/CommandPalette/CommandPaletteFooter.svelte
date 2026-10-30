@@ -1,5 +1,5 @@
 <script>
-  import { Button, CommandPalette } from "carbon-components-svelte";
+  import { Button, CommandPalette, Kbd, Stack } from "carbon-components-svelte";
 
   let open = true;
 
@@ -13,7 +13,12 @@
 <Button on:click={() => (open = true)}>Open command palette</Button>
 
 <CommandPalette bind:open {items}>
-  <svelte:fragment slot="footer">
-    ↑ ↓ to move · Enter to run · Esc to close
-  </svelte:fragment>
+  <Stack slot="footer" orientation="horizontal" gap={5}>
+    <span
+      ><Kbd variant="muted" shortcut="arrowup" />
+      <Kbd variant="muted" shortcut="arrowdown" /> to move</span
+    >
+    <span><Kbd variant="muted" shortcut="enter" /> to run</span>
+    <span><Kbd variant="muted" shortcut="escape" /> to close</span>
+  </Stack>
 </CommandPalette>
