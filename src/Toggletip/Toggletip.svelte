@@ -7,7 +7,9 @@
   /**
    * @event {null} open
    * @event {null} close
-   * @slot {{}} labelText - Set the toggletip label, rendered beside the button.
+   * @slot {{}} labelChildren - Set the toggletip label, rendered beside the button.
+   * @deprecated use the `labelChildren` slot
+   * @slot {{}} labelText
    * @slot {{}} icon - Override the button icon.
    */
 
@@ -49,7 +51,7 @@
 
   /**
    * Set the toggletip label text.
-   * Alternatively, use the "labelText" slot.
+   * Alternatively, use the "labelChildren" slot.
    */
   export let labelText = "";
 
@@ -211,9 +213,10 @@
 <!-- Flex wrapper so the label and button align without an inter-element
 whitespace gap; the label's end margin is then the only spacing. -->
 <span class:bx--toggletip-container={true}>
-  {#if labelText || $$slots.labelText}
+  {#if labelText || $$slots.labelChildren || $$slots.labelText}
     <span class:bx--toggletip-label={true}>
-      <slot name="labelText">{labelText}</slot>
+      <slot name="labelChildren"><slot name="labelText">{labelText}</slot></slot
+      >
     </span>
   {/if}
 

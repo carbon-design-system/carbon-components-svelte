@@ -5,6 +5,7 @@ import { nextFrame } from "../utils/next-frame";
 import { user } from "../utils/user";
 import Toggletip from "./Toggletip.test.svelte";
 import ToggletipInModal from "./ToggletipInModal.test.svelte";
+import ToggletipLabelSlot from "./ToggletipLabelSlot.test.svelte";
 
 /**
  * Listeners are enabled on the animation frame after opening, on top of the
@@ -275,6 +276,24 @@ describe("Toggletip", () => {
       render(Toggletip, { props: { labelText: "Details" } });
 
       expect(screen.getByText("Details")).toHaveClass("bx--toggletip-label");
+    });
+
+    it.each([
+      ["labelChildren", "New label"],
+      ["labelText", "Old label"],
+    ] as const)("renders the %s slot as the label", (slots, text) => {
+      render(ToggletipLabelSlot, { props: { slots } });
+
+      expect(screen.getByText(text).parentElement).toHaveClass(
+        "bx--toggletip-label",
+      );
+    });
+
+    it("prefers the labelChildren slot over the labelText slot", () => {
+      render(ToggletipLabelSlot, { props: { slots: "both" } });
+
+      expect(screen.getByText("New label")).toBeInTheDocument();
+      expect(screen.queryByText("Old label")).toBeNull();
     });
   });
 });
