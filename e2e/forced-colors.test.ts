@@ -157,6 +157,39 @@ async function ringShare(
   );
 }
 
+// Colors (`r,g,b`) of the pixels in page rows `ys`, from `x` to `x + width`.
+async function pixelRows(page: Page, x: number, width: number, ys: number[]) {
+  const top = Math.round(Math.min(...ys));
+  const clip = {
+    x: Math.round(x),
+    y: top,
+    width: Math.round(width),
+    height: Math.round(Math.max(...ys)) - top + 1,
+  };
+  const png = (await page.screenshot({ clip })).toString("base64");
+  return page.evaluate(
+    async ([png, rows]) => {
+      const img = new Image();
+      img.src = `data:image/png;base64,${png}`;
+      await img.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("no 2d context");
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, img.width, img.height);
+      return rows.map((y) =>
+        Array.from({ length: img.width }, (_, x) => {
+          const i = (y * img.width + x) * 4;
+          return `${data[i]},${data[i + 1]},${data[i + 2]}`;
+        }),
+      );
+    },
+    [png, ys.map((y) => Math.round(y) - top)] as const,
+  );
+}
+
 test.describe("forced colors", () => {
   let system: Record<SystemColor, string>;
 
@@ -971,6 +1004,44 @@ test.describe("forced colors", () => {
         .soft(await style(page, close), `${group} clear button focus`)
         .toMatchObject({ outline: "solid 2px" });
       await page.fill(`${scope} input`, "");
+    }
+  });
+
+  // The menu drew its 1px edge outside its own box, 1px past the field's
+  // sides and over the last row of the field's focus ring, and the field
+  // drew a 1px edge outside its 2px resting box.
+  test("an open list box's menu lines up with its field", async ({ page }) => {
+    const rgb = (color: string) => color.match(/\d+/g)?.join(",");
+    const canvas = rgb(system.Canvas);
+    const text = rgb(system.CanvasText);
+    for (const [field, trigger] of [
+      ["dropdown", ".bx--list-box__field"],
+      ["combobox", "input"],
+      ["multiselect", ".bx--list-box__field"],
+    ]) {
+      const scope = `[data-testid=fields] [data-testid=${field}]`;
+      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+      await page.click(`${scope} ${trigger}`);
+      const option = page.locator(`${scope} .bx--list-box__menu-item`).nth(2);
+      await expect(option).toBeVisible();
+      await page.mouse.move(0, 0);
+      const box = await page.locator(`${scope} ${trigger}`).boundingBox();
+      const row = await option.boundingBox();
+      if (!box || !row) throw new Error(`no ${field} box`);
+      const [fieldRow = [], optionRow = [], ringRow = []] = await pixelRows(
+        page,
+        box.x - 4,
+        box.width / 2,
+        [
+          box.y + box.height / 2,
+          row.y + row.height / 2,
+          box.y + box.height - 1,
+        ],
+      );
+      const edge = (pixels: string[]) => pixels.findIndex((c) => c !== canvas);
+      expect.soft(edge(optionRow), `${field} menu edge`).toBe(edge(fieldRow));
+      expect.soft(ringRow.at(-1), `${field} ring`).not.toBe(text);
+      await page.keyboard.press("Escape");
     }
   });
 

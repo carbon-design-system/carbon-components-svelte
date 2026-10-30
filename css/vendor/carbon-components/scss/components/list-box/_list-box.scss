@@ -953,17 +953,35 @@ $list-box-width: 100%;
 // colors repaint it as `CanvasText`, so it sat on the next option's top
 // divider and every divider read twice as thick, with a stray line under
 // the last option. The bottom border goes, and the top divider stays.
+//
+// The field and the menu drew their edges with `high-contrast-mode`'s 1px
+// outline, which sits outside the box: around the field's 2px resting box,
+// and past the field's sides and over its focus ring for the menu. Both
+// draw the 2px inset box every other field draws. In ComboBox the input
+// draws it, and the field's outline would cover the input's focus ring.
 
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-/// One divider between list box options in forced-colors mode.
+/// One divider between list box options, and one edge around the field and
+/// the menu, in forced-colors mode.
 /// @access private
 /// @group components
 @mixin list-box-forced-colors {
   @media (forced-colors: active) {
     .#{$prefix}--list-box__menu-item__option {
       border-bottom-style: none;
+    }
+
+    // Ties `.bx--dropdown .bx--list-box__field` in the dropdown styles.
+    .#{$prefix}--list-box__field,
+    .#{$prefix}--dropdown .#{$prefix}--list-box__field,
+    .#{$prefix}--list-box__menu {
+      @include focus-outline("reset");
+    }
+
+    .#{$prefix}--combo-box .#{$prefix}--list-box__field {
+      outline-style: none;
     }
   }
 }
