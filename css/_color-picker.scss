@@ -318,10 +318,21 @@
     .#{$prefix}--color-picker__thumb:focus {
       outline-color: Highlight;
     }
+
+    // Forced colors drop the chosen swatch's `box-shadow`, which leaves it
+    // the same 1px border as the rest.
+    .#{$prefix}--color-picker__swatch--selected {
+      border-width: 2px;
+      border-color: Highlight;
+    }
   }
 
   @media (any-hover: hover) {
-    .#{$prefix}--color-picker__swatch:not(:disabled):hover {
+    // The chosen swatch keeps its own border, which forced colors draw in
+    // `Highlight`.
+    .#{$prefix}--color-picker__swatch:not(:disabled):not(
+        .#{$prefix}--color-picker__swatch--selected
+      ):hover {
       border-color: $text-primary;
     }
   }

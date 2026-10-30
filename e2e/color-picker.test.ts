@@ -279,6 +279,9 @@ test.describe("ColorPicker", () => {
       await expect(
         picker(page).locator(".bx--color-picker__swatch--selected svg").first(),
       ).toBeVisible();
+      await expect(
+        picker(page).locator(".bx--color-picker__swatch--selected").first(),
+      ).toHaveCSS("border-top-color", ring.highlight);
     } finally {
       await page.emulateMedia({ forcedColors: "none" });
     }
