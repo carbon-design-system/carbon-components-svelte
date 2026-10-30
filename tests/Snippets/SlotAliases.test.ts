@@ -19,4 +19,12 @@ describe("Svelte 5 snippets for renamed slots", () => {
     );
     expect(trigger).not.toHaveTextContent("Ignored");
   });
+
+  it("renders the Modal labelChildren snippet as the label", () => {
+    render(SlotAliases);
+
+    expect(
+      screen.getByTestId("modal-label-children").parentElement,
+    ).toHaveClass("bx--modal-header__label");
+  });
 });

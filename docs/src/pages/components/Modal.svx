@@ -83,7 +83,7 @@ Set `lazy` to build the body and footer the first time the modal opens, then kee
 
 ### Custom heading and label
 
-Override the plain-text `modalHeading` and `modalLabel` with the `heading` and `label` slots when you need richer markup, such as a status tag next to the title.
+Override the plain-text `modalHeading` and `modalLabel` with the `heading` and `labelChildren` slots when you need richer markup, such as a status tag next to the title.
 
 <FileSource src="/framed/Modal/ModalCustomHeading" />
 

@@ -12,7 +12,7 @@
   secondaryButtonText="Cancel"
   on:click:button--secondary={() => (open = false)}
 >
-  <svelte:fragment slot="label">
+  <svelte:fragment slot="labelChildren">
     Cloudant <Tag type="green" size="sm">Beta</Tag>
   </svelte:fragment>
   <svelte:fragment slot="heading">Create database</svelte:fragment>

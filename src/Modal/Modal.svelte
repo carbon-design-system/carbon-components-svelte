@@ -27,6 +27,12 @@
    */
 
   /**
+   * @slot {{}} labelChildren - Custom label content. Replaces `modalLabel`.
+   * @deprecated use the `labelChildren` slot
+   * @slot {{}} label
+   */
+
+  /**
    * Set the size of the modal.
    * Also accepts Carbon v11's `"md"`, the default width.
    * @type {"xs" | "sm" | "md" | "lg" | undefined}
@@ -59,6 +65,7 @@
 
   /**
    * Specify the modal label.
+   * Alternatively, use the "labelChildren" slot.
    * @type {string | undefined}
    */
   export let modalLabel = undefined;
@@ -443,9 +450,11 @@
           </Button>
         </div>
       {/if}
-      {#if modalLabel || $$slots.label}
+      {#if modalLabel || $$slots.labelChildren || $$slots.label}
         <h2 id={modalLabelId} class:bx--modal-header__label={true}>
-          <slot name="label">{modalLabel}</slot>
+          <slot name="labelChildren"
+            ><slot name="label">{modalLabel}</slot></slot
+          >
         </h2>
       {/if}
       <h2 id={modalHeadingId} class:bx--modal-header__heading={true}>
