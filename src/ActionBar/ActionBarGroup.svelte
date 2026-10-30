@@ -44,13 +44,17 @@
   const sharedSelection = writable(selection);
   /** @type {import("svelte/store").Writable<string | number | undefined>} */
   const sharedValue = writable(value);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
+  const sharedLabel = writable(labelText);
   $: sharedSelection.set(selection);
   $: sharedValue.set(value);
+  $: sharedLabel.set(labelText);
 
   setContext("carbon:ActionBarGroup", {
     id,
     selection: sharedSelection,
     value: sharedValue,
+    labelText: sharedLabel,
     /** @param {string | number} next */
     select(next) {
       if (value === next) return;

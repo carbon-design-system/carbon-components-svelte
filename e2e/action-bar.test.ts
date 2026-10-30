@@ -182,6 +182,28 @@ test.describe("ActionBar", () => {
     await expect(trigger).toBeFocused();
   });
 
+  test("keeps a collapsed single choice a radio group in the menu", async ({
+    page,
+  }) => {
+    await page.goto("/action-bar.html");
+    await resize(page, 200);
+    await more(page).click();
+    const group = page.getByRole("group", { name: "Alignment" });
+    await expect(group.getByRole("menuitemradio")).toHaveCount(3);
+    await expect(
+      group.getByRole("menuitemradio", { name: "Align left" }),
+    ).toHaveAttribute("aria-checked", "true");
+    await group.getByRole("menuitemradio", { name: "Align center" }).click();
+    await expect(page.getByTestId("align")).toHaveText("center");
+    await more(page).click();
+    await expect(
+      group.getByRole("menuitemradio", { name: "Align center" }),
+    ).toHaveAttribute("aria-checked", "true");
+    await expect(
+      group.getByRole("menuitemradio", { name: "Align left" }),
+    ).toHaveAttribute("aria-checked", "false");
+  });
+
   test("closes the menu opened by the pointer with Escape", async ({
     page,
   }) => {

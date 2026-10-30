@@ -116,6 +116,8 @@
   const tabStopId = bar?.tabStopId ?? readable(null);
   const groupSelection = group?.selection ?? readable("none");
   const groupValue = group?.value ?? readable(undefined);
+  /** @type {import("svelte/store").Readable<string | undefined>} */
+  const groupLabel = group?.labelText ?? readable(undefined);
 
   /** @type {(() => void) | undefined} */
   let unregister;
@@ -154,6 +156,8 @@
     icon,
     disabled,
     checked: radio || pressed !== undefined ? !!checked : undefined,
+    radio,
+    groupLabel: $groupLabel ?? "",
     shortcut,
     priority,
     pinned,
@@ -175,6 +179,8 @@
         icon,
         disabled,
         checked: radio || pressed !== undefined ? !!checked : undefined,
+        radio,
+        groupLabel: $groupLabel ?? "",
         shortcut,
         danger,
         activate,

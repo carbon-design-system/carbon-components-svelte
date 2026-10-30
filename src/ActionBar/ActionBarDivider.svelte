@@ -33,6 +33,8 @@
       icon: undefined,
       disabled: false,
       checked: undefined,
+      radio: false,
+      groupLabel: "",
       shortcut: "",
       danger: false,
       activate() {},

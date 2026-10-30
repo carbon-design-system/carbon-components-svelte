@@ -13,6 +13,8 @@
    * @property {import("../utils/icon-component.js").IconComponent | undefined} icon
    * @property {boolean} disabled
    * @property {boolean | undefined} checked - Set for a toggle or a radio.
+   * @property {boolean} radio - A choice of a `selection="single"` group.
+   * @property {string} groupLabel - The name of its group, for a radio.
    * @property {string} shortcut
    * @property {boolean} danger
    * @property {() => void} activate - Click the button the entry stands for.
@@ -91,6 +93,7 @@
   import Menu from "../Menu/Menu.svelte";
   import MenuDivider from "../Menu/MenuDivider.svelte";
   import MenuItem from "../Menu/MenuItem.svelte";
+  import MenuItemRadioGroup from "../Menu/MenuItemRadioGroup.svelte";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
@@ -164,14 +167,21 @@
   }
 
   /**
+   * @typedef {{ type: "divider"; id: string }
+   *   | { type: "item"; entry: ActionBarEntry }
+   *   | { type: "radio"; id: string; label: string; selectedId: string; entries: ActionBarEntry[] }} MenuRow
+   */
+
+  /**
    * The "More" menu: the collapsed items in order, with a divider where one
-   * sat between two of them.
+   * sat between two of them. The collapsed choices of a `selection="single"`
+   * group stay one radio group.
    * @param {ActionBarEntry[]} list
    * @param {Set<string>} collapsed
-   * @returns {Array<{ type: "divider"; id: string } | { type: "item"; entry: ActionBarEntry }>}
+   * @returns {MenuRow[]}
    */
   function buildMenu(list, collapsed) {
-    /** @type {Array<{ type: "divider"; id: string } | { type: "item"; entry: ActionBarEntry }>} */
+    /** @type {MenuRow[]} */
     const model = [];
     let divider = "";
     for (const entry of list) {
@@ -181,11 +191,31 @@
         if (divider && model.length > 0)
           model.push({ type: "divider", id: divider });
         divider = "";
-        model.push({ type: "item", entry });
+        const last = model[model.length - 1];
+        const selectedId = entry.checked ? menuItemId(entry) : "";
+        if (!entry.radio) model.push({ type: "item", entry });
+        else if (last?.type === "radio" && last.id === entry.groupId) {
+          last.entries.push(entry);
+          if (selectedId) last.selectedId = selectedId;
+        } else
+          model.push({
+            type: "radio",
+            id: entry.groupId ?? entry.id,
+            label: entry.groupLabel,
+            selectedId,
+            entries: [entry],
+          });
       }
     }
     return model;
   }
+
+  /**
+   * The id of a collapsed entry's item in the menu. The entry's own id is
+   * on its button, which stays in the bar.
+   * @param {ActionBarEntry} entry
+   */
+  const menuItemId = (entry) => `${entry.id}-menu`;
 
   /** @returns {Array<{ id: string; node: HTMLElement; focus?: () => void }>} */
   function stops() {
@@ -581,9 +611,22 @@
     bind:open={moreOpen}
     on:close={handleMenuClose}
   >
-    {#each menuModel as row (row.type === "divider" ? `d-${row.id}` : row.entry.id)}
+    {#each menuModel as row (row.type === "item" ? row.entry.id : `${row.type}-${row.id}`)}
       {#if row.type === "divider"}
         <MenuDivider />
+      {:else if row.type === "radio"}
+        <MenuItemRadioGroup labelText={row.label} selectedId={row.selectedId}>
+          {#each row.entries as entry (entry.id)}
+            <MenuItem
+              id={menuItemId(entry)}
+              labelText={entry.label}
+              icon={entry.icon}
+              disabled={entry.disabled}
+              shortcut={entry.shortcut}
+              on:click={() => entry.activate()}
+            />
+          {/each}
+        </MenuItemRadioGroup>
       {:else}
         <MenuItem
           labelText={row.entry.label}
