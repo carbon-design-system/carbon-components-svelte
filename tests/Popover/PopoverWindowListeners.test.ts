@@ -28,4 +28,21 @@ describe("Popover window listeners", () => {
     await flushDismiss();
     expect(netListenerCalls(add, remove, "click")).toBe(1);
   });
+
+  it("open popovers share one window resize listener, removed on close", async () => {
+    const first = render(Popover, { props: { open: true } });
+    render(Popover, { props: { open: true } });
+    render(Popover, { props: { open: false } });
+    expect(netListenerCalls(add, remove, "resize")).toBe(1);
+    await first.rerender({ open: false });
+    expect(netListenerCalls(add, remove, "resize")).toBe(1);
+    first.unmount();
+    expect(netListenerCalls(add, remove, "resize")).toBe(1);
+  });
+
+  it("a closed or relative popover listens for no resize", () => {
+    render(Popover, { props: { open: false } });
+    render(Popover, { props: { open: true, relative: true } });
+    expect(netListenerCalls(add, remove, "resize")).toBe(0);
+  });
 });
