@@ -16,8 +16,8 @@
 
 <Tearsheet
   bind:open
-  title="Create environment"
-  description="Environments isolate configuration and secrets."
+  titleText="Create environment"
+  descriptionText="Environments isolate configuration and secrets."
 >
   <svelte:fragment slot="headerActions">
     <Button kind="ghost" size="small">Import template</Button>

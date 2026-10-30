@@ -19,8 +19,8 @@
 <Tearsheet
   bind:open
   size="narrow"
-  title="Release 2.14.0"
-  description="Deployed to production on 12 October."
+  titleText="Release 2.14.0"
+  descriptionText="Deployed to production on 12 October."
 >
   <StructuredList>
     <StructuredListBody>
