@@ -47,3 +47,13 @@
   />
 </div>
 <output data-testid="alpha-value">{alphaValue}</output>
+
+<div data-testid="disabled" style="width: 20rem; padding: 1rem">
+  <ColorPicker
+    value="#0f62fe"
+    alpha
+    format="rgb"
+    disabled
+    aria-label="Disabled color"
+  />
+</div>

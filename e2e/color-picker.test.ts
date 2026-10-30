@@ -202,6 +202,23 @@ test.describe("ColorPicker", () => {
     expect(gaps).toEqual({ across: 8, down: 8 });
   });
 
+  test("shows every part as disabled", async ({ page }) => {
+    const disabled = page.getByTestId("disabled");
+    await expect(disabled.locator(".bx--color-picker__preview")).toHaveCSS(
+      "opacity",
+      "0.5",
+    );
+    const colors = await disabled
+      .locator(".bx--color-picker__caption")
+      .evaluateAll((captions) =>
+        captions.map((caption) => getComputedStyle(caption).color),
+      );
+    const input = await disabled
+      .getByRole("spinbutton", { name: "Red" })
+      .evaluate((field) => getComputedStyle(field).color);
+    expect(new Set(colors)).toEqual(new Set([input]));
+  });
+
   test("holds a line for the contrast warning", async ({ page }) => {
     const alphaPicker = page.getByTestId("alpha");
     const root = alphaPicker.locator(".bx--color-picker");
@@ -318,6 +335,9 @@ test.describe("ColorPicker", () => {
   });
 
   test("draws the Gray 100 theme", async ({ page }) => {
+    // Fields fade their colors between themes. Axe read a field halfway
+    // through the fade and reported its contrast.
+    await page.addStyleTag({ content: "* { transition: none !important; }" });
     await page.evaluate(() => {
       document.documentElement.classList.add("bx--g100");
     });
