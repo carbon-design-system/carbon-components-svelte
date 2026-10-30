@@ -81,9 +81,9 @@
   .#{$prefix}--rich-text-editor__separator {
     flex: none;
     margin-inline: $carbon--spacing-02;
-    background-color: $border-subtle;
+    // A border, not a fill: forced colors remove fills and keep borders.
+    border-inline-start: 1px solid $border-subtle;
     block-size: to-rem(16px);
-    inline-size: 1px;
   }
 
   .#{$prefix}--rich-text-editor__glyph {
@@ -351,6 +351,22 @@
     .#{$prefix}--rich-text-editor__box
     .#{$prefix}--text-area__invalid-icon {
     @include fluid-status-icon(to-rem(8px));
+  }
+
+  // Forced colors repaint each ghost button's transparent border, which
+  // drew a box around every button in the field. Only the focused button
+  // and a pressed one (a `Highlight` fill) keep an edge.
+  @media (forced-colors: active) {
+    .#{$prefix}--rich-text-editor__toolbar .#{$prefix}--rich-text-editor__tool {
+      border-color: Canvas;
+    }
+
+    .#{$prefix}--rich-text-editor__toolbar
+      .#{$prefix}--rich-text-editor__tool:focus,
+    .#{$prefix}--rich-text-editor__toolbar
+      .#{$prefix}--rich-text-editor__tool.#{$prefix}--btn--selected {
+      border-color: Highlight;
+    }
   }
 }
 

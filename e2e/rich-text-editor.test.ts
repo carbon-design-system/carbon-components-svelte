@@ -624,6 +624,26 @@ test.describe("RichTextEditor", () => {
         .first()
         .evaluate((el) => getComputedStyle(el).backgroundColor);
       expect(pressed).not.toBe(resting);
+
+      // Resting buttons draw no box; only the pressed one has an edge.
+      const edges = await page.evaluate(() => {
+        const probe = document.createElement("span");
+        probe.style.color = "Canvas";
+        document.body.append(probe);
+        const canvas = getComputedStyle(probe).color;
+        probe.remove();
+        const tools = [
+          ...document.querySelectorAll(
+            ".bx--rich-text-editor__toolbar .bx--rich-text-editor__tool",
+          ),
+        ].slice(0, 16);
+        return tools
+          .filter((tool) => tool.getAttribute("aria-pressed") !== "true")
+          .filter((tool) => tool !== document.activeElement)
+          .filter((tool) => getComputedStyle(tool).borderTopColor !== canvas)
+          .length;
+      });
+      expect(edges).toBe(0);
     });
 
     test("toolbar buttons fill the toolbar, with the first icon on the text's edge", async ({
