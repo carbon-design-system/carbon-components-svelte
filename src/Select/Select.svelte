@@ -110,6 +110,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -283,6 +284,7 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
+        use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
       >
         <slot name="labelChildren">{labelText}</slot>
       </label>

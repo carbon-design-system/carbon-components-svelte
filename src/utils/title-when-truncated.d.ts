@@ -2,6 +2,8 @@
 export interface TitleWhenTruncatedOptions {
   /** Selector for the descendant whose text truncates. Defaults to `node`. */
   measure?: string;
+  /** Set to `false` to skip the element. Defaults to `true`. */
+  enabled?: boolean;
 }
 
 /**

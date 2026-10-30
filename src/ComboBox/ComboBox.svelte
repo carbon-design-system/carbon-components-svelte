@@ -419,6 +419,7 @@
   import { moveIndex } from "../utils/move-index.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { submitAttempts } from "../utils/submit-attempt.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
@@ -1171,6 +1172,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>

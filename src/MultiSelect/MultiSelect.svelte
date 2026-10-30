@@ -545,6 +545,7 @@
   import { overflowTitle } from "../utils/overflow-title.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rangeSlice } from "../utils/range-slice.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -1633,6 +1634,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>

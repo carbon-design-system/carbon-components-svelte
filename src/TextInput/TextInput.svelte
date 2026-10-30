@@ -129,6 +129,7 @@
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext(FORM_CONTEXT_KEY);
@@ -269,6 +270,7 @@
         class:bx--label--disabled={disabled}
         class:bx--label--inline={inline}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
+        use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
       >
         <slot name="labelChildren">{labelText}</slot>
       </label>

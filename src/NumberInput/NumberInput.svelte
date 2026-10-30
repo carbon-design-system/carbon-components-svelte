@@ -240,6 +240,7 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const SCRUB_STEP_PIXELS = 4;
@@ -608,6 +609,7 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
         class:bx--label--scrubbable={scrubEnabled}
+        use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
         use:pointerDrag={{
           enabled: scrubEnabled,
           onStart: handleScrubStart,

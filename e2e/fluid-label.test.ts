@@ -20,6 +20,8 @@ const TRUNCATING = [
   "hidden-label",
 ];
 
+const LABEL = "Billing contact for overdue invoices";
+
 test.beforeEach(async ({ page }) => {
   await page.goto("/fluid-label.html");
   await expect(page.getByTestId("start")).toBeVisible();
@@ -50,6 +52,32 @@ for (const id of TRUNCATING) {
     expect(style.inside).toBe(true);
   });
 }
+
+test("a cut-off fluid label shows its full text on hover", async ({ page }) => {
+  // The hidden label has no box to hover.
+  for (const id of TRUNCATING.filter((id) => id !== "hidden-label")) {
+    const label = page.getByTestId(id).locator(".bx--label").first();
+    // biome-ignore lint/performance/noAwaitInLoops: one hover at a time
+    await label.hover();
+    await expect.soft(label, id).toHaveAttribute("title", LABEL);
+  }
+
+  // A label that fits gets none.
+  const wide = page.getByTestId("wide").locator(".bx--label");
+  await expect(wide).toHaveCount(10);
+  for (const label of await wide.all()) {
+    // biome-ignore lint/performance/noAwaitInLoops: one hover at a time
+    const cut = await label.evaluate((el) => el.scrollWidth > el.clientWidth);
+    expect(cut).toBe(false);
+    await label.hover();
+    expect.soft(await label.getAttribute("title")).toBeNull();
+  }
+
+  // A slotted label scrolls to keep its control in reach, and gets none.
+  const slotted = page.getByTestId("slotted-label").locator(".bx--label");
+  await slotted.hover();
+  expect(await slotted.getAttribute("title")).toBeNull();
+});
 
 test("a fluid label with a slotted control stays inside the field", async ({
   page,

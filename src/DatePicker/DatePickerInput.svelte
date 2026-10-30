@@ -88,6 +88,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { getCalendarLocale } from "./calendar-dates.js";
   import {
@@ -232,6 +233,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--readonly={readonly}
+      use:titleWhenTruncated={{ enabled: $isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
