@@ -174,6 +174,59 @@ describe("createDialogLifecycle", () => {
       vi.unstubAllGlobals();
     });
 
+    it("restores focus after the transition time when transitionend never fires", async () => {
+      vi.useFakeTimers();
+      vi.stubGlobal("getComputedStyle", () => ({
+        transitionDuration: "0.24s, 0s",
+        transitionDelay: "0.01s, 0s",
+      }));
+      const { lifecycle, restoreFocusReturn, setLiveOpen } = createHarness({
+        getContainer: () => ({}) as Element,
+      });
+
+      try {
+        setLiveOpen(true);
+        lifecycle.syncOpen(true);
+        setLiveOpen(false);
+        lifecycle.syncOpen(false);
+        await Promise.resolve().then().then().then();
+
+        vi.advanceTimersByTime(249);
+        expect(restoreFocusReturn).not.toHaveBeenCalled();
+        vi.advanceTimersByTime(1);
+        expect(restoreFocusReturn).toHaveBeenCalledTimes(1);
+      } finally {
+        vi.useRealTimers();
+        vi.unstubAllGlobals();
+      }
+    });
+
+    it("does not restore focus after a reopen during the closing transition", async () => {
+      vi.useFakeTimers();
+      vi.stubGlobal("getComputedStyle", () => ({
+        transitionDuration: "0.24s",
+      }));
+      const { lifecycle, restoreFocusReturn, setLiveOpen } = createHarness({
+        getContainer: () => ({}) as Element,
+      });
+
+      try {
+        setLiveOpen(true);
+        lifecycle.syncOpen(true);
+        setLiveOpen(false);
+        lifecycle.syncOpen(false);
+        await Promise.resolve().then().then().then();
+
+        setLiveOpen(true);
+        lifecycle.syncOpen(true);
+        vi.advanceTimersByTime(240);
+        expect(restoreFocusReturn).not.toHaveBeenCalled();
+      } finally {
+        vi.useRealTimers();
+        vi.unstubAllGlobals();
+      }
+    });
+
     it("a closing transition already dispatched by close() does not double-dispatch", async () => {
       const { lifecycle, dispatch, setLiveOpen } = createHarness();
 
