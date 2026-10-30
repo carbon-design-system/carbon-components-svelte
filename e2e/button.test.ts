@@ -78,9 +78,12 @@ test.describe("Button", () => {
   });
 });
 
-// Carbon v11 draws a disabled ghost button's text and icon in
-// `$text-disabled`, and an icon-only one in `$icon-on-color-disabled`.
-test("disabled ghost buttons use v11's disabled colors", async ({ page }) => {
+// A disabled ghost button draws its icon in `$icon-disabled` and its text
+// in `$text-disabled`, with or without a label. Carbon v11 uses
+// `$icon-on-color-disabled` for the icon-only one; this library does not.
+test("disabled ghost buttons share one gray with or without a label", async ({
+  page,
+}) => {
   await page.goto("/button-icon-kinds.html");
   for (const theme of ["white", "g100"]) {
     // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
@@ -94,28 +97,34 @@ test("disabled ghost buttons use v11's disabled colors", async ({ page }) => {
         probe.remove();
         return color;
       };
-      const ghost = document.querySelector("[data-testid=kind-ghost]");
-      const text = ghost?.querySelector(
-        ".bx--btn:disabled:not(.bx--btn--icon-only)",
-      );
-      const iconOnly = ghost?.querySelector(".bx--btn--icon-only:disabled");
       const fill = (button?: Element | null) => {
         const icon = button?.querySelector(".bx--btn__icon");
         return icon ? getComputedStyle(icon).fill : "";
       };
       return {
         textDisabled: token("--cds-text-disabled"),
-        iconOnColorDisabled: token("--cds-icon-on-color-disabled"),
-        text: text ? getComputedStyle(text).color : "",
-        textIcon: fill(text),
-        iconOnly: fill(iconOnly),
+        iconDisabled: token("--cds-icon-disabled"),
+        kinds: ["ghost", "danger-ghost"].map((kind) => {
+          const scope = document.querySelector(`[data-testid=kind-${kind}]`);
+          const text = scope?.querySelector(
+            ".bx--btn:disabled:not(.bx--btn--icon-only)",
+          );
+          const iconOnly = scope?.querySelector(".bx--btn--icon-only:disabled");
+          return {
+            kind,
+            text: text ? getComputedStyle(text).color : "",
+            textIcon: fill(text),
+            iconOnly: fill(iconOnly),
+          };
+        }),
       };
     }, theme);
-    expect.soft(read.text, `${theme} text`).toBe(read.textDisabled);
-    expect.soft(read.textIcon, `${theme} text icon`).toBe(read.textDisabled);
-    expect
-      .soft(read.iconOnly, `${theme} icon-only icon`)
-      .toBe(read.iconOnColorDisabled);
+    for (const { kind, text, textIcon, iconOnly } of read.kinds) {
+      const name = `${theme} ${kind}`;
+      expect.soft(text, `${name} text`).toBe(read.textDisabled);
+      expect.soft(textIcon, `${name} text icon`).toBe(read.iconDisabled);
+      expect.soft(iconOnly, `${name} icon-only icon`).toBe(textIcon);
+    }
   }
 });
 

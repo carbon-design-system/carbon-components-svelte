@@ -239,9 +239,12 @@
 
   // Outranks the position blocks' `cursor: pointer` (0,2,0) for a disabled
   // ghost trigger at rest; `.bx--btn:disabled` (0,2,0) emits before them.
-  // Also restores the disabled color the rule above would otherwise replace.
+  // Also restores the disabled color the rule above would otherwise replace,
+  // in the same gray as a disabled ghost button with a label. Carbon v11
+  // uses `$icon-on-color-disabled` here, a token for an icon on a disabled
+  // fill; a ghost button has no fill.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] { // ccs: specificity
-    color: $text-on-color-disabled;
+    color: $icon-disabled; // ccs: matches the labeled ghost, departs from v11
     cursor: not-allowed;
   }
 

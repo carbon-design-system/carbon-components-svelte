@@ -36,10 +36,10 @@
     stroke: currentColor;
   }
 
-  // Ghost icon-only buttons render their icon in $icon-primary/$text-on-color-disabled (see
+  // Ghost icon-only buttons render their icon in $icon-primary/$icon-disabled (see
   // the .bx--btn--ghost.bx--btn--icon-only `color` rules in
   // components/button/_button.scss) — mirror that for the spinner stroke.
-  // The `.bx--btn--disabled` loading state does not get $text-on-color-disabled `color`,
+  // The `.bx--btn--disabled` loading state does not get $icon-disabled `color`,
   // so the stroke rule below is still needed for it.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
     stroke: $icon-primary;
@@ -50,7 +50,7 @@
   // class the component still applies for the visual treatment.
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] .#{$prefix}--btn__loading .#{$prefix}--loading__stroke,
   .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only.#{$prefix}--btn--disabled .#{$prefix}--btn__loading .#{$prefix}--loading__stroke {
-    stroke: $icon-on-color-disabled;
+    stroke: $icon-disabled;
   }
 
   // Every kind's disabled styling (components/button/_mixins.scss and the
