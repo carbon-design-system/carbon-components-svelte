@@ -55,6 +55,36 @@ test.describe("Tearsheet", () => {
     ).toBeGreaterThan(120);
   });
 
+  test("below md the header lines up with the body and keeps its title whole", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto("/tearsheet.html");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const title = await rect(page, ".bx--tearsheet__title");
+    expect(title.left).toBe(
+      (await rect(page, ".bx--tearsheet__main .bx--label")).left,
+    );
+    // The header actions go under the title instead of beside it.
+    expect(
+      (await rect(page, ".bx--tearsheet__header-actions .bx--btn")).top,
+    ).toBeGreaterThanOrEqual(title.bottom);
+    expect(
+      await page
+        .locator(".bx--tearsheet__title")
+        .evaluate((node) => node.scrollWidth <= node.clientWidth),
+    ).toBe(true);
+  });
+
+  test("a wide title stops short of the close button", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/tearsheet.html?passive");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    expect(
+      (await rect(page, ".bx--tearsheet__title")).right,
+    ).toBeLessThanOrEqual((await rect(page, ".bx--tearsheet__close")).left);
+  });
+
   test("a narrow tearsheet is as wide as a small modal", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/tearsheet.html?size=narrow");
