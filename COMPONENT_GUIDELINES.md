@@ -19,6 +19,7 @@ Rules for components that compose several Carbon elements, such as grids, trees,
 ## Principles
 
 - Match Carbon's design. Where this library can improve behavior, developer experience or speed, improve it.
+- Carbon React's behavior is evidence, not the rule. Where it contradicts the WAI-ARIA APG or these guidelines, follow them and say so in the pull request (for example, disabled menu items stay focusable).
 - If a rule, test or budget blocks a better design, change the rule in the same pull request and give the reason.
 - Add no runtime dependencies. Ship optional code from a separate entry point, as `carbon-components-svelte/syntax` does.
 - Support performance claims with measurements, for example "1.5 ms per arrow key at 10,000 rows; 6 ms at 4x CPU throttling".
@@ -79,7 +80,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - Centered content aligns on a shared center axis. A centered column header and the centered value below it, such as a weekday and its date in a circle, share one center.
 - Icons side by side have the same optical size. Draw them on the same artboard (16 px) with a similar ink extent. A letterform icon such as "Aa" that fills less of its box reads smaller than an arrow beside it.
 - Text in adjacent controls of one row shares a baseline. In a flex row with mixed type sizes, use `align-items: baseline`. Align on the baseline only when every item starts with text. An item that starts with an icon takes its baseline from the icon; align those rows to the top.
-- Text the user writes (log lines, messages, editor paragraphs, search queries) gets `dir="auto"`, so each block reads in its own direction on a page of the other direction.
+- Text the user writes (log lines, messages, editor paragraphs, search queries) reads in its own direction on a page of the other direction. Blocks of text get `dir="auto"`. Text inputs get `unicode-bidi: plaintext`, which keeps the field's padding and icons on the page's sides.
 - Center an icon on the text beside it. A 16 px icon next to `body-compact-01` text centers in the 18 px line.
 - Fields in a row align to the top of their field box. A message under one field does not move its neighbors. To center a shorter control, such as a toggle, center that control; do not center the field wrappers.
 - Align numbers by place value: right-align numeric columns and use `tabular-nums`.
@@ -104,11 +105,12 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - A disabled component shows every part as disabled: text in `$text-disabled`, icons in `$icon-disabled`, no hover, and no focus on its items. It disables its own controls; for slotted content, it sets `inert` on the slot region or documents that the consumer disables it. A read-only component keeps its text color and blocks changes. An unavailable item inside an enabled composite (a menu item, a toolbar button) is a different case: it stays focusable with `aria-disabled`.
 - Where an alignment rule conflicts with the built-in layout of a Carbon component used inside, such as a field label's position, keep the Carbon layout and say so in the pull request.
 - Overlays move to a portal when a container would clip them. A container with a `transform` or `content-visibility: auto` also clips in-place menus. Set `portalMenu` on menus inside one.
+- Do not size an overlay or a panel with `100vw`: it includes a classic scrollbar, so the box runs under it. Use `100%` of the containing block.
 - A titled surface uses `Section` one level below the page, so its headings nest.
 
 ## API
 
-- **Data in, no mutation.** Take arrays and objects as props. Assign new values; do not edit the consumer's objects. Return changes through `bind:`. Examples: `rows` and `selectedRowIds` on DataTable, `nodes` and `expandedIds` on TreeView.
+- **Data in, no mutation.** Take arrays and objects as props. Assign new values; do not edit the consumer's objects. Return changes through `bind:`. Examples: `rows` and `selectedRowIds` on DataTable, `nodes` and `expandedIds` on TreeView. Do not change a bound value on mount. Ids the component cannot resolve yet, such as checks under a node that has not loaded, stay in the value until their data arrives.
 - **Data array with a per-item slot** for collections that need search, filtering, virtualization or reordering. A child component per item cannot be sorted or virtualized. Use child components for other cases. See [Code style](CONTRIBUTING.md#code-style).
 - **Cancelable events for user actions.** Dispatch moves, pastes, sorts and closes with `{ cancelable: true }`, synchronously. `preventDefault()` cancels the action. Example: `click:overflow` on TagSet.
 - **Exported helpers.** Put logic that consumers may need without the component (serialize, validate, evaluate, apply a change) in a pure function with no DOM access, exported from the package. It must run on the server. Examples: `toCsv`, `toHierarchy`, `fuzzyMatch`.
@@ -216,6 +218,7 @@ These names apply to new components and new props. Shipped components keep their
 
 - Do not bind single-character shortcuts at the document level (WCAG 2.1.4). Use `keyboard-shortcut.js` with a modifier, and scope shortcuts to the focused component unless they are documented as global.
 - Every drag operation has a keyboard alternative and a single-pointer alternative (WCAG 2.5.7).
+- A component that uses Tab itself, such as a text editor indenting a list, gives a documented way out (Escape, then Tab).
 
 ### Announcements and contrast
 
@@ -359,9 +362,11 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 ### Stability
 
 - Do not insert, remove or move content next to the control under the pointer. Hold the change until the pointer leaves the region or the user scrolls.
+- While a change is held under the pointer, announce it to assistive technology at once, and show it as soon as the pointer leaves.
+- A do-not-disturb mode stops announcements and anything that opens by itself. It still updates counts.
 - A counter next to controls ("3 of 12") uses `tabular-nums` and reserves the width of its largest value, so the controls after it do not move.
 - A live list (logs, feeds, notifications) stops following new content when the user scrolls away from the end, and shows a control to return to it.
-- A layout that collapses items into an overflow menu collapses at one width and expands at a larger one, so a width near the boundary does not toggle it on every resize.
+- A layout that collapses items into an overflow menu collapses at one width and expands at a larger one, so a width near the boundary does not toggle it on every resize. Fields shrink to a minimum width (about 8 rem) before any button collapses, since a field cannot move into a menu. The row never scrolls.
 
 ### Input pacing
 
@@ -376,7 +381,7 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 
 ### Time limits
 
-- Auto-dismiss time grows with the length of the message, with a minimum. A notification with an action does not auto-dismiss (WCAG 2.2.1).
+- A component that sets its own auto-dismiss time makes it grow with the length of the message, with a minimum. Components leave `timeout` to the consumer by default; the docs advise a minimum of about 5 seconds plus reading time for the message, which depends on the language. A notification with an action does not auto-dismiss (WCAG 2.2.1).
 - Pause auto-dismiss while the pointer is over the notification, while it has focus, and while the tab is hidden (`pause-on-hover-focus.js`, `timeout-dismiss.js`).
 - For an action the user can reverse, run it at once and offer Undo. Ask for confirmation only before an action that cannot be reversed.
 
