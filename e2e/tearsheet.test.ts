@@ -297,16 +297,27 @@ test.describe("Tearsheet", () => {
     page,
   }) => {
     await page.emulateMedia({ forcedColors: "active" });
-    await page.goto("/tearsheet.html");
+    await page.goto("/tearsheet.html?passive");
     await expect(page.getByRole("dialog")).toBeVisible();
-    const outline = await page.evaluate(() => {
-      const style = getComputedStyle(
+    // The edge is the 1px border. A focused button beside it draws a
+    // border and an outline, so its ring is wider than the edge.
+    await page.getByRole("button", { name: "Close" }).focus();
+    const edge = await page.evaluate(() => {
+      const container = getComputedStyle(
         document.querySelector(".bx--tearsheet__container") as Element,
       );
-      return { width: style.outlineWidth, color: style.outlineColor };
+      const button = getComputedStyle(document.activeElement as Element);
+      return {
+        border: `${container.borderLeftWidth} ${container.borderLeftColor}`,
+        outline: container.outlineStyle,
+        ring:
+          Number.parseFloat(button.borderTopWidth) +
+          Number.parseFloat(button.outlineWidth),
+      };
     });
-    expect(outline.width).toBe("3px");
-    expect(outline.color).not.toBe("rgba(0, 0, 0, 0)");
+    expect(edge.border).toBe("1px rgb(0, 0, 0)");
+    expect(edge.outline).toBe("none");
+    expect(edge.ring).toBeGreaterThan(1);
 
     await page.emulateMedia({ forcedColors: "none", reducedMotion: "reduce" });
     expect(

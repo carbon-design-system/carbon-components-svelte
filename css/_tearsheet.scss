@@ -62,12 +62,11 @@
     // Below `md` the tearsheet fills the window.
     width: 100%;
     height: 100%;
+    // Forced colors draw this border, even where the AI surface makes it
+    // transparent, so the edge stays thinner than a 2px focus ring.
     border: 1px solid $border-subtle;
     border-bottom: 0;
     background-color: $layer;
-    // Keeps the edge visible in forced colors.
-    outline: 3px solid transparent;
-    outline-offset: -3px;
     // The slide covers at most 500px, so a tall window doesn't speed it up.
     transform: translate3d(0, calc(min(95vh, 500px)), 0);
     transition: transform $duration--moderate-02 motion(exit, expressive);
