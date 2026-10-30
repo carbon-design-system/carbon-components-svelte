@@ -33,7 +33,7 @@
 <Tearsheet
   bind:open
   size="narrow"
-  title="Edit alert rule"
+  titleText="Edit alert rule"
   on:close={handleClose}
 >
   <Stack gap={5}>

@@ -19,9 +19,9 @@
   {size}
   {preventCloseOnClickOutside}
   {hideCloseButton}
-  title="Create integration"
-  label="Step 2 of 4"
-  description="Connect a data source."
+  titleText="Create integration"
+  labelText="Step 2 of 4"
+  descriptionText="Connect a data source."
 >
   Body
   <Button slot="headerActions" kind="ghost" size="small">Preview</Button>

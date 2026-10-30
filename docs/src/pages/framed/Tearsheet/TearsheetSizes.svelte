@@ -26,8 +26,8 @@
 <Tearsheet
   bind:open
   {size}
-  title="Add a webhook"
-  description="Send build events to another service."
+  titleText="Add a webhook"
+  descriptionText="Send build events to another service."
 >
   <Stack gap={6}>
     <TextInput
