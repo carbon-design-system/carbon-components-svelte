@@ -249,6 +249,40 @@ test.describe("RichTextEditor", () => {
       );
     });
 
+    test("Escape releases the next Tab or Shift+Tab from a list", async ({
+      page,
+    }) => {
+      const box = editor(page);
+      await box.click();
+      await page.keyboard.press(k("ControlOrMeta+a"));
+      await page.keyboard.press("Delete");
+      await page.keyboard.press(k("ControlOrMeta+Shift+8"));
+      await page.keyboard.type("one");
+      await page.keyboard.press("Enter");
+      await page.keyboard.type("two");
+      await page.keyboard.press("Tab");
+      const nested = "<ul><li>one<ul><li>two</li></ul></li></ul>";
+      await expect(value(page)).toHaveText(nested);
+
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Shift+Tab");
+      await expect(box).not.toBeFocused();
+      await expect(value(page)).toHaveText(nested);
+
+      // The release lasts for one key.
+      await box.focus();
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("Shift+Tab");
+      await expect(box).toBeFocused();
+      await expect(value(page)).toHaveText("<ul><li>one</li><li>two</li></ul>");
+
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Tab");
+      await expect(box).not.toBeFocused();
+      await expect(value(page)).toHaveText("<ul><li>one</li><li>two</li></ul>");
+    });
+
     test("Tab leaves the editor outside a list", async ({ page }) => {
       await editor(page).click();
       await page.keyboard.press("Tab");

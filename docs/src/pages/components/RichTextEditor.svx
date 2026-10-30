@@ -61,7 +61,7 @@ With a caret and no selection, a mark applies to the text you type next. Clear f
 
 ### Lists
 
-In a list, <DocKbd label="Tab" /> nests the item under the one before it and <DocKbd label="Shift+Tab" /> moves it out a level. On the first item, where it can't nest, <DocKbd label="Tab" /> leaves the editor as it does anywhere else, so the keyboard is never trapped. <DocKbd label="Enter" /> on an empty item, or <DocKbd label="Backspace" /> at the start of one, ends the list.
+In a list, <DocKbd label="Tab" /> nests the item under the one before it and <DocKbd label="Shift+Tab" /> moves it out a level. On the first item, where it can't nest, <DocKbd label="Tab" /> leaves the editor as it does anywhere else. To leave from any item, press <DocKbd label="Escape" />, then <DocKbd label="Tab" /> or <DocKbd label="Shift+Tab" />: the next one moves focus and leaves the list as it is, so the keyboard is never trapped. <DocKbd label="Enter" /> on an empty item, or <DocKbd label="Backspace" /> at the start of one, ends the list.
 
 ### Choosing the toolbar
 
@@ -177,7 +177,7 @@ Every string the editor shows is a prop. Rename buttons with `commandText`, the 
 
 ## Accessibility
 
-The editable region is a `textbox` with `aria-multiline`. The toolbar is labelled and follows the WAI-ARIA toolbar pattern with a roving tab stop. Toggle buttons carry `aria-pressed`, and each button lists its shortcut in `aria-keyshortcuts`. Undo and redo stay focusable when there is nothing to undo, so focus doesn't drop out of the toolbar as they turn off.
+The editable region is a `textbox` with `aria-multiline`. The toolbar is labelled and follows the WAI-ARIA toolbar pattern with a roving tab stop. Toggle buttons carry `aria-pressed`, and each button lists its shortcut in `aria-keyshortcuts`. Undo and redo stay focusable when there is nothing to undo, so focus doesn't drop out of the toolbar as they turn off. In a list, <DocKbd label="Tab" /> and <DocKbd label="Shift+Tab" /> change the item's level; <DocKbd label="Escape" /> first lets the next one move focus out of the editor, as in CodeMirror (WCAG 2.1.2).
 
 ## Limitations
 

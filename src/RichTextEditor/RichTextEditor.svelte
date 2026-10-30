@@ -658,9 +658,28 @@
     if (deferredValue !== undefined) syncFromValue(deferredValue);
   }
 
+  /**
+   * Escape releases the next Tab or Shift+Tab from a list, so focus can
+   * always leave the editor by keyboard (WCAG 2.1.2), as in CodeMirror.
+   */
+  let tabReleased = false;
+
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (!interactive || !ref || !editing || isImeComposition(event)) return;
+
+    // A modifier pressed on its own, such as the Shift of Shift+Tab, keeps
+    // the release.
+    if (
+      event.key === "Shift" ||
+      event.key === "Control" ||
+      event.key === "Alt" ||
+      event.key === "Meta"
+    ) {
+      return;
+    }
+    const released = tabReleased;
+    tabReleased = event.key === "Escape";
 
     const command = commandForKey(event, mac);
     if (command && allowed.has(command)) {
@@ -689,7 +708,7 @@
     if (!range) return;
 
     if (event.key === "Tab" && allowed.has("indent")) {
-      if (!inListItem(range)) return;
+      if (released || !inListItem(range)) return;
       // Tab moves between list levels; where it can't, it leaves the editor.
       const ok = mutate(() =>
         event.shiftKey ? !!editing?.outdent() : !!editing?.indent(),
@@ -820,6 +839,7 @@
 
   function handleEditorBlur() {
     focused = false;
+    tabReleased = false;
     history.seal();
     if (value !== valueAtFocus) dispatch("change", value);
   }
