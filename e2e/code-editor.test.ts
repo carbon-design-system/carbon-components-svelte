@@ -274,6 +274,29 @@ test.describe("CodeEditor", () => {
     });
   });
 
+  test("starts the textarea's text where the layer's starts", async ({
+    page,
+  }) => {
+    const field = editor(page, "code-editor-js");
+    const [text, layer] = await field.evaluate((el) => {
+      const style = getComputedStyle(el);
+      const box = el.getBoundingClientRect();
+      const code = el.parentElement?.querySelector(".bx--code-editor__code");
+      const range = document.createRange();
+      range.selectNodeContents(code as Node);
+      const line = (code as Element).parentElement?.getBoundingClientRect();
+      return [
+        [
+          box.left + el.clientLeft + Number.parseFloat(style.paddingLeft),
+          box.top + el.clientTop + Number.parseFloat(style.paddingTop),
+        ],
+        [range.getBoundingClientRect().left, line?.top ?? 0],
+      ];
+    });
+    expect(Math.abs(text[0] - layer[0])).toBeLessThanOrEqual(0.5);
+    expect(Math.abs(text[1] - layer[1])).toBeLessThanOrEqual(0.5);
+  });
+
   test("shows composition text in the layer and leaves Escape to the IME", async ({
     page,
     browserName,

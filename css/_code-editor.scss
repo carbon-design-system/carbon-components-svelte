@@ -129,6 +129,9 @@
     overflow: hidden;
     padding: var(--ccs-code-editor-padding) $carbon--spacing-05
       var(--ccs-code-editor-padding) var(--ccs-code-editor-inset);
+    // The reset keeps the browser's 1px border, which would move the text
+    // 1px off the layer's.
+    border: 0;
     background: transparent;
     caret-color: $text-primary;
     color: $text-primary;
