@@ -34,3 +34,9 @@ export const SEPARATOR_HOVER_DELAY_MS: 150;
 
 /** Idle time before a type-ahead search buffer resets. */
 export const TYPEAHEAD_RESET_MS: 500;
+
+/**
+ * Time to wait for more arrivals before a live region announces them, so a
+ * burst reads as one count ("3 new notifications") and not one per item.
+ */
+export const ANNOUNCE_BATCH_MS: 300;

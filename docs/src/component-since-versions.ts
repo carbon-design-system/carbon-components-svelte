@@ -66,6 +66,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Modal: "0.2.0",
   MultiSelect: "0.2.0",
   NotificationQueue: "0.94.0",
+  NotificationsPanel: "0.114.0",
   NumberInput: "0.2.0",
   OrderedList: "0.2.0",
   OverflowMenu: "0.2.0",

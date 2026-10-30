@@ -1,0 +1,155 @@
+---
+components: ["NotificationsPanel", "HeaderAction", "BadgeIndicator"]
+description: A notifications panel is a list of notifications a user comes back to, grouped by recency, with unread state, per-row dismiss, a bulk dismiss and an optional Do Not Disturb toggle.
+---
+
+<script>
+  import { Button, NotificationsPanel } from "carbon-components-svelte";
+  import Settings from "carbon-icons-svelte/lib/Settings.svelte";
+
+  const HOUR = 3_600_000;
+  const DAY = 24 * HOUR;
+  const now = Date.UTC(2026, 9, 27, 15, 0, 0);
+  const options = { now, locale: "en", timeZone: "UTC" };
+
+  /** @type {import("carbon-components-svelte/NotificationsPanel/NotificationsPanel.svelte").PanelNotification[]} */
+  const basic = [
+    { id: "1", title: "Build #482 failed", kind: "error", timestamp: now - HOUR },
+    { id: "2", title: "Deployment finished", kind: "success", timestamp: now - 3 * HOUR },
+    { id: "3", title: "Your invoice is ready", kind: "info", timestamp: now - DAY - 2 * HOUR },
+    { id: "4", title: "Certificate expires soon", kind: "warning", timestamp: now - 6 * DAY },
+  ];
+
+  /** @type {import("carbon-components-svelte/NotificationsPanel/NotificationsPanel.svelte").PanelNotification[]} */
+  const content = [
+    {
+      id: "1",
+      title: "Build #482 failed",
+      subtitle: "The checkout service did not pass its tests.",
+      kind: "error",
+      timestamp: now - HOUR,
+      unread: true,
+      action: { label: "Retry", onClick: () => {} },
+    },
+    {
+      id: "2",
+      title: "Nightly backup finished",
+      kind: "success",
+      timestamp: now - 3 * HOUR,
+      caption: "Run 42",
+    },
+    {
+      id: "3",
+      title: "Read the release notes",
+      subtitle: "Version 2.4 changes the sign-in flow.",
+      kind: "info",
+      timestamp: now - DAY - 2 * HOUR,
+      unread: true,
+      href: "#content",
+    },
+    {
+      id: "4",
+      title: "Pinned maintenance window",
+      kind: "warning-alt",
+      timestamp: now - 6 * DAY,
+      dismissible: false,
+    },
+  ];
+</script>
+
+## Basic
+
+`NotificationsPanel` renders the notifications you give it: a heading, a "Dismiss all" button, and rows grouped under Today, Yesterday and Previous, each with its relative time. It is content, not a popup. It owns no open state, portal or position, so a [`HeaderAction`](#in-the-header), a `SidePanel` or a column of your page hosts it. It fills the height of its container and scrolls the rows inside; set `--ccs-notifications-panel-max-height` to cap one on a page.
+
+The panel never changes your array. Remove the notification in your `dismiss` handler, and it leaves the list.
+
+```svelte
+<NotificationsPanel
+  {notifications}
+  on:dismiss={({ detail }) =>
+    (notifications = notifications.filter((n) => n.id !== detail.id))}
+  on:dismiss:all={() => (notifications = [])}
+/>
+```
+
+<NotificationsPanel {...options} notifications={basic} style="--ccs-notifications-panel-max-height: 28rem" />
+
+Each row's text is one button, so the whole row is the target. Press <DocKbd label="Tab" /> to move between the row, its action and its dismiss button. <DocKbd label="ArrowUp" />, <DocKbd label="ArrowDown" />, <DocKbd label="Home" /> and <DocKbd label="End" /> move between rows, wrapping at the ends. <DocKbd label="Delete" /> or <DocKbd label="Backspace" /> on a row dismisses it.
+
+When a dismissed row was holding focus and your handler removes it, focus moves to the next row, and to the heading when none is left. If you keep the row, as while a request is pending, focus stays where it is.
+
+## Content
+
+Mark a row `unread` for a dot, a bolder title and a hidden "Unread" for screen readers. Add a `subtitle` for detail, or a `caption`, such as "Run 42", to replace the relative time. A row with an `href` is a link. In a `HeaderAction`, following it closes the panel. An `action` adds a button or link beside the text, with the same shape as the `NotificationQueue` action. Set `dismissible` to `false` to hide a row's dismiss button. Set `statusIconDescription` to name a row's status icon in another language; it defaults to the English name of its `kind`.
+
+`kind` picks the icon, with the same names as `ToastNotification`. Its label for screen readers is the kind's default, such as "Warning".
+
+<NotificationsPanel {...options} notifications={content} style="--ccs-notifications-panel-max-height: 36rem" />
+
+### Grouping
+
+Set `grouped` to `false` for one flat list. `groupLabels` renames the headings, and "Today" and "Yesterday" follow `locale`. Groups are the calendar days in `timeZone`, not 24-hour windows, and a timestamp in the future counts as today.
+
+<NotificationsPanel
+  {...options}
+  notifications={basic}
+  grouped={false}
+  titleText="Activity"
+  dismissAllText=""
+  style="--ccs-notifications-panel-max-height: 20rem"
+/>
+
+<NotificationsPanel
+  {...options}
+  notifications={basic}
+  groupLabels={{ previous: "Earlier" }}
+  style="--ccs-notifications-panel-max-height: 28rem"
+/>
+
+## Slots
+
+Use `actions` for controls beside "Dismiss all", such as a settings button. Use `empty` to replace the text shown with no notifications. Use `notification` to replace a row's text; the icon, the dismiss button and the focus handling stay. The text sits inside the row's button or link, so keep it to non-interactive content.
+
+<NotificationsPanel {...options} notifications={[]}>
+  <Button slot="actions" kind="ghost" size="sm" iconDescription="Settings" icon={Settings} tooltipPosition="bottom" tooltipAlignment="end" />
+  <p slot="empty">Nothing needs your attention.</p>
+</NotificationsPanel>
+
+<NotificationsPanel {...options} notifications={basic.slice(0, 2)}>
+  <svelte:fragment slot="notification" let:notification>
+    <strong>{notification.title}</strong>
+  </svelte:fragment>
+</NotificationsPanel>
+
+## Do Not Disturb
+
+Set `doNotDisturbLabelText` to show a toggle, and bind `doNotDisturb` to its state. The panel only holds the state. Your app decides what it silences, such as the toasts a [`NotificationQueue`](/components/NotificationQueue) shows. Pair it with `LocalStorage` to remember the choice. Set `doNotDisturbOffText` and `doNotDisturbOnText` to translate the toggle's "Off" and "On".
+
+<FileSource src="/framed/NotificationsPanel/NotificationsPanelDoNotDisturb" />
+
+## In the header
+
+Put the panel in a `HeaderAction`. Add a `BadgeIndicator` to its `icon` slot for the unread count, and set `--ccs-header-panel-width` on `HeaderUtilities` to widen the panel. The action shows its close icon while the panel is open, so the badge returns when it closes. Inside a `HeaderAction`, the panel drops its own region role, because the action's panel is already a labelled region.
+
+In the classic UI Shell the header is Gray 100 on a light page, and the panel takes those colors from its tokens, with no styles of its own.
+
+<FileSource src="/framed/NotificationsPanel/NotificationsPanelHeader" />
+
+## Server rendering
+
+The groups and the relative times depend on the clock and the time zone. A server in UTC can group a notification differently from the user's browser. When you render on the server, set `now` and `timeZone` so both sides agree. Setting `now` turns the live relative times off.
+
+## Announcements
+
+When notifications arrive while the panel is open, a polite live region announces them: the title for one, or "N new notifications" for several in a short burst. The first render and removals are silent. Pass a function to `arrivalDescription` to write your own text, such as in another language, or `null` to turn it off.
+
+While a mouse or pen rests on the rows, they hold still. A new notification renders when the pointer leaves the rows or the list scrolls; the live region announces it at once. A row you remove leaves an empty space of its own height until then, so a double click on a dismiss button dismisses one row.
+
+| Do | Why |
+| --- | --- |
+| Remove a notification from your array in the `dismiss` handler. | The panel never changes `notifications`, so the list stays yours. |
+| Keep each `id` stable across updates. | A row keeps its focus and its relative time while the list changes around it. |
+| Remove the row in the handler, not after a delay. | Focus moves to the next row only if it was lost in that update. |
+| Set `now` and `timeZone` when you render on the server. | The server and the client then bucket every notification the same way. |
+| Put a destructive bulk action behind a confirmation in your `dismiss:all` handler. | The panel dispatches the event at once and leaves the list alone. |
+| Set `--ccs-header-panel-width` on `HeaderUtilities`, not on `HeaderAction`. | The panel is a sibling of the action's button, so a style on the action never reaches it. |

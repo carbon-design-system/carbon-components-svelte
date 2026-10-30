@@ -1,0 +1,301 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// NotificationsPanel: a heading, a bulk dismiss, rows grouped by recency
+/// and a footer. It fills the box that holds it, such as a `HeaderAction`
+/// panel, and scrolls the rows inside. It reads theme tokens, so the classic
+/// header's Gray 100 scope makes it dark with no rule of its own.
+/// @access private
+/// @group components
+@mixin notifications-panel {
+  .#{$prefix}--notifications-panel {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+    background-color: $layer;
+    color: $text-primary;
+    // Set it to cap a panel that sits in a page, not in a header.
+    max-height: var(--ccs-notifications-panel-max-height, none);
+  }
+
+  // The minimum is the height with "Dismiss all", so the header keeps its
+  // height when the last row goes and the button hides.
+  .#{$prefix}--notifications-panel__header {
+    display: flex;
+    min-height: to-rem(48px);
+    flex: none;
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--notifications-panel__heading {
+    @include type-style("heading-compact-02");
+
+    flex: 1 1 auto;
+    margin: 0;
+    color: $text-primary;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--notifications-panel__dnd {
+    flex: none;
+    padding: 0 $carbon--spacing-05 $carbon--spacing-03;
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--notifications-panel__body {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .#{$prefix}--notifications-panel__group-heading {
+    @include type-style("label-01");
+
+    margin: 0;
+    padding: $carbon--spacing-05 $carbon--spacing-05 $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--notifications-panel__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  // Equal inline padding and a flex row, so RTL flips the dot, icon and
+  // dismiss button with no physical properties. The 16px padding puts the
+  // status icon under the heading and the dismiss icon under the header's
+  // last icon.
+  .#{$prefix}--notifications-panel__item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    gap: $carbon--spacing-03;
+  }
+
+  // The divider takes its 1px from the padding, so rows keep a 4px pitch.
+  .#{$prefix}--notifications-panel__item + .#{$prefix}--notifications-panel__item {
+    padding-top: calc(#{$carbon--spacing-03} - 1px);
+    border-top: 1px solid $border-subtle;
+  }
+
+  // The unread dot, centered in the row's 16px start padding. Its negative
+  // margins cancel its width and the gap, so the icon starts at the padding.
+  .#{$prefix}--notifications-panel__item::before {
+    width: to-rem(6px);
+    height: to-rem(6px);
+    flex: none;
+    margin-top: to-rem(6px);
+    margin-inline-end: to-rem(-3px);
+    margin-inline-start: to-rem(-11px);
+    background-color: transparent;
+    border-radius: 50%;
+    content: "";
+  }
+
+  .#{$prefix}--notifications-panel__item--unread::before {
+    background-color: $support-info;
+  }
+
+  // A removed row keeps its space while the pointer rests on the rows, so
+  // the next row does not move under the pointer.
+  .#{$prefix}--notifications-panel__item--held {
+    visibility: hidden;
+  }
+
+  .#{$prefix}--notifications-panel__icon {
+    display: flex;
+    height: to-rem(18px);
+    flex: none;
+    align-items: center;
+  }
+
+  // The inline notification icon carries margins for its own layout.
+  .#{$prefix}--notifications-panel__icon .#{$prefix}--inline-notification__icon {
+    margin: 0;
+  }
+
+  .#{$prefix}--notifications-panel__content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  // The row's text is the control. Its `::after` stretches over the row, so
+  // the whole row is the target and carries the focus ring. The action and
+  // dismiss button are siblings above it, never inside.
+  .#{$prefix}--notifications-panel__main {
+    @include type-style("body-compact-01");
+
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: 0;
+    color: inherit;
+    font-family: inherit;
+    text-align: start;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--notifications-panel__item--interactive
+    .#{$prefix}--notifications-panel__main {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--notifications-panel__item--interactive
+    .#{$prefix}--notifications-panel__main::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    content: "";
+  }
+
+  .#{$prefix}--notifications-panel__item--interactive
+    .#{$prefix}--notifications-panel__main:focus::after {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--notifications-panel__title {
+    display: block;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--notifications-panel__item--unread
+    .#{$prefix}--notifications-panel__title {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--notifications-panel__subtitle {
+    display: block;
+    margin-top: $carbon--spacing-01;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--notifications-panel__caption {
+    @include type-style("helper-text-01");
+
+    display: block;
+    margin-top: $carbon--spacing-01;
+    color: $text-helper;
+  }
+
+  // Above the stretched row target. The ghost button's text sits 16px and
+  // a 1px border inside it, so this lines it up with the title.
+  .#{$prefix}--notifications-panel__action {
+    position: relative;
+    margin-top: $carbon--spacing-02;
+    margin-inline-start: calc(#{-$carbon--spacing-05} - 1px);
+  }
+
+  .#{$prefix}--notifications-panel__dismiss {
+    @include button-reset($width: false, $omit: (display));
+
+    position: relative;
+    display: flex;
+    width: to-rem(32px);
+    height: to-rem(32px);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    // Centers the 32px button on the title's 18px first line.
+    margin: to-rem(-7px) 0;
+    color: $icon-primary;
+
+    svg {
+      fill: currentColor;
+    }
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--notifications-panel__empty {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-07 $carbon--spacing-05;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  // The ghost button's text sits 16px and a 1px border inside it, so it
+  // starts under the heading.
+  .#{$prefix}--notifications-panel__footer {
+    flex: none;
+    padding: $carbon--spacing-03 0;
+    border-top: 1px solid $border-subtle;
+
+    > .#{$prefix}--btn {
+      margin-inline-start: -1px;
+    }
+  }
+
+  // Forced colors drop fills, so the dot and the dividers take system colors.
+  // Lines use `CanvasText`; `GrayText` is the color of disabled text.
+  @media (forced-colors: active) {
+    .#{$prefix}--notifications-panel__item--unread::before {
+      background-color: CanvasText;
+    }
+
+    .#{$prefix}--notifications-panel__item + .#{$prefix}--notifications-panel__item,
+    .#{$prefix}--notifications-panel__footer,
+    .#{$prefix}--notifications-panel__dnd {
+      border-color: CanvasText;
+    }
+  }
+
+  // The dismiss button shows on hover or focus where a pointer can hover,
+  // and stays visible on touch screens.
+  @media (any-hover: hover) {
+    .#{$prefix}--notifications-panel__item--interactive:hover {
+      background-color: $background-hover;
+    }
+
+    .#{$prefix}--notifications-panel__dismiss {
+      opacity: 0;
+      transition: opacity $duration--fast-01 motion(standard, productive);
+    }
+
+    .#{$prefix}--notifications-panel__item:hover
+      .#{$prefix}--notifications-panel__dismiss,
+    .#{$prefix}--notifications-panel__item:focus-within
+      .#{$prefix}--notifications-panel__dismiss {
+      opacity: 1;
+    }
+
+    .#{$prefix}--notifications-panel__dismiss:hover {
+      background-color: $background-active;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .#{$prefix}--notifications-panel__dismiss {
+        transition: none;
+      }
+    }
+  }
+}
+
+@include exports("notifications-panel") {
+  @include notifications-panel;
+}
