@@ -1,7 +1,21 @@
 <script>
   // One passing and one failing case per helper in e2e/helpers/layout.ts.
   // `?wide` adds an element wider than the page.
+  import AnchoredTooltip from "carbon-components-svelte/Portal/AnchoredTooltip.svelte";
+  import { titleWhenTruncated } from "carbon-components-svelte/utils/title-when-truncated.js";
+
   const wide = new URLSearchParams(location.search).has("wide");
+  const host = "Load balancer in eu-central-1";
+
+  let tipAnchor = null;
+  let wrongTipAnchor = null;
+
+  /** A hover handler that sets a `title` without the full text. */
+  function shortTitle(node) {
+    const set = () => node.setAttribute("title", "Load balancer");
+    node.addEventListener("mouseenter", set);
+    return { destroy: () => node.removeEventListener("mouseenter", set) };
+  }
 </script>
 
 <!-- expectAligned -->
@@ -73,6 +87,23 @@
   <p class="digits clip" data-testid="fits-cut" title="12345678901234567890">
     12345678901234567890
   </p>
+</div>
+
+<div data-testid="fits-hover-good">
+  <p class="cell clip" use:titleWhenTruncated>{host}</p>
+  <p class="cell clip" bind:this={tipAnchor}>{host}</p>
+  <AnchoredTooltip anchor={tipAnchor} text={host} />
+</div>
+<div data-testid="fits-hover-title-bad">
+  <p class="cell clip" data-testid="fits-short-title" use:shortTitle>
+    {host}
+  </p>
+</div>
+<div data-testid="fits-hover-tooltip-bad">
+  <p class="cell clip" data-testid="fits-wrong-tip" bind:this={wrongTipAnchor}>
+    {host}
+  </p>
+  <AnchoredTooltip anchor={wrongTipAnchor} text="Load balancer" />
 </div>
 
 <!-- expectNoNestedBorders -->

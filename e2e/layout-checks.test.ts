@@ -71,6 +71,17 @@ test("layout helpers pass good cases and name the element in bad ones", async ({
     await expect(
       expectTextFits(page.getByTestId("fits-cut-number")),
     ).rejects.toThrow(/fits-cut.*: cuts a number: shows "\d+", hides "\d+"/);
+
+    // A `title` set on hover and a tooltip anchored from a portal both
+    // count, once the pointer is over the text. Each must hold the full
+    // text.
+    expect(await expectTextFits(page.getByTestId("fits-hover-good"))).toBe(2);
+    await expect(
+      expectTextFits(page.getByTestId("fits-hover-title-bad")),
+    ).rejects.toThrow(/fits-short-title.*: truncated .* with no title/);
+    await expect(
+      expectTextFits(page.getByTestId("fits-hover-tooltip-bad")),
+    ).rejects.toThrow(/fits-wrong-tip.*: truncated .* with no title/);
   });
 
   await test.step("expectNoNestedBorders", async () => {
