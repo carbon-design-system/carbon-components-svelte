@@ -117,29 +117,29 @@
    */
   export let rowHeaderText = (rowIndex) => String(rowIndex + 1);
 
-  /** Specify the accessible name of the corner cell, which selects every cell. */
-  export let selectAllText = "Select all";
+  /**
+   * Specify the visually hidden name of the corner cell, which selects
+   * every cell.
+   */
+  export let selectAllDescription = "Select all";
 
   /**
    * Override the text announced when the selection changes.
    * @type {(rows: number, columns: number) => string}
    */
-  export let selectionText = (rows, columns) =>
-    `${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"} selected`;
+  export let selectionDescription = defaultSelectionDescription;
 
   /**
    * Override the text announced after a copy.
    * @type {(rows: number, columns: number) => string}
    */
-  export let copiedText = (rows, columns) =>
-    `Copied ${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"}`;
+  export let copyDescription = defaultCopyDescription;
 
   /**
    * Override the text announced after a paste.
    * @type {(rows: number, columns: number) => string}
    */
-  export let pastedText = (rows, columns) =>
-    `Pasted ${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"}`;
+  export let pasteDescription = defaultPasteDescription;
 
   /**
    * Specify the accessible name of an empty cell. An empty cell shows an
@@ -306,6 +306,30 @@
   $: selectionEndColumn = selection ? selection.endColumn : 0;
 
   /**
+   * @param {number} rows
+   * @param {number} columns
+   */
+  function defaultSelectionDescription(rows, columns) {
+    return `${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"} selected`;
+  }
+
+  /**
+   * @param {number} rows
+   * @param {number} columns
+   */
+  function defaultCopyDescription(rows, columns) {
+    return `Copied ${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"}`;
+  }
+
+  /**
+   * @param {number} rows
+   * @param {number} columns
+   */
+  function defaultPasteDescription(rows, columns) {
+    return `Pasted ${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"}`;
+  }
+
+  /**
    * Indexes to paint, in order: the frozen ones, the window, and the active
    * index when it is in neither.
    * @param {number} frozen
@@ -373,7 +397,7 @@
 
   /** @param {DataGridRange} range */
   function announceSelection(range) {
-    announcement = selectionText(
+    announcement = selectionDescription(
       range.endRow - range.startRow + 1,
       range.endColumn - range.startColumn + 1,
     );
@@ -621,7 +645,7 @@
     if (!dispatch("copy", { range, matrix }, { cancelable: true })) return;
     event.clipboardData.setData("text/plain", toTsv(matrix));
     event.clipboardData.setData("text/html", toHtmlTable(matrix));
-    announcement = copiedText(matrix.length, matrix[0]?.length ?? 0);
+    announcement = copyDescription(matrix.length, matrix[0]?.length ?? 0);
   }
 
   /** @param {ClipboardEvent} event */
@@ -650,7 +674,7 @@
       column: target.range.startColumn,
     };
     select(target.range);
-    announcement = pastedText(
+    announcement = pasteDescription(
       target.range.endRow - target.range.startRow + 1,
       target.range.endColumn - target.range.startColumn + 1,
     );
@@ -942,7 +966,7 @@
               style:width="{gutterWidth}px"
               style:--ccs-data-grid-x="0px"
             >
-              <span class="bx--visually-hidden">{selectAllText}</span>
+              <span class="bx--visually-hidden">{selectAllDescription}</span>
             </div>
           {:else}
             <div

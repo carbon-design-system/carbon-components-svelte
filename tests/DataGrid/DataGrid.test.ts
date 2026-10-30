@@ -92,6 +92,21 @@ describe("DataGrid", () => {
       );
     });
 
+    it("announces a selection with selectionDescription", async () => {
+      render(DataGrid, {
+        ...makeGrid(5, 5),
+        selectionDescription: (rows: number, columns: number) =>
+          `${rows} x ${columns}`,
+      });
+      mustCell(0, 0).focus();
+
+      await user.keyboard("{Shift>}{ArrowDown}{ArrowRight}{/Shift}");
+
+      expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
+        "2 x 2",
+      );
+    });
+
     it("counts every row and column, though it paints few", () => {
       render(DataGrid, makeGrid(1000, 30));
 

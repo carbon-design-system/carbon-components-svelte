@@ -43,6 +43,7 @@
     {height}
     {size}
     labelText="Sales"
+    {...$$restProps}
     on:paste={handlePaste}
     on:copy={handleCopy}
   >
