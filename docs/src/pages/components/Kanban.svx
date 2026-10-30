@@ -29,7 +29,9 @@ Links, buttons, and form controls inside a card keep their own press and don't s
 
 The board is a single tab stop. Focus lands on the grip of one card, and the arrow keys move focus between cards: <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> within a column, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> across columns, and <DocKbd label="Home" /> and <DocKbd label="End" /> to the first and last card of the column. The inline arrows swap in right-to-left languages.
 
-Press <DocKbd label="Space" /> or <DocKbd label="Enter" /> to pick a card up. The arrow keys then move it, <DocKbd label="Space" /> or <DocKbd label="Enter" /> drops it, and <DocKbd label="Escape" /> puts it back. Nothing changes in your data until the drop. Moving focus away also puts it back. <DocKbd label="Shift" />+<DocKbd label="F10" /> or <DocKbd label="ContextMenu" /> opens the move menu.
+Press <DocKbd label="Space" /> or <DocKbd label="Enter" /> to pick a card up. The arrow keys then move it, <DocKbd label="Space" /> or <DocKbd label="Enter" /> drops it, and <DocKbd label="Escape" /> puts it back. Nothing changes in your data until the drop. Moving focus away also puts it back.
+
+<DocKbd label="Shift" />+<DocKbd label="F10" /> or <DocKbd label="ContextMenu" /> opens the card's move menu, and <DocKbd label="Escape" /> closes it and returns focus to the card. The menu button stays out of the tab order, so the board keeps one tab stop. A pointer, voice control, or a screen reader's browse mode still reaches the button.
 
 A live region announces each step: the pick-up and its position, each new place, and the drop or the cancel. The grip is described as a draggable card, and a hidden description tells screen reader users the keys.
 

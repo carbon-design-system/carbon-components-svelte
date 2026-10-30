@@ -82,11 +82,8 @@ test.describe("Kanban keyboard", () => {
       if (stop === null) break;
       stops.push(stop);
     }
-    // The current card's grip and its menu, and nothing from another card.
-    expect(stops).toEqual([
-      "Design the login page",
-      "Move Design the login page",
-    ]);
+    // The current card's grip only. Its menu opens with Shift+F10.
+    expect(stops).toEqual(["Design the login page"]);
   });
 
   test("Escape puts the card back", async ({ page }) => {
@@ -178,6 +175,28 @@ test.describe("Kanban keyboard", () => {
       index: 1,
       source: "menu",
     });
+  });
+
+  test("the move menu returns focus to its card", async ({ page }) => {
+    await handle(page, "Set up CI").focus();
+    await page.keyboard.press("Shift+F10");
+    await expect(page.getByRole("menu")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("menu")).toBeHidden();
+    await expect(handle(page, "Set up CI")).toBeFocused();
+    // Arrow keys go on from the card.
+    await page.keyboard.press("ArrowUp");
+    await expect(handle(page, "Write the API spec")).toBeFocused();
+    // Tab closes the menu and leaves the board.
+    await page.keyboard.press("ContextMenu");
+    await expect(page.getByRole("menu")).toBeVisible();
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("menu")).toBeHidden();
+    expect(
+      await page.evaluate(
+        () => !document.activeElement?.closest("[data-testid=board]"),
+      ),
+    ).toBe(true);
   });
 
   test("collapses a column to a strip", async ({ page }) => {

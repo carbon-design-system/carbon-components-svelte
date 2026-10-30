@@ -94,7 +94,7 @@
 
   /** Specify the text that tells keyboard users how to move a card */
   export let instructionsText =
-    "Press Space or Enter to pick up. Use the arrow keys to move, Space or Enter to drop, Escape to cancel.";
+    "Press Space or Enter to pick up. Use the arrow keys to move, Space or Enter to drop, Escape to cancel. Press Shift+F10 for the move menu.";
 
   /** Specify what a screen reader calls a card's drag handle */
   export let roleDescriptionText = "draggable card";
@@ -1249,8 +1249,15 @@
                           id="{id}-menu-{encodeURIComponent(cardId)}"
                           iconDescription={moveMenuText}
                           aria-label={moveMenuLabel(label)}
-                          tabindex={stop ? 0 : -1}
+                          tabindex={-1}
                           class="bx--kanban__menu"
+                          on:close={(event) => {
+                            // Escape and Tab return focus to the menu
+                            // button, which is out of the tab order.
+                            if (event.detail?.trigger === "escape-key") {
+                              refocus(cardId);
+                            }
+                          }}
                         >
                           <OverflowMenuItem
                             text={moveUpText}

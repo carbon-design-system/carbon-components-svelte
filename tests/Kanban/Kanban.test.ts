@@ -30,9 +30,8 @@ describe("Kanban", () => {
     const stops = screen
       .getAllByRole("button")
       .filter((button) => button.getAttribute("tabindex") === "0");
-    // The first card's handle and its menu.
-    expect(stops).toHaveLength(2);
-    expect(stops[0]).toBe(handle("Alpha"));
+    // The first card's handle. Its menu opens with Shift+F10.
+    expect(stops).toEqual([handle("Alpha")]);
   });
 
   it("adds and removes collapse buttons when collapsible changes", async () => {
