@@ -41,6 +41,34 @@
    * @property {"and" | "or"} operator - Whether all or any of the conditions must match
    * @property {Array<QueryCondition | QueryGroup>} conditions
    */
+
+  /** @type {CanvasRenderingContext2D | null | undefined} */
+  let measureContext;
+
+  /**
+   * The full text of a select's chosen option when the select cuts it,
+   * and `""` when it fits. A native select draws no ellipsis and has no
+   * scroll width, so the text is measured on a canvas.
+   * @param {HTMLSelectElement} select
+   */
+  function cutSelectText(select) {
+    const text = select.selectedOptions[0]?.textContent?.trim() ?? "";
+    if (!text) return "";
+    measureContext ??= document.createElement("canvas").getContext("2d");
+    if (!measureContext) return "";
+    const style = getComputedStyle(select);
+    measureContext.font = [
+      style.fontStyle,
+      style.fontWeight,
+      style.fontSize,
+      style.fontFamily,
+    ].join(" ");
+    const room =
+      select.clientWidth -
+      Number.parseFloat(style.paddingInlineStart) -
+      Number.parseFloat(style.paddingInlineEnd);
+    return measureContext.measureText(text).width > room ? text : "";
+  }
 </script>
 
 <script>
@@ -333,6 +361,30 @@
     );
   }
 
+  /**
+   * While the pointer is over a select whose text is cut, give it a
+   * `title` with the full text, as `titleWhenTruncated` does. One listener
+   * serves every select in the builder.
+   * @param {HTMLElement} node
+   */
+  function titleCutSelects(node) {
+    /** @param {MouseEvent} event */
+    function handleMouseover(event) {
+      const select =
+        event.target instanceof Element ? event.target.closest("select") : null;
+      if (!select) return;
+      const text = cutSelectText(select);
+      if (text) select.title = text;
+      else select.removeAttribute("title");
+    }
+    node.addEventListener("mouseover", handleMouseover);
+    return {
+      destroy() {
+        node.removeEventListener("mouseover", handleMouseover);
+      },
+    };
+  }
+
   setContext("carbon:QueryBuilder", {
     settings,
     errors,
@@ -347,6 +399,7 @@
 
 <div
   bind:this={rootRef}
+  use:titleCutSelects
   {id}
   class:bx--query-builder={true}
   class:bx--query-builder--sm={size === "sm"}

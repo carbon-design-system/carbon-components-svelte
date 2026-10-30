@@ -298,6 +298,32 @@ test.describe("QueryBuilder", () => {
     expect(text.y - (label.y + label.height)).toBeCloseTo(8, 0);
   });
 
+  test("titles a field select only while its name is cut", async ({ page }) => {
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await page.goto("/query-builder.html?preset=nested");
+    const select = page
+      .getByRole("group", { name: /^Condition 1 of 2: Where Name/ })
+      .getByRole("combobox", { name: "Field" });
+    const rename = (text: string) =>
+      select.evaluate((el: HTMLSelectElement, text) => {
+        el.options[el.selectedIndex].textContent = text;
+      }, text);
+
+    await select.hover();
+    await expect(select).not.toHaveAttribute("title");
+
+    // 144 px of text in the 128 px a 192 px column leaves for it.
+    await rename("Number of active seats");
+    await page.mouse.move(0, 0);
+    await select.hover();
+    await expect(select).toHaveAttribute("title", "Number of active seats");
+
+    await rename("Seats");
+    await page.mouse.move(0, 0);
+    await select.hover();
+    await expect(select).not.toHaveAttribute("title");
+  });
+
   test("shows every text part in the disabled color when disabled", async ({
     page,
   }) => {
