@@ -186,6 +186,8 @@ Set `disabled` to disable every field and button.
 
 Rows are a flow of cells that wrap when their container is narrow: on a phone the field, operator, and value each take a line, and the row actions follow. Nothing depends on the viewport width, so a builder in a narrow panel wraps the same way. The layout follows the page direction, so under `dir="rtl"` the sentence reads from the right.
 
+The connector column is 48 px wide, and the field and operator columns are 192 px. A connector ("Where", "And", "Or", "Match") wraps when a translation is longer. A field or operator name that does not fit is cut, and the select shows the full name in a tooltip on hover. The summary wraps and keeps each date on one line.
+
 <Box maxWidth="22rem">
   <QueryBuilder fields={fields} value={flat} />
 </Box>
