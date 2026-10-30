@@ -66,7 +66,7 @@ description: A query builder edits a filter as nested groups of conditions, each
 
 Pass the `fields` people can filter on and bind `value`. The query is a root group with an `operator` of `"and"` or `"or"` and a list of `conditions`. A condition is a `field`, an `operator`, and a `value`. A condition can also be a group, which is how the query nests.
 
-Each row reads left to right as a sentence: "Where Plan is any of Team, Enterprise and Seats is at least 50". The builder fills in a unique `id` on every group and condition that has none, and writes them back to `value`.
+Each row reads left to right as a sentence: "Where Plan is any of Team, Enterprise and Seats is at least 50". The builder gives every group and condition without an `id` a unique one. The ids reach `value` with the first edit, so mounting the builder does not change a bound value.
 
 The `change` event fires on every edit with the whole query as `event.detail`.
 

@@ -85,7 +85,8 @@
 
   /**
    * Specify the query: a root group of conditions and nested groups.
-   * Nodes without an `id` get one.
+   * Nodes without an `id` get one, which reaches `value` with the first
+   * edit.
    * @type {QueryGroup}
    * @bindable writable
    */
@@ -187,6 +188,8 @@
   let status = "";
   /** @type {HTMLDivElement | null} */
   let rootRef = null;
+  /** @type {QueryGroup} */
+  let tree = value;
 
   /** @returns {string} */
   function makeId() {
@@ -194,10 +197,12 @@
     return `q${seq}`;
   }
 
-  $: if (!hasIds(value)) value = assignIds(value, makeId);
+  // The builder works on a copy with an id on every node. The ids reach
+  // the bound value with the first edit, so mounting leaves it alone.
+  $: tree = hasIds(value) ? value : assignIds(value, makeId);
   $: translate = withFallback(translateWithId);
   $: fieldsById = indexFields(fields);
-  $: validation = validateQuery(value, fieldsById);
+  $: validation = validateQuery(tree, fieldsById);
   $: errors.set(validation.errors);
   // The naming attributes belong on the root group, which carries the role.
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
@@ -223,7 +228,7 @@
     labelId,
     describedBy,
   });
-  $: summary = showSummary ? queryToText(value, fieldsById, translate) : "";
+  $: summary = showSummary ? queryToText(tree, fieldsById, translate) : "";
 
   /**
    * @param {import("./QueryBuilder.svelte").QueryGroup} next
@@ -273,7 +278,7 @@
    * @param {Record<string, unknown>} patch
    */
   function update(nodeId, patch) {
-    commit(updateNode(value, nodeId, patch));
+    commit(updateNode(tree, nodeId, patch));
   }
 
   /** @param {string} nodeId */
@@ -292,7 +297,7 @@
     const condition = newCondition(first.id, makeId());
     if (kind === "condition") {
       commit(
-        appendNode(value, groupId, condition),
+        appendNode(tree, groupId, condition),
         translate("announceConditionAdded"),
       );
       focusById(`${id}-${condition.id}-field`);
@@ -300,7 +305,7 @@
     }
     const group = { id: makeId(), operator: "and", conditions: [condition] };
     commit(
-      appendNode(value, groupId, /** @type {any} */ (group)),
+      appendNode(tree, groupId, /** @type {any} */ (group)),
       translate("announceGroupAdded"),
     );
     focusById(`${id}-${condition.id}-field`);
@@ -308,13 +313,13 @@
 
   /** @param {string} nodeId */
   function remove(nodeId) {
-    const found = findNode(value, nodeId);
+    const found = findNode(tree, nodeId);
     if (!found?.parent) return;
     const { parent, index, node } = found;
     const neighbor =
       parent.conditions[index + 1] ?? parent.conditions[index - 1];
     commit(
-      removeNode(value, nodeId),
+      removeNode(tree, nodeId),
       translate(
         isQueryGroup(node)
           ? "announceGroupRemoved"
@@ -333,8 +338,8 @@
    * @param {number} delta
    */
   function move(nodeId, delta) {
-    const next = moveNode(value, nodeId, delta);
-    if (next === value) return;
+    const next = moveNode(tree, nodeId, delta);
+    if (next === tree) return;
     const found = findNode(next, nodeId);
     commit(
       next,
@@ -438,7 +443,7 @@
       {invalidText}
     </div>
   {/if}
-  <QueryBuilderGroup node={value} />
+  <QueryBuilderGroup node={tree} />
   {#if showSummary}
     <div class="bx--query-builder__summary">
       <span class:bx--label={true} class:bx--label--disabled={disabled}

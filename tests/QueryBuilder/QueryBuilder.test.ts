@@ -37,13 +37,29 @@ describe("QueryBuilder", () => {
     ).toBeInTheDocument();
   });
 
-  it("fills in ids and writes them back to the bound value", () => {
+  it("leaves the bound value alone on mount and adds ids with the first edit", async () => {
+    const onchange = vi.fn();
     render(QueryBuilder, {
-      props: { value: { operator: "or", conditions: [nameRow] } },
+      props: { value: { operator: "or", conditions: [nameRow] }, onchange },
     });
 
     const button = screen.getByRole("button", { name: "Remove condition 1" });
     expect(button.id).toMatch(/^qb-q\d+-remove$/);
+    expect(
+      JSON.parse(screen.getByTestId("bound-ids").textContent ?? ""),
+    ).toEqual({ operator: "or", conditions: [nameRow] });
+    expect(onchange).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Add condition" }));
+
+    const edited = JSON.parse(
+      screen.getByTestId("bound-ids").textContent ?? "",
+    );
+    expect(edited.id).toEqual(expect.any(String));
+    expect(edited.conditions.map((node: { id: string }) => node.id)).toEqual([
+      expect.any(String),
+      expect.any(String),
+    ]);
   });
 
   it("adds a condition with the first field, focuses it, and fires change", async () => {

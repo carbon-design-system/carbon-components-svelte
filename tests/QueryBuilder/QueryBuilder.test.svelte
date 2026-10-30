@@ -54,3 +54,4 @@
   on:change={(event) => onchange(event.detail)}
 />
 <pre data-testid="bound">{queryToJSON(value)}</pre>
+<pre data-testid="bound-ids">{queryToJSON(value, { ids: true })}</pre>
