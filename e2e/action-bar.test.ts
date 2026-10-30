@@ -282,6 +282,23 @@ test.describe("ActionBar", () => {
     await expect(page.getByRole("combobox")).toBeFocused();
   });
 
+  test("keeps a field's hidden label inside the bar at 320 px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 600 });
+    await page.goto("/action-bar-fields.html");
+    await page.locator("#fields").evaluate((node) => {
+      node.style.width = "320px";
+    });
+    await expect(page.getByRole("toolbar")).toBeVisible();
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
   test("a vertical bar moves with Up and Down and collapses to its height", async ({
     page,
   }) => {

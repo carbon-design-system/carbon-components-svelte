@@ -5,6 +5,7 @@
     ActionBarItem,
     Dropdown,
     Search,
+    TextInput,
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";
@@ -35,6 +36,9 @@
         placeholder="Find"
         bind:value={query}
       />
+    </ActionBarItem>
+    <ActionBarItem>
+      <TextInput size="sm" hideLabel labelText="Page" value="3" />
     </ActionBarItem>
     <ActionBarButton labelText="Copy" icon={Copy} />
   </ActionBar>

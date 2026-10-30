@@ -33,7 +33,11 @@
     min-height: to-rem(48px);
   }
 
+  // The containing block of what it clips. A field's visually hidden label
+  // is `position: absolute`, and with a block outside the bar, the clip
+  // missed it and the page scrolled sideways.
   .#{$prefix}--action-bar__items {
+    position: relative;
     display: flex;
     min-width: 0;
     flex: 1 1 auto;
