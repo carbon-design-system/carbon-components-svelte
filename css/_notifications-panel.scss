@@ -78,7 +78,9 @@
     gap: $carbon--spacing-03;
   }
 
+  // The divider takes its 1px from the padding, so rows keep a 4px pitch.
   .#{$prefix}--notifications-panel__item + .#{$prefix}--notifications-panel__item {
+    padding-top: calc(#{$carbon--spacing-03} - 1px);
     border-top: 1px solid $border-subtle;
   }
 
@@ -186,7 +188,7 @@
     @include type-style("helper-text-01");
 
     display: block;
-    margin-top: $carbon--spacing-02;
+    margin-top: $carbon--spacing-01;
     color: $text-helper;
   }
 

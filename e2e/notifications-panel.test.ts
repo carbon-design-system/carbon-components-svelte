@@ -248,6 +248,27 @@ test.describe("NotificationsPanel", () => {
     ).toBeInViewport({ ratio: 1 });
   });
 
+  test("keeps the rows on a 4px pitch", async ({ page }) => {
+    await page.goto("/notifications-panel.html?plain&count=12");
+    // Consecutive rows with one line of title and a time, in one list.
+    const pitches = await page.locator(ROW).evaluateAll((rows) =>
+      rows.flatMap((row, i) => {
+        const next = rows[i + 1];
+        const plain = (el: Element) =>
+          !el.querySelector(
+            ".bx--notifications-panel__subtitle, .bx--notifications-panel__action",
+          );
+        if (!next || row.parentElement !== next.parentElement) return [];
+        if (!plain(row) || !plain(next)) return [];
+        return [
+          next.getBoundingClientRect().top - row.getBoundingClientRect().top,
+        ];
+      }),
+    );
+    expect(pitches.length).toBeGreaterThan(2);
+    for (const pitch of pitches) expect(Math.abs(pitch - 52)).toBeLessThan(0.5);
+  });
+
   test("renders the panel without a header, on the page", async ({ page }) => {
     await page.goto("/notifications-panel.html?plain&count=12");
     const region = page.getByRole("region", { name: "Notifications" });
