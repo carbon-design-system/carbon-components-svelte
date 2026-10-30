@@ -668,15 +668,13 @@
         ...(typeof virtualize === "object" ? virtualize : {}),
       }
     : virtualize;
-  // Headers and descriptions make rows unequal, so measure them.
-  $: measuredRows =
-    grouped || entries.some((entry) => entry.description !== undefined);
   $: menuState = menuWindow.update({
     items: menuRows,
     getKey: (row) => row.id,
     shouldVirtualize,
     virtualize: windowConfig,
-    wrapOptions: measuredRows,
+    // Labels wrap and headers are taller than rows, so rows are measured.
+    wrapOptions: true,
     size,
     scrollTop: listScrollTop,
   });

@@ -179,11 +179,12 @@
     flex-direction: column;
   }
 
+  // Labels and descriptions wrap, as menu items do. A word longer than
+  // the line, such as a URL, breaks; a shorter one moves whole to the
+  // next line, so an id is not cut where it would fit.
   .#{$prefix}--command-palette__item-text,
   .#{$prefix}--command-palette__item-description {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: break-word;
   }
 
   .#{$prefix}--command-palette__item-description {
@@ -203,11 +204,18 @@
 
   // `Kbd` keeps the keys in left-to-right order in RTL; only their place
   // moves.
+  // Narrow screens drop the keys first, as secondary details, and leave
+  // the label the row. The option still names them in
+  // `aria-keyshortcuts`.
   .#{$prefix}--command-palette__shortcut {
-    display: flex;
+    display: none;
     flex: 0 0 auto;
     align-items: center;
     margin-inline-start: $carbon--spacing-05;
+
+    @include carbon--breakpoint(md) {
+      display: flex;
+    }
   }
 
   .#{$prefix}--command-palette__footer {

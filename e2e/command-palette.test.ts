@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+import { expectNoPageOverflow, expectTextFits } from "./helpers/layout";
 
 const highlighted = ".bx--command-palette__item--highlighted";
 
@@ -105,6 +106,19 @@ test("mirrors the icon, the highlight bar and the key caps in RTL", async ({
   expect(rtl.bar).toContain("-3px 0px 0px 0px inset");
   // Key names read left to right in any language.
   expect(rtl.caps).toEqual(ltr.caps);
+});
+
+test("wraps long labels at 320 px instead of cutting them", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/command-palette.html?open&state=long");
+  const container = page.locator(".bx--command-palette__container");
+  await expect(container).toBeVisible();
+  await expect(async () => {
+    expect(await expectTextFits(container)).toBeGreaterThan(0);
+  }).toPass();
+  await expectNoPageOverflow(page);
 });
 
 test("stacks above a Modal that comes after it in the DOM", async ({
