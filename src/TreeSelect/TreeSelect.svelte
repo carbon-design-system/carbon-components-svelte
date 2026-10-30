@@ -1406,13 +1406,17 @@
     warnText={isFluid ? "" : warnText}
     {warnId}
   >
-    {#if showInvalid}
-      <WarningFilled class="bx--list-box__invalid-icon" />
-    {/if}
-    {#if showWarn}
-      <WarningAltFilled
-        class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
-      />
+    <!-- A single-mode search puts the icons after its input, as ComboBox
+         does, so the rule that moves them clear of the clear button applies. -->
+    {#if !(filterable && single)}
+      {#if showInvalid}
+        <WarningFilled class="bx--list-box__invalid-icon" />
+      {/if}
+      {#if showWarn}
+        <WarningAltFilled
+          class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+        />
+      {/if}
     {/if}
     {#if filterable}
       <div
@@ -1486,6 +1490,14 @@
             {placeholder}
             {id}
           />
+          {#if single && showInvalid}
+            <WarningFilled class="bx--list-box__invalid-icon" />
+          {/if}
+          {#if single && showWarn}
+            <WarningAltFilled
+              class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+            />
+          {/if}
           {#if value && !readonly}
             <ListBoxSelection
               on:clear={clearSearch}

@@ -76,6 +76,21 @@
           helperText="Helper text"
         />
       </div>
+      <div data-testid="search-{state.name}">
+        <TreeSelect
+          labelText="Search {state.name}"
+          {nodes}
+          filterable
+          selectedId="paris"
+          invalid={state.invalid}
+          invalidText={state.invalidText}
+          warn={state.warn}
+          warnText={state.warnText}
+          readonly={state.readonly}
+          disabled={state.disabled}
+          helperText="Helper text"
+        />
+      </div>
     {/each}
     <FluidForm>
       <div data-testid="fluid">

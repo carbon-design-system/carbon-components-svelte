@@ -156,3 +156,25 @@ test.describe("TreeSelect", () => {
     await expect(parent).not.toHaveAttribute("aria-busy");
   });
 });
+
+test.describe("TreeSelect states", () => {
+  test("a search field's status icon sits clear of its clear button", async ({
+    page,
+  }) => {
+    await page.goto("/tree-select-states.html");
+    for (const state of ["invalid", "warn"]) {
+      const scope = page.getByTestId(`search-${state}`);
+      // biome-ignore lint/performance/noAwaitInLoops: two reads per state
+      const icon = await scope
+        .locator(".bx--list-box__invalid-icon")
+        .boundingBox();
+      const clear = await scope
+        .locator(".bx--list-box__selection")
+        .boundingBox();
+      if (!(icon && clear)) throw new Error(`${state}: missing icon`);
+      expect
+        .soft(icon.x + icon.width, state)
+        .toBeLessThanOrEqual(clear.x + 0.5);
+    }
+  });
+});
