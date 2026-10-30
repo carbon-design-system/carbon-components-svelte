@@ -90,9 +90,9 @@ Set `labelText` to an empty string to render an icon-only button. Provide an `ic
 
 ### Custom tooltip position
 
-Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
+Set `tooltipAlign` to place the tooltip, with Popover's `align` names. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
 
-<FileUploaderButton labelText="" tooltipPosition="right" tooltipAlignment="end" iconDescription="Add file" icon={Add} />
+<FileUploaderButton labelText="" tooltipAlign="right-end" iconDescription="Add file" icon={Add} />
 
 ### Hidden tooltip
 
