@@ -35,6 +35,9 @@
     rows[1].c1 = 'He said "hi"';
     rows[1].c2 = "two\nlines";
     rows[2].c1 = "a\tb";
+    // Values that read differently reversed.
+    rows[3].c1 = "-4.2";
+    rows[3].c2 = "3 / 4";
   }
 
   let activeCell = { row: 0, column: 0 };

@@ -274,6 +274,32 @@ test.describe("DataGrid", () => {
     expect(Math.abs(stuck.x - frozen.x)).toBeLessThan(2);
   });
 
+  test("keeps signed numbers and fractions in order right to left", async ({
+    page,
+  }) => {
+    await page.goto("/data-grid.html?dir=rtl");
+
+    // The x of each character, in the order they are written.
+    const xs = (row: number, column: number) =>
+      cell(page, row, column).evaluate((node) => {
+        const text = node.querySelector(".bx--data-grid__text")?.firstChild;
+        if (!text?.textContent) return [];
+        const range = document.createRange();
+        return [...text.textContent].map((_, i) => {
+          range.setStart(text, i);
+          range.setEnd(text, i + 1);
+          return range.getBoundingClientRect().left;
+        });
+      });
+
+    const signed = await xs(3, 1);
+    expect(signed).toHaveLength(4);
+    expect(signed).toEqual([...signed].sort((a, b) => a - b));
+    const fraction = await xs(3, 2);
+    expect(fraction).toHaveLength(5);
+    expect(fraction).toEqual([...fraction].sort((a, b) => a - b));
+  });
+
   test("keeps the selection visible in forced colors", async ({
     page,
     browserName,

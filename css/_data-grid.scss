@@ -93,10 +93,14 @@
     color: $text-secondary;
   }
 
+  // Each value takes its direction from its own first strong character, as
+  // a `<bdi>` would, with no element per cell. A value with none, such as
+  // "-4.2" or "3 / 4", reads left to right on a right-to-left page.
   .#{$prefix}--data-grid__text {
     overflow: hidden;
     min-width: 0;
     text-overflow: ellipsis;
+    unicode-bidi: plaintext;
     white-space: nowrap;
   }
 
