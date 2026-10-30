@@ -245,7 +245,7 @@
    * @typedef {object} Entry
    * @property {any} id
    * @property {number} index - Position in `items`; option ids use it.
-   * @property {Item} item
+   * @property {any} item
    * @property {string} text
    * @property {string | undefined} group
    * @property {string | undefined} description
