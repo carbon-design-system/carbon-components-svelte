@@ -19,23 +19,22 @@
   {#each stops as stop, i}
     <Coachmark
       focusOnOpen
-      title={stop.label}
+      titleText={stop.label}
       open={current === i}
       on:close={() => {
         if (current === i) current = -1;
       }}
     >
-      <Button
-        slot="target"
-        let:triggerProps
-        let:toggle
-        {...triggerProps}
-        kind="tertiary"
-        size="small"
-        on:click={toggle}
-      >
-        {stop.label}
-      </Button>
+      <svelte:fragment slot="target" let:triggerProps let:toggle>
+        <Button
+          {...triggerProps}
+          kind="tertiary"
+          size="small"
+          on:click={toggle}
+        >
+          {stop.label}
+        </Button>
+      </svelte:fragment>
       {stop.text}
       <svelte:fragment slot="actions">
         <Button size="small" data-modal-primary-focus on:click={() => next(i)}>
