@@ -174,6 +174,20 @@
   // fills with `Highlight` and opts out of forcing, as a selected
   // icon-only `Button` does. A disabled one reads as `GrayText`.
   @media (forced-colors: active) {
+    // A ghost button's transparent border is repainted, which drew a box
+    // around every button, and focus only changed the color of one. The
+    // resting border matches the canvas, and focus draws a 2px ring.
+    .#{$prefix}--action-bar__button.#{$prefix}--btn,
+    .#{$prefix}--action-bar__more.#{$prefix}--btn {
+      border-color: Canvas;
+    }
+
+    .#{$prefix}--action-bar__button.#{$prefix}--btn:not(.#{$prefix}--action-bar__button--pressed):focus,
+    .#{$prefix}--action-bar__more.#{$prefix}--btn:focus {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
     .#{$prefix}--action-bar__button--pressed,
     .#{$prefix}--action-bar__button--pressed:hover,
     .#{$prefix}--action-bar__button--pressed:focus {

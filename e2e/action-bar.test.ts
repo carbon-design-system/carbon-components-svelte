@@ -258,6 +258,40 @@ test.describe("ActionBar", () => {
     expect(await paint(pressed)).not.toBe(await paint(plain));
   });
 
+  test("draws one ring, on the focused button, in forced colors", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/action-bar.html");
+    await page.getByRole("button", { name: "Italic" }).focus();
+    const edges = await bar(page)
+      .locator(".bx--action-bar__button")
+      .evaluateAll((nodes) => {
+        const probe = document.createElement("span");
+        probe.style.color = "Canvas";
+        document.body.append(probe);
+        const canvas = getComputedStyle(probe).color;
+        probe.remove();
+        return nodes
+          .filter((node) => node.checkVisibility())
+          .map((node) => {
+            const style = getComputedStyle(node);
+            const box =
+              style.borderTopColor !== canvas &&
+              style.borderTopColor !== "rgba(0, 0, 0, 0)";
+            const ring =
+              style.outlineStyle !== "none" &&
+              Number.parseFloat(style.outlineWidth) >= 2;
+            return { focused: node === document.activeElement, box, ring };
+          });
+      });
+    // A border that shows would be a box around every button.
+    expect(edges.filter((edge) => edge.box && !edge.focused)).toEqual([]);
+    expect(edges.filter((edge) => edge.ring)).toEqual([
+      { focused: true, box: false, ring: true },
+    ]);
+  });
+
   test("keeps the keys of a nested field and dropdown", async ({ page }) => {
     await page.goto("/action-bar-fields.html");
     await page.getByRole("button", { name: "Add row" }).focus();
