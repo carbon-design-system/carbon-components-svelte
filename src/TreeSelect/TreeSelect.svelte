@@ -193,7 +193,7 @@
    * stay in the menu whatever this returns for them.
    * @type {(node: Node, value: string) => boolean}
    */
-  export let filterNode = function filterNode(node, value) {
+  export let shouldFilterNode = function shouldFilterNode(node, value) {
     return String(node.text ?? node.id)
       .toLowerCase()
       .includes(value.trim().toLowerCase());
@@ -699,7 +699,7 @@
   $: matchNodes = searching
     ? filterTreeNodes(
         /** @type {any} */ (viewNodes),
-        (node) => filterNode(/** @type {Node} */ (node), value),
+        (node) => shouldFilterNode(/** @type {Node} */ (node), value),
         { includeAncestors: true, includeChildren: false },
       )
     : viewNodes;

@@ -100,7 +100,7 @@ A tag is a component that registers with `TagSet`, so thousands of them are slow
 
 Set `filterable` to search the tree in the field. The menu keeps the nodes that match and the ancestors of each match, and holds those ancestors open. Searching ignores the expanded branches and restores them when the search ends.
 
-Pass `filterNode` to change what matches. It receives the node and the search text, and ancestors of a match stay whatever it returns for them. In `selectionMode="single"` the field shows the selected label until you edit it, and closing the menu puts the label back.
+Pass `shouldFilterNode` to change what matches. It receives the node and the search text, and ancestors of a match stay whatever it returns for them. In `selectionMode="single"` the field shows the selected label until you edit it, and closing the menu puts the label back.
 
 <Stack gap={6}>
   <TreeSelect labelText="Office" placeholder="Search offices" {nodes} filterable />
