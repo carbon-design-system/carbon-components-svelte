@@ -676,6 +676,20 @@ $ai-label-sizes: (
     }
   }
 
+  // Without steppers, the read-only icon shows in their place. It takes the
+  // invalid icon's spot left of the decorator, and the text stops short.
+  .#{$prefix}--number--nosteppers
+    .#{$prefix}--number__input-wrapper--decorator
+    .#{$prefix}--text-input__readonly-icon {
+    @include ccs-inset-inline($end: to-rem(40px));
+  }
+
+  .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers
+    .#{$prefix}--number__input-wrapper--decorator
+    input[type="text"] {
+    padding-inline-end: to-rem(72px);
+  }
+
   // A divider between the label and the steppers, as in v11. The first
   // rule divider is otherwise drawn only beside an invalid icon.
   .#{$prefix}--number__input-wrapper--decorator
