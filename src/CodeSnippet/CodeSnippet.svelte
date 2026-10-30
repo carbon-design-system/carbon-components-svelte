@@ -198,13 +198,24 @@
   export let portalTooltip = undefined;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the feedback tooltip relative to the copy button.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
 
   /**
    * Set the alignment of the feedback tooltip relative to the copy button.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -227,6 +238,7 @@
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
@@ -250,7 +262,10 @@
   // Caret spacing + alignment nudges for the inline variant's portalled
   // feedback. Single/multi variants delegate to CopyButton, which computes
   // its own from the same util.
-  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+  $: portalGaps = iconTooltipPortalGaps(
+    effectiveTooltipPosition,
+    effectiveTooltipAlignment,
+  );
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
@@ -475,6 +490,11 @@
       disconnectModalObserver();
     };
   });
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 {#if skeleton}
@@ -573,8 +593,8 @@
         anchor={copyRef}
         open={feedbackOpen}
         text={feedbackText}
-        direction={tooltipPosition}
-        intrinsicAlign={tooltipAlignment}
+        direction={effectiveTooltipPosition}
+        intrinsicAlign={effectiveTooltipAlignment}
         horizontalGapLeft={portalGaps.horizontalGapLeft}
         horizontalGapRight={portalGaps.horizontalGapRight}
         gapTop={portalGaps.gapTop}
@@ -632,8 +652,8 @@
         {feedbackIcon}
         iconDescription={copyButtonDescription}
         portalTooltip={effectivePortalTooltip}
-        {tooltipPosition}
-        {tooltipAlignment}
+        tooltipPosition={effectiveTooltipPosition}
+        tooltipAlignment={effectiveTooltipAlignment}
         on:click
         on:copy
         on:copy:error
