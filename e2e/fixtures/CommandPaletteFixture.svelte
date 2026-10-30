@@ -78,10 +78,13 @@
     { id: "short", text: "View logs" },
   ];
 
-  const large = Array.from({ length: 1000 }, (_, index) => ({
-    id: index,
-    text: `service-${index}`,
-  }));
+  const large = Array.from(
+    { length: Number(params.get("large")) || 1000 },
+    (_, index) => ({
+      id: index,
+      text: `service-${index}`,
+    }),
+  );
 
   const sets = {
     "": basic,
