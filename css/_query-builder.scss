@@ -155,6 +155,25 @@
     margin-inline-start: auto;
   }
 
+  // A move that cannot happen stays focusable in the row's toolbar
+  // (aria-disabled). It looks like a disabled ghost button and keeps its
+  // focus ring, which Carbon's `--disabled` class would remove.
+  .#{$prefix}--query-builder__actions .#{$prefix}--btn--ghost[aria-disabled="true"],
+  .#{$prefix}--query-builder__actions .#{$prefix}--btn--ghost[aria-disabled="true"]:hover,
+  .#{$prefix}--query-builder__actions .#{$prefix}--btn--ghost[aria-disabled="true"]:active {
+    background-color: transparent;
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--query-builder__actions
+      .#{$prefix}--btn--ghost[aria-disabled="true"]
+      .#{$prefix}--btn__icon {
+      fill: GrayText;
+    }
+  }
+
   .#{$prefix}--query-builder__footer {
     display: flex;
     flex-wrap: wrap;

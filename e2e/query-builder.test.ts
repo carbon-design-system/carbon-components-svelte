@@ -106,7 +106,7 @@ test.describe("QueryBuilder", () => {
     await page.keyboard.type("is at l");
     await tabTo("value");
     await page.keyboard.type("50");
-    // The only row cannot move, so Tab skips its two disabled buttons.
+    // The only row cannot move, so its toolbar's tab stop is "Remove".
     await tabTo("remove");
 
     // Add a group from the root's footer, then a condition inside it.
@@ -151,13 +151,13 @@ test.describe("QueryBuilder", () => {
     let query = await readJson(page);
     expect(query.conditions[0].operator).toBe("or");
     expect(query.conditions[1].field).toBe("name");
-    // The row sits last now, so focus passes to the button that still works.
+    // The row sits last now. Its "down" button cannot act but keeps focus.
     const moved = root.getByRole("group", {
       name: /^Condition 2 of 2: and Name/,
     });
-    await expect(
-      moved.getByRole("button", { name: "Move condition 2 up" }),
-    ).toBeFocused();
+    const down = moved.getByRole("button", { name: "Move condition 2 down" });
+    await expect(down).toBeFocused();
+    await expect(down).toHaveAttribute("aria-disabled", "true");
     await expect(page.locator(".bx--query-builder > [role=status]")).toHaveText(
       "Condition moved to position 2 of 2",
     );
@@ -170,6 +170,73 @@ test.describe("QueryBuilder", () => {
     await expect(page.locator(".bx--query-builder > [role=status]")).toHaveText(
       "Condition removed",
     );
+  });
+
+  test("tabs through a row's fields, then its actions as one stop", async ({
+    page,
+  }) => {
+    await page.goto("/query-builder.html?preset=nested");
+    const row = page.getByRole("group", {
+      name: /^Condition 1 of 3: Where Seats/,
+    });
+    await row.getByRole("combobox", { name: "Field" }).focus();
+    const order: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+      await page.keyboard.press("Tab");
+      order.push(suffix(await activeId(page)));
+    }
+    // The first row cannot move up, so its stop is "down". The next Tab
+    // leaves the toolbar for the next row's field.
+    expect(order).toEqual(["operator", "value", "down", "field", "operator"]);
+
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Shift+Tab");
+    expect(suffix(await activeId(page))).toBe("down");
+  });
+
+  test("moves between a row's actions with the arrow keys", async ({
+    page,
+  }) => {
+    await page.goto("/query-builder.html?preset=nested");
+    const row = page.getByRole("group", {
+      name: /^Condition 2 of 3: or Plan/,
+    });
+    const toolbar = row.getByRole("toolbar", { name: "Condition 2 actions" });
+    const up = toolbar.getByRole("button", { name: "Move condition 2 up" });
+    const down = toolbar.getByRole("button", { name: "Move condition 2 down" });
+    const remove = toolbar.getByRole("button", { name: "Remove condition 2" });
+
+    await up.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(down).toBeFocused();
+    await page.keyboard.press("End");
+    await expect(remove).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(up).toBeFocused();
+    await page.keyboard.press("ArrowLeft");
+    await expect(remove).toBeFocused();
+    await page.keyboard.press("Home");
+    await expect(up).toBeFocused();
+
+    // The last focused action stays the row's tab stop.
+    await page.keyboard.press("ArrowRight");
+    const stops = await toolbar
+      .getByRole("button")
+      .evaluateAll((buttons) =>
+        buttons.map((b) => (b as HTMLElement).tabIndex),
+      );
+    expect(stops).toEqual([-1, 0, -1]);
+
+    // Left and Right swap under dir="rtl".
+    await page.evaluate(() =>
+      document.documentElement.setAttribute("dir", "rtl"),
+    );
+    await page.keyboard.press("ArrowLeft");
+    await expect(remove).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(down).toBeFocused();
+    await page.evaluate(() => document.documentElement.removeAttribute("dir"));
   });
 
   test("moves and removes a group from its options menu", async ({ page }) => {

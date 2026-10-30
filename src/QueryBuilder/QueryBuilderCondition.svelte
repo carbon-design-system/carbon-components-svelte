@@ -35,6 +35,11 @@
   import ArrowUp from "../icons/ArrowUp.svelte";
   import Close from "../icons/Close.svelte";
   import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
+  import {
     carryValue,
     conditionToText,
     emptyValue,
@@ -45,6 +50,7 @@
   /** @type {import("./query-tree.js").QueryBuilderContext} */
   const { settings, errors, touched, keyOf, update, touch, remove, move } =
     getContext("carbon:QueryBuilder");
+  const layoutDirection = getLayoutDirection();
 
   $: ({
     translate,
@@ -67,6 +73,10 @@
   let nodeId = "";
   /** @type {import("./query.js").QueryErrorCode | undefined} */
   let error;
+  /** @type {HTMLDivElement | null} */
+  let toolbarRef = null;
+  // The row action the user last focused: 0 up, 1 down, 2 remove.
+  let focusedAction = -1;
 
   $: nodeId = node.id ?? "";
   $: field = fieldsById.get(node.field);
@@ -101,6 +111,23 @@
     text: `${connector} ${sentence || field?.text || ""}`.trim(),
   });
   $: base = `${id}-${keyOf(nodeId)}`;
+  $: canMoveUp = index > 0;
+  $: canMoveDown = index < total - 1;
+  // The toolbar's one tab stop: the action last focused, or else the first
+  // one that can act. Remove always can.
+  $: tabStop =
+    focusedAction >= 0 ? focusedAction : canMoveUp ? 0 : canMoveDown ? 1 : 2;
+
+  /** @param {FocusEvent} event */
+  function handleActionFocusin(event) {
+    const buttons = toolbarRef
+      ? [...toolbarRef.querySelectorAll("button")]
+      : [];
+    const position = buttons.indexOf(
+      /** @type {HTMLButtonElement} */ (event.target),
+    );
+    if (position >= 0) focusedAction = position;
+  }
 
   /** @param {string} fieldId */
   function setField(fieldId) {
@@ -382,15 +409,34 @@
     </div>
   {/if}
   {#if !readonly}
-    <div class="bx--query-builder__actions">
+    <!-- One tab stop for the row's actions; arrow keys move between them.
+      A move that cannot happen stays focusable with aria-disabled, so
+      focus stays on the button after a move to either end. -->
+    <div
+      bind:this={toolbarRef}
+      class="bx--query-builder__actions"
+      role="toolbar"
+      aria-label={translate("conditionActions", { n: index + 1 })}
+      use:rovingFocus={{
+        selector: "button",
+        getActiveIndex: () => tabStop,
+        onMove: (position) => (focusedAction = position),
+        focusOnMove: true,
+        rtl: () =>
+          resolveLayoutDirection($layoutDirection, toolbarRef) === "rtl",
+      }}
+      on:focusin={handleActionFocusin}
+    >
       <Button
         id="{base}-up"
         kind="ghost"
         size={buttonSize}
         icon={ArrowUp}
         iconDescription={translate("moveUp", { n: index + 1 })}
-        disabled={disabled || index === 0}
-        on:click={() => move(nodeId, -1)}
+        tabindex={tabStop === 0 ? "0" : "-1"}
+        aria-disabled={!canMoveUp || undefined}
+        {disabled}
+        on:click={() => canMoveUp && move(nodeId, -1)}
       />
       <Button
         id="{base}-down"
@@ -398,8 +444,10 @@
         size={buttonSize}
         icon={ArrowDown}
         iconDescription={translate("moveDown", { n: index + 1 })}
-        disabled={disabled || index === total - 1}
-        on:click={() => move(nodeId, 1)}
+        tabindex={tabStop === 1 ? "0" : "-1"}
+        aria-disabled={!canMoveDown || undefined}
+        {disabled}
+        on:click={() => canMoveDown && move(nodeId, 1)}
       />
       <Button
         id="{base}-remove"
@@ -407,6 +455,7 @@
         size={buttonSize}
         icon={Close}
         iconDescription={translate("removeCondition", { n: index + 1 })}
+        tabindex={tabStop === 2 ? "0" : "-1"}
         {disabled}
         on:click={() => remove(nodeId)}
       />

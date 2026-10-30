@@ -51,6 +51,7 @@ export type QueryTextId =
   | "moveGroupUp"
   | "moveGroupDown"
   | "groupActions"
+  | "conditionActions"
   | "emptyGroup"
   | "conditionLabel"
   | "groupLabel"

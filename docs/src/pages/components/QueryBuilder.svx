@@ -194,9 +194,11 @@ Rows are a flow of cells that wrap when their container is narrow: on a phone th
 
 Each condition is a labelled group whose name is its sentence and place, such as "Condition 2 of 3: and Seats is at least 50". Each nested group is named with its level, its logic, and its size. Screen readers announce the name on entering the group, so the sentence and the all-or-any logic are read without visiting every field.
 
-Move through the builder with <DocKbd label="Tab" /> in reading order: a group's logic, then each row's field, operator, value, and its enabled row buttons, then the group's add buttons. Arrow keys keep their native meaning inside the fields. The builder does not use a grid or tree model, because arrow keys already pick an option in a list, step a number, and move through a calendar.
+Move through the builder with <DocKbd label="Tab" /> in reading order: a group's logic, then each row's field, operator, value and row actions, then the group's add buttons. A row's actions (move up, move down, remove) are a toolbar with one tab stop. Inside it, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> move between the buttons, and <DocKbd label="Home" /> and <DocKbd label="End" /> go to the first and last. Left and right swap under `dir="rtl"`. The toolbar's tab stop is the action you last used, so a row moved several places keeps it. A move that cannot happen, such as "up" on the first row, stays in the toolbar and does nothing.
 
-Adding a condition or group moves focus to its first field. Removing one moves focus to the next row, or to "Add condition" when none is left. Moving a row keeps focus on its move button, or on the other move button when the row reaches an end. Each change is announced in a status region, for example "Condition moved to position 2 of 3".
+Arrow keys keep their native meaning inside the fields. The builder does not use a grid or tree model for the fields, because arrow keys already pick an option in a list, step a number, and move through a calendar.
+
+Adding a condition or group moves focus to its first field. Removing one moves focus to the next row, or to "Add condition" when none is left. Moving a row keeps focus on its move button, also when the row reaches an end. Each change is announced in a status region, for example "Condition moved to position 2 of 3".
 
 | Do | Why |
 | --- | --- |

@@ -388,17 +388,10 @@
       focusPart(nodeId, "menu");
       return;
     }
-    // The button that was pressed may be disabled at the new end; hand
-    // focus to the other so it stays on the row.
-    const atEdge =
-      found?.parent &&
-      (delta < 0
-        ? found.index === 0
-        : found.index === found.parent.conditions.length - 1);
-    focusPart(
-      nodeId,
-      atEdge ? (delta < 0 ? "down" : "up") : delta < 0 ? "up" : "down",
-    );
+    // The row may have moved in the DOM, which drops focus. The pressed
+    // button stays focusable at either end (aria-disabled), so focus
+    // returns to it.
+    focusPart(nodeId, delta < 0 ? "up" : "down");
   }
 
   /**

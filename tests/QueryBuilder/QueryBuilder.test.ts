@@ -230,7 +230,7 @@ describe("QueryBuilder", () => {
     expect(operator).toHaveDisplayValue("is");
   });
 
-  it("reorders a row and keeps focus on the button that still works", async () => {
+  it("reorders a row and keeps focus on the pressed button at the end", async () => {
     render(QueryBuilder, {
       props: {
         value: {
@@ -248,12 +248,45 @@ describe("QueryBuilder", () => {
       "seats",
       "name",
     ]);
-    expect(
-      screen.getByRole("button", { name: "Move condition 2 up" }),
-    ).toHaveFocus();
+    // At the end the button cannot act, but it stays focusable.
+    const down = screen.getByRole("button", { name: "Move condition 2 down" });
+    expect(down).toHaveFocus();
+    expect(down).toHaveAttribute("aria-disabled", "true");
+    expect(down).not.toBeDisabled();
     expect(screen.getByRole("status")).toHaveTextContent(
       "Condition moved to position 2 of 2",
     );
+
+    await user.click(down);
+    expect(bound().conditions.map((c: { field: string }) => c.field)).toEqual([
+      "seats",
+      "name",
+    ]);
+  });
+
+  it("gives each row's actions one tab stop in a toolbar", () => {
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [nameRow, { field: "seats", operator: "gte", value: 5 }],
+        },
+      },
+    });
+
+    const [first, second] = screen.getAllByRole("toolbar");
+    expect(first).toHaveAccessibleName("Condition 1 actions");
+    const tabStops = (toolbar: HTMLElement) =>
+      within(toolbar)
+        .getAllByRole("button")
+        .filter((button) => button.tabIndex === 0);
+    // The first row cannot move up, so its stop starts on "down".
+    expect(tabStops(first)).toEqual([
+      within(first).getByRole("button", { name: "Move condition 1 down" }),
+    ]);
+    expect(tabStops(second)).toEqual([
+      within(second).getByRole("button", { name: "Move condition 2 up" }),
+    ]);
   });
 
   it("removes a row and focuses the next one, or the add button when none is left", async () => {

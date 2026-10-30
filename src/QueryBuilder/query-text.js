@@ -31,6 +31,7 @@ export const DEFAULT_TEXT = {
   moveGroupUp: "Move group {n} up",
   moveGroupDown: "Move group {n} down",
   groupActions: "Group {n} options",
+  conditionActions: "Condition {n} actions",
   emptyGroup: "No conditions yet.",
   conditionLabel: "Condition {n} of {total}: {text}",
   groupLabel: "Group, level {level}: {logic}, {count} items",
