@@ -1199,12 +1199,12 @@ Each test pays for its setup: a remount on the host, or a page load (about 300 t
 | :--- | :--- |
 | `expectAligned(locators, { edge })` | Elements share one edge: `inline-start`, `inline-end`, `top`, `bottom`, `center-x`, `center-y` or `baseline`. Inline edges follow each element's direction. `baseline` is the first line's text baseline, or the value's baseline in an input or select. |
 | `expectOnePitch(rows)` | Repeated rows have one top-to-top pitch, and it is a multiple of 4 px. |
-| `expectTextFits(scope)` | No text overflows its box or a clipping ancestor. Text cut by an ellipsis keeps its full value in a `title`, an `aria-label` or a tooltip, and does not stop inside a number, date or time. |
+| `expectTextFits(scope)` | No text overflows its box or a clipping ancestor. Text cut by an ellipsis keeps its full value in a `title`, an `aria-label` or a tooltip, and does not stop inside a number, date or time. Cut-off text with no full value at rest is hovered, so a `title` set on hover (`titleWhenTruncated`) and a tooltip in a portal (`AnchoredTooltip`) count. The pointer ends in the bottom-right corner. |
 | `expectNoNestedBorders(scope)` | No box with an edge sits inside another one on the same background. An edge is a border on all four sides, an outline, or a box-shadow ring with no offset or blur. Form controls' borders and the focused element's outline are skipped. Run it under forced colors too. |
 | `expectNoPageOverflow(page, { vertical })` | The page does not scroll sideways. `vertical: true` also checks that it does not scroll down. |
 | `expectSingleRing(scope)` | Under forced colors, at most one element draws an outline or a `Highlight` border. Call it with at most one item focused or selected. |
 
-Each helper reads the page once. After an action that lays out in the next frame, wrap the call in `expect(...).toPass()`. [`layout-checks.test.ts`](e2e/layout-checks.test.ts) shows a passing and a failing case for each helper.
+Each helper reads the page once, except that `expectTextFits` hovers cut-off text it can't settle at rest. After an action that lays out in the next frame, wrap the call in `expect(...).toPass()`. [`layout-checks.test.ts`](e2e/layout-checks.test.ts) shows a passing and a failing case for each helper.
 
 A few gotchas:
 

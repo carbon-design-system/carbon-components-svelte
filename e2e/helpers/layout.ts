@@ -9,8 +9,9 @@ import type { Locator, Page } from "@playwright/test";
  * Each also throws when it finds nothing to check, so a helper that matched
  * no elements cannot pass by accident.
  *
- * A helper reads the page once. After an action that lays out in the next
- * frame, wrap the call in `expect(...).toPass()`.
+ * A helper reads the page once. `expectTextFits` also hovers cut-off text
+ * whose full value is missing at rest. After an action that lays out in the
+ * next frame, wrap the call in `expect(...).toPass()`.
  */
 
 export type Edge =
@@ -36,6 +37,13 @@ interface Result {
   checked: number;
   problems: string[];
   summary: string;
+  /**
+   * Truncated text with no full text at rest, each marked with
+   * `data-layout-hover="<id>"`. `run` hovers each one, since a `title` set
+   * on `mouseenter` or a tooltip anchored from a portal only appears then,
+   * and reports `problem` if the full text is still missing.
+   */
+  hover?: { id: string; full: string; problem: string }[];
 }
 
 const TOLERANCE = 0.5;
@@ -285,6 +293,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
 
   const elements = () => roots.flatMap((root) => all(root));
   const problems: string[] = [];
+  const hover: NonNullable<Result["hover"]> = [];
 
   switch (request.check) {
     case "aligned": {
@@ -401,10 +410,18 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
           const full = (truncator.textContent ?? "")
             .replace(/\s+/g, " ")
             .trim();
-          if (!fullTextAvailable(truncator, full))
-            problems.push(
-              `${path(truncator)}: truncated "${full}" (${truncator.scrollWidth}px in ${truncator.clientWidth}px) with no title, aria-label or tooltip holding it`,
-            );
+          if (
+            !fullTextAvailable(truncator, full) &&
+            !truncator.hasAttribute("data-layout-hover")
+          ) {
+            const id = String(hover.length);
+            truncator.setAttribute("data-layout-hover", id);
+            hover.push({
+              id,
+              full,
+              problem: `${path(truncator)}: truncated "${full}" (${truncator.scrollWidth}px in ${truncator.clientWidth}px) with no title, aria-label or tooltip holding it, at rest or on hover`,
+            });
+          }
           const { shown, hidden } = splitAtCut(truncator);
           if (/\d[:./,-]?$/.test(shown) && /^[:./,-]?\d/.test(hidden))
             problems.push(
@@ -464,7 +481,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
           if (ns.overflowY !== "visible") y = false;
         }
       }
-      return { checked, problems, summary: "text elements" };
+      return { checked, problems, summary: "text elements", hover };
     }
 
     case "borders": {
@@ -629,6 +646,64 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
   }
 }
 
+/**
+ * Hovers the element `measure` marked with `id` and waits up to `timeout`
+ * for its full text to show up: in a `title` or an `aria-label` on it or an
+ * ancestor (set by a `mouseenter` handler such as `titleWhenTruncated`), or
+ * in a tooltip that opens, which may sit in a portal (`AnchoredTooltip`).
+ * A tooltip already open belongs to an earlier element and does not count.
+ * The pointer goes back to the bottom-right corner, where the host parks it.
+ */
+async function fullTextOnHover(
+  page: Page,
+  id: string,
+  full: string,
+  timeout = 1500,
+) {
+  const target = page.locator(`[data-layout-hover="${id}"]`);
+  const tooltips = '[role="tooltip"], .bx--tooltip-portal__content';
+  await page.evaluate((selector) => {
+    for (const tip of document.querySelectorAll(selector))
+      tip.setAttribute("data-layout-stale", "");
+  }, tooltips);
+  // `force`: an overlay that ignores the pointer may cover the text, and the
+  // element under the pointer still passes the hover to its ancestors.
+  const hovered = await target
+    .hover({ force: true, timeout })
+    .then(() => true)
+    .catch(() => false);
+  let found = false;
+  const until = Date.now() + timeout;
+  while (hovered && !found) {
+    // biome-ignore lint/performance/noAwaitInLoops: polls until it appears
+    found = await target.evaluate(
+      (el, [text, selector]) => {
+        for (let node: Element | null = el; node; node = node.parentElement) {
+          for (const name of ["title", "aria-label"]) {
+            if (node.getAttribute(name)?.includes(text)) return true;
+          }
+        }
+        return [...document.querySelectorAll(selector)].some(
+          (tip) =>
+            !tip.hasAttribute("data-layout-stale") &&
+            tip.checkVisibility({ visibilityProperty: true }) &&
+            tip.textContent?.replace(/\s+/g, " ").includes(text),
+        );
+      },
+      [full, tooltips] as const,
+    );
+    if (found || Date.now() > until) break;
+    await page.waitForTimeout(50);
+  }
+  const viewport = page.viewportSize();
+  if (viewport) await page.mouse.move(viewport.width - 1, viewport.height - 1);
+  await page.evaluate(() => {
+    for (const tip of document.querySelectorAll("[data-layout-stale]"))
+      tip.removeAttribute("data-layout-stale");
+  });
+  return found;
+}
+
 async function run(scope: Scope | Locator[], request: Request) {
   const name = {
     aligned: "expectAligned",
@@ -646,6 +721,21 @@ async function run(scope: Scope | Locator[], request: Request) {
       ? scope
       : scope.locator(":root");
   const result = await locator.evaluateAll(measure, request);
+  if (result.hover?.length) {
+    const page = locator.page();
+    try {
+      for (const { id, full, problem } of result.hover) {
+        // biome-ignore lint/performance/noAwaitInLoops: one pointer, one element at a time
+        if (!(await fullTextOnHover(page, id, full)))
+          result.problems.push(problem);
+      }
+    } finally {
+      await page.evaluate(() => {
+        for (const el of document.querySelectorAll("[data-layout-hover]"))
+          el.removeAttribute("data-layout-hover");
+      });
+    }
+  }
   const problems = [...new Set(result.problems)];
   if (problems.length) throw new Error(`${name}:\n  ${problems.join("\n  ")}`);
   const least = request.check === "aligned" ? 2 : 1;
@@ -682,7 +772,10 @@ export function expectOnePitch(
 /**
  * No text overflows its box or its nearest clipping ancestor. Text that an
  * ellipsis truncates keeps its full value in a `title`, an `aria-label` or
- * a tooltip, and does not stop inside a number, date or time.
+ * a tooltip, and does not stop inside a number, date or time. Truncated
+ * text with no full value at rest is hovered, so a `title` set on hover
+ * and a tooltip in a portal count. The pointer ends in the bottom-right
+ * corner.
  */
 export function expectTextFits(
   scope: Scope,
