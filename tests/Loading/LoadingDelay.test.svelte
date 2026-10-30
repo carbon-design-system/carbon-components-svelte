@@ -3,8 +3,10 @@
 
   export let active = true;
   export let delay = 0;
+  export let withOverlay = false;
+  export let description = "loading";
 </script>
 
 <div data-testid="delayed">
-  <Loading withOverlay={false} {active} {delay} />
+  <Loading {withOverlay} {active} {delay} {description} />
 </div>
