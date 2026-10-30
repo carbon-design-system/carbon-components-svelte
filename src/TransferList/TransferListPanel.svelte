@@ -567,8 +567,10 @@
   <div class:bx--transfer-list__header={true}>
     <div class:bx--transfer-list__heading={true}>
       <span id="{id}-title" class:bx--transfer-list__title={true}>{title}</span>
-      <span id="{id}-count" class:bx--transfer-list__count={true}
-        >{countLabel}</span
+      <!-- `bdi` takes its direction from the count's own text, so "3 items"
+        keeps its order on a right-to-left page. -->
+      <bdi id="{id}-count" class:bx--transfer-list__count={true}
+        >{countLabel}</bdi
       >
     </div>
     <slot name="actions" />

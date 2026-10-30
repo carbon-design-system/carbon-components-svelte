@@ -140,6 +140,39 @@ test.describe("TransferList", () => {
     expect(rtl?.x).toBeGreaterThan(selectedBox?.x ?? 0);
     expect(ltr?.x).toBeLessThan(ltrSelected?.x ?? 0);
     expect(await transform()).toBe("matrix(-1, 0, 0, 1, 0, 0)");
+
+    // The count keeps its order: the digit before the word, as in LTR.
+    const order = await page
+      .locator(".bx--transfer-list__count")
+      .first()
+      .evaluate((count) => {
+        const text = count.firstChild as Text;
+        const range = document.createRange();
+        const x = (index: number) => {
+          range.setStart(text, index);
+          range.setEnd(text, index + 1);
+          return range.getBoundingClientRect().left;
+        };
+        return {
+          text: text.data,
+          digit: x(0),
+          word: x(text.data.indexOf("i")),
+        };
+      });
+    expect(order.text).toBe("10 items");
+    expect(order.digit).toBeLessThan(order.word);
+    // It stays at the inline end, away from the title.
+    const title = await page
+      .locator(".bx--transfer-list__title")
+      .first()
+      .boundingBox();
+    const count = await page
+      .locator(".bx--transfer-list__count")
+      .first()
+      .boundingBox();
+    expect((count?.x ?? 0) + (count?.width ?? 0)).toBeLessThan(
+      (title?.x ?? 0) - 100,
+    );
     await page.evaluate(() => document.documentElement.removeAttribute("dir"));
   });
 

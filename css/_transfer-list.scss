@@ -61,16 +61,19 @@
     column-gap: $carbon--spacing-03;
   }
 
+  // The title pushes the count to the inline end. The count is a `bdi`
+  // that takes its own direction, so a margin on it would follow the
+  // count's direction, not the page's.
   .#{$prefix}--transfer-list__title {
     @include type-style("heading-compact-01");
 
+    margin-inline-end: auto;
     color: $text-primary;
   }
 
   .#{$prefix}--transfer-list__count {
     @include type-style("helper-text-01");
 
-    margin-inline-start: auto;
     color: $text-secondary;
   }
 
