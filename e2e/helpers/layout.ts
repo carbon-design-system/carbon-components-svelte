@@ -29,8 +29,12 @@ interface Request {
   check: "aligned" | "pitch" | "fits" | "borders" | "overflow" | "ring";
   tolerance: number;
   edge?: Edge;
+  /** Measure the text and icons instead of the box; unset means auto. */
+  ink?: boolean;
   grid?: number;
   vertical?: boolean;
+  /** Elements to leave out: rows for `pitch`, child components for `ring`. */
+  skip?: string;
 }
 
 interface Result {
@@ -157,8 +161,128 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
     return line.top + metrics(text.parentElement).ascent;
   };
 
+  const clipped = (value: string) => value === "hidden" || value === "clip";
+
+  // Visually hidden text (`clip`, `clip-path`) is meant to be cut.
+  const hiddenOnPurpose = (el: Element) => {
+    for (let node: Element | null = el; node; node = node.parentElement) {
+      const s = style(node);
+      if (s.clip !== "auto" || s.clipPath !== "none") return true;
+    }
+    return false;
+  };
+
+  // The library's classes for content hidden on purpose: screen reader
+  // text, and an icon's tooltip while it is closed.
+  const LIBRARY_HIDDEN =
+    ".bx--visually-hidden, .bx--tooltip--hidden .bx--assistive-text";
+
+  type Box = { left: number; right: number; top: number; bottom: number };
+
+  // How much of `rect` the boxes that clip it leave in view, from `from`
+  // up to the first fixed element.
+  const inView = (rect: Box, from: Element | null) => {
+    let { left, right, top, bottom } = rect;
+    for (
+      let node = from;
+      node && node !== document.documentElement;
+      node = node.parentElement
+    ) {
+      const ns = style(node);
+      const clipX = clipped(ns.overflowX);
+      const clipY = clipped(ns.overflowY);
+      if (clipX || clipY) {
+        const box = paddingBox(node);
+        if (clipX) {
+          left = Math.max(left, box.left);
+          right = Math.min(right, box.right);
+        }
+        if (clipY) {
+          top = Math.max(top, box.top);
+          bottom = Math.min(bottom, box.bottom);
+        }
+      }
+      if (ns.position === "fixed") break;
+    }
+    return { width: right - left, height: bottom - top };
+  };
+  // More than a pixel each way: a 1px box is the screen reader pattern.
+  const hasArea = ({ width, height }: { width: number; height: number }) =>
+    width > 1 && height > 1;
+
+  // Shown to the eye: visible, not hidden on purpose, and with some of its
+  // box in view.
+  const shown = (el: Element) =>
+    visible(el) &&
+    !el.closest(LIBRARY_HIDDEN) &&
+    !hiddenOnPurpose(el) &&
+    hasArea(inView(el.getBoundingClientRect(), el.parentElement));
+
+  // Text that is the element's own: in a text node inside it, or inside
+  // its inline children. A heading or a button has it; a table, a toolbar
+  // or a card holds its text in blocks.
+  const hasOwnText = (el: Element): boolean =>
+    [...el.childNodes].some((node) =>
+      node.nodeType === Node.TEXT_NODE
+        ? !!node.textContent?.trim()
+        : node instanceof Element &&
+          style(node).display === "inline" &&
+          hasOwnText(node),
+    );
+
+  // The ink box: the union of the element's visible text, by its Range
+  // rects, and its icons, by their svg boxes. Null when it has neither.
+  const ink = (el: Element) => {
+    const rects: Box[] = [];
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const text = node.textContent ?? "";
+      const parent = node.parentElement;
+      if (
+        !text.trim() ||
+        !parent ||
+        !visible(parent) ||
+        hiddenOnPurpose(parent)
+      )
+        continue;
+      const range = document.createRange();
+      range.setStart(node, text.length - text.trimStart().length);
+      range.setEnd(node, text.trimEnd().length);
+      for (const rect of range.getClientRects())
+        if (rect.width && rect.height) rects.push(rect);
+    }
+    const icons = [
+      ...(el instanceof SVGSVGElement ? [el] : []),
+      ...el.querySelectorAll("svg"),
+    ].filter(
+      (svg) =>
+        !svg.parentElement?.closest("svg") &&
+        visible(svg) &&
+        !hiddenOnPurpose(svg),
+    );
+    for (const svg of icons) {
+      const rect = svg.getBoundingClientRect();
+      if (rect.width && rect.height) rects.push(rect);
+    }
+    if (!rects.length) return null;
+    return {
+      left: Math.min(...rects.map((r) => r.left)),
+      right: Math.max(...rects.map((r) => r.right)),
+      top: Math.min(...rects.map((r) => r.top)),
+      bottom: Math.max(...rects.map((r) => r.bottom)),
+    };
+  };
+
+  // Inline edges measure the ink of an element with its own text, so two
+  // headings whose text lines up align whatever their padding.
+  const usesInk = (el: Element, edge: Edge) =>
+    request.ink ??
+    ((edge === "inline-start" || edge === "inline-end") && hasOwnText(el));
+
   const edgeOf = (el: Element, edge: Edge) => {
-    const box = el.getBoundingClientRect();
+    if (edge === "baseline") return baseline(el);
+    const box = usesInk(el, edge) ? ink(el) : el.getBoundingClientRect();
+    if (!box) return null;
     switch (edge) {
       case "inline-start":
         return rtl(el) ? box.right : box.left;
@@ -169,11 +293,9 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       case "bottom":
         return box.bottom;
       case "center-x":
-        return box.left + box.width / 2;
+        return (box.left + box.right) / 2;
       case "center-y":
-        return box.top + box.height / 2;
-      case "baseline":
-        return baseline(el);
+        return (box.top + box.bottom) / 2;
     }
   };
 
@@ -224,17 +346,6 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       }
     }
     return lines;
-  };
-
-  const clipped = (value: string) => value === "hidden" || value === "clip";
-
-  // Visually hidden text (`clip`, `clip-path`) is meant to be cut.
-  const hiddenOnPurpose = (el: Element) => {
-    for (let node: Element | null = el; node; node = node.parentElement) {
-      const s = style(node);
-      if (s.clip !== "auto" || s.clipPath !== "none") return true;
-    }
-    return false;
   };
 
   // The text a truncated element shows, and the text it hides.
@@ -301,7 +412,9 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       const values = roots.map((el) => ({ el, value: edgeOf(el, edge) }));
       for (const { el, value } of values) {
         if (value === null)
-          problems.push(`${path(el)}: no text for a baseline`);
+          problems.push(
+            `${path(el)}: ${edge === "baseline" ? "no text for a baseline" : "no text or icon to measure"}`,
+          );
       }
       const measured = values.filter(
         (v): v is { el: Element; value: number } => v.value !== null,
@@ -331,7 +444,19 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
 
     case "pitch": {
       const grid = request.grid ?? 4;
-      const tops = roots.map((el) => ({
+      // Only rows in the flow of the list: frozen rows stick in place, and
+      // a spacer row, a virtual list's padding or a selection overlay
+      // shows no content of its own.
+      const content = "svg, img, canvas, input, select, textarea, button";
+      const rows = roots.filter(
+        (el) =>
+          !(request.skip && el.matches(request.skip)) &&
+          !/sticky|fixed/.test(style(el).position) &&
+          !el.closest("[aria-hidden=true]") &&
+          visible(el) &&
+          (!!el.textContent?.trim() || !!el.querySelector(content)),
+      );
+      const tops = rows.map((el) => ({
         el,
         top: el.getBoundingClientRect().top,
       }));
@@ -350,12 +475,12 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       const offGrid = Math.abs(first - Math.round(first / grid) * grid);
       if (pitches.length && offGrid > tolerance)
         problems.unshift(
-          `${path(roots[0])}: pitch ${px(first)} is not a multiple of ${grid}px`,
+          `${path(rows[0])}: pitch ${px(first)} is not a multiple of ${grid}px`,
         );
       return {
         checked: pitches.length,
         problems,
-        summary: `${roots.length} rows`,
+        summary: `pitches in ${rows.length} rows (${roots.length - rows.length} skipped)`,
       };
     }
 
@@ -365,18 +490,30 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
         if (
           el.closest("script, style, template, noscript, option, svg") ||
           !visible(el) ||
+          el.closest(LIBRARY_HIDDEN) ||
           hiddenOnPurpose(el)
         )
           continue;
         const lines = ownLines(el);
         if (!lines.length) continue;
-        checked++;
         const text = {
           left: Math.min(...lines.map((l) => l.left)),
           right: Math.max(...lines.map((l) => l.right)),
           top: Math.min(...lines.map((l) => l.top)),
           bottom: Math.max(...lines.map((l) => l.bottom)),
         };
+        // Text that shows nothing, in a 1px box or placed wholly outside a
+        // box that clips it, is hidden on purpose. Its box and its text
+        // both count, so text that spills from an empty box still shows.
+        const box = el.getBoundingClientRect();
+        const extent = {
+          left: Math.min(box.left, text.left),
+          right: Math.max(box.right, text.right),
+          top: Math.min(box.top, text.top),
+          bottom: Math.max(box.bottom, text.bottom),
+        };
+        if (!hasArea(inView(extent, el))) continue;
+        checked++;
         const spill = (
           box: ReturnType<typeof paddingBox>,
           x = true,
@@ -615,32 +752,53 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
       document.body.append(probe);
       const highlight = style(probe).color;
       probe.remove();
-      const rings: string[] = [];
+      // A field keeps a 2px resting box (forced colors repaint its
+      // transparent outline); its focus ring is wider. Other resting
+      // edges, a card's border or a button's box, are 1px.
+      const fields =
+        "input, textarea, select, [contenteditable=true], [role=combobox], [role=textbox], [role=searchbox], [role=spinbutton]";
       let checked = 0;
-      for (const el of elements()) {
-        if (!visible(el)) continue;
-        checked++;
-        for (const pseudo of [undefined, "::before", "::after"]) {
-          const s = style(el, pseudo);
-          if (pseudo && s.content === "none") continue;
-          const outline =
-            s.outlineStyle !== "none" &&
-            Number.parseFloat(s.outlineWidth) > 0 &&
-            alpha(s.outlineColor) > 0;
-          const border = (["Top", "Right", "Bottom", "Left"] as const).some(
-            (side) =>
-              Number.parseFloat(s[`border${side}Width`]) > 0 &&
-              !/none|hidden/.test(s[`border${side}Style`]) &&
-              s[`border${side}Color`] === highlight,
-          );
-          if (outline || border)
-            rings.push(
-              `${path(el)}${pseudo ?? ""}: ${outline ? `outline ${s.outlineWidth} ${s.outlineColor}` : `border ${highlight}`}`,
-            );
+      // Each element in scope is one group, such as one pane of a split
+      // view, with at most one ring of its own.
+      for (const root of roots) {
+        const rings: string[] = [];
+        for (const el of all(root)) {
+          const owner = request.skip ? el.closest(request.skip) : null;
+          if ((owner && owner !== root && root.contains(owner)) || !shown(el))
+            continue;
+          checked++;
+          const resting = el.matches(fields) && !el.matches(":focus") ? 2 : 1;
+          // An element and its pseudo-elements draw one ring together.
+          const parts: string[] = [];
+          for (const pseudo of [undefined, "::before", "::after"]) {
+            const s = style(el, pseudo);
+            if (pseudo && s.content === "none") continue;
+            const on = pseudo ? `${pseudo} ` : "";
+            const width = Number.parseFloat(s.outlineWidth);
+            if (
+              s.outlineStyle !== "none" &&
+              alpha(s.outlineColor) > 0 &&
+              (width > resting || (width > 0 && s.outlineColor === highlight))
+            )
+              parts.push(`${on}outline ${s.outlineWidth} ${s.outlineColor}`);
+            else if (
+              (["Top", "Right", "Bottom", "Left"] as const).some(
+                (side) =>
+                  Number.parseFloat(s[`border${side}Width`]) > 0 &&
+                  !/none|hidden/.test(s[`border${side}Style`]) &&
+                  s[`border${side}Color`] === highlight,
+              )
+            )
+              parts.push(`${on}border ${highlight}`);
+          }
+          if (parts.length) rings.push(`${path(el)}: ${parts.join(", ")}`);
         }
+        if (rings.length > 1)
+          problems.push(
+            `${rings.length} rings${roots.length > 1 ? ` in ${path(root)}` : ""}, at most 1 allowed`,
+            ...rings,
+          );
       }
-      if (rings.length > 1)
-        problems.push(`${rings.length} rings, at most 1 allowed`, ...rings);
       return { checked, problems, summary: "elements" };
     }
   }
@@ -750,23 +908,40 @@ async function run(scope: Scope | Locator[], request: Request) {
  * The elements share one edge, within `tolerance` (0.5px). Inline edges
  * follow each element's direction. `baseline` is the first line's text
  * baseline; on an input or select, the baseline of its value.
+ *
+ * `ink: true` measures the ink box: the element's visible text, by its
+ * Range rects, and its icons, by their svg boxes. `ink: false` measures
+ * the border box. Left unset, inline edges measure the ink of an element
+ * with its own text (a heading, a label, a button) and the box of any
+ * other, so padding does not hide text that lines up.
  */
 export function expectAligned(
   locators: Locator | Locator[],
-  { edge, tolerance = TOLERANCE }: { edge: Edge; tolerance?: number },
+  {
+    edge,
+    ink,
+    tolerance = TOLERANCE,
+  }: { edge: Edge; ink?: boolean; tolerance?: number },
 ) {
-  return run(locators, { check: "aligned", edge, tolerance });
+  return run(locators, { check: "aligned", edge, ink, tolerance });
 }
 
-/** Consecutive rows share one top-to-top pitch, a multiple of `grid` (4px). */
+/**
+ * Consecutive rows share one top-to-top pitch, a multiple of `grid` (4px).
+ * Only rows in the list's flow count: rows that match `skip`, frozen rows
+ * (`position: sticky` or `fixed`), rows under `aria-hidden`, and rows with
+ * no text, icon or control (a virtual list's spacer, a selection overlay)
+ * are left out.
+ */
 export function expectOnePitch(
-  rows: Locator,
+  rows: Locator | Locator[],
   {
     grid = 4,
+    skip,
     tolerance = TOLERANCE,
-  }: { grid?: number; tolerance?: number } = {},
+  }: { grid?: number; skip?: string; tolerance?: number } = {},
 ) {
-  return run(rows, { check: "pitch", grid, tolerance });
+  return run(rows, { check: "pitch", grid, skip, tolerance });
 }
 
 /**
@@ -775,7 +950,9 @@ export function expectOnePitch(
  * a tooltip, and does not stop inside a number, date or time. Truncated
  * text with no full value at rest is hovered, so a `title` set on hover
  * and a tooltip in a portal count. The pointer ends in the bottom-right
- * corner.
+ * corner. Text hidden on purpose is skipped: under `clip` or `clip-path`,
+ * under `.bx--visually-hidden` or a closed icon tooltip, or in a box with
+ * no area in view (1px, or wholly outside a box that clips it).
  */
 export function expectTextFits(
   scope: Scope,
@@ -810,10 +987,21 @@ export function expectNoPageOverflow(
 }
 
 /**
- * For forced-colors pages: at most one element in scope draws a ring, an
- * outline or a `Highlight` border. Call it with one item focused or
- * selected at most.
+ * For forced-colors pages: each element the scope matches holds at most one
+ * focus or selection ring. Call it with one item focused or selected at
+ * most. A ring is an outline wider than the element's resting edge, or an
+ * outline or border in `Highlight`. Resting edges stay: 1px on most
+ * elements (a card's border, a button's box), 2px on an unfocused field,
+ * whose transparent outline forced colors repaint. An element and its
+ * `::before` and `::after` count as one ring. Elements with no area in
+ * view, or hidden with `clip`, `clip-path` or the library's hidden classes
+ * (a closed tooltip), are skipped, and so are elements inside `skip`, for
+ * child components the scope does not own. To check one selection shown
+ * in two panes, pass both panes: each is counted on its own.
  */
-export function expectSingleRing(scope: Scope) {
-  return run(scope, { check: "ring", tolerance: TOLERANCE });
+export function expectSingleRing(
+  scope: Scope | Locator[],
+  { skip }: { skip?: string } = {},
+) {
+  return run(scope, { check: "ring", skip, tolerance: TOLERANCE });
 }

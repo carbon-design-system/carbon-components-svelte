@@ -1,7 +1,11 @@
 <script>
   // One passing and one failing case per helper in e2e/helpers/layout.ts.
   // `?wide` adds an element wider than the page.
+  import Button from "carbon-components-svelte/Button/Button.svelte";
   import AnchoredTooltip from "carbon-components-svelte/Portal/AnchoredTooltip.svelte";
+  import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
+  import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+  import Edit from "carbon-components-svelte/icons/Edit.svelte";
   import { titleWhenTruncated } from "carbon-components-svelte/utils/title-when-truncated.js";
 
   const wide = new URLSearchParams(location.search).has("wide");
@@ -47,6 +51,16 @@
   <div class="bar"></div>
   <div class="bar short indent" data-testid="aligned-start-off"></div>
 </div>
+<!-- Padding and margin put the boxes 16px apart; the text lines up. -->
+<div data-testid="aligned-ink-good">
+  <h3 class="padded">Overview</h3>
+  <h3 class="indented">Details</h3>
+  <div class="padded ink-icon"><Edit /></div>
+</div>
+<div data-testid="aligned-ink-bad">
+  <h3 class="padded">Overview</h3>
+  <h3 class="indented off" data-testid="aligned-ink-off">Details</h3>
+</div>
 
 <!-- expectOnePitch -->
 <ul data-testid="pitch-good">
@@ -65,6 +79,25 @@
   <li class="line shared">Two</li>
   <li class="line shared">Three</li>
 </ul>
+<!-- A virtualized grid: a frozen header, the spacer for rows scrolled
+     past, a group row, and a range selection drawn as an overlay. -->
+<div class="vgrid" data-testid="pitch-grid">
+  <div class="vrow frozen">Name</div>
+  <div class="vrow spacer" aria-hidden="true"></div>
+  <div class="vrow group">Group A</div>
+  <div class="vrow">Row 4</div>
+  <div class="vrow">Row 5</div>
+  <div class="vrow range"></div>
+  <div class="vrow">Row 6</div>
+</div>
+<div class="vgrid" data-testid="pitch-grid-bad">
+  <div class="vrow frozen">Name</div>
+  <div class="vrow spacer" aria-hidden="true"></div>
+  <div class="vrow">Row 4</div>
+  <div class="vrow extra" data-testid="pitch-grid-off">Row 5</div>
+  <div class="vrow">Row 6</div>
+  <div class="vrow">Row 7</div>
+</div>
 
 <!-- expectTextFits -->
 <div data-testid="fits-good">
@@ -104,6 +137,19 @@
     {host}
   </p>
   <AnchoredTooltip anchor={wrongTipAnchor} text="Load balancer" />
+</div>
+<!-- Labels hidden on purpose: placed wholly outside a box that clips
+     them, in a 1px box, and under the library's hidden class. -->
+<div data-testid="fits-hidden-good">
+  <p class="cell">Short</p>
+  <div class="clip-box"><span class="outside">{host}</span></div>
+  <span class="one-px">{host}</span>
+  <span class="bx--visually-hidden unclipped">{host}</span>
+</div>
+<div data-testid="fits-hidden-bad">
+  <div class="clip-box">
+    <span class="partly" data-testid="fits-partly">{host}</span>
+  </div>
 </div>
 
 <!-- expectNoNestedBorders -->
@@ -182,15 +228,52 @@
 </div>
 
 <!-- expectSingleRing, under forced colors -->
+<!-- 1px boxes, as on ActionBar buttons, are resting edges. -->
 <div class="grid" data-testid="ring-good">
   <span class="cell-ring selected">1</span>
-  <span class="cell-ring">2</span>
-  <span class="cell-ring">3</span>
+  <span class="cell-ring boxed">2</span>
+  <span class="cell-ring boxed">3</span>
 </div>
 <div class="grid" data-testid="ring-bad">
   <span class="cell-ring outlined">1</span>
   <span class="cell-ring outlined">2</span>
   <span class="cell-ring outlined">3</span>
+</div>
+<!-- Each icon Button holds a tooltip hidden with `clip`. -->
+<div class="grid" data-testid="ring-toolbar">
+  {#each ["Edit", "Copy", "Move", "Rename", "Share", "Delete"] as label}
+    <Button kind="ghost" size="small" icon={Edit} iconDescription={label} />
+  {/each}
+</div>
+<!-- A selected tile holding child components: a field's resting box is
+     structural, and a focused Toggle draws its own ring. -->
+<div class="tile" data-testid="ring-children">
+  <span class="cell-ring selected">Selected</span>
+  <Toggle labelText="Notify" />
+  <TextInput labelText="Name" />
+  <Button kind="ghost" size="small" icon={Edit} iconDescription="Edit" />
+</div>
+<!-- One selection shown in two panes, as a Gantt shows its list and bars.
+     Each item draws its ring with an outline and a `::before`. -->
+<div class="grid" data-testid="ring-panes">
+  <ul class="pane">
+    <li class="item">Task 1</li>
+    <li class="item picked">Task 2</li>
+  </ul>
+  <div class="pane">
+    <div class="item">Bar 1</div>
+    <div class="item picked">Bar 2</div>
+  </div>
+</div>
+<div class="grid" data-testid="ring-panes-bad">
+  <ul class="pane" data-testid="ring-pane-off">
+    <li class="item picked">Task 1</li>
+    <li class="item picked">Task 2</li>
+  </ul>
+  <div class="pane">
+    <div class="item">Bar 1</div>
+    <div class="item picked">Bar 2</div>
+  </div>
 </div>
 
 <!-- expectNoPageOverflow -->
@@ -315,7 +398,96 @@
     border: 2px solid Highlight;
   }
   .outlined {
+    outline: 2px solid CanvasText;
+  }
+  .boxed {
     outline: 1px solid CanvasText;
+  }
+  .padded {
+    padding-inline-start: 1rem;
+  }
+  .indented {
+    margin-inline-start: 1rem;
+  }
+  .indented.off {
+    margin-inline-start: 1.125rem;
+  }
+  .vgrid {
+    margin-bottom: 1rem;
+  }
+  .vrow {
+    height: 2rem;
+  }
+  .frozen {
+    position: sticky;
+    top: 0;
+    height: 3rem;
+  }
+  .spacer {
+    height: 6rem;
+  }
+  .group {
+    height: 3rem;
+  }
+  .vrow.extra {
+    height: 2.5rem;
+  }
+  .range {
+    position: absolute;
+    width: 10rem;
+    height: 4rem;
+    margin-top: -4rem;
+    outline: 2px solid Highlight;
+  }
+  .clip-box {
+    position: relative;
+    width: 6rem;
+    height: 1.5rem;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+  }
+  .outside,
+  .partly {
+    position: absolute;
+    white-space: nowrap;
+  }
+  .outside {
+    inset-inline-start: 100%;
+  }
+  .partly {
+    inset-inline-start: 3rem;
+  }
+  .one-px {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .unclipped {
+    clip: auto;
+    width: 2rem;
+    height: 1rem;
+  }
+  .tile {
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+  .pane {
+    flex: 1;
+  }
+  .item {
+    position: relative;
+    padding: 0.5rem;
+  }
+  .picked {
+    outline: 2px solid Highlight;
+  }
+  .picked::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid Highlight;
   }
   .wide {
     width: 150vw;
