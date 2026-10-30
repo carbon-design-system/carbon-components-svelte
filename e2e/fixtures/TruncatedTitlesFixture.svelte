@@ -1,6 +1,8 @@
 <script>
   import {
     ContentSwitcher,
+    DatePicker,
+    DatePickerInput,
     Pagination,
     ProgressIndicator,
     ProgressStep,
@@ -41,6 +43,16 @@
         <Switch><TableOfContents /> Table of contents</Switch>
         <Switch text="List" />
       </ContentSwitcher>
+    </div>
+    <div data-testid="date-picker">
+      <DatePicker
+        datePickerType="multiple"
+        value={id === "cut"
+          ? "09/09/2026, 09/10/2026, 09/11/2026, 09/12/2026"
+          : "09/09/2026"}
+      >
+        <DatePickerInput labelText="Blackout dates" placeholder="mm/dd/yyyy" />
+      </DatePicker>
     </div>
   </div>
 {/each}

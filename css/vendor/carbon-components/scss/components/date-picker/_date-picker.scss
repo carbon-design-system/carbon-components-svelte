@@ -145,15 +145,18 @@
   }
 
   // Chromium/Firefox/WebKit only render `text-overflow: ellipsis` on an
-  // <input> while it is blurred; a focused, editable field always shows its
-  // content unellipsized so the caret stays visible. For "multiple" mode's
-  // potentially long joined value, an overlay renders the same text as
-  // ellipsized static content on top of the (visually transparent, but
-  // still focusable/typable) real input, matching the blurred rendering in
-  // both states. See DatePickerInput.svelte.
+  // <input> while it is blurred. For "multiple" mode's potentially long
+  // joined value, an overlay renders the same text as ellipsized static
+  // content on top of the (visually transparent, but still focusable and
+  // typable) real input. While the input has focus, the overlay hides and
+  // the input shows its own text. See DatePickerInput.svelte.
   .#{$prefix}--date-picker__input--ghost-text {
     color: transparent;
     caret-color: $text-primary;
+  }
+
+  .#{$prefix}--date-picker__input-overlay--hidden {
+    visibility: hidden;
   }
 
   .#{$prefix}--date-picker__input-overlay {
