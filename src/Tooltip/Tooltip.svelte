@@ -4,6 +4,9 @@
    * @event {null} open
    * @event {null} close
    * @restProps {div}
+   * @slot {{}} triggerChildren - Custom trigger content. Replaces `triggerText`.
+   * @deprecated use the `triggerChildren` slot
+   * @slot {{}} triggerText
    */
 
   /**
@@ -64,7 +67,10 @@
    */
   export let triggerId = uniqueId();
 
-  /** Set the tooltip button text */
+  /**
+   * Set the tooltip button text.
+   * Alternatively, use the "triggerChildren" slot.
+   */
   export let triggerText = "";
 
   /**
@@ -500,7 +506,9 @@
 >
   {#if !hideIcon}
     <div bind:this={ref} id={triggerId} class:bx--tooltip__label={true}>
-      <slot name="triggerText">{triggerText}</slot>
+      <slot name="triggerChildren"
+        ><slot name="triggerText">{triggerText}</slot></slot
+      >
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <div
         bind:this={refIcon}
@@ -527,7 +535,9 @@
       on:focusout={handleFocusout}
       on:keydown={handleKeydown}
     >
-      <slot name="triggerText">{triggerText}</slot>
+      <slot name="triggerChildren"
+        ><slot name="triggerText">{triggerText}</slot></slot
+      >
     </div>
   {/if}
   {#if open && !effectivePortalTooltip}

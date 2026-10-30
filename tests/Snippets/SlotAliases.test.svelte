@@ -2,6 +2,7 @@
   import CardTitle from "carbon-components-svelte/Card/CardTitle.svelte";
   import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
+  import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
   import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
   import HeaderNav from "carbon-components-svelte/UIShell/HeaderNav.svelte";
   import HeaderNavItem from "carbon-components-svelte/UIShell/HeaderNavItem.svelte";
@@ -43,3 +44,10 @@
     <strong data-testid="tooltip-icon-tooltip-children">Metrics</strong>
   {/snippet}
 </TooltipIcon>
+
+<Tooltip iconDescription="Information">
+  {#snippet triggerChildren()}
+    <strong data-testid="tooltip-trigger-children">Resource list</strong>
+  {/snippet}
+  Content
+</Tooltip>
