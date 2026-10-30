@@ -6,7 +6,7 @@ describe("Coachmark server render", () => {
   it("renders the open dialog named by an existing heading", () => {
     const html = renderRaw(Coachmark, {
       id: "tip",
-      title: "Export",
+      titleText: "Export",
       open: true,
     });
 
@@ -19,7 +19,7 @@ describe("Coachmark server render", () => {
   });
 
   it("renders only the beacon and a closed dialog by default", () => {
-    const html = renderRaw(Coachmark, { id: "tip", title: "Export" });
+    const html = renderRaw(Coachmark, { id: "tip", titleText: "Export" });
 
     expect(html).toContain('aria-expanded="false"');
     expect(html).not.toContain("bx--popover--open");

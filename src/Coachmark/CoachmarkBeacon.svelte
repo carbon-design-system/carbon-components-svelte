@@ -9,7 +9,7 @@
    * A consumer `aria-label` or `aria-labelledby` wins.
    * @type {string}
    */
-  export let label;
+  export let iconDescription;
 
   /**
    * Set to `true` to place the beacon on the end/top corner of its
@@ -31,7 +31,7 @@
   type="button"
   class:bx--coachmark-beacon={true}
   class:bx--coachmark-beacon--overlay={overlay}
-  aria-label={label}
+  aria-label={iconDescription}
   {...$$restProps}
   on:click
 >
