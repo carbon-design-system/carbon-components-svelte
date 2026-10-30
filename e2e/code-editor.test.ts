@@ -321,6 +321,20 @@ test.describe("CodeEditor", () => {
     expect(band).toBe("rgba(0, 0, 0, 0)");
   });
 
+  test("shows the numbers and untyped text as disabled", async ({ page }) => {
+    const layer = root(page, "code-editor-disabled");
+    const [label, number, line] = await layer.evaluate((el) => {
+      const first = el.querySelector(".bx--code-editor__line") as Element;
+      return [
+        getComputedStyle(el.querySelector("label") as Element).color,
+        getComputedStyle(first, "::before").color,
+        getComputedStyle(first).color,
+      ];
+    });
+    expect(number).toBe(label);
+    expect(line).toBe(label);
+  });
+
   test("starts the textarea's text where the layer's starts", async ({
     page,
   }) => {

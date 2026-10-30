@@ -250,6 +250,11 @@
     color: $text-primary;
   }
 
+  // After the number's color above, which this ties. Untyped text takes the
+  // line's color, so the line is disabled too, not only the tokens.
+  .#{$prefix}--code-editor__wrapper--disabled .#{$prefix}--code-editor__line,
+  .#{$prefix}--code-editor__wrapper--disabled
+    .#{$prefix}--code-editor__line::before,
   .#{$prefix}--code-editor__wrapper--disabled .#{$prefix}--code-editor__code * {
     color: $text-disabled;
   }
