@@ -750,6 +750,35 @@ test.describe("RichTextEditor", () => {
       );
     });
 
+    test("a paragraph takes the direction of its own text", async ({
+      page,
+    }) => {
+      await page.evaluate(() =>
+        document.documentElement.setAttribute("dir", "rtl"),
+      );
+      const box = editor(page);
+      await box.click();
+      await page.keyboard.press(k("ControlOrMeta+a"));
+      await paste(box, { html: "<p>Done, 3 of 4.</p><p>تم، 3 من 4.</p>" });
+
+      // In an RTL page, the English paragraph starts at the left edge and
+      // the Arabic one ends at the right edge.
+      const edges = await box.evaluate((root) => {
+        const content = root.getBoundingClientRect();
+        const style = getComputedStyle(root);
+        const left = content.left + Number.parseFloat(style.paddingLeft);
+        const right = content.right - Number.parseFloat(style.paddingRight);
+        return [...root.querySelectorAll("p")].map((p) => {
+          const range = document.createRange();
+          range.selectNodeContents(p);
+          const text = range.getBoundingClientRect();
+          return { left: text.left - left, right: right - text.right };
+        });
+      });
+      expect(Math.abs(edges[0].left)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(edges[1].right)).toBeLessThanOrEqual(0.5);
+    });
+
     test("has no accessibility violations in Gray 100", async ({ page }) => {
       await page.evaluate(() =>
         document.documentElement.classList.add("bx--g100"),

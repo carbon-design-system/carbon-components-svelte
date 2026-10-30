@@ -198,6 +198,16 @@
 
   // Content
 
+  // Each paragraph takes its direction and alignment from its first strong
+  // character, as a `dir="auto"` element does, so an English paragraph on
+  // an RTL page keeps its period at the end. List items keep the page's
+  // direction: their marker would stay on the page's side of the text.
+  .#{$prefix}--rich-text-editor__content p,
+  .#{$prefix}--rich-text-editor__content h2,
+  .#{$prefix}--rich-text-editor__content h3 {
+    unicode-bidi: plaintext;
+  }
+
   .#{$prefix}--rich-text-editor__content > * + * {
     margin-block-start: $carbon--spacing-03;
   }
