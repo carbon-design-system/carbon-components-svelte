@@ -35,6 +35,7 @@ export const DEFAULT_TEXT = {
   emptyGroup: "No conditions yet.",
   conditionLabel: "Condition {n} of {total}: {text}",
   groupLabel: "Group, level {level}: {logic}, {count} items",
+  groupLabelOne: "Group, level {level}: {logic}, 1 item",
   summaryLabel: "Read as text",
   summary: "Where {text}",
   summaryEmpty: "No conditions",

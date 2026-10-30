@@ -363,6 +363,19 @@ describe("QueryBuilder", () => {
 
     expect(bound().conditions[0].operator).toBe("and");
     expect(bound().conditions[0].conditions).toHaveLength(1);
+    expect(
+      screen.getByRole("group", {
+        name: "Group, level 2: All of the following, 1 item",
+      }),
+    ).toBeInTheDocument();
+    await user.click(
+      screen.getAllByRole("button", { name: "Add condition" })[0],
+    );
+    expect(
+      screen.getByRole("group", {
+        name: "Group, level 2: All of the following, 2 items",
+      }),
+    ).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Add group" })).toHaveLength(
       1,
     );

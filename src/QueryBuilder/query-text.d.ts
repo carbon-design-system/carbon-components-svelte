@@ -55,6 +55,7 @@ export type QueryTextId =
   | "emptyGroup"
   | "conditionLabel"
   | "groupLabel"
+  | "groupLabelOne"
   | "summaryLabel"
   | "summary"
   | "summaryEmpty"

@@ -73,7 +73,11 @@
     index === 0
       ? translate("where")
       : translate(groupOperator === "and" ? "connectorAnd" : "connectorOr");
-  $: label = translate("groupLabel", { level: depth, logic, count });
+  $: label = translate(count === 1 ? "groupLabelOne" : "groupLabel", {
+    level: depth,
+    logic,
+    count,
+  });
   $: canNest = depth < maxDepth;
   $: canAdd = fields.length > 0;
 
