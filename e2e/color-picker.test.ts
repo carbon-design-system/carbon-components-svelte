@@ -155,6 +155,37 @@ test.describe("ColorPicker", () => {
     ).toHaveLength(1);
   });
 
+  test("keeps a thumb at the end of its range inside the picker", async ({
+    page,
+  }) => {
+    await area(page).focus();
+    await page.keyboard.press("End");
+    for (let i = 0; i < 10; i += 1) {
+      // biome-ignore lint/performance/noAwaitInLoops: each key follows the last
+      await page.keyboard.press("PageUp");
+    }
+    await hue(page).focus();
+    await page.keyboard.press("End");
+
+    const outside = await picker(page)
+      .locator(".bx--color-picker")
+      .evaluate((root) => {
+        const box = root.getBoundingClientRect();
+        return [...root.querySelectorAll(".bx--color-picker__thumb")].map(
+          (thumb) => {
+            const rect = thumb.getBoundingClientRect();
+            return Math.max(
+              box.left - rect.left,
+              rect.right - box.right,
+              box.top - rect.top,
+              0,
+            );
+          },
+        );
+      });
+    expect(outside).toEqual([0, 0]);
+  });
+
   test("mirrors the area, the sliders and the arrow keys in RTL", async ({
     page,
   }) => {

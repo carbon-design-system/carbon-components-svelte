@@ -37,6 +37,9 @@
     width: 100%;
     max-width: to-rem(320px);
     flex-direction: column;
+    // Half a thumb on the inline sides and the top, so a thumb at the end
+    // of the area or a track stays inside the picker's box.
+    padding: $carbon--spacing-03 $carbon--spacing-03 0;
     gap: $carbon--spacing-05;
     color: $text-primary;
   }
