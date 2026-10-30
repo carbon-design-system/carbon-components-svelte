@@ -137,6 +137,19 @@
     @include ccs-inset-inline(var(--ccs-gantt-x), null);
   }
 
+  // A label shows whole or not at all, so a month at the edge of the range
+  // never reads "February 202". The cell wraps, and a full-height empty
+  // item holds the first line, so a label too wide for the cell moves to
+  // the second line, below the clipped edge.
+  .#{$prefix}--gantt__axis-cell {
+    flex-wrap: wrap;
+  }
+
+  .#{$prefix}--gantt__axis-cell::before {
+    block-size: 100%;
+    content: "";
+  }
+
   // Weekend stripes and row lines are backgrounds, so the canvas holds only
   // the bars, the links and the today line however long the chart is.
   .#{$prefix}--gantt__canvas {

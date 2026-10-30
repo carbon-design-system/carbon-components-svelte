@@ -253,6 +253,34 @@ test.describe("Gantt", () => {
     );
   });
 
+  test("shows an axis label whole or not at all", async ({ page }) => {
+    await page.goto("/gantt.html?size=short&zoom=week");
+    const labels = await page
+      .locator(".bx--gantt__axis-cell span")
+      .evaluateAll((spans) =>
+        spans.map((span) => {
+          const cell = (span.parentElement as Element).getBoundingClientRect();
+          const text = span.getBoundingClientRect();
+          return {
+            text: span.textContent,
+            inside:
+              text.left >= cell.left - 0.5 &&
+              text.right <= cell.right + 0.5 &&
+              text.top >= cell.top - 0.5 &&
+              text.bottom <= cell.bottom + 0.5,
+            outside: text.top >= cell.bottom - 0.5,
+          };
+        }),
+      );
+    // The first week's month is too wide for its cell, so it is left out.
+    expect(labels.find((label) => label.text === "February 2026")).toEqual({
+      text: "February 2026",
+      inside: false,
+      outside: true,
+    });
+    expect(labels.every((label) => label.inside || label.outside)).toBe(true);
+  });
+
   test("draws a conflicting link dashed", async ({ page }) => {
     const dashed = page.locator(".bx--gantt__link--conflict");
     await expect(dashed).toHaveCount(1);
