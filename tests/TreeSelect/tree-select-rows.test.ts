@@ -147,4 +147,9 @@ describe("unresolvedIds", () => {
     const loaded = withLoadedChildren(tree, new Map([["a2", [{ id: "k" }]]]));
     expect(unresolvedIds(["gone"], indexTree(loaded))).toEqual([]);
   });
+
+  it("does not count a parent the user cleared", () => {
+    const index = indexTree(tree);
+    expect(unresolvedIds(["a2-kid"], index, new Set(["a2"]))).toEqual([]);
+  });
 });

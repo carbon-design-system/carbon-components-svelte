@@ -256,17 +256,30 @@ export function diffIds(prev, next) {
  * component keeps it instead of dropping it. In a tree with no unloaded
  * parent, an unknown id is stale and none are returned.
  *
+ * `cleared` names unloaded parents whose whole subtree the user
+ * unchecked. They hold no saved checks, so they do not count.
+ *
  * @param {ReadonlyArray<TreeSelectNodeId>} ids
  * @param {{ byId: ReadonlyMap<TreeSelectNodeId, TreeSelectBaseNode> }} index
+ * @param {ReadonlySet<TreeSelectNodeId>} [cleared]
  * @returns {Array<TreeSelectNodeId>}
  */
-export function unresolvedIds(ids, index) {
+export function unresolvedIds(ids, index, cleared) {
   const unknown = ids.filter((id) => !index.byId.has(id));
   if (unknown.length === 0) return unknown;
   for (const node of index.byId.values()) {
-    if (node.hasChildren === true && !(node.nodes && node.nodes.length > 0)) {
-      return unknown;
-    }
+    if (!isUnloaded(node) || cleared?.has(node.id)) continue;
+    return unknown;
   }
   return [];
+}
+
+/**
+ * Whether a node is a lazy parent whose children have not loaded.
+ *
+ * @param {TreeSelectBaseNode} node
+ * @returns {boolean}
+ */
+export function isUnloaded(node) {
+  return node.hasChildren === true && !(node.nodes && node.nodes.length > 0);
 }

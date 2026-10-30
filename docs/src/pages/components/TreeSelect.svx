@@ -121,6 +121,8 @@ Mark a parent with `hasChildren: true` and no `nodes`, and pass `loadChildren`. 
 
 A checked parent that has not loaded gives its check to its children once they arrive. An id in `checkedIds` for a node that has not loaded stays checked and submits with the form, so a saved check is kept until its node loads. Once no parent is left to load, ids that match no node are dropped.
 
+With the default `checkMode="deep"`, unchecking a parent that has not loaded, or one of its ancestors, also unchecks the saved ids under it, and removes them from the form. They leave `checkedIds` as soon as no other unloaded parent could hold them, and at the latest when the parent's children load.
+
 <FileSource src="/framed/TreeSelect/TreeSelectLazy" />
 
 ## Large trees

@@ -79,4 +79,8 @@ export function diffIds(
 export function unresolvedIds(
   ids: ReadonlyArray<TreeSelectNodeId>,
   index: { byId: ReadonlyMap<TreeSelectNodeId, TreeSelectBaseNode> },
+  cleared?: ReadonlySet<TreeSelectNodeId>,
 ): Array<TreeSelectNodeId>;
+
+/** Whether a node is a lazy parent whose children have not loaded. */
+export function isUnloaded(node: TreeSelectBaseNode): boolean;

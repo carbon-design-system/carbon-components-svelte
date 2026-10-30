@@ -410,6 +410,127 @@ describe("TreeSelect lazy children", () => {
     expect(component.indeterminateIds).toEqual(["root"]);
   });
 
+  describe("unchecking a parent that has not loaded", () => {
+    const kids = async () => [
+      { id: "kid", text: "Kid" },
+      { id: "kin", text: "Kin" },
+    ];
+    const submitted = (container: HTMLElement) =>
+      [...container.querySelectorAll("input[type=hidden]")].map(
+        (input) => (input as HTMLInputElement).value,
+      );
+
+    it("clears the saved checks under it, and their form values", async () => {
+      const onEvent = vi.fn();
+      const { component, container } = render(TreeSelect, {
+        props: {
+          nodes: lazy,
+          loadChildren: kids,
+          selectionMode: "checkbox",
+          checkedIds: ["root", "kin"],
+          name: "places",
+          onEvent,
+        },
+      });
+      expect(submitted(container)).toEqual(["root", "kin"]);
+
+      await openWithKeyboard();
+      await user.keyboard(" ");
+
+      // `root` is the only parent not loaded, so every unknown id is under it.
+      expect(component.checkedIds).toEqual([]);
+      expect(submitted(container)).toEqual([]);
+      expect(onEvent).toHaveBeenLastCalledWith(
+        "check:change",
+        expect.objectContaining({ removed: ["root", "kin"] }),
+      );
+    });
+
+    it("clears them when the user removes the parent's tag", async () => {
+      const { component, container } = render(TreeSelect, {
+        props: {
+          nodes: lazy,
+          loadChildren: kids,
+          selectionMode: "checkbox",
+          selectionDisplay: "tags",
+          checkedIds: ["root", "kin"],
+          name: "places",
+        },
+      });
+
+      await user.click(screen.getByRole("button", { name: /Remove.*Root/ }));
+
+      expect(component.checkedIds).toEqual([]);
+      expect(submitted(container)).toEqual([]);
+    });
+
+    it("clears them on load when another parent has not loaded", async () => {
+      const { component, container } = render(TreeSelect, {
+        props: {
+          nodes: [lazy[0], { id: "other", text: "Other", hasChildren: true }],
+          loadChildren: kids,
+          selectionMode: "checkbox",
+          checkedIds: ["root", "kin", "far"],
+          name: "places",
+        },
+      });
+
+      await openWithKeyboard();
+      await user.keyboard(" ");
+      // Either parent may hold `kin` or `far`, so both stay for now.
+      expect(component.checkedIds).toEqual(["kin", "far"]);
+      expect(submitted(container)).toEqual(["kin", "far"]);
+
+      await user.keyboard("{ArrowRight}");
+      await waitFor(() => expect(treeItemNames()).toContain("Kin"));
+
+      expect(component.checkedIds).toEqual(["far"]);
+      expect(component.indeterminateIds).toEqual([]);
+      expect(submitted(container)).toEqual(["far"]);
+      expect(screen.getByRole("treeitem", { name: "Kin" })).toHaveAttribute(
+        "aria-checked",
+        "false",
+      );
+    });
+
+    it("checks the loaded children when the user checks it again", async () => {
+      const { component } = render(TreeSelect, {
+        props: {
+          nodes: [lazy[0], { id: "other", text: "Other", hasChildren: true }],
+          loadChildren: kids,
+          selectionMode: "checkbox",
+          checkedIds: ["root", "kin"],
+        },
+      });
+
+      await openWithKeyboard();
+      await user.keyboard("  {ArrowRight}");
+
+      await waitFor(() =>
+        expect(component.checkedIds).toEqual(["root", "kid", "kin"]),
+      );
+    });
+
+    it("keeps them when checkMode is node", async () => {
+      const { component, container } = render(TreeSelect, {
+        props: {
+          nodes: lazy,
+          loadChildren: kids,
+          selectionMode: "checkbox",
+          checkMode: "node",
+          checkedIds: ["root", "kin"],
+          name: "places",
+        },
+      });
+
+      await openWithKeyboard();
+      await user.keyboard(" ");
+
+      expect(component.checkedIds).toEqual(["kin"]);
+      expect(submitted(container)).toEqual(["kin"]);
+    });
+  });
+
   it("drops an unknown id once no parent is left to load", () => {
     const { component } = render(TreeSelect, {
       props: {

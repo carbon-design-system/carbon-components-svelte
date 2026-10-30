@@ -491,6 +491,7 @@
     expandableIds,
     flattenVisible,
     indexTree,
+    isUnloaded,
     sameIds,
     shownCheckedIds,
     unresolvedIds,
@@ -670,7 +671,7 @@
   // Ids that name nodes a lazy parent has not loaded yet. They stay
   // selected and submit with the form until their nodes load.
   $: pendingIds = checkbox
-    ? unresolvedIds(checkedIds, treeIndex)
+    ? unresolvedIds(checkedIds, treeIndex, clearedParents(checkedIds))
     : selectedId !== undefined && !selectedNode
       ? unresolvedIds([selectedId], treeIndex)
       : [];
@@ -1021,10 +1022,84 @@
    * @param {ReturnType<typeof indexTree>} index
    */
   function resolveChecked(seed, tree, index) {
-    const state = resolveCheckboxState(tree, seed, { cascade });
-    const pending = unresolvedIds(seed, index);
+    const ids =
+      uncheckedUnloadedIds.size > 0 ? dropUncheckedSubtrees(seed, index) : seed;
+    const state = resolveCheckboxState(tree, ids, { cascade });
+    const pending = unresolvedIds(ids, index, clearedParents(ids));
     if (pending.length === 0) return state;
     return { ...state, checkedIds: [...state.checkedIds, ...pending] };
+  }
+
+  /**
+   * Lazy parents the user unchecked before their children loaded, directly
+   * or through an ancestor, with `checkMode="deep"`. That uncheck covers the
+   * whole subtree, so saved checks under them are dropped once the children
+   * load, or at once when no other unloaded parent could hold them.
+   * @type {Set<Node["id"]>}
+   */
+  const uncheckedUnloadedIds = new Set();
+
+  /**
+   * Records the unloaded lazy parents in `list` and their subtrees as
+   * unchecked, and adds every id visited to `visited`.
+   * @param {ReadonlyArray<import("./tree-select-rows.js").TreeSelectBaseNode>} list
+   * @param {Set<Node["id"]>} [visited]
+   */
+  function markUncheckedUnloaded(list, visited) {
+    for (const node of list) {
+      visited?.add(node.id);
+      if (isUnloaded(node)) uncheckedUnloadedIds.add(node.id);
+      if (Array.isArray(node.nodes)) markUncheckedUnloaded(node.nodes, visited);
+    }
+  }
+
+  /**
+   * Drops the checks under each unchecked lazy parent whose children have
+   * loaded, unless the parent was checked again before they arrived.
+   * @param {ReadonlyArray<Node["id"]>} ids
+   * @param {ReturnType<typeof indexTree>} index
+   * @returns {ReadonlyArray<Node["id"]>}
+   */
+  function dropUncheckedSubtrees(ids, index) {
+    const checked = new Set(ids);
+    /** @type {Set<Node["id"]>} */
+    const dropped = new Set();
+    for (const parentId of [...uncheckedUnloadedIds]) {
+      const node = index.byId.get(parentId);
+      if (node && isUnloaded(node)) continue;
+      uncheckedUnloadedIds.delete(parentId);
+      if (node?.nodes && !checked.has(parentId)) {
+        markUncheckedUnloaded(node.nodes, dropped);
+      }
+    }
+    return dropped.size > 0 ? ids.filter((id) => !dropped.has(id)) : ids;
+  }
+
+  /**
+   * Unchecked lazy parents that still hold no check, so they cannot hold a
+   * saved one either. Checking a parent again cancels its entry.
+   * @param {ReadonlyArray<Node["id"]>} ids
+   * @returns {Set<Node["id"]>}
+   */
+  function clearedParents(ids) {
+    if (uncheckedUnloadedIds.size === 0) return uncheckedUnloadedIds;
+    const checked = new Set(ids);
+    return new Set(
+      [...uncheckedUnloadedIds].filter((parentId) => !checked.has(parentId)),
+    );
+  }
+
+  /**
+   * Toggles a check from a user action. A deep uncheck also clears the
+   * saved checks under any unloaded parent it covers.
+   * @param {Node} node
+   * @param {boolean} checked
+   */
+  function applyToggle(node, checked) {
+    if (!checked && cascade) markUncheckedUnloaded([node]);
+    applyChecked(
+      toggleCheckboxNode(viewNodes, checkedIds, node.id, checked, { cascade }),
+    );
   }
 
   /** @param {ReadonlyArray<Node["id"]>} seed */
@@ -1056,15 +1131,7 @@
   /** @param {Node} node */
   function toggleCheck(node) {
     if (readonly || node.disabled) return;
-    applyChecked(
-      toggleCheckboxNode(
-        viewNodes,
-        checkedIds,
-        node.id,
-        !checkedSet.has(node.id),
-        { cascade },
-      ),
-    );
+    applyToggle(node, !checkedSet.has(node.id));
   }
 
   /** @param {Node} node */
@@ -1317,10 +1384,10 @@
     if (disabled || readonly) return;
     const tagId = detail.tag.value;
     if (tagId === undefined) return;
+    const node = treeIndex.byId.get(tagId);
+    if (!node) return;
     const hadFocus = tagsRef?.contains(document.activeElement);
-    applyChecked(
-      toggleCheckboxNode(viewNodes, checkedIds, tagId, false, { cascade }),
-    );
+    applyToggle(node, false);
     // With no tag left to take focus, hand it back to the field.
     if (hadFocus && checkedIds.length === 0) {
       tick().then(() => (filterable ? inputRef : ref)?.focus());
