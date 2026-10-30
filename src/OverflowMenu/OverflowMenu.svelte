@@ -76,14 +76,25 @@
   export let iconDescription = "Options";
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the trigger's tooltip.
    * The tooltip flips to the opposite side when there is not enough space.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "top";
 
   /**
    * Set the alignment of the trigger's tooltip.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -148,6 +159,7 @@
   import { rovingFocus } from "../utils/roving-focus.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import {
@@ -492,7 +504,10 @@
     !dismissed &&
     (hovered || focused) &&
     $tooltipActive;
-  $: tooltipGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+  $: tooltipGaps = iconTooltipPortalGaps(
+    effectiveTooltipPosition,
+    effectiveTooltipAlignment,
+  );
 
   function handleTooltipMouseenter() {
     if (!hasTooltip || disabled) return;
@@ -630,6 +645,11 @@
       dismissTooltip();
     }
   }
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <button
@@ -780,11 +800,11 @@
 {#if tooltipMounted}
   <PortalTooltip
     anchor={buttonRef}
-    direction={tooltipPosition}
+    direction={effectiveTooltipPosition}
     open={tooltipOpen}
     text={iconDescription}
     tooltipType="icon"
-    intrinsicAlign={tooltipAlignment}
+    intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={tooltipGaps.horizontalGapLeft}
     horizontalGapRight={tooltipGaps.horizontalGapRight}
     gapTop={tooltipGaps.gapTop}

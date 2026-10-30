@@ -161,9 +161,9 @@ Set `aria-label` to give the trigger and the menu a longer name than the tooltip
 
 ### Tooltip position
 
-Set `tooltipPosition` and `tooltipAlignment` to place the trigger's tooltip. The default is `"top"` and `"center"`. The tooltip shows on hover and focus, hides while the menu is open, and flips to the opposite side when there is not enough space. It stays closed when the menu returns focus to the trigger.
+Set `tooltipAlign` to place the trigger's tooltip, with Popover's `align` names. The default is `"top"`. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated. The tooltip shows on hover and focus, hides while the menu is open, and flips to the opposite side when there is not enough space. It stays closed when the menu returns focus to the trigger.
 
-<OverflowMenu tooltipPosition="bottom" tooltipAlignment="start">
+<OverflowMenu tooltipAlign="bottom-start">
   <OverflowMenuItem text="Manage credentials" />
   <OverflowMenuItem href="https://cloud.ibm.com/docs/api-gateway/" target="_blank" text="API documentation" />
   <OverflowMenuItem danger text="Delete service" />
