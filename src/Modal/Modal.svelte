@@ -443,7 +443,7 @@
           </Button>
         </div>
       {/if}
-      {#if modalLabel}
+      {#if modalLabel || $$slots.label}
         <h2 id={modalLabelId} class:bx--modal-header__label={true}>
           <slot name="label">{modalLabel}</slot>
         </h2>
