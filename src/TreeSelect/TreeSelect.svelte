@@ -352,7 +352,8 @@
   };
 
   /**
-   * Specify the text announced when a lazy node fails to load.
+   * Specify the text announced when a lazy node fails to load. It also
+   * describes the node's row and shows as a tooltip on its error icon.
    * @type {(node: Node) => string}
    */
   export let loadErrorText = function loadErrorText(node) {
@@ -1653,6 +1654,9 @@
                 {readonly}
                 {searching}
                 loadState={loadStates.get(nodeId)}
+                errorText={loadStates.get(nodeId) === "error"
+                  ? loadErrorText(row.node)
+                  : ""}
                 on:click={(event) => handleRowClick(event, row)}
                 on:mousedown={(event) => {
                   // Keep focus on the field so screen readers don't
@@ -1680,6 +1684,9 @@
               {readonly}
               {searching}
               loadState={loadStates.get(nodeId)}
+              errorText={loadStates.get(nodeId) === "error"
+                ? loadErrorText(row.node)
+                : ""}
               on:click={(event) => handleRowClick(event, row)}
               on:mousedown={(event) => {
                 event.preventDefault();

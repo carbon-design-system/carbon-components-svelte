@@ -45,6 +45,12 @@
   export let loadState = undefined;
 
   /**
+   * Text that says a lazy parent failed to load. It describes the row and
+   * shows as a tooltip on the expander's error icon.
+   */
+  export let errorText = "";
+
+  /**
    * The `id` of the `TreeSelect`, which scopes the checkbox ids.
    * @type {string}
    */
@@ -59,6 +65,7 @@
   import { createEventDispatcher } from "svelte";
   import { ListBoxMenuItem } from "../ListBox/index.js";
   import Loading from "../Loading/Loading.svelte";
+  import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
@@ -66,6 +73,9 @@
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
   const dispatch = createEventDispatcher();
+
+  /** @type {null | HTMLSpanElement} */
+  let toggleRef = null;
 
   /**
    * @param {HTMLElement} node
@@ -109,6 +119,7 @@
   aria-checked={checkbox ? toAriaChecked(checked, indeterminate) : undefined}
   aria-busy={loadState === "loading" ? "true" : undefined}
   aria-labelledby="{optionId}-text"
+  aria-describedby={errorText ? `${optionId}-error` : undefined}
   active={checkbox ? false : selected}
   {disabled}
   style="--ccs-tree-select-depth: {row.depth};"
@@ -121,6 +132,7 @@
       <!-- Pointer-only: a keyboard user expands with the arrow keys, from
            the field, so the toggle stays out of the tab order and the tree. -->
       <span
+        bind:this={toggleRef}
         aria-hidden="true"
         class:bx--tree-select__toggle={true}
         class:bx--tree-select__toggle--expanded={row.expanded}
@@ -134,12 +146,24 @@
           <Loading small withOverlay={false} description="" />
         {:else if loadState === "error"}
           <WarningFilled class="bx--tree-select__toggle-error" />
+          <AnchoredTooltip
+            anchor={toggleRef}
+            text={errorText}
+            enabled={errorText !== ""}
+            align="start"
+            dismissOnClick={false}
+          />
         {:else}
           <ChevronRight />
         {/if}
       </span>
     {:else}
       <span aria-hidden="true" class:bx--tree-select__toggle={true}></span>
+    {/if}
+    {#if errorText}
+      <span id="{optionId}-error" class:bx--visually-hidden={true}
+        >{errorText}</span
+      >
     {/if}
     {#if checkbox}
       <div

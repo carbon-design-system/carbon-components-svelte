@@ -341,6 +341,11 @@ describe("TreeSelect lazy children", () => {
       }),
     );
     expect(treeItemNames()).toEqual(["Root", "Leaf"]);
+    expect(
+      screen.getByRole("treeitem", { name: "Root" }),
+    ).toHaveAccessibleDescription(
+      "Could not load Root. Expand it to try again.",
+    );
 
     await user.keyboard("{ArrowRight}");
     await waitFor(() => expect(treeItemNames()).toContain("Kid"));
