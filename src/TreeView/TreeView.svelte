@@ -968,11 +968,65 @@
     if (!nodeMap) return [];
     const unknown = [...new Set(ids)].filter((id) => !nodeMap.has(id));
     if (unknown.length === 0) return unknown;
+    const checked = new Set(ids);
     for (const node of nodeMap.values()) {
-      const loaded = Array.isArray(node.nodes) && node.nodes.length > 0;
-      if (node.hasChildren === true && !loaded) return unknown;
+      if (!isUnloaded(node)) continue;
+      // The user cleared this parent's subtree, so only another parent can
+      // still hold a saved check.
+      if (uncheckedUnloadedIds.has(node.id) && !checked.has(node.id)) continue;
+      return unknown;
     }
     return [];
+  }
+
+  /**
+   * Lazy parents the user unchecked before their children loaded, directly
+   * or through an ancestor, with `checkMode="deep"`. That uncheck covers the
+   * whole subtree, so saved checks under them are dropped once the children
+   * load, or at once when no other unloaded parent could hold them.
+   * @type {Set<Node["id"]>}
+   */
+  const uncheckedUnloadedIds = new Set();
+
+  /** @type {(node: TreeNode<any>) => boolean} */
+  function isUnloaded(node) {
+    const loaded = Array.isArray(node.nodes) && node.nodes.length > 0;
+    return node.hasChildren === true && !loaded;
+  }
+
+  /**
+   * Records the unloaded lazy parents in `nodes` and their subtrees as
+   * unchecked, and adds every id visited to `visited`.
+   * @param {ReadonlyArray<TreeNode<any>>} nodes
+   * @param {Set<Node["id"]>} [visited]
+   */
+  function markUncheckedUnloaded(nodes, visited) {
+    for (const node of nodes) {
+      visited?.add(node.id);
+      if (isUnloaded(node)) uncheckedUnloadedIds.add(node.id);
+      if (Array.isArray(node.nodes)) markUncheckedUnloaded(node.nodes, visited);
+    }
+  }
+
+  /**
+   * Drops the checks under each unchecked lazy parent whose children have
+   * loaded, unless the parent was checked again before they arrived.
+   * @param {ReadonlyArray<Node["id"]>} ids
+   * @returns {ReadonlyArray<Node["id"]>}
+   */
+  function dropUncheckedSubtrees(ids) {
+    const checked = new Set(ids);
+    /** @type {Set<Node["id"]>} */
+    const dropped = new Set();
+    for (const id of [...uncheckedUnloadedIds]) {
+      const node = cachedNodeMap?.get(id);
+      if (node && isUnloaded(node)) continue;
+      uncheckedUnloadedIds.delete(id);
+      if (node?.nodes && !checked.has(id)) {
+        markUncheckedUnloaded(node.nodes, dropped);
+      }
+    }
+    return dropped.size > 0 ? ids.filter((id) => !dropped.has(id)) : ids;
   }
 
   /**
@@ -1067,14 +1121,12 @@
 
       if (!clickedCheckbox) return;
 
+      const checked = !checkedIdsSet.has(node.id);
+      if (!checked && checkMode !== "node") markUncheckedUnloaded([node]);
       setCheckedIds(
-        toggleCheckboxNode(
-          nodes,
-          checkedIds,
-          node.id,
-          !checkedIdsSet.has(node.id),
-          { cascade: checkMode !== "node" },
-        ),
+        toggleCheckboxNode(nodes, checkedIds, node.id, checked, {
+          cascade: checkMode !== "node",
+        }),
       );
       dispatch("check", withLiveState(node));
       return;
@@ -1584,14 +1636,18 @@
         checkedIds !== prevCheckboxCheckedIds ||
         checkMode !== prevCheckboxCheckMode
       ) {
+        const seedIds =
+          uncheckedUnloadedIds.size > 0
+            ? dropUncheckedSubtrees(checkedIds)
+            : checkedIds;
         const checkboxState = resolveCheckboxState(
           checkboxInputNodes,
-          checkedIds,
+          seedIds,
           {
             cascade: checkMode !== "node",
           },
         );
-        const pendingIds = unloadedCheckedIds(checkedIds, cachedNodeMap);
+        const pendingIds = unloadedCheckedIds(seedIds, cachedNodeMap);
         const nextCheckedIds =
           pendingIds.length > 0
             ? [...checkboxState.checkedIds, ...pendingIds]
