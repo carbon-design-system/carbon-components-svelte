@@ -18,6 +18,7 @@
   }
 
   .#{$prefix}--text-truncate__toggle {
+    position: relative;
     padding: 0;
     border: 0;
     background: none;
@@ -25,6 +26,19 @@
     cursor: pointer;
     font: inherit;
     text-align: start;
+  }
+
+  // The label is about 14 px tall. An invisible box on its center takes a
+  // press of at least 24 x 24 px (WCAG 2.5.8) without moving the layout or
+  // the focus ring. It is centered, so it needs no RTL twin.
+  .#{$prefix}--text-truncate__toggle::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, #{to-rem(24px)});
+    height: max(100%, #{to-rem(24px)});
+    content: "";
+    transform: translate(-50%, -50%);
   }
 
   .#{$prefix}--text-truncate__toggle:focus {
