@@ -272,6 +272,8 @@ While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot render
 
 With `selectionMode="checkbox"`, a saved id in `checkedIds` can name a node that has not loaded yet. It stays in `checkedIds` while any `hasChildren` node is unloaded, and its row shows as checked once the node arrives. An id that matches no node after every parent has loaded is dropped.
 
+With the default `checkMode="deep"`, unchecking a node that has not loaded, or one of its ancestors, also unchecks the saved ids under it. They leave `checkedIds` as soon as no other unloaded node could hold them, and at the latest when the node's children load.
+
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
 
 ### Virtualization
