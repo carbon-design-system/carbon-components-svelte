@@ -17,6 +17,18 @@ const CASES: {
     hover: ".bx--pagination__items-count",
     text: "21–30 of 120 items",
   },
+  {
+    name: "ProgressStep label",
+    hover: ".bx--progress-step-button >> nth=0",
+    measure: ".bx--progress-label",
+    text: "Team members",
+  },
+  {
+    name: "ProgressStep slotted label",
+    hover: ".bx--progress-step-button >> nth=1",
+    measure: ".bx--progress-label",
+    text: "Billing plan",
+  },
 ];
 
 test("truncated text has a title on hover, and text that fits has none", async ({
