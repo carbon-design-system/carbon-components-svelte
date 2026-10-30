@@ -102,6 +102,17 @@ test.describe("TreeViewGrid", () => {
     expect(name).toBeGreaterThanOrEqual(192);
   });
 
+  test("scrolls inside its container at 320px, not the page", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    // The toggles' visually hidden inputs sit past the fold.
+    const pageWidth = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect(pageWidth).toBe(320);
+  });
+
   test("draws a focus ring on a row and on a cell", async ({ page }) => {
     const row = page.locator("[data-tree-row-id=us-east]");
     await row.focus();

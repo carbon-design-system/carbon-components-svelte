@@ -13,8 +13,11 @@
 @mixin tree-view-grid {
   // Columns take their widths from the header row alone, so they keep them
   // as rows expand and collapse. The component sets a minimum width on the
-  // table, and the container scrolls when it is narrower.
+  // table, and the container scrolls when it is narrower. The table is the
+  // containing block of the visually hidden labels and inputs in its cells,
+  // so the container clips them too and they cannot widen the page.
   .#{$prefix}--tree-grid {
+    position: relative;
     table-layout: fixed;
   }
 
