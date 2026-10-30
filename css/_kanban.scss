@@ -163,13 +163,28 @@
   }
 
   // Cards below the fold skip layout and paint until they scroll near, which
-  // keeps a column of hundreds of cards cheap. The size is a guess for the
-  // skipped ones; `auto` swaps in the real height once one has rendered.
+  // keeps a column of hundreds of cards cheap. A skipped card takes the
+  // height of a one-line card with the same parts, so a column keeps its
+  // height as cards render: 24px of padding, an 18px title, and an 8px gap
+  // before a 16px description or a 24px row of tags. `auto` keeps a card's
+  // real height once it has rendered, as for a title that wraps.
   .#{$prefix}--kanban__item {
-    contain-intrinsic-size: auto to-rem(88px);
+    contain-intrinsic-size: auto to-rem(48px);
     content-visibility: auto;
     -webkit-touch-callout: none;
     user-select: none;
+  }
+
+  .#{$prefix}--kanban__item--description {
+    contain-intrinsic-size: auto to-rem(66px);
+  }
+
+  .#{$prefix}--kanban__item--meta {
+    contain-intrinsic-size: auto to-rem(74px);
+  }
+
+  .#{$prefix}--kanban__item--description.#{$prefix}--kanban__item--meta {
+    contain-intrinsic-size: auto to-rem(98px);
   }
 
   // At least 48px tall: a one-line card keeps a 56px pitch while its menu

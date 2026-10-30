@@ -543,6 +543,46 @@ test.describe("Kanban modes", () => {
     expect(await duration()).toBe("0s");
   });
 
+  test("a column past the fold keeps its height as its cards render", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/kanban-large.html?columns=8&cards=40");
+    const column = page.locator('[data-kanban-column="c7"]');
+    const list = column.locator(".bx--kanban__list");
+    const height = () =>
+      list.evaluate((el) => el.getBoundingClientRect().height);
+    // A card skipped by `content-visibility` lays out no children.
+    const rendered = (cardId: string) =>
+      expect
+        .poll(() =>
+          page
+            .locator(`[data-kanban-item="${cardId}"] .bx--kanban__card-title`)
+            .evaluate((el) => el.getBoundingClientRect().width),
+        )
+        .toBeGreaterThan(0);
+    await expect(page.locator('[data-kanban-item="c7-0"]')).toHaveCSS(
+      "content-visibility",
+      "auto",
+    );
+    const before = await height();
+
+    await page.locator(".bx--kanban__scroller").evaluate((el) => {
+      el.scrollLeft = el.scrollWidth;
+    });
+    await rendered("c7-0");
+    const inView = await height();
+    await column.locator(".bx--kanban__body").evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
+    await rendered("c7-39");
+
+    // Each card's guess matches a one-line card of its shape, so the
+    // column does not grow or shrink as cards first render.
+    expect(Math.abs(inView - before)).toBeLessThanOrEqual(1);
+    expect(Math.abs((await height()) - before)).toBeLessThanOrEqual(1);
+  });
+
   test("scrolls the board and a column near their edges while dragging", async ({
     page,
   }) => {

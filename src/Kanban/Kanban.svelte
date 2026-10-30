@@ -1190,6 +1190,10 @@
                     class:bx--kanban__item--picked={cardId === draggingId &&
                       dragMode === "keyboard"}
                     class:bx--kanban__item--focus={cardId === ringId}
+                    class:bx--kanban__item--description={!$$slots.card &&
+                      !!item.description}
+                    class:bx--kanban__item--meta={!$$slots.card &&
+                      !!(item.tags?.length || item.assignee)}
                     data-kanban-item={cardId}
                   >
                     <Tile noPadding class="bx--kanban__card">
