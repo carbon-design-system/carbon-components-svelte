@@ -19,6 +19,8 @@
   export let readonly = false;
   export let inputs: string[] = [];
   export let changes: string[] = [];
+  export let formats: string[] = [];
+  export let recentChanges: number[] = [];
 </script>
 
 <ColorPicker
@@ -35,8 +37,11 @@
   {swatchColumns}
   {disabled}
   {readonly}
-  on:input={(event) => (inputs = [...inputs, event.detail])}
-  on:change={(event) => (changes = [...changes, event.detail])}
+  on:input={(event) => (inputs = [...inputs, event.detail.value])}
+  on:change={(event) => (changes = [...changes, event.detail.value])}
+  on:format:change={(event) => (formats = [...formats, event.detail.format])}
+  on:recent:change={(event) =>
+    (recentChanges = [...recentChanges, event.detail.recent.length])}
 />
 <span data-testid="value">{value}</span>
 <span data-testid="format">{format}</span>

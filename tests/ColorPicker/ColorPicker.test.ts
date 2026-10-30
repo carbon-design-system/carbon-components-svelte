@@ -186,7 +186,7 @@ describe("ColorPicker", () => {
     });
 
     it("switches the format and rewrites the value", async () => {
-      render(ColorPicker, { value: "#0f62fe" });
+      const { component } = render(ColorPicker, { value: "#0f62fe" });
 
       await user.selectOptions(
         screen.getByRole("combobox", { name: "Color format" }),
@@ -203,6 +203,11 @@ describe("ColorPicker", () => {
         "hsl",
       );
       expect(value()).toBe("hsl(219, 99%, 53%)");
+      expect(component.formats).toEqual(["rgb", "hsl"]);
+      expect(component.changes).toEqual([
+        "rgb(15, 98, 254)",
+        "hsl(219, 99%, 53%)",
+      ]);
     });
 
     it("clamps a channel typed past its range", async () => {
@@ -323,7 +328,10 @@ describe("ColorPicker", () => {
 
   describe("recent colors", () => {
     it("lists a picked color, newest first, without duplicates", async () => {
-      render(ColorPicker, { value: "#0f62fe", swatches });
+      const { component } = render(ColorPicker, {
+        value: "#0f62fe",
+        swatches,
+      });
       expect(
         screen.queryByRole("listbox", { name: "Recent colors" }),
       ).not.toBeInTheDocument();
@@ -333,6 +341,7 @@ describe("ColorPicker", () => {
       await user.click(screen.getByRole("option", { name: "Red" }));
 
       expect(screen.getByTestId("recent")).toHaveTextContent("#da1e28 #24a148");
+      expect(component.recentChanges).toEqual([1, 2, 2]);
       expect(
         screen.getByRole("listbox", { name: "Recent colors" }),
       ).toBeVisible();

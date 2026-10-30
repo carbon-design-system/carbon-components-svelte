@@ -5,8 +5,10 @@
    * @typedef {import("./ColorSwatches.svelte").ColorSwatch} ColorPickerSwatch
    * @typedef {"group" | "area" | "areaRoleDescription" | "areaValue" | "hue" | "hueValue" | "alpha" | "alphaValue" | "format" | "hex" | "red" | "green" | "blue" | "hueField" | "saturation" | "lightness" | "swatches" | "recent" | "eyeDropper" | "invalidColor" | "lowContrast" | "readonly"} ColorPickerTranslationId
    * @restProps {div}
-   * @event {string} input
-   * @event {string} change
+   * @event {{ value: string }} input
+   * @event {{ value: string }} change
+   * @event {{ format: ColorPickerFormat }} format:change
+   * @event {{ recent: ReadonlyArray<string> }} recent:change
    */
 
   /**
@@ -239,7 +241,7 @@
     const next = formatColor(current(), format);
     lastEmitted = next;
     value = next;
-    dispatch(type, next);
+    dispatch(type, { value: next });
   }
 
   /** @param {ColorPickerColor} next */
@@ -269,6 +271,7 @@
         return !(other && sameColor(other, rgba));
       }),
     ].slice(0, recentLimit);
+    dispatch("recent:change", { recent });
   }
 
   /** @param {CustomEvent<{ saturation: number; brightness: number }>} event */
@@ -321,6 +324,7 @@
   /** @param {CustomEvent<string>} event */
   function handleFormat(event) {
     format = /** @type {ColorPickerFormat} */ (event.detail);
+    dispatch("format:change", { format });
     emit("change");
   }
 
