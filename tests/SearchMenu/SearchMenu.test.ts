@@ -513,3 +513,51 @@ describe("SearchMenu groups", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("SearchMenu loadingDelay", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function getSkeletons() {
+    return document.querySelectorAll(".bx--search-menu-item--skeleton");
+  }
+
+  it("shows the loading row after the delay and holds it for the minimum", async () => {
+    const { rerender } = render(SearchMenu, { props: { loadingDelay: 300 } });
+    screen.getByRole("combobox").focus();
+    await rerender({ loading: true });
+
+    expect(screen.getByRole("listbox")).toHaveAttribute("aria-busy", "true");
+    expect(getSkeletons()).toHaveLength(0);
+
+    await vi.advanceTimersByTimeAsync(300);
+    expect(getSkeletons()).toHaveLength(1);
+
+    await vi.advanceTimersByTimeAsync(100);
+    await rerender({ loading: false });
+    expect(screen.getByRole("listbox")).not.toHaveAttribute("aria-busy");
+    expect(getSkeletons()).toHaveLength(1);
+
+    // Shown at 300 ms, so the 500 ms minimum ends at 800 ms.
+    await vi.advanceTimersByTimeAsync(399);
+    expect(getSkeletons()).toHaveLength(1);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(getSkeletons()).toHaveLength(0);
+  });
+
+  it("delays the searchLoading spinner too", async () => {
+    const { rerender } = render(SearchMenu, { props: { loadingDelay: 300 } });
+    await rerender({ searchLoading: true });
+
+    expect(screen.getByRole("combobox")).toHaveAttribute("aria-busy", "true");
+    expect(screen.queryByTitle("Searching")).toBeNull();
+
+    await vi.advanceTimersByTimeAsync(300);
+    expect(screen.getByTitle("Searching")).toBeInTheDocument();
+  });
+});

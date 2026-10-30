@@ -341,6 +341,15 @@
   export let loadingText = "Loading...";
 
   /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the loading row. Once shown, it stays for at least 500 ms, so fast work
+   * shows nothing and slow work never flashes. The menu sets `aria-busy` and
+   * holds back the empty state as soon as `loading` is `true`.
+   * Set to `0` to show it at once.
+   */
+  export let loadingDelay = 0;
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -405,6 +414,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -525,8 +535,18 @@
     return () => {
       announceFilterResults.cancel();
       menuWindow.destroy();
+      loadingIndicator.cancel();
     };
   });
+
+  // `loading` takes effect at once for `aria-busy` and the empty state. Only
+  // the indicator waits for `loadingDelay`; with no delay it follows `loading`
+  // exactly.
+  let showLoading = loading;
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
 
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
@@ -1765,7 +1785,7 @@
             <slot name="empty" {value}>{emptyMessage}</slot>
           </ListBoxMenuStatus>
         {/if}
-        {#if loading}
+        {#if showLoading}
           <ListBoxMenuStatus>
             <InlineLoading description={loadingText} />
           </ListBoxMenuStatus>
