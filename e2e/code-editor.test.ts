@@ -301,6 +301,26 @@ test.describe("CodeEditor", () => {
     expect(await field.evaluate((el) => el.scrollLeft)).toBe(0);
   });
 
+  test("marks the active line in the gutter, not behind the code", async ({
+    page,
+  }) => {
+    const field = editor(page, "code-editor-js");
+    await select(field, 0);
+    const active = root(page, "code-editor-js").locator(
+      ".bx--code-editor__line--active",
+    );
+    await expect(active).toHaveCount(1);
+    const [number, band, field_] = await active.evaluate((el) => [
+      getComputedStyle(el, "::before").backgroundColor,
+      getComputedStyle(el, "::after").backgroundColor,
+      getComputedStyle(el.closest(".bx--code-editor__wrapper") as Element)
+        .backgroundColor,
+    ]);
+    expect(number).not.toBe("rgba(0, 0, 0, 0)");
+    expect(number).not.toBe(field_);
+    expect(band).toBe("rgba(0, 0, 0, 0)");
+  });
+
   test("starts the textarea's text where the layer's starts", async ({
     page,
   }) => {

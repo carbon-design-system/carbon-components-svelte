@@ -52,7 +52,10 @@
   /** Set to `false` to hide the line numbers */
   export let lineNumbers = true;
 
-  /** Set to `false` to stop marking the line that holds the caret */
+  /**
+   * Set to `false` to stop marking the number of the line that holds the
+   * caret. The mark is in the gutter, so it needs `lineNumbers`.
+   */
   export let highlightActiveLine = true;
 
   /**

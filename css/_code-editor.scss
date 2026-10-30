@@ -240,19 +240,13 @@
     text-align: right;
   }
 
-  // The current line is a band behind the textarea, so the selection and the
-  // caret draw over it.
-  .#{$prefix}--code-editor__line--active::after {
-    position: absolute;
-    z-index: -1;
-    background-color: $field-hover;
-    content: "";
-    inset: 0;
-    pointer-events: none;
-  }
-
+  // The current line is marked in the gutter only. Carbon tunes the syntax
+  // colors for the field, and a band behind the code takes some of them
+  // below 4.5:1. The band stops at the rule, which shows through the border.
   .#{$prefix}--code-editor__scroller--numbered
     .#{$prefix}--code-editor__line--active::before {
+    background-clip: padding-box;
+    background-color: $field-hover;
     color: $text-primary;
   }
 
