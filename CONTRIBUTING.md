@@ -1189,6 +1189,21 @@ Each test pays for its setup: a remount on the host, or a page load (about 300 t
 | Keep each batched test under about 5 seconds | Playwright spreads tests, not cases, across workers; one long test runs on one worker. |
 | Assert an expected failure with a single read and `not`, not `test.fail()` around a retrying matcher | A retrying matcher that never matches waits out its 5 second timeout every run. |
 
+#### Layout checks
+
+[`e2e/helpers/layout.ts`](e2e/helpers/layout.ts) turns the layout rules of the component guidelines into assertions. Each helper takes a `Page` or a `Locator`, measures in one `evaluate` after the fonts load, and throws an error that names each offending element with the numbers it measured. Edges may differ by 0.5 CSS px. Each helper also throws when it finds nothing to check and returns the count it checked, so it carries its own positive assertion.
+
+| Helper | Rule it checks |
+| :--- | :--- |
+| `expectAligned(locators, { edge })` | Elements share one edge: `inline-start`, `inline-end`, `top`, `bottom`, `center-x`, `center-y` or `baseline`. Inline edges follow each element's direction. `baseline` is the first line's text baseline, or the value's baseline in an input or select. |
+| `expectOnePitch(rows)` | Repeated rows have one top-to-top pitch, and it is a multiple of 4 px. |
+| `expectTextFits(scope)` | No text overflows its box or a clipping ancestor. Text cut by an ellipsis keeps its full value in a `title`, an `aria-label` or a tooltip, and does not stop inside a number, date or time. |
+| `expectNoNestedBorders(scope)` | No box with an edge sits inside another one on the same background. An edge is a border on all four sides, an outline, or a box-shadow ring with no offset or blur. Form controls' borders and the focused element's outline are skipped. Run it under forced colors too. |
+| `expectNoPageOverflow(page, { vertical })` | The page does not scroll sideways. `vertical: true` also checks that it does not scroll down. |
+| `expectSingleRing(scope)` | Under forced colors, at most one element draws an outline or a `Highlight` border. Call it with at most one item focused or selected. |
+
+Each helper reads the page once. After an action that lays out in the next frame, wrap the call in `expect(...).toPass()`. [`layout-checks.test.ts`](e2e/layout-checks.test.ts) shows a passing and a failing case for each helper.
+
 A few gotchas:
 
 For components that hide content with CSS (for example ComposedModal), `toBeVisible()` can lie because the element stays in the DOM. Prefer `toHaveClass(/is-visible/)` on the container, or assert on `aria-hidden` / `inert`.
