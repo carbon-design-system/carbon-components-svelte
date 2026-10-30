@@ -836,7 +836,7 @@
       style:--ccs-code-editor-columns={wrapText ? undefined : columns}
       on:scroll={handleScroll}
     >
-      <div class:bx--code-editor__content={true}>
+      <div class:bx--code-editor__content={true} style:tab-size={tabSize}>
         <textarea
           bind:this={ref}
           bind:value
@@ -853,7 +853,6 @@
           {placeholder}
           {readonly}
           class:bx--code-editor__input={true}
-          style:tab-size={tabSize}
           {...$$restProps}
           aria-describedby={joinDescribedBy(
             describedBy,

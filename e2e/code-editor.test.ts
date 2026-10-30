@@ -117,6 +117,22 @@ test.describe("CodeEditor", () => {
     await expect(field).toHaveValue("\tx");
   });
 
+  test("paints a tab as wide as the textarea's", async ({ page }) => {
+    const field = editor(page, "code-editor-tabs");
+    await field.focus();
+    await page.keyboard.press("Tab");
+    await page.keyboard.type("x");
+    const sizes = await field.evaluate((el) => [
+      getComputedStyle(el).tabSize,
+      getComputedStyle(
+        el.parentElement?.querySelector(
+          ".bx--code-editor__highlight",
+        ) as Element,
+      ).tabSize,
+    ]);
+    expect(sizes).toEqual(["4", "4"]);
+  });
+
   test("Enter keeps the indent and opens a block between brackets", async ({
     page,
   }) => {
