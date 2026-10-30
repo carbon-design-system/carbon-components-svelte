@@ -47,6 +47,7 @@
   /**
    * Set the label of the close button in a filterable tag.
    * Shown in a tooltip on hover and focus, and leads the button's accessible name.
+   * The tag element gets no native `title` attribute from this prop.
    */
   export let title = "Clear filter";
 

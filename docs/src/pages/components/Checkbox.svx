@@ -47,6 +47,12 @@ Use the `labelChildren` slot to provide custom label content instead of `labelTe
   </svelte:fragment>
 </Checkbox>
 
+### Label title
+
+A label too long for its container shows its full text in the native `title` attribute while it is cut off. Set `title` to choose that text yourself. It then applies at every width.
+
+<Checkbox labelText="Email notifications" title="Sent to the address on your profile" />
+
 ## No margin
 
 By default, a checkbox renders with outer margin to space it within a stack of checkboxes. Set `noMargin` to `true` to omit the margin when the checkbox sits in a table cell or a row that spaces its own content.
