@@ -166,7 +166,10 @@
    */
   export let activeId = "";
 
-  /** Specify the width of the task list in px */
+  /**
+   * Specify the width of the task list in px. The list stays in view while
+   * it takes at most half of the chart's width, and scrolls away otherwise.
+   */
   export let listWidth = 460;
 
   /**

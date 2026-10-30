@@ -18,9 +18,11 @@
     --ccs-gantt-line: #{$border-subtle};
   }
 
+  // A container, so the list can compare its width with the scroller's.
   .#{$prefix}--gantt__scroller {
     position: relative;
     overflow: auto;
+    container-type: inline-size;
     max-block-size: var(--ccs-gantt-height);
     border: 1px solid $border-subtle;
   }
@@ -34,7 +36,21 @@
     inline-size: max-content;
   }
 
+  // The list sticks only while it takes at most half of the scroller. In a
+  // narrower scroller a sticky list would cover the whole timeline, so the
+  // offset becomes minus the list's width and it scrolls away with the
+  // bars. The step from 0 to the full offset is a clamp of a large factor,
+  // since CSS cannot compare two lengths in a condition.
   .#{$prefix}--gantt__list {
+    --ccs-gantt-list-inset: calc(
+      -1 *
+        clamp(
+          0px,
+          (var(--ccs-gantt-list-width) - 50cqi) * 1000,
+          var(--ccs-gantt-list-width)
+        )
+    );
+
     position: sticky;
     z-index: 3;
     flex: none;
@@ -42,7 +58,7 @@
     inline-size: var(--ccs-gantt-list-width);
     background: $layer;
     border-inline-end: 1px solid $border-strong;
-    @include ccs-inset-inline(0, null);
+    @include ccs-inset-inline(var(--ccs-gantt-list-inset), null);
   }
 
   // The tree grid scrolls its own table sideways. Here the one scroller

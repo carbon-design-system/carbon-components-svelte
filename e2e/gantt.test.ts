@@ -218,6 +218,23 @@ test.describe("Gantt", () => {
     expect(header?.y).toBeLessThanOrEqual((scroller?.y ?? 0) + 2);
   });
 
+  test("lets the list scroll away when it would cover the timeline", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 600 });
+    const scroller = page.locator(".bx--gantt__scroller");
+    await scroller.evaluate((node) => {
+      node.scrollLeft = 500;
+    });
+    const list = (await page.locator(".bx--gantt__list").boundingBox()) as {
+      x: number;
+      width: number;
+    };
+    const box = (await scroller.boundingBox()) as { x: number };
+    // The 460px list no longer covers the 358px scroller.
+    expect(list.x + list.width).toBeLessThanOrEqual(box.x + 1);
+  });
+
   test("draws a conflicting link dashed", async ({ page }) => {
     const dashed = page.locator(".bx--gantt__link--conflict");
     await expect(dashed).toHaveCount(1);
