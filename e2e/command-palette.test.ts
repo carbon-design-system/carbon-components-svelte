@@ -1,8 +1,10 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 import {
+  expectAligned,
   expectNoNestedBorders,
   expectNoPageOverflow,
+  expectOnePitch,
   expectTextFits,
 } from "./helpers/layout";
 
@@ -131,6 +133,28 @@ test("draws no bordered box inside the dialog", async ({ page }) => {
   await expect(container).toBeVisible();
   await expect(async () => {
     expect(await expectNoNestedBorders(container)).toBeGreaterThan(0);
+  }).toPass();
+});
+
+test("centers the icon and the keys on the label's first line", async ({
+  page,
+}) => {
+  await page.goto("/command-palette.html?open&state=groups");
+  const row = page.getByRole("option").first();
+  await expect(row).toBeVisible();
+  await expect(async () => {
+    await expectAligned(
+      [
+        row.locator(".bx--command-palette__item-icon svg"),
+        row.locator(".bx--command-palette__item-text"),
+        row.locator(".bx--kbd__platform--other"),
+      ],
+      { edge: "center-y", ink: false },
+    );
+    // One-line rows keep the 40 px pitch.
+    await expectOnePitch(
+      page.getByRole("option", { name: /^(Logs|Metrics|Events)/ }),
+    );
   }).toPass();
 });
 

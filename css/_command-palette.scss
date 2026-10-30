@@ -16,9 +16,9 @@
   // [text inset, icon inset, row height] per size. Search's padding and
   // magnifier offset at the field size each palette size renders.
   $command-palette-insets: (
-    "sm": ($carbon--spacing-07, $carbon--spacing-03, to-rem(32px)),
-    "md": ($carbon--spacing-08, $carbon--spacing-04, to-rem(40px)),
-    "lg": ($carbon--spacing-09, $carbon--spacing-05, to-rem(48px)),
+    "sm": ($carbon--spacing-07, $carbon--spacing-03, 32px),
+    "md": ($carbon--spacing-08, $carbon--spacing-04, 40px),
+    "lg": ($carbon--spacing-09, $carbon--spacing-05, 48px),
   );
 
   .#{$prefix}--command-palette {
@@ -124,9 +124,9 @@
     position: relative;
     display: flex;
     box-sizing: border-box;
-    align-items: center;
-    padding-top: $carbon--spacing-03;
-    padding-bottom: $carbon--spacing-03;
+    // The icon and the keys sit on the label's first line, which the
+    // padding centers in a one-line row.
+    align-items: flex-start;
     padding-inline-end: $carbon--spacing-05;
     color: $text-primary;
     cursor: pointer;
@@ -151,9 +151,7 @@
 
   .#{$prefix}--command-palette__item-icon {
     position: absolute;
-    top: 50%;
     display: flex;
-    transform: translateY(-50%);
 
     svg {
       fill: $icon-secondary;
@@ -203,9 +201,8 @@
   }
 
   // `Kbd` keeps the keys in left-to-right order in RTL; only their place
-  // moves.
-  // Narrow screens drop the keys first, as secondary details, and leave
-  // the label the row. The option still names them in
+  // moves. Narrow screens drop the keys first, as secondary details, and
+  // leave the label the row. The option still names them in
   // `aria-keyshortcuts`.
   .#{$prefix}--command-palette__shortcut {
     display: none;
@@ -231,6 +228,9 @@
     $text-inset: nth($inset, 1);
     $icon-inset: nth($inset, 2);
     $row-height: nth($inset, 3);
+    // Centers one 18px line of `body-compact-01` in the row, as the list
+    // box's 11px option padding does at 40px.
+    $row-padding: ($row-height - 18px) * 0.5;
 
     .#{$prefix}--command-palette--#{$size} {
       .#{$prefix}--command-palette__item,
@@ -241,19 +241,21 @@
 
       .#{$prefix}--command-palette__item,
       .#{$prefix}--list-box__menu-status {
-        min-height: $row-height;
+        min-height: to-rem($row-height);
       }
 
+      .#{$prefix}--command-palette__item {
+        padding-top: to-rem($row-padding);
+        padding-bottom: to-rem($row-padding);
+      }
+
+      // A 16px icon centers in the label's 18px first line.
       .#{$prefix}--command-palette__item-icon {
+        top: to-rem($row-padding + 1px);
+
         @include ccs-inset-inline($start: $icon-inset);
       }
     }
-  }
-
-  // Small rows have no room for vertical padding.
-  .#{$prefix}--command-palette--sm .#{$prefix}--command-palette__item {
-    padding-top: $carbon--spacing-02;
-    padding-bottom: $carbon--spacing-02;
   }
 
   // Forced colors drop the highlight's fill and bar, so arrow keys showed
