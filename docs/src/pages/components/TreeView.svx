@@ -270,6 +270,8 @@ Set `hasChildren` on a node to render it as an expandable branch before its `nod
 
 While `hasChildren` is `true` and `nodes` is empty, the `childNodes` slot renders in place of the (empty) subtree, receiving the same `node` as the default slot. TreeView has no built-in concept of "loading" or "error" — the slot is generic, so you decide what to render (a spinner, an error message with retry, or nothing) based on whatever fields you put on the node yourself.
 
+With `selectionMode="checkbox"`, a saved id in `checkedIds` can name a node that has not loaded yet. It stays in `checkedIds` while any `hasChildren` node is unloaded, and its row shows as checked once the node arrives. An id that matches no node after every parent has loaded is dropped.
+
 <FileSource src="/framed/TreeView/TreeViewLazyLoad" />
 
 ### Virtualization
