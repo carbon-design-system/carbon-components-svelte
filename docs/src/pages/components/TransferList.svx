@@ -188,15 +188,16 @@ save succeeds. `change` follows each move that is not canceled.
 
 ## Text
 
-Every string is a prop, so the component can be translated. Set `countText` and
-`announcementText` to build the item counts and the move announcements from their
-numbers.
+Every string is a prop, so the component can be translated. Visible text ends
+in `Text`, and text that only a screen reader reads ends in `Description`. Set
+`countText` and `announcementDescription` to build the item counts and the move
+announcements from their numbers.
 
 <TransferList
   {items}
   selectedIds={["audit"]}
-  availableText="Disponibles"
-  selectedText="Elegidos"
+  availableTitleText="Disponibles"
+  selectedTitleText="Elegidos"
   addText="Agregar los elegidos"
   addAllText="Agregar todos"
   removeText="Quitar los elegidos"
@@ -204,6 +205,6 @@ numbers.
   moveUpText="Subir"
   moveDownText="Bajar"
   countText={({ marked, shown, total }) => marked > 0 ? `${marked} de ${shown} elegidos` : `${shown} de ${total}`}
-  announcementText={({ type, count }) => `${count} movidos (${type}).`}
+  announcementDescription={({ type, count }) => `${count} movidos (${type}).`}
   legendText="Permisos"
 />

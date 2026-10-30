@@ -132,10 +132,10 @@
   export let form = undefined;
 
   /** Specify the heading of the available list */
-  export let availableText = "Available";
+  export let availableTitleText = "Available";
 
   /** Specify the heading of the selected list */
-  export let selectedText = "Selected";
+  export let selectedTitleText = "Selected";
 
   /** Specify the placeholder of the search fields */
   export let searchPlaceholder = "Search";
@@ -159,7 +159,7 @@
   export let noMatchText = "No matches";
 
   /** Specify the accessible name of the toolbar of move buttons */
-  export let moveToolbarText = "Move items";
+  export let moveToolbarDescription = "Move items";
 
   /** Specify the accessible name of the button that selects the marked items */
   export let addText = "Add selected items";
@@ -174,7 +174,7 @@
   export let removeAllText = "Remove all items";
 
   /** Specify the accessible name of the toolbar that reorders the selected list */
-  export let reorderToolbarText = "Reorder selected items";
+  export let reorderToolbarDescription = "Reorder selected items";
 
   /** Specify the accessible name of the button that moves the marked items up */
   export let moveUpText = "Move up";
@@ -193,7 +193,7 @@
    * Build the message announced after items move.
    * @type {(announcement: TransferListAnnouncement) => string}
    */
-  export let announcementText = defaultAnnouncementText;
+  export let announcementDescription = defaultAnnouncementDescription;
 
   /**
    * Set an id for the component.
@@ -280,7 +280,13 @@
    * @param {TransferListAnnouncement} announcement
    * @returns {string}
    */
-  function defaultAnnouncementText({ type, count, text, position, total }) {
+  function defaultAnnouncementDescription({
+    type,
+    count,
+    text,
+    position,
+    total,
+  }) {
     const things = count === 1 && text ? text : `${count} items`;
     if (type === "add") return `${things} added to the selected list.`;
     if (type === "remove") return `${things} removed from the selected list.`;
@@ -409,7 +415,7 @@
       moved.length === 1 ? items[ordinals.get(moved[0]) ?? -1] : undefined;
     const position = only ? next.indexOf(only.id) + 1 : undefined;
     announce(
-      announcementText({
+      announcementDescription({
         type: direction,
         count: moved.length,
         text: only?.text,
@@ -728,7 +734,7 @@
       bind:marked={availableMarked}
       bind:search={availableSearch}
       id="{baseId}-available"
-      title={availableText}
+      title={availableTitleText}
       countLabel={availableCount}
       rows={availableRows}
       {ordinals}
@@ -754,7 +760,7 @@
       bind:this={moveToolbarRef}
       class:bx--transfer-list__controls={true}
       role="toolbar"
-      aria-label={moveToolbarText}
+      aria-label={moveToolbarDescription}
       use:rovingFocus={toolbarOptions(() => moveToolbarRef)}
     >
       {#each moveButtons as button, index (button.key)}
@@ -777,7 +783,7 @@
       bind:marked={selectedMarked}
       bind:search={selectedSearch}
       id="{baseId}-selected"
-      title={selectedText}
+      title={selectedTitleText}
       countLabel={selectedCount}
       rows={selectedRows}
       {ordinals}
@@ -809,7 +815,7 @@
             bind:this={reorderToolbarRef}
             class:bx--transfer-list__reorder={true}
             role="toolbar"
-            aria-label={reorderToolbarText}
+            aria-label={reorderToolbarDescription}
             use:rovingFocus={toolbarOptions(() => reorderToolbarRef)}
           >
             <Button
