@@ -27,7 +27,7 @@ describe("QueryBuilder server render", () => {
         ?.getAttribute("aria-label"),
     ).toBe("Condition 1 of 2: Where Name contains “Acme”");
     expect(
-      (document.querySelector("#qb-q1-value") as HTMLInputElement | null)
+      (document.querySelector("#qb-n2-value") as HTMLInputElement | null)
         ?.value,
     ).toBe("Acme");
     expect(

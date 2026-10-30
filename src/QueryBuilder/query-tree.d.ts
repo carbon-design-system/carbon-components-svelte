@@ -74,6 +74,8 @@ export interface QueryBuilderContext {
     Record<string, import("./query.js").QueryErrorCode>
   >;
   touched: import("svelte/store").Readable<Record<string, true>>;
+  /** The key inner ids use for a node, safe for id references. */
+  keyOf(id: string): string;
   update(id: string, patch: Record<string, unknown>): void;
   touch(id: string): void;
   add(groupId: string, kind: "condition" | "group"): void;

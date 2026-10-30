@@ -43,9 +43,8 @@
   } from "./query.js";
 
   /** @type {import("./query-tree.js").QueryBuilderContext} */
-  const { settings, errors, touched, update, touch, remove, move } = getContext(
-    "carbon:QueryBuilder",
-  );
+  const { settings, errors, touched, keyOf, update, touch, remove, move } =
+    getContext("carbon:QueryBuilder");
 
   $: ({
     translate,
@@ -101,7 +100,7 @@
     total,
     text: `${connector} ${sentence || field?.label || ""}`.trim(),
   });
-  $: base = `${id}-${nodeId}`;
+  $: base = `${id}-${keyOf(nodeId)}`;
 
   /** @param {string} fieldId */
   function setField(fieldId) {

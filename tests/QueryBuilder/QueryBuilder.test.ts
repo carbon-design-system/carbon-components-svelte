@@ -44,7 +44,7 @@ describe("QueryBuilder", () => {
     });
 
     const button = screen.getByRole("button", { name: "Remove condition 1" });
-    expect(button.id).toMatch(/^qb-q\d+-remove$/);
+    expect(button.id).toMatch(/^qb-n\d+-remove$/);
     expect(
       JSON.parse(screen.getByTestId("bound-ids").textContent ?? ""),
     ).toEqual({ operator: "or", conditions: [nameRow] });
@@ -60,6 +60,36 @@ describe("QueryBuilder", () => {
       expect.any(String),
       expect.any(String),
     ]);
+  });
+
+  it("builds inner ids from keys, so any node id keeps its references", async () => {
+    render(QueryBuilder, {
+      props: {
+        showErrors: true,
+        value: {
+          operator: "and",
+          conditions: [
+            { ...nameRow, id: "rule 1", value: "" },
+            { ...nameRow, id: 'a"b' },
+            { ...nameRow, id: "c" },
+          ],
+        },
+      },
+    });
+
+    const input = screen.getAllByRole("textbox", { name: "Value" })[0];
+    expect(input.id).toMatch(/^qb-n\d+-value$/);
+    const message = input.getAttribute("aria-errormessage") ?? "";
+    expect(message).not.toContain(" ");
+    expect(document.getElementById(message)).toHaveTextContent("Enter a value");
+
+    // The focus step after a remove looks the neighbor up by its id.
+    await user.click(
+      screen.getByRole("button", { name: "Remove condition 3" }),
+    );
+    const fields = screen.getAllByRole("combobox", { name: "Field" });
+    expect(fields).toHaveLength(2);
+    expect(fields[1]).toHaveFocus();
   });
 
   it("adds a condition with the first field, focuses it, and fires change", async () => {

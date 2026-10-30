@@ -190,6 +190,8 @@
   let rootRef = null;
   /** @type {QueryGroup} */
   let tree = value;
+  /** @type {Map<string, string>} */
+  const keys = new Map();
 
   /** @returns {string} */
   function makeId() {
@@ -248,12 +250,31 @@
     status = message;
   }
 
-  /** @param {string} target */
-  async function focusById(target) {
+  /**
+   * The key that inner ids use for a node. Node ids come from the
+   * consumer and may hold spaces or quotes, which break id references
+   * and selectors. Keys follow the order nodes first render in, so the
+   * server and the client give the same ones.
+   * @param {string} nodeId
+   */
+  function keyOf(nodeId) {
+    let key = keys.get(nodeId);
+    if (!key) {
+      key = `n${keys.size + 1}`;
+      keys.set(nodeId, key);
+    }
+    return key;
+  }
+
+  /**
+   * Focus a part of a node once the tree has rendered.
+   * @param {string} nodeId
+   * @param {string} part
+   */
+  async function focusPart(nodeId, part) {
     await tick();
-    /** @type {HTMLElement | null | undefined} */ (
-      rootRef?.querySelector(`[id="${target}"]`)
-    )?.focus();
+    const target = document.getElementById(`${id}-${keyOf(nodeId)}-${part}`);
+    if (target && rootRef?.contains(target)) target.focus();
   }
 
   /**
@@ -300,7 +321,7 @@
         appendNode(tree, groupId, condition),
         translate("announceConditionAdded"),
       );
-      focusById(`${id}-${condition.id}-field`);
+      focusPart(condition.id, "field");
       return;
     }
     const group = { id: makeId(), operator: "and", conditions: [condition] };
@@ -308,7 +329,7 @@
       appendNode(tree, groupId, /** @type {any} */ (group)),
       translate("announceGroupAdded"),
     );
-    focusById(`${id}-${condition.id}-field`);
+    focusPart(condition.id, "field");
   }
 
   /** @param {string} nodeId */
@@ -326,11 +347,9 @@
           : "announceConditionRemoved",
       ),
     );
-    if (neighbor)
-      focusById(
-        `${id}-${neighbor.id}-${isQueryGroup(neighbor) ? "logic" : "field"}`,
-      );
-    else focusById(`${id}-${parent.id}-add`);
+    if (neighbor?.id)
+      focusPart(neighbor.id, isQueryGroup(neighbor) ? "logic" : "field");
+    else if (parent.id) focusPart(parent.id, "add");
   }
 
   /**
@@ -351,7 +370,7 @@
     // A group's actions are in its menu, which closes on a choice; focus
     // returns to the menu button.
     if (found && isQueryGroup(found.node)) {
-      focusById(`${id}-${nodeId}-menu`);
+      focusPart(nodeId, "menu");
       return;
     }
     // The button that was pressed may be disabled at the new end; hand
@@ -361,8 +380,9 @@
       (delta < 0
         ? found.index === 0
         : found.index === found.parent.conditions.length - 1);
-    focusById(
-      `${id}-${nodeId}-${atEdge ? (delta < 0 ? "down" : "up") : delta < 0 ? "up" : "down"}`,
+    focusPart(
+      nodeId,
+      atEdge ? (delta < 0 ? "down" : "up") : delta < 0 ? "up" : "down",
     );
   }
 
@@ -394,6 +414,7 @@
     settings,
     errors,
     touched,
+    keyOf,
     update,
     touch,
     add,

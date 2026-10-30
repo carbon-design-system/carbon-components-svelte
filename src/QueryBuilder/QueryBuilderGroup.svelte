@@ -36,7 +36,7 @@
   import { isQueryGroup } from "./query.js";
 
   /** @type {import("./query-tree.js").QueryBuilderContext} */
-  const { settings, update, add, remove, move } = getContext(
+  const { settings, keyOf, update, add, remove, move } = getContext(
     "carbon:QueryBuilder",
   );
 
@@ -62,7 +62,7 @@
 
   $: nodeId = node.id ?? "";
   $: root = depth === 1;
-  $: base = `${id}-${nodeId}`;
+  $: base = `${id}-${keyOf(nodeId)}`;
   $: buttonSize = size === "sm" ? "small" : "field";
   $: selectSize = size === "sm" ? "sm" : undefined;
   $: menuSize = size === "sm" ? "sm" : undefined;

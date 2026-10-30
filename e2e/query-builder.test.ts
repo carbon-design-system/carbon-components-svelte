@@ -16,7 +16,7 @@ function activeId(page: Page) {
   return page.evaluate(() => document.activeElement?.id ?? "");
 }
 
-// Ids are `qb-<node id>-<part>`; the node ids are assigned in tree order.
+// Ids are `qb-<node key>-<part>`; the keys follow the tree order.
 function suffix(id: string) {
   return id.split("-").slice(2).join("-");
 }
@@ -233,7 +233,8 @@ test.describe("QueryBuilder", () => {
   test("stores dates as ISO strings, one day or a range", async ({ page }) => {
     await page.goto("/query-builder.html?preset=nested");
     const row = page.locator(".bx--query-builder__condition").filter({
-      has: page.locator("#qb-q5-value"),
+      // The only date row; its inputs keep this placeholder in a range.
+      has: page.locator("[placeholder=yyyy-mm-dd]"),
     });
 
     const day = row.getByRole("textbox", { name: "Value" });
