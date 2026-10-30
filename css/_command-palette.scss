@@ -215,6 +215,19 @@
     }
   }
 
+  // The loading spinner sits in the icon column, under the magnifier, so
+  // the loading text starts at the label edge.
+  .#{$prefix}--command-palette .#{$prefix}--list-box__menu-status {
+    position: relative;
+  }
+
+  .#{$prefix}--command-palette .#{$prefix}--inline-loading__animation {
+    position: absolute;
+    top: 50%;
+    margin: 0;
+    transform: translateY(-50%);
+  }
+
   .#{$prefix}--command-palette__footer {
     @include type-style("label-01");
 
@@ -253,6 +266,10 @@
       .#{$prefix}--command-palette__item-icon {
         top: to-rem($row-padding + 1px);
 
+        @include ccs-inset-inline($start: $icon-inset);
+      }
+
+      .#{$prefix}--inline-loading__animation {
         @include ccs-inset-inline($start: $icon-inset);
       }
     }

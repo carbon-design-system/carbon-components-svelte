@@ -158,6 +158,33 @@ test("centers the icon and the keys on the label's first line", async ({
   }).toPass();
 });
 
+for (const dir of ["ltr", "rtl"]) {
+  test(`puts the loading spinner in the icon column (${dir})`, async ({
+    page,
+  }) => {
+    await page.goto(
+      `/command-palette.html?open&state=loading-more${dir === "rtl" ? "&rtl" : ""}`,
+    );
+    await expect(page.locator(".bx--inline-loading")).toBeVisible();
+    await expect(async () => {
+      await expectAligned(
+        [
+          page.locator(".bx--inline-loading__text"),
+          page.locator(".bx--command-palette__item-text").first(),
+        ],
+        { edge: "inline-start" },
+      );
+      await expectAligned(
+        [
+          page.locator(".bx--inline-loading__animation"),
+          page.locator(".bx--command-palette__item-icon svg").first(),
+        ],
+        { edge: "center-x", ink: false },
+      );
+    }).toPass();
+  });
+}
+
 test("keeps Tab off the options, including link options", async ({ page }) => {
   await page.goto("/command-palette.html?open&state=groups");
   const input = page.getByRole("combobox");
