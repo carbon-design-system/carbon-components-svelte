@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+import CodeEditor from "carbon-components-svelte/CodeEditor/CodeEditor.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
@@ -140,6 +141,20 @@ export const cases: FieldCase[] = [
       component: FluidTextAreaSkeleton,
       className: "bx--text-area--fluid__skeleton",
       field: "bx--text-area",
+    },
+  },
+  {
+    name: "CodeEditor",
+    component: CodeEditor,
+    // The contract leaves a field with Tab, which a code editor spends on
+    // indenting.
+    props: { indentWithTab: false },
+    control: () => screen.getByRole("textbox"),
+    reset: { initial: "notes", typed: "x", events: ["input", "change"] },
+    state: {},
+    fluid: {
+      className: "bx--code-editor--fluid",
+      wrapper: ".bx--code-editor__wrapper",
     },
   },
   {
