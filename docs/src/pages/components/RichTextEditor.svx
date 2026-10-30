@@ -165,11 +165,14 @@ Every string the editor shows is a prop. Rename buttons with `commandText`, the 
 
 `input` fires on each edit with the new HTML. `change` fires when the editor loses focus after an edit.
 
+`paste` fires before a paste goes in, with the sanitized HTML and the plain text. Call `preventDefault()` to cancel it, for example to reject a paste that is too long or to insert it yourself.
+
 <RichTextEditor
   labelText="Notes"
   rows={2}
   on:input={(e) => console.log(e.detail)} // string
   on:change={(e) => console.log(e.detail)} // string
+  on:paste={(e) => console.log(e.detail)} // { html, text }
 />
 
 ## Accessibility

@@ -278,6 +278,31 @@ describe("RichTextEditor", () => {
       expect(notCanceled).toBe(false);
       expect(editor().innerHTML).toBe("<p>aXb</p>");
     });
+
+    it("dispatches a cancelable paste with the sanitized HTML first", async () => {
+      const seen: { html: string; text: string }[] = [];
+      render(RichTextEditor, {
+        value: "<p>ab</p>",
+        onPaste: (event: CustomEvent<{ html: string; text: string }>) => {
+          seen.push(event.detail);
+          event.preventDefault();
+        },
+      });
+      await tick();
+      const text = editor().querySelector("p")?.firstChild;
+      if (text) window.getSelection()?.collapse(text, 1);
+
+      await fireEvent.paste(editor(), {
+        clipboardData: {
+          getData: (type: string) =>
+            type === "text/html" ? "<b onclick='x()'>X</b>" : "X",
+        },
+      });
+
+      expect(seen).toEqual([{ html: "<p><strong>X</strong></p>", text: "X" }]);
+      expect(editor().innerHTML).toBe("<p>ab</p>");
+      expect(shown()).toBe("<p>ab</p>");
+    });
   });
 
   describe("form", () => {

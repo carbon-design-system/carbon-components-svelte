@@ -2,6 +2,7 @@
   /**
    * @event {string} input - Dispatched on each edit with the new HTML.
    * @event {string} change - Dispatched with the HTML when the editor loses focus after an edit.
+   * @event {{ html: string; text: string }} paste - Dispatched before a paste is inserted, with the sanitized HTML and the plain text. Call `preventDefault()` to cancel the paste.
    * @slot {{}} labelChildren
    * @restProps {div}
    */
@@ -624,7 +625,10 @@
         // for an engine that fires `beforeinput` first.
         if (!event.dataTransfer) return;
         event.preventDefault();
-        insertTransfer(event.dataTransfer);
+        insertTransfer(
+          event.dataTransfer,
+          event.inputType !== "insertFromDrop",
+        );
         return;
       case "insertReplacementText":
         return;
@@ -720,12 +724,19 @@
   /**
    * Insert what a paste or drop carries, as the schema.
    * @param {DataTransfer} data
+   * @param {boolean} [pasted] Dispatch the cancelable `paste` event first.
    */
-  function insertTransfer(data) {
+  function insertTransfer(data, pasted = false) {
     const html = data.getData("text/html");
     const text = data.getData("text/plain");
     const clean = html ? sanitizeHtml(html, { edges: true }) : textToHtml(text);
     if (!clean) return;
+    if (
+      pasted &&
+      !dispatch("paste", { html: clean, text }, { cancelable: true })
+    ) {
+      return;
+    }
     mutate(() => !!editing?.insertHtml(clean));
   }
 
@@ -733,7 +744,7 @@
   function handlePaste(event) {
     if (!interactive || !event.clipboardData) return;
     event.preventDefault();
-    insertTransfer(event.clipboardData);
+    insertTransfer(event.clipboardData, true);
   }
 
   /** The selection as sanitized HTML and as text. */
