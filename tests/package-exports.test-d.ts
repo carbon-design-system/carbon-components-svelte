@@ -1,4 +1,5 @@
 import type {
+  applyKanbanMove,
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
@@ -89,6 +90,9 @@ type _DataTable = DataTable;
 type _DataTableRow = DataTableRow<{ id: string; name: string }>;
 type _FormatFileSize = ReturnType<typeof formatFileSize>;
 type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
+type _ApplyKanbanMove = ReturnType<
+  typeof applyKanbanMove<{ id: string; column: string; title: string }>
+>;
 type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _GetInitials = ReturnType<typeof getInitials>;
 type _GetLayoutDirection = ReturnType<typeof getLayoutDirection>;

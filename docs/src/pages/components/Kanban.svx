@@ -1,0 +1,82 @@
+---
+components: ["Kanban"]
+description: Kanban boards sort cards into columns that people move between by dragging, with the keyboard, or from a menu, such as incidents by stage or releases by status.
+---
+
+## Basic
+
+Pass the `columns` in reading order and the `items` as one flat array. Each item has an `id` and the `id` of its `column`, and the order of the array is the order within a column. A card shows its `title`, an optional `description`, `tags`, and an `assignee`.
+
+Bind `items` to apply moves to your data. The board never edits your array or its cards: it assigns a new array, which reaches you only through `bind:items`. Without `bind:`, the board still shows the move, and your array stays as it was until you set it again.
+
+The board fills the height it is given, and each column scrolls on its own. Without a height, it grows with its tallest column. Name it with `aria-label`.
+
+<FileSource src="/framed/Kanban/KanbanBasic" />
+
+## Moving cards
+
+Every way of moving a card ends in one `move` event, so the three stay in step.
+
+### Pointer and touch
+
+Press a card and drag it. The card follows the pointer, a line shows where it will land, and the column under it is outlined. Near the edge of a column the column scrolls, and near the edge of the board the board scrolls. A drop outside every column cancels the move.
+
+A mouse starts a drag after a few pixels of movement, so a click still works. On touch, the grip at the start of a card lifts it at once, and a press that rests on the rest of the card for a moment lifts it too. A quick swipe on a card scrolls the column instead.
+
+Links, buttons, and form controls inside a card keep their own press and don't start a drag. Put the action that opens a card on one of them, such as the title as a link, and the rest of the card drags.
+
+### Keyboard
+
+The board is a single tab stop. Focus lands on the grip of one card, and the arrow keys move focus between cards: <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> within a column, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> across columns, and <DocKbd label="Home" /> and <DocKbd label="End" /> to the first and last card of the column. The inline arrows swap in right-to-left languages.
+
+Press <DocKbd label="Space" /> or <DocKbd label="Enter" /> to pick a card up. The arrow keys then move it, <DocKbd label="Space" /> or <DocKbd label="Enter" /> drops it, and <DocKbd label="Escape" /> puts it back. Nothing changes in your data until the drop. Moving focus away also puts it back. <DocKbd label="Shift" />+<DocKbd label="F10" /> or <DocKbd label="ContextMenu" /> opens the move menu.
+
+A live region announces each step: the pick-up and its position, each new place, and the drop or the cancel. The grip is described as a draggable card, and a hidden description tells screen reader users the keys.
+
+### Move menu
+
+Each card has a menu with "Move up", "Move down", and "Move to" each other column, so a card moves without dragging. It is the way to move a card with a switch device, with voice control, or with a screen reader that doesn't pass arrow keys. A card moved to another column goes to the bottom.
+
+## Move event
+
+The `move` event fires once per move, on drop, with the card's `id`, the column it left (`from`) and entered (`to`), its new position among the other cards of `to` (`index`, where `0` is the top), where it was (`fromIndex`), and how it moved (`source`: `"pointer"`, `"keyboard"`, or `"menu"`).
+
+The event is cancelable. Call `preventDefault()` to refuse the move, or to hold it until a server call settles. Then apply it with `applyKanbanMove(items, event.detail)`, which returns a new array and leaves yours and its cards as they were. It runs on the server too.
+
+<FileSource src="/framed/Kanban/KanbanMoveEvent" />
+
+| Do | Why |
+| --- | --- |
+| Read `index` as the card's final position | For a card reordered inside its column, it counts the other cards, so it needs no adjusting for the card's old place. |
+| Replace `items` with a new array | The board compares by identity, and a card changed in place isn't picked up. |
+| Cancel the event, then set `items` after the save | The board stays the source of truth you control, with no card left in the wrong column on failure. |
+
+## Work-in-progress limits
+
+Set `limit` on a column to cap the cards it should hold. Its count reads "3 / 4". A column over its limit shows a warning icon and a red count, and says "over its limit" to a screen reader and in the announcement when a card is dropped into it.
+
+`limitMode` decides what the limit does. The default `"warn"` lets cards in and marks the overflow. Set it to `"block"` to keep cards out of a full column: the column is outlined as refused while dragging, the arrow keys stop at it and say it is full, and its "Move to" item is disabled. Reordering inside a column is always allowed, so a column over its limit can still be sorted and emptied.
+
+<FileSource src="/framed/Kanban/KanbanLimits" />
+
+## Collapsible columns
+
+Set `collapsible` to give each column a button that collapses it to a narrow strip with its title and count. Set `collapsible: false` on a column to keep it open. Bind `collapsedIds` to read or set the collapsed ids.
+
+A collapsed column is still a place to drop a card with the pointer, and the card goes to its bottom. Keyboard moves skip it, and a collapsed column builds its cards only when it first opens.
+
+<FileSource src="/framed/Kanban/KanbanCollapsible" />
+
+## Custom cards
+
+Fill the `card` slot to replace a card's content, with the `item`, its `column`, and its `index`. The `columnHeader` slot replaces a column's title and count, and `empty` replaces the text of an empty column. Set `itemToString` to name cards for assistive technology when they have no `title`.
+
+<FileSource src="/framed/Kanban/KanbanCustomCard" />
+
+## Disabled
+
+Set `disabled` to `true` for a read-only board. Cards don't drag and have no move menu.
+
+## Text
+
+Every string a person sees or hears is a prop: `instructionsText`, the announcements (`pickedUpText`, `movedText`, `droppedText`, `cancelledText`, `fullText`, `overLimitText`), `moveToText`, `moveUpText`, `moveDownText`, `collapseText`, and `emptyText`. The announcement props are functions that receive the card's label, the column's title, and the position, so a translation can reorder the sentence.
