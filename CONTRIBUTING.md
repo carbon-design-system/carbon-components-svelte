@@ -1206,6 +1206,40 @@ Each test pays for its setup: a remount on the host, or a page load (about 300 t
 
 Each helper reads the page once, except that `expectTextFits` hovers cut-off text it can't settle at rest. After an action that lays out in the next frame, wrap the call in `expect(...).toPass()`. [`layout-checks.test.ts`](e2e/layout-checks.test.ts) shows a passing and a failing case for each helper.
 
+`findLayoutProblems(scope, check)` runs `fits`, `borders`, `overflow` or `ring` and returns the findings instead of throwing.
+
+#### Layout sweep
+
+[`layout-sweep.test.ts`](e2e/layout-sweep.test.ts) runs the page-wide layout checks on every page in `e2e/fixtures/`. It skips `host.html`, `index.html` and `layout-checks.html`, which holds the helpers' failing cases. It mounts each fixture again for each variant:
+
+| Variant | Checks |
+| :--- | :--- |
+| `1280`, `672`, `320` (px wide, 720 px high) | `overflow` (`expectNoPageOverflow`), `borders` (`expectNoNestedBorders`), `fits` (`expectTextFits`) |
+| `1280-forced` (forced colors) | `borders`, and `ring` (`expectSingleRing`) once for each `listbox`, `grid`, `treegrid`, `tree`, `tablist`, `menu`, `menubar` and `radiogroup` |
+
+Before it measures, it waits for the fonts, finishes running transitions and stops looping animations at their start. `expectAligned` and `expectOnePitch` need selectors, so they stay in each component's tests.
+
+[`layout-sweep.baseline.json`](e2e/layout-sweep.baseline.json) lists the findings on `master`. The sweep compares findings by a key: fixture, variant, check, kind and a short CSS path. The key holds no pixel values, and the path skips ids that `uniqueId` generates. The `message` holds the numbers; the sweep shows it and does not compare it. Each fixture is one test, and it fails in two cases:
+
+- **A new finding.** The failure lists its key and message, for example `tag-v11.html | 320 | fits | no full text | button[data-testid="long-operational"] > span.bx--tag__label`. Fix it. If the design is intended, update the baseline and give the reason in the PR.
+- **A baseline entry that no longer occurs.** Update the baseline to drop it. While a fixed finding stays in the baseline, it could come back without a failure.
+
+Update the baseline for the fixtures that run, with one worker:
+
+```sh
+# Every fixture, about 1.5 minutes
+LAYOUT_SWEEP_UPDATE=1 bunx playwright test e2e/layout-sweep.test.ts --project=chromium --workers=1
+
+# One fixture
+LAYOUT_SWEEP_UPDATE=1 bunx playwright test e2e/layout-sweep.test.ts --project=chromium --workers=1 --grep "sweep tabs.html$"
+```
+
+Read the diff before you commit it. Dropping entries is always fine. Add an entry only for an intended design, and give the reason in the PR. A new fixture can add entries the same way.
+
+CI runs Chromium on Linux, and the baseline must match it. A few lines of text measure a few pixels apart on Linux and macOS. A finding that comes and goes between runs of the same code, or occurs on one platform only, goes in `UNSTABLE` in the test, with its reason. The sweep leaves those out of the comparison and the baseline. Check a change to the sweep with `--repeat-each=3 --retries=0`, and read the first CI run.
+
+CI runs the sweep when a change reaches a fixture page, which covers `src/`, `css/` and `e2e/fixtures/`. It takes about 1.5 minutes on one worker.
+
 A few gotchas:
 
 For components that hide content with CSS (for example ComposedModal), `toBeVisible()` can lie because the element stays in the DOM. Prefer `toHaveClass(/is-visible/)` on the container, or assert on `aria-hidden` / `inert`.
