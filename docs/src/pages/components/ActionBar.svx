@@ -150,7 +150,7 @@ An `ActionBarItem` holds a control that is not a button, such as a `Dropdown` or
 
 A field takes the bar's `size` when its own is unset, so it fills the height of the bar and its bottom border is the bar's bottom edge.
 
-An item never collapses into the menu, since a control cannot be copied into it. Give the bar room for its items, or move them out of it on narrow screens.
+An item never collapses into the menu, since a control cannot be copied into it. Instead, its field shrinks: in a horizontal bar, fields narrow to 8rem before any button collapses, and once every button is in the menu, they share what is left. The row never scrolls, so focus on a field keeps the other controls in place. Below 8rem a field gets hard to read, so give the bar room for its items, or move them out of it on narrow screens.
 
 <ActionBar labelText="Table tools">
   <ActionBarButton labelText="Add row" icon={Add} />

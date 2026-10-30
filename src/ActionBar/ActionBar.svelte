@@ -106,10 +106,11 @@
   import { observeResize } from "../utils/shared-observer.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
-  import { fitActionBar, sameIds } from "./action-bar-fit.js";
+  import { fitActionBar, sameIds, shownSize } from "./action-bar-fit.js";
   import { caretAtEdge, controlOwnsKey } from "./action-bar-keys.js";
   import {
     ACTION_BAR_EXPAND_SLACK_PX,
+    ACTION_BAR_FIELD_MIN_REM,
     ACTION_BAR_SIZE_PX,
     BUTTON_SIZE_BY_ACTION_BAR_SIZE,
     FORM_SIZE_BY_ACTION_BAR_SIZE,
@@ -158,6 +159,14 @@
   let available = null;
   let fitQueued = false;
   let mounted = false;
+  /** The least width of a field in pixels, from the root font size. */
+  let fieldMin = ACTION_BAR_FIELD_MIN_REM * 16;
+  /**
+   * Set when the fields do not fit at their least width even with every
+   * button in the menu. They then share what is left, so the row never
+   * overflows, and focus never scrolls it.
+   */
+  let overfull = false;
 
   /** @type {null | HTMLButtonElement | HTMLAnchorElement} */
   let moreRef = null;
@@ -320,20 +329,35 @@
   function refit() {
     if (available === null) return;
     const list = $entries;
+    const moreWidth = ACTION_BAR_SIZE_PX[size];
+    // Fields shrink to their least width before a button collapses. A
+    // vertical bar does not shrink them, and a field not laid out yet
+    // counts as nothing, as a button does.
+    const fitEntries = list.map((entry) => ({
+      id: entry.id,
+      kind: entry.kind,
+      width: sizes.get(entry.id) ?? 0,
+      priority: entry.priority,
+      pinned: entry.pinned,
+      minWidth:
+        entry.managed && !vertical && sizes.has(entry.id)
+          ? fieldMin
+          : undefined,
+    }));
     const next = fitActionBar({
       available,
-      moreWidth: ACTION_BAR_SIZE_PX[size],
+      moreWidth,
       previous: $hidden,
       slack: ACTION_BAR_EXPAND_SLACK_PX,
-      entries: list.map((entry) => ({
-        id: entry.id,
-        kind: entry.kind,
-        width: sizes.get(entry.id) ?? 0,
-        priority: entry.priority,
-        pinned: entry.pinned,
-      })),
+      entries: fitEntries,
     });
     const changed = !sameIds(next, $hidden);
+    const anyHidden = list.some(
+      (entry) => entry.kind === "item" && next.has(entry.id),
+    );
+    overfull =
+      !vertical &&
+      shownSize(fitEntries, next) + (anyHidden ? moreWidth : 0) > available;
 
     // Focus on a button that is about to collapse goes to "More" once the
     // button is gone; and from "More" to the first control, once it is.
@@ -451,6 +475,10 @@
 
   onMount(() => {
     mounted = true;
+    fieldMin =
+      ACTION_BAR_FIELD_MIN_REM *
+      (Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
+        16);
     stopRoot = observeRoot();
     return () => {
       mounted = false;
@@ -581,6 +609,7 @@
   class:bx--action-bar--md={size === "md"}
   class:bx--action-bar--lg={size === "lg"}
   class:bx--action-bar--vertical={vertical}
+  class:bx--action-bar--overfull={overfull}
   on:click|capture={handleClickCapture}
   on:mousedown={handleMousedown}
   on:focusin={handleFocusin}

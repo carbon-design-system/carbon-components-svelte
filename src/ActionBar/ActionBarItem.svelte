@@ -7,7 +7,8 @@
    * dropdown keeps Up and Down. Tab leaves the bar from any item.
    *
    * An item never collapses into the "More" menu, since a control cannot be
-   * copied into it.
+   * copied into it. In a horizontal bar it shrinks to 8rem before any
+   * button collapses.
    *
    * @restProps {div}
    * @slot {{}}

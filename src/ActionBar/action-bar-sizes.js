@@ -30,6 +30,13 @@ export const BUTTON_SIZE_BY_ACTION_BAR_SIZE = Object.freeze({
 export const ACTION_BAR_EXPAND_SLACK_PX = 16;
 
 /**
+ * The least width of a field in an `ActionBarItem`, in rem, while any
+ * button shows. Fields shrink to it before a button collapses into the
+ * "More" menu. Matches `min-inline-size` on `.bx--action-bar__item`.
+ */
+export const ACTION_BAR_FIELD_MIN_REM = 8;
+
+/**
  * `Form` size for a bar size, which fields in an `ActionBarItem` take when
  * their own `size` is unset, so they fill the bar's height.
  */

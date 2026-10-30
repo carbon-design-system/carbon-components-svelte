@@ -36,6 +36,10 @@
   // The containing block of what it clips. A field's visually hidden label
   // is `position: absolute`, and with a block outside the bar, the clip
   // missed it and the page scrolled sideways.
+  //
+  // The row never scrolls: focus on a field past the clip would slide every
+  // control out of view. The fit leaves no overflow, and `clip`, where the
+  // browser has it, also stops a scroll from focus.
   .#{$prefix}--action-bar__items {
     position: relative;
     display: flex;
@@ -45,13 +49,35 @@
     overflow: hidden;
   }
 
+  @supports (overflow: clip) {
+    .#{$prefix}--action-bar,
+    .#{$prefix}--action-bar__items {
+      overflow: clip;
+    }
+  }
+
   .#{$prefix}--action-bar__group {
     display: flex;
     flex: none;
     align-items: center;
   }
 
+  // A field shrinks to 8rem (`ACTION_BAR_FIELD_MIN_REM`) before a button
+  // collapses into the "More" menu, and grows no wider than its own width.
+  // With every button collapsed and still no room, the fields shrink on
+  // from 8rem in equal parts, so they do not jump at the boundary.
   .#{$prefix}--action-bar__item {
+    min-inline-size: to-rem(128px);
+    flex: 0 1 auto;
+  }
+
+  .#{$prefix}--action-bar--overfull .#{$prefix}--action-bar__item {
+    min-inline-size: 0;
+    flex-basis: to-rem(128px);
+  }
+
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__item {
+    min-inline-size: 0;
     flex: none;
   }
 

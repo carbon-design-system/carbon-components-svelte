@@ -353,6 +353,115 @@ test.describe("ActionBar", () => {
     expect(edges.dropdown).toBe(edges.bar);
   });
 
+  test("shrinks its fields to 8rem before a button collapses", async ({
+    page,
+  }) => {
+    await page.goto("/action-bar-fields.html");
+    const fields = page.locator("#fields");
+    /** Each width, the buttons that show, and the narrowest field. */
+    const sweep = () =>
+      fields.evaluate(async (node) => {
+        const frame = () =>
+          new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          );
+        const steps: { width: number; buttons: number; field: number }[] = [];
+        for (let width = 720; width >= 400; width -= 1) {
+          node.style.width = `${width}px`;
+          // biome-ignore lint/performance/noAwaitInLoops: one width at a time
+          await frame();
+          const buttons = [
+            ...node.querySelectorAll(".bx--action-bar__button"),
+          ].filter((button) => button.checkVisibility()).length;
+          const field = Math.min(
+            ...[...node.querySelectorAll(".bx--action-bar__item")].map(
+              (item) => item.getBoundingClientRect().width,
+            ),
+          );
+          steps.push({ width, buttons, field });
+        }
+        return steps;
+      });
+    const steps = await sweep();
+    const index = steps.findIndex((step) => step.buttons < 2);
+    expect(index).toBeGreaterThan(0);
+    // Every field is at its least width, 128 px, before a button goes.
+    const before = steps[index - 1];
+    expect(before.buttons).toBe(2);
+    expect(before.field).toBeCloseTo(128, 0);
+    for (const step of steps.filter((s) => s.buttons === 2)) {
+      expect(step.field).toBeGreaterThanOrEqual(127.5);
+    }
+    // The row never overflows, so it never scrolls.
+    const overflow = await page
+      .locator(".bx--action-bar__items")
+      .evaluate((row) => row.scrollWidth - row.clientWidth);
+    expect(overflow).toBe(0);
+  });
+
+  test("does not toggle a button with 1 px steps across the boundary", async ({
+    page,
+  }) => {
+    await page.goto("/action-bar-fields.html");
+    const fields = page.locator("#fields");
+    const changes = await fields.evaluate(async (node) => {
+      const frame = () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        );
+      const shown = () =>
+        [...node.querySelectorAll(".bx--action-bar__button")]
+          .filter((button) => button.checkVisibility())
+          .length.toString();
+      let width = 720;
+      node.style.width = `${width}px`;
+      await frame();
+      while (shown() === "2" && width > 300) {
+        width -= 1;
+        node.style.width = `${width}px`;
+        // biome-ignore lint/performance/noAwaitInLoops: one width at a time
+        await frame();
+      }
+      // Back and forth over 1 px across the boundary, ten times.
+      let last = shown();
+      let count = 0;
+      for (let i = 0; i < 10; i++) {
+        node.style.width = `${width + (i % 2 === 0 ? 1 : 0)}px`;
+        // biome-ignore lint/performance/noAwaitInLoops: one width at a time
+        await frame();
+        if (shown() !== last) count += 1;
+        last = shown();
+      }
+      return count;
+    });
+    expect(changes).toBe(0);
+  });
+
+  test("never scrolls the row as focus walks into a field at 320 px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 600 });
+    await page.goto("/action-bar-fields.html");
+    await page.locator("#fields").evaluate((node) => {
+      node.style.width = "320px";
+    });
+    const row = page.locator(".bx--action-bar__items");
+    const overflow = () =>
+      row.evaluate((node) => node.scrollWidth - node.clientWidth);
+    // The fields fit once the bar has measured its new width.
+    await expect.poll(overflow).toBe(0);
+    await page.getByRole("combobox").focus();
+    for (const name of ["Find", "Page"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+      await page.keyboard.press("ArrowRight");
+      await expect(
+        page.getByRole(name === "Find" ? "searchbox" : "textbox", { name }),
+      ).toBeFocused();
+      expect(await row.evaluate((node) => node.scrollLeft)).toBe(0);
+    }
+    expect(await overflow()).toBe(0);
+  });
+
   test("keeps a field's hidden label inside the bar at 320 px", async ({
     page,
   }) => {

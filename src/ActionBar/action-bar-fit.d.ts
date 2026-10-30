@@ -7,6 +7,11 @@ export type FitEntry = {
   priority: number;
   /** Never collapses. */
   pinned: boolean;
+  /**
+   * Set for an entry that shrinks, such as a field: the least size it takes
+   * while any entry shows. The fit counts this size.
+   */
+  minWidth?: number;
 };
 
 /**
@@ -24,6 +29,12 @@ export function fitActionBar(options: {
   /** Room an entry needs beyond its own size to come back out of the menu. */
   slack?: number;
 }): Set<string>;
+
+/** The size the shown entries take, with each field at its `minWidth`. */
+export function shownSize(
+  entries: ReadonlyArray<FitEntry>,
+  hidden: ReadonlySet<string>,
+): number;
 
 export function sameIds(
   a: ReadonlySet<string>,

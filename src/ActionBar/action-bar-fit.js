@@ -8,6 +8,9 @@
  *   the last time the entry was shown.
  * @property {number} priority - Higher stays visible longer.
  * @property {boolean} pinned - Never collapses.
+ * @property {number} [minWidth] - Set for an entry that shrinks, such as a
+ *   field: the least size it takes while any entry shows. The fit counts
+ *   this size, so fields shrink to it before anything collapses.
  */
 
 /**
@@ -33,7 +36,7 @@ function measureShown(entries, removed) {
     } else if (!removed.has(entry.id)) {
       if (pending) width += pending.width;
       pending = null;
-      width += entry.width;
+      width += entry.minWidth ?? entry.width;
       seenItem = true;
     }
   }
@@ -110,6 +113,19 @@ export function fitActionBar({
   const hidden = new Set(order.slice(0, count));
   for (const id of shownWithout(count).dividers) hidden.add(id);
   return hidden;
+}
+
+/**
+ * The size the entries that show take, with each field at its `minWidth`.
+ * More than the room, once `fitActionBar` has collapsed all it can, means
+ * the fields must shrink past their minimum.
+ *
+ * @param {ReadonlyArray<FitEntry>} entries - In DOM order.
+ * @param {ReadonlySet<string>} hidden
+ * @returns {number}
+ */
+export function shownSize(entries, hidden) {
+  return measureShown(entries, hidden).width;
 }
 
 /**

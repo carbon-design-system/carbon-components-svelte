@@ -2,6 +2,7 @@ import {
   fitActionBar,
   type FitEntry,
   sameIds,
+  shownSize,
 } from "carbon-components-svelte/ActionBar/action-bar-fit.js";
 
 const item = (id: string, extra: Partial<FitEntry> = {}): FitEntry => ({
@@ -126,6 +127,18 @@ describe("fitActionBar", () => {
     expect(shrinkThenGrow(176, collapsed)).toEqual([]);
     // It still collapses more at once.
     expect(shrinkThenGrow(119, collapsed)).toEqual(["b", "c", "d"]);
+  });
+
+  it("counts a field at its least width, so fields shrink first", () => {
+    // A 230 px field that shrinks to 128 px, between two buttons.
+    const field = item("field", { width: 230, minWidth: 128, pinned: true });
+    const entries = [item("a"), field, item("b")];
+    // 40 + 128 + 40: both buttons show, and the field takes what is left.
+    expect(hiddenIds(entries, 310)).toEqual([]);
+    expect(hiddenIds(entries, 208)).toEqual([]);
+    // Below the field's least width, the buttons collapse.
+    expect(hiddenIds(entries, 207)).toEqual(["a", "b"]);
+    expect(shownSize(entries, new Set(["a", "b"]))).toBe(128);
   });
 });
 
