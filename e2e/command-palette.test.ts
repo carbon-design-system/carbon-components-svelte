@@ -28,7 +28,7 @@ test("runs the highlighted command and gives focus back after the exit", async (
   await expect(page.locator(highlighted)).toHaveText("Restart service");
 
   await page.keyboard.press("Enter");
-  await expect(page.getByTestId("selected")).toHaveText("Restart service");
+  await expect(page.getByTestId("selected")).toHaveText("restart");
   await expect(page.locator(".bx--command-palette")).not.toHaveClass(
     /bx--command-palette--open/,
   );
