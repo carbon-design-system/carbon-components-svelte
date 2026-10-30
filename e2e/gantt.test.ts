@@ -115,6 +115,82 @@ test.describe("Gantt", () => {
     ).toHaveText("Mar 9, 2026");
   });
 
+  test("moves and resizes a bar from its menu with single clicks", async ({
+    page,
+  }) => {
+    const trigger = page.getByRole("button", { name: "Move task" });
+    await expect(trigger).toHaveCount(0);
+    await bar(page, "design").click();
+    await trigger.click();
+    await page.getByRole("menuitem", { name: "End later" }).click();
+    expect(await lastChange(page)).toMatchObject({
+      id: "design",
+      start: "2026-03-09",
+      end: "2026-03-14",
+      mode: "end",
+      source: "menu",
+    });
+    await expect(bar(page, "design")).toBeFocused();
+    // The button sits beside the bar, inside the row, and is 24 px or more.
+    const [barBox, buttonBox] = await Promise.all([
+      bar(page, "design").boundingBox(),
+      trigger.boundingBox(),
+    ]);
+    expect(buttonBox?.x).toBeGreaterThanOrEqual(
+      (barBox?.x ?? 0) + (barBox?.width ?? 0),
+    );
+    expect(buttonBox?.width).toBeGreaterThanOrEqual(24);
+    expect((buttonBox?.y ?? 0) + (buttonBox?.height ?? 0) / 2).toBeCloseTo(
+      (barBox?.y ?? 0) + (barBox?.height ?? 0) / 2,
+      0,
+    );
+
+    await trigger.click();
+    await page.getByRole("menuitem", { name: "Move earlier" }).click();
+    expect(await lastChange(page)).toMatchObject({
+      start: "2026-03-08",
+      end: "2026-03-13",
+      mode: "move",
+    });
+
+    await page.goto("/gantt.html?size=short&zoom=day&cancel");
+    await bar(page, "design").click();
+    await trigger.click();
+    await page.getByRole("menuitem", { name: "Start later" }).click();
+    expect((await lastChange(page)).start).toBe("2026-03-10");
+    await expect(
+      page.locator('[data-tree-row-id="design"] td').nth(1),
+    ).toHaveText("Mar 9, 2026");
+  });
+
+  test("opens the move menu with Shift+F10 and returns to the bar", async ({
+    page,
+  }) => {
+    await bar(page, "design").focus();
+    await page.keyboard.press("Shift+F10");
+    await expect(page.getByRole("menu")).toBeVisible();
+    await expect(
+      page.getByRole("menuitem", { name: "Move earlier" }),
+    ).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    expect(await lastChange(page)).toMatchObject({
+      start: "2026-03-10",
+      end: "2026-03-14",
+      mode: "move",
+      source: "menu",
+    });
+    await expect(bar(page, "design")).toBeFocused();
+
+    await page.keyboard.press("Shift+F10");
+    await expect(page.getByRole("menu")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("menu")).toBeHidden();
+    await expect(bar(page, "design")).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(bar(page, "approved")).toBeFocused();
+  });
+
   test("moves between bars with Up, Down, Home and End", async ({ page }) => {
     await bar(page, "brief").focus();
     await page.keyboard.press("ArrowDown");

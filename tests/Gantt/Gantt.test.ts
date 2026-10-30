@@ -247,6 +247,122 @@ describe("Gantt", () => {
     });
   });
 
+  describe("move menu", () => {
+    const startCell = (id: string) =>
+      document
+        .querySelector(`[data-tree-row-id="${id}"]`)
+        ?.querySelectorAll("td")[1];
+
+    it("shows a button beside the active bar only", async () => {
+      render(Gantt);
+      expect(screen.queryByRole("button", { name: "Move task" })).toBeNull();
+
+      await user.click(bar("design"));
+
+      const trigger = await screen.findByRole("button", { name: "Move task" });
+      expect(trigger).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("moves and resizes a task by the zoom's step with a pointer", async () => {
+      const log: Log = [];
+      render(Gantt, { props: { log } });
+
+      await user.click(bar("design"));
+      await user.click(
+        await screen.findByRole("button", { name: "Move task" }),
+      );
+      await user.click(screen.getByRole("menuitem", { name: "Start later" }));
+
+      expect(log[0].detail).toMatchObject({
+        id: "design",
+        start: "2026-03-10",
+        end: "2026-03-13",
+        mode: "start",
+        source: "menu",
+      });
+      await waitFor(() =>
+        expect(startCell("design")).toHaveTextContent("Mar 10, 2026"),
+      );
+      expect(bar("design")).toHaveFocus();
+
+      await user.click(screen.getByRole("button", { name: "Move task" }));
+      await user.click(screen.getByRole("menuitem", { name: "Move later" }));
+      expect(log[1].detail).toMatchObject({
+        start: "2026-03-11",
+        end: "2026-03-14",
+        mode: "move",
+      });
+    });
+
+    it("keeps the dates when a listener cancels the change", async () => {
+      const log: Log = [];
+      render(Gantt, { props: { log, cancel: true } });
+
+      await user.click(bar("design"));
+      await user.click(
+        await screen.findByRole("button", { name: "Move task" }),
+      );
+      await user.click(screen.getByRole("menuitem", { name: "End later" }));
+
+      expect(log[0].detail).toMatchObject({ end: "2026-03-14", mode: "end" });
+      expect(endCell("design")).toHaveTextContent("Mar 13, 2026");
+    });
+
+    it("opens from the keyboard and returns focus to the bar", async () => {
+      render(Gantt);
+
+      bar("design").focus();
+      await user.keyboard("{Shift>}{F10}{/Shift}");
+      const menu = await screen.findByRole("menu");
+      expect(within(menu).getAllByRole("menuitem")).toHaveLength(6);
+
+      await user.keyboard("{Escape}");
+      await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
+      expect(bar("design")).toHaveFocus();
+    });
+
+    it("offers only moves for a milestone, and nothing for a locked task", async () => {
+      render(Gantt, { props: { translateWithId: () => undefined } });
+
+      bar("go").focus();
+      await user.keyboard("{Shift>}{F10}{/Shift}");
+      const menu = await screen.findByRole("menu");
+      expect(
+        within(menu)
+          .getAllByRole("menuitem")
+          .map((item) => item.textContent?.trim()),
+      ).toEqual(["Move earlier", "Move later"]);
+      await user.keyboard("{Escape}");
+
+      await user.click(bar("locked"));
+      expect(screen.queryByRole("button", { name: "Move task" })).toBeNull();
+    });
+
+    it("translates the button and the items", async () => {
+      render(Gantt, {
+        props: {
+          translateWithId: (id: string) =>
+            id === "move-menu"
+              ? "Verschieben"
+              : id === "end-later"
+                ? "Später enden"
+                : undefined,
+        },
+      });
+
+      await user.click(bar("design"));
+      await user.click(
+        await screen.findByRole("button", { name: "Verschieben" }),
+      );
+      expect(
+        screen.getByRole("menuitem", { name: "Später enden" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("menuitem", { name: "Start earlier" }),
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("dates", () => {
     it("writes back Date objects when the task holds them", async () => {
       const log: Log = [];

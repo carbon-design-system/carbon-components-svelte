@@ -228,6 +228,14 @@
     @include ccs-inset-inline(var(--ccs-gantt-x), null);
   }
 
+  // The move menu button beside the active bar, above the bars and links.
+  .#{$prefix}--gantt__menu {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    @include ccs-inset-inline(var(--ccs-gantt-x), null);
+  }
+
   // The progress fill is an element, not a gradient: forced colors drop
   // background images but keep a system-colour background.
   .#{$prefix}--gantt__bar {

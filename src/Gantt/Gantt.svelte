@@ -11,8 +11,22 @@
   /** Width of the Start and End columns of the default list, in px. */
   const DATE_COLUMN_WIDTH = 136;
 
-  /** English text of the default columns, by translation id. */
-  const DEFAULT_TEXT = { task: "Task", start: "Start", end: "End" };
+  /** English text of the default columns and the move menu, by translation id. */
+  const DEFAULT_TEXT = {
+    task: "Task",
+    start: "Start",
+    end: "End",
+    "move-menu": "Move task",
+    "move-earlier": "Move earlier",
+    "move-later": "Move later",
+    "start-earlier": "Start earlier",
+    "start-later": "Start later",
+    "end-earlier": "End earlier",
+    "end-later": "End later",
+  };
+
+  /** Space between a bar and its move menu button, in px. */
+  const MENU_GAP = 4;
 
   /** @param {string | number} id */
   function barSelector(id) {
@@ -54,7 +68,7 @@
    * @property {Date | string} end - The new last day
    * @property {{ start: Date | string; end: Date | string }} previous
    * @property {"move" | "start" | "end"} mode - Moved, or resized at the start or the end
-   * @property {"pointer" | "keyboard"} source
+   * @property {"pointer" | "keyboard" | "menu"} source
    */
 
   /**
@@ -62,7 +76,7 @@
    */
 
   /**
-   * Fired before a drag or a key press changes a task's dates. Call
+   * Fired before a drag, a key press or the move menu changes a task's dates. Call
    * `preventDefault()` to keep the task as it is; otherwise `tasks` is updated.
    * @event change
    * @type {GanttChange<Task["id"]>}
@@ -203,15 +217,17 @@
 
   /** Specify the hint a screen reader gives for a bar that can be moved */
   export let hintText =
-    "Arrow keys move the task. Shift and arrow keys resize it. Alt, Shift and arrow keys resize its start.";
+    "Arrow keys move the task. Shift and arrow keys resize it. Alt, Shift and arrow keys resize its start. Shift+F10 opens the move menu.";
 
   /**
-   * @typedef {"task" | "start" | "end"} GanttTranslationId
+   * @typedef {"task" | "start" | "end" | "move-menu" | "move-earlier" | "move-later" | "start-earlier" | "start-later" | "end-earlier" | "end-later"} GanttTranslationId
    */
 
   /**
-   * Override the header text of the default columns. Return no value for an
-   * id to keep its English default ("Task", "Start", "End").
+   * Override the header text of the default columns ("task", "start",
+   * "end"), and the move menu's button ("move-menu") and items
+   * ("move-earlier", "start-later" and so on). Return no value for an id to
+   * keep its English default ("Task", "Move task", "Start later").
    * @type {((id: GanttTranslationId) => string | undefined) | undefined}
    */
   export let translateWithId = undefined;
@@ -264,7 +280,9 @@
     if (todayDay !== null) scrollToDate(fromDay(todayDay, ""));
   }
 
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
+  import OverflowMenu from "../OverflowMenu/OverflowMenu.svelte";
+  import OverflowMenuItem from "../OverflowMenu/OverflowMenuItem.svelte";
   import TreeViewGrid from "../TreeViewGrid/TreeViewGrid.svelte";
   import { toCssLength } from "../utils/css-length.js";
   import {
@@ -714,7 +732,7 @@
    * @param {number} start
    * @param {number} end
    * @param {"move" | "start" | "end"} mode
-   * @param {"pointer" | "keyboard"} source
+   * @param {"pointer" | "keyboard" | "menu"} source
    */
   function commit(bar, start, end, mode, source) {
     const node = maps.nodeMap.get(bar.id);
@@ -900,10 +918,113 @@
     }
   }
 
+  /** @param {GanttTranslationId} textId */
+  function textFor(textId) {
+    return translateWithId?.(textId) ?? DEFAULT_TEXT[textId];
+  }
+
+  /**
+   * The move menu sits beside the active bar, the one the user last clicked
+   * or chose, so a single pointer can move and resize it (WCAG 2.5.7).
+   */
+  $: menuBar = bars.find(
+    (bar) => bar.id === activeId && bar.editable && !disabledKeys.has(bar.key),
+  );
+  /** @type {"xs" | "sm"} */
+  let menuSize;
+  $: menuSize = rowHeight <= 32 ? "xs" : "sm";
+  $: menuId = `${id}-move-menu`;
+
+  /**
+   * Place the menu button after the bar, or before it when the bar ends at
+   * the edge of the timeline, centered on the row.
+   * @param {import("./gantt-utils.js").GanttBar} bar
+   * @param {"xs" | "sm"} menu
+   * @param {number} rowPx
+   * @param {number} width
+   */
+  function menuStyle(bar, menu, rowPx, width) {
+    const size = menu === "xs" ? 24 : 32;
+    const after = bar.x + bar.width + MENU_GAP;
+    const x = after + size <= width ? after : bar.x - MENU_GAP - size;
+    const y = bar.row * rowPx + (rowPx - size) / 2;
+    return `--ccs-gantt-x:${x}px;top:${y}px`;
+  }
+
+  /**
+   * The menu's steps: move, or resize either end, by the zoom's step. A step
+   * that would change nothing, or take the bar off a fixed axis, is
+   * disabled.
+   * @param {import("./gantt-utils.js").GanttBar} bar
+   * @param {number} snap
+   * @param {{ start: number; end: number }} range
+   */
+  function menuSteps(bar, snap, range) {
+    /** @type {Array<"move" | "start" | "end">} */
+    const modes = bar.milestone ? ["move"] : ["move", "start", "end"];
+    return modes.flatMap((mode) =>
+      /** @type {const} */ ([-1, 1]).map((sign) => {
+        const next = applyDelta(bar.start, bar.end, mode, sign * snap);
+        /** @type {GanttTranslationId} */
+        const textId = `${mode}-${sign < 0 ? "earlier" : "later"}`;
+        return {
+          textId,
+          mode,
+          next,
+          disabled:
+            (next.start === bar.start && next.end === bar.end) ||
+            next.end < range.start ||
+            next.start >= range.end,
+        };
+      }),
+    );
+  }
+
+  /**
+   * Run a step from the menu, then return focus to the bar.
+   * @param {import("./gantt-utils.js").GanttBar} bar
+   * @param {ReturnType<typeof menuSteps>[number]} step
+   */
+  async function moveFromMenu(bar, step) {
+    commit(bar, step.next.start, step.next.end, step.mode, "menu");
+    await refocus(bar);
+  }
+
+  /**
+   * Focus a bar once the menu has closed and handed focus back to its
+   * button, which is out of the tab order.
+   * @param {import("./gantt-utils.js").GanttBar} bar
+   */
+  async function refocus(bar) {
+    await tick();
+    focusBar(bar);
+  }
+
+  /**
+   * Open the move menu from the keyboard. The bar becomes the active one,
+   * so the menu button shows beside it first.
+   * @param {import("./gantt-utils.js").GanttBar} bar
+   */
+  async function openMoveMenu(bar) {
+    selectBar(bar);
+    await tick();
+    const trigger = canvasRef?.ownerDocument.getElementById(menuId);
+    if (trigger) trigger.click();
+  }
+
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     const bar = barOf(event.target);
     if (!bar) return;
+    if (
+      event.key === "ContextMenu" ||
+      (event.key === "F10" && event.shiftKey)
+    ) {
+      if (!bar.editable || disabledKeys.has(bar.key)) return;
+      event.preventDefault();
+      openMoveMenu(bar);
+      return;
+    }
     const key = inlineKey(
       event.key,
       $layoutDirection,
@@ -1082,6 +1203,38 @@
               {/if}
             </div>
           {/each}
+
+          {#if menuBar && !dragMode}
+            <div
+              class:bx--gantt__menu={true}
+              style={menuStyle(menuBar, menuSize, rowHeight, timelineWidth)}
+            >
+              <!-- Out of the tab order: Shift+F10 on a bar opens it. -->
+              <OverflowMenu
+                id={menuId}
+                size={menuSize}
+                flipped
+                portalMenu
+                tabindex={-1}
+                iconDescription={textFor("move-menu")}
+                on:close={(event) => {
+                  // Escape returns focus to the button, which is out of the
+                  // tab order, so send it on to the bar.
+                  if (event.detail?.trigger === "escape-key" && menuBar) {
+                    refocus(menuBar);
+                  }
+                }}
+              >
+                {#each menuSteps(menuBar, level.snap, axis) as step (step.textId)}
+                  <OverflowMenuItem
+                    text={textFor(step.textId)}
+                    disabled={step.disabled}
+                    on:click={() => menuBar && moveFromMenu(menuBar, step)}
+                  />
+                {/each}
+              </OverflowMenu>
+            </div>
+          {/if}
         </div>
       </div>
     </div>

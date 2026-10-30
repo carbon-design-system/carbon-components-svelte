@@ -43,7 +43,7 @@ Set `size` to control row height. The list and the bars share it, so they stay o
 
 ## Task list
 
-The list is a [TreeViewGrid](/components/TreeViewGrid). By default it has Task, Start and End columns; a summary shows the dates it derives from its children. Set `translateWithId` to translate their headers. Its ids are `task`, `start` and `end`, and an id with no value keeps the English text. Set `headers` for other columns and `listWidth` for the width. The list stays in view while it takes at most half of the chart's width. In a narrower chart, such as on a phone, it scrolls away with the timeline. A column reads the task field of the same `key`, and `display` formats it.
+The list is a [TreeViewGrid](/components/TreeViewGrid). By default it has Task, Start and End columns; a summary shows the dates it derives from its children. Set `translateWithId` to translate their headers. Its ids are `task`, `start` and `end`, and an id with no value keeps the English text. The same function translates the move menu: `move-menu` for its button, and `move-earlier`, `move-later`, `start-earlier`, `start-later`, `end-earlier` and `end-later` for its items. Set `headers` for other columns and `listWidth` for the width. The list stays in view while it takes at most half of the chart's width. In a narrower chart, such as on a phone, it scrolls away with the timeline. A column reads the task field of the same `key`, and `display` formats it.
 
 The list does not wrap text, since a cell that grows taller than the row would push the list out of line with the bars. Text that does not fit ends in an ellipsis, and the cell shows the full text on hover.
 
@@ -52,6 +52,8 @@ The list does not wrap text, since a cell that grows taller than the row would p
 ## Editing
 
 Drag a bar to move it, or drag either end to change its first or last day. Dates snap to a day at day and week zoom and to a week at month and quarter zoom. The bar shows the new dates while you drag, and the task is written when you let go. Press <DocKbd label="Escape" /> to cancel a drag.
+
+Every drag also has a single-click way (WCAG 2.5.7). Click a bar, or its row, to make it the active task. A "Move task" button shows beside the bar, and its menu moves the task, or its first or last day, one step earlier or later: a day at day and week zoom, a week at month and quarter zoom. A milestone's menu only moves it. A step that would change nothing is disabled. The menu's items fire the same `change` event, with `source: "menu"`.
 
 The `change` event fires before the write and is cancelable. Its detail is `{ id, start, end, previous, mode, source }`, with `start` and `end` in the same kind as the task holds, a `Date` or a string. Call `preventDefault()` to keep the task as it is. Otherwise the chart writes the new dates into `tasks`, so bind `tasks` to receive them. The chart never moves other tasks: a successor that now starts too early is drawn dashed, and a listener can shift it from the same event.
 
@@ -78,6 +80,7 @@ The list is a treegrid with one tab stop. The bars are a second tab stop: <DocKb
 | Bar | <DocKbd label="↑" /> / <DocKbd label="↓" /> | Focus the previous or next bar. Rows without a bar and disabled tasks are skipped. |
 | Bar | <DocKbd label="Home" /> / <DocKbd label="End" /> | Focus the first or last bar. |
 | Bar | <DocKbd label="Enter" /> / <DocKbd label="Space" /> | Select the task's row. |
+| Bar | <DocKbd label="Shift" /> + <DocKbd label="F10" /> or <DocKbd label="Menu" /> | Open the move menu. <DocKbd label="Escape" /> closes it, and focus returns to the bar. |
 
 A milestone moves but does not resize. A summary and a locked task take no arrow keys.
 
