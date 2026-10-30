@@ -142,6 +142,11 @@
       <span data-testid="overflow-item-icon-right">R</span>
     {/snippet}
   </OverflowMenuItem>
+  <OverflowMenuItem text="Edit end">
+    {#snippet iconEnd()}
+      <span data-testid="overflow-item-icon-end">E</span>
+    {/snippet}
+  </OverflowMenuItem>
 </OverflowMenu>
 
 <div data-testid="theme-snippet">

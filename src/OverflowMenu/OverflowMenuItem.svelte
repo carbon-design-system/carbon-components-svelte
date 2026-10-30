@@ -7,6 +7,8 @@
   /**
    * @event {MouseEvent} click
    * @slot {{}} icon
+   * @slot {{}} iconEnd
+   * @deprecated use the `iconEnd` slot
    * @slot {{}} iconRight
    */
 
@@ -36,15 +38,22 @@
   export let icon = /** @type {Icon | undefined} */ (undefined);
 
   /**
-   * Specify an icon to render pinned to the right edge of the item.
-   * Alternatively, use the "iconRight" slot.
+   * Specify an icon to render at the end of the item.
+   * Alternatively, use the "iconEnd" slot.
    * @type {Icon | undefined}
    * @example
    * ```svelte
    * <OverflowMenuItem>
-   *   <Icon slot="iconRight" />
+   *   <Icon slot="iconEnd" />
    * </OverflowMenuItem>
    * ```
+   */
+  export let iconEnd = /** @type {Icon | undefined} */ (undefined);
+
+  /**
+   * Specify an icon to render at the end of the item.
+   * @deprecated use `iconEnd`
+   * @type {Icon | undefined}
    */
   export let iconRight = /** @type {Icon | undefined} */ (undefined);
 
@@ -127,6 +136,8 @@
   $: patch(id, { text, disabled, shortcut });
 
   $: focused = $focusedId === id;
+
+  $: endIcon = iconEnd ?? iconRight;
 
   // A shortcut that doesn't parse, such as Carbon React's free-text "⌘C",
   // shows as written, with no `aria-keyshortcuts`.
@@ -216,12 +227,15 @@
           {/if}
         </span>
       {/if}
-      {#if $$slots.iconRight || iconRight}
+      {#if $$slots.iconEnd || $$slots.iconRight || endIcon}
         <div
           class:bx--overflow-menu-options__option-icon={true}
           class:bx--overflow-menu-options__option-icon--right={true}
         >
-          <slot name="iconRight"><svelte:component this={iconRight} /></slot>
+          <slot name="iconEnd"
+            ><slot name="iconRight"><svelte:component this={endIcon} /></slot
+            ></slot
+          >
         </div>
       {/if}
     </a>
@@ -253,12 +267,15 @@
           {/if}
         </span>
       {/if}
-      {#if $$slots.iconRight || iconRight}
+      {#if $$slots.iconEnd || $$slots.iconRight || endIcon}
         <div
           class:bx--overflow-menu-options__option-icon={true}
           class:bx--overflow-menu-options__option-icon--right={true}
         >
-          <slot name="iconRight"><svelte:component this={iconRight} /></slot>
+          <slot name="iconEnd"
+            ><slot name="iconRight"><svelte:component this={endIcon} /></slot
+            ></slot
+          >
         </div>
       {/if}
     </button>
