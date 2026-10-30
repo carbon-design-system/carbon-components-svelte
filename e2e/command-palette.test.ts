@@ -106,3 +106,31 @@ test("mirrors the icon, the highlight bar and the key caps in RTL", async ({
   // Key names read left to right in any language.
   expect(rtl.caps).toEqual(ltr.caps);
 });
+
+test("stacks above a Modal that comes after it in the DOM", async ({
+  page,
+}) => {
+  await page.goto("/command-palette.html?modal&first&state=groups");
+  await expect(page.locator(".bx--modal.is-visible")).toBeVisible();
+  await page.getByTestId("modal-trigger").focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("combobox")).toBeFocused();
+
+  const container = page.locator(".bx--command-palette__container");
+  await expect
+    .poll(() =>
+      container.evaluate((node) => {
+        const box = node.getBoundingClientRect();
+        const hit = document.elementFromPoint(
+          box.left + box.width / 2,
+          box.top + 20,
+        );
+        return node.contains(hit);
+      }),
+    )
+    .toBe(true);
+
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".bx--modal.is-visible")).toBeVisible();
+  await expect(page.getByTestId("modal-trigger")).toBeFocused();
+});

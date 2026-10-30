@@ -23,7 +23,10 @@
 
   .#{$prefix}--command-palette {
     position: fixed;
-    z-index: z("modal");
+    // The user opens it over whatever is on screen, Modals included, so
+    // it stacks above them whatever their order in the DOM. Portalled
+    // menus (`z("dropdown")`) still stack above it.
+    z-index: z("modal") + 1;
     top: 0;
     left: 0;
     display: flex;
