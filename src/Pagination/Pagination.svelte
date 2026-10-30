@@ -256,6 +256,7 @@
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
   import { clamp } from "../utils/numeric-format.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -384,6 +385,7 @@
       <span
         class:bx--pagination__text={!pageSizeInputDisabled}
         class:bx--pagination__items-count={true}
+        use:titleWhenTruncated
       >
         {itemsCountText}
       </span>
