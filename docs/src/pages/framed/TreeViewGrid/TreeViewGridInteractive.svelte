@@ -29,7 +29,13 @@
           owner: "Payments",
           note: "",
         },
-        { id: "us-east-db", text: "ledger-db", owner: "Data", note: "" },
+        {
+          id: "us-east-db",
+          text: "ledger-db",
+          owner: "Data",
+          note: "Locked",
+          disabled: true,
+        },
       ],
     },
     { id: "eu-west", text: "EU West", owner: "Platform", note: "" },
@@ -47,12 +53,13 @@
 >
   <svelte:fragment slot="cell" let:node let:cell>
     {#if cell.key === "owner"}
-      <Link href="#{node.owner}">{node.owner}</Link>
+      <Link href="#{node.owner}" disabled={node.disabled}>{node.owner}</Link>
     {:else if cell.key === "note"}
       <TextInput
         size="sm"
         hideLabel
         labelText="Note for {node.text}"
+        disabled={node.disabled}
         bind:value={node.note}
       />
     {:else if cell.key === "scale"}
@@ -60,10 +67,16 @@
         size="sm"
         hideLabel
         labelText="Auto scale {node.text}"
+        disabled={node.disabled}
         bind:toggled={scaled[node.id]}
       />
     {:else if cell.key === "actions"}
-      <OverflowMenu size="sm" flipped iconDescription="Actions for {node.text}">
+      <OverflowMenu
+        size="sm"
+        flipped
+        disabled={node.disabled}
+        iconDescription="Actions for {node.text}"
+      >
         <OverflowMenuItem text="Restart" />
         <OverflowMenuItem text="Delete" danger />
       </OverflowMenu>

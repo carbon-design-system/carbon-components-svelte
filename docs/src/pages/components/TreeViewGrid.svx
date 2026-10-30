@@ -61,6 +61,7 @@ Set `widgetNavigation` to `"tab"` to keep each control in the page tab order.
 | --- | --- |
 | Keep the default `"arrow"` for trees with a control in most rows | One <DocKbd label="Tab" /> enters the grid and the next leaves it, instead of one stop per control. |
 | Give each control an accessible name that includes the row, such as `labelText="Auto scale {node.text}"` | Screen readers read the control and the row header together, but a bare "Toggle" repeats on every row. |
+| Pass `disabled={node.disabled}` to each control in a cell | A disabled row dims its text and takes no clicks, but the grid cannot disable your controls. Disabled, they read as part of the row and leave the tab order. |
 | Use `"tab"` for a few widgets in a small tree | Users who expect <DocKbd label="Tab" /> to reach a control find it without learning the arrow keys. |
 | Don't build the controls' tab order yourself with `tabindex` | In `"arrow"` mode the grid removes the tab stop of every link, button, and input in a cell, and puts it back while the cell has focus. |
 

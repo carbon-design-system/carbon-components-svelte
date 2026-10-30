@@ -141,9 +141,11 @@
 >
   <svelte:fragment slot="cell" let:node let:cell>
     {#if cell.key === "status"}
-      <Tag size="sm" type={kinds[node.status]}>{node.status}</Tag>
+      <Tag size="sm" type={kinds[node.status]} disabled={node.disabled}
+        >{node.status}</Tag
+      >
     {:else if cell.key === "owner"}
-      <Link href="#{node.owner}">{node.owner}</Link>
+      <Link href="#{node.owner}" disabled={node.disabled}>{node.owner}</Link>
     {:else if cell.key === "cost"}
       {money.format(cell.value)}
     {:else if cell.key === "scale"}
@@ -151,10 +153,16 @@
         size="sm"
         hideLabel
         labelText="Auto scale {node.name}"
+        disabled={node.disabled}
         bind:toggled={scaled[node.id]}
       />
     {:else if cell.key === "actions"}
-      <OverflowMenu size="sm" flipped iconDescription="Actions for {node.name}">
+      <OverflowMenu
+        size="sm"
+        flipped
+        disabled={node.disabled}
+        iconDescription="Actions for {node.name}"
+      >
         <OverflowMenuItem text="Restart" />
         <OverflowMenuItem text="Delete" danger />
       </OverflowMenu>

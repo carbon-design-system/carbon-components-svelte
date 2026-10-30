@@ -134,6 +134,29 @@ test.describe("TreeViewGrid", () => {
     await expect(page.getByTestId("selected")).toHaveText("us-east-cache");
   });
 
+  test("skips a disabled row's controls with Tab", async ({ page }) => {
+    // The fixture passes `disabled={node.disabled}` to each control, as the
+    // docs ask; with `widgetNavigation="tab"` each control is a tab stop.
+    await page.goto("/tree-view-grid.html?tab");
+    const rows = [];
+    for (let i = 0; i < 16; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: keys go in order
+      await page.keyboard.press("Tab");
+      rows.push(
+        await page.evaluate(() =>
+          document.activeElement
+            ?.closest("tr")
+            ?.getAttribute("data-tree-row-id"),
+        ),
+      );
+    }
+    expect(rows).toContain("us-east-cache");
+    expect(rows).not.toContain("us-east-db");
+    await expect(
+      page.locator("[data-tree-row-id=us-east-db] .bx--link"),
+    ).toHaveAttribute("aria-disabled", "true");
+  });
+
   test("draws a focus ring on a row and on a cell", async ({ page }) => {
     const row = page.locator("[data-tree-row-id=us-east]");
     await row.focus();
