@@ -119,14 +119,25 @@
   export let iconDescription = undefined;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the alignment of the tooltip relative to the icon.
    * Only applies to icon-only buttons.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
 
   /**
    * Set the position of the tooltip relative to the icon.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
@@ -148,6 +159,7 @@
   import { noop } from "../utils/noop.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -254,6 +266,11 @@
   function handleFormReset() {
     files = [];
   }
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <button
@@ -283,25 +300,25 @@
   class:bx--tooltip--a11y={hasIconOnly && !hideTooltip}
   class:bx--btn--icon-only--top={hasIconOnly &&
     !hideTooltip &&
-    tooltipPosition === "top"}
+    effectiveTooltipPosition === "top"}
   class:bx--btn--icon-only--right={hasIconOnly &&
     !hideTooltip &&
-    tooltipPosition === "right"}
+    effectiveTooltipPosition === "right"}
   class:bx--btn--icon-only--bottom={hasIconOnly &&
     !hideTooltip &&
-    tooltipPosition === "bottom"}
+    effectiveTooltipPosition === "bottom"}
   class:bx--btn--icon-only--left={hasIconOnly &&
     !hideTooltip &&
-    tooltipPosition === "left"}
+    effectiveTooltipPosition === "left"}
   class:bx--tooltip--align-start={hasIconOnly &&
     !hideTooltip &&
-    tooltipAlignment === "start"}
+    effectiveTooltipAlignment === "start"}
   class:bx--tooltip--align-center={hasIconOnly &&
     !hideTooltip &&
-    tooltipAlignment === "center"}
+    effectiveTooltipAlignment === "center"}
   class:bx--tooltip--align-end={hasIconOnly &&
     !hideTooltip &&
-    tooltipAlignment === "end"}
+    effectiveTooltipAlignment === "end"}
   class:bx--tooltip--hidden={hasTooltip && $tooltipHidden}
   class:bx--tooltip--visible={hasTooltip && $tooltipOpen}
   class:bx--tooltip--instant={hasTooltip && $tooltipInstant}
