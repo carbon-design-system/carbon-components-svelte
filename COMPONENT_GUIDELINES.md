@@ -34,7 +34,7 @@ Before you write CSS, look for a Carbon block whose rules you can use unchanged.
 - Lists in a panel: use the ListBox classes. The menu classes are for a popup (absolute position, shadow, hidden until open). Override the position in the component's partial.
 - Anchored panels: use Popover or Toggletip. Their caret centers on targets of any size.
 - Drawers and full-height overlays: use the dialog lifecycle, scroll lock and focus trap from SidePanel and the modals. Use ActionSet for the buttons.
-- Toolbars: use DataTable's Toolbar layout (`bx--table-toolbar`). Items fill the toolbar's height with no inner padding, and a search field's bottom border is the toolbar's bottom edge.
+- Page and table toolbars: use DataTable's Toolbar layout (`bx--table-toolbar`). Items fill the toolbar's height with no inner padding, and a search field's bottom border is the toolbar's bottom edge. A toolbar inside a field, such as a text editor's, keeps field-sized buttons and leaves the field's focus ring visible.
 - Content surfaces: use `Layer` and `Tile`. For content, use `Tag`, `UserAvatar` and `OverflowMenu`.
 - If a component includes parts you do not need (Slider renders a label row and a number input), import its helpers and custom properties instead of the component.
 
@@ -58,13 +58,16 @@ Before you write CSS, look for a Carbon block whose rules you can use unchanged.
 ### Spacing
 
 - Use the spacing scale for all gaps, padding and sizes: 2, 4, 8, 12, 16, 24, 32, 40, 48 px and up.
-- The gap between groups is at least twice the gap between items in a group. Do not use one gap for every item in a row.
+- The gap between groups is at least twice the gap between items in a group, measured between visible content (text and icon ink), not between element boxes. Do not use one gap for every item in a row.
 - Columns of monospace content (line numbers, timestamps, levels, ids) have fixed widths in `ch`, so values line up across rows. A `ch` width does not include letter spacing, and Carbon's `code-01` and `code-02` styles add 0.32 px per character. Set `letter-spacing: 0` on those columns.
 - Use the row heights of the most similar component's [size family](CONTRIBUTING.md#carbon-v11-size-aliases): DataTable sizes for grids, ListBox sizes for fields. Accept the family's aliases.
-- Repeated rows have one pitch, and it is a multiple of 4 px. Rows that overlap by 1 px to share a border move 1 px off the grid per row.
+- Repeated rows of one shape have one pitch, and it is a multiple of 4 px. Rows with optional or wrapping content share one minimum height and one padding instead. Rows that overlap by 1 px to share a border move 1 px off the grid per row.
 - A grid uses at most two line styles, for example hour lines and day lines, both `$border-subtle`. Show extra guide lines only during an interaction such as a drag.
 - Rows of form fields use fixed widths for every column except the last, so fields line up across rows. Only the last column grows.
-- Columns in a board or a grid keep their width when content changes. Set a fixed or minimum and maximum width; long content wraps or truncates inside the column.
+- Columns in a board or a grid keep their width when content changes. Set a fixed or minimum and maximum width; long content wraps or truncates inside the column. A column that shows numbers, dates or ids is at least as wide as its widest value; it grows past a consumer's width before it cuts a value.
+- Parts that move inside a component, such as slider thumbs and drag handles, stay inside the component's box at every value.
+- Content outside a fixed range, such as a bar past the end of a time axis, is clipped at the range edge and marked as continuing.
+- Decorative layers (highlights, overlays, rings drawn with pseudo-elements) set `pointer-events: none` so they never take a click.
 - Show nesting with an indent and a 2 px inline-start rule (`$border-subtle`). Do not put a bordered box inside another bordered box. Nested levels then share the outer level's inline-end edge.
 - Page-level surfaces use `$background`, with fields on `$field`. Panels and narrow overlays use `$layer`.
 
@@ -76,6 +79,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - Centered content aligns on a shared center axis. A centered column header and the centered value below it, such as a weekday and its date in a circle, share one center.
 - Icons side by side have the same optical size. Draw them on the same artboard (16 px) with a similar ink extent. A letterform icon such as "Aa" that fills less of its box reads smaller than an arrow beside it.
 - Text in adjacent controls of one row shares a baseline. In a flex row with mixed type sizes, use `align-items: baseline`. Align on the baseline only when every item starts with text. An item that starts with an icon takes its baseline from the icon; align those rows to the top.
+- Text the user writes (log lines, messages, editor paragraphs, search queries) gets `dir="auto"`, so each block reads in its own direction on a page of the other direction.
 - Center an icon on the text beside it. A 16 px icon next to `body-compact-01` text centers in the 18 px line.
 - Fields in a row align to the top of their field box. A message under one field does not move its neighbors. To center a shorter control, such as a toggle, center that control; do not center the field wrappers.
 - Align numbers by place value: right-align numeric columns and use `tabular-nums`.
@@ -89,7 +93,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - Use the monospace family for values people copy or compare: ids, hashes, keys, paths, versions, log lines.
 - Each text slot either wraps or truncates, and the component documents which. Labels, menu items and error messages wrap. Single-line cells and tags may truncate. Error messages never truncate.
 - Use `text-wrap: balance` on headings and `text-wrap: pretty` on body text.
-- Body text in long descriptions is at most about 70 characters per line.
+- Body text in long descriptions is at most about 70 characters per line, about 480 px of `body-compact-01`. A `70ch` width holds about 88 characters of IBM Plex Sans, so set the width in px or rem.
 - Show an empty value as an em dash with an accessible name ("None"). Do not leave a cell blank.
 - Join a number and its unit with a non-breaking space: "12&nbsp;GB".
 
@@ -97,7 +101,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 
 - Change layout for narrow screens with CSS breakpoints. Do not change state, such as a view, a page size or `open`, from the viewport width in JavaScript: the server cannot know the width, and the change overwrites a bound prop.
 - `size`, `kind`, `invalid`, `warn`, `disabled`, `readonly`, skeletons and `Layer` work as in related components. Form controls pass `tests/form-field-contract`.
-- A disabled component shows every part as disabled: text in `$text-disabled`, icons in `$icon-disabled`, no hover, and no focus on its items. A read-only component keeps its text color and blocks changes.
+- A disabled component shows every part as disabled: text in `$text-disabled`, icons in `$icon-disabled`, no hover, and no focus on its items. It disables its own controls; for slotted content, it sets `inert` on the slot region or documents that the consumer disables it. A read-only component keeps its text color and blocks changes. An unavailable item inside an enabled composite (a menu item, a toolbar button) is a different case: it stays focusable with `aria-disabled`.
 - Where an alignment rule conflicts with the built-in layout of a Carbon component used inside, such as a field label's position, keep the Carbon layout and say so in the pull request.
 - Overlays move to a portal when a container would clip them. A container with a `transform` or `content-visibility: auto` also clips in-place menus. Set `portalMenu` on menus inside one.
 - A titled surface uses `Section` one level below the page, so its headings nest.
@@ -117,13 +121,15 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 
 ### Props
 
-These names apply to new components and new props. Do not rename existing props without keeping the old name as an alias.
+These names apply to new components and new props. Shipped components keep their names; do not rename existing props without keeping the old name as an alias.
 
 | Kind | Name | Examples |
 | :--- | :--- | :--- |
 | Visible text | `{part}Text` | `labelText`, `helperText`, `emptyText` |
 | Text read only by assistive technology | `{part}Description` | `iconDescription`, `loadingDescription` |
 | Assistive text built from values | `{part}Description` as a function with a named default | `countDescription(count, limit)` |
+| Text both shown (in a `title` or tooltip) and read | `{part}Text`, or a `{part}Text` function | `colorNameText(color)` |
+| Text for each state of a two-state control | one `*Text` prop per state | `onText`, `offText` |
 | Text built from values | `{part}Text` as a function with a named default | `pageRangeText(start, end, total)` |
 | Heading of a surface | `titleText` | A `title` prop also sets the native `title` attribute through `$$restProps` |
 | On/off state | an adjective | `open`, `expanded`, `disabled`, `readonly`, `invalid`, `loading` |
@@ -146,10 +152,10 @@ These names apply to new components and new props. Do not rename existing props 
 ### Events
 
 - Name the main state change with a verb in the present tense: `change`, `select`, `open`, `close`, `toggle`, `expand`, `collapse`, `sort`, `move`, `remove`. Dispatch it before the change when it can be canceled.
-- A component with more than one bindable value dispatches `{noun}:change` for each.
+- A component with more than one bindable value dispatches `{noun}:change` for each, with the noun in kebab case: `active-cell:change`, `selection:change`.
 - An event from one inner element is `{event}:{part}`, with the part in kebab case: `click:row`, `mouseenter:trigger`.
 - A failure is `{action}:error`: `copy:error`, `download:error`.
-- `detail` is always an object: `{ id, item }` for items, `{ trigger }` for open and close, `{ from, to }` for moves. Close triggers use the same values everywhere: `"escape"`, `"outside"`, `"button"`, `"programmatic"`.
+- `detail` is always an object: `{ id, item }` for items, `{ trigger }` for open and close, `{ from, to }` for moves. Close triggers use the values the library already sends: `"escape-key"`, `"outside-click"`, `"close-button"`, `"programmatic"`.
 
 ### Slots
 
@@ -192,6 +198,7 @@ These names apply to new components and new props. Do not rename existing props 
 - Opening a dialog or panel moves focus into it. Closing it returns focus to the trigger, or to a documented fallback if the trigger was removed.
 - After an item is removed, move focus to the next item, then the previous item, then the container.
 - Do not move focus on hover, on timers or on data updates.
+- A component that opens itself, such as a coachmark on page load, does not move focus. It moves focus only when the user opened it.
 
 ### Keys
 
@@ -230,11 +237,13 @@ These names apply to new components and new props. Do not rename existing props 
   - that an action completed (a copy confirmation);
   - that work is in progress (a loading indicator).
 - Do not animate initial render, hydration, data updates (sort, filter, new rows) or decoration.
+- A looping animation, such as a pulsing beacon, stops after at most 5 seconds or a few cycles, and stops at once under `prefers-reduced-motion` (WCAG 2.2.2).
+- Measure in a `ResizeObserver` callback and write in the next frame (`createFrameJob`), so a resize does not trigger a ResizeObserver loop error.
 - Durations come from the motion tokens: `$duration--fast-01` (70 ms), `fast-02` (110 ms), `moderate-01` (150 ms), `moderate-02` (240 ms), `slow-01` (400 ms), `slow-02` (720 ms).
   - Color, icon and small state changes: `fast-01` or `fast-02`.
   - Menus, expanding rows and small panels: `moderate-01` or `moderate-02`.
   - Full-height panels and modals: `slow-01` at most.
-- Easing comes from `motion(standard | entrance | exit, productive)`. Use `entrance` for elements that appear and `exit` for elements that leave. Use `expressive` only on marketing-style surfaces.
+- Easing comes from `motion(standard | entrance | exit, productive)`. Use `entrance` for elements that appear and `exit` for elements that leave. Use `expressive` only on marketing-style surfaces. Where the Carbon component it mirrors uses `expressive`, match Carbon.
 - Animate `transform` and `opacity`; they do not trigger layout. Animate a size only on the one element that expands.
 - Elements that move together use the same duration and easing.
 - Transitions are interruptible. A close during an open reverses from the current position.
@@ -251,7 +260,7 @@ Follow [Carbon's content guidelines](https://carbondesignsystem.com/guidelines/c
 - Labels name the value: "Region", "Retention period".
 - Placeholders show a format or example. A placeholder does not replace a label.
 - Helper text states the constraint in one sentence: "Lowercase letters and hyphens, up to 63 characters."
-- Helper text for a field or a group sits under its label and before the field. For a tall field, such as a group of rows, it does not go after the field.
+- Helper text sits below its field, as in Carbon. For a tall group of rows (such as a query builder), it sits under the group's label, before the rows.
 - Error text states the problem and the fix: "Enter a port from 1 to 65535." Do not use "Invalid input" or an error code alone.
 - Empty states say why the area is empty and give the next action.
 - Destructive confirmations name the object and the result: "Delete 3 services? You cannot undo this." The confirm button repeats the verb: "Delete".
@@ -268,7 +277,7 @@ Follow [Carbon's content guidelines](https://carbondesignsystem.com/guidelines/c
 - Use 16 px icons in components. Use 20 px in the UI shell header.
 - Color icons with icon tokens: `$icon-primary`, `$icon-secondary`, `$icon-on-color`, `$icon-disabled`. Status icons use `$support-*` tokens.
 - Hide decorative icons from assistive technology with `aria-hidden="true"`. This includes icons next to text that says the same thing.
-- Icon-only controls get their name from `iconDescription` and show the same text in a tooltip.
+- Icon-only controls get their name from `iconDescription` and show the same text in a tooltip, unless the control opens a popover that shows that text.
 - Do not show status with color alone (WCAG 1.4.1). Combine color with a shape and text, as `IconIndicator` and `ShapeIndicator` do.
 - Use one icon per meaning across the library, for example `Close` to dismiss and `TrashCan` to delete.
 - Mirror icons that point forward or back in right-to-left layouts. See [Conventions](CONTRIBUTING.md#conventions).
