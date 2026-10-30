@@ -132,7 +132,7 @@
           {now}
           timeZone="UTC"
           locale="en"
-          doNotDisturbLabel="Do not disturb"
+          doNotDisturbLabelText="Do not disturb"
           bind:doNotDisturb
           viewAllText="View all"
           on:dismiss={handleDismiss}

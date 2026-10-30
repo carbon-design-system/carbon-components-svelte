@@ -35,7 +35,7 @@
   <Button size="small" on:click={send}>Send a notification</Button>
   <NotificationsPanel
     {notifications}
-    doNotDisturbLabel="Do not disturb"
+    doNotDisturbLabelText="Do not disturb"
     bind:doNotDisturb
     style="--ccs-notifications-panel-max-height: 24rem"
     on:dismiss={({ detail }) => {

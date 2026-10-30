@@ -10,15 +10,15 @@
   export let notifications: Item[] = [];
   /** Remove a row in the `dismiss` handler, as a consumer would. */
   export let remove = true;
-  export let doNotDisturbLabel = "";
+  export let doNotDisturbLabelText = "";
   export let doNotDisturb = false;
   export let doNotDisturbOffText = "Off";
   export let doNotDisturbOnText = "On";
   export let viewAllText = "";
   export let grouped = true;
   export let interactive = true;
-  export let announce: ((added: Item[]) => string) | null | undefined =
-    undefined;
+  export let arrivalDescription:
+    ((added: Item[]) => string) | null | undefined = undefined;
   export let events: string[] = [];
 
   const now = Date.UTC(2026, 9, 27, 15, 0, 0);
@@ -39,14 +39,14 @@
   {now}
   locale="en"
   timeZone="UTC"
-  {doNotDisturbLabel}
+  {doNotDisturbLabelText}
   bind:doNotDisturb
   {doNotDisturbOffText}
   {doNotDisturbOnText}
   {viewAllText}
   {grouped}
   {interactive}
-  {...announce === undefined ? {} : { announce }}
+  {...arrivalDescription === undefined ? {} : { arrivalDescription }}
   on:dismiss={handleDismiss}
   on:dismiss:all={() => {
     events = [...events, "dismiss:all"];

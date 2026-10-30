@@ -155,7 +155,7 @@ describe("NotificationsPanel", () => {
       });
       expect(screen.queryByRole("switch")).toBeNull();
 
-      await rerender({ doNotDisturbLabel: "Do not disturb" });
+      await rerender({ doNotDisturbLabelText: "Do not disturb" });
       const toggle = screen.getByRole("switch", { name: "Do not disturb" });
       await user.click(toggle);
       expect(screen.getByTestId("dnd")).toHaveTextContent("true");
@@ -164,7 +164,7 @@ describe("NotificationsPanel", () => {
     it("takes the toggle's state text from props", async () => {
       render(NotificationsPanel, {
         notifications: items(),
-        doNotDisturbLabel: "Ne pas déranger",
+        doNotDisturbLabelText: "Ne pas déranger",
         doNotDisturbOffText: "Désactivé",
         doNotDisturbOnText: "Activé",
       });
@@ -348,7 +348,7 @@ describe("NotificationsPanel", () => {
       expect(status).toHaveTextContent("Backup done");
     });
 
-    it("reads a burst as one count, and turns off with announce={null}", async () => {
+    it("reads a burst as one count, and turns off with arrivalDescription={null}", async () => {
       const { rerender } = render(NotificationsPanel, { notifications: [] });
       const status = screen.getByRole("status");
 
@@ -364,7 +364,7 @@ describe("NotificationsPanel", () => {
       await vi.advanceTimersByTimeAsync(1000);
       expect(status).toHaveTextContent("2 new notifications");
 
-      await rerender({ announce: null });
+      await rerender({ arrivalDescription: null });
       await rerender({
         notifications: [
           { id: "n3", title: "Three", timestamp: NOW },

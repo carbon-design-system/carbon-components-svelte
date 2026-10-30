@@ -45,7 +45,7 @@
   export let notifications = [];
 
   /** Specify the heading. It also names the panel. */
-  export let heading = "Notifications";
+  export let titleText = "Notifications";
 
   /** Set to `false` to render one list instead of grouping by recency. */
   export let grouped = true;
@@ -101,7 +101,7 @@
   export let doNotDisturb = false;
 
   /** Specify the Do Not Disturb label. Setting it shows the toggle. */
-  export let doNotDisturbLabel = "";
+  export let doNotDisturbLabelText = "";
 
   /** Specify the toggle's text when Do Not Disturb is off. */
   export let doNotDisturbOffText = "Off";
@@ -120,7 +120,7 @@
    * while the panel is open. Set to `null` to turn announcements off.
    * @type {((added: PanelNotification[]) => string) | null}
    */
-  export let announce = defaultAnnounce;
+  export let arrivalDescription = defaultArrivalDescription;
 
   /** Set an id for the panel. */
   export let id = uniqueId();
@@ -157,7 +157,7 @@
   // second one with the same name is a duplicate landmark.
 
   /** @param {PanelNotification[]} added */
-  function defaultAnnounce(added) {
+  function defaultArrivalDescription(added) {
     return added.length === 1
       ? added[0].title
       : `${added.length} new notifications`;
@@ -179,7 +179,7 @@
   const flushAnnouncement = debounce(() => {
     const added = arrivals;
     arrivals = [];
-    announcement = announce ? announce(added) : "";
+    announcement = arrivalDescription ? arrivalDescription(added) : "";
   }, ANNOUNCE_DELAY_MS);
 
   $: byId = new Map(notifications.map((item) => [item.id, item]));
@@ -211,7 +211,7 @@
     const ids = new Set(items.map((item) => item.id));
     const previous = prevIds;
     prevIds = ids;
-    if (!previous || !announce) return;
+    if (!previous || !arrivalDescription) return;
     const added = items.filter((item) => !previous.has(item.id));
     if (added.length === 0) return;
     arrivals = [...arrivals, ...added];
@@ -399,7 +399,7 @@
       tabindex="-1"
       class:bx--notifications-panel__heading={true}
     >
-      {heading}
+      {titleText}
     </h2>
     {#if dismissAllText && notifications.length > 0}
       <Button kind="ghost" size="sm" on:click={dismissAll}>
@@ -408,11 +408,11 @@
     {/if}
     <slot name="actions" />
   </div>
-  {#if doNotDisturbLabel}
+  {#if doNotDisturbLabelText}
     <div class:bx--notifications-panel__dnd={true}>
       <Toggle
         size="sm"
-        labelText={doNotDisturbLabel}
+        labelText={doNotDisturbLabelText}
         labelA={doNotDisturbOffText}
         labelB={doNotDisturbOnText}
         bind:toggled={doNotDisturb}
