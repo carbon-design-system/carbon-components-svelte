@@ -59,4 +59,12 @@ describe("Svelte 5 snippets for renamed slots", () => {
       screen.getByTestId("context-menu-shortcut-children").parentElement,
     ).toHaveClass("bx--menu-option__info");
   });
+
+  it("renders the MenuItem shortcutChildren snippet", () => {
+    render(SlotAliases);
+
+    expect(
+      screen.getByTestId("menu-item-shortcut-children").parentElement,
+    ).toHaveClass("bx--menu-option__info");
+  });
 });

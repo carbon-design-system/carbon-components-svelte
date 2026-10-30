@@ -17,6 +17,21 @@
       <kbd>⌘S</kbd>
     </svelte:fragment>
   </MenuItem>
+  <MenuItem>
+    Copy
+    <svelte:fragment slot="shortcutChildren">
+      <kbd>⌘C</kbd>
+    </svelte:fragment>
+  </MenuItem>
+  <MenuItem>
+    Paste
+    <svelte:fragment slot="shortcutChildren">
+      <kbd>⌘V</kbd>
+    </svelte:fragment>
+    <svelte:fragment slot="shortcutText">
+      <kbd>Old</kbd>
+    </svelte:fragment>
+  </MenuItem>
   <MenuItem labelText="Export as">
     <svelte:fragment slot="labelChildren">
       <strong>Custom label content</strong>

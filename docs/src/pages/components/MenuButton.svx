@@ -181,7 +181,7 @@ Pass a Carbon icon to `icon`.
 
 ### Shortcuts
 
-Set `shortcut` to show its keys on the right of the row, such as `"mod+x"`: ⌘X on Apple platforms, Ctrl+X elsewhere. The item announces them with `aria-keyshortcuts`. The menu only shows the keys, since it's usually closed when they're pressed: bind the command itself with `onShortcut`. For other content, use `shortcutText` or its slot, which take precedence.
+Set `shortcut` to show its keys on the right of the row, such as `"mod+x"`: ⌘X on Apple platforms, Ctrl+X elsewhere. The item announces them with `aria-keyshortcuts`. The menu only shows the keys, since it's usually closed when they're pressed: bind the command itself with `onShortcut`. For other content, use `shortcutText` or the `shortcutChildren` slot, which take precedence.
 
 <MenuButton labelText="Actions">
   <MenuItem icon={Cut} shortcut="mod+x" on:click={() => console.log("Cut")}>Cut</MenuItem>

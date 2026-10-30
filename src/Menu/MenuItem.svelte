@@ -6,6 +6,12 @@
    */
 
   /**
+   * @slot {{}} shortcutChildren - Custom shortcut content. Replaces `shortcutText` and `shortcut`.
+   * @deprecated use the `shortcutChildren` slot
+   * @slot {{}} shortcutText
+   */
+
+  /**
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
@@ -37,12 +43,12 @@
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot.
+   * Alternatively, use the "shortcutChildren" slot.
    * Display only; does not register a keybinding.
    * @example
    * ```svelte
    * <MenuItem>
-   *   <span slot="shortcutText">⌘S</span>
+   *   <span slot="shortcutChildren">⌘S</span>
    * </MenuItem>
    * ```
    */
@@ -334,9 +340,11 @@
       <div class:bx--menu-option__info={true}>
         <CaretRight />
       </div>
-    {:else if shortcutText || $$slots.shortcutText}
+    {:else if shortcutText || $$slots.shortcutChildren || $$slots.shortcutText}
       <div class:bx--menu-option__info={true}>
-        <slot name="shortcutText">{shortcutText}</slot>
+        <slot name="shortcutChildren"
+          ><slot name="shortcutText">{shortcutText}</slot></slot
+        >
       </div>
     {:else if shortcut}
       <div class:bx--menu-option__info={true}>
