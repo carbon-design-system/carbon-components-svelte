@@ -102,6 +102,20 @@ test.describe("DataGrid", () => {
     await expect(cell(page, 2, 1)).toBeFocused();
   });
 
+  test("shows the full value of cut-off text on hover", async ({ page }) => {
+    await page.goto("/data-grid.html");
+    const long = cell(page, 4, 1).locator(".bx--data-grid__text");
+    const short = cell(page, 0, 1).locator(".bx--data-grid__text");
+
+    await long.hover();
+    await expect(long).toHaveAttribute(
+      "title",
+      "A value far too long for its column",
+    );
+    await short.hover();
+    await expect(short).not.toHaveAttribute("title");
+  });
+
   test("paints a bounded window of 500,000 cells and counts all of them", async ({
     page,
   }) => {

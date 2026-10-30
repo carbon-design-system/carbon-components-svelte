@@ -40,6 +40,7 @@
     // Values that read differently reversed.
     rows[3].c1 = "-4.2";
     rows[3].c2 = "3 / 4";
+    rows[4].c1 = "A value far too long for its column";
   }
 
   let activeCell = { row: 0, column: 0 };

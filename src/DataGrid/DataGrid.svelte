@@ -164,6 +164,7 @@
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { selectorTabbable } from "../utils/trap-focus.js";
+  import { isTruncated } from "../utils/truncation.js";
   import {
     buildColumnLayout,
     getCellAtPoint,
@@ -734,6 +735,24 @@
     return dragCell !== null;
   }
 
+  /**
+   * Give cut-off header or cell text its full value in a `title` while the
+   * pointer is over it. One listener serves every cell.
+   * @param {PointerEvent} event
+   */
+  function handlePointerover(event) {
+    const text =
+      event.target instanceof Element
+        ? event.target.closest(".bx--data-grid__text")
+        : null;
+    if (!(text instanceof HTMLElement)) return;
+    if (isTruncated(text)) {
+      text.title = text.textContent?.trim() ?? "";
+    } else if (text.hasAttribute("title")) {
+      text.removeAttribute("title");
+    }
+  }
+
   /** Keep the press from focusing the page or starting a text selection. */
   function handleMousedown(/** @type {MouseEvent} */ event) {
     const target = event.target;
@@ -867,6 +886,7 @@
   on:keydown={handleKeydown}
   on:focusin={handleFocusin}
   on:mousedown={handleMousedown}
+  on:pointerover={handlePointerover}
   on:copy={handleCopy}
   on:paste={handlePaste}
 >
