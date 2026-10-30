@@ -25,7 +25,7 @@
 
   let events = [];
   const log = (name) => (e) => {
-    events = [...events, `${name}:${e.detail?.trigger ?? "open"}`];
+    events = [...events, `${name}:${e.type}:${e.detail.trigger}`];
   };
 
   // A tour driven by the consumer: one coachmark per step.

@@ -37,7 +37,7 @@ test.describe("Coachmark", () => {
       await expect(dialog(page, "cm-basic")).toBeHidden();
       await expect(beacon).toBeFocused();
       await expect(page.getByTestId("events")).toHaveText(
-        "basic:open,basic:escape-key",
+        "basic:open:target,basic:close:escape-key",
       );
     });
 
