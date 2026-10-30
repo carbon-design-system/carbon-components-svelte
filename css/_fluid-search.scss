@@ -181,6 +181,15 @@
 
     @include fluid-status-icon(to-rem(72px));
   }
+
+  // Forced colors paint the clear button's underline an opaque `Canvas`
+  // across the bottom of the field's focus ring. The button has no fill
+  // there to draw the line over.
+  @media (forced-colors: active) {
+    .#{$prefix}--search--fluid .#{$prefix}--search-close::after {
+      display: none;
+    }
+  }
 }
 
 @include exports("fluid-search") {
