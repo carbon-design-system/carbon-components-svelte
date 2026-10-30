@@ -33,13 +33,24 @@
   export let showPasswordLabel = "Show password";
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the alignment of the tooltip relative to the icon.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "end";
 
   /**
    * Set the position of the tooltip relative to the icon.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
@@ -134,6 +145,7 @@
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -161,8 +173,12 @@
 
   // The position classes place the in-place tooltip and its caret. A
   // portalled one has its own, so the toggle drops them, as Button does.
-  $: inlinePosition = effectivePortalTooltip ? undefined : tooltipPosition;
-  $: inlineAlignment = effectivePortalTooltip ? undefined : tooltipAlignment;
+  $: inlinePosition = effectivePortalTooltip
+    ? undefined
+    : effectiveTooltipPosition;
+  $: inlineAlignment = effectivePortalTooltip
+    ? undefined
+    : effectiveTooltipAlignment;
 
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;
@@ -228,6 +244,11 @@
   function handleFormReset() {
     if (ref) value = ref.value;
   }
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -438,7 +459,7 @@
 {#if effectivePortalTooltip && !disabled}
   <PortalTooltip
     anchor={toggleButtonRef}
-    direction={tooltipPosition === "top" ? "top" : "bottom"}
+    direction={effectiveTooltipPosition === "top" ? "top" : "bottom"}
     open={$tooltipOpen}
     text={tooltipLabel}
     on:mouseenter={tooltip.handleTooltipMouseenter}
