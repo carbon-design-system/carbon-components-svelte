@@ -21,13 +21,24 @@
     background-color: $field;
   }
 
-  .#{$prefix}--rich-text-editor__box--invalid {
-    outline: 2px solid $support-error;
-    outline-offset: -2px;
+  // The rings draw on a layer above the toolbar. Its buttons reach the
+  // box's top edge, and a pressed or hovered button would paint over an
+  // outline on the box itself.
+  .#{$prefix}--rich-text-editor__box--invalid::after,
+  .#{$prefix}--rich-text-editor__box--focused::after {
+    position: absolute;
+    z-index: 1;
+    content: "";
+    pointer-events: none;
+    inset: 0;
   }
 
-  // After the invalid outline: focus wins while typing.
-  .#{$prefix}--rich-text-editor__box--focused {
+  .#{$prefix}--rich-text-editor__box--invalid::after {
+    @include focus-outline("invalid");
+  }
+
+  // After the invalid ring: focus wins while typing.
+  .#{$prefix}--rich-text-editor__box--focused::after {
     @include focus-outline("outline");
   }
 
@@ -55,11 +66,14 @@
 
   // Toolbar
 
+  // Buttons fill the toolbar's height, as in DataTable's toolbar. The
+  // inline padding puts the first icon's ink 16px in, on the text's edge:
+  // 4px beside a 40px button, 8px beside 32px and 12px beside 24px.
   .#{$prefix}--rich-text-editor__toolbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: $carbon--spacing-02 $carbon--spacing-03;
+    padding: 0 $carbon--spacing-02;
     border-bottom: 1px solid $border-subtle;
     gap: 0 $carbon--spacing-01;
   }
@@ -270,7 +284,15 @@
   }
 
   .#{$prefix}--rich-text-editor--xs .#{$prefix}--rich-text-editor__toolbar {
-    padding-block: 0;
+    padding-inline: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--rich-text-editor--sm .#{$prefix}--rich-text-editor__toolbar {
+    padding-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--rich-text-editor--xl .#{$prefix}--rich-text-editor__toolbar {
+    padding-inline: 0;
   }
 
   .#{$prefix}--rich-text-editor--xs .#{$prefix}--rich-text-editor__placeholder {

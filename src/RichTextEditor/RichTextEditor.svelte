@@ -246,10 +246,17 @@
   $: items = toolbar === false ? [] : toolbar;
   $: allowed = new Set(items.filter((item) => item !== "|"));
   $: showToolbar = allowed.size > 0 && !readonly;
-  /** @type {"xs" | "small"} */
-  let buttonSize = "small";
+  // Toolbar buttons fill the toolbar, which is as tall as the field's size.
+  /** @type {"xs" | "small" | "field" | "default"} */
+  let buttonSize = "field";
   $: buttonSize =
-    effectiveSize === "xs" || effectiveSize === "sm" ? "xs" : "small";
+    effectiveSize === "xs"
+      ? "xs"
+      : effectiveSize === "sm"
+        ? "small"
+        : effectiveSize === "xl"
+          ? "default"
+          : "field";
   $: helperId = `helper-${id}`;
   $: errorId = `error-${id}`;
   $: warnId = `warn-${id}`;

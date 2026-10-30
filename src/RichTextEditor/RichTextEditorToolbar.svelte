@@ -30,10 +30,10 @@
   export let disabled = false;
 
   /**
-   * Specify the button size.
-   * @type {"xs" | "small" | "field"}
+   * Specify the button size. Buttons fill the toolbar's height.
+   * @type {"xs" | "small" | "field" | "default"}
    */
-  export let buttonSize = "small";
+  export let buttonSize = "field";
 
   /**
    * The names of the toolbar buttons.
@@ -135,7 +135,7 @@
    * @param {Set<string>} state
    * @param {Partial<Record<import("./commands.js").RichTextCommand, string>>} names
    * @param {boolean} isMac
-   * @param {"xs" | "small" | "field"} size
+   * @param {"xs" | "small" | "field" | "default"} size
    * @param {boolean} isDisabled
    * @returns {Record<string, any>}
    */

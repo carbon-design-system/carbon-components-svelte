@@ -606,7 +606,8 @@ test.describe("RichTextEditor", () => {
       await box.click();
       const ring = await box.evaluate((el) => {
         const field = el.closest(".bx--rich-text-editor__box") as HTMLElement;
-        const style = getComputedStyle(field);
+        // The ring draws on a layer above the toolbar's buttons.
+        const style = getComputedStyle(field, "::after");
         return { width: style.outlineWidth, style: style.outlineStyle };
       });
       expect(ring.style).not.toBe("none");
@@ -623,6 +624,37 @@ test.describe("RichTextEditor", () => {
         .first()
         .evaluate((el) => getComputedStyle(el).backgroundColor);
       expect(pressed).not.toBe(resting);
+    });
+
+    test("toolbar buttons fill the toolbar, with the first icon on the text's edge", async ({
+      page,
+    }) => {
+      const field = page.locator(".bx--rich-text-editor").first();
+      const m = await field.evaluate((root) => {
+        const toolbar = root.querySelector(
+          ".bx--rich-text-editor__toolbar",
+        ) as HTMLElement;
+        const style = getComputedStyle(toolbar);
+        const inner =
+          toolbar.getBoundingClientRect().height -
+          Number.parseFloat(style.borderBottomWidth);
+        const buttons = [
+          ...toolbar.querySelectorAll(".bx--rich-text-editor__tool"),
+        ].map((b) => b.getBoundingClientRect().height);
+        const icon = (
+          toolbar.querySelector(".bx--rich-text-editor__tool svg") as Element
+        ).getBoundingClientRect();
+        const content = root.querySelector(
+          ".bx--rich-text-editor__content",
+        ) as HTMLElement;
+        const text =
+          content.getBoundingClientRect().left +
+          Number.parseFloat(getComputedStyle(content).paddingLeft);
+        return { inner, buttons, iconLeft: icon.left, text };
+      });
+      expect(m.inner).toBe(40);
+      expect(new Set(m.buttons)).toEqual(new Set([40]));
+      expect(Math.abs(m.iconLeft - m.text)).toBeLessThanOrEqual(0.5);
     });
 
     test("a long URL wraps inside the field at 320 px", async ({ page }) => {
