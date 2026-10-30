@@ -116,6 +116,14 @@
   {/snippet}
 </Dropdown>
 
+<Dropdown data-testid="dropdown-icon-end-snippets" {items} selectedId="1">
+  {#snippet iconEnd({ item, selected })}
+    <span data-testid="dropdown-icon-end-{item.id}" data-selected={selected}
+      >E</span
+    >
+  {/snippet}
+</Dropdown>
+
 <ComboBox data-testid="combobox-snippet" {items} selectedId="2">
   {#snippet children({ item, index, selected })}
     <span data-testid="combobox-item-{index}" data-selected={selected}

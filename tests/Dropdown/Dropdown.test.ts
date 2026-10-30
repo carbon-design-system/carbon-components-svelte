@@ -16,6 +16,7 @@ import Dropdown from "./Dropdown.test.svelte";
 import DropdownCustom from "./DropdownCustom.test.svelte";
 import DropdownDuplicateIds from "./DropdownDuplicateIds.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
+import DropdownIconEnd from "./DropdownIconEnd.test.svelte";
 import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
@@ -2427,6 +2428,36 @@ describe("Dropdown", () => {
       expect(
         document.querySelector(".bx--list-box__menu-item__selected-icon"),
       ).toBeNull();
+    });
+
+    it("should render iconEnd instead of the checkmark", () => {
+      render(DropdownIconEnd);
+
+      expect(screen.getByTestId("end-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("end-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(
+        screen
+          .getByTestId("end-0")
+          .closest(".bx--list-box__menu-item__icon--right"),
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeNull();
+    });
+
+    it("should prefer iconEnd over iconRight", () => {
+      render(DropdownIconEnd, { props: { withIconRight: true } });
+
+      expect(screen.getByTestId("end-0")).toBeInTheDocument();
+      expect(screen.getByTestId("end-1")).toBeInTheDocument();
+      expect(screen.queryByTestId("right-0")).toBeNull();
+      expect(screen.queryByTestId("right-1")).toBeNull();
     });
   });
 

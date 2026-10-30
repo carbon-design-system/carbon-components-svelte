@@ -118,7 +118,7 @@ Set icon on an item for a left icon. The label sits between the icon and the che
   {id: "1", text: "Email", icon: Email},
   {id: "2", text: "Fax", icon: Document}]} />
 
-Use the `iconRight` slot to replace the checkmark.
+Use the `iconEnd` slot to replace the checkmark.
 
 <Dropdown labelText="Contact" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
@@ -127,7 +127,7 @@ Use the `iconRight` slot to replace the checkmark.
   <svelte:fragment slot="icon" let:item>
     <svelte:component this={item.icon} />
   </svelte:fragment>
-  <svelte:fragment slot="iconRight" let:selected>
+  <svelte:fragment slot="iconEnd" let:selected>
     {#if selected}<StarFilled />{:else}<Star />{/if}
   </svelte:fragment>
 </Dropdown>
