@@ -304,6 +304,8 @@ sveld writes a `CarbonXContext` type for each `setContext` value. Where it can o
 
 [File an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) first.
 
+For a complex component (a grid, a tree, an editor, a board, a picker), read [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) too. It covers API design, design and performance checks, and pull requests.
+
 If you add a new component, export it from `src/index.js`:
 
 ```diff
