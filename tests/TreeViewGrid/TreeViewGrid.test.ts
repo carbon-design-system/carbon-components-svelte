@@ -58,6 +58,35 @@ describe("TreeViewGrid", () => {
     });
   });
 
+  describe("empty state", () => {
+    it("shows emptyText in one cell across every column", () => {
+      render(TreeViewGrid, {
+        props: { nodes: [], emptyText: "No servers yet." },
+      });
+
+      const cells = within(screen.getByRole("treegrid")).getAllByRole(
+        "gridcell",
+      );
+      expect(cells).toHaveLength(1);
+      expect(cells[0]).toHaveAttribute("colspan", "3");
+      expect(cells[0]).toHaveTextContent("No servers yet.");
+    });
+
+    it("renders no row without emptyText or an empty slot", () => {
+      render(TreeViewGrid, { props: { nodes: [] } });
+
+      expect(
+        within(screen.getByRole("treegrid")).queryAllByRole("row"),
+      ).toHaveLength(1);
+    });
+
+    it("hides emptyText while there are rows", () => {
+      render(TreeViewGrid, { props: { emptyText: "No servers yet." } });
+
+      expect(screen.queryByText("No servers yet.")).not.toBeInTheDocument();
+    });
+  });
+
   describe("keyboard", () => {
     it("expands on Right, enters the first cell, then returns and collapses on Left", async () => {
       render(TreeViewGrid);

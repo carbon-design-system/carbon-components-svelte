@@ -157,6 +157,22 @@ test.describe("TreeViewGrid", () => {
     ).toHaveAttribute("aria-disabled", "true");
   });
 
+  test("shows the empty state in one row, with its link in reach", async ({
+    page,
+  }) => {
+    await page.goto("/tree-view-grid.html?empty");
+    const empty = page.locator("tbody td");
+    await expect(empty).toHaveCount(1);
+    await expect(empty).toHaveAttribute("colspan", "6");
+    await expect(empty).toContainText("No resources in this account yet.");
+    const axe = await new AxeBuilder({ page }).include("#app").analyze();
+    expect(axe.violations).toEqual([]);
+    await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("link", { name: "Create a resource" }),
+    ).toBeFocused();
+  });
+
   test("draws a focus ring on a row and on a cell", async ({ page }) => {
     const row = page.locator("[data-tree-row-id=us-east]");
     await row.focus();

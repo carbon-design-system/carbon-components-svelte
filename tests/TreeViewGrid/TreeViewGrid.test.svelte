@@ -60,6 +60,7 @@
   export let multiselect = false;
   export let widgetNavigation: "arrow" | "tab" = "arrow";
   export let widgets = false;
+  export let emptyText = "";
   export let log: Array<{ name: string; detail: unknown }> = [];
 
   function record(name: string) {
@@ -73,6 +74,7 @@
   {headers}
   {multiselect}
   {widgetNavigation}
+  {emptyText}
   bind:expandedIds
   bind:selectedIds
   bind:activeId

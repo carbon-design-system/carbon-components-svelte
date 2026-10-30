@@ -61,6 +61,9 @@
    */
   function removeWidgetTabStops(root) {
     for (const widget of root.querySelectorAll(WIDGET_SELECTOR)) {
+      // With no rows the grid has no tab stop, so the empty state's
+      // controls keep their own.
+      if (widget.closest(".bx--tree-grid__empty")) continue;
       if (widget.getAttribute("tabindex") !== "-1") {
         widget.setAttribute("tabindex", "-1");
         widget.setAttribute(REMOVED_ATTR, "");
@@ -228,6 +231,12 @@
 
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
+
+  /**
+   * Specify the text shown when there are no rows. Say why the grid is
+   * empty and what to do next. Use the `empty` slot to add an action.
+   */
+  export let emptyText = "";
 
   /**
    * Set an id for the grid element.
@@ -1124,6 +1133,17 @@
       </tr>
     </thead>
     <tbody bind:this={tbodyRef}>
+      {#if rowIds.length === 0 && (emptyText || $$slots.empty)}
+        <tr>
+          <td
+            role="gridcell"
+            colspan={columns.length}
+            class:bx--tree-grid__empty={true}
+          >
+            <slot name="empty">{emptyText}</slot>
+          </td>
+        </tr>
+      {/if}
       {#each rowIds as rowId (rowId)}
         {@const row = rowAt(rows, indexByKey, rowId)}
         {@const node = row.node}

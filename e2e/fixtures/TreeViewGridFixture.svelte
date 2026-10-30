@@ -10,7 +10,7 @@
   import Cloud from "carbon-icons-svelte/lib/Cloud.svelte";
   import Folder from "carbon-icons-svelte/lib/Folder.svelte";
 
-  // `?size=short&zebra&sticky&multiselect&tab` pick a variant.
+  // `?size=short&zebra&sticky&multiselect&tab&empty` pick a variant.
   const params = new URLSearchParams(
     typeof location === "undefined" ? "" : location.search,
   );
@@ -26,7 +26,7 @@
     { key: "actions", value: "Actions", width: "6rem" },
   ];
 
-  const nodes = [
+  const allNodes = [
     {
       id: "us-east",
       name: "US East",
@@ -111,6 +111,7 @@
       cost: 0,
     },
   ];
+  const nodes = params.has("empty") ? [] : allNodes;
 
   const kinds = { active: "green", degraded: "red", stopped: "gray" };
   const money = new Intl.NumberFormat("en-US", {
@@ -169,6 +170,10 @@
     {:else}
       {cell.value}
     {/if}
+  </svelte:fragment>
+  <svelte:fragment slot="empty">
+    No resources in this account yet.
+    <Link href="#create">Create a resource</Link>
   </svelte:fragment>
 </TreeViewGrid>
 

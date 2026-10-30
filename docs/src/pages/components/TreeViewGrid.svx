@@ -27,6 +27,12 @@ Use the `cell` slot to render a cell. The slot receives the `node`, the `cell` (
 
 <FileSource src="/framed/TreeViewGrid/TreeViewGridCustomCells" />
 
+## Empty state
+
+Set `emptyText` to show a message when `nodes` has no rows. Say why the grid is empty and what to do next. Use the `empty` slot to add a link or a button. Its controls keep their own tab stops.
+
+<FileSource src="/framed/TreeViewGrid/TreeViewGridEmpty" />
+
 ## Sizes
 
 Set `size` to control row height. The default is 48px, as in [DataTable](/components/DataTable#sizes). Use `"short"` for dense trees such as a file browser.
