@@ -121,6 +121,16 @@ test("wraps long labels at 320 px instead of cutting them", async ({
   await expectNoPageOverflow(page);
 });
 
+test("keeps Tab off the options, including link options", async ({ page }) => {
+  await page.goto("/command-palette.html?open&state=groups");
+  const input = page.getByRole("combobox");
+  await expect(input).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(input).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(input).toBeFocused();
+});
+
 test("stacks above a Modal that comes after it in the DOM", async ({
   page,
 }) => {
