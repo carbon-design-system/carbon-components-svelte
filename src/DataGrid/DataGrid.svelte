@@ -163,6 +163,7 @@
   } from "../utils/layout-direction.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import { selectorTabbable } from "../utils/trap-focus.js";
   import {
     buildColumnLayout,
     getCellAtPoint,
@@ -187,6 +188,10 @@
   const COLUMN_OVERSCAN = 2;
   const FALLBACK_VIEWPORT_WIDTH = 1024;
   const FALLBACK_VIEWPORT_HEIGHT = 400;
+  // The controls Enter or F2 can move into, including those the grid took
+  // out of the tab order.
+  const selectorControl =
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex], [contenteditable="true"]';
 
   /** @type {HTMLDivElement | null} */
   let gridRef = null;
@@ -436,20 +441,54 @@
     };
   }
 
+  /**
+   * Take the controls in painted cells out of the tab order, so the grid
+   * stays one tab stop. Enter or F2 moves into a cell's control.
+   */
+  function removeCellTabStops() {
+    if (!gridRef) return;
+    for (const node of gridRef.querySelectorAll(selectorTabbable)) {
+      if (
+        node instanceof HTMLElement &&
+        node.getAttribute("role") !== "gridcell" &&
+        node.closest('[role="gridcell"]')
+      ) {
+        node.tabIndex = -1;
+      }
+    }
+  }
+
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     const target = event.target;
-    // A control inside a cell keeps its own keys.
-    if (
-      !(target instanceof HTMLElement) ||
-      target.getAttribute("role") !== "gridcell" ||
-      !activeCell
-    ) {
+    const key = event.key;
+    if (!(target instanceof HTMLElement) || !activeCell) return;
+    const cell = target.closest('[role="gridcell"]');
+
+    // A control inside a cell keeps its own keys. Escape hands focus back
+    // to the cell, as in the APG grid pattern.
+    if (target !== cell) {
+      if (
+        key === "Escape" &&
+        !event.defaultPrevented &&
+        cell instanceof HTMLElement
+      ) {
+        event.preventDefault();
+        cell.focus({ preventScroll: true });
+      }
+      return;
+    }
+
+    if (key === "Enter" || key === "F2") {
+      const control = target.querySelector(selectorControl);
+      if (control instanceof HTMLElement) {
+        event.preventDefault();
+        control.focus();
+      }
       return;
     }
 
     const ctrl = event.ctrlKey || event.metaKey;
-    const key = event.key;
 
     if (ctrl && key.toLowerCase() === "a") {
       event.preventDefault();
@@ -787,7 +826,17 @@
       if (entry.contentRect.height > 0)
         viewportHeight = entry.contentRect.height;
     });
+    // Only a `cell` slot can put a control in a cell. Rows and columns
+    // mount as the grid scrolls, so recheck when cells are added.
+    /** @type {MutationObserver | undefined} */
+    let cellObserver;
+    if ($$slots.cell && typeof MutationObserver !== "undefined") {
+      removeCellTabStops();
+      cellObserver = new MutationObserver(removeCellTabStops);
+      cellObserver.observe(gridRef, { childList: true, subtree: true });
+    }
     return () => {
+      cellObserver?.disconnect();
       stopObserving?.();
       if (dragFrame) cancelAnimationFrame(dragFrame);
     };

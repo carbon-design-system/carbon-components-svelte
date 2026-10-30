@@ -8,6 +8,8 @@
   const frozenColumns = Number(params.get("frozenColumns") ?? 0);
   const size = params.get("size") ?? "short";
   const height = Number(params.get("height") ?? 320);
+  // A link in column 1 of every row, through the `cell` slot.
+  const controls = params.get("controls") === "1";
 
   const dir = params.get("dir");
   if (dir) document.documentElement.dir = dir;
@@ -78,19 +80,43 @@
     Cancel paste
   </label>
   <button type="button" data-testid="before">Before</button>
-  <DataGrid
-    {columns}
-    {rows}
-    {frozenRows}
-    {frozenColumns}
-    {size}
-    {height}
-    labelText="Sales"
-    data-testid="grid"
-    bind:activeCell
-    bind:selection
-    on:paste={handlePaste}
-  />
+  {#if controls}
+    <DataGrid
+      {columns}
+      {rows}
+      {frozenRows}
+      {frozenColumns}
+      {size}
+      {height}
+      labelText="Sales"
+      data-testid="grid"
+      bind:activeCell
+      bind:selection
+      on:paste={handlePaste}
+    >
+      <svelte:fragment slot="cell" let:value let:columnIndex let:rowIndex>
+        {#if columnIndex === 1}
+          <a href="#row-{rowIndex}">Open {value}</a>
+        {:else}
+          {value}
+        {/if}
+      </svelte:fragment>
+    </DataGrid>
+  {:else}
+    <DataGrid
+      {columns}
+      {rows}
+      {frozenRows}
+      {frozenColumns}
+      {size}
+      {height}
+      labelText="Sales"
+      data-testid="grid"
+      bind:activeCell
+      bind:selection
+      on:paste={handlePaste}
+    />
+  {/if}
   <button type="button" data-testid="after">After</button>
   <pre data-testid="state">{JSON.stringify({ activeCell, selection })}</pre>
   <pre data-testid="paste-log">{pasteLog}</pre>

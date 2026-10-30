@@ -129,7 +129,7 @@ Set `format` on a column to turn a value into the text a cell shows and copies, 
 
 Use the `cell` slot to draw a cell yourself. The grid copies the text from `format` or the raw value, not from the slot.
 
-Keep controls out of cells. A link or a button in a cell is a tab stop for every painted row, and the grid is meant to be one. When you must, set `tabindex="-1"` on it. A control in a cell keeps its own keys: the arrow keys move the grid only when the cell itself has focus.
+A link or a button in a cell leaves the tab order, so the grid stays one tab stop. Press <DocKbd label="Enter" /> or <DocKbd label="F2" /> on the cell to move into its first control, and <DocKbd label="Escape" /> to return to the cell. A control in a cell keeps its own keys: the arrow keys move the grid only when the cell itself has focus.
 
 <FileSource src="/framed/DataGrid/DataGridCells" />
 

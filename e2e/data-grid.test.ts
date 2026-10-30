@@ -70,6 +70,38 @@ test.describe("DataGrid", () => {
     await expect(cell(page, 1, 1)).toBeFocused();
   });
 
+  test("stays one tab stop with links in cells, and Enter moves into one", async ({
+    page,
+  }) => {
+    await page.goto("/data-grid.html?controls=1");
+    const link = cell(page, 2, 1).getByRole("link");
+    await expect(link).toHaveAttribute("tabindex", "-1");
+
+    await page.getByTestId("before").focus();
+    await page.keyboard.press("Tab");
+    await expect(cell(page, 0, 0)).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.locator('[role="grid"] :focus')).toHaveCount(0);
+
+    // Rows painted by a scroll come out of the tab order too.
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Control+End");
+    await expect(cell(page, 39, 1).getByRole("link")).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+
+    await page.keyboard.press("Control+Home");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowRight");
+    await expect(cell(page, 2, 1)).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(link).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(cell(page, 2, 1)).toBeFocused();
+  });
+
   test("paints a bounded window of 500,000 cells and counts all of them", async ({
     page,
   }) => {
