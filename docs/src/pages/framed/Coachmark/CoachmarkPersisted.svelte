@@ -21,7 +21,7 @@
 <Stack orientation="horizontal" gap={7}>
   <Coachmark
     bind:open
-    title="Saved views"
+    titleText="Saved views"
     align="bottom-start"
     on:close={() => (seen = true)}
   >

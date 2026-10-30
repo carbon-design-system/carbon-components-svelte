@@ -530,13 +530,13 @@ export const interactive: AriaEntry[] = [
     // Naming lands on the dialog, not the wrapper.
     name: "Coachmark",
     render: (attrs) =>
-      render(Coachmark, { props: { open: true, title: "Tip", ...attrs } }),
+      render(Coachmark, { props: { open: true, titleText: "Tip", ...attrs } }),
     target: () => screen.getByRole("dialog"),
   },
   {
     name: "CoachmarkBeacon",
     render: (attrs) =>
-      render(CoachmarkBeacon, { props: { label: "Show", ...attrs } }),
+      render(CoachmarkBeacon, { props: { iconDescription: "Show", ...attrs } }),
     target: () => screen.getByRole("button"),
   },
   {

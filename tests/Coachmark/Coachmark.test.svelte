@@ -3,7 +3,8 @@
   import Coachmark from "../../src/Coachmark/Coachmark.svelte";
 
   export let open: ComponentProps<Coachmark>["open"] = false;
-  export let title: ComponentProps<Coachmark>["title"] = "Export in bulk";
+  export let titleText: ComponentProps<Coachmark>["titleText"] =
+    "Export in bulk";
   export let closeOnOutsideClick: ComponentProps<Coachmark>["closeOnOutsideClick"] = true;
   export let selectorPrimaryFocus: ComponentProps<Coachmark>["selectorPrimaryFocus"] =
     "[data-modal-primary-focus]";
@@ -20,7 +21,7 @@
 <Coachmark
   id="cm"
   bind:open
-  {title}
+  {titleText}
   {closeOnOutsideClick}
   {selectorPrimaryFocus}
   {...$$restProps}

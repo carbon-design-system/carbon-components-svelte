@@ -9,7 +9,7 @@
    * @event {{ trigger: CoachmarkCloseTrigger }} close - Cancelable, except when the trigger is `"programmatic"`. A user close fires before `open` changes.
    * @slot {{ close: () => void }} - The coachmark body. Call `close` to dismiss it and return focus to the target.
    * @slot {{ open: boolean; toggle: () => void; triggerProps: { id: string; "aria-haspopup": "dialog"; "aria-expanded": boolean; "aria-controls": string } }} target - The element that opens the coachmark. Spread `triggerProps` on it and call `toggle` on click. Defaults to a `CoachmarkBeacon`.
-   * @slot {{}} title - A rich heading. Overrides `title`.
+   * @slot {{}} titleChildren - A rich heading. Overrides `titleText`.
    * @slot {{ close: () => void }} actions - Buttons in the footer.
    */
 
@@ -21,9 +21,9 @@
 
   /**
    * Specify the heading. It names the dialog.
-   * Alternatively, use the "title" slot.
+   * Alternatively, use the "titleChildren" slot.
    */
-  export let title = "";
+  export let titleText = "";
 
   /**
    * Set the placement of the coachmark relative to its target.
@@ -38,7 +38,7 @@
    * Specify the accessible name of the default beacon.
    * Used only when the "target" slot is empty.
    */
-  export let beaconLabel = "Show coachmark";
+  export let beaconDescription = "Show coachmark";
 
   /** Specify the accessible name of the close button */
   export let closeIconDescription = "Close";
@@ -132,7 +132,7 @@
   $: dialogId = `${id}-content`;
   $: titleId = `${id}-title`;
   $: triggerId = `${id}-target`;
-  $: hasTitle = !!(title || $$slots.title);
+  $: hasTitle = !!(titleText || $$slots.titleChildren);
 
   $: triggerProps = {
     id: triggerId,
@@ -142,7 +142,7 @@
   };
 
   // Naming and description belong on the dialog, not the wrapper. A consumer
-  // `aria-label` wins over `title`.
+  // `aria-label` wins over `titleText`.
   $: ({
     ariaLabel,
     ariaLabelledBy,
@@ -285,7 +285,11 @@
   {...wrapperProps}
 >
   <slot name="target" {open} {toggle} {triggerProps}>
-    <CoachmarkBeacon label={beaconLabel} {...triggerProps} on:click={toggle} />
+    <CoachmarkBeacon
+      iconDescription={beaconDescription}
+      {...triggerProps}
+      on:click={toggle}
+    />
   </slot>
   <Popover
     bind:ref
@@ -309,7 +313,7 @@
       <div class:bx--coachmark__header={true}>
         {#if hasTitle}
           <h2 id={titleId} class:bx--coachmark__title={true} tabindex="-1">
-            <slot name="title">{title}</slot>
+            <slot name="titleChildren">{titleText}</slot>
           </h2>
         {/if}
         <button

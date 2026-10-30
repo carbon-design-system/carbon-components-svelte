@@ -37,6 +37,18 @@ describe("Coachmark", () => {
     expect(dialog()).not.toHaveAttribute("aria-labelledby");
   });
 
+  it("keeps a native title for the wrapper, apart from the heading", () => {
+    render(Coachmark, { props: { title: "Onboarding tip" } });
+
+    expect(document.getElementById("cm")).toHaveAttribute(
+      "title",
+      "Onboarding tip",
+    );
+    expect(document.getElementById("cm-title")).toHaveTextContent(
+      "Export in bulk",
+    );
+  });
+
   it("opens from a custom target through the slot props", async () => {
     render(CoachmarkTarget);
 

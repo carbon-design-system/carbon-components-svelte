@@ -19,7 +19,7 @@
   {#each stops as stop, i}
     <Coachmark
       focusOnOpen
-      title={stop.label}
+      titleText={stop.label}
       open={current === i}
       on:close={() => {
         if (current === i) current = -1;

@@ -47,7 +47,7 @@
   <HeaderUtilities>
     <Coachmark
       id="cm-header"
-      title="Notifications"
+      titleText="Notifications"
       align="bottom-end"
       data-testid="cm-header"
     >
@@ -70,7 +70,7 @@
     <h3>Basic</h3>
     <Coachmark
       id="cm-basic"
-      title="Export in bulk"
+      titleText="Export in bulk"
       align="bottom-start"
       data-testid="cm-basic"
       on:open={log("basic")}
@@ -90,7 +90,7 @@
     <DataTable title="Balancers" {headers} {rows}>
       <Toolbar>
         <ToolbarContent>
-          <Coachmark id="cm-toolbar" title="Filters" align="bottom-end">
+          <Coachmark id="cm-toolbar" titleText="Filters" align="bottom-end">
             <Button
               slot="target"
               let:triggerProps
@@ -121,7 +121,7 @@
         the coachmark. A button here would nest inside the tab. -->
         <Coachmark
           id="cm-tab"
-          title="Details moved"
+          titleText="Details moved"
           portalTooltip
           bind:open={tabTip}
           data-testid="cm-tab"
@@ -144,12 +144,12 @@
 
   <section data-testid="overlay">
     <h3>Overlay beacon</h3>
-    <Coachmark id="cm-overlay" title="New" align="right-start">
+    <Coachmark id="cm-overlay" titleText="New" align="right-start">
       <svelte:fragment slot="target" let:triggerProps let:toggle>
         <Button kind="tertiary">Share</Button>
         <CoachmarkBeacon
           overlay
-          label="Show what is new about Share"
+          iconDescription="Show what is new about Share"
           {...triggerProps}
           on:click={toggle}
         />
@@ -166,7 +166,7 @@
     {#each tour as name, i}
       <Coachmark
         id="cm-tour-{i}"
-        title="{name} stop"
+        titleText="{name} stop"
         focusOnOpen
         open={tourStep === i}
         on:close={(e) => {
@@ -203,7 +203,7 @@
     <h3>Persisting dismissal</h3>
     <Coachmark
       id="cm-persist"
-      title="Saved views"
+      titleText="Saved views"
       open={seenOpen}
       on:close={() => {
         seenOpen = false;

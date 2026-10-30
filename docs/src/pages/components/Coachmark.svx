@@ -9,7 +9,7 @@ description: Coachmarks introduce one feature in a dismissible callout anchored 
 
 ## Basic
 
-Click the beacon to open the coachmark. It stays open while the user keeps working, until they close it, press <DocKbd label="Escape" />, or click outside it. The dialog is named by `title`.
+Click the beacon to open the coachmark. It stays open while the user keeps working, until they close it, press <DocKbd label="Escape" />, or click outside it. The dialog is named by `titleText`.
 
 | Do | Why |
 | --- | --- |
@@ -18,7 +18,7 @@ Click the beacon to open the coachmark. It stays open while the user keeps worki
 | Use [Toggletip](/components/Toggletip) for help that is always available. | A coachmark is first-run onboarding, and a toggletip is reference. |
 | Don't open several coachmarks at once. | Only one dialog should compete for the user's attention. |
 
-<Coachmark title="Export in bulk" align="bottom-start">
+<Coachmark titleText="Export in bulk" align="bottom-start">
   <p>Select rows, then use the toolbar to export them together.</p>
 </Coachmark>
 
@@ -36,10 +36,10 @@ Set `align` to place the coachmark relative to its target. `start` and `end` nam
 The coachmark stays in view. Near a window edge, or the edge of a box that clips it, it flips to the side with room. A coachmark that a box with `overflow` would cut off opens in a portal. Inside a [Modal](/components/Modal) it always does. Set `portalTooltip` to `true` or `false` to override this.
 
 <Stack orientation="horizontal" gap={10}>
-  <Coachmark title="Top" align="top-start" beaconLabel="Show top coachmark">
+  <Coachmark titleText="Top" align="top-start" beaconDescription="Show top coachmark">
     A coachmark above its target.
   </Coachmark>
-  <Coachmark title="End" align="right" beaconLabel="Show end coachmark">
+  <Coachmark titleText="End" align="right" beaconDescription="Show end coachmark">
     A coachmark beside its target.
   </Coachmark>
 </Stack>
@@ -50,7 +50,7 @@ The coachmark stays in view. Near a window edge, or the edge of a box that clips
 
 Use the `"target"` slot to open the coachmark from a control you already have. Spread `triggerProps` on it, which sets `aria-haspopup`, `aria-expanded` and `aria-controls`, and call `toggle` on click.
 
-<Coachmark title="Filters" align="bottom-start">
+<Coachmark titleText="Filters" align="bottom-start">
   <Button slot="target" kind="tertiary" size="small" let:triggerProps let:toggle {...triggerProps} on:click={toggle}>
     Filter
   </Button>
@@ -61,10 +61,10 @@ Use the `"target"` slot to open the coachmark from a control you already have. S
 
 Set `overlay` on a `CoachmarkBeacon` to place it on the end and top corner of its positioned parent, so it can mark an existing control without a button inside a button. The coachmark's wrapper is that parent.
 
-<Coachmark title="New" align="right-start">
+<Coachmark titleText="New" align="right-start">
   <svelte:fragment slot="target" let:triggerProps let:toggle>
     <Button kind="tertiary" size="small">Share</Button>
-    <CoachmarkBeacon overlay label="Show what is new about Share" {...triggerProps} on:click={toggle} />
+    <CoachmarkBeacon overlay iconDescription="Show what is new about Share" {...triggerProps} on:click={toggle} />
   </svelte:fragment>
   Share a view with a link.
 </Coachmark>
@@ -77,7 +77,7 @@ Focus moves into the coachmark only when the user opened it, through the target 
 
 <DocKbd label="Escape" /> closes the coachmark when focus is on its target or inside it, and focus returns to the target. Pressing <DocKbd label="Escape" /> in an unrelated field does not close it. Inside a [Modal](/components/Modal), the coachmark closes first. The close button and a click on the target also return focus to the target, and an outside click leaves focus where the user put it.
 
-<Coachmark title="Saved views" align="bottom-start">
+<Coachmark titleText="Saved views" align="bottom-start">
   Pick up where you left off.
   <svelte:fragment slot="actions">
     <Button size="small" data-modal-primary-focus>Open views</Button>

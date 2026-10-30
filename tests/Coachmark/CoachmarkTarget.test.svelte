@@ -2,7 +2,7 @@
   import Coachmark from "../../src/Coachmark/Coachmark.svelte";
 </script>
 
-<Coachmark id="cm" title="Filters">
+<Coachmark id="cm" titleText="Filters">
   <button
     slot="target"
     type="button"
