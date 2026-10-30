@@ -140,6 +140,7 @@
   import { statusIconLabel } from "../Notification/status-icon-label.js";
   import RelativeTime from "../RelativeTime/RelativeTime.svelte";
   import Toggle from "../Toggle/Toggle.svelte";
+  import { ANNOUNCE_BATCH_MS } from "../constants/timing.js";
   import Close from "../icons/Close.svelte";
   import { debounce } from "../utils/debounce.js";
   import { focusQuietly } from "../utils/focus.js";
@@ -149,9 +150,6 @@
   import { localeDirection } from "../utils/locale-direction.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
-
-  /** Time (ms) to wait for more arrivals before announcing them together. */
-  const ANNOUNCE_DELAY_MS = 300;
 
   const dispatch = createEventDispatcher();
   const host = getContext("carbon:HeaderAction");
@@ -182,7 +180,7 @@
     const added = arrivals;
     arrivals = [];
     announcement = arrivalDescription ? arrivalDescription(added) : "";
-  }, ANNOUNCE_DELAY_MS);
+  }, ANNOUNCE_BATCH_MS);
 
   $: byId = new Map(notifications.map((item) => [item.id, item]));
   // A held row shows its latest data. One that is gone keeps its last data
