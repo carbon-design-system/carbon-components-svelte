@@ -186,3 +186,26 @@ test.describe("TreeSelect states", () => {
     }
   });
 });
+
+test.describe("TreeSelect rows", () => {
+  test("a checkbox row centers its checkbox on the expander", async ({
+    page,
+  }) => {
+    await page.goto("/tree-select.html");
+    await page.getByRole("combobox", { name: "Multi", exact: true }).click();
+    const row = page.getByRole("treeitem", { name: "Europe", exact: true });
+    const centers = await row.evaluate((el) => {
+      const center = (selector: string) => {
+        const box = el.querySelector(selector)?.getBoundingClientRect();
+        return box ? box.top + box.height / 2 : Number.NaN;
+      };
+      return {
+        checkbox: center(".bx--checkbox-label"),
+        expander: center(".bx--tree-select__toggle > svg"),
+      };
+    });
+    expect(Math.abs(centers.checkbox - centers.expander)).toBeLessThanOrEqual(
+      0.5,
+    );
+  });
+});
