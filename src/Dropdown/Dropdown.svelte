@@ -23,6 +23,8 @@
    * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconEnd - Content at the end of each item. Replaces the checkmark on the selected item.
+   * @deprecated use the `iconEnd` slot
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
    * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
    * @slot {{}} empty
@@ -1247,19 +1249,26 @@
                       {:else}
                         {itemToString(item)}
                       {/if}
-                      {#if $$slots.iconRight}
+                      {#if $$slots.iconEnd || $$slots.iconRight}
                         <span
                           class:bx--list-box__menu-item__icon={true}
                           class:bx--list-box__menu-item__icon--right={true}
                         >
                           <HighlightSlot {optionId} let:highlighted>
                             <slot
-                              name="iconRight"
+                              name="iconEnd"
                               {item}
                               index={actualIndex}
                               {selected}
                               {highlighted}
-                            />
+                              ><slot
+                                name="iconRight"
+                                {item}
+                                index={actualIndex}
+                                {selected}
+                                {highlighted}
+                              /></slot
+                            >
                           </HighlightSlot>
                         </span>
                       {:else if selected}
@@ -1360,19 +1369,26 @@
                     {:else}
                       {itemToString(item)}
                     {/if}
-                    {#if $$slots.iconRight}
+                    {#if $$slots.iconEnd || $$slots.iconRight}
                       <span
                         class:bx--list-box__menu-item__icon={true}
                         class:bx--list-box__menu-item__icon--right={true}
                       >
                         <HighlightSlot {optionId} let:highlighted>
                           <slot
-                            name="iconRight"
+                            name="iconEnd"
                             {item}
                             {index}
                             {selected}
                             {highlighted}
-                          />
+                            ><slot
+                              name="iconRight"
+                              {item}
+                              {index}
+                              {selected}
+                              {highlighted}
+                            /></slot
+                          >
                         </HighlightSlot>
                       </span>
                     {:else if selected}

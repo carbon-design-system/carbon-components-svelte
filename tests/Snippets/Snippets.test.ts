@@ -170,6 +170,19 @@ describe("Svelte 5 Snippets", () => {
         "false",
       );
     });
+
+    it("should render the iconEnd snippet with selected", async () => {
+      await openDropdown("dropdown-icon-end-snippets");
+
+      expect(screen.getByTestId("dropdown-icon-end-1")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("dropdown-icon-end-2")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+    });
   });
 
   describe("OverflowMenuItem icon/iconRight", () => {
