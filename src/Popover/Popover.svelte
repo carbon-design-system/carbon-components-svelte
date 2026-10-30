@@ -184,9 +184,16 @@
       const after = anchor.getBoundingClientRect();
       const moved = after.left !== before.left || after.top !== before.top;
       if (moved && tries < 10) return fitPlacement(tries + 1);
-      // The portal picks the side. The edge alignment along it is ours.
-      const [, fittedEdge] = fitPopoverAlign(ref, anchor, placement).split("-");
-      const next = fittedEdge ? `${side}-${fittedEdge}` : side;
+      // The portal picks the side. The edge alignment along it is ours, and
+      // so is the move above or below when neither side has room.
+      const fit = fitPopoverAlign(ref, anchor, placement);
+      const [fitSide, fittedEdge] = fit.split("-");
+      const next =
+        isVertical(fitSide) === isVertical(side)
+          ? fittedEdge
+            ? `${side}-${fittedEdge}`
+            : side
+          : fit;
       if (next !== placement) fitted = { from, to: next };
       return;
     }
@@ -200,6 +207,11 @@
     if (portalPopover === undefined && open && ref && clippedBy(ref)) {
       portalWhenClipped = true;
     }
+  }
+
+  /** @param {string} placementSide */
+  function isVertical(placementSide) {
+    return placementSide === "top" || placementSide === "bottom";
   }
 
   // Two animation frames, or a timeout where there are none (tests).

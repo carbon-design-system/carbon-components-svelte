@@ -28,10 +28,11 @@ export function shouldFlipAlign(
 /**
  * A Popover placement that keeps `el` in view: the other side when `el`
  * runs past it and the anchor has more room there, and the edge alignment
- * along that side that overflows least. Across the page, the room is
- * `horizontalBounds`; up and down, the window. Placements are physical
- * (`bottom-left`, `left-top`). Keeps `align` when `el` has no layout (zero
- * size) or its anchor is out of the window.
+ * along that side that overflows least. A left or right popover with no
+ * room on either side opens below, or above when only that fits. Across
+ * the page, the room is `horizontalBounds`; up and down, the window.
+ * Placements are physical (`bottom-left`, `left-top`). Keeps `align` when
+ * `el` has no layout (zero size) or its anchor is out of the window.
  */
 export function fitPopoverAlign(
   el: Element,

@@ -97,8 +97,10 @@ function fitEdge(box, anchor, bounds, edge, [start, end]) {
 /**
  * A Popover placement that keeps `el` in view. It takes the other side when
  * `el` runs past it and the anchor has more room on the other side. Along
- * that side, it takes the edge alignment that overflows least. Across the
- * page, the room is `horizontalBounds`; up and down, it is the window.
+ * that side, it takes the edge alignment that overflows least. A left or
+ * right popover with no room on either side opens below, or above when
+ * only that fits. Across the page, the room is `horizontalBounds`; up and
+ * down, it is the window.
  * Placements are physical (`bottom-left`, `left-top`). Keeps `align` when
  * `el` has no layout (zero size) or its anchor is out of the window.
  * @param {Element} el The open popover.
@@ -125,6 +127,19 @@ export function fitPopoverAlign(el, anchor, align) {
   } else {
     const before = a.left - x.left;
     const after = x.right - a.right;
+    // The width the popover takes beside its anchor, caret gap included.
+    const need = side === "right" ? r.right - a.right : a.left - r.left;
+    if (need > before && need > after) {
+      // No room on either side, as in a narrow window: open below, or
+      // above when it fits there and not below.
+      const tall = r.height + need - r.width;
+      const below = vh - a.bottom;
+      side = below < tall && a.top >= tall ? "top" : "bottom";
+      const center = (a.left + a.right) / 2;
+      const box = { left: center - r.width / 2, right: center + r.width / 2 };
+      edge = fitEdge(box, a, x, "", ["left", "right"]);
+      return edge ? `${side}-${edge}` : side;
+    }
     if (side === "right" && r.right > x.right && before > after) side = "left";
     else if (side === "left" && r.left < x.left && after > before) {
       side = "right";
