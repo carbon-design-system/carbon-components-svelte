@@ -464,4 +464,32 @@ describe("ColorPicker", () => {
       expect(option).toBeDisabled();
     }
   });
+
+  it("keeps the color but stays focusable when read-only", async () => {
+    (window as unknown as { EyeDropper: unknown }).EyeDropper = class {};
+    render(ColorPicker, { value: "#0f62fe", readonly: true, swatches });
+    await tick();
+
+    expect(area()).toHaveAttribute("tabindex", "0");
+    expect(area()).toHaveAttribute("aria-readonly", "true");
+    expect(area()).toHaveAccessibleDescription("Read-only");
+    expect(hue()).toHaveAccessibleDescription("Read-only");
+
+    await user.click(area());
+    await user.keyboard("{ArrowLeft}{Home}");
+    hue().focus();
+    await user.keyboard("{End}");
+    await user.click(swatchOptions()[0]);
+
+    expect(value()).toBe("#0f62fe");
+    expect(screen.getByRole("textbox", { name: "Hex" })).toHaveAttribute(
+      "readonly",
+    );
+    expect(
+      screen.getByRole("listbox", { name: "Preset colors" }),
+    ).toHaveAttribute("aria-readonly", "true");
+    expect(
+      screen.queryByRole("button", { name: "Pick a color from the screen" }),
+    ).not.toBeInTheDocument();
+  });
 });

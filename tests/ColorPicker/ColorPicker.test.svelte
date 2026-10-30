@@ -16,6 +16,7 @@
   export let hideEyeDropper = false;
   export let swatchColumns = 8;
   export let disabled = false;
+  export let readonly = false;
   export let inputs: string[] = [];
   export let changes: string[] = [];
 </script>
@@ -33,6 +34,7 @@
   {hideEyeDropper}
   {swatchColumns}
   {disabled}
+  {readonly}
   on:input={(event) => (inputs = [...inputs, event.detail])}
   on:change={(event) => (changes = [...changes, event.detail])}
 />

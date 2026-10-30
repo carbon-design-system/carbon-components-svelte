@@ -3,7 +3,7 @@
    * @typedef {import("../utils/color.js").ColorFormat} ColorPickerFormat
    * @typedef {import("../utils/color.js").Hsva} ColorPickerColor
    * @typedef {import("./ColorSwatches.svelte").ColorSwatch} ColorPickerSwatch
-   * @typedef {"group" | "area" | "areaRoleDescription" | "areaValue" | "hue" | "hueValue" | "alpha" | "alphaValue" | "format" | "hex" | "red" | "green" | "blue" | "hueField" | "saturation" | "lightness" | "swatches" | "recent" | "eyeDropper" | "invalidColor" | "lowContrast"} ColorPickerTranslationId
+   * @typedef {"group" | "area" | "areaRoleDescription" | "areaValue" | "hue" | "hueValue" | "alpha" | "alphaValue" | "format" | "hex" | "red" | "green" | "blue" | "hueField" | "saturation" | "lightness" | "swatches" | "recent" | "eyeDropper" | "invalidColor" | "lowContrast" | "readonly"} ColorPickerTranslationId
    * @restProps {div}
    * @event {string} input
    * @event {string} change
@@ -78,6 +78,12 @@
 
   /** Set to `true` to disable the picker */
   export let disabled = false;
+
+  /**
+   * Set to `true` to show the color without letting the user change it.
+   * The thumbs, fields and swatches stay focusable and readable.
+   */
+  export let readonly = false;
 
   /**
    * Name a color for a screen reader, as in "dark teal". The default names
@@ -166,6 +172,7 @@
     eyeDropper: "Pick a color from the screen",
     invalidColor: "Enter a color such as #0f62fe",
     lowContrast: "Contrast with the background is below {min}:1",
+    readonly: "Read-only",
   };
 
   const BARE_HEX = /^[0-9a-f]{3,8}$/i;
@@ -444,7 +451,12 @@
   $: alphaText = fill(translateWithId("alphaValue"), {
     alpha: Math.round(hsva.a * 100),
   });
-  $: showEyeDropper = eyeDropperSupported && !hideEyeDropper;
+  $: showEyeDropper = eyeDropperSupported && !hideEyeDropper && !readonly;
+  $: readonlyId = `${id}-readonly`;
+  $: areaDescribedBy =
+    [lowContrast ? warningId : "", readonly ? readonlyId : ""]
+      .filter(Boolean)
+      .join(" ") || undefined;
   $: showRecent = recentLimit > 0 && recent.length > 0;
 </script>
 
@@ -454,6 +466,7 @@
   {id}
   class:bx--color-picker={true}
   class:bx--color-picker--disabled={disabled}
+  class:bx--color-picker--readonly={readonly}
   style:--ccs-color-picker-rgb="{to8Bit(rgba.r)}, {to8Bit(rgba.g)}, {to8Bit(
     rgba.b,
   )}"
@@ -472,8 +485,9 @@
     label={translateWithId("area")}
     roleDescription={translateWithId("areaRoleDescription")}
     valueText={areaText}
-    describedBy={lowContrast ? warningId : undefined}
+    describedBy={areaDescribedBy}
     {disabled}
+    {readonly}
     on:input={handleArea}
     on:change={handleAreaChange}
     on:commit={remember}
@@ -502,6 +516,8 @@
         label={translateWithId("hue")}
         valueText={hueText}
         {disabled}
+        {readonly}
+        describedBy={readonly ? readonlyId : undefined}
         on:input={handleHue}
         on:change={handleHueChange}
         on:commit={remember}
@@ -513,6 +529,8 @@
           label={translateWithId("alpha")}
           valueText={alphaText}
           {disabled}
+          {readonly}
+          describedBy={readonly ? readonlyId : undefined}
           on:input={handleAlpha}
           on:change={handleAlphaChange}
           on:commit={remember}
@@ -531,6 +549,8 @@
           labelText={translateWithId("format")}
           selected={format}
           {disabled}
+          {readonly}
+          readonlyText={translateWithId("readonly")}
           on:update={handleFormat}
         >
           <SelectItem value="hex" text="HEX" />
@@ -552,6 +572,7 @@
             invalid={hexInvalid}
             invalidText={translateWithId("invalidColor")}
             {disabled}
+            {readonly}
             spellcheck="false"
             autocomplete="off"
             on:input={handleHexInput}
@@ -571,6 +592,7 @@
               labelText={translateWithId(name)}
               bind:value={fields[channel]}
               {disabled}
+              {readonly}
               on:change={(event) => handleRgb(channel, event)}
               on:blur={remember}
             />
@@ -592,6 +614,7 @@
               labelText={translateWithId(name)}
               bind:value={fields[channel]}
               {disabled}
+              {readonly}
               on:change={(event) => handleHsl(channel, event)}
               on:blur={remember}
             />
@@ -613,6 +636,7 @@
             labelText={translateWithId("alpha")}
             bind:value={fields.a}
             {disabled}
+            {readonly}
             on:change={handleAlphaField}
             on:blur={remember}
           />
@@ -634,6 +658,12 @@
     </div>
   {/if}
 
+  {#if readonly}
+    <span id={readonlyId} class:bx--visually-hidden={true}
+      >{translateWithId("readonly")}</span
+    >
+  {/if}
+
   {#if swatches.length > 0}
     <ColorSwatches
       {swatches}
@@ -642,6 +672,7 @@
       describe={formatColorName}
       selected={rgba}
       {disabled}
+      {readonly}
       on:select={handleSwatch}
     />
   {/if}
@@ -654,6 +685,7 @@
       describe={formatColorName}
       selected={rgba}
       {disabled}
+      {readonly}
       on:select={handleSwatch}
     />
   {/if}

@@ -35,6 +35,12 @@
   /** Set to `true` to disable the swatches */
   export let disabled = false;
 
+  /**
+   * Set to `true` to keep the swatches focusable while a click or Enter
+   * chooses nothing.
+   */
+  export let readonly = false;
+
   import { createEventDispatcher } from "svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import {
@@ -114,6 +120,7 @@
   /** @param {number} index */
   function choose(index) {
     focusIndex = index;
+    if (readonly) return;
     dispatch("select", {
       value: items[index].value,
       color: items[index].color,
@@ -128,6 +135,7 @@
   role="listbox"
   aria-label={label}
   aria-disabled={disabled || undefined}
+  aria-readonly={readonly || undefined}
   class:bx--color-picker__swatches={true}
   style:--ccs-color-picker-columns={columns}
 >
@@ -137,6 +145,7 @@
       role="option"
       class:bx--color-picker__swatch={true}
       class:bx--color-picker__swatch--selected={index === selectedIndex}
+      class:bx--color-picker__swatch--interactive={!disabled && !readonly}
       aria-selected={index === selectedIndex}
       aria-label={item.name}
       title={item.name}

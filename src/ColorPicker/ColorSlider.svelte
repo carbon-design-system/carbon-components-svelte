@@ -34,6 +34,12 @@
   export let disabled = false;
 
   /**
+   * Set to `true` to keep the value while the thumb stays focusable. Keys
+   * and drags change nothing.
+   */
+  export let readonly = false;
+
+  /**
    * Obtain a reference to the thumb.
    * @bindable readonly
    * @type {null | HTMLDivElement}
@@ -90,7 +96,7 @@
 
   /** @param {PointerEvent} event */
   function handleDragStart(event) {
-    if (disabled || !trackRef) return false;
+    if (disabled || readonly || !trackRef) return false;
     readDirection();
     event.preventDefault();
     ref?.focus({ preventScroll: true });
@@ -106,7 +112,7 @@
 
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
-    if (disabled || hasModifierKey(event)) return;
+    if (disabled || readonly || hasModifierKey(event)) return;
     const big = event.shiftKey ? 10 : 1;
     let next = value;
     switch (event.key) {
@@ -157,10 +163,11 @@
   class:bx--color-picker__slider--hue={channel === "hue"}
   class:bx--color-picker__slider--alpha={channel === "alpha"}
   class:bx--color-picker__slider--disabled={disabled}
+  class:bx--color-picker__slider--readonly={readonly}
   style:--ccs-slider-sign={trackSign(rtl)}
   style:--ccs-color-picker-hue={channel === "hue" ? value : undefined}
   use:pointerDrag={{
-    enabled: !disabled,
+    enabled: !disabled && !readonly,
     onStart: handleDragStart,
     onMove: moveTo,
     onEnd: handleDragEnd,
@@ -181,6 +188,7 @@
     aria-orientation="horizontal"
     aria-describedby={describedBy}
     aria-disabled={disabled || undefined}
+    aria-readonly={readonly || undefined}
     on:focus={readDirection}
     on:keydown={handleKeydown}
     on:blur={handleBlur}

@@ -34,6 +34,12 @@
   export let disabled = false;
 
   /**
+   * Set to `true` to keep the value while the thumb stays focusable. Keys
+   * and drags change nothing.
+   */
+  export let readonly = false;
+
+  /**
    * Obtain a reference to the thumb, which takes focus.
    * @bindable readonly
    * @type {null | HTMLDivElement}
@@ -98,7 +104,7 @@
 
   /** @param {PointerEvent} event */
   function handleDragStart(event) {
-    if (disabled || !areaRef) return false;
+    if (disabled || readonly || !areaRef) return false;
     readDirection();
     // Focus the thumb so the arrow keys work after a press on the area.
     // The compat `mousedown` would otherwise move focus to the body.
@@ -122,7 +128,7 @@
 
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
-    if (disabled || hasModifierKey(event)) return;
+    if (disabled || readonly || hasModifierKey(event)) return;
     const big = event.shiftKey ? 10 : 1;
     let nextSaturation = saturation;
     let nextBrightness = brightness;
@@ -173,10 +179,11 @@
   bind:this={areaRef}
   class:bx--color-picker__area={true}
   class:bx--color-picker__area--disabled={disabled}
+  class:bx--color-picker__area--readonly={readonly}
   style:--ccs-color-picker-hue={hue}
   style:--ccs-slider-sign={trackSign(rtl)}
   use:pointerDrag={{
-    enabled: !disabled,
+    enabled: !disabled && !readonly,
     onStart: handleDragStart,
     onMove: moveTo,
     onEnd: handleDragEnd,
@@ -198,6 +205,7 @@
     aria-valuetext={valueText}
     aria-describedby={describedBy}
     aria-disabled={disabled || undefined}
+    aria-readonly={readonly || undefined}
     on:focus={readDirection}
     on:keydown={handleKeydown}
     on:blur={handleBlur}

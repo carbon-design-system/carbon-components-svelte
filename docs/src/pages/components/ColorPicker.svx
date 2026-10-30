@@ -82,6 +82,12 @@ Set `disabled` to `true` to prevent interaction.
 
 <ColorPicker disabled {swatches} value="#0f62fe" />
 
+## Read-only
+
+Set `readonly` to `true` to show a color the user cannot change. The thumbs, fields and swatches stay focusable, and the eyedropper hides.
+
+<ColorPicker readonly {swatches} value="#0f62fe" />
+
 ## Accessibility
 
 The area is one slider with a role description of "2D slider". Its value text names both axes and the color, as in "Saturation 60%, brightness 40%, dark teal", so a screen reader user hears where the thumb is without seeing the area. Override the wording with `translateWithId`, and the color names with `formatColorName`.

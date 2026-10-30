@@ -159,6 +159,11 @@
     opacity: 0.5;
   }
 
+  .#{$prefix}--color-picker__area--readonly,
+  .#{$prefix}--color-picker__slider--readonly {
+    cursor: default;
+  }
+
   .#{$prefix}--color-picker__row {
     display: flex;
     align-items: center;
@@ -222,15 +227,23 @@
   }
 
   // Three digits fit a quarter of the row, so the fields trade the text
-  // input's 16px side padding for 8px.
+  // input's 16px side padding for 8px. A read-only number field is
+  // `type="text"`.
   .#{$prefix}--color-picker__field .#{$prefix}--text-input,
-  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="number"] {
-    padding-right: $carbon--spacing-03;
-    padding-left: $carbon--spacing-03;
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="number"],
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="text"] {
+    padding-inline: $carbon--spacing-03;
   }
 
-  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="number"] {
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="number"],
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="text"] {
     text-align: center;
+  }
+
+  // The read-only icon covers three digits in a quarter of the row. The
+  // fields' read-only border and the picker's state say it instead.
+  .#{$prefix}--color-picker__field .#{$prefix}--text-input__readonly-icon {
+    display: none;
   }
 
   .#{$prefix}--color-picker__caption {
@@ -285,6 +298,9 @@
     border: 1px solid $border-strong;
     border-radius: 2px;
     background: none;
+  }
+
+  .#{$prefix}--color-picker__swatch--interactive {
     cursor: pointer;
   }
 
@@ -335,9 +351,9 @@
   }
 
   @media (any-hover: hover) {
-    // The chosen swatch keeps its own border, which forced colors draw in
-    // `Highlight`.
-    .#{$prefix}--color-picker__swatch:not(:disabled):not(
+    // Only a swatch that can be chosen reacts. The chosen one keeps its
+    // own border, which forced colors draw in `Highlight`.
+    .#{$prefix}--color-picker__swatch--interactive:not(
         .#{$prefix}--color-picker__swatch--selected
       ):hover {
       border-color: $text-primary;
