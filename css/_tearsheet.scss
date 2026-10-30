@@ -181,7 +181,9 @@
   .#{$prefix}--tearsheet__description {
     @include type-style("body-compact-01");
 
-    max-inline-size: 80%;
+    // Upstream's share of the header, capped at about 70 characters a
+    // line for a wide window.
+    max-inline-size: min(80%, to-rem(480px));
     margin-top: $carbon--spacing-03;
     color: $text-secondary;
   }
@@ -192,7 +194,7 @@
 
   @include carbon--breakpoint(md) {
     .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__description {
-      max-inline-size: 60%;
+      max-inline-size: min(60%, to-rem(480px));
     }
   }
 

@@ -76,6 +76,15 @@ test.describe("Tearsheet", () => {
     ).toBe(true);
   });
 
+  test("caps a wide description at about 70 characters a line", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1920, height: 900 });
+    await page.goto("/tearsheet.html");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    expect((await rect(page, ".bx--tearsheet__description")).width).toBe(480);
+  });
+
   test("a wide title stops short of the close button", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/tearsheet.html?passive");
