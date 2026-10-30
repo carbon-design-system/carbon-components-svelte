@@ -68,7 +68,8 @@
   }
 
   // A 32px button pulled into the content's padding, so the icon sits on
-  // the corner as a bare 16px icon would.
+  // the corner as a bare 16px icon would. Its block margins center it on
+  // the title's 18px first line, and take no more height than that line.
   .#{$prefix}--coachmark__close {
     display: flex;
     width: to-rem(32px);
@@ -78,7 +79,8 @@
     justify-content: center;
     padding: 0;
     border: 0;
-    margin: (-$carbon--spacing-03) (-$carbon--spacing-03) (-$carbon--spacing-03) auto;
+    margin-block: calc((#{to-rem(18px)} - #{to-rem(32px)}) / 2);
+    margin-inline: auto (-$carbon--spacing-03);
     background: transparent;
     cursor: pointer;
   }
