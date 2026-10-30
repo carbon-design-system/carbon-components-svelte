@@ -12,7 +12,7 @@ Menu positions its content relative to an `anchor` element and does not render a
 
 The root element has `role="menu"`. Set `labelText` or `aria-label` on Menu so assistive technologies get a meaningful name, since there is no visible text the menu is otherwise associated with.
 
-Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last enabled item, skipping disabled ones. Type a character to move focus to the next enabled item whose label starts with it; type several characters quickly to match a longer prefix. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
+Once open, arrow keys move focus between items without wrapping past the first or last item. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the first and last item. Disabled items take focus so screen reader users can find them, but they do not run. Type a character to move focus to the next item whose label starts with it; type several characters quickly to match a longer prefix. <DocKbd label="Escape" /> closes the menu and returns focus to the anchor. See [Events](#events) for the full set of ways the menu can close, and how to keep it open after selection.
 
 <FileSource src="/framed/Menu/MenuBasic" />
 
