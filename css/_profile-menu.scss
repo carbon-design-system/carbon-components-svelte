@@ -54,7 +54,9 @@
     right: 0;
     z-index: 9000;
     width: to-rem(320px);
-    max-width: 100vw;
+    // The header's width, which leaves out a classic scrollbar. `100vw`
+    // counts it, so the card ran off the far edge by its width.
+    max-width: 100%;
     // Scroll within the card when the menu is taller than the viewport.
     max-height: calc(100vh - to-rem(48px));
     overflow-y: auto;
