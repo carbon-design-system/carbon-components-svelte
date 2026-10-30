@@ -34,6 +34,12 @@ const CASES: {
     hover: ".bx--content-switcher__label >> nth=0",
     text: "Table of contents",
   },
+  {
+    name: "DatePicker multiple value",
+    hover: ".bx--date-picker-input__wrapper",
+    measure: ".bx--date-picker__input-overlay span",
+    text: "09/09/2026, 09/10/2026, 09/11/2026, 09/12/2026",
+  },
 ];
 
 test("truncated text has a title on hover, and text that fits has none", async ({
@@ -77,4 +83,45 @@ test("the title follows a width change", async ({ page }) => {
   await page.mouse.move(0, 0);
   await count.hover();
   await expect(count).toHaveAttribute("title", "21–30 of 120 items");
+});
+
+test("a focused multiple DatePicker shows the input's own text", async ({
+  page,
+}) => {
+  await page.goto("/truncated-titles.html");
+  const field = page.getByTestId("cut").getByTestId("date-picker");
+  const input = field.getByRole("textbox", { name: "Blackout dates" });
+  const read = () =>
+    field.evaluate((el) => {
+      const input = el.querySelector("input");
+      const overlay = el.querySelector(".bx--date-picker__input-overlay");
+      if (!input || !overlay) throw new Error("field not rendered");
+      return {
+        input: getComputedStyle(input).color,
+        overlay: getComputedStyle(overlay).color,
+        overlayVisibility: getComputedStyle(overlay).visibility,
+        scrolled: input.scrollLeft > 0,
+      };
+    });
+
+  // At rest, the overlay draws the value with an ellipsis over a
+  // transparent input.
+  const rest = await read();
+  expect(rest.input).toBe("rgba(0, 0, 0, 0)");
+  expect(rest.overlayVisibility).toBe("visible");
+
+  // While focused, the input shows its own text, scrolled to the caret,
+  // in the overlay's color.
+  await input.focus();
+  await page.keyboard.press("End");
+  const focused = await read();
+  expect(focused.overlayVisibility).toBe("hidden");
+  expect(focused.input).toBe(rest.overlay);
+  expect(focused.scrolled).toBe(true);
+
+  await input.blur();
+  expect(await read()).toMatchObject({
+    input: "rgba(0, 0, 0, 0)",
+    overlayVisibility: "visible",
+  });
 });

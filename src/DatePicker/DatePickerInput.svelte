@@ -183,6 +183,9 @@
   // deliberate lag would otherwise leave the overlay showing stale text
   // while the (invisible) real input already has the freshly typed value.
   $: overlayValue = currentValue;
+  // While the input has focus, the overlay hides and the input shows its
+  // own text, scrolled to the caret, so the part being edited is visible.
+  let focused = false;
   $: ({ errorId, warnId, helperId } = buildFieldIds(id));
   // Fluid fields render no helper text, as with the other fluid fields.
   $: describedBy = resolveStatusDescribedBy({
@@ -199,6 +202,7 @@
   });
 
   function handleFocus() {
+    focused = true;
     if (selectTextOnFocus && !disabled && !$multiple) {
       tick().then(() => ref?.select());
     }
@@ -247,6 +251,10 @@
     class:bx--date-picker-input__wrapper--decorator={$$slots.decorator &&
       !$isFluid}
     class:bx--date-picker-input__wrapper--ai-label={$aiLabelState === "active"}
+    use:titleWhenTruncated={{
+      measure: ".bx--date-picker__input-overlay span",
+      enabled: $multiple,
+    }}
   >
     <input
       bind:this={ref}
@@ -275,7 +283,7 @@
       class:bx--date-picker__input--xs={effectiveSize === "xs"}
       class:bx--date-picker__input--sm={effectiveSize === "sm"}
       class:bx--date-picker__input--xl={effectiveSize === "xl"}
-      class:bx--date-picker__input--ghost-text={$multiple}
+      class:bx--date-picker__input--ghost-text={$multiple && !focused}
       on:input
       on:input={(event) => {
         const { value: inputValue } = /** @type {HTMLInputElement} */ (
@@ -305,6 +313,7 @@
       on:focus={handleFocus}
       on:blur
       on:blur={(event) => {
+        focused = false;
         blurInput(event.relatedTarget);
       }}
       on:paste
@@ -313,6 +322,7 @@
       <div
         class:bx--date-picker__input={true}
         class:bx--date-picker__input-overlay={true}
+        class:bx--date-picker__input-overlay--hidden={focused}
         class:bx--date-picker__input--with-icon={hasIcon}
         class:bx--date-picker__input--with-clear={showClear}
         class:bx--date-picker__input--xs={effectiveSize === "xs"}
