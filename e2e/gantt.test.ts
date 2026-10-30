@@ -146,6 +146,30 @@ test.describe("Gantt", () => {
     await expect(bar(page, "build")).toBeFocused();
   });
 
+  test("keeps bars inside a fixed axis range", async ({ page }) => {
+    await page.goto("/gantt.html?size=short&zoom=day&range");
+    // "Write the brief" ends before the range and "Launch" starts after it.
+    await expect(bar(page, "brief")).toHaveCount(0);
+    await expect(bar(page, "ship")).toHaveCount(0);
+    const scroller = page.locator(".bx--gantt__scroller");
+    const widths = await scroller.evaluate((node) => {
+      const list = node.querySelector(".bx--gantt__list") as Element;
+      const timeline = node.querySelector(".bx--gantt__timeline") as Element;
+      return {
+        scroll: node.scrollWidth,
+        content:
+          list.getBoundingClientRect().width +
+          timeline.getBoundingClientRect().width,
+      };
+    });
+    expect(widths.scroll).toBeLessThanOrEqual(Math.ceil(widths.content));
+    // End reaches the last bar on the axis, and it can be seen.
+    await bar(page, "design").focus();
+    await page.keyboard.press("End");
+    await expect(bar(page, "locked")).toBeFocused();
+    await expect(bar(page, "locked")).toBeInViewport();
+  });
+
   test("is one tab stop however many bars there are", async ({ page }) => {
     await page.getByRole("treegrid").locator("tbody tr").first().focus();
     await page.keyboard.press("Tab");

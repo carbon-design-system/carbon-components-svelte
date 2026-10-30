@@ -141,6 +141,8 @@
 
   /**
    * Set the last day of the axis. Defaults to a week after the latest task.
+   * A task wholly outside the axis has no bar, and a bar that crosses either
+   * end is clipped there.
    * @type {Date | string | undefined}
    */
   export let rangeEnd = undefined;
@@ -409,11 +411,12 @@
    * @param {typeof rows} visible
    * @param {typeof schedule} entries
    * @param {number} start
+   * @param {number} end
    * @param {number} width
    * @param {number} rowPx
    * @param {boolean} locked
    */
-  function layoutBars(visible, entries, start, width, rowPx, locked) {
+  function layoutBars(visible, entries, start, end, width, rowPx, locked) {
     /** @type {import("./gantt-utils.js").GanttBar[]} */
     const list = [];
     /** @type {Map<string, import("./gantt-utils.js").GanttBar>} */
@@ -425,7 +428,13 @@
     for (let i = 0; i < visible.length; i++) {
       const node = visible[i].node;
       const entry = entries.get(node.id);
-      if (!entry) continue;
+      // A task wholly outside the axis has no bar; the list keeps its dates.
+      if (
+        !entry ||
+        (entry.end !== null && entry.end < start) ||
+        (entry.start !== null && entry.start >= end)
+      )
+        continue;
       const bar = placeBar(
         i,
         node.id,
@@ -455,6 +464,7 @@
     rows,
     schedule,
     axis.start,
+    axis.end,
     dayWidth,
     rowHeight,
     readonly,
@@ -685,6 +695,9 @@
   function commit(bar, start, end, mode, source) {
     const node = maps.nodeMap.get(bar.id);
     if (!node || (start === bar.start && end === bar.end)) return;
+    // A change that would take the bar wholly off a fixed axis is ignored,
+    // so the bar and its focus stay.
+    if (end < axis.start || start >= axis.end) return;
     const startLike = node.start;
     const endLike = node.end ?? node.start;
     const detail = {

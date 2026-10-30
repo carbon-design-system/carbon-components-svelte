@@ -17,7 +17,7 @@ Use `Gantt` when the dates are the point. For rows that share columns and have n
 
 ### Zoom
 
-Set `zoom` to `"day"`, `"week"`, `"month"` or `"quarter"`. The header has two tiers: months over days or weeks, and years over months or quarters. Headers come from `Intl`, so `locale` sets the language, the first day of the week, and which days are the weekend. Weekends are shaded where a day is wide enough to see (day and week zoom). The today line sits at the current day; set `today` to pin it, or to `false` to hide it. Set `rangeStart` and `rangeEnd` to fix the span of the axis. By default it runs from a week before the first task to a week after the last.
+Set `zoom` to `"day"`, `"week"`, `"month"` or `"quarter"`. The header has two tiers: months over days or weeks, and years over months or quarters. Headers come from `Intl`, so `locale` sets the language, the first day of the week, and which days are the weekend. Weekends are shaded where a day is wide enough to see (day and week zoom). The today line sits at the current day; set `today` to pin it, or to `false` to hide it. Set `rangeStart` and `rangeEnd` to fix the span of the axis. By default it runs from a week before the first task to a week after the last. A task wholly outside a fixed range has no bar, and a bar that crosses an end is clipped there. The list still shows its dates.
 
 <FileSource src="/framed/Gantt/GanttZoom" />
 

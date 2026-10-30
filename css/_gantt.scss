@@ -151,9 +151,12 @@
   }
 
   // Weekend stripes and row lines are backgrounds, so the canvas holds only
-  // the bars, the links and the today line however long the chart is.
+  // the bars, the links and the today line however long the chart is. A bar
+  // that crosses an end of the axis is clipped there, so it neither slides
+  // under the list nor widens the scroll area.
   .#{$prefix}--gantt__canvas {
     position: relative;
+    overflow: clip;
     background-color: $layer;
     background-image:
       var(--ccs-gantt-weekends, none),
