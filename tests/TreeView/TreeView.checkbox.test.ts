@@ -179,4 +179,69 @@ describe("TreeView selectionMode=checkbox", () => {
       indeterminateIds: [],
     });
   });
+
+  describe("saved checks under a lazy parent", () => {
+    const lazyNodes = [
+      { id: "loaded", text: "Loaded", nodes: [{ id: "x", text: "X" }] },
+      { id: "lazy", text: "Lazy", hasChildren: true },
+    ];
+
+    it.each([
+      ["deep", ["loaded", "x", "lazy-1"]],
+      ["node", ["x", "lazy-1"]],
+    ] as const)(
+      "keeps them while it has not loaded (checkMode=%s)",
+      async (checkMode, expected) => {
+        const onCheckChange = vi.fn();
+        const { component } = render(TreeViewCheckbox, {
+          nodes: lazyNodes,
+          checkMode,
+          checkedIds: ["lazy-1", "x"],
+          onCheckChange,
+        });
+        await tick();
+
+        expect(component.checkedIds).toEqual(expected);
+        for (const call of onCheckChange.mock.calls) {
+          expect(call[0].removed).toEqual([]);
+        }
+      },
+    );
+
+    it("resolves them once the children load", async () => {
+      const { component, rerender } = render(TreeViewCheckbox, {
+        nodes: lazyNodes,
+        checkedIds: ["lazy-1"],
+      });
+      expect(component.checkedIds).toEqual(["lazy-1"]);
+
+      await rerender({
+        nodes: [
+          lazyNodes[0],
+          {
+            id: "lazy",
+            text: "Lazy",
+            hasChildren: true,
+            nodes: [
+              { id: "lazy-1", text: "Lazy 1" },
+              { id: "lazy-2", text: "Lazy 2" },
+            ],
+          },
+        ],
+      });
+
+      expect(component.checkedIds).toEqual(["lazy-1"]);
+      expect(component.indeterminateIds).toEqual(["lazy"]);
+    });
+
+    it("drops an unknown id once every parent has loaded", async () => {
+      const { component } = render(TreeViewCheckbox, {
+        nodes: [lazyNodes[0]],
+        checkedIds: ["gone", "x"],
+      });
+      await tick();
+
+      expect(component.checkedIds).toEqual(["loaded", "x"]);
+    });
+  });
 });
