@@ -33,7 +33,9 @@ Customize the text announced to screen readers by setting `description`. Default
 
 ## Delay
 
-Set `delay` to wait a number of milliseconds after `active` becomes `true` before rendering the spinner. Requests that finish within the delay never show a spinner, avoiding a flash of loading state for fast responses.
+Set `delay` to wait a number of milliseconds after `active` becomes `true` before showing the spinner. Work that finishes within the delay shows no spinner. Once shown, the spinner stays for at least 500 ms so it does not flash.
+
+While it waits, the spinner is in the page but hidden. The server HTML holds it too, and CSS shows it after the delay even before the page's script runs. This also covers a `Loading` that mounts when the work starts, as in `{#if loading}`.
 
 <FileSource src="/framed/Loading/LoadingDelay" />
 
