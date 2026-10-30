@@ -252,6 +252,7 @@
   }
 
   // Forced colors drop fills, so the dot and the dividers take system colors.
+  // Lines use `CanvasText`; `GrayText` is the color of disabled text.
   @media (forced-colors: active) {
     .#{$prefix}--notifications-panel__item--unread::before {
       background-color: CanvasText;
@@ -260,7 +261,7 @@
     .#{$prefix}--notifications-panel__item + .#{$prefix}--notifications-panel__item,
     .#{$prefix}--notifications-panel__footer,
     .#{$prefix}--notifications-panel__dnd {
-      border-color: GrayText;
+      border-color: CanvasText;
     }
   }
 

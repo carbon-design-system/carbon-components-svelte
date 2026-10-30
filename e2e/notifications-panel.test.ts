@@ -409,10 +409,7 @@ test.describe("NotificationsPanel", () => {
           probe.style.backgroundColor = color;
           return getComputedStyle(probe).backgroundColor;
         };
-        const result = {
-          canvasText: read("CanvasText"),
-          grayText: read("GrayText"),
-        };
+        const result = { canvasText: read("CanvasText") };
         probe.remove();
         return result;
       });
@@ -439,7 +436,7 @@ test.describe("NotificationsPanel", () => {
           const style = getComputedStyle(el);
           return { color: style.borderTopColor, width: style.borderTopWidth };
         });
-      expect(divider.color).toBe(colors.grayText);
+      expect(divider.color).toBe(colors.canvasText);
       expect(divider.width).toBe("1px");
 
       await page
