@@ -55,7 +55,7 @@ Drag a bar to move it, or drag either end to change its first or last day. Dates
 
 The `change` event fires before the write and is cancelable. Its detail is `{ id, start, end, previous, mode, source }`, with `start` and `end` in the same kind as the task holds, a `Date` or a string. Call `preventDefault()` to keep the task as it is. Otherwise the chart writes the new dates into `tasks`, so bind `tasks` to receive them. The chart never moves other tasks: a successor that now starts too early is drawn dashed, and a listener can shift it from the same event.
 
-A summary, a task with `readonly: true`, and every task when `readonly` is set on the chart cannot be moved.
+A summary, a task with `readonly: true`, and every task when `readonly` is set on the chart cannot be moved. A task with `disabled: true` is drawn as disabled and takes no pointer or focus, as its row in the list does not.
 
 <FileSource src="/framed/Gantt/GanttChange" />
 
@@ -75,7 +75,7 @@ The list is a treegrid with one tab stop. The bars are a second tab stop: <DocKb
 | Bar | <DocKbd label="→" /> / <DocKbd label="←" /> | Move the task one day later or earlier (one week at month and quarter zoom). |
 | Bar | <DocKbd label="Shift" /> + <DocKbd label="→" /> / <DocKbd label="←" /> | Move the last day later or earlier. |
 | Bar | <DocKbd label="Alt" /> + <DocKbd label="Shift" /> + <DocKbd label="→" /> / <DocKbd label="←" /> | Move the first day later or earlier. |
-| Bar | <DocKbd label="↑" /> / <DocKbd label="↓" /> | Focus the previous or next bar. Rows without a bar are skipped. |
+| Bar | <DocKbd label="↑" /> / <DocKbd label="↓" /> | Focus the previous or next bar. Rows without a bar and disabled tasks are skipped. |
 | Bar | <DocKbd label="Home" /> / <DocKbd label="End" /> | Focus the first or last bar. |
 | Bar | <DocKbd label="Enter" /> / <DocKbd label="Space" /> | Select the task's row. |
 

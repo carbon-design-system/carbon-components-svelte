@@ -418,6 +418,10 @@
     const list = [];
     /** @type {Map<string, import("./gantt-utils.js").GanttBar>} */
     const byKey = new Map();
+    /** @type {import("./gantt-utils.js").GanttBar[]} */
+    const reachable = [];
+    /** @type {Set<string>} */
+    const disabled = new Set();
     for (let i = 0; i < visible.length; i++) {
       const node = visible[i].node;
       const entry = entries.get(node.id);
@@ -434,12 +438,20 @@
       if (bar) {
         list.push(bar);
         byKey.set(bar.key, bar);
+        if (node.disabled) disabled.add(bar.key);
+        else reachable.push(bar);
       }
     }
-    return { bars: list, barByKey: byKey };
+    return {
+      bars: list,
+      barByKey: byKey,
+      focusableBars: reachable,
+      disabledKeys: disabled,
+    };
   }
 
-  $: ({ bars, barByKey } = layoutBars(
+  // A disabled task's bar takes no focus, as its row in the list does not.
+  $: ({ bars, barByKey, focusableBars, disabledKeys } = layoutBars(
     rows,
     schedule,
     axis.start,
@@ -653,7 +665,11 @@
   /** @type {string | undefined} */
   let focusKey;
   $: tabStopKey =
-    focusKey !== undefined && barByKey.has(focusKey) ? focusKey : bars[0]?.key;
+    focusKey !== undefined &&
+    barByKey.has(focusKey) &&
+    !disabledKeys.has(focusKey)
+      ? focusKey
+      : focusableBars[0]?.key;
 
   let announcement = "";
 
@@ -696,7 +712,7 @@
   /** @param {import("./gantt-utils.js").GanttBar} bar */
   function selectBar(bar) {
     const node = maps.nodeMap.get(bar.id);
-    if (!node) return;
+    if (!node || node.disabled) return;
     activeId = bar.id;
     dispatch("select", {
       ...node,
@@ -837,7 +853,7 @@
    * @param {1 | -1} step
    */
   function focusBarFrom(row, step) {
-    const byRow = new Map(bars.map((bar) => [bar.row, bar]));
+    const byRow = new Map(focusableBars.map((bar) => [bar.row, bar]));
     for (let i = row + step; i >= 0 && i < rows.length; i += step) {
       const target = byRow.get(i);
       if (target) {
@@ -877,7 +893,10 @@
       case "Home":
       case "End": {
         event.preventDefault();
-        const target = key === "Home" ? bars[0] : bars[bars.length - 1];
+        const target =
+          key === "Home"
+            ? focusableBars[0]
+            : focusableBars[focusableBars.length - 1];
         if (target) focusBar(target);
         break;
       }
@@ -1008,11 +1027,13 @@
               class:bx--gantt__bar--milestone={bar.milestone}
               class:bx--gantt__bar--summary={bar.summary}
               class:bx--gantt__bar--editable={bar.editable}
+              class:bx--gantt__bar--disabled={disabledKeys.has(bar.key)}
               class:bx--gantt__bar--resizable={bar.editable && !bar.milestone}
               class:bx--gantt__bar--selected={selectedSet.has(bar.id)}
               class:bx--gantt__bar--dragging={shown !== bar}
               role="button"
               tabindex={bar.key === tabStopKey ? 0 : -1}
+              aria-disabled={disabledKeys.has(bar.key) || undefined}
               data-gantt-id={bar.id}
               aria-label={labelByKey.get(bar.key)}
               aria-describedby={bar.editable ? hintId : undefined}

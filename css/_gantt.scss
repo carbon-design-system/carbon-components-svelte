@@ -273,6 +273,19 @@
     transform: rotate(45deg);
   }
 
+  // A disabled task's bar is drawn as disabled and takes no pointer, as
+  // its row in the list does not.
+  .#{$prefix}--gantt__bar--disabled {
+    border-color: $border-disabled;
+    background-color: transparent;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--gantt__bar--disabled .#{$prefix}--gantt__progress,
+  .#{$prefix}--gantt__bar--disabled.#{$prefix}--gantt__bar--milestone {
+    background-color: $icon-disabled;
+  }
+
   // A bracket: a bar across the top with a point at each end. The visible
   // shape is clipped, so the element keeps its full box for the focus ring.
   .#{$prefix}--gantt__bar--summary {
@@ -376,6 +389,15 @@
 
     .#{$prefix}--gantt__bar--milestone {
       background-color: CanvasText;
+    }
+
+    .#{$prefix}--gantt__bar--disabled {
+      border-color: GrayText;
+    }
+
+    .#{$prefix}--gantt__bar--disabled .#{$prefix}--gantt__progress,
+    .#{$prefix}--gantt__bar--disabled.#{$prefix}--gantt__bar--milestone {
+      background-color: GrayText;
     }
 
     .#{$prefix}--gantt__bar--summary {

@@ -131,6 +131,21 @@ test.describe("Gantt", () => {
     await expect(bar(page, "plan")).toBeFocused();
   });
 
+  test("draws a disabled task's bar as disabled and skips it", async ({
+    page,
+  }) => {
+    await page.goto("/gantt.html?size=short&zoom=day&disabled");
+    const api = bar(page, "api");
+    await expect(api).toHaveAttribute("aria-disabled", "true");
+    await expect(api).toHaveCSS("pointer-events", "none");
+    await expect(api).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await bar(page, "build").focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(bar(page, "ui")).toBeFocused();
+    await page.keyboard.press("ArrowUp");
+    await expect(bar(page, "build")).toBeFocused();
+  });
+
   test("is one tab stop however many bars there are", async ({ page }) => {
     await page.getByRole("treegrid").locator("tbody tr").first().focus();
     await page.keyboard.press("Tab");
