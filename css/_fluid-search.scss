@@ -85,8 +85,12 @@
   @media (any-hover: hover) {
     .#{$prefix}--search--fluid
       .#{$prefix}--search-input:focus
-      ~ .#{$prefix}--search-close:hover {
-      outline: none;
+      ~ .#{$prefix}--search-close:hover::before {
+      // The button sits inside the field's ring, so its hover fill covers
+      // all of it. Forced colors hide `::before`.
+      top: 0;
+      width: 100%;
+      height: 100%;
     }
 
     .#{$prefix}--search--fluid
