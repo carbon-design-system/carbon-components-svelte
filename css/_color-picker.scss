@@ -245,6 +245,9 @@
     @include type-style("helper-text-01");
 
     display: flex;
+    // One line is held while the color reads, so the warning does not
+    // move the swatches when it appears.
+    min-height: to-rem(16px);
     align-items: flex-start;
     gap: $carbon--spacing-03;
     color: $text-primary;

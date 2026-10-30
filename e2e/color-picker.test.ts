@@ -186,6 +186,20 @@ test.describe("ColorPicker", () => {
     expect(outside).toEqual([0, 0]);
   });
 
+  test("holds a line for the contrast warning", async ({ page }) => {
+    const alphaPicker = page.getByTestId("alpha");
+    const root = alphaPicker.locator(".bx--color-picker");
+    await expect(alphaPicker.getByRole("status")).not.toBeEmpty();
+    const warned = await root.boundingBox();
+
+    const field = alphaPicker.getByRole("spinbutton", { name: "Alpha" });
+    await field.fill("100");
+    await field.press("Enter");
+    await expect(alphaPicker.getByRole("status")).toBeEmpty();
+
+    expect((await root.boundingBox())?.height).toBe(warned?.height);
+  });
+
   test("mirrors the area, the sliders and the arrow keys in RTL", async ({
     page,
   }) => {
