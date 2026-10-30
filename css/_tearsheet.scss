@@ -11,7 +11,8 @@
 
 /// Tearsheet styles, after Carbon React's `Tearsheet` from Carbon for IBM
 /// Products (`packages/styles/src/components/Tearsheet`), with its v11
-/// tokens, type styles, widths and motion. The tearsheet is a modal
+/// tokens, type styles, widths and durations. Its easing is productive,
+/// as SidePanel's is; upstream uses expressive. The tearsheet is a modal
 /// layer (`bx--layer-one`): the header and footer sit on `$layer`, the
 /// wide body is the page surface (`$background`) and the narrow body one
 /// level up, as a modal's body is. The container slides on `transform`
@@ -32,14 +33,14 @@
     inset: 0;
     opacity: 0;
     transition:
-      opacity $duration--moderate-02 motion(exit, expressive),
-      visibility $duration--moderate-02 motion(exit, expressive);
+      opacity $duration--moderate-02 motion(exit, productive),
+      visibility $duration--moderate-02 motion(exit, productive);
     visibility: hidden;
 
     &.is-visible {
       opacity: 1;
       // No `visibility` here, so it flips at once and focus can move in.
-      transition: opacity $duration--moderate-02 motion(entrance, expressive);
+      transition: opacity $duration--moderate-02 motion(entrance, productive);
       visibility: inherit;
     }
   }
@@ -69,12 +70,12 @@
     background-color: $layer;
     // The slide covers at most 500px, so a tall window doesn't speed it up.
     transform: translate3d(0, calc(min(95vh, 500px)), 0);
-    transition: transform $duration--moderate-02 motion(exit, expressive);
+    transition: transform $duration--moderate-02 motion(exit, productive);
   }
 
   .#{$prefix}--tearsheet.is-visible .#{$prefix}--tearsheet__container {
     transform: none;
-    transition: transform $duration--moderate-02 motion(entrance, expressive);
+    transition: transform $duration--moderate-02 motion(entrance, productive);
   }
 
   // The gap above the tearsheet. `--ccs-tearsheet-top` sets it, for

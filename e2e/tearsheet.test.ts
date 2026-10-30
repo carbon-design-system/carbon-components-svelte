@@ -293,7 +293,7 @@ test.describe("Tearsheet", () => {
     );
   });
 
-  test("draws its edge in forced colors and drops its motion for reduced motion", async ({
+  test("draws its edge in forced colors, eases productively, and drops its motion for reduced motion", async ({
     page,
   }) => {
     await page.emulateMedia({ forcedColors: "active" });
@@ -319,7 +319,22 @@ test.describe("Tearsheet", () => {
     expect(edge.outline).toBe("none");
     expect(edge.ring).toBeGreaterThan(1);
 
-    await page.emulateMedia({ forcedColors: "none", reducedMotion: "reduce" });
+    // Productive easing: `motion(entrance, productive)` while open.
+    await page.emulateMedia({ forcedColors: "none" });
+    expect(
+      await page.evaluate(() =>
+        [".bx--tearsheet", ".bx--tearsheet__container"].map(
+          (selector) =>
+            getComputedStyle(document.querySelector(selector) as Element)
+              .transitionTimingFunction,
+        ),
+      ),
+    ).toEqual([
+      "cubic-bezier(0, 0, 0.38, 0.9)",
+      "cubic-bezier(0, 0, 0.38, 0.9)",
+    ]);
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
     expect(
       await page.evaluate(
         () =>
