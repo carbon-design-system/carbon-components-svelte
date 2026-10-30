@@ -226,6 +226,41 @@ test.describe("Coachmark", () => {
       ).toBeLessThanOrEqual(2);
     });
 
+    for (const dir of ["ltr", "rtl"]) {
+      test(`the close icon sits on its corner and the title line, ${dir}`, async ({
+        page,
+      }) => {
+        await page.evaluate(
+          (dir) => document.documentElement.setAttribute("dir", dir),
+          dir,
+        );
+        await page
+          .getByRole("button", { name: "Show coachmark" })
+          .first()
+          .click();
+        const m = await dialog(page, "cm-basic").evaluate((el) => {
+          const content = el.querySelector(".bx--coachmark-content");
+          const icon = el.querySelector(".bx--coachmark__close svg");
+          const title = el.querySelector(".bx--coachmark__title");
+          if (!(content && icon && title)) return null;
+          const c = content.getBoundingClientRect();
+          const i = icon.getBoundingClientRect();
+          const t = title.getBoundingClientRect();
+          const line = Number.parseFloat(getComputedStyle(title).lineHeight);
+          const rtl = getComputedStyle(content).direction === "rtl";
+          return {
+            end: rtl ? i.left - c.left : c.right - i.right,
+            top: i.top - c.top,
+            offCenter: i.top + i.height / 2 - (t.top + line / 2),
+          };
+        });
+        expect(m).not.toBeNull();
+        if (!m) return;
+        expect(m.end).toBeCloseTo(16, 0);
+        expect(Math.abs(m.offCenter)).toBeLessThanOrEqual(0.5);
+      });
+    }
+
     test("reduced motion stills the beacon's ring", async ({ page }) => {
       const ring = page.locator(".bx--coachmark-beacon__ring").first();
       expect(
