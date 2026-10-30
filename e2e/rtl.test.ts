@@ -1276,30 +1276,81 @@ test.describe("right-to-left text fields", () => {
     page,
   }) => {
     await setDirection(page, "rtl");
-    const input = page.getByTestId("search").locator("input");
-    await input.fill("3 / 4");
-    await page.evaluate(() => document.fonts.ready);
-    // The query's left end, if it sits by the magnifier at the right.
-    const { x, y } = await input.evaluate((node: HTMLInputElement) => {
-      const style = getComputedStyle(node);
-      const context = document.createElement("canvas").getContext("2d");
-      if (!context) throw new Error("no canvas");
-      context.font = style.font;
-      const width = context.measureText(node.value).width;
-      const box = node.getBoundingClientRect();
-      return {
-        x: box.right - Number.parseFloat(style.paddingRight) - width + 2,
-        y: box.top + box.height / 2,
-      };
-    });
-    await page.mouse.click(x, y);
-
     // "3" is at the left end, so the caret lands before it.
     expect(
-      await input.evaluate((node: HTMLInputElement) => node.selectionStart),
+      await caretAtLeftEnd(page, page.getByTestId("search").locator("input")),
     ).toBe(0);
   });
+
+  test("reads typed text in its own direction, at the page's start", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const fields = {
+      TextInput: page.getByTestId("text-invalid").locator("input"),
+      PasswordInput: page.getByTestId("password").locator("input"),
+      "fluid TextInput": page
+        .getByTestId("fluid-text-invalid")
+        .locator("input"),
+      "fluid PasswordInput": page
+        .getByTestId("fluid-password-invalid")
+        .locator("input"),
+      TextArea: page.getByTestId("text-area-invalid").locator("textarea"),
+      "fluid TextArea": page
+        .getByTestId("fluid-text-area-invalid")
+        .locator("textarea"),
+      HeaderSearch: page.getByTestId("header-search").locator("input"),
+    };
+    // A password shows its characters, so their order is visible.
+    await page.getByTestId("password").getByRole("button").click();
+    await page
+      .getByTestId("fluid-password-invalid")
+      .getByRole("button")
+      .click();
+    // A click elsewhere closes HeaderSearch; its button opens it again.
+    const openHeaderSearch = page
+      .getByTestId("header-search")
+      .getByRole("button");
+    for (const [name, field] of Object.entries(fields)) {
+      const open = name === "HeaderSearch" ? openHeaderSearch : undefined;
+      // biome-ignore lint/performance/noAwaitInLoops: each click moves focus
+      expect.soft(await caretAtLeftEnd(page, field, open), name).toBe(0);
+    }
+  });
 });
+
+/**
+ * Types "3 / 4" into a right-to-left field and clicks where its left end
+ * sits if the text keeps its own order at the page's start (the right).
+ * Returns the caret's index: 0 when the left end is "3". `open` is a
+ * button to click first, for a field that is hidden until then.
+ */
+async function caretAtLeftEnd(page: Page, field: Locator, open?: Locator) {
+  await open?.click();
+  await field.fill("3 / 4");
+  await page.evaluate(() => document.fonts.ready);
+  const { x, y } = await field.evaluate((node: HTMLInputElement) => {
+    const style = getComputedStyle(node);
+    const context = document.createElement("canvas").getContext("2d");
+    if (!context) throw new Error("no canvas");
+    context.font = style.font;
+    const width = context.measureText(node.value).width;
+    const box = node.getBoundingClientRect();
+    const top = box.top + Number.parseFloat(style.paddingTop);
+    const bottom = box.bottom - Number.parseFloat(style.paddingBottom);
+    // The first line. A fluid field's top padding holds its label.
+    const line =
+      node.tagName === "TEXTAREA"
+        ? Number.parseFloat(style.lineHeight)
+        : bottom - top;
+    return {
+      x: box.right - Number.parseFloat(style.paddingRight) - width + 2,
+      y: top + line / 2,
+    };
+  });
+  await page.mouse.click(x, y);
+  return field.evaluate((node: HTMLInputElement) => node.selectionStart);
+}
 
 /**
  * Every button in each case of the buttons fixture, its label and its icon,
