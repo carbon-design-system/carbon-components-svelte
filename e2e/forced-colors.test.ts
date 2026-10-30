@@ -97,6 +97,66 @@ async function flatness(page: Page, selector: string) {
   }, png);
 }
 
+// Share of the pixels in the band `width` px inside an element's edge that
+// show its ring: 1 when nothing covers the ring. A pixel in `Canvas` or
+// `CanvasText` is a fill or a line drawn over it. The ring's own color
+// differs where it blends with an edge below, since the emulated
+// `Highlight` is translucent.
+async function ringShare(
+  page: Page,
+  selector: string,
+  system: Record<SystemColor, string>,
+  width = 4,
+) {
+  const clip = await page.evaluate((selector) => {
+    const el = document.querySelector(selector);
+    if (!el) throw new Error(`no ${selector}`);
+    // The clip is in viewport coordinates.
+    el.scrollIntoView({ block: "center" });
+    const { x, y, width, height } = el.getBoundingClientRect();
+    return {
+      x: Math.round(x),
+      y: Math.round(y),
+      width: Math.round(width),
+      height: Math.round(height),
+    };
+  }, selector);
+  const png = (await page.screenshot({ clip })).toString("base64");
+  return page.evaluate(
+    async ([png, covers, width]) => {
+      const img = new Image();
+      img.src = `data:image/png;base64,${png}`;
+      await img.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("no 2d context");
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, img.width, img.height);
+      const cover = covers.map((color) =>
+        (color.match(/\d+/g) ?? []).slice(0, 3).map(Number),
+      );
+      let band = 0;
+      let ring = 0;
+      for (let y = 0; y < img.height; y++) {
+        for (let x = 0; x < img.width; x++) {
+          const edge = Math.min(x, y, img.width - 1 - x, img.height - 1 - y);
+          if (edge >= width) continue;
+          const i = (y * img.width + x) * 4;
+          band++;
+          const covered = cover.some((rgb) =>
+            rgb.every((c, k) => Math.abs((data[i + k] ?? 0) - c) <= 2),
+          );
+          if (!covered) ring++;
+        }
+      }
+      return ring / band;
+    },
+    [png, [system.Canvas, system.CanvasText], width] as const,
+  );
+}
+
 test.describe("forced colors", () => {
   let system: Record<SystemColor, string>;
 
@@ -878,6 +938,39 @@ test.describe("forced colors", () => {
             outlineColor: system.Highlight,
           });
       }
+    }
+  });
+
+  // The clear button sits over the field's inline end, and forced colors
+  // painted its transparent resting outline as a 2px CanvasText box, and its
+  // start-edge strip and hover fill as Canvas, on top of the field's 4px
+  // Highlight ring.
+  test("a Search focus ring runs past its clear button", async ({ page }) => {
+    for (const group of ["fields", "fluid-fields"]) {
+      const scope = `[data-testid=${group}] [data-testid=search]`;
+      const close = `${scope} .bx--search-close`;
+      const settled = () =>
+        page.$eval(close, (el) =>
+          el.getAnimations().every((a) => a.playState === "finished"),
+        );
+      // biome-ignore lint/performance/noAwaitInLoops: one field has focus at a time
+      await page.fill(`${scope} input`, "us-east");
+      // The clear button fades in.
+      await expect.poll(settled).toBe(true);
+      expect
+        .soft(await ringShare(page, `${scope} input`, system), group)
+        .toBe(1);
+      await page.hover(close);
+      await expect.poll(settled).toBe(true);
+      expect
+        .soft(await ringShare(page, `${scope} input`, system), `${group} hover`)
+        .toBe(1);
+      await page.mouse.move(0, 0);
+      await page.focus(close);
+      expect
+        .soft(await style(page, close), `${group} clear button focus`)
+        .toMatchObject({ outline: "solid 2px" });
+      await page.fill(`${scope} input`, "");
     }
   });
 

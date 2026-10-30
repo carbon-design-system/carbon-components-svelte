@@ -474,3 +474,39 @@
 @include exports("search-validation") {
   @include search-validation;
 }
+
+// carbon-components-svelte patch (search-close-forced-colors)
+/// The clear button sits over the field's inline end. Forced colors paint
+/// its `transparent` resting outline and borders `CanvasText`, and its
+/// start-edge strip and hover fill an opaque `Canvas`, all on top of the
+/// field's 4px `Highlight` focus ring. The field keeps its own resting box,
+/// so the button draws a ring only when it has focus.
+/// @access private
+/// @group components
+@mixin search-close-forced-colors {
+  @media (forced-colors: active) {
+    // The hover selectors tie the vendored hover rules above and win on
+    // order. Each sits beside its resting selector, which it restates.
+    .#{$prefix}--search-close,
+    .#{$prefix}--search-close:hover {
+      border-style: none;
+      background-color: transparent;
+    }
+
+    // `.bx--search-close:focus` outweighs the first selector.
+    .#{$prefix}--search-close,
+    .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close,
+    .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover {
+      outline-style: none;
+    }
+
+    // A `Canvas` strip down the button's start edge.
+    .#{$prefix}--search-close::before {
+      display: none;
+    }
+  }
+}
+
+@include exports("search-close-forced-colors") {
+  @include search-close-forced-colors;
+}
