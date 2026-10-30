@@ -140,14 +140,20 @@
 
   $: hasIcon = Boolean(icon || $$slots.icon);
 
-  // A truncated label shows its full text in a tooltip. Static and filter
-  // tags wrap the label in `TooltipDefinition`. Interactive and link tags
-  // are already a button or an anchor, so the tooltip anchors to the tag
-  // itself instead of nesting another control. A roving `TagSet` is a
-  // single tab stop, which the definition's focusable trigger would break,
-  // and a disabled tag gets no hover or focus: both fall back to `title`.
+  // A truncated label shows its full text in a tooltip. Static tags wrap
+  // the label in `TooltipDefinition`. Interactive and link tags are already
+  // a button or an anchor, so the tooltip anchors to the tag itself instead
+  // of nesting another control. A roving `TagSet` is a single tab stop,
+  // which the definition's focusable trigger would break, and a disabled
+  // tag gets no hover or focus: both fall back to `title`. A filter tag's
+  // close button is its only tab stop, and its name already includes the
+  // full label, so the label takes `title`, as in Carbon v11.
   $: showTruncationTooltip =
-    truncated && !interactive && !href && $groupNavigation !== "roving";
+    truncated &&
+    !filter &&
+    !interactive &&
+    !href &&
+    $groupNavigation !== "roving";
   $: showHostTooltip = truncated && (interactive || !!href) && !disabled;
   $: nativeTitle =
     truncated && !showTruncationTooltip && !showHostTooltip
@@ -159,9 +165,6 @@
   $: rootProps = showTruncationTooltip
     ? omitTabindex($$restProps)
     : $$restProps;
-  $: filterRootProps = showTruncationTooltip
-    ? omitTabindex(filterProps)
-    : filterProps;
 
   /** @param {Record<string, any>} props */
   function omitTabindex({ tabindex, ...props }) {
@@ -223,7 +226,6 @@
     bind:this={ref}
     {id}
     data-overflow={$groupOverflow ? "true" : undefined}
-    title={nativeTitle}
     class:bx--tag={true}
     class:bx--tag--inline={inline}
     class:bx--tag--disabled={disabled}
@@ -245,7 +247,7 @@
     class:bx--tag--warm-gray={type === "warm-gray"}
     class:bx--tag--high-contrast={type === "high-contrast"}
     class:bx--tag--outline={type === "outline"}
-    {...filterRootProps}
+    {...filterProps}
     style:max-width={maxWidth}
     on:click
     on:mouseover
@@ -257,26 +259,16 @@
         <slot name="icon"><svelte:component this={icon} /></slot>
       </div>
     {/if}
-    {#if showTruncationTooltip}
-      <TooltipDefinition
-        class="bx--tag__label-tooltip"
-        tooltipText={truncationLabel}
-        tabindex={$$restProps.tabindex}
-        portalTooltip
-      >
-        <span bind:this={labelRef} id="{id}-label" class:bx--tag__label={true}>
-          <slot props={{ class: "bx--tag__label" }}>
-            {type}
-          </slot>
-        </span>
-      </TooltipDefinition>
-    {:else}
-      <span bind:this={labelRef} id="{id}-label" class:bx--tag__label={true}>
-        <slot props={{ class: "bx--tag__label" }}>
-          {type}
-        </slot>
-      </span>
-    {/if}
+    <span
+      bind:this={labelRef}
+      id="{id}-label"
+      title={nativeTitle}
+      class:bx--tag__label={true}
+    >
+      <slot props={{ class: "bx--tag__label" }}>
+        {type}
+      </slot>
+    </span>
     {#if $$slots.decorator}
       <Decorator
         class="bx--tag__decorator"

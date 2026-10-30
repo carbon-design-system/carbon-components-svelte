@@ -4,6 +4,7 @@ import { tick } from "svelte";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { expectInlineStyle } from "../utils/inline-style";
 import { openTooltips } from "../utils/open-tooltips";
+import { user } from "../utils/user";
 import TagTruncation from "./TagTruncation.test.svelte";
 
 type Props = ComponentProps<TagTruncation>;
@@ -58,24 +59,46 @@ describe("Tag truncation", () => {
     ["SelectableTag", { kind: "selectable" }, () => screen.getByRole("button")],
   ];
 
-  it.each([
-    ["static tag", {}],
-    ["filter tag", { filter: true }],
-  ])(
-    "wraps a truncated %s label in a definition tooltip by default",
-    async (_, props) => {
-      mockOverflow(true);
-      await renderTag(props);
+  it("wraps a truncated static tag label in a definition tooltip by default", async () => {
+    mockOverflow(true);
+    await renderTag({});
 
-      const tooltip = document.querySelector(".bx--tooltip--definition");
-      expect(tooltip).toBeInTheDocument();
-      expect(
-        tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
-      ).toBe(label);
-      expect(tagOf(label)).not.toHaveClass("bx--tag--truncate");
-      expect(tagOf(label)).not.toHaveAttribute("title");
-    },
-  );
+    const tooltip = document.querySelector(".bx--tooltip--definition");
+    expect(tooltip).toBeInTheDocument();
+    expect(
+      tooltip?.querySelector(".bx--tooltip__trigger")?.textContent?.trim(),
+    ).toBe(label);
+    expect(tagOf(label)).not.toHaveClass("bx--tag--truncate");
+    expect(tagOf(label)).not.toHaveAttribute("title");
+  });
+
+  // As in Carbon v11's DismissibleTag, the label shows its full text in
+  // `title`, so the close button stays the tag's only tab stop.
+  it("keeps a truncated filter tag to one tab stop", async () => {
+    mockOverflow(true);
+    await renderTag({ filter: true });
+
+    // Tab until focus leaves the tag and returns to the body.
+    const stops: Element[] = [];
+    await user.tab();
+    let focused = document.activeElement;
+    while (focused && focused !== document.body && stops.length < 5) {
+      stops.push(focused);
+      // biome-ignore lint/performance/noAwaitInLoops: each tab moves focus once
+      await user.tab();
+      focused = document.activeElement;
+    }
+
+    const close = screen.getByRole("button", {
+      name: `Clear filter ${label}`,
+    });
+    expect(stops).toEqual([close]);
+    expect(screen.getByText(label)).toHaveAttribute("title", label);
+    expect(tagOf(label)).not.toHaveAttribute("title");
+    expect(
+      document.querySelector(".bx--tooltip--definition"),
+    ).not.toBeInTheDocument();
+  });
 
   it.each(hosts)(
     "shows a truncated %s label in a tooltip on focus",
@@ -158,21 +181,15 @@ describe("Tag truncation", () => {
     },
   );
 
-  it.each([
-    ["static tag", {}],
-    ["filter tag", { filter: true }],
-  ])(
-    "applies `tabindex` to a truncated %s label's tooltip trigger",
-    async (_, props) => {
-      mockOverflow(true);
-      await renderTag({ ...props, tabindex: -1 });
+  it("applies `tabindex` to a truncated static tag label's tooltip trigger", async () => {
+    mockOverflow(true);
+    await renderTag({ tabindex: -1 });
 
-      expect(
-        tagOf(label)?.querySelector(".bx--tooltip__trigger"),
-      ).toHaveAttribute("tabindex", "-1");
-      expect(tagOf(label)).not.toHaveAttribute("tabindex");
-    },
-  );
+    expect(
+      tagOf(label)?.querySelector(".bx--tooltip__trigger"),
+    ).toHaveAttribute("tabindex", "-1");
+    expect(tagOf(label)).not.toHaveAttribute("tabindex");
+  });
 
   it("keeps `tabindex` on a static tag whose label fits", async () => {
     mockOverflow(false);
@@ -184,7 +201,7 @@ describe("Tag truncation", () => {
 
   it("uses a native title, not a focusable tooltip, inside a roving TagSet", async () => {
     mockOverflow(true);
-    await renderTag({ filter: true, roving: true });
+    await renderTag({ roving: true });
 
     const tag = tagOf(label);
     expect(tag).toHaveAttribute("title", label);
