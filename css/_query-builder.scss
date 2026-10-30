@@ -201,10 +201,18 @@
     margin-bottom: 0;
   }
 
+  // A long query reads as a paragraph: about 70 characters a line.
   .#{$prefix}--query-builder__summary-text {
     @include type-style("body-01");
 
+    max-width: to-rem(480px);
     color: $text-primary;
+    text-wrap: pretty;
+  }
+
+  // A line never breaks a date at its hyphens.
+  .#{$prefix}--query-builder__date {
+    white-space: nowrap;
   }
 
   // A disabled builder shows every part as disabled. Carbon's classes

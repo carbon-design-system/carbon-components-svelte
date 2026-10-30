@@ -384,6 +384,30 @@ describe("QueryBuilder", () => {
     ).toHaveLength(2);
   });
 
+  it("keeps each date in the summary on one line", () => {
+    render(QueryBuilder, {
+      props: {
+        showSummary: true,
+        value: {
+          operator: "and",
+          conditions: [
+            { field: "renewal", operator: "before", value: "2027-01-01" },
+          ],
+        },
+      },
+    });
+
+    const summary = document.querySelector(".bx--query-builder__summary-text");
+    expect(summary).toHaveTextContent(
+      "Where Renewal date is before 2027-01-01",
+    );
+    expect(
+      [...document.querySelectorAll(".bx--query-builder__date")].map(
+        (date) => date.textContent,
+      ),
+    ).toEqual(["2027-01-01"]);
+  });
+
   it("switches a group between all and any", async () => {
     render(QueryBuilder);
 

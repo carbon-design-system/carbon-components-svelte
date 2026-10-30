@@ -233,6 +233,12 @@
     describedBy,
   });
   $: summary = showSummary ? queryToText(tree, fieldsById, translate) : "";
+  // Odd parts are ISO dates, which the summary keeps whole.
+  $: summaryParts = (
+    summary
+      ? translate("summary", { text: summary })
+      : translate("summaryEmpty")
+  ).split(/(\d{4}-\d{2}-\d{2})/);
 
   /**
    * @param {import("./QueryBuilder.svelte").QueryGroup} next
@@ -479,9 +485,10 @@
         >{translate("summaryLabel")}</span
       >
       <p id="{id}-summary" class="bx--query-builder__summary-text">
-        {summary
-          ? translate("summary", { text: summary })
-          : translate("summaryEmpty")}
+        <!-- A date is kept on one line: a line would break it at a hyphen. -->
+        {#each summaryParts as part, position (position)}{#if position % 2}<span
+              class="bx--query-builder__date">{part}</span
+            >{:else}{part}{/if}{/each}
       </p>
     </div>
   {/if}
