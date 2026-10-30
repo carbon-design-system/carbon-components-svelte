@@ -21,8 +21,11 @@
     max-height: var(--ccs-notifications-panel-max-height, none);
   }
 
+  // The minimum is the height with "Dismiss all", so the header keeps its
+  // height when the last row goes and the button hides.
   .#{$prefix}--notifications-panel__header {
     display: flex;
+    min-height: to-rem(48px);
     flex: none;
     align-items: center;
     padding: $carbon--spacing-03 $carbon--spacing-05;

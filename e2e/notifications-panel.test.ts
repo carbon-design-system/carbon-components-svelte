@@ -314,6 +314,18 @@ test.describe("NotificationsPanel", () => {
     expect(Math.abs(m.dismissY - m.titleY)).toBeLessThan(0.5);
   });
 
+  test("keeps the header's height when Dismiss all hides", async ({ page }) => {
+    await page.goto("/notifications-panel.html?plain&count=3");
+    const bodyTop = () =>
+      page
+        .locator(".bx--notifications-panel__body")
+        .evaluate((el) => el.getBoundingClientRect().top);
+    const before = await bodyTop();
+    await page.getByRole("button", { name: "Dismiss all" }).click();
+    await expect(page.getByText("You're all caught up")).toBeVisible();
+    expect(await bodyTop()).toBe(before);
+  });
+
   test("renders the panel without a header, on the page", async ({ page }) => {
     await page.goto("/notifications-panel.html?plain&count=12");
     const region = page.getByRole("region", { name: "Notifications" });
