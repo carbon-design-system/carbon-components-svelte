@@ -152,7 +152,7 @@ A filter tag shows the full text in the label's `title`, as in Carbon v11. The c
 
 ### Close button label
 
-Set `title` to customize the close button's tooltip, shown on hover and focus, and the leading words of its accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components".
+Set `title` to customize the close button's tooltip, shown on hover and focus, and the leading words of its accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components". The prop labels the close button only, so the tag element gets no `title` attribute from it.
 
 <Tag filter title="Remove filter" on:close>carbon-components</Tag>
 

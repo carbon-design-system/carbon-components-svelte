@@ -76,19 +76,19 @@ Set `size` to change the tab height. Line tabs support `"sm"`, `"md"`, and `"lg"
 
 ## Selection
 
-Control which tab is active by index, by a stable id, or by changing how arrow keys move the selection.
-
-### Reactive
-
-Use `bind:selected` for a two-way binding with the selected tab index, so you can programmatically control the selected tab and react to tab changes.
-
-<FileSource src="/framed/Tabs/TabsReactive" />
+Control which tab is active by a stable id, by index, or by changing how arrow keys move the selection.
 
 ### Selected by id
 
-For dynamic tab sets, bind `selectedId` and give each `Tab` a stable `id`. Selection stays on the same logical tab when tabs before it are added or removed. When set, `selectedId` takes precedence over `selected`.
+Bind `selectedId` and give each `Tab` a stable `id`. Prefer it to `selected`: selection stays on the same logical tab when tabs before it are added, removed or reordered. When set, `selectedId` takes precedence over `selected`.
 
 <FileSource src="/framed/Tabs/TabsSelectedId" />
+
+### Reactive
+
+Use `bind:selected` for a two-way binding with the selected tab index. An index points at a different tab once tabs before it change, so use it only for a fixed set of tabs.
+
+<FileSource src="/framed/Tabs/TabsReactive" />
 
 ### Query string
 
