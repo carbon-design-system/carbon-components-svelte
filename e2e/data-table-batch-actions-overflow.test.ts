@@ -18,7 +18,8 @@ test.describe("DataTable batch actions overflow", () => {
   });
 
   // The toolbar spans the table's width, rows keep one pitch, and no cell
-  // or toolbar text spills or gets cut in the 360px table.
+  // or toolbar text spills or gets cut in the 360px table. The button's
+  // box ends at the table's edge, so `ink: false` measures boxes.
   test("toolbar and rows line up with the table", async ({ page }) => {
     const table = page.locator(".bx--data-table-container");
     await expectAligned(
@@ -27,7 +28,7 @@ test.describe("DataTable batch actions overflow", () => {
     );
     await expectAligned(
       [table.locator(".bx--toolbar-content .bx--btn"), table.locator("table")],
-      { edge: "inline-end" },
+      { edge: "inline-end", ink: false },
     );
     expect(await expectOnePitch(table.locator("tbody tr"))).toBe(2);
     expect(await expectTextFits(table)).toBeGreaterThan(0);
