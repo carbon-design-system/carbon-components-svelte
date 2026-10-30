@@ -100,7 +100,11 @@
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { initialFocus, returnFocus } from "../utils/focus.js";
+  import {
+    initialFocus,
+    returnFocus,
+    returnFocusOnClose,
+  } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
@@ -156,6 +160,15 @@
   // Open and close in one block that reads only `open`, so it runs once per
   // change and `close` can name what closed it.
   $: handleOpenChange(open);
+
+  // However it closes, a dialog that holds focus hands it back to the
+  // target, so focus does not stay on a hidden button. A tour that opens
+  // the next stop in the same update keeps focus there.
+  const syncFocusReturn = returnFocusOnClose(
+    () => document.getElementById(triggerId),
+    () => ref,
+  );
+  $: syncFocusReturn(open);
 
   $: if (pendingFocus && open && ref) {
     pendingFocus = false;

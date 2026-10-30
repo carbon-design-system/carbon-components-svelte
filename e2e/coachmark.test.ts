@@ -167,6 +167,8 @@ test.describe("Coachmark", () => {
       await stop(2, "Third", "Finish");
 
       await expect(page.locator(".bx--popover--open")).toHaveCount(0);
+      // The consumer closed the last stop from code, with focus inside it.
+      await expect(page.locator("#cm-tour-2-target")).toBeFocused();
     });
   });
 
