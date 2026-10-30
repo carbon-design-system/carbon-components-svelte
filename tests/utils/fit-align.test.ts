@@ -324,6 +324,28 @@ describe("fitPopoverAlign", () => {
     expect(fitPopoverAlign(el, anchor, "right-top")).toBe("left-bottom");
   });
 
+  // A 600px popover 8px right of a centered anchor needs 608px; each side
+  // has 480px.
+  it.each([
+    ["below", 100, "bottom"],
+    ["above, at the bottom of the window", 560, "top"],
+  ] as const)("opens %s when neither side has room", (_, top, expected) => {
+    const { el, anchor } = setup(
+      { left: 480, top },
+      { left: 528, top, width: 600, height: 20 },
+    );
+    expect(fitPopoverAlign(el, anchor, "right")).toBe(expected);
+  });
+
+  it("aligns the move below to the edge with room", () => {
+    // Centered under the anchor at 120, a 900px popover would start at -330.
+    const { el, anchor } = setup(
+      { left: 100, top: 100 },
+      { left: 92 - 900, top: 100, width: 900, height: 20 },
+    );
+    expect(fitPopoverAlign(el, anchor, "left-top")).toBe("bottom-left");
+  });
+
   it("fits within the box that clips it across the page", () => {
     // The box ends at 500; the window has room.
     const { el, anchor } = setup(

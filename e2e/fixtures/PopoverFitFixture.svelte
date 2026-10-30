@@ -19,6 +19,8 @@
     scroll: false,
     card: false,
     plain: false,
+    narrow: false,
+    narrowPortal: false,
   };
   const text = "Replicated to two zones, backed up nightly, kept for 30 days.";
 </script>
@@ -101,6 +103,35 @@
       ><p>{text}</p></Toggletip
     >
   </span>
+</div>
+
+<!-- Centered, with no room on either side at 320px. -->
+<div style="display: flex; justify-content: center; padding: 1rem 0">
+  <div data-testid="narrow" style="position: relative">
+    <Button size="sm" on:click={() => (open.narrow = !open.narrow)}
+      >Narrow</Button
+    >
+    <Popover open={open.narrow} caret align="right"
+      ><div style="padding: 1rem; width: 16rem">{text}</div></Popover
+    >
+  </div>
+</div>
+<div style="display: flex; justify-content: center; padding: 1rem 0">
+  <div data-testid="narrow-portal" style="position: relative">
+    <Button size="sm" on:click={() => (open.narrowPortal = !open.narrowPortal)}
+      >Narrow portal</Button
+    >
+    <Popover open={open.narrowPortal} caret align="left" portalPopover
+      ><div style="padding: 1rem; width: 16rem">{text}</div></Popover
+    >
+  </div>
+</div>
+<div style="display: flex; justify-content: center; padding: 1rem 0">
+  <div data-testid="toggletip-narrow">
+    <Toggletip direction="left" iconDescription="Toggletip with no side room"
+      ><p>{text}</p></Toggletip
+    >
+  </div>
 </div>
 
 <div style="height: 120vh"></div>
