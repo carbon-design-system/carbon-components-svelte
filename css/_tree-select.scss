@@ -67,14 +67,16 @@
     cursor: pointer;
   }
 
-  .#{$prefix}--tree-select__toggle svg {
+  // Only the expander's own icon: a `Loading` inside it draws with
+  // strokes, and a fill turns its ring into a disc.
+  .#{$prefix}--tree-select__toggle > svg {
     fill: $icon-secondary;
     transition: transform $duration--fast-01 motion(standard, productive);
 
     @include ccs-mirror-rtl;
   }
 
-  .#{$prefix}--tree-select__toggle--expanded svg {
+  .#{$prefix}--tree-select__toggle--expanded > svg {
     transform: rotate(90deg);
 
     @include ccs-mirror-rtl(rotate(90deg));
@@ -103,14 +105,14 @@
   // fill there, needs system colors of its own: `CanvasText` on the menu and
   // `HighlightText` on the filled row.
   @media (forced-colors: active) {
-    .#{$prefix}--tree-select__toggle svg {
+    .#{$prefix}--tree-select__toggle > svg {
       fill: CanvasText;
     }
 
     .#{$prefix}--tree-select
       .#{$prefix}--list-box__menu-item--highlighted
       .#{$prefix}--tree-select__toggle
-      svg {
+      > svg {
       fill: HighlightText;
     }
   }

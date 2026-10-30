@@ -150,6 +150,14 @@ test.describe("TreeSelect", () => {
       exact: true,
     });
     await expect(parent).toHaveAttribute("aria-busy", "true");
+    // The spinner is a ring: the expander's icon fill must not reach it.
+    const fills = await parent
+      .locator(".bx--loading circle")
+      .evaluateAll((circles) =>
+        circles.map((circle) => getComputedStyle(circle).fill),
+      );
+    expect(fills.length).toBeGreaterThan(0);
+    for (const fill of fills) expect(fill).toBe("rgba(0, 0, 0, 0)");
     await expect(
       page.getByRole("treeitem", { name: "Cloud accounts 2" }),
     ).toBeVisible();
