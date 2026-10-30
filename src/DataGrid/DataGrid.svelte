@@ -140,6 +140,12 @@
     `Pasted ${rows} ${rows === 1 ? "row" : "rows"} by ${columns} ${columns === 1 ? "column" : "columns"}`;
 
   /**
+   * Specify the accessible name of an empty cell. An empty cell shows an
+   * em dash, and a screen reader reads this text.
+   */
+  export let emptyCellDescription = "None";
+
+  /**
    * Bring a cell into view, out from under the frozen rows and columns,
    * and give it focus.
    * @param {number} row
@@ -323,6 +329,14 @@
       row: Math.min(Math.max(cell.row, 0), Math.max(rowCount - 1, 0)),
       column: Math.min(Math.max(cell.column, 0), Math.max(columnCount - 1, 0)),
     };
+  }
+
+  /**
+   * A CSS string, for the alternative text of the em dash in an empty cell.
+   * @param {string} text
+   */
+  function cssString(text) {
+    return `"${String(text).replace(/["\\\n]/g, (char) => (char === "\n" ? "\\a " : `\\${char}`))}"`;
   }
 
   /**
@@ -876,6 +890,7 @@
   aria-readonly="true"
   style:max-height={maxHeight}
   style:--ccs-data-grid-row-height="{rowHeight}px"
+  style:--ccs-data-grid-empty-description={cssString(emptyCellDescription)}
   use:pointerDrag={{
     onStart: handlePointerStart,
     onMove: handlePointerMove,

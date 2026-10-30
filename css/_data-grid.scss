@@ -104,6 +104,18 @@
     white-space: nowrap;
   }
 
+  // An empty value shows an em dash, which a screen reader reads as
+  // `emptyCellDescription`. A rule draws it, so a cell keeps one element
+  // and a copy still gives an empty string.
+  .#{$prefix}--data-grid__cell > .#{$prefix}--data-grid__text:empty::before {
+    content: "\2014";
+
+    // Browsers without alternative text for `content` keep the dash.
+    @supports (content: "" / "") {
+      content: "\2014" / var(--ccs-data-grid-empty-description);
+    }
+  }
+
   .#{$prefix}--data-grid__cell--align-end {
     justify-content: flex-end;
     text-align: end;

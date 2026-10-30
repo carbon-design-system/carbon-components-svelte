@@ -125,6 +125,8 @@ If you do not call `preventDefault`, the pasted range becomes the selection, as 
 
 Set `format` on a column to turn a value into the text a cell shows and copies, and `align` to `"end"` for numbers. `align` is logical, so `"end"` is the left edge in a right-to-left page.
 
+An empty value, or a `format` that returns `""`, shows an em dash. A screen reader reads it as `emptyCellDescription` ("None"), and a copy gives an empty string.
+
 ### Custom content
 
 Use the `cell` slot to draw a cell yourself. The grid copies the text from `format` or the raw value, not from the slot.

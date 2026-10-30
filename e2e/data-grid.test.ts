@@ -116,6 +116,19 @@ test.describe("DataGrid", () => {
     await expect(short).not.toHaveAttribute("title");
   });
 
+  test("shows an empty value as a dash named None", async ({ page }) => {
+    await page.goto("/data-grid.html");
+    const empty = cell(page, 5, 1);
+
+    await expect(empty).toHaveText("");
+    expect(
+      await empty
+        .locator(".bx--data-grid__text")
+        .evaluate((node) => getComputedStyle(node, "::before").content),
+    ).toContain("—");
+    await expect(empty).toHaveAccessibleName("None");
+  });
+
   test("paints a bounded window of 500,000 cells and counts all of them", async ({
     page,
   }) => {
