@@ -67,7 +67,7 @@ The panel never changes your array. Remove the notification in your `dismiss` ha
 <NotificationsPanel
   {notifications}
   on:dismiss={({ detail }) =>
-    (notifications = notifications.filter((n) => n.id !== detail.notification.id))}
+    (notifications = notifications.filter((n) => n.id !== detail.id))}
   on:dismiss:all={() => (notifications = [])}
 />
 ```

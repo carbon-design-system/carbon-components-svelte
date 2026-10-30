@@ -23,11 +23,11 @@
 
   const now = Date.UTC(2026, 9, 27, 15, 0, 0);
 
-  function handleDismiss(event: CustomEvent<{ notification: Item }>) {
-    events = [...events, `dismiss:${event.detail.notification.id}`];
+  function handleDismiss(event: CustomEvent<{ id: string; item: Item }>) {
+    events = [...events, `dismiss:${event.detail.id}`];
     if (remove) {
       notifications = notifications.filter(
-        (item) => item.id !== event.detail.notification.id,
+        (item) => item.id !== event.detail.id,
       );
     }
   }
@@ -53,7 +53,7 @@
     if (remove) notifications = [];
   }}
   on:click:notification={(event) =>
-    (events = [...events, `click:${event.detail.notification.id}`])}
+    (events = [...events, `click:${event.detail.id}`])}
   on:view:all={() => (events = [...events, "view:all"])}
 />
 <p data-testid="events">{events.join(",")}</p>

@@ -39,9 +39,7 @@
     bind:doNotDisturb
     style="--ccs-notifications-panel-max-height: 24rem"
     on:dismiss={({ detail }) => {
-      notifications = notifications.filter(
-        (n) => n.id !== detail.notification.id,
-      );
+      notifications = notifications.filter((n) => n.id !== detail.id);
     }}
     on:dismiss:all={() => (notifications = [])}
   />

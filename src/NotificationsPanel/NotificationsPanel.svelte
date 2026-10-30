@@ -24,13 +24,15 @@
   /**
    * @event click:notification
    * @type {object}
-   * @property {PanelNotification} notification
+   * @property {string} id
+   * @property {PanelNotification} item
    */
 
   /**
    * @event dismiss
    * @type {object}
-   * @property {PanelNotification} notification
+   * @property {string} id
+   * @property {PanelNotification} item
    */
 
   /** @event dismiss:all */
@@ -297,7 +299,7 @@
    */
   function dismiss(notification, row, viaDismissButton) {
     const hadFocus = !!row?.contains(document.activeElement);
-    dispatch("dismiss", { notification });
+    dispatch("dismiss", { id: notification.id, item: notification });
     if (hadFocus) restoreFocus(row, viaDismissButton);
   }
 
@@ -329,7 +331,7 @@
   function handleClick(notification, event) {
     const proceed = dispatch(
       "click:notification",
-      { notification },
+      { id: notification.id, item: notification },
       { cancelable: true },
     );
     if (!proceed) event.preventDefault();

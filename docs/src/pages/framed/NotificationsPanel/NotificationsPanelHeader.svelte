@@ -75,13 +75,11 @@
         viewAllHref="#all"
         on:click:notification={({ detail }) => {
           notifications = notifications.map((n) =>
-            n.id === detail.notification.id ? { ...n, unread: false } : n,
+            n.id === detail.id ? { ...n, unread: false } : n,
           );
         }}
         on:dismiss={({ detail }) => {
-          notifications = notifications.filter(
-            (n) => n.id !== detail.notification.id,
-          );
+          notifications = notifications.filter((n) => n.id !== detail.id);
         }}
         on:dismiss:all={() => (notifications = [])}
       />

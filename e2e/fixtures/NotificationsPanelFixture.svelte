@@ -64,10 +64,8 @@
   }
 
   function handleDismiss(event) {
-    log(`dismiss:${event.detail.notification.id}`);
-    notifications = notifications.filter(
-      (item) => item.id !== event.detail.notification.id,
-    );
+    log(`dismiss:${event.detail.id}`);
+    notifications = notifications.filter((item) => item.id !== event.detail.id);
   }
 
   function handleDismissAll() {
@@ -95,7 +93,7 @@
   window.addNotification = addArrival;
 
   function handleClick(event) {
-    log(`click:${event.detail.notification.id}`);
+    log(`click:${event.detail.id}`);
   }
 </script>
 
