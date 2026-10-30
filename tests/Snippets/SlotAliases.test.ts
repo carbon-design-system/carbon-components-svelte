@@ -43,4 +43,12 @@ describe("Svelte 5 snippets for renamed slots", () => {
       screen.getByTestId("tooltip-icon-tooltip-children").parentElement,
     ).toHaveClass("bx--assistive-text");
   });
+
+  it("renders the Tooltip triggerChildren snippet beside the icon", () => {
+    render(SlotAliases);
+
+    expect(
+      screen.getByTestId("tooltip-trigger-children").parentElement,
+    ).toHaveClass("bx--tooltip__label");
+  });
 });

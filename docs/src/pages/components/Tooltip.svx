@@ -34,10 +34,10 @@ Use custom trigger text instead of the default icon with `triggerText`.
 
 ### Trigger text slot
 
-Alternatively, use the `"triggerText"` slot for custom markup.
+Alternatively, use the `triggerChildren` slot for custom markup.
 
 <Tooltip>
-  <strong slot="triggerText">Resource list</strong>
+  <strong slot="triggerChildren">Resource list</strong>
   <p>
     Resources are provisioned based on your account's organization.
   </p>
