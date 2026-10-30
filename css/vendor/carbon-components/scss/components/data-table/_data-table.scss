@@ -459,6 +459,17 @@
     z-index: 3;
   }
 
+  // A focus ring runs past its cell. The next pinned cell paints its opaque
+  // background over the same layer, so the cell that holds focus rises one
+  // step. A pinned header cell of a sticky header keeps its 3, which wins on
+  // weight.
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-start:focus-within,
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-end:focus-within {
+    z-index: 2;
+  }
+
   .#{$prefix}--data-table--pinned-columns {
     isolation: isolate;
   }

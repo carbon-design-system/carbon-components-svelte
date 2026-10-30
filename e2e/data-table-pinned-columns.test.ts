@@ -65,6 +65,24 @@ test.describe("DataTable pinned columns", () => {
     }
   });
 
+  test("raises the pinned cell that holds focus over the next pin", async ({
+    page,
+  }) => {
+    await open(page, "fixed&batch");
+    const row = page.locator("tbody tr").nth(1);
+    await row.locator("input[type=checkbox]").focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+
+    // The checkbox's ring runs past its cell, under the "Name" pin.
+    const z = (index: number) =>
+      row
+        .locator("td")
+        .nth(index)
+        .evaluate((el) => Number(getComputedStyle(el).zIndex));
+    expect(await z(0)).toBeGreaterThan(await z(1));
+  });
+
   test("measures pins the table laid out wider or narrower than declared", async ({
     page,
   }) => {
