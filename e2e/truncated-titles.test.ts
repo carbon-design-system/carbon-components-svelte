@@ -29,6 +29,11 @@ const CASES: {
     measure: ".bx--progress-label",
     text: "Billing plan",
   },
+  {
+    name: "Switch label",
+    hover: ".bx--content-switcher__label >> nth=0",
+    text: "Table of contents",
+  },
 ];
 
 test("truncated text has a title on hover, and text that fits has none", async ({

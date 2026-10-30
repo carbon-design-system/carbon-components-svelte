@@ -1,9 +1,12 @@
 <script>
   import {
+    ContentSwitcher,
     Pagination,
     ProgressIndicator,
     ProgressStep,
+    Switch,
   } from "carbon-components-svelte";
+  import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
 
   const boxes = [
     { id: "cut", width: 200 },
@@ -32,6 +35,12 @@
           <span {...props}>Billing plan</span>
         </ProgressStep>
       </ProgressIndicator>
+    </div>
+    <div data-testid="content-switcher">
+      <ContentSwitcher>
+        <Switch><TableOfContents /> Table of contents</Switch>
+        <Switch text="List" />
+      </ContentSwitcher>
     </div>
   </div>
 {/each}
