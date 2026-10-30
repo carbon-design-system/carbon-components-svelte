@@ -135,13 +135,24 @@
   export let portalTooltip = undefined;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the copy button's tooltip.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
 
   /**
    * Set the alignment of the copy button's tooltip.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "end";
@@ -156,6 +167,7 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -196,6 +208,11 @@
   function handleBlur() {
     focused = false;
   }
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -315,8 +332,8 @@
         {feedbackTimeout}
         {iconDescription}
         {portalTooltip}
-        {tooltipPosition}
-        {tooltipAlignment}
+        tooltipPosition={effectiveTooltipPosition}
+        tooltipAlignment={effectiveTooltipAlignment}
         disabled={disabled || (!value && copy === copyText)}
         {copy}
         aria-describedby={hasLabel ? labelId : undefined}
