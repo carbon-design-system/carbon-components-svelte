@@ -171,7 +171,7 @@
           {#if row.shortcut}
             <!-- The option names its keys in `aria-keyshortcuts`. -->
             <span aria-hidden="true" class:bx--command-palette__shortcut={true}>
-              <Kbd shortcut={row.shortcut} size="sm" />
+              <Kbd shortcut={row.shortcut} variant="muted" />
             </span>
           {/if}
         </svelte:element>

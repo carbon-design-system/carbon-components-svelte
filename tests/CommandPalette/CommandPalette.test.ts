@@ -322,6 +322,16 @@ describe("CommandPalette", () => {
     ).toHaveAttribute("aria-hidden", "true");
   });
 
+  it("shows no key caps for a shortcut that does not parse", () => {
+    render(CommandPalette, {
+      props: { items: [{ id: "logs", text: "Logs", shortcut: "g l" }] },
+    });
+
+    const option = screen.getByRole("option");
+    expect(option.querySelector(".bx--kbd")).toBeNull();
+    expect(option).not.toHaveAttribute("aria-keyshortcuts");
+  });
+
   it("renders a command with href as a link option", () => {
     render(CommandPalette, {
       props: { items: [{ id: "docs", text: "Read the docs", href: "/docs" }] },

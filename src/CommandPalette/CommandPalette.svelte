@@ -232,7 +232,7 @@
   import { restoreFocus } from "../utils/focus.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { applePlatform } from "../utils/keyboard-shortcut.js";
+  import { applePlatform, parseShortcut } from "../utils/keyboard-shortcut.js";
   import { moveIndex } from "../utils/move-index.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
@@ -412,7 +412,11 @@
         description: fields.description || undefined,
         keywords: fields.keywords ?? NO_KEYWORDS,
         icon: fields.icon,
-        shortcut: fields.shortcut || undefined,
+        // A shortcut that does not parse would show an empty key cap.
+        shortcut:
+          fields.shortcut && parseShortcut(fields.shortcut)
+            ? fields.shortcut
+            : undefined,
         href: fields.href || undefined,
         disabled: Boolean(fields.disabled),
       };

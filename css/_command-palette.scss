@@ -259,8 +259,7 @@
   // Forced colors drop the highlight's fill and bar, so arrow keys showed
   // no row. The highlighted row fills with `Highlight`, as a native list's
   // current option does, and opts out of forcing, so everything it holds
-  // needs a system color, the key caps' edges too. A disabled row reads
-  // `GrayText`.
+  // needs a system color, the keys too. A disabled row reads `GrayText`.
   @media (forced-colors: active) {
     .#{$prefix}--command-palette__item--highlighted {
       forced-color-adjust: none;
@@ -285,8 +284,6 @@
 
     .#{$prefix}--command-palette__item--highlighted
       .#{$prefix}--kbd__key {
-      border-color: HighlightText;
-      background-color: transparent;
       color: HighlightText;
     }
 

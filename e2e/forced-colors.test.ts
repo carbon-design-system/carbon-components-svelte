@@ -736,8 +736,8 @@ test.describe("forced colors", () => {
   });
 
   // The palette's highlight is a fill and a bar, both dropped, so arrow
-  // keys showed no row. Key caps are fills too, so they keep a border.
-  test("the CommandPalette highlighted row fills with Highlight, and key caps keep an edge", async ({
+  // keys showed no row.
+  test("the CommandPalette highlighted row fills with Highlight", async ({
     page,
   }) => {
     // A click would leave later tests' scripted focus without a ring.
@@ -759,11 +759,6 @@ test.describe("forced colors", () => {
     expect
       .soft((await style(page, `${highlighted} svg`)).fill, "icon")
       .toBe(system.HighlightText);
-    const key =
-      ".bx--command-palette__item:not(.bx--command-palette__item--highlighted) .bx--kbd__platform--other .bx--kbd__key";
-    expect
-      .soft((await style(page, key)).borderColor, key)
-      .toBe(system.CanvasText);
     expect
       .soft(
         (await style(page, ".bx--command-palette__item--disabled")).color,

@@ -1,6 +1,10 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
-import { expectNoPageOverflow, expectTextFits } from "./helpers/layout";
+import {
+  expectNoNestedBorders,
+  expectNoPageOverflow,
+  expectTextFits,
+} from "./helpers/layout";
 
 const highlighted = ".bx--command-palette__item--highlighted";
 
@@ -119,6 +123,15 @@ test("wraps long labels at 320 px instead of cutting them", async ({
     expect(await expectTextFits(container)).toBeGreaterThan(0);
   }).toPass();
   await expectNoPageOverflow(page);
+});
+
+test("draws no bordered box inside the dialog", async ({ page }) => {
+  await page.goto("/command-palette.html?open&state=groups");
+  const container = page.locator(".bx--command-palette__container");
+  await expect(container).toBeVisible();
+  await expect(async () => {
+    expect(await expectNoNestedBorders(container)).toBeGreaterThan(0);
+  }).toPass();
 });
 
 test("keeps Tab off the options, including link options", async ({ page }) => {
