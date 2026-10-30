@@ -356,14 +356,23 @@
   {...rest}
 >
   {#if labelText}
-    <span id={labelId} class="bx--label" class:bx--visually-hidden={hideLabel}
-      >{labelText}</span
+    <span
+      id={labelId}
+      class:bx--label={true}
+      class:bx--label--disabled={disabled}
+      class:bx--visually-hidden={hideLabel}>{labelText}</span
     >
   {/if}
   <!-- Helper and error text follow the label. Below the builder they would
     sit after every row and the add buttons, far from the label. -->
   {#if helperText && !invalid}
-    <div id="{id}-helper" class="bx--form__helper-text">{helperText}</div>
+    <div
+      id="{id}-helper"
+      class:bx--form__helper-text={true}
+      class:bx--form__helper-text--disabled={disabled}
+    >
+      {helperText}
+    </div>
   {/if}
   {#if invalid && invalidText}
     <!-- The modifier shows the message, which Carbon hides unless it follows
@@ -379,7 +388,9 @@
   <QueryBuilderGroup node={value} />
   {#if showSummary}
     <div class="bx--query-builder__summary">
-      <span class="bx--label">{translate("summaryLabel")}</span>
+      <span class:bx--label={true} class:bx--label--disabled={disabled}
+        >{translate("summaryLabel")}</span
+      >
       <p id="{id}-summary" class="bx--query-builder__summary-text">
         {summary
           ? translate("summary", { text: summary })

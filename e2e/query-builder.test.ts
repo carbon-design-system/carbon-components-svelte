@@ -298,6 +298,32 @@ test.describe("QueryBuilder", () => {
     expect(text.y - (label.y + label.height)).toBeCloseTo(8, 0);
   });
 
+  test("shows every text part in the disabled color when disabled", async ({
+    page,
+  }) => {
+    await page.goto("/query-builder.html?preset=nested&disabled=1");
+    const colors = await page.evaluate(() => {
+      const color = (selector: string) => {
+        const el = document.querySelector(selector);
+        if (!el) throw new Error(`no ${selector}`);
+        return getComputedStyle(el).color;
+      };
+      return {
+        field: color(".bx--query-builder__cell--field select"),
+        parts: {
+          label: color(".bx--query-builder > .bx--label"),
+          helper: color(".bx--query-builder > .bx--form__helper-text"),
+          connector: color(".bx--query-builder__connector"),
+          summaryLabel: color(".bx--query-builder__summary .bx--label"),
+          summary: color(".bx--query-builder__summary-text"),
+        },
+      };
+    });
+    for (const [part, value] of Object.entries(colors.parts)) {
+      expect.soft(value, part).toBe(colors.field);
+    }
+  });
+
   test("shows no controls to edit when read only", async ({ page }) => {
     await page.goto("/query-builder.html?preset=nested&readonly=1");
     await expect(
