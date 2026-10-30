@@ -598,6 +598,20 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/FullPageError
+  gantt:
+    name: Gantt
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/gantt.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Gantt
+    tags:
+      - content-element
   grid:
     status: stable
     framework: svelte

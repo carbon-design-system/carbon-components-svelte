@@ -15,6 +15,7 @@ import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
+import Gantt from "carbon-components-svelte/Gantt/Gantt.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
@@ -510,6 +511,18 @@ export const interactive: AriaEntry[] = [
         props: { labelText: "Files", nodes, virtualize: true, ...attrs },
       }),
     target: () => screen.getByRole("tree"),
+  },
+  {
+    name: "Gantt",
+    render: (attrs) =>
+      render(Gantt, {
+        props: {
+          labelText: "Plan",
+          tasks: [{ id: "a", text: "A", start: "2026-03-02" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("treegrid"),
   },
   {
     name: "TreeViewGrid",
