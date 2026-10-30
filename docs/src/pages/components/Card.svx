@@ -179,7 +179,7 @@ Set `noPadding` on `CardBody` for content with its own spacing, such as a list, 
 
 ## Title
 
-`CardTitle` takes a `label` slot above the title and a `description` slot below it. Put an icon before the title with `CardTitleMedia`, or in the `titleStart` and `titleEnd` slots.
+`CardTitle` takes a `labelChildren` slot above the title and a `description` slot below it. Put an icon before the title with `CardTitleMedia`, or in the `titleStart` and `titleEnd` slots.
 
 <Box maxWidth="20rem">
   <Card>
@@ -188,7 +188,7 @@ Set `noPadding` on `CardBody` for content with its own spacing, such as a list, 
         <Report size={20} />
       </CardTitleMedia>
       <CardTitle>
-        <svelte:fragment slot="label">Billing</svelte:fragment>
+        <svelte:fragment slot="labelChildren">Billing</svelte:fragment>
         Quarterly report
         <svelte:fragment slot="description">Updated 2 hours ago</svelte:fragment>
       </CardTitle>

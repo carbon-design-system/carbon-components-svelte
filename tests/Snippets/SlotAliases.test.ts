@@ -27,4 +27,12 @@ describe("Svelte 5 snippets for renamed slots", () => {
       screen.getByTestId("modal-label-children").parentElement,
     ).toHaveClass("bx--modal-header__label");
   });
+
+  it("renders the CardTitle labelChildren snippet above the title", () => {
+    render(SlotAliases);
+
+    expect(
+      screen.getByTestId("card-title-label-children").parentElement,
+    ).toHaveClass("bx--card__label");
+  });
 });
