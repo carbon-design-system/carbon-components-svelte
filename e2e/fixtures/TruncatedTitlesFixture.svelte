@@ -1,5 +1,9 @@
 <script>
-  import { Pagination } from "carbon-components-svelte";
+  import {
+    Pagination,
+    ProgressIndicator,
+    ProgressStep,
+  } from "carbon-components-svelte";
 
   const boxes = [
     { id: "cut", width: 200 },
@@ -20,6 +24,14 @@
   >
     <div data-testid="pagination">
       <Pagination totalItems={120} pageSize={10} pageSizes={[10]} page={3} />
+    </div>
+    <div data-testid="progress-indicator">
+      <ProgressIndicator spaceEqually preventChangeOnClick>
+        <ProgressStep label="Team members" />
+        <ProgressStep let:props>
+          <span {...props}>Billing plan</span>
+        </ProgressStep>
+      </ProgressIndicator>
     </div>
   </div>
 {/each}
