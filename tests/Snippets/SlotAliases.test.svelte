@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CardTitle from "carbon-components-svelte/Card/CardTitle.svelte";
   import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
   import HeaderNav from "carbon-components-svelte/UIShell/HeaderNav.svelte";
@@ -28,3 +29,10 @@
   {/snippet}
   Content
 </Modal>
+
+<CardTitle>
+  {#snippet labelChildren()}
+    <span data-testid="card-title-label-children">Billing</span>
+  {/snippet}
+  Quarterly report
+</CardTitle>

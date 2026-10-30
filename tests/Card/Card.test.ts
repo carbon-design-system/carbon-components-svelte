@@ -3,6 +3,7 @@ import { user } from "../utils/user";
 import Card from "./Card.test.svelte";
 import CardDecorated from "./CardDecorated.test.svelte";
 import CardTitle from "./CardTitle.test.svelte";
+import CardTitleLabelSlot from "./CardTitleLabelSlot.test.svelte";
 
 describe("Card", () => {
   it("renders a static surface with the productive title style", () => {
@@ -286,6 +287,22 @@ describe("CardTitle", () => {
     expect(
       title.querySelector(".bx--card__title-text-row")?.getAttribute("style"),
     ).toBeFalsy();
+  });
+
+  it.each([
+    ["labelChildren", "New label"],
+    ["label", "Old label"],
+  ] as const)("renders the %s slot above the title", (slots, text) => {
+    render(CardTitleLabelSlot, { props: { slots } });
+
+    expect(screen.getByText(text)).toHaveClass("bx--card__label");
+  });
+
+  it("prefers the labelChildren slot over the label slot", () => {
+    render(CardTitleLabelSlot, { props: { slots: "both" } });
+
+    expect(screen.getByText("New label")).toHaveClass("bx--card__label");
+    expect(screen.queryByText("Old label")).toBeNull();
   });
 
   it("truncates the title to one line at a maximum width", () => {
