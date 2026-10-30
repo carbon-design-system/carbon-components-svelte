@@ -243,16 +243,19 @@ describe("Tearsheet", () => {
     );
   });
 
-  it("uses the narrow footer below the md breakpoint, so labels stay whole", async () => {
+  it("keeps the wide footer's size at any window width, so the server renders it", async () => {
     const viewport = stubViewport(360);
     render(TearsheetSlots);
     await tick();
-    const actions = () => document.querySelector(".bx--tearsheet__actions");
-    expect(actions()).toHaveClass("bx--action-set--lg");
-
+    // CSS sizes the buttons below `md`; the class does not follow the window.
+    expect(document.querySelector(".bx--tearsheet__actions")).toHaveClass(
+      "bx--action-set--2xl",
+    );
     viewport.setWidth(1280);
     await tick();
-    expect(actions()).toHaveClass("bx--action-set--2xl");
+    expect(document.querySelector(".bx--tearsheet__actions")).toHaveClass(
+      "bx--action-set--2xl",
+    );
     vi.unstubAllGlobals();
   });
 
