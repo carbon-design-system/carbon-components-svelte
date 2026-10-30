@@ -259,6 +259,18 @@ test.describe("ColorPicker", () => {
       expect(colors.swatch).not.toBe(colors.canvas);
       expect(colors.hueBefore).toContain("linear-gradient");
 
+      // The thumbs keep their colors, but the focus ring is `Highlight`.
+      await area(page).focus();
+      const ring = await area(page).evaluate((thumb) => {
+        const probe = document.createElement("div");
+        probe.style.color = "Highlight";
+        document.body.append(probe);
+        const highlight = getComputedStyle(probe).color;
+        probe.remove();
+        return { outline: getComputedStyle(thumb).outlineColor, highlight };
+      });
+      expect(ring.outline).toBe(ring.highlight);
+
       // The value still reads as text, and the chosen swatch carries a mark.
       await expect(
         picker(page).getByRole("textbox", { name: "Hex" }),

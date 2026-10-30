@@ -142,10 +142,14 @@
     background-color: hsl(var(--ccs-color-picker-hue, 0), 100%, 50%);
   }
 
+  // The thumb sits on the color the user picks, so a `$focus` ring alone
+  // vanishes on blue. A `$focus-inset` halo on both sides of the ring
+  // keeps it at 3:1 on any color.
   .#{$prefix}--color-picker__thumb:focus {
     @include focus-outline("outline", (outline-offset));
 
-    outline-offset: to-rem(3px);
+    box-shadow: 0 0 0 5px $focus-inset;
+    outline-offset: 1px;
   }
 
   .#{$prefix}--color-picker__area--disabled,
@@ -307,6 +311,12 @@
   @media (forced-colors: active) {
     .#{$prefix}--color-picker__swatch-face svg {
       fill: currentColor;
+    }
+
+    // The thumbs keep their colors, so the ring takes the system color
+    // by hand.
+    .#{$prefix}--color-picker__thumb:focus {
+      outline-color: Highlight;
     }
   }
 
