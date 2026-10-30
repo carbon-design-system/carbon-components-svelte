@@ -10,6 +10,12 @@
    */
 
   /**
+   * @slot {{}} textChildren - Custom trigger content. Replaces `text`.
+   * @deprecated use the `textChildren` slot
+   * @slot {{}} text
+   */
+
+  /**
    * Set to `true` to toggle the expanded state.
    * @bindable writable
    */
@@ -20,6 +26,7 @@
 
   /**
    * Specify the text.
+   * Alternatively, use the "textChildren" slot.
    * @type {string | undefined}
    */
   export let text = undefined;
@@ -315,7 +322,7 @@
     on:focus
     on:blur
   >
-    <slot name="text">{text}</slot>
+    <slot name="textChildren"><slot name="text">{text}</slot></slot>
     {#if icon || $$slots.icon}
       <slot name="icon">
         <svelte:component this={icon} size={16} />

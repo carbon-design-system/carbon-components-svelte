@@ -50,7 +50,7 @@ Keyboard support follows the WAI-ARIA menu pattern: <DocKbd label="Enter" />, <D
 
 `HeaderNav` is a WAI-ARIA menubar, so its top-level items (`HeaderNavItem`s and `HeaderNavMenu` triggers) are a single <DocKbd label="Tab" /> stop: the current page item (or the first item) takes focus, and the arrow keys move between the rest. <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> move between top-level items (wrapping at either end), <DocKbd label="Home" />/<DocKbd label="End" /> jump to the first or last, and typing a character focuses the next item whose label starts with it. While a menu is open, <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowRight" /> close it and move to the adjacent top-level item, opening its menu and focusing the first item when it is a `HeaderNavMenu`. In a right-to-left layout, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> swap. Typing a character focuses the next menu item starting with it.
 
-Set `icon` on `HeaderNavMenu` to render a trailing icon between the text and the chevron, or use the `icon` slot. Replace the label with the `text` slot when it needs custom content; the trigger's accessible name follows what is rendered.
+Set `icon` on `HeaderNavMenu` to render a trailing icon between the text and the chevron, or use the `icon` slot. Replace the label with the `textChildren` slot when it needs custom content; the trigger's accessible name follows what is rendered.
 
 <FileSource src="/framed/UIShell/HeaderNavMenuTrigger" />
 

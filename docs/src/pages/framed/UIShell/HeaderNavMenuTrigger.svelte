@@ -25,7 +25,7 @@
       <HeaderNavItem href="/access" text="Access (IAM)" />
     </HeaderNavMenu>
     <HeaderNavMenu>
-      <svelte:fragment slot="text">
+      <svelte:fragment slot="textChildren">
         Products <Tag size="sm" type="blue">New</Tag>
       </svelte:fragment>
       <HeaderNavItem href="/watson" text="Watson Studio" />
