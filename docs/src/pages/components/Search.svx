@@ -191,6 +191,11 @@ Replace the default search icon with a custom one.
 Set `loading` to show a small spinner in place of the search icon while
 results are loading. The input stays editable and gets `aria-busy="true"`.
 
+Set `loadingDelay` to wait a number of milliseconds after `loading` becomes
+`true` before showing the spinner. Work that finishes within the delay shows
+no spinner. Once shown, the spinner stays for at least 500 ms so it does not
+flash. The input gets `aria-busy` as soon as `loading` is `true`.
+
 <Search loading value="Cloud functions" />
 
 ## Skeleton
