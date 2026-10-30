@@ -202,7 +202,7 @@
     FORM_SIZE_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import { createLoadingDelay } from "../utils/delayed-loading.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formButtonSize } from "../utils/form-button-size.js";
@@ -236,18 +236,10 @@
   // the disabled look that comes with it, wait for `loadingDelay`. With no
   // delay the spinner follows `loading` exactly, as before.
   let showSpinner = loading;
-  /** @type {import("../utils/delayed-loading.js").LoadingDelay | undefined} */
-  let loadingTimer;
-  $: {
-    loadingTimer?.cancel();
-    loadingTimer = createLoadingDelay(
-      (shown) => {
-        showSpinner = shown;
-      },
-      { delay: loadingDelay, minDuration: loadingDelay > 0 ? undefined : 0 },
-    );
-  }
-  $: loadingTimer?.(loading);
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showSpinner = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
   // Without an iconDescription there is nothing to show in a tooltip or
   // announce as the accessible name via the assistive-text span; skip the
   // whole tooltip apparatus and let the consumer's own aria-label/
@@ -437,7 +429,7 @@
   onMount(() => {
     return () => {
       tooltipHandoff.cancel();
-      loadingTimer?.cancel();
+      loadingIndicator.cancel();
       disconnectModalObserver();
       tooltipHandoff.release();
     };
