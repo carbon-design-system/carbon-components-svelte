@@ -924,6 +924,40 @@ test.describe("forced colors", () => {
     }
   });
 
+  // Each option's transparent bottom border was forced to CanvasText on
+  // top of the next option's divider, so every divider read twice as thick.
+  test("a list box draws one line between options", async ({ page }) => {
+    for (const [field, trigger] of [
+      ["dropdown", ".bx--list-box__field"],
+      ["combobox", "input"],
+      ["multiselect", ".bx--list-box__field"],
+    ]) {
+      const scope = `[data-testid=fields] [data-testid=${field}]`;
+      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+      await page.click(`${scope} ${trigger}`);
+      const options = page.locator(`${scope} .bx--list-box__menu-item__option`);
+      await expect(options.nth(2)).toBeVisible();
+      // Lines between each option and the next: its bottom edge plus the
+      // next one's top edge.
+      const lines = await options.evaluateAll((els) => {
+        const drawn = (style: string, width: string) =>
+          style !== "none" && style !== "hidden" && width !== "0px" ? 1 : 0;
+        const edges = els.map((el) => {
+          const s = getComputedStyle(el);
+          return {
+            top: drawn(s.borderTopStyle, s.borderTopWidth),
+            bottom: drawn(s.borderBottomStyle, s.borderBottomWidth),
+          };
+        });
+        return edges
+          .slice(1)
+          .map((edge, i) => (edges[i]?.bottom ?? 0) + edge.top);
+      });
+      expect.soft(lines, field).toEqual([1, 1]);
+      await page.keyboard.press("Escape");
+    }
+  });
+
   test("an OverflowMenu option and a HeaderSearch result fill with Highlight when highlighted", async ({
     page,
   }) => {
