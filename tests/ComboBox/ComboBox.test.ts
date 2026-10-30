@@ -11,6 +11,7 @@ import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxDuplicateIds from "./ComboBoxDuplicateIds.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
+import ComboBoxIconEnd from "./ComboBoxIconEnd.test.svelte";
 import ComboBoxIconSlots from "./ComboBoxIconSlots.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
 import ComboBoxItemIcon from "./ComboBoxItemIcon.test.svelte";
@@ -2141,6 +2142,36 @@ describe("ComboBox", () => {
       expect(
         document.querySelector(".bx--list-box__menu-item__selected-icon"),
       ).toBeNull();
+    });
+
+    it("should render iconEnd instead of the checkmark", () => {
+      render(ComboBoxIconEnd);
+
+      expect(screen.getByTestId("end-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("end-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(
+        screen
+          .getByTestId("end-0")
+          .closest(".bx--list-box__menu-item__icon--right"),
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeNull();
+    });
+
+    it("should prefer iconEnd over iconRight", () => {
+      render(ComboBoxIconEnd, { props: { withIconRight: true } });
+
+      expect(screen.getByTestId("end-0")).toBeInTheDocument();
+      expect(screen.getByTestId("end-1")).toBeInTheDocument();
+      expect(screen.queryByTestId("right-0")).toBeNull();
+      expect(screen.queryByTestId("right-1")).toBeNull();
     });
   });
 
