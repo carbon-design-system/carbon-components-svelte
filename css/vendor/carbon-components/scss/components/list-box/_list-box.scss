@@ -947,3 +947,27 @@ $list-box-width: 100%;
 @include exports("list-box-selection-divider") {
   @include list-box-selection-divider;
 }
+
+// carbon-components-svelte patch (list-box-forced-colors)
+// Each option carries a transparent bottom border that never shows. Forced
+// colors repaint it as `CanvasText`, so it sat on the next option's top
+// divider and every divider read twice as thick, with a stray line under
+// the last option. The bottom border goes, and the top divider stays.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// One divider between list box options in forced-colors mode.
+/// @access private
+/// @group components
+@mixin list-box-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--list-box__menu-item__option {
+      border-bottom-style: none;
+    }
+  }
+}
+
+@include exports("list-box-forced-colors") {
+  @include list-box-forced-colors;
+}
