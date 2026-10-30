@@ -37,10 +37,10 @@ Render an inline label beside the button using the `labelText` prop.
 
 ### Label slot
 
-Alternatively, use the `"labelText"` slot for custom markup.
+Alternatively, use the `labelChildren` slot for custom markup.
 
 <Toggletip>
-  <strong slot="labelText">Density</strong>
+  <strong slot="labelChildren">Density</strong>
   Controls the row height and spacing across tables in this workspace.
 </Toggletip>
 
