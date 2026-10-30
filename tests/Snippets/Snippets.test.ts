@@ -199,6 +199,15 @@ describe("Svelte 5 Snippets", () => {
         rightIcon.closest(".bx--overflow-menu-options__option-icon--right"),
       ).toBeInTheDocument();
     });
+
+    it("should render the iconEnd slot as a snippet", () => {
+      render(Snippets);
+
+      const endIcon = screen.getByTestId("overflow-item-icon-end");
+      expect(
+        endIcon.closest(".bx--overflow-menu-options__option-icon--right"),
+      ).toBeInTheDocument();
+    });
   });
 
   describe("Theme", () => {

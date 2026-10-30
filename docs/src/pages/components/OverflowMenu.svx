@@ -185,13 +185,13 @@ Customize individual menu items.
 
 ### Icons
 
-Set `icon` for a left icon or `iconRight` for a right icon; the label fills the space between them. Use the matching slots for custom markup. Item icons are not intended for `sm` or `xs` sizes.
+Set `icon` for an icon at the start or `iconEnd` for one at the end; the label fills the space between them. Use the matching slots for custom markup. Item icons are not intended for `sm` or `xs` sizes.
 
 <OverflowMenu>
   <OverflowMenuItem icon={Edit} text="Rename" />
   <OverflowMenuItem
     icon={Document}
-    iconRight={Launch}
+    iconEnd={Launch}
     text="Open docs"
     href="https://www.ibm.com/docs"
     target="_blank"

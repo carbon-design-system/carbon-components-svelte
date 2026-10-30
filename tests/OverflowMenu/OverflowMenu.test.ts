@@ -727,6 +727,42 @@ describe("OverflowMenu", () => {
         slotIcon.closest(".bx--overflow-menu-options__option-icon--right"),
       ).toBeInTheDocument();
     });
+
+    it("renders the iconEnd prop and slot at the end", () => {
+      render(OverflowMenuItemIcons);
+
+      const endProp = screen.getByRole("menuitem", { name: "End prop" });
+      expect(
+        endProp.querySelector(
+          ".bx--overflow-menu-options__option-icon--right svg",
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen
+          .getByTestId("slot-icon-end")
+          .closest(".bx--overflow-menu-options__option-icon--right"),
+      ).toBeInTheDocument();
+    });
+
+    it("prefers iconEnd over iconRight", () => {
+      render(OverflowMenuItemIcons);
+
+      const endIcon = (name: string) =>
+        screen
+          .getByRole("menuitem", { name })
+          .querySelector(".bx--overflow-menu-options__option-icon--right");
+      // Both items render Launch from `iconEnd`; the second also sets
+      // `iconRight` to Edit.
+      expect(endIcon("Both end props")?.innerHTML).toBe(
+        endIcon("End prop")?.innerHTML,
+      );
+
+      expect(screen.getByTestId("both-icon-end")).toBeInTheDocument();
+      expect(screen.queryByTestId("both-icon-right")).toBeNull();
+      expect(endIcon("Both end slots")?.querySelectorAll("svg")).toHaveLength(
+        1,
+      );
+    });
   });
 
   it("puts aria attributes on the menu item, and the rest on the wrapper", () => {
