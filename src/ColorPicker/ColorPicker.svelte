@@ -3,7 +3,7 @@
    * @typedef {import("../utils/color.js").ColorFormat} ColorPickerFormat
    * @typedef {import("../utils/color.js").Hsva} ColorPickerColor
    * @typedef {import("./ColorSwatches.svelte").ColorSwatch} ColorPickerSwatch
-   * @typedef {"group" | "area" | "areaRoleDescription" | "areaValue" | "hue" | "hueValue" | "alpha" | "alphaValue" | "format" | "hex" | "red" | "green" | "blue" | "hueField" | "saturation" | "lightness" | "swatches" | "recent" | "eyeDropper" | "invalidColor" | "lowContrast" | "readonly"} ColorPickerTranslationId
+   * @typedef {"group" | "area" | "areaRoleDescription" | "areaValue" | "hue" | "hueValue" | "alpha" | "alphaValue" | "format" | "hex" | "red" | "green" | "blue" | "hueField" | "saturation" | "lightness" | "swatches" | "recent" | "eyeDropper" | "invalidColor" | "lowContrast" | "readonly" | "formatHex" | "formatRgb" | "formatHsl" | "redCaption" | "greenCaption" | "blueCaption" | "hueCaption" | "saturationCaption" | "lightnessCaption" | "alphaCaption"} ColorPickerTranslationId
    * @restProps {div}
    * @event {{ value: string }} input
    * @event {{ value: string }} change
@@ -175,22 +175,37 @@
     invalidColor: "Enter a color such as #0f62fe",
     lowContrast: "Contrast with the background is below {min}:1",
     readonly: "Read-only",
+    formatHex: "HEX",
+    formatRgb: "RGB",
+    formatHsl: "HSL",
+    redCaption: "R",
+    greenCaption: "G",
+    blueCaption: "B",
+    hueCaption: "H",
+    saturationCaption: "S",
+    lightnessCaption: "L",
+    alphaCaption: "A",
   };
 
   const BARE_HEX = /^[0-9a-f]{3,8}$/i;
 
-  /** @type {ReadonlyArray<{ channel: "r" | "g" | "b"; name: ColorPickerTranslationId; caption: string }>} */
+  /** @type {ReadonlyArray<{ channel: "r" | "g" | "b"; name: ColorPickerTranslationId; caption: ColorPickerTranslationId }>} */
   const RGB_FIELDS = [
-    { channel: "r", name: "red", caption: "R" },
-    { channel: "g", name: "green", caption: "G" },
-    { channel: "b", name: "blue", caption: "B" },
+    { channel: "r", name: "red", caption: "redCaption" },
+    { channel: "g", name: "green", caption: "greenCaption" },
+    { channel: "b", name: "blue", caption: "blueCaption" },
   ];
 
-  /** @type {ReadonlyArray<{ channel: "h" | "s" | "l"; name: ColorPickerTranslationId; caption: string; max: number }>} */
+  /** @type {ReadonlyArray<{ channel: "h" | "s" | "l"; name: ColorPickerTranslationId; caption: ColorPickerTranslationId; max: number }>} */
   const HSL_FIELDS = [
-    { channel: "h", name: "hueField", caption: "H", max: 360 },
-    { channel: "s", name: "saturation", caption: "S", max: 100 },
-    { channel: "l", name: "lightness", caption: "L", max: 100 },
+    { channel: "h", name: "hueField", caption: "hueCaption", max: 360 },
+    {
+      channel: "s",
+      name: "saturation",
+      caption: "saturationCaption",
+      max: 100,
+    },
+    { channel: "l", name: "lightness", caption: "lightnessCaption", max: 100 },
   ];
   const dispatch = createEventDispatcher();
 
@@ -557,9 +572,9 @@
           readonlyText={translateWithId("readonly")}
           on:update={handleFormat}
         >
-          <SelectItem value="hex" text="HEX" />
-          <SelectItem value="rgb" text="RGB" />
-          <SelectItem value="hsl" text="HSL" />
+          <SelectItem value="hex" text={translateWithId("formatHex")} />
+          <SelectItem value="rgb" text={translateWithId("formatRgb")} />
+          <SelectItem value="hsl" text={translateWithId("formatHsl")} />
         </Select>
       </div>
       {#if format === "hex"}
@@ -601,7 +616,7 @@
               on:blur={remember}
             />
             <span class:bx--color-picker__caption={true} aria-hidden="true"
-              >{caption}</span
+              >{translateWithId(caption)}</span
             >
           </div>
         {/each}
@@ -623,7 +638,7 @@
               on:blur={remember}
             />
             <span class:bx--color-picker__caption={true} aria-hidden="true"
-              >{caption}</span
+              >{translateWithId(caption)}</span
             >
           </div>
         {/each}
@@ -645,7 +660,7 @@
             on:blur={remember}
           />
           <span class:bx--color-picker__caption={true} aria-hidden="true"
-            >A</span
+            >{translateWithId("alphaCaption")}</span
           >
         </div>
       {/if}

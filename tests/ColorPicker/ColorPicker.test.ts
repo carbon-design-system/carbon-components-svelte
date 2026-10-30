@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import ColorPickerComponent from "carbon-components-svelte/ColorPicker/ColorPicker.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import ColorPicker from "./ColorPicker.test.svelte";
@@ -461,6 +462,26 @@ describe("ColorPicker", () => {
         screen.queryByRole("button", { name: "Pick a color from the screen" }),
       ).not.toBeInTheDocument();
     });
+  });
+
+  it("translates the format names and the field captions", () => {
+    const french: Record<string, string> = {
+      formatRgb: "RVB",
+      greenCaption: "V",
+      alphaCaption: "O",
+    };
+    const { container } = render(ColorPickerComponent, {
+      value: "#0f62fe",
+      format: "rgb",
+      alpha: true,
+      translateWithId: (id: string) => french[id] ?? id,
+    });
+
+    expect(screen.getByRole("option", { name: "RVB" })).toBeInTheDocument();
+    const captions = [
+      ...container.querySelectorAll(".bx--color-picker__caption"),
+    ].map((caption) => caption.textContent);
+    expect(captions).toEqual(["redCaption", "V", "blueCaption", "O"]);
   });
 
   it("takes the thumbs and fields out of the tab order when disabled", () => {
