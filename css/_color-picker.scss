@@ -265,7 +265,6 @@
 
   .#{$prefix}--color-picker__swatches {
     display: grid;
-    justify-content: space-between;
     gap: $carbon--spacing-03;
     grid-template-columns: repeat(
       var(--ccs-color-picker-columns, 8),

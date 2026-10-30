@@ -186,6 +186,22 @@ test.describe("ColorPicker", () => {
     expect(outside).toEqual([0, 0]);
   });
 
+  test("spaces the swatches 8px apart both ways", async ({ page }) => {
+    const gaps = await picker(page)
+      .locator(".bx--color-picker__swatches")
+      .first()
+      .evaluate((grid) => {
+        const rects = [...grid.children].map((swatch) =>
+          swatch.getBoundingClientRect(),
+        );
+        return {
+          across: rects[1].left - rects[0].right,
+          down: rects[8].top - rects[0].bottom,
+        };
+      });
+    expect(gaps).toEqual({ across: 8, down: 8 });
+  });
+
   test("holds a line for the contrast warning", async ({ page }) => {
     const alphaPicker = page.getByTestId("alpha");
     const root = alphaPicker.locator(".bx--color-picker");
