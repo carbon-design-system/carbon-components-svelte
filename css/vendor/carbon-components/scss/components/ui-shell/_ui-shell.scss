@@ -218,7 +218,15 @@
     background-color: initial;
     border: none;
     outline: none;
+    // A query reads in its own direction, so in RTL "3 / 4" keeps its
+    // order, as in `.bx--search-input`. Keep it at the page's start.
+    unicode-bidi: plaintext;
+    text-align: left;
     transition: opacity $duration--fast-02 motion(standard, productive);
+  }
+
+  [dir="rtl"] .#{$prefix}--header__search-input {
+    text-align: ccs-dir(left, right);
   }
 
   .#{$prefix}--header__search-input:not(.#{$prefix}--header__search--active) {

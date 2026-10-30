@@ -8,6 +8,7 @@
     DataTable,
     DatePicker,
     DatePickerInput,
+    HeaderSearch,
     NumberInput,
     PasswordInput,
     PinCodeInput,
@@ -377,6 +378,9 @@
       invalid
       invalidText="Wrong code"
     />
+  </div>
+  <div data-testid="header-search">
+    <HeaderSearch />
   </div>
 </div>
 

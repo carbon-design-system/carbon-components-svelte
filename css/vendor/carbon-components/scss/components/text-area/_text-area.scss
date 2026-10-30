@@ -155,3 +155,23 @@
 .#{$prefix}--text-area__label-counter--error {
   color: $text-error;
 }
+
+// Each paragraph reads in its own direction, so in RTL "3 / 4" keeps its
+// order instead of showing as "4 / 3". `unicode-bidi: plaintext` also aligns
+// each paragraph to its own start, so keep it at the page's start.
+/// @access private
+/// @group components
+@mixin text-area-plaintext {
+  .#{$prefix}--text-area {
+    unicode-bidi: plaintext;
+    text-align: left;
+  }
+
+  [dir="rtl"] .#{$prefix}--text-area {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("text-area-plaintext") {
+  @include text-area-plaintext;
+}
