@@ -42,7 +42,7 @@ Set `lines` above 1 to limit how many lines show. Multiline mode always clamps f
 
 ### Tooltip
 
-Set `reveal` to `"tooltip"` to show the full text in a tooltip. While the text is clipped, it joins the tab order, and the tooltip opens on hover and focus. Press <DocKbd label="Escape" /> to hide it. Text that fits stays plain. Set `tooltipPosition` and `tooltipAlignment` to place the tooltip.
+Set `reveal` to `"tooltip"` to show the full text in a tooltip. While the text is clipped, it joins the tab order, and the tooltip opens on hover and focus. Press <DocKbd label="Escape" /> to hide it. Text that fits stays plain. Set `tooltipAlign` to place the tooltip, with Popover's `align` names. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
 
 <Box maxWidth="20rem">
   <Truncate reveal="tooltip">

@@ -45,8 +45,18 @@
   export let collapseLabel = "View less";
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the tooltip relative to the text.
    * Only applies when `reveal` is `"tooltip"`.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "top";
@@ -54,6 +64,7 @@
   /**
    * Set the alignment of the tooltip relative to the text.
    * Only applies when `reveal` is `"tooltip"`.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -61,6 +72,7 @@
   import { onMount } from "svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { noop } from "../utils/noop.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { isTruncated, observeTruncation } from "../utils/truncation.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -120,6 +132,11 @@
   onMount(() => {
     return () => stopObserving();
   });
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <svelte:element
@@ -158,7 +175,7 @@
     anchor={textRef}
     text={fullText}
     enabled={truncated}
-    direction={tooltipPosition}
-    align={tooltipAlignment}
+    direction={effectiveTooltipPosition}
+    align={effectiveTooltipAlignment}
   />
 {/if}
