@@ -107,6 +107,24 @@ describe("DataGrid", () => {
       );
     });
 
+    it("dispatches a change event for each bindable value", async () => {
+      const onChange = vi.fn();
+      render(DataGrid, { ...makeGrid(5, 5), onChange });
+      expect(onChange).not.toHaveBeenCalled();
+      mustCell(0, 0).focus();
+
+      await user.keyboard("{ArrowDown}");
+      expect(onChange).toHaveBeenLastCalledWith("active-cell:change", {
+        activeCell: { row: 1, column: 0 },
+      });
+
+      await user.keyboard("{Shift>}{ArrowRight}{/Shift}");
+      expect(onChange).toHaveBeenLastCalledWith("selection:change", {
+        selection: { startRow: 1, startColumn: 0, endRow: 1, endColumn: 1 },
+      });
+      expect(onChange).toHaveBeenCalledTimes(2);
+    });
+
     it("counts every row and column, though it paints few", () => {
       render(DataGrid, makeGrid(1000, 30));
 

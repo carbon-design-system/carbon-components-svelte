@@ -15,6 +15,8 @@
   export let withButton = false;
   export let onPaste: ((event: CustomEvent) => void) | undefined = undefined;
   export let onCopy: ((event: CustomEvent) => void) | undefined = undefined;
+  export let onChange: ((type: string, detail: unknown) => void) | undefined =
+    undefined;
 
   export let activeCell: Props["activeCell"] = { row: 0, column: 0 };
   export let selection: Props["selection"] = null;
@@ -46,6 +48,10 @@
     {...$$restProps}
     on:paste={handlePaste}
     on:copy={handleCopy}
+    on:active-cell:change={(event) =>
+      onChange?.("active-cell:change", event.detail)}
+    on:selection:change={(event) =>
+      onChange?.("selection:change", event.detail)}
   >
     <svelte:fragment slot="cell" let:value let:rowIndex let:columnIndex>
       {#if withButton && rowIndex === 0 && columnIndex === 1}

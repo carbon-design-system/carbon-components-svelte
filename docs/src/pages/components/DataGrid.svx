@@ -98,7 +98,7 @@ Select a range by holding <DocKbd label="Shift" /> and pressing an arrow key, or
 
 Click a column header or a row header to select the whole column or row. <DocKbd label="Ctrl" /> + <DocKbd label="Space" /> selects the column of the active cell, <DocKbd label="Shift" /> + <DocKbd label="Space" /> its row, and <DocKbd label="Ctrl" /> + <DocKbd label="A" /> every cell. <DocKbd label="Escape" /> clears the selection.
 
-Bind `activeCell` and `selection` to read them. A selection is `null` while it covers one cell.
+Bind `activeCell` and `selection` to read them. A selection is `null` while it covers one cell. To follow them without a binding, listen for `active-cell:change` and `selection:change`, which fire once after each change.
 
 <FileSource src="/framed/DataGrid/DataGridSelection" />
 

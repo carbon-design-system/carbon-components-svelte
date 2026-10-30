@@ -6,6 +6,18 @@
    */
 
   /**
+   * Fires after `activeCell` changes.
+   * @event active-cell:change
+   * @type {{ activeCell: DataGridCell | null }}
+   */
+
+  /**
+   * Fires after `selection` changes.
+   * @event selection:change
+   * @type {{ selection: DataGridRange | null }}
+   */
+
+  /**
    * @typedef {Record<string, any>} DataGridRow
    */
 
@@ -304,6 +316,22 @@
   $: selectionEndRow = selection ? selection.endRow : 0;
   $: selectionStartColumn = selection ? selection.startColumn : 1;
   $: selectionEndColumn = selection ? selection.endColumn : 0;
+
+  // Report each change of a bindable value once, whoever made it. A new
+  // object with the same cells is not a change.
+  let reportedActiveCell = activeCell;
+  let reportedSelection = selection;
+  $: if (
+    activeCell?.row !== reportedActiveCell?.row ||
+    activeCell?.column !== reportedActiveCell?.column
+  ) {
+    reportedActiveCell = activeCell;
+    dispatch("active-cell:change", { activeCell });
+  }
+  $: if (!rangesEqual(selection, reportedSelection)) {
+    reportedSelection = selection;
+    dispatch("selection:change", { selection });
+  }
 
   /**
    * @param {number} rows
