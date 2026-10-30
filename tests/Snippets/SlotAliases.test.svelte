@@ -1,5 +1,7 @@
 <script lang="ts">
   import CardTitle from "carbon-components-svelte/Card/CardTitle.svelte";
+  import ContextMenu from "carbon-components-svelte/ContextMenu/ContextMenu.svelte";
+  import ContextMenuOption from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
   import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
   import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
@@ -51,3 +53,11 @@
   {/snippet}
   Content
 </Tooltip>
+
+<ContextMenu open={true} x={0} y={0}>
+  <ContextMenuOption labelText="Copy">
+    {#snippet shortcutChildren()}
+      <span data-testid="context-menu-shortcut-children">Ctrl+C</span>
+    {/snippet}
+  </ContextMenuOption>
+</ContextMenu>
