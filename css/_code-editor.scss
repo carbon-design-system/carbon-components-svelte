@@ -96,10 +96,14 @@
   }
 
   // The lines sit on the 16px or 20px grid the layer and the textarea share,
-  // whatever line height the type style gives the scroller.
+  // whatever line height the type style gives the scroller. The content is
+  // sized in `ch`, which leaves out the type style's letter spacing, so the
+  // code has none.
   .#{$prefix}--code-editor__content {
     position: relative;
     isolation: isolate;
+    font-variant-ligatures: none;
+    letter-spacing: 0;
     line-height: var(--ccs-code-editor-line-height);
     min-inline-size: calc(
       var(--ccs-code-editor-inset) + var(--ccs-code-editor-columns, 0) * 1ch +
@@ -137,7 +141,6 @@
     color: $text-primary;
     direction: ltr;
     font: inherit;
-    font-variant-ligatures: none;
     inset: 0;
     letter-spacing: inherit;
     resize: none;
@@ -225,6 +228,7 @@
     border-right: 1px solid transparent;
     color: $text-helper;
     content: counter(ccs-code-line);
+    font-variant-numeric: tabular-nums;
     inline-size: var(--ccs-code-editor-gutter);
     left: 0;
     margin-inline-start: calc(-1 * var(--ccs-code-editor-inset));

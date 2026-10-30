@@ -290,6 +290,17 @@ test.describe("CodeEditor", () => {
     });
   });
 
+  test("sizes a long line so the textarea never scrolls under the layer", async ({
+    page,
+  }) => {
+    const field = editor(page, "code-editor-js");
+    await field.focus();
+    await page.keyboard.press("ControlOrMeta+End");
+    await page.keyboard.insertText(`// ${"wide ".repeat(40)}end`);
+    await page.keyboard.type("x");
+    expect(await field.evaluate((el) => el.scrollLeft)).toBe(0);
+  });
+
   test("starts the textarea's text where the layer's starts", async ({
     page,
   }) => {
