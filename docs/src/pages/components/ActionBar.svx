@@ -44,7 +44,7 @@ The bar is one tab stop. <DocKbd label="Tab" /> enters it and leaves it, and the
 
 ### Collapse into a menu
 
-When the bar is narrower than its buttons, the ones that do not fit collapse into a menu behind a "More" button. The last button goes first. Drag the slider to change the width.
+When the bar is narrower than its buttons, the ones that do not fit collapse into a menu behind a "More" button. The last button goes first. Drag the slider to change the width. A collapsed button comes back once it fits with 16px to spare, so a width near the edge does not toggle it on every resize.
 
 <FileSource src="/framed/ActionBar/ActionBarOverflow" />
 

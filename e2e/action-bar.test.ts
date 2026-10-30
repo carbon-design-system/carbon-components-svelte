@@ -136,6 +136,33 @@ test.describe("ActionBar", () => {
     expect(await names(page)).toContain("Underline");
   });
 
+  test("expands at a larger width than it collapses at", async ({ page }) => {
+    await page.goto("/action-bar.html");
+    // Find the widest width at which the bar collapses.
+    const boundary = await page.locator("#basic").evaluate(async (node) => {
+      const frame = () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        );
+      let width = 640;
+      while (!node.querySelector(".bx--action-bar__more") && width > 100) {
+        width -= 1;
+        node.style.width = `${width}px`;
+        // biome-ignore lint/performance/noAwaitInLoops: one width at a time
+        await frame();
+      }
+      return width;
+    });
+    // Back and forth across the boundary, it stays collapsed.
+    for (const width of [boundary + 1, boundary, boundary + 8]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one width at a time
+      await resize(page, width);
+      await expect(more(page)).toBeVisible();
+    }
+    await resize(page, boundary + 17);
+    await expect(more(page)).toHaveCount(0);
+  });
+
   test("runs a collapsed button from the menu, and returns focus", async ({
     page,
   }) => {

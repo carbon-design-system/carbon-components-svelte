@@ -10,3 +10,6 @@ export const BUTTON_SIZE_BY_ACTION_BAR_SIZE: Readonly<{
   md: "field";
   lg: "default";
 }>;
+
+/** Room a collapsed button needs beyond its own size to come back, in pixels. */
+export const ACTION_BAR_EXPAND_SLACK_PX: number;

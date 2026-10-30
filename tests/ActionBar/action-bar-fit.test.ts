@@ -104,6 +104,29 @@ describe("fitActionBar", () => {
       );
     }
   });
+
+  it("expands only once the entries fit with the slack to spare", () => {
+    const entries = [item("a"), item("b"), item("c"), item("d")];
+    const shrinkThenGrow = (available: number, previous: Set<string>) =>
+      [
+        ...fitActionBar({
+          entries,
+          available,
+          moreWidth: 40,
+          previous,
+          slack: 16,
+        }),
+      ].sort();
+    const collapsed = new Set(["c", "d"]);
+    // It collapses at 159 px, as with no slack.
+    expect(shrinkThenGrow(159, new Set())).toEqual(["c", "d"]);
+    // One pixel back is not enough to expand.
+    expect(shrinkThenGrow(160, collapsed)).toEqual(["c", "d"]);
+    expect(shrinkThenGrow(175, collapsed)).toEqual(["c", "d"]);
+    expect(shrinkThenGrow(176, collapsed)).toEqual([]);
+    // It still collapses more at once.
+    expect(shrinkThenGrow(119, collapsed)).toEqual(["b", "c", "d"]);
+  });
 });
 
 describe("sameIds", () => {

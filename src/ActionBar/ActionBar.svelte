@@ -105,6 +105,7 @@
   import { fitActionBar, sameIds } from "./action-bar-fit.js";
   import { caretAtEdge, controlOwnsKey } from "./action-bar-keys.js";
   import {
+    ACTION_BAR_EXPAND_SLACK_PX,
     ACTION_BAR_SIZE_PX,
     BUTTON_SIZE_BY_ACTION_BAR_SIZE,
   } from "./action-bar-sizes.js";
@@ -282,6 +283,8 @@
     const next = fitActionBar({
       available,
       moreWidth: ACTION_BAR_SIZE_PX[size],
+      previous: $hidden,
+      slack: ACTION_BAR_EXPAND_SLACK_PX,
       entries: list.map((entry) => ({
         id: entry.id,
         kind: entry.kind,

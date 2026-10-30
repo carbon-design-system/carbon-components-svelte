@@ -21,3 +21,10 @@ export const BUTTON_SIZE_BY_ACTION_BAR_SIZE = Object.freeze({
   md: "field",
   lg: "default",
 });
+
+/**
+ * Room a collapsed button needs beyond its own size to come back out of the
+ * "More" menu, in pixels. The bar collapses at one width and expands at a
+ * larger one, so a width near the boundary does not toggle it.
+ */
+export const ACTION_BAR_EXPAND_SLACK_PX = 16;
