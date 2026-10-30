@@ -1652,10 +1652,10 @@
     {warnId}
     class={multiSelectListBoxClass}
   >
-    {#if showInvalid}
+    {#if !filterable && showInvalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
-    {#if showWarn}
+    {#if !filterable && showWarn}
       <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
@@ -1797,6 +1797,16 @@
             {placeholder}
             {id}
           />
+          <!-- After the input, as in ComboBox, so the list box rules move the
+            status icon left of the clear button once a query is typed. -->
+          {#if showInvalid}
+            <WarningFilled class="bx--list-box__invalid-icon" />
+          {/if}
+          {#if showWarn}
+            <WarningAltFilled
+              class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+            />
+          {/if}
           {#if value}
             <ListBoxSelection
               on:clear={() => {
