@@ -57,6 +57,18 @@
     @include ccs-mirror-rtl(rotate(-90deg));
   }
 
+  // The caret is 16px. Its hit area is 24px (WCAG 2.5.8), centered on it,
+  // so a press just outside the caret expands instead of selecting the row.
+  .#{$prefix}--tree-grid__toggle--expandable {
+    position: relative;
+  }
+
+  .#{$prefix}--tree-grid__toggle--expandable::before {
+    position: absolute;
+    content: "";
+    inset: to-rem(-4px);
+  }
+
   .#{$prefix}--tree-grid__toggle--expanded {
     transform: rotate(0);
     @include ccs-mirror-rtl(rotate(0));

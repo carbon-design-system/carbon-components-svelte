@@ -947,8 +947,9 @@
     if (row.node.disabled) return;
     const target = /** @type {Element} */ (event.target);
 
-    if (target.closest(".bx--tree-grid__toggle")) {
-      if (row.hasChildren) setExpanded(row.node, !expandedSet.has(row.node.id));
+    // A leaf's empty toggle box selects the row like the rest of it.
+    if (row.hasChildren && target.closest(".bx--tree-grid__toggle")) {
+      setExpanded(row.node, !expandedSet.has(row.node.id));
       return;
     }
 
@@ -1164,6 +1165,7 @@
                 <div class:bx--tree-grid__label={true}>
                   <span
                     class:bx--tree-grid__toggle={true}
+                    class:bx--tree-grid__toggle--expandable={expandable}
                     class:bx--tree-grid__toggle--expanded={expanded}
                   >
                     {#if expandable}<CaretDown />{/if}

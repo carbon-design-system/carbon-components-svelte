@@ -113,6 +113,27 @@ test.describe("TreeViewGrid", () => {
     expect(pageWidth).toBe(320);
   });
 
+  test("expands for a press just outside the 16px caret", async ({ page }) => {
+    const row = page.locator("[data-tree-row-id=us-east-api]");
+    const caret = await row.locator(".bx--tree-grid__toggle").boundingBox();
+    expect(caret?.width).toBe(16);
+    if (!caret) return;
+    // 3px before the caret, inside its 24px hit area.
+    await page.mouse.click(caret.x - 3, caret.y + caret.height / 2);
+    await expect(row).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByTestId("selected")).toHaveText("");
+  });
+
+  test("selects a leaf row for a press on its empty toggle box", async ({
+    page,
+  }) => {
+    await page
+      .locator("[data-tree-row-id=us-east-cache]")
+      .locator(".bx--tree-grid__toggle")
+      .click();
+    await expect(page.getByTestId("selected")).toHaveText("us-east-cache");
+  });
+
   test("draws a focus ring on a row and on a cell", async ({ page }) => {
     const row = page.locator("[data-tree-row-id=us-east]");
     await row.focus();
