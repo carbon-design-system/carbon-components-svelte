@@ -1,0 +1,339 @@
+// New component: Carbon has no command palette, so this partial is
+// hand-written. It reads as a v11 modal (overlay, layer, motion) around a
+// v11 Search and a listbox of commands.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Command palette: a modal search field over a list of commands. Rows
+/// line up with the field per size, the label under the input text and
+/// the icon under the magnifier.
+/// @access private
+/// @group components
+@mixin command-palette {
+  // [text inset, icon inset, row height] per size. Search's padding and
+  // magnifier offset at the field size each palette size renders.
+  $command-palette-insets: (
+    "sm": ($carbon--spacing-07, $carbon--spacing-03, to-rem(32px)),
+    "md": ($carbon--spacing-08, $carbon--spacing-04, to-rem(40px)),
+    "lg": ($carbon--spacing-09, $carbon--spacing-05, to-rem(48px)),
+  );
+
+  .#{$prefix}--command-palette {
+    position: fixed;
+    z-index: z("modal");
+    top: 0;
+    left: 0;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    padding: $carbon--spacing-05;
+    background-color: $overlay;
+    opacity: 0;
+    // Visibility is discrete: it stays visible through the fade, then hides.
+    transition: opacity $duration--fast-02 motion(exit, productive),
+      visibility $duration--fast-02 motion(exit, productive);
+    visibility: hidden;
+
+    // Anchored near the top, so the field stays put as results change.
+    @include carbon--breakpoint(md) {
+      padding-top: 12vh;
+    }
+  }
+
+  .#{$prefix}--command-palette--open {
+    opacity: 1;
+    // Visible at once, so focus can move in on open.
+    transition: opacity $duration--fast-02 motion(entrance, productive);
+    visibility: inherit;
+  }
+
+  .#{$prefix}--command-palette__container {
+    display: flex;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--ccs-command-palette-width, #{to-rem(640px)});
+    max-height: 100%;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    color: $text-primary;
+    // Forced colors repaint the transparent outline as the dialog's edge.
+    outline: 3px solid transparent;
+    outline-offset: -3px;
+    transform: translate3d(0, to-rem(-8px), 0);
+    transition: transform $duration--fast-02 motion(exit, productive);
+  }
+
+  .#{$prefix}--command-palette--open
+    .#{$prefix}--command-palette__container {
+    transform: translate3d(0, 0, 0);
+    transition: transform $duration--fast-02 motion(entrance, productive);
+  }
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    .#{$prefix}--command-palette,
+    .#{$prefix}--command-palette--open,
+    .#{$prefix}--command-palette__container,
+    .#{$prefix}--command-palette--open
+      .#{$prefix}--command-palette__container {
+      transition: none;
+    }
+  }
+
+  .#{$prefix}--command-palette__search {
+    flex: 0 0 auto;
+  }
+
+  .#{$prefix}--command-palette__list {
+    position: relative;
+    min-height: 0;
+    max-height: to-rem(384px);
+    flex: 0 1 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .#{$prefix}--command-palette__list--empty {
+    overflow-y: hidden;
+  }
+
+  .#{$prefix}--command-palette__group-header {
+    @include type-style("label-01");
+
+    box-sizing: border-box;
+    padding-top: $carbon--spacing-05;
+    padding-bottom: $carbon--spacing-03;
+    padding-inline-end: $carbon--spacing-05;
+    color: $text-secondary;
+    cursor: default;
+  }
+
+  .#{$prefix}--command-palette__item {
+    @include type-style("body-compact-01");
+
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding-top: $carbon--spacing-03;
+    padding-bottom: $carbon--spacing-03;
+    padding-inline-end: $carbon--spacing-05;
+    color: $text-primary;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+  }
+
+  // The keyboard and the pointer move one highlight, so it is also the hover.
+  // The bar at the start marks it without color alone.
+  .#{$prefix}--command-palette__item--highlighted {
+    background-color: $layer-selected;
+    // `--ccs-inline-sign` is -1 under the nearest `dir="rtl"`, so the bar
+    // stays at the inline start.
+    box-shadow: inset calc(3px * var(--ccs-inline-sign, 1)) 0 0 0
+      $border-interactive;
+  }
+
+  .#{$prefix}--command-palette__item--disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--command-palette__item-icon {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    transform: translateY(-50%);
+
+    svg {
+      fill: $icon-secondary;
+    }
+  }
+
+  .#{$prefix}--command-palette__item--highlighted
+    .#{$prefix}--command-palette__item-icon
+    svg {
+    fill: $icon-primary;
+  }
+
+  .#{$prefix}--command-palette__item--disabled
+    .#{$prefix}--command-palette__item-icon
+    svg {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--command-palette__item-content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--command-palette__item-text,
+  .#{$prefix}--command-palette__item-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--command-palette__item-description {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--command-palette__item--disabled
+    .#{$prefix}--command-palette__item-description {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--command-palette__match {
+    font-weight: 600;
+  }
+
+  // A shortcut is Latin key names, which read left to right in any
+  // language, so the keys keep their order in RTL. Only their place moves.
+  .#{$prefix}--command-palette__shortcut {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    margin-inline-start: $carbon--spacing-05;
+
+    [dir="rtl"] & {
+      flex-direction: ccs-dir(row, row-reverse);
+    }
+  }
+
+  .#{$prefix}--command-palette__key {
+    @include type-style("code-01");
+
+    display: inline-flex;
+    box-sizing: border-box;
+    min-width: to-rem(20px);
+    height: to-rem(20px);
+    align-items: center;
+    justify-content: center;
+    padding: 0 $carbon--spacing-02;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    background-color: $layer-accent;
+    color: $text-secondary;
+  }
+
+  // `layer-accent` and `layer-selected` share a value, so a highlighted
+  // row's key caps take the palette's surface instead.
+  .#{$prefix}--command-palette__item--highlighted
+    .#{$prefix}--command-palette__key {
+    background-color: $layer;
+  }
+
+  // Physical: the keys run left to right in both directions.
+  .#{$prefix}--command-palette__key + .#{$prefix}--command-palette__key {
+    margin-left: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--command-palette__footer {
+    @include type-style("label-01");
+
+    flex: 0 0 auto;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-top: 1px solid $border-subtle;
+    color: $text-secondary;
+  }
+
+  @each $size, $inset in $command-palette-insets {
+    $text-inset: nth($inset, 1);
+    $icon-inset: nth($inset, 2);
+    $row-height: nth($inset, 3);
+
+    .#{$prefix}--command-palette--#{$size} {
+      .#{$prefix}--command-palette__item,
+      .#{$prefix}--command-palette__group-header,
+      .#{$prefix}--list-box__menu-status {
+        padding-inline-start: $text-inset;
+      }
+
+      .#{$prefix}--command-palette__item,
+      .#{$prefix}--list-box__menu-status {
+        min-height: $row-height;
+      }
+
+      .#{$prefix}--command-palette__item-icon {
+        @include ccs-inset-inline($start: $icon-inset);
+      }
+    }
+  }
+
+  // Small rows have no room for vertical padding.
+  .#{$prefix}--command-palette--sm .#{$prefix}--command-palette__item {
+    padding-top: $carbon--spacing-02;
+    padding-bottom: $carbon--spacing-02;
+  }
+
+  // Forced colors drop the highlight's fill and bar, so arrow keys showed
+  // no row. The highlighted row fills with `Highlight`, as a native list's
+  // current option does, and opts out of forcing, so everything it holds
+  // needs a system color. Key caps keep an edge; a disabled row reads
+  // `GrayText`.
+  @media (forced-colors: active) {
+    .#{$prefix}--command-palette__item--highlighted {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--command-palette__item--highlighted {
+      box-shadow: none;
+    }
+
+    .#{$prefix}--command-palette__item--highlighted
+      .#{$prefix}--command-palette__item-description {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--command-palette__item--highlighted
+      .#{$prefix}--command-palette__item-icon
+      svg {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--command-palette__item--highlighted
+      .#{$prefix}--command-palette__key {
+      border-color: HighlightText;
+      background-color: transparent;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--command-palette__key {
+      border-color: CanvasText;
+    }
+
+    // Forced colors leave an SVG fill alone, so the theme fill stayed.
+    .#{$prefix}--command-palette__item-icon svg {
+      fill: ButtonText;
+    }
+
+    .#{$prefix}--command-palette__item--disabled
+      .#{$prefix}--command-palette__item-icon
+      svg {
+      fill: GrayText;
+    }
+
+    .#{$prefix}--command-palette__item--disabled,
+    .#{$prefix}--command-palette__item--disabled
+      .#{$prefix}--command-palette__item-description {
+      color: GrayText;
+    }
+  }
+}
+
+@include exports("command-palette") {
+  @include command-palette;
+}
