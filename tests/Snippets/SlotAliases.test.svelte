@@ -2,6 +2,7 @@
   import CardTitle from "carbon-components-svelte/Card/CardTitle.svelte";
   import Modal from "carbon-components-svelte/Modal/Modal.svelte";
   import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
+  import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
   import HeaderNav from "carbon-components-svelte/UIShell/HeaderNav.svelte";
   import HeaderNavItem from "carbon-components-svelte/UIShell/HeaderNavItem.svelte";
   import HeaderNavMenu from "carbon-components-svelte/UIShell/HeaderNavMenu.svelte";
@@ -36,3 +37,9 @@
   {/snippet}
   Quarterly report
 </CardTitle>
+
+<TooltipIcon portalTooltip={false} aria-label="Metrics">
+  {#snippet tooltipChildren()}
+    <strong data-testid="tooltip-icon-tooltip-children">Metrics</strong>
+  {/snippet}
+</TooltipIcon>

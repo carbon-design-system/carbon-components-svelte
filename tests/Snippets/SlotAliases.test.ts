@@ -35,4 +35,12 @@ describe("Svelte 5 snippets for renamed slots", () => {
       screen.getByTestId("card-title-label-children").parentElement,
     ).toHaveClass("bx--card__label");
   });
+
+  it("renders the TooltipIcon tooltipChildren snippet in the tooltip", () => {
+    render(SlotAliases);
+
+    expect(
+      screen.getByTestId("tooltip-icon-tooltip-children").parentElement,
+    ).toHaveClass("bx--assistive-text");
+  });
 });
