@@ -393,6 +393,13 @@ test.describe("DataGrid", () => {
     expect(edge.startWidth).toBe("2px");
     // An inner edge draws nothing.
     expect(edge.bottomWidth).toBe("0px");
+    // A frozen edge stays thinner than the selection, so it does not read
+    // as one more side of the rectangle.
+    expect(
+      await cell(page, 2, 0).evaluate(
+        (node) => getComputedStyle(node).borderRightWidth,
+      ),
+    ).toBe("1px");
     await expect(page.locator('[aria-selected="true"]')).toHaveCount(4);
 
     const header = await grid(page)

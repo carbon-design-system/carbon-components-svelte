@@ -192,8 +192,8 @@
   }
 
   // Forced colors drop the fills. The rectangle's border and the lit
-  // headers take the system highlight, and the dividers get thicker, since
-  // every border is then one color.
+  // headers take the system highlight. Frozen edges stay 1 px, so the
+  // selection and the focus ring are the only 2 px lines.
   @media (forced-colors: active) {
     .#{$prefix}--data-grid__cell--selected::after {
       border-color: Highlight;
@@ -203,15 +203,6 @@
       background-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
-    }
-
-    .#{$prefix}--data-grid__frozen--edge {
-      border-inline-end-width: 2px;
-    }
-
-    .#{$prefix}--data-grid__row--frozen-edge > .#{$prefix}--data-grid__cell,
-    .#{$prefix}--data-grid__row--frozen-edge > .#{$prefix}--data-grid__header {
-      border-block-end-width: 2px;
     }
   }
 }
