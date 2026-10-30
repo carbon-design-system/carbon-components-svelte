@@ -64,10 +64,14 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, onMount, tick } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import { clippedBy, fitPopoverAlign } from "../utils/fit-align.js";
+  import {
+    clippedBy,
+    fitPopoverAlign,
+    sidePlacement,
+  } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isInlineAlign, popoverPlacement } from "../utils/inline-align.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -75,6 +79,8 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { rafThrottle } from "../utils/raf-throttle.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -98,17 +104,11 @@
 
   // The placement an open popover settles on: `alignClass`, unless it runs
   // past the window or its container there and fits better on the other
-  // side or edge. Physical, like `alignClass`.
-  /** @type {null | string} */
-  let fittedAlign = null;
-  $: placement = fittedAlign ?? alignClass;
-  // A new `align` starts over.
-  $: resetFit(alignClass);
-
-  /** @param {string} _align */
-  function resetFit(_align) {
-    fittedAlign = null;
-  }
+  // side or edge. Physical, like `alignClass`. The fit keeps the align it
+  // was made for, so a new `align` starts over in the same update.
+  /** @type {null | { from: string, to: string }} */
+  let fitted = null;
+  $: placement = fitted?.from === alignClass ? fitted.to : alignClass;
 
   // Set for one open when the popover in place turns out to be cut off by a
   // box around it: it moves to a portal instead. Only when `portalPopover`
@@ -119,7 +119,7 @@
     (portalPopover === undefined ? portalWhenClipped : portalPopover);
 
   $: if (!open) {
-    resetFit(alignClass);
+    fitted = null;
     portalWhenClipped = false;
   }
 
@@ -128,36 +128,73 @@
   $: if (open && !relative) {
     void alignClass;
     void portalled;
-    tick().then(fit);
+    tick().then(() => fitPlacement());
   }
+
+  // A window resize moves the anchor and changes the room around it, so an
+  // open popover fits again, from the placement it has. One listener for
+  // every popover, and only while open.
+  const refit = rafThrottle(() => void fitPlacement());
+  /** @type {null | (() => void)} */
+  let stopRefit = null;
+  $: if (open && !relative && typeof window !== "undefined") {
+    if (!stopRefit) {
+      stopRefit = addPooledListener("resize", refit, { passive: true });
+    }
+  } else {
+    stopListening();
+  }
+
+  function stopListening() {
+    stopRefit?.();
+    stopRefit = null;
+    refit.cancel();
+  }
+
+  onMount(() => stopListening);
 
   // The anchor's size, for styles that place the popover from its center
   // (Toggletip's caret). In place, 100% of the anchor does that.
   let anchorWidth = 0;
   let anchorHeight = 0;
 
-  async function fit() {
+  // Counts fits, so a fit that waits for the portal gives way to a later
+  // one, after a new align or a resize.
+  let fits = 0;
+
+  // Measures the popover where it is, at `placement`: `alignClass` on open,
+  // the fitted placement on a resize.
+  async function fitPlacement(tries = 0) {
     if (!(open && ref)) return;
+    const run = ++fits;
+    const from = alignClass;
     if (portalled) {
       const anchor = markerRef?.parentElement;
       if (!anchor) return;
-      ({ width: anchorWidth, height: anchorHeight } =
-        anchor.getBoundingClientRect());
+      const before = anchor.getBoundingClientRect();
+      ({ width: anchorWidth, height: anchorHeight } = before);
       // The portal places its content on the next frame, and once more on
       // the frame after that.
       await twoFrames();
-      if (!(open && portalled && ref)) return;
+      if (!(open && portalled && ref) || run !== fits) return;
+      // The anchor moved while the portal placed the box, as in a resize
+      // or the Modal's entrance, so the box may still be where it was.
+      // Measure again once the portal has followed. An anchor that never
+      // stops gets measured after 10 tries.
+      const after = anchor.getBoundingClientRect();
+      const moved = after.left !== before.left || after.top !== before.top;
+      if (moved && tries < 10) return fitPlacement(tries + 1);
       // The portal picks the side. The edge alignment along it is ours.
       const [, fittedEdge] = fitPopoverAlign(ref, anchor, placement).split("-");
       const next = fittedEdge ? `${side}-${fittedEdge}` : side;
-      if (next !== placement) fittedAlign = next;
+      if (next !== placement) fitted = { from, to: next };
       return;
     }
     const anchor = ref.parentElement;
     if (!anchor) return;
-    const next = fitPopoverAlign(ref, anchor, alignClass);
+    const next = fitPopoverAlign(ref, anchor, placement);
     if (next !== placement) {
-      fittedAlign = next;
+      fitted = { from, to: next };
       await tick();
     }
     if (portalPopover === undefined && open && ref && clippedBy(ref)) {
@@ -187,13 +224,18 @@
   /**
    * The class list of a portalled popover. A consumer `class` is kept: in
    * Svelte 3 and 4, a `class` in `$$restProps` would replace a static one.
-   * @param {string} portalSide The side the portal settled on.
+   * The placement class names where the portal put the box, so the caret
+   * points at the anchor. Each input is a parameter, so Svelte updates the
+   * class when any of them changes.
+   * @param {"top" | "bottom" | "left" | "right"} portalSide The side the portal settled on.
+   * @param {"start" | "center" | "end"} align
+   * @param {string | undefined} className
    */
-  function portalClass(portalSide) {
+  function portalClass(portalSide, align, className) {
     return [
       "bx--popover bx--popover--portal bx--popover--open",
-      `bx--popover--${edge ? `${portalSide}-${edge}` : portalSide}`,
-      $$restProps.class,
+      `bx--popover--${sidePlacement(portalSide, align)}`,
+      className,
     ]
       .filter(Boolean)
       .join(" ");
@@ -266,7 +308,11 @@
           ],
         }}
         {...$$restProps}
-        class={portalClass(portalSide ?? side)}
+        class={portalClass(
+          portalSide ?? side,
+          intrinsicAlign,
+          $$restProps.class,
+        )}
         class:bx--popover--caret={caret}
         class:bx--popover--high-contrast={highContrast}
         class:bx--popover--drop-shadow={dropShadow}

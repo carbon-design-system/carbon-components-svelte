@@ -40,6 +40,18 @@ export function fitPopoverAlign(
 ): string;
 
 /**
+ * The Popover placement of a box that `FloatingPortal` placed on `side`,
+ * at the start, center or end along it. Start is the left or the top, and
+ * end is the right or the bottom: `bottom` and `start` give `bottom-left`,
+ * `right` and `end` give `right-bottom`. The edge always lies along the
+ * side, so the placement is always a real one.
+ */
+export function sidePlacement(
+  side: "top" | "bottom" | "left" | "right",
+  align: "start" | "center" | "end",
+): string;
+
+/**
  * How far to slide `el` sideways so it sits at least `margin` px (8 by
  * default) inside the window, measured as if `applied` px weren't applied.
  * A box with no layout (zero size), or a window with none, keeps `applied`.

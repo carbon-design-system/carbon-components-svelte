@@ -2,6 +2,7 @@ import {
   clippedBy,
   fitPopoverAlign,
   shouldFlipAlign,
+  sidePlacement,
   slideIntoWindow,
   windowShift,
 } from "../../src/utils/fit-align.js";
@@ -36,6 +37,45 @@ function box(edges: Parameters<typeof rect>[0]) {
   el.getBoundingClientRect = () => rect(edges);
   return el;
 }
+
+describe("sidePlacement", () => {
+  it.each([
+    ["bottom", "center", "bottom"],
+    ["bottom", "start", "bottom-left"],
+    ["bottom", "end", "bottom-right"],
+    ["top", "start", "top-left"],
+    ["top", "end", "top-right"],
+    ["right", "center", "right"],
+    ["right", "start", "right-top"],
+    ["right", "end", "right-bottom"],
+    ["left", "start", "left-top"],
+    ["left", "end", "left-bottom"],
+  ] as const)("places %s and %s as %s", (side, align, expected) => {
+    expect(sidePlacement(side, align)).toBe(expected);
+  });
+
+  it("never pairs a side with an edge on its own axis", () => {
+    const valid = new Set([
+      "top",
+      "top-left",
+      "top-right",
+      "bottom",
+      "bottom-left",
+      "bottom-right",
+      "left",
+      "left-top",
+      "left-bottom",
+      "right",
+      "right-top",
+      "right-bottom",
+    ]);
+    for (const side of ["top", "bottom", "left", "right"] as const) {
+      for (const align of ["start", "center", "end"] as const) {
+        expect(valid.has(sidePlacement(side, align))).toBe(true);
+      }
+    }
+  });
+});
 
 describe("windowShift", () => {
   afterEach(() => vi.restoreAllMocks());
