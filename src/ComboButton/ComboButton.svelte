@@ -90,8 +90,18 @@
   export let iconDescription = "Additional actions";
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the icon-only trigger's tooltip.
    * Independent of `direction`, which controls where the menu opens.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
@@ -99,6 +109,7 @@
   /**
    * Set the alignment of the icon-only trigger's tooltip relative to the
    * trigger. Use `"end"` when the button sits at the right edge of a page.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -119,6 +130,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { blurOnMouseClose } from "../utils/blur-on-mouse-close.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
 
   const dispatch = createEventDispatcher();
 
@@ -154,6 +166,11 @@
     dispatch("click:trigger", event);
     blurOnMouseClose(wasOpen, event, triggerRef);
   }
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <div
@@ -190,8 +207,8 @@
     size={BUTTON_SIZE_BY_MENU_SIZE[size]}
     {disabled}
     hideTooltip={open}
-    {tooltipPosition}
-    {tooltipAlignment}
+    tooltipPosition={effectiveTooltipPosition}
+    tooltipAlignment={effectiveTooltipAlignment}
     class="bx--combo-button__trigger {open
       ? 'bx--combo-button__trigger--open'
       : ''}"

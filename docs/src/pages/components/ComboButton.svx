@@ -50,16 +50,16 @@ The icon-only trigger needs its own accessible label, since it has no visible te
 
 ### Tooltip position
 
-Set `tooltipPosition` to control where the trigger's tooltip appears. This is independent of `direction`, which controls where the menu opens - the two are separate concerns and can point different ways.
+Set `tooltipAlign` to control where the trigger's tooltip appears, with Popover's `align` names. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated. This is independent of `direction`, which controls where the menu opens - the two are separate concerns and can point different ways.
 
-<ComboButton labelText="Save" tooltipPosition="right">
+<ComboButton labelText="Save" tooltipAlign="right">
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
   <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
 </ComboButton>
 
-Set `tooltipAlignment` to `"end"` to align the tooltip with the trigger's right edge, so it stays on screen when the button sits at the right edge of a page.
+Set `tooltipAlign` to `"bottom-end"` to align the tooltip with the trigger's end edge, so it stays on screen when the button sits at the end of a row.
 
-<ComboButton labelText="Save" tooltipAlignment="end">
+<ComboButton labelText="Save" tooltipAlign="bottom-end">
   <MenuItem on:click={() => console.log("Save as")}>Save as</MenuItem>
   <MenuItem on:click={() => console.log("Save a copy")}>Save a copy</MenuItem>
 </ComboButton>
