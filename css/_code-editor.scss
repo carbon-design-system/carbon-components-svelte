@@ -24,7 +24,12 @@
     --ccs-code-editor-line-height: #{to-rem(16px)};
   }
 
+  // The wrapper is the field, so it draws the resting box forced colors
+  // show, as a TextArea's textarea does. The textarea spans the whole text
+  // and scrolls, so it draws none.
   .#{$prefix}--code-editor__wrapper {
+    @include focus-outline("reset");
+
     border-bottom: 1px solid $border-strong;
     background-color: $field;
     transition: background-color $duration--fast-01 motion(standard, productive);
@@ -126,11 +131,11 @@
   // the layer, the textarea shows its own text.
   .#{$prefix}--code-editor__input {
     @include reset;
-    @include focus-outline("reset");
 
     position: absolute;
     display: block;
     overflow: hidden;
+    outline: none;
     padding: var(--ccs-code-editor-padding) $carbon--spacing-05
       var(--ccs-code-editor-padding) var(--ccs-code-editor-inset);
     // The reset keeps the browser's 1px border, which would move the text

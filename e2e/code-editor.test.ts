@@ -427,5 +427,27 @@ test.describe("CodeEditor", () => {
         .evaluate((el) => getComputedStyle(el).outlineWidth);
       expect(outline).toBe("4px");
     });
+
+    test("draws the resting box on the field, not around the text", async ({
+      page,
+    }) => {
+      const field = editor(page, "code-editor-js");
+      await field.focus();
+      const rings = await page.evaluate(() =>
+        [...document.querySelectorAll(".bx--code-editor")].map((el) => {
+          const wrapper = el.querySelector(".bx--code-editor__wrapper");
+          const input = el.querySelector("textarea");
+          return [
+            getComputedStyle(wrapper as Element).outlineStyle,
+            getComputedStyle(input as Element).outlineStyle,
+          ];
+        }),
+      );
+      // The fluid editor draws its box with TextArea's divider instead.
+      for (const [wrapper, input] of rings.slice(0, -1)) {
+        expect(wrapper).toBe("solid");
+        expect(input).toBe("none");
+      }
+    });
   });
 });
