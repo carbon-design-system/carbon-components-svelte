@@ -2,6 +2,7 @@
   /**
    * @slot {{ row: DataGridRow; rowIndex: number; column: DataGridColumn; columnIndex: number; value: any; }} cell
    * @slot {{ column: DataGridColumn; columnIndex: number; }} columnHeader
+   * @slot {{}} empty
    * @restProps {div}
    */
 
@@ -154,6 +155,12 @@
   export let pasteDescription = defaultPasteDescription;
 
   /**
+   * Specify the text shown when there are no rows. Say why, and what to do
+   * next, or use the `empty` slot.
+   */
+  export let emptyText = "No rows";
+
+  /**
    * Specify the accessible name of an empty cell. An empty cell shows an
    * em dash, and a screen reader reads this text.
    */
@@ -245,7 +252,8 @@
     : 0;
   $: columnOffset = rowHeaders ? 2 : 1;
   $: totalWidth = gutterWidth + layout.total;
-  $: totalHeight = rowHeight * (rowCount + 1);
+  // With no rows, one row holds the empty state.
+  $: totalHeight = rowHeight * (Math.max(rowCount, 1) + 1);
   $: maxHeight = typeof height === "number" ? `${height}px` : height;
 
   $: rowWindow = getRowWindow({
@@ -536,7 +544,7 @@
   function handleKeydown(event) {
     const target = event.target;
     const key = event.key;
-    if (!(target instanceof HTMLElement) || !activeCell) return;
+    if (!(target instanceof HTMLElement)) return;
     const cell = target.closest('[role="gridcell"]');
 
     // A control inside a cell keeps its own keys. Escape hands focus back
@@ -562,6 +570,8 @@
       return;
     }
 
+    // The empty state cell has no active cell to move.
+    if (!activeCell) return;
     const ctrl = event.ctrlKey || event.metaKey;
 
     if (ctrl && key.toLowerCase() === "a") {
@@ -918,11 +928,15 @@
       if (entry.contentRect.height > 0)
         viewportHeight = entry.contentRect.height;
     });
-    // Only a `cell` slot can put a control in a cell. Rows and columns
-    // mount as the grid scrolls, so recheck when cells are added.
+    // Only the `cell` and `empty` slots can put a control in a cell. Rows
+    // and columns mount as the grid scrolls, so recheck when cells are
+    // added.
     /** @type {MutationObserver | undefined} */
     let cellObserver;
-    if ($$slots.cell && typeof MutationObserver !== "undefined") {
+    if (
+      ($$slots.cell || $$slots.empty) &&
+      typeof MutationObserver !== "undefined"
+    ) {
       removeCellTabStops();
       cellObserver = new MutationObserver(removeCellTabStops);
       cellObserver.observe(gridRef, { childList: true, subtree: true });
@@ -943,7 +957,7 @@
   class="bx--data-grid {$$restProps.class ?? ''}"
   class:bx--data-grid--compact={resolvedSize === "compact"}
   aria-label={labelText || $$restProps["aria-label"] || undefined}
-  aria-rowcount={rowCount + 1}
+  aria-rowcount={Math.max(rowCount, 1) + 1}
   aria-colcount={columnCount + (rowHeaders ? 1 : 0)}
   aria-multiselectable="true"
   aria-readonly="true"
@@ -1084,6 +1098,28 @@
         {/each}
       </div>
     {/each}
+    {#if rowCount === 0}
+      <div
+        role="row"
+        class="bx--data-grid__row"
+        aria-rowindex="2"
+        style:top="{rowHeight}px"
+      >
+        <div
+          role="gridcell"
+          class="bx--data-grid__cell bx--data-grid__empty"
+          aria-colindex={columnOffset}
+          aria-colspan={Math.max(columnCount, 1)}
+          tabindex="0"
+          style:width="{Math.max(layout.total, defaultColumnWidth)}px"
+          style:--ccs-data-grid-x="{gutterWidth}px"
+        >
+          <slot name="empty">
+            <span class="bx--data-grid__text">{emptyText}</span>
+          </slot>
+        </div>
+      </div>
+    {/if}
   </div>
 </div>
 <div class="bx--visually-hidden" role="status" aria-live="polite">

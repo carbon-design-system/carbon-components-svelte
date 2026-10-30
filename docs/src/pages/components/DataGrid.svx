@@ -144,6 +144,12 @@ Set `size` to control the row height: `"compact"` (24px), `"short"` (32px), `"me
   <DataGrid labelText="Tall" size="tall" {columns} rows={rows.slice(0, 3)} />
 </Stack>
 
+## Empty
+
+With no rows, the grid shows `emptyText` ("No rows") in one cell under the headers, and that cell takes the tab stop. Say why the grid is empty and what to do next, or use the `empty` slot for a link or a button. As in any cell, <DocKbd label="Enter" /> moves into the control.
+
+<DataGrid labelText="Service traffic" {columns} rows={[]} emptyText="No services match the filter. Clear it to see all services." />
+
 ## Row headers
 
 Set `rowHeaders` to `false` to remove the column of row numbers. Use `rowHeaderText` to number rows another way, such as a record id.

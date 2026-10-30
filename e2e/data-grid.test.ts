@@ -129,6 +129,27 @@ test.describe("DataGrid", () => {
     await expect(empty).toHaveAccessibleName("None");
   });
 
+  test("is one tab stop with no rows, and says so", async ({ page }) => {
+    await page.goto("/data-grid.html?rows=0");
+    await page.getByTestId("before").focus();
+
+    await page.keyboard.press("Tab");
+    const empty = grid(page).getByRole("gridcell");
+    await expect(empty).toBeFocused();
+    await expect(empty).toHaveText("No rows");
+
+    // The text starts where the first column's title does.
+    const [title, text] = await Promise.all([
+      grid(page)
+        .getByRole("columnheader", { name: "Item" })
+        .locator("span")
+        .boundingBox(),
+      empty.locator("span").boundingBox(),
+    ]);
+    if (!title || !text) throw new Error("grid is not painted");
+    expect(Math.abs(title.x - text.x)).toBeLessThan(0.5);
+  });
+
   test("paints a bounded window of 500,000 cells and counts all of them", async ({
     page,
   }) => {

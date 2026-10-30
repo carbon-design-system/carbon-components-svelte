@@ -76,14 +76,17 @@ describe("DataGrid server render", () => {
     ).toContain("top: 192px");
   });
 
-  it("renders an empty grid with only its headers and no tab stop", () => {
+  it("renders an empty grid as its headers and one empty state cell", () => {
     const document = render({ rows: [] });
 
-    expect(document.querySelectorAll('[role="row"]')).toHaveLength(1);
-    expect(document.querySelector('[tabindex="0"]')).toBeNull();
+    expect(document.querySelectorAll('[role="row"]')).toHaveLength(2);
+    const empty = document.querySelector('[role="gridcell"]');
+    expect(empty).toHaveTextContent("No rows");
+    expect(empty).toHaveAttribute("tabindex", "0");
+    expect(empty).toHaveAttribute("aria-colspan", "50");
     expect(document.querySelector('[role="grid"]')).toHaveAttribute(
       "aria-rowcount",
-      "1",
+      "2",
     );
   });
 });
