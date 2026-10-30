@@ -956,6 +956,26 @@
   }
 
   /**
+   * Checked ids that match no node while a lazy parent (`hasChildren`) has
+   * not loaded its children. They may name nodes that are not loaded yet,
+   * so they stay in `checkedIds` until their nodes arrive. With every
+   * parent loaded, an unknown id is stale and none are returned.
+   * @param {ReadonlyArray<Node["id"]>} ids
+   * @param {Map<Node["id"], Node> | null} nodeMap
+   * @returns {Array<Node["id"]>}
+   */
+  function unloadedCheckedIds(ids, nodeMap) {
+    if (!nodeMap) return [];
+    const unknown = [...new Set(ids)].filter((id) => !nodeMap.has(id));
+    if (unknown.length === 0) return unknown;
+    for (const node of nodeMap.values()) {
+      const loaded = Array.isArray(node.nodes) && node.nodes.length > 0;
+      if (node.hasChildren === true && !loaded) return unknown;
+    }
+    return [];
+  }
+
+  /**
    * Same sync-mirror pattern as `setSelectedIds` for checkbox state.
    * @type {(next: ReadonlyArray<Node["id"]>) => void}
    */
@@ -1571,8 +1591,13 @@
             cascade: checkMode !== "node",
           },
         );
-        if (!arrayIdsEqual(checkboxState.checkedIds, checkedIds)) {
-          setCheckedIds(checkboxState.checkedIds);
+        const pendingIds = unloadedCheckedIds(checkedIds, cachedNodeMap);
+        const nextCheckedIds =
+          pendingIds.length > 0
+            ? [...checkboxState.checkedIds, ...pendingIds]
+            : checkboxState.checkedIds;
+        if (!arrayIdsEqual(nextCheckedIds, checkedIds)) {
+          setCheckedIds(nextCheckedIds);
         }
         if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
           indeterminateIds = checkboxState.indeterminateIds;
