@@ -99,20 +99,20 @@ On hover or focus, the button shows a proactive tooltip with the `iconDescriptio
 
 ### Directions
 
-Set `tooltipPosition` to place the tooltip relative to the button.
+Set `tooltipAlign` to place the tooltip relative to the button. It takes Popover's `align` names and replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
 
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Top" tooltipPosition="top" />
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Right" tooltipPosition="right" />
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Bottom" tooltipPosition="bottom" />
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Left" tooltipPosition="left" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Top" tooltipAlign="top" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Right" tooltipAlign="right" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Bottom" tooltipAlign="bottom" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Left" tooltipAlign="left" />
 
 ### Alignment
 
-Set `tooltipAlignment` to align the tooltip relative to the button.
+Add `-start` or `-end` to align the tooltip with one end of the button.
 
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Start" tooltipAlignment="start" />
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Center" tooltipAlignment="center" />
-<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="End" tooltipAlignment="end" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Start" tooltipAlign="bottom-start" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="Center" tooltipAlign="bottom" />
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" iconDescription="End" tooltipAlign="bottom-end" />
 
 ### Tooltip group
 
@@ -128,7 +128,7 @@ Place the button in a [TooltipGroup](/components/TooltipGroup) with the icon-onl
 
 ## Portal tooltip
 
-The "Copied!" feedback tooltip is rendered in a floating portal by default, so it shares the same surface as the hover tooltip (the text swaps in place) and is never clipped by an `overflow: hidden` container. Set `portalTooltip` to `false` to use Carbon's inline feedback caret instead. A non-default `tooltipPosition` or `tooltipAlignment` is always portalled because the inline caret only supports the default placement.
+The "Copied!" feedback tooltip is rendered in a floating portal by default, so it shares the same surface as the hover tooltip (the text swaps in place) and is never clipped by an `overflow: hidden` container. Set `portalTooltip` to `false` to use Carbon's inline feedback caret instead. A `tooltipAlign` other than `"bottom"` is always portalled because the inline caret only supports the default placement.
 
 <FileSource src="/framed/CopyButton/CopyButtonPortalTooltip" />
 
