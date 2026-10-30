@@ -165,7 +165,9 @@
       "aria-disabled": off ? "true" : undefined,
       "aria-keyshortcuts": ariaShortcut(command, isMac),
       "data-tool-index": index,
-      class: "bx--rich-text-editor__tool",
+      class: spec.mirror
+        ? "bx--rich-text-editor__tool bx--rich-text-editor__tool--mirror"
+        : "bx--rich-text-editor__tool",
     };
   }
 

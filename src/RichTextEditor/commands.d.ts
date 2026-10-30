@@ -24,6 +24,8 @@ export interface CommandSpec {
   glyph?: string;
   /** Whether the item has a pressed state. */
   toggle: boolean;
+  /** Whether the icon points back or forward, and mirrors in RTL. */
+  mirror?: boolean;
   /** Key in the editor's format state that marks it pressed. */
   state?: string;
   shortcuts?: {

@@ -115,6 +115,12 @@
     gap: $carbon--spacing-03;
   }
 
+  // Undo and redo point back and forward, and the indent icons point
+  // toward and away from the inline start.
+  .#{$prefix}--rich-text-editor__tool--mirror .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
   // Undo, redo and the indent buttons stay focusable when there is nothing
   // for them to do, so focus doesn't drop out of the toolbar as one turns
   // off. They draw as disabled.

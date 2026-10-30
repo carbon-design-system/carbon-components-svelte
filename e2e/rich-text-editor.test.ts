@@ -720,6 +720,19 @@ test.describe("RichTextEditor", () => {
       ]);
       expect((undoBox?.x ?? 0) > (clearBox?.x ?? 0)).toBe(true);
 
+      // Undo, redo and the indent icons point back or forward, so they
+      // mirror. Bold does not.
+      const transform = (name: RegExp) =>
+        button(page, name)
+          .first()
+          .locator("svg")
+          .evaluate((el) => getComputedStyle(el).transform);
+      const transforms = await Promise.all(
+        [/^Undo/, /^Redo/, /^Increase indent/, /^Bold/].map(transform),
+      );
+      const mirror = "matrix(-1, 0, 0, 1, 0, 0)";
+      expect(transforms).toEqual([mirror, mirror, mirror, "none"]);
+
       await toolbar.locator("[tabindex='0']").focus();
       await page.keyboard.press("ArrowLeft");
       // In RTL, ArrowLeft moves forward through the toolbar.

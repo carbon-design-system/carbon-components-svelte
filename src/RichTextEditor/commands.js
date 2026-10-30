@@ -27,6 +27,7 @@ import Undo from "../icons/Undo.svelte";
  * @property {any} [icon] Icon component. Without one, `glyph` is drawn.
  * @property {string} [glyph]
  * @property {boolean} toggle Whether the item has a pressed state.
+ * @property {boolean} [mirror] Whether the icon points back or forward, and mirrors in RTL.
  * @property {string} [state] Key in `queryState()` that marks it pressed.
  * @property {{ key?: string, code?: string, shift?: boolean, alt?: boolean, mac?: boolean }[]} [shortcuts] First entry that fits the platform is the one shown. A `mac` of `false` limits it to other platforms.
  */
@@ -37,12 +38,14 @@ export const COMMANDS = {
     label: "Undo",
     icon: Undo,
     toggle: false,
+    mirror: true,
     shortcuts: [{ key: "z" }],
   },
   redo: {
     label: "Redo",
     icon: Redo,
     toggle: false,
+    mirror: true,
     shortcuts: [
       { key: "z", shift: true },
       { key: "y", mac: false },
@@ -115,11 +118,13 @@ export const COMMANDS = {
     label: "Decrease indent",
     icon: TextIndentLess,
     toggle: false,
+    mirror: true,
   },
   indent: {
     label: "Increase indent",
     icon: TextIndentMore,
     toggle: false,
+    mirror: true,
   },
   blockquote: {
     label: "Quote",
