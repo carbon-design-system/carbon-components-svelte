@@ -464,7 +464,7 @@ export const forms: AriaEntry[] = [
       render(QueryBuilder, {
         props: {
           labelText: "Filter",
-          fields: [{ id: "name", label: "Name", kind: "text" }],
+          fields: [{ id: "name", text: "Name", kind: "text" }],
           ...attrs,
         },
       }),

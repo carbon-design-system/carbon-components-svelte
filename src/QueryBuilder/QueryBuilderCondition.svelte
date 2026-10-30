@@ -98,7 +98,7 @@
   $: label = translate("conditionLabel", {
     n: index + 1,
     total,
-    text: `${connector} ${sentence || field?.label || ""}`.trim(),
+    text: `${connector} ${sentence || field?.text || ""}`.trim(),
   });
   $: base = `${id}-${keyOf(nodeId)}`;
 
@@ -201,7 +201,7 @@
         <SelectItem value="" text={translate("chooseField")} disabled hidden />
       {/if}
       {#each fields as option (option.id)}
-        <SelectItem value={option.id} text={option.label} />
+        <SelectItem value={option.id} text={option.text} />
       {/each}
     </Select>
   </div>

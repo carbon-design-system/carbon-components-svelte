@@ -2,8 +2,8 @@
   import { QueryBuilder } from "carbon-components-svelte";
 
   const fields = [
-    { id: "name", label: "Nombre", kind: "text" },
-    { id: "seats", label: "Puestos", kind: "number", min: 0 },
+    { id: "name", text: "Nombre", kind: "text" },
+    { id: "seats", text: "Puestos", kind: "number", min: 0 },
   ];
 
   const text = {

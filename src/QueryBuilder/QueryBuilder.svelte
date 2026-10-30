@@ -12,7 +12,7 @@
   /**
    * @typedef {object} QueryField
    * @property {string} id - Stored in a condition's `field`
-   * @property {string} label - Shown in the field list and in sentences
+   * @property {string} text - Shown in the field list and in sentences
    * @property {QueryFieldKind} kind - Decides the operators and the value input
    * @property {ReadonlyArray<QueryFieldOption>} [options] - Choices of an `"option"` field
    * @property {ReadonlyArray<import("./query-text.js").QueryOperator>} [operators] - Offer only these operators, in this order

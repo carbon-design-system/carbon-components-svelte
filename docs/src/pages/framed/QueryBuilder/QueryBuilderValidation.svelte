@@ -7,9 +7,9 @@
   } from "carbon-components-svelte";
 
   const fields = [
-    { id: "name", label: "Account name", kind: "text" },
-    { id: "seats", label: "Seats", kind: "number", min: 0, max: 10000 },
-    { id: "renewal", label: "Renewal date", kind: "date" },
+    { id: "name", text: "Account name", kind: "text" },
+    { id: "seats", text: "Seats", kind: "number", min: 0, max: 10000 },
+    { id: "renewal", text: "Renewal date", kind: "date" },
   ];
 
   let value = {

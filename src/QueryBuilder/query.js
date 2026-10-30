@@ -499,7 +499,7 @@ export function conditionToText(
       .map((item) => valueToText(field, item, translate))
       .join(", ");
   }
-  return [field.label, operator, tail].filter(Boolean).join(" ");
+  return [field.text, operator, tail].filter(Boolean).join(" ");
 }
 
 /**

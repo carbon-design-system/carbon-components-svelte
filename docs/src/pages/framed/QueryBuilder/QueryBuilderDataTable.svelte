@@ -7,12 +7,12 @@
   } from "carbon-components-svelte";
 
   const fields = [
-    { id: "name", label: "Account", kind: "text" },
-    { id: "seats", label: "Seats", kind: "number", min: 0 },
-    { id: "renewal", label: "Renewal date", kind: "date" },
+    { id: "name", text: "Account", kind: "text" },
+    { id: "seats", text: "Seats", kind: "number", min: 0 },
+    { id: "renewal", text: "Renewal date", kind: "date" },
     {
       id: "region",
-      label: "Region",
+      text: "Region",
       kind: "option",
       options: [
         { id: "us-east", text: "US East" },
@@ -20,7 +20,7 @@
         { id: "ap-south", text: "Asia Pacific" },
       ],
     },
-    { id: "active", label: "Active", kind: "boolean" },
+    { id: "active", text: "Active", kind: "boolean" },
   ];
 
   const regionNames = Object.fromEntries(

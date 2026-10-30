@@ -2,12 +2,12 @@
   import { QueryBuilder, Stack } from "carbon-components-svelte";
 
   const fields = [
-    { id: "name", label: "Account name", kind: "text" },
-    { id: "seats", label: "Seats", kind: "number", min: 0 },
-    { id: "renewal", label: "Renewal date", kind: "date" },
+    { id: "name", text: "Account name", kind: "text" },
+    { id: "seats", text: "Seats", kind: "number", min: 0 },
+    { id: "renewal", text: "Renewal date", kind: "date" },
     {
       id: "plan",
-      label: "Plan",
+      text: "Plan",
       kind: "option",
       options: [
         { id: "free", text: "Free" },
@@ -15,7 +15,7 @@
         { id: "enterprise", text: "Enterprise" },
       ],
     },
-    { id: "active", label: "Active", kind: "boolean" },
+    { id: "active", text: "Active", kind: "boolean" },
   ];
 
   let value = {

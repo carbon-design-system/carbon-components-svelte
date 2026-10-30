@@ -17,22 +17,22 @@ import {
 } from "../../src/QueryBuilder/query.js";
 
 const fields: QueryField[] = [
-  { id: "name", label: "Name", kind: "text" },
-  { id: "seats", label: "Seats", kind: "number", min: 0, max: 100 },
-  { id: "renewal", label: "Renewal", kind: "date" },
+  { id: "name", text: "Name", kind: "text" },
+  { id: "seats", text: "Seats", kind: "number", min: 0, max: 100 },
+  { id: "renewal", text: "Renewal", kind: "date" },
   {
     id: "plan",
-    label: "Plan",
+    text: "Plan",
     kind: "option",
     options: [
       { id: "free", text: "Free" },
       { id: "team", text: "Team" },
     ],
   },
-  { id: "active", label: "Active", kind: "boolean" },
+  { id: "active", text: "Active", kind: "boolean" },
   {
     id: "owner",
-    label: "Owner",
+    text: "Owner",
     kind: "text",
     operators: ["is", "isEmpty"],
     getValue: (row: { owner?: { name: string } }) => row.owner?.name,
@@ -46,7 +46,7 @@ describe("operators", () => {
     expect(
       operatorsFor({
         id: "x",
-        label: "X",
+        text: "X",
         kind: "text",
         operators: ["gt" as never, "is"],
       }),

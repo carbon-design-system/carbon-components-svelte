@@ -8,19 +8,19 @@
   import { queryToJSON } from "../../src/QueryBuilder/query.js";
 
   export const fields: QueryField[] = [
-    { id: "name", label: "Name", kind: "text" },
-    { id: "seats", label: "Seats", kind: "number", min: 0, max: 100 },
-    { id: "renewal", label: "Renewal date", kind: "date" },
+    { id: "name", text: "Name", kind: "text" },
+    { id: "seats", text: "Seats", kind: "number", min: 0, max: 100 },
+    { id: "renewal", text: "Renewal date", kind: "date" },
     {
       id: "plan",
-      label: "Plan",
+      text: "Plan",
       kind: "option",
       options: [
         { id: "free", text: "Free" },
         { id: "team", text: "Team" },
       ],
     },
-    { id: "active", label: "Active", kind: "boolean" },
+    { id: "active", text: "Active", kind: "boolean" },
   ];
 
   export let value: QueryGroup = { operator: "and", conditions: [] };

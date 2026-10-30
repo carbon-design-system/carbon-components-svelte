@@ -7,12 +7,12 @@ description: A query builder edits a filter as nested groups of conditions, each
   import { Box, QueryBuilder, Stack } from "carbon-components-svelte";
 
   const fields = [
-    { id: "name", label: "Account name", kind: "text" },
-    { id: "seats", label: "Seats", kind: "number", min: 0 },
-    { id: "renewal", label: "Renewal date", kind: "date" },
+    { id: "name", text: "Account name", kind: "text" },
+    { id: "seats", text: "Seats", kind: "number", min: 0 },
+    { id: "renewal", text: "Renewal date", kind: "date" },
     {
       id: "plan",
-      label: "Plan",
+      text: "Plan",
       kind: "option",
       options: [
         { id: "free", text: "Free" },
@@ -20,12 +20,12 @@ description: A query builder edits a filter as nested groups of conditions, each
         { id: "enterprise", text: "Enterprise" },
       ],
     },
-    { id: "active", label: "Active", kind: "boolean" },
+    { id: "active", text: "Active", kind: "boolean" },
   ];
 
   const operatorFields = [
-    { id: "name", label: "Account name", kind: "text", operators: ["is", "contains"] },
-    { id: "seats", label: "Seats", kind: "number", operators: ["gte", "lte", "between"] },
+    { id: "name", text: "Account name", kind: "text", operators: ["is", "contains"] },
+    { id: "seats", text: "Seats", kind: "number", operators: ["gte", "lte", "between"] },
   ];
 
   const nested = {
@@ -74,7 +74,7 @@ The `change` event fires on every edit with the whole query as `event.detail`.
 
 ## Fields
 
-A field has an `id`, a `label`, and a `kind`. The kind decides which operators the field offers and which input holds the value.
+A field has an `id`, the `text` shown for it, and a `kind`. The kind decides which operators the field offers and which input holds the value.
 
 | Kind | Operators | Value input | Value in the query |
 | --- | --- | --- | --- |
@@ -201,7 +201,7 @@ Adding a condition or group moves focus to its first field. Removing one moves f
 | Do | Why |
 | --- | --- |
 | Set `labelText`, or `aria-label` on the builder. | It names the root group. Without either, the group is named "Conditions". |
-| Keep field labels short and distinct. | They appear in each row's name, the field list, and the summary. |
+| Keep field names short and distinct. | They appear in each row's name, the field list, and the summary. |
 | Set `showSummary` for queries people save and share. | It gives a plain-language check that the query says what was meant. |
 
 ## Translation
