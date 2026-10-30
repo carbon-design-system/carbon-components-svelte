@@ -11,6 +11,9 @@
   /** Width of the Start and End columns of the default list, in px. */
   const DATE_COLUMN_WIDTH = 136;
 
+  /** English text of the default columns, by translation id. */
+  const DEFAULT_TEXT = { task: "Task", start: "Start", end: "End" };
+
   /** @param {string | number} id */
   function barSelector(id) {
     return `[${BAR_ATTR}="${CSS.escape(String(id))}"]`;
@@ -201,6 +204,17 @@
   /** Specify the hint a screen reader gives for a bar that can be moved */
   export let hintText =
     "Arrow keys move the task. Shift and arrow keys resize it. Alt, Shift and arrow keys resize its start.";
+
+  /**
+   * @typedef {"task" | "start" | "end"} GanttTranslationId
+   */
+
+  /**
+   * Override the header text of the default columns. Return no value for an
+   * id to keep its English default ("Task", "Start", "End").
+   * @type {((id: GanttTranslationId) => string | undefined) | undefined}
+   */
+  export let translateWithId = undefined;
 
   /** Specify the accessible name of the timeline */
   export let timelineLabel = "Timeline";
@@ -587,8 +601,11 @@
    * @param {number} width
    * @param {string} loc
    * @param {Intl.DateTimeFormatOptions} format
+   * @param {typeof translateWithId} translate
    */
-  function defaultColumns(entries, width, loc, format) {
+  function defaultColumns(entries, width, loc, format, translate) {
+    /** @param {GanttTranslationId} textId */
+    const text = (textId) => translate?.(textId) ?? DEFAULT_TEXT[textId];
     /** @param {"start" | "end"} edge */
     const dateCell =
       (edge) => (/** @type {any} */ _, /** @type {any} */ node) => {
@@ -598,18 +615,18 @@
     return [
       {
         key: "text",
-        value: "Task",
+        value: text("task"),
         width: `${Math.max(width - DATE_COLUMN_WIDTH * 2, 120)}px`,
       },
       {
         key: "start",
-        value: "Start",
+        value: text("start"),
         width: `${DATE_COLUMN_WIDTH}px`,
         display: dateCell("start"),
       },
       {
         key: "end",
-        value: "End",
+        value: text("end"),
         width: `${DATE_COLUMN_WIDTH}px`,
         display: dateCell("end"),
       },
@@ -617,7 +634,8 @@
   }
 
   $: columns =
-    headers ?? defaultColumns(schedule, listWidth, locale, dateFormat);
+    headers ??
+    defaultColumns(schedule, listWidth, locale, dateFormat, translateWithId);
 
   $: labelProps =
     $$restProps["aria-label"] || $$restProps["aria-labelledby"] || hideLabel

@@ -41,6 +41,7 @@
   export let today: Props["today"] = "2026-03-10";
   export let dir: "ltr" | "rtl" | undefined = undefined;
   export let cancel = false;
+  export let translateWithId: Props["translateWithId"] = undefined;
   type Change = {
     id: string;
     start: string | Date;
@@ -64,6 +65,7 @@
       {links}
       {readonly}
       {today}
+      {translateWithId}
       bind:tasks
       bind:zoom
       bind:expandedIds
@@ -76,6 +78,7 @@
     {links}
     {readonly}
     {today}
+    {translateWithId}
     bind:tasks
     bind:zoom
     bind:expandedIds

@@ -49,6 +49,21 @@ describe("Gantt", () => {
       expect(bar("go")).toHaveClass("bx--gantt__bar--milestone");
     });
 
+    it("translates the default column headers, with English as the fallback", () => {
+      render(Gantt, {
+        props: {
+          translateWithId: (id: string) =>
+            id === "task" ? "Tarea" : id === "start" ? "Inicio" : undefined,
+        },
+      });
+
+      expect(
+        [...document.querySelectorAll("thead th")].map((th) =>
+          th.textContent?.trim(),
+        ),
+      ).toEqual(["Tarea", "Inicio", "End"]);
+    });
+
     it("draws no link between two tasks hidden under the same summary", () => {
       render(Gantt, { props: { expandedIds: [] } });
 

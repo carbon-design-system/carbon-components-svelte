@@ -43,7 +43,7 @@ Set `size` to control row height. The list and the bars share it, so they stay o
 
 ## Task list
 
-The list is a [TreeViewGrid](/components/TreeViewGrid). By default it has Task, Start and End columns; a summary shows the dates it derives from its children. Set `headers` for other columns and `listWidth` for the width. The list stays in view while it takes at most half of the chart's width. In a narrower chart, such as on a phone, it scrolls away with the timeline. A column reads the task field of the same `key`, and `display` formats it.
+The list is a [TreeViewGrid](/components/TreeViewGrid). By default it has Task, Start and End columns; a summary shows the dates it derives from its children. Set `translateWithId` to translate their headers. Its ids are `task`, `start` and `end`, and an id with no value keeps the English text. Set `headers` for other columns and `listWidth` for the width. The list stays in view while it takes at most half of the chart's width. In a narrower chart, such as on a phone, it scrolls away with the timeline. A column reads the task field of the same `key`, and `display` formats it.
 
 The list does not wrap text, since a cell that grows taller than the row would push the list out of line with the bars. Text that does not fit ends in an ellipsis, and the cell shows the full text on hover.
 
