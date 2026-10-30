@@ -47,6 +47,24 @@ describe("titleWhenTruncated", () => {
     expect(node).toHaveAttribute("title", "Billing plan");
   });
 
+  it("skips the node while `enabled` is false", () => {
+    const node = sized("label", "Billing contact", 200);
+    const spy = vi.spyOn(node, "addEventListener");
+    const action = titleWhenTruncated(node, { enabled: false });
+    expect(spy).not.toHaveBeenCalled();
+    hover(node);
+    expect(node).not.toHaveAttribute("title");
+
+    action.update({ enabled: true });
+    hover(node);
+    expect(node).toHaveAttribute("title", "Billing contact");
+
+    action.update({ enabled: false });
+    expect(node).not.toHaveAttribute("title");
+    hover(node);
+    expect(node).not.toHaveAttribute("title");
+  });
+
   it("stops listening on destroy", () => {
     const node = sized("span", "us-south-1", 200);
     titleWhenTruncated(node).destroy();

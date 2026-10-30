@@ -171,6 +171,7 @@
   } from "../utils/keyboard-shortcut.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -380,6 +381,7 @@
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>

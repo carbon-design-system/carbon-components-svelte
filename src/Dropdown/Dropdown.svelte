@@ -367,6 +367,7 @@
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -896,6 +897,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>

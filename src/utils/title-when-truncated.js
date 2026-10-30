@@ -12,6 +12,7 @@ import { isTruncated } from "./truncation.js";
  *
  * `options.measure` names a descendant (a selector) whose text is the one
  * that truncates, such as a label inside a button. Falls back to `node`.
+ * `options.enabled: false` removes the listener and any `title` it set.
  *
  * @param {HTMLElement} node
  * @param {import("./title-when-truncated.js").TitleWhenTruncatedOptions} [options]
@@ -21,6 +22,7 @@ import { isTruncated } from "./truncation.js";
  */
 export function titleWhenTruncated(node, options = {}) {
   let latest = options;
+  let listening = false;
 
   function update() {
     const measured =
@@ -32,13 +34,24 @@ export function titleWhenTruncated(node, options = {}) {
     }
   }
 
-  node.addEventListener("mouseenter", update);
+  /** @param {import("./title-when-truncated.js").TitleWhenTruncatedOptions} [next] */
+  function apply(next = {}) {
+    latest = next;
+    const enabled = next.enabled !== false;
+    if (enabled === listening) return;
+    listening = enabled;
+    if (enabled) {
+      node.addEventListener("mouseenter", update);
+    } else {
+      node.removeEventListener("mouseenter", update);
+      node.removeAttribute("title");
+    }
+  }
+
+  apply(options);
 
   return {
-    /** @param {import("./title-when-truncated.js").TitleWhenTruncatedOptions} [next] */
-    update(next = {}) {
-      latest = next;
-    },
+    update: apply,
     destroy() {
       node.removeEventListener("mouseenter", update);
     },

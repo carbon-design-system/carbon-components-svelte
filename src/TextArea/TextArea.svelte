@@ -134,6 +134,7 @@
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { wordCount, wordLimitAction } from "../utils/word-count.js";
 
@@ -398,6 +399,9 @@
           class:bx--visually-hidden={hideLabel}
           class:bx--label--disabled={disabled}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
+          use:titleWhenTruncated={{
+            enabled: isFluid && !$$slots.labelChildren,
+          }}
         >
           <slot name="labelChildren">{labelText}</slot>
         </label>
