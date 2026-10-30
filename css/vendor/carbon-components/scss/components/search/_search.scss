@@ -146,6 +146,8 @@
   }
 
   .#{$prefix}--search-close svg {
+    position: relative; // ccs: v11, above the hover fill in `::before`
+    z-index: 1; // ccs: v11
     fill: inherit;
   }
 
@@ -207,8 +209,17 @@
     }
   }
 
-  .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover {
-    @include focus-outline('outline');
+  // Upstream drew a second focus ring around the hovered button. As in v11,
+  // its fill and bottom border go clear so the field's ring shows through,
+  // and the start-edge strip in `::before` grows into a fill inside it.
+  .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover { // ccs: v11, one ring
+    border-bottom-color: transparent;
+    background-color: transparent;
+    outline: none;
+
+    &::before {
+      width: calc(100% - 2px);
+    }
   }
 
   .#{$prefix}--search--sm {

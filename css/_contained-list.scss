@@ -212,6 +212,9 @@
       ~ .#{$prefix}--search-close:hover {
       border: 2px solid $focus;
       border-inline-start: 0;
+      // The base rule clears this fill, and the `::before` that replaces it
+      // is hidden here.
+      background-color: $field-hover;
       outline: none;
     }
 
