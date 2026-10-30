@@ -263,7 +263,12 @@
   {...$$restProps}
   on:keydown
   on:keydown={(event) => {
-    if (disabled) return;
+    if (disabled) {
+      // A disabled item still takes focus, so keep Space from scrolling the
+      // page under it.
+      if (event.key === " " || event.key === "Enter") event.preventDefault();
+      return;
+    }
 
     if (hasSubmenu) {
       if (
