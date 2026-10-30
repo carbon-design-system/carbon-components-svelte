@@ -108,9 +108,9 @@ Set `href` to create an icon-only link button.
 
 ### Custom tooltip position
 
-Control the tooltip position and alignment with `tooltipPosition` and `tooltipAlignment`.
+Set `tooltipAlign` to place the tooltip: a side, then `start` or `end` along it, as Popover's `align` takes. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
 
-<Button tooltipPosition="right" tooltipAlignment="end" iconDescription="Tooltip text" icon={Add} />
+<Button tooltipAlign="right-end" iconDescription="Tooltip text" icon={Add} />
 
 ### Portalled tooltip
 

@@ -88,14 +88,25 @@
   export let shortcut = "";
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the alignment of the tooltip relative to the icon.
    * Only applies to icon-only buttons.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
 
   /**
    * Set the position of the tooltip relative to the icon.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
@@ -204,6 +215,7 @@
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { closeOverControls } from "../utils/tooltip-cover.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -417,7 +429,10 @@
     tooltipHandoff.release();
   }
 
-  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+  $: portalGaps = iconTooltipPortalGaps(
+    effectiveTooltipPosition,
+    effectiveTooltipAlignment,
+  );
 
   onMount(() => {
     return () => {
@@ -502,10 +517,12 @@
       hasShortcutHint && !spinnerInShortcut && "bx--btn--shortcut-icon",
       hasTooltip && "bx--tooltip__trigger",
       hasTooltip && "bx--tooltip--a11y",
-      hasTooltip && tooltipPosition && `bx--btn--icon-only--${tooltipPosition}`,
       hasTooltip &&
-        tooltipAlignment &&
-        `bx--tooltip--align-${tooltipAlignment}`,
+        effectiveTooltipPosition &&
+        `bx--btn--icon-only--${effectiveTooltipPosition}`,
+      hasTooltip &&
+        effectiveTooltipAlignment &&
+        `bx--tooltip--align-${effectiveTooltipAlignment}`,
       hasTooltip &&
         (tooltipHidden ||
           (dismissed && (hovered || focused)) ||
@@ -519,6 +536,11 @@
       .filter(Boolean)
       .join(" "),
   };
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 {#if skeleton}
@@ -829,11 +851,11 @@
 {#if usePortal}
   <PortalTooltip
     anchor={ref}
-    direction={tooltipPosition}
+    direction={effectiveTooltipPosition}
     open={portalOpen}
     text={iconDescription}
     tooltipType="icon"
-    intrinsicAlign={tooltipAlignment}
+    intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}
     horizontalGapRight={portalGaps.horizontalGapRight}
     gapTop={portalGaps.gapTop}
