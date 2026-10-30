@@ -15,6 +15,8 @@
     undefined;
   export let tooltipAlignment: ComponentProps<ComboButton>["tooltipAlignment"] =
     undefined;
+  export let tooltipAlign: ComponentProps<ComboButton>["tooltipAlign"] =
+    undefined;
   export let iconDescription: ComponentProps<ComboButton>["iconDescription"] =
     undefined;
 
@@ -37,6 +39,7 @@
   {intrinsicAlign}
   {tooltipPosition}
   {tooltipAlignment}
+  {tooltipAlign}
   {iconDescription}
   bind:open
   on:click={() => onEvent?.("click")}
