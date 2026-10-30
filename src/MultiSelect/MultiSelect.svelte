@@ -1967,7 +1967,9 @@
               class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
           {/if}
-          <span class:bx--list-box__label={true}>{label}</span>
+          <span class:bx--list-box__label={true} use:titleWhenTruncated
+            >{label}</span
+          >
           <ListBoxMenuIcon {open} {translateWithId} />
         </ListBoxField>
       </div>

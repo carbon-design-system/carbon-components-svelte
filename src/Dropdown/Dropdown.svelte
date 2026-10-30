@@ -1078,7 +1078,7 @@
         {disabled}
         {id}
       >
-        <span class:bx--list-box__label={true}>
+        <span class:bx--list-box__label={true} use:titleWhenTruncated>
           {#if selectedItem}
             {itemToString(selectedItem)}
           {:else}

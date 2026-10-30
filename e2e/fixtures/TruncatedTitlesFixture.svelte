@@ -3,6 +3,8 @@
     ContentSwitcher,
     DatePicker,
     DatePickerInput,
+    Dropdown,
+    MultiSelect,
     Pagination,
     ProgressIndicator,
     ProgressStep,
@@ -10,6 +12,10 @@
   } from "carbon-components-svelte";
   import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
 
+  const items = [
+    { id: "short", text: "Email" },
+    { id: "long", text: "Legacy pager gateway for the on-call rotation" },
+  ];
   const boxes = [
     { id: "cut", width: 200 },
     { id: "fits", width: 960 },
@@ -53,6 +59,16 @@
       >
         <DatePickerInput labelText="Blackout dates" placeholder="mm/dd/yyyy" />
       </DatePicker>
+    </div>
+    <div data-testid="dropdown">
+      <Dropdown labelText="Pager" {items} selectedId="long" />
+    </div>
+    <div data-testid="multi-select">
+      <MultiSelect
+        labelText="Regions"
+        label="Choose the regions to deploy to"
+        {items}
+      />
     </div>
   </div>
 {/each}
