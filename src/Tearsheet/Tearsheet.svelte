@@ -248,11 +248,6 @@
   $: $sharedOpen = open;
   trackModal(sharedOpen);
 
-  // Below `md` a wide tearsheet's 80px footer buttons would take a quarter
-  // of a narrow window each and break their labels, so the footer uses the
-  // narrow tearsheet's. Set after mount, as the server can't know the width.
-  let compact = false;
-
   onMount(() => {
     lifecycle.setMounted();
     if (open) {
@@ -260,16 +255,8 @@
         if (open) focus();
       });
     }
-    const query = window.matchMedia("(max-width: 671px)");
-    compact = query.matches;
-    /** @param {MediaQueryListEvent} event */
-    const handleChange = (event) => {
-      compact = event.matches;
-    };
-    query.addEventListener("change", handleChange);
     return () => {
       stopObserving();
-      query.removeEventListener("change", handleChange);
     };
   });
 
@@ -419,10 +406,7 @@
       </Section>
     </div>
     {#if $$slots.actions}
-      <ActionSet
-        size={narrow || compact ? "lg" : "2xl"}
-        class="bx--tearsheet__actions"
-      >
+      <ActionSet size={narrow ? "lg" : "2xl"} class="bx--tearsheet__actions">
         <slot name="actions" />
       </ActionSet>
     {/if}
