@@ -367,6 +367,62 @@ describe("TreeSelect lazy children", () => {
       expect(component.checkedIds).toEqual(["root", "kid", "kin"]),
     );
   });
+
+  it("keeps a saved check on a node that has not loaded, and submits it", async () => {
+    const loadChildren = vi.fn(async () => [
+      { id: "kid", text: "Kid" },
+      { id: "kin", text: "Kin" },
+    ]);
+    const onEvent = vi.fn();
+    const { component, container } = render(TreeSelect, {
+      props: {
+        nodes: lazy,
+        loadChildren,
+        selectionMode: "checkbox",
+        checkedIds: ["kin"],
+        name: "places",
+        onEvent,
+      },
+    });
+
+    expect(component.checkedIds).toEqual(["kin"]);
+    expect(onEvent).not.toHaveBeenCalledWith("check:change", expect.anything());
+    const submitted = () =>
+      [...container.querySelectorAll("input[type=hidden]")].map(
+        (input) => (input as HTMLInputElement).value,
+      );
+    expect(submitted()).toEqual(["kin"]);
+
+    await openWithKeyboard();
+    await user.keyboard("{ArrowRight}");
+    await waitFor(() =>
+      expect(screen.getByRole("treeitem", { name: "Kin" })).toHaveAttribute(
+        "aria-checked",
+        "true",
+      ),
+    );
+    expect(component.checkedIds).toEqual(["kin"]);
+    expect(component.indeterminateIds).toEqual(["root"]);
+  });
+
+  it("drops an unknown id once no parent is left to load", () => {
+    const { component } = render(TreeSelect, {
+      props: {
+        nodes: [{ id: "leaf", text: "Leaf" }],
+        selectionMode: "checkbox",
+        checkedIds: ["gone", "leaf"],
+      },
+    });
+    expect(component.checkedIds).toEqual(["leaf"]);
+  });
+
+  it("submits a selected id whose node has not loaded", () => {
+    const { container } = render(TreeSelect, {
+      props: { nodes: lazy, selectedId: "kin", name: "place" },
+    });
+    const input = container.querySelector("input[type=hidden]");
+    expect(input).toHaveValue("kin");
+  });
 });
 
 describe("TreeSelect windowing", () => {

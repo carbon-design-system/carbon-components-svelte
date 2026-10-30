@@ -119,7 +119,7 @@ Checking a parent while a search is active checks its whole subtree, including t
 
 Mark a parent with `hasChildren: true` and no `nodes`, and pass `loadChildren`. It runs the first time the node expands. While it is pending the chevron is a spinner and the row is `aria-busy`. If it rejects, the node collapses, the chevron becomes a warning icon, and expanding it again tries again. `TreeSelect` lays the children it loads over `nodes` and never changes your array.
 
-A checked parent that has not loaded gives its check to its children once they arrive. An id in `checkedIds` for a node that has not loaded is dropped, as `TreeView` drops it.
+A checked parent that has not loaded gives its check to its children once they arrive. An id in `checkedIds` for a node that has not loaded stays checked and submits with the form, so a saved check is kept until its node loads. Once no parent is left to load, ids that match no node are dropped.
 
 <FileSource src="/framed/TreeSelect/TreeSelectLazy" />
 

@@ -249,3 +249,24 @@ export function diffIds(prev, next) {
     removed: prev.filter((id) => !nextSet.has(id)),
   };
 }
+
+/**
+ * Ids that match no node while some lazy parent has not loaded its
+ * children. Such an id may name a node that is not loaded yet, so the
+ * component keeps it instead of dropping it. In a tree with no unloaded
+ * parent, an unknown id is stale and none are returned.
+ *
+ * @param {ReadonlyArray<TreeSelectNodeId>} ids
+ * @param {{ byId: ReadonlyMap<TreeSelectNodeId, TreeSelectBaseNode> }} index
+ * @returns {Array<TreeSelectNodeId>}
+ */
+export function unresolvedIds(ids, index) {
+  const unknown = ids.filter((id) => !index.byId.has(id));
+  if (unknown.length === 0) return unknown;
+  for (const node of index.byId.values()) {
+    if (node.hasChildren === true && !(node.nodes && node.nodes.length > 0)) {
+      return unknown;
+    }
+  }
+  return [];
+}

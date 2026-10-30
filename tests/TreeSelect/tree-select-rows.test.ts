@@ -5,6 +5,7 @@ import {
   flattenVisible,
   indexTree,
   shownCheckedIds,
+  unresolvedIds,
   withLoadedChildren,
 } from "carbon-components-svelte/TreeSelect/tree-select-rows.js";
 
@@ -132,5 +133,18 @@ describe("diffIds", () => {
       added: ["c"],
       removed: ["a"],
     });
+  });
+});
+
+describe("unresolvedIds", () => {
+  it("keeps unknown ids while a lazy parent has not loaded", () => {
+    expect(unresolvedIds(["a1x", "a2-kid"], indexTree(tree))).toEqual([
+      "a2-kid",
+    ]);
+  });
+
+  it("returns none once every parent has loaded", () => {
+    const loaded = withLoadedChildren(tree, new Map([["a2", [{ id: "k" }]]]));
+    expect(unresolvedIds(["gone"], indexTree(loaded))).toEqual([]);
   });
 });

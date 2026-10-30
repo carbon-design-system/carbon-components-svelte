@@ -71,3 +71,12 @@ export function diffIds(
   added: Array<TreeSelectNodeId>;
   removed: Array<TreeSelectNodeId>;
 };
+
+/**
+ * Ids that match no node while some lazy parent has not loaded, so they
+ * may name a node that is not loaded yet.
+ */
+export function unresolvedIds(
+  ids: ReadonlyArray<TreeSelectNodeId>,
+  index: { byId: ReadonlyMap<TreeSelectNodeId, TreeSelectBaseNode> },
+): Array<TreeSelectNodeId>;

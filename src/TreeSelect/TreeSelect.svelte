@@ -77,7 +77,9 @@
    * The node ids that are checked in `selectionMode="checkbox"`. Resolved
    * the way `TreeView` resolves them: with `checkMode="deep"` a checked
    * parent lists every non-disabled descendant, and a parent whose children
-   * are all checked is checked itself.
+   * are all checked is checked itself. While a lazy parent has not loaded,
+   * an id that matches no node stays checked, so a saved check on a node
+   * that has not loaded yet is kept.
    * @type {ReadonlyArray<Node["id"]>}
    * @bindable writable
    */
@@ -490,6 +492,7 @@
     indexTree,
     sameIds,
     shownCheckedIds,
+    unresolvedIds,
     withLoadedChildren,
   } from "./tree-select-rows.js";
 
@@ -641,7 +644,7 @@
       checkedIds !== prevResolveChecked ||
       cascade !== prevResolveCascade
     ) {
-      const state = resolveCheckboxState(viewNodes, checkedIds, { cascade });
+      const state = resolveChecked(checkedIds, viewNodes, treeIndex);
       if (!sameIds(state.checkedIds, checkedIds)) checkedIds = state.checkedIds;
       if (!sameIds(state.indeterminateIds, indeterminateIds)) {
         indeterminateIds = state.indeterminateIds;
@@ -663,6 +666,14 @@
       : undefined;
   $: selectedText = selectedNode ? nodeToString(selectedNode) : "";
 
+  // Ids that name nodes a lazy parent has not loaded yet. They stay
+  // selected and submit with the form until their nodes load.
+  $: pendingIds = checkbox
+    ? unresolvedIds(checkedIds, treeIndex)
+    : selectedId !== undefined && !selectedNode
+      ? unresolvedIds([selectedId], treeIndex)
+      : [];
+
   // Entries the field reports: tags, text and form values.
   $: shownIds = checkbox
     ? shownCheckedIds(checkedIds, cascade ? showChecked : "all", treeIndex)
@@ -673,6 +684,7 @@
     .map((entryId) => treeIndex.byId.get(entryId))
     .filter((node) => node !== undefined);
   $: formEntries = shownEntries.filter((node) => !node.disabled);
+  $: hasFormValue = formEntries.length > 0 || pendingIds.length > 0;
   $: selectionCount = checkbox ? shownEntries.length : 0;
   $: hasSelection = shownEntries.length > 0;
 
@@ -873,7 +885,7 @@
     disabled,
     readonly,
   }));
-  $: if (!required || formEntries.length > 0) requiredError = false;
+  $: if (!required || hasFormValue) requiredError = false;
   $: shownInvalidText =
     requiredError && !invalid ? requiredInvalidText : invalidText;
   $: canClear = !readonly && hasSelection && (checkbox || clearable);
@@ -999,9 +1011,24 @@
     clear({ open: openOnClear });
   }
 
+  /**
+   * Resolve a seed of checked ids against the tree. Ids of nodes a lazy
+   * parent has not loaded stay at the end, so a saved check survives until
+   * its node loads.
+   * @param {ReadonlyArray<Node["id"]>} seed
+   * @param {ReadonlyArray<Node>} tree
+   * @param {ReturnType<typeof indexTree>} index
+   */
+  function resolveChecked(seed, tree, index) {
+    const state = resolveCheckboxState(tree, seed, { cascade });
+    const pending = unresolvedIds(seed, index);
+    if (pending.length === 0) return state;
+    return { ...state, checkedIds: [...state.checkedIds, ...pending] };
+  }
+
   /** @param {ReadonlyArray<Node["id"]>} seed */
   function applyChecked(seed) {
-    const state = resolveCheckboxState(viewNodes, seed, { cascade });
+    const state = resolveChecked(seed, viewNodes, treeIndex);
     const { added, removed } = diffIds(checkedIds, state.checkedIds);
     prevResolveNodes = viewNodes;
     prevResolveCascade = cascade;
@@ -1349,7 +1376,10 @@
     {#each formEntries as node (node.id)}
       <input type="hidden" {name} value={node.id} {disabled} {form} />
     {/each}
-    {#if single && formEntries.length === 0}
+    {#each pendingIds as pendingId (pendingId)}
+      <input type="hidden" {name} value={pendingId} {disabled} {form} />
+    {/each}
+    {#if single && !hasFormValue}
       <input type="hidden" {name} value="" {disabled} {form} />
     {/if}
   {/if}
@@ -1552,7 +1582,7 @@
     {/if}
     {#if required}
       <ListBoxRequiredInput
-        hasValue={formEntries.length > 0}
+        hasValue={hasFormValue}
         {disabled}
         {readonly}
         focusTarget={filterable ? inputRef : ref}
