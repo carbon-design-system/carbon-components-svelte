@@ -269,6 +269,51 @@ test.describe("NotificationsPanel", () => {
     for (const pitch of pitches) expect(Math.abs(pitch - 52)).toBeLessThan(0.5);
   });
 
+  test("lines the rows up with the heading and the header icon", async ({
+    page,
+  }) => {
+    await page.goto("/notifications-panel.html?count=12&open");
+    await expect(page.locator(ROW).first()).toBeVisible();
+    const m = await page.evaluate(() => {
+      const box = (selector: string) => {
+        const el = document.querySelector(selector);
+        if (!el) throw new Error(`missing ${selector}`);
+        return el.getBoundingClientRect();
+      };
+      // The start of an element's text, without the box's padding.
+      const textStart = (selector: string) => {
+        const el = document.querySelector(selector);
+        if (!el) throw new Error(`missing ${selector}`);
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return range.getClientRects()[0].left;
+      };
+      const dismiss = box(".bx--notifications-panel__dismiss");
+      const title = box(".bx--notifications-panel__title");
+      const settings = box(
+        ".bx--notifications-panel__header .bx--btn--icon-only",
+      );
+      return {
+        heading: textStart(".bx--notifications-panel__heading"),
+        group: textStart(".bx--notifications-panel__group-heading"),
+        icon: box(".bx--notifications-panel__icon svg").left,
+        viewAll: textStart(".bx--notifications-panel__footer .bx--btn"),
+        titleStart: title.left,
+        retry: textStart(".bx--notifications-panel__action .bx--btn"),
+        dismissX: dismiss.left + dismiss.width / 2,
+        settingsX: settings.left + settings.width / 2,
+        dismissY: dismiss.top + dismiss.height / 2,
+        titleY: title.top + 9,
+      };
+    });
+    for (const x of [m.group, m.icon, m.viewAll]) {
+      expect(Math.abs(x - m.heading)).toBeLessThan(0.5);
+    }
+    expect(Math.abs(m.retry - m.titleStart)).toBeLessThan(0.5);
+    expect(Math.abs(m.dismissX - m.settingsX)).toBeLessThan(0.5);
+    expect(Math.abs(m.dismissY - m.titleY)).toBeLessThan(0.5);
+  });
+
   test("renders the panel without a header, on the page", async ({ page }) => {
     await page.goto("/notifications-panel.html?plain&count=12");
     const region = page.getByRole("region", { name: "Notifications" });

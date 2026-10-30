@@ -69,12 +69,14 @@
   }
 
   // Equal inline padding and a flex row, so RTL flips the dot, icon and
-  // dismiss button with no physical properties.
+  // dismiss button with no physical properties. The 16px padding puts the
+  // status icon under the heading and the dismiss icon under the header's
+  // last icon.
   .#{$prefix}--notifications-panel__item {
     position: relative;
     display: flex;
     align-items: flex-start;
-    padding: $carbon--spacing-03;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
     gap: $carbon--spacing-03;
   }
 
@@ -84,12 +86,15 @@
     border-top: 1px solid $border-subtle;
   }
 
-  // The unread dot. Read rows keep its space, so the icons line up.
+  // The unread dot, centered in the row's 16px start padding. Its negative
+  // margins cancel its width and the gap, so the icon starts at the padding.
   .#{$prefix}--notifications-panel__item::before {
     width: to-rem(6px);
     height: to-rem(6px);
     flex: none;
-    margin: to-rem(6px) $carbon--spacing-01 0;
+    margin-top: to-rem(6px);
+    margin-inline-end: to-rem(-3px);
+    margin-inline-start: to-rem(-11px);
     background-color: transparent;
     border-radius: 50%;
     content: "";
@@ -192,11 +197,12 @@
     color: $text-helper;
   }
 
-  // Above the stretched row target, and lined up with the text.
+  // Above the stretched row target. The ghost button's text sits 16px and
+  // a 1px border inside it, so this lines it up with the title.
   .#{$prefix}--notifications-panel__action {
     position: relative;
     margin-top: $carbon--spacing-02;
-    margin-inline-start: -$carbon--spacing-05;
+    margin-inline-start: calc(#{-$carbon--spacing-05} - 1px);
   }
 
   .#{$prefix}--notifications-panel__dismiss {
@@ -209,7 +215,8 @@
     flex: none;
     align-items: center;
     justify-content: center;
-    margin: (-$carbon--spacing-02) 0;
+    // Centers the 32px button on the title's 18px first line.
+    margin: to-rem(-7px) 0;
     color: $icon-primary;
 
     svg {
@@ -229,10 +236,16 @@
     text-align: center;
   }
 
+  // The ghost button's text sits 16px and a 1px border inside it, so it
+  // starts under the heading.
   .#{$prefix}--notifications-panel__footer {
     flex: none;
-    padding: $carbon--spacing-03 $carbon--spacing-05;
+    padding: $carbon--spacing-03 0;
     border-top: 1px solid $border-subtle;
+
+    > .#{$prefix}--btn {
+      margin-inline-start: -1px;
+    }
   }
 
   // Forced colors drop fills, so the dot and the dividers take system colors.
