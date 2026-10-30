@@ -333,6 +333,33 @@
       --ccs-gantt-line: GrayText;
     }
 
+    // Forced colors drop the canvas's gradient row lines. One layer that
+    // keeps its colors draws them again in CanvasText, as the list draws
+    // its row borders. It has no children, so the opt-out stops here.
+    .#{$prefix}--gantt__canvas::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(var(--ccs-gantt-row-height) - 1px),
+        CanvasText calc(var(--ccs-gantt-row-height) - 1px),
+        CanvasText var(--ccs-gantt-row-height)
+      );
+      content: "";
+      forced-color-adjust: none;
+      pointer-events: none;
+    }
+
+    // The chart draws the frame. DataTable's outline around its content
+    // would be a second frame around the list, inside the first.
+    .#{$prefix}--gantt__list .#{$prefix}--data-table-content:not(:focus) {
+      outline: 0;
+    }
+
     .#{$prefix}--gantt__bar {
       border-color: CanvasText;
       background-color: Canvas;

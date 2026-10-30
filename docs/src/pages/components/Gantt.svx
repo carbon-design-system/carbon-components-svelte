@@ -93,4 +93,4 @@ Time runs from the inline start to the inline end, as the rest of the layout doe
 
 ## Forced colors and print
 
-In forced colors every bar has a border, progress is a system-color fill, the milestone and summary are solid, and the links keep their stroke. A dashed link marks a conflict by its dashes, not its color. Selection is a thicker `Highlight` border. When printed the chart is as wide as its axis, with nothing sticky or scrolling; choose a zoom whose axis fits the page.
+In forced colors every bar has a border, progress is a system-color fill, the milestone and summary are solid, the links keep their stroke, and the timeline keeps its row lines. A dashed link marks a conflict by its dashes, not its color. Selection is a thicker `Highlight` border. When printed the chart is as wide as its axis, with nothing sticky or scrolling; choose a zoom whose axis fits the page.

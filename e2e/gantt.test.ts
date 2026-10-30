@@ -406,6 +406,15 @@ test.describe("Gantt forced colors and print", () => {
     expect(await style('[data-gantt-id="design"]', "border-top-color")).toBe(
       colors.highlight,
     );
+    // Row lines survive in the timeline, and the list has no frame of its
+    // own inside the chart's.
+    const lines = await page
+      .locator(".bx--gantt__canvas")
+      .evaluate((node) => getComputedStyle(node, "::before").backgroundImage);
+    expect(lines).toContain(colors.canvasText);
+    expect(
+      await style(".bx--gantt__list .bx--data-table-content", "outline-width"),
+    ).toBe("0px");
   });
 
   test("prints the whole chart with nothing sticky or scrolling", async ({
