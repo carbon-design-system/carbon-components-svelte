@@ -216,7 +216,7 @@ test("expectSingleRing allows one ring under forced colors", async ({
   expect(await expectSingleRing(children)).toBeGreaterThan(4);
   await children.getByRole("textbox", { name: "Name" }).focus();
   await expect(expectSingleRing(children)).rejects.toThrow(
-    /2 rings, at most 1 allowed\n.*span.cell-ring.selected: border .*\n.*input#.*: outline 4px/,
+    /2 rings, at most 1 allowed\n.*span.cell-ring.selected: border .*\n.*input\.bx--text-input: outline 4px/,
   );
   await children.getByRole("switch", { name: "Notify" }).focus();
   await expect(expectSingleRing(children)).rejects.toThrow(
