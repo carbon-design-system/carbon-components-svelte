@@ -14,7 +14,7 @@ description: Tearsheets hold a focused task that outgrows a modal but should not
 
 ## Basic
 
-Bind `open` to show the tearsheet. It slides up from the bottom, stops short of the top of the window, and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. Use `label` for a step or category above the title, and `description` for a sentence below it.
+Bind `open` to show the tearsheet. It slides up from the bottom, stops short of the top of the window, and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. Use `labelText` for a step or category above the title, and `descriptionText` for a sentence below it.
 
 Put footer buttons in the `actions` slot; the tearsheet lays them out in an [ActionSet](/components/ActionSet). A tearsheet with `actions` is transactional: it hides the close button and stays open on an outside click, so a stray click can't discard a form. A tearsheet without `actions` is passive, shows the close button, and closes on an outside click. Omit the `actions` slot entirely for a passive tearsheet: an empty slot still counts as `actions`.
 
@@ -75,4 +75,4 @@ To open a tearsheet from inside a modal, or from another overlay with a `transfo
 | Use `actions` for transactional work, and leave the slot out for read-only content | Its presence decides the close button and the outside-click rule, as in Carbon v11. |
 | Put a Modal that a tearsheet opens inside the tearsheet | A page-level Modal that comes earlier in the document sits under the tearsheet, which shares its z-index. |
 | Wrap a tearsheet rendered inside a modal or other transformed container in a Portal | The tearsheet is fixed to the window, and a transformed ancestor becomes its containing block. |
-| Give a tearsheet a `title`, or an `aria-label` | The dialog needs a name, and the title provides it. |
+| Give a tearsheet a `titleText`, or an `aria-label` | The dialog needs a name, and the title provides it. |

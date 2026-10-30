@@ -23,9 +23,9 @@
 
 <Tearsheet
   bind:open
-  label="Step 2 of 4"
-  title="Create integration"
-  description="Connect a data source and map its fields."
+  labelText="Step 2 of 4"
+  titleText="Create integration"
+  descriptionText="Connect a data source and map its fields."
 >
   <Stack gap={6}>
     <TextInput labelText="Connection name" placeholder="orders-warehouse" />

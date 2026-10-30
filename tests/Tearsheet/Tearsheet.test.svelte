@@ -12,9 +12,9 @@
 
   export let open = false;
   export let size: Props["size"] = "wide";
-  export let title: Props["title"] = "Create integration";
-  export let label: Props["label"] = undefined;
-  export let description: Props["description"] = undefined;
+  export let titleText: Props["titleText"] = "Create integration";
+  export let labelText: Props["labelText"] = undefined;
+  export let descriptionText: Props["descriptionText"] = undefined;
   export let hideCloseButton: Props["hideCloseButton"] = undefined;
   export let preventCloseOnClickOutside: boolean | undefined = undefined;
   export let selectorPrimaryFocus: Props["selectorPrimaryFocus"] = undefined;
@@ -29,9 +29,9 @@
   <Tearsheet
     bind:open
     {size}
-    {title}
-    {label}
-    {description}
+    {titleText}
+    {labelText}
+    {descriptionText}
     {hideCloseButton}
     {preventCloseOnClickOutside}
     {selectorPrimaryFocus}

@@ -454,7 +454,7 @@ export const interactive: AriaEntry[] = [
     name: "Tearsheet",
     render: (attrs) =>
       render(Tearsheet, {
-        props: { open: true, title: "Create integration", ...attrs },
+        props: { open: true, titleText: "Create integration", ...attrs },
       }),
     target: () => screen.getByRole("dialog"),
   },

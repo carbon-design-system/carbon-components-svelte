@@ -15,7 +15,7 @@
   <Button on:click={() => (open = true)}>Edit service</Button>
 </Content>
 
-<Tearsheet bind:open title="Edit service">
+<Tearsheet bind:open titleText="Edit service">
   <Stack gap={6}>
     <TextInput labelText="On the page surface" />
     <Layer>

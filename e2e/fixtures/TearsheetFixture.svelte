@@ -48,8 +48,8 @@
   <Tearsheet
     bind:open
     {size}
-    title="Create integration"
-    description="Connect a data source and map its fields."
+    titleText="Create integration"
+    descriptionText="Connect a data source and map its fields."
     on:close={(event) =>
       (closeTriggers = [...closeTriggers, event.detail.trigger])}
   >
@@ -59,9 +59,9 @@
   <Tearsheet
     bind:open
     {size}
-    title="Create integration"
-    label="Step 2 of 4"
-    description="Connect a data source and map its fields."
+    titleText="Create integration"
+    labelText="Step 2 of 4"
+    descriptionText="Connect a data source and map its fields."
     on:close={(event) =>
       (closeTriggers = [...closeTriggers, event.detail.trigger])}
   >
@@ -116,7 +116,7 @@
       Configure in a tearsheet
     </Button>
     <Portal>
-      <Tearsheet bind:open title="Configure source" size="narrow">
+      <Tearsheet bind:open titleText="Configure source" size="narrow">
         <TextInput labelText="Host" />
       </Tearsheet>
     </Portal>

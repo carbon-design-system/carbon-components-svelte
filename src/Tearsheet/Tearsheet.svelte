@@ -10,7 +10,7 @@
    * @slot {{}} actions - Footer buttons. The tearsheet lays them out in an `ActionSet`.
    * @slot {{}} headerActions - Buttons in the header, beside the title. Wide only.
    * @slot {{}} decorator - An `AILabel`, beside the close button.
-   * @slot {{}} descriptionChildren - Rich description content. Overrides `description`.
+   * @slot {{}} descriptionChildren - Rich description content. Overrides `descriptionText`.
    */
 
   /**
@@ -28,22 +28,23 @@
   export let size = "wide";
 
   /**
-   * Specify the title. It names the tearsheet.
+   * Specify the title. It names the tearsheet. A `title` attribute goes
+   * to the dialog element.
    * @type {string | undefined}
    */
-  export let title = undefined;
+  export let titleText = undefined;
 
   /**
-   * Specify a label above the title. Renders only with a `title`.
+   * Specify a label above the title. Renders only with a `titleText`.
    * @type {string | undefined}
    */
-  export let label = undefined;
+  export let labelText = undefined;
 
   /**
    * Specify the description. It describes the tearsheet.
    * @type {string | undefined}
    */
-  export let description = undefined;
+  export let descriptionText = undefined;
 
   /**
    * Control whether the header shows a close button. By default a
@@ -261,12 +262,12 @@
   $: narrow = size === "narrow";
   $: titleId = `${id}-title`;
   $: descriptionId = `${id}-description`;
-  $: hasDescription = Boolean(description) || $$slots.descriptionChildren;
+  $: hasDescription = Boolean(descriptionText) || $$slots.descriptionChildren;
   $: showHeaderActions = $$slots.headerActions && !narrow;
   $: showClose =
     hideCloseButton === undefined ? !$$slots.actions : !hideCloseButton;
   $: hasHeader =
-    Boolean(title) ||
+    Boolean(titleText) ||
     hasDescription ||
     showHeaderActions ||
     showClose ||
@@ -317,7 +318,7 @@
     aria-modal="true"
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy ??
-      (ariaLabel === undefined && title ? titleId : undefined)}
+      (ariaLabel === undefined && titleText ? titleId : undefined)}
     aria-describedby={joinDescribedBy(
       hasDescription ? descriptionId : undefined,
       ariaDescribedBy,
@@ -340,17 +341,17 @@
           class="bx--tearsheet__header-content"
         >
           <div class:bx--tearsheet__header-fields={true}>
-            {#if title && label}
-              <p class:bx--tearsheet__label={true}>{label}</p>
+            {#if titleText && labelText}
+              <p class:bx--tearsheet__label={true}>{labelText}</p>
             {/if}
-            {#if title}
+            {#if titleText}
               <Heading id={titleId} class="bx--tearsheet__title"
-                >{title}</Heading
+                >{titleText}</Heading
               >
             {/if}
             {#if hasDescription}
               <div id={descriptionId} class:bx--tearsheet__description={true}>
-                <slot name="descriptionChildren">{description}</slot>
+                <slot name="descriptionChildren">{descriptionText}</slot>
               </div>
             {/if}
           </div>
@@ -393,8 +394,8 @@
       bind:this={mainRef}
       class:bx--tearsheet__main={true}
       class:bx--layer-two={narrow}
-      role={scrollable && title ? "region" : undefined}
-      aria-labelledby={scrollable && title ? titleId : undefined}
+      role={scrollable && titleText ? "region" : undefined}
+      aria-labelledby={scrollable && titleText ? titleId : undefined}
       tabindex={scrollable ? 0 : undefined}
     >
       <Section tag="div" level={contentLevel} class="bx--tearsheet__content">
