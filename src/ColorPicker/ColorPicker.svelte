@@ -164,7 +164,7 @@
     swatches: "Preset colors",
     recent: "Recent colors",
     eyeDropper: "Pick a color from the screen",
-    invalidColor: "Enter a valid color",
+    invalidColor: "Enter a color such as #0f62fe",
     lowContrast: "Contrast with the background is below {min}:1",
   };
 
@@ -341,15 +341,27 @@
 
   $: syncFields(hsva);
 
+  /** @param {string | number | null | undefined} input */
+  function readHex(input) {
+    const text = String(input ?? "").trim();
+    return parseColor(BARE_HEX.test(text) ? `#${text}` : text);
+  }
+
   /** @param {CustomEvent<string | number | null>} event */
   function handleHex(event) {
-    const text = String(event.detail ?? "").trim();
-    const rgba = parseColor(BARE_HEX.test(text) ? `#${text}` : text);
+    const rgba = readHex(event.detail);
     if (!rgba) {
       hexInvalid = true;
       return;
     }
     pick(rgba);
+  }
+
+  // While the field shows an error, a value that reads clears it at once.
+  // The color still changes on `change`.
+  /** @param {CustomEvent<string | number | null>} event */
+  function handleHexInput(event) {
+    if (hexInvalid && readHex(event.detail)) hexInvalid = false;
   }
 
   /**
@@ -542,6 +554,7 @@
             {disabled}
             spellcheck="false"
             autocomplete="off"
+            on:input={handleHexInput}
             on:change={handleHex}
           />
         </div>

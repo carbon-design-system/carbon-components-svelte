@@ -164,7 +164,24 @@ describe("ColorPicker", () => {
       await user.type(field, "nope{Tab}");
 
       expect(field).toBeInvalid();
-      expect(screen.getByText("Enter a valid color")).toBeVisible();
+      expect(screen.getByText("Enter a color such as #0f62fe")).toBeVisible();
+      expect(value()).toBe("#0f62fe");
+    });
+
+    it("clears the error as soon as the typed value reads", async () => {
+      render(ColorPicker, { value: "#0f62fe" });
+      const field = screen.getByRole("textbox", { name: "Hex" });
+
+      await user.clear(field);
+      await user.type(field, "nope{Tab}");
+      expect(field).toBeInvalid();
+
+      await user.clear(field);
+      await user.type(field, "#d");
+      expect(field).toBeInvalid();
+      await user.type(field, "a1e28");
+      expect(field).not.toBeInvalid();
+      // The color changes on commit, not on each key.
       expect(value()).toBe("#0f62fe");
     });
 
