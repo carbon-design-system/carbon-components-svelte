@@ -279,6 +279,50 @@ describe("QueryBuilder", () => {
     expect(screen.getByText("No conditions yet.")).toBeInTheDocument();
   });
 
+  it("dispatches cancelable move and remove events before the change", async () => {
+    const onchange = vi.fn();
+    const onmove = vi.fn((event: CustomEvent) => event.preventDefault());
+    const onremove = vi.fn((event: CustomEvent) => event.preventDefault());
+    const seatsRow = { id: "s", field: "seats", operator: "gte", value: 5 };
+    render(QueryBuilder, {
+      props: {
+        value: {
+          operator: "and",
+          conditions: [{ ...nameRow, id: "n" }, seatsRow],
+        },
+        onchange,
+        onmove,
+        onremove,
+      },
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Move condition 1 down" }),
+    );
+    expect(onmove).toHaveBeenCalledTimes(1);
+    expect(onmove.mock.calls[0][0].detail).toEqual({
+      id: "n",
+      item: { ...nameRow, id: "n" },
+      from: 0,
+      to: 1,
+    });
+
+    await user.click(
+      screen.getByRole("button", { name: "Remove condition 2" }),
+    );
+    expect(onremove).toHaveBeenCalledTimes(1);
+    expect(onremove.mock.calls[0][0].detail).toEqual({
+      id: "s",
+      item: seatsRow,
+    });
+
+    expect(onchange).not.toHaveBeenCalled();
+    expect(bound().conditions.map((c: { field: string }) => c.field)).toEqual([
+      "name",
+      "seats",
+    ]);
+  });
+
   it("adds a group seeded with a condition, and stops offering groups at maxDepth", async () => {
     render(QueryBuilder, { props: { maxDepth: 2 } });
 

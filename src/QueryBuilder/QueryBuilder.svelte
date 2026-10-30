@@ -74,7 +74,9 @@
 <script>
   /**
    * @restProps {div}
-   * @event {QueryGroup} change
+   * @event {QueryGroup} change - Dispatched after every edit, with the whole query.
+   * @event {{ id: string; item: QueryCondition | QueryGroup; from: number; to: number }} move - Cancelable. Dispatched before a condition or group moves within its group; `from` and `to` are its positions there. Call `preventDefault()` to keep it in place.
+   * @event {{ id: string; item: QueryCondition | QueryGroup }} remove - Cancelable. Dispatched before a condition or group is removed. Call `preventDefault()` to keep it.
    */
 
   /**
@@ -337,6 +339,8 @@
     const found = findNode(tree, nodeId);
     if (!found?.parent) return;
     const { parent, index, node } = found;
+    if (!dispatch("remove", { id: nodeId, item: node }, { cancelable: true }))
+      return;
     const neighbor =
       parent.conditions[index + 1] ?? parent.conditions[index - 1];
     commit(
@@ -360,6 +364,17 @@
     const next = moveNode(tree, nodeId, delta);
     if (next === tree) return;
     const found = findNode(next, nodeId);
+    const from = findNode(tree, nodeId);
+    if (
+      from &&
+      found &&
+      !dispatch(
+        "move",
+        { id: nodeId, item: from.node, from: from.index, to: found.index },
+        { cancelable: true },
+      )
+    )
+      return;
     commit(
       next,
       translate("announceMoved", {

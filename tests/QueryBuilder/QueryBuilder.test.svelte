@@ -35,6 +35,8 @@
   export let translateWithId: ComponentProps<QueryBuilder>["translateWithId"] =
     undefined;
   export let onchange: (detail: QueryGroup) => void = () => {};
+  export let onmove: (event: CustomEvent) => void = () => {};
+  export let onremove: (event: CustomEvent) => void = () => {};
 </script>
 
 <QueryBuilder
@@ -52,6 +54,8 @@
   {helperText}
   {...translateWithId ? { translateWithId } : {}}
   on:change={(event) => onchange(event.detail)}
+  on:move={onmove}
+  on:remove={onremove}
 />
 <pre data-testid="bound">{queryToJSON(value)}</pre>
 <pre data-testid="bound-ids">{queryToJSON(value, { ids: true })}</pre>

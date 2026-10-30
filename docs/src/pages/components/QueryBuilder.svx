@@ -98,6 +98,19 @@ Set `operators` on a field to offer only some of its kind's operators, in the or
 
 Each group matches all or any of its conditions, chosen from the list at the top of the group. "Add group" starts a nested group with one condition in it. Reorder a condition with its move buttons. A group's moves and its remove action are in the options menu on its first line. Moves are disabled at the ends.
 
+The `move` and `remove` events fire before the change, with the node's `id` and the node as `item`. A move also has `from` and `to`, its positions in the group. Both can be canceled: call `event.preventDefault()` to keep the node, for example while you ask before removing a group.
+
+```svelte
+<QueryBuilder
+  {fields}
+  bind:value
+  on:remove={(event) => {
+    if (event.detail.item.conditions && !confirm("Remove this group?"))
+      event.preventDefault();
+  }}
+/>
+```
+
 Set `maxDepth` to cap nesting. The root group is level 1, so the default of `3` allows a group in a group. At the deepest level only "Add condition" is offered.
 
 <QueryBuilder fields={fields} value={nested} maxDepth={3} />
