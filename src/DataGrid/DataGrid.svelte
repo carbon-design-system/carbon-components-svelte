@@ -82,8 +82,10 @@
   /**
    * Specify the row height. `compact` is 24px, `short` 32px, `medium` 40px,
    * `default` 48px and `tall` 64px. Rows have one fixed height so the grid
-   * can paint only the rows in view.
-   * @type {"compact" | "short" | "medium" | "default" | "tall"}
+   * can paint only the rows in view. Also accepts Carbon v11's row heights:
+   * `"xs"` (`"compact"`), `"sm"` (`"short"`), `"md"` (`"medium"`), `"lg"`
+   * (`"default"`) and `"xl"` (`"tall"`).
+   * @type {"compact" | "short" | "medium" | "default" | "tall" | "xs" | "sm" | "md" | "lg" | "xl"}
    */
   export let size = "short";
 
@@ -169,6 +171,10 @@
   } from "../utils/layout-direction.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import {
+    DATA_GRID_SIZE_ALIASES,
+    normalizeSize,
+  } from "../utils/size-aliases.js";
   import { selectorTabbable } from "../utils/trap-focus.js";
   import { isTruncated } from "../utils/truncation.js";
   import {
@@ -218,7 +224,8 @@
   $: layout = buildColumnLayout(columns, defaultColumnWidth);
   $: rowCount = rows.length;
   $: columnCount = columns.length;
-  $: rowHeight = rowHeightForSize(size);
+  $: resolvedSize = normalizeSize(size, DATA_GRID_SIZE_ALIASES);
+  $: rowHeight = rowHeightForSize(resolvedSize);
   $: frozenRowCount = Math.min(Math.max(frozenRows, 0), rowCount);
   $: frozenColumnCount = Math.min(Math.max(frozenColumns, 0), columnCount);
   $: gutterWidth = rowHeaders
@@ -882,7 +889,7 @@
   role="grid"
   tabindex="-1"
   class="bx--data-grid {$$restProps.class ?? ''}"
-  class:bx--data-grid--compact={size === "compact"}
+  class:bx--data-grid--compact={resolvedSize === "compact"}
   aria-label={labelText || $$restProps["aria-label"] || undefined}
   aria-rowcount={rowCount + 1}
   aria-colcount={columnCount + (rowHeaders ? 1 : 0)}

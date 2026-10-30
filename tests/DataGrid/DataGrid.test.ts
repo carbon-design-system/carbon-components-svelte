@@ -82,6 +82,16 @@ async function scrollTo(grid: HTMLElement, top: number, left = 0) {
 
 describe("DataGrid", () => {
   describe("semantics", () => {
+    it("resolves a v11 size alias before it reaches the class", () => {
+      render(DataGrid, { ...makeGrid(3, 3), size: "xs" });
+
+      const grid = screen.getByRole("grid");
+      expect(grid).toHaveClass("bx--data-grid--compact");
+      expect(grid.style.getPropertyValue("--ccs-data-grid-row-height")).toBe(
+        "24px",
+      );
+    });
+
     it("counts every row and column, though it paints few", () => {
       render(DataGrid, makeGrid(1000, 30));
 
