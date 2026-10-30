@@ -121,13 +121,15 @@
     flex-direction: column;
   }
 
-  // Fits the height of its container, when the container has one: the room
-  // the buttons that do not fit collapse to.
+  // Fills the height of its container, when the container has one: the
+  // room the buttons that do not fit collapse to. A bar only as tall as the
+  // buttons it shows would measure that height as its room, and never
+  // expand again.
   .#{$prefix}--action-bar--vertical {
     width: fit-content;
     min-width: to-rem(40px);
+    height: 100%;
     min-height: 0;
-    max-height: 100%;
     align-items: stretch;
   }
 

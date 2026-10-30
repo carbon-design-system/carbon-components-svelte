@@ -386,6 +386,22 @@ test.describe("ActionBar", () => {
     await expect(tools.getByRole("button", { name: "Copy" })).toBeFocused();
   });
 
+  test("a vertical bar expands again as its container grows", async ({
+    page,
+  }) => {
+    await page.goto("/action-bar-vertical.html");
+    const tools = page.getByRole("toolbar", { name: "Tools", exact: true });
+    const trigger = tools.getByRole("button", { name: "More" });
+    await expect(trigger).toBeVisible();
+    await page.locator("#vertical").evaluate((node) => {
+      node.style.height = "400px";
+    });
+    await expect(trigger).toHaveCount(0);
+    await expect(tools.locator(".bx--action-bar__button:visible")).toHaveCount(
+      6,
+    );
+  });
+
   test("accounts for every button of forty as the bar resizes", async ({
     page,
   }) => {
