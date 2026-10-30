@@ -20,7 +20,7 @@
   "ContentSwitcher/ContentSwitcher.svelte": 2,
   "ContentSwitcher/Switch.svelte": 1,
   "ContextMenu/ContextMenu.svelte": 13,
-  "ContextMenu/ContextMenuOption.svelte": 18,
+  "ContextMenu/ContextMenuOption.svelte": 17,
   "CopyButton/CopyButton.svelte": 2,
   "DataTable/DataTable.svelte": 118,
   "DataTable/DataTableSkeleton.svelte": 2,

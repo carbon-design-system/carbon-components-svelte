@@ -92,7 +92,7 @@ describe("ContextMenu", () => {
     expect(options[0]).toHaveFocus();
   });
 
-  it("should skip disabled options with the arrow keys", async () => {
+  it("should move focus onto disabled options with the arrow keys", async () => {
     render(ContextMenu, { props: { open: true, optionDisabled: true } });
 
     const menu = screen.getAllByRole("menu")[0];
@@ -103,15 +103,19 @@ describe("ContextMenu", () => {
     await user.keyboard("{ArrowDown}");
     expect(options[0]).toHaveFocus();
 
-    // ArrowDown again skips the disabled middle option.
+    // Disabled options stay focusable, as in the WAI-ARIA APG menu pattern.
+    await user.keyboard("{ArrowDown}");
+    expect(options[1]).toHaveAttribute("aria-disabled", "true");
+    expect(options[1]).toHaveFocus();
+
     await user.keyboard("{ArrowDown}");
     expect(options[2]).toHaveFocus();
 
     await user.keyboard("{ArrowUp}");
-    expect(options[0]).toHaveFocus();
+    expect(options[1]).toHaveFocus();
   });
 
-  it("should skip disabled submenu options with the arrow keys", async () => {
+  it("should move focus onto disabled submenu options with the arrow keys", async () => {
     render(ContextMenu, {
       props: {
         open: true,
@@ -126,12 +130,17 @@ describe("ContextMenu", () => {
     await user.keyboard("{ArrowRight}");
     await user.keyboard("{ArrowDown}");
     expect(
+      screen.getByRole("menuitem", { name: "Submenu option 2" }),
+    ).toHaveFocus();
+
+    await user.keyboard("{ArrowDown}");
+    expect(
       screen.getByRole("menuitem", { name: "Submenu option 3" }),
     ).toHaveFocus();
 
     await user.keyboard("{ArrowUp}");
     expect(
-      screen.getByRole("menuitem", { name: "Submenu option 1" }),
+      screen.getByRole("menuitem", { name: "Submenu option 2" }),
     ).toHaveFocus();
   });
 

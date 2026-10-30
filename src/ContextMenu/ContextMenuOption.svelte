@@ -101,6 +101,7 @@
   } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     applePlatform,
@@ -114,7 +115,6 @@
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitMenuAxis } from "../utils/menu-placement.js";
-  import { nextEnabledIndex } from "../utils/move-index.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -305,13 +305,11 @@
       }
 
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        focusIndex = nextEnabledIndex({
-          items: options,
-          index: focusIndex,
-          step: event.key === "ArrowDown" ? 1 : -1,
-          wrap: false,
-          isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
-        });
+        focusIndex = clampIndex(
+          focusIndex,
+          event.key === "ArrowDown" ? 1 : -1,
+          options.length,
+        );
       } else if (event.key === "Home") {
         if (options.length > 0) focusIndex = 0;
       } else if (event.key === "End" && options.length > 0) {
@@ -327,7 +325,6 @@
           query,
           itemToString: menuOptionLabel,
           index: focusIndex,
-          isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
         });
       }
 
