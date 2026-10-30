@@ -104,5 +104,10 @@
     on:change={() => (changes += 1)}
   />
   <p data-testid="changes">{changes}</p>
-  <pre data-testid="json">{queryToJSON(value)}</pre>
+  <!-- Wraps, so the one-line JSON does not widen the page. -->
+  <pre
+    data-testid="json"
+    style="white-space: pre-wrap; overflow-wrap: anywhere">{queryToJSON(
+      value,
+    )}</pre>
 </div>

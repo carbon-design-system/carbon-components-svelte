@@ -3016,6 +3016,14 @@
     "message": "a#fnref-1: text overflows p[data-testid=\"footnoted\"] by 3.33px (text 9.61px x 20px)"
   },
   {
+    "fixture": "query-builder.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "button#qb-n5-value > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "button#qb-n5-value > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline button#qb-n5-value, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "radio-button-group.html",
     "variant": "320",
     "check": "overflow",
