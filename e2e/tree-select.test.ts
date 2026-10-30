@@ -106,6 +106,36 @@ test.describe("TreeSelect", () => {
     await expect(field).toContainText("Europe");
   });
 
+  test("a click on the highlighted first row's expander expands it", async ({
+    page,
+  }) => {
+    await page.goto("/tree-select.html");
+    const field = page.getByRole("combobox", { name: "Lazy" });
+    await field.click();
+    // A collapsed first row: an expanded one's rotated chevron paints
+    // above the highlight ring and hides the problem.
+    const cloud = page.getByRole("treeitem", {
+      name: "Cloud accounts",
+      exact: true,
+    });
+    const toggle = cloud.locator(".bx--tree-select__toggle");
+    await toggle.hover();
+    await expect(cloud).toHaveClass(/bx--list-box__menu-item--highlighted/);
+
+    const box = await toggle.boundingBox();
+    if (!box) throw new Error("no expander");
+    expect(box.width).toBe(24);
+    expect(box.height).toBe(24);
+
+    // A plain mouse press, so nothing retries until the row lets it through.
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.up();
+    await expect(cloud).toHaveAttribute("aria-expanded", "true");
+    await expect(field).toHaveAttribute("aria-expanded", "true");
+    await expect(field).not.toContainText("Cloud accounts");
+  });
+
   test("a lazy node shows a spinner, loads its children, and keeps them", async ({
     page,
   }) => {

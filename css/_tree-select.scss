@@ -51,15 +51,19 @@
   }
 
   // The expander slot is always there, so a leaf's label lines up with a
-  // sibling parent's.
+  // sibling parent's. It is a 24px target (WCAG 2.5.8) around a 16px icon;
+  // negative margins keep the row's height and the label's position.
   .#{$prefix}--tree-select__toggle {
     display: flex;
-    width: $carbon--spacing-05;
-    height: $carbon--spacing-05;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
     flex: none;
     align-items: center;
     justify-content: center;
-    margin-inline-end: $carbon--spacing-03;
+    margin-top: to-rem(-4px);
+    margin-bottom: to-rem(-4px);
+    margin-inline-end: $carbon--spacing-02;
+    margin-inline-start: to-rem(-4px);
     cursor: pointer;
   }
 
