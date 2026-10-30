@@ -43,8 +43,9 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  *   (post-mount) open transition. Always deferred with `tick()` here.
  * @param {() => void} options.restoreFocusReturn - Restore the focus
  *   saved by `saveFocusReturn`. Each component calls it on the closing
- *   transform `transitionend`; this factory also calls it after close when
- *   the container has no transition, so that event never fires.
+ *   transform `transitionend`. This factory also calls it after close,
+ *   once the container's transition time has passed, in case that event
+ *   never fires. A second call must do nothing.
  * @param {() => Element | null} options.getContainer - The element whose
  *   transform transition ends the close animation.
  * @param {() => boolean} options.getOpen - Re-read the current `open`
@@ -72,6 +73,8 @@ export function createDialogLifecycle({
   let closeDispatched = false;
   let prevOpen = false;
   let mounted = false;
+  /** @type {undefined | ReturnType<typeof setTimeout>} */
+  let restoreTimer;
 
   /** @param {string} trigger */
   function close(trigger) {
@@ -105,16 +108,26 @@ export function createDialogLifecycle({
           });
         }
         closeDispatched = false;
-        // With transitions disabled (e.g. a consumer's `transition: none`),
-        // `transitionend` never fires, so restore focus here instead.
+        // `transitionend` restores focus when the closing transition ends.
+        // It never fires when the transition does not run: a transition
+        // disabled with `transition: none`, a transform a consumer pins,
+        // or a hidden container. Restore after the transition's length
+        // in any case; a second restore does nothing.
         tick().then(() => {
-          if (!getOpen() && !hasTransition(getContainer())) {
+          if (getOpen()) return;
+          const ms = transitionMs(getContainer());
+          if (ms === 0) {
             restoreFocusReturn();
+          } else {
+            restoreTimer = setTimeout(() => {
+              if (!getOpen()) restoreFocusReturn();
+            }, ms);
           }
         });
       }
     } else if (nextOpen) {
       prevOpen = true;
+      clearTimeout(restoreTimer);
       // Reading `document.activeElement` doesn't depend on this dialog's
       // own DOM, so it's safe (and race-free) to capture it synchronously.
       saveFocusReturn();
@@ -148,13 +161,29 @@ export function closesOnOutsideClick(preventCloseOnClickOutside, passive) {
 }
 
 /**
+ * The time in ms until the longest transition on `element` ends, delay
+ * included. 0 when it has none.
  * @param {Element | null} element
- * @returns {boolean}
+ * @returns {number}
  */
-function hasTransition(element) {
-  if (!element) return false;
-  const { transitionDuration } = getComputedStyle(element);
+function transitionMs(element) {
+  if (!element) return 0;
+  const { transitionDuration, transitionDelay } = getComputedStyle(element);
+  const delays = (transitionDelay || "0s").split(",").map(toMs);
   return transitionDuration
     .split(",")
-    .some((duration) => Number.parseFloat(duration) > 0);
+    .map(toMs)
+    .reduce((longest, duration, i) => {
+      if (duration <= 0) return longest;
+      return Math.max(longest, duration + delays[i % delays.length]);
+    }, 0);
+}
+
+/**
+ * @param {string} time - A CSS time, such as `0.24s` or `240ms`.
+ * @returns {number}
+ */
+function toMs(time) {
+  const value = Number.parseFloat(time) || 0;
+  return time.trim().endsWith("ms") ? value : value * 1000;
 }
