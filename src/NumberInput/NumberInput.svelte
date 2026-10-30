@@ -205,13 +205,17 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, tick } from "svelte";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
   } from "../constants/context-keys.js";
+  import {
+    STEPPER_REPEAT_DELAY_MS,
+    STEPPER_REPEAT_INTERVAL_MS,
+  } from "../constants/timing.js";
   import Add from "../icons/Add.svelte";
   import EditOff from "../icons/EditOff.svelte";
   import Subtract from "../icons/Subtract.svelte";
@@ -573,8 +577,65 @@
   }
 
   function handleStepperBlur(event, direction) {
+    stopRepeat();
     dispatch("blur:stepper", { event, value, direction });
   }
+
+  /** @type {undefined | ReturnType<typeof setTimeout>} */
+  let repeatTimer;
+  // Set once a held stepper has stepped, so the click that ends the press
+  // does not step again.
+  let repeated = false;
+
+  /**
+   * A press shorter than `STEPPER_REPEAT_DELAY_MS` steps once, on click, so
+   * moving off the button before release still cancels it. A longer press
+   * steps every `STEPPER_REPEAT_INTERVAL_MS` until release, a min or max,
+   * or the field turns disabled or read-only. Keys repeat on their own.
+   * @param {PointerEvent} event
+   * @param {boolean} isIncrementing
+   */
+  function startRepeat(event, isIncrementing) {
+    stopRepeat();
+    repeated = false;
+    if (event.button !== 0 || !event.isPrimary || disabled || readonly) return;
+    const repeat = () => {
+      if (disabled || readonly) return stopRepeat();
+      const previous = value;
+      updateValue(isIncrementing);
+      repeated = true;
+      if (value === previous) return stopRepeat();
+      repeatTimer = setTimeout(repeat, STEPPER_REPEAT_INTERVAL_MS);
+    };
+    repeatTimer = setTimeout(repeat, STEPPER_REPEAT_DELAY_MS);
+  }
+
+  function stopRepeat() {
+    clearTimeout(repeatTimer);
+    repeatTimer = undefined;
+  }
+
+  /**
+   * Stop on leave. A pointer that leaves while pressed ends the press with
+   * no click; a touch leaves after its release, before its click.
+   * @param {PointerEvent} event
+   */
+  function handleStepperPointerLeave(event) {
+    stopRepeat();
+    if (event.buttons) repeated = false;
+  }
+
+  /** @param {boolean} isIncrementing */
+  function handleStepperClick(isIncrementing) {
+    if (repeated) repeated = false;
+    else updateValue(isIncrementing);
+    dispatch("click:stepper", {
+      value,
+      direction: isIncrementing ? "up" : "down",
+    });
+  }
+
+  onMount(() => stopRepeat);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -771,9 +832,13 @@
             aria-label={decrementLabel}
             class:bx--number__control-btn={true}
             class:down-icon={true}
-            on:click={() => {
-              updateValue(false);
-              dispatch("click:stepper", { value, direction: "down" });
+            on:click={() => handleStepperClick(false)}
+            on:pointerdown={(event) => startRepeat(event, false)}
+            on:pointerup={stopRepeat}
+            on:pointerleave={handleStepperPointerLeave}
+            on:pointercancel={() => {
+              stopRepeat();
+              repeated = false;
             }}
             on:blur={(event) => handleStepperBlur(event, "down")}
             disabled={disabled || readonly}
@@ -788,9 +853,13 @@
             aria-label={incrementLabel}
             class:bx--number__control-btn={true}
             class:up-icon={true}
-            on:click={() => {
-              updateValue(true);
-              dispatch("click:stepper", { value, direction: "up" });
+            on:click={() => handleStepperClick(true)}
+            on:pointerdown={(event) => startRepeat(event, true)}
+            on:pointerup={stopRepeat}
+            on:pointerleave={handleStepperPointerLeave}
+            on:pointercancel={() => {
+              stopRepeat();
+              repeated = false;
             }}
             on:blur={(event) => handleStepperBlur(event, "up")}
             disabled={disabled || readonly}

@@ -331,6 +331,8 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 | `LOADING_DELAY_MS` | 300 ms | Time `loading` stays `true` before an indicator shows |
 | `LOADING_MIN_DURATION_MS` | 500 ms | Minimum time an indicator stays once shown |
 | `NOTIFICATION_QUEUE_COLLAPSE_MS` | 150 ms | Time before the space a closed toast held under the pointer collapses |
+| `STEPPER_REPEAT_DELAY_MS` | 400 ms | Hold time before a stepper button starts to repeat |
+| `STEPPER_REPEAT_INTERVAL_MS` | 50 ms | Time between steps while a stepper button stays held |
 
 ### Intent
 

@@ -1,6 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
+import {
+  STEPPER_REPEAT_DELAY_MS,
+  STEPPER_REPEAT_INTERVAL_MS,
+} from "../../src/constants/timing.js";
 import { clickToFocus } from "../utils/click-to-focus";
 import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
@@ -1685,6 +1689,114 @@ describe("NumberInput", () => {
       await user.keyboard("{ArrowUp}");
 
       expect(mockHandler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("held stepper", () => {
+    const press = { button: 0, buttons: 1, isPrimary: true, pointerId: 1 };
+    const release = { button: 0, buttons: 0, isPrimary: true, pointerId: 1 };
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("repeats after the delay, then steps once per interval", async () => {
+      const onclickstepper = vi.fn();
+      render(NumberInput, { props: { value: 0, onclickstepper } });
+      const input = screen.getByRole("spinbutton");
+      const button = screen.getByRole("button", { name: "Increment number" });
+
+      await fireEvent.pointerDown(button, press);
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_DELAY_MS - 1);
+      expect(input).toHaveValue(0);
+
+      await vi.advanceTimersByTimeAsync(1);
+      expect(input).toHaveValue(1);
+
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_INTERVAL_MS * 3);
+      expect(input).toHaveValue(4);
+
+      // The click that ends a held press does not step again.
+      await fireEvent.pointerUp(button, release);
+      await fireEvent.click(button, { detail: 1 });
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_INTERVAL_MS * 3);
+      expect(input).toHaveValue(4);
+      expect(onclickstepper).toHaveBeenCalledTimes(1);
+      expect(onclickstepper.mock.calls[0][0].detail).toEqual({
+        value: 4,
+        direction: "up",
+      });
+    });
+
+    it("steps once for a press shorter than the delay", async () => {
+      render(NumberInput, { props: { value: 5 } });
+      const input = screen.getByRole("spinbutton");
+      const button = screen.getByRole("button", { name: "Decrement number" });
+
+      await fireEvent.pointerDown(button, press);
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_DELAY_MS / 2);
+      await fireEvent.pointerUp(button, release);
+      await fireEvent.click(button, { detail: 1 });
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_DELAY_MS * 2);
+
+      expect(input).toHaveValue(4);
+    });
+
+    it("stops at max", async () => {
+      render(NumberInput, { props: { value: 8, max: 10 } });
+      const button = screen.getByRole("button", { name: "Increment number" });
+
+      await fireEvent.pointerDown(button, press);
+      await vi.advanceTimersByTimeAsync(
+        STEPPER_REPEAT_DELAY_MS + STEPPER_REPEAT_INTERVAL_MS * 5,
+      );
+
+      expect(screen.getByRole("spinbutton")).toHaveValue(10);
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it("stops at min in text mode", async () => {
+      render(NumberInput, {
+        props: { value: 1.5, min: 0, step: 0.5, allowDecimal: true },
+      });
+      const button = screen.getByRole("button", { name: "Decrement number" });
+
+      await fireEvent.pointerDown(button, press);
+      await vi.advanceTimersByTimeAsync(
+        STEPPER_REPEAT_DELAY_MS + STEPPER_REPEAT_INTERVAL_MS * 5,
+      );
+
+      expect(screen.getByRole("textbox")).toHaveValue("0");
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it("stops when the pointer leaves, and a later click steps once", async () => {
+      render(NumberInput, { props: { value: 0 } });
+      const input = screen.getByRole("spinbutton");
+      const button = screen.getByRole("button", { name: "Increment number" });
+
+      await fireEvent.pointerDown(button, press);
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_DELAY_MS);
+      await fireEvent.pointerLeave(button, press);
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_INTERVAL_MS * 3);
+      expect(input).toHaveValue(1);
+
+      await fireEvent.click(button);
+      expect(input).toHaveValue(2);
+    });
+
+    it("does not repeat when read-only", async () => {
+      render(NumberInput, { props: { value: 0, readonly: true } });
+      const button = screen.getByRole("button", { name: "Increment number" });
+
+      await fireEvent.pointerDown(button, press);
+      await vi.advanceTimersByTimeAsync(STEPPER_REPEAT_DELAY_MS * 2);
+
+      expect(screen.getByRole("textbox")).toHaveValue("0");
     });
   });
 

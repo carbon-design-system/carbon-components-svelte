@@ -42,6 +42,30 @@ test.describe("NumberInput", () => {
     await expect(input).toHaveValue("4");
   });
 
+  test("a held stepper repeats until release and stops at max", async ({
+    page,
+  }) => {
+    const input = page.getByTestId("number-input-quantity");
+    await input.fill("5");
+    await page.getByLabel("Increment number").first().hover();
+    await page.mouse.down();
+    await expect
+      .poll(async () => Number(await input.inputValue()))
+      .toBeGreaterThan(7);
+    await page.mouse.up();
+    const released = await input.inputValue();
+    await page.waitForTimeout(300);
+    await expect(input).toHaveValue(released);
+
+    await input.fill("97");
+    await page.getByLabel("Increment number").first().hover();
+    await page.mouse.down();
+    await expect(input).toHaveValue("100");
+    await page.waitForTimeout(300);
+    await page.mouse.up();
+    await expect(input).toHaveValue("100");
+  });
+
   test.describe("locale + formatting", () => {
     test("displays initial value with locale formatting (de-DE)", async ({
       page,
