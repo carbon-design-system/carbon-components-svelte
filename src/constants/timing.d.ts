@@ -61,3 +61,12 @@ export const LOADING_MIN_DURATION_MS: 500;
  * (Carbon moderate-01), and the space is already zero under reduced motion.
  */
 export const NOTIFICATION_QUEUE_COLLAPSE_MS: 150;
+
+/**
+ * How long a stepper button is held before it starts to repeat, so a click
+ * steps once.
+ */
+export const STEPPER_REPEAT_DELAY_MS: 400;
+
+/** Time between steps while a stepper button stays held (Chromium spin button). */
+export const STEPPER_REPEAT_INTERVAL_MS: 50;
