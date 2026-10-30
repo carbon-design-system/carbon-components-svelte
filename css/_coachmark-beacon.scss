@@ -45,7 +45,7 @@
     width: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
     height: calc(var(--ccs-coachmark-beacon-size, #{to-rem(24px)}) / 3);
     animation: coachmark-beacon-pulse $duration--slow-02 * 3
-      motion(entrance, expressive) infinite;
+      motion(entrance, productive) infinite;
     background-color: $support-info;
     border-radius: 50%;
     pointer-events: none;
