@@ -64,6 +64,31 @@ test.describe("Kanban keyboard", () => {
     ]);
   });
 
+  test("a truncated tag adds no tab stop to its card", async ({ page }) => {
+    await page.goto("/kanban.html?long");
+    await expect(
+      page.locator('[data-kanban-item="g"] .bx--tag__label-tooltip'),
+    ).toHaveCount(1);
+    await page.getByTestId("cancel").focus();
+    const stops: string[] = [];
+    for (let step = 0; step < 5; step++) {
+      // biome-ignore lint/performance/noAwaitInLoops: each Tab depends on the last
+      await page.keyboard.press("Tab");
+      const stop = await page.evaluate(() => {
+        const el = document.activeElement;
+        if (!el?.closest("[data-testid=board]")) return null;
+        return el.getAttribute("aria-label") ?? el.textContent?.trim() ?? "";
+      });
+      if (stop === null) break;
+      stops.push(stop);
+    }
+    // The current card's grip and its menu, and nothing from another card.
+    expect(stops).toEqual([
+      "Design the login page",
+      "Move Design the login page",
+    ]);
+  });
+
   test("Escape puts the card back", async ({ page }) => {
     await handle(page, "Set up CI").focus();
     await page.keyboard.press("Space");

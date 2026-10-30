@@ -1222,8 +1222,12 @@
                           {#if item.tags?.length || item.assignee}
                             <div class:bx--kanban__card-meta={true}>
                               {#each item.tags ?? [] as tag, tagIndex (tagIndex)}
-                                <Tag size="sm" type={tagType(tag.type)}
-                                  >{tag.text}</Tag
+                                <!-- A truncated tag's tooltip trigger
+                                  would add a tab stop to the card. -->
+                                <Tag
+                                  size="sm"
+                                  type={tagType(tag.type)}
+                                  tabindex={-1}>{tag.text}</Tag
                                 >
                               {/each}
                               {#if item.assignee}
