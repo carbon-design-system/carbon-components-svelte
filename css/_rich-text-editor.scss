@@ -134,11 +134,15 @@
     max-block-size: calc(
       var(--ccs-rich-text-editor-max-rows) * #{to-rem(20px)} + #{to-rem(22px)}
     );
-    overflow-wrap: break-word;
     overflow-y: auto;
     padding: to-rem(11px) $carbon--spacing-05;
     color: $text-primary;
     outline: none;
+    // A long URL breaks only when nothing else fits, and does not set the
+    // field's min-content width, so a flex or grid parent can shrink it.
+    // `break-word` rather than `overflow-wrap: anywhere` (Safari 15.4+), as
+    // in `_long-words.scss`.
+    word-break: break-word;
   }
 
   .#{$prefix}--rich-text-editor__box--invalid

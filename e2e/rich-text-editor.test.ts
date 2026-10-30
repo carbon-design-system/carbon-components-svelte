@@ -625,6 +625,34 @@ test.describe("RichTextEditor", () => {
       expect(pressed).not.toBe(resting);
     });
 
+    test("a long URL wraps inside the field at 320 px", async ({ page }) => {
+      await page.setViewportSize({ width: 320, height: 800 });
+      const box = editor(page);
+      await box.click();
+      await page.keyboard.press(k("ControlOrMeta+a"));
+      await paste(box, {
+        text: "https://example.com/a/very/long/path/that/does/not/break/easily/and/keeps/going",
+      });
+      await expect(value(page)).toContainText("keeps/going");
+
+      // In a grid, the column is as wide as the field's min-content width.
+      // The URL must not set it.
+      const widths = await box.evaluate((el) => {
+        const field = el.closest(".bx--rich-text-editor") as HTMLElement;
+        const parent = field.parentElement as HTMLElement;
+        for (const child of parent.children) {
+          if (child !== field) (child as HTMLElement).style.display = "none";
+        }
+        parent.style.display = "grid";
+        return {
+          field: field.getBoundingClientRect().width,
+          page: document.documentElement.scrollWidth,
+        };
+      });
+      expect(widths.field).toBeLessThanOrEqual(320);
+      expect(widths.page).toBeLessThanOrEqual(320);
+    });
+
     test("flips the toolbar and placeholder in RTL", async ({ page }) => {
       await page.evaluate(() =>
         document.documentElement.setAttribute("dir", "rtl"),
