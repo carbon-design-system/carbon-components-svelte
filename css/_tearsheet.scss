@@ -241,6 +241,27 @@
     border-top: 1px solid $border-subtle;
   }
 
+  // Below `md` a wide tearsheet keeps the `2xl` set the server renders,
+  // but its buttons are 48px tall and share the row, as a narrow
+  // tearsheet's are, so their labels stay whole. The width rule ties with
+  // the set's `2xl` rule and wins on order; a set too narrow for its
+  // buttons still stacks.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--tearsheet--wide
+      .#{$prefix}--tearsheet__actions
+      .#{$prefix}--btn--xl:not(.#{$prefix}--btn--icon-only) {
+      min-height: to-rem(48px);
+      padding-top: nth($button-padding, 1);
+    }
+
+    .#{$prefix}--tearsheet--wide
+      .#{$prefix}--tearsheet__actions.#{$prefix}--action-set--2xl
+      .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost) {
+      max-width: none;
+      flex-grow: 1;
+    }
+  }
+
   // The AI surface, as on a modal: a transparent edge, an inner aura and
   // a drop shadow.
   .#{$prefix}--tearsheet--ai-label::before {

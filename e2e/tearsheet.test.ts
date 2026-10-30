@@ -85,6 +85,28 @@ test.describe("Tearsheet", () => {
     ).toBeLessThanOrEqual((await rect(page, ".bx--tearsheet__close")).left);
   });
 
+  test("below md a wide footer's buttons are 48px tall and share the row", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 671, height: 800 });
+    await page.goto("/tearsheet.html");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    const buttons = page.locator(".bx--tearsheet__actions .bx--btn");
+    const boxes = await buttons.evaluateAll((nodes) =>
+      nodes.map((node) => node.getBoundingClientRect()),
+    );
+    expect(boxes.map((box) => box.height)).toEqual([48, 48]);
+    expect(boxes[0].width).toBeCloseTo(boxes[1].width, 0);
+    expect(boxes[0].width + boxes[1].width).toBeGreaterThan(660);
+
+    await page.setViewportSize({ width: 672, height: 800 });
+    await expect
+      .poll(() =>
+        buttons.first().evaluate((node) => node.getBoundingClientRect().height),
+      )
+      .toBe(80);
+  });
+
   test("a narrow tearsheet is as wide as a small modal", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/tearsheet.html?size=narrow");
