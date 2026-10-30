@@ -41,6 +41,11 @@
     background-color: $field;
     color: $text-primary;
     text-overflow: ellipsis;
+    // ccs: a query reads in its own direction, so in RTL "3 / 4" keeps
+    // its order instead of showing as "4 / 3". `dir="auto"` would do the
+    // same, but it also turns the field's padding to the value's
+    // direction and puts the text under the icons.
+    unicode-bidi: plaintext;
     transition: background-color $duration--fast-02 motion(standard, productive);
 
     &:focus {
@@ -520,4 +525,24 @@
 
 @include exports("search-close-forced-colors") {
   @include search-close-forced-colors;
+}
+
+// carbon-components-svelte patch
+// `unicode-bidi: plaintext` on the input aligns each query to its own start:
+// "3 / 4" to the left on an RTL page, Arabic to the right on an LTR one.
+// Keep it at the page's start, by the magnifier.
+/// @access private
+/// @group components
+@mixin search-text-align {
+  .#{$prefix}--search-input {
+    text-align: left;
+  }
+
+  [dir="rtl"] .#{$prefix}--search-input {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("search-text-align") {
+  @include search-text-align;
 }

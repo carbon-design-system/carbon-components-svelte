@@ -1271,6 +1271,34 @@ test.describe("right-to-left text fields", () => {
     await setDirection(page, "rtl");
     expect(await shadow()).toBe(ltr.replace("-2px 0px", "2px 0px"));
   });
+
+  test("reads a Search query in its own direction, at the page's start", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const input = page.getByTestId("search").locator("input");
+    await input.fill("3 / 4");
+    await page.evaluate(() => document.fonts.ready);
+    // The query's left end, if it sits by the magnifier at the right.
+    const { x, y } = await input.evaluate((node: HTMLInputElement) => {
+      const style = getComputedStyle(node);
+      const context = document.createElement("canvas").getContext("2d");
+      if (!context) throw new Error("no canvas");
+      context.font = style.font;
+      const width = context.measureText(node.value).width;
+      const box = node.getBoundingClientRect();
+      return {
+        x: box.right - Number.parseFloat(style.paddingRight) - width + 2,
+        y: box.top + box.height / 2,
+      };
+    });
+    await page.mouse.click(x, y);
+
+    // "3" is at the left end, so the caret lands before it.
+    expect(
+      await input.evaluate((node: HTMLInputElement) => node.selectionStart),
+    ).toBe(0);
+  });
 });
 
 /**
