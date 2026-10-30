@@ -10,6 +10,7 @@ import TooltipIconMultiple from "./TooltipIconMultiple.test.svelte";
 import TooltipIconPortal from "./TooltipIconPortal.test.svelte";
 import TooltipIconPortalEscape from "./TooltipIconPortalEscape.test.svelte";
 import TooltipIconReactive from "./TooltipIconReactive.test.svelte";
+import TooltipIconTooltipSlot from "./TooltipIconTooltipSlot.test.svelte";
 
 type Props = ComponentProps<TooltipIconComponent>;
 
@@ -567,6 +568,31 @@ describe("TooltipIcon", () => {
 
       expect(trigger).toHaveClass("bx--tooltip--hidden");
     });
+  });
+
+  describe("tooltip content slots", () => {
+    it.each([
+      ["tooltipChildren", "New content"],
+      ["tooltipText", "Old content"],
+    ] as const)("renders the %s slot in the tooltip", (slots, text) => {
+      render(TooltipIconTooltipSlot, { props: { slots } });
+
+      expect(screen.getByText(text).parentElement).toHaveClass(
+        "bx--assistive-text",
+      );
+    });
+
+    it.each([false, true])(
+      "prefers the tooltipChildren slot with portalTooltip %s",
+      (portalTooltip) => {
+        render(TooltipIconTooltipSlot, {
+          props: { slots: "both", portalTooltip },
+        });
+
+        expect(screen.getByText("New content")).toBeInTheDocument();
+        expect(screen.queryByText("Old content")).toBeNull();
+      },
+    );
   });
 
   describe("Generics", () => {

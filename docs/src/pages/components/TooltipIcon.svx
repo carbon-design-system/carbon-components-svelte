@@ -62,10 +62,10 @@ Align the tooltip content with `align`.
 
 ## Custom tooltip text
 
-Use the `tooltipText` slot to customize the tooltip content with additional styling.
+Use the `tooltipChildren` slot to customize the tooltip content with additional styling.
 
 <TooltipIcon icon={Carbon}>
-  <Text slot="tooltipText" tag="span" type="inherit" weight="semibold">Metrics are aggregated across every workspace in your organization.</Text>
+  <Text slot="tooltipChildren" tag="span" type="inherit" weight="semibold">Metrics are aggregated across every workspace in your organization.</Text>
 </TooltipIcon>
 
 ## Custom icon
