@@ -3,6 +3,7 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import HeaderNavContent from "./HeaderNavContent.test.svelte";
 import HeaderNavMenuInsert from "./HeaderNavMenuInsert.test.svelte";
+import HeaderNavMenuTextSlot from "./HeaderNavMenuTextSlot.test.svelte";
 import Menubar from "./HeaderNavMenubar.test.svelte";
 
 const item = (name: string) => screen.getByRole("menuitem", { name });
@@ -251,6 +252,23 @@ describe("HeaderNavMenu trigger content", () => {
     expect(trigger).not.toHaveTextContent("Ignored");
     expect(icon.parentElement).toBe(trigger);
     expect(icon.nextElementSibling).toHaveClass("bx--header__menu-arrow");
+  });
+
+  it.each([
+    ["textChildren", "New label"],
+    ["text", "Old label"],
+  ] as const)("renders the %s slot as the trigger content", (slots, text) => {
+    render(HeaderNavMenuTextSlot, { props: { slots } });
+
+    const trigger = screen.getByRole("menuitem", { name: text });
+    expect(trigger).not.toHaveTextContent("Ignored");
+  });
+
+  it("prefers the textChildren slot over the text slot", () => {
+    render(HeaderNavMenuTextSlot, { props: { slots: "both" } });
+
+    const trigger = screen.getByRole("menuitem", { name: "New label" });
+    expect(trigger).not.toHaveTextContent("Old label");
   });
 });
 
