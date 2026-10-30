@@ -8,6 +8,34 @@
   const PAGE_ROWS = 10;
 
   /**
+   * The narrowest a column with no `width` or `minWidth` gets. Columns take
+   * their widths from the header alone, so the table needs a floor to scroll
+   * in a narrow container instead of squeezing those columns.
+   */
+  const MIN_COLUMN_WIDTH = "12rem";
+
+  /**
+   * The table's minimum width. Columns with a `width` take it. The others
+   * share the rest evenly, and a fixed layout ignores `min-width` on a cell,
+   * so each of them is given the largest of their `minWidth` floors.
+   * @param {ReadonlyArray<{ width?: string; minWidth?: string }>} headers
+   */
+  function minTableWidth(headers) {
+    const sized = [];
+    const floors = [];
+    for (const header of headers) {
+      if (header.width) sized.push(header.width);
+      else floors.push(header.minWidth ?? MIN_COLUMN_WIDTH);
+    }
+    if (floors.length > 0) {
+      const unique = [...new Set(floors)];
+      const floor = unique.length > 1 ? `max(${unique.join(", ")})` : unique[0];
+      sized.push(`${floors.length} * ${floor}`);
+    }
+    return `calc(${sized.join(" + ")})`;
+  }
+
+  /**
    * Controls inside a cell that Tab must not reach while the grid has a
    * single tab stop. `tabindex="0"` covers custom widgets; the grid's own
    * rows and cells are excluded.
@@ -87,8 +115,8 @@
    * @property {string} key - The node field this column reads. The first column is the tree column and falls back to `node.text`.
    * @property {any} value - The column header content
    * @property {(item: any, node: Node) => any} [display] - Format the cell value
-   * @property {string} [width]
-   * @property {string} [minWidth]
+   * @property {string} [width] - The exact width of the column. Columns keep their widths as rows expand and collapse.
+   * @property {string} [minWidth] - The narrowest a column with no `width` gets. Defaults to `12rem`.
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
    */
 
@@ -1067,6 +1095,7 @@
     class:bx--data-table--tall={effectiveSize === "tall"}
     class:bx--data-table--zebra={zebra}
     class:bx--data-table--sticky-header={stickyHeader}
+    style:min-inline-size={minTableWidth(columns)}
     aria-label={$$restProps["aria-label"] ??
       (hideLabel ? labelText : undefined)}
     aria-labelledby={$$restProps["aria-labelledby"] ??

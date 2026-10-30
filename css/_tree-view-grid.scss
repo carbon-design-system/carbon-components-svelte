@@ -11,6 +11,13 @@
 /// @access private
 /// @group components
 @mixin tree-view-grid {
+  // Columns take their widths from the header row alone, so they keep them
+  // as rows expand and collapse. The component sets a minimum width on the
+  // table, and the container scrolls when it is narrower.
+  .#{$prefix}--tree-grid {
+    table-layout: fixed;
+  }
+
   // DataTable aligns text with a physical `left`. Cells read the writing
   // direction here; `columnAlign` still wins through its own class.
   .#{$prefix}--tree-grid th,
@@ -21,9 +28,12 @@
   // The toggle, icon and text of the tree column. Each level indents the
   // whole label by one level's width; the level is a custom property on the
   // row, so the server renders the indent.
+  // A long name wraps inside the tree column, also in the middle of a word,
+  // since deep levels leave little room after the indent.
   .#{$prefix}--tree-grid__label {
     display: flex;
     align-items: center;
+    overflow-wrap: anywhere;
     padding-inline-start: calc(
       (var(--ccs-tree-grid-level, 1) - 1) * #{$carbon--spacing-05}
     );

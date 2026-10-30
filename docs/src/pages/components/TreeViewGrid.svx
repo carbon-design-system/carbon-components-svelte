@@ -15,7 +15,9 @@ Use `TreeViewGrid` when rows nest and share columns. For a single column of nest
 
 ### Widths and alignment
 
-Set `width` or `minWidth` on a header to size its column. Set `columnAlign` to `"end"` to align a numeric column to the inline end, which is the left edge in right-to-left layouts.
+Columns keep their widths as rows expand and collapse. A header's `width` is the exact width of its column, so give a numeric column room for its largest value. Columns with no `width` share the rest of the row evenly, and are at least as wide as their `minWidth`, or 12rem when it is unset. In a narrower container, the grid scrolls sideways. Text in the tree column wraps, also inside a long word.
+
+Set `columnAlign` to `"end"` to align a numeric column to the inline end, which is the left edge in right-to-left layouts.
 
 <FileSource src="/framed/TreeViewGrid/TreeViewGridWidths" />
 

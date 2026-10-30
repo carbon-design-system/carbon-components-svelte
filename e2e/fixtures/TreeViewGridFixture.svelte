@@ -57,6 +57,13 @@
               owner: "Payments",
               cost: 320,
             },
+            {
+              id: "us-east-api-canary",
+              name: "api-canary-failover-replica-2026-10-29",
+              status: "active",
+              owner: "Payments",
+              cost: 80,
+            },
           ],
         },
         {

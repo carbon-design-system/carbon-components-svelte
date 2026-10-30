@@ -74,6 +74,34 @@ test.describe("TreeViewGrid", () => {
     await expect(page.getByTestId("selected")).toHaveText("");
   });
 
+  test("keeps its column widths as rows expand", async ({ page }) => {
+    const widths = () =>
+      page
+        .locator("thead th")
+        .evaluateAll((cells) =>
+          cells.map((cell) => Math.round(cell.getBoundingClientRect().width)),
+        );
+    const before = await widths();
+    await page
+      .locator("[data-tree-row-id=us-east-api]")
+      .locator(".bx--tree-grid__toggle")
+      .click();
+    await expect(
+      page.locator("[data-tree-row-id=us-east-api-canary]"),
+    ).toBeVisible();
+    expect(await widths()).toEqual(before);
+  });
+
+  test("does not squeeze the tree column at 320px", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    const name = await page
+      .locator("thead th")
+      .first()
+      .evaluate((cell) => cell.getBoundingClientRect().width);
+    // 12rem, the floor for a column with no `width`.
+    expect(name).toBeGreaterThanOrEqual(192);
+  });
+
   test("draws a focus ring on a row and on a cell", async ({ page }) => {
     const row = page.locator("[data-tree-row-id=us-east]");
     await row.focus();
