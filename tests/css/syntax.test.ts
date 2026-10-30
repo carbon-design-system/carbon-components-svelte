@@ -122,7 +122,9 @@ describe("syntax stylesheets", () => {
       await compileEntry("syntax-tokens.scss"),
       ":root",
     );
-    const rules = parseRules(css);
+    const rules = parseRules(css).filter(
+      (rule) => !rule.selector.includes("code-editor"),
+    );
     expect(rules).toHaveLength(88 * 2);
 
     for (const { selector, decls } of rules) {
@@ -139,7 +141,42 @@ describe("syntax stylesheets", () => {
       );
       expect(declared.has(`--cds-syntax-${type}`), selector).toBe(true);
     }
-    // No theme values: the same sheet serves every theme.
-    expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+    // No theme values: the same sheet serves every theme. CodeEditor's light
+    // colors sit inside `light-dark()`, which follows the theme.
+    expect(css.replace(/light-dark\([^)]*\)/g, "")).not.toMatch(
+      /#[0-9a-f]{3,8}\b/i,
+    );
+  }, 30_000);
+
+  // Selected code sits on `$highlight` (#d0e2ff in White and Gray 10).
+  it("syntax.css gives CodeEditor 4.5:1 on the light selection", async () => {
+    const css = await compileEntry("syntax.scss");
+    const light = syntaxTokens(
+      await compileEntry("syntax-tokens.scss"),
+      ":root",
+    );
+    const rules = parseRules(css).filter((rule) =>
+      rule.selector.includes("code-editor"),
+    );
+    const stepped = new Set<string>();
+    for (const { selector, decls } of rules) {
+      const type = selector.match(/\.tok-([\w-]+)$/)?.[1] ?? "";
+      const match = decls
+        .get("color")
+        ?.toString()
+        .match(/^light-dark\((#[0-9a-f]+),\s*var\(--cds-syntax-([\w-]+)\)\)$/);
+      expect(match?.[2], selector).toBe(type);
+      expect(contrast(match?.[1] ?? "", "#d0e2ff"), selector).toBeGreaterThan(
+        MIN_CONTRAST,
+      );
+      stepped.add(type);
+    }
+    // Every light text color below 4.5:1 on the selection is stepped.
+    const failing = [...light]
+      .filter(([prop]) => !/-(inserted|deleted)$/.test(prop))
+      .filter(([, value]) => contrast(value, "#d0e2ff") < MIN_CONTRAST)
+      .map(([prop]) => prop.replace("--cds-syntax-", ""));
+    expect(failing.length).toBeGreaterThan(0);
+    expect([...stepped].sort()).toEqual(failing.sort());
   }, 30_000);
 });

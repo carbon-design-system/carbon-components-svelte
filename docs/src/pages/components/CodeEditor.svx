@@ -197,3 +197,5 @@ Code reads left to right in any language. Under `dir="rtl"` the label, helper te
 ## Accessibility
 
 The editor is a native textarea with a label, so screen readers, spell and autofill settings, IME composition, and the browser's undo work as in any field. The colored layer and the line numbers are hidden from assistive technology, and spellcheck, autocorrect, and autocapitalize are off. In forced colors the text takes the system colors and the layer is hidden, so the caret and the selection stay visible.
+
+In White and Gray 10, the syntax colors at the 60 grade take the 70 grade of the same hue in the editor, so selected code reads at 4.5:1 or more on the selection color. CodeSnippet and the dark themes keep Carbon's colors.

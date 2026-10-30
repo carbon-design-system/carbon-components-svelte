@@ -2,11 +2,12 @@
   import {
     Button,
     CodeEditor,
+    CodeSnippet,
     FluidForm,
     Modal,
     Stack,
   } from "carbon-components-svelte";
-  import { tokenize } from "carbon-components-svelte/syntax";
+  import { highlight, tokenize } from "carbon-components-svelte/syntax";
   import "carbon-components-svelte/css/syntax-tokens.css";
   import "carbon-components-svelte/css/syntax.css";
 
@@ -21,6 +22,8 @@ export function createCounter(start = 0) {
   };
 }
 `;
+  // The script as first shown, colored by CodeSnippet for comparison.
+  const snippet = script;
   let json = `{
   "name": "carbon-components-svelte",
   "private": false,
@@ -127,7 +130,7 @@ export function createCounter(start = 0) {
     {tokenize}
     rows={3}
     disabled
-    value={"const disabled = true;"}
+    value={"const disabled = true; // off"}
   />
 
   <CodeEditor
@@ -192,6 +195,12 @@ export function createCounter(start = 0) {
       bind:value={modalValue}
     />
   </Modal>
+
+  <div data-testid="snippet">
+    <CodeSnippet type="multi" code={snippet}>
+      {@html highlight(snippet, "js")}
+    </CodeSnippet>
+  </div>
 </Stack>
 
 <div data-testid="fluid">

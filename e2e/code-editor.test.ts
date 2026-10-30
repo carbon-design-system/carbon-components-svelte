@@ -321,6 +321,61 @@ test.describe("CodeEditor", () => {
     expect(band).toBe("rgba(0, 0, 0, 0)");
   });
 
+  test("darkens the light 60-grade syntax colors for selected text", async ({
+    page,
+  }) => {
+    const colors = () =>
+      page.evaluate(() => {
+        const read = (scope: string) =>
+          Object.fromEntries(
+            ["comment", "function", "special-string", "number"].map((type) => [
+              type,
+              getComputedStyle(
+                document.querySelector(`${scope} .tok-${type}`) as Element,
+              ).color,
+            ]),
+          );
+        return {
+          editor: read(".bx--code-editor__code"),
+          snippet: read("[data-testid='snippet']"),
+        };
+      });
+    await expect(
+      root(page, "code-editor-js").locator(".tok-function").first(),
+    ).toBeVisible();
+
+    // White: the editor takes the 70 grade, CodeSnippet keeps the 60.
+    const white = await colors();
+    expect(white.editor).toEqual({
+      comment: "rgb(14, 96, 39)",
+      function: "rgb(104, 78, 0)",
+      "special-string": "rgb(105, 41, 196)",
+      number: "rgb(14, 96, 39)",
+    });
+    expect(white.snippet).toEqual({
+      comment: "rgb(25, 128, 56)",
+      function: "rgb(142, 106, 0)",
+      "special-string": "rgb(138, 63, 252)",
+      number: "rgb(25, 128, 56)",
+    });
+    // A disabled editor keeps the disabled color.
+    const [label, comment] = await root(page, "code-editor-disabled").evaluate(
+      (el) => [
+        getComputedStyle(el.querySelector("label") as Element).color,
+        getComputedStyle(el.querySelector(".tok-comment") as Element).color,
+      ],
+    );
+    expect(comment).toBe(label);
+
+    // Gray 100: the editor keeps Carbon's dark colors.
+    await page.evaluate(() =>
+      document.documentElement.setAttribute("theme", "g100"),
+    );
+    const dark = await colors();
+    expect(dark.editor).toEqual(dark.snippet);
+    expect(dark.editor.comment).toBe("rgb(66, 190, 101)");
+  });
+
   test("shows the numbers and untyped text as disabled", async ({ page }) => {
     const layer = root(page, "code-editor-disabled");
     const [label, number, line] = await layer.evaluate((el) => {
