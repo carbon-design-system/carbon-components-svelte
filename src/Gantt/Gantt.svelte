@@ -5,6 +5,9 @@
   /** How far the pointer moves before a press on a bar becomes a drag, in px. */
   const DRAG_THRESHOLD = 3;
 
+  /** Marks a `title` the list set on a cut cell, so only that one is removed. */
+  const TITLE_ATTR = "data-gantt-title";
+
   /** Width of the Start and End columns of the default list, in px. */
   const DATE_COLUMN_WIDTH = 136;
 
@@ -254,6 +257,7 @@
   } from "../utils/size-aliases.js";
   import { buildTreeMaps } from "../utils/tree-nodes.js";
   import { createTreeVirtualIndex } from "../utils/tree-virtual-index.js";
+  import { isTruncated } from "../utils/truncation.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     alignDomain,
@@ -800,6 +804,27 @@
     if (bar) focusKey = bar.key;
   }
 
+  /**
+   * The list truncates its cells. On hover, a cut cell gets a `title` with
+   * its full text, and a cell that fits loses the one set here.
+   * @param {PointerEvent} event
+   */
+  function handleListPointerover(event) {
+    const cell =
+      event.target instanceof Element ? event.target.closest("td, th") : null;
+    if (!cell) return;
+    const text =
+      cell.querySelector(".bx--tree-grid__label > span:last-child") ?? cell;
+    if (!(text instanceof HTMLElement)) return;
+    if (isTruncated(text)) {
+      text.title = text.textContent?.trim() ?? "";
+      text.setAttribute(TITLE_ATTR, "");
+    } else if (text.hasAttribute(TITLE_ATTR)) {
+      text.removeAttribute("title");
+      text.removeAttribute(TITLE_ATTR);
+    }
+  }
+
   /** @param {import("./gantt-utils.js").GanttBar} bar */
   function focusBar(bar) {
     const element = canvasRef?.querySelector(barSelector(bar.id));
@@ -887,7 +912,9 @@
 >
   <div bind:this={scrollerRef} class:bx--gantt__scroller={true}>
     <div class:bx--gantt__body={true}>
-      <div class:bx--gantt__list={true}>
+      <!-- Hover only sets a title on cut text; the grid inside takes input. -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div class:bx--gantt__list={true} on:pointerover={handleListPointerover}>
         <TreeViewGrid
           {id}
           nodes={tasks}

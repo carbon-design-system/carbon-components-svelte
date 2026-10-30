@@ -1,7 +1,8 @@
 <script>
   import { Gantt } from "carbon-components-svelte";
 
-  // `?zoom=day&size=short&n=2000&links=1500&readonly&cancel` pick a variant.
+  // `?zoom=day&size=short&n=2000&links=1500&readonly&cancel&long` pick a
+  // variant.
   // `n` tasks are spread over 20 phases, which makes a stress chart.
   const params = new URLSearchParams(
     typeof location === "undefined" ? "" : location.search,
@@ -138,6 +139,11 @@
     { from: "locked", to: "ship" },
     { from: "ui", to: "locked" },
   ];
+
+  if (params.has("long")) {
+    project[0].nodes[0].text =
+      "Write the brief for the internationalization and accessibility overhaul";
+  }
 
   const big = count > 0 ? stress() : null;
   let tasks = big ? big.nodes : project;

@@ -235,6 +235,24 @@ test.describe("Gantt", () => {
     expect(list.x + list.width).toBeLessThanOrEqual(box.x + 1);
   });
 
+  test("truncates a long name and shows it whole on hover", async ({
+    page,
+  }) => {
+    await page.goto("/gantt.html?size=short&zoom=day&long");
+    const text = page.locator(
+      '[data-tree-row-id="brief"] .bx--tree-grid__label > span:last-child',
+    );
+    await expect(text).toHaveCSS("text-overflow", "ellipsis");
+    expect(
+      await text.evaluate((node) => node.scrollWidth > node.clientWidth),
+    ).toBe(true);
+    await text.hover();
+    await expect(text).toHaveAttribute(
+      "title",
+      "Write the brief for the internationalization and accessibility overhaul",
+    );
+  });
+
   test("draws a conflicting link dashed", async ({ page }) => {
     const dashed = page.locator(".bx--gantt__link--conflict");
     await expect(dashed).toHaveCount(1);

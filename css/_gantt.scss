@@ -73,12 +73,19 @@
   }
 
   // A row that grew would push the list out of line with the bars, so cells
-  // clip their text.
+  // truncate their text. The tree column's text sits in a flex label, where
+  // the cell's ellipsis does not reach, so the text truncates itself.
   .#{$prefix}--gantt__list td,
   .#{$prefix}--gantt__list th {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .#{$prefix}--gantt__list .#{$prefix}--tree-grid__label > span:last-child {
+    overflow: hidden;
+    min-inline-size: 0;
+    text-overflow: ellipsis;
   }
 
   .#{$prefix}--gantt__list .#{$prefix}--data-table thead th {
