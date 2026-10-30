@@ -40,6 +40,16 @@ const CASES: {
     measure: ".bx--date-picker__input-overlay span",
     text: "09/09/2026, 09/10/2026, 09/11/2026, 09/12/2026",
   },
+  {
+    name: "Dropdown selected item",
+    hover: "[data-testid=dropdown] .bx--list-box__label",
+    text: "Legacy pager gateway for the on-call rotation",
+  },
+  {
+    name: "MultiSelect label",
+    hover: "[data-testid=multi-select] .bx--list-box__label",
+    text: "Choose the regions to deploy to",
+  },
 ];
 
 test("truncated text has a title on hover, and text that fits has none", async ({
