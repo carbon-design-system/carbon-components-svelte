@@ -165,10 +165,12 @@ $ccs-scheduler-date: to-rem(28px);
     @include type-style("heading-03");
   }
 
-  // The transparent outline shows in forced colors, which repaint the
-  // background that marks the current day away.
+  // `$background-brand` is Blue 60 in every theme, so white text on it
+  // keeps 5:1. The dark themes' `$interactive` gave 3.35:1. The transparent
+  // outline shows in forced colors, which repaint the background that
+  // marks the current day away.
   .#{$prefix}--scheduler__heading--today .#{$prefix}--scheduler__day-number {
-    background-color: $interactive;
+    background-color: $background-brand;
     color: $text-on-color;
     outline: 2px solid transparent;
     outline-offset: -2px;
@@ -630,7 +632,7 @@ $ccs-scheduler-date: to-rem(28px);
   }
 
   .#{$prefix}--scheduler__cell--today .#{$prefix}--scheduler__date {
-    background-color: $interactive;
+    background-color: $background-brand;
     color: $text-on-color;
     outline: 2px solid transparent;
     outline-offset: -2px;
@@ -711,7 +713,7 @@ $ccs-scheduler-date: to-rem(28px);
     }
 
     .#{$prefix}--scheduler__cell--today .#{$prefix}--scheduler__date:hover {
-      background-color: $interactive;
+      background-color: $background-brand;
     }
   }
 

@@ -530,4 +530,42 @@ baseTest.describe("Scheduler current time", () => {
       await expect(now).toHaveCount(1);
     },
   );
+
+  // The today number is 20px or 12px at weight 400, below WCAG's large
+  // text size, so it needs 4.5:1 against its circle (1.4.3).
+  baseTest(
+    "gives the today number 4.5:1 on its circle in every theme",
+    async ({ page }) => {
+      await page.clock.install({ time: new Date("2026-10-27T18:35:00Z") });
+      const views = [
+        ["week", ".bx--scheduler__heading--today .bx--scheduler__day-number"],
+        ["month", ".bx--scheduler__cell--today .bx--scheduler__date"],
+      ] as const;
+      for (const [view, selector] of views) {
+        // biome-ignore lint/performance/noAwaitInLoops: one view at a time
+        await page.goto(`/scheduler.html?view=${view}`);
+        const ratios = await page.locator(selector).evaluate((el) => {
+          const luminance = (color: string) => {
+            const [r = 0, g = 0, b = 0] = (color.match(/[\d.]+/g) ?? []).map(
+              (value) => {
+                const c = Number(value) / 255;
+                return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+              },
+            );
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+          };
+          return ["white", "g10", "g90", "g100"].map((theme) => {
+            document.documentElement.setAttribute("theme", theme);
+            const style = getComputedStyle(el);
+            const [a, b] = [style.color, style.backgroundColor].map(luminance);
+            const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+            return [theme, ratio] as const;
+          });
+        });
+        for (const [theme, ratio] of ratios) {
+          expect.soft(ratio, `${view} ${theme}`).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    },
+  );
 });
