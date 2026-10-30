@@ -110,6 +110,7 @@
           aria-hidden="true"
           data-virtual-index={measured ? rowIndex : undefined}
           class:bx--command-palette__group-header={true}
+          class:bx--command-palette__group-header--first={rowIndex === 0}
           on:mousedown|preventDefault
         >
           <slot name="group" group={row.group} items={itemsOf(row.items)} />

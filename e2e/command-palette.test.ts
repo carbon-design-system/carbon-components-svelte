@@ -185,6 +185,31 @@ for (const dir of ["ltr", "rtl"]) {
   });
 }
 
+test("sets groups at least twice as far apart as rows", async ({ page }) => {
+  await page.goto("/command-palette.html?open&state=groups");
+  await expect(page.locator(".bx--command-palette__list")).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  const gaps = await page.evaluate(() => {
+    const text = (label: string) => {
+      const node = [
+        ...document.querySelectorAll(
+          ".bx--command-palette__item-text, .bx--command-palette__group-header",
+        ),
+      ].find((element) => element.textContent?.trim() === label);
+      if (!node) throw new Error(`no ${label}`);
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      return range.getBoundingClientRect();
+    };
+    return {
+      rows: text("Delete service").top - text("Restart service").bottom,
+      groups: text("Go to").top - text("Delete service").bottom,
+    };
+  });
+  expect(gaps.rows).toBeGreaterThan(0);
+  expect(gaps.groups).toBeGreaterThanOrEqual(gaps.rows * 2 - 0.5);
+});
+
 test("keeps Tab off the options, including link options", async ({ page }) => {
   await page.goto("/command-palette.html?open&state=groups");
   const input = page.getByRole("combobox");
