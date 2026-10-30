@@ -5,8 +5,8 @@
 
   /**
    * @restProps {span}
-   * @event {null} open
-   * @event {{ trigger: CoachmarkCloseTrigger }} close
+   * @event {{ trigger: "target" | "programmatic" }} open - `"target"` when the user opened it through the target.
+   * @event {{ trigger: CoachmarkCloseTrigger }} close - Cancelable, except when the trigger is `"programmatic"`. A user close fires before `open` changes.
    * @slot {{ close: () => void }} - The coachmark body. Call `close` to dismiss it and return focus to the target.
    * @slot {{ open: boolean; toggle: () => void; triggerProps: { id: string; "aria-haspopup": "dialog"; "aria-expanded": boolean; "aria-controls": string } }} target - The element that opens the coachmark. Spread `triggerProps` on it and call `toggle` on click. Defaults to a `CoachmarkBeacon`.
    * @slot {{}} title - A rich heading. Overrides `title`.
@@ -122,8 +122,8 @@
 
   /** @type {boolean | undefined} */
   let prevOpen;
-  /** @type {CoachmarkCloseTrigger | null} */
-  let pendingTrigger = null;
+  // `close` already reported this close.
+  let closeDispatched = false;
   // The user opened it through the target.
   let openedByTarget = false;
   // Focus moves into the dialog once it is in the page, if the user opened it.
@@ -199,13 +199,13 @@
         (openedByTarget ||
           (typeof document !== "undefined" &&
             !!anchorRef?.contains(document.activeElement)));
+      const trigger = openedByTarget ? "target" : "programmatic";
       openedByTarget = false;
-      dispatch("open");
+      dispatch("open", { trigger });
     } else {
       pendingFocus = false;
-      const trigger = pendingTrigger ?? "programmatic";
-      pendingTrigger = null;
-      dispatch("close", { trigger });
+      if (closeDispatched) closeDispatched = false;
+      else dispatch("close", { trigger: "programmatic" });
     }
   }
 
@@ -220,12 +220,15 @@
   }
 
   /**
-   * Close the coachmark and report what closed it.
+   * Close the coachmark and report what closed it. The `close` event fires
+   * first, and `preventDefault()` keeps a user close from happening.
    * @param {CoachmarkCloseTrigger} [trigger]
    */
   function close(trigger = "programmatic") {
     if (!open) return;
-    pendingTrigger = trigger;
+    const cancelable = trigger !== "programmatic";
+    if (!dispatch("close", { trigger }, { cancelable })) return;
+    closeDispatched = true;
     open = false;
     // An outside click leaves focus where the user put it.
     if (trigger === "outside-click" || trigger === "programmatic") return;

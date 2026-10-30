@@ -177,6 +177,38 @@ describe("Coachmark", () => {
       expect(stay).not.toHaveBeenCalled();
     });
 
+    it("keeps a user close from happening when it is canceled", async () => {
+      const onClose = vi.fn();
+      render(Coachmark, {
+        props: {
+          onClose,
+          onCloseEvent: (e: CustomEvent) => e.preventDefault(),
+        },
+      });
+
+      await user.click(beacon());
+      await user.click(screen.getByRole("button", { name: "Close" }));
+      await user.keyboard("{Escape}");
+
+      expect(onClose).toHaveBeenCalledTimes(2);
+      expect(dialog()).toHaveClass("bx--popover--open");
+      expect(beacon()).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("reports what opened it, once per close", async () => {
+      const onOpen = vi.fn();
+      const onClose = vi.fn();
+      const { rerender } = render(Coachmark, { props: { onOpen, onClose } });
+
+      await user.click(beacon());
+      expect(onOpen).toHaveBeenLastCalledWith({ trigger: "target" });
+      await user.click(screen.getByRole("button", { name: "Close" }));
+      expect(onClose).toHaveBeenCalledTimes(1);
+
+      await rerender({ open: true });
+      expect(onOpen).toHaveBeenLastCalledWith({ trigger: "programmatic" });
+    });
+
     it("reports a programmatic close", async () => {
       const onClose = vi.fn();
       const { rerender } = render(Coachmark, {

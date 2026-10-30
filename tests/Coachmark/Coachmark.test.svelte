@@ -8,8 +8,9 @@
   export let selectorPrimaryFocus: ComponentProps<Coachmark>["selectorPrimaryFocus"] =
     "[data-modal-primary-focus]";
   export let withActions = false;
-  export let onOpen: () => void = () => {};
+  export let onOpen: (detail: { trigger: string }) => void = () => {};
   export let onClose: (detail: { trigger: string }) => void = () => {};
+  export let onCloseEvent: (event: CustomEvent) => void = () => {};
 </script>
 
 <input data-testid="unrelated" aria-label="Unrelated" />
@@ -23,8 +24,11 @@
   {closeOnOutsideClick}
   {selectorPrimaryFocus}
   {...$$restProps}
-  on:open={onOpen}
-  on:close={(e) => onClose(e.detail)}
+  on:open={(e) => onOpen(e.detail)}
+  on:close={(e) => {
+    onClose(e.detail);
+    onCloseEvent(e);
+  }}
 >
   <p>Select rows, then export them.</p>
   <svelte:fragment slot="actions" let:close>

@@ -86,7 +86,9 @@ Focus moves into the coachmark only when the user opened it, through the target 
 
 ## Events
 
-`open` fires when the coachmark opens, and `close` when it closes. The `close` event reports what closed it.
+`open` fires when the coachmark opens. Its `detail.trigger` is `"target"` when the user opened it through the target, and `"programmatic"` otherwise.
+
+`close` reports what closed it. A close by the user fires before the coachmark closes, and `preventDefault()` keeps it open. A `"programmatic"` close fires after it closes and cannot be canceled.
 
 | `detail.trigger` | Closed by |
 | --- | --- |
