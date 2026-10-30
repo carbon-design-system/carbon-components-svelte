@@ -29,6 +29,23 @@ describe("modal heading level", () => {
     ).toHaveClass("bx--modal-header__label");
   });
 
+  it("renders the labelChildren slot as the label", () => {
+    render(ModalLabelSlot, { props: { slots: "labelChildren" } });
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "New label" }),
+    ).toHaveClass("bx--modal-header__label");
+  });
+
+  it("prefers the labelChildren slot over the label slot", () => {
+    render(ModalLabelSlot, { props: { slots: "both" } });
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "New label" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Cloudant")).toBeNull();
+  });
+
   it("renders the ModalHeader label and title as h2", () => {
     render(ComposedModalTest, {
       props: {
