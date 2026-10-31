@@ -1154,6 +1154,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/SidePanel
+  shell-banner:
+    name: Shell banner
+    description: An app-wide state strip, such as staging, impersonation or an incident, above the UI Shell header or at the top of the content.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/shell-banner.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ShellBanner
   skeleton-icon:
     name: Skeleton icon
     status: stable

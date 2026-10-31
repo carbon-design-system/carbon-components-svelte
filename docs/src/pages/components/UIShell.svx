@@ -509,6 +509,10 @@ Integrate toasts with the UI Shell. This example triggers a toast, which appears
 
 <FileSource src="/framed/UIShell/HeaderWithToast" />
 
+## Shell banner
+
+Show an app-wide state, such as staging or an incident, with a [ShellBanner](/components/ShellBanner). An `"above-header"` banner moves the header, side navigation, header panels and content down by its height through the `--ccs-shell-offset` custom property.
+
 ## Classic theme
 
 Before version 0.105.0, the UI Shell defaulted to a mixed theme: **Gray 100** header and **White** side navigation. Now it follows the active theme (`white`, `g10`, `g80`, `g90`, `g100`).

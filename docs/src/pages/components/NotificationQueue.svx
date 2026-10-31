@@ -38,6 +38,8 @@ The top-right position assumes usage of the [UIShell](/components/UIShell) compo
 
 Customize queue placement with `offsetTop`, `offsetBottom`, `offsetLeft`, and `offsetRight`. Useful for positioning notifications below headers or adjusting spacing.
 
+The default `offsetTop` clears the UI Shell header, and an above-header [ShellBanner](/components/ShellBanner) too, through `--ccs-shell-offset`. A custom `offsetTop` replaces it, so add the property back when you set your own: `calc(var(--ccs-shell-offset, 0px) + 5rem)`.
+
 <FileSource src="/framed/NotificationQueue/NotificationQueueOffsets" />
 
 ### Z-index

@@ -20,6 +20,7 @@ export { default as ProfileMenuDivider } from "./ProfileMenuDivider.svelte";
 export { default as ProfileMenuHeader } from "./ProfileMenuHeader.svelte";
 export { default as ProfileMenuItem } from "./ProfileMenuItem.svelte";
 export { default as ProfileMenuList } from "./ProfileMenuList.svelte";
+export { default as ShellBanner } from "./ShellBanner.svelte";
 export { default as SideNav } from "./SideNav.svelte";
 export { default as SideNavDivider } from "./SideNavDivider.svelte";
 export { default as SideNavItems } from "./SideNavItems.svelte";

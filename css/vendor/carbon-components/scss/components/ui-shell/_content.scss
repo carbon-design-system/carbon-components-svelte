@@ -18,7 +18,7 @@
   }
 
   .#{$prefix}--header ~ .#{$prefix}--content {
-    margin-top: mini-units(6);
+    margin-top: calc(var(--ccs-shell-offset, 0px) + #{mini-units(6)}); // ccs: below a `ShellBanner`
   }
 
   .#{$prefix}--side-nav ~ .#{$prefix}--content {

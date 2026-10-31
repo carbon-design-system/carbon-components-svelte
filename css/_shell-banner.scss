@@ -1,0 +1,298 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/components/notification/tokens";
+
+// ShellBanner reuses the inline notification's icon, action button and
+// close button, and its notification tokens. It has its own root because the
+// inline notification's kind rules draw the accent as a physical
+// `border-left`, which stays on the wrong edge under `dir="rtl"`.
+
+$-kind-accents: (
+  error: $support-error,
+  info: $support-info,
+  success: $support-success,
+  warning: $support-warning,
+);
+
+$-kind-accents-inverse: (
+  error: $support-error-inverse,
+  info: $support-info-inverse,
+  success: $support-success-inverse,
+  warning: $support-warning-inverse,
+);
+
+/// ShellBanner: an app-wide state strip, fixed above the UI Shell header or
+/// at the top of `Content`.
+/// @access private
+/// @group components
+@mixin shell-banner {
+  .#{$prefix}--shell-banner {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    border-inline-start: 3px solid transparent;
+    color: $text-primary;
+  }
+
+  // The accent is the kind's color. `transparent` above keeps the three
+  // pixels on the same edge under `dir="rtl"`.
+  @each $kind, $color in $-kind-accents {
+    .#{$prefix}--shell-banner--low-contrast.#{$prefix}--shell-banner--#{$kind} {
+      border-inline-start-color: $color;
+      background-color: get-token-value(
+        $notification-colors,
+        "notification-background-#{$kind}"
+      );
+    }
+  }
+
+  @each $kind, $color in $-kind-accents-inverse {
+    .#{$prefix}--shell-banner--high-contrast.#{$prefix}--shell-banner--#{$kind} {
+      border-inline-start-color: $color;
+    }
+  }
+
+  .#{$prefix}--shell-banner--high-contrast {
+    background-color: $background-inverse;
+    color: $text-inverse;
+  }
+
+  .#{$prefix}--shell-banner--high-contrast a {
+    color: $link-inverse;
+  }
+
+  .#{$prefix}--shell-banner--above-header {
+    position: fixed;
+    z-index: z("header") + 1;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+
+  // Content's padding is 2rem. The banner bleeds across it to sit flush
+  // under the header and against the side nav.
+  .#{$prefix}--content > .#{$prefix}--shell-banner--content {
+    width: auto;
+    margin: (-$carbon--spacing-07) (-$carbon--spacing-07) $carbon--spacing-07;
+  }
+
+  .#{$prefix}--shell-banner--sticky {
+    position: sticky;
+    z-index: z("overlay") - 1;
+    top: calc(var(--ccs-shell-offset, 0px) + #{to-rem(48px)});
+  }
+
+  .#{$prefix}--shell-banner__body {
+    display: flex;
+    min-height: to-rem(40px);
+    align-items: flex-start;
+  }
+
+  .#{$prefix}--shell-banner__details {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0%;
+    padding-inline: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--shell-banner .#{$prefix}--inline-notification__icon {
+    margin-top: to-rem(10px);
+    margin-inline: 0 $carbon--spacing-05;
+  }
+
+  // The text and the action share a wrapping row. The text claims 15rem
+  // before the action wraps under it, so a long action label cannot
+  // squeeze the text to a letter per line.
+  .#{$prefix}--shell-banner__content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0%;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .#{$prefix}--shell-banner__text {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 to-rem(240px);
+    flex-wrap: wrap;
+    padding: to-rem(11px) 0;
+    column-gap: $carbon--spacing-03;
+    word-break: break-word;
+  }
+
+  .#{$prefix}--shell-banner__title {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+  }
+
+  .#{$prefix}--shell-banner__subtitle {
+    @include type-style("body-compact-01");
+  }
+
+  // A label longer than the banner wraps inside the button.
+  .#{$prefix}--shell-banner
+    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
+    max-width: 100%;
+    height: auto;
+    min-height: to-rem(32px);
+    flex-shrink: 1;
+    margin-block: $carbon--spacing-02;
+    margin-inline: 0 $carbon--spacing-03;
+    text-align: start;
+    white-space: normal;
+  }
+
+  .#{$prefix}--shell-banner--high-contrast
+    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
+    color: $link-inverse;
+  }
+
+  .#{$prefix}--shell-banner--high-contrast
+    .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+    outline: 2px solid $focus-inverse;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--shell-banner .#{$prefix}--inline-notification__close-button {
+    position: static;
+    width: to-rem(40px);
+    min-width: to-rem(40px);
+    max-width: to-rem(40px);
+    height: to-rem(40px);
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}--shell-banner--high-contrast
+    .#{$prefix}--inline-notification__close-button:focus {
+    outline: 2px solid $focus-inverse;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--shell-banner--low-contrast
+    .#{$prefix}--inline-notification__close-button:focus {
+    @include focus-outline("outline");
+  }
+
+  // A 4px strip in the kind's color. The title hangs below it in a tab
+  // centered on the viewport, over the header.
+  .#{$prefix}--shell-banner--thin {
+    height: to-rem(4px);
+    min-height: 0;
+    padding: 0;
+    border-inline-start-width: 0;
+    background-color: transparent;
+  }
+
+  @each $kind, $color in $-kind-accents {
+    .#{$prefix}--shell-banner--thin.#{$prefix}--shell-banner--low-contrast.#{$prefix}--shell-banner--#{$kind} {
+      background-color: $color;
+    }
+  }
+
+  @each $kind, $color in $-kind-accents-inverse {
+    .#{$prefix}--shell-banner--thin.#{$prefix}--shell-banner--high-contrast.#{$prefix}--shell-banner--#{$kind} {
+      background-color: $color;
+    }
+  }
+
+  .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__body {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    width: max-content;
+    max-width: 100%;
+    min-height: 0;
+    align-items: center;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-05;
+    margin-inline: auto;
+    border: 1px solid $border-subtle;
+    border-top: 0;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__details {
+    align-items: center;
+    padding-inline: 0;
+  }
+
+  // The kind's icon, so the tab does not rest on the strip's color.
+  .#{$prefix}--shell-banner--thin .#{$prefix}--inline-notification__icon {
+    margin-top: 0;
+    margin-inline-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__text {
+    padding: $carbon--spacing-02 0;
+  }
+
+  .#{$prefix}--shell-banner--thin
+    .#{$prefix}--inline-notification__close-button {
+    width: to-rem(24px);
+    min-width: to-rem(24px);
+    max-width: to-rem(24px);
+    height: to-rem(24px);
+    margin-inline: $carbon--spacing-03 (-$carbon--spacing-03);
+  }
+
+  .#{$prefix}--shell-banner--thin .#{$prefix}--inline-notification__close-icon {
+    fill: $icon-primary;
+  }
+
+  // A banner closed under the pointer keeps its space, empty, until the
+  // pointer leaves it. The component drops its kind classes meanwhile.
+  .#{$prefix}--shell-banner--held > * {
+    visibility: hidden;
+  }
+
+  @media (forced-colors: active) {
+    // An outline, not a border, so the banner stays 2.5rem tall. The 3px
+    // inline-start border draws the accent.
+    .#{$prefix}--shell-banner {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
+    .#{$prefix}--shell-banner--thin {
+      border-block-end: to-rem(4px) solid CanvasText;
+      outline: 0;
+    }
+
+    .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__body {
+      border-color: CanvasText;
+    }
+
+    // After the thin rule above, which it ties.
+    .#{$prefix}--shell-banner--held {
+      border-color: transparent;
+      outline: 0;
+    }
+
+    // Forced colors repaint the close button's transparent 2px outline,
+    // a ring as wide as its focus ring. The `:focus` rules above win.
+    .#{$prefix}--shell-banner .#{$prefix}--inline-notification__close-button {
+      outline: none;
+    }
+
+    // The inline notification's rule is scoped to its own root.
+    .#{$prefix}--shell-banner .#{$prefix}--inline-notification__close-icon {
+      fill: ButtonText;
+    }
+  }
+
+  @media print {
+    .#{$prefix}--shell-banner {
+      display: none;
+    }
+  }
+}
+
+@include exports("shell-banner") {
+  @include shell-banner;
+}
