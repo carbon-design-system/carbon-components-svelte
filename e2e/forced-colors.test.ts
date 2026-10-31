@@ -312,6 +312,7 @@ test.describe("forced colors", () => {
       ".bx--card--disabled .bx--card__title-text-row",
       ".bx--menu-option--disabled .bx--menu-option__label",
       ".bx--menu-option--disabled .bx--menu-option__info",
+      ".bx--date-picker__preset[aria-disabled=true]",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
@@ -637,6 +638,17 @@ test.describe("forced colors", () => {
         (await style(page, ".bx--toc__item--active", "::before")).background,
       )
       .toBe(system.Highlight);
+  });
+
+  test("the current DatePicker preset keeps its bar", async ({ page }) => {
+    // Forced colors paint every border, transparent or not, so only the
+    // current preset may have one.
+    const bars = await page.evaluate(() =>
+      [...document.querySelectorAll(".bx--date-picker__preset")].map(
+        (preset) => getComputedStyle(preset).borderLeftWidth,
+      ),
+    );
+    expect(bars).toEqual(["2px", "0px"]);
   });
 
   test("chat bubbles, typing dots and the streaming caret stay visible", async ({

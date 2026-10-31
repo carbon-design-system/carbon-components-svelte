@@ -26,6 +26,23 @@
       <DatePickerInput labelText="Billing month" />
     </DatePicker>
   </div>
+  <div data-testid="presets">
+    <DatePicker
+      datePickerType="range"
+      inline
+      valueFrom="03/11/2024"
+      valueTo="03/15/2024"
+      presets={[
+        {
+          label: "Launch week",
+          value: () => [new Date(2024, 2, 11), new Date(2024, 2, 15)],
+        },
+      ]}
+    >
+      <DatePickerInput labelText="Start date" />
+      <DatePickerInput labelText="End date" />
+    </DatePicker>
+  </div>
   <!-- Narrower than the calendar, so it overhangs the field. -->
   <div class="narrow" data-testid="static">
     <DatePicker datePickerType="single" value="03/15/2024">

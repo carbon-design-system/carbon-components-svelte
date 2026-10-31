@@ -92,6 +92,7 @@ export { default as DatePicker } from "./DatePicker/DatePicker.svelte";
 export { default as DatePickerInput } from "./DatePicker/DatePickerInput.svelte";
 export { default as DatePickerSkeleton } from "./DatePicker/DatePickerSkeleton.svelte";
 export { default as FluidDatePickerSkeleton } from "./DatePicker/FluidDatePickerSkeleton.svelte";
+export { datePresets } from "./DatePicker/date-presets.js";
 export { default as DescriptionList } from "./DescriptionList/DescriptionList.svelte";
 export { default as DescriptionListItem } from "./DescriptionList/DescriptionListItem.svelte";
 export { default as Dialog } from "./Dialog/Dialog.svelte";

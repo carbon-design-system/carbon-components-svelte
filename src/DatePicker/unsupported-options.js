@@ -27,6 +27,19 @@ export function getPropWarnings({ datePickerType, months, anchor, portalled }) {
 }
 
 /**
+ * Presets pick one date or one range.
+ *
+ * @param {string | undefined} datePickerType
+ * @returns {string | undefined}
+ */
+export function getPresetsWarning(datePickerType) {
+  if (datePickerType === "single" || datePickerType === "range") {
+    return undefined;
+  }
+  return `${PREFIX}presets only apply to datePickerType="single" and "range"; they have no effect on "${datePickerType}".`;
+}
+
+/**
  * `short` only narrows the field of a `"simple"` picker.
  *
  * @param {string | undefined} datePickerType

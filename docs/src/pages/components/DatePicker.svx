@@ -114,7 +114,7 @@ Use `bind:selectedDates` to read and set the selection as `Date` objects instead
 
 ### Range presets
 
-Build preset range buttons (for example "Last 7 days" or "This month") by setting `valueFrom` and `valueTo` from outside the component, the same way as the programmatic example above.
+To show shortcuts inside the calendar, use [`presets`](#presets). To set a range from buttons outside it, such as a filter bar, set `valueFrom` and `valueTo`, the same way as the programmatic example above.
 
 <FileSource src="/framed/DatePicker/DatePickerRangePresets" />
 
@@ -208,6 +208,41 @@ Set `monthLabel="short"` to show the abbreviated month name from the active `loc
 By default, the calendar appears instantly with no animation. Set `animate` to animate the calendar as it opens and closes.
 
 <FileSource src="/framed/DatePicker/DatePickerEnableAnimation" />
+
+## Presets
+
+Set `presets` to show shortcut buttons beside a `"single"` or `"range"` calendar. Each preset has a `label` and a `value` function that returns a date or a `[start, end]` pair. Picking one sets the date, fires `change`, and closes the calendar like a picked day; the one that matches the selection is marked current. The shortcuts are one tab stop: Up and Down move between them, Home and End go to the first and last, and Enter or Space picks one. Shift+Tab from the days returns to them. Set `presetsLabelText` to rename the group, which defaults to "Shortcuts".
+
+A preset is cut to `minDate` and `maxDate`, and is unavailable when none of it falls inside them or when an end is a disabled date. An unavailable preset stays focusable, with `aria-disabled`, so the arrow keys still reach it.
+
+### Range
+
+The exported `datePresets` helpers return the common spans.
+
+<FileSource src="/framed/DatePicker/DatePickerPresets" />
+
+| Helper | Span |
+| --- | --- |
+| `datePresets.today` | Today |
+| `datePresets.yesterday` | Yesterday |
+| `datePresets.lastDays(n)` | The last `n` days, today included |
+| `datePresets.thisWeek` | The week that holds today, from the calendar's first day of the week |
+| `datePresets.thisMonth` | The first to the last day of this month |
+| `datePresets.lastMonth` | The first to the last day of last month |
+| `datePresets.yearToDate` | January 1 to today |
+
+### Single date
+
+A `"single"` picker takes the first date of a span. A custom `value` receives `today`, the calendar's `firstDayOfWeek`, and whether the picker sets a time.
+
+<FileSource src="/framed/DatePicker/DatePickerPresetsCustom" />
+
+| Do | Why |
+| --- | --- |
+| Compute each date from `today` in `value`, or use a `datePresets` helper. | `value` runs each time the shortcuts show, so a fixed date would go stale overnight. |
+| Write the labels in your app's language. | The helpers only compute dates; the labels are yours. |
+| Keep to about eight shortcuts. | The rail is as tall as the calendar and scrolls past that. |
+| Declare `presets` once in `<script>`. | A new array rebuilds the buttons. |
 
 ## Calendar interaction
 

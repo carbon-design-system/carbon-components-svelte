@@ -2087,6 +2087,10 @@ const CALENDAR_PARTS = {
   rangeEndInput: "[data-testid=range] .bx--date-picker-container + * input",
   firstMonth: "[data-testid=month] .bx--date-picker__grid-cell",
   selectedMonth: "[data-testid=month] .bx--date-picker__grid-cell--selected",
+  // The preset rail sits at the inline start, its bar on the inline start.
+  presetRail: "[data-testid=presets] .bx--date-picker__presets",
+  presetMonth: "[data-testid=presets] .bx--date-picker__month-days",
+  activePreset: "[data-testid=presets] .bx--date-picker__preset--active",
 };
 
 test.describe("right-to-left date picker", () => {
@@ -2122,6 +2126,29 @@ test.describe("right-to-left date picker", () => {
         next: `${CALENDAR_PARTS.next} svg`,
       }),
     ).toEqual({ previous: -1, next: -1 });
+  });
+
+  test("stacks the preset rail above the calendar at 320 px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    await setDirection(page, "rtl");
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const rail = document.querySelector(
+            "[data-testid=presets] .bx--date-picker__presets",
+          );
+          const days = document.querySelector(
+            "[data-testid=presets] .bx--date-picker__days",
+          );
+          if (!rail || !days) return "missing";
+          const r = rail.getBoundingClientRect();
+          const d = days.getBoundingClientRect();
+          return r.bottom <= d.top && d.right <= 320 && d.left >= 0;
+        }),
+      )
+      .toBe(true);
   });
 
   test("swaps ArrowLeft and ArrowRight, and keeps Home at the inline start", async ({
