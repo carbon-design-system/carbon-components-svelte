@@ -347,20 +347,25 @@ describe("ComboBox", () => {
     expect(activeOptions[0]).toHaveAttribute("role", "option");
   });
 
-  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+  it("keeps the keyboard highlight while the pointer moves over the menu", async () => {
     render(ComboBox);
 
     await user.click(getInput());
+    await user.keyboard("{ArrowDown}");
 
+    const slackOption = screen.getByRole("option", { name: "Slack" });
     const emailOption = screen.getByRole("option", { name: "Email" });
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
     await fireEvent.mouseLeave(screen.getByRole("listbox"));
-    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
-  it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
+  it("does not highlight a hovered item, so Enter closes without selecting", async () => {
     const onSelect = vi.fn();
     render(ComboBox, { props: { onSelect } });
 
@@ -369,7 +374,7 @@ describe("ComboBox", () => {
 
     const emailOption = screen.getByRole("option", { name: "Email" });
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
 
     await user.keyboard("{Enter}");
     expect(onSelect).not.toHaveBeenCalled();
@@ -1631,7 +1636,7 @@ describe("ComboBox", () => {
     expect(customItems[1]).toHaveAttribute("data-selected", "true");
     expect(customItems[2]).toHaveAttribute("data-selected", "false");
 
-    await user.hover(customItems[2]);
+    await user.keyboard("{ArrowDown}");
     expect(customItems[2]).toHaveAttribute("data-highlighted", "true");
     expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
   });
@@ -1751,24 +1756,14 @@ describe("ComboBox", () => {
     expect(focusSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("should not highlight a disabled option on hover", async () => {
-    render(ComboBox, {
-      props: {
-        items: [
-          { id: "0", text: "Slack", price: 100 },
-          { id: "1", text: "Email", price: 200, disabled: true },
-        ],
-      },
-    });
+  it("does not move aria-activedescendant on hover", async () => {
+    render(ComboBox);
 
     const input = getInput();
     await user.click(input);
 
     await user.hover(screen.getByRole("option", { name: "Email" }));
     expect(input).toHaveAttribute("aria-activedescendant", "");
-
-    await user.hover(screen.getByRole("option", { name: "Slack" }));
-    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
   describe("autoHighlight", () => {

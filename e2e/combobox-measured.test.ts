@@ -42,8 +42,8 @@ for (const optimizeFastScroll of [false, true]) {
       await hoverBottomEdge(page);
       await page.waitForTimeout(200);
 
-      // The pointer highlights whatever it lands on. Bringing a clipped option
-      // fully into view would scroll the list out from under the reader.
+      // The pointer moves no highlight, so nothing asks to bring the clipped
+      // option fully into view and scroll the list out from under the reader.
       expect(await readMenuScrollTop(page)).toBe(held);
     });
     test("options render at unequal heights while filtered", async ({
