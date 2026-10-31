@@ -8,10 +8,16 @@
   export let title = undefined;
 
   $: labelled = $$props["aria-label"] || $$props["aria-labelledby"] || title;
+  /**
+   * Literal "true", not a boolean: Svelte 3 and 4 write a spread `true` as
+   * a bare attribute on the server.
+   * @type {{ "aria-hidden": "true" | undefined; role: "img" | undefined; focusable: "true" | undefined }}
+   */
+  let attributes;
   $: attributes = {
-    "aria-hidden": labelled ? undefined : true,
+    "aria-hidden": labelled ? undefined : "true",
     role: labelled ? "img" : undefined,
-    focusable: Number($$props.tabindex) === 0 ? true : undefined,
+    focusable: Number($$props.tabindex) === 0 ? "true" : undefined,
   };
 </script>
 
