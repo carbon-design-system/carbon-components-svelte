@@ -878,13 +878,35 @@ $list-box-width: 100%;
 /// @group components
 @mixin list-box-menu-group-header {
   // Spaced with padding, not margin: measured virtualization reads each row's
-  // border box, which leaves margins out.
+  // border box, which leaves margins out. Groups sit at least twice as far
+  // apart as options, measured on the text: at 40px rows, 22px separates
+  // two labels in a group and 51px separates a group's last label from the
+  // next header. The padding grows with the row height.
   .#{$prefix}--list-box__menu-group-header {
     @include type-style("label-01");
 
-    padding: $carbon--spacing-05 $carbon--spacing-05 $carbon--spacing-03;
+    padding: $carbon--spacing-08 $carbon--spacing-05 $carbon--spacing-03;
     color: $text-secondary;
     cursor: default;
+  }
+
+  .#{$prefix}--list-box--xs .#{$prefix}--list-box__menu-group-header {
+    padding-top: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--list-box--sm .#{$prefix}--list-box__menu-group-header {
+    padding-top: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--list-box--lg .#{$prefix}--list-box__menu-group-header,
+  .#{$prefix}--list-box--xl .#{$prefix}--list-box__menu-group-header {
+    padding-top: $carbon--spacing-09;
+  }
+
+  // Nothing sits above the menu's first row. Ties the size rules above and
+  // wins on order.
+  .#{$prefix}--list-box__menu .#{$prefix}--list-box__menu-group-header--first {
+    padding-top: $carbon--spacing-05;
   }
 
   .#{$prefix}--list-box--inline .#{$prefix}--list-box__menu-group-header {
