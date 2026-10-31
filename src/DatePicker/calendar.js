@@ -1604,17 +1604,40 @@ export function createCalendarEngine(element, userConfig = {}) {
           (/** @type {Date} */ date, /** @type {number} */ i) =>
             compareDays(date, selected[i]) === 0,
         );
-      button.disabled = !dates;
+      // Unavailable presets stay focusable, as in a toolbar.
+      if (dates) button.removeAttribute("aria-disabled");
+      else button.setAttribute("aria-disabled", "true");
       toggleClass(button, "bx--date-picker__preset--active", active);
       if (active) button.setAttribute("aria-current", "true");
       else button.removeAttribute("aria-current");
     }
+    const buttons = [...self.presetsElement.children];
+    const current = buttons.findIndex((button) =>
+      button.hasAttribute("aria-current"),
+    );
+    setPresetStop(current === -1 ? presetStop : current);
+  }
+
+  /**
+   * The rail is one tab stop: the current preset, else the one focused
+   * last, else the first.
+   */
+  let presetStop = 0;
+
+  /** @param {number} index */
+  function setPresetStop(index) {
+    const buttons = [...self.presetsElement.children];
+    presetStop = index >= 0 && index < buttons.length ? index : 0;
+    buttons.forEach((button, i) => {
+      button.tabIndex = i === presetStop ? 0 : -1;
+    });
   }
 
   /** @param {Event} event */
   function onPresetClick(event) {
     const button = eventTarget(event).closest?.(".bx--date-picker__preset");
-    if (!button || button.disabled) return;
+    if (!button || button.getAttribute("aria-disabled") === "true") return;
+    setPresetStop([...self.presetsElement.children].indexOf(button));
     const dates = presetDates(button.$preset);
     if (!dates) return;
     setDate(dates, true);
@@ -1629,9 +1652,7 @@ export function createCalendarEngine(element, userConfig = {}) {
    * @param {number} code
    */
   function onPresetKeyDown(event, code) {
-    const buttons = [...self.presetsElement.children].filter(
-      (/** @type {HTMLButtonElement} */ button) => !button.disabled,
-    );
+    const buttons = [...self.presetsElement.children];
     if (buttons.length === 0) return;
     const index = buttons.indexOf(document.activeElement);
     const next =
@@ -1646,6 +1667,7 @@ export function createCalendarEngine(element, userConfig = {}) {
               : -1;
     if (next === -1) return;
     event.preventDefault();
+    setPresetStop(next);
     buttons[next].focus();
   }
 
@@ -2415,7 +2437,9 @@ export function createCalendarEngine(element, userConfig = {}) {
             event.shiftKey
           ) {
             event.preventDefault();
-            self._input.focus();
+            // Back to the preset rail, which sits before the grid.
+            const stop = self.presetsElement?.querySelector("[tabindex='0']");
+            (stop ?? self._input).focus();
           }
           break;
         default:

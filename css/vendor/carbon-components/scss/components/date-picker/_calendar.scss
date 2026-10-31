@@ -245,7 +245,7 @@
       pointer-events: none;
     }
 
-    .#{$prefix}--date-picker__preset:enabled:hover {
+    .#{$prefix}--date-picker__preset:not([aria-disabled='true']):hover {
       background-color: $layer-hover;
     }
   }
@@ -473,9 +473,15 @@
       @include focus-outline('outline');
     }
 
-    &:disabled {
+    // Unavailable presets stay focusable (`aria-disabled`), so forced
+    // colors don't grey them on their own.
+    &[aria-disabled='true'] {
       color: $text-disabled;
       cursor: not-allowed;
+
+      @media (forced-colors: active) {
+        color: GrayText;
+      }
     }
   }
 

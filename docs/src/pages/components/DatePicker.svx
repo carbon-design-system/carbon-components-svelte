@@ -211,9 +211,9 @@ By default, the calendar appears instantly with no animation. Set `animate` to a
 
 ## Presets
 
-Set `presets` to show shortcut buttons beside a `"single"` or `"range"` calendar. Each preset has a `label` and a `value` function that returns a date or a `[start, end]` pair. Picking one sets the date, fires `change`, and closes the calendar like a picked day; the one that matches the selection is marked current. Up and Down move between the shortcuts, and Enter or Space picks one. Set `presetsLabelText` to rename the group, which defaults to "Shortcuts".
+Set `presets` to show shortcut buttons beside a `"single"` or `"range"` calendar. Each preset has a `label` and a `value` function that returns a date or a `[start, end]` pair. Picking one sets the date, fires `change`, and closes the calendar like a picked day; the one that matches the selection is marked current. The shortcuts are one tab stop: Up and Down move between them, Home and End go to the first and last, and Enter or Space picks one. Shift+Tab from the days returns to them. Set `presetsLabelText` to rename the group, which defaults to "Shortcuts".
 
-A preset is cut to `minDate` and `maxDate`, and is disabled when none of it falls inside them or when an end is a disabled date.
+A preset is cut to `minDate` and `maxDate`, and is unavailable when none of it falls inside them or when an end is a disabled date. An unavailable preset stays focusable, with `aria-disabled`, so the arrow keys still reach it.
 
 ### Range
 

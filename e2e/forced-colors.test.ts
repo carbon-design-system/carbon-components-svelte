@@ -312,7 +312,7 @@ test.describe("forced colors", () => {
       ".bx--card--disabled .bx--card__title-text-row",
       ".bx--menu-option--disabled .bx--menu-option__label",
       ".bx--menu-option--disabled .bx--menu-option__info",
-      ".bx--date-picker__preset:disabled",
+      ".bx--date-picker__preset[aria-disabled=true]",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });

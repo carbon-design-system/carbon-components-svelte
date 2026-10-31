@@ -63,7 +63,13 @@ describe("DatePicker presets", () => {
     });
 
     await openCalendar("Start");
-    expect(screen.getByRole("button", { name: "Today" })).toBeDisabled();
+    const unavailable = screen.getByRole("button", { name: "Today" });
+    // It stays focusable, and a click does nothing.
+    expect(unavailable).toHaveAttribute("aria-disabled", "true");
+    expect(unavailable).toBeEnabled();
+    const before = screen.getByTestId("value").textContent;
+    await user.click(unavailable);
+    expect(screen.getByTestId("value").textContent).toBe(before);
     await user.click(screen.getByRole("button", { name: "This month" }));
     await tick();
 
@@ -79,9 +85,14 @@ describe("DatePicker presets", () => {
     });
 
     await openCalendar("Start");
-    screen.getByRole("button", { name: "Today" }).focus();
+    const first = screen.getByRole("button", { name: "Today" });
+    const second = screen.getByRole("button", { name: "Last 7 days" });
+    // The rail is one tab stop, which follows the arrow keys.
+    expect([first.tabIndex, second.tabIndex]).toEqual([0, -1]);
+    first.focus();
     await user.keyboard("{ArrowDown}");
-    expect(screen.getByRole("button", { name: "Last 7 days" })).toHaveFocus();
+    expect(second).toHaveFocus();
+    expect([first.tabIndex, second.tabIndex]).toEqual([-1, 0]);
     await user.keyboard("{Enter}");
     await tick();
 
