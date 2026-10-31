@@ -31,10 +31,12 @@
       <BadgeIndicator slot="badge" count={3} />
     </SideNavLink>
     <SideNavLink icon={Activity} href="/activity" text="Activity tracker" />
-    <SideNavMenu icon={Kubernetes} text="Kubernetes">
+    <SideNavMenu icon={Kubernetes} text="Kubernetes" expanded>
       <BadgeIndicator slot="badge" />
       <SideNavMenuItem href="/kubernetes/clusters" text="Clusters" />
-      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools" />
+      <SideNavMenuItem href="/kubernetes/worker-pools" text="Worker pools">
+        <BadgeIndicator slot="badge" count={2} />
+      </SideNavMenuItem>
     </SideNavMenu>
     <SideNavDivider />
   </SideNavItems>

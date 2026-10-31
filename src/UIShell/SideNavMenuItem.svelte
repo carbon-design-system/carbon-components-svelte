@@ -1,4 +1,8 @@
 <script>
+  /**
+   * @slot {{}} badge
+   */
+
   /** Set to `true` to select the item */
   export let isSelected = false;
 
@@ -44,5 +48,8 @@
     on:click
   >
     <span class:bx--side-nav__link-text={true}><slot>{text}</slot></span>
+    {#if $$slots.badge}
+      <div class:bx--side-nav__link-badge={true}><slot name="badge" /></div>
+    {/if}
   </a>
 </li>
