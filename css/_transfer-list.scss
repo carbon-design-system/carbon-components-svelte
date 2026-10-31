@@ -1,0 +1,409 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// TransferList styles: two listboxes with a column of move buttons between
+/// them. The rows are `ListBoxMenuItem`s, so they keep the list box row, its
+/// selected check and its highlight ring; the menu around them is a popup in
+/// v10 (absolute, shadowed, collapsed until the field opens), so it is laid
+/// out in flow here and given a fixed height of `--ccs-transfer-list-rows`
+/// rows. Below the `md` breakpoint the lists stack and the move buttons turn
+/// to point down and up. A media query, not a container query: container
+/// queries are past the CSS baseline.
+///
+/// A partial, not a vendored patch: it restyles `list-box`'s menu and
+/// `button`, and must emit after the highlight ring partial it overrides in
+/// forced colors.
+/// @access private
+/// @group components
+@mixin transfer-list {
+  .#{$prefix}--transfer-list {
+    min-inline-size: 0;
+    margin-block: 0;
+    margin-inline: 0;
+    border: 0;
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  .#{$prefix}--transfer-list__body {
+    display: grid;
+    align-items: start;
+    column-gap: $carbon--spacing-05;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    row-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--transfer-list__panel {
+    display: flex;
+    min-inline-size: 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--transfer-list__header {
+    display: flex;
+    min-block-size: to-rem(32px);
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+  }
+
+  // The title and count differ in size, so they share a baseline; the
+  // group centers in the header beside the reorder buttons.
+  .#{$prefix}--transfer-list__heading {
+    display: flex;
+    min-inline-size: 0;
+    flex: 1;
+    align-items: baseline;
+    column-gap: $carbon--spacing-03;
+  }
+
+  // The title pushes the count to the inline end. The count is a `bdi`
+  // that takes its own direction, so a margin on it would follow the
+  // count's direction, not the page's.
+  .#{$prefix}--transfer-list__title {
+    @include type-style("heading-compact-01");
+
+    margin-inline-end: auto;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--transfer-list__count {
+    @include type-style("helper-text-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--transfer-list__reorder {
+    display: flex;
+  }
+
+  .#{$prefix}--transfer-list__search {
+    margin-block-end: $carbon--spacing-02;
+  }
+
+  // The list: a box with the rows in it. The inner menu scrolls.
+  .#{$prefix}--transfer-list__list {
+    position: relative;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--transfer-list__list > .#{$prefix}--list-box__menu {
+    // `position: relative` so a drop marker positions against the content
+    // and scrolls with it.
+    position: relative;
+    z-index: auto;
+    overflow-y: auto;
+    inline-size: 100%;
+    block-size: calc(var(--ccs-transfer-list-rows, 8) * #{to-rem(40px)});
+    max-block-size: none;
+    background-color: transparent;
+    box-shadow: none;
+    transition: none;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  // While a row holds the cursor, its ring shows where focus is, so the
+  // list draws none around it.
+  .#{$prefix}--transfer-list__list--cursor > .#{$prefix}--list-box__menu:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--transfer-list--sm .#{$prefix}--transfer-list__list > .#{$prefix}--list-box__menu {
+    block-size: calc(var(--ccs-transfer-list-rows, 8) * #{to-rem(32px)});
+  }
+
+  .#{$prefix}--transfer-list--lg .#{$prefix}--transfer-list__list > .#{$prefix}--list-box__menu {
+    block-size: calc(var(--ccs-transfer-list-rows, 8) * #{to-rem(48px)});
+  }
+
+  .#{$prefix}--transfer-list--sm .#{$prefix}--list-box__menu-item {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--transfer-list--sm .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(32px);
+    padding-block: to-rem(7px);
+  }
+
+  .#{$prefix}--transfer-list--lg .#{$prefix}--list-box__menu-item {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--transfer-list--lg .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(48px);
+    padding-block: to-rem(15px);
+  }
+
+  // A window's start spacer is a `div` ahead of the first row, which takes
+  // the row out of `:first-of-type`, so its top rule is dropped here.
+  .#{$prefix}--transfer-list__list
+    > .#{$prefix}--list-box__menu
+    > [aria-hidden="true"]
+    + .#{$prefix}--list-box__menu-item
+    > .#{$prefix}--list-box__menu-item__option {
+    border-top-color: transparent;
+  }
+
+  .#{$prefix}--transfer-list--disabled {
+    .#{$prefix}--transfer-list__title,
+    .#{$prefix}--transfer-list__count,
+    .#{$prefix}--transfer-list__empty {
+      color: $text-disabled;
+    }
+  }
+
+  .#{$prefix}--transfer-list__empty {
+    @include type-style("body-compact-01");
+
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  // Carbon colors the option inside each row, so the row's own color does
+  // not reach the text. A marked row keeps its fill, as a disabled
+  // MultiSelect's checked rows do.
+  .#{$prefix}--transfer-list__list--disabled {
+    cursor: not-allowed;
+
+    .#{$prefix}--list-box__menu-item {
+      pointer-events: none;
+    }
+
+    .#{$prefix}--list-box__menu-item__option {
+      color: $text-disabled;
+    }
+
+    .#{$prefix}--list-box__menu-item__selected-icon {
+      fill: $icon-disabled;
+    }
+  }
+
+  .#{$prefix}--transfer-list__list--invalid {
+    @include focus-outline("invalid");
+  }
+
+  // Where a drag would drop: a rule between two rows of the selected list,
+  // or an outline on the list that would take the rows.
+  .#{$prefix}--transfer-list__list--dropping > .#{$prefix}--list-box__menu::after {
+    position: absolute;
+    block-size: 2px;
+    background-color: $focus;
+    content: "";
+    inset-block-start: var(--ccs-transfer-list-drop, 0);
+    // Spans the list, so both sides are 0 and neither flips.
+    left: 0;
+    pointer-events: none;
+    right: 0;
+    transform: translateY(-1px);
+  }
+
+  .#{$prefix}--transfer-list__panel--drop-target .#{$prefix}--transfer-list__list {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--transfer-list--dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .#{$prefix}--transfer-list__ghost {
+    @include type-style("body-compact-01");
+
+    position: fixed;
+    z-index: z("floating");
+    padding: $carbon--spacing-02 $carbon--spacing-04;
+    background-color: $background-inverse;
+    color: $text-inverse;
+    // The pointer's own coordinates place it, so these are physical.
+    left: 0;
+    pointer-events: none;
+    top: 0;
+  }
+
+  // The column of move buttons.
+  .#{$prefix}--transfer-list__controls {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    row-gap: $carbon--spacing-03;
+  }
+
+  // The icons point toward the inline end for "add", so a mirror makes them
+  // point left under `dir="rtl"`.
+  .#{$prefix}--transfer-list__move .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
+  // Helper text and the messages sit under the legend and before the
+  // lists, in one row: an error or warning replaces the helper text.
+  .#{$prefix}--transfer-list__validation-msg {
+    display: none;
+    align-items: flex-start;
+    margin-block: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--transfer-list > .#{$prefix}--form__helper-text {
+    margin-block: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--transfer-list--invalid .#{$prefix}--transfer-list__validation-msg,
+  .#{$prefix}--transfer-list--warning .#{$prefix}--transfer-list__validation-msg {
+    display: flex;
+  }
+
+  .#{$prefix}--transfer-list__validation-msg .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-block-size: 100%;
+    margin-block-start: 0;
+    margin-inline-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--transfer-list--invalid
+    .#{$prefix}--transfer-list__validation-msg
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--transfer-list__invalid-icon {
+    // 16px tall in the message's 16px line, so the row is as tall as the
+    // helper text it replaces.
+    min-inline-size: to-rem(16px);
+    margin-inline: to-rem(1px) 0;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--transfer-list__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--transfer-list__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+  }
+
+  // Stacked: one column, the buttons in a row between the lists, each
+  // arrow turned to point down (add) or up (remove).
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--transfer-list__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .#{$prefix}--transfer-list__controls {
+      flex-direction: row;
+      justify-content: center;
+      column-gap: $carbon--spacing-03;
+    }
+
+    .#{$prefix}--transfer-list__move .#{$prefix}--btn__icon {
+      transform: rotate(90deg);
+      @include ccs-mirror-rtl(rotate(90deg));
+    }
+  }
+
+  // Forced colors drop every fill, so a marked row would be a plain row.
+  // It takes `Highlight`; the row under the cursor, if not marked, keeps
+  // the canvas and a `Highlight` ring; both together fill and ring in
+  // `HighlightText`. Tied with the highlight ring partial's row rule on
+  // two classes, then one more here to win.
+  @media (forced-colors: active) {
+    .#{$prefix}--transfer-list .#{$prefix}--list-box__menu-item--active {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+
+      .#{$prefix}--list-box__menu-item__option {
+        color: HighlightText;
+      }
+
+      .#{$prefix}--list-box__menu-item__selected-icon {
+        fill: HighlightText;
+      }
+    }
+
+    .#{$prefix}--transfer-list
+      .#{$prefix}--list-box__menu-item.#{$prefix}--list-box__menu-item--highlighted {
+      forced-color-adjust: none;
+      background-color: Canvas;
+      color: CanvasText;
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+
+      .#{$prefix}--list-box__menu-item__option {
+        color: CanvasText;
+      }
+    }
+
+    .#{$prefix}--transfer-list
+      .#{$prefix}--list-box__menu-item--active.#{$prefix}--list-box__menu-item--highlighted {
+      background-color: Highlight;
+      color: HighlightText;
+      outline-color: HighlightText;
+      outline-offset: -4px;
+
+      .#{$prefix}--list-box__menu-item__option {
+        color: HighlightText;
+      }
+    }
+
+    .#{$prefix}--transfer-list .#{$prefix}--list-box__menu-item[disabled] {
+      forced-color-adjust: none;
+      color: GrayText;
+
+      .#{$prefix}--list-box__menu-item__option {
+        color: GrayText;
+      }
+    }
+
+    .#{$prefix}--transfer-list__list--disabled .#{$prefix}--list-box__menu-item__option {
+      color: GrayText;
+    }
+
+    // The list's border is its edge, and one 1px line divides two rows.
+    // Forced colors repaint Carbon's transparent edges: the menu's popup
+    // outline, the first row's top edge, and each row's bottom edge, which
+    // doubled every divider. The focus ring still wins on `:focus`. A
+    // marked row is not forced, so its transparent edges stay and a
+    // `Canvas` one would cut its `Highlight` fill.
+    .#{$prefix}--transfer-list__list > .#{$prefix}--list-box__menu {
+      outline: none;
+    }
+
+    .#{$prefix}--transfer-list__list
+      .#{$prefix}--list-box__menu-item:not(.#{$prefix}--list-box__menu-item--active)
+      > .#{$prefix}--list-box__menu-item__option {
+      border-bottom-color: Canvas;
+    }
+
+    .#{$prefix}--transfer-list__list
+      .#{$prefix}--list-box__menu-item:first-of-type:not(.#{$prefix}--list-box__menu-item--active)
+      > .#{$prefix}--list-box__menu-item__option,
+    .#{$prefix}--transfer-list__list
+      > .#{$prefix}--list-box__menu
+      > [aria-hidden="true"]
+      + .#{$prefix}--list-box__menu-item:not(.#{$prefix}--list-box__menu-item--active)
+      > .#{$prefix}--list-box__menu-item__option {
+      border-top-color: Canvas;
+    }
+
+    .#{$prefix}--transfer-list__list--dropping > .#{$prefix}--list-box__menu::after {
+      background-color: Highlight;
+    }
+  }
+}
+
+@include exports("transfer-list") {
+  @include transfer-list;
+}

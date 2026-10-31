@@ -1497,6 +1497,19 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/TooltipIcon
     tags:
       - content-element
+  transfer-list:
+    name: Transfer list
+    description: A dual list box that moves items between an available list and a selected list, with search, reordering and drag and drop.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/transfer-list.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TransferList
   tree-view:
     status: stable
     framework: svelte

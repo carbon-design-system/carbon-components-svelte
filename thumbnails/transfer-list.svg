@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>transfer-list</title>
+    <g id="transfer-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="left-list" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="76.5" y="42.5" width="64" height="95"></rect>
+        <rect id="left-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="86" y="54" width="44" height="6"></rect>
+        <rect id="left-selected" fill="var(--cds-border-subtle, #e0e0e0)" x="77" y="72" width="63" height="22"></rect>
+        <rect id="left-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="86" y="80" width="36" height="6"></rect>
+        <rect id="left-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="86" y="106" width="40" height="6"></rect>
+        <rect id="left-4" fill="var(--cds-layer-accent-active, #a8a8a8)" x="86" y="124" width="30" height="6"></rect>
+        <path id="move-right" fill="var(--cds-background-brand, #0f62fe)" transform="translate(152, 68) scale(0.625)" d="M22 16L12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"></path>
+        <path id="move-left" fill="var(--cds-icon-primary, #161616)" transform="translate(152, 92) scale(0.625)" d="M10 16L20 26 21.4 24.6 12.8 16 21.4 7.4 20 6z"></path>
+        <rect id="right-list" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x="179.5" y="42.5" width="64" height="95"></rect>
+        <rect id="right-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="189" y="54" width="42" height="6"></rect>
+        <rect id="right-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="189" y="80" width="34" height="6"></rect>
+        <rect id="right-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="189" y="106" width="38" height="6"></rect>
+    </g>
+</svg>
