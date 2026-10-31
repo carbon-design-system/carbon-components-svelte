@@ -259,25 +259,29 @@
             iconDescription={statusIconDescription || statusIconLabel(kind)}
           />
         {/if}
-        <div class:bx--shell-banner__text={true}>
-          {#if titled}
-            <p id={titleId} class:bx--shell-banner__title={true}>
-              <slot name="titleChildren">{title}</slot>
-            </p>
-          {/if}
-          {#if !thin}
-            {#if subtitle || $$slots.subtitleChildren}
-              <div class:bx--shell-banner__subtitle={true}>
-                <slot name="subtitleChildren">{subtitle}</slot>
-              </div>
+        <!-- The action follows the text in one wrapping row, so in a narrow
+        banner it moves under the text instead of squeezing it. -->
+        <div class:bx--shell-banner__content={true}>
+          <div class:bx--shell-banner__text={true}>
+            {#if titled}
+              <p id={titleId} class:bx--shell-banner__title={true}>
+                <slot name="titleChildren">{title}</slot>
+              </p>
             {/if}
-            <slot />
+            {#if !thin}
+              {#if subtitle || $$slots.subtitleChildren}
+                <div class:bx--shell-banner__subtitle={true}>
+                  <slot name="subtitleChildren">{subtitle}</slot>
+                </div>
+              {/if}
+              <slot />
+            {/if}
+          </div>
+          {#if !thin}
+            <slot name="actions" />
           {/if}
         </div>
       </div>
-      {#if !thin}
-        <slot name="actions" />
-      {/if}
       {#if dismissible}
         <NotificationButton
           notificationType="inline"

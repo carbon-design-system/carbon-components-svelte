@@ -103,9 +103,21 @@ $-kind-accents-inverse: (
     margin-inline: 0 $carbon--spacing-05;
   }
 
+  // The text and the action share a wrapping row. The text claims 15rem
+  // before the action wraps under it, so a long action label cannot
+  // squeeze the text to a letter per line.
+  .#{$prefix}--shell-banner__content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0%;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
   .#{$prefix}--shell-banner__text {
     display: flex;
     min-width: 0;
+    flex: 1 1 to-rem(240px);
     flex-wrap: wrap;
     padding: to-rem(11px) 0;
     column-gap: $carbon--spacing-03;
@@ -122,12 +134,17 @@ $-kind-accents-inverse: (
     @include type-style("body-compact-01");
   }
 
+  // A label longer than the banner wraps inside the button.
   .#{$prefix}--shell-banner
     .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
-    height: to-rem(32px);
-    flex-shrink: 0;
+    max-width: 100%;
+    height: auto;
+    min-height: to-rem(32px);
+    flex-shrink: 1;
     margin-block: $carbon--spacing-02;
     margin-inline: 0 $carbon--spacing-03;
+    text-align: start;
+    white-space: normal;
   }
 
   .#{$prefix}--shell-banner--high-contrast

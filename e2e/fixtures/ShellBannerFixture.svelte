@@ -29,6 +29,7 @@
   const dismissId = params.get("dismissId") ?? undefined;
   const highContrast = params.has("highContrast");
   const wrap = params.has("wrap");
+  const longAction = params.has("longAction");
   const announce = params.has("announce");
   const panelOpen = params.has("panel");
   const resizable = params.has("resizable");
@@ -83,7 +84,11 @@
     bind:open
   >
     <svelte:fragment slot="actions">
-      <NotificationActionButton>Exit</NotificationActionButton>
+      <NotificationActionButton
+        >{longAction
+          ? "Exit impersonation and return to your own account"
+          : "Exit"}</NotificationActionButton
+      >
     </svelte:fragment>
   </ShellBanner>
 {/if}

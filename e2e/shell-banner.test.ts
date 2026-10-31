@@ -50,6 +50,29 @@ test.describe("above the header", () => {
     expect(content).toBe((banner ?? 0) + 48);
   });
 
+  test("wraps a long action under the text at 320px", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto("/shell-banner.html?longAction&dismissible");
+    await expect(page.locator(BANNER)).toBeVisible();
+
+    const sizes = await page.evaluate(() => {
+      const box = (selector: string) =>
+        (document.querySelector(selector) as Element).getBoundingClientRect();
+      return {
+        scrollWidth: document.documentElement.scrollWidth,
+        text: box(".bx--shell-banner__text").width,
+        textBottom: box(".bx--shell-banner__text").bottom,
+        actionTop: box(".bx--inline-notification__action-button").top,
+        close: box(".bx--inline-notification__close-button").right,
+      };
+    });
+    expect(sizes.scrollWidth).toBe(320);
+    expect(sizes.close).toBeLessThanOrEqual(320);
+    // The text keeps its width; the action moves to the next line.
+    expect(sizes.text).toBeGreaterThan(150);
+    expect(sizes.actionTop).toBeGreaterThanOrEqual(sizes.textBottom);
+  });
+
   test("returns the shell to the top when it is dismissed", async ({
     page,
   }) => {
