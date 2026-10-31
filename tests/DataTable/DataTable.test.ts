@@ -1388,7 +1388,7 @@ describe("DataTable", () => {
   });
 
   describe("stickyHeaderMaxHeight", () => {
-    it("applies a pixel max-height when stickyHeader is enabled", () => {
+    it("sets a pixel cap when stickyHeader is enabled", () => {
       const { container } = render(DataTable, {
         props: {
           headers,
@@ -1401,10 +1401,14 @@ describe("DataTable", () => {
       const innerContainer = container.querySelector(
         "section.bx--data-table_inner-container",
       );
-      expect(innerContainer).toHaveStyle({ "max-height": "500px" });
+      // A custom property, not `max-height`, so a print rule can lift the cap.
+      expectInlineStyle(innerContainer, {
+        "--ccs-sticky-header-max-height": "500px",
+      });
+      expect((innerContainer as HTMLElement).style.maxHeight).toBe("");
     });
 
-    it("applies a CSS length string when stickyHeader is enabled", () => {
+    it("sets a CSS length string cap when stickyHeader is enabled", () => {
       const { container } = render(DataTable, {
         props: {
           headers,
@@ -1417,7 +1421,9 @@ describe("DataTable", () => {
       const innerContainer = container.querySelector(
         "section.bx--data-table_inner-container",
       );
-      expectInlineStyle(innerContainer, { "max-height": "24rem" });
+      expectInlineStyle(innerContainer, {
+        "--ccs-sticky-header-max-height": "24rem",
+      });
     });
   });
 

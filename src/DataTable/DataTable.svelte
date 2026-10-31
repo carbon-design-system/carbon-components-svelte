@@ -10,9 +10,10 @@
   /**
    * @param {string | undefined} columnAlign
    * @param {import("./data-table-utils.js").PinnedColumnLayout | undefined} pin
+   * @param {...string} classes
    */
-  function formatColumnClass(columnAlign, pin) {
-    return formatPinnedClass(pin, alignClasses[columnAlign]);
+  function formatColumnClass(columnAlign, pin, ...classes) {
+    return formatPinnedClass(pin, alignClasses[columnAlign], ...classes);
   }
 
   /**
@@ -496,6 +497,28 @@
    */
   export let highlightedRowIds = [];
 
+  /**
+   * Set to `true` to highlight the row and column of the cell under the
+   * pointer, including the column's header. Use it on a grid of values read
+   * across two axes, such as a timetable. Rows get
+   * `bx--data-table--highlighted-row`, and the column's header and cells get
+   * a `data-highlighted-column` attribute.
+   */
+  export let crosshair = false;
+
+  /**
+   * Set to `true` to make the body cells keyboard navigable, as in a grid.
+   * One cell is a tab stop; the arrow keys move between cells (`ArrowLeft`
+   * and `ArrowRight` follow the text direction), `Home` and `End` go to the
+   * ends of the row, and `Ctrl` with them to the ends of the table. The
+   * header is the grid's first row: its sort buttons leave the tab order
+   * and `ArrowUp` from the first row reaches them. The table gets
+   * `role="grid"`. With `crosshair`, the focused cell drives the
+   * cross. Use it for read-only values: an interactive control inside a
+   * cell takes its own keys, so keep those cells out of a navigable table.
+   */
+  export let cellFocus = false;
+
   /** Set to `true` to enable a sticky header */
   export let stickyHeader = false;
 
@@ -611,6 +634,7 @@
   import { toCssLength } from "../utils/css-length.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
+  import { inlineKey } from "../utils/inline-direction.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
@@ -631,6 +655,7 @@
   import TableHead from "./TableHead.svelte";
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
+  import { findCellTarget } from "./cell-navigation.js";
   import {
     compareValues,
     computePinnedOffsets,
@@ -642,6 +667,7 @@
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
+  import { revealFocus } from "./reveal-focus.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -987,8 +1013,14 @@
     });
   }
 
+  // With `cellFocus`, header controls leave the tab order and join the
+  // grid's arrow keys. `TableHeader` reads it.
+  const cellFocusStore = writable(cellFocus);
+  $: cellFocusStore.set(cellFocus);
+
   setContext("carbon:DataTable", {
     batchSelectedIds,
+    cellFocus: cellFocusStore,
     tableRows,
     tableSize,
     resetSelectedRowIds,
@@ -1479,6 +1511,197 @@
 
   $: hasRowDecorator = $$slots.rowDecorator;
 
+  /**
+   * The cell under the pointer. Only the row id and column key are read, so
+   * moving within a row or a column changes at most one of them and a cell
+   * that is neither re-renders nothing.
+   * @type {null | { rowId: Row["id"]; key: string | undefined }}
+   */
+  let hoverCell = null;
+  /**
+   * The cell holding focus, when `cellFocus` is set.
+   * @type {null | { rowId: Row["id"]; key: string | undefined }}
+   */
+  let focusCell = null;
+  /**
+   * The cell the next Tab lands on: the last one focused, else the first
+   * painted. It is dropped when a filter or page change removes its row.
+   * @type {null | { rowId: Row["id"]; key: string }}
+   */
+  let tabCell = null;
+  $: crossCell = hoverCell || focusCell;
+  $: crossRowId = crosshair && crossCell ? crossCell.rowId : undefined;
+  $: crossKey = crosshair && crossCell ? crossCell.key : undefined;
+
+  $: tabRowId = cellFocus
+    ? resolveTabRow(tabCell, rowIdsToRender, hideMode, matchedRowIdsSet)
+    : undefined;
+  $: tabKey = cellFocus ? resolveTabKey(tabCell, visibleHeaders) : undefined;
+  // Each row derives its own tab key (`rowTabKey` in the markup), so moving
+  // the tab stop re-renders the cells of two rows, not of every row.
+
+  /**
+   * @param {null | { rowId: Row["id"]; key: string }} cell
+   * @param {ReadonlyArray<Row["id"]>} ids
+   * @param {boolean} hidden Whether rows outside `matched` are hidden.
+   * @param {Set<Row["id"]>} matched
+   */
+  function resolveTabRow(cell, ids, hidden, matched) {
+    if (cell && ids.includes(cell.rowId)) return cell.rowId;
+    return ids.find((rowId) => !hidden || matched.has(rowId));
+  }
+
+  /**
+   * @param {null | { rowId: Row["id"]; key: string }} cell
+   * @param {ReadonlyArray<{ key: string; empty?: boolean }>} columns
+   */
+  function resolveTabKey(cell, columns) {
+    const keys = columns.filter((column) => !column.empty);
+    if (cell && keys.some((column) => column.key === cell.key)) return cell.key;
+    return keys[0]?.key;
+  }
+
+  /**
+   * The key of the column a body cell belongs to, read from the `headers`
+   * attribute that ties it to its header (`{id}-{key}`). The expand and
+   * selection cells have none.
+   * @param {EventTarget | null} target
+   */
+  function columnKeyAt(target) {
+    const cell = /** @type {Element | null} */ (target)?.closest?.("td");
+    const ref = cell?.getAttribute("headers");
+    const prefix = `${id}-`;
+    return ref?.startsWith(prefix) && ref !== `${id}-expand`
+      ? ref.slice(prefix.length)
+      : undefined;
+  }
+
+  /**
+   * @param {MouseEvent} event
+   * @param {Row["id"]} rowId
+   */
+  function handleCellPointer(event, rowId) {
+    if (!crosshair) return;
+    const key = columnKeyAt(event.target);
+    if (hoverCell?.rowId === rowId && hoverCell.key === key) return;
+    hoverCell = { rowId, key };
+  }
+
+  /**
+   * @param {FocusEvent} event
+   * @param {Row["id"]} rowId
+   */
+  function handleCellFocus(event, rowId) {
+    if (pinnedLayouts !== null || stickyHeader) revealFocus(event.target);
+    if (!cellFocus) return;
+    const cell = /** @type {Element} */ (event.target).closest("td[tabindex]");
+    const key = columnKeyAt(cell);
+    if (key === undefined) return;
+    if (tabCell?.rowId !== rowId || tabCell.key !== key) {
+      tabCell = { rowId, key };
+    }
+    if (focusCell?.rowId !== rowId || focusCell.key !== key) {
+      focusCell = { rowId, key };
+    }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleCellKeydown(event) {
+    const target = /** @type {Element} */ (event.target);
+    // A navigable body cell, or a header cell or its sort button. Other
+    // controls in a cell keep their own keys.
+    const cell = /** @type {HTMLTableCellElement | null} */ (
+      target.closest?.("td[tabindex], th[data-header]") ?? null
+    );
+    if (
+      !cellFocus ||
+      !cell ||
+      !(target === cell || target.matches("button.bx--table-sort")) ||
+      event.defaultPrevented ||
+      event.altKey ||
+      event.shiftKey
+    ) {
+      return;
+    }
+    const ctrl = event.ctrlKey || event.metaKey;
+    // Only `Home` and `End` take `Ctrl`; the arrows are left to the browser with it.
+    if (ctrl && event.key !== "Home" && event.key !== "End") return;
+    const next = findCellTarget(
+      cell,
+      inlineKey(event.key, undefined, cell),
+      ctrl,
+    );
+    if (!next) return;
+    event.preventDefault();
+    next.focus();
+  }
+
+  // The body cells of each column, so a crosshair move marks the cells of
+  // the two columns that change and no others. Bound to `crossKey` in the
+  // markup, every cell would re-render on each move: 7.3 ms of script per
+  // move at 1,000 rows.
+  /** @type {Map<string | undefined, Set<HTMLElement>>} */
+  const columnCells = new Map();
+  /** @type {string | undefined} */
+  let markedKey;
+
+  /** @param {string | undefined} key */
+  function markColumn(key) {
+    if (key === markedKey) return;
+    for (const cell of columnCells.get(markedKey) ?? []) {
+      cell.removeAttribute("data-highlighted-column");
+    }
+    for (const cell of columnCells.get(key) ?? []) {
+      cell.setAttribute("data-highlighted-column", "");
+    }
+    markedKey = key;
+  }
+
+  $: markColumn(crossKey);
+
+  /**
+   * Registers a body cell under its column while `crosshair` is on.
+   * @param {HTMLElement} node
+   * @param {string | undefined} key `undefined` when `crosshair` is off.
+   */
+  function crossColumn(node, key) {
+    let current = key;
+    const register = () => {
+      if (current === undefined) return;
+      let cells = columnCells.get(current);
+      if (!cells) {
+        cells = new Set();
+        columnCells.set(current, cells);
+      }
+      cells.add(node);
+      node.toggleAttribute("data-highlighted-column", current === markedKey);
+    };
+    const release = () => {
+      if (current !== undefined) columnCells.get(current)?.delete(node);
+    };
+    register();
+    return {
+      /** @param {string | undefined} next */
+      update(next) {
+        release();
+        current = next;
+        register();
+      },
+      destroy: release,
+    };
+  }
+
+  /**
+   * @param {string} key
+   * @param {string | undefined} highlightedKey Passed in, not read from the
+   * component, so a template call re-runs when the highlighted column moves.
+   */
+  function headerHighlight(key, highlightedKey) {
+    return highlightedKey !== undefined && key === highlightedKey
+      ? ""
+      : undefined;
+  }
+
   // The title decorator has no AI surface, so its state is not read.
   const titleAILabelState = { set() {} };
 
@@ -1583,6 +1806,7 @@
       {useStaticWidth}
       {fixedLayout}
       pinnedColumns={pinnedLayouts !== null}
+      grid={cellFocus}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
       aria-label={ariaLabel}
@@ -1590,7 +1814,7 @@
       aria-describedby={ariaDescribedBy}
       tableStyle={tableStyle || undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
-        ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
+        ? `--ccs-sticky-header-max-height: ${toCssLength(stickyHeaderMaxHeight)}`
         : undefined}
     >
       {#if hasCustomHeaderWidth}
@@ -1611,6 +1835,7 @@
       {/if}
       <TableHead
         style={virtualScrollContainer ? "position: sticky; top: 0;" : undefined}
+        on:keydown={handleCellKeydown}
       >
         <TableRow>
           {#if hasRowDecorator}
@@ -1740,7 +1965,15 @@
               {#if header.columnMenu}
                 <th
                   scope="col"
-                  class={formatPinnedClass(pin, "bx--table-column-menu")}
+                  class={formatColumnClass(
+                    header.columnAlign,
+                    pin,
+                    "bx--table-column-menu",
+                  )}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                   >{#if header.value}<span class:bx--visually-hidden={true}
                       >{header.value}</span
@@ -1749,7 +1982,11 @@
               {:else}
                 <th
                   scope="col"
-                  class={formatPinnedClass(pin)}
+                  class={formatColumnClass(header.columnAlign, pin)}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                 >
                   <div class:bx--table-header-label={true}>
@@ -1764,6 +2001,10 @@
                 <TableHeader
                   id="{id}-{header.key}"
                   class={formatColumnClass(header.columnAlign, pin)}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
@@ -1784,6 +2025,10 @@
                 <TableHeader
                   id="{id}-{header.key}"
                   class={formatColumnClass(header.columnAlign, pin)}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
@@ -1817,7 +2062,9 @@
             {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
+            {@const isHighlighted =
+              highlightedRowIdsSet.has(row.id) || rowId === crossRowId}
+            {@const rowTabKey = rowId === tabRowId ? tabKey : undefined}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -1827,6 +2074,7 @@
                     expanded: isExpanded,
                   })
                 : rowClass}
+            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
             <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
@@ -1858,7 +2106,12 @@
               on:mouseenter={() => {
                 dispatch("mouseenter:row", row);
               }}
+              on:mouseover={(event) => handleCellPointer(event, rowId)}
+              on:focusin={(event) => handleCellFocus(event, rowId)}
+              on:focusout={() => (focusCell = null)}
+              on:keydown={handleCellKeydown}
               on:mouseleave={() => {
+                hoverCell = null;
                 dispatch("mouseleave:row", row);
               }}
             >
@@ -2043,6 +2296,9 @@
                     formatColumnClass(cell.columnAlign, pin),
                     cellClassValue,
                   )}
+                  use:crossColumn={crosshair && !cell.empty
+                    ? cell.key
+                    : undefined}
                   style={formatInsetStyle(pin)}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
@@ -2050,6 +2306,11 @@
                     `${id}-${cell.key}`,
                   )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
+                  tabindex={cellFocus && !cell.empty
+                    ? cell.key === rowTabKey
+                      ? 0
+                      : -1
+                    : undefined}
                   on:click={(event) => {
                     if (cell.empty) return;
                     dispatch("click", { row, cell });
@@ -2121,7 +2382,9 @@
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
+            {@const isHighlighted =
+              highlightedRowIdsSet.has(row.id) || rowId === crossRowId}
+            {@const rowTabKey = rowId === tabRowId ? tabKey : undefined}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -2131,6 +2394,7 @@
                     expanded: isExpanded,
                   })
                 : rowClass}
+            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
             <tr
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
@@ -2168,7 +2432,12 @@
               on:mouseenter={() => {
                 dispatch("mouseenter:row", row);
               }}
+              on:mouseover={(event) => handleCellPointer(event, rowId)}
+              on:focusin={(event) => handleCellFocus(event, rowId)}
+              on:focusout={() => (focusCell = null)}
+              on:keydown={handleCellKeydown}
               on:mouseleave={() => {
+                hoverCell = null;
                 dispatch("mouseleave:row", row);
               }}
             >
@@ -2351,6 +2620,9 @@
                     formatColumnClass(cell.columnAlign, pin),
                     cellClassValue,
                   )}
+                  use:crossColumn={crosshair && !cell.empty
+                    ? cell.key
+                    : undefined}
                   style={formatInsetStyle(pin)}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
@@ -2358,6 +2630,11 @@
                     `${id}-${cell.key}`,
                   )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
+                  tabindex={cellFocus && !cell.empty
+                    ? cell.key === rowTabKey
+                      ? 0
+                      : -1
+                    : undefined}
                   on:click={(event) => {
                     if (cell.empty) return;
                     dispatch("click", { row, cell });

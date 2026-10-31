@@ -31,6 +31,12 @@
   export let pinnedColumns = false;
 
   /**
+   * Set to `true` for `role="grid"`, when the cells are keyboard navigable.
+   * `DataTable` sets this from `cellFocus`.
+   */
+  export let grid = false;
+
+  /**
    * Set the style attribute on the `table` element.
    * @type {string | undefined}
    */
@@ -117,6 +123,8 @@
   // or the sticky-header section) scrolls inside it. Keyboard users can only
   // scroll that region once it takes focus, so it does while it overflows.
   let scrollable = false;
+  // A grid scrolls as its cells take focus, so the region is not a second tab stop.
+  $: tabbableScroll = scrollable && !grid;
   let stopObserving = noop;
   /** @type {null | HTMLElement} */
   let scrollRef = null;
@@ -159,13 +167,14 @@
   <section
     class:bx--data-table_inner-container={true}
     bind:this={ref}
-    tabindex={scrollable ? 0 : undefined}
-    aria-labelledby={scrollable ? ariaLabelledby : undefined}
+    tabindex={tabbableScroll ? 0 : undefined}
+    aria-labelledby={tabbableScroll ? ariaLabelledby : undefined}
     {...sectionProps}
     style={containerStyle}
   >
     <table
       bind:this={tableRef}
+      role={grid ? "grid" : undefined}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}
@@ -190,9 +199,9 @@
   <div
     bind:this={contentRef}
     class:bx--data-table-content={true}
-    tabindex={scrollable ? 0 : undefined}
-    role={scrollable && ariaLabelledby ? "region" : undefined}
-    aria-labelledby={scrollable ? ariaLabelledby : undefined}
+    tabindex={tabbableScroll ? 0 : undefined}
+    role={tabbableScroll && ariaLabelledby ? "region" : undefined}
+    aria-labelledby={tabbableScroll ? ariaLabelledby : undefined}
   >
     <table
       bind:this={tableRef}
@@ -207,6 +216,7 @@
       class:bx--data-table--sticky-header={stickyHeader}
       class:bx--data-table--fixed-layout={fixedLayout}
       class:bx--data-table--pinned-columns={pinnedColumns}
+      role={grid ? "grid" : undefined}
       {...$$restProps}
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}

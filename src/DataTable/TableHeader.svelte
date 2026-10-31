@@ -60,8 +60,15 @@
   $: ariaLabel =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
 
+  const tableContext = getContext("carbon:DataTable");
+
   // Inside a DataTable, an active AI label marks the whole column.
-  const setColumnAILabel = getContext("carbon:DataTable")?.setColumnAILabel;
+  const setColumnAILabel = tableContext?.setColumnAILabel;
+
+  // In a DataTable with `cellFocus` the header row is part of the grid: its
+  // controls take focus from the arrow keys, not from Tab.
+  const cellFocus = tableContext?.cellFocus ?? writable(false);
+  $: gridTabindex = $cellFocus ? -1 : undefined;
 
   /**
    * Starts active for a filled slot, so the server renders the AI surface.
@@ -94,6 +101,7 @@
       <div class:bx--table-sort__decorator-wrapper={true}>
         <button
           type="button"
+          tabindex={gridTabindex}
           class:bx--table-sort={true}
           class:bx--table-sort--active={active}
           class:bx--table-sort--ascending={active &&
@@ -123,6 +131,7 @@
     {:else}
       <button
         type="button"
+        tabindex={gridTabindex}
         class:bx--table-sort={true}
         class:bx--table-sort--active={active}
         class:bx--table-sort--ascending={active &&
@@ -148,6 +157,7 @@
     {id}
     {scope}
     data-header={id}
+    tabindex={gridTabindex}
     class:bx--table-header--ai-label={$aiLabelState === "active"}
     {...$$restProps}
     on:click
