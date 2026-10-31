@@ -147,4 +147,20 @@ test.describe("Swatch", () => {
     expect(style.borderWidth).toBe("1px");
     expect(style.fill).not.toBe("rgba(0, 0, 0, 0)");
   });
+
+  test("edges a custom color and leaves palette dots plain", async ({
+    page,
+  }) => {
+    await page.goto("/swatch.html");
+    const shadow = (el: Element) => getComputedStyle(el).boxShadow;
+
+    expect(await dotsOf(page, "palette").first().evaluate(shadow)).toBe("none");
+    // `#ff7eb6`, the custom color in the sizes row.
+    expect(await dotsOf(page, "sizes").last().evaluate(shadow)).toMatch(
+      /0px 0px 0px 1px inset$/,
+    );
+
+    await page.emulateMedia({ forcedColors: "active" });
+    expect(await dotsOf(page, "sizes").last().evaluate(shadow)).toBe("none");
+  });
 });

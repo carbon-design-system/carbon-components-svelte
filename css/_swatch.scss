@@ -40,6 +40,15 @@
     }
   }
 
+  // A consumer's color can match what it sits on (`#fff` on White is
+  // 1:1), so a custom dot gets an edge. `$border-strong`, which
+  // ColorPicker's swatches use, is 1.6:1 on a gray tag in g100;
+  // `$icon-secondary` is 4.5:1 or more on the page and on a gray tag.
+  // Palette dots are chosen to contrast and keep no edge.
+  .#{$prefix}--swatch--custom {
+    box-shadow: inset 0 0 0 1px $icon-secondary;
+  }
+
   // A selected SelectableTag and a `high-contrast` tag paint an inverse
   // fill, which the `-strong` step matches (1.0 to 1.6:1). The `-inverse`
   // step is the other theme's, 6.8:1 or more there.
@@ -64,8 +73,10 @@
   // Forced colors drop background colors, which would erase the dot. Keep
   // the fill and ring it so it also reads on a dark `Canvas`.
   @media (forced-colors: active) {
+    // The border is the only edge; a custom dot's ring would add a second.
     .#{$prefix}--swatch {
       border: 1px solid CanvasText;
+      box-shadow: none;
       forced-color-adjust: none;
     }
   }

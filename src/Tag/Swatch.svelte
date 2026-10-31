@@ -20,7 +20,8 @@
 
   /**
    * Specify any CSS color to paint the swatch with, instead of the palette.
-   * Sets the `--ccs-swatch-color` custom property.
+   * Sets the `--ccs-swatch-color` custom property. A 1px edge keeps a
+   * color close to the background visible.
    * @type {string | undefined}
    */
   export let cssColor = undefined;
@@ -48,6 +49,7 @@
   aria-hidden={label ? undefined : "true"}
   class:bx--swatch={true}
   class:bx--swatch--sm={size === "sm"}
+  class:bx--swatch--custom={Boolean(cssColor)}
   class:bx--swatch--red={resolvedColor === "red"}
   class:bx--swatch--magenta={resolvedColor === "magenta"}
   class:bx--swatch--purple={resolvedColor === "purple"}
