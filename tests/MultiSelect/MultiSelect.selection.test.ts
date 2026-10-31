@@ -1064,13 +1064,15 @@ describe("MultiSelect", () => {
       expect(input).toHaveAttribute("aria-expanded", "false");
     });
 
-    it("non-filterable: Space does not toggle a hover-highlighted option", async () => {
+    it("non-filterable: Space does not toggle a hovered option", async () => {
       render(MultiSelect, { props: { items } });
 
       await openMenu();
       const emailOption = screen.getByRole("option", { name: "Email" });
       await user.hover(emailOption);
-      expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+      expect(emailOption).not.toHaveClass(
+        "bx--list-box__menu-item--highlighted",
+      );
 
       await user.keyboard(" ");
       expect(emailOption).toHaveAttribute("aria-checked", "false");

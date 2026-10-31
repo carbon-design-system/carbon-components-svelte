@@ -452,7 +452,7 @@
   $: menuAriaLabel = ariaLabel ?? (labelText || "Choose an item");
 
   let highlightedIndex = -1;
-  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  let highlightOrigin = /** @type {"keyboard" | null} */ (null);
   let prevHighlightedIndex = -1;
   let prevItemsLength = items.length;
   let listScrollTop = 0;
@@ -642,7 +642,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      highlightOrigin,
       menuWindow,
     });
 
@@ -1151,16 +1150,9 @@
         {align}
         {highlightedId}
         {wrapOptions}
-        highlightScroll={highlightOrigin !== "pointer"}
         aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
-        on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
@@ -1227,11 +1219,6 @@
                         // Keep focus on the field so screen readers don't
                         // re-announce it on every option click.
                         event.preventDefault();
-                      }}
-                      on:mouseenter={() => {
-                        if (item.disabled) return;
-                        highlightedIndex = actualIndex;
-                        highlightOrigin = "pointer";
                       }}
                     >
                       {#if $$slots.icon}
@@ -1352,11 +1339,6 @@
                       // Keep focus on the field so screen readers don't
                       // re-announce it on every option click.
                       event.preventDefault();
-                    }}
-                    on:mouseenter={() => {
-                      if (item.disabled) return;
-                      highlightedIndex = index;
-                      highlightOrigin = "pointer";
                     }}
                   >
                     {#if $$slots.icon}

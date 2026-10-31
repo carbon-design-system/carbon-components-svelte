@@ -200,7 +200,7 @@
 
   /**
    * Control whether the first matching item is automatically highlighted as the user types.
-   * - `"none"`: No auto-highlighting (default). The user must use arrow keys or hover to highlight items.
+   * - `"none"`: No auto-highlighting (default). The user must use arrow keys to highlight items.
    * - `"first-match"`: Automatically highlight the first non-disabled filtered item on each input change.
    * @type {"none" | "first-match"}
    */
@@ -494,7 +494,7 @@
   let selectedItem;
   let prevSelectedId = null;
   let highlightedIndex = -1;
-  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  let highlightOrigin = /** @type {"keyboard" | null} */ (null);
   let prevHighlightedIndex = -1;
   let valueBeforeOpen = "";
   let prevInputLength = 0;
@@ -653,19 +653,6 @@
     return filteredIndex.byId.get(id);
   }
 
-  /**
-   * @param {Item} item
-   * @param {number} [knownIndex] The option's position among the filtered
-   * items, when the caller already has it.
-   */
-  function highlightItem(item, knownIndex) {
-    if (item.disabled) return;
-    const matchIndex = knownIndex ?? getFilteredIndex(filteredItems, item.id);
-    if (matchIndex === undefined) return;
-    highlightedIndex = matchIndex;
-    highlightOrigin = "pointer";
-  }
-
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
@@ -757,7 +744,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      highlightOrigin,
       menuWindow,
     });
 
@@ -1499,16 +1485,9 @@
         {direction}
         {highlightedId}
         {wrapOptions}
-        highlightScroll={highlightOrigin !== "pointer"}
         aria-busy={loading ? "true" : undefined}
         on:scroll
         on:scroll={handleMenuScroll}
-        on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
@@ -1576,7 +1555,6 @@
                         // re-announce it on every option click.
                         event.preventDefault();
                       }}
-                      on:mouseenter={() => highlightItem(item, actualIndex)}
                     >
                       {#if $$slots.icon}
                         <span
@@ -1710,7 +1688,6 @@
                       // re-announce it on every option click.
                       event.preventDefault();
                     }}
-                    on:mouseenter={() => highlightItem(item)}
                   >
                     {#if $$slots.icon}
                       <span

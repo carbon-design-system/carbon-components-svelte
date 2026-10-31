@@ -786,7 +786,7 @@ describe("Dropdown", () => {
     });
   });
 
-  it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
+  it("does not highlight a hovered item, so Enter closes without selecting", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
       props: { items, selectedId: "0", onselect: selectHandler },
@@ -799,7 +799,7 @@ describe("Dropdown", () => {
     const fax = screen.getByText("Fax").closest(".bx--list-box__menu-item");
     assert(fax);
     await user.hover(fax);
-    expect(fax).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(fax).not.toHaveClass("bx--list-box__menu-item--highlighted");
 
     await user.keyboard("{Enter}");
     expect(selectHandler).not.toHaveBeenCalled();
@@ -1127,7 +1127,7 @@ describe("Dropdown", () => {
     expect(customItems[1]).toHaveAttribute("data-selected", "true");
     expect(customItems[2]).toHaveAttribute("data-selected", "false");
 
-    await user.hover(customItems[2]);
+    await user.keyboard("{End}");
     expect(customItems[2]).toHaveAttribute("data-highlighted", "true");
     expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
   });
@@ -1594,18 +1594,23 @@ describe("Dropdown", () => {
     );
   });
 
-  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+  it("keeps the keyboard highlight while the pointer moves over the menu", async () => {
     render(Dropdown, { props: { items } });
 
     const button = screen.getByRole("combobox");
     await user.click(button);
+    await user.keyboard("{Home}");
 
+    const slackOption = screen.getByRole("option", { name: "Slack" });
     const emailOption = screen.getByRole("option", { name: "Email" });
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
     await fireEvent.mouseLeave(screen.getByRole("listbox"));
-    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
   // "av" only reaches Avocado if the buffer accumulates: a search for "v"
