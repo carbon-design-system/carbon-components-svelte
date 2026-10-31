@@ -1,0 +1,176 @@
+---
+components: ["DataGrid"]
+description: Data grids show values in rows and columns that people move through, select as a range and copy, like a spreadsheet. Use one for large sets of cells that people compare.
+---
+
+<script>
+  import { Box, DataGrid, Stack } from "carbon-components-svelte";
+
+  const columns = [
+    { key: "service", title: "Service", width: 180 },
+    { key: "region", title: "Region", width: 130 },
+    {
+      key: "requests",
+      title: "Requests",
+      width: 130,
+      align: "end",
+      format: (value) => value.toLocaleString("en-US"),
+    },
+    { key: "latency", title: "p95 latency (ms)", width: 150, align: "end" },
+    {
+      key: "errors",
+      title: "Error rate",
+      width: 120,
+      align: "end",
+      format: (value) => `${value}%`,
+    },
+    { key: "owner", title: "Owner", width: 160 },
+  ];
+
+  const rows = [
+    { service: "billing-api", region: "us-south", requests: 1284300, latency: 182, errors: 0.4, owner: "Payments" },
+    { service: "checkout", region: "us-south", requests: 934120, latency: 240, errors: 1.1, owner: "Commerce" },
+    { service: "identity", region: "eu-de", requests: 2210450, latency: 96, errors: 0.1, owner: "Platform" },
+    { service: "inventory", region: "eu-de", requests: 402880, latency: 310, errors: 2.3, owner: "Commerce" },
+    { service: "notifications", region: "us-east", requests: 688200, latency: 128, errors: 0.6, owner: "Engagement" },
+    { service: "search", region: "us-east", requests: 3120040, latency: 74, errors: 0.2, owner: "Discovery" },
+    { service: "shipping", region: "jp-tok", requests: 255610, latency: 205, errors: 0.9, owner: "Fulfillment" },
+    { service: "webhooks", region: "au-syd", requests: 118930, latency: 150, errors: 0.5, owner: "Platform" },
+  ];
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const spendColumns = [
+    { key: "service", title: "Service", width: 150 },
+    ...months.map((month) => ({
+      key: month,
+      title: month,
+      width: 96,
+      align: "end",
+      format: (value) => `$${value.toLocaleString("en-US")}`,
+    })),
+  ];
+
+  const spendRows = rows.map((row, i) => ({
+    service: row.service,
+    ...Object.fromEntries(
+      months.map((month, j) => [month, 1200 + ((i * 317 + j * 89) % 2400)]),
+    ),
+  }));
+</script>
+
+## Basic
+
+Pass `columns` and `rows`. A cell shows `row[column.key]`, so a row needs no id. Name the grid with `labelText`. The grid never edits a row.
+
+Give each column a `width` in pixels, or leave it at `defaultColumnWidth`. The grid paints only the cells in view, so it places each one from the widths instead of measuring. `height` caps how tall the grid grows before it scrolls.
+
+Press <DocKbd label="Tab" /> to enter the grid, once. The arrow keys move one cell. <DocKbd label="Home" /> and <DocKbd label="End" /> go to the ends of the row, and with <DocKbd label="Ctrl" /> to the first and last cell. <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> move a screen of rows, and with <DocKbd label="Alt" /> a screen of columns. <DocKbd label="Tab" /> again leaves the grid, and returns to the same cell.
+
+<DataGrid labelText="Service traffic" {columns} {rows} />
+
+## Large data
+
+The grid paints only the rows and columns in view, so 500,000 cells cost about as much as 500. Keep `rows` a plain array: the grid reads it and never copies it. `aria-rowcount` and `aria-colcount` still report the whole grid, and each painted cell reports its own `aria-rowindex` and `aria-colindex`.
+
+The cell you moved to stays painted even when you scroll away from it, so focus is never lost to the page.
+
+<FileSource src="/framed/DataGrid/DataGridLarge" />
+
+## Frozen
+
+Set `frozenRows` and `frozenColumns` to keep the leading rows and columns in view while the rest scrolls. They sit under the column headers and beside the row headers. A frozen cell is opaque and a divider marks its edge.
+
+Moving to a frozen cell with <DocKbd label="Home" /> or <DocKbd label="Ctrl" /> + <DocKbd label="Home" /> also scrolls the grid back to the start. A cell that scrolls into view never lands under a frozen row or column.
+
+<DataGrid
+  labelText="Monthly spend by service"
+  columns={spendColumns}
+  rows={spendRows}
+  frozenColumns={1}
+  frozenRows={1}
+  height={280}
+/>
+
+## Selection
+
+Select a range by holding <DocKbd label="Shift" /> and pressing an arrow key, or by dragging across cells. Dragging past the edge of the grid scrolls it. A selected cell has `aria-selected="true"`, and a rectangle marks the edge of the range, so the selection shows in forced colors too.
+
+Click a column header or a row header to select the whole column or row. <DocKbd label="Ctrl" /> + <DocKbd label="Space" /> selects the column of the active cell, <DocKbd label="Shift" /> + <DocKbd label="Space" /> its row, and <DocKbd label="Ctrl" /> + <DocKbd label="A" /> every cell. <DocKbd label="Escape" /> clears the selection.
+
+Bind `activeCell` and `selection` to read them. A selection is `null` while it covers one cell. To follow them without a binding, listen for `active-cell:change` and `selection:change`, which fire once after each change.
+
+<FileSource src="/framed/DataGrid/DataGridSelection" />
+
+## Copy and paste
+
+<DocKbd label="Ctrl" /> + <DocKbd label="C" /> copies the selection, or the active cell, as tab-separated text and as an HTML table. Spreadsheets paste either one with its cells in place. The `copy` event fires first, with the matrix, and `preventDefault` cancels the copy.
+
+A paste hands the cells to you. The grid parses the clipboard's tab-separated text into a matrix, picks the range it would cover from the top left of the selection, and dispatches `paste` with `matrix`, `range`, and `truncated`. It does not write anything: apply the values to `rows` yourself, or pass `rows`, `columns` and the event's `detail` to `applyDataGridPaste`, which returns new rows. Its optional fourth argument turns pasted text into a value, such as a number. One pasted value over a larger selection fills the whole selection.
+
+If you do not call `preventDefault`, the pasted range becomes the selection, as in a spreadsheet. Call it to reject a paste, and the selection stays put.
+
+| Do | Why |
+| :--- | :--- |
+| Write the values in the `paste` handler with `applyDataGridPaste` and reassign `rows` | The grid reads `rows` and never changes it. |
+| Call `event.preventDefault()` to reject a paste | The selection stays and nothing is announced as pasted. |
+| Check `detail.truncated` | The block ran past the last row or column, and `range` is cut to fit. |
+| Leave editing to the cell | A grid that edits in place, with validation, is a separate concern. |
+
+<FileSource src="/framed/DataGrid/DataGridPaste" />
+
+## Cells
+
+### Format
+
+Set `format` on a column to turn a value into the text a cell shows and copies, and `align` to `"end"` for numbers. `align` is logical, so `"end"` is the left edge in a right-to-left page.
+
+An empty value, or a `format` that returns `""`, shows an em dash. A screen reader reads it as `emptyCellDescription` ("None"), and a copy gives an empty string.
+
+### Custom content
+
+Use the `cell` slot to draw a cell yourself. The grid copies the text from `format` or the raw value, not from the slot.
+
+A link or a button in a cell leaves the tab order, so the grid stays one tab stop. Press <DocKbd label="Enter" /> or <DocKbd label="F2" /> on the cell to move into its first control, and <DocKbd label="Escape" /> to return to the cell. A control in a cell keeps its own keys: the arrow keys move the grid only when the cell itself has focus.
+
+<FileSource src="/framed/DataGrid/DataGridCells" />
+
+## Sizes
+
+Set `size` to control the row height: `"compact"` (24px), `"short"` (32px), `"medium"` (40px), `"default"` (48px), or `"tall"` (64px). The default is `"short"`. Every row has the same height, which is how the grid knows where each one sits.
+
+<Stack gap={6}>
+  <DataGrid labelText="Compact" size="compact" {columns} rows={rows.slice(0, 3)} />
+  <DataGrid labelText="Tall" size="tall" {columns} rows={rows.slice(0, 3)} />
+</Stack>
+
+## Empty
+
+With no rows, the grid shows `emptyText` ("No rows") in one cell under the headers, and that cell takes the tab stop. Say why the grid is empty and what to do next, or use the `empty` slot for a link or a button. As in any cell, <DocKbd label="Enter" /> moves into the control.
+
+<DataGrid labelText="Service traffic" {columns} rows={[]} emptyText="No services match the filter. Clear it to see all services." />
+
+## Row headers
+
+Set `rowHeaders` to `false` to remove the column of row numbers. Use `rowHeaderText` to number rows another way, such as a record id.
+
+<DataGrid
+  labelText="Service traffic"
+  {columns}
+  rows={rows.slice(0, 4)}
+  rowHeaders={false}
+/>
+
+## Right to left
+
+The grid follows the page's direction. Column 1 sits at the right, the frozen columns stick to the right, and <DocKbd label="ArrowLeft" /> moves to the next column. Pass `dir="rtl"` on an ancestor, or wrap the grid in `LayoutDirection`.
+
+## When to use
+
+| Do | Why |
+| :--- | :--- |
+| Use a data grid for cells people compare, select as a range and copy | The model is cells with an address, not records with actions. |
+| Use [DataTable](/components/DataTable) for records with sorting, row selection, expansion and a toolbar | Those belong to a row, and a `grid` role has no place for them. |
+| Give the grid a `labelText` | A grid has no caption of its own. |
+| Set a fixed `height` for large data | The grid scrolls inside it, and only the rows in view are painted. |
+| Do not nest a grid in a container that scrolls | The grid scrolls itself, and two scrollers fight over the wheel. |
