@@ -296,6 +296,12 @@
     @include type-style("label-01");
   }
 
+  // Tick values stack down the y axis and step along the x axis: equal
+  // digit widths keep them aligned by place value.
+  .#{$prefix}--viz-axis__label {
+    font-variant-numeric: tabular-nums;
+  }
+
   .#{$prefix}--viz-grid__line {
     shape-rendering: crispEdges;
     stroke: $border-subtle;
