@@ -772,6 +772,24 @@ test.describe("DatePicker", () => {
   });
 });
 
+test("range fields show a 12-hour time with seconds whole", async ({
+  page,
+}) => {
+  await page.goto("/date-picker.html");
+  const inputs = page
+    .getByTestId("date-picker-range-seconds")
+    .locator(".bx--date-picker__input");
+  await expect(inputs.nth(1)).toHaveValue("10/29/2026 12:45:59 PM");
+  const overflow = () =>
+    inputs.evaluateAll((nodes) =>
+      nodes.map((node) => node.scrollWidth - node.clientWidth),
+    );
+  expect(await overflow()).toEqual([0, 0]);
+  // Too narrow for both: the end field wraps instead of shrinking.
+  await page.setViewportSize({ width: 320, height: 720 });
+  await expect.poll(overflow).toEqual([0, 0]);
+});
+
 test.describe("DatePicker time row across daylight saving time", () => {
   test.use({ timezoneId: "America/New_York" });
 

@@ -32,9 +32,13 @@ export function getPropWarnings({
   if (anchor && !portalled) {
     messages.push(`${PREFIX}anchor has no effect unless portalMenu is set.`);
   }
-  if (timeGranularity && datePickerType !== "single") {
+  if (
+    timeGranularity &&
+    datePickerType !== "single" &&
+    datePickerType !== "range"
+  ) {
     messages.push(
-      `${PREFIX}timeGranularity is only supported with datePickerType="single".`,
+      `${PREFIX}timeGranularity is only supported with datePickerType="single" or "range".`,
     );
   }
   if (

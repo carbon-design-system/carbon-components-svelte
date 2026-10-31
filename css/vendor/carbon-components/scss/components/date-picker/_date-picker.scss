@@ -236,6 +236,28 @@
     max-width: 100%;
   }
 
+  // ccs: with time rows (`timeGranularity`), each end holds a date and a
+  // time, "10/15/2026 2:30 PM" in code-02 beside the icon.
+  .#{$prefix}--date-picker--range.#{$prefix}--date-picker--time
+    .#{$prefix}--date-picker-container,
+  .#{$prefix}--date-picker--range.#{$prefix}--date-picker--time
+    .#{$prefix}--date-picker__input {
+    // ccs: or wider, to fit the widest value the format and locale write
+    // (`--ccs-date-picker-value-chars`, set by DatePicker): a code-02
+    // cell is 0.525rem plus 0.32px of letter spacing, one cell spare for
+    // the caret, and 3rem of padding beside the icon.
+    width: max(
+      #{to-rem(216px)},
+      calc((var(--ccs-date-picker-value-chars, 0) + 1) * (0.525rem + 0.32px) + 3rem)
+    );
+  }
+
+  // ccs: where the two fields don't fit side by side, the end field wraps
+  // below the start, so neither cuts its value.
+  .#{$prefix}--date-picker.#{$prefix}--date-picker--range.#{$prefix}--date-picker--time {
+    flex-wrap: wrap;
+  }
+
   // ccs: the icon spans 16-32px from the right edge. The 3rem default
   // leaves a 143.5px range input ~80px of text, clipping a code-02
   // `mm/dd/yyyy` (~87px); 2rem still keeps the text clear of the icon.

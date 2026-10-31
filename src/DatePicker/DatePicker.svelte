@@ -276,10 +276,11 @@
   export let closeOnSelect = true;
 
   /**
-   * Show a time row below the calendar, down to this unit. `value`,
+   * Show a time row below the calendar, down to this unit: one row, or a
+   * start and an end row for a range. `value` (or `valueFrom`/`valueTo`),
    * `selectedDates` and `change` then carry the time, and `dateFormat`
    * gains one if it has none.
-   * Only supported with the "single" date picker type.
+   * Only supported with the "single" and "range" date picker types.
    * @type {undefined | "hour" | "minute" | "second"}
    */
   export let timeGranularity = undefined;
@@ -296,12 +297,17 @@
 
   /**
    * Time given to a day picked while no time is set, as 24-hour `"HH:mm"`
-   * or `"HH:mm:ss"`.
+   * or `"HH:mm:ss"`. A pair sets a range's start and end.
+   * @type {string | [string, string]}
    */
   export let defaultTime = "00:00";
 
-  /** Accessible name of the time row. */
-  export let timeLabelText = "Time";
+  /**
+   * Name of the time row. A range's two rows show a pair, which defaults to
+   * `["Start time", "End time"]`; the single row's defaults to "Time".
+   * @type {undefined | string | [string, string]}
+   */
+  export let timeLabelText = undefined;
 
   /**
    * Parse typed text into a date. Receives the text and `dateFormat`;
@@ -519,7 +525,11 @@
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import { createCalendarApi } from "./calendar-api.js";
-  import { effectiveDateFormat, resolveHourCycle } from "./calendar-time.js";
+  import {
+    effectiveDateFormat,
+    resolveHourCycle,
+    widestValueLength,
+  } from "./calendar-time.js";
   import { createCalendar } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
@@ -574,8 +584,10 @@
    */
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
-  // The time row only exists in the single type.
-  $: usesTime = !!timeGranularity && datePickerType === "single";
+  // Time rows only exist in the single and range types.
+  $: usesTime =
+    !!timeGranularity &&
+    (datePickerType === "single" || datePickerType === "range");
   $: hourCycle = resolveHourCycle(hourFormat, dateFormat, locale);
   // `dateFormat`, with a time when the time row is on and it has none.
   $: calendarDateFormat = effectiveDateFormat(
@@ -583,6 +595,11 @@
     usesTime ? timeGranularity : undefined,
     hourCycle,
   );
+  // A range's fields fit the widest date and time the format writes.
+  $: rangeValueChars =
+    usesTime && datePickerType === "range"
+      ? widestValueLength(calendarDateFormat, locale)
+      : undefined;
   const sharedDateFormat = writable(dateFormat);
   const sharedLocale = writable(locale);
   const sharedClearable = writable(clearable);
@@ -2070,6 +2087,8 @@
       datePickerType === "week" ||
       datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
+    style:--ccs-date-picker-value-chars={rangeValueChars}
+    class:bx--date-picker--time={usesTime}
     class:bx--date-picker--inline={usesInline && $hasCalendar}
     on:keydown={(event) => {
       if (engine?.isOpen && event.key === "Escape") {
