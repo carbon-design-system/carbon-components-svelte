@@ -16,6 +16,12 @@ describe("SelectableTagGroup declarations", () => {
     >();
   });
 
+  it("accepts every tag size, as SelectableTag does", () => {
+    expectTypeOf<ComponentProps<SelectableTagGroup>["size"]>().toEqualTypeOf<
+      "xs" | "sm" | "default" | "lg" | "md" | undefined
+    >();
+  });
+
   it("defaults `Value` to string | number", () => {
     expectTypeOf<
       ComponentProps<SelectableTagGroup>["selected"]

@@ -26,7 +26,7 @@
 
   /**
    * Specify the size of the tags. A tag's own `size` wins.
-   * @type {"sm" | "default" | "lg" | "md" | undefined}
+   * @type {"xs" | "sm" | "default" | "lg" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -108,9 +108,9 @@
     new Set(effectiveSelected(selected, selectionMode)),
   );
   const groupDisabled = writable(disabled);
-  /** @type {import("svelte/store").Writable<"sm" | "default" | "lg" | undefined>} */
+  /** @type {import("svelte/store").Writable<"xs" | "sm" | "default" | "lg" | undefined>} */
   const groupSize = writable(
-    /** @type {"sm" | "default" | "lg" | undefined} */ (
+    /** @type {"xs" | "sm" | "default" | "lg" | undefined} */ (
       normalizeSize(size, TAG_SIZE_ALIASES)
     ),
   );
@@ -126,7 +126,7 @@
   $: selectedValues.set(new Set(effectiveSelected(selected, selectionMode)));
   $: groupDisabled.set(disabled);
   $: groupSize.set(
-    /** @type {"sm" | "default" | "lg" | undefined} */ (
+    /** @type {"xs" | "sm" | "default" | "lg" | undefined} */ (
       normalizeSize(size, TAG_SIZE_ALIASES)
     ),
   );

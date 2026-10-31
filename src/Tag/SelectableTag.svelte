@@ -76,7 +76,7 @@
     selectedValues: readable(/** @type {Set<string | number> | null} */ (null)),
     disabled: readable(false),
     size: readable(
-      /** @type {"sm" | "default" | "lg" | undefined} */ (undefined),
+      /** @type {"xs" | "sm" | "default" | "lg" | undefined} */ (undefined),
     ),
     tabStop: readable(/** @type {HTMLElement | null} */ (null)),
     toggle: () => /** @type {boolean | null} */ (null),
