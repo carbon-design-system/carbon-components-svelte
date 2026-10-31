@@ -13,9 +13,11 @@
     NumberInput,
     PasswordInput,
     PinCodeInput,
+    RangeSlider,
     Search,
     Select,
     SelectItem,
+    Slider,
     TagInput,
     TextArea,
     TextInput,
@@ -388,6 +390,18 @@
   </div>
   <div data-testid="multi-select-filterable">
     <MultiSelect filterable labelText="Regions" placeholder="Filter" {items} />
+  </div>
+  <div data-testid="slider">
+    <Slider labelText="Offset" min={-10} max={10} value={-5} />
+  </div>
+  <div data-testid="range-slider">
+    <RangeSlider
+      labelText="Window"
+      min={-10}
+      max={10}
+      value={-5}
+      valueUpper={-2}
+    />
   </div>
   <div data-testid="number-negative-unit">
     <NumberInput

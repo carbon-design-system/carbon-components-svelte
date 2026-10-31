@@ -1347,6 +1347,48 @@ test.describe("right-to-left text fields", () => {
       expect.soft(offsets, name).toEqual([...Array(value.length + 1).keys()]);
     }
   });
+
+  test("keeps Slider's minus signs in front of the numbers", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const inputs = page.locator(
+      "[data-testid=slider] .bx--slider-text-input, [data-testid=range-slider] .bx--slider-text-input",
+    );
+    await expect(inputs).toHaveCount(3);
+    const read = await Promise.all((await inputs.all()).map(caretOffsets));
+    for (const [index, { value, offsets }] of read.entries()) {
+      expect(value.startsWith("-"), `input ${index}`).toBe(true);
+      expect
+        .soft(offsets, `input ${index} ${value}`)
+        .toEqual([...Array(value.length + 1).keys()]);
+    }
+    // Each range label's characters in visual order, left to right.
+    const labels = await page
+      .locator(
+        "[data-testid=slider] .bx--slider__range-label, [data-testid=range-slider] .bx--slider__range-label",
+      )
+      .evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const text = node.firstChild;
+          const range = document.createRange();
+          const chars: { char: string; left: number }[] = [];
+          for (let i = 0; text && i < (text.textContent ?? "").length; i++) {
+            range.setStart(text, i);
+            range.setEnd(text, i + 1);
+            chars.push({
+              char: range.toString(),
+              left: range.getBoundingClientRect().left,
+            });
+          }
+          return chars
+            .sort((a, b) => a.left - b.left)
+            .map(({ char }) => char)
+            .join("");
+        }),
+      );
+    expect(labels).toEqual(["-10", "10", "-10", "10"]);
+  });
 });
 
 /**
