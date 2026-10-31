@@ -414,6 +414,10 @@ describe("DatePicker", () => {
     }
 
     it("keeps focus on the day after adding it in multiple mode", async () => {
+      // ArrowRight from the last day of a month opens the next month, where
+      // the first selected day is not shown. Start mid-month.
+      vi.useFakeTimers({ toFake: ["Date"], now: new Date(2026, 9, 15, 12) });
+      onTestFinished(() => vi.useRealTimers());
       render(DatePicker, { datePickerType: "multiple" });
       const input = screen.getByLabelText("Date");
       const calendar = await screen.findByLabelText(/^Choose a /);
