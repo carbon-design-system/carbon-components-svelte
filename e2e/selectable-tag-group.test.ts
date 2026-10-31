@@ -102,4 +102,25 @@ test.describe("SelectableTagGroup", () => {
     // Open is selected; every other tag differs from it.
     expect(colors.slice(1).every((color) => color !== colors[0])).toBe(true);
   });
+
+  test("draws a 1px resting edge and a wider ring in forced colors", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName === "webkit", "WebKit does not force colors");
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto("/selectable-tag-group.html");
+    const status = page.getByTestId("status");
+    const edges = () =>
+      status.getByRole("button").evaluateAll((tags) =>
+        tags.map((tag) => {
+          const s = getComputedStyle(tag);
+          return `${s.borderTopWidth} ${s.outlineStyle === "none" ? "0px" : s.outlineWidth}`;
+        }),
+      );
+
+    expect(await edges()).toEqual(Array(5).fill("1px 0px"));
+    await status.getByRole("button", { name: "Closed" }).focus();
+    expect((await edges())[2]).toBe("1px 2px");
+  });
 });
