@@ -493,6 +493,28 @@
     border-inline-start: to-rem(2px) solid $border-interactive;
   }
 
+  // Below the md breakpoint the rail sits above the calendar as a
+  // wrapping row, so a 320px page doesn't scroll sideways (WCAG 1.4.10).
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--presets.#{$prefix}--date-picker__calendar--open,
+    .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--presets.#{$prefix}--date-picker__calendar--inline {
+      flex-direction: column;
+      width: min-content;
+      height: auto;
+    }
+
+    .#{$prefix}--date-picker__presets {
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: auto;
+      margin-block-end: $carbon--spacing-02;
+      margin-inline-end: 0;
+      padding-block: 0 $carbon--spacing-02;
+      border-block-end: 1px solid $border-subtle;
+      border-inline-end: 0;
+    }
+  }
+
   // Same wrapping box as the month days so the rows line up.
   .#{$prefix}--date-picker__week-numbers .#{$prefix}--date-picker__week-number-list {
     display: flex;

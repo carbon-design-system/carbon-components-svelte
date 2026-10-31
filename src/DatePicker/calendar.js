@@ -2136,8 +2136,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     triggerEvent("onPreCalendarPosition");
     const anchor = customPositionElement || self._positionElement;
     const container = self.calendarContainer;
-    // The preset rail sits beside the calendar, not above it.
-    const sideBySide = !!self.presetsElement;
+    // The preset rail sits beside the calendar, or above it on a narrow
+    // screen.
+    const sideBySide =
+      !!self.presetsElement &&
+      getComputedStyle(container).flexDirection === "row";
     let height = 0;
     for (const child of /** @type {HTMLElement[]} */ ([
       ...container.children,

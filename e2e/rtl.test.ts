@@ -2128,6 +2128,29 @@ test.describe("right-to-left date picker", () => {
     ).toEqual({ previous: -1, next: -1 });
   });
 
+  test("stacks the preset rail above the calendar at 320 px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    await setDirection(page, "rtl");
+    await expect
+      .poll(() =>
+        page.evaluate(() => {
+          const rail = document.querySelector(
+            "[data-testid=presets] .bx--date-picker__presets",
+          );
+          const days = document.querySelector(
+            "[data-testid=presets] .bx--date-picker__days",
+          );
+          if (!rail || !days) return "missing";
+          const r = rail.getBoundingClientRect();
+          const d = days.getBoundingClientRect();
+          return r.bottom <= d.top && d.right <= 320 && d.left >= 0;
+        }),
+      )
+      .toBe(true);
+  });
+
   test("swaps ArrowLeft and ArrowRight, and keeps Home at the inline start", async ({
     page,
   }) => {
