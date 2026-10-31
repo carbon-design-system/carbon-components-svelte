@@ -523,21 +523,21 @@
 /// @access private
 /// @group components
 @mixin data-table-crosshair {
-  .#{$prefix}--data-table thead .#{$prefix}--data-table--highlighted-column {
+  .#{$prefix}--data-table thead [data-highlighted-column] {
     background-color: $layer-accent-hover;
   }
 
   .#{$prefix}--data-table
     tbody
     tr:not(.#{$prefix}--data-table--selected)
-    > .#{$prefix}--data-table--highlighted-column {
+    > [data-highlighted-column] {
     background-color: $layer-hover;
   }
 
   .#{$prefix}--data-table--zebra
     > tbody
     > tr:not(.#{$prefix}--parent-row):not(.#{$prefix}--data-table--selected)
-    > .#{$prefix}--data-table--highlighted-column {
+    > [data-highlighted-column] {
     background-color: $layer-hover;
   }
 }

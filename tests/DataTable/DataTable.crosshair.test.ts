@@ -13,18 +13,18 @@ const rows = [
   { id: "c", station: "San Mateo", t1: "5:38a", t2: "6:04a" },
 ];
 
-const COLUMN = "bx--data-table--highlighted-column";
+const COLUMN = "data-highlighted-column";
 const ROW = "bx--data-table--highlighted-row";
 
 function highlightedHeaders() {
   return [...document.querySelectorAll("thead th")]
-    .filter((th) => th.classList.contains(COLUMN))
+    .filter((th) => th.hasAttribute(COLUMN))
     .map((th) => th.textContent?.trim());
 }
 
 function highlightedCells() {
   return [...document.querySelectorAll("tbody td")]
-    .filter((td) => td.classList.contains(COLUMN))
+    .filter((td) => td.hasAttribute(COLUMN))
     .map((td) => td.textContent?.trim());
 }
 
@@ -78,7 +78,7 @@ describe("DataTable crosshair", () => {
 
     await fireEvent.mouseOver(getCells(getBodyRows()[1])[1]);
 
-    expect(document.querySelector(`.${ROW}, .${COLUMN}`)).toBeNull();
+    expect(document.querySelector(`.${ROW}, [${COLUMN}]`)).toBeNull();
   });
 
   it("keeps highlightedRowIds when the pointer leaves", async () => {

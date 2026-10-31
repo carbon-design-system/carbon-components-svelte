@@ -14,7 +14,7 @@ const rows = [
   { id: "c", station: "San Mateo", t1: "5:38a", t2: "6:04a" },
 ];
 
-const COLUMN = "bx--data-table--highlighted-column";
+const COLUMN = "data-highlighted-column";
 
 function cellAt(row: number, column: number) {
   return getCells(getBodyRows()[row])[column];
@@ -208,13 +208,13 @@ describe("DataTable cellFocus", () => {
     await tick();
 
     expect(getBodyRows()[1]).toHaveClass("bx--data-table--highlighted-row");
-    expect(cellAt(0, 1)).toHaveClass(COLUMN);
-    expect(cellAt(2, 1)).toHaveClass(COLUMN);
+    expect(cellAt(0, 1)).toHaveAttribute(COLUMN);
+    expect(cellAt(2, 1)).toHaveAttribute(COLUMN);
 
     cellAt(1, 1).blur();
     await tick();
 
-    expect(document.querySelector(`.${COLUMN}`)).toBeNull();
+    expect(document.querySelector(`[${COLUMN}]`)).toBeNull();
     expect(getBodyRows()[1]).not.toHaveClass("bx--data-table--highlighted-row");
   });
 });

@@ -63,12 +63,12 @@ test.describe("DataTable timetable", () => {
     await expect(
       page.locator("tbody tr.bx--data-table--highlighted-row"),
     ).toHaveCount(1);
-    await expect(
-      page.locator("thead th.bx--data-table--highlighted-column"),
-    ).toHaveText("103");
-    await expect(
-      page.locator("tbody td.bx--data-table--highlighted-column"),
-    ).toHaveCount(24);
+    await expect(page.locator("thead th[data-highlighted-column]")).toHaveText(
+      "103",
+    );
+    await expect(page.locator("tbody td[data-highlighted-column]")).toHaveCount(
+      24,
+    );
     // Carbon fades the row fill in, so read it once the fade ends.
     await expect(async () => {
       const [row, column, plain] = await page.evaluate(() => {
@@ -101,9 +101,9 @@ test.describe("DataTable timetable", () => {
     await expect(
       page.locator("tbody tr.bx--data-table--highlighted-row"),
     ).toHaveCount(1);
-    await expect(
-      page.locator("thead th.bx--data-table--highlighted-column"),
-    ).toHaveText("101");
+    await expect(page.locator("thead th[data-highlighted-column]")).toHaveText(
+      "101",
+    );
   });
 
   test("keeps the focused cell clear of the pinned column and the header", async ({

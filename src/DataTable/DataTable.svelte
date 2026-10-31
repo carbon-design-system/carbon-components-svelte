@@ -10,9 +10,10 @@
   /**
    * @param {string | undefined} columnAlign
    * @param {import("./data-table-utils.js").PinnedColumnLayout | undefined} pin
+   * @param {...string} classes
    */
-  function formatColumnClass(columnAlign, pin) {
-    return formatPinnedClass(pin, alignClasses[columnAlign]);
+  function formatColumnClass(columnAlign, pin, ...classes) {
+    return formatPinnedClass(pin, alignClasses[columnAlign], ...classes);
   }
 
   /**
@@ -501,7 +502,7 @@
    * pointer, including the column's header. Use it on a grid of values read
    * across two axes, such as a timetable. Rows get
    * `bx--data-table--highlighted-row`, and the column's header and cells get
-   * `bx--data-table--highlighted-column`.
+   * a `data-highlighted-column` attribute.
    */
   export let crosshair = false;
 
@@ -1534,6 +1535,8 @@
     ? resolveTabRow(tabCell, rowIdsToRender, hideMode, matchedRowIdsSet)
     : undefined;
   $: tabKey = cellFocus ? resolveTabKey(tabCell, visibleHeaders) : undefined;
+  // Each row derives its own tab key (`rowTabKey` in the markup), so moving
+  // the tab stop re-renders the cells of two rows, not of every row.
 
   /**
    * @param {null | { rowId: Row["id"]; key: string }} cell
@@ -1631,19 +1634,70 @@
     next.focus();
   }
 
+  // The body cells of each column, so a crosshair move marks the cells of
+  // the two columns that change and no others. Bound to `crossKey` in the
+  // markup, every cell would re-render on each move: 7.3 ms of script per
+  // move at 1,000 rows.
+  /** @type {Map<string | undefined, Set<HTMLElement>>} */
+  const columnCells = new Map();
+  /** @type {string | undefined} */
+  let markedKey;
+
+  /** @param {string | undefined} key */
+  function markColumn(key) {
+    if (key === markedKey) return;
+    for (const cell of columnCells.get(markedKey) ?? []) {
+      cell.removeAttribute("data-highlighted-column");
+    }
+    for (const cell of columnCells.get(key) ?? []) {
+      cell.setAttribute("data-highlighted-column", "");
+    }
+    markedKey = key;
+  }
+
+  $: markColumn(crossKey);
+
   /**
-   * @param {{ key: string; columnAlign?: string }} header
-   * @param {import("./data-table-utils.js").PinnedColumnLayout | undefined} pin
+   * Registers a body cell under its column while `crosshair` is on.
+   * @param {HTMLElement} node
+   * @param {string | undefined} key `undefined` when `crosshair` is off.
+   */
+  function crossColumn(node, key) {
+    let current = key;
+    const register = () => {
+      if (current === undefined) return;
+      let cells = columnCells.get(current);
+      if (!cells) {
+        cells = new Set();
+        columnCells.set(current, cells);
+      }
+      cells.add(node);
+      node.toggleAttribute("data-highlighted-column", current === markedKey);
+    };
+    const release = () => {
+      if (current !== undefined) columnCells.get(current)?.delete(node);
+    };
+    register();
+    return {
+      /** @param {string | undefined} next */
+      update(next) {
+        release();
+        current = next;
+        register();
+      },
+      destroy: release,
+    };
+  }
+
+  /**
+   * @param {string} key
    * @param {string | undefined} highlightedKey Passed in, not read from the
    * component, so a template call re-runs when the highlighted column moves.
    */
-  function formatHeaderClass(header, pin, highlightedKey) {
-    return joinClasses(
-      formatColumnClass(header.columnAlign, pin),
-      highlightedKey !== undefined && header.key === highlightedKey
-        ? "bx--data-table--highlighted-column"
-        : undefined,
-    );
+  function headerHighlight(key, highlightedKey) {
+    return highlightedKey !== undefined && key === highlightedKey
+      ? ""
+      : undefined;
   }
 
   // The title decorator has no AI surface, so its state is not read.
@@ -1909,9 +1963,14 @@
               {#if header.columnMenu}
                 <th
                   scope="col"
-                  class={joinClasses(
-                    formatHeaderClass(header, pin, crossKey),
+                  class={formatColumnClass(
+                    header.columnAlign,
+                    pin,
                     "bx--table-column-menu",
+                  )}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
                   )}
                   style={formatColumnStyle(header, pin)}
                   >{#if header.value}<span class:bx--visually-hidden={true}
@@ -1921,7 +1980,11 @@
               {:else}
                 <th
                   scope="col"
-                  class={formatHeaderClass(header, pin, crossKey)}
+                  class={formatColumnClass(header.columnAlign, pin)}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                 >
                   <div class:bx--table-header-label={true}>
@@ -1935,7 +1998,11 @@
               {#if $$slots.headerDecorator}
                 <TableHeader
                   id="{id}-{header.key}"
-                  class={formatHeaderClass(header, pin, crossKey)}
+                  class={formatColumnClass(header.columnAlign, pin)}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
@@ -1955,7 +2022,11 @@
               {:else}
                 <TableHeader
                   id="{id}-{header.key}"
-                  class={formatHeaderClass(header, pin, crossKey)}
+                  class={formatColumnClass(header.columnAlign, pin)}
+                  data-highlighted-column={headerHighlight(
+                    header.key,
+                    crossKey,
+                  )}
                   style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
@@ -1991,6 +2062,7 @@
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isHighlighted =
               highlightedRowIdsSet.has(row.id) || rowId === crossRowId}
+            {@const rowTabKey = rowId === tabRowId ? tabKey : undefined}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -2220,11 +2292,11 @@
                 <td
                   class={joinClasses(
                     formatColumnClass(cell.columnAlign, pin),
-                    cell.key === crossKey
-                      ? "bx--data-table--highlighted-column"
-                      : undefined,
                     cellClassValue,
                   )}
+                  use:crossColumn={crosshair && !cell.empty
+                    ? cell.key
+                    : undefined}
                   style={formatInsetStyle(pin)}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
@@ -2233,7 +2305,7 @@
                   )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
                   tabindex={cellFocus && !cell.empty
-                    ? rowId === tabRowId && cell.key === tabKey
+                    ? cell.key === rowTabKey
                       ? 0
                       : -1
                     : undefined}
@@ -2310,6 +2382,7 @@
             {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
             {@const isHighlighted =
               highlightedRowIdsSet.has(row.id) || rowId === crossRowId}
+            {@const rowTabKey = rowId === tabRowId ? tabKey : undefined}
             {@const rowClassValue =
               typeof rowClass === "function"
                 ? rowClass({
@@ -2543,11 +2616,11 @@
                 <td
                   class={joinClasses(
                     formatColumnClass(cell.columnAlign, pin),
-                    cell.key === crossKey
-                      ? "bx--data-table--highlighted-column"
-                      : undefined,
                     cellClassValue,
                   )}
+                  use:crossColumn={crosshair && !cell.empty
+                    ? cell.key
+                    : undefined}
                   style={formatInsetStyle(pin)}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
@@ -2556,7 +2629,7 @@
                   )}
                   headers={cell.empty ? undefined : `${id}-${cell.key}`}
                   tabindex={cellFocus && !cell.empty
-                    ? rowId === tabRowId && cell.key === tabKey
+                    ? cell.key === rowTabKey
                       ? 0
                       : -1
                     : undefined}
