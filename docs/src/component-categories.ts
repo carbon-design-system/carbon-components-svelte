@@ -26,6 +26,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "UnorderedList",
       "DescriptionList",
       "VirtualList",
+      "LogViewer",
     ],
   },
   {

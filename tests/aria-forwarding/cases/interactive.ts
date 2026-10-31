@@ -18,6 +18,7 @@ import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
+import LogViewer from "carbon-components-svelte/LogViewer/LogViewer.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
 import Modal from "carbon-components-svelte/Modal/Modal.svelte";
@@ -736,6 +737,14 @@ export const interactive: AriaEntry[] = [
     name: "ChatLog",
     render: (attrs) =>
       render(ChatLog, { props: { labelText: "Conversation", ...attrs } }),
+    target: () => screen.getByRole("log"),
+  },
+  {
+    name: "LogViewer",
+    render: (attrs) =>
+      render(LogViewer, {
+        props: { lines: ["INFO started"], labelText: "Build output", ...attrs },
+      }),
     target: () => screen.getByRole("log"),
   },
   {
