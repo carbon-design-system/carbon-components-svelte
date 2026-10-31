@@ -1322,7 +1322,54 @@ test.describe("right-to-left text fields", () => {
       expect.soft(await caretAtLeftEnd(page, field, open), name).toBe(0);
     }
   });
+
+  test("keeps NumberInput's minus sign in front of the number", async ({
+    page,
+  }) => {
+    // In an RTL paragraph, bidi moved a leading minus to the far side:
+    // "-5" painted as "5-", and "-5 kg" as "kg 5-".
+    await setDirection(page, "rtl");
+    const number = page.getByTestId("number").locator("input");
+    const fluid = page.getByTestId("fluid-number-invalid").locator("input");
+    await number.fill("-5");
+    await fluid.fill("-5");
+    const fields = {
+      NumberInput: number,
+      "fluid NumberInput": fluid,
+      "NumberInput with a unit": page
+        .getByTestId("number-negative-unit")
+        .locator("input"),
+    };
+    for (const [name, field] of Object.entries(fields)) {
+      // biome-ignore lint/performance/noAwaitInLoops: one field at a time
+      const { value, offsets } = await caretOffsets(field);
+      expect(value.startsWith("-"), name).toBe(true);
+      expect.soft(offsets, name).toEqual([...Array(value.length + 1).keys()]);
+    }
+  });
 });
+
+/**
+ * A field's caret offsets from its left edge to its right one. Text that
+ * reads left to right gives 0, 1, 2 and on.
+ */
+function caretOffsets(field: Locator) {
+  return field.evaluate((node: HTMLInputElement) => {
+    node.scrollIntoView({ block: "center" });
+    const style = getComputedStyle(node);
+    const box = node.getBoundingClientRect();
+    // A fluid field's top padding holds its label.
+    const top = box.top + Number.parseFloat(style.paddingTop);
+    const bottom = box.bottom - Number.parseFloat(style.paddingBottom);
+    const offsets: number[] = [];
+    for (let x = Math.ceil(box.left); x < box.right; x++) {
+      const position = document.caretPositionFromPoint(x, (top + bottom) / 2);
+      if (position?.offsetNode !== node) continue;
+      if (offsets.at(-1) !== position.offset) offsets.push(position.offset);
+    }
+    return { value: node.value, offsets };
+  });
+}
 
 /**
  * Types "3 / 4" into a right-to-left field and clicks where its left end

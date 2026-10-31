@@ -389,6 +389,14 @@
   <div data-testid="multi-select-filterable">
     <MultiSelect filterable labelText="Regions" placeholder="Filter" {items} />
   </div>
+  <div data-testid="number-negative-unit">
+    <NumberInput
+      labelText="Change"
+      value={-5}
+      locale="en-US"
+      formatOptions={{ style: "unit", unit: "kilogram" }}
+    />
+  </div>
 </div>
 
 <style>
