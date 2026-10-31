@@ -40,6 +40,19 @@
     }
   }
 
+  // A selected SelectableTag and a `high-contrast` tag paint an inverse
+  // fill, which the `-strong` step matches (1.0 to 1.6:1). The `-inverse`
+  // step is the other theme's, 6.8:1 or more there.
+  @each $color in $colors {
+    .#{$prefix}--tag--selectable-selected .#{$prefix}--swatch--#{$color},
+    .#{$prefix}--tag--high-contrast .#{$prefix}--swatch--#{$color} {
+      --ccs-swatch-color: #{ccs-theme-color(
+          $ccs-user-avatar-colors,
+          "user-avatar-#{$color}-inverse"
+        )};
+    }
+  }
+
   // The tag's icon box is 16px and not a flex container, so center the dot
   // in it; the box already supplies the gap to the label.
   .#{$prefix}--tag__custom-icon > .#{$prefix}--swatch {

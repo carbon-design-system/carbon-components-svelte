@@ -44,4 +44,26 @@ describe("Swatch fill", () => {
     },
     30_000,
   );
+
+  // A selected SelectableTag and a `high-contrast` tag paint an inverse
+  // fill, where the strong fill fell to 1.0 to 1.6:1.
+  it.each(THEMES)(
+    "stands out from an inverse surface in %s",
+    async (theme) => {
+      const tokens = (await themeTokens()).themes[theme];
+      for (const color of COLORS) {
+        const fill = tokens[`--ccs-user-avatar-${color}-inverse`];
+        for (const surface of [
+          "--cds-layer-selected-inverse",
+          "--cds-background-inverse",
+        ]) {
+          expect(
+            contrast(fill, tokens[surface]),
+            `${color} on ${surface}`,
+          ).toBeGreaterThanOrEqual(3);
+        }
+      }
+    },
+    30_000,
+  );
 });

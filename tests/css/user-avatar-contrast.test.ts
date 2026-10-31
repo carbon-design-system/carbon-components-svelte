@@ -8,8 +8,11 @@ describe("UserAvatar fill contrast", () => {
     "every fill holds its initials and icon in %s",
     async (theme) => {
       const tokens = (await themeTokens()).themes[theme];
-      const fills = Object.keys(tokens).filter((name) =>
-        name.startsWith("--ccs-user-avatar-"),
+      // The `-inverse` steps are Swatch fills on an inverse surface; no
+      // initials sit on them (see swatch.test.ts).
+      const fills = Object.keys(tokens).filter(
+        (name) =>
+          name.startsWith("--ccs-user-avatar-") && !name.endsWith("-inverse"),
       );
       // Ten hues, each with a default and a strong fill.
       expect(fills).toHaveLength(20);
