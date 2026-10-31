@@ -87,10 +87,11 @@ Set `kind` to match the message. The status icon has a label, such as
 
 ### Thin
 
-Set `thin` for a 4px strip in the kind's color, with the title in a tab
-that hangs below it. It suits a quiet reminder, such as the environment
-name. Give it a `title`, because the color alone does not say what the
-strip means. A thin banner has no subtitle or actions.
+Set `thin` for a 4px strip in the kind's color, with the kind's icon
+and the title in a tab that hangs below it. It suits a quiet reminder,
+such as the environment name. Give it a `title`, because the icon says
+the kind but not what the strip means. A thin banner has no subtitle or
+actions.
 
 The tab sits over the header's center, so keep that area of the header
 free of controls.

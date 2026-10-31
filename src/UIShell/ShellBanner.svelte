@@ -44,9 +44,9 @@
   export let sticky = false;
 
   /**
-   * Set to `true` for a 4px strip with only the title, hanging below it.
-   * Give it a `title`: the kind is announced to screen readers, but the
-   * color is the only visual signal.
+   * Set to `true` for a 4px strip with the kind's icon and the title in a
+   * tab hanging below it. Give it a `title`: the icon says the kind, not
+   * what the strip means.
    */
   export let thin = false;
 
@@ -291,18 +291,14 @@
   >
     <div class:bx--shell-banner__body={true}>
       <div class:bx--shell-banner__details={true}>
-        {#if thin}
-          <span class:bx--visually-hidden={true}
-            >{statusIconDescription || statusIconLabel(kind)}:</span
-          >
-        {:else}
-          <NotificationIcon
-            notificationType="inline"
-            {kind}
-            {lowContrast}
-            iconDescription={statusIconDescription || statusIconLabel(kind)}
-          />
-        {/if}
+        <!-- A thin banner shows the icon in its tab too, so the kind does
+        not rest on the strip's color alone. -->
+        <NotificationIcon
+          notificationType="inline"
+          {kind}
+          {lowContrast}
+          iconDescription={statusIconDescription || statusIconLabel(kind)}
+        />
         <!-- The action follows the text in one wrapping row, so in a narrow
         banner it moves under the text instead of squeezing it. -->
         <div class:bx--shell-banner__content={true}>

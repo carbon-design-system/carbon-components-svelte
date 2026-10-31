@@ -187,7 +187,11 @@ describe("ShellBanner", () => {
 
     const banner = screen.getByTestId("banner");
     expect(banner).toHaveClass("bx--shell-banner--thin");
-    expect(banner).toHaveTextContent("Information: Staging");
+    expect(banner).toHaveTextContent("Staging");
+    // The kind shows as its icon too, not only as the strip's color.
+    expect(
+      banner.querySelector(".bx--inline-notification__icon title"),
+    ).toHaveTextContent("Information");
     expect(screen.queryByText("Ignored")).toBeNull();
     expect(screen.queryByTestId("extra")).toBeNull();
     expect(screen.queryByRole("button", { name: "Exit" })).toBeNull();

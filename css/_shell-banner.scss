@@ -218,7 +218,14 @@ $-kind-accents-inverse: (
   }
 
   .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__details {
+    align-items: center;
     padding-inline: 0;
+  }
+
+  // The kind's icon, so the tab does not rest on the strip's color.
+  .#{$prefix}--shell-banner--thin .#{$prefix}--inline-notification__icon {
+    margin-top: 0;
+    margin-inline-end: $carbon--spacing-03;
   }
 
   .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__text {

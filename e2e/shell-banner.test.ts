@@ -236,6 +236,25 @@ test.describe("RTL", () => {
     expect(widths).toEqual(["0px", "3px"]);
   });
 
+  test("shows the kind's icon in the thin tab", async ({ page }) => {
+    await page.goto("/shell-banner.html?thin");
+    const icon = page.locator(`${BANNER} .bx--inline-notification__icon`);
+
+    await expect(icon).toBeVisible();
+    const [iconBox, titleBox] = await Promise.all([
+      icon.boundingBox(),
+      page.locator(`${BANNER} .bx--shell-banner__title`).boundingBox(),
+    ]);
+    if (!iconBox || !titleBox) throw new Error("no icon or title");
+    // Centered on the title, before it.
+    expect(
+      Math.abs(
+        iconBox.y + iconBox.height / 2 - (titleBox.y + titleBox.height / 2),
+      ),
+    ).toBeLessThanOrEqual(0.5);
+    expect(iconBox.x + iconBox.width).toBeLessThanOrEqual(titleBox.x);
+  });
+
   test("centers the thin tab on the viewport", async ({ page }) => {
     await page.goto("/shell-banner.html?thin&dismissible");
     await page.evaluate(() => {
