@@ -351,51 +351,6 @@
   @include data-table-fixed-layout;
 }
 
-// carbon-components-svelte patch (DataTable virtualize without stickyHeader)
-@import "carbon-components/scss/globals/scss/vars";
-@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
-
-/// Keep the header of a virtualized `DataTable` in view while it scrolls.
-/// Without `stickyHeader`, the wrapper around the table scrolls and the `thead`
-/// is `position: sticky`. A sticky box sticks to its nearest scroll container,
-/// and upstream's `overflow-x: auto` on `.bx--data-table-content` makes that
-/// inner `div` the scroll container (the other axis computes to `auto` too).
-/// It never scrolls vertically, so the header sticks to nothing and scrolls
-/// away with the body. The wrapper already scrolls on both axes, so the inner
-/// `div` stops being a scroll container.
-/// @access private
-/// @group components
-@mixin data-table-virtual {
-  .#{$prefix}--data-table-virtual > .#{$prefix}--data-table-content {
-    overflow: visible;
-  }
-}
-
-@include exports("data-table-virtual") {
-  @include data-table-virtual;
-}
-
-// carbon-components-svelte patch (small tag in a cell)
-@import "carbon-components/scss/globals/scss/vars";
-@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
-
-/// Keep a small `Tag` inside the cell's line. The tag is 18px, the cell's
-/// `body-compact-01` line height, but `vertical-align: middle` centers it
-/// on the font's x-height, which sits below the line's center, so the line
-/// grew to 19.39px and `compact` and `short` rows to 24.39px and 33.39px.
-/// Aligned to the top, the tag fills the line exactly.
-/// @access private
-/// @group components
-@mixin data-table-tag-sm {
-  .#{$prefix}--data-table .#{$prefix}--tag--sm {
-    vertical-align: top;
-  }
-}
-
-@include exports("data-table-tag-sm") {
-  @include data-table-tag-sm;
-}
-
 // carbon-components-svelte patch (column resize handle)
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
@@ -411,6 +366,11 @@
 /// The `th` is the handle's containing block. The marker class on the table
 /// gives the rule the weight to beat `th:last-of-type`, which sets
 /// `position: static`; a sticky header cell keeps its `position: sticky`.
+///
+/// This block sits right after the fixed layout block, before the other
+/// patches. A later patch that sets `position` on a header cell at the same
+/// weight, such as a sticky (pinned) column, then wins on order: a sticky
+/// cell is a containing block too.
 /// @access private
 /// @group components
 @mixin data-table-resize-handle {
@@ -479,4 +439,49 @@
 
 @include exports("data-table-resize-handle") {
   @include data-table-resize-handle;
+}
+
+// carbon-components-svelte patch (DataTable virtualize without stickyHeader)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Keep the header of a virtualized `DataTable` in view while it scrolls.
+/// Without `stickyHeader`, the wrapper around the table scrolls and the `thead`
+/// is `position: sticky`. A sticky box sticks to its nearest scroll container,
+/// and upstream's `overflow-x: auto` on `.bx--data-table-content` makes that
+/// inner `div` the scroll container (the other axis computes to `auto` too).
+/// It never scrolls vertically, so the header sticks to nothing and scrolls
+/// away with the body. The wrapper already scrolls on both axes, so the inner
+/// `div` stops being a scroll container.
+/// @access private
+/// @group components
+@mixin data-table-virtual {
+  .#{$prefix}--data-table-virtual > .#{$prefix}--data-table-content {
+    overflow: visible;
+  }
+}
+
+@include exports("data-table-virtual") {
+  @include data-table-virtual;
+}
+
+// carbon-components-svelte patch (small tag in a cell)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Keep a small `Tag` inside the cell's line. The tag is 18px, the cell's
+/// `body-compact-01` line height, but `vertical-align: middle` centers it
+/// on the font's x-height, which sits below the line's center, so the line
+/// grew to 19.39px and `compact` and `short` rows to 24.39px and 33.39px.
+/// Aligned to the top, the tag fills the line exactly.
+/// @access private
+/// @group components
+@mixin data-table-tag-sm {
+  .#{$prefix}--data-table .#{$prefix}--tag--sm {
+    vertical-align: top;
+  }
+}
+
+@include exports("data-table-tag-sm") {
+  @include data-table-tag-sm;
 }
