@@ -31,7 +31,7 @@
 <Stack gap={4}>
   <Dropdown
     labelText="Load more on scroll"
-    label="Open and scroll to the bottom…"
+    placeholder="Open and scroll to the bottom…"
     {items}
     virtualize={{ containerHeight: 240, threshold: 1 }}
     {loading}

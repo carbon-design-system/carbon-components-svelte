@@ -245,12 +245,30 @@ describe("Dropdown", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("shows the placeholder when nothing is selected", () => {
+    render(Dropdown, {
+      props: { items, labelText: "Contact", placeholder: "Choose one" },
+    });
+
+    expect(screen.getByRole("combobox")).toHaveTextContent("Choose one");
+  });
+
+  it("rejects the removed label prop in its types", () => {
+    const props: ComponentProps<DropdownComponent> = {
+      items,
+      // @ts-expect-error `label` was renamed to `placeholder`
+      label: "Choose one",
+    };
+
+    expect(props).toBeDefined();
+  });
+
   it("should hide the clear button when there is no selection", () => {
     render(Dropdown, {
       props: {
         items,
         labelText: "Contact",
-        label: "Choose a contact method",
+        placeholder: "Choose a contact method",
         clearable: true,
       },
     });
@@ -311,7 +329,7 @@ describe("Dropdown", () => {
         items,
         selectedId: "0",
         labelText: "Contact",
-        label: "Choose a contact method",
+        placeholder: "Choose a contact method",
         clearable: true,
         onclear,
       },
@@ -1305,7 +1323,7 @@ describe("Dropdown", () => {
     render(Dropdown, {
       props: {
         items,
-        label: "Choose an option",
+        placeholder: "Choose an option",
         labelText: "Contact",
       },
     });
@@ -1332,7 +1350,7 @@ describe("Dropdown", () => {
 
     const button = screen.getByRole("combobox");
     expect(button).toBeEnabled();
-    // With no label, the text falls back to ListBoxMenuIcon's "Open menu".
+    // With no placeholder, the text falls back to ListBoxMenuIcon's "Open menu".
     expect(button).toHaveTextContent("Open menu");
     expect(button).not.toHaveTextContent("undefined");
   });

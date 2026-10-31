@@ -14,7 +14,7 @@
     <Dropdown
       required
       labelText="Contact"
-      label="Select a contact method"
+      placeholder="Select a contact method"
       items={[
         { id: "0", text: "Slack" },
         { id: "1", text: "Email" },

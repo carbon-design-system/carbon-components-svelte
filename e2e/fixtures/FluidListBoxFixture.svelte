@@ -9,14 +9,14 @@
 </script>
 
 <div data-testid="fluid-list-box-neutral">
-  <Dropdown fluid labelText="Contact" label="Choose an option" {items} />
+  <Dropdown fluid labelText="Contact" placeholder="Choose an option" {items} />
 </div>
 
 <div data-testid="fluid-list-box-invalid">
   <Dropdown
     fluid
     labelText="Contact"
-    label="Choose an option"
+    placeholder="Choose an option"
     {items}
     invalid
     invalidText="This field is required"
@@ -27,7 +27,7 @@
   <Dropdown
     fluid
     labelText="Contact"
-    label="Choose an option"
+    placeholder="Choose an option"
     {items}
     warn
     warnText="This selection may be incorrect"
@@ -38,7 +38,7 @@
   <Dropdown
     fluid
     labelText="Contact"
-    label="Choose an option"
+    placeholder="Choose an option"
     {items}
     disabled
   />
@@ -48,7 +48,7 @@
   <Dropdown
     fluid
     labelText="Contact"
-    label="Choose an option"
+    placeholder="Choose an option"
     {items}
     readonly
   />
