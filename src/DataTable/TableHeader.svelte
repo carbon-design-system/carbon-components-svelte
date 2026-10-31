@@ -203,6 +203,35 @@
     hovered = false;
   }
 
+  // A resizable column can be narrower than its label, which then ends in an
+  // ellipsis. The full label shows as a `title` while it is cut.
+  /**
+   * @param {HTMLElement} label
+   * @param {boolean} enabled
+   */
+  function fullLabelTitle(label, enabled) {
+    let active = enabled;
+    const show = () => {
+      if (!active) return;
+      if (label.scrollWidth > label.clientWidth) {
+        label.title = label.textContent?.trim() ?? "";
+      } else {
+        label.removeAttribute("title");
+      }
+    };
+    label.addEventListener("mouseenter", show);
+    return {
+      /** @param {boolean} next */
+      update(next) {
+        active = next;
+        if (!next) label.removeAttribute("title");
+      },
+      destroy() {
+        label.removeEventListener("mouseenter", show);
+      },
+    };
+  }
+
   function measure() {
     measuredWidth = Math.round(headerWidth());
   }
@@ -254,7 +283,13 @@
             sortDirection === "descending"}
           on:click
         >
-          <div id={labelId} class:bx--table-header-label={true}><slot /></div>
+          <div
+            id={labelId}
+            class:bx--table-header-label={true}
+            use:fullLabelTitle={resizable}
+          >
+            <slot />
+          </div>
           <ArrowUp
             size={20}
             aria-label={ariaLabel}
@@ -283,7 +318,13 @@
           sortDirection === "descending"}
         on:click
       >
-        <div id={labelId} class:bx--table-header-label={true}><slot /></div>
+        <div
+          id={labelId}
+          class:bx--table-header-label={true}
+          use:fullLabelTitle={resizable}
+        >
+          <slot />
+        </div>
         <ArrowUp
           size={20}
           aria-label={ariaLabel}
@@ -346,6 +387,7 @@
     <div
       id={labelId}
       class:bx--table-header-label={true}
+      use:fullLabelTitle={resizable}
       class:bx--table-header-label--decorator={$$slots.decorator}
     >
       <slot />

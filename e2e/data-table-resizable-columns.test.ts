@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+import { expectTextFits } from "./helpers/layout";
 
 async function open(page: Page, query = "") {
   await page.goto(`/data-table-resizable-columns.html?${query}`);
@@ -23,6 +24,19 @@ async function center(handle: Locator) {
 }
 
 test.describe("DataTable resizable columns", () => {
+  test("ends a cut header label in an ellipsis, with the full label as a title", async ({
+    page,
+  }) => {
+    // The expand and selection columns leave "Environment" 95px.
+    await open(page, "rows=2&batch&expandable");
+    const label = page.locator("thead .bx--table-header-label").last();
+
+    await expect(label).toHaveCSS("text-overflow", "ellipsis");
+    await expectTextFits(page.getByTestId("resizable-root"));
+    await label.hover();
+    await expect(label).toHaveAttribute("title", "Environment");
+  });
+
   test("tracks the pointer one to one and moves only the columns after it", async ({
     page,
   }) => {

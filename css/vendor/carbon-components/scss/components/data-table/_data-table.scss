@@ -379,6 +379,15 @@
     position: relative;
   }
 
+  // A column can be dragged narrower than its label. The label ends in an
+  // ellipsis, and `TableHeader` shows the full label as a `title`.
+  .#{$prefix}--table-header--resizable .#{$prefix}--table-header-label {
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .#{$prefix}--table-header__resize-handle {
     position: absolute;
     top: 0;
