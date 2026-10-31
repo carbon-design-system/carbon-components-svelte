@@ -201,6 +201,9 @@
     return node.querySelector(".bx--tag__close-icon:not(:disabled)");
   }
 
+  /** Polite live region text after a tag is removed. */
+  let liveAnnouncement = "";
+
   function handleTagClose(item) {
     const index = $items.indexOf(item);
     // Closing usually removes the tag, unmounting its focused close button.
@@ -215,9 +218,14 @@
 
     dispatch("close:tag", { tag: item, index });
 
-    if (!hadFocus) return;
     tick().then(() => {
+      // The consumer decides whether the tag goes away; only announce a
+      // removal that happened.
       if (item.node?.isConnected) return;
+      liveAnnouncement = item.label
+        ? `Filter ${item.label} removed`
+        : "Filter removed";
+      if (!hadFocus) return;
       returnFocus(
         [...neighbours, overflowTriggerRef].find((el) => el?.isConnected),
       );
@@ -579,6 +587,9 @@
       </svelte:fragment>
     </TagSetOverflow>
   </Stack>
+  <div aria-live="polite" aria-atomic="true" class:bx--visually-hidden={true}>
+    {liveAnnouncement}
+  </div>
 </div>
 
 {#if mountAllTags}

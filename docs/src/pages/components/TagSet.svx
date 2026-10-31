@@ -183,7 +183,7 @@ With more hidden tags than `viewAllThreshold` (10 by default), the popover lists
 
 ## Dismissible
 
-Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response. Set `value` on each `Tag` to read it back as `tag.value`, so you can remove by id rather than by position or label.
+Set `filter` on a `Tag` to render it as closable. `TagSet` dispatches `close:tag` with `{ tag, index }` instead of taking a per-tag handler: remove the tag from your own state in response. Set `value` on each `Tag` to read it back as `tag.value`, so you can remove by id rather than by position or label. A visually hidden polite live region announces "Filter {label} removed" once the tag leaves the set.
 
 <FileSource src="/framed/TagSet/TagSetDismissible" />
 
