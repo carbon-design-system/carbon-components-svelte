@@ -77,11 +77,57 @@ describe("DataTable cellFocus", () => {
     cellAt(0, 0).focus();
 
     const left = await fireEvent.keyDown(cellAt(0, 0), { key: "ArrowLeft" });
-    const up = await fireEvent.keyDown(cellAt(0, 0), { key: "ArrowUp" });
+    const down = await fireEvent.keyDown(cellAt(2, 0), { key: "ArrowDown" });
 
     expect(cellAt(0, 0)).toHaveFocus();
     // Left unprevented, so the page scrolls as it would.
-    expect(left && up).toBe(true);
+    expect(left && down).toBe(true);
+  });
+
+  it("takes the header row into the grid, with no tab stop of its own", async () => {
+    render(DataTable, {
+      props: { headers, rows, cellFocus: true, sortable: true },
+    });
+    const buttons = [...document.querySelectorAll("thead button")];
+
+    expect(buttons).toHaveLength(3);
+    for (const button of buttons) {
+      expect(button).toHaveAttribute("tabindex", "-1");
+    }
+
+    cellAt(0, 1).focus();
+    await fireEvent.keyDown(cellAt(0, 1), { key: "ArrowUp" });
+    expect(buttons[1]).toHaveFocus();
+
+    await fireEvent.keyDown(buttons[1], { key: "ArrowRight" });
+    expect(buttons[2]).toHaveFocus();
+
+    await fireEvent.keyDown(buttons[2], { key: "Home" });
+    expect(buttons[0]).toHaveFocus();
+
+    const up = await fireEvent.keyDown(buttons[0], { key: "ArrowUp" });
+    expect(up).toBe(true);
+
+    await fireEvent.keyDown(buttons[0], { key: "ArrowDown" });
+    expect(cellAt(0, 0)).toHaveFocus();
+  });
+
+  it("focuses a header cell with no sort button", async () => {
+    render(DataTable, { props: { headers, rows, cellFocus: true } });
+    const header = document.querySelectorAll("thead th")[2];
+
+    expect(header).toHaveAttribute("tabindex", "-1");
+    cellAt(0, 2).focus();
+    await fireEvent.keyDown(cellAt(0, 2), { key: "ArrowUp" });
+    expect(header).toHaveFocus();
+  });
+
+  it("leaves the header controls in the tab order without cellFocus", () => {
+    render(DataTable, { props: { headers, rows, sortable: true } });
+
+    for (const button of document.querySelectorAll("thead button")) {
+      expect(button).not.toHaveAttribute("tabindex");
+    }
   });
 
   it("swaps the horizontal arrows in right-to-left text", async () => {

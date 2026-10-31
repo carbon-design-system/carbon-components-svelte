@@ -69,18 +69,21 @@ test.describe("DataTable timetable", () => {
     await expect(
       page.locator("tbody td.bx--data-table--highlighted-column"),
     ).toHaveCount(24);
-    const [row, column, plain] = await page.evaluate(() => {
-      const fill = (selector: string) =>
-        getComputedStyle(document.querySelector(selector) as Element)
-          .backgroundColor;
-      return [
-        fill("tbody tr:nth-child(3) td:nth-child(2)"),
-        fill("tbody tr:nth-child(1) td:nth-child(4)"),
-        fill("tbody tr:nth-child(1) td:nth-child(2)"),
-      ];
-    });
-    expect(row).not.toBe(plain);
-    expect(column).not.toBe(plain);
+    // Carbon fades the row fill in, so read it once the fade ends.
+    await expect(async () => {
+      const [row, column, plain] = await page.evaluate(() => {
+        const fill = (selector: string) =>
+          getComputedStyle(document.querySelector(selector) as Element)
+            .backgroundColor;
+        return [
+          fill("tbody tr:nth-child(3) td:nth-child(2)"),
+          fill("tbody tr:nth-child(1) td:nth-child(4)"),
+          fill("tbody tr:nth-child(1) td:nth-child(2)"),
+        ];
+      });
+      expect(row).not.toBe(plain);
+      expect(column).not.toBe(plain);
+    }).toPass();
   });
 
   test("shows a focus ring on the focused cell and drives the cross from it", async ({
@@ -138,6 +141,36 @@ test.describe("DataTable timetable", () => {
     await expect(
       page.locator(".bx--data-table_inner-container"),
     ).not.toHaveAttribute("tabindex", /.*/);
+  });
+
+  test("keeps sortable headers in the grid, out of the tab order", async ({
+    page,
+  }) => {
+    await open(page, "sortable");
+    const table = page.locator("table");
+
+    // Tab from the page lands on one cell, and the next Tab leaves the grid.
+    const focused = () =>
+      page.evaluate(() => {
+        const el = document.activeElement;
+        return el?.closest("table") ? el.tagName : "outside";
+      });
+    await page.locator("body").focus();
+    await page.keyboard.press("Tab");
+    expect(await focused()).toBe("TD");
+    await page.keyboard.press("Tab");
+    expect(await focused()).toBe("outside");
+
+    // ArrowUp from the first row reaches the column's sort button.
+    await focusFirstCell(page);
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowUp");
+    await expect(table.locator("thead button").nth(1)).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(table.locator("thead th").nth(1)).toHaveAttribute(
+      "aria-sort",
+      "ascending",
+    );
   });
 
   test("outlines the focused cell in forced colors", async ({

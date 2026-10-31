@@ -548,12 +548,14 @@
 
 // carbon-components-svelte patch (cell focus)
 
-/// The focus ring of a navigable cell (`DataTable`'s `cellFocus`), drawn
-/// inside the cell so a neighbor or a pinned column does not clip it.
+/// The focus ring of a navigable cell (`DataTable`'s `cellFocus`), in the
+/// body or the header, drawn inside the cell so a neighbor or a pinned
+/// column does not clip it.
 /// @access private
 /// @group components
 @mixin data-table-cell-focus {
-  .#{$prefix}--data-table td:focus {
+  .#{$prefix}--data-table td:focus,
+  .#{$prefix}--data-table th:focus {
     @include focus-outline("outline");
   }
 }

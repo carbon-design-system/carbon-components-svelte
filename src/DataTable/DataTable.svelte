@@ -1010,8 +1010,14 @@
     });
   }
 
+  // With `cellFocus`, header controls leave the tab order and join the
+  // grid's arrow keys. `TableHeader` reads it.
+  const cellFocusStore = writable(cellFocus);
+  $: cellFocusStore.set(cellFocus);
+
   setContext("carbon:DataTable", {
     batchSelectedIds,
+    cellFocus: cellFocusStore,
     tableRows,
     tableSize,
     resetSelectedRowIds,
@@ -1596,11 +1602,17 @@
 
   /** @param {KeyboardEvent} event */
   function handleCellKeydown(event) {
-    const cell = event.target;
+    const target = /** @type {Element} */ (event.target);
+    // A navigable body cell, or a header cell or its sort button. Other
+    // controls in a cell keep their own keys.
+    const cell = /** @type {HTMLTableCellElement | null} */ (
+      target.closest?.("td[tabindex], th[data-header]") ?? null
+    );
     if (
       !cellFocus ||
-      !(cell instanceof HTMLTableCellElement) ||
-      !cell.hasAttribute("tabindex") ||
+      !cell ||
+      !(target === cell || target.matches("button.bx--table-sort")) ||
+      event.defaultPrevented ||
       event.altKey ||
       event.shiftKey
     ) {
@@ -1609,14 +1621,14 @@
     const ctrl = event.ctrlKey || event.metaKey;
     // Only `Home` and `End` take `Ctrl`; the arrows are left to the browser with it.
     if (ctrl && event.key !== "Home" && event.key !== "End") return;
-    const target = findCellTarget(
+    const next = findCellTarget(
       cell,
       inlineKey(event.key, undefined, cell),
       ctrl,
     );
-    if (!target) return;
+    if (!next) return;
     event.preventDefault();
-    target.focus();
+    next.focus();
   }
 
   /**
@@ -1767,6 +1779,7 @@
       {/if}
       <TableHead
         style={virtualScrollContainer ? "position: sticky; top: 0;" : undefined}
+        on:keydown={handleCellKeydown}
       >
         <TableRow>
           {#if hasRowDecorator}

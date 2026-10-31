@@ -2,7 +2,7 @@
   import { DataTable } from "carbon-components-svelte";
 
   // Options come from the query string: `rtl`, `zebra`, `size=compact`,
-  // `plain` (no `crosshair` or `cellFocus`).
+  // `plain` (no `crosshair` or `cellFocus`), `sortable`.
   const params = new URLSearchParams(location.search);
   const has = (name) => params.has(name);
 
@@ -38,6 +38,7 @@
     fixedLayout
     stickyHeader
     stickyHeaderMaxHeight={320}
+    sortable={has("sortable")}
     crosshair={!has("plain")}
     cellFocus={!has("plain")}
     zebra={has("zebra")}
