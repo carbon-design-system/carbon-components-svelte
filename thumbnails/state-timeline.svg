@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>state-timeline</title>
+    <g id="state-timeline" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label-1" fill="var(--cds-text-disabled, #c6c6c6)" x="64" y="54" width="24" height="8"></rect>
+        <rect id="state-1-1" fill="var(--cds-background-brand, #0f62fe)" x="100" y="48" width="60" height="18"></rect>
+        <rect id="state-1-2" fill="var(--cds-text-disabled, #c6c6c6)" x="161" y="48" width="36" height="18"></rect>
+        <rect id="state-1-3" fill="var(--cds-background-brand, #0f62fe)" x="198" y="48" width="46" height="18"></rect>
+        <rect id="label-2" fill="var(--cds-text-disabled, #c6c6c6)" x="64" y="82" width="24" height="8"></rect>
+        <rect id="state-2-1" fill="var(--cds-text-disabled, #c6c6c6)" x="100" y="76" width="24" height="18"></rect>
+        <rect id="state-2-2" fill="var(--cds-background-brand, #0f62fe)" x="125" y="76" width="96" height="18"></rect>
+        <rect id="state-2-3" fill="var(--cds-border-subtle, #e0e0e0)" x="222" y="76" width="22" height="18"></rect>
+        <rect id="label-3" fill="var(--cds-text-disabled, #c6c6c6)" x="64" y="110" width="24" height="8"></rect>
+        <rect id="state-3-1" fill="var(--cds-background-brand, #0f62fe)" x="100" y="104" width="84" height="18"></rect>
+        <rect id="state-3-2" fill="var(--cds-support-error, #da1e28)" x="185" y="104" width="20" height="18"></rect>
+        <rect id="state-3-3" fill="var(--cds-background-brand, #0f62fe)" x="206" y="104" width="38" height="18"></rect>
+    </g>
+</svg>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>lollipop-chart</title>
+    <g id="lollipop-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <line id="stem-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="94" y1="136" x2="94" y2="88"></line>
+        <circle id="head-1" fill="var(--cds-background-brand, #0f62fe)" cx="94" cy="88" r="6"></circle>
+        <line id="stem-2" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="122" y1="136" x2="122" y2="60"></line>
+        <circle id="head-2" fill="var(--cds-background-brand, #0f62fe)" cx="122" cy="60" r="6"></circle>
+        <line id="stem-3" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="150" y1="136" x2="150" y2="76"></line>
+        <circle id="head-3" fill="var(--cds-background-brand, #0f62fe)" cx="150" cy="76" r="6"></circle>
+        <line id="stem-4" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="178" y1="136" x2="178" y2="48"></line>
+        <circle id="head-4" fill="var(--cds-background-brand, #0f62fe)" cx="178" cy="48" r="6"></circle>
+        <line id="stem-5" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="206" y1="136" x2="206" y2="68"></line>
+        <circle id="head-5" fill="var(--cds-background-brand, #0f62fe)" cx="206" cy="68" r="6"></circle>
+        <line id="stem-6" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="234" y1="136" x2="234" y2="56"></line>
+        <circle id="head-6" fill="var(--cds-background-brand, #0f62fe)" cx="234" cy="56" r="6"></circle>
+    </g>
+</svg>

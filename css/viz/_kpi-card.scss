@@ -1,0 +1,94 @@
+/// KpiCard: a metric's name, value, change, trend, and target on one tile.
+/// @access private
+/// @group viz
+@mixin viz-kpi-card {
+  .#{$prefix}--viz-kpi {
+    display: flex;
+    flex-direction: column;
+    // Cards in a row match: the tallest sets the height, the rest fill it.
+    block-size: 100%;
+    min-inline-size: to-rem(192px);
+    row-gap: $carbon--spacing-03;
+  }
+
+  // The name and its status share one line; a long status truncates
+  // rather than push the name down and the card out of line with its row.
+  .#{$prefix}--viz-kpi__head {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--viz-kpi__head > .#{$prefix}--viz-kpi__label {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--viz-kpi__head > :not(.#{$prefix}--viz-kpi__label) {
+    flex: 0 1 auto;
+    overflow: hidden;
+    min-inline-size: 0;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--viz-kpi__label,
+  .#{$prefix}--viz-kpi__subtitle,
+  .#{$prefix}--viz-kpi__as-of {
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  // The subtitle hangs off the name, closer than the row gap.
+  .#{$prefix}--viz-kpi__subtitle {
+    margin-block-start: -#{$carbon--spacing-02};
+  }
+
+  .#{$prefix}--viz-kpi__error {
+    display: flex;
+    align-items: center;
+    color: $text-error;
+    // As tall as the value it stands in for, so the row does not jump.
+    min-block-size: to-rem(40px);
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--viz-kpi__as-of {
+    margin-block-start: auto;
+  }
+
+  .#{$prefix}--viz-kpi__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $carbon--spacing-02 $carbon--spacing-04;
+  }
+
+  .#{$prefix}--viz-kpi__value {
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("heading-05");
+  }
+
+  .#{$prefix}--viz-kpi__skeleton {
+    // As tall as the value it stands in for, so nothing jumps on load.
+    min-block-size: to-rem(40px);
+  }
+
+  .#{$prefix}--viz-kpi__chart {
+    display: flex;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--viz-kpi__footer {
+    margin-block-start: auto;
+    padding-block-start: $carbon--spacing-03;
+  }
+}
+
+@include exports("viz-kpi-card") {
+  @include viz-kpi-card;
+}

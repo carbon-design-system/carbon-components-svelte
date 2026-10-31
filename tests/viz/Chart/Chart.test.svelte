@@ -1,0 +1,101 @@
+<script lang="ts">
+  import Chart from "carbon-components-svelte/viz/Chart/Chart.svelte";
+  import ChartProbe from "./ChartProbe.test.svelte";
+
+  type Row = { day: number; region: string; revenue: number | null };
+
+  export let data: ReadonlyArray<Row> = [
+    { day: 0, region: "a", revenue: 10 },
+    { day: 1, region: "a", revenue: 20 },
+    { day: 2, region: "a", revenue: 30 },
+    { day: 0, region: "b", revenue: 80 },
+    { day: 1, region: "b", revenue: 60 },
+    { day: 2, region: "b", revenue: 40 },
+  ];
+  export let x: "day" | ((row: Row) => string) = "day";
+  export let hidden: ReadonlyArray<string | number> = [];
+  export let transition = false;
+  export let selected: { series: string | number; index: number } | null = null;
+  export let title = "Revenue by region";
+  export let subtitle = "";
+  export let emitUpdate = false;
+  export let loading = false;
+  export let error = false;
+  export let errorText = "Could not load this chart";
+  export let asOf: Date | undefined = undefined;
+  export let includeY: number | undefined = undefined;
+  export let withProbe = true;
+  export let tickle = 0;
+  export let width: number | "auto" = 640;
+  export let aspectRatio: number | undefined = undefined;
+  export let maxRows: number | undefined = undefined;
+  export let zoomable = false;
+  export let brush: [number, number] | null = null;
+  let chart: Chart<Row> | undefined;
+  // biome-ignore lint/correctness/noUnusedVariables: read in the template
+  let nextDay = 100;
+  export let zoom: [number, number] | null = null;
+  export let onScales: (scales: unknown) => void = () => {};
+  export let onselect: (detail: unknown) => void = () => {};
+  export let onhover: (detail: unknown) => void = () => {};
+  export let onupdate: (detail: unknown) => void = () => {};
+  export let ontoggle: (detail: unknown) => void = () => {};
+</script>
+
+<span data-testid="tickle">{tickle}</span>
+<button
+  type="button"
+  on:click={() =>
+    chart?.push([
+      { day: nextDay++, region: "a", revenue: 5 },
+      { day: nextDay++, region: "a", revenue: 6 },
+    ])}
+>
+  push
+</button>
+
+<Chart
+  bind:this={chart}
+  {maxRows}
+  {zoomable}
+  bind:brush
+  {transition}
+  {data}
+  {x}
+  y="revenue"
+  series="region"
+  {title}
+  {subtitle}
+  {width}
+  {aspectRatio}
+  {emitUpdate}
+  {loading}
+  {error}
+  {errorText}
+  {asOf}
+  emptyText="Nothing to show"
+  bind:hidden
+  bind:selected
+  bind:zoom
+  data-testid="chart"
+  on:select={(e) => onselect(e.detail)}
+  on:hover={(e) => onhover(e.detail)}
+  on:update={(e) => onupdate(e.detail)}
+  on:legend:toggle={(e) => ontoggle(e.detail)}
+>
+  {#if withProbe}
+    <ChartProbe {includeY} {onScales} />
+  {/if}
+  <svelte:fragment slot="actions">
+    {#if subtitle}
+      <button type="button">Card menu</button>
+    {/if}
+  </svelte:fragment>
+</Chart>
+
+<output data-testid="hidden">{hidden.join(",")}</output>
+<output data-testid="zoom">{zoom ? zoom.join(",") : ""}</output>
+<output data-testid="brush">{brush ? brush.join(",") : ""}</output>
+<output data-testid="selected"
+  >{selected ? `${selected.series}:${selected.index}` : ""}</output
+>

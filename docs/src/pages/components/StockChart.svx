@@ -1,0 +1,71 @@
+---
+components: ["StockChart"]
+description: Stock chart draws a price as candles, a line, or an area, with volume along the bottom, moving averages and bands over it, and indicator panes under it that share its axis, hover, and zoom.
+---
+
+<script>
+  import { ChartThreshold, StockChart } from "carbon-components-svelte/viz";
+
+  // 120 trading days of a made-up ticker.
+  const DAY = 86_400_000;
+  const start = new Date(2026, 3, 1).getTime();
+  let price = 182;
+  const daily = [];
+  for (let i = 0; i < 120; i++) {
+    const drift = Math.sin(i / 9) * 1.4 + Math.cos(i / 23) * 0.9 + ((i * 7919) % 11) / 10 - 0.5;
+    const open = price;
+    const close = Math.round((open + drift) * 100) / 100;
+    const high = Math.round((Math.max(open, close) + ((i * 31) % 7) / 4 + 0.3) * 100) / 100;
+    const low = Math.round((Math.min(open, close) - ((i * 17) % 5) / 4 - 0.3) * 100) / 100;
+    const volume = Math.round(18_000_000 + ((i * 104_729) % 9_000_000) + Math.abs(drift) * 4_000_000);
+    daily.push({ date: new Date(start + i * DAY).toLocaleDateString("en-US", { month: "short", day: "numeric" }), open, high, low, close, volume });
+    price = close;
+  }
+  const recent = daily.slice(60);
+</script>
+
+`StockChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+
+It composes [Chart](/components/Chart) presets into the layout a finance page uses: one chart for the price, with the volume along its bottom, and one small chart per indicator under it. The panes share the x axis, the hover, and the zoom, so one chart answers a question that would otherwise take a row of small multiples.
+
+## Basic
+
+Pass one row per period with `x` for the period and `open`, `high`, `low`, `close`, and `volume` accessors. Periods are categories, so a closed day leaves no gap. Volume draws as bars in the bottom quarter of the pane on its own scale, colored by the period's direction, and the tooltip lists the four prices, the volume, and the change.
+
+<StockChart data={recent} x="date" open="open" high="high" low="low" close="close" volume="volume" yFormat={{ style: "currency", currency: "USD" }} title="ACME, last 60 days" />
+
+## Modes
+
+`mode` draws the price as `"candles"`, a `"line"`, or an `"area"` of the close. The tooltip and the table view keep all four prices either way.
+
+<StockChart data={recent} x="date" open="open" high="high" low="low" close="close" volume="volume" mode="area" yFormat={{ style: "currency", currency: "USD" }} title="ACME, last 60 days, area" height={220} />
+
+## Overlays
+
+`overlays` are computed from the close and drawn over the price: a simple or exponential moving average (`sma`, `ema`) with a `period`, or Bollinger bands (`bollinger`) with a `period` and two dashed lines either side of their average. Give one a `label` or a `color` to name it. The legend lists the overlays only and hides one on click.
+
+<StockChart data={daily} x="date" open="open" high="high" low="low" close="close" volume="volume" overlays={[{ type: "sma", period: 10 }, { type: "ema", period: 30, label: "30-day EMA" }, { type: "bollinger", period: 20 }]} yFormat={{ style: "currency", currency: "USD" }} title="ACME, daily, with averages" />
+
+## Indicators
+
+`indicators` get a pane each under the price, `indicatorHeight` tall: `rsi` with a `period` and its 30 and 70 lines, or `macd` with `fast`, `slow`, and `signal` and its histogram by sign. The panes share the hover, so one ruler crosses all of them, and `zoomBar` puts one range under the last pane with the price as its shape.
+
+<StockChart data={daily} x="date" open="open" high="high" low="low" close="close" volume="volume" overlays={[{ type: "ema", period: 20 }]} indicators={[{ type: "rsi" }, { type: "macd" }]} yFormat={{ style: "currency", currency: "USD" }} title="ACME, daily, with RSI and MACD" zoomBar />
+
+## Zoom
+
+`zoom` is the visible range as category indexes and binds, so a control outside the chart can move it, and the panes follow.
+
+<StockChart data={daily} x="date" open="open" high="high" low="low" close="close" volume="volume" indicators={[{ type: "rsi" }]} zoom={[80, 119]} yFormat={{ style: "currency", currency: "USD" }} title="ACME, the last 40 days" zoomBar />
+
+## Composition
+
+The default slot is the price pane's, so a mark composes as on any chart.
+
+<StockChart data={recent} x="date" open="open" high="high" low="low" close="close" yFormat={{ style: "currency", currency: "USD" }} title="ACME against a level" height={240}>
+  <ChartThreshold y={200} label="Resistance" kind="warning" />
+</StockChart>
+
+## Accessibility
+
+Each pane is one tab stop with the same keys as every chart: Left and Right move between periods, reading out the prices, the volume, and the overlays of that period; Up and Down move between series. The panes announce their own name, `RSI 14` or `MACD 12/26/9`, so the title says which one. The table view lists every period with its prices, overlays, and volume. A rising candle is hollow and a falling one filled, and the volume and histogram bars take the same pair of colors, so direction survives grayscale.

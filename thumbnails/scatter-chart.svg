@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>scatter-chart</title>
+    <g id="scatter-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <circle id="point-1" fill="var(--cds-background-brand, #0f62fe)" cx="90" cy="118" r="4"></circle>
+        <circle id="point-2" fill="var(--cds-background-brand, #0f62fe)" cx="100" cy="96" r="4"></circle>
+        <circle id="point-3" fill="var(--cds-background-brand, #0f62fe)" cx="106" cy="124" r="4"></circle>
+        <circle id="point-4" fill="var(--cds-background-brand, #0f62fe)" cx="116" cy="104" r="4"></circle>
+        <circle id="point-5" fill="var(--cds-background-brand, #0f62fe)" cx="124" cy="86" r="4"></circle>
+        <circle id="point-6" fill="var(--cds-background-brand, #0f62fe)" cx="132" cy="108" r="4"></circle>
+        <circle id="point-7" fill="var(--cds-background-brand, #0f62fe)" cx="144" cy="76" r="4"></circle>
+        <circle id="point-8" fill="var(--cds-background-brand, #0f62fe)" cx="150" cy="98" r="4"></circle>
+        <circle id="point-9" fill="var(--cds-background-brand, #0f62fe)" cx="162" cy="88" r="4"></circle>
+        <circle id="point-10" fill="var(--cds-background-brand, #0f62fe)" cx="170" cy="66" r="4"></circle>
+        <circle id="point-11" fill="var(--cds-background-brand, #0f62fe)" cx="182" cy="84" r="4"></circle>
+        <circle id="point-12" fill="var(--cds-background-brand, #0f62fe)" cx="190" cy="58" r="4"></circle>
+        <circle id="point-13" fill="var(--cds-background-brand, #0f62fe)" cx="202" cy="72" r="4"></circle>
+        <circle id="point-14" fill="var(--cds-background-brand, #0f62fe)" cx="214" cy="52" r="4"></circle>
+        <circle id="point-15" fill="var(--cds-background-brand, #0f62fe)" cx="224" cy="66" r="4"></circle>
+        <circle id="point-16" fill="var(--cds-background-brand, #0f62fe)" cx="236" cy="46" r="4"></circle>
+    </g>
+</svg>

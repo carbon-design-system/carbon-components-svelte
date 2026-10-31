@@ -5,6 +5,7 @@
     "paths": {
       "carbon-components-svelte": ["../src"],
       "carbon-components-svelte/tokens": ["../src/tokens/index.d.ts"],
+      "carbon-components-svelte/viz": ["../src/viz"],
       "carbon-components-svelte/*": ["../*"],
       "*": ["./*"]
     }

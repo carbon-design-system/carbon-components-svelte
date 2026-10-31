@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>stock-chart</title>
+    <g id="stock-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <polyline id="average" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" points="86,92 110,84 134,76 158,80 182,72 206,60 234,54"></polyline>
+        <line id="wick-1" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="94" y1="80" x2="94" y2="104"></line>
+        <rect id="body-1" fill="var(--cds-icon-primary, #161616)" x="89" y="86" width="10" height="12"></rect>
+        <line id="wick-2" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="116" y1="72" x2="116" y2="96"></line>
+        <rect id="body-2" stroke="var(--cds-icon-primary, #161616)" x="111.5" y="80.5" width="10" height="12" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-3" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="138" y1="64" x2="138" y2="84"></line>
+        <rect id="body-3" stroke="var(--cds-icon-primary, #161616)" x="133.5" y="70.5" width="10" height="8" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-4" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="160" y1="66" x2="160" y2="94"></line>
+        <rect id="body-4" fill="var(--cds-icon-primary, #161616)" x="155" y="74" width="10" height="14"></rect>
+        <line id="wick-5" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="182" y1="58" x2="182" y2="90"></line>
+        <rect id="body-5" stroke="var(--cds-icon-primary, #161616)" x="177.5" y="66.5" width="10" height="18" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-6" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="204" y1="46" x2="204" y2="72"></line>
+        <rect id="body-6" stroke="var(--cds-icon-primary, #161616)" x="199.5" y="52.5" width="10" height="12" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-7" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="226" y1="40" x2="226" y2="62"></line>
+        <rect id="body-7" stroke="var(--cds-icon-primary, #161616)" x="221.5" y="48.5" width="10" height="8" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <rect id="volume-1" fill="var(--cds-text-disabled, #c6c6c6)" x="89" y="128" width="10" height="8"></rect>
+        <rect id="volume-2" fill="var(--cds-text-disabled, #c6c6c6)" x="111" y="122" width="10" height="14"></rect>
+        <rect id="volume-3" fill="var(--cds-text-disabled, #c6c6c6)" x="133" y="126" width="10" height="10"></rect>
+        <rect id="volume-4" fill="var(--cds-text-disabled, #c6c6c6)" x="155" y="120" width="10" height="16"></rect>
+        <rect id="volume-5" fill="var(--cds-text-disabled, #c6c6c6)" x="177" y="124" width="10" height="12"></rect>
+        <rect id="volume-6" fill="var(--cds-text-disabled, #c6c6c6)" x="199" y="118" width="10" height="18"></rect>
+        <rect id="volume-7" fill="var(--cds-text-disabled, #c6c6c6)" x="221" y="126" width="10" height="10"></rect>
+    </g>
+</svg>

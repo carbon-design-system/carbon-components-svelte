@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>sequence-diagram</title>
+    <g id="sequence-diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="head-1" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="40" width="40" height="16"></rect>
+        <line id="lifeline-1" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="96" y1="56" x2="96" y2="136" stroke-dasharray="3 3"></line>
+        <rect id="head-2" fill="var(--cds-border-subtle, #e0e0e0)" x="140" y="40" width="40" height="16"></rect>
+        <line id="lifeline-2" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="160" y1="56" x2="160" y2="136" stroke-dasharray="3 3"></line>
+        <rect id="head-3" fill="var(--cds-border-subtle, #e0e0e0)" x="204" y="40" width="40" height="16"></rect>
+        <line id="lifeline-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="224" y1="56" x2="224" y2="136" stroke-dasharray="3 3"></line>
+        <line id="message-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" x1="96" y1="72" x2="160" y2="72"></line>
+        <polygon id="arrow-1" fill="var(--cds-background-brand, #0f62fe)" points="160,72 154,68 154,76"></polygon>
+        <line id="message-2" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" x1="160" y1="88" x2="224" y2="88"></line>
+        <polygon id="arrow-2" fill="var(--cds-border-strong, #8d8d8d)" points="224,88 218,84 218,92"></polygon>
+        <line id="message-3" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" x1="224" y1="108" x2="160" y2="108"></line>
+        <polygon id="arrow-3" fill="var(--cds-border-strong, #8d8d8d)" points="160,108 166,104 166,112"></polygon>
+        <line id="message-4" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" x1="160" y1="124" x2="96" y2="124"></line>
+        <polygon id="arrow-4" fill="var(--cds-text-disabled, #c6c6c6)" points="96,124 102,120 102,128"></polygon>
+    </g>
+</svg>

@@ -1,0 +1,549 @@
+---
+components: ["Chart", "ChartAxis", "ChartGrid", "ChartLine", "ChartArea", "ChartBars", "ChartBins", "ChartBoxes", "ChartCandles", "ChartViolins", "ChartSwarm", "ChartHexbin", "ChartContours", "ChartDumbbells", "ChartLollipops", "ChartPoints", "ChartRuler", "ChartTooltip", "ChartTooltipRow", "ChartLegend", "ChartThreshold", "ChartMarker", "ChartBand", "ChartAnomalies", "ChartAnnotations", "ChartBrush", "ChartCrosshair", "ChartErrorBars", "ChartToolbar", "ChartDataTable", "ChartZoomBar", "ChartWaterfall"]
+description: Chart is the root that chart primitives compose inside. It turns long format rows into series, scales, and a plot box, and shares them with the marks you place in it.
+---
+
+<script>
+  import { Link } from "carbon-components-svelte";
+  import {
+    BarChart,
+    Chart,
+    ChartAnnotations,
+    ChartAxis,
+    ChartBars,
+    ChartBrush,
+    ChartCrosshair,
+    ChartErrorBars,
+    ChartGrid,
+    ChartLegend,
+    ChartLine,
+    ChartPoints,
+    ChartRuler,
+    ChartThreshold,
+    ChartToolbar,
+    ChartTooltip,
+    ChartTooltipRow,
+    ChartZoomBar,
+    LineChart,
+  } from "carbon-components-svelte/viz";
+
+  const DAY = 86_400_000;
+  const START = new Date(2026, 0, 1).getTime();
+  const data = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
+    Array.from({ length: 48 }, (_, i) => ({
+      date: new Date(START + (i * DAY * 365) / 48),
+      region,
+      revenue: Math.round(30000 + r * 9000 + Math.sin(i / 5 + r) * 9000 + ((i * 7919 * (r + 1)) % 4000)),
+    })),
+  );
+  const withError = data.map((row) => ({ ...row, lo: row.revenue * 0.9, hi: row.revenue * 1.1 }));
+  const compact = (value) => new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(value);
+  const quarters = ["EMEA", "APAC", "AMER"].flatMap((region, r) =>
+    ["Q1", "Q2", "Q3", "Q4"].map((quarter, i) => ({ quarter, region, revenue: 40 + r * 15 + i * 6 + ((i * 7 + r * 3) % 9) })),
+  );
+  let brushed = null;
+  const growth = ["Free", "Team"].flatMap((product, p) =>
+    [2021, 2022, 2023, 2024, 2025, 2026].map((year, i) => ({
+      year: String(year),
+      product,
+      users: Math.round((p ? 40 : 900) * (p ? 3.1 : 2.2) ** i),
+    })),
+  );
+  const byRegion = [
+    { region: "Europe, Middle East, and Africa", revenue: 412 },
+    { region: "Asia Pacific", revenue: 296 },
+    { region: "Americas", revenue: 538 },
+  ];
+  const hours = data
+    .filter((row) => row.region === "EMEA")
+    .map((row, i) => ({ ...row, date: new Date(START + i * 3_600_000 * 1.5) }));
+</script>
+
+The chart primitives are part of the data visualization subpackage. Import them from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+
+For the common case use a ready-made chart such as [LineChart](/components/LineChart), [AreaChart](/components/AreaChart), or [BarChart](/components/BarChart). Compose the primitives yourself when you need a different arrangement.
+
+## Choosing a chart
+
+Start from the question the chart has to answer. Each preset is one import from `carbon-components-svelte/viz`; compose the primitives on this page when none fits.
+
+| Question | Chart |
+| --- | --- |
+| How does a value change over time? | [LineChart](/components/LineChart), [AreaChart](/components/AreaChart) for totals, [Sparkline](/components/Sparkline) inline |
+| How do categories compare? | [BarChart](/components/BarChart), [LollipopChart](/components/LollipopChart), [DumbbellChart](/components/DumbbellChart) for two values each |
+| How is a whole divided? | [DonutChart](/components/DonutChart), [StackedBar](/components/StackedBar), [WaffleChart](/components/WaffleChart), [TreemapChart](/components/TreemapChart) for a hierarchy |
+| How is a value distributed? | [Histogram](/components/Histogram), [BoxplotChart](/components/BoxplotChart), [ViolinPlot](/components/ViolinPlot), [BeeswarmChart](/components/BeeswarmChart) |
+| How do two measures relate? | [ScatterChart](/components/ScatterChart), with `density` for thousands of points |
+| How did a price move? | [StockChart](/components/StockChart) with volume, overlays, and indicator panes; [CandlestickChart](/components/CandlestickChart) alone |
+| What changed between two periods? | [SlopeChart](/components/SlopeChart), [WaterfallChart](/components/WaterfallChart), [DeltaIndicator](/components/DeltaIndicator) |
+| How far along is something? | [RadialProgress](/components/RadialProgress), [SegmentedProgress](/components/SegmentedProgress), [TargetIndicator](/components/TargetIndicator), [BulletChart](/components/BulletChart) |
+| Where did people drop off? | [FunnelBars](/components/FunnelBars), [FunnelChart](/components/FunnelChart), [FunnelCompare](/components/FunnelCompare) |
+| What is dense across two dimensions? | [Heatmap](/components/Heatmap), [CalendarHeatmap](/components/CalendarHeatmap), [CohortTable](/components/CohortTable) |
+| When did things happen? | [EventTimeline](/components/EventTimeline), [StateTimeline](/components/StateTimeline), [GanttChart](/components/GanttChart), [SpanWaterfall](/components/SpanWaterfall) |
+| How are things connected? | [LayeredGraph](/components/LayeredGraph), [TreeChart](/components/TreeChart), [OrgChart](/components/OrgChart), [GraphCanvas](/components/GraphCanvas) to pan and zoom, [NodeEditor](/components/NodeEditor) to edit |
+| What flows where? | [AlluvialChart](/components/AlluvialChart), [ChordDiagram](/components/ChordDiagram), [SequenceSunburst](/components/SequenceSunburst) |
+| One number on a dashboard? | [KpiCard](/components/KpiCard), or [BigNumber](/components/BigNumber) from the core library |
+| Many small charts to compare? | [SmallMultiples](/components/SmallMultiples) with any chart inside |
+
+## Principles
+
+The defaults follow a few rules, and the props are there to follow them further.
+
+| Rule | In the charts |
+| --- | --- |
+| Show the data, erase the rest | No frames, no 3D, gridlines in `border-subtle` on one axis, points only where they have room, a legend only with more than one series. Prefer `labels="end"` on a line to a legend for two or three series. |
+| Scales are promises | Bars start at zero and cannot be made not to; lines may not, with `zero` to insist. A log axis says so on its ticks. A second y axis is opt in, and reads as secondary. |
+| Color is a name, not decoration | One hue per series, fixed with `colors` across a page; status colors only for status; a symbol or pattern as the second channel for anyone who cannot see the hue apart. |
+| Numbers keep their digits where they are read | Ticks are compact, `41K`; a tooltip, the table, and the announcement write `41,250` unless a format says otherwise. |
+| Compare, do not just show | A previous period with `compare`, a threshold, an annotation, small multiples. A number without a comparison is decoration. |
+| Shape follows the data, not the box | `aspectRatio` holds a chart's proportions as its container changes, so the same series does not read steep on a phone and flat on a desk. |
+
+## Composition
+
+`Chart` reads the `data` and shares series, scales, and hover state with the marks inside it. Marks that draw in the plot go in the default slot. The tooltip and the legend are HTML, so they go in the `tooltip` and `legend` slots.
+
+<Chart {data} x="date" y="revenue" series="region" title="Revenue by region">
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" title="Revenue" />
+  <ChartThreshold y={65000} label="Target" />
+  <ChartLine curve="monotone" />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" />
+  <ChartLegend slot="legend" />
+</Chart>
+
+## Data
+
+`data` is long format: one row per x and series. `x`, `y`, and `series` name the fields, or take a function. Dates make a time axis, numbers a linear one, and strings a categorical one.
+
+Reassign `data` to update it; the chart treats rows and arrays as immutable, so a `push` into the same array changes nothing. Rows that stream in go through the chart's `push` method, reached with `bind:this`: rows pushed in one frame draw once, nothing draws in a hidden tab, and `maxRows` keeps a sliding window. For the reassign idiom, `appendWindow(data, rows, max)` does the same copy and trim. Within a series, rows are told apart by their x, or by `key` when one row's x is not enough: selection, hover, and motion follow a datum by it when rows are added before it or trimmed away, as a sliding window does. If your data is wide, with one column per series, reshape it first with `pivotLonger`.
+
+```js
+import { pivotLonger } from "carbon-components-svelte/viz";
+
+const wide = [{ month: "Jan", emea: 4, apac: 7 }];
+const data = pivotLonger(wide, { cols: ["emea", "apac"] });
+// [{ month: "Jan", series: "emea", value: 4 }, { month: "Jan", series: "apac", value: 7 }]
+```
+
+## Axes and grid
+
+### Positions and titles
+
+`ChartAxis` takes a `position` and an optional `title`, which reserves its own margin. Labels that would collide are dropped rather than rotated.
+
+<Chart {data} x="date" y="revenue" series="region" title="Axes on three sides" height={240}>
+  <ChartAxis position="bottom" title="Month" />
+  <ChartAxis position="left" title="Revenue" />
+  <ChartAxis position="right" hideLine />
+  <ChartLine />
+</Chart>
+
+### Time ticks
+
+Time ticks land on calendar boundaries. When hourly ticks span several days, the ones at midnight show the date.
+
+<Chart data={hours} x="date" y="revenue" title="Hourly ticks across three days" height={220} zero={false}>
+  <ChartGrid x dashed />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine points="none" />
+</Chart>
+
+### Log scale
+
+Set `yScale` to `"log"` for values that span orders of magnitude. The axis rounds out to whole powers of ten and never includes zero, which has no logarithm. It needs strictly positive data: with a zero or a negative value it falls back to a linear axis rather than dropping points.
+
+<Chart data={growth} x="year" y="users" series="product" title="Users, on a log axis" yScale="log" height={240}>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine points="all" />
+  <ChartLegend slot="legend" />
+  <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
+</Chart>
+
+### Secondary axis
+
+Set `secondary` to the series that belong on a second y axis, with its own domain. A `ChartAxis` on the right reads it, and so does the top one in a horizontal chart. Every mark takes a `series` prop, so each can draw its own share of the data. [ComboChart](/components/ComboChart) is the preset.
+
+### Orientation
+
+Set `orientation` to `"horizontal"` to run the x scale down the left side and the y scale along the bottom. `x` and `y` keep their meaning, so the same marks work: an axis on the left or right then reads the x scale, and one on the bottom or top reads the y scale. `ChartArea` does not support it.
+
+<Chart data={byRegion} x="region" y="revenue" title="Revenue by region" orientation="horizontal" height={200}>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartBars />
+  <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
+</Chart>
+
+## Tooltip timing
+
+Every chart's tooltip follows one clock, whether the chart is built on `Chart` or draws its own.
+
+| Moment | What happens |
+| --- | --- |
+| A pointer arrives on an item | The tooltip shows after it has rested 150 ms, so a sweep across the chart flashes nothing. `ChartTooltip` takes `delay` to change it. |
+| A key press or a tap | Shows at once. |
+| A hover synced from another chart | The ruler follows at once; the tooltip waits with the source's and shows when it does, so a sweep across small multiples flashes nothing. |
+| The pointer moves to another item | Swaps at once. |
+| The pointer leaves an item or the chart | Stays 100 ms, so crossing the gap to a neighbor never flickers, then hides and the hover clears. |
+| The pointer comes back within 300 ms of hiding | Shows at once; later it waits again. |
+| A click or a tap | Pins it until another click, <DocKbd label="Escape" />, or a press outside the chart. |
+
+## Tooltip anatomy
+
+A tooltip is a title, the hovered x, over one row per series: a swatch, the label, and the value pushed to the right. Presets add rows of their own, such as a candle's change or a task's dates, and a row without a swatch is one that names no series. The gallery lays every composition out still, to check spacing without hovering.
+
+| Class | Part |
+| --- | --- |
+| `bx--viz-chart-tooltip` | The box: inverse background, a shadow, 8 px by 16 px padding, 128 px minimum width. |
+| `bx--viz-chart-tooltip__title` | The x label or item name, semibold, with a 4 px gap below. |
+| `bx--viz-chart-tooltip__row` | A flex row, 8 px gap, from `ChartTooltipRow`. |
+| `bx--viz-chart-tooltip__swatch`, `__label`, `__value` | The 8 px square, the name, and the value pushed to the right by at least 16 px. |
+| `--flipped`, `--above`, `--fixed`, `--pinned` | Placement past the middle, over a row, in a facet corner, and held in place. |
+
+<FileSource src="/framed/Chart/ChartTooltipGallery" />
+
+## Tooltip rows
+
+Rows come in series order. `sort` reorders them, `maxRows` folds the rest into one "+N more" line, and both reach a preset through its `tooltip` prop, which takes `false` or an options object. A stacked bar or area lists the top of the stack first by default, since that is how the eye reads it.
+
+| `sort` | Order |
+| --- | --- |
+| `"series"` | As the series are. The default. |
+| `"stack"` | The top of the stack first. The default when a preset stacks. |
+| `"value"`, `"value-asc"` | Largest first, or smallest. |
+| `(a, b) => number` | Any order, over the hovered points. Each point's `datum` is the row, typed from `data`. |
+
+<Chart {data} x="date" y="revenue" series="region" title="Largest first, two rows" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" sort="value" maxRows={2} />
+</Chart>
+
+## Crosshair
+
+`ChartCrosshair` is the ruler plus the values: the hovered x written on the bottom axis, a line and the hovered y on the left one, each in a badge. It reads at a glance where a tooltip would be too much, and pairs with `tooltip={false}` on a preset. `series` picks whose y the badge shows; `yBadge={false}` leaves the x alone.
+
+<Chart {data} x="date" y="revenue" series="region" title="Values on the axes" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartCrosshair />
+</Chart>
+
+## Custom tooltip
+
+`ChartTooltip` passes `x`, `xLabel`, and the hovered `points` to its slot. Each point carries its `series`, `datum`, `color`, and a formatted `value`.
+
+A click, or a tap on a touch screen, pins the tooltip on its point so it can be read and its text selected; another click, <DocKbd label="Escape" />, or a press outside the chart releases it.
+
+<Chart {data} x="date" y="revenue" series="region" title="Custom tooltip" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartRuler />
+  <svelte:fragment slot="tooltip">
+    <ChartTooltip let:points let:xLabel>
+      <strong>Week of {xLabel}</strong>
+      {#each points as point (point.series)}
+        <ChartTooltipRow color={point.color} label={`${point.series} region`} value={`$${point.value}`} />
+      {/each}
+    </ChartTooltip>
+  </svelte:fragment>
+</Chart>
+
+## Thresholds
+
+`ChartThreshold` takes a `kind` of `"error"`, `"warning"`, `"success"`, or `"info"`. The chart keeps the value inside the y domain for as long as the threshold is mounted.
+
+<Chart {data} x="date" y="revenue" series="region" title="Two thresholds" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartThreshold y={70000} label="Stretch" kind="success" />
+  <ChartThreshold y={25000} label="Floor" kind="warning" />
+  <ChartLine />
+</Chart>
+
+### Ranges
+
+Set `to` for a second value, and the space between the two is shaded: an acceptable band, a target zone, a forecast interval. The rule stays at `y`, so the range never rests on the tint alone, and both values stay inside the y domain.
+
+<Chart {data} x="date" y="revenue" series="region" title="An acceptable band" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartThreshold y={45000} to={60000} label="Target zone" kind="success" />
+  <ChartLine />
+</Chart>
+
+## Labels
+
+Marks write their values when asked. `ChartBars` takes `labels`: `"outside"` past the bar's end, `"inside"` on the bar, or `"auto"`, outside where the bar is wide enough and nothing where it is not. A stacked chart labels its totals. `ChartLine` takes `"end"` for the series name at the line's end, or `"all"` for every value; `ChartPoints` takes a `label` accessor. Every label yields to a neighbor rather than cover it, so a dense chart keeps the ones that read.
+
+<Chart {data} x="date" y="revenue" series="region" title="Labelled bars" height={260}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartBars labels="auto" />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+<Chart {data} x="date" y="revenue" series="region" title="Lines named at their ends" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine labels="end" />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+## Error bars
+
+`ChartErrorBars` draws an interval per datum from `lo` and `hi` accessors, or `y ± error` with `error`. With `bars` set to the bars' options it centers on each bar of a grouped chart; otherwise it sits on the x position, for lines and points. The tooltip reads the interval from each point's `datum`.
+
+<Chart data={withError} x="date" y="revenue" series="region" title="Revenue with a confidence interval" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartBars />
+  <ChartErrorBars lo="lo" hi="hi" bars={{}} />
+  <svelte:fragment slot="tooltip">
+    <ChartTooltip let:points let:xLabel>
+      <strong>{xLabel}</strong>
+      {#each points as point (point.series)}
+        <ChartTooltipRow color={point.color} label={String(point.series)} value={`${point.value} (${compact(point.datum.lo)} to ${compact(point.datum.hi)})`} />
+      {/each}
+    </ChartTooltip>
+  </svelte:fragment>
+</Chart>
+
+## Annotations
+
+`ChartAnnotations` marks moments and points with a short label. An item with `x` alone is a dashed rule across the plot; one with `y` too is a ring on that point, which the chart keeps inside its domain. `kind` colors the marker with a status token. Labels take the first free corner around their anchor and a leader line connects them.
+
+<Chart {data} x="date" y="revenue" series="region" title="Annotated" height={260}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartAnnotations items={[{ x: data[20].date, label: "Pricing change", kind: "info" }, { x: data[40].date, y: data[40].revenue, label: "Outage", kind: "error" }]} />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+## Loading, empty, and error
+
+Set `loading` while the data is on its way. A skeleton covers the plot, the axes stay in place so nothing jumps when the data lands, and the chart is marked busy for assistive technology. The wrappers, such as `LineChart`, take the same props.
+
+Set `error` when the fetch failed. The chart keeps its box and title, writes `errorText` in the error color where the data would be, and the `error` slot takes an action such as a retry button. Dashboards fail more often than they are empty, so the state is first class. `asOf` writes when the data was fetched in the header, so a cached chart says so.
+
+<Chart data={[]} x="date" y="revenue" title="Error" height={200} error asOf={new Date(2026, 9, 24, 9, 41)}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <svelte:fragment slot="error">Could not reach the revenue service. <Link href="#">Retry</Link></svelte:fragment>
+</Chart>
+
+<Chart data={[]} x="date" y="revenue" title="Loading" height={200} loading>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+</Chart>
+
+With no data and `loading` unset, the plot shows `emptyText`. Fill the `empty` slot for anything richer, such as a link to change the filters.
+
+<Chart data={[]} x="date" y="revenue" title="Empty" height={200} emptyText="No revenue in this period">
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+</Chart>
+
+Every chart takes the same two props. Flip them here to see a Cartesian chart keep its axes while it loads, and the others swap in a box of their own size.
+
+<FileSource src="/framed/Chart/ChartStates" />
+
+## Toolbar and data table
+
+`ChartToolbar` goes in the `toolbar` slot. It switches the chart to a table of every value and downloads what the chart shows as CSV: the series that are not hidden, within the zoom window, in the same long format the chart reads with ISO dates, plain numbers, and an empty field for a missing value. A label that starts like a spreadsheet formula is quoted. Anything in its default slot sits before the buttons.
+
+Set `copy` for a button that copies the same data to the clipboard, as tab-separated cells by default so they paste into a spreadsheet, or as CSV or JSON rows with `copyFormat`; `copyImage` copies the plot as a PNG where the browser allows it, and `print` prints the page. Each button has a label prop for translation, and a failed download or copy fires `export:error` instead of throwing. On a preset, `toolbar` takes the toolbar's own props: `toolbar={{ filename: "revenue", copy: true }}`.
+
+The table is the chart's text alternative. `Chart` renders a `ChartDataTable` when `view` is `"table"`, so it is available even without the toolbar. Bind `view` to drive it from your own control, and use the `table` slot to replace it.
+
+<Chart {data} x="date" y="revenue" series="region" title="Revenue by region" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartToolbar slot="toolbar" filename="revenue-by-region" copy />
+  <ChartLegend slot="legend" />
+</Chart>
+
+### Image and fullscreen
+
+The toolbar also downloads the plot as an image and shows the chart fullscreen. Set `image` to `"png"` (the default), `"svg"`, or `false`, and `fullscreen` to `false` to drop that button. It is left out on its own where the browser has no Fullscreen API, such as Safari on iPhone.
+
+The image holds the plot, the title, and the visible series, on the background the chart sits on, so it matches the theme. Styles are resolved and written into the file, because the custom properties that color the chart mean nothing outside the page. Web fonts cannot follow, so text falls back to a system font. A PNG is drawn at twice the pixel density.
+
+While fullscreen, the plot grows to fill what the title, toolbar, and legend leave of the screen, and returns to `height` on exit.
+
+Both are on the chart context for a control of your own: `exportImage("png" | "svg")` resolves to a `Blob` or to markup, and `toggleFullscreen()` pairs with the `fullscreen` store.
+
+## Motion
+
+Set `transition` to animate bars and points to their new place when the data changes, instead of snapping. A chart arrives in place: nothing moves on its first paint, only after. Lines redraw at once. Nothing moves where the user prefers reduced motion. `TreemapChart` takes the same prop for its cells, each of which moves in a straight line to its new place.
+
+<FileSource src="/framed/Chart/ChartMotion" />
+
+## Compare periods
+
+Set `compare` to overlay the previous period. Every row shifted forward by `period`, milliseconds on a time axis, becomes a ghost of its series: dashed, in the same color, out of the legend, and written under its series in the tooltip with the change. The data holds both periods; the chart draws the earlier one on top of the later.
+
+<Chart {data} x="date" y="revenue" series="region" title="Against the previous eight weeks" height={260} compare={{ period: 8 * 7 * 86400000 }}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartRuler />
+  <ChartTooltip slot="tooltip" />
+  <ChartLegend slot="legend" />
+</Chart>
+
+## Brush
+
+`ChartBrush` lets a drag across the plot pick an x range. The range binds as `brush`, in data space, and fires `brush` when the drag ends; a click on the plot clears it, as does <DocKbd label="Escape" />. From the keyboard, <DocKbd label="Shift" /> with an arrow key grows a brush from the focused point. Presets take `brushable` and bind `brush` the same way. The brush is a range to act on, a filter for a table or a window for another chart, where the zoom bar changes what this chart shows.
+
+<Chart {data} x="date" y="revenue" series="region" title="Drag across the plot" height={240} bind:brush={brushed}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine />
+  <ChartBrush />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+<p>{brushed ? `${new Date(brushed[0]).toDateString()} to ${new Date(brushed[1]).toDateString()}` : "Nothing brushed"}</p>
+
+## Linked charts
+
+Charts that share a `syncId` share hover: one ruler across all of them. `sync` says what else travels: the zoom range, the brush, the selection, and `"hidden"`, the series a legend has hidden. A click in one chart then selects the same x in the others, in the same series where they have it, which is how a dashboard filters by a bar without any wiring. Shift-click adds to `selection` instead of replacing it.
+
+<BarChart data={quarters} x="quarter" y="revenue" series="region" title="Click a bar" syncId="linked" sync={["hover", "selection"]} height={220} />
+<LineChart data={quarters} x="quarter" y="revenue" series="region" title="The line follows" syncId="linked" sync={["hover", "selection"]} height={220} />
+
+## Zoom
+
+`ChartZoomBar` goes in the `zoom` slot, under the plot. It draws the whole dataset small, with a window over the visible range: drag a handle to resize it, drag the window to pan, and double click to reset. While a zoom, a brush, or a selection is set, a reset button sits in the chart's header, by the title; `reset={false}` drops it. Bind `zoom` on the chart to read or set the range yourself. On a category axis the range is category indexes, and the slots shown grow to fill the plot.
+
+While zoomed, marks are clipped to the plot and the y axis keeps its full range, so values stay comparable as the window moves. Set `zoomable` to zoom from the plot itself, without a bar: Ctrl or Cmd with the wheel or a pinch zooms about the pointer, Shift and a drag pans while zoomed, and `+`, `-`, and `0` zoom from the keyboard. Plain scrolling over a chart still scrolls the page.
+
+<Chart {data} x="date" y="revenue" series="region" title="Revenue by region" height={220}>
+  <ChartGrid />
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartLine points="none" />
+  <ChartZoomBar slot="zoom" />
+  <ChartLegend slot="legend" />
+  <svelte:fragment slot="tooltip"><ChartTooltip /></svelte:fragment>
+</Chart>
+
+## Shapes and patterns
+
+Color is the first channel for a series and should not be the only one. `ChartPoints` takes `symbol`, `ChartBars` and `ChartArea` take `pattern`: `"auto"` gives each series its own symbol or fill in order, a map names them. The legend draws the same shape in its swatch, so the chart reads in print, under forced colors, and to a reader who does not see the hues apart. The presets expose them as `symbols` on `ScatterChart` and `patterns` on `BarChart` and `AreaChart`.
+
+<Chart {data} x="date" y="revenue" series="region" title="A symbol per series" height={240}>
+  <ChartAxis position="bottom" />
+  <ChartAxis position="left" />
+  <ChartPoints symbol="auto" />
+  <ChartLegend slot="legend" />
+  <ChartTooltip slot="tooltip" />
+</Chart>
+
+<BarChart data={quarters} x="quarter" y="revenue" series="region" title="A pattern per series" patterns="auto" height={220} />
+
+## Color palettes
+
+Every color is a `--cds-viz-*` custom property declared by `viz.css`, so it follows the theme and can be overridden like any other token. On a page of charts, wrap them in `ChartColors` with a map from series key to color, so a series keeps one color everywhere however many series each chart has; a chart's own `colors` win over it. Pass a name without the prefix, such as `"cat-03"`, anywhere a color is accepted, or resolve one with `vizColor()`. Switch the theme in the page header to see each palette change.
+
+- **Categorical**: fourteen colors, in the order Carbon prescribes, for six series or more: `cat-01` to `cat-14`. A categorical index, as in `color={3}`, picks from these.
+- **Groups**: for one to five series, whole groups chosen to contrast with each other, several options each: `group-<size>-<option>-<index>`. Charts use option 1 unless `palette` says otherwise.
+- **Sequential**: eleven steps from low to high in four hues: `seq-<hue>-01` to `-11`. Low is the step nearest the background, so dark themes reverse the swatches.
+- **Diverging**: seventeen steps around a neutral midpoint at 09, in two palettes: `div-<low>-<high>-01` to `-17`. The midpoint matches the background, so the extremes are always the loudest steps.
+- **Labels on a ramp**: `seq-on-<step>` and `div-on-<step>` are the text colors that hold 4.5:1 on each step. Which steps need dark text differs by theme, which is why they are tokens. `contrastTextColor()` names the right one.
+- **Semantic**: `interactive`, `neutral`, `success`, `error`, `warning`, and `info`, aliases of core theme tokens for marks that carry status. Status never rests on these alone: components pair them with an icon, a shape, or text.
+
+`colors` and `hidden` are keyed by series values, which TypeScript cannot read off the row type. Name the union yourself and let `satisfies` check the keys:
+
+```svelte
+<script lang="ts">
+  import type { VizColor } from "carbon-components-svelte/viz";
+
+  type Region = "EMEA" | "APAC" | "AMER";
+  const colors = { EMEA: "cat-01", APAC: "cat-03" } satisfies Partial<Record<Region, VizColor>>;
+</script>
+```
+
+<FileSource src="/framed/Chart/VizPalettes" />
+
+## In a dashboard
+
+Charts sit on tiles inside a `Layer`, read its tokens, and fill their columns: KPI tiles in a row, charts beside each other, and a table with inline graphics in its cells.
+
+<FileSource src="/framed/Chart/ChartDashboard" />
+
+## Server rendering
+
+Every chart renders on the server: axes, marks, and legend, laid out at a nominal width until a browser measures the container, so pass a numeric `width` where the layout must not change on hydration. A chart writes ids into its SVG, for a clip path or a pattern, under its `id`; set one per chart on a server-rendered page so the markup the server sends is the markup the client expects. Canvas-drawn points come after hydration, and the data table is built on demand.
+
+## Conventions
+
+The presets share one vocabulary, so what you learn on one chart carries to the next.
+
+| Prop or event | Meaning |
+| --- | --- |
+| `data` | Rows, one per mark, read through accessor props such as `x`, `y`, `series`, `value`, `label`, `id`, `parent`, `group`. An accessor is a field name or a function of the row. |
+| `nodes`, `links` | A graph's rows and the pairs between them, read with `source` and `target`. |
+| `values`, `stages` | A plain array of numbers for a sparkline or strip; the stages of a funnel. |
+| `title`, `subtitle` | The caption of a chart, also its accessible name, and the line under it: a unit, a definition, a period. |
+| `label` | On a micrographic, its accessible name. On a chart, the accessor for a mark's label. |
+| `size` | `"sm"`, `"md"`, or `"lg"`. Only `ScatterChart` uses `size` for the bubble accessor. |
+| `width`, `height`, `aspectRatio` | Pixels. Charts built on `Chart` also take `width="auto"` to fill their container, and `aspectRatio` to let the height follow the width. |
+| `format`, `xFormat`, `yFormat` | `Intl.NumberFormat` options or a function of the value. `locale` goes with them. |
+| `palette`, `colors`, `color` | A group option number, or a sequential hue on heat charts; a map from series to a token; one token. Values are `--cds-viz-*` names, never colors. |
+| `legend`, `legendPosition`, `maxLegendItems` | Whether to draw the legend, where (`bottom`, `right`, `top`, `left`), and how many items show before the rest fold behind a "more" button. Pointing at an item dims the other series. |
+| `sort`, `valueType` | Enums: `"none" \| "value"`; `"value" \| "percent"`, with `"both"` or `"none"` where a chart can write them. |
+| `selectable`, `selected` | Selection is opt in. `selected` is the row id, the index on an index-keyed strip, or `{ series, index, key }` on a Cartesian chart, where `key` is what identifies the datum within its series and finds it again when the data changes. |
+| `hidden` | Series keys the legend has hidden; bind it. |
+| `loading`, `emptyText`, `error`, `errorText` | A skeleton while data is on its way, the message when there is none, and the error state with an `error` slot for a retry action. Loading wins over error, error over empty. |
+| `asOf`, `asOfLabel` | When the data was fetched, written in the header so stale data says so. On charts built on `Chart`, and on `KpiCard`. |
+| `actions` slot | A place in the header, beside the toolbar, for a card's own controls: an `OverflowMenu`, a link to the report. On charts built on `Chart`. |
+| `hover` | The hovered item, or `null` when the pointer leaves. |
+| `select` | `{ <item>, originalEvent }`, the same item `hover` carries, when `selectable` is set. |
+| `toggle`, `legend:toggle`, `threshold`, `brush`, `zoom` | `{ id, collapsed }`; `{ series, hidden }`; `{ threshold, direction, value }`; a brush or zoom range. |
+| `update` | After the data changes, with what is now drawn. Fires only with `emitUpdate`. |
+
+Tooltips never take the pointer, wait for a mouse to settle, show at once from the keyboard or a tap, pin on click until Escape or a press outside, and flip only where they fit. Every chart is one tab stop: arrows move within it, <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the ends, <DocKbd label="Enter" /> or <DocKbd label="Space" /> selects, and <DocKbd label="Escape" /> clears.
+
+## Writing a mark
+
+A mark is a component that reads the chart context and renders SVG. `groups` holds the series, `scales` maps data to pixels, and `hover` holds the focused point. Subscribe only to what you draw from: a mark that reads `groups` and `scales` but not `hover` never re-renders while the pointer moves.
+
+```svelte
+<script>
+  import { getContext } from "svelte";
+  import { CHART_CONTEXT } from "carbon-components-svelte/viz";
+
+  const { groups, scales } = getContext(CHART_CONTEXT);
+</script>
+
+{#each $groups as group (group.key)}
+  <text x={$scales.plot.x1} y={$scales.y.map(group.ys.at(-1))}>{group.key}</text>
+{/each}
+```
+
+`scales.x` and `scales.y` return positions along their own scale. In a horizontal chart `scales.horizontal` is `true`, and `x.map` gives a vertical pixel while `y.map` gives a horizontal one, so a mark that supports both swaps the two when it draws.
+
+## Accessibility
+
+Every chart has a data table view, which is its text alternative. The chart itself is one tab stop with `role="application"`. Left and Right move between data points, Up and Down between series, Home and End jump to the ends, Enter or Space selects, and Escape clears. The focused point is announced through a live region with a full x label. The tooltip and the axes are hidden from assistive technology so that nothing is read twice. Always set `title`.
+
+Under forced colors (Windows contrast themes) axis and label text takes the system text color; swatches, bars, slices, and leaves keep their series color, since color is how a series is named, and bars gain an outline; the loading state keeps a dashed edge where its shimmer was. In print the tooltip, toolbar, ruler, and zoom bar are dropped, a chart does not break across pages, and a mark drawn as a background, such as a heatmap or status cell, keeps its color.

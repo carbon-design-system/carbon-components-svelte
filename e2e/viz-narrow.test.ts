@@ -1,0 +1,88 @@
+import { expect, test } from "@playwright/test";
+
+// Charts lay out by their container: nothing spills past a narrow box, and
+// a legend with many series folds behind a "more" button instead of
+// taking the plot's height.
+test("viz charts fit a narrow container and fold long legends", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  await page.setViewportSize({ width: 1440, height: 1200 });
+  await page.goto("/viz-narrow.html");
+  await expect(page.locator("figure")).toHaveCount(24);
+
+  for (const width of [240, 320, 390, 480]) {
+    const box = page.getByTestId(`box-${width}`);
+    // biome-ignore lint/performance/noAwaitInLoops: one box at a time
+    const spills = await box.evaluate((el) =>
+      [...el.querySelectorAll("figure")].map((figure) => ({
+        title: figure
+          .querySelector("figcaption, .bx--viz-chart__title")
+          ?.textContent?.trim(),
+        overflow: figure.scrollWidth - figure.clientWidth,
+        // Tick labels draw outside the SVG's box when they run long; a
+        // category name ends in an ellipsis before it leaves the figure.
+        labelsOutside: [...figure.querySelectorAll(".bx--viz-axis__label")]
+          .filter((label) => {
+            const box = label.getBoundingClientRect();
+            const edge = figure.getBoundingClientRect();
+            return box.left < edge.left - 0.5 || box.right > edge.right + 0.5;
+          })
+          .map((label) => label.textContent),
+        outside:
+          Math.round(figure.getBoundingClientRect().right) -
+          Math.round(el.getBoundingClientRect().right),
+      })),
+    );
+    for (const s of spills) {
+      expect
+        .soft(s.overflow, `${width}px: ${s.title} does not scroll`)
+        .toBeLessThanOrEqual(0);
+      expect
+        .soft(s.outside, `${width}px: ${s.title} inside its box`)
+        .toBeLessThanOrEqual(0);
+      expect
+        .soft(s.labelsOutside, `${width}px: ${s.title} axis labels inside`)
+        .toEqual([]);
+    }
+    // Fourteen series fold to eight and a button: five rows at most, even
+    // where two labels fit a row.
+    const legend = box.locator(".bx--viz-legend").first();
+    await expect(legend.locator(".bx--viz-legend__more")).toHaveText("+6 more");
+    expect
+      .soft(
+        await legend.evaluate((el) => el.getBoundingClientRect().height),
+        `${width}px: legend folded`,
+      )
+      .toBeLessThanOrEqual(100);
+  }
+
+  const legend = page.getByTestId("box-480").locator(".bx--viz-legend").first();
+  await legend.locator(".bx--viz-legend__more").click();
+  await expect(
+    legend.locator(".bx--viz-legend__item:not(.bx--viz-legend__more)"),
+  ).toHaveCount(14);
+  await expect(legend.locator(".bx--viz-legend__more")).toHaveText("Show less");
+});
+
+// The plot does not mirror on an RTL page, so its text keeps a left-to-right
+// base direction: y tick labels end before the axis line, and a minus sign
+// stays before its number.
+test("viz axis labels keep their side on an RTL page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1200 });
+  await page.goto("/viz-narrow.html");
+  await page.evaluate(() =>
+    document.documentElement.setAttribute("dir", "rtl"),
+  );
+  const chart = page.getByTestId("box-480").locator("figure").first();
+  const gaps = await chart.evaluate((figure) => {
+    const line = figure
+      .querySelector(".bx--viz-axis--left .bx--viz-axis__line")
+      ?.getBoundingClientRect();
+    return [
+      ...figure.querySelectorAll(".bx--viz-axis--left .bx--viz-axis__label"),
+    ].map((label) => (line?.left ?? 0) - label.getBoundingClientRect().right);
+  });
+  expect(gaps.length).toBeGreaterThan(0);
+  for (const gap of gaps) expect(gap).toBeGreaterThanOrEqual(4);
+});

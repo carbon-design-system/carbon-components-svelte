@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>funnel-chart</title>
+    <g id="funnel-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="stage-1" fill="var(--cds-background-brand, #0f62fe)" points="76,40 244,40 220,62 100,62" fill-opacity="1"></polygon>
+        <polygon id="stage-2" fill="var(--cds-background-brand, #0f62fe)" points="101,64 219,64 201,86 119,86" fill-opacity="0.75"></polygon>
+        <polygon id="stage-3" fill="var(--cds-background-brand, #0f62fe)" points="120,88 200,88 188,110 132,110" fill-opacity="0.5"></polygon>
+        <polygon id="stage-4" fill="var(--cds-background-brand, #0f62fe)" points="133,112 187,112 180,134 140,134" fill-opacity="0.3"></polygon>
+    </g>
+</svg>

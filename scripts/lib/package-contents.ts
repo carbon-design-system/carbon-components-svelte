@@ -38,10 +38,11 @@ const REQUIRED: [string, RegExp][] = [
 
 /**
  * Release builds (all themes, doc comments stripped) unpack to ~5.7 MB as of
- * 0.112.1. The budget leaves room for real source growth while still
+ * 0.112.1, and ~6.6 MB with the `viz` subpackage (35 charts, their CSS, and
+ * types). The budget leaves room for real source growth while still
  * tripping on an artifact the size of the parse cache.
  */
-export const UNPACKED_SIZE_BUDGET = 6_500_000;
+export const UNPACKED_SIZE_BUDGET = 7_500_000;
 
 export function packageContentProblems(
   files: PackedFile[],

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>up-set-plot</title>
+    <g id="up-set-plot" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="size-1" fill="var(--cds-background-brand, #0f62fe)" x="112" y="44" width="14" height="52"></rect>
+        <rect id="size-2" fill="var(--cds-border-strong, #8d8d8d)" x="136" y="60" width="14" height="36"></rect>
+        <rect id="size-3" fill="var(--cds-border-strong, #8d8d8d)" x="160" y="68" width="14" height="28"></rect>
+        <rect id="size-4" fill="var(--cds-border-strong, #8d8d8d)" x="184" y="76" width="14" height="20"></rect>
+        <rect id="size-5" fill="var(--cds-border-strong, #8d8d8d)" x="208" y="84" width="14" height="12"></rect>
+        <rect id="set-1" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="106" width="28" height="8"></rect>
+        <rect id="set-2" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="120" width="28" height="8"></rect>
+        <rect id="set-3" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="134" width="28" height="8"></rect>
+        <circle id="dot-1-1" fill="var(--cds-background-brand, #0f62fe)" cx="119" cy="110" r="4"></circle>
+        <circle id="dot-1-2" fill="var(--cds-text-secondary, #525252)" cx="143" cy="110" r="4"></circle>
+        <circle id="dot-1-3" fill="var(--cds-border-subtle, #e0e0e0)" cx="167" cy="110" r="4"></circle>
+        <circle id="dot-1-4" fill="var(--cds-text-secondary, #525252)" cx="191" cy="110" r="4"></circle>
+        <circle id="dot-1-5" fill="var(--cds-border-subtle, #e0e0e0)" cx="215" cy="110" r="4"></circle>
+        <circle id="dot-2-1" fill="var(--cds-background-brand, #0f62fe)" cx="119" cy="124" r="4"></circle>
+        <circle id="dot-2-2" fill="var(--cds-border-subtle, #e0e0e0)" cx="143" cy="124" r="4"></circle>
+        <circle id="dot-2-3" fill="var(--cds-text-secondary, #525252)" cx="167" cy="124" r="4"></circle>
+        <circle id="dot-2-4" fill="var(--cds-text-secondary, #525252)" cx="191" cy="124" r="4"></circle>
+        <circle id="dot-2-5" fill="var(--cds-border-subtle, #e0e0e0)" cx="215" cy="124" r="4"></circle>
+        <circle id="dot-3-1" fill="var(--cds-border-subtle, #e0e0e0)" cx="119" cy="138" r="4"></circle>
+        <circle id="dot-3-2" fill="var(--cds-text-secondary, #525252)" cx="143" cy="138" r="4"></circle>
+        <circle id="dot-3-3" fill="var(--cds-text-secondary, #525252)" cx="167" cy="138" r="4"></circle>
+        <circle id="dot-3-4" fill="var(--cds-border-subtle, #e0e0e0)" cx="191" cy="138" r="4"></circle>
+        <circle id="dot-3-5" fill="var(--cds-text-secondary, #525252)" cx="215" cy="138" r="4"></circle>
+        <line id="join-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x1="119" y1="110" x2="119" y2="124"></line>
+        <line id="join-2" stroke="var(--cds-text-secondary, #525252)" stroke-width="2" x1="143" y1="110" x2="143" y2="138"></line>
+        <line id="join-3" stroke="var(--cds-text-secondary, #525252)" stroke-width="2" x1="167" y1="124" x2="167" y2="138"></line>
+        <line id="join-4" stroke="var(--cds-text-secondary, #525252)" stroke-width="2" x1="191" y1="110" x2="191" y2="124"></line>
+    </g>
+</svg>

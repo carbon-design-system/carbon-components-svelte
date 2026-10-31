@@ -1,0 +1,22 @@
+/// FilterChips: a dashboard's filters as dismissible tags.
+/// @access private
+/// @group viz
+@mixin viz-filter-chips {
+  .#{$prefix}--viz-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-02 $carbon--spacing-03;
+    min-block-size: to-rem(32px);
+  }
+
+  .#{$prefix}--viz-filter-chips__empty {
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+}
+
+@include exports("viz-filter-chips") {
+  @include viz-filter-chips;
+}

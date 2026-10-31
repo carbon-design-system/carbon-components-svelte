@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>segmented-progress</title>
+    <g id="segmented-progress" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="66" width="64" height="8"></rect>
+        <rect id="segment-1" fill="var(--cds-background-brand, #0f62fe)" x="76" y="84" width="31" height="8"></rect>
+        <rect id="segment-2" fill="var(--cds-background-brand, #0f62fe)" x="111" y="84" width="31" height="8"></rect>
+        <rect id="segment-3" fill="var(--cds-background-brand, #0f62fe)" x="146" y="84" width="31" height="8"></rect>
+        <rect id="segment-4" fill="var(--cds-border-subtle, #e0e0e0)" x="181" y="84" width="31" height="8"></rect>
+        <rect id="segment-5" fill="var(--cds-border-subtle, #e0e0e0)" x="216" y="84" width="31" height="8"></rect>
+    </g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>area-chart</title>
+    <g id="area-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <path id="layer-1" fill="var(--cds-background-brand, #0f62fe)" fill-opacity="0.5" d="M84,112 L112,100 L140,104 L168,88 L196,92 L224,76 L244,80 L244,136 L84,136 Z"></path>
+        <path id="layer-2" fill="var(--cds-background-brand, #0f62fe)" fill-opacity="0.2" d="M84,84 L112,64 L140,72 L168,48 L196,56 L224,36 L244,44 L244,80 L224,76 L196,92 L168,88 L140,104 L112,100 L84,112 Z"></path>
+        <polyline id="line-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="84,112 112,100 140,104 168,88 196,92 224,76 244,80"></polyline>
+        <polyline id="line-2" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="84,84 112,64 140,72 168,48 196,56 224,36 244,44"></polyline>
+    </g>
+</svg>

@@ -1,0 +1,38 @@
+---
+components: ["ParetoChart"]
+description: Pareto chart sorts categories largest first and runs their cumulative share to 100%, so the few causes behind most of the effect stand out.
+---
+
+<script>
+  import { ParetoChart } from "carbon-components-svelte/viz";
+
+  const tickets = [
+    { cause: "Timeout", count: 120 },
+    { cause: "Crash on save", count: 310 },
+    { cause: "Login loop", count: 240 },
+    { cause: "Typo in email", count: 35 },
+    { cause: "Slow search", count: 90 },
+    { cause: "Export fails", count: 60 },
+    { cause: "Other", count: 45 },
+  ];
+</script>
+
+`ParetoChart` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+
+It is a [Chart](/components/Chart) preset: bars sorted largest first, a cumulative share on a secondary axis from 0% to 100%, and a threshold at the share to act on. The categories left of where the line crosses the threshold are the ones that matter.
+
+## Basic
+
+Pass one row per category with `x` and `y` accessors. The chart sorts; the data need not be.
+
+<ParetoChart data={tickets} x="cause" y="count" title="Support tickets by cause" valueLabel="Tickets" yTitle="Tickets" />
+
+## Threshold
+
+`threshold` is the share to mark, as a fraction, with `thresholdLabel` for its text. `cumulativeLabel` names the line in the tooltip and the table.
+
+<ParetoChart data={tickets} x="cause" y="count" title="Two thirds of tickets" threshold={0.67} thresholdLabel="Two thirds" cumulativeLabel="Share so far" valueLabel="Tickets" height={260} />
+
+## Accessibility
+
+As on every chart built on `Chart`: one tab stop, arrows between categories, a live region that reads the count and the cumulative share, and a data table view with both columns.

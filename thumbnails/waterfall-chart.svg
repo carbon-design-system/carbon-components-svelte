@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>waterfall-chart</title>
+    <g id="waterfall-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <rect id="start" fill="var(--cds-background-brand, #0f62fe)" x="86" y="80" width="20" height="56"></rect>
+        <rect id="step-1" fill="var(--cds-border-strong, #8d8d8d)" x="114" y="60" width="20" height="20"></rect>
+        <rect id="step-2" fill="var(--cds-border-strong, #8d8d8d)" x="142" y="48" width="20" height="12"></rect>
+        <rect id="step-3" fill="var(--cds-text-disabled, #c6c6c6)" x="170" y="48" width="20" height="24"></rect>
+        <rect id="step-4" fill="var(--cds-border-strong, #8d8d8d)" x="198" y="56" width="20" height="16"></rect>
+        <rect id="end" fill="var(--cds-background-brand, #0f62fe)" x="226" y="56" width="18" height="80"></rect>
+        <line id="connector-1" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="106" y1="80" x2="114" y2="80"></line>
+        <line id="connector-2" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="134" y1="60" x2="142" y2="60"></line>
+        <line id="connector-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="162" y1="48" x2="170" y2="48"></line>
+        <line id="connector-4" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="190" y1="72" x2="198" y2="72"></line>
+        <line id="connector-5" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" x1="218" y1="56" x2="226" y2="56"></line>
+    </g>
+</svg>

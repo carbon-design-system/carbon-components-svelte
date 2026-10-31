@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>choropleth-chart</title>
+    <g id="choropleth-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="region-1" fill="var(--cds-background-brand, #0f62fe)" points="80,52 132,44 140,80 108,96 76,84" fill-opacity="0.3" stroke="var(--cds-layer-02, #ffffff)" stroke-width="1.5"></polygon>
+        <polygon id="region-2" fill="var(--cds-background-brand, #0f62fe)" points="132,44 188,40 196,72 140,80" fill-opacity="0.6" stroke="var(--cds-layer-02, #ffffff)" stroke-width="1.5"></polygon>
+        <polygon id="region-3" fill="var(--cds-background-brand, #0f62fe)" points="188,40 244,48 240,88 196,72" fill-opacity="0.2" stroke="var(--cds-layer-02, #ffffff)" stroke-width="1.5"></polygon>
+        <polygon id="region-4" fill="var(--cds-background-brand, #0f62fe)" points="140,80 196,72 204,112 156,128 108,96" fill-opacity="1" stroke="var(--cds-layer-02, #ffffff)" stroke-width="1.5"></polygon>
+        <polygon id="region-5" fill="var(--cds-background-brand, #0f62fe)" points="196,72 240,88 236,124 204,112" fill-opacity="0.45" stroke="var(--cds-layer-02, #ffffff)" stroke-width="1.5"></polygon>
+        <polygon id="region-6" fill="var(--cds-background-brand, #0f62fe)" points="76,84 108,96 118,136 84,132" fill-opacity="0.15" stroke="var(--cds-layer-02, #ffffff)" stroke-width="1.5"></polygon>
+    </g>
+</svg>

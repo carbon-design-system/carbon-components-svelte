@@ -1,0 +1,148 @@
+/// ForestPlot: a point estimate and interval per row, the pooled diamond,
+/// and the line of no effect, drawn at a fixed logical size and scaled to
+/// the container.
+/// @access private
+/// @group viz
+@mixin viz-forest-plot {
+  .#{$prefix}--viz-forest {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-forest .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-forest__svg {
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-forest__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-forest__null {
+    stroke: $border-strong;
+    stroke-dasharray: 4 3;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-forest__tick {
+    stroke: $border-strong;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-forest__axis-label {
+    fill: $text-secondary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-forest__row {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-forest__band {
+    fill: transparent;
+  }
+
+  .#{$prefix}--viz-forest__row--active .#{$prefix}--viz-forest__band {
+    fill: $layer-hover;
+  }
+
+  .#{$prefix}--viz-forest__row--selected .#{$prefix}--viz-forest__band {
+    fill: $layer-selected;
+  }
+
+  .#{$prefix}--viz-forest__label {
+    fill: $text-primary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-forest__label--overall,
+  .#{$prefix}--viz-forest__value--overall {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-forest__value {
+    fill: $text-secondary;
+    font-variant-numeric: tabular-nums;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-forest__whisker,
+  .#{$prefix}--viz-forest__cap {
+    stroke: $icon-secondary;
+    stroke-width: 1.5;
+  }
+
+  // An interval clear of the null is a solid mark; one that crosses it is
+  // hollow, so the finding never rests on where the line falls.
+  .#{$prefix}--viz-forest__marker {
+    fill: $background;
+    stroke: $border-interactive;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-forest__row--clear .#{$prefix}--viz-forest__marker {
+    fill: $border-interactive;
+  }
+
+  .#{$prefix}--viz-forest__rule {
+    stroke: $border-subtle;
+    stroke-width: 1;
+  }
+
+  .#{$prefix}--viz-forest__diamond {
+    fill: $background;
+    stroke: $border-inverse;
+    stroke-width: 1.5;
+  }
+
+  .#{$prefix}--viz-forest__diamond--clear {
+    fill: $border-inverse;
+  }
+
+  @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-forest__row--active .#{$prefix}--viz-forest__band,
+    .#{$prefix}--viz-forest__row--selected .#{$prefix}--viz-forest__band,
+    .#{$prefix}--viz-forest__marker,
+    .#{$prefix}--viz-forest__diamond {
+      fill: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-forest__axis-label,
+    .#{$prefix}--viz-forest__label,
+    .#{$prefix}--viz-forest__value {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--viz-forest__marker,
+    .#{$prefix}--viz-forest__diamond {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--viz-forest__row--clear .#{$prefix}--viz-forest__marker,
+    .#{$prefix}--viz-forest__diamond--clear {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--viz-forest__row--selected .#{$prefix}--viz-forest__band {
+      fill: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-forest-plot") {
+  @include viz-forest-plot;
+}

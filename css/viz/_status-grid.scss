@@ -1,0 +1,90 @@
+/// StatusGrid: one cell per item, colored by its state, wrapping to fit.
+/// @access private
+/// @group viz
+@mixin viz-status-grid {
+  .#{$prefix}--viz-status-grid {
+    position: relative;
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-status-grid .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--viz-status-grid__body {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-status-grid__cells {
+    display: grid;
+    gap: 2px;
+    grid-template-columns: repeat(auto-fill, minmax(to-rem(12px), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .#{$prefix}--viz-status-grid--sm .#{$prefix}--viz-status-grid__cells {
+    gap: 1px;
+    grid-template-columns: repeat(auto-fill, minmax(to-rem(8px), 1fr));
+  }
+
+  .#{$prefix}--viz-status-grid--lg .#{$prefix}--viz-status-grid__cells {
+    gap: 3px;
+    grid-template-columns: repeat(auto-fill, minmax(to-rem(20px), 1fr));
+  }
+
+  .#{$prefix}--viz-status-grid__cell {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--bx-viz-color);
+  }
+
+  .#{$prefix}--viz-status-grid__cell--active {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--viz-status-grid__cell--selected {
+    box-shadow: inset 0 0 0 2px $background;
+    outline: 2px solid $interactive;
+    outline-offset: 0;
+  }
+
+  .#{$prefix}--viz-status-grid__button {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--viz-status-grid__button:focus {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+
+  // Above the hovered cell, centered on it; the component sets where.
+  .#{$prefix}--viz-status-grid .#{$prefix}--viz-chart-tooltip {
+    transform: translate(-50%, calc(-100% - #{$carbon--spacing-02}));
+  }
+
+  .#{$prefix}--viz-status-grid__count {
+    margin-inline-start: $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--viz-status-grid__cell {
+      forced-color-adjust: none;
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+  }
+}
+
+@include exports("viz-status-grid") {
+  @include viz-status-grid;
+}

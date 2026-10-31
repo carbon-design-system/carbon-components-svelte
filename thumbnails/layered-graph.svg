@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>layered-graph</title>
+    <g id="layered-graph" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path id="edge-1" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M104,90 C128,90 128,64 152,64"></path>
+        <path id="edge-2" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M104,90 C128,90 128,116 152,116"></path>
+        <path id="edge-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M152,64 C176,64 176,64 200,64"></path>
+        <path id="edge-4" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M152,116 C176,116 176,64 200,64"></path>
+        <path id="edge-5" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M152,116 C176,116 176,116 200,116"></path>
+        <rect id="rank-1" fill="var(--cds-background-brand, #0f62fe)" x="76" y="80" width="28" height="20"></rect>
+        <rect id="rank-2a" fill="var(--cds-border-strong, #8d8d8d)" x="138" y="54" width="28" height="20"></rect>
+        <rect id="rank-2b" fill="var(--cds-border-strong, #8d8d8d)" x="138" y="106" width="28" height="20"></rect>
+        <rect id="rank-3a" fill="var(--cds-text-disabled, #c6c6c6)" x="200" y="54" width="28" height="20"></rect>
+        <rect id="rank-3b" fill="var(--cds-text-disabled, #c6c6c6)" x="200" y="106" width="28" height="20"></rect>
+    </g>
+</svg>

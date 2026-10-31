@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>candlestick-chart</title>
+    <g id="candlestick-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <line id="wick-1" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="94" y1="58" x2="94" y2="100"></line>
+        <rect id="body-1" fill="var(--cds-icon-primary, #161616)" x="88" y="70" width="12" height="22"></rect>
+        <line id="wick-2" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="116" y1="50" x2="116" y2="96"></line>
+        <rect id="body-2" stroke="var(--cds-icon-primary, #161616)" x="110.5" y="62.5" width="12" height="26" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-3" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="138" y1="46" x2="138" y2="84"></line>
+        <rect id="body-3" fill="var(--cds-icon-primary, #161616)" x="132" y="60" width="12" height="18"></rect>
+        <line id="wick-4" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="160" y1="64" x2="160" y2="110"></line>
+        <rect id="body-4" fill="var(--cds-icon-primary, #161616)" x="154" y="76" width="12" height="22"></rect>
+        <line id="wick-5" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="182" y1="80" x2="182" y2="118"></line>
+        <rect id="body-5" stroke="var(--cds-icon-primary, #161616)" x="176.5" y="86.5" width="12" height="10" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-6" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="204" y1="56" x2="204" y2="90"></line>
+        <rect id="body-6" stroke="var(--cds-icon-primary, #161616)" x="198.5" y="66.5" width="12" height="18" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <line id="wick-7" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x1="226" y1="48" x2="226" y2="74"></line>
+        <rect id="body-7" stroke="var(--cds-icon-primary, #161616)" x="220.5" y="54.5" width="12" height="10" fill="var(--cds-layer-02, #ffffff)"></rect>
+    </g>
+</svg>

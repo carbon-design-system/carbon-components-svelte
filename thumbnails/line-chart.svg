@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>line-chart</title>
+    <g id="line-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="axis-left" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="40" width="1" height="97"></rect>
+        <rect id="axis-bottom" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="136" width="168" height="1"></rect>
+        <polyline id="series-2" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="84,124 112,116 140,120 168,104 196,110 224,96 244,100"></polyline>
+        <polyline id="series-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="84,112 112,88 140,96 168,64 196,72 224,48 244,56"></polyline>
+    </g>
+</svg>

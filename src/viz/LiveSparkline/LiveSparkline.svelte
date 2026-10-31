@@ -1,0 +1,88 @@
+<svelte:options immutable />
+
+<script>
+  /**
+   * @restProps {svg}
+   * @event {{ values: ReadonlyArray<number | null> }} update Fires once per animation frame in which samples were appended after mount, with the values now shown. Requires `emitUpdate`.
+   */
+
+  /**
+   * Specify the latest sample. Every change appends it. Call `push` instead
+   * to append a sample that may equal the last one, or many at once.
+   * @type {number | null}
+   */
+  export let value = undefined;
+
+  /**
+   * Specify the samples to start from. Only the last `capacity` are kept.
+   * @type {ReadonlyArray<number | null | undefined>}
+   */
+  export let seed = [];
+
+  /** Specify how many samples to keep. Older ones fall off the left. */
+  export let capacity = 60;
+
+  /**
+   * Set to `true` to hold new samples without drawing them. They are
+   * drawn, all at once, when set back to `false`.
+   */
+  export let paused = false;
+
+  /**
+   * Accessible name for the chart. Leave empty to mark it as decorative.
+   */
+  export let label = "";
+
+  /**
+   * Obtain a reference to the SVG element
+   * @type {null | SVGSVGElement}
+   */
+  export let ref = null;
+
+  /** Set to `true` to dispatch the `update` event */
+  export let emitUpdate = false;
+
+  import { createEventDispatcher, onMount } from "svelte";
+  import Sparkline from "../Sparkline/Sparkline.svelte";
+  import { createSampleWindow } from "../utils/sample-window.js";
+  import { normalizeSparklineValues } from "../utils/sparkline.js";
+
+  const dispatch = createEventDispatcher();
+
+  /** @type {Array<number | null>} */
+  let values = normalizeSparklineValues(seed).slice(-capacity);
+  const window = createSampleWindow({
+    capacity: () => capacity,
+    onFlush: (batch) => {
+      const next = values.concat(batch);
+      values =
+        next.length > capacity ? next.slice(next.length - capacity) : next;
+      if (emitUpdate) dispatch("update", { values });
+    },
+  });
+
+  /**
+   * Append a sample, or an array of them. Many in one frame draw once: the
+   * queue is flushed on the next animation frame, which the browser stops
+   * running in a hidden tab, so a background dashboard costs nothing until
+   * it is looked at.
+   *
+   * @param {number | null | undefined | ReadonlyArray<number | null | undefined>} samples
+   * @returns {void}
+   */
+  export function push(samples) {
+    window.push(
+      (Array.isArray(samples) ? samples : [samples]).map((sample) =>
+        typeof sample === "number" && Number.isFinite(sample) ? sample : null,
+      ),
+    );
+  }
+
+  $: if (value !== undefined) push(value);
+  $: window.pause(paused);
+  $: if (values.length > capacity) values = values.slice(-capacity);
+
+  onMount(() => window.mount());
+</script>
+
+<Sparkline {values} {label} bind:ref {...$$restProps} />

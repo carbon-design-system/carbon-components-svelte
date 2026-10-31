@@ -1,0 +1,35 @@
+---
+components: ["FilterChips"]
+description: Filter chips show the filters a dashboard has put on its charts as tags that remove themselves.
+---
+
+<script>
+  import { BarChart, createDashboard, FilterChips, filterRows } from "carbon-components-svelte/viz";
+
+  const board = createDashboard();
+  const all = ["EMEA", "APAC", "AMER"].flatMap((region) =>
+    ["Cloud", "Data", "Security"].map((product, p) => ({ region, product, revenue: 120 + p * 40 + region.length * 7 })),
+  );
+  $: rows = filterRows(all, $board.filters);
+  $: byRegion = ["EMEA", "APAC", "AMER"].map((region) => ({ region, revenue: rows.filter((r) => r.region === region).reduce((s, r) => s + r.revenue, 0) }));
+  $: byProduct = ["Cloud", "Data", "Security"].map((product) => ({ product, revenue: rows.filter((r) => r.product === product).reduce((s, r) => s + r.revenue, 0) }));
+</script>
+
+`FilterChips` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`.
+
+It shows the filters of a `createDashboard` store as dismissible tags, with a button to clear them all once there are two. A chart's `select` event adds a filter through `board.toggleFilter`; `filterRows` applies them to rows. See [Dashboards](/dashboards).
+
+## Basic
+
+Click a bar in either chart. The chip removes its filter; `remove` and `clear` fire after the store changes.
+
+<FilterChips {board} labels={{ region: "Region", product: "Product" }} emptyText="No filters" />
+
+<BarChart data={byRegion} x="region" y="revenue" title="By region" legend={false} height={200} on:select={(e) => board.toggleFilter("region", e.detail.datum.region)} />
+<BarChart data={byProduct} x="product" y="revenue" title="By product" legend={false} height={200} on:select={(e) => board.toggleFilter("product", e.detail.datum.product)} />
+
+## Values
+
+`format` writes a value; `labels` takes a map or a function for the dimension.
+
+<FilterChips {board} labels={(d) => d.toUpperCase()} format={(v) => `“${v}”`} clearLabel="" emptyText="No filters" />

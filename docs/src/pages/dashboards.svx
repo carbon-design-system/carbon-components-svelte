@@ -1,0 +1,62 @@
+---
+title: Dashboards
+layout: guide
+description: Compose a dashboard from the data visualization subpackage: one time range for the page, filters that a click on one chart puts on all of them, cards with status and freshness, streaming rows, and charts that zoom from the plot.
+---
+
+<script>
+  // Pages outside /components get no auto-import for the framed preview.
+  import Preview from "../components/Preview.svelte";
+</script>
+
+## What a dashboard needs that a chart does not
+
+A chart answers one question. A dashboard keeps a dozen of them on one time range, lets a click on one narrow the others, says how fresh each number is and when a source is down, and keeps drawing as rows arrive. The pieces below are small and composable: two stores, two controls, and props on the charts and cards you already have. Everything else is the core library's `Grid`, `Tile`, and `PageHeader`.
+
+## The kitchen sink
+
+Every piece at once, to test against. Change the range, click a bar or a slice to filter the page and remove the chip, hide a series in one legend and watch the other chart follow, hold Ctrl or Cmd and scroll over the line to zoom, Shift and drag to pan, press `+`, `-`, and `0` with the chart focused, Shift and an arrow key to brush, copy the data or the image from the toolbar, stream requests, and fail a source.
+
+<FileSource src="/framed/Dashboard/DashboardKitchenSink" />
+
+## One time range
+
+`createTimeRange` is a store of `{ from, to, preset }`, set from a preset such as `"7d"` or from two dates. `TimeRangePicker` is its control: a switcher of the presets with two dates behind "Custom". Charts read the range as their x domain, and `withinRange` keeps a query to it.
+
+```svelte
+<script>
+  import { createTimeRange, TimeRangePicker, withinRange, LineChart } from "carbon-components-svelte/viz";
+
+  const range = createTimeRange({ presets: ["24h", "7d", "30d"], initial: "7d" });
+  $: rows = withinRange(all, "time", $range);
+</script>
+
+<TimeRangePicker {range} />
+<LineChart data={rows} x="time" y="revenue" series="region" xDomain={[$range.from, $range.to]} />
+```
+
+`range.refreshEvery(30_000)` counts a preset back from now again on an interval, for a live page; `range.shift(-1)` moves to the previous window. To keep the range in the URL, pair it with the core `queryParam` store through `timeRangeToParam` and `timeRangeFromParam`.
+
+## Filters that travel
+
+`createDashboard` is a store of the filters a click has put on the page and the series a legend has hidden. A chart's `select` event adds a filter; `FilterChips` shows them as tags that remove themselves; `filterRows` applies them to any rows by property or accessor.
+
+```svelte
+<script>
+  const board = createDashboard({ range });
+  $: shown = filterRows(rows, $board.filters);
+</script>
+
+<FilterChips {board} labels={{ region: "Region" }} />
+<BarChart data={byRegion} x="region" y="revenue" selectable on:select={(e) => board.toggleFilter("region", e.detail.datum.region)} />
+```
+
+Charts that share a `syncId` can also share what the legend hid: add `"hidden"` to `sync`, and hiding EMEA in one chart hides it in every chart on the channel.
+
+## Cards
+
+A chart in a tile takes `subtitle` for its unit or definition, `asOf` for freshness, and an `actions` slot in its header for the card's own menu. `KpiCard` takes the same `subtitle` and `asOf`, a `status` shape beside its name for a metric over its threshold, and `error` with an `error` slot for a retry, so a page can degrade one tile without blanking the rest. Wrap the page in `ChartColors` to pin each series to one color across every chart, however many series each has.
+
+## Streaming and zoom
+
+Rows that arrive go through a chart's `push` method with a `maxRows` window; many in one frame draw once and nothing draws in a hidden tab. `zoomable` lets the plot zoom itself: Ctrl or Cmd with the wheel or a pinch about the pointer, Shift and a drag to pan, `+`, `-`, and `0` from the keyboard; Shift with an arrow key brushes without a pointer. The toolbar's `copy`, `copyImage`, and `print` put the data or the picture where a report needs it.

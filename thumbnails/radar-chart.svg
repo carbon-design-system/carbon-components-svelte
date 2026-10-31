@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>radar-chart</title>
+    <g id="radar-chart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <line id="spoke-1" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x1="160" y1="90" x2="160" y2="38"></line>
+        <line id="spoke-2" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x1="160" y1="90" x2="205" y2="64"></line>
+        <line id="spoke-3" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x1="160" y1="90" x2="205" y2="116"></line>
+        <line id="spoke-4" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x1="160" y1="90" x2="160" y2="142"></line>
+        <line id="spoke-5" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x1="160" y1="90" x2="115" y2="116"></line>
+        <line id="spoke-6" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1" x1="160" y1="90" x2="115" y2="64"></line>
+        <polygon id="web-1" stroke="var(--cds-border-subtle, #e0e0e0)" points="160,64 182.5,77 182.5,103 160,116 137.5,103 137.5,77"></polygon>
+        <polygon id="web-2" stroke="var(--cds-border-subtle, #e0e0e0)" points="160,38 205,64 205,116 160,142 115,116 115,64"></polygon>
+        <polygon id="series-2" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" fill="var(--cds-border-strong, #8d8d8d)" fill-opacity="0.15" points="160,62 194.6,70 180.8,102 160,126 134,105 137.5,77"></polygon>
+        <polygon id="series-1" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" fill="var(--cds-background-brand, #0f62fe)" fill-opacity="0.2" points="160,44 191.2,72 194.6,110 160,120 127.1,109 121.9,68"></polygon>
+    </g>
+</svg>

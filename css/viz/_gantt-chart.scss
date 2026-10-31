@@ -1,0 +1,155 @@
+/// GanttChart: tasks as bars on one time scale, grouped by workstream,
+/// with dependency arrows, drawn at a fixed logical size and scaled to the
+/// container. The legend reuses the treemap's and the tooltip the chart's.
+/// @access private
+/// @group viz
+@mixin viz-gantt-chart {
+  .#{$prefix}--viz-gantt {
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--viz-gantt .#{$prefix}--viz-chart__title {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--viz-gantt__plot {
+    position: relative;
+  }
+
+  .#{$prefix}--viz-gantt__svg {
+    display: block;
+    block-size: auto;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--viz-gantt__svg:focus {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+
+  .#{$prefix}--viz-gantt__tick,
+  .#{$prefix}--viz-gantt__label {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-gantt__grid {
+    shape-rendering: crispEdges;
+    stroke: $border-subtle;
+  }
+
+  // Workstreams alternate a faint band, so their rows read as one.
+  .#{$prefix}--viz-gantt__group {
+    fill: transparent;
+  }
+
+  .#{$prefix}--viz-gantt__group:nth-of-type(even) {
+    fill: $layer;
+  }
+
+  .#{$prefix}--viz-gantt__group-label {
+    fill: var(--bx-viz-color, #{$text-primary});
+    font-weight: 600;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--viz-gantt__hit {
+    fill: transparent;
+  }
+
+  .#{$prefix}--viz-gantt__task {
+    transition: opacity $duration--fast-02 carbon--motion(standard, productive);
+  }
+
+  // The bar is the workstream's color at low strength, and what is done
+  // sits on it at full strength.
+  .#{$prefix}--viz-gantt__bar {
+    fill: var(--bx-viz-color, #{$border-interactive});
+    fill-opacity: 0.35;
+  }
+
+  .#{$prefix}--viz-gantt__done {
+    fill: var(--bx-viz-color, #{$border-interactive});
+  }
+
+  .#{$prefix}--viz-gantt__task--active .#{$prefix}--viz-gantt__bar {
+    fill-opacity: 0.6;
+    stroke: $border-inverse;
+  }
+
+  .#{$prefix}--viz-gantt__task--active .#{$prefix}--viz-gantt__label {
+    fill: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--viz-gantt__task--selected .#{$prefix}--viz-gantt__bar {
+    stroke: $border-interactive;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--viz-gantt--emphasis
+    .#{$prefix}--viz-gantt__task:not(.#{$prefix}--viz-gantt__task--active) {
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--viz-gantt__link {
+    fill: none;
+    stroke: $border-strong;
+    stroke-width: 1.5;
+  }
+
+  // A task that starts before what it waits for ends.
+  .#{$prefix}--viz-gantt__link--late {
+    stroke: $support-error;
+    stroke-dasharray: 4 3;
+  }
+
+  .#{$prefix}--viz-gantt__arrow {
+    fill: $border-strong;
+  }
+
+  .#{$prefix}--viz-gantt__today {
+    shape-rendering: crispEdges;
+    stroke: $border-inverse;
+    stroke-dasharray: 2 2;
+  }
+
+  .#{$prefix}--viz-gantt__today-label {
+    fill: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--viz-gantt__task {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    // A surface under text in CanvasText takes the canvas.
+    .#{$prefix}--viz-gantt__group:nth-of-type(even) {
+      fill: Canvas;
+    }
+
+    // SVG text keeps its class fill under forced colors; take the page's.
+    .#{$prefix}--viz-gantt__tick,
+    .#{$prefix}--viz-gantt__label,
+    .#{$prefix}--viz-gantt__task--active .#{$prefix}--viz-gantt__label,
+    .#{$prefix}--viz-gantt__today-label {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--viz-gantt__bar,
+    .#{$prefix}--viz-gantt__done {
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("viz-gantt-chart") {
+  @include viz-gantt-chart;
+}

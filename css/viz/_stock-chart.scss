@@ -1,0 +1,30 @@
+/// StockChart: a price pane over indicator panes that share its x axis.
+/// @access private
+/// @group viz
+@mixin viz-stock-chart {
+  .#{$prefix}--viz-stock {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  // Volume sits under the price in the bottom quarter, quiet.
+  .#{$prefix}--viz-stock__volume .#{$prefix}--viz-bars__bar {
+    opacity: 0.35;
+  }
+
+  .#{$prefix}--viz-stock__histogram .#{$prefix}--viz-bars__bar {
+    opacity: 0.5;
+  }
+
+  // The panes take their title from the price pane; theirs is a small label.
+  .#{$prefix}--viz-stock__pane .#{$prefix}--viz-chart__title {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+}
+
+@include exports("viz-stock-chart") {
+  @include viz-stock-chart;
+}

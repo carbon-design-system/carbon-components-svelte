@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>status-grid</title>
+    <g id="status-grid" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="healthy" fill="var(--cds-support-success, #198038)">
+            <rect x="76" y="52" width="12" height="12"></rect>
+            <rect x="90" y="52" width="12" height="12"></rect>
+            <rect x="104" y="52" width="12" height="12"></rect>
+            <rect x="118" y="52" width="12" height="12"></rect>
+            <rect x="132" y="52" width="12" height="12"></rect>
+            <rect x="160" y="52" width="12" height="12"></rect>
+            <rect x="174" y="52" width="12" height="12"></rect>
+            <rect x="188" y="52" width="12" height="12"></rect>
+            <rect x="202" y="52" width="12" height="12"></rect>
+            <rect x="216" y="52" width="12" height="12"></rect>
+            <rect x="230" y="52" width="12" height="12"></rect>
+            <rect x="76" y="66" width="12" height="12"></rect>
+            <rect x="90" y="66" width="12" height="12"></rect>
+            <rect x="104" y="66" width="12" height="12"></rect>
+            <rect x="118" y="66" width="12" height="12"></rect>
+            <rect x="132" y="66" width="12" height="12"></rect>
+            <rect x="146" y="66" width="12" height="12"></rect>
+            <rect x="174" y="66" width="12" height="12"></rect>
+            <rect x="188" y="66" width="12" height="12"></rect>
+            <rect x="202" y="66" width="12" height="12"></rect>
+            <rect x="216" y="66" width="12" height="12"></rect>
+            <rect x="76" y="80" width="12" height="12"></rect>
+            <rect x="90" y="80" width="12" height="12"></rect>
+            <rect x="104" y="80" width="12" height="12"></rect>
+            <rect x="132" y="80" width="12" height="12"></rect>
+            <rect x="146" y="80" width="12" height="12"></rect>
+            <rect x="160" y="80" width="12" height="12"></rect>
+            <rect x="174" y="80" width="12" height="12"></rect>
+            <rect x="202" y="80" width="12" height="12"></rect>
+            <rect x="216" y="80" width="12" height="12"></rect>
+            <rect x="230" y="80" width="12" height="12"></rect>
+            <rect x="76" y="94" width="12" height="12"></rect>
+            <rect x="104" y="94" width="12" height="12"></rect>
+            <rect x="118" y="94" width="12" height="12"></rect>
+            <rect x="132" y="94" width="12" height="12"></rect>
+            <rect x="146" y="94" width="12" height="12"></rect>
+            <rect x="160" y="94" width="12" height="12"></rect>
+            <rect x="174" y="94" width="12" height="12"></rect>
+            <rect x="188" y="94" width="12" height="12"></rect>
+            <rect x="202" y="94" width="12" height="12"></rect>
+            <rect x="230" y="94" width="12" height="12"></rect>
+            <rect x="76" y="108" width="12" height="12"></rect>
+            <rect x="90" y="108" width="12" height="12"></rect>
+            <rect x="104" y="108" width="12" height="12"></rect>
+            <rect x="118" y="108" width="12" height="12"></rect>
+            <rect x="132" y="108" width="12" height="12"></rect>
+            <rect x="146" y="108" width="12" height="12"></rect>
+            <rect x="160" y="108" width="12" height="12"></rect>
+            <rect x="188" y="108" width="12" height="12"></rect>
+            <rect x="202" y="108" width="12" height="12"></rect>
+            <rect x="216" y="108" width="12" height="12"></rect>
+            <rect x="230" y="108" width="12" height="12"></rect>
+            <rect x="76" y="122" width="12" height="12"></rect>
+            <rect x="90" y="122" width="12" height="12"></rect>
+            <rect x="118" y="122" width="12" height="12"></rect>
+            <rect x="132" y="122" width="12" height="12"></rect>
+            <rect x="146" y="122" width="12" height="12"></rect>
+            <rect x="160" y="122" width="12" height="12"></rect>
+            <rect x="174" y="122" width="12" height="12"></rect>
+            <rect x="188" y="122" width="12" height="12"></rect>
+            <rect x="216" y="122" width="12" height="12"></rect>
+            <rect x="230" y="122" width="12" height="12"></rect>
+        </g>
+        <g id="degraded" fill="var(--cds-support-warning, #f1c21b)">
+            <rect x="146" y="52" width="12" height="12"></rect>
+            <rect x="188" y="80" width="12" height="12"></rect>
+            <rect x="174" y="108" width="12" height="12"></rect>
+        </g>
+        <g id="failed" fill="var(--cds-support-error, #da1e28)">
+            <rect x="160" y="66" width="12" height="12"></rect>
+            <rect x="90" y="94" width="12" height="12"></rect>
+            <rect x="104" y="122" width="12" height="12"></rect>
+        </g>
+        <g id="pending" fill="var(--cds-border-strong, #8d8d8d)">
+            <rect x="118" y="80" width="12" height="12"></rect>
+            <rect x="216" y="94" width="12" height="12"></rect>
+            <rect x="202" y="122" width="12" height="12"></rect>
+            <rect x="230" y="66" width="12" height="12"></rect>
+        </g>
+    </g>
+</svg>

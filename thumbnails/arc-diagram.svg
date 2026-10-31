@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>arc-diagram</title>
+    <g id="arc-diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="baseline" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="124" width="168" height="1"></rect>
+        <path id="arc-1" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M88,124 A72.0,72.0 0 0 1 232,124"></path>
+        <path id="arc-2" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M88,124 A36.0,36.0 0 0 1 160,124"></path>
+        <path id="arc-3" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M124,124 A36.0,36.0 0 0 1 196,124"></path>
+        <path id="arc-4" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M160,124 A36.0,36.0 0 0 1 232,124"></path>
+        <path id="arc-5" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" d="M124,124 A18.0,18.0 0 0 1 160,124"></path>
+        <circle id="node-1" fill="var(--cds-background-brand, #0f62fe)" cx="88" cy="124" r="5"></circle>
+        <circle id="node-2" fill="var(--cds-text-secondary, #525252)" cx="124" cy="124" r="5"></circle>
+        <circle id="node-3" fill="var(--cds-background-brand, #0f62fe)" cx="160" cy="124" r="5"></circle>
+        <circle id="node-4" fill="var(--cds-text-secondary, #525252)" cx="196" cy="124" r="5"></circle>
+        <circle id="node-5" fill="var(--cds-text-secondary, #525252)" cx="232" cy="124" r="5"></circle>
+    </g>
+</svg>

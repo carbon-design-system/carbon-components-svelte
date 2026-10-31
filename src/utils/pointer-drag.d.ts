@@ -2,6 +2,8 @@
 export interface PointerDragOptions {
   /** Set to `false` to ignore new drags. An active drag still ends normally. */
   enabled?: boolean;
+  /** Mouse buttons that start a drag. @default [0] */
+  buttons?: number[];
   /** Called on the primary-button `pointerdown`. Return `false` to decline the drag. */
   onStart?: (event: PointerEvent) => unknown;
   /** Called for each `pointermove` of the active pointer. */

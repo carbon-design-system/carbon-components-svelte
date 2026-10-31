@@ -81,6 +81,42 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ActionSet
+  alluvial-chart:
+    name: Alluvial chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/alluvial-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/AlluvialChart
+  arc-diagram:
+    name: Arc diagram
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/arc-diagram.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ArcDiagram
+  area-chart:
+    name: Area chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/area-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/AreaChart
   aspect-ratio:
     status: stable
     framework: svelte
@@ -102,6 +138,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/BadgeIndicator
+  bar-chart:
+    name: Bar chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/bar-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BarChart
+  beeswarm-chart:
+    name: Beeswarm chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/beeswarm-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BeeswarmChart
   big-number:
     name: Big number
     status: stable
@@ -138,6 +198,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Box
+  boxplot-chart:
+    name: Boxplot chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/boxplot-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BoxplotChart
   breadcrumb:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/breadcrumb/usage
@@ -162,6 +234,30 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/Breakpoint
     tags:
       - shell
+  bullet-chart:
+    name: Bullet chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/bullet-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BulletChart
+  bump-chart:
+    name: Bump chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/bump-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BumpChart
   button:
     status: stable
     externalDocsUrl: https://www.carbondesignsystem.com/components/button/usage
@@ -187,6 +283,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/ButtonSet
     tags:
       - input-control
+  calendar-heatmap:
+    name: Calendar heatmap
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/calendar-heatmap.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CalendarHeatmap
   callout:
     name: Callout
     status: stable
@@ -201,6 +309,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/Callout
     tags:
       - system-feedback
+  candlestick-chart:
+    name: Candlestick chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/candlestick-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CandlestickChart
   card:
     name: Card
     status: experimental
@@ -227,6 +347,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Carousel
+  chart:
+    name: Chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Chart
   chat-button:
     name: Chat button
     status: stable
@@ -261,6 +393,42 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Checkbox
+  chord-diagram:
+    name: Chord diagram
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/chord-diagram.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ChordDiagram
+  choropleth-chart:
+    name: Choropleth chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/choropleth-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ChoroplethChart
+  circle-pack-chart:
+    name: Circle pack chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/circle-pack-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CirclePackChart
   clickable-tile:
     name: Clickable tile
     status: stable
@@ -285,6 +453,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/CodeSnippet
+  cohort-table:
+    name: Cohort table
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/cohort-table.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CohortTable
   combo-box:
     status: stable
     framework: svelte
@@ -306,6 +486,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ComboButton
+  combo-chart:
+    name: Combo chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/combo-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ComboChart
+  comparison-bar:
+    name: Comparison bar
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/comparison-bar.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ComparisonBar
   composed-modal:
     name: Composed modal
     status: stable
@@ -455,6 +659,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TooltipDefinition
+  delta-indicator:
+    name: Delta indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/delta-indicator.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DeltaIndicator
   description-list:
     name: Description list
     status: stable
@@ -503,6 +719,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Divider
+  donut-chart:
+    name: Donut chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/donut-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DonutChart
   dropdown:
     status: stable
     framework: svelte
@@ -513,6 +741,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Dropdown
+  dumbbell-chart:
+    name: Dumbbell chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/dumbbell-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DumbbellChart
   empty-state:
     name: Empty state
     status: stable
@@ -525,6 +765,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/EmptyState
+  event-timeline:
+    name: Event timeline
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/event-timeline.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/EventTimeline
   expandable-tile:
     name: Expandable tile
     status: stable
@@ -550,6 +802,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/FileUploader
+  filter-chips:
+    name: Filter chips
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/filter-chips.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FilterChips
+  flame-graph:
+    name: Flame graph
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/flame-graph.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FlameGraph
   floating-portal:
     name: Floating portal
     status: stable
@@ -576,6 +852,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/FluidForm
     tags:
       - form
+  forest-plot:
+    name: Forest plot
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/forest-plot.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ForestPlot
   form:
     status: stable
     framework: svelte
@@ -598,6 +886,66 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/FullPageError
+  funnel-bars:
+    name: Funnel bars
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/funnel-bars.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FunnelBars
+  funnel-chart:
+    name: Funnel chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/funnel-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FunnelChart
+  funnel-compare:
+    name: Funnel compare
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/funnel-compare.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FunnelCompare
+  gantt-chart:
+    name: Gantt chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/gantt-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/GanttChart
+  graph-canvas:
+    name: Graph canvas
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/graph-canvas.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/GraphCanvas
   grid:
     status: stable
     framework: svelte
@@ -619,6 +967,78 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Heading
+  heat-strip:
+    name: Heat strip
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/heat-strip.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/HeatStrip
+  heatmap:
+    name: Heatmap
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/heatmap.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Heatmap
+  histogram:
+    name: Histogram
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/histogram.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Histogram
+  hive-plot:
+    name: Hive plot
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/hive-plot.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/HivePlot
+  horizon-chart:
+    name: Horizon chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/horizon-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/HorizonChart
+  icicle-chart:
+    name: Icicle chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/icicle-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/IcicleChart
   icon-indicator:
     name: Icon indicator
     status: stable
@@ -721,6 +1141,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Kbd
+  kpi-card:
+    name: KPI card
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/kpi-card.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/KpiCard
   layer:
     name: Layer
     status: stable
@@ -733,6 +1165,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Layer
+  layered-graph:
+    name: Layered graph
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/layered-graph.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LayeredGraph
   layout-direction:
     name: Layout direction
     status: stable
@@ -757,6 +1201,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/LazyMount
+  line-chart:
+    name: Line chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/line-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LineChart
   link:
     status: stable
     framework: svelte
@@ -767,6 +1223,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Link
+  live-sparkline:
+    name: Live sparkline
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/live-sparkline.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LiveSparkline
   loading:
     status: stable
     framework: svelte
@@ -791,6 +1259,30 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
+  lollipop-chart:
+    name: Lollipop chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/lollipop-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LollipopChart
+  marimekko-chart:
+    name: Marimekko chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/marimekko-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MarimekkoChart
   menu:
     name: Menu
     status: stable
@@ -827,6 +1319,42 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Meter
+  micro-donut:
+    name: Micro donut
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/micro-donut.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MicroDonut
+  micro-funnel:
+    name: Micro funnel
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/micro-funnel.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MicroFunnel
+  micro-histogram:
+    name: Micro histogram
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/micro-histogram.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MicroHistogram
   modal:
     status: stable
     framework: svelte
@@ -847,6 +1375,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/MultiSelect
+  node-editor:
+    name: Node editor
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/node-editor.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/NodeEditor
   notification-queue:
     name: Notification queue
     status: stable
@@ -883,6 +1423,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/OrderedList
     tags:
       - data-display
+  org-chart:
+    name: Org chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/org-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/OrgChart
   overflow-menu:
     name: Overflow menu
     status: stable
@@ -928,6 +1480,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/PaginationNav
+  parallel-coordinates:
+    name: Parallel coordinates
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/parallel-coordinates.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ParallelCoordinates
+  pareto-chart:
+    name: Pareto chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/pareto-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ParetoChart
   password-input:
     name: Password input
     status: stable
@@ -1009,6 +1585,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Prose
+  radar-chart:
+    name: Radar chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/radar-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RadarChart
+  radial-progress:
+    name: Radial progress
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/radial-progress.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RadialProgress
   radio-button:
     status: stable
     framework: svelte
@@ -1033,6 +1633,30 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/RadioTile
     tags:
       - input-control
+  range-indicator:
+    name: Range indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/range-indicator.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RangeIndicator
+  rank-bars:
+    name: Rank bars
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/rank-bars.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RankBars
   recursive-list:
     name: Recursive list
     status: stable
@@ -1059,6 +1683,42 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/RelativeTime
+  retention-chart:
+    name: Retention chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/retention-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RetentionChart
+  ridgeline-chart:
+    name: Ridgeline chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/ridgeline-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RidgelineChart
+  scatter-chart:
+    name: Scatter chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/scatter-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ScatterChart
   scroll-gradient:
     name: Scroll gradient
     status: stable
@@ -1093,6 +1753,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/SearchMenu
+  segmented-progress:
+    name: Segmented progress
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/segmented-progress.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SegmentedProgress
   select:
     status: stable
     framework: svelte
@@ -1117,6 +1789,30 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/SelectableTile
     tags:
       - input-control
+  sequence-diagram:
+    name: Sequence diagram
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/sequence-diagram.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SequenceDiagram
+  sequence-sunburst:
+    name: Sequence sunburst
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/sequence-sunburst.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SequenceSunburst
   session-storage:
     name: Session storage
     status: stable
@@ -1141,6 +1837,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ShapeIndicator
+  share-of-total:
+    name: Share of total
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/share-of-total.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ShareOfTotal
   side-panel:
     name: Side panel
     description: A panel that docks to the edge of the page for details, edits or a short flow, over the content or beside it.
@@ -1204,6 +1912,54 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Slider
+  slope-chart:
+    name: Slope chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/slope-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SlopeChart
+  small-multiples:
+    name: Small multiples
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/small-multiples.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SmallMultiples
+  span-waterfall:
+    name: Span waterfall
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/span-waterfall.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SpanWaterfall
+  sparkline:
+    name: Sparkline
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/sparkline.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Sparkline
   splitter:
     name: Splitter
     status: stable
@@ -1228,6 +1984,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Stack
+  stacked-bar:
+    name: Stacked bar
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/stacked-bar.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/StackedBar
   star-rating:
     name: Star rating
     status: stable
@@ -1240,6 +2008,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/StarRating
+  state-timeline:
+    name: State timeline
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/state-timeline.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/StateTimeline
+  status-grid:
+    name: Status grid
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/status-grid.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/StatusGrid
   stepper:
     name: Stepper
     status: stable
@@ -1252,6 +2044,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Stepper
+  stock-chart:
+    name: Stock chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/stock-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/StockChart
   structured-list:
     status: stable
     framework: svelte
@@ -1262,6 +2066,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/StructuredList
+  sunburst-chart:
+    name: Sunburst chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/sunburst-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SunburstChart
   table-of-contents:
     name: Table of contents
     status: stable
@@ -1330,6 +2146,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TagSet
+  target-indicator:
+    name: Target indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/target-indicator.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TargetIndicator
   text:
     name: Text
     status: stable
@@ -1392,6 +2220,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Tile
+  tile-grid-map:
+    name: Tile grid map
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tile-grid-map.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TileGridMap
   time-picker:
     status: stable
     framework: svelte
@@ -1401,6 +2241,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TimePicker
+  time-range-picker:
+    name: Time range picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/time-range-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TimeRangePicker
   toast-notification:
     name: Toast notification
     status: stable
@@ -1497,6 +2349,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/TooltipIcon
     tags:
       - content-element
+  tree-chart:
+    name: Tree chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tree-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TreeChart
   tree-view:
     status: stable
     framework: svelte
@@ -1506,6 +2370,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TreeView
+  treemap-chart:
+    name: Treemap chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/treemap-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TreemapChart
   truncate:
     name: Truncate
     status: stable
@@ -1545,6 +2421,30 @@ assets:
     tags:
       - data-display
       
+  up-set-plot:
+    name: Upset plot
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/up-set-plot.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UpSetPlot
+  uptime-bar:
+    name: Uptime bar
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/uptime-bar.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UptimeBar
   user-avatar:
     name: User avatar
     status: stable
@@ -1569,6 +2469,30 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/UserAvatarGroup
+  variance-indicator:
+    name: Variance indicator
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/variance-indicator.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/VarianceIndicator
+  violin-plot:
+    name: Violin plot
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/violin-plot.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ViolinPlot
   virtual-list:
     name: Virtual list
     status: stable
@@ -1581,3 +2505,51 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/VirtualList
+  waffle-chart:
+    name: Waffle chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/waffle-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/WaffleChart
+  waterfall-chart:
+    name: Waterfall chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/waterfall-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/WaterfallChart
+  win-loss:
+    name: Win loss
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/win-loss.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/WinLoss
+  word-cloud-chart:
+    name: Word cloud chart
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/word-cloud-chart.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/WordCloudChart

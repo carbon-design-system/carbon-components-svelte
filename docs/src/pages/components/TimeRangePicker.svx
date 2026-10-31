@@ -1,0 +1,41 @@
+---
+components: ["TimeRangePicker"]
+description: Time range picker sets one time range for a page of charts, from presets such as the last seven days or from two dates.
+---
+
+<script>
+  import { createTimeRange, LineChart, TimeRangePicker, withinRange } from "carbon-components-svelte/viz";
+
+  const NOW = new Date(2026, 9, 24, 9, 41).getTime();
+  const HOUR = 3_600_000;
+  const range = createTimeRange({ presets: ["24h", "7d", "30d"], initial: "7d", now: () => NOW });
+  const all = Array.from({ length: 30 * 24 }, (_, i) => ({
+    time: new Date(NOW - (30 * 24 - i) * HOUR),
+    revenue: Math.round(900 + Math.sin(i / 17) * 250 + ((i * 7919) % 180)),
+  }));
+  $: rows = withinRange(all, "time", $range);
+</script>
+
+`TimeRangePicker` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`.
+
+It is the control for a `createTimeRange` store: a `ContentSwitcher` of the store's presets, with a range `DatePicker` behind "Custom". See [Dashboards](/dashboards) for the store, the URL, and the charts that read it.
+
+## Basic
+
+Pass the store as `range`. Presets are a count and a unit, `m`, `h`, `d`, or `w`, written as "Last 7 days".
+
+<TimeRangePicker {range} />
+
+<LineChart data={rows} x="time" y="revenue" title="Revenue" xDomain={[$range.from, $range.to]} height={200} legend={false} />
+
+## Presets only
+
+Set `custom` to `false` to offer the presets alone.
+
+<TimeRangePicker {range} custom={false} />
+
+## Labels
+
+`presetLabel` writes a preset your way, and `customLabel`, `fromLabel`, `toLabel`, and `placeholder` name the rest.
+
+<TimeRangePicker {range} presetLabel={(preset) => preset.toUpperCase()} customLabel="Pick dates" />

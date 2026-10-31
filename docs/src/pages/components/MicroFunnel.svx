@@ -1,0 +1,103 @@
+---
+components: ["MicroFunnel"]
+description: Micro funnel reduces a funnel to a graphic small enough for a table cell or KPI card, as stepped segments or a single completion bar.
+---
+
+<script>
+  import { DataTable, Stack } from "carbon-components-svelte";
+  import { MicroFunnel } from "carbon-components-svelte/viz";
+
+  const stages = [
+    { id: "visit", label: "Visitors", value: 10000 },
+    { id: "signup", label: "Signup", value: 6000 },
+    { id: "activate", label: "Activated", value: 3000 },
+    { id: "paid", label: "Paid", value: 900 },
+  ];
+
+  const weak = [
+    { id: "visit", label: "Visitors", value: 8000 },
+    { id: "signup", label: "Signup", value: 1600 },
+    { id: "activate", label: "Activated", value: 900 },
+    { id: "paid", label: "Paid", value: 120 },
+  ];
+</script>
+
+`MicroFunnel` is part of the data visualization subpackage. Import it from `carbon-components-svelte/viz` and load `carbon-components-svelte/css/viz.css` alongside `all.css`. With a single-theme stylesheet such as `g100.css`, load the matching `viz-g100.css` instead.
+
+It takes the same `stages` as [FunnelBars](/components/FunnelBars). Use `FunnelBars` when the stage values matter. Use `MicroFunnel` when only the shape or the final conversion does.
+
+## Basic
+
+Pass `stages` and a `label`. The overall conversion is appended to the accessible name.
+
+<MicroFunnel {stages} label="Signup funnel" />
+
+## Variants
+
+### Steps
+
+One segment per stage. Height steps down with each stage.
+
+<Stack gap={5}>
+  <MicroFunnel {stages} label="Healthy funnel" />
+  <MicroFunnel stages={weak} label="Funnel with an early drop" />
+</Stack>
+
+### Completion
+
+Set `variant` to `"completion"` to reduce the funnel to one bar filled to the overall conversion.
+
+<Stack gap={5}>
+  <MicroFunnel {stages} variant="completion" label="Signup funnel" />
+  <MicroFunnel stages={weak} variant="completion" label="Weak funnel" />
+  <MicroFunnel {stages} variant="completion" hideValue label="Signup funnel" />
+</Stack>
+
+## Sizes
+
+<Stack gap={5}>
+  <MicroFunnel {stages} size="sm" label="Small funnel" />
+  <MicroFunnel {stages} label="Medium funnel (default)" />
+  <MicroFunnel {stages} size="lg" label="Large funnel" />
+</Stack>
+
+## Color
+
+Set `color` to a semantic name, a categorical index from 1 to 14, a viz token name, or any CSS color.
+
+<Stack gap={5}>
+  <MicroFunnel {stages} color="neutral" label="Neutral funnel" />
+  <MicroFunnel {stages} color={3} label="Categorical funnel" />
+</Stack>
+
+## In a data table
+
+The small size matches the short row density.
+
+<DataTable
+  size="short"
+  headers={[
+    { key: "channel", value: "Channel" },
+    { key: "visitors", value: "Visitors" },
+    { key: "funnel", value: "Funnel" },
+    { key: "completion", value: "Paid" },
+  ]}
+  rows={[
+    { id: "a", channel: "Organic", visitors: "10K", funnel: stages, completion: stages },
+    { id: "b", channel: "Paid search", visitors: "8K", funnel: weak, completion: weak },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell let:row>
+    {#if cell.key === "funnel"}
+      <MicroFunnel stages={cell.value} size="sm" label="{row.channel} funnel" />
+    {:else if cell.key === "completion"}
+      <MicroFunnel stages={cell.value} size="sm" variant="completion" />
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
+
+## Accessibility
+
+With a `label`, the funnel is announced as an image named with the label and the overall conversion, such as "Signup funnel. Overall conversion 9%". Without one it is hidden from assistive technology, which suits a table where a neighboring cell already gives the number.
