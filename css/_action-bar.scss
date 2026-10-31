@@ -1,0 +1,251 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ActionBar: a toolbar of buttons that collapse into a "More" menu as the
+/// bar narrows. Carbon v10 has no general toolbar (its `.bx--toolbar` is
+/// DataTable's), so this is an original layout over `Button`, `Menu` and the
+/// ghost icon-only look the DataTable toolbar uses.
+/// @access private
+/// @group components
+@mixin action-bar {
+  // One line, clipped to its width. The server renders every button, and
+  // the bar collapses what does not fit on mount; until then the clip keeps
+  // the overflow off the page. A bar as tall as its buttons keeps the
+  // height from changing when it does.
+  .#{$prefix}--action-bar {
+    display: flex;
+    min-width: 0;
+    min-height: to-rem(40px);
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--action-bar--xs {
+    min-height: to-rem(24px);
+  }
+
+  .#{$prefix}--action-bar--sm {
+    min-height: to-rem(32px);
+  }
+
+  .#{$prefix}--action-bar--lg {
+    min-height: to-rem(48px);
+  }
+
+  // The containing block of what it clips. A field's visually hidden label
+  // is `position: absolute`, and with a block outside the bar, the clip
+  // missed it and the page scrolled sideways.
+  //
+  // The row never scrolls: focus on a field past the clip would slide every
+  // control out of view. The fit leaves no overflow, and `clip`, where the
+  // browser has it, also stops a scroll from focus.
+  .#{$prefix}--action-bar__items {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  @supports (overflow: clip) {
+    .#{$prefix}--action-bar,
+    .#{$prefix}--action-bar__items {
+      overflow: clip;
+    }
+  }
+
+  .#{$prefix}--action-bar__group {
+    display: flex;
+    flex: none;
+    align-items: center;
+  }
+
+  // A field shrinks to 8rem (`ACTION_BAR_FIELD_MIN_REM`) before a button
+  // collapses into the "More" menu, and grows no wider than its own width.
+  // With every button collapsed and still no room, the fields shrink on
+  // from 8rem in equal parts, so they do not jump at the boundary.
+  .#{$prefix}--action-bar__item {
+    min-inline-size: to-rem(128px);
+    flex: 0 1 auto;
+  }
+
+  .#{$prefix}--action-bar--overfull .#{$prefix}--action-bar__item {
+    min-inline-size: 0;
+    flex-basis: to-rem(128px);
+  }
+
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__item {
+    min-inline-size: 0;
+    flex: none;
+  }
+
+  .#{$prefix}--action-bar__button,
+  .#{$prefix}--action-bar__more {
+    flex: none;
+  }
+
+  .#{$prefix}--action-bar__divider {
+    display: flex;
+    flex: none;
+    align-items: center;
+    padding-inline: $carbon--spacing-03;
+  }
+
+  // A border rather than a fill, which forced colors would repaint.
+  .#{$prefix}--action-bar__divider::before {
+    display: block;
+    height: to-rem(16px);
+    border-inline-start: to-rem(1px) solid $border-subtle;
+    content: "";
+  }
+
+  // Collapsed into the "More" menu. The observer reads 0 from it and keeps the
+  // width it had. A button's own tooltip classes set `display` at two classes,
+  // so the button says three.
+  .#{$prefix}--action-bar__button.#{$prefix}--action-bar__button--collapsed.#{$prefix}--btn,
+  .#{$prefix}--action-bar__group--collapsed,
+  .#{$prefix}--action-bar__divider--collapsed {
+    display: none;
+  }
+
+  // A disabled button stays focusable (`aria-disabled`), so it holds the
+  // disabled look through hover and focus, which the native `:disabled`
+  // rules would otherwise do.
+  .#{$prefix}--action-bar__button[aria-disabled="true"] {
+    background-color: transparent;
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--action-bar__button[aria-disabled="true"] .#{$prefix}--btn__icon,
+  .#{$prefix}--action-bar__button[aria-disabled="true"] .#{$prefix}--btn__icon path {
+    fill: $icon-disabled;
+  }
+
+  // Pressed (a toggle, or the chosen radio): a fill, and a bar under the
+  // icon so the state does not rest on color alone. The bar is a background
+  // image: the focus ring owns `box-shadow`, and the tooltip `::before` and
+  // `::after`.
+  .#{$prefix}--action-bar__button--pressed {
+    background-color: $layer-selected;
+    background-image: linear-gradient($icon-primary, $icon-primary);
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: calc(100% - #{$carbon--spacing-05}) to-rem(2px);
+  }
+
+  .#{$prefix}--action-bar__button--pressed[aria-disabled="true"] {
+    background-image: linear-gradient($icon-disabled, $icon-disabled);
+  }
+
+  // Vertical: a column of buttons, with the bar under each one's edge.
+  .#{$prefix}--action-bar--vertical,
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__items,
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__group {
+    flex-direction: column;
+  }
+
+  // Fills the height of its container, when the container has one: the
+  // room the buttons that do not fit collapse to. A bar only as tall as the
+  // buttons it shows would measure that height as its room, and never
+  // expand again.
+  .#{$prefix}--action-bar--vertical {
+    width: fit-content;
+    min-width: to-rem(40px);
+    height: 100%;
+    min-height: 0;
+    align-items: stretch;
+  }
+
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__items,
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__group {
+    align-items: stretch;
+  }
+
+  .#{$prefix}--action-bar--vertical.#{$prefix}--action-bar--xs {
+    min-width: to-rem(24px);
+  }
+
+  .#{$prefix}--action-bar--vertical.#{$prefix}--action-bar--sm {
+    min-width: to-rem(32px);
+  }
+
+  .#{$prefix}--action-bar--vertical.#{$prefix}--action-bar--lg {
+    min-width: to-rem(48px);
+  }
+
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__divider {
+    padding-block: $carbon--spacing-03;
+    padding-inline: 0;
+  }
+
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__divider::before {
+    width: to-rem(16px);
+    height: 0;
+    margin-inline: auto;
+    border-block-start: to-rem(1px) solid $border-subtle;
+    border-inline-start: 0;
+  }
+
+  .#{$prefix}--action-bar--vertical .#{$prefix}--action-bar__button--pressed {
+    background-position: left center;
+    background-size: to-rem(2px) calc(100% - #{$carbon--spacing-05});
+
+    [dir="rtl"] & {
+      background-position: ccs-dir(left center, right center);
+    }
+  }
+
+  // Forced colors repaint a fill and drop the bar, so a pressed button
+  // fills with `Highlight` and opts out of forcing, as a selected
+  // icon-only `Button` does. A disabled one reads as `GrayText`.
+  @media (forced-colors: active) {
+    // A ghost button's transparent border is repainted, which drew a box
+    // around every button, and focus only changed the color of one. The
+    // resting border matches the canvas, and focus draws a 2px ring.
+    .#{$prefix}--action-bar__button.#{$prefix}--btn,
+    .#{$prefix}--action-bar__more.#{$prefix}--btn {
+      border-color: Canvas;
+    }
+
+    .#{$prefix}--action-bar__button.#{$prefix}--btn:not(.#{$prefix}--action-bar__button--pressed):focus,
+    .#{$prefix}--action-bar__more.#{$prefix}--btn:focus {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    .#{$prefix}--action-bar__button--pressed,
+    .#{$prefix}--action-bar__button--pressed:hover,
+    .#{$prefix}--action-bar__button--pressed:focus {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--action-bar__button--pressed .#{$prefix}--btn__icon,
+    .#{$prefix}--action-bar__button--pressed .#{$prefix}--btn__icon path {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--action-bar__button--pressed {
+      background-image: none;
+    }
+
+    .#{$prefix}--action-bar__button[aria-disabled="true"] {
+      color: GrayText;
+    }
+
+    .#{$prefix}--action-bar__button[aria-disabled="true"] .#{$prefix}--btn__icon,
+    .#{$prefix}--action-bar__button[aria-disabled="true"]
+      .#{$prefix}--btn__icon
+      path {
+      fill: GrayText;
+    }
+  }
+}
+
+@include exports("action-bar") {
+  @include action-bar;
+}

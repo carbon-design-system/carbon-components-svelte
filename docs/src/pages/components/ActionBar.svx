@@ -1,0 +1,205 @@
+---
+components: ["ActionBar", "ActionBarButton", "ActionBarGroup", "ActionBarDivider", "ActionBarItem"]
+description: A toolbar of icon buttons, toggles and fields with one tab stop and arrow-key navigation, which collapses what does not fit into a "More" menu.
+---
+
+<script>
+  import {
+    ActionBar,
+    ActionBarButton,
+    ActionBarDivider,
+    ActionBarGroup,
+    ActionBarItem,
+    Box,
+    Dropdown,
+    Search,
+    Stack,
+  } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
+  import Redo from "carbon-icons-svelte/lib/Redo.svelte";
+  import Save from "carbon-icons-svelte/lib/Save.svelte";
+  import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
+  import TextItalic from "carbon-icons-svelte/lib/TextItalic.svelte";
+  import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+  import Undo from "carbon-icons-svelte/lib/Undo.svelte";
+</script>
+
+## Basic
+
+`ActionBar` is a toolbar for commands that sit in a row, such as the formatting tools of an editor. Give it `labelText`: a page with more than one toolbar needs a name for each.
+
+The bar is one tab stop. <DocKbd label="Tab" /> enters it and leaves it, and the arrow keys, <DocKbd label="Home" /> and <DocKbd label="End" /> move between the buttons. An icon-only button shows its `labelText` as a tooltip, with its `shortcut` beside it.
+
+<ActionBar labelText="Document tools">
+  <ActionBarButton labelText="Undo" icon={Undo} shortcut="mod+z" />
+  <ActionBarButton labelText="Redo" icon={Redo} shortcut="mod+shift+z" />
+  <ActionBarDivider />
+  <ActionBarButton labelText="Copy" icon={Copy} />
+  <ActionBarButton labelText="Delete" icon={TrashCan} kind="danger-ghost" />
+</ActionBar>
+
+## Overflow
+
+### Collapse into a menu
+
+When the bar is narrower than its buttons, the ones that do not fit collapse into a menu behind a "More" button. The last button goes first. Drag the slider to change the width. A collapsed button comes back once it fits with 16px to spare, so a width near the edge does not toggle it on every resize.
+
+<FileSource src="/framed/ActionBar/ActionBarOverflow" />
+
+A button in the menu keeps its tooltip text as its label, its pressed state as a check, and its `shortcut`, which still works. Choosing it runs the button's own `on:click`. A divider goes when it no longer sits between two buttons that show, and the menu gets one where a divider sat between two of its buttons.
+
+Set `moreText` to rename the button, and listen for `overflow:change` to see how many collapsed.
+
+### Priority and pinned
+
+`priority` decides which buttons stay. A button with a lower number collapses first, and of equal numbers the last one does. Set `pinned` so a button never collapses, such as the primary action. A pinned button that does not fit is clipped, so leave the bar room for those.
+
+<FileSource src="/framed/ActionBar/ActionBarPriority" />
+
+## Buttons
+
+### Icon-only and labeled
+
+A button with an `icon` shows only the icon, and `labelText` becomes its tooltip. Set `iconOnly={false}` to show the label beside the icon, and leave out `icon` for a text button.
+
+<ActionBar labelText="Editing">
+  <ActionBarButton labelText="Add" icon={Add} />
+  <ActionBarButton labelText="Save" icon={Save} iconOnly={false} />
+  <ActionBarButton labelText="Publish" iconOnly={false} />
+</ActionBar>
+
+### Toggle
+
+Set `pressed` to `true` or `false` to make a button a toggle. A toggle shows a fill and a bar under it, so the state does not rest on color, and announces `aria-pressed`. `pressed` is controlled: flip it from `on:click`, so an editor can set it from the selection instead.
+
+<FileSource src="/framed/ActionBar/ActionBarToggle" />
+
+### Single choice
+
+Set `selection="single"` on an `ActionBarGroup` and give each button a `value`. The buttons become the radio buttons of one choice, and `value` on the group is bindable. The arrow keys of the bar move focus between them without choosing, and <DocKbd label="Space" /> or <DocKbd label="Enter" /> chooses.
+
+<FileSource src="/framed/ActionBar/ActionBarChoice" />
+
+### Disabled
+
+A disabled button stays in the tab order and answers to the arrow keys, since focus would otherwise fall to the page when a button turns itself off, as Undo does. It is `aria-disabled`, shows its tooltip, and does not click.
+
+<ActionBar labelText="History">
+  <ActionBarButton labelText="Undo" icon={Undo} />
+  <ActionBarButton labelText="Redo" icon={Redo} disabled />
+</ActionBar>
+
+### Shortcut
+
+Set `shortcut` to show the keys in the tooltip and set `aria-keyshortcuts`. The button clicks when they are pressed, also while it is in the "More" menu. See [Button](/components/Button#keyboard-shortcut) for the keys.
+
+<ActionBar labelText="Formatting">
+  <ActionBarButton labelText="Bold" icon={TextBold} shortcut="mod+b" />
+  <ActionBarButton labelText="Italic" icon={TextItalic} shortcut="mod+i" />
+  <ActionBarButton labelText="Underline" icon={TextUnderline} shortcut="mod+u" />
+</ActionBar>
+
+## Sizes
+
+Set `size` to `"xs"`, `"sm"`, `"md"` (default) or `"lg"`: 24, 32, 40 and 48px.
+
+<Stack gap={4}>
+  <ActionBar labelText="Extra small" size="xs">
+    <ActionBarButton labelText="Undo" icon={Undo} />
+    <ActionBarButton labelText="Redo" icon={Redo} />
+  </ActionBar>
+  <ActionBar labelText="Small" size="sm">
+    <ActionBarButton labelText="Undo" icon={Undo} />
+    <ActionBarButton labelText="Redo" icon={Redo} />
+  </ActionBar>
+  <ActionBar labelText="Medium" size="md">
+    <ActionBarButton labelText="Undo" icon={Undo} />
+    <ActionBarButton labelText="Redo" icon={Redo} />
+  </ActionBar>
+  <ActionBar labelText="Large" size="lg">
+    <ActionBarButton labelText="Undo" icon={Undo} />
+    <ActionBarButton labelText="Redo" icon={Redo} />
+  </ActionBar>
+</Stack>
+
+## Orientation
+
+Set `orientation="vertical"` for a column. The bar moves focus with <DocKbd label="↑" /> and <DocKbd label="↓" />, tooltips open beside the buttons, and the buttons that do not fit the height of the bar's container collapse.
+
+<Box height="11rem">
+  <ActionBar labelText="Tools" orientation="vertical">
+    <ActionBarButton labelText="Add" icon={Add} />
+    <ActionBarButton labelText="Copy" icon={Copy} />
+    <ActionBarButton labelText="Save" icon={Save} />
+    <ActionBarButton labelText="Delete" icon={TrashCan} />
+    <ActionBarButton labelText="Undo" icon={Undo} />
+  </ActionBar>
+</Box>
+
+## Fields
+
+An `ActionBarItem` holds a control that is not a button, such as a `Dropdown` or a `Search`. It is one stop of the bar, and the control keeps the keys it uses:
+
+| Control | Keeps | The bar takes |
+| :--- | :--- | :--- |
+| Text field | <DocKbd label="←" /> <DocKbd label="→" /> <DocKbd label="Home" /> <DocKbd label="End" /> | <DocKbd label="←" /> or <DocKbd label="→" /> at the edge of the text |
+| `Dropdown` | <DocKbd label="↑" /> <DocKbd label="↓" />, and every arrow while open | <DocKbd label="←" /> <DocKbd label="→" /> |
+| Button | None | Every arrow key |
+
+A field takes the bar's `size` when its own is unset, so it fills the height of the bar and its bottom border is the bar's bottom edge.
+
+An item never collapses into the menu, since a control cannot be copied into it. Instead, its field shrinks: in a horizontal bar, fields narrow to 8rem before any button collapses, and once every button is in the menu, they share what is left. The row never scrolls, so focus on a field keeps the other controls in place. Below 8rem a field gets hard to read, so give the bar room for its items, or move them out of it on narrow screens.
+
+<ActionBar labelText="Table tools">
+  <ActionBarButton labelText="Add row" icon={Add} />
+  <ActionBarItem>
+    <Dropdown
+      hideLabel
+      labelText="Style"
+      selectedId="paragraph"
+      items={[
+        { id: "paragraph", text: "Paragraph" },
+        { id: "heading", text: "Heading" },
+      ]}
+    />
+  </ActionBarItem>
+  <ActionBarItem>
+    <Search labelText="Find" placeholder="Find" />
+  </ActionBarItem>
+  <ActionBarButton labelText="Copy" icon={Copy} />
+</ActionBar>
+
+## Keyboard
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="Tab" /> | Enter the bar at the button last in focus, or leave it |
+| <DocKbd label="→" /> <DocKbd label="←" /> | Move to the next or previous button, wrapping. They swap under `dir="rtl"` |
+| <DocKbd label="↓" /> <DocKbd label="↑" /> | The same in a vertical bar |
+| <DocKbd label="Home" /> <DocKbd label="End" /> | Move to the first or last button |
+| <DocKbd label="Space" /> <DocKbd label="Enter" /> | Press the button |
+| <DocKbd label="Escape" /> | Close the tooltip, then dispatch `exit`, so an editor can take focus back |
+
+Chords with <DocKbd label="Alt" />, <DocKbd label="Ctrl" /> or <DocKbd label="Cmd" /> are left to the browser. When a button collapses while it has focus, focus moves to the "More" button.
+
+## Keep focus in an editor
+
+Set `preserveFocus` so pressing a button with the pointer does not take focus from the editor it acts on. The keyboard path is unchanged: press <DocKbd label="Escape" /> to return to the editor from the `exit` event.
+
+<ActionBar labelText="Formatting" preserveFocus>
+  <ActionBarButton labelText="Bold" icon={TextBold} />
+  <ActionBarButton labelText="Italic" icon={TextItalic} />
+</ActionBar>
+
+## Choosing a component
+
+| Do | Why |
+| :--- | :--- |
+| Use `ActionBar` for a row of commands that can run out of room, such as an editor's tools | It collapses what does not fit and stays one tab stop |
+| Use [DataTable](/components/DataTable)'s `Toolbar` for a table's search, filters and batch actions | It carries the table's own selection state |
+| Use [ToggleButtonGroup](/components/ToggleButtonGroup) for one segmented choice that stands alone | It is a single control, with no overflow |
+| Use [ActionSet](/components/ActionSet) for the buttons in the footer of a modal or panel | It stacks them and orders them by kind |
+| Use [MenuButton](/components/MenuButton) when every action lives in a menu | An `ActionBar` shows its buttons |
+| Name each bar with `labelText` | A toolbar with no name is announced as "toolbar" alone |
