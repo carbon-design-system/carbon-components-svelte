@@ -238,6 +238,12 @@ $-kind-accents-inverse: (
     fill: $icon-primary;
   }
 
+  // A banner closed under the pointer keeps its space, empty, until the
+  // pointer leaves it. The component drops its kind classes meanwhile.
+  .#{$prefix}--shell-banner--held > * {
+    visibility: hidden;
+  }
+
   @media (forced-colors: active) {
     // An outline, not a border, so the banner stays 2.5rem tall. The 3px
     // inline-start border draws the accent.
@@ -253,6 +259,12 @@ $-kind-accents-inverse: (
 
     .#{$prefix}--shell-banner--thin .#{$prefix}--shell-banner__body {
       border-color: CanvasText;
+    }
+
+    // After the thin rule above, which it ties.
+    .#{$prefix}--shell-banner--held {
+      border-color: transparent;
+      outline: 0;
     }
 
     // The inline notification's rule is scoped to its own root.

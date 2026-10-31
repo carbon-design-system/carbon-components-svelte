@@ -78,6 +78,8 @@ test.describe("above the header", () => {
   }) => {
     await page.goto("/shell-banner.html?dismissible");
     await page.getByRole("button", { name: "Dismiss banner" }).click();
+    // The space is held until the pointer leaves it.
+    await page.mouse.move(600, 500);
 
     await expect(page.locator(BANNER)).toHaveCount(0);
     const { header, sideNav, content } = await tops(page);
@@ -102,9 +104,52 @@ test.describe("above the header", () => {
     expect(box?.y).toBe(40 - 1);
   });
 
+  test("holds its space under the pointer after a click closes it", async ({
+    page,
+  }) => {
+    await page.goto("/shell-banner.html?dismissible");
+    const close = page.getByRole("button", { name: "Dismiss banner" });
+    const box = await close.boundingBox();
+    if (!box) throw new Error("no close button");
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.move(box.x, box.y + 2);
+
+    // Closed for assistive technology, and the header has not moved.
+    const banner = page.locator(".bx--shell-banner--held");
+    await expect(banner).toHaveAttribute("aria-hidden", "true");
+    await expect(
+      page.getByRole("region", { name: "Impersonation" }),
+    ).toHaveCount(0);
+    expect((await tops(page)).header).toBe(40);
+
+    // Leaving releases the space.
+    await page.mouse.move(600, 500);
+    await expect(page.locator(BANNER)).toHaveCount(0);
+    expect((await tops(page)).header).toBe(0);
+  });
+
+  test("collapses at once when the keyboard closes it", async ({ page }) => {
+    await page.goto("/shell-banner.html?dismissible");
+    await page.getByRole("button", { name: "Dismiss banner" }).focus();
+    await page.keyboard.press("Enter");
+
+    await expect(page.locator(BANNER)).toHaveCount(0);
+    expect((await tops(page)).header).toBe(0);
+  });
+
+  test("releases a held space when the page scrolls", async ({ page }) => {
+    await page.goto("/shell-banner.html?dismissible");
+    await page.getByRole("button", { name: "Dismiss banner" }).click();
+    await expect(page.locator(".bx--shell-banner--held")).toHaveCount(1);
+
+    await page.mouse.wheel(0, 200);
+    await expect(page.locator(BANNER)).toHaveCount(0);
+  });
+
   test("stays dismissed after a reload", async ({ page }) => {
     await page.goto("/shell-banner.html?dismissible&dismissId=release-2");
     await page.getByRole("button", { name: "Dismiss banner" }).click();
+    await page.mouse.move(600, 500);
     await expect(page.locator(BANNER)).toHaveCount(0);
 
     await page.reload();

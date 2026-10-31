@@ -112,10 +112,12 @@
   import NotificationButton from "../Notification/NotificationButton.svelte";
   import NotificationIcon from "../Notification/NotificationIcon.svelte";
   import { statusIconLabel } from "../Notification/status-icon-label.js";
+  import { NOTIFICATION_QUEUE_COLLAPSE_MS } from "../constants/timing.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { returnFocus } from "../utils/focus.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import { addPooledListener } from "../utils/window-listener-pool.js";
 
   const dispatch = createEventDispatcher();
   const owner = uniqueId();
@@ -135,6 +137,15 @@
   let prevFocus = null;
   /** @type {() => void} */
   let stopOffset = () => {};
+  // Closed by a mouse or pen over the banner: the empty banner keeps its
+  // space until the pointer leaves it or the page scrolls, so the shell
+  // does not move under the pointer.
+  let held = false;
+  let pointerType = "";
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let releaseTimer;
+  /** @type {() => void} */
+  let stopScrollRelease = () => {};
 
   $: aboveHeader = placement === "above-header";
   $: titled = Boolean(title || $$slots.titleChildren);
@@ -142,7 +153,8 @@
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
     splitAriaNaming($$restProps));
   $: if (dismissed) open = false;
-  $: syncOffset(mounted && open && aboveHeader ? ref : null);
+  $: syncOffset(mounted && (open || held) && aboveHeader ? ref : null);
+  $: if (open && held) release();
 
   /**
    * Publish the banner's height as `--ccs-shell-offset` on `<html>`, which
@@ -182,10 +194,31 @@
     }
   }
 
+  function release() {
+    clearTimeout(releaseTimer);
+    stopScrollRelease();
+    stopScrollRelease = () => {};
+    held = false;
+  }
+
+  function handlePointerLeave() {
+    if (!held) return;
+    clearTimeout(releaseTimer);
+    releaseTimer = setTimeout(release, NOTIFICATION_QUEUE_COLLAPSE_MS);
+  }
+
   function close() {
     if (!dispatch("close", { dismissId }, { cancelable: true })) return;
     const hadFocus = !!ref?.contains(document.activeElement);
     const target = prevFocus;
+    // Touch has no hover, and a keyboard close has no pointer to protect.
+    if (pointerType && pointerType !== "touch" && ref?.matches(":hover")) {
+      held = true;
+      stopScrollRelease = addPooledListener("scroll", release, {
+        capture: true,
+        passive: true,
+      });
+    }
     open = false;
     if (dismissId) dismissed = true;
     prevFocus = null;
@@ -204,7 +237,11 @@
 
   onMount(() => {
     mounted = true;
-    return () => stopOffset();
+    return () => {
+      stopOffset();
+      clearTimeout(releaseTimer);
+      stopScrollRelease();
+    };
   });
 </script>
 
@@ -222,10 +259,11 @@
   {/if}
 </svelte:head>
 
-{#if open}
+{#if open || held}
   <section
     bind:this={ref}
-    role={announce ? "status" : undefined}
+    role={announce && !held ? "status" : undefined}
+    aria-hidden={held ? "true" : undefined}
     aria-label={ariaLabel ?? label}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={ariaDescribedBy}
@@ -234,8 +272,9 @@
     class:bx--shell-banner--content={!aboveHeader}
     class:bx--shell-banner--sticky={sticky && !aboveHeader}
     class:bx--shell-banner--thin={thin}
-    class:bx--shell-banner--low-contrast={lowContrast}
-    class:bx--shell-banner--high-contrast={!lowContrast}
+    class:bx--shell-banner--held={held}
+    class:bx--shell-banner--low-contrast={lowContrast && !held}
+    class:bx--shell-banner--high-contrast={!lowContrast && !held}
     class:bx--shell-banner--error={kind === "error"}
     class:bx--shell-banner--info={kind === "info" || kind === "info-square"}
     class:bx--shell-banner--success={kind === "success"}
@@ -244,6 +283,11 @@
     {...rest}
     on:click
     on:focusin={handleFocusIn}
+    on:pointerdown={(event) => {
+      pointerType = event.pointerType;
+    }}
+    on:pointerenter={() => clearTimeout(releaseTimer)}
+    on:pointerleave={handlePointerLeave}
   >
     <div class:bx--shell-banner__body={true}>
       <div class:bx--shell-banner__details={true}>

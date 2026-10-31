@@ -49,10 +49,34 @@ describe("ShellBanner", () => {
     it("closes, and binds open", async () => {
       render(ShellBanner, { props: { dismissible: true } });
 
-      await user.click(screen.getByRole("button", { name: "Dismiss banner" }));
+      screen.getByRole("button", { name: "Dismiss banner" }).focus();
+      await user.keyboard("{Enter}");
 
       expect(screen.queryByTestId("banner")).toBeNull();
       expect(screen.getByTestId("open")).toHaveTextContent("false");
+    });
+
+    it("holds its space under the pointer until the pointer leaves", async () => {
+      render(ShellBanner, {
+        props: { placement: "above-header", dismissible: true },
+      });
+      await tick();
+
+      await user.click(screen.getByRole("button", { name: "Dismiss banner" }));
+
+      // `open` is false at once; the empty banner keeps the offset.
+      expect(screen.getByTestId("open")).toHaveTextContent("false");
+      const banner = screen.getByTestId("banner");
+      expect(banner).toHaveAttribute("aria-hidden", "true");
+      expect(banner).toHaveClass("bx--shell-banner--held");
+      expect(offset()).not.toBe("");
+
+      await user.unhover(banner);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      await tick();
+
+      expect(screen.queryByTestId("banner")).toBeNull();
+      expect(offset()).toBe("");
     });
 
     it("keeps the banner open when a close listener cancels", async () => {
@@ -131,7 +155,8 @@ describe("ShellBanner", () => {
       await tick();
       expect(offset()).toBe("40px");
 
-      await user.click(screen.getByRole("button", { name: "Dismiss banner" }));
+      screen.getByRole("button", { name: "Dismiss banner" }).focus();
+      await user.keyboard("{Enter}");
 
       expect(offset()).toBe("");
     });

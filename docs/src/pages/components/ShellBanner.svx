@@ -135,6 +135,13 @@ Set `dismissible` to show a close button. Closing dispatches a cancelable
 `event.preventDefault()`. Bind `open` to close or reopen the banner from
 your own code.
 
+When a mouse closes the banner, `open` turns `false` at once, but the
+empty banner keeps its space until the pointer leaves it or the page
+scrolls. The shell and the content then move up. Otherwise the header,
+or the content, would move under the pointer, and a second click would
+land on whatever moved there. A keyboard or touch close removes the
+space at once.
+
 Give the banner a `dismissId` to remember the dismissal in `localStorage`,
 under the key `ccs-shell-banner:{dismissId}`. It stays closed on later
 visits and in other tabs until the id changes, so give each announcement
