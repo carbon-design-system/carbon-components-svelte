@@ -25,6 +25,7 @@ import HeaderGlobalActionFixture from "../fixtures/HeaderGlobalAction.test.svelt
 import HeaderNavFixture from "../fixtures/HeaderNav.test.svelte";
 import ProfileMenuItemFixture from "../fixtures/ProfileMenuItem.test.svelte";
 import ProgressStepFixture from "../fixtures/ProgressStep.test.svelte";
+import SelectableTagGroupFixture from "../fixtures/SelectableTagGroup.test.svelte";
 import SideNavFixture from "../fixtures/SideNav.test.svelte";
 import StructuredListFixture from "../fixtures/StructuredList.test.svelte";
 import TableFixture from "../fixtures/Table.test.svelte";
@@ -235,6 +236,11 @@ export const navigation: AriaEntry[] = [
     name: "SelectableTag",
     render: (attrs) => render(SelectableTag, { props: attrs }),
     target: () => screen.getByRole("button"),
+  },
+  {
+    name: "SelectableTagGroup",
+    render: (attrs) => render(SelectableTagGroupFixture, { props: attrs }),
+    target: () => screen.getByRole("toolbar"),
   },
   {
     name: "Tag",

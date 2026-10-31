@@ -543,6 +543,13 @@
   // backplate, which hid the `HighlightText` label. Its border and focus
   // ring, which unforcing brings back, use system colors too.
   @media (forced-colors: active) {
+    // The tag's Windows high contrast fix adds a 1px outline to every tag.
+    // The border is already the resting edge, and the two drew 2px, as
+    // wide as the focus ring. The `:focus` rule below still draws the ring.
+    .#{$prefix}--tag--selectable {
+      outline: none;
+    }
+
     .#{$prefix}--tag--selectable.#{$prefix}--tag--selectable-selected:not(.#{$prefix}--tag--disabled) {
       forced-color-adjust: none;
       border-color: Highlight;
