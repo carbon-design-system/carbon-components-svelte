@@ -1,0 +1,16 @@
+diff --git a/dist/src/index.js b/dist/src/index.js
+index 8eec91714c82eaba243e87e3a7b90863c8b7710d..adb60e068919e556c8b0f2c4a35f2c0493c94aac 100644
+--- a/dist/src/index.js
++++ b/dist/src/index.js
+@@ -129495,6 +129495,11 @@ function runTypeScriptDiagnostics(tsconfigPath, useTsgo, incremental, cwd) {
+     });
+ }
+ function getTsGoBinPath(tsconfigPath) {
++    // Prefer tsrs (Rust port of TypeScript 7) when installed; it prints tsc's `--pretty` output.
++    const tsrs = tryParsePkg(tsconfigPath, 'tsrs');
++    if (tsrs?.bin.tsrs) {
++        return path__namespace.join(path__namespace.dirname(tsrs.path), tsrs.bin.tsrs);
++    }
+     const pkg = tryParseTsGoVersion(tsconfigPath);
+     if (!pkg) {
+         throw new Error(formatTsGoNotFoundError('--tsgo'));

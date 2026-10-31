@@ -104,7 +104,6 @@
     "@types/bun": "^1.4.2",
     "@types/jsdom": "^30.0.0",
     "@types/node": "^26.6.2",
-    "@typescript/native-preview": "^7.0.0-dev.20260707.2",
     "acorn": "^8.18.0",
     "bivium": "^0.2.1",
     "browserslist": "^4.29.1",
@@ -118,6 +117,7 @@
     "sveld": "^0.39.0",
     "svelte": "^5.57.1",
     "svelte-check": "^4.7.6",
+    "tsrs": "^0.18.0-ts7.1.0-dev.20260929",
     "typescript": "^6.0.3",
     "vite": "^8.3.1",
     "vitest": "^5.0.4"
@@ -145,5 +145,8 @@
   ],
   "maintainers": [
     "Eric Liu (https://github.com/metonym)"
-  ]
+  ],
+  "patchedDependencies": {
+    "svelte-check@4.7.6": "patches/svelte-check@4.7.6.patch"
+  }
 }
