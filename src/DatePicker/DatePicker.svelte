@@ -1829,6 +1829,9 @@
     } else {
       engine.calendarContainer.removeAttribute("aria-disabled");
     }
+    engine.setBlocked?.(
+      $disabledAny ? "disabled" : $readonlyAny ? "readonly" : undefined,
+    );
   }
   // The range plugin writes to two inputs and has no alt input for the second.
   $: usesDisplayFormat = !!displayFormat && datePickerType !== "range";

@@ -100,6 +100,19 @@ describe("DatePicker presets", () => {
     expect(screen.getByTestId("value")).toHaveTextContent("10/08/2026");
   });
 
+  it("disables the presets of a disabled inline picker", async () => {
+    const { rerender } = render(DatePickerPresets, {
+      presets: [today, thisMonth],
+      inline: true,
+      disabled: true,
+    });
+
+    const preset = await screen.findByRole("button", { name: "This month" });
+    expect(preset).toBeDisabled();
+    await rerender({ disabled: false });
+    expect(preset).toBeEnabled();
+  });
+
   it("warns once when the type has no single date or range", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     render(DatePickerPresets, { datePickerType: "month", presets: [today] });

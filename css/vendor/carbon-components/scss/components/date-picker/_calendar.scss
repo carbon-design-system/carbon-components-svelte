@@ -245,7 +245,7 @@
       pointer-events: none;
     }
 
-    .#{$prefix}--date-picker__preset:not([aria-disabled='true']):hover {
+    .#{$prefix}--date-picker__preset:enabled:not([aria-disabled='true']):hover {
       background-color: $layer-hover;
     }
   }
@@ -475,6 +475,8 @@
 
     // Unavailable presets stay focusable (`aria-disabled`), so forced
     // colors don't grey them on their own.
+    // A disabled picker disables every preset (`disabled`).
+    &:disabled,
     &[aria-disabled='true'] {
       color: $text-disabled;
       cursor: not-allowed;
@@ -491,6 +493,10 @@
     padding-inline-start: calc(#{$carbon--spacing-04} - #{to-rem(2px)});
     font-weight: 600;
     border-inline-start: to-rem(2px) solid $border-interactive;
+
+    &:disabled {
+      border-inline-start-color: $border-disabled;
+    }
   }
 
   // Below the md breakpoint the rail sits above the calendar as a

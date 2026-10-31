@@ -1586,7 +1586,29 @@ export function createCalendarEngine(element, userConfig = {}) {
     container.replaceChildren(rail, main);
     self.presetsElement = rail;
     syncPresets();
+    applyBlocked();
   }
+
+  /**
+   * Whether a disabled or read-only input blocks the calendar. The picker
+   * blocks the grid's and the presets' clicks and keys; a disabled
+   * picker's presets are disabled too, so they leave the tab order.
+   * @type {undefined | "disabled" | "readonly"}
+   */
+  let blocked;
+
+  function applyBlocked() {
+    for (const button of self.presetsElement?.children ?? []) {
+      button.disabled = blocked === "disabled";
+    }
+  }
+
+  /** @param {undefined | "disabled" | "readonly"} state */
+  function setBlocked(state) {
+    blocked = state;
+    applyBlocked();
+  }
+  self.setBlocked = setBlocked;
 
   /**
    * Marks the preset that matches the selection (by day) and disables the

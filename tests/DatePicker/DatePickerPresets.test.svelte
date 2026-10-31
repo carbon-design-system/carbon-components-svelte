@@ -11,20 +11,23 @@
   export let valueTo = "";
   export let maxDate: ComponentProps<DatePicker>["maxDate"] = null;
   export let onchange: (event: CustomEvent) => void = () => {};
+  export let inline = false;
+  export let disabled = false;
 </script>
 
 <DatePicker
   {datePickerType}
   {presets}
   {maxDate}
+  {inline}
   bind:value
   bind:valueFrom
   bind:valueTo
   on:change={onchange}
 >
-  <DatePickerInput labelText="Start" />
+  <DatePickerInput labelText="Start" {disabled} />
   {#if datePickerType === "range"}
-    <DatePickerInput labelText="End" />
+    <DatePickerInput labelText="End" {disabled} />
   {/if}
 </DatePicker>
 <p data-testid="value">
