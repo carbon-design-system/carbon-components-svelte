@@ -145,3 +145,26 @@ export function sideTokens(values, options = {}) {
   });
   return [...lines.values()];
 }
+
+/**
+ * The spacing token closest to `px`, for a fix suggestion: `spacing-05`
+ * and its size for 13px. Ties go to the smaller token.
+ * @param {number} px
+ * @param {number} [remPx] root font size in pixels
+ * @returns {{ token: string; px: number }}
+ */
+export function nearestSpacing(px, remPx = 16) {
+  const abs = Math.abs(px);
+  let best = 0;
+  SPACING_REM.forEach((rem, index) => {
+    if (
+      Math.abs(rem * remPx - abs) < Math.abs(SPACING_REM[best] * remPx - abs)
+    ) {
+      best = index;
+    }
+  });
+  return {
+    token: `spacing-${String(best + 1).padStart(2, "0")}`,
+    px: SPACING_REM[best] * remPx * Math.sign(px || 1),
+  };
+}

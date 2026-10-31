@@ -32,3 +32,4 @@ tests/zzprobe/
 **/zz*.test.ts
 **/Zz*.test.svelte
 zz.*.config.ts
+audit-docs/
