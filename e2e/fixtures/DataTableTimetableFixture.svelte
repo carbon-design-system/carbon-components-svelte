@@ -32,7 +32,7 @@
   }));
 </script>
 
-<div data-testid="timetable-root" style="width: 480px;">
+<div data-testid="timetable-root" style="width: 480px; max-width: 100%;">
   <DataTable
     title="Timetable"
     fixedLayout
