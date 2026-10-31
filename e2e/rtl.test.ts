@@ -2209,6 +2209,43 @@ test.describe("right-to-left date picker", () => {
     }
   });
 
+  test("keeps an inline range's end field level with the start field", async ({
+    page,
+  }) => {
+    // The inline calendar sits in the start field's container. The end
+    // container stretched to the same height and put its input at the
+    // bottom, over the last week, and covered the calendar's far half.
+    const read = () =>
+      page.getByTestId("range").evaluate((root) => {
+        const calendar = root.querySelector(".bx--date-picker__calendar");
+        calendar?.scrollIntoView({ block: "center" });
+        const [start, end] = [
+          ...root.querySelectorAll(".bx--date-picker__input"),
+        ].map((input) => Math.round(input.getBoundingClientRect().top));
+        const days = [...root.querySelectorAll(".bx--date-picker__day")];
+        const covered = days
+          .filter((day) => {
+            const rect = day.getBoundingClientRect();
+            const hit = document.elementFromPoint(
+              rect.left + rect.width / 2,
+              rect.top + rect.height / 2,
+            );
+            return !calendar?.contains(hit);
+          })
+          .map((day) => day.getAttribute("aria-label"));
+        return { start, end, covered, days: days.length };
+      });
+
+    const ltr = await read();
+    await setDirection(page, "rtl");
+    const rtl = await read();
+    for (const [dir, layout] of Object.entries({ ltr, rtl })) {
+      expect.soft(layout.end, `${dir} end field top`).toBe(layout.start);
+      expect.soft(layout.covered, `${dir} covered days`).toEqual([]);
+      expect(layout.days).toBeGreaterThanOrEqual(28);
+    }
+  });
+
   test("keeps a date and time in reading order", async ({ page }) => {
     // Bidi reordered "03/15/2024 2:30 PM" by the page's direction, so an
     // RTL page showed "PM 2:30 03/15/2024". Read left to right, the field's
