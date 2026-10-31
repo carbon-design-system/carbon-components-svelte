@@ -11,6 +11,10 @@ const carbonRoot = path.resolve(import.meta.dirname, "..");
  */
 export const carbonAlias: Alias[] = [
   {
+    find: /^carbon-components-svelte\/devtools$/,
+    replacement: path.join(carbonRoot, "src/devtools/index.js"),
+  },
+  {
     find: /^carbon-components-svelte\/syntax$/,
     replacement: path.join(carbonRoot, "src/syntax/index.js"),
   },

@@ -1,0 +1,19 @@
+// Developer tool styles for the static `g10.css` theme build.
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/themes";
+
+$carbon--theme: $carbon--theme--g10;
+@include carbon--theme();
+
+// The theme sheet already emits Carbon's globals; claiming their keys keeps
+// this sheet to the dev tools' own rules.
+$imported-modules: (
+  "css--font-face",
+  "css--helpers",
+  "css--body",
+  "css--reset",
+  "css--default-type",
+  "focus-outline-style",
+  "skeleton",
+);
+
+@import "./_devtools";

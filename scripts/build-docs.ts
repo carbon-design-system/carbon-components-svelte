@@ -1,3 +1,4 @@
+import { tmpdir } from "node:os";
 import { $ } from "bun";
 import { sveld } from "sveld";
 
@@ -59,5 +60,27 @@ const strict = !process.argv.includes("--no-strict");
 const format = process.env.GITHUB_ACTIONS ? "github" : "text";
 const { exitCode } = await sveld({ ...SVELD_OPTIONS, strict, format });
 
+// The JSON lists the main entry's components only. The `devtools` sub-path
+// is its own entry, so read it too and add its components, which the docs
+// need for their API tables.
+const devtoolsJson = `${tmpdir()}/ccs-devtools-api.json`;
+const devtools = await sveld({
+  ...SVELD_OPTIONS,
+  entry: "src/devtools/index.js",
+  types: false,
+  jsonOptions: { outFile: devtoolsJson },
+  quiet: true,
+  strict,
+  format,
+});
+const api = await Bun.file(SVELD_OPTIONS.jsonOptions.outFile).json();
+const extra = await Bun.file(devtoolsJson).json();
+api.components.push(...extra.components);
+api.total = api.components.length;
+await Bun.write(
+  SVELD_OPTIONS.jsonOptions.outFile,
+  `${JSON.stringify(api, null, 2)}\n`,
+);
+
 console.timeEnd("[build-docs]");
-process.exitCode = exitCode;
+process.exitCode = exitCode || devtools.exitCode;

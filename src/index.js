@@ -120,7 +120,6 @@ export { default as Column } from "./Grid/Column.svelte";
 export { default as CssColumn } from "./Grid/CssColumn.svelte";
 export { default as CssGrid } from "./Grid/CssGrid.svelte";
 export { default as Grid } from "./Grid/Grid.svelte";
-export { default as GridOverlay } from "./Grid/GridOverlay.svelte";
 export { default as Row } from "./Grid/Row.svelte";
 export { default as Heading } from "./Heading/Heading.svelte";
 export { default as Section } from "./Heading/Section.svelte";

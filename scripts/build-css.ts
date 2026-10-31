@@ -13,7 +13,7 @@ const CACHE_DIR = ".cache/build-css";
 const WATCH = process.argv.includes("--watch");
 const FULL_THEMES = process.argv.includes("--themes");
 // Built by default alongside `all`: small, and the docs site loads them.
-const DEFAULT_ENTRIES = ["all", "prose", "syntax", "syntax-tokens"];
+const DEFAULT_ENTRIES = ["all", "devtools", "prose", "syntax", "syntax-tokens"];
 
 // `BUILD_CSS_MINIFY=0` keeps the output readable for debugging.
 const MINIFY = process.env.BUILD_CSS_MINIFY !== "0";

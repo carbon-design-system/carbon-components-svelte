@@ -1,0 +1,457 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/components/tag/tokens";
+
+/// Opacity for annotation fills drawn over the page, so the content under
+/// a margin, padding, or content box stays visible. Carbon has no opacity
+/// tokens; this is the one value the dev aids share.
+/// @access private
+$ccs-annotation-opacity: 0.6;
+
+/// LayoutInspector: a fixed, non-interactive dev aid that draws the box
+/// model of the hovered element, measures distances, and flags off-scale
+/// spacing, low contrast, small targets, and overflow.
+/// @access private
+/// @group components
+@mixin layout-inspector {
+  // Every color is a Carbon theme token, set as a custom property so it
+  // can be overridden:
+  //
+  // - Annotation hues use the Tag tokens, which come in theme-aware pairs
+  //   tested for contrast: `tag-background-*` for fills and label
+  //   backgrounds, `tag-color-*` for strokes and label text. The content
+  //   box uses `$highlight` and `$interactive`, Carbon's selection
+  //   colors.
+  // - The card and summary badge follow the theme like Tooltip, with the
+  //   inverse tokens.
+  .#{$prefix}--layout-inspector {
+    --ccs-layout-inspector-margin-fill: #{get-token-value($tag-colors, "tag-background-magenta")};
+    --ccs-layout-inspector-margin-ink: #{get-token-value($tag-colors, "tag-color-magenta")};
+    --ccs-layout-inspector-padding-fill: #{get-token-value($tag-colors, "tag-background-green")};
+    --ccs-layout-inspector-padding-ink: #{get-token-value($tag-colors, "tag-color-green")};
+    --ccs-layout-inspector-content-fill: #{$highlight};
+    --ccs-layout-inspector-content-ink: #{$interactive};
+    --ccs-layout-inspector-measure-fill: #{get-token-value($tag-colors, "tag-background-purple")};
+    --ccs-layout-inspector-measure-ink: #{get-token-value($tag-colors, "tag-color-purple")};
+    --ccs-layout-inspector-off-fill: #{get-token-value($tag-colors, "tag-background-red")};
+    --ccs-layout-inspector-off-ink: #{get-token-value($tag-colors, "tag-color-red")};
+    --ccs-layout-inspector-spacing-fill: #{get-token-value($tag-colors, "tag-background-red")};
+    --ccs-layout-inspector-spacing-ink: #{get-token-value($tag-colors, "tag-color-red")};
+    --ccs-layout-inspector-contrast-fill: #{get-token-value($tag-colors, "tag-background-cyan")};
+    --ccs-layout-inspector-contrast-ink: #{get-token-value($tag-colors, "tag-color-cyan")};
+    --ccs-layout-inspector-target-fill: #{get-token-value($tag-colors, "tag-background-teal")};
+    --ccs-layout-inspector-target-ink: #{get-token-value($tag-colors, "tag-color-teal")};
+    --ccs-layout-inspector-overflow-fill: #{get-token-value($tag-colors, "tag-background-cool-gray")};
+    --ccs-layout-inspector-overflow-ink: #{get-token-value($tag-colors, "tag-color-cool-gray")};
+    --ccs-layout-inspector-card-background: #{$layer};
+    --ccs-layout-inspector-card-text: #{$text-primary};
+    --ccs-layout-inspector-card-text-secondary: #{$text-secondary};
+    --ccs-layout-inspector-card-text-helper: #{$text-helper};
+    --ccs-layout-inspector-card-error: #{$text-error};
+    --ccs-layout-inspector-card-border: #{$border-strong};
+
+    position: fixed;
+    inset: 0;
+    // Two above the highest layer in $z-indexes: over dropdowns, modals,
+    // and GridOverlay.
+    z-index: z("dropdown") + 2;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--layout-inspector__margin,
+  .#{$prefix}--layout-inspector__padding,
+  .#{$prefix}--layout-inspector__content,
+  .#{$prefix}--layout-inspector__outline,
+  .#{$prefix}--layout-inspector__segment,
+  .#{$prefix}--layout-inspector__mark {
+    position: absolute;
+    box-sizing: border-box;
+  }
+
+  // Box model -------------------------------------------------------------
+
+  // Tokens are opaque colors, so the fills fade as whole elements.
+  .#{$prefix}--layout-inspector__margin,
+  .#{$prefix}--layout-inspector__padding,
+  .#{$prefix}--layout-inspector__content {
+    opacity: $ccs-annotation-opacity;
+  }
+
+  .#{$prefix}--layout-inspector__margin {
+    border-style: solid;
+    border-color: var(--ccs-layout-inspector-margin-fill);
+  }
+
+  .#{$prefix}--layout-inspector__padding {
+    border-style: solid;
+    border-color: var(--ccs-layout-inspector-padding-fill);
+  }
+
+  .#{$prefix}--layout-inspector__content {
+    background-color: var(--ccs-layout-inspector-content-fill);
+    outline: 1px solid var(--ccs-layout-inspector-content-ink);
+    outline-offset: -1px;
+  }
+
+  .#{$prefix}--layout-inspector__outline {
+    outline: 1px solid var(--ccs-layout-inspector-measure-ink);
+  }
+
+  .#{$prefix}--layout-inspector__outline--anchor {
+    outline-width: 2px;
+  }
+
+  // Annotation labels: every value drawn on the page is a small Carbon Tag
+  // (`label-01`, 18px tall, pill radius) in the matching Tag token pair.
+  .#{$prefix}--layout-inspector__side,
+  .#{$prefix}--layout-inspector__segment-label,
+  .#{$prefix}--layout-inspector__mark-label {
+    @include type-style("label-01");
+
+    position: absolute;
+    display: inline-flex;
+    min-height: to-rem(18px);
+    align-items: center;
+    padding: 0 $carbon--spacing-03;
+    border-radius: to-rem(15px);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--layout-inspector__side {
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--layout-inspector__side--margin {
+    background-color: var(--ccs-layout-inspector-margin-fill);
+    color: var(--ccs-layout-inspector-margin-ink);
+  }
+
+  .#{$prefix}--layout-inspector__side--padding {
+    background-color: var(--ccs-layout-inspector-padding-fill);
+    color: var(--ccs-layout-inspector-padding-ink);
+  }
+
+  .#{$prefix}--layout-inspector__side.#{$prefix}--layout-inspector__side--off,
+  .#{$prefix}--layout-inspector__segment-label.#{$prefix}--layout-inspector__side--off {
+    background-color: var(--ccs-layout-inspector-off-fill);
+    color: var(--ccs-layout-inspector-off-ink);
+  }
+
+  // Distances -------------------------------------------------------------
+
+  // A 1px line, drawn as one border on a box 0px thick across the line.
+  .#{$prefix}--layout-inspector__segment {
+    height: 0;
+    border-top: 1px solid var(--ccs-layout-inspector-measure-ink);
+  }
+
+  .#{$prefix}--layout-inspector__segment--vertical {
+    width: 0;
+    border-top: 0;
+    border-left: 1px solid var(--ccs-layout-inspector-measure-ink);
+  }
+
+  .#{$prefix}--layout-inspector__segment-label {
+    top: 50%;
+    left: 50%;
+    background-color: var(--ccs-layout-inspector-measure-fill);
+    color: var(--ccs-layout-inspector-measure-ink);
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--layout-inspector__segment--vertical
+    .#{$prefix}--layout-inspector__segment-label {
+    left: $carbon--spacing-02;
+    transform: translateY(-50%);
+  }
+
+  // Card and summary badge: Carbon Popover chrome ------------------------
+  //
+  // The default Popover surface (`$layer`, the standard shadow, a 2px
+  // radius) rather than the inverse Tooltip one, so text can step down in
+  // color as well as size: `$text-primary` for labels and values,
+  // `$text-secondary` for the size, `$text-helper` for supporting details,
+  // `$text-error` for problems. Inverse surfaces have only one text token.
+
+  .#{$prefix}--layout-inspector__card,
+  .#{$prefix}--layout-inspector__summary {
+    @include box-shadow;
+
+    position: absolute;
+    background-color: var(--ccs-layout-inspector-card-background);
+    border-radius: to-rem(2px);
+    color: var(--ccs-layout-inspector-card-text);
+  }
+
+  // One card, reused for every element and positioned from script with a
+  // transform. Fixed at Tooltip's maximum width, so it does not resize as
+  // its content changes.
+  //
+  // Everything is flush left, all sans, and reads top to bottom. Type and
+  // spacing set the hierarchy:
+  //
+  // - Title `heading-compact-02`, with the size below in `helper-text-01`.
+  // - Each fact is a bold `heading-compact-01` label over its value. Main
+  //   values use `body-compact-01`; supporting details (token names, type
+  //   metrics) use `helper-text-01`. The contrast verdict is bold too.
+  // - 24px after the header and before the hint, 16px between facts, 4px
+  //   inside a fact.
+  .#{$prefix}--layout-inspector__card {
+    @include type-style("body-compact-01");
+
+    top: 0;
+    left: 0;
+    width: to-rem(288px);
+    max-width: calc(100vw - #{$carbon--spacing-05});
+    padding: $carbon--spacing-05;
+    font-variant-numeric: tabular-nums;
+    text-align: left;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--layout-inspector__card-header {
+    display: flex;
+    flex-direction: column;
+    color: var(--ccs-layout-inspector-card-text-secondary);
+    gap: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--layout-inspector__card-title {
+    @include type-style("heading-compact-02");
+
+    color: var(--ccs-layout-inspector-card-text);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--layout-inspector__list {
+    display: flex;
+    flex-direction: column;
+    margin-top: $carbon--spacing-06;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--layout-inspector__item {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--layout-inspector__term {
+    @include type-style("heading-compact-01");
+
+    display: flex;
+    color: var(--ccs-layout-inspector-card-text);
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--layout-inspector__desc {
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--layout-inspector__secondary {
+    @include type-style("helper-text-01");
+
+    color: var(--ccs-layout-inspector-card-text-helper);
+  }
+
+  // The size line under the title is secondary, a step above helper text.
+  .#{$prefix}--layout-inspector__card-header
+    .#{$prefix}--layout-inspector__secondary {
+    color: var(--ccs-layout-inspector-card-text-secondary);
+  }
+
+  .#{$prefix}--layout-inspector__verdict {
+    @include type-style("heading-compact-01");
+  }
+
+  // Legend swatches, 12px like Carbon Charts legends, ringed in
+  // `$border-strong` so a swatch matching the card still shows.
+  .#{$prefix}--layout-inspector__term--margin::before,
+  .#{$prefix}--layout-inspector__term--padding::before,
+  .#{$prefix}--layout-inspector__swatch {
+    width: to-rem(12px);
+    height: to-rem(12px);
+    flex: none;
+    box-shadow: 0 0 0 1px var(--ccs-layout-inspector-card-border);
+  }
+
+  .#{$prefix}--layout-inspector__term--margin::before,
+  .#{$prefix}--layout-inspector__term--padding::before {
+    content: "";
+  }
+
+  .#{$prefix}--layout-inspector__term--margin::before {
+    background-color: var(--ccs-layout-inspector-margin-fill);
+  }
+
+  .#{$prefix}--layout-inspector__term--padding::before {
+    background-color: var(--ccs-layout-inspector-padding-fill);
+  }
+
+  .#{$prefix}--layout-inspector__swatch {
+    display: inline-block;
+    margin-right: $carbon--spacing-03;
+    vertical-align: to-rem(-1px);
+  }
+
+  .#{$prefix}--layout-inspector__off {
+    color: var(--ccs-layout-inspector-card-error);
+  }
+
+  .#{$prefix}--layout-inspector__hint {
+    margin-top: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--layout-inspector__summary {
+    @include type-style("label-01");
+
+    bottom: $carbon--spacing-03;
+    left: $carbon--spacing-03;
+    display: flex;
+    padding: $carbon--spacing-02 $carbon--spacing-04;
+    font-variant-numeric: tabular-nums;
+    gap: $carbon--spacing-04;
+  }
+
+  // Page marks ------------------------------------------------------------
+
+  // Page marks live in page coordinates; the layer is translated by the
+  // scroll position from script.
+  .#{$prefix}--layout-inspector__page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(
+      var(--ccs-layout-inspector-x, 0),
+      var(--ccs-layout-inspector-y, 0)
+    );
+  }
+
+  // Marks on fixed boxes, in viewport coordinates, do not scroll.
+  .#{$prefix}--layout-inspector__pinned {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .#{$prefix}--layout-inspector__mark--spacing {
+    outline: 1px dashed var(--ccs-layout-inspector-spacing-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--target {
+    outline: 2px solid var(--ccs-layout-inspector-target-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--contrast {
+    outline: 2px dotted var(--ccs-layout-inspector-contrast-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--overflow {
+    outline: 2px dashed var(--ccs-layout-inspector-overflow-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark-label {
+    bottom: calc(100% + #{$carbon--spacing-01});
+    left: 0;
+  }
+
+  .#{$prefix}--layout-inspector__mark--spacing
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-spacing-fill);
+    color: var(--ccs-layout-inspector-spacing-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--target
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-target-fill);
+    color: var(--ccs-layout-inspector-target-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--contrast
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-contrast-fill);
+    color: var(--ccs-layout-inspector-contrast-ink);
+  }
+
+  .#{$prefix}--layout-inspector__mark--overflow
+    .#{$prefix}--layout-inspector__mark-label {
+    background-color: var(--ccs-layout-inspector-overflow-fill);
+    color: var(--ccs-layout-inspector-overflow-ink);
+  }
+
+  // Forced colors (Windows contrast themes) repaint fills to `Canvas` and
+  // drop shadows, so the card lost its edge, the color swatches went blank,
+  // and margin and padding painted the same. Surfaces get the transparent
+  // outline forced mode paints. Annotations opt out of forcing and use
+  // system colors, so they follow the user's palette but stay apart:
+  // margin `Highlight`, padding `GrayText`, labels `CanvasText` on
+  // `Canvas`, and off-scale labels inverted. Swatches show a real color,
+  // so they opt out and keep it.
+  @include high-contrast-mode {
+    .#{$prefix}--layout-inspector__card,
+    .#{$prefix}--layout-inspector__summary {
+      outline: 1px solid transparent;
+    }
+
+    .#{$prefix}--layout-inspector__swatch,
+    .#{$prefix}--layout-inspector__term--margin::before,
+    .#{$prefix}--layout-inspector__term--padding::before {
+      forced-color-adjust: none;
+      box-shadow: 0 0 0 1px CanvasText;
+    }
+
+    .#{$prefix}--layout-inspector__margin,
+    .#{$prefix}--layout-inspector__padding,
+    .#{$prefix}--layout-inspector__content,
+    .#{$prefix}--layout-inspector__side,
+    .#{$prefix}--layout-inspector__segment-label,
+    .#{$prefix}--layout-inspector__mark-label {
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--layout-inspector {
+      --ccs-layout-inspector-margin-fill: Highlight;
+      --ccs-layout-inspector-padding-fill: GrayText;
+      --ccs-layout-inspector-content-fill: Canvas;
+      --ccs-layout-inspector-content-ink: CanvasText;
+    }
+
+    .#{$prefix}--layout-inspector__side,
+    .#{$prefix}--layout-inspector__segment-label,
+    .#{$prefix}--layout-inspector__mark-label,
+    .#{$prefix}--layout-inspector__mark--spacing
+      .#{$prefix}--layout-inspector__mark-label,
+    .#{$prefix}--layout-inspector__mark--target
+      .#{$prefix}--layout-inspector__mark-label,
+    .#{$prefix}--layout-inspector__mark--contrast
+      .#{$prefix}--layout-inspector__mark-label,
+    .#{$prefix}--layout-inspector__mark--overflow
+      .#{$prefix}--layout-inspector__mark-label,
+    .#{$prefix}--layout-inspector__side--margin,
+    .#{$prefix}--layout-inspector__side--padding {
+      background-color: Canvas;
+      color: CanvasText;
+      outline: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--layout-inspector__side.#{$prefix}--layout-inspector__side--off,
+    .#{$prefix}--layout-inspector__segment-label.#{$prefix}--layout-inspector__side--off {
+      background-color: CanvasText;
+      color: Canvas;
+    }
+  }
+}
+
+@include exports("layout-inspector") {
+  @include layout-inspector;
+}

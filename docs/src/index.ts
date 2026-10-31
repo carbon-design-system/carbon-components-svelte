@@ -1,6 +1,7 @@
 import { mount } from "svelte";
 import App from "./App.svelte";
 import "../../css/all.css";
+import "../../css/devtools.css";
 import "../../css/prose.css";
 import "../../css/syntax-tokens.css";
 import "../../css/syntax.css";

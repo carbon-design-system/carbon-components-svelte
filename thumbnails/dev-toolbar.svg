@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>dev-toolbar</title>
+    <defs>
+        <filter id="dev-toolbar-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="dev-toolbar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="shadow" fill="black" filter="url(#dev-toolbar-shadow)" x="72" y="70" width="176" height="40"></rect>
+        <rect id="bar" fill="var(--cds-layer-02, #ffffff)" x="72" y="70" width="176" height="40"></rect>
+        <rect id="pressed" fill="var(--cds-border-subtle, #e0e0e0)" x="72" y="70" width="40" height="40"></rect>
+        <rect id="pressed-bar" fill="var(--cds-background-brand, #0f62fe)" x="72" y="108" width="40" height="2"></rect>
+        <g id="grid" transform="translate(80, 78) scale(0.75)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M12,4H6A2,2,0,0,0,4,6v6a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V6A2,2,0,0,0,12,4Zm0,8H6V6h6Z"></path>
+            <path d="M26,4H20a2,2,0,0,0-2,2v6a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V6A2,2,0,0,0,26,4Zm0,8H20V6h6Z"></path>
+            <path d="M12,18H6a2,2,0,0,0-2,2v6a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V20A2,2,0,0,0,12,18Zm0,8H6V20h6Z"></path>
+            <path d="M26,18H20a2,2,0,0,0-2,2v6a2,2,0,0,0,2,2h6a2,2,0,0,0,2-2V20A2,2,0,0,0,26,18Zm0,8H20V20h6Z"></path>
+        </g>
+        <g id="baseline" transform="translate(120, 78) scale(0.75)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M17 6H30V8H17z"></path>
+            <path d="M17 12H27V14H17z"></path>
+            <path d="M17 18H30V20H17z"></path>
+            <path d="M17 24H27V26H17z"></path>
+            <path d="M11.59 13.41 8 9.83 8 9.83 4.41 13.42 3 12 8 7 13 12 11.59 13.41z"></path>
+            <path d="M11.59 18.59 8 22.17 8 22.17 4.41 18.58 3 20 8 25 13 20 11.59 18.59z"></path>
+        </g>
+        <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="159" y="80" width="1" height="20"></rect>
+        <g id="ruler" transform="translate(168, 78) scale(0.75)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M29,10H3a1,1,0,0,0-1,1V21a1,1,0,0,0,1,1H29a1,1,0,0,0,1-1V11A1,1,0,0,0,29,10ZM28,20H4V12H8v4h2V12h5v4h2V12h5v4h2V12h4Z"></path>
+        </g>
+        <g id="contrast" transform="translate(208, 78) scale(0.75)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M29.37,11.84a13.6,13.6,0,0,0-1.06-2.51A14.17,14.17,0,0,0,25.9,6.1a14,14,0,1,0,0,19.8,14.17,14.17,0,0,0,2.41-3.23,13.6,13.6,0,0,0,1.06-2.51,14,14,0,0,0,0-8.32ZM4,16A12,12,0,0,1,16,4V28A12,12,0,0,1,4,16Z"></path>
+        </g>
+    </g>
+</svg>

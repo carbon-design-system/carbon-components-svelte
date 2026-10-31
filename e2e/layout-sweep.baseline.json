@@ -1048,6 +1048,86 @@
     "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
   },
   {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > button.bx--btn.bx--btn--sm > span.bx--assistive-text",
+    "message": "div#app > section.bx--dev-toolbar > button.bx--btn.bx--btn--sm > span.bx--assistive-text: 1px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(1) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(1) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(1) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(1) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(1) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(3)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(1) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(3): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(3)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(3): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(4)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(4): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(5)",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(2) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(5): 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dev-aids.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only",
+    "message": "div#app > section.bx--dev-toolbar > div.bx--toggle-button-group.bx--toggle-button-group--sm:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only: 2px outline inside 1px outline div#app > section.bx--dev-toolbar, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "dropdown-align.html",
     "variant": "1280-forced",
     "check": "borders",

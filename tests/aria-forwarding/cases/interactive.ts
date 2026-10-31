@@ -200,6 +200,11 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("button"),
   },
   {
+    name: "DevToolbar",
+    exempt:
+      "dev-only bar; its section is named Developer tools and each ToggleButtonGroup and Button names its own controls",
+  },
+  {
     name: "Disclosure",
     render: (attrs) =>
       render(Disclosure, { props: { summary: "More", ...attrs } }),
@@ -273,6 +278,11 @@ export const interactive: AriaEntry[] = [
     name: "InterstitialScreenHeader",
     exempt:
       "header container; its close button is a fixed control named by iconDescription",
+  },
+  {
+    name: "LayoutInspector",
+    exempt:
+      "aria-hidden overlay with no focusable content; tabindex only appears in its target-size selector",
   },
   {
     name: "Link",

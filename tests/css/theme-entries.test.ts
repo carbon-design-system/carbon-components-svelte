@@ -20,12 +20,17 @@ const THEME_ENTRIES = [
 const TOKEN_PARTIAL = "./theme-token-properties";
 
 // Partials imported by other css/_*.scss partials, or by an opt-in sheet
-// (`_prose.scss`, by `prose.scss` and `prose-<theme>.scss`), not by the
-// manifest.
+// (`_prose.scss`, by `prose.scss` and `prose-<theme>.scss`; `_devtools.scss`
+// and the three it imports, by `devtools.scss` and `devtools-<theme>.scss`),
+// not by the manifest.
 const UNREGISTERED_PARTIALS = [
   "_ai-tokens.scss",
+  "_dev-toolbar.scss",
+  "_devtools.scss",
   "_fill-tokens.scss",
   "_fluid-shared.scss",
+  "_grid-overlay.scss",
+  "_layout-inspector.scss",
   "_prose.scss",
   "_spacing-scale.scss",
   "_status-tokens.scss",
