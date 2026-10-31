@@ -64,3 +64,25 @@ test("viz charts fit a narrow container and fold long legends", async ({
   ).toHaveCount(14);
   await expect(legend.locator(".bx--viz-legend__more")).toHaveText("Show less");
 });
+
+// The plot does not mirror on an RTL page, so its text keeps a left-to-right
+// base direction: y tick labels end before the axis line, and a minus sign
+// stays before its number.
+test("viz axis labels keep their side on an RTL page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1200 });
+  await page.goto("/viz-narrow.html");
+  await page.evaluate(() =>
+    document.documentElement.setAttribute("dir", "rtl"),
+  );
+  const chart = page.getByTestId("box-480").locator("figure").first();
+  const gaps = await chart.evaluate((figure) => {
+    const line = figure
+      .querySelector(".bx--viz-axis--left .bx--viz-axis__line")
+      ?.getBoundingClientRect();
+    return [
+      ...figure.querySelectorAll(".bx--viz-axis--left .bx--viz-axis__label"),
+    ].map((label) => (line?.left ?? 0) - label.getBoundingClientRect().right);
+  });
+  expect(gaps.length).toBeGreaterThan(0);
+  for (const gap of gaps) expect(gap).toBeGreaterThanOrEqual(4);
+});

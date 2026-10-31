@@ -269,6 +269,10 @@
 
   .#{$prefix}--viz-chart__svg {
     display: block;
+    // The plot's geometry is physical: x grows to the right on every page.
+    // Text in it takes the same base direction, so `text-anchor` keeps its
+    // side and a minus sign stays before its number on an RTL page.
+    direction: ltr;
     overflow: visible;
     inline-size: 100%;
     // Horizontal pointer moves scrub the chart. Vertical ones scroll the page.
