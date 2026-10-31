@@ -5968,6 +5968,886 @@
     "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: 1px outline inside 2px outline div#app > div.dropdown:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "viz-dashboard.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tile > div.bx--data-table-container > div:nth-of-type(2) > div.bx--data-table-content",
+    "message": "div.bx--tile > div.bx--data-table-container > div:nth-of-type(2) > div.bx--data-table-content: 1px outline inside 2px outline div.bx--grid.bx--grid--narrow > div.bx--row:nth-of-type(3) > div.bx--col-sm-4.bx--col-md-8 > div.bx--tile, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz-features.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 760px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-features.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 760px"
+  },
+  {
+    "fixture": "viz-features.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 760px, clientWidth 672px"
+  },
+  {
+    "fixture": "viz-features.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 760px"
+  },
+  {
+    "fixture": "viz-forced-colors.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 480px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-forced-colors.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 480px"
+  },
+  {
+    "fixture": "viz-marks.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 720px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-marks.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 720px"
+  },
+  {
+    "fixture": "viz-marks.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 720px, clientWidth 672px"
+  },
+  {
+    "fixture": "viz-marks.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 720px"
+  },
+  {
+    "fixture": "viz-narrow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 520px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-narrow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-240\"] > figure.bx--viz-gantt:nth-of-type(6) > table.bx--visually-hidden",
+    "message": "div[data-testid=\"box-240\"] > figure.bx--viz-gantt:nth-of-type(6) > table.bx--visually-hidden: spans 16px to 520.25px"
+  },
+  {
+    "fixture": "viz-narrow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-320\"]",
+    "message": "div[data-testid=\"box-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "viz-narrow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-390\"]",
+    "message": "div[data-testid=\"box-390\"]: spans 16px to 406px"
+  },
+  {
+    "fixture": "viz-narrow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-480\"]",
+    "message": "div[data-testid=\"box-480\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "1280",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1520px, clientWidth 1280px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "1280",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.matrix > div.column:nth-of-type(3)",
+    "message": "div#app > div.matrix > div.column:nth-of-type(3): spans 1040px to 1520px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1520px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.matrix > div.column:nth-of-type(1)",
+    "message": "div#app > div.matrix > div.column:nth-of-type(1): spans 16px to 496px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.matrix > div.column:nth-of-type(2)",
+    "message": "div#app > div.matrix > div.column:nth-of-type(2): spans 528px to 1008px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.matrix > div.column:nth-of-type(3)",
+    "message": "div#app > div.matrix > div.column:nth-of-type(3): spans 1040px to 1520px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1520px, clientWidth 672px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.matrix > div.column:nth-of-type(2)",
+    "message": "div#app > div.matrix > div.column:nth-of-type(2): spans 528px to 1008px"
+  },
+  {
+    "fixture": "viz-states.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.matrix > div.column:nth-of-type(3)",
+    "message": "div#app > div.matrix > div.column:nth-of-type(3): spans 1040px to 1520px"
+  },
+  {
+    "fixture": "viz-stock.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 960px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-stock.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"stock-area\"]",
+    "message": "div[data-testid=\"stock-area\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "viz-stock.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"stock\"]",
+    "message": "div[data-testid=\"stock\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "viz-stock.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 960px, clientWidth 672px"
+  },
+  {
+    "fixture": "viz-stock.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"stock-area\"]",
+    "message": "div[data-testid=\"stock-area\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "viz-stock.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"stock\"]",
+    "message": "div[data-testid=\"stock\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "viz-tooltip.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 640px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz-tooltip.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 640px"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(10) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(10) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"23.\", hides \"2K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(11) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(11) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"21.\", hides \"4K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(12) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(12) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"21.\", hides \"2K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(9) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(9) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"23.\", hides \"7K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday by 1px (text 24.25px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday by 1px (text 25.03px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday by 1px (text 14.84px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-kpi.bx--tile:nth-of-type(1) > div.bx--viz-kpi__footer:nth-of-type(4) > div.bx--viz-bullet.bx--viz-bullet--sm > span.bx--viz-bullet__track",
+    "message": "div.bx--viz-kpi.bx--tile:nth-of-type(1) > div.bx--viz-kpi__footer:nth-of-type(4) > div.bx--viz-bullet.bx--viz-bullet--sm > span.bx--viz-bullet__track: bordered box inside 2px outline main[data-testid=\"viz\"] > div.bx--viz-kpi.bx--tile:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(1) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(1) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"5\", hides \"6.4K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(10) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(10) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"4\", hides \"1.2K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(2) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(2) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"5\", hides \"6.2K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(3) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(3) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"5\", hides \"3.9K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(4) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(4) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"53\", hides \".4K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(5) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(5) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"49\", hides \".9K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(6) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(6) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"49\", hides \".3K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(7) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(7) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"4\", hides \"5.5K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(8) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(8) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"4\", hides \"4.8K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(9) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(9) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"4\", hides \"1.7K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday by 1px (text 24.25px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday by 1px (text 25.03px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday by 1px (text 14.84px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 788px, clientWidth 320px"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-arc:nth-of-type(8) > svg.bx--viz-arc__svg > g",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-arc:nth-of-type(8) > svg.bx--viz-arc__svg > g: spans 23px to 322.24px"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-gantt:nth-of-type(3) > table.bx--visually-hidden",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-gantt:nth-of-type(3) > table.bx--visually-hidden: spans 16px to 478.09px"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-upset.bx--viz-upset--selectable:nth-of-type(19) > table.bx--viz-upset__table",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-upset.bx--viz-upset--selectable:nth-of-type(19) > table.bx--viz-upset__table: spans 16px to 452.97px"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--in:nth-of-type(2): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3)",
+    "message": "div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3) > span.bx--viz-editor__port.bx--viz-editor__port--out:nth-of-type(3): bordered box inside bordered box figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(1): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3)",
+    "message": "figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > div.bx--viz-editor__nodes > div.bx--viz-editor__node:nth-of-type(3): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2) > svg.bx--viz-editor__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-editor:nth-of-type(42) > div.bx--viz-editor__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2)",
+    "message": "main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2) > svg.bx--viz-graph-canvas__minimap:nth-of-type(2): bordered box inside bordered box main[data-testid=\"viz\"] > figure.bx--viz-graph-canvas:nth-of-type(43) > div.bx--viz-graph-canvas__stage:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(10) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(10) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"23.\", hides \"2K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(11) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(11) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"21.\", hides \"4K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(12) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(12) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"21.\", hides \"2K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "cuts a number",
+    "path": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(9) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2)",
+    "message": "ul.bx--viz-treemap__leaves > li.bx--viz-treemap__leaf:nth-of-type(9) > button.bx--viz-treemap__button > span.bx--viz-treemap__value:nth-of-type(2): cuts a number: shows \"23.\", hides \"7K\""
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(2) > th.bx--viz-calendar__weekday by 1px (text 24.25px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(4) > th.bx--viz-calendar__weekday by 1px (text 25.03px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "overflows box",
+    "path": "tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday > span",
+    "message": "tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday > span: text overflows table.bx--viz-calendar__table > tbody > tr:nth-of-type(6) > th.bx--viz-calendar__weekday by 1px (text 14.84px x 15px)"
+  },
+  {
+    "fixture": "viz.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 788px, clientWidth 672px"
+  },
+  {
     "fixture": "warning-icon-glyph.html",
     "variant": "320",
     "check": "overflow",
