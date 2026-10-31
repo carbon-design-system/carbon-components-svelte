@@ -1298,6 +1298,45 @@ The `Docs audit` workflow runs it at 320px and 1056px with `--baseline` and fail
 
 The same checks are a library API, for a script or an agent driving a browser: `audit()`, `inspect(element)`, and `baselines()` from `carbon-components-svelte/devtools`. See [`audit.js`](src/devtools/audit.js).
 
+### Design a component with the dev tools
+
+The page checks also run while you build a component, on its docs examples and e2e fixtures. They answer three questions: is each spacing value a token, does every target meet WCAG 2.5.8, and does any text fall below contrast or get clipped.
+
+**While you build.** Watch the component's examples, with Carbon's own elements checked:
+
+```sh
+bun run audit:watch --filter Tile --carbon --inspect ".bx--tile"
+```
+
+It starts the Vite dev server, audits the pages that match `--filter`, and audits them again on every save to `src/`, `css/`, or the examples. It prints only what changed: `+` for a new finding, `-` for a fixed one, and `~` for a token value of an `--inspect` element that moved. A Svelte or example change shows up about half a second after the save. A `css/` change rebuilds the CSS first, which takes about 5 seconds. Keep `--filter` to 12 pages or fewer. `--width`, `--dir`, and `--theme` take comma lists, as in `audit:docs`. `--json` prints one line per run, for an agent to read.
+
+New findings show at every severity, `info` too: an off-scale value you just added to a Carbon element is `info`, but it is still news.
+
+**Before you open a PR.** Audit the component's examples and fixtures once, at a phone width and a desktop width:
+
+```sh
+bun run audit:docs --carbon --filter Tile --width 320,1056
+bun run audit:docs --source fixtures --carbon --filter tile
+```
+
+`--source fixtures` serves `e2e/fixtures` with the e2e Vite config. Fix each `error`. For a `warning` or `info` you keep on purpose, say why in the PR.
+
+**In the component's e2e test.** Assert that the component stays clean:
+
+```ts
+import { expectNoLayoutFindings } from "./helpers/layout-audit";
+
+await expectNoLayoutFindings(page, {
+  scope: "[data-testid=tile]",
+  carbon: true,
+  severities: ["error"],
+});
+```
+
+A failure lists each finding with the values to fix it: both colors and a passing token for contrast, the target that crowds a target and how many pixels it needs, the nearest token for spacing.
+
+**What the checks do not see.** They check the page as it renders. A closed menu, an unselected tab, or a hover state is checked only once a test opens it. Some exemptions need a person: a target that has an equivalent control (the checks know Slider's text input, nothing else), or text that is decorative.
+
 ### Performance benchmarks
 
 Benchmarks live in `bench/`, split into two tiers by filename convention. Both tiers run on [ostia](https://github.com/metonym/ostia) (Bun-native) — no vitest, no mitata.

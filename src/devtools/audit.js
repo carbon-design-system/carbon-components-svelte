@@ -98,6 +98,34 @@ function carbonBackground(source, cache) {
 // Text Carbon draws as disabled. WCAG 1.4.3 exempts it, like `disabled`.
 const DISABLED = "[disabled], [aria-disabled='true'], [class*='--disabled']";
 
+/**
+ * Whether `el` sits in the `<label>` of a disabled control, such as a
+ * disabled Checkbox or Toggle. The input is the label's sibling or child,
+ * so `[disabled]` is not an ancestor of the text.
+ * @param {Element} el
+ */
+function labelsDisabledControl(el) {
+  const label = /** @type {HTMLLabelElement | null} */ (el.closest("label"));
+  const control = /** @type {HTMLInputElement | null} */ (label?.control);
+  return Boolean(control?.disabled);
+}
+
+/**
+ * Whether a slider's value can also be typed into a text input next to
+ * it, as in Carbon's Slider. WCAG 2.5.8 exempts a small target when an
+ * equivalent control on the page meets the size.
+ * @param {Element} el
+ */
+function hasEquivalentInput(el) {
+  if (el.getAttribute("role") !== "slider") return false;
+  const field = el.closest(".bx--form-item, [role='group']");
+  return Boolean(
+    field?.querySelector(
+      "input:not([type='hidden']):not([type='range']):not([disabled])",
+    ),
+  );
+}
+
 const DEV_TOOL_ATTRIBUTE = "data-ccs-dev-tool";
 
 // Caps each check so a huge page cannot stall a scan.
@@ -247,6 +275,7 @@ function scanTargets(options) {
     if (rect.width <= 1 || rect.height <= 1) continue;
     const style = getComputedStyle(el);
     if (style.visibility === "hidden") continue;
+    if (hasEquivalentInput(el)) continue;
     // Targets in a sentence are exempt in WCAG 2.5.8: skip inline elements
     // whose parent also holds running text.
     if (
@@ -312,6 +341,7 @@ function scanContrast(options) {
     if (!near(r, options)) continue;
     if (
       el.closest(`${DEV_TOOL}, script, style, ${DISABLED}`) ||
+      labelsDisabledControl(el) ||
       closestSafe(el, options.ignore)
     ) {
       continue;
@@ -436,7 +466,8 @@ function overflowFinding(el, r, style, page) {
   const { sx, pageWidth, pageScrolls } = page;
   if (pageScrolls && style.position !== "fixed") {
     const past = Math.max(r.right + sx - pageWidth, -(r.left + sx));
-    if (past > 0.5) {
+    // More than a pixel: subpixel layout rounds a box 1px past the edge.
+    if (past > 1) {
       const parent = el.parentElement?.getBoundingClientRect();
       const parentPast = parent
         ? Math.max(parent.right + sx - pageWidth, -(parent.left + sx))
