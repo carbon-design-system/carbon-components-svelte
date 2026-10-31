@@ -282,6 +282,17 @@ Smaller files are not added, and `rejected` fires with
   on:rejected={(e) => console.log(e.detail)}
 />
 
+### Maximum number of files
+
+Limit how many files can be attached with `maxFiles`. Excess files are rejected
+after size and duplicate checks, in selection order. A `rejected` event fires
+with `{ file, reason: "count" }` for each excess file. When the list is at
+capacity, further picks are disabled until a file is removed.
+
+This example accepts up to 3 documents.
+
+<FileSource src="/framed/FileUploader/FileUploaderMaxFiles" />
+
 ### File size
 
 Set `fileSize` to show each file's size under its name. File sizes are hidden by
