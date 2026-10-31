@@ -4560,6 +4560,22 @@
     "message": "div#app > div > div:nth-of-type(8): spans 972px to 1272px"
   },
   {
+    "fixture": "table-state.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(1) > span.bx--assistive-text",
+    "message": "div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(1) > span.bx--assistive-text: 1px outline inside 1px outline div.bx--pagination.bx--pagination--md:nth-of-type(2) > div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "table-state.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(2) > span.bx--assistive-text",
+    "message": "div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(2) > span.bx--assistive-text: 1px outline inside 1px outline div.bx--pagination.bx--pagination--md:nth-of-type(2) > div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "tabs-overflow.html",
     "variant": "1280-forced",
     "check": "ring",
