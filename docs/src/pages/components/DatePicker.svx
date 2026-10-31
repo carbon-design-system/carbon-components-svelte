@@ -130,6 +130,20 @@ Use `bind:value` to select a year from outside the component, or `bind:calendar`
 
 <FileSource src="/framed/DatePicker/DatePickerYearProgrammatic" />
 
+## Date and time
+
+### Composition
+
+Pair a `DatePicker` with a [TimePicker](/components/TimePicker) and a `TimePickerSelect` for AM and PM, then combine the picked day and the typed time into one `Date` in app code. Read the day with `bind:selectedDates`, so the time never has to be parsed out of a date string.
+
+<FileSource src="/framed/DatePicker/DatePickerDateTime" />
+
+| Do | Why |
+| --- | --- |
+| Keep the date and the time as two labelled fields. | Each field's label and error are announced on their own, and Carbon's guidance keeps time in its own field. |
+| Return `null` until both fields are valid. | A day with no time, or a half-typed time, is not a moment anyone can schedule. |
+| Treat the result as the browser's local time, and convert it yourself when users schedule across time zones. | A `Date` carries no time zone; a time zone `TimePickerSelect` can record the user's choice. |
+
 ## Date constraints
 
 Constrain which dates are selectable, for single, range, month, and year calendars.
