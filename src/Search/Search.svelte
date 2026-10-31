@@ -177,7 +177,7 @@
   import {
     applePlatform,
     ariaKeyShortcuts,
-    keyboardShortcut,
+    lazyKeyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
@@ -350,7 +350,7 @@
       <button
         type="button"
         bind:this={searchRef}
-        use:keyboardShortcut={shortcutParams}
+        use:lazyKeyboardShortcut={shortcutParams}
         aria-keyshortcuts={ariaShortcut}
         class:bx--search-magnifier={true}
         aria-label={labelText.trim() === ""
@@ -409,7 +409,7 @@
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this={ref}
-      use:keyboardShortcut={shortcutParams}
+      use:lazyKeyboardShortcut={shortcutParams}
       use:preserveFocusSelection={selectTextOnFocus && !disabled}
       use:formReset={handleFormReset}
       bind:value

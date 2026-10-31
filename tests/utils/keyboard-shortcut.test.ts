@@ -1,10 +1,14 @@
 import {
-  applePlatform,
-  ariaKeyShortcuts,
-  formatShortcut,
   keyboardShortcut,
   matchesShortcut,
   onShortcut,
+} from "../../src/utils/keyboard-shortcut-binding.js";
+import {
+  applePlatform,
+  ariaKeyShortcuts,
+  formatShortcut,
+  lazyKeyboardShortcut,
+  loadShortcutBinding,
   parseShortcut,
   platformScript,
   shortcutKeys,
@@ -458,5 +462,37 @@ describe("keyboardShortcut", () => {
 
     action.destroy();
     button.remove();
+  });
+});
+
+describe("lazyKeyboardShortcut", () => {
+  it("binds once the code loads, and when a shortcut is set later", async () => {
+    const node = document.createElement("button");
+    document.body.append(node);
+    const run = vi.fn();
+    const action = lazyKeyboardShortcut(node, { shortcut: "", run });
+
+    action.update({ shortcut: "ctrl+j", run });
+    window.dispatchEvent(key({ key: "j", ctrlKey: true }));
+    expect(run).not.toHaveBeenCalled();
+
+    await loadShortcutBinding();
+    window.dispatchEvent(key({ key: "j", ctrlKey: true }));
+    expect(run).toHaveBeenCalledTimes(1);
+
+    action.destroy();
+    node.remove();
+  });
+
+  it("doesn't bind after it's destroyed before the code loads", async () => {
+    const node = document.createElement("button");
+    document.body.append(node);
+    const run = vi.fn();
+    lazyKeyboardShortcut(node, { shortcut: "ctrl+u", run }).destroy();
+
+    await loadShortcutBinding();
+    window.dispatchEvent(key({ key: "u", ctrlKey: true }));
+    expect(run).not.toHaveBeenCalled();
+    node.remove();
   });
 });

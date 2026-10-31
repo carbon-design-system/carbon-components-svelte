@@ -210,7 +210,7 @@
   import {
     applePlatform,
     ariaKeyShortcuts,
-    keyboardShortcut,
+    lazyKeyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
@@ -558,7 +558,7 @@
       <a
         bind:this={ref}
         use:dismiss={escapeListener}
-        use:keyboardShortcut={shortcutParams}
+        use:lazyKeyboardShortcut={shortcutParams}
         use:ignoreTooltipClicks
         use:closeOverControls={{ onCover: handleTooltipCover }}
         {...buttonProps}
@@ -629,7 +629,7 @@
     <a
       bind:this={ref}
       use:dismiss={escapeListener}
-      use:keyboardShortcut={shortcutParams}
+      use:lazyKeyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
       {...buttonProps}
@@ -701,7 +701,7 @@
       type="button"
       bind:this={ref}
       use:dismiss={escapeListener}
-      use:keyboardShortcut={shortcutParams}
+      use:lazyKeyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
       {...buttonProps}
@@ -773,7 +773,7 @@
     type="button"
     bind:this={ref}
     use:dismiss={escapeListener}
-    use:keyboardShortcut={shortcutParams}
+    use:lazyKeyboardShortcut={shortcutParams}
     use:ignoreTooltipClicks
     use:closeOverControls={{ onCover: handleTooltipCover }}
     {...buttonProps}

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { loadShortcutBinding } from "../../src/utils/keyboard-shortcut.js";
 import SearchShortcutTranslations from "./Search.shortcut-translations.test.svelte";
 import SearchShortcut from "./Search.shortcut.test.svelte";
 
@@ -37,8 +38,9 @@ describe("Search shortcut", () => {
     expect(field.querySelector(".bx--search__shortcut")).toBeNull();
   });
 
-  it("focuses the field, but not while typing in another", () => {
+  it("focuses the field, but not while typing in another", async () => {
     render(SearchShortcut);
+    await loadShortcutBinding();
 
     press({ key: "/" }, screen.getByTestId("other"));
     expect(input("search")).not.toHaveFocus();
@@ -47,8 +49,9 @@ describe("Search shortcut", () => {
     expect(input("search")).toHaveFocus();
   });
 
-  it("skips the focus when on:shortcut prevents it", () => {
+  it("skips the focus when on:shortcut prevents it", async () => {
     render(SearchShortcut, { props: { preventShortcut: true } });
+    await loadShortcutBinding();
 
     press({ key: "/" });
     expect(input("search")).not.toHaveFocus();
@@ -74,6 +77,7 @@ describe("Search shortcut", () => {
       .getByTestId("expandable")
       .querySelector(".bx--search-magnifier");
     expect(magnifier).toHaveAttribute("aria-keyshortcuts", "Control+Shift+F");
+    await loadShortcutBinding();
 
     press({ key: "f", ctrlKey: true, shiftKey: true });
     await tick();
@@ -94,6 +98,7 @@ describe("Search shortcut", () => {
       "Ctrl",
       "K",
     ]);
+    await loadShortcutBinding();
 
     press({ key: "k", ctrlKey: true });
     await tick();
