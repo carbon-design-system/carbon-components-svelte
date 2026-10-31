@@ -148,6 +148,25 @@ test.describe("Swatch", () => {
     expect(style.fill).not.toBe("rgba(0, 0, 0, 0)");
   });
 
+  test("fills a disabled tag's dot with the disabled icon color", async ({
+    page,
+  }) => {
+    await page.goto("/swatch.html");
+    const dot = page
+      .getByTestId("color-tag")
+      .locator(".bx--tag--disabled .bx--swatch");
+
+    const { fill, disabled } = await dot.evaluate((el) => {
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = "var(--cds-icon-disabled)";
+      document.body.append(probe);
+      const disabled = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return { fill: getComputedStyle(el).backgroundColor, disabled };
+    });
+    expect(fill).toBe(disabled);
+  });
+
   test("edges a custom color and leaves palette dots plain", async ({
     page,
   }) => {

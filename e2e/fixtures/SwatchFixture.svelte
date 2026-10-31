@@ -69,6 +69,7 @@
     <ColorTag colorKey="Billing" interactive>Billing</ColorTag>
     <ColorTag cssColor="#ff7eb6" size="sm">Custom</ColorTag>
     <ColorTag colorKey="Data" showSwatch={false}>No swatch</ColorTag>
+    <ColorTag colorKey="Security" interactive disabled>Disabled</ColorTag>
   </Stack>
 
   <Stack orientation="horizontal" gap={5} data-testid="legend">

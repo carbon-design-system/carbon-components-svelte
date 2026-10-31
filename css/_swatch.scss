@@ -62,6 +62,11 @@
     }
   }
 
+  // A disabled tag shows every part as disabled, the dot included.
+  .#{$prefix}--tag--disabled .#{$prefix}--swatch {
+    background-color: $icon-disabled;
+  }
+
   // The tag's icon box is 16px and not a flex container, so center the dot
   // in it; the box already supplies the gap to the label.
   .#{$prefix}--tag__custom-icon > .#{$prefix}--swatch {
@@ -78,6 +83,12 @@
       border: 1px solid CanvasText;
       box-shadow: none;
       forced-color-adjust: none;
+    }
+
+    // A disabled tag reads `GrayText`, so its dot does too.
+    .#{$prefix}--tag--disabled .#{$prefix}--swatch {
+      border-color: GrayText;
+      background-color: GrayText;
     }
   }
 }
