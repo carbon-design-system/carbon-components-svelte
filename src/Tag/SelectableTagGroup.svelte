@@ -242,6 +242,7 @@
   role="toolbar"
   {id}
   aria-labelledby={legendText ? legendId : undefined}
+  aria-disabled={disabled ? "true" : undefined}
   use:rovingFocus={{
     selector: TAG_SELECTOR,
     getItems: getTags,
@@ -268,6 +269,7 @@
     <span
       id={legendId}
       class:bx--label={true}
+      class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLegend}
     >
       {legendText}

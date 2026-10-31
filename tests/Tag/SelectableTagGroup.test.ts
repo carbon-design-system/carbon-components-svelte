@@ -134,6 +134,11 @@ describe("SelectableTagGroup", () => {
     }
     await user.click(tag("Open"));
     expect(onChange).not.toHaveBeenCalled();
+    expect(screen.getByText("Status")).toHaveClass("bx--label--disabled");
+    expect(screen.getByRole("toolbar")).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
   });
 
   it("gives tags the group size, unless a tag sets its own", () => {
