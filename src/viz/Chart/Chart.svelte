@@ -1758,16 +1758,19 @@
     loading ? "loading" : error ? "error" : empty ? "empty" : "ready",
   );
 
-  $: announcement = $hover
-    ? `${$scales.xLabel($hover.x)}: ${$hover.points
-        .map(
-          (/** @type {any} */ point) =>
-            `${point.series} ${(point.axis === "y2"
-              ? $scales.y2Value
-              : $scales.yValue)(point.y)}`,
-        )
-        .join(", ")}`
-    : "";
+  // Only the keyboard walk speaks. A pointer sweep would queue a phrase per
+  // frame, and charts that share a `syncId` would each repeat it.
+  $: announcement =
+    $hover && $hoverOrigin === "keyboard"
+      ? `${$scales.xLabel($hover.x)}: ${$hover.points
+          .map(
+            (/** @type {any} */ point) =>
+              `${point.series} ${(point.axis === "y2"
+                ? $scales.y2Value
+                : $scales.yValue)(point.y)}`,
+          )
+          .join(", ")}`
+      : "";
 </script>
 
 <figure
@@ -1875,9 +1878,8 @@
       <div
         class:bx--viz-chart__skeleton={true}
         class:bx--skeleton__placeholder={true}
-        style:inset="{$scales.plot.y0}px {$size.width -
-          $scales.plot.x1}px {$size.height - $scales.plot.y1}px {$scales.plot
-          .x0}px"
+        style:inset="{$scales.plot.y0}px {$size.width - $scales.plot.x1}px {$size.height -
+          $scales.plot.y1}px {$scales.plot.x0}px"
       ></div>
     {:else if error}
       <div class:bx--viz-chart__error={true}>

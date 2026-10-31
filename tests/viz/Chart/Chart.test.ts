@@ -165,6 +165,33 @@ describe("Chart", () => {
       ).toHaveTextContent("1: a 20, b 60");
     });
 
+    it("announces the keyboard walk only, not a pointer sweep", async () => {
+      render(Chart);
+      const live = () =>
+        screen.getByRole("figure").querySelector("[aria-live]");
+      svg().getBoundingClientRect = () =>
+        ({
+          left: 0,
+          top: 0,
+          width: 640,
+          height: 288,
+          right: 640,
+          bottom: 288,
+          x: 0,
+          y: 0,
+          toJSON() {},
+        }) as DOMRect;
+
+      await fireEvent.pointerMove(svg(), { clientX: 320, clientY: 100 });
+      await new Promise((resolve) => setTimeout(resolve, 30));
+      expect(probe().getAttribute("data-hover-x")).not.toBe("");
+      expect(live()).toHaveTextContent("");
+
+      svg().focus();
+      await user.keyboard("{ArrowRight}");
+      expect(live()).toHaveTextContent("0: a 10, b 80");
+    });
+
     it("selects the focused datum of the focused series with Enter", async () => {
       const onselect = vi.fn();
       render(Chart, { onselect });
