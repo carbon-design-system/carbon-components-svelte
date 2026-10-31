@@ -599,3 +599,27 @@
 @include exports("number-input-scrubbable") {
   @include number-input-scrubbable;
 }
+
+// carbon-components-svelte patch
+// The value reads in its own direction, so in RTL "-5" keeps its sign in
+// front instead of showing as "5-", as in `.bx--text-input-wrapper
+// .bx--text-input`. `unicode-bidi: plaintext` also aligns the value to its
+// own start, so keep it at the page's start.
+/// @access private
+/// @group number-input
+@mixin number-input-plaintext {
+  .#{$prefix}--number input[type="number"],
+  .#{$prefix}--number input[type="text"] {
+    unicode-bidi: plaintext;
+    text-align: left;
+  }
+
+  [dir="rtl"] .#{$prefix}--number input[type="number"],
+  [dir="rtl"] .#{$prefix}--number input[type="text"] {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("number-input-plaintext") {
+  @include number-input-plaintext;
+}
