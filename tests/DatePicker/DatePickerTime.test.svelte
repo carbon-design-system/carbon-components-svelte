@@ -9,6 +9,9 @@
   export let minuteStep = 1;
   export let value: ComponentProps<DatePicker>["value"] = "";
   export let onchange: (event: CustomEvent) => void = () => {};
+  export let inline = false;
+  export let disabled = false;
+  export let readonly = false;
 </script>
 
 <DatePicker
@@ -17,9 +20,15 @@
   {hourFormat}
   {minuteStep}
   defaultTime="09:00"
+  {inline}
   bind:value
   on:change={onchange}
 >
-  <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
+  <DatePickerInput
+    labelText="Date"
+    placeholder="mm/dd/yyyy"
+    {disabled}
+    {readonly}
+  />
 </DatePicker>
 <p data-testid="value">{value}</p>

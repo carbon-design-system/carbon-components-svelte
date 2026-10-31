@@ -45,4 +45,5 @@ export function createTimeRow(options: TimeRowOptions): {
   element: HTMLDivElement;
   setTime(next: TimeParts): void;
   setDisabled(disabled: boolean): void;
+  setReadOnly(readOnly: boolean): void;
 };

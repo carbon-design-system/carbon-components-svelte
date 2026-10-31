@@ -161,6 +161,8 @@ export interface CalendarInstance {
   clear(triggerChangeEvent?: boolean, toInitial?: boolean): void;
   destroy(): void;
   redraw(): void;
+  /** Disables, or makes read-only, the parts the picker can't block by events. */
+  setBlocked(state: undefined | "disabled" | "readonly"): void;
   set(option: string | CalendarOptions, value?: unknown): void;
   setDate(date: unknown, triggerChange?: boolean, format?: string): void;
   jumpToDate(date?: unknown, triggerChange?: boolean): void;

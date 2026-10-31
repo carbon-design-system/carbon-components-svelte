@@ -683,7 +683,27 @@ export function createCalendarEngine(element, userConfig = {}) {
     });
     self.innerContainer.after(timeRow.element);
     syncTimeRow();
+    applyBlocked();
   }
+
+  /**
+   * Whether a disabled or read-only input blocks the calendar. The picker
+   * blocks the grid's clicks and keys; the time row's fields follow too.
+   * @type {undefined | "disabled" | "readonly"}
+   */
+  let blocked;
+
+  function applyBlocked() {
+    timeRow?.setDisabled(blocked === "disabled");
+    timeRow?.setReadOnly(blocked === "readonly");
+  }
+
+  /** @param {undefined | "disabled" | "readonly"} state */
+  function setBlocked(state) {
+    blocked = state;
+    applyBlocked();
+  }
+  self.setBlocked = setBlocked;
 
   function syncTimeRow() {
     timeRow?.setTime(currentTime());
