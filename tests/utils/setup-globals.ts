@@ -25,6 +25,43 @@ if (typeof window !== "undefined" && !window.matchMedia) {
     }) as unknown as MediaQueryList;
 }
 
+// jsdom has no Web Animations API. Svelte 5 runs a `transition:` or `animate:`
+// with a non-zero duration through `element.animate()` and `getAnimations()`,
+// and throws without them. This `animate()` finishes on a timer, so an outro
+// holds its element for the duration (fake timers drive it), and
+// `getAnimations()` is empty. Svelte 3 and 4 use rAF and injected CSS instead.
+if (typeof Element !== "undefined" && !Element.prototype.animate) {
+  Element.prototype.animate = function animate(
+    _keyframes: Keyframe[] | PropertyIndexedKeyframes | null,
+    options?: number | KeyframeAnimationOptions,
+  ) {
+    const duration =
+      typeof options === "number" ? options : Number(options?.duration ?? 0);
+    const startedAt = performance.now();
+    const animation = {
+      effect: {} as AnimationEffect | null,
+      playState: "running" as AnimationPlayState,
+      onfinish: null as null | (() => void),
+      get currentTime() {
+        return performance.now() - startedAt;
+      },
+      cancel() {
+        clearTimeout(timer);
+        animation.playState = "idle";
+      },
+    };
+    const timer = setTimeout(
+      () => {
+        animation.playState = "finished";
+        animation.onfinish?.();
+      },
+      Math.max(duration, 0),
+    );
+    return animation as unknown as Animation;
+  };
+  Element.prototype.getAnimations = () => [];
+}
+
 class ResizeObserverMock {
   callback: ResizeObserverCallback;
   elements: Element[];

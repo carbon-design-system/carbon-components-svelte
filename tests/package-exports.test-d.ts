@@ -19,6 +19,21 @@ import type {
   ThemeZone as BarrelThemeZone,
   trapFocus,
 } from "carbon-components-svelte";
+import {
+  duration,
+  type DurationToken,
+  easing,
+  easingCss,
+  fade,
+  flip,
+  fly,
+  type FlyParams,
+  motion,
+  type MotionMode,
+  prefersReducedMotion,
+  shouldReduceMotion,
+  slide,
+} from "carbon-components-svelte/motion";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
 import type Button from "carbon-components-svelte/src/Button/Button.svelte";
 import type ComboBoxSkeleton from "carbon-components-svelte/src/ComboBox/ComboBoxSkeleton.svelte";
@@ -124,3 +139,27 @@ const _html: string | undefined = highlight("let a", "js");
 const _action: { destroy: () => void } = highlightCode(document.body, {
   language: "js",
 });
+
+const _duration: DurationToken = "moderate02";
+const _ms: number = duration[_duration];
+const _mode: MotionMode = "expressive";
+const _ease: number = easing.exit[_mode](0.5);
+const _css: string = easingCss.standard.productive;
+const _motion: string = motion("entrance", _mode);
+const _reduce: boolean = shouldReduceMotion();
+const _reduceStore: () => void = prefersReducedMotion.subscribe(
+  (_v: boolean) => {},
+);
+const _flyParams: FlyParams = { x: 32, y: "1rem", collapse: true };
+const _fade: number | undefined = fade(document.body, {
+  duration: "fast02",
+  easing: "exit",
+  reducedMotion: "ignore",
+}).duration;
+const _slide: number | undefined = slide(document.body, { axis: "x" }).duration;
+const _fly: number | undefined = fly(document.body, _flyParams).duration;
+const _flip: number | undefined = flip(
+  document.body,
+  { from: new DOMRect(), to: new DOMRect() },
+  { duration: (distance) => distance },
+).duration;
