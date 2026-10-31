@@ -1,5 +1,6 @@
 // @ts-check
-import { writable } from "svelte/store";
+import { readable, writable } from "svelte/store";
+import { SEARCH_DEBOUNCE_MS } from "../constants/timing.js";
 import { deepEqual } from "../utils/deep-equal.js";
 import { replaceHistory } from "../utils/query-param.js";
 import { safeBrowserStorage } from "../utils/storage.js";
@@ -33,6 +34,7 @@ import { safeBrowserStorage } from "../utils/storage.js";
  * @property {ReadonlyArray<string>} [sortKeys] - Allowed sort keys; anything else falls back to the default
  * @property {boolean | { prefix?: string; params?: SearchParamsOptions["params"]; replace?: (href: string) => void }} [url] - Mirror the state to the URL's search parameters
  * @property {{ key: string; area?: "local" | "session"; pick?: ReadonlyArray<string> }} [persist] - Mirror the state to web storage
+ * @property {number} [searchDebounce] - Milliseconds a search-only change waits before `settled` follows it
  */
 
 /**
@@ -311,10 +313,16 @@ function createDefaults() {
  *
  * @param {Partial<TableState> & Record<string, unknown>} [initial]
  * @param {TableStateOptions} [options]
- * @returns {import("svelte/store").Writable<any> & { patch(partial: Record<string, unknown>): void; reset(): void }}
+ * @returns {import("svelte/store").Writable<any> & { patch(partial: Record<string, unknown>): void; reset(): void; settled: import("svelte/store").Readable<any> }}
  */
 export function createTableState(initial = {}, options = {}) {
-  const { resetPageOn = [], codecs = {}, pageSizes, sortKeys } = options;
+  const {
+    resetPageOn = [],
+    codecs = {},
+    pageSizes,
+    sortKeys,
+    searchDebounce = SEARCH_DEBOUNCE_MS,
+  } = options;
   const extraKeys = [
     ...new Set(
       [...Object.keys(initial), ...Object.keys(codecs), ...resetPageOn].filter(
@@ -475,8 +483,51 @@ export function createTableState(initial = {}, options = {}) {
     };
   });
 
+  /**
+   * Whether `next` differs from `prev` only in what typing in a search
+   * changes: `search`, and the `page` it resets.
+   * @param {TableState & Record<string, unknown>} prev
+   * @param {TableState & Record<string, unknown>} next
+   */
+  function searchOnly(prev, next) {
+    if (prev.search === next.search) return false;
+    return Object.keys({ ...prev, ...next }).every(
+      (key) =>
+        key === "search" || key === "page" || deepEqual(prev[key], next[key]),
+    );
+  }
+
+  // The state a request reads. It follows every change at once, except one
+  // that only types in the search, which lands once typing pauses for
+  // `searchDebounce` ms. A later change of any other kind flushes it.
+  const settled = readable(copyState(current), (set) => {
+    /** @type {ReturnType<typeof setTimeout> | null} */
+    let timer = null;
+    /** @type {null | (TableState & Record<string, unknown>)} */
+    let last = null;
+    const unsubscribe = store.subscribe((value) => {
+      if (timer !== null) clearTimeout(timer);
+      timer = null;
+      if (last && searchDebounce > 0 && searchOnly(last, value)) {
+        timer = setTimeout(() => {
+          timer = null;
+          last = value;
+          set(value);
+        }, searchDebounce);
+        return;
+      }
+      last = value;
+      set(value);
+    });
+    return () => {
+      if (timer !== null) clearTimeout(timer);
+      unsubscribe();
+    };
+  });
+
   return {
     subscribe: store.subscribe,
+    settled: { subscribe: settled.subscribe },
     set: (value) => commit(value),
     update: (callback) => commit(callback(copyState(current))),
     patch: (partial) => commit({ ...current, ...partial }),

@@ -1789,11 +1789,11 @@ Bind each field of `$table` to the part that owns it. Changing the search, the p
 | Do | Why |
 | --- | --- |
 | Create the store inside the component. | A store made at module scope is shared by every request on a server. |
-| Read `$table` in one `$:` statement to build the request. | A click then makes one request, even though the sort and the page both change. |
+| Build the request from `table.settled` in one `$:` statement. | `settled` follows a click at once and waits for typing in the search to pause (`searchDebounce`, 300 ms), so a click makes one request and typing makes one per pause. |
 | Pass only the current page as `rows` and bind `page` and `pageSize` on `Pagination`. | `pageSize` on `DataTable` slices `rows` a second time. |
 | Replace `selectedRowIds`, never push to it. | The store compares each write with a private copy, and a pushed array is the same array. |
 
-`tableStateToSearchParams($table)` is the request: it leaves out an empty search and an unsorted table. Pass `defaults` to also leave out a `page` and `pageSize` the server assumes.
+`tableStateToSearchParams($settled)` is the request: it leaves out an empty search and an unsorted table. Pass `defaults` to also leave out a `page` and `pageSize` the server assumes.
 
 <FileSource src="/framed/DataTable/DataTableTableState" />
 

@@ -40,6 +40,12 @@ export const SUBMENU_AIM_PAUSE_MS: 100;
  */
 export const SEPARATOR_HOVER_DELAY_MS: 150;
 
+/**
+ * Default time a table search waits for typing to pause before the state a
+ * request reads changes (`createTableState`'s `settled`).
+ */
+export const SEARCH_DEBOUNCE_MS: 300;
+
 /** Idle time before a type-ahead search buffer resets. */
 export const TYPEAHEAD_RESET_MS: 500;
 

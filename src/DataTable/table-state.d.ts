@@ -1,4 +1,4 @@
-import type { Writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
 import type { ColumnSettings } from "../utils/column-settings.js";
 
 export type TableState = {
@@ -32,6 +32,11 @@ export type TableStateOptions<State extends TableState = TableState> = {
   pageSizes?: ReadonlyArray<number>;
   /** Allowed sort keys. Any other key falls back to the default. */
   sortKeys?: ReadonlyArray<string>;
+  /**
+   * Milliseconds a change to `search` alone waits, after the last one,
+   * before `settled` follows it. Defaults to `SEARCH_DEBOUNCE_MS` (300).
+   */
+  searchDebounce?: number;
   /**
    * Mirror `sortKey`, `sortDirection`, `page`, `pageSize`, `search` and the
    * keys that have a codec to the URL's search parameters. A parameter
@@ -88,6 +93,12 @@ export type TableStateStore<State extends TableState = TableState> =
     patch(partial: Partial<State>): void;
     /** Set the state back to the initial state. */
     reset(): void;
+    /**
+     * The state to build a request from. It follows every change at once,
+     * except typing in the search, which lands once typing pauses for
+     * `searchDebounce` ms, so a server table fetches once per pause.
+     */
+    settled: Readable<State>;
   };
 
 /**

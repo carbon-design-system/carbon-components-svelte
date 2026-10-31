@@ -219,3 +219,42 @@ describe("table state search params", () => {
     ).toEqual(["open", "late"]);
   });
 });
+
+describe("createTableState settled", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("waits for typing to pause, and follows other changes at once", () => {
+    vi.useFakeTimers();
+    const table = createTableState({ pageSize: 5 });
+    const seen: string[] = [];
+    const stop = table.settled.subscribe((state) => {
+      seen.push(`${state.search}|${state.sortKey}|${state.page}`);
+    });
+
+    table.patch({ page: 3 });
+    table.patch({ search: "b" });
+    table.patch({ search: "ba" });
+    table.patch({ search: "ban" });
+    vi.advanceTimersByTime(299);
+    expect(seen).toEqual(["|null|1", "|null|3"]);
+
+    vi.advanceTimersByTime(1);
+    expect(seen).toEqual(["|null|1", "|null|3", "ban|null|1"]);
+
+    // A sort while a search waits lands at once, with the search.
+    table.patch({ search: "bana" });
+    table.patch({ sortKey: "name", sortDirection: "ascending" });
+    expect(seen.at(-1)).toBe("bana|name|1");
+    vi.advanceTimersByTime(300);
+    expect(seen).toHaveLength(4);
+    stop();
+  });
+
+  it("follows every change at once with searchDebounce 0", () => {
+    const table = createTableState({}, { searchDebounce: 0 });
+    table.patch({ search: "x" });
+    expect(get(table.settled).search).toBe("x");
+  });
+});

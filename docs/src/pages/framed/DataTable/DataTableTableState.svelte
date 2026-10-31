@@ -40,9 +40,11 @@
     };
   }
 
-  // Read $table once, so one click makes one request.
-  $: request = tableStateToSearchParams($table).toString();
-  $: ({ rows, total } = fetchPage($table));
+  // `settled` waits for typing in the search to pause, so a request runs
+  // once per pause. Read it once, so one click makes one request.
+  const settled = table.settled;
+  $: request = tableStateToSearchParams($settled).toString();
+  $: ({ rows, total } = fetchPage($settled));
 </script>
 
 <DataTable
