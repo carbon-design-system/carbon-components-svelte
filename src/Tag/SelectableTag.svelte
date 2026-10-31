@@ -55,7 +55,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { readable } from "svelte/store";
+  import { get, readable } from "svelte/store";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { noop } from "../utils/noop.js";
@@ -78,13 +78,24 @@
     size: readable(
       /** @type {"sm" | "default" | "lg" | undefined} */ (undefined),
     ),
+    tabStop: readable(/** @type {HTMLElement | null} */ (null)),
     toggle: () => /** @type {boolean | null} */ (null),
+    claimInitialTabStop: () => false,
+    refreshTabStop: noop,
   };
   const {
     selectedValues: groupSelectedValues,
     disabled: groupDisabled,
     size: selectionGroupSize,
+    tabStop: groupTabStop,
   } = selectionGroup;
+
+  // Decided while initializing, in markup order, so the server HTML of a
+  // group already has one tab stop. `$groupTabStop` takes over on mount.
+  const initialTabStop = selectionGroup.claimInitialTabStop(
+    value ?? id,
+    disabled || get(groupDisabled),
+  );
 
   // Inside a `TagSet`, register like `Tag` does.
   const group = joinTagSet(() => ({
@@ -108,6 +119,19 @@
     ? $groupSelectedValues.has(identity)
     : selected;
   $: isDisabled = disabled || $groupDisabled;
+  // In an enabled group, a disabled tag stays focusable with
+  // `aria-disabled` so arrow keys still reach it, as in a toolbar.
+  $: nativeDisabled = inSelectionGroup ? $groupDisabled : isDisabled;
+  $: groupTabindex =
+    $groupTabStop === null
+      ? initialTabStop && !isDisabled
+        ? 0
+        : -1
+      : $groupTabStop === ref
+        ? 0
+        : -1;
+  // The group picks a new tab stop once the DOM shows the change.
+  $: if (inSelectionGroup) selectionGroup.refreshTabStop(nativeDisabled);
   $: resolvedSize =
     normalizeSize(size, TAG_SIZE_ALIASES) ??
     $selectionGroupSize ??
@@ -134,7 +158,10 @@
   $: truncationLabel = truncated ? (labelRef?.textContent?.trim() ?? "") : "";
 
   onMount(() => {
-    return () => stopObservingLabel();
+    return () => {
+      stopObservingLabel();
+      if (inSelectionGroup) selectionGroup.refreshTabStop();
+    };
   });
 
   function toggle() {
@@ -156,9 +183,15 @@
   aria-pressed={isSelected ? "true" : "false"}
   data-overflow={$groupOverflow ? "true" : undefined}
   {id}
-  disabled={isDisabled}
+  disabled={nativeDisabled}
   aria-disabled={isDisabled ? "true" : "false"}
-  tabindex={isDisabled ? -1 : $rovingTabindex}
+  tabindex={inSelectionGroup
+    ? nativeDisabled
+      ? -1
+      : groupTabindex
+    : isDisabled
+      ? -1
+      : $rovingTabindex}
   title={isDisabled && truncated ? truncationLabel : undefined}
   class:bx--tag={true}
   class:bx--tag--selectable={true}

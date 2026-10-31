@@ -284,7 +284,7 @@ Use the large size variant for selectable tags.
 
 Wrap tags in `SelectableTagGroup` to own the selection for a set of filter chips. Give each tag a `value` and bind `selected`, an array of the selected values. `change` dispatches with the new array when a click changes the selection, and not when `selected` is set from outside.
 
-The group renders `role="group"` named by `legendText`; set `hideLegend` to hide the legend visually. Tags stay in the tab order and wrap onto more lines in a narrow parent. Press <DocKbd label="Space" /> or <DocKbd label="Enter" /> to toggle the focused tag. A tag in a group takes its selected state from the group, so a `selected` set on the tag is ignored. A tag without a `value` is identified by its `id`.
+The group renders `role="toolbar"` named by `legendText`; set `hideLegend` to hide the legend visually. Tags wrap onto more lines in a narrow parent. The group is one tab stop: the first selected tag, or the first tag. Press <DocKbd label="Left" /> and <DocKbd label="Right" /> to move between tags, <DocKbd label="Home" /> and <DocKbd label="End" /> to jump to the ends, and <DocKbd label="Space" /> or <DocKbd label="Enter" /> to toggle the focused tag. A disabled tag in an enabled group stays focusable with `aria-disabled`, so keyboard users can still find it. A tag in a group takes its selected state from the group, so a `selected` set on the tag is ignored. A tag without a `value` is identified by its `id`.
 
 <FileSource src="/framed/Tag/SelectableTagGroup" />
 

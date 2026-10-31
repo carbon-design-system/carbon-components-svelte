@@ -11,7 +11,7 @@ describe("SelectableTagGroup", () => {
   it("names the group from its legend", () => {
     render(SelectableTagGroup);
 
-    expect(screen.getByRole("group", { name: "Status" })).toBeInTheDocument();
+    expect(screen.getByRole("toolbar", { name: "Status" })).toBeInTheDocument();
   });
 
   it("selects several tags in multiple mode and reports the array once per click", async () => {
@@ -152,12 +152,60 @@ describe("SelectableTagGroup", () => {
     expect(tag("Open")).not.toHaveClass("bx--tag--lg");
   });
 
-  it("leaves every tag in the tab order", () => {
+  it("has one tab stop, on the selected tag, and arrows move it", async () => {
     render(SelectableTagGroup, { props: { selected: ["closed"] } });
 
-    expect(screen.getAllByRole("button")).toHaveLength(3);
-    for (const name of ["Open", "Closed", "Draft"]) {
-      expect(tag(name)).not.toHaveAttribute("tabindex", "-1");
-    }
+    expect(tag("Open")).toHaveAttribute("tabindex", "-1");
+    expect(tag("Closed")).toHaveAttribute("tabindex", "0");
+    expect(tag("Draft")).toHaveAttribute("tabindex", "-1");
+
+    await user.tab();
+    expect(tag("Closed")).toHaveFocus();
+    await user.keyboard("{ArrowRight}");
+    expect(tag("Draft")).toHaveFocus();
+    expect(tag("Draft")).toHaveAttribute("tabindex", "0");
+    expect(tag("Closed")).toHaveAttribute("tabindex", "-1");
+    await user.keyboard("{ArrowRight}");
+    expect(tag("Open")).toHaveFocus();
+    await user.keyboard("{End}");
+    expect(tag("Draft")).toHaveFocus();
+    await user.keyboard("{Home}");
+    expect(tag("Open")).toHaveFocus();
+    await user.keyboard(" ");
+    expect(selected()).toEqual(["closed", "open"]);
+  });
+
+  it("keeps a disabled tag focusable in an enabled group", async () => {
+    render(SelectableTagGroup, { props: { draftDisabled: true } });
+
+    expect(tag("Draft")).not.toBeDisabled();
+    expect(tag("Draft")).toHaveAttribute("aria-disabled", "true");
+
+    await user.tab();
+    expect(tag("Open")).toHaveFocus();
+    await user.keyboard("{End}");
+    expect(tag("Draft")).toHaveFocus();
+    await user.keyboard(" ");
+    await user.click(tag("Draft"));
+    expect(selected()).toEqual([]);
+  });
+
+  it("moves the tab stop off a tag that becomes disabled", async () => {
+    const { component } = render(SelectableTagGroup, {
+      props: { selected: ["closed"] },
+    });
+
+    component.disabled = true;
+    await tick();
+    await tick();
+    component.disabled = false;
+    await tick();
+    await tick();
+
+    expect(
+      screen
+        .getAllByRole("button")
+        .filter((button) => button.getAttribute("tabindex") === "0"),
+    ).toEqual([tag("Closed")]);
   });
 });

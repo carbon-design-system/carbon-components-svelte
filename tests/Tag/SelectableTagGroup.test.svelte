@@ -16,6 +16,7 @@
     "Status";
   export let id: ComponentProps<SelectableTagGroup>["id"] = undefined;
   export let closedSize: ComponentProps<SelectableTag>["size"] = undefined;
+  export let draftDisabled = false;
   export let onChange = (_detail: readonly (string | number)[]) => {};
   export let onTagChange = (_detail: { selected: boolean }) => {};
 </script>
@@ -34,7 +35,7 @@
     Open
   </SelectableTag>
   <SelectableTag value="closed" size={closedSize}>Closed</SelectableTag>
-  <SelectableTag id="draft">Draft</SelectableTag>
+  <SelectableTag id="draft" disabled={draftDisabled}>Draft</SelectableTag>
 </SelectableTagGroup>
 
 <output data-testid="selected">{JSON.stringify(selected)}</output>

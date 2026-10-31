@@ -63,13 +63,22 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, setContext } from "svelte";
-  import { readonly, writable } from "svelte/store";
+  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
+  import { get, readonly, writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
+
+  const TAG_SELECTOR = "button.bx--tag--selectable";
   const fallbackId = uniqueId();
   $: legendId = `${id ?? fallbackId}-legend`;
 
@@ -137,19 +146,122 @@
     return !isSelected;
   }
 
+  /**
+   * The group's one tab stop. `null` until mount, while each tag uses the
+   * choice from `claimInitialTabStop`.
+   * @type {import("svelte/store").Writable<HTMLButtonElement | null>}
+   */
+  const tabStop = writable(null);
+
+  /**
+   * Tags that can take focus, in DOM order. A tag that is only
+   * `aria-disabled` counts; a disabled group's tags do not.
+   * @type {() => HTMLButtonElement[]}
+   */
+  const getTags = () =>
+    /** @type {HTMLButtonElement[]} */ (
+      Array.from(ref?.querySelectorAll(TAG_SELECTOR) ?? [])
+    ).filter((tag) => !tag.disabled);
+
+  /**
+   * The default tab stop: the first selected, available tag, then the first
+   * available tag, then the first tag that is only `aria-disabled`.
+   * @type {() => HTMLButtonElement | null}
+   */
+  function findDefaultTabStop() {
+    const tags = getTags();
+    const available = tags.filter(
+      (tag) => tag.getAttribute("aria-disabled") !== "true",
+    );
+    return (
+      available.find((tag) => tag.getAttribute("aria-pressed") === "true") ??
+      available[0] ??
+      tags[0] ??
+      null
+    );
+  }
+
+  let initialTabStopClaimed = false;
+
+  /**
+   * Tags call this while initializing, in markup order, so the first render
+   * (server or browser) has one `tabindex="0"` without reading the DOM.
+   * @type {(value: Value, isDisabled: boolean) => boolean}
+   */
+  function claimInitialTabStop(value, isDisabled) {
+    if (initialTabStopClaimed || isDisabled) return false;
+    const current = effectiveSelected(selected, selectionMode);
+    if (current.length > 0 && !current.includes(value)) return false;
+    initialTabStopClaimed = true;
+    return true;
+  }
+
+  /**
+   * Moves the tab stop off a tag that left the DOM or became disabled. Runs
+   * after the DOM update, so it reads the new `disabled` attributes. The
+   * argument is ignored; a caller passes its state so its `$:` block reruns
+   * when that state changes.
+   * @type {(_state?: unknown) => void}
+   */
+  function refreshTabStop(_state) {
+    tick().then(() => {
+      if (!ref) return;
+      const current = get(tabStop);
+      if (current && ref.contains(current) && !current.disabled) return;
+      tabStop.set(findDefaultTabStop());
+    });
+  }
+
+  $: refreshTabStop(disabled);
+
+  onMount(() => {
+    refreshTabStop();
+  });
+
+  /** @param {FocusEvent} event */
+  function handleFocusIn(event) {
+    const target = event.target;
+    if (target instanceof HTMLButtonElement && target.matches(TAG_SELECTOR)) {
+      tabStop.set(target);
+    }
+  }
+
   setContext("carbon:SelectableTagGroup", {
     selectedValues: readonly(selectedValues),
     disabled: readonly(groupDisabled),
     size: readonly(groupSize),
+    tabStop: readonly(tabStop),
     toggle,
+    claimInitialTabStop,
+    refreshTabStop,
   });
 </script>
 
 <div
   bind:this={ref}
-  role="group"
+  role="toolbar"
   {id}
   aria-labelledby={legendText ? legendId : undefined}
+  use:rovingFocus={{
+    selector: TAG_SELECTOR,
+    getItems: getTags,
+    rtl: () => resolveLayoutDirection($layoutDirection, ref) === "rtl",
+    getActiveIndex: () => {
+      const current = get(tabStop);
+      const index = current ? getTags().indexOf(current) : -1;
+      return index === -1 ? 0 : index;
+    },
+    onMove: (index, event) => {
+      // Leave Alt/Ctrl/Meta+Arrow (Back, scroll) to the browser.
+      if (hasModifierKey(event)) return;
+      event.preventDefault();
+      const tag = getTags()[index];
+      if (!tag) return;
+      tabStop.set(tag);
+      tag.focus();
+    },
+  }}
+  on:focusin={handleFocusIn}
   {...$$restProps}
 >
   {#if legendText}

@@ -4,21 +4,30 @@ import { expect, test } from "./helpers/host";
 test.describe("SelectableTagGroup", () => {
   test("has no detectable accessibility violations", async ({ page }) => {
     await page.goto("/selectable-tag-group.html");
-    await expect(page.getByRole("group", { name: "Status" })).toBeVisible();
+    await expect(page.getByRole("toolbar", { name: "Status" })).toBeVisible();
 
     const results = await new AxeBuilder({ page }).include("#app").analyze();
     expect(results.violations).toEqual([]);
   });
 
-  test("Tab reaches every tag and Space toggles it", async ({ page }) => {
+  test("is one tab stop; arrows move and Space toggles", async ({ page }) => {
     await page.goto("/selectable-tag-group.html");
-    const status = page.getByRole("group", { name: "Status" });
+    const status = page.getByRole("toolbar", { name: "Status" });
     const closed = status.getByRole("button", { name: "Closed" });
 
+    await expect(status.locator('[tabindex="0"]')).toHaveCount(1);
     await status.getByRole("button", { name: "Open" }).focus();
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Tab");
+    await page.keyboard.press("ArrowRight");
+    await page.keyboard.press("ArrowRight");
     await expect(closed).toBeFocused();
+    // Tab leaves the group for the next group's tab stop.
+    await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("toolbar", { name: "Priority" }).getByRole("button", {
+        name: "Medium",
+      }),
+    ).toBeFocused();
+    await closed.focus();
 
     await page.keyboard.press("Space");
     await expect(closed).toHaveAttribute("aria-pressed", "true");
@@ -29,7 +38,7 @@ test.describe("SelectableTagGroup", () => {
 
   test("keeps the last tag of a required single group", async ({ page }) => {
     await page.goto("/selectable-tag-group.html");
-    const priority = page.getByRole("group", { name: "Priority" });
+    const priority = page.getByRole("toolbar", { name: "Priority" });
 
     await priority.getByRole("button", { name: "Medium" }).click();
     await expect(

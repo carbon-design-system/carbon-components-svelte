@@ -240,7 +240,7 @@ export const navigation: AriaEntry[] = [
   {
     name: "SelectableTagGroup",
     render: (attrs) => render(SelectableTagGroupFixture, { props: attrs }),
-    target: () => screen.getByRole("group"),
+    target: () => screen.getByRole("toolbar"),
   },
   {
     name: "Tag",
