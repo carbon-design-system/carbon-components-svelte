@@ -9,6 +9,7 @@
     DatePicker,
     DatePickerInput,
     HeaderSearch,
+    MultiSelect,
     NumberInput,
     PasswordInput,
     PinCodeInput,
@@ -381,6 +382,12 @@
   </div>
   <div data-testid="header-search">
     <HeaderSearch />
+  </div>
+  <div data-testid="combo-box">
+    <ComboBox labelText="Region" {items} />
+  </div>
+  <div data-testid="multi-select-filterable">
+    <MultiSelect filterable labelText="Regions" placeholder="Filter" {items} />
   </div>
 </div>
 

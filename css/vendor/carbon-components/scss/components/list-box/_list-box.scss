@@ -989,3 +989,25 @@ $list-box-width: 100%;
 @include exports("list-box-forced-colors") {
   @include list-box-forced-colors;
 }
+
+// carbon-components-svelte patch
+// ComboBox's and MultiSelect's typed text reads in its own direction, so in
+// RTL "3 / 4" keeps its order instead of showing as "4 / 3", as in
+// `.bx--text-input-wrapper .bx--text-input`. `unicode-bidi: plaintext` also
+// aligns the value to its own start, so keep it at the page's start.
+/// @access private
+/// @group components
+@mixin list-box-plaintext {
+  .#{$prefix}--list-box__field .#{$prefix}--text-input {
+    unicode-bidi: plaintext;
+    text-align: left;
+  }
+
+  [dir="rtl"] .#{$prefix}--list-box__field .#{$prefix}--text-input {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("list-box-plaintext") {
+  @include list-box-plaintext;
+}
