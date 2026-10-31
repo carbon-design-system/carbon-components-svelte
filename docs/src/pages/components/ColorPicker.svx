@@ -1,0 +1,112 @@
+---
+components: ["ColorPicker"]
+description: Color pickers let people choose a color by dragging, typing a value, or picking a preset, and warn when the color is too close to the surface it sits on.
+---
+
+<script>
+  import { ColorPicker } from "carbon-components-svelte";
+
+  const swatches = [
+    { value: "#da1e28", label: "Red 60" },
+    { value: "#ff832b", label: "Orange 40" },
+    { value: "#f1c21b", label: "Yellow 30" },
+    { value: "#24a148", label: "Green 50" },
+    { value: "#009d9a", label: "Teal 50" },
+    { value: "#0f62fe", label: "Blue 60" },
+    { value: "#8a3ffc", label: "Purple 60" },
+    { value: "#d02670", label: "Magenta 60" },
+    { value: "#161616", label: "Gray 100" },
+    { value: "#8d8d8d", label: "Gray 50" },
+    { value: "#e0e0e0", label: "Gray 20" },
+    { value: "#ffffff", label: "White" },
+  ];
+</script>
+
+## Basic
+
+Drag in the area to set saturation and brightness, and use the slider to set the hue. The value is a CSS color string, such as `#0f62fe`. Bind to `value`, or listen for `input` while the color changes and `change` when a choice settles.
+
+<FileSource src="/framed/ColorPicker/ColorPickerBound" />
+
+## Format
+
+Set `format` to `"hex"`, `"rgb"` or `"hsl"` to choose the text fields and how `value` is written: `#0f62fe`, `rgb(15, 98, 254)` or `hsl(219, 99%, 53%)`. The format switch under the sliders changes it, so bind `format` to follow the choice. A `value` in any of the three forms is read as is, and is not rewritten until the color changes.
+
+### RGB
+
+<ColorPicker format="rgb" value="rgb(15, 98, 254)" />
+
+### HSL
+
+<ColorPicker format="hsl" value="hsl(219, 99%, 53%)" />
+
+## Alpha
+
+Set `alpha` to add an alpha slider and field. The value gains an alpha part: `#0f62fe80` or `rgba(15, 98, 254, 0.5)`. Without `alpha`, `value` is always opaque and drops any alpha it was given.
+
+<ColorPicker alpha format="rgb" value="rgba(15, 98, 254, 0.5)" />
+
+## Swatches
+
+Pass `swatches` to add a grid of preset colors. Give a swatch a `label` to name it for a screen reader; one without a label is named by color, as in "dark teal". Set `swatchColumns` for the number of swatches in a row.
+
+<ColorPicker {swatches} value="#24a148" />
+
+### Recent colors
+
+The picker keeps the colors you chose last in `recent`, newest first, and shows them as a second row. A color is added when a pick settles: the end of a drag, a typed value, a swatch, the eyedropper, or focus leaving a control after the keyboard changed it. Bind `recent` to keep the list between visits, and set `recentLimit` to `0` to turn the row off.
+
+<FileSource src="/framed/ColorPicker/ColorPickerRecent" />
+
+## Contrast
+
+Set `background` to the color the chosen color sits on, and the picker warns when the WCAG contrast ratio between them falls below `minContrast`, 4.5 by default. Use `3` for an icon or a border. A color with alpha is laid over the background first, and a background with alpha over white.
+
+<FileSource src="/framed/ColorPicker/ColorPickerContrast" />
+
+## Eyedropper
+
+In browsers that have the EyeDropper API (Chromium), a button beside the preview picks any color on the screen. It is not rendered on the server or in other browsers, so the layout there has no gap for it. Set `hideEyeDropper` to remove it.
+
+<ColorPicker hideEyeDropper />
+
+## Text fields
+
+Set `hideInputs` to hide the format switch and the text fields, as when a field of your own already shows the value.
+
+<ColorPicker hideInputs />
+
+## Disabled
+
+Set `disabled` to `true` to prevent interaction.
+
+<ColorPicker disabled {swatches} value="#0f62fe" />
+
+## Read-only
+
+Set `readonly` to `true` to show a color the user cannot change. The thumbs, fields and swatches stay focusable, and the eyedropper hides.
+
+<ColorPicker readonly {swatches} value="#0f62fe" />
+
+## Accessibility
+
+The area is one slider with a role description of "2D slider". Its value text names both axes and the color, as in "Saturation 60%, brightness 40%, dark teal", so a screen reader user hears where the thumb is without seeing the area. Override the wording with `translateWithId`, and the color names with `formatColorName`.
+
+| Key | Action |
+| :-- | :-- |
+| <DocKbd label="ArrowLeft" /> <DocKbd label="ArrowRight" /> | Change the saturation by 1. In a right-to-left layout, the keys swap. |
+| <DocKbd label="ArrowUp" /> <DocKbd label="ArrowDown" /> | Change the brightness by 1. |
+| <DocKbd label="Shift" /> + an arrow | Change the value by 10. |
+| <DocKbd label="PageUp" /> <DocKbd label="PageDown" /> | Change the brightness by 10. |
+| <DocKbd label="Home" /> <DocKbd label="End" /> | Set the saturation to its lowest or highest value. |
+| <DocKbd label="Tab" /> | Move between the area, the hue slider, the alpha slider, the fields and the swatches. The swatches are one tab stop. |
+
+The hue and alpha sliders take the same keys. The swatches are a listbox: the arrow keys move focus, and <DocKbd label="Enter" /> or <DocKbd label="Space" /> chooses, so moving through the swatches does not change the color on the way.
+
+In a right-to-left layout the area, the sliders and the swatches mirror, and so does the hue, so the start of every track sits at the inline start. In forced colors mode, the area, the sliders, the preview and the swatches keep their colors, the fields show the value as text, and the chosen swatch carries a check mark.
+
+| Do | Why |
+| :-- | :-- |
+| Show the value as text, beside or below the picker | The color in the area and preview is not available to everyone, and the text is what a form submits. |
+| Set `background` where the color is text or an icon | The warning is the only cue that a color is too faint to read. |
+| Label each swatch | A name such as "Blue 60" says more than a color name does. |

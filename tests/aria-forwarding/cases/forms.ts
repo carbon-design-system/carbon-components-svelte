@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
+import ColorPicker from "carbon-components-svelte/ColorPicker/ColorPicker.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
@@ -66,6 +67,11 @@ export const forms: AriaEntry[] = [
         props: { labelText: "Name", helperText: "Full name", ...attrs },
       }),
     target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "ColorPicker",
+    render: (attrs) => render(ColorPicker, { props: { ...attrs } }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "ComboBox",

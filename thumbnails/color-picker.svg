@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>color-picker</title>
+    <g id="color-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="area" fill="var(--cds-background-brand, #0f62fe)" x="76" y="34" width="168" height="64"></rect>
+        <rect id="area-light" fill="var(--cds-text-on-color, #ffffff)" fill-opacity="0.4" x="76" y="34" width="56" height="64"></rect>
+        <rect id="area-dark" fill="var(--cds-background-inverse, #393939)" fill-opacity="0.5" x="76" y="74" width="168" height="24"></rect>
+        <circle id="area-thumb" fill="var(--cds-background-brand, #0f62fe)" stroke="var(--cds-text-on-color, #ffffff)" stroke-width="2" cx="204" cy="52" r="7"></circle>
+        <rect id="hue-red" fill="var(--cds-support-error, #da1e28)" x="76" y="110" width="42" height="8"></rect>
+        <rect id="hue-yellow" fill="var(--cds-support-warning, #f1c21b)" x="118" y="110" width="42" height="8"></rect>
+        <rect id="hue-green" fill="var(--cds-support-success, #198038)" x="160" y="110" width="42" height="8"></rect>
+        <rect id="hue-blue" fill="var(--cds-background-brand, #0f62fe)" x="202" y="110" width="42" height="8"></rect>
+        <circle id="hue-thumb" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-icon-primary, #161616)" cx="202" cy="114" r="7"></circle>
+        <rect id="swatch-1" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="130" width="16" height="16"></rect>
+        <rect id="swatch-2" fill="var(--cds-border-subtle, #e0e0e0)" x="100" y="130" width="16" height="16"></rect>
+        <rect id="swatch-3" fill="var(--cds-background-brand, #0f62fe)" x="124" y="130" width="16" height="16"></rect>
+        <rect id="swatch-4" fill="var(--cds-border-subtle, #e0e0e0)" x="148" y="130" width="16" height="16"></rect>
+    </g>
+</svg>
