@@ -395,3 +395,115 @@
 @include exports("data-table-tag-sm") {
   @include data-table-tag-sm;
 }
+
+// carbon-components-svelte patch (pinned columns)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Pin columns to the inline start or end while the table scrolls
+/// horizontally (a header's `columnPinned`). `DataTable` writes the offset
+/// inline as `--ccs-pinned-offset`, from declared widths, so the server
+/// output is already right. The rules turn it into `left` or `right` by
+/// direction (`ccs-inset-inline`). An inline `inset-inline-start` would skip
+/// that twin, but the sources avoid it: it needs Safari 14.1, under the
+/// Safari 14.0 baseline.
+///
+/// Never set a background on a pinned cell. Carbon already paints every cell
+/// opaque in each state (layer, zebra, hover, selected, highlighted), so a
+/// pinned cell hides what scrolls beneath it, and a background here would
+/// out-rank those state rules.
+///
+/// Stacking: a pinned header cell of a `stickyHeader` table sits at 3, over
+/// the body pins at 1. Without it the header would tie with them at the
+/// sticky header's own 1, and the later body cell would win. The pinned
+/// table is its own stacking context, so these values do not compete with a
+/// toolbar or menu outside it.
+///
+/// The marker class on the table gives the rules the weight to beat
+/// `th:last-of-type` and `th.bx--table-column-checkbox`, which set
+/// `position: static`.
+///
+/// The edge divider is a pseudo-element, not a `box-shadow`: selected and
+/// expandable rows already set `box-shadow` on `td`, and collapsed table
+/// borders do not travel with a sticky cell. It takes `$border-strong`
+/// because the header's own fill is `$layer-accent`, which is as light as
+/// `$border-subtle` in the white theme.
+/// @access private
+/// @group components
+@mixin data-table-pinned-columns {
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-start,
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-end {
+    position: sticky;
+    z-index: 1;
+  }
+
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-start {
+    @include ccs-inset-inline($start: var(--ccs-pinned-offset, 0));
+  }
+
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-end {
+    @include ccs-inset-inline($end: var(--ccs-pinned-offset, 0));
+  }
+
+  .#{$prefix}--data-table.#{$prefix}--data-table--sticky-header.#{$prefix}--data-table--pinned-columns
+    thead
+    .#{$prefix}--table-column--pinned-start,
+  .#{$prefix}--data-table.#{$prefix}--data-table--sticky-header.#{$prefix}--data-table--pinned-columns
+    thead
+    .#{$prefix}--table-column--pinned-end {
+    z-index: 3;
+  }
+
+  // A focus ring runs past its cell. The next pinned cell paints its opaque
+  // background over the same layer, so the cell that holds focus rises one
+  // step. A pinned header cell of a sticky header keeps its 3, which wins on
+  // weight.
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-start:focus-within,
+  .#{$prefix}--data-table.#{$prefix}--data-table--pinned-columns
+    .#{$prefix}--table-column--pinned-end:focus-within {
+    z-index: 2;
+  }
+
+  .#{$prefix}--data-table--pinned-columns {
+    isolation: isolate;
+  }
+
+  .#{$prefix}--table-column--pinned-start-edge::after,
+  .#{$prefix}--table-column--pinned-end-edge::after {
+    position: absolute;
+    // Runs 1px past the cell to cover the row borders it crosses.
+    top: -1px;
+    bottom: -1px;
+    width: 1px;
+    background: $border-strong;
+    content: "";
+    pointer-events: none;
+  }
+
+  .#{$prefix}--table-column--pinned-start-edge::after {
+    @include ccs-inset-inline($end: 0);
+  }
+
+  .#{$prefix}--table-column--pinned-end-edge::after {
+    @include ccs-inset-inline($start: 0);
+  }
+
+  // Forced colors repaints backgrounds with `Canvas`, which hides the line.
+  @media (forced-colors: active) {
+    .#{$prefix}--table-column--pinned-start-edge::after,
+    .#{$prefix}--table-column--pinned-end-edge::after {
+      background: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("data-table-pinned-columns") {
+  @include data-table-pinned-columns;
+}

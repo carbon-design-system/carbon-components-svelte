@@ -24,6 +24,13 @@
   export let fixedLayout = false;
 
   /**
+   * Set to `true` when a column is pinned (`position: sticky`) so the table
+   * stacks its pinned cells among themselves, under anything outside it.
+   * `DataTable` sets this from `columnPinned`.
+   */
+  export let pinnedColumns = false;
+
+  /**
    * Set the style attribute on the `table` element.
    * @type {string | undefined}
    */
@@ -172,6 +179,7 @@
       class:bx--data-table--static={useStaticWidth}
       class:bx--data-table--sticky-header={stickyHeader}
       class:bx--data-table--fixed-layout={fixedLayout}
+      class:bx--data-table--pinned-columns={pinnedColumns}
       style={tableStyle}
     >
       <slot />
@@ -198,6 +206,7 @@
       class:bx--data-table--static={useStaticWidth}
       class:bx--data-table--sticky-header={stickyHeader}
       class:bx--data-table--fixed-layout={fixedLayout}
+      class:bx--data-table--pinned-columns={pinnedColumns}
       {...$$restProps}
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}

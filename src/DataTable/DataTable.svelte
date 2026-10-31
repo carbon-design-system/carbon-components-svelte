@@ -1,13 +1,18 @@
 <script context="module">
   import { deepEqual } from "../utils/deep-equal.js";
+  import { formatPinnedClass } from "./data-table-utils.js";
 
   const alignClasses = {
     start: "bx--table-column--align-start",
     end: "bx--table-column--align-end",
   };
 
-  function formatAlignClass(columnAlign) {
-    return alignClasses[columnAlign];
+  /**
+   * @param {string | undefined} columnAlign
+   * @param {import("./data-table-utils.js").PinnedColumnLayout | undefined} pin
+   */
+  function formatColumnClass(columnAlign, pin) {
+    return formatPinnedClass(pin, alignClasses[columnAlign]);
   }
 
   /**
@@ -18,6 +23,30 @@
   function joinClasses(...parts) {
     return parts.filter(Boolean).join(" ") || undefined;
   }
+
+  /**
+   * The layouts of the leading columns, in render order.
+   * @param {null | Array<import("./data-table-utils.js").PinnedColumnLayout | undefined>} layouts
+   * @param {boolean} decorator
+   * @param {boolean} expand
+   * @param {boolean} selection
+   */
+  function splitLeadingPins(layouts, decorator, expand, selection) {
+    let index = 0;
+    return {
+      decorator: decorator ? layouts?.[index++] : undefined,
+      expand: expand ? layouts?.[index++] : undefined,
+      selection: selection ? layouts?.[index++] : undefined,
+    };
+  }
+
+  // Declared widths for the first paint. The expand and selection columns
+  // are 2.5rem in Carbon's CSS and the decorator column 1rem.
+  const LEADING_COLUMN_WIDTHS = {
+    decorator: "1rem",
+    expand: "2.5rem",
+    selection: "2.5rem",
+  };
 
   /**
    * Whether `next` describes the same row values as `prev`. Unlike
@@ -124,6 +153,7 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {"start" | "end"} [columnPinned] - Keep the column in view while the table scrolls horizontally. Logical, so `start` is the left edge in LTR and the right edge in RTL. A pinned column renders at its edge wherever it sits in `headers`, in `headers` order within the edge. Give it a `width` so the first paint is right.
    */
 
   /**
@@ -140,6 +170,7 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {"start" | "end"} [columnPinned] - Keep the column in view while the table scrolls horizontally. Logical, so `start` is the left edge in LTR and the right edge in RTL. A pinned column renders at its edge wherever it sits in `headers`, in `headers` order within the edge. Give it a `width` so the first paint is right.
    */
 
   /**
@@ -581,7 +612,9 @@
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
+  import { observeResize } from "../utils/shared-observer.js";
   import {
     DATA_TABLE_SIZE_ALIASES,
     normalizeSize,
@@ -600,8 +633,12 @@
   import TableRow from "./TableRow.svelte";
   import {
     compareValues,
+    computePinnedOffsets,
+    formatColumnStyle,
     formatHeaderWidth,
+    formatInsetStyle,
     getDisplayedRows,
+    resolveColumnOrder,
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
@@ -737,8 +774,11 @@
   }
 
   // A columnHidden header stays in `headers`, the column definition, and is
-  // skipped everywhere the rendered column set is meant.
-  $: visibleHeaders = stableHeaders.filter((header) => !header.columnHidden);
+  // skipped everywhere the rendered column set is meant. Pinned columns move
+  // to their edge here, so the head, `colgroup`, cells and footer all follow
+  // one order and DOM order stays equal to visual order.
+  $: renderOrder = resolveColumnOrder(stableHeaders);
+  $: visibleHeaders = renderOrder.map((index) => stableHeaders[index]);
 
   // A single stable reference that only moves when `rows` genuinely differs
   // by value, shared by the filter-replay block and the cell cache block
@@ -1031,8 +1071,8 @@
 
     // Index into `headers` rather than the visible subset so hiding a preceding
     // column does not renumber the generated keys the `{#each}` blocks key on.
-    headers.forEach((header, index) => {
-      if (header.columnHidden) return;
+    for (const index of renderOrder) {
+      const header = headers[index];
       cells.push({
         key: header.key ?? `key-${index}`,
         value: header.key ? resolvePath(row, header.key) : undefined,
@@ -1041,7 +1081,7 @@
         columnMenu: header.columnMenu,
         columnAlign: header.columnAlign,
       });
-    });
+    }
 
     return cells;
   }
@@ -1278,6 +1318,103 @@
     (header) => header.width ?? header.minWidth,
   );
 
+  // Pinned columns stick at an offset summed from the widths before them.
+  // Declared widths give the server output and the first paint; the pinned
+  // header cells are then measured, since a table can lay a column out wider
+  // or narrower than its `width`. The leading columns (decorator, expand,
+  // selection) pin with the start group, so their offsets are measured too.
+  $: leadingColumns = [
+    hasRowDecorator && { width: LEADING_COLUMN_WIDTHS.decorator },
+    expandable && { width: LEADING_COLUMN_WIDTHS.expand },
+    isSelectionEnabled && { width: LEADING_COLUMN_WIDTHS.selection },
+  ].filter(Boolean);
+
+  /** @type {Array<number | undefined>} */
+  let measuredWidths = [];
+
+  $: pinnedLayouts = computePinnedOffsets(
+    [
+      ...leadingColumns.map((column) => ({ ...column, leading: true })),
+      ...visibleHeaders.map((header) => ({
+        pin: header.columnPinned,
+        width: header.width,
+      })),
+    ],
+    measuredWidths,
+  );
+  $: leadingPins = splitLeadingPins(
+    pinnedLayouts,
+    hasRowDecorator,
+    expandable,
+    isSelectionEnabled,
+  );
+  $: pinnedByKey = pinnedLayouts
+    ? Object.fromEntries(
+        visibleHeaders.map((header, index) => [
+          header.key,
+          pinnedLayouts[leadingColumns.length + index],
+        ]),
+      )
+    : {};
+
+  // Which head cells to measure, and which columns they are. Strings, so an
+  // offset update does not re-subscribe the observer, and a swap of two
+  // pinned columns does.
+  $: pinnedCells = pinnedLayouts
+    ? pinnedLayouts.map((layout) => (layout ? "p" : "-")).join("")
+    : "";
+  $: pinnedKeys = pinnedLayouts
+    ? visibleHeaders.map((h) => h.key).join("\0")
+    : "";
+
+  let stopMeasuring = noop;
+  let measureEpoch = 0;
+
+  /**
+   * @param {null | HTMLElement} root
+   * @param {string} signature - `"p"` for each head cell to measure.
+   * @param {string} _keys - Re-subscribes when the columns change.
+   */
+  function measurePinnedCells(root, signature, _keys) {
+    stopMeasuring();
+    stopMeasuring = noop;
+    const epoch = ++measureEpoch;
+    if (measuredWidths.length > 0) measuredWidths = [];
+    if (!root || !signature) return;
+    // The signature changes before the head re-renders.
+    tick().then(() => {
+      if (epoch !== measureEpoch) return;
+      const cells = root.querySelector("thead tr")?.children;
+      if (!cells) return;
+      const stops = [];
+      for (let i = 0; i < signature.length; i++) {
+        if (signature[i] !== "p" || !cells[i]) continue;
+        stops.push(
+          observeResize(cells[i], () => {
+            const width = cells[i].getBoundingClientRect().width;
+            // No width means no layout (a hidden table): keep what we have.
+            // Sub-pixel noise would rewrite every offset.
+            if (!width || Math.abs(width - (measuredWidths[i] ?? -1)) < 0.5)
+              return;
+            const next = [...measuredWidths];
+            next[i] = Math.round(width * 100) / 100;
+            measuredWidths = next;
+          }),
+        );
+      }
+      stopMeasuring = () => {
+        for (const stop of stops) stop();
+      };
+    });
+  }
+
+  $: measurePinnedCells(scrollContainerRef, pinnedCells, pinnedKeys);
+
+  onMount(() => () => {
+    measureEpoch++;
+    stopMeasuring();
+  });
+
   // Calculate total columns for spacer rows and expanded row cells
   $: totalColumns =
     (hasRowDecorator ? 1 : 0) +
@@ -1445,6 +1582,7 @@
       {sortable}
       {useStaticWidth}
       {fixedLayout}
+      pinnedColumns={pinnedLayouts !== null}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
       aria-label={ariaLabel}
@@ -1476,7 +1614,14 @@
       >
         <TableRow>
           {#if hasRowDecorator}
-            <th scope="col" class:bx--table-column-decorator={true}>
+            <th
+              scope="col"
+              class={formatPinnedClass(
+                leadingPins.decorator,
+                "bx--table-column-decorator",
+              )}
+              style={formatInsetStyle(leadingPins.decorator)}
+            >
               <span class:bx--visually-hidden={true}>AI label</span>
             </th>
           {/if}
@@ -1484,7 +1629,8 @@
             <th
               scope="col"
               id="{id}-expand"
-              class:bx--table-expand={true}
+              class={formatPinnedClass(leadingPins.expand, "bx--table-expand")}
+              style={formatInsetStyle(leadingPins.expand)}
               data-previous-value={expanded ? "collapsed" : undefined}
             >
               {#if batchExpansion}
@@ -1533,8 +1679,12 @@
           {#if isSelectionEnabled && (radio || !batchSelection)}
             <th
               scope="col"
-              class:bx--table-column-checkbox={true}
+              class={formatPinnedClass(
+                leadingPins.selection,
+                "bx--table-column-checkbox",
+              )}
               class:bx--table-column-radio={radio}
+              style={formatInsetStyle(leadingPins.selection)}
             >
               <span class:bx--visually-hidden={true}
                 >{translateWithId("selectRow")}</span
@@ -1542,7 +1692,14 @@
             </th>
           {/if}
           {#if batchSelection && !radio}
-            <th scope="col" class:bx--table-column-checkbox={true}>
+            <th
+              scope="col"
+              class={formatPinnedClass(
+                leadingPins.selection,
+                "bx--table-column-checkbox",
+              )}
+              style={formatInsetStyle(leadingPins.selection)}
+            >
               <InlineCheckbox
                 id="{id}-select-all"
                 aria-label={translateWithId("selectAll")}
@@ -1578,18 +1735,23 @@
             </th>
           {/if}
           {#each visibleHeaders as header (header.key)}
+            {@const pin = pinnedByKey[header.key]}
             {#if header.empty}
               {#if header.columnMenu}
                 <th
                   scope="col"
-                  class:bx--table-column-menu={true}
-                  style={formatHeaderWidth(header)}
+                  class={formatPinnedClass(pin, "bx--table-column-menu")}
+                  style={formatColumnStyle(header, pin)}
                   >{#if header.value}<span class:bx--visually-hidden={true}
                       >{header.value}</span
                     >{/if}</th
                 >
               {:else}
-                <th scope="col" style={formatHeaderWidth(header)}>
+                <th
+                  scope="col"
+                  class={formatPinnedClass(pin)}
+                  style={formatColumnStyle(header, pin)}
+                >
                   <div class:bx--table-header-label={true}>
                     {#if header.value}<span class:bx--visually-hidden={true}
                         >{header.value}</span
@@ -1601,8 +1763,8 @@
               {#if $$slots.headerDecorator}
                 <TableHeader
                   id="{id}-{header.key}"
-                  class={formatAlignClass(header.columnAlign)}
-                  style={formatHeaderWidth(header)}
+                  class={formatColumnClass(header.columnAlign, pin)}
+                  style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
                     ? sortDirection
@@ -1621,8 +1783,8 @@
               {:else}
                 <TableHeader
                   id="{id}-{header.key}"
-                  class={formatAlignClass(header.columnAlign)}
-                  style={formatHeaderWidth(header)}
+                  class={formatColumnClass(header.columnAlign, pin)}
+                  style={formatColumnStyle(header, pin)}
                   sortable={isHeaderSortable(header)}
                   sortDirection={sortKey === header.key
                     ? sortDirection
@@ -1702,7 +1864,11 @@
             >
               {#if hasRowDecorator}
                 <td
-                  class="bx--table-column-decorator"
+                  class={formatPinnedClass(
+                    leadingPins.decorator,
+                    "bx--table-column-decorator",
+                  )}
+                  style={formatInsetStyle(leadingPins.decorator)}
                   class:bx--table-cell={true}
                 >
                   <Decorator
@@ -1716,7 +1882,11 @@
               {/if}
               {#if expandable}
                 <td
-                  class="bx--table-expand"
+                  class={formatPinnedClass(
+                    leadingPins.expand,
+                    "bx--table-expand",
+                  )}
+                  style={formatInsetStyle(leadingPins.expand)}
                   class:bx--table-cell={true}
                   headers="{id}-expand"
                   data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
@@ -1760,8 +1930,12 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class={formatPinnedClass(
+                    leadingPins.selection,
+                    "bx--table-column-checkbox",
+                  )}
+                  style={formatInsetStyle(leadingPins.selection)}
                   class:bx--table-cell={true}
-                  class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
                 >
@@ -1863,12 +2037,13 @@
                   selected: isSelected,
                   expanded: isExpanded,
                 })}
-                {@const cellClasses = joinClasses(
-                  formatAlignClass(cell.columnAlign),
-                  cellClassValue,
-                )}
+                {@const pin = pinnedByKey[cell.key]}
                 <td
-                  class={cellClasses}
+                  class={joinClasses(
+                    formatColumnClass(cell.columnAlign, pin),
+                    cellClassValue,
+                  )}
+                  style={formatInsetStyle(pin)}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
                   class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
@@ -1999,7 +2174,11 @@
             >
               {#if hasRowDecorator}
                 <td
-                  class="bx--table-column-decorator"
+                  class={formatPinnedClass(
+                    leadingPins.decorator,
+                    "bx--table-column-decorator",
+                  )}
+                  style={formatInsetStyle(leadingPins.decorator)}
                   class:bx--table-cell={true}
                 >
                   <Decorator
@@ -2013,7 +2192,11 @@
               {/if}
               {#if expandable}
                 <td
-                  class="bx--table-expand"
+                  class={formatPinnedClass(
+                    leadingPins.expand,
+                    "bx--table-expand",
+                  )}
+                  style={formatInsetStyle(leadingPins.expand)}
                   class:bx--table-cell={true}
                   headers="{id}-expand"
                   data-previous-value={isExpandable && isExpanded
@@ -2055,8 +2238,12 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  class={formatPinnedClass(
+                    leadingPins.selection,
+                    "bx--table-column-checkbox",
+                  )}
+                  style={formatInsetStyle(leadingPins.selection)}
                   class:bx--table-cell={true}
-                  class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
                   on:click={(event) => handleRadioColumnClick(row, event)}
                 >
@@ -2158,12 +2345,13 @@
                   selected: isSelected,
                   expanded: isExpanded,
                 })}
-                {@const cellClasses = joinClasses(
-                  formatAlignClass(cell.columnAlign),
-                  cellClassValue,
-                )}
+                {@const pin = pinnedByKey[cell.key]}
                 <td
-                  class={cellClasses}
+                  class={joinClasses(
+                    formatColumnClass(cell.columnAlign, pin),
+                    cellClassValue,
+                  )}
+                  style={formatInsetStyle(pin)}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
                   class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
@@ -2230,28 +2418,42 @@
             {#if hasRowDecorator}
               <td
                 aria-hidden="true"
+                class={formatPinnedClass(
+                  leadingPins.decorator,
+                  "bx--table-column-decorator",
+                )}
+                style={formatInsetStyle(leadingPins.decorator)}
                 class:bx--table-cell={true}
-                class:bx--table-column-decorator={true}
               ></td>
             {/if}
             {#if expandable}
               <td
                 aria-hidden="true"
+                class={formatPinnedClass(
+                  leadingPins.expand,
+                  "bx--table-expand",
+                )}
+                style={formatInsetStyle(leadingPins.expand)}
                 class:bx--table-cell={true}
-                class:bx--table-expand={true}
               ></td>
             {/if}
             {#if isSelectionEnabled}
               <td
                 aria-hidden="true"
+                class={formatPinnedClass(
+                  leadingPins.selection,
+                  "bx--table-column-checkbox",
+                )}
+                style={formatInsetStyle(leadingPins.selection)}
                 class:bx--table-cell={true}
-                class:bx--table-column-checkbox={true}
                 class:bx--table-column-radio={radio}
               ></td>
             {/if}
             {#each visibleHeaders as header, index (header.key)}
+              {@const pin = pinnedByKey[header.key]}
               <td
-                class={formatAlignClass(header.columnAlign)}
+                class={formatColumnClass(header.columnAlign, pin)}
+                style={formatInsetStyle(pin)}
                 class:bx--table-cell={true}
               >
                 <slot name="footerCell" {header} {index} />

@@ -189,3 +189,66 @@ export type DataTableSortValue<Row> = Row extends object
       : never
     : never
   : never;
+
+/**
+ * Indices of the rendered columns, in render order. Hidden columns drop out
+ * and pinned columns move to their edge: `"start"` pins first, `"end"` pins
+ * last, each group keeping its order in `headers`.
+ */
+export function resolveColumnOrder(
+  headers: ReadonlyArray<{
+    columnHidden?: boolean;
+    columnPinned?: "start" | "end";
+    [key: string]: unknown;
+  }>,
+): number[];
+
+export type PinnedColumnLayout = {
+  /** The edge the column is pinned to. */
+  side: "start" | "end";
+  /** CSS length from that edge: the summed widths of the pinned columns before it. */
+  offset: string;
+  /** Whether the column is the pinned column nearest the scrolling area. */
+  edge: boolean;
+};
+
+/**
+ * Where each pinned column sticks, by index into `columns` (the rendered
+ * columns in render order, leading ones included). Offsets come from
+ * declared widths; a `measured` width in px wins. Returns `null` when no
+ * column is pinned.
+ */
+export function computePinnedOffsets(
+  columns: ReadonlyArray<{
+    pin?: "start" | "end";
+    leading?: boolean;
+    width?: string | number;
+  }>,
+  measured?: ReadonlyArray<number | undefined>,
+): null | Array<PinnedColumnLayout | undefined>;
+
+/**
+ * Class attribute for a cell: `classes` plus, for a pinned column, the pin
+ * classes. `undefined` when there is nothing to set.
+ */
+export function formatPinnedClass(
+  pin: PinnedColumnLayout | undefined,
+  ...classes: Array<string | undefined>
+): string | undefined;
+
+/** Inline style for a pinned cell: its offset from its edge, as a custom property. */
+export function formatInsetStyle(
+  pin: PinnedColumnLayout | undefined,
+): string | undefined;
+
+/**
+ * Inline style for a header cell: its width, and for a pinned column its
+ * offset from its edge.
+ */
+export function formatColumnStyle(
+  header: {
+    width?: string | null | number;
+    minWidth?: string | null | number;
+  },
+  pin: PinnedColumnLayout | undefined,
+): string | undefined;
