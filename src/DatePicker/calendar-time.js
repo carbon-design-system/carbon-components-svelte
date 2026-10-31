@@ -212,7 +212,9 @@ export function isTimeAllowed(time, window) {
 
 /**
  * `time`, or the allowed time closest to it: one of the window's edges.
- * Left as is when nothing is allowed.
+ * Distance runs within the day, so midnight goes to an "08:00" start, not
+ * an "18:00" end; only a window that wraps past midnight measures across
+ * it. Left as is when nothing is allowed.
  *
  * @param {TimeParts} time
  * @param {TimeWindow} [window]
@@ -220,10 +222,14 @@ export function isTimeAllowed(time, window) {
 export function clampTime(time, window) {
   if (!window || isTimeAllowed(time, window)) return time;
   const t = secondsOf(time);
+  const wraps =
+    window.min !== undefined &&
+    window.max !== undefined &&
+    window.min > window.max;
   /** @param {number} edge */
   const distance = (edge) => {
     const d = Math.abs(edge - t);
-    return Math.min(d, DAY_SECONDS - d);
+    return wraps ? Math.min(d, DAY_SECONDS - d) : d;
   };
   const edges = [window.min, window.max, window.from, window.to]
     .filter(

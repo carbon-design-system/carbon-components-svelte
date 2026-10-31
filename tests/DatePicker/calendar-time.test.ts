@@ -1,4 +1,5 @@
 import {
+  clampTime,
   effectiveDateFormat,
   resolveHourCycle,
   widestValueLength,
@@ -31,5 +32,27 @@ describe("widestValueLength", () => {
     expect(widestValueLength("m/d/Y h:i:S K", "en")).toBe(22);
     expect(widestValueLength("m/d/Y H:i", "en")).toBe(16);
     expect(widestValueLength("m/d/Y h:i K", "ko")).toBeGreaterThan(19);
+  });
+});
+
+describe("clampTime", () => {
+  const at = (hours: number) => ({ hours, minutes: 0, seconds: 0 });
+  const hour = 3600;
+
+  it("moves a time to the nearer edge of the same day", () => {
+    const window = { min: 8 * hour, max: 18 * hour };
+    expect(clampTime(at(0), window)).toEqual(at(8));
+    expect(clampTime(at(23), window)).toEqual(at(18));
+  });
+
+  it("measures across midnight for a window that wraps it", () => {
+    const window = { min: 22 * hour, max: 6 * hour };
+    expect(clampTime(at(12), window)).toEqual(at(6));
+    expect(clampTime(at(15), window)).toEqual(at(22));
+  });
+
+  it("keeps a minDate's day from starting before its time", () => {
+    const window = { min: 8 * hour, max: 18 * hour, from: 13 * hour };
+    expect(clampTime(at(0), window)).toEqual(at(13));
   });
 });

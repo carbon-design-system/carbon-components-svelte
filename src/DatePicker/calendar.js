@@ -16,8 +16,8 @@ import {
 import {
   clampTime,
   createTimeRow,
-  isTimeOnDay,
   isTimeAllowed,
+  isTimeOnDay,
   parseTimeString,
   secondsOf,
   timeOf,
@@ -521,7 +521,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     self.selectedDates = config.allowInvalidPreload
       ? dates
-      : dates.filter((d) => d instanceof Date && isEnabled(d, false));
+      : clampToWindow(
+          dates.filter((d) => d instanceof Date && isEnabled(d, false)),
+        );
     if (isRange) {
       self.selectedDates.sort(
         (/** @type {Date} */ a, /** @type {Date} */ b) =>
@@ -681,6 +683,21 @@ export function createCalendarEngine(element, userConfig = {}) {
       if (to > 0) window.to = to;
     }
     return window;
+  }
+
+  /**
+   * `dates`, each moved into its day's time window: typed text, presets
+   * and a bound value get the nearest allowed time, as the rows do.
+   *
+   * @param {Date[]} dates
+   */
+  function clampToWindow(dates) {
+    if (!hasTime()) return dates;
+    return dates.map((date) => {
+      const time = timeOf(date);
+      const clamped = clampTime(time, timeWindow(date));
+      return clamped === time ? date : withTime(date, clamped);
+    });
   }
 
   /**

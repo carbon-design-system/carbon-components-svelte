@@ -228,4 +228,32 @@ describe("DatePicker time window", () => {
 
     expect(valueText()).toBe(`${dayText(15)} 2:30 PM`);
   });
+
+  // jsdom can't type into the field, so set the text as typing does.
+  async function setText(props: Record<string, unknown>, text: string) {
+    render(DatePickerTime, { props });
+    await openCalendar();
+    const input = screen.getByLabelText("Date") as HTMLInputElement & {
+      _flatpickr?: { setDate(text: string, notify: boolean): void };
+    };
+    input._flatpickr?.setDate(text, true);
+  }
+
+  it("moves typed text outside the window to its nearest edge", async () => {
+    await setText(
+      { minTime: "08:00", maxTime: "18:00" },
+      "10/15/2026 11:00 PM",
+    );
+
+    await vi.waitFor(() => expect(valueText()).toBe("10/15/2026 6:00 PM"));
+  });
+
+  it("starts a minDate's day no earlier than its time", async () => {
+    await setText(
+      { minDate: new Date(2026, 9, 15, 14, 30) },
+      "10/15/2026 9:00 AM",
+    );
+
+    await vi.waitFor(() => expect(valueText()).toBe("10/15/2026 2:30 PM"));
+  });
 });
