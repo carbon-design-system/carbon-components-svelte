@@ -15,6 +15,7 @@ import {
 } from "./calendar-dates.js";
 import {
   createTimeRow,
+  isTimeOnDay,
   parseTimeString,
   timeOf,
   withTime,
@@ -674,6 +675,11 @@ export function createCalendarEngine(element, userConfig = {}) {
       idPrefix: `${self.element.id || "date-picker"}-time`,
       onChange: commitTime,
       onEnter: focusAndClose,
+      // Steps skip the hour a daylight saving change removes.
+      isAllowed: (time) => {
+        const [selected] = self.selectedDates;
+        return !(selected instanceof Date) || isTimeOnDay(selected, time);
+      },
     });
     self.innerContainer.after(timeRow.element);
     syncTimeRow();

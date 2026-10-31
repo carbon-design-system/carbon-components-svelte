@@ -771,3 +771,26 @@ test.describe("DatePicker", () => {
     });
   });
 });
+
+test.describe("DatePicker time row across daylight saving time", () => {
+  test.use({ timezoneId: "America/New_York" });
+
+  // March 8, 2026 has no 2 AM in New York.
+  test("ArrowDown skips the hour a 23-hour day does not have", async ({
+    page,
+  }) => {
+    await page.goto("/date-picker.html");
+    const input = page.getByTestId("date-picker-time-input");
+    await input.fill("03/08/2026 1:00 AM");
+    await input.press("Enter");
+    await input.click();
+    const hours = page
+      .getByTestId("date-picker-time")
+      .getByRole("spinbutton", { name: "Hours" });
+    await hours.focus();
+    await hours.press("ArrowUp");
+    await expect(input).toHaveValue("03/08/2026 3:00 AM");
+    await hours.press("ArrowDown");
+    await expect(input).toHaveValue("03/08/2026 1:00 AM");
+  });
+});
