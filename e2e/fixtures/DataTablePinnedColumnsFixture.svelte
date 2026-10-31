@@ -37,7 +37,7 @@
   let selectedRowIds = has("selectable") || has("batch") ? ["row-1"] : [];
 </script>
 
-<div data-testid="pinned-root" style="width: 480px;">
+<div data-testid="pinned-root" style="width: 480px; max-width: 100%;">
   <DataTable
     {headers}
     {rows}

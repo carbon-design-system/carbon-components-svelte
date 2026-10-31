@@ -916,24 +916,24 @@
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
-    "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline section[data-testid=\"selectable\"] > div.bx--data-table-container:nth-of-type(2) > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+    "path": "td.bx--table-column-checkbox.bx--table-cell:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "td.bx--table-column-checkbox.bx--table-cell:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline section[data-testid=\"selectable\"] > div.bx--data-table-container:nth-of-type(2) > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "data-table-variants.html",
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(2) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
-    "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(2) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline section[data-testid=\"expandable\"] > div.bx--data-table-container:nth-of-type(3) > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+    "path": "td.bx--table-column-checkbox.bx--table-cell:nth-of-type(2) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "td.bx--table-column-checkbox.bx--table-cell:nth-of-type(2) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline section[data-testid=\"expandable\"] > div.bx--data-table-container:nth-of-type(3) > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "data-table.html",
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
-    "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline div[data-testid=\"data-table-radio-deselect\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+    "path": "td.bx--table-column-checkbox.bx--table-cell:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "td.bx--table-column-checkbox.bx--table-cell:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline div[data-testid=\"data-table-radio-deselect\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "date-picker-fit.html",
