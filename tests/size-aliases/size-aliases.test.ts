@@ -31,6 +31,7 @@ import NumberInputSkeleton from "carbon-components-svelte/NumberInput/NumberInpu
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import PinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/PinCodeInputSkeleton.svelte";
+import RichTextEditor from "carbon-components-svelte/RichTextEditor/RichTextEditor.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchSkeleton from "carbon-components-svelte/Search/SearchSkeleton.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
@@ -219,6 +220,11 @@ const cases = [
   ...aliasCases<ComponentProps<CopyInputSkeleton>>(
     "CopyInputSkeleton",
     (size) => render(CopyInputSkeleton, { props: { size } }),
+    FIELD,
+  ),
+  ...aliasCases<ComponentProps<RichTextEditor>>(
+    "RichTextEditor",
+    (size) => render(RichTextEditor, { props: { labelText: "Notes", size } }),
     FIELD,
   ),
   ...aliasCases<ComponentProps<TagInput>>(

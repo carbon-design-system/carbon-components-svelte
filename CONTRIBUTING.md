@@ -177,7 +177,7 @@ Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/ut
 | Component | Our names | v11 aliases | Kept on collision |
 | :--- | :--- | :--- | :--- |
 | Button, ButtonSkeleton, FileUploader, FileUploaderButton, FileUploaderSkeleton | `xs` 24, `small` 32, `field` 40, `default` 48, `lg` 64, `xl` 80 | `sm` → `small`, `md` → `field`, `2xl` → `xl` | `lg` (v11 48), `xl` (v11 64) |
-| TextInput, PasswordInput, Select, NumberInput, DatePickerInput, TimePicker, CopyInput, TagInput, their skeletons, Form, InputGroup | `xs` 24, `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
+| TextInput, PasswordInput, Select, NumberInput, DatePickerInput, TimePicker, CopyInput, TagInput, RichTextEditor, their skeletons, Form, InputGroup | `xs` 24, `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
 | PinCodeInput, PinCodeInputSkeleton | `xs`, `sm`, `default` 40, `xl` 48 | `md` → `default`, `lg` → `xl` | none |
 | ComboBox, Dropdown, MultiSelect, ListBox, their skeletons | `xs` 24, `sm` 32, unset 40, `lg` 48, `xl` 48 | `md` → unset | none |
 | Search, SearchSkeleton, SearchMenu, SearchMenuSkeleton | `xs` 24, `sm` 32, `lg` 40, `xl` 48 | `md` → `lg` | `lg` (v11 48) |

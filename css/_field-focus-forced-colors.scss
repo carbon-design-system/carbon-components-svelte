@@ -30,6 +30,7 @@
     .#{$prefix}--list-box__field:focus,
     .#{$prefix}--multi-select .#{$prefix}--list-box__field--wrapper--input-focused,
     .#{$prefix}--tag-input--focused,
+    .#{$prefix}--rich-text-editor__box--focused::after,
     .#{$prefix}--toolbar-search-container-persistent
       .#{$prefix}--search-input:focus:not([disabled]),
     .#{$prefix}--table-toolbar--small
