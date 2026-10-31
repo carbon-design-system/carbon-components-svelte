@@ -94,3 +94,20 @@ Set `background` to `"transparent"` to let the parent's own background show thro
 Toggling content demonstrates that the gradients update as the container's overflow changes.
 
 <FileSource src="/framed/ScrollGradient/ReactiveScrollGradient" />
+
+## Action
+
+`ScrollGradient` draws its own fade. To drive your own, such as a fade on a sticky-header table, a modal body or a custom list, use the `scrollEdges` action on a scroller you own. It calls `onChange` once after mount and again whenever the state changes, with `isXScrollable`, `isYScrollable`, `atTop`, `atBottom`, `atStart` and `atEnd`.
+
+`atStart` and `atEnd` follow the writing direction, so in a right-to-left page `atStart` is the right edge. The server doesn't run actions, so the first paint has no fades; start from a state with nothing scrollable and the fades appear on mount.
+
+The action re-measures when the scroller or one of its direct children changes size, when children are added or removed, and on scroll. Overflow that grows inside a fixed-size child isn't seen until the next scroll, so give the child a size that follows its content.
+
+<FileSource src="/framed/ScrollGradient/ScrollEdgesFades" />
+
+| Do | Why |
+| --- | --- |
+| Give a scroller that overflows `tabindex="0"`, a `role` and a label when `isXScrollable \|\| isYScrollable` | A keyboard user can't scroll a region they can't focus, unless it already holds a focusable child. |
+| Mark the fade elements `aria-hidden` and `pointer-events: none` | They are decoration, and must not catch clicks meant for the content. |
+| Leave `tolerance` at its default of `1` | Zoom and fractional scroll offsets leave the last pixel short of the edge. Raise it only to reach the edge early. |
+| Prefer `ScrollGradient` for a plain fade | It needs no state. Use the action when the edge state drives something other than a gradient. |
