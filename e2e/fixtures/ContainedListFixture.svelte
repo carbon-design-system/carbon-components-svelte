@@ -1,5 +1,9 @@
 <script>
-  import { ContainedList, ContainedListItem } from "carbon-components-svelte";
+  import {
+    ContainedList,
+    ContainedListItem,
+    Search,
+  } from "carbon-components-svelte";
 
   let clickedItem = null;
 </script>
@@ -18,3 +22,12 @@
   </ContainedList>
 </div>
 <div data-testid="clicked-item">{clickedItem ?? "none"}</div>
+
+<div data-testid="search-scroller" style="height: 200px; overflow: auto;">
+  <ContainedList labelText="Members">
+    <Search slot="search" placeholder="Filter members" />
+    {#each Array.from({ length: 30 }, (_, i) => i + 1) as n}
+      <ContainedListItem>Member {n}</ContainedListItem>
+    {/each}
+  </ContainedList>
+</div>

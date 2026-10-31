@@ -19,7 +19,7 @@
 </script>
 
 <ContainedList kind="disclosed" labelText="Support tickets">
-  <Search placeholder="Filter tickets" bind:value={searchTerm} />
+  <Search slot="search" placeholder="Filter tickets" bind:value={searchTerm} />
   {#each filteredResults as item}
     <ContainedListItem>{item}</ContainedListItem>
   {/each}
