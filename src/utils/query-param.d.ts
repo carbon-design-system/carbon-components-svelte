@@ -29,3 +29,6 @@ export function queryParam<T>(
   key: string,
   options: QueryParamOptions<T>,
 ): Writable<T>;
+
+/** Replace the current history entry with `href`. Ignores an error. */
+export function replaceHistory(href: string): void;

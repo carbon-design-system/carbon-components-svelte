@@ -71,6 +71,11 @@ export { default as Countdown } from "./Countdown/Countdown.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
 export { toCsv } from "./DataTable/data-table-utils.js";
+export {
+  createTableState,
+  tableStateFromSearchParams,
+  tableStateToSearchParams,
+} from "./DataTable/table-state.js";
 export { default as Table } from "./DataTable/Table.svelte";
 export { default as TableBody } from "./DataTable/TableBody.svelte";
 export { default as TableCell } from "./DataTable/TableCell.svelte";

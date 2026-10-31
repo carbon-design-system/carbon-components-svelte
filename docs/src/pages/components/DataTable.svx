@@ -1778,6 +1778,41 @@ Pair a compact table with extra small (xs) pagination.
 />
 <Pagination size="xs" totalItems={3} pageSizes={[10, 15, 20]} />
 
+## Table state
+
+A table's sort, page, page size, search, selection and column settings usually travel together: the toolbar writes some, `Pagination` writes others, and a server table turns all of them into one request. `createTableState` keeps them in one writable store.
+
+### Shared store
+
+Bind each field of `$table` to the part that owns it. Changing the search, the page size or the sort resets `page` to 1 in the same write, so a server table never asks for page 5 of a query that has two pages.
+
+| Do | Why |
+| --- | --- |
+| Create the store inside the component. | A store made at module scope is shared by every request on a server. |
+| Build the request from `table.settled` in one `$:` statement. | `settled` follows a click at once and waits for typing in the search to pause (`searchDebounce`, 300 ms), so a click makes one request and typing makes one per pause. |
+| Pass only the current page as `rows` and bind `page` and `pageSize` on `Pagination`. | `pageSize` on `DataTable` slices `rows` a second time. |
+| Replace `selectedRowIds`, never push to it. | The store compares each write with a private copy, and a pushed array is the same array. |
+
+`tableStateToSearchParams($settled)` is the request: it leaves out an empty search and an unsorted table. Pass `defaults` to also leave out a `page` and `pageSize` the server assumes.
+
+<FileSource src="/framed/DataTable/DataTableTableState" />
+
+### Query string
+
+Set `url` to mirror `sortKey`, `sortDirection`, `page`, `pageSize` and `search` to the search parameters `sort`, `page`, `pageSize` and `q`. A value equal to the initial one leaves its parameter out, other parameters stay, and writes replace the current history entry, one per frame. Use `prefix` to avoid a collision, or `replace` to hand the URL to a router.
+
+The URL is read when the first subscriber arrives in the browser, and again on back and forward navigation, so a server-rendered page shows the initial state first and corrects on mount. To render the URL's state on the server, pass `tableStateFromSearchParams(url.searchParams)` as the initial state.
+
+Pass `pageSizes` and `sortKeys` so a hand-edited URL cannot ask for a page size or a sort column you do not offer.
+
+### Persisting
+
+Set `persist` to keep chosen keys in web storage. The URL wins over the stored state, and the stored state over the initial state. It leaves out `selectedRowIds`, `search` and `page` unless `pick` says otherwise: a stored selection goes stale, and a stored search or page comes back on a different data set.
+
+<FileSource src="/framed/DataTable/DataTableTableStateUrl" />
+
+Other state joins the store through `codecs`, which read and write a key as a search parameter, and `resetPageOn`, which names the keys that reset `page`.
+
 ## Empty column (overflow menu)
 
 Set `empty: true` in a header to create an empty column—for overflow menus without a header label. Its `value` stays visually hidden and names the column for screen readers.
