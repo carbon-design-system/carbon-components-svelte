@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+import ColorInput from "carbon-components-svelte/ColorPicker/ColorInput.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
@@ -97,6 +98,12 @@ export const cases: FieldCase[] = [
     },
     reset: { initial: "Ada", typed: "x", events: ["input"] },
     selectOnFocus: { value: "Ada" },
+  },
+  {
+    name: "ColorInput",
+    component: ColorInput,
+    control: () => screen.getByRole("textbox"),
+    state: {},
   },
   {
     name: "TextInput",
