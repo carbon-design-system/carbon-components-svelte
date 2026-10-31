@@ -2024,6 +2024,38 @@
     "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(2) > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: 1px outline inside 2px outline div#app > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(2) > div.bx--dropdown.bx--list-box, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "list-box-groups.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open > div:nth-of-type(1) > button.bx--list-box__field",
+    "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open > div:nth-of-type(1) > button.bx--list-box__field: 1px outline inside 2px outline div[data-testid=\"dropdown\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-groups.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper.bx--list-box__field--wrapper--input-focused:nth-of-type(1) > button.bx--list-box__field",
+    "message": "div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper.bx--list-box__field--wrapper--input-focused:nth-of-type(1) > button.bx--list-box__field: 2px outline inside 4px outline div[data-testid=\"multiselect\"] > div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper.bx--list-box__field--wrapper--input-focused:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-groups.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"dropdown\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open > div.bx--list-box__menu:nth-of-type(2)",
+    "message": "div[data-testid=\"dropdown\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open > div.bx--list-box__menu:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"dropdown\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-groups.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"virtualized\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open > div.bx--list-box__menu:nth-of-type(2)",
+    "message": "div[data-testid=\"virtualized\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open > div.bx--list-box__menu:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"virtualized\"] > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--dropdown--open, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "list-box-icons.html",
     "variant": "1280",
     "check": "borders",

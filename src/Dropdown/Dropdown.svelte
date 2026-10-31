@@ -1196,6 +1196,8 @@
                       aria-hidden="true"
                       data-virtual-index={isMeasured ? rowIndex : undefined}
                       class:bx--list-box__menu-group-header={true}
+                      class:bx--list-box__menu-group-header--first={rowIndex ===
+                        0}
                       on:mousedown={(event) => {
                         // Keep focus on the field, as options do.
                         event.preventDefault();
@@ -1323,6 +1325,8 @@
                     aria-hidden="true"
                     data-virtual-index={isMeasured ? rowIndex : undefined}
                     class:bx--list-box__menu-group-header={true}
+                    class:bx--list-box__menu-group-header--first={rowIndex ===
+                      0}
                     on:mousedown={(event) => {
                       // Keep focus on the field, as options do.
                       event.preventDefault();
