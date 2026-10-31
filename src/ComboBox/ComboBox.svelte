@@ -276,10 +276,29 @@
   export let id = uniqueId();
 
   /**
-   * Specify a name attribute for the input.
+   * Specify a name to submit `selectedId` with a form.
+   * Mounts a hidden input whose value mirrors `selectedId`
+   * (empty string when nothing is selected, or when the
+   * selected item is disabled). Omitted from submission
+   * when the combo box is disabled. Use `inputName` to
+   * also submit the typed text.
    * @type {string | undefined}
    */
   export let name = undefined;
+
+  /**
+   * Specify a name attribute for the text input.
+   * The typed or displayed text submits under this key.
+   * @type {string | undefined}
+   */
+  export let inputName = undefined;
+
+  /**
+   * Specify the id of a form element outside the component to associate the
+   * hidden `name` input and the text input with.
+   * @type {string | undefined}
+   */
+  export let form = undefined;
 
   /**
    * Set to `true` to require a value. Sets `required` on the input, so a
@@ -491,6 +510,7 @@
   let fieldFocused = false;
   /** Set when a required, empty combo box blocked form submission. */
   let requiredError = false;
+  /** @type {Item | undefined} */
   let selectedItem;
   let prevSelectedId = null;
   let highlightedIndex = -1;
@@ -863,6 +883,10 @@
   }
 
   $: itemsById = new Map(items.map((item) => [item.id, item]));
+  // Mirrors native `<select><option value>`: a disabled selection is not a
+  // successful control, so it serializes as empty like nothing being selected.
+  $: hiddenInputValue =
+    selectedId === undefined || selectedItem?.disabled ? "" : selectedId;
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
@@ -1199,6 +1223,9 @@
       <slot name="labelChildren">{labelText}</slot>
     </label>
   {/if}
+  {#if name}
+    <input type="hidden" {name} value={hiddenInputValue} {disabled} {form} />
+  {/if}
   <ListBox
     class={comboBoxListBoxClass}
     id={comboId}
@@ -1248,7 +1275,8 @@
           {readonly}
           {placeholder}
           {id}
-          {name}
+          name={inputName}
+          {form}
           {required}
           {...$$restProps}
           aria-describedby={joinDescribedBy(

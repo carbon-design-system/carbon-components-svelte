@@ -12,7 +12,7 @@
   "Checkbox/CheckboxGroup.svelte": 6,
   "Checkbox/InlineCheckbox.svelte": 3,
   "CodeSnippet/CodeSnippet.svelte": 2,
-  "ComboBox/ComboBox.svelte": 38,
+  "ComboBox/ComboBox.svelte": 29,
   "ComboButton/ComboButton.svelte": 4,
   "ComposedModal/ComposedModal.svelte": 2,
   "ConfirmModal/ConfirmModal.svelte": 3,
