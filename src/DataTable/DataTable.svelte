@@ -511,7 +511,9 @@
    * One cell is a tab stop; the arrow keys move between cells (`ArrowLeft`
    * and `ArrowRight` follow the text direction), `Home` and `End` go to the
    * ends of the row, and `Ctrl` with them to the ends of the table. The
-   * table gets `role="grid"`. With `crosshair`, the focused cell drives the
+   * header is the grid's first row: its sort buttons leave the tab order
+   * and `ArrowUp` from the first row reaches them. The table gets
+   * `role="grid"`. With `crosshair`, the focused cell drives the
    * cross. Use it for read-only values: an interactive control inside a
    * cell takes its own keys, so keep those cells out of a navigable table.
    */
