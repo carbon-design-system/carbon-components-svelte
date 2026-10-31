@@ -92,6 +92,25 @@ describe("SidePanel", () => {
     expect(document.querySelector(".bx--side-panel")).toBeNull();
   });
 
+  it("leaves focus alone when it mounts open, unless it's modal", async () => {
+    render(SidePanel, { props: { open: true, field: true } });
+    await tick();
+    await tick();
+    expect(document.body).toHaveFocus();
+
+    document.body.innerHTML = "";
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
+    render(SidePanel, {
+      props: { open: true, includeOverlay: true, field: true },
+    });
+    await tick();
+    await tick();
+    expect(screen.getByLabelText("Region")).toHaveFocus();
+    // A panel shown on load doesn't scroll the page, or a page framing it.
+    expect(focus).toHaveBeenLastCalledWith({ preventScroll: true });
+    focus.mockRestore();
+  });
+
   it.each([
     ["close button", "close-button"],
     ["Escape", "escape-key"],

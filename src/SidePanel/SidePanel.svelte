@@ -26,7 +26,9 @@
    */
 
   /**
-   * Set to `true` to open the panel.
+   * Set to `true` to open the panel. Opening it moves focus into it; a
+   * panel already open when it mounts leaves focus where it is, unless it
+   * is modal.
    * @bindable writable
    */
   export let open = false;
@@ -252,7 +254,8 @@
    */
   const aiLabelState = writable($$slots.decorator ? "active" : undefined);
 
-  function focusPanel() {
+  /** @param {FocusOptions} [options] */
+  function focusPanel(options) {
     if (!ref) return;
     let target;
     if (slideIn) {
@@ -272,7 +275,7 @@
     }
     // The user didn't ask for a tooltip on the first focus target, so one
     // Escape still closes the panel.
-    if (target) focusQuietly(target);
+    if (target) focusQuietly(target, options);
   }
 
   /** @param {KeyboardEvent} event */
@@ -507,9 +510,13 @@
   onMount(() => {
     mounted = true;
     lifecycle.setMounted();
+    // Open from the first render, the panel is part of the page rather
+    // than something the reader opened, so only a modal one takes focus,
+    // and without scrolling to it (or scrolling a page that frames this
+    // one).
     if (open) {
       tick().then(() => {
-        if (open) focusPanel();
+        if (open && modal) focusPanel({ preventScroll: true });
       });
     }
     return () => {
