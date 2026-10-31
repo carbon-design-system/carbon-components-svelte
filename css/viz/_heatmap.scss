@@ -8,6 +8,13 @@
 
     margin: 0;
     color: $text-primary;
+    // A grid wider than its container scrolls inside it. Its width comes
+    // from the container, never from the grid, so a flex or grid parent
+    // does not grow to fit it. It holds the cells' visually hidden values,
+    // which are absolutely positioned, so they scroll with it.
+    position: relative;
+    contain: inline-size;
+    overflow-x: auto;
   }
 
   .#{$prefix}--viz-heatmap--sm {
@@ -23,6 +30,12 @@
     border-spacing: to-rem(2px);
     font-variant-numeric: tabular-nums;
     inline-size: 100%;
+    // The row headers' column, then each column at its widest header
+    // in tabular digits, its padding, and the border spacing.
+    min-inline-size: calc(
+      #{to-rem(96px)} + var(--bx-viz-columns, 0) *
+        (var(--bx-viz-column-chars, 2) * 1ch + #{to-rem(8px)})
+    );
     table-layout: fixed;
 
     @include type-style("label-01");

@@ -148,6 +148,28 @@
     palette,
   });
   $: formatValue = resolveFormat(format, locale);
+  // Each column keeps room for its widest header, and for its widest value
+  // when values are drawn, so a number or a date is never cut. Past that,
+  // the figure scrolls.
+  $: columnChars = widestColumn(grid, cellLabels ? formatValue : null);
+
+  /**
+   * @param {typeof grid} grid
+   * @param {((value: number) => string) | null} write
+   */
+  function widestColumn(grid, write) {
+    let most = 1;
+    for (const column of grid.columns) {
+      most = Math.max(most, String(column).length);
+    }
+    if (!write) return most;
+    for (const row of grid.rows) {
+      for (const cell of row.cells) {
+        if (cell) most = Math.max(most, write(cell.value).length);
+      }
+    }
+    return most;
+  }
   $: ramp = LEGEND_STEPS.map(
     (t) =>
       heatColor(
@@ -219,6 +241,8 @@
   <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <table
     class:bx--viz-heatmap__table={true}
+    style:--bx-viz-columns={grid.columns.length}
+    style:--bx-viz-column-chars={columnChars}
     on:keydown={selectable ? onKeydown : undefined}
   >
     {#if title}

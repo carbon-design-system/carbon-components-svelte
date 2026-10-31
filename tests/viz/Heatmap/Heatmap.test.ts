@@ -24,6 +24,25 @@ describe("Heatmap", () => {
     expect(tue.querySelector("span")).toHaveClass("bx--visually-hidden");
   });
 
+  it("gives each column room for its widest header", () => {
+    render(Heatmap);
+
+    // "Mon", "Tue" and "Wed": three columns of three characters. The
+    // stylesheet turns these into a minimum width, and the figure scrolls.
+    expect(table().style.getPropertyValue("--bx-viz-columns")).toBe("3");
+    expect(table().style.getPropertyValue("--bx-viz-column-chars")).toBe("3");
+  });
+
+  it("counts drawn values in the column width", () => {
+    render(Heatmap, {
+      cellLabels: true,
+      data: [{ day: "Mon", block: "AM", requests: 1_234_567 }],
+    });
+
+    // The drawn value, "1.2M", is wider than "Mon".
+    expect(table().style.getPropertyValue("--bx-viz-column-chars")).toBe("4");
+  });
+
   it("colors cells by value and hatches the ones with no data", () => {
     render(Heatmap);
 
