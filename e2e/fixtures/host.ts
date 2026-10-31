@@ -5,6 +5,7 @@ import "carbon-components-svelte/css/all.css";
 // any other fixture is mounted. Two fixtures import prose.css, so the second
 // one lost it. Load it here, for every fixture; it only styles `.bx--prose`.
 import "carbon-components-svelte/css/prose.css";
+import { audit } from "carbon-components-svelte/devtools/audit.js";
 
 /**
  * One page per Playwright worker that swaps fixtures in place, so a test
@@ -95,8 +96,14 @@ async function mountFixture(name: string, search: string, keepStorage = false) {
 
 declare global {
   interface Window {
-    __host: { mount: typeof mountFixture; clear: typeof clear };
+    __host: {
+      mount: typeof mountFixture;
+      clear: typeof clear;
+      audit: typeof audit;
+    };
   }
 }
 
-window.__host = { mount: mountFixture, clear };
+// The dev tools' page checks, for `expectNoLayoutFindings` in
+// e2e/helpers/layout-audit.ts.
+window.__host = { mount: mountFixture, clear, audit };
