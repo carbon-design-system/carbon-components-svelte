@@ -180,6 +180,30 @@ describe("SelectableTagGroup", () => {
     expect(selected()).toEqual(["closed", "open"]);
   });
 
+  it("submits the selection under `name` and restores it on reset", async () => {
+    render(SelectableTagGroup, {
+      props: { name: "status", selected: ["closed"] },
+    });
+    const form = screen.getByTestId("form") as HTMLFormElement;
+
+    expect(new FormData(form).getAll("status")).toEqual(["closed"]);
+    await user.click(tag("Open"));
+    expect(new FormData(form).getAll("status")).toEqual(["closed", "open"]);
+
+    await user.click(screen.getByRole("button", { name: "Reset" }));
+    await new Promise((resolve) => setTimeout(resolve));
+    await tick();
+    expect(selected()).toEqual(["closed"]);
+    expect(new FormData(form).getAll("status")).toEqual(["closed"]);
+  });
+
+  it("submits nothing without `name`", () => {
+    render(SelectableTagGroup, { props: { selected: ["closed"] } });
+    const form = screen.getByTestId("form") as HTMLFormElement;
+
+    expect([...new FormData(form).keys()]).toEqual([]);
+  });
+
   it("keeps a disabled tag focusable in an enabled group", async () => {
     render(SelectableTagGroup, { props: { draftDisabled: true } });
 

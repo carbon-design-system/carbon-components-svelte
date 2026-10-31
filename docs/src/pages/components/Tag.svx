@@ -304,6 +304,10 @@ Set `selectionMode="single"` so at most one tag is selected. Selecting the selec
   <SelectableTag value="high">High</SelectableTag>
 </SelectableTagGroup>
 
+### Group in a form
+
+Set `name` to submit the selection with a form. The group renders one hidden input per selected value, so `FormData.getAll(name)` returns the selected values. A form reset restores the selection the group rendered with, and does not dispatch `change`.
+
 ### Group size
 
 Set `size` on the group to size every tag. A tag's own `size` wins. Set `disabled` to disable every tag.

@@ -43,6 +43,14 @@
   export let hideLegend = false;
 
   /**
+   * Specify a name to submit the selection with a form: one hidden input
+   * per selected value. A form reset restores the selection the group
+   * rendered with.
+   * @type {string | undefined}
+   */
+  export let name = undefined;
+
+  /**
    * Specify the gap between tags.
    * Alternatively, specify a custom value (e.g., "0.25rem").
    * @type {import("../Stack/Stack.svelte").StackScale | string}
@@ -66,6 +74,7 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
+  import { formReset } from "../utils/form-reset.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     getLayoutDirection,
@@ -105,6 +114,14 @@
       normalizeSize(size, TAG_SIZE_ALIASES)
     ),
   );
+
+  // A form reset restores this, the selection the group rendered with.
+  // Hidden inputs keep their value through a reset, so the browser cannot.
+  const defaultSelected = selected;
+
+  function handleFormReset() {
+    selected = defaultSelected;
+  }
 
   $: selectedValues.set(new Set(effectiveSelected(selected, selectionMode)));
   $: groupDisabled.set(disabled);
@@ -262,6 +279,7 @@
       tag.focus();
     },
   }}
+  use:formReset={handleFormReset}
   on:focusin={handleFocusIn}
   {...$$restProps}
 >
@@ -278,4 +296,9 @@
   <Stack orientation="horizontal" align="center" wrap="wrap" {gap}>
     <slot />
   </Stack>
+  {#if name}
+    {#each effectiveSelected(selected, selectionMode) as value (value)}
+      <input type="hidden" {name} value={String(value)} {disabled} />
+    {/each}
+  {/if}
 </div>
