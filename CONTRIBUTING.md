@@ -945,6 +945,7 @@ Prioritize high-value coverage:
 - Default render and primary user interactions (open, select, submit, keyboard)
 - Accessibility roles, labels, and ARIA state changes
 - Regressions for bugs you fix. For a CSS-only bug, that means an e2e fixture that renders the broken state for `check:css:compare`, not a `tests/css/` assertion.
+- The conditions in [Stress testing UI](#stress-testing-ui) that apply to the change: a narrow container, long words, the server render, keyboard only.
 - Existing prop combinations without your new prop. A prop that adds content next to something another prop hides (`valueText` beside a `hideLabel` label) can break the case where it is unset. The `valueText` tests covered `hideLabel` with value text but not without it, which is the case that regressed.
 - Boundary inputs to pure utils: zero or negative sizes, empty collections, divide-by-zero, and out-of-range indices. Assert the defined fallback (clamp, empty, identity) rather than only that it doesn't throw.
 - Generic/type contracts when adding `@template` props (see below)
@@ -1257,6 +1258,113 @@ Headless Chromium has no scrollbar to drag. Send large `page.mouse.wheel` deltas
 To cover an opt-in mode with existing assertions, have the fixture read a query flag and run the suite once for each value. The measured-menu suites run a second time with `?optimizeFastScroll`.
 
 Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the index page.
+
+### Stress testing UI
+
+Most layout and state bugs only show once a component sits somewhere other than its docs example: in a narrow card, beside other controls, with a long label, or before JavaScript runs. Check a change against the conditions below before calling it done, and measure rather than eyeball. A bug found this way gets a fixture that renders the failing condition, so the fix stays fixed.
+
+#### Render every state side by side
+
+Render each size against each state in one matrix: default, helper text, invalid, warning, disabled, read-only, hidden label, skeleton, inline, fluid, and inside a `Layer`. Compare the rows. Do fields of the same size share one height and line up their icons? Does the skeleton match the loaded control? Does one size drop an icon or a border? One example at the default size hides almost all of this. Repeat in each theme (`white`, `g10`, `g90`, `g100`).
+
+To review a change that moves many screenshots at once, such as a token or theme change, compare image dimensions before pixels. Same size, different pixels is a color change. A different width or height is a layout change, and those are the ones to look at first.
+
+#### Put it in a real composition
+
+Render the component where it will be used, not alone on a wide page:
+
+- In narrow containers: fixed-width boxes at 240, 320 and 480px, and the phone width (390px). [`pagination-fit.test.ts`](e2e/pagination-fit.test.ts) renders the same component in four boxes and asserts per width.
+- In rows that shrink: a flex row, a grid row with an `auto` track beside `minmax(0, 1fr)` text, and controls side by side in an `InputGroup` or toolbar. Controls that act as one share one height and a 1px seam; assert the heights and gaps.
+- In panels, modals and cards.
+
+Lay out by the component's own width, not the window's. A component that switches layout at a breakpoint should do it with a container query on itself, so it behaves the same in a 20rem panel on a wide screen as on a phone. A set of actions that can't fit its labels should stack or wrap, not squeeze.
+
+#### Long and unusual content
+
+Use a long compound word (`Datenschutzgrundverordnungskonformitätsprüfung`), a URL or id with no spaces, CJK text, a translated string longer than the English, a large count, an empty value and a single character. [`long-words.test.ts`](e2e/long-words.test.ts) puts these in a 12rem column and asserts nothing spills out.
+
+Also test the opposite: a short word must not break when it would fit. `word-break: break-word` (see [`_long-words.scss`](css/_long-words.scss)) lets a box shrink below its longest word, so a squeezed flex item or `auto` grid track breaks "Select" a letter a line. Assert both: nothing spills past its column, and no word that fits its row is split across lines. A word is split when its range has client rects on more than one line:
+
+```ts
+const splitWords = (root: Element) => {
+  const out: string[] = [];
+  const range = document.createRange();
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    for (const match of (node.textContent ?? "").matchAll(/\S+/g)) {
+      range.setStart(node, match.index ?? 0);
+      range.setEnd(node, (match.index ?? 0) + match[0].length);
+      const tops = new Set(
+        [...range.getClientRects()]
+          .filter((rect) => rect.width > 0)
+          .map((rect) => Math.round(rect.top)),
+      );
+      if (tops.size > 1) out.push(match[0]);
+    }
+  }
+  return out;
+};
+
+expect(await page.getByTestId("rows").evaluate(splitWords)).toEqual([]);
+```
+
+#### Without JavaScript and before hydration
+
+Anything a component settles after mount renders differently on the server: a class derived from its children registering (icon-only, a secondary label somewhere in a tab set), a measured size (a collapsed tile's height), a position computed in `afterUpdate` (an open menu), an indent read from the DOM. The page then moves when it hydrates, and stays wrong with JavaScript off.
+
+- Prefer state the server can know: compute it from props or context in render (a node's `level`) instead of from the DOM after mount.
+- When only the children know, express the layout in CSS. Use `:has()` only inside `@supports selector(:has(*))`: an unsupported selector in a rule's selector list drops the whole rule, so an unguarded `:has()` also breaks the rule for older browsers.
+- Test the markup with a [server rendering test](#server-rendering-tests), and the layout with an e2e case that measures the mounted component, puts it back in its server state, and asserts that the box did not move:
+
+```ts
+test("a collapsed ExpandableTile is its collapsed height before it measures", async ({
+  page,
+}) => {
+  const tile = page.locator(".bx--tile--expandable");
+  const rect = () =>
+    tile.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return [r.x, r.y, r.width, r.height].map(Math.round);
+    });
+  const mounted = await rect();
+  // The server's markup: not yet measured.
+  await tile.evaluate((el) => {
+    el.classList.add("bx--tile--unmeasured");
+    (el as HTMLElement).style.maxHeight = "none";
+  });
+  expect(await rect()).toEqual(mounted);
+});
+```
+
+On a server-rendered page you can check the whole page the same way: screenshot a region as served, trigger hydration, screenshot it again, and diff. To find the cause, list each element's `class`, `style` and bounding box before and after hydration; the attribute that changed is usually the bug.
+
+#### Keyboard only
+
+Walk the component with the keyboard alone, and record `document.activeElement`, its accessible name and its ARIA state at each step. Tab in and out. Arrow keys follow the matching [APG pattern](https://www.w3.org/WAI/ARIA/apg/patterns/). Escape closes an overlay and returns focus to what opened it, or to a fallback when the opener was removed. Focus is always visible and never lands on `body`. An icon-only trigger has a name, and a menu is labelled by its trigger.
+
+#### Assistive text
+
+Every string the component renders or announces (labels, counts, status text, live-region messages) must be translatable through a prop or `translateWithId`. Search the component for English string literals before adding one.
+
+#### Measure, then prove the fix
+
+Assert numbers (heights, gaps, positions, line counts, the number of visible skeleton bars), not that a screenshot looks right. Give a detector a self-test: render a case it must flag, and fail if it doesn't, so a clean run means something. Before opening the pull request, put the file back to its old version, rebuild, and watch the new test fail:
+
+```sh
+git show HEAD~1:css/_long-words.scss > css/_long-words.scss
+bun run build:css && bunx playwright test e2e/long-words.test.ts --project=chromium
+git checkout -- css/_long-words.scss && bun run build:css
+```
+
+When a style seems to have no effect, read the computed value with `getComputedStyle`, walking up the parent chain if needed. A computed `auto` where you set a value means the browser dropped your declaration.
+
+#### CSS pitfalls found this way
+
+- `min()`, `max()` and `calc()` can't take `max-content` or `min-content`. The browser drops the whole declaration without a warning. Use a length, a percentage, or a different property.
+- `word-break: break-word` lowers an element's min-content to one character, so a flex item or an `auto` grid track can squeeze it a letter at a time. Give such items a way to keep their words: `nowrap` on a short label, `flex-wrap` on the row, or a container query that changes the layout.
+- Text placed directly in a flex or grid container is an anonymous item with `min-width: auto`. It can't be styled apart from its container, so `overflow-wrap` on the container doesn't let it shrink.
+- Shorthands reset what they don't name: `border: 0` also resets `border-color` to `currentColor`, which a transition then animates on the first change. Set the property you mean (`border-width`).
+- A size modifier with more classes silently beats a state rule on the same element, for example centering what a tall layout start-aligns. Check specificity when adding either.
 
 ### Performance benchmarks
 
