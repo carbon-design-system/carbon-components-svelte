@@ -1,5 +1,6 @@
 <script>
   import {
+    BarChart,
     DonutChart,
     GanttChart,
     LineChart,
@@ -24,6 +25,11 @@
     cost: 40 - i * 2,
     team: `Team ${(i % 10) + 1}`,
   }));
+  const regions = [
+    "North America and the Caribbean",
+    "Europe",
+    "Asia Pacific",
+  ].map((region, i) => ({ region, units: 12_000 + i * 7_300 }));
   const tasks = [
     {
       id: "a",
@@ -66,6 +72,21 @@
       label="service"
       group="team"
       title="Treemap"
+    />
+    <BarChart
+      data={regions}
+      x="region"
+      y="units"
+      orientation="horizontal"
+      title="Bars"
+      height={160}
+    />
+    <BarChart
+      data={regions}
+      x="region"
+      y="units"
+      title="Columns"
+      height={160}
     />
     <GanttChart
       data={tasks}

@@ -29,7 +29,7 @@
 
   import { getContext, onMount } from "svelte";
   import { CHART_CONTEXT } from "./context.js";
-  import { thinLabels } from "./model.js";
+  import { GLYPH_WIDTH, thinLabels } from "./model.js";
 
   /** @type {import("./context.js").ChartContext} */
   const { scales, size, reserveMargin } = getContext(CHART_CONTEXT);
@@ -49,6 +49,12 @@
   $: reserve(Boolean(title));
 
   const ROW_HEIGHT = 16;
+
+  // Fewer characters than this say nothing; thinning drops the label instead.
+  const MIN_CHARS = 4;
+  // A label with a digit may be a number, a date, a time or an id, none of
+  // which may be cut: bars turn dates into categories. It stays whole.
+  const HAS_DIGIT = /\d/;
 
   /** @param {ReadonlyArray<number>} at */
   function thinRows(at) {
@@ -75,7 +81,31 @@
   $: write =
     format ??
     (readsX ? $scales.xFormat : secondary ? $scales.y2Format : $scales.yFormat);
-  $: labels = values.map((value) => write(value));
+  $: full = values.map((value) => write(value));
+  // A category name longer than its room ends in an ellipsis and keeps the
+  // whole name in a `<title>`. Room is the slot along a horizontal axis and
+  // the margin beside a vertical one.
+  $: room =
+    readsX && $scales.kind === "category"
+      ? horizontal
+        ? ($scales.step ?? 0) - 8
+        : position === "left"
+          ? $scales.plot.x0 - 8
+          : $size.width - $scales.plot.x1 - 8
+      : Number.POSITIVE_INFINITY;
+  $: labels = full.map((/** @type {string} */ label) => fitLabel(label, room));
+
+  /**
+   * @param {string} label
+   * @param {number} px
+   */
+  function fitLabel(label, px) {
+    if (label.length * GLYPH_WIDTH <= px || HAS_DIGIT.test(label)) return label;
+    const chars = Math.max(MIN_CHARS, Math.floor(px / GLYPH_WIDTH) - 1);
+    return chars >= label.length
+      ? label
+      : `${label.slice(0, chars).trimEnd()}…`;
+  }
   $: positions = values.map((value) =>
     readsX
       ? $scales.x.map(value)
@@ -137,7 +167,7 @@
             y={position === "bottom" ? edge + 18 : edge - 8}
             text-anchor="middle"
           >
-            {labels[i]}
+            {#if labels[i] !== full[i]}<title>{full[i]}</title>{/if}{labels[i]}
           </text>
         {:else}
           <text
@@ -147,7 +177,7 @@
             dy="0.32em"
             text-anchor={position === "left" ? "end" : "start"}
           >
-            {labels[i]}
+            {#if labels[i] !== full[i]}<title>{full[i]}</title>{/if}{labels[i]}
           </text>
         {/if}
       {/if}
@@ -166,7 +196,7 @@
     {:else}
       <text
         class:bx--viz-axis__title={true}
-        transform="translate({position === "left"
+        transform="translate({position === 'left'
           ? 10
           : $size.width - 4},{(plot.y0 + plot.y1) / 2}) rotate(-90)"
         text-anchor="middle"

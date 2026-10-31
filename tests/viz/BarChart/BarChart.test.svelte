@@ -15,6 +15,7 @@
   export let orientation: "vertical" | "horizontal" = "vertical";
   export let hidden: ReadonlyArray<string | number> = [];
   export let onselect: (detail: unknown) => void = () => {};
+  export let width = 640;
 </script>
 
 <BarChart
@@ -23,7 +24,7 @@
   y="revenue"
   series="product"
   title="Revenue by quarter"
-  width={640}
+  {width}
   locale="en-US"
   {mode}
   {orientation}

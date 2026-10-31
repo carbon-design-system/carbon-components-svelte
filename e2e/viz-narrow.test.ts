@@ -9,7 +9,7 @@ test("viz charts fit a narrow container and fold long legends", async ({
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1440, height: 1200 });
   await page.goto("/viz-narrow.html");
-  await expect(page.locator("figure")).toHaveCount(16);
+  await expect(page.locator("figure")).toHaveCount(24);
 
   for (const width of [240, 320, 390, 480]) {
     const box = page.getByTestId(`box-${width}`);
@@ -20,6 +20,15 @@ test("viz charts fit a narrow container and fold long legends", async ({
           .querySelector("figcaption, .bx--viz-chart__title")
           ?.textContent?.trim(),
         overflow: figure.scrollWidth - figure.clientWidth,
+        // Tick labels draw outside the SVG's box when they run long; a
+        // category name ends in an ellipsis before it leaves the figure.
+        labelsOutside: [...figure.querySelectorAll(".bx--viz-axis__label")]
+          .filter((label) => {
+            const box = label.getBoundingClientRect();
+            const edge = figure.getBoundingClientRect();
+            return box.left < edge.left - 0.5 || box.right > edge.right + 0.5;
+          })
+          .map((label) => label.textContent),
         outside:
           Math.round(figure.getBoundingClientRect().right) -
           Math.round(el.getBoundingClientRect().right),
@@ -32,6 +41,9 @@ test("viz charts fit a narrow container and fold long legends", async ({
       expect
         .soft(s.outside, `${width}px: ${s.title} inside its box`)
         .toBeLessThanOrEqual(0);
+      expect
+        .soft(s.labelsOutside, `${width}px: ${s.title} axis labels inside`)
+        .toEqual([]);
     }
     // Fourteen series fold to eight and a button: five rows at most, even
     // where two labels fit a row.

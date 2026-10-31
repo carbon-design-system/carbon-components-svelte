@@ -102,6 +102,57 @@ describe("BarChart", () => {
     expect(geometry.calls).toBe(built);
   });
 
+  it("ends a long category name in an ellipsis and keeps it whole in a title", () => {
+    const long = "North America and the Caribbean";
+    const data = [long, "Europe", "Asia Pacific"].map((quarter, i) => ({
+      quarter,
+      product: "a",
+      revenue: 10_000 * (i + 1),
+    }));
+    const texts = (side: string) =>
+      Array.from(
+        document.querySelectorAll(
+          `.bx--viz-axis--${side} .bx--viz-axis__label`,
+        ),
+      );
+    const shown = (node: Element) =>
+      Array.from(node.childNodes)
+        .filter((child) => child.nodeType === Node.TEXT_NODE)
+        .map((child) => child.textContent)
+        .join("")
+        .trim();
+
+    for (const orientation of ["vertical", "horizontal"] as const) {
+      document.body.innerHTML = "";
+      render(BarChart, { data, orientation, width: 240 });
+      const side = orientation === "vertical" ? "bottom" : "left";
+      const [first, second] = texts(side);
+      expect(shown(first)).toMatch(/…$/);
+      expect(shown(first).length).toBeLessThan(long.length);
+      expect(first.querySelector("title")).toHaveTextContent(long);
+      expect(shown(second)).toBe("Europe");
+      expect(second.querySelector("title")).toBeNull();
+      // Values are never cut.
+      const values = texts(side === "bottom" ? "left" : "bottom").map(shown);
+      expect(values.every((value) => !value.includes("…"))).toBe(true);
+    }
+
+    // Dates become categories on a bar chart, and stay whole too.
+    document.body.innerHTML = "";
+    render(BarChart, {
+      width: 240,
+      data: Array.from({ length: 8 }, (_, month) => ({
+        quarter: new Date(2026, month, 1),
+        product: "a",
+        revenue: 10 + month,
+      })),
+    });
+    expect(texts("bottom").length).toBeGreaterThan(0);
+    expect(texts("bottom").some((node) => shown(node).includes("…"))).toBe(
+      false,
+    );
+  });
+
   it("lists categories down the left and values along the bottom when horizontal", async () => {
     render(BarChart, { orientation: "horizontal" });
 
