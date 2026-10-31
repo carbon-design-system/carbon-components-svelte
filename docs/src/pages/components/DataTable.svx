@@ -1466,6 +1466,7 @@ Without `externalSort`, the table sorts the rows it receives again. A server pag
 | Reset `page` to 1 in `on:sort`. | The new order has a different first page, and page 5 of the old order may not exist. |
 | Bind `sortKey` and `sortDirection` and fetch from them in a `$:` statement. | The headers and the request read the same state, so the indicator always names the order the server applied. |
 | Leave `sort` and `header.sort` unset. | `externalSort` never calls them. |
+| Give each request an id and keep only the newest response. Set `aria-busy` while one runs. | A slow response for an older sort can arrive after a newer one and replace its rows. |
 
 The framed example simulates a request with `setTimeout`. It sorts names by code point, which differs from the browser's collation.
 

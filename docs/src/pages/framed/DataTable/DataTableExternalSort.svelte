@@ -32,12 +32,24 @@
     });
   }
 
-  $: fetchPage(sortKey, sortDirection, page, pageSize).then((next) => {
+  let loading = false;
+  let request = 0;
+
+  async function load(key, direction, pageNumber, size) {
+    const id = ++request;
+    loading = true;
+    const next = await fetchPage(key, direction, pageNumber, size);
+    // A newer request replaced this one: keep its rows.
+    if (id !== request) return;
     rows = next;
-  });
+    loading = false;
+  }
+
+  $: load(sortKey, sortDirection, page, pageSize);
 </script>
 
 <DataTable
+  aria-busy={loading}
   headers={[
     { key: "name", value: "Name" },
     { key: "port", value: "Port" },
