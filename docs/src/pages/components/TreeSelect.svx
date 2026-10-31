@@ -1,0 +1,226 @@
+---
+components: ["TreeSelect"]
+description: Tree selects pick one node, or many with checkboxes, from a hierarchy in a dropdown menu, with search, tags, and lazy loading.
+---
+
+<script>
+  import { FluidForm, Stack, TreeSelect } from "carbon-components-svelte";
+
+  const nodes = [
+    {
+      id: "europe",
+      text: "Europe",
+      nodes: [
+        {
+          id: "germany",
+          text: "Germany",
+          nodes: [
+            { id: "berlin", text: "Berlin" },
+            { id: "munich", text: "Munich" },
+          ],
+        },
+        { id: "france", text: "France", nodes: [{ id: "paris", text: "Paris" }] },
+        { id: "iceland", text: "Iceland", disabled: true },
+      ],
+    },
+    {
+      id: "north-america",
+      text: "North America",
+      nodes: [
+        { id: "us", text: "United States" },
+        { id: "canada", text: "Canada" },
+      ],
+    },
+    { id: "antarctica", text: "Antarctica" },
+  ];
+
+  const sizes = ["xs", "sm", undefined, "lg"];
+</script>
+
+## Basic
+
+Pick one node from a tree. Set `nodes` to a hierarchy where every node has a unique `id` and `text`, and a node's `nodes` are its children. Click a row to select it, or the chevron to open a branch.
+
+<TreeSelect labelText="Office" label="Choose an office" {nodes} />
+
+## Selection
+
+Set `selectionMode` to choose how nodes are picked.
+
+### Single
+
+Bind `selectedId` to read or set the selected node. Opening the menu shows the selected node by expanding the branches above it. Set `selectable="leaf"` so that a parent only opens and closes, and set `clearable` to add a clear button.
+
+<FileSource src="/framed/TreeSelect/TreeSelectBound" />
+
+### Checkbox
+
+Set `selectionMode="checkbox"` to render a tri-state checkbox on every node. It resolves checks the way `TreeView` does. With the default `checkMode="deep"`, checking a parent checks its non-disabled descendants, and a parent with some children checked is partly checked. Set `checkMode="node"` to check each node on its own.
+
+`checkedIds` lists every checked node, descendants included, and `indeterminateIds` lists the partly checked ones. Both are bindable, and writes to `indeterminateIds` are overwritten.
+
+<TreeSelect
+  labelText="Offices"
+  label="Choose offices"
+  {nodes}
+  selectionMode="checkbox"
+  expandedIds={["europe"]}
+  checkedIds={["germany"]}
+/>
+
+## Display
+
+In `selectionMode="checkbox"`, the field lists the checked nodes. A fully checked branch would otherwise list every descendant, so `showChecked` decides which nodes count.
+
+| `showChecked` | The field lists |
+| --- | --- |
+| `"parent"` (default) | The topmost checked node of each branch, so a checked branch reads as one entry |
+| `"leaf"` | Only checked nodes without children |
+| `"all"` | Every checked node |
+
+The same entries are submitted with `name`, and `checkMode="node"` always lists every checked node.
+
+### Tags
+
+Set `selectionDisplay="tags"` to list each entry as a dismissible tag below the field, as `MultiSelect` does. Set `tagOverflow="collapse"` to keep one row, with the rest behind a "+N" button.
+
+A tag is a component that registers with `TagSet`, so thousands of them are slow. `tagLimit` (default `100`) mounts that many and counts the rest in one tag. Every entry stays selected and stays in the field's text.
+
+<TreeSelect
+  labelText="Offices"
+  label="Choose offices"
+  {nodes}
+  selectionMode="checkbox"
+  selectionDisplay="tags"
+  showChecked="leaf"
+  checkedIds={["germany", "us"]}
+/>
+
+## Search
+
+Set `filterable` to search the tree in the field. The menu keeps the nodes that match and the ancestors of each match, and holds those ancestors open. Searching ignores the expanded branches and restores them when the search ends.
+
+Pass `shouldFilterNode` to change what matches. It receives the node and the search text, and ancestors of a match stay whatever it returns for them. In `selectionMode="single"` the field shows the selected label until you edit it, and closing the menu puts the label back.
+
+<Stack gap={6}>
+  <TreeSelect labelText="Office" placeholder="Search offices" {nodes} filterable />
+  <TreeSelect
+    labelText="Offices"
+    placeholder="Search offices"
+    {nodes}
+    selectionMode="checkbox"
+    filterable
+  />
+</Stack>
+
+Checking a parent while a search is active checks its whole subtree, including the nodes the search hides, so a parent's check always means its branch.
+
+## Lazy loading
+
+Mark a parent with `hasChildren: true` and no `nodes`, and pass `loadChildren`. It runs the first time the node expands. While it is pending the chevron is a spinner and the row is `aria-busy`. If it rejects, the node collapses, the chevron becomes a warning icon, and expanding it again tries again. `TreeSelect` lays the children it loads over `nodes` and never changes your array.
+
+A checked parent that has not loaded gives its check to its children once they arrive. An id in `checkedIds` for a node that has not loaded stays checked and submits with the form, so a saved check is kept until its node loads. Once no parent is left to load, ids that match no node are dropped.
+
+With the default `checkMode="deep"`, unchecking a parent that has not loaded, or one of its ancestors, also unchecks the saved ids under it, and removes them from the form. They leave `checkedIds` as soon as no other unloaded parent could hold them, and at the latest when the parent's children load.
+
+<FileSource src="/framed/TreeSelect/TreeSelectLazy" />
+
+## Large trees
+
+The menu mounts only the rows in view. It is flat, so a tree of 5,000 nodes costs the same as a list: expanding, searching, and checking a branch each finish within a frame. Set `virtualize` to tune the window, as for `Dropdown`.
+
+<FileSource src="/framed/TreeSelect/TreeSelectLarge" />
+
+## Sizes
+
+Set `size` to control field height. The default is `"md"` (40px).
+
+<Stack gap={6}>
+  {#each sizes as size}
+    <TreeSelect labelText="Size {size ?? 'md'}" label="Choose an office" {nodes} {size} />
+  {/each}
+</Stack>
+
+## States
+
+Reflect validation and interaction states. A read-only field still opens the menu to review the selection, but changes nothing.
+
+### Invalid
+
+<TreeSelect
+  labelText="Office"
+  label="Choose an office"
+  {nodes}
+  invalid
+  invalidText="Choose an office"
+/>
+
+### Warning
+
+<TreeSelect
+  labelText="Office"
+  label="Choose an office"
+  {nodes}
+  warn
+  warnText="This office is closing"
+/>
+
+### Read-only
+
+<TreeSelect labelText="Office" label="Choose an office" {nodes} selectedId="paris" readonly />
+
+### Disabled
+
+Set `disabled` to `true` to prevent user interaction. Set `disabled: true` on a node to disable just that node, and its branch for `checkMode="deep"`.
+
+<TreeSelect labelText="Office" label="Choose an office" {nodes} selectedId="paris" disabled />
+
+## Fluid
+
+Inside a `FluidForm`, or with `fluid`, the field takes the fluid variant.
+
+<FluidForm>
+  <TreeSelect labelText="Office" label="Choose an office" {nodes} selectedId="berlin" />
+</FluidForm>
+
+## Portal
+
+In a `Modal`, or when a box around the field would cut the menu off, the menu moves to a portal. Set `portalMenu` to `true` or `false` to choose. Escape closes the menu and leaves the modal open.
+
+<FileSource src="/framed/TreeSelect/TreeSelectModal" />
+
+## Forms
+
+Set `name` to submit the selection. A single select submits one value, and a checkbox select submits one value per entry `showChecked` reports, disabled nodes left out. Set `required` to block submission while nothing is selected.
+
+## Keyboard
+
+The field keeps focus, and the highlighted row is named by `aria-activedescendant`. In `filterable` mode the field is a text input, so the keys that would move its caret keep that job while you are typing.
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Down" /> / <DocKbd label="Up" /> | Opens the menu, then moves the highlight to the next or previous visible row |
+| <DocKbd label="Right" /> | Expands the highlighted branch, or moves to its first child when it is open |
+| <DocKbd label="Left" /> | Collapses the highlighted branch, or moves to its parent when it is closed |
+| <DocKbd label="Enter" /> | Selects the highlighted node, or checks it and keeps the menu open |
+| <DocKbd label="Space" /> | Does the same as Enter, except in a search field |
+| <DocKbd label="Home" /> / <DocKbd label="End" /> | Highlights the first or last row, except in a search field |
+| <DocKbd label="PageUp" /> / <DocKbd label="PageDown" /> | Moves the highlight 10 rows |
+| <DocKbd label="Escape" /> | Closes the menu |
+| <DocKbd label="Delete" /> / <DocKbd label="Backspace" /> | Clears the selection, when it can be cleared |
+
+Type a letter on the field to highlight the next row that starts with it. In RTL layouts the arrow keys swap, so Left expands.
+
+While a search is typed, plain <DocKbd label="Left" /> and <DocKbd label="Right" /> move the caret, and <DocKbd label="Alt" /> with either one expands or collapses.
+
+## Design
+
+`TreeSelect` is a combobox with a `tree` popup (`aria-haspopup="tree"`), not a `TreeView` in a menu. A `TreeView` moves DOM focus into its rows, so a search field could not keep the keyboard. This one keeps focus on the field and exposes each row as a `treeitem` with `aria-level`, `aria-posinset`, and `aria-setsize`, in a flat list that can be windowed.
+
+| Do | Why |
+| --- | --- |
+| Use `TreeSelect` to choose from a hierarchy in a form | It is a field, so it takes labels, validation, and `name` |
+| Use `TreeView` to browse or navigate a hierarchy | It has links, icons, and keyboard focus inside the tree |
+| Give every node a unique `id` | Ids key the checks, the expansion, and the rows |
+| Leave `showChecked` at `"parent"` for wide trees | One entry per checked branch keeps the field readable |
+| Pass `loadChildren` instead of mutating `nodes` | The component tracks loading, failure, and retry for you |

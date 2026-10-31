@@ -1053,6 +1053,7 @@ test.describe("forced colors", () => {
       ["dropdown", ".bx--list-box__field"],
       ["combobox", "input"],
       ["multiselect", ".bx--list-box__field"],
+      ["treeselect", ".bx--list-box__field"],
     ]) {
       const scope = `[data-testid=fields] [data-testid=${field}]`;
       // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
@@ -1078,7 +1079,16 @@ test.describe("forced colors", () => {
         )
         .toBe(system.HighlightText);
       expect.soft(await flatness(page, highlighted), field).toBeLessThan(0.95);
-      if (field === "multiselect") {
+      if (field === "treeselect") {
+        expect
+          .soft(
+            (await style(page, `${highlighted} .bx--tree-select__toggle svg`))
+              .fill,
+            field,
+          )
+          .toBe(system.HighlightText);
+      }
+      if (field === "multiselect" || field === "treeselect") {
         const checkbox = `${highlighted} .bx--checkbox-label`;
         expect
           .soft((await style(page, checkbox, "::before")).borderColor, field)

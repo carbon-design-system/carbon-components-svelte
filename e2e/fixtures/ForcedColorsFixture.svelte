@@ -79,6 +79,7 @@
     ToggleButton,
     ToggleButtonGroup,
     Toggletip,
+    TreeSelect,
     TreeView,
     Truncate,
     UserAvatar,
@@ -92,6 +93,18 @@
 
   let menuAnchor = null;
   let sidePanelOpen = false;
+
+  const regionTree = [
+    {
+      id: "americas",
+      text: "Americas",
+      nodes: [
+        { id: "us", text: "United States" },
+        { id: "ca", text: "Canada" },
+      ],
+    },
+    { id: "emea", text: "EMEA" },
+  ];
 
   const regions = [
     { id: "us-east", text: "US East" },
@@ -373,6 +386,15 @@
     </div>
     <div data-testid="multiselect">
       <MultiSelect labelText="Multi select" items={regions} />
+    </div>
+    <div data-testid="treeselect">
+      <TreeSelect
+        labelText="Tree select"
+        nodes={regionTree}
+        selectionMode="checkbox"
+        expandedIds={["americas"]}
+        checkedIds={["us"]}
+      />
     </div>
     <div data-testid="multiselect-filterable">
       <MultiSelect

@@ -43,6 +43,7 @@
     Tabs,
     TabsSkeleton,
     TabsVertical,
+    TreeSelect,
     TreeView,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
@@ -56,6 +57,20 @@
     { id: "0", text: "Slack" },
     { id: "1", text: "Email" },
     { id: "2", text: "Fax" },
+  ];
+
+  const places = [
+    {
+      id: "eu",
+      text: "Europe",
+      nodes: [{ id: "de", text: "Germany" }],
+    },
+    {
+      id: "na",
+      text: "North America",
+      nodes: [{ id: "us", text: "United States" }],
+    },
+    { id: "an", text: "Antarctica" },
   ];
 
   const nodes = [
@@ -184,6 +199,14 @@ export async function rollback(region, id) {
   </div>
   <div data-testid="multiselect" class="field">
     <MultiSelect labelText="Contact" {items} selectedIds={["1"]} />
+  </div>
+  <div data-testid="treeselect" class="field">
+    <TreeSelect
+      labelText="Place"
+      nodes={places}
+      selectionMode="checkbox"
+      expandedIds={["eu"]}
+    />
   </div>
   <div data-testid="clickable-tile" class="field">
     <ClickableTile href="#" icon={ArrowRight}>Billing settings</ClickableTile>

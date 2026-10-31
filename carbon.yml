@@ -1497,6 +1497,15 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/TooltipIcon
     tags:
       - content-element
+  tree-select:
+    status: stable
+    framework: svelte
+    thumbnailPath: './thumbnails/tree-select.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TreeSelect
   tree-view:
     status: stable
     framework: svelte

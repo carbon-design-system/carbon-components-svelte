@@ -1,0 +1,128 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `TreeSelect`'s menu rows: a list box option that also indents by depth and
+/// carries an expander. It builds on the Dropdown, ComboBox, and MultiSelect
+/// markup it shares a field with, so only the tree part is new here.
+///
+/// A row sets `--ccs-tree-select-depth` (zero for a root). The option's
+/// inline margin grows by one step per level, so the hairline between rows
+/// indents with its text.
+/// @access private
+/// @group components
+@mixin tree-select {
+  .#{$prefix}--tree-select .#{$prefix}--list-box__menu-item__option {
+    margin-inline-start: calc(
+      #{$carbon--spacing-05} + var(--ccs-tree-select-depth, 0) *
+        #{$carbon--spacing-05}
+    );
+  }
+
+  .#{$prefix}--tree-select__row {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+  }
+
+  // Both classes tie with Carbon's
+  // `.#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type`, whose
+  // 3px bottom margin would push the centered checkbox 1.5px above the
+  // expander, and this rule wins on order.
+  .#{$prefix}--tree-select__row
+    > .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: row;
+    margin: 0;
+  }
+
+  .#{$prefix}--tree-select__label {
+    overflow: hidden;
+    min-width: 0;
+    flex: 1 1 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--tree-select__label > span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // The expander slot is always there, so a leaf's label lines up with a
+  // sibling parent's. It is a 24px target (WCAG 2.5.8) around a 16px icon;
+  // negative margins keep the row's height and the label's position.
+  .#{$prefix}--tree-select__toggle {
+    display: flex;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    margin-top: to-rem(-4px);
+    margin-bottom: to-rem(-4px);
+    margin-inline-end: $carbon--spacing-02;
+    margin-inline-start: to-rem(-4px);
+    cursor: pointer;
+  }
+
+  // Only the expander's own icon: a `Loading` inside it draws with
+  // strokes, and a fill turns its ring into a disc.
+  .#{$prefix}--tree-select__toggle > svg {
+    fill: $icon-secondary;
+    transition: transform $duration--fast-01 motion(standard, productive);
+
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--tree-select__toggle--expanded > svg {
+    transform: rotate(90deg);
+
+    @include ccs-mirror-rtl(rotate(90deg));
+  }
+
+  // A search holds every branch open, so there is nothing to toggle.
+  .#{$prefix}--tree-select__toggle--locked {
+    cursor: default;
+  }
+
+  .#{$prefix}--tree-select__toggle .#{$prefix}--loading {
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--tree-select__toggle .#{$prefix}--tree-select__toggle-error {
+    fill: $support-error;
+  }
+
+  .#{$prefix}--tree-select .#{$prefix}--list-box__menu-item[disabled] svg {
+    fill: $icon-disabled;
+  }
+
+  // A highlighted row opts out of forced colors and fills with `Highlight`
+  // (see `list-box-highlight-ring`), so the expander, which keeps its token
+  // fill there, needs system colors of its own: `CanvasText` on the menu and
+  // `HighlightText` on the filled row.
+  @media (forced-colors: active) {
+    .#{$prefix}--tree-select__toggle > svg {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--tree-select
+      .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--tree-select__toggle
+      > svg {
+      fill: HighlightText;
+    }
+  }
+}
+
+@include exports("tree-select") {
+  @include tree-select;
+}

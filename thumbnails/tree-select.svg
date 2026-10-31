@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>tree-select</title>
+    <g id="tree-select" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="56" y="36" width="208" height="32"></rect>
+        <rect id="field-border" fill="var(--cds-border-strong, #8d8d8d)" x="56" y="67" width="208" height="1"></rect>
+        <rect id="label-selected" fill="var(--cds-text-secondary, #525252)" x="68" y="48" width="72" height="8"></rect>
+        <g id="chevron-field" transform="translate(240, 44) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path>
+        </g>
+        <rect id="menu" fill="var(--cds-field-01, #f4f4f4)" x="56" y="68" width="208" height="88"></rect>
+        <g id="caret-root" transform="translate(64, 78) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M24 12L16 22 8 12z"></path>
+        </g>
+        <rect id="box-root" fill="none" stroke="var(--cds-icon-primary, #161616)" x="82.500" y="78.500" width="9" height="9"></rect>
+        <rect id="dash-root" fill="var(--cds-icon-primary, #161616)" x="85" y="82" width="4" height="2"></rect>
+        <rect id="label-root" fill="var(--cds-text-secondary, #525252)" x="100" y="80" width="80" height="6"></rect>
+        <rect id="box-child-1" fill="var(--cds-icon-primary, #161616)" x="98" y="98" width="10" height="10"></rect>
+        <path id="check-child-1" d="M100 103l2 2 4-4" stroke="var(--cds-icon-inverse, #ffffff)" stroke-width="1.500"></path>
+        <rect id="label-child-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="116" y="100" width="64" height="6"></rect>
+        <rect id="box-child-2" fill="none" stroke="var(--cds-icon-primary, #161616)" x="98.500" y="116.500" width="9" height="9"></rect>
+        <rect id="label-child-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="116" y="118" width="52" height="6"></rect>
+        <g id="caret-root-2" transform="translate(64, 134) scale(0.5) rotate(-90 16 16)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M24 12L16 22 8 12z"></path>
+        </g>
+        <rect id="box-root-2" fill="none" stroke="var(--cds-icon-primary, #161616)" x="82.500" y="134.500" width="9" height="9"></rect>
+        <rect id="label-root-2" fill="var(--cds-text-secondary, #525252)" x="100" y="136" width="90" height="6"></rect>
+    </g>
+</svg>
