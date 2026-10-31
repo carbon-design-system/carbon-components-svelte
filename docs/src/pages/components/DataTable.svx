@@ -390,6 +390,24 @@ Set `columnAlign` in `headers` to align a column's header and cells. Values are 
   ]}
 />
 
+### Resizable
+
+Set `resizable` to `true` to add a drag handle to the inline end of every header. Drag it to resize the column. With the handle focused, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> resize by 10px, or by 40px with <DocKbd label="Shift" />. <DocKbd label="Home" /> and <DocKbd label="End" /> go to the column's minimum and maximum, and <DocKbd label="Escape" /> cancels a drag. Double-click the handle to restore the column's `width`. The arrow keys follow the text direction.
+
+`resizable` implies `fixedLayout`, so unsized columns share the table's width equally until the first drag. The first press on a handle gives every column a pixel width, and the table is then as wide as their sum. A table wider than its container scrolls; a narrower one leaves a gap at the end.
+
+Set `columnResizable` to `false` in `headers` to leave a column without a handle, or to `true` to add one to a single column of a table that is not `resizable`. A header's `minWidth` and `maxWidth` bound the column in pixels, and no column gets narrower than 48px.
+
+`columnWidths` holds the widths in pixels by header key. It updates when a drag is released, so bind it to persist the layout. Seed it to restore a saved layout: the seeded widths render on the server. `resize` fires once per gesture, before `columnWidths` changes, with the key, the new width and all the widths. Call `preventDefault()` on it to keep the old width, as with `sort`.
+
+| Do | Why |
+| --- | --- |
+| Persist `columnWidths`, not `headers`. | Resizing never writes into `headers`, so the `display` and `sort` functions on a header stay intact. |
+| Leave an actions or selection-adjacent column out with `columnResizable: false`. | Every handle is one more tab stop. |
+| Virtualize or paginate a large table. | A live drag lays out every painted row on each frame, so the drag cost follows the row count. |
+
+<FileSource src="/framed/DataTable/DataTableResizableColumns" />
+
 ### Horizontal scroll
 
 When a table's columns need more space than its container, the table becomes horizontally scrollable.

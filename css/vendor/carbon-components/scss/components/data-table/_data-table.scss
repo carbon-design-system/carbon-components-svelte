@@ -351,6 +351,105 @@
   @include data-table-fixed-layout;
 }
 
+// carbon-components-svelte patch (column resize handle)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The drag handle `TableHeader` renders at the inline end of a resizable
+/// column (`DataTable` `resizable`). It is an 8px focusable separator inside
+/// the `th`, drawn as a 1px line, so it reads like `Splitter`'s separator.
+/// The component adds `--hover` once the pointer has rested on the handle,
+/// and the cursor and the line follow it, so a pass over a header doesn't
+/// flash it. `--active` holds while a drag runs.
+///
+/// The `th` is the handle's containing block. The marker class on the table
+/// gives the rule the weight to beat `th:last-of-type`, which sets
+/// `position: static`; a sticky header cell keeps its `position: sticky`.
+///
+/// This block sits right after the fixed layout block, before the other
+/// patches. A later patch that sets `position` on a header cell at the same
+/// weight, such as a sticky (pinned) column, then wins on order: a sticky
+/// cell is a containing block too.
+/// @access private
+/// @group components
+@mixin data-table-resize-handle {
+  .#{$prefix}--data-table.#{$prefix}--data-table--fixed-layout
+    .#{$prefix}--table-header--resizable {
+    position: relative;
+  }
+
+  // A column can be dragged narrower than its label. The label ends in an
+  // ellipsis, and `TableHeader` shows the full label as a `title`.
+  .#{$prefix}--table-header--resizable .#{$prefix}--table-header-label {
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--table-header__resize-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: to-rem(8px);
+    touch-action: none;
+    user-select: none;
+    @include ccs-inset-inline($end: 0);
+
+    &::after {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: $border-subtle;
+      content: "";
+      transition: background-color $duration--fast-02 motion(standard, productive);
+      @include ccs-inset-inline($end: 0);
+    }
+  }
+
+  .#{$prefix}--table-header__resize-handle--hover {
+    cursor: col-resize;
+
+    &::after {
+      background-color: $border-strong;
+    }
+  }
+
+  .#{$prefix}--table-header__resize-handle--active {
+    cursor: col-resize;
+
+    &::after {
+      background-color: $border-strong;
+      transition: none;
+    }
+  }
+
+  // A pointer press focuses the handle, so only the keyboard draws the ring.
+  .#{$prefix}--table-header__resize-handle:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // Forced colors repaints backgrounds with `Canvas`, which hides the line.
+  @media (forced-colors: active) {
+    .#{$prefix}--table-header__resize-handle::after {
+      background-color: ButtonText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--table-header__resize-handle--hover::after,
+    .#{$prefix}--table-header__resize-handle--active::after,
+    .#{$prefix}--table-header__resize-handle:focus-visible::after {
+      background-color: Highlight;
+    }
+  }
+}
+
+@include exports("data-table-resize-handle") {
+  @include data-table-resize-handle;
+}
+
 // carbon-components-svelte patch (DataTable virtualize without stickyHeader)
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
