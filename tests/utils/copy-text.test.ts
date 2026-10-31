@@ -53,4 +53,21 @@ describe("copyText", () => {
 
     await expect(copyText("nope")).rejects.toThrow("Failed to copy");
   });
+
+  it("restores focus to the previously focused element after the execCommand fallback", async () => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: vi.fn().mockRejectedValue(new Error("denied")) },
+    });
+    stubExecCommand(true);
+
+    const button = document.createElement("button");
+    document.body.appendChild(button);
+    button.focus();
+
+    await copyText("x");
+
+    expect(document.activeElement).toBe(button);
+    button.remove();
+  });
 });
