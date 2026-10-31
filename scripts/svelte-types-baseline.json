@@ -22,7 +22,7 @@
   "ContextMenu/ContextMenu.svelte": 13,
   "ContextMenu/ContextMenuOption.svelte": 17,
   "CopyButton/CopyButton.svelte": 2,
-  "DataTable/DataTable.svelte": 118,
+  "DataTable/DataTable.svelte": 117,
   "DataTable/DataTableSkeleton.svelte": 2,
   "DataTable/ToolbarBatchActions.svelte": 6,
   "DataTable/ToolbarColumnVisibility.svelte": 2,

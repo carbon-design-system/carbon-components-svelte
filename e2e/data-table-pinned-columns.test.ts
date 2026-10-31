@@ -89,9 +89,12 @@ test.describe("DataTable pinned columns", () => {
     // Without `fixedLayout` an auto layout squeezes the declared widths.
     await open(page);
     await scrollTo(page, 120);
-    const [name, id] = await edges(page);
 
-    expect(id.left).toBeCloseTo(name.right, 0);
+    // The pins are measured after layout, and again once the font loads.
+    await expect(async () => {
+      const [name, id] = await edges(page);
+      expect(id.left).toBeCloseTo(name.right, 0);
+    }).toPass();
   });
 
   test("keeps the opaque background of the row state on a pinned cell", async ({
