@@ -31,8 +31,8 @@
    */
   export let cssColor = undefined;
 
-  /** Set to `false` to hide the swatch */
-  export let showSwatch = true;
+  /** Set to `true` to hide the swatch */
+  export let hideSwatch = false;
 
   import Swatch from "./Swatch.svelte";
   import Tag from "./Tag.svelte";
@@ -41,7 +41,7 @@
 <!-- The swatch sits in the `icon` slot, so a `TagSet` measures it with the
 tag. A slot can't be passed from inside an `{#if}`, so the two cases are
 two tags. The rest of the props, such as `size` and `filter`, go to `Tag`. -->
-{#if showSwatch}
+{#if !hideSwatch}
   <Tag
     {type}
     {...$$restProps}

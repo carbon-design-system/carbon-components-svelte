@@ -346,13 +346,13 @@ A swatch also stands alone, such as in a chart legend. Set `label` to name it, w
 
 ### ColorTag
 
-`ColorTag` is a gray `Tag` with the swatch already in its `icon` slot. It takes `colorKey`, `color`, `cssColor` and `showSwatch`, passes the rest of its props to `Tag`, and forwards `click`, `close` and the mouse events. A filter `ColorTag` keeps its swatch and its close button.
+`ColorTag` is a gray `Tag` with the swatch already in its `icon` slot. It takes `colorKey`, `color`, `cssColor` and `hideSwatch`, passes the rest of its props to `Tag`, and forwards `click`, `close` and the mouse events. A filter `ColorTag` keeps its swatch and its close button.
 
 <Stack orientation="horizontal" gap={3} wrap="wrap">
   <ColorTag colorKey="Platform">Platform</ColorTag>
   <ColorTag colorKey="Design" filter>Design</ColorTag>
   <ColorTag colorKey="Billing" interactive>Billing</ColorTag>
-  <ColorTag colorKey="Data" showSwatch={false}>No swatch</ColorTag>
+  <ColorTag colorKey="Data" hideSwatch>No swatch</ColorTag>
 </Stack>
 
 | Do | Why |

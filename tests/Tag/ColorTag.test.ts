@@ -20,8 +20,8 @@ describe("ColorTag", () => {
     ).toHaveClass(`bx--swatch--${getAvatarBackgroundColor("Platform")}`);
   });
 
-  it("hides the swatch, and its icon box, with showSwatch={false}", () => {
-    render(ColorTag, { props: { colorKey: "Platform", showSwatch: false } });
+  it("hides the swatch, and its icon box, with hideSwatch", () => {
+    render(ColorTag, { props: { colorKey: "Platform", hideSwatch: true } });
 
     const tag = tagOf("Platform");
     expect(tag.querySelector(".bx--swatch")).not.toBeInTheDocument();
