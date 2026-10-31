@@ -1,6 +1,7 @@
 import {
   effectiveDateFormat,
   resolveHourCycle,
+  widestValueLength,
 } from "../../src/DatePicker/calendar-time.js";
 
 describe("resolveHourCycle", () => {
@@ -21,5 +22,14 @@ describe("effectiveDateFormat", () => {
       "Y-m-d \\a\\t H:i",
     );
     expect(effectiveDateFormat("m/d/Y", undefined, "12")).toBe("m/d/Y");
+  });
+});
+
+describe("widestValueLength", () => {
+  it("counts the widest date and time the format writes, wide letters twice", () => {
+    expect(widestValueLength("m/d/Y h:i K", "en")).toBe(19);
+    expect(widestValueLength("m/d/Y h:i:S K", "en")).toBe(22);
+    expect(widestValueLength("m/d/Y H:i", "en")).toBe(16);
+    expect(widestValueLength("m/d/Y h:i K", "ko")).toBeGreaterThan(19);
   });
 });

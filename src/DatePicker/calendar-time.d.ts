@@ -19,6 +19,8 @@ export function effectiveDateFormat(
   granularity: TimeGranularity | undefined,
   hourCycle: HourCycle,
 ): string;
+/** The widest text `format` writes in `locale`, in monospace cells. */
+export function widestValueLength(format: string, locale: unknown): number;
 export function parseTimeString(text: unknown): TimeParts | undefined;
 export function timeOf(date: Date): TimeParts;
 export function withTime(

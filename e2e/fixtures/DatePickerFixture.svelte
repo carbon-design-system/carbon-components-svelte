@@ -260,3 +260,17 @@
     </DatePickerInput>
   </DatePicker>
 </div>
+
+<!-- The widest 12-hour time with seconds, which a range field must not cut. -->
+<div data-testid="date-picker-range-seconds">
+  <DatePicker
+    datePickerType="range"
+    timeGranularity="second"
+    hourFormat="12"
+    valueFrom="10/28/2026 12:45:59 AM"
+    valueTo="10/29/2026 12:45:59 PM"
+  >
+    <DatePickerInput labelText="Freeze starts" />
+    <DatePickerInput labelText="Freeze ends" />
+  </DatePicker>
+</div>

@@ -529,7 +529,11 @@
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import { createCalendarApi } from "./calendar-api.js";
-  import { effectiveDateFormat, resolveHourCycle } from "./calendar-time.js";
+  import {
+    effectiveDateFormat,
+    resolveHourCycle,
+    widestValueLength,
+  } from "./calendar-time.js";
   import { createCalendar } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
@@ -598,6 +602,11 @@
     usesTime ? timeGranularity : undefined,
     hourCycle,
   );
+  // A range's fields fit the widest date and time the format writes.
+  $: rangeValueChars =
+    usesTime && datePickerType === "range"
+      ? widestValueLength(calendarDateFormat, locale)
+      : undefined;
   const sharedDateFormat = writable(dateFormat);
   const sharedLocale = writable(locale);
   const sharedConjunction = writable(conjunction);
@@ -2142,6 +2151,7 @@
       datePickerType === "week" ||
       datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
+    style:--ccs-date-picker-value-chars={rangeValueChars}
     class:bx--date-picker--time={usesTime}
     class:bx--date-picker--inline={usesInline && $hasCalendar}
     on:keydown={(event) => {
