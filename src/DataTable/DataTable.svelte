@@ -947,7 +947,40 @@
     });
   }
 
+  /**
+   * Rows for an export, in the order the table shows them. Read when called
+   * (a click on `ToolbarExport`), not on every flush, so a table without an
+   * export menu pays nothing for it.
+   * @param {"filtered" | "page" | "selected"} scope
+   */
+  function getExportRows(scope) {
+    const matched = hideMode
+      ? sortedRows.filter((row) => matchedRowIdsSet.has(row.id))
+      : sortedRows;
+    if (scope === "page") {
+      return virtualConfig
+        ? matched
+        : getDisplayedRows(matched, page, pageSize);
+    }
+    if (scope === "selected") {
+      return matched.filter((row) => selectedRowIdsSet.has(row.id));
+    }
+    return matched;
+  }
+
+  /**
+   * The table's headers, including hidden ones.
+   * @returns {ReadonlyArray<DataTableHeader<Row>>}
+   */
+  // The rendered columns, in the order the head shows them, so an export
+  // follows anything that moves a column (hidden columns drop out).
+  function getExportHeaders() {
+    return visibleHeaders;
+  }
+
   setContext("carbon:DataTable", {
+    getExportRows,
+    getExportHeaders,
     batchSelectedIds,
     tableRows,
     tableSize,

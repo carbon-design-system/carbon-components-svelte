@@ -287,3 +287,108 @@ export function toCsv(headers, rows, options = {}) {
 
   return lines.join(newline);
 }
+
+/**
+ * @typedef {object} ToJsonOptions
+ * @property {number | string} [space] - Indentation passed to `JSON.stringify`. Defaults to 2
+ * @property {"key" | "label"} [keys] - Whether each object is keyed by the header `key` or its label. Defaults to "key"
+ */
+
+/**
+ * Serializes data table headers and rows to a JSON string: an array with one
+ * object per row. Skips empty and hidden columns and applies `display`
+ * formatting, like `toCsv`. A missing value becomes `null`, so every object
+ * has every column.
+ * @template {Record<string, unknown>} Row
+ * @param {ReadonlyArray<ToCsvHeader>} headers - The data table headers
+ * @param {ReadonlyArray<Row>} rows - The rows to serialize
+ * @param {ToJsonOptions} [options] - Serialization options
+ * @returns {string} The JSON string
+ */
+export function toJson(headers, rows, options = {}) {
+  const { space = 2, keys = "key" } = options;
+  const columns = headers.filter(
+    (header) => !header.empty && !header.columnHidden,
+  );
+
+  return JSON.stringify(
+    rows.map((row) =>
+      Object.fromEntries(
+        columns.map((header) => {
+          const value = resolvePath(row, header.key);
+          const display = header.display ? header.display(value, row) : value;
+          const name =
+            keys === "label"
+              ? stringifyCsvValue(header.value ?? header.key)
+              : header.key;
+          return [name, display === undefined ? null : display];
+        }),
+      ),
+    ),
+    null,
+    space,
+  );
+}
+
+/**
+ * @typedef {object} SerializedRows
+ * @property {string} content - The file content
+ * @property {string} mimeType - The MIME type, with a charset
+ * @property {string} extension - The file extension, without the dot
+ */
+
+/**
+ * @typedef {object} SerializeRowsOptions
+ * @property {boolean} [bom] - Prefix csv and tsv content with a UTF-8 byte order mark. Defaults to false
+ * @property {ToCsvOptions} [csv] - Options for `toCsv`
+ * @property {ToJsonOptions} [json] - Options for `toJson`
+ */
+
+/**
+ * Serializes rows to a downloadable file body in one of the export formats.
+ * @template {Record<string, unknown>} Row
+ * @param {ReadonlyArray<ToCsvHeader>} headers
+ * @param {ReadonlyArray<Row>} rows
+ * @param {"csv" | "tsv" | "json"} format
+ * @param {SerializeRowsOptions} [options]
+ * @returns {SerializedRows}
+ */
+export function serializeRows(headers, rows, format, options = {}) {
+  const { bom = false, csv, json } = options;
+
+  if (format === "json") {
+    return {
+      content: toJson(headers, rows, json),
+      mimeType: "application/json;charset=utf-8",
+      extension: "json",
+    };
+  }
+  if (format === "csv" || format === "tsv") {
+    const content = toCsv(headers, rows, {
+      delimiter: format === "tsv" ? "\t" : ",",
+      ...csv,
+    });
+    return {
+      content: bom ? `\uFEFF${content}` : content,
+      mimeType:
+        format === "tsv"
+          ? "text/tab-separated-values;charset=utf-8"
+          : "text/csv;charset=utf-8",
+      extension: format,
+    };
+  }
+  throw new TypeError(`Unsupported export format: ${format}`);
+}
+
+/**
+ * Appends `.extension` to `filename` unless it already ends with it.
+ * @param {string} filename
+ * @param {string} extension - The extension, without the dot
+ * @returns {string}
+ */
+export function withExtension(filename, extension) {
+  const suffix = `.${extension}`;
+  return filename.toLowerCase().endsWith(suffix)
+    ? filename
+    : `${filename}${suffix}`;
+}
