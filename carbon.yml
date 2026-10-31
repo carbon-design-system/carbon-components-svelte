@@ -1330,6 +1330,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TagSet
+  tearsheet:
+    name: Tearsheet
+    description: A panel that slides up from the bottom for a focused task that outgrows a modal but should not become a page.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tearsheet.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Tearsheet
   text:
     name: Text
     status: stable

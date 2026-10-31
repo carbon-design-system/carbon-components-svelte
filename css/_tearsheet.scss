@@ -1,0 +1,302 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+@import "carbon-components/scss/globals/scss/layout";
+@import "./ai-tokens";
+
+/// Tearsheet styles, after Carbon React's `Tearsheet` from Carbon for IBM
+/// Products (`packages/styles/src/components/Tearsheet`), with its v11
+/// tokens, type styles, widths and durations. Its easing is productive,
+/// as SidePanel's is; upstream uses expressive. The tearsheet is a modal
+/// layer (`bx--layer-one`): the header and footer sit on `$layer`, the
+/// wide body is the page surface (`$background`) and the narrow body one
+/// level up, as a modal's body is. The container slides on `transform`
+/// alone, and rests with `transform: none` so a `Modal` rendered inside
+/// still positions against the window. A narrow tearsheet is as wide as a
+/// small modal, as upstream's `size="sm"` makes it.
+/// @access private
+/// @group components
+@mixin tearsheet {
+  .#{$prefix}--tearsheet {
+    position: fixed;
+    z-index: z("modal");
+    display: flex;
+    box-sizing: border-box;
+    align-items: flex-end;
+    justify-content: center;
+    color: $text-primary;
+    inset: 0;
+    opacity: 0;
+    transition:
+      opacity $duration--moderate-02 motion(exit, productive),
+      visibility $duration--moderate-02 motion(exit, productive);
+    visibility: hidden;
+
+    &.is-visible {
+      opacity: 1;
+      // No `visibility` here, so it flips at once and focus can move in.
+      transition: opacity $duration--moderate-02 motion(entrance, productive);
+      visibility: inherit;
+    }
+  }
+
+  // The overlay is the root's own box, so a press on it reaches the
+  // root's dismiss handlers.
+  .#{$prefix}--tearsheet::before {
+    position: absolute;
+    background-color: $overlay;
+    content: "";
+    inset: 0;
+  }
+
+  .#{$prefix}--tearsheet__container {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    box-sizing: border-box;
+    flex-direction: column;
+    // Below `md` the tearsheet fills the window.
+    width: 100%;
+    height: 100%;
+    // Forced colors draw this border, even where the AI surface makes it
+    // transparent, so the edge stays thinner than a 2px focus ring.
+    border: 1px solid $border-subtle;
+    border-bottom: 0;
+    background-color: $layer;
+    // The slide covers at most 500px, so a tall window doesn't speed it up.
+    transform: translate3d(0, calc(min(95vh, 500px)), 0);
+    transition: transform $duration--moderate-02 motion(exit, productive);
+  }
+
+  .#{$prefix}--tearsheet.is-visible .#{$prefix}--tearsheet__container {
+    transform: none;
+    transition: transform $duration--moderate-02 motion(entrance, productive);
+  }
+
+  // The gap above the tearsheet. `--ccs-tearsheet-top` sets it, for
+  // example to dock it under a taller bar.
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet__container {
+      max-height: calc(
+        100% - var(
+            --ccs-tearsheet-top,
+            #{$carbon--spacing-11 + $carbon--spacing-03 + $carbon--spacing-01}
+          )
+      );
+    }
+
+    .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__container {
+      width: calc(100% - #{2 * $carbon--spacing-10});
+    }
+
+    .#{$prefix}--tearsheet--narrow .#{$prefix}--tearsheet__container {
+      width: 60%;
+    }
+  }
+
+  @include carbon--breakpoint(lg) {
+    .#{$prefix}--tearsheet--narrow .#{$prefix}--tearsheet__container {
+      width: 42%;
+    }
+  }
+
+  // The header's inline padding matches the body's, so the title starts
+  // where the content below it does: 16px below `md`, 32px from it when
+  // wide.
+  .#{$prefix}--tearsheet__header {
+    position: relative;
+    flex: none;
+    padding: $carbon--spacing-05;
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__header {
+      padding: $carbon--spacing-06 $carbon--spacing-07;
+    }
+  }
+
+  // The close button and decorator sit in the inline-end corner, and the
+  // header leaves room for them. Ties with the wide padding above and
+  // wins on order.
+  .#{$prefix}--tearsheet__header.#{$prefix}--tearsheet__header--close,
+  .#{$prefix}--tearsheet__header.#{$prefix}--tearsheet__header--decorator {
+    padding-inline-end: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--tearsheet__header--close.#{$prefix}--tearsheet__header--decorator {
+    padding-inline-end: $carbon--spacing-12;
+  }
+
+  // Below `md` the header actions go under the title, at the inline end
+  // as on a wide window, so they do not squeeze it.
+  .#{$prefix}--tearsheet__header-content {
+    display: flex;
+    flex-direction: column;
+    row-gap: $carbon--spacing-05;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet__header-content {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      column-gap: $carbon--spacing-05;
+    }
+  }
+
+  .#{$prefix}--tearsheet__header-fields {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .#{$prefix}--tearsheet__header-actions {
+    display: flex;
+    flex: none;
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--tearsheet__label {
+    @include type-style("label-01");
+
+    margin-bottom: $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--tearsheet__title {
+    @include type-style("heading-03");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__title {
+    @include type-style("heading-04");
+  }
+
+  .#{$prefix}--tearsheet__description {
+    @include type-style("body-compact-01");
+
+    // Upstream's share of the header, capped at about 70 characters a
+    // line for a wide window.
+    max-inline-size: min(80%, to-rem(480px));
+    margin-top: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__description {
+    margin-top: $carbon--spacing-05;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__description {
+      max-inline-size: min(60%, to-rem(480px));
+    }
+  }
+
+  .#{$prefix}--tearsheet__corner {
+    position: absolute;
+    z-index: 1;
+    top: $carbon--spacing-03;
+    display: flex;
+    align-items: center;
+    @include ccs-inset-inline($end: $carbon--spacing-03);
+  }
+
+  .#{$prefix}--tearsheet__decorator {
+    display: flex;
+    padding: $carbon--spacing-02;
+  }
+
+  // The body scrolls on its own, between the header and the footer.
+  .#{$prefix}--tearsheet__main {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__main {
+    background-color: $background;
+  }
+
+  .#{$prefix}--tearsheet__content {
+    padding: $carbon--spacing-05;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--tearsheet--wide .#{$prefix}--tearsheet__content {
+      padding: $carbon--spacing-07;
+    }
+  }
+
+  .#{$prefix}--tearsheet__actions {
+    flex: none;
+    border-top: 1px solid $border-subtle;
+  }
+
+  // Below `md` a wide tearsheet keeps the `2xl` set the server renders,
+  // but its buttons are 48px tall and share the row, as a narrow
+  // tearsheet's are, so their labels stay whole. The width rule ties with
+  // the set's `2xl` rule and wins on order; a set too narrow for its
+  // buttons still stacks.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--tearsheet--wide
+      .#{$prefix}--tearsheet__actions
+      .#{$prefix}--btn--xl:not(.#{$prefix}--btn--icon-only) {
+      min-height: to-rem(48px);
+      padding-top: nth($button-padding, 1);
+    }
+
+    .#{$prefix}--tearsheet--wide
+      .#{$prefix}--tearsheet__actions.#{$prefix}--action-set--2xl
+      .#{$prefix}--btn:not(.#{$prefix}--btn--ghost):not(.#{$prefix}--btn--danger-ghost) {
+      max-width: none;
+      flex-grow: 1;
+    }
+  }
+
+  // The AI surface, as on a modal: a transparent edge, an inner aura and
+  // a drop shadow.
+  .#{$prefix}--tearsheet--ai-label::before {
+    background-color: ai-token("ai-overlay");
+  }
+
+  .#{$prefix}--tearsheet--ai-label .#{$prefix}--tearsheet__container {
+    border-color: transparent;
+    box-shadow: 0 to-rem(4px) to-rem(10px) to-rem(2px)
+      ai-token("ai-drop-shadow");
+  }
+
+  .#{$prefix}--tearsheet--ai-label .#{$prefix}--tearsheet__main {
+    background-image: linear-gradient(
+      to top,
+      ai-token("ai-aura-start") 0%,
+      15%,
+      ai-token("ai-aura-end") 50%
+    );
+    box-shadow: inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px)
+      ai-token("ai-inner-shadow");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--tearsheet,
+    .#{$prefix}--tearsheet.is-visible,
+    .#{$prefix}--tearsheet__container,
+    .#{$prefix}--tearsheet.is-visible .#{$prefix}--tearsheet__container {
+      transition: none;
+    }
+  }
+}
+
+@include exports("tearsheet") {
+  @include tearsheet;
+}
