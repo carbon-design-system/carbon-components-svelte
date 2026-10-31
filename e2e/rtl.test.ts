@@ -1300,6 +1300,11 @@ test.describe("right-to-left text fields", () => {
         .getByTestId("fluid-text-area-invalid")
         .locator("textarea"),
       HeaderSearch: page.getByTestId("header-search").locator("input"),
+      ComboBox: page.getByTestId("combo-box").locator("input"),
+      "fluid ComboBox": page
+        .getByTestId("fluid-combo-box-invalid")
+        .locator("input"),
+      MultiSelect: page.getByTestId("multi-select-filterable").locator("input"),
     };
     // A password shows its characters, so their order is visible.
     await page.getByTestId("password").getByRole("button").click();
@@ -1317,7 +1322,96 @@ test.describe("right-to-left text fields", () => {
       expect.soft(await caretAtLeftEnd(page, field, open), name).toBe(0);
     }
   });
+
+  test("keeps NumberInput's minus sign in front of the number", async ({
+    page,
+  }) => {
+    // In an RTL paragraph, bidi moved a leading minus to the far side:
+    // "-5" painted as "5-", and "-5 kg" as "kg 5-".
+    await setDirection(page, "rtl");
+    const number = page.getByTestId("number").locator("input");
+    const fluid = page.getByTestId("fluid-number-invalid").locator("input");
+    await number.fill("-5");
+    await fluid.fill("-5");
+    const fields = {
+      NumberInput: number,
+      "fluid NumberInput": fluid,
+      "NumberInput with a unit": page
+        .getByTestId("number-negative-unit")
+        .locator("input"),
+    };
+    for (const [name, field] of Object.entries(fields)) {
+      // biome-ignore lint/performance/noAwaitInLoops: one field at a time
+      const { value, offsets } = await caretOffsets(field);
+      expect(value.startsWith("-"), name).toBe(true);
+      expect.soft(offsets, name).toEqual([...Array(value.length + 1).keys()]);
+    }
+  });
+
+  test("keeps Slider's minus signs in front of the numbers", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const inputs = page.locator(
+      "[data-testid=slider] .bx--slider-text-input, [data-testid=range-slider] .bx--slider-text-input",
+    );
+    await expect(inputs).toHaveCount(3);
+    const read = await Promise.all((await inputs.all()).map(caretOffsets));
+    for (const [index, { value, offsets }] of read.entries()) {
+      expect(value.startsWith("-"), `input ${index}`).toBe(true);
+      expect
+        .soft(offsets, `input ${index} ${value}`)
+        .toEqual([...Array(value.length + 1).keys()]);
+    }
+    // Each range label's characters in visual order, left to right.
+    const labels = await page
+      .locator(
+        "[data-testid=slider] .bx--slider__range-label, [data-testid=range-slider] .bx--slider__range-label",
+      )
+      .evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const text = node.firstChild;
+          const range = document.createRange();
+          const chars: { char: string; left: number }[] = [];
+          for (let i = 0; text && i < (text.textContent ?? "").length; i++) {
+            range.setStart(text, i);
+            range.setEnd(text, i + 1);
+            chars.push({
+              char: range.toString(),
+              left: range.getBoundingClientRect().left,
+            });
+          }
+          return chars
+            .sort((a, b) => a.left - b.left)
+            .map(({ char }) => char)
+            .join("");
+        }),
+      );
+    expect(labels).toEqual(["-10", "10", "-10", "10"]);
+  });
 });
+
+/**
+ * A field's caret offsets from its left edge to its right one. Text that
+ * reads left to right gives 0, 1, 2 and on.
+ */
+function caretOffsets(field: Locator) {
+  return field.evaluate((node: HTMLInputElement) => {
+    node.scrollIntoView({ block: "center" });
+    const style = getComputedStyle(node);
+    const box = node.getBoundingClientRect();
+    // A fluid field's top padding holds its label.
+    const top = box.top + Number.parseFloat(style.paddingTop);
+    const bottom = box.bottom - Number.parseFloat(style.paddingBottom);
+    const offsets: number[] = [];
+    for (let x = Math.ceil(box.left); x < box.right; x++) {
+      const position = document.caretPositionFromPoint(x, (top + bottom) / 2);
+      if (position?.offsetNode !== node) continue;
+      if (offsets.at(-1) !== position.offset) offsets.push(position.offset);
+    }
+    return { value: node.value, offsets };
+  });
+}
 
 /**
  * Types "3 / 4" into a right-to-left field and clicks where its left end
@@ -1343,10 +1437,12 @@ async function caretAtLeftEnd(page: Page, field: Locator, open?: Locator) {
       node.tagName === "TEXTAREA"
         ? Number.parseFloat(style.lineHeight)
         : bottom - top;
-    return {
-      x: box.right - Number.parseFloat(style.paddingRight) - width + 2,
-      y: top + line / 2,
-    };
+    // MultiSelect's focused filter draws a 2px border inside its box.
+    const end =
+      box.right -
+      Number.parseFloat(style.borderRightWidth) -
+      Number.parseFloat(style.paddingRight);
+    return { x: end - width + 2, y: top + line / 2 };
   });
   await page.mouse.click(x, y);
   return field.evaluate((node: HTMLInputElement) => node.selectionStart);
