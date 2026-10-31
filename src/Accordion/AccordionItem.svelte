@@ -2,6 +2,7 @@
   /**
    * @event {{ open: boolean }} toggle - Dispatched with the next open state after a header click.
    * @restProps {li}
+   * @slot {{}} extra
    */
 
   /**
@@ -126,6 +127,8 @@
       unsubscribeType();
     };
   });
+
+  $: hasExtra = $$slots.extra;
 </script>
 
 <li
@@ -138,35 +141,45 @@
   {...wrapperProps}
   on:animationend
 >
-  <button
-    bind:this={ref}
-    id="{id}-button"
-    type="button"
-    class:bx--accordion__heading={true}
-    aria-label={restAriaLabel ?? ariaLabel}
-    aria-labelledby={ariaLabelledBy}
-    aria-describedby={ariaDescribedBy}
-    aria-expanded={open}
-    aria-controls="{id}-content"
-    disabled={isDisabled}
-    on:click
-    on:click={() => {
-      open = !open;
-      animation = open ? "expanding" : "collapsing";
-      dispatch("toggle", { open });
-    }}
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-    on:focus
-    on:blur
-    on:keydown
+  <div
+    class:bx--accordion__heading-row={hasExtra}
+    style:display={hasExtra ? undefined : "contents"}
   >
-    <ChevronRight class="bx--accordion__arrow" />
-    <div class:bx--accordion__title={true}>
-      <slot name="title">{title ?? ""}</slot>
-    </div>
-  </button>
+    <button
+      bind:this={ref}
+      id="{id}-button"
+      type="button"
+      class:bx--accordion__heading={true}
+      aria-label={restAriaLabel ?? ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
+      aria-expanded={open}
+      aria-controls="{id}-content"
+      disabled={isDisabled}
+      on:click
+      on:click={() => {
+        open = !open;
+        animation = open ? "expanding" : "collapsing";
+        dispatch("toggle", { open });
+      }}
+      on:mouseover
+      on:mouseenter
+      on:mouseleave
+      on:focus
+      on:blur
+      on:keydown
+    >
+      <ChevronRight class="bx--accordion__arrow" />
+      <div class:bx--accordion__title={true}>
+        <slot name="title">{title ?? ""}</slot>
+      </div>
+    </button>
+    {#if hasExtra}
+      <div class:bx--accordion__extra={true}>
+        <slot name="extra" />
+      </div>
+    {/if}
+  </div>
   <!-- Only the content animates; `self` ignores descendants' bubbled events. -->
   <div
     id="{id}-content"

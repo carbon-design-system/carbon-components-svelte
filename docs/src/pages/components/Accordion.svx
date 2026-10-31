@@ -125,6 +125,14 @@ otherwise have nothing to announce for the control.
   </AccordionItem>
 </Accordion>
 
+### Header actions
+
+Render secondary header content, such as a status tag or an action menu, with
+the `extra` slot. The content sits beside the heading button instead of inside
+it, which keeps buttons and menus valid HTML and reachable by keyboard.
+
+<FileSource src="/framed/Accordion/AccordionHeaderActions" />
+
 ## Open state
 
 Control which items are open by default, exclusively, or programmatically.
