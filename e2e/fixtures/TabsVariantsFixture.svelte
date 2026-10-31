@@ -91,6 +91,11 @@
       <Tab {label} icon={icons[i % 3]} disabled={i === 3} />
     {/each}
   </Tabs>
+  <Tabs iconOnly iconSize="lg" type="container">
+    {#each labels as label, i}
+      <Tab {label} icon={icons[i % 3]} disabled={i === 3} />
+    {/each}
+  </Tabs>
 </section>
 
 <section data-testid="widths">
