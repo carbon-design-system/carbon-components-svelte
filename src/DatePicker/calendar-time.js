@@ -482,8 +482,18 @@ export function createTimeRow(options) {
     },
     /** @param {boolean} disabled */
     setDisabled(disabled) {
+      row.classList.toggle("bx--date-picker__time--disabled", disabled);
       for (const segment of segments) segment.input.disabled = disabled;
       if (period) period.disabled = disabled;
+    },
+    /**
+     * Keeps the fields focusable and their text color, and blocks typing
+     * and pasting. The picker blocks the AM/PM select's keys and clicks.
+     *
+     * @param {boolean} readOnly
+     */
+    setReadOnly(readOnly) {
+      for (const segment of segments) segment.input.readOnly = readOnly;
     },
   };
 }

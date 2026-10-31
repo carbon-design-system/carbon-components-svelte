@@ -543,6 +543,12 @@
     @include ccs-inset-inline($end: $carbon--spacing-04);
   }
 
+  // A disabled row greys the separators and the chevron with its fields.
+  .#{$prefix}--date-picker__time--disabled .#{$prefix}--date-picker__time-separator,
+  .#{$prefix}--date-picker__time--disabled .#{$prefix}--date-picker__time-period {
+    color: $text-disabled;
+  }
+
   .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today {
     position: relative;
     color: $link-primary;

@@ -110,4 +110,20 @@ describe("DatePicker time row", () => {
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(screen.getByLabelText("Date")).toHaveFocus();
   });
+
+  it("disables the fields of a disabled inline picker, and locks a read-only one", async () => {
+    const { rerender } = render(DatePickerTime, {
+      props: { inline: true, disabled: true },
+    });
+    const hours = await screen.findByRole("spinbutton", { name: "Hours" });
+    expect(hours).toBeDisabled();
+    expect(screen.getByRole("combobox", { name: "AM/PM" })).toBeDisabled();
+
+    await rerender({ disabled: false, readonly: true });
+    expect(hours).toBeEnabled();
+    expect(hours).toHaveAttribute("readonly");
+
+    await rerender({ readonly: false });
+    expect(hours).not.toHaveAttribute("readonly");
+  });
 });
