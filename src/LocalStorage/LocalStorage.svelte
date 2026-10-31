@@ -2,7 +2,7 @@
   /**
    * @template [T=any]
    * @event {null} save
-   * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab or window. Set `sync` to `"off"` to ignore updates from other tabs.
+   * @event update - Fires when the stored value changes, either from a bound value update or when localStorage is modified from another tab or window, or by another LocalStorage on this page. Set `sync` to `"off"` to ignore those external updates.
    * @property {T} prevValue
    * @property {T} value
    * @event {{ error: unknown }} error - Fires when a write to localStorage fails (e.g. quota exceeded or access denied).
@@ -21,8 +21,9 @@
   export let value = /** @type {T} */ ("");
 
   /**
-   * `"off"` ignores storage events from other tabs or windows on the same
-   * origin. `"on"` (default) keeps the previous behavior.
+   * `"off"` ignores changes from other tabs or windows on the same origin and
+   * from other LocalStorage components on this page. `"on"` (default) keeps
+   * the previous behavior.
    * @type {"on" | "off"}
    */
   export let sync = "on";
