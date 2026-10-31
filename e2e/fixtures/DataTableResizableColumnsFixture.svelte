@@ -33,7 +33,7 @@
   let sorted = [];
 </script>
 
-<div data-testid="resizable-root" style="width: 640px;">
+<div data-testid="resizable-root" style="width: 640px; max-width: 100%;">
   <DataTable
     resizable
     {headers}
