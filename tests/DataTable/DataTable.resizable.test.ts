@@ -111,6 +111,25 @@ describe("DataTable resizable columns", () => {
     expect(colWidths()).toEqual(["145px", "100px", "100px"]);
   });
 
+  it("keeps the width when resize is canceled", async () => {
+    const { onresize } = setup({ cancelResize: true });
+    const [name] = separators();
+
+    await drag(name, 200, 245);
+    await fireEvent.keyDown(name, { key: "ArrowRight" });
+
+    // The event fires before the change, with the width it would set.
+    expect(onresize).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ key: "name", width: 145 }),
+    );
+    expect(onresize).toHaveBeenCalledTimes(2);
+    expect(colWidths()).toEqual(["100px", "100px", "100px"]);
+    expect(screen.getByTestId("widths")).toHaveTextContent(
+      '{"name":100,"region":100,"owner":100}',
+    );
+  });
+
   it("changes nothing on a press without movement", async () => {
     const { onresize } = setup();
 

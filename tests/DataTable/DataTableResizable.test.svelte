@@ -27,6 +27,7 @@
   export let columnWidths: Record<string, number> = {};
   export let onresize: (detail: unknown) => void = () => {};
   export let onclickheader: (detail: unknown) => void = () => {};
+  export let cancelResize = false;
 </script>
 
 <DataTable
@@ -35,7 +36,10 @@
   {resizable}
   {sortable}
   bind:columnWidths
-  on:resize={(event) => onresize(event.detail)}
+  on:resize={(event) => {
+    onresize(event.detail);
+    if (cancelResize) event.preventDefault();
+  }}
   on:click:header={(event) => onclickheader(event.detail)}
 />
 

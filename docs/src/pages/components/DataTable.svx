@@ -398,7 +398,7 @@ Set `resizable` to `true` to add a drag handle to the inline end of every header
 
 Set `columnResizable` to `false` in `headers` to leave a column without a handle, or to `true` to add one to a single column of a table that is not `resizable`. A header's `minWidth` and `maxWidth` bound the column in pixels, and no column gets narrower than 48px.
 
-`columnWidths` holds the widths in pixels by header key. It updates when a drag is released, so bind it to persist the layout. Seed it to restore a saved layout: the seeded widths render on the server. `resize` fires once per gesture with the key, the new width and all the widths.
+`columnWidths` holds the widths in pixels by header key. It updates when a drag is released, so bind it to persist the layout. Seed it to restore a saved layout: the seeded widths render on the server. `resize` fires once per gesture, before `columnWidths` changes, with the key, the new width and all the widths. Call `preventDefault()` on it to keep the old width, as with `sort`.
 
 | Do | Why |
 | --- | --- |

@@ -270,7 +270,7 @@
    */
 
   /**
-   * Dispatched once per resize gesture, when a drag is released or after a key press or double click. `widths` holds the width in pixels of every column.
+   * Dispatched once per resize gesture, when a drag is released or after a key press or double click, before `columnWidths` changes. `widths` holds the width in pixels of every column after the change. The event is cancelable: call `preventDefault()` to keep the column at its width.
    * @event {{ key: DataTableKey<Row>; width: number; widths: Record<string, number> }} resize
    */
 
@@ -1389,8 +1389,13 @@
    * @param {number} width
    */
   function commitColumnWidth(header, width) {
-    columnWidths = { ...columnWidths, [header.key]: width };
-    dispatch("resize", { key: header.key, width, widths: columnWidths });
+    const widths = { ...columnWidths, [header.key]: width };
+    const proceed = dispatch(
+      "resize",
+      { key: header.key, width, widths },
+      { cancelable: true },
+    );
+    if (proceed) columnWidths = widths;
   }
 
   // Columns the first drag rendered at their natural width, which a double
