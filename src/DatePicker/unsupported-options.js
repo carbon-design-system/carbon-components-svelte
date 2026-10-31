@@ -11,6 +11,7 @@ const PREFIX = "[carbon-components-svelte] DatePicker: ";
  *   portalled: boolean;
  *   timeGranularity?: string;
  *   minuteStep?: number;
+ *   timeWindow?: boolean;
  * }} props
  * @returns {string[]}
  */
@@ -21,6 +22,7 @@ export function getPropWarnings({
   portalled,
   timeGranularity,
   minuteStep = 1,
+  timeWindow = false,
 }) {
   /** @type {string[]} */
   const messages = [];
@@ -47,6 +49,11 @@ export function getPropWarnings({
   ) {
     messages.push(
       `${PREFIX}minuteStep must divide 60; ${minuteStep} falls back to 1.`,
+    );
+  }
+  if (timeWindow && !timeGranularity) {
+    messages.push(
+      `${PREFIX}minTime and maxTime have no effect without timeGranularity.`,
     );
   }
   return messages;

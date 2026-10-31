@@ -22,7 +22,7 @@ describe("getPropWarnings", () => {
   });
 });
 
-it("flags a time row outside the single type and an uneven minuteStep", () => {
+it("flags a time row outside the single and range types, an uneven minuteStep, and a window without a time row", () => {
   const base = { months: 1, anchor: undefined, portalled: false };
 
   expect(
@@ -40,6 +40,9 @@ it("flags a time row outside the single type and an uneven minuteStep", () => {
       minuteStep: 7,
     }),
   ).toEqual([expect.stringMatching(/minuteStep must divide 60/)]);
+  expect(
+    getPropWarnings({ ...base, datePickerType: "single", timeWindow: true }),
+  ).toEqual([expect.stringMatching(/minTime and maxTime.*timeGranularity/)]);
 });
 
 describe("getShortWarning", () => {

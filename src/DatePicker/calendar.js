@@ -14,9 +14,12 @@ import {
   yearSuffix,
 } from "./calendar-dates.js";
 import {
+  clampTime,
   createTimeRow,
+  isTimeAllowed,
   isTimeOnDay,
   parseTimeString,
+  secondsOf,
   timeOf,
   withTime,
 } from "./calendar-time.js";
@@ -79,6 +82,8 @@ const QUIET_OPTIONS = new Set([
   // The time row redraws itself.
   "defaultTime",
   "hourFormat",
+  "maxTime",
+  "minTime",
   "minuteStep",
   "timeGranularity",
   "timeLabel",
@@ -516,7 +521,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     self.selectedDates = config.allowInvalidPreload
       ? dates
-      : dates.filter((d) => d instanceof Date && isEnabled(d, false));
+      : clampToWindow(
+          dates.filter((d) => d instanceof Date && isEnabled(d, false)),
+        );
     if (isRange) {
       self.selectedDates.sort(
         (/** @type {Date} */ a, /** @type {Date} */ b) =>
@@ -652,6 +659,48 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   /**
+   * The times `date` allows: `minTime` to `maxTime`, and on the day of a
+   * `minDate` or `maxDate` that carries a time, no earlier or later.
+   *
+   * @param {Date | undefined} date
+   * @returns {import("./calendar-time.js").TimeWindow}
+   */
+  function timeWindow(date) {
+    const min = parseTimeString(config.minTime);
+    const max = parseTimeString(config.maxTime);
+    /** @type {import("./calendar-time.js").TimeWindow} */
+    const window = {
+      min: min && secondsOf(min),
+      max: max && secondsOf(max),
+    };
+    const { _minDate: minDate, _maxDate: maxDate } = config;
+    if (date && minDate && compareDays(date, minDate) === 0) {
+      const from = secondsOf(timeOf(minDate));
+      if (from > 0) window.from = from;
+    }
+    if (date && maxDate && compareDays(date, maxDate) === 0) {
+      const to = secondsOf(timeOf(maxDate));
+      if (to > 0) window.to = to;
+    }
+    return window;
+  }
+
+  /**
+   * `dates`, each moved into its day's time window: typed text, presets
+   * and a bound value get the nearest allowed time, as the rows do.
+   *
+   * @param {Date[]} dates
+   */
+  function clampToWindow(dates) {
+    if (!hasTime()) return dates;
+    return dates.map((date) => {
+      const time = timeOf(date);
+      const clamped = clampTime(time, timeWindow(date));
+      return clamped === time ? date : withTime(date, clamped);
+    });
+  }
+
+  /**
    * Gives each selected date its row's time. A range that starts and ends
    * on one day can't end before it starts, so the end catches up with the
    * start, or the start with an edited end.
@@ -663,7 +712,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     const next = self.selectedDates.map(
       (/** @type {unknown} */ date, /** @type {number} */ i) =>
         date instanceof Date
-          ? withTime(date, times[i] ?? times[0], config.timeGranularity)
+          ? withTime(
+              date,
+              clampTime(times[i] ?? times[0], timeWindow(date)),
+              config.timeGranularity,
+            )
           : date,
     );
     if (isRange && next.length === 2 && next[1] < next[0]) {
@@ -688,7 +741,8 @@ export function createCalendarEngine(element, userConfig = {}) {
    */
   function commitTime(index, time) {
     if (!(self.selectedDates[index] instanceof Date)) {
-      pendingTimes[index] = time;
+      pendingTimes[index] = clampTime(time, timeWindow(undefined));
+      syncTimeRow();
       return;
     }
     const times = rowTimes();
@@ -736,10 +790,14 @@ export function createCalendarEngine(element, userConfig = {}) {
         idPrefix: isRange ? `${prefix}-${index}` : prefix,
         onChange: (time) => commitTime(index, time),
         onEnter: focusAndClose,
-        // Steps skip the hour a daylight saving change removes.
+        // Steps skip times outside the window, and the hour a daylight
+        // saving change removes.
         isAllowed: (time) => {
           const date = self.selectedDates[index];
-          return !(date instanceof Date) || isTimeOnDay(date, time);
+          return (
+            isTimeAllowed(time, timeWindow(date)) &&
+            (!(date instanceof Date) || isTimeOnDay(date, time))
+          );
         },
       }),
     );
@@ -1999,6 +2057,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     minuteStep: [buildTimeRow],
     timeLabel: [buildTimeRow],
     defaultTime: [syncTimeRow],
+    minTime: [syncTimeRow],
+    maxTime: [syncTimeRow],
   };
 
   /**

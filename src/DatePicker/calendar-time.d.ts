@@ -23,6 +23,16 @@ export function effectiveDateFormat(
 export function widestValueLength(format: string, locale: unknown): number;
 export function parseTimeString(text: unknown): TimeParts | undefined;
 export function timeOf(date: Date): TimeParts;
+export function secondsOf(time: TimeParts): number;
+/** Allowed times in seconds since midnight; `min` > `max` wraps midnight. */
+export type TimeWindow = {
+  min?: number;
+  max?: number;
+  from?: number;
+  to?: number;
+};
+export function isTimeAllowed(time: TimeParts, window?: TimeWindow): boolean;
+export function clampTime(time: TimeParts, window?: TimeWindow): TimeParts;
 export function withTime(
   date: Date,
   time: TimeParts,
@@ -41,7 +51,7 @@ export type TimeRowOptions = {
   idPrefix: string;
   onChange: (time: TimeParts) => void;
   onEnter: () => void;
-  /** Steps skip times this rejects. */
+  /** Whether a time can be picked; steps skip the rest. */
   isAllowed?: (time: TimeParts) => boolean;
 };
 

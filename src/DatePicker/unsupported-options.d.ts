@@ -6,6 +6,7 @@ export function getPropWarnings(props: {
   portalled: boolean;
   timeGranularity?: string;
   minuteStep?: number;
+  timeWindow?: boolean;
 }): string[];
 
 /** `short` only narrows the field of a `"simple"` picker. */

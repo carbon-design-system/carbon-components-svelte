@@ -303,6 +303,23 @@
   export let defaultTime = "00:00";
 
   /**
+   * Earliest time of day the time row allows, as 24-hour `"HH:mm"`. A
+   * `minTime` later than `maxTime` wraps past midnight ("22:00" to
+   * "06:00"). On the day of a `minDate` that carries a time, times before
+   * it are not allowed either.
+   * @type {string | undefined}
+   */
+  export let minTime = undefined;
+
+  /**
+   * Latest time of day the time row allows, as 24-hour `"HH:mm"`. On the
+   * day of a `maxDate` that carries a time, times after it are not allowed
+   * either.
+   * @type {string | undefined}
+   */
+  export let maxTime = undefined;
+
+  /**
    * Name of the time row. A range's two rows show a pair, which defaults to
    * `["Start time", "End time"]`; the single row's defaults to "Time".
    * @type {undefined | string | [string, string]}
@@ -1897,6 +1914,7 @@
       portalled: effectivePortalMenu,
       timeGranularity,
       minuteStep,
+      timeWindow: !!(minTime || maxTime),
     })) {
       reportOnce(message);
     }
@@ -1974,6 +1992,8 @@
     hourFormat: hourCycle,
     minuteStep,
     defaultTime,
+    minTime,
+    maxTime,
     timeLabel: timeLabelText,
   };
   const CALENDAR_NOUN = {
