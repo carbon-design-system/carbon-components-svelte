@@ -1,5 +1,11 @@
 <script>
-  import { ColorTag, Stack, Swatch, Tag } from "carbon-components-svelte";
+  import {
+    ColorTag,
+    Stack,
+    Swatch,
+    Tag,
+    TagSet,
+  } from "carbon-components-svelte";
 
   const colors = [
     "red",
@@ -49,6 +55,26 @@
     <Tag type="gray" size="lg">
       <Swatch slot="icon" cssColor="#ff7eb6" />
       Custom
+    </Tag>
+  </Stack>
+
+  <Stack
+    orientation="horizontal"
+    gap={3}
+    align="center"
+    wrap="wrap"
+    data-testid="tag-sizes"
+  >
+    <ColorTag colorKey="Platform" size="xs">Extra small</ColorTag>
+    <ColorTag colorKey="Platform" size="sm">Small</ColorTag>
+    <TagSet size="sm">
+      <ColorTag colorKey="Platform">In a small TagSet</ColorTag>
+    </TagSet>
+    <ColorTag colorKey="Platform">Default</ColorTag>
+    <ColorTag colorKey="Platform" size="lg">Large</ColorTag>
+    <Tag type="gray" size="sm">
+      <Swatch slot="icon" size="md" color="green" />
+      Explicit md
     </Tag>
   </Stack>
 

@@ -51,13 +51,7 @@ two tags. The rest of the props, such as `size` and `filter`, go to `Tag`. -->
     on:mouseenter
     on:mouseleave
   >
-    <Swatch
-      slot="icon"
-      {color}
-      {colorKey}
-      {cssColor}
-      size={$$restProps.size === "sm" ? "sm" : "md"}
-    />
+    <Swatch slot="icon" {color} {colorKey} {cssColor} />
     <slot />
   </Tag>
 {:else}

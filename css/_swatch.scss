@@ -12,19 +12,30 @@
 /// @access private
 /// @group components
 @mixin swatch {
+  // The size is inherited, so a tag can set it on its icon box. The
+  // `--sm` and `--md` classes set it on the dot, so an explicit size wins.
   .#{$prefix}--swatch {
-    --ccs-swatch-size: #{to-rem(12px)};
-
     display: inline-block;
     flex-shrink: 0;
     box-sizing: border-box;
-    width: var(--ccs-swatch-size);
-    height: var(--ccs-swatch-size);
+    width: var(--ccs-swatch-size, #{to-rem(12px)});
+    height: var(--ccs-swatch-size, #{to-rem(12px)});
     border-radius: 50%;
     background-color: var(--ccs-swatch-color);
   }
 
   .#{$prefix}--swatch--sm {
+    --ccs-swatch-size: #{to-rem(8px)};
+  }
+
+  .#{$prefix}--swatch--md {
+    --ccs-swatch-size: #{to-rem(12px)};
+  }
+
+  // `xs` and `sm` tags are 18px tall, so their dot is the small one, also
+  // when a `TagSet` sets the size.
+  .#{$prefix}--tag--xs > .#{$prefix}--tag__custom-icon,
+  .#{$prefix}--tag--sm > .#{$prefix}--tag__custom-icon {
     --ccs-swatch-size: #{to-rem(8px)};
   }
 
@@ -71,7 +82,9 @@
   // in it; the box already supplies the gap to the label.
   .#{$prefix}--tag__custom-icon > .#{$prefix}--swatch {
     display: block;
-    margin-block: calc((#{to-rem(16px)} - var(--ccs-swatch-size)) / 2);
+    margin-block: calc(
+      (#{to-rem(16px)} - var(--ccs-swatch-size, #{to-rem(12px)})) / 2
+    );
     margin-inline: auto;
   }
 

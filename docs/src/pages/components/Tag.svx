@@ -321,10 +321,10 @@ Set `cssColor` to any CSS color, for a color you get from your data. It sets the
 
 ### Size
 
-`size="sm"` draws an 8px dot, for a small tag. The default is 12px.
+In a tag, the dot follows the tag: 8px in an `xs` or `sm` tag, also when a `TagSet` sets the size, and 12px otherwise. Set `size="sm"` or `size="md"` on the swatch to choose one.
 
 <Stack orientation="horizontal" gap={3} wrap="wrap">
-  <Tag type="gray" size="sm"><Swatch slot="icon" size="sm" color="green" />Small</Tag>
+  <Tag type="gray" size="sm"><Swatch slot="icon" color="green" />Small</Tag>
   <Tag type="gray"><Swatch slot="icon" color="green" />Default</Tag>
   <Tag type="gray" size="lg"><Swatch slot="icon" color="green" />Large</Tag>
 </Stack>

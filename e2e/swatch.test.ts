@@ -51,6 +51,18 @@ test.describe("Swatch", () => {
     });
   }
 
+  test("sizes the dot from the tag, unless the swatch sets a size", async ({
+    page,
+  }) => {
+    await page.goto("/swatch.html");
+
+    const widths = await dotsOf(page, "tag-sizes").evaluateAll((dots) =>
+      dots.map((dot) => dot.getBoundingClientRect().width),
+    );
+    // xs, sm, sm from a TagSet, default, lg, then an explicit md in sm.
+    expect(widths).toEqual([8, 8, 8, 12, 12, 12]);
+  });
+
   test("centers the dot in the tag's icon box at each size", async ({
     page,
   }) => {

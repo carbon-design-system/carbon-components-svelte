@@ -27,10 +27,11 @@
   export let cssColor = undefined;
 
   /**
-   * Specify the size of the swatch: 8px or 12px.
-   * @type {"sm" | "md"}
+   * Specify the size of the swatch: 8px or 12px. Unset, it is 12px, or
+   * 8px inside an `xs` or `sm` tag.
+   * @type {"sm" | "md" | undefined}
    */
-  export let size = "md";
+  export let size = undefined;
 
   /**
    * Name the swatch for assistive technologies. Leave empty when the text
@@ -49,6 +50,7 @@
   aria-hidden={label ? undefined : "true"}
   class:bx--swatch={true}
   class:bx--swatch--sm={size === "sm"}
+  class:bx--swatch--md={size === "md"}
   class:bx--swatch--custom={Boolean(cssColor)}
   class:bx--swatch--red={resolvedColor === "red"}
   class:bx--swatch--magenta={resolvedColor === "magenta"}

@@ -48,13 +48,16 @@ describe("ColorTag", () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it("uses the small swatch in a small tag, and passes the rest to Tag", () => {
+  it("leaves the swatch size to the tag, and passes the rest to Tag", () => {
     render(ColorTag, {
       props: { size: "sm", type: "blue", "data-testid": "tag" },
     });
 
     const tag = screen.getByTestId("tag");
     expect(tag).toHaveClass("bx--tag--sm", "bx--tag--blue");
-    expect(tag.querySelector(".bx--swatch")).toHaveClass("bx--swatch--sm");
+    // The tag's size class sizes the dot in CSS, also under a TagSet.
+    const swatch = tag.querySelector(".bx--swatch");
+    expect(swatch).not.toHaveClass("bx--swatch--sm");
+    expect(swatch).not.toHaveClass("bx--swatch--md");
   });
 });
