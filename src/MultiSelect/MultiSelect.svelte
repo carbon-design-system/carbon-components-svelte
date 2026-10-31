@@ -631,7 +631,7 @@
   /** Set when a required, empty multi-select blocked form submission. */
   let requiredError = false;
   let highlightedIndex = -1;
-  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  let highlightOrigin = /** @type {"keyboard" | null} */ (null);
   /** Row index (see `toRowIndex`) last scrolled into view. */
   let prevHighlightedIndex = -1;
   let prevChecked = [];
@@ -743,8 +743,7 @@
    * Select the item keyboard-highlighted at `index` (into `itemsToUse`), or
    * with `shiftKey` select the range from the anchor to it, matching
    * shift+click (`handleOptionClick`). Ignored unless the highlight came
-   * from the keyboard: a hover highlight must not become selectable by
-   * pressing Enter/Space elsewhere.
+   * from the keyboard.
    * @param {number} index
    * @param {boolean} shiftKey
    */
@@ -759,16 +758,6 @@
       selectItemRange(index, !item.checked);
     if (!usedRange) selectItem(item);
     prevSelectedItemId = item.id;
-  }
-
-  /**
-   * @param {number} index Index into `itemsToUse`.
-   * @param {boolean} itemDisabled
-   */
-  function handleOptionMouseenter(index, itemDisabled) {
-    if (itemDisabled) return;
-    highlightedIndex = index;
-    highlightOrigin = "pointer";
   }
 
   function change(step) {
@@ -1123,7 +1112,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      highlightOrigin,
       menuWindow,
     });
 
@@ -2026,18 +2014,11 @@
         {direction}
         highlightedId={activeDescendantId}
         {wrapOptions}
-        highlightScroll={highlightOrigin !== "pointer"}
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
         aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
-        on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
@@ -2129,8 +2110,6 @@
                         // re-announce it on every option click.
                         event.preventDefault();
                       }}
-                      on:mouseenter={() =>
-                        handleOptionMouseenter(actualIndex, itemDisabled)}
                     >
                       <HighlightSlot {optionId} let:highlighted>
                         <div
@@ -2258,8 +2237,6 @@
                       // re-announce it on every option click.
                       event.preventDefault();
                     }}
-                    on:mouseenter={() =>
-                      handleOptionMouseenter(index, itemDisabled)}
                   >
                     <HighlightSlot {optionId} let:highlighted>
                       <div

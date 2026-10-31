@@ -108,6 +108,21 @@ test.describe("list box icons and highlight", () => {
     expect((await ring(email)).outline).toBe("none");
   });
 
+  // As in Carbon React, the pointer gets the hover fill and the ring stays
+  // with the keyboard.
+  for (const testId of ["combobox", "dropdown", "multiselect"]) {
+    test(`${testId}: a hovered option takes no ring`, async ({ page }) => {
+      const wrapper = page.getByTestId(testId);
+      await wrapper.locator(".bx--list-box__field").click();
+
+      const fax = options(page, testId).filter({ hasText: "Fax" });
+      await fax.hover();
+
+      await expect(fax).not.toHaveClass(/--highlighted/);
+      expect((await ring(fax)).outline).toBe("none");
+    });
+  }
+
   // The field's ring and the first option's top edge meet as one 2px line.
   for (const testId of ["combobox", "multiselect"]) {
     test(`${testId}: thins the field ring over a highlighted first option`, async ({

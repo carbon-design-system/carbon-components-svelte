@@ -414,6 +414,8 @@ describe("DatePicker", () => {
     }
 
     it("keeps focus on the day after adding it in multiple mode", async () => {
+      // Mid-month, so ArrowRight stays in the shown month.
+      pinToday(new Date(2026, 0, 15));
       render(DatePicker, { datePickerType: "multiple" });
       const input = screen.getByLabelText("Date");
       const calendar = await screen.findByLabelText(/^Choose a /);
