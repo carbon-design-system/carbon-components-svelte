@@ -624,6 +624,7 @@
   import {
     compareValues,
     formatHeaderWidth,
+    formatTableMinWidth,
     formatTableWidth,
     getDisplayedRows,
     leadingColumnLengths,
@@ -1204,6 +1205,9 @@
   $: tableStyle = [
     fixedLayout || hasResizableColumn ? "table-layout: fixed" : undefined,
     tableWidth ? `width: ${tableWidth}` : undefined,
+    hasResizableColumn && !tableWidth
+      ? `min-width: ${formatTableMinWidth(leadingLengths, visibleHeaders, renderedWidths ?? {})}`
+      : undefined,
     virtualConfig && stickyHeader && calculatedContainerHeight
       ? `max-height: ${calculatedContainerHeight}px; overflow-y: auto`
       : undefined,

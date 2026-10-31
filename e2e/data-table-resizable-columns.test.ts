@@ -27,14 +27,30 @@ test.describe("DataTable resizable columns", () => {
   test("ends a cut header label in an ellipsis, with the full label as a title", async ({
     page,
   }) => {
-    // The expand and selection columns leave "Environment" 95px.
-    await open(page, "rows=2&batch&expandable");
+    await open(page, "rows=2");
+    // Home takes "Environment" to the 48px minimum, narrower than its label.
+    await page.getByRole("separator").last().focus();
+    await page.keyboard.press("Home");
     const label = page.locator("thead .bx--table-header-label").last();
 
     await expect(label).toHaveCSS("text-overflow", "ellipsis");
-    await expectTextFits(page.getByTestId("resizable-root"));
+    await expectTextFits(page.locator("thead"));
     await label.hover();
     await expect(label).toHaveAttribute("title", "Environment");
+  });
+
+  test("scrolls a narrow container instead of squeezing unsized columns", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await open(page, "rows=2");
+
+    await expectTextFits(page.getByTestId("resizable-root"));
+    const [table, root] = await Promise.all([
+      page.locator("table").boundingBox(),
+      page.getByTestId("resizable-root").boundingBox(),
+    ]);
+    expect(table?.width).toBeGreaterThan(root?.width ?? 0);
   });
 
   test("tracks the pointer one to one and moves only the columns after it", async ({

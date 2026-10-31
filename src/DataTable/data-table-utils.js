@@ -1,5 +1,6 @@
 // @ts-check
 import { BoundedFifoCache } from "../utils/bounded-fifo-cache.js";
+import { toCssLength } from "../utils/css-length.js";
 import { deepEqual } from "../utils/deep-equal.js";
 
 /**
@@ -182,6 +183,32 @@ export function formatTableWidth(leading, headers, widths) {
   return leading.length > 0
     ? `calc(${[...leading, `${total}px`].join(" + ")})`
     : `${total}px`;
+}
+
+/** The least an unsized resizable column takes before the first drag. */
+export const UNSIZED_COLUMN_MIN_WIDTH = "8rem";
+
+/**
+ * The table's minimum width while a column is still unsized: the leading
+ * columns, each column's pixel width, else its declared `width` or
+ * `minWidth`, else `UNSIZED_COLUMN_MIN_WIDTH`. The fixed layout then
+ * scrolls in a narrow container instead of squeezing every column below
+ * its content.
+ * @param {ReadonlyArray<string>} leading - CSS lengths of the leading columns.
+ * @param {ReadonlyArray<{ key: string; width?: string | number | null; minWidth?: string | number | null }>} headers
+ * @param {Record<string, number | undefined>} widths
+ * @returns {string}
+ */
+export function formatTableMinWidth(leading, headers, widths) {
+  const terms = headers.map((header) => {
+    const width = widths[header.key];
+    if (width !== undefined) return `${width}px`;
+    const declared = toCssLength(header.width ?? header.minWidth ?? undefined);
+    return typeof declared === "string" && !declared.endsWith("%")
+      ? declared
+      : UNSIZED_COLUMN_MIN_WIDTH;
+  });
+  return `calc(${[...leading, ...terms].join(" + ")})`;
 }
 
 const LEADING_COLUMN_LENGTHS = {

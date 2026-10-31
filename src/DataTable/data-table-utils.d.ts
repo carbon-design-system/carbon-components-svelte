@@ -210,6 +210,23 @@ export function resolveColumnBounds(header: {
   maxWidth?: string | number | null;
 }): { min: number; max: number };
 
+/** The least an unsized resizable column takes before the first drag. */
+export const UNSIZED_COLUMN_MIN_WIDTH: string;
+
+/**
+ * The table's minimum width while a column is still unsized, so a narrow
+ * container scrolls the fixed layout instead of squeezing it.
+ */
+export function formatTableMinWidth(
+  leading: ReadonlyArray<string>,
+  headers: ReadonlyArray<{
+    key: string;
+    width?: string | number | null;
+    minWidth?: string | number | null;
+  }>,
+  widths: Record<string, number | undefined>,
+): string;
+
 /**
  * The table's width once every column has a pixel width, or `undefined`
  * while any is unsized.
