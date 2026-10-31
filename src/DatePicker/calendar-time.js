@@ -6,6 +6,8 @@
  * @typedef {{ hours: number; minutes: number; seconds: number }} TimeParts
  */
 
+import { formatDate, getCalendarLocale } from "./calendar-dates.js";
+
 const TIME_TOKENS = new Set(["H", "G", "h", "i", "S", "s", "K"]);
 const TWELVE_HOUR_TOKENS = /[hGK]/;
 const DIGIT = /^\d$/;
@@ -79,6 +81,34 @@ export function timeFormat(granularity, hourCycle) {
 export function effectiveDateFormat(dateFormat, granularity, hourCycle) {
   if (!granularity || hasTimeToken(dateFormat)) return dateFormat;
   return `${dateFormat} ${timeFormat(granularity, hourCycle)}`;
+}
+
+/** East Asian wide letters, which take two cells of a monospace font. */
+const WIDE =
+  /[\u1100-\u115F\u2E80-\uA4CF\uAC00-\uD7A3\uF900-\uFAFF\uFF00-\uFF60]/gu;
+
+/**
+ * The widest text `format` writes in `locale`, in monospace cells: every
+ * month at a two-digit day, before and after noon. Digits share one width,
+ * so the month and AM/PM names decide it.
+ *
+ * @param {string} format
+ * @param {unknown} locale
+ */
+export function widestValueLength(format, locale) {
+  const l10n = getCalendarLocale(locale);
+  let widest = 0;
+  for (let month = 0; month < 12; month++) {
+    for (const hours of [10, 22]) {
+      const text = formatDate(
+        new Date(2026, month, 28, hours, 45, 59),
+        format,
+        l10n,
+      );
+      widest = Math.max(widest, text.length + (text.match(WIDE)?.length ?? 0));
+    }
+  }
+  return widest;
 }
 
 const TIME_STRING = /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/;
