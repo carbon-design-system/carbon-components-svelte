@@ -314,6 +314,20 @@ test.describe("forced colors", () => {
     expect(fill).toBe(canvas);
   });
 
+  test("rings the close button only when it has focus", async ({ page }) => {
+    await page.goto("/shell-banner.html?dismissible");
+    const close = page.getByRole("button", { name: "Dismiss banner" });
+    const outline = () =>
+      close.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return s.outlineStyle === "none" ? "none" : s.outlineWidth;
+      });
+
+    expect(await outline()).toBe("none");
+    await close.focus();
+    expect(await outline()).toBe("2px");
+  });
+
   test("draws the thin strip as a border", async ({ page }) => {
     await page.goto("/shell-banner.html?thin");
     await expect(page.locator(BANNER)).toBeVisible();

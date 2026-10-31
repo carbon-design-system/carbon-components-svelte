@@ -274,6 +274,12 @@ $-kind-accents-inverse: (
       outline: 0;
     }
 
+    // Forced colors repaint the close button's transparent 2px outline,
+    // a ring as wide as its focus ring. The `:focus` rules above win.
+    .#{$prefix}--shell-banner .#{$prefix}--inline-notification__close-button {
+      outline: none;
+    }
+
     // The inline notification's rule is scoped to its own root.
     .#{$prefix}--shell-banner .#{$prefix}--inline-notification__close-icon {
       fill: ButtonText;
