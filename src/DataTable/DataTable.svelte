@@ -972,8 +972,10 @@
    * The table's headers, including hidden ones.
    * @returns {ReadonlyArray<DataTableHeader<Row>>}
    */
+  // The rendered columns, in the order the head shows them, so an export
+  // follows anything that moves a column (hidden columns drop out).
   function getExportHeaders() {
-    return stableHeaders;
+    return visibleHeaders;
   }
 
   setContext("carbon:DataTable", {

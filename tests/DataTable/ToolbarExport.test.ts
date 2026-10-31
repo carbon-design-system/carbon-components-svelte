@@ -65,6 +65,18 @@ describe("ToolbarExport", () => {
     expect(csv.split("\r\n")[0]).toBe("Name,Port");
   });
 
+  it("writes the columns in the order the header shows them", async () => {
+    render(ToolbarExportTest);
+
+    await exportAs("Export CSV");
+
+    const csv = await readBlob(createObjectURL.mock.calls[0][0]);
+    const shown = [...document.querySelectorAll("thead th[data-header]")]
+      .map((th) => th.textContent?.trim())
+      .filter(Boolean);
+    expect(csv.split("\r\n")[0]).toBe(shown.join(","));
+  });
+
   it("exports the rows the search matches", async () => {
     render(ToolbarExportTest);
 
