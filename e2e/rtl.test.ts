@@ -2124,6 +2124,22 @@ test.describe("right-to-left date picker", () => {
     ).toEqual({ previous: -1, next: -1 });
   });
 
+  test("keeps the time fields left to right, with AM/PM at the inline end", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const left = (selector: string) =>
+      page
+        .locator(`[data-testid=time-row] ${selector}`)
+        .evaluate((node) => node.getBoundingClientRect().left);
+    const hours = await left("[aria-label=Hours]");
+    const minutes = await left("[aria-label=Minutes]");
+    const period = await left(".bx--date-picker__time-period");
+
+    expect(hours).toBeLessThan(minutes);
+    expect(period).toBeLessThan(hours);
+  });
+
   test("swaps ArrowLeft and ArrowRight, and keeps Home at the inline start", async ({
     page,
   }) => {
