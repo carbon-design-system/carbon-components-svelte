@@ -26,6 +26,7 @@ export function withTime(
   time: TimeParts,
   granularity?: TimeGranularity,
 ): Date;
+export function isTimeOnDay(date: Date, time: TimeParts): boolean;
 
 export type TimeRowOptions = {
   label: string;
@@ -36,6 +37,8 @@ export type TimeRowOptions = {
   idPrefix: string;
   onChange: (time: TimeParts) => void;
   onEnter: () => void;
+  /** Steps skip times this rejects. */
+  isAllowed?: (time: TimeParts) => boolean;
 };
 
 export function createTimeRow(options: TimeRowOptions): {

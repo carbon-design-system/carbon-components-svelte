@@ -127,6 +127,18 @@ export function withTime(date, time, granularity = "second") {
   );
 }
 
+/**
+ * Whether `date`'s day has the clock time `time`. A day that skips an hour
+ * for daylight saving time has no 2:30 AM, so `new Date` moves it on.
+ *
+ * @param {Date} date
+ * @param {TimeParts} time
+ */
+export function isTimeOnDay(date, time) {
+  const moved = withTime(date, time);
+  return moved.getHours() === time.hours && moved.getMinutes() === time.minutes;
+}
+
 /** @param {number} value */
 const pad = (value) => String(value).padStart(2, "0");
 
@@ -140,6 +152,7 @@ const pad = (value) => String(value).padStart(2, "0");
  *   idPrefix: string;
  *   onChange: (time: TimeParts) => void;
  *   onEnter: () => void;
+ *   isAllowed?: (time: TimeParts) => boolean;
  * }} TimeRowOptions
  */
 
@@ -296,7 +309,8 @@ export function createTimeRow(options) {
   }
 
   /**
-   * Steps a segment by `delta` steps, wrapping at its ends.
+   * Steps a segment by `delta` steps, wrapping at its ends and skipping
+   * values that `isAllowed` rejects.
    *
    * @param {Segment} segment
    * @param {number} delta
@@ -306,9 +320,15 @@ export function createTimeRow(options) {
     const span = max - min + 1;
     const current = shown(segment.name);
     const snapped = current - ((current - min) % size);
-    const next =
-      ((((snapped - min + delta * size) % span) + span) % span) + min;
-    commit(timeWith(segment.name, next));
+    for (let n = 1; n <= Math.ceil(span / size); n++) {
+      const next =
+        ((((snapped - min + n * delta * size) % span) + span) % span) + min;
+      const candidate = timeWith(segment.name, next);
+      if (options.isAllowed?.(candidate) ?? true) {
+        commit(candidate);
+        return;
+      }
+    }
   }
 
   /**
