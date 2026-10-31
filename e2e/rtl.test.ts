@@ -1300,6 +1300,11 @@ test.describe("right-to-left text fields", () => {
         .getByTestId("fluid-text-area-invalid")
         .locator("textarea"),
       HeaderSearch: page.getByTestId("header-search").locator("input"),
+      ComboBox: page.getByTestId("combo-box").locator("input"),
+      "fluid ComboBox": page
+        .getByTestId("fluid-combo-box-invalid")
+        .locator("input"),
+      MultiSelect: page.getByTestId("multi-select-filterable").locator("input"),
     };
     // A password shows its characters, so their order is visible.
     await page.getByTestId("password").getByRole("button").click();
@@ -1343,10 +1348,12 @@ async function caretAtLeftEnd(page: Page, field: Locator, open?: Locator) {
       node.tagName === "TEXTAREA"
         ? Number.parseFloat(style.lineHeight)
         : bottom - top;
-    return {
-      x: box.right - Number.parseFloat(style.paddingRight) - width + 2,
-      y: top + line / 2,
-    };
+    // MultiSelect's focused filter draws a 2px border inside its box.
+    const end =
+      box.right -
+      Number.parseFloat(style.borderRightWidth) -
+      Number.parseFloat(style.paddingRight);
+    return { x: end - width + 2, y: top + line / 2 };
   });
   await page.mouse.click(x, y);
   return field.evaluate((node: HTMLInputElement) => node.selectionStart);
