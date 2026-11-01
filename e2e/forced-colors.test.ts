@@ -735,6 +735,45 @@ test.describe("forced colors", () => {
       .toMatchObject({ outline: "solid 1px", outlineColor: system.CanvasText });
   });
 
+  // The palette's highlight is a fill and a bar, both dropped, so arrow
+  // keys showed no row.
+  test("the CommandPalette highlighted row fills with Highlight", async ({
+    page,
+  }) => {
+    // A click would leave later tests' scripted focus without a ring.
+    await page.getByTestId("command-palette-open").press("Enter");
+    const highlighted = ".bx--command-palette__item--highlighted";
+    await expect(page.locator(highlighted)).toBeVisible();
+    expect.soft(await style(page, highlighted), highlighted).toMatchObject({
+      background: system.Highlight,
+      color: system.HighlightText,
+    });
+    const description = `${highlighted} .bx--command-palette__item-description`;
+    expect
+      .soft((await style(page, description)).color, description)
+      .toBe(system.HighlightText);
+    const highlightedKey = `${highlighted} .bx--kbd__platform--other .bx--kbd__key`;
+    expect
+      .soft((await style(page, highlightedKey)).color, highlightedKey)
+      .toBe(system.HighlightText);
+    expect
+      .soft((await style(page, `${highlighted} svg`)).fill, "icon")
+      .toBe(system.HighlightText);
+    expect
+      .soft(
+        (await style(page, ".bx--command-palette__item--disabled")).color,
+        "disabled",
+      )
+      .toBe(system.GrayText);
+    const icon =
+      ".bx--command-palette__item:not(.bx--command-palette__item--highlighted) .bx--command-palette__item-icon svg";
+    await page.keyboard.press("ArrowDown");
+    expect.soft((await style(page, icon)).fill, icon).toBe(system.ButtonText);
+    expect
+      .soft(await style(page, ".bx--command-palette__container"))
+      .toMatchObject({ outline: "solid 3px", outlineColor: system.CanvasText });
+  });
+
   test("UserAvatar circles and status dots keep a CanvasText edge", async ({
     page,
   }) => {

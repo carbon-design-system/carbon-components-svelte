@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import CommandPalette from "carbon-components-svelte/CommandPalette/CommandPalette.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
@@ -73,6 +74,12 @@ export const forms: AriaEntry[] = [
       render(ComboBox, {
         props: { items, labelText: "Fruit", helperText: "Pick one", ...attrs },
       }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "CommandPalette",
+    render: (attrs) =>
+      render(CommandPalette, { props: { open: true, items, ...attrs } }),
     target: () => screen.getByRole("combobox"),
   },
   {
