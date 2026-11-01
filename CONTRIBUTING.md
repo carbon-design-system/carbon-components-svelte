@@ -1240,6 +1240,8 @@ CI runs Chromium on Linux, and the baseline must match it. A few lines of text m
 
 CI runs the sweep when a change reaches a fixture page, which covers `src/`, `css/` and `e2e/fixtures/`. It takes about 1.5 minutes on one worker.
 
+[`pointer-focus-ring.test.ts`](e2e/pointer-focus-ring.test.ts) sweeps every fixture the same way for focus rings the pointer draws. On each page, at 1280px and 360px, it clicks the text of each focusable element that is not a control, and fails on any new ring in `$focus` that no `:focus-visible` element explains. It has no baseline, so every finding is a bug.
+
 A few gotchas:
 
 For components that hide content with CSS (for example ComposedModal), `toBeVisible()` can lie because the element stays in the DOM. Prefer `toHaveClass(/is-visible/)` on the container, or assert on `aria-hidden` / `inert`.
