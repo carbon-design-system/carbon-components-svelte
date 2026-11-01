@@ -32,6 +32,13 @@
     @include focus-outline('outline');
   }
 
+  // ccs: a table that scrolls takes focus, so a click on a cell would ring
+  // the whole table. Ring it only for the keyboard. A browser without
+  // `:focus-visible` drops this rule and keeps the ring.
+  .#{$prefix}--data-table-content:focus:not(:focus-visible) {
+    outline: none;
+  }
+
   .#{$prefix}--data-table-header {
     padding: $spacing-05 0 $spacing-06 $spacing-05;
     background: $layer;
