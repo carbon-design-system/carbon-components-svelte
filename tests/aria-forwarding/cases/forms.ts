@@ -20,6 +20,7 @@ import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
+import QueryBuilder from "carbon-components-svelte/QueryBuilder/QueryBuilder.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
@@ -456,6 +457,18 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(TileGroup, { props: { legendText: "Plans", ...attrs } }),
     target: () => screen.getByRole("group"),
+  },
+  {
+    name: "QueryBuilder",
+    render: (attrs) =>
+      render(QueryBuilder, {
+        props: {
+          labelText: "Filter",
+          fields: [{ id: "name", text: "Name", kind: "text" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getAllByRole("group")[0],
   },
   {
     name: "InputGroup",
