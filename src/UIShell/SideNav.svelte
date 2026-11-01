@@ -383,9 +383,8 @@
   <div
     on:click={() => {
       dispatch("click:overlay");
-      // Only the mobile overlay hides the nav, taking focus with it; hand
-      // it back to the hamburger, as Escape does.
-      if (isOpen && $isSideNavMobile) $hamburgerMenuRef?.focus();
+      // Only the pointer reaches the overlay, so focus stays put. Moving
+      // it to the hamburger would ring it, which Carbon React does not.
       isOpen = false;
     }}
     class:bx--side-nav__overlay={true}
