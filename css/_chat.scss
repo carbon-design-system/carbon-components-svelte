@@ -21,6 +21,13 @@
     &:focus {
       @include focus-outline("outline");
     }
+
+    // The log takes focus, so a click on a message would ring the whole
+    // log. Ring it only for the keyboard. A browser without
+    // `:focus-visible` drops this rule and keeps the ring.
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
   }
 
   // Padding inside the scrolling area, so messages clear the edges of the
