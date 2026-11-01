@@ -652,3 +652,20 @@
 @include exports("date-picker-rtl-text") {
   @include date-picker-rtl-text;
 }
+
+// carbon-components-svelte patch
+// An inline range calendar sits in the start field's container. The row
+// stretched the end container to the same height, and its
+// `space-between` then put the end input at the bottom, over the
+// calendar's last week. Keep each container as tall as its own content.
+/// @access private
+/// @group components
+@mixin date-picker-inline-range {
+  .#{$prefix}--date-picker--range.#{$prefix}--date-picker--inline {
+    align-items: flex-start;
+  }
+}
+
+@include exports("date-picker-inline-range") {
+  @include date-picker-inline-range;
+}
