@@ -118,6 +118,13 @@
     &:focus {
       @include focus-outline('outline');
     }
+
+    // ccs: scrolling content takes focus, so a click on its text would ring
+    // it. Ring it only for the keyboard. A browser without `:focus-visible`
+    // drops this rule and keeps the ring.
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
   }
 
   // text/p gets 20% right padding
@@ -317,6 +324,13 @@
     ~ .#{$prefix}--modal-content--overflow-indicator {
     width: calc(100% - 4px);
     margin: 0 2px 2px;
+  }
+
+  // ccs: no ring to clear on pointer focus, so the fade keeps its width.
+  .#{$prefix}--modal-content:focus:not(:focus-visible)
+    ~ .#{$prefix}--modal-content--overflow-indicator {
+    width: 100%;
+    margin: 0;
   }
 
   .#{$prefix}--modal-footer {
