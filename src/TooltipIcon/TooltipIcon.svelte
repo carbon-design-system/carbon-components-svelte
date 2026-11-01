@@ -18,6 +18,7 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy } from "../utils/fit-align.js";
+  import { isPointerFocus } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { closeOverControls } from "../utils/tooltip-cover.js";
@@ -342,6 +343,8 @@
   on:focus
   on:focus={() => {
     if (disabled) return;
+    // A click's focus leaves the tooltip to the pointer.
+    if (isPointerFocus(ref)) return;
     // Focus shows the tooltip at once, without the fade-in. Focus the
     // library moved here itself, such as a modal's first focus, did not
     // ask for it: keep it hidden until the next pointer enter or focus.

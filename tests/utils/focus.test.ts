@@ -1,10 +1,12 @@
 import {
   focusQuietly,
   initialFocus,
+  isPointerFocus,
   isQuietFocus,
   restoreFocus,
   returnFocus,
 } from "../../src/utils/focus.js";
+import { user } from "../utils/user";
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -238,5 +240,21 @@ describe("focusQuietly", () => {
     item.focus();
     focusReturn.restore();
     expect(quiet).toEqual([true, true]);
+  });
+});
+
+describe("isPointerFocus", () => {
+  it("reports focus from a press on the element until a key press", async () => {
+    document.body.innerHTML =
+      '<button id="a"><span id="icon">A</span></button><button id="b">B</button>';
+    const a = document.getElementById("a") as HTMLButtonElement;
+    const b = document.getElementById("b") as HTMLButtonElement;
+
+    await user.click(document.getElementById("icon") as HTMLElement);
+    expect(isPointerFocus(a)).toBe(true);
+    expect(isPointerFocus(b)).toBe(false);
+
+    await user.keyboard("{Tab}");
+    expect(isPointerFocus(a)).toBe(false);
   });
 });
