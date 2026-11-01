@@ -197,6 +197,8 @@ These names apply to new components and new props. Shipped components keep their
 - A composite widget (listbox, grid, tree, toolbar, tablist, radio group) has one tab stop. Arrow keys move focus inside it.
 - Use roving `tabindex` when items receive DOM focus. Use `aria-activedescendant` when focus must stay in a text input, as in a combobox.
 - Every focusable element shows the focus ring from `@include focus-outline("outline")`.
+- The focus ring follows the keyboard. Hover and clicks draw fills, never the ring. A region that takes focus only so the keyboard can reach or scroll it (a tab panel, a wide table, a log) rings on `:focus` and drops the ring on `:focus:not(:focus-visible)`, so a click on its text leaves it plain. Do not move focus after a pointer click unless Carbon React does. [`pointer-focus-ring.test.ts`](e2e/pointer-focus-ring.test.ts) checks this on every fixture.
+- When you port a v11 rule tied to a state (`--highlighted`, `--selected`, `:focus`), find when Carbon React sets that state, and match it. React's Downshift reducer ignores hover, so its `--highlighted` ring only follows the keyboard.
 - Opening a dialog or panel moves focus into it. Closing it returns focus to the trigger, or to a documented fallback if the trigger was removed.
 - After an item is removed, move focus to the next item, then the previous item, then the container.
 - Do not move focus on hover, on timers or on data updates.

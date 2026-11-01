@@ -130,7 +130,7 @@ describe("SideNav overlay click", () => {
     setViewportWidth(1024);
   });
 
-  it("closes the mobile side nav and refocuses the hamburger", async () => {
+  it("closes the mobile side nav and leaves the hamburger unfocused", async () => {
     setViewportWidth(500);
     const { component, container } = render(UiShell, {
       props: { sideNavIsOpen: true },
@@ -143,7 +143,7 @@ describe("SideNav overlay click", () => {
     await user.click(overlay);
 
     expect(component.sideNavIsOpen).toBe(false);
-    expect(hamburger).toHaveFocus();
+    expect(hamburger).not.toHaveFocus();
   });
 });
 

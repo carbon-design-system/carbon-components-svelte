@@ -248,6 +248,13 @@
     &:focus {
       @include focus-outline('outline');
     }
+
+    // ccs: the panel takes focus, so a click in it would ring the whole
+    // panel. Ring it only for the keyboard. A browser without
+    // `:focus-visible` drops this rule and keeps the ring.
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
   }
 
   // Double class so it outranks the vertical and scrollable panel rules.
