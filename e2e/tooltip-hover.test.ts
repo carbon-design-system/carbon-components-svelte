@@ -78,6 +78,48 @@ test.describe("Icon tooltips and the pointer", () => {
     });
   }
 
+  // As in Carbon React, the focus a click leaves doesn't hold the tooltip
+  // open once the pointer leaves. Focus from the keyboard still shows it.
+  test("the inline tooltip of a clicked button closes when the pointer leaves", async ({
+    page,
+  }) => {
+    const edit = page.getByRole("button", { name: "Edit service" });
+
+    await edit.click();
+    await page.mouse.move(1, 1);
+    await page.waitForTimeout(PAUSE_MS);
+    expect(await inlineClip(edit)).not.toBe("auto");
+
+    // A key press ends the click's hold. macOS Firefox and Safari don't
+    // focus a clicked button, so focus it directly.
+    await edit.blur();
+    await page.keyboard.press("Shift");
+    await edit.focus();
+    await expect.poll(() => inlineClip(edit)).toBe("auto");
+  });
+
+  for (const name of ["Duplicate service", "List view"]) {
+    test(`the portalled tooltip of a clicked "${name}" closes when the pointer leaves`, async ({
+      page,
+    }) => {
+      const trigger =
+        name === "List view"
+          ? page.getByRole("tab", { name })
+          : page.getByRole("button", { name });
+      const tooltips = page.locator(".bx--tooltip-portal__content");
+
+      await trigger.click();
+      await page.mouse.move(1, 1);
+      await page.waitForTimeout(PAUSE_MS);
+      await expect(tooltips).toHaveCount(0);
+
+      await trigger.blur();
+      await page.keyboard.press("Shift");
+      await trigger.focus();
+      await expect(tooltips).toHaveText([name]);
+    });
+  }
+
   test("a click on an inline tooltip doesn't press its button", async ({
     page,
   }) => {

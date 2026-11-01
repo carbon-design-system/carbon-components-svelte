@@ -208,6 +208,7 @@
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import { clippedBy } from "../utils/fit-align.js";
+  import { isPointerFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
@@ -273,6 +274,10 @@
 
   let hovered = false;
   let focused = false;
+  // Focus from a click. The tooltip leaves it to the pointer, but the
+  // inline tooltip's CSS still shows on `:focus`, so it needs the hidden
+  // class once the pointer has gone.
+  let pointerFocused = false;
   // Set by Escape. The tooltip stays hidden while the button keeps hover
   // or focus, until the next pointer enter or focus (WCAG 1.4.13).
   let dismissed = false;
@@ -393,6 +398,12 @@
   // until the next pointer enter or focus.
   function handleFocus() {
     if (!(hasTooltip || usePortal) || disabled) return;
+    // A click's focus leaves the tooltip to the pointer, so it closes when
+    // the pointer leaves, as Carbon React's does.
+    if (isPointerFocus(ref)) {
+      pointerFocused = true;
+      return;
+    }
     focused = true;
     dismissed = !tooltipHandoff.claimFocus(ref);
     tooltipShown = !dismissed;
@@ -422,6 +433,7 @@
   function handleBlur() {
     if (!(hasTooltip || usePortal)) return;
     focused = false;
+    pointerFocused = false;
     if (hovered) return;
     tooltipShown = false;
     tooltipHandoff.release();
@@ -527,7 +539,7 @@
       hasTooltip &&
         (tooltipHidden ||
           (dismissed && (hovered || focused)) ||
-          (hovered && !tooltipShown)) &&
+          ((hovered || pointerFocused) && !tooltipShown)) &&
         "bx--tooltip--hidden",
       inlineOpen && "bx--tooltip--visible",
       hasTooltip && $tooltipInstant && "bx--tooltip--instant",
