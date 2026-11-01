@@ -127,11 +127,15 @@
     return typeof labelSize === "function" ? labelSize(labelKind) : labelSize;
   }
 
-  async function handleRevert() {
+  /** @param {MouseEvent} event */
+  async function handleRevert(event) {
     revertActive = false;
     dispatch("revert");
-    // The revert button unmounts with the click, so focus would
-    // otherwise fall back to the body.
+    // The revert button unmounts with the click. A keyboard press
+    // (`detail` 0) would drop focus on the body, so move it to the label.
+    // A pointer click leaves it, as Carbon React does, since the label
+    // would show its focus ring.
+    if (event.detail !== 0) return;
     await tick();
     ref?.focus();
   }

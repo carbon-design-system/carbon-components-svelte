@@ -110,6 +110,18 @@ describe("AILabel", () => {
 
     expect(onrevert).toHaveBeenCalledTimes(1);
     expect(screen.getByTestId("revert-active")).toHaveTextContent("false");
+    // A pointer click leaves focus, so the label shows no focus ring.
+    expect(
+      screen.getByRole("button", { name: "AI Show information" }),
+    ).not.toHaveFocus();
+  });
+
+  it("moves focus to the label when the keyboard reverts", async () => {
+    render(AILabel, { props: { revertActive: true } });
+
+    screen.getByRole("button", { name: "Revert to AI input" }).focus();
+    await user.keyboard("{Enter}");
+
     expect(
       screen.getByRole("button", { name: "AI Show information" }),
     ).toHaveFocus();
