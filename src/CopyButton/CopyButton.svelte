@@ -104,6 +104,7 @@
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
   import { dismiss } from "../utils/dismiss.js";
+  import { isPointerFocus } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { noop } from "../utils/noop.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
@@ -190,6 +191,8 @@
   // didn't ask for the tooltip: treat it as dismissed until the next
   // pointer enter or focus.
   function handleTooltipFocus() {
+    // A click's focus leaves the tooltip to the pointer.
+    if (isPointerFocus(ref)) return;
     focused = true;
     dismissed = !tooltipHandoff.claimFocus(ref);
   }

@@ -14,6 +14,13 @@ export function focusQuietly(target: HTMLElement, options?: FocusOptions): void;
 /** Whether focus is moving to `node` through `focusQuietly`. */
 export function isQuietFocus(node: Element | null | undefined): boolean;
 
+/**
+ * Whether focus on `node` came from a pointer press on it, with no key
+ * pressed since. A tooltip ignores that focus, so it closes when the
+ * pointer leaves.
+ */
+export function isPointerFocus(node: Element | null | undefined): boolean;
+
 export function restoreFocus(): {
   save(): void;
   restore(region?: Element | null): void;

@@ -66,6 +66,42 @@ export function isQuietFocus(node) {
 }
 
 /**
+ * The element the last pointer press landed on, until the next key press.
+ * @type {EventTarget | null}
+ */
+let pressTarget = null;
+
+if (typeof document !== "undefined") {
+  /** @param {Event} event */
+  const press = (event) => {
+    pressTarget = event.target;
+  };
+  document.addEventListener("pointerdown", press, true);
+  document.addEventListener("mousedown", press, true);
+  document.addEventListener(
+    "keydown",
+    () => {
+      pressTarget = null;
+    },
+    true,
+  );
+}
+
+/**
+ * Whether focus on `node` came from a pointer press on it, with no key
+ * pressed since. A tooltip ignores that focus, as Carbon React's does
+ * (`focusByMouse`), so it closes when the pointer leaves.
+ *
+ * @param {Element | null | undefined} node
+ * @returns {boolean}
+ */
+export function isPointerFocus(node) {
+  return (
+    node != null && pressTarget instanceof Node && node.contains(pressTarget)
+  );
+}
+
+/**
  * Save focus before an overlay opens and restore it on close when the element
  * is still connected. Pass the overlay as `region` to skip the restore when
  * focus has already moved outside it (e.g. a close handler opened another

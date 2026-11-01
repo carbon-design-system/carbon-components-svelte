@@ -1,6 +1,7 @@
 // @ts-check
 import { derived, get, writable } from "svelte/store";
 import { dismiss as windowListener } from "./dismiss.js";
+import { isPointerFocus } from "./focus.js";
 import { isImeComposition } from "./ime-composition.js";
 import { ignoreTooltipClicks } from "./tooltip-clicks.js";
 import { closeOverControls } from "./tooltip-cover.js";
@@ -88,8 +89,10 @@ export function createAnchoredTooltip({
   /** @param {Event} event */
   function handleFocus(event) {
     if (!enabled()) return;
-    focused.set(true);
     const node = /** @type {Element} */ (event.currentTarget);
+    // A click's focus leaves the tooltip to the pointer.
+    if (isPointerFocus(node)) return;
+    focused.set(true);
     dismissed.set(!handoff.claimFocus(node));
   }
 
