@@ -512,12 +512,40 @@
 // shadows and shows an inset `HighlightText` ring, which contrasts with the
 // fill. The switcher ancestor makes these outrank the low-contrast focus rules
 // regardless of emit order.
+//
+// Forced colors also paint the transparent 2px outline that
+// `focus-outline("reset")` leaves on a resting switch. Each unselected switch
+// drew a box inside the switcher's edge, with a double line between
+// switches, and the 1px `Highlight` focus ring was thinner than the boxes
+// around it. A resting switch drops the outline, and the focus ring is 2px.
+// The divider between switches is a background, which forced colors paint
+// `Canvas`, so it opts out of forcing and reads `CanvasText`, or `GrayText`
+// when disabled. The rules that hide it next to a selected, focused or
+// hovered switch outrank these and keep it transparent.
 
 /// Selected content switcher in forced-colors mode.
 /// @access private
 /// @group content-switcher
 @mixin content-switcher-forced-colors {
   @media (forced-colors: active) {
+    // Ties the base rules and wins on order.
+    .#{$prefix}--content-switcher-btn {
+      outline-style: none;
+    }
+
+    .#{$prefix}--content-switcher-btn:focus {
+      outline-width: 2px;
+    }
+
+    .#{$prefix}--content-switcher-btn::before {
+      forced-color-adjust: none;
+      background-color: CanvasText;
+    }
+
+    .#{$prefix}--content-switcher-btn:disabled::before {
+      background-color: GrayText;
+    }
+
     .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:not(:disabled) {
       forced-color-adjust: none;
       background-color: Highlight;

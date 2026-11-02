@@ -1,4 +1,5 @@
 import { expect, test } from "./helpers/host";
+import { expectNoNestedBorders, expectSingleRing } from "./helpers/layout";
 
 test.describe("ContentSwitcher", () => {
   test.beforeEach(async ({ page }) => {
@@ -56,5 +57,36 @@ test.describe("ContentSwitcher", () => {
         (el) => getComputedStyle(el, "::after").borderRadius,
       ),
     ).toBe("4px");
+  });
+
+  // Forced colors paint the transparent 2px outline that the focus reset
+  // leaves on each resting switch. Every unselected switch drew a box, with
+  // a double line between switches, and the 1px focus ring was thinner.
+  test("forced colors: one line between switches, and a ring only on focus", async ({
+    page,
+    browserName,
+  }) => {
+    test.skip(browserName === "webkit", "WebKit does not force colors");
+    await page.emulateMedia({ forcedColors: "active" });
+    const switcher = page.getByTestId("content-switcher");
+    const third = page.getByRole("tab", { name: "Third" });
+    await expect(third).toBeVisible();
+
+    await expectNoNestedBorders(switcher);
+    await expectSingleRing([switcher]);
+    // The divider between Second and Third reads CanvasText.
+    const [divider, text] = await third.evaluate((el) => {
+      const probe = document.createElement("div");
+      probe.style.color = "CanvasText";
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return [getComputedStyle(el, "::before").backgroundColor, color];
+    });
+    expect(divider).toBe(text);
+
+    await third.focus();
+    await expectSingleRing([switcher]);
+    await expect(third).toHaveCSS("outline-width", "2px");
   });
 });

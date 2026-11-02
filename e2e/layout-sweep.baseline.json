@@ -272,214 +272,6 @@
     "message": "div#app > div:nth-of-type(1) > div.bx--combo-button: spans 320px to 442.3px"
   },
   {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"default\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"default\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"low-contrast\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"low-contrast\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"narrow\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"narrow\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"narrow\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"sm\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"sm\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"xl\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"xl\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"default\"] > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(96, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"low-contrast\"] > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(96, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"sm\"] > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(96, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"xl\"] > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(96, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"default\"]",
-    "message": "2 rings in div[data-testid=\"default\"], at most 1 allowed"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"low-contrast\"]",
-    "message": "2 rings in div[data-testid=\"low-contrast\"], at most 1 allowed"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"sm\"]",
-    "message": "2 rings in div[data-testid=\"sm\"], at most 1 allowed"
-  },
-  {
-    "fixture": "content-switcher-icon-text.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"xl\"]",
-    "message": "2 rings in div[data-testid=\"xl\"], at most 1 allowed"
-  },
-  {
-    "fixture": "content-switcher.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"content-switcher\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "content-switcher.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "content-switcher.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"content-switcher\"]",
-    "message": "2 rings, at most 1 allowed"
-  },
-  {
     "fixture": "data-table-batch-actions-overflow.html",
     "variant": "320",
     "check": "overflow",
@@ -881,14 +673,6 @@
   },
   {
     "fixture": "focus-ring.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div#app > div > div.bx--content-switcher:nth-of-type(16) > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div#app > div > div.bx--content-switcher:nth-of-type(16) > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div#app > div > div.bx--content-switcher:nth-of-type(16), both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "focus-ring.html",
     "variant": "320",
     "check": "overflow",
     "kind": "scrolls sideways",
@@ -926,22 +710,6 @@
     "kind": "nested edge",
     "path": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline",
     "message": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline: bordered box inside 2px box-shadow ring div#app > main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2), both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "forced-colors.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"icons\"] > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1) > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2)",
-    "message": "div[data-testid=\"icons\"] > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1) > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"icons\"] > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1), both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "forced-colors.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div#app > main > div.bx--content-switcher:nth-of-type(2) > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div#app > main > div.bx--content-switcher:nth-of-type(2) > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div#app > main > div.bx--content-switcher:nth-of-type(2), both on rgb(255, 255, 255)"
   },
   {
     "fixture": "forced-colors.html",
@@ -1993,46 +1761,6 @@
   },
   {
     "fixture": "rtl-placement.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "rtl-placement.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"content-switcher\"], both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "rtl-placement.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "rtl-placement.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher\"] > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "rtl-placement.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"content-switcher\"]",
-    "message": "2 rings in div[data-testid=\"content-switcher\"], at most 1 allowed"
-  },
-  {
-    "fixture": "rtl-placement.html",
     "variant": "320",
     "check": "overflow",
     "kind": "scrolls sideways",
@@ -2166,126 +1894,6 @@
     "kind": "widens page",
     "path": "main#main-content > button",
     "message": "main#main-content > button: spans 288px to 349.84px"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(3): 2px outline inside 1px outline div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(2): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "ring",
-    "path": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(3)",
-    "message": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl > button.bx--content-switcher-btn:nth-of-type(3): outline 2px rgb(0, 0, 0)"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher",
-    "message": "2 rings in div[data-testid=\"content-switcher-md\"] > div:nth-of-type(1) > div.bx--content-switcher, at most 1 allowed"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm",
-    "message": "2 rings in div[data-testid=\"content-switcher-sm\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--sm, at most 1 allowed"
-  },
-  {
-    "fixture": "skeleton-swap.html",
-    "variant": "1280-forced",
-    "check": "ring",
-    "kind": "rings",
-    "path": "div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl",
-    "message": "2 rings in div[data-testid=\"content-switcher-xl\"] > div:nth-of-type(1) > div.bx--content-switcher.bx--content-switcher--xl, at most 1 allowed"
   },
   {
     "fixture": "skeleton-swap.html",
@@ -2788,14 +2396,6 @@
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1) > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2)",
-    "message": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1) > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2): 2px outline inside 1px outline div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1), both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "tooltip-escape.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
     "path": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--toggle-button-group:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1)",
     "message": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--toggle-button-group:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1): 2px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
   },
@@ -2830,30 +2430,6 @@
     "kind": "nested edge",
     "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
     "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
-  },
-  {
-    "fixture": "tooltip-group.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div#app > div > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2)",
-    "message": "div#app > div > div.bx--content-switcher.bx--content-switcher--sm > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2): 2px outline inside 1px outline div#app > div > div.bx--content-switcher.bx--content-switcher--sm, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "tooltip-hover.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div#app > div > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1) > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2)",
-    "message": "div#app > div > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1) > button.bx--content-switcher-btn.bx--content-switcher-btn--icon:nth-of-type(2): 2px outline inside 1px outline div#app > div > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1), both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "truncated-titles.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div[data-testid=\"content-switcher\"] > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2)",
-    "message": "div[data-testid=\"content-switcher\"] > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher\"] > div.bx--content-switcher, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "truncated-titles.html",
