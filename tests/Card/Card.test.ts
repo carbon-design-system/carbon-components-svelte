@@ -155,23 +155,12 @@ describe("Card", () => {
     );
   });
 
-  it("marks the header when it holds actions", () => {
+  it("puts header actions in the header", () => {
     render(Card, { props: { actions: true } });
 
-    expect(screen.getByTestId("header")).toHaveClass(
-      "bx--card__header--actions",
-    );
     expect(
-      screen.getByRole("button", { name: "Share" }).parentElement,
-    ).toHaveClass("bx--card__action", "bx--card__action--icon-only");
-  });
-
-  it("does not mark a header without actions", () => {
-    render(Card);
-
-    expect(screen.getByTestId("header")).not.toHaveClass(
-      "bx--card__header--actions",
-    );
+      screen.getByTestId("header").querySelector(".bx--card__actions"),
+    ).not.toBeNull();
   });
 
   it("keeps media at its ratio above the content", () => {

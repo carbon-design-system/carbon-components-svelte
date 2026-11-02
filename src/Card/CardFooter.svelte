@@ -5,8 +5,10 @@
    */
 
   /**
-   * Set to `true` when the footer holds `CardAction`s. The footer drops
-   * its padding and gains a top border, and the actions fill the row.
+   * A footer that holds `CardAction`s drops its padding and gains a top
+   * border, and the actions fill the row. The footer now detects that
+   * itself.
+   * @deprecated The footer detects its `CardAction`s. Remove the prop.
    */
   export let actionSet = false;
 

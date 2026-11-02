@@ -4,9 +4,9 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
-    // The Svelte 5 browser baseline (Firefox 83, Safari 14) has ES2021.
-    // `Intl.Segmenter` (ES2022) is always feature-detected before use.
-    "lib": ["ES2021", "ES2022.Intl", "DOM", "DOM.Iterable"]
+    // The browser baseline (Chrome 124, Firefox 125, Safari 17.4) has
+    // ES2023, and `Intl.Segmenter`.
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
   },
   "include": ["src/**/*.js"],
   "exclude": ["node_modules", "src/node_modules", "src/**/index.js"]

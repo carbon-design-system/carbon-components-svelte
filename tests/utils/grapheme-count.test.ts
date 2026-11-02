@@ -55,12 +55,4 @@ describe("segmenter use", () => {
     expect(fresh.truncateGraphemes("a\r\nb", 2)).toBe("a\r\n");
     expect(constructorSpy).toHaveBeenCalledTimes(1);
   });
-
-  it("falls back to code points without Intl.Segmenter", async () => {
-    vi.stubGlobal("Intl", { ...Intl, Segmenter: undefined });
-    const fresh = await importFresh();
-
-    expect(fresh.graphemeCount("😀😀")).toBe(2);
-    expect(fresh.truncateGraphemes("😀😀", 1)).toBe("😀");
-  });
 });
