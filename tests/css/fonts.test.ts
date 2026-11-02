@@ -35,6 +35,16 @@ describe("fonts.css", () => {
   }, 30_000);
 });
 
+describe("theme sheets", () => {
+  it("leave the @font-face rules to fonts.css", async () => {
+    const entries = ["all.scss", "white.scss", "g100.scss"];
+    const sheets = await Promise.all(entries.map(compileEntry));
+    sheets.forEach((css, i) => {
+      expect(css, entries[i]).not.toMatch(/@font-face/);
+    });
+  }, 60_000);
+});
+
 describe("font family variables", () => {
   it("routes every sans, mono and serif stack through --ccs-font-*", async () => {
     const css = await compileEntry("all.scss");

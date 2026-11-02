@@ -88,6 +88,12 @@ import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/all.css";
 ```
 
+Then load IBM Plex, unless you use your own fonts (see [Fonts](#fonts)):
+
+```js
+import "carbon-components-svelte/css/fonts.css";
+```
+
 ### Smaller CSS
 
 Each precompiled StyleSheet contains the styles for every component. To ship only the styles your app uses, add [`optimizeCss`](#optimizecss) to your production build. Set `propAware: true` to also drop the styles of prop values your app never passes; see [prop-aware pruning](#prop-aware-pruning).
@@ -96,9 +102,17 @@ The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yours
 
 ### Fonts
 
-The theme StyleSheets load IBM Plex Sans, Mono and Serif from Carbon's CDN (`1.www.s81c.com`). A browser only downloads a face that rendered text uses.
+The theme StyleSheets load no web fonts. `css/fonts.css` loads IBM Plex Sans, Mono and Serif from Carbon's CDN (`1.www.s81c.com`). Text falls back to Helvetica Neue and Arial until a family loads, or when none does.
 
-To use another font, set the family variables on `:root`:
+| You want | Do this |
+| :--- | :--- |
+| IBM Plex from the CDN | Import `carbon-components-svelte/css/fonts.css`. |
+| IBM Plex from your own server | Skip `fonts.css`. Install `@ibm/plex-sans` and `@ibm/plex-mono`, and import `@ibm/plex-sans/css/ibm-plex-sans-default.min.css` and `@ibm/plex-mono/css/ibm-plex-mono-default.min.css`. Your bundler copies the font files. |
+| IBM Plex from another URL | Copy `fonts.css` and replace its base URL. |
+| Another font | Load its `@font-face` rules and set the family variables below. |
+| No web fonts | Skip `fonts.css`. |
+
+The sans, mono and serif families read three variables:
 
 ```css
 :root {
@@ -108,9 +122,7 @@ To use another font, set the family variables on `:root`:
 }
 ```
 
-Plex is then never requested. Set them on `:root`. To change part of a page, also set `font-family: var(--ccs-font-sans)` on that element, since text inherits its family from `body`. On a `ThemeZone`, the code type styles follow `--ccs-font-mono` on their own.
-
-`css/fonts.css` holds the same `@font-face` rules on their own. A later release drops them from the theme StyleSheets ([#5291](https://github.com/carbon-design-system/carbon-components-svelte/issues/5291)); import `fonts.css` now as well to keep Plex loading then. Until then the two copies are identical, so the browser loads each face once.
+Set them on `:root`. To change part of a page, also set `font-family: var(--ccs-font-sans)` on that element, since text inherits its family from `body`. On a `ThemeZone`, the code type styles follow `--ccs-font-mono` on their own.
 
 ### Dynamic theming
 
