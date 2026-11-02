@@ -108,6 +108,13 @@ test("layout helpers pass good cases and name the element in bad ones", async ({
     // count, once the pointer is over the text. Each must hold the full
     // text.
     expect(await expectTextFits(page.getByTestId("fits-hover-good"))).toBe(2);
+    // A tooltip still closing over the next label does not hide that
+    // label's own tooltip, and a box that grows on hover counts.
+    expect(
+      await expectTextFits(page.getByTestId("fits-hover-stacked-good")),
+    ).toBe(3);
+    // A raised `sup` leaves its paragraph's box; nothing clips it.
+    expect(await expectTextFits(page.getByTestId("fits-sup-good"))).toBe(2);
     await expect(
       expectTextFits(page.getByTestId("fits-hover-title-bad")),
     ).rejects.toThrow(/fits-short-title.*: truncated .* with no title/);

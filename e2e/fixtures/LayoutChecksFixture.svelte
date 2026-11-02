@@ -13,6 +13,8 @@
 
   let tipAnchor = null;
   let wrongTipAnchor = null;
+  let coverAnchor = null;
+  let coveredAnchor = null;
 
   /** A hover handler that sets a `title` without the full text. */
   function shortTitle(node) {
@@ -126,6 +128,21 @@
   <p class="cell clip" use:titleWhenTruncated>{host}</p>
   <p class="cell clip" bind:this={tipAnchor}>{host}</p>
   <AnchoredTooltip anchor={tipAnchor} text={host} />
+</div>
+<!-- The first tooltip opens over the second label, and stays open while
+     the pointer is on it. A box that grows on hover shows its text. -->
+<div data-testid="fits-hover-stacked-good">
+  <p class="cell clip" bind:this={coverAnchor}>{host}</p>
+  <AnchoredTooltip anchor={coverAnchor} text={host} />
+  <p class="cell clip" bind:this={coveredAnchor}>{host}</p>
+  <AnchoredTooltip anchor={coveredAnchor} text={host} />
+  <p class="cell clip grow">{host}</p>
+</div>
+<!-- A footnote marker rises above its paragraph's box, as in prose. -->
+<div data-testid="fits-sup-good">
+  <p class="tight">
+    Limits apply per key<sup><a href="#fits-sup-good">1</a></sup>.
+  </p>
 </div>
 <div data-testid="fits-hover-title-bad">
   <p class="cell clip" data-testid="fits-short-title" use:shortTitle>
@@ -377,6 +394,16 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+  .grow:hover {
+    width: 20rem;
+  }
+  .tight {
+    line-height: 1;
+  }
+  /* As in prose: the marker does not push its line apart. */
+  .tight sup {
+    line-height: 0;
   }
   .digits {
     width: 10ch;

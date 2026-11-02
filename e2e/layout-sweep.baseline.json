@@ -2040,30 +2040,6 @@
     "message": "ul[data-testid=\"progress-indicator\"] > li.bx--progress-step.bx--progress-step--complete:nth-of-type(4): spans 336px to 448px"
   },
   {
-    "fixture": "prose.html",
-    "variant": "1280",
-    "check": "fits",
-    "kind": "overflows box",
-    "path": "a#fnref-1",
-    "message": "a#fnref-1: text overflows p[data-testid=\"footnoted\"] by 3.33px (text 9.61px x 20px)"
-  },
-  {
-    "fixture": "prose.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "overflows box",
-    "path": "a#fnref-1",
-    "message": "a#fnref-1: text overflows p[data-testid=\"footnoted\"] by 3.33px (text 9.61px x 20px)"
-  },
-  {
-    "fixture": "prose.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "overflows box",
-    "path": "a#fnref-1",
-    "message": "a#fnref-1: text overflows p[data-testid=\"footnoted\"] by 3.33px (text 9.61px x 20px)"
-  },
-  {
     "fixture": "radio-button-group.html",
     "variant": "320",
     "check": "overflow",
@@ -4066,14 +4042,6 @@
   {
     "fixture": "tag-v11.html",
     "variant": "320",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "button[data-testid=\"long-operational\"] > span.bx--tag__label",
-    "message": "button[data-testid=\"long-operational\"] > span.bx--tag__label: truncated \"status:active AND region:us-south AND service:cloud-object-storage\" (390px in 190px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "tag-v11.html",
-    "variant": "320",
     "check": "overflow",
     "kind": "scrolls sideways",
     "path": "page",
@@ -4377,99 +4345,11 @@
   },
   {
     "fixture": "uishell-variants.html",
-    "variant": "1280",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(4) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(4) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"No icon\" (49px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "1280",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(9) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(9) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"Settings\" (54px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "1280",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item.bx--side-nav__item--large:nth-of-type(5) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item.bx--side-nav__item--large:nth-of-type(5) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"Large\" (36px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li:nth-of-type(1) > a.bx--header__menu-item > span.bx--text-truncate--end",
-    "message": "ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li:nth-of-type(1) > a.bx--header__menu-item > span.bx--text-truncate--end: truncated \"Catalog\" (51px in 12px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(4) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(4) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"No icon\" (49px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(9) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(9) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"Settings\" (54px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item.bx--side-nav__item--large:nth-of-type(5) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item.bx--side-nav__item--large:nth-of-type(5) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"Large\" (36px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
     "variant": "320",
     "check": "fits",
     "kind": "overflows box",
     "path": "li:nth-of-type(1) > ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li.bx--header__submenu.bx--header__submenu--current:nth-of-type(2) > a.bx--header__menu-item.bx--header__menu-title",
     "message": "li:nth-of-type(1) > ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li.bx--header__submenu.bx--header__submenu--current:nth-of-type(2) > a.bx--header__menu-item.bx--header__menu-title: text overflows its box by 23.64px (text 51.64px x 18px)"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li:nth-of-type(1) > a.bx--header__menu-item > span.bx--text-truncate--end",
-    "message": "ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li:nth-of-type(1) > a.bx--header__menu-item > span.bx--text-truncate--end: truncated \"Catalog\" (51px in 12px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(4) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(4) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"No icon\" (49px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(9) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item:nth-of-type(9) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"Settings\" (54px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "no full text",
-    "path": "ul.bx--side-nav__items > li.bx--side-nav__item.bx--side-nav__item--large:nth-of-type(5) > a.bx--side-nav__link > span.bx--side-nav__link-text",
-    "message": "ul.bx--side-nav__items > li.bx--side-nav__item.bx--side-nav__item--large:nth-of-type(5) > a.bx--side-nav__link > span.bx--side-nav__link-text: truncated \"Large\" (36px in 16px) with no title, aria-label or tooltip holding it, at rest or on hover"
   },
   {
     "fixture": "uishell-variants.html",
