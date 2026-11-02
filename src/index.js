@@ -191,6 +191,16 @@ export { default as ProgressIndicator } from "./ProgressIndicator/ProgressIndica
 export { default as ProgressIndicatorSkeleton } from "./ProgressIndicator/ProgressIndicatorSkeleton.svelte";
 export { default as ProgressStep } from "./ProgressIndicator/ProgressStep.svelte";
 export { default as Prose } from "./Prose/Prose.svelte";
+export { default as QueryBuilder } from "./QueryBuilder/QueryBuilder.svelte";
+export {
+  conditionToText,
+  countConditions,
+  evaluateQuery,
+  queryFromJSON,
+  queryToJSON,
+  queryToText,
+  validateQuery,
+} from "./QueryBuilder/query.js";
 export { default as RadioButton } from "./RadioButton/RadioButton.svelte";
 export { default as RadioButtonSkeleton } from "./RadioButton/RadioButtonSkeleton.svelte";
 export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup.svelte";

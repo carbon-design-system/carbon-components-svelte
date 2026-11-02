@@ -1,0 +1,229 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// QueryBuilder: nested groups of condition rows. A row is a flow of
+/// connector, field, operator and value cells. The connector, field and
+/// operator have fixed widths, so they line up across the rows of a level,
+/// and the value fills the rest. When the value no longer fits, it wraps
+/// to the next line by itself, so the row needs no breakpoint.
+/// @access private
+/// @group components
+@mixin query-builder {
+  .#{$prefix}--query-builder {
+    --ccs-query-builder-field-height: #{to-rem(40px)};
+    --ccs-query-builder-connector-width: #{to-rem(48px)};
+    --ccs-query-builder-column-width: #{to-rem(192px)};
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  // The label, then its helper or error text, 8 px apart as in a form
+  // item. The text ends 16 px above the first row, the gap between rows.
+  .#{$prefix}--query-builder > .#{$prefix}--label {
+    margin-bottom: 0;
+  }
+
+  .#{$prefix}--query-builder > .#{$prefix}--form__helper-text,
+  .#{$prefix}--query-builder > .#{$prefix}--form-requirement {
+    margin: 0 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder--sm {
+    --ccs-query-builder-field-height: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--query-builder__group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  // A nested group is marked by a rule on its inline start and an indent.
+  // It keeps no inline-end padding, so the row actions of every level end
+  // at the builder's inline end.
+  .#{$prefix}--query-builder__group--nested {
+    padding-inline-start: $carbon--spacing-05;
+    border-inline-start: 2px solid $border-subtle;
+    // Rows are 16 px apart, so a group ends 32 px before the next row,
+    // twice the gap inside it.
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  // The parent's footer follows 8 px after its body. Keep the same 32 px
+  // between the two footers, so each reads with its own group.
+  .#{$prefix}--query-builder__group--nested:last-child {
+    margin-block-end: $carbon--spacing-06;
+  }
+
+  // The header and the rows share one 16 px gap, so every row of a group,
+  // its header included, has the same pitch.
+  .#{$prefix}--query-builder__body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    margin-block-start: $carbon--spacing-05;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--query-builder__group-header,
+  .#{$prefix}--query-builder__condition {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  // The word that joins a row to the one above ("and", "or"). It sits level
+  // with the fields, whatever their height.
+  .#{$prefix}--query-builder__connector {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: var(--ccs-query-builder-field-height);
+    flex: 0 0 var(--ccs-query-builder-connector-width);
+    align-items: center;
+    color: $text-secondary;
+  }
+
+  // Cells share a line while they fit and wrap, in source order, when they
+  // don't. Source order is tab order, so nothing is reordered. A cell
+  // shrinks only when it is alone on a line narrower than its width.
+  .#{$prefix}--query-builder__cell {
+    min-width: 0;
+    flex: 0 1 var(--ccs-query-builder-column-width);
+  }
+
+  .#{$prefix}--query-builder__cell--value {
+    flex: 1 1 to-rem(160px);
+  }
+
+  // Two inputs for a range share the cell. Like the row, the pair aligns
+  // to the top of its field boxes, so an error under one input does not
+  // move the other.
+  .#{$prefix}--query-builder__cell--pair {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder__cell--pair > * {
+    min-width: to-rem(160px);
+    flex: 1 1 0;
+  }
+
+  .#{$prefix}--query-builder__cell .#{$prefix}--form-item,
+  .#{$prefix}--query-builder__cell .#{$prefix}--select,
+  .#{$prefix}--query-builder__cell .#{$prefix}--list-box__wrapper,
+  .#{$prefix}--query-builder__cell .#{$prefix}--text-input,
+  .#{$prefix}--query-builder__cell .#{$prefix}--number,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker-container,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker-input__wrapper,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker__anchor {
+    width: 100%;
+    max-width: none;
+  }
+
+  // DatePicker sets its inputs to 288 px (one date) and 143.5 px (a range).
+  // In a cell they fill it, so a date ends at the same x as the other
+  // values. Each selector ties the vendored one and wins on order.
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker--single .#{$prefix}--date-picker__input,
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input {
+    width: 100%;
+  }
+
+  .#{$prefix}--query-builder__cell .#{$prefix}--date-picker--range .#{$prefix}--date-picker-container {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  // A toggle is shorter than a field. Center the toggle itself in a box of
+  // the field's height; the form item stays top-aligned with its neighbors.
+  .#{$prefix}--query-builder__cell--value .#{$prefix}--toggle-input__label {
+    min-height: var(--ccs-query-builder-field-height);
+    justify-content: center;
+  }
+
+  .#{$prefix}--query-builder__actions {
+    display: flex;
+    flex: 0 0 auto;
+    margin-inline-start: auto;
+  }
+
+  // A move that cannot happen stays focusable in the row's toolbar
+  // (aria-disabled). It looks like a disabled ghost button and keeps its
+  // focus ring, which Carbon's `--disabled` class would remove.
+  .#{$prefix}--query-builder__actions .#{$prefix}--btn--ghost[aria-disabled="true"],
+  .#{$prefix}--query-builder__actions .#{$prefix}--btn--ghost[aria-disabled="true"]:hover,
+  .#{$prefix}--query-builder__actions .#{$prefix}--btn--ghost[aria-disabled="true"]:active {
+    background-color: transparent;
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--query-builder__actions
+      .#{$prefix}--btn--ghost[aria-disabled="true"]
+      .#{$prefix}--btn__icon {
+      fill: GrayText;
+    }
+  }
+
+  .#{$prefix}--query-builder__footer {
+    display: flex;
+    flex-wrap: wrap;
+    // Closer than the rows, so it reads as part of the group.
+    margin-block-start: $carbon--spacing-03;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--query-builder__empty {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--query-builder__summary {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-05;
+    border-inline-start: 3px solid $border-strong;
+    background: $layer;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--query-builder__summary .#{$prefix}--label {
+    margin-bottom: 0;
+  }
+
+  // A long query reads as a paragraph: about 70 characters a line.
+  .#{$prefix}--query-builder__summary-text {
+    @include type-style("body-01");
+
+    max-width: to-rem(480px);
+    color: $text-primary;
+    text-wrap: pretty;
+  }
+
+  // A line never breaks a date at its hyphens.
+  .#{$prefix}--query-builder__date {
+    white-space: nowrap;
+  }
+
+  // A disabled builder shows every part as disabled. Carbon's classes
+  // cover the label and helper text; these cover the builder's own text.
+  .#{$prefix}--query-builder--disabled .#{$prefix}--query-builder__connector,
+  .#{$prefix}--query-builder--disabled .#{$prefix}--query-builder__empty,
+  .#{$prefix}--query-builder--disabled .#{$prefix}--query-builder__summary-text {
+    color: $text-disabled;
+  }
+}
+
+@include exports("query-builder") {
+  @include query-builder;
+}

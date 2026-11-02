@@ -38,6 +38,9 @@ const IGNORED = [
   /^Property '\w+' does not exist on type '(EventTarget|Element)'/,
   // `new Date(a) - new Date(b)`, and `a - b` on a `string | number` cell.
   /^The (left|right)-hand side of an arithmetic operation must be/,
+  // `{ kind: "text" }` and `{ operator: "and" }` widen to `string`, not
+  // QueryBuilder's `fields` and `value` literal unions.
+  /^(Type|Argument of type) '.*\b(kind|operator): string\b.*' is not assignable to (type|parameter of type) '(readonly QueryField\[\]|QueryGroup)'/,
 ];
 
 /**

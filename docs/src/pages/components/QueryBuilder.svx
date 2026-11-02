@@ -1,0 +1,215 @@
+---
+components: ["QueryBuilder"]
+description: A query builder edits a filter as nested groups of conditions, each testing a field with an operator and a value, for saved filters and search refinement.
+---
+
+<script>
+  import { Box, QueryBuilder, Stack } from "carbon-components-svelte";
+
+  const fields = [
+    { id: "name", text: "Account name", kind: "text" },
+    { id: "seats", text: "Seats", kind: "number", min: 0 },
+    { id: "renewal", text: "Renewal date", kind: "date" },
+    {
+      id: "plan",
+      text: "Plan",
+      kind: "option",
+      options: [
+        { id: "free", text: "Free" },
+        { id: "team", text: "Team" },
+        { id: "enterprise", text: "Enterprise" },
+      ],
+    },
+    { id: "active", text: "Active", kind: "boolean" },
+  ];
+
+  const operatorFields = [
+    { id: "name", text: "Account name", kind: "text", operators: ["is", "contains"] },
+    { id: "seats", text: "Seats", kind: "number", operators: ["gte", "lte", "between"] },
+  ];
+
+  const nested = {
+    operator: "and",
+    conditions: [
+      { field: "active", operator: "is", value: true },
+      {
+        operator: "or",
+        conditions: [
+          { field: "plan", operator: "is", value: "enterprise" },
+          {
+            operator: "and",
+            conditions: [
+              { field: "plan", operator: "is", value: "team" },
+              { field: "seats", operator: "gte", value: 50 },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  const flat = {
+    operator: "and",
+    conditions: [
+      { field: "name", operator: "contains", value: "Acme" },
+      { field: "seats", operator: "between", value: [10, 200] },
+    ],
+  };
+
+  const queryLevelInvalid = {
+    operator: "and",
+    conditions: [{ field: "active", operator: "is", value: true }],
+  };
+</script>
+
+## Basic
+
+Pass the `fields` people can filter on and bind `value`. The query is a root group with an `operator` of `"and"` or `"or"` and a list of `conditions`. A condition is a `field`, an `operator`, and a `value`. A condition can also be a group, which is how the query nests.
+
+Each row reads left to right as a sentence: "Where Plan is any of Team, Enterprise and Seats is at least 50". The builder gives every group and condition without an `id` a unique one. The ids reach `value` with the first edit, so mounting the builder does not change a bound value.
+
+The `change` event fires on every edit with the whole query as `event.detail`. To put a link or a tooltip in the label, fill the `labelChildren` slot in place of `labelText`.
+
+<FileSource src="/framed/QueryBuilder/QueryBuilderBasic" />
+
+## Fields
+
+A field has an `id`, the `text` shown for it, and a `kind`. The kind decides which operators the field offers and which input holds the value.
+
+| Kind | Operators | Value input | Value in the query |
+| --- | --- | --- | --- |
+| `"text"` | is, is not, contains, does not contain, starts with, ends with, is empty, is not empty | TextInput | A string |
+| `"number"` | equals, does not equal, greater than, at least, less than, at most, between, is empty, is not empty | NumberInput | A number, or a pair for between |
+| `"date"` | is, is not, before, after, on or before, on or after, between, is empty, is not empty | DatePicker | An ISO date such as `"2026-05-01"`, or a pair for between |
+| `"option"` | is, is not, is any of, is none of, is empty, is not empty | Dropdown, or MultiSelect for the list operators | An option id, or a list of ids |
+| `"boolean"` | is | Toggle | `true` or `false` |
+
+Give an `"option"` field its choices with `options`, each with an `id` and the `text` shown. The query stores ids, so display text can change without breaking a saved filter.
+
+Changing a row's field keeps its operator and value when the new field is of the same kind, and resets both otherwise. Changing the operator keeps the value when its shape still fits: a number carries from "greater than" to "at most", and becomes a pair for "between".
+
+### Operators
+
+Set `operators` on a field to offer only some of its kind's operators, in the order you list them. A field left with one operator shows it in a read-only select.
+
+<QueryBuilder fields={operatorFields} value={flat} />
+
+## Groups
+
+Each group matches all or any of its conditions, chosen from the list at the top of the group. "Add group" starts a nested group with one condition in it. Reorder a condition with its move buttons. A group's moves and its remove action are in the options menu on its first line. Moves are disabled at the ends.
+
+The `move` and `remove` events fire before the change, with the node's `id` and the node as `item`. A move also has `from` and `to`, its positions in the group. Both can be canceled: call `event.preventDefault()` to keep the node, for example while you ask before removing a group.
+
+```svelte
+<QueryBuilder
+  {fields}
+  bind:value
+  on:remove={(event) => {
+    if (event.detail.item.conditions && !confirm("Remove this group?"))
+      event.preventDefault();
+  }}
+/>
+```
+
+Set `maxDepth` to cap nesting. The root group is level 1, so the default of `3` allows a group in a group. At the deepest level only "Add condition" is offered.
+
+<QueryBuilder fields={fields} value={nested} maxDepth={3} />
+
+| Do | Why |
+| --- | --- |
+| Keep nesting to two or three levels. | Each level adds indentation and a clause people must hold in mind; a sentence with more than three nested clauses stops being readable. |
+| Use "All of the following" for the root and a single nested group for one alternative. | Most filters are a list of requirements with one "or" inside. |
+| Cap depth with `maxDepth` to match what your backend can run. | The builder never offers a group the backend rejects. |
+
+## Reading the query
+
+Set `showSummary` to show the query as one sentence under the builder. Screen readers hear it as the description of the root group. Incomplete conditions are left out, so the sentence matches what the query filters by.
+
+<QueryBuilder fields={fields} value={nested} showSummary />
+
+The helpers behind the summary work on any query without the component:
+
+| Helper | Returns |
+| --- | --- |
+| `queryToText(query, fields)` | The sentence shown in the summary. |
+| `queryToJSON(query)` | A JSON string without node ids, so equal queries serialize equally. Pass `{ ids: true }` to keep them. |
+| `queryFromJSON(json)` | A query, or a `TypeError` that names the path of the first malformed node. |
+| `validateQuery(query, fields)` | `{ valid, errors }`, with an error code for each incomplete condition, keyed by id. |
+| `evaluateQuery(query, row, fields)` | Whether a row matches. Incomplete conditions are skipped. |
+
+## Filter a DataTable
+
+`evaluateQuery` tests one row against the query, so filtering a table is a `filter` over its rows. The table narrows as the query is built, because conditions that are not complete yet are skipped. Text comparisons ignore case and dates compare by calendar day.
+
+<FileSource src="/framed/QueryBuilder/QueryBuilderDataTable" />
+
+## Validation
+
+### Incomplete conditions
+
+A condition with a missing value, an out-of-range number, or a start after its end is incomplete. Its error shows once focus leaves its value. Set `showErrors` to show every error at once, such as after a failed submit. `validateQuery` returns the same errors for the form's own checks.
+
+<FileSource src="/framed/QueryBuilder/QueryBuilderValidation" />
+
+### Invalid
+
+Set `invalid` and `invalidText` for an error about the query as a whole, such as a filter that must have a condition.
+
+<QueryBuilder
+  fields={fields}
+  value={queryLevelInvalid}
+  invalid
+  invalidText="Add a condition on plan or seats to save this filter."
+/>
+
+## Sizes
+
+Set `size` to `"sm"` for a denser builder. The default is `"md"`.
+
+<QueryBuilder fields={fields} value={flat} size="sm" />
+
+## States
+
+### Read-only
+
+Set `readonly` to show a saved query without letting people edit it. The add, move, and remove buttons are not shown.
+
+<QueryBuilder fields={fields} value={nested} readonly showSummary />
+
+### Disabled
+
+Set `disabled` to disable every field and button.
+
+<QueryBuilder fields={fields} value={flat} disabled />
+
+## Layout
+
+Rows are a flow of cells that wrap when their container is narrow: on a phone the field, operator, and value each take a line, and the row actions follow. Nothing depends on the viewport width, so a builder in a narrow panel wraps the same way. The layout follows the page direction, so under `dir="rtl"` the sentence reads from the right.
+
+The connector column is 48 px wide, and the field and operator columns are 192 px. A connector ("Where", "And", "Or", "Match") wraps when a translation is longer. A field or operator name that does not fit is cut, and the select shows the full name in a tooltip on hover. The summary wraps and keeps each date on one line.
+
+<Box maxWidth="22rem">
+  <QueryBuilder fields={fields} value={flat} />
+</Box>
+
+## Keyboard and screen readers
+
+Each condition is a labelled group whose name is its sentence and place, such as "Condition 2 of 3: and Seats is at least 50". Each nested group is named with its level, its logic, and its size. Screen readers announce the name on entering the group, so the sentence and the all-or-any logic are read without visiting every field.
+
+Move through the builder with <DocKbd label="Tab" /> in reading order: a group's logic, then each row's field, operator, value and row actions, then the group's add buttons. A row's actions (move up, move down, remove) are a toolbar with one tab stop. Inside it, <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> move between the buttons, and <DocKbd label="Home" /> and <DocKbd label="End" /> go to the first and last. Left and right swap under `dir="rtl"`. The toolbar's tab stop is the action you last used, so a row moved several places keeps it. A move that cannot happen, such as "up" on the first row, stays in the toolbar and does nothing.
+
+Arrow keys keep their native meaning inside the fields. The builder does not use a grid or tree model for the fields, because arrow keys already pick an option in a list, step a number, and move through a calendar.
+
+Adding a condition or group moves focus to its first field. Removing one moves focus to the next row, or to "Add condition" when none is left. Moving a row keeps focus on its move button, also when the row reaches an end. Each change is announced in a status region, for example "Condition moved to position 2 of 3".
+
+| Do | Why |
+| --- | --- |
+| Set `labelText`, or `aria-label` on the builder. | It names the root group. Without either, the group is named "Conditions". |
+| Keep field names short and distinct. | They appear in each row's name, the field list, and the summary. |
+| Set `showSummary` for queries people save and share. | It gives a plain-language check that the query says what was meant. |
+
+## Translation
+
+Set `translateWithId` to change any string, including operator names and the announcements. It receives an id and the values for its `{name}` placeholders. Return nothing for an id to keep the English default.
+
+<FileSource src="/framed/QueryBuilder/QueryBuilderTranslated" />
