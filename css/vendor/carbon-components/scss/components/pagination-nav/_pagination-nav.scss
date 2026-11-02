@@ -78,8 +78,12 @@
     line-height: 0;
   }
 
+  // ccs: wrap the pages onto more rows when the nav is narrower than
+  // them, so a 320 px page does not scroll sideways. Carbon React drops
+  // to four pages under `sm` in JS; set `shown` for that.
   .#{$prefix}--pagination-nav__list {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     list-style: none;
   }

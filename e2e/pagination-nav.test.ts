@@ -1,4 +1,5 @@
 import { expect, test } from "./helpers/host";
+import { expectNoPageOverflow } from "./helpers/layout";
 
 test.describe("PaginationNav", () => {
   test.beforeEach(async ({ page }) => {
@@ -34,5 +35,15 @@ test.describe("PaginationNav", () => {
       "aria-current",
       "page",
     );
+  });
+
+  test("wraps its pages at a 320 px width", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 720 });
+    await expectNoPageOverflow(page);
+    const next = await page
+      .getByRole("button", { name: "Next page" })
+      .boundingBox();
+    expect(next?.x).toBeGreaterThanOrEqual(0);
+    expect((next?.x ?? 0) + (next?.width ?? 0)).toBeLessThanOrEqual(320);
   });
 });
