@@ -5,7 +5,7 @@ import { browserslistToTargets } from "lightningcss";
 export const BROWSERSLIST = [
   "Chrome >= 87",
   "Firefox >= 83",
-  "Safari >= 14",
+  "Safari >= 14.1",
   "Edge >= 87",
 ] as const;
 
