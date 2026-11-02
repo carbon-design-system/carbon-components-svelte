@@ -618,10 +618,15 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
 
         // Its own box, or for inline text the box that holds it, unless
         // that box scrolls on the axis. Preformatted lines (code) that a
-        // scrolling ancestor holds are meant to scroll.
+        // scrolling ancestor holds are meant to scroll. Inline text raised
+        // or lowered off the baseline (a footnote `sup`) may leave the
+        // holder's box on the block axis; a clipping ancestor still counts.
         let holder: Element | null = el;
-        while (holder && /^(inline|contents)$/.test(style(holder).display))
+        let shifted = false;
+        while (holder && /^(inline|contents)$/.test(style(holder).display)) {
+          if (style(holder).verticalAlign !== "baseline") shifted = true;
           holder = holder.parentElement;
+        }
         if (holder) {
           const hs = style(holder);
           const code =
@@ -631,7 +636,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
           const over = spill(
             paddingBox(holder),
             !code && !/auto|scroll/.test(hs.overflowX),
-            !/auto|scroll/.test(hs.overflowY),
+            !shifted && !/auto|scroll/.test(hs.overflowY),
           );
           if (over > tolerance) {
             problems.push(
@@ -986,8 +991,10 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
  * for its full text to show up: in a `title` or an `aria-label` on it or an
  * ancestor (set by a `mouseenter` handler such as `titleWhenTruncated`), or
  * in a tooltip that opens, which may sit in a portal (`AnchoredTooltip`).
- * A tooltip already open belongs to an earlier element and does not count.
- * The pointer goes back to the bottom-right corner, where the host parks it.
+ * Text whose box grows on hover until it fits counts too. A tooltip
+ * already open belongs to an earlier element and does not count. The
+ * pointer goes back to the bottom-right corner, where the host parks it,
+ * and the tooltip this hover opened closes before the next hover.
  */
 async function fullTextOnHover(
   page: Page,
@@ -1013,6 +1020,9 @@ async function fullTextOnHover(
     // biome-ignore lint/performance/noAwaitInLoops: polls until it appears
     found = await target.evaluate(
       (el, [text, selector]) => {
+        // The box grew to show it all, as a collapsed SideNav rail does.
+        if (el.clientWidth >= 1 && el.scrollWidth - el.clientWidth <= 1)
+          return true;
         for (let node: Element | null = el; node; node = node.parentElement) {
           for (const name of ["title", "aria-label"]) {
             if (node.getAttribute(name)?.includes(text)) return true;
@@ -1032,6 +1042,20 @@ async function fullTextOnHover(
   }
   const viewport = page.viewportSize();
   if (viewport) await page.mouse.move(viewport.width - 1, viewport.height - 1);
+  // Wait for a tooltip this hover opened to close. One still closing may
+  // cover the next element, and keeps itself open under the pointer.
+  await page
+    .waitForFunction(
+      (selector) =>
+        [...document.querySelectorAll(selector)].every(
+          (tip) =>
+            tip.hasAttribute("data-layout-stale") ||
+            !tip.checkVisibility({ visibilityProperty: true }),
+        ),
+      tooltips,
+      { timeout, polling: 50 },
+    )
+    .catch(() => {});
   await page.evaluate(() => {
     for (const tip of document.querySelectorAll("[data-layout-stale]"))
       tip.removeAttribute("data-layout-stale");
