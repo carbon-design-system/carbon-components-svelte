@@ -322,7 +322,9 @@
     on:focus
     on:blur
   >
-    <slot name="textChildren"><slot name="text">{text}</slot></slot>
+    <span class:bx--text-truncate--end={true}
+      ><slot name="textChildren"><slot name="text">{text}</slot></slot></span
+    >
     {#if icon || $$slots.icon}
       <slot name="icon">
         <svelte:component this={icon} size={16} />

@@ -1,4 +1,5 @@
 import { expect, test } from "./helpers/host";
+import { findLayoutProblems } from "./helpers/layout";
 
 test.describe("UIShell", () => {
   test.beforeEach(async ({ page }) => {
@@ -254,4 +255,26 @@ test.describe("UIShell ProfileMenu", () => {
     await expect(card(page)).toHaveCount(0);
     await expect(trigger(page)).toBeFocused();
   });
+});
+
+test("a header menu title in the collapsed rail ends in an ellipsis", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 672, height: 720 });
+  await page.goto("/uishell-variants.html");
+  await page.evaluate(() => document.fonts.ready);
+  // Below `lg` the rail mirrors the header nav. "Manage" ran out of its
+  // 48px row with no ellipsis, while "Catalog" beside it truncated.
+  const title = page.locator(
+    ".bx--side-nav__header-navigation .bx--header__menu-title",
+  );
+  const findings = await findLayoutProblems([title], "fits");
+  expect(findings.filter(({ kind }) => kind === "overflows box")).toEqual([]);
+  const text = title.locator(".bx--text-truncate--end");
+  await expect(text).toHaveText("Manage");
+  // Whether "Manage" overflows depends on the platform's font metrics, so
+  // check that it would end in an ellipsis if it did.
+  await expect(text).toHaveCSS("text-overflow", "ellipsis");
+  await expect(text).toHaveCSS("overflow-x", "hidden");
+  await expect(text).toHaveCSS("white-space", "nowrap");
 });
