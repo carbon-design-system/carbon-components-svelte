@@ -99,7 +99,7 @@ describe("Table Sub-Components", () => {
 
       const tbody = container.querySelector("tbody");
       expect(tbody).toBeInTheDocument();
-      expect(tbody).toHaveAttribute("aria-live", "polite");
+      expect(tbody).not.toHaveAttribute("aria-live");
     });
 
     it("should apply custom attributes", () => {

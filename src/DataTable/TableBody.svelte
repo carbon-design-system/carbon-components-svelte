@@ -1,3 +1,3 @@
-<tbody aria-live="polite" {...$$restProps}>
+<tbody {...$$restProps}>
   <slot />
 </tbody>
