@@ -298,7 +298,14 @@
 
 <!-- expectNoPageOverflow -->
 {#if wide}
-  <div class="wide" data-testid="overflow-wide"></div>
+  <div class="wide" data-testid="overflow-wide">
+    <!-- Past the edge, inside a wider box: the box is named, not this. -->
+    <div style="display: contents">
+      <div class="wide" data-testid="overflow-in-wrapper"></div>
+    </div>
+  </div>
+  <!-- Past the edge with no height: adds no scroll width. -->
+  <div class="flat" data-testid="overflow-flat"></div>
 {/if}
 
 <style>
@@ -549,5 +556,12 @@
   .wide {
     width: 150vw;
     height: 1px;
+  }
+
+  .flat {
+    position: absolute;
+    left: 200vw;
+    width: 20rem;
+    height: 0;
   }
 </style>

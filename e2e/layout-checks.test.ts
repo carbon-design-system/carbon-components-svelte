@@ -6,6 +6,7 @@ import {
   expectOnePitch,
   expectSingleRing,
   expectTextFits,
+  findLayoutProblems,
 } from "./helpers/layout";
 
 // Each helper passes on its good case and throws on its bad case, naming
@@ -200,6 +201,14 @@ test("expectNoPageOverflow names what widens the page", async ({ page }) => {
   await expect(expectNoPageOverflow(page)).rejects.toThrow(
     /page scrolls sideways: scrollWidth \d+px, clientWidth \d+px\n.*overflow-wide.*: spans 0px to \d/,
   );
+  // Named once: not the child in a `display: contents` wrapper, and not
+  // the box with no height, which adds no scroll width.
+  const named = (await findLayoutProblems(page, "overflow")).map(
+    (finding) => finding.message,
+  );
+  expect(named.filter((message) => /spans/.test(message))).toEqual([
+    expect.stringMatching(/overflow-wide.*: spans 0px to \d/),
+  ]);
 });
 
 test("expectSingleRing allows one ring under forced colors", async ({

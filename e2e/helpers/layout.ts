@@ -876,14 +876,28 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
         }
         return false;
       };
+      // A box with no width or no height adds nothing to the scroll
+      // width, such as a closed calendar at `max-height: 0`. A wrapper
+      // with `display: contents` has no box at all.
+      const hasArea = (el: Element) => {
+        const box = el.getBoundingClientRect();
+        return box.width > 0 && box.height > 0;
+      };
+      const boxedParent = (el: Element) => {
+        let node = el.parentElement;
+        while (node && node !== document.body && !hasArea(node))
+          node = node.parentElement;
+        return node;
+      };
       if (wide > tolerance) {
         // Name where the overflow starts: elements past the edge whose
-        // parent is not.
+        // nearest parent with a box is not.
         const culprits = [...document.body.querySelectorAll("*")].filter(
-          (el) =>
-            sticksOut(el) &&
-            !(el.parentElement && sticksOut(el.parentElement)) &&
-            !inClip(el),
+          (el) => {
+            if (!sticksOut(el) || !hasArea(el) || inClip(el)) return false;
+            const parent = boxedParent(el);
+            return !(parent && sticksOut(parent));
+          },
         );
         problems.push(
           problem(
