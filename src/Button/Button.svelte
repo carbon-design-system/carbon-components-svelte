@@ -244,8 +244,8 @@
   // announce as the accessible name via the assistive-text span; skip the
   // whole tooltip apparatus and let the consumer's own aria-label/
   // aria-labelledby (passed through $$restProps) carry accessibility instead.
-  // While loading, Loading's own <title> + aria-live carries the accessible
-  // name instead, so the tooltip is suppressed to avoid double-announcing.
+  // While loading, the spinner's <title> carries the accessible name
+  // instead, so the tooltip is suppressed to avoid reading it twice.
   $: hasTooltipContent =
     hasIconOnly && Boolean(iconDescription) && !showSpinner;
   // Set for one open when the in-place tooltip turns out to be cut off by

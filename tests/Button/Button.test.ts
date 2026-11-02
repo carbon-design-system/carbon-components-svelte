@@ -444,6 +444,17 @@ describe("Button", () => {
       expect(button.querySelector(".bx--assistive-text")).toBeNull();
     });
 
+    // An assertive region created with its text is not reliably read, and
+    // `aria-busy` already reports the state.
+    it("sets aria-busy and puts no live region in a loading button", () => {
+      render(ButtonLoading, { loading: true });
+
+      const button = screen.getByTestId("btn-labeled-loading");
+      expect(button).toHaveAttribute("aria-busy", "true");
+      expect(button.querySelector(".bx--btn__loading title")).not.toBeNull();
+      expect(button.querySelector("[aria-live]")).toBeNull();
+    });
+
     it("renders the spinner trailing the label on a labeled button", () => {
       render(ButtonLoading, { loading: true });
 
