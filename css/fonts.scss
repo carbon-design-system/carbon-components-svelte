@@ -1,7 +1,7 @@
-// The IBM Plex `@font-face` rules on their own, served from Carbon's CDN.
-// The theme sheets include the same rules today. Import this file next to
-// a theme sheet that leaves them out, or skip it to self-host Plex, use
-// another font through `--ccs-font-sans`, or load no web fonts.
+// The IBM Plex `@font-face` rules, served from Carbon's CDN. The theme
+// sheets leave them out. Import this file next to one, or skip it to
+// self-host Plex, use another font through `--ccs-font-sans`, or load no
+// web fonts.
 
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 

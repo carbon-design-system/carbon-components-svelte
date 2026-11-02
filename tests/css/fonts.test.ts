@@ -35,6 +35,15 @@ describe("fonts.css", () => {
   }, 30_000);
 });
 
+describe("theme sheets", () => {
+  it("leave the @font-face rules to fonts.css", async () => {
+    for (const entry of ["all.scss", "white.scss", "g100.scss"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: the compile cache is per entry
+      expect(await compileEntry(entry), entry).not.toMatch(/@font-face/);
+    }
+  }, 60_000);
+});
+
 describe("font family variables", () => {
   it("routes every sans, mono and serif stack through --ccs-font-*", async () => {
     const css = await compileEntry("all.scss");

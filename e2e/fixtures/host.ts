@@ -1,6 +1,7 @@
 import type { Component } from "svelte";
 import { flushSync, mount, unmount } from "svelte";
 import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/fonts.css";
 // A stylesheet belongs to the first fixture that loads it, and is off while
 // any other fixture is mounted. Two fixtures import prose.css, so the second
 // one lost it. Load it here, for every fixture; it only styles `.bx--prose`.
