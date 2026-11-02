@@ -166,6 +166,19 @@ test("layout helpers pass good cases and name the element in bad ones", async ({
     await expect(
       expectNoNestedBorders(page.getByTestId("rings-active-bad")),
     ).rejects.toThrow(/#rings-other-2: 2px outline inside bordered box/);
+
+    // A user sees no second box when the inner edge is hidden with `clip`,
+    // paints on the outer edge's line, sits on a layer its `::after`
+    // paints, or hangs outside the box. The hidden edge is not counted.
+    const edges = (id: string) => expectNoNestedBorders(page.getByTestId(id));
+    expect(await edges("edges-hidden")).toBe(1);
+    expect(await edges("edges-shared")).toBe(2);
+    expect(await edges("edges-segment")).toBe(2);
+    expect(await edges("edges-menu")).toBe(2);
+    // An inner outline that shares three sides still draws its fourth.
+    await expect(edges("edges-shared-bad")).rejects.toThrow(
+      /edges-half.*: 1px outline inside 2px outline .*edges-shared-bad/,
+    );
   });
 
   await test.step("a helper with nothing to measure fails", async () => {

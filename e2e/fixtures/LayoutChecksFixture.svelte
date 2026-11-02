@@ -226,6 +226,26 @@
   <div class="shadow-inset" data-testid="rings-inset">Inset shadow ring</div>
   <div class="shadow-spread" data-testid="rings-spread">Spread shadow ring</div>
 </div>
+<!-- Edges that show no second box. A closed icon tooltip, hidden with
+     `clip`. A field's outline drawn on its list box's outline. A selected
+     segment, whose `::after` is its layer. A menu below its field. -->
+<div class="frame" data-testid="edges-hidden">
+  <span class="outline clipped">Closed tooltip</span>
+</div>
+<div class="outline" data-testid="edges-shared">
+  <div class="outline-thin">Field on its box's edge</div>
+</div>
+<div class="outline-thin segments" data-testid="edges-segment">
+  <div class="outline-thin segment">Selected segment</div>
+</div>
+<div class="outline anchor" data-testid="edges-menu">
+  Field
+  <div class="outline menu">Menu below its field</div>
+</div>
+<!-- The field's outline shares three sides; its end is a second line. -->
+<div class="outline" data-testid="edges-shared-bad">
+  <div class="outline-thin half" data-testid="edges-half">Half field</div>
+</div>
 
 <!-- expectSingleRing, under forced colors -->
 <!-- 1px boxes, as on ActionBar buttons, are resting edges. -->
@@ -370,6 +390,43 @@
   .outline-transparent {
     outline: 2px solid transparent;
     outline-offset: -2px;
+  }
+  .outline-thin {
+    outline: 1px solid #8d8d8d;
+    outline-offset: -2px;
+  }
+  .clipped {
+    position: absolute;
+    clip: rect(0 0 0 0);
+  }
+  .segments {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #e0e0e0;
+  }
+  .segment {
+    position: relative;
+    z-index: 0;
+  }
+  .segment::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #fff;
+  }
+  .anchor {
+    position: relative;
+    margin-bottom: 3rem;
+  }
+  .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+  }
+  .half {
+    width: 50%;
   }
   .elevated {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
