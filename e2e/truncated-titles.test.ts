@@ -1,4 +1,5 @@
 import { expect, test } from "./helpers/host";
+import { findLayoutProblems } from "./helpers/layout";
 
 /**
  * Text that a component cuts off with an ellipsis gets a `title` with the
@@ -37,7 +38,7 @@ const CASES: {
   {
     name: "DatePicker multiple value",
     hover: ".bx--date-picker-input__wrapper",
-    measure: ".bx--date-picker__input-overlay span",
+    measure: ".bx--date-picker__input-overlay > span",
     text: "09/09/2026, 09/10/2026, 09/11/2026, 09/12/2026",
   },
   {
@@ -134,4 +135,16 @@ test("a focused multiple DatePicker shows the input's own text", async ({
     input: "rgba(0, 0, 0, 0)",
     overlayVisibility: "visible",
   });
+});
+
+test("a cut multiple DatePicker hides whole dates", async ({ page }) => {
+  await page.goto("/truncated-titles.html");
+  await page.evaluate(() => document.fonts.ready);
+  const overlay = page
+    .getByTestId("cut")
+    .getByTestId("date-picker")
+    .locator(".bx--date-picker__input-overlay");
+  // The ellipsis falls after "09/09/2026, ", not inside the next date.
+  const findings = await findLayoutProblems(overlay, "fits");
+  expect(findings.filter(({ kind }) => kind === "cuts a number")).toEqual([]);
 });

@@ -544,6 +544,7 @@
   const mode = writable(datePickerType);
   const sharedDateFormat = writable(dateFormat);
   const sharedLocale = writable(locale);
+  const sharedConjunction = writable(conjunction);
   const sharedClearable = writable(clearable);
   const sharedClearButtonLabelText = writable(clearButtonLabelText);
   /**
@@ -1300,6 +1301,7 @@
     hasCalendar,
     dateFormat: sharedDateFormat,
     locale: sharedLocale,
+    conjunction: sharedConjunction,
     clearable: sharedClearable,
     clearButtonLabelText: sharedClearButtonLabelText,
     clear,
@@ -1771,6 +1773,7 @@
 
   $: sharedDateFormat.set(dateFormat);
   $: sharedLocale.set(locale);
+  $: sharedConjunction.set(conjunction);
   // Repaint a pending range's window when the limits change.
   $: if (
     minRangeDays !== prevMinRangeDays ||

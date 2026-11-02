@@ -103,6 +103,10 @@ test("layout helpers pass good cases and name the element in bad ones", async ({
     await expect(
       expectTextFits(page.getByTestId("fits-cut-number")),
     ).rejects.toThrow(/fits-cut.*: cuts a number: shows "\d+", hides "\d+"/);
+    // The ellipsis hides an inline-block whole, so no number is cut.
+    expect(await expectTextFits(page.getByTestId("fits-whole-numbers"))).toBe(
+      3,
+    );
 
     // A `title` set on hover and a tooltip anchored from a portal both
     // count, once the pointer is over the text. Each must hold the full

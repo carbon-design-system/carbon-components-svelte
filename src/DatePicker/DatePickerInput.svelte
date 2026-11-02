@@ -131,6 +131,7 @@
     clearButtonLabelText,
     clear,
     locale,
+    conjunction,
   } = getContext("carbon:DatePicker");
 
   add({ id, labelText });
@@ -183,6 +184,13 @@
   // deliberate lag would otherwise leave the overlay showing stale text
   // while the (invisible) real input already has the freshly typed value.
   $: overlayValue = currentValue;
+  // Each date is its own inline-block, so the ellipsis hides whole dates
+  // and never cuts one in the middle.
+  $: overlayDates = overlayValue
+    ? $conjunction
+      ? overlayValue.split($conjunction)
+      : [overlayValue]
+    : [];
   // While the input has focus, the overlay hides and the input shows its
   // own text, scrolled to the caret, so the part being edited is visible.
   let focused = false;
@@ -252,7 +260,7 @@
       !$isFluid}
     class:bx--date-picker-input__wrapper--ai-label={$aiLabelState === "active"}
     use:titleWhenTruncated={{
-      measure: ".bx--date-picker__input-overlay span",
+      measure: ".bx--date-picker__input-overlay > span",
       enabled: $multiple,
     }}
   >
@@ -330,7 +338,11 @@
         class:bx--date-picker__input--xl={effectiveSize === "xl"}
         aria-hidden="true"
       >
-        <span>{overlayValue}</span>
+        <span dir="auto"
+          >{#each overlayDates as date, i (i)}{#if i}{$conjunction}{/if}<span
+              >{date}</span
+            >{/each}</span
+        >
       </div>
     {/if}
     {#if showClear}

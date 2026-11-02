@@ -174,12 +174,20 @@
     // directly on it, so the truncation happens on this nested flex child
     // instead; `min-width: 0` lets it actually shrink below its content
     // size rather than the flexbox default of refusing to.
-    span {
+    // `dir="auto"` in the markup reads the direction from the dates, as
+    // `unicode-bidi: plaintext` does on the input.
+    > span {
       overflow: hidden;
       min-width: 0;
       white-space: nowrap;
       text-overflow: ellipsis;
-      unicode-bidi: plaintext; // ccs: as on the input
+    }
+
+    // ccs: one inline-block per date. The ellipsis hides an atomic inline
+    // whole, so it falls between dates and never inside one.
+    > span > span {
+      display: inline-block;
+      unicode-bidi: plaintext;
     }
   }
 

@@ -4281,27 +4281,11 @@
   },
   {
     "fixture": "truncated-titles.html",
-    "variant": "1280",
-    "check": "fits",
-    "kind": "cuts a number",
-    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__input.bx--date-picker__input-overlay:nth-of-type(2) > span",
-    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__input.bx--date-picker__input-overlay:nth-of-type(2) > span: cuts a number: shows \"09/09/2026, 09\", hides \"/10/2026, 09/11/2026, 09/12/2026\""
-  },
-  {
-    "fixture": "truncated-titles.html",
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
     "path": "div[data-testid=\"content-switcher\"] > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2)",
     "message": "div[data-testid=\"content-switcher\"] > div.bx--content-switcher > button.bx--content-switcher-btn:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"content-switcher\"] > div.bx--content-switcher, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "truncated-titles.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "cuts a number",
-    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__input.bx--date-picker__input-overlay:nth-of-type(2) > span",
-    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__input.bx--date-picker__input-overlay:nth-of-type(2) > span: cuts a number: shows \"09/09/2026, 09\", hides \"/10/2026, 09/11/2026, 09/12/2026\""
   },
   {
     "fixture": "truncated-titles.html",
@@ -4318,14 +4302,6 @@
     "kind": "widens page",
     "path": "div[data-testid=\"fits\"]",
     "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
-  },
-  {
-    "fixture": "truncated-titles.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "cuts a number",
-    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__input.bx--date-picker__input-overlay:nth-of-type(2) > span",
-    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__input.bx--date-picker__input-overlay:nth-of-type(2) > span: cuts a number: shows \"09/09/2026, 09\", hides \"/10/2026, 09/11/2026, 09/12/2026\""
   },
   {
     "fixture": "truncated-titles.html",
