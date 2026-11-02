@@ -77,14 +77,16 @@ describe("translatable strings", () => {
     );
   });
 
-  it("PaginationNav names pages and announces the range with pageText and pageRangeText", () => {
+  it("PaginationNav names pages and announces the range with pageText and pageRangeText", async () => {
     render(TranslatableStrings, { props: { example: "PaginationNav" } });
 
     expect(screen.getByRole("button", { name: "Seite 1" })).toHaveAttribute(
       "aria-current",
       "page",
     );
-    expect(screen.getByText("Seite 1 von 20")).toBeInTheDocument();
+    // The range is announced once the user picks a page.
+    await user.click(screen.getByRole("button", { name: "Seite 2" }));
+    expect(screen.getByText("Seite 2 von 20")).toBeInTheDocument();
     expect(screen.getByLabelText("Seite wählen")).toBeInTheDocument();
   });
 
