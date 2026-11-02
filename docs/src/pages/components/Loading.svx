@@ -27,7 +27,7 @@ Display a more compact loading indicator.
 
 ## Description
 
-Customize the text announced to screen readers by setting `description`. Defaults to `"loading"`.
+Set `description` to name the spinner for screen readers. The overlay also uses it as the name of its dialog. Defaults to `"loading"`. The spinner is not a live region: the overlay is announced when its dialog takes focus, and a spinner inside a control, such as Button's, is read with that control.
 
 <Loading description="Loading metrics..." withOverlay={false} />
 
@@ -41,6 +41,6 @@ While it waits, the spinner is in the page but hidden. The server HTML holds it 
 
 ## Stop state
 
-Set `active` to `false` to play the spinner's end-of-loading animation and mark it inactive for screen readers (`aria-live="off"`). Useful when transitioning out of a loading state before removing the component.
+Set `active` to `false` to play the spinner's end-of-loading animation. Useful when transitioning out of a loading state before removing the component.
 
 <Loading active={false} withOverlay={false} />
