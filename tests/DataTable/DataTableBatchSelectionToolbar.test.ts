@@ -196,21 +196,41 @@ describe("DataTableBatchSelectionToolbar", () => {
       },
     });
 
-    const batchActions = container.querySelector(".bx--batch-actions");
+    const actionList = container.querySelector(".bx--action-list");
     const toolbarContent = container.querySelector(".bx--toolbar-content");
 
-    expect(batchActions).toHaveAttribute("inert");
+    expect(actionList).toHaveAttribute("inert");
     expect(toolbarContent).not.toHaveAttribute("inert");
 
     await rerender({ selectedRowIds: ["a", "b"] });
 
-    expect(batchActions).not.toHaveAttribute("inert");
+    expect(actionList).not.toHaveAttribute("inert");
     expect(toolbarContent).toHaveAttribute("inert");
 
     await rerender({ selectedRowIds: [] });
 
-    expect(batchActions).toHaveAttribute("inert");
+    expect(actionList).toHaveAttribute("inert");
     expect(toolbarContent).not.toHaveAttribute("inert");
+  });
+
+  // A live region inside `inert` is out of the accessibility tree, so the
+  // count it gains or loses with `inert` is not announced.
+  it("keeps the selection summary out of the inert subtree", async () => {
+    const { container, rerender } = render(DataTableBatchSelectionToolbar, {
+      props: { selectedRowIds: [] },
+    });
+
+    const summary = container.querySelector(".bx--batch-summary__para");
+    assert(summary);
+    expect(summary.closest("[inert]")).toBeNull();
+
+    await rerender({ selectedRowIds: ["a"] });
+    expect(summary).toHaveTextContent("1 item selected");
+    expect(summary.closest("[inert]")).toBeNull();
+
+    await rerender({ selectedRowIds: [] });
+    expect(summary).toHaveTextContent("0 items selected");
+    expect(summary.closest("[inert]")).toBeNull();
   });
 });
 

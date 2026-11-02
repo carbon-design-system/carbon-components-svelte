@@ -107,9 +107,10 @@
     bind:this={wrapperRef}
     class:bx--batch-actions={true}
     class:bx--batch-actions--active={showActions}
-    {...inertProps}
     {...$$restProps}
   >
+    <!-- Keep the summary outside `inert`: a live region that enters or
+         leaves the accessibility tree with its text is not announced. -->
     <div class:bx--batch-summary={true}>
       <p
         class:bx--batch-summary__para={true}
@@ -119,7 +120,7 @@
         <span> {formatTotalSelected(batchSelectedIds.length)} </span>
       </p>
     </div>
-    <div class:bx--action-list={true}>
+    <div class:bx--action-list={true} {...inertProps}>
       <slot />
       <Button
         size="default"
