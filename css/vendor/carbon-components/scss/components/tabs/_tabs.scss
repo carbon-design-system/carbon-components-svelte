@@ -1608,12 +1608,35 @@ $tabs-sizes: (
 // opts out of forcing: forced text sits on a `Canvas` backplate that would
 // hide `HighlightText`. Its focus ring is a system color for the same
 // reason. A disabled tab reads `GrayText`.
+//
+// Forced colors paint the transparent 2px outline that
+// `focus-outline("reset")` leaves on a resting link, so every tab drew the
+// focus ring and the focused tab looked like the rest. Line tabs drop it and
+// keep their underline. Contained tabs lose the box shadows that divide
+// them, so an unselected one keeps a 1px edge instead. The `:focus` and
+// `:active` rules outrank both and draw the 2px ring.
 
 /// Tabs selected and disabled states in forced-colors mode.
 /// @access private
 /// @group tabs
 @mixin tabs-forced-colors {
   @media (forced-colors: active) {
+    // Outranks the element-qualified base link (`a.bx--tabs__nav-link`).
+    .#{$prefix}--tabs__nav-item .#{$prefix}--tabs__nav-link {
+      outline-style: none;
+    }
+
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link {
+      outline-width: 1px;
+      outline-style: solid;
+      outline-offset: -1px;
+    }
+
+    // The selected tab's fill is its edge.
+    .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-link--selected {
+      outline-style: none;
+    }
+
     // The vertical variant ties TabsVertical's selected link rule, which
     // sets `color`, and wins on order.
     .#{$prefix}--tabs__nav-item--selected .#{$prefix}--tabs__nav-link.#{$prefix}--tabs__nav-link--selected,

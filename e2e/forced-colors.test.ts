@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+import { expectSingleRing } from "./helpers/layout";
 
 // Forced colors (Windows contrast themes) repaint author colors with a few
 // system colors and drop box-shadows, so a state drawn only as a tint, an
@@ -762,8 +763,8 @@ test.describe("forced colors", () => {
   });
 
   // Forced colors drop the box shadows that divide contained tabs. Each
-  // link keeps its own edge instead: the focus reset's transparent outline
-  // turns into a frame in the link's color.
+  // unselected link keeps a 1px frame in its own color instead, thinner
+  // than the 2px focus ring. The selected tab's fill is its edge.
   test("contained Tabs keep an edge per tab, in both directions", async ({
     page,
   }) => {
@@ -771,9 +772,9 @@ test.describe("forced colors", () => {
       "[data-testid=tabs-container] .bx--tabs__nav-link",
     );
     // Overview, Logs (selected), Metrics, Alerts, Settings (disabled)
-    const colors: SystemColor[] = [
+    const edges: (SystemColor | null)[] = [
       "LinkText",
-      "HighlightText",
+      null,
       "LinkText",
       "LinkText",
       "GrayText",
@@ -793,13 +794,45 @@ test.describe("forced colors", () => {
           };
         }),
       );
-      expect(outlines).toHaveLength(colors.length);
-      colors.forEach((color, i) => {
-        expect.soft(outlines[i], `${dir} tab ${i + 1}`).toEqual({
-          outline: "solid 2px",
-          outlineColor: system[color],
-        });
+      expect(outlines).toHaveLength(edges.length);
+      edges.forEach((color, i) => {
+        expect
+          .soft(outlines[i], `${dir} tab ${i + 1}`)
+          .toMatchObject(
+            color
+              ? { outline: "solid 1px", outlineColor: system[color] }
+              : { outline: expect.stringMatching(/^none /) },
+          );
       });
+    }
+  });
+
+  // The focus reset leaves a transparent 2px outline on every resting tab.
+  // Forced colors painted it, so each tab drew the focus ring and the
+  // focused tab looked like the rest.
+  test("Tabs draw a ring only on the focused tab", async ({ page }) => {
+    for (const [tablist, name] of [
+      [".bx--tabs--line [role=tablist]", "Tab"],
+      ["[data-testid=tabs-container] [role=tablist]", "Metrics"],
+    ] as const) {
+      const scope = page.locator(tablist).first();
+      // biome-ignore lint/performance/noAwaitInLoops: one tab has focus at a time
+      await expectSingleRing([scope]);
+      await scope.getByRole("tab", { name, exact: true }).focus();
+      const widths = await scope
+        .locator(".bx--tabs__nav-link")
+        .evaluateAll((els) =>
+          els.map((el) => {
+            const s = getComputedStyle(el);
+            return s.outlineStyle === "none" ? "0px" : s.outlineWidth;
+          }),
+        );
+      expect
+        .soft(
+          widths.filter((width) => width === "2px"),
+          tablist,
+        )
+        .toHaveLength(1);
     }
   });
 
