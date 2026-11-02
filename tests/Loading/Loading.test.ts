@@ -14,8 +14,10 @@ describe("Loading", () => {
     expect(loader).toBeInTheDocument();
     expect(loader).not.toHaveClass("bx--loading--stop");
 
-    expect(loader).toHaveAttribute("aria-atomic", "true");
-    expect(loader).toHaveAttribute("aria-live", "assertive");
+    // The <title> names the spinner and the overlay dialog announces it,
+    // so the spinner is not a live region.
+    expect(loader).not.toHaveAttribute("aria-live");
+    expect(loader).not.toHaveAttribute("aria-atomic");
 
     expect(wrapper.querySelector(".bx--loading__stroke")).toHaveAttribute(
       "r",
@@ -61,8 +63,6 @@ describe("Loading", () => {
 
     const loader = wrapper.querySelector(".bx--loading");
     expect(loader).toHaveClass("bx--loading--stop");
-
-    expect(loader).toHaveAttribute("aria-live", "off");
   });
 
   it("passes rest props to the overlay", () => {
@@ -74,14 +74,12 @@ describe("Loading", () => {
     expect(overlay).toHaveAttribute("data-extra", "yes");
   });
 
-  it("turns off aria-live without an overlay when inactive", () => {
-    render(Loading);
-    const wrapper = screen.getByTestId("loader-no-overlay-inactive");
+  it("renders no live region in any variant", () => {
+    const { container } = render(Loading);
+    const spinners = container.querySelectorAll(".bx--loading");
 
-    expect(wrapper.querySelector(".bx--loading")).toHaveAttribute(
-      "aria-live",
-      "off",
-    );
+    expect(spinners.length).toBeGreaterThan(4);
+    expect(container.querySelectorAll("[aria-live]")).toHaveLength(0);
   });
 
   it("supports custom description", () => {
@@ -157,7 +155,6 @@ describe("Loading", () => {
       await vi.advanceTimersByTimeAsync(300);
       await rerender({ active: false, delay: 200 });
       expect(getSpinner()).not.toHaveClass("bx--loading--stop");
-      expect(getSpinner()).toHaveAttribute("aria-live", "assertive");
 
       // Shown at 200 ms, so the 500 ms minimum ends at 700 ms.
       await vi.advanceTimersByTimeAsync(399);
@@ -165,7 +162,6 @@ describe("Loading", () => {
 
       await vi.advanceTimersByTimeAsync(1);
       expect(getSpinner()).toHaveClass("bx--loading--stop");
-      expect(getSpinner()).toHaveAttribute("aria-live", "off");
     });
 
     it("stops at once when the work outlasts the minimum", async () => {

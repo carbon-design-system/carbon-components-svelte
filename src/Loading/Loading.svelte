@@ -82,8 +82,6 @@
       use:overlayFocus={shown}
     >
       <div
-        aria-atomic="true"
-        aria-live={spinning ? "assertive" : "off"}
         class:bx--loading={true}
         class:bx--loading--small={small}
         class:bx--loading--stop={!spinning}
@@ -110,8 +108,6 @@
     </div>
   {:else}
     <div
-      aria-atomic="true"
-      aria-live={spinning ? "assertive" : "off"}
       class:bx--loading={true}
       class:bx--loading--small={small}
       class:bx--loading--stop={!spinning}
