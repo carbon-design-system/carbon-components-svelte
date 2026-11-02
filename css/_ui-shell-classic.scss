@@ -1,46 +1,15 @@
 // Classic UI Shell: g100 header + white side nav. Requires all.css (CSS custom properties).
 
 @import "carbon-components/scss/globals/scss/vars";
-@import "./text-tokens";
-@import "./user-avatar-tokens";
 
 // Requires all.css (CSS custom properties), so this only emits when the
 // entry file sets `$ccs-theme-switching`.
 @if $ccs-theme-switching {
 
-// These scopes nest under any page theme, so they re-declare every token that
-// varies between themes and inherit the rest (type, spacing, layout) from it.
-$ccs-themes: (
-  $carbon--theme--white,
-  $carbon--theme--g10,
-  $carbon--theme--g80,
-  $carbon--theme--g90,
-  $carbon--theme--g100
-);
-
-.#{$prefix}--header.#{$prefix}--header--ui-shell-classic {
-  @include carbon--theme($carbon--theme--g100, true, $ccs-themes) {
-    @include emit-component-tokens($tag-colors, $ccs-themes);
-    @include emit-component-tokens($notification-colors, $ccs-themes);
-    @include emit-component-tokens($content-switcher-colors, $ccs-themes);
-    @include emit-component-tokens($status-colors, $ccs-themes);
-  }
-  @include ccs-emit-theme-colors($ccs-text-colors, $carbon--theme--g100);
-  @include ccs-emit-theme-colors($ccs-user-avatar-colors, $carbon--theme--g100);
-
-  // The header panel is always g100 (dark) in the classic variant, regardless of
-  // the page theme, so force a dark color scheme rather than inheriting the root's.
-  .#{$prefix}--header-panel {
-    color-scheme: dark;
-  }
-
-  // The ProfileMenu card inherits the classic header's g100 tokens (it renders as
-  // a header descendant), so it is dark already; force the color scheme to match
-  // for native scrollbars and controls.
-  .#{$prefix}--profile-menu {
-    color-scheme: dark;
-  }
-}
+// The header and side nav take the Gray 100 and White token sets from the
+// theme blocks in all.scss, which list them beside the theme zones. The
+// Gray 100 block also sets `color-scheme: dark`, so the header panel and
+// ProfileMenu inside the header get dark scrollbars and controls.
 
 // Header tooltips open below the header, over the page, so they take the
 // page's inverse colors rather than the Gray 100 header's: on a light page,
@@ -58,14 +27,4 @@ html {
   --cds-background-inverse: var(--ccs-page-background-inverse);
 }
 
-.#{$prefix}--side-nav.#{$prefix}--side-nav--ui-shell-classic {
-  @include carbon--theme($carbon--theme--white, true, $ccs-themes) {
-    @include emit-component-tokens($tag-colors, $ccs-themes);
-    @include emit-component-tokens($notification-colors, $ccs-themes);
-    @include emit-component-tokens($content-switcher-colors, $ccs-themes);
-    @include emit-component-tokens($status-colors, $ccs-themes);
-  }
-  @include ccs-emit-theme-colors($ccs-text-colors, $carbon--theme--white);
-  @include ccs-emit-theme-colors($ccs-user-avatar-colors, $carbon--theme--white);
-}
 }
