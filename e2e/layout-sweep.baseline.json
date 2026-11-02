@@ -764,22 +764,6 @@
     "variant": "320",
     "check": "overflow",
     "kind": "widens page",
-    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static",
-    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static: spans 16px to 331px"
-  },
-  {
-    "fixture": "date-picker-fit.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--range",
-    "message": "div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--range: spans 16px to 331px"
-  },
-  {
-    "fixture": "date-picker-fit.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
     "path": "div[data-testid=\"single-wide\"]",
     "message": "div[data-testid=\"single-wide\"]: spans 16px to 616px"
   },
@@ -937,14 +921,6 @@
   },
   {
     "fixture": "fluid-label.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div[data-testid=\"wide\"] > div.bx--search.bx--search--lg:nth-of-type(9) > div.bx--search-magnifier > svg.bx--search-magnifier-icon",
-    "message": "div[data-testid=\"wide\"] > div.bx--search.bx--search--lg:nth-of-type(9) > div.bx--search-magnifier > svg.bx--search-magnifier-icon: spans 448px to 464px"
-  },
-  {
-    "fixture": "fluid-label.html",
     "variant": "672",
     "check": "fits",
     "kind": "no full text",
@@ -1020,30 +996,6 @@
     "variant": "320",
     "check": "overflow",
     "kind": "widens page",
-    "path": "div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(9) > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field",
-    "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(9) > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: spans 284px to 680px"
-  },
-  {
-    "fixture": "focus-ring.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--list-box__wrapper:nth-of-type(10) > div.bx--combo-box.bx--list-box > div > div.bx--list-box__field",
-    "message": "div.bx--list-box__wrapper:nth-of-type(10) > div.bx--combo-box.bx--list-box > div > div.bx--list-box__field: spans 284px to 680px"
-  },
-  {
-    "fixture": "focus-ring.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(12) > div.bx--multi-select.bx--combo-box > div > div.bx--list-box__field",
-    "message": "div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(12) > div.bx--multi-select.bx--combo-box > div > div.bx--list-box__field: spans 284px to 680px"
-  },
-  {
-    "fixture": "focus-ring.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
     "path": "div#app > div",
     "message": "div#app > div: spans 272px to 692px"
   },
@@ -1054,30 +1006,6 @@
     "kind": "scrolls sideways",
     "path": "page",
     "message": "page scrolls sideways: scrollWidth 692px, clientWidth 672px"
-  },
-  {
-    "fixture": "focus-ring.html",
-    "variant": "672",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(9) > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field",
-    "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(9) > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: spans 284px to 680px"
-  },
-  {
-    "fixture": "focus-ring.html",
-    "variant": "672",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--list-box__wrapper:nth-of-type(10) > div.bx--combo-box.bx--list-box > div > div.bx--list-box__field",
-    "message": "div.bx--list-box__wrapper:nth-of-type(10) > div.bx--combo-box.bx--list-box > div > div.bx--list-box__field: spans 284px to 680px"
-  },
-  {
-    "fixture": "focus-ring.html",
-    "variant": "672",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(12) > div.bx--multi-select.bx--combo-box > div > div.bx--list-box__field",
-    "message": "div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(12) > div.bx--multi-select.bx--combo-box > div > div.bx--list-box__field: spans 284px to 680px"
   },
   {
     "fixture": "focus-ring.html",
@@ -1284,30 +1212,6 @@
     "variant": "320",
     "check": "overflow",
     "kind": "widens page",
-    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static",
-    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static: spans 16px to 331px"
-  },
-  {
-    "fixture": "forced-colors.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper.bx--date-picker-input__wrapper--readonly > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static",
-    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper.bx--date-picker-input__wrapper--readonly > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static: spans 16px to 331px"
-  },
-  {
-    "fixture": "forced-colors.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--date-picker-container.bx--date-picker--fluid--neutral > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static",
-    "message": "div.bx--date-picker-container.bx--date-picker--fluid--neutral > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > div.bx--date-picker__calendar.bx--date-picker__calendar--static: spans 16px to 331px"
-  },
-  {
-    "fixture": "forced-colors.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
     "path": "div[data-testid=\"icons\"] > ul.bx--progress:nth-of-type(1) > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3)",
     "message": "div[data-testid=\"icons\"] > ul.bx--progress:nth-of-type(1) > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3): spans 240px to 352px"
   },
@@ -1382,22 +1286,6 @@
     "kind": "scrolls sideways",
     "path": "page",
     "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
-  },
-  {
-    "fixture": "hidden-label.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field",
-    "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: spans 0px to 400px"
-  },
-  {
-    "fixture": "hidden-label.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--list-box__wrapper > div.bx--combo-box.bx--list-box > div > div.bx--list-box__field",
-    "message": "div.bx--list-box__wrapper > div.bx--combo-box.bx--list-box > div > div.bx--list-box__field: spans 0px to 400px"
   },
   {
     "fixture": "hidden-label.html",
@@ -3228,14 +3116,6 @@
     "variant": "320",
     "check": "overflow",
     "kind": "widens page",
-    "path": "div.bx--list-box__wrapper > div.bx--combo-box.bx--list-box--clearable:nth-of-type(1) > div > div.bx--list-box__field",
-    "message": "div.bx--list-box__wrapper > div.bx--combo-box.bx--list-box--clearable:nth-of-type(1) > div > div.bx--list-box__field: spans 324px to 624px"
-  },
-  {
-    "fixture": "status-icons.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
     "path": "div#app > div > div:nth-of-type(2)",
     "message": "div#app > div > div:nth-of-type(2): spans 324px to 624px"
   },
@@ -3262,6 +3142,14 @@
     "kind": "widens page",
     "path": "div#app > div > div:nth-of-type(6)",
     "message": "div#app > div > div:nth-of-type(6): spans 324px to 624px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(7)",
+    "message": "div#app > div > div:nth-of-type(7): spans 648px to 948px"
   },
   {
     "fixture": "status-icons.html",
@@ -4460,14 +4348,6 @@
     "variant": "320",
     "check": "overflow",
     "kind": "widens page",
-    "path": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field",
-    "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: spans 0px to 960px"
-  },
-  {
-    "fixture": "truncated-titles.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
     "path": "div[data-testid=\"fits\"]",
     "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
   },
@@ -4486,14 +4366,6 @@
     "kind": "scrolls sideways",
     "path": "page",
     "message": "page scrolls sideways: scrollWidth 960px, clientWidth 672px"
-  },
-  {
-    "fixture": "truncated-titles.html",
-    "variant": "672",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field",
-    "message": "div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box > div > button.bx--list-box__field: spans 0px to 960px"
   },
   {
     "fixture": "truncated-titles.html",
