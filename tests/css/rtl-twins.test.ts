@@ -27,7 +27,9 @@ describe("[dir=rtl] twins", () => {
         })),
       );
 
-    expect(decls.length).toBeGreaterThan(300);
+    // Offsets are logical (`ccs-inset-inline`); the twins left mirror
+    // transforms, shadows and the rest that have no logical form.
+    expect(decls.length).toBeGreaterThan(80);
     expect(
       decls
         .filter(({ value }) => !NEAREST_DIR.test(value))
@@ -52,7 +54,7 @@ describe("ccs-dir()", () => {
         [...rule.decls.values()].some((value) => DIR_SWITCH.test(value)),
       );
 
-      expect(rules.length).toBeGreaterThan(200);
+      expect(rules.length).toBeGreaterThan(40);
       expect(
         rules
           .filter(
