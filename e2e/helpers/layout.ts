@@ -381,8 +381,19 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
     const range = document.createRange();
     let shown = "";
     let hidden = "";
+    const fits = (rect: DOMRect) =>
+      right
+        ? rect.left >= box.left + room - tolerance
+        : rect.right <= box.right - room + tolerance;
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const text = node.textContent ?? "";
+      // The ellipsis hides an atomic inline (an inline-block) whole, so its
+      // text shows only when all of it fits.
+      let atom: Element | null = null;
+      for (let p = node.parentElement; p && p !== el; p = p.parentElement) {
+        if (/^inline-/.test(style(p).display)) atom = p;
+      }
+      const atomFits = atom ? fits(atom.getBoundingClientRect()) : true;
       for (let i = 0; i < text.length; i++) {
         if (hidden) {
           hidden += text[i];
@@ -391,10 +402,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
         range.setStart(node, i);
         range.setEnd(node, i + 1);
         const rect = range.getBoundingClientRect();
-        const fits = right
-          ? rect.left >= box.left + room - tolerance
-          : rect.right <= box.right - room + tolerance;
-        if (fits || !rect.width) shown += text[i];
+        if (atomFits && (fits(rect) || !rect.width)) shown += text[i];
         else hidden += text[i];
       }
     }
@@ -568,7 +576,8 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
           );
 
         // An ellipsis on the element or the block that holds it truncates
-        // the text on purpose.
+        // the text on purpose. An inline-block sits on that block's line,
+        // so the ellipsis hides it too.
         let truncator: Element | null = null;
         for (let node: Element | null = el; node; node = node.parentElement) {
           const ns = style(node);
@@ -576,7 +585,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
             truncator = node;
             break;
           }
-          if (ns.display !== "inline") break;
+          if (!/^inline/.test(ns.display)) break;
         }
         if (truncator) {
           // A box with no width shows no text at all, which is hiding it.

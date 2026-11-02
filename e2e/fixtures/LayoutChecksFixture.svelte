@@ -122,6 +122,15 @@
   </p>
 </div>
 
+<!-- Each number is an inline-block, so the ellipsis hides the second
+     whole. -->
+<div data-testid="fits-whole-numbers">
+  <p class="digits clip" title="1234, 5678, 9012">
+    <span class="atom">1234</span>, <span class="atom">5678</span>,
+    <span class="atom">9012</span>
+  </p>
+</div>
+
 <div data-testid="fits-hover-good">
   <p class="cell clip" use:titleWhenTruncated>{host}</p>
   <p class="cell clip" bind:this={tipAnchor}>{host}</p>
@@ -374,6 +383,9 @@
   .digits {
     width: 10ch;
     font-family: monospace;
+  }
+  .atom {
+    display: inline-block;
   }
   .frame {
     margin-bottom: 1rem;

@@ -26,6 +26,7 @@
   export let inline = false;
   export let months: ComponentProps<DatePicker>["months"] = 1;
   export let closeOnSelect = true;
+  export let conjunction = ", ";
   export let monthLabel: ComponentProps<DatePicker>["monthLabel"] = "long";
   export let animate = false;
   export let allowInput = true;
@@ -73,6 +74,7 @@
   {inline}
   {months}
   {closeOnSelect}
+  {conjunction}
   {monthLabel}
   {animate}
   {allowInput}

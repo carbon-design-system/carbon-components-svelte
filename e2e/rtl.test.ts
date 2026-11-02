@@ -2232,18 +2232,22 @@ test.describe("right-to-left date picker", () => {
           }
         }
         const chars: { char: string; left: number }[] = [];
-        const text = root.querySelector(
-          ".bx--date-picker__input-overlay span",
-        )?.firstChild;
+        const overlay = root.querySelector(".bx--date-picker__input-overlay");
         const range = document.createRange();
-        for (let i = 0; text && i < (text.textContent ?? "").length; i++) {
-          if (/\s/.test(text.textContent?.[i] ?? "")) continue;
-          range.setStart(text, i);
-          range.setEnd(text, i + 1);
-          chars.push({
-            char: text.textContent?.[i] ?? "",
-            left: range.getBoundingClientRect().left,
-          });
+        // Each date is a span of its own.
+        const walker = overlay
+          ? document.createTreeWalker(overlay, NodeFilter.SHOW_TEXT)
+          : null;
+        for (let text = walker?.nextNode(); text; text = walker?.nextNode()) {
+          for (let i = 0; i < (text.textContent ?? "").length; i++) {
+            if (/\s/.test(text.textContent?.[i] ?? "")) continue;
+            range.setStart(text, i);
+            range.setEnd(text, i + 1);
+            chars.push({
+              char: text.textContent?.[i] ?? "",
+              left: range.getBoundingClientRect().left,
+            });
+          }
         }
         return {
           offsets,

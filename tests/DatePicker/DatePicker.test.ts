@@ -2039,6 +2039,24 @@ describe("DatePicker", () => {
       expect(overlay?.querySelector("span")).toHaveTextContent("01/0");
     });
 
+    it("puts each date of the ghost overlay in its own span", () => {
+      render(DatePicker, {
+        datePickerType: "multiple",
+        value: "01/05/2026; 01/06/2026; 01/07/2026",
+        conjunction: "; ",
+      });
+
+      const text = document.querySelector(
+        ".bx--date-picker__input-overlay > span",
+      );
+      expect(text).toHaveTextContent("01/05/2026; 01/06/2026; 01/07/2026");
+      expect(
+        [...(text?.querySelectorAll(":scope > span") ?? [])].map(
+          (date) => date.textContent,
+        ),
+      ).toEqual(["01/05/2026", "01/06/2026", "01/07/2026"]);
+    });
+
     describe("shift-click range selection", () => {
       function getSelectedDayNumbers(calendar: HTMLElement) {
         return Array.from(
