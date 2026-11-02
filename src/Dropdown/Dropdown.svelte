@@ -1204,7 +1204,6 @@
                       id={optionId}
                       active={selectedId === item.id}
                       disabled={item.disabled}
-                      hasLeftIcon={Boolean($$slots.icon || item.icon)}
                       aria-setsize={items.length}
                       aria-posinset={actualIndex + 1}
                       data-virtual-index={isMeasured ? rowIndex : undefined}
@@ -1326,7 +1325,6 @@
                     id={optionId}
                     active={selectedId === item.id}
                     disabled={item.disabled}
-                    hasLeftIcon={Boolean($$slots.icon || item.icon)}
                     data-virtual-index={isMeasured ? rowIndex : undefined}
                     on:click={(event) => {
                       if (item.disabled) {

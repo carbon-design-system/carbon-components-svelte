@@ -6,11 +6,7 @@
    */
 </script>
 
-<div
-  class:bx--card__header={true}
-  class:bx--card__header--actions={$$slots.actions}
-  {...$$restProps}
->
+<div class:bx--card__header={true} {...$$restProps}>
   <slot />
   <slot name="actions" />
 </div>

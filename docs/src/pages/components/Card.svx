@@ -237,7 +237,7 @@ Put `CardActions` in the `actions` slot of `CardHeader` for quick actions, with 
 
 ### Footer actions
 
-Set `actionSet` on `CardFooter` to fill the footer with `CardAction`s. The footer gets a top border and the actions share the row. Set `iconOnly` on a `CardAction` that holds an icon-only button, so it keeps its width at the end of the row.
+Put `CardAction`s in a `CardFooter` to fill it. The footer gets a top border and the actions share the row. An action that holds an icon-only button keeps its width at the end of the row.
 
 <Box maxWidth="20rem">
   <Card>
@@ -245,14 +245,14 @@ Set `actionSet` on `CardFooter` to fill the footer with `CardAction`s. The foote
       <CardTitle>Delete the staging bucket?</CardTitle>
     </CardHeader>
     <CardBody>Its 1,204 objects are deleted too.</CardBody>
-    <CardFooter actionSet>
+    <CardFooter>
       <CardAction>
         <Button kind="secondary">Cancel</Button>
       </CardAction>
       <CardAction>
         <Button kind="danger">Delete</Button>
       </CardAction>
-      <CardAction iconOnly>
+      <CardAction>
         <Button
           kind="ghost"
           icon={OverflowMenuVertical}

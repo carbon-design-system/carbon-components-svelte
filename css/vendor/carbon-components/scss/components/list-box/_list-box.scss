@@ -803,7 +803,12 @@ $list-box-width: 100%;
     @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
-  .#{$prefix}--list-box__menu-item__option--icon-left {
+  // ccs: an option holding a left icon makes room for it. The class is
+  // for `ListBoxMenuItem`'s deprecated `hasLeftIcon`.
+  .#{$prefix}--list-box__menu-item__option--icon-left,
+  .#{$prefix}--list-box__menu-item__option:has(
+      > .#{$prefix}--list-box__menu-item__icon--left
+    ) {
     padding-inline-start: $carbon--spacing-06;
   }
 

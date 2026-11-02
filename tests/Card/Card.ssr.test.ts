@@ -60,14 +60,14 @@ describe("Card (server)", () => {
     },
   );
 
-  // The title leaves room for the actions from the first paint.
-  it("marks a header with actions", () => {
+  // The title leaves room for the actions from the first paint: the CSS
+  // reads `:has(> .bx--card__actions)`, so the header needs no marker.
+  it("renders the actions as the header's last child", () => {
     const { document } = renderSSR(Card);
 
     const header = document.querySelector(
       "[data-testid=actions] .bx--card__header",
     );
-    expect(header?.classList).toContain("bx--card__header--actions");
     expect(header?.lastElementChild?.classList).toContain("bx--card__actions");
   });
 });
