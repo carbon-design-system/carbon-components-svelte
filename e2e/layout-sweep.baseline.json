@@ -753,14 +753,6 @@
   },
   {
     "fixture": "forced-colors.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "main > nav.bx--pagination-nav:nth-of-type(2) > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(7)",
-    "message": "main > nav.bx--pagination-nav:nth-of-type(2) > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(7): spans 304px to 352px"
-  },
-  {
-    "fixture": "forced-colors.html",
     "variant": "672",
     "check": "borders",
     "kind": "nested edge",
@@ -1416,54 +1408,6 @@
     "message": "div[data-testid=\"skeleton-800\"]: spans 16px to 816px"
   },
   {
-    "fixture": "pagination-nav.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "scrolls sideways",
-    "path": "page",
-    "message": "page scrolls sideways: scrollWidth 576px, clientWidth 320px"
-  },
-  {
-    "fixture": "pagination-nav.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(10)",
-    "message": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(10): spans 432px to 480px"
-  },
-  {
-    "fixture": "pagination-nav.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(11)",
-    "message": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(11): spans 480px to 528px"
-  },
-  {
-    "fixture": "pagination-nav.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(7)",
-    "message": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(7): spans 288px to 336px"
-  },
-  {
-    "fixture": "pagination-nav.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(8)",
-    "message": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(8): spans 336px to 384px"
-  },
-  {
-    "fixture": "pagination-nav.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(9)",
-    "message": "nav[data-testid=\"pagination-nav\"] > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(9): spans 384px to 432px"
-  },
-  {
     "fixture": "pin-code-input.html",
     "variant": "320",
     "check": "overflow",
@@ -1742,14 +1686,6 @@
     "kind": "scrolls sideways",
     "path": "page",
     "message": "page scrolls sideways: scrollWidth 368px, clientWidth 320px"
-  },
-  {
-    "fixture": "rtl-icons.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div[data-testid=\"pagination-nav\"] > nav.bx--pagination-nav > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(7)",
-    "message": "div[data-testid=\"pagination-nav\"] > nav.bx--pagination-nav > ul.bx--pagination-nav__list > li.bx--pagination-nav__list-item:nth-of-type(7): spans 304px to 352px"
   },
   {
     "fixture": "rtl-icons.html",
