@@ -395,6 +395,17 @@
   export let sort = undefined;
 
   /**
+   * Override the text announced after `sortKey` or `sortDirection` changes.
+   * `header` is the sorted column. For `"none"`, it is the column that was
+   * sorted before.
+   * @type {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending") => string}
+   */
+  export let sortStatusText = function sortStatusText(header, direction) {
+    if (direction === "none" || !header) return "Not sorted";
+    return `Sorted by ${header.value ?? header.key}, ${direction}`;
+  };
+
+  /**
    * Set to `true` for the expandable variant.
    * Automatically set to `true` if `batchExpansion` is `true`.
    * @bindable writable
@@ -575,6 +586,7 @@
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
+  import { createStatusAnnouncer } from "../ListBox/menu-status.js";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
@@ -1114,6 +1126,27 @@
       }
     }
     return next;
+  }
+
+  let sortStatus = "";
+  const announceSortStatus = createStatusAnnouncer(
+    (text) => (sortStatus = text),
+  );
+  let prevSortKey = sortKey;
+  let prevSortDirection = sortDirection;
+
+  // Announce each sort once from a status region. The rows are not a live
+  // region: a reorder would read every row again.
+  $: if (sortKey !== prevSortKey || sortDirection !== prevSortDirection) {
+    const statusKey = sortDirection === "none" ? prevSortKey : sortKey;
+    prevSortKey = sortKey;
+    prevSortDirection = sortDirection;
+    announceSortStatus(
+      sortStatusText(
+        headers.find((header) => header.key === statusKey),
+        sortDirection,
+      ),
+    );
   }
 
   $: ascending = sortDirection === "ascending";
@@ -2262,4 +2295,7 @@
       {/if}
     </Table>
   </div>
+  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+    >{sortStatus}</span
+  >
 </TableContainer>
