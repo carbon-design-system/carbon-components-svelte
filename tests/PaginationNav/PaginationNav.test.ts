@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import PaginationNav from "./PaginationNav.test.svelte";
+import PaginationNavPair from "./PaginationNavPair.test.svelte";
 
 /** Page numbers of the rendered page buttons, in DOM order. */
 function renderedPages(container: HTMLElement) {
@@ -138,16 +139,54 @@ describe("PaginationNav", () => {
   });
 
   it("should announce current 1-based page in the live region", async () => {
-    render(PaginationNav, { props: { page: 1, total: 10 } });
-    expect(screen.getByText("Page 1 of 10")).toBeInTheDocument();
+    const { container } = render(PaginationNav, {
+      props: { page: 1, total: 10 },
+    });
+    const region = container.querySelector("[aria-live]");
+    assert(region);
+    expect(region).toHaveTextContent(/^$/);
 
     const nextButton = screen.getByRole("button", { name: "Next page" });
     await user.click(nextButton);
-    expect(screen.getByText("Page 2 of 10")).toBeInTheDocument();
+    expect(region).toHaveTextContent("Page 2 of 10");
 
     const prevButton = screen.getByRole("button", { name: "Previous page" });
     await user.click(prevButton);
-    expect(screen.getByText("Page 1 of 10")).toBeInTheDocument();
+    expect(region).toHaveTextContent("Page 1 of 10");
+  });
+
+  it("announces a page change only in the nav the user acted on", async () => {
+    render(PaginationNavPair);
+    const [top, bottom] = ["top", "bottom"].map((id) => {
+      const region = screen.getByTestId(id).querySelector("[aria-live]");
+      assert(region);
+      return region;
+    });
+
+    const announced: string[] = [];
+    const observer = new MutationObserver((records) => {
+      for (const region of [top, bottom]) {
+        const text = region.textContent?.replace(/\s+/g, " ").trim();
+        if (text && records.some((record) => region.contains(record.target))) {
+          announced.push(`${region === top ? "top" : "bottom"}: ${text}`);
+        }
+      }
+    });
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
+
+    const [topNext, bottomNext] = screen.getAllByRole("button", {
+      name: "Next page",
+    });
+    await user.click(topNext);
+    await user.click(bottomNext);
+    observer.disconnect();
+
+    expect(announced).toEqual(["top: Page 2 of 10", "bottom: Page 3 of 10"]);
+    expect(top).toHaveTextContent(/^$/);
   });
 
   it("names the current page like any other, leaving aria-current to mark it", () => {
@@ -167,7 +206,6 @@ describe("PaginationNav", () => {
 
     await rerender({ total: 5 });
 
-    expect(screen.getByText("Page 5 of 5")).toBeInTheDocument();
     expect(screen.getByRole("button", { current: "page" })).toHaveAttribute(
       "data-page",
       "5",
