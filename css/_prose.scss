@@ -326,10 +326,6 @@ $ccs-prose-variants: (
 /// specificity of one class and one element. The guard sits on the element a
 /// rule styles; its ancestors are covered by the descendant check.
 ///
-/// The guard needs `:where()` and a complex `:not()` (Chrome 88, Safari 14),
-/// one release above the Chrome 87 baseline, where element rules drop and
-/// copy falls back to the root's type style and rhythm.
-///
 /// The rhythm rules space every child of the root (or of a `section` or
 /// `article` wrapper), components included.
 /// @access private

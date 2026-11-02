@@ -1,14 +1,6 @@
 // @ts-check
-// Intl.Segmenter is missing in Firefox < 125; fall back to whitespace splitting.
 
-const segmenter =
-  typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
-    ? new Intl.Segmenter(undefined, { granularity: "word" })
-    : null;
-
-const WHITESPACE = /\s+/;
-const WHITESPACE_OR_TOKEN = /\s+|\S+/g;
-const STARTS_WITH_WHITESPACE = /^\s/;
+const segmenter = new Intl.Segmenter(undefined, { granularity: "word" });
 
 /**
  * Split `value` into consecutive segments flagged as word-like or not.
@@ -17,35 +9,25 @@ const STARTS_WITH_WHITESPACE = /^\s/;
  * @returns {{ segment: string; isWordLike: boolean }[]}
  */
 function segmentWords(value) {
-  if (segmenter) {
-    return Array.from(segmenter.segment(value), ({ segment, isWordLike }) => ({
-      segment,
-      isWordLike: !!isWordLike,
-    }));
-  }
-  return (value.match(WHITESPACE_OR_TOKEN) ?? []).map((segment) => ({
+  return Array.from(segmenter.segment(value), ({ segment, isWordLike }) => ({
     segment,
-    isWordLike: !STARTS_WITH_WHITESPACE.test(segment),
+    isWordLike: !!isWordLike,
   }));
 }
 
 /**
  * Count words in `value`.
- * Uses `Intl.Segmenter` word segments flagged `isWordLike`;
- * falls back to whitespace splitting.
+ * Uses `Intl.Segmenter` word segments flagged `isWordLike`.
  *
  * @param {string} value
  * @returns {number}
  */
 export function wordCount(value) {
-  if (segmenter) {
-    let count = 0;
-    for (const { isWordLike } of segmenter.segment(value)) {
-      if (isWordLike) count++;
-    }
-    return count;
+  let count = 0;
+  for (const { isWordLike } of segmenter.segment(value)) {
+    if (isWordLike) count++;
   }
-  return value.trim().split(WHITESPACE).filter(Boolean).length;
+  return count;
 }
 
 /**

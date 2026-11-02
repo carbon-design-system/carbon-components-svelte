@@ -179,15 +179,12 @@
     right: 0;
   }
 
-  // 100vh first as a fallback for browsers without dvh support; 100dvh
-  // overrides it and tracks mobile browser chrome, so no scroll clipping.
+  // `dvh` tracks mobile browser chrome, so nothing scrolls out of view.
   .#{$prefix}--box-height-viewport {
-    height: 100vh;
     height: 100dvh;
   }
 
   .#{$prefix}--box-min-height-viewport {
-    min-height: 100vh;
     min-height: 100dvh;
   }
 
