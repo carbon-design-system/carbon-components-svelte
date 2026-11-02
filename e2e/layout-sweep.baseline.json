@@ -2384,22 +2384,6 @@
     "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
   },
   {
-    "fixture": "uishell-variants.html",
-    "variant": "320",
-    "check": "fits",
-    "kind": "overflows box",
-    "path": "li:nth-of-type(1) > ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li.bx--header__submenu.bx--header__submenu--current:nth-of-type(2) > a.bx--header__menu-item.bx--header__menu-title",
-    "message": "li:nth-of-type(1) > ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li.bx--header__submenu.bx--header__submenu--current:nth-of-type(2) > a.bx--header__menu-item.bx--header__menu-title: text overflows its box by 23.64px (text 51.64px x 18px)"
-  },
-  {
-    "fixture": "uishell-variants.html",
-    "variant": "672",
-    "check": "fits",
-    "kind": "overflows box",
-    "path": "li:nth-of-type(1) > ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li.bx--header__submenu.bx--header__submenu--current:nth-of-type(2) > a.bx--header__menu-item.bx--header__menu-title",
-    "message": "li:nth-of-type(1) > ul.bx--side-nav__header-navigation.bx--side-nav__header-divider > li.bx--header__submenu.bx--header__submenu--current:nth-of-type(2) > a.bx--header__menu-item.bx--header__menu-title: text overflows its box by 23.64px (text 51.64px x 18px)"
-  },
-  {
     "fixture": "warning-icon-glyph.html",
     "variant": "320",
     "check": "overflow",
