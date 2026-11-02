@@ -161,6 +161,7 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, tick } from "svelte";
+  import { createStatusAnnouncer } from "../ListBox/menu-status.js";
   import Tag from "../Tag/Tag.svelte";
   import TagSet from "../TagSet/TagSet.svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
@@ -207,6 +208,8 @@
   let focused = false;
   /** Text of the visually hidden live region. */
   let statusText = "";
+  // Clears the region before each message, so a repeat is announced too.
+  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
   /** Message for the most recent rejected value; cleared on the next edit. */
   let rejectionText = "";
 
@@ -326,7 +329,7 @@
     if (accepted.length > 0) {
       if (rejected.length === 0) rejectionText = "";
       value = [...value, ...accepted];
-      statusText = addedText(accepted, value.length);
+      announceStatus(addedText(accepted, value.length));
       dispatch("change", value);
     }
 
@@ -364,7 +367,7 @@
     const hadFocus = rootRef?.contains(document.activeElement);
     value = value.filter((_, i) => i !== index);
     rejectionText = "";
-    statusText = removedText(tag, value.length);
+    announceStatus(removedText(tag, value.length));
     dispatch("change", value);
 
     // With no tag left to take focus, keep it in the field. `TagSet` moves

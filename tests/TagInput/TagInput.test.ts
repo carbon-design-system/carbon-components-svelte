@@ -34,6 +34,32 @@ describe("TagInput", () => {
       expect(status()).toHaveTextContent("Svelte added. 1 tag.");
     });
 
+    // A live region fires only on a text change, so the same message
+    // written twice in a row was silent.
+    it("announces the same message twice in a row", async () => {
+      render(TagInput, { config: { addedText: () => "Tag added" } });
+      const region = status();
+
+      const announced: string[] = [];
+      const observer = new MutationObserver(() => {
+        const text = region.textContent?.trim();
+        if (text) announced.push(text);
+      });
+      observer.observe(region, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
+
+      await user.type(input(), "a{Enter}");
+      await user.type(input(), "b{Enter}");
+      await tick();
+      observer.disconnect();
+
+      expect(shownValue()).toEqual(["a", "b"]);
+      expect(announced).toEqual(["Tag added", "Tag added"]);
+    });
+
     it("leaves Enter alone when the field is empty", async () => {
       const onAdd = vi.fn();
       render(TagInput, { onAdd });
