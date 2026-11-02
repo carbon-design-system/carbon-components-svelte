@@ -1700,7 +1700,7 @@ export const typeTokens = {
   },
   "code-01": {
     "font-family":
-      "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace",
+      "var(--ccs-font-mono, 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace)",
     "font-size": "0.75rem",
     "font-weight": "400",
     "line-height": "1.33333",
@@ -1708,7 +1708,7 @@ export const typeTokens = {
   },
   "code-02": {
     "font-family":
-      "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace",
+      "var(--ccs-font-mono, 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace)",
     "font-size": "0.875rem",
     "font-weight": "400",
     "line-height": "1.42857",
@@ -1835,14 +1835,16 @@ export const typeTokens = {
     "letter-spacing": "0",
   },
   "fluid-quotation-01": {
-    "font-family": "'IBM Plex Serif', 'Georgia', Times, serif",
+    "font-family":
+      "var(--ccs-font-serif, 'IBM Plex Serif', 'Georgia', Times, serif)",
     "font-size": "1.25rem",
     "font-weight": "400",
     "line-height": "1.3",
     "letter-spacing": "0",
   },
   "fluid-quotation-02": {
-    "font-family": "'IBM Plex Serif', 'Georgia', Times, serif",
+    "font-family":
+      "var(--ccs-font-serif, 'IBM Plex Serif', 'Georgia', Times, serif)",
     "font-size": "2rem",
     "font-weight": "300",
     "line-height": "1.25",
