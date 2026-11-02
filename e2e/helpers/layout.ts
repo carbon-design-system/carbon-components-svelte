@@ -700,6 +700,18 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
         (el.getAttribute("aria-selected") === "true" &&
           !!focused &&
           el.parentElement?.closest(composite) === focused);
+      // The band an edge paints: between `out` and `in`, `out` by `from`
+      // pixels outside the border box and `in` by `to`.
+      const grow = (box: DOMRect, by: number): Box => ({
+        left: box.left - by,
+        right: box.right + by,
+        top: box.top - by,
+        bottom: box.bottom + by,
+      });
+      const band = (el: Element, from: number, to: number) => {
+        const box = el.getBoundingClientRect();
+        return { out: grow(box, from), in: grow(box, to) };
+      };
       const edge = (el: Element) => {
         const s = style(el);
         if (
@@ -710,51 +722,136 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
               !/none|hidden/.test(s[`border${side}Style`]) &&
               alpha(s[`border${side}Color`]) > 0,
           )
-        )
-          return "bordered box";
+        ) {
+          // The band takes the thinnest side's width, so an inner edge is
+          // painted over only where every side covers it.
+          const width = Math.min(
+            ...sides.map((side) => Number.parseFloat(s[`border${side}Width`])),
+          );
+          return { kind: "bordered box", band: band(el, 0, -width) };
+        }
+        const outline = Number.parseFloat(s.outlineWidth);
         if (
           !focusRing(el) &&
           s.outlineStyle !== "none" &&
-          Number.parseFloat(s.outlineWidth) > 0 &&
+          outline > 0 &&
           alpha(s.outlineColor) > 0
-        )
-          return `${s.outlineWidth} outline`;
+        ) {
+          const offset = Number.parseFloat(s.outlineOffset) || 0;
+          return {
+            kind: `${s.outlineWidth} outline`,
+            band: band(el, offset + outline, offset),
+          };
+        }
         if (s.boxShadow === "none") return null;
         for (const shadow of s.boxShadow.split(/,(?![^(]*\))/)) {
           const color = /rgba?\([^)]*\)/.exec(shadow)?.[0] ?? "transparent";
           const [x, y, blur, spread = 0] = [
             ...shadow.replace(color, "").matchAll(/-?[\d.]+px/g),
           ].map((match) => Number.parseFloat(match[0]));
+          const inset = /\binset\b/.test(shadow);
           if (x === 0 && y === 0 && blur === 0 && spread > 0 && alpha(color))
-            return `${px(spread)} ${/\binset\b/.test(shadow) ? "inset " : ""}box-shadow ring`;
+            return {
+              kind: `${px(spread)} ${inset ? "inset " : ""}box-shadow ring`,
+              band: inset ? band(el, 0, -spread) : band(el, spread, 0),
+            };
+        }
+        return null;
+      };
+      // An inner edge whose band lies in the outer edge's band on every
+      // side paints over it, so the two show as one line.
+      const within = (
+        inner: ReturnType<typeof band>,
+        outer: ReturnType<typeof band>,
+      ) =>
+        inner.out.left >= outer.out.left - tolerance &&
+        inner.in.left <= outer.in.left + tolerance &&
+        inner.out.top >= outer.out.top - tolerance &&
+        inner.in.top <= outer.in.top + tolerance &&
+        inner.out.right <= outer.out.right + tolerance &&
+        inner.in.right >= outer.in.right - tolerance &&
+        inner.out.bottom <= outer.out.bottom + tolerance &&
+        inner.in.bottom >= outer.in.bottom - tolerance;
+      // A menu below its field, or an open tooltip beside its trigger,
+      // sits in the box's markup and paints outside it. Content that a
+      // scroll area between them hides is inside once scrolled to.
+      const outside = (
+        el: Element,
+        inner: Box,
+        outerEl: Element,
+        outer: Box,
+      ) => {
+        for (
+          let node = el.parentElement;
+          node && node !== outerEl;
+          node = node.parentElement
+        ) {
+          const ns = style(node);
+          if (ns.overflowX !== "visible" || ns.overflowY !== "visible")
+            return false;
+        }
+        return (
+          Math.min(inner.right, outer.right) -
+            Math.max(inner.left, outer.left) <=
+            tolerance ||
+          Math.min(inner.bottom, outer.bottom) -
+            Math.max(inner.top, outer.top) <=
+            tolerance
+        );
+      };
+      // The color behind the element: its own background, or that of a
+      // `::before` or `::after` that fills its box (a selected segment's
+      // layer), or else its nearest ancestor's.
+      const fill = (el: Element) => {
+        const color = style(el).backgroundColor;
+        if (alpha(color) > 0) return color;
+        const box = el.getBoundingClientRect();
+        for (const pseudo of ["::before", "::after"]) {
+          const s = style(el, pseudo);
+          if (
+            s.content !== "none" &&
+            /absolute|fixed/.test(s.position) &&
+            alpha(s.backgroundColor) > 0 &&
+            Number.parseFloat(s.width) >= box.width - 4 &&
+            Number.parseFloat(s.height) >= box.height - 4
+          )
+            return s.backgroundColor;
         }
         return null;
       };
       const background = (el: Element) => {
         for (let node: Element | null = el; node; node = node.parentElement) {
-          const color = style(node).backgroundColor;
-          if (alpha(color) > 0) return color;
+          const color = fill(node);
+          if (color) return color;
         }
         return "transparent";
       };
       const inScope = (el: Element) => roots.some((root) => root.contains(el));
       let checked = 0;
       for (const el of elements()) {
-        const kind = visible(el) && edge(el);
-        if (!kind) continue;
+        if (!visible(el) || el.closest(LIBRARY_HIDDEN) || hiddenOnPurpose(el))
+          continue;
+        const own = edge(el);
+        if (!own) continue;
         checked++;
         let outer = el.parentElement;
         while (outer && inScope(outer) && !edge(outer))
           outer = outer.parentElement;
         if (!outer || !inScope(outer)) continue;
+        const around = edge(outer);
+        if (
+          !around ||
+          within(own.band, around.band) ||
+          outside(el, own.band.out, outer, around.band.in)
+        )
+          continue;
         const inner = background(el);
-        const around = background(outer);
-        if (inner === around)
+        if (inner === background(outer))
           problems.push(
             problem(
               path(el),
               "nested edge",
-              `${path(el)}: ${kind} inside ${edge(outer)} ${path(outer)}, both on ${inner}`,
+              `${path(el)}: ${own.kind} inside ${around.kind} ${path(outer)}, both on ${inner}`,
             ),
           );
       }
@@ -1065,6 +1162,13 @@ export function expectTextFits(
  * a focused element's `aria-activedescendant`, or of an `aria-selected`
  * option in a focused composite. Run it under forced colors too, where a
  * transparent outline is repainted.
+ *
+ * Edges hidden on purpose are skipped: under `clip` or `clip-path`, or
+ * under `.bx--visually-hidden` or a closed icon tooltip. So is an inner
+ * edge that paints inside the outer edge's band on every side, since the
+ * two show as one line, and an inner edge that paints wholly outside the
+ * outer box (an open menu or tooltip). A `::before` or `::after` that fills the element's
+ * box sets its background, as on a selected segment.
  */
 export function expectNoNestedBorders(scope: Scope) {
   return run(scope, { check: "borders", tolerance: TOLERANCE });
