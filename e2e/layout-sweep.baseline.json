@@ -32,22 +32,6 @@
     "message": "div#app > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(3) > li.bx--overflow-menu-options__option > button.bx--overflow-menu-options__btn: 2px outline inside 1px outline div#app > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(3), both on rgb(255, 255, 255)"
   },
   {
-    "fixture": "accessible-names.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "scrolls sideways",
-    "path": "page",
-    "message": "page scrolls sideways: scrollWidth 321px, clientWidth 320px"
-  },
-  {
-    "fixture": "accessible-names.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div#app > div.bx--file:nth-of-type(24) > input.bx--file-input",
-    "message": "div#app > div.bx--file:nth-of-type(24) > input.bx--file-input: spans 320px to 321px"
-  },
-  {
     "fixture": "accordion-container.html",
     "variant": "320",
     "check": "overflow",
