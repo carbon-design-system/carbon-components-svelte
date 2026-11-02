@@ -69,7 +69,7 @@ Set tooltip position relative to the navigation buttons with `tooltipPosition`.
 
 ## Translations
 
-Set `pageText` to name each page and `pageSelectLabelText` to name the overflow select. When the page changes, screen readers hear the page text followed by `pageRangeText`, as in "Page 3 of 20". These props work like the Pagination props of the same names.
+Set `pageText` to name each page and `pageSelectLabelText` to name the overflow select. When the user changes the page, screen readers hear the page text followed by `pageRangeText`, as in "Page 3 of 20". Only the nav the user acted on announces it, so two navs bound to one `page` (above and below a table) announce once. A `page` set by your code is not announced. These props work like the Pagination props of the same names.
 
 <PaginationNav
   total={20}
