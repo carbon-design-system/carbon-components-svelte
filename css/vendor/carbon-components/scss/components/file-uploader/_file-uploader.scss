@@ -30,8 +30,13 @@
     color: $text-primary;
   }
 
+  // ccs: `display: block` puts the hidden input's static position at the
+  // start of the next line. As an inline box it sat after the inline-block
+  // browse button, so at 320px it hung 1px past the page edge.
   .#{$prefix}--file-input {
     @include hidden;
+
+    display: block;
   }
 
   .#{$prefix}--file-browse-btn {

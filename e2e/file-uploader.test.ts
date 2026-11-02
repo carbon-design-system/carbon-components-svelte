@@ -1,4 +1,5 @@
 import { expect, test } from "./helpers/host";
+import { expectNoPageOverflow } from "./helpers/layout";
 
 test.describe("FileUploader", () => {
   test.beforeEach(async ({ page }) => {
@@ -187,4 +188,18 @@ test.describe("FileUploader (advanced)", () => {
     );
     expect(sizeBox?.x).toBe(nameBox?.x);
   });
+});
+
+test("a drop container does not widen a 320 px page", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto("/file-uploader-drop-container.html");
+  // Below other content: at the very top, the hidden input's -1px
+  // margin lifts it out of the scroll area.
+  await page.evaluate(() => {
+    const above = document.createElement("p");
+    above.textContent = "Attachments";
+    document.body.prepend(above);
+  });
+  await expect(page.locator(".bx--file-input")).toBeAttached();
+  await expectNoPageOverflow(page);
 });
