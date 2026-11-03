@@ -1,0 +1,19 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `ExpandableTile` clamps to the height of its above-the-fold content,
+/// which it measures. The component sets the height as
+/// `--ccs-tile-max-height` and this rule reads it, so a stylesheet can
+/// replace the clamp. An inline `max-height` could not be replaced without
+/// `!important`. Unset, as for an expanded tile, the tile is unclamped.
+/// @access private
+/// @group components
+@mixin tile-expandable {
+  .#{$prefix}--tile--expandable {
+    max-height: var(--ccs-tile-max-height, none);
+  }
+}
+
+@include exports("tile-expandable") {
+  @include tile-expandable;
+}

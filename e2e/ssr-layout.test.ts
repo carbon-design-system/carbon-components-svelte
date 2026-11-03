@@ -23,7 +23,7 @@ test("a collapsed ExpandableTile is its collapsed height before it measures", as
   const mounted = await rect(page, selector);
   await page.locator(selector).evaluate((el) => {
     el.classList.add("bx--tile--unmeasured");
-    (el as HTMLElement).style.maxHeight = "none";
+    (el as HTMLElement).style.setProperty("--ccs-tile-max-height", "none");
   });
   expect(await rect(page, selector)).toEqual(mounted);
 });
