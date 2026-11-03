@@ -15,6 +15,7 @@ import type {
   preserveFocusSelection,
   queryParam,
   rovingFocus,
+  setTranslateContext,
   themeScript,
   ThemeZone as BarrelThemeZone,
   trapFocus,
@@ -92,6 +93,7 @@ type _FuzzyMatch = ReturnType<typeof fuzzyMatch>;
 type _GetAvatarBackgroundColor = ReturnType<typeof getAvatarBackgroundColor>;
 type _GetInitials = ReturnType<typeof getInitials>;
 type _GetLayoutDirection = ReturnType<typeof getLayoutDirection>;
+type _SetTranslateContext = Parameters<typeof setTranslateContext>[0];
 type _LayoutDirection = LayoutDirection;
 type _LayoutDirectionProps = LayoutDirectionProps<"section">["dir"];
 type _MultiSelectSkeleton = MultiSelectSkeleton;

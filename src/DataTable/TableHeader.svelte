@@ -28,11 +28,12 @@
   });
 
   /**
-   * Override the default translation ids.
+   * Override the default translation ids. Unset, it uses
+   * `setTranslateContext`, then English.
    * @type {(id: TableHeaderTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   /** Set an id for the top-level element */
@@ -43,7 +44,10 @@
   import Decorator from "../AILabel/Decorator.svelte";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  const translate = getTranslateContext();
 
   const defaultTranslations = {
     [translationIds.columnSortAscending]:

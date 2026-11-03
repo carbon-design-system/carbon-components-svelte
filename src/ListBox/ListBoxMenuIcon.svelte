@@ -13,14 +13,18 @@
   });
 
   /**
-   * Override the default translation ids.
+   * Override the default translation ids. Unset, it uses
+   * `setTranslateContext`, then English.
    * @type {(id: ListBoxMenuIconTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { getTranslateContext } from "../utils/translate-context.js";
+
+  const translate = getTranslateContext();
 
   const defaultTranslations = {
     [translationIds.close]: "Close menu",
