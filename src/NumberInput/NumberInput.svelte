@@ -227,6 +227,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
   import {
@@ -246,6 +247,10 @@
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const SCRUB_STEP_PIXELS = 4;
 
@@ -357,11 +362,11 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: effectiveInvalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: isFluid = fluid || !!formContext?.isFluid;
-  $: scrubEnabled = scrubbable && !disabled && !readonly;
+  $: scrubEnabled = scrubbable && !effectiveDisabled && !readonly;
   // Neutral = neither invalid nor warn is showing.
   $: neutral = !showInvalid && !showWarn;
   $: hasErrorMessage = showInvalid && !!invalidText;
@@ -490,7 +495,7 @@
 
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
-    if (readonly || disabled) return;
+    if (readonly || effectiveDisabled) return;
 
     if (useTextMode && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
       event.preventDefault();
@@ -565,7 +570,7 @@
 
   function handleInputFocus() {
     if (isFluid) inputFocused = true;
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => ref?.select());
     }
   }
@@ -598,9 +603,10 @@
   function startRepeat(event, isIncrementing) {
     stopRepeat();
     repeated = false;
-    if (event.button !== 0 || !event.isPrimary || disabled || readonly) return;
+    if (event.button !== 0 || !event.isPrimary || effectiveDisabled || readonly)
+      return;
     const repeat = () => {
-      if (disabled || readonly) return stopRepeat();
+      if (effectiveDisabled || readonly) return stopRepeat();
       const previous = value;
       updateValue(isIncrementing);
       repeated = true;
@@ -642,6 +648,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--number-input--fluid={isFluid}
   class:bx--number-input--fluid--focus={isFluid && inputFocused}
@@ -666,7 +673,7 @@
       <label
         for={id}
         class:bx--label={true}
-        class:bx--label--disabled={disabled}
+        class:bx--label--disabled={effectiveDisabled}
         class:bx--visually-hidden={hideLabel}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
         class:bx--label--scrubbable={scrubEnabled}
@@ -695,13 +702,13 @@
             type="hidden"
             {name}
             value={value ?? ""}
-            {disabled}
+            disabled={effectiveDisabled}
             form={$$restProps.form}
           />
         {/if}
         <input
           bind:this={ref}
-          use:preserveFocusSelection={selectTextOnFocus && !disabled}
+          use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
           use:formReset={handleFormReset}
           use:reflectDefaultValue={allowEmpty ? undefined : inputValue}
           value={inputValue}
@@ -712,7 +719,7 @@
           aria-invalid={showInvalid ? "true" : undefined}
           aria-label={labelText ? undefined : ariaLabel}
           aria-readonly={readonly ? "true" : undefined}
-          {disabled}
+          disabled={effectiveDisabled}
           {id}
           {max}
           {min}
@@ -752,7 +759,7 @@
           editable, so a read-only field renders as a text input. -->
         <input
           bind:this={ref}
-          use:preserveFocusSelection={selectTextOnFocus && !disabled}
+          use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
           use:formReset={handleFormReset}
           use:reflectDefaultValue={allowEmpty ? undefined : value}
           type={readonly ? "text" : "number"}
@@ -762,7 +769,7 @@
           aria-invalid={showInvalid ? "true" : undefined}
           aria-label={labelText ? undefined : ariaLabel}
           aria-readonly={readonly ? "true" : undefined}
-          {disabled}
+          disabled={effectiveDisabled}
           {id}
           {name}
           {max}
@@ -841,7 +848,7 @@
               repeated = false;
             }}
             on:blur={(event) => handleStepperBlur(event, "down")}
-            disabled={disabled || readonly}
+            disabled={effectiveDisabled || readonly}
           >
             <Subtract class="down-icon" />
           </button>
@@ -862,7 +869,7 @@
               repeated = false;
             }}
             on:blur={(event) => handleStepperBlur(event, "up")}
-            disabled={disabled || readonly}
+            disabled={effectiveDisabled || readonly}
           >
             <Add class="up-icon" />
           </button>
@@ -885,7 +892,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
       >
         {helperText}
       </div>

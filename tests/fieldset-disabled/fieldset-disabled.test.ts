@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
 import type { ComponentType } from "svelte";
@@ -35,6 +36,19 @@ const cases: {
       await fireEvent.keyDown(lower, { key: "ArrowRight" });
       expect(lower).toHaveAttribute("aria-valuenow", "20");
       expect(lower).not.toHaveAttribute("tabindex");
+    },
+  },
+  {
+    name: "NumberInput",
+    component: NumberInput,
+    fieldProps: { labelText: "Field", value: 5, scrubbable: true },
+    expectDisabled: async () => {
+      const label = screen.getByText("Field");
+      await fireEvent.pointerDown(label, { clientX: 100, pointerId: 1 });
+      await fireEvent.pointerMove(label, { clientX: 140, pointerId: 1 });
+      await fireEvent.pointerUp(label, { clientX: 140, pointerId: 1 });
+      expect(screen.getByRole("spinbutton")).toHaveValue(5);
+      expect(label).toHaveClass("bx--label--disabled");
     },
   },
 ];
