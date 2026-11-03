@@ -373,6 +373,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -387,6 +388,10 @@
   } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -508,7 +513,7 @@
   // A Dropdown that turns disabled or read-only while open closes its menu,
   // like a native `<select>`, so no option stays clickable. Closing here is
   // not a dismissal, so `close` does not fire.
-  $: if ((disabled || readonly) && open) open = false;
+  $: if ((effectiveDisabled || readonly) && open) open = false;
   $: {
     itemsById = new Map();
     for (let index = 0; index < items.length; index++) {
@@ -525,7 +530,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: invalid || requiredError,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: hasSelectionDescription =
@@ -551,11 +556,11 @@
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
-    isFluid && !showInvalid && !showWarn && !disabled && !readonly;
+    isFluid && !showInvalid && !showWarn && !effectiveDisabled && !readonly;
   // Hoverable = disabled/readonly do not suppress the invalid/warning hover
   // tint. showInvalid/showWarn already exclude both, so this only matters
   // for readability of the selector it replaces.
-  $: fluidHoverable = isFluid && !disabled && !readonly;
+  $: fluidHoverable = isFluid && !effectiveDisabled && !readonly;
   // Scope the option id with the instance `id` so multiple Dropdowns on a
   // page do not produce duplicate DOM ids. `aria-activedescendant` references
   // this same scoped value (see the `ListBoxMenuItem` ids below).
@@ -883,7 +888,7 @@
     effectiveSize === "lg" && "bx--dropdown--lg",
     effectiveSize === "xl" && "bx--dropdown--xl",
     inline && "bx--dropdown--inline",
-    disabled && "bx--dropdown--disabled",
+    effectiveDisabled && "bx--dropdown--disabled",
     readonly && "bx--dropdown--readonly",
   ]
     .filter(Boolean)
@@ -899,6 +904,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--dropdown__wrapper={true}
   class:bx--list-box__wrapper={true}
   class:bx--dropdown__wrapper--inline={inline}
@@ -909,7 +915,7 @@
   class:bx--list-box__wrapper--fluid--hoverable={fluidHoverable}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
-  class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
+  class:bx--list-box__wrapper--fluid--disabled={isFluid && effectiveDisabled}
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
@@ -919,7 +925,7 @@
     <label
       for={id}
       class:bx--label={true}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
       use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
@@ -928,21 +934,27 @@
     </label>
   {/if}
   {#if name}
-    <input type="hidden" {name} value={hiddenInputValue} {disabled} {form} />
+    <input
+      type="hidden"
+      {name}
+      value={hiddenInputValue}
+      disabled={effectiveDisabled}
+      {form}
+    />
   {/if}
   <ListBox
     {type}
     size={effectiveSize}
     class={dropdownListBoxClass}
     on:click={(event) => {
-      if (disabled || readonly) return;
+      if (effectiveDisabled || readonly) return;
       // Options close the menu themselves. Anything else in the menu, such
       // as a group header, is not a dismissal.
       if (listRef?.contains(/** @type {Node} */ (event.target))) return;
       if (open || !ref.contains(event.target)) open = false;
       else openMenu("click");
     }}
-    {disabled}
+    disabled={effectiveDisabled}
     {open}
     invalid={showInvalid}
     warn={showWarn}
@@ -1100,7 +1112,7 @@
           if (readonly) return;
           selectHighlighted();
         }}
-        {disabled}
+        disabled={effectiveDisabled}
         {id}
       >
         <span class:bx--list-box__label={true} use:titleWhenTruncated>
@@ -1115,14 +1127,14 @@
             on:clear
             on:clear={() => clear({ open: openOnClear })}
             translateWithId={translateWithIdSelection}
-            {disabled}
+            disabled={effectiveDisabled}
             {readonly}
           />
         {/if}
         <ListBoxMenuIcon
           on:click={(event) => {
             event.stopPropagation();
-            if (disabled || readonly) return;
+            if (effectiveDisabled || readonly) return;
             if (open) open = false;
             else openMenu("click");
           }}
@@ -1134,7 +1146,7 @@
     {#if required}
       <ListBoxRequiredInput
         hasValue={hiddenInputValue !== ""}
-        {disabled}
+        disabled={effectiveDisabled}
         {readonly}
         focusTarget={ref}
         {form}
@@ -1440,7 +1452,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
