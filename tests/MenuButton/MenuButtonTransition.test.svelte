@@ -6,9 +6,15 @@
   export let menuTransition: ComponentProps<MenuButton>["menuTransition"] =
     undefined;
   export let open = false;
+  export let onOutroEnd: () => void = () => {};
 </script>
 
-<MenuButton labelText="Actions" {menuTransition} bind:open>
+<MenuButton
+  labelText="Actions"
+  {menuTransition}
+  bind:open
+  on:outroend={onOutroEnd}
+>
   <MenuItem>Cut</MenuItem>
   <MenuItem>Copy</MenuItem>
 </MenuButton>

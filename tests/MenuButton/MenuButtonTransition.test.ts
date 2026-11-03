@@ -58,4 +58,20 @@ describe("MenuButton menuTransition prop", () => {
     expect(trigger()).toHaveAttribute("aria-expanded", "true");
     expect(menu()).toBe(leaving);
   });
+
+  it("forwards outroend after the menu has left", async () => {
+    const onOutroEnd = vi.fn();
+    render(MenuButtonTransition, {
+      menuTransition: { duration: DURATION },
+      onOutroEnd,
+    });
+    await user.click(trigger());
+    await sleep(DURATION * 4);
+
+    await user.click(trigger());
+    expect(onOutroEnd).not.toHaveBeenCalled();
+
+    await waitFor(() => expect(menu()).not.toBeInTheDocument());
+    expect(onOutroEnd).toHaveBeenCalledTimes(1);
+  });
 });

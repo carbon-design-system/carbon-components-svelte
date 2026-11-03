@@ -17,6 +17,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Required. Specify the trigger button text.
    * Alternatively, use the "labelChildren" slot for custom trigger content;
    * `labelText` is still used as the accessible name in that case.
@@ -215,6 +222,10 @@
   {labelText}
   data-carbon-menu-button-icon-only={iconOnly ? true : undefined}
   on:close
+  on:introstart
+  on:introend
+  on:outrostart
+  on:outroend
 >
   <slot />
 </Menu>
