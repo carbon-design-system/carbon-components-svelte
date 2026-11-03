@@ -5,6 +5,7 @@ import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
+import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import type { ComponentType } from "svelte";
@@ -110,6 +111,12 @@ const styleCases: {
   fieldProps: Record<string, unknown>;
   marker: string;
 }[] = [
+  {
+    name: "TextArea",
+    component: TextArea,
+    fieldProps: field,
+    marker: ".bx--label--disabled",
+  },
   {
     name: "PasswordInput",
     component: PasswordInput,
