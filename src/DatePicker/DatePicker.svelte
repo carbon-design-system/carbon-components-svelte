@@ -1941,7 +1941,9 @@
   $: if (engine) {
     applyOptionIfChanged("clickOpens", interactive.clickOpens);
     applyOptionIfChanged("allowInput", interactive.allowInput);
-    if ($readonlyAny && engine.isOpen) engine.close();
+    // A disabled or read-only input can't open the calendar, so one that
+    // turns so while open closes it.
+    if (interactionBlocked && engine.isOpen) engine.close();
   }
 
   /**
