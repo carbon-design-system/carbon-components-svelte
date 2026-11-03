@@ -331,6 +331,19 @@ describe("OverflowMenu", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("closes the menu when disabled turns on while open", async () => {
+    const onClose = vi.fn();
+    const { rerender } = render(OverflowMenu, { props: { onClose } });
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    await rerender({ disabled: true });
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("applies direction attribute", async () => {
     render(OverflowMenu, { props: { direction: "top" } });
 
