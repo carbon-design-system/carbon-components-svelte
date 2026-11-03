@@ -94,12 +94,17 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { observeTruncation } from "./tag-truncation.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);
@@ -111,7 +116,7 @@
     label: ref?.textContent?.trim() ?? "",
     type,
     size: resolvedSize,
-    disabled,
+    disabled: effectiveDisabled,
     filter: false,
   }));
   const {
@@ -154,7 +159,7 @@
           `${direction}-${align}`
         );
   $: insideElements = [wrapperRef, popoverRef];
-  $: if (disabled || !hasContent) open = false;
+  $: if (effectiveDisabled || !hasContent) open = false;
   $: hasIcon = Boolean(icon || $$slots.icon);
 
   // A truncated label shows its full text in a tooltip on the tag, except
@@ -170,10 +175,10 @@
   }
   $: truncationLabel = truncated ? (labelRef?.textContent?.trim() ?? "") : "";
 
-  $: group.update({ type, size: resolvedSize, disabled });
+  $: group.update({ type, size: resolvedSize, disabled: effectiveDisabled });
 
   function toggle() {
-    if (!disabled && hasContent) open = !open;
+    if (!effectiveDisabled && hasContent) open = !open;
   }
 
   function close() {
@@ -236,6 +241,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={wrapperRef}
   class:bx--operational-tag={true}
   data-overflow={$groupOverflow ? "true" : undefined}
@@ -250,15 +256,15 @@
     bind:this={ref}
     type="button"
     {id}
-    {disabled}
+    disabled={effectiveDisabled}
     aria-expanded={hasContent ? (open ? "true" : "false") : undefined}
     aria-controls={hasContent ? contentId : undefined}
     tabindex={$rovingTabindex}
-    title={disabled && truncated ? truncationLabel : undefined}
+    title={effectiveDisabled && truncated ? truncationLabel : undefined}
     class:bx--tag={true}
     class:bx--tag--interactive={true}
     class:bx--tag--operational={true}
-    class:bx--tag--disabled={disabled}
+    class:bx--tag--disabled={effectiveDisabled}
     class:bx--tag--with-icon={hasIcon}
     class:bx--tag--xs={resolvedSize === "xs"}
     class:bx--tag--sm={resolvedSize === "sm"}
@@ -291,7 +297,7 @@
     passEscapeWhenFocused
     anchor={ref}
     text={truncationLabel}
-    enabled={truncated && !disabled && !open}
+    enabled={truncated && !effectiveDisabled && !open}
   />
   {#if hasContent}
     <Popover
