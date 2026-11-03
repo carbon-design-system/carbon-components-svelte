@@ -40,15 +40,19 @@ describe("CountryPicker", () => {
   });
 
   describe("flag", () => {
-    it("shows the flag emoji, and hides it from assistive technology", async () => {
-      render(CountryPicker, { props: { values, flag: "emoji" } });
+    it("draws the region's flag once the flags have loaded, and hides it from assistive technology", async () => {
+      render(CountryPicker, { props: { values, flag: "auto" } });
       await open();
 
-      const flag = screen
-        .getByRole("option", { name: /Switzerland/ })
-        .querySelector(".bx--intl-picker__flag");
-      expect(flag).toHaveTextContent("\u{1F1E8}\u{1F1ED}");
-      expect(flag).toHaveAttribute("aria-hidden", "true");
+      const swiss = screen.getByRole("option", { name: /Switzerland/ });
+      await waitFor(() =>
+        expect(swiss.querySelector("svg.bx--flag")).not.toBeNull(),
+      );
+      expect(swiss.querySelector("svg.bx--flag")).toHaveAttribute(
+        "aria-hidden",
+        "true",
+      );
+      // Only the names are read.
       expect(
         screen.getByRole("option", { name: "Switzerland Schweiz" }),
       ).toBeInTheDocument();
@@ -62,36 +66,12 @@ describe("CountryPicker", () => {
 
       const badge = screen
         .getByRole("option", { name: /Switzerland/ })
-        .querySelector(".bx--intl-picker__badge");
+        .querySelector(".bx--flag--badge");
       expect(badge).toHaveTextContent("CH");
       expect(badge).toHaveAttribute("aria-hidden", "true");
 
       await rerender({ flag: "none" });
-      expect(document.querySelector(".bx--intl-picker__badge")).toBeNull();
-      expect(document.querySelector(".bx--intl-picker__flag")).toBeNull();
-    });
-
-    it("picks the badge on a platform that draws no flag, once the menu opens", async () => {
-      const getContext = vi
-        .spyOn(HTMLCanvasElement.prototype, "getContext")
-        .mockReturnValue({
-          canvas: { width: 0, height: 0 },
-          fillText() {},
-          // Letters, as Windows draws the regional indicators: one gray.
-          getImageData: () => ({
-            data: new Uint8ClampedArray([80, 80, 80, 255]),
-          }),
-        } as unknown as CanvasRenderingContext2D);
-      render(CountryPicker, { props: { values, flag: "auto" } });
-      expect(getContext).not.toHaveBeenCalled();
-
-      await open();
-
-      expect(
-        document.querySelector(".bx--intl-picker__badge"),
-      ).toHaveTextContent(/^[A-Z]{2}$/);
-      expect(document.querySelector(".bx--intl-picker__flag")).toBeNull();
-      getContext.mockRestore();
+      expect(document.querySelector(".bx--flag")).toBeNull();
     });
   });
 
@@ -179,7 +159,6 @@ describe("CountryPicker", () => {
         label: "Switzerland",
         name: "Switzerland",
         nativeName: "Schweiz",
-        flag: "\u{1F1E8}\u{1F1ED}",
       });
     });
 
@@ -249,16 +228,20 @@ describe("CountryPicker", () => {
     });
   });
 
-  it("takes UN M.49 codes in a caller's list", async () => {
+  it("takes UN M.49 codes in a caller's list, with the code where there is no flag", async () => {
     render(CountryPicker, {
-      props: { values: ["150", "019", "US"], flag: "emoji" },
+      props: { values: ["150", "019", "US"], flag: "auto" },
     });
     await open();
 
     expect(optionNames()).toEqual(["Europe", "Americas", "United States"]);
-    // The empty slot keeps the names in line.
-    expect(
-      document.querySelectorAll(".bx--intl-picker__flag")[0].textContent,
-    ).toBe("");
+    const us = screen.getByRole("option", { name: /United States/ });
+    await waitFor(() =>
+      expect(us.querySelector("svg.bx--flag")).not.toBeNull(),
+    );
+    // The box is as large as a flag, so the names stay in line.
+    const europe = screen.getByRole("option", { name: /Europe/ });
+    expect(europe.querySelector(".bx--flag--badge")).toHaveTextContent("150");
+    expect(europe.querySelector(".bx--flag--20")).not.toBeNull();
   });
 });

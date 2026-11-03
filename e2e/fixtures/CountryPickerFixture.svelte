@@ -30,7 +30,6 @@
   data-testid="country"
   labelText="Country"
   helperText="Where you live"
-  flag="emoji"
   {locale}
   bind:value
   on:change={(event) => {
@@ -89,10 +88,6 @@
   secondaryButtonText="Cancel"
   on:click:button--secondary={() => (modalOpen = false)}
 >
-  <CountryPicker
-    labelText="Modal country"
-    flag="emoji"
-    bind:value={modalValue}
-  />
+  <CountryPicker labelText="Modal country" bind:value={modalValue} />
 </Modal>
 <output data-testid="modal-value">{modalValue}</output>

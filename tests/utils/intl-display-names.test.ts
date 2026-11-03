@@ -1,6 +1,5 @@
 // @vitest-environment node
 import {
-  canRenderFlags,
   languageEndonym,
   languageName,
   listLanguages,
@@ -8,7 +7,6 @@ import {
   listRegions,
   localeRegion,
   matchLanguage,
-  regionFlag,
   regionName,
   regionNativeName,
 } from "../../src/utils/intl-display-names.js";
@@ -104,12 +102,6 @@ describe("names", () => {
     }
   });
 
-  it("makes a flag from a code's two letters", () => {
-    expect(regionFlag("US")).toBe("\u{1F1FA}\u{1F1F8}");
-    expect(regionFlag("150")).toBe("");
-    expect(regionFlag("us")).toBe("");
-  });
-
   it("guesses the region of a locale", () => {
     expect(localeRegion("en")).toBe("US");
     expect(localeRegion("de")).toBe("DE");
@@ -122,33 +114,5 @@ describe("names", () => {
     expect(matchLanguage(["pt-BR", "en"], ["pt", "en"])).toBe("pt");
     expect(matchLanguage(["xx", "en-GB"], ["en"])).toBe("en");
     expect(matchLanguage(["xx"], ["en"])).toBe("");
-  });
-});
-
-describe("canRenderFlags", () => {
-  const paint = (pixels: number[]) => () =>
-    ({
-      canvas: { width: 0, height: 0 },
-      fillText() {},
-      getImageData: () => ({ data: new Uint8ClampedArray(pixels) }),
-    }) as unknown as CanvasRenderingContext2D;
-
-  it("sees a flag in a pixel with red and blue", () => {
-    expect(canRenderFlags(paint([200, 20, 20, 255, 20, 20, 200, 255]))).toBe(
-      true,
-    );
-  });
-
-  it("sees letters in gray pixels, as Windows draws them", () => {
-    expect(canRenderFlags(paint([90, 90, 90, 255, 0, 0, 0, 0]))).toBe(false);
-  });
-
-  it("is false with no canvas", () => {
-    expect(canRenderFlags(() => null)).toBe(false);
-    expect(
-      canRenderFlags(() => {
-        throw new Error("no canvas");
-      }),
-    ).toBe(false);
   });
 });

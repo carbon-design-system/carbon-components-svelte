@@ -47,7 +47,6 @@ describe("createRegionSource", () => {
       value: "CH",
       name: "Switzerland",
       nativeName: "Schweiz",
-      flag: "\u{1F1E8}\u{1F1ED}",
     });
     expect(source.detail("US").nativeName).toBe("");
     expect(createRegionSource({ locale: "de" }).detail("CH").nativeName).toBe(
@@ -66,7 +65,6 @@ describe("createRegionSource", () => {
       "United States",
       "Americas",
     ]);
-    expect(own.detail("150").flag).toBe("");
   });
 
   it("detects the region of the locale, if it is listed", () => {

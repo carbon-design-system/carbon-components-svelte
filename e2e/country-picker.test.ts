@@ -67,8 +67,9 @@ test.describe("CountryPicker", () => {
     await page.keyboard.type("japan");
 
     const row = page.getByRole("option", { name: /Japan/ });
-    await expect(row.locator(".bx--intl-picker__flag")).toHaveText(
-      "\u{1F1EF}\u{1F1F5}",
+    // The flags load when the menu opens: Japan's disc is red.
+    await expect(row.locator('svg.bx--flag path[fill="#da1e28"]')).toHaveCount(
+      1,
     );
     await expect(row.locator(".bx--intl-picker__secondary")).toHaveText("日本");
   });
@@ -79,23 +80,39 @@ test.describe("CountryPicker", () => {
 
     const badge = page
       .getByRole("option", { name: /Switzerland/ })
-      .locator(".bx--intl-picker__badge");
+      .locator(".bx--flag--badge");
     await expect(badge).toHaveText("CH");
-    const border = await badge.evaluate(
-      (el) => getComputedStyle(el).borderTopWidth,
-    );
-    expect(border).toBe("1px");
+    expect(await badge.boundingBox()).toMatchObject({ width: 20, height: 15 });
   });
 
-  test("lists flags automatically where the platform draws them", async ({
+  test("draws a flag where there is one, and a box of the same size where there is not", async ({
     page,
   }) => {
     await page.goto("/country-picker.html");
     await open(page, "Automatic flag");
+    const field = page.getByRole("combobox", { name: "Automatic flag" });
 
-    // Headless Chromium paints the emoji, so `auto` must pick the flag.
-    await expect(page.locator(".bx--intl-picker__flag").first()).toBeVisible();
-    await expect(page.locator(".bx--intl-picker__badge")).toHaveCount(0);
+    async function leading(query: string, name: RegExp) {
+      await field.fill(query);
+      const row = page.getByRole("option", { name });
+      await expect(row.locator(".bx--flag")).toBeVisible();
+      return {
+        flag: await row.locator(".bx--flag").boundingBox(),
+        text: await row.locator(".bx--intl-picker__text").boundingBox(),
+        drawn: await row.locator("svg.bx--flag").count(),
+      };
+    }
+
+    const japan = await leading("japan", /Japan/);
+    // Kosovo has no flag drawn yet, so a box with its code stands in.
+    const kosovo = await leading("kosovo", /Kosovo/);
+
+    expect(japan.drawn).toBe(1);
+    expect(kosovo.drawn).toBe(0);
+    expect(kosovo.flag).toMatchObject({ width: 20, height: 15 });
+    expect(japan.flag).toMatchObject({ width: 20, height: 15 });
+    // The names start at the same place in both rows.
+    expect(kosovo.text?.x).toBeCloseTo(japan.text?.x ?? 0);
   });
 
   test("renames the names when the locale changes at runtime", async ({
@@ -132,7 +149,7 @@ test.describe("CountryPicker", () => {
     await open(page, "Country");
 
     const row = page.getByRole("option").first();
-    const flag = await row.locator(".bx--intl-picker__flag").boundingBox();
+    const flag = await row.locator(".bx--flag").boundingBox();
     const text = await row.locator(".bx--intl-picker__text").boundingBox();
     expect(flag && text && flag.x > text.x).toBe(true);
     const sorted = await optionTexts(page);

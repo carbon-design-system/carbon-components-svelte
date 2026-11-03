@@ -2,7 +2,6 @@
 import {
   listRegions,
   localeRegion,
-  regionFlag,
   regionName,
   regionNativeName,
 } from "./intl-display-names.js";
@@ -21,8 +20,6 @@ import { searchText } from "./intl-search.js";
  * @property {string} name The name in the UI locale.
  * @property {string} nativeName The name in the region's main language, or
  * `""` when that is the UI language or the engine has no data.
- * @property {string} flag The flag emoji, or `""` for a code that is not two
- * letters.
  */
 
 /**
@@ -99,7 +96,6 @@ export function createRegionSource({ locale, values }) {
         value: code,
         name: itemsById.get(code)?.text ?? regionName(locale, code) ?? code,
         nativeName: nativeName(code),
-        flag: regionFlag(code),
       };
     },
     /**

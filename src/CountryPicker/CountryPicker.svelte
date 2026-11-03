@@ -10,7 +10,6 @@
    * @property {string} label - The name shown in the field.
    * @property {string} name - The name in the UI locale.
    * @property {string} nativeName - The name in the region's main language, such as "Schweiz". Empty where it is the UI language or the engine has no data.
-   * @property {string} flag - The flag emoji, whether or not the menu shows it.
    * @property {any} metadata - What `metadata` returned for the region.
    * @event {null} clear
    */
@@ -52,13 +51,11 @@
 
   /**
    * Set how a region's flag shows in the menu.
-   * - `"auto"`: the flag emoji where the platform draws them, else the code in
-   *   a box. Windows draws the regional indicators as letters, so it gets the
-   *   box.
-   * - `"emoji"`: always the flag emoji.
+   * - `"auto"`: the region's `Flag`, and its code in a box of the same size
+   *   where none is drawn yet. The flags load when the menu first opens.
    * - `"badge"`: the code in a box.
    * - `"none"`: the name alone.
-   * @type {"auto" | "emoji" | "badge" | "none"}
+   * @type {"auto" | "badge" | "none"}
    */
   export let flag = "auto";
 
@@ -167,7 +164,6 @@
   export let ref = null;
 
   import IntlPicker from "../IntlPicker/IntlPicker.svelte";
-  import { canRenderFlags } from "../utils/intl-display-names.js";
   import { createRegionSource } from "../utils/intl-regions.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -189,14 +185,27 @@
     source = createRegionSource({ locale: nextLocale, values: nextValues });
   }
 
-  // Painting a flag to see whether it draws is a canvas read, so wait for the
-  // first time the menu opens.
-  /** @type {"emoji" | "badge" | undefined} */
-  let detectedFlag;
-  $: if (flag === "auto" && open && detectedFlag === undefined) {
-    detectedFlag = canRenderFlags() ? "emoji" : "badge";
+  // The flags are one module of every flag, so load it the first time the
+  // menu opens, and only for a picker that shows them. A page that never opens
+  // the menu never fetches it.
+  /** @type {import("../flags/all.js").getFlag | undefined} */
+  let getFlag;
+  let loading = false;
+  $: if (flag === "auto" && open && !loading) load();
+
+  /** @type {"flag" | "badge" | "none"} */
+  let shownFlag = "none";
+  $: shownFlag = flag === "auto" ? "flag" : flag;
+
+  async function load() {
+    loading = true;
+    try {
+      getFlag = (await import("../flags/all.js")).getFlag;
+    } catch {
+      // Offline, or a blocked chunk: every row shows its code instead.
+      getFlag = () => undefined;
+    }
   }
-  $: shownFlag = flag === "auto" ? (detectedFlag ?? "none") : flag;
 
   $: fieldProps = {
     ...$$restProps,
@@ -205,6 +214,7 @@
     locale,
     detect,
     flag: shownFlag,
+    getFlag,
     lang: locale,
     metadata,
     labelText,

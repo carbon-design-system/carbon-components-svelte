@@ -49,38 +49,13 @@
     white-space: nowrap;
   }
 
-  .#{$prefix}--intl-picker__flag {
-    flex: none;
-    inline-size: to-rem(20px);
-    line-height: 1;
-    text-align: center;
-  }
-
-  // The stand-in for a flag where the platform draws none: the code, boxed.
-  .#{$prefix}--intl-picker__badge {
-    @include type-style("label-01");
-
-    min-inline-size: to-rem(28px);
-    flex: none;
-    padding: 0 $carbon--spacing-02;
-    border: 1px solid $border-strong;
-    border-radius: 2px;
-    color: $text-secondary;
-    text-align: center;
-  }
-
   // A highlighted row fills with `Highlight` and stops being forced, so what
   // it holds has to take the text color from the row.
   @media (forced-colors: active) {
     .#{$prefix}--intl-picker__text,
     .#{$prefix}--intl-picker__secondary,
-    .#{$prefix}--intl-picker__trailing,
-    .#{$prefix}--intl-picker__badge {
+    .#{$prefix}--intl-picker__trailing {
       color: inherit;
-    }
-
-    .#{$prefix}--intl-picker__badge {
-      border-color: currentcolor;
     }
   }
 }

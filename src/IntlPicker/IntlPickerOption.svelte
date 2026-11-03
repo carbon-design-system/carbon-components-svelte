@@ -1,4 +1,6 @@
 <script>
+  import Flag from "../Flag/Flag.svelte";
+
   /**
    * One option row of an `IntlPicker`: the name, then what the source knows
    * about the code. A row asks the source for it, so only rows that are
@@ -17,8 +19,13 @@
   /** The locale the names are written in. */
   export let locale = "en";
 
-  /** @type {"emoji" | "badge" | "none"} */
+  /** @type {"flag" | "badge" | "none"} */
   export let flag = "none";
+
+  /**
+   * @type {((code: string) => { readonly code: string; readonly body: string } | undefined) | undefined}
+   */
+  export let getFlag = undefined;
 
   $: detail = source.detail(item.id);
   $: secondary =
@@ -36,13 +43,12 @@
 </script>
 
 <span class:bx--intl-picker__option={true}>
-  {#if kind === "region" && flag === "emoji"}
-    <span class:bx--intl-picker__flag={true} aria-hidden="true"
-      >{detail.flag}</span
-    >
+  {#if kind === "region" && flag === "flag"}
+    <!-- Where no flag is drawn, or none is loaded yet, `Flag` draws a box of
+         the same size, so the names line up. -->
+    <Flag flag={getFlag?.(item.id)} code={getFlag ? item.id : ""} />
   {:else if kind === "region" && flag === "badge"}
-    <span class:bx--intl-picker__badge={true} aria-hidden="true">{item.id}</span
-    >
+    <Flag code={item.id} />
   {/if}
   <span
     class:bx--intl-picker__text={true}
