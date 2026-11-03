@@ -17,6 +17,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Required. Specify the trigger button text.
    * Alternatively, use the "labelChildren" slot for custom trigger content;
    * `labelText` is still used as the accessible name in that case.
@@ -94,10 +101,11 @@
    * Animate the menu as it opens and closes. Set to `true` for Carbon's fly
    * (`fast01`, 2 px toward the side the menu opens on), to fly params (e.g.,
    * `{ duration: "fast02" }`) to customize it, or to `{ fn }` to use another
-   * transition. The menu does not animate by default.
+   * transition. The menu does not animate by default. When `undefined`, the
+   * nearest `Motion` sets it through the `menu` role.
    * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
    */
-  export let menuTransition = undefined;
+  export let transition = undefined;
 
   /**
    * Obtain a reference to the trigger button HTML element.
@@ -214,12 +222,16 @@
   {intrinsicAlign}
   {size}
   {maxHeight}
-  transition={menuTransition}
+  {transition}
   intrinsicWidth
   bind:open
   {labelText}
   data-carbon-menu-button-icon-only={iconOnly ? true : undefined}
   on:close
+  on:introstart
+  on:introend
+  on:outrostart
+  on:outroend
 >
   <slot />
 </Menu>
