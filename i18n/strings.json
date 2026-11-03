@@ -2305,6 +2305,55 @@
       "defaultKind": "text"
     },
     {
+      "component": "TimezonePicker",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "No results",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimezonePicker",
+      "prop": "filterResultsText",
+      "type": "(count: number) => string",
+      "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "TimezonePicker",
+      "prop": "groupText",
+      "type": "(area: string, label: string) => string",
+      "default": "(_area, label) => label",
+      "defaultKind": "function"
+    },
+    {
+      "component": "TimezonePicker",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimezonePicker",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimezonePicker",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimezonePicker",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "ToastNotification",
       "prop": "closeButtonDescription",
       "type": "string",
