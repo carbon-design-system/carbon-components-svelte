@@ -222,6 +222,121 @@ test.describe("PickerGrid", () => {
     expect(await columnsOf(listbox(page, "narrow"))).toBeGreaterThan(2);
   });
 
+  test.describe("sticky section headers", () => {
+    const sticky = (page: Page) =>
+      grid(page, "basic").locator(".bx--picker-grid__sticky");
+
+    test("names the section at the top, and the next header pushes it off", async ({
+      page,
+    }) => {
+      await expect(sticky(page)).toHaveText("Recent");
+      await grid(page, "basic")
+        .getByRole("toolbar")
+        .getByRole("button", { name: "Food" })
+        .click();
+      await expect(sticky(page)).toHaveText("Food");
+      const list = listbox(page, "basic");
+      // Scroll within the section: the header stays at the top of the grid.
+      await list.evaluate((node) => {
+        node.scrollTop += 100;
+      });
+      await expect(sticky(page)).toHaveText("Food");
+      const offset = async () => {
+        const [header, area] = await Promise.all([
+          sticky(page).boundingBox(),
+          list.boundingBox(),
+        ]);
+        return header && area ? Math.round(header.y - area.y) : null;
+      };
+      expect(await offset()).toBe(0);
+      // 16px before the next section's header reaches it, the header
+      // starts to leave, and the next one takes its place.
+      const next = await list.evaluate((node) => {
+        const headers = [
+          ...node.querySelectorAll<HTMLElement>(".bx--picker-grid__header"),
+        ];
+        const travel = headers.find((header) =>
+          header.textContent?.includes("Travel"),
+        );
+        return travel
+          ? travel.getBoundingClientRect().top -
+              node.getBoundingClientRect().top +
+              node.scrollTop
+          : 0;
+      });
+      expect(next).toBeGreaterThan(0);
+      await list.evaluate((node, top) => {
+        node.scrollTop = top - 16;
+      }, next);
+      await expect(sticky(page)).toHaveText("Food");
+      await expect.poll(offset).toBe(-16);
+      await list.evaluate((node, top) => {
+        node.scrollTop = top;
+      }, next);
+      await expect(sticky(page)).toHaveText("Travel");
+    });
+
+    test("keeps the cursor's cell out from under the sticky header", async ({
+      page,
+    }) => {
+      await search(page).focus();
+      await grid(page, "basic")
+        .getByRole("toolbar")
+        .getByRole("button", { name: "Food" })
+        .click();
+      await page.keyboard.press("ArrowDown");
+      for (let at = 0; at < 20; at++) {
+        // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+        await page.keyboard.press("ArrowDown");
+      }
+      for (let at = 0; at < 6; at++) {
+        // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+        await page.keyboard.press("ArrowUp");
+        const id = await search(page).getAttribute("aria-activedescendant");
+        const clear = await page.evaluate((cell) => {
+          const node = document.getElementById(cell ?? "");
+          const header = document.querySelector(
+            '[data-testid="basic"] .bx--picker-grid__sticky',
+          );
+          if (!node || !header) return false;
+          return (
+            node.getBoundingClientRect().top >=
+            header.getBoundingClientRect().bottom - 1
+          );
+        }, id);
+        expect(clear).toBe(true);
+      }
+    });
+
+    test("is gone while searching, which has no headers", async ({ page }) => {
+      await search(page).fill("an");
+      await expect(sticky(page)).toHaveCount(0);
+    });
+  });
+
+  test("names the cursor's cell only while it is rendered", async ({
+    page,
+  }) => {
+    await search(page).focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(search(page)).toHaveAttribute("aria-activedescendant", /.+/);
+    // The wheel moves the window away from the cursor, and its cell unmounts.
+    await listbox(page, "basic").evaluate((node) => {
+      node.scrollTop = node.scrollHeight;
+    });
+    await expect(search(page)).not.toHaveAttribute(
+      "aria-activedescendant",
+      /.+/,
+    );
+    const results = await new AxeBuilder({ page })
+      .include('[data-testid="basic"]')
+      .analyze();
+    expect(results.violations).toEqual([]);
+    // A key brings the cursor, and its name, back.
+    await page.keyboard.press("ArrowUp");
+    await expect(search(page)).toHaveAttribute("aria-activedescendant", /.+/);
+  });
+
   test("has no detectable accessibility violations", async ({ page }) => {
     const results = await new AxeBuilder({ page }).include("#app").analyze();
     expect(results.violations).toEqual([]);

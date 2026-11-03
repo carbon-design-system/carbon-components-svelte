@@ -138,6 +138,9 @@
   /** Set to `false` to remove the preview of the cell under the pointer or the keyboard */
   export let preview = true;
 
+  /** Set to `false` to let each section header scroll away with its cells, instead of staying at the top until the next section pushes it off */
+  export let stickyHeaders = true;
+
   /** Specify the accessible name of the grid */
   export let labelText = "Options";
 
@@ -366,11 +369,39 @@
         : atEnd
           ? sections.ids.length - 1
           : sectionAtRow(layout.rows, topRow);
+  // The header of the section at the top stays there, drawn over the cells
+  // that scroll under it, until the next section's header reaches it. A
+  // search has no headers.
+  $: topSection =
+    layout.rows.length === 0 ? -1 : sectionAtRow(layout.rows, topRow);
+  $: stickyLabel =
+    stickyHeaders && !hasQuery && topSection >= 0
+      ? sections.labels[topSection]
+      : "";
+  $: stickyInset = stickyLabel ? HEADER_HEIGHT : 0;
+  $: stickyShift =
+    topSection >= 0 && topSection + 1 < layout.sectionRows.length
+      ? Math.min(
+          0,
+          offsets[layout.sectionRows[topSection + 1]] -
+            scrollTop -
+            HEADER_HEIGHT,
+        )
+      : 0;
   $: showCategories = !hasQuery && sections.ids.length > 1;
   $: previewIndex = hoveredIndex >= 0 ? hoveredIndex : highlightedIndex;
   $: previewItem = list[previewIndex];
+  // The cursor's cell is named only while it is rendered: an id that no
+  // element holds is invalid, and the window drops a cell that scrolls away.
   $: activeDescendant =
-    highlightedIndex >= 0 && highlightedIndex < list.length
+    highlightedIndex >= 0 &&
+    highlightedIndex < list.length &&
+    windowed.visibleItems.some(
+      (row) =>
+        row.type === "cells" &&
+        highlightedIndex >= row.start &&
+        highlightedIndex < row.start + row.length,
+    )
       ? optionId(id, highlightedIndex)
       : undefined;
   $: navActive = searchFocused || viewportFocused;
@@ -479,28 +510,35 @@
     if (!viewportRef || hasQuery) return;
     const at = firstSelectedIndex();
     if (at < 0) return;
-    const next = getBoundedScrollTop({
+    let next = getBoundedScrollTop({
       index: layout.lineRows[layout.itemLine[at]],
       itemHeight: cellSize,
       containerHeight,
       itemCount: layout.rows.length,
       heights: rowHeights,
     });
+    // Below the sticky header, which names the cell's section.
+    next = Math.max(0, next - stickyInset);
     viewportRef.scrollTop = next;
     scrollTop = next;
   }
 
-  /** @param {number} row */
+  /**
+   * The scroll that brings a row into the part of the grid the sticky header
+   * leaves visible, or `null` when it is there.
+   * @param {number} row
+   */
   function rowScroll(row) {
-    return scrollHighlightedIntoView({
+    const next = scrollHighlightedIntoView({
       highlightedIndex: row,
-      currentScrollTop: viewportRef?.scrollTop ?? 0,
+      currentScrollTop: (viewportRef?.scrollTop ?? 0) + stickyInset,
       itemCount: layout.rows.length,
       itemHeight: cellSize,
-      containerHeight,
+      containerHeight: containerHeight - stickyInset,
       overscan: OVERSCAN,
       heights: rowHeights,
     });
+    return next === null ? null : Math.max(0, next - stickyInset);
   }
 
   /**
@@ -797,6 +835,17 @@
     on:focus={() => (viewportFocused = true)}
     on:blur={() => (viewportFocused = false)}
   >
+    {#if stickyLabel}
+      <div
+        aria-hidden="true"
+        class:bx--picker-grid__sticky={true}
+        style:transform={stickyShift < 0
+          ? `translateY(${stickyShift}px)`
+          : undefined}
+      >
+        {stickyLabel}
+      </div>
+    {/if}
     <VirtualWindow
       totalHeight={offsets[layout.rows.length]}
       offsetY={windowed.offsetY}

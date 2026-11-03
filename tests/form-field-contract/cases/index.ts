@@ -4,6 +4,7 @@ import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import EmojiPicker from "carbon-components-svelte/EmojiPicker/EmojiPicker.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
@@ -52,6 +53,12 @@ export const cases: FieldCase[] = [
       errorAttribute: "aria-describedby",
       ignoredWith: { type: "inline" },
     },
+  },
+  {
+    name: "EmojiPicker",
+    component: EmojiPicker,
+    control: () => screen.getAllByRole("combobox")[0],
+    state: { errorAttribute: "aria-describedby" },
   },
   {
     name: "MultiSelect",

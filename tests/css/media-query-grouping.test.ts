@@ -53,10 +53,12 @@ describe("any-hover media query grouping", () => {
     // gives a hovered danger option's keys its color (_menu-shortcut.scss).
     // Raised again from 75 to 76 for PickerGrid's one hover block, which
     // tints a hovered category button (_picker-grid.scss).
+    // Raised again from 76 to 77 for EmojiPicker's one hover block, which
+    // tints a hovered skin tone button (_emoji-picker.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(76);
+    expect(blocks.length).toBeLessThanOrEqual(77);
   }, 30_000);
 });

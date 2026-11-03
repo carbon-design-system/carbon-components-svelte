@@ -1,0 +1,154 @@
+---
+components: ["EmojiPicker"]
+description: Emoji pickers let people search and choose an emoji, with skin tones and the ones they use most, in a field or an icon button that opens a popover.
+---
+
+<script>
+  import { Box, EmojiPicker, Stack } from "carbon-components-svelte";
+
+  const emoji = () => import("carbon-components-svelte/emoji-data");
+</script>
+
+## Basic
+
+`items` is the emoji. The data is its own module, `carbon-components-svelte/emoji-data`: 1,923 emoji from Unicode and CLDR, with their names, groups and keywords. Pass a function that imports it, and the picker loads it when it first opens, or when `value` is set, so a page that only renders the field never downloads it.
+
+`value` is the `id` of the chosen emoji, which is its shortcode. The `select` event carries the glyph, in the skin tone the user chose.
+
+<Box maxWidth="20rem">
+  <EmojiPicker labelText="Status" items={emoji} value="rocket" />
+</Box>
+
+## Data
+
+The data is not in the package's main entry, so an app pays for it only where it opens a picker. The picker alone is part of the library like any component.
+
+| Source | Size | Notes |
+| :--- | :--- | :--- |
+| `() => import("carbon-components-svelte/emoji-data")` | The picker only, until it first opens | Use this. The data is a chunk of about 98 kB, 35 kB gzipped. |
+| `import emoji from "carbon-components-svelte/emoji-data"` | The picker and the data in the first load | Use it only where the picker is on screen at once. |
+| Your own `EmojiPickerItem[]` | Yours | A custom set. Give each item an `id`, a `label`, an `emoji`, a `category`, a `version` and `tones`. |
+
+The data is English. Each emoji is one string, `glyph;name;version;tones;keywords`, and `toEmojiItems` expands them once. `scripts/build-emoji-data.ts` downloads Unicode's `emoji-test.txt` and CLDR's annotations and writes the module, so a new Unicode release is one command.
+
+## Variants
+
+### Button
+
+Set `variant` to `"button"` for an icon button. With `selectionMode="multiple"`, a click toggles the emoji and the popover stays open, which suits reactions. `labelText` names the button and is its tooltip.
+
+<FileSource src="/framed/EmojiPicker/EmojiPickerReactions" />
+
+A button in single selection reports a choice and holds none, so use it to insert an emoji. Insert it where the caret is.
+
+<FileSource src="/framed/EmojiPicker/EmojiPickerInsert" />
+
+### Inline
+
+Set `variant` to `"inline"` to show the grid on the page, with no trigger and no popover. Use it where the choice is the point, such as a settings panel.
+
+<FileSource src="/framed/EmojiPicker/EmojiPickerInline" />
+
+## Skin tones
+
+The selector under the grid sets `skinTone` for every emoji that has variants. It is a radio group of six hands, `0` for the default and `1` to `5` from light to dark, so a screen reader hears the tone and its state. The choice does not change what search matches: the name is the same in every tone.
+
+Persist `skinTone`, `recent` and `usage` together with one [LocalStorage](/components/LocalStorage) binding.
+
+<FileSource src="/framed/EmojiPicker/EmojiPickerPersist" />
+
+## Frequently used
+
+The first section shows the emoji the user chooses most, up to `recentLimit` (16). `usage` counts each choice, and among equal counts the most recent comes first. In multiple selection the section changes the next time the picker opens or the search clears, so a cell does not move under the pointer. Set `recentLimit` to `0` to hide the section and stop counting.
+
+## Browser support
+
+An emoji newer than the browser's font draws as a box, and a new sequence draws as its parts. Left alone, the picker draws two emoji of each Unicode version on a canvas, once, about 20 ms, and hides the versions after the first that fails. It does the same for the flags of countries, which Windows draws as two letters. A server renders every emoji, and the client hides some on the first open.
+
+Set `maxVersion` to pin it, such as `15` to show the emoji of Unicode 15 and before whatever the browser draws, or `Infinity` to test nothing.
+
+| Do | Why |
+| :--- | :--- |
+| Leave `maxVersion` unset | A box in a grid of emoji says "broken" more than a missing emoji does. |
+| Set `maxVersion` when you render emoji from images | The canvas tests the browser's font, not your images. |
+| Set `maxVersion={Infinity}` in tests | A headless browser may have no emoji font, so detection has nothing to measure. |
+
+## States
+
+Set `invalid` and `invalidText`, or `warn` and `warnText`, to show a validation state. `disabled` keeps the field from opening, and `readonly` shows the chosen emoji and keeps it from changing.
+
+<Stack gap={5}>
+  <Box maxWidth="20rem">
+    <EmojiPicker labelText="Invalid" items={emoji} invalid invalidText="Choose a status" searchLabelText="Search invalid" />
+  </Box>
+  <Box maxWidth="20rem">
+    <EmojiPicker labelText="Warning" items={emoji} warn warnText="This emoji is also on the team" value="fire" searchLabelText="Search warning" />
+  </Box>
+  <Box maxWidth="20rem">
+    <EmojiPicker labelText="Disabled" items={emoji} disabled value="sparkles" />
+  </Box>
+  <Box maxWidth="20rem">
+    <EmojiPicker labelText="Read-only" items={emoji} readonly value="sparkles" />
+  </Box>
+</Stack>
+
+## Form field
+
+Set `name` and the field writes the chosen glyph, in its skin tone, to a hidden input, so a form submits it. Set `helperText` to add guidance, and `hideLabel` to hide the label visually.
+
+<Box maxWidth="20rem">
+  <EmojiPicker labelText="Status" hideLabel helperText="Shown next to your name" name="status" items={emoji} searchLabelText="Search form" />
+</Box>
+
+## In a modal
+
+Inside a [Modal](/components/Modal), the popover opens in a portal, above the modal. <DocKbd label="Escape" /> closes it before the modal. When the trigger is an icon button, the first <DocKbd label="Escape" /> after the popover closes hides the button's tooltip.
+
+<FileSource src="/framed/EmojiPicker/EmojiPickerModal" />
+
+## Typing a shortcode
+
+A text box that opens a list of emoji when the user types `:` is a job for Mentions, a companion of `TextArea` and `TextInput` that is still a draft. `toEmojiItems` gives it the emoji to match, each with an `id` that is the shortcode, a `label` and `keywords`. Its API may change, so treat this as a sketch.
+
+```svelte
+<script>
+  import { toEmojiItems } from "carbon-components-svelte";
+  import data from "carbon-components-svelte/emoji-data";
+
+  const { items: emoji } = toEmojiItems(data);
+  let ref = null;
+</script>
+
+<TextArea bind:ref labelText="Comment" />
+<Mentions
+  field={ref}
+  triggers={[{ char: ":", items: emoji, format: "plain", minQueryLength: 2 }]}
+/>
+```
+
+## Keyboard
+
+Focus moves into the search field when the popover opens, and returns to the trigger when it closes. The grid takes the keys of [PickerGrid](/components/PickerGrid#keyboard) from the search field.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="↓" /> <DocKbd label="↑" /> | On a field: open the popover. |
+| Letters | In the popover: search by name, keyword or shortcode. |
+| <DocKbd label="↓" /> <DocKbd label="↑" /> <DocKbd label="←" /> <DocKbd label="→" /> | Move the cursor over the emoji. |
+| <DocKbd label="Enter" /> | Choose the emoji under the cursor. In single selection, close the popover and return focus to the trigger. |
+| <DocKbd label="Escape" /> | Clear the search. With nothing to clear, close the popover and return focus to the trigger. |
+| <DocKbd label="Tab" /> | Move to the category buttons, the skin tones, then out of the popover, which closes it. |
+| <DocKbd label="←" /> <DocKbd label="→" /> | On the skin tones: move to a tone and choose it. |
+
+## Accessibility
+
+The trigger opens a dialog. The dialog holds the search field, the category buttons, the grid and the skin tones. The grid is a listbox of options named by CLDR's name for each emoji, so a screen reader hears "thumbs up, 120 of 1,923". The glyphs are hidden from assistive technology, because some screen readers say nothing for an emoji, and others read a name that differs from the CLDR one.
+
+A chosen emoji is marked by a check mark as well as a fill, and the chosen skin tone by an underline. Under forced colors both stay, and a glyph keeps its own colors.
+
+| Do | Why |
+| :--- | :--- |
+| Set `labelText` | The field, the button and the dialog take their name from it. |
+| Show the chosen emoji with its name beside it | The name is what a screen reader hears, and a glyph can differ across platforms. |
+| Keep `skinToneNames` and the other texts in the page's language | The data is English, so translate the texts, and for other languages supply your own items. |
+| Do not put an emoji in a label or a heading as its only meaning | A screen reader may skip it or read it unpredictably. |
