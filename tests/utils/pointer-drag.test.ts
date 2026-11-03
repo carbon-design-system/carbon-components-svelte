@@ -115,6 +115,20 @@ describe("pointerDrag", () => {
     action.destroy();
   });
 
+  it("ends an active drag when it is disabled", () => {
+    const onMove = vi.fn();
+    const onEnd = vi.fn();
+    const action = pointerDrag(node, { onMove, onEnd });
+
+    node.dispatchEvent(pointer("pointerdown"));
+    action.update({ enabled: false, onMove, onEnd });
+    node.dispatchEvent(pointer("pointermove"));
+
+    expect(onEnd).toHaveBeenCalledTimes(1);
+    expect(onMove).not.toHaveBeenCalled();
+    action.destroy();
+  });
+
   it("listens for moves only while a drag is active", () => {
     const add = vi.spyOn(node, "addEventListener");
     const remove = vi.spyOn(node, "removeEventListener");
