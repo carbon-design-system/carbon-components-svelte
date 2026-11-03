@@ -815,6 +815,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/MenuButton
+  mentions:
+    name: Mentions
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/mentions.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Mentions
   meter:
     name: Meter
     status: stable
