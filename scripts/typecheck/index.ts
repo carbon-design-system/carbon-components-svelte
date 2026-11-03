@@ -11,7 +11,7 @@ import { createLocator, type Output } from "./output";
  *   bun scripts/typecheck --workspace src --tsconfig tsconfig.svelte-types.json --no-declarations
  *
  * Each component is turned into TypeScript (see `emit.ts`) under
- * `<workspace>/.typecheck`, next to a tsconfig that extends the workspace's.
+ * `.typecheck/<workspace>`, next to a tsconfig that extends the workspace's.
  * `--checker` runs `bun check` (default), `tsgo` or `tsc` on it, and each
  * error maps back to its `.svelte` line. Errors in generated code are
  * dropped; `TYPECHECK_DEBUG=1` prints them. `--no-declarations` skips the
@@ -20,7 +20,7 @@ import { createLocator, type Output } from "./output";
  * `ERROR "file" line:column "message" code` lines, with `file` relative to
  * the workspace. `--components` (repeatable) picks the components to check
  * with globs relative to the workspace, and `--out-dir` moves the generated
- * code out of `<workspace>/.typecheck`. `--svelte` points at the
+ * code out of `.typecheck/<workspace>`. `--svelte` points at the
  * Svelte install to check against (its version and element typings), e.g.
  * `tests-svelte3/node_modules/svelte` with `--tsconfig
  * tests-svelte3/tsconfig.check.json`.
@@ -53,7 +53,8 @@ const baseConfig = resolve(
 );
 const outDir = values["out-dir"]
   ? resolve(ROOT, values["out-dir"])
-  : join(workspace, ".typecheck");
+  : // Outside the workspace: `src/` ships to npm.
+    join(ROOT, ".typecheck", relative(ROOT, workspace));
 const genDir = join(outDir, "svelte");
 const noDeclarations = values["no-declarations"];
 
