@@ -18,9 +18,9 @@ import { createLocator, type Output } from "./output";
  * `X.d.svelte.ts` re-exports, so imports of `.svelte` files resolve to their
  * own `.svelte.d.ts` (as `src/` has, from sveld). `--output machine` prints
  * `ERROR "file" line:column "message" code` lines. `--svelte` points at the
- * Svelte install whose element typings to use, e.g.
- * `tests-svelte4/node_modules/svelte` with `--tsconfig
- * tests-svelte4/tsconfig.check.json`.
+ * Svelte install to check against (its version and element typings), e.g.
+ * `tests-svelte3/node_modules/svelte` with `--tsconfig
+ * tests-svelte3/tsconfig.check.json`.
  */
 const { values } = parseArgs({
   options: {
@@ -50,14 +50,19 @@ const outDir = join(workspace, ".typecheck");
 const genDir = join(outDir, "svelte");
 const noDeclarations = values["no-declarations"];
 
-// svelte's element typings: Svelte 4 and 5 ship them, Svelte 3 doesn't.
-const svelteHtml = resolve(ROOT, values.svelte, "svelte-html.d.ts");
-if (!(await Bun.file(svelteHtml).exists())) {
-  console.error(
-    `${relative(ROOT, svelteHtml)} not found: Svelte 3 isn't supported yet.`,
-  );
-  process.exit(2);
-}
+const svelteMajor = Number(
+  (
+    (await Bun.file(resolve(ROOT, values.svelte, "package.json")).json()) as {
+      version: string;
+    }
+  ).version.split(".")[0],
+);
+
+// Element typings: Svelte 4 and 5 ship svelte-html.d.ts, Svelte 3 doesn't.
+const svelteHtml =
+  svelteMajor === 3
+    ? join(ROOT, "scripts/typecheck/svelte3-elements.d.ts")
+    : resolve(ROOT, values.svelte, "svelte-html.d.ts");
 
 /**
  * The `exclude` the base tsconfig ends up with (the nearest config in its
@@ -107,6 +112,7 @@ files.forEach((rel, i) => {
   let result: ReturnType<typeof emit>;
   try {
     result = emit(sources[i], {
+      svelte: svelteMajor,
       // A relative import that leaves the workspace is relative to the
       // generated file's folder instead.
       rewriteImport(specifier) {

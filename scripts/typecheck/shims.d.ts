@@ -305,3 +305,19 @@ declare function __sveltets_2_isomorphic_component_slots<
   Exports,
   Bindings
 >;
+
+/**
+ * A component as Svelte 3 types one: a `SvelteComponentTyped` class, which
+ * its `render()` typings infer props from. Svelte 3 has no function components.
+ */
+declare function __sveltets_2_svelte3_component<
+  Props extends Record<string, any>,
+  Events extends Record<string, any>,
+  Slots extends Record<string, any>,
+  Exports extends Record<string, any>,
+  Bindings extends string,
+>(
+  klass: SvelteRender<Props, Events, Slots, Exports, Bindings>,
+): new (
+  options: import("svelte").ComponentConstructorOptions<Props>,
+) => import("svelte").SvelteComponentTyped<Props, Events, Slots> & Exports;

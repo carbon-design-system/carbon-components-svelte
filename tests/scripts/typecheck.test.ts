@@ -51,4 +51,12 @@ describe("emit", () => {
     );
     expect(out.code).not.toContain("$$render<");
   });
+
+  it("types a Svelte 3 component as a class, without a `children` prop", () => {
+    const source = `<script>\n  import Box from "./Box.svelte";\n</script>\n\n<Box>x</Box>\n`;
+    const svelte3 = emit(source, { svelte: 3 }).out.code;
+    expect(svelte3).toContain("__sveltets_2_svelte3_component(");
+    expect(svelte3).not.toContain("children:");
+    expect(emit(source).out.code).toContain("children:");
+  });
 });

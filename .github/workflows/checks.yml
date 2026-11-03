@@ -406,11 +406,10 @@ jobs:
           cd ${{ matrix.dir }}
           bun run test:types
 
-      # Runs next to svelte-check until it replaces it. Svelte 3 isn't
-      # supported (scripts/typecheck/index.ts).
+      # Runs next to svelte-check until it replaces it.
       - name: Test types with scripts/typecheck (${{ matrix.label }})
-        if: matrix.dir == 'tests-svelte4' && matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
-        run: bun run test:typecheck:svelte4
+        if: matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
+        run: bun run test:typecheck:${{ matrix.dir == 'tests-svelte3' && 'svelte3' || 'svelte4' }}
 
       # Selected files outside this harness's `include` (Svelte 5-only
       # tests) are dropped, and a shard can get none, so an empty match passes.

@@ -29,6 +29,8 @@ const NUMBER_ATTRIBUTES = new Set(
 export type EmitOptions = {
   /** A new specifier for an import that leaves the workspace, if any. */
   rewriteImport?: (specifier: string) => string | undefined;
+  /** Svelte's major version: Svelte 3 types a component as a class. */
+  svelte?: number;
 };
 
 /** `generics="T extends A = B, U"` as JSDoc: `@template {A} [T=B]`, `@template U`. */
@@ -56,7 +58,10 @@ function jsdocTemplates(generics: string) {
     });
 }
 
-export function emit(source: string, { rewriteImport }: EmitOptions = {}) {
+export function emit(
+  source: string,
+  { rewriteImport, svelte = 5 }: EmitOptions = {},
+) {
   // biome-ignore lint/suspicious/noExplicitAny: sveast's AST is untyped here
   type Node = any;
   const ast: Node = parse(source, { css: false });
@@ -444,7 +449,8 @@ export function emit(source: string, { rewriteImport }: EmitOptions = {}) {
       out.raw(
         `const ${id} = new ${id}C({ target: __sveltets_2_any(), props: {`,
       );
-      if (hasDefault)
+      // Svelte 5 passes slot content as a `children` snippet.
+      if (hasDefault && svelte >= 5)
         out.raw("children:() => { return __sveltets_2_any(0); },");
       for (const a of node.attributes ?? []) {
         if (a.type === "Attribute") {
@@ -676,7 +682,7 @@ export function emit(source: string, { rewriteImport }: EmitOptions = {}) {
   // `$$restProps` or `$$props` lets a parent pass any prop.
   const anyProp = USES_ALL_PROPS.test(source);
   out.raw(
-    `const $$Component = __sveltets_2_isomorphic_component${slots.size ? "_slots" : ""}(__sveltets_2_partial${anyProp ? "_with_any" : ""}(${optional.length ? `[${optional.join(",")}], ` : ""}__sveltets_2_with_any_event($$render())));\n`,
+    `const $$Component = ${svelte < 4 ? "__sveltets_2_svelte3_component" : `__sveltets_2_isomorphic_component${slots.size ? "_slots" : ""}`}(__sveltets_2_partial${anyProp ? "_with_any" : ""}(${optional.length ? `[${optional.join(",")}], ` : ""}__sveltets_2_with_any_event($$render())));\n`,
   );
   if (isTs) out.raw("type $$Component = InstanceType<typeof $$Component>;\n");
   else
