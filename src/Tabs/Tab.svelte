@@ -246,6 +246,7 @@
     aria-selected={$navigation ? undefined : selected}
     aria-current={$navigation && selected ? "page" : undefined}
     aria-disabled={disabled}
+    aria-keyshortcuts={$useDismissible && !disabled ? "Delete" : undefined}
     aria-controls={ariaControls ?? ($navigation ? undefined : panelId)}
     aria-label={ariaLabel ?? ($iconOnly ? label : undefined)}
     aria-labelledby={ariaLabelledBy}
@@ -321,10 +322,13 @@
     {/if}
   </a>
   {#if $useDismissible}
+    <!-- A `tablist` may own only tabs, so the button is hidden from
+         assistive technology. The Delete key on the tab dismisses it. -->
     <div class:bx--tabs__nav-item--close={true}>
       <button
         type="button"
         tabindex="-1"
+        aria-hidden="true"
         aria-label={$useDismissText(label ?? "")}
         class:bx--tabs__nav-item--close-icon={true}
         class:bx--tabs__nav-item--close-icon--disabled={disabled}

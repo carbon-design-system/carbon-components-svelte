@@ -114,8 +114,6 @@ describe("translatable strings", () => {
   it("Tabs names each dismiss button with dismissText", () => {
     render(TranslatableStrings, { props: { example: "Tabs" } });
 
-    expect(
-      screen.getByRole("button", { name: "Zwei schließen" }),
-    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Zwei schließen")).toBeInTheDocument();
   });
 });
