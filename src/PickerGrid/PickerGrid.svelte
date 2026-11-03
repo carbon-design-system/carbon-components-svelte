@@ -369,8 +369,17 @@
   $: showCategories = !hasQuery && sections.ids.length > 1;
   $: previewIndex = hoveredIndex >= 0 ? hoveredIndex : highlightedIndex;
   $: previewItem = list[previewIndex];
+  // The cursor's cell is named only while it is rendered: an id that no
+  // element holds is invalid, and the window drops a cell that scrolls away.
   $: activeDescendant =
-    highlightedIndex >= 0 && highlightedIndex < list.length
+    highlightedIndex >= 0 &&
+    highlightedIndex < list.length &&
+    windowed.visibleItems.some(
+      (row) =>
+        row.type === "cells" &&
+        highlightedIndex >= row.start &&
+        highlightedIndex < row.start + row.length,
+    )
       ? optionId(id, highlightedIndex)
       : undefined;
   $: navActive = searchFocused || viewportFocused;

@@ -222,6 +222,29 @@ test.describe("PickerGrid", () => {
     expect(await columnsOf(listbox(page, "narrow"))).toBeGreaterThan(2);
   });
 
+  test("names the cursor's cell only while it is rendered", async ({
+    page,
+  }) => {
+    await search(page).focus();
+    await page.keyboard.press("ArrowDown");
+    await expect(search(page)).toHaveAttribute("aria-activedescendant", /.+/);
+    // The wheel moves the window away from the cursor, and its cell unmounts.
+    await listbox(page, "basic").evaluate((node) => {
+      node.scrollTop = node.scrollHeight;
+    });
+    await expect(search(page)).not.toHaveAttribute(
+      "aria-activedescendant",
+      /.+/,
+    );
+    const results = await new AxeBuilder({ page })
+      .include('[data-testid="basic"]')
+      .analyze();
+    expect(results.violations).toEqual([]);
+    // A key brings the cursor, and its name, back.
+    await page.keyboard.press("ArrowUp");
+    await expect(search(page)).toHaveAttribute("aria-activedescendant", /.+/);
+  });
+
   test("has no detectable accessibility violations", async ({ page }) => {
     const results = await new AxeBuilder({ page }).include("#app").analyze();
     expect(results.violations).toEqual([]);
