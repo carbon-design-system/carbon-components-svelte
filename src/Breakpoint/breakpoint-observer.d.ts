@@ -14,8 +14,9 @@ export function observeBreakpoint(
 /**
  * Creates a readable store that returns the current breakpoint size.
  * It also provides functions for creating derived stores used to do comparisons.
+ * @param options
  */
-export function breakpointObserver(): {
+export function breakpointObserver(options?: { fallback?: BreakpointSize }): {
   subscribe: (
     this: void,
     run: Subscriber<BreakpointSize | undefined>,
