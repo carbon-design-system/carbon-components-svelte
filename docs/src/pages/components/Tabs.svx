@@ -493,8 +493,10 @@ Set `dismissible` on Tabs to render a close button on each tab. Handle the
 dismiss event to remove the tab from your data. Bind `selectedId` with a stable
 `id` on each Tab so selection stays coherent without manual index math. The
 event detail includes `{ id, label, disabled, hasSecondaryLabel, index }`.
-Press <DocKbd label="Delete" /> on the focused tab to dismiss it. Focus moves to the
-next tab, or to the previous tab when the last one is dismissed.
+Press <DocKbd label="Delete" /> on the focused tab, or middle-click it, to dismiss it.
+Focus moves to the next tab, or to the previous tab when the last one is dismissed.
+The event is cancelable: call `preventDefault()` to keep the tab, as in
+[Modified](#modified).
 
 ### Basic
 
@@ -554,6 +556,40 @@ Call `preventDefault()` to keep a tab in place, as for a pinned tab.
 | Reorder the panels along with the tabs | A panel pairs with the tab at its position. |
 | Bind `selectedId`, not `selected` | An index points at a different tab once tabs move. |
 | Leave `reorderable` off for `navigation` tabs | Page navigation is a list of links, not a tab list, so it ignores `reorderable`. |
+
+## Modified
+
+Set `modified` on a Tab to show it has unsaved changes. A dot stands where the
+dismiss button is, and the button takes its place back when the tab is hovered or
+focused, as in a code editor. The tab's accessible name gains the text of
+`modifiedText`, so a screen reader says "variables.tf Modified". On a touch
+screen the dot stays, and tapping it still dismisses the tab.
+
+Closing a modified tab is the app's call. Tabs never remove a tab, and the app
+owns `modified`, so `dismiss` is the place to ask: look the tab up by its `id`,
+and call `preventDefault()` to keep it.
+
+### Basic
+
+<FileSource src="/framed/Tabs/TabsModified" />
+
+### Container
+
+<FileSource src="/framed/Tabs/TabsModifiedContainer" />
+
+### Confirm before closing
+
+Call `preventDefault()` on `dismiss` to keep a modified tab, then close it when a
+dialog says to. Focus stays on the tab while the dialog is open.
+
+<FileSource src="/framed/Tabs/TabsModifiedConfirm" />
+
+| Do | Why |
+| --- | --- |
+| Close an unmodified tab at once and ask only about a modified one | The handler knows which tabs are modified, since the app set them. |
+| Keep `modified` true until the changes are saved or discarded | The dot is the only sign of unsaved work once the tab is not hovered. |
+| Use `modified` with `dismissible` | Without a dismiss button the dot sits at the end of the tab, and nothing swaps with it. |
+| Leave `modified` off `TabsVertical` | Vertical tabs have no dismiss button and draw no dot. |
 
 ## Custom label
 
