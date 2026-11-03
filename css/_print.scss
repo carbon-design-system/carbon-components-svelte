@@ -1,0 +1,108 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Print rules, so a printed page holds the page's content and not the
+/// application around it. The UI Shell, toolbars, pagination, overlays and
+/// skeletons are dropped; a closed Accordion or Disclosure prints its
+/// content; rows, tiles and notifications are not cut across pages; and a
+/// sticky header prints once, in place. Tiles and cards keep a border,
+/// since a browser prints no backgrounds.
+///
+/// One block, placed last so each rule ties with, and beats, the screen
+/// rule it replaces. An expandable `Tile` and a `DataTable` row's
+/// `expandedRow` slot are not covered. The tile's collapsed height is an
+/// inline `max-height`, which no stylesheet can beat without `!important`,
+/// and a collapsed row has no markup to show. A consumer opts an element
+/// out with its own `@media print` rule.
+/// @access private
+/// @group components
+@mixin print {
+  @media print {
+    // Chrome of the application, not the content.
+    .#{$prefix}--header,
+    .#{$prefix}--header-panel,
+    .#{$prefix}--side-nav,
+    .#{$prefix}--side-nav__overlay,
+    // The selector the open mobile overlay uses to set `display: block`.
+    .#{$prefix}--side-nav__overlay--mobile.#{$prefix}--side-nav__overlay-active,
+    .#{$prefix}--skip-to-content,
+    .#{$prefix}--table-toolbar,
+    .#{$prefix}--pagination,
+    .#{$prefix}--pagination-nav,
+    // Layers over the page.
+    .#{$prefix}--modal,
+    .#{$prefix}--side-panel,
+    .#{$prefix}--side-panel__overlay,
+    .#{$prefix}--tooltip,
+    .#{$prefix}--tooltip-portal,
+    .#{$prefix}--popover-contents,
+    .#{$prefix}--overflow-menu-options,
+    .#{$prefix}--menu,
+    .#{$prefix}--notification-queue,
+    .#{$prefix}--loading-overlay,
+    // Placeholders for content that has not arrived.
+    .#{$prefix}--skeleton,
+    .#{$prefix}--skeleton__text,
+    .#{$prefix}--skeleton__heading,
+    .#{$prefix}--skeleton__placeholder {
+      display: none;
+    }
+
+    // Closed content prints. This is the selector `accordion-nested` uses
+    // to keep a closed item closed; it ties and comes later.
+    .#{$prefix}--accordion__item:not(.#{$prefix}--accordion__item--active):not(.#{$prefix}--accordion__item--collapsing)
+      > .#{$prefix}--accordion__content,
+    .#{$prefix}--disclosure__content {
+      display: block;
+    }
+
+    // A browser prints no backgrounds, so the surface edge is a border.
+    .#{$prefix}--tile,
+    .#{$prefix}--card {
+      border: 1px solid $border-subtle;
+    }
+
+    .#{$prefix}--data-table thead th {
+      border-bottom: 1px solid $border-strong;
+    }
+
+    // A table row, a tile or a notification is not cut across two pages,
+    // and a heading is not left alone at the foot of one.
+    .#{$prefix}--data-table tr,
+    .#{$prefix}--tile,
+    .#{$prefix}--card,
+    .#{$prefix}--accordion__item,
+    .#{$prefix}--inline-notification,
+    .#{$prefix}--toast-notification {
+      break-inside: avoid;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      break-after: avoid;
+    }
+
+    // A pinned header would print over the content it scrolls past. This is
+    // the selector the sticky header uses; it ties and comes later.
+    .#{$prefix}--data-table.#{$prefix}--data-table--sticky-header thead th,
+    .#{$prefix}--box-position-sticky,
+    .#{$prefix}--action-set--sticky,
+    .#{$prefix}--contained-list__header {
+      position: static;
+    }
+
+    // The scroll region of a sticky-header table has no box in print, so
+    // its `max-height`, which an app can set inline, no longer cuts the rows.
+    .#{$prefix}--data-table_inner-container {
+      display: contents;
+    }
+  }
+}
+
+@include exports("print") {
+  @include print;
+}

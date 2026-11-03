@@ -711,6 +711,23 @@ $ccs-prose-variants: (
     overflow-x: auto;
   }
 
+  // Paper does not scroll: a long line wraps and the whole block prints,
+  // and paper has no hover to reveal where a link goes. The `pre` rule
+  // sits beside the one above because `prose.css` and the theme sheet
+  // load in either order and both weigh the same. `all.css` holds no
+  // `bx--prose` rule, so the print rules for Prose live here.
+  @media print {
+    #{$p} pre#{$x} {
+      overflow: visible;
+      white-space: pre-wrap;
+      break-inside: avoid;
+    }
+
+    #{$p} a#{$x}[href^="http"]::after {
+      content: " (" attr(href) ")";
+    }
+  }
+
   // Skip rendering offscreen code blocks and figures. Paint containment
   // clips overflow, which is why tables, which can overflow, aren't
   // included; `pre` scrolls its own overflow.

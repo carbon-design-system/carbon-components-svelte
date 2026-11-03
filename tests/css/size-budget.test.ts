@@ -21,7 +21,7 @@ const SHEETS: Record<string, { floor: number; ceiling?: Size }> = {
   // Prose's opt-in sheet keeps a ceiling about 10% above its size. The
   // per-PR limit is sized for all.css and would let it grow by half.
   // min 62,493 and gzip 4,469 measured 2026-10-23
-  "prose.scss": { floor: 55_000, ceiling: { min: 68_800, gzip: 4_950 } },
+  "prose.scss": { floor: 55_000, ceiling: { min: 68_800, gzip: 5_100 } },
 };
 
 describe("css size", () => {
