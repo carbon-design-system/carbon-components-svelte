@@ -83,11 +83,11 @@ Use `FormGroup` to wrap related controls in a `fieldset`, with an optional
 
 ### Disabled
 
-Set `disabled` on FormGroup to disable the fieldset and nested native form
-controls. Labels are visually muted via Carbon's `fieldset[disabled]` styles,
-and disabled controls are left out of the submission. `Dropdown`, `ComboBox`,
-and `MultiSelect` inside a disabled group are disabled and left out too, but
-they do not look disabled; set `disabled` on each of them directly.
+Set `disabled` on FormGroup to disable every field inside it, with no
+`disabled` on the fields themselves. Each field, list boxes and sliders
+included, takes its disabled state and styles from the fieldset, and
+disabled controls are left out of the submission. A plain
+`<fieldset disabled>` works the same way.
 
 <Form>
   <FormGroup legendText="Account details" disabled>
@@ -100,6 +100,15 @@ they do not look disabled; set `disabled` on each of them directly.
         <SelectItem value="en" text="English" />
         <SelectItem value="es" text="Spanish" />
       </Select>
+      <Dropdown
+        name="team"
+        labelText="Team"
+        selectedId="design"
+        items={[
+          { id: "design", text: "Design" },
+          { id: "engineering", text: "Engineering" },
+        ]}
+      />
     </Stack>
   </FormGroup>
 </Form>
