@@ -221,6 +221,12 @@ The handle is also focusable: <DocKbd label="ArrowLeft" />/<DocKbd label="ArrowR
 
 <FileSource src="/framed/UIShell/SideNavResizable" />
 
+### Persisted rail and menu state
+
+Bind `rail` and a `SideNavMenu`'s `expanded` to a `LocalStorage` value to survive page reloads; each persisted menu needs its own storage key. `isOpen` is deliberately left out of this example since a closed drawer that silently reopens from a stale saved value is a worse default than always starting closed.
+
+<FileSource src="/framed/UIShell/HeaderNavRailPersisted" />
+
 ### Persisted hamburger
 
 Create a header with a persistent hamburger menu state.
