@@ -42,6 +42,11 @@ jobs:
         run: bun run typecheck:examples
         working-directory: docs
 
+      # Unit tests for the docs build scripts (`docs/scripts/*.test.ts`).
+      - name: Test the docs scripts
+        run: bun test
+        working-directory: docs
+
       - name: Server-render framed examples
         run: bun run render:examples
         working-directory: docs
