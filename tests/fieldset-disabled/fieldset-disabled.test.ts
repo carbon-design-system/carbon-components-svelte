@@ -18,6 +18,8 @@ import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
+import RadioTile from "carbon-components-svelte/Tile/RadioTile.svelte";
+import SelectableTile from "carbon-components-svelte/Tile/SelectableTile.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { ComponentType } from "svelte";
@@ -208,6 +210,18 @@ const styleCases: {
     component: TextInput,
     fieldProps: field,
     marker: ".bx--label--disabled",
+  },
+  {
+    name: "RadioTile",
+    component: RadioTile,
+    fieldProps: { value: "a", labelText: "Tile" },
+    marker: ".bx--tile--disabled",
+  },
+  {
+    name: "SelectableTile",
+    component: SelectableTile,
+    fieldProps: { labelText: "Tile" },
+    marker: ".bx--tile--disabled",
   },
   {
     name: "TimePicker",

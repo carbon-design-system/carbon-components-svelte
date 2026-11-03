@@ -83,6 +83,7 @@
   } from "../RadioButton/radio-button-registry.js";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -112,7 +113,9 @@
   // A disabled TileGroup disables the input natively through its fieldset;
   // mirror that in the tile's styling and tab order. The `disabled`
   // attribute stays the tile's own.
-  $: effectiveDisabled = disabled || $groupDisabled;
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || $groupDisabled || inDisabledFieldset;
 
   add({ value, checked });
 
@@ -212,6 +215,7 @@
   class="bx--tile__wrapper--radio"
 >
   <input
+    use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
     bind:this={ref}
     use:formReset={handleFormReset}
     type="radio"
