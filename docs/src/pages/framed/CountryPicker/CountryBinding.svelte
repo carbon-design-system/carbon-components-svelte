@@ -14,7 +14,6 @@
   <p>value: {value || "(empty)"}</p>
   {#if detail?.value}
     <p>
-      {detail.flag}
       {detail.name}{detail.nativeName ? `, ${detail.nativeName}` : ""}
     </p>
   {/if}
