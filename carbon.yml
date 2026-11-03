@@ -414,6 +414,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Countdown
+  create-flow:
+    name: Create flow
+    description: A multi-step flow for creating a resource, with a step list, per-step validation, Back, Next and Submit, and a guard against losing unsaved changes.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/create-flow.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CreateFlow
   css-grid:
     name: CSS grid
     status: stable

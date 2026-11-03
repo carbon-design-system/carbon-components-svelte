@@ -117,6 +117,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "FluidForm",
       "UnsavedChanges",
       "Stepper",
+      "CreateFlow",
     ],
   },
   {

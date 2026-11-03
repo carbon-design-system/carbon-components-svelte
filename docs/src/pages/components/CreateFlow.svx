@@ -1,0 +1,198 @@
+---
+components: ["CreateFlowSteps", "CreateFlowStep", "CreateFlowForm", "CreateFlowActions"]
+description: A create flow walks the user through the steps of creating a resource, with a step list, per-step validation, Back, Next and Submit, in a Tearsheet, a Modal or a page.
+---
+
+<script>
+  import { Callout } from "carbon-components-svelte";
+</script>
+
+<Callout
+  title="Preview"
+  subtitle="Create flow follows CreateTearsheet and CreateFullPage from Carbon for IBM Products and Carbon's create flow guidance. Its API may change in a minor release."
+/>
+
+## Basic
+
+A create flow is a store and four small components. `createStepFlow` holds the steps, the current step, the validation and the submit. `CreateFlowSteps` shows the steps, `CreateFlowForm` holds them and `CreateFlowActions` has the buttons. Each step is a `CreateFlowStep` inside the form. The pieces take the `flow` as a prop, so they sit wherever the layout needs them.
+
+This example uses a [Tearsheet](/components/Tearsheet), with the step list in its `influencer` slot and the buttons in its `actions` slot. Next checks the step and moves on, and the last step submits. Closing it with a change in any step asks first, through [UnsavedChanges](/components/UnsavedChanges).
+
+<FileSource src="/framed/CreateFlow/CreateVirtualServer" />
+
+```svelte
+<script>
+  import {
+    CreateFlowActions, CreateFlowForm, CreateFlowStep, CreateFlowSteps,
+    Tearsheet, TextInput, createStepFlow,
+  } from "carbon-components-svelte";
+
+  let open = true;
+  let name = "";
+
+  const flow = createStepFlow({
+    steps: [
+      { id: "details", label: "Details" },
+      { id: "review", label: "Review" },
+    ],
+    validate: (step) => step.id !== "details" || name !== "",
+    submit: () => fetch("/api/servers", { method: "POST", body: name }),
+  });
+</script>
+
+<Tearsheet bind:open title="Create a server">
+  <CreateFlowSteps slot="influencer" {flow} />
+  <CreateFlowForm {flow}>
+    <CreateFlowStep {flow} id="details">
+      <TextInput labelText="Name" bind:value={name} invalid={name === ""} />
+    </CreateFlowStep>
+    <CreateFlowStep {flow} id="review">{name}</CreateFlowStep>
+  </CreateFlowForm>
+  <CreateFlowActions slot="actions" {flow} on:cancel={() => (open = false)} />
+</Tearsheet>
+```
+
+## Containers
+
+The same flow runs in any container. Only the layout around the pieces changes, and `CreateFlowSteps` takes `vertical` for a horizontal list.
+
+| Container | Steps | Put the pieces |
+| --- | --- | --- |
+| [Tearsheet](/components/Tearsheet) | Three or more | The list in `influencer`, the buttons in `actions` |
+| [ComposedModal](/components/ComposedModal) | Two or three | A horizontal list at the top of `ModalBody`, the buttons in `ModalFooter` |
+| A page | Any number | The list in a column beside the form, the buttons under it in a [ButtonSet](/components/ButtonSet) |
+
+### Modal
+
+A short flow fits a modal. Use a horizontal list so the steps take a row, not a column. In a modal, `CreateFlowActions` goes in `ModalFooter`.
+
+<FileSource src="/framed/CreateFlow/CreateFlowModal" />
+
+### Page
+
+On a page, put the list in a column beside the form and the buttons under the form. Wrap the form in a [Section](/components/Heading) so each step's heading sits below the page's.
+
+<FileSource src="/framed/CreateFlow/CreateFlowPage" />
+
+## Steps
+
+A step is `{ id, label }`, with `secondaryLabel`, `optional`, `disabled` and `skipped` to change it. The list shows each step as complete, current, invalid or not yet reached. A step marked `optional` gets "Optional" under its label, which you change with `optionalText`.
+
+### Conditional steps
+
+Skip a step an earlier answer makes unneeded with `flow.update(id, { skipped })`. A skipped step leaves the list and the count, so the heading reads "Step 2 of 3" and the last step submits. Call it from `$:` so it follows the answer. A step the user has completed keeps its state while it is skipped.
+
+```svelte
+<script>
+  $: flow.update("storage", { skipped: values.boot === "instance" });
+</script>
+```
+
+### Linear and non-linear
+
+By default a step can be entered once every step before it is complete, so the list only goes back. Set `linear: false` to let the user enter any step that is not `disabled`. Submitting then checks every step the user has not completed, and shows the first one that fails.
+
+<FileSource src="/framed/CreateFlow/CreateFlowNonLinear" />
+
+## Validation
+
+Next calls `validate(step)`. Return `false` to stay: the step is marked invalid in the list, and focus moves to the step's first field with `aria-invalid="true"`. Mark the fields in `validate` before it returns, as in the first example.
+
+`validate` can return a promise, such as for a check the server makes. Next shows a spinner and its `validatingDescription` while it runs, and Back and Cancel are disabled. A second press is ignored.
+
+If `validate` throws or rejects, the failure is not the user's input, so no field is marked. The flow keeps the error, and the step shows it in an error notification, which takes focus. The error clears when the user tries again, moves to another step or closes the notification. Change the notification's text with the `error` slot of `CreateFlowStep`.
+
+| Result of `validate` | The step | Focus |
+| --- | --- | --- |
+| `true`, or nothing | Marked complete, and the flow moves on | The next step's heading |
+| `false` | Marked invalid | The first field with `aria-invalid="true"`, else the heading |
+| Throws or rejects | Unchanged, and the error shows | The error notification |
+
+## Submit
+
+Next on the last step is the submit button. Pass the request as `submit`. While it runs the button shows its loading state and the buttons are disabled. If it throws or rejects, the flow stays on the last step, shows the error and lets the user try again. When it succeeds, every step is complete, `CreateFlowForm` shows its `submitted` slot, focus moves there, and `CreateFlowActions` shows a Done button that dispatches `done`.
+
+A request cannot be taken back, so keep the container open while one runs. Cancel the container's `close` event while `$flow.busy` is `true`, as the first example does.
+
+## Unsaved changes
+
+Pass a store from `createUnsavedChanges` to `CreateFlowForm` as `unsavedChanges`, so a change in any step marks the flow dirty. Give the same store to `createStepFlow` and a successful submit marks it saved. Close the container through the store's `closeGuard`, and add an `UnsavedChangesPrompt` after the container in the markup so it opens above it.
+
+```svelte
+<script>
+  const unsaved = createUnsavedChanges();
+  const flow = createStepFlow({ steps, submit, unsavedChanges: unsaved });
+  const guardClose = unsaved.closeGuard(() => (open = false));
+</script>
+
+<Tearsheet bind:open on:close={guardClose}>
+  <CreateFlowForm {flow} unsavedChanges={unsaved}>…</CreateFlowForm>
+  <CreateFlowActions slot="actions" {flow} on:cancel={() => guardClose()} />
+</Tearsheet>
+<UnsavedChangesPrompt store={unsaved} />
+```
+
+<Callout
+  title="Reset when the flow opens again"
+  subtitle="Call flow.reset() and reassign your values when the container opens again, and wrap the form in a key block so its controls and the unsaved-changes baseline start fresh."
+/>
+
+## Keeping each step's values
+
+Fields keep their values across steps because their state belongs to the page, bound with `bind:value`. A step is built the first time the user reaches it, and then it stays mounted and is hidden while the user is on another step. This keeps what a component holds itself, such as the files in a `FileUploader`, and lets the unsaved-changes guard see a change in any step.
+
+Set `keepMounted={false}` on a step to remove its content while it is hidden. Its fields then lose any state that is not bound, and a change made in it is no longer counted as unsaved.
+
+## Keyboard and focus
+
+When the user moves to a step, focus moves to the step's heading, so a screen reader reads "Step 2 of 4: Networking". Set `stepText` to change the count's wording. The heading takes focus without being a tab stop, and <DocKbd label="Tab" /> then reaches the step's first field.
+
+| Key | Where | Does |
+| --- | --- | --- |
+| <DocKbd label="Enter" /> | In a text field | Submits the form: Next, or the submit button on the last step |
+| <DocKbd label="Enter" /> or <DocKbd label="Space" /> | On Back, Next or Cancel | Presses the button |
+| <DocKbd label="Tab" /> | Anywhere | Goes through the step list, the step's fields and the buttons, in that order |
+| <DocKbd label="Escape" /> | In the container | Closes it, or asks first when a step has a change |
+
+## Narrow windows
+
+Below the `md` breakpoint a vertical list shows the current step alone, so it takes a row instead of a column. The step's heading and count still say where the user is, and Back goes to the earlier steps. The buttons of a Tearsheet stack.
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Keep each step to one task, such as networking or storage. | The user sees one step at a time, so a long step hides what is left. |
+| Mark a step `optional` when the user can go on without it. | The list says so before the user gets there, and Next is still the way forward. |
+| Show field errors in `validate`, and let the flow handle failures that are not input. | A rejected check shows an error notification and keeps the step, so the user is not told a field is wrong when the network is down. |
+| Use a Review step for anything that is hard to undo. | Submit is the last action, and a summary lets the user check the answers first. |
+| Use the same store for the unsaved-changes guard and the flow. | A change in any step blocks Escape and close, and a successful submit clears it. |
+| Use a [Stepper](/components/Stepper) when the buttons belong under the content. | A create flow puts the buttons in the container's footer, and its list beside the content. |
+
+## API
+
+### createStepFlow
+
+`createStepFlow(options)` returns a store that holds the state of the flow, with methods to move it.
+
+| Option | Type | Does |
+| --- | --- | --- |
+| `steps` | `StepDefinition[]` | The steps, in order |
+| `initial` | `string` | The id of the step to start on |
+| `linear` | `boolean` | `true` (default) to enter only completed steps, `false` for any step that is not disabled |
+| `optionalText` | `string` | The label under an optional step. Defaults to "Optional" |
+| `validate` | `(step) => boolean \| Promise<boolean>` | Runs when Next leaves a step. Return `false` to stay |
+| `submit` | `(state) => unknown` | Runs when Next is pressed on the last step. Throw or reject to fail |
+| `unsavedChanges` | `UnsavedChangesStore` | Marked saved when `submit` succeeds |
+
+| Method | Does |
+| --- | --- |
+| `next()` | Validates the current step and moves on, or submits on the last step. Resolves `true` when it did |
+| `back()` | Goes to the previous step, with no validation |
+| `goTo(id)` | Goes to a step the flow can enter |
+| `update(id, patch)` | Changes `label`, `secondaryLabel`, `optional`, `disabled` or `skipped`, or sets `invalid` or `complete` |
+| `setSteps(steps)` | Replaces the steps. State is kept for ids that stay |
+| `reset()` | Goes back to the first step with nothing complete |
+| `clearError()` | Clears the error from a failed check or submit |
+
+The store's value holds `steps` (each with `complete`, `current`, `invalid`, `reachable`, `number` and `total`), `current`, `index`, `first`, `last`, `status`, `busy`, `submitted` and `error`. `status` is `"idle"`, `"validating"`, `"submitting"`, `"submitted"` or `"failed"`.
