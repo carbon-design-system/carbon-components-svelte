@@ -89,3 +89,20 @@ $ccs-classic-side-nav: ".#{$prefix}--side-nav--ui-shell-classic";
     @include ccs-theme-tokens($carbon--theme--g100, $carbon--theme--white);
   }
 }
+
+// Paper is white: the dark themes print on White's text, surface, border and
+// link tokens. One rule for all of them, after the last block that declares
+// them. It ties with each on specificity and wins on order.
+:root[theme="g80"],
+:root[theme="g90"],
+:root[theme="g100"],
+:root[theme="system"],
+.#{$prefix}--g80,
+.#{$prefix}--g90,
+.#{$prefix}--g100,
+.#{$prefix}--system {
+  @include ccs-print-theme-tokens(
+    ($carbon--theme--g80, $carbon--theme--g90, $carbon--theme--g100),
+    $carbon--theme--white
+  );
+}

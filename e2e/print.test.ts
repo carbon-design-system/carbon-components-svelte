@@ -23,6 +23,10 @@ test.describe("print", () => {
       page.getByTestId("accordion-content"),
       "closed accordion content",
     ).toBeHidden();
+    await expect(
+      page.getByTestId("expandable-tile"),
+      "collapsed tile",
+    ).not.toHaveCSS("max-height", "none");
     await expect(page.locator("thead th").first()).toHaveCSS(
       "position",
       "sticky",
@@ -59,6 +63,17 @@ test.describe("print", () => {
     // A closed accordion item prints its content.
     await expect(page.getByTestId("accordion-content")).toBeVisible();
 
+    // A collapsed ExpandableTile prints its content below the fold.
+    const tile = page.getByTestId("expandable-tile");
+    await expect(tile).toHaveAttribute("aria-expanded", "false");
+    await expect(tile).toHaveCSS("max-height", "none");
+    await expect(page.getByTestId("below-fold")).toBeVisible();
+    const tileBox = await tile.boundingBox();
+    const belowBox = await page.getByTestId("below-fold").boundingBox();
+    expect(belowBox.y + belowBox.height).toBeLessThanOrEqual(
+      tileBox.y + tileBox.height,
+    );
+
     // A pinned header prints once, in place.
     await expect(page.locator("thead th").first()).toHaveCSS(
       "position",
@@ -80,4 +95,28 @@ test.describe("print", () => {
 
     await expect(page.getByTestId("code")).toHaveCSS("overflow-x", "visible");
   });
+
+  for (const [theme, screen] of [
+    ["g90", "rgb(38, 38, 38)"],
+    ["g100", "rgb(22, 22, 22)"],
+  ]) {
+    test(`prints ${theme} on White's text and surface`, async ({ page }) => {
+      await page.evaluate(
+        (t) => document.documentElement.setAttribute("theme", t),
+        theme,
+      );
+      const heading = page.getByRole("heading", { name: "Service report" });
+      const body = page.locator("body");
+      await expect(heading, "on screen").toHaveCSS(
+        "color",
+        "rgb(244, 244, 244)",
+      );
+      await expect(body, "on screen").toHaveCSS("background-color", screen);
+
+      await page.emulateMedia({ media: "print" });
+      await expect(heading).toHaveCSS("color", "rgb(22, 22, 22)");
+      await expect(body).toHaveCSS("background-color", "rgb(255, 255, 255)");
+      await expect(page.locator("html")).toHaveCSS("color-scheme", "light");
+    });
+  }
 });

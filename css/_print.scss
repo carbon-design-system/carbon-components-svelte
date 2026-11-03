@@ -9,11 +9,9 @@
 /// since a browser prints no backgrounds.
 ///
 /// One block, placed last so each rule ties with, and beats, the screen
-/// rule it replaces. An expandable `Tile` and a `DataTable` row's
-/// `expandedRow` slot are not covered. The tile's collapsed height is an
-/// inline `max-height`, which no stylesheet can beat without `!important`,
-/// and a collapsed row has no markup to show. A consumer opts an element
-/// out with its own `@media print` rule.
+/// rule it replaces. A `DataTable` row's `expandedRow` slot is not covered:
+/// a collapsed row has no markup to show. A consumer opts an element out
+/// with its own `@media print` rule.
 /// @access private
 /// @group components
 @mixin print {
@@ -54,6 +52,21 @@
       > .#{$prefix}--accordion__content,
     .#{$prefix}--disclosure__content {
       display: block;
+    }
+
+    // A collapsed ExpandableTile prints in full. The clamp is
+    // `--ccs-tile-max-height`, read by `.bx--tile--expandable`; this ties
+    // and comes later. The content below the fold is faded out and hidden,
+    // and not rendered at all until a server-rendered tile has measured.
+    // The selector ties with the one that hides it, and comes later.
+    .#{$prefix}--tile--expandable {
+      max-height: none;
+    }
+
+    .#{$prefix}--tile--expandable .#{$prefix}--tile-content__below-the-fold {
+      display: block;
+      opacity: 1;
+      visibility: visible;
     }
 
     // A browser prints no backgrounds, so the surface edge is a border.

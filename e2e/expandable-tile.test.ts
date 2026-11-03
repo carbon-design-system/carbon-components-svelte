@@ -17,6 +17,23 @@ test.describe("ExpandableTile", () => {
     await expect(page.getByTestId("below-fold")).toHaveText("Below the fold");
   });
 
+  test("clamps to the measured height through its transition", async ({
+    page,
+  }) => {
+    const tile = page.getByTestId("expandable-tile");
+    await expect(tile).toHaveCSS("transition-property", "max-height");
+    await expect(tile).toHaveCSS("transition-duration", "0.15s");
+    await expect(tile).toHaveCSS("max-height", /^\d+(\.\d+)?px$/);
+
+    await tile.click();
+    await expect(tile).toHaveCSS("max-height", "none");
+    await expect(tile).toHaveCSS("transition-duration", "0.11s");
+
+    await tile.click();
+    await expect(tile).toHaveCSS("max-height", /^\d+(\.\d+)?px$/);
+    await expect(tile).toHaveCSS("transition-duration", "0.15s");
+  });
+
   test("collapses on second click", async ({ page }) => {
     await page.getByTestId("expandable-tile").click();
     await expect(page.getByTestId("below-fold")).toBeVisible();

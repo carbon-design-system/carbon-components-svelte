@@ -266,7 +266,7 @@
     class:bx--tile--decorator={$$slots.decorator}
     class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
     class:bx--tile--ai-label={$aiLabelState === "active"}
-    style:max-height={expanded || effectiveMaxHeight <= 0
+    style:--ccs-tile-max-height={expanded || effectiveMaxHeight <= 0
       ? "none"
       : `${effectiveMaxHeight + effectivePadding}px`}
     {...interactive ? wrapperProps : $$restProps}

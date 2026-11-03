@@ -395,10 +395,10 @@ describe("ExpandableTile", () => {
     });
 
     const tile = screen.getByRole("button");
-    expect(tile.getAttribute("style")).toBe("max-height: 220px;");
+    expect(tile.getAttribute("style")).toBe("--ccs-tile-max-height: 220px;");
 
     await user.click(tile);
-    expect(tile.getAttribute("style")).toBe("max-height: none;");
+    expect(tile.getAttribute("style")).toBe("--ccs-tile-max-height: none;");
   });
 
   it("should set max-height to none when tileMaxHeight is 0 to prevent height animation on initial load", () => {
@@ -410,7 +410,7 @@ describe("ExpandableTile", () => {
     });
 
     const tile = screen.getByRole("button");
-    expect(tile.getAttribute("style")).toBe("max-height: none;");
+    expect(tile.getAttribute("style")).toBe("--ccs-tile-max-height: none;");
   });
 
   it("should not overwrite consumer-bound tilePadding after afterUpdate runs", async () => {
@@ -553,7 +553,7 @@ describe("ExpandableTile", () => {
       assert(above);
       expect(observed.has(above)).toBe(true);
       expect(observed.has(tile)).toBe(true);
-      expect(tile.getAttribute("style")).toBe("max-height: none;");
+      expect(tile.getAttribute("style")).toBe("--ccs-tile-max-height: none;");
 
       deliver(
         [
@@ -562,7 +562,7 @@ describe("ExpandableTile", () => {
         {} as ResizeObserver,
       );
       await tick();
-      expect(tile.getAttribute("style")).toBe("max-height: 120px;");
+      expect(tile.getAttribute("style")).toBe("--ccs-tile-max-height: 120px;");
 
       unmount();
       expect(observed.size).toBe(0);
