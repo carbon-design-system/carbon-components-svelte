@@ -423,6 +423,13 @@
     },
     {
       "component": "DataTable",
+      "prop": "rowDecoratorDescription",
+      "type": "string",
+      "default": "AI label",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DataTable",
       "prop": "sortStatusText",
       "type": "(header: DataTableHeader<Row> | undefined, direction: \"none\" | \"ascending\" | \"descending\") => string",
       "default": "function sortStatusText(header, direction) {\n  if (direction === \"none\" || !header) return \"Not sorted\";\n  return `Sorted by ${header.value ?? header.key}, ${direction}`;\n}",
@@ -1277,6 +1284,13 @@
     },
     {
       "component": "PaginationNav",
+      "prop": "labelText",
+      "type": "string",
+      "default": "pagination",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PaginationNav",
       "prop": "pageRangeText",
       "type": "(current: number, total: number) => string",
       "default": "(_current, total) => `of ${total}`",
@@ -1630,6 +1644,13 @@
       "prop": "navigationBackIconDescription",
       "type": "string",
       "default": "Back",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SkipToContent",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Skip to main content",
       "defaultKind": "text"
     },
     {
@@ -2064,6 +2085,13 @@
       "prop": "labelText",
       "type": "string",
       "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToolbarBatchActions",
+      "prop": "cancelText",
+      "type": "string",
+      "default": "Cancel",
       "defaultKind": "text"
     },
     {

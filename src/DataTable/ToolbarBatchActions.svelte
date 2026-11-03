@@ -12,6 +12,9 @@
     return `${totalSelected} item${totalSelected === 1 ? "" : "s"} selected`;
   };
 
+  /** Specify the text of the cancel button. The `cancel` slot replaces it. */
+  export let cancelText = "Cancel";
+
   /**
    * Use a boolean to show or hide the toolbar.
    * @type {undefined | boolean}
@@ -128,7 +131,7 @@
         tabindex={showActions ? "0" : "-1"}
         on:click={cancel}
       >
-        <slot name="cancel">Cancel</slot>
+        <slot name="cancel">{cancelText}</slot>
       </Button>
     </div>
   </div>

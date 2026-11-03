@@ -53,6 +53,9 @@
   /** Set to `true` to loop the navigation */
   export let loop = false;
 
+  /** Specify the accessible name of the navigation landmark */
+  export let labelText = "pagination";
+
   /** Specify the forward button text */
   export let forwardText = "Next page";
 
@@ -145,7 +148,7 @@
   $: items = computePageWindow(total, startOffset, front, back);
 </script>
 
-<nav aria-label="pagination" class:bx--pagination-nav={true} {...$$restProps}>
+<nav aria-label={labelText} class:bx--pagination-nav={true} {...$$restProps}>
   <ul class:bx--pagination-nav__list={true}>
     <li class:bx--pagination-nav__list-item={true}>
       <Button

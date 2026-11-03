@@ -395,6 +395,12 @@
   export let sort = undefined;
 
   /**
+   * Specify the text that names the row decorator column for assistive
+   * technology. Only used when the `rowDecorator` slot is used.
+   */
+  export let rowDecoratorDescription = "AI label";
+
+  /**
    * Override the text announced after `sortKey` or `sortDirection` changes.
    * `header` is the sorted column. For `"none"`, it is the column that was
    * sorted before.
@@ -1515,7 +1521,9 @@
         <TableRow>
           {#if hasRowDecorator}
             <th scope="col" class:bx--table-column-decorator={true}>
-              <span class:bx--visually-hidden={true}>AI label</span>
+              <span class:bx--visually-hidden={true}
+                >{rowDecoratorDescription}</span
+              >
             </th>
           {/if}
           {#if expandable}
