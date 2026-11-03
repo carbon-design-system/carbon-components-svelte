@@ -994,6 +994,18 @@
       svg {
       fill: $text-primary;
     }
+
+    // ccs: a modified tab swaps its dot for the dismiss button on hover (see
+    // `tabs-modified` below). Kept in this block to keep the any-hover count down.
+    .#{$prefix}--tabs__nav-item--modified:hover
+      .#{$prefix}--tabs__nav-item--close-icon {
+      opacity: 1;
+    }
+
+    .#{$prefix}--tabs__nav-item--modified:hover
+      .#{$prefix}--tabs__nav-item--modified-dot {
+      opacity: 0;
+    }
   }
 }
 
@@ -1780,4 +1792,79 @@ $tabs-sizes: (
 
 @include exports("tabs-overflow-menu") {
   @include tabs-overflow-menu;
+}
+
+// carbon-components-svelte patch (tabs-modified)
+// A tab with unsaved changes shows a dot where the dismiss button sits, as
+// VS Code does, and gives the place back to the button on hover and focus.
+// The button stays in the tab order and the accessibility tree while it is
+// hidden, so a touch screen, which has no hover, can still tap it: the app
+// hears `dismiss` for a modified tab and asks before it closes. The swap is
+// instant, so reduced motion needs no case.
+
+/// The modified dot of a tab, and its swap with the dismiss button.
+/// @access private
+/// @group tabs
+@mixin tabs-modified {
+  .#{$prefix}--tabs__nav-item--close {
+    position: relative;
+  }
+
+  .#{$prefix}--tabs__nav-item--modified-dot {
+    position: absolute;
+    border-radius: 50%;
+    background-color: $icon-primary;
+    block-size: $carbon--spacing-03;
+    inline-size: $carbon--spacing-03;
+    pointer-events: none;
+  }
+
+  // Centered on the dismiss button.
+  .#{$prefix}--tabs__nav-item--close .#{$prefix}--tabs__nav-item--modified-dot {
+    inset-block: 0;
+    inset-inline: 0;
+    margin: auto;
+  }
+
+  .#{$prefix}--tabs__nav-item--modified .#{$prefix}--tabs__nav-item--close-icon {
+    opacity: 0;
+  }
+
+  .#{$prefix}--tabs__nav-item--modified:focus-within
+    .#{$prefix}--tabs__nav-item--close-icon {
+    opacity: 1;
+  }
+
+  .#{$prefix}--tabs__nav-item--modified:focus-within
+    .#{$prefix}--tabs__nav-item--modified-dot {
+    opacity: 0;
+  }
+
+  // With no dismiss button, the dot sits at the inline end of the tab.
+  .#{$prefix}--tabs__nav-item--modified-static {
+    position: relative;
+  }
+
+  .#{$prefix}--tabs__nav-item--modified-static .#{$prefix}--tabs__nav-link {
+    padding-inline-end: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--tabs__nav-item--modified-dot--static {
+    inset-block: 0;
+    inset-inline-end: $carbon--spacing-05;
+    margin-block: auto;
+  }
+
+  @media (forced-colors: active) {
+    // Forced colors repaint a background, which would erase a dot that is
+    // only a background. A system color keeps it.
+    .#{$prefix}--tabs__nav-item--modified-dot {
+      forced-color-adjust: none;
+      background-color: ButtonText;
+    }
+  }
+}
+
+@include exports("tabs-modified") {
+  @include tabs-modified;
 }

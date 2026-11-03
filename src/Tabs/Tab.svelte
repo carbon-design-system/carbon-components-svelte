@@ -42,6 +42,14 @@
   export let id = uniqueId();
 
   /**
+   * Set to `true` to mark the tab as having unsaved changes.
+   * A dot takes the place of the dismiss button until the tab is hovered or
+   * focused, and `Tabs` `modifiedText` is added to the tab's accessible name.
+   * Not supported by `TabsVertical`.
+   */
+  export let modified = false;
+
+  /**
    * Specify an optional secondary label.
    * Only rendered for container type tabs.
    * Alternatively, use the "secondaryChildren" slot.
@@ -109,6 +117,8 @@
     secondaryLabelSupported,
     useContainer,
     reorderHint = readable(undefined),
+    useModifiedText = readable(undefined),
+    setModified,
     navigation,
     add,
     remove,
@@ -148,6 +158,7 @@
   onMount(() => {
     return () => {
       remove(id);
+      setModified?.(id, false);
     };
   });
 
@@ -160,6 +171,11 @@
     ariaDescribedBy,
     rest: { "aria-controls": ariaControls, ...wrapperProps },
   } = splitAriaNaming($$restProps));
+
+  // `TabsVertical` provides no text, and draws no dot.
+  $: showModified = modified && Boolean($useModifiedText);
+  $: nameWithModified = showModified ? `${label} ${$useModifiedText}` : label;
+  $: setModified?.(id, showModified);
 
   $: selected = $selectedTab === id;
   $: registered = $tabsById[id] !== undefined;
@@ -191,6 +207,8 @@
   role="presentation"
   class:bx--tabs__nav-item={true}
   class:bx--tabs__nav-item--disabled={disabled}
+  class:bx--tabs__nav-item--modified={showModified}
+  class:bx--tabs__nav-item--modified-static={showModified && !$useDismissible}
   class:bx--tabs__nav-item--selected={selected}
   class:bx--tabs__nav-item--default={!disabled && !selected}
   class:bx--tabs__nav-item--container={$useContainer}
@@ -207,6 +225,15 @@
     }
     if (!isLink && !$navigation) event.preventDefault();
     update(id);
+  }}
+  on:mousedown={(event) => {
+    // A middle press starts autoscroll on some platforms.
+    if ($useDismissible && event.button === 1) event.preventDefault();
+  }}
+  on:auxclick={(event) => {
+    if (!$useDismissible || disabled || event.button !== 1) return;
+    event.preventDefault();
+    dismiss(id);
   }}
   on:mouseover
   on:mouseenter
@@ -246,7 +273,7 @@
     aria-current={$navigation && selected ? "page" : undefined}
     aria-disabled={disabled}
     aria-controls={ariaControls ?? ($navigation ? undefined : panelId)}
-    aria-label={ariaLabel ?? ($iconOnly ? label : undefined)}
+    aria-label={ariaLabel ?? ($iconOnly ? nameWithModified : undefined)}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={ariaDescribedBy
       ? $reorderHint
@@ -322,9 +349,23 @@
         </div>
       {/if}
     {/if}
+    {#if showModified && !$iconOnly}
+      <span class:bx--visually-hidden={true}>{` ${$useModifiedText}`}</span>
+    {/if}
   </a>
+  {#if showModified && !$useDismissible}
+    <span
+      class:bx--tabs__nav-item--modified-dot={true}
+      class:bx--tabs__nav-item--modified-dot--static={true}
+      aria-hidden="true"
+    ></span>
+  {/if}
   {#if $useDismissible}
     <div class:bx--tabs__nav-item--close={true}>
+      {#if showModified}
+        <span class:bx--tabs__nav-item--modified-dot={true} aria-hidden="true"
+        ></span>
+      {/if}
       <button
         type="button"
         tabindex="-1"
