@@ -13,6 +13,7 @@ import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svel
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import type { ComponentType } from "svelte";
 import { tick } from "svelte";
+import DatePickerField from "../form-field-contract/fixtures/DatePickerField.test.svelte";
 import FieldsetHost from "./FieldsetHost.test.svelte";
 
 const items = [
@@ -118,6 +119,12 @@ const styleCases: {
     name: "CopyInput",
     component: CopyInput,
     fieldProps: { ...field, value: "x" },
+    marker: ".bx--label--disabled",
+  },
+  {
+    name: "DatePickerInput",
+    component: DatePickerField,
+    fieldProps: field,
     marker: ".bx--label--disabled",
   },
   {
