@@ -863,6 +863,10 @@
     disabled,
     readonly,
   }));
+  // A ComboBox that turns disabled or read-only while open closes its menu,
+  // so no option stays clickable. Closing here is not a dismissal, so
+  // `close` does not fire.
+  $: if ((disabled || readonly) && open) open = false;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
