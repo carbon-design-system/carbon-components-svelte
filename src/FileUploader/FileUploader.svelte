@@ -246,6 +246,7 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { returnFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
@@ -255,6 +256,10 @@
   import { uniqueId } from "../utils/unique-id.js";
   import FileUploaderButton from "./FileUploaderButton.svelte";
   import Filename from "./Filename.svelte";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -396,6 +401,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={root}
   {id}
   class:bx--form-item={true}
@@ -408,7 +414,7 @@
   {#if labelTitle || $$slots.labelTitle}
     <p
       class:bx--file--label={true}
-      class:bx--label-description--disabled={disabled}
+      class:bx--label-description--disabled={effectiveDisabled}
     >
       <slot name="labelTitle">{labelTitle}</slot>
     </p>
@@ -417,14 +423,14 @@
     <p
       id={descriptionId}
       class:bx--label-description={true}
-      class:bx--label-description--disabled={disabled}
+      class:bx--label-description--disabled={effectiveDisabled}
     >
       <slot name="labelDescription">{labelDescription}</slot>
     </p>
   {/if}
   <FileUploaderButton
     id="{id}-input"
-    {disabled}
+    disabled={effectiveDisabled}
     disableLabelChanges
     labelText={buttonLabel}
     {accept}
@@ -500,7 +506,7 @@
       <span
         class:bx--file__selected-file={true}
         class:bx--file__selected-file--invalid={rowInvalid}
-        class:bx--file__selected-file--disabled={disabled}
+        class:bx--file__selected-file--disabled={effectiveDisabled}
         class:bx--file__selected-file--xs={effectiveSize === "xs"}
         class:bx--file__selected-file--full-width={fullWidth}
       >
@@ -517,7 +523,7 @@
             {iconDescription}
             status={rowStatus}
             invalid={rowInvalid}
-            {disabled}
+            disabled={effectiveDisabled}
             aria-describedby={rowErrorId}
             on:keydown
             on:click={() => removeFile(file, index)}

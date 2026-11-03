@@ -4,6 +4,9 @@ import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelt
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
+import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
+import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
@@ -152,6 +155,24 @@ const styleCases: {
     component: DatePickerField,
     fieldProps: field,
     marker: ".bx--label--disabled",
+  },
+  {
+    name: "FileUploader",
+    component: FileUploader,
+    fieldProps: { labelTitle: "Field", labelDescription: "Help" },
+    marker: ".bx--label-description--disabled",
+  },
+  {
+    name: "FileUploaderButton",
+    component: FileUploaderButton,
+    fieldProps: field,
+    marker: ".bx--btn--disabled",
+  },
+  {
+    name: "FileUploaderDropContainer",
+    component: FileUploaderDropContainer,
+    fieldProps: field,
+    marker: ".bx--file-browse-btn--disabled",
   },
   {
     name: "InlineEdit",

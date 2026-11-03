@@ -153,6 +153,7 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formReset } from "../utils/form-reset.js";
@@ -162,6 +163,10 @@
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -280,9 +285,9 @@
   aria-label={ariaLabel}
   aria-describedby={ariaDescribedBy}
   aria-labelledby={ariaLabelledBy}
-  {disabled}
+  disabled={effectiveDisabled}
   class:bx--btn={true}
-  class:bx--btn--disabled={disabled}
+  class:bx--btn--disabled={effectiveDisabled}
   class:bx--btn--primary={kind === "primary"}
   class:bx--btn--secondary={kind === "secondary"}
   class:bx--btn--tertiary={kind === "tertiary"}
@@ -338,6 +343,7 @@
   {/if}
 </button>
 <input
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={ref}
   use:formReset={handleFormReset}
   type="file"
@@ -346,7 +352,7 @@
   accept={typeof accept === "string" ? accept : accept.join(",")}
   {capture}
   webkitdirectory={directory || undefined}
-  {disabled}
+  disabled={effectiveDisabled}
   {id}
   {multiple}
   {name}

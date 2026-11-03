@@ -24,6 +24,24 @@ describe("FileUploaderDropContainer", () => {
     expect(target).toHaveClass("bx--file-browse-btn--disabled");
   });
 
+  it("ignores dropped files inside a disabled fieldset", async () => {
+    const onadd = vi.fn();
+    const fieldset = document.body.appendChild(
+      document.createElement("fieldset"),
+    );
+    const { container } = render(FileUploaderDropContainer, {
+      props: { onadd },
+      target: fieldset,
+    });
+
+    fieldset.disabled = true;
+    await tick();
+    dropFiles(container, [makeFile("a.txt")]);
+
+    expect(onadd).not.toHaveBeenCalled();
+    fieldset.remove();
+  });
+
   it("should expose aria-disabled and remove from tab order when disabled", () => {
     const { container } = render(FileUploaderDropContainer, {
       props: { disabled: true },

@@ -117,10 +117,15 @@
 
   import { createEventDispatcher } from "svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formReset } from "../utils/form-reset.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -179,18 +184,19 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--file={true}
   {...wrapperRestProps}
   on:dragover
   on:dragover|preventDefault|stopPropagation={(event) => {
-    if (!disabled) {
+    if (!effectiveDisabled) {
       over = true;
       event.dataTransfer.dropEffect = "copy";
     }
   }}
   on:dragleave
   on:dragleave|preventDefault|stopPropagation={(event) => {
-    if (disabled) return;
+    if (effectiveDisabled) return;
     const next = event.relatedTarget;
     const current = event.currentTarget;
     if (
@@ -205,7 +211,7 @@
   }}
   on:drop
   on:drop|preventDefault|stopPropagation={(event) => {
-    if (!disabled) {
+    if (!effectiveDisabled) {
       over = false;
       processIncoming([...event.dataTransfer.files]);
     }
@@ -220,19 +226,19 @@
     aria-label={ariaLabel}
     aria-describedby={ariaDescribedBy}
     aria-labelledby={ariaLabelledBy}
-    tabindex={disabled ? -1 : tabindex}
-    aria-disabled={disabled || undefined}
+    tabindex={effectiveDisabled ? -1 : tabindex}
+    aria-disabled={effectiveDisabled || undefined}
     class:bx--file-browse-btn={true}
     class:bx--file-browse-btn--full-width={fullWidth}
-    class:bx--file-browse-btn--disabled={disabled}
+    class:bx--file-browse-btn--disabled={effectiveDisabled}
     on:click={() => {
-      if (!disabled) ref.click();
+      if (!effectiveDisabled) ref.click();
     }}
     on:keydown
     on:keydown={(event) => {
       if (event.key === " " || event.key === "Enter") {
         event.preventDefault();
-        if (!disabled) ref.click();
+        if (!effectiveDisabled) ref.click();
       }
     }}
   >
@@ -251,7 +257,7 @@
     aria-hidden="true"
     aria-labelledby={dropTargetId}
     {id}
-    {disabled}
+    disabled={effectiveDisabled}
     accept={typeof accept === "string" ? accept : accept.join(",")}
     {capture}
     {name}
