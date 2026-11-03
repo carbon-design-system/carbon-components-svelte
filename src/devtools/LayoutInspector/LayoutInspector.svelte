@@ -88,7 +88,15 @@
   import { createDelayedSetter } from "../../utils/delayed-setter.js";
   import { createFrameJob } from "../../utils/frame-batch.js";
   import { addPooledListener } from "../../utils/window-listener-pool.js";
-  import { AUDIT_CHECKS, formatRatio, runChecks } from "../audit.js";
+  import { formatRatio, runChecks } from "../audit.js";
+
+  /** The checks the inspector draws. `audit()` also runs `animations`, which has no marks. */
+  const INSPECTOR_CHECKS = /** @type {const} */ ([
+    "spacing",
+    "targets",
+    "contrast",
+    "overflow",
+  ]);
   import {
     boxes,
     distanceSegments,
@@ -516,7 +524,7 @@
   /**
    * A finding as a mark, in page coordinates, or in viewport coordinates
    * when its element sits in a fixed box.
-   * @param {import("../audit.js").Finding} finding
+   * @param {import("../audit.js").Finding & { check: LayoutInspectorCheck }} finding
    * @param {{ sx: number; sy: number; fixedBox: (el: Element) => Element | null }} context
    * @returns {LayoutInspectorMark}
    */
@@ -587,7 +595,7 @@
         fixedBox: createLayerLookup(["fixed"]),
       };
       const findings = runChecks({
-        checks: AUDIT_CHECKS.filter((check) => current[check]),
+        checks: INSPECTOR_CHECKS.filter((check) => current[check]),
         band,
         carbon: current.carbon,
         ignore: current.ignore,
@@ -600,9 +608,10 @@
       /** @type {Record<LayoutInspectorCheck, LayoutInspectorMark[]>} */
       const next = { spacing: [], targets: [], contrast: [], overflow: [] };
       for (const finding of findings) {
-        next[finding.check].push(mark(finding, context));
+        const check = /** @type {LayoutInspectorCheck} */ (finding.check);
+        next[check].push(mark({ ...finding, check }, context));
       }
-      for (const check of AUDIT_CHECKS) uniqueKeys(next[check]);
+      for (const check of INSPECTOR_CHECKS) uniqueKeys(next[check]);
       // Crowded labels share one, so a row of small targets stays legible.
       const all = [
         ...next.spacing,

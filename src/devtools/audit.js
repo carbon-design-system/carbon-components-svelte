@@ -12,7 +12,7 @@ import { formatPx, nearestSpacing, offScale } from "./spacing.js";
 /**
  * The page checks, as plain DOM code: LayoutInspector draws their
  * findings, and `audit` returns them as data for scripts and agents.
- * @typedef {"spacing" | "contrast" | "targets" | "overflow"} AuditCheck
+ * @typedef {"spacing" | "contrast" | "targets" | "overflow" | "animations"} AuditCheck
  * @typedef {{ left: number; top: number; width: number; height: number }} Rect
  * @typedef {"error" | "warning" | "info"} Severity
  * @typedef {{ check: AuditCheck; severity: Severity; el: Element; rect: Rect; message: string; values?: Record<string, unknown>; related?: Element }} Finding
@@ -24,6 +24,7 @@ export const AUDIT_CHECKS = /** @type {const} */ ([
   "targets",
   "contrast",
   "overflow",
+  "animations",
 ]);
 
 export const INTERACTIVE = [
@@ -506,6 +507,144 @@ function overflowFinding(el, r, style, page) {
 }
 
 /**
+ * Carbon's motion durations, in milliseconds. A copy of `duration` in
+ * `src/motion/tokens.js`, kept here so the dev tools import nothing from
+ * the motion entry.
+ */
+const DURATION_TOKENS = /** @type {Record<string, number>} */ ({
+  fast01: 70,
+  fast02: 110,
+  moderate01: 150,
+  moderate02: 240,
+  slow01: 400,
+  slow02: 700,
+});
+
+/** Elements whose motion shows that work is in progress, which may keep moving under reduced motion. */
+const LOADING =
+  ".bx--loading, .bx--inline-loading, [class*='skeleton'], .bx--progress-bar--indeterminate, [role='progressbar'], [aria-busy='true']";
+
+/** Properties whose animation triggers layout on every frame. */
+const LAYOUT_PROPERTY =
+  /^(width|height|top|left|right|bottom|inset|margin|padding|border(Top|Right|Bottom|Left|Inline|Block)?Width|blockSize|inlineSize|minWidth|minHeight|maxWidth|maxHeight)/;
+
+/** Under 5 s a loop reads as a cue; past it, it is a distraction (WCAG 2.2.2). */
+const MAX_LOOP_MS = 5000;
+
+/** @param {number} ms */
+function nearestDuration(ms) {
+  let best = "fast01";
+  for (const [name, value] of Object.entries(DURATION_TOKENS)) {
+    if (Math.abs(value - ms) < Math.abs(DURATION_TOKENS[best] - ms)) {
+      best = name;
+    }
+  }
+  return best;
+}
+
+/**
+ * Running animations and transitions, read from the Web Animations API:
+ * anything that moves under `prefers-reduced-motion: reduce` outside a
+ * loading indicator, durations that are not a motion token, loops that
+ * never stop outside a loading or skeleton state, and keyframes on
+ * properties that trigger layout. Transitions that a component plays on
+ * open and close show up only while they run, so call `audit` right after
+ * the open or close to see them.
+ * @param {CheckOptions} options
+ * @returns {Finding[]}
+ */
+function scanAnimations(options) {
+  /** @type {Finding[]} */
+  const findings = [];
+  if (typeof document.getAnimations !== "function") return findings;
+  const reduce =
+    typeof matchMedia === "function" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches;
+  for (const animation of document.getAnimations()) {
+    if (findings.length >= MAX_FINDINGS) break;
+    const effect = /** @type {KeyframeEffect | null} */ (animation.effect);
+    // Duck-typed: jsdom has no `KeyframeEffect`.
+    if (!effect || typeof effect.getKeyframes !== "function") continue;
+    const el = effect.target;
+    if (!(el instanceof Element)) continue;
+    if (closestSafe(el, `[${DEV_TOOL_ATTRIBUTE}]`)) continue;
+    if (closestSafe(el, options.ignore)) continue;
+    // Carbon's own animations are `info` unless `carbon`, like spacing.
+    const owned = carbonOwned(el, options.owned);
+    if (owned && !options.carbon) continue;
+    const severity = owned ? "info" : "warning";
+    const rect = el.getBoundingClientRect();
+    if (!near(rect, options)) continue;
+    const timing = effect.getComputedTiming();
+    const duration =
+      typeof timing.duration === "number" ? timing.duration : Number.NaN;
+    const loading = !!closestSafe(el, LOADING);
+    const loops = timing.iterations === Number.POSITIVE_INFINITY;
+    const loopMs = loops
+      ? Number.POSITIVE_INFINITY
+      : duration * (timing.iterations || 1);
+    /** @param {Finding} finding */
+    const add = (finding) => {
+      findings.push(finding);
+    };
+    if (reduce && animation.playState === "running" && !loading) {
+      add({
+        check: "animations",
+        severity: "error",
+        el,
+        rect,
+        message: `${cssPath(el)}: animates under prefers-reduced-motion: reduce`,
+        values: { duration, loops },
+      });
+    }
+    if (Number.isFinite(duration) && duration > 0 && !loading) {
+      const token = Object.entries(DURATION_TOKENS).find(
+        ([, value]) => value === duration,
+      );
+      if (!token) {
+        const nearest = nearestDuration(duration);
+        add({
+          check: "animations",
+          severity,
+          el,
+          rect,
+          message: `${cssPath(el)}: ${Math.round(duration)}ms is not a motion token; nearest is ${nearest} (${DURATION_TOKENS[nearest]}ms)`,
+          values: { duration, nearest, nearestMs: DURATION_TOKENS[nearest] },
+        });
+      }
+    }
+    if (loopMs > MAX_LOOP_MS && !loading) {
+      add({
+        check: "animations",
+        severity,
+        el,
+        rect,
+        message: `${cssPath(el)}: ${loops ? "loops" : `runs ${Math.round(loopMs / 1000)}s`}; a cue that is not a loading state stops within 5s`,
+        values: { duration, iterations: timing.iterations },
+      });
+    }
+    const layoutProps = new Set();
+    for (const frame of effect.getKeyframes()) {
+      for (const key of Object.keys(frame)) {
+        if (LAYOUT_PROPERTY.test(key)) layoutProps.add(key);
+      }
+    }
+    if (layoutProps.size) {
+      const props = [...layoutProps].sort().join(", ");
+      add({
+        check: "animations",
+        severity,
+        el,
+        rect,
+        message: `${cssPath(el)}: animates ${props}, which lays out every frame; animate transform or opacity, or size only on the one element that expands`,
+        values: { properties: [...layoutProps].sort() },
+      });
+    }
+  }
+  return findings;
+}
+
+/**
  * Spacing and overflow in one pass over the page's elements, so each
  * element's box and style are read once.
  * @param {CheckOptions} options
@@ -578,6 +717,7 @@ export function runChecks(options) {
     ...(on.has("targets") ? scanTargets(scan) : []),
     ...(on.has("contrast") ? scanContrast(scan) : []),
     ...elements.overflow,
+    ...(on.has("animations") ? scanAnimations(scan) : []),
   ];
 }
 

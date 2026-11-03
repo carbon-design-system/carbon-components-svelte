@@ -1,4 +1,4 @@
-import { carbonOwned, cssPath } from "../../src/devtools/audit.js";
+import { audit, carbonOwned, cssPath } from "../../src/devtools/audit.js";
 import { targetConflicts } from "../../src/devtools/geometry.js";
 import { nearestSpacing } from "../../src/devtools/spacing.js";
 
@@ -102,5 +102,156 @@ describe("targetConflicts", () => {
     expect(
       targetConflicts([box(0, 0, 16, 16), box(100, 0, 16, 16)], 24),
     ).toEqual([]);
+  });
+});
+
+describe("animations", () => {
+  type FakeAnimation = {
+    effect: {
+      target: Element;
+      getKeyframes: () => Record<string, unknown>[];
+      getComputedTiming: () => { duration: number; iterations: number };
+    };
+    playState: string;
+  };
+
+  function animating(
+    el: Element,
+    options: {
+      duration?: number;
+      iterations?: number;
+      keyframes?: Record<string, unknown>[];
+      playState?: string;
+    } = {},
+  ): FakeAnimation {
+    const {
+      duration = 240,
+      iterations = 1,
+      keyframes = [{ opacity: 0 }, { opacity: 1 }],
+      playState = "running",
+    } = options;
+    return {
+      effect: {
+        target: el,
+        getKeyframes: () => keyframes,
+        getComputedTiming: () => ({ duration, iterations }),
+      },
+      playState,
+    };
+  }
+
+  function stub(animations: FakeAnimation[], reduce = false) {
+    vi.stubGlobal("matchMedia", (media: string) => ({
+      matches: reduce && media.includes("reduce"),
+      media,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
+    Object.defineProperty(document, "getAnimations", {
+      configurable: true,
+      value: () => animations,
+    });
+  }
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    Object.defineProperty(document, "getAnimations", {
+      configurable: true,
+      value: undefined,
+    });
+  });
+
+  const run = () =>
+    audit({ checks: ["animations"], carbon: true }).findings.map((f) => ({
+      severity: f.severity,
+      message: f.message.replace(/^[^:]+: /, ""),
+    }));
+
+  test("reports nothing when the page has no animations API", () => {
+    mount(`<div class="app">x</div>`);
+    expect(audit({ checks: ["animations"] }).findings).toEqual([]);
+  });
+
+  test("passes a token duration on opacity", () => {
+    const $ = mount(`<div class="app">x</div>`);
+    stub([animating($(".app"), { duration: 240 })]);
+    expect(run()).toEqual([]);
+  });
+
+  test("flags a duration that is not a motion token, with the nearest", () => {
+    const $ = mount(`<div class="app">x</div>`);
+    stub([animating($(".app"), { duration: 300 })]);
+    expect(run()).toEqual([
+      {
+        severity: "warning",
+        message: "300ms is not a motion token; nearest is moderate02 (240ms)",
+      },
+    ]);
+  });
+
+  test("Carbon's own animations are info unless carbon is requested", () => {
+    const $ = mount(`<div class="bx--tile">x</div>`);
+    stub([animating($(".bx--tile"), { duration: 300 })]);
+    expect(run()[0]?.severity).toBe("info");
+    expect(audit({ checks: ["animations"] }).findings).toEqual([]);
+  });
+
+  test("flags a loop outside a loading state", () => {
+    const $ = mount(`<div class="app">x</div>`);
+    stub([
+      animating($(".app"), {
+        duration: 700,
+        iterations: Number.POSITIVE_INFINITY,
+      }),
+    ]);
+    expect(run().map((f) => f.message)).toEqual([
+      "loops; a cue that is not a loading state stops within 5s",
+    ]);
+  });
+
+  test("lets loading and skeleton states loop and run under reduced motion", () => {
+    const $ = mount(
+      `<div class="bx--loading"><svg></svg></div><p class="bx--skeleton__text">x</p>`,
+    );
+    stub(
+      [
+        animating($("svg"), {
+          duration: 690,
+          iterations: Number.POSITIVE_INFINITY,
+        }),
+        animating($("p"), {
+          duration: 3000,
+          iterations: Number.POSITIVE_INFINITY,
+        }),
+      ],
+      true,
+    );
+    expect(run()).toEqual([]);
+  });
+
+  test("errors on anything else that moves under reduced motion", () => {
+    const $ = mount(`<div class="app">x</div>`);
+    stub([animating($(".app"), { duration: 240 })], true);
+    expect(run()).toEqual([
+      {
+        severity: "error",
+        message: "animates under prefers-reduced-motion: reduce",
+      },
+    ]);
+  });
+
+  test("flags keyframes on layout properties", () => {
+    const $ = mount(`<div class="app">x</div>`);
+    stub([
+      animating($(".app"), {
+        keyframes: [
+          { height: "0px", paddingTop: "0px" },
+          { height: "40px", paddingTop: "8px" },
+        ],
+      }),
+    ]);
+    expect(run().map((f) => f.message)).toEqual([
+      "animates height, paddingTop, which lays out every frame; animate transform or opacity, or size only on the one element that expands",
+    ]);
   });
 });

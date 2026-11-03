@@ -1,4 +1,5 @@
-export type AuditCheck = "spacing" | "contrast" | "targets" | "overflow";
+export type AuditCheck =
+  "spacing" | "contrast" | "targets" | "overflow" | "animations";
 
 export type Rect = { left: number; top: number; width: number; height: number };
 
@@ -26,7 +27,7 @@ export type CheckOptions = {
 
 export type AuditFinding = {
   check: AuditCheck;
-  /** `error` for WCAG failures and page overflow, `warning` for the app's off-scale spacing and clipped content, `info` for Carbon's own spacing. */
+  /** `error` for WCAG failures, page overflow and motion under reduced motion, `warning` for the app's off-scale spacing, clipped content and off-token motion, `info` for Carbon's own spacing and motion. */
   severity: Severity;
   /** A short CSS path to the element. */
   selector: string;
@@ -47,6 +48,7 @@ export const AUDIT_CHECKS: readonly [
   "targets",
   "contrast",
   "overflow",
+  "animations",
 ];
 export const INTERACTIVE: string;
 export function hasOwnText(el: Element): boolean;
