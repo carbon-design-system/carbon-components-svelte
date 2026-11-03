@@ -145,6 +145,11 @@
 
   let triggerRef = null;
 
+  // Turning disabled on while open closes the menu, so no item stays
+  // clickable under a disabled trigger. Closing here is not a dismissal, so
+  // `close` does not fire.
+  $: if (disabled && open) open = false;
+
   /** @type {import("svelte/store").Writable<null | HTMLDivElement>} */
   const placementGroup = writable(null);
   setContext(MENU_PLACEMENT_CONTEXT_KEY, placementGroup);
