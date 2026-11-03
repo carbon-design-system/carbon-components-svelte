@@ -186,13 +186,13 @@ describe("in a TooltipGroup", () => {
   const hover = (name: string) => user.hover(trigger(name));
   const unhover = (name: string) => user.unhover(trigger(name));
 
-  function renderGroup() {
+  function renderGroup(duration = DURATION) {
     const onIntroStart = vi.fn();
     const onOutroEnd = vi.fn();
     render(TooltipTransition, {
       kind: "group",
       portalTooltip: false,
-      transition: { duration: DURATION },
+      transition: { duration },
       onIntroStart,
       onOutroEnd,
     });
@@ -223,6 +223,39 @@ describe("in a TooltipGroup", () => {
     await sleep(DURATION * 3);
     expect(onIntroStart).not.toHaveBeenCalled();
     expect(content("-a")).not.toBeInTheDocument();
+  });
+
+  it("removes the tooltip handed off from at once, and fires outroend", async () => {
+    const { onOutroEnd } = renderGroup(DURATION * 10);
+    await hover("A");
+    await waitFor(() => expect(content("-a")).toBeInTheDocument());
+    await sleep(DURATION * 12);
+
+    await unhover("A");
+    await hover("B");
+
+    // Well inside the exit fade, which would take 400ms.
+    await waitFor(() => expect(content("-a")).not.toBeInTheDocument(), {
+      timeout: 150,
+    });
+    expect(content("-b")).toBeInTheDocument();
+    await waitFor(() => expect(onOutroEnd).toHaveBeenCalledWith("a"));
+  });
+
+  it("hides a tooltip already fading out when another takes over", async () => {
+    renderGroup(DURATION * 10);
+    await hover("A");
+    await waitFor(() => expect(content("-a")).toBeInTheDocument());
+    await sleep(DURATION * 12);
+    await unhover("A");
+    // The leave delay passes and the fade starts.
+    await sleep(DURATION * 2);
+    expect(content("-a")).toBeVisible();
+
+    await hover("B");
+
+    expect(content("-b")).toBeInTheDocument();
+    expect(content("-a")).not.toBeVisible();
   });
 
   it("opens a tooltip with no fade within the skip window after another closed", async () => {

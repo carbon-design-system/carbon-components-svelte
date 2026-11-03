@@ -126,7 +126,8 @@
    * fade (`fast01`), to fade params (e.g., `{ duration: "fast02" }`) to
    * customize it, or to `{ fn }` to use another transition. The tooltip does
    * not animate by default. A tooltip that opens right after another one in
-   * its group closed appears at once, with no fade.
+   * its group closed appears at once, with no fade, and the one it replaces
+   * leaves at once too.
    * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
    */
   export let transition = undefined;
@@ -168,6 +169,34 @@
     params: transitionParams,
     animated,
   } = resolveTransition(transition, fadePreset));
+
+  // Set while the tooltip leaves because another one in its group took over
+  // by warm handoff, so the group reads as one tooltip moving. The wrapper
+  // reads it through getters, as Svelte 3 and 4 read a `transition:` config
+  // when each run starts, not when the element mounts.
+  let handoffExit = false;
+
+  /** @type {import("../motion/resolve-transition.js").TransitionFunction} */
+  function handoffAwareFn(node, params, options) {
+    const config = transitionFn(node, params, options);
+    return {
+      get delay() {
+        return handoffExit ? 0 : config.delay;
+      },
+      get duration() {
+        return handoffExit ? 0 : config.duration;
+      },
+      get easing() {
+        return config.easing;
+      },
+      get css() {
+        return handoffExit ? undefined : config.css;
+      },
+      get tick() {
+        return handoffExit ? undefined : config.tick;
+      },
+    };
+  }
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
@@ -305,7 +334,19 @@
     // tooltip's own claim when it opens.
     const unsubscribeOthersActive = tooltipHandoff.hidden.subscribe(
       (othersActive) => {
-        if (othersActive && open && get(openedByHover)) open = false;
+        if (!othersActive) return;
+        const handedOff = get(tooltipHandoff.handedOff);
+        if (open && get(openedByHover)) {
+          handoffExit = handedOff;
+          open = false;
+        } else if (leaving && handedOff) {
+          // Already fading out, and the Svelte outro cannot be shortened:
+          // hide the element now, and let the outro finish unseen.
+          handoffExit = true;
+          for (const node of [refInPlace, refPortalTooltip]) {
+            node?.style.setProperty("display", "none");
+          }
+        }
       },
     );
 
@@ -514,6 +555,11 @@
       flip = null;
       shift = 0;
       skipFade = $tooltipInstant && !leaving;
+      // A tooltip that turns around mid-exit shows again, and fades back in.
+      for (const node of [refInPlace, refPortalTooltip]) {
+        node?.style.removeProperty("display");
+      }
+      handoffExit = false;
       leaving = false;
     }
     wasOpen = open;
@@ -614,7 +660,7 @@
       class:bx--tooltip--align-start={sideAlign === "start"}
       class:bx--tooltip--align-end={sideAlign === "end"}
       style:width="max-content"
-      transition:transitionFn|local={transitionParams}
+      transition:handoffAwareFn|local={transitionParams}
       on:introstart
       on:introend
       on:outrostart
@@ -687,7 +733,7 @@
           class:bx--tooltip--align-end={sideAlign === "end"}
           style="position: relative; transform: none; display: block; margin-top: 0;"
           style:left="{shift}px"
-          transition:transitionFn|global={transitionParams}
+          transition:handoffAwareFn|global={transitionParams}
           on:introstart
           on:introend
           on:outrostart
