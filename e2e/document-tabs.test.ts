@@ -275,8 +275,10 @@ test.describe("Document tabs: RTL", () => {
     const second = await box(page, 2);
     await drag(page, 1, 4, { side: "start", release: false, rtl: true });
     await expect.poll(() => shifted(page)).toEqual([2, 3]);
-    const moved = await box(page, 2);
-    expect(moved.x).toBeGreaterThan(second.x);
+    // The tab slides, so its box moves over the next frames.
+    await expect
+      .poll(async () => (await box(page, 2)).x)
+      .toBeGreaterThan(second.x);
     await page.mouse.up();
   });
 });
@@ -408,6 +410,37 @@ test.describe("Document tabs: appearance", () => {
     await expect.poll(() => shifted(page)).toEqual([2, 3]);
     await page.mouse.up();
   });
+
+  for (const [motion, slides] of [
+    ["no-preference", true],
+    ["reduce", false],
+  ] as const) {
+    test(`tabs ${slides ? "slide" : "snap"} aside under ${motion} motion`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ reducedMotion: motion });
+      await page.goto("/document-tabs.html?count=5&width=900&dismissible");
+      await drag(page, 1, 4, { side: "start", release: false });
+      await expect.poll(() => shifted(page)).toEqual([2, 3]);
+      const transition = await page
+        .locator(".bx--tabs__nav-item")
+        .nth(1)
+        .evaluate((node) => {
+          const style = getComputedStyle(node);
+          return {
+            properties: style.transitionProperty,
+            duration: style.transitionDuration,
+          };
+        });
+      if (slides) {
+        expect(transition.properties).toContain("transform");
+        expect(transition.duration).not.toMatch(/^0s(, 0s)*$/);
+      } else {
+        expect(transition.duration).toMatch(/^0s(, 0s)*$/);
+      }
+      await page.mouse.up();
+    });
+  }
 
   test("the held tab is filled and lifted while the pointer is over it", async ({
     page,
