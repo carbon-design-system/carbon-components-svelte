@@ -136,6 +136,37 @@ describe("trapFocus", () => {
     expect(document.activeElement).toBe(buttons[2]);
   });
 
+  describe("focus on an element inside the container that is not a tab stop", () => {
+    // A heading with `tabindex="-1"` between two buttons.
+    function setupHeading() {
+      const { container, buttons } = setup(3);
+      const heading = document.createElement("h2");
+      heading.tabIndex = -1;
+      container.insertBefore(heading, buttons[1]);
+      return { container, buttons, heading };
+    }
+
+    it("Tab goes to the next element in the document, not the first", () => {
+      const { container, buttons, heading } = setupHeading();
+      heading.focus();
+      const { event } = tabEvent();
+
+      trapFocus({ container, event });
+
+      expect(document.activeElement).toBe(buttons[1]);
+    });
+
+    it("Shift+Tab goes to the previous element in the document, not the last", () => {
+      const { container, buttons, heading } = setupHeading();
+      heading.focus();
+      const { event } = tabEvent(true);
+
+      trapFocus({ container, event });
+
+      expect(document.activeElement).toBe(buttons[0]);
+    });
+  });
+
   it("visibility:hidden and display:none elements are both excluded, only the visible one is focused", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
