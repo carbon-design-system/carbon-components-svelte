@@ -837,7 +837,7 @@ Types and E2E:
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
 - `bun test:src-svelte` runs `svelte-check` compiler diagnostics on `src/` (a11y, unused CSS)
 - `bun test:src-svelte-types` type-checks the component scripts in `src/` against a per-component error baseline (see [Component script types](#component-script-types))
-- `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`
+- `bun test:types` runs `svelte-check` on `*.svelte` and `.ts` files in `tests/`. It caches in `tests/.svelte-check`, so a rerun only checks what changed; the cache clears itself when `svelte-check` or `svelte` changes version
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
 Three process traps:
