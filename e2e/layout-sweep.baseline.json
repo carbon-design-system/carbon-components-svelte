@@ -808,6 +808,14 @@
     "message": "div#app > div: spans 0px to 400px"
   },
   {
+    "fixture": "icon-picker-modal.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--icon-picker.bx--list-box__wrapper > div.bx--icon-picker__field:nth-of-type(1) > div.bx--list-box > button.bx--list-box__field.bx--icon-picker__trigger",
+    "message": "div.bx--icon-picker.bx--list-box__wrapper > div.bx--icon-picker__field:nth-of-type(1) > div.bx--list-box > button.bx--list-box__field.bx--icon-picker__trigger: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "inline-notification-width.html",
     "variant": "1280-forced",
     "check": "borders",

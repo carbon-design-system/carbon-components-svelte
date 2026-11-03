@@ -1,0 +1,82 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// IconPicker: a field that opens a popover of icons, built on the list box
+/// field and `PickerGrid`.
+/// @access private
+/// @group components
+@mixin icon-picker {
+  // The popover places itself against its parent, so the field box is the
+  // anchor, not the label and helper text around it.
+  .#{$prefix}--icon-picker__field {
+    position: relative;
+  }
+
+  .#{$prefix}--icon-picker__chosen {
+    display: inline-flex;
+    flex: none;
+    margin-inline-end: $carbon--spacing-03;
+    color: $icon-primary;
+  }
+
+  .#{$prefix}--icon-picker__trigger:disabled .#{$prefix}--icon-picker__chosen {
+    color: $icon-disabled;
+  }
+
+  // The popover is as wide as the grid asks, not as its text.
+  .#{$prefix}--icon-picker__panel {
+    inline-size: to-rem(320px);
+  }
+
+  .#{$prefix}--icon-picker--inline {
+    inline-size: to-rem(320px);
+    max-inline-size: 100%;
+  }
+
+  // The place of an icon that is still being imported, so the grid keeps its
+  // shape and nothing moves when the icon arrives. No animation: the wait is
+  // short, and a screenful of pulsing boxes is noise.
+  .#{$prefix}--icon-picker__placeholder {
+    display: block;
+    flex: none;
+    background-color: $skeleton-background;
+    block-size: var(--ccs-icon-picker-size);
+    inline-size: var(--ccs-icon-picker-size);
+  }
+
+  .#{$prefix}--icon-picker__preview-icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    block-size: to-rem(32px);
+    color: $icon-primary;
+    inline-size: to-rem(32px);
+  }
+
+  .#{$prefix}--icon-picker__preview-name {
+    @include type-style("heading-compact-01");
+
+    overflow: hidden;
+    flex: none;
+    max-inline-size: 50%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--icon-picker__preview-id {
+    @include type-style("code-01");
+
+    overflow: hidden;
+    min-inline-size: 0;
+    color: $text-secondary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@include exports("icon-picker") {
+  @include icon-picker;
+}
