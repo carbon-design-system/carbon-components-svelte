@@ -9,10 +9,13 @@
 /// @access private
 /// @group components
 @mixin picker-grid {
+  // The grid draws its own surface: a section header that sticks to the
+  // top covers the cells scrolling under it, so it needs a fill that matches.
   .#{$prefix}--picker-grid {
     display: flex;
     min-width: 0;
     flex-direction: column;
+    background-color: var(--ccs-picker-grid-surface, #{$layer});
   }
 
   .#{$prefix}--picker-grid__search .#{$prefix}--search {
@@ -69,6 +72,26 @@
     padding-inline: $carbon--spacing-03;
     block-size: var(--ccs-picker-grid-header);
     color: $text-secondary;
+  }
+
+  // The header of the section at the top, drawn over the cells. It takes no
+  // room: the negative margin gives back the height it has.
+  .#{$prefix}--picker-grid__sticky {
+    @include type-style("label-01");
+
+    position: sticky;
+    z-index: 1;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding-inline: $carbon--spacing-05;
+    margin-block-end: calc(-1 * var(--ccs-picker-grid-header));
+    margin-inline: calc(-1 * #{$carbon--spacing-02});
+    background-color: var(--ccs-picker-grid-surface, #{$layer});
+    block-size: var(--ccs-picker-grid-header);
+    color: $text-secondary;
+    inset-block-start: 0;
+    pointer-events: none;
   }
 
   .#{$prefix}--picker-grid__row {

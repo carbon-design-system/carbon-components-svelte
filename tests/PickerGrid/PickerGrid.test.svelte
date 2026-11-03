@@ -7,6 +7,7 @@
   export let recent: string[] = [];
   export let query = "";
   export let searchable = true;
+  export let stickyHeaders = true;
 
   let events: string[] = [];
 
@@ -27,6 +28,7 @@
   {categories}
   {selectionMode}
   {searchable}
+  {stickyHeaders}
   columns={2}
   bind:selectedId
   bind:selectedIds

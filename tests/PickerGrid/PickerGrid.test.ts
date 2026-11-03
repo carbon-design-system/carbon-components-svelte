@@ -21,6 +21,19 @@ describe("PickerGrid", () => {
     );
   });
 
+  it("draws the header of the section at the top over the grid, for sighted users only", async () => {
+    const { container, rerender } = render(PickerGrid);
+    const sticky = () => container.querySelector(".bx--picker-grid__sticky");
+    expect(sticky()).toHaveTextContent("Fruit");
+    expect(sticky()).toHaveAttribute("aria-hidden", "true");
+    await user.type(screen.getByRole("combobox"), "ba");
+    expect(sticky()).toBeNull();
+    await user.clear(screen.getByRole("combobox"));
+    expect(sticky()).toHaveTextContent("Fruit");
+    await rerender({ stickyHeaders: false });
+    expect(sticky()).toBeNull();
+  });
+
   it("gives each option its place in the whole set", () => {
     render(PickerGrid);
     const carrot = screen.getByRole("option", { name: "Carrot" });

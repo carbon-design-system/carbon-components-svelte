@@ -44,10 +44,12 @@
     max-inline-size: 100%;
   }
 
+  // The surface of the grid, so the skin tones under it match.
   .#{$prefix}--emoji-picker__body {
     display: flex;
     min-inline-size: 0;
     flex-direction: column;
+    background-color: var(--ccs-picker-grid-surface, #{$layer});
   }
 
   .#{$prefix}--emoji-picker__glyph {
