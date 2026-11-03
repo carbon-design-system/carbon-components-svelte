@@ -12,6 +12,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Specify the size of the overflow menu.
    * Also accepts Carbon v11's `"md"` (the 40px default) and `"lg"` (`"xl"`).
    * @type {"xs" | "sm" | "md" | "lg" | "xl" | undefined}
@@ -125,6 +132,16 @@
    */
   export let portalMenu = undefined;
 
+  /**
+   * Animate the menu as it opens and closes. Set to `true` for Carbon's fly
+   * (`fast01`, 2 px toward the side the menu opens on), to fly params (e.g.,
+   * `{ duration: "fast02" }`) to customize it, or to `{ fn }` to use another
+   * transition. The menu does not animate by default. When `undefined`, the
+   * nearest `Motion` sets it through the `menu` role.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
+   */
+  export let transition = undefined;
+
   import {
     afterUpdate,
     createEventDispatcher,
@@ -140,6 +157,8 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import OverflowMenuVertical from "../icons/OverflowMenuVertical.svelte";
+  import { getMotionDefault } from "../motion/context.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -154,6 +173,7 @@
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { menuSide } from "../utils/menu-placement.js";
+  import { makeInert, makeLive, menuPreset } from "../utils/menu-transition.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
   import { rovingFocus } from "../utils/roving-focus.js";
@@ -190,6 +210,14 @@
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
+
+  const motionDefault = getMotionDefault("menu");
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition ?? $motionDefault, menuPreset));
 
   const dispatch = createEventDispatcher();
   /**
@@ -753,7 +781,46 @@
   </slot>
 </button>
 
-{#if open && !effectivePortalMenu}
+<!-- Svelte 3/4 remove an element with any transition a frame late, so the
+     static branches carry no directive. The in-place menu is local: this
+     component toggles it. The portal's `{#if open}` removes the other, so
+     that one is global. -->
+{#if open && !effectivePortalMenu && animated}
+  <ul
+    bind:this={menuRef}
+    use:rovingFocus={menuRovingFocus}
+    role="menu"
+    tabindex="-1"
+    id={menuId}
+    aria-label={ariaLabel}
+    aria-labelledby={ariaLabel === undefined ? id : undefined}
+    data-floating-menu-direction={menuPlacement}
+    class:bx--overflow-menu-options={true}
+    class:bx--overflow-menu--flip={alignRight}
+    class:bx--overflow-menu-options--open={open}
+    class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
+    class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
+    class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
+    class:bx--overflow-menu-options--scrollable={!!maxHeight}
+    class:bx--overflow-menu-options--shortcuts={hasShortcuts}
+    class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+    class:bx--overflow-menu-options--below-left={belowLeft}
+    class={menuOptionsClass}
+    style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
+    style:max-height={maxHeightStyle}
+    transition:transitionFn|local={transitionParams}
+    on:introstart
+    on:introstart={makeLive}
+    on:introend
+    on:outrostart
+    on:outrostart={makeInert}
+    on:outroend
+    on:keydown={handleMenuKeydown}
+    on:focusin={() => moveFocus.set(true)}
+  >
+    <slot />
+  </ul>
+{:else if open && !effectivePortalMenu}
   <ul
     bind:this={menuRef}
     use:rovingFocus={menuRovingFocus}
@@ -794,35 +861,74 @@
     intrinsicAlign={alignRight ? "end" : "start"}
     let:direction={portalDirection}
   >
-    <ul
-      bind:this={menuRef}
-      use:rovingFocus={menuRovingFocus}
-      role="menu"
-      tabindex="-1"
-      id={menuId}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabel === undefined ? id : undefined}
-      data-floating-menu-direction={portalDirection}
-      class:bx--overflow-menu-options={true}
-      class:bx--overflow-menu--flip={alignRight}
-      class:bx--overflow-menu-options--open={open}
-      class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
-      class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
-      class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
-      class:bx--overflow-menu-options--scrollable={!!maxHeight}
-      class:bx--overflow-menu-options--shortcuts={hasShortcuts}
-      class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
-      class={menuOptionsClass}
-      style:position="relative"
-      style:top="auto"
-      style:left="auto"
-      style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
-      style:max-height={maxHeightStyle}
-      on:keydown={handleMenuKeydown}
-      on:focusin={() => moveFocus.set(true)}
-    >
-      <slot />
-    </ul>
+    {#if animated}
+      <ul
+        bind:this={menuRef}
+        use:rovingFocus={menuRovingFocus}
+        role="menu"
+        tabindex="-1"
+        id={menuId}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel === undefined ? id : undefined}
+        data-floating-menu-direction={portalDirection}
+        class:bx--overflow-menu-options={true}
+        class:bx--overflow-menu--flip={alignRight}
+        class:bx--overflow-menu-options--open={open}
+        class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
+        class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
+        class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
+        class:bx--overflow-menu-options--scrollable={!!maxHeight}
+        class:bx--overflow-menu-options--shortcuts={hasShortcuts}
+        class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+        class={menuOptionsClass}
+        style:position="relative"
+        style:top="auto"
+        style:left="auto"
+        style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
+        style:max-height={maxHeightStyle}
+        transition:transitionFn|global={transitionParams}
+        on:introstart
+        on:introstart={makeLive}
+        on:introend
+        on:outrostart
+        on:outrostart={makeInert}
+        on:outroend
+        on:keydown={handleMenuKeydown}
+        on:focusin={() => moveFocus.set(true)}
+      >
+        <slot />
+      </ul>
+    {:else}
+      <ul
+        bind:this={menuRef}
+        use:rovingFocus={menuRovingFocus}
+        role="menu"
+        tabindex="-1"
+        id={menuId}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel === undefined ? id : undefined}
+        data-floating-menu-direction={portalDirection}
+        class:bx--overflow-menu-options={true}
+        class:bx--overflow-menu--flip={alignRight}
+        class:bx--overflow-menu-options--open={open}
+        class:bx--overflow-menu-options--xs={effectiveSize === "xs"}
+        class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
+        class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
+        class:bx--overflow-menu-options--scrollable={!!maxHeight}
+        class:bx--overflow-menu-options--shortcuts={hasShortcuts}
+        class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
+        class={menuOptionsClass}
+        style:position="relative"
+        style:top="auto"
+        style:left="auto"
+        style:--overflow-menu-options-after-width={overflowMenuOptionsAfterWidth}
+        style:max-height={maxHeightStyle}
+        on:keydown={handleMenuKeydown}
+        on:focusin={() => moveFocus.set(true)}
+      >
+        <slot />
+      </ul>
+    {/if}
   </FloatingPortal>
 {/if}
 
