@@ -18,7 +18,8 @@
 
   /**
    * Set to `true` to use disabled styles.
-   * Inside a `FormItem`, defaults to the item's `disabled`.
+   * Inside a `FormItem`, defaults to the item's `disabled`. A disabled
+   * fieldset around it applies either way.
    * @type {boolean | undefined}
    */
   export let disabled = undefined;
@@ -26,6 +27,7 @@
   import { getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const context = getContext(FORM_ITEM_CONTEXT_KEY);
@@ -33,6 +35,8 @@
   const formItem = context?.group ? undefined : context;
   const controlId = formItem?.controlId ?? readable(undefined);
   const parentDisabled = formItem?.disabled ?? readable(false);
+  // A disabled fieldset around the label disables it too.
+  let inDisabledFieldset = false;
   const part = formItem?.part("label");
   const fallbackId = uniqueId();
 
@@ -48,9 +52,11 @@
 </script>
 
 <label
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   id={labelId}
   class:bx--label={true}
-  class:bx--label--disabled={disabled ?? $parentDisabled}
+  class:bx--label--disabled={(disabled ?? $parentDisabled) ||
+    inDisabledFieldset}
   for={htmlFor}
   {...$$restProps}
   on:click

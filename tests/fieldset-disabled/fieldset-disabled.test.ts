@@ -7,6 +7,7 @@ import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
+import FormLabel from "carbon-components-svelte/FormLabel/FormLabel.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
@@ -173,6 +174,12 @@ const styleCases: {
     component: FileUploaderDropContainer,
     fieldProps: field,
     marker: ".bx--file-browse-btn--disabled",
+  },
+  {
+    name: "FormLabel",
+    component: FormLabel,
+    fieldProps: {},
+    marker: ".bx--label--disabled",
   },
   {
     name: "InlineEdit",
