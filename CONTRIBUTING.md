@@ -269,6 +269,8 @@ bun test:types   # svelte-check on tests/
 
 `bun setup` already runs `build:docs` once. Repeat `build:docs` only when the component API changes.
 
+On a PR that touches `src/`, the API check workflow diffs the component API against the base branch with `sveld --check` and lists each change, with its semver bump, in the job summary. A breaking change (a prop removed or made required, a type narrowed, an event or slot removed) fails it unless the PR is marked breaking: a `!` in its title, a `BREAKING CHANGE:` footer in its description, or the "breaking changes" label. A sveld upgrade that changes the generated types counts too.
+
 When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/framed/` for the old name. Nothing type-checks the e2e fixtures, and the docs examples are type-checked only on PRs that change `docs/`. Svelte ignores an unknown prop, so a stale one passes until an E2E assertion fails or the next docs PR does.
 
 #### Component script types
