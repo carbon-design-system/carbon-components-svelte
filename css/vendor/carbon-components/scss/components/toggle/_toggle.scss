@@ -216,6 +216,11 @@
 
         // ccs: starts at the inline start, where the track does
         @include ccs-inset-inline(to-rem(3px));
+
+        // ccs: the handle holds still, as the track's colors may still fade
+        @media screen and (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
       }
 
       .#{$prefix}--toggle-input__label & {
