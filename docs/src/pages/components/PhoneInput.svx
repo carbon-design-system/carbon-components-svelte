@@ -1,0 +1,116 @@
+---
+components: ["PhoneInput"]
+description: Phone inputs join a country selector to a number field that is formatted for the country, and hold the number in international E.164 form.
+---
+
+<script>
+  import { PhoneInput, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a phone input with a label. The selector shows the flag and the calling code, and the number field formats what is typed in the country's way. Set `country` for the country to start with.
+
+<PhoneInput labelText="Phone" country="US" helperText="Choose a country, then enter the number" />
+
+## Value
+
+### Bind the value
+
+`value` is the number in E.164 form: a plus, the calling code and the digits, with no spaces, such as `+14155550123`. It is empty until a digit is entered. Bind `country` to read or set the country, and `complete` to know when the number has the digits a number of that country has. `complete` tests the shape of the number, not whether the number exists.
+
+<FileSource src="/framed/PhoneInput/PhoneBinding" />
+
+Set `value` to fill the field. The calling code picks the country, and keeps the current one when several share the code: `+1` is the United States, Canada and a score of Caribbean countries.
+
+<PhoneInput labelText="Office phone" value="+442079460958" />
+
+### Submit in a form
+
+Set `name` and the form submits the E.164 value, not the grouped text the user sees. A hidden field carries it.
+
+<FileSource src="/framed/PhoneInput/PhoneForm" />
+
+### Detect from the locale
+
+Set `detect` to `true` to fill an empty `country` with the country `locale` is most used in once the field has mounted. This is a guess from the language, not the user's location, so keep it for a default the user can change.
+
+<PhoneInput labelText="Phone" detect locale="de" />
+
+## Countries
+
+### Restrict the list
+
+Pass `countries` to list only some countries, in your order.
+
+<PhoneInput labelText="Phone" countries={["CH", "AT", "DE", "LI"]} country="CH" />
+
+### Search
+
+The selector is a combo box. Type a name or a calling code to filter the list: "swit" finds Switzerland, and "+49" or "49" finds Germany. <DocKbd label="ArrowDown" /> opens the menu, <DocKbd label="Enter" /> picks the highlighted country and <DocKbd label="Escape" /> closes the menu.
+
+## International numbers
+
+Pasting or filling in a number that starts with a plus, such as `+44 20 7946 0958`, switches the country to the one with that calling code and fills the number. A code that the `countries` list leaves out changes nothing. Typing a plus is not taken: the user picks the country in the selector, or pastes.
+
+A number in national form works too. Where a country writes a trunk prefix, as in `020 7946 0958` in the United Kingdom, the user may type it, and it is shown but not kept in the value.
+
+## Number formats
+
+Each country writes its numbers in its own groups. The component ships the grouping for about 40 countries and groups the rest in threes. It does not know which numbers exist: area codes, mobile ranges and lengths are the job of a number-plan library, which is far larger. Use one on the server, and treat `complete` as a hint.
+
+| Country | Shown as | Kept as |
+| :-- | :-- | :-- |
+| United States, Canada | `(415) 555-0123` | `+14155550123` |
+| United Kingdom | `020 7946 0958` | `+442079460958` |
+| France | `06 12 34 56 78` | `+33612345678` |
+| Japan | `090-1234-5678` | `+819012345678` |
+| Brazil | `(11) 91234-5678` | `+5511912345678` |
+| Any other | Groups of three | `+` the code and the digits |
+
+Choosing another country formats the digits already entered for it. The digits the new format does not hold are dropped.
+
+## Validation
+
+Mark the field invalid yourself, usually after `blur`.
+
+<FileSource src="/framed/PhoneInput/PhoneValidation" />
+
+## Sizes
+
+Set `size` to size both fields.
+
+<Stack gap={6}>
+  <PhoneInput labelText="Extra-large" size="xl" country="US" />
+  <PhoneInput labelText="Small" size="sm" country="US" />
+  <PhoneInput labelText="Extra-small" size="xs" country="US" />
+</Stack>
+
+## States
+
+<Stack gap={6}>
+  <PhoneInput labelText="Invalid" country="DE" invalid invalidText="Enter a complete number" />
+  <PhoneInput labelText="Warning" country="DE" warn warnText="This number is not in service" />
+  <PhoneInput labelText="Disabled" country="FR" disabled />
+  <PhoneInput labelText="Read-only" country="FR" value="+33612345678" readonly />
+</Stack>
+
+## Right-to-left
+
+The calling code and the number read left to right in any page, so the brackets and hyphens of a number keep their place. They sit at the page's start edge. The menu opens toward the end edge of the field.
+
+<div dir="rtl">
+  <PhoneInput labelText="Phone" country="US" value="+14155550123" />
+</div>
+
+## Accessibility
+
+| Do | Why |
+| :-- | :-- |
+| Give the field a `labelText` | It names the group of the two fields. The selector and the number field have their own names, "Country calling code" and "Phone number", which `countryLabelText` and `numberLabelText` replace for another language. |
+| Say the format in `helperText` | It is read with the number field. A `placeholder` is gone once the user types. |
+| Leave `type` alone | The number field is `type="tel"`: a phone keypad on mobile, and the selection API the mask needs. |
+| Read `value`, not the text | The shown text has literals a screen reader reads aloud. Keep them for grouping, not for decoration. |
+| Offer `countries` when a form serves some | A shorter list is faster to search and to read. |
+
+The number field is masked by the [`mask` action](/components/TextInput#input-mask), so Backspace deletes the digit before a literal, a selection is replaced by what is typed, and undo works.

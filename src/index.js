@@ -182,6 +182,7 @@ export { default as PageHeaderSkeleton } from "./PageHeader/PageHeaderSkeleton.s
 export { default as Pagination } from "./Pagination/Pagination.svelte";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.svelte";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
+export { default as PhoneInput } from "./PhoneInput/PhoneInput.svelte";
 export { default as FluidPinCodeInputSkeleton } from "./PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";
 export { default as PinCodeInputSkeleton } from "./PinCodeInput/PinCodeInputSkeleton.svelte";
@@ -337,6 +338,7 @@ export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
+export { createMask } from "./utils/input-mask.js";
 export {
   formatShortcut,
   matchesShortcut,
@@ -345,6 +347,7 @@ export {
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
+export { mask } from "./utils/mask.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";

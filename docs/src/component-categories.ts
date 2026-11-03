@@ -112,6 +112,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TimePicker",
       "TimezonePicker",
       "CountryPicker",
+      "PhoneInput",
       "Checkbox",
       "RadioButton",
       "StarRating",

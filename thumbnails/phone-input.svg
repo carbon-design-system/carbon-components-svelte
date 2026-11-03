@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>phone-input</title>
+    <g id="phone-input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="56" y="58" width="48" height="8"></rect>
+        <rect id="country" fill="var(--cds-field-01, #f4f4f4)" x="56" y="74" width="72" height="32"></rect>
+        <rect id="country-border" fill="var(--cds-border-strong, #8d8d8d)" x="56" y="105" width="72" height="1"></rect>
+        <rect id="flag-0" fill="var(--cds-support-error, #da1e28)" x="68" y="84" width="6" height="12"></rect>
+        <rect id="flag-1" fill="var(--cds-layer-02, #ffffff)" x="74" y="84" width="6" height="12"></rect>
+        <rect id="flag-2" fill="var(--cds-support-error, #da1e28)" x="80" y="84" width="6" height="12"></rect>
+        <rect id="flag-edge" fill="none" stroke="var(--cds-layer-accent-active, #a8a8a8)" stroke-width="1" x="67.5" y="83.5" width="19" height="13"></rect>
+        <rect id="code" fill="var(--cds-text-secondary, #525252)" x="94" y="86" width="16" height="8"></rect>
+        <path id="chevron" fill="var(--cds-icon-primary, #161616)" transform="translate(110, 82) scale(0.5)" d="M16 22 6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path>
+        <rect id="number" fill="var(--cds-field-01, #f4f4f4)" x="129" y="74" width="136" height="32"></rect>
+        <rect id="number-border" fill="var(--cds-border-strong, #8d8d8d)" x="129" y="105" width="136" height="1"></rect>
+        <rect id="group-0" fill="var(--cds-text-secondary, #525252)" x="141" y="86" width="24" height="8"></rect>
+        <rect id="group-1" fill="var(--cds-text-secondary, #525252)" x="171" y="86" width="24" height="8"></rect>
+        <rect id="group-2" fill="var(--cds-text-secondary, #525252)" x="201" y="86" width="32" height="8"></rect>
+        <rect id="caret" fill="var(--cds-icon-primary, #161616)" x="236" y="83" width="1" height="14"></rect>
+        <rect id="helper" fill="var(--cds-layer-accent-active, #a8a8a8)" x="129" y="114" width="80" height="6"></rect>
+    </g>
+</svg>

@@ -967,6 +967,18 @@ assets:
     tags:
       - form
       - contextual-navigation
+  phone-input:
+    name: Phone input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/phone-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PhoneInput
   pin-code-input:
     name: PIN code input
     status: stable
