@@ -1,10 +1,23 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
 import type { ComponentType } from "svelte";
 import { tick } from "svelte";
 import FieldsetHost from "./FieldsetHost.test.svelte";
+
+const items = [
+  { id: "a", text: "Alpha" },
+  { id: "b", text: "Beta" },
+];
+
+/** Opens the list box from its chevron, the one part a disabled fieldset doesn't block. */
+async function clickChevron(container: HTMLElement) {
+  const chevron = container.querySelector(".bx--list-box__menu-icon");
+  assert(chevron instanceof HTMLElement);
+  await fireEvent.click(chevron);
+}
 
 // Each case renders the component in a fieldset that turns disabled after
 // mount, then checks the part the browser leaves operable.
@@ -51,6 +64,16 @@ const cases: {
       expect(label).toHaveClass("bx--label--disabled");
     },
   },
+  ...[{ name: "Dropdown", component: Dropdown }].map(({ name, component }) => ({
+    name,
+    component,
+    fieldProps: { labelText: "Field", items },
+    expectDisabled: async (container: HTMLElement) => {
+      await clickChevron(container);
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(screen.getByText("Field")).toHaveClass("bx--label--disabled");
+    },
+  })),
 ];
 
 describe("components in a disabled fieldset", () => {
