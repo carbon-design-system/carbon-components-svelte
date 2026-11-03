@@ -1,0 +1,87 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A `Flag`: a 4:3 box drawn with its real colors. The 1px outline sits
+/// inside the box, so a white flag keeps its edge on a white page and a dark
+/// one on Gray 100, and the box is the same size with or without it. The
+/// outline is the one thing that follows the theme. Flags are content, like
+/// an image, so forced colors leave their fills alone and only the outline
+/// goes to `CanvasText`.
+/// @access private
+/// @group components
+@mixin flag {
+  .#{$prefix}--flag {
+    display: inline-block;
+    flex: none;
+    box-sizing: border-box;
+    outline: 1px solid $border-subtle;
+    outline-offset: -1px;
+    forced-color-adjust: none;
+  }
+
+  .#{$prefix}--flag--16 {
+    block-size: to-rem(12px);
+    inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--flag--20 {
+    block-size: to-rem(15px);
+    inline-size: to-rem(20px);
+  }
+
+  .#{$prefix}--flag--24 {
+    block-size: to-rem(18px);
+    inline-size: to-rem(24px);
+  }
+
+  .#{$prefix}--flag--32 {
+    block-size: to-rem(24px);
+    inline-size: to-rem(32px);
+  }
+
+  // The stand-in for a region with no flag: its code, in the same box.
+  .#{$prefix}--flag--badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $layer-accent;
+    color: $text-secondary;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .#{$prefix}--flag--badge.#{$prefix}--flag--16 {
+    font-size: to-rem(7px);
+  }
+
+  .#{$prefix}--flag--badge.#{$prefix}--flag--20 {
+    font-size: to-rem(9px);
+  }
+
+  .#{$prefix}--flag--badge.#{$prefix}--flag--24 {
+    font-size: to-rem(11px);
+  }
+
+  .#{$prefix}--flag--badge.#{$prefix}--flag--32 {
+    font-size: to-rem(14px);
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--flag {
+      outline-color: CanvasText;
+    }
+
+    .#{$prefix}--flag--badge {
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}
+
+@include exports("flag") {
+  @include flag;
+}
