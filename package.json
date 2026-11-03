@@ -17,6 +17,14 @@
       "svelte": "./src/syntax/index.js",
       "import": "./src/syntax/index.js"
     },
+    "./flags": {
+      "types": "./src/flags/index.d.ts",
+      "import": "./src/flags/index.js"
+    },
+    "./flags/all": {
+      "types": "./src/flags/all.d.ts",
+      "import": "./src/flags/all.js"
+    },
     "./tokens": {
       "types": "./src/tokens/index.d.ts",
       "import": "./src/tokens/index.js"
@@ -68,6 +76,7 @@
     "build:css:watch": "bun scripts/build-css --watch",
     "build:css:themes": "bun scripts/build-css --themes",
     "build:syntax-tokens": "bun scripts/build-syntax-tokens.ts",
+    "build:flags": "bun scripts/build-flags.ts",
     "build:tokens": "bun scripts/build-tokens.ts",
     "check:css": "crassus diff --entry all",
     "check:css:size": "bun scripts/check-css-size.ts",

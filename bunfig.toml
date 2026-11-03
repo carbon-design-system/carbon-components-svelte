@@ -1,13 +1,17 @@
 # Options for `bun fmt`.
 
 [fmt]
-# Sass, Markdown and YAML stay hand-formatted.
+# Sass, Markdown and YAML stay hand-formatted. The flags are generated.
 ignorePatterns = [
   "**/*.scss",
   "**/*.md",
   "**/*.yml",
   "**/*.yaml",
   "docs/src/pages/index.svelte",
+  "src/flags/index.js",
+  "src/flags/all.js",
+  "src/flags/all.d.ts",
+  "src/flags/index.d.ts",
 ]
 
 [fmt.sortImports]
