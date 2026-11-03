@@ -137,6 +137,7 @@ export { default as InterstitialScreenHeader } from "./InterstitialScreen/Inters
 export { default as InterstitialScreenView } from "./InterstitialScreen/InterstitialScreenView.svelte";
 export { default as Kbd } from "./Kbd/Kbd.svelte";
 export { setKbdTranslations } from "./Kbd/kbd-translations.js";
+export { default as LanguagePicker } from "./LanguagePicker/LanguagePicker.svelte";
 export { default as Layer } from "./Layer/Layer.svelte";
 export { default as LayoutDirection } from "./LayoutDirection/LayoutDirection.svelte";
 export { default as LazyMount } from "./LazyMount/LazyMount.svelte";

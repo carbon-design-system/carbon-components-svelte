@@ -14,6 +14,7 @@ import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
 import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
+import LanguagePicker from "carbon-components-svelte/LanguagePicker/LanguagePicker.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
 import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
@@ -99,6 +100,19 @@ export const forms: AriaEntry[] = [
           values: ["FR", "DE"],
           labelText: "Country",
           helperText: "Where you live",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "LanguagePicker",
+    render: (attrs) =>
+      render(LanguagePicker, {
+        props: {
+          values: ["fr", "de"],
+          labelText: "Language",
+          helperText: "For messages",
           ...attrs,
         },
       }),

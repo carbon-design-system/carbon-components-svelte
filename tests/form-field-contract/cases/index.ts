@@ -5,6 +5,7 @@ import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
 import CountryPicker from "carbon-components-svelte/CountryPicker/CountryPicker.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import LanguagePicker from "carbon-components-svelte/LanguagePicker/LanguagePicker.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
@@ -111,6 +112,13 @@ export const cases: FieldCase[] = [
     name: "CountryPicker",
     component: CountryPicker,
     props: { values: ["FR", "DE"] },
+    control: () => screen.getByRole("combobox"),
+    state: {},
+  },
+  {
+    name: "LanguagePicker",
+    component: LanguagePicker,
+    props: { values: ["fr", "de"] },
     control: () => screen.getByRole("combobox"),
     state: {},
   },
