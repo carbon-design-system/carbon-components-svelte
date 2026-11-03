@@ -1,7 +1,7 @@
 <script>
   /**
    * @event {number} change
-   * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
+   * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss - Cancelable. Dispatched when a tab's dismiss button is pressed, Delete is pressed on it, or it is middle-clicked. Tabs never remove a tab: remove it in your data. Call `preventDefault()` to keep it, for example while asking whether to discard a modified tab.
    * @event {{ id: string; label: string; oldIndex: number; newIndex: number; source: "pointer" | "keyboard" }} reorder - Cancelable. Dispatched when a tab is dropped, or moved with the keyboard, in a new place. Tabs never reorder themselves: move the tab in your data. Call `preventDefault()` to refuse the move.
    */
 
@@ -61,6 +61,12 @@
   export let dismissText = function dismissText(label) {
     return label ? `Dismiss ${label}` : "Dismiss tab";
   };
+
+  /**
+   * Specify the text added to the accessible name of a `modified` tab.
+   * Read after the label, as "Report.ts Modified".
+   */
+  export let modifiedText = "Modified";
 
   /**
    * Set to `true` to reorder tabs by dragging them, or with
@@ -175,6 +181,17 @@
    * @type {import("svelte/store").Writable<string | undefined>}
    */
   const useReorderHint = writable(undefined);
+  /**
+   * @type {import("svelte/store").Writable<string>}
+   */
+  const useModifiedText = writable(modifiedText);
+  // Ids of the tabs marked `modified`. A store of its own, not a field of
+  // `tabs`: the overflow menu is all that reads it, and `tabs` is a context
+  // type that children rely on.
+  /**
+   * @type {import("svelte/store").Writable<ReadonlySet<string>>}
+   */
+  const modifiedIds = writable(new Set());
   /** @type {import("svelte/store").Readable<Record<string, { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>} */
   const tabsById = derived(tabs, (_) => keyBy(_));
   /**
@@ -378,6 +395,16 @@
    * }) => void}
    */
   const add = registration.add;
+  /** @type {(id: string, modified: boolean) => void} */
+  function setModified(id, modified) {
+    modifiedIds.update((ids) => {
+      if (ids.has(id) === modified) return ids;
+      const next = new Set(ids);
+      if (modified) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
   /** @type {(id: string) => void} */
   const remove = registration.remove;
   /** @type {(data: { id: string }) => void} */
@@ -440,6 +467,7 @@
   /**
    * Dispatch `dismiss`. When the handler removes the focused tab, move focus
    * to the tab that took its place (or the new last tab) instead of `<body>`.
+   * A handler that calls `preventDefault()` keeps the tab, so focus stays.
    * @type {(id: string) => Promise<void>}
    */
   async function dismiss(id) {
@@ -448,7 +476,7 @@
 
     const doc = refTabList?.ownerDocument;
     const hadFocus = Boolean(doc && refTabList.contains(doc.activeElement));
-    dispatch("dismiss", tab);
+    if (!dispatch("dismiss", tab, { cancelable: true })) return;
     if (!hadFocus) return;
 
     // Let the handler's removal render, then keep focus in the list.
@@ -603,6 +631,8 @@
     useDismissText,
     useContainer,
     reorderHint: useReorderHint,
+    useModifiedText,
+    setModified,
     navigation: useNavigation,
     secondaryLabelSupported: useContainer,
     hasSecondaryLabel,
@@ -749,6 +779,7 @@
   $: useDismissText.set(dismissText);
   $: useContainer.set(type === "container");
   $: useNavigation.set(navigation);
+  $: useModifiedText.set(modifiedText);
   $: useReorderHint.set(
     reorderable && !navigation && reorderHintText ? reorderHintId : undefined,
   );
@@ -855,6 +886,7 @@
         {#each hiddenTabs as tab (tab.id)}
           <MenuItem
             labelText={tab.label || tab.id}
+            shortcutText={$modifiedIds.has(tab.id) ? modifiedText : ""}
             disabled={tab.disabled}
             on:click={() => selectTab(tab.index)}
           />

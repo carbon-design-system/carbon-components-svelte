@@ -13,7 +13,7 @@ const events = (page: Page) =>
     .textContent()
     .then((text) => JSON.parse(text ?? "[]"));
 const tab = (page: Page, n: number) =>
-  page.getByRole("tab", { name: `File ${n}.ts`, exact: true });
+  page.getByRole("tab", { name: new RegExp(`^File ${n}\\.ts( Modified)?$`) });
 
 /** The tabs, by number, that a drag has stepped aside. */
 const shifted = (page: Page) =>
@@ -408,16 +408,16 @@ test.describe("Document tabs: more tabs menu", () => {
   test("shows only once the list overflows", async ({ page }) => {
     await page.goto("/document-tabs.html?count=3&width=900");
     await expect(moreTabs(page)).toHaveCount(0);
-    await page.goto("/document-tabs.html?count=14&width=600");
+    await page.goto("/document-tabs.html?count=14&width=600&modified=0");
     await expect(moreTabs(page)).toBeVisible();
-    await page.goto("/document-tabs.html?count=14&width=600&menu=0");
+    await page.goto("/document-tabs.html?count=14&width=600&modified=0&menu=0");
     await expect(moreTabs(page)).toHaveCount(0);
   });
 
   test("lists the tabs that are out of view, and follows the scroll", async ({
     page,
   }) => {
-    await page.goto("/document-tabs.html?count=14&width=600");
+    await page.goto("/document-tabs.html?count=14&width=600&modified=0");
     await expect(moreTabs(page)).toBeVisible();
 
     await moreTabs(page).click();
@@ -438,7 +438,7 @@ test.describe("Document tabs: more tabs menu", () => {
   test("choosing a hidden tab selects it, shows it and focuses it", async ({
     page,
   }) => {
-    await page.goto("/document-tabs.html?count=14&width=600");
+    await page.goto("/document-tabs.html?count=14&width=600&modified=0");
     await moreTabs(page).click();
     await page.getByRole("menuitem", { name: "File 12.ts" }).click();
 
@@ -454,7 +454,7 @@ test.describe("Document tabs: more tabs menu", () => {
   test("works from the keyboard alone", async ({ page, browserName }) => {
     // Safari does not Tab to buttons unless a system setting is on.
     test.skip(browserName === "webkit", "WebKit does not Tab to buttons");
-    await page.goto("/document-tabs.html?count=14&width=600");
+    await page.goto("/document-tabs.html?count=14&width=600&modified=0");
     // Until the tabs register, every one is a stop. Wait for the roving one,
     // and for the button the overflow adds after the list.
     await expect(tab(page, 2)).toHaveAttribute("tabindex", "-1");
@@ -477,7 +477,9 @@ test.describe("Document tabs: more tabs menu", () => {
   });
 
   test("sits at the inline end, which is the left in RTL", async ({ page }) => {
-    await page.goto("/document-tabs.html?count=14&width=600&dir=rtl");
+    await page.goto(
+      "/document-tabs.html?count=14&width=600&modified=0&dir=rtl",
+    );
     const button = await moreTabs(page).boundingBox();
     const first = await box(page, 1);
     expect(button?.x ?? Number.POSITIVE_INFINITY).toBeLessThan(first.x);
@@ -494,7 +496,9 @@ test.describe("Document tabs: more tabs menu", () => {
     "&type=container&size=xl",
   ]) {
     test(`is as tall as the tabs (${query || "line"})`, async ({ page }) => {
-      await page.goto(`/document-tabs.html?count=14&width=600${query}`);
+      await page.goto(
+        `/document-tabs.html?count=14&width=600&modified=0${query}`,
+      );
       const button = await moreTabs(page).boundingBox();
       const list = await page.getByRole("tablist").boundingBox();
       expect(button?.height).toBeCloseTo(list?.height ?? 0, 0);
@@ -502,18 +506,40 @@ test.describe("Document tabs: more tabs menu", () => {
   }
 
   test("stays quick and correct with 50 tabs", async ({ page }) => {
-    await page.goto("/document-tabs.html?count=50&width=600");
+    await page.goto("/document-tabs.html?count=50&width=600&modified=0");
     await moreTabs(page).click();
     await expect.poll(() => menuLabels(page)).toEqual(await outOfView(page));
     expect((await menuLabels(page)).length).toBeGreaterThan(40);
     await page.keyboard.press("Escape");
   });
 
+  test("a scrolling menu of 50 tabs has no axe violations but one", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/document-tabs.html?count=50&width=600&modified=0&dismissible=0",
+    );
+    await moreTabs(page).click();
+    await expect(page.getByRole("menu", { name: "More tabs" })).toBeVisible();
+    // Any `Menu` taller than its `maxHeight` fails `scrollable-region-focusable`:
+    // axe wants the scroll box to be tabbable, and a menu's items take focus by
+    // arrow key. It is a `Menu` matter, not this one's, so it is the one rule
+    // left out.
+    const results = await new AxeBuilder({ page })
+      .include("#app")
+      .include("[data-floating-portal]")
+      .disableRules(["scrollable-region-focusable"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+
   for (const theme of ["white", "g100"] as const) {
     test(`has no axe violations with the menu open on ${theme}`, async ({
       page,
     }) => {
-      await page.goto("/document-tabs.html?count=14&width=600&dismissible=0");
+      await page.goto(
+        "/document-tabs.html?count=14&width=600&modified=0&dismissible=0",
+      );
       await setTheme(page, theme);
       await moreTabs(page).click();
       await expect(page.getByRole("menu", { name: "More tabs" })).toBeVisible();
@@ -524,6 +550,235 @@ test.describe("Document tabs: more tabs menu", () => {
         .analyze();
       expect(results.violations).toEqual([]);
     });
+  }
+});
+
+const modifiedTab = (page: Page, n: number) =>
+  page.getByRole("tab", { name: `File ${n}.ts Modified`, exact: true });
+
+/** The dot and the dismiss button of the tab `n`: their opacities. */
+const swap = (page: Page, n: number) =>
+  page.locator(`#doc-${n}`).evaluate((link) => {
+    const item = link.closest("li");
+    const opacity = (selector: string) => {
+      const element = item?.querySelector(selector);
+      return element ? Number(getComputedStyle(element).opacity) : null;
+    };
+    return {
+      dot: opacity(".bx--tabs__nav-item--modified-dot"),
+      close: opacity(".bx--tabs__nav-item--close-icon"),
+    };
+  });
+
+test.describe("Document tabs: modified", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0");
+  });
+
+  test("a modified tab's name says so, and no other does", async ({ page }) => {
+    await expect(modifiedTab(page, 2)).toBeVisible();
+    await expect(modifiedTab(page, 4)).toBeVisible();
+    await expect(tab(page, 3)).toHaveAccessibleName("File 3.ts");
+    await expect(page.locator(".bx--tabs__nav-item--modified-dot")).toHaveCount(
+      2,
+    );
+  });
+
+  test("the dot stands where the dismiss button is until hover", async ({
+    page,
+  }) => {
+    expect(await swap(page, 2)).toEqual({ dot: 1, close: 0 });
+    expect((await swap(page, 3)).close).toBe(1);
+
+    const dot = await page.locator("#doc-2").evaluate((link) => {
+      const item = link.closest("li");
+      const rect = (selector: string) =>
+        item?.querySelector(selector)?.getBoundingClientRect() as DOMRect;
+      const a = rect(".bx--tabs__nav-item--modified-dot");
+      const b = rect(".bx--tabs__nav-item--close-icon");
+      return {
+        dx: a.x + a.width / 2 - (b.x + b.width / 2),
+        dy: a.y + a.height / 2 - (b.y + b.height / 2),
+        size: a.width,
+      };
+    });
+    expect(Math.abs(dot.dx)).toBeLessThan(1);
+    expect(Math.abs(dot.dy)).toBeLessThan(1);
+    expect(dot.size).toBe(8);
+
+    await tab(page, 2).hover();
+    await expect.poll(() => swap(page, 2)).toEqual({ dot: 0, close: 1 });
+    await page.mouse.move(0, 400);
+    await expect.poll(() => swap(page, 2)).toEqual({ dot: 1, close: 0 });
+  });
+
+  test("focus swaps them too", async ({ page }) => {
+    await tab(page, 1).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(modifiedTab(page, 2)).toBeFocused();
+    expect(await swap(page, 2)).toEqual({ dot: 0, close: 1 });
+    await page.keyboard.press("ArrowRight");
+    expect(await swap(page, 2)).toEqual({ dot: 1, close: 0 });
+  });
+
+  test("with no hover to swap on, the dot stays and a tap on it dismisses", async ({
+    browser,
+  }) => {
+    // A touch screen has no hover: `any-hover` is `none`.
+    const context = await browser.newContext({ hasTouch: true });
+    const page = await context.newPage();
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0&ask");
+    await modifiedTab(page, 2).hover();
+    expect(await swap(page, 2)).toEqual({ dot: 1, close: 0 });
+
+    // The button is still there, under the dot.
+    const rect = await page
+      .getByRole("button", { name: "Dismiss File 2.ts" })
+      .boundingBox();
+    await page.touchscreen.tap(
+      (rect?.x ?? 0) + (rect?.width ?? 0) / 2,
+      (rect?.y ?? 0) + (rect?.height ?? 0) / 2,
+    );
+    expect(await events(page)).toEqual([{ type: "dismiss", id: "doc-2" }]);
+    await context.close();
+  });
+
+  test("a canceled dismiss keeps a modified tab until the app says so", async ({
+    page,
+  }) => {
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0&ask");
+    await modifiedTab(page, 2).hover();
+    await page.getByRole("button", { name: "Dismiss File 2.ts" }).click();
+
+    expect(await events(page)).toEqual([{ type: "dismiss", id: "doc-2" }]);
+    expect(await order(page)).toContain("doc-2");
+
+    await page.getByTestId("discard").click();
+    await expect.poll(() => order(page)).not.toContain("doc-2");
+  });
+
+  test("an unmodified tab goes at once", async ({ page }) => {
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0&ask");
+    await page.getByRole("button", { name: "Dismiss File 3.ts" }).click();
+    await expect.poll(() => order(page)).not.toContain("doc-3");
+  });
+
+  test("Delete on a modified tab is cancelable too", async ({ page }) => {
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0&ask");
+    await modifiedTab(page, 4).focus();
+    await page.keyboard.press("Delete");
+    expect(await events(page)).toEqual([{ type: "dismiss", id: "doc-4" }]);
+    // The tab stays, so focus stays on it.
+    await expect(modifiedTab(page, 4)).toBeFocused();
+  });
+
+  test("a middle click dismisses, and is cancelable like the rest", async ({
+    page,
+  }) => {
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0&ask");
+    const rect = await box(page, 4);
+    await page.mouse.click(rect.x + 20, rect.y + 20, { button: "middle" });
+    expect(await events(page)).toEqual([{ type: "dismiss", id: "doc-4" }]);
+    expect(await order(page)).toContain("doc-4");
+
+    const other = await box(page, 5);
+    await page.mouse.click(other.x + 20, other.y + 20, { button: "middle" });
+    await expect.poll(() => order(page)).not.toContain("doc-5");
+  });
+
+  test("a click on the dot's place, tab or not, still dismisses", async ({
+    page,
+  }) => {
+    const button = page.getByRole("button", { name: "Dismiss File 2.ts" });
+    const rect = await button.boundingBox();
+    await page.mouse.click(
+      (rect?.x ?? 0) + (rect?.width ?? 0) / 2,
+      (rect?.y ?? 0) + (rect?.height ?? 0) / 2,
+    );
+    expect((await events(page))[0]).toMatchObject({ id: "doc-2" });
+  });
+
+  test("a tab with no dismiss button draws its dot at the inline end", async ({
+    page,
+  }) => {
+    await page.goto(
+      "/document-tabs.html?count=6&width=900&menu=0&dismissible=0",
+    );
+    const geometry = await page.locator("#doc-2").evaluate((link) => {
+      const item = link.closest("li") as HTMLElement;
+      const dot = item
+        .querySelector(".bx--tabs__nav-item--modified-dot")
+        ?.getBoundingClientRect() as DOMRect;
+      const label = item
+        .querySelector(".bx--tabs__nav-item-label")
+        ?.getBoundingClientRect() as DOMRect;
+      const edge = item.getBoundingClientRect();
+      return {
+        dotStart: dot.left,
+        labelEnd: label.right,
+        itemEnd: edge.right,
+        dotEnd: dot.right,
+      };
+    });
+    expect(geometry.dotStart).toBeGreaterThanOrEqual(geometry.labelEnd);
+    expect(geometry.dotEnd).toBeLessThan(geometry.itemEnd);
+  });
+
+  test("RTL puts the dot over the dismiss button too", async ({ page }) => {
+    await page.goto("/document-tabs.html?count=6&width=900&menu=0&dir=rtl");
+    const dx = await page.locator("#doc-2").evaluate((link) => {
+      const item = link.closest("li");
+      const rect = (selector: string) =>
+        item?.querySelector(selector)?.getBoundingClientRect() as DOMRect;
+      const a = rect(".bx--tabs__nav-item--modified-dot");
+      const b = rect(".bx--tabs__nav-item--close-icon");
+      return a.x + a.width / 2 - (b.x + b.width / 2);
+    });
+    expect(Math.abs(dx)).toBeLessThan(1);
+  });
+
+  test("forced colors keep the dot, in a system color", async ({ page }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    const colors = await page.locator("#doc-2").evaluate((link) => {
+      const dot = link
+        .closest("li")
+        ?.querySelector(".bx--tabs__nav-item--modified-dot") as Element;
+      const style = getComputedStyle(dot);
+      return {
+        dot: style.backgroundColor,
+        canvas: getComputedStyle(document.body).backgroundColor,
+        width: style.width,
+      };
+    });
+    expect(colors.dot).not.toBe(colors.canvas);
+    expect(colors.dot).not.toBe("rgba(0, 0, 0, 0)");
+    expect(colors.width).toBe("8px");
+  });
+
+  test("contained tabs show the dot too", async ({ page }) => {
+    await page.goto(
+      "/document-tabs.html?count=6&width=900&menu=0&type=container",
+    );
+    expect(await swap(page, 2)).toEqual({ dot: 1, close: 0 });
+  });
+
+  for (const theme of ["white", "g100"] as const) {
+    for (const dismissible of [false, true]) {
+      test(`has no axe violations with modified tabs on ${theme}${dismissible ? "" : ", not dismissible"}`, async ({
+        page,
+      }) => {
+        await page.goto(
+          `/document-tabs.html?count=6&width=900&menu=0&dismissible=${dismissible ? 1 : 0}`,
+        );
+        await setTheme(page, theme);
+        // See the dismissible axe row below for the rule skipped here.
+        const results = await new AxeBuilder({ page })
+          .include("#app")
+          .disableRules(dismissible ? ["aria-required-children"] : [])
+          .analyze();
+        expect(results.violations).toEqual([]);
+      });
+    }
   }
 });
 

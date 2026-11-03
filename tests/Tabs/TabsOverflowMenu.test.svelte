@@ -10,7 +10,7 @@
     { id: "a", label: "Alpha" },
     { id: "b", label: "Bravo" },
     { id: "c", label: "Charlie" },
-    { id: "d", label: "Delta" },
+    { id: "d", label: "Delta", modified: true },
     { id: "e", label: "Echo", disabled: true },
   ];
 </script>
@@ -21,7 +21,12 @@
   {...overflowMenuText === undefined ? {} : { overflowMenuText }}
 >
   {#each tabs as tab (tab.id)}
-    <Tab id={tab.id} label={tab.label} disabled={tab.disabled} />
+    <Tab
+      id={tab.id}
+      label={tab.label}
+      disabled={tab.disabled}
+      modified={tab.modified}
+    />
   {/each}
   <svelte:fragment slot="content">
     {#each tabs as tab (tab.id)}

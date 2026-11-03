@@ -31,7 +31,9 @@ class FakeIntersectionObserver {
   report(ratios: Record<string, number>) {
     this.callback(
       this.observed.flatMap((target) => {
-        const label = target.querySelector("[role=tab]")?.textContent?.trim();
+        const label = target
+          .querySelector(".bx--tabs__nav-item-label")
+          ?.textContent?.trim();
         return label && label in ratios
           ? [{ target, intersectionRatio: ratios[label] }]
           : [];
@@ -112,7 +114,7 @@ describe("Tabs overflowMenu", () => {
       within(menu)
         .getAllByRole("menuitem")
         .map((item) => item.textContent?.trim()),
-    ).toEqual(["Alpha", "Bravo", "Delta", "Echo"]);
+    ).toEqual(["Alpha", "Bravo", "Delta Modified", "Echo"]);
   });
 
   it("drops a tab from the list once it scrolls whole into view", async () => {
@@ -146,7 +148,7 @@ describe("Tabs overflowMenu", () => {
     const scrolled = vi.fn();
     nav.getBoundingClientRect = () =>
       ({ left: 0, right: 100, width: 100 }) as DOMRect;
-    const delta = screen.getByRole("tab", { name: "Delta" });
+    const delta = screen.getByRole("tab", { name: "Delta Modified" });
     delta.getBoundingClientRect = () =>
       ({ left: 300, right: 400, width: 100 }) as DOMRect;
     Object.defineProperty(nav, "scrollLeft", {
@@ -156,13 +158,26 @@ describe("Tabs overflowMenu", () => {
     });
 
     await user.click(screen.getByRole("button", { name: "More tabs" }));
-    await user.click(await screen.findByRole("menuitem", { name: "Delta" }));
+    await user.click(await screen.findByRole("menuitem", { name: /Delta/ }));
     await tick();
     await tick();
 
     expect(screen.getByTestId("selected")).toHaveTextContent("d");
-    expect(screen.getByRole("tab", { name: "Delta" })).toHaveFocus();
+    expect(screen.getByRole("tab", { name: "Delta Modified" })).toHaveFocus();
     expect(scrolled).toHaveBeenCalled();
+  });
+
+  it("says in the menu which hidden tab is modified", async () => {
+    await renderOverflowing();
+    FakeIntersectionObserver.current?.report({ Charlie: 0, Delta: 0 });
+    await tick();
+
+    await user.click(screen.getByRole("button", { name: "More tabs" }));
+
+    const charlie = await screen.findByRole("menuitem", { name: /Charlie/ });
+    const delta = screen.getByRole("menuitem", { name: /Delta/ });
+    expect(charlie).not.toHaveTextContent("Modified");
+    expect(delta).toHaveTextContent("Modified");
   });
 
   it("disables a disabled tab's item", async () => {
