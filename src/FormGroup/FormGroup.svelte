@@ -14,9 +14,8 @@
   export let invalid = false;
 
   /**
-   * Set to `true` to disable the fieldset and nested native form controls.
-   * Div-based controls such as Dropdown may still need an explicit
-   * `disabled` prop for full visual disable.
+   * Set to `true` to disable the fieldset and every field inside it,
+   * including their labels, helper text and disabled styles.
    */
   export let disabled = false;
 
