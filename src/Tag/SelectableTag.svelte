@@ -47,10 +47,15 @@
   import { createEventDispatcher, onMount } from "svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { observeTruncation } from "./tag-truncation.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -68,7 +73,7 @@
     value,
     type,
     size: resolvedSize,
-    disabled,
+    disabled: effectiveDisabled,
     filter: false,
   }));
   const {
@@ -79,7 +84,12 @@
 
   $: resolvedSize =
     normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
-  $: group.update({ value, type, size: resolvedSize, disabled });
+  $: group.update({
+    value,
+    type,
+    size: resolvedSize,
+    disabled: effectiveDisabled,
+  });
   $: hasIcon = Boolean(icon || $$slots.icon);
 
   // A truncated label shows its full text in a tooltip on the tag. A
@@ -99,26 +109,27 @@
   });
 
   function toggle() {
-    if (disabled) return;
+    if (effectiveDisabled) return;
     selected = !selected;
     dispatch("change", { selected });
   }
 </script>
 
 <button
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={buttonRef}
   type="button"
   aria-pressed={selected ? "true" : "false"}
   data-overflow={$groupOverflow ? "true" : undefined}
   {id}
-  {disabled}
-  aria-disabled={disabled ? "true" : "false"}
-  tabindex={disabled ? -1 : $rovingTabindex}
-  title={disabled && truncated ? truncationLabel : undefined}
+  disabled={effectiveDisabled}
+  aria-disabled={effectiveDisabled ? "true" : "false"}
+  tabindex={effectiveDisabled ? -1 : $rovingTabindex}
+  title={effectiveDisabled && truncated ? truncationLabel : undefined}
   class:bx--tag={true}
   class:bx--tag--selectable={true}
   class:bx--tag--selectable-selected={selected}
-  class:bx--tag--disabled={disabled}
+  class:bx--tag--disabled={effectiveDisabled}
   class:bx--tag--with-icon={hasIcon}
   class:bx--tag--xs={resolvedSize === "xs"}
   class:bx--tag--sm={resolvedSize === "sm"}
@@ -154,5 +165,5 @@
   passEscapeWhenFocused
   anchor={buttonRef}
   text={truncationLabel}
-  enabled={truncated && !disabled}
+  enabled={truncated && !effectiveDisabled}
 />
