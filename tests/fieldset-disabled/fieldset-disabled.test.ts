@@ -19,6 +19,7 @@ import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
+import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { ComponentType } from "svelte";
 import { tick } from "svelte";
 import DatePickerField from "../form-field-contract/fixtures/DatePickerField.test.svelte";
@@ -213,6 +214,12 @@ const styleCases: {
     component: TimePicker,
     fieldProps: field,
     marker: ".bx--label--disabled",
+  },
+  {
+    name: "Toggle",
+    component: Toggle,
+    fieldProps: field,
+    marker: ".bx--form__helper-text--disabled",
   },
 ];
 
