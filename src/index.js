@@ -100,6 +100,8 @@ export { default as Divider } from "./Divider/Divider.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";
+export { default as EmojiPicker } from "./EmojiPicker/EmojiPicker.svelte";
+export { applySkinTone, toEmojiItems } from "./EmojiPicker/emoji-items.js";
 export { default as EmptyState } from "./EmptyState/EmptyState.svelte";
 export { default as FileDownloadItem } from "./FileUploader/FileDownloadItem.svelte";
 export { default as Filename } from "./FileUploader/Filename.svelte";

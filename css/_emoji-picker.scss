@@ -1,0 +1,161 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// EmojiPicker: a field or an icon button that opens a popover of emoji,
+/// built on the list box field and `PickerGrid`, with a skin tone selector
+/// under the grid.
+/// @access private
+/// @group components
+@mixin emoji-picker {
+  // Emoji draw from a color font, which the first families name. A glyph's
+  // own colors stay in forced colors, so the grid is not recolored.
+  $emoji-font:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
+    "Twemoji Mozilla", sans-serif;
+
+  // The popover places itself against its parent, so the trigger is the
+  // anchor, not the label and helper text around it.
+  .#{$prefix}--emoji-picker__field {
+    position: relative;
+  }
+
+  .#{$prefix}--emoji-picker--button {
+    display: inline-block;
+  }
+
+  .#{$prefix}--emoji-picker__chosen {
+    display: inline-flex;
+    flex: none;
+    margin-inline-end: $carbon--spacing-03;
+    font-family: $emoji-font;
+    line-height: 1;
+  }
+
+  // The popover is as wide as the grid asks: eight cells of 36 pixels and
+  // a scroll bar.
+  .#{$prefix}--emoji-picker__panel {
+    inline-size: to-rem(320px);
+  }
+
+  .#{$prefix}--emoji-picker--inline {
+    inline-size: to-rem(320px);
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--emoji-picker__body {
+    display: flex;
+    min-inline-size: 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--emoji-picker__glyph {
+    font-family: $emoji-font;
+    font-size: to-rem(22px);
+    line-height: 1;
+  }
+
+  .#{$prefix}--emoji-picker__preview-glyph {
+    flex: none;
+    font-family: $emoji-font;
+    font-size: to-rem(28px);
+    line-height: 1;
+  }
+
+  .#{$prefix}--emoji-picker__preview-name {
+    @include type-style("heading-compact-01");
+
+    overflow: hidden;
+    flex: none;
+    max-inline-size: 50%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--emoji-picker__preview-code {
+    @include type-style("code-01");
+
+    overflow: hidden;
+    min-inline-size: 0;
+    color: $text-secondary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--emoji-picker__tones {
+    display: flex;
+    flex: none;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: $carbon--spacing-04 $carbon--spacing-03;
+    border-block-start: 1px solid $border-subtle;
+    block-size: to-rem(40px);
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--emoji-picker__tones-label {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--emoji-picker__tone-group {
+    display: flex;
+  }
+
+  .#{$prefix}--emoji-picker__tone {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    block-size: to-rem(32px);
+    cursor: pointer;
+    font-family: $emoji-font;
+    font-size: to-rem(18px);
+    inline-size: to-rem(32px);
+    line-height: 1;
+  }
+
+  // A bar under the chosen tone says so, as well as the fill.
+  .#{$prefix}--emoji-picker__tone--selected {
+    background-color: $layer-selected;
+    box-shadow: inset 0 -2px 0 $border-interactive;
+  }
+
+  .#{$prefix}--emoji-picker__tone:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--emoji-picker__tone:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--emoji-picker__tone--selected:hover {
+      background-color: $layer-selected-hover;
+    }
+  }
+
+  // Forced colors drop fills and shadows. The chosen tone gets an underline
+  // that is a border, so it stays, and the radio is `aria-checked`.
+  @media (forced-colors: active) {
+    .#{$prefix}--emoji-picker__tone--selected {
+      border-block-end: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .#{$prefix}--emoji-picker__tone:focus-visible {
+      outline: 2px solid CanvasText;
+      outline-offset: -2px;
+    }
+  }
+}
+
+@include exports("emoji-picker") {
+  @include emoji-picker;
+}

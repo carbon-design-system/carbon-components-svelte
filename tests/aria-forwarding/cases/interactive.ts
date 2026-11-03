@@ -13,6 +13,7 @@ import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
+import EmojiPicker from "carbon-components-svelte/EmojiPicker/EmojiPicker.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
@@ -274,6 +275,15 @@ export const interactive: AriaEntry[] = [
     name: "InterstitialScreenHeader",
     exempt:
       "header container; its close button is a fixed control named by iconDescription",
+  },
+  {
+    // The field is the combobox that opens the popover.
+    name: "EmojiPicker",
+    render: (attrs) =>
+      render(EmojiPicker, {
+        props: { labelText: "Emoji", items: [], ...attrs },
+      }),
+    target: () => screen.getByRole("combobox"),
   },
   {
     name: "Link",

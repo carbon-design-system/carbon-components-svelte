@@ -17,6 +17,10 @@
       "svelte": "./src/syntax/index.js",
       "import": "./src/syntax/index.js"
     },
+    "./emoji-data": {
+      "types": "./src/emoji-data/index.d.ts",
+      "import": "./src/emoji-data/index.js"
+    },
     "./tokens": {
       "types": "./src/tokens/index.d.ts",
       "import": "./src/tokens/index.js"
