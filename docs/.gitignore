@@ -2,6 +2,7 @@
 /dist
 /public/sitemap.xml
 /public/components/
+/public/guides/
 /public/llms.txt
 /public/llms-full.txt
 /.routify
