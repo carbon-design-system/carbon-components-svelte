@@ -8,6 +8,9 @@
    */
   export let tabindex = "0";
 
+  /** Specify the link text. The default slot replaces it. */
+  export let labelText = "Skip to main content";
+
   import { tabindexAttribute } from "../utils/tabindex.js";
 </script>
 
@@ -18,5 +21,5 @@
   {...$$restProps}
   on:click
 >
-  <slot>Skip to main content</slot>
+  <slot>{labelText}</slot>
 </a>
