@@ -208,6 +208,22 @@ describe("Dropdown", () => {
   });
 
   it.each(["disabled", "readonly"] as const)(
+    "closes the menu when %s turns on while open",
+    async (state) => {
+      const { rerender } = render(Dropdown, {
+        props: { items, selectedId: "0" },
+      });
+      const trigger = screen.getByRole("combobox");
+      await user.click(trigger);
+
+      await rerender({ [state]: true });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    },
+  );
+
+  it.each(["disabled", "readonly"] as const)(
     "drops the invalid and warning markers when %s",
     (state) => {
       const { container } = render(Dropdown, {
