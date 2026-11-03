@@ -68,6 +68,7 @@
     "build:css:themes": "bun scripts/build-css --themes",
     "build:syntax-tokens": "bun scripts/build-syntax-tokens.ts",
     "build:tokens": "bun scripts/build-tokens.ts",
+    "build:strings": "bun scripts/generate-strings.ts",
     "check:css": "crassus diff --entry all",
     "check:css:size": "bun scripts/check-css-size.ts",
     "check:css:overrides": "crassus dead",

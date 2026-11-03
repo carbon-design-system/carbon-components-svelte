@@ -1,0 +1,2341 @@
+{
+  "generatedBy": "scripts/generate-strings.ts (bun run build:strings)",
+  "text": [
+    {
+      "component": "AILabel",
+      "prop": "aiText",
+      "type": "string",
+      "default": "AI",
+      "defaultKind": "text"
+    },
+    {
+      "component": "BigNumber",
+      "prop": "labelText",
+      "type": "string",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "BigNumber",
+      "prop": "tooltipDescription",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "BigNumber",
+      "prop": "totalSeparatorText",
+      "type": "string",
+      "default": "of",
+      "defaultKind": "text"
+    },
+    {
+      "component": "BigNumber",
+      "prop": "trendDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Breadcrumb",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Breadcrumb",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Button",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Button",
+      "prop": "loadingDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Callout",
+      "prop": "statusIconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Carousel",
+      "prop": "counterText",
+      "type": "(current: number, total: number) => string",
+      "default": "(current, total) => `${current} of ${total}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Carousel",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Carousel",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Carousel",
+      "prop": "nextButtonLabelText",
+      "type": "string",
+      "default": "Next slide",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Carousel",
+      "prop": "prevButtonLabelText",
+      "type": "string",
+      "default": "Previous slide",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ChatLog",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ChatMessage",
+      "prop": "retryText",
+      "type": "string",
+      "default": "Retry",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ChatMessage",
+      "prop": "statusText",
+      "type": "(status: \"sending\" | \"sent\" | \"delivered\" | \"read\" | \"failed\") => string",
+      "default": "(status) => ({\n  sending: \"Sending\",\n  sent: \"Sent\",\n  delivered: \"Delivered\",\n  read: \"Read\",\n  failed: \"Not sent\",\n})[status]",
+      "defaultKind": "function"
+    },
+    {
+      "component": "ChatMessage",
+      "prop": "typingText",
+      "type": "string",
+      "default": "Typing",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Checkbox",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Checkbox",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Checkbox",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Checkbox",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Checkbox",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CheckboxGroup",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CheckboxGroup",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CheckboxGroup",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CheckboxGroup",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CheckboxGroup",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CodeSnippet",
+      "prop": "copyButtonDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "CodeSnippet",
+      "prop": "showLessText",
+      "type": "string",
+      "default": "Show less",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CodeSnippet",
+      "prop": "showMoreText",
+      "type": "string",
+      "default": "Show more",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CodeSnippet",
+      "prop": "wrapText",
+      "type": "boolean",
+      "default": "false",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "emptyText",
+      "type": "string | ((value: string) => string)",
+      "default": "No results",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "filterResultsText",
+      "type": "(count: number) => string",
+      "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "loadingText",
+      "type": "string",
+      "default": "Loading...",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select an item",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "selectionClearedText",
+      "type": "string",
+      "default": "Selection cleared",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboButton",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Additional actions",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboButton",
+      "prop": "labelText",
+      "type": "string",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ComboButton",
+      "prop": "loadingDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ConfirmModal",
+      "prop": "cancelText",
+      "type": "string",
+      "default": "Cancel",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ConfirmModal",
+      "prop": "confirmText",
+      "type": "string",
+      "default": "Confirm",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ConfirmModal",
+      "prop": "loadingDescription",
+      "type": "string",
+      "default": "Working",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ContainedList",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ContextMenu",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ContextMenuGroup",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ContextMenuOption",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ContextMenuOption",
+      "prop": "shortcutText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ContextMenuRadioGroup",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyButton",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Copy to clipboard",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyInput",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Copy to clipboard",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CopyText",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Copy to clipboard",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Countdown",
+      "prop": "expiredDescription",
+      "type": "string",
+      "default": "Time is up",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Countdown",
+      "prop": "warnDescription",
+      "type": "string",
+      "default": "One minute left",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DataTable",
+      "prop": "sortStatusText",
+      "type": "(header: DataTableHeader<Row> | undefined, direction: \"none\" | \"ascending\" | \"descending\") => string",
+      "default": "function sortStatusText(header, direction) {\n  if (direction === \"none\" || !header) return \"Not sorted\";\n  return `Sorted by ${header.value ?? header.key}, ${direction}`;\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "DateCalendar",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Choose a date",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DateCalendar",
+      "prop": "nextLabelText",
+      "type": "string",
+      "default": "Next month",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DateCalendar",
+      "prop": "previousLabelText",
+      "type": "string",
+      "default": "Previous month",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePicker",
+      "prop": "calendarLabelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "DatePicker",
+      "prop": "clearButtonLabelText",
+      "type": "string",
+      "default": "Clear date",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePicker",
+      "prop": "dayDescription",
+      "type": "undefined | ((date: Date) => string | undefined)",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "DatePicker",
+      "prop": "nextLabelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "DatePicker",
+      "prop": "previousLabelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "DatePickerInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePickerInput",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePickerInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePickerInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "DatePickerInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "clearSelectionText",
+      "type": "string",
+      "default": "To clear the selection, press Delete or Backspace",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "emptyText",
+      "type": "string",
+      "default": "No options",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "loadingText",
+      "type": "string",
+      "default": "Loading...",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select an item",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "selectionClearedText",
+      "type": "string",
+      "default": "Selection cleared",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Dropdown",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ExpandableTile",
+      "prop": "tileCollapsedIconText",
+      "type": "string",
+      "default": "Interact to expand Tile",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ExpandableTile",
+      "prop": "tileExpandedIconText",
+      "type": "string",
+      "default": "Interact to collapse Tile",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FileDownloadItem",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Download",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Filename",
+      "prop": "iconDescription",
+      "type": "string | undefined | ((ctx: FilenameIconDescriptionContext) => string | undefined)",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "FileUploader",
+      "prop": "iconDescription",
+      "type": "string | undefined | ((ctx: { file?: File; fileName: string; status: \"uploading\" | \"edit\" | \"complete\"; invalid: boolean }) => string | undefined)",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "FileUploader",
+      "prop": "labelDescription",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FileUploaderButton",
+      "prop": "fileCountText",
+      "type": "(count: number) => string",
+      "default": "(count) => `${count} files`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "FileUploaderButton",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "FileUploaderButton",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Add file",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FileUploaderDropContainer",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Add file",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FileUploaderItem",
+      "prop": "iconDescription",
+      "type": "string | undefined | ((ctx: { file?: File; fileName: string; status: \"uploading\" | \"edit\" | \"complete\"; invalid: boolean }) => string | undefined)",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "FileUploaderSkeleton",
+      "prop": "hideLabelDescription",
+      "type": "boolean",
+      "default": "false",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FormGroup",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FormGroup",
+      "prop": "messageText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "FullPageError",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "HeaderAction",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "HeaderSearch",
+      "prop": "closeButtonLabelText",
+      "type": "string",
+      "default": "Clear search input",
+      "defaultKind": "text"
+    },
+    {
+      "component": "HeaderSearch",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Search",
+      "defaultKind": "text"
+    },
+    {
+      "component": "HeaderSwitcher",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Switch account",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InlineEdit",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InlineEdit",
+      "prop": "labelText",
+      "type": "string",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "InlineEdit",
+      "prop": "readonlyToggletipText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "InlineLoading",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "InlineNotification",
+      "prop": "closeButtonDescription",
+      "type": "string",
+      "default": "Close notification",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InlineNotification",
+      "prop": "statusIconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "InputGroup",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InputGroup",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InputGroup",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InputGroup",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InterstitialScreenFooter",
+      "prop": "nextButtonText",
+      "type": "string",
+      "default": "Next",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InterstitialScreenFooter",
+      "prop": "previousButtonText",
+      "type": "string",
+      "default": "Back",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InterstitialScreenFooter",
+      "prop": "skipButtonText",
+      "type": "string",
+      "default": "Skip",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InterstitialScreenFooter",
+      "prop": "startButtonText",
+      "type": "string",
+      "default": "Get Started",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InterstitialScreenHeader",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Close",
+      "defaultKind": "text"
+    },
+    {
+      "component": "InterstitialScreenHeader",
+      "prop": "statusText",
+      "type": "(status: \"complete\" | \"invalid\") => string",
+      "default": "(status) => status",
+      "defaultKind": "function"
+    },
+    {
+      "component": "InterstitialScreenHeader",
+      "prop": "stepLabelText",
+      "type": "(step: number) => string",
+      "default": "(step) => `Step ${step}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "InterstitialScreenHeader",
+      "prop": "stepText",
+      "type": "(step: number, total: number) => string",
+      "default": "(step, total) => `Step ${step} of ${total}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "ListBox",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ListBox",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Menu",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "MenuButton",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "MenuButton",
+      "prop": "labelText",
+      "type": "string",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "MenuItem",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "MenuItem",
+      "prop": "shortcutText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MenuItemGroup",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MenuItemRadioGroup",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Meter",
+      "prop": "errorText",
+      "type": "string",
+      "default": "Error",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Meter",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Meter",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Meter",
+      "prop": "thresholdsText",
+      "type": "(thresholds: MeterThresholds, locale?: string) => string",
+      "default": "function thresholdsText(\n  { warning, error },\n  locale,\n) {\n  const format = getNumberFormatter(locale);\n  if (warning !== undefined && error !== undefined) {\n    return `Warning at ${format.format(warning)}, error at ${format.format(error)}`;\n  }\n  if (warning !== undefined) return `Warning at ${format.format(warning)}`;\n  if (error !== undefined) return `Error at ${format.format(error)}`;\n  return \"\";\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Meter",
+      "prop": "valueRangeText",
+      "type": "(value: number, max: number, locale?: string) => string",
+      "default": "function valueRangeText(value, max, locale) {\n  const format = getNumberFormatter(locale);\n  return `${format.format(value)} of ${format.format(max)}`;\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Meter",
+      "prop": "valueText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Meter",
+      "prop": "warningText",
+      "type": "string",
+      "default": "Warning",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Modal",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Close the modal",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Modal",
+      "prop": "primaryButtonLoadingDescription",
+      "type": "string",
+      "default": "Loading",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Modal",
+      "prop": "primaryButtonLoadingIconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Modal",
+      "prop": "primaryButtonText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Modal",
+      "prop": "secondaryButtonLoadingDescription",
+      "type": "string",
+      "default": "Loading",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Modal",
+      "prop": "secondaryButtonText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ModalFooter",
+      "prop": "primaryButtonLoadingDescription",
+      "type": "string",
+      "default": "Loading",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ModalFooter",
+      "prop": "primaryButtonLoadingIconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ModalFooter",
+      "prop": "primaryButtonText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ModalFooter",
+      "prop": "secondaryButtonLoadingDescription",
+      "type": "string",
+      "default": "Loading",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ModalFooter",
+      "prop": "secondaryButtonText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ModalHeader",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Close",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "clearSelectionText",
+      "type": "string",
+      "default": "To clear the selection, press Delete or Backspace",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "emptyText",
+      "type": "undefined | string | ((value: string) => string)",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "filterResultsText",
+      "type": "(count: number) => string",
+      "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "loadingText",
+      "type": "string",
+      "default": "Loading...",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "maxSelectedText",
+      "type": "string",
+      "default": "Maximum items selected",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "removeTagText",
+      "type": "string",
+      "default": "Remove",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "requiredInvalidText",
+      "type": "string",
+      "default": "Select at least one item",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "selectionClearedText",
+      "type": "string",
+      "default": "All items cleared",
+      "defaultKind": "text"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "selectionCountText",
+      "type": "(count: number) => string",
+      "default": "(count) => `${count} selected`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NotificationButton",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Close icon",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NotificationIcon",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "NotificationQueue",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Notifications",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "NumberInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "OutboundLink",
+      "prop": "assistiveText",
+      "type": "string",
+      "default": "(opens in a new tab)",
+      "defaultKind": "text"
+    },
+    {
+      "component": "OverflowMenu",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Options",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Pagination",
+      "prop": "backwardText",
+      "type": "string",
+      "default": "Previous page",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Pagination",
+      "prop": "forwardText",
+      "type": "string",
+      "default": "Next page",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Pagination",
+      "prop": "itemRangeText",
+      "type": "(min: number, max: number, total: number) => string",
+      "default": "function itemRangeText(min, max, total) {\n  if (total <= 0) return \"0 items\";\n  return `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? \"\" : \"s\"}`;\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Pagination",
+      "prop": "itemsPerPageText",
+      "type": "string",
+      "default": "Items per page:",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Pagination",
+      "prop": "itemText",
+      "type": "(min: number, max: number) => string",
+      "default": "(min, max) => `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? \"\" : \"s\"}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Pagination",
+      "prop": "pageRangeText",
+      "type": "(current: number, total: number) => string",
+      "default": "(_current, total) => `of ${total.toLocaleString()} page${total === 1 ? \"\" : \"s\"}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Pagination",
+      "prop": "pageSelectLabelText",
+      "type": "(total: number) => string",
+      "default": "(total) => `Page number, of ${total} page${total === 1 ? \"\" : \"s\"}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "Pagination",
+      "prop": "pageText",
+      "type": "(page: number) => string",
+      "default": "(page) => `page ${page.toLocaleString()}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PaginationNav",
+      "prop": "backwardText",
+      "type": "string",
+      "default": "Previous page",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PaginationNav",
+      "prop": "forwardText",
+      "type": "string",
+      "default": "Next page",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PaginationNav",
+      "prop": "pageRangeText",
+      "type": "(current: number, total: number) => string",
+      "default": "(_current, total) => `of ${total}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PaginationNav",
+      "prop": "pageSelectLabelText",
+      "type": "(total: number) => string",
+      "default": "(_total) => \"Select page number\"",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PaginationNav",
+      "prop": "pageText",
+      "type": "(page: number) => string",
+      "default": "(page) => `Page ${page}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PasswordInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PasswordInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PasswordInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PasswordInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PinCodeInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PinCodeInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PinCodeInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PinCodeInput",
+      "prop": "segmentLabelText",
+      "type": "(position: number, count: number, labelText: string, type: \"numeric\" | \"alphanumeric\") => string",
+      "default": "(position,\n    count,\n    labelText,\n    type) => `${labelText || \"Pin code\"} ${type === \"numeric\" ? \"digit\" : \"character\"} ${position} of ${count}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PinCodeInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProfileMenu",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Profile",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProgressBar",
+      "prop": "errorText",
+      "type": "string",
+      "default": "Error",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProgressBar",
+      "prop": "finishedText",
+      "type": "string",
+      "default": "Complete",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProgressBar",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProgressBar",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProgressBar",
+      "prop": "valueText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ProgressIndicator",
+      "prop": "statusText",
+      "type": "(status: \"complete\" | \"invalid\") => string",
+      "default": "(status) => status",
+      "defaultKind": "function"
+    },
+    {
+      "component": "RadioButton",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButton",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButtonGroup",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButtonGroup",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButtonGroup",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButtonGroup",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioButtonGroup",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RadioTile",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Tile checkmark",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RangeSlider",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RangeSlider",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RangeSlider",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RangeSlider",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "RangeSlider",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Search",
+      "prop": "closeButtonLabelText",
+      "type": "string",
+      "default": "Clear search input",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Search",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Search",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Search",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Search",
+      "prop": "loadingDescription",
+      "type": "string",
+      "default": "Searching",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Search",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SearchMenu",
+      "prop": "closeButtonLabelText",
+      "type": "string",
+      "default": "Clear search input",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SearchMenu",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SearchMenu",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Select",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Select",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Select",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Select",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Select",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SelectableTile",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Tile checkmark",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SelectableTileGroup",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SidePanel",
+      "prop": "closeIconDescription",
+      "type": "string",
+      "default": "Close",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SidePanel",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "SidePanel",
+      "prop": "navigationBackIconDescription",
+      "type": "string",
+      "default": "Back",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Slider",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Slider",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Slider",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Slider",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Slider",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "StarRating",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "StarRating",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "StarRating",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "StarRating",
+      "prop": "valueText",
+      "type": "(value: number, max: number) => string",
+      "default": "(value, max) => `${value} out of ${max} stars`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "StarRating",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Stepper",
+      "prop": "backText",
+      "type": "string",
+      "default": "Back",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Stepper",
+      "prop": "nextText",
+      "type": "string",
+      "default": "Continue",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Stepper",
+      "prop": "submitText",
+      "type": "string",
+      "default": "Submit",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Stepper",
+      "prop": "submittingDescription",
+      "type": "string",
+      "default": "Submitting",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Stepper",
+      "prop": "validatingDescription",
+      "type": "string",
+      "default": "Checking",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TableOfContents",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Table of contents",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Tabs",
+      "prop": "dismissText",
+      "type": "(label: string) => string",
+      "default": "(label) => label ? `Dismiss ${label}` : \"Dismiss tab\"",
+      "defaultKind": "function"
+    },
+    {
+      "component": "TagInput",
+      "prop": "addedText",
+      "type": "(tags: string[], count: number) => string",
+      "default": "(tags, count) => `${tags.length === 1 ? tags[0] : `${tags.length} tags`} added. ${count} ${count === 1 ? \"tag\" : \"tags\"}.`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "TagInput",
+      "prop": "duplicateText",
+      "type": "string",
+      "default": "This tag has already been added",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "instructionsText",
+      "type": "string",
+      "default": "Press Enter to add a tag. Press Backspace in an empty field to move to the tags, then Delete to remove one.",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "invalidTagText",
+      "type": "string",
+      "default": "This tag isn't valid",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "maxText",
+      "type": "string",
+      "default": "You've reached the maximum number of tags",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "removedText",
+      "type": "(tag: string, count: number) => string",
+      "default": "(tag, count) => `${tag} removed. ${count} ${count === 1 ? \"tag\" : \"tags\"}.`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "TagInput",
+      "prop": "removeTagText",
+      "type": "string",
+      "default": "Remove",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "requiredText",
+      "type": "string",
+      "default": "Add at least one tag",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TagSet",
+      "prop": "viewAllText",
+      "type": "string",
+      "default": "View all",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextArea",
+      "prop": "counterText",
+      "type": "((count: number, max: number) => string) | undefined",
+      "default": "`${count} of ${max} characters`, or `${count} of ${max} words` when `counterMode` is `\"word\"`",
+      "defaultKind": "described"
+    },
+    {
+      "component": "TextArea",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextArea",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextArea",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextArea",
+      "prop": "limitReachedText",
+      "type": "string | undefined",
+      "default": "\"Character limit reached\", or \"Word limit reached\" when `counterMode` is `\"word\"`",
+      "defaultKind": "described"
+    },
+    {
+      "component": "TextArea",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextInput",
+      "prop": "counterText",
+      "type": "((count: number, max: number) => string) | undefined",
+      "default": "`${count} of ${max} characters`",
+      "defaultKind": "described"
+    },
+    {
+      "component": "TextInput",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextInput",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TextInput",
+      "prop": "limitReachedText",
+      "type": "string | undefined",
+      "default": "\"Character limit reached\"",
+      "defaultKind": "described"
+    },
+    {
+      "component": "TextInput",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TileGroup",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePicker",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePicker",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePicker",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePicker",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePickerSelect",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Open list of options",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePickerSelect",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TimePickerSelect",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToastNotification",
+      "prop": "closeButtonDescription",
+      "type": "string",
+      "default": "Close notification",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToastNotification",
+      "prop": "statusIconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "Toggle",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Toggle",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Toggle",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Toggle",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Toggle",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToggleButton",
+      "prop": "iconDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ToggleButtonGroup",
+      "prop": "labelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "ToggleSkeleton",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Toggletip",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Show information",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Toggletip",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToolbarColumnVisibility",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Column visibility",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToolbarDensity",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Row height",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ToolbarSearch",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Search",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Tooltip",
+      "prop": "iconDescription",
+      "type": "string",
+      "default": "Show information",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Tooltip",
+      "prop": "triggerText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TooltipDefinition",
+      "prop": "tooltipText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TooltipIcon",
+      "prop": "tooltipText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "TreeView",
+      "prop": "labelText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "UserAvatar",
+      "prop": "imageDescription",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "UserAvatar",
+      "prop": "tooltipText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "UserAvatarGroup",
+      "prop": "overflowTooltipText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    }
+  ],
+  "translateWithId": [
+    {
+      "component": "ComboBox",
+      "prop": "translateWithId",
+      "type": "((id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string) | undefined",
+      "ids": {
+        "close": "Close menu",
+        "open": "Open menu"
+      }
+    },
+    {
+      "component": "ComboBox",
+      "prop": "translateWithIdSelection",
+      "type": "((id: \"clearSelection\") => string) | undefined",
+      "ids": {
+        "clearSelection": "Clear selected item"
+      }
+    },
+    {
+      "component": "DataTable",
+      "prop": "tableHeaderTranslateWithId",
+      "type": "((id: import(\"./TableHeader.svelte\").TableHeaderTranslationId) => string) | undefined",
+      "ids": {
+        "columnSortAscending": "Sort rows by this header in ascending order",
+        "columnSortDescending": "Sort rows by this header in descending order"
+      }
+    },
+    {
+      "component": "DataTable",
+      "prop": "translateWithId",
+      "type": "(id: DataTableTranslationId) => string",
+      "ids": {
+        "expandAll": "Expand all rows",
+        "collapseAll": "Collapse all rows",
+        "expandRow": "Expand current row",
+        "collapseRow": "Collapse current row",
+        "expandColumn": "Expand rows",
+        "selectAll": "Select all rows",
+        "selectRow": "Select row"
+      }
+    },
+    {
+      "component": "Dropdown",
+      "prop": "translateWithId",
+      "type": "((id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string) | undefined",
+      "ids": {
+        "close": "Close menu",
+        "open": "Open menu"
+      }
+    },
+    {
+      "component": "Dropdown",
+      "prop": "translateWithIdSelection",
+      "type": "((id: \"clearSelection\") => string) | undefined",
+      "ids": {
+        "clearSelection": "Clear selected item"
+      }
+    },
+    {
+      "component": "Kbd",
+      "prop": "translateWithId",
+      "type": "(id: KbdTranslationId) => string",
+      "ids": {
+        "ctrl": "Ctrl",
+        "control": "Control",
+        "alt": "Alt",
+        "option": "Option",
+        "shift": "Shift",
+        "meta": "Meta",
+        "command": "Command",
+        "enter": "Enter",
+        "return": "Return",
+        "escape": "Esc",
+        "escapeName": "Escape",
+        "tab": "Tab",
+        "backspace": "Backspace",
+        "delete": "Delete",
+        "forwardDelete": "Forward Delete",
+        "space": "Space",
+        "arrowUp": "Up Arrow",
+        "arrowDown": "Down Arrow",
+        "arrowLeft": "Left Arrow",
+        "arrowRight": "Right Arrow",
+        "pageUp": "Page Up",
+        "pageDown": "Page Down",
+        "home": "Home",
+        "end": "End"
+      }
+    },
+    {
+      "component": "ListBoxMenuIcon",
+      "prop": "translateWithId",
+      "type": "(id: ListBoxMenuIconTranslationId) => string",
+      "ids": {
+        "close": "Close menu",
+        "open": "Open menu"
+      }
+    },
+    {
+      "component": "ListBoxSelection",
+      "prop": "translateWithId",
+      "type": "(id: ListBoxSelectionTranslationId) => string",
+      "ids": {
+        "clearAll": "Clear all selected items",
+        "clearSelection": "Clear selected item"
+      }
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "translateWithId",
+      "type": "((id: import(\"../ListBox/ListBoxMenuIcon.svelte\").ListBoxMenuIconTranslationId) => string) | undefined",
+      "ids": {
+        "close": "Close menu",
+        "open": "Open menu"
+      }
+    },
+    {
+      "component": "MultiSelect",
+      "prop": "translateWithIdSelection",
+      "type": "((id: import(\"../ListBox/ListBoxSelection.svelte\").ListBoxSelectionTranslationId) => string) | undefined",
+      "ids": {
+        "clearAll": "Clear all selected items",
+        "clearSelection": "Clear selected item"
+      }
+    },
+    {
+      "component": "NumberInput",
+      "prop": "translateWithId",
+      "type": "(id: NumberInputTranslationId) => string",
+      "ids": {
+        "increment": "Increment number",
+        "decrement": "Decrement number"
+      }
+    },
+    {
+      "component": "StructuredListCell",
+      "prop": "translateWithId",
+      "type": "(id: StructuredListCellTranslationId) => string",
+      "ids": {
+        "columnSortAscending": "Sort rows by this header in ascending order",
+        "columnSortDescending": "Sort rows by this header in descending order"
+      }
+    },
+    {
+      "component": "TableHeader",
+      "prop": "translateWithId",
+      "type": "(id: TableHeaderTranslationId) => string",
+      "ids": {
+        "columnSortAscending": "Sort rows by this header in ascending order",
+        "columnSortDescending": "Sort rows by this header in descending order"
+      }
+    }
+  ],
+  "ids": {
+    "alt": "Alt",
+    "arrowDown": "Down Arrow",
+    "arrowLeft": "Left Arrow",
+    "arrowRight": "Right Arrow",
+    "arrowUp": "Up Arrow",
+    "backspace": "Backspace",
+    "clearAll": "Clear all selected items",
+    "clearSelection": "Clear selected item",
+    "close": "Close menu",
+    "collapseAll": "Collapse all rows",
+    "collapseRow": "Collapse current row",
+    "columnSortAscending": "Sort rows by this header in ascending order",
+    "columnSortDescending": "Sort rows by this header in descending order",
+    "command": "Command",
+    "control": "Control",
+    "ctrl": "Ctrl",
+    "decrement": "Decrement number",
+    "delete": "Delete",
+    "end": "End",
+    "enter": "Enter",
+    "escape": "Esc",
+    "escapeName": "Escape",
+    "expandAll": "Expand all rows",
+    "expandColumn": "Expand rows",
+    "expandRow": "Expand current row",
+    "forwardDelete": "Forward Delete",
+    "home": "Home",
+    "increment": "Increment number",
+    "meta": "Meta",
+    "open": "Open menu",
+    "option": "Option",
+    "pageDown": "Page Down",
+    "pageUp": "Page Up",
+    "return": "Return",
+    "selectAll": "Select all rows",
+    "selectRow": "Select row",
+    "shift": "Shift",
+    "space": "Space",
+    "tab": "Tab"
+  }
+}
