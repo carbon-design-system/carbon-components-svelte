@@ -247,6 +247,19 @@ Set `danger` on an item to indicate a critical or destructive action, such as de
   <OverflowMenuItem hasDivider danger text="Delete service" />
 </OverflowMenu>
 
+## Transition
+
+The menu opens and closes at once by default. Set `transition` to animate it. `true` uses Carbon's fly (`fast01`, 70 ms): the menu moves 2 px toward the side it opens on while it fades, and moves back as it closes. Fly parameters such as `{ duration: "fast02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). It applies to the menu in place and to the one in a portal (see `portalMenu`). Under `prefers-reduced-motion: reduce` the menu still opens and closes at once. To animate every menu in an app, set `menu` on [`Motion`](/motion#app-wide-defaults).
+
+A closing menu stays in the page until its exit ends, but it is already closed: the trigger reads `aria-expanded="false"`, focus is back on the trigger after <DocKbd label="Escape" /> or a selection, and the menu takes no clicks or keys. OverflowMenu forwards `introstart`, `introend`, `outrostart`, and `outroend`.
+
+<FileSource src="/framed/OverflowMenu/OverflowMenuTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Keep the default `fast01` and 2 px. | An overflow menu is a small, frequent surface, and a longer or larger move reads as a delay. |
+| Run work that follows the close from `on:outroend`, not a timer. | The event fires when the menu has left, and fires at once under reduced motion. |
+
 ## Events
 
 Respond to menu close attempts and individual item clicks.
