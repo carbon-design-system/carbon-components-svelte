@@ -139,6 +139,12 @@ A collapsed `SideNavMenu` that contains the current page, at any depth, shows th
 
 Set `isActive` on a `SideNavMenu` to mark it for a page the nav doesn't list, such as a detail route under a listed section.
 
+### Sync with Breadcrumb
+
+Derive `isSelected` and [Breadcrumb](/components/Breadcrumb)'s `isCurrentPage` from one shared trail array instead of hand-tracking two separate "current page" states that can drift apart. A `SideNavMenu` containing the active item also expands on mount automatically, since it already finds the `aria-current="page"` descendant set by `isSelected`.
+
+<FileSource src="/framed/UIShell/SideNavBreadcrumbSync" />
+
 ### Large
 
 Set `large` on `SideNavLink` or `SideNavMenu` to increase the item's height from 32px to 48px — useful for a top-level item that should stand out, or for larger touch targets. Not available on `SideNavMenuItem` (nested items). Composes with `icon` on both components.
