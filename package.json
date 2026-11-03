@@ -12,6 +12,11 @@
       "types": "./src/index.d.ts",
       "svelte": "./src/index.js"
     },
+    "./boundary": {
+      "types": "./src/ErrorBoundary/index.d.ts",
+      "svelte": "./src/ErrorBoundary/index.js",
+      "import": "./src/ErrorBoundary/index.js"
+    },
     "./syntax": {
       "types": "./src/syntax/index.d.ts",
       "svelte": "./src/syntax/index.js",
