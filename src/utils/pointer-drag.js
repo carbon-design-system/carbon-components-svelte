@@ -15,6 +15,8 @@
  *
  * Only the primary button starts a drag, and a second pointer is ignored
  * while one is active. `onStart` may return `false` to decline the drag.
+ * Turning `enabled` off ends an active drag, so a control disabled
+ * mid-gesture stops following the pointer.
  *
  * @param {HTMLElement} node
  * @param {PointerDragOptions} options
@@ -68,6 +70,15 @@ export function pointerDrag(node, options) {
   return {
     update(options) {
       current = options;
+      if (current.enabled === false && activePointerId !== null) {
+        const pointerId = activePointerId;
+        activePointerId = null;
+        removeDragListeners();
+        if (node.hasPointerCapture?.(pointerId)) {
+          node.releasePointerCapture(pointerId);
+        }
+        current.onEnd?.();
+      }
     },
     destroy() {
       activePointerId = null;
