@@ -127,6 +127,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
@@ -137,6 +138,10 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { wordCount, wordLimitAction } from "../utils/word-count.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const formContext = getContext(FORM_CONTEXT_KEY);
 
@@ -168,11 +173,14 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: overCount =
-    typeof maxCount === "number" && count > maxCount && !disabled && !readonly;
+    typeof maxCount === "number" &&
+    count > maxCount &&
+    !effectiveDisabled &&
+    !readonly;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: hasMaxCount = typeof maxCount === "number";
   $: errorMessageId = showInvalid && invalidText ? errorId : undefined;
@@ -204,7 +212,7 @@
   $: limitAnnouncement.track(count, maxCount, resolvedLimitReachedText);
 
   function handleFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => ref?.select());
     }
   }
@@ -383,6 +391,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   on:click
   on:mouseover
   on:mouseenter
@@ -397,7 +406,7 @@
           for={id}
           class:bx--label={true}
           class:bx--visually-hidden={hideLabel}
-          class:bx--label--disabled={disabled}
+          class:bx--label--disabled={effectiveDisabled}
           class:bx--label--slotted={isFluid && $$slots.labelChildren}
           use:titleWhenTruncated={{
             enabled: isFluid && !$$slots.labelChildren,
@@ -409,7 +418,7 @@
       {#if hasMaxCount}
         <div
           class:bx--label={true}
-          class:bx--label--disabled={disabled}
+          class:bx--label--disabled={effectiveDisabled}
           class:bx--text-area__label-counter={true}
           class:bx--text-area__label-counter--error={overCount}
         >
@@ -449,13 +458,13 @@
     {/if}
     <textarea
       bind:this={ref}
-      use:preserveFocusSelection={selectTextOnFocus && !disabled}
+      use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
       use:formReset={handleFormReset}
       bind:value
       aria-invalid={showInvalid || overCount ? "true" : undefined}
       aria-errormessage={errorMessageId}
       data-warn={showWarn || undefined}
-      {disabled}
+      disabled={effectiveDisabled}
       {id}
       {name}
       {cols}
@@ -515,7 +524,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
