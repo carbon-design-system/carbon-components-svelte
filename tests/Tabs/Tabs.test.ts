@@ -207,14 +207,14 @@ describe("Tabs", () => {
 
   it("toggles the close buttons when dismissible changes after mount", async () => {
     const { rerender } = render(Tabs);
-    expect(screen.queryByRole("button", { name: /^Dismiss/ })).toBeNull();
+    expect(screen.queryByLabelText(/^Dismiss/)).toBeNull();
 
     await rerender({ dismissible: true });
-    expect(screen.getAllByRole("button", { name: /^Dismiss/ })).toHaveLength(3);
+    expect(screen.getAllByLabelText(/^Dismiss/)).toHaveLength(3);
     expect(tabsRoot()).toHaveClass("bx--tabs--dismissible");
 
     await rerender({ dismissible: false });
-    expect(screen.queryByRole("button", { name: /^Dismiss/ })).toBeNull();
+    expect(screen.queryByLabelText(/^Dismiss/)).toBeNull();
   });
 
   it("applies the container item classes when type changes after mount", async () => {
@@ -520,7 +520,7 @@ describe("Tabs dismissible", () => {
     render(TabsDismissible);
     await tick();
 
-    await user.click(screen.getByRole("button", { name: "Dismiss Two" }));
+    await user.click(screen.getByLabelText("Dismiss Two"));
     await tick();
 
     expect(screen.getByRole("tab", { name: "Three" })).toHaveFocus();
@@ -538,7 +538,7 @@ describe("Tabs dismissible", () => {
     render(TabsDismissible, { props: { onDismiss } });
     await tick();
 
-    screen.getByRole("button", { name: "Dismiss Two" }).focus();
+    screen.getByLabelText("Dismiss Two").focus();
     await user.keyboard(key);
     await tick();
 
@@ -579,10 +579,19 @@ describe("Tabs dismissible", () => {
     expect(onDismiss).not.toHaveBeenCalled();
   });
 
+  it("hides the close buttons and names the Delete key on each tab", () => {
+    render(TabsDismissible);
+
+    expect(screen.queryByRole("button")).toBeNull();
+    for (const tab of screen.getAllByRole("tab")) {
+      expect(tab).toHaveAttribute("aria-keyshortcuts", "Delete");
+    }
+  });
+
   it("names the close button of an unlabeled tab Dismiss tab", () => {
     render(TabsDismissible, { props: { emptyLabel: true } });
 
-    expect(screen.getByRole("button", { name: "Dismiss tab" })).toBeVisible();
+    expect(screen.getByLabelText("Dismiss tab")).toBeVisible();
   });
 
   it("renders a tab icon left of the label, not right, when dismissible", () => {
