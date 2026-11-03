@@ -16,7 +16,7 @@ type Options = {
 /**
  * The dev tools' page checks (`audit` from `/devtools`) on the mounted
  * fixture: off-scale spacing, low contrast, small targets (WCAG 2.5.8),
- * and overflow. Needs a fixture the shared host page mounts.
+ * overflow, and animations. Needs a fixture the shared host page mounts.
  */
 export async function layoutFindings(page: Page, options: Options = {}) {
   const { severities = ["error", "warning"], ...rest } = options;

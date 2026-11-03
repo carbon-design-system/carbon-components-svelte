@@ -1279,13 +1279,14 @@ Add a link to `e2e/fixtures/index.html` so the fixture is reachable from the ind
 
 ### Audit the docs examples
 
-`bun run audit:docs` runs the dev tools' page checks on every framed docs example: off-scale spacing, low contrast, small targets, and overflow. It serves `docs/dist`, so build it first with `cd docs && bun run build:audit`. A full run takes about 30 seconds.
+`bun run audit:docs` runs the dev tools' page checks on every framed docs example: off-scale spacing, low contrast, small targets, overflow, and animations that are off the motion tokens, loop, lay out every frame, or run under reduced motion. It serves `docs/dist`, so build it first with `cd docs && bun run build:audit`. A full run takes about 30 seconds.
 
 ```sh
 bun run audit:docs                      # the examples' own code
 bun run audit:docs --carbon             # Carbon's components too
 bun run audit:docs --filter DataTable   # some examples only
 bun run audit:docs --width 320,1056 --dir ltr,rtl --theme white,g100
+bun run audit:docs --motion reduce      # what still moves under reduced motion
 ```
 
 `--width`, `--dir`, and `--theme` take comma lists and run every combination, so the last line runs 8 variants. Each finding names its variant, such as `320-rtl-g100`. A full sweep of 3 widths, both directions, and 2 themes takes about 6 minutes.
