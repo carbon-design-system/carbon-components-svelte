@@ -34,6 +34,8 @@ Pass `items` with an `id` and a `label` each. The grid renders a search field, t
 
 Give an item a `category`, and the grid groups the items under a header for each. The buttons above the grid jump to a category and follow the scroll. List `categories` to set their order and labels. Without it, categories follow the order they first appear in `items`, and items with no category come last.
 
+The header of the section at the top stays there while its cells scroll, until the next header pushes it off. Set `stickyHeaders` to `false` to let it scroll away. The header is drawn over the cells, so the grid fills its own background, `--ccs-picker-grid-surface`, which defaults to the layer color.
+
 <Box maxWidth="22rem">
   <PickerGrid
     items={regions}

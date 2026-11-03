@@ -513,6 +513,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Dropdown
+  emoji-picker:
+    name: Emoji picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/emoji-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/EmojiPicker
   empty-state:
     name: Empty state
     status: stable
