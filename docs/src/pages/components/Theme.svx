@@ -284,10 +284,12 @@ Every theme stylesheet carries a small set of `@media print` rules, so a printed
 | Prints | Components |
 | :--- | :--- |
 | Left out | The UI Shell header, side nav, header panels and skip link. The DataTable toolbar and pagination, and PaginationNav. Modals, side panels, tooltips, popovers, menus, the notification queue and the loading overlay. Skeletons. |
-| In full | The content of closed Accordion and Disclosure items. A sticky-header DataTable, with its header in place instead of pinned. [Prose](/components/Prose) code blocks, wrapped, and the address after each external link (with `prose.css`). |
+| In full | The content of closed Accordion and Disclosure items, and of a collapsed ExpandableTile. A sticky-header DataTable, with its header in place instead of pinned. [Prose](/components/Prose) code blocks, wrapped, and the address after each external link (with `prose.css`). |
 | Kept whole | Table rows, tiles, cards, accordion items and notifications do not break across pages. A heading stays with the text after it. |
 
-A collapsed ExpandableTile prints collapsed, and a DataTable prints the rows that are expanded on screen.
+A DataTable prints the rows that are expanded on screen. The content of a collapsed row is not in the page, so it is not printed.
+
+The dark themes (Gray 80, Gray 90 and Gray 100) print on White's text, background, layer, border, link and icon colors, since paper is white and a browser prints no backgrounds. Buttons, tags and notifications keep the theme's colors.
 
 To keep or change a rule, write your own `@media print` rule and load it after the theme stylesheet. The rules weigh one class, so yours wins on order.
 
