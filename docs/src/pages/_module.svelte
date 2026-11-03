@@ -348,34 +348,9 @@
           isSelected={$isActive($url("/quick-start"))}
         />
         <SideNavLink
-          text="Server-side rendering"
-          href={$url("/server-rendering")}
-          isSelected={$isActive($url("/server-rendering"))}
-        />
-        <SideNavLink
-          text="Right-to-left"
-          href={$url("/right-to-left")}
-          isSelected={$isActive($url("/right-to-left"))}
-        />
-        <SideNavLink
-          text="Performance"
-          href={$url("/performance")}
-          isSelected={$isActive($url("/performance"))}
-        />
-        <SideNavLink
           text="Component index"
           href={$url("/component-index")}
           isSelected={$isActive($url("/component-index"))}
-        />
-        <SideNavLink
-          text="Theme builder"
-          href={$url("/theme-builder")}
-          isSelected={$isActive($url("/theme-builder"))}
-        />
-        <SideNavLink
-          text="Tokens"
-          href={$url("/tokens")}
-          isSelected={$isActive($url("/tokens"))}
         />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
