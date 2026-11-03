@@ -23,6 +23,10 @@ test.describe("print", () => {
       page.getByTestId("accordion-content"),
       "closed accordion content",
     ).toBeHidden();
+    await expect(
+      page.getByTestId("expandable-tile"),
+      "collapsed tile",
+    ).not.toHaveCSS("max-height", "none");
     await expect(page.locator("thead th").first()).toHaveCSS(
       "position",
       "sticky",
@@ -58,6 +62,17 @@ test.describe("print", () => {
 
     // A closed accordion item prints its content.
     await expect(page.getByTestId("accordion-content")).toBeVisible();
+
+    // A collapsed ExpandableTile prints its content below the fold.
+    const tile = page.getByTestId("expandable-tile");
+    await expect(tile).toHaveAttribute("aria-expanded", "false");
+    await expect(tile).toHaveCSS("max-height", "none");
+    await expect(page.getByTestId("below-fold")).toBeVisible();
+    const tileBox = await tile.boundingBox();
+    const belowBox = await page.getByTestId("below-fold").boundingBox();
+    expect(belowBox.y + belowBox.height).toBeLessThanOrEqual(
+      tileBox.y + tileBox.height,
+    );
 
     // A pinned header prints once, in place.
     await expect(page.locator("thead th").first()).toHaveCSS(

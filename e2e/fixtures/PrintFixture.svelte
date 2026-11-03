@@ -11,6 +11,7 @@
   import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
   import Prose from "carbon-components-svelte/Prose/Prose.svelte";
   import SkeletonText from "carbon-components-svelte/SkeletonText/SkeletonText.svelte";
+  import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
   import Tile from "carbon-components-svelte/Tile/Tile.svelte";
   import Content from "carbon-components-svelte/UIShell/Content.svelte";
   import Header from "carbon-components-svelte/UIShell/Header.svelte";
@@ -76,6 +77,11 @@
   </Accordion>
 
   <Tile data-testid="tile">A tile with a summary of the report</Tile>
+
+  <ExpandableTile data-testid="expandable-tile">
+    <span slot="above">Summary of the report</span>
+    <span slot="below" data-testid="below-fold">Details of the report</span>
+  </ExpandableTile>
 
   <InlineNotification
     lowContrast
