@@ -122,6 +122,24 @@
       scrollRef.scrollHeight - scrollRef.clientHeight > 1;
   }
 
+  // A browser scrolls a focused control just into the scroll region, which
+  // leaves it behind the sticky header when it comes in from above. Scroll
+  // its row to the header's bottom edge first: the control is then in view,
+  // so the browser has nothing left to scroll. Padding the region with
+  // `scroll-padding` would not do: Firefox ignores it for a control that
+  // only partly sits under the header.
+  /** @param {FocusEvent} event */
+  function clearStickyHeader(event) {
+    // Each `th` sticks on its own, so `thead` itself scrolls away.
+    const head = tableRef?.tHead?.querySelector("th");
+    const target = event.target;
+    if (!(target instanceof Element) || !head || !scrollRef) return;
+    if (!target.closest("tbody")) return;
+    const top = (target.closest("td") ?? target).getBoundingClientRect().top;
+    const covered = head.getBoundingClientRect().bottom - top;
+    if (covered > 0) scrollRef.scrollTop -= covered;
+  }
+
   /**
    * @param {null | HTMLElement} content
    * @param {null | HTMLTableElement} table
@@ -156,6 +174,7 @@
     aria-labelledby={scrollable ? ariaLabelledby : undefined}
     {...sectionProps}
     style={containerStyle}
+    on:focusin={clearStickyHeader}
   >
     <table
       bind:this={tableRef}
