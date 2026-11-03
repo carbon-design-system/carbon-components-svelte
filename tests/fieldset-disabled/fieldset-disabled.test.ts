@@ -3,6 +3,7 @@ import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
+import Search from "carbon-components-svelte/Search/Search.svelte";
 import Select from "carbon-components-svelte/Select/Select.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
@@ -112,6 +113,12 @@ const styleCases: {
   fieldProps: Record<string, unknown>;
   marker: string;
 }[] = [
+  {
+    name: "Search",
+    component: Search,
+    fieldProps: field,
+    marker: ".bx--search--disabled",
+  },
   {
     name: "Select",
     component: Select,

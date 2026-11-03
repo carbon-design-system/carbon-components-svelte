@@ -171,6 +171,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -184,6 +185,10 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -220,7 +225,7 @@
   $: hasShortcutHint =
     Boolean(shortcut) &&
     (value === "" || value == null) &&
-    !disabled &&
+    !effectiveDisabled &&
     !(expandable && !expanded) &&
     !showInvalid &&
     !showWarn;
@@ -286,7 +291,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: ({ errorId, warnId, helperId } = buildFieldIds(id));
@@ -332,7 +337,7 @@
     data-invalid={showInvalid || undefined}
     data-warn={showWarn || undefined}
     class:bx--search={true}
-    class:bx--search--disabled={disabled}
+    class:bx--search--disabled={effectiveDisabled}
     class:bx--search--xs={effectiveSize === "xs"}
     class:bx--search--sm={effectiveSize === "sm"}
     class:bx--search--lg={effectiveSize === "lg"}
@@ -356,7 +361,7 @@
         aria-label={labelText.trim() === ""
           ? placeholder || "Open search"
           : labelText}
-        {disabled}
+        disabled={effectiveDisabled}
         on:click={() => {
           expanded = true;
         }}
@@ -380,7 +385,7 @@
         bind:this={searchRef}
         class:bx--search-magnifier={true}
         on:click={() => {
-          if (expandable && !disabled) expanded = true;
+          if (expandable && !effectiveDisabled) expanded = true;
         }}
       >
         {#if showLoading}
@@ -408,16 +413,17 @@
     </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
+      use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
       bind:this={ref}
       use:keyboardShortcut={shortcutParams}
-      use:preserveFocusSelection={selectTextOnFocus && !disabled}
+      use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
       use:formReset={handleFormReset}
       bind:value
       type="search"
       class:bx--search-input={true}
       autofocus={autofocus === true ? true : undefined}
       {autocomplete}
-      {disabled}
+      disabled={effectiveDisabled}
       {readonly}
       {id}
       {placeholder}
@@ -441,10 +447,10 @@
       }}
       on:focus
       on:focus={() => {
-        if (expandable && !disabled) expanded = true;
+        if (expandable && !effectiveDisabled) expanded = true;
         const skip = skipSelectOnFocus;
         skipSelectOnFocus = false;
-        if (selectTextOnFocus && !disabled && !skip) {
+        if (selectTextOnFocus && !effectiveDisabled && !skip) {
           tick().then(() => ref?.select());
         }
       }}
@@ -498,7 +504,7 @@
     <button
       type="button"
       aria-label={closeButtonLabelText}
-      {disabled}
+      disabled={effectiveDisabled}
       class:bx--search-close={true}
       class:bx--search-close--hidden={readonly || value === "" || value == null}
       on:click
@@ -531,7 +537,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
