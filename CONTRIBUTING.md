@@ -780,6 +780,7 @@ The shortest loop, in order:
 | --- | --- | --- |
 | Format and lint what you touched | `bun fmt <paths> && bunx biome check --write <paths>` | Seconds |
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
+| Rerun only the unit tests that just failed | `bun run test:failed` | Reads the last run's results. Use it to tell a real failure from one that only fails under load |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
 | Run the E2E tests your branch can reach | `bun run test:changed:e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
 | See what CI will run | `bun run test:plan` | Same plan as CI, with the reason for any full run. `bunx bivium why <test>` shows why a test was picked |
