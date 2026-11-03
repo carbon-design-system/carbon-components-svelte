@@ -5,6 +5,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Specify the kind of notification.
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */
@@ -93,6 +100,17 @@
    */
   export let id = undefined;
 
+  /**
+   * Animate the notification as it opens and closes, and when a parent's
+   * `{#if}` adds or removes it. Set to `true` for Carbon's fly, which
+   * moves the toast in from 32px to the right while it fades and shrinks
+   * its height so notifications around it close the gap (`moderate02`),
+   * to fly params (e.g., `{ x: -32 }`) to customize it, or to `{ fn }` to
+   * use another transition. The notification does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
+   */
+  export let transition = undefined;
+
   import {
     createEventDispatcher,
     getContext,
@@ -100,15 +118,17 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fly } from "../motion/transitions.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import NotificationButton from "./NotificationButton.svelte";
-  import NotificationIcon from "./NotificationIcon.svelte";
+  import ToastNotificationContent from "./ToastNotificationContent.svelte";
   import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
+  const flyPreset = { fn: fly, params: { x: 32, collapse: true } };
   const fallbackId = uniqueId();
   $: titleId = `${id ?? fallbackId}-title`;
   $: subtitleId = `${id ?? fallbackId}-subtitle`;
@@ -145,6 +165,12 @@
     getRef: () => notificationRef,
   });
 
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition, flyPreset));
+
   $: sync(open, timeout, actionable || !!$$slots.actions);
   $: setPaused(Boolean($queuePaused));
   $: syncFocusOnOpen(open, actionable && focusOnOpen);
@@ -168,90 +194,148 @@
 </script>
 
 {#if open}
-  <!-- An actionable notification takes focus itself when it holds no button. -->
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <div
-    bind:this={notificationRef}
-    role={actionable ? "alertdialog" : role}
-    tabindex={actionable ? -1 : undefined}
-    aria-label={ariaLabel}
-    aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
-    aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
-    class:bx--toast-notification={true}
-    class:bx--toast-notification--low-contrast={lowContrast}
-    class:bx--toast-notification--high-contrast={!lowContrast}
-    class:bx--toast-notification--error={kind === "error"}
-    class:bx--toast-notification--low-contrast-error={lowContrast &&
-      kind === "error"}
-    class:bx--toast-notification--info={kind === "info"}
-    class:bx--toast-notification--low-contrast-info={lowContrast &&
-      kind === "info"}
-    class:bx--toast-notification--info-square={kind === "info-square"}
-    class:bx--toast-notification--low-contrast-info-square={lowContrast &&
-      kind === "info-square"}
-    class:bx--toast-notification--success={kind === "success"}
-    class:bx--toast-notification--low-contrast-success={lowContrast &&
-      kind === "success"}
-    class:bx--toast-notification--warning={kind === "warning"}
-    class:bx--toast-notification--low-contrast-warning={lowContrast &&
-      kind === "warning"}
-    class:bx--toast-notification--warning-alt={kind === "warning-alt"}
-    class:bx--toast-notification--low-contrast-warning-alt={lowContrast &&
-      kind === "warning-alt"}
-    style:width={fullWidth ? "100%" : undefined}
-    {id}
-    {...rest}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseenter={handleMouseenter}
-    on:mouseleave
-    on:mouseleave={handleMouseleave}
-    on:focusin={handleFocusIn}
-    on:focusout={handleFocusOut}
-    on:keydown={(event) => {
-      if (actionable) {
-        handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
-      }
-    }}
-  >
-    <NotificationIcon
-      {kind}
-      {lowContrast}
-      iconDescription={statusIconDescription || statusIconLabel(kind)}
-    />
-    <div class:bx--toast-notification__details={true}>
-      {#if hasTitle}
-        <h3 id={titleId} class:bx--toast-notification__title={true}>
-          <slot name="titleChildren">{title}</slot>
-        </h3>
-      {/if}
-      {#if hasSubtitle}
-        <div
-          id={actionable ? subtitleId : undefined}
-          class:bx--toast-notification__subtitle={true}
-        >
-          <slot name="subtitleChildren">{subtitle}</slot>
-        </div>
-      {/if}
-      {#if caption || $$slots.captionChildren}
-        <div class:bx--toast-notification__caption={true}>
-          <slot name="captionChildren">{caption}</slot>
-        </div>
-      {/if}
-      <slot />
-      {#if $$slots.actions}
-        <div class:bx--toast-notification__actions={true}>
-          <slot name="actions" />
-        </div>
-      {/if}
-    </div>
-    {#if !hideCloseButton}
-      <NotificationButton
-        iconDescription={closeButtonDescription}
+  {#if animated}
+    <!-- An actionable notification takes focus itself when it holds no button. -->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <div
+      bind:this={notificationRef}
+      role={actionable ? "alertdialog" : role}
+      tabindex={actionable ? -1 : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
+      aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
+      class:bx--toast-notification={true}
+      class:bx--toast-notification--low-contrast={lowContrast}
+      class:bx--toast-notification--high-contrast={!lowContrast}
+      class:bx--toast-notification--error={kind === "error"}
+      class:bx--toast-notification--low-contrast-error={lowContrast &&
+        kind === "error"}
+      class:bx--toast-notification--info={kind === "info"}
+      class:bx--toast-notification--low-contrast-info={lowContrast &&
+        kind === "info"}
+      class:bx--toast-notification--info-square={kind === "info-square"}
+      class:bx--toast-notification--low-contrast-info-square={lowContrast &&
+        kind === "info-square"}
+      class:bx--toast-notification--success={kind === "success"}
+      class:bx--toast-notification--low-contrast-success={lowContrast &&
+        kind === "success"}
+      class:bx--toast-notification--warning={kind === "warning"}
+      class:bx--toast-notification--low-contrast-warning={lowContrast &&
+        kind === "warning"}
+      class:bx--toast-notification--warning-alt={kind === "warning-alt"}
+      class:bx--toast-notification--low-contrast-warning-alt={lowContrast &&
+        kind === "warning-alt"}
+      style:width={fullWidth ? "100%" : undefined}
+      {id}
+      {...rest}
+      transition:transitionFn|global={transitionParams}
+      on:introstart
+      on:introend
+      on:outrostart
+      on:outroend
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseenter={handleMouseenter}
+      on:mouseleave
+      on:mouseleave={handleMouseleave}
+      on:focusin={handleFocusIn}
+      on:focusout={handleFocusOut}
+      on:keydown={(event) => {
+        if (actionable) {
+          handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
+        }
+      }}
+    >
+      <ToastNotificationContent
+        {kind}
         {lowContrast}
-        on:click={close}
-      />
-    {/if}
-  </div>
+        statusIconDescription={statusIconDescription || statusIconLabel(kind)}
+        {hasTitle}
+        {hasSubtitle}
+        hasCaption={!!(caption || $$slots.captionChildren)}
+        hasActions={!!$$slots.actions}
+        {titleId}
+        subtitleId={actionable ? subtitleId : undefined}
+        {hideCloseButton}
+        {closeButtonDescription}
+        on:close={() => close()}
+      >
+        <slot name="titleChildren" slot="titleChildren">{title}</slot>
+        <slot name="subtitleChildren" slot="subtitleChildren">{subtitle}</slot>
+        <slot name="captionChildren" slot="captionChildren">{caption}</slot>
+        <slot />
+        <slot name="actions" slot="actions" />
+      </ToastNotificationContent>
+    </div>
+  {:else}
+    <!-- An actionable notification takes focus itself when it holds no button. -->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <div
+      bind:this={notificationRef}
+      role={actionable ? "alertdialog" : role}
+      tabindex={actionable ? -1 : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
+      aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
+      class:bx--toast-notification={true}
+      class:bx--toast-notification--low-contrast={lowContrast}
+      class:bx--toast-notification--high-contrast={!lowContrast}
+      class:bx--toast-notification--error={kind === "error"}
+      class:bx--toast-notification--low-contrast-error={lowContrast &&
+        kind === "error"}
+      class:bx--toast-notification--info={kind === "info"}
+      class:bx--toast-notification--low-contrast-info={lowContrast &&
+        kind === "info"}
+      class:bx--toast-notification--info-square={kind === "info-square"}
+      class:bx--toast-notification--low-contrast-info-square={lowContrast &&
+        kind === "info-square"}
+      class:bx--toast-notification--success={kind === "success"}
+      class:bx--toast-notification--low-contrast-success={lowContrast &&
+        kind === "success"}
+      class:bx--toast-notification--warning={kind === "warning"}
+      class:bx--toast-notification--low-contrast-warning={lowContrast &&
+        kind === "warning"}
+      class:bx--toast-notification--warning-alt={kind === "warning-alt"}
+      class:bx--toast-notification--low-contrast-warning-alt={lowContrast &&
+        kind === "warning-alt"}
+      style:width={fullWidth ? "100%" : undefined}
+      {id}
+      {...rest}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseenter={handleMouseenter}
+      on:mouseleave
+      on:mouseleave={handleMouseleave}
+      on:focusin={handleFocusIn}
+      on:focusout={handleFocusOut}
+      on:keydown={(event) => {
+        if (actionable) {
+          handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
+        }
+      }}
+    >
+      <ToastNotificationContent
+        {kind}
+        {lowContrast}
+        statusIconDescription={statusIconDescription || statusIconLabel(kind)}
+        {hasTitle}
+        {hasSubtitle}
+        hasCaption={!!(caption || $$slots.captionChildren)}
+        hasActions={!!$$slots.actions}
+        {titleId}
+        subtitleId={actionable ? subtitleId : undefined}
+        {hideCloseButton}
+        {closeButtonDescription}
+        on:close={() => close()}
+      >
+        <slot name="titleChildren" slot="titleChildren">{title}</slot>
+        <slot name="subtitleChildren" slot="subtitleChildren">{subtitle}</slot>
+        <slot name="captionChildren" slot="captionChildren">{caption}</slot>
+        <slot />
+        <slot name="actions" slot="actions" />
+      </ToastNotificationContent>
+    </div>
+  {/if}
 {/if}
