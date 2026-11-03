@@ -1,3 +1,4 @@
+export { type CollapseOptions, collapse } from "./collapse.js";
 export { prefersReducedMotion, shouldReduceMotion } from "./reduced-motion.js";
 export type {
   MotionRole,
