@@ -64,7 +64,23 @@ export function trapFocus({ container, event }) {
     /** @type {HTMLElement} */ (document.activeElement),
   );
   if (index === -1) {
-    index = event.shiftKey ? tabbable.length : -1;
+    const active = document.activeElement;
+    if (active && active !== container && container.contains(active)) {
+      // Focus is on an element that is not a tab stop, such as a heading
+      // given `tabindex="-1"` so it can take focus. Carry on from its place
+      // in the document, as the browser does, instead of from the start.
+      let preceding = -1;
+      for (let i = 0; i < tabbable.length; i++) {
+        if (
+          tabbable[i].compareDocumentPosition(active) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+        )
+          preceding = i;
+      }
+      index = event.shiftKey ? preceding + 1 : preceding;
+    } else {
+      index = event.shiftKey ? tabbable.length : -1;
+    }
   }
 
   index += event.shiftKey ? -1 : 1;
