@@ -455,6 +455,8 @@ test.describe("Document tabs: more tabs menu", () => {
     // Safari does not Tab to buttons unless a system setting is on.
     test.skip(browserName === "webkit", "WebKit does not Tab to buttons");
     await page.goto("/document-tabs.html?count=14&width=600");
+    // Until the tabs register, every one is a stop. Wait for the roving one.
+    await expect(tab(page, 2)).toHaveAttribute("tabindex", "-1");
     await tab(page, 1).focus();
 
     // The tab list is one stop, so the next Tab reaches the button.
