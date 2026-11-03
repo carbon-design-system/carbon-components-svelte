@@ -50,6 +50,19 @@ Specify the stacking order of the queue with `zIndex`. Defaults to `9000`, match
 
 Lower the value if the queue should render behind other fixed UI instead.
 
+## Transition
+
+Notifications appear and leave at once by default. Set `transition` on the queue to fly each toast in from the edge the queue sits on: 32 px from the side for the corner positions, and 16 px from above or below for `top-center` and `bottom-center`. `true` uses Carbon's fly (`moderate02`, 240 ms). A toast's height grows and shrinks with it, so the others slide to make room. Removing a toast with `remove`, `clear()`, `maxNotifications` or its close button plays the same exit. Fly parameters such as `{ mode: "expressive" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` toasts appear and leave at once. Without `transition`, the queue uses `notification` from [`Motion`](/motion#app-wide-defaults).
+
+Set `transition` on a single notification to override the queue for that one, or to `false` to turn it off. While the pointer is in the queue, a closing toast keeps its height and the empty space waits for the exit to end, so the toasts below stay under the pointer.
+
+<FileSource src="/framed/NotificationQueue/NotificationQueueTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Set `transition` once, on the queue. | Every toast flies from the queue's edge, and the stack slides as one. |
+| Keep a custom `fn` from changing the toast's height. | The queue keeps the space under the pointer by not shrinking the toast. A transition that shrinks it moves the stack. |
+
 ## Managing notifications
 
 The queue tracks notifications by id, so `add`, `update`, `remove`, and the `maxNotifications` limit all key off the same identifier.

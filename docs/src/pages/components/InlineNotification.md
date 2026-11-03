@@ -29,6 +29,17 @@ action never disappears before they reach it.
 
 <FileSource src="/framed/InlineNotification/InlineNotificationTimeout" />
 
+## Transition
+
+The notification opens and closes at once by default. Set `transition` to slide it open and closed, and to play the same slide when a parent `{#if}` adds or removes it. `true` uses Carbon's slide (`moderate02`, 240 ms), which animates height, padding and margin so the content below moves with it. Slide parameters such as `{ duration: "slow01" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` it still opens and closes at once. The notification forwards `introstart`, `introend`, `outrostart`, and `outroend`. To animate every notification in an app, set `notification` on [`Motion`](/motion#app-wide-defaults).
+
+<FileSource src="/framed/InlineNotification/InlineNotificationTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Set `transition` on notifications that sit in the page flow. | The content below follows the slide instead of jumping when the notification leaves. |
+| Listen for `on:outroend` to run code after the exit. | The notification is still in the page while it leaves, so `open` flips before it is gone. |
+
 ## Full width
 
 Set `fullWidth` to fill the parent's width without the default width limits and outer margin. Use it when the notification sits inside a card, form, or other layout that sizes and spaces its own content.
