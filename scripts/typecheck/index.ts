@@ -117,7 +117,7 @@ writes.push(
           noEmit: true,
         },
         files: [
-          "node_modules/svelte-check/dist/src/svelte-shims-v4.d.ts",
+          "scripts/typecheck/shims.d.ts",
           "node_modules/svelte/svelte-html.d.ts",
         ].map((path) => relative(outDir, join(ROOT, path))),
         include: noDeclarations ? ["svelte"] : [workspaceRel, "svelte"],

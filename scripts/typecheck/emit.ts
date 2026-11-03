@@ -6,8 +6,9 @@ import { Output } from "./output";
  * Turns a component into TypeScript (or JS with JSDoc, for a component
  * without `lang="ts"`) that a type checker can read, the way svelte2tsx
  * does: the instance script becomes a `$$render` function, the markup an
- * `async () => {}` inside it, and the component the default export. It
- * uses svelte2tsx's `__sveltets_2_*` shims and svelte's `svelteHTML`.
+ * `async () => {}` inside it, and the component the default export. The
+ * `__sveltets_2_*` helpers it calls are declared in `shims.d.ts`, and
+ * `svelteHTML` in svelte's `svelte-html.d.ts`.
  */
 const GENERIC_PARAM =
   /^(\w+)(?:\s+extends\s+([\s\S]+?))?(?:\s*=\s*([\s\S]+))?$/;
@@ -675,7 +676,7 @@ export function emit(source: string, { rewriteImport }: EmitOptions = {}) {
   // `$$restProps` or `$$props` lets a parent pass any prop.
   const anyProp = USES_ALL_PROPS.test(source);
   out.raw(
-    `const $$Component = __sveltets_2_isomorphic_component${slots.size ? "_slots" : ""}(__sveltets_2_partial${anyProp ? "_with_any" : ""}([${optional.join(",")}], __sveltets_2_with_any_event($$render())));\n`,
+    `const $$Component = __sveltets_2_isomorphic_component${slots.size ? "_slots" : ""}(__sveltets_2_partial${anyProp ? "_with_any" : ""}(${optional.length ? `[${optional.join(",")}], ` : ""}__sveltets_2_with_any_event($$render())));\n`,
   );
   if (isTs) out.raw("type $$Component = InstanceType<typeof $$Component>;\n");
   else
