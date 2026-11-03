@@ -1,5 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
+import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+
+// Axe reads the color of the box as it fades in, so wait for the entrance.
+async function settleMotion(page: Page) {
+  await page.waitForFunction(() => document.getAnimations().length === 0);
+}
 
 test.describe("Dialog a11y", () => {
   test("has no detectable accessibility violations", async ({ page }) => {
@@ -7,6 +13,7 @@ test.describe("Dialog a11y", () => {
 
     await page.getByTestId("open-modal").click();
     await expect(page.getByTestId("modal-focus-target")).toBeVisible();
+    await settleMotion(page);
 
     const modalResults = await new AxeBuilder({ page })
       .include("#app")
@@ -21,6 +28,7 @@ test.describe("Dialog a11y", () => {
 
     await page.getByTestId("open-non-modal").click();
     await expect(page.getByText("Non-modal content")).toBeVisible();
+    await settleMotion(page);
 
     const nonModalResults = await new AxeBuilder({ page })
       .include("#app")

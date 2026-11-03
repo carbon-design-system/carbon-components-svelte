@@ -70,3 +70,10 @@ export const STEPPER_REPEAT_DELAY_MS: 400;
 
 /** Time between steps while a stepper button stays held (Chromium spin button). */
 export const STEPPER_REPEAT_INTERVAL_MS: 50;
+
+/**
+ * How long `Dialog` stays open while its exit motion runs, so it leaves
+ * with the same fade and slide it entered with. It matches the transition
+ * (Carbon moderate-02), and the dialog closes at once under reduced motion.
+ */
+export const DIALOG_CLOSE_MS: 240;
