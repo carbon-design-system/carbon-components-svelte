@@ -32,3 +32,5 @@ tests/zzprobe/
 **/zz*.test.ts
 **/Zz*.test.svelte
 zz.*.config.ts
+tests/.typecheck
+src/.typecheck

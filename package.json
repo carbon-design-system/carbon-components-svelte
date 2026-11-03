@@ -57,6 +57,7 @@
     "test:src-svelte-types": "bun scripts/check-svelte-types.ts",
     "test:package-exports": "bun check --project tsconfig.package-exports.json",
     "test:types": "bun scripts/test-types.ts",
+    "test:typecheck": "bun scripts/typecheck/index.ts --workspace tests",
     "test:svelte3": "cd tests-svelte3 && bunx vitest",
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
     "test:svelte4": "cd tests-svelte4 && bunx vitest",
