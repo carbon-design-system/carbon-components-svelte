@@ -27,6 +27,7 @@
   export let preventCloseOnClickOutside = false;
 
   import { createEventDispatcher } from "svelte";
+  import { DIALOG_CLOSE_MS } from "../constants/timing.js";
   import { restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outside-dismiss.js";
 
@@ -38,6 +39,12 @@
 
   /** @type {HTMLDialogElement} */
   let dialog;
+
+  /** Whether the exit motion is running, before `close()` is called. */
+  let closing = false;
+
+  /** @type {(() => void) | null} Stops the exit motion's hold. */
+  let releaseHold = null;
 
   /**
    * Server-rendered `open` attribute so a non-modal dialog is visible in
@@ -57,6 +64,8 @@
    * A dialog that arrives with the `open` attribute (server-rendered and
    * hydrated by Svelte 5) has not been shown yet, so the first sync
    * drops the attribute and calls `show()` to run the usual open path.
+   * Closing waits for the exit motion (see `requestClose`), and opening
+   * again during that wait cancels the close.
    * @param {HTMLDialogElement} node
    * @param {{ open: boolean; modal: boolean }} options
    */
@@ -68,7 +77,9 @@
 
     return {
       update: sync,
-      destroy() {},
+      destroy() {
+        releaseHold?.();
+      },
     };
 
     /** @param {{ open: boolean; modal: boolean }} options */
@@ -77,7 +88,10 @@
       hasInitialAttribute = false;
 
       if (shouldOpen) {
-        if (!node.open || fromAttribute) {
+        if (releaseHold) {
+          releaseHold();
+          pendingTrigger = null;
+        } else if (!node.open || fromAttribute) {
           if (fromAttribute) node.removeAttribute("open");
           focusReturn.save();
           if (isModal) {
@@ -89,18 +103,93 @@
         }
       } else if (node.open) {
         pendingTrigger = pendingTrigger ?? "programmatic";
-        node.close();
+        requestClose();
       }
     }
   }
 
-  function handleCancel() {
+  /**
+   * Whether the dialog can play its exit motion: it is open, and the user
+   * has not asked for reduced motion (the CSS drops the motion then too).
+   */
+  function canHold() {
+    return (
+      dialog.open &&
+      !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  /**
+   * Closes the dialog after its exit motion. A native `<dialog>` leaves the
+   * top layer as soon as `close()` runs, so the `--closing` class starts the
+   * fade and slide first, and `close()` follows when the box's transition
+   * ends. The timeout is the fallback, as `transitionend` never fires when
+   * the duration is zero or the dialog is hidden.
+   * @param {string} [returnValue]
+   */
+  function requestClose(returnValue) {
+    if (releaseHold) return;
+    if (!canHold()) {
+      dialog.close(returnValue);
+      return;
+    }
+
+    const node = dialog;
+    const timer = setTimeout(finish, DIALOG_CLOSE_MS);
+    /** @param {TransitionEvent} event */
+    const onEnd = (event) => {
+      if (event.target === node && event.propertyName === "transform") finish();
+    };
+
+    node.addEventListener("transitionend", onEnd);
+    closing = true;
+    releaseHold = () => {
+      clearTimeout(timer);
+      node.removeEventListener("transitionend", onEnd);
+      releaseHold = null;
+      closing = false;
+    };
+
+    function finish() {
+      releaseHold?.();
+      node.close(returnValue);
+    }
+  }
+
+  /** @param {Event} event */
+  function handleCancel(event) {
+    if (releaseHold) {
+      event.preventDefault();
+      return;
+    }
     pendingTrigger = "escape-key";
+    // Only a cancelable `cancel` can be held back; the browser closes the
+    // dialog at once when it is not (a second Escape, with no input between).
+    if (event.cancelable && canHold()) {
+      event.preventDefault();
+      requestClose();
+    }
+  }
+
+  /**
+   * Closes through the exit motion on a `<form method="dialog">` submit,
+   * which the browser would otherwise close at once.
+   * @param {SubmitEvent & { target: HTMLFormElement }} event
+   */
+  function handleSubmit(event) {
+    const { target: form } = event;
+    const submitter = /** @type {HTMLButtonElement | null} */ (event.submitter);
+    if (event.defaultPrevented || !canHold()) return;
+    if (form.getAttribute("method")?.toLowerCase() !== "dialog") return;
+    event.preventDefault();
+    requestClose(
+      submitter?.hasAttribute("value") ? submitter.value : undefined,
+    );
   }
 
   const outsideDismiss = createOutsideDismiss(() => {
     pendingTrigger = "backdrop";
-    dialog.close();
+    requestClose();
   });
 
   /**
@@ -132,6 +221,7 @@
   function handleClose(event) {
     const trigger = pendingTrigger ?? "close-button";
     pendingTrigger = null;
+    releaseHold?.();
     open = false;
     dispatch("close", { trigger });
     focusReturn.restore(event.currentTarget);
@@ -141,9 +231,11 @@
 <dialog
   class:bx--dialog={true}
   class:bx--dialog--modal={modal}
+  class:bx--dialog--closing={closing}
   use:dialogAction={{ open, modal }}
   {...initialOpen ? { ...$$restProps, open: true } : $$restProps}
   on:cancel={handleCancel}
+  on:submit={handleSubmit}
   on:close={handleClose}
   on:mousedown={handleMouseDown}
   on:mouseup={handleMouseUp}

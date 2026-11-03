@@ -340,6 +340,7 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 | `COPY_FEEDBACK_FADE_MS` | 110 ms | Fade-out of a copy confirmation, after which it closes if `animationend` has not fired |
 | `STEPPER_REPEAT_DELAY_MS` | 400 ms | Hold time before a stepper button starts to repeat |
 | `STEPPER_REPEAT_INTERVAL_MS` | 50 ms | Time between steps while a stepper button stays held |
+| `DIALOG_CLOSE_MS` | 240 ms | Time `Dialog` stays open for its exit motion |
 
 ### Intent
 
