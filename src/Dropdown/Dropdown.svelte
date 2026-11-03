@@ -265,6 +265,15 @@
    */
   export let portalMenu = undefined;
 
+  /**
+   * Animate the menu as it opens and closes. Set to `true` for Carbon's
+   * slide at `fast02` (a fade at `fast02` when the menu is in a portal), to
+   * params (e.g., `{ duration: "moderate01" }`) to customize it, or to
+   * `{ fn }` to use another transition. The menu does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
+   */
+  export let menuTransition = undefined;
+
   /** Set an id for the list box component */
   export let id = uniqueId();
 
@@ -1143,6 +1152,7 @@
         aria-label={menuAriaLabel}
         {id}
         portal={effectivePortalMenu}
+        transition={menuTransition}
         portalHostClass={inline ? "bx--dropdown__menu-host--inline" : undefined}
         {open}
         anchor={ref}
