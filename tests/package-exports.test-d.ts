@@ -16,6 +16,7 @@ import type {
   queryParam,
   rovingFocus,
   shortcut,
+  ShortcutHelp as BarrelShortcutHelp,
   ShortcutProvider as BarrelShortcutProvider,
   themeScript,
   ThemeZone as BarrelThemeZone,
@@ -29,6 +30,8 @@ import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTa
 import type LayoutDirection from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
 import type { LayoutDirectionProps } from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
 import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
+import type ShortcutHelp from "carbon-components-svelte/src/ShortcutProvider/ShortcutHelp.svelte";
+import type { ShortcutHelpProps } from "carbon-components-svelte/src/ShortcutProvider/ShortcutHelp.svelte";
 import type ShortcutProvider from "carbon-components-svelte/src/ShortcutProvider/ShortcutProvider.svelte";
 import type { ShortcutProviderProps } from "carbon-components-svelte/src/ShortcutProvider/ShortcutProvider.svelte";
 import type { ShortcutSpec } from "carbon-components-svelte/src/ShortcutProvider/shortcut-registry.js";
@@ -122,6 +125,9 @@ type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
 type _TrapFocus = ReturnType<typeof trapFocus>;
+type _BarrelShortcutHelp = BarrelShortcutHelp;
+type _ShortcutHelp = ShortcutHelp;
+type _ShortcutHelpOpen = ShortcutHelpProps["open"];
 type _BarrelShortcutProvider = BarrelShortcutProvider;
 type _ShortcutProvider = ShortcutProvider;
 type _ShortcutProviderProps = ShortcutProviderProps["shortcuts"];

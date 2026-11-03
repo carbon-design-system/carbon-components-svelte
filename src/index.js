@@ -211,6 +211,7 @@ export { default as SelectItemGroup } from "./Select/SelectItemGroup.svelte";
 export { default as SelectSkeleton } from "./Select/SelectSkeleton.svelte";
 export { default as SessionStorage } from "./SessionStorage/SessionStorage.svelte";
 export { default as ShapeIndicator } from "./ShapeIndicator/ShapeIndicator.svelte";
+export { default as ShortcutHelp } from "./ShortcutProvider/ShortcutHelp.svelte";
 export { default as ShortcutProvider } from "./ShortcutProvider/ShortcutProvider.svelte";
 export { shortcut } from "./ShortcutProvider/shortcut.js";
 export { default as SidePanel } from "./SidePanel/SidePanel.svelte";
