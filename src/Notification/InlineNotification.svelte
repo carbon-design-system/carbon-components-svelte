@@ -5,6 +5,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Specify the kind of notification.
    * @type {"error" | "info" | "info-square" | "success" | "warning" | "warning-alt"}
    */
@@ -91,17 +98,30 @@
    */
   export let id = undefined;
 
+  /**
+   * Animate the notification as it opens and closes, and when a parent's
+   * `{#if}` adds or removes it. Set to `true` for Carbon's slide, which
+   * animates height, padding and margin so the content below moves with
+   * it (`moderate02`), to slide params (e.g., `{ duration: "slow01" }`) to
+   * customize it, or to `{ fn }` to use another transition. The
+   * notification does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
+   */
+  export let transition = undefined;
+
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { slide } from "../motion/transitions.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import NotificationButton from "./NotificationButton.svelte";
-  import NotificationIcon from "./NotificationIcon.svelte";
+  import InlineNotificationContent from "./InlineNotificationContent.svelte";
   import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
+  const slidePreset = { fn: slide };
   const fallbackId = uniqueId();
   $: titleId = `${id ?? fallbackId}-title`;
   $: subtitleId = `${id ?? fallbackId}-subtitle`;
@@ -133,6 +153,12 @@
     getRef: () => notificationRef,
   });
 
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition, slidePreset));
+
   $: sync(open, timeout, actionable || !!$$slots.actions);
   $: syncFocusOnOpen(open, actionable && focusOnOpen);
 
@@ -155,86 +181,144 @@
 </script>
 
 {#if open}
-  <!-- An actionable notification takes focus itself when it holds no button. -->
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <div
-    bind:this={notificationRef}
-    role={actionable ? "alertdialog" : role}
-    tabindex={actionable ? -1 : undefined}
-    aria-label={ariaLabel}
-    aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
-    aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
-    class:bx--inline-notification={true}
-    class:bx--inline-notification--low-contrast={lowContrast}
-    class:bx--inline-notification--high-contrast={!lowContrast}
-    class:bx--inline-notification--hide-close-button={hideCloseButton}
-    class:bx--inline-notification--full-width={fullWidth}
-    class:bx--inline-notification--error={kind === "error"}
-    class:bx--inline-notification--low-contrast-error={lowContrast &&
-      kind === "error"}
-    class:bx--inline-notification--info={kind === "info"}
-    class:bx--inline-notification--low-contrast-info={lowContrast &&
-      kind === "info"}
-    class:bx--inline-notification--info-square={kind === "info-square"}
-    class:bx--inline-notification--low-contrast-info-square={lowContrast &&
-      kind === "info-square"}
-    class:bx--inline-notification--success={kind === "success"}
-    class:bx--inline-notification--low-contrast-success={lowContrast &&
-      kind === "success"}
-    class:bx--inline-notification--warning={kind === "warning"}
-    class:bx--inline-notification--low-contrast-warning={lowContrast &&
-      kind === "warning"}
-    class:bx--inline-notification--warning-alt={kind === "warning-alt"}
-    class:bx--inline-notification--low-contrast-warning-alt={lowContrast &&
-      kind === "warning-alt"}
-    {id}
-    {...rest}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseenter={handleMouseenter}
-    on:mouseleave
-    on:mouseleave={handleMouseleave}
-    on:focusin={handleFocusIn}
-    on:focusout={handleFocusOut}
-    on:keydown={(event) => {
-      if (actionable) {
-        handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
-      }
-    }}
-  >
-    <div class:bx--inline-notification__details={true}>
-      <NotificationIcon
-        notificationType="inline"
+  {#if animated}
+    <!-- An actionable notification takes focus itself when it holds no button. -->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <div
+      bind:this={notificationRef}
+      role={actionable ? "alertdialog" : role}
+      tabindex={actionable ? -1 : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
+      aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
+      class:bx--inline-notification={true}
+      class:bx--inline-notification--low-contrast={lowContrast}
+      class:bx--inline-notification--high-contrast={!lowContrast}
+      class:bx--inline-notification--hide-close-button={hideCloseButton}
+      class:bx--inline-notification--full-width={fullWidth}
+      class:bx--inline-notification--error={kind === "error"}
+      class:bx--inline-notification--low-contrast-error={lowContrast &&
+        kind === "error"}
+      class:bx--inline-notification--info={kind === "info"}
+      class:bx--inline-notification--low-contrast-info={lowContrast &&
+        kind === "info"}
+      class:bx--inline-notification--info-square={kind === "info-square"}
+      class:bx--inline-notification--low-contrast-info-square={lowContrast &&
+        kind === "info-square"}
+      class:bx--inline-notification--success={kind === "success"}
+      class:bx--inline-notification--low-contrast-success={lowContrast &&
+        kind === "success"}
+      class:bx--inline-notification--warning={kind === "warning"}
+      class:bx--inline-notification--low-contrast-warning={lowContrast &&
+        kind === "warning"}
+      class:bx--inline-notification--warning-alt={kind === "warning-alt"}
+      class:bx--inline-notification--low-contrast-warning-alt={lowContrast &&
+        kind === "warning-alt"}
+      {id}
+      {...rest}
+      transition:transitionFn|global={transitionParams}
+      on:introstart
+      on:introend
+      on:outrostart
+      on:outroend
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseenter={handleMouseenter}
+      on:mouseleave
+      on:mouseleave={handleMouseleave}
+      on:focusin={handleFocusIn}
+      on:focusout={handleFocusOut}
+      on:keydown={(event) => {
+        if (actionable) {
+          handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
+        }
+      }}
+    >
+      <InlineNotificationContent
         {kind}
         {lowContrast}
-        iconDescription={statusIconDescription || statusIconLabel(kind)}
-      />
-      <div class:bx--inline-notification__text-wrapper={true}>
-        {#if hasTitle}
-          <p id={titleId} class:bx--inline-notification__title={true}>
-            <strong><slot name="titleChildren">{title}</slot></strong>
-          </p>
-        {/if}
-        {#if hasSubtitle}
-          <div
-            id={actionable ? subtitleId : undefined}
-            class:bx--inline-notification__subtitle={true}
-          >
-            <slot name="subtitleChildren">{subtitle}</slot>
-          </div>
-        {/if}
+        statusIconDescription={statusIconDescription || statusIconLabel(kind)}
+        {hasTitle}
+        {hasSubtitle}
+        {titleId}
+        subtitleId={actionable ? subtitleId : undefined}
+        {hideCloseButton}
+        {closeButtonDescription}
+        on:close={() => close()}
+      >
+        <slot name="titleChildren" slot="titleChildren">{title}</slot>
+        <slot name="subtitleChildren" slot="subtitleChildren">{subtitle}</slot>
         <slot />
-      </div>
+        <slot name="actions" slot="actions" />
+      </InlineNotificationContent>
     </div>
-    <slot name="actions" />
-    {#if !hideCloseButton}
-      <NotificationButton
-        iconDescription={closeButtonDescription}
+  {:else}
+    <!-- An actionable notification takes focus itself when it holds no button. -->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+    <div
+      bind:this={notificationRef}
+      role={actionable ? "alertdialog" : role}
+      tabindex={actionable ? -1 : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy ?? builtInLabelledBy}
+      aria-describedby={joinDescribedBy(builtInDescribedBy, ariaDescribedBy)}
+      class:bx--inline-notification={true}
+      class:bx--inline-notification--low-contrast={lowContrast}
+      class:bx--inline-notification--high-contrast={!lowContrast}
+      class:bx--inline-notification--hide-close-button={hideCloseButton}
+      class:bx--inline-notification--full-width={fullWidth}
+      class:bx--inline-notification--error={kind === "error"}
+      class:bx--inline-notification--low-contrast-error={lowContrast &&
+        kind === "error"}
+      class:bx--inline-notification--info={kind === "info"}
+      class:bx--inline-notification--low-contrast-info={lowContrast &&
+        kind === "info"}
+      class:bx--inline-notification--info-square={kind === "info-square"}
+      class:bx--inline-notification--low-contrast-info-square={lowContrast &&
+        kind === "info-square"}
+      class:bx--inline-notification--success={kind === "success"}
+      class:bx--inline-notification--low-contrast-success={lowContrast &&
+        kind === "success"}
+      class:bx--inline-notification--warning={kind === "warning"}
+      class:bx--inline-notification--low-contrast-warning={lowContrast &&
+        kind === "warning"}
+      class:bx--inline-notification--warning-alt={kind === "warning-alt"}
+      class:bx--inline-notification--low-contrast-warning-alt={lowContrast &&
+        kind === "warning-alt"}
+      {id}
+      {...rest}
+      on:click
+      on:mouseover
+      on:mouseenter
+      on:mouseenter={handleMouseenter}
+      on:mouseleave
+      on:mouseleave={handleMouseleave}
+      on:focusin={handleFocusIn}
+      on:focusout={handleFocusOut}
+      on:keydown={(event) => {
+        if (actionable) {
+          handleActionableKeydown(event, { closeOnEscape, hideCloseButton });
+        }
+      }}
+    >
+      <InlineNotificationContent
+        {kind}
         {lowContrast}
-        notificationType="inline"
-        on:click={close}
-      />
-    {/if}
-  </div>
+        statusIconDescription={statusIconDescription || statusIconLabel(kind)}
+        {hasTitle}
+        {hasSubtitle}
+        {titleId}
+        subtitleId={actionable ? subtitleId : undefined}
+        {hideCloseButton}
+        {closeButtonDescription}
+        on:close={() => close()}
+      >
+        <slot name="titleChildren" slot="titleChildren">{title}</slot>
+        <slot name="subtitleChildren" slot="subtitleChildren">{subtitle}</slot>
+        <slot />
+        <slot name="actions" slot="actions" />
+      </InlineNotificationContent>
+    </div>
+  {/if}
 {/if}

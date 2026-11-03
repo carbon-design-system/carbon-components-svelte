@@ -78,6 +78,7 @@
    * @property {boolean} [focusOnOpen]
    * @property {boolean} [closeOnEscape]
    * @property {NotificationAction} [action] - Add an action button. The toast keeps focus where it is and does not time out.
+   * @property {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>} [transition] - Override the queue's `transition` for this notification. `false` turns it off.
    */
 
   /**
@@ -114,9 +115,24 @@
   /** Specify the accessible name of the notifications landmark */
   export let labelText = "Notifications";
 
+  /**
+   * Animate notifications as they enter and leave, including when `remove`,
+   * `clear` or `maxNotifications` takes them out. Set to `true` for Carbon's
+   * fly, which moves a toast in from the edge the queue sits on (32px
+   * sideways in the corners, 16px vertically in the centered positions)
+   * while its height grows and shrinks so the rest of the stack slides
+   * (`moderate02`). Set to fly params (e.g., `{ mode: "expressive" }`) to
+   * customize it, or to `{ fn }` to use another transition. A
+   * notification's own `transition` overrides this. Notifications do not
+   * animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
+   */
+  export let transition = undefined;
+
   import { onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import { NOTIFICATION_QUEUE_COLLAPSE_MS } from "../constants/timing.js";
+  import { fly } from "../motion/transitions.js";
   import { focusActionableNotification } from "../utils/dismissible-notification.js";
   import { returnFocus } from "../utils/focus.js";
   import NotificationActionButton from "./NotificationActionButton.svelte";
@@ -124,7 +140,7 @@
 
   /**
    * @typedef {NotificationData & { id: string, placeholder?: undefined }} QueuedNotification
-   * @typedef {{ id?: undefined, placeholder: { height: number } }} Placeholder
+   * @typedef {{ id?: undefined, placeholder: { height: number, after?: string, held: boolean } }} Placeholder
    */
 
   /** @type {null | HTMLDivElement} */
@@ -138,7 +154,7 @@
 
   /**
    * Toasts, and the empty space of toasts that closed under the pointer.
-   * Each entry renders one element, so `queueRef.children[index]` is its node.
+   * Each entry renders one element, so `entryNodes()[index]` is its node.
    * @type {Array<QueuedNotification | Placeholder>}
    */
   let notifications = [];
@@ -193,12 +209,93 @@
    */
   function toastProps(entry) {
     const {
-      id: _id,
+      id,
       action: _action,
       placeholder: _placeholder,
+      transition: _transition,
       ...props
     } = entry;
-    return props;
+    // Marks the toast's element as the entry's, so a toast that is leaving
+    // can be told from one that is not (see `entryNodes`).
+    return { ...props, "data-queue-entry": id };
+  }
+
+  /**
+   * The element of each entry, in order. A toast that left the array stays
+   * in the page until its exit ends, and is not an entry. A placeholder that
+   * waits for that exit renders nothing yet, so its slot is `undefined`.
+   * @returns {Array<Element | undefined>}
+   */
+  function entryNodes() {
+    const ids = new Set(notifications.map((entry) => entry.id));
+    const rendered = Array.from(queueRef?.children ?? []).filter((node) => {
+      const id = node.getAttribute("data-queue-entry");
+      return id === null || ids.has(id);
+    });
+    let next = 0;
+    return notifications.map((entry) =>
+      entry.placeholder?.held === false ? undefined : rendered[next++],
+    );
+  }
+
+  /**
+   * A toast that animates out keeps its full height there, so a placeholder
+   * that holds its space waits for the exit to end, then takes over in the
+   * same frame. A placeholder cannot start at full height, or the stack
+   * would drop by it while the toast still fills it.
+   * @param {string} id
+   */
+  function releasePlaceholder(id) {
+    const index = notifications.findIndex((n) => n.placeholder?.after === id);
+    const entry = notifications[index];
+    if (entry?.placeholder) {
+      notifications[index] = {
+        placeholder: { height: entry.placeholder.height, held: true },
+      };
+      notifications = notifications;
+    }
+  }
+
+  // A toast that closes under the pointer leaves a placeholder of its
+  // height, so it must not shrink as well, or the stack would drop twice.
+  // Svelte 3 and 4 call a transition function once per element, so the
+  // choice is made in `css`, which every version runs when an exit starts.
+  /**
+   * @param {Element} node
+   * @param {import("../motion/transitions.js").FlyParams} params
+   * @param {import("../motion/transitions.js").TransitionOptions} options
+   * @returns {import("svelte/transition").TransitionConfig}
+   */
+  function holdingFly(node, params, options) {
+    const config = fly(node, params, options);
+    const { css } = config;
+    if (!css || !params.collapse) return config;
+    const held = fly(node, { ...params, collapse: false }, options).css;
+    return {
+      ...config,
+      css: (t, u) => (hovered && held ? held : css)(t, u),
+    };
+  }
+
+  /**
+   * The `transition` prop of a toast: it flies in from the edge the queue
+   * sits on, sideways in the corners and vertically in the centered
+   * positions. A `{ fn }` of another transition passes through as is.
+   * @param {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams> | undefined} prop
+   * @param {string} position
+   * @returns {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
+   */
+  function toastTransition(prop, position) {
+    if (!prop) return false;
+    const { fn, ...params } =
+      /** @type {{ fn?: unknown } & import("../motion/transitions.js").FlyParams} */ (
+        prop === true ? {} : prop
+      );
+    if (fn && fn !== fly) return prop;
+    const from = isCenterPosition(position)
+      ? { x: 0, y: isTopPosition(position) ? -16 : 16 }
+      : { x: isLeftPosition(position) ? -32 : 32 };
+    return { fn: holdingFly, ...from, collapse: true, ...params };
   }
 
   /**
@@ -324,12 +421,23 @@
 
     moveFocusFrom(index);
     arrivals.delete(id);
-    const node = queueRef?.children[index];
+    const node = entryNodes()[index];
     if (hovered && node instanceof HTMLElement) {
       // The toasts after it would slide under the pointer, and a second
       // click would close one of them. Keep its space until the pointer
       // leaves. Focus inside it has already moved to the next toast.
-      notifications[index] = { placeholder: { height: node.offsetHeight } };
+      const entry = notifications[index];
+      notifications[index] = {
+        placeholder: {
+          height: node.offsetHeight,
+          after: id,
+          // Without an exit, nothing else holds the space.
+          held: !toastTransition(
+            isToast(entry) ? (entry.transition ?? transition) : false,
+            position,
+          ),
+        },
+      };
     } else {
       notifications.splice(index, 1);
     }
@@ -359,8 +467,9 @@
    */
   function moveFocusFrom(index) {
     if (!queueRef) return;
-    // Children, so `index` also counts placeholders, which never take focus.
-    const nodes = Array.from(queueRef.children);
+    // A slot per entry, so `index` also counts placeholders, which never take
+    // focus.
+    const nodes = entryNodes();
     const current = nodes[index];
     if (!current?.contains(document.activeElement)) return;
 
@@ -369,7 +478,7 @@
       ...nodes.slice(0, index).reverse(),
     ];
     for (const toast of nearest) {
-      if (!toast.classList.contains("bx--toast-notification")) continue;
+      if (!toast?.classList.contains("bx--toast-notification")) continue;
       if (toast instanceof HTMLElement) focusActionableNotification(toast);
       if (!current.contains(document.activeElement)) return;
     }
@@ -426,7 +535,7 @@
       .sort((a, b) => b.arrival - a.arrival);
 
     for (const { index } of newestFirst) {
-      const toast = queueRef.children[index];
+      const toast = entryNodes()[index];
       if (!(toast instanceof HTMLElement)) continue;
       focusActionableNotification(toast);
       if (queueRef.contains(document.activeElement)) {
@@ -493,20 +602,29 @@
     <!-- `id` keys the queue; spreading it would set duplicate DOM ids across queues. -->
     {#each notifications as entry (entry.placeholder ?? entry.id)}
       {#if entry.placeholder}
-        <div
-          aria-hidden="true"
-          class:bx--notification-queue__placeholder={true}
-          style:block-size="{collapsing ? 0 : entry.placeholder.height}px"
-        ></div>
+        <!-- Until the toast it replaces has left, that toast holds the space. -->
+        {#if entry.placeholder.held}
+          <div
+            aria-hidden="true"
+            class:bx--notification-queue__placeholder={true}
+            style:block-size="{collapsing ? 0 : entry.placeholder.height}px"
+          ></div>
+        {/if}
       {:else}
         {@const id = entry.id}
         {@const action = entry.action}
         {@const timeout = resolveTimeout(entry)}
+        {@const motion = toastTransition(
+          entry.transition ?? transition,
+          position,
+        )}
         {#if action}
           <ToastNotification
             {...toastProps(entry)}
             {timeout}
+            transition={motion}
             on:close={() => remove(id)}
+            on:outroend={() => releasePlaceholder(id)}
           >
             <svelte:fragment slot="actions">
               <NotificationActionButton
@@ -521,7 +639,9 @@
           <ToastNotification
             {...toastProps(entry)}
             {timeout}
+            transition={motion}
             on:close={() => remove(id)}
+            on:outroend={() => releasePlaceholder(id)}
           />
         {/if}
       {/if}
