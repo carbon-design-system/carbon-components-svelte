@@ -115,9 +115,14 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const errorId = `error-${id}`;
@@ -147,7 +152,7 @@
 
   // Matches TextInput's own showInvalid convention: disabled/readonly take
   // precedence over validation styling.
-  $: showInvalid = invalid && !disabled && !readonly;
+  $: showInvalid = invalid && !effectiveDisabled && !readonly;
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
     splitAriaNaming($$restProps));
   // Only `value` is a dependency: `focused` is read inside the function.
@@ -163,7 +168,7 @@
     showInvalid && "bx--edit-in-place--invalid",
     inheritTypography && "bx--edit-in-place--inherit-type",
     readonly && "bx--edit-in-place--readonly",
-    disabled && "bx--edit-in-place--disabled",
+    effectiveDisabled && "bx--edit-in-place--disabled",
   ]
     .filter(Boolean)
     .join(" ");
@@ -282,7 +287,12 @@
   }
 </script>
 
-<div bind:this={ref} data-component-name="InlineEdit" {...rest}>
+<div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
+  bind:this={ref}
+  data-component-name="InlineEdit"
+  {...rest}
+>
   <div
     bind:this={containerRef}
     class={containerClass}
@@ -291,14 +301,14 @@
   >
     <input
       bind:this={inputRef}
-      use:preserveFocusSelection={selectTextOnFocus && !disabled}
+      use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
       {id}
       type="text"
       class="bx--edit-in-place__text-input bx--text-input"
       {placeholder}
       value={draft}
       readonly={readonly || undefined}
-      disabled={disabled || undefined}
+      disabled={effectiveDisabled || undefined}
       on:input={(event) => setValue(event.currentTarget.value)}
       on:keydown={handleKeyDown}
       aria-label={ariaLabel ?? labelText}
@@ -317,7 +327,7 @@
       {#if showInvalid}
         <WarningFilled size={16} class="bx--edit-in-place__warning-icon" />
       {/if}
-      {#if disabled}
+      {#if effectiveDisabled}
         <!-- No edit affordance: the field is fully inert. -->
       {:else if readonly}
         <Toggletip
