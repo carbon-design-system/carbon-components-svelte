@@ -1,4 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import {
+  COPY_FEEDBACK_FADE_MS,
+  TOOLTIP_ENTER_DELAY_MS,
+} from "../../src/constants/timing.js";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { openTooltips } from "../utils/open-tooltips";
 import { user } from "../utils/user";
@@ -374,21 +378,23 @@ describe("CopyButton", () => {
         vi.useRealTimers();
       });
 
-      // Regression: portalled feedback hides the inline element, so the
-      // hide-feedback animation (and animationend) never runs; feedbackTimeout
-      // must close the portal directly or the tooltip stays open.
-      it("should dismiss portal feedback after feedbackTimeout", async () => {
+      // The portalled tooltip fades out as the inline caret does, then the
+      // timeout fallback removes it if `animationend` never fires.
+      it("should fade out portal feedback, then remove it", async () => {
         render(CopyButtonPortalTooltipTimeout);
 
         const button = getCopyButton("Copy");
         await fireEvent.click(button);
         await Promise.resolve();
 
-        expect(
-          document.querySelector("[data-floating-portal]"),
-        ).toBeInTheDocument();
+        const tooltip = () => document.querySelector(".bx--tooltip-portal");
+        expect(tooltip()).toHaveClass("bx--tooltip-portal--fade-in");
 
         await vi.advanceTimersByTimeAsync(100);
+
+        expect(tooltip()).toHaveClass("bx--tooltip-portal--fade-out");
+
+        await vi.advanceTimersByTimeAsync(COPY_FEEDBACK_FADE_MS + 50);
 
         expect(
           document.querySelector("[data-floating-portal]"),
@@ -399,6 +405,61 @@ describe("CopyButton", () => {
         expect(
           document.querySelector("[data-floating-portal]"),
         ).toBeInTheDocument();
+      });
+
+      it("should swap an open tooltip to the feedback without fading in", async () => {
+        render(CopyButtonPortalTooltipTimeout);
+
+        const button = getCopyButton("Copy");
+        await fireEvent.mouseEnter(button);
+        await vi.advanceTimersByTimeAsync(TOOLTIP_ENTER_DELAY_MS);
+        await fireEvent.click(button);
+        await Promise.resolve();
+
+        const tooltip = document.querySelector(".bx--tooltip-portal");
+        expect(tooltip).toHaveTextContent("Copied!");
+        expect(tooltip).not.toHaveClass("bx--tooltip-portal--fade-in");
+      });
+
+      it("should swap back to the description without fading out while hovered", async () => {
+        render(CopyButtonPortalTooltipTimeout);
+
+        const button = getCopyButton("Copy");
+        await fireEvent.mouseEnter(button);
+        await vi.advanceTimersByTimeAsync(TOOLTIP_ENTER_DELAY_MS);
+        await fireEvent.click(button);
+        await Promise.resolve();
+        expect(document.querySelector(".bx--tooltip-portal")).toHaveTextContent(
+          "Copied!",
+        );
+
+        await vi.advanceTimersByTimeAsync(100);
+
+        const tooltip = document.querySelector(".bx--tooltip-portal");
+        expect(tooltip).toHaveTextContent("Copy");
+        expect(tooltip).not.toHaveClass("bx--tooltip-portal--fade-out");
+      });
+
+      it("should remove portal feedback when hide-feedback ends", async () => {
+        render(CopyButtonPortalTooltipTimeout);
+
+        await fireEvent.click(getCopyButton("Copy"));
+        await Promise.resolve();
+        await vi.advanceTimersByTimeAsync(100);
+
+        const tooltip = document.querySelector(".bx--tooltip-portal");
+        expect(tooltip).toHaveClass("bx--tooltip-portal--fade-out");
+        // jsdom has no `AnimationEvent`.
+        const ended = new Event("animationend", { bubbles: true });
+        Object.defineProperty(ended, "animationName", {
+          value: "hide-feedback",
+        });
+        tooltip?.dispatchEvent(ended);
+        await vi.advanceTimersByTimeAsync(0);
+
+        expect(
+          document.querySelector("[data-floating-portal]"),
+        ).not.toBeInTheDocument();
       });
     });
 

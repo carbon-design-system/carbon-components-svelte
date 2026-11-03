@@ -551,14 +551,10 @@
       on:click
       on:click={async () => {
         try {
-          await copyFeedback.onClick(
-            async () => {
-              await copy(getCopyText());
-              dispatch("copy");
-            },
-            feedbackTimeout,
-            effectivePortalTooltip,
-          );
+          await copyFeedback.onClick(async () => {
+            await copy(getCopyText());
+            dispatch("copy");
+          }, feedbackTimeout);
         } catch (error) {
           dispatch("copy:error", { error });
         }
@@ -594,6 +590,7 @@
         anchor={copyRef}
         open={feedbackOpen}
         text={feedbackText}
+        {animation}
         direction={effectiveTooltipPosition}
         intrinsicAlign={effectiveTooltipAlignment}
         horizontalGapLeft={portalGaps.horizontalGapLeft}
@@ -603,6 +600,9 @@
         verticalAlignOffsetLeft={portalGaps.verticalAlignOffsetLeft}
         verticalAlignOffsetRight={portalGaps.verticalAlignOffsetRight}
         on:cover={() => copyFeedback.dismiss()}
+        on:animationend={(event) => {
+          copyFeedback.onAnimationEnd(event);
+        }}
       />
     {/if}
   {/if}

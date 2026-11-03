@@ -40,6 +40,14 @@
   export let tooltipType = undefined;
 
   /**
+   * Fade the tooltip in or out, as a copy confirmation does. The tooltip
+   * stays in the page until the owner sets `open` to `false`, for example
+   * on `animationend`.
+   * @type {"fade-in" | "fade-out" | undefined}
+   */
+  export let animation = undefined;
+
+  /**
    * Set on the portalled content when using a11y tooltips (`role="tooltip"`).
    * @type {string | undefined}
    */
@@ -133,10 +141,13 @@
       onCover: () => dispatch("cover"),
     }}
     class:bx--tooltip-portal={true}
+    class:bx--tooltip-portal--fade-in={animation === "fade-in"}
+    class:bx--tooltip-portal--fade-out={animation === "fade-out"}
     data-direction={actualDirection ?? direction}
     data-tooltip-type={tooltipType}
     on:mouseenter
     on:mouseleave
+    on:animationend
   >
     <span class:bx--tooltip-portal__caret={true}></span>
     <!-- The box lays out left to right (see _tooltip.scss); the text keeps

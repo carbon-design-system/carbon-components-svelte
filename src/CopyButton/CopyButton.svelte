@@ -125,11 +125,24 @@
   let copyPending = false;
   let copyFailed = false;
 
+  // Whether the tooltip was already open when the feedback appeared. Its
+  // text then swaps in place: fading in from hidden would blink it out.
+  let feedbackSwapsInPlace = false;
+
   function syncCopyFeedback() {
+    if (copyFeedback.animation === "fade-in" && animation !== "fade-in") {
+      feedbackSwapsInPlace = tooltipOpen;
+    }
     animation = copyFeedback.animation;
     feedbackOpen = copyFeedback.feedbackOpen;
     copyPending = copyFeedback.copyPending;
     copyFailed = copyFeedback.isError;
+
+    // The hover description takes the tooltip's place when the feedback
+    // ends. The tooltip stays, so it has nothing to fade out.
+    if (animation === "fade-out" && feedbackPortalled && tooltipHoverActive) {
+      copyFeedback.dismiss();
+    }
   }
 
   $: feedbackText = copyFailed ? errorFeedback : feedback;
@@ -169,6 +182,10 @@
   $: feedbackInPortal = feedbackPortalled && feedbackOpen;
   $: tooltipOpen = tooltipHoverActive || feedbackInPortal;
   $: tooltipText = feedbackOpen ? feedbackText : iconDescription;
+  $: portalAnimation =
+    feedbackInPortal && !(animation === "fade-in" && feedbackSwapsInPlace)
+      ? animation
+      : undefined;
 
   function handleTooltipMouseEnter() {
     // Skip the enter delay when another icon tooltip is already open so moving
@@ -294,16 +311,12 @@
   on:click
   on:click={async () => {
     try {
-      await copyFeedback.onClick(
-        async () => {
-          if (copy === copyText ? text !== undefined : true) {
-            await copy(text ?? "");
-            dispatch("copy");
-          }
-        },
-        feedbackTimeout,
-        feedbackPortalled,
-      );
+      await copyFeedback.onClick(async () => {
+        if (copy === copyText ? text !== undefined : true) {
+          await copy(text ?? "");
+          dispatch("copy");
+        }
+      }, feedbackTimeout);
     } catch (error) {
       dispatch("copy:error", { error });
     }
@@ -347,6 +360,7 @@
     anchor={ref}
     open={tooltipOpen}
     text={tooltipText}
+    animation={portalAnimation}
     tooltipType="icon"
     direction={effectiveTooltipPosition}
     intrinsicAlign={effectiveTooltipAlignment}
@@ -362,5 +376,8 @@
     }}
     on:mouseleave={handleTooltipMouseLeave}
     on:cover={handleTooltipCover}
+    on:animationend={(event) => {
+      copyFeedback.onAnimationEnd(event);
+    }}
   />
 {/if}

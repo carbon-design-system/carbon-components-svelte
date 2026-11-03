@@ -12,7 +12,6 @@ export type CopyFeedbackState = {
   onClick: (
     performCopy: () => void | Promise<void>,
     feedbackTimeout: number,
-    portalled?: boolean,
   ) => Promise<void>;
   onAnimationEnd: (event: { animationName: string }) => void;
   cleanup: () => void;
