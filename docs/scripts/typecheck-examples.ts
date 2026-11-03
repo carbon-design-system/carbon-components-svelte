@@ -136,6 +136,8 @@ fs.writeFileSync(
           // The subpaths in package.json `exports`, so an example can't
           // import a deep path that an app can't resolve.
           "carbon-components-svelte": [relative("../src")],
+          "carbon-components-svelte/flags": [relative("../src/flags")],
+          "carbon-components-svelte/flags/all": [relative("../src/flags/all")],
           "carbon-components-svelte/motion": [relative("../src/motion")],
           "carbon-components-svelte/syntax": [relative("../src/syntax")],
           "carbon-components-svelte/tokens": [relative("../src/tokens")],
