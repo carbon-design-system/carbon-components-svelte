@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
+import TabsModified from "./TabsModified.test.svelte";
 import TabsReorder from "./TabsReorder.test.svelte";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSsr from "./TabsSsr.test.svelte";
@@ -120,5 +121,16 @@ describe("Tabs server render with a secondary label", () => {
       "move this tab",
     );
     expect(document.querySelector("[role='status']")?.textContent).toBe("");
+  });
+
+  it("renders the dot and the name of a modified tab", () => {
+    const { document } = renderSSR(TabsModified);
+
+    const dots = document.querySelectorAll(".bx--tabs__nav-item--modified-dot");
+    expect(dots).toHaveLength(1);
+    expect(dots[0].closest("li")).toHaveClass("bx--tabs__nav-item--modified");
+    expect(
+      dots[0].closest("li")?.querySelector("[role='tab']")?.textContent,
+    ).toContain("Bravo Modified");
   });
 });
