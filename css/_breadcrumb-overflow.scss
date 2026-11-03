@@ -1,0 +1,38 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Breadcrumb overflow: collapse items that don't fit the available width
+/// into an overflow menu, keeping the first and last items visible.
+/// @access private
+/// @group components
+@mixin breadcrumb-overflow {
+  // `enableOverflow` needs a stable single line to measure and collapse
+  // against, so force flex + nowrap regardless of viewport. Double-classed
+  // since the base `.#{$prefix}--breadcrumb` sets `display` both
+  // unconditionally and behind a breakpoint, at equal specificity.
+  .#{$prefix}--breadcrumb.#{$prefix}--breadcrumb--overflow {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  // Every item keeps its natural width; overflow is handled by moving items
+  // into the menu, never by squeezing one to fit.
+  .#{$prefix}--breadcrumb.#{$prefix}--breadcrumb--overflow
+    .#{$prefix}--breadcrumb-item {
+    flex-shrink: 0;
+  }
+
+  // A collapsed item, or the overflow trigger when nothing is collapsed.
+  // Kept in the DOM (not `display: none`) so `offsetWidth` stays measurable
+  // if the container grows and it fits again.
+  .#{$prefix}--breadcrumb-item[data-overflow="true"],
+  .#{$prefix}--breadcrumb-item--overflow-empty {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@include exports("breadcrumb-overflow") {
+  @include breadcrumb-overflow;
+}
