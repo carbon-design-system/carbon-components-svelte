@@ -27,6 +27,39 @@
     margin-inline-start: $carbon--spacing-03;
   }
 
+  // A ghost button without an icon has no icon room for the spinner to
+  // replace. The spinner sits centered over the label instead, which stays in
+  // flow, hidden, so the button keeps its width. `-webkit-text-fill-color`
+  // hides the text but leaves `color`, which the spinner's stroke and the
+  // disabled look read, and keeps the label in the accessibility tree.
+  // Centered with auto margins: the spinner's own animation owns `transform`.
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--spinner-over-label,
+  .#{$prefix}--btn--danger-ghost.#{$prefix}--btn--spinner-over-label {
+    -webkit-text-fill-color: transparent;
+
+    .#{$prefix}--btn__loading {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      @include ccs-inset-inline(0, 0);
+    }
+  }
+
+  // Forced colors paint the label whatever its fill, so hiding it leaves it
+  // under the spinner. Put the spinner back after the label, as on a ghost
+  // button with an icon, and let the button grow.
+  @media (forced-colors: active) {
+    .#{$prefix}--btn--ghost.#{$prefix}--btn--spinner-over-label,
+    .#{$prefix}--btn--danger-ghost.#{$prefix}--btn--spinner-over-label {
+      .#{$prefix}--btn__loading {
+        position: static;
+        margin: 0;
+        margin-inline-start: $carbon--spacing-03;
+      }
+    }
+  }
+
   .#{$prefix}--btn--icon-only.#{$prefix}--btn--ghost .#{$prefix}--btn__loading,
   .#{$prefix}--btn--icon-only.#{$prefix}--btn--danger-ghost .#{$prefix}--btn__loading {
     margin-inline-start: 0;

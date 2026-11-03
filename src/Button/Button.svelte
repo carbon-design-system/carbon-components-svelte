@@ -496,6 +496,11 @@
   // Without an icon for the spinner to replace, it takes the keys' place
   // instead, and the hidden keys keep the button's width.
   $: spinnerInShortcut = hasShortcutHint && !icon && !$$slots.icon;
+  // With no icon for the spinner to replace, a ghost button has no room to
+  // give it. The spinner sits over the label, which stays, hidden, so
+  // `loading` does not change the button's width.
+  $: spinnerOverLabel =
+    showSpinner && !spinnerInShortcut && !hasIconOnly && !icon && !$$slots.icon;
   // Spreads `$$restProps` and sets `type` over the `<button>`'s own
   // literal one (which the linter wants), so it's typed as the loose bag it is.
   /** @type {Record<string, any>} */
@@ -527,6 +532,7 @@
       hasIconOnly && "bx--btn--icon-only",
       hasShortcutHint && "bx--btn--shortcut",
       spinnerInShortcut && "bx--btn--shortcut-end",
+      spinnerOverLabel && "bx--btn--spinner-over-label",
       hasShortcutHint && !spinnerInShortcut && "bx--btn--shortcut-icon",
       hasTooltip && "bx--tooltip__trigger",
       hasTooltip && "bx--tooltip--a11y",

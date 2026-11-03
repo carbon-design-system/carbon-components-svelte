@@ -464,6 +464,22 @@ describe("Button", () => {
       expect(button.querySelector(".bx--btn__loading")).not.toBeNull();
     });
 
+    // With no icon to replace, the spinner overlays the label instead of
+    // widening the button; the marker class is what the CSS keys on.
+    it("marks a labeled button with no icon as showing its spinner over the label", async () => {
+      const { rerender } = render(ButtonLoading, { loading: false });
+      const labeled = screen.getByTestId("btn-labeled-loading");
+      const withIcon = screen.getByTestId("btn-icon-labeled-loading");
+      expect(labeled).not.toHaveClass("bx--btn--spinner-over-label");
+
+      await rerender({ loading: true });
+      expect(labeled).toHaveClass("bx--btn--spinner-over-label");
+      expect(withIcon).not.toHaveClass("bx--btn--spinner-over-label");
+      expect(screen.getByTestId("btn-icon-only-loading")).not.toHaveClass(
+        "bx--btn--spinner-over-label",
+      );
+    });
+
     it("marks the button aria-disabled but keeps it focusable while loading", () => {
       render(ButtonLoading, { loading: true });
 
