@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
@@ -68,6 +69,7 @@ const cases: {
   ...[
     { name: "Dropdown", component: Dropdown },
     { name: "ComboBox", component: ComboBox },
+    { name: "MultiSelect", component: MultiSelect },
   ].map(({ name, component }) => ({
     name,
     component,
