@@ -112,6 +112,9 @@ export default {
     // passes. Each `*.hydrate.test.ts` names them in `@depends-on`, so it
     // runs when they or a component they render changes.
     "tests/utils/hydrate.ts",
+    // scripts/typecheck checks the workspace its caller names, and its
+    // test names that workspace (the fixtures) in `@depends-on`.
+    "scripts/typecheck/index.ts",
     "tests/utils/hydrate-build.ts",
   ],
   narrowers: [cssNarrower],

@@ -1,4 +1,5 @@
 // @vitest-environment node
+// @depends-on scripts/typecheck/** tsconfig.json bun.lock
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { emit } from "../../scripts/typecheck/emit";
