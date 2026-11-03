@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
 
 test.describe("Toggle", () => {
@@ -116,5 +117,32 @@ test.describe("Toggle", () => {
         await flip(testId);
       }
     }
+  });
+
+  // Flip the switch from script and read the transitions it starts in the
+  // same task, before any of them can finish.
+  const flipAndListTransitions = (page: Page) =>
+    page
+      .getByRole("switch", { name: "Enable notifications" })
+      .evaluate((input: HTMLInputElement) => {
+        input.click();
+        return document
+          .getAnimations()
+          .map((animation) => (animation as CSSTransition).transitionProperty);
+      });
+
+  test("slides the handle when motion is allowed", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+
+    expect(await flipAndListTransitions(page)).toContain("transform");
+  });
+
+  test("holds the handle still under reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+
+    expect(await flipAndListTransitions(page)).not.toContain("transform");
+    await expect(
+      page.getByRole("switch", { name: "Enable notifications" }),
+    ).toBeChecked();
   });
 });
