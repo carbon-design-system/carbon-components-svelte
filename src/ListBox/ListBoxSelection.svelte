@@ -26,11 +26,12 @@
   });
 
   /**
-   * Override the default translation ids.
+   * Override the default translation ids. Unset, it uses
+   * `setTranslateContext`, then English.
    * @type {(id: ListBoxSelectionTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   /**
@@ -43,11 +44,13 @@
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
 
   const defaultTranslations = {
     [translationIds.clearAll]: "Clear all selected items",
     [translationIds.clearSelection]: "Clear selected item",
   };
+  const translate = getTranslateContext();
   const dispatch = createEventDispatcher();
   const ctx = getContext("carbon:MultiSelect");
 

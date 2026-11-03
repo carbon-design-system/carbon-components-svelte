@@ -67,3 +67,9 @@ export const MENU_PLACEMENT_CONTEXT_KEY = "carbon:MenuPlacement";
  * its first or last item.
  */
 export const MENU_OPEN_CONTEXT_KEY = "carbon:MenuOpenKey";
+
+/**
+ * Set by `setTranslateContext`; read by every component with a
+ * `translateWithId` prop, when the prop is not passed.
+ */
+export const TRANSLATE_CONTEXT_KEY = "carbon:translate";

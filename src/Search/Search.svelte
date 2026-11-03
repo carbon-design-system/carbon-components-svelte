@@ -238,6 +238,7 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   // A disabled `<fieldset>` around the component disables it too.
@@ -274,10 +275,11 @@
   }
 
   const kbdTranslations = getKbdTranslations();
+  const translate = getTranslateContext();
 
   /** @param {import("../Kbd/Kbd.svelte").KbdTranslationId} id */
   function translateKey(id) {
-    return kbdTranslations?.(id) ?? KBD_TRANSLATIONS[id];
+    return kbdTranslations?.(id) ?? translate?.(id) ?? KBD_TRANSLATIONS[id];
   }
 
   // The collapsed magnifier takes the shortcut, then the input.

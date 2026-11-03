@@ -266,6 +266,7 @@
   /**
    * Override the chevron icon label based on the open state.
    * Defaults to "Open menu" when closed and "Close menu" when open.
+   * Unset, it uses `setTranslateContext`, then English.
    * @type {((id: import("../ListBox/ListBoxMenuIcon.svelte").ListBoxMenuIconTranslationId) => string) | undefined}
    */
   export let translateWithId = undefined;
@@ -273,6 +274,7 @@
   /**
    * Override the label of the clear button when the input has a selection.
    * Defaults to "Clear selected item" since a combo box can only have one selection.
+   * Unset, it uses `setTranslateContext`, then English.
    * @type {((id: "clearSelection") => string) | undefined}
    */
   export let translateWithIdSelection = undefined;

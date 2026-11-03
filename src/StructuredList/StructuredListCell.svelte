@@ -43,22 +43,25 @@
   });
 
   /**
-   * Override the default translation ids.
+   * Override the default translation ids. Unset, it uses
+   * `setTranslateContext`, then English.
    * Only used when `sortable` is `true`.
    * @type {(id: StructuredListCellTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   import { createEventDispatcher, getContext } from "svelte";
   import { readable } from "svelte/store";
   import ArrowUp from "../icons/ArrowUp.svelte";
   import ArrowsVertical from "../icons/ArrowsVertical.svelte";
+  import { getTranslateContext } from "../utils/translate-context.js";
 
   const ctx = getContext("carbon:StructuredListWrapper");
   const selection = ctx?.selection ?? readable(false);
 
+  const translate = getTranslateContext();
   const dispatch = createEventDispatcher();
 
   const defaultTranslations = {
