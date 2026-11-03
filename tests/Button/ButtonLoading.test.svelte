@@ -19,6 +19,8 @@
   >Submit</Button
 >
 
+<Button data-testid="btn-icon-labeled-loading" icon={Add} {loading}>Add</Button>
+
 <Button data-testid="btn-href-loading" href="#" {loading}>Link</Button>
 
 <Button data-testid="btn-skeleton-loading" skeleton {loading} />
