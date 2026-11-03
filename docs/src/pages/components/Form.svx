@@ -350,6 +350,8 @@ Press the reset button to clear the preview along with the field.
 
 <FileSource src="/framed/Form/FormResetAction" />
 
+To warn before a user discards edits, see [UnsavedChanges](/components/UnsavedChanges).
+
 ## SvelteKit
 
 Forms work without JavaScript first: a `method="POST"` form posts its fields to

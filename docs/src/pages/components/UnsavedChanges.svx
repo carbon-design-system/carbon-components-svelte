@@ -1,0 +1,131 @@
+---
+components: ["UnsavedChangesPrompt"]
+description: Track unsaved form changes and ask before the user closes a dialog, navigates in the app or leaves the page.
+---
+
+## Basic
+
+Create a store with `createUnsavedChanges()` and report a form to it with the `trackUnsavedChanges` action. The store's `dirty` and `count` are readable stores. Call `markSaved()` after a successful save.
+
+The action compares each control to its own baseline from when the form mounted, not `FormData`, so controls without a `name` count. Typing a change and typing it back reads clean again.
+
+<FileSource src="/framed/UnsavedChanges/UnsavedChanges" />
+
+Pass the action to `Form` and `FluidForm` through `actions`. On a plain `<form>`, use `use:trackUnsavedChanges={{ store }}`.
+
+```svelte
+<script>
+  import { Form, TextInput, createUnsavedChanges, trackUnsavedChanges } from "carbon-components-svelte";
+
+  const unsaved = createUnsavedChanges();
+  const { dirty } = unsaved;
+</script>
+
+<Form actions={[[trackUnsavedChanges, { store: unsaved }]]}>
+  <TextInput labelText="Service name" />
+</Form>
+```
+
+### Reset and save
+
+A reset retakes the baseline, so the form reads clean at whatever the reset left in it. `markSaved()` does the same for every form on the store, and also clears sources you set by hand. Submitting does not mark the form clean: a save can fail, and the form should keep asking until it succeeds.
+
+A native submit that no handler cancels navigates the page, so the action keeps the browser's leave prompt quiet for that navigation. A save handler that calls `preventDefault()` is unaffected.
+
+### Explicit
+
+Pass `dirty` to report a flag you compute yourself. The action then mirrors it and does not look at the controls. Use it for controls that have no form element to compare, such as `DataTable` inline edit, `TreeView` checks or a `Dropdown` without a `name`.
+
+<FileSource src="/framed/UnsavedChanges/UnsavedChangesExplicit" />
+
+### Supported controls
+
+| Control | Detected how |
+| --- | --- |
+| `TextInput`, `TextArea`, `Checkbox`, `Toggle`, `Select`, `RadioButtonGroup` | The native `input` and `change` events. |
+| `DatePicker` | The `input` and `change` events the calendar dispatches on its input. |
+| `FileUploader`, `FileUploaderDropContainer` | The `change` event of the file input, by file name, size and modified time. |
+| `NumberInput` stepper buttons, `Slider` | The input's `value` attribute, which the control keeps in step with its value. |
+| `ComboBox` | A sweep of every control after the next click or navigation key. |
+| `Dropdown` with a `name`, `MultiSelect` | The hidden inputs they render, compared as a set. |
+| `Dropdown` without a `name` | Nothing. It renders no form element; use [Explicit](#explicit). |
+
+## Guarding
+
+### Dialog close
+
+`Modal`, `ComposedModal` and `SidePanel` dispatch a cancelable `close` event. `closeGuard(close)` returns a handler for it: when the store is dirty it cancels the close, asks, and calls `close()` only if the user discards. Programmatic closes pass through, so closing the dialog from `close()` does not ask again.
+
+A footer Cancel button does not close a `Modal` by itself. Call the same handler without an event from `on:click:button--secondary`.
+
+After a discard, `closeGuard` calls `markSaved()`, so restore the form's values in `close()`. `form.reset()` is not a restore: it sets bound fields to their markup default, which is empty for most of them.
+
+<FileSource src="/framed/UnsavedChanges/UnsavedChangesModal" />
+
+`ComposedModal` and `SidePanel` take the same handler. A `SidePanel` without an overlay is not modal, so it does not move focus on its own.
+
+<FileSource src="/framed/UnsavedChanges/UnsavedChangesSidePanel" />
+
+### In-app navigation
+
+`guard()` resolves `true` when it is safe to leave: the store is clean, or the user agreed to discard. Call it before you change what the user is looking at. `ContentSwitcher`, `Tabs` and `Stepper` change events are not cancelable, so they have already moved when `guard()` answers. Put the selection back when the user declines, as the example does by remounting the switcher.
+
+<FileSource src="/framed/UnsavedChanges/UnsavedChangesGuard" />
+
+### Browser unload
+
+While any source is dirty, the store asks the browser to confirm before it closes or reloads the tab. The browser shows its own text, and only for a page the user has interacted with. The listener exists only while the store is dirty, so a clean page keeps its back and forward cache.
+
+Pass `beforeUnload: false` to `createUnsavedChanges()`, or call `setBeforeUnload(false)` at runtime, to turn the prompt off.
+
+## Prompt
+
+`UnsavedChangesPrompt` is a [ConfirmModal](/components/ConfirmModal) that answers `guard()` and `closeGuard()` in place of `window.confirm`. Mount one per store. It renders nothing until the first request, and resolves each request once: Discard resolves `true`; Keep editing, <DocKbd label="Escape" /> and the close button resolve `false`. Focus starts on Keep editing, so a stray <DocKbd label="Enter" /> does not discard.
+
+Set `title`, `confirmText`, `cancelText` and `kind`, and use the default slot for the body.
+
+```svelte
+<UnsavedChangesPrompt
+  store={unsaved}
+  title="Leave without saving?"
+  confirmText="Leave"
+  kind="warning"
+>
+  Edits to this service are not saved.
+</UnsavedChangesPrompt>
+```
+
+It opens over an open dialog without closing it.
+
+| Do | Why |
+| --- | --- |
+| Create a store per dialog. | One shared store makes unrelated dialogs prompt each other. |
+| Reset the form's values when closing a mounted dialog. | Reopening would show the discarded edits. |
+| Call `markSaved()` after loading async data into the form. | Otherwise the load itself is the baseline. |
+| Keep Save enabled while the form is dirty. | A disabled Save hides why nothing happens. |
+
+## Routers
+
+`interrupt(cancel, retry)` bridges a router hook. When the store is dirty it calls `cancel()` synchronously, asks, and calls `retry()` if the user discards. Routers commit a navigation as soon as the hook returns, so `await guard()` followed by `cancel()` is too late.
+
+```js
+import { beforeNavigate, goto } from "$app/navigation";
+
+beforeNavigate(({ willUnload, cancel, to }) => {
+  if (!willUnload && to) unsaved.interrupt(cancel, () => goto(to.url));
+});
+```
+
+`willUnload` navigations leave the page, which `beforeunload` handles. A second interruption while the prompt is open replaces `retry`, so only the latest destination is followed.
+
+The Navigation API works the same way where `navigate` events are cancelable:
+
+```js
+navigation.addEventListener("navigate", (event) => {
+  if (!event.cancelable) return;
+  unsaved.interrupt(
+    () => event.preventDefault(),
+    () => navigation.navigate(event.destination.url),
+  );
+});
+```
