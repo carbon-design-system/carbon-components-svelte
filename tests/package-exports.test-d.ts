@@ -2,6 +2,7 @@ import type {
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  createMask,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
@@ -12,6 +13,7 @@ import type {
   getAvatarBackgroundColor,
   getInitials,
   getLayoutDirection,
+  mask,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
@@ -46,6 +48,7 @@ import type {
   FloatingPositionOptions,
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
+import type { MaskParams } from "carbon-components-svelte/src/utils/mask.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
 import {
   highlight,
@@ -113,6 +116,9 @@ type _FloatingPosition = ReturnType<typeof floatingPosition>;
 type _FloatingPositionOptions = FloatingPositionOptions;
 type _FloatingPositionResult = FloatingPositionResult;
 type _FormReset = ReturnType<typeof formReset>;
+type _CreateMask = ReturnType<typeof createMask>["format"];
+type _Mask = ReturnType<typeof mask>;
+type _MaskParams = MaskParams;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
