@@ -1,5 +1,10 @@
 <script>
-  import { MenuButton, MenuItem } from "carbon-components-svelte";
+  import {
+    MenuButton,
+    MenuItem,
+    OverflowMenu,
+    OverflowMenuItem,
+  } from "carbon-components-svelte";
 </script>
 
 <MenuButton labelText="Actions" menuTransition>
@@ -10,3 +15,13 @@
     <MenuItem>PNG</MenuItem>
   </MenuItem>
 </MenuButton>
+
+<OverflowMenu iconDescription="Overflow actions" menuTransition>
+  <OverflowMenuItem text="Action 1" />
+  <OverflowMenuItem text="Action 2" />
+</OverflowMenu>
+
+<OverflowMenu iconDescription="Portal actions" portalMenu menuTransition>
+  <OverflowMenuItem text="Action 1" />
+  <OverflowMenuItem text="Action 2" />
+</OverflowMenu>
