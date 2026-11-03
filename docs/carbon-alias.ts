@@ -15,6 +15,14 @@ export const carbonAlias: Alias[] = [
     replacement: path.join(carbonRoot, "src/syntax/index.js"),
   },
   {
+    find: /^carbon-components-svelte\/flags$/,
+    replacement: path.join(carbonRoot, "src/flags/index.js"),
+  },
+  {
+    find: /^carbon-components-svelte\/flags\/all$/,
+    replacement: path.join(carbonRoot, "src/flags/all.js"),
+  },
+  {
     find: /^carbon-components-svelte\/tokens$/,
     replacement: path.join(carbonRoot, "src/tokens/index.js"),
   },
