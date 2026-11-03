@@ -1977,6 +1977,26 @@ describe("NumberInput", () => {
       expect(onchange.mock.calls[0][0].detail).toBe(13);
     });
 
+    it.each(["disabled", "readonly"] as const)(
+      "ends a scrub when %s turns on mid-drag",
+      async (state) => {
+        const onchange = vi.fn();
+        const { rerender } = render(NumberInput, {
+          props: { scrubbable: true, onchange },
+        });
+        const label = screen.getByText("Clusters");
+
+        await fireEvent.pointerDown(label, { clientX: 100, pointerId: 1 });
+        await fireEvent.pointerMove(label, { clientX: 109, pointerId: 1 });
+        await rerender({ [state]: true });
+        await fireEvent.pointerMove(label, { clientX: 140, pointerId: 1 });
+
+        expect(screen.getByTestId("bound")).toHaveTextContent("2");
+        expect(onchange).toHaveBeenCalledTimes(1);
+        expect(onchange.mock.calls[0][0].detail).toBe(2);
+      },
+    );
+
     it("moves 10 steps per 4px with Shift and clamps to min and max", async () => {
       render(NumberInput, {
         props: { value: 10, min: 0, max: 30, scrubbable: true },

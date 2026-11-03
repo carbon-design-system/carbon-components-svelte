@@ -545,6 +545,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -563,6 +564,10 @@
   } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -904,7 +909,7 @@
    * @param {{ detail: { tag: { value?: string | number } } }} event
    */
   function handleTagClose({ detail }) {
-    if (disabled || readonly) return;
+    if (effectiveDisabled || readonly) return;
     const id = detail.tag.value;
     const entry = sortedItems.find((item) => item.id === id);
     if (!entry?.checked || entry.disabled) return;
@@ -1349,20 +1354,20 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: invalid || requiredError,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   // A MultiSelect that turns disabled while open closes its menu, so no
   // option stays clickable. A read-only menu stays open for review. Closing
   // here is not a dismissal, so `close` does not fire.
-  $: if (disabled && open) open = false;
+  $: if (effectiveDisabled && open) open = false;
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
-    isFluid && !showInvalid && !showWarn && !disabled && !readonly;
+    isFluid && !showInvalid && !showWarn && !effectiveDisabled && !readonly;
   // Hoverable = disabled/readonly do not suppress the invalid/warning hover
   // tint. showInvalid/showWarn already exclude both, so this only matters
   // for readability of the selector it replaces.
-  $: fluidHoverable = isFluid && !disabled && !readonly;
+  $: fluidHoverable = isFluid && !effectiveDisabled && !readonly;
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
   $: if (items !== prevItems) {
     prevItems = items;
@@ -1607,6 +1612,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={multiSelectRef}
   use:formReset={handleOptionFormReset}
   use:dismiss={{
@@ -1624,7 +1630,7 @@
   class:bx--list-box__wrapper--fluid--hoverable={fluidHoverable}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
-  class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
+  class:bx--list-box__wrapper--fluid--disabled={isFluid && effectiveDisabled}
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   class:bx--multi-select--filterable__wrapper={isFluid && filterable}
@@ -1635,7 +1641,7 @@
       type="hidden"
       name={itemInput.name ?? name ?? item.id}
       value={itemInput.value ?? (name ? item.id : "")}
-      {disabled}
+      disabled={effectiveDisabled}
       form={$$restProps.form}
     />
   {/each}
@@ -1643,7 +1649,7 @@
     <label
       for={id}
       class:bx--label={true}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
       use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
@@ -1653,7 +1659,7 @@
   {/if}
   <ListBox
     id={comboId}
-    {disabled}
+    disabled={effectiveDisabled}
     invalid={showInvalid}
     invalidText={isFluid ? "" : shownInvalidText}
     invalidId={errorId}
@@ -1698,14 +1704,14 @@
               on:clear
               on:clear={() => clear({ open: openOnClear })}
               translateWithId={translateWithIdSelection}
-              {disabled}
+              disabled={effectiveDisabled}
               {readonly}
               class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
           {/if}
           <input
             bind:this={inputRef}
-            use:preserveFocusSelection={selectTextOnFocus && !disabled}
+            use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
             use:formReset={handleFilterFormReset}
             bind:value
             aria-invalid={showInvalid ? "true" : undefined}
@@ -1718,7 +1724,7 @@
             aria-haspopup="listbox"
             aria-expanded={open ? "true" : "false"}
             aria-activedescendant={activeDescendantId}
-            aria-disabled={disabled ? "true" : undefined}
+            aria-disabled={effectiveDisabled ? "true" : undefined}
             aria-readonly={readonly ? "true" : undefined}
             aria-controls={open ? menuId : undefined}
             aria-describedby={joinDescribedBy(
@@ -1728,7 +1734,7 @@
             class:bx--text-input={true}
             class:bx--text-input--empty={value === ""}
             on:click={() => {
-              if (disabled) return;
+              if (effectiveDisabled) return;
               openMenu("click");
             }}
             on:keydown
@@ -1795,7 +1801,7 @@
             on:focus
             on:focus={() => {
               fieldFocused = true;
-              if (selectTextOnFocus && !disabled) {
+              if (selectTextOnFocus && !effectiveDisabled) {
                 tick().then(() => inputRef?.select());
               }
             }}
@@ -1804,7 +1810,7 @@
               fieldFocused = false;
             }}
             on:paste
-            {disabled}
+            disabled={effectiveDisabled}
             {readonly}
             {placeholder}
             {id}
@@ -1835,13 +1841,13 @@
                 }
               }}
               translateWithId={translateWithIdSelection}
-              {disabled}
+              disabled={effectiveDisabled}
               {readonly}
             />
           {/if}
           <ListBoxMenuIcon
             on:click={(event) => {
-              if (disabled) return;
+              if (effectiveDisabled) return;
               event.stopPropagation();
               if (open) open = false;
               else openMenu("click");
@@ -1880,13 +1886,13 @@
             fieldFocused = true;
           }}
           on:click={() => {
-            if (disabled) return;
+            if (effectiveDisabled) return;
             if (open) open = false;
             else openMenu("click");
           }}
           on:keydown={(event) => {
             // The field is only aria-disabled, so a click can still focus it.
-            if (disabled) return;
+            if (effectiveDisabled) return;
             if (
               event.key === " " ||
               event.key === "Enter" ||
@@ -1975,7 +1981,7 @@
             dispatch("blur", event);
           }}
           {id}
-          {disabled}
+          disabled={effectiveDisabled}
           {readonly}
         >
           {#if selectionCount > 0}
@@ -1984,7 +1990,7 @@
               on:clear
               on:clear={() => clear({ open: openOnClear })}
               translateWithId={translateWithIdSelection}
-              {disabled}
+              disabled={effectiveDisabled}
               {readonly}
               class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
@@ -1999,7 +2005,7 @@
     {#if required}
       <ListBoxRequiredInput
         hasValue={formItems.length > 0}
-        {disabled}
+        disabled={effectiveDisabled}
         {readonly}
         focusTarget={filterable ? inputRef : fieldRef}
         form={$$restProps.form}
@@ -2342,7 +2348,7 @@
         {#each selectedTagItems as item, index (item.id)}
           {@const props = {
             filter: !readonly,
-            disabled: disabled || !!item.disabled,
+            disabled: effectiveDisabled || !!item.disabled,
             value: item.id,
             title: removeTagText,
             maxWidth: "13rem",
@@ -2360,7 +2366,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
