@@ -1352,6 +1352,10 @@
     disabled,
     readonly,
   }));
+  // A MultiSelect that turns disabled while open closes its menu, so no
+  // option stays clickable. A read-only menu stays open for review. Closing
+  // here is not a dismissal, so `close` does not fire.
+  $: if (disabled && open) open = false;
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
     isFluid && !showInvalid && !showWarn && !disabled && !readonly;

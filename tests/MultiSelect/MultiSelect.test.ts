@@ -381,6 +381,19 @@ describe("MultiSelect", () => {
       },
     );
 
+    it("closes the menu when disabled turns on while open", async () => {
+      const { rerender } = render(MultiSelect, { props: { items } });
+      await openMenu();
+
+      await rerender({ disabled: true });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
+
     it("handles disabled state", () => {
       render(MultiSelect, {
         props: {
