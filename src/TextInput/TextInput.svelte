@@ -124,6 +124,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
@@ -131,6 +132,10 @@
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const ctx = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -171,7 +176,7 @@
   }
 
   function handleFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => ref?.select());
     }
   }
@@ -179,7 +184,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
@@ -207,6 +212,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--text-input-wrapper={true}
   class:bx--text-input-wrapper--inline={inline}
@@ -228,7 +234,7 @@
             for={id}
             class:bx--label={true}
             class:bx--visually-hidden={hideLabel}
-            class:bx--label--disabled={disabled}
+            class:bx--label--disabled={effectiveDisabled}
             class:bx--label--inline={inline}
             class:bx--label--inline--xs={effectiveSize === "xs"}
             class:bx--label--inline--sm={effectiveSize === "sm"}
@@ -240,7 +246,7 @@
           {#if maxCount != null}
             <div
               class:bx--label={true}
-              class:bx--label--disabled={disabled}
+              class:bx--label--disabled={effectiveDisabled}
               class:bx--text-input__label-counter={true}
               aria-hidden="true"
             >
@@ -253,7 +259,7 @@
         <div
           id={helperId}
           class:bx--form__helper-text={true}
-          class:bx--form__helper-text--disabled={disabled}
+          class:bx--form__helper-text--disabled={effectiveDisabled}
           class:bx--form__helper-text--inline={inline}
         >
           {helperText}
@@ -267,7 +273,7 @@
         for={id}
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
-        class:bx--label--disabled={disabled}
+        class:bx--label--disabled={effectiveDisabled}
         class:bx--label--inline={inline}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
         use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
@@ -277,7 +283,7 @@
       {#if maxCount != null}
         <div
           class:bx--label={true}
-          class:bx--label--disabled={disabled}
+          class:bx--label--disabled={effectiveDisabled}
           class:bx--text-input__label-counter={true}
           aria-hidden="true"
         >
@@ -324,13 +330,13 @@
       {/if}
       <input
         bind:this={ref}
-        use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid ? "true" : undefined}
         data-warn={showWarn || undefined}
         aria-errormessage={showInvalid && invalidText ? errorId : undefined}
-        {disabled}
+        disabled={effectiveDisabled}
         {id}
         {name}
         {placeholder}
@@ -396,7 +402,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
         class:bx--form__helper-text--inline={inline}
       >
         {helperText}

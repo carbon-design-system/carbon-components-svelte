@@ -5,6 +5,8 @@ import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
+import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
+import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import type { ComponentType } from "svelte";
 import { tick } from "svelte";
 import FieldsetHost from "./FieldsetHost.test.svelte";
@@ -94,6 +96,47 @@ describe("components in a disabled fieldset", () => {
       await tick();
 
       await expectDisabled(container);
+    },
+  );
+});
+
+const field = { labelText: "Field", helperText: "Help" };
+
+// The browser disables these fields' native controls itself; the fieldset
+// now also reaches their disabled styles.
+const styleCases: {
+  name: string;
+  component: ComponentType;
+  fieldProps: Record<string, unknown>;
+  marker: string;
+}[] = [
+  {
+    name: "PasswordInput",
+    component: PasswordInput,
+    fieldProps: field,
+    marker: ".bx--label--disabled",
+  },
+  {
+    name: "TextInput",
+    component: TextInput,
+    fieldProps: field,
+    marker: ".bx--label--disabled",
+  },
+];
+
+describe("form fields in a disabled fieldset", () => {
+  it.each(styleCases)(
+    "$name shows its disabled state",
+    async ({ component, fieldProps, marker }) => {
+      const { container, rerender } = render(FieldsetHost, {
+        props: { component, fieldProps },
+      });
+      expect(container.querySelector(marker)).toBeNull();
+
+      await rerender({ disabled: true });
+      await tick();
+
+      expect(container.querySelector(marker)).not.toBeNull();
     },
   );
 });

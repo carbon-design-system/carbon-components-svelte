@@ -140,6 +140,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
@@ -148,6 +149,10 @@
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const ctx = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -158,7 +163,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
@@ -191,7 +196,7 @@
   // hides it until the next hover or focus.
   const tooltip = createAnchoredTooltip({
     group: getTooltipGroup(),
-    enabled: () => !disabled,
+    enabled: () => !effectiveDisabled,
     dismissOnClick: false,
     enterDelayMs: () => 0,
   });
@@ -208,7 +213,7 @@
     detachTooltip = toggleButtonRef ? tooltip.attach(toggleButtonRef) : noop;
   }
 
-  $: if (disabled) tooltip.hide();
+  $: if (effectiveDisabled) tooltip.hide();
 
   $: if (!$tooltipOpen) portalWhenClipped = false;
   $: inlineOpen = !effectivePortalTooltip && $tooltipOpen;
@@ -232,7 +237,7 @@
   $: tooltipLabel = type === "text" ? hidePasswordLabel : showPasswordLabel;
 
   function handleFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => ref?.select());
     }
   }
@@ -255,6 +260,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--text-input-wrapper={true}
   class:bx--password-input-wrapper={true}
@@ -275,7 +281,7 @@
         for={id}
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
-        class:bx--label--disabled={disabled}
+        class:bx--label--disabled={effectiveDisabled}
         class:bx--label--inline={inline}
         class:bx--label--inline--xs={inline && effectiveSize === "xs"}
         class:bx--label--inline--sm={inline && effectiveSize === "sm"}
@@ -288,7 +294,7 @@
         <div
           id={helperId}
           class:bx--form__helper-text={true}
-          class:bx--form__helper-text--disabled={disabled}
+          class:bx--form__helper-text--disabled={effectiveDisabled}
           class:bx--form__helper-text--inline={inline}
         >
           {helperText}
@@ -301,7 +307,7 @@
       for={id}
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
       class:bx--label--inline={inline}
       class:bx--label--inline--xs={inline && effectiveSize === "xs"}
       class:bx--label--inline--sm={inline && effectiveSize === "sm"}
@@ -336,7 +342,7 @@
       {/if}
       <input
         bind:this={ref}
-        use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:formReset={handleFormReset}
         data-invalid={showInvalid || undefined}
         aria-invalid={showInvalid ? "true" : undefined}
@@ -347,7 +353,7 @@
         {placeholder}
         {type}
         value={value ?? ""}
-        {disabled}
+        disabled={effectiveDisabled}
         {readonly}
         class:bx--text-input={true}
         class:bx--password-input={true}
@@ -398,11 +404,11 @@
       <button
         bind:this={toggleButtonRef}
         type="button"
-        {disabled}
+        disabled={effectiveDisabled}
         class:bx--text-input--password__visibility__toggle={true}
         class:bx--btn={true}
         class:bx--btn--icon-only={true}
-        class:bx--btn--disabled={disabled}
+        class:bx--btn--disabled={effectiveDisabled}
         class:bx--tooltip__trigger={true}
         class:bx--tooltip--a11y={true}
         class:bx--tooltip--portal-active={effectivePortalTooltip}
@@ -416,14 +422,14 @@
         class:bx--tooltip--hidden={!effectivePortalTooltip && $tooltipHidden}
         class:bx--tooltip--visible={inlineOpen}
         class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
-        aria-label={effectivePortalTooltip || disabled
+        aria-label={effectivePortalTooltip || effectiveDisabled
           ? tooltipLabel
           : undefined}
         on:click={() => {
           type = type === "password" ? "text" : "password";
         }}
       >
-        {#if !disabled && !effectivePortalTooltip}
+        {#if !effectiveDisabled && !effectivePortalTooltip}
           <span bind:this={tooltipRef} class:bx--assistive-text={true}>
             {tooltipLabel}
           </span>
@@ -444,7 +450,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
         class:bx--form__helper-text--inline={inline}
       >
         {helperText}
@@ -456,7 +462,7 @@
   </div>
 </div>
 
-{#if effectivePortalTooltip && !disabled}
+{#if effectivePortalTooltip && !effectiveDisabled}
   <PortalTooltip
     anchor={toggleButtonRef}
     direction={effectiveTooltipPosition === "top" ? "top" : "bottom"}
