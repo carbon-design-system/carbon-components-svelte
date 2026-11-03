@@ -950,6 +950,63 @@ test.describe("right-to-left layout", () => {
     expectMirrored(await boxes(page, parts), mirror(ltr, axis));
   });
 
+  // The rail sits at the inline start of a vertical indicator, its wrapped
+  // label lines start there too, and a horizontal step's optional label
+  // is inset from the inline start of its step. The icon's gap and an
+  // equal-width step's label inset sit at the inline end.
+  test("mirrors ProgressIndicator's rail and labels", async ({ page }) => {
+    const parts = {
+      verticalRail: "[data-testid=progress-vertical] .bx--progress-line",
+      verticalOptional:
+        "[data-testid=progress-vertical] .bx--progress-optional",
+      horizontalLabel: "[data-testid=progress-horizontal] .bx--progress-label",
+      horizontalOptional:
+        "[data-testid=progress-horizontal] .bx--progress-optional",
+      horizontalIcon:
+        "[data-testid=progress-horizontal] .bx--progress-step svg",
+      equalLabel: "[data-testid=progress-equal] .bx--progress-label",
+    };
+    // The extent of each line of the vertical step's wrapped label.
+    const lines = () =>
+      page
+        .locator("[data-testid=progress-vertical] .bx--progress-label")
+        .first()
+        .evaluate(async (label) => {
+          await document.fonts.ready;
+          const range = document.createRange();
+          range.selectNodeContents(label);
+          const tops = new Map<number, { left: number; right: number }>();
+          for (const rect of range.getClientRects()) {
+            const top = Math.round(rect.top);
+            const line = tops.get(top);
+            tops.set(top, {
+              left: Math.min(line?.left ?? rect.left, rect.left),
+              right: Math.max(line?.right ?? rect.right, rect.right),
+            });
+          }
+          return Object.fromEntries(
+            [...tops.values()].map((line, index) => [
+              `line${index}`,
+              {
+                left: Math.round(line.left),
+                right: Math.round(line.right),
+                width: Math.round(line.right - line.left),
+              },
+            ]),
+          );
+        });
+
+    const viewportWidth = await page.evaluate(
+      () => document.documentElement.clientWidth,
+    );
+    const ltr = { ...(await boxes(page, parts)), ...(await lines()) };
+    await setDirection(page, "rtl");
+    const rtl = { ...(await boxes(page, parts)), ...(await lines()) };
+
+    expect(Object.keys(ltr)).toContain("line1");
+    expectMirrored(rtl, mirror(ltr, viewportWidth));
+  });
+
   // Both platforms' keys share one grid cell as wide as the wider set. The
   // keys run left to right, but the narrower set still sits at the inline
   // end, next to whatever follows the label.
