@@ -254,6 +254,24 @@ function leadingRange({ range, scrollTop, containerHeight, lead, maxItems }) {
 }
 
 /**
+ * How many items, counting from the first, fit in `maxHeight`.
+ *
+ * @param {Object} options
+ * @param {ReturnType<typeof accumulateOffsets> | null} options.accumulated
+ * @param {number} options.itemCount
+ * @param {number} options.itemHeight
+ * @param {number} [options.maxHeight]
+ * @returns {number}
+ */
+function fitCount({ accumulated, itemCount, itemHeight, maxHeight }) {
+  if (maxHeight === undefined) return itemCount;
+  if (!accumulated) {
+    return Math.min(itemCount, Math.floor(maxHeight / itemHeight));
+  }
+  return upperBound(accumulated.offsets, itemCount + 1, maxHeight) - 1;
+}
+
+/**
  * Compute the `[startIndex, endIndex)` slice of items to render for a given
  * scroll position, including `overscan` padding and an optional `maxItems` cap.
  *
@@ -333,6 +351,9 @@ export function getVisibleRange({
  * @param {number} [options.scrollDelta=0] Signed distance the last scroll
  * moved. The window extends that far past the viewport in the direction of
  * travel, up to one `containerHeight`, so a fast scroll does not outrun it.
+ * @param {number} [options.maxHeight] The tallest list to lay out, in pixels.
+ * The list ends at the last item that fits: a browser lays out only so tall a
+ * scroll area, and drops a taller one.
  * @returns {{
  *   visibleItems: Item[],
  *   startIndex: number,
@@ -354,6 +375,7 @@ export function virtualize({
   measured = false,
   heights = undefined,
   scrollDelta = 0,
+  maxHeight = undefined,
 }) {
   // A non-positive itemHeight can't be virtualized (the math divides by it and
   // yields NaN indices), so render the full list unvirtualized. This holds
@@ -376,9 +398,15 @@ export function virtualize({
   const accumulated = measured
     ? accumulateOffsets({ itemCount: items.length, heights, itemHeight })
     : null;
+  const itemCount = fitCount({
+    accumulated,
+    itemCount: items.length,
+    itemHeight,
+    maxHeight,
+  });
   const totalHeight = accumulated
-    ? accumulated.totalHeight
-    : items.length * itemHeight;
+    ? accumulated.offsets[itemCount]
+    : itemCount * itemHeight;
 
   // Clamp scrollTop to the scrollable range. A stale scrollTop (e.g. left over
   // from a longer list after the filter narrows it) would otherwise push
@@ -397,14 +425,14 @@ export function virtualize({
           accumulated,
           scrollTop: top,
           containerHeight: height,
-          itemCount: items.length,
+          itemCount,
           overscan,
         })
       : getVisibleRange({
           scrollTop: top,
           itemHeight,
           containerHeight: height,
-          itemCount: items.length,
+          itemCount,
           overscan,
         });
 

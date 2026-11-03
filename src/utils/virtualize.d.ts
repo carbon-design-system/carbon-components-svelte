@@ -30,6 +30,11 @@ export type VirtualizeConfig<
    * @default 0
    */
   scrollDelta?: number;
+  /**
+   * The tallest list to lay out, in pixels. The list ends at the last item
+   * that fits, since a browser lays out only so tall a scroll area.
+   */
+  maxHeight?: number;
 };
 
 export type VirtualizeResult<
