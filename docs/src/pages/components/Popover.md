@@ -258,3 +258,14 @@ The action registers its listeners after a macrotask, not synchronously. Enablin
 Manage open state with an external element, like a button, using `open`.
 
 <FileSource src="/framed/Popover/WithButton" />
+
+## Transition
+
+The popover appears and disappears at once by default. Set `transition` to fade its contents in and out, in place or in a portal. `true` uses Carbon's fade (`fast01`, 70 ms), fade parameters such as `{ duration: "fast02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` it still appears and disappears at once. The popover forwards `introstart`, `introend`, `outrostart`, and `outroend`. While animated, the contents are in the page only when `open` is `true`, and the popover stays displayed until they have left. To animate every popover in an app, set `tooltip` on [`Motion`](/motion#app-wide-defaults).
+
+<FileSource src="/framed/Popover/PopoverTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Run work that needs the contents gone on `outroend`, not when `open` turns `false`. | The popover stays displayed until the contents have faded out. |
+| Don't read the contents from the DOM while `open` is `false`. | An animated popover mounts them only while it is open. |
