@@ -100,7 +100,12 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -174,13 +179,13 @@
   $: $groupForm = form;
   $: $groupRequired = required;
   $: $groupReadonly = readonly;
-  $: $groupDisabled = disabled;
+  $: $groupDisabled = effectiveDisabled;
   $: $groupInvalid = invalid;
   $: $groupWarn = warn;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
 
@@ -200,6 +205,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   {id}
   class:bx--form-item={true}
   {...wrapperProps}
@@ -216,7 +222,7 @@
     class:bx--checkbox-group--invalid={showInvalid}
     class:bx--checkbox-group--warning={showWarn}
     class:bx--checkbox-group--decorator={$$slots.decorator}
-    {disabled}
+    disabled={effectiveDisabled}
     data-invalid={showInvalid || undefined}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
@@ -278,7 +284,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
