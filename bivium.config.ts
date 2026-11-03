@@ -47,6 +47,8 @@ export default {
     "thumbnails/**",
     "ostia.config.ts",
     "biome.json",
+    // Options for `bun fmt` only.
+    "bunfig.toml",
     "carbon.yml",
     "telemetry.yml",
     "LICENSE",
@@ -66,7 +68,14 @@ export default {
     "dom-accessibility-api",
     "@carbon/colors",
   ],
-  edges: { "css/*.css": ["css/**", "scripts/build-css.ts"] },
+  // Tools CI runs on its own: a bump that only reaches them selects nothing.
+  inert: ["@biomejs/biome", "ostia", "@types/*"],
+  edges: {
+    "css/*.css": ["css/**", "scripts/build-css.ts"],
+    // Vitest loads the setup file, and what it imports, before every unit
+    // test, and no test imports it.
+    "tests/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": "tests/setup-tests.ts",
+  },
   self: [
     "bivium.config.ts",
     "scripts/lib/css-narrower.ts",
