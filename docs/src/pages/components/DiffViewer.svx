@@ -1,0 +1,288 @@
+---
+components: ["DiffViewer"]
+description: DiffViewer compares two texts, or shows a patch, in a split or unified view. It folds unchanged lines, marks the words that changed, and jumps between changes by keyboard.
+---
+
+<script>
+  import { DiffViewer, Stack } from "carbon-components-svelte";
+  import { tokenize } from "carbon-components-svelte/syntax";
+
+  const before = `import { readFile } from "node:fs/promises";
+
+// Load the settings for a project.
+export async function loadSettings(path, options = {}) {
+  const raw = await readFile(path, "utf8");
+  const settings = JSON.parse(raw);
+  if (!settings.name) {
+    throw new Error("A project needs a name");
+  }
+  const retries = options.retries ?? 3;
+  return { ...settings, retries };
+}
+
+export function describe(settings) {
+  return settings.name + " (" + settings.retries + " retries)";
+}
+
+export function isEnabled(settings) {
+  return settings.enabled !== false;
+}
+`;
+
+  const after = `import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+
+// Load the settings for a project.
+export async function loadSettings(path, options = {}) {
+  const raw = await readFile(resolve(path), "utf8");
+  const settings = JSON.parse(raw);
+  if (!settings.name) {
+    throw new Error("A project needs a name: " + path);
+  }
+  const retries = options.retries ?? 5;
+  return { ...settings, retries };
+}
+
+export function describe(settings) {
+  return settings.name + " (" + settings.retries + " retries)";
+}
+
+export function isEnabled(settings) {
+  return settings.enabled !== false;
+}
+
+export function isArchived(settings) {
+  return settings.archived === true;
+}
+`;
+
+  const spaced = after
+    .replace("  const raw", "      const raw")
+    .replace("?? 5", "?? 8");
+
+  const patch = `diff --git a/deploy/api.yaml b/deploy/api.yaml
+index 4b3e2a1..9c0d5f7 100644
+--- a/deploy/api.yaml
++++ b/deploy/api.yaml
+@@ -12,7 +12,7 @@ spec:
+   template:
+     spec:
+       containers:
+-        - image: registry.example.com/api:4.2.0
++        - image: registry.example.com/api:4.3.0
+           resources:
+             limits:
+               memory: 512Mi
+@@ -40,6 +40,7 @@ spec:
+   strategy:
+     rollingUpdate:
+       maxUnavailable: 0
++      maxSurge: 2
+   selector:
+     matchLabels:
+       app: api
+`;
+
+  const config = `retries: 3
+timeout: 30
+region: eu-de
+logLevel: info
+`;
+  const configAfter = `retries: 5
+timeout: 30
+region: eu-de
+logLevel: debug
+`;
+</script>
+
+## Basic
+
+Compare two texts with `oldText` and `newText`. The split view puts the old line beside the new one, with line numbers for both. Lines far from a change fold behind a "Show hidden lines" button, and each stretch of lines opens with its hunk header. The toolbar counts the lines added and removed, steps between changes, switches the view, and copies the diff as a patch.
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  labelText="Settings changes"
+  oldLabel="settings.js (before)"
+  newLabel="settings.js (after)"
+  height={420}
+/>
+
+## View
+
+Set `view` to `"unified"` to list removed lines above the added lines that replace them, with the old and new line numbers side by side. Use `bind:view` to follow the toolbar's view buttons.
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  view="unified"
+  labelText="Settings changes, unified"
+  height={420}
+/>
+
+## Folding
+
+### Context
+
+Set `context` to the number of unchanged lines kept around each change. The default is `3`. A fold of one line is not worth its own row, so it stays open.
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  view="unified"
+  context={1}
+  labelText="Settings changes, one line of context"
+  height={300}
+/>
+
+### Show every line
+
+Set `collapseUnchanged` to `false` to show every line. The diff still scrolls by window, so a file of any length costs the same to show.
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  collapseUnchanged={false}
+  labelText="Settings changes, every line"
+  height={300}
+/>
+
+### Hunk headers
+
+Set `hunkHeaders` to `false` to drop the `@@` line that opens each stretch. The control for folded lines stays.
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  hunkHeaders={false}
+  view="unified"
+  labelText="Settings changes, no hunk headers"
+  height={300}
+/>
+
+## Patch
+
+Set `patch` to a unified diff, such as the output of `git diff` or a forge's patch file, to show it instead of comparing two texts. The first file of the patch is shown. A patch holds only the lines near each change, so the text between hunks is not available: it reads "lines are not in the patch" and can't be expanded. To expand it, pass the whole files as `oldText` and `newText`.
+
+<DiffViewer
+  {patch}
+  view="unified"
+  labelText="Deployment changes"
+  height={300}
+/>
+
+## Syntax highlighting
+
+DiffViewer does not ship a highlighter. Pass `tokenize` a function that returns `{ type, text }` runs for a language, such as `tokenize` from `carbon-components-svelte/syntax`, and `language` to tell it which one. Each side is tokenized whole, so a comment or template string that spans lines is colored on every line. Load `css/syntax-tokens.css` and `css/syntax.css` for the colors; see [CodeSnippet](/components/CodeSnippet#syntax-highlighting).
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  language="js"
+  {tokenize}
+  labelText="Settings changes, highlighted"
+  height={420}
+/>
+
+## Lines
+
+### Word marks
+
+Inside a changed line, the words that differ are marked with a stronger tint, and underlined in forced colors. Lines that share little are left unmarked, so a rewritten line does not turn speckled. Lines over 1000 characters are not marked.
+
+### Whitespace
+
+Set `ignoreWhitespace` to `true` to treat lines that differ only in whitespace as equal. Here, the re-indented line does not count as a change.
+
+<DiffViewer
+  oldText={after}
+  newText={spaced}
+  ignoreWhitespace
+  labelText="Settings changes, whitespace ignored"
+  height={200}
+/>
+
+### Wrapping
+
+Long lines scroll sideways by default, which keeps every row the same height. Set `wrap` to `true` to wrap them instead. Rows then have to be measured, which costs more on a very long file.
+
+<DiffViewer
+  oldText={before}
+  newText={after}
+  view="unified"
+  wrap
+  labelText="Settings changes, wrapped"
+  height={300}
+/>
+
+## Sizes
+
+Set `size` to control row height. The default is `"md"`, 20px; `"sm"` is 16px.
+
+<DiffViewer
+  oldText={config}
+  newText={configAfter}
+  size="sm"
+  labelText="Config changes, small"
+  height={160}
+/>
+
+## Without the toolbar
+
+Set `toolbar` to `false` to hide it, such as when the page has its own controls. The keys and the methods keep working.
+
+<DiffViewer
+  oldText={config}
+  newText={configAfter}
+  toolbar={false}
+  labelText="Config changes, no toolbar"
+  height={160}
+/>
+
+## Navigating changes
+
+Focus the diff, then press <DocKbd label="F7" /> for the next change and <DocKbd label="Shift" /> + <DocKbd label="F7" /> for the previous one. <DocKbd label="N" /> and <DocKbd label="P" /> do the same where a function key is awkward, such as a laptop that needs <DocKbd label="Fn" />. Moving wraps past either end, scrolls the change into view, marks it with a bar, and announces "Change 2 of 5" to screen readers. The toolbar buttons do the same.
+
+Use `bind:current` to read or set the current change by index, and call `goTo`, `next`, `previous`, `expandAll`, and `getPatch` through `bind:this`.
+
+<FileSource src="/framed/DiffViewer/DiffViewerNavigation" />
+
+## Accessibility
+
+Color never carries a change alone. Every added and removed line has a `+` or `-` sign in its gutter, and text that a screen reader reads before the code: "Added line 12" or "Removed line 9". That text is visually hidden, so forced colors and screen readers get it, and it is left out of copied text. The sign and the line numbers are hidden from assistive technology, because the hidden text already names the line. In the split view each row reads its removed side, then its added side.
+
+The diff is one scroll region, named by `labelText`, with one tab stop. The rows form a list, and the position of each row in the whole diff is announced even though only a window of rows is in the page. Replace any of the words with `addedLineText`, `removedLineText`, `changeText`, `hiddenLinesText`, `summaryText` and the other text props.
+
+Code always reads left to right, in any page direction. Only the toolbar around it follows the page.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="F7" /> or <DocKbd label="N" /> | Next change |
+| <DocKbd label="Shift" /> + <DocKbd label="F7" /> or <DocKbd label="P" /> | Previous change |
+| Arrow keys, <DocKbd label="Page Up" />, <DocKbd label="Page Down" />, <DocKbd label="Home" />, <DocKbd label="End" /> | Scroll the diff |
+| <DocKbd label="Enter" /> on a fold | Show the folded lines. Focus returns to the diff |
+
+## Large files
+
+Rows are rendered by window, so the page holds the same few dozen rows for any length. Measured in Chromium on a laptop, in a production build:
+
+| Input | Result |
+| :--- | :--- |
+| 10,000 lines, 40 edits | Diff in about 4 ms, first render in about 40 ms |
+| 10,000 lines, every line changed | First render in about 55 ms |
+| 10,000 lines, repeated lines in another order | Diff in about 250 ms, the worst case: the search is capped, and the result may be longer than the shortest |
+| 100,000 lines, scattered edits | Diff in about 25 ms, first render in about 80 ms |
+| Scrolling 100,000 lines | 60 frames per second, no blank rows |
+| With `tokenize`, 10,000 lines | First render in about 150 ms |
+| With `tokenize`, 100,000 lines | First render in about 1 second |
+| 10,000 lines with a 20,000 character line every 50 lines | Rows stay one height, scrolling stays at 60 frames per second |
+
+A list taller than 15 million pixels would stop scrolling in Firefox, so a diff shows its first 750,000 rows and says how many it left out.
+
+| Do | Why |
+| :--- | :--- |
+| Give the diff a `height` | Rows scroll inside it; without one it is 400px tall |
+| Name it with `labelText` or `aria-label` | The scroll region needs a name |
+| Pass `tokenize` for code, not for prose | Tokenizing a file costs time proportional to its size |
+| Keep `wrap` off for a very long file | Wrapped rows are measured as they render |
+| Pass `oldText` and `newText` when readers should expand | A patch cannot show lines it does not hold |
