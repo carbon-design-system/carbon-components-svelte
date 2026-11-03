@@ -367,6 +367,7 @@ Put every default delay in `src/constants/timing.js`, named `*_MS`, with a JSDoc
 | `STEPPER_REPEAT_INTERVAL_MS` | 50 ms | Time between steps while a stepper button stays held |
 | `ANNOUNCER_READY_DELAY_MS` | 150 ms | Age a live region reaches before `announce()` writes to it, so a screen reader has seen it |
 | `ANNOUNCER_CLEAR_AFTER_MS` | 7 s | Time an announced message stays in its live region |
+| `DIALOG_CLOSE_MS` | 240 ms | Time `Dialog` stays open for its exit motion |
 
 ### Intent
 

@@ -100,3 +100,10 @@ export const ANNOUNCER_READY_DELAY_MS = 150;
  * that browses the page does not find old messages.
  */
 export const ANNOUNCER_CLEAR_AFTER_MS = 7000;
+
+/**
+ * How long `Dialog` stays open while its exit motion runs, so it leaves
+ * with the same fade and slide it entered with. It matches the transition
+ * (Carbon moderate-02), and the dialog closes at once under reduced motion.
+ */
+export const DIALOG_CLOSE_MS = 240;
