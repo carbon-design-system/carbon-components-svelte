@@ -119,7 +119,6 @@
     "sveast": "^0.9.6",
     "sveld": "^0.40.1",
     "svelte": "^5.57.3",
-    "svelte-check": "^4.7.8",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
     "vitest": "^5.1.0"

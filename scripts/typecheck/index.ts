@@ -186,7 +186,6 @@ writes.push(
         ],
         exclude: [
           `${workspaceRel}/**/node_modules`,
-          `${workspaceRel}/.svelte-check`,
           ...(await baseExclude(baseConfig)).map((p) => join(workspaceRel, p)),
         ],
       },

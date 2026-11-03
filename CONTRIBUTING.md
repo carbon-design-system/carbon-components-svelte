@@ -275,7 +275,7 @@ When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/fra
 
 #### Component script types
 
-`bun test:src-svelte-types` type-checks the component scripts themselves (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)). Most components still have errors, so it holds each one to its count in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): a component that gains an error fails, and so does a new component with any. When you fix errors, run `bun test:src-svelte-types --update` to lower the baseline; the check fails until you do. Run `bun build:docs` first.
+`bun test:src-svelte-types` type-checks the components themselves, scripts and markup (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)). Most components still have errors, so it holds each one to its count in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): a component that gains an error fails, and so does a new component with any. When you fix errors, run `bun test:src-svelte-types --update` to lower the baseline; the check fails until you do. Run `bun build:docs` first.
 
 sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some that sveld reads. Write the form both accept:
 
@@ -287,7 +287,7 @@ sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some t
 | A `bind:this` ref typed as the element it binds: `@type {null \| HTMLDivElement}`, `null \| HTMLElementTagNameMap[Tag]` for `<svelte:element this={tag}>`, or a union for `this={href ? "a" : "button"}` | `@type {null \| HTMLElement}` on a ref bound to one known element, or an element type the ref is never bound to |
 | `@template [Id=any]` above `@typedef {object} Item` | `@typedef {object} Item<Id=any>` |
 | `@template` for component generics, in a block without a `@typedef` (TypeScript gives a `@template` to the `@typedef` beside it) | `@generics {T extends Item = Item} T` |
-| The script's `generics` attribute when a `@template` can't express the generic, as in [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte): `<script generics="Node extends RecursiveListNode = RecursiveListNode">`. svelte-check and editors read it in plain JS too | The same generic in both the attribute and a `@template` (sveld reports it; the attribute wins) |
+| The script's `generics` attribute when a `@template` can't express the generic, as in [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte): `<script generics="Node extends RecursiveListNode = RecursiveListNode">`. `bun test:types` and editors read it in plain JS too | The same generic in both the attribute and a `@template` (sveld reports it; the attribute wins) |
 | `@extendProps {"./Button.svelte"} ButtonProps` | `@extends {"./Button.svelte"} ButtonProps` |
 | One `@event` with its `@type`/`@property` tags per block, or `@event {{ trigger: string }} close` | Several `@event` + `@type {object}` groups in one block |
 | A typedef the module script uses, declared in the module script | Declared in the instance script |
@@ -837,7 +837,7 @@ For the E2E selection (`test:changed:e2e`, `test:plan`, and CI), a `css/` change
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
-- `bun test:src-svelte` runs `svelte-check` compiler diagnostics on `src/` (a11y, unused CSS)
+- `bun test:src-svelte` compiles `src/` with `svelte/compiler` and fails on any warning (a11y, unused CSS)
 - `bun test:src-svelte-types` type-checks the component scripts in `src/` against a per-component error baseline (see [Component script types](#component-script-types))
 - `bun test:types` type-checks the `*.svelte` and `.ts` files in `tests/`, in about a second: [`scripts/typecheck`](scripts/typecheck/index.ts) turns each component into TypeScript with [sveast](https://github.com/metonym/sveast), runs `bun check` on it, and maps each error back to its `.svelte` line. `bun test:types:svelte3` and `bun test:types:svelte4` check the same files against Svelte 3 and 4
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
@@ -1406,7 +1406,7 @@ Examples:
 ```
 fix(combo-box): close dropdown on outside click
 docs(tree-view): fix slottable inline editing example
-chore(deps-dev): bump vitest, svelte-check
+chore(deps-dev): bump vitest, jsdom
 ```
 
 Body (optional):
