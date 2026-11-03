@@ -154,6 +154,25 @@ element.animate(keyframes, {
 
 Svelte 3 and 4 run a transition by injecting a `<style>` rule with keyframes. A policy with a strict `style-src` blocks it, and the transition snaps. Svelte 5 uses the Web Animations API and is not affected.
 
+## Collapse
+
+`collapse` is an action for content that stays mounted while it opens and closes, such as a disclosure's details or a side nav submenu, where a transition cannot run because nothing leaves the DOM. It animates the element's `height` and vertical padding, the one element that expands, with the `entrance` curve on open and the `exit` curve on close. Pass `open` as a boolean or in an options object with `duration`, `mode` and `reducedMotion`, the same parameters the transitions take. While closed the element is `inert` and `visibility: hidden`, so it takes no focus and is hidden from assistive technology; a toggle during a toggle starts from the size reached so far. Under `prefers-reduced-motion: reduce` the element jumps between states.
+
+```svelte
+<script>
+  import { collapse } from "carbon-components-svelte/motion";
+
+  let open = false;
+</script>
+
+<div use:collapse={open}>Details</div>
+<div use:collapse={{ open, duration: "moderate01" }}>Details</div>
+```
+
+<FileSource src="/framed/Motion/MotionCollapse" />
+
+Actions run only in the browser, so server HTML renders closed content open until hydration. Where that matters, also hide it with a class the stylesheet knows, as `SideNavMenu` does: the action lifts `max-height` and `visibility` while it animates, so a stylesheet's closed state does not cut the motion short.
+
 ## Component props
 
 Components that mount and unmount take a `transition` prop. It is off by default, so nothing animates until you opt in, on the component or with [`Motion`](#app-wide-defaults).
