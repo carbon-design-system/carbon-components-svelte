@@ -40,13 +40,24 @@ function offenders(pattern: RegExp, skip: Set<string> = new Set()): string[] {
   );
 }
 
-// Literal timings or `all` in a transition. Matches the whole declaration up
-// to `;`, since the formatter wraps a multi-property list onto the lines
-// after `transition:`. Returns 1-based line numbers and the number inspected.
-function literalTransitions(lines: string[]) {
-  const LITERAL = /\d(ms|s)\b|cubic-bezier|\ball\b/;
+// Literal timings, curves or `all` in a transition or animation: the
+// shorthands and the `-duration`, `-delay` and `-timing-function` longhands.
+// Durations come from `$duration--*` and curves from `motion()`; `linear`
+// and a zero stay, since a `visibility` toggle or a skipped delay has
+// neither a curve nor a token. Matches
+// the whole declaration up to `;`, since the formatter wraps a multi-property
+// list onto the lines after the property. Returns 1-based line numbers and
+// the number inspected.
+function literalTimings(lines: string[]) {
+  // A zero (`visibility 0s`, `transition-delay: 0ms`) has no token.
+  const LITERAL =
+    /\b(?!0(?:ms|s)\b)\d+(?:\.\d+)?(?:ms|s)\b|cubic-bezier|\ball\b|\bease(-in|-out|-in-out)?\b/;
   const source = lines.map((line) => line.replace(/\/\/.*$/, "")).join("\n");
-  const matches = [...source.matchAll(/\btransition:\s*([^;]+);/g)];
+  const matches = [
+    ...source.matchAll(
+      /\b(?:transition|animation)(?:-duration|-delay|-timing-function)?:\s*([^;]+);/g,
+    ),
+  ];
   return {
     inspected: matches.length,
     found: matches
@@ -54,6 +65,14 @@ function literalTransitions(lines: string[]) {
       .map((match) => source.slice(0, match.index).split("\n").length),
   };
 }
+
+// Looping indicators whose period is a cadence, not a transition: the AI
+// skeleton shimmer (Carbon v11's 1250ms), the chat caret blink and the
+// typing dots with their staggered delays. Exact counts that only shrink.
+const KNOWN_LITERAL_ANIMATIONS: Record<string, number> = {
+  "_ai-skeleton.scss": 1,
+  "_chat.scss": 4,
+};
 
 // `:has()` outside an `@supports selector(:has(…))` block, as 1-based line
 // numbers. A gated block is the one place `:has()` may appear: a browser
@@ -207,17 +226,35 @@ describe("css partial conventions", () => {
     expect(offenders(/\$spacing-\d/)).toEqual([]);
   });
 
-  it("times transitions with motion tokens and an explicit property list", () => {
+  it("times transitions and animations with motion tokens and an explicit property list", () => {
     let declarations = 0;
+    const counts: Record<string, number> = {};
     const found = PARTIALS.flatMap((name) => {
-      const result = literalTransitions(
+      const result = literalTimings(
         readFileSync(join(CSS_DIR, name), "utf8").split("\n"),
       );
       declarations += result.inspected;
-      return result.found.map((line) => `${name}:${line}`);
+      if (result.found.length > 0) counts[name] = result.found.length;
+      return result.found.length === (KNOWN_LITERAL_ANIMATIONS[name] ?? 0)
+        ? []
+        : result.found.map((line) => `${name}:${line}`);
     });
     expect(declarations).toBeGreaterThan(0);
     expect(found).toEqual([]);
+    expect(counts).toEqual(KNOWN_LITERAL_ANIMATIONS);
+  });
+
+  it("flags literal animation timings and curves, and lets tokens through", () => {
+    const { found } = literalTimings([
+      "  animation: 1250ms ease-in-out shimmer infinite;",
+      "  animation-delay: 0.15s;",
+      "  animation: $duration--fast-02 motion(standard, productive) expand;",
+      "  animation: none;",
+      "  transition-duration: 300ms;",
+      "  transition: opacity $duration--fast-01 motion(standard, productive),",
+      "    visibility 0s linear;",
+    ]);
+    expect(found).toEqual([1, 2, 5]);
   });
 
   it("keeps the manifest's load-bearing import order", () => {
@@ -467,7 +504,7 @@ const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
   ),
   ":has()": ungatedHas,
   "repeated class": matching(/(\.#\{\$prefix\}--[\w-]+)\1(?![\w-])/),
-  "literal transition": (lines) => literalTransitions(lines).found,
+  "literal timing": (lines) => literalTimings(lines).found,
   "unguarded :hover": unguardedHover,
 };
 
@@ -476,13 +513,13 @@ const PATCH_RULES: Record<string, (lines: string[]) => number[]> = {
 // map only ever shrinks. Do not raise a count or add an entry: fix the new
 // rule instead. "repeated class" in tabs is deliberate (each site carries a
 // comment naming the `:not()` chain whose specificity it preserves).
-// The remaining literal transitions use timings with no motion token (300ms,
+// The remaining literal timings use durations with no motion token (300ms,
 // 175ms). The shell overlay's `var(--cds-overlay, …)` fallback is fixed:
 // swapped for `$overlay-01`, the token this build actually declares.
 const KNOWN_PATCH_VIOLATIONS: Record<string, number> = {
   "repeated class: components/tabs/_tabs.scss": 4,
-  "literal transition: components/data-table/_data-table-action.scss": 1,
-  "literal transition: components/ui-shell/_ui-shell.scss": 1,
+  "literal timing: components/data-table/_data-table-action.scss": 1,
+  "literal timing: components/ui-shell/_ui-shell.scss": 1,
   // What is left competes with a base hover rule the vendored tree leaves
   // unguarded (readonly/disabled resets, the shell header, copy-button),
   // or shares its declarations with `:active`/`:focus`/a
