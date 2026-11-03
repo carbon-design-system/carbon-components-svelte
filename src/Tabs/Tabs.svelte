@@ -86,6 +86,16 @@
     return `Moved ${label || "tab"} to position ${position} of ${count}`;
   };
 
+  /**
+   * Set to `true` to add a "more tabs" menu beside the scroll buttons once the
+   * list overflows. It lists the tabs that are out of view. Choosing one
+   * selects it and scrolls it into view.
+   */
+  export let overflowMenu = false;
+
+  /** Specify the accessible name of the "more tabs" menu button. */
+  export let overflowMenuText = "More tabs";
+
   /** Set to `true` for tabs to span the full width of the container */
   export let fullWidth = false;
 
@@ -123,8 +133,11 @@
     tick,
   } from "svelte";
   import { derived, get, writable } from "svelte/store";
+  import MenuItem from "../Menu/MenuItem.svelte";
+  import MenuButton from "../MenuButton/MenuButton.svelte";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import OverflowMenuHorizontal from "../icons/OverflowMenuHorizontal.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     computeScrollOverflow,
@@ -275,6 +288,56 @@
 
   function remeasureOverflow() {
     if (mounted) observeOverflow();
+  }
+
+  // The "more tabs" menu lists the tabs that are not fully in view. One
+  // observer rooted at the tab list reports each tab as it crosses the edge,
+  // so a scroll costs no layout read, unlike measuring every tab per scroll.
+  /** @type {Set<string>} */
+  let hiddenIds = new Set();
+  let observedKey = "";
+  let stopObservingVisibility = noop;
+
+  /** @type {(entries: IntersectionObserverEntry[]) => void} */
+  function handleVisibility(entries) {
+    const next = new Set(hiddenIds);
+    for (const entry of entries) {
+      const id = entry.target.querySelector(".bx--tabs__nav-link")?.id;
+      if (id === undefined) continue;
+      // A tab a pixel short of whole counts as in view.
+      if (entry.intersectionRatio < 0.98) next.add(id);
+      else next.delete(id);
+    }
+    hiddenIds = next;
+  }
+
+  function observeVisibility() {
+    const ids = overflowMenu ? get(tabs).map((tab) => tab.id) : [];
+    const key = ids.join("\u0000");
+    if (!refTabList || typeof IntersectionObserver === "undefined") return;
+    // `$tabs` changes for a relabel too, which leaves the tab list alone.
+    if (key === observedKey) return;
+    observedKey = key;
+    stopObservingVisibility();
+    hiddenIds = new Set();
+    if (ids.length === 0) {
+      stopObservingVisibility = noop;
+      return;
+    }
+    const observer = new IntersectionObserver(handleVisibility, {
+      root: refTabList,
+      threshold: [0.98],
+    });
+    for (const item of refTabList.querySelectorAll(".bx--tabs__nav-item")) {
+      observer.observe(item);
+    }
+    stopObservingVisibility = () => observer.disconnect();
+  }
+
+  /** @type {(enabled: boolean, registered: unknown) => void} */
+  function syncVisibility() {
+    // Wait for the tabs that registered to render.
+    tick().then(observeVisibility);
   }
 
   // Flag to trigger DOM reordering only when tabs change.
@@ -643,6 +706,7 @@
     return () => {
       mounted = false;
       stopObserving();
+      stopObservingVisibility();
       stopObservingOrder();
       pageHeader?.unregister();
     };
@@ -675,6 +739,10 @@
   $: if ($tabs) {
     tick().then(remeasureOverflow);
   }
+  $: if (mounted) syncVisibility(overflowMenu, $tabs);
+  $: hiddenTabs = overflowMenu
+    ? $tabs.filter((tab) => hiddenIds.has(tab.id))
+    : [];
   $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
@@ -775,6 +843,24 @@
     >
       <ChevronRight />
     </button>
+    {#if overflowMenu}
+      <MenuButton
+        iconOnly
+        icon={OverflowMenuHorizontal}
+        labelText={overflowMenuText}
+        intrinsicAlign="end"
+        maxHeight="20rem"
+        class="bx--tabs__overflow-menu"
+      >
+        {#each hiddenTabs as tab (tab.id)}
+          <MenuItem
+            labelText={tab.label || tab.id}
+            disabled={tab.disabled}
+            on:click={() => selectTab(tab.index)}
+          />
+        {/each}
+      </MenuButton>
+    {/if}
   {/if}
 </div>
 {#if reorderable && !navigation}
