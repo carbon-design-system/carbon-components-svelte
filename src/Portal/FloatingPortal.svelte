@@ -151,6 +151,22 @@
   /** @type {(() => void) | null} */
   let unlistenWindowResize = null;
 
+  // A transition or animation on an ancestor of the anchor (a Modal sliding
+  // in) moves the anchor without a scroll, a resize or a change to the
+  // anchor's own style or class. Place again once it ends.
+  /** @type {(() => void) | null} */
+  let unlistenTransitionEnd = null;
+  /** @type {(() => void) | null} */
+  let unlistenAnimationEnd = null;
+
+  /** @param {Event} event */
+  function onMotionEnd(event) {
+    const { target } = event;
+    if (anchor && target instanceof Node && target.contains(anchor)) {
+      scheduleUpdate();
+    }
+  }
+
   function addWindowListeners() {
     // The `$: if (open)` caller also runs during server rendering.
     if (typeof window === "undefined") return;
@@ -164,6 +180,8 @@
         passive: true,
       });
     }
+    unlistenTransitionEnd ??= addPooledListener("transitionend", onMotionEnd);
+    unlistenAnimationEnd ??= addPooledListener("animationend", onMotionEnd);
   }
 
   function removeWindowListeners() {
@@ -171,6 +189,10 @@
     unlistenWindowScroll = null;
     unlistenWindowResize?.();
     unlistenWindowResize = null;
+    unlistenTransitionEnd?.();
+    unlistenTransitionEnd = null;
+    unlistenAnimationEnd?.();
+    unlistenAnimationEnd = null;
   }
 
   onMount(() => {

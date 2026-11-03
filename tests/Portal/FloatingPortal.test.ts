@@ -509,6 +509,30 @@ describe("FloatingPortal", () => {
     });
   });
 
+  describe("ancestor motion", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    // A Modal slides its container in for 240ms. A menu placed during that
+    // slide is off by the distance left, and the anchor's own style and
+    // class never change, so only the end of the motion says it moved.
+    it.each(["transitionend", "animationend"])(
+      "places again when an ancestor of the anchor fires %s",
+      async (type) => {
+        const rafSpy = vi.spyOn(window, "requestAnimationFrame");
+        await renderOpen({ scrollableContainer: true });
+        const rafCountBefore = rafSpy.mock.calls.length;
+
+        screen
+          .getByTestId("scroll-container")
+          .dispatchEvent(new Event(type, { bubbles: true }));
+
+        expect(rafSpy.mock.calls.length).toBeGreaterThan(rafCountBefore);
+      },
+    );
+  });
+
   describe("anchor position tracking", () => {
     afterEach(() => {
       vi.restoreAllMocks();
