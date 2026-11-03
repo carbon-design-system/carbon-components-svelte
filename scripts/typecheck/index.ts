@@ -17,7 +17,8 @@ import { createLocator, type Output } from "./output";
  * dropped; `TYPECHECK_DEBUG=1` prints them. `--no-declarations` skips the
  * `X.d.svelte.ts` re-exports, so imports of `.svelte` files resolve to their
  * own `.svelte.d.ts` (as `src/` has, from sveld). `--output machine` prints
- * `ERROR "file" line:column "message" code` lines. `--svelte` points at the
+ * `ERROR "file" line:column "message" code` lines, with `file` relative to
+ * the workspace. `--svelte` points at the
  * Svelte install to check against (its version and element typings), e.g.
  * `tests-svelte3/node_modules/svelte` with `--tsconfig
  * tests-svelte3/tsconfig.check.json`.
@@ -289,7 +290,7 @@ diagnostics.sort(
 for (const d of diagnostics)
   console.log(
     values.output === "machine"
-      ? `ERROR ${JSON.stringify(d.file)} ${d.line}:${d.column} ${JSON.stringify(d.message)} ${d.code}`
+      ? `ERROR ${JSON.stringify(relative(workspace, resolve(ROOT, d.file)))} ${d.line}:${d.column} ${JSON.stringify(d.message)} ${d.code}`
       : `${d.file}:${d.line}:${d.column} - error ${d.code}: ${d.message}`,
   );
 console.error(

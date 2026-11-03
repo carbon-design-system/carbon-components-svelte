@@ -2,12 +2,11 @@
 import { compare, parseErrors } from "../../scripts/lib/svelte-types";
 
 describe("parseErrors", () => {
-  it("reads .svelte errors from svelte-check's machine output", () => {
+  it("reads .svelte errors from scripts/typecheck's machine output", () => {
     const output = [
-      '1793012718195 START "/repo/src"',
-      "1793012718195 ERROR \"Tag/Tag.svelte\" 3:9 \"Type 'string' is not assignable to type 'number'.\\n  Detail.\"",
-      '1793012718195 ERROR "DatePicker/calendar.js" 18:42 "Not a component."',
-      "1793012718202 COMPLETED 950 FILES 2 ERRORS 0 WARNINGS 2 FILES_WITH_PROBLEMS",
+      "ERROR \"Tag/Tag.svelte\" 3:9 \"Type 'string' is not assignable to type 'number'.\\n  Detail.\" TS2322",
+      'ERROR "DatePicker/calendar.js" 18:42 "Not a component." TS2339',
+      "398 components, 2 errors [emit 210 ms, bun 350 ms]",
     ].join("\n");
     expect(parseErrors(output)).toEqual([
       {

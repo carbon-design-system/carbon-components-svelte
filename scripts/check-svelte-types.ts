@@ -10,8 +10,8 @@ import {
 } from "./lib/svelte-types";
 
 /**
- * Type-checks the component scripts in `src/` (`checkJs`, through
- * `tsconfig.svelte-types.json`) and holds each component to its error
+ * Type-checks the components in `src/` with `scripts/typecheck` (`checkJs`,
+ * through `tsconfig.svelte-types.json`) and holds each component to its error
  * count in `svelte-types-baseline.json`. Fails when a component gains an
  * error, or when one loses errors and the baseline still has the old count.
  *
@@ -29,23 +29,23 @@ const ROOT = join(import.meta.dirname, "..");
 const BASELINE = join(ROOT, "scripts/svelte-types-baseline.json");
 
 const result = spawnSync(
-  join(ROOT, "node_modules/.bin/svelte-check"),
+  process.execPath,
   [
+    join(ROOT, "scripts/typecheck/index.ts"),
     "--workspace",
-    join(ROOT, "src"),
+    "src",
     "--tsconfig",
-    join(ROOT, "tsconfig.svelte-types.json"),
-    "--diagnostic-sources",
-    "js",
+    "tsconfig.svelte-types.json",
+    "--no-declarations",
     "--output",
     "machine",
   ],
-  { encoding: "utf-8", maxBuffer: 64 * 1024 * 1024 },
+  { cwd: ROOT, encoding: "utf-8", maxBuffer: 64 * 1024 * 1024 },
 );
 const output = `${result.stdout}\n${result.stderr}`;
-if (!/ COMPLETED /.test(output)) {
+if (!/\d+ components, \d+ errors/.test(output)) {
   console.error(output);
-  throw new Error("svelte-check didn't complete");
+  throw new Error("scripts/typecheck didn't complete");
 }
 
 const errors = parseErrors(output);

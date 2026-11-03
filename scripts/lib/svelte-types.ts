@@ -1,6 +1,6 @@
-/** One TypeScript error svelte-check reported in a component script. */
+/** One TypeScript error reported in a component script. */
 export type SvelteTypeError = {
-  /** Path relative to `src/`, as svelte-check prints it. */
+  /** Path relative to `src/`. */
   file: string;
   line: number;
   column: number;
@@ -10,10 +10,10 @@ export type SvelteTypeError = {
 /** Error count per component, keyed by path relative to `src/`. */
 export type Counts = Record<string, number>;
 
-const MACHINE_ERROR = /^\d+ ERROR "([^"]+)" (\d+):(\d+) "(.*)"$/;
+const MACHINE_ERROR = /^ERROR "([^"]+)" (\d+):(\d+) "(.*)" TS\d+$/;
 
 /**
- * The errors in `.svelte` files from `svelte-check --output machine`.
+ * The errors in `.svelte` files from `scripts/typecheck --output machine`.
  * `.js` files are left out: `test:src-js` checks them under `strict`.
  */
 export function parseErrors(output: string): SvelteTypeError[] {
@@ -32,7 +32,7 @@ export function parseErrors(output: string): SvelteTypeError[] {
   });
 }
 
-/** svelte-check escapes the message like a JSON string. */
+/** The message is escaped like a JSON string. */
 function unescapeMessage(message: string): string {
   try {
     return JSON.parse(`"${message}"`);
