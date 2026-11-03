@@ -256,6 +256,22 @@
     "message": "div#app > div:nth-of-type(1) > div.bx--combo-button: spans 320px to 442.3px"
   },
   {
+    "fixture": "dashboard-grid.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input: 2px outline inside 1px outline div[data-testid=\"alerts\"] > div.bx--dashboard-grid__frame.bx--card, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "dashboard-grid.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--layer-two.bx--dashboard-grid__body:nth-of-type(2) > div.bx--data-table-container > div > div.bx--data-table-content",
+    "message": "div.bx--layer-two.bx--dashboard-grid__body:nth-of-type(2) > div.bx--data-table-container > div > div.bx--data-table-content: 1px outline inside 1px outline div[data-testid=\"table\"] > div.bx--dashboard-grid__frame.bx--card, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "data-table-batch-actions-overflow.html",
     "variant": "320",
     "check": "overflow",
