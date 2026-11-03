@@ -395,6 +395,12 @@
   export let sort = undefined;
 
   /**
+   * Specify the text that names the row decorator column for assistive
+   * technology. Only used when the `rowDecorator` slot is used.
+   */
+  export let rowDecoratorDescription = "AI label";
+
+  /**
    * Override the text announced after `sortKey` or `sortDirection` changes.
    * `header` is the sorted column. For `"none"`, it is the column that was
    * sorted before.
@@ -545,17 +551,19 @@
   export let scrollContainerRef = null;
 
   /**
-   * Override the default table header translation ids.
+   * Override the default table header translation ids. Unset, a header uses
+   * `setTranslateContext`, then English.
    * @type {((id: import("./TableHeader.svelte").TableHeaderTranslationId) => string) | undefined}
    */
   export let tableHeaderTranslateWithId = undefined;
 
   /**
    * Override the default translation ids for the expand and select controls.
+   * Unset, it uses `setTranslateContext`, then English.
    * @type {(id: DataTableTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   /**
@@ -571,6 +579,8 @@
     selectAll: "selectAll",
     selectRow: "selectRow",
   };
+
+  const translate = getTranslateContext();
 
   const defaultTranslations = {
     [translationIds.expandAll]: "Expand all rows",
@@ -598,6 +608,7 @@
     DATA_TABLE_SIZE_ALIASES,
     normalizeSize,
   } from "../utils/size-aliases.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
@@ -1510,7 +1521,9 @@
         <TableRow>
           {#if hasRowDecorator}
             <th scope="col" class:bx--table-column-decorator={true}>
-              <span class:bx--visually-hidden={true}>AI label</span>
+              <span class:bx--visually-hidden={true}
+                >{rowDecoratorDescription}</span
+              >
             </th>
           {/if}
           {#if expandable}

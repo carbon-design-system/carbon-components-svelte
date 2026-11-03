@@ -346,6 +346,7 @@ export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
+export { setTranslateContext } from "./utils/translate-context.js";
 export { trapFocus } from "./utils/trap-focus.js";
 export {
   resolveCheckboxState,

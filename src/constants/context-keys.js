@@ -60,3 +60,9 @@ export const THEME_ZONE_CONTEXT_KEY = "carbon:ThemeZone";
  * to the menu's `anchor`, the trigger.
  */
 export const MENU_PLACEMENT_CONTEXT_KEY = "carbon:MenuPlacement";
+
+/**
+ * Set by `setTranslateContext`; read by every component with a
+ * `translateWithId` prop, when the prop is not passed.
+ */
+export const TRANSLATE_CONTEXT_KEY = "carbon:translate";

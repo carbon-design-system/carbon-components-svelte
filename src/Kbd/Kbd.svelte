@@ -66,11 +66,12 @@
    * Override the default translations of the key names. Words such as
    * "Ctrl" are shown on the keys; names such as "Command" are read by
    * screen readers for the symbols shown on Apple platforms. Unset, it uses
-   * the nearest `setKbdTranslations`, then English.
+   * the nearest `setKbdTranslations`, then `setTranslateContext`, then
+   * English.
    * @type {(id: KbdTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return shared?.(id) ?? KBD_TRANSLATIONS[id];
+    return shared?.(id) ?? translate?.(id) ?? KBD_TRANSLATIONS[id];
   };
 
   /**
@@ -81,10 +82,12 @@
   export let ref = null;
 
   import { applePlatform } from "../utils/keyboard-shortcut.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import { KBD_TRANSLATIONS, kbdKeys } from "./kbd-keys.js";
   import { getKbdTranslations } from "./kbd-translations.js";
 
   const shared = getKbdTranslations();
+  const translate = getTranslateContext();
 
   $: isApple = apple ?? $applePlatform;
 

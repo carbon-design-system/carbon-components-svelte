@@ -171,11 +171,12 @@
   export let hideLabel = false;
 
   /**
-   * Override the default translation ids.
+   * Override the default translation ids. Unset, it uses
+   * `setTranslateContext`, then English.
    * @type {(id: NumberInputTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   /**
@@ -245,9 +246,12 @@
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const SCRUB_STEP_PIXELS = 4;
+
+  const translate = getTranslateContext();
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

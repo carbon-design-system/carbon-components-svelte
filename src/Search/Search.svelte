@@ -182,6 +182,7 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -201,10 +202,11 @@
   }
 
   const kbdTranslations = getKbdTranslations();
+  const translate = getTranslateContext();
 
   /** @param {import("../Kbd/Kbd.svelte").KbdTranslationId} id */
   function translateKey(id) {
-    return kbdTranslations?.(id) ?? KBD_TRANSLATIONS[id];
+    return kbdTranslations?.(id) ?? translate?.(id) ?? KBD_TRANSLATIONS[id];
   }
 
   $: shortcutParams = { shortcut, run: runShortcut };
