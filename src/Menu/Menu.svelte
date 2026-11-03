@@ -10,6 +10,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Required. Specify the anchor element to position the menu relative to.
    * @type {null | HTMLElement}
    */
@@ -102,6 +109,16 @@
    */
   export let target = null;
 
+  /**
+   * Animate the menu as it opens and closes. Set to `true` for Carbon's fly
+   * (`fast01`, 2 px toward the side the menu opens on), to fly params (e.g.,
+   * `{ duration: "fast02" }`) to customize it, or to `{ fn }` to use another
+   * transition. Submenus take their parent's setting. The menu does not
+   * animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
+   */
+  export let transition = undefined;
+
   import {
     createEventDispatcher,
     getContext,
@@ -113,6 +130,7 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MENU_PLACEMENT_CONTEXT_KEY } from "../constants/context-keys.js";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -127,6 +145,7 @@
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitIntrinsicAlign, physicalAlign } from "../utils/menu-placement.js";
+  import { makeInert, makeLive, menuPreset } from "../utils/menu-transition.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -252,8 +271,22 @@
   /** @type {Set<string>} */
   const seededIds = parentCtx?.seededIds ?? new Set();
 
+  // A submenu animates like its parent unless it is given its own setting.
+  /** @type {import("svelte/store").Readable<import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>>} */
+  const parentTransition = parentCtx?.transition ?? readable(undefined);
+  /** @type {import("svelte/store").Writable<import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>>} */
+  const effectiveTransition = writable(transition);
+  $: $effectiveTransition =
+    transition === undefined ? $parentTransition : transition;
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition($effectiveTransition, menuPreset));
+
   setContext("carbon:Menu", {
     close,
+    transition: effectiveTransition,
     seededIds,
     registerIndented: indentedColumn.register,
     unregisterIndented: indentedColumn.unregister,
@@ -367,8 +400,55 @@
       close("escape-key");
     }
   }
+
+  const rovingOptions = {
+    selector: MENUITEM_SELECTOR,
+    orientation: /** @type {const} */ ("vertical"),
+    wrap: false,
+    focusOnMove: false,
+    getActiveIndex: () => focusIndex,
+    /** @type {(index: number, event: KeyboardEvent) => void} */
+    onMove: (index, event) => {
+      if (hasModifierKey(event)) return;
+      focusIndex = index;
+      const item = getItems()[index];
+      if (item) focusMenuItem(item);
+    },
+  };
+
+  $: dismissOptions = {
+    enabled: open,
+    listeners: [
+      { type: /** @type {const} */ ("click"), handler: handleOutsideClick },
+      { type: /** @type {const} */ ("keydown"), handler: handleEscape },
+    ],
+  };
+
+  /** @param {KeyboardEvent} event */
+  function handleKeydown(event) {
+    if (
+      ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key) &&
+      !hasModifierKey(event)
+    ) {
+      event.preventDefault();
+    } else if (isTypeaheadKey(event)) {
+      event.preventDefault();
+      typeaheadSearch(event.key);
+    }
+  }
+
+  /** @param {FocusEvent} event */
+  function handleFocusin(event) {
+    // A click focuses an item without going through `onMove`, so sync the
+    // index; otherwise the next arrow key starts from the stale one.
+    const index = getItems().indexOf(/** @type {HTMLElement} */ (event.target));
+    if (index > -1) focusIndex = index;
+  }
 </script>
 
+<!-- The portal's `{#if open}` removes the list, so the transition is global.
+     Svelte 3/4 remove an element with any transition a frame late, so the
+     static branch carries no directive. -->
 <FloatingPortal
   anchor={placementAnchor}
   {direction}
@@ -386,67 +466,70 @@
   lockDirection="always"
   let:direction={portalDirection}
 >
-  <ul
-    bind:this={ref}
-    use:rovingFocus={{
-      selector: MENUITEM_SELECTOR,
-      orientation: "vertical",
-      wrap: false,
-      focusOnMove: false,
-      getActiveIndex: () => focusIndex,
-      onMove: (index, event) => {
-        if (hasModifierKey(event)) return;
-        focusIndex = index;
-        const item = getItems()[index];
-        if (item) focusMenuItem(item);
-      },
-    }}
-    use:dismiss={{
-      enabled: open,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "keydown", handler: handleEscape },
-      ],
-    }}
-    role="menu"
-    tabindex="-1"
-    data-floating-menu-direction={portalDirection}
-    data-carbon-align={intrinsicWidth ? placementAlign : undefined}
-    style:position="relative"
-    style:top="auto"
-    style:left="auto"
-    style:max-height={maxHeightStyle}
-    class:bx--menu={true}
-    class:bx--menu--open={open}
-    class:bx--menu--xs={size === "xs"}
-    class:bx--menu--md={size === "md"}
-    class:bx--menu--lg={size === "lg"}
-    class:bx--menu--scrollable={!!maxHeight}
-    {...$$restProps}
-    aria-label={menuAriaLabel}
-    on:keydown
-    on:keydown={(event) => {
-      if (
-        ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key) &&
-        !hasModifierKey(event)
-      ) {
-        event.preventDefault();
-      } else if (isTypeaheadKey(event)) {
-        event.preventDefault();
-        typeaheadSearch(event.key);
-      }
-    }}
-    on:focusin={(event) => {
-      // A click focuses an item without going through `onMove`, so sync the
-      // index; otherwise the next arrow key starts from the stale one.
-      const index = getItems().indexOf(
-        /** @type {HTMLElement} */ (event.target),
-      );
-      if (index > -1) focusIndex = index;
-    }}
-    on:mouseenter
-    on:mouseleave
-  >
-    <slot />
-  </ul>
+  {#if animated}
+    <ul
+      bind:this={ref}
+      use:rovingFocus={rovingOptions}
+      use:dismiss={dismissOptions}
+      role="menu"
+      tabindex="-1"
+      data-floating-menu-direction={portalDirection}
+      data-carbon-align={intrinsicWidth ? placementAlign : undefined}
+      style:position="relative"
+      style:top="auto"
+      style:left="auto"
+      style:max-height={maxHeightStyle}
+      class:bx--menu={true}
+      class:bx--menu--open={open}
+      class:bx--menu--xs={size === "xs"}
+      class:bx--menu--md={size === "md"}
+      class:bx--menu--lg={size === "lg"}
+      class:bx--menu--scrollable={!!maxHeight}
+      {...$$restProps}
+      aria-label={menuAriaLabel}
+      transition:transitionFn|global={transitionParams}
+      on:introstart
+      on:introstart={makeLive}
+      on:introend
+      on:outrostart
+      on:outrostart={makeInert}
+      on:outroend
+      on:keydown
+      on:keydown={handleKeydown}
+      on:focusin={handleFocusin}
+      on:mouseenter
+      on:mouseleave
+    >
+      <slot />
+    </ul>
+  {:else}
+    <ul
+      bind:this={ref}
+      use:rovingFocus={rovingOptions}
+      use:dismiss={dismissOptions}
+      role="menu"
+      tabindex="-1"
+      data-floating-menu-direction={portalDirection}
+      data-carbon-align={intrinsicWidth ? placementAlign : undefined}
+      style:position="relative"
+      style:top="auto"
+      style:left="auto"
+      style:max-height={maxHeightStyle}
+      class:bx--menu={true}
+      class:bx--menu--open={open}
+      class:bx--menu--xs={size === "xs"}
+      class:bx--menu--md={size === "md"}
+      class:bx--menu--lg={size === "lg"}
+      class:bx--menu--scrollable={!!maxHeight}
+      {...$$restProps}
+      aria-label={menuAriaLabel}
+      on:keydown
+      on:keydown={handleKeydown}
+      on:focusin={handleFocusin}
+      on:mouseenter
+      on:mouseleave
+    >
+      <slot />
+    </ul>
+  {/if}
 </FloatingPortal>

@@ -59,7 +59,7 @@
   "MultiSelect/MultiSelect.svelte": 56,
   "Notification/NotificationQueue.svelte": 4,
   "NumberInput/NumberInput.svelte": 15,
-  "OverflowMenu/OverflowMenu.svelte": 25,
+  "OverflowMenu/OverflowMenu.svelte": 23,
   "OverflowMenu/OverflowMenuItem.svelte": 4,
   "Pagination/Pagination.svelte": 18,
   "PaginationNav/PaginationNav.svelte": 4,
