@@ -634,6 +634,19 @@ describe("ComboBox", () => {
     },
   );
 
+  it.each(["disabled", "readonly"] as const)(
+    "closes the menu when %s turns on while open",
+    async (state) => {
+      const { rerender } = render(ComboBox);
+      await user.click(getInput());
+
+      await rerender({ [state]: true });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(getInput()).toHaveAttribute("aria-expanded", "false");
+    },
+  );
+
   it.each([
     ["sm", "bx--list-box--sm"],
     ["xl", "bx--list-box--xl"],
