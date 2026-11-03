@@ -363,6 +363,18 @@ Set `size` to `"sm"` (default), `"lg"`, or `"xl"` to control row density. Result
 
 <FileSource src="/framed/UIShell/HeaderSearchMenu" />
 
+### Menu transition
+
+The results menu and the `menu` slot appear and disappear at once by default. Set `menuTransition` to slide the menu out when the search closes. `true` uses Carbon's slide (`fast02`, 110 ms), slide parameters such as `{ duration: "moderate01" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). While the menu leaves, `aria-expanded` is already `false` and the menu takes no clicks. Under `prefers-reduced-motion: reduce` it still closes at once. `HeaderSearch` forwards `introstart`, `introend`, `outrostart`, and `outroend` from the menu.
+
+<FileSource src="/framed/UIShell/HeaderSearchTransition" />
+
+| Do | Why |
+| --- | --- |
+| Set `menuTransition` on `HeaderSearch`, not on the items in the `menu` slot. | The slide plays on the whole menu, so the rows move together and the input stays put. |
+| Keep the duration at `fast01` or `fast02`. | The menu sits under the pointer and the input. A slower slide makes the search feel stuck. |
+| Finish work on `outroend`, not a timer. | The event fires when the menu is gone, and at once under reduced motion. |
+
 ### Select on focus
 
 Set `selectTextOnFocus` to select the full value when the search bar receives focus.
