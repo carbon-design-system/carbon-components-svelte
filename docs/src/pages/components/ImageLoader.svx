@@ -47,7 +47,9 @@ Raise `rootMargin`, for example to `"1200px"`, if images still appear blank duri
 
 ## Fade in
 
-Enable a smooth fade-in animation when the image loads successfully.
+Enable a smooth fade-in animation when the image loads successfully. `fadeIn` is shorthand for `transition`: the fade uses Carbon's `fast02` (110 ms) and plays only if the user has not asked for reduced motion.
+
+Set `transition` for control. `transition={{ duration: "moderate02" }}` slows the fade, `{ fn }` swaps in another [transition](/motion#transitions), and `transition={false}` turns the fade off even when `fadeIn` is set.
 
 <Button kind="ghost" on:click="{() => { key++;}}">Reload image</Button>
 {#key key}<ImageLoader fadeIn ratio="16x9" src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" />{/key}

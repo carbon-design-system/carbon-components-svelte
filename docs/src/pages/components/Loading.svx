@@ -39,6 +39,14 @@ While it waits, the spinner is in the page but hidden. The server HTML holds it 
 
 <FileSource src="/framed/Loading/LoadingDelay" />
 
+## Transition
+
+The spinner and its overlay appear and disappear at once by default. Set `transition` to fade them as the `{#if}` that holds them adds and removes them. `true` uses Carbon's fade (`moderate02`, 240 ms), fade parameters such as `{ duration: "slow01" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` they still appear and disappear at once.
+
+The leaving overlay becomes inert, so it takes no clicks, and focus returns to where it was once the fade ends. `Loading` forwards `introstart`, `introend`, `outrostart`, and `outroend`.
+
+<FileSource src="/framed/Loading/LoadingTransition" />
+
 ## Stop state
 
 Set `active` to `false` to play the spinner's end-of-loading animation. Useful when transitioning out of a loading state before removing the component.
