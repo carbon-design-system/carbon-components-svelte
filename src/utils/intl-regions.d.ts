@@ -14,8 +14,6 @@ export interface RegionDetail {
   name: string;
   /** The name in the region's main language, or `""`. */
   nativeName: string;
-  /** The flag emoji, or `""` for a code that is not two letters. */
-  flag: string;
 }
 
 export interface RegionSource {

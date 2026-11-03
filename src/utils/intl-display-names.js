@@ -192,64 +192,6 @@ export function regionNativeName(code) {
 }
 
 /**
- * The region's regional-indicator flag emoji: "🇺🇸" for "US". Empty for
- * anything but two letters.
- * @param {string} code
- * @returns {string}
- */
-export function regionFlag(code) {
-  if (!TWO_LETTERS.test(code)) return "";
-  return String.fromCodePoint(
-    0x1f1e6 + code.charCodeAt(0) - 65,
-    0x1f1e6 + code.charCodeAt(1) - 65,
-  );
-}
-
-/** @type {boolean | undefined} */
-let flagSupport;
-
-/**
- * Whether this platform draws flag emoji. Windows draws the two regional
- * indicators as the letters "US" instead, so the flag is checked by painting
- * one and looking for a pixel that is not gray. Checked once, in a browser.
- * @param {(() => CanvasRenderingContext2D | null)} [createContext] Replaces
- * the canvas, for tests.
- * @returns {boolean}
- */
-export function canRenderFlags(createContext) {
-  if (flagSupport !== undefined && !createContext) return flagSupport;
-  let supported = false;
-  try {
-    const context = createContext
-      ? createContext()
-      : typeof document === "undefined"
-        ? null
-        : document.createElement("canvas").getContext("2d", {
-            willReadFrequently: true,
-          });
-    if (context) {
-      context.canvas.width = 32;
-      context.canvas.height = 32;
-      context.textBaseline = "top";
-      context.font = "24px sans-serif";
-      context.fillText(regionFlag("US"), 0, 0);
-      const { data } = context.getImageData(0, 0, 32, 32);
-      for (let i = 0; i < data.length; i += 4) {
-        // A flag has red and blue in it. The letters are one gray.
-        if (data[i + 3] > 0 && Math.abs(data[i] - data[i + 2]) > 32) {
-          supported = true;
-          break;
-        }
-      }
-    }
-  } catch {
-    supported = false;
-  }
-  if (!createContext) flagSupport = supported;
-  return supported;
-}
-
-/**
  * The region a locale is most likely in: "US" for "en", "DE" for "de".
  * @param {string} locale
  * @returns {string}

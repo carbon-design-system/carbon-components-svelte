@@ -49,10 +49,18 @@
   export let detect = false;
 
   /**
-   * How a region's flag shows in the menu.
-   * @type {"emoji" | "badge" | "none"}
+   * How a region's flag shows in the menu: `"flag"` draws it with `Flag`,
+   * once `getFlag` is set, `"badge"` shows the code, and `"none"` nothing.
+   * @type {"flag" | "badge" | "none"}
    */
   export let flag = "none";
+
+  /**
+   * Finds the drawn flag of a region code. Until it is set, a flag's place
+   * holds an empty box of the same size.
+   * @type {((code: string) => { readonly code: string; readonly body: string } | undefined) | undefined}
+   */
+  export let getFlag = undefined;
 
   /**
    * Add to the `change` event's detail.
@@ -355,7 +363,7 @@
     <svelte:fragment slot="labelChildren">
       <slot name="labelChildren" />
     </svelte:fragment>
-    <IntlPickerOption {kind} {source} {item} {locale} {flag} />
+    <IntlPickerOption {kind} {source} {item} {locale} {flag} {getFlag} />
   </ComboBox>
 {:else}
   <ComboBox
@@ -377,6 +385,6 @@
     on:paste
     let:item
   >
-    <IntlPickerOption {kind} {source} {item} {locale} {flag} />
+    <IntlPickerOption {kind} {source} {item} {locale} {flag} {getFlag} />
   </ComboBox>
 {/if}

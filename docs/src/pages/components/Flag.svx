@@ -1,0 +1,143 @@
+---
+description: Flag draws the flag of a country or region as a small flat icon that follows Carbon's icon design, with the region's code in a box where there is no flag yet.
+components: ["Flag"]
+---
+
+<script>
+  import { Flag, Stack, Text } from "carbon-components-svelte";
+  import { CA, DE, FR, JP, KR, NO, US } from "carbon-components-svelte/flags";
+</script>
+
+## Basic
+
+Import the flags you draw from `carbon-components-svelte/flags`, and pass one to `flag`. Each flag is a named export, so a bundler leaves out the ones you don't use. A flag takes the width of its `size`, and its height is three quarters of that.
+
+```svelte
+<script>
+  import { Flag } from "carbon-components-svelte";
+  import { JP } from "carbon-components-svelte/flags";
+</script>
+
+<Flag flag={JP} />
+```
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Flag flag={JP} />
+  <Flag flag={FR} />
+  <Flag flag={DE} />
+  <Flag flag={NO} />
+  <Flag flag={US} />
+</Stack>
+
+## Sizes
+
+Set `size` to `16`, `20`, `24` or `32`, the sizes of Carbon's icons. The default is `20`. Every flag is drawn on one 32 by 24 grid, so a flag at 32 is exactly twice the size of one at 16, and every height is a whole number of pixels.
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Flag flag={KR} size={16} />
+  <Flag flag={KR} size={20} />
+  <Flag flag={KR} size={24} />
+  <Flag flag={KR} size={32} />
+</Stack>
+
+## Accessible name
+
+A flag is decoration: it sits beside the name of its region, and a screen reader that read "flag" before every country would say it twice. It is hidden from assistive technology by default. Set `title` to name it when it stands alone.
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Flag flag={CA} size={32} title="Canada" />
+</Stack>
+
+## Region code
+
+Not every region has a flag yet. A `Flag` with no `flag` draws the region's code in a box of the same size, so a list of regions stays aligned. Pass the code as `code`.
+
+<Stack orientation="horizontal" gap={5} align="center">
+  <Flag code="XK" size={16} />
+  <Flag code="XK" size={20} />
+  <Flag code="XK" size={24} />
+  <Flag code="XK" size={32} />
+</Stack>
+
+## Importing flags
+
+`carbon-components-svelte/flags` exports every flag by its ISO 3166-1 code, as plain objects. Importing `JP` adds about 130 bytes to a bundle. Importing the lot with `carbon-components-svelte/flags/all`, for a `getFlag(code)` lookup, adds about 33 kB (8 kB gzipped) for the 104 flags drawn so far, so load it with `import()` when a screen needs it.
+
+<FileSource src="/framed/Flag/FlagTreeShaking" />
+
+| Approach | One flag | All flags |
+| :--- | :--- | :--- |
+| `flags` (named exports and one `Flag`) | 132 B | 33 kB (8 kB gzipped) |
+| One Svelte component per flag | 840 B | 96 kB (10 kB gzipped) |
+| One SVG sprite | All of it: 37 kB (7 kB gzipped) | 37 kB (7 kB gzipped) |
+
+Sizes are the minified increase for 104 flags over a bundle with the `Flag` component. A sprite carries every flag whenever it is used, and a component per flag repeats the same markup around each flag.
+
+## All flags
+
+Each flag at the four sizes, on White and on Gray 100. Hover a flag for its code.
+
+<FileSource src="/framed/Flag/FlagGrid" />
+
+## Design
+
+The flags follow the principles of Carbon's icons, read from the 2,787 icons of `carbon-icons-svelte`: every one is drawn on a 32 by 32 artboard with about 2px of padding, in flat fills, with no gradient or stroke and a median of 380 bytes of markup. Where a flag has to differ from an icon, it is for its colors.
+
+| Do | Why |
+| :--- | :--- |
+| Draw every flag in one 4:3 frame on a 32 by 24 grid | Flags are 2:3, 3:5, 1:2 or square, and a row of mixed shapes does not line up. Carbon's icons share one artboard for the same reason. A flag that is not 4:3 fills the frame instead of sitting letterboxed in it: the Swiss cross keeps its arms and the French bands are a little wide |
+| Fill the frame edge to edge, with square corners | Carbon's controls and tiles are square, and a flag with a rounded corner reads as an app icon. The code box is the same size, so a list with both stays aligned |
+| Use flat fills of 12 palette colors, with no gradient, shading, stroke or transparency | Carbon's icons are flat, and flat shapes stay sharp at 16px |
+| Keep a 1px keyline inside the box, in the theme's subtle border color | A white flag on a white page, or a navy one on Gray 100, would lose its edge. The keyline is the only part that follows the theme |
+| Snap bands to the pixel grid, so a flag with only straight bands renders with crisp edges | A third of a 16px flag is 5.33px, and a blurred seam between two bands looks like a different color |
+| Keep a shape only if it is at least 2 grid units across, which is 1px at 16px | Anything smaller turns to a gray smudge. The United States shows 7 stripes and 9 stars, Greece 5 stripes, and China keeps its small stars as dots |
+| Show a coat of arms as the shape and colors of its mass: a ring, a shield, a disc | A drawn eagle is a blur at 32px and unreadable at 16px. Spain is a shield and two pillars, Mexico a green wreath around a dark red disc |
+| Leave out text and script, and draw its band | At this size an inscription is not readable, and a made-up script would misrepresent it. The shahada on the flag of Saudi Arabia is a plain white band above the sword |
+| Never mirror a flag in right-to-left text | A flag is not directional, and a mirrored flag is a different flag. Only its placement in a row follows the page direction |
+| Add no flag for a region until it is drawn from its real flag | An invented flag is worse than the code box. The simplified emblems are reductions of the real ones |
+
+### Palette
+
+Flags need their real colors, so they cannot read the theme's tokens: a flag that turned gray on Gray 100 would not be a flag. They use 12 colors from Carbon's palette instead, so flags sit beside Carbon's icons and charts without a new hue. Each flag color is mapped to the nearest one.
+
+| Color | Carbon | Value | Flags |
+| :--- | :--- | :--- | :--- |
+| `white` | White | `#ffffff` | Japan, Finland |
+| `black` | Gray 100 | `#161616` | Germany, Estonia |
+| `red` | Red 60 | `#da1e28` | France, Turkey |
+| `maroon` | Red 70 | `#a2191f` | Qatar, Latvia |
+| `orange` | Orange 40 | `#ff832b` | India, Ireland |
+| `yellow` | Yellow 30 | `#f1c21b` | Spain, Ukraine |
+| `green` | Green 60 | `#198038` | Italy, Nigeria |
+| `forest` | Green 70 | `#0e6027` | Mexico's wreath |
+| `sky` | Cyan 40 | `#33b1ff` | Argentina, Somalia |
+| `blue` | Cyan 70 | `#00539a` | France, Greece, Finland |
+| `royal` | Blue 80 | `#002d9c` | Israel, Chile, Cuba |
+| `navy` | Blue 90 | `#001d6c` | United Kingdom, United States |
+
+The palette trades accuracy for consistency. Against 32 published flag colors, the mean distance is 13.5 in CIE Lab, which is a visible but not a different color, and the worst is the near black green of Pakistan at 32. Carbon's blue 70 and 60 were 40 away from the blues of France and Greece, so the blue is Cyan 70, with Blue 80 for the more saturated blues.
+
+### Gray 100 and forced colors
+
+On Gray 100 the flags keep their colors and only the keyline changes. Under forced colors the fills stay as they are, the way an image does, and the keyline becomes `CanvasText`. A monochrome fallback would remove the one thing that tells a flag from another: of the 5,356 pairs of the 104 flags at 16px, 42 are within 12% of each other in color, and 161 are in luminance alone. France and Peru, and Austria and the Netherlands, become the same flag.
+
+### Right-to-left
+
+Flags do not mirror. In a right-to-left page a flag sits at the start edge of a row, on the right, and is drawn the same.
+
+### Regions and disputes
+
+Flags are listed by the codes of Unicode CLDR and ISO 3166-1, the codes `Intl.DisplayNames` returns, and carry no opinion on the status of a region. A region gets a flag only when its own authorities use one that the sovereign's flag does not stand for. A region whose status is in dispute, or that has no flag of its own, shows the code until the maintainers decide: Antarctica, Western Sahara, Hong Kong, Macao, Palestinian Territories, Taiwan, Kosovo and Sark. Regions without an ISO code, such as Scotland, have no flag here.
+
+## Adding a flag
+
+A flag is a short list of layers in `scripts/flags/spec.ts`: bands, crosses, saltires, triangles, discs, stars, crescents, cantons and wheels, with a `path` for a shape the layers can't draw. `bun run build:flags` compiles them to `src/flags/index.js`. See [the generator](https://github.com/carbon-design-system/carbon-components-svelte/blob/master/scripts/lib/flags.ts) for each layer.
+
+```js
+// Norway: a red field, a white cross, and a navy cross inside it.
+NO: [
+  ["fill", "red"],
+  ["cross", "white", 6, 0.364],
+  ["cross", "navy", 3, 0.364],
+],
+```
