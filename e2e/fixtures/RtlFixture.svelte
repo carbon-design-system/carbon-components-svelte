@@ -31,6 +31,8 @@
     MultiSelect,
     Pagination,
     PaginationSkeleton,
+    ProgressIndicator,
+    ProgressStep,
     RangeSlider,
     SideNav,
     SideNavItems,
@@ -403,6 +405,28 @@ export async function rollback(region, id) {
   </div>
   <div data-testid="kbd">
     <Kbd shortcut="mod+shift+k" />
+  </div>
+  <div data-testid="progress-horizontal" class="field">
+    <ProgressIndicator>
+      <ProgressStep complete label="Workspace" secondaryLabel="Optional" />
+      <ProgressStep label="Billing" />
+    </ProgressIndicator>
+  </div>
+  <div data-testid="progress-equal" class="field">
+    <ProgressIndicator spaceEqually>
+      <ProgressStep complete label="Region" />
+      <ProgressStep label="Billing" />
+    </ProgressIndicator>
+  </div>
+  <div data-testid="progress-vertical" class="field">
+    <ProgressIndicator vertical>
+      <ProgressStep
+        complete
+        label="Configure the workspace region and networking"
+        secondaryLabel="Optional"
+      />
+      <ProgressStep label="Billing" />
+    </ProgressIndicator>
   </div>
 </Content>
 

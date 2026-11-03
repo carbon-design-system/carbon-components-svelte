@@ -65,7 +65,9 @@
     width: $carbon--spacing-05;
     height: $carbon--spacing-05;
     flex-shrink: 0;
-    margin: to-rem(10px) $carbon--spacing-03 0 0;
+    // ccs: the gap to the label sits at the inline end, so it mirrors
+    margin: to-rem(10px) 0 0;
+    margin-inline-end: $carbon--spacing-03;
     border-radius: 50%;
     fill: $interactive;
   }
@@ -102,7 +104,8 @@
 
   .#{$prefix}--progress--space-equal .#{$prefix}--progress-label {
     max-width: 100%;
-    margin-right: 0.75rem;
+    // ccs: margin-inline-end, not margin-right
+    margin-inline-end: 0.75rem;
   }
 
   .#{$prefix}--progress-step-button:not(.#{$prefix}--progress-step-button--unclickable)
@@ -115,9 +118,11 @@
     @include type-style('label-01');
 
     position: absolute;
-    left: 0;
+    // ccs: the label sits at the inline start of its step, so it mirrors
+    @include ccs-inset-inline($start: 0);
+
     margin-top: to-rem(28px);
-    margin-left: $carbon--spacing-06;
+    margin-inline-start: $carbon--spacing-06;
     color: $text-secondary;
     text-align: start;
   }
@@ -148,7 +153,8 @@
     @include button-reset($omit: (display));
 
     display: flex;
-    text-align: left;
+    // ccs: text-align start, not left
+    text-align: start;
 
     // Upstream relies on `.bx--progress-label:focus` for a focus indicator,
     // but that span is never itself the focused element (the button is), so
@@ -258,9 +264,10 @@
   .#{$prefix}--progress--vertical .#{$prefix}--progress-line {
     position: absolute;
     top: 0;
-    left: 0;
     width: 1px;
     height: 100%;
+    // ccs: the line sits on the inline start, so a right-to-left rail has it at the right
+    @include ccs-inset-inline($start: 0);
   }
 }
 
