@@ -183,6 +183,10 @@
   // moves to a portal instead. Only when `portalMenu` is left unset.
   let portalWhenClipped = false;
   $: if (!open) portalWhenClipped = false;
+  // Turning disabled on while open closes the menu, so no item stays
+  // clickable under a disabled trigger. Closing here is not a dismissal, so
+  // `close` does not fire.
+  $: if (disabled && open) open = false;
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
