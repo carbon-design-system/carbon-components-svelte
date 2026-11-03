@@ -829,6 +829,7 @@
    * @param {Item} item
    */
   function selectItem(item) {
+    if (disabled) return;
     if (item.id === selectedId) {
       // Same rule as selectHighlighted: re-picking the current item is not a
       // selection, so close without `select` or `close`.

@@ -207,6 +207,25 @@ describe("Dropdown", () => {
     expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
 
+  it.each([false, true])(
+    "ignores option clicks after becoming disabled (virtualize=%s)",
+    async (virtualize) => {
+      const onselect = vi.fn();
+      const { rerender } = render(Dropdown, {
+        props: { items, selectedId: "0", virtualize, onselect },
+      });
+      const trigger = screen.getByRole("combobox");
+      await user.click(trigger);
+      const option = screen.getByRole("option", { name: "Email" });
+
+      await rerender({ disabled: true });
+      await user.click(option);
+
+      expect(trigger).toHaveTextContent("Slack");
+      expect(onselect).not.toHaveBeenCalled();
+    },
+  );
+
   it.each(["disabled", "readonly"] as const)(
     "drops the invalid and warning markers when %s",
     (state) => {
