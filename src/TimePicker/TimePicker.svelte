@@ -96,11 +96,16 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const formContext = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -121,7 +126,7 @@
   setContext("carbon:TimePicker", timePickerContext);
 
   function handleFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => ref?.select());
     }
   }
@@ -136,13 +141,13 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: isFluid = fluid || !!formContext?.isFluid;
   $: timePickerContext.isFluid = isFluid;
   $: groupReadonly.set(readonly);
-  $: groupDisabled.set(disabled);
+  $: groupDisabled.set(effectiveDisabled);
   $: groupHideLabel.set(hideLabel);
   $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
 </script>
@@ -151,6 +156,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--form-item--fit={!isFluid}
   class:bx--time-picker__form-item--fluid={isFluid}
@@ -162,7 +168,7 @@
   {#if isFluid}
     <div
       class:bx--time-picker--fluid={true}
-      class:bx--time-picker--fluid--disabled={disabled}
+      class:bx--time-picker--fluid--disabled={effectiveDisabled}
       class:bx--time-picker--fluid--invalid={showInvalid}
       class:bx--time-picker--fluid--warning={showWarn}
       class:bx--time-picker--readonly={readonly}
@@ -180,7 +186,7 @@
                 for={id}
                 class:bx--label={true}
                 class:bx--visually-hidden={hideLabel}
-                class:bx--label--disabled={disabled}
+                class:bx--label--disabled={effectiveDisabled}
                 class:bx--label--readonly={readonly}
                 class:bx--label--slotted={$$slots.labelChildren}
                 use:titleWhenTruncated={{ enabled: !$$slots.labelChildren }}
@@ -192,7 +198,8 @@
               <div class:bx--text-input__field-wrapper={true}>
                 <input
                   bind:this={ref}
-                  use:preserveFocusSelection={selectTextOnFocus && !disabled}
+                  use:preserveFocusSelection={selectTextOnFocus &&
+                    !effectiveDisabled}
                   use:formReset={handleFormReset}
                   bind:value
                   type="text"
@@ -205,7 +212,7 @@
                   {maxlength}
                   {id}
                   {name}
-                  {disabled}
+                  disabled={effectiveDisabled}
                   readonly={readonly || undefined}
                   {...$$restProps}
                   aria-describedby={joinDescribedBy(
@@ -273,7 +280,7 @@
             for={id}
             class:bx--label={true}
             class:bx--visually-hidden={hideLabel}
-            class:bx--label--disabled={disabled}
+            class:bx--label--disabled={effectiveDisabled}
             class:bx--label--readonly={readonly}
           >
             <slot name="labelChildren">{labelText}</slot>
@@ -297,7 +304,8 @@
             {/if}
             <input
               bind:this={ref}
-              use:preserveFocusSelection={selectTextOnFocus && !disabled}
+              use:preserveFocusSelection={selectTextOnFocus &&
+                !effectiveDisabled}
               use:formReset={handleFormReset}
               bind:value
               type="text"
@@ -311,7 +319,7 @@
               {maxlength}
               {id}
               {name}
-              {disabled}
+              disabled={effectiveDisabled}
               readonly={readonly || undefined}
               {...$$restProps}
               aria-describedby={joinDescribedBy(
@@ -360,7 +368,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
       >
         {helperText}
       </div>
