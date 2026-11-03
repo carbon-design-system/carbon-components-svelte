@@ -148,7 +148,8 @@
     @include button-reset($omit: (display));
 
     display: flex;
-    text-align: left;
+    // ccs: text-align start, not left
+    text-align: start;
 
     // Upstream relies on `.bx--progress-label:focus` for a focus indicator,
     // but that span is never itself the focused element (the button is), so
@@ -258,9 +259,10 @@
   .#{$prefix}--progress--vertical .#{$prefix}--progress-line {
     position: absolute;
     top: 0;
-    left: 0;
     width: 1px;
     height: 100%;
+    // ccs: the line sits on the inline start, so a right-to-left rail has it at the right
+    @include ccs-inset-inline($start: 0);
   }
 }
 

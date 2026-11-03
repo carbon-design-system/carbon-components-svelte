@@ -256,6 +256,70 @@
     "message": "div#app > div:nth-of-type(1) > div.bx--combo-button: spans 320px to 442.3px"
   },
   {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--create-flow__step > div.bx--stack.bx--stack-vertical > div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(3) > div.bx--dropdown.bx--list-box",
+    "message": "div.bx--create-flow__step > div.bx--stack.bx--stack-vertical > div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(3) > div.bx--dropdown.bx--list-box: 2px outline inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item:nth-of-type(4) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input",
+    "message": "div.bx--form-item:nth-of-type(4) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input: 2px outline inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "fieldset.bx--radio-button-group.bx--radio-button-group--label-right > div.bx--radio-button-wrapper:nth-of-type(1) > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "fieldset.bx--radio-button-group.bx--radio-button-group--label-right > div.bx--radio-button-wrapper:nth-of-type(1) > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "fieldset.bx--radio-button-group.bx--radio-button-group--label-right > div.bx--radio-button-wrapper:nth-of-type(2) > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "fieldset.bx--radio-button-group.bx--radio-button-group--label-right > div.bx--radio-button-wrapper:nth-of-type(2) > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--current:nth-of-type(1) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--current:nth-of-type(1) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(2) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(2) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "create-flow.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(4) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(4) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "data-table-batch-actions-overflow.html",
     "variant": "320",
     "check": "overflow",
@@ -2200,6 +2264,54 @@
     "message": "div[data-testid=\"tag-input\"]: spans 0px to 480px"
   },
   {
+    "fixture": "tearsheet.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--combo-box.bx--list-box > div > div.bx--list-box__field > input.bx--text-input.bx--text-input--empty",
+    "message": "div.bx--combo-box.bx--list-box > div > div.bx--list-box__field > input.bx--text-input.bx--text-input--empty: 2px outline inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tearsheet.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker-input__wrapper > input.bx--date-picker__input.bx--date-picker__input--with-icon",
+    "message": "div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker-input__wrapper > input.bx--date-picker__input.bx--date-picker__input--with-icon: 2px outline inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tearsheet.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"dropdown\"] > div.bx--dropdown.bx--list-box",
+    "message": "div[data-testid=\"dropdown\"] > div.bx--dropdown.bx--list-box: 2px outline inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tearsheet.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--current:nth-of-type(2) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--current:nth-of-type(2) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tearsheet.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(1) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(1) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tearsheet.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--vertical > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside 3px outline div#app > div.bx--tearsheet.bx--layer-one > div.bx--tearsheet__container, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "text-area-grow.html",
     "variant": "320",
     "check": "overflow",
@@ -2382,6 +2494,14 @@
     "kind": "widens page",
     "path": "div[data-testid=\"fits\"]",
     "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "unsaved-changes.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "warning-icon-glyph.html",

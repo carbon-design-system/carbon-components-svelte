@@ -29,6 +29,10 @@ const NEEDS_PARENT = new Set([
   "AccordionItem", // Accordion
   "BreadcrumbItem", // Breadcrumb
   "ContextMenuOption", // ContextMenu
+  "CreateFlowActions", // a flow from createStepFlow
+  "CreateFlowForm", // a flow from createStepFlow
+  "CreateFlowStep", // a flow from createStepFlow
+  "CreateFlowSteps", // a flow from createStepFlow
   "DatePickerInput", // DatePicker
   "InterstitialScreenBody", // InterstitialScreen
   "InterstitialScreenFooter", // InterstitialScreen

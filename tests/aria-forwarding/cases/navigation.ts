@@ -21,6 +21,7 @@ import SideNavMenu from "carbon-components-svelte/UIShell/SideNavMenu.svelte";
 import SkipToContent from "carbon-components-svelte/UIShell/SkipToContent.svelte";
 import type { AriaEntry } from "../contract";
 import ContentSwitcherFixture from "../fixtures/ContentSwitcher.test.svelte";
+import CreateFlowFixture from "../fixtures/CreateFlow.test.svelte";
 import HeaderGlobalActionFixture from "../fixtures/HeaderGlobalAction.test.svelte";
 import HeaderNavFixture from "../fixtures/HeaderNav.test.svelte";
 import ProfileMenuItemFixture from "../fixtures/ProfileMenuItem.test.svelte";
@@ -225,6 +226,25 @@ export const navigation: AriaEntry[] = [
     name: "ProgressStep",
     render: (attrs) => render(ProgressStepFixture, { props: attrs }),
     target: () => first("button"),
+  },
+  {
+    name: "CreateFlowSteps",
+    render: (attrs) =>
+      render(CreateFlowFixture, { props: { part: "steps", ...attrs } }),
+    target: () => screen.getByRole("navigation"),
+  },
+  {
+    name: "CreateFlowForm",
+    render: (attrs) =>
+      render(CreateFlowFixture, { props: { part: "form", ...attrs } }),
+    // A form is a landmark only once it has a name.
+    target: () => document.querySelector("form") as HTMLElement,
+  },
+  {
+    name: "CreateFlowStep",
+    render: (attrs) =>
+      render(CreateFlowFixture, { props: { part: "step", ...attrs } }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "OperationalTag",
