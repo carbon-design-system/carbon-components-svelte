@@ -16,6 +16,9 @@
 
   /**
    * Specify the items to render.
+   * A browser scrolls only so far, about 17.9 million pixels in Firefox and
+   * 33.5 million in Chrome and Safari. A longer list ends at the last item
+   * that fits, so page or filter a list that large.
    * @type {ReadonlyArray<Item>}
    */
   export let items = [];
@@ -102,12 +105,16 @@
     VIRTUAL_INDEX_ATTRIBUTE,
   } from "../utils/height-measurer.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { getMaxScrollHeight } from "../utils/max-scroll-height.js";
   import { noop } from "../utils/noop.js";
   import { virtualize } from "../utils/virtualize.js";
   import VirtualWindow from "./VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
+  // A scroll area can be only so tall: Firefox lays out about 17.9 million
+  // pixels and drops a taller one, so the list would stop scrolling.
+  const maxHeight = getMaxScrollHeight();
 
   let scrollTop = 0;
   /** How far, and which way, the last scroll moved. */
@@ -181,6 +188,7 @@
     measured,
     heights: measured ? heights : undefined,
     scrollDelta,
+    maxHeight,
   });
 
   $: pinned = optimizeFastScroll && !scrollElement && virtualData.isVirtualized;

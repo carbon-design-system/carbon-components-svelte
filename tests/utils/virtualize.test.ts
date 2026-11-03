@@ -1058,3 +1058,49 @@ describe("virtualize with a scroll lead", () => {
     expect(data?.endIndex).toBe(114);
   });
 });
+
+describe("virtualize with a maximum height", () => {
+  const items = Array.from({ length: 1000 }, (_, i) => ({ id: i }));
+
+  it("ends the list at the last item that fits", () => {
+    const result = virtualize({
+      items,
+      itemHeight: 40,
+      containerHeight: 300,
+      scrollTop: 1_000_000,
+      maxHeight: 10_000,
+    });
+
+    // 250 items of 40px fit in 10000px. A scroll past the end clamps to it.
+    expect(result.totalHeight).toBe(10_000);
+    expect(result.endIndex).toBe(250);
+    expect(result.visibleItems.at(-1)).toEqual({ id: 249 });
+  });
+
+  it("counts measured heights against the maximum", () => {
+    const result = virtualize({
+      items,
+      itemHeight: 40,
+      containerHeight: 300,
+      scrollTop: 1_000_000,
+      measured: true,
+      heights: Array.from({ length: 1000 }, () => 100),
+      maxHeight: 10_050,
+    });
+
+    expect(result.totalHeight).toBe(10_000);
+    expect(result.endIndex).toBe(100);
+  });
+
+  it("leaves a list that fits alone", () => {
+    const result = virtualize({
+      items,
+      itemHeight: 40,
+      containerHeight: 300,
+      scrollTop: 0,
+      maxHeight: 1_000_000,
+    });
+
+    expect(result.totalHeight).toBe(40_000);
+  });
+});
