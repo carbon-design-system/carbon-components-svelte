@@ -3,7 +3,7 @@
  * devtools`) on every framed docs example and writes a report.
  *
  *   bun run audit:docs [--carbon] [--width 1056] [--dir ltr] [--theme white]
- *     [--filter Button]
+ *     [--motion no-preference] [--filter Button]
  *     [--concurrency 4] [--base http://localhost:4175] [--out dir]
  *     [--include-seeded] [--baseline] [--update-baseline]
  *
@@ -11,9 +11,11 @@
  * first with `cd docs && bun run build:audit`. The audit is bundled from
  * source and injected into each page, so the docs need no changes.
  *
- * `--width`, `--dir`, and `--theme` take comma lists, and every combination
- * runs: `--width 320,1056 --dir ltr,rtl --theme white,g100` is 8 variants.
- * Each finding names its variant, such as `320-rtl-g100`.
+ * `--width`, `--dir`, `--theme` and `--motion` take comma lists, and every
+ * combination runs: `--width 320,1056 --dir ltr,rtl --theme white,g100` is
+ * 8 variants. `--motion reduce` emulates `prefers-reduced-motion: reduce`,
+ * so the animations check reports anything still moving. Each finding
+ * names its variant, such as `320-rtl-g100-reduce`.
  *
  * With `--baseline`, it compares the findings with
  * `scripts/audit-docs.baseline[-carbon].json` and fails on any finding the
@@ -59,6 +61,7 @@ type Variant = {
   width: number;
   dir: "ltr" | "rtl";
   theme: string;
+  motion: "no-preference" | "reduce";
   id: string;
 };
 
@@ -66,12 +69,18 @@ const list = (name: string, fallback: string) =>
   (arg(name, fallback) as string).split(",").map((value) => value.trim());
 const variants: Variant[] = list("width", "1056").flatMap((width) =>
   list("dir", "ltr").flatMap((dir) =>
-    list("theme", "white").map((theme) => ({
-      width: Number(width),
-      dir: dir === "rtl" ? ("rtl" as const) : ("ltr" as const),
-      theme,
-      id: `${width}${dir === "rtl" ? "-rtl" : ""}${theme === "white" ? "" : `-${theme}`}`,
-    })),
+    list("theme", "white").flatMap((theme) =>
+      list("motion", "no-preference").map((motion) => ({
+        width: Number(width),
+        dir: dir === "rtl" ? ("rtl" as const) : ("ltr" as const),
+        theme,
+        motion:
+          motion === "reduce"
+            ? ("reduce" as const)
+            : ("no-preference" as const),
+        id: `${width}${dir === "rtl" ? "-rtl" : ""}${theme === "white" ? "" : `-${theme}`}${motion === "reduce" ? "-reduce" : ""}`,
+      })),
+    ),
   ),
 );
 const concurrency = Number(arg("concurrency", "4"));
@@ -239,6 +248,7 @@ async function auditPage(
   try {
     // Framed pages take a theme from the query, without saving it.
     const query = variant.theme === "white" ? "" : `?theme=${variant.theme}`;
+    await page.emulateMedia({ reducedMotion: variant.motion });
     await page.goto(base + url + query, { waitUntil: "load" });
     await settle(page);
     if (variant.dir === "rtl") {
