@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>picker-grid</title>
+    <g id="picker-grid" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="search" x="88" y="36" width="144" height="24" fill="var(--cds-field-01, #f4f4f4)"></rect>
+        <rect x="88" y="59" width="144" height="1" fill="var(--cds-border-strong-01, #8d8d8d)"></rect>
+        <rect x="96" y="46" width="40" height="4" fill="var(--cds-text-placeholder, #a8a8a8)"></rect>
+        <g id="cells" fill="var(--cds-icon-secondary, #525252)">
+            <rect x="96" y="76" width="20" height="20"></rect>
+            <rect x="130" y="76" width="20" height="20"></rect>
+            <rect x="164" y="76" width="20" height="20"></rect>
+            <rect x="198" y="76" width="20" height="20"></rect>
+            <rect x="96" y="108" width="20" height="20"></rect>
+            <rect x="164" y="108" width="20" height="20"></rect>
+            <rect x="198" y="108" width="20" height="20"></rect>
+            <rect x="96" y="140" width="20" height="20"></rect>
+            <rect x="130" y="140" width="20" height="20"></rect>
+            <rect x="164" y="140" width="20" height="20"></rect>
+        </g>
+        <rect id="selected" x="124.5" y="102.5" width="32" height="32" fill="var(--cds-layer-selected-01, #e0e0e0)" stroke="var(--cds-focus, #0f62fe)" stroke-width="2"></rect>
+        <rect x="131" y="109" width="18" height="18" fill="var(--cds-icon-primary, #161616)"></rect>
+    </g>
+</svg>

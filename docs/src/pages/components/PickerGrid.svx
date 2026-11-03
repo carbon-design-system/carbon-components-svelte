@@ -1,0 +1,121 @@
+---
+components: ["PickerGrid"]
+description: Picker grids let people search, browse by category and choose from a large set of options, such as icons, emoji or color swatches.
+---
+
+<script>
+  import { Box, PickerGrid, Stack } from "carbon-components-svelte";
+
+  const regions = [
+    { id: "us-east", label: "Washington DC", category: "americas" },
+    { id: "us-south", label: "Dallas", category: "americas" },
+    { id: "ca-tor", label: "Toronto", category: "americas" },
+    { id: "br-sao", label: "São Paulo", category: "americas" },
+    { id: "eu-de", label: "Frankfurt", category: "europe" },
+    { id: "eu-gb", label: "London", category: "europe" },
+    { id: "eu-es", label: "Madrid", category: "europe" },
+    { id: "eu-fr2", label: "Paris", category: "europe" },
+    { id: "jp-tok", label: "Tokyo", category: "asia-pacific" },
+    { id: "jp-osa", label: "Osaka", category: "asia-pacific" },
+    { id: "au-syd", label: "Sydney", category: "asia-pacific" },
+    { id: "in-che", label: "Chennai", category: "asia-pacific" },
+  ];
+</script>
+
+## Basic
+
+Pass `items` with an `id` and a `label` each. The grid renders a search field, the options and a preview of the one under the pointer or the keyboard cursor. Choose with a click or <DocKbd label="Enter" />.
+
+<Box maxWidth="22rem">
+  <PickerGrid items={regions} labelText="Regions" height={160} cellSize={64} />
+</Box>
+
+## Categories
+
+Give an item a `category`, and the grid groups the items under a header for each. The buttons above the grid jump to a category and follow the scroll. List `categories` to set their order and labels. Without it, categories follow the order they first appear in `items`, and items with no category come last.
+
+<Box maxWidth="22rem">
+  <PickerGrid
+    items={regions}
+    categories={[
+      { id: "americas", label: "Americas" },
+      { id: "europe", label: "Europe" },
+      { id: "asia-pacific", label: "Asia Pacific" },
+    ]}
+    labelText="Regions"
+    height={200}
+    cellSize={64}
+  />
+</Box>
+
+## Search
+
+Typing filters the items to the ones that match every word, best match first, and the grid drops its categories while a search is active. A match on the start of the label ranks above a match inside a word, and a match on `keywords` ranks last, so `keywords` can hold synonyms. Accents and case are ignored. After a pause, a status message announces the number of results; set `resultsText` to translate it.
+
+<FileSource src="/framed/PickerGrid/PickerGridKeywords" />
+
+Set `searchable` to `false` to remove the field. The grid then takes the tab stop, and typing jumps to the next item whose label starts with the typed text.
+
+<FileSource src="/framed/PickerGrid/PickerGridNoSearch" />
+
+## Selection
+
+### Single
+
+Bind `selectedId` to read and set the chosen item. The grid opens scrolled to it.
+
+<FileSource src="/framed/PickerGrid/PickerGridSelection" />
+
+### Multiple
+
+Set `selectionMode` to `"multiple"` and bind `selectedIds`. A click or <DocKbd label="Enter" /> toggles the option, and a check mark shows each chosen one.
+
+<FileSource src="/framed/PickerGrid/PickerGridMultiple" />
+
+## Recent items
+
+The grid adds each item the user chooses to `recent`, newest first, and shows them in a section before the categories. `recentLimit` caps the list, and `0` hides the section. The section waits for the next search before it reorders, so a cell never moves out from under the pointer in multiple selection.
+
+`recent` is a plain array of `id`s, so save it where you like. This example keeps it with [LocalStorage](/components/LocalStorage): choose a region, then reload the page. An `id` that no item holds any more stays in the array and is skipped.
+
+<FileSource src="/framed/PickerGrid/PickerGridRecent" />
+
+## Custom cells
+
+Fill a cell through the `cell` slot, which receives `item`, `selected` and `highlighted`. The cell is as wide as the grid allows and `cellSize` tall. Set `columns` for a fixed count. By default the grid fits as many cells as its width holds, and the server renders eight.
+
+The `preview` slot fills the strip under the grid, and `preview={false}` removes it.
+
+<FileSource src="/framed/PickerGrid/PickerGridSwatches" />
+
+## Large sets
+
+The grid renders only the rows in view and a few around them, so a set of thousands of items costs the same as a set of dozens. The `window:change` event lists the cells in the window, with `scrolling` set to `true` when the grid scrolled to them. Use it to load what a cell shows, as [IconPicker](/components/IconPicker) does, and wait for the scroll to settle when loading is costly.
+
+<FileSource src="/framed/PickerGrid/PickerGridLarge" />
+
+## Keyboard
+
+Focus stays in the search field, and the cell the keys reach is named by `aria-activedescendant`. With `searchable` set to `false`, focus is on the grid itself.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="↑" /> <DocKbd label="↓" /> | Move to the cell above or below. A short row keeps the column you were in, and the next move brings it back. |
+| <DocKbd label="←" /> <DocKbd label="→" /> | Move one cell, on into the next row. The keys swap in right-to-left layouts. In the search field, they move the caret until <DocKbd label="↑" /> or <DocKbd label="↓" /> hands the keys to the grid, or while the field is empty. |
+| <DocKbd label="Home" /> <DocKbd label="End" /> | First or last cell in the row, or in the whole grid with <DocKbd label="Ctrl" />. In the search field, they behave as the arrows do. |
+| <DocKbd label="Page Up" /> <DocKbd label="Page Down" /> | Move a page of rows. |
+| <DocKbd label="Enter" /> | Choose the cell the keys reached. |
+| <DocKbd label="Space" /> | Choose, when there is no search field. |
+| Letters | Type in the search field, or jump to a matching label when there is none. |
+
+Nothing wraps: an arrow at an edge stays put.
+
+## Accessibility
+
+The grid is a `listbox` whose options sit in rows that have no role of their own, and in a named `group` for each category. Arrow keys move in two dimensions, which the listbox pattern doesn't define. A `grid` would announce coordinates that change with the width, and would need row and column indexes for every cell of a window that moves. Each option carries `aria-posinset` and `aria-setsize` for the whole set instead, so a screen reader says "Dallas, 2 of 12".
+
+| Do | Why |
+| :--- | :--- |
+| Set `labelText` to name the options ("Regions") | It names the listbox, and the search field gets its own name from `searchLabelText`. |
+| Give each item a `label` that stands alone | The label is the option's accessible name, so a glyph in the `cell` slot needs no name of its own. |
+| Pass `aria-label`, `aria-labelledby` or `aria-describedby` to the grid | They land on the listbox. Other attributes land on the root. |
