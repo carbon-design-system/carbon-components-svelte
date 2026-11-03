@@ -1,6 +1,7 @@
 // Type-checks the docs examples against the library's types with
-// svelte-check, non-strict. Exits 1 on any error, except the ones only
-// TypeScript's inference produces (see `IGNORED`).
+// scripts/typecheck, non-strict, and fails on Svelte compiler errors. Exits
+// 1 on any error, except the ones only TypeScript's inference produces (see
+// `IGNORED`).
 //
 //   bun run build:docs   # from the repo root, for the .d.ts files
 //   cd docs && bun scripts/typecheck-examples.ts
@@ -13,12 +14,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { compile } from "mdsvex";
 import { visit } from "unist-util-visit";
+import { compilerDiagnostics } from "../../scripts/lib/svelte-warnings";
 import { PAGE_EXTENSION } from "./constants";
 
 const DOCS = path.resolve(import.meta.dirname, "..");
 const PAGES = path.join(DOCS, "src/pages");
+const ROOT = path.resolve(DOCS, "..");
 const OUT = path.join(DOCS, ".cache/typecheck-examples");
-const SVELTE_CHECK = path.join(DOCS, "../node_modules/.bin/svelte-check");
 
 const DOC_KBD_RE = /^\s*<DocKbd\b/;
 const RELATIVE_IMPORT_RE = /(from\s+|import\s+)(["'])(\.\.?\/[^"']+)\2/g;
@@ -77,11 +79,6 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
   [
     "src/pages/framed/RecursiveList/RecursiveListOrderedNative.svelte",
     /^Type '\(/,
-  ],
-  // `let nodes` takes its type from the first of two tree shapes.
-  [
-    "src/pages/framed/TreeView/TreeViewPerformance.svelte",
-    /^Type '\{ id: number; text: string; \}\[\]'/,
   ],
 ];
 const knownHits = new Set<number>();
@@ -162,6 +159,13 @@ const pages = fs
   .map((f) => path.join(PAGES, f));
 await Promise.all(pages.map(writePage));
 
+const framedFiles = fs
+  .readdirSync(path.join(PAGES, "framed"), {
+    recursive: true,
+    encoding: "utf8",
+  })
+  .filter((f) => f.endsWith(".svelte"));
+
 const relative = (p: string) => path.relative(OUT, path.join(DOCS, p));
 fs.writeFileSync(
   path.join(OUT, "tsconfig.json"),
@@ -191,37 +195,62 @@ fs.writeFileSync(
 );
 
 const check = spawnSync(
-  SVELTE_CHECK,
+  process.execPath,
   [
+    path.join(ROOT, "scripts/typecheck/index.ts"),
     "--workspace",
-    OUT,
+    "docs",
     "--tsconfig",
-    path.join(OUT, "tsconfig.json"),
+    path.relative(ROOT, path.join(OUT, "tsconfig.json")),
+    "--no-declarations",
+    "--out-dir",
+    "docs/.cache/typecheck",
+    "--components",
+    ".cache/typecheck-examples/*.svelte",
+    "--components",
+    "src/pages/framed/**/*.svelte",
     "--output",
     "machine",
-    "--diagnostic-sources",
-    "js,svelte",
-    "--threshold",
-    "error",
   ],
-  { cwd: OUT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+  { cwd: ROOT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
 );
 
-// `<timestamp> ERROR "<file>" <line>:<column> "<message>"`
-const ERROR_RE = /^\d+ ERROR "(.+?)" (\d+):(\d+) "(.*)"$/;
-let errors = 0;
-let diagnostics = 0;
+// `ERROR "<file>" <line>:<column> "<message>" <code>`, the file relative to docs/.
+const ERROR_RE = /^ERROR "(.+?)" (\d+):(\d+) "(.*)" TS\d+$/;
+const found: Array<
+  [file: string, row: number, column: number, message: string]
+> = [];
 for (const line of check.stdout.split("\n")) {
   const match = line.match(ERROR_RE);
-  if (!match) continue;
-  diagnostics++;
-  const [, file, row, column, raw] = match;
-  const message = JSON.parse(`"${raw}"`).split("\n")[0];
+  if (match)
+    found.push([
+      match[1],
+      Number(match[2]),
+      Number(match[3]),
+      JSON.parse(`"${match[4]}"`).split("\n")[0],
+    ]);
+}
+// The compiler's errors (not its warnings) fail an example too.
+for (const file of [
+  ...[...lineMaps.keys()].map((name) => path.join(OUT, name)),
+  ...framedFiles.map((f) => path.join(PAGES, "framed", f)),
+])
+  for (const d of compilerDiagnostics(fs.readFileSync(file, "utf8"), file))
+    if (d.severity === "error")
+      found.push([
+        path.relative(DOCS, file),
+        d.line,
+        d.column,
+        d.message.split("\n")[0],
+      ]);
+
+let errors = 0;
+for (const [file, row, column, message] of found) {
   if (IGNORED.some((re) => re.test(message))) continue;
-  const map = lineMaps.get(file);
+  const map = lineMaps.get(path.basename(file));
   const source = map
-    ? `src/pages/components/${file.replace(".svelte", PAGE_EXTENSION)}`
-    : path.relative(DOCS, path.resolve(OUT, file));
+    ? `src/pages/components/${path.basename(file, ".svelte")}${PAGE_EXTENSION}`
+    : file;
   const known = KNOWN.findIndex(([f, re]) => f === source && re.test(message));
   if (known !== -1) {
     knownHits.add(known);
@@ -229,7 +258,7 @@ for (const line of check.stdout.split("\n")) {
   }
   errors++;
   const location = map
-    ? `${source}:${map[Number(row) - 1] || "?"}`
+    ? `${source}:${map[row - 1] || "?"}`
     : `${source}:${row}:${column}`;
   console.log(`${location}  ${message}`);
 }
@@ -238,16 +267,12 @@ for (const [i, [file, re]] of KNOWN.entries()) {
   errors++;
   console.log(`${file}  Fixed? Remove its KNOWN entry: ${re}`);
 }
-if (check.status !== 0 && diagnostics === 0) {
+// 1 is a type error; anything else (2: emitter bug) means no result.
+if (check.status !== 0 && check.status !== 1) {
   console.error(check.stdout, check.stderr);
   process.exit(check.status ?? 1);
 }
-const framed = fs
-  .readdirSync(path.join(PAGES, "framed"), {
-    recursive: true,
-    encoding: "utf8",
-  })
-  .filter((f) => f.endsWith(".svelte")).length;
+const framed = framedFiles.length;
 console.log(
   `\nChecked ${lineMaps.size} pages of live examples and ${framed} framed examples: ${errors} errors.`,
 );
