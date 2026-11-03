@@ -132,6 +132,20 @@ By default, the menu mounts into the anchor's nearest `<dialog>` or `[popover]` 
 
 Set `zIndex` to change the menu's stacking order. The default is `9200`.
 
+## Transition
+
+The menu opens and closes at once by default. Set `transition` to animate it. `true` uses Carbon's fly (`fast01`, 70 ms): the menu moves 2 px toward the side it opens on while it fades, and moves back as it closes. Fly parameters such as `{ duration: "fast02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Submenus take their parent's setting. Under `prefers-reduced-motion: reduce` the menu still opens and closes at once. To animate every menu in an app, set `menu` on [`Motion`](/motion#app-wide-defaults).
+
+A closing menu stays in the page until its exit ends, but it is already closed: it takes no clicks or keys, and a close from <DocKbd label="Escape" />, <DocKbd label="Tab" />, or a selection has already returned focus to the anchor. Menu forwards `introstart`, `introend`, `outrostart`, and `outroend`.
+
+<FileSource src="/framed/Menu/MenuTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Set `transition` on the root `Menu` only. | Submenus take the parent's setting, so a nested menu cannot move differently from the menu it opens from. |
+| Keep the default `fast01` and 2 px. | A menu is a small, frequent surface, and a longer or larger move reads as a delay. |
+| Run work that follows the close from `on:outroend`, not a timer. | The event fires when the menu has left, and fires at once under reduced motion. |
+
 ## Events
 
 Menu dispatches `open` once it finishes opening and focus moves to the first item, and `close` on every close attempt.
