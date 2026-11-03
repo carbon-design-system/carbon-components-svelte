@@ -7,6 +7,10 @@
   /**
    * @event {null} open
    * @event {null} close
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
    * @slot {{}} labelChildren - Set the toggletip label, rendered beside the button.
    * @deprecated use the `labelChildren` slot
    * @slot {{}} labelText
@@ -70,6 +74,15 @@
    * @type {boolean | undefined}
    */
   export let portalTooltip = undefined;
+
+  /**
+   * Animate the content as it appears and leaves. Set to `true` for
+   * Carbon's fade (`fast01`), to fade params (e.g., `{ duration: "fast02" }`)
+   * to customize it, or to `{ fn }` to use another transition. The content
+   * does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
+   */
+  export let transition = undefined;
 
   /**
    * Specify a class for the popover.
@@ -257,10 +270,15 @@ whitespace gap; the label's end margin is then the only spacing. -->
       {open}
       align={popoverAlign}
       {portalPopover}
+      {transition}
       id={contentId}
       caret
       highContrast
       class={["bx--toggletip-popover", popoverClass].filter(Boolean).join(" ")}
+      on:introstart
+      on:introend
+      on:outrostart
+      on:outroend
     >
       <!-- In a portal, the content is outside the wrapper's listeners. -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
