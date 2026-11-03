@@ -57,7 +57,7 @@
    * Obtain a reference to the indicator's HTML element, so the parent can
    * measure its natural width for the fit calculation.
    * @bindable readonly
-   * @type {null | HTMLElement}
+   * @type {null | HTMLSpanElement}
    */
   export let triggerRef = null;
 

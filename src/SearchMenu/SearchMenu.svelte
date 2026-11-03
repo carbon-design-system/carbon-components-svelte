@@ -162,7 +162,7 @@
 
   /**
    * Obtain a reference to the menu HTML element.
-   * @type {null | HTMLElement}
+   * @type {null | HTMLDivElement}
    * @bindable readonly
    */
   export let menuRef = null;

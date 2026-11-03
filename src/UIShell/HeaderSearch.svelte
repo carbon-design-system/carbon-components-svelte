@@ -43,7 +43,7 @@
 
   /**
    * Obtain a reference to the input HTML element.
-   * @type {HTMLInputElement | null}
+   * @type {null | HTMLInputElement}
    * @bindable readonly
    */
   export let ref = null;

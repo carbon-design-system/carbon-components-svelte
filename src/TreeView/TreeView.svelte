@@ -493,7 +493,7 @@
   /**
    * Reference to the scrollable container when `virtualize` is enabled.
    * `null` otherwise.
-   * @type {null | HTMLElement}
+   * @type {null | HTMLUListElement}
    * @bindable readonly
    */
   export let scrollContainerRef = null;

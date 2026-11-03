@@ -92,7 +92,7 @@
 
   /**
    * Obtain a reference to the trigger button HTML element.
-   * @type {null | HTMLButtonElement | HTMLAnchorElement}
+   * @type {null | HTMLButtonElement}
    * @bindable readonly
    */
   export let ref = null;

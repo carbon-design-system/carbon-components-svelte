@@ -53,7 +53,7 @@
 
   /**
    * Obtain a reference to the tablist HTML element.
-   * @type {HTMLDivElement | null}
+   * @type {null | HTMLDivElement}
    * @bindable readonly
    */
   export let ref = null;

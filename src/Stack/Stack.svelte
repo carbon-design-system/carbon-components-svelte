@@ -86,7 +86,7 @@
   /**
    * Obtain a reference to the HTML element.
    * Stays `null` when `as` is set; use `bind:this` on your own element instead.
-   * @type {null | HTMLElement}
+   * @type {null | HTMLElementTagNameMap[Tag]}
    * @bindable readonly
    */
   export let ref = null;
