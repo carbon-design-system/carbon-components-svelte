@@ -66,6 +66,17 @@ cannot close before users act.
 
 <FileSource src="/framed/ToastNotification/ToastNotificationActionable" />
 
+## Transition
+
+The notification opens and closes at once by default. Set `transition` to fly it in from 32 px to the right while it fades, and out again, including when a parent `{#if}` adds or removes it. `true` uses Carbon's fly (`moderate02`, 240 ms), and the toast's height grows and shrinks with it so notifications around it close the gap. Fly parameters such as `{ x: -32 }` enter from the left, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` it still opens and closes at once. The notification forwards `introstart`, `introend`, `outrostart`, and `outroend`. To animate every notification in an app, set `notification` on [`Motion`](/motion#app-wide-defaults).
+
+<FileSource src="/framed/ToastNotification/ToastNotificationTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Set `transition` on a toast that sits in the page flow, such as a stack you manage yourself. | The siblings slide to close the gap instead of jumping. |
+| Use [NotificationQueue](/components/NotificationQueue#transition) for toasts that stack in a corner. | It picks the fly direction from its position and keeps the space under the pointer. |
+
 ## Full width
 
 Span the full container width with `fullWidth`.
