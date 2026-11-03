@@ -184,6 +184,14 @@ Components that mount and unmount take a `transition` prop. It is off by default
 | [Loading](/components/Loading#transition) | `fade`, `moderate02`, overlay included | Global: the parent's `{#if}` plays it |
 | [ImageLoader](/components/ImageLoader#fade-in) | `fade`, `fast02` | Local: its own `{#if}` plays it |
 | [HeaderAction, HeaderSwitcher, ProfileMenu](/components/UIShell#app-switcher) | `slide`, `moderate02` | Local: their own `{#if}` plays it |
+| [InlineNotification](/components/InlineNotification#transition) | `slide`, `moderate02` | Global: the parent's `{#if}` plays it |
+| [ToastNotification](/components/ToastNotification#transition) | `fly` from 32 px, collapsing, `moderate02` | Global: the parent's `{#if}` plays it |
+| [NotificationQueue](/components/NotificationQueue#transition) | The toast preset, from the queue's side; `NotificationData.transition` per item | Global: adding and removing entries plays it |
+| [Dropdown, ComboBox, MultiSelect](/components/Dropdown#menu-transition) (`menuTransition`) | `slide`, `fast02`; `fade`, `fast02` in a portal | Global: the field's `{#if open}` plays it |
+| [HeaderSearch](/components/UIShell#search-menu-transition) (`menuTransition`) | `slide`, `fast02` | Local: its own `{#if}` plays it |
+| [Menu](/components/Menu#transition), [MenuButton](/components/MenuButton#menu-transition), [OverflowMenu](/components/OverflowMenu#menu-transition) (`menuTransition` on the buttons) | `fly` 2 px from the open edge, `fast01` | Global in a portal, local in place |
+| [Tooltip](/components/Tooltip#transition), [Toggletip](/components/Toggletip#transition), [Popover](/components/Popover#transition) | `fade`, `fast01` | Local in place, global in a portal |
+| [SideNavMenu](/components/UIShell#side-nav-menus) | `collapse`, `moderate01` | An action: the list stays mounted |
 
 A component adds the directive only when `transition` is on. Svelte 3 and 4 remove an element that carries a `transition:` directive one frame late even at zero duration, so with the prop off the element leaves at once. When a swapped `fn` brings its own parameters, the preset's are dropped, because a preset's `x` means nothing to `blur`.
 
