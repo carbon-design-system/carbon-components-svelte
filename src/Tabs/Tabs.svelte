@@ -2,6 +2,7 @@
   /**
    * @event {number} change
    * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
+   * @event {{ id: string; label: string; oldIndex: number; newIndex: number; source: "pointer" | "keyboard" }} reorder - Cancelable. Dispatched when a tab is dropped, or moved with the keyboard, in a new place. Tabs never reorder themselves: move the tab in your data. Call `preventDefault()` to refuse the move.
    */
 
   /**
@@ -61,6 +62,30 @@
     return label ? `Dismiss ${label}` : "Dismiss tab";
   };
 
+  /**
+   * Set to `true` to reorder tabs by dragging them, or with
+   * Ctrl or Cmd + Shift + Left or Right Arrow (Home and End go to the ends).
+   * Tabs never move themselves: handle `reorder` and move the tab in your data.
+   * Ignored when `navigation` is set.
+   */
+  export let reorderable = false;
+
+  /**
+   * Specify the hint read after each tab's name when `reorderable`.
+   * Set to `""` to leave it out.
+   */
+  export let reorderHintText =
+    "Hold Control or Command and Shift, then press an arrow key to move this tab.";
+
+  /**
+   * Specify the announcement for a tab that moved, made through a live region.
+   * Receives the tab's `label` and its new 1-based `position` of `count`.
+   * @type {(detail: { label: string; position: number; count: number }) => string}
+   */
+  export let reorderText = function reorderText({ label, position, count }) {
+    return `Moved ${label || "tab"} to position ${position} of ${count}`;
+  };
+
   /** Set to `true` for tabs to span the full width of the container */
   export let fullWidth = false;
 
@@ -118,9 +143,11 @@
   import { rovingFocus } from "../utils/roving-focus.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
+  import { tabReorder } from "../utils/tab-reorder.js";
   import { createTabsInitClaims } from "../utils/tabs-init-claims.js";
   import { createTabsRegistration } from "../utils/tabs-registration.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
+  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -129,6 +156,12 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>}
    */
   const tabs = writable([]);
+  // Id of the hidden hint each tab names in `aria-describedby`.
+  const reorderHintId = uniqueId("bx--tabs-reorder-hint");
+  /**
+   * @type {import("svelte/store").Writable<string | undefined>}
+   */
+  const useReorderHint = writable(undefined);
   /** @type {import("svelte/store").Readable<Record<string, { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>} */
   const tabsById = derived(tabs, (_) => keyBy(_));
   /**
@@ -444,6 +477,55 @@
     scrollTabIntoView(activeTab);
   }
 
+  const REPEAT_TAIL = "\u00a0";
+  let announcement = "";
+
+  /**
+   * Hand a move to the app. The tab moves only if the handler moves it in the
+   * data, so announce it, and put focus back on the tab, once the DOM shows it.
+   * @type {(detail: import("../utils/tab-reorder.js").TabReorderDetail) => Promise<void>}
+   */
+  async function reorder(detail) {
+    const tab = get(tabsById)[detail.id];
+    if (!tab) return;
+
+    const hadFocus = Boolean(
+      refTabList?.contains(refTabList.ownerDocument.activeElement),
+    );
+    const proceed = dispatch(
+      "reorder",
+      { ...detail, label: tab.label },
+      { cancelable: true },
+    );
+    if (!proceed) return;
+
+    // Moving a node blurs it in some browsers.
+    await tick();
+    const links = Array.from(
+      refTabList?.querySelectorAll(".bx--tabs__nav-link") ?? [],
+    );
+    const index = links.findIndex((link) => link.id === detail.id);
+    if (index !== detail.newIndex) return;
+
+    const link = /** @type {HTMLElement} */ (links[index]);
+    if (hadFocus || detail.source === "keyboard") {
+      link.focus({ preventScroll: true });
+    }
+    scrollTabIntoView(link);
+    const message = reorderText({
+      label: tab.label,
+      position: index + 1,
+      count: links.length,
+    });
+    // A live region does not announce text that did not change, and two
+    // tabs can share a label, so a repeat gets an invisible tail.
+    const tailed = announcement.endsWith(REPEAT_TAIL);
+    announcement =
+      message === (tailed ? announcement.slice(0, -1) : announcement) && !tailed
+        ? message + REPEAT_TAIL
+        : message;
+  }
+
   const tabsContext = {
     tabs,
     tabsById,
@@ -457,6 +539,7 @@
     useDismissible,
     useDismissText,
     useContainer,
+    reorderHint: useReorderHint,
     navigation: useNavigation,
     secondaryLabelSupported: useContainer,
     hasSecondaryLabel,
@@ -598,6 +681,9 @@
   $: useDismissText.set(dismissText);
   $: useContainer.set(type === "container");
   $: useNavigation.set(navigation);
+  $: useReorderHint.set(
+    reorderable && !navigation && reorderHintText ? reorderHintId : undefined,
+  );
   $: useIconOnly.set(iconOnly);
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
@@ -613,6 +699,7 @@
   class:bx--tabs--tall={$hasSecondaryLabel}
   class:bx--tabs--full-width={fullWidth}
   class:bx--tabs--dismissible={dismissible}
+  class:bx--tabs--reorderable={reorderable && !navigation}
   class:bx--tabs--icon-only={iconOnly}
   class:bx--tabs__icon--lg={iconOnly && iconSize === "lg"}
   class:bx--tabs--scrollable={isOverflow}
@@ -662,6 +749,11 @@
         }
       },
     }}
+    use:tabReorder={{
+      enabled: reorderable && !navigation,
+      rtl: () => resolveLayoutDirection($layoutDirection, refTabList) === "rtl",
+      onReorder: reorder,
+    }}
     class:bx--tabs__nav={true}
     on:scroll={updateOverflow}
   >
@@ -685,4 +777,12 @@
     </button>
   {/if}
 </div>
+{#if reorderable && !navigation}
+  <span id={reorderHintId} class:bx--visually-hidden={true}
+    >{reorderHintText}</span
+  >
+  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+    >{announcement}</span
+  >
+{/if}
 <slot name="content" />
