@@ -205,6 +205,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { getLayoutDirection } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
@@ -234,6 +235,10 @@
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   /** @typedef {{ value: number; valueUpper: number }} RangeSliderChangeDetail */
   /** @typedef {"lower" | "upper"} ActiveHandle */
@@ -307,7 +312,7 @@
   }
 
   function handleLowerInputFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => lowerInputRef?.select());
     }
     dispatch("focus", { value, valueUpper, handle: "lower" });
@@ -318,7 +323,7 @@
   }
 
   function handleUpperInputFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => upperInputRef?.select());
     }
     dispatch("focus", { value, valueUpper, handle: "upper" });
@@ -364,7 +369,7 @@
 
   /** @type {(e: PointerEvent) => void} */
   function handlePointermove(event) {
-    if (disabled || readonly || event.buttons !== 0) return;
+    if (effectiveDisabled || readonly || event.buttons !== 0) return;
     if (getRangePressValue(event) != null) hoverCursor = "grab";
     else if (trackDrag === "brush" && !isOnThumb(event))
       hoverCursor = "crosshair";
@@ -386,7 +391,7 @@
 
   /** @type {(e: PointerEvent) => boolean | undefined} */
   function handleDragStart(event) {
-    if (disabled || readonly) return false;
+    if (effectiveDisabled || readonly) return false;
     readDirection();
     const rangePress = getRangePressValue(event);
     hoverCursor = undefined;
@@ -445,7 +450,8 @@
     grabOffset = 0;
     dragMode = "handle";
     brushAnchor = null;
-    if (!disabled && !readonly) dispatch("change", { value, valueUpper });
+    if (!effectiveDisabled && !readonly)
+      dispatch("change", { value, valueUpper });
   }
 
   /** @type {(e: PointerEvent) => number | null} */
@@ -469,7 +475,7 @@
 
   /** @type {(e: PointerEvent) => void} */
   function paintRange(event) {
-    if (disabled || readonly || brushAnchor == null) return;
+    if (effectiveDisabled || readonly || brushAnchor == null) return;
     const pointerValue = getSnappedPointerValue(event);
     if (pointerValue == null) return;
     const next = brushRange(brushAnchor, pointerValue, { min, max, minGap });
@@ -480,7 +486,7 @@
 
   /** @type {(e: PointerEvent) => void} */
   function moveRange(event) {
-    if (disabled || readonly) return;
+    if (effectiveDisabled || readonly) return;
     const pointerValue = getPointerValue(event, 0);
     if (pointerValue == null) return;
     const delta = Math.round((pointerValue - rangeAnchor) / step) * step;
@@ -515,7 +521,7 @@
 
   /** @type {(e: PointerEvent) => void} */
   function calcValue(event) {
-    if (disabled || readonly || !trackRef) return;
+    if (effectiveDisabled || readonly || !trackRef) return;
 
     const rect = trackRef.getBoundingClientRect();
     let nextValue = valueFromPointer(event, rect, {
@@ -555,7 +561,7 @@
   /** @type {(e: KeyboardEvent) => void} */
   function handleKeydown(event) {
     // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
-    if (disabled || readonly || hasModifierKey(event)) return;
+    if (effectiveDisabled || readonly || hasModifierKey(event)) return;
     readDirection();
 
     if (event.key === "Home" || event.key === "End") {
@@ -614,7 +620,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
 
@@ -699,6 +705,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--form-item--fit={!fullWidth}
   class:bx--slider-form-item--vertical={orientation === "vertical"}
@@ -713,7 +720,7 @@
     for={hideTextInput || readonly ? undefined : lowerInputId}
     id={labelId}
     class:bx--label={true}
-    class:bx--label--disabled={disabled}
+    class:bx--label--disabled={effectiveDisabled}
     class:bx--visually-hidden={hideLabel}
   >
     <slot name="labelChildren">{labelText}</slot>
@@ -729,7 +736,7 @@
     class:bx--slider-container--two-handles={true}
     class:bx--slider-container--readonly={readonly}
     class:bx--slider-container--vertical={orientation === "vertical"}
-    class:bx--slider-container--disabled={disabled}
+    class:bx--slider-container--disabled={effectiveDisabled}
     style:width={fullWidth ? "100%" : undefined}
   >
     <div
@@ -739,7 +746,7 @@
     >
       <input
         bind:this={lowerInputRef}
-        use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:reflectDefaultValue={value}
         type={hideTextInput || readonly ? "hidden" : inputType}
         id={lowerInputId}
@@ -755,7 +762,7 @@
         {value}
         aria-label={ariaLabelInput}
         aria-labelledby="{groupLabelledBy} {lowerInputId}"
-        {disabled}
+        disabled={effectiveDisabled}
         {readonly}
         {required}
         {min}
@@ -823,7 +830,7 @@
     <div
       bind:this={ref}
       class:bx--slider={true}
-      class:bx--slider--disabled={disabled}
+      class:bx--slider--disabled={effectiveDisabled}
       class:bx--slider--readonly={readonly}
       class:bx--slider--with-marks={resolvedMarks.length > 0}
       class:bx--slider--with-mark-labels={hasMarkLabels}
@@ -861,8 +868,8 @@
         <div
           bind:this={lowerThumbRef}
           role="slider"
-          aria-disabled={disabled || undefined}
-          tabindex={disabled ? undefined : 0}
+          aria-disabled={effectiveDisabled || undefined}
+          tabindex={effectiveDisabled ? undefined : 0}
           class:bx--slider__thumb={true}
           class:bx--slider__thumb--lower={true}
           aria-valuemax={lowerMax}
@@ -939,8 +946,8 @@
         <div
           bind:this={upperThumbRef}
           role="slider"
-          aria-disabled={disabled || undefined}
-          tabindex={disabled ? undefined : 0}
+          aria-disabled={effectiveDisabled || undefined}
+          tabindex={effectiveDisabled ? undefined : 0}
           class:bx--slider__thumb={true}
           id={upperThumbId}
           class:bx--slider__thumb--upper={true}
@@ -1042,7 +1049,7 @@
     >
       <input
         bind:this={upperInputRef}
-        use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:reflectDefaultValue={valueUpper}
         type={hideTextInput || readonly ? "hidden" : inputType}
         id={upperInputId}
@@ -1058,7 +1065,7 @@
         value={valueUpper}
         aria-label={ariaLabelInputUpper}
         aria-labelledby="{groupLabelledBy} {upperInputId}"
-        {disabled}
+        disabled={effectiveDisabled}
         {readonly}
         {required}
         min={upperMin}
@@ -1141,7 +1148,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>

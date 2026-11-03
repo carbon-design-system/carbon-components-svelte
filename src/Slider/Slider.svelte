@@ -171,6 +171,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { getLayoutDirection } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
@@ -196,6 +197,10 @@
     valueFromPointer,
   } from "../utils/slider-value.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   $: textInputWidth = getTextInputWidth(min, max, step);
 
@@ -224,7 +229,7 @@
   }
 
   function handleDragStart(event) {
-    if (disabled || readonly) return false;
+    if (effectiveDisabled || readonly) return false;
     readDirection();
     // Focus the thumb so arrow keys work after a press on the track. The
     // compat `mousedown` would otherwise move focus to the body.
@@ -234,17 +239,17 @@
   }
 
   function handleDragEnd() {
-    if (!disabled && !readonly) dispatch("change", value);
+    if (!effectiveDisabled && !readonly) dispatch("change", value);
   }
 
   function handleTextInputFocus() {
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       tick().then(() => textInputRef?.select());
     }
   }
 
   function calcValue(event) {
-    if (disabled || readonly || !event) return;
+    if (effectiveDisabled || readonly || !event) return;
 
     const rect = trackRef.getBoundingClientRect();
     let nextValue = valueFromPointer(event, rect, {
@@ -279,7 +284,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: range = max - min;
@@ -324,6 +329,7 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--form-item--fit={!fullWidth}
   class:bx--slider-form-item--vertical={orientation === "vertical"}
@@ -338,7 +344,7 @@
     for={hideTextInput || readonly ? undefined : inputId}
     id={labelId}
     class:bx--label={true}
-    class:bx--label--disabled={disabled}
+    class:bx--label--disabled={effectiveDisabled}
     class:bx--visually-hidden={hideLabel}
   >
     <slot name="labelChildren">{labelText}</slot>
@@ -360,7 +366,7 @@
     <div
       bind:this={ref}
       class:bx--slider={true}
-      class:bx--slider--disabled={disabled}
+      class:bx--slider--disabled={effectiveDisabled}
       class:bx--slider--readonly={readonly}
       class:bx--slider--with-marks={resolvedMarks.length > 0}
       class:bx--slider--with-mark-labels={hasMarkLabels}
@@ -379,8 +385,8 @@
       <div
         bind:this={thumbRef}
         role="slider"
-        aria-disabled={disabled || undefined}
-        tabindex={disabled ? undefined : 0}
+        aria-disabled={effectiveDisabled || undefined}
+        tabindex={effectiveDisabled ? undefined : 0}
         class:bx--slider__thumb={true}
         style:left={orientation === "vertical" ? undefined : trackLeft(left)}
         style:top={orientation === "vertical" ? `${100 - left}%` : undefined}
@@ -411,7 +417,7 @@
         on:focus={readDirection}
         on:keydown={(event) => {
           // Alt/Ctrl/Meta+Arrow belong to the browser (Alt/Cmd+Left is Back).
-          if (disabled || readonly || hasModifierKey(event)) return;
+          if (effectiveDisabled || readonly || hasModifierKey(event)) return;
           readDirection();
 
           if (event.key === "Home" || event.key === "End") {
@@ -503,7 +509,7 @@
       {/if}
       <input
         bind:this={textInputRef}
-        use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:reflectDefaultValue={value}
         type={hideTextInput || readonly ? "hidden" : inputType}
         id={inputId}
@@ -518,7 +524,7 @@
         {value}
         aria-labelledby={controlLabelledBy}
         aria-label={ariaLabel ?? "Slider number input"}
-        {disabled}
+        disabled={effectiveDisabled}
         {readonly}
         {required}
         {min}
@@ -598,7 +604,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
