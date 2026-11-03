@@ -1,4 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
+import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
@@ -111,6 +113,7 @@ describe("components in a disabled fieldset", () => {
 });
 
 const field = { labelText: "Field", helperText: "Help" };
+const group = { legendText: "Field", helperText: "Help" };
 
 // The browser disables these fields' native controls itself; the fieldset
 // now also reaches their disabled styles.
@@ -120,6 +123,18 @@ const styleCases: {
   fieldProps: Record<string, unknown>;
   marker: string;
 }[] = [
+  {
+    name: "Checkbox",
+    component: Checkbox,
+    fieldProps: field,
+    marker: ".bx--form__helper-text--disabled",
+  },
+  {
+    name: "CheckboxGroup",
+    component: CheckboxGroup,
+    fieldProps: group,
+    marker: ".bx--form__helper-text--disabled",
+  },
   {
     name: "CopyInput",
     component: CopyInput,

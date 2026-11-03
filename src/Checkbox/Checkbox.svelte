@@ -134,10 +134,15 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CheckboxSkeleton from "./CheckboxSkeleton.svelte";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -196,7 +201,7 @@
     warn: effectiveWarn,
     // A disabled group disables its boxes natively, through `<fieldset
     // disabled>`, so its state is read here only to hide the invalid state.
-    disabled: disabled || $groupDisabled,
+    disabled: effectiveDisabled || $groupDisabled,
     readonly: effectiveReadonly,
   }));
 
@@ -285,6 +290,7 @@
     on:mouseleave
   >
     <input
+      use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
       bind:this={ref}
       use:formReset={handleFormReset}
       type="checkbox"
@@ -350,7 +356,7 @@
       for={id}
       use:overflowTitle={{ title, measure: labelRef }}
       data-contained-checkbox-state={indeterminate ? "mixed" : undefined}
-      data-contained-checkbox-disabled={indeterminate && disabled
+      data-contained-checkbox-disabled={indeterminate && effectiveDisabled
         ? "true"
         : undefined}
       class:bx--checkbox-label={true}
@@ -402,7 +408,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
       >
         {helperText}
       </div>
