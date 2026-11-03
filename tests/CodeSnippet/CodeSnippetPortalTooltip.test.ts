@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
+import { COPY_FEEDBACK_FADE_MS } from "../../src/constants/timing.js";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import CodeSnippetInlineInModal from "./CodeSnippetInlineInModal.test.svelte";
@@ -34,9 +35,8 @@ describe("CodeSnippet portal tooltip", () => {
         vi.useRealTimers();
       });
 
-      // Regression: portalled feedback hides the inline element, so the
-      // hide-feedback animation (and animationend) never runs; feedbackTimeout
-      // must close the portal directly or the tooltip stays open.
+      // The portalled tooltip fades out, then the timeout fallback removes it
+      // if `animationend` never fires, or the tooltip would stay open.
       it("should dismiss portal feedback after feedbackTimeout", async () => {
         render(CodeSnippet, {
           props: {
@@ -57,6 +57,12 @@ describe("CodeSnippet portal tooltip", () => {
         ).toBeInTheDocument();
 
         await vi.advanceTimersByTimeAsync(100);
+
+        expect(document.querySelector(".bx--tooltip-portal")).toHaveClass(
+          "bx--tooltip-portal--fade-out",
+        );
+
+        await vi.advanceTimersByTimeAsync(COPY_FEEDBACK_FADE_MS + 50);
 
         expect(
           document.querySelector("[data-floating-portal]"),

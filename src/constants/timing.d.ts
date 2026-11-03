@@ -70,3 +70,10 @@ export const STEPPER_REPEAT_DELAY_MS: 400;
 
 /** Time between steps while a stepper button stays held (Chromium spin button). */
 export const STEPPER_REPEAT_INTERVAL_MS: 50;
+
+/**
+ * How long a copy confirmation takes to fade out (Carbon fast-02). The
+ * feedback closes after this if `animationend` never fires, as when the
+ * element is hidden or its animation is off.
+ */
+export const COPY_FEEDBACK_FADE_MS: 110;

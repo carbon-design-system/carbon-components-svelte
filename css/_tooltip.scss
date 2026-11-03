@@ -1,5 +1,6 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/tooltip";
+@import "carbon-components/scss/globals/scss/motion";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// Portal tooltip for overflow containers (e.g. modals)
@@ -164,6 +165,25 @@
     box-sizing: content-box;
     white-space: normal;
     word-break: break-word;
+  }
+
+  // A copy confirmation fades as Carbon's inline one does: in on the
+  // entrance curve, out on the exit curve. `forwards` holds it hidden until
+  // the component removes it. Under reduced motion it swaps at once.
+  .#{$prefix}--tooltip-portal--fade-in {
+    animation: $duration--fast-02 motion(entrance, productive) show-feedback;
+  }
+
+  .#{$prefix}--tooltip-portal--fade-out {
+    animation: $duration--fast-02 motion(exit, productive) hide-feedback
+      forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--tooltip-portal--fade-in,
+    .#{$prefix}--tooltip-portal--fade-out {
+      animation: none;
+    }
   }
 }
 

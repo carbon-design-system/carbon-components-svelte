@@ -1,13 +1,27 @@
 // @ts-check
 
+import { COPY_FEEDBACK_FADE_MS } from "../constants/timing.js";
+
 /** Default time (ms) copy feedback stays visible. */
 export const COPY_FEEDBACK_TIMEOUT_MS = 2000;
 
 /** @typedef {'fade-in' | 'fade-out' | undefined} CopyFeedbackAnimation */
 
+/** Whether the user asked for less motion. False where `matchMedia` is missing. */
+function prefersReducedMotion() {
+  return (
+    typeof matchMedia === "function" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 /**
  * Copy-button feedback (fade-in/out, portal tooltip).
  * `copyActive` blocks a second click before Svelte assigns `animation`.
+ * The fade-out ends on the `animationend` of `hide-feedback`, or after
+ * `COPY_FEEDBACK_FADE_MS` if that never fires (a hidden element, a
+ * stylesheet without the animation). Under reduced motion there is no
+ * fade-out: the feedback closes at once.
  * On copy failure, still opens feedback (`isError`) so callers can show
  * error text in the same tooltip slot, then rethrows.
  *
@@ -18,7 +32,7 @@ export const COPY_FEEDBACK_TIMEOUT_MS = 2000;
  *   get copyPending(): boolean,
  *   get isError(): boolean,
  *   dismiss: () => void,
- *   onClick: (performCopy: () => void | Promise<void>, feedbackTimeout: number, portalled?: boolean) => Promise<void>,
+ *   onClick: (performCopy: () => void | Promise<void>, feedbackTimeout: number) => Promise<void>,
  *   onAnimationEnd: (event: { animationName: string }) => void,
  *   cleanup: () => void,
  * }}
@@ -32,6 +46,8 @@ export function createCopyFeedbackState(onSync) {
   let copyActive = false;
   let copyPending = false;
   let copyFailed = false;
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let fadeTimeout;
   // Bumped by `cleanup` so a copy still in flight when feedback is dismissed
   // (e.g. the Modal closes) doesn't reopen it on resolve.
   let epoch = 0;
@@ -40,28 +56,43 @@ export function createCopyFeedbackState(onSync) {
     onSync?.();
   }
 
+  /** Close the feedback and allow another copy. */
+  function finish() {
+    clearTimeout(timeout);
+    timeout = undefined;
+    clearTimeout(fadeTimeout);
+    fadeTimeout = undefined;
+    animation = undefined;
+    feedbackOpen = false;
+    copyActive = false;
+    copyFailed = false;
+    notify();
+  }
+
+  function startFadeOut() {
+    if (prefersReducedMotion()) {
+      finish();
+      return;
+    }
+    animation = "fade-out";
+    // `animationend` does not fire for an element that is hidden or has no
+    // animation, which would leave the feedback open and copying blocked.
+    fadeTimeout = setTimeout(finish, COPY_FEEDBACK_FADE_MS + 50);
+    notify();
+  }
+
   /**
    * @param {number} feedbackTimeout
-   * @param {boolean} portalled
    * @param {boolean} error
    */
-  function openFeedback(feedbackTimeout, portalled, error) {
+  function openFeedback(feedbackTimeout, error) {
     copyPending = false;
     copyFailed = error;
     animation = "fade-in";
     feedbackOpen = true;
     clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      if (portalled) {
-        feedbackOpen = false;
-        animation = undefined;
-        copyActive = false;
-        copyFailed = false;
-      } else {
-        animation = "fade-out";
-      }
-      notify();
-    }, feedbackTimeout);
+    clearTimeout(fadeTimeout);
+    timeout = setTimeout(startFadeOut, feedbackTimeout);
     notify();
   }
 
@@ -74,6 +105,8 @@ export function createCopyFeedbackState(onSync) {
     copyFailed = false;
     clearTimeout(timeout);
     timeout = undefined;
+    clearTimeout(fadeTimeout);
+    fadeTimeout = undefined;
   }
 
   function dismiss() {
@@ -84,13 +117,9 @@ export function createCopyFeedbackState(onSync) {
   /**
    * @param {() => void | Promise<void>} performCopy
    * @param {number} feedbackTimeout
-   * @param {boolean} [portalled] - When `true`, close feedback directly on
-   *   timeout instead of awaiting the `hide-feedback` animation. The portalled
-   *   tooltip hides the feedback element, so that animation (and its
-   *   `animationend`) never fires and the tooltip would otherwise stay open.
    * @returns {Promise<void>}
    */
-  async function handleClick(performCopy, feedbackTimeout, portalled = false) {
+  async function handleClick(performCopy, feedbackTimeout) {
     if (copyActive || animation === "fade-in") return;
 
     copyActive = true;
@@ -103,22 +132,16 @@ export function createCopyFeedbackState(onSync) {
     try {
       await performCopy();
     } catch (error) {
-      if (epoch === startEpoch) openFeedback(feedbackTimeout, portalled, true);
+      if (epoch === startEpoch) openFeedback(feedbackTimeout, true);
       throw error;
     }
 
-    if (epoch === startEpoch) openFeedback(feedbackTimeout, portalled, false);
+    if (epoch === startEpoch) openFeedback(feedbackTimeout, false);
   }
 
   /** @param {{ animationName: string }} event */
   function handleAnimationend(event) {
-    if (event.animationName === "hide-feedback") {
-      animation = undefined;
-      feedbackOpen = false;
-      copyActive = false;
-      copyFailed = false;
-      notify();
-    }
+    if (event.animationName === "hide-feedback") finish();
   }
 
   return {

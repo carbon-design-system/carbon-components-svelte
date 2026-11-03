@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { COPY_FEEDBACK_FADE_MS } from "../../src/constants/timing.js";
 import { createCopyFeedbackState } from "../../src/utils/copy-feedback.js";
 
 describe("createCopyFeedbackState", () => {
@@ -8,6 +9,7 @@ describe("createCopyFeedbackState", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
 
   it("runs performCopy once and starts fade-in feedback", async () => {
@@ -32,22 +34,40 @@ describe("createCopyFeedbackState", () => {
     expect(state.animation).toBe("fade-out");
   });
 
-  it("portalled closes feedback directly after feedbackTimeout", async () => {
+  it("closes after the fade when animationend never fires", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi.fn();
 
-    await state.onClick(performCopy, 100, true);
+    await state.onClick(performCopy, 100);
+    vi.advanceTimersByTime(100);
+    expect(state.animation).toBe("fade-out");
     expect(state.feedbackOpen).toBe(true);
 
-    vi.advanceTimersByTime(100);
+    // A hidden element, or a tooltip without the animation, never fires
+    // `animationend`. The fallback closes the feedback and frees the copy.
+    vi.advanceTimersByTime(COPY_FEEDBACK_FADE_MS + 50);
 
-    // No hide-feedback animationend fires when portalled, so the timeout must
-    // close the tooltip itself.
     expect(state.feedbackOpen).toBe(false);
     expect(state.animation).toBeUndefined();
 
-    // copyActive is also cleared, so a subsequent copy works.
-    await state.onClick(performCopy, 100, true);
+    await state.onClick(performCopy, 100);
+    expect(performCopy).toHaveBeenCalledTimes(2);
+  });
+
+  it("closes at once under reduced motion", async () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === "(prefers-reduced-motion: reduce)",
+    }));
+    const state = createCopyFeedbackState();
+    const performCopy = vi.fn();
+
+    await state.onClick(performCopy, 100);
+    vi.advanceTimersByTime(100);
+
+    expect(state.animation).toBeUndefined();
+    expect(state.feedbackOpen).toBe(false);
+
+    await state.onClick(performCopy, 100);
     expect(performCopy).toHaveBeenCalledTimes(2);
   });
 
