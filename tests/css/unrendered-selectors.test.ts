@@ -17,8 +17,6 @@ const UNRENDERED = [
   // `:not()` guards on these only padded specificity.
   /pagination-nav__page--direction/,
   /header__menu-toggle__hidden/,
-  // Pruned as styled-but-unrendered; see tests/css/unrendered-classes.test.ts.
-  /inline-loading__checkmark\b(?!-)/,
   /--switcher \{/,
   /--table-toolbar--sm\b/,
   /--text-input--warn\b(?!ing)/,

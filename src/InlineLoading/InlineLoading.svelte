@@ -45,7 +45,6 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import Loading from "../Loading/Loading.svelte";
-  import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { createLoadingDelay } from "../utils/delayed-loading.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
@@ -110,6 +109,12 @@
   $: shownDescription = held ? activeDescription : description;
   $: shownIconDescription = held ? activeIconDescription : iconDescription;
 
+  // The check draws on only when work finishes in front of the user, so a
+  // component that renders already finished (server HTML, hydration) shows
+  // the check drawn.
+  let drawCheck = false;
+  $: if (mounted && shownStatus !== "finished") drawCheck = true;
+
   $: if (mounted && shownStatus === "finished") {
     scheduleSuccess(successDelay, () => {
       dispatch("success");
@@ -139,10 +144,23 @@
         title={shownIconDescription || shownStatus}
       />
     {:else if shownStatus === "finished"}
-      <CheckmarkFilled
+      <svg
         class="bx--inline-loading__checkmark-container"
-        title={shownIconDescription || shownStatus}
-      />
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        width="16"
+        height="16"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+      >
+        <title>{shownIconDescription || shownStatus}</title>
+        <circle cx="16" cy="16" r="14"></circle>
+        <polyline
+          class:bx--inline-loading__checkmark={true}
+          class:bx--inline-loading__checkmark--draw={drawCheck}
+          points="9.8 15.8 14 20 22.2 11.8"
+        ></polyline>
+      </svg>
     {:else if shownStatus === "inactive" || shownStatus === "active"}
       <Loading
         small
