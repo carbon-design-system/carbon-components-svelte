@@ -78,7 +78,7 @@
   /**
    * Obtain a reference to the outer HTML element.
    * @bindable readonly
-   * @type {null | HTMLElement}
+   * @type {null | HTMLAnchorElement | HTMLButtonElement | HTMLDivElement}
    */
   export let ref = null;
 

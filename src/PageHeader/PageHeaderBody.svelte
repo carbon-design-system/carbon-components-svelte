@@ -8,7 +8,7 @@
 
   /**
    * Obtain a reference to the body element.
-   * @type {null | HTMLElement}
+   * @type {null | HTMLDivElement}
    * @bindable readonly
    */
   export let ref = null;

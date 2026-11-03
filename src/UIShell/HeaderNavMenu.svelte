@@ -40,7 +40,7 @@
 
   /**
    * Obtain a reference to the HTML anchor element.
-   * @type {HTMLAnchorElement | null}
+   * @type {null | HTMLAnchorElement}
    * @bindable readonly
    */
   export let ref = null;

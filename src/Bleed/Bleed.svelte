@@ -73,7 +73,7 @@
 
   /**
    * Obtain a reference to the HTML element.
-   * @type {null | HTMLElement}
+   * @type {null | HTMLElementTagNameMap[Tag]}
    * @bindable readonly
    */
   export let ref = null;

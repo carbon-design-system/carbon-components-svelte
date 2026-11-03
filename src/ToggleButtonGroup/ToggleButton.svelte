@@ -60,7 +60,7 @@
 
   /**
    * Obtain a reference to the HTML element.
-   * @type {HTMLButtonElement | null}
+   * @type {null | HTMLButtonElement}
    * @bindable readonly
    */
   export let ref = null;

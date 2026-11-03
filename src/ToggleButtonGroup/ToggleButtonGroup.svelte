@@ -56,7 +56,7 @@
 
   /**
    * Obtain a reference to the HTML element.
-   * @type {HTMLDivElement | null}
+   * @type {null | HTMLDivElement}
    * @bindable readonly
    */
   export let ref = null;
