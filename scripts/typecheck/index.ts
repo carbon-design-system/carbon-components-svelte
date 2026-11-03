@@ -18,7 +18,9 @@ import { createLocator, type Output } from "./output";
  * `X.d.svelte.ts` re-exports, so imports of `.svelte` files resolve to their
  * own `.svelte.d.ts` (as `src/` has, from sveld). `--output machine` prints
  * `ERROR "file" line:column "message" code` lines, with `file` relative to
- * the workspace. `--svelte` points at the
+ * the workspace. `--components` (repeatable) picks the components to check
+ * with globs relative to the workspace, and `--out-dir` moves the generated
+ * code out of `<workspace>/.typecheck`. `--svelte` points at the
  * Svelte install to check against (its version and element typings), e.g.
  * `tests-svelte3/node_modules/svelte` with `--tsconfig
  * tests-svelte3/tsconfig.check.json`.
@@ -31,6 +33,8 @@ const { values } = parseArgs({
     "no-declarations": { type: "boolean", default: false },
     output: { type: "string", default: "human" },
     svelte: { type: "string", default: "node_modules/svelte" },
+    components: { type: "string", multiple: true },
+    "out-dir": { type: "string" },
   },
 });
 
@@ -47,7 +51,9 @@ const baseConfig = resolve(
   ROOT,
   values.tsconfig ?? join(values.workspace, "tsconfig.json"),
 );
-const outDir = join(workspace, ".typecheck");
+const outDir = values["out-dir"]
+  ? resolve(ROOT, values["out-dir"])
+  : join(workspace, ".typecheck");
 const genDir = join(outDir, "svelte");
 const noDeclarations = values["no-declarations"];
 
@@ -89,14 +95,17 @@ const excluded = (await baseExclude(baseConfig))
 const started = performance.now();
 rmSync(outDir, { recursive: true, force: true });
 
-const files = [
-  ...new Bun.Glob("**/*.svelte").scanSync({ cwd: workspace }),
-].filter(
-  (rel) =>
-    !rel.includes("node_modules") &&
-    !rel.startsWith(".") &&
-    !excluded.some((glob) => glob.match(rel)),
-);
+const files = (values.components ?? ["**/*.svelte"])
+  .flatMap((pattern) => [
+    ...new Bun.Glob(pattern).scanSync({ cwd: workspace, dot: true }),
+  ])
+  .filter(
+    (rel) =>
+      !rel.includes("node_modules") &&
+      // Hidden folders (generated output) only when a pattern names them.
+      (values.components || !rel.startsWith(".")) &&
+      !excluded.some((glob) => glob.match(rel)),
+  );
 const sources = await Promise.all(
   files.map((rel) => Bun.file(join(workspace, rel)).text()),
 );
@@ -165,7 +174,16 @@ writes.push(
         files: [join(ROOT, "scripts/typecheck/shims.d.ts"), svelteHtml].map(
           (path) => relative(outDir, path),
         ),
-        include: noDeclarations ? ["svelte"] : [workspaceRel, "svelte"],
+        include: [
+          ...(noDeclarations ? [] : [workspaceRel]),
+          "svelte",
+          // `include` globs skip dot folders unless a pattern names them.
+          ...new Set(
+            files
+              .filter((rel) => rel.startsWith(".") || rel.includes("/."))
+              .map((rel) => `svelte/${dirname(rel)}/*`),
+          ),
+        ],
         exclude: [
           `${workspaceRel}/**/node_modules`,
           `${workspaceRel}/.svelte-check`,
