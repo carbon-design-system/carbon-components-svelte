@@ -7,6 +7,7 @@ import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
+import FormHelperText from "carbon-components-svelte/FormHelperText/FormHelperText.svelte";
 import FormLabel from "carbon-components-svelte/FormLabel/FormLabel.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
@@ -174,6 +175,12 @@ const styleCases: {
     component: FileUploaderDropContainer,
     fieldProps: field,
     marker: ".bx--file-browse-btn--disabled",
+  },
+  {
+    name: "FormHelperText",
+    component: FormHelperText,
+    fieldProps: {},
+    marker: ".bx--form__helper-text--disabled",
   },
   {
     name: "FormLabel",
