@@ -36,8 +36,8 @@
   export let containerStyle = undefined;
 
   /**
-   * Obtain a reference to the section HTML element (when stickyHeader is enabled) or table HTML element.
-   * @type {null | HTMLElement | HTMLTableElement}
+   * Obtain a reference to the section HTML element. Only set when `stickyHeader` is true.
+   * @type {null | HTMLElement}
    * @bindable readonly
    */
   export let ref = null;
