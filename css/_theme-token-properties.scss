@@ -11,6 +11,62 @@
 @import "./text-tokens";
 @import "./user-avatar-tokens";
 
+/// The tokens a printed page needs in light values: text, the surface under
+/// it, its borders, links and icons. A name matches when it starts with one.
+/// Buttons, tags, notifications and status colors keep the theme's, as a
+/// browser prints no backgrounds under them.
+/// @access private
+/// @group themes
+$ccs-print-token-prefixes: (
+  "text-",
+  "background",
+  "layer",
+  "border-",
+  "link-",
+  "icon-",
+  "field"
+);
+
+/// Whether `$name` starts with `$prefix`.
+/// @access private
+@function ccs-starts-with($name, $prefix) {
+  @return str-index($name, $prefix) == 1;
+}
+
+/// Re-declares, for print, the tokens in `$ccs-print-token-prefixes` that
+/// any of the dark `$themes` sets apart from `$light`, with `$light`'s
+/// values. A browser prints no backgrounds, so a dark theme's light text
+/// would otherwise print on white paper. Place it after the dark themes'
+/// own tokens, in a rule that ties with theirs on specificity, so it wins on
+/// order.
+/// @param {List} $themes - Dark theme maps the rule can declare
+/// @param {Map} $light - Theme to print with
+/// @access private
+/// @group themes
+@mixin ccs-print-theme-tokens($themes, $light) {
+  @media print {
+    color-scheme: light;
+
+    @each $name, $value in $light {
+      $differs: false;
+      @each $theme in $themes {
+        @if map-get($theme, $name) != $value {
+          $differs: true;
+        }
+      }
+      // `text-05` is a v10 name; v11 has no token for it.
+      @if $differs and type-of($value) != map and $name != "text-05" {
+        @each $prefix in $ccs-print-token-prefixes {
+          @if ccs-starts-with($name, $prefix) {
+            --cds-#{$name}: #{$value};
+          }
+        }
+      }
+    }
+    @include ccs-emit-theme-colors($ccs-text-colors, $light);
+  }
+}
+
 /// Declares a theme's tokens: Carbon's, the tag, notification, content
 /// switcher and status component tokens, and the library's own text and
 /// avatar colors.
@@ -40,4 +96,9 @@
   }
   @include ccs-emit-theme-colors($ccs-text-colors, $theme, $base);
   @include ccs-emit-theme-colors($ccs-user-avatar-colors, $theme, $base);
+
+  // `all.css` prints every dark theme from one rule, after the last of them.
+  @if $dark and not $base {
+    @include ccs-print-theme-tokens(($theme,), $carbon--theme--white);
+  }
 }

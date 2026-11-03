@@ -95,4 +95,28 @@ test.describe("print", () => {
 
     await expect(page.getByTestId("code")).toHaveCSS("overflow-x", "visible");
   });
+
+  for (const [theme, screen] of [
+    ["g90", "rgb(38, 38, 38)"],
+    ["g100", "rgb(22, 22, 22)"],
+  ]) {
+    test(`prints ${theme} on White's text and surface`, async ({ page }) => {
+      await page.evaluate(
+        (t) => document.documentElement.setAttribute("theme", t),
+        theme,
+      );
+      const heading = page.getByRole("heading", { name: "Service report" });
+      const body = page.locator("body");
+      await expect(heading, "on screen").toHaveCSS(
+        "color",
+        "rgb(244, 244, 244)",
+      );
+      await expect(body, "on screen").toHaveCSS("background-color", screen);
+
+      await page.emulateMedia({ media: "print" });
+      await expect(heading).toHaveCSS("color", "rgb(22, 22, 22)");
+      await expect(body).toHaveCSS("background-color", "rgb(255, 255, 255)");
+      await expect(page.locator("html")).toHaveCSS("color-scheme", "light");
+    });
+  }
 });

@@ -40,6 +40,8 @@ export type TokenData = {
 // start on different characters, so the match never backtracks between them.
 const ROOT_BLOCK =
   /:root(?:\[theme=["']?(\w+)["']?\])?(?:,[^{}]*|\s*)\{([^}]*)\}/g;
+// Print rules re-point tokens for paper; the screen theme is not theirs.
+const PRINT_BLOCK = /@media print\s*\{(?:[^{}]|\{[^{}]*\})*\}/g;
 const DECLARATION = /--cds-([\w-]+)\s*:\s*([^;]+)/g;
 const COLOR = /^(#[\da-f]{3,8}|rgba?\(|hsla?\(|transparent$)/i;
 /** Carbon v11's component tokens; every other color is a theme token. */
@@ -90,7 +92,7 @@ const SCALES: [RegExp, "spacing" | "layout" | "container" | "size"][] = [
 /** `--cds-*` declarations per theme, with each theme filled in from white. */
 function parseThemes(css: string): Record<Theme, Declarations> {
   const declared: Partial<Record<Theme, Declarations>> = {};
-  for (const block of css.matchAll(ROOT_BLOCK)) {
+  for (const block of css.replace(PRINT_BLOCK, "").matchAll(ROOT_BLOCK)) {
     const theme = (block[1] ?? "white") as Theme;
     declared[theme] ??= {};
     const declarations = declared[theme];
