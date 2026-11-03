@@ -174,6 +174,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
@@ -182,6 +183,10 @@
   } from "../utils/layout-direction.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -213,11 +218,11 @@
   /** Message for the most recent rejected value; cleared on the next edit. */
   let rejectionText = "";
 
-  $: interactive = !disabled && !readonly;
+  $: interactive = !effectiveDisabled && !readonly;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: invalid || !!rejectionText,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: errorText = invalid ? invalidText : rejectionText;
@@ -540,7 +545,7 @@
   function tagSlotProps(tag) {
     return {
       filter: !readonly,
-      disabled,
+      disabled: effectiveDisabled,
       value: tag,
       title: removeTagText,
       maxWidth: "13rem",
@@ -556,6 +561,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={rootRef}
   class:bx--form-item={true}
   on:keydown={handleTagKeydown}
@@ -565,7 +571,7 @@
       for={id}
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
@@ -582,7 +588,7 @@
     class:bx--tag-input--xl={effectiveSize === "xl"}
     class:bx--tag-input--focused={focused}
     class:bx--tag-input--invalid={showInvalid}
-    class:bx--tag-input--disabled={disabled}
+    class:bx--tag-input--disabled={effectiveDisabled}
     class:bx--tag-input--readonly={readonly}
     class:bx--tag-input--status={readonly || showInvalid || showWarn}
     on:click={handleFieldClick}
@@ -620,7 +626,7 @@
         autocomplete="off"
         aria-invalid={showInvalid ? "true" : undefined}
         aria-errormessage={showInvalid && errorText ? errorId : undefined}
-        {disabled}
+        disabled={effectiveDisabled}
         {id}
         placeholder={readonly && value.length > 0 ? undefined : placeholder}
         {readonly}
@@ -675,7 +681,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
@@ -690,7 +696,7 @@
   {/if}
   {#if name}
     {#each value as tag, index (index)}
-      <input type="hidden" {name} value={tag} {disabled} />
+      <input type="hidden" {name} value={tag} disabled={effectiveDisabled} />
     {/each}
   {/if}
   <span id={instructionsId} class:bx--visually-hidden={true}
