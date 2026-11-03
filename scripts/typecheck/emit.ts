@@ -1,4 +1,4 @@
-import { parse } from "sveast";
+import { isReference, parse, walk } from "sveast";
 import { analyzeScopes } from "sveast/scope";
 import { Output } from "./output";
 
@@ -15,6 +15,7 @@ const GENERIC_PARAM =
 const TS_LANG = /^(ts|typescript)$/;
 const OWNS_TEMPLATE = /@(typedef|callback)\b/;
 const JSDOC_BLOCK = /\/\*\*[\s\S]*?\*\//g;
+const CALL_PARENS = /\s*\(\s*\)$/;
 const JSDOC_LINE_START = /^\s*\/?\*+\s?/;
 const JSDOC_END = /\s*\*\/\s*$/;
 const USES_ALL_PROPS = /\$\$(restProps|props)\b/;
@@ -75,7 +76,10 @@ export function emit(
     ),
   );
   let uid = 0;
-  const slots = new Set<string>();
+  /** Each `<slot>`'s attributes, by slot name. */
+  const slots = new Map<string, Node[]>();
+  /** Events the component forwards: an element's DOM event, or `any`. */
+  const forwarded = new Map<string, string>();
 
   function textOf(attribute: Node) {
     const value = Array.isArray(attribute.value)
@@ -334,7 +338,13 @@ export function emit(
     else if (a.type === "OnDirective") {
       key(a, `on:${a.name}`);
       if (a.expression) expression(a.expression);
-      else out.raw("undefined");
+      else {
+        out.raw("undefined");
+        forwarded.set(
+          a.name,
+          `__sveltets_2_mapElementEvent(${JSON.stringify(a.name)})`,
+        );
+      }
       out.raw(",");
     } else if (a.type === "BindDirective" && a.name !== "this") {
       key(a, `bind:${a.name}`);
@@ -488,6 +498,9 @@ export function emit(
             .raw("() => ")
             .copy(a.expression.start, a.expression.end)
             .raw(" = __sveltets_2_any(null);");
+      } else if (a.type === "OnDirective" && !a.expression) {
+        if (!forwarded.has(a.name))
+          forwarded.set(a.name, "__sveltets_2_any(0)");
       } else if (a.type === "OnDirective" && a.expression) {
         out.from(nameAt(a), () =>
           out.raw(`${id}.$on(${JSON.stringify(a.name)}, `),
@@ -571,7 +584,10 @@ export function emit(
         const nameAttr = (node.attributes ?? []).find(
           (a: Node) => a.type === "Attribute" && a.name === "name",
         );
-        slots.add(nameAttr ? textOf(nameAttr) : "default");
+        slots.set(
+          nameAttr ? textOf(nameAttr) : "default",
+          node.attributes ?? [],
+        );
         out.raw("({");
         for (const a of node.attributes ?? [])
           if (a.type === "Attribute" && a.name !== "name") {
@@ -673,8 +689,61 @@ export function emit(
   const accessors = ast.options?.attributes?.some(
     (a: Node) => a.name === "accessors" && a.value !== false,
   );
+  /** Whether a value reads a name the markup declares (`{#each}`, `let:`). */
+  const markupScoped = (value: Node) => {
+    let scoped = false;
+    for (const part of Array.isArray(value) ? value : [value])
+      if (part?.type === "ExpressionTag")
+        walk(part.expression, {
+          enter(node: Node, parent: Node) {
+            if (node.type !== "Identifier" || !isReference(node, parent))
+              return;
+            const b = scopes.bindingOf(node);
+            if (b && b.scope !== scopes.instance && b.scope !== scopes.module)
+              scoped = true;
+          },
+        });
+    return scoped;
+  };
+  const entries = (pairs: [string, string][]) =>
+    pairs.map(([k, v]) => `${JSON.stringify(k)}: ${v}`).join(", ");
   out.raw(
-    `return { props: {${props.map((p) => `${JSON.stringify(p.name)}: ${p.local}`).join(", ")}}, exports: {${[...(accessors ? props.map((p) => `${JSON.stringify(p.name)}: ${p.local}`) : []), ...exportsOf.map((e) => `${e}: ${e}`)].join(", ")}}, bindings: "", slots: {${[...slots].map((n) => `${JSON.stringify(n)}: {}`).join(", ")}}, events: {} };\n}\n`,
+    `return { props: {${entries(props.map((p) => [p.name, p.local]))}}, exports: {${entries([...(accessors ? props.map((p): [string, string] => [p.name, p.local]) : []), ...exportsOf.map((e): [string, string] => [e, e])])}}, bindings: "", slots: {`,
+  );
+  // A slot's props, as `let:` reads them; `any` for a value the markup scopes.
+  for (const [name, attributes] of slots) {
+    out.raw(`${JSON.stringify(name)}: {`);
+    for (const a of attributes)
+      if (a.type === "Attribute" && a.name !== "name") {
+        out.raw(`${JSON.stringify(a.name)}: `);
+        if (markupScoped(a.value)) out.raw("__sveltets_2_any(0)");
+        else attrValue(a.value);
+        out.raw(", ");
+      } else if (
+        a.type === "SpreadAttribute" &&
+        !markupScoped({ type: "ExpressionTag", expression: a.expression })
+      )
+        out.raw("...").copy(a.expression.start, a.expression.end).raw(", ");
+    out.raw("}, ");
+  }
+  // `createEventDispatcher<Events>()` types the events it dispatches.
+  const dispatcher = body
+    .flatMap((s: Node) =>
+      s.type === "VariableDeclaration" ? s.declarations : [],
+    )
+    .map((d: Node) => d.init)
+    .find(
+      (init: Node) =>
+        init?.type === "CallExpression" &&
+        init.callee?.name === "createEventDispatcher",
+    );
+  const typings = dispatcher
+    ? source
+        .slice(dispatcher.callee.end, dispatcher.end)
+        .replace(CALL_PARENS, "")
+    : "";
+  out.raw(
+    `}, events: {${typings.startsWith("<") ? `...__sveltets_2_toEventTypings${typings}(), ` : ""}${entries([...forwarded])}} };\n}\n`,
   );
   const optional = props
     .filter((p) => p.optional)

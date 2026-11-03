@@ -109,6 +109,17 @@ declare function __sveltets_2_ensureTransition(
     | (() => __sveltets_2_SvelteTransitionConfig),
 ): {};
 
+// --- Events.
+
+/** `createEventDispatcher<Typings>()`'s events, as `CustomEvent`s. */
+declare function __sveltets_2_toEventTypings<Typings>(): {
+  [Key in keyof Typings]: CustomEvent<Typings[Key]>;
+};
+/** A DOM event an element forwards with a bare `on:event`. */
+declare function __sveltets_2_mapElementEvent<
+  K extends keyof HTMLElementEventMap,
+>(event: K): HTMLElementEventMap[K];
+
 // --- Components.
 
 declare type ATypedSvelteComponent = {
