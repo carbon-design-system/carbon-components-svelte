@@ -5,7 +5,7 @@
     "": {
       "name": "carbon-components-svelte",
       "dependencies": {
-        "@ibm/telemetry-js": "^1.10.2",
+        "@ibm/telemetry-js": "^1.12.0",
       },
       "devDependencies": {
         "@axe-core/playwright": "^4.13.0",
@@ -105,7 +105,7 @@
 
     "@exodus/bytes": ["@exodus/bytes@1.15.1", "", { "peerDependencies": { "@noble/hashes": "^1.8.0 || ^2.0.0" }, "optionalPeers": ["@noble/hashes"] }, "sha512-S6mL0yNB/Abt9Ei4tq8gDhcczc4S3+vQ4ra7vxnAf+YHC02srtqxKKZghx2Dq6p0e66THKwR6r8N6P95wEty7Q=="],
 
-    "@ibm/telemetry-js": ["@ibm/telemetry-js@1.11.0", "", { "bin": { "ibmtelemetry": "dist/collect.js" } }, "sha512-RO/9j+URJnSfseWg9ZkEX9p+a3Ousd33DBU7rOafoZB08RqdzxFVYJ2/iM50dkBuD0o7WX7GYt1sLbNgCoE+pA=="],
+    "@ibm/telemetry-js": ["@ibm/telemetry-js@1.12.0", "", { "bin": { "ibmtelemetry": "dist/collect.js" } }, "sha512-tNgmk2k8loNDTnPInlu7yMP9YOCr9UMwSnXN7SCEsGIV8xHfTawhXlDnp1PV0Lbv+2GoLQKSgkShlJeGPi4jTg=="],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.12", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-OuLGC46TjB5BbN1dH8JULVVZY4WTdkF7tV9Ys6wLL1rubZnCMstOhNHueU5bLCrnRuDhKPDM4g6sw4Bel5Gzqg=="],
 

@@ -89,7 +89,7 @@
     "release:docs": "bun scripts/release-changelog --docs-only"
   },
   "dependencies": {
-    "@ibm/telemetry-js": "^1.10.2"
+    "@ibm/telemetry-js": "^1.12.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
