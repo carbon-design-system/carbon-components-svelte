@@ -173,11 +173,12 @@
   export let hideLabel = false;
 
   /**
-   * Override the default translation ids.
+   * Override the default translation ids. Unset, it uses
+   * `setTranslateContext`, then English.
    * @type {(id: NumberInputTranslationId) => string}
    */
   export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
+    return translate?.(id) ?? defaultTranslations[id];
   };
 
   /**
@@ -250,12 +251,15 @@
   import { reflectDefaultValue } from "../utils/reflect-default-value.js";
   import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
   $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const SCRUB_STEP_PIXELS = 4;
+
+  const translate = getTranslateContext();
 
   const defaultTranslations = {
     [translationIds.increment]: "Increment number",

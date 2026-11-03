@@ -69,11 +69,11 @@
    * "Ctrl" are shown on the keys; names such as "Command" are read by
    * screen readers for the icons shown on Apple platforms. A key it
    * returns `undefined` for uses the nearest `setKbdTranslations`, then
-   * English.
+   * `setTranslateContext`, then English.
    * @type {(id: KbdTranslationId) => string | undefined}
    */
   export let translateWithId = function translateWithId(id) {
-    return shared?.(id) ?? KBD_TRANSLATIONS[id];
+    return shared?.(id) ?? contextTranslate?.(id) ?? KBD_TRANSLATIONS[id];
   };
 
   /**
@@ -84,17 +84,22 @@
   export let ref = null;
 
   import { applePlatform } from "../utils/keyboard-shortcut.js";
+  import { getTranslateContext } from "../utils/translate-context.js";
   import { KBD_GLYPHS } from "./kbd-glyphs.js";
   import { KBD_TRANSLATIONS, kbdKeys } from "./kbd-keys.js";
   import { getKbdTranslations } from "./kbd-translations.js";
 
   const shared = getKbdTranslations();
+  const contextTranslate = getTranslateContext();
 
   $: isApple = apple ?? $applePlatform;
   /** @type {(id: KbdTranslationId) => string} */
   let translate;
   $: translate = (id) =>
-    translateWithId(id) ?? shared?.(id) ?? KBD_TRANSLATIONS[id];
+    translateWithId(id) ??
+    shared?.(id) ??
+    contextTranslate?.(id) ??
+    KBD_TRANSLATIONS[id];
 
   /**
    * @param {string} value
