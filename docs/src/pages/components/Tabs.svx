@@ -171,6 +171,27 @@ Below the medium breakpoint, vertical tabs collapse into the same horizontal, sc
 
 <FileSource src="/framed/Tabs/TabsVerticalOverflow" />
 
+### More tabs menu
+
+Scroll buttons suit a handful of tabs. With dozens open, set `overflowMenu` to
+add a "more tabs" menu beside them. It lists the tabs that are not whole in
+view and updates as the list scrolls. Choose one to select it, scroll it into
+view and move focus to it. The menu is a button after the tab list, so
+pressing <DocKbd label="Tab" /> in the tabs reaches it, and `overflowMenuText`
+replaces its name.
+
+<FileSource src="/framed/Tabs/TabsOverflowMenu" />
+
+#### Container
+
+<FileSource src="/framed/Tabs/TabsOverflowMenuContainer" />
+
+| Do | Why |
+| --- | --- |
+| Set `overflowMenu` for lists that can grow past a screen | The menu reaches any tab in two steps, where the scroll buttons move a page at a time. |
+| Keep the scroll buttons | They still scroll a few tabs, and the menu only appears once the list overflows. |
+| Give tabs a `label` | The menu shows the label. A tab without one shows its `id`. |
+
 ## Disabled tabs
 
 Set `disabled` on a tab to prevent interaction. Keyboard navigation skips disabled
