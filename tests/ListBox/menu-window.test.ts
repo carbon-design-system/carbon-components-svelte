@@ -1016,19 +1016,6 @@ describe("createMenuWindow: closing and teardown", () => {
     expect(placeFifthOption(harness)).toBeCloseTo(PLACED_ON_ESTIMATE, 6);
   });
 
-  it("withdrawing a request keeps the heights it was placed against", async () => {
-    const observer = installManualResizeObserver();
-    const harness = setup();
-    const items = buildItems(300);
-
-    await measure(harness, observer, items);
-    harness.menu.cancelRequest();
-
-    // Withdrawing is not closing. The reader is still reading this menu, so
-    // the heights measured for it still describe what is on screen.
-    expect(placeFifthOption(harness)).toBe(PLACED_ON_MEASURED);
-  });
-
   it("has nothing to say about an unmeasured list on close", () => {
     const harness = setup();
     const items = buildItems(300);
@@ -1239,22 +1226,6 @@ describe("createMenuWindow: the measured scroll position", () => {
     await menu.sync();
 
     expect(container.scrollTop).toBe(100);
-  });
-
-  it("a withdrawn request is not placed later", async () => {
-    installManualResizeObserver();
-    const { container, menu, render } = setupPlaced({
-      optionHeights: { 2: 320 },
-    });
-    render();
-
-    menu.scrollIntoView(2, "nearest");
-    // The caller has learned the reader moved on, which nothing here can see:
-    // a pointer landing on another option moves no scroll position.
-    menu.cancelRequest();
-    await menu.sync();
-
-    expect(container.scrollTop).toBe(0);
   });
 
   it("a close drops the request so nothing re-places the option", async () => {

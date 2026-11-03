@@ -112,7 +112,7 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
   height: 1px;
   padding: 0;
   border: 0;
-  margin: -1px;
+  margin: -1px 0; // ccs: no inline margin, see `.bx--visually-hidden`
   clip: rect(0, 0, 0, 0);
   visibility: inherit;
   white-space: nowrap;
@@ -275,9 +275,9 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
 }
 
 // carbon-components-svelte patch
-// Right-to-left offsets. Lightning CSS expands `inset-inline-start` and
-// `inset-inline-end` into `:lang()` rules for the Safari 14 baseline, and
-// `:dir()` is newer than it, so a `[dir="rtl"]` ancestor mirrors them.
+// Right-to-left helpers. Offsets are logical (`ccs-inset-inline`). What has
+// no logical form, such as a transform, mirrors under a `[dir="rtl"]`
+// ancestor, since `:dir()` is newer than the Safari 14.1 floor.
 
 /// The value for the nearest `dir`: `$ltr` under `dir="ltr"` (or no
 /// `dir`), `$rtl` under `dir="rtl"`. Use it in a `[dir="rtl"]` twin. The
@@ -297,24 +297,16 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
   @return unquote("var(--ccs-rtl, #{$ltr}) var(--ccs-ltr, #{$rtl})");
 }
 
-/// Sets `left` to `$start` and `right` to `$end`, and swaps them under the
-/// nearest `dir="rtl"`. A side left `null` stays unset in LTR and is
-/// `auto` in RTL, and in an LTR region inside an RTL page. Include it after
-/// the rule's declarations: Sass splits a rule around the nested one.
+/// Sets `inset-inline-start` to `$start` and `inset-inline-end` to `$end`,
+/// which follow the element's own direction. A side left `null` is `auto`,
+/// so a physical offset from Carbon's base rule on that side stops
+/// applying, in both directions.
 /// @access private
 /// @group global-helpers
 /// @example @include ccs-inset-inline($end: $carbon--spacing-05);
 @mixin ccs-inset-inline($start: null, $end: null) {
-  $start-or-auto: if($start == null, auto, $start);
-  $end-or-auto: if($end == null, auto, $end);
-
-  left: $start;
-  right: $end;
-
-  [dir="rtl"] & {
-    right: ccs-dir($end-or-auto, $start-or-auto);
-    left: ccs-dir($start-or-auto, $end-or-auto);
-  }
+  inset-inline-start: if($start == null, auto, $start);
+  inset-inline-end: if($end == null, auto, $end);
 }
 
 /// Mirrors a directional icon, such as a next arrow, under a `[dir="rtl"]`

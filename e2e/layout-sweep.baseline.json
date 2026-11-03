@@ -1,0 +1,2402 @@
+[
+  {
+    "fixture": "accessible-names-dialog.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost",
+    "message": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost: 1px inset box-shadow ring inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "accessible-names-dialog.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost",
+    "message": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost: 1px inset box-shadow ring inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "accessible-names-dialog.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost",
+    "message": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost: 1px inset box-shadow ring inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "accessible-names.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(3) > li.bx--overflow-menu-options__option > button.bx--overflow-menu-options__btn",
+    "message": "div#app > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(3) > li.bx--overflow-menu-options__option > button.bx--overflow-menu-options__btn: 2px outline inside 1px outline div#app > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "accordion-container.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 900px, clientWidth 320px"
+  },
+  {
+    "fixture": "accordion-container.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-500\"]",
+    "message": "div[data-testid=\"box-500\"]: spans 0px to 500px"
+  },
+  {
+    "fixture": "accordion-container.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-900\"]",
+    "message": "div[data-testid=\"box-900\"]: spans 0px to 900px"
+  },
+  {
+    "fixture": "accordion-container.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 900px, clientWidth 672px"
+  },
+  {
+    "fixture": "accordion-container.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-900\"]",
+    "message": "div[data-testid=\"box-900\"]: spans 0px to 900px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1016px, clientWidth 320px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-2-1000\"]",
+    "message": "div[data-testid=\"set-2-1000\"]: spans 16px to 1016px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-2-320\"]",
+    "message": "div[data-testid=\"set-2-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-3-1000\"]",
+    "message": "div[data-testid=\"set-3-1000\"]: spans 16px to 1016px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-3-320\"]",
+    "message": "div[data-testid=\"set-3-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-4-320\"]",
+    "message": "div[data-testid=\"set-4-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1016px, clientWidth 672px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-2-1000\"]",
+    "message": "div[data-testid=\"set-2-1000\"]: spans 16px to 1016px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-3-1000\"]",
+    "message": "div[data-testid=\"set-3-1000\"]: spans 16px to 1016px"
+  },
+  {
+    "fixture": "action-set-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-4-1000\"]",
+    "message": "div[data-testid=\"set-4-1000\"]: spans 16px to 1016px"
+  },
+  {
+    "fixture": "ai-label-data-table.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 480px, clientWidth 320px"
+  },
+  {
+    "fixture": "ai-label-data-table.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"table\"]",
+    "message": "div[data-testid=\"table\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "button-set.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 800px, clientWidth 320px"
+  },
+  {
+    "fixture": "button-set.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"button-set-wide\"]",
+    "message": "div[data-testid=\"button-set-wide\"]: spans 0px to 800px"
+  },
+  {
+    "fixture": "button-set.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 800px, clientWidth 672px"
+  },
+  {
+    "fixture": "button-set.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"button-set-wide\"]",
+    "message": "div[data-testid=\"button-set-wide\"]: spans 0px to 800px"
+  },
+  {
+    "fixture": "callout.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 640px, clientWidth 320px"
+  },
+  {
+    "fixture": "callout.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(2)",
+    "message": "div#app > div:nth-of-type(2): spans 0px to 640px"
+  },
+  {
+    "fixture": "combo-button.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 476px, clientWidth 320px"
+  },
+  {
+    "fixture": "combo-button.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"center-room\"]",
+    "message": "div[data-testid=\"center-room\"]: spans 320px to 442.33px"
+  },
+  {
+    "fixture": "combo-button.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"end-room\"]",
+    "message": "div[data-testid=\"end-room\"]: spans 320px to 442.33px"
+  },
+  {
+    "fixture": "combo-button.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"start-room\"]",
+    "message": "div[data-testid=\"start-room\"]: spans 320px to 442.33px"
+  },
+  {
+    "fixture": "combo-button.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(1) > div.bx--combo-button",
+    "message": "div#app > div:nth-of-type(1) > div.bx--combo-button: spans 320px to 442.3px"
+  },
+  {
+    "fixture": "data-table-batch-actions-overflow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 360px, clientWidth 320px"
+  },
+  {
+    "fixture": "data-table-batch-actions-overflow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 360px"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--combo-box.bx--list-box > div > div.bx--list-box__field > input.bx--text-input.bx--text-input--empty",
+    "message": "div.bx--combo-box.bx--list-box > div > div.bx--list-box__field > input.bx--text-input.bx--text-input--empty: 2px outline inside 1px outline div[data-testid=\"ComboBox\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > input.bx--date-picker__input.bx--date-picker__input--with-icon",
+    "message": "div.bx--date-picker-container > div.bx--date-picker-input__wrapper > div.bx--date-picker__anchor > input.bx--date-picker__input.bx--date-picker__input--with-icon: 2px outline inside 1px outline div[data-testid=\"DatePicker\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn: 2px outline inside 1px outline div[data-testid=\"PasswordInput\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > input.bx--text-input.bx--password-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > input.bx--text-input.bx--password-input: 2px outline inside 1px outline div[data-testid=\"PasswordInput\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper.bx--copy-input__field-wrapper > button.bx--copy-btn.bx--copy",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper.bx--copy-input__field-wrapper > button.bx--copy-btn.bx--copy: 2px outline inside 1px outline div[data-testid=\"CopyInput\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper.bx--copy-input__field-wrapper > input.bx--text-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper.bx--copy-input__field-wrapper > input.bx--text-input: 2px outline inside 1px outline div[data-testid=\"CopyInput\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper > button.bx--list-box__field",
+    "message": "div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper > button.bx--list-box__field: 2px outline inside 1px outline div[data-testid=\"MultiSelect\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "tr > td.bx--table-cell:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box",
+    "message": "tr > td.bx--table-cell:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box: 2px outline inside 1px outline div[data-testid=\"Dropdown\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "tr > td.bx--table-cell:nth-of-type(2) > span.bx--operational-tag > button.bx--tag.bx--tag--interactive",
+    "message": "tr > td.bx--table-cell:nth-of-type(2) > span.bx--operational-tag > button.bx--tag.bx--tag--interactive: 1px outline inside 1px outline div[data-testid=\"OperationalTag\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 496px, clientWidth 320px"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"ComboBox\"]",
+    "message": "div[data-testid=\"ComboBox\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"Dropdown\"]",
+    "message": "div[data-testid=\"Dropdown\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"MenuButton\"]",
+    "message": "div[data-testid=\"MenuButton\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"MultiSelect\"]",
+    "message": "div[data-testid=\"MultiSelect\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "data-table-cell-overlays.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"OverflowMenu\"]",
+    "message": "div[data-testid=\"OverflowMenu\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "data-table-sticky-header.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "data-table-sticky-header.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"data-table-sticky-root\"]",
+    "message": "div[data-testid=\"data-table-sticky-root\"]: spans 0px to 400px"
+  },
+  {
+    "fixture": "data-table-tag.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "tbody > tr:nth-of-type(1) > td.bx--table-cell:nth-of-type(2) > div.bx--tag.bx--tag--sm",
+    "message": "tbody > tr:nth-of-type(1) > td.bx--table-cell:nth-of-type(2) > div.bx--tag.bx--tag--sm: 1px outline inside 1px outline div[data-testid=\"compact\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-tag.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "tbody > tr:nth-of-type(2) > td.bx--table-cell:nth-of-type(2) > div.bx--tag.bx--tag--sm",
+    "message": "tbody > tr:nth-of-type(2) > td.bx--table-cell:nth-of-type(2) > div.bx--tag.bx--tag--sm: 1px outline inside 1px outline div[data-testid=\"compact\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-variants.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--child-row-inner-container > div.bx--data-table-container > div > div.bx--data-table-content",
+    "message": "div.bx--child-row-inner-container > div.bx--data-table-container > div > div.bx--data-table-content: 1px outline inside 1px outline section[data-testid=\"nested\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-variants.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline section[data-testid=\"selectable\"] > div.bx--data-table-container:nth-of-type(2) > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table-variants.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(2) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(2) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline section[data-testid=\"expandable\"] > div.bx--data-table-container:nth-of-type(3) > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "data-table.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1)",
+    "message": "td.bx--table-cell.bx--table-column-checkbox:nth-of-type(1) > div.bx--radio-button-wrapper > label.bx--radio-button__label > span.bx--radio-button__appearance:nth-of-type(1): bordered box inside 1px outline div[data-testid=\"data-table-radio-deselect\"] > div.bx--data-table-container > div > div.bx--data-table-content, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 616px, clientWidth 320px"
+  },
+  {
+    "fixture": "date-picker-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"single-wide\"]",
+    "message": "div[data-testid=\"single-wide\"]: spans 16px to 616px"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"date-picker-full-width\"]",
+    "message": "div[data-testid=\"date-picker-full-width\"]: spans 0px to 400px"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "date-picker.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2)",
+    "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "fluid-date-picker.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "fluid-date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--neutral:nth-of-type(2) > div.bx--date-picker-input__wrapper > input.bx--date-picker__input.bx--date-picker__input--with-icon",
+    "message": "div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--neutral:nth-of-type(2) > div.bx--date-picker-input__wrapper > input.bx--date-picker__input.bx--date-picker__input--with-icon: 2px outline inside 2px outline div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "fluid-date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "fluid-date-picker.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "fluid-date-picker.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1)",
+    "message": "div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(1): 2px outline inside 2px outline div[data-testid=\"fluid-date-picker-range-invalid\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "fluid-label.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "no full text",
+    "path": "div[data-testid=\"slotted-label\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__label-wrapper:nth-of-type(1) > label.bx--label.bx--label--slotted",
+    "message": "div[data-testid=\"slotted-label\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__label-wrapper:nth-of-type(1) > label.bx--label.bx--label--slotted: truncated \"Billing contact for overdue invoices The person who receives overdue notices.\" (227px in 132px) with no title, aria-label or tooltip holding it, at rest or on hover"
+  },
+  {
+    "fixture": "fluid-label.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "no full text",
+    "path": "div[data-testid=\"slotted-label\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__label-wrapper:nth-of-type(1) > label.bx--label.bx--label--slotted",
+    "message": "div[data-testid=\"slotted-label\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__label-wrapper:nth-of-type(1) > label.bx--label.bx--label--slotted: truncated \"Billing contact for overdue invoices The person who receives overdue notices.\" (227px in 132px) with no title, aria-label or tooltip holding it, at rest or on hover"
+  },
+  {
+    "fixture": "fluid-label.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 480px, clientWidth 320px"
+  },
+  {
+    "fixture": "fluid-label.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"wide\"]",
+    "message": "div[data-testid=\"wide\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "fluid-label.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "no full text",
+    "path": "div[data-testid=\"slotted-label\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__label-wrapper:nth-of-type(1) > label.bx--label.bx--label--slotted",
+    "message": "div[data-testid=\"slotted-label\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__label-wrapper:nth-of-type(1) > label.bx--label.bx--label--slotted: truncated \"Billing contact for overdue invoices The person who receives overdue notices.\" (227px in 132px) with no title, aria-label or tooltip holding it, at rest or on hover"
+  },
+  {
+    "fixture": "fluid-number-input.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.down-icon:nth-of-type(1)",
+    "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.down-icon:nth-of-type(1): 1px outline inside 2px outline div[data-testid=\"fluid-number-input-invalid\"] > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "fluid-number-input.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2)",
+    "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2): 1px outline inside 2px outline div[data-testid=\"fluid-number-input-invalid\"] > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "fluid-text-area.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"fluid-text-area-in-modal\"] > div.bx--form-item.bx--text-area--fluid > div.bx--text-area__wrapper:nth-of-type(2)",
+    "message": "div[data-testid=\"fluid-text-area-in-modal\"] > div.bx--form-item.bx--text-area--fluid > div.bx--text-area__wrapper:nth-of-type(2): bordered box inside bordered box div#app > div.bx--modal.bx--layer-one:nth-of-type(4) > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "focus-ring.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 692px, clientWidth 320px"
+  },
+  {
+    "fixture": "focus-ring.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 272px to 692px"
+  },
+  {
+    "fixture": "focus-ring.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 692px, clientWidth 672px"
+  },
+  {
+    "fixture": "focus-ring.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 272px to 692px"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline",
+    "message": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline: bordered box inside 2px box-shadow ring div#app > main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(31) > button.bx--toast-notification__close-button",
+    "message": "div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(31) > button.bx--toast-notification__close-button: 2px outline inside 1px outline div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(31), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(2) > li.bx--overflow-menu-options__option > button.bx--overflow-menu-options__btn",
+    "message": "main > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(2) > li.bx--overflow-menu-options__option > button.bx--overflow-menu-options__btn: 2px outline inside 1px outline div#app > main > ul.bx--overflow-menu-options.bx--overflow-menu-options--open:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline",
+    "message": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline: bordered box inside 2px box-shadow ring div#app > main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 368px, clientWidth 320px"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"icons\"] > ul.bx--progress:nth-of-type(1) > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3)",
+    "message": "div[data-testid=\"icons\"] > ul.bx--progress:nth-of-type(1) > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3): spans 240px to 352px"
+  },
+  {
+    "fixture": "forced-colors.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline",
+    "message": "main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2) > span.bx--user-avatar__status.bx--user-avatar__status--offline: bordered box inside 2px box-shadow ring div#app > main > span.bx--user-avatar__badge-wrapper:nth-of-type(4) > span.bx--user-avatar__badge:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "form-item-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 600px, clientWidth 320px"
+  },
+  {
+    "fixture": "form-item-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"row-checkbox\"]",
+    "message": "div[data-testid=\"row-checkbox\"]: spans 0px to 600px"
+  },
+  {
+    "fixture": "form-item-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"row-date-picker\"]",
+    "message": "div[data-testid=\"row-date-picker\"]: spans 0px to 600px"
+  },
+  {
+    "fixture": "form-item-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"row-slider\"]",
+    "message": "div[data-testid=\"row-slider\"]: spans 0px to 600px"
+  },
+  {
+    "fixture": "form-item-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"row-time-picker\"]",
+    "message": "div[data-testid=\"row-time-picker\"]: spans 0px to 600px"
+  },
+  {
+    "fixture": "form-item-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"row-toggle\"]",
+    "message": "div[data-testid=\"row-toggle\"]: spans 0px to 600px"
+  },
+  {
+    "fixture": "hidden-label.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "hidden-label.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 400px"
+  },
+  {
+    "fixture": "inline-notification-width.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > div:nth-of-type(1) > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2)",
+    "message": "div#app > div:nth-of-type(1) > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2): 2px outline inside 1px outline div#app > div:nth-of-type(1) > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "inline-notification-width.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#app > div:nth-of-type(2) > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2)",
+    "message": "div#app > div:nth-of-type(2) > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2): 2px outline inside 1px outline div#app > div:nth-of-type(2) > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "inline-notification-width.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 640px, clientWidth 320px"
+  },
+  {
+    "fixture": "inline-notification-width.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(2)",
+    "message": "div#app > div:nth-of-type(2): spans 0px to 640px"
+  },
+  {
+    "fixture": "inline-notification.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline-notification\"] > button.bx--inline-notification__close-button",
+    "message": "div[data-testid=\"inline-notification\"] > button.bx--inline-notification__close-button: 2px outline inside 1px outline div[data-testid=\"inline-notification\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "inline-notification.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1200px, clientWidth 320px"
+  },
+  {
+    "fixture": "inline-notification.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"notification-wide\"]",
+    "message": "div[data-testid=\"notification-wide\"]: spans 0px to 1200px"
+  },
+  {
+    "fixture": "inline-notification.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1200px, clientWidth 672px"
+  },
+  {
+    "fixture": "inline-notification.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"notification-wide\"]",
+    "message": "div[data-testid=\"notification-wide\"]: spans 0px to 1200px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 480px, clientWidth 320px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"group-invalid\"]",
+    "message": "div[data-testid=\"group-invalid\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"group-md\"]",
+    "message": "div[data-testid=\"group-md\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"group-sm\"]",
+    "message": "div[data-testid=\"group-sm\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"group-xl\"]",
+    "message": "div[data-testid=\"group-xl\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"group-xs\"]",
+    "message": "div[data-testid=\"group-xs\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "interstitial-screen.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--space-equal > li.bx--progress-step.bx--progress-step--current:nth-of-type(1) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--space-equal > li.bx--progress-step.bx--progress-step--current:nth-of-type(1) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside bordered box div[data-testid=\"screen\"] > div.bx--interstitial-screen.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "interstitial-screen.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--space-equal > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(2) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--space-equal > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(2) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside bordered box div[data-testid=\"screen\"] > div.bx--interstitial-screen.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "interstitial-screen.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "ul.bx--progress.bx--progress--space-equal > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line",
+    "message": "ul.bx--progress.bx--progress--space-equal > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3) > button.bx--progress-step-button.bx--progress-step-button--unclickable > span.bx--progress-line: bordered box inside bordered box div[data-testid=\"screen\"] > div.bx--interstitial-screen.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "items-resync.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-inline-status.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--inline:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--inline:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(3) > div.bx--multi-select.bx--multi-select--inline:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-inline-status.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(3) > div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "list-box-invalid-outline.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--combo-box:nth-of-type(1) > div > div.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--combo-box:nth-of-type(1) > div > div.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div[data-testid=\"multiselect-filterable-selected\"] > div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--combo-box:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "long-words.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--inline > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--inline > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(1) > div.bx--multi-select.bx--multi-select--inline > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "long-words.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 352px, clientWidth 320px"
+  },
+  {
+    "fixture": "long-words.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"rows-dropdown\"]",
+    "message": "div[data-testid=\"rows-dropdown\"]: spans 0px to 352px"
+  },
+  {
+    "fixture": "long-words.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"rows-multiselect\"]",
+    "message": "div[data-testid=\"rows-multiselect\"]: spans 0px to 352px"
+  },
+  {
+    "fixture": "menu-button-edge.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 640px, clientWidth 320px"
+  },
+  {
+    "fixture": "menu-button-edge.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"middle\"]",
+    "message": "div[data-testid=\"middle\"]: spans 0px to 640px"
+  },
+  {
+    "fixture": "menu-flip.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 368px, clientWidth 320px"
+  },
+  {
+    "fixture": "menu-flip.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"bottom\"] > button.bx--overflow-menu",
+    "message": "div[data-testid=\"bottom\"] > button.bx--overflow-menu: spans 352.08px to 368.08px"
+  },
+  {
+    "fixture": "menu-flip.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"bottom\"] > div:nth-of-type(3)",
+    "message": "div[data-testid=\"bottom\"] > div:nth-of-type(3): spans 224.28px to 336.08px"
+  },
+  {
+    "fixture": "modal-container.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1100px, clientWidth 320px"
+  },
+  {
+    "fixture": "modal-container.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-1100\"]",
+    "message": "div[data-testid=\"box-1100\"]: spans -408px to 692px"
+  },
+  {
+    "fixture": "modal-container.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-800\"]",
+    "message": "div[data-testid=\"box-800\"]: spans -408px to 392px"
+  },
+  {
+    "fixture": "modal-container.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1100px, clientWidth 672px"
+  },
+  {
+    "fixture": "modal-container.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-1100\"]",
+    "message": "div[data-testid=\"box-1100\"]: spans 0px to 1100px"
+  },
+  {
+    "fixture": "modal-container.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"box-800\"]",
+    "message": "div[data-testid=\"box-800\"]: spans 0px to 800px"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker-input__wrapper.bx--date-picker-input__wrapper--readonly > input.bx--date-picker__input.bx--date-picker__input--with-icon",
+    "message": "div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker-input__wrapper.bx--date-picker-input__wrapper--readonly > input.bx--date-picker__input.bx--date-picker__input--with-icon: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item:nth-of-type(4) > div.bx--number.bx--number--neutral > div.bx--number__input-wrapper > input",
+    "message": "div.bx--form-item:nth-of-type(4) > div.bx--number.bx--number--neutral > div.bx--number__input-wrapper > input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item:nth-of-type(7) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input",
+    "message": "div.bx--form-item:nth-of-type(7) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(1) > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(1) > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(5) > div.bx--dropdown.bx--list-box",
+    "message": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper:nth-of-type(5) > div.bx--dropdown.bx--list-box: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--search.bx--search--lg:nth-of-type(8) > input.bx--search-input",
+    "message": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--search.bx--search--lg:nth-of-type(8) > input.bx--search-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--data-table-container:nth-of-type(3) > div > div.bx--data-table-content",
+    "message": "div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--data-table-container:nth-of-type(3) > div > div.bx--data-table-content: 1px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--form-item:nth-of-type(9) > div.bx--text-area__wrapper:nth-of-type(2) > textarea.bx--text-area",
+    "message": "div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--form-item:nth-of-type(9) > div.bx--text-area__wrapper:nth-of-type(2) > textarea.bx--text-area: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(6) > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper > button.bx--list-box__field",
+    "message": "div.bx--multi-select__wrapper.bx--list-box__wrapper:nth-of-type(6) > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper > button.bx--list-box__field: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--neutral > div.bx--number__input-wrapper > div.bx--number__controls > button.bx--number__control-btn.down-icon:nth-of-type(1)",
+    "message": "div.bx--number.bx--number--neutral > div.bx--number__input-wrapper > div.bx--number__controls > button.bx--number__control-btn.down-icon:nth-of-type(1): 1px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--neutral > div.bx--number__input-wrapper > div.bx--number__controls > button.bx--number__control-btn.up-icon:nth-of-type(2)",
+    "message": "div.bx--number.bx--number--neutral > div.bx--number__input-wrapper > div.bx--number__controls > button.bx--number__control-btn.up-icon:nth-of-type(2): 1px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--pagination.bx--pagination--md:nth-of-type(11) > div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(1)",
+    "message": "div.bx--pagination.bx--pagination--md:nth-of-type(11) > div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(1): 1px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--pagination.bx--pagination--md:nth-of-type(11) > div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(2)",
+    "message": "div.bx--pagination.bx--pagination--md:nth-of-type(11) > div.bx--pagination__right:nth-of-type(2) > div.bx--pagination__control-buttons:nth-of-type(2) > button.bx--btn.bx--btn--ghost:nth-of-type(2): 1px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__item-count.bx--select-input",
+    "message": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__item-count.bx--select-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__page-number.bx--select-input",
+    "message": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__page-number.bx--select-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"composed-modal\"] > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--tile:nth-of-type(2)",
+    "message": "div[data-testid=\"composed-modal\"] > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--tile:nth-of-type(2): 2px outline inside bordered box div[data-testid=\"composed-modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "modal-layer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"modal\"] > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--tile:nth-of-type(2)",
+    "message": "div[data-testid=\"modal\"] > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--tile:nth-of-type(2): 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline-200\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button",
+    "message": "div[data-testid=\"inline-200\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button: 2px outline inside 1px outline div[data-testid=\"inline-200\"] > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline-320\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button",
+    "message": "div[data-testid=\"inline-320\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button: 2px outline inside 1px outline div[data-testid=\"inline-320\"] > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline-shrink\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button",
+    "message": "div[data-testid=\"inline-shrink\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button: 2px outline inside 1px outline div[data-testid=\"inline-shrink\"] > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"toast-200\"] > div.bx--toast-notification.bx--toast-notification--high-contrast > button.bx--toast-notification__close-button",
+    "message": "div[data-testid=\"toast-200\"] > div.bx--toast-notification.bx--toast-notification--high-contrast > button.bx--toast-notification__close-button: 2px outline inside 1px outline div[data-testid=\"toast-200\"] > div.bx--toast-notification.bx--toast-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"toast-320\"] > div.bx--toast-notification.bx--toast-notification--high-contrast > button.bx--toast-notification__close-button",
+    "message": "div[data-testid=\"toast-320\"] > div.bx--toast-notification.bx--toast-notification--high-contrast > button.bx--toast-notification__close-button: 2px outline inside 1px outline div[data-testid=\"toast-320\"] > div.bx--toast-notification.bx--toast-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 336px, clientWidth 320px"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"inline-320\"]",
+    "message": "div[data-testid=\"inline-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "notification-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"toast-320\"]",
+    "message": "div[data-testid=\"toast-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 816px, clientWidth 320px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"pagination-320\"]",
+    "message": "div[data-testid=\"pagination-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"pagination-480\"]",
+    "message": "div[data-testid=\"pagination-480\"]: spans 16px to 496px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"pagination-800\"]",
+    "message": "div[data-testid=\"pagination-800\"]: spans 16px to 816px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"skeleton-320\"]",
+    "message": "div[data-testid=\"skeleton-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"skeleton-800\"]",
+    "message": "div[data-testid=\"skeleton-800\"]: spans 16px to 816px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 816px, clientWidth 672px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"pagination-800\"]",
+    "message": "div[data-testid=\"pagination-800\"]: spans 16px to 816px"
+  },
+  {
+    "fixture": "pagination-fit.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"skeleton-800\"]",
+    "message": "div[data-testid=\"skeleton-800\"]: spans 16px to 816px"
+  },
+  {
+    "fixture": "pin-code-input.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "pin-code-input.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"pin-code-input-400\"]",
+    "message": "div[data-testid=\"pin-code-input-400\"]: spans 0px to 400px"
+  },
+  {
+    "fixture": "popover-portal-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 482px, clientWidth 320px"
+  },
+  {
+    "fixture": "popover-portal-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(1) > div:nth-of-type(2) > button.bx--btn.bx--btn--sm:nth-of-type(3)",
+    "message": "div#app > div:nth-of-type(1) > div:nth-of-type(2) > button.bx--btn.bx--btn--sm:nth-of-type(3): spans 329.48px to 481.78px"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--combo-box.bx--list-box > div > div.bx--list-box__field > input.bx--text-input.bx--text-input--empty",
+    "message": "div.bx--combo-box.bx--list-box > div > div.bx--list-box__field > input.bx--text-input.bx--text-input--empty: 2px outline inside bordered box div[data-testid=\"scroll\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper > button.bx--list-box__field",
+    "message": "div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--list-box > div.bx--list-box__field--wrapper > button.bx--list-box__field: 2px outline inside bordered box div[data-testid=\"scroll\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"card\"] > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box",
+    "message": "div[data-testid=\"card\"] > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box: 2px outline inside bordered box div[data-testid=\"card\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"scroll\"] > div:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box",
+    "message": "div[data-testid=\"scroll\"] > div:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box: 2px outline inside bordered box div[data-testid=\"scroll\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div[data-testid=\"card\"] > div:nth-of-type(3) > div.bx--multi-select__wrapper.bx--list-box__wrapper > label.bx--label",
+    "message": "div[data-testid=\"card\"] > div:nth-of-type(3) > div.bx--multi-select__wrapper.bx--list-box__wrapper > label.bx--label: text is cut by div[data-testid=\"card\"] by 2.44px"
+  },
+  {
+    "fixture": "progress-bar.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "progress-bar.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 400px"
+  },
+  {
+    "fixture": "progress-indicator.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 464px, clientWidth 320px"
+  },
+  {
+    "fixture": "progress-indicator.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "ul[data-testid=\"progress-indicator\"] > li.bx--progress-step.bx--progress-step--complete:nth-of-type(3)",
+    "message": "ul[data-testid=\"progress-indicator\"] > li.bx--progress-step.bx--progress-step--complete:nth-of-type(3): spans 224px to 336px"
+  },
+  {
+    "fixture": "progress-indicator.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "ul[data-testid=\"progress-indicator\"] > li.bx--progress-step.bx--progress-step--complete:nth-of-type(4)",
+    "message": "ul[data-testid=\"progress-indicator\"] > li.bx--progress-step.bx--progress-step--complete:nth-of-type(4): spans 336px to 448px"
+  },
+  {
+    "fixture": "radio-button-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 480px, clientWidth 320px"
+  },
+  {
+    "fixture": "radio-button-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(9)",
+    "message": "div#app > div:nth-of-type(9): spans 0px to 480px"
+  },
+  {
+    "fixture": "radio-button-lone.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "radio-button-lone.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 400px"
+  },
+  {
+    "fixture": "readonly-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--readonly > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--readonly > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--readonly > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-buttons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 640px, clientWidth 320px"
+  },
+  {
+    "fixture": "rtl-buttons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"action-set\"]",
+    "message": "div[data-testid=\"action-set\"]: spans 0px to 640px"
+  },
+  {
+    "fixture": "rtl-buttons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"button-set-disabled\"]",
+    "message": "div[data-testid=\"button-set-disabled\"]: spans 0px to 640px"
+  },
+  {
+    "fixture": "rtl-buttons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"button-set\"]",
+    "message": "div[data-testid=\"button-set\"]: spans 0px to 640px"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--range:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--range:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(6)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(6): 1px outline inside 1px outline div.bx--form-item.bx--form-item--fit > div.bx--date-picker.bx--date-picker--single > div.bx--date-picker-container > div.bx--date-picker__calendar.bx--date-picker__calendar--inline:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(3): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(5): outline 1px rgba(5, 0, 73, 0.8)"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "rings",
+    "path": "div.bx--date-picker__body:nth-of-type(2) > div.bx--date-picker__main > div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days",
+    "message": "2 rings in div.bx--date-picker__body:nth-of-type(2) > div.bx--date-picker__main > div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days, at most 1 allowed"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 464px, clientWidth 320px"
+  },
+  {
+    "fixture": "rtl-date-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"portal-inset\"]",
+    "message": "div[data-testid=\"portal-inset\"]: spans 320px to 464px"
+  },
+  {
+    "fixture": "rtl-fields.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn: 2px outline inside 2px outline div[data-testid=\"fluid-password-invalid\"] > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-fields.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.down-icon:nth-of-type(1)",
+    "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.down-icon:nth-of-type(1): 1px outline inside 2px outline div[data-testid=\"fluid-number-invalid\"] > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-fields.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2)",
+    "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2): 1px outline inside 2px outline div[data-testid=\"fluid-number-invalid\"] > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 368px, clientWidth 320px"
+  },
+  {
+    "fixture": "rtl-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"stepper\"] > div.bx--stepper > ul.bx--progress > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3)",
+    "message": "div[data-testid=\"stepper\"] > div.bx--stepper > ul.bx--progress > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3): spans 240px to 352px"
+  },
+  {
+    "fixture": "rtl-placement.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 608px, clientWidth 320px"
+  },
+  {
+    "fixture": "rtl-placement.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div.roving:nth-of-type(8)",
+    "message": "div#app > div.roving:nth-of-type(8): spans 8px to 608px"
+  },
+  {
+    "fixture": "rtl-tooltips.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 422px, clientWidth 320px"
+  },
+  {
+    "fixture": "rtl-tooltips.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#ai-label-content",
+    "message": "div#ai-label-content: spans 140px to 422px"
+  },
+  {
+    "fixture": "rtl-tooltips.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#operational-tag-start-content",
+    "message": "div#operational-tag-start-content: spans 133.64px to 357.64px"
+  },
+  {
+    "fixture": "rtl-tooltips.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#popover-top-left",
+    "message": "div#popover-top-left: spans 144px to 336px"
+  },
+  {
+    "fixture": "rtl-tooltips.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#popover-top-start",
+    "message": "div#popover-top-start: spans 144px to 336px"
+  },
+  {
+    "fixture": "rtl-tooltips.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#tooltip-right",
+    "message": "div#tooltip-right: spans 197.41px to 405.41px"
+  },
+  {
+    "fixture": "rtl.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "search-fluid-status.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 920px, clientWidth 320px"
+  },
+  {
+    "fixture": "search-fluid-status.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"search-plain\"]",
+    "message": "div[data-testid=\"search-plain\"]: spans 328px to 608px"
+  },
+  {
+    "fixture": "search-fluid-status.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"search-warn\"]",
+    "message": "div[data-testid=\"search-warn\"]: spans 328px to 608px"
+  },
+  {
+    "fixture": "search-fluid-status.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"text-input-invalid\"]",
+    "message": "div[data-testid=\"text-input-invalid\"]: spans 640px to 920px"
+  },
+  {
+    "fixture": "search-fluid-status.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 920px, clientWidth 672px"
+  },
+  {
+    "fixture": "search-fluid-status.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"text-input-invalid\"]",
+    "message": "div[data-testid=\"text-input-invalid\"]: spans 640px to 920px"
+  },
+  {
+    "fixture": "side-nav-active-item-scroll.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 350px, clientWidth 320px"
+  },
+  {
+    "fixture": "side-nav-active-item-scroll.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "main#main-content > button",
+    "message": "main#main-content > button: spans 288px to 349.84px"
+  },
+  {
+    "fixture": "skeleton-swap.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 482px, clientWidth 320px"
+  },
+  {
+    "fixture": "skeleton-swap.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"copy-input-xs\"]",
+    "message": "div[data-testid=\"copy-input-xs\"]: spans 0px to 482px"
+  },
+  {
+    "fixture": "skeleton-swap.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"number-input-xs\"]",
+    "message": "div[data-testid=\"number-input-xs\"]: spans 0px to 482px"
+  },
+  {
+    "fixture": "skeleton-swap.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"password-input-xs\"]",
+    "message": "div[data-testid=\"password-input-xs\"]: spans 0px to 482px"
+  },
+  {
+    "fixture": "skeleton-swap.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"select-xs\"]",
+    "message": "div[data-testid=\"select-xs\"]: spans 0px to 482px"
+  },
+  {
+    "fixture": "skeleton-swap.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"text-input-xs\"]",
+    "message": "div[data-testid=\"text-input-xs\"]: spans 0px to 482px"
+  },
+  {
+    "fixture": "slider-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 616px, clientWidth 320px"
+  },
+  {
+    "fixture": "slider-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"full-600\"]",
+    "message": "div[data-testid=\"full-600\"]: spans 16px to 616px"
+  },
+  {
+    "fixture": "slider-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"range-320\"]",
+    "message": "div[data-testid=\"range-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "slider-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"range-600\"]",
+    "message": "div[data-testid=\"range-600\"]: spans 16px to 616px"
+  },
+  {
+    "fixture": "slider-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"slider-320\"]",
+    "message": "div[data-testid=\"slider-320\"]: spans 16px to 336px"
+  },
+  {
+    "fixture": "slider-fit.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"slider-600\"]",
+    "message": "div[data-testid=\"slider-600\"]: spans 16px to 616px"
+  },
+  {
+    "fixture": "splitter.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 600px, clientWidth 320px"
+  },
+  {
+    "fixture": "splitter.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"pixel-container\"]",
+    "message": "div[data-testid=\"pixel-container\"]: spans 0px to 600px"
+  },
+  {
+    "fixture": "splitter.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(1)",
+    "message": "div#app > div:nth-of-type(1): spans 0px to 600px"
+  },
+  {
+    "fixture": "splitter.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(4)",
+    "message": "div#app > div:nth-of-type(4): spans 0px to 600px"
+  },
+  {
+    "fixture": "ssr-layout.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(1) > button.bx--overflow-menu-options__btn",
+    "message": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(1) > button.bx--overflow-menu-options__btn: 2px outline inside 1px outline div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "ssr-layout.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(2) > button.bx--overflow-menu-options__btn",
+    "message": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(2) > button.bx--overflow-menu-options__btn: 2px outline inside 1px outline div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "ssr-layout.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(1) > button.bx--overflow-menu-options__btn",
+    "message": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(1) > button.bx--overflow-menu-options__btn: outline 2px rgb(0, 0, 0)"
+  },
+  {
+    "fixture": "ssr-layout.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "ring",
+    "path": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(2) > button.bx--overflow-menu-options__btn",
+    "message": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open > li.bx--overflow-menu-options__option:nth-of-type(2) > button.bx--overflow-menu-options__btn: outline 2px rgb(0, 0, 0)"
+  },
+  {
+    "fixture": "ssr-layout.html",
+    "variant": "1280-forced",
+    "check": "ring",
+    "kind": "rings",
+    "path": "div[data-testid=\"menu\"] > ul.bx--overflow-menu-options.bx--overflow-menu-options--open",
+    "message": "2 rings, at most 1 allowed"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn",
+    "message": "div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn: 2px outline inside 2px outline div:nth-of-type(38) > div.bx--form-item.bx--text-input-wrapper > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag--xs.bx--tag:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag--xs.bx--tag:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--invalid:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--selected:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag--xs.bx--tag:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--selected:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag--xs.bx--tag:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--multi-select.bx--multi-select--selected:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1)",
+    "message": "div.bx--multi-select.bx--multi-select--selected:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected:nth-of-type(1) > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.down-icon:nth-of-type(1)",
+    "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.down-icon:nth-of-type(1): 1px outline inside 2px outline div > div:nth-of-type(39) > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2)",
+    "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2): 1px outline inside 2px outline div > div:nth-of-type(39) > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 2px outline div > div:nth-of-type(24) > div.bx--form-item > div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--xl:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--xl:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 2px outline div > div:nth-of-type(36) > div.bx--form-item > div.bx--tag-input.bx--tag-input--xl:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--xs:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--xs:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 2px outline div > div:nth-of-type(12) > div.bx--form-item > div.bx--tag-input.bx--tag-input--xs:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1272px, clientWidth 320px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(2)",
+    "message": "div#app > div > div:nth-of-type(2): spans 324px to 624px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(3)",
+    "message": "div#app > div > div:nth-of-type(3): spans 648px to 948px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(4)",
+    "message": "div#app > div > div:nth-of-type(4): spans 972px to 1272px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(6)",
+    "message": "div#app > div > div:nth-of-type(6): spans 324px to 624px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(7)",
+    "message": "div#app > div > div:nth-of-type(7): spans 648px to 948px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 1272px, clientWidth 672px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(11)",
+    "message": "div#app > div > div:nth-of-type(11): spans 648px to 948px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(3)",
+    "message": "div#app > div > div:nth-of-type(3): spans 648px to 948px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(4)",
+    "message": "div#app > div > div:nth-of-type(4): spans 972px to 1272px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(7)",
+    "message": "div#app > div > div:nth-of-type(7): spans 648px to 948px"
+  },
+  {
+    "fixture": "status-icons.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div > div:nth-of-type(8)",
+    "message": "div#app > div > div:nth-of-type(8): spans 972px to 1272px"
+  },
+  {
+    "fixture": "tag-input.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 2px outline div#app > div.bx--form-item:nth-of-type(5) > div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tag-v11.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 480px, clientWidth 320px"
+  },
+  {
+    "fixture": "tag-v11.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"set-container\"]",
+    "message": "div[data-testid=\"set-container\"]: spans 0px to 360px"
+  },
+  {
+    "fixture": "tag-v11.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"short-set\"]",
+    "message": "div[data-testid=\"short-set\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "tag-v11.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"tag-input\"]",
+    "message": "div[data-testid=\"tag-input\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "text-area-grow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 600px, clientWidth 320px"
+  },
+  {
+    "fixture": "text-area-grow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(1)",
+    "message": "div#app > div:nth-of-type(1): spans 0px to 400px"
+  },
+  {
+    "fixture": "text-area-grow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div:nth-of-type(2)",
+    "message": "div#app > div:nth-of-type(2): spans 0px to 400px"
+  },
+  {
+    "fixture": "text-area-grow.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#width-container",
+    "message": "div#width-container: spans 0px to 600px"
+  },
+  {
+    "fixture": "time-picker-fluid.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "time-picker-fluid.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 400px"
+  },
+  {
+    "fixture": "time-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "time-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"time-picker-390\"]",
+    "message": "div[data-testid=\"time-picker-390\"]: spans 0px to 390px"
+  },
+  {
+    "fixture": "time-picker.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"time-picker-400\"]",
+    "message": "div[data-testid=\"time-picker-400\"]: spans 0px to 400px"
+  },
+  {
+    "fixture": "toast-notification.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"toast-notification\"] > button.bx--toast-notification__close-button",
+    "message": "div[data-testid=\"toast-notification\"] > button.bx--toast-notification__close-button: 2px outline inside 1px outline div[data-testid=\"toast-notification\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "toggle-button-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 420px, clientWidth 320px"
+  },
+  {
+    "fixture": "toggle-button-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"grid-wide\"]",
+    "message": "div[data-testid=\"grid-wide\"]: spans 0px to 420px"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(4) > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn",
+    "message": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(4) > div.bx--text-input__field-outer-wrapper > div.bx--text-input__field-wrapper > button.bx--text-input--password__visibility__toggle.bx--btn: 2px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--toggle-button-group:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1)",
+    "message": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--toggle-button-group:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(1): 2px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--toggle-button-group:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2)",
+    "message": "div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--toggle-button-group:nth-of-type(3) > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2): 2px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "tooltip-escape.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "truncated-titles.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 960px, clientWidth 320px"
+  },
+  {
+    "fixture": "truncated-titles.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"fits\"]",
+    "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "truncated-titles.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 960px, clientWidth 672px"
+  },
+  {
+    "fixture": "truncated-titles.html",
+    "variant": "672",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"fits\"]",
+    "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
+  },
+  {
+    "fixture": "warning-icon-glyph.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "scrolls sideways",
+    "path": "page",
+    "message": "page scrolls sideways: scrollWidth 400px, clientWidth 320px"
+  },
+  {
+    "fixture": "warning-icon-glyph.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div#app > div",
+    "message": "div#app > div: spans 0px to 400px"
+  }
+]

@@ -22,6 +22,7 @@
    * @event {{ value: string; selectedResultIndex: number; selectedResult: Result } | { value: string; item: { text?: string; value?: string; href?: string }; event: Event }} select - A result from `results` was chosen (`selectedResult`), or an item in the `menu` slot (`item`).
    * @event {{ value: string }} submit
    * @event {string} search
+   * @event {KeyboardEvent} shortcut - Dispatched when `shortcut` is pressed, before the search opens. Call `preventDefault()` to keep it closed.
    * @slot {{ result: Result; index: number; selected: boolean; }}
    * @slot {{}} menu
    * @slot {{}} noResults
@@ -73,6 +74,14 @@
 
   /** Specify the label for the clear button. */
   export let closeButtonLabelText = "Clear search input";
+
+  /**
+   * Specify a keyboard shortcut that opens the search and focuses it, such
+   * as `"mod+k"` or `"/"`. `mod` is Command on Apple platforms and Ctrl
+   * elsewhere. The closed search button shows the keys in its tooltip and
+   * gets `aria-keyshortcuts`.
+   */
+  export let shortcut = "";
 
   /**
    * Set to `true` to filter `menu`-slot items by the search value using fuzzy
@@ -128,6 +137,7 @@
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
+  import Kbd from "../Kbd/Kbd.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
@@ -137,6 +147,11 @@
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    keyboardShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -154,6 +169,21 @@
   let menuRef = null;
   /** @type {null | HTMLButtonElement} */
   let searchButtonRef = null;
+
+  // Pressing the shortcut opens the search and focuses it, as a click on
+  // the search button does.
+  /** @param {KeyboardEvent} event */
+  function runShortcut(event) {
+    if (!dispatch("shortcut", event, { cancelable: true })) return;
+    active = true;
+    ref?.focus();
+  }
+
+  $: shortcutParams = { shortcut, run: runShortcut };
+
+  // The closed search shows its shortcut beside the icon.
+  $: hasShortcutHint = Boolean(shortcut) && !active;
+
   let prevActive;
   // Escape closes the menu but leaves the search bar open.
   let menuDismissed = false;
@@ -413,6 +443,7 @@
     handler: handleOutsideMouseup,
   }}
   class:bx--header__search={true}
+  class:bx--header__search--shortcut={hasShortcutHint}
   role="search"
   class:bx--header__search--active={active}
   on:focusout={handleFocusout}
@@ -427,9 +458,13 @@
   >
     <button
       bind:this={searchButtonRef}
+      use:keyboardShortcut={shortcutParams}
       type="button"
       aria-label={labelText}
       aria-expanded={active}
+      aria-keyshortcuts={shortcut
+        ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+        : undefined}
       tabindex={active ? -1 : 0}
       class:bx--header-search-button={true}
       class:bx--header__action={true}
@@ -439,6 +474,11 @@
       }}
     >
       <svelte:component this={icon} size={20} />
+      {#if hasShortcutHint}
+        <span class:bx--header__search-shortcut={true}>
+          <Kbd {shortcut} variant="muted" aria-hidden="true" />
+        </span>
+      {/if}
     </button>
     <input
       bind:this={ref}
@@ -449,6 +489,9 @@
       tabindex={active ? "0" : "-1"}
       class:bx--header__search-input={true}
       class:bx--header__search--active={active}
+      aria-keyshortcuts={shortcut
+        ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+        : undefined}
       {...$$restProps}
       id={inputId}
       role={richMenu ? "combobox" : undefined}

@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { expectNoContent } from "../utils/no-content";
 import { user } from "../utils/user";
 import ContentSwitcherPanels from "./ContentSwitcher.panels.test.svelte";
 import SwitchPanelAriaLabel from "./SwitchPanel.ariaLabel.test.svelte";
@@ -125,7 +126,7 @@ describe("SwitchPanel", () => {
     await renderAndFlush(ContentSwitcherPanels, { props: { lazy: true } });
 
     expect(panel("one-panel")).toHaveTextContent("Content 1");
-    expect(panel("two-panel")).toBeEmptyDOMElement();
+    expectNoContent(panel("two-panel"));
 
     await user.click(screen.getByRole("tab", { name: "Two" }));
     expect(panel("two-panel")).toHaveTextContent("Content 2");
@@ -139,10 +140,10 @@ describe("SwitchPanel", () => {
       props: { unmountOnHide: true },
     });
 
-    expect(panel("two-panel")).toBeEmptyDOMElement();
+    expectNoContent(panel("two-panel"));
 
     await user.click(screen.getByRole("tab", { name: "Two" }));
     expect(panel("two-panel")).toHaveTextContent("Content 2");
-    expect(panel("one-panel")).toBeEmptyDOMElement();
+    expectNoContent(panel("one-panel"));
   });
 });

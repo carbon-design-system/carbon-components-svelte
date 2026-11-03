@@ -107,7 +107,7 @@
 
   /**
    * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item, in this menu level only, whose label starts with the
+   * item, in this menu level only, whose label starts with the
    * buffered characters typed so far. `options` (this level's own
    * `data-nested="false"` items) already excludes any open submenu's items,
    * so a submenu owns its own search once it has focus.
@@ -123,7 +123,6 @@
       query,
       itemToString: menuOptionLabel,
       index: focusIndex,
-      isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
     });
   }
 
@@ -295,7 +294,6 @@
     selector: "li[data-nested='false']",
     orientation: "vertical",
     wrap: false,
-    skipDisabled: true,
     getActiveIndex: () => focusIndex,
     onMove: (index, event) => {
       if ($hasPopup || hasModifierKey(event)) return;

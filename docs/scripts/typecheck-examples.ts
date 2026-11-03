@@ -51,15 +51,15 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
   // A computed column's `key` isn't a key of `Row`.
   [
     "src/pages/framed/DataTable/DataTableEditableCells.svelte",
-    /DataTableEmptyHeader/,
+    /not assignable to type 'DataTableHeader</,
   ],
   [
     "src/pages/framed/DataTable/DataTableEditableCellsRefreshCells.svelte",
-    /DataTableEmptyHeader/,
+    /not assignable to type 'DataTableHeader</,
   ],
   [
     "src/pages/framed/InlineEdit/InlineEditDataTableCell.svelte",
-    /DataTableEmptyHeader/,
+    /not assignable to type 'DataTableHeader</,
   ],
   // ToolbarSearch's `shouldFilterRows` types the query `number | string`.
   [

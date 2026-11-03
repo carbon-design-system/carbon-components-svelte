@@ -12,6 +12,7 @@
   export let disabled = false;
   export let open = false;
   export let roving = false;
+  export let tabindex: number | undefined = undefined;
   export let label =
     "status:active AND region:us-south AND service:cloud-object-storage";
 </script>
@@ -30,7 +31,7 @@
     </Tag>
   </TagSet>
 {:else}
-  <Tag {maxWidth} {filter} {interactive} {href} {disabled} on:close>
+  <Tag {maxWidth} {filter} {interactive} {href} {disabled} {tabindex} on:close>
     {label}
   </Tag>
 {/if}

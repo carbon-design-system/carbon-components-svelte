@@ -41,6 +41,11 @@
     background-color: $field;
     color: $text-primary;
     text-overflow: ellipsis;
+    // ccs: a query reads in its own direction, so in RTL "3 / 4" keeps
+    // its order instead of showing as "4 / 3". `dir="auto"` would do the
+    // same, but it also turns the field's padding to the value's
+    // direction and puts the text under the icons.
+    unicode-bidi: plaintext;
     transition: background-color $duration--fast-02 motion(standard, productive);
 
     &:focus {
@@ -146,6 +151,8 @@
   }
 
   .#{$prefix}--search-close svg {
+    position: relative; // ccs: v11, above the hover fill in `::before`
+    z-index: 1; // ccs: v11
     fill: inherit;
   }
 
@@ -207,8 +214,17 @@
     }
   }
 
-  .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover {
-    @include focus-outline('outline');
+  // Upstream drew a second focus ring around the hovered button. As in v11,
+  // its fill and bottom border go clear so the field's ring shows through,
+  // and the start-edge strip in `::before` grows into a fill inside it.
+  .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover { // ccs: v11, one ring
+    border-bottom-color: transparent;
+    background-color: transparent;
+    outline: none;
+
+    &::before {
+      width: calc(100% - 2px);
+    }
   }
 
   .#{$prefix}--search--sm {
@@ -473,4 +489,60 @@
 
 @include exports("search-validation") {
   @include search-validation;
+}
+
+// carbon-components-svelte patch (search-close-forced-colors)
+/// The clear button sits over the field's inline end. Forced colors paint
+/// its `transparent` resting outline and borders `CanvasText`, and its
+/// start-edge strip and hover fill an opaque `Canvas`, all on top of the
+/// field's 4px `Highlight` focus ring. The field keeps its own resting box,
+/// so the button draws a ring only when it has focus.
+/// @access private
+/// @group components
+@mixin search-close-forced-colors {
+  @media (forced-colors: active) {
+    // The hover selectors tie the vendored hover rules above and win on
+    // order. Each sits beside its resting selector, which it restates.
+    .#{$prefix}--search-close,
+    .#{$prefix}--search-close:hover {
+      border-style: none;
+      background-color: transparent;
+    }
+
+    // `.bx--search-close:focus` outweighs the first selector.
+    .#{$prefix}--search-close,
+    .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close,
+    .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover {
+      outline-style: none;
+    }
+
+    // A `Canvas` strip down the button's start edge.
+    .#{$prefix}--search-close::before {
+      display: none;
+    }
+  }
+}
+
+@include exports("search-close-forced-colors") {
+  @include search-close-forced-colors;
+}
+
+// carbon-components-svelte patch
+// `unicode-bidi: plaintext` on the input aligns each query to its own start:
+// "3 / 4" to the left on an RTL page, Arabic to the right on an LTR one.
+// Keep it at the page's start, by the magnifier.
+/// @access private
+/// @group components
+@mixin search-text-align {
+  .#{$prefix}--search-input {
+    text-align: left;
+  }
+
+  [dir="rtl"] .#{$prefix}--search-input {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("search-text-align") {
+  @include search-text-align;
 }

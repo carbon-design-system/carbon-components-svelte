@@ -134,20 +134,11 @@ export async function stepDown(
   return isFullyInView(highlighted);
 }
 
-/** The option the highlight is on, by the text it renders. */
-export async function readHighlightedOption(page: Page) {
-  const text = await page
-    .locator(".bx--list-box__menu-item--highlighted")
-    .first()
-    .textContent();
-  return text?.trim() ?? "";
-}
-
 /**
- * Put the pointer on whatever option the menu's bottom edge runs through,
- * which is the option a hover would move the menu for: measured placement asks
- * whether an option is fully visible rather than merely rendered, so a clipped
- * one would be pulled out from under the pointer.
+ * Put the pointer on whatever option the menu's bottom edge runs through.
+ * Measured placement asks whether an option is fully visible rather than
+ * merely rendered, so a scroll toward a clipped one would pull the list out
+ * from under the pointer.
  *
  * A mouse move rather than a locator hover, because hovering a locator scrolls
  * it into view first, which is the very thing being judged.

@@ -104,6 +104,9 @@
     left: 0;
     right: auto;
     width: to-rem(256px);
+    // The menu shares `.bx--profile-menu`, whose `max-width: 100%` reads the
+    // header. Here that would be the trigger's width.
+    max-width: 100vw;
   }
 }
 

@@ -63,6 +63,9 @@ describe("Menu", () => {
 
     expect(screen.getByRole("menu")).toHaveFocus();
     expect(onOpen).toHaveBeenCalledTimes(1);
+
+    await user.keyboard("{ArrowDown}");
+    expect(screen.getAllByRole("menuitem")[0]).toHaveFocus();
   });
 
   it("focuses the first item without scrolling the page into view", async () => {
@@ -139,19 +142,49 @@ describe("Menu", () => {
     expect(items[0]).toHaveFocus();
   });
 
-  it("skips disabled items during keyboard navigation", async () => {
-    render(MenuFixture, { props: { disabledIndex: 1 } });
+  it("moves focus onto disabled items with the arrow keys", async () => {
+    const onItemClick = vi.fn();
+    render(MenuFixture, { props: { disabledIndex: 1, onItemClick } });
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
     const items = screen.getAllByRole("menuitem");
     expect(items[1]).toHaveAttribute("aria-disabled", "true");
-
-    // The first item is already focused on open; ArrowDown skips the
-    // disabled second item and lands on the third.
     expect(items[0]).toHaveFocus();
+
+    // Disabled items stay focusable, as in the WAI-ARIA APG menu pattern.
+    await user.keyboard("{ArrowDown}");
+    expect(items[1]).toHaveFocus();
 
     await user.keyboard("{ArrowDown}");
     expect(items[2]).toHaveFocus();
+
+    await user.keyboard("{ArrowUp}");
+    expect(items[1]).toHaveFocus();
+
+    // Enter and Space on the disabled item neither select nor close.
+    const space = new KeyboardEvent("keydown", {
+      key: " ",
+      bubbles: true,
+      cancelable: true,
+    });
+    items[1].dispatchEvent(space);
+    expect(space.defaultPrevented).toBe(true);
+    await user.keyboard("{Enter}");
+    expect(onItemClick).not.toHaveBeenCalled();
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("moves Home and End onto disabled first and last items", async () => {
+    render(MenuFixture, { props: { disabledIndex: 2 } });
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const items = screen.getAllByRole("menuitem");
+
+    await user.keyboard("{End}");
+    expect(items[2]).toHaveFocus();
+
+    await user.keyboard("{Home}");
+    expect(items[0]).toHaveFocus();
   });
 
   it("moves focus to the item matching a typed character", async () => {
@@ -168,8 +201,7 @@ describe("Menu", () => {
     expect(items[2]).toHaveFocus();
   });
 
-  it("skips disabled items when searching by typed character", async () => {
-    // "Second" is disabled, so typing "s" should skip it.
+  it("moves focus onto a disabled item when searching by typed character", async () => {
     render(MenuFixture, { props: { disabledIndex: 1 } });
 
     await user.click(screen.getByRole("button", { name: "Trigger" }));
@@ -177,8 +209,7 @@ describe("Menu", () => {
     expect(items[1]).toHaveAttribute("aria-disabled", "true");
 
     await user.keyboard("s");
-    expect(items[1]).not.toHaveFocus();
-    expect(items[0]).toHaveFocus();
+    expect(items[1]).toHaveFocus();
   });
 
   it("focuses the first non-disabled item on open", async () => {

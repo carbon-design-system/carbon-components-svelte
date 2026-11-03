@@ -149,27 +149,33 @@ describe("MultiSelect", () => {
     expect(screen.getByText("0 Slack 2")).toBeInTheDocument();
   });
 
-  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+  it("keeps the keyboard highlight while the pointer moves over the menu", async () => {
     render(MultiSelect, { props: { items } });
 
     await openMenu();
+    await user.keyboard("{ArrowDown}");
 
+    // Items sort by text, so Email comes first.
     const emailOption = screen.getByRole("option", { name: "Email" });
-    await user.hover(emailOption);
+    const faxOption = screen.getByRole("option", { name: "Fax" });
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
+    await user.hover(faxOption);
+    expect(faxOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
     expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
     await fireEvent.mouseLeave(screen.getByRole("listbox"));
-    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
-  it("does not toggle a hover-highlighted item on Enter", async () => {
+  it("does not highlight a hovered item, so Enter toggles nothing", async () => {
     render(MultiSelect, { props: { items } });
 
     await openMenu();
 
     const emailOption = screen.getByRole("option", { name: "Email" });
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
     expect(emailOption).toHaveAttribute("aria-checked", "false");
 
     await user.keyboard("{Enter}");
@@ -213,7 +219,7 @@ describe("MultiSelect", () => {
     expect(byText("Option 1")).toHaveAttribute("data-selected", "false");
     expect(byText("Option 3")).toHaveAttribute("data-selected", "false");
 
-    await user.hover(byText("Option 3"));
+    await user.keyboard("{End}");
     expect(byText("Option 3")).toHaveAttribute("data-highlighted", "true");
     expect(byText("Option 1")).toHaveAttribute("data-highlighted", "false");
   });
@@ -374,6 +380,19 @@ describe("MultiSelect", () => {
         ).toBeNull();
       },
     );
+
+    it("closes the menu when disabled turns on while open", async () => {
+      const { rerender } = render(MultiSelect, { props: { items } });
+      await openMenu();
+
+      await rerender({ disabled: true });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(screen.getByRole("combobox")).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+    });
 
     it("handles disabled state", () => {
       render(MultiSelect, {
@@ -653,13 +672,13 @@ describe("MultiSelect", () => {
     });
 
     // The count tag follows the field's size like the selected-item tags:
-    // an 18px tag fits a 24px or 32px field.
+    // a 16px tag fits a 24px field, an 18px tag a 32px one.
     it.each([
-      ["xs", true],
-      ["sm", true],
-      [undefined, false],
-      ["lg", false],
-    ] as const)("sizes the count tag for a %s field", (size, small) => {
+      ["xs", "bx--tag--xs"],
+      ["sm", "bx--tag--sm"],
+      [undefined, undefined],
+      ["lg", undefined],
+    ] as const)("sizes the count tag for a %s field", (size, sizeClass) => {
       render(MultiSelect, {
         props: { items, selectedIds: ["0", "1"], size },
       });
@@ -667,7 +686,10 @@ describe("MultiSelect", () => {
       const tag = screen
         .getByRole("button", { name: "Clear all selected items" })
         .closest(".bx--tag");
-      expect(tag?.classList.contains("bx--tag--sm")).toBe(small);
+      const sizeClasses = [...(tag?.classList ?? [])].filter((name) =>
+        /^bx--tag--(xs|sm|lg)$/.test(name),
+      );
+      expect(sizeClasses).toEqual(sizeClass ? [sizeClass] : []);
     });
 
     it("moves focus directly to the next control when tabbing away with the menu open", async () => {

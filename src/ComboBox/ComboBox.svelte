@@ -45,6 +45,8 @@
    * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconEnd - Content at the end of each item. Replaces the checkmark on the selected item.
+   * @deprecated use the `iconEnd` slot
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
    * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
    * @slot {{ value: string; }} empty
@@ -198,7 +200,7 @@
 
   /**
    * Control whether the first matching item is automatically highlighted as the user types.
-   * - `"none"`: No auto-highlighting (default). The user must use arrow keys or hover to highlight items.
+   * - `"none"`: No auto-highlighting (default). The user must use arrow keys to highlight items.
    * - `"first-match"`: Automatically highlight the first non-disabled filtered item on each input change.
    * @type {"none" | "first-match"}
    */
@@ -339,6 +341,15 @@
   export let loadingText = "Loading...";
 
   /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the loading row. Once shown, it stays for at least 500 ms, so fast work
+   * shows nothing and slow work never flashes. The menu sets `aria-busy` and
+   * holds back the empty state as soon as `loading` is `true`.
+   * Set to `0` to show it at once.
+   */
+  export let loadingDelay = 0;
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -403,6 +414,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -419,6 +431,7 @@
   import { moveIndex } from "../utils/move-index.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { submitAttempts } from "../utils/submit-attempt.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
@@ -481,7 +494,7 @@
   let selectedItem;
   let prevSelectedId = null;
   let highlightedIndex = -1;
-  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  let highlightOrigin = /** @type {"keyboard" | null} */ (null);
   let prevHighlightedIndex = -1;
   let valueBeforeOpen = "";
   let prevInputLength = 0;
@@ -522,8 +535,18 @@
     return () => {
       announceFilterResults.cancel();
       menuWindow.destroy();
+      loadingIndicator.cancel();
     };
   });
+
+  // `loading` takes effect at once for `aria-busy` and the empty state. Only
+  // the indicator waits for `loadingDelay`; with no delay it follows `loading`
+  // exactly.
+  let showLoading = loading;
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
 
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
@@ -630,19 +653,6 @@
     return filteredIndex.byId.get(id);
   }
 
-  /**
-   * @param {Item} item
-   * @param {number} [knownIndex] The option's position among the filtered
-   * items, when the caller already has it.
-   */
-  function highlightItem(item, knownIndex) {
-    if (item.disabled) return;
-    const matchIndex = knownIndex ?? getFilteredIndex(filteredItems, item.id);
-    if (matchIndex === undefined) return;
-    highlightedIndex = matchIndex;
-    highlightOrigin = "pointer";
-  }
-
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
@@ -734,7 +744,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      highlightOrigin,
       menuWindow,
     });
 
@@ -854,6 +863,10 @@
     disabled,
     readonly,
   }));
+  // A ComboBox that turns disabled or read-only while open closes its menu,
+  // so no option stays clickable. Closing here is not a dismissal, so
+  // `close` does not fire.
+  $: if ((disabled || readonly) && open) open = false;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
@@ -1171,6 +1184,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
@@ -1475,16 +1489,9 @@
         {direction}
         {highlightedId}
         {wrapOptions}
-        highlightScroll={highlightOrigin !== "pointer"}
         aria-busy={loading ? "true" : undefined}
         on:scroll
         on:scroll={handleMenuScroll}
-        on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
@@ -1520,6 +1527,8 @@
                       aria-hidden="true"
                       data-virtual-index={isMeasured ? rowIndex : undefined}
                       class:bx--list-box__menu-group-header={true}
+                      class:bx--list-box__menu-group-header--first={rowIndex ===
+                        0}
                       on:mousedown={(event) => {
                         // Keep focus on the field, as options do.
                         event.preventDefault();
@@ -1552,7 +1561,6 @@
                         // re-announce it on every option click.
                         event.preventDefault();
                       }}
-                      on:mouseenter={() => highlightItem(item, actualIndex)}
                     >
                       {#if $$slots.icon}
                         <span
@@ -1589,19 +1597,26 @@
                       {:else}
                         {itemToString(item)}
                       {/if}
-                      {#if $$slots.iconRight}
+                      {#if $$slots.iconEnd || $$slots.iconRight}
                         <span
                           class:bx--list-box__menu-item__icon={true}
                           class:bx--list-box__menu-item__icon--right={true}
                         >
                           <HighlightSlot {optionId} let:highlighted>
                             <slot
-                              name="iconRight"
+                              name="iconEnd"
                               {item}
                               index={actualIndex}
                               {selected}
                               {highlighted}
-                            />
+                              ><slot
+                                name="iconRight"
+                                {item}
+                                index={actualIndex}
+                                {selected}
+                                {highlighted}
+                              /></slot
+                            >
                           </HighlightSlot>
                         </span>
                       {:else if selected}
@@ -1636,6 +1651,8 @@
                     aria-hidden="true"
                     data-virtual-index={isMeasured ? rowIndex : undefined}
                     class:bx--list-box__menu-group-header={true}
+                    class:bx--list-box__menu-group-header--first={rowIndex ===
+                      0}
                     on:mousedown={(event) => {
                       // Keep focus on the field, as options do.
                       event.preventDefault();
@@ -1679,7 +1696,6 @@
                       // re-announce it on every option click.
                       event.preventDefault();
                     }}
-                    on:mouseenter={() => highlightItem(item)}
                   >
                     {#if $$slots.icon}
                       <span
@@ -1716,19 +1732,26 @@
                     {:else}
                       {itemToString(item)}
                     {/if}
-                    {#if $$slots.iconRight}
+                    {#if $$slots.iconEnd || $$slots.iconRight}
                       <span
                         class:bx--list-box__menu-item__icon={true}
                         class:bx--list-box__menu-item__icon--right={true}
                       >
                         <HighlightSlot {optionId} let:highlighted>
                           <slot
-                            name="iconRight"
+                            name="iconEnd"
                             {item}
                             index={slotIndex}
                             {selected}
                             {highlighted}
-                          />
+                            ><slot
+                              name="iconRight"
+                              {item}
+                              index={slotIndex}
+                              {selected}
+                              {highlighted}
+                            /></slot
+                          >
                         </HighlightSlot>
                       </span>
                     {:else if selected}
@@ -1747,7 +1770,7 @@
             <slot name="empty" {value}>{emptyMessage}</slot>
           </ListBoxMenuStatus>
         {/if}
-        {#if loading}
+        {#if showLoading}
           <ListBoxMenuStatus>
             <InlineLoading description={loadingText} />
           </ListBoxMenuStatus>

@@ -7,7 +7,6 @@ function buildMenuWindow() {
     scrollIntoView: vi.fn(),
     sync: vi.fn(),
     noteScroll: vi.fn(),
-    cancelRequest: vi.fn(),
     reset: vi.fn(),
     destroy: vi.fn(),
   };
@@ -19,7 +18,6 @@ const baseOptions = {
   highlightedIndex: 2,
   prevHighlightedIndex: 1,
   listRef: document.createElement("ul"),
-  highlightOrigin: "keyboard" as const,
 };
 
 describe("scheduleHighlightScroll", () => {
@@ -37,22 +35,6 @@ describe("scheduleHighlightScroll", () => {
     await Promise.resolve();
 
     expect(menuWindow.scrollIntoView).toHaveBeenCalledWith(2, "nearest");
-    expect(menuWindow.cancelRequest).not.toHaveBeenCalled();
-  });
-
-  it("cancels an outstanding request instead of scrolling when the pointer took the highlight", async () => {
-    const menuWindow = buildMenuWindow();
-    scheduleHighlightScroll({
-      ...baseOptions,
-      highlightOrigin: "pointer",
-      menuWindow,
-    });
-
-    await Promise.resolve();
-    await Promise.resolve();
-
-    expect(menuWindow.cancelRequest).toHaveBeenCalledOnce();
-    expect(menuWindow.scrollIntoView).not.toHaveBeenCalled();
   });
 
   it("does nothing when the menu is closed", async () => {

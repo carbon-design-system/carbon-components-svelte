@@ -181,6 +181,17 @@ describe.each([
 ] as const)(
   "$name trigger and menu",
   ({ Fixture, buttonNames, triggerName, itemName, tabKeys }) => {
+    it("closes the menu when disabled turns on while open", async () => {
+      const { rerender } = render(Fixture);
+      const trigger = screen.getByRole("button", { name: triggerName });
+      await user.click(trigger);
+
+      await rerender({ disabled: true });
+
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    });
+
     it.each([
       { size: "xs", buttonClass: "bx--btn--sm", menuClass: "bx--menu--xs" },
       { size: "sm", buttonClass: "bx--btn--sm", menuClass: undefined },

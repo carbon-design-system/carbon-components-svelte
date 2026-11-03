@@ -11,4 +11,13 @@
     <svg slot="iconRight" data-testid="slot-icon-right" />
   </OverflowMenuItem>
   <OverflowMenuItem text="No icons" />
+  <OverflowMenuItem iconEnd={Launch} text="End prop" />
+  <OverflowMenuItem iconEnd={Launch} iconRight={Edit} text="Both end props" />
+  <OverflowMenuItem text="End slot">
+    <svg slot="iconEnd" data-testid="slot-icon-end" />
+  </OverflowMenuItem>
+  <OverflowMenuItem iconEnd={Edit} text="Both end slots">
+    <svg slot="iconEnd" data-testid="both-icon-end" />
+    <svg slot="iconRight" data-testid="both-icon-right" />
+  </OverflowMenuItem>
 </OverflowMenu>

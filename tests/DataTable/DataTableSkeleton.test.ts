@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, within } from "@testing-library/svelte";
 import DataTableSkeleton from "../../src/DataTable/DataTableSkeleton.svelte";
 
 describe("DataTableSkeleton", () => {
@@ -60,6 +60,21 @@ describe("DataTableSkeleton", () => {
       props: { headers: ["Name", { empty: true }] },
     });
 
-    expect(container.querySelectorAll("thead th")[1]).toHaveTextContent("");
+    // Truly empty, so Carbon's `th:empty` cap keeps the column narrow.
+    expect(container.querySelectorAll("thead th")[1]?.matches(":empty")).toBe(
+      true,
+    );
+  });
+
+  it("names an empty header with its value, visually hidden", () => {
+    const { container } = render(DataTableSkeleton, {
+      props: { headers: ["Name", { empty: true, value: "Actions" }] },
+    });
+
+    const header = container.querySelectorAll("thead th")[1];
+    assert(header instanceof HTMLElement);
+    expect(within(header).getByText("Actions")).toHaveClass(
+      "bx--visually-hidden",
+    );
   });
 });

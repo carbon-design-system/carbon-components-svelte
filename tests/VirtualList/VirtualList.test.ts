@@ -1,5 +1,9 @@
+import { setFlagsFromString } from "node:v8";
+import { runInNewContext } from "node:vm";
 import { fireEvent, render, screen, within } from "@testing-library/svelte";
+import VirtualListComponent from "carbon-components-svelte/VirtualList/VirtualList.svelte";
 import { tick } from "svelte";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { stubPerOptionResizeObserver } from "../utils/stub-per-option-resize-observer";
@@ -116,6 +120,44 @@ describe("VirtualList", () => {
     expect(screen.getByText("Keyed 2")).toBe(row);
   });
 
+  it("lets go of the items it was given once the list is replaced", async () => {
+    // Node has no `gc` here, but V8 hands it out on request.
+    setFlagsFromString("--expose-gc");
+    const gc = runInNewContext("gc") as () => void;
+
+    // Everything that points at the first list stays inside this function.
+    // Render the list alone. Under Svelte 3 and 4, a `let:` slot keeps a copy
+    // of its parent's state until a value it reads changes, so the rows of
+    // the fixture's other lists would hold the first list. Track the array,
+    // not an item: a Svelte 5 `{#each}` row keeps the item it was created
+    // with for as long as the row lives.
+    const mountFirst = () => {
+      const first = Array.from({ length: 10 }, (_, i) => ({ id: i }));
+      return {
+        tracked: new WeakRef(first),
+        view: render(VirtualListComponent, { props: { items: first } }),
+      };
+    };
+    const { tracked, view } = mountFirst();
+    await view.rerender({ items: [{ id: 100 }] });
+
+    // Collect after a macrotask, so no task that touched the first list is
+    // still running, and repeat in case one pass leaves it. Read `tracked`
+    // only once: `deref` keeps its target alive until the task ends.
+    const collect = async () => {
+      await flushMacrotask();
+      gc();
+    };
+    await collect();
+    await collect();
+    await collect();
+
+    expect(
+      tracked.deref(),
+      "the first list is still reachable after garbage collection",
+    ).toBeUndefined();
+  });
+
   it("detaches its scroll listener from scrollElement on unmount", () => {
     const { unmount } = render(VirtualList);
     const scroller = screen.getByTestId("scroller");
@@ -150,6 +192,29 @@ describe("VirtualList", () => {
           height: 40,
         })),
       });
+      await nextFrame();
+      expect(getTotalHeight()).toBe("800px");
+    });
+
+    it("forgets measured heights when items are replaced while unmeasured", async () => {
+      const { rerender } = render(VirtualList);
+      const list = screen.getByTestId("measured");
+      const getTotalHeight = () =>
+        virtualWindowLayer(list).parentElement?.style.height;
+
+      await nextFrame();
+      list.scrollTop = 5000;
+      await fireEvent.scroll(list);
+      await nextFrame();
+
+      await rerender({ measuring: false });
+      await rerender({
+        measuredItems: Array.from({ length: 20 }, (_, i) => ({
+          id: i + 20,
+          height: 40,
+        })),
+      });
+      await rerender({ measuring: true });
       await nextFrame();
       expect(getTotalHeight()).toBe("800px");
     });

@@ -52,6 +52,27 @@ describe("MenuItem", () => {
     );
   });
 
+  it("renders the shortcutChildren slot", async () => {
+    render(MenuItemSlot);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const item = screen.getByRole("menuitem", { name: "Copy ⌘C" });
+    expect(item.querySelector(".bx--menu-option__info kbd")).toHaveTextContent(
+      "⌘C",
+    );
+  });
+
+  it("prefers the shortcutChildren slot over the shortcutText slot", async () => {
+    render(MenuItemSlot);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+
+    const item = screen.getByRole("menuitem", { name: "Paste ⌘V" });
+    expect(item.querySelectorAll(".bx--menu-option__info kbd")).toHaveLength(1);
+    expect(item).not.toHaveTextContent("Old");
+  });
+
   it("prevents Space's default action (page scroll) when selecting an item", async () => {
     render(MenuItemFixture);
 

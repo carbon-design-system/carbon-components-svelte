@@ -205,7 +205,6 @@
       &::after {
         position: absolute;
         top: to-rem(3px);
-        left: to-rem(3px);
         display: block;
         width: to-rem(18px);
         height: to-rem(18px);
@@ -214,6 +213,9 @@
         border-radius: 50%;
         content: '';
         transition: transform $duration--fast-01 motion(exit, productive);
+
+        // ccs: starts at the inline start, where the track does
+        @include ccs-inset-inline(to-rem(3px));
       }
 
       .#{$prefix}--toggle-input__label & {
@@ -228,7 +230,7 @@
       @include type-style('body-compact-01');
 
       grid-area: 1 / 1;
-      margin-left: to-rem(56px);
+      margin-inline-start: to-rem(56px); // ccs: was margin-left
       user-select: none;
       white-space: nowrap;
     }
@@ -253,7 +255,8 @@
 
       &::after {
         background-color: $icon-on-color;
-        transform: translateX(to-rem(24px));
+        // ccs: travels toward the inline end
+        transform: translateX(calc(#{to-rem(24px)} * var(--ccs-inline-sign, 1)));
       }
     }
 
@@ -322,14 +325,15 @@
 
       .#{$prefix}--toggle__text--off,
       .#{$prefix}--toggle__text--on {
-        margin-left: to-rem(40px);
+        margin-inline-start: to-rem(40px); // ccs: was margin-left
       }
     }
 
     .#{$prefix}--toggle-input--small:checked
       + .#{$prefix}--toggle-input__label {
       > .#{$prefix}--toggle__switch::after {
-        transform: translateX(to-rem(17px));
+        // ccs: travels toward the inline end
+        transform: translateX(calc(#{to-rem(17px)} * var(--ccs-inline-sign, 1)));
       }
     }
 

@@ -12,6 +12,7 @@ import OverflowMenuRel from "./OverflowMenu.rel.test.svelte";
 import OverflowMenu from "./OverflowMenu.test.svelte";
 import OverflowMenuInBreadcrumb from "./OverflowMenuInBreadcrumb.test.svelte";
 import OverflowMenuInModal from "./OverflowMenuInModal.test.svelte";
+import OverflowMenuItemAria from "./OverflowMenuItem.aria.test.svelte";
 import OverflowMenuItemIcons from "./OverflowMenuItem.icons.test.svelte";
 import OverflowMenuPrimaryFocus from "./OverflowMenuPrimaryFocus.test.svelte";
 import { closeDetails, openMenu } from "./helpers";
@@ -328,6 +329,19 @@ describe("OverflowMenu", () => {
     await user.click(menuButton);
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("closes the menu when disabled turns on while open", async () => {
+    const onClose = vi.fn();
+    const { rerender } = render(OverflowMenu, { props: { onClose } });
+    const menuButton = screen.getByRole("button");
+    await user.click(menuButton);
+
+    await rerender({ disabled: true });
+
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    expect(menuButton).toHaveAttribute("aria-expanded", "false");
+    expect(onClose).not.toHaveBeenCalled();
   });
 
   it("applies direction attribute", async () => {
@@ -726,6 +740,61 @@ describe("OverflowMenu", () => {
         slotIcon.closest(".bx--overflow-menu-options__option-icon--right"),
       ).toBeInTheDocument();
     });
+
+    it("renders the iconEnd prop and slot at the end", () => {
+      render(OverflowMenuItemIcons);
+
+      const endProp = screen.getByRole("menuitem", { name: "End prop" });
+      expect(
+        endProp.querySelector(
+          ".bx--overflow-menu-options__option-icon--right svg",
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen
+          .getByTestId("slot-icon-end")
+          .closest(".bx--overflow-menu-options__option-icon--right"),
+      ).toBeInTheDocument();
+    });
+
+    it("prefers iconEnd over iconRight", () => {
+      render(OverflowMenuItemIcons);
+
+      const endIcon = (name: string) =>
+        screen
+          .getByRole("menuitem", { name })
+          .querySelector(".bx--overflow-menu-options__option-icon--right");
+      // Both items render Launch from `iconEnd`; the second also sets
+      // `iconRight` to Edit.
+      expect(endIcon("Both end props")?.innerHTML).toBe(
+        endIcon("End prop")?.innerHTML,
+      );
+
+      expect(screen.getByTestId("both-icon-end")).toBeInTheDocument();
+      expect(screen.queryByTestId("both-icon-right")).toBeNull();
+      expect(endIcon("Both end slots")?.querySelectorAll("svg")).toHaveLength(
+        1,
+      );
+    });
+  });
+
+  it("puts aria attributes on the menu item, and the rest on the wrapper", () => {
+    render(OverflowMenuItemAria);
+
+    const button = screen.getByRole("menuitem", { name: "Save" });
+    expect(button).toHaveAttribute("aria-keyshortcuts", "Control+S");
+    expect(button).toHaveAttribute("aria-describedby", "save-hint");
+    expect(button).toHaveAccessibleDescription("Saves the draft");
+
+    const link = screen.getByRole("menuitem", { name: "Docs" });
+    expect(link).toHaveAttribute("aria-keyshortcuts", "Control+D");
+    expect(link).toHaveAttribute("aria-current", "page");
+
+    const wrapper = screen.getByTestId("save");
+    expect(wrapper).toHaveAttribute("role", "none");
+    for (const name of wrapper.getAttributeNames()) {
+      expect(name.startsWith("aria-")).toBe(false);
+    }
   });
 
   it("focuses the primaryFocus item, not the first item, when opened", async () => {

@@ -1,0 +1,83 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A Button's `shortcut`: the keys after the label, or after the
+/// description in an icon-only button's tooltip, as text in the button's or
+/// tooltip's own color, so they meet its contrast on every kind, on the
+/// inverse tooltip, and when disabled.
+/// @access private
+/// @group components
+@mixin button-shortcut {
+  // The keys wrap below the label when the button is too narrow for both,
+  // so the label keeps its words whole.
+  .#{$prefix}--btn--shortcut {
+    flex-wrap: wrap;
+    column-gap: $carbon--spacing-05;
+    row-gap: $carbon--spacing-02;
+  }
+
+  // At the end, where the icon would be: without one, the button gives up
+  // the room it keeps for it and pads its end as its start.
+  .#{$prefix}--btn__shortcut {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+
+  // Loading: the spinner over the end of the keys, which stay in place,
+  // hidden, so the button doesn't change width.
+  // Centred with auto margins: the spinner's own animation owns
+  // `transform`.
+  .#{$prefix}--btn .#{$prefix}--btn__shortcut .#{$prefix}--btn__loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    @include ccs-inset-inline($end: 0);
+  }
+
+  .#{$prefix}--btn__shortcut .#{$prefix}--btn__loading + .#{$prefix}--kbd {
+    visibility: hidden;
+  }
+
+  .#{$prefix}--btn.#{$prefix}--btn--shortcut-end:not(.#{$prefix}--btn--ghost) {
+    padding-inline-end: to-rem(15px);
+  }
+
+  .#{$prefix}--btn--sm.#{$prefix}--btn--shortcut-end:not(.#{$prefix}--btn--ghost),
+  .#{$prefix}--btn--xs.#{$prefix}--btn--shortcut-end:not(.#{$prefix}--btn--ghost) {
+    padding-inline-end: to-rem(12px);
+  }
+
+  // With an icon, the button keeps room for the icon only, so the keys sit
+  // 8px from it: the icon is 1rem from the end and 1rem wide.
+  .#{$prefix}--btn.#{$prefix}--btn--shortcut-icon:not(.#{$prefix}--btn--ghost) {
+    padding-inline-end: to-rem(40px);
+  }
+
+  // A ghost button's icon follows in the row; 8px from the keys there too.
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--shortcut-icon .#{$prefix}--btn__icon,
+  .#{$prefix}--btn--ghost.#{$prefix}--btn--shortcut-icon .#{$prefix}--btn__loading {
+    margin-inline-start: $carbon--spacing-03 - $carbon--spacing-05;
+  }
+
+  .#{$prefix}--btn__tooltip-shortcut {
+    display: inline-flex;
+    margin-inline-start: $carbon--spacing-03;
+  }
+
+  // The label's color, not dimmed: muted keys would fall below 4.5:1 on
+  // primary, tertiary, ghost and danger. The gap and the symbols set the
+  // keys apart. Ties the muted key rule and wins on order.
+  .#{$prefix}--btn__shortcut .#{$prefix}--kbd__key,
+  .#{$prefix}--btn__tooltip-shortcut .#{$prefix}--kbd__key {
+    color: inherit;
+  }
+}
+
+@include exports("button-shortcut") {
+  @include button-shortcut;
+}

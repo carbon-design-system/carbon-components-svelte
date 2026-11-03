@@ -15,9 +15,21 @@ export default {
       // Read only by `test:types` (svelte-check), which runs whenever the
       // unit job does. `tests/tsconfig.json` isn't one: Vite reads it to
       // transform the tests.
-      nonInputs: ["**/*.test-d.ts", "**/tsconfig.compat-check.json"],
-      // The Svelte 3/4 harnesses run the same unit tests.
-      wiring: ["tests-svelte{3,4}/**"],
+      nonInputs: [
+        "**/*.test-d.ts",
+        "**/tsconfig.compat-check.json",
+        // Components only svelte-check renders, to check their types.
+        "tests/DataTable/DataTable{DeepNesting,ExplicitGenerics,Skeleton}.test.svelte",
+      ],
+      // The Svelte 3/4 harnesses run the same unit tests. Vite reads
+      // tests/tsconfig.json to transform the tests, and vite.config.ts takes
+      // its test options from tests/utils.ts.
+      wiring: ["tests-svelte{3,4}/**", "tests/tsconfig.json", "tests/utils.ts"],
+      // Vitest loads it before every test (`setupFiles`), so every test
+      // depends on it and on what it imports.
+      setup: "tests/setup-tests.ts",
+      // Vitest runs the code; `test:types` checks the types on its own.
+      types: false,
     },
     e2e: {
       tests: "e2e/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}",
@@ -26,6 +38,16 @@ export default {
       root: "e2e",
       urls: { "/*": "e2e/fixtures/*" },
       pages: "e2e/fixtures/**/*.html",
+      // Playwright's web server builds the fixtures with it.
+      wiring: "e2e/vite.config.ts",
+      // The perf harnesses and the dev server they start, which no e2e test
+      // runs.
+      nonInputs: [
+        "e2e/fixture-server.ts",
+        "e2e/selector-stats.ts",
+        "e2e/transition-perf.ts",
+      ],
+      types: false,
     },
   },
   // The framed DatePicker pages are examples an e2e test renders from `src`.
@@ -45,8 +67,12 @@ export default {
     "examples/**",
     "bench/**",
     "thumbnails/**",
+    // A test reporter's output, which nothing reads.
+    "tests/.vitest/**",
     "ostia.config.ts",
     "biome.json",
+    // Options for `bun fmt` only.
+    "bunfig.toml",
     "carbon.yml",
     "telemetry.yml",
     "LICENSE",
@@ -66,6 +92,8 @@ export default {
     "dom-accessibility-api",
     "@carbon/colors",
   ],
+  // Tools CI runs on its own: a bump that only reaches them selects nothing.
+  inert: ["@biomejs/biome", "ostia", "@types/*"],
   edges: { "css/*.css": ["css/**", "scripts/build-css.ts"] },
   self: [
     "bivium.config.ts",

@@ -66,13 +66,24 @@
   export let portalTooltip = undefined;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the tooltip relative to the button.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
 
   /**
    * Set the alignment of the tooltip relative to the button.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -95,6 +106,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { noop } from "../utils/noop.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
 
@@ -143,7 +155,8 @@
   // place, no flash). Only the plain default (bottom/center, non-portalled)
   // keeps Carbon's inline feedback caret.
   $: tooltipCustomized =
-    tooltipPosition !== "bottom" || tooltipAlignment !== "center";
+    effectiveTooltipPosition !== "bottom" ||
+    effectiveTooltipAlignment !== "center";
   $: feedbackPortalled = effectivePortalTooltip || tooltipCustomized;
 
   $: showingInlineFeedback =
@@ -221,7 +234,10 @@
   }
 
   // Caret spacing + alignment nudges, mirroring Button's icon tooltip.
-  $: portalGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+  $: portalGaps = iconTooltipPortalGaps(
+    effectiveTooltipPosition,
+    effectiveTooltipAlignment,
+  );
 
   function dismissFeedback() {
     copyFeedback.dismiss();
@@ -245,6 +261,11 @@
       tooltipHandoff.release();
     };
   });
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <button
@@ -326,8 +347,8 @@
     open={tooltipOpen}
     text={tooltipText}
     tooltipType="icon"
-    direction={tooltipPosition}
-    intrinsicAlign={tooltipAlignment}
+    direction={effectiveTooltipPosition}
+    intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}
     horizontalGapRight={portalGaps.horizontalGapRight}
     gapTop={portalGaps.gapTop}

@@ -12,7 +12,7 @@
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
     { key: "renewal", value: "Renewal" },
-    { key: "actions", empty: true },
+    { key: "actions", empty: true, value: "Actions" },
   ];
 
   const rows = [

@@ -544,6 +544,7 @@
   const mode = writable(datePickerType);
   const sharedDateFormat = writable(dateFormat);
   const sharedLocale = writable(locale);
+  const sharedConjunction = writable(conjunction);
   const sharedClearable = writable(clearable);
   const sharedClearButtonLabelText = writable(clearButtonLabelText);
   /**
@@ -1120,6 +1121,18 @@
   }
 
   /**
+   * Tabbing past the last control of the popup moves focus out of the
+   * calendar without a click, so close it as an outside dismissal. Focus
+   * moving to an input, within the calendar or to a `keepOpenFor` element
+   * keeps it open, as with an input blur.
+   *
+   * @param {FocusEvent} event
+   */
+  function handleCalendarFocusOut(event) {
+    blurInput(event.relatedTarget);
+  }
+
+  /**
    * @type {() => void}
    */
   function openCalendar() {
@@ -1288,6 +1301,7 @@
     hasCalendar,
     dateFormat: sharedDateFormat,
     locale: sharedLocale,
+    conjunction: sharedConjunction,
     clearable: sharedClearable,
     clearButtonLabelText: sharedClearButtonLabelText,
     clear,
@@ -1552,6 +1566,10 @@
       handleCalendarKeydown,
       { capture: true },
     );
+    engine.calendarContainer?.addEventListener(
+      "focusout",
+      handleCalendarFocusOut,
+    );
     if (engine.config.inline) {
       for (const type of BLOCKED_EVENTS) {
         engine.calendarContainer?.addEventListener(
@@ -1682,6 +1700,10 @@
       handleCalendarKeydown,
       { capture: true },
     );
+    engine.calendarContainer?.removeEventListener(
+      "focusout",
+      handleCalendarFocusOut,
+    );
     for (const type of BLOCKED_EVENTS) {
       engine.calendarContainer?.removeEventListener(
         type,
@@ -1751,6 +1773,7 @@
 
   $: sharedDateFormat.set(dateFormat);
   $: sharedLocale.set(locale);
+  $: sharedConjunction.set(conjunction);
   // Repaint a pending range's window when the limits change.
   $: if (
     minRangeDays !== prevMinRangeDays ||
@@ -1918,7 +1941,9 @@
   $: if (engine) {
     applyOptionIfChanged("clickOpens", interactive.clickOpens);
     applyOptionIfChanged("allowInput", interactive.allowInput);
-    if ($readonlyAny && engine.isOpen) engine.close();
+    // A disabled or read-only input can't open the calendar, so one that
+    // turns so while open closes it.
+    if (interactionBlocked && engine.isOpen) engine.close();
   }
 
   /**

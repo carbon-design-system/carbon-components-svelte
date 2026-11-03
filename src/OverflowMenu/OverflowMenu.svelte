@@ -76,14 +76,25 @@
   export let iconDescription = "Options";
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the trigger's tooltip.
    * The tooltip flips to the opposite side when there is not enough space.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "top";
 
   /**
    * Set the alignment of the trigger's tooltip.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -148,6 +159,7 @@
   import { rovingFocus } from "../utils/roving-focus.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import {
@@ -171,19 +183,26 @@
   // moves to a portal instead. Only when `portalMenu` is left unset.
   let portalWhenClipped = false;
   $: if (!open) portalWhenClipped = false;
+  // Turning disabled on while open closes the menu, so no item stays
+  // clickable under a disabled trigger. Closing here is not a dismissal, so
+  // `close` does not fire.
+  $: if (disabled && open) open = false;
 
   $: effectivePortalMenu =
     portalMenu === undefined ? !!insideModal || portalWhenClipped : portalMenu;
 
   const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }>>}
+   * @type {import("svelte/store").Writable<ReadonlyArray<{ id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }>>}
    */
   const items = writable([]);
   /**
-   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }>>}
+   * @type {import("svelte/store").Readable<Record<string, { id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }>>}
    */
   const itemsById = derived(items, (_) => keyBy(_));
+  // A menu whose items show shortcuts sizes to its content, so the keys
+  // don't squeeze the labels.
+  $: hasShortcuts = $items.some((item) => item.shortcut);
   const currentId = writable(undefined);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
@@ -263,7 +282,7 @@
   const batchedItemsUpdate = batchStoreUpdates(items);
 
   /**
-   * @type {(item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; node: HTMLElement }) => void}
+   * @type {(item: { id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }) => void}
    */
   function add(item) {
     batchedItemsUpdate((_) => {
@@ -489,7 +508,10 @@
     !dismissed &&
     (hovered || focused) &&
     $tooltipActive;
-  $: tooltipGaps = iconTooltipPortalGaps(tooltipPosition, tooltipAlignment);
+  $: tooltipGaps = iconTooltipPortalGaps(
+    effectiveTooltipPosition,
+    effectiveTooltipAlignment,
+  );
 
   function handleTooltipMouseenter() {
     if (!hasTooltip || disabled) return;
@@ -627,6 +649,11 @@
       dismissTooltip();
     }
   }
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <button
@@ -718,6 +745,7 @@
     class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
     class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
     class:bx--overflow-menu-options--scrollable={!!maxHeight}
+    class:bx--overflow-menu-options--shortcuts={hasShortcuts}
     class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
     class:bx--overflow-menu-options--below-left={belowLeft}
     class={menuOptionsClass}
@@ -757,6 +785,7 @@
       class:bx--overflow-menu-options--sm={effectiveSize === "sm"}
       class:bx--overflow-menu-options--xl={effectiveSize === "xl"}
       class:bx--overflow-menu-options--scrollable={!!maxHeight}
+      class:bx--overflow-menu-options--shortcuts={hasShortcuts}
       class:bx--breadcrumb-menu-options={!!ctxBreadcrumbItem}
       class={menuOptionsClass}
       style:position="relative"
@@ -775,11 +804,11 @@
 {#if tooltipMounted}
   <PortalTooltip
     anchor={buttonRef}
-    direction={tooltipPosition}
+    direction={effectiveTooltipPosition}
     open={tooltipOpen}
     text={iconDescription}
     tooltipType="icon"
-    intrinsicAlign={tooltipAlignment}
+    intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={tooltipGaps.horizontalGapLeft}
     horizontalGapRight={tooltipGaps.horizontalGapRight}
     gapTop={tooltipGaps.gapTop}

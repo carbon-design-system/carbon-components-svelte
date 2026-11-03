@@ -8,6 +8,8 @@
   export let ariaLabel: ComponentProps<OverflowMenu>["aria-label"] = undefined;
   export let tooltipPosition: ComponentProps<OverflowMenu>["tooltipPosition"] =
     "top";
+  export let tooltipAlign: ComponentProps<OverflowMenu>["tooltipAlign"] =
+    undefined;
   export let disabled = false;
   export let onParentKeydown: (event: KeyboardEvent) => void = () => {};
 </script>
@@ -19,6 +21,7 @@
     aria-label={ariaLabel}
     {iconDescription}
     {tooltipPosition}
+    {tooltipAlign}
     {disabled}
   >
     <OverflowMenuItem text="Manage credentials" />

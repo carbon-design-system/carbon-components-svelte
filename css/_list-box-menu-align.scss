@@ -13,9 +13,8 @@
 /// Under `[dir="rtl"]`, `right` wins the overconstrained box, so end
 /// alignment releases `right` instead.
 ///
-/// Physical, not `inset-inline-start`: lightningcss expands flow-relative
-/// insets into `:lang()` RTL rules for the Safari 14 baseline, and Carbon's
-/// rule it overrides is physical too.
+/// Physical, not `inset-inline-start`: Carbon's rule it overrides is
+/// physical too.
 ///
 /// A portaled menu is static inside a host as wide as the field, so `left`
 /// has no effect there. `ListBoxMenu` marks that host instead, and a flex

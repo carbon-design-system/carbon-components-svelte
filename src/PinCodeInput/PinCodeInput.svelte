@@ -213,6 +213,7 @@
     normalizeSize,
     PIN_CODE_INPUT_SIZE_ALIASES,
   } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -584,6 +585,7 @@
         class:bx--visually-hidden={hideLabel}
         class:bx--label--disabled={disabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
+        use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
         on:click={handleLegendClick}
       >
         <slot name="labelChildren">{labelText}</slot>

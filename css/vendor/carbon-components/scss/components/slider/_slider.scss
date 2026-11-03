@@ -821,3 +821,21 @@
 @include exports('slider-xs') {
   @include slider-xs;
 }
+
+// carbon-components-svelte patch
+// The value and the range labels read in their own direction, so in RTL
+// "-5" keeps its sign in front instead of showing as "5-", as in
+// `.bx--number input`. The value is centered and a label is as wide as its
+// text, so the alignment `unicode-bidi: plaintext` sets changes nothing.
+/// @access private
+/// @group slider
+@mixin slider-plaintext {
+  .#{$prefix}--slider-text-input,
+  .#{$prefix}--slider__range-label {
+    unicode-bidi: plaintext;
+  }
+}
+
+@include exports("slider-plaintext") {
+  @include slider-plaintext;
+}

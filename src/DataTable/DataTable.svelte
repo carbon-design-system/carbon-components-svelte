@@ -115,6 +115,7 @@
    * @typedef {object} DataTableEmptyHeader
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
+   * @property {DataTableValue} [value] - Name of the column for screen readers. Visually hidden. Without it, the header has no accessible name.
    * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {boolean | ((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>) => number)} [sort] - `false` disables sorting for this column even when the table is sortable; `true` enables it even when the table is not; a comparator both enables sorting and provides it. Unset inherits the table-level `sortable`.
    * @property {boolean} [sortAlways] - Override table-level sortAlways for this column
@@ -159,7 +160,7 @@
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
    * @slot {{ header: DataTableNonEmptyHeader<Row>; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
-   * @slot {{ header: DataTableNonEmptyHeader<Row>; index: number; }} footerCell
+   * @slot {{ header: DataTableHeader<Row>; index: number; }} footerCell
    * @slot {{ header: DataTableNonEmptyHeader<Row>; }} headerDecorator
    * @slot {{ row: Row; }} rowDecorator
    */
@@ -350,7 +351,7 @@
 
   /**
    * Specify the header key to sort by.
-   * @type {DataTableKey<Row>}
+   * @type {DataTableKey<Row> | null}
    * @bindable writable
    */
   export let sortKey = null;
@@ -392,6 +393,17 @@
    * @type {((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number) | undefined}
    */
   export let sort = undefined;
+
+  /**
+   * Override the text announced after `sortKey` or `sortDirection` changes.
+   * `header` is the sorted column. For `"none"`, it is the column that was
+   * sorted before.
+   * @type {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending") => string}
+   */
+  export let sortStatusText = function sortStatusText(header, direction) {
+    if (direction === "none" || !header) return "Not sorted";
+    return `Sorted by ${header.value ?? header.key}, ${direction}`;
+  };
 
   /**
    * Set to `true` for the expandable variant.
@@ -574,6 +586,7 @@
   import { writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
+  import { createStatusAnnouncer } from "../ListBox/menu-status.js";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
@@ -1115,16 +1128,38 @@
     return next;
   }
 
+  let sortStatus = "";
+  const announceSortStatus = createStatusAnnouncer(
+    (text) => (sortStatus = text),
+  );
+  let prevSortKey = sortKey;
+  let prevSortDirection = sortDirection;
+
+  // Announce each sort once from a status region. The rows are not a live
+  // region: a reorder would read every row again.
+  $: if (sortKey !== prevSortKey || sortDirection !== prevSortDirection) {
+    const statusKey = sortDirection === "none" ? prevSortKey : sortKey;
+    prevSortKey = sortKey;
+    prevSortDirection = sortDirection;
+    announceSortStatus(
+      sortStatusText(
+        headers.find((header) => header.key === statusKey),
+        sortDirection,
+      ),
+    );
+  }
+
   $: ascending = sortDirection === "ascending";
   $: sortingHeader = stableHeaders.find((header) => header.key === sortKey);
   $: sorting =
     sortKey != null &&
     (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
+  $: sortPath = sortKey == null ? "" : String(sortKey);
   $: sortedRows =
     sorting && sortDirection !== "none"
       ? [...$tableRows].sort((a, b) => {
-          const itemA = resolvePath(a, sortKey);
-          const itemB = resolvePath(b, sortKey);
+          const itemA = resolvePath(a, sortPath);
+          const itemB = resolvePath(b, sortPath);
           const headerSort = sortingHeader?.sort;
 
           if (typeof headerSort === "function") {
@@ -1428,6 +1463,7 @@
   <div
     bind:this={scrollContainerRef}
     use:formReset={handleFormReset}
+    class:bx--data-table-virtual={virtualScrollContainer}
     style:max-height={virtualScrollContainer
       ? `${calculatedContainerHeight}px`
       : undefined}
@@ -1528,7 +1564,11 @@
             </th>
           {/if}
           {#if isSelectionEnabled && (radio || !batchSelection)}
-            <th scope="col">
+            <th
+              scope="col"
+              class:bx--table-column-checkbox={true}
+              class:bx--table-column-radio={radio}
+            >
               <span class:bx--visually-hidden={true}
                 >{translateWithId("selectRow")}</span
               >
@@ -1577,10 +1617,17 @@
                   scope="col"
                   class:bx--table-column-menu={true}
                   style={formatHeaderWidth(header)}
-                ></th>
+                  >{#if header.value}<span class:bx--visually-hidden={true}
+                      >{header.value}</span
+                    >{/if}</th
+                >
               {:else}
                 <th scope="col" style={formatHeaderWidth(header)}>
-                  <div class:bx--table-header-label={true}></div>
+                  <div class:bx--table-header-label={true}>
+                    {#if header.value}<span class:bx--visually-hidden={true}
+                        >{header.value}</span
+                      >{/if}
+                  </div>
                 </th>
               {/if}
             {:else}
@@ -2248,4 +2295,7 @@
       {/if}
     </Table>
   </div>
+  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+    >{sortStatus}</span
+  >
 </TableContainer>

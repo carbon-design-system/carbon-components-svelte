@@ -137,4 +137,27 @@ test.describe("Modal", () => {
     await expect(modal).not.toHaveClass(/is-visible/);
     await expect(page.getByTestId("close-events")).toHaveText("outside-click");
   });
+
+  test("returns focus to the trigger when the closing transition never runs", async ({
+    page,
+  }) => {
+    // A pinned transform keeps the transition duration but runs no
+    // transition, so no `transitionend` fires.
+    await page.addStyleTag({
+      content: `html .bx--modal-container,
+        html .bx--modal.is-visible .bx--modal-container { transform: none; }`,
+    });
+    // The new rule moves the closed container, which runs its own
+    // transition. Let it end first.
+    await page.evaluate(() =>
+      Promise.all(document.getAnimations().map((a) => a.finished)),
+    );
+    const trigger = page.getByTestId("open-modal");
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("modal-select")).toBeFocused();
+
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+  });
 });

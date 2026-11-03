@@ -23,6 +23,8 @@
    * @event {KeyboardEvent | MouseEvent} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
+   * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconEnd - Content at the end of each item. Replaces the checkmark on the selected item.
+   * @deprecated use the `iconEnd` slot
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconRight
    * @slot {{ group: string; items: ReadonlyArray<Item>; }} group
    * @slot {{}} empty
@@ -239,6 +241,15 @@
   export let loadingText = "Loading...";
 
   /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the loading row. Once shown, it stays for at least 500 ms, so fast work
+   * shows nothing and slow work never flashes. The menu sets `aria-busy` and
+   * holds back the empty state as soon as `loading` is `true`.
+   * Set to `0` to show it at once.
+   */
+  export let loadingDelay = 0;
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -354,6 +365,7 @@
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -367,6 +379,7 @@
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -439,7 +452,7 @@
   $: menuAriaLabel = ariaLabel ?? (labelText || "Choose an item");
 
   let highlightedIndex = -1;
-  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  let highlightOrigin = /** @type {"keyboard" | null} */ (null);
   let prevHighlightedIndex = -1;
   let prevItemsLength = items.length;
   let listScrollTop = 0;
@@ -478,10 +491,24 @@
     return () => {
       typeahead.clear();
       menuWindow.destroy();
+      loadingIndicator.cancel();
     };
   });
 
+  // `loading` takes effect at once for `aria-busy` and the empty state. Only
+  // the indicator waits for `loadingDelay`; with no delay it follows `loading`
+  // exactly.
+  let showLoading = loading;
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
+
   $: inline = type === "inline";
+  // A Dropdown that turns disabled or read-only while open closes its menu,
+  // like a native `<select>`, so no option stays clickable. Closing here is
+  // not a dismissal, so `close` does not fire.
+  $: if ((disabled || readonly) && open) open = false;
   $: {
     itemsById = new Map();
     for (let index = 0; index < items.length; index++) {
@@ -619,7 +646,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      highlightOrigin,
       menuWindow,
     });
 
@@ -896,6 +922,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
@@ -1076,7 +1103,7 @@
         {disabled}
         {id}
       >
-        <span class:bx--list-box__label={true}>
+        <span class:bx--list-box__label={true} use:titleWhenTruncated>
           {#if selectedItem}
             {itemToString(selectedItem)}
           {:else}
@@ -1127,16 +1154,9 @@
         {align}
         {highlightedId}
         {wrapOptions}
-        highlightScroll={highlightOrigin !== "pointer"}
         aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
-        on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
@@ -1172,6 +1192,8 @@
                       aria-hidden="true"
                       data-virtual-index={isMeasured ? rowIndex : undefined}
                       class:bx--list-box__menu-group-header={true}
+                      class:bx--list-box__menu-group-header--first={rowIndex ===
+                        0}
                       on:mousedown={(event) => {
                         // Keep focus on the field, as options do.
                         event.preventDefault();
@@ -1203,11 +1225,6 @@
                         // Keep focus on the field so screen readers don't
                         // re-announce it on every option click.
                         event.preventDefault();
-                      }}
-                      on:mouseenter={() => {
-                        if (item.disabled) return;
-                        highlightedIndex = actualIndex;
-                        highlightOrigin = "pointer";
                       }}
                     >
                       {#if $$slots.icon}
@@ -1245,19 +1262,26 @@
                       {:else}
                         {itemToString(item)}
                       {/if}
-                      {#if $$slots.iconRight}
+                      {#if $$slots.iconEnd || $$slots.iconRight}
                         <span
                           class:bx--list-box__menu-item__icon={true}
                           class:bx--list-box__menu-item__icon--right={true}
                         >
                           <HighlightSlot {optionId} let:highlighted>
                             <slot
-                              name="iconRight"
+                              name="iconEnd"
                               {item}
                               index={actualIndex}
                               {selected}
                               {highlighted}
-                            />
+                              ><slot
+                                name="iconRight"
+                                {item}
+                                index={actualIndex}
+                                {selected}
+                                {highlighted}
+                              /></slot
+                            >
                           </HighlightSlot>
                         </span>
                       {:else if selected}
@@ -1292,6 +1316,8 @@
                     aria-hidden="true"
                     data-virtual-index={isMeasured ? rowIndex : undefined}
                     class:bx--list-box__menu-group-header={true}
+                    class:bx--list-box__menu-group-header--first={rowIndex ===
+                      0}
                     on:mousedown={(event) => {
                       // Keep focus on the field, as options do.
                       event.preventDefault();
@@ -1321,11 +1347,6 @@
                       // Keep focus on the field so screen readers don't
                       // re-announce it on every option click.
                       event.preventDefault();
-                    }}
-                    on:mouseenter={() => {
-                      if (item.disabled) return;
-                      highlightedIndex = index;
-                      highlightOrigin = "pointer";
                     }}
                   >
                     {#if $$slots.icon}
@@ -1358,19 +1379,26 @@
                     {:else}
                       {itemToString(item)}
                     {/if}
-                    {#if $$slots.iconRight}
+                    {#if $$slots.iconEnd || $$slots.iconRight}
                       <span
                         class:bx--list-box__menu-item__icon={true}
                         class:bx--list-box__menu-item__icon--right={true}
                       >
                         <HighlightSlot {optionId} let:highlighted>
                           <slot
-                            name="iconRight"
+                            name="iconEnd"
                             {item}
                             {index}
                             {selected}
                             {highlighted}
-                          />
+                            ><slot
+                              name="iconRight"
+                              {item}
+                              {index}
+                              {selected}
+                              {highlighted}
+                            /></slot
+                          >
                         </HighlightSlot>
                       </span>
                     {:else if selected}
@@ -1389,7 +1417,7 @@
             <slot name="empty">{emptyText}</slot>
           </ListBoxMenuStatus>
         {/if}
-        {#if loading}
+        {#if showLoading}
           <ListBoxMenuStatus>
             <InlineLoading description={loadingText} />
           </ListBoxMenuStatus>

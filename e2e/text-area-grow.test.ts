@@ -21,8 +21,8 @@ test.describe("TextArea grow", () => {
 
   test("caps growth at maxRows and scrolls the overflow", async ({ page }) => {
     const textarea = page.getByTestId("grow-max-rows");
-    const { rows, overflowY } = await textarea.evaluate(
-      (el: HTMLTextAreaElement) => {
+    const measure = () =>
+      textarea.evaluate((el: HTMLTextAreaElement) => {
         const computed = getComputedStyle(el);
         const paddingTop = Number.parseFloat(computed.paddingTop);
         const paddingBottom = Number.parseFloat(computed.paddingBottom);
@@ -31,11 +31,13 @@ test.describe("TextArea grow", () => {
           rows: (el.clientHeight - paddingTop - paddingBottom) / lineHeight,
           overflowY: computed.overflowY,
         };
-      },
-    );
+      });
 
-    expect(Math.abs(rows - 8)).toBeLessThan(0.1);
-    expect(overflowY).toBe("auto");
+    // The textarea grows after it mounts, so poll until it reaches the cap.
+    await expect
+      .poll(async () => Math.abs((await measure()).rows - 8))
+      .toBeLessThan(0.1);
+    expect((await measure()).overflowY).toBe("auto");
   });
 
   test("grows taller when a narrower container rewraps a long line", async ({

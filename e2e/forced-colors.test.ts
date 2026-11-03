@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers/host";
+import { expectSingleRing } from "./helpers/layout";
 
 // Forced colors (Windows contrast themes) repaint author colors with a few
 // system colors and drop box-shadows, so a state drawn only as a tint, an
@@ -95,6 +96,99 @@ async function flatness(page: Page, selector: string) {
     }
     return Math.max(...counts.values()) / (data.length / 4);
   }, png);
+}
+
+// Share of the pixels in the band `width` px inside an element's edge that
+// show its ring: 1 when nothing covers the ring. A pixel in `Canvas` or
+// `CanvasText` is a fill or a line drawn over it. The ring's own color
+// differs where it blends with an edge below, since the emulated
+// `Highlight` is translucent.
+async function ringShare(
+  page: Page,
+  selector: string,
+  system: Record<SystemColor, string>,
+  width = 4,
+) {
+  const clip = await page.evaluate((selector) => {
+    const el = document.querySelector(selector);
+    if (!el) throw new Error(`no ${selector}`);
+    // The clip is in viewport coordinates.
+    el.scrollIntoView({ block: "center" });
+    const { x, y, width, height } = el.getBoundingClientRect();
+    return {
+      x: Math.round(x),
+      y: Math.round(y),
+      width: Math.round(width),
+      height: Math.round(height),
+    };
+  }, selector);
+  const png = (await page.screenshot({ clip })).toString("base64");
+  return page.evaluate(
+    async ([png, covers, width]) => {
+      const img = new Image();
+      img.src = `data:image/png;base64,${png}`;
+      await img.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("no 2d context");
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, img.width, img.height);
+      const cover = covers.map((color) =>
+        (color.match(/\d+/g) ?? []).slice(0, 3).map(Number),
+      );
+      let band = 0;
+      let ring = 0;
+      for (let y = 0; y < img.height; y++) {
+        for (let x = 0; x < img.width; x++) {
+          const edge = Math.min(x, y, img.width - 1 - x, img.height - 1 - y);
+          if (edge >= width) continue;
+          const i = (y * img.width + x) * 4;
+          band++;
+          const covered = cover.some((rgb) =>
+            rgb.every((c, k) => Math.abs((data[i + k] ?? 0) - c) <= 2),
+          );
+          if (!covered) ring++;
+        }
+      }
+      return ring / band;
+    },
+    [png, [system.Canvas, system.CanvasText], width] as const,
+  );
+}
+
+// Colors (`r,g,b`) of the pixels in page rows `ys`, from `x` to `x + width`.
+async function pixelRows(page: Page, x: number, width: number, ys: number[]) {
+  const top = Math.round(Math.min(...ys));
+  const clip = {
+    x: Math.round(x),
+    y: top,
+    width: Math.round(width),
+    height: Math.round(Math.max(...ys)) - top + 1,
+  };
+  const png = (await page.screenshot({ clip })).toString("base64");
+  return page.evaluate(
+    async ([png, rows]) => {
+      const img = new Image();
+      img.src = `data:image/png;base64,${png}`;
+      await img.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("no 2d context");
+      ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, img.width, img.height);
+      return rows.map((y) =>
+        Array.from({ length: img.width }, (_, x) => {
+          const i = (y * img.width + x) * 4;
+          return `${data[i]},${data[i + 1]},${data[i + 2]}`;
+        }),
+      );
+    },
+    [png, ys.map((y) => Math.round(y) - top)] as const,
+  );
 }
 
 test.describe("forced colors", () => {
@@ -217,6 +311,8 @@ test.describe("forced colors", () => {
       ".bx--card--disabled",
       ".bx--card--disabled .bx--card__label",
       ".bx--card--disabled .bx--card__title-text-row",
+      ".bx--menu-option--disabled .bx--menu-option__label",
+      ".bx--menu-option--disabled .bx--menu-option__info",
     ]) {
       // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
@@ -667,8 +763,8 @@ test.describe("forced colors", () => {
   });
 
   // Forced colors drop the box shadows that divide contained tabs. Each
-  // link keeps its own edge instead: the focus reset's transparent outline
-  // turns into a frame in the link's color.
+  // unselected link keeps a 1px frame in its own color instead, thinner
+  // than the 2px focus ring. The selected tab's fill is its edge.
   test("contained Tabs keep an edge per tab, in both directions", async ({
     page,
   }) => {
@@ -676,9 +772,9 @@ test.describe("forced colors", () => {
       "[data-testid=tabs-container] .bx--tabs__nav-link",
     );
     // Overview, Logs (selected), Metrics, Alerts, Settings (disabled)
-    const colors: SystemColor[] = [
+    const edges: (SystemColor | null)[] = [
       "LinkText",
-      "HighlightText",
+      null,
       "LinkText",
       "LinkText",
       "GrayText",
@@ -698,14 +794,68 @@ test.describe("forced colors", () => {
           };
         }),
       );
-      expect(outlines).toHaveLength(colors.length);
-      colors.forEach((color, i) => {
-        expect.soft(outlines[i], `${dir} tab ${i + 1}`).toEqual({
-          outline: "solid 2px",
-          outlineColor: system[color],
-        });
+      expect(outlines).toHaveLength(edges.length);
+      edges.forEach((color, i) => {
+        expect
+          .soft(outlines[i], `${dir} tab ${i + 1}`)
+          .toMatchObject(
+            color
+              ? { outline: "solid 1px", outlineColor: system[color] }
+              : { outline: expect.stringMatching(/^none /) },
+          );
       });
     }
+  });
+
+  // The focus reset leaves a transparent 2px outline on every resting tab.
+  // Forced colors painted it, so each tab drew the focus ring and the
+  // focused tab looked like the rest.
+  test("Tabs draw a ring only on the focused tab", async ({ page }) => {
+    for (const [tablist, name] of [
+      [".bx--tabs--line [role=tablist]", "Tab"],
+      ["[data-testid=tabs-container] [role=tablist]", "Metrics"],
+    ] as const) {
+      const scope = page.locator(tablist).first();
+      // biome-ignore lint/performance/noAwaitInLoops: one tab has focus at a time
+      await expectSingleRing([scope]);
+      await scope.getByRole("tab", { name, exact: true }).focus();
+      const widths = await scope
+        .locator(".bx--tabs__nav-link")
+        .evaluateAll((els) =>
+          els.map((el) => {
+            const s = getComputedStyle(el);
+            return s.outlineStyle === "none" ? "0px" : s.outlineWidth;
+          }),
+        );
+      expect
+        .soft(
+          widths.filter((width) => width === "2px"),
+          tablist,
+        )
+        .toHaveLength(1);
+    }
+  });
+
+  // A key cap is drawn by its border; keys inside a button take the
+  // button's text color, GrayText when it's disabled.
+  test("Kbd keeps its edge, and shortcut keys follow their button", async ({
+    page,
+  }) => {
+    expect
+      .soft(await style(page, "#fc-kbd .bx--kbd__key"), "#fc-kbd")
+      .toMatchObject({ borderColor: system.CanvasText });
+    const ids = ["#fc-kbd-button", "#fc-kbd-button-disabled"];
+    const pairs = await Promise.all(
+      ids.map((id) =>
+        Promise.all([style(page, id), style(page, `${id} .bx--kbd__key`)]),
+      ),
+    );
+    pairs.forEach(([button, key], i) => {
+      expect.soft(key, ids[i]).toMatchObject({ color: button.color });
+    });
+    expect
+      .soft(await style(page, "#fc-kbd-button-disabled"))
+      .toMatchObject({ color: system.GrayText });
   });
 
   // A button would read as ButtonText; "View all" looks and acts as a link.
@@ -857,6 +1007,77 @@ test.describe("forced colors", () => {
     }
   });
 
+  // The clear button sits over the field's inline end, and forced colors
+  // painted its transparent resting outline as a 2px CanvasText box, and its
+  // start-edge strip and hover fill as Canvas, on top of the field's 4px
+  // Highlight ring.
+  test("a Search focus ring runs past its clear button", async ({ page }) => {
+    for (const group of ["fields", "fluid-fields"]) {
+      const scope = `[data-testid=${group}] [data-testid=search]`;
+      const close = `${scope} .bx--search-close`;
+      const settled = () =>
+        page.$eval(close, (el) =>
+          el.getAnimations().every((a) => a.playState === "finished"),
+        );
+      // biome-ignore lint/performance/noAwaitInLoops: one field has focus at a time
+      await page.fill(`${scope} input`, "us-east");
+      // The clear button fades in.
+      await expect.poll(settled).toBe(true);
+      expect
+        .soft(await ringShare(page, `${scope} input`, system), group)
+        .toBe(1);
+      await page.hover(close);
+      await expect.poll(settled).toBe(true);
+      expect
+        .soft(await ringShare(page, `${scope} input`, system), `${group} hover`)
+        .toBe(1);
+      await page.mouse.move(0, 0);
+      await page.focus(close);
+      expect
+        .soft(await style(page, close), `${group} clear button focus`)
+        .toMatchObject({ outline: "solid 2px" });
+      await page.fill(`${scope} input`, "");
+    }
+  });
+
+  // The menu drew its 1px edge outside its own box, 1px past the field's
+  // sides and over the last row of the field's focus ring, and the field
+  // drew a 1px edge outside its 2px resting box.
+  test("an open list box's menu lines up with its field", async ({ page }) => {
+    const rgb = (color: string) => color.match(/\d+/g)?.join(",");
+    const canvas = rgb(system.Canvas);
+    const text = rgb(system.CanvasText);
+    for (const [field, trigger] of [
+      ["dropdown", ".bx--list-box__field"],
+      ["combobox", "input"],
+      ["multiselect", ".bx--list-box__field"],
+    ]) {
+      const scope = `[data-testid=fields] [data-testid=${field}]`;
+      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+      await page.click(`${scope} ${trigger}`);
+      const option = page.locator(`${scope} .bx--list-box__menu-item`).nth(2);
+      await expect(option).toBeVisible();
+      await page.mouse.move(0, 0);
+      const box = await page.locator(`${scope} ${trigger}`).boundingBox();
+      const row = await option.boundingBox();
+      if (!box || !row) throw new Error(`no ${field} box`);
+      const [fieldRow = [], optionRow = [], ringRow = []] = await pixelRows(
+        page,
+        box.x - 4,
+        box.width / 2,
+        [
+          box.y + box.height / 2,
+          row.y + row.height / 2,
+          box.y + box.height - 1,
+        ],
+      );
+      const edge = (pixels: string[]) => pixels.findIndex((c) => c !== canvas);
+      expect.soft(edge(optionRow), `${field} menu edge`).toBe(edge(fieldRow));
+      expect.soft(ringRow.at(-1), `${field} ring`).not.toBe(text);
+      await page.keyboard.press("Escape");
+    }
+  });
+
   // The highlight was a tint, or a ring the rows' own edges matched.
   test("a list box's highlighted option fills with Highlight", async ({
     page,
@@ -900,6 +1121,40 @@ test.describe("forced colors", () => {
     }
   });
 
+  // Each option's transparent bottom border was forced to CanvasText on
+  // top of the next option's divider, so every divider read twice as thick.
+  test("a list box draws one line between options", async ({ page }) => {
+    for (const [field, trigger] of [
+      ["dropdown", ".bx--list-box__field"],
+      ["combobox", "input"],
+      ["multiselect", ".bx--list-box__field"],
+    ]) {
+      const scope = `[data-testid=fields] [data-testid=${field}]`;
+      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
+      await page.click(`${scope} ${trigger}`);
+      const options = page.locator(`${scope} .bx--list-box__menu-item__option`);
+      await expect(options.nth(2)).toBeVisible();
+      // Lines between each option and the next: its bottom edge plus the
+      // next one's top edge.
+      const lines = await options.evaluateAll((els) => {
+        const drawn = (style: string, width: string) =>
+          style !== "none" && style !== "hidden" && width !== "0px" ? 1 : 0;
+        const edges = els.map((el) => {
+          const s = getComputedStyle(el);
+          return {
+            top: drawn(s.borderTopStyle, s.borderTopWidth),
+            bottom: drawn(s.borderBottomStyle, s.borderBottomWidth),
+          };
+        });
+        return edges
+          .slice(1)
+          .map((edge, i) => (edges[i]?.bottom ?? 0) + edge.top);
+      });
+      expect.soft(lines, field).toEqual([1, 1]);
+      await page.keyboard.press("Escape");
+    }
+  });
+
   test("an OverflowMenu option and a HeaderSearch result fill with Highlight when highlighted", async ({
     page,
   }) => {
@@ -926,6 +1181,55 @@ test.describe("forced colors", () => {
         color: system.HighlightText,
       });
     expect.soft(await flatness(page, result), result).toBeLessThan(0.95);
+  });
+
+  // A transparent resting outline is forced to a visible color, so a list
+  // with a menu per row drew a box on every row.
+  test("an OverflowMenu trigger draws a ring only when focused or open", async ({
+    page,
+  }) => {
+    const edges = (selector: string) =>
+      page.evaluate((selector) => {
+        const el = document.querySelector(selector);
+        if (!el) throw new Error(`no ${selector}`);
+        const s = getComputedStyle(el);
+        return {
+          border: s.borderTopStyle,
+          outline: s.outlineStyle,
+          outlineWidth: s.outlineWidth,
+          outlineColor: s.outlineColor,
+        };
+      }, selector);
+    const ring = (color: SystemColor) => ({
+      outline: "solid",
+      outlineWidth: "2px",
+      outlineColor: system[color],
+    });
+
+    for (const trigger of ["#fc-overflow-1", "#fc-overflow-2"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: reads one trigger at a time
+      expect.soft(await edges(trigger), trigger).toMatchObject({
+        border: "none",
+        outline: "none",
+      });
+    }
+
+    await page.focus("#fc-overflow-1");
+    expect
+      .soft(await edges("#fc-overflow-1"), "focused")
+      .toMatchObject(ring("Highlight"));
+    expect
+      .soft(await edges("#fc-overflow-2"), "beside the focused trigger")
+      .toMatchObject({ outline: "none" });
+
+    await page.click("#fc-overflow-2");
+    await expect(page.locator("#fc-overflow-2")).toHaveClass(
+      /bx--overflow-menu--open/,
+    );
+    expect
+      .soft(await edges("#fc-overflow-2"), "open")
+      .toMatchObject(ring("CanvasText"));
+    await page.keyboard.press("Escape");
   });
 
   // The underline is a background fill, which forced colors repaint.

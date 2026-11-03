@@ -18,6 +18,13 @@ Create a basic tag with text content.
 
 Set `size` to control the tag height. The default is medium.
 
+### Extra small
+
+Use the extra small size (16px) inside 24px (`size="xs"`) fields, where
+TagInput and MultiSelect use it.
+
+<Tag size="xs">IBM Cloud</Tag>
+
 ### Small
 
 Use the small size variant for more compact layouts.
@@ -70,6 +77,12 @@ Disable a filterable tag to prevent interaction.
 
 <Tag filter disabled on:close>carbon-components</Tag>
 
+### Extra small
+
+Combine the filterable variant with the extra small size.
+
+<Tag size="xs" filter on:close>carbon-components</Tag>
+
 ### Small
 
 Combine the filterable variant with the small size.
@@ -96,7 +109,11 @@ carbon-components
 
 ### Max width
 
-Tags cap at 208px, as in Carbon v11. A longer label truncates with an ellipsis, and a tooltip shows the full text on hover and focus. Set `maxWidth` to change the cap, for example `"100%"` to fit the container. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
+Tags cap at 208px, as in Carbon v11. A longer label truncates with an ellipsis. Set `maxWidth` to change the cap, for example `"100%"` to fit the container. Accepts any valid CSS length, including `rem`, `px`, `ch`, and `%`.
+
+A static tag shows the full text in a tooltip on hover and focus. Its tooltip trigger is a tab stop. Inside a widget that is one tab stop, such as a card or a grid cell, set `tabindex="-1"` on the tag. The trigger then leaves the tab order, and the tag keeps the full text as its accessible name.
+
+A filter tag shows the full text in the label's `title`, as in Carbon v11. The close button stays its only tab stop, and its accessible name holds the full text.
 
 <Stack gap={5}>
   <div>
@@ -135,7 +152,7 @@ Tags cap at 208px, as in Carbon v11. A longer label truncates with an ellipsis, 
 
 ### Close button label
 
-Set `title` to customize the close button's tooltip, shown on hover and focus, and the leading words of its accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components".
+Set `title` to customize the close button's tooltip, shown on hover and focus, and the leading words of its accessible name. Defaults to `"Clear filter"`. The tag text is appended to the name, so each button reads as "Clear filter carbon-components". The prop labels the close button only, so the tag element gets no `title` attribute from it.
 
 <Tag filter title="Remove filter" on:close>carbon-components</Tag>
 

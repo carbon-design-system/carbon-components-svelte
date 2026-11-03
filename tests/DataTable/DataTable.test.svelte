@@ -96,6 +96,8 @@
     null;
   export let tableHeaderTranslateWithId: ComponentProps<DataTable>["tableHeaderTranslateWithId"] =
     undefined;
+  export let sortStatusText: ComponentProps<DataTable>["sortStatusText"] =
+    undefined;
   export let onsort:
     ((e: ComponentEvents<DataTableComponent>["sort"]) => void) | undefined =
     undefined;
@@ -153,6 +155,7 @@
   {filterMode}
   bind:scrollContainerRef
   {tableHeaderTranslateWithId}
+  {sortStatusText}
   on:click={(e) => onevent?.("click", e.detail)}
   on:click:header={(e) => onevent?.("click:header", e.detail)}
   on:click:row={(e) => onevent?.("click:row", e.detail)}

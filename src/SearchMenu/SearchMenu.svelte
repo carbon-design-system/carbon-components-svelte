@@ -104,6 +104,16 @@
   export let skeletonCount = 4;
 
   /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the skeleton menu or loading row, and the `searchLoading` spinner. Once
+   * shown, it stays for at least 500 ms, so fast work shows nothing and slow
+   * work never flashes. The menu sets `aria-busy` and holds back the
+   * no-results state as soon as `loading` is `true`.
+   * Set to `0` to show it at once.
+   */
+  export let loadingDelay = 0;
+
+  /**
    * Set to `true` to show a spinner in the search input while results are
    * loading. Independent of `loading`, which controls the skeleton menu —
    * combine both to show the spinner while the menu is also loading.
@@ -176,6 +186,7 @@
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import { toCssLength } from "../utils/css-length.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
@@ -209,8 +220,20 @@
   }
 
   onMount(() => {
-    return () => dispatchSearch?.cancel();
+    return () => {
+      dispatchSearch?.cancel();
+      loadingIndicator.cancel();
+    };
   });
+
+  // `loading` takes effect at once for `aria-busy` and the no-results state.
+  // Only the indicator waits for `loadingDelay`; with no delay it follows
+  // `loading` exactly.
+  let showLoading = loading;
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
 
   const query = writable("");
   const sharedShouldFilter = writable(shouldFilter);
@@ -246,7 +269,7 @@
     $$slots.noResults;
   $: open = !disabled && !readonly && focused && !dismissed;
   $: if (!open) scrollEndTracker.reset();
-  $: loadingMore = loading && itemCount > 0;
+  $: loadingMore = showLoading && itemCount > 0;
   $: menuVisible = open && (loading || itemCount > 0 || showNoResults);
   $: menuDomId = `menu-${id}`;
   $: ({ readonlyId } = buildFieldIds(id));
@@ -490,6 +513,7 @@
       {searchClass}
       {selectTextOnFocus}
       loading={searchLoading}
+      {loadingDelay}
       bind:value
       bind:ref
       role="combobox"
@@ -536,7 +560,7 @@
         on:mousedown={handleMenuPointerDown}
         on:scroll={handleMenuScroll}
       >
-        {#if loading && itemCount === 0}
+        {#if showLoading && itemCount === 0}
           <slot name="loading">
             {#each skeletonWidths as width, i (i)}
               <div
@@ -579,7 +603,7 @@
         on:mousedown={handleMenuPointerDown}
         on:scroll={handleMenuScroll}
       >
-        {#if loading && itemCount === 0}
+        {#if showLoading && itemCount === 0}
           <slot name="loading">
             {#each skeletonWidths as width, i (i)}
               <div

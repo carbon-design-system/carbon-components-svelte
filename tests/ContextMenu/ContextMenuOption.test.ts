@@ -6,6 +6,7 @@ import ContextMenu from "./ContextMenu.test.svelte";
 import ContextMenuGroup from "./ContextMenuGroup.test.svelte";
 import ContextMenuOptionKeepOpenFixture from "./ContextMenuOption.keepOpen.test.svelte";
 import ContextMenuOptionRole from "./ContextMenuOption.role.test.svelte";
+import ContextMenuOptionShortcutSlot from "./ContextMenuOption.shortcutSlot.test.svelte";
 import ContextMenuOptionSelectableIconBind from "./ContextMenuOptionSelectableIconBind.test.svelte";
 import ContextMenuSelection from "./ContextMenuSelection.test.svelte";
 import { getSelectedIds } from "./helpers";
@@ -268,5 +269,28 @@ describe("ContextMenuOption hover transfer to a flush submenu", () => {
     await wait(HOVER_DELAY);
 
     expect(trigger).toHaveAttribute("aria-expanded", "false");
+  });
+});
+
+describe("ContextMenuOption shortcut slots", () => {
+  it.each([
+    ["New", "New shortcut"],
+    ["Old", "Old shortcut"],
+  ])("renders the %s option's shortcut slot", (label, text) => {
+    render(ContextMenuOptionShortcutSlot);
+
+    const option = screen.getByRole("menuitem", { name: new RegExp(label) });
+    expect(option).toHaveTextContent(text);
+    expect(option).not.toHaveTextContent("Ignored");
+    expect(screen.getByText(text).parentElement).toHaveClass(
+      "bx--menu-option__info",
+    );
+  });
+
+  it("prefers the shortcutChildren slot over the shortcutText slot", () => {
+    render(ContextMenuOptionShortcutSlot);
+
+    expect(screen.getByText("Both new")).toBeInTheDocument();
+    expect(screen.queryByText("Both old")).toBeNull();
   });
 });

@@ -132,13 +132,13 @@ Patterns:
 - Forward `$$restProps` to the most important element. When a component has a clear primary element with the most customizable props, such as the `<input>` or `<button>`, spread `{...$$restProps}` onto it so consumers can set attributes like `name`, `placeholder`, or `data-*` on the element they care about. See the `<input>` in [`TextInput.svelte`](src/TextInput/TextInput.svelte). Only when there is no such element does it go to the wrapper (top-level element), as in [`Tile.svelte`](src/Tile/Tile.svelte).
 - Name slots in camelCase. No dashes: a hyphenated slot name will not map to a Svelte 5 Snippet. Use `labelChildren`, not `label-children`.
 - Mirror the shadowed prop in the slot name. When a slot overrides the content a prop renders, name it after that prop. Svelte forbids a slot from matching an exported prop name exactly, so suffix it with `Children`: the `labelChildren` slot shadows the `labelText` prop. See `<slot name="labelChildren">` in [`TextInput.svelte`](src/TextInput/TextInput.svelte).
-- Make every string a user sees or hears replaceable through a prop. Give a function prop a named `function` default, and reuse the name and signature a sibling already has: PaginationNav takes the same `pageText` and `pageRangeText` as [`Pagination.svelte`](src/Pagination/Pagination.svelte).
+- Make every string a user sees or hears replaceable through a prop. Give a function prop a named `function` default, and reuse the name and signature a sibling already has: PaginationNav takes the same `pageText` and `pageRangeText` as [`Pagination.svelte`](src/Pagination/Pagination.svelte). Give a string a default only when it is right in every use, such as "Close". Leave a name that depends on the content unset, so axe reports it, rather than guess one such as "Actions".
 - Set dynamic styles with the `style:` directive, not inline `style` strings or template literals: `style:left="{x}px"`. See [`ContextMenu.svelte`](src/ContextMenu/ContextMenu.svelte) and the thumb position in [`Slider.svelte`](src/Slider/Slider.svelte).
 - Swap arrow keys that act along the inline axis under `dir="rtl"`. Left raises a `Slider` and expands a `TreeView` row, as in React Aria. Resolve the direction with `resolveLayoutDirection` from [`layout-direction.js`](src/utils/layout-direction.js) when the key arrives: the element's nearest `dir` attribute first, as in the CSS, so a plain `dir` inside a `LayoutDirection` wins, then the `LayoutDirection`, then the computed direction. Nothing reports a `dir` change on an ancestor, so a value read at mount goes stale. `inlineKey` returns the key as an LTR page reads it, and `rovingFocus` and `createMenubar` take an `rtl()` callback. See `treeKey` in [`TreeView.svelte`](src/TreeView/TreeView.svelte).
 - Keep numbers and counts in their own order. Without that, an RTL page moves the sign of "+12%" to the far side ("12%+"). Wrap a formatted number in `<bdi>` with the direction of the locale that formatted it, as BigNumber does with `localeDirection` from [`locale-direction.js`](src/utils/locale-direction.js). Take the direction from the locale, not the text: `Intl` output can start with a left-to-right mark, and Arabic digits have no strong direction. Give a pure count such as "+7" or "99+" `dir="ltr"`, as [`TagSetOverflow.svelte`](src/TagSet/TagSetOverflow.svelte) and [`UserAvatarGroupOverflow.svelte`](src/UserAvatarGroup/UserAvatarGroupOverflow.svelte) do. Do not use a bare `<bdi>` for text with no strong characters. Browser engines resolve its direction differently.
 - Place floating content by inline side, read when it opens or the drag starts. A submenu opens toward the inline end, `start` and `end` alignment props name the trigger's inline sides, and a resize drag flips its sign. Map them to physical sides before they reach a `left` or a physical class. Reuse the placement helpers instead of new math, so every overlay fits by the same rules. They already handle a box with no layout and an anchor scrolled out of the window:
   - [`menu-placement.js`](src/utils/menu-placement.js): `fitMenuAxis` places a menu along one axis, `menuSide` picks an in-place menu's block side by the rule a portalled menu follows, and `fitIntrinsicAlign` picks a menu's start, end or center alignment.
-  - [`fit-align.js`](src/utils/fit-align.js): `horizontalBounds`, `shouldFlipAlign` and `fitPopoverAlign` fit a popover to the box around it, `windowShift` slides it back into the window (`slideIntoWindow` keeps doing so for a portalled tooltip's body), and `clippedBy` finds the box that cuts it off.
+  - [`fit-align.js`](src/utils/fit-align.js): `horizontalBounds`, `shouldFlipAlign` and `fitPopoverAlign` fit a popover to the box around it, `sidePlacement` names the placement a portal put it in, `windowShift` slides it back into the window (`slideIntoWindow` keeps doing so for a portalled tooltip's body), and `clippedBy` finds the box that cuts it off.
   - [`inline-align.js`](src/utils/inline-align.js): `physicalAlign` and `popoverPlacement` turn `start` and `end` into physical sides.
 - Move an overlay that a box would cut off to a portal by default. Leave `portalMenu` or `portalTooltip` unset for that; `false` keeps the overlay in place, and `true` always portals it. Dropdown, OverflowMenu, TooltipIcon and Toggletip work this way. Two things follow:
   - Consumer CSS that reaches the overlay through a descendant selector stops matching in the portal. `.sidebar .bx--list-box__menu` no longer finds a menu that moved out of `.sidebar`.
@@ -182,7 +182,7 @@ Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/ut
 | ComboBox, Dropdown, MultiSelect, ListBox, their skeletons | `xs` 24, `sm` 32, unset 40, `lg` 48, `xl` 48 | `md` → unset | none |
 | Search, SearchSkeleton, SearchMenu, SearchMenuSkeleton | `xs` 24, `sm` 32, `lg` 40, `xl` 48 | `md` → `lg` | `lg` (v11 48) |
 | Accordion, ContentSwitcher, their skeletons, OverflowMenu | `xs` 24 (OverflowMenu only), `sm` 32, unset 40, `xl` 48 | `md` → unset, `lg` → `xl` | none |
-| Tag, SelectableTag, OperationalTag, TagSkeleton, TagSet | `sm`, `default`, `lg` | `md` → `default` | none |
+| Tag, SelectableTag, OperationalTag, TagSkeleton, TagSet | `xs`, `sm`, `default`, `lg` | `md` → `default` | none |
 | Toggle, ToggleSkeleton | `sm`, `default` | `md` → `default` | none |
 | Modal, ComposedModal, ConfirmModal | `xs`, `sm`, unset, `lg` | `md` → unset | none |
 | TreeView, TreeViewSkeleton | `compact` 24, `default` 32 | `xs` → `compact`, `sm` → `default` | none |
@@ -289,6 +289,7 @@ sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some t
 | One `@event` with its `@type`/`@property` tags per block, or `@event {{ trigger: string }} close` | Several `@event` + `@type {object}` groups in one block |
 | A typedef the module script uses, declared in the module script | Declared in the instance script |
 | `@template {import("../utils/icon-component.js").IconComponent} [Icon=any]` for a component prop such as `icon` | An unconstrained `@template [Icon=any]` |
+| A `@slot` prop type that covers every value the slot gets on every path. A slot rendered per visible header also gets empty headers | A type for the common path only |
 
 sveld writes a `CarbonXContext` type for each `setContext` value. Where it can only infer `any`, or a type with `any` inside it, `bun build:docs` fails with `sveld/context-any-type`:
 
@@ -302,6 +303,8 @@ sveld writes a `CarbonXContext` type for each `setContext` value. Where it can o
 ### Creating a component
 
 [File an issue](https://github.com/carbon-design-system/carbon-components-svelte/issues) first.
+
+For a complex component (a grid, a tree, an editor, a board, a picker), read [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) too. It covers API design, design and performance checks, and pull requests.
 
 If you add a new component, export it from `src/index.js`:
 
@@ -636,13 +639,13 @@ Selectors:
 - When a rule applies only if _none_ of several states hold, have the component emit one marker class (`--neutral`) instead of chaining `:not()`.
 - Do not pad specificity (repeated classes, `tag.class`, order-only `:not()`). If the rule you need to beat is in the vendored tree, edit it there. Repetition is tolerated only to preserve an existing cascade during a refactor, with a comment saying what it matches.
 - Hover rules go in **one** `@media (any-hover: hover)` block per partial, at the end of the mixin. Lightning CSS only merges adjacent blocks, and `tests/css/media-query-grouping.test.ts` budgets the total. Keep any equal-specificity `:focus` rule after the block, or a hover `outline: none` will erase the ring. Two shapes stay outside the block: a suppressor that lists `X:hover` beside its own `X` to restate the resting style, and any hover rule that competes with a base hover rule the vendored tree leaves unguarded (most of them). Guarding only your half lets the base hover through on touch; guard both or neither.
-- Use logical inline properties (`padding-inline-end`, `margin-inline-start`, `border-inline-start`) in new code. Override a side with the spelling the base rule uses: `margin-left: 0` does not undo `margin-inline-start` in RTL. Some older rules are still physical and do not flip yet: the notification color bar, the Modal close button, Accordion titles, DataTable cell alignment, sortable header padding and expanded rows, StructuredList header cells, list markers, the ProgressBar fill, flexbox Grid offsets and Bleed.
-- Put `left`/`right` through `@include ccs-inset-inline($start, $end)`, which adds a `[dir="rtl"]` twin. A twin matches any RTL ancestor, so it also matches inside a `dir="ltr"` region of an RTL page, where logical properties have turned back. Write each value in a twin as `ccs-dir($ltr, $rtl)`, which reads the nearest `dir` (`ccs-inset-inline` does this), or the region keeps its icons on the RTL side over LTR padding. `tests/css/rtl-twins.test.ts` checks every twin. A box shadow's x offset has no logical form: multiply it by `var(--ccs-inline-sign, 1)`, which is `-1` under `dir="rtl"`, as the ButtonSet dividers do. A twin there would outweigh every rule it ties. Flip every rule that sets the same side of an element, in every partial: a physical rule left behind lands on the wrong side in RTL. Check with `e2e/rtl.test.ts`.
+- Use logical inline properties (`padding-inline-end`, `margin-inline-start`, `border-inline-start`) in new code. Override a side with the spelling the base rule uses: `margin-left: 0` does not undo `margin-inline-start` in RTL. Some older rules are still physical and do not flip yet: the notification color bar, Accordion titles, DataTable cell alignment, sortable header padding and expanded rows, StructuredList header cells, list markers, the ProgressBar fill, flexbox Grid offsets and Bleed.
+- Put `left`/`right` through `@include ccs-inset-inline($start, $end)`, which writes `inset-inline-start` and `inset-inline-end`. A side you leave out is `auto`, so a physical offset Carbon's base rule sets on that side stops applying. A value with no logical form gets a `[dir="rtl"]` twin instead. A twin matches any RTL ancestor, so it also matches inside a `dir="ltr"` region of an RTL page, where logical properties have turned back. Write each value in a twin as `ccs-dir($ltr, $rtl)`, which reads the nearest `dir`, or the region keeps its icons on the RTL side over LTR padding. Use `ccs-dir()` only in a twin. In a base rule on a page with no `dir`, both of its fallbacks apply at once, so two transforms cancel. Most pages set no `dir`, and a base `ccs-dir()` would have held every checked Toggle handle at the start ([#5190](https://github.com/carbon-design-system/carbon-components-svelte/pull/5190)). `tests/css/rtl-twins.test.ts` checks every twin, and that `ccs-dir()` appears only inside one. A box shadow's x offset and a `translateX` offset have no logical form: multiply them by `var(--ccs-inline-sign, 1)`, which is `-1` under `dir="rtl"`, as the ButtonSet dividers do. A twin there would outweigh every rule it ties. Flip every rule that sets the same side of an element, in every partial: a physical rule left behind lands on the wrong side in RTL. Check with `e2e/rtl.test.ts`, on a page with no `dir` as well as under `ltr` and `rtl`.
 - `start` and `end` alignments of tooltips, Toggletip, OperationalTag, and Popover name inline sides, as in floating-ui, so they swap in RTL. `left`, `right`, and Popover's older names (`top-left`) stay physical. Where JavaScript places the content or picks its placement class, resolve the physical side when it opens with `physicalAlign` or `popoverPlacement` from [`inline-align.js`](src/utils/inline-align.js), and keep the CSS physical. Where only CSS places it, as for the icon tooltips, add a `[dir="rtl"]` twin. Check with the tooltip rows in `e2e/rtl.test.ts`.
 - Code reads left to right in any language. CodeSnippet's code area (`bx--snippet-container`, inline `code`) sets `direction: ltr`, and only the buttons around it flip. Logical properties inside that area resolve against LTR, so a side that follows a button there is physical, with a `[dir="rtl"]` twin (see the multi-line `pre` padding in the code snippet styles).
 - Mirror an icon in RTL when it points forward or back by meaning: previous and next, back, undo, a submenu caret, a link arrow. Add `@include ccs-mirror-rtl` to its rule, and pass the rule's own transform (`ccs-mirror-rtl(rotate(90deg))`) so the two compose. The mixin reads `--ccs-mirror-rtl`, which inherits from the nearest `dir`, so a `dir="ltr"` region turns it off. Leave alone icons with no direction or a fixed one: check marks, media controls, clocks, search, `Launch`, and chevrons that point up or down. Apps mirror their own icons with the `bx--icon--mirror-rtl` class.
-- Avoid syntax Lightning CSS downlevels by duplicating the rule: `inset-inline-start`/`-end`, `border-start-start-radius` and its siblings (each expands to `:lang()` RTL twins, about 900 bytes per declaration), a selector list inside `:not()` (write `:not(.a):not(.b)`, or better a marker class), and `:is()`/`:where()`. `tests/css/downlevel.test.ts` scans the vendored tree too.
-- Do not use `:has()`. It exceeds the Svelte 5 browserslist baseline (Firefox 83/Safari 14) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline, since one unknown selector invalidates the whole rule. Newer _properties_ that degrade gracefully (`text-wrap: pretty`) are fine.
+- Avoid syntax Lightning CSS downlevels by duplicating the rule: `border-start-start-radius` and its siblings (each expands to `:lang()` RTL twins, about 900 bytes per declaration), a selector list inside `:not()` (write `:not(.a):not(.b)`, or better a marker class), and `:is()`/`:where()`. `tests/css/downlevel.test.ts` scans the vendored tree too.
+- Do not use `:has()`. It exceeds the browser floor (Firefox 83/Safari 14.1) the CSS targets, and Lightning CSS cannot prefix or polyfill it. Mark parents explicitly instead (for example a `hasLeftIcon` prop emitting a marker class). Same rule for any selector newer than that baseline, since one unknown selector invalidates the whole rule. Newer _properties_ that degrade gracefully (`text-wrap: pretty`) are fine.
   - One exception: an enhancement no markup can carry may use `:has()` inside `@supports selector(:has(*))`, if the layout without it still works. The server writes a parent's classes before its children render, so a parent can't mark what a child holds until the browser runs. Sized container tabs use this to be tall from the first paint when a later tab has a secondary label. Mark everything else explicitly, even inside the block. `conventions.test.ts` allows `:has()` only there.
 
 Naming:
@@ -765,7 +768,7 @@ The compiled `css/*.css` are **not** committed (they are gitignored) — but the
 
 This compiles Sass (compressed) and writes `css/*.css` plus `css/css.d.ts`. Lightning CSS then adds vendor prefixes for the supported browsers and minifies, locally as in CI, so local pages and e2e runs get the CSS that ships. Set `BUILD_CSS_MINIFY=0` for readable output. Commit only the `.scss` source — never the generated `*.css`. The small `css/css.d.ts` (module declarations) **is** committed, so type-checks resolve the CSS imports without a build; commit it too if adding or removing a theme entry changes it.
 
-The prebundled CSS targets the [Svelte 5 browser support](https://svelte.dev/docs/svelte/browser-support) baseline (Firefox 83/Safari 14), not older browsers. Matching that baseline lets Lightning CSS drop legacy fallbacks. Author SCSS to that baseline; see the `:has()` note in [Conventions](#conventions).
+The prebundled CSS targets the [Svelte 5 browser support](https://svelte.dev/docs/svelte/browser-support) baseline (Firefox 83, Chrome 87), with Safari 14.1 in place of Svelte's 14.0: below 14.1, Lightning CSS expands logical insets into `:lang()` rules. Matching that floor lets Lightning CSS drop legacy fallbacks. Author SCSS to that baseline; see the `:has()` note in [Conventions](#conventions).
 
 ### Checks
 
@@ -918,6 +921,7 @@ Check [`tests/utils/`](tests/utils/) before writing a helper:
 | [`flushMacrotask`](tests/utils/flush-macrotask.ts) | Wait one macrotask for a timer or deferred listener; replaces `await new Promise((resolve) => setTimeout(resolve))` |
 | [`netListenerCalls`](tests/utils/net-listener-calls.ts) | Outstanding `window` listener count from an add/remove spy pair |
 | [`expectInlineStyle`](tests/utils/inline-style.ts) | Authored inline styles with relative units, which `toHaveStyle` resolves to `px` |
+| [`expectNoContent`](tests/utils/no-content.ts) | No child elements and no visible text. Use it instead of `toBeEmptyDOMElement`, which fails on the whitespace Svelte 3 and 4 keep |
 | [`openTooltips`](tests/utils/open-tooltips.ts) | Every portalled tooltip in the document |
 | [`setMenuMetrics`](tests/utils/set-menu-metrics.ts) | Stub the scroll metrics jsdom leaves at zero |
 | [`treeItemById`](tests/utils/tree-item-by-id.ts) | A tree node by `id`, narrowed |
@@ -933,6 +937,7 @@ Component folders keep their own `helpers.ts` for queries such as `getBodyRows` 
 - Use `data-testid` in unit tests only when roles are insufficient. E2E fixtures use `data-testid` routinely.
 - Use the shared `user` helper from [`tests/utils/user.ts`](tests/utils/user.ts) for clicks and keyboard input.
 - Type fixture props with `ComponentProps<typeof Component>` from `svelte` where helpful.
+- Change props with `await rerender({ prop })`. Without the `await`, Svelte 3 and 4 have not updated the DOM when the next assertion runs, so the test can pass without checking anything.
 
 #### What to test
 
@@ -952,8 +957,9 @@ Skip or avoid:
 - Large fixture setups when a focused unit test on a util suffices
 - A case another test already covers. Search the component's folder before adding one, since behaviors such as close events often have a dedicated file (`OverflowMenuClose.test.ts`) beside the main one. Extend the existing test or add a row to its table instead.
 - A compiled-CSS test for a CSS-only change. See [What belongs in tests/css](#what-belongs-in-testscss).
+- `toBeEmptyDOMElement` to test that an element is empty. Svelte 3 and 4 keep whitespace text nodes in an element that looks empty. Use `expectNoContent`, or `el.matches(":empty")` when the CSS `:empty` selector is what the test is about.
 
-Add tests proportional to the change. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
+Add tests proportional to the change. A fix gets one test that fails without it, or none if nothing meaningful can be asserted. Leave out negative twins of a positive test and rows that run the same code path as another row. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
 
 A test that asserts absence (`not.toMatch`, an upper bound on a count, `toEqual([])` on an offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of what it inspected. A test that reads source text matches whole declarations up to `;`, not single lines, since the formatter wraps long values. Break the source on purpose once and confirm the test fails.
 
@@ -1186,6 +1192,55 @@ Each test pays for its setup: a remount on the host, or a page load (about 300 t
 | Keep each batched test under about 5 seconds | Playwright spreads tests, not cases, across workers; one long test runs on one worker. |
 | Assert an expected failure with a single read and `not`, not `test.fail()` around a retrying matcher | A retrying matcher that never matches waits out its 5 second timeout every run. |
 
+#### Layout checks
+
+[`e2e/helpers/layout.ts`](e2e/helpers/layout.ts) turns the layout rules of the component guidelines into assertions. Each helper takes a `Page` or a `Locator`, measures in one `evaluate` after the fonts load, and throws an error that names each offending element with the numbers it measured. Edges may differ by 0.5 CSS px. Each helper also throws when it finds nothing to check and returns the count it checked, so it carries its own positive assertion.
+
+| Helper | Rule it checks |
+| :--- | :--- |
+| `expectAligned(locators, { edge, ink })` | Elements share one edge: `inline-start`, `inline-end`, `top`, `bottom`, `center-x`, `center-y` or `baseline`. Inline edges follow each element's direction. `baseline` is the first line's text baseline, or the value's baseline in an input or select. Inline edges measure the ink (the text's Range rects and the icons' svg boxes) of an element with its own text, such as a heading, a label or a button, and the box of any other. `ink: true` measures the ink on every edge; `ink: false` measures the box. |
+| `expectOnePitch(rows, { skip })` | Repeated rows have one top-to-top pitch, and it is a multiple of 4 px. Frozen rows (`sticky` or `fixed`), rows under `aria-hidden`, rows with no text, icon or control (a spacer, a selection overlay) and rows that match `skip` are left out. |
+| `expectTextFits(scope)` | No text overflows its box or a clipping ancestor. Text cut by an ellipsis keeps its full value in a `title`, an `aria-label` or a tooltip, and does not stop inside a number, date or time. Cut-off text with no full value at rest is hovered, so a `title` set on hover (`titleWhenTruncated`), a tooltip in a portal (`AnchoredTooltip`) and a box that grows to fit on hover (the SideNav rail) count. The pointer ends in the bottom-right corner, and the tooltip it opened closes before the next hover. Inline text raised off the baseline (a footnote `sup`) may leave its paragraph's box. Text hidden on purpose is skipped: under `clip`, `clip-path` or `.bx--visually-hidden`, or in a box with no area in view. |
+| `expectNoNestedBorders(scope)` | No box with an edge sits inside another one on the same background. An edge is a border on all four sides, an outline, or a box-shadow ring with no offset or blur. Form controls' borders and the focused element's outline are skipped. Run it under forced colors too. |
+| `expectNoPageOverflow(page, { vertical })` | The page does not scroll sideways. `vertical: true` also checks that it does not scroll down. |
+| `expectSingleRing(scope, { skip })` | Under forced colors, each element the scope matches holds at most one focus or selection ring. Call it with at most one item focused or selected. A ring is an outline wider than the resting edge (1 px, or 2 px on an unfocused field), or an outline or border in `Highlight`. An element and its pseudo-elements count once. Hidden elements, such as a closed tooltip, are skipped, and so are elements inside `skip`, for child components the scope does not own. For one selection shown in two panes, pass a locator that matches both panes. |
+
+Each helper reads the page once, except that `expectTextFits` hovers cut-off text it can't settle at rest. After an action that lays out in the next frame, wrap the call in `expect(...).toPass()`. [`layout-checks.test.ts`](e2e/layout-checks.test.ts) shows a passing and a failing case for each helper.
+
+`findLayoutProblems(scope, check)` runs `fits`, `borders`, `overflow` or `ring` and returns the findings instead of throwing.
+
+#### Layout sweep
+
+[`layout-sweep.test.ts`](e2e/layout-sweep.test.ts) runs the page-wide layout checks on every page in `e2e/fixtures/`. It skips `host.html`, `index.html` and `layout-checks.html`, which holds the helpers' failing cases. It mounts each fixture again for each variant:
+
+| Variant | Checks |
+| :--- | :--- |
+| `1280`, `672`, `320` (px wide, 720 px high) | `overflow` (`expectNoPageOverflow`), `borders` (`expectNoNestedBorders`), `fits` (`expectTextFits`) |
+| `1280-forced` (forced colors) | `borders`, and `ring` (`expectSingleRing`) once for each `listbox`, `grid`, `treegrid`, `tree`, `tablist`, `menu`, `menubar` and `radiogroup` |
+
+Before it measures, it waits for the fonts, finishes running transitions and stops looping animations at their start. `expectAligned` and `expectOnePitch` need selectors, so they stay in each component's tests.
+
+[`layout-sweep.baseline.json`](e2e/layout-sweep.baseline.json) lists the findings on `master`. The sweep compares findings by a key: fixture, variant, check, kind and a short CSS path. The key holds no pixel values, and the path skips ids that `uniqueId` generates. The `message` holds the numbers; the sweep shows it and does not compare it. Each fixture is one test, and it fails in two cases:
+
+- **A new finding.** The failure lists its key and message, for example `tag-v11.html | 320 | fits | no full text | button[data-testid="long-operational"] > span.bx--tag__label`. Fix it. If the design is intended, update the baseline and give the reason in the PR.
+- **A baseline entry that no longer occurs.** Update the baseline to drop it. While a fixed finding stays in the baseline, it could come back without a failure.
+
+Update the baseline for the fixtures that run, with one worker:
+
+```sh
+# Every fixture, about 1.5 minutes
+LAYOUT_SWEEP_UPDATE=1 bunx playwright test e2e/layout-sweep.test.ts --project=chromium --workers=1
+
+# One fixture
+LAYOUT_SWEEP_UPDATE=1 bunx playwright test e2e/layout-sweep.test.ts --project=chromium --workers=1 --grep "sweep tabs.html$"
+```
+
+Read the diff before you commit it. Dropping entries is always fine. Add an entry only for an intended design, and give the reason in the PR. A new fixture can add entries the same way.
+
+CI runs Chromium on Linux, and the baseline must match it. A few lines of text measure a few pixels apart on Linux and macOS. A finding that comes and goes between runs of the same code, or occurs on one platform only, goes in `UNSTABLE` in the test, with its reason. The sweep leaves those out of the comparison and the baseline. Check a change to the sweep with `--repeat-each=3 --retries=0`, and read the first CI run.
+
+CI runs the sweep when a change reaches a fixture page, which covers `src/`, `css/` and `e2e/fixtures/`. It takes about 1.5 minutes on one worker.
+
 A few gotchas:
 
 For components that hide content with CSS (for example ComposedModal), `toBeVisible()` can lie because the element stays in the DOM. Prefer `toHaveClass(/is-visible/)` on the container, or assert on `aria-hidden` / `inert`.
@@ -1324,7 +1379,8 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 Subject line:
 
 - Keep it concise: one line, imperative mood
-- Common types: `fix`, `feat`, `docs`, `chore`, `test`, `refactor`
+- Common types: `fix`, `feat`, `docs`, `chore`, `test`, `refactor`. A commit
+  that adds a prop, slot, or public field is `feat`, even when it fixes a bug
 - Scope is the component or area; multi-word names are lowercase with dashes: `combo-box`, `code-snippet`, `data-table`, `ui-shell`, `accordion-item`
 - Omit scope when the change spans many areas (`docs: …`, `chore: …`)
 - Append `!` after the scope for breaking changes: `fix(accordion-item)!: …`.

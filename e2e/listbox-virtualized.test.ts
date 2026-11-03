@@ -61,10 +61,11 @@ for (const component of COMPONENTS) {
         if (!box) throw new Error("menu has no box");
 
         await page.mouse.move(box.x + 40, box.y + box.height - 2);
+        await page.waitForTimeout(150);
+
         await expect(
           page.locator(".bx--list-box__menu-item--highlighted"),
-        ).toHaveText("Item 7");
-        await page.waitForTimeout(150);
+        ).toHaveCount(0);
 
         expect(await readMenuScrollTop(page)).toBe(0);
       });

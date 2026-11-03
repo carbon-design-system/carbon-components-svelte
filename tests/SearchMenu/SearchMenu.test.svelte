@@ -10,6 +10,7 @@
   export let readonly = false;
   export let hideLabel = false;
   export let loading = false;
+  export let loadingDelay = 0;
   export let searchLoading = false;
   export let size: ComponentProps<SearchMenu>["size"] = undefined;
   export let menuSize: ComponentProps<SearchMenu>["menuSize"] = undefined;
@@ -40,6 +41,7 @@
   {readonly}
   {hideLabel}
   {loading}
+  {loadingDelay}
   {searchLoading}
   {size}
   {menuSize}

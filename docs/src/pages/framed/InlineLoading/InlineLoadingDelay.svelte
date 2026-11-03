@@ -17,19 +17,25 @@
 
 <Stack gap={5}>
   <Stack orientation="horizontal" gap={5} align="center">
-    <Button on:click={() => simulateSave(100)}>Fast save (100 ms)</Button>
-    <Button on:click={() => simulateSave(2000)}>Slow save (2 s)</Button>
+    <Button on:click={() => simulateSave(150)}>Fast save (150 ms)</Button>
+    <Button kind="secondary" on:click={() => simulateSave(400)}>
+      Save (400 ms)
+    </Button>
+    <Button kind="tertiary" on:click={() => simulateSave(2000)}>
+      Slow save (2 s)
+    </Button>
     {#if status}
       <InlineLoading
         {status}
         description={descriptionMap[status]}
-        delay={250}
+        delay={300}
       />
     {/if}
   </Stack>
 
   <Text type="helper-text-01">
-    The fast save finishes before the 250 ms delay elapses, so it never shows
-    the pending state.
+    The fast save finishes before the 300 ms delay, so it goes straight to
+    "Saved". The 400 ms save shows the spinner at 300 ms and keeps it until 800
+    ms, then shows "Saved".
   </Text>
 </Stack>

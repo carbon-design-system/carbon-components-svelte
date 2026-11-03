@@ -29,6 +29,7 @@
     HeaderSearch,
     HeaderUtilities,
     InlineEdit,
+    Kbd,
     Menu,
     MenuItem,
     Meter,
@@ -242,6 +243,7 @@
   <button bind:this={menuAnchor} type="button">Menu anchor</button>
   <Menu anchor={menuAnchor} open labelText="Menu">
     <MenuItem labelText="Item" />
+    <MenuItem labelText="Disabled item" shortcutText="⌘S" disabled />
   </Menu>
 
   <ShapeIndicator kind="medium" label="Medium" />
@@ -516,4 +518,25 @@
       <Tab label="Settings" disabled />
     </Tabs>
   </div>
+
+  <div>
+    <Kbd id="fc-kbd" shortcut="ctrl+k" apple={false} />
+    <Button id="fc-kbd-button" shortcut="ctrl+alt+s">Save</Button>
+    <Button id="fc-kbd-button-disabled" shortcut="ctrl+alt+d" disabled>
+      Delete
+    </Button>
+  </div>
+
+  <ul data-testid="overflow-menus" style="list-style: none; padding: 0;">
+    {#each [1, 2, 3] as row}
+      <li>
+        <OverflowMenu
+          id="fc-overflow-{row}"
+          iconDescription="Row {row} actions"
+        >
+          <OverflowMenuItem text="Edit" />
+        </OverflowMenu>
+      </li>
+    {/each}
+  </ul>
 </main>

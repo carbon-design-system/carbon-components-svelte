@@ -215,6 +215,23 @@ describe("OverflowMenu trigger tooltip", () => {
       "bottom",
     );
   });
+
+  it("places the tooltip by tooltipAlign over the older props", async () => {
+    render(OverflowMenuTrigger, {
+      props: { tooltipPosition: "top", tooltipAlign: "bottom-end" },
+    });
+
+    screen.getByTestId("trigger").focus();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(document.querySelector(".bx--tooltip-portal")).toHaveAttribute(
+      "data-direction",
+      "bottom",
+    );
+    expect(document.querySelector("[data-floating-portal]")).toHaveAttribute(
+      "data-floating-intrinsic-align",
+      "end",
+    );
+  });
 });
 
 describeTooltipHover("OverflowMenu trigger", () => {

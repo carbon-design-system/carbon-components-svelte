@@ -36,6 +36,12 @@ $ccs-non-default-themes: (
   g100: $carbon--theme--g100,
 );
 
+// The classic UI Shell is a Gray 100 header over a White side nav, on any
+// page theme. Its two parts are zones like the ones above, so they share
+// the theme blocks too.
+$ccs-classic-header: ".#{$prefix}--header--ui-shell-classic";
+$ccs-classic-side-nav: ".#{$prefix}--side-nav--ui-shell-classic";
+
 // Default: white
 :root,
 .#{$prefix}--white,
@@ -43,7 +49,9 @@ $ccs-non-default-themes: (
 .#{$prefix}--g80,
 .#{$prefix}--g90,
 .#{$prefix}--g100,
-.#{$prefix}--system {
+.#{$prefix}--system,
+#{$ccs-classic-header},
+#{$ccs-classic-side-nav} {
   @include ccs-theme-tokens($carbon--theme--white);
 }
 
@@ -52,7 +60,7 @@ $ccs-non-default-themes: (
 @each $name, $theme in $ccs-non-default-themes {
   // <html theme="…">
   :root[theme="#{$name}"],
-  .#{$prefix}--#{$name} {
+  .#{$prefix}--#{$name}#{if($name == g100, ", #{$ccs-classic-header}", "")} {
     @include ccs-theme-tokens($theme, $carbon--theme--white);
   }
 }

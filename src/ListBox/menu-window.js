@@ -526,16 +526,6 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Drop the outstanding request, keeping everything measured for it. For a
-   * caller that knows the request is spent when no scroll position says so:
-   * a pointer landing on another option takes the highlight away from the one
-   * that asked, and moves nothing this could read.
-   */
-  function cancelRequest() {
-    pending = null;
-  }
-
-  /**
    * Forget the measurements and any outstanding request, keeping the estimate
    * they averaged to. Called on close, and by `noteCollection` when the
    * collection comes to hold other options.
@@ -565,7 +555,6 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     scrollIntoView,
     sync,
     noteScroll,
-    cancelRequest,
     reset,
     destroy,
   };
@@ -573,7 +562,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
 
 /**
  * Call from `afterUpdate`. Schedules (via `tick`) a scroll of the newly
- * highlighted option into view, unless the pointer moved the highlight.
+ * highlighted option into view.
  *
  * @param {Object} options
  * @param {boolean} options.open
@@ -581,7 +570,6 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
  * @param {number} options.highlightedIndex
  * @param {number} options.prevHighlightedIndex
  * @param {HTMLElement | null | undefined} options.listRef
- * @param {"keyboard" | "pointer" | null} options.highlightOrigin
  * @param {ReturnType<typeof createMenuWindow>} options.menuWindow
  * @returns {number} The value to store as `prevHighlightedIndex`.
  */
@@ -591,7 +579,6 @@ export function scheduleHighlightScroll({
   highlightedIndex,
   prevHighlightedIndex,
   listRef,
-  highlightOrigin,
   menuWindow,
 }) {
   if (!(
@@ -606,14 +593,6 @@ export function scheduleHighlightScroll({
 
   tick().then(() => {
     if (!listRef || highlightedIndex < 0) return;
-    // The pointer can only reach an option it can see. Bringing a clipped
-    // one fully into view would pull the list out from under it. Cancel as
-    // well as return: the pointer has taken the highlight from the option an
-    // outstanding measured request was placing.
-    if (highlightOrigin === "pointer") {
-      menuWindow.cancelRequest();
-      return;
-    }
     menuWindow.scrollIntoView(highlightedIndex, "nearest");
   });
 

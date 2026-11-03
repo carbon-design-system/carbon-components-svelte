@@ -18,6 +18,7 @@
     id: i,
     height: i < 5 ? 100 : 40,
   }));
+  export let measuring = true;
 
   let scrollendCount = 0;
   let scrollendDetail = "";
@@ -145,7 +146,7 @@
   items={measuredItems}
   itemHeight={40}
   containerHeight={200}
-  measured
+  measured={measuring}
   let:item
   let:index
 >

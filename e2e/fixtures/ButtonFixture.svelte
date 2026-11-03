@@ -15,3 +15,18 @@
 {#if clickCount > 0}
   <p data-testid="click-count">Clicked: {clickCount}</p>
 {/if}
+
+<div data-testid="shortcut-kinds">
+  <Button data-kind="primary" shortcut="ctrl+s">Save</Button>
+  <Button data-kind="secondary" kind="secondary" shortcut="ctrl+s">Save</Button>
+  <Button data-kind="tertiary" kind="tertiary" shortcut="ctrl+s">Save</Button>
+  <Button data-kind="ghost" kind="ghost" shortcut="ctrl+s">Save</Button>
+  <Button data-kind="danger" kind="danger" shortcut="ctrl+d">Delete</Button>
+  <Button data-kind="danger-tertiary" kind="danger-tertiary" shortcut="ctrl+d">
+    Delete
+  </Button>
+  <Button data-kind="danger-ghost" kind="danger-ghost" shortcut="ctrl+d">
+    Delete
+  </Button>
+  <Button data-kind="disabled" shortcut="ctrl+e" disabled>Export</Button>
+</div>

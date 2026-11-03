@@ -124,6 +124,11 @@
     .filter(Boolean)
     .join(" ");
 
+  // Turning disabled on while open closes the menu, so no item stays
+  // clickable under a disabled trigger. Closing here is not a dismissal, so
+  // `close` does not fire.
+  $: if (disabled && open) open = false;
+
   $: iconTriggerClass = [ICON_TRIGGER_SIZE_CLASSES[size], $$restProps.class]
     .filter(Boolean)
     .join(" ");

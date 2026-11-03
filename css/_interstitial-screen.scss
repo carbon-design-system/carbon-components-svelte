@@ -45,7 +45,7 @@
     margin-bottom: 0;
 
     @include carbon--breakpoint(md) {
-      padding-left: $carbon--spacing-07;
+      padding-inline-start: $carbon--spacing-07;
     }
   }
 

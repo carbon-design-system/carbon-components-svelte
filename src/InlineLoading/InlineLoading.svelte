@@ -26,8 +26,13 @@
   export let successDelay = 1500;
 
   /**
-   * Specify the delay (ms) before rendering while `status` is `"active"`.
-   * Operations that finish within the delay never show the pending state.
+   * Wait this many milliseconds after `status` turns `"active"` before
+   * showing the spinner. Once shown, the spinner stays for at least 500 ms,
+   * so fast work shows nothing and slow work never flashes. A status that
+   * arrives inside that time waits for it. While it waits, the spinner is
+   * in the page but hidden, so server HTML already holds it. `"inactive"`,
+   * `"finished"` and `"error"` render at once.
+   * Set to `0` to show the spinner at once.
    */
   export let delay = 0;
 
@@ -42,81 +47,112 @@
   import Loading from "../Loading/Loading.svelte";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
+  import { createLoadingDelay } from "../utils/delayed-loading.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
 
   const dispatch = createEventDispatcher();
-  const schedule = createDelayedSetter();
   const scheduleSuccess = createDelayedSetter();
 
-  // `delay > 0` renders nothing during SSR while `status` is "active", since the timer only fires client-side.
-  let visible = false;
+  // `shown` is the spinner the user sees. With a delay, an active spinner
+  // first renders `waiting`: in the page but hidden, and CSS reveals it
+  // after `delay` even before the script runs. The server HTML, the first
+  // client render and a spinner mounted for fast work all start this way.
+  let shown = delay > 0 ? false : status === "active";
 
   // With `successDelay={0}` the event dispatches synchronously; during init (Svelte 3/4) the parent hasn't attached `on:success` yet.
   let mounted = false;
+  /** @type {import("../utils/delayed-loading.js").LoadingDelay | undefined} */
+  let loadingTimer;
+
+  /** @param {number} delay */
+  function createTimer(delay) {
+    const timer = createLoadingDelay(
+      (next) => {
+        shown = next;
+      },
+      { delay, minDuration: delay > 0 ? undefined : 0 },
+    );
+    // Start from what is on screen, so a new `delay` keeps the spinner.
+    timer(shown);
+    return timer;
+  }
+
+  $: if (mounted) {
+    loadingTimer?.cancel();
+    loadingTimer = createTimer(delay);
+  }
+  $: loadingTimer?.(status === "active");
 
   onMount(() => {
     mounted = true;
 
     return () => {
       scheduleSuccess.cancel();
-      schedule.cancel();
+      loadingTimer?.cancel();
     };
   });
 
-  $: if (mounted && status === "finished") {
+  // A spinner inside its minimum keeps the text it showed with, and the
+  // next status waits for it, so the spinner never flashes before "Saved".
+  /** @type {string | undefined} */
+  let activeDescription = description;
+  /** @type {string | undefined} */
+  let activeIconDescription = iconDescription;
+  $: if (status === "active") {
+    activeDescription = description;
+    activeIconDescription = iconDescription;
+  }
+
+  $: shownStatus = shown ? "active" : status;
+  $: held = shown && status !== "active";
+  $: waiting = status === "active" && !shown;
+  $: revealAfter = waiting ? `${delay}ms` : undefined;
+  $: shownDescription = held ? activeDescription : description;
+  $: shownIconDescription = held ? activeIconDescription : iconDescription;
+
+  $: if (mounted && shownStatus === "finished") {
     scheduleSuccess(successDelay, () => {
       dispatch("success");
     });
   } else {
     scheduleSuccess.cancel();
   }
-
-  $: if (status === "active") {
-    // Re-hide on every entry into "active", even if a prior resting status left `visible` true.
-    visible = false;
-    schedule(delay, () => {
-      visible = true;
-    });
-  } else {
-    schedule.cancel();
-    visible = true;
-  }
 </script>
 
-{#if visible}
-  <div
-    class:bx--inline-loading={true}
-    class:bx--inline-loading--sm={size === "sm"}
-    role={status === "error" ? "alert" : "status"}
-    aria-live={status === "error" ? "assertive" : "polite"}
-    {...$$restProps}
-    on:click
-    on:mouseover
-    on:mouseenter
-    on:mouseleave
-  >
-    <div class:bx--inline-loading__animation={true}>
-      {#if status === "error"}
-        <ErrorFilled
-          class="bx--inline-loading--error"
-          title={iconDescription || status}
-        />
-      {:else if status === "finished"}
-        <CheckmarkFilled
-          class="bx--inline-loading__checkmark-container"
-          title={iconDescription || status}
-        />
-      {:else if status === "inactive" || status === "active"}
-        <Loading
-          small
-          description={iconDescription}
-          withOverlay={false}
-          active={status === "active"}
-        />
-      {/if}
-    </div>
-    {#if description}
-      <div class:bx--inline-loading__text={true}>{description}</div>
+<div
+  class:bx--inline-loading={true}
+  class:bx--inline-loading--sm={size === "sm"}
+  class:bx--inline-loading--delayed={waiting}
+  style:animation-duration={revealAfter}
+  role={shownStatus === "error" ? "alert" : "status"}
+  aria-live={shownStatus === "error" ? "assertive" : "polite"}
+  {...$$restProps}
+  on:click
+  on:mouseover
+  on:mouseenter
+  on:mouseleave
+>
+  <div class:bx--inline-loading__animation={true}>
+    {#if shownStatus === "error"}
+      <ErrorFilled
+        class="bx--inline-loading--error"
+        title={shownIconDescription || shownStatus}
+      />
+    {:else if shownStatus === "finished"}
+      <CheckmarkFilled
+        class="bx--inline-loading__checkmark-container"
+        title={shownIconDescription || shownStatus}
+      />
+    {:else if shownStatus === "inactive" || shownStatus === "active"}
+      <Loading
+        small
+        description={shownIconDescription}
+        withOverlay={false}
+        active={shownStatus === "active"}
+      />
     {/if}
   </div>
-{/if}
+  {#if shownDescription}
+    <div class:bx--inline-loading__text={true}>{shownDescription}</div>
+  {/if}
+</div>

@@ -33,16 +33,27 @@
   export let disabled = false;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the portalled tooltip relative to the icon. Icon-only buttons only.
    * Defaults to `"bottom"` when the group is horizontal and `"right"` when
    * vertical, since a top/bottom tooltip would otherwise land on top of the
    * next stacked segment.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left" | undefined}
    */
   export let tooltipPosition = undefined;
 
   /**
    * Set the alignment of the portalled tooltip relative to the icon. Icon-only buttons only.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -60,6 +71,7 @@
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { noop } from "../utils/noop.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
 
   // Standalone use (no ancestor `ToggleButtonGroup`) is undocumented but
@@ -95,7 +107,8 @@
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
   $: hasTooltipContent = hasIconOnly && Boolean(iconDescription);
   $: effectiveTooltipPosition =
-    tooltipPosition ?? ($groupOrientation === "vertical" ? "right" : "bottom");
+    placedTooltipPosition ??
+    ($groupOrientation === "vertical" ? "right" : "bottom");
   $: pressed = $selectedValues.has(value);
   $: isDisabled = disabled || $groupDisabled;
   $: isTabStop =
@@ -111,7 +124,7 @@
   // `tooltipAlignment="end"` tooltip overshoot the anchor's edge by 1px.
   $: portalGaps = iconTooltipPortalGaps(
     effectiveTooltipPosition,
-    tooltipAlignment,
+    effectiveTooltipAlignment,
   );
 
   // Portalled (not CSS `:hover`/`:focus`) so it can't be clipped by an
@@ -153,6 +166,11 @@
       notifyUnmount(ref);
     };
   });
+
+  $: ({
+    position: placedTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <button
@@ -193,7 +211,7 @@
     open={$tooltipOpen}
     text={iconDescription}
     tooltipType="icon"
-    intrinsicAlign={tooltipAlignment}
+    intrinsicAlign={effectiveTooltipAlignment}
     horizontalGapLeft={portalGaps.horizontalGapLeft}
     horizontalGapRight={portalGaps.horizontalGapRight}
     gapTop={portalGaps.gapTop}

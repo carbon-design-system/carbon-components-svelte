@@ -241,13 +241,25 @@
 // The Menu surface is separated from the page only by a box-shadow, which
 // forced-colors mode drops. A transparent outline is repainted as a visible
 // system colour there.
+//
+// Forced colors repaint a disabled item's text in the same color as an
+// enabled one, so nothing marked it. Its label, shortcut and icon read
+// `GrayText`. The selectors repeat the disabled rules above, which set
+// `color`, and win on order.
 
-/// Menu surface edge in forced-colors mode.
+/// Menu surface edge and disabled items in forced-colors mode.
 /// @access private
 /// @group menu
 @mixin menu-forced-colors {
   .#{$prefix}--menu {
     @include high-contrast-mode("outline");
+  }
+
+  .#{$prefix}--menu-option__content--disabled,
+  .#{$prefix}--menu-option__content--disabled .#{$prefix}--menu-option__label,
+  .#{$prefix}--menu-option__content--disabled .#{$prefix}--menu-option__info,
+  .#{$prefix}--menu-option__content--disabled .#{$prefix}--menu-option__icon {
+    @include high-contrast-mode("disabled");
   }
 }
 

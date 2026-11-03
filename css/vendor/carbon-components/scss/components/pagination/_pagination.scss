@@ -450,6 +450,17 @@ $css--helpers: true;
   }
 }
 
+/// Page and range text in tabular figures, so the digits hold still as
+/// the page changes
+/// @access private
+/// @group components
+@mixin pagination-tabular-nums {
+  .#{$prefix}--pagination__text,
+  .#{$prefix}--pagination__items-count {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
 @include exports("pagination-xs") {
   @include pagination-xs;
 }
@@ -460,4 +471,8 @@ $css--helpers: true;
 
 @include exports("pagination-page-input") {
   @include pagination-page-input;
+}
+
+@include exports("pagination-tabular-nums") {
+  @include pagination-tabular-nums;
 }

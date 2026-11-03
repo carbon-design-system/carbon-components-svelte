@@ -6,6 +6,9 @@
   /**
    * @event {null} open
    * @event {null} close
+   * @slot {{}} tooltipChildren - Custom tooltip content. Replaces `tooltipText`.
+   * @deprecated use the `tooltipChildren` slot
+   * @slot {{}} tooltipText
    */
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
@@ -24,7 +27,7 @@
 
   /**
    * Specify the tooltip text.
-   * Alternatively, use the "tooltipText" slot.
+   * Alternatively, use the "tooltipChildren" slot.
    */
   export let tooltipText = "";
 
@@ -363,7 +366,9 @@
 >
   {#if !effectivePortalTooltip}
     <span bind:this={tooltipRef} {id} class:bx--assistive-text={true}>
-      <slot name="tooltipText">{tooltipText}</slot>
+      <slot name="tooltipChildren"
+        ><slot name="tooltipText">{tooltipText}</slot></slot
+      >
     </span>
   {/if}
   <slot><svelte:component this={icon} {size} /></slot>
@@ -391,6 +396,8 @@
     on:mouseleave={handleMouseleave}
     on:cover={handleTooltipCover}
   >
-    <slot name="tooltipText">{tooltipText}</slot>
+    <slot name="tooltipChildren"
+      ><slot name="tooltipText">{tooltipText}</slot></slot
+    >
   </PortalTooltip>
 {/if}

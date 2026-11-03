@@ -7,6 +7,12 @@
    */
 
   /**
+   * @slot {{}} shortcutChildren - Custom shortcut content. Replaces `shortcutText` and `shortcut`.
+   * @deprecated use the `shortcutChildren` slot
+   * @slot {{}} shortcutText
+   */
+
+  /**
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
@@ -60,15 +66,25 @@
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot.
+   * Alternatively, use the "shortcutChildren" slot.
    * @example
    * ```svelte
    * <ContextMenuOption>
-   *   <span slot="shortcutText">Ctrl+K</span>
+   *   <span slot="shortcutChildren">Ctrl+K</span>
    * </ContextMenuOption>
    * ```
    */
   export let shortcutText = "";
+
+  /**
+   * Specify a keyboard shortcut to show, such as `"mod+s"`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The keys show where
+   * `shortcutText` goes, and the item gets `aria-keyshortcuts`. Display only:
+   * bind the command itself with `onShortcut`, since the menu is usually
+   * closed. `shortcutText` and its slot take precedence. A value that isn't
+   * a shortcut, such as `"⌘C"`, shows as written.
+   */
+  export let shortcut = "";
 
   /**
    * Specify the id.
@@ -84,10 +100,20 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
-  import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
+  import Kbd from "../Kbd/Kbd.svelte";
+  import {
+    SUBMENU_AIM_PAUSE_MS,
+    SUBMENU_HOVER_DELAY_MS,
+  } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    parseShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import {
     getLayoutDirection,
     inlineKey,
@@ -95,7 +121,6 @@
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitMenuAxis } from "../utils/menu-placement.js";
-  import { nextEnabledIndex } from "../utils/move-index.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -128,7 +153,12 @@
     (value) => {
       submenuOpen = value;
     },
-    { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
+    {
+      openDelay: SUBMENU_HOVER_DELAY_MS,
+      closeDelay: SUBMENU_HOVER_DELAY_MS,
+      aimPause: SUBMENU_AIM_PAUSE_MS,
+      getSubmenu: () => (submenuOpen ? submenuRef : null),
+    },
   );
 
   const unsubPosition = ctx.position.subscribe((position) => {
@@ -186,6 +216,9 @@
   $: isSelectable = !!ctxGroup || selectable;
   $: isRadio = !!ctxRadioGroup;
   $: subOptions = $$slots.default;
+  // A shortcut that doesn't parse, such as Carbon React's free-text "⌘C",
+  // shows as written, as `shortcutText` would.
+  $: parsable = parseShortcut(shortcut) !== null;
   $: ctx.setPopup(submenuOpen);
   // The submenu opens toward the inline end (the left in RTL), flips when
   // it doesn't fit, and pins to the viewport edge when it fits on neither
@@ -245,6 +278,9 @@
   data-nested={ctx.level === 2}
   data-sub={subOptions}
   data-id={id}
+  aria-keyshortcuts={shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+    : undefined}
   {...$$restProps}
   on:keydown
   on:keydown={async (event) => {
@@ -275,13 +311,11 @@
       }
 
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        focusIndex = nextEnabledIndex({
-          items: options,
-          index: focusIndex,
-          step: event.key === "ArrowDown" ? 1 : -1,
-          wrap: false,
-          isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
-        });
+        focusIndex = clampIndex(
+          focusIndex,
+          event.key === "ArrowDown" ? 1 : -1,
+          options.length,
+        );
       } else if (event.key === "Home") {
         if (options.length > 0) focusIndex = 0;
       } else if (event.key === "End" && options.length > 0) {
@@ -297,7 +331,6 @@
           query,
           itemToString: menuOptionLabel,
           index: focusIndex,
-          isDisabled: (item) => item.getAttribute("aria-disabled") === "true",
         });
       }
 
@@ -318,9 +351,9 @@
     }
   }}
   on:mouseleave
-  on:mouseleave={() => {
+  on:mouseleave={(event) => {
     if (subOptions) {
-      hoverIntent.scheduleClose();
+      hoverIntent.scheduleClose(event);
     }
   }}
   on:click={(event) => {
@@ -385,7 +418,17 @@
         <slot name="labelChildren">{labelText}</slot>
       </span>
       <div class:bx--menu-option__info={true}>
-        <slot name="shortcutText">{shortcutText}</slot>
+        <slot name="shortcutChildren">
+          <slot name="shortcutText">
+            {#if shortcutText || !shortcut}
+              {shortcutText}
+            {:else if parsable}
+              <Kbd {shortcut} variant="muted" aria-hidden="true" />
+            {:else}
+              {shortcut}
+            {/if}
+          </slot>
+        </slot>
       </div>
     </div>
   {/if}

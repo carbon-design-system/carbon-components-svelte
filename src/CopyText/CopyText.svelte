@@ -41,13 +41,24 @@
   export let portalTooltip = undefined;
 
   /**
+   * Set the tooltip placement in floating-ui form: the side, then `start`
+   * or `end` along it, as Popover's `align` takes. Above and below,
+   * `start` and `end` name inline sides, so they swap under `dir="rtl"`.
+   * When set, takes precedence over `tooltipPosition` and `tooltipAlignment`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
+   */
+  export let tooltipAlign = undefined;
+
+  /**
    * Set the position of the tooltip relative to the button.
+   * @deprecated use `tooltipAlign`
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let tooltipPosition = "bottom";
 
   /**
    * Set the alignment of the tooltip relative to the button.
+   * @deprecated use `tooltipAlign`
    * @type {"start" | "center" | "end"}
    */
   export let tooltipAlignment = "center";
@@ -63,6 +74,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { COPY_FEEDBACK_TIMEOUT_MS } from "../utils/copy-feedback.js";
   import { copyText } from "../utils/copy-text.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
 
   /** @type {null | HTMLSpanElement} */
   let valueNode = null;
@@ -73,6 +85,11 @@
     ariaDescribedBy,
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
+
+  $: ({
+    position: effectiveTooltipPosition,
+    alignment: effectiveTooltipAlignment,
+  } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
 </script>
 
 <span bind:this={ref} class:bx--copy-text={true} {...wrapperProps}>
@@ -86,8 +103,8 @@
     {errorFeedback}
     {feedbackTimeout}
     {portalTooltip}
-    {tooltipPosition}
-    {tooltipAlignment}
+    tooltipPosition={effectiveTooltipPosition}
+    tooltipAlignment={effectiveTooltipAlignment}
     text=""
     copy={() => copy(text ?? valueNode?.textContent?.trim() ?? "")}
     aria-label={ariaLabel ?? iconDescription}

@@ -10,7 +10,7 @@
 
   const headers = [
     { key: "name", value: "Name" },
-    { key: "overflow", empty: true, width: "72px" },
+    { key: "overflow", empty: true, value: "Actions", width: "72px" },
   ];
 
   const rows = Array.from({ length: ROW_COUNT }, (_, i) => ({

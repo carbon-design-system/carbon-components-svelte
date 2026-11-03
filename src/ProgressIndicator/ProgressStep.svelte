@@ -38,6 +38,7 @@
   import Warning from "../icons/Warning.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   let step = {};
@@ -114,6 +115,7 @@
     class:bx--progress-step-button--unclickable={current ||
       !complete ||
       $preventChangeOnClick}
+    use:titleWhenTruncated={{ measure: ".bx--progress-label" }}
     on:click
     on:click={() => {
       if (!step.complete || step.current) return;

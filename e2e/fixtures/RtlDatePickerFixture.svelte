@@ -51,6 +51,25 @@
       </DatePicker>
     </div>
   </div>
+  <!-- A time mixes letters and digits, which bidi reorders in RTL. -->
+  <div data-testid="time">
+    <DatePicker
+      datePickerType="single"
+      dateFormat="m/d/Y h:i K"
+      value="03/15/2024 2:30 PM"
+    >
+      <DatePickerInput labelText="Maintenance window" />
+    </DatePicker>
+  </div>
+  <div data-testid="time-multiple">
+    <DatePicker
+      datePickerType="multiple"
+      dateFormat="m/d/Y h:i K"
+      value="03/15/2024 2:30 PM"
+    >
+      <DatePickerInput labelText="Maintenance windows" />
+    </DatePicker>
+  </div>
 </div>
 
 <style>

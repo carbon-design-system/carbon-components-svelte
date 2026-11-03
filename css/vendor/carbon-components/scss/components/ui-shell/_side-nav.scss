@@ -683,11 +683,13 @@
 @mixin side-nav-resize {
   // The component sets `--ccs-side-nav-width` to its clamped `width`.
   // `max-width` lifts Carbon's 16rem cap while keeping a mobile overlay
-  // within the viewport. No width transition: the drag should track the
-  // pointer, and `Content`'s margin (which doesn't animate) follows it.
+  // within the viewport. `100%` of the viewport leaves out a classic
+  // scrollbar, which `100vw` counts, so the handle stays clear of it. No
+  // width transition: the drag should track the pointer, and `Content`'s
+  // margin (which doesn't animate) follows it.
   .#{$prefix}--side-nav--resizable {
     width: var(--ccs-side-nav-width, #{mini-units(32)});
-    max-width: 100vw;
+    max-width: 100%;
     transition: none;
   }
 

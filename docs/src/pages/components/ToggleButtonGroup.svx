@@ -88,28 +88,26 @@ An icon-only button needs `iconDescription`, which becomes both the accessible l
 
 ### Custom tooltip position
 
-Set `tooltipPosition` and `tooltipAlignment` on `ToggleButton` to control where its tooltip appears.
+Set `tooltipAlign` on `ToggleButton` to control where its tooltip appears, with Popover's `align` names. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
 
 <ToggleButtonGroup labelText="Text formatting">
   <ToggleButton
     value="bold"
     icon={TextBold}
     iconDescription="Bold"
-    tooltipPosition="top"
-    tooltipAlignment="start"
+    tooltipAlign="top-start"
   />
   <ToggleButton
     value="italic"
     icon={TextItalic}
     iconDescription="Italic"
-    tooltipPosition="top"
+    tooltipAlign="top"
   />
   <ToggleButton
     value="underline"
     icon={TextUnderline}
     iconDescription="Underline"
-    tooltipPosition="top"
-    tooltipAlignment="end"
+    tooltipAlign="top-end"
   />
 </ToggleButtonGroup>
 
@@ -185,7 +183,7 @@ Set `orientation="vertical"` to stack the buttons and use Up/Down to move focus 
 
 ### Icon-only
 
-The tooltip defaults to `tooltipPosition="right"` in a vertical group instead of `"bottom"`, since a bottom tooltip would land on the next stacked segment. Set `tooltipPosition` and `tooltipAlignment` on `ToggleButton` to override it.
+The tooltip defaults to the right in a vertical group instead of `"bottom"`, since a bottom tooltip would land on the next stacked segment. Set `tooltipAlign` on `ToggleButton` to override it.
 
 <ToggleButtonGroup orientation="vertical" labelText="Text formatting">
   <ToggleButton value="bold" icon={TextBold} iconDescription="Bold" />
@@ -199,28 +197,26 @@ The tooltip defaults to `tooltipPosition="right"` in a vertical group instead of
 
 ### Custom tooltip position
 
-Override the `"right"` default with `tooltipPosition` and `tooltipAlignment`.
+Override the `"right"` default with `tooltipAlign`.
 
 <ToggleButtonGroup orientation="vertical" labelText="Text formatting">
   <ToggleButton
     value="bold"
     icon={TextBold}
     iconDescription="Bold"
-    tooltipPosition="right"
-    tooltipAlignment="start"
+    tooltipAlign="right-start"
   />
   <ToggleButton
     value="italic"
     icon={TextItalic}
     iconDescription="Italic"
-    tooltipPosition="right"
+    tooltipAlign="right"
   />
   <ToggleButton
     value="underline"
     icon={TextUnderline}
     iconDescription="Underline"
-    tooltipPosition="right"
-    tooltipAlignment="end"
+    tooltipAlign="right-end"
   />
 </ToggleButtonGroup>
 

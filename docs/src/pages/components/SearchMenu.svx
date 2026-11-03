@@ -279,6 +279,8 @@ Set `readonly` to prevent opening the results menu or selecting a value. The cur
 
 Set `searchLoading` to show a spinner in the search input while results are loading, independent of `loading`, which controls the skeleton menu (see [Async results](#async-results)). Combine both props when the menu is also loading.
 
+Set `loadingDelay` to wait a number of milliseconds after `loading` or `searchLoading` becomes `true` before showing the skeleton menu, the loading row or the spinner. Work that finishes within the delay shows none of them. Once shown, they stay for at least 500 ms so they do not flash. The menu is marked busy as soon as `loading` is `true`.
+
 <SearchMenu searchLoading labelText="Search" placeholder="Search...">
   <SearchMenuItem text="Databases for TestSQL" />
   <SearchMenuItem text="Data Store for Memcache" />

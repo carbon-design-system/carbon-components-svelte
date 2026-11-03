@@ -342,3 +342,46 @@ describe("Search", () => {
     });
   });
 });
+
+describe("Search loadingDelay", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("shows the spinner after the delay and holds it for the minimum", async () => {
+    const { rerender } = render(Search, { props: { loadingDelay: 300 } });
+    await rerender({ loading: true });
+    const search = screen.getByRole("searchbox", { name: "Default search" });
+
+    expect(search).toHaveAttribute("aria-busy", "true");
+    expect(screen.queryByTitle("Searching")).toBeNull();
+
+    await vi.advanceTimersByTimeAsync(300);
+    expect(screen.getByTitle("Searching")).toBeInTheDocument();
+
+    await vi.advanceTimersByTimeAsync(100);
+    await rerender({ loading: false });
+    expect(search).not.toHaveAttribute("aria-busy");
+    expect(screen.getByTitle("Searching")).toBeInTheDocument();
+
+    // Shown at 300 ms, so the 500 ms minimum ends at 800 ms.
+    await vi.advanceTimersByTimeAsync(399);
+    expect(screen.getByTitle("Searching")).toBeInTheDocument();
+    await vi.advanceTimersByTimeAsync(1);
+    expect(screen.queryByTitle("Searching")).toBeNull();
+  });
+
+  it("never shows the spinner for loading that ends within the delay", async () => {
+    const { rerender } = render(Search, { props: { loadingDelay: 300 } });
+    await rerender({ loading: true });
+    await vi.advanceTimersByTimeAsync(150);
+    await rerender({ loading: false });
+    await vi.advanceTimersByTimeAsync(1000);
+
+    expect(screen.queryByTitle("Searching")).toBeNull();
+  });
+});

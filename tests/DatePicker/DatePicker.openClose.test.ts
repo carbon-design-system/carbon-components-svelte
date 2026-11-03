@@ -104,6 +104,20 @@ describe("DatePicker bind:open", () => {
     await settle();
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
   });
+
+  it.each(["disabled", "readonly"] as const)(
+    "closes the calendar when %s turns on while open",
+    async (state) => {
+      const { rerender } = render(DatePicker, {
+        props: { datePickerType: "single" },
+      });
+      const calendar = await openCalendar();
+
+      await rerender({ [state]: true });
+
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
+    },
+  );
 });
 
 /** Opens the range picker's start input and returns the open calendar. */
@@ -288,6 +302,22 @@ describe("DatePicker close event", () => {
     await fireEvent.blur(screen.getByLabelText("Date"), {
       relatedTarget: screen.getByRole("button", { name: "Outside" }),
     });
+    await settle();
+
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
+  });
+
+  it('dispatches close with trigger "outside-click" when focus leaves the calendar', async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose, outsideButton: true } });
+
+    const calendar = await openCalendar();
+    firstDay(calendar).focus();
+    expect(calendar).toContainElement(document.activeElement as HTMLElement);
+
+    screen.getByRole("button", { name: "Outside" }).focus();
     await settle();
 
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");

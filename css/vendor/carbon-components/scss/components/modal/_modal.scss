@@ -138,8 +138,8 @@
     max-height: 50vh;
     overflow-y: auto;
     padding-top: $spacing-05;
-    padding-right: $spacing-09;
-    padding-left: $spacing-05;
+    padding-inline-end: $spacing-09;
+    padding-inline-start: $spacing-05;
     margin-bottom: $spacing-03;
     grid-column: 1/-1;
     grid-row: 1/1;
@@ -156,7 +156,7 @@
     @include type-style('heading-03');
 
     // ccs: v11 keeps the heading's line length close to the body text's.
-    padding-right: calc(20% - #{$spacing-09});
+    padding-inline-end: calc(20% - #{$spacing-09});
     color: $text-primary;
   }
 
@@ -348,7 +348,6 @@
     position: absolute;
     z-index: 2;
     top: 0;
-    right: 0;
     overflow: hidden;
     width: 3rem;
     height: 3rem;
@@ -357,6 +356,9 @@
     background-color: transparent;
     cursor: pointer;
     transition: background-color $duration--fast-02 motion(standard, productive);
+
+    // ccs: v11 seats the button at the inline end.
+    @include ccs-inset-inline($end: 0);
 
     &:hover {
       background-color: $layer-hover;

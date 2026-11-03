@@ -88,8 +88,12 @@
       <thead>
         <tr>
           {#each cols as col (col)}
-            {#if typeof values[col] === "object" && values[col].empty === true}
-              <th></th>
+            {#if typeof headers[col] === "object" && headers[col].empty === true}
+              <th
+                >{#if headers[col].value}<span class:bx--visually-hidden={true}
+                    >{headers[col].value}</span
+                  >{/if}</th
+              >
             {:else}
               <th>{values[col] || ""}</th>
             {/if}

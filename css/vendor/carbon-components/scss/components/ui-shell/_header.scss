@@ -262,6 +262,19 @@
     position: relative;
   }
 
+  // ccs: the title's text truncates like a top-level item's, but keeps its
+  // own width beside the arrow, so it shrinks only in a box narrower than
+  // it, such as a collapsed SideNav rail. There the arrow gives way first,
+  // and the text keeps room for its first letter, as the rail's links do.
+  .#{$prefix}--header__menu-title > .#{$prefix}--text-truncate--end {
+    width: auto;
+    min-width: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--header__menu-title > .#{$prefix}--header__menu-arrow {
+    min-width: 0;
+  }
+
   .#{$prefix}--header__menu-title[aria-expanded='true']
     > .#{$prefix}--header__menu-arrow {
     transform: rotate(180deg);
@@ -352,7 +365,7 @@
     height: 1px;
     padding: 0;
     border: 0;
-    margin: -1px;
+    margin: -1px 0; // ccs: no inline margin, see `.bx--visually-hidden`
     clip: rect(0, 0, 0, 0);
     visibility: inherit;
     white-space: nowrap;

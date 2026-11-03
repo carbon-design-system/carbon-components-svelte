@@ -156,6 +156,16 @@
   }
 
   $: if (measured) noteItems(items);
+  // Unmeasured, the list reads no heights. Drop any it kept, and follow
+  // `items` without comparing. Holding the old list keeps it alive: a log
+  // that drops its oldest lines would keep every item of its first array.
+  // Kept heights would outlive a list replaced while unmeasured, and apply
+  // to the new items once `measured` is set again. `clear` is cheap when
+  // there are none.
+  $: if (!measured) {
+    knownItems = items;
+    heightMeasurer.clear();
+  }
 
   $: scrollEndTracker.noteItemCount(items.length);
 

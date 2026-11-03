@@ -134,6 +134,8 @@ export { default as InterstitialScreenBody } from "./InterstitialScreen/Intersti
 export { default as InterstitialScreenFooter } from "./InterstitialScreen/InterstitialScreenFooter.svelte";
 export { default as InterstitialScreenHeader } from "./InterstitialScreen/InterstitialScreenHeader.svelte";
 export { default as InterstitialScreenView } from "./InterstitialScreen/InterstitialScreenView.svelte";
+export { default as Kbd } from "./Kbd/Kbd.svelte";
+export { setKbdTranslations } from "./Kbd/kbd-translations.js";
 export { default as Layer } from "./Layer/Layer.svelte";
 export { default as LayoutDirection } from "./LayoutDirection/LayoutDirection.svelte";
 export { default as LazyMount } from "./LazyMount/LazyMount.svelte";
@@ -325,6 +327,7 @@ export {
   applyColumnSettings,
   toColumnSettings,
 } from "./utils/column-settings.js";
+export { createLoadingDelay, delayedLoading } from "./utils/delayed-loading.js";
 export { dismiss } from "./utils/dismiss.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
@@ -338,6 +341,12 @@ export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
+export {
+  formatShortcut,
+  matchesShortcut,
+  onShortcut,
+  platformScript,
+} from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";

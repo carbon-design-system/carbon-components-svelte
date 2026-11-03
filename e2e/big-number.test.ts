@@ -1,4 +1,5 @@
 import { expect, test } from "./helpers/host";
+import { expectNoPageOverflow, expectTextFits } from "./helpers/layout";
 
 test("BigNumber steps its type with size", async ({ page }) => {
   await page.goto("/big-number.html");
@@ -141,3 +142,21 @@ for (const dir of ["ltr", "rtl"]) {
     });
   }
 }
+
+// The trend icon's hidden description sits at the row's inline start. A
+// -1px inline margin on `.bx--visually-hidden` put it 1px past the right
+// edge under `dir="rtl"`, so the page scrolled sideways.
+test("BigNumber's hidden trend text stays inside the page in RTL, and its text fits", async ({
+  page,
+}) => {
+  await page.goto("/big-number.html");
+  await page.evaluate(() => document.fonts.ready);
+
+  const hidden = await page
+    .locator('[dir="rtl"] .bx--big-number__value-row > .bx--visually-hidden')
+    .count();
+  expect(hidden).toBeGreaterThan(0);
+  await expectNoPageOverflow(page);
+  // Each value, label and total shows in full in both directions.
+  expect(await expectTextFits(page.locator("#app"))).toBeGreaterThan(0);
+});

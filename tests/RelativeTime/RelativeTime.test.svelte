@@ -84,3 +84,5 @@
   timeZone="Asia/Tokyo"
   data-testid="title-zone-override"
 />
+
+<RelativeTime date={fiveMinutesAgo} {now} locale="ar" data-testid="arabic" />

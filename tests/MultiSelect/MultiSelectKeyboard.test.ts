@@ -42,8 +42,9 @@ describe("MultiSelect keyboard", () => {
       await openMenu();
       // Click sets the anchor (mirrors shift+click's `prevSelectedItemId`).
       await user.click(screen.getByRole("option", { name: "Alpha" }));
-      // Move the keyboard highlight down to "Delta" without selecting it.
-      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
+      // The click leaves the keyboard highlight where it was, off the list.
+      // Move it down to "Delta" without selecting it.
+      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}");
 
       await user.keyboard("{Shift>}{Enter}{/Shift}");
 
@@ -57,7 +58,7 @@ describe("MultiSelect keyboard", () => {
 
       await openMenu();
       await user.click(screen.getByRole("option", { name: "Alpha" }));
-      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
+      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}");
 
       await user.keyboard("{Shift>} {/Shift}");
 
@@ -71,7 +72,7 @@ describe("MultiSelect keyboard", () => {
 
       await openMenu();
       await user.click(screen.getByRole("option", { name: "Alpha" }));
-      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}");
+      await user.keyboard("{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}");
       await user.keyboard("{Shift>}{Enter}{/Shift}");
 
       const selected = screen
@@ -81,7 +82,7 @@ describe("MultiSelect keyboard", () => {
       expect(selected).toEqual(["Alpha", "Bravo"]);
     });
 
-    it("ignores a pointer (hover) highlight: Shift+Enter only acts on a keyboard highlight", async () => {
+    it("Shift+Enter ignores a hovered option", async () => {
       render(MultiSelect, { props: { items } });
 
       await openMenu();

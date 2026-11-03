@@ -954,6 +954,27 @@ test.describe("right-to-left layout", () => {
     const axis = Math.round(region.x * 2 + region.width);
     expectMirrored(await boxes(page, parts), mirror(ltr, axis));
   });
+
+  // Both platforms' keys share one grid cell as wide as the wider set. The
+  // keys run left to right, but the narrower set still sits at the inline
+  // end, next to whatever follows the label.
+  test("keeps Kbd's narrower key set at the inline end", async ({ page }) => {
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      const offsets = await page.getByTestId("kbd").evaluate((node, dir) => {
+        const root = node.querySelector(".bx--kbd")?.getBoundingClientRect();
+        if (!root) throw new Error("no kbd");
+        return [...node.querySelectorAll(".bx--kbd__platform")].map((set) => {
+          const box = set.getBoundingClientRect();
+          return Math.round(
+            dir === "rtl" ? box.left - root.left : root.right - box.right,
+          );
+        });
+      }, dir);
+      expect.soft(offsets, `${dir} end offsets`).toEqual([0, 0]);
+    }
+  });
 });
 
 // Icons that point forward or back, by meaning, mirror in RTL. A `dir="ltr"`
@@ -1250,7 +1271,182 @@ test.describe("right-to-left text fields", () => {
     await setDirection(page, "rtl");
     expect(await shadow()).toBe(ltr.replace("-2px 0px", "2px 0px"));
   });
+
+  test("reads a Search query in its own direction, at the page's start", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    // "3" is at the left end, so the caret lands before it.
+    expect(
+      await caretAtLeftEnd(page, page.getByTestId("search").locator("input")),
+    ).toBe(0);
+  });
+
+  test("reads typed text in its own direction, at the page's start", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const fields = {
+      TextInput: page.getByTestId("text-invalid").locator("input"),
+      PasswordInput: page.getByTestId("password").locator("input"),
+      "fluid TextInput": page
+        .getByTestId("fluid-text-invalid")
+        .locator("input"),
+      "fluid PasswordInput": page
+        .getByTestId("fluid-password-invalid")
+        .locator("input"),
+      TextArea: page.getByTestId("text-area-invalid").locator("textarea"),
+      "fluid TextArea": page
+        .getByTestId("fluid-text-area-invalid")
+        .locator("textarea"),
+      HeaderSearch: page.getByTestId("header-search").locator("input"),
+      ComboBox: page.getByTestId("combo-box").locator("input"),
+      "fluid ComboBox": page
+        .getByTestId("fluid-combo-box-invalid")
+        .locator("input"),
+      MultiSelect: page.getByTestId("multi-select-filterable").locator("input"),
+    };
+    // A password shows its characters, so their order is visible.
+    await page.getByTestId("password").getByRole("button").click();
+    await page
+      .getByTestId("fluid-password-invalid")
+      .getByRole("button")
+      .click();
+    // A click elsewhere closes HeaderSearch; its button opens it again.
+    const openHeaderSearch = page
+      .getByTestId("header-search")
+      .getByRole("button");
+    for (const [name, field] of Object.entries(fields)) {
+      const open = name === "HeaderSearch" ? openHeaderSearch : undefined;
+      // biome-ignore lint/performance/noAwaitInLoops: each click moves focus
+      expect.soft(await caretAtLeftEnd(page, field, open), name).toBe(0);
+    }
+  });
+
+  test("keeps NumberInput's minus sign in front of the number", async ({
+    page,
+  }) => {
+    // In an RTL paragraph, bidi moved a leading minus to the far side:
+    // "-5" painted as "5-", and "-5 kg" as "kg 5-".
+    await setDirection(page, "rtl");
+    const number = page.getByTestId("number").locator("input");
+    const fluid = page.getByTestId("fluid-number-invalid").locator("input");
+    await number.fill("-5");
+    await fluid.fill("-5");
+    const fields = {
+      NumberInput: number,
+      "fluid NumberInput": fluid,
+      "NumberInput with a unit": page
+        .getByTestId("number-negative-unit")
+        .locator("input"),
+    };
+    for (const [name, field] of Object.entries(fields)) {
+      // biome-ignore lint/performance/noAwaitInLoops: one field at a time
+      const { value, offsets } = await caretOffsets(field);
+      expect(value.startsWith("-"), name).toBe(true);
+      expect.soft(offsets, name).toEqual([...Array(value.length + 1).keys()]);
+    }
+  });
+
+  test("keeps Slider's minus signs in front of the numbers", async ({
+    page,
+  }) => {
+    await setDirection(page, "rtl");
+    const inputs = page.locator(
+      "[data-testid=slider] .bx--slider-text-input, [data-testid=range-slider] .bx--slider-text-input",
+    );
+    await expect(inputs).toHaveCount(3);
+    const read = await Promise.all((await inputs.all()).map(caretOffsets));
+    for (const [index, { value, offsets }] of read.entries()) {
+      expect(value.startsWith("-"), `input ${index}`).toBe(true);
+      expect
+        .soft(offsets, `input ${index} ${value}`)
+        .toEqual([...Array(value.length + 1).keys()]);
+    }
+    // Each range label's characters in visual order, left to right.
+    const labels = await page
+      .locator(
+        "[data-testid=slider] .bx--slider__range-label, [data-testid=range-slider] .bx--slider__range-label",
+      )
+      .evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const text = node.firstChild;
+          const range = document.createRange();
+          const chars: { char: string; left: number }[] = [];
+          for (let i = 0; text && i < (text.textContent ?? "").length; i++) {
+            range.setStart(text, i);
+            range.setEnd(text, i + 1);
+            chars.push({
+              char: range.toString(),
+              left: range.getBoundingClientRect().left,
+            });
+          }
+          return chars
+            .sort((a, b) => a.left - b.left)
+            .map(({ char }) => char)
+            .join("");
+        }),
+      );
+    expect(labels).toEqual(["-10", "10", "-10", "10"]);
+  });
 });
+
+/**
+ * A field's caret offsets from its left edge to its right one. Text that
+ * reads left to right gives 0, 1, 2 and on.
+ */
+function caretOffsets(field: Locator) {
+  return field.evaluate((node: HTMLInputElement) => {
+    node.scrollIntoView({ block: "center" });
+    const style = getComputedStyle(node);
+    const box = node.getBoundingClientRect();
+    // A fluid field's top padding holds its label.
+    const top = box.top + Number.parseFloat(style.paddingTop);
+    const bottom = box.bottom - Number.parseFloat(style.paddingBottom);
+    const offsets: number[] = [];
+    for (let x = Math.ceil(box.left); x < box.right; x++) {
+      const position = document.caretPositionFromPoint(x, (top + bottom) / 2);
+      if (position?.offsetNode !== node) continue;
+      if (offsets.at(-1) !== position.offset) offsets.push(position.offset);
+    }
+    return { value: node.value, offsets };
+  });
+}
+
+/**
+ * Types "3 / 4" into a right-to-left field and clicks where its left end
+ * sits if the text keeps its own order at the page's start (the right).
+ * Returns the caret's index: 0 when the left end is "3". `open` is a
+ * button to click first, for a field that is hidden until then.
+ */
+async function caretAtLeftEnd(page: Page, field: Locator, open?: Locator) {
+  await open?.click();
+  await field.fill("3 / 4");
+  await page.evaluate(() => document.fonts.ready);
+  const { x, y } = await field.evaluate((node: HTMLInputElement) => {
+    const style = getComputedStyle(node);
+    const context = document.createElement("canvas").getContext("2d");
+    if (!context) throw new Error("no canvas");
+    context.font = style.font;
+    const width = context.measureText(node.value).width;
+    const box = node.getBoundingClientRect();
+    const top = box.top + Number.parseFloat(style.paddingTop);
+    const bottom = box.bottom - Number.parseFloat(style.paddingBottom);
+    // The first line. A fluid field's top padding holds its label.
+    const line =
+      node.tagName === "TEXTAREA"
+        ? Number.parseFloat(style.lineHeight)
+        : bottom - top;
+    // MultiSelect's focused filter draws a 2px border inside its box.
+    const end =
+      box.right -
+      Number.parseFloat(style.borderRightWidth) -
+      Number.parseFloat(style.paddingRight);
+    return { x: end - width + 2, y: top + line / 2 };
+  });
+  await page.mouse.click(x, y);
+  return field.evaluate((node: HTMLInputElement) => node.selectionStart);
+}
 
 /**
  * Every button in each case of the buttons fixture, its label and its icon,
@@ -1385,6 +1581,49 @@ test.describe("right-to-left buttons", () => {
         Object.entries(ltr.dividers).map(([name, x]) => [name, -x || 0]),
       ),
     );
+  });
+
+  test("seats the modal close button at the inline end, clear of the heading", async ({
+    page,
+  }) => {
+    const measure = () =>
+      page.evaluate(() => {
+        const modal = document.querySelector("[data-testid=modal]");
+        const box = (selector: string) => {
+          const rect = modal?.querySelector(selector)?.getBoundingClientRect();
+          if (!rect) throw new Error(`no ${selector}`);
+          return rect;
+        };
+        const container = box(".bx--modal-container");
+        const close = box(".bx--modal-close");
+        const header = modal?.querySelector(".bx--modal-header");
+        const style = getComputedStyle(header as Element);
+        return {
+          // The button's offsets from each edge of the dialog.
+          fromLeft: Math.round(close.left - container.left),
+          fromRight: Math.round(container.right - close.right),
+          // The header keeps the button's width clear on the same side.
+          paddingLeft: style.paddingLeft,
+          paddingRight: style.paddingRight,
+        };
+      });
+
+    const ltr = await measure();
+    expect(ltr.fromRight).toBeLessThan(ltr.fromLeft);
+    expect({ left: ltr.paddingLeft, right: ltr.paddingRight }).toEqual({
+      left: "16px",
+      right: "48px",
+    });
+
+    // Every offset mirrors.
+    await setDirection(page, "rtl");
+    const rtl = await measure();
+    expect(rtl.fromLeft).toBe(ltr.fromRight);
+    expect(rtl.fromRight).toBe(ltr.fromLeft);
+    expect({ left: rtl.paddingLeft, right: rtl.paddingRight }).toEqual({
+      left: "48px",
+      right: "16px",
+    });
   });
 });
 
@@ -2063,6 +2302,117 @@ test.describe("right-to-left date picker", () => {
       expect
         .soft((box as Box).right, `${name} in view`)
         .toBeLessThanOrEqual(width);
+    }
+  });
+
+  test("keeps an inline range's end field level with the start field", async ({
+    page,
+  }) => {
+    // The inline calendar sits in the start field's container. The end
+    // container stretched to the same height and put its input at the
+    // bottom, over the last week, and covered the calendar's far half.
+    const read = () =>
+      page.getByTestId("range").evaluate((root) => {
+        const calendar = root.querySelector(".bx--date-picker__calendar");
+        calendar?.scrollIntoView({ block: "center" });
+        const [start, end] = [
+          ...root.querySelectorAll(".bx--date-picker__input"),
+        ].map((input) => Math.round(input.getBoundingClientRect().top));
+        const days = [...root.querySelectorAll(".bx--date-picker__day")];
+        const covered = days
+          .filter((day) => {
+            const rect = day.getBoundingClientRect();
+            const hit = document.elementFromPoint(
+              rect.left + rect.width / 2,
+              rect.top + rect.height / 2,
+            );
+            return !calendar?.contains(hit);
+          })
+          .map((day) => day.getAttribute("aria-label"));
+        return { start, end, covered, days: days.length };
+      });
+
+    const ltr = await read();
+    await setDirection(page, "rtl");
+    const rtl = await read();
+    for (const [dir, layout] of Object.entries({ ltr, rtl })) {
+      expect.soft(layout.end, `${dir} end field top`).toBe(layout.start);
+      expect.soft(layout.covered, `${dir} covered days`).toEqual([]);
+      expect(layout.days).toBeGreaterThanOrEqual(28);
+    }
+  });
+
+  test("keeps a date and time in reading order", async ({ page }) => {
+    // Bidi reordered "03/15/2024 2:30 PM" by the page's direction, so an
+    // RTL page showed "PM 2:30 03/15/2024". Read left to right, the field's
+    // caret offsets must run from the start of the text to its end, and the
+    // overlay's characters must spell the date in order.
+    const read = (testId: string) =>
+      page.getByTestId(testId).evaluate((root) => {
+        const input = root.querySelector("input");
+        if (!input) throw new Error("no input");
+        input.scrollIntoView({ block: "center" });
+        const rect = input.getBoundingClientRect();
+        const y = rect.top + rect.height / 2;
+        const offsets: number[] = [];
+        const xs: number[] = [];
+        for (let x = Math.ceil(rect.left); x < rect.right; x++) {
+          const position = document.caretPositionFromPoint(x, y);
+          if (position?.offsetNode !== input) continue;
+          if (offsets.at(-1) !== position.offset) {
+            offsets.push(position.offset);
+            xs.push(x);
+          }
+        }
+        const chars: { char: string; left: number }[] = [];
+        const overlay = root.querySelector(".bx--date-picker__input-overlay");
+        const range = document.createRange();
+        // Each date is a span of its own.
+        const walker = overlay
+          ? document.createTreeWalker(overlay, NodeFilter.SHOW_TEXT)
+          : null;
+        for (let text = walker?.nextNode(); text; text = walker?.nextNode()) {
+          for (let i = 0; i < (text.textContent ?? "").length; i++) {
+            if (/\s/.test(text.textContent?.[i] ?? "")) continue;
+            range.setStart(text, i);
+            range.setEnd(text, i + 1);
+            chars.push({
+              char: text.textContent?.[i] ?? "",
+              left: range.getBoundingClientRect().left,
+            });
+          }
+        }
+        return {
+          offsets,
+          length: input.value.length,
+          // Space before the text's first character and after its last.
+          startGap: (xs[1] ?? rect.left) - rect.left,
+          endGap: rect.right - (xs.at(-1) ?? rect.right),
+          overlay: chars
+            .sort((a, b) => a.left - b.left)
+            .map(({ char }) => char)
+            .join(""),
+        };
+      });
+
+    await page.evaluate(() => document.fonts.ready);
+    for (const dir of ["ltr", "rtl"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
+      await setDirection(page, dir);
+      const field = await read("time");
+      expect(field.length, dir).toBeGreaterThan(0);
+      expect(field.offsets, dir).toEqual(
+        Array.from({ length: field.length + 1 }, (_, index) => index),
+      );
+      // The text stays at the page's inline start.
+      if (dir === "rtl") {
+        expect(field.endGap).toBeLessThan(field.startGap);
+      } else {
+        expect(field.startGap).toBeLessThan(field.endGap);
+      }
+      expect((await read("time-multiple")).overlay, dir).toBe(
+        "03/15/20242:30PM",
+      );
     }
   });
 });

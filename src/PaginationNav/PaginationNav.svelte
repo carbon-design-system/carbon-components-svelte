@@ -109,6 +109,13 @@
   // Keep the page in range when `total` shrinks, as Pagination does.
   $: if (page > total) page = Math.max(total, 1);
 
+  // The page the user last chose in this instance, or null. Two navs bound
+  // to one `page` (above and below a table) both see the change; only the
+  // one the user acted on writes it to its live region.
+  /** @type {number | null} */
+  let statusPage = null;
+  $: if (statusPage !== null && page !== statusPage) statusPage = null;
+
   // number of nav overflow or items that may appear
   $: fit = Math.max(shown, MIN);
   $: startOffset = fit <= MIN && page > 1 ? 0 : 1;
@@ -156,6 +163,7 @@
             page--;
           }
           dispatch("click:button--previous", { page });
+          statusPage = page;
           dispatch("change", { page });
         }}
       />
@@ -167,6 +175,7 @@
         active={page === 1}
         on:click={() => {
           page = 1;
+          statusPage = page;
           dispatch("change", { page });
         }}
       />
@@ -179,6 +188,7 @@
       count={front}
       on:select={(event) => {
         page = event.detail.index;
+        statusPage = page;
         dispatch("change", { page });
       }}
     />
@@ -189,6 +199,7 @@
         active={page === item + 1}
         on:click={() => {
           page = item + 1;
+          statusPage = page;
           dispatch("change", { page });
         }}
       />
@@ -201,6 +212,7 @@
       count={back}
       on:select={(event) => {
         page = event.detail.index;
+        statusPage = page;
         dispatch("change", { page });
       }}
     />
@@ -211,6 +223,7 @@
         active={page === total}
         on:click={() => {
           page = total;
+          statusPage = page;
           dispatch("change", { page });
         }}
       />
@@ -231,6 +244,7 @@
             page++;
           }
           dispatch("click:button--next", { page });
+          statusPage = page;
           dispatch("change", { page });
         }}
       />
@@ -241,7 +255,9 @@
     aria-atomic="true"
     class:bx--pagination-nav__accessibility-label={true}
   >
-    {pageText(page)}
-    {pageRangeText(page, total)}
+    {#if statusPage !== null}
+      {pageText(page)}
+      {pageRangeText(page, total)}
+    {/if}
   </div>
 </nav>

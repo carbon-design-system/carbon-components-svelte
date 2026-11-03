@@ -5,13 +5,14 @@
 
   /**
    * Specify the selected tab index.
-   * Ignored when `selectedId` is set.
+   * Prefer `selectedId` when tabs can be added, removed or reordered: an
+   * index then points at a different tab. Ignored when `selectedId` is set.
    * @bindable writable
    */
   export let selected = 0;
 
   /**
-   * Specify the selected tab by id.
+   * Specify the selected tab by id. Prefer it to `selected`.
    * When set, takes precedence over `selected` and stays on the same logical
    * tab as tabs are added or removed. Pair with a stable `id` on each `Tab`.
    * @bindable writable

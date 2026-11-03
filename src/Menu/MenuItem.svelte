@@ -6,6 +6,12 @@
    */
 
   /**
+   * @slot {{}} shortcutChildren - Custom shortcut content. Replaces `shortcutText` and `shortcut`.
+   * @deprecated use the `shortcutChildren` slot
+   * @slot {{}} shortcutText
+   */
+
+  /**
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    */
 
@@ -37,16 +43,26 @@
 
   /**
    * Specify the shortcut text.
-   * Alternatively, use the "shortcutText" slot.
+   * Alternatively, use the "shortcutChildren" slot.
    * Display only; does not register a keybinding.
    * @example
    * ```svelte
    * <MenuItem>
-   *   <span slot="shortcutText">⌘S</span>
+   *   <span slot="shortcutChildren">⌘S</span>
    * </MenuItem>
    * ```
    */
   export let shortcutText = "";
+
+  /**
+   * Specify a keyboard shortcut to show, such as `"mod+s"`. `mod` is
+   * Command on Apple platforms and Ctrl elsewhere. The keys show where
+   * `shortcutText` goes, and the item gets `aria-keyshortcuts`. Display only:
+   * bind the command itself with `onShortcut`, since the menu is usually
+   * closed. `shortcutText` and its slot take precedence. A value that isn't
+   * a shortcut, such as `"⌘C"`, shows as written.
+   */
+  export let shortcut = "";
 
   /**
    * Set to `true` to select the item.
@@ -79,10 +95,19 @@
   export let ref = null;
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
-  import { SUBMENU_HOVER_DELAY_MS } from "../constants/timing.js";
+  import Kbd from "../Kbd/Kbd.svelte";
+  import {
+    SUBMENU_AIM_PAUSE_MS,
+    SUBMENU_HOVER_DELAY_MS,
+  } from "../constants/timing.js";
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    parseShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import {
     getLayoutDirection,
     inlineKey,
@@ -101,17 +126,27 @@
   let submenuOpen = false;
   /** @type {"left" | "right"} */
   let submenuDirection = "right";
+  /** @type {HTMLUListElement | null} */
+  let submenuRef = null;
   const hoverIntent = createSubmenuHoverIntent(
     (value) => {
       submenuOpen = value;
     },
-    { openDelay: SUBMENU_HOVER_DELAY_MS, closeDelay: SUBMENU_HOVER_DELAY_MS },
+    {
+      openDelay: SUBMENU_HOVER_DELAY_MS,
+      closeDelay: SUBMENU_HOVER_DELAY_MS,
+      aimPause: SUBMENU_AIM_PAUSE_MS,
+      getSubmenu: () => (submenuOpen ? submenuRef : null),
+    },
   );
   // `selected` implies the checkbox variant. Latch it instead of writing back
   // to `selectable` so deselecting the item keeps its role and indentation.
   let selectedOnce = false;
 
   $: hasSubmenu = labelText !== undefined && $$slots.default;
+  // A shortcut that doesn't parse, such as Carbon React's free-text "⌘C",
+  // shows as written, as `shortcutText` would.
+  $: parsable = parseShortcut(shortcut) !== null;
   // A submenu opens toward the inline end: the left in RTL. Read when it
   // opens, since nothing reports a `dir` change.
   $: if (submenuOpen) {
@@ -222,10 +257,18 @@
   class:bx--menu-option--disabled={disabled}
   class:bx--menu-option--active={hasSubmenu && submenuOpen}
   class:bx--menu-option--danger={!hasSubmenu && kind === "danger"}
+  aria-keyshortcuts={shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+    : undefined}
   {...$$restProps}
   on:keydown
   on:keydown={(event) => {
-    if (disabled) return;
+    if (disabled) {
+      // A disabled item still takes focus, so keep Space from scrolling the
+      // page under it.
+      if (event.key === " " || event.key === "Enter") event.preventDefault();
+      return;
+    }
 
     if (hasSubmenu) {
       if (
@@ -266,8 +309,10 @@
   on:mouseenter={() => {
     if (hasSubmenu) scheduleOpenSubmenu();
   }}
-  on:mouseleave={() => {
-    if (hasSubmenu) scheduleCloseSubmenu();
+  on:mouseleave={(event) => {
+    // The event's position lets the close wait while the pointer aims at
+    // the submenu across the items below.
+    if (hasSubmenu) hoverIntent.scheduleClose(event);
   }}
 >
   <div
@@ -300,15 +345,26 @@
       <div class:bx--menu-option__info={true}>
         <CaretRight />
       </div>
-    {:else if shortcutText || $$slots.shortcutText}
+    {:else if shortcutText || $$slots.shortcutChildren || $$slots.shortcutText}
       <div class:bx--menu-option__info={true}>
-        <slot name="shortcutText">{shortcutText}</slot>
+        <slot name="shortcutChildren"
+          ><slot name="shortcutText">{shortcutText}</slot></slot
+        >
+      </div>
+    {:else if shortcut}
+      <div class:bx--menu-option__info={true}>
+        {#if parsable}
+          <Kbd {shortcut} variant="muted" aria-hidden="true" />
+        {:else}
+          {shortcut}
+        {/if}
       </div>
     {/if}
   </div>
 
   {#if hasSubmenu}
     <Menu
+      bind:ref={submenuRef}
       anchor={ref}
       direction={submenuDirection}
       intrinsicWidth

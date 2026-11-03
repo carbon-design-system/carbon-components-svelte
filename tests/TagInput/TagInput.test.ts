@@ -34,6 +34,32 @@ describe("TagInput", () => {
       expect(status()).toHaveTextContent("Svelte added. 1 tag.");
     });
 
+    // A live region fires only on a text change, so the same message
+    // written twice in a row was silent.
+    it("announces the same message twice in a row", async () => {
+      render(TagInput, { config: { addedText: () => "Tag added" } });
+      const region = status();
+
+      const announced: string[] = [];
+      const observer = new MutationObserver(() => {
+        const text = region.textContent?.trim();
+        if (text) announced.push(text);
+      });
+      observer.observe(region, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
+
+      await user.type(input(), "a{Enter}");
+      await user.type(input(), "b{Enter}");
+      await tick();
+      observer.disconnect();
+
+      expect(shownValue()).toEqual(["a", "b"]);
+      expect(announced).toEqual(["Tag added", "Tag added"]);
+    });
+
     it("leaves Enter alone when the field is empty", async () => {
       const onAdd = vi.fn();
       render(TagInput, { onAdd });
@@ -553,6 +579,15 @@ describe("TagInput", () => {
 
       expect(removeButton("a")).toBeDisabled();
       expect(input()).toBeDisabled();
+    });
+
+    // A 24px field takes the 16px tag, clear of its 2px focus outline.
+    it("gives an xs field xs tags", () => {
+      render(TagInput, { value: ["a"], config: { size: "xs" } });
+
+      expect(screen.getByText("a").closest(".bx--tag")).toHaveClass(
+        "bx--tag--xs",
+      );
     });
 
     it("scales tags with the field size", () => {

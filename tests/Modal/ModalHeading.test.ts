@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import ComposedModalTest from "../ComposedModal/ComposedModal.test.svelte";
 import ModalTest from "./Modal.test.svelte";
+import ModalLabelSlot from "./ModalLabelSlot.test.svelte";
 
 describe("modal heading level", () => {
   it("renders the Modal label and heading as h2", () => {
@@ -18,6 +19,31 @@ describe("modal heading level", () => {
     expect(
       screen.getByRole("heading", { level: 2, name: "Account settings" }),
     ).toHaveClass("bx--modal-header__label");
+  });
+
+  it("renders the label slot without modalLabel", () => {
+    render(ModalLabelSlot);
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Cloudant" }),
+    ).toHaveClass("bx--modal-header__label");
+  });
+
+  it("renders the labelChildren slot as the label", () => {
+    render(ModalLabelSlot, { props: { slots: "labelChildren" } });
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "New label" }),
+    ).toHaveClass("bx--modal-header__label");
+  });
+
+  it("prefers the labelChildren slot over the label slot", () => {
+    render(ModalLabelSlot, { props: { slots: "both" } });
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "New label" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("Cloudant")).toBeNull();
   });
 
   it("renders the ModalHeader label and title as h2", () => {

@@ -305,13 +305,13 @@ The copy button shows a tooltip: a proactive hint on hover or focus for single a
 
 ### Position
 
-Set `tooltipPosition` to place the tooltip relative to the copy button. Applies to every variant, including the inline snippet.
+Set `tooltipAlign` to place the tooltip relative to the copy button, with Popover's `align` names. Applies to every variant, including the inline snippet. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetTooltipPosition" />
 
 ### Alignment
 
-Set `tooltipAlignment` to align the tooltip relative to the copy button.
+Add `-start` or `-end` to align the tooltip with one end of the copy button.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetTooltipAlignment" />
 

@@ -1,6 +1,10 @@
 import type { Component } from "svelte";
 import { flushSync, mount, unmount } from "svelte";
 import "carbon-components-svelte/css/all.css";
+// A stylesheet belongs to the first fixture that loads it, and is off while
+// any other fixture is mounted. Two fixtures import prose.css, so the second
+// one lost it. Load it here, for every fixture; it only styles `.bx--prose`.
+import "carbon-components-svelte/css/prose.css";
 
 /**
  * One page per Playwright worker that swaps fixtures in place, so a test

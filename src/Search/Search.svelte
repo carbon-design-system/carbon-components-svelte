@@ -5,6 +5,7 @@
    * @event {null} expand
    * @event {null} collapse
    * @event {T} search
+   * @event {KeyboardEvent} shortcut - Dispatched when `shortcut` is pressed, before the field is focused. Call `preventDefault()` to skip the focus.
    * @restProps {input}
    */
 
@@ -76,6 +77,15 @@
   /** Specify the close button label text */
   export let closeButtonLabelText = "Clear search input";
 
+  /**
+   * Specify a keyboard shortcut that focuses the field, such as `"/"` or
+   * `"mod+k"`. `mod` is Command on Apple platforms and Ctrl elsewhere. The
+   * keys show at the end of the empty field until it's focused, and the
+   * input gets `aria-keyshortcuts`. A shortcut without a modifier, such as
+   * `"/"`, doesn't fire while typing in another field.
+   */
+  export let shortcut = "";
+
   /** Specify the label text */
   export let labelText = "";
 
@@ -124,6 +134,15 @@
   export let loadingDescription = "Searching";
 
   /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the spinner. Once shown, it stays for at least 500 ms, so fast work shows
+   * nothing and slow work never flashes. The input sets `aria-busy` as soon as
+   * `loading` is `true`.
+   * Set to `0` to show it at once.
+   */
+  export let loadingDelay = 0;
+
+  /**
    * Milliseconds to wait after the last input before dispatching `search`.
    * 0 (default) does not dispatch on input; Enter still dispatches
    * immediately. When greater than 0, `search` also fires after the pause.
@@ -132,6 +151,9 @@
   export let debounce = 0;
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
+  import Kbd from "../Kbd/Kbd.svelte";
+  import { KBD_TRANSLATIONS, kbdKeys } from "../Kbd/kbd-keys.js";
+  import { getKbdTranslations } from "../Kbd/kbd-translations.js";
   import Loading from "../Loading/Loading.svelte";
   import {
     FORM_CONTEXT_KEY,
@@ -142,6 +164,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -151,12 +174,59 @@
   import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import {
+    applePlatform,
+    ariaKeyShortcuts,
+    keyboardShortcut,
+  } from "../utils/keyboard-shortcut.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+
+  // Pressing the shortcut focuses the field, expanding it first when it's
+  // collapsed (the magnifier button holds the binding then).
+  /** @param {KeyboardEvent} event */
+  function runShortcut(event) {
+    if (!dispatch("shortcut", event, { cancelable: true })) return;
+    if (expandable && !expanded) {
+      expanded = true;
+      tick().then(() => ref?.focus());
+    } else {
+      ref?.focus();
+    }
+  }
+
+  const kbdTranslations = getKbdTranslations();
+
+  /** @param {import("../Kbd/Kbd.svelte").KbdTranslationId} id */
+  function translateKey(id) {
+    return kbdTranslations?.(id) ?? KBD_TRANSLATIONS[id];
+  }
+
+  $: shortcutParams = { shortcut, run: runShortcut };
+  // The magnifier holds the binding while the field is collapsed, so it
+  // announces the keys too.
+  $: ariaShortcut = shortcut
+    ? ariaKeyShortcuts(shortcut, { apple: $applePlatform }) || undefined
+    : undefined;
+  // The keys show in the empty field, where the clear button goes, and
+  // make room for themselves: their width in `ch`, near enough for the
+  // short run of keys, in the names `setKbdTranslations` gives them, and
+  // known on the server.
+  $: hasShortcutHint =
+    Boolean(shortcut) &&
+    (value === "" || value == null) &&
+    !disabled &&
+    !(expandable && !expanded) &&
+    !showInvalid &&
+    !showWarn;
+  $: shortcutWidth = kbdKeys(shortcut, $applePlatform, translateKey)
+    .map((key) => key.label)
+    .join($applePlatform ? "" : "+").length;
 
   let skipSelectOnFocus = false;
 
@@ -198,8 +268,19 @@
   }
 
   onMount(() => {
-    return () => dispatchSearch?.cancel();
+    return () => {
+      dispatchSearch?.cancel();
+      loadingIndicator.cancel();
+    };
   });
+
+  // `loading` takes effect at once for `aria-busy`. Only the indicator waits
+  // for `loadingDelay`; with no delay it follows `loading` exactly.
+  let showLoading = loading;
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
 
   $: isFluid = !expandable && (fluid || !!formContext?.isFluid);
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
@@ -259,12 +340,18 @@
     class:bx--search--expandable={expandable}
     class:bx--search--expanded={expanded}
     class:bx--search--fluid={isFluid}
+    class:bx--search--shortcut={hasShortcutHint}
+    style:--ccs-search-shortcut-width={hasShortcutHint
+      ? `${shortcutWidth}ch`
+      : undefined}
     class={searchClass}
   >
     {#if expandable && !expanded}
       <button
         type="button"
         bind:this={searchRef}
+        use:keyboardShortcut={shortcutParams}
+        aria-keyshortcuts={ariaShortcut}
         class:bx--search-magnifier={true}
         aria-label={labelText.trim() === ""
           ? placeholder || "Open search"
@@ -274,7 +361,7 @@
           expanded = true;
         }}
       >
-        {#if loading}
+        {#if showLoading}
           <span class:bx--search-magnifier-icon={true}>
             <Loading
               small
@@ -296,7 +383,7 @@
           if (expandable && !disabled) expanded = true;
         }}
       >
-        {#if loading}
+        {#if showLoading}
           <span class:bx--search-magnifier-icon={true}>
             <Loading
               small
@@ -315,12 +402,14 @@
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
     <!-- svelte-ignore a11y-autofocus -->
     <input
       bind:this={ref}
+      use:keyboardShortcut={shortcutParams}
       use:preserveFocusSelection={selectTextOnFocus && !disabled}
       use:formReset={handleFormReset}
       bind:value
@@ -337,6 +426,7 @@
       aria-invalid={showInvalid ? "true" : undefined}
       data-warn={showWarn || undefined}
       aria-errormessage={showInvalid && invalidText ? errorId : undefined}
+      aria-keyshortcuts={ariaShortcut}
       {...$$restProps}
       aria-describedby={joinDescribedBy(
         describedById,
@@ -392,6 +482,11 @@
       on:keyup
       on:paste
     />
+    {#if hasShortcutHint}
+      <span class:bx--search__shortcut={true}>
+        <Kbd {shortcut} variant="muted" aria-hidden="true" />
+      </span>
+    {/if}
     {#if showInvalid}
       <WarningFilled class="bx--search__invalid-icon" />
     {/if}

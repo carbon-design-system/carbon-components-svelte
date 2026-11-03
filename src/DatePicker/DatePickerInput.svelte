@@ -88,6 +88,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { getCalendarLocale } from "./calendar-dates.js";
   import {
@@ -130,6 +131,7 @@
     clearButtonLabelText,
     clear,
     locale,
+    conjunction,
   } = getContext("carbon:DatePicker");
 
   add({ id, labelText });
@@ -182,6 +184,16 @@
   // deliberate lag would otherwise leave the overlay showing stale text
   // while the (invisible) real input already has the freshly typed value.
   $: overlayValue = currentValue;
+  // Each date is its own inline-block, so the ellipsis hides whole dates
+  // and never cuts one in the middle.
+  $: overlayDates = overlayValue
+    ? $conjunction
+      ? overlayValue.split($conjunction)
+      : [overlayValue]
+    : [];
+  // While the input has focus, the overlay hides and the input shows its
+  // own text, scrolled to the caret, so the part being edited is visible.
+  let focused = false;
   $: ({ errorId, warnId, helperId } = buildFieldIds(id));
   // Fluid fields render no helper text, as with the other fluid fields.
   $: describedBy = resolveStatusDescribedBy({
@@ -198,6 +210,7 @@
   });
 
   function handleFocus() {
+    focused = true;
     if (selectTextOnFocus && !disabled && !$multiple) {
       tick().then(() => ref?.select());
     }
@@ -232,6 +245,7 @@
       class:bx--visually-hidden={hideLabel}
       class:bx--label--disabled={disabled}
       class:bx--label--readonly={readonly}
+      use:titleWhenTruncated={{ enabled: $isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
@@ -245,6 +259,10 @@
     class:bx--date-picker-input__wrapper--decorator={$$slots.decorator &&
       !$isFluid}
     class:bx--date-picker-input__wrapper--ai-label={$aiLabelState === "active"}
+    use:titleWhenTruncated={{
+      measure: ".bx--date-picker__input-overlay > span",
+      enabled: $multiple,
+    }}
   >
     <input
       bind:this={ref}
@@ -273,7 +291,7 @@
       class:bx--date-picker__input--xs={effectiveSize === "xs"}
       class:bx--date-picker__input--sm={effectiveSize === "sm"}
       class:bx--date-picker__input--xl={effectiveSize === "xl"}
-      class:bx--date-picker__input--ghost-text={$multiple}
+      class:bx--date-picker__input--ghost-text={$multiple && !focused}
       on:input
       on:input={(event) => {
         const { value: inputValue } = /** @type {HTMLInputElement} */ (
@@ -303,6 +321,7 @@
       on:focus={handleFocus}
       on:blur
       on:blur={(event) => {
+        focused = false;
         blurInput(event.relatedTarget);
       }}
       on:paste
@@ -311,6 +330,7 @@
       <div
         class:bx--date-picker__input={true}
         class:bx--date-picker__input-overlay={true}
+        class:bx--date-picker__input-overlay--hidden={focused}
         class:bx--date-picker__input--with-icon={hasIcon}
         class:bx--date-picker__input--with-clear={showClear}
         class:bx--date-picker__input--xs={effectiveSize === "xs"}
@@ -318,7 +338,11 @@
         class:bx--date-picker__input--xl={effectiveSize === "xl"}
         aria-hidden="true"
       >
-        <span>{overlayValue}</span>
+        <span dir="auto"
+          >{#each overlayDates as date, i (i)}{#if i}{$conjunction}{/if}<span
+              >{date}</span
+            >{/each}</span
+        >
       </div>
     {/if}
     {#if showClear}

@@ -88,3 +88,21 @@ describe("FileUploader form reset", () => {
     expect(onUploaderChange.mock.calls[1][0].detail).toEqual([]);
   });
 });
+
+describe("FileUploader form-level change", () => {
+  it.each(["button", "uploader"])(
+    "lets a form listener see a file pick in the %s input",
+    async (testId) => {
+      render(FileUploaderForm);
+      const onFormChange = vi.fn();
+      screen.getByTestId("form").addEventListener("change", onFormChange);
+
+      simulateFileSelection(getFileInput(screen.getByTestId(testId)), [
+        receipt(),
+      ]);
+      await tick();
+
+      expect(onFormChange).toHaveBeenCalledTimes(1);
+    },
+  );
+});

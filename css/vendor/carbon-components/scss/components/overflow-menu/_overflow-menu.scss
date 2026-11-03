@@ -522,8 +522,13 @@
 // thinner `Highlight` ring stood out less than its neighbors. It fills with
 // `Highlight` and opts out of forcing, as a highlighted SearchMenu row does;
 // a danger option's red fill would come back without the doubled class.
+//
+// The trigger's resting outline is repainted the same way, so a list with a
+// menu per row drew a box on every row. Only the focused or open trigger
+// keeps its ring, and the focus ring matches the open one's 2px width.
 
-/// OverflowMenu surface edge and focused option in forced-colors mode.
+/// OverflowMenu surface edge, trigger ring and focused option in forced-colors
+/// mode.
 /// @access private
 /// @group overflow-menu
 @mixin overflow-menu-forced-colors {
@@ -532,6 +537,18 @@
   }
 
   @media (forced-colors: active) {
+    .#{$prefix}--overflow-menu {
+      outline-style: none;
+    }
+
+    .#{$prefix}--overflow-menu:focus {
+      outline-width: 2px;
+    }
+
+    .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open {
+      outline-style: solid;
+    }
+
     .#{$prefix}--overflow-menu-options__btn:focus,
     .#{$prefix}--overflow-menu-options__option--danger
       .#{$prefix}--overflow-menu-options__btn:focus {

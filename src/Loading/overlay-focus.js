@@ -1,6 +1,7 @@
 // @ts-check
 import { tick } from "svelte";
 import { restoreFocus } from "../utils/focus.js";
+import { isModalDialog } from "../utils/modal-dialog.js";
 import { trapFocus } from "../utils/trap-focus.js";
 
 /**
@@ -9,21 +10,6 @@ import { trapFocus } from "../utils/trap-focus.js";
  * @type {HTMLElement[]}
  */
 const stack = [];
-
-/**
- * @param {Element} element
- * @returns {boolean}
- */
-function isModalDialog(element) {
-  if (element.matches('[aria-modal="true"]')) return true;
-  if (!(element instanceof HTMLDialogElement) || !element.open) return false;
-  try {
-    return element.matches(":modal");
-  } catch {
-    // Browsers without `:modal` only reach here for an open `<dialog>`.
-    return true;
-  }
-}
 
 /**
  * Whether `target` sits in a modal (`Modal`, `ComposedModal`, a modal

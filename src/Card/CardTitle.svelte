@@ -2,7 +2,9 @@
   /**
    * @restProps {div}
    * @slot {{}}
-   * @slot {{}} label - Text above the title, such as a category.
+   * @slot {{}} labelChildren - Text above the title, such as a category.
+   * @deprecated use the `labelChildren` slot
+   * @slot {{}} label
    * @slot {{}} description - Text below the title, such as a date.
    * @slot {{}} titleStart - An icon before the title text.
    * @slot {{}} titleEnd - An icon after the title text.
@@ -22,7 +24,7 @@
   export let maxWidth = "100%";
 
   /**
-   * Truncate the `label` slot. Takes the same values as `titleTruncate`.
+   * Truncate the `labelChildren` slot. Takes the same values as `titleTruncate`.
    * @type {boolean | number}
    */
   export let labelTruncate = false;
@@ -40,7 +42,7 @@
 </script>
 
 <div class:bx--card__title={true} {...$$restProps}>
-  {#if $$slots.label}
+  {#if $$slots.labelChildren || $$slots.label}
     <div
       class:bx--card__label={true}
       class:bx--card__label--truncate={labelTruncate === true}
@@ -49,7 +51,7 @@
         ? labelTruncate
         : undefined}
     >
-      <slot name="label" />
+      <slot name="labelChildren"><slot name="label" /></slot>
     </div>
   {/if}
   <span

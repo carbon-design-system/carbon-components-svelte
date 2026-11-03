@@ -53,7 +53,9 @@ The `"error"` status renders `role="alert"`, interrupting the screen reader imme
 
 ## Delay
 
-Set `delay` to wait a number of milliseconds after `status` becomes `"active"` before rendering. Operations that finish within the delay never show the pending state; `"inactive"`, `"finished"`, and `"error"` always render immediately since they're resting or terminal states, not something to hide.
+Set `delay` to wait a number of milliseconds after `status` becomes `"active"` before showing the spinner. Work that finishes within the delay goes straight to the next status. Once shown, the spinner stays for at least 500 ms so it does not flash. A status that arrives in that time waits for it, and the spinner keeps the description it had, so a spinner never blinks before "Saved". The `success` event fires `successDelay` milliseconds after the checkmark shows.
+
+`"inactive"`, `"finished"`, and `"error"` render at once when no spinner is showing. While the spinner waits, it is in the page but hidden, so the server HTML holds it too.
 
 <FileSource src="/framed/InlineLoading/InlineLoadingDelay" />
 

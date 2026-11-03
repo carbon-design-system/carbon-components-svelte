@@ -191,4 +191,67 @@ describe("createDismissibleNotification", () => {
     expect(document.activeElement).toBe(elsewhere);
     document.body.innerHTML = "";
   });
+
+  it.each([
+    ["the page body", () => null],
+    ["another element", (other: HTMLElement) => other],
+  ])(
+    "a timeout leaves focus alone after focus left for %s",
+    async (_, next) => {
+      const before = document.createElement("button");
+      const root = document.createElement("div");
+      const inside = document.createElement("button");
+      const other = document.createElement("button");
+      root.append(inside);
+      document.body.append(before, root, other);
+
+      const notification = createDismissibleNotification({
+        dispatch: vi.fn(() => true),
+        getPauseOnHover: () => false,
+        setOpen: vi.fn(),
+      });
+      root.addEventListener("focusin", notification.handleFocusIn);
+      root.addEventListener("focusout", notification.handleFocusOut);
+      notification.sync(true, 100);
+      before.focus();
+      inside.focus();
+
+      const target = next(other);
+      if (target) target.focus();
+      else inside.blur();
+      await Promise.resolve();
+      // Focus later drops to the body, as when the focused element goes away.
+      other.blur();
+      expect(document.activeElement).toBe(document.body);
+
+      vi.advanceTimersByTime(100);
+
+      expect(document.activeElement).toBe(document.body);
+      document.body.innerHTML = "";
+    },
+  );
+
+  it("a timeout still returns focus that stayed inside", () => {
+    const before = document.createElement("button");
+    const root = document.createElement("div");
+    const inside = document.createElement("button");
+    root.append(inside);
+    document.body.append(before, root);
+
+    const notification = createDismissibleNotification({
+      dispatch: vi.fn(() => true),
+      getPauseOnHover: () => false,
+      setOpen: vi.fn(),
+    });
+    root.addEventListener("focusin", notification.handleFocusIn);
+    root.addEventListener("focusout", notification.handleFocusOut);
+    notification.sync(true, 100);
+    before.focus();
+    inside.focus();
+
+    vi.advanceTimersByTime(100);
+
+    expect(document.activeElement).toBe(before);
+    document.body.innerHTML = "";
+  });
 });

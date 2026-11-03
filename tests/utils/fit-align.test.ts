@@ -2,6 +2,7 @@ import {
   clippedBy,
   fitPopoverAlign,
   shouldFlipAlign,
+  sidePlacement,
   slideIntoWindow,
   windowShift,
 } from "../../src/utils/fit-align.js";
@@ -36,6 +37,45 @@ function box(edges: Parameters<typeof rect>[0]) {
   el.getBoundingClientRect = () => rect(edges);
   return el;
 }
+
+describe("sidePlacement", () => {
+  it.each([
+    ["bottom", "center", "bottom"],
+    ["bottom", "start", "bottom-left"],
+    ["bottom", "end", "bottom-right"],
+    ["top", "start", "top-left"],
+    ["top", "end", "top-right"],
+    ["right", "center", "right"],
+    ["right", "start", "right-top"],
+    ["right", "end", "right-bottom"],
+    ["left", "start", "left-top"],
+    ["left", "end", "left-bottom"],
+  ] as const)("places %s and %s as %s", (side, align, expected) => {
+    expect(sidePlacement(side, align)).toBe(expected);
+  });
+
+  it("never pairs a side with an edge on its own axis", () => {
+    const valid = new Set([
+      "top",
+      "top-left",
+      "top-right",
+      "bottom",
+      "bottom-left",
+      "bottom-right",
+      "left",
+      "left-top",
+      "left-bottom",
+      "right",
+      "right-top",
+      "right-bottom",
+    ]);
+    for (const side of ["top", "bottom", "left", "right"] as const) {
+      for (const align of ["start", "center", "end"] as const) {
+        expect(valid.has(sidePlacement(side, align))).toBe(true);
+      }
+    }
+  });
+});
 
 describe("windowShift", () => {
   afterEach(() => vi.restoreAllMocks());
@@ -282,6 +322,28 @@ describe("fitPopoverAlign", () => {
       { left: 940, top: 560, width: 200, height: 100 },
     );
     expect(fitPopoverAlign(el, anchor, "right-top")).toBe("left-bottom");
+  });
+
+  // A 600px popover 8px right of a centered anchor needs 608px; each side
+  // has 480px.
+  it.each([
+    ["below", 100, "bottom"],
+    ["above, at the bottom of the window", 560, "top"],
+  ] as const)("opens %s when neither side has room", (_, top, expected) => {
+    const { el, anchor } = setup(
+      { left: 480, top },
+      { left: 528, top, width: 600, height: 20 },
+    );
+    expect(fitPopoverAlign(el, anchor, "right")).toBe(expected);
+  });
+
+  it("aligns the move below to the edge with room", () => {
+    // Centered under the anchor at 120, a 900px popover would start at -330.
+    const { el, anchor } = setup(
+      { left: 100, top: 100 },
+      { left: 92 - 900, top: 100, width: 900, height: 20 },
+    );
+    expect(fitPopoverAlign(el, anchor, "left-top")).toBe("bottom-left");
   });
 
   it("fits within the box that clips it across the page", () => {

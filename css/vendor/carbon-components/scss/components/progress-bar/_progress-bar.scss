@@ -165,11 +165,13 @@
 // carbon-components-svelte patch
 // `valueText` sits after the (optional) status icon in the label row. Anchor
 // it to the row's end with its own margin so it doesn't compete with the
-// label/icon `space-between` for position.
+// label/icon `space-between` for position. Tabular figures keep the
+// digits still as the value counts up.
 @mixin progress-bar-value-text {
   .#{$prefix}--progress-bar__value-text {
     margin-left: auto;
     color: $text-secondary;
+    font-variant-numeric: tabular-nums;
   }
 }
 

@@ -448,6 +448,8 @@ Set `loading` to `true` to show a loading row after the options, such as while f
 
 Set `loadingText` to change the row's text.
 
+Set `loadingDelay` to wait a number of milliseconds after `loading` becomes `true` before showing the loading row. Work that finishes within the delay shows no row. Once shown, the row stays for at least 500 ms so it does not flash. The menu is marked busy, and the empty state held back, as soon as `loading` is `true`.
+
 <MultiSelect loading labelText="Contact" label="Select contact methods..."
     items="{[{id: "0", text: "Slack"},
     {id: "1", text: "Email"}]}"

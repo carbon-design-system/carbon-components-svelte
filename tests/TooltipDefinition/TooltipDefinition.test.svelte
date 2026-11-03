@@ -14,6 +14,7 @@
     undefined;
   export let enterDelayMs = 0;
   export let leaveDelayMs = 0;
+  export let tabindex: number | undefined = undefined;
   export let onOpen: () => void = () => {};
   export let onClose: () => void = () => {};
   export let onParentKeydown: (event: KeyboardEvent) => void = () => {};
@@ -31,6 +32,7 @@
     {portalTooltip}
     {enterDelayMs}
     {leaveDelayMs}
+    {tabindex}
     on:open={onOpen}
     on:close={onClose}
   >

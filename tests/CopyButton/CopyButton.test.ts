@@ -346,6 +346,25 @@ describe("CopyButton", () => {
       expect(openTooltips()[0]).toHaveTextContent("Copied!");
     });
 
+    it("places feedback by tooltipAlign over tooltipPosition", async () => {
+      render(CopyButtonPortalTooltipTimeout, {
+        props: {
+          portalTooltip: false,
+          tooltipPosition: "bottom",
+          tooltipAlign: "top-start",
+        },
+      });
+
+      const button = getCopyButton("Copy");
+      expect(button).toHaveClass("bx--copy-btn--portal-active");
+
+      await user.click(button);
+
+      const portal = document.querySelector("[data-floating-portal]");
+      expect(portal).toHaveAttribute("data-floating-direction", "top");
+      expect(portal).toHaveAttribute("data-floating-intrinsic-align", "start");
+    });
+
     describe("feedback timeout", () => {
       beforeEach(() => {
         vi.useFakeTimers();

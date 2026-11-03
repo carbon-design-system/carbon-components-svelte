@@ -55,6 +55,7 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
@@ -135,7 +136,7 @@
   {#if hasIcon}
     <slot {selected}><svelte:component this={icon} /></slot>
   {:else}
-    <span class:bx--content-switcher__label={true}>
+    <span class:bx--content-switcher__label={true} use:titleWhenTruncated>
       <slot {selected}>{text}</slot>
     </span>
   {/if}

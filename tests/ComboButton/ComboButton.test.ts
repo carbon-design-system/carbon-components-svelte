@@ -165,6 +165,23 @@ describe("ComboButton", () => {
     expect(trigger).toHaveClass("bx--btn--icon-only--right");
     expect(trigger).not.toHaveClass("bx--btn--icon-only--top");
   });
+
+  it("passes tooltipAlign to the trigger over the older props", () => {
+    render(ComboButtonFixture, {
+      props: {
+        tooltipAlign: "left-end",
+        tooltipPosition: "right",
+        tooltipAlignment: "start",
+      },
+    });
+
+    const trigger = screen.getByRole("button", { name: "Additional actions" });
+    expect(trigger).toHaveClass(
+      "bx--btn--icon-only--left",
+      "bx--tooltip--align-end",
+    );
+    expect(trigger).not.toHaveClass("bx--btn--icon-only--right");
+  });
 });
 
 describe("ComboButton menu placement", () => {

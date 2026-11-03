@@ -45,7 +45,7 @@ Set icon on an item for a left icon. The label sits between the icon and the che
   {id: "1", text: "Email", icon: Email},
   {id: "2", text: "Webhook", icon: Webhook}]} />
 
-Use the `iconRight` slot to replace the checkmark.
+Use the `iconEnd` slot to replace the checkmark.
 
 <ComboBox labelText="Alert channel" placeholder="Select alert channel" selectedId="0" items={[
   {id: "0", text: "Slack", icon: Chat},
@@ -54,7 +54,7 @@ Use the `iconRight` slot to replace the checkmark.
   <svelte:fragment slot="icon" let:item>
     <svelte:component this={item.icon} />
   </svelte:fragment>
-  <svelte:fragment slot="iconRight" let:selected>
+  <svelte:fragment slot="iconEnd" let:selected>
     {#if selected}<StarFilled />{:else}<Star />{/if}
   </svelte:fragment>
 </ComboBox>
@@ -333,6 +333,8 @@ The original value is automatically restored if you close the dropdown without m
 For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async behavior with a debounced input value change.
 
 Set `loading` to `true` while a request is in flight. The menu shows a loading row after the options, is marked busy for screen readers, and holds back the empty state until the results arrive.
+
+Set `loadingDelay` to wait a number of milliseconds after `loading` becomes `true` before showing the loading row. Work that finishes within the delay shows no row. Once shown, the row stays for at least 500 ms so it does not flash. The menu is marked busy, and the empty state held back, as soon as `loading` is `true`.
 
 <FileSource src="/framed/ComboBox/AsyncComboBox" />
 

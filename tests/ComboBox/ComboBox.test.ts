@@ -11,6 +11,7 @@ import ComboBox from "./ComboBox.test.svelte";
 import ComboBoxCustom from "./ComboBoxCustom.test.svelte";
 import ComboBoxDuplicateIds from "./ComboBoxDuplicateIds.test.svelte";
 import ComboBoxGenerics from "./ComboBoxGenerics.test.svelte";
+import ComboBoxIconEnd from "./ComboBoxIconEnd.test.svelte";
 import ComboBoxIconSlots from "./ComboBoxIconSlots.test.svelte";
 import ComboBoxInModal from "./ComboBoxInModal.test.svelte";
 import ComboBoxItemIcon from "./ComboBoxItemIcon.test.svelte";
@@ -346,20 +347,25 @@ describe("ComboBox", () => {
     expect(activeOptions[0]).toHaveAttribute("role", "option");
   });
 
-  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+  it("keeps the keyboard highlight while the pointer moves over the menu", async () => {
     render(ComboBox);
 
     await user.click(getInput());
+    await user.keyboard("{ArrowDown}");
 
+    const slackOption = screen.getByRole("option", { name: "Slack" });
     const emailOption = screen.getByRole("option", { name: "Email" });
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
     await fireEvent.mouseLeave(screen.getByRole("listbox"));
-    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
-  it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
+  it("does not highlight a hovered item, so Enter closes without selecting", async () => {
     const onSelect = vi.fn();
     render(ComboBox, { props: { onSelect } });
 
@@ -368,7 +374,7 @@ describe("ComboBox", () => {
 
     const emailOption = screen.getByRole("option", { name: "Email" });
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
 
     await user.keyboard("{Enter}");
     expect(onSelect).not.toHaveBeenCalled();
@@ -625,6 +631,19 @@ describe("ComboBox", () => {
         "data-invalid",
       );
       expect(container.querySelector(".bx--list-box__invalid-icon")).toBeNull();
+    },
+  );
+
+  it.each(["disabled", "readonly"] as const)(
+    "closes the menu when %s turns on while open",
+    async (state) => {
+      const { rerender } = render(ComboBox);
+      await user.click(getInput());
+
+      await rerender({ [state]: true });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(getInput()).toHaveAttribute("aria-expanded", "false");
     },
   );
 
@@ -1630,7 +1649,7 @@ describe("ComboBox", () => {
     expect(customItems[1]).toHaveAttribute("data-selected", "true");
     expect(customItems[2]).toHaveAttribute("data-selected", "false");
 
-    await user.hover(customItems[2]);
+    await user.keyboard("{ArrowDown}");
     expect(customItems[2]).toHaveAttribute("data-highlighted", "true");
     expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
   });
@@ -1750,24 +1769,14 @@ describe("ComboBox", () => {
     expect(focusSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("should not highlight a disabled option on hover", async () => {
-    render(ComboBox, {
-      props: {
-        items: [
-          { id: "0", text: "Slack", price: 100 },
-          { id: "1", text: "Email", price: 200, disabled: true },
-        ],
-      },
-    });
+  it("does not move aria-activedescendant on hover", async () => {
+    render(ComboBox);
 
     const input = getInput();
     await user.click(input);
 
     await user.hover(screen.getByRole("option", { name: "Email" }));
     expect(input).toHaveAttribute("aria-activedescendant", "");
-
-    await user.hover(screen.getByRole("option", { name: "Slack" }));
-    expect(input.getAttribute("aria-activedescendant")).toMatch(/-0$/);
   });
 
   describe("autoHighlight", () => {
@@ -2141,6 +2150,36 @@ describe("ComboBox", () => {
       expect(
         document.querySelector(".bx--list-box__menu-item__selected-icon"),
       ).toBeNull();
+    });
+
+    it("should render iconEnd instead of the checkmark", () => {
+      render(ComboBoxIconEnd);
+
+      expect(screen.getByTestId("end-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("end-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(
+        screen
+          .getByTestId("end-0")
+          .closest(".bx--list-box__menu-item__icon--right"),
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeNull();
+    });
+
+    it("should prefer iconEnd over iconRight", () => {
+      render(ComboBoxIconEnd, { props: { withIconRight: true } });
+
+      expect(screen.getByTestId("end-0")).toBeInTheDocument();
+      expect(screen.getByTestId("end-1")).toBeInTheDocument();
+      expect(screen.queryByTestId("right-0")).toBeNull();
+      expect(screen.queryByTestId("right-1")).toBeNull();
     });
   });
 

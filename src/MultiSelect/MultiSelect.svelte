@@ -450,6 +450,15 @@
   export let loadingText = "Loading...";
 
   /**
+   * Wait this many milliseconds after `loading` turns `true` before showing
+   * the loading row. Once shown, it stays for at least 500 ms, so fast work
+   * shows nothing and slow work never flashes. The menu sets `aria-busy` and
+   * holds back the empty state as soon as `loading` is `true`.
+   * Set to `0` to show it at once.
+   */
+  export let loadingDelay = 0;
+
+  /**
    * Set to `true` to let an option's label wrap onto as many lines as it needs
    * instead of being truncated with an ellipsis.
    * @type {boolean}
@@ -528,6 +537,7 @@
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { deepEqual } from "../utils/deep-equal.js";
+  import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
@@ -545,6 +555,7 @@
   import { overflowTitle } from "../utils/overflow-title.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rangeSlice } from "../utils/range-slice.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -620,7 +631,7 @@
   /** Set when a required, empty multi-select blocked form submission. */
   let requiredError = false;
   let highlightedIndex = -1;
-  let highlightOrigin = /** @type {"keyboard" | "pointer" | null} */ (null);
+  let highlightOrigin = /** @type {"keyboard" | null} */ (null);
   /** Row index (see `toRowIndex`) last scrolled into view. */
   let prevHighlightedIndex = -1;
   let prevChecked = [];
@@ -732,8 +743,7 @@
    * Select the item keyboard-highlighted at `index` (into `itemsToUse`), or
    * with `shiftKey` select the range from the anchor to it, matching
    * shift+click (`handleOptionClick`). Ignored unless the highlight came
-   * from the keyboard: a hover highlight must not become selectable by
-   * pressing Enter/Space elsewhere.
+   * from the keyboard.
    * @param {number} index
    * @param {boolean} shiftKey
    */
@@ -748,16 +758,6 @@
       selectItemRange(index, !item.checked);
     if (!usedRange) selectItem(item);
     prevSelectedItemId = item.id;
-  }
-
-  /**
-   * @param {number} index Index into `itemsToUse`.
-   * @param {boolean} itemDisabled
-   */
-  function handleOptionMouseenter(index, itemDisabled) {
-    if (itemDisabled) return;
-    highlightedIndex = index;
-    highlightOrigin = "pointer";
   }
 
   function change(step) {
@@ -1058,8 +1058,18 @@
       announceFilterResults.cancel();
       typeahead.clear();
       menuWindow.destroy();
+      loadingIndicator.cancel();
     };
   });
+
+  // `loading` takes effect at once for `aria-busy` and the empty state. Only
+  // the indicator waits for `loadingDelay`; with no delay it follows `loading`
+  // exactly.
+  let showLoading = loading;
+  const loadingIndicator = createLoadingIndicator((shown) => {
+    showLoading = shown;
+  });
+  $: loadingIndicator(loading, loadingDelay);
 
   afterUpdate(() => {
     syncOpenEvent();
@@ -1102,7 +1112,6 @@
       highlightedIndex: toRowIndex(highlightedIndex),
       prevHighlightedIndex,
       listRef,
-      highlightOrigin,
       menuWindow,
     });
 
@@ -1343,6 +1352,10 @@
     disabled,
     readonly,
   }));
+  // A MultiSelect that turns disabled while open closes its menu, so no
+  // option stays clickable. A read-only menu stays open for review. Closing
+  // here is not a dismissal, so `close` does not fire.
+  $: if (disabled && open) open = false;
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
     isFluid && !showInvalid && !showWarn && !disabled && !readonly;
@@ -1401,9 +1414,11 @@
     selectionDisplay === "tags"
       ? items.filter((item) => !item.isSelectAll && selectedIdsSet.has(item.id))
       : [];
-  /** @type {"sm" | "default"} */
+  /** @type {"xs" | "sm" | "default"} */
   $: tagSize =
-    effectiveSize === "xs" || effectiveSize === "sm" ? "sm" : "default";
+    effectiveSize === "xs" || effectiveSize === "sm"
+      ? effectiveSize
+      : "default";
   // Scope select-all to the currently visible (filtered) items, so it
   // doesn't check/uncheck items hidden by an active filter.
   $: selectAllScope = filterable && open ? filteredItems : sortedItems;
@@ -1631,6 +1646,7 @@
       class:bx--label--disabled={disabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
+      use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
     >
       <slot name="labelChildren">{labelText}</slot>
     </label>
@@ -1648,10 +1664,10 @@
     {warnId}
     class={multiSelectListBoxClass}
   >
-    {#if showInvalid}
+    {#if !filterable && showInvalid}
       <WarningFilled class="bx--list-box__invalid-icon" />
     {/if}
-    {#if showWarn}
+    {#if !filterable && showWarn}
       <WarningAltFilled
         class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
       />
@@ -1684,7 +1700,7 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
-              class={tagSize === "sm" ? "bx--tag--sm" : undefined}
+              class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
           {/if}
           <input
@@ -1793,6 +1809,16 @@
             {placeholder}
             {id}
           />
+          <!-- After the input, as in ComboBox, so the list box rules move the
+            status icon left of the clear button once a query is typed. -->
+          {#if showInvalid}
+            <WarningFilled class="bx--list-box__invalid-icon" />
+          {/if}
+          {#if showWarn}
+            <WarningAltFilled
+              class="bx--list-box__invalid-icon bx--list-box__invalid-icon--warning"
+            />
+          {/if}
           {#if value}
             <ListBoxSelection
               on:clear={() => {
@@ -1960,10 +1986,12 @@
               translateWithId={translateWithIdSelection}
               {disabled}
               {readonly}
-              class={tagSize === "sm" ? "bx--tag--sm" : undefined}
+              class={tagSize === "default" ? undefined : `bx--tag--${tagSize}`}
             />
           {/if}
-          <span class:bx--list-box__label={true}>{label}</span>
+          <span class:bx--list-box__label={true} use:titleWhenTruncated
+            >{label}</span
+          >
           <ListBoxMenuIcon {open} {translateWithId} />
         </ListBoxField>
       </div>
@@ -1990,18 +2018,11 @@
         {direction}
         highlightedId={activeDescendantId}
         {wrapOptions}
-        highlightScroll={highlightOrigin !== "pointer"}
         aria-multiselectable="true"
         aria-readonly={readonly || undefined}
         aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
-        on:mouseleave={() => {
-          // Clear the hover highlight when the cursor leaves the menu so the
-          // highlighted state does not linger on the last hovered item.
-          highlightedIndex = -1;
-          highlightOrigin = null;
-        }}
         bind:ref={listRef}
         style={isWindowed
           ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
@@ -2037,6 +2058,8 @@
                       aria-hidden="true"
                       data-virtual-index={isMeasured ? rowIndex : undefined}
                       class:bx--list-box__menu-group-header={true}
+                      class:bx--list-box__menu-group-header--first={rowIndex ===
+                        0}
                       on:mousedown={(event) => {
                         // Keep focus on the field, as options do.
                         event.preventDefault();
@@ -2093,8 +2116,6 @@
                         // re-announce it on every option click.
                         event.preventDefault();
                       }}
-                      on:mouseenter={() =>
-                        handleOptionMouseenter(actualIndex, itemDisabled)}
                     >
                       <HighlightSlot {optionId} let:highlighted>
                         <div
@@ -2173,6 +2194,8 @@
                     aria-hidden="true"
                     data-virtual-index={isMeasured ? rowIndex : undefined}
                     class:bx--list-box__menu-group-header={true}
+                    class:bx--list-box__menu-group-header--first={rowIndex ===
+                      0}
                     on:mousedown={(event) => {
                       // Keep focus on the field, as options do.
                       event.preventDefault();
@@ -2222,8 +2245,6 @@
                       // re-announce it on every option click.
                       event.preventDefault();
                     }}
-                    on:mouseenter={() =>
-                      handleOptionMouseenter(index, itemDisabled)}
                   >
                     <HighlightSlot {optionId} let:highlighted>
                       <div
@@ -2289,7 +2310,7 @@
             <slot name="empty" {value}>{emptyMessage}</slot>
           </ListBoxMenuStatus>
         {/if}
-        {#if loading}
+        {#if showLoading}
           <ListBoxMenuStatus>
             <InlineLoading description={loadingText} />
           </ListBoxMenuStatus>

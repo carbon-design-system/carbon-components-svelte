@@ -49,6 +49,31 @@ test.describe("DataTable virtualization", () => {
     ).toHaveCount(0);
   });
 
+  test("header stays at the top of the scroll container while scrolling", async ({
+    page,
+  }) => {
+    const scrollContainer = page
+      .getByTestId("data-table-virtual-root")
+      .locator(".bx--data-table-container > div")
+      .filter({ has: page.locator("table.bx--data-table") });
+    await expect(scrollContainer).toBeVisible();
+
+    await scrollContainer.evaluate((el) => {
+      el.scrollTop = 50 * 48;
+    });
+    await expect(
+      page.getByRole("cell", { name: "Row 50", exact: true }),
+    ).toBeVisible();
+
+    const container = await scrollContainer.boundingBox();
+    const header = await page
+      .getByRole("columnheader", { name: "Name" })
+      .boundingBox();
+    expect(container).not.toBeNull();
+    expect(header).not.toBeNull();
+    expect(header?.y).toBeCloseTo(container?.y ?? Number.NaN, 0);
+  });
+
   test("virtual scroll container is height-limited and scrollable", async ({
     page,
   }) => {

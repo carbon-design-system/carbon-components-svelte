@@ -227,7 +227,7 @@
     {/if}
   </slot>
 </button>
-{#if isOpen}
+{#if isOpen && transition}
   <div
     bind:this={refPanel}
     id="{id}-panel"
@@ -235,10 +235,18 @@
     aria-labelledby={id}
     class:bx--header-panel={true}
     class:bx--header-panel--expanded={true}
-    transition:slide|local={{
-      ...transition,
-      duration: transition === false ? 0 : transition.duration,
-    }}
+    transition:slide|local={transition}
+  >
+    <slot />
+  </div>
+{:else if isOpen}
+  <div
+    bind:this={refPanel}
+    id="{id}-panel"
+    role="region"
+    aria-labelledby={id}
+    class:bx--header-panel={true}
+    class:bx--header-panel--expanded={true}
   >
     <slot />
   </div>

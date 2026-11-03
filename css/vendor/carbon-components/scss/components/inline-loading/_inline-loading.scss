@@ -73,6 +73,11 @@
     }
   }
 
+  // ccs: hidden while `delay` waits, as `.bx--loading--delayed` is in
+  // loading.
+  .#{$prefix}--inline-loading--delayed {
+    animation-name: loading-delay;
+  }
 }
 
 @include exports('inline-loading') {

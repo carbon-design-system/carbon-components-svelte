@@ -127,7 +127,7 @@
    * Size of every tag, including the "+N" overflow indicator. Applies to
    * slotted `Tag` children without their own `size`.
    * Also accepts Carbon v11's `"md"` (`"default"`).
-   * @type {"sm" | "default" | "lg" | "md" | undefined}
+   * @type {"xs" | "sm" | "default" | "lg" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -176,7 +176,7 @@
   const items = writable([]);
   /** @type {import("svelte/store").Writable<Set<string>>} */
   const overflowIds = writable(new Set());
-  /** @type {import("svelte/store").Writable<"sm" | "default" | "lg" | undefined>} */
+  /** @type {import("svelte/store").Writable<"xs" | "sm" | "default" | "lg" | undefined>} */
   const sharedSize = writable(normalizeSize(size, TAG_SIZE_ALIASES));
   $: sharedSize.set(normalizeSize(size, TAG_SIZE_ALIASES));
   const sharedNavigation = writable(navigation);

@@ -105,6 +105,9 @@
     color: $text-primary;
     text-overflow: ellipsis;
     white-space: nowrap;
+    // ccs: a date reads in its own direction, so in RTL "03/15/2024 2:30
+    // PM" keeps its order instead of showing as "PM 2:30 03/15/2024".
+    unicode-bidi: plaintext;
     transition: background-color $duration--fast-01 motion(standard, productive);
 
     &:focus { // ccs: dropped unrendered .bx--focused
@@ -142,15 +145,18 @@
   }
 
   // Chromium/Firefox/WebKit only render `text-overflow: ellipsis` on an
-  // <input> while it is blurred; a focused, editable field always shows its
-  // content unellipsized so the caret stays visible. For "multiple" mode's
-  // potentially long joined value, an overlay renders the same text as
-  // ellipsized static content on top of the (visually transparent, but
-  // still focusable/typable) real input, matching the blurred rendering in
-  // both states. See DatePickerInput.svelte.
+  // <input> while it is blurred. For "multiple" mode's potentially long
+  // joined value, an overlay renders the same text as ellipsized static
+  // content on top of the (visually transparent, but still focusable and
+  // typable) real input. While the input has focus, the overlay hides and
+  // the input shows its own text. See DatePickerInput.svelte.
   .#{$prefix}--date-picker__input--ghost-text {
     color: transparent;
     caret-color: $text-primary;
+  }
+
+  .#{$prefix}--date-picker__input-overlay--hidden {
+    visibility: hidden;
   }
 
   .#{$prefix}--date-picker__input-overlay {
@@ -168,11 +174,20 @@
     // directly on it, so the truncation happens on this nested flex child
     // instead; `min-width: 0` lets it actually shrink below its content
     // size rather than the flexbox default of refusing to.
-    span {
+    // `dir="auto"` in the markup reads the direction from the dates, as
+    // `unicode-bidi: plaintext` does on the input.
+    > span {
       overflow: hidden;
       min-width: 0;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+
+    // ccs: one inline-block per date. The ellipsis hides an atomic inline
+    // whole, so it falls between dates and never inside one.
+    > span > span {
+      display: inline-block;
+      unicode-bidi: plaintext;
     }
   }
 
@@ -629,4 +644,36 @@
 
 @include exports("date-picker-full-width") {
   @include date-picker-full-width;
+}
+
+// carbon-components-svelte patch
+// `unicode-bidi: plaintext` on the input aligns a left-to-right date to the
+// left, even on an RTL page. Keep it at the page's start.
+/// @access private
+/// @group components
+@mixin date-picker-rtl-text {
+  [dir="rtl"] .#{$prefix}--date-picker__input {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("date-picker-rtl-text") {
+  @include date-picker-rtl-text;
+}
+
+// carbon-components-svelte patch
+// An inline range calendar sits in the start field's container. The row
+// stretched the end container to the same height, and its
+// `space-between` then put the end input at the bottom, over the
+// calendar's last week. Keep each container as tall as its own content.
+/// @access private
+/// @group components
+@mixin date-picker-inline-range {
+  .#{$prefix}--date-picker--range.#{$prefix}--date-picker--inline {
+    align-items: flex-start;
+  }
+}
+
+@include exports("date-picker-inline-range") {
+  @include date-picker-inline-range;
 }

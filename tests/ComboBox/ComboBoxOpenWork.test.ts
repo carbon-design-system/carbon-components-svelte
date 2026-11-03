@@ -36,19 +36,6 @@ describe("ComboBox open work on long lists", () => {
     expect(state.idReads).toBeLessThan(COUNT / 2);
   });
 
-  it("highlights a hovered option without reading every item's id", async () => {
-    const { items, state } = buildItems();
-    render(ComboBox, { props: { items, placeholder: "Pick" } });
-    await user.click(getInput());
-    state.idReads = 0;
-
-    const option = screen.getAllByRole("option")[2];
-    await user.hover(option);
-
-    expect(getInput()).toHaveAttribute("aria-activedescendant", option.id);
-    expect(state.idReads).toBeLessThan(COUNT / 2);
-  });
-
   describe("filter pass", () => {
     const buildCountedItems = () => {
       const state = { filterCalls: 0 };
@@ -145,7 +132,7 @@ describe("ComboBox open work on long lists", () => {
     });
   });
 
-  it("still maps hovered options to their position when not virtualized", async () => {
+  it("still maps options to their position when not virtualized", async () => {
     const items = Array.from({ length: 20 }, (_, i) => ({
       id: String(i),
       text: `Item ${i}`,
@@ -157,8 +144,5 @@ describe("ComboBox open work on long lists", () => {
 
     const option = screen.getAllByRole("option")[7];
     expect(option).toHaveAttribute("aria-posinset", "8");
-    await user.hover(option);
-
-    expect(getInput()).toHaveAttribute("aria-activedescendant", option.id);
   });
 });

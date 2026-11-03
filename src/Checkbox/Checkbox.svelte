@@ -89,7 +89,8 @@
   export let form = undefined;
 
   /**
-   * Specify the title attribute for the label element.
+   * Set the native `title` attribute on the label element. When unset,
+   * the label takes its full text as `title` while it is truncated.
    * @type {string | undefined}
    * @bindable readonly
    */

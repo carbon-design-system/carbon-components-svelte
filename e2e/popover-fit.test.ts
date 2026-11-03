@@ -188,6 +188,21 @@ test.describe("in LTR", () => {
     expect(edge).toBe("1px");
   });
 
+  for (const [id, name] of [
+    ["narrow", "Narrow"],
+    ["narrow-portal", "Narrow portal"],
+    ["toggletip-narrow", "Toggletip with no side room"],
+  ] as const)
+    test(`${id} with no room on either side at 320px opens above or below`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 320, height: 600 });
+      const p = await open(page, id, name);
+      expect(p.inWindow).toBe(true);
+      expect(p.align).toMatch(/^bx--popover--(top|bottom)/);
+      expect(Math.abs(p.caretOffset)).toBeLessThan(p.anchorHalf);
+    });
+
   test("one that fits keeps its align, in place", async ({ page }) => {
     const p = await open(page, "plain", "Plain");
     expect(p.align).toBe("bx--popover--bottom-left");

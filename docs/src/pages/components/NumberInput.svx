@@ -70,6 +70,8 @@ of 0.1.
 
 With the input focused, <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> step by `step`. <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> step by 10 × `step`, clamped to `min`/`max`.
 
+A stepper button held for 400 ms steps, then steps every 50 ms until release or `min`/`max`. A shorter press steps once, on release.
+
 <NumberInput value="{50}" step={1} min={0} max={100} helperText="Press PageUp or PageDown to step by 10" labelText="Clusters" />
 
 ### Scrub by dragging the label
@@ -173,7 +175,8 @@ includes the current parsed value and the original FocusEvent.
 
 Use `on:click:stepper` to listen for stepper button clicks. The event detail
 includes the updated value and direction (`"up"` or `"down"`). This event only
-fires on button clicks, not arrow key presses.
+fires on button clicks, not arrow key presses. A held button fires it once,
+on release, with the final value.
 
 <NumberInput
   on:click:stepper={(e) => {

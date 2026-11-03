@@ -115,6 +115,9 @@ export function createDismissibleNotification({
     // `dispose()` runs, so only settle the flag once the unmount is done.
     queueMicrotask(() => {
       focusInside = !!root?.contains(document.activeElement);
+      // Focus left for the page, even just the body. A later close must
+      // not pull it back to where it was before it entered.
+      if (!focusInside) prevFocus = null;
     });
   }
 

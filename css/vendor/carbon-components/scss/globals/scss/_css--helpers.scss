@@ -22,7 +22,10 @@
     height: 1px;
     padding: 0;
     border: 0;
-    margin: -1px;
+    // ccs: no inline margin. Under `dir="rtl"` a -1px inline-start margin
+    // moves the box 1px past the container's right edge, which scrolls a
+    // page whose right edge it touches.
+    margin: -1px 0;
     clip: rect(0, 0, 0, 0);
     visibility: inherit;
     white-space: nowrap;

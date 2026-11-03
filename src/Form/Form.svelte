@@ -1,7 +1,7 @@
 <script context="module">
   /**
    * @typedef {import("svelte/action").Action<HTMLFormElement, any>} FormAction
-   * @typedef {FormAction | [FormAction, any]} FormActionEntry
+   * @typedef {FormAction | readonly [FormAction, any]} FormActionEntry
    */
 
   /**

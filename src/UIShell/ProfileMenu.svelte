@@ -174,17 +174,24 @@
     <slot name="avatar"><UserAvatar size="md" /></slot>
   </span>
 </button>
-{#if isOpen}
+{#if isOpen && transition}
   <div
     bind:this={refMenu}
     use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
     id={menuId}
     aria-label={iconDescription}
     class:bx--profile-menu={true}
-    transition:slide|local={{
-      ...transition,
-      duration: transition === false ? 0 : transition.duration,
-    }}
+    transition:slide|local={transition}
+  >
+    <slot />
+  </div>
+{:else if isOpen}
+  <div
+    bind:this={refMenu}
+    use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
+    id={menuId}
+    aria-label={iconDescription}
+    class:bx--profile-menu={true}
   >
     <slot />
   </div>

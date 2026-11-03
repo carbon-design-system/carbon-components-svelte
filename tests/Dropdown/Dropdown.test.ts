@@ -16,6 +16,7 @@ import Dropdown from "./Dropdown.test.svelte";
 import DropdownCustom from "./DropdownCustom.test.svelte";
 import DropdownDuplicateIds from "./DropdownDuplicateIds.test.svelte";
 import DropdownGenerics from "./DropdownGenerics.test.svelte";
+import DropdownIconEnd from "./DropdownIconEnd.test.svelte";
 import DropdownIconSlots from "./DropdownIconSlots.test.svelte";
 import DropdownInModal from "./DropdownInModal.test.svelte";
 import DropdownItemIcon from "./DropdownItemIcon.test.svelte";
@@ -205,6 +206,22 @@ describe("Dropdown", () => {
     expect(screen.getByRole("combobox")).toHaveAttribute("disabled");
     expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
+
+  it.each(["disabled", "readonly"] as const)(
+    "closes the menu when %s turns on while open",
+    async (state) => {
+      const { rerender } = render(Dropdown, {
+        props: { items, selectedId: "0" },
+      });
+      const trigger = screen.getByRole("combobox");
+      await user.click(trigger);
+
+      await rerender({ [state]: true });
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    },
+  );
 
   it.each(["disabled", "readonly"] as const)(
     "drops the invalid and warning markers when %s",
@@ -785,7 +802,7 @@ describe("Dropdown", () => {
     });
   });
 
-  it("does not select a hover-highlighted item on Enter; closes without selecting", async () => {
+  it("does not highlight a hovered item, so Enter closes without selecting", async () => {
     const selectHandler = vi.fn();
     render(Dropdown, {
       props: { items, selectedId: "0", onselect: selectHandler },
@@ -798,7 +815,7 @@ describe("Dropdown", () => {
     const fax = screen.getByText("Fax").closest(".bx--list-box__menu-item");
     assert(fax);
     await user.hover(fax);
-    expect(fax).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(fax).not.toHaveClass("bx--list-box__menu-item--highlighted");
 
     await user.keyboard("{Enter}");
     expect(selectHandler).not.toHaveBeenCalled();
@@ -1126,7 +1143,7 @@ describe("Dropdown", () => {
     expect(customItems[1]).toHaveAttribute("data-selected", "true");
     expect(customItems[2]).toHaveAttribute("data-selected", "false");
 
-    await user.hover(customItems[2]);
+    await user.keyboard("{End}");
     expect(customItems[2]).toHaveAttribute("data-highlighted", "true");
     expect(customItems[0]).toHaveAttribute("data-highlighted", "false");
   });
@@ -1593,18 +1610,23 @@ describe("Dropdown", () => {
     );
   });
 
-  it("should clear the hover highlight when the cursor leaves the menu", async () => {
+  it("keeps the keyboard highlight while the pointer moves over the menu", async () => {
     render(Dropdown, { props: { items } });
 
     const button = screen.getByRole("combobox");
     await user.click(button);
+    await user.keyboard("{Home}");
 
+    const slackOption = screen.getByRole("option", { name: "Slack" });
     const emailOption = screen.getByRole("option", { name: "Email" });
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
+
     await user.hover(emailOption);
-    expect(emailOption).toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
 
     await fireEvent.mouseLeave(screen.getByRole("listbox"));
-    expect(emailOption).not.toHaveClass("bx--list-box__menu-item--highlighted");
+    expect(slackOption).toHaveClass("bx--list-box__menu-item--highlighted");
   });
 
   // "av" only reaches Avocado if the buffer accumulates: a search for "v"
@@ -2427,6 +2449,36 @@ describe("Dropdown", () => {
       expect(
         document.querySelector(".bx--list-box__menu-item__selected-icon"),
       ).toBeNull();
+    });
+
+    it("should render iconEnd instead of the checkmark", () => {
+      render(DropdownIconEnd);
+
+      expect(screen.getByTestId("end-0")).toHaveAttribute(
+        "data-selected",
+        "true",
+      );
+      expect(screen.getByTestId("end-1")).toHaveAttribute(
+        "data-selected",
+        "false",
+      );
+      expect(
+        screen
+          .getByTestId("end-0")
+          .closest(".bx--list-box__menu-item__icon--right"),
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector(".bx--list-box__menu-item__selected-icon"),
+      ).toBeNull();
+    });
+
+    it("should prefer iconEnd over iconRight", () => {
+      render(DropdownIconEnd, { props: { withIconRight: true } });
+
+      expect(screen.getByTestId("end-0")).toBeInTheDocument();
+      expect(screen.getByTestId("end-1")).toBeInTheDocument();
+      expect(screen.queryByTestId("right-0")).toBeNull();
+      expect(screen.queryByTestId("right-1")).toBeNull();
     });
   });
 

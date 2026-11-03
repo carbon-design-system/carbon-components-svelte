@@ -3,6 +3,7 @@
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
   export let loading = false;
+  export let loadingDelay = 0;
   export let onClick: () => void = () => {};
 </script>
 
@@ -14,12 +15,19 @@
   {loading}
 />
 
-<Button data-testid="btn-labeled-loading" {loading}>Submit</Button>
+<Button data-testid="btn-labeled-loading" {loading} {loadingDelay}
+  >Submit</Button
+>
 
 <Button data-testid="btn-href-loading" href="#" {loading}>Link</Button>
 
 <Button data-testid="btn-skeleton-loading" skeleton {loading} />
 
-<Button data-testid="btn-click-guard" {loading} on:click={onClick}>
+<Button
+  data-testid="btn-click-guard"
+  {loading}
+  {loadingDelay}
+  on:click={onClick}
+>
   Submit
 </Button>

@@ -99,6 +99,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -182,6 +183,7 @@
                 class:bx--label--disabled={disabled}
                 class:bx--label--readonly={readonly}
                 class:bx--label--slotted={$$slots.labelChildren}
+                use:titleWhenTruncated={{ enabled: !$$slots.labelChildren }}
               >
                 <slot name="labelChildren">{labelText}</slot>
               </label>

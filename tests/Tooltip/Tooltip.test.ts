@@ -15,6 +15,7 @@ import TooltipHideIconFooter from "./TooltipHideIconFooter.test.svelte";
 import TooltipNoLabel from "./TooltipNoLabel.test.svelte";
 import TooltipOpen from "./TooltipOpen.test.svelte";
 import TooltipPortalDirections from "./TooltipPortalDirections.test.svelte";
+import TooltipTriggerSlot from "./TooltipTriggerSlot.test.svelte";
 import TooltipTwoInstancesFocus from "./TooltipTwoInstancesFocus.test.svelte";
 
 describe("Tooltip", () => {
@@ -390,6 +391,29 @@ describe("Tooltip", () => {
       expect(document.getElementById(labelledby ?? "")).toBeInTheDocument();
     },
   );
+
+  describe("trigger content slots", () => {
+    it.each([
+      ["triggerChildren", "New trigger"],
+      ["triggerText", "Old trigger"],
+    ] as const)("renders the %s slot beside the icon", (slots, text) => {
+      render(TooltipTriggerSlot, { props: { slots } });
+
+      expect(screen.getByText(text).parentElement).toHaveClass(
+        "bx--tooltip__label",
+      );
+    });
+
+    it.each([false, true])(
+      "prefers the triggerChildren slot with hideIcon %s",
+      (hideIcon) => {
+        render(TooltipTriggerSlot, { props: { slots: "both", hideIcon } });
+
+        expect(screen.getByText("New trigger")).toBeInTheDocument();
+        expect(screen.queryByText("Old trigger")).toBeNull();
+      },
+    );
+  });
 
   describe("portal content", () => {
     it("closes on Escape from the portalled content", async () => {

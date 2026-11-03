@@ -11,17 +11,13 @@
 <Button bind:ref={anchor} on:click={() => (open = !open)}>Actions</Button>
 
 <Menu {anchor} bind:open labelText="Actions menu">
-  <MenuItem icon={Cut} shortcutText="⌘X" on:click={() => console.log("Cut")}>
+  <MenuItem icon={Cut} shortcut="mod+x" on:click={() => console.log("Cut")}>
     Cut
   </MenuItem>
-  <MenuItem icon={Copy} shortcutText="⌘C" on:click={() => console.log("Copy")}>
+  <MenuItem icon={Copy} shortcut="mod+c" on:click={() => console.log("Copy")}>
     Copy
   </MenuItem>
-  <MenuItem
-    icon={Paste}
-    shortcutText="⌘V"
-    on:click={() => console.log("Paste")}
-  >
+  <MenuItem icon={Paste} shortcut="mod+v" on:click={() => console.log("Paste")}>
     Paste
   </MenuItem>
 </Menu>

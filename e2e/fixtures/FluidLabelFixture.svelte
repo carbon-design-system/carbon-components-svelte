@@ -64,3 +64,22 @@
     </TextInput>
   </div>
 </div>
+
+<!-- The same fields wide enough for their labels. -->
+<div
+  data-testid="wide"
+  style="width: 480px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin-top: 2rem;"
+>
+  <TextInput fluid labelText={label} />
+  <TextArea fluid labelText={label} />
+  <Select fluid labelText={label}><SelectItem value="a" text="Alpha" /></Select>
+  <NumberInput fluid labelText={label} value={1} />
+  <ComboBox fluid labelText={label} {items} />
+  <MultiSelect fluid labelText={label} {items} />
+  <DatePicker fluid datePickerType="single">
+    <DatePickerInput labelText={label} placeholder="mm/dd/yyyy" />
+  </DatePicker>
+  <TimePicker fluid labelText={label} />
+  <Search fluid labelText={label} />
+  <PinCodeInput fluid labelText={label} count={6} />
+</div>

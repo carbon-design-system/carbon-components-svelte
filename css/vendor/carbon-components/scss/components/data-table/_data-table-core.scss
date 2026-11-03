@@ -603,9 +603,12 @@
     padding-bottom: $spacing-05;
   }
 
+  // ccs: v11; padding below too, so text that wraps past the 64px row
+  // keeps clear of the row's bottom border
   .#{$prefix}--data-table--tall td,
   .#{$prefix}--data-table--tall tbody tr th {
     padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
   .#{$prefix}--data-table--tall th,

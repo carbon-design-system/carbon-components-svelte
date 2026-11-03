@@ -102,14 +102,14 @@
   /** @type {null | HTMLDivElement} */
   let tooltipRef = null;
 
-  // Naming and description belong on the trigger button, not the wrapper.
-  // A consumer `aria-describedby` joins the tooltip id, which in portal mode
-  // exists only while the tooltip is shown.
+  // Naming, description and `tabindex` belong on the trigger button, not the
+  // wrapper. A consumer `aria-describedby` joins the tooltip id, which in
+  // portal mode exists only while the tooltip is shown.
   $: ({
     ariaLabel,
     ariaLabelledBy,
     ariaDescribedBy,
-    rest: wrapperProps,
+    rest: { tabindex: triggerTabindex, ...wrapperProps },
   } = splitAriaNaming($$restProps));
 
   const PORTAL_VERTICAL_GAP_TOP_PX = -2;
@@ -236,6 +236,7 @@
   <button
     bind:this={ref}
     type="button"
+    tabindex={triggerTabindex}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(

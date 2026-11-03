@@ -414,6 +414,8 @@ describe("DatePicker", () => {
     }
 
     it("keeps focus on the day after adding it in multiple mode", async () => {
+      // Mid-month, so ArrowRight stays in the shown month.
+      pinToday(new Date(2026, 0, 15));
       render(DatePicker, { datePickerType: "multiple" });
       const input = screen.getByLabelText("Date");
       const calendar = await screen.findByLabelText(/^Choose a /);
@@ -2035,6 +2037,24 @@ describe("DatePicker", () => {
       const overlay = document.querySelector(".bx--date-picker__input-overlay");
       expect(overlay).toHaveAttribute("aria-hidden", "true");
       expect(overlay?.querySelector("span")).toHaveTextContent("01/0");
+    });
+
+    it("puts each date of the ghost overlay in its own span", () => {
+      render(DatePicker, {
+        datePickerType: "multiple",
+        value: "01/05/2026; 01/06/2026; 01/07/2026",
+        conjunction: "; ",
+      });
+
+      const text = document.querySelector(
+        ".bx--date-picker__input-overlay > span",
+      );
+      expect(text).toHaveTextContent("01/05/2026; 01/06/2026; 01/07/2026");
+      expect(
+        [...(text?.querySelectorAll(":scope > span") ?? [])].map(
+          (date) => date.textContent,
+        ),
+      ).toEqual(["01/05/2026", "01/06/2026", "01/07/2026"]);
     });
 
     describe("shift-click range selection", () => {

@@ -299,6 +299,14 @@ test.describe("DataTable", () => {
     ).toHaveAttribute("tabindex", "0");
   });
 
+  test("fixedLayout gives the selection column a width", async ({ page }) => {
+    const table = page.getByTestId("data-table-fixed-layout-selectable");
+    const header = table.getByRole("columnheader").first();
+    await expect(header).toBeAttached();
+    const box = await header.boundingBox();
+    expect(box?.width).toBeGreaterThan(0);
+  });
+
   test("a hand-written td keeps the cell color and background", async ({
     page,
   }) => {
@@ -316,4 +324,18 @@ test.describe("DataTable", () => {
       });
     expect(await look("Hand-written cell")).toEqual(await look("Table cell"));
   });
+});
+
+// Carbon v11 draws the search close icon at 16px. ToolbarSearch keeps
+// Search's xl size, which draws it at 20px, too large for the 32px
+// close button of a small toolbar.
+test("a small toolbar's search draws a 16px close icon", async ({ page }) => {
+  await page.goto("/data-table-variants.html");
+  const icon = page
+    .getByTestId("toolbar")
+    .locator(".bx--table-toolbar--small .bx--search-close svg")
+    .first();
+  const box = await icon.boundingBox();
+  expect(box?.width).toBe(16);
+  expect(box?.height).toBe(16);
 });

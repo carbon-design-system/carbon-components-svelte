@@ -136,14 +136,16 @@
   } from "../utils/typeahead.js";
 
   // Selectable and radio items carry their own roles, so navigation and
-  // initial focus must match all three.
-  const NON_DISABLED_MENUITEM_SELECTOR = [
-    "menuitem",
-    "menuitemcheckbox",
-    "menuitemradio",
-  ]
-    .map((role) => `[role='${role}']:not([aria-disabled='true'])`)
-    .join(",");
+  // initial focus must match all three. Arrow keys, Home, End and typeahead
+  // reach disabled items, which stay focusable as in the WAI-ARIA APG menu
+  // pattern; opening the menu still focuses the first enabled item.
+  const MENUITEM_ROLES = ["menuitem", "menuitemcheckbox", "menuitemradio"];
+  const MENUITEM_SELECTOR = MENUITEM_ROLES.map(
+    (role) => `[role='${role}']`,
+  ).join(",");
+  const NON_DISABLED_MENUITEM_SELECTOR = MENUITEM_ROLES.map(
+    (role) => `[role='${role}']:not([aria-disabled='true'])`,
+  ).join(",");
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -269,7 +271,7 @@
         if (!open || !ref) return;
         const firstItem = ref.querySelector(NON_DISABLED_MENUITEM_SELECTOR);
         if (firstItem instanceof HTMLElement) {
-          focusIndex = 0;
+          focusIndex = getItems().indexOf(firstItem);
           focusMenuItem(firstItem);
         } else {
           ref.focus({ preventScroll: true });
@@ -314,21 +316,21 @@
   }
 
   /** @returns {HTMLElement[]} */
-  function getEnabledItems() {
-    return Array.from(
-      ref?.querySelectorAll(NON_DISABLED_MENUITEM_SELECTOR) ?? [],
-    ).filter((item) => item instanceof HTMLElement);
+  function getItems() {
+    return Array.from(ref?.querySelectorAll(MENUITEM_SELECTOR) ?? []).filter(
+      (item) => item instanceof HTMLElement,
+    );
   }
 
   /**
    * WAI-ARIA APG menu first-character navigation: move focus to the next
-   * enabled item (in this menu's own level; a submenu is a separate,
+   * item (in this menu's own level; a submenu is a separate,
    * portaled `<ul>` so it is never among `items` here) whose label starts
    * with the buffered characters typed so far.
    * @param {string} character
    */
   function typeaheadSearch(character) {
-    const items = getEnabledItems();
+    const items = getItems();
     if (items.length === 0) return;
 
     const query = typeahead.push(character);
@@ -387,7 +389,7 @@
   <ul
     bind:this={ref}
     use:rovingFocus={{
-      selector: NON_DISABLED_MENUITEM_SELECTOR,
+      selector: MENUITEM_SELECTOR,
       orientation: "vertical",
       wrap: false,
       focusOnMove: false,
@@ -395,7 +397,7 @@
       onMove: (index, event) => {
         if (hasModifierKey(event)) return;
         focusIndex = index;
-        const item = getEnabledItems()[index];
+        const item = getItems()[index];
         if (item) focusMenuItem(item);
       },
     }}
@@ -437,7 +439,7 @@
     on:focusin={(event) => {
       // A click focuses an item without going through `onMove`, so sync the
       // index; otherwise the next arrow key starts from the stale one.
-      const index = getEnabledItems().indexOf(
+      const index = getItems().indexOf(
         /** @type {HTMLElement} */ (event.target),
       );
       if (index > -1) focusIndex = index;
