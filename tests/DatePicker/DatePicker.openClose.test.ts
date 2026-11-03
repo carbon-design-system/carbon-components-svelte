@@ -104,6 +104,20 @@ describe("DatePicker bind:open", () => {
     await settle();
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
   });
+
+  it.each(["disabled", "readonly"] as const)(
+    "closes the calendar when %s turns on while open",
+    async (state) => {
+      const { rerender } = render(DatePicker, {
+        props: { datePickerType: "single" },
+      });
+      const calendar = await openCalendar();
+
+      await rerender({ [state]: true });
+
+      expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
+    },
+  );
 });
 
 /** Opens the range picker's start input and returns the open calendar. */
