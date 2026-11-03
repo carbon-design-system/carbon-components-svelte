@@ -1,0 +1,306 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// JsonViewer: a virtualized JSON tree. Every row is as tall as
+/// `--ccs-json-row-height`, which the component sets from `size`, so the
+/// list can place rows without measuring them.
+///
+/// Type colors read `--ccs-json-<type>` first. The fallbacks are Carbon's tag
+/// text colors, which are built to read on a layer in every theme. To match a
+/// page that loads `syntax-tokens.css`, point a hook at a syntax token, such
+/// as `--ccs-json-string: var(--cds-syntax-string)`.
+/// @access private
+/// @group components
+@mixin json-viewer {
+  .#{$prefix}--json-viewer {
+    --ccs-json-indent: #{$carbon--spacing-05};
+
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--json-viewer__frame {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $background;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--json-viewer__toolbar,
+  .#{$prefix}--json-viewer__path {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    padding-inline: $carbon--spacing-03;
+    background-color: $layer;
+  }
+
+  // The controls wrap on a narrow screen instead of widening the page, and
+  // the block padding keeps the search field's focus ring off the frame.
+  .#{$prefix}--json-viewer__toolbar {
+    flex-wrap: wrap;
+    padding-block: $carbon--spacing-02;
+    border-block-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--json-viewer__path {
+    min-block-size: $carbon--spacing-07;
+    border-block-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--json-viewer__search {
+    flex: 1 1 to-rem(160px);
+    max-inline-size: to-rem(320px);
+    min-inline-size: to-rem(120px);
+  }
+
+  .#{$prefix}--json-viewer__status {
+    @include type-style("helper-text-01");
+
+    min-inline-size: to-rem(72px);
+    margin-inline: $carbon--spacing-03;
+    color: $text-secondary;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--json-viewer__divider {
+    inline-size: 1px;
+    block-size: $carbon--spacing-05;
+    margin-inline: $carbon--spacing-02;
+    background-color: $border-subtle;
+  }
+
+  .#{$prefix}--json-viewer__path-label {
+    @include type-style("label-01");
+
+    flex: none;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--json-viewer__path-text {
+    @include type-style("code-01");
+
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    color: $text-primary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // The scroll container. `overflow-anchor` stays off so the browser does not
+  // move the scroll position when `VirtualList` swaps the rows it renders.
+  .#{$prefix}--json-viewer__tree {
+    @include type-style("code-01");
+
+    position: relative;
+    overflow: auto;
+    overflow-anchor: none;
+    background-color: $background;
+  }
+
+  .#{$prefix}--json-viewer--sm .#{$prefix}--json-viewer__tree {
+    @include type-style("code-02");
+  }
+
+  .#{$prefix}--json-viewer__row {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    block-size: var(--ccs-json-row-height);
+    inline-size: max-content;
+    min-inline-size: 100%;
+    padding-inline: calc(
+        var(--ccs-json-depth, 0) * var(--ccs-json-indent) + #{$carbon--spacing-03}
+      )
+      $carbon--spacing-05;
+    color: $text-primary;
+    outline: none;
+    white-space: pre;
+  }
+
+  .#{$prefix}--json-viewer__toggle {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    block-size: 100%;
+    inline-size: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--json-viewer__caret {
+    fill: $icon-secondary;
+    transform: rotate(-90deg);
+    transition: transform $duration--fast-02 motion(standard, productive);
+
+    // In RTL, child rows indent toward the left, so a collapsed caret points
+    // left. Expanded, it points down in both directions.
+    [dir="rtl"] &:not(.#{$prefix}--json-viewer__caret--expanded) {
+      transform: ccs-dir(rotate(-90deg), rotate(90deg));
+    }
+  }
+
+  .#{$prefix}--json-viewer__caret--expanded {
+    transform: rotate(0);
+  }
+
+  // A key and its value are code: they read left to right as one unit in any
+  // page direction, beside a toggle that follows the page.
+  .#{$prefix}--json-viewer__content {
+    display: flex;
+    align-items: center;
+    unicode-bidi: isolate;
+  }
+
+  .#{$prefix}--json-viewer__key {
+    color: var(--ccs-json-key, var(--cds-tag-color-purple));
+  }
+
+  .#{$prefix}--json-viewer__key--root,
+  .#{$prefix}--json-viewer__key--index {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--json-viewer__colon {
+    margin-inline-end: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  // The value's type, as a color. Forced colors drop these, so the text itself
+  // carries the type too: quotes, `n`, `Date`, `ƒ`, `[Circular → …]`.
+  .#{$prefix}--json-viewer__row[data-json-type="string"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-string, var(--cds-tag-color-green));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="number"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="bigint"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-number, var(--cds-tag-color-blue));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="boolean"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-boolean, var(--cds-tag-color-magenta));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="date"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="regexp"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-date, var(--cds-tag-color-teal));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="function"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="symbol"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="opaque"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-special, var(--cds-tag-color-cool-gray));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="circular"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-error, var(--cds-tag-color-red));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="error"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-error, var(--cds-tag-color-red));
+  }
+
+  .#{$prefix}--json-viewer__row[data-json-type="null"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="undefined"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="object"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="array"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="map"]
+    .#{$prefix}--json-viewer__value,
+  .#{$prefix}--json-viewer__row[data-json-type="set"]
+    .#{$prefix}--json-viewer__value {
+    color: var(--ccs-json-muted, #{$text-secondary});
+  }
+
+  .#{$prefix}--json-viewer__hint,
+  .#{$prefix}--json-viewer__type {
+    @include type-style("label-01");
+
+    margin-inline-start: $carbon--spacing-04;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--json-viewer__type {
+    padding-inline: $carbon--spacing-02;
+    border: 1px solid $border-subtle;
+    border-radius: 2px;
+  }
+
+  .#{$prefix}--json-viewer__mark {
+    background-color: $highlight;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--json-viewer__row--current
+    .#{$prefix}--json-viewer__mark {
+    outline: 2px solid $border-inverse;
+    outline-offset: 0;
+  }
+
+  .#{$prefix}--json-viewer__row--active {
+    background-color: $layer-selected;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--json-viewer__row:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--json-viewer__row--active:hover {
+      background-color: $layer-selected-hover;
+    }
+
+    .#{$prefix}--json-viewer__toggle {
+      cursor: pointer;
+    }
+  }
+
+  .#{$prefix}--json-viewer__row:focus {
+    @include focus-outline("outline");
+  }
+
+  // Forced colors repaint every color above with the page's text color, so a
+  // type is read from its text, and the active row, the current match and the
+  // marks use system colors.
+  @media (forced-colors: active) {
+    .#{$prefix}--json-viewer__row--active:not(:focus) {
+      outline: 2px dotted Highlight;
+      outline-offset: -2px;
+    }
+
+    .#{$prefix}--json-viewer__mark {
+      forced-color-adjust: none;
+      background-color: Mark;
+      color: MarkText;
+    }
+
+    .#{$prefix}--json-viewer__caret {
+      fill: CanvasText;
+    }
+  }
+}
+
+@include exports("json-viewer") {
+  @include json-viewer;
+}
