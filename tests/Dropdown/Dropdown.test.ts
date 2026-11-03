@@ -207,22 +207,19 @@ describe("Dropdown", () => {
     expect(screen.getByRole("combobox")).toHaveTextContent("Slack");
   });
 
-  it.each([false, true])(
-    "ignores option clicks after becoming disabled (virtualize=%s)",
-    async (virtualize) => {
-      const onselect = vi.fn();
+  it.each(["disabled", "readonly"] as const)(
+    "closes the menu when %s turns on while open",
+    async (state) => {
       const { rerender } = render(Dropdown, {
-        props: { items, selectedId: "0", virtualize, onselect },
+        props: { items, selectedId: "0" },
       });
       const trigger = screen.getByRole("combobox");
       await user.click(trigger);
-      const option = screen.getByRole("option", { name: "Email" });
 
-      await rerender({ disabled: true });
-      await user.click(option);
+      await rerender({ [state]: true });
 
-      expect(trigger).toHaveTextContent("Slack");
-      expect(onselect).not.toHaveBeenCalled();
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
     },
   );
 

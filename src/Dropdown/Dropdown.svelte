@@ -505,6 +505,10 @@
   $: loadingIndicator(loading, loadingDelay);
 
   $: inline = type === "inline";
+  // A Dropdown that turns disabled or read-only while open closes its menu,
+  // like a native `<select>`, so no option stays clickable. Closing here is
+  // not a dismissal, so `close` does not fire.
+  $: if ((disabled || readonly) && open) open = false;
   $: {
     itemsById = new Map();
     for (let index = 0; index < items.length; index++) {
@@ -829,7 +833,6 @@
    * @param {Item} item
    */
   function selectItem(item) {
-    if (disabled) return;
     if (item.id === selectedId) {
       // Same rule as selectHighlighted: re-picking the current item is not a
       // selection, so close without `select` or `close`.
