@@ -12,6 +12,7 @@ import Search from "carbon-components-svelte/Search/Search.svelte";
 import Select from "carbon-components-svelte/Select/Select.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
+import StarRating from "carbon-components-svelte/StarRating/StarRating.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
 import SelectableTag from "carbon-components-svelte/Tag/SelectableTag.svelte";
 import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
@@ -174,6 +175,12 @@ const styleCases: {
     component: Select,
     fieldProps: field,
     marker: ".bx--select--disabled",
+  },
+  {
+    name: "StarRating",
+    component: StarRating,
+    fieldProps: group,
+    marker: ".bx--star-rating--disabled",
   },
   {
     name: "OperationalTag",

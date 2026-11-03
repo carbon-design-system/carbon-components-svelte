@@ -103,8 +103,13 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
 
@@ -115,12 +120,12 @@
 
   $: stars = Array.from({ length: max }, (_, index) => index + 1);
   // A disabled rating takes no pointerleave, so drop the preview now.
-  $: if (disabled) hovered = 0;
+  $: if (effectiveDisabled) hovered = 0;
   $: shown = hovered || value;
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: ({ helperId, errorId, warnId } = buildFieldIds(id));
@@ -222,10 +227,11 @@
     class:bx--star-rating={true}
     class:bx--star-rating--sm={size === "sm"}
     class:bx--star-rating--lg={size === "lg"}
-    class:bx--star-rating--disabled={disabled}
+    class:bx--star-rating--disabled={effectiveDisabled}
     {...rest}
   >
     <fieldset
+      use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
       bind:this={fieldsetRef}
       use:formReset={handleFormReset}
       {form}
@@ -236,13 +242,13 @@
       aria-describedby={joinDescribedBy(describedBy, ariaDescribedBy)}
       aria-invalid={showInvalid || undefined}
       data-invalid={showInvalid || undefined}
-      {disabled}
+      disabled={effectiveDisabled}
     >
       {#if hasLegend}
         <legend
           id={legendId}
           class:bx--label={true}
-          class:bx--label--disabled={disabled}
+          class:bx--label--disabled={effectiveDisabled}
           class:bx--visually-hidden={hideLegend}
         >
           <slot name="legendChildren">{legendText}</slot>
@@ -260,7 +266,8 @@
               class:bx--star-rating__star--on={star <= shown}
               on:pointerenter={(event) => {
                 // Only a mouse previews: a touch has no leave to clear it.
-                if (!disabled && event.pointerType === "mouse") hovered = star;
+                if (!effectiveDisabled && event.pointerType === "mouse")
+                  hovered = star;
               }}
             >
               <input
@@ -270,7 +277,7 @@
                 value={star}
                 checked={value === star}
                 {required}
-                {disabled}
+                disabled={effectiveDisabled}
                 {form}
                 on:click={() => {
                   // A radio fires no change when it is already checked.
@@ -322,7 +329,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
       >
         {helperText}
       </div>
