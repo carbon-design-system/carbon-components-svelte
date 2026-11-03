@@ -101,6 +101,14 @@ Group related links behind a dropdown with `SideNavMenu`, wrapping `SideNavMenuI
 
 In the [rail](#rail) variant, an expanded `SideNavMenu` automatically collapses when the rail returns to its narrow state.
 
+A submenu opens and closes at once by default. Set `transition` to animate its height with Carbon's [collapse](/motion#collapse): `true` plays it at `moderate01` (150 ms), and options such as `{ duration: "moderate02" }` customize it. Under `prefers-reduced-motion: reduce` it jumps.
+
+```svelte
+<SideNavMenu text="Kubernetes" transition>
+  <SideNavMenuItem href="/" text="Pods" />
+</SideNavMenu>
+```
+
 ### Nested menus
 
 Nest a `SideNavMenu` inside another for deeper hierarchies. Each level's text starts 16px past its parent's.

@@ -38,11 +38,28 @@
    */
   export let ref = null;
 
+  /**
+   * Animate the submenu's height as it expands and collapses. Set to `true`
+   * for Carbon's collapse at `moderate01` (150 ms), or to options such as
+   * `{ duration: "moderate02" }` to customize it. The submenu does not
+   * animate by default. Under `prefers-reduced-motion: reduce` it jumps.
+   * @type {undefined | boolean | import("../motion/collapse.js").CollapseOptions}
+   */
+  export let transition = undefined;
+
   import { getContext, onMount, setContext } from "svelte";
   import { readable, writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
+  import { collapse } from "../motion/collapse.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isSideNavCollapsed, isSideNavRail } from "./nav-store.js";
+
+  $: animated = transition !== undefined && transition !== false;
+  $: collapseOptions = {
+    duration: /** @type {const} */ ("moderate01"),
+    ...(typeof transition === "object" ? transition : {}),
+    open: expanded,
+  };
 
   // Follow the enclosing `SideNav`; the module stores cover a menu rendered
   // outside one.
@@ -147,14 +164,29 @@
       <ChevronDown />
     </span>
   </button>
-  <ul
-    bind:this={menuRef}
-    inert={expanded ? undefined : true}
-    class:bx--side-nav__menu={true}
-    style:max-height={expanded ? "none" : undefined}
-    style:--ccs-side-nav-menu-depth={depth > 1 ? depth : undefined}
-    style:--ccs-side-nav-menu-icon-depth={depth > 1 ? $iconDepth : undefined}
-  >
-    <slot />
-  </ul>
+  {#if animated}
+    <!-- The action owns the inline max-height, so the stylesheet's
+         collapsed state does not cut the exit short. -->
+    <ul
+      bind:this={menuRef}
+      inert={expanded ? undefined : true}
+      class:bx--side-nav__menu={true}
+      style:--ccs-side-nav-menu-depth={depth > 1 ? depth : undefined}
+      style:--ccs-side-nav-menu-icon-depth={depth > 1 ? $iconDepth : undefined}
+      use:collapse={collapseOptions}
+    >
+      <slot />
+    </ul>
+  {:else}
+    <ul
+      bind:this={menuRef}
+      inert={expanded ? undefined : true}
+      class:bx--side-nav__menu={true}
+      style:max-height={expanded ? "none" : undefined}
+      style:--ccs-side-nav-menu-depth={depth > 1 ? depth : undefined}
+      style:--ccs-side-nav-menu-icon-depth={depth > 1 ? $iconDepth : undefined}
+    >
+      <slot />
+    </ul>
+  {/if}
 </li>
