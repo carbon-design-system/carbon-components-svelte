@@ -152,7 +152,7 @@ test.describe("Motion on tooltips, toggletips and popovers", () => {
     expect((await recorded(page)).animated).toContain("tooltip-content");
   });
 
-  test("a tooltip that opens right after another one skips the fade", async ({
+  test("a tooltip that opens right after another one skips both fades", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -167,7 +167,7 @@ test.describe("Motion on tooltips, toggletips and popovers", () => {
     await expect(page.getByTestId("neighbor-content")).toBeVisible();
     await expect(page.getByTestId("tooltip-content")).toHaveCount(0);
     const { animated } = await recorded(page);
-    expect(animated).toContain("tooltip-content");
+    expect(animated).not.toContain("tooltip-content");
     expect(animated).not.toContain("neighbor-content");
   });
 });
