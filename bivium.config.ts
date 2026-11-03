@@ -74,7 +74,8 @@ export default {
     "css/*.css": ["css/**", "scripts/build-css.ts"],
     // Vitest loads the setup file, and what it imports, before every unit
     // test, and no test imports it.
-    "tests/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": "tests/setup-tests.ts",
+    "tests/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}":
+      "tests/setup-tests.ts",
   },
   self: [
     "bivium.config.ts",
