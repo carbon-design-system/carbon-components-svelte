@@ -18,6 +18,11 @@ export default {
       nonInputs: ["**/*.test-d.ts", "**/tsconfig.compat-check.json"],
       // The Svelte 3/4 harnesses run the same unit tests.
       wiring: ["tests-svelte{3,4}/**"],
+      // Vitest loads it before every test (`setupFiles`), so every test
+      // depends on it and on what it imports.
+      setup: "tests/setup-tests.ts",
+      // Vitest runs the code; `test:types` checks the types on its own.
+      types: false,
     },
     e2e: {
       tests: "e2e/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}",
@@ -26,6 +31,7 @@ export default {
       root: "e2e",
       urls: { "/*": "e2e/fixtures/*" },
       pages: "e2e/fixtures/**/*.html",
+      types: false,
     },
   },
   // The framed DatePicker pages are examples an e2e test renders from `src`.
@@ -70,13 +76,7 @@ export default {
   ],
   // Tools CI runs on its own: a bump that only reaches them selects nothing.
   inert: ["@biomejs/biome", "ostia", "@types/*"],
-  edges: {
-    "css/*.css": ["css/**", "scripts/build-css.ts"],
-    // Vitest loads the setup file, and what it imports, before every unit
-    // test, and no test imports it.
-    "tests/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}":
-      "tests/setup-tests.ts",
-  },
+  edges: { "css/*.css": ["css/**", "scripts/build-css.ts"] },
   self: [
     "bivium.config.ts",
     "scripts/lib/css-narrower.ts",
