@@ -33,7 +33,7 @@
 
   /**
    * Set the default for the menus of Dropdown, ComboBox, MultiSelect, Menu,
-   * MenuButton, and OverflowMenu.
+   * MenuButton, OverflowMenu, and HeaderSearch.
    * @type {import("./context.js").MotionValue}
    */
   export let menu = undefined;
