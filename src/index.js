@@ -268,6 +268,7 @@ export { default as FluidTimePickerSkeleton } from "./TimePicker/FluidTimePicker
 export { default as TimePicker } from "./TimePicker/TimePicker.svelte";
 export { default as TimePickerSelect } from "./TimePicker/TimePickerSelect.svelte";
 export { default as TimePickerSkeleton } from "./TimePicker/TimePickerSkeleton.svelte";
+export { default as TimezonePicker } from "./TimezonePicker/TimezonePicker.svelte";
 export { default as Toggle } from "./Toggle/Toggle.svelte";
 export { default as ToggleSkeleton } from "./Toggle/ToggleSkeleton.svelte";
 export { default as ToggleButton } from "./ToggleButtonGroup/ToggleButton.svelte";
