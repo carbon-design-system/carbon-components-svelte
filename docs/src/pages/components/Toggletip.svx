@@ -109,6 +109,17 @@ With `align` set to `"start"` or `"end"`, the caret points at the button's cente
   <Toggletip direction="bottom" align="end">end</Toggletip>
 </Stack>
 
+## Transition
+
+The content appears and disappears at once by default. Set `transition` to fade it in and out, in place or in a portal. `true` uses Carbon's fade (`fast01`, 70 ms), fade parameters such as `{ duration: "fast02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` it still appears and disappears at once. The toggletip forwards `introstart`, `introend`, `outrostart`, and `outroend`. While animated, the content is in the page only when the toggletip is open.
+
+<FileSource src="/framed/Toggletip/ToggletipTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Run work that needs the content gone on `outroend`, not when `open` turns `false`. | The content stays in the page until it has faded out. |
+| Don't keep state you need in the content while the toggletip is closed. | An animated toggletip mounts its content when it opens and removes it when it has left. |
+
 ## Portal
 
 Content that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a portal. Inside a Modal, the content always opens in a portal.

@@ -3,6 +3,10 @@
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
    * @event {null} open
    * @event {null} close
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
    * @restProps {div}
    * @slot {{}} triggerChildren - Custom trigger content. Replaces `triggerText`.
    * @deprecated use the `triggerChildren` slot
@@ -117,6 +121,17 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Animate the tooltip as it appears and leaves. Set to `true` for Carbon's
+   * fade (`fast01`), to fade params (e.g., `{ duration: "fast02" }`) to
+   * customize it, or to `{ fn }` to use another transition. The tooltip does
+   * not animate by default. A tooltip that opens right after another one in
+   * its group closed appears at once, with no fade, and the one it replaces
+   * leaves at once too.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
+   */
+  export let transition = undefined;
+
   import {
     createEventDispatcher,
     getContext,
@@ -128,6 +143,8 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fade } from "../motion/transitions.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
@@ -142,6 +159,44 @@
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import TooltipContent from "./TooltipContent.svelte";
+
+  /** @type {{ fn: typeof fade; params: import("../motion/transitions.js").FadeParams }} */
+  const fadePreset = { fn: fade, params: { duration: "fast01" } };
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition, fadePreset));
+
+  // Set while the tooltip leaves because another one in its group took over
+  // by warm handoff, so the group reads as one tooltip moving. The wrapper
+  // reads it through getters, as Svelte 3 and 4 read a `transition:` config
+  // when each run starts, not when the element mounts.
+  let handoffExit = false;
+
+  /** @type {import("../motion/resolve-transition.js").TransitionFunction} */
+  function handoffAwareFn(node, params, options) {
+    const config = transitionFn(node, params, options);
+    return {
+      get delay() {
+        return handoffExit ? 0 : config.delay;
+      },
+      get duration() {
+        return handoffExit ? 0 : config.duration;
+      },
+      get easing() {
+        return config.easing;
+      },
+      get css() {
+        return handoffExit ? undefined : config.css;
+      },
+      get tick() {
+        return handoffExit ? undefined : config.tick;
+      },
+    };
+  }
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
@@ -186,10 +241,13 @@
   /** @type {null | HTMLElement} */
   let refPortalTooltip = null;
 
-  $: if (!open) {
-    flip = null;
-    shift = 0;
-  }
+  // The in-place and portalled tooltips bind their own refs, so one that is
+  // still leaving cannot clear `refTooltip` after its replacement sets it.
+  /** @type {null | HTMLDivElement} */
+  let refInPlace = null;
+  /** @type {null | HTMLDivElement} */
+  let refFloating = null;
+  $: refTooltip = effectivePortalTooltip ? refFloating : refInPlace;
 
   setContext("carbon:Tooltip", { tooltipOpen, openedByHover });
 
@@ -201,6 +259,7 @@
     leaveDelayMs: () => leaveDelayMs,
     rich: true,
   });
+  const { instant: tooltipInstant } = tooltipHandoff;
 
   function handleMouseenter() {
     openedByHover.set(true);
@@ -275,7 +334,19 @@
     // tooltip's own claim when it opens.
     const unsubscribeOthersActive = tooltipHandoff.hidden.subscribe(
       (othersActive) => {
-        if (othersActive && open && get(openedByHover)) open = false;
+        if (!othersActive) return;
+        const handedOff = get(tooltipHandoff.handedOff);
+        if (open && get(openedByHover)) {
+          handoffExit = handedOff;
+          open = false;
+        } else if (leaving && handedOff) {
+          // Already fading out, and the Svelte outro cannot be shortened:
+          // hide the element now, and let the outro finish unseen.
+          handoffExit = true;
+          for (const node of [refInPlace, refPortalTooltip]) {
+            node?.style.setProperty("display", "none");
+          }
+        }
       },
     );
 
@@ -434,7 +505,8 @@
 
   // Read the direction when the tooltip opens: nothing reports a `dir`
   // change. Above and below the icon, `start` and `end` are inline sides.
-  $: rtl = open && readRtl($layoutDirection);
+  let rtl = false;
+  $: if (open) rtl = readRtl($layoutDirection);
   $: sideAlign =
     direction === "top" || direction === "bottom"
       ? physicalAlign(align, rtl)
@@ -461,6 +533,38 @@
   $: tooltipOpen.set(open);
   $: if (open) tooltipHandoff.claim();
   else tooltipHandoff.release();
+
+  let leaving = false;
+
+  function handleOutroStart() {
+    leaving = true;
+  }
+
+  function handleOutroEnd() {
+    leaving = false;
+  }
+
+  // What starts over when a tooltip opens, not as it closes, so one that is
+  // leaving keeps its place and its fade. A tooltip that opens by warm
+  // handoff (read after the claim above) appears at once, with no fade, unless
+  // it is the one that was leaving: that one turns around and fades back in.
+  let wasOpen = open;
+  let skipFade = false;
+  $: {
+    if (open && !wasOpen) {
+      flip = null;
+      shift = 0;
+      skipFade = $tooltipInstant && !leaving;
+      // A tooltip that turns around mid-exit shows again, and fades back in.
+      for (const node of [refInPlace, refPortalTooltip]) {
+        node?.style.removeProperty("display");
+      }
+      handoffExit = false;
+      leaving = false;
+    }
+    wasOpen = open;
+  }
+  $: animateTooltip = animated && !skipFade;
   $: if (!open) openedByHover.set(false);
   $: notifyOpenChange(open);
   // Naming and description belong on the `role="button"` trigger, not the
@@ -540,10 +644,39 @@
       >
     </div>
   {/if}
-  {#if open && !effectivePortalTooltip}
+  {#if open && !effectivePortalTooltip && animateTooltip}
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
-      bind:this={refTooltip}
+      bind:this={refInPlace}
+      id={tooltipId}
+      data-floating-menu-direction={placement}
+      class:bx--tooltip={true}
+      class:bx--tooltip--shown={true}
+      class:bx--tooltip--top={placement === "top"}
+      class:bx--tooltip--right={placement === "right"}
+      class:bx--tooltip--bottom={placement === "bottom"}
+      class:bx--tooltip--left={placement === "left"}
+      class:bx--tooltip--align-center={sideAlign === "center"}
+      class:bx--tooltip--align-start={sideAlign === "start"}
+      class:bx--tooltip--align-end={sideAlign === "end"}
+      style:width="max-content"
+      transition:handoffAwareFn|local={transitionParams}
+      on:introstart
+      on:introend
+      on:outrostart
+      on:outrostart={handleOutroStart}
+      on:outroend
+      on:outroend={handleOutroEnd}
+      on:mouseenter={handleMouseenter}
+      on:focusout={handleFocusout}
+      on:keydown={handleKeydown}
+    >
+      <TooltipContent {triggerId} {shift}><slot /></TooltipContent>
+    </div>
+  {:else if open && !effectivePortalTooltip}
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
+      bind:this={refInPlace}
       id={tooltipId}
       data-floating-menu-direction={placement}
       class:bx--tooltip={true}
@@ -560,23 +693,7 @@
       on:focusout={handleFocusout}
       on:keydown={handleKeydown}
     >
-      <span
-        class:bx--tooltip__caret={true}
-        style:left={shift ? `${-shift}px` : undefined}
-        style:right={shift ? `${shift}px` : undefined}
-      ></span>
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-      <div
-        on:click|stopPropagation
-        on:mousedown|stopPropagation
-        class:bx--tooltip__content={true}
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby={triggerId}
-      >
-        <slot />
-      </div>
+      <TooltipContent {triggerId} {shift}><slot /></TooltipContent>
     </div>
   {/if}
 </div>
@@ -592,52 +709,69 @@
     horizontalGapRight={6}
     verticalAlignOffsetLeft={-10}
     verticalAlignOffsetRight={4}
-    bind:ref={refTooltip}
+    bind:ref={refFloating}
     let:direction={actualDirection}
   >
     <div
       style="display: flex; justify-content: center; align-items: center;"
       use:watchPortal
     >
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        bind:this={refPortalTooltip}
-        id={tooltipId}
-        data-floating-menu-direction={actualDirection}
-        class:bx--tooltip={true}
-        class:bx--tooltip--shown={open}
-        class:bx--tooltip--top={actualDirection === "top"}
-        class:bx--tooltip--right={actualDirection === "right"}
-        class:bx--tooltip--bottom={actualDirection === "bottom"}
-        class:bx--tooltip--left={actualDirection === "left"}
-        class:bx--tooltip--align-center={sideAlign === "center"}
-        class:bx--tooltip--align-start={sideAlign === "start"}
-        class:bx--tooltip--align-end={sideAlign === "end"}
-        style="position: relative; transform: none; display: block; margin-top: 0;"
-        style:left="{shift}px"
-        on:mouseenter={handleMouseenter}
-        on:mouseleave={handleMouseleave}
-        on:focusout={handleFocusout}
-        on:keydown={handleKeydown}
-      >
-        <span
-          class:bx--tooltip__caret={true}
-          style:left={shift ? `${-shift}px` : undefined}
-          style:right={shift ? `${shift}px` : undefined}
-        ></span>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+      {#if animateTooltip}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
-          on:click|stopPropagation
-          on:mousedown|stopPropagation
-          class:bx--tooltip__content={true}
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby={triggerId}
+          bind:this={refPortalTooltip}
+          id={tooltipId}
+          data-floating-menu-direction={actualDirection}
+          class:bx--tooltip={true}
+          class:bx--tooltip--shown={true}
+          class:bx--tooltip--top={actualDirection === "top"}
+          class:bx--tooltip--right={actualDirection === "right"}
+          class:bx--tooltip--bottom={actualDirection === "bottom"}
+          class:bx--tooltip--left={actualDirection === "left"}
+          class:bx--tooltip--align-center={sideAlign === "center"}
+          class:bx--tooltip--align-start={sideAlign === "start"}
+          class:bx--tooltip--align-end={sideAlign === "end"}
+          style="position: relative; transform: none; display: block; margin-top: 0;"
+          style:left="{shift}px"
+          transition:handoffAwareFn|global={transitionParams}
+          on:introstart
+          on:introend
+          on:outrostart
+          on:outrostart={handleOutroStart}
+          on:outroend
+          on:outroend={handleOutroEnd}
+          on:mouseenter={handleMouseenter}
+          on:mouseleave={handleMouseleave}
+          on:focusout={handleFocusout}
+          on:keydown={handleKeydown}
         >
-          <slot />
+          <TooltipContent {triggerId} {shift}><slot /></TooltipContent>
         </div>
-      </div>
+      {:else}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+          bind:this={refPortalTooltip}
+          id={tooltipId}
+          data-floating-menu-direction={actualDirection}
+          class:bx--tooltip={true}
+          class:bx--tooltip--shown={open}
+          class:bx--tooltip--top={actualDirection === "top"}
+          class:bx--tooltip--right={actualDirection === "right"}
+          class:bx--tooltip--bottom={actualDirection === "bottom"}
+          class:bx--tooltip--left={actualDirection === "left"}
+          class:bx--tooltip--align-center={sideAlign === "center"}
+          class:bx--tooltip--align-start={sideAlign === "start"}
+          class:bx--tooltip--align-end={sideAlign === "end"}
+          style="position: relative; transform: none; display: block; margin-top: 0;"
+          style:left="{shift}px"
+          on:mouseenter={handleMouseenter}
+          on:mouseleave={handleMouseleave}
+          on:focusout={handleFocusout}
+          on:keydown={handleKeydown}
+        >
+          <TooltipContent {triggerId} {shift}><slot /></TooltipContent>
+        </div>
+      {/if}
     </div>
   </FloatingPortal>
 {/if}
