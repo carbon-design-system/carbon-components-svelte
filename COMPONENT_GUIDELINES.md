@@ -242,7 +242,7 @@ These names apply to new components and new props. Shipped components keep their
 - Do not animate initial render, hydration, data updates (sort, filter, new rows) or decoration.
 - A looping animation, such as a pulsing beacon, stops after at most 5 seconds or a few cycles, and stops at once under `prefers-reduced-motion` (WCAG 2.2.2).
 - Measure in a `ResizeObserver` callback and write in the next frame (`createFrameJob`), so a resize does not trigger a ResizeObserver loop error.
-- Durations come from the motion tokens: `$duration--fast-01` (70 ms), `fast-02` (110 ms), `moderate-01` (150 ms), `moderate-02` (240 ms), `slow-01` (400 ms), `slow-02` (720 ms).
+- Durations come from the motion tokens: `$duration--fast-01` (70 ms), `fast-02` (110 ms), `moderate-01` (150 ms), `moderate-02` (240 ms), `slow-01` (400 ms), `slow-02` (700 ms). `@carbon/motion` is the source of truth; the vendored v10 Sass set `slow-02` to 720 ms and is corrected to 700 ms.
   - Color, icon and small state changes: `fast-01` or `fast-02`.
   - Menus, expanding rows and small panels: `moderate-01` or `moderate-02`.
   - Full-height panels and modals: `slow-01` at most.
@@ -253,6 +253,21 @@ These names apply to new components and new props. Shipped components keep their
 - Do not depend on `transitionend` to finish a state change. It does not fire when the duration is 0 or the element is hidden. Use a timeout fallback.
 - Under `prefers-reduced-motion: reduce`, remove movement: set durations to 0 for transforms, slides and smooth scrolling. Loading indicators may keep moving, since the motion shows state.
 - Motion started from JavaScript (`scrollIntoView({ behavior: "smooth" })`, the Web Animations API, View Transitions) checks `matchMedia("(prefers-reduced-motion: reduce)")`. CSS media queries do not apply to it.
+
+### Svelte transitions
+
+Rules for motion that Svelte's `transition:`, `in:`, `out:` and `animate:` directives run. The CSS rules above still apply to what the transition animates.
+
+- Components animate only through an opt-in `transition` prop typed `undefined | boolean | Params | (Params & { fn })`, default `undefined` (off). `true` plays the component's Carbon preset, an object overrides the preset's params, and `fn` swaps in any Svelte transition. Resolve the prop with `resolveTransition` from `src/motion/`; do not read it in the markup.
+- Presets use the transitions in `src/motion/` (`fade`, `slide`, `fly`, `flip`), which take their durations from `duration` (the JavaScript mirror of `$duration--*`, parity-tested against the Sass) and pick the `entrance` or `exit` curve from the direction. Do not import from `svelte/transition` in a component.
+- No directive when off. Svelte 3 and 4 remove an element that carries a `transition:` directive one frame late, even at zero duration. Branch the markup: `{#if animated}<div transition:fn={params}>…</div>{:else}<div>…</div>{/if}`, and share the inner markup through an internal component when it is more than a few lines. Nothing waits on a transition event when `animated` is false.
+- `|local` goes on the block that toggles the element. An ancestor's `{#if}` suppresses a local transition, so a nested `{#if animated}` inside `{#if open}` plays nothing; flatten it to `{#if open && animated}…{:else if open}…{/if}`.
+- `|global` goes on a root the consumer mounts and unmounts (`{#if saving}<InlineLoading transition />{/if}`), so the exit plays. Svelte 3 ignores the modifier; 4 and 5 honor it. When that root also sits inside the component's own `{#if open}`, nest the branches, `{#if open}{#if animated}…{:else}…{/if}{/if}`: the flat `{#if open && animated}` form leaves the element in the DOM on Svelte 3 and 4 when the parent removes the component in the same `close` handler that sets `open` to `false`.
+- Finish a state change on `outroend` (`hidePopover()`, pruning a queue entry, returning focus), never on `transitionend`, and only when `animated` is true.
+- Under `prefers-reduced-motion: reduce`, a transition returns exactly `{ duration: 0 }` with no `css`, `tick` or `delay`, so Svelte 5 never calls `element.animate()` and 3 and 4 inject no keyframes. Loading indicators pass `reducedMotion: "ignore"`. Read the preference through `shouldReduceMotion()`, which shares one `MediaQueryList` and returns `false` on the server.
+- A `transition:` directive passes `{ direction: "both" }` on Svelte 3 and 4 and resolves a function-form config once, after `wait()`, when the outro group is gone. Return a config object, not a function, and use the `standard` curve for `transition:`. Use `in:` and `out:` where the entrance and exit curves must differ.
+- `animate:flip` goes on a DOM element in a keyed `{#each}`, only where an item leaves and the survivors close the gap. Do not animate a sort, a filter or new rows.
+- Tests spy on the preset through `vi.mock(import("../../src/motion/transitions.js"))` with reduced motion stubbed, and assert exits through `outroend`, since Svelte 3 and 4 call the transition function once per element and reuse its config. A Svelte 5 mount runs the entrance too, so wait it out before testing an exit. Add an e2e row that opens and closes the surface with `reducedMotion: "reduce"` and asserts `document.getAnimations()` is empty.
 
 ## UI text
 
