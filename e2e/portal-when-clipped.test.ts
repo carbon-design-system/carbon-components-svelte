@@ -2,10 +2,11 @@ import { expect, test } from "@playwright/test";
 
 // A menu that a scrolling panel or an `overflow: hidden` card would cut off
 // opens in a portal instead, so it shows whole and the panel doesn't grow a
-// scrollbar; one with nothing around it stays in place.
+// scrollbar; one with nothing around it stays in place. `contain: paint` and
+// `content-visibility: auto` clip their contents like `overflow: hidden`.
 const MENU = ".bx--list-box__menu, .bx--overflow-menu-options";
 
-for (const box of ["scroll", "card"])
+for (const box of ["scroll", "card", "contain", "visibility"])
   for (const [name, selector] of [
     ["Dropdown", ".bx--dropdown .bx--list-box__field"],
     ["ComboBox", ".bx--combo-box input"],
