@@ -22,6 +22,11 @@ export interface TooltipGroup {
 
 export interface TooltipToken {
   scope: TooltipGroupScope;
+  /**
+   * `true` while the tooltip holds the slot it took by warm handoff from
+   * another tooltip in its scope.
+   */
+  warm?: boolean;
 }
 
 /** The tooltip currently shown, page-wide. `null` means none is claimed. */

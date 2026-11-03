@@ -24,6 +24,11 @@ export function createTooltipHandoff(options?: {
   active: Readable<boolean>;
   /** `true` while another tooltip holds the active slot. */
   hidden: Readable<boolean>;
+  /**
+   * `true` while another tooltip in the group holds the slot it took by
+   * warm handoff: this tooltip is the one handed off from.
+   */
+  handedOff: Readable<boolean>;
   /** `true` while this tooltip holds the slot it took by warm handoff. */
   instant: Readable<boolean>;
   scheduleEnter: (onShow: () => void) => void;
