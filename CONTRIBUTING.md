@@ -937,6 +937,7 @@ Component folders keep their own `helpers.ts` for queries such as `getBodyRows` 
 - Use `data-testid` in unit tests only when roles are insufficient. E2E fixtures use `data-testid` routinely.
 - Use the shared `user` helper from [`tests/utils/user.ts`](tests/utils/user.ts) for clicks and keyboard input.
 - Type fixture props with `ComponentProps<typeof Component>` from `svelte` where helpful.
+- Change props with `await rerender({ prop })`. Without the `await`, Svelte 3 and 4 have not updated the DOM when the next assertion runs, so the test can pass without checking anything.
 
 #### What to test
 
@@ -958,7 +959,7 @@ Skip or avoid:
 - A compiled-CSS test for a CSS-only change. See [What belongs in tests/css](#what-belongs-in-testscss).
 - `toBeEmptyDOMElement` to test that an element is empty. Svelte 3 and 4 keep whitespace text nodes in an element that looks empty. Use `expectNoContent`, or `el.matches(":empty")` when the CSS `:empty` selector is what the test is about.
 
-Add tests proportional to the change. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
+Add tests proportional to the change. A fix gets one test that fails without it, or none if nothing meaningful can be asserted. Leave out negative twins of a positive test and rows that run the same code path as another row. Not every prop variant needs its own case. When cases differ only in their inputs (sizes, counts, close triggers), write one `it.each` table instead of copies.
 
 A test that asserts absence (`not.toMatch`, an upper bound on a count, `toEqual([])` on an offender list) needs a positive assertion beside it that fails when the pattern stops matching: a lower bound, or a count of what it inspected. A test that reads source text matches whole declarations up to `;`, not single lines, since the formatter wraps long values. Break the source on purpose once and confirm the test fails.
 
