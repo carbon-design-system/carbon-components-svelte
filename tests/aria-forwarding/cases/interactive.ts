@@ -15,6 +15,7 @@ import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
+import IconPicker from "carbon-components-svelte/IconPicker/IconPicker.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
@@ -274,6 +275,13 @@ export const interactive: AriaEntry[] = [
     name: "InterstitialScreenHeader",
     exempt:
       "header container; its close button is a fixed control named by iconDescription",
+  },
+  {
+    // The field is the combobox that opens the popover.
+    name: "IconPicker",
+    render: (attrs) =>
+      render(IconPicker, { props: { labelText: "Icon", items: [], ...attrs } }),
+    target: () => screen.getByRole("combobox"),
   },
   {
     name: "Link",

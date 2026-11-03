@@ -128,5 +128,10 @@ export default {
       glob: "docs/svelte.config.ts",
       reason: "docs-only changes skip CI; master runs every test after one",
     },
+    {
+      file: "e2e/fixtures/all-icons.ts",
+      glob: "../../node_modules/carbon-icons-svelte/lib/*.svelte",
+      reason: "an installed package, outside the tracked tree; Vite reads it",
+    },
   ],
 } satisfies Config<"unit" | "e2e">;

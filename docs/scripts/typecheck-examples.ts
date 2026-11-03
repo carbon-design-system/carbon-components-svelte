@@ -38,6 +38,8 @@ const IGNORED = [
   /^Property '\w+' does not exist on type '(EventTarget|Element)'/,
   // `new Date(a) - new Date(b)`, and `a - b` on a `string | number` cell.
   /^The (left|right)-hand side of an arithmetic operation must be/,
+  // The docs build with Vite, which adds `glob` to `ImportMeta`.
+  /^Property 'glob' does not exist on type 'ImportMeta'/,
 ];
 
 /**
