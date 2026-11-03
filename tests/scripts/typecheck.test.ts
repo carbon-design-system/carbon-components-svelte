@@ -1,4 +1,6 @@
 // @vitest-environment node
+import { spawnSync } from "node:child_process";
+import { join } from "node:path";
 import { emit } from "../../scripts/typecheck/emit";
 
 /** Where `needle` lands in the generated code, mapped back to the source. */
@@ -59,4 +61,42 @@ describe("emit", () => {
     expect(svelte3).not.toContain("children:");
     expect(emit(source).out.code).toContain("children:");
   });
+});
+
+describe("scripts/typecheck", () => {
+  // One planted error per kind, where svelte-check --tsgo reported each,
+  // in scripts/typecheck/fixtures. Clean.svelte has none.
+  it("reports what svelte-check reports for the fixtures", () => {
+    const root = join(import.meta.dirname, "../..");
+    const { stdout } = spawnSync(
+      "bun",
+      [
+        "scripts/typecheck/index.ts",
+        "--workspace",
+        "scripts/typecheck/fixtures",
+        "--output",
+        "machine",
+      ],
+      { cwd: root, encoding: "utf-8" },
+    );
+    const errors = [
+      ...stdout.matchAll(/^ERROR "(.+)" (\d+:\d+) .* (TS\d+)$/gm),
+    ];
+    expect(errors.map(([, file, at, code]) => `${file}:${at} ${code}`)).toEqual(
+      [
+        "Errors.svelte:8:9 TS2322", // script: a string for a number
+        "Errors.svelte:11:8 TS2322", // a component prop's value
+        "Errors.svelte:12:45 TS2339", // a dispatched event's detail
+        "Errors.svelte:13:33 TS2339", // a default slot's `let:` prop
+        "Errors.svelte:14:55 TS2339", // a named slot's `let:` prop
+        "Errors.svelte:15:9 TS2322", // an element attribute's value
+        "Errors.svelte:16:28 TS2339", // a DOM event
+        "Errors.svelte:17:5 TS2304", // an undeclared name in markup
+        "Errors.svelte:18:31 TS2339", // an `{#each}` item
+        "Errors.svelte:19:18 TS2741", // `bind:this` to another element type
+        "Errors.svelte:20:12 TS2339", // a `$store` value
+        "render.ts:3:45 TS2322", // a component's props from TypeScript
+      ],
+    );
+  }, 30_000);
 });

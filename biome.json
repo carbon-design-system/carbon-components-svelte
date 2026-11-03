@@ -154,6 +154,10 @@
       }
     },
     {
+      "includes": ["scripts/typecheck/fixtures/**"],
+      "linter": { "enabled": false }
+    },
+    {
       "includes": ["tests/**", "!tests/package-exports.test-d.ts"],
       "linter": {
         "rules": {
