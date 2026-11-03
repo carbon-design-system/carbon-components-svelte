@@ -198,6 +198,32 @@ describe("clippedBy", () => {
     expect(clippedBy(menu)).toBe(outer);
   });
 
+  it("counts every contain value that clips paint", () => {
+    const { outer, menu } = tree();
+    place(outer, { top: 0, left: 0, width: 400, height: 120 });
+    place(menu, { top: 40, left: 0, width: 200, height: 160 });
+    // jsdom drops `contain`, so stub the one computed value under test.
+    const real = window.getComputedStyle;
+    const spy = vi.spyOn(window, "getComputedStyle");
+    for (const contain of ["paint", "content", "strict", "layout"]) {
+      spy.mockImplementation((el) => {
+        const style = real(el);
+        return el === outer
+          ? ({
+              ...style,
+              overflowX: "visible",
+              overflowY: "visible",
+              contain,
+            } as CSSStyleDeclaration)
+          : style;
+      });
+      expect(clippedBy(menu), contain).toBe(
+        contain === "layout" ? null : outer,
+      );
+    }
+    spy.mockRestore();
+  });
+
   it("returns null for a menu that fits, or one with no layout", () => {
     const { outer, menu } = tree();
     place(

@@ -1452,8 +1452,24 @@
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
+    "path": "div[data-testid=\"contain\"] > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box",
+    "message": "div[data-testid=\"contain\"] > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box: 2px outline inside bordered box div[data-testid=\"contain\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
     "path": "div[data-testid=\"scroll\"] > div:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box",
     "message": "div[data-testid=\"scroll\"] > div:nth-of-type(2) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box: 2px outline inside bordered box div[data-testid=\"scroll\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "portal-when-clipped.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"visibility\"] > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box",
+    "message": "div[data-testid=\"visibility\"] > div:nth-of-type(1) > div.bx--dropdown__wrapper.bx--list-box__wrapper > div.bx--dropdown.bx--list-box: 2px outline inside bordered box div[data-testid=\"visibility\"], both on rgb(255, 255, 255)"
   },
   {
     "fixture": "portal-when-clipped.html",

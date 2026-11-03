@@ -233,12 +233,18 @@ export function slideIntoWindow(node) {
   };
 }
 
+/** `contain` values that include paint containment. */
+const PAINT_CONTAINMENT = /paint|content|strict/;
+
 /**
  * The first box that cuts `el` off: an ancestor whose overflow isn't
- * `visible` on an axis where `el` reaches past its edge. Only boxes that
- * position `el` count: an absolutely positioned `el` escapes the boxes
- * inside its positioning parent, and a fixed one escapes them all. `null`
- * when nothing clips it, or when `el` has no layout (zero size).
+ * `visible` on an axis where `el` reaches past its edge. Paint containment
+ * (`contain: paint`, `content`, or `strict`) and `content-visibility`
+ * (`auto` or `hidden`) clip to the padding box on both axes, so they count
+ * like `overflow: hidden`. Only boxes that position `el` count: an
+ * absolutely positioned `el` escapes the boxes inside its positioning
+ * parent, and a fixed one escapes them all. `null` when nothing clips it,
+ * or when `el` has no layout (zero size).
  * @param {HTMLElement} el
  * @returns {HTMLElement | null}
  */
@@ -255,8 +261,11 @@ export function clippedBy(el) {
   ) {
     if (anchor && !box.contains(anchor)) continue;
     const style = getComputedStyle(box);
-    const clipsX = style.overflowX !== "visible";
-    const clipsY = style.overflowY !== "visible";
+    const paints =
+      PAINT_CONTAINMENT.test(style.contain ?? "") ||
+      (style.contentVisibility ?? "visible") !== "visible";
+    const clipsX = paints || style.overflowX !== "visible";
+    const clipsY = paints || style.overflowY !== "visible";
     if (!clipsX && !clipsY) continue;
     const clip = clipRect(box);
     // 1px of slack absorbs subpixel rounding at the edges.
