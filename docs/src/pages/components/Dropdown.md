@@ -263,6 +263,17 @@ It defaults to `false` because wrapping changes option heights.
 
 <FileSource src="/framed/Dropdown/WrapOptions" />
 
+## Transition
+
+The menu opens and closes at once by default. Set `transition` to animate it. `true` slides the menu with Carbon's `fast02` (110 ms), the duration of Carbon's list box. In a [portal](#portal-menu), the menu fades at `fast02` instead, because a portal measures the menu to place it and a menu that grows from nothing would open on one side of the field and jump to the other. Parameters such as `{ duration: "moderate01" }` customize the preset, and `{ fn }` swaps in another [transition](/motion#transitions). Under `prefers-reduced-motion: reduce` the menu still opens and closes at once. While it leaves, `aria-expanded` is already `false` and the menu takes no clicks. To animate every menu in an app, set `menu` on [`Motion`](/motion#app-wide-defaults).
+
+<FileSource src="/framed/Dropdown/DropdownMenuTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Keep the `fast02` duration, or a shorter one. | The menu answers a click, so a slow animation makes the control feel late. |
+| Use `{ fn }` with a transition that keeps the menu's size when the menu is in a portal. | A portal measures the menu to pick a side, so a size change makes it open on one side and jump to the other. |
+
 ## Virtualization
 
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
