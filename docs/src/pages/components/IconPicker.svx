@@ -1,0 +1,162 @@
+---
+components: ["IconPicker"]
+description: Icon pickers let people search and choose an icon, from a short list your app imports or from all of Carbon, in a field that opens a popover.
+---
+
+<script>
+  import { Box, IconPicker, Stack, toIconItems } from "carbon-components-svelte";
+  import Add from "carbon-icons-svelte/lib/Add.svelte";
+  import Chat from "carbon-icons-svelte/lib/Chat.svelte";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Home from "carbon-icons-svelte/lib/Home.svelte";
+  import Notification from "carbon-icons-svelte/lib/Notification.svelte";
+  import Save from "carbon-icons-svelte/lib/Save.svelte";
+  import Settings from "carbon-icons-svelte/lib/Settings.svelte";
+  import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+  import Warning from "carbon-icons-svelte/lib/Warning.svelte";
+
+  const items = toIconItems({
+    Add,
+    Chat,
+    Edit,
+    Home,
+    Notification,
+    Save,
+    Settings,
+    TrashCan,
+    Warning,
+  });
+</script>
+
+## Basic
+
+`items` lists the icons. `toIconItems` builds them from an object of imported icons, names each by its key, and writes a label for search and screen readers ("TrashCan" becomes "Trash can"). `value` is the name of the chosen icon, and the `change` event carries the component, so the app can render it without importing it by name.
+
+<Box maxWidth="20rem">
+  <IconPicker labelText="Menu icon" {items} value="Home" />
+</Box>
+
+## Icon sources
+
+Importing every icon of `carbon-icons-svelte` puts all 2,790 of them in the app. Pass a loader for each icon instead, and the picker imports only the ones it shows.
+
+Vite's `import.meta.glob` makes a loader for each file. `toIconItems` names each icon by its file and keeps the loader. Group the icons with `category`, here by first letter.
+
+```js
+// all-carbon-icons.js
+import { toIconItems } from "carbon-components-svelte";
+
+export default toIconItems(
+  import.meta.glob("/node_modules/carbon-icons-svelte/lib/*.svelte"),
+  { category: (id) => id[0] },
+);
+```
+
+Give the picker a function that returns the items, and it asks for them when it first opens, or when `value` is set. An app that only renders the field then downloads none of them. The field shows the name of a chosen icon while they load.
+
+<FileSource src="/framed/IconPicker/IconPickerCarbon" />
+
+| Source | In the app's first load | Notes |
+| :--- | :--- | :--- |
+| Imported icons, `{ Add, Edit }` | The icons you import | Use it for a short list. |
+| `import * as icons` | All 2,790 icons: about 4.2 MB, 2.4 MB gzipped | Avoid it. |
+| `import.meta.glob`, items passed directly | The list of loaders: about 540 kB, 96 kB gzipped | Each icon loads from its own file as it comes into view. |
+| `import.meta.glob`, items passed as a function | Nothing | The list loads on the first open, and the icons as they come into view. |
+
+The field alone adds about 5 kB gzipped to an app that already uses `Dropdown`.
+
+## Sizes
+
+Set `iconSize` to `16`, `20`, `24` or `32`. The default is `24`. A cell is 16 pixels larger than its icon, and the grid fits as many cells as the popover holds.
+
+<Stack gap={5}>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="16" {items} iconSize={16} value="Edit" searchLabelText="Search 16" />
+  </Box>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="20" {items} iconSize={20} value="Edit" searchLabelText="Search 20" />
+  </Box>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="32" {items} iconSize={32} value="Edit" searchLabelText="Search 32" />
+  </Box>
+</Stack>
+
+## Pictograms
+
+Any component that draws an SVG works, so a pictogram set fits. Set `iconSize` to `48` or `64`, because a pictogram is drawn larger than an icon.
+
+<FileSource src="/framed/IconPicker/IconPickerPictograms" />
+
+## Categories
+
+Give an item a `category`, and the grid groups the icons under a header for each, with buttons that jump to it. List `categories` to set the order and the labels.
+
+<FileSource src="/framed/IconPicker/IconPickerCategories" />
+
+## Recent icons
+
+The picker adds each icon the user chooses to `recent`, newest first, and shows them before the categories. Persist the array with [LocalStorage](/components/LocalStorage).
+
+<FileSource src="/framed/IconPicker/IconPickerRecent" />
+
+## Inline
+
+Set `variant` to `"inline"` to show the grid on the page, with no field and no popover. Use it where the choice is the point, such as a settings panel.
+
+<FileSource src="/framed/IconPicker/IconPickerInline" />
+
+## States
+
+Set `invalid` and `invalidText`, or `warn` and `warnText`, to show a validation state. `disabled` keeps the field from opening, and `readonly` shows the chosen icon and keeps it from changing.
+
+<Stack gap={5}>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="Invalid" {items} invalid invalidText="Choose an icon for the menu" searchLabelText="Search invalid" />
+  </Box>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="Warning" {items} warn warnText="This icon is also used by Settings" value="Home" searchLabelText="Search warning" />
+  </Box>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="Disabled" {items} disabled value="Save" />
+  </Box>
+  <Box maxWidth="20rem">
+    <IconPicker labelText="Read-only" {items} readonly value="Save" />
+  </Box>
+</Stack>
+
+## Form field
+
+Set `name` and the picker writes the icon's name to a hidden input, so a form submits it. Set `helperText` to add guidance, and `hideLabel` to hide the label visually.
+
+<Box maxWidth="20rem">
+  <IconPicker labelText="Icon" hideLabel helperText="Shown beside the menu item" name="menu-icon" {items} searchLabelText="Search form" />
+</Box>
+
+## In a modal
+
+Inside a [Modal](/components/Modal), the popover opens in a portal, above the modal, and <DocKbd label="Escape" /> closes it before the modal.
+
+<FileSource src="/framed/IconPicker/IconPickerModal" />
+
+## Keyboard
+
+Focus moves into the search field when the popover opens, and returns to the field when it closes. The grid takes the keys of [PickerGrid](/components/PickerGrid#keyboard) from the search field.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="↓" /> <DocKbd label="↑" /> <DocKbd label="Enter" /> <DocKbd label="Space" /> | On the field: open the popover. |
+| Letters | In the popover: search. |
+| <DocKbd label="↓" /> <DocKbd label="↑" /> <DocKbd label="←" /> <DocKbd label="→" /> | Move the cursor over the icons. |
+| <DocKbd label="Enter" /> | Choose the icon under the cursor, close the popover and return focus to the field. |
+| <DocKbd label="Escape" /> | Clear the search. With nothing to clear, close the popover and return focus to the field. |
+| <DocKbd label="Tab" /> | Move to the category buttons, then out of the popover, which closes it. |
+
+## Accessibility
+
+The field is a combobox that opens a dialog. The dialog holds the search field and the grid, which is a listbox of options, each named by its label. The glyphs are hidden from assistive technology, so a screen reader hears "Trash can, 8 of 9".
+
+| Do | Why |
+| :--- | :--- |
+| Set `labelText`, or `aria-label` on the field | The field and the dialog take their name from it. |
+| Keep each item's `label` plain and unique | It is the option's name, and what search matches. `toIconItems` writes one from the icon's name. |
+| Give a custom icon a `label` that says what it shows | The name of the file may say nothing to the person choosing. |
