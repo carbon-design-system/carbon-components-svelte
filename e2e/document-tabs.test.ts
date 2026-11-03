@@ -28,6 +28,14 @@ const shifted = (page: Page) =>
       ),
     );
 
+/** Switch the theme and let the color transitions it starts finish. */
+async function setTheme(page: Page, theme: "white" | "g100") {
+  await page.evaluate(async (t) => {
+    document.documentElement.classList.toggle("bx--g100", t === "g100");
+    await Promise.all(document.getAnimations().map((a) => a.finished));
+  }, theme);
+}
+
 async function box(page: Page, n: number) {
   const rect = await tab(page, n).boundingBox();
   if (!rect) throw new Error(`Tab ${n} has no box`);
@@ -373,6 +381,152 @@ test.describe("Document tabs: touch", () => {
   });
 });
 
+/** The tabs, by label, that are not whole inside the tab list. */
+const outOfView = (page: Page) =>
+  page.getByRole("tablist").evaluate((nav) => {
+    const edge = nav.getBoundingClientRect();
+    return Array.from(nav.querySelectorAll("[role=tab]"))
+      .filter((link) => {
+        const rect = link.closest("li")?.getBoundingClientRect();
+        return (
+          !rect || rect.left < edge.left - 1 || rect.right > edge.right + 1
+        );
+      })
+      .map((link) => link.textContent?.trim());
+  });
+
+const moreTabs = (page: Page) =>
+  page.getByRole("button", { name: "More tabs" });
+
+const menuLabels = (page: Page) =>
+  page
+    .getByRole("menu", { name: "More tabs" })
+    .getByRole("menuitem")
+    .evaluateAll((items) => items.map((item) => item.textContent?.trim()));
+
+test.describe("Document tabs: more tabs menu", () => {
+  test("shows only once the list overflows", async ({ page }) => {
+    await page.goto("/document-tabs.html?count=3&width=900");
+    await expect(moreTabs(page)).toHaveCount(0);
+    await page.goto("/document-tabs.html?count=14&width=600");
+    await expect(moreTabs(page)).toBeVisible();
+    await page.goto("/document-tabs.html?count=14&width=600&menu=0");
+    await expect(moreTabs(page)).toHaveCount(0);
+  });
+
+  test("lists the tabs that are out of view, and follows the scroll", async ({
+    page,
+  }) => {
+    await page.goto("/document-tabs.html?count=14&width=600");
+    await expect(moreTabs(page)).toBeVisible();
+
+    await moreTabs(page).click();
+    await expect.poll(() => menuLabels(page)).toEqual(await outOfView(page));
+    await page.keyboard.press("Escape");
+
+    await page.locator(".bx--tab--overflow-nav-button--next").click();
+    await expect
+      .poll(() => page.getByRole("tablist").evaluate((nav) => nav.scrollLeft))
+      .toBeGreaterThan(100);
+    await page.waitForTimeout(500);
+    await moreTabs(page).click();
+    const hidden = await outOfView(page);
+    expect(hidden).toContain("File 1.ts");
+    await expect.poll(() => menuLabels(page)).toEqual(hidden);
+  });
+
+  test("choosing a hidden tab selects it, shows it and focuses it", async ({
+    page,
+  }) => {
+    await page.goto("/document-tabs.html?count=14&width=600");
+    await moreTabs(page).click();
+    await page.getByRole("menuitem", { name: "File 12.ts" }).click();
+
+    const chosen = tab(page, 12);
+    await expect(chosen).toHaveAttribute("aria-selected", "true");
+    await expect(chosen).toBeFocused();
+    await expect.poll(() => outOfView(page)).not.toContain("File 12.ts");
+    await expect(page.getByRole("tabpanel")).toContainText(
+      "File 12.ts content",
+    );
+  });
+
+  test("works from the keyboard alone", async ({ page, browserName }) => {
+    // Safari does not Tab to buttons unless a system setting is on.
+    test.skip(browserName === "webkit", "WebKit does not Tab to buttons");
+    await page.goto("/document-tabs.html?count=14&width=600");
+    // Until the tabs register, every one is a stop. Wait for the roving one,
+    // and for the button the overflow adds after the list.
+    await expect(tab(page, 2)).toHaveAttribute("tabindex", "-1");
+    await expect(moreTabs(page)).toBeVisible();
+    await tab(page, 1).focus();
+
+    // The tab list is one stop, so the next Tab reaches the button.
+    await page.keyboard.press("Tab");
+    await expect(moreTabs(page)).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page.getByRole("menu", { name: "More tabs" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(moreTabs(page)).toBeFocused();
+
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("End");
+    await page.keyboard.press("Enter");
+    await expect(tab(page, 14)).toBeFocused();
+    await expect(tab(page, 14)).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("sits at the inline end, which is the left in RTL", async ({ page }) => {
+    await page.goto("/document-tabs.html?count=14&width=600&dir=rtl");
+    const button = await moreTabs(page).boundingBox();
+    const first = await box(page, 1);
+    expect(button?.x ?? Number.POSITIVE_INFINITY).toBeLessThan(first.x);
+    await moreTabs(page).click();
+    const menu = await page.getByRole("menu").boundingBox();
+    expect(menu?.x ?? Number.POSITIVE_INFINITY).toBeLessThan(first.x);
+    await expect.poll(() => menuLabels(page)).toEqual(await outOfView(page));
+  });
+
+  for (const query of [
+    "",
+    "&type=container",
+    "&size=sm",
+    "&type=container&size=xl",
+  ]) {
+    test(`is as tall as the tabs (${query || "line"})`, async ({ page }) => {
+      await page.goto(`/document-tabs.html?count=14&width=600${query}`);
+      const button = await moreTabs(page).boundingBox();
+      const list = await page.getByRole("tablist").boundingBox();
+      expect(button?.height).toBeCloseTo(list?.height ?? 0, 0);
+    });
+  }
+
+  test("stays quick and correct with 50 tabs", async ({ page }) => {
+    await page.goto("/document-tabs.html?count=50&width=600");
+    await moreTabs(page).click();
+    await expect.poll(() => menuLabels(page)).toEqual(await outOfView(page));
+    expect((await menuLabels(page)).length).toBeGreaterThan(40);
+    await page.keyboard.press("Escape");
+  });
+
+  for (const theme of ["white", "g100"] as const) {
+    test(`has no axe violations with the menu open on ${theme}`, async ({
+      page,
+    }) => {
+      await page.goto("/document-tabs.html?count=14&width=600&dismissible=0");
+      await setTheme(page, theme);
+      await moreTabs(page).click();
+      await expect(page.getByRole("menu", { name: "More tabs" })).toBeVisible();
+      // The page's debug text sits outside any landmark; the menu portals out.
+      const results = await new AxeBuilder({ page })
+        .include("#app")
+        .include("[data-floating-portal]")
+        .analyze();
+      expect(results.violations).toEqual([]);
+    });
+  }
+});
+
 test.describe("Document tabs: variants", () => {
   for (const [name, query] of [
     ["contained", "type=container"],
@@ -463,9 +617,7 @@ test.describe("Document tabs: appearance", () => {
   for (const theme of ["white", "g100"] as const) {
     test(`has no axe violations on ${theme}`, async ({ page }) => {
       await page.goto("/document-tabs.html?count=6&width=900&dismissible");
-      await page.evaluate((t) => {
-        document.documentElement.classList.toggle("bx--g100", t === "g100");
-      }, theme);
+      await setTheme(page, theme);
       await expect(page.getByTestId("document-tabs")).toBeVisible();
       // A dismiss button inside the tablist breaks `aria-required-children`
       // on master as well, for any dismissible `Tabs`. The tabs here don't
@@ -481,9 +633,7 @@ test.describe("Document tabs: appearance", () => {
       page,
     }) => {
       await page.goto("/document-tabs.html?count=6&width=900&dismissible=0");
-      await page.evaluate((t) => {
-        document.documentElement.classList.toggle("bx--g100", t === "g100");
-      }, theme);
+      await setTheme(page, theme);
       await expect(page.getByTestId("document-tabs")).toBeVisible();
       const results = await new AxeBuilder({ page }).include("#app").analyze();
       expect(results.violations).toEqual([]);

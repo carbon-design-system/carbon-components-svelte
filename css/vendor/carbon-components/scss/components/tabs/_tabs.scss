@@ -518,6 +518,13 @@
       .#{$prefix}--tabs--scrollable__nav-item:hover {
       background-color: $layer-selected-hover;
     }
+
+    // ccs: the "more tabs" button of container tabs (see `tabs-overflow-menu`
+    // below). Its hover lives in this block to keep the any-hover count down.
+    .#{$prefix}--tabs--scrollable--container
+      .#{$prefix}--tabs__overflow-menu:not(.#{$prefix}--overflow-menu--open):hover {
+      background-color: $layer-accent-hover;
+    }
   }
 }
 
@@ -1742,4 +1749,35 @@ $tabs-sizes: (
 
 @include exports("tabs-reorder") {
   @include tabs-reorder;
+}
+
+// carbon-components-svelte patch (tabs-overflow-menu)
+// The "more tabs" menu button sits beside the scroll buttons. It is as tall
+// as the tabs at every size (the overflow menu has no 64px size for the
+// largest contained tabs) and as wide as the scroll buttons. Container tabs
+// fill the scroll buttons with `$layer-accent`, so the button does the same
+// to read as part of the bar. An open button keeps its own fill.
+
+/// The "more tabs" menu button of an overflowing tab list.
+/// @access private
+/// @group tabs
+@mixin tabs-overflow-menu {
+  .#{$prefix}--tabs__overflow-menu {
+    height: auto;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  .#{$prefix}--tabs--scrollable--container .#{$prefix}--tabs__overflow-menu {
+    width: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--tabs--scrollable--container
+    .#{$prefix}--tabs__overflow-menu:not(.#{$prefix}--overflow-menu--open) {
+    background-color: $layer-accent;
+  }
+}
+
+@include exports("tabs-overflow-menu") {
+  @include tabs-overflow-menu;
 }

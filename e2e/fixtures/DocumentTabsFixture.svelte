@@ -3,6 +3,7 @@
 
   // Query: `count`, `width` (px), `type` (`container`), `dir`, `size`,
   // `dismissible` and `reorderable` (on; `=0` turns one off),
+  // `menu` (the "more tabs" menu; `menu=0` turns it off),
   // `unbound` (a `reorder` handler that moves nothing), `cancel` (a handler
   // that cancels).
   const params = new URLSearchParams(location.search);
@@ -13,6 +14,7 @@
   const size = params.get("size") ?? undefined;
   const dismissible = params.get("dismissible") !== "0";
   const reorderable = params.get("reorderable") !== "0";
+  const menu = params.get("menu") !== "0";
   const unbound = params.has("unbound");
   const cancel = params.has("cancel");
 
@@ -50,6 +52,7 @@
     {size}
     {dismissible}
     {reorderable}
+    overflowMenu={menu}
     on:reorder={handleReorder}
     on:dismiss={handleDismiss}
   >
