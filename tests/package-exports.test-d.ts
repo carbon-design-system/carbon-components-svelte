@@ -22,6 +22,8 @@ import type {
   useId,
 } from "carbon-components-svelte";
 import {
+  collapse,
+  type CollapseOptions,
   duration,
   type DurationToken,
   easing,
@@ -164,6 +166,8 @@ const _fade: number | undefined = fade(document.body, {
 }).duration;
 const _slide: number | undefined = slide(document.body, { axis: "x" }).duration;
 const _fly: number | undefined = fly(document.body, _flyParams).duration;
+const _collapseOptions: CollapseOptions = { open: false, duration: "fast02" };
+const _collapse: () => void = collapse(document.body, _collapseOptions).destroy;
 const _flip: number | undefined = flip(
   document.body,
   { from: new DOMRect(), to: new DOMRect() },
