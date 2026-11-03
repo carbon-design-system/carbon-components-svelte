@@ -91,6 +91,15 @@
   export let open = false;
 
   /**
+   * Animate the menu as it opens and closes. Set to `true` for Carbon's fly
+   * (`fast01`, 2 px toward the side the menu opens on), to fly params (e.g.,
+   * `{ duration: "fast02" }`) to customize it, or to `{ fn }` to use another
+   * transition. The menu does not animate by default.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FlyParams>}
+   */
+  export let menuTransition = undefined;
+
+  /**
    * Obtain a reference to the trigger button HTML element.
    * @type {null | HTMLButtonElement | HTMLAnchorElement}
    * @bindable readonly
@@ -200,6 +209,7 @@
   {intrinsicAlign}
   {size}
   {maxHeight}
+  transition={menuTransition}
   intrinsicWidth
   bind:open
   {labelText}
