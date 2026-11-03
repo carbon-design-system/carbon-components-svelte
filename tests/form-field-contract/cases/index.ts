@@ -3,6 +3,7 @@ import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
+import CountryPicker from "carbon-components-svelte/CountryPicker/CountryPicker.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
@@ -103,6 +104,13 @@ export const cases: FieldCase[] = [
     name: "TimezonePicker",
     component: TimezonePicker,
     props: { values: ["Europe/Paris", "UTC"], detect: false },
+    control: () => screen.getByRole("combobox"),
+    state: {},
+  },
+  {
+    name: "CountryPicker",
+    component: CountryPicker,
+    props: { values: ["FR", "DE"] },
     control: () => screen.getByRole("combobox"),
     state: {},
   },

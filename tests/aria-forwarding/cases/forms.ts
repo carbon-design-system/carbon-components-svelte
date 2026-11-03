@@ -3,6 +3,7 @@ import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
+import CountryPicker from "carbon-components-svelte/CountryPicker/CountryPicker.svelte";
 import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
@@ -85,6 +86,19 @@ export const forms: AriaEntry[] = [
           detect: false,
           labelText: "Time zone",
           helperText: "Your zone",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "CountryPicker",
+    render: (attrs) =>
+      render(CountryPicker, {
+        props: {
+          values: ["FR", "DE"],
+          labelText: "Country",
+          helperText: "Where you live",
           ...attrs,
         },
       }),
