@@ -109,9 +109,14 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -243,7 +248,7 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: isFluid = !inline && (fluid || !!formContext?.isFluid);
@@ -265,6 +270,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--select--fluid={isFluid}
   class:bx--select__form-item--inline={inline}
@@ -273,7 +279,7 @@
     class:bx--select={true}
     class:bx--select--inline={inline}
     class:bx--select--invalid={showInvalid}
-    class:bx--select--disabled={disabled}
+    class:bx--select--disabled={effectiveDisabled}
     class:bx--select--warning={showWarn}
     class:bx--select--readonly={readonly}
   >
@@ -282,7 +288,7 @@
         for={id}
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
-        class:bx--label--disabled={disabled}
+        class:bx--label--disabled={effectiveDisabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
         use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
       >
@@ -302,7 +308,7 @@
             bind:this={ref}
             aria-invalid={showInvalid ? "true" : undefined}
             aria-readonly={readonly ? "true" : undefined}
-            disabled={disabled || undefined}
+            disabled={effectiveDisabled || undefined}
             required={required || undefined}
             {id}
             {name}
@@ -364,7 +370,7 @@
           <div
             id={helperId}
             class:bx--form__helper-text={true}
-            class:bx--form__helper-text--disabled={disabled}
+            class:bx--form__helper-text--disabled={effectiveDisabled}
           >
             {helperText}
           </div>
@@ -383,7 +389,7 @@
           bind:this={ref}
           {id}
           {name}
-          disabled={disabled || undefined}
+          disabled={effectiveDisabled || undefined}
           required={required || undefined}
           aria-invalid={showInvalid ? "true" : undefined}
           aria-readonly={readonly ? "true" : undefined}
@@ -447,7 +453,7 @@
         <div
           id={helperId}
           class:bx--form__helper-text={true}
-          class:bx--form__helper-text--disabled={disabled}
+          class:bx--form__helper-text--disabled={effectiveDisabled}
         >
           {helperText}
         </div>
