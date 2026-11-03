@@ -20,6 +20,7 @@ import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.sv
 import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
+import PhoneInput from "carbon-components-svelte/PhoneInput/PhoneInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
@@ -103,6 +104,20 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "PhoneInput",
+    render: (attrs) =>
+      render(PhoneInput, {
+        props: {
+          country: "US",
+          labelText: "Phone",
+          helperText: "Your number",
+          ...attrs,
+        },
+      }),
+    // The number field, not the country selector.
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "CopyInput",

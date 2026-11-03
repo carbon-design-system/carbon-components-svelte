@@ -1,0 +1,59 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PhoneInput: a country selector that shows a flag and a calling code,
+/// joined to the number field in an `InputGroup`. The selector is a combo
+/// box with a narrow field, so what it opens is the combo box's own menu,
+/// made wide enough for a country name.
+///
+/// `--ccs-phone-input-country-width` sets the width of the selector.
+/// @access private
+/// @group components
+@mixin phone-input {
+  .#{$prefix}--phone-input__country {
+    position: relative;
+    inline-size: var(--ccs-phone-input-country-width, #{to-rem(144px)});
+  }
+
+  // The number field takes the rest of the row, like any field in the group.
+  .#{$prefix}--phone-input__number {
+    min-inline-size: 0;
+    flex: 1 1 auto;
+  }
+
+  // The flag sits in the field, in front of the calling code. It is
+  // decoration: the combo box's field holds the code, and its menu rows name
+  // the country.
+  .#{$prefix}--phone-input__flag {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    inset-block: 0;
+    inset-inline-start: $carbon--spacing-05;
+    pointer-events: none;
+  }
+
+  // The code reads left to right in any page, and starts at the page's
+  // start edge, beside the flag. `plaintext` takes the direction from the
+  // text and leaves the box's own direction to the page.
+  .#{$prefix}--phone-input__country .#{$prefix}--text-input {
+    padding-inline-start: to-rem(48px);
+    unicode-bidi: plaintext;
+  }
+
+  // A number needs a country, so there is nothing to clear.
+  .#{$prefix}--phone-input__country .#{$prefix}--list-box__selection {
+    display: none;
+  }
+
+  // The menu is as wide as a country name, not as the narrow field.
+  .#{$prefix}--phone-input__country .#{$prefix}--list-box__menu {
+    inline-size: min(to-rem(320px), calc(100vw - #{$carbon--spacing-07}));
+  }
+}
+
+@include exports("phone-input") {
+  @include phone-input;
+}
