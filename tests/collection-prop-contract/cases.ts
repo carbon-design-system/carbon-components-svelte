@@ -373,6 +373,8 @@ export const exempt: Exemptions = {
   "FluidForm.actions": NO_REFERENCE_CHECK,
   "Form.actions": NO_REFERENCE_CHECK,
   "HeaderSearch.results": NO_REFERENCE_CHECK,
+  "HeaderSearchResults.results": INTERNAL,
+  "HeaderSearchRichMenuContent.skeletonWidths": INTERNAL,
   "MenuItemGroup.selectedIds": NO_REFERENCE_CHECK,
   "Modal.secondaryButtons": NO_REFERENCE_CHECK,
   "ModalFooter.secondaryButtons": NO_REFERENCE_CHECK,
