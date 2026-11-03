@@ -5,7 +5,7 @@
   import HeaderPanelLinks from "carbon-components-svelte/UIShell/HeaderPanelLinks.svelte";
 
   export let href: string | undefined = "#alpha";
-  export let ref: HTMLElement | null = null;
+  export let ref: HTMLAnchorElement | HTMLButtonElement | null = null;
   export let clicks = 0;
 </script>
 
