@@ -9,6 +9,7 @@ import Search from "carbon-components-svelte/Search/Search.svelte";
 import Select from "carbon-components-svelte/Select/Select.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
+import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
@@ -146,6 +147,12 @@ const styleCases: {
     component: Select,
     fieldProps: field,
     marker: ".bx--select--disabled",
+  },
+  {
+    name: "TagInput",
+    component: TagInput,
+    fieldProps: field,
+    marker: ".bx--tag-input--disabled",
   },
   {
     name: "TextArea",
