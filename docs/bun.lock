@@ -9,8 +9,8 @@
         "@types/mdast": "^4.0.4",
         "@types/prismjs": "^1.26.5",
         "@types/unist": "^3.0.3",
-        "carbon-icons-svelte": "^13.15.0",
-        "carbon-pictograms-svelte": "^13.20.0",
+        "carbon-icons-svelte": "^13.17.0",
+        "carbon-pictograms-svelte": "^13.21.0",
         "clipboard-copy": "^4.0.1",
         "estree-walker": "^3.0.3",
         "github-slugger": "^2.0.0",
@@ -97,9 +97,9 @@
 
     "cachewrap": ["cachewrap@0.0.1", "", {}, "sha512-MumTMQ26KmLvWKnECZvoX+7tVGNOplDL4ls1z+xLkpZKCjuvv4t6QvrpqcsCAPfHoqerz0FEfWa6KXVHYylbJA=="],
 
-    "carbon-icons-svelte": ["carbon-icons-svelte@13.15.0", "", {}, "sha512-NzTWP1X+Qdkx4/ri6BOOSitZ2uGw0M6dMSiQAO8mgU+FTybB5z34v1qk7CRuamm6FKe+TiqRpu67IwlUm6ibdg=="],
+    "carbon-icons-svelte": ["carbon-icons-svelte@13.17.0", "", {}, "sha512-lFpkXDgkOupXQ/SVw3ZORH4vY5+abNYrm5s/9PB1cni45wnpIE3eXdcqgdM5znj+tWdkurwHcY6IUBMmosP5nw=="],
 
-    "carbon-pictograms-svelte": ["carbon-pictograms-svelte@13.20.0", "", {}, "sha512-b36OJFCZCtk4/UW6ywY9nT+KV7MaQyo9IXQ27Klrg9BsE7dC4bn4ceZ8paVQwT9iu0NvolDh4N/FvP1mKfwJQg=="],
+    "carbon-pictograms-svelte": ["carbon-pictograms-svelte@13.21.0", "", {}, "sha512-CfIPP1HrqAwrrmTzESDAwLAIxUK7Hw18IJARKYDPnAbxAf/I75TTKd+ZUziz8YkV0Jt4KWZ2NgV7n4fAqNNEng=="],
 
     "cheap-watch": ["cheap-watch@1.0.4", "", {}, "sha512-QR/9FrtRL5fjfUJBhAKCdi0lSRQ3rVRRum3GF9wDKp2TJbEIMGhUEr2yU8lORzm9Isdjx7/k9S0DFDx+z5VGtw=="],
 
