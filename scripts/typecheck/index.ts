@@ -17,7 +17,10 @@ import { createLocator, type Output } from "./output";
  * dropped; `TYPECHECK_DEBUG=1` prints them. `--no-declarations` skips the
  * `X.d.svelte.ts` re-exports, so imports of `.svelte` files resolve to their
  * own `.svelte.d.ts` (as `src/` has, from sveld). `--output machine` prints
- * `ERROR "file" line:column "message" code` lines.
+ * `ERROR "file" line:column "message" code` lines. `--svelte` points at the
+ * Svelte install whose element typings to use, e.g.
+ * `tests-svelte4/node_modules/svelte` with `--tsconfig
+ * tests-svelte4/tsconfig.check.json`.
  */
 const { values } = parseArgs({
   options: {
@@ -26,6 +29,7 @@ const { values } = parseArgs({
     checker: { type: "string", default: "bun" },
     "no-declarations": { type: "boolean", default: false },
     output: { type: "string", default: "human" },
+    svelte: { type: "string", default: "node_modules/svelte" },
   },
 });
 
@@ -46,12 +50,47 @@ const outDir = join(workspace, ".typecheck");
 const genDir = join(outDir, "svelte");
 const noDeclarations = values["no-declarations"];
 
+// svelte's element typings: Svelte 4 and 5 ship them, Svelte 3 doesn't.
+const svelteHtml = resolve(ROOT, values.svelte, "svelte-html.d.ts");
+if (!(await Bun.file(svelteHtml).exists())) {
+  console.error(
+    `${relative(ROOT, svelteHtml)} not found: Svelte 3 isn't supported yet.`,
+  );
+  process.exit(2);
+}
+
+/**
+ * The `exclude` the base tsconfig ends up with (the nearest config in its
+ * `extends` chain that sets one), as globs relative to the workspace.
+ */
+async function baseExclude(path: string): Promise<string[]> {
+  const config = Bun.JSONC.parse(await Bun.file(path).text()) as {
+    extends?: string;
+    exclude?: string[];
+  };
+  if (config.exclude)
+    return config.exclude.map((pattern) =>
+      relative(workspace, resolve(dirname(path), pattern)),
+    );
+  return config.extends
+    ? baseExclude(resolve(dirname(path), config.extends))
+    : [];
+}
+const excluded = (await baseExclude(baseConfig))
+  .filter((pattern) => !pattern.startsWith(".."))
+  .map((pattern) => new Bun.Glob(pattern));
+
 const started = performance.now();
 rmSync(outDir, { recursive: true, force: true });
 
 const files = [
   ...new Bun.Glob("**/*.svelte").scanSync({ cwd: workspace }),
-].filter((rel) => !rel.includes("node_modules") && !rel.startsWith("."));
+].filter(
+  (rel) =>
+    !rel.includes("node_modules") &&
+    !rel.startsWith(".") &&
+    !excluded.some((glob) => glob.match(rel)),
+);
 const sources = await Promise.all(
   files.map((rel) => Bun.file(join(workspace, rel)).text()),
 );
@@ -116,14 +155,14 @@ writes.push(
           allowArbitraryExtensions: true,
           noEmit: true,
         },
-        files: [
-          "scripts/typecheck/shims.d.ts",
-          "node_modules/svelte/svelte-html.d.ts",
-        ].map((path) => relative(outDir, join(ROOT, path))),
+        files: [join(ROOT, "scripts/typecheck/shims.d.ts"), svelteHtml].map(
+          (path) => relative(outDir, path),
+        ),
         include: noDeclarations ? ["svelte"] : [workspaceRel, "svelte"],
         exclude: [
           `${workspaceRel}/**/node_modules`,
           `${workspaceRel}/.svelte-check`,
+          ...(await baseExclude(baseConfig)).map((p) => join(workspaceRel, p)),
         ],
       },
       null,
