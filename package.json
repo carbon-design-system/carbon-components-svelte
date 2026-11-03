@@ -95,8 +95,8 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "2.6.4",
-    "@carbon/themes": "11.82.0",
-    "@carbon/type": "11.69.0",
+    "@carbon/themes": "11.84.0",
+    "@carbon/type": "11.70.0",
     "@playwright/test": "1.63.0",
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@testing-library/jest-dom": "^7.0.1",
