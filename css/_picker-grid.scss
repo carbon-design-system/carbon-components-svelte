@@ -1,0 +1,221 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PickerGrid: a searchable grid of options in categories, windowed by row.
+/// Cells are as wide as the grid allows and `--ccs-picker-grid-cell` tall,
+/// so a row's height is known and the window needs no measuring.
+/// @access private
+/// @group components
+@mixin picker-grid {
+  .#{$prefix}--picker-grid {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--picker-grid__search .#{$prefix}--search {
+    width: 100%;
+  }
+
+  .#{$prefix}--picker-grid__categories {
+    display: flex;
+    flex: none;
+    border-block-end: 1px solid $border-subtle;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .#{$prefix}--picker-grid__category {
+    @include type-style("body-compact-01");
+
+    flex: none;
+    box-sizing: border-box;
+    block-size: $carbon--spacing-07;
+    padding-block: 0;
+    padding-inline: $carbon--spacing-04;
+    border: 0;
+    background-color: transparent;
+    color: $text-secondary;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--picker-grid__category[aria-current="true"] {
+    box-shadow: inset 0 -2px 0 $border-interactive;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--picker-grid__category:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--picker-grid__viewport {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-inline: $carbon--spacing-02;
+  }
+
+  // The header and the cells of a section are laid out by the window, not
+  // by flow, so every row has a height of its own.
+  .#{$prefix}--picker-grid__header {
+    @include type-style("label-01");
+
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    padding-inline: $carbon--spacing-03;
+    block-size: var(--ccs-picker-grid-header);
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--picker-grid__row {
+    display: grid;
+    block-size: var(--ccs-picker-grid-cell);
+    grid-template-columns: repeat(
+      var(--ccs-picker-grid-columns),
+      minmax(0, 1fr)
+    );
+  }
+
+  .#{$prefix}--picker-grid__cell {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    block-size: 100%;
+    color: $icon-primary;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--picker-grid__cell--hovered {
+    background-color: $layer-hover;
+  }
+
+  .#{$prefix}--picker-grid__cell--selected {
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--picker-grid__cell--selected.#{$prefix}--picker-grid__cell--hovered {
+    background-color: $layer-selected-hover;
+  }
+
+  .#{$prefix}--picker-grid__cell--disabled {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  // The ring marks the cell the keys reached, and only while the grid or
+  // its search field holds focus.
+  .#{$prefix}--picker-grid__cell--highlighted {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--picker-grid__label {
+    @include type-style("body-compact-01");
+
+    overflow: hidden;
+    padding-inline: $carbon--spacing-02;
+    color: $text-primary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--picker-grid__cell--disabled .#{$prefix}--picker-grid__label {
+    color: $text-disabled;
+  }
+
+  // A shape, not only a fill, says a cell is chosen.
+  .#{$prefix}--picker-grid__check {
+    position: absolute;
+    display: flex;
+    color: $icon-primary;
+    inset-block-start: $carbon--spacing-01;
+    pointer-events: none;
+
+    @include ccs-inset-inline($end: $carbon--spacing-01);
+  }
+
+  .#{$prefix}--picker-grid__check svg {
+    inline-size: to-rem(12px);
+    block-size: to-rem(12px);
+  }
+
+  .#{$prefix}--picker-grid__empty {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: $carbon--spacing-05;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  .#{$prefix}--picker-grid__preview {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    flex: none;
+    box-sizing: border-box;
+    align-items: center;
+    padding-inline: $carbon--spacing-04;
+    border-block-start: 1px solid $border-subtle;
+    block-size: to-rem(48px);
+    color: $text-primary;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--picker-grid__preview-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--picker-grid__category:hover {
+      background-color: $layer-hover;
+    }
+  }
+
+  // Forced colors drop fills and shadows. A chosen cell fills with
+  // `Highlight`, and a check mark says so as well. The ring of the cell the
+  // keys reached is `CanvasText`, which shows on `Canvas` and on `Highlight`.
+  @media (forced-colors: active) {
+    .#{$prefix}--picker-grid__cell--selected,
+    .#{$prefix}--picker-grid__cell--selected .#{$prefix}--picker-grid__label {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    // Forced colors leave an SVG fill alone, so an icon inside the fill needs
+    // its own text color.
+    .#{$prefix}--picker-grid__cell--selected svg {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--picker-grid__cell--highlighted {
+      outline: 2px solid CanvasText;
+      outline-offset: -2px;
+    }
+
+    .#{$prefix}--picker-grid__category[aria-current="true"] {
+      border-block-end: 2px solid Highlight;
+      box-shadow: none;
+    }
+
+    .#{$prefix}--picker-grid__cell--disabled {
+      color: GrayText;
+    }
+  }
+}
+
+@include exports("picker-grid") {
+  @include picker-grid;
+}

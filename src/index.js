@@ -180,6 +180,7 @@ export { default as PageHeaderSkeleton } from "./PageHeader/PageHeaderSkeleton.s
 export { default as Pagination } from "./Pagination/Pagination.svelte";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.svelte";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
+export { default as PickerGrid } from "./PickerGrid/PickerGrid.svelte";
 export { default as FluidPinCodeInputSkeleton } from "./PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";
 export { default as PinCodeInputSkeleton } from "./PinCodeInput/PinCodeInputSkeleton.svelte";
