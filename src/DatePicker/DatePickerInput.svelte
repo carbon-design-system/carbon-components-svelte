@@ -85,6 +85,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
@@ -95,6 +96,10 @@
     dateFormatToMultiplePattern,
     dateFormatToPattern,
   } from "./date-format-pattern.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
@@ -144,12 +149,12 @@
     );
   $: if (ref) declareRef({ id, ref });
   $: setReadonly(id, readonly);
-  $: setDisabled(id, disabled);
+  $: setDisabled(id, effectiveDisabled);
   // Invalid/warn states are suppressed when the input is disabled or read-only.
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   $: setValidation(id, showInvalid, showWarn);
@@ -167,7 +172,7 @@
   $: showClear =
     $clearable &&
     !readonly &&
-    !disabled &&
+    !effectiveDisabled &&
     $inputIds[$inputIds.length - 1] === id &&
     ($range
       ? $inputValueFrom !== "" || $inputValueTo !== ""
@@ -211,7 +216,7 @@
 
   function handleFocus() {
     focused = true;
-    if (selectTextOnFocus && !disabled && !$multiple) {
+    if (selectTextOnFocus && !effectiveDisabled && !$multiple) {
       tick().then(() => ref?.select());
     }
   }
@@ -228,6 +233,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--date-picker-container={true}
   class:bx--date-picker--fluid--invalid={$isFluid && showInvalid}
   class:bx--date-picker--fluid--warn={$isFluid && showWarn}
@@ -243,7 +249,7 @@
       class:bx--label={true}
       class:bx--label--slotted={$isFluid && $$slots.labelChildren}
       class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
       class:bx--label--readonly={readonly}
       use:titleWhenTruncated={{ enabled: $isFluid && !$$slots.labelChildren }}
     >
@@ -255,7 +261,7 @@
     class:bx--date-picker-input__wrapper--invalid={showInvalid}
     class:bx--date-picker-input__wrapper--warn={showWarn}
     class:bx--date-picker-input__wrapper--readonly={readonly}
-    class:bx--date-picker-input__wrapper--disabled={disabled}
+    class:bx--date-picker-input__wrapper--disabled={effectiveDisabled}
     class:bx--date-picker-input__wrapper--decorator={$$slots.decorator &&
       !$isFluid}
     class:bx--date-picker-input__wrapper--ai-label={$aiLabelState === "active"}
@@ -266,7 +272,9 @@
   >
     <input
       bind:this={ref}
-      use:preserveFocusSelection={selectTextOnFocus && !disabled && !$multiple}
+      use:preserveFocusSelection={selectTextOnFocus &&
+        !effectiveDisabled &&
+        !$multiple}
       use:attachFormReset={handleFormReset}
       data-invalid={showInvalid || undefined}
       aria-invalid={showInvalid ? "true" : undefined}
@@ -276,7 +284,7 @@
       {placeholder}
       {type}
       pattern={actualPattern}
-      {disabled}
+      disabled={effectiveDisabled}
       {readonly}
       {...$$restProps}
       aria-describedby={joinDescribedBy(
@@ -394,7 +402,7 @@
   {#if !$isFluid && !showInvalid && !showWarn && helperText}
     <div
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
       id={helperId}
     >
       {helperText}
