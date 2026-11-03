@@ -1,6 +1,7 @@
 <script>
   import { COPY_FEEDBACK_TIMEOUT_MS } from "../utils/copy-feedback.js";
   import { copyText } from "../utils/copy-text.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
 
   /**
    * @template {import("../utils/icon-component.js").IconComponent} [Icon=any]
@@ -170,6 +171,10 @@
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
 
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
+
   const dispatch = createEventDispatcher();
   const ctx = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
@@ -181,7 +186,7 @@
 
   // Browsers still fire mouseenter on disabled inputs; never reveal those.
   $: revealed =
-    !disabled &&
+    !effectiveDisabled &&
     (revealMode === "hover-focus"
       ? focused || hovered
       : revealMode === "focus"
@@ -197,7 +202,7 @@
 
   function handleFocus() {
     focused = true;
-    if (selectTextOnFocus && !disabled) {
+    if (selectTextOnFocus && !effectiveDisabled) {
       ref?.select();
       // Revealing a mask swaps the input's text, which clears that
       // selection, so select again once the value is shown.
@@ -219,6 +224,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--form-item={true}
   class:bx--text-input-wrapper={true}
   class:bx--text-input-wrapper--inline={inline}
@@ -236,7 +242,7 @@
           for={id}
           class:bx--label={true}
           class:bx--visually-hidden={hideLabel}
-          class:bx--label--disabled={disabled}
+          class:bx--label--disabled={effectiveDisabled}
           class:bx--label--inline={inline}
           class:bx--label--inline--xs={effectiveSize === "xs"}
           class:bx--label--inline--sm={effectiveSize === "sm"}
@@ -250,7 +256,7 @@
         <div
           id={helperId}
           class:bx--form__helper-text={true}
-          class:bx--form__helper-text--disabled={disabled}
+          class:bx--form__helper-text--disabled={effectiveDisabled}
           class:bx--form__helper-text--inline={inline}
         >
           {helperText}
@@ -264,7 +270,7 @@
       for={id}
       class:bx--label={true}
       class:bx--visually-hidden={hideLabel}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
     >
       <slot name="labelChildren">{labelText}</slot>
@@ -288,12 +294,12 @@
            wins; an undefined one falls back to "auto". -->
       <input
         bind:this={ref}
-        use:preserveFocusSelection={selectTextOnFocus && !disabled}
+        use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
         use:reflectDefaultValue={shownValue}
         readonly
         type={inputType}
         value={shownValue}
-        {disabled}
+        disabled={effectiveDisabled}
         {id}
         name={masked ? undefined : name}
         class:bx--text-input={true}
@@ -317,7 +323,7 @@
           type="hidden"
           {name}
           {value}
-          {disabled}
+          disabled={effectiveDisabled}
           form={$$restProps.form}
         />
       {/if}
@@ -334,7 +340,7 @@
         {portalTooltip}
         tooltipPosition={effectiveTooltipPosition}
         tooltipAlignment={effectiveTooltipAlignment}
-        disabled={disabled || (!value && copy === copyText)}
+        disabled={effectiveDisabled || (!value && copy === copyText)}
         {copy}
         aria-describedby={hasLabel ? labelId : undefined}
         on:copy
@@ -347,7 +353,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
       >
         {helperText}
       </div>

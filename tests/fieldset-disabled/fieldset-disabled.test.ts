@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
+import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
@@ -113,6 +114,12 @@ const styleCases: {
   fieldProps: Record<string, unknown>;
   marker: string;
 }[] = [
+  {
+    name: "CopyInput",
+    component: CopyInput,
+    fieldProps: { ...field, value: "x" },
+    marker: ".bx--label--disabled",
+  },
   {
     name: "Search",
     component: Search,
