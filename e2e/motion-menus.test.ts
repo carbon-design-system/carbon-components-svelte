@@ -1,6 +1,10 @@
 import { expect, type Page, test } from "./helpers/host";
 
-const SURFACES = [["MenuButton", "Actions"]] as const;
+const SURFACES = [
+  ["MenuButton", "Actions"],
+  ["OverflowMenu", "Overflow actions"],
+  ["OverflowMenu in a portal", "Portal actions"],
+] as const;
 
 const KEYFRAME_METADATA = ["offset", "computedOffset", "easing", "composite"];
 
