@@ -276,11 +276,6 @@ jobs:
         if: matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
         run: bun run test:types
 
-      # Runs next to svelte-check until it replaces it (scripts/typecheck).
-      - name: Test types with scripts/typecheck (Svelte 5)
-        if: matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
-        run: bun run test:typecheck
-
       # Each shard runs half of the selected files, so an empty half passes.
       - name: Test (Svelte 5)
         env:
@@ -405,11 +400,6 @@ jobs:
         run: |
           cd ${{ matrix.dir }}
           bun run test:types
-
-      # Runs next to svelte-check until it replaces it.
-      - name: Test types with scripts/typecheck (${{ matrix.label }})
-        if: matrix.shard == 1 && (github.event_name != 'pull_request' || needs.changes.outputs.types == 'true')
-        run: bun run test:typecheck:${{ matrix.dir == 'tests-svelte3' && 'svelte3' || 'svelte4' }}
 
       # Selected files outside this harness's `include` (Svelte 5-only
       # tests) are dropped, and a shard can get none, so an empty match passes.
