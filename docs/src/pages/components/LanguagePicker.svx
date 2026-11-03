@@ -1,0 +1,103 @@
+---
+components: ["LanguagePicker"]
+description: Language pickers choose a language by its BCP 47 tag, with each name shown in the page's language and in the language itself.
+---
+
+<script>
+  import { Box, LanguagePicker, LayoutDirection, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a picker with a label. The list and the names come from the browser's own `Intl` data, so the component ships none of it. Each row shows the language in the page's language and in itself, such as "French" beside "français", with the tag at the end of the row.
+
+Type to search by either name or by the tag. <DocKbd label="ArrowDown" /> opens the menu, <DocKbd label="Enter" /> picks the highlighted language and <DocKbd label="Escape" /> closes the menu.
+
+<LanguagePicker labelText="Language" />
+
+## Value
+
+### Bind the value
+
+Bind `value` to read or set the language. It holds the BCP 47 tag, such as `"fr"` or `"pt-BR"`, and an empty string when nothing is chosen. A deprecated tag such as `"iw"` selects the language it became, Hebrew. The `change` event fires when the user chooses or clears a language, and carries both names and the direction the language is written in.
+
+<FileSource src="/framed/LanguagePicker/LanguageBinding" />
+
+### Detect from the browser
+
+Set `detect` to `true` to fill an empty field with the browser's best language that the list has, once the field has mounted. A browser set to `"pt-BR"` gets Portuguese from a list that has no variants. No `change` event fires for it.
+
+<LanguagePicker labelText="Interface language" detect />
+
+### Restrict the list
+
+Pass `values` to list only the languages you support, in your order.
+
+<LanguagePicker labelText="Supported languages" values={["en", "de", "fr", "es", "pt-BR", "ja", "ar", "he"]} />
+
+## Variants
+
+Set `variants` to add the script and region variants people most often need, such as Brazilian and European Portuguese, Latin American Spanish, and Simplified and Traditional Chinese. They sit next to their language.
+
+<LanguagePicker labelText="Language" variants value="pt-BR" />
+
+Set `languageDisplay` to `"dialect"` to name a variant the way people say it, where the browser knows one: "Brazilian Portuguese" instead of "Portuguese (Brazil)". The default, `"standard"`, sorts variants beside their language.
+
+<LanguagePicker labelText="Language" variants languageDisplay="dialect" value="pt-BR" />
+
+## Locale
+
+Set `locale` to write the names in another language. The language's own name stays in its own language, whatever the locale, and is written in the language's own direction. The field and the open menu rename when it changes at runtime, and the list is sorted for the locale.
+
+<FileSource src="/framed/LanguagePicker/LanguageLocale" />
+
+`locale` is never read from the browser, so the server and the first paint of the browser write the same names. To follow the user's language, set it after mount. Where the browser has no data for a locale, the names are in English. The same goes for a language's own name: where the browser has no data for it, the row shows only the name in the page's language.
+
+### Right to left
+
+The tag is written left to right, so "pt-BR" keeps its order on a right-to-left page. Arabic and Hebrew names are set right to left wherever they appear.
+
+<LayoutDirection dir="rtl">
+  <LanguagePicker labelText="اللغة" locale="ar" values={["en", "ar", "he", "fr"]} value="ar" />
+</LayoutDirection>
+
+## Sizes
+
+Set `size` to control the field height. The default is 40px.
+
+<Stack gap={5}>
+  <LanguagePicker size="sm" labelText="Small" />
+  <LanguagePicker labelText="Default" />
+  <LanguagePicker size="xl" labelText="Extra large" />
+</Stack>
+
+## States
+
+Reflect validation and interaction states.
+
+<Stack gap={5}>
+  <LanguagePicker labelText="Invalid" invalid invalidText="Choose a language" />
+  <LanguagePicker labelText="Warning" warn warnText="Translations are incomplete" value="ja" />
+  <LanguagePicker labelText="Disabled" disabled value="fr" />
+  <LanguagePicker labelText="Read-only" readonly value="fr" />
+</Stack>
+
+## In a form
+
+Set `name` to post the tag with a form. The visible field holds the name, so a hidden input carries the tag.
+
+<Box maxWidth="24rem">
+  <form on:submit|preventDefault>
+    <LanguagePicker labelText="Language" name="language" required />
+  </form>
+</Box>
+
+## Server rendering
+
+The server renders the field with the selected language's name and no menu, so the list cannot differ between the server and the browser.
+
+| Do | Why |
+| :--- | :--- |
+| Leave `locale` set to the page's language | The names are the same on the server and in the browser |
+| Pass `values` for the languages you ship | The browser cannot list languages, so the default is every two-letter code it can name, about 180 |
+| Use `variants` only where the variant changes the content | Spelling and vocabulary differ, but a long list of regions is noise |
