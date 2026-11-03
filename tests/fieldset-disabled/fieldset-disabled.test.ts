@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
@@ -64,7 +65,10 @@ const cases: {
       expect(label).toHaveClass("bx--label--disabled");
     },
   },
-  ...[{ name: "Dropdown", component: Dropdown }].map(({ name, component }) => ({
+  ...[
+    { name: "Dropdown", component: Dropdown },
+    { name: "ComboBox", component: ComboBox },
+  ].map(({ name, component }) => ({
     name,
     component,
     fieldProps: { labelText: "Field", items },

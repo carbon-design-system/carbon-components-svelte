@@ -422,6 +422,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -434,6 +435,10 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const scrollEndTracker = createScrollEndTracker();
@@ -860,22 +865,22 @@
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({
     invalid: invalid || requiredError,
     warn,
-    disabled,
+    disabled: effectiveDisabled,
     readonly,
   }));
   // A ComboBox that turns disabled or read-only while open closes its menu,
   // so no option stays clickable. Closing here is not a dismissal, so
   // `close` does not fire.
-  $: if ((disabled || readonly) && open) open = false;
+  $: if ((effectiveDisabled || readonly) && open) open = false;
   $: isFluid = fluid || !!formContext?.isFluid;
   $: showFieldFocus = isFluid && (fieldFocused || open);
   // Neutral = default fluid state, i.e. none of the other wrapper modifiers apply.
   $: fluidNeutral =
-    isFluid && !showInvalid && !showWarn && !disabled && !readonly;
+    isFluid && !showInvalid && !showWarn && !effectiveDisabled && !readonly;
   // Hoverable = disabled/readonly do not suppress the invalid/warning hover
   // tint. showInvalid/showWarn already exclude both, so this only matters
   // for readability of the selector it replaces.
-  $: fluidHoverable = isFluid && !disabled && !readonly;
+  $: fluidHoverable = isFluid && !effectiveDisabled && !readonly;
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
@@ -1166,13 +1171,14 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   class:bx--list-box__wrapper={true}
   class:bx--list-box__wrapper--fluid={isFluid}
   class:bx--list-box__wrapper--fluid--neutral={fluidNeutral}
   class:bx--list-box__wrapper--fluid--hoverable={fluidHoverable}
   class:bx--list-box__wrapper--fluid--invalid={isFluid && showInvalid}
   class:bx--list-box__wrapper--fluid--warning={isFluid && showWarn}
-  class:bx--list-box__wrapper--fluid--disabled={isFluid && disabled}
+  class:bx--list-box__wrapper--fluid--disabled={isFluid && effectiveDisabled}
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
@@ -1181,7 +1187,7 @@
     <label
       for={id}
       class:bx--label={true}
-      class:bx--label--disabled={disabled}
+      class:bx--label--disabled={effectiveDisabled}
       class:bx--visually-hidden={hideLabel}
       class:bx--label--slotted={isFluid && $$slots.labelChildren}
       use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
@@ -1192,7 +1198,7 @@
   <ListBox
     class={comboBoxListBoxClass}
     id={comboId}
-    {disabled}
+    disabled={effectiveDisabled}
     invalid={showInvalid}
     {open}
     size={effectiveSize}
@@ -1215,7 +1221,7 @@
       <div bind:this={fieldRef} class:bx--list-box__field={true}>
         <input
           bind:this={ref}
-          use:preserveFocusSelection={selectTextOnFocus && !disabled}
+          use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
           bind:value
           use:formReset={handleFormReset}
           use:submitAttempts={required}
@@ -1227,14 +1233,14 @@
           aria-haspopup="listbox"
           aria-expanded={open ? "true" : "false"}
           aria-activedescendant={highlightedId ?? ""}
-          aria-disabled={disabled ? "true" : undefined}
+          aria-disabled={effectiveDisabled ? "true" : undefined}
           aria-readonly={readonly ? "true" : undefined}
           aria-controls={open ? menuId : undefined}
           aria-invalid={showInvalid ? "true" : undefined}
           aria-errormessage={showInvalid && shownInvalidText
             ? errorId
             : undefined}
-          {disabled}
+          disabled={effectiveDisabled}
           {readonly}
           {placeholder}
           {id}
@@ -1249,7 +1255,7 @@
           class:bx--text-input={true}
           class:bx--text-input--empty={value === ""}
           on:click={() => {
-            if (disabled || readonly) return;
+            if (effectiveDisabled || readonly) return;
             openMenu("click");
           }}
           on:input|capture={(event) => {
@@ -1259,7 +1265,7 @@
             // unfocused-close reset in `afterUpdate`. Without a match, drop
             // any old selection so that reset cannot restore its label over
             // the filled text.
-            if (disabled || readonly || inputHasFocus()) return;
+            if (effectiveDisabled || readonly || inputHasFocus()) return;
             selectedId = findExactMatch(
               items,
               /** @type {HTMLInputElement} */ (event.target).value,
@@ -1427,7 +1433,7 @@
           on:focus
           on:focus={() => {
             if (isFluid) fieldFocused = true;
-            if (selectTextOnFocus && !disabled) {
+            if (selectTextOnFocus && !effectiveDisabled) {
               tick().then(() => ref?.select());
             }
           }}
@@ -1462,14 +1468,14 @@
             on:clear
             on:clear={() => clear({ open: openOnClear })}
             translateWithId={translateWithIdSelection}
-            {disabled}
+            disabled={effectiveDisabled}
             {readonly}
           />
         {/if}
         <ListBoxMenuIcon
           aria-hidden={readonly ? "true" : undefined}
           on:click={(event) => {
-            if (disabled || readonly) return;
+            if (effectiveDisabled || readonly) return;
             event.stopPropagation();
             if (open) open = false;
             else openMenu("click");
@@ -1793,7 +1799,7 @@
     <div
       id={helperId}
       class:bx--form__helper-text={true}
-      class:bx--form__helper-text--disabled={disabled}
+      class:bx--form__helper-text--disabled={effectiveDisabled}
     >
       {helperText}
     </div>
