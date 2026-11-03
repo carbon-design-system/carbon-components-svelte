@@ -203,6 +203,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import {
     getLayoutDirection,
@@ -215,6 +216,10 @@
   } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
+
+  // A disabled `<fieldset>` around the component disables it too.
+  let inDisabledFieldset = false;
+  $: effectiveDisabled = disabled || inDisabledFieldset;
 
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
@@ -264,7 +269,12 @@
   // Validation states are suppressed in the read-only and disabled variants,
   // matching the other Carbon inputs.
   $: ({ showInvalid: hasError, showWarn: hasWarn } =
-    resolveValidationVisibility({ invalid, warn, disabled, readonly }));
+    resolveValidationVisibility({
+      invalid,
+      warn,
+      disabled: effectiveDisabled,
+      readonly,
+    }));
   $: isFluid = fluid || !!formContext?.isFluid;
   $: segmentPlaceholder =
     placeholder === undefined ? (isFluid ? "–" : "") : placeholder;
@@ -370,7 +380,7 @@
   /** @type {(index: number, event: Event) => void} */
   function handleInput(index, event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
-    if (readonly || disabled) {
+    if (readonly || effectiveDisabled) {
       input.value = code[index] ?? "";
       return;
     }
@@ -413,7 +423,7 @@
   function handleKeydown(index, event) {
     switch (inlineArrow(event.key)) {
       case "Backspace":
-        if (readonly || disabled) break;
+        if (readonly || effectiveDisabled) break;
         if (!code[index] && index > 0) {
           event.preventDefault();
           setChar(index - 1, "");
@@ -433,11 +443,11 @@
         }
         break;
       case "Delete":
-        if (readonly || disabled || !code[index]) break;
+        if (readonly || effectiveDisabled || !code[index]) break;
         setChar(index, "");
         break;
       default:
-        if (readonly || disabled) break;
+        if (readonly || effectiveDisabled) break;
         // maxlength="1" drops keystrokes into a filled segment; select its
         // content so the native insertion replaces the character.
         if (
@@ -460,7 +470,7 @@
   /** @type {(index: number, event: ClipboardEvent) => void} */
   function handlePaste(index, event) {
     event.preventDefault();
-    if (readonly || disabled) return;
+    if (readonly || effectiveDisabled) return;
     const text = (event.clipboardData?.getData("text") ?? "").replace(
       /\s/g,
       "",
@@ -557,6 +567,7 @@
 </script>
 
 <div
+  use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={ref}
   class:bx--form-item={true}
   class:bx--pin-code-input={true}
@@ -569,7 +580,7 @@
     use:formReset={handleFormReset}
     {form}
     class:bx--pin-code-input__fieldset={true}
-    {disabled}
+    disabled={effectiveDisabled}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy}
     aria-describedby={joinDescribedBy(describedById, ariaDescribedBy)}
@@ -583,7 +594,7 @@
         id={legendId}
         class:bx--label={true}
         class:bx--visually-hidden={hideLabel}
-        class:bx--label--disabled={disabled}
+        class:bx--label--disabled={effectiveDisabled}
         class:bx--label--slotted={isFluid && $$slots.labelChildren}
         use:titleWhenTruncated={{ enabled: isFluid && !$$slots.labelChildren }}
         on:click={handleLegendClick}
@@ -616,7 +627,7 @@
             value={char}
             placeholder={segmentPlaceholder || undefined}
             id={index === 0 ? id : `${id}-${index}`}
-            {disabled}
+            disabled={effectiveDisabled}
             {readonly}
             {required}
             {form}
@@ -681,7 +692,7 @@
       <div
         id={helperId}
         class:bx--form__helper-text={true}
-        class:bx--form__helper-text--disabled={disabled}
+        class:bx--form__helper-text--disabled={effectiveDisabled}
       >
         {helperText}
       </div>

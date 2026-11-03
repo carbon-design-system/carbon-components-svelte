@@ -4,6 +4,7 @@ import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
+import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import Select from "carbon-components-svelte/Select/Select.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
@@ -125,6 +126,12 @@ const styleCases: {
   {
     name: "DatePickerInput",
     component: DatePickerField,
+    fieldProps: field,
+    marker: ".bx--label--disabled",
+  },
+  {
+    name: "PinCodeInput",
+    component: PinCodeInput,
     fieldProps: field,
     marker: ".bx--label--disabled",
   },
