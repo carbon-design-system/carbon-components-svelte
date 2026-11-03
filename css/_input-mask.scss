@@ -1,0 +1,27 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A field the `mask` action works on. Digits and their literals read in
+/// order only in a left-to-right box: in a right-to-left one the brackets and
+/// hyphens of `(415) 555-0123` land around the wrong digit groups. The
+/// direction is set here and not with a `dir` attribute, so `ccs-dir()` still
+/// reads the page's direction and the text stays at the page's inline end,
+/// beside the label.
+/// @access private
+/// @group components
+@mixin input-mask {
+  input[data-ccs-mask],
+  textarea[data-ccs-mask] {
+    direction: ltr;
+  }
+
+  [dir="rtl"] input[data-ccs-mask],
+  [dir="rtl"] textarea[data-ccs-mask] {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("input-mask") {
+  @include input-mask;
+}
