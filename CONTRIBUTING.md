@@ -282,6 +282,7 @@ sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some t
 | `@type {X \| undefined}` on a prop that defaults to `undefined` | `@type {X}` |
 | `@param` tags on every helper and handler | Untyped parameters |
 | An `@type` on `let x = null` or `writable(null)` | No type: the inferred `null` rejects later writes |
+| A `bind:this` ref typed as the element it binds: `@type {null \| HTMLDivElement}`, `null \| HTMLElementTagNameMap[Tag]` for `<svelte:element this={tag}>`, or a union for `this={href ? "a" : "button"}` | `@type {null \| HTMLElement}` on a ref bound to one known element, or an element type the ref is never bound to |
 | `@template [Id=any]` above `@typedef {object} Item` | `@typedef {object} Item<Id=any>` |
 | `@template` for component generics, in a block without a `@typedef` (TypeScript gives a `@template` to the `@typedef` beside it) | `@generics {T extends Item = Item} T` |
 | The script's `generics` attribute when a `@template` can't express the generic, as in [`RecursiveList.svelte`](src/RecursiveList/RecursiveList.svelte): `<script generics="Node extends RecursiveListNode = RecursiveListNode">`. svelte-check and editors read it in plain JS too | The same generic in both the attribute and a `@template` (sveld reports it; the attribute wins) |
@@ -290,6 +291,8 @@ sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some t
 | A typedef the module script uses, declared in the module script | Declared in the instance script |
 | `@template {import("../utils/icon-component.js").IconComponent} [Icon=any]` for a component prop such as `icon` | An unconstrained `@template [Icon=any]` |
 | A `@slot` prop type that covers every value the slot gets on every path. A slot rendered per visible header also gets empty headers | A type for the common path only |
+
+sveld types a ref from its element only when the ref has no `@type`. A declared type ships as written, and where it names an element type the ref is never bound to, `bun build:docs` fails with `sveld/bind-this-type-mismatch` and suggests the type to declare.
 
 sveld writes a `CarbonXContext` type for each `setContext` value. Where it can only infer `any`, or a type with `any` inside it, `bun build:docs` fails with `sveld/context-any-type`:
 
