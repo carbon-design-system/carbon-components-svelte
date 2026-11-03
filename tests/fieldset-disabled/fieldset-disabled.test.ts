@@ -26,6 +26,7 @@ import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { ComponentType } from "svelte";
 import { tick } from "svelte";
 import DatePickerField from "../form-field-contract/fixtures/DatePickerField.test.svelte";
+import InlineEditField from "../form-field-contract/fixtures/InlineEditField.test.svelte";
 import FieldsetHost from "./FieldsetHost.test.svelte";
 
 const items = [
@@ -151,6 +152,12 @@ const styleCases: {
     component: DatePickerField,
     fieldProps: field,
     marker: ".bx--label--disabled",
+  },
+  {
+    name: "InlineEdit",
+    component: InlineEditField,
+    fieldProps: { value: "x" },
+    marker: ".bx--edit-in-place--disabled",
   },
   {
     name: "PinCodeInput",
