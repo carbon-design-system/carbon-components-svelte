@@ -276,7 +276,7 @@
   let overflowTriggerRef = null;
   /** @type {null | HTMLButtonElement} */
   let overflowButtonRef = null;
-  /** @type {null | HTMLElement} */
+  /** @type {null | HTMLDivElement} */
   let overflowContentRef = null;
   let overflowOpen = false;
 
