@@ -13,7 +13,7 @@
 
   /**
    * Specify the nodes to render.
-   * @type {ReadonlyArray<Node & { nodes?: Node[] }>}
+   * @type {ReadonlyArray<Node>}
    */
   export let nodes = [];
 
