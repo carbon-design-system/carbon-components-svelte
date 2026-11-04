@@ -6,7 +6,7 @@ import Tabs from "./Tabs.test.svelte";
 import TabsKeyed from "./TabsKeyed.test.svelte";
 import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
-import { mockScrollMetrics, renderManual } from "./helpers";
+import { mockScrollMetrics, renderManual, tabsRoot } from "./helpers";
 
 /**
  * Behavior `Tabs` and `TabsVertical` share. Each row picks the component the
@@ -268,7 +268,7 @@ describe.each(variants)(
       render(TabsRegistration, { props: { vertical } });
       await tick();
 
-      const nav = screen.getByRole("navigation");
+      const nav = tabsRoot();
       expect(nav).not.toHaveClass("bx--tabs--tall");
       expect(screen.queryByText("(3/4)")).not.toBeInTheDocument();
 

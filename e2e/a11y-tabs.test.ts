@@ -19,4 +19,16 @@ test.describe("Tabs a11y", () => {
       .analyze();
     expect(switchedResults.violations).toEqual([]);
   });
+
+  test("adds no unnamed landmark for each tab list", async ({ page }) => {
+    await page.goto("/tabs-landmarks.html");
+    await expect(page.getByRole("tab", { name: "Eight" })).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .include("#app")
+      .withRules(["landmark-unique"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+    await expect(page.getByRole("navigation")).toHaveCount(0);
+  });
 });

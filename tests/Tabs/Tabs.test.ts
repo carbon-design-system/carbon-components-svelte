@@ -18,7 +18,7 @@ import TabsRegistration from "./TabsRegistration.test.svelte";
 import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsSkeleton from "./TabsSkeleton.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
-import { expectClass, mockScrollMetrics } from "./helpers";
+import { expectClass, mockScrollMetrics, tabsRoot } from "./helpers";
 
 describe("Tabs", () => {
   it("should render with default props", async () => {
@@ -32,7 +32,7 @@ describe("Tabs", () => {
     expect(screen.getByText("Content 2")).not.toBeVisible();
     expect(screen.getByText("Content 3")).not.toBeVisible();
 
-    const tabsContainer = screen.getByRole("navigation");
+    const tabsContainer = tabsRoot();
     expect(tabsContainer).not.toHaveClass("bx--tabs--full-width");
   });
 
@@ -182,7 +182,7 @@ describe("Tabs", () => {
       render(Tabs, { props: { type } });
       await tick();
 
-      const nav = screen.getByRole("navigation");
+      const nav = tabsRoot();
       expect(nav).toHaveClass(navClass);
       expect(nav).not.toHaveClass(otherNavClass);
 
@@ -211,7 +211,7 @@ describe("Tabs", () => {
 
     await rerender({ dismissible: true });
     expect(screen.getAllByRole("button", { name: /^Dismiss/ })).toHaveLength(3);
-    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--dismissible");
+    expect(tabsRoot()).toHaveClass("bx--tabs--dismissible");
 
     await rerender({ dismissible: false });
     expect(screen.queryByRole("button", { name: /^Dismiss/ })).toBeNull();
@@ -310,7 +310,7 @@ describe("Tabs", () => {
       props: { fullWidth: true },
     });
 
-    const tabsContainer = screen.getByRole("navigation");
+    const tabsContainer = tabsRoot();
     expect(tabsContainer).toHaveClass("bx--tabs--full-width");
   });
 
@@ -335,7 +335,7 @@ describe("Tabs", () => {
       props: { customClass: "custom-tabs" },
     });
 
-    const tabsContainer = screen.getByRole("navigation");
+    const tabsContainer = tabsRoot();
     expect(tabsContainer).toHaveClass("custom-tabs");
     expect(tabsContainer).toHaveClass("bx--tabs");
   });
@@ -345,8 +345,9 @@ describe("Tabs", () => {
       props: { ariaLabel: "Custom label" },
     });
 
-    const nav = screen.getByRole("navigation", { name: "Custom label" });
-    expect(nav).toHaveAttribute("aria-label", "Custom label");
+    const tablist = screen.getByRole("tablist", { name: "Custom label" });
+    expect(tablist).toHaveAttribute("aria-label", "Custom label");
+    expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
   });
 
   it("should maintain correct indices when tabs are dynamically removed and re-added", async () => {
@@ -623,11 +624,11 @@ describe("Tab registration", () => {
 
     await user.click(screen.getByRole("button", { name: "Load count" }));
     await tick();
-    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--tall");
+    expect(tabsRoot()).toHaveClass("bx--tabs--tall");
 
     await user.click(screen.getByRole("button", { name: "Clear count" }));
     await tick();
-    expect(screen.getByRole("navigation")).not.toHaveClass("bx--tabs--tall");
+    expect(tabsRoot()).not.toHaveClass("bx--tabs--tall");
   });
 
   it("reports the current label in the dismiss detail", async () => {
@@ -822,7 +823,7 @@ describe("Container tabs with icons and secondary label", () => {
     const { container } = render(TabIconSecondaryLabel);
     await tick();
 
-    const tabsContainer = screen.getByRole("navigation");
+    const tabsContainer = tabsRoot();
     expect(tabsContainer).toHaveClass("bx--tabs--container");
 
     expect(screen.getByRole("tab", { name: /Calendar/ })).toBeInTheDocument();
@@ -888,7 +889,7 @@ describe("Container tabs with secondary label", () => {
     render(TabSecondaryLabel);
     await tick();
 
-    const tabsContainer = screen.getByRole("navigation");
+    const tabsContainer = tabsRoot();
     expect(tabsContainer).toHaveClass("bx--tabs--container");
     expect(tabsContainer).toHaveClass("bx--tabs--tall");
   });
@@ -896,7 +897,7 @@ describe("Container tabs with secondary label", () => {
   it("updates the tall class when type changes after mount", async () => {
     const { rerender } = render(TabSecondaryLabel);
     await tick();
-    const nav = screen.getByRole("navigation");
+    const nav = tabsRoot();
 
     await rerender({ type: "default" });
     expect(nav).not.toHaveClass("bx--tabs--tall");
@@ -987,7 +988,7 @@ describe("Container tabs with secondary label", () => {
 });
 
 describe.each([
-  ["Tabs", Tabs, () => screen.getByRole("navigation")],
+  ["Tabs", Tabs, () => tabsRoot()],
   ["TabsSkeleton", TabsSkeleton, () => document.querySelector(".bx--tabs")],
 ])("%s layout size", (_, Component, getNav) => {
   it.each([

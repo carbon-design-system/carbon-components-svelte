@@ -1,21 +1,19 @@
 import { fireEvent, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { openTooltips } from "../utils/open-tooltips";
-import { renderIconOnly } from "./helpers";
+import { renderIconOnly, tabsRoot } from "./helpers";
 
 describe("Tabs (icon-only)", () => {
   it("renders the icon-only variant when `iconOnly` is set", async () => {
     await renderIconOnly();
 
-    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--icon-only");
+    expect(tabsRoot()).toHaveClass("bx--tabs--icon-only");
   });
 
   it("renders icons beside labels (not icon-only) by default", async () => {
     await renderIconOnly({ iconOnly: false });
 
-    expect(screen.getByRole("navigation")).not.toHaveClass(
-      "bx--tabs--icon-only",
-    );
+    expect(tabsRoot()).not.toHaveClass("bx--tabs--icon-only");
     expect(screen.getByRole("tab", { name: "Calendar" })).toHaveTextContent(
       "Calendar",
     );
@@ -138,6 +136,6 @@ describe("Tabs (icon-only)", () => {
   it("applies the large icon scale via `iconSize`", async () => {
     await renderIconOnly({ iconSize: "lg" });
 
-    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs__icon--lg");
+    expect(tabsRoot()).toHaveClass("bx--tabs__icon--lg");
   });
 });
