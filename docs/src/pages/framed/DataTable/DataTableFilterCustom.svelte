@@ -40,7 +40,7 @@
         shouldFilterRows={(row, value) => {
           return (
             /(6|8)$/.test(row.name) &&
-            row.rule.toLowerCase().includes(value.toLowerCase())
+            row.rule.toLowerCase().includes(String(value).toLowerCase())
           );
         }}
         bind:filteredRowIds
