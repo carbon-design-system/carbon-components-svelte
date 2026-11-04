@@ -197,6 +197,11 @@ export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup
 export { default as RecursiveList } from "./RecursiveList/RecursiveList.svelte";
 export { default as RelativeTime } from "./RelativeTime/RelativeTime.svelte";
 export { default as ScrollGradient } from "./ScrollGradient/ScrollGradient.svelte";
+export { createForm } from "./SchemaForm/create-form.js";
+export { schemaToFields } from "./SchemaForm/schema.js";
+export { default as SchemaForm } from "./SchemaForm/SchemaForm.svelte";
+export { default as SchemaFormErrorSummary } from "./SchemaForm/SchemaFormErrorSummary.svelte";
+export { defaultWidgets } from "./SchemaForm/widgets.js";
 export { default as FluidSearchSkeleton } from "./Search/FluidSearchSkeleton.svelte";
 export { default as Search } from "./Search/Search.svelte";
 export { default as SearchSkeleton } from "./Search/SearchSkeleton.svelte";

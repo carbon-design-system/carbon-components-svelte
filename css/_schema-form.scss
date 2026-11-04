@@ -1,0 +1,107 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// SchemaForm: the error summary above the form, the repeatable rows of an
+/// array field, and the action row. The fields are Carbon's own.
+/// @access private
+/// @group components
+@mixin schema-form {
+  // The summary takes focus after a failed submit, so it shows a ring.
+  .#{$prefix}--schema-form__summary {
+    margin-bottom: $carbon--spacing-06;
+    padding: $carbon--spacing-05;
+    border: 1px solid $support-error;
+    border-inline-start-width: $carbon--spacing-02;
+    background-color: $layer;
+    color: $text-primary;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--schema-form__summary-title {
+    margin-bottom: $carbon--spacing-03;
+    color: $text-error;
+    @include type-style("heading-compact-02");
+  }
+
+  .#{$prefix}--schema-form__summary-list {
+    margin: 0;
+    padding-inline-start: $carbon--spacing-05;
+    list-style: disc;
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--schema-form__summary-list a {
+    color: $link-primary;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--schema-form__field {
+    min-width: 0;
+  }
+
+  .#{$prefix}--schema-form__rows {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+    margin-bottom: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--schema-form__row {
+    padding: $carbon--spacing-05;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--schema-form__row-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--schema-form__row-header .#{$prefix}--label {
+    margin-bottom: 0;
+  }
+
+  .#{$prefix}--schema-form__row-actions {
+    display: flex;
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--schema-form__actions {
+    display: flex;
+    gap: $carbon--spacing-05;
+    margin-top: $carbon--spacing-07;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--schema-form__summary-list a:hover {
+      color: $link-primary-hover;
+    }
+  }
+
+  // Forced colors drop the fills, so the summary and the rows keep their
+  // edges and the summary's heavy edge stays heavy.
+  @media (forced-colors: active) {
+    .#{$prefix}--schema-form__summary {
+      border-color: CanvasText;
+    }
+
+    .#{$prefix}--schema-form__row {
+      border-color: CanvasText;
+    }
+  }
+}
+
+@include exports("schema-form") {
+  @include schema-form;
+}
