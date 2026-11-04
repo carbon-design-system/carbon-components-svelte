@@ -150,8 +150,25 @@
    */
 
   /**
+   * A column whose cells `display` computes from the row, under a key that
+   * isn't one of `Row`'s, such as a total. It has no value to sort by.
    * @template [Row=DataTableRow]
-   * @typedef {DataTableNonEmptyHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader
+   * @typedef {object} DataTableComputedHeader
+   * @property {string & {}} key
+   * @property {false} [empty]
+   * @property {DataTableValue} value
+   * @property {(item: DataTableValue, row: Row) => DataTableValue} display
+   * @property {false} sort - A computed column has no value to sort by.
+   * @property {boolean} [columnMenu] - Whether the column menu is enabled
+   * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
+   * @property {string} [width]
+   * @property {string} [minWidth]
+   * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   */
+
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row> | DataTableEmptyHeader<Row>} DataTableHeader
    */
 
   /**
@@ -165,10 +182,10 @@
   /**
    * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
    * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
-   * @slot {{ header: DataTableNonEmptyHeader<Row>; }} cellHeader
+   * @slot {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} cellHeader
    * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
    * @slot {{ header: DataTableHeader<Row>; index: number; }} footerCell
-   * @slot {{ header: DataTableNonEmptyHeader<Row>; }} headerDecorator
+   * @slot {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} headerDecorator
    * @slot {{ row: Row; }} rowDecorator
    */
 
@@ -1387,12 +1404,13 @@
   /**
    * Sort on a header click and dispatch the header click events.
    * @param {Event} event
-   * @param {DataTableNonEmptyHeader<Row>} header
+   * @param {DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>} header
    */
   function handleHeaderClick(event, header) {
     dispatch("click", { header });
 
-    if (isHeaderSortable(header)) {
+    // A computed column never sorts: it has no value to sort by.
+    if (header.sort !== false && isHeaderSortable(header)) {
       const currentSortDirection =
         sortKey === header.key ? sortDirection : "none";
       const effectiveSortAlways = header.sortAlways ?? sortAlways;

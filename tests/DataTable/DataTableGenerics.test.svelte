@@ -1,5 +1,6 @@
 <script lang="ts">
   import type {
+    DataTableComputedHeader,
     DataTableEmptyHeader,
     DataTableHeader,
     DataTableKey,
@@ -70,7 +71,8 @@
       const _empty: DataTableEmptyHeader<Row> = h;
       return _empty.key;
     }
-    const _nonEmpty: DataTableNonEmptyHeader<Row> = h;
+    const _nonEmpty:
+      DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row> = h;
     return _nonEmpty.value;
   }
   void readHeader;
