@@ -471,7 +471,9 @@ test.describe("PivotFieldList", () => {
     const built = grid(page, "builder");
     await chip(page, "values", "amount").getByRole("button").click();
     await page.getByRole("menuitem", { name: "Summarize by" }).click();
-    await page.getByRole("menuitemcheckbox", { name: "Count", exact: true }).click();
+    await page
+      .getByRole("menuitemcheckbox", { name: "Count", exact: true })
+      .click();
     await expect(chip(page, "values", "amount")).toContainText(
       "Count of Amount",
     );
