@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
+import PivotTable from "carbon-components-svelte/PivotTable/PivotTable.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
@@ -327,6 +328,18 @@ export const navigation: AriaEntry[] = [
     name: "ToggleButtonGroup",
     render: (attrs) => render(ToggleButtonGroupFixture, { props: attrs }),
     target: () => screen.getByRole("toolbar"),
+  },
+  {
+    name: "PivotTable",
+    render: (attrs) =>
+      render(PivotTable, {
+        props: {
+          records: [{ region: "EMEA", amount: 1 }],
+          config: { rows: ["region"], values: [{ field: "amount" }] },
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("treegrid"),
   },
   {
     name: "Table",

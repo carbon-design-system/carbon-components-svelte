@@ -1,0 +1,202 @@
+// New component: no equivalent exists in carbon-components v10. It renders
+// DataTable's classes (`bx--data-table`, the size and zebra modifiers) and
+// patches what a pivot needs on top: sticky header rows and a sticky first
+// column over a scroll area, grouped headers and totals.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PivotTable: grouped rows and columns of aggregates in a `treegrid`.
+/// @access private
+/// @group components
+@mixin pivot-table {
+  .#{$prefix}--pivot-table {
+    --ccs-pivot-row-height: #{to-rem(48px)};
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  // The row height is the sticky offset of every header row. It matches
+  // DataTable's size classes, which the table itself carries.
+  .#{$prefix}--pivot-table--compact {
+    --ccs-pivot-row-height: #{to-rem(24px)};
+  }
+
+  .#{$prefix}--pivot-table--short {
+    --ccs-pivot-row-height: #{to-rem(32px)};
+  }
+
+  .#{$prefix}--pivot-table--md {
+    --ccs-pivot-row-height: #{to-rem(40px)};
+  }
+
+  .#{$prefix}--pivot-table--tall {
+    --ccs-pivot-row-height: #{to-rem(64px)};
+  }
+
+  .#{$prefix}--pivot-table__label-text {
+    @include type-style("heading-compact-01");
+
+    padding-block-end: $carbon--spacing-03;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--pivot-table__scroll {
+    overflow: auto;
+    max-block-size: var(--ccs-pivot-max-height, none);
+    background-color: $layer;
+    // A focused cell scrolls just into view, under the sticky header rows
+    // and the sticky first column. Pad the scrollport by their size.
+    scroll-padding-block-start: calc(
+      var(--ccs-pivot-row-height) * var(--ccs-pivot-header-rows, 1)
+    );
+    scroll-padding-inline-start: var(--ccs-pivot-header-width, #{to-rem(256px)});
+  }
+
+  .#{$prefix}--data-table.#{$prefix}--pivot-table__table {
+    width: max-content;
+    min-width: 100%;
+    // Cell borders belong to their cells in this model, so they travel with
+    // a sticky cell. The collapsed model leaves them behind.
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  // The base `th:last-of-type` rule is static; the extra class keeps every
+  // header cell pinned.
+  .#{$prefix}--data-table.#{$prefix}--pivot-table__table thead th {
+    position: sticky;
+    z-index: 2;
+    top: calc(
+      var(--ccs-pivot-row-height) * var(--ccs-pivot-header-row, 0)
+    );
+    border-block-end: 1px solid $border-strong;
+    text-align: start;
+  }
+
+  .#{$prefix}--data-table.#{$prefix}--pivot-table__table
+    .#{$prefix}--pivot-table__header--corner {
+    z-index: 3;
+    @include ccs-inset-inline($start: 0);
+  }
+
+  .#{$prefix}--pivot-table__header--corner,
+  .#{$prefix}--pivot-table__row-header {
+    min-width: var(--ccs-pivot-header-width, #{to-rem(256px)});
+    max-width: var(--ccs-pivot-header-width, #{to-rem(256px)});
+    border-inline-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--pivot-table__row-header {
+    position: sticky;
+    z-index: 1;
+    @include ccs-inset-inline($start: 0);
+  }
+
+  .#{$prefix}--data-table.#{$prefix}--pivot-table__table
+    .#{$prefix}--pivot-table__header--value,
+  .#{$prefix}--data-table.#{$prefix}--pivot-table__table
+    .#{$prefix}--pivot-table__header--leaf,
+  .#{$prefix}--data-table.#{$prefix}--pivot-table__table
+    .#{$prefix}--pivot-table__header--total {
+    text-align: end;
+  }
+
+  .#{$prefix}--pivot-table__header--total,
+  .#{$prefix}--pivot-table__cell--subtotal,
+  .#{$prefix}--pivot-table__cell--total {
+    border-inline-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--pivot-table__header--toggle,
+  .#{$prefix}--pivot-table__row-header--toggle {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--pivot-table__label {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    padding-inline-start: calc(var(--ccs-pivot-level, 0) * #{$carbon--spacing-05});
+  }
+
+  .#{$prefix}--pivot-table__chevron {
+    flex: none;
+    fill: $icon-secondary;
+    transition: transform $duration--fast-02 motion(standard, productive);
+
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--pivot-table__chevron--expanded {
+    transform: rotate(90deg);
+  }
+
+  .#{$prefix}--pivot-table__chevron-space {
+    display: inline-block;
+    width: to-rem(16px);
+    flex: none;
+  }
+
+  .#{$prefix}--pivot-table__cell {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--pivot-table__cell--empty {
+    color: $text-disabled;
+  }
+
+  // Group rows, the grand total row and the total columns read as totals.
+  .#{$prefix}--pivot-table__row--group > td,
+  .#{$prefix}--pivot-table__row--grand > td,
+  .#{$prefix}--pivot-table__cell--subtotal,
+  .#{$prefix}--pivot-table__cell--total {
+    @include type-style("heading-compact-01");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--pivot-table__row--grand > td {
+    border-block-start: 1px solid $border-strong;
+    background-color: $layer-accent;
+  }
+
+  .#{$prefix}--pivot-table__table td:focus,
+  .#{$prefix}--pivot-table__table th:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--pivot-table__message {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-05;
+    background-color: $layer;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--pivot-table__drill {
+    overflow: auto;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--data-table.#{$prefix}--pivot-table__table
+      thead
+      .#{$prefix}--pivot-table__header--toggle:hover {
+      background-color: $layer-accent-hover;
+    }
+  }
+}
+
+@include exports("pivot-table") {
+  @include pivot-table;
+}
