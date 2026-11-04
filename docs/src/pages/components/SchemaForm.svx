@@ -1,0 +1,224 @@
+---
+components: ["SchemaForm", "SchemaFormErrorSummary"]
+description: SchemaForm renders a form from a list of fields or a JSON Schema, with validation, conditional fields, nested groups and repeatable rows, using the library's own form fields.
+---
+
+<script>
+  import { SchemaForm, Stack } from "carbon-components-svelte";
+
+  const fields = [
+    { name: "name", label: "Project name", required: true, minLength: 3 },
+    {
+      name: "region",
+      type: "select",
+      label: "Region",
+      options: [
+        { value: "us", label: "United States" },
+        { value: "eu", label: "Europe" },
+      ],
+      default: "eu",
+    },
+    { name: "public", type: "toggle", label: "Public project" },
+  ];
+</script>
+
+## Basic
+
+Pass `fields`. Each one has a `name`, a `type` that picks the widget (`"text"` when left out), a `label` and rules such as `required`. A failed submit shows a summary of the errors above the form and moves focus to it; its links move focus to the fields. A valid submit dispatches `submit` with the values.
+
+<Stack gap={6}>
+  <SchemaForm {fields} on:submit={(e) => console.log(e.detail)} />
+</Stack>
+
+## Field types
+
+The `type` of a field picks the widget. Each widget wraps one of the library's fields and passes it the label, helper text, `invalid` and `warn` state, `disabled`, `readonly` and `required`, so the field keeps its own accessibility wiring.
+
+| Type | Field | Value |
+| --- | --- | --- |
+| `text`, `email`, `url`, `tel` | `TextInput` | string |
+| `password` | `PasswordInput` | string |
+| `textarea` | `TextArea` | string |
+| `search` | `Search` | string |
+| `number`, `integer` | `NumberInput` | number, or `null` when empty |
+| `select` | `Select` | the option's value, or `""` |
+| `dropdown` | `Dropdown` | the option's value, or `""` |
+| `combobox` | `ComboBox` | the option's value, or `""` |
+| `multiselect` | `MultiSelect` | array of option values |
+| `checkbox` | `Checkbox` | boolean |
+| `toggle` | `Toggle` | boolean |
+| `radio` | `RadioButtonGroup` | the option's value, or `""` |
+| `checkboxes` | `CheckboxGroup` | array of option values |
+| `togglebuttons` | `ToggleButtonGroup` | array of option values |
+| `date` | `DatePicker` | string in `dateFormat`, `"Y-m-d"` by default |
+| `daterange` | `DatePicker` | `[from, to]` |
+| `time` | `TimePicker` | string like `09:30` |
+| `slider` | `Slider` | number |
+| `rangeslider` | `RangeSlider` | `[lower, upper]` |
+| `file` | `FileUploader` | array of `File` |
+| `tags` | `TagInput` | array of strings |
+| `pin` | `PinCodeInput` | string |
+| `rating` | `StarRating` | number, `0` for none |
+| `object` | `FormGroup` | object of its fields |
+| `array` | `FormGroup` with rows | array of rows |
+
+<FileSource src="/framed/SchemaForm/SchemaFormFieldTypes" />
+
+Pass anything else the field takes in `props`, such as `{ accept: [".pdf"] }` for a `file`. A field's `options` is a list of values, or of `{ value, label, disabled }`. An option's value can be a number, and it comes back as a number.
+
+## From a JSON Schema
+
+Pass `schema`, a JSON Schema of `type` `"object"`, to render a form from the schema in place of `fields`. An optional `uiSchema` shaped like it sets the widget and the text, with the `ui:` keys react-jsonschema-form uses.
+
+`SchemaForm` reads these keywords:
+
+| Keyword | Becomes |
+| --- | --- |
+| `type`: `string`, `number`, `integer`, `boolean`, `object`, `array`, or a `["string", "null"]` pair | the widget, with `integer` a whole number |
+| `title`, `description`, `default`, `readOnly`, `writeOnly` | label, helper text, starting value, read-only, password |
+| `enum`, `oneOf` or `anyOf` of `const`s with `title`s | the options of a `select` |
+| `const` | a read-only field with that value |
+| `required` | `required` on those properties. A boolean is required only when its `const` is `true`. |
+| `minLength`, `maxLength`, `pattern` | the same rules |
+| `format`: `email`, `uri`, `date`, `time`, `password`, `binary` | `email`, `url`, `date`, `time`, `password` and `file` fields |
+| `minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum`, `multipleOf` | the same rules |
+| `properties`, `items` | fields of a group, rows of an array |
+| `minItems`, `maxItems`, `uniqueItems` | the same rules. `uniqueItems` with an `enum` is a `checkboxes` or `multiselect`. |
+| `allOf` | merged into one schema |
+| `$ref` to `#/$defs/...` in the same schema | the referenced schema |
+| `oneOf` of objects that share a `const` property | a `select` for that property, and each variant's fields shown while it is chosen |
+
+It does not read `$ref` to another document, `if`, `then`, `else`, `dependentRequired`, `dependentSchemas`, `not`, `patternProperties`, `additionalProperties`, `prefixItems`, `contains` or `format: "date-time"`. A `$ref` to another document throws an error that says so.
+
+The `uiSchema` keys are `ui:widget`, `ui:title`, `ui:description`, `ui:help`, `ui:placeholder`, `ui:disabled`, `ui:readonly`, `ui:options` (the `props`), `ui:order` (property names, with `"*"` for the rest), `ui:columns`, `ui:span`, `ui:addLabel` and `ui:itemLabel`. An array's rows are configured under `items`.
+
+<FileSource src="/framed/SchemaForm/SchemaFormJsonSchema" />
+
+`schemaToFields(schema, uiSchema)` returns the field list, so a schema can be adjusted in code before it renders.
+
+## Validation
+
+A field is checked when you leave it (`validateOn="blur"`, the default). Once a field shows an error, and for every field after a failed submit, it is checked again on each change, so the message clears as soon as the value is right. Set `validateOn` to `"change"` to check as the user types, or to `"submit"` to wait for the submit.
+
+The rules come from the field: `required`, `minLength`, `maxLength`, `pattern`, `format`, `min`, `max`, `multipleOf`, `minItems`, `maxItems` and `uniqueItems`. A rule skips an empty value, so only `required` complains about one. `validate(value, values, { signal })` adds your own rule and gets all the values, for rules across fields. It can return a promise, and `signal` aborts when the user changes the field again before the check ends. `dependsOn` re-checks a field when another changes. `warn(value, values)` returns a warning that shows while there is no error.
+
+Pass `messages` to reword a rule. A message can hold `{label}`, `{min}`, `{max}`, `{step}` and `{value}`, or be a function of those.
+
+<FileSource src="/framed/SchemaForm/SchemaFormValidation" />
+
+### Error summary
+
+After a failed submit, `SchemaForm` lists the errors above the form and focuses the list. Each link names the problem, as the field does, and moves focus to the field. The summary updates as errors are fixed and goes when none are left. Use `SchemaFormErrorSummary` on its own with `createForm`.
+
+## Conditional fields
+
+`visibleIf` shows a field only while a condition holds. Write it as an object that compares one field, named relative to the field's group (`"type"`) or from the root (`"/billing.country"`), with `equals`, `in` or `notEmpty`. Write it as a function of all the values for anything else.
+
+A hidden field is left out of the submitted values and is not checked. The form still holds its value, so it comes back if the field shows again. Set `hidden="keep"` to keep hidden values in what is submitted.
+
+<FileSource src="/framed/SchemaForm/SchemaFormConditional" />
+
+## Groups and arrays
+
+A field of `type` `"object"` with `fields` renders as a `FormGroup`, a `fieldset` with a `legend`. A field of `type` `"array"` with `items` renders a row for each item. Rows have buttons to move them up and down, and to remove them, and a button that adds one, with `minItems` and `maxItems` limiting them. After an action focus goes to the new row, the moved row or the next row, and a live region announces it.
+
+<FileSource src="/framed/SchemaForm/SchemaFormArray" />
+
+## Layout
+
+Set `columns` on a group to lay its fields in 1 to 4 columns, and `span` on a field to take more than one. The columns stack on small screens. Set `fluid` to use the fluid variant.
+
+<FileSource src="/framed/SchemaForm/SchemaFormLayout" />
+
+## Native submission
+
+Every control is named by its path, as in `address.city` and `addresses[0].city`, so a form that posts to a server sends them. Set `native` to let the browser submit once the form is valid, in place of dispatching `submit`. A browser posts strings only: a number is its text, a checked box is `on` and an unchecked one is left out, and a list is one entry per item. `rangeslider` and `daterange` post as `name[0]` and `name[1]`. Fields with no `name` of their own, such as `togglebuttons`, post through hidden inputs.
+
+```svelte
+<SchemaForm {fields} native method="post" action="/instances" />
+```
+
+Reset with a `type="reset"` button, as the default buttons do, or with `form.reset()`. Both restore the starting values and clear the errors.
+
+## Custom widgets
+
+A widget is a component that takes the state of a field as props and dispatches `change` with the new value. Pass a map of them as `widgets`, by field `type`. It is merged over `defaultWidgets`, so you can add a type or replace one.
+
+| Prop | Meaning |
+| --- | --- |
+| `value` | The field's value. |
+| `field` | The compiled field, with `field.config` (what you wrote), `field.options` and `field.type`. |
+| `id`, `name`, `label` | The control's id, its name for a native post and its label. |
+| `helperText`, `placeholder` | Text from the field. |
+| `invalid`, `invalidText`, `warn`, `warnText` | State and messages. Show them and point the control at them. |
+| `disabled`, `readonly`, `required` | State. |
+
+```svelte
+<script>
+  import { createEventDispatcher } from "svelte";
+
+  export let value = "";
+  export let field;
+  export let id;
+  export let label;
+
+  const dispatch = createEventDispatcher();
+</script>
+
+<fieldset {id}>
+  <legend>{label}</legend>
+  {#each field.options ?? [] as option}
+    <label>
+      <input
+        type="radio"
+        value={option.value}
+        checked={value === option.value}
+        on:change={() => dispatch("change", option.value)}
+      />
+      {option.label}
+    </label>
+  {/each}
+</fieldset>
+```
+
+```svelte
+<SchemaForm {fields} widgets={{ swatch: SwatchWidget }} />
+```
+
+Blur is picked up from the focus leaving the widget, so a widget does not report it.
+
+## Headless form
+
+`createForm` is the store behind the component, and works without it. It takes the same `fields` or `schema`, `initialValues`, `validateOn`, `messages` and `hidden`, and returns:
+
+| Member | Meaning |
+| --- | --- |
+| `values`, `rawValues`, `errors`, `errorList`, `touched`, `dirty`, `isSubmitting`, `submitCount`, `isValidating` | Stores of the form's state. `values` leaves out hidden fields. |
+| `field(path)` | A store of one field: `value`, `error`, `warn`, `touched`, `dirty`, `validating`, `visible`, `required`, `disabled`, `readonly`. It notifies only when that field's state changes. |
+| `rows(path)` | A store of the stable ids of an array's rows. |
+| `setValue(path, value)`, `blur(path)` | Update a field. |
+| `validate()`, `submit(handler)`, `reset(values)` | Check, submit and reset. `submit` returns a promise of whether the form was valid. |
+| `add(path, item, index)`, `remove(path, index)`, `move(path, from, to)` | Change the rows of an array. |
+| `setErrors(errors)` | Put errors on fields, such as ones from a server. A `submit` handler can return `{ errors }` to do the same. |
+
+<FileSource src="/framed/SchemaForm/SchemaFormStore" />
+
+Pass a form to `SchemaForm` as `form` to render it, or bind `form` to get the one the component makes.
+
+## Create a cloud instance
+
+A form of about thirty fields that uses every widget: groups in columns, an array of disks and one of CIDR ranges, fields that show with a toggle, a name checked by an async validator, a password that must match, and a summary of errors on submit.
+
+<FileSource src="/framed/SchemaForm/CloudInstance" />
+
+## Best practices
+
+| Do | Why |
+| --- | --- |
+| Give every field a `name` | The name is its key in the values and the name of its control in a native post. A name cannot hold a dot. |
+| Put the rules on the field, not in the submit handler | The same rule then checks on blur, shows beside the field and lands in the summary. |
+| Write messages that name the field | The summary lists them apart from their fields, so "Required" alone does not say what to fix. |
+| Check on the server too | A form in the browser is a convenience. Return `{ errors }` from `onSubmit` to show what the server found. |
+| Use `visibleIf` for fields that depend on another | A hidden field is not checked and is left out of the values, so it cannot block a submit. |
+| Key the component to render other `fields` | The form is made once, from the first `fields` or `schema`. Wrap it in `{#key}` to start over. |
+| Use `columns` for two or three short fields | Long fields and groups of radios read better one to a row. |
