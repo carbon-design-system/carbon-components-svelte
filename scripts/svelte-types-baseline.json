@@ -1,7 +1,6 @@
 {
   "Bleed/Bleed.svelte": 1,
   "Card/Card.svelte": 2,
-  "DatePicker/DatePicker.svelte": 2,
   "Link/LinkDownload.svelte": 1,
   "Popover/Popover.svelte": 1,
   "Select/Select.svelte": 1,
