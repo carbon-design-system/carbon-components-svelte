@@ -5,8 +5,8 @@
  * `target="_blank"` defaults to `"noopener noreferrer"`.
  *
  * @param {string | null | undefined} target
- * @param {string} [rel]
- * @returns {string | undefined}
+ * @param {string | null} [rel]
+ * @returns {string | null | undefined}
  */
 export function resolveLinkRel(target, rel) {
   if (rel !== undefined) return rel;

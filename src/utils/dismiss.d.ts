@@ -1,7 +1,8 @@
 /** A single window listener managed by the `dismiss` action. */
 export interface DismissListener {
   type: string;
-  handler: (event: Event) => void;
+  // A method, so a handler can take the event type it listens for.
+  handler(event: Event): void;
   options?: boolean | AddEventListenerOptions;
 }
 
@@ -16,7 +17,7 @@ export interface DismissParams {
   immediate?: boolean;
   listeners?: DismissListener[];
   type?: string | string[];
-  handler?: (event: Event) => void;
+  handler?(event: Event): void;
   options?: boolean | AddEventListenerOptions;
 }
 

@@ -2,7 +2,7 @@ export type RelativeTimeUnit =
   "second" | "minute" | "hour" | "day" | "week" | "month" | "year";
 
 /** Convert a `Date`, epoch number, or date string to epoch milliseconds. */
-export function toTimestamp(input: Date | number | string): number;
+export function toTimestamp(input: Date | number | string | undefined): number;
 
 /** Format `target` relative to `now`; `""` when `target` is invalid. */
 export function formatRelativeTime(

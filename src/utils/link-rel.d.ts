@@ -4,5 +4,5 @@
  */
 export function resolveLinkRel(
   target: string | null | undefined,
-  rel?: string,
-): string | undefined;
+  rel?: string | null,
+): string | null | undefined;
