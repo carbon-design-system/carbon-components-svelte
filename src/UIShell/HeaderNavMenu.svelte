@@ -230,7 +230,7 @@
   class:bx--header__submenu={true}
   class:bx--header__submenu--current={isCurrentSubmenu}
   on:click={(event) => {
-    if (menuRef.contains(event.target)) {
+    if (event.target instanceof Node && menuRef?.contains(event.target)) {
       // Activating an item closes the menu and hides the focused item, so
       // hand focus back to the trigger unless navigation moved it.
       expanded = false;
@@ -243,7 +243,10 @@
   on:keydown={(event) => {
     // Enter on an item fires a click, which the handler above closes on;
     // toggling here as well reopened the menu.
-    if (event.key === "Enter" && !menuRef.contains(event.target)) {
+    if (
+      event.key === "Enter" &&
+      !(event.target instanceof Node && menuRef?.contains(event.target))
+    ) {
       event.stopPropagation();
       expanded = !expanded;
     } else if (
@@ -252,7 +255,8 @@
       inlineKey(event.key, $layoutDirection, menuRef) === "ArrowLeft" &&
       !event.defaultPrevented &&
       !(event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) &&
-      menuRef.contains(event.target)
+      event.target instanceof Node &&
+      menuRef?.contains(event.target)
     ) {
       // Back out of the submenu, like Escape.
       event.preventDefault();
