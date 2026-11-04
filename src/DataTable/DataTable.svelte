@@ -1185,8 +1185,8 @@
   $: sortedRows =
     sorting && sortDirection !== "none"
       ? [...$tableRows].sort((a, b) => {
-          const itemA = resolvePath(a, sortPath);
-          const itemB = resolvePath(b, sortPath);
+          const itemA = sortValueAt(a, sortPath);
+          const itemB = sortValueAt(b, sortPath);
           const headerSort = sortingHeader?.sort;
 
           if (typeof headerSort === "function") {
@@ -1195,7 +1195,7 @@
 
           if (sort) {
             const result = sort(itemA, itemB, {
-              key: sortKey,
+              key: sortingKey(),
               ascending,
               row_a: a,
               row_b: b,
@@ -1258,7 +1258,7 @@
         items: rowsToVirtualize,
         scrollTop: tableBodyScrollTop,
         itemHeight: virtualConfig.itemHeight,
-        containerHeight: calculatedContainerHeight,
+        containerHeight: calculatedContainerHeight ?? 0,
         overscan: virtualConfig.overscan,
         threshold: virtualConfig.threshold,
         maxItems: virtualConfig.maxItems,
@@ -1281,6 +1281,24 @@
   $: rowsToRender = virtualData?.isVirtualized
     ? virtualData.visibleItems
     : rowsToVirtualize;
+
+  /**
+   * A row's value at a sort key: one of its cell values.
+   * @param {Row} row
+   * @param {string} path
+   * @returns {DataTableSortValue<Row>}
+   */
+  function sortValueAt(row, path) {
+    return /** @type {DataTableSortValue<Row>} */ (resolvePath(row, path));
+  }
+
+  /**
+   * The key a sort runs by: set whenever `sorting` is.
+   * @returns {DataTableKey<Row>}
+   */
+  function sortingKey() {
+    return /** @type {DataTableKey<Row>} */ (sortKey);
+  }
 
   /**
    * Every id the row blocks render comes from these rows, so `get` finds it.
@@ -2006,7 +2024,7 @@
           {/each}
 
           <!-- Spacer row for remaining height -->
-          {#if virtualData.endIndex < rowsToVirtualize.length}
+          {#if virtualConfig && virtualData.endIndex < rowsToVirtualize.length}
             {@const remainingHeight =
               virtualData.totalHeight -
               virtualData.endIndex * virtualConfig.itemHeight}
