@@ -275,7 +275,7 @@ When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/fra
 
 #### Component script types
 
-`bun test:src-svelte-types` type-checks the components themselves, scripts and markup (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)). Most components still have errors, so it holds each one to its count in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): a component that gains an error fails, and so does a new component with any. When you fix errors, run `bun test:src-svelte-types --update` to lower the baseline; the check fails until you do. Run `bun build:docs` first.
+`bun test:src-svelte` type-checks the components themselves, scripts and markup, and the `.js` files beside them (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)), and fails on any type error or Svelte compiler warning. The one exception is in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): TypeScript can't represent the attributes of a `<svelte:element>` whose tag is any element ("union type too complex"), which svelte-check reports too, and sveld needs the plain `this={tag}` to type the element's rest props. Don't add to the baseline; if an error you fix is in it, run `bun test:src-svelte --update-baseline` to drop it, and the check fails until you do (`--strict-baseline`). Run `bun build:docs` first.
 
 sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some that sveld reads. Write the form both accept:
 
@@ -303,7 +303,7 @@ sveld writes a `CarbonXContext` type for each `setContext` value. Where it can o
 | A store from `writable(undefined)`, `writable(null)` or `derived(...)` | `/** @type {import("svelte/store").Writable<string \| undefined>} */` on the declaration |
 | A function, declared outside the object or as a method in it | `@param` tags. Without `@returns`, the return type is read off the body |
 
-`bun test:src-svelte-types` ignores a JSDoc cast in a `$:` statement or a template expression, so the cast doesn't fix an error there. Put a `/** @type {T} */` line above the `$:` declaration, or move the expression into a script variable.
+`bun test:src-svelte` ignores a JSDoc cast in a `$:` statement or a template expression, so the cast doesn't fix an error there. Put a `/** @type {T} */` line above the `$:` declaration, or move the expression into a script variable.
 
 ### Creating a component
 
@@ -837,8 +837,7 @@ For the E2E selection (`test:changed:e2e`, `test:plan`, and CI), a `css/` change
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
-- `bun test:src-svelte` compiles `src/` with `svelte/compiler` and fails on any warning (a11y, unused CSS)
-- `bun test:src-svelte-types` type-checks the component scripts in `src/` against a per-component error baseline (see [Component script types](#component-script-types))
+- `bun test:src-svelte` type-checks `src/`'s components and `.js` files against an error baseline, and fails on any Svelte compiler warning (a11y, unused CSS); see [Component script types](#component-script-types)
 - `bun test:types` type-checks the `*.svelte` and `.ts` files in `tests/`, in about a second: [svelte-typecheck](https://github.com/metonym/svelte-typecheck) turns each component into TypeScript, runs `bun check` on it, and maps each error back to its `.svelte` line, as svelte-check reports it. `bun test:types:svelte3` and `bun test:types:svelte4` check the same files against Svelte 3 and 4
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
@@ -1482,7 +1481,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 
 | Job | Runs on a PR |
 | --- | --- |
-| `static-checks` | Always: `bun fmt --check`, `biome ci --error-on-warnings`, `build:docs`, `test:src-types`, `test:src-js`, `test:src-svelte`, `test:src-svelte-types`, `test:package-exports`, `check:package`, `thumbnails catalog` and `bivium check` |
+| `static-checks` | Always: `bun fmt --check`, `biome ci --error-on-warnings`, `build:docs`, `test:src-types`, `test:src-svelte`, `test:package-exports`, `check:package`, `thumbnails catalog` and `bivium check` |
 | `test` (2 shards) | The selected unit tests, skipped when there are none and types didn't change. `test:types` runs on the first shard |
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |

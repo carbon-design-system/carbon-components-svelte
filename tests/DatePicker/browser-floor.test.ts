@@ -5,7 +5,7 @@ import { parse } from "acorn";
 
 // The calendar ships as unbundled source, so whatever it uses reaches users
 // as written. Keep it inside the Svelte 5 browser baseline the CSS targets
-// (Firefox 83, Safari 14). `test:src-js` checks the .js files against the
+// (Firefox 83, Safari 14). `test:src-svelte` checks the .js files against the
 // ES2021 library; this covers what it can't see: syntax, browser APIs, and
 // the scripts of .svelte files.
 
@@ -26,7 +26,7 @@ const NEWER_BROWSER_APIS: Array<[RegExp, string]> = [
   [/\bsignal\s*[:,}]/, "addEventListener `signal`: Safari 15"],
 ];
 
-/** ES2022+ APIs, for the .svelte scripts `test:src-js` doesn't check. */
+/** ES2022+ APIs, for the .svelte scripts, whose type errors are baselined. */
 const NEWER_ES_APIS: Array<[RegExp, string]> = [
   [/\.at\(/, "Array/String#at: Firefox 90, Safari 15.4"],
   [/Object\.hasOwn\(/, "Object.hasOwn: Firefox 92, Safari 15.4"],
