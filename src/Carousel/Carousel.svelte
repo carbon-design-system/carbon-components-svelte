@@ -154,7 +154,7 @@
   }
 
   function childrenChanged() {
-    const children = viewportRef.children;
+    const children = /** @type {HTMLDivElement} */ (viewportRef).children;
     return (
       children.length !== $views.length ||
       $views.some((view, index) => view !== children[index])
@@ -203,7 +203,9 @@
     const observer = new MutationObserver(() => {
       if (childrenChanged()) setup();
     });
-    observer.observe(viewportRef, { childList: true });
+    observer.observe(/** @type {HTMLDivElement} */ (viewportRef), {
+      childList: true,
+    });
 
     return () => {
       observer.disconnect();

@@ -1,4 +1,15 @@
 <script context="module">
+  /**
+   * @typedef {object} MeterThresholds
+   * @property {number} [warning]
+   * @property {number} [error]
+   */
+
+  /**
+   * @param {number} value
+   * @param {MeterThresholds | undefined} thresholds
+   * @param {boolean} overCapacity
+   */
   function deriveStatus(value, thresholds, overCapacity) {
     if (overCapacity) return "error";
     if (thresholds?.error !== undefined && value >= thresholds.error) {
@@ -10,6 +21,10 @@
     return "default";
   }
 
+  /**
+   * @param {MeterThresholds} thresholds
+   * @param {number} max
+   */
   function getMarkers(thresholds, max) {
     return Object.entries(thresholds)
       .filter(([, threshold]) => threshold !== undefined)
@@ -21,12 +36,7 @@
 </script>
 
 <script>
-  /**
-   * @typedef {object} MeterThresholds
-   * @property {number} [warning]
-   * @property {number} [error]
-   * @restProps {div}
-   */
+  /** @restProps {div} */
 
   /** Specify the current amount, in the same units as `max`. */
   export let value = 0;
@@ -138,6 +148,7 @@
 
   $: hasValueText = !!valueText?.trim() || !!$$slots.valueChildren;
 
+  /** @type {undefined | "default" | "success" | "warning" | "error"} */
   let prevStatus;
   let statusAnnouncement = "";
 

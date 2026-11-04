@@ -36,7 +36,8 @@
 
   import { getContext } from "svelte";
 
-  /** @type {undefined | import("svelte/store").Readable<1 | 2 | 3 | 4 | 5 | 6>} */
+  // Undefined outside a `Section`; `$sectionLevel` is read only when it is set.
+  /** @type {import("svelte/store").Readable<1 | 2 | 3 | 4 | 5 | 6>} */
   const sectionLevel = getContext("carbon:Section");
 
   $: headingTag = `h${

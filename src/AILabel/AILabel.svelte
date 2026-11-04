@@ -123,7 +123,7 @@
 
   /** @param {"default" | "inline"} labelKind */
   function hostLabelSize(labelKind) {
-    const { labelSize } = host;
+    const { labelSize } = /** @type {NonNullable<typeof host>} */ (host);
     return typeof labelSize === "function" ? labelSize(labelKind) : labelSize;
   }
 

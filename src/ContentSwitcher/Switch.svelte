@@ -70,9 +70,12 @@
 
   ctx.add({ id, text, selected, icon: hasIcon, disabled });
 
-  const unsubscribe = ctx.currentId.subscribe((currentId) => {
-    selected = prevSelected = currentId === id;
-  });
+  const unsubscribe = ctx.currentId.subscribe(
+    /** @param {string | null} currentId */
+    (currentId) => {
+      selected = prevSelected = currentId === id;
+    },
+  );
 
   $: if (selected !== prevSelected) {
     prevSelected = selected;

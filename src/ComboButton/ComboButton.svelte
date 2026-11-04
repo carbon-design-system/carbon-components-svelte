@@ -143,6 +143,7 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let triggerRef = null;
 
   // Turning disabled on while open closes the menu, so no item stays

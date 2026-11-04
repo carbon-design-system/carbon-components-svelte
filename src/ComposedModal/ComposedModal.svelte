@@ -219,6 +219,7 @@
     setBodyId,
   });
 
+  /** @param {HTMLElement} [node] */
   function focus(node) {
     const container = node || innerModalRef;
     const target = initialFocus({
@@ -316,7 +317,7 @@
       } else if (event.key === "Tab" && !event.defaultPrevented) {
         // A nested modal or a child that uses Tab itself (an editor that
         // indents) already handled this Tab; trapping again moves focus twice.
-        trapFocus({ container: ref, event });
+        trapFocus({ container: /** @type {HTMLDivElement} */ (ref), event });
       }
     }
   }}

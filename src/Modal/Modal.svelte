@@ -236,13 +236,16 @@
   const dispatch = createEventDispatcher();
   const focusReturn = restoreFocus();
 
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let buttonRef = null;
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let primaryButtonRef = null;
   /** @type {null | HTMLDivElement} */
   let innerModalRef = null;
 
+  /** @param {HTMLElement} [node] */
   function focus(node) {
-    const container = node || innerModalRef;
+    const container = /** @type {HTMLElement} */ (node || innerModalRef);
     const target = initialFocus({
       container,
       selectorPrimaryFocus,
@@ -365,7 +368,7 @@
       } else if (event.key === "Tab" && !event.defaultPrevented) {
         // A nested modal or a child that uses Tab itself (an editor that
         // indents) already handled this Tab; trapping again moves focus twice.
-        trapFocus({ container: ref, event });
+        trapFocus({ container: /** @type {HTMLDivElement} */ (ref), event });
       } else if (
         shouldSubmitOnEnter &&
         event.key === "Enter" &&

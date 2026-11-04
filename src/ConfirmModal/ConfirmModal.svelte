@@ -114,6 +114,7 @@
 
   let phraseValue = "";
   let prevOpen = false;
+  /** @type {null | HTMLInputElement} */
   let phraseInputRef = null;
   /** Whether a `confirm` promise is in flight. */
   let pending = false;
@@ -187,6 +188,7 @@
     }
   }
 
+  /** @param {CustomEvent<{ trigger: "escape-key" | "outside-click" | "close-button" | "programmatic" }>} event */
   function handleClose(event) {
     const { trigger } = event.detail;
     // `open` was set to false, by this component after a confirm or cancel

@@ -85,6 +85,7 @@
       } else if (typeof breakpoint === "number") {
         return `bx--col-${name}-${breakpoint}`;
       } else if (breakpoint && typeof breakpoint === "object") {
+        /** @type {string[]} */
         let bp = [];
 
         if (typeof breakpoint.span === "number") {

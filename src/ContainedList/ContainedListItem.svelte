@@ -37,6 +37,17 @@
   $: isDisabledLink = isLink && disabled;
   $: isClickable = isLink || interactive;
   $: tag = isLink ? "a" : interactive ? "button" : "div";
+  /**
+   * @type {{
+   *   type: undefined | "button";
+   *   disabled: undefined | boolean;
+   *   href: undefined | string;
+   *   rel: undefined | string;
+   *   role: undefined | "link";
+   *   "aria-disabled": undefined | "true";
+   *   "aria-current": undefined | "true";
+   * }}
+   */
   $: props = {
     type: tag === "button" ? "button" : undefined,
     disabled: tag === "button" ? disabled : undefined,
