@@ -62,16 +62,6 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
     "src/pages/framed/InlineEdit/InlineEditDataTableCell.svelte",
     /not assignable to type 'DataTableHeader</,
   ],
-  // ToolbarSearch's `shouldFilterRows` types the query `number | string`.
-  [
-    "src/pages/framed/DataTable/DataTableFilterCustom.svelte",
-    /'string \| number'/,
-  ],
-  // DatePicker's `change` detail is `string | { selectedDates, … }`.
-  [
-    "src/pages/framed/DatePicker/DatePickerErrorHandler.svelte",
-    /selectedDates/,
-  ],
 ];
 const knownHits = new Set<number>();
 
