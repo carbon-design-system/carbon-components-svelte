@@ -120,12 +120,11 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<Value>>}
    */
   const selectedValues = writable(selected);
-  // The context type is public API: keep it as it was.
-  /** @type {import("svelte/store").Writable<string>} */
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const groupName = writable(name);
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const groupForm = writable(form);
-  /** @type {import("svelte/store").Writable<boolean>} */
+  /** @type {import("svelte/store").Writable<boolean | undefined>} */
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupDisabled = writable(disabled);
