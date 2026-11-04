@@ -125,7 +125,10 @@
     // Without flex basis and flex shrink being set here, our icon width can go
     // <16px and cause the icon to render in the incorrect artboard size
     flex: 0 0 1rem;
-    margin: $accordion-arrow-margin;
+    // ccs: logical, so the arrow and title mirror in RTL. Same values as
+    // `$accordion-arrow-margin` (`2px $carbon--spacing-05 0 0`).
+    margin: 2px 0 0;
+    margin-inline-end: $carbon--spacing-05;
     fill: $layer-selected-inverse;
     transform: rotate(-270deg) #{'/*rtl:ignore*/'};
     // ccs: only transform (active) and fill (disabled) differ; avoid `all`
@@ -140,8 +143,11 @@
 
     z-index: 1;
     width: 100%;
-    margin: $accordion-title-margin;
-    text-align: left;
+    // ccs: same values as `$accordion-title-margin`
+    // (`0 0 0 $carbon--spacing-05`), logical.
+    margin: 0;
+    margin-inline-start: $carbon--spacing-05;
+    text-align: start;
   }
 
   .#{$prefix}--accordion__content {
@@ -191,15 +197,16 @@
   }
 
   .#{$prefix}--accordion--start .#{$prefix}--accordion__arrow {
-    margin: 2px 0 0 $carbon--spacing-05;
+    margin: 2px 0 0;
+    margin-inline-start: $carbon--spacing-05;
   }
 
   .#{$prefix}--accordion--start .#{$prefix}--accordion__title {
-    margin-right: $carbon--spacing-05;
+    margin-inline-end: $carbon--spacing-05;
   }
 
   .#{$prefix}--accordion--start .#{$prefix}--accordion__content {
-    margin-left: $carbon--spacing-07;
+    margin-inline-start: $carbon--spacing-07;
   }
 
   .#{$prefix}--accordion__item--collapsing .#{$prefix}--accordion__content,
@@ -259,7 +266,7 @@
 
   .#{$prefix}--accordion--end.#{$prefix}--skeleton
     .#{$prefix}--accordion__arrow {
-    margin-left: $spacing-05;
+    margin-inline-start: $spacing-05;
   }
 
   .#{$prefix}--skeleton
