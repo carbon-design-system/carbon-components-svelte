@@ -20,6 +20,7 @@
     {
       key: "total",
       value: "Total",
+      sort: false,
       display: (_value, row) => `$${row.unitPrice * row.qty}`,
     },
   ]}
