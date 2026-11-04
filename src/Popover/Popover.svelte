@@ -224,7 +224,18 @@
   }
 
   // `FloatingPortal` places by side, and by start, center or end along it.
-  $: [side, edge = ""] = placement.split("-");
+  $: [side, edge] = splitPlacement(placement);
+
+  /**
+   * A placement's side, and its edge along it ("" for the center). Every
+   * placement starts with its side.
+   * @param {string} placement
+   * @returns {[side: "top" | "bottom" | "left" | "right", edge: string]}
+   */
+  function splitPlacement(placement) {
+    const [side, edge = ""] = placement.split("-");
+    return [/** @type {"top" | "bottom" | "left" | "right"} */ (side), edge];
+  }
   /** @type {"start" | "end" | "center"} */
   $: intrinsicAlign =
     edge === "left" || edge === "top"
