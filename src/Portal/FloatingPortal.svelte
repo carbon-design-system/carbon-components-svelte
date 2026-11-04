@@ -110,7 +110,8 @@
 
   /**
    * DOM node to mount the portal into. When unset, uses the anchor's nearest
-   * `<dialog>` or `[popover]`, else `document.body`.
+   * `<dialog>` or `[popover]`, else the fullscreen element holding the anchor,
+   * else `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
@@ -123,6 +124,7 @@
   import { observeResize } from "../utils/shared-observer.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import Portal from "./Portal.svelte";
+  import { getFullscreenRoot } from "./portal-utils.js";
 
   let mounted = true;
 
@@ -261,8 +263,13 @@
     stopObservingFloating = null;
   }
 
-  // Default portal target: nearest <dialog> or [popover] on the anchor. `target` wins.
-  $: effectiveTarget = target ?? anchor?.closest("dialog,[popover]") ?? null;
+  // Default portal target: nearest <dialog> or [popover] on the anchor, else
+  // the fullscreen element holding it (read when opened, since fullscreen can
+  // start any time). `target` wins.
+  $: effectiveTarget =
+    target ??
+    anchor?.closest("dialog,[popover]") ??
+    (open ? getFullscreenRoot(anchor) : null);
 
   // Inside dialog/popover, absolute is relative to the target, not the viewport.
   // Use fixed + zero scroll offsets; scroll offsets only apply on document.body.
