@@ -256,8 +256,11 @@
     ariaLabel: consumerLabel,
     ariaLabelledBy: consumerLabelledby,
     ariaDescribedBy,
-    rest: wrapperProps,
+    rest: splitRest,
   } = splitAriaNaming($$restProps));
+  // A role description belongs with the role, so it goes on the dialog too.
+  $: ({ "aria-roledescription": ariaRoledescription, ...wrapperProps } =
+    splitRest);
   $: ariaLabel =
     consumerLabel ??
     (consumerLabelledby === undefined
@@ -346,6 +349,7 @@
       ariaDescribedBy,
     )}
     aria-modal="true"
+    aria-roledescription={ariaRoledescription}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledby}
     class:bx--modal-container={true}

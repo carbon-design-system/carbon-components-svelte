@@ -1,0 +1,128 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ImageViewer: a frame that clips an image the script moves with a
+/// `transform`. The zoom buttons float over the image on a surface of their
+/// own, so they read against any picture, and in forced colors the surface
+/// is Canvas with a border.
+/// @access private
+/// @group components
+@mixin image-viewer {
+  .#{$prefix}--image-viewer {
+    position: relative;
+    min-width: 0;
+  }
+
+  // Without a `ratio` the frame takes the height of its parent. The
+  // aspect-ratio box then has no ratio, so its spacer goes.
+  .#{$prefix}--image-viewer--fill {
+    height: 100%;
+    min-height: to-rem(240px);
+  }
+
+  .#{$prefix}--image-viewer--fill > .#{$prefix}--aspect-ratio {
+    height: 100%;
+  }
+
+  .#{$prefix}--image-viewer--fill > .#{$prefix}--aspect-ratio::before {
+    display: none;
+  }
+
+  .#{$prefix}--image-viewer__frame {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: $layer;
+    cursor: zoom-in;
+    // A fitted image leaves vertical swipes to the page. Zoomed, every
+    // gesture is the viewer's.
+    touch-action: pan-y;
+    user-select: none;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--image-viewer__frame--zoomed {
+    cursor: grab;
+    touch-action: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  // Placed from the frame's top-left corner by the script's transform, in
+  // either text direction.
+  .#{$prefix}--image-viewer__layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: 0 0;
+
+    img {
+      display: block;
+      max-width: none;
+      -webkit-user-drag: none;
+    }
+  }
+
+  // A layer that stays promoted keeps the pixels it painted at the scale it
+  // was promoted at, so zoomed in it stays blurry. The script adds this
+  // class for the length of a gesture only.
+  .#{$prefix}--image-viewer__layer--interacting {
+    will-change: transform;
+  }
+
+  .#{$prefix}--image-viewer__layer--animating {
+    transition: transform $duration--moderate-01 motion(standard, productive);
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .#{$prefix}--image-viewer__status {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--image-viewer__message {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--image-viewer__controls {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    inset-block-end: $carbon--spacing-03;
+    inset-inline-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--image-viewer__controls .#{$prefix}--image-viewer__level {
+    min-width: to-rem(64px);
+    justify-content: center;
+    padding-inline: $carbon--spacing-03;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@include exports("image-viewer") {
+  @include image-viewer;
+}

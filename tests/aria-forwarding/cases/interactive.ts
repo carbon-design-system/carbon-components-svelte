@@ -16,7 +16,9 @@ import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
+import ImageViewer from "carbon-components-svelte/ImageViewer/ImageViewer.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+import Lightbox from "carbon-components-svelte/Lightbox/Lightbox.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
@@ -258,6 +260,14 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("img"),
   },
   {
+    name: "ImageViewer",
+    render: (attrs) =>
+      render(ImageViewer, {
+        props: { src: "a.png", alt: "Alt text", ...attrs },
+      }),
+    target: () => screen.getByRole("img"),
+  },
+  {
     name: "InterstitialScreen",
     render: (attrs) => render(InterstitialScreen, { props: attrs }),
     target: () => screen.getByRole("dialog"),
@@ -273,6 +283,14 @@ export const interactive: AriaEntry[] = [
     name: "InterstitialScreenHeader",
     exempt:
       "header container; its close button is a fixed control named by iconDescription",
+  },
+  {
+    name: "Lightbox",
+    render: (attrs) =>
+      render(Lightbox, {
+        props: { open: true, items: [{ src: "a.png", alt: "A" }], ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "Link",

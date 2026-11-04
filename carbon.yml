@@ -647,6 +647,20 @@ assets:
       - shell
       - media
       - media
+  image-viewer:
+    name: Image viewer
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/image-viewer.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ImageViewer
+    tags:
+      - media
   inline-edit:
     name: Inline edit
     status: stable
@@ -757,6 +771,21 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/LazyMount
+  lightbox:
+    name: Lightbox
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/lightbox.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Lightbox
+    tags:
+      - media
+      - overlay
   link:
     status: stable
     framework: svelte

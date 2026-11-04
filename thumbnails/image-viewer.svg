@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>image-viewer</title>
+    <g id="image-viewer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="76.5" y="36.5" width="167" height="107" fill="var(--cds-field-01, #f4f4f4)" stroke="var(--cds-border-subtle, #e0e0e0)"></rect>
+        <rect x="96" y="48" width="128" height="64" fill="var(--cds-border-subtle, #e0e0e0)"></rect>
+        <rect x="140.5" y="62.5" width="56" height="36" stroke="var(--cds-background-brand, #0f62fe)" stroke-dasharray="4 2"></rect>
+        <rect x="191.5" y="117.5" width="44" height="20" fill="var(--cds-field-01, #f4f4f4)" stroke="var(--cds-border-strong, #8d8d8d)"></rect>
+        <rect x="199" y="127" width="8" height="2" fill="var(--cds-icon-primary, #161616)"></rect>
+        <rect x="219" y="127" width="8" height="2" fill="var(--cds-icon-primary, #161616)"></rect>
+        <rect x="222" y="124" width="2" height="8" fill="var(--cds-icon-primary, #161616)"></rect>
+    </g>
+</svg>
