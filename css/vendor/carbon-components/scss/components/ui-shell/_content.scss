@@ -17,55 +17,60 @@
     padding: 2rem;
   }
 
-  .#{$prefix}--header ~ .#{$prefix}--content {
-    margin-top: mini-units(6);
-  }
+  // ccs: the offsets that make room for the header and the side nav apply
+  // on screen only. Both are hidden in print, and these rules outweigh
+  // any print override, so the content would keep a blank margin.
+  @media screen {
+    .#{$prefix}--header ~ .#{$prefix}--content {
+      margin-top: mini-units(6);
+    }
 
-  .#{$prefix}--side-nav ~ .#{$prefix}--content {
-    margin-inline-start: mini-units(6);
-  }
+    .#{$prefix}--side-nav ~ .#{$prefix}--content {
+      margin-inline-start: mini-units(6);
+    }
 
-  .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded ~ .#{$prefix}--content {
-    margin-inline-start: mini-units(32);
-  }
+    .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded ~ .#{$prefix}--content {
+      margin-inline-start: mini-units(32);
+    }
 
-  // carbon-components-svelte patch
-  // Follow a resizable side nav's width. `Content` sets the custom property
-  // from the side nav's store, since a sibling can't inherit it.
-  .#{$prefix}--side-nav.#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--expanded
-    ~ .#{$prefix}--content {
-    margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
-  }
-
-  // carbon-components-svelte patch
-  // Server-rendered markup (before hydration) has a side nav that is neither
-  // `--expanded` nor `--collapsed`: JS hasn't measured the window yet. The
-  // rules above then draw the nav at 16rem but give `Content` only the
-  // rail's 3rem, and hydration moves the content across. On large screens,
-  // where the nav opens by default, lay `Content` out beside it from the
-  // start. A collapsed nav, and `Content`'s inline margin once hydrated,
-  // still win.
-  @include carbon--breakpoint('lg') {
-    .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--collapsed):not(.#{$prefix}--side-nav--rail)
+    // carbon-components-svelte patch
+    // Follow a resizable side nav's width. `Content` sets the custom property
+    // from the side nav's store, since a sibling can't inherit it.
+    .#{$prefix}--side-nav.#{$prefix}--side-nav--resizable.#{$prefix}--side-nav--expanded
       ~ .#{$prefix}--content {
       margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
     }
-  }
 
-  // Below `lg` the nav overlays the content (or hides), so the content
-  // starts at the edge; without this, server-rendered markup keeps the
-  // rail's 3rem until JS zeroes it. A rail (still visible) and a fixed nav
-  // keep their margins, and so does an expanded one: with an
-  // `expansionBreakpoint` under `lg`, it opens beside the content there.
-  @include carbon--breakpoint-down('lg') {
-    .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
-      ~ .#{$prefix}--content {
-      margin-inline-start: 0;
+    // carbon-components-svelte patch
+    // Server-rendered markup (before hydration) has a side nav that is neither
+    // `--expanded` nor `--collapsed`: JS hasn't measured the window yet. The
+    // rules above then draw the nav at 16rem but give `Content` only the
+    // rail's 3rem, and hydration moves the content across. On large screens,
+    // where the nav opens by default, lay `Content` out beside it from the
+    // start. A collapsed nav, and `Content`'s inline margin once hydrated,
+    // still win.
+    @include carbon--breakpoint('lg') {
+      .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--collapsed):not(.#{$prefix}--side-nav--rail)
+        ~ .#{$prefix}--content {
+        margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
+      }
     }
 
-    .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
-      ~ .#{$prefix}--content {
-      margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
+    // Below `lg` the nav overlays the content (or hides), so the content
+    // starts at the edge; without this, server-rendered markup keeps the
+    // rail's 3rem until JS zeroes it. A rail (still visible) and a fixed nav
+    // keep their margins, and so does an expanded one: with an
+    // `expansionBreakpoint` under `lg`, it opens beside the content there.
+    @include carbon--breakpoint-down('lg') {
+      .#{$prefix}--side-nav:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
+        ~ .#{$prefix}--content {
+        margin-inline-start: 0;
+      }
+
+      .#{$prefix}--side-nav.#{$prefix}--side-nav--expanded:not(.#{$prefix}--side-nav--rail):not(.#{$prefix}--side-nav--fixed)
+        ~ .#{$prefix}--content {
+        margin-inline-start: var(--ccs-side-nav-width, #{mini-units(32)});
+      }
     }
   }
 }

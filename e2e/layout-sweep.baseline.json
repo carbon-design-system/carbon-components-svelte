@@ -1464,6 +1464,54 @@
     "message": "div[data-testid=\"card\"] > div:nth-of-type(3) > div.bx--multi-select__wrapper.bx--list-box__wrapper > label.bx--label: text is cut by div[data-testid=\"card\"] by 2.44px"
   },
   {
+    "fixture": "print.html",
+    "variant": "1280",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost",
+    "message": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost: 1px inset box-shadow ring inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "print.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "main#main-content > div.bx--inline-notification.bx--inline-notification--low-contrast:nth-of-type(3) > button.bx--inline-notification__close-button",
+    "message": "main#main-content > div.bx--inline-notification.bx--inline-notification--low-contrast:nth-of-type(3) > button.bx--inline-notification__close-button: 2px outline inside 1px outline main#main-content > div.bx--inline-notification.bx--inline-notification--low-contrast:nth-of-type(3), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "print.html",
+    "variant": "320",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost",
+    "message": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost: 1px inset box-shadow ring inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "print.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "pre[data-testid=\"code\"]",
+    "message": "pre[data-testid=\"code\"]: text is cut by body.bx--body--with-modal-open by 408.17px"
+  },
+  {
+    "fixture": "print.html",
+    "variant": "672",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost",
+    "message": "div.bx--modal-container > div.bx--modal-header:nth-of-type(1) > div.bx--modal-close-button > button.bx--btn.bx--btn--ghost: 1px inset box-shadow ring inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(244, 244, 244)"
+  },
+  {
+    "fixture": "print.html",
+    "variant": "672",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "pre[data-testid=\"code\"]",
+    "message": "pre[data-testid=\"code\"]: text is cut by body.bx--body--with-modal-open by 56.17px"
+  },
+  {
     "fixture": "progress-bar.html",
     "variant": "320",
     "check": "overflow",
