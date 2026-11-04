@@ -127,6 +127,31 @@
       "[Card.svelte] a clickable card needs an accessible name. Set `aria-label` or `aria-labelledby`.",
     );
   }
+
+  // `svelte:element` types its events loosely, so the handlers are typed here.
+  /** @param {MouseEvent} event */
+  function handleDisabledClick(event) {
+    // A disabled card ignores pointer events, but a script can still
+    // click it.
+    if (disabled) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }
+
+  /** @param {KeyboardEvent} event */
+  function handleActivationKey(event) {
+    // A link already clicks on Enter. A div with `role="button"` clicks
+    // on neither key.
+    if (link || !clickable || disabled) return;
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault();
+      // A held Space would click on every auto-repeat; a native button
+      // activates once per press.
+      if (event.repeat && event.key === " ") return;
+      ref?.click();
+    }
+  }
 </script>
 
 <CardWrapper
@@ -149,28 +174,10 @@
     class:bx--card--ai-label={$aiLabelState === "active"}
     {...cardProps}
     {...$$restProps}
-    on:click={(event) => {
-      // A disabled card ignores pointer events, but a script can still
-      // click it.
-      if (disabled) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-      }
-    }}
+    on:click={handleDisabledClick}
     on:click
     on:keydown
-    on:keydown={(event) => {
-      // A link already clicks on Enter. A div with `role="button"` clicks
-      // on neither key.
-      if (link || !clickable || disabled) return;
-      if (event.key === " " || event.key === "Enter") {
-        event.preventDefault();
-        // A held Space would click on every auto-repeat; a native button
-        // activates once per press.
-        if (event.repeat && event.key === " ") return;
-        ref?.click();
-      }
-    }}
+    on:keydown={handleActivationKey}
     on:keyup
     on:focus
     on:blur
