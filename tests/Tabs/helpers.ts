@@ -58,3 +58,11 @@ export async function renderIconOnly(props: Record<string, unknown> = {}) {
   await tick();
   return result;
 }
+
+/**
+ * The `.bx--tabs` root around the tab list. A tab list is not a landmark, so
+ * the root has no role to query by.
+ */
+export function tabsRoot() {
+  return screen.getByRole("tablist").closest(".bx--tabs") as HTMLElement;
+}

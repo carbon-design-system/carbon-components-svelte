@@ -296,15 +296,13 @@ export const navigation: AriaEntry[] = [
   {
     name: "Tabs",
     render: (attrs) => render(TabsFixture, { props: attrs }),
-    target: () => screen.getByRole("navigation"),
-    skip: OPEN_API_QUESTION,
+    target: () => screen.getByRole("tablist"),
   },
   {
     name: "TabsVertical",
     render: (attrs) =>
       render(TabsFixture, { props: { vertical: true, ...attrs } }),
-    target: () => screen.getByRole("navigation"),
-    skip: OPEN_API_QUESTION,
+    target: () => screen.getByRole("tablist"),
   },
   {
     name: "ToggleButton",

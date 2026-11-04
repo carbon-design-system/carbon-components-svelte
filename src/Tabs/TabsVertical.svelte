@@ -1,6 +1,7 @@
 <script>
   /**
    * @event {number} change
+   * @restProps {div}
    */
 
   /**
@@ -68,6 +69,7 @@
   import { breakpoints } from "../Breakpoint/breakpoints.js";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     computeScrollOverflow,
@@ -530,6 +532,15 @@
   /** @type {"horizontal" | "vertical"} */
   $: listOrientation = isRow ? "horizontal" : "vertical";
   $: useNavigation.set(navigation);
+  // A tab list is not a landmark, so a consumer name goes on the list. Page
+  // navigation is one, and keeps the name on the root.
+  $: ({
+    ariaLabel: tablistLabel,
+    ariaLabelledBy: tablistLabelledby,
+    ariaDescribedBy: tablistDescribedby,
+    rest: tablistRootProps,
+  } = splitAriaNaming($$restProps));
+  $: rootProps = navigation ? $$restProps : tablistRootProps;
   // Recompute overflow when the tabs change or the layout flips.
   $: if ($tabs || isRow) {
     tick().then(remeasureOverflow);
@@ -543,7 +554,7 @@
   class:bx--tabs--vertical-container--column={orientation === "vertical"}
 >
   <div
-    role="navigation"
+    role={navigation ? "navigation" : undefined}
     class:bx--tabs={true}
     class:bx--tabs--vertical={true}
     class:bx--tabs--vertical--responsive={orientation === undefined}
@@ -556,7 +567,7 @@
     class:bx--layout--size-md={size === "md"}
     class:bx--layout--size-lg={size === "lg"}
     class:bx--layout--size-xl={size === "xl"}
-    {...$$restProps}
+    {...rootProps}
   >
     {#if isOverflow}
       <button
@@ -578,6 +589,9 @@
     <ul
       bind:this={refTabList}
       role={navigation ? undefined : "tablist"}
+      aria-label={navigation ? undefined : tablistLabel}
+      aria-labelledby={navigation ? undefined : tablistLabelledby}
+      aria-describedby={navigation ? undefined : tablistDescribedby}
       aria-orientation={navigation ? undefined : listOrientation}
       use:rovingFocus={{
         // Navigation links have no tab role, so arrow keys leave them alone.

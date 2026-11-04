@@ -2,6 +2,7 @@
   /**
    * @event {number} change
    * @event {{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }} dismiss
+   * @restProps {div}
    */
 
   /**
@@ -100,6 +101,7 @@
   import { derived, get, writable } from "svelte/store";
   import ChevronLeft from "../icons/ChevronLeft.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
+  import { splitAriaNaming } from "../utils/aria-naming.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     computeScrollOverflow,
@@ -610,6 +612,15 @@
   $: useDismissText.set(dismissText);
   $: useContainer.set(type === "container");
   $: useNavigation.set(navigation);
+  // A tab list is not a landmark, so a consumer name goes on the list. Page
+  // navigation is one, and keeps the name on the root.
+  $: ({
+    ariaLabel: tablistLabel,
+    ariaLabelledBy: tablistLabelledby,
+    ariaDescribedBy: tablistDescribedby,
+    rest: tablistRootProps,
+  } = splitAriaNaming($$restProps));
+  $: rootProps = navigation ? $$restProps : tablistRootProps;
   $: useIconOnly.set(iconOnly);
 
   $: maxSizeIndex = type === "container" ? 3 : 2;
@@ -618,7 +629,7 @@
 
 <div
   bind:this={refRoot}
-  role="navigation"
+  role={navigation ? "navigation" : undefined}
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
   class:bx--tabs--line={type !== "container"}
@@ -633,7 +644,7 @@
   class:bx--layout--size-md={resolvedSize === "md"}
   class:bx--layout--size-lg={resolvedSize === "lg"}
   class:bx--layout--size-xl={resolvedSize === "xl"}
-  {...$$restProps}
+  {...rootProps}
 >
   {#if isOverflow}
     <button
@@ -655,6 +666,9 @@
   <ul
     bind:this={refTabList}
     role={navigation ? undefined : "tablist"}
+    aria-label={navigation ? undefined : tablistLabel}
+    aria-labelledby={navigation ? undefined : tablistLabelledby}
+    aria-describedby={navigation ? undefined : tablistDescribedby}
     use:rovingFocus={{
       // Navigation links have no tab role, so arrow keys leave them alone.
       selector: "[role='tab']",

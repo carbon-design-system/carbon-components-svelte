@@ -5,14 +5,14 @@ import TabsSelectedId from "./TabsSelectedId.test.svelte";
 import TabsVertical from "./TabsVertical.test.svelte";
 import TabsVerticalOrientationToggle from "./TabsVerticalOrientationToggle.test.svelte";
 import TabsVerticalSkeleton from "./TabsVerticalSkeleton.test.svelte";
-import { expectClass, mockScrollMetrics } from "./helpers";
+import { expectClass, mockScrollMetrics, tabsRoot } from "./helpers";
 
 describe("TabsVertical", () => {
   it("should render with default props", async () => {
     render(TabsVertical);
     await tick();
 
-    expect(screen.getByRole("navigation")).toHaveClass("bx--tabs--vertical");
+    expect(tabsRoot()).toHaveClass("bx--tabs--vertical");
 
     expect(screen.getByRole("tab", { name: "Tab 1" })).toHaveAttribute(
       "aria-selected",
@@ -25,13 +25,13 @@ describe("TabsVertical", () => {
   it("should default to the xl layout size", () => {
     render(TabsVertical);
 
-    expect(screen.getByRole("navigation")).toHaveClass("bx--layout--size-xl");
+    expect(tabsRoot()).toHaveClass("bx--layout--size-xl");
   });
 
   it("should apply the layout size class for the size prop", () => {
     render(TabsVertical, { props: { size: "sm" } });
 
-    const nav = screen.getByRole("navigation");
+    const nav = tabsRoot();
     expect(nav).toHaveClass("bx--layout--size-sm");
     expect(nav).not.toHaveClass("bx--layout--size-xl");
   });
@@ -99,7 +99,7 @@ describe("TabsVertical", () => {
   describe("orientation", () => {
     it("updates the layout and keyboard when orientation changes", async () => {
       const { container } = render(TabsVerticalOrientationToggle);
-      const nav = screen.getByRole("navigation");
+      const nav = tabsRoot();
       const tablist = screen.getByRole("tablist");
       const next = screen.getByRole("button", { name: "Next orientation" });
 
@@ -147,7 +147,7 @@ describe("TabsVertical", () => {
           props: { orientation },
         });
 
-        const nav = screen.getByRole("navigation");
+        const nav = tabsRoot();
         expect(nav).toHaveClass(`bx--tabs--vertical--${modifier}`);
         expect(nav).not.toHaveClass("bx--tabs--vertical--responsive");
         expectClass(
