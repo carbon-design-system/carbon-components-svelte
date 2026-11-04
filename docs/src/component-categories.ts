@@ -97,6 +97,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     label: "Forms",
     components: [
       "CopyInput",
+      "CurrencyInput",
       "DatePicker",
       "FileUploader",
       "InlineEdit",
@@ -107,6 +108,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "TagInput",
       "TextArea",
       "TextInput",
+      "UnitInput",
       "InputGroup",
       "TimePicker",
       "Checkbox",

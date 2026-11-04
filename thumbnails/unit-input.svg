@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>unit-input</title>
+    <g id="unit-input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="56" width="64" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="72" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="103" width="168" height="1"></rect>
+        <rect id="digits-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="84" width="8" height="8"></rect>
+        <rect id="digits-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="100" y="84" width="8" height="8"></rect>
+        <rect id="decimal-mark" fill="var(--cds-text-secondary, #525252)" x="112" y="90" width="2" height="2"></rect>
+        <rect id="digits-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="118" y="84" width="8" height="8"></rect>
+        <rect id="unit-1" fill="var(--cds-text-secondary, #525252)" x="136" y="84" width="14" height="8"></rect>
+        <rect id="unit-2" fill="var(--cds-text-secondary, #525252)" x="154" y="88" width="10" height="4"></rect>
+    </g>
+</svg>
