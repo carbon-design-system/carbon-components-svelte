@@ -205,13 +205,26 @@ describe("RecursiveList Generics", () => {
     type Props = ComponentProps<ComponentType>;
 
     expectTypeOf<NonNullable<Props["nodes"]>>().toEqualTypeOf<
-      ReadonlyArray<CustomNode & { nodes?: CustomNode[] }>
+      ReadonlyArray<CustomNode>
     >();
 
     type BaseComponentType = RecursiveListComponent<RecursiveListNode>;
     type BaseProps = ComponentProps<BaseComponentType>;
     expectTypeOf<NonNullable<BaseProps["nodes"]>>().toEqualTypeOf<
-      ReadonlyArray<RecursiveListNode & { nodes?: RecursiveListNode[] }>
+      ReadonlyArray<RecursiveListNode>
     >();
+  });
+
+  it("takes a tree whose nodes have different shapes", () => {
+    const tree = [
+      {
+        text: "Docs",
+        nodes: [{ text: "Guide", nodes: [{ html: "<b>New</b>" }] }],
+      },
+      { text: "Links", nodes: [{ href: "/a" }, { href: "/b", text: "B" }] },
+      { text: "Plain" },
+    ];
+    type Props = ComponentProps<RecursiveListComponent<(typeof tree)[number]>>;
+    expectTypeOf(tree).toExtend<NonNullable<Props["nodes"]>>();
   });
 });

@@ -72,13 +72,6 @@ const KNOWN: Array<[file: string, message: RegExp]> = [
     "src/pages/framed/DatePicker/DatePickerErrorHandler.svelte",
     /selectedDates/,
   ],
-  // RecursiveList infers `Node` from the first node, not the union.
-  ["src/pages/framed/RecursiveList/RecursiveList.svelte", /^Type '\(/],
-  ["src/pages/framed/RecursiveList/RecursiveListOrdered.svelte", /^Type '\(/],
-  [
-    "src/pages/framed/RecursiveList/RecursiveListOrderedNative.svelte",
-    /^Type '\(/,
-  ],
 ];
 const knownHits = new Set<number>();
 
