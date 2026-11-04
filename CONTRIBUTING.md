@@ -275,7 +275,7 @@ When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/fra
 
 #### Component script types
 
-`bun test:src-svelte` type-checks the components themselves, scripts and markup, and the `.js` files beside them (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)), and fails on any type error or Svelte compiler warning. The one exception is in [`scripts/svelte-types-baseline.json`](scripts/svelte-types-baseline.json): TypeScript can't represent the attributes of a `<svelte:element>` whose tag is any element ("union type too complex"), which svelte-check reports too, and sveld needs the plain `this={tag}` to type the element's rest props. Don't add to the baseline; if an error you fix is in it, run `bun test:src-svelte --update-baseline` to drop it, and the check fails until you do (`--strict-baseline`). Run `bun build:docs` first.
+`bun test:src-svelte` type-checks the components themselves, scripts and markup, and the `.js` files beside them (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)), and fails on any type error or Svelte compiler warning. Run `bun build:docs` first.
 
 sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some that sveld reads. Write the form both accept:
 
