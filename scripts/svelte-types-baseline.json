@@ -1,10 +1,8 @@
 {
   "Bleed/Bleed.svelte": 1,
   "Card/Card.svelte": 2,
-  "ComboBox/ComboBox.svelte": 1,
   "DataTable/DataTable.svelte": 4,
   "DatePicker/DatePicker.svelte": 2,
-  "Dropdown/Dropdown.svelte": 1,
   "Link/LinkDownload.svelte": 1,
   "Popover/Popover.svelte": 1,
   "Select/Select.svelte": 1,
