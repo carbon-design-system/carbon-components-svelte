@@ -1,0 +1,126 @@
+---
+components: ["ActivityFeed", "ActivityComposer", "ActivityBody"]
+description: An activity feed lists comments and system events in time order, with replies, reactions, edit in place and a composer with mentions.
+---
+
+## Basic
+
+Pass the `items` in time order, oldest first, and the `user` who is reading. A comment has an `author`, a `body`, an optional `editedAt`, `reactions` and `replies`. An event has `kind: "event"` and a `body` that continues the author's name: "changed the status to Done".
+
+The feed owns no data. It dispatches `react`, `reply`, `edit`, `delete`, `retry` and `load:older`, and you change `items`. [createActivityFeed](#optimistic-updates) does that for you and keeps the screen ahead of the server.
+
+<FileSource src="/framed/ActivityFeed/ActivityFeedBasic" />
+
+## Items
+
+### Comments and events
+
+A comment is a person's words. An event is the system's: it draws as one compact line, and events that follow each other, within six hours of the one before, share one row. A group of more than three folds behind "Show N more". Set `groupEvents` to `false` for one row per event, or `groupWindowMs` to change the window.
+
+### Replies
+
+A comment has one level of replies, as in GitHub and Linear. A reply to a reply lands on the same comment, so a thread never indents further. A thread of more than `replyLimit` replies (2 by default) folds the earlier ones behind "Show N earlier replies". The button keeps its place and says "Hide earlier replies" once it is open.
+
+| Do | Why |
+| :--- | :--- |
+| Keep a thread to one level | Each level of indent takes a column from a narrow screen, and nobody can say which of three levels a reply answers |
+| Mention the person you answer | A reply to a reply is a flat list, so `@name` carries who it is for |
+
+### Reactions
+
+Each reaction is a toggle button with a count. Its name holds the emoji's name, the count and who reacted: "Thumbs up, 3 reactions: You, Grace and 1 other". The menu beside them offers the rest of `reactions`, a short set by default. Pass your own list, or build a bigger picker and call `react` from it.
+
+### Time
+
+Each comment shows a [RelativeTime](/components/RelativeTime) with the full time in its tooltip, and an "edited" mark whose tooltip says when. Days begin with a divider, drawn with the [ChatLog](/components/ChatLog) divider. Set `timeZone` so the dividers fall on the same days on the server and in the browser, and `now` to fix the moment relative times count from. A fixed `now` turns the live updates off.
+
+## Optimistic updates
+
+`createActivityFeed` is a store of the items. It keeps what the server has confirmed apart from the requests in flight, and shows the second applied to the first. A request that fails is dropped from the list, which undoes that change and nothing else, and the store records it in `errors` for the feed to show as a notice.
+
+| Change | Shows at once | When it fails |
+| :--- | :--- | :--- |
+| `add` | The comment, marked "Sending" | It stays, marked "Not sent", with Retry and Discard. The text is not lost |
+| `edit` | The new text, marked edited | The old text returns, with a notice |
+| `remove` | The comment is gone | It comes back in place, with a notice |
+| `react` | The new count, pressed | The count returns, with a notice |
+
+A comment keeps its element when the server gives it an id, because rows are keyed by the id it had when it was sent.
+
+<FileSource src="/framed/ActivityFeed/ActivityFeedOptimistic" />
+
+## Older and newer activity
+
+### Load older
+
+Set `hasOlder` when there is more, and handle `load:older`. The button turns into "Loading older activity", the feed is `aria-busy`, and when the page arrives focus moves to its first comment. Until then `aria-setsize` is unknown (`-1`).
+
+### New items
+
+Comments others add while the reader is at the end scroll into view. When the reader has scrolled up, nothing moves. A button at the foot of the feed says how many are new, and takes the reader to the end. A polite live region announces the new comments either way, and focus is never moved. A comment you send always scrolls into view.
+
+<FileSource src="/framed/ActivityFeed/ActivityFeedLive" />
+
+### Long feeds
+
+Rows far from the viewport cost the browser nothing to draw (`content-visibility`), but they still cost time to build: about 0.75 ms each, so 1,600 rows take over a second. Page the feed with "Load older", or set `virtual` and `height`, and only the rows near the viewport exist.
+
+| Do | Why |
+| :--- | :--- |
+| Page with "Load older" for a feed that has a server behind it | The DOM stays small, find in page and screen readers still see every loaded comment |
+| Use `virtual` for a feed that is all on the page | 2,000 items mount in under 100 ms instead of over a second, but find in page and screen reader browse reach only the rows near the viewport |
+
+<FileSource src="/framed/ActivityFeed/ActivityFeedVirtual" />
+
+## Composer
+
+`ActivityComposer` is a [TextArea](/components/TextArea) with `@` mentions, a submit button and the shortcut <DocKbd label="Ctrl" />+<DocKbd label="Enter" /> (<DocKbd label="⌘" />+<DocKbd label="Enter" /> on Apple platforms). <DocKbd label="Enter" /> writes a new line. A mention is written as `@[Name](id)`, so the ids survive in the string you store.
+
+Set `draftKey` to keep the unsent text in `localStorage` under that key, one per thread, written after a pause in typing and removed when the form is submitted or cancelled. The feed opens its reply and edit fields with the same `draftKey`, with a suffix of their own.
+
+<FileSource src="/framed/ActivityFeed/ActivityComposerDraft" />
+
+## Body format
+
+A body is plain text with mentions and links, plus a small Markdown subset. It is parsed to runs and drawn as elements, never as HTML, so a body cannot inject markup and there is nothing to sanitize. Only `http`, `https` and `mailto` links become links.
+
+| Syntax | Result |
+| :--- | :--- |
+| `**bold**`, `*italic*`, `_italic_` | Strong and emphasis |
+| `` `code` `` and fenced code | Inline code and a code block |
+| `> text` | A quote |
+| `- item` | A bullet list |
+| `[text](https://example.com)` and bare `https://` URLs | A link that opens in a new tab with `rel="noopener noreferrer ugc"` |
+| `@[Name](id)` | A mention |
+| Anything else, including `<b>` and `[x](javascript:...)` | Text |
+
+Each paragraph takes the direction of its own first strong letter, so an Arabic comment under an English one reads from the right, and names and mentions are isolated so they do not flip the punctuation around them.
+
+<FileSource src="/framed/ActivityFeed/ActivityBodyFormat" />
+
+## Texts
+
+Pass `texts` with the keys to replace. Each is a string or a function, such as `reactionLabel`, `incoming` and `showReplies`. The rest stay in English.
+
+## Keyboard
+
+The feed follows the [WAI-ARIA feed pattern](https://www.w3.org/WAI/ARIA/apg/patterns/feed/). Every comment is a tab stop and the controls inside it follow in order.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="PageDown" /> | Move focus to the next comment |
+| <DocKbd label="PageUp" /> | Move focus to the previous comment |
+| <DocKbd label="Enter" /> in the menu | Edit or delete your own comment |
+| <DocKbd label="Ctrl" />+<DocKbd label="Enter" /> | Submit the composer, a reply or an edit |
+| <DocKbd label="Escape" /> | Close the mention menu, then cancel a reply or an edit |
+
+## Accessibility
+
+The list is `role="feed"` with an article for each comment or group of events. Each article has `aria-posinset` and `aria-setsize`, and a name that says who and when. The feed is `aria-busy` while older activity loads. The day dividers are drawn only: the day is in each article's name.
+
+The feed itself is not a live region, so loading older activity is not read out. New comments from others are announced in a separate polite region, and focus stays where it was. A reaction is a toggle button, and the people who reacted are in its name.
+
+| Do | Why |
+| :--- | :--- |
+| Use a feed, not a [ChatLog](/components/ChatLog), for a thread of comments | A chat log is a live region that reads out everything added to it, including a page of older comments, and pins the view to the newest message |
+| Send `user` to turn on edit, delete and the pressed state of reactions | Without it the feed is read-only |
