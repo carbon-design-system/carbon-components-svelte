@@ -31,6 +31,7 @@
 
   // `bind:this` may already have nulled `ref` by the time the cleanup runs,
   // so keep the node that was declared for `releaseRef`.
+  /** @type {null | HTMLButtonElement} */
   let declaredRef = null;
 
   $: if (ctx && ref) {

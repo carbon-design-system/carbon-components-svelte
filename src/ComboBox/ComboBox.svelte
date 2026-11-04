@@ -496,7 +496,9 @@
   let fieldFocused = false;
   /** Set when a required, empty combo box blocked form submission. */
   let requiredError = false;
+  /** @type {Item | undefined} */
   let selectedItem;
+  /** @type {Item["id"] | null} */
   let prevSelectedId = null;
   let highlightedIndex = -1;
   let highlightOrigin = /** @type {"keyboard" | null} */ (null);
@@ -513,9 +515,12 @@
   /** @type {null | HTMLDivElement} */
   let fieldRef = null;
 
-  /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
+  // Rows are items or group headers, told apart by the row index in the
+  // template, so the window's row type is `any`.
+  /** @type {import("../ListBox/menu-window.js").MenuWindowState<any>} */
   let menuState;
 
+  /** @type {import("../ListBox/menu-window.js").MenuWindow<any>} */
   const menuWindow = createMenuWindow({
     getContainer: () => listRef,
     onScrollTop: (scrollTop) => {
@@ -599,6 +604,7 @@
     }
   }
 
+  /** @param {number} step */
   function change(step) {
     // Disabled options stay in the keyboard navigation sequence (APG:
     // "Focusability of disabled controls") so assistive-tech users can
@@ -661,12 +667,13 @@
   const announceStatus = createStatusAnnouncer((text) => (statusText = text));
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
+  /** @type {number | null} */
   let announcedFilterCount = null;
 
   const announceFilterResults = debounce((count) => {
     if (count === announcedFilterCount) return;
-    announcedFilterCount = count;
-    announceStatus(filterResultsText(count));
+    announcedFilterCount = /** @type {number} */ (count);
+    announceStatus(filterResultsText(/** @type {number} */ (count)));
   }, 800);
 
   /**
@@ -785,7 +792,8 @@
 
     menuWindow.sync();
 
-    if (wasJustOpened && rendered) ref.focus();
+    if (wasJustOpened && rendered)
+      /** @type {HTMLInputElement} */ (ref).focus();
     rendered = true;
 
     if (open) {
@@ -810,13 +818,21 @@
         if (clearFilterOnOpen && valueBeforeOpen) {
           value = valueBeforeOpen;
           valueBeforeOpen = "";
-        } else if (!ref.contains(document.activeElement)) {
+        } else if (
+          !(
+            /** @type {HTMLInputElement} */ (ref).contains(
+              document.activeElement,
+            )
+          )
+        ) {
           // Only set value programmatically if the input is not focused
           value = itemToString(selectedItem);
         }
       } else if (
         !selectedItem &&
-        !ref.contains(document.activeElement) &&
+        !(
+          /** @type {HTMLInputElement} */ (ref).contains(document.activeElement)
+        ) &&
         !allowCustomValue
       ) {
         value = "";
@@ -984,8 +1000,11 @@
       const selectionEnd = selectionStart + suggestion.length;
 
       tick().then(() => {
-        ref.value = value + suggestion;
-        ref.setSelectionRange(selectionStart, selectionEnd);
+        /** @type {HTMLInputElement} */ (ref).value = value + suggestion;
+        /** @type {HTMLInputElement} */ (ref).setSelectionRange(
+          selectionStart,
+          selectionEnd,
+        );
       });
     }
   }
@@ -1059,6 +1078,7 @@
   /**
    * Select `item` when focus leaves the field. Selecting normalizes the value
    * to the item's casing and fires `select` reactively.
+   * @param {Item} item
    * @returns {true}
    */
   function commitOnLeave(item) {
@@ -1157,6 +1177,7 @@
     dispatch,
   });
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     // The menu counts as inside even when not portaled: a click on a group
     // header lands in it without closing the menu itself.
@@ -1372,9 +1393,12 @@
               // menu. Unlike Enter/Tab it does not select an item or close, and it
               // preserves the user's casing so continued typing still filters.
               event.preventDefault();
-              value = ref.value;
+              value = /** @type {HTMLInputElement} */ (ref).value;
               tick().then(() => {
-                ref.setSelectionRange(value.length, value.length);
+                /** @type {HTMLInputElement} */ (ref).setSelectionRange(
+                  value.length,
+                  value.length,
+                );
               });
             } else if (open && (event.key === "Home" || event.key === "End")) {
               // APG editable combobox: Home/End stay native caret keys while
@@ -1445,7 +1469,7 @@
               fieldRef?.contains(/** @type {Node} */ (event.relatedTarget)) ||
               listRef?.contains(/** @type {Node} */ (event.relatedTarget))
             ) {
-              ref.focus();
+              /** @type {HTMLInputElement} */ (ref).focus();
             }
           }}
           on:paste

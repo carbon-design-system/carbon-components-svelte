@@ -251,14 +251,16 @@
     SEARCH_SIZE_ALIASES,
   );
 
+  /** @type {null | HTMLButtonElement | HTMLDivElement} */
   let searchRef = null;
   let prevExpanded = expanded;
+  /** @type {null | import("../utils/debounce.js").Debounced<(searchValue: unknown) => void>} */
   let dispatchSearch = null;
 
   // A form reset restores the field without an input event. Svelte 5 syncs
   // `bind:value` back on its own; Svelte 3 and 4 do not, so read the field.
   function handleFormReset() {
-    if (ref) value = ref.value;
+    if (ref) value = /** @type {T} */ (ref.value);
   }
 
   $: {
@@ -466,7 +468,7 @@
           // Escape that cancels an IME composition is not a clear.
           if (isImeComposition(event)) return;
           if (!readonly && value !== "" && value != null) {
-            value = "";
+            value = /** @type {T} */ ("");
             dispatchSearch?.cancel();
             dispatch("clear");
             event.preventDefault();
@@ -510,8 +512,8 @@
       on:click
       on:click={() => {
         if (readonly) return;
-        value = "";
-        ref.focus();
+        value = /** @type {T} */ ("");
+        /** @type {HTMLInputElement} */ (ref).focus();
         dispatchSearch?.cancel();
         dispatch("clear");
       }}

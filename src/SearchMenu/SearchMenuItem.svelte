@@ -1,6 +1,7 @@
 <script context="module">
   /**
    * Tolerate custom matchers that omit `indices` so highlighting still works.
+   * @param {{ matched?: boolean; indices?: number[] } | null | undefined} result
    */
   function normalizeMatch(result) {
     return {
@@ -9,6 +10,7 @@
     };
   }
 
+  /** @param {string} raw */
   function escapeHtml(raw) {
     return raw
       .replace(/&/g, "&amp;")
@@ -16,6 +18,7 @@
       .replace(/>/g, "&gt;");
   }
 
+  /** @param {Array<{ text: string; match: boolean }>} parts */
   function segmentsToHtml(parts) {
     // Build the highlighted label as one HTML string. Rendering matched and
     // unmatched runs as separate template nodes pads the text with the
@@ -111,6 +114,7 @@
   const highlightedId = menu.highlightedId;
   const groupFilter = group?.filter ?? readable(undefined);
 
+  /** @type {null | HTMLAnchorElement | HTMLDivElement} */
   let ref = null;
   let registered = false;
 
@@ -130,6 +134,11 @@
   $: inDividerGroup = group?.divider ?? false;
   $: updateRegistration(shouldRender, isFilterable, inDividerGroup);
 
+  /**
+   * @param {boolean} render
+   * @param {boolean} filterable
+   * @param {boolean} footerGroup
+   */
   function updateRegistration(render, filterable, footerGroup) {
     if (render) {
       registered = true;
