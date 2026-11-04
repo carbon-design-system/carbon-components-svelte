@@ -28,6 +28,11 @@ describe("downloadFile", () => {
     expect(blob.type).toBe("text/csv;charset=utf-8");
   });
 
+  it("downloads nothing without data", () => {
+    downloadFile(undefined, "empty.txt");
+    expect(createObjectURL).not.toHaveBeenCalled();
+  });
+
   it("passes a Blob straight through without rewrapping it", () => {
     const blob = new Blob(["custom"], { type: "application/json" });
     downloadFile(blob, "data.json");

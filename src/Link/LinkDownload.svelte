@@ -28,8 +28,9 @@
 
   /**
    * Override the default download behavior (creates an object URL for
-   * `data` and clicks a temporary anchor).
-   * @type {(data: string | Blob, filename: string, type: string) => void | Promise<void>}
+   * `data` and clicks a temporary anchor). It gets `data`, `filename` and
+   * `type` as set, so `data` and `type` may be `undefined`.
+   * @type {(data: string | Blob | undefined, filename: string, type: string | undefined) => void | Promise<void>}
    */
   export let download = downloadFile;
 
