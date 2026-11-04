@@ -17,7 +17,7 @@ import { createCalendarEngine } from "./calendar.js";
  *     [option: string]: unknown;
  *   };
  *   base: HTMLInputElement;
- *   input: HTMLInputElement;
+ *   input: HTMLInputElement | null;
  *   dispatch: (event: string, detail?: unknown) => void;
  *   isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
  * }} CreateCalendarArgs
@@ -262,7 +262,7 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
 
 /**
  * @param {HTMLInputElement} field
- * @param {(number | null)[] | undefined} caret
+ * @param {(number | null)[] | null | undefined} caret
  */
 function restoreFocus(field, caret) {
   if (document.activeElement === field) return;

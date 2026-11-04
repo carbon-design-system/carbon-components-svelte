@@ -10,7 +10,8 @@ export interface CreateCalendarArgs {
     [option: string]: unknown;
   };
   base: HTMLInputElement;
-  input: HTMLInputElement;
+  /** The range's second input: `null` outside range mode. */
+  input: HTMLInputElement | null;
   dispatch: (event: string, detail?: unknown) => void;
   isDayBlocked?: (date: Date, instance: CalendarInstance) => boolean;
 }

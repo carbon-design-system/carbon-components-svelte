@@ -685,7 +685,7 @@
     portalWhenClipped = false;
     calendarUsesFixedPositioning = false;
     engine?.set({
-      appendTo: datePickerRef,
+      appendTo: datePickerRef ?? undefined,
       position: propOptions.position,
       static: true,
     });
