@@ -82,8 +82,8 @@ export function joinDescribedBy(...ids) {
  * @param {unknown} [options.warnText]
  * @param {boolean} [options.isFluid=false] - fluid fields don't render
  *   helper text, so `aria-describedby` doesn't point at it.
- * @param {string} options.errorId
- * @param {string} options.warnId
+ * @param {string | undefined} options.errorId
+ * @param {string | undefined} options.warnId
  * @param {string} [options.helperId]
  * @param {boolean} [options.includeErrorId=true] - `false` when the
  *   invalid message is instead surfaced via `aria-errormessage`; the
