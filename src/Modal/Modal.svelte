@@ -223,7 +223,7 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import Close from "../icons/Close.svelte";
-  import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { splitAria, splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
@@ -309,14 +309,15 @@
   $: modalLabelId = `bx--modal-header__label--modal-${id}`;
   $: modalHeadingId = `bx--modal-header__heading--modal-${id}`;
   $: modalBodyId = `bx--modal-body--${id}`;
-  // The root carries `role="presentation"`, so consumer naming and
-  // description go on the dialog element instead.
+  // The root carries `role="presentation"`, so every consumer `aria-*`
+  // attribute goes on the dialog element instead.
   $: ({
     ariaLabel: consumerLabel,
     ariaLabelledBy,
     ariaDescribedBy,
-    rest: wrapperProps,
+    rest: nonNamingProps,
   } = splitAriaNaming($$restProps));
+  $: ({ aria: dialogAria, rest: wrapperProps } = splitAria(nonNamingProps));
   // A consumer `aria-label` names the dialog. The scrolling region keeps
   // the built-in name so the consumer label stays on the dialog alone.
   $: builtInLabel = modalLabel ?? modalAriaLabel ?? modalHeading;
@@ -415,6 +416,7 @@
   <div
     bind:this={innerModalRef}
     tabindex="-1"
+    {...dialogAria}
     role={alert ? (passiveModal ? "alert" : "alertdialog") : "dialog"}
     aria-describedby={joinDescribedBy(
       alert && !passiveModal ? modalBodyId : undefined,

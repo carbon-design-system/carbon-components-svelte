@@ -5,6 +5,7 @@ import {
   CONSUMER_DESCRIPTION_ID,
   CONSUMER_LABEL,
   CONSUMER_LABEL_ID,
+  CONSUMER_ROLE_DESCRIPTION,
   isExempt,
 } from "./contract";
 
@@ -92,6 +93,31 @@ describe.each(cases.map((c) => [title(c), c] as const))("%s", (_, c) => {
         ),
       ].filter((el) => !targets.includes(el));
       expect(stray).toEqual([]);
+    },
+  );
+
+  it.runIf(c.also?.includes("aria-roledescription"))(
+    "puts a consumer aria-roledescription on the target",
+    () => {
+      const result = c.render({
+        "aria-roledescription": CONSUMER_ROLE_DESCRIPTION,
+      });
+      const targets = targetsOf(c, result);
+
+      for (const target of targets) {
+        expect(target).toHaveAttribute(
+          "aria-roledescription",
+          CONSUMER_ROLE_DESCRIPTION,
+        );
+      }
+      expectOnlyTargets(
+        holders(
+          result.baseElement,
+          "aria-roledescription",
+          CONSUMER_ROLE_DESCRIPTION,
+        ),
+        targets,
+      );
     },
   );
 });
