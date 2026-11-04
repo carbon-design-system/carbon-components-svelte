@@ -108,7 +108,7 @@
     <span
       class:bx--tag__label={true}
       title={selectionCount?.toString()}
-      aria-hidden={readonly || undefined}
+      aria-hidden={readonly ? "true" : undefined}
     >
       {selectionCount}
     </span>
@@ -119,12 +119,12 @@
       class:bx--tag__close-icon={true}
       on:click|preventDefault|stopPropagation={handleClear}
       on:keydown|stopPropagation={handleClearKeydown}
-      {disabled}
-      aria-disabled={readonly || undefined}
+      {...{ disabled }}
+      aria-disabled={readonly ? "true" : undefined}
       aria-label={ariaLabel ?? description}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
-      aria-hidden={readonly || undefined}
+      aria-hidden={readonly ? "true" : undefined}
       title={description}
     >
       <Close />

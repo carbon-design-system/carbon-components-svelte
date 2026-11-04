@@ -82,7 +82,7 @@
   class:bx--list-box__menu-item--active={active}
   aria-selected={active ? "true" : "false"}
   aria-disabled={disabled ? "true" : undefined}
-  disabled={disabled ? true : undefined}
+  {...{ disabled: disabled ? true : undefined }}
   {...$$restProps}
   on:click
   on:mousedown

@@ -316,7 +316,7 @@
       <!-- svelte-ignore a11y-no-static-element-interactions -->
       <span
         class:bx--tree-parent-node__toggle={true}
-        {disabled}
+        {...{ disabled }}
         on:click={() => {
           if (disabled) return;
           const nextExpanded = !expanded;
