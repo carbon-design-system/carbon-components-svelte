@@ -3,6 +3,7 @@ import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
+import CurrencyInput from "carbon-components-svelte/CurrencyInput/CurrencyInput.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
@@ -23,6 +24,7 @@ import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svel
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+import UnitInput from "carbon-components-svelte/UnitInput/UnitInput.svelte";
 import type { Exemptions, FieldCase } from "../contract";
 import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
@@ -164,6 +166,32 @@ export const cases: FieldCase[] = [
       component: FluidNumberInputSkeleton,
       ...textInputSkeleton,
     },
+  },
+  {
+    name: "CurrencyInput",
+    component: CurrencyInput,
+    props: { currency: "USD" },
+    control: () => screen.getByRole("textbox"),
+    state: {},
+    fluid: {
+      className: "bx--text-input--fluid",
+      wrapper: ".bx--text-input__field-wrapper",
+      ignoredWith: { inline: true },
+    },
+    selectOnFocus: { value: "12.5" },
+  },
+  {
+    name: "UnitInput",
+    component: UnitInput,
+    props: { unit: "kg" },
+    control: () => screen.getByRole("textbox"),
+    state: {},
+    fluid: {
+      className: "bx--text-input--fluid",
+      wrapper: ".bx--text-input__field-wrapper",
+      ignoredWith: { inline: true },
+    },
+    selectOnFocus: { value: 12.5 },
   },
   {
     name: "Select",
