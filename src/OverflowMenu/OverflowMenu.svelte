@@ -623,10 +623,11 @@
   // instance, causing overhead when many OverflowMenu components are rendered.
   // The button's width per size until it's measured, so a menu open in the
   // server's markup joins its button as it does once mounted.
+  /** @type {Partial<Record<"xs" | "sm" | "md" | "xl", string>>} */
   const BUTTON_WIDTHS = { xs: "1.5rem", sm: "2rem", xl: "3rem" };
   $: overflowMenuOptionsAfterWidth = buttonWidth
     ? `${buttonWidth}px`
-    : (BUTTON_WIDTHS[effectiveSize] ?? "2.5rem");
+    : ((effectiveSize && BUTTON_WIDTHS[effectiveSize]) ?? "2.5rem");
   $: maxHeightStyle = toCssLength(maxHeight);
 
   /** @param {Event} event */
@@ -669,7 +670,7 @@
     );
     if (shouldContinue) {
       open = false;
-      focusQuietly(buttonRef, { preventScroll: true });
+      if (buttonRef) focusQuietly(buttonRef, { preventScroll: true });
       dismissTooltip();
     }
   }
@@ -705,7 +706,7 @@
   aria-label={triggerLabel}
   on:click
   on:click={({ target }) => {
-    if (!menuRef?.contains(target)) {
+    if (!(target instanceof Node && menuRef?.contains(target))) {
       dismissTooltip();
       if (open) {
         const shouldContinue = dispatch(

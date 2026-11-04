@@ -42,7 +42,7 @@
    *   type: undefined | "button";
    *   disabled: undefined | boolean;
    *   href: undefined | string;
-   *   rel: undefined | string;
+   *   rel: undefined | null | string;
    *   role: undefined | "link";
    *   "aria-disabled": undefined | "true";
    *   "aria-current": undefined | "true";
