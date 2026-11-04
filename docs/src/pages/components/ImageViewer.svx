@@ -1,0 +1,128 @@
+---
+components: ["ImageViewer"]
+description: Image viewers show one image in a frame that zooms and pans, for product photos, diagrams, and screenshots that need a closer look.
+---
+
+<script>
+  import { Box, ImageViewer, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `src` and `alt`. The image fits the frame, and the frame is a focusable image region that announces `alt`.
+
+Zoom with the buttons, the mouse wheel while holding <DocKbd label="Ctrl" />, a trackpad pinch, or a touch pinch. Each zoom keeps the point under the cursor or between the fingers still. Drag a zoomed image to pan it; it coasts a little after release and stops at the edges. Double-click or double-tap to switch between fit and 100%.
+
+With the frame focused, <DocKbd label="+" /> and <DocKbd label="-" /> zoom, <DocKbd label="0" /> fits the image, <DocKbd label="Enter" /> switches between fit and 100%, and the arrow keys pan a zoomed image. A live region announces the zoom level once it settles.
+
+With reduced motion requested, a pan does not coast and a zoom does not animate.
+
+<ImageViewer
+  ratio="4x3"
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1280px-The_Earth_seen_from_Apollo_17.jpg"
+  alt="Photograph of Earth taken by the Apollo 17 crew"
+/>
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Write `alt` for what the image shows. | It names the region, and it is the only description a screen reader user gets of the image. |
+| Pass `width` and `height` when you know them. | The viewer lays the image out before it loads, so the frame does not shift. |
+| Use it where detail matters, such as a diagram or a screenshot. | A picture people only glance at needs no zoom controls. |
+| Open the image in a [Lightbox](/components/Lightbox) when there is little room inline. | A small frame limits how much of a zoomed image shows at once. |
+| Serve an image that is at most a few thousand pixels wide, and a smaller one for the page. | The browser holds the whole decoded image once it is zoomed in: about 190 MB for 8000 by 6000. |
+
+## Zoom
+
+### Bind the zoom
+
+Bind `zoom` to read or set it. `"fit"` shows the whole image, and a number is a scale where 1 is 100%. A zoom within a hair of fit snaps back to `"fit"`, and `zoomed` is `true` while the image is zoomed in.
+
+<FileSource src="/framed/ImageViewer/ImageViewerZoom" />
+
+### Maximum zoom
+
+Set `maxZoom` to limit how far in a user can go. The default is 4, or 400%. The limit is never below the fit scale.
+
+<ImageViewer
+  ratio="16x9"
+  maxZoom={1}
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/1280px-FullMoon2010.jpg"
+  alt="The full Moon"
+/>
+
+## Mouse wheel
+
+By default only <DocKbd label="Ctrl" /> and the wheel zoom, so the page keeps scrolling while the pointer is over an inline viewer. A plain wheel pans a zoomed image. Set `wheel` to `"always"` for a viewer that fills the window, where every wheel event zooms.
+
+<Stack gap={6}>
+  <ImageViewer
+    ratio="16x9"
+    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/1280px-Saturn_during_Equinox.jpg"
+    alt="Saturn at equinox"
+  />
+  <ImageViewer
+    wheel="always"
+    ratio="16x9"
+    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Mars_Valles_Marineris.jpeg/1280px-Mars_Valles_Marineris.jpeg"
+    alt="Valles Marineris on Mars"
+  />
+</Stack>
+
+## Frame
+
+### Aspect ratio
+
+Set `ratio` to give the frame an [AspectRatio](/components/AspectRatio). It takes the same values.
+
+<ImageViewer
+  ratio="1x1"
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/1280px-Saturn_during_Equinox.jpg"
+  alt="Saturn at equinox"
+/>
+
+### Fill the parent
+
+Without `ratio`, the frame fills the height of its parent, with a minimum height. Give the parent a height, as a viewer in a panel or a window has.
+
+<Box height="20rem">
+  <ImageViewer
+    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Mars_Valles_Marineris.jpeg/1280px-Mars_Valles_Marineris.jpeg"
+    alt="Valles Marineris on Mars"
+  />
+</Box>
+
+### Controls
+
+Set `controls` to `false` to hide the zoom buttons. Gestures and keys still work, and the `zoomIn()`, `zoomOut()`, `zoomTo(scale)`, `toggle()`, `reset()` and `pan(dx, dy)` methods are there to build your own.
+
+<ImageViewer
+  controls={false}
+  ratio="16x9"
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/1280px-FullMoon2010.jpg"
+  alt="The full Moon"
+/>
+
+## Loading and errors
+
+While the image loads, the viewer shows a skeleton. If it fails, the viewer shows a message and a retry button, and the frame stops being an image region so the button can be reached. Replace either with the `loading` and `error` slots, as in [ImageLoader](/components/ImageLoader). The `error` slot gets a `retry` function.
+
+<ImageViewer
+  ratio="16x9"
+  src="https://example.invalid/missing.jpg"
+  alt="Quarterly capacity report"
+  errorText="The report image is unavailable."
+/>
+
+## Right to left
+
+The image keeps its own left and right in a right-to-left page, so a pan or a zoom follows the pointer the same way. The controls move to the inline end of the frame.
+
+<div dir="rtl">
+  <ImageViewer
+    ratio="16x9"
+    src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1280px-The_Earth_seen_from_Apollo_17.jpg"
+    alt="Photograph of Earth taken by the Apollo 17 crew"
+  />
+</div>
