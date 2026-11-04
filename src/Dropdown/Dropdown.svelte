@@ -203,6 +203,19 @@
   export let translateWithIdSelection = undefined;
 
   /**
+   * ListBoxSelection asks a single selection only for "clearSelection": it
+   * passes no count. Passed only when `translateWithIdSelection` is set.
+   * @param {"clearAll" | "clearSelection"} id
+   * @returns {string}
+   */
+  function translateSelectionId(id) {
+    const translate = /** @type {(id: "clearSelection") => string} */ (
+      translateWithIdSelection
+    );
+    return translate(/** @type {"clearSelection"} */ (id));
+  }
+
+  /**
    * Enable virtualization for large lists. Virtualization renders only the items currently visible in the viewport, improving performance for large lists.
    *
    * By default, virtualization is automatically enabled for lists with more than 100 items.
@@ -1140,7 +1153,7 @@
           <ListBoxSelection
             on:clear
             on:clear={() => clear({ open: openOnClear })}
-            translateWithId={translateWithIdSelection}
+            translateWithId={translateWithIdSelection && translateSelectionId}
             disabled={effectiveDisabled}
             {readonly}
           />

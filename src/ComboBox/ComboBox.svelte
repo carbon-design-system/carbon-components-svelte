@@ -246,6 +246,19 @@
   export let translateWithIdSelection = undefined;
 
   /**
+   * ListBoxSelection asks a single selection only for "clearSelection": it
+   * passes no count. Passed only when `translateWithIdSelection` is set.
+   * @param {"clearAll" | "clearSelection"} id
+   * @returns {string}
+   */
+  function translateSelectionId(id) {
+    const translate = /** @type {(id: "clearSelection") => string} */ (
+      translateWithIdSelection
+    );
+    return translate(/** @type {"clearSelection"} */ (id));
+  }
+
+  /**
    * Specify the assistive text announced through the status live region when
    * a selection is cleared via the clear button, the Escape key, or `clear()`.
    */
@@ -1491,7 +1504,7 @@
           <ListBoxSelection
             on:clear
             on:clear={() => clear({ open: openOnClear })}
-            translateWithId={translateWithIdSelection}
+            translateWithId={translateWithIdSelection && translateSelectionId}
             disabled={effectiveDisabled}
             {readonly}
           />
