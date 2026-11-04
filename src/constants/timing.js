@@ -72,3 +72,17 @@ export const STEPPER_REPEAT_DELAY_MS = 400;
 
 /** Time between steps while a stepper button stays held (Chromium spin button). */
 export const STEPPER_REPEAT_INTERVAL_MS = 50;
+
+/**
+ * How long a scrolling picker waits, once the cells in view stop changing,
+ * before it imports what they show. A fling past hundreds of cells then
+ * costs no imports for the ones it passed, and the cells wait as
+ * placeholders. Typing a search, a jump or a first open do not wait.
+ */
+export const PICKER_LOAD_SETTLE_MS = 80;
+
+/**
+ * How long a picker waits after the last keystroke before it announces the
+ * number of matches, so a screen reader hears one count, not one per letter.
+ */
+export const PICKER_ANNOUNCE_DELAY_MS = 300;
