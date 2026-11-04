@@ -83,6 +83,94 @@ The action takes a boolean, so pass an expression to turn it on and off. Pass `f
 
 <FileSource src="/framed/TextInput/PreserveFocusSelectionToggling" />
 
+## Input mask
+
+The `mask` action formats what is typed into a text field from a pattern. Put it on the `<input>`, or on any element around fields, such as a `<div>` that wraps a `TextInput`: the action listens on that element and acts on the fields inside it, so `TextInput` needs no `bind:ref` and gains no prop. `bind:value` holds the formatted text, which is what the field shows.
+
+<FileSource src="/framed/TextInput/MaskBasic" />
+
+`onchange` reports `{ value, rawValue, complete, pattern, field }` when any of them changes, and once for the text a field starts with. `rawValue` is the characters that fill the slots, without the literals: use it to validate and to send. A field's `name` submits the formatted text, because that is what the field holds.
+
+### Patterns
+
+| Character | Takes | Stored as |
+| :-- | :-- | :-- |
+| `9` | A digit, in any script (`١٢٣` and `１２３` count) | The ASCII digit |
+| `A` | A letter | Upper case |
+| `a` | A letter | Lower case |
+| `*` | A letter or a digit | As typed |
+| `X` | A letter or a digit | Upper case |
+| `\` | Nothing: the next character is a literal (`\\9` shows a `9`) | |
+| Anything else | A literal, shown for you | |
+
+<FileSource src="/framed/TextInput/MaskLetters" />
+
+Typed or pasted characters that a slot refuses are dropped, and a pasted `(415) 555-0123` or `415.555.0123` fills the same slots. A literal the user types where the pattern has it is taken as that literal.
+
+### Dynamic patterns
+
+Pass a function from the raw value to a pattern when the grouping depends on what was typed. The function runs again for each character.
+
+<FileSource src="/framed/TextInput/MaskDynamic" />
+
+### Literals
+
+A literal normally appears when the next character needs it, so the field never ends in a dangling `)` or `/` and Backspace never has to delete one. Set `eager` to write the literals up to the next slot as soon as a group is full.
+
+<FileSource src="/framed/TextInput/MaskEager" />
+
+### Validation
+
+A mask does not validate: it only shapes the text. `complete` is `true` when every slot of the pattern is filled. Mark the field invalid yourself, usually after `blur`, as in [Form validation](/components/Form).
+
+<FileSource src="/framed/TextInput/MaskValidation" />
+
+### Native fields
+
+<FileSource src="/framed/TextInput/MaskNative" />
+
+### On the server
+
+`createMask(pattern)` is the same engine with no DOM. Use `format(text)` to format an initial value before it renders, `unmask(text)` for the raw value, and `placeholder()` for a `placeholder` such as `(___) ___-____`.
+
+```svelte
+<script>
+  import { createMask } from "carbon-components-svelte";
+
+  const phone = createMask("(999) 999-9999");
+  let value = phone.format(savedNumber).value;
+</script>
+```
+
+### Editing
+
+The caret is counted in slot characters, not in text positions, so it keeps its place when the mask adds or removes a literal.
+
+| Action | Result |
+| :-- | :-- |
+| Type in the middle | The characters after it shift right. The caret stays after the typed character. |
+| Type into a full field | Refused, so no earlier character is pushed out. |
+| Backspace after a literal | Deletes the digit before the literal. The caret lands before the next group. |
+| Delete before a literal | Deletes the next digit. The caret does not move. |
+| Select, then type or paste | Replaces the selection. |
+| Paste | Strips what the pattern refuses and fills the slots. |
+| Undo and redo | Work as on any field. |
+| IME composition | Nothing changes until the composition ends, then the text is masked. |
+
+### Accessibility
+
+| Do | Why |
+| :-- | :-- |
+| Say the format in `helperText` | The helper text is read with the field. A `placeholder` disappears when typing starts, and screen readers do not read it reliably. |
+| Set `autocomplete` (`tel`, `cc-number`, `postal-code`) | Browsers fill the field, and the mask formats what they insert. |
+| Keep the `type` as `text` or `tel` | The mask needs the selection API, which `number` and `email` fields do not have. |
+| Prefer spaces and hyphens as literals | A screen reader reads a bracket aloud as a word. |
+| Leave `inputmode` alone for digit-only patterns | The action sets `inputmode="numeric"` where the field has none. |
+
+The action also sets `spellcheck="false"`, and `data-ccs-mask`, which keeps the text left to right in a right-to-left page: a phone number reads in order only left to right, so the field keeps its text direction and sits at the page's end edge. The action leaves an attribute alone when the field already has it.
+
+Number fields that need grouping and decimals for a locale are not masked: use [NumberInput](/components/NumberInput).
+
 ## AI label
 
 Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.

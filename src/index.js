@@ -334,6 +334,7 @@ export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
+export { createMask } from "./utils/input-mask.js";
 export {
   formatShortcut,
   matchesShortcut,
@@ -342,6 +343,7 @@ export {
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
+export { mask } from "./utils/mask.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
