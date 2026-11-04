@@ -143,6 +143,10 @@
   let containerSize = { width: 0, height: 0 };
   let stopObserving = noop;
 
+  /**
+   * @param {null | HTMLElement} node
+   * @param {boolean} enabled
+   */
   function observeContainer(node, enabled) {
     stopObserving();
     stopObserving =
@@ -156,6 +160,11 @@
 
   // A pixel bound as a percentage of `length`. Until the splitter is
   // measured, and on the server, the pane's inline min/max size holds it.
+  /**
+   * @param {number | `${number}px`} bound
+   * @param {number} length
+   * @param {number} fallback
+   */
   function toPercent(bound, length, fallback) {
     if (typeof bound === "number") return bound;
     if (!length) return fallback;
@@ -186,12 +195,14 @@
 
   // Drag math yields long fractions; two decimals is finer than a pixel on
   // any realistic splitter and keeps `aria-valuenow` readable.
+  /** @param {number} next */
   function setSize(next) {
     size = Math.round(constrain(next) * 100) / 100;
   }
 
   // `bind:size` updates on every step of a drag; `resize` fires once per
   // gesture, for example to persist the final size.
+  /** @param {number} prevSize */
   function dispatchResize(prevSize) {
     const nextSize = constrain(size);
     if (nextSize === prevSize) return;
@@ -209,6 +220,10 @@
       : (minPercent + maxPercent) / 2;
   }
 
+  /**
+   * @param {boolean} nextCollapsed
+   * @param {number} currentSize
+   */
   function syncCollapsed(nextCollapsed, currentSize) {
     if (nextCollapsed !== syncedCollapsed) {
       syncedCollapsed = nextCollapsed;
@@ -224,13 +239,15 @@
     if (atCollapsed !== collapsed) collapsed = syncedCollapsed = atCollapsed;
   }
 
+  /** @param {PointerEvent} event */
   function getPointerAxis(event) {
-    const rect = ref.getBoundingClientRect();
+    const rect = /** @type {HTMLDivElement} */ (ref).getBoundingClientRect();
     return orientation === "vertical"
       ? { point: event.clientY, length: rect.height }
       : { point: event.clientX, length: rect.width };
   }
 
+  /** @param {PointerEvent} event */
   function handleDragStart(event) {
     if (disabled) return false;
     // The press focuses the separator natively, which, unlike a scripted
@@ -246,6 +263,7 @@
     dragStartSize = renderedSize;
   }
 
+  /** @param {PointerEvent} event */
   function handleDragMove(event) {
     const { point, length } = getPointerAxis(event);
     if (!length) return;

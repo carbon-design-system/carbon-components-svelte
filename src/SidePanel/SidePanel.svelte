@@ -205,6 +205,7 @@
   const focusReturn = restoreFocus();
   const layoutDirection = getLayoutDirection();
 
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let closeButtonRef = null;
   /** @type {null | HTMLDivElement} */
   let innerContentRef = null;
@@ -286,12 +287,13 @@
       event.stopPropagation();
       close("escape-key");
     } else if (event.key === "Tab" && modal && !event.defaultPrevented) {
-      trapFocus({ container: ref, event });
+      trapFocus({ container: /** @type {HTMLElement} */ (ref), event });
     }
   }
 
   // Svelte reruns this only when `open` changes. The exit animation ends
   // the render; without one, so does the next tick.
+  /** @param {boolean} nextOpen */
   function syncRendered(nextOpen) {
     if (nextOpen) {
       rendered = true;
@@ -304,6 +306,7 @@
     }
   }
 
+  /** @param {null | HTMLElement} element */
   function hasAnimation(element) {
     if (!element) return false;
     const { animationName, animationDuration } = getComputedStyle(element);
@@ -343,6 +346,7 @@
       : Math.round(window.innerWidth * MAX_WIDTH_RATIO);
   }
 
+  /** @param {number} value */
   function clampWidth(value) {
     return Math.round(Math.max(MIN_WIDTH, Math.min(maxWidth(), value)));
   }
@@ -359,6 +363,7 @@
     return renderedWidth ?? Math.round(ref?.getBoundingClientRect().width ?? 0);
   }
 
+  /** @param {PointerEvent} event */
   function handleResizeStart(event) {
     resizing = true;
     resizeStartX = event.clientX;
@@ -370,6 +375,7 @@
     document.body.classList.add("bx--side-panel-resizing");
   }
 
+  /** @param {PointerEvent} event */
   function handleResizeMove(event) {
     const delta = event.clientX - resizeStartX;
     // The free edge faces the page, so moving it toward the page widens
@@ -393,6 +399,7 @@
 
   // `bind:width` updates on every step of a drag; `resize` fires once per
   // gesture, for example to persist the width.
+  /** @param {number | undefined} prevWidth */
   function dispatchResize(prevWidth) {
     if (width !== prevWidth) dispatch("resize", { width });
   }
@@ -442,9 +449,14 @@
 
   // The rendered width, for the handle's value and a slide-in panel's
   // page offset. It follows `size`, the user's width and the CSS caps.
+  /** @type {number | undefined} */
   let measuredWidth;
   let stopMeasuring = noop;
 
+  /**
+   * @param {null | HTMLElement} node
+   * @param {boolean} enabled
+   */
   function measure(node, enabled) {
     stopMeasuring();
     stopMeasuring =
@@ -461,19 +473,27 @@
   // it docks to, and puts back the consumer's own value on close. The
   // page keeps the transition class while the panel is mounted, so the
   // content slides back too.
+  /** @type {null | HTMLElement} */
   let pageContent = null;
+  /** @type {string} */
   let pageMarginProperty;
   let pagePushed = false;
   let prevPageMargin = "";
 
+  /**
+   * @param {boolean} pushed
+   * @param {string} [offset]
+   */
   function setPagePushed(pushed, offset) {
     if (pushed && !pagePushed) {
-      prevPageMargin = pageContent.style.getPropertyValue(pageMarginProperty);
+      prevPageMargin = /** @type {HTMLElement} */ (
+        pageContent
+      ).style.getPropertyValue(pageMarginProperty);
     }
     if (pushed || pagePushed) {
-      pageContent.style.setProperty(
+      /** @type {HTMLElement} */ (pageContent).style.setProperty(
         pageMarginProperty,
-        pushed ? offset : prevPageMargin,
+        pushed ? /** @type {string} */ (offset) : prevPageMargin,
       );
     }
     pagePushed = pushed;
@@ -489,6 +509,13 @@
     pageContent = null;
   }
 
+  /**
+   * @param {string | undefined} selector
+   * @param {string} property
+   * @param {boolean} pushed
+   * @param {string} offset
+   * @param {boolean} dragging
+   */
   function syncPage(selector, property, pushed, offset, dragging) {
     const next = selector ? document.querySelector(selector) : null;
     if (next !== pageContent || property !== pageMarginProperty) {

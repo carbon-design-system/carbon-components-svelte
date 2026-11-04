@@ -7,12 +7,14 @@
   import { isTypeaheadKey } from "../utils/typeahead.js";
   import { TREE_ROW_ID_ATTR, treeRowIdSelector } from "./tree-row-id.js";
 
+  /** @param {Element} node */
   function isUnderCollapsedSubtree(node) {
     return Boolean(node.closest("ul.bx--tree-node--hidden"));
   }
 
   /**
    * Creates a TreeWalker instance for keyboard navigation.
+   * @param {Element} root
    * @returns {TreeWalker} A TreeWalker configured to navigate tree nodes
    */
   function createTreeWalkerInstance(root) {
@@ -47,7 +49,7 @@
 
   /**
    * Pre-order flatten of every node via an explicit stack.
-   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @template {{ id: string | number; nodes?: any[] }} TNode
    * @param {ReadonlyArray<TNode>} nodes
    * @returns {Array<TNode>}
    */
@@ -59,7 +61,7 @@
       stack.push(nodes[i]);
     }
     while (stack.length > 0) {
-      const node = stack.pop();
+      const node = /** @type {TNode} */ (stack.pop());
       out.push(node);
       if (Array.isArray(node.nodes) && node.nodes.length > 0) {
         for (let i = node.nodes.length - 1; i >= 0; i--) {
@@ -73,7 +75,7 @@
   /**
    * Like `traverse`, but only into expanded nodes.
    * Used for Shift+Click range selection over visible rows.
-   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @template {{ id: string | number; nodes?: any[] }} TNode
    * @param {ReadonlyArray<TNode>} nodes
    * @param {Set<string | number>} expandedIdsSet
    * @returns {Array<TNode>}
@@ -104,7 +106,7 @@
   /**
    * Build node, parent, and child-id maps in one walk.
    * Leaves the flat array to `ensureFlatIndex`.
-   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @template {{ id: string | number; nodes?: any[] }} TNode
    * @param {ReadonlyArray<TNode>} nodes
    * @returns {{
    *   nodeMap: Map<TNode["id"], TNode>,
@@ -132,7 +134,9 @@
       stack.push({ node: nodes[i], parentId: ROOT_PARENT_ID });
     }
     while (stack.length > 0) {
-      const { node, parentId } = stack.pop();
+      const { node, parentId } = /** @type {(typeof stack)[number]} */ (
+        stack.pop()
+      );
       nodeMap.set(node.id, node);
       parentIdById.set(node.id, parentId);
       if (Array.isArray(node.nodes) && node.nodes.length > 0) {
@@ -162,7 +166,7 @@
    * mutating an entry both keep sharing node objects — so this returns
    * `false` and the caller redoes the work from scratch. No snapshot is
    * kept, so it is never stale at the top level.
-   * @template {{ id: string | number; nodes?: TNode[] }} TNode
+   * @template {{ id: string | number; nodes?: any[] }} TNode
    * @param {ReadonlyArray<TNode>} prevNodes
    * @param {ReadonlyArray<TNode>} nextNodes
    * @returns {boolean}
@@ -171,7 +175,9 @@
     if (prevNodes.length !== nextNodes.length) return false;
 
     for (let i = 0; i < prevNodes.length; i++) {
+      /** @type {Record<string, any>} */
       const prev = prevNodes[i];
+      /** @type {Record<string, any>} */
       const next = nextNodes[i];
       // Same reference: might have been mutated in place, can't trust it.
       if (prev === next) return false;
@@ -218,7 +224,9 @@
   /**
    * IDs to select for multiselect expansion from `node` (non-disabled only).
    * Disabled nodes are omitted; subtrees under a disabled node are not traversed.
-   * @template {{ id: string | number; disabled?: boolean; nodes?: TNode[] }} TNode
+   * @template {{ id: string | number; disabled?: boolean; nodes?: any[] }} TNode
+   * @param {TNode} node
+   * @param {"node" | "shallow" | "deep"} mode
    * @returns {Array<string | number>}
    */
   function multiselectExpansionIds(node, mode) {
@@ -234,6 +242,7 @@
       }
       return out;
     }
+    /** @type {Array<string | number>} */
     const out = [];
     /** @param {TNode} n */
     function walkDeep(n) {
@@ -247,7 +256,13 @@
   }
 
   /** Tabindex anchor: prefer the focused row when it is currently mounted
-   * and enabled; otherwise the first enabled row in the window. */
+   * and enabled; otherwise the first enabled row in the window.
+   * @param {unknown} virtualConfig
+   * @param {unknown} virtualIndex
+   * @param {{ visibleItems: Array<{ node: { id: string | number; disabled?: boolean } }> } | null | undefined} virtualData
+   * @param {string | number | undefined} virtualFocusedId
+   * @returns {string | number | undefined}
+   */
   function resolveVirtualTabAnchorId(
     virtualConfig,
     virtualIndex,
@@ -514,7 +529,7 @@
     // Only expandable ids affect descent; leaf ids are no-ops and waste
     // memory on large trees.
     const expandableIds = [];
-    for (const node of cachedFlattenedNodes) {
+    for (const node of /** @type {Node[]} */ (cachedFlattenedNodes)) {
       if (isExpandableNode(node)) expandableIds.push(node.id);
     }
     expandedIdsSet = new Set(expandableIds);
@@ -552,11 +567,13 @@
    */
   export function expandNodes(filterNode = () => true) {
     ensureFlatIndex();
-    const nodesToExpand = cachedFlattenedNodes.filter(
+    const nodesToExpand = /** @type {Node[]} */ (cachedFlattenedNodes).filter(
       (node) =>
         isExpandableNode(node) &&
         (filterNode(node) ||
-          node.nodes?.some((child) => filterNode(child) && child.nodes)),
+          node.nodes?.some(
+            (child) => filterNode(/** @type {Node} */ (child)) && child.nodes,
+          )),
     );
     for (const node of nodesToExpand) {
       expandedIdsSet.add(node.id);
@@ -580,7 +597,7 @@
    */
   export function collapseNodes(filterNode = () => true) {
     ensureFlatIndex();
-    for (const node of cachedFlattenedNodes) {
+    for (const node of /** @type {Node[]} */ (cachedFlattenedNodes)) {
       if (expandedIdsSet.has(node.id) && filterNode(node)) {
         expandedIdsSet.delete(node.id);
       }
@@ -683,7 +700,9 @@
    * ```
    */
   export function getNodes(ids) {
-    return ids.map((id) => cachedNodeMap?.get(id)).filter((node) => node);
+    return /** @type {Node[]} */ (
+      ids.map((id) => cachedNodeMap?.get(id)).filter((node) => node)
+    );
   }
 
   import {
@@ -793,8 +812,16 @@
     if (typeof window === "undefined") return;
     if (want && multiselectWindowUnlisteners.length === 0) {
       multiselectWindowUnlisteners = [
-        addPooledListener("keydown", syncModifierFromEvent, true),
-        addPooledListener("keyup", syncModifierFromEvent, true),
+        addPooledListener(
+          "keydown",
+          /** @type {(event: Event) => void} */ (syncModifierFromEvent),
+          true,
+        ),
+        addPooledListener(
+          "keyup",
+          /** @type {(event: Event) => void} */ (syncModifierFromEvent),
+          true,
+        ),
         addPooledListener("blur", clearMultiselectModifierKeys),
       ];
       document.addEventListener("visibilitychange", handleVisibilitychange);
@@ -913,6 +940,8 @@
   let prevExpandedIdsPushed = expandedIds;
 
   /**
+   * @param {ReadonlyArray<unknown>} a
+   * @param {ReadonlyArray<unknown>} b
    * @returns {boolean}
    */
   function arrayIdsEqual(a, b) {
@@ -1106,7 +1135,8 @@
       // with `detail: 0`. Real pointer clicks have `detail >= 1`, so skip
       // the forwarded one to avoid toggling twice.
       const isForwardedLabelClick =
-        event?.target instanceof HTMLInputElement && event.detail === 0;
+        event?.target instanceof HTMLInputElement &&
+        /** @type {MouseEvent} */ (event).detail === 0;
 
       if (isForwardedLabelClick) return;
 
@@ -1315,6 +1345,7 @@
     rovingTabStops.add(node);
   }
 
+  /** @param {EventTarget | null} target */
   function getTreeItemFromTarget(target) {
     if (!(target instanceof Element)) return null;
     if (target.classList.contains("bx--tree-node")) return target;
@@ -1476,7 +1507,7 @@
             ) ?? [],
           ).map((element) => [element.getAttribute(TREE_ROW_ID_ATTR), element]),
         );
-        for (const n of cachedFlattenedNodes) {
+        for (const n of /** @type {Node[]} */ (cachedFlattenedNodes)) {
           if (n.disabled) continue;
           const element = visibleEls.get(String(n.id));
           if (!element || isUnderCollapsedSubtree(element)) continue;
@@ -1618,6 +1649,7 @@
   let prevCheckboxInputNodes = null;
   /** @type {ReadonlyArray<Node["id"]> | null} */
   let prevCheckboxCheckedIds = null;
+  /** @type {'node' | 'deep' | undefined} */
   let prevCheckboxCheckMode;
 
   // This block also runs on updates unrelated to any of the checkbox
@@ -1714,7 +1746,9 @@
 
   /** Row id that currently owns keyboard focus in the virtual path.
    * Kept separate from `activeId` so arrow moves match non-virtual
-   * (focus only) while still anchoring tabindex across remounts. */
+   * (focus only) while still anchoring tabindex across remounts.
+   * @type {string | number | undefined}
+   */
   let virtualFocusedId;
 
   /** Pixel height of the scroll container, measured from the DOM when
@@ -1756,7 +1790,7 @@
   let prevVirtualIndexNodes = null;
   /** @type {ReadonlyArray<Node["id"]> | null} */
   let prevVirtualIndexExpandedIds = null;
-  /** @type {ReturnType<typeof createTreeVirtualIndex> | null} */
+  /** @type {ReturnType<typeof createTreeVirtualIndex<any>> | null} */
   let virtualIndex = null;
   $: {
     if (!virtualConfig) {
@@ -1815,6 +1849,11 @@
     }
   }
 
+  /**
+   * @param {{ itemHeight: number; overscan: number } | null} virtualConfig
+   * @param {ReturnType<typeof createTreeVirtualIndex<any>> | null} virtualIndex
+   * @param {number} scrollTop
+   */
   function resolveVirtualData(virtualConfig, virtualIndex, scrollTop) {
     if (!virtualConfig || !virtualIndex) return null;
     const itemHeight = virtualConfig.itemHeight;
@@ -1837,6 +1876,7 @@
       totalHeight,
     };
   }
+  /** @type {NonNullable<ReturnType<typeof resolveVirtualData>>} */
   $: virtualData = resolveVirtualData(virtualConfig, virtualIndex, scrollTop);
 
   /** Observe the scroll container so percentage / relative heights
@@ -2061,8 +2101,15 @@
     /** @param {number} from @param {1 | -1} dir */
     function nextEnabled(from, dir) {
       let i = from;
-      while (i >= 0 && i < virtualIndex.totalCount) {
-        const row = virtualIndex.getRowAt(i);
+      while (
+        i >= 0 &&
+        i <
+          /** @type {NonNullable<typeof virtualIndex>} */ (virtualIndex)
+            .totalCount
+      ) {
+        const row = /** @type {NonNullable<typeof virtualIndex>} */ (
+          virtualIndex
+        ).getRowAt(i);
         if (row && !row.node.disabled) return i;
         i += dir;
       }
