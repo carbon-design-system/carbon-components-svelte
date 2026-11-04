@@ -161,6 +161,8 @@
   // li: naming, description, `aria-keyshortcuts` and the rest.
   $: ({ aria: ariaProps, rest: wrapperProps } = splitAria($$restProps));
 
+  // Carries the consumer's own `aria-*` props, whatever their values.
+  /** @type {Record<string, any>} */
   $: buttonProps = {
     ...ariaProps,
     role: "menuitem",
