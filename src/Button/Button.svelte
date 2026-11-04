@@ -296,7 +296,9 @@
   $: if (!inlineOpen && !portalOpen) endClippedOpen();
 
   function portalIfClipped() {
-    const tooltip = ref?.querySelector(":scope > .bx--assistive-text");
+    const tooltip = /** @type {HTMLElement | null | undefined} */ (
+      ref?.querySelector(":scope > .bx--assistive-text")
+    );
     if (portalTooltip !== undefined || !inlineOpen || !tooltip) return;
     if (clippedBy(tooltip)) portalWhenClipped = true;
   }

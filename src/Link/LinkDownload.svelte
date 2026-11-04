@@ -39,6 +39,7 @@
 
   const dispatch = createEventDispatcher();
 
+  /** @param {MouseEvent} event */
   async function handleClick(event) {
     event.preventDefault();
     if (disabled) return;

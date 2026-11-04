@@ -98,6 +98,7 @@
   // its own set, the same way it reads carbon:Modal for portalTooltip.
   setContext("carbon:ActionSet", { size: buttonSize });
 
+  /** @type {null | HTMLDivElement} */
   let ref = null;
   /** @type {string[]} */
   let actionKinds = [];
@@ -113,7 +114,7 @@
   onMount(() => {
     syncActionCount();
     const observer = new MutationObserver(syncActionCount);
-    observer.observe(ref, { childList: true });
+    observer.observe(/** @type {HTMLDivElement} */ (ref), { childList: true });
     return () => observer.disconnect();
   });
 

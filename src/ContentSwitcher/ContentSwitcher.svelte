@@ -378,7 +378,7 @@
     initialSwitches.close();
     // A keyed reorder moves switches without re-registering them. Resync in
     // afterUpdate, which keeps the selected switch selected.
-    return observeDomOrder(ref, {
+    return observeDomOrder(/** @type {HTMLDivElement} */ (ref), {
       selector: "[role='tab']",
       getItems: () => switches,
       onReorder: () => {
@@ -408,7 +408,7 @@
       let next = switches;
       sharedSwitches.update((current) => {
         next = syncDomOrder({
-          root: ref,
+          root: /** @type {HTMLDivElement} */ (ref),
           selector: "[role='tab']",
           items: current,
         });

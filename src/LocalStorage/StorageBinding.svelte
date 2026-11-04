@@ -42,6 +42,7 @@
     });
   }
 
+  /** @param {StorageEvent} event */
   function handleStorageChange(event) {
     // `storage` fires for both areas; skip writes to the other one.
     if (event.storageArea && event.storageArea !== window[storageType]) return;

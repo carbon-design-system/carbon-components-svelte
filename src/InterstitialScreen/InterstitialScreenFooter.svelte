@@ -42,6 +42,7 @@
   $: showNext = isMultiStep && $progStep < progStepCeil;
   $: showStart = !isMultiStep || $progStep === progStepCeil;
 
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let primaryButtonRef = null;
 
   // Move focus to the Next/Get-Started button on mount and on every step

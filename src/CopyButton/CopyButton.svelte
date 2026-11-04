@@ -119,7 +119,7 @@
 
   const copyFeedback = createCopyFeedbackState(syncCopyFeedback);
 
-  /** @type {"fade-in" | "fade-out"} */
+  /** @type {"fade-in" | "fade-out" | undefined} */
   let animation;
   let feedbackOpen = false;
   let copyPending = false;

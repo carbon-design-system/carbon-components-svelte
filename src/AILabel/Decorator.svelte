@@ -38,6 +38,7 @@
   import { writable } from "svelte/store";
   import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
 
+  /** @type {import("svelte/store").Writable<undefined | string>} */
   const sharedSize = writable(size);
   $: sharedSize.set(size);
 

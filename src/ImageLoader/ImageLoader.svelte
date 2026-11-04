@@ -99,12 +99,14 @@
   // "fast-02" duration (ms) from Carbon motion recommended for fading micro-interactions
   const fast02 = 110;
 
+  /** @type {null | HTMLImageElement} */
   let image = null;
 
   /** The URL being loaded and shown, which `loadImage(url)` can set apart from `src`. */
   let currentSrc = src;
 
   /** In `lazy` mode, an empty element where the image will be, to observe. */
+  /** @type {null | HTMLSpanElement} */
   let sentinel = null;
   let nearViewport = false;
   let stopObserving = noop;

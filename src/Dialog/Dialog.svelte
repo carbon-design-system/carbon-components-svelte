@@ -57,6 +57,8 @@
    * A dialog that arrives with the `open` attribute (server-rendered and
    * hydrated by Svelte 5) has not been shown yet, so the first sync
    * drops the attribute and calls `show()` to run the usual open path.
+   * @param {HTMLDialogElement} node
+   * @param {{ open: boolean; modal: boolean }} options
    */
   function dialogAction(node, options) {
     dialog = node;
@@ -69,6 +71,7 @@
       destroy() {},
     };
 
+    /** @param {{ open: boolean; modal: boolean }} options */
     function sync({ open: shouldOpen, modal: isModal }) {
       const fromAttribute = hasInitialAttribute;
       hasInitialAttribute = false;

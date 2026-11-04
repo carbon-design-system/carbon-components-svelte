@@ -51,6 +51,7 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
+  /** @type {undefined | "expanding" | "collapsing"} */
   let animation;
 
   function toggle() {

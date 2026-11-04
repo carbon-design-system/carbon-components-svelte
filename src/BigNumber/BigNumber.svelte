@@ -146,7 +146,7 @@
   /**
    * Format `num` as text runs. A run with `mark` set is the percent sign,
    * with any space the locale puts beside it; it takes the total's type.
-   * @param {number} num
+   * @param {number | undefined} num
    * @param {number} digits
    * @param {boolean} doTruncate
    * @param {boolean} [percent]
@@ -178,6 +178,7 @@
     }
     Object.assign(options, formatOptions);
     const parts = getNumberFormatter(locale, options).formatToParts(num);
+    /** @param {Intl.NumberFormatPart | undefined} part */
     const sign = (part) =>
       percent && (part?.type === "unit" || part?.type === "percentSign");
     /** @type {{ text: string; mark: boolean }[]} */

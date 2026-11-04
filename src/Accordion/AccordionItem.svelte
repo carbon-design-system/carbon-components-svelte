@@ -70,15 +70,18 @@
   // an existing item does. On the first render, the first open item wins.
   let claimOnMount = open && ctx.isMounted();
 
-  const unsubscribeOpenId = ctx.openId.subscribe((openItemId) => {
-    if (claimOnMount) {
-      claimOnMount = false;
-      return;
-    }
-    if (openItemId !== null && openItemId !== itemKey) {
-      open = false;
-    }
-  });
+  const unsubscribeOpenId = ctx.openId.subscribe(
+    /** @param {object | null} openItemId */
+    (openItemId) => {
+      if (claimOnMount) {
+        claimOnMount = false;
+        return;
+      }
+      if (openItemId !== null && openItemId !== itemKey) {
+        open = false;
+      }
+    },
+  );
 
   // Naming and description belong on the heading button, not the `li`.
   // A consumer `aria-label` wins over the `ariaLabel` prop.
@@ -101,18 +104,22 @@
 
   let previousType = get(ctx.typeStore);
 
-  const unsubscribeType = ctx.typeStore.subscribe((value) => {
-    if (
-      value === "single" &&
-      previousType !== "single" &&
-      open &&
-      !ctx.claimSingle(itemKey)
-    ) {
-      open = false;
-    }
-    previousType = value;
-  });
+  const unsubscribeType = ctx.typeStore.subscribe(
+    /** @param {"single" | "multiple"} value */
+    (value) => {
+      if (
+        value === "single" &&
+        previousType !== "single" &&
+        open &&
+        !ctx.claimSingle(itemKey)
+      ) {
+        open = false;
+      }
+      previousType = value;
+    },
+  );
 
+  /** @type {undefined | "expanding" | "collapsing"} */
   let animation;
   let openedOnce = open;
 
