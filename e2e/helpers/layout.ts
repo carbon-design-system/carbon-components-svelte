@@ -1,4 +1,4 @@
-// biome-ignore-all lint/performance/useTopLevelRegex: `measure` runs in the page, where module constants do not reach.
+/* eslint-disable no-restricted-syntax -- `measure` runs in the page, where module constants do not reach. */
 import type { Locator, Page } from "@playwright/test";
 
 /**
@@ -1040,7 +1040,6 @@ async function fullTextOnHover(
   let found = false;
   const until = Date.now() + timeout;
   while (hovered && !found) {
-    // biome-ignore lint/performance/noAwaitInLoops: polls until it appears
     found = await target.evaluate(
       (el, [text, selector]) => {
         // The box grew to show it all, as a collapsed SideNav rail does.
@@ -1109,7 +1108,6 @@ async function collect(scope: Scope | Locator[], request: Request) {
     const page = locator.page();
     try {
       for (const { id, full, problem } of result.hover) {
-        // biome-ignore lint/performance/noAwaitInLoops: one pointer, one element at a time
         if (!(await fullTextOnHover(page, id, full)))
           result.problems.push(problem);
       }

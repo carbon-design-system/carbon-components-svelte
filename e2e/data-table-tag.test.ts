@@ -6,7 +6,6 @@ test("a small Tag in a cell keeps every row size", async ({ page }) => {
 
   const sizes = { compact: 24, short: 32, medium: 40, default: 48, tall: 64 };
   for (const [size, height] of Object.entries(sizes)) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one table at a time
     const rows = await page
       .getByTestId(size)
       .locator("tbody tr")

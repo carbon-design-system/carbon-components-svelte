@@ -299,9 +299,9 @@ describe("UIShell", () => {
         type ComponentType = HamburgerMenuComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["iconMenu"]>().toEqualTypeOf<any>();
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["iconClose"]>().toEqualTypeOf<any>();
       });
     });
@@ -325,9 +325,9 @@ describe("UIShell", () => {
         type ComponentType = HeaderComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["iconMenu"]>().toEqualTypeOf<any>();
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["iconClose"]>().toEqualTypeOf<any>();
       });
     });

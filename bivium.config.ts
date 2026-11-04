@@ -70,8 +70,7 @@ export default {
     // A test reporter's output, which nothing reads.
     "tests/.vitest/**",
     "ostia.config.ts",
-    "biome.json",
-    // Options for `bun fmt` only.
+    // Options for `bun fmt` and `bun lint` only.
     "bunfig.toml",
     "carbon.yml",
     "telemetry.yml",
@@ -93,7 +92,7 @@ export default {
     "@carbon/colors",
   ],
   // Tools CI runs on its own: a bump that only reaches them selects nothing.
-  inert: ["@biomejs/biome", "ostia", "@types/*"],
+  inert: ["ostia", "@types/*"],
   edges: { "css/*.css": ["css/**", "scripts/build-css.ts"] },
   self: [
     "bivium.config.ts",

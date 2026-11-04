@@ -32,7 +32,6 @@ test.describe("Icon tooltips with Escape in a Modal", () => {
       page.getByRole("button", { name: "Show password" }),
     ];
     for (const trigger of portalled) {
-      // biome-ignore lint/performance/noAwaitInLoops: one tooltip at a time
       await trigger.focus();
       await expect(portalTooltips(page)).toHaveCount(1);
 

@@ -37,7 +37,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # `bun lint` is only in canary builds.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: canary
       - run: bun ci
       # Fails when a test reaches a file whose dependencies bivium can't read,
       # which would make that test run on every PR, or when a `@depends-on`,
@@ -45,7 +48,7 @@ jobs:
       # because it takes a couple of seconds, so a later failure can't hide it.
       - run: bunx --bun bivium check --max-unknown 0
       - run: bun fmt --check
-      - run: bunx biome ci --error-on-warnings
+      - run: bun lint
 
       - name: Build docs
         run: bun run build:docs

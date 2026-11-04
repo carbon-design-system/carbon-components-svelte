@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // biome-ignore lint/performance/noDelete: restore jsdom's document
+  // eslint-disable-next-line no-restricted-syntax -- restore jsdom's document
   delete (document as { elementsFromPoint?: unknown }).elementsFromPoint;
   elementsFromPoint.mockClear();
   document.body.innerHTML = "";

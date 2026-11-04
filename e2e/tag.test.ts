@@ -54,7 +54,6 @@ test.describe("Tag", () => {
     await page.evaluate(() => document.fonts.ready);
 
     for (const testId of ["tag-icon", "tag-icon-lg"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one tag at a time
       const ltr = await gaps(testId);
       await page.evaluate(() => {
         document.documentElement.dir = "rtl";
@@ -76,7 +75,6 @@ test.describe("Tag", () => {
     await region.getByRole("button", { name: "Before" }).focus();
     const order: string[] = [];
     for (let step = 0; step < 5; step++) {
-      // biome-ignore lint/performance/noAwaitInLoops: each Tab depends on the last
       await page.keyboard.press("Tab");
       const name = await page.evaluate(
         () => document.activeElement?.textContent?.trim() ?? "",

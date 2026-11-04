@@ -95,7 +95,7 @@ describe("selectorSources", () => {
     ["src/Form/FormItem.svelte", `<div class="bx--form-item"></div>`],
     ["src/Checkbox/Checkbox.svelte", `<div class="bx--form-item"></div>`],
     ["src/Tag/Tag.svelte", `<div class="bx--tag bx--tag--{size}"></div>`],
-    // biome-ignore lint/suspicious/noTemplateCurlyInString: source text
+    // eslint-disable-next-line no-template-curly-in-string -- source text
     ["src/Button/Button.svelte", "const cls = `bx--btn--${kind}`;"],
     ["src/Grid/Column.svelte", `const cls = "bx--col-" + size;`],
     ["e2e/fixtures/Raw.svelte", `<div class="bx--raw"></div>`],

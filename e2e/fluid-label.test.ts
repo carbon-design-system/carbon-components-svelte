@@ -57,7 +57,6 @@ test("a cut-off fluid label shows its full text on hover", async ({ page }) => {
   // The hidden label has no box to hover.
   for (const id of TRUNCATING.filter((id) => id !== "hidden-label")) {
     const label = page.getByTestId(id).locator(".bx--label").first();
-    // biome-ignore lint/performance/noAwaitInLoops: one hover at a time
     await label.hover();
     await expect.soft(label, id).toHaveAttribute("title", LABEL);
   }
@@ -66,7 +65,6 @@ test("a cut-off fluid label shows its full text on hover", async ({ page }) => {
   const wide = page.getByTestId("wide").locator(".bx--label");
   await expect(wide).toHaveCount(10);
   for (const label of await wide.all()) {
-    // biome-ignore lint/performance/noAwaitInLoops: one hover at a time
     const cut = await label.evaluate((el) => el.scrollWidth > el.clientWidth);
     expect(cut).toBe(false);
     await label.hover();
@@ -155,7 +153,6 @@ test("fluid labels are not tab stops", async ({ page, browserName }) => {
   // landing on <body>, so waiting for <body> never ends there.
   const stops: string[] = [];
   for (let i = 1; i < expected.length; i++) {
-    // biome-ignore lint/performance/noAwaitInLoops: tabs one stop at a time
     await page.keyboard.press("Tab");
     stops.push(
       await page.evaluate(() => {

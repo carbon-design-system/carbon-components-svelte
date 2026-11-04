@@ -323,7 +323,7 @@ describe("ContentSwitcher", () => {
         expect(document.activeElement).toBe(tabs[0]);
 
         for (const [key, focused] of steps) {
-          // biome-ignore lint/performance/noAwaitInLoops: key presses are sequential
+          // eslint-disable-next-line no-await-in-loop -- key presses are sequential
           await user.keyboard(key);
           expect(document.activeElement).toBe(tabs[focused]);
 

@@ -31,7 +31,6 @@ test.describe("Button", () => {
     page,
   }) => {
     for (const theme of ["white", "g100"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
       const rows = await page.evaluate((theme) => {
         document.documentElement.setAttribute("theme", theme);
         const opaque = (color: string) =>
@@ -86,7 +85,6 @@ test("disabled ghost buttons share one gray with or without a label", async ({
 }) => {
   await page.goto("/button-icon-kinds.html");
   for (const theme of ["white", "g100"]) {
-    // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
     const read = await page.evaluate((theme) => {
       document.documentElement.setAttribute("theme", theme);
       const token = (name: string) => {

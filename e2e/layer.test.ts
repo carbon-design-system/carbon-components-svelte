@@ -28,7 +28,6 @@ test("components take the surface of their Layer level", async ({ page }) => {
   for (const [name, selector, token] of CASES) {
     for (const level of [1, 2, 3]) {
       const el = page.getByTestId(`level-${level}`).locator(selector).first();
-      // biome-ignore lint/performance/noAwaitInLoops: one page, read in order
       await expect
         .soft(el, `${name} at level ${level}`)
         .toHaveCSS("background-color", G100[token][level - 1]);
@@ -57,7 +56,6 @@ test("zebra stripes stand out from the rows at every Layer level", async ({
   await page.mouse.move(0, 0);
 
   for (const [theme, { row, stripe }] of Object.entries(ZEBRA)) {
-    // biome-ignore lint/performance/noAwaitInLoops: one page, read in order
     await page.evaluate(
       (t) => document.documentElement.setAttribute("theme", t),
       theme,
@@ -126,7 +124,6 @@ test("modal content sits one Layer level up", async ({ page }) => {
   await page.goto("/modal-layer.html");
 
   for (const [theme, colors] of Object.entries(MODAL)) {
-    // biome-ignore lint/performance/noAwaitInLoops: one page, read in order
     await page.evaluate(
       (t) => document.documentElement.setAttribute("theme", t),
       theme,

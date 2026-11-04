@@ -478,6 +478,7 @@ describe("SelectableTileGroup", () => {
     it("should support custom string literal types with generics", () => {
       type CustomValue = "option1" | "option2" | "option3";
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars -- only read through typeof
       const selectedValues: CustomValue[] = ["option1", "option2"];
 
       expectTypeOf<typeof selectedValues>().toEqualTypeOf<CustomValue[]>();

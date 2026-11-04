@@ -113,7 +113,6 @@ for (const dir of ["ltr", "rtl"] as const) {
 
     for (const [align, where] of cases) {
       const name = `${align}, ${where}`;
-      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
       const { g, m, width } = await openMenu(page, `${align}-${where}`);
       const left = Math.abs(m.x - g.x);
       const right = Math.abs(m.x + m.width - (g.x + g.width));

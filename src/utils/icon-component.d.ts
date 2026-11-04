@@ -4,5 +4,5 @@
  * fit either way. `null` renders nothing, as with `<svelte:component>`.
  */
 export type IconComponent =
-  // biome-ignore lint/suspicious/noExplicitAny: `<svelte:component>` takes any component class or function, whatever its props.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- `<svelte:component>` takes any component class or function, whatever its props.
   (new (...args: any[]) => any) | ((...args: any[]) => any) | null;

@@ -255,7 +255,6 @@ test.describe("forced colors", () => {
     page,
   }) => {
     for (const [on, off] of selected) {
-      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(on);
       // Polled: a hover transition can still be running at the first read.
       await expect
@@ -291,7 +290,6 @@ test.describe("forced colors", () => {
   test("selected and pressed labels show on their fill", async ({ page }) => {
     // An icon-only button has no visible label.
     for (const [on] of selected.filter(([on]) => !on.includes("bx--btn"))) {
-      // biome-ignore lint/performance/noAwaitInLoops: one screenshot at a time
       expect.soft(await flatness(page, on), on).toBeLessThan(0.95);
     }
   });
@@ -314,7 +312,6 @@ test.describe("forced colors", () => {
       ".bx--menu-option--disabled .bx--menu-option__label",
       ".bx--menu-option--disabled .bx--menu-option__info",
     ]) {
-      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(selector, { force: true });
       await expect
         .poll(async () => (await style(page, selector)).color, {
@@ -517,7 +514,6 @@ test.describe("forced colors", () => {
   }) => {
     await page.locator(".bx--text-truncate__toggle").waitFor();
     for (const [target, ring, pseudo, color] of rings) {
-      // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
       await page.focus(target);
       expect.soft(await style(page, ring, pseudo), target).toMatchObject({
         outline: "solid 2px",
@@ -674,7 +670,6 @@ test.describe("forced colors", () => {
       ".bx--checkbox:disabled:not(:checked) + .bx--checkbox-label",
       ".bx--checkbox:disabled:checked + .bx--checkbox-label",
     ]) {
-      // biome-ignore lint/performance/noAwaitInLoops: hover moves one pointer
       await page.hover(label, { force: true });
       const [text, box, check] = await Promise.all([
         style(page, label),
@@ -781,7 +776,6 @@ test.describe("forced colors", () => {
     ];
 
     for (const dir of ["ltr", "rtl"] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await page.evaluate((dir) => {
         document.documentElement.dir = dir;
       }, dir);
@@ -816,7 +810,6 @@ test.describe("forced colors", () => {
       ["[data-testid=tabs-container] [role=tablist]", "Metrics"],
     ] as const) {
       const scope = page.locator(tablist).first();
-      // biome-ignore lint/performance/noAwaitInLoops: one tab has focus at a time
       await expectSingleRing([scope]);
       await scope.getByRole("tab", { name, exact: true }).focus();
       const widths = await scope
@@ -992,7 +985,6 @@ test.describe("forced colors", () => {
       for (const [field, ring, pseudo] of rings) {
         const scope = `[data-testid=${group}] [data-testid=${field}]`;
         const target = `${scope} :is(input:not([type=hidden]):not([tabindex="-1"]), textarea, select, [role=combobox])`;
-        // biome-ignore lint/performance/noAwaitInLoops: one element has focus at a time
         await page.locator(target).first().focus();
         expect
           .soft(
@@ -1019,7 +1011,6 @@ test.describe("forced colors", () => {
         page.$eval(close, (el) =>
           el.getAnimations().every((a) => a.playState === "finished"),
         );
-      // biome-ignore lint/performance/noAwaitInLoops: one field has focus at a time
       await page.fill(`${scope} input`, "us-east");
       // The clear button fades in.
       await expect.poll(settled).toBe(true);
@@ -1053,7 +1044,6 @@ test.describe("forced colors", () => {
       ["multiselect", ".bx--list-box__field"],
     ]) {
       const scope = `[data-testid=fields] [data-testid=${field}]`;
-      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
       await page.click(`${scope} ${trigger}`);
       const option = page.locator(`${scope} .bx--list-box__menu-item`).nth(2);
       await expect(option).toBeVisible();
@@ -1088,7 +1078,6 @@ test.describe("forced colors", () => {
       ["multiselect", ".bx--list-box__field"],
     ]) {
       const scope = `[data-testid=fields] [data-testid=${field}]`;
-      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
       await page.focus(`${scope} ${trigger}`);
       const highlighted = `${scope} .bx--list-box__menu-item--highlighted`;
       // The first press opens the menu; ComboBox highlights on the second.
@@ -1130,7 +1119,6 @@ test.describe("forced colors", () => {
       ["multiselect", ".bx--list-box__field"],
     ]) {
       const scope = `[data-testid=fields] [data-testid=${field}]`;
-      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
       await page.click(`${scope} ${trigger}`);
       const options = page.locator(`${scope} .bx--list-box__menu-item__option`);
       await expect(options.nth(2)).toBeVisible();
@@ -1207,7 +1195,6 @@ test.describe("forced colors", () => {
     });
 
     for (const trigger of ["#fc-overflow-1", "#fc-overflow-2"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: reads one trigger at a time
       expect.soft(await edges(trigger), trigger).toMatchObject({
         border: "none",
         outline: "none",

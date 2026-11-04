@@ -14,7 +14,6 @@ async function glide(page: Page, from: Point, to: Point, speed: number) {
   const steps = Math.max(1, Math.round(duration / frame));
   const start = performance.now();
   for (let i = 1; i <= steps; i++) {
-    // biome-ignore lint/performance/noAwaitInLoops: one pointer step a frame
     await page.mouse.move(
       from.x + ((to.x - from.x) * i) / steps,
       from.y + ((to.y - from.y) * i) / steps,

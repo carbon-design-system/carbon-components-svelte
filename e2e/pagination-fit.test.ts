@@ -11,7 +11,6 @@ test("pagination fits its container", async ({ page }) => {
 
   for (const width of [200, 320, 480, 800]) {
     const box = page.getByTestId(`pagination-${width}`);
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     const outer = await box.boundingBox();
     const next = await box
       .locator(".bx--pagination__button--forward")

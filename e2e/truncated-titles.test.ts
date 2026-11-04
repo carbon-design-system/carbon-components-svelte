@@ -65,7 +65,6 @@ test("truncated text has a title on hover, and text that fits has none", async (
       const measured = measure ? target.locator(measure) : target;
       const label = `${name} (${box})`;
       // The fixture still cuts off what it means to.
-      // biome-ignore lint/performance/noAwaitInLoops: one hover at a time
       const cut = await measured.evaluate(
         (el) => el.scrollWidth > el.clientWidth,
       );

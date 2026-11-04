@@ -36,7 +36,6 @@ tooling:
       - any-glob-to-any-file:
           - "scripts/**"
           - "bench/**"
-          - "biome.json"
           - "bunfig.toml"
           - "vite.config*.ts"
           - "playwright.config.ts"
