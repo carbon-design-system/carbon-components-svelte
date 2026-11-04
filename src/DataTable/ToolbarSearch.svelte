@@ -97,7 +97,9 @@
 
   const ctx = getContext("carbon:DataTable") ?? {};
 
+  /** @type {null | ReadonlyArray<Row>} */
   let rows = null;
+  /** @type {null | (() => void)} */
   let unsubscribe = null;
 
   $: {
@@ -105,18 +107,24 @@
     unsubscribe = null;
     if (shouldFilterRows) {
       // Outside a `DataTable` there is no context, so there are no rows to filter.
-      unsubscribe = ctx.tableRows?.subscribe((tableRows) => {
-        // Only update if the rows have actually changed.
-        // This approach works in both Svelte 4 and Svelte 5.
-        if (!rowsEqual(tableRows, rows)) {
-          rows = tableRows;
-        }
-      });
+      unsubscribe = ctx.tableRows?.subscribe(
+        /** @param {ReadonlyArray<Row>} tableRows */
+        (tableRows) => {
+          // Only update if the rows have actually changed.
+          // This approach works in both Svelte 4 and Svelte 5.
+          if (!rowsEqual(tableRows, rows)) {
+            rows = tableRows;
+          }
+        },
+      );
     } else {
       rows = null;
     }
   }
 
+  /**
+   * @type {null | (((...args: any[]) => void) & { cancel: () => void; flush: () => void })}
+   */
   let debouncedFilter = null;
 
   // Bumped on every filter request so a yielded filter that was overtaken
@@ -139,6 +147,10 @@
     return mounted;
   }
 
+  /**
+   * @param {number | string} searchValue
+   * @param {boolean | ((row: Row, value: number | string) => boolean)} filter
+   */
   function applyFilter(searchValue, filter) {
     filteredRowIds = ctx.filterRows(searchValue, filter);
   }
@@ -149,6 +161,12 @@
       : new Promise((resolve) => setTimeout(resolve, 0));
   }
 
+  /**
+   * Typed `any` so the function satisfies `debounceFn`'s inferred
+   * `(...args: unknown[]) => void` in the `$:` block below.
+   * @param {any} searchValue
+   * @param {any} filter
+   */
   function runFilter(searchValue, filter) {
     if (!deferFilter || !mounted) {
       applyFilter(searchValue, filter);
@@ -190,7 +208,7 @@
     if (disabled || persistent || expanded) return;
     expanded = true;
     await tick();
-    ref.focus();
+    /** @type {HTMLInputElement} */ (ref).focus();
   }
 
   /**

@@ -67,6 +67,7 @@
 
   const dispatch = createEventDispatcher();
   const toolbarCtx = getContext("carbon:Toolbar") ?? {};
+  /** @type {import("svelte/store").Readable<"xs" | "sm" | "default"> | undefined} */
   const toolbarSize = toolbarCtx.toolbarSize;
 
   $: menuSize = MENU_SIZE_BY_TOOLBAR_SIZE[$toolbarSize ?? "default"] ?? "lg";
@@ -79,6 +80,7 @@
     (header) => !header.columnHidden,
   ).length;
 
+  /** @param {string} key */
   function toggle(key) {
     const header = headers.find((h) => h.key === key);
     if (!header) return;

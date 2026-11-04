@@ -5,11 +5,15 @@
 
   let batchActionsActive = false;
 
+  /** @type {undefined | (() => void)} */
   let unsubscribe;
   if (ctx?.batchActionsActive) {
-    unsubscribe = ctx.batchActionsActive.subscribe((value) => {
-      batchActionsActive = value;
-    });
+    unsubscribe = ctx.batchActionsActive.subscribe(
+      /** @param {boolean} value */
+      (value) => {
+        batchActionsActive = value;
+      },
+    );
   }
 
   onMount(() => {
