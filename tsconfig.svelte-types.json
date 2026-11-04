@@ -1,7 +1,6 @@
 {
   // `test:src-svelte` checks the components and the .js files under
-  // `strict`, holding the components' errors to
-  // scripts/svelte-types-baseline.json.
+  // `strict`.
   "extends": "./tsconfig.js-check.json",
   "include": ["src/**/*.svelte", "src/**/*.js"],
   "exclude": ["node_modules", "src/node_modules", "src/**/index.js"]
