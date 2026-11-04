@@ -118,6 +118,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Toggle: "0.2.0",
   ToggleButtonGroup: "0.113.0",
   Toggletip: "0.110.0",
+  TokenSearch: "0.114.0",
   Toolbar: "0.2.0",
   Tooltip: "0.2.0",
   TooltipDefinition: "0.2.0",
