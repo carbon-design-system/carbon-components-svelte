@@ -103,6 +103,22 @@ describe("themeScript", () => {
     ).toBe("#d02670");
   });
 
+  it("sets the contextual token with a first-layer token, as Theme does", () => {
+    run(
+      themeScript({
+        tokens: {
+          "layer-01": "#111111",
+          "field-01": "#222222",
+          field: "#333333",
+        },
+      }),
+    );
+    const style = document.documentElement.style;
+    expect(style.getPropertyValue("--cds-layer")).toBe("#111111");
+    // A contextual token that is set too is left as given.
+    expect(style.getPropertyValue("--cds-field")).toBe("#333333");
+  });
+
   it("escapes < so the script cannot close its tag", () => {
     const script = themeScript({ persist: true, persistKey: "</script>" });
     expect(script).not.toContain("</script>");

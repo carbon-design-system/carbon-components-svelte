@@ -105,6 +105,7 @@
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
   import Toggle from "../Toggle/Toggle.svelte";
+  import { withContextualTokens } from "./contextual-tokens.js";
 
   const dispatch = createEventDispatcher();
 
@@ -187,16 +188,18 @@
   // cleared, and a stored value can be any string.
   $: if (persist && !(theme in themes)) theme = fallbackTheme();
 
+  $: appliedValues = withContextualTokens(tokens);
+
   // Apply theme before dispatching update. Reactive blocks run in source order,
   // and a throwing on:update handler aborts the rest of the flush.
   $: if (typeof window !== "undefined") {
     for (const token of appliedTokens) {
-      if (token in tokens) continue;
+      if (token in appliedValues) continue;
       document.documentElement.style.removeProperty(`--cds-${token}`);
       appliedTokens.delete(token);
     }
 
-    for (const [token, value] of Object.entries(tokens)) {
+    for (const [token, value] of Object.entries(appliedValues)) {
       document.documentElement.style.setProperty(`--cds-${token}`, value);
       appliedTokens.add(token);
     }
