@@ -94,7 +94,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.5",
     "@carbon/themes": "11.84.0",
     "@carbon/type": "11.70.0",
     "@playwright/test": "1.64.1",
