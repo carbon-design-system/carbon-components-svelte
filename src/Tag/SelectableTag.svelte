@@ -68,7 +68,7 @@
 
   // Inside a `TagSet`, register like `Tag` does.
   const group = joinTagSet(() => ({
-    node: buttonRef,
+    node: /** @type {HTMLElement} */ (buttonRef),
     label: buttonRef?.textContent?.trim() ?? "",
     value,
     type,

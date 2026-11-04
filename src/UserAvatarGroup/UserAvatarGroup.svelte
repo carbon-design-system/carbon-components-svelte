@@ -8,8 +8,9 @@
   // registered node is nested a couple of levels below the direct child that
   // the group's `> *` overlap/stacking CSS targets. Walk up to that direct
   // child so the stacking custom property lands where the CSS reads it.
-  /** @param {HTMLElement} node */
+  /** @param {HTMLElement | undefined} node */
   function overlapTarget(node) {
+    /** @type {HTMLElement | null | undefined} */
     let current = node;
     while (
       current?.parentElement &&

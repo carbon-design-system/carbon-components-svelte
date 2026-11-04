@@ -64,9 +64,13 @@
   } from "../utils/relative-time.js";
 
   let tickNow = Date.now();
+  /** @type {(() => void) | undefined} */
   let unsubscribe;
+  /** @type {number | undefined} */
   let prevRefreshMs;
 
+  // Called with the inputs it should re-run on, which it ignores.
+  /** @type {(...deps: unknown[]) => void} */
   function handleTick() {
     tickNow = Date.now();
   }

@@ -185,7 +185,8 @@
   let registeredChecked = checked;
 
   $: if (registration) {
-    if (checked && !registeredChecked) updateGroupSelection(name, instanceKey);
+    if (checked && !registeredChecked)
+      updateGroupSelection(/** @type {string} */ (name), instanceKey);
     registeredChecked = checked;
   }
 

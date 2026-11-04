@@ -112,7 +112,7 @@
 
   // Inside a `TagSet`, register like `Tag` does.
   const group = joinTagSet(() => ({
-    node: ref,
+    node: /** @type {HTMLElement} */ (ref),
     label: ref?.textContent?.trim() ?? "",
     type,
     size: resolvedSize,
@@ -128,6 +128,7 @@
   /** @type {null | HTMLSpanElement} */
   let wrapperRef = null;
   // The popover, in place or in a portal.
+  /** @type {null | HTMLDivElement} */
   let popoverRef = null;
   /** @type {null | HTMLSpanElement} */
   let labelRef = null;
@@ -138,6 +139,7 @@
   // that opened the popover can't bubble to the outside-click handler and
   // close it again (as in `Toggletip`).
   let listenersEnabled = false;
+  /** @type {number} */
   let enableFrame;
 
   $: resolvedSize =
@@ -201,7 +203,11 @@
     // Some browsers report a null relatedTarget when clicking non-focusable
     // popover content; keep it open then.
     if (!open || event.relatedTarget === null) return;
-    if (!insideElements.some((node) => node?.contains(event.relatedTarget))) {
+    if (
+      !insideElements.some((node) =>
+        node?.contains(/** @type {Node | null} */ (event.relatedTarget)),
+      )
+    ) {
       close();
     }
   }

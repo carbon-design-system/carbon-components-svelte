@@ -218,7 +218,7 @@
         // Dispatching (rather than `ref.click()`) lets Shift be forwarded onto
         // the resulting click, which still runs the checkbox's native
         // pre-click activation (toggle + a follow-up "change").
-        ref.dispatchEvent(
+        /** @type {HTMLInputElement} */ (ref).dispatchEvent(
           new MouseEvent("click", {
             shiftKey: event.shiftKey,
             bubbles: true,

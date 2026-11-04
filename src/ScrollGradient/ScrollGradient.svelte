@@ -1,4 +1,5 @@
 <script context="module">
+  /** @type {Set<string | undefined>} */
   const FILL_TOKENS = new Set([
     "background",
     "layer-01",
@@ -125,8 +126,14 @@
     //
     // Observing queues a first measurement, which runs with every other
     // gradient's in one batch instead of forcing a layout apiece.
-    const stopScrollElement = observeResize(scrollElementRef, updateScrollable);
-    const stopContent = observeResize(contentRef, updateScrollable);
+    const stopScrollElement = observeResize(
+      /** @type {HTMLDivElement} */ (scrollElementRef),
+      updateScrollable,
+    );
+    const stopContent = observeResize(
+      /** @type {HTMLDivElement} */ (contentRef),
+      updateScrollable,
+    );
 
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
@@ -145,12 +152,12 @@
       { root: scrollElementRef },
     );
 
-    for (const sentinel of [
+    for (const sentinel of /** @type {HTMLDivElement[]} */ ([
       sentinelTop,
       sentinelBottom,
       sentinelLeft,
       sentinelRight,
-    ]) {
+    ])) {
       intersectionObserver.observe(sentinel);
     }
 

@@ -103,7 +103,7 @@
   // width, collapse it into "+N" once it no longer fits, and include it in
   // roving focus. Standalone, the stores are inert.
   const group = joinTagSet(() => ({
-    node: ref,
+    node: /** @type {HTMLElement} */ (ref),
     label: labelRef?.textContent?.trim() ?? "",
     value,
     type,
@@ -196,7 +196,7 @@
   // Toggling `filter`, `interactive` or `href` swaps the root element, so the
   // set must be told about the new node too.
   $: group.update({
-    node: ref,
+    node: /** @type {HTMLElement} */ (ref),
     value,
     type,
     size: resolvedSize,

@@ -157,8 +157,22 @@
   // When rendered inside a `UserAvatarGroup`, register with the group so it can
   // count avatars and hide those beyond its `max`. The group context is absent
   // for a standalone avatar, in which case none of this applies.
+  /**
+   * @type {{
+   *   items: import("svelte/store").Readable<Array<{ id: string; name: string; node?: HTMLElement }>>;
+   *   max: import("svelte/store").Readable<number>;
+   *   size: import("svelte/store").Readable<"sm" | "md" | "lg" | "xl" | undefined>;
+   *   claimAvatar: (name: string | undefined) => number;
+   *   register: (item: { id: string; name: string | undefined; node: HTMLElement | null }) => void;
+   *   unregister: (id: string) => void;
+   *   updateName: (id: string, name: string | undefined) => void;
+   *   updateNode: (id: string, node: HTMLElement) => void;
+   * } | undefined}
+   */
   const userAvatarGroup = getContext("carbon:UserAvatarGroup");
-  const groupItemId = userAvatarGroup ? uniqueId("cua") : undefined;
+  const groupItemId = /** @type {string} */ (
+    userAvatarGroup ? uniqueId("cua") : undefined
+  );
   const groupItems = userAvatarGroup?.items ?? readable([]);
   const groupMax = userAvatarGroup?.max ?? readable(0);
   const groupSize = userAvatarGroup?.size ?? readable(undefined);
@@ -237,6 +251,7 @@
   // Fall back to icon/initials when the photo URL fails. Comparing against the
   // failed URL means a new `image` value automatically retries. Forget the
   // failure once `image` moves off it, so returning to that URL retries too.
+  /** @type {string | undefined} */
   let failedImage;
   $: if (failedImage !== undefined && image !== failedImage) {
     failedImage = undefined;

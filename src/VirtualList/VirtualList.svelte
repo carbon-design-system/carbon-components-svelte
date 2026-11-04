@@ -47,6 +47,7 @@
    */
   export let measured = false;
 
+  /** @type {(_item: unknown, index: number) => number} */
   function defaultGetKey(_item, index) {
     return index;
   }
@@ -125,6 +126,7 @@
    */
   const POSITIONED_ITEM = "li, [role=listitem], [role=option], [role=article]";
 
+  /** @param {number[]} nextHeights */
   function handleMeasure(nextHeights) {
     heights = nextHeights;
   }
