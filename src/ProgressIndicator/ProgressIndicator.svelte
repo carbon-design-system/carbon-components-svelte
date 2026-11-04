@@ -168,13 +168,17 @@
    */
   function syncOrder() {
     steps.update((_) =>
-      syncDomOrder({ root: listRef, selector: ".bx--progress-step", items: _ }),
+      syncDomOrder({
+        root: /** @type {HTMLUListElement} */ (listRef),
+        selector: ".bx--progress-step",
+        items: _,
+      }),
     );
   }
 
   onMount(() =>
     // A keyed reorder moves steps without re-registering them.
-    observeDomOrder(listRef, {
+    observeDomOrder(/** @type {HTMLUListElement} */ (listRef), {
       selector: ".bx--progress-step",
       getItems: () => $steps,
       onReorder: syncOrder,
@@ -250,8 +254,8 @@
     focusOnMove: false,
     getActiveIndex: () => {
       if (!listRef) return -1;
-      const items = Array.from(
-        listRef.querySelectorAll(".bx--progress-step-button"),
+      const items = /** @type {(Element | null)[]} */ (
+        Array.from(listRef.querySelectorAll(".bx--progress-step-button"))
       );
       return items.indexOf(document.activeElement);
     },
@@ -260,7 +264,9 @@
       if (hasModifierKey(event)) return;
       // Arrow keys would otherwise also scroll the page.
       event.preventDefault();
-      listRef?.querySelectorAll(".bx--progress-step-button")[index]?.focus();
+      /** @type {HTMLElement | undefined} */ (
+        listRef?.querySelectorAll(".bx--progress-step-button")[index]
+      )?.focus();
     },
   }}
   on:click

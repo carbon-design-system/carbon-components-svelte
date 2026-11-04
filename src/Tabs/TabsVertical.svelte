@@ -211,7 +211,7 @@
       isRow &&
       focused instanceof HTMLElement &&
       focused.matches("[role='tab']") &&
-      refTabList.contains(focused)
+      /** @type {HTMLUListElement} */ (refTabList).contains(focused)
     ) {
       scrollTabIntoView(focused);
     }
@@ -245,13 +245,17 @@
   //
   // Set needsDomSync inside the batched update. afterUpdate runs once
   // after mount before this flush, while tabs is still [].
-  const registration = createTabsRegistration({
-    tabs,
-    content,
-    onDomSyncNeeded: () => {
-      needsDomSync = true;
-    },
-  });
+  // The registries hold an `index` that registrations don't carry.
+  const registration =
+    /** @type {ReturnType<typeof createTabsRegistration<{ id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean }, { id: string }>>} */ (
+      createTabsRegistration({
+        tabs,
+        content,
+        onDomSyncNeeded: () => {
+          needsDomSync = true;
+        },
+      })
+    );
 
   /**
    * @type {(data: {
@@ -419,7 +423,7 @@
   function syncOrder() {
     tabs.update((currentTabs) =>
       syncDomOrder({
-        root: refTabList,
+        root: /** @type {HTMLUListElement} */ (refTabList),
         selector: ".bx--tabs__nav-link",
         items: currentTabs,
       }),
@@ -428,7 +432,7 @@
     if (refRoot) {
       content.update((currentContent) =>
         syncDomOrder({
-          root: refRoot,
+          root: /** @type {HTMLDivElement} */ (refRoot),
           selector: "[role='tabpanel']",
           items: currentContent,
         }),
@@ -469,17 +473,20 @@
     // A keyed reorder moves tabs without re-registering them. Keep the
     // selected tab selected at its new index. An insert or removal syncs in
     // afterUpdate instead, which keeps the index.
-    const stopObservingOrder = observeDomOrder(refTabList, {
-      selector: ".bx--tabs__nav-link",
-      getItems: () => get(tabs),
-      onReorder: () => {
-        if (needsDomSync) return;
-        const id = get(selectedTab);
-        syncOrder();
-        const tab = id === undefined ? undefined : get(tabsById)[id];
-        if (selectedId === undefined && tab) selected = tab.index;
+    const stopObservingOrder = observeDomOrder(
+      /** @type {HTMLUListElement} */ (refTabList),
+      {
+        selector: ".bx--tabs__nav-link",
+        getItems: () => get(tabs),
+        onReorder: () => {
+          if (needsDomSync) return;
+          const id = get(selectedTab);
+          syncOrder();
+          const tab = id === undefined ? undefined : get(tabsById)[id];
+          if (selectedId === undefined && tab) selected = tab.index;
+        },
       },
-    });
+    );
 
     /** @type {(event: MediaQueryListEvent) => void} */
     const onBreakpointChange = (event) => {

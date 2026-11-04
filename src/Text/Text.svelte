@@ -80,7 +80,7 @@
         : maxWidth;
 
   $: truncated = lines !== undefined;
-  $: multiline = truncated && lines > 1;
+  $: multiline = truncated && /** @type {number} */ (lines) > 1;
   $: front = truncated && !multiline && clamp === "front";
 
   $: textClass = [

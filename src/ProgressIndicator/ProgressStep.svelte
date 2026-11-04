@@ -41,7 +41,8 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
-  let step = {};
+  let step =
+    /** @type {{ complete: boolean; current: boolean; index: number }} */ ({});
 
   // Naming and description belong on the step button, not the `li`.
   $: ({
@@ -78,12 +79,15 @@
 
   $: add({ id, complete, disabled });
 
-  const unsubscribe = stepsById.subscribe((value) => {
-    if (value[id]) {
-      step = value[id];
-      current = step.current;
-    }
-  });
+  const unsubscribe = stepsById.subscribe(
+    /** @param {Record<string, { complete: boolean; current: boolean; index: number }>} value */
+    (value) => {
+      if (value[id]) {
+        step = value[id];
+        current = step.current;
+      }
+    },
+  );
 
   onMount(() => {
     return () => {

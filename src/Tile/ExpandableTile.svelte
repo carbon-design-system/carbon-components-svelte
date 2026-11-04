@@ -100,6 +100,7 @@
 
   /** @type {null | HTMLDivElement} */
   let refAbove = null;
+  /** @type {null | HTMLButtonElement | HTMLDivElement} */
   let chevronRef = null;
   let mounted = false;
   let stopObserving = noop;

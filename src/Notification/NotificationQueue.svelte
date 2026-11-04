@@ -1,16 +1,20 @@
 <script context="module">
+  /** @param {string} value */
   function isTopPosition(value) {
     return value.startsWith("top");
   }
 
+  /** @param {string} value */
   function isLeftPosition(value) {
     return value.endsWith("left");
   }
 
+  /** @param {string} value */
   function isRightPosition(value) {
     return value.endsWith("right");
   }
 
+  /** @param {string} value */
   function isCenterPosition(value) {
     return value.endsWith("center");
   }

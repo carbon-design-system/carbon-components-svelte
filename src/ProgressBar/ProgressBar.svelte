@@ -69,6 +69,7 @@
   } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
+  /** @type {Record<string, import("../utils/icon-component.js").IconComponent>} */
   const statusIcons = {
     error: ErrorFilled,
     finished: CheckmarkFilled,
@@ -87,7 +88,9 @@
 
   $: resolvedSize = normalizeSize(size, PROGRESS_BAR_SIZE_ALIASES);
   $: indeterminate = value === undefined && status === "active";
+  /** @type {number} */
   let capped;
+  /** @type {number} */
   let upper;
   $: {
     upper = Number.isFinite(max) && max > 0 ? max : 0;

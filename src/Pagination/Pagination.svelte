@@ -7,13 +7,14 @@
    * browser blurs it (moving focus to the body). Refocus the other button
    * so keyboard/AT users don't lose their place, unless a `change` handler
    * moved focus elsewhere in the meantime.
-   * @param {HTMLButtonElement | null} clickedRef
-   * @param {HTMLButtonElement | null} otherRef
+   * @param {null | HTMLAnchorElement | HTMLButtonElement} clickedRef
+   * @param {null | HTMLAnchorElement | HTMLButtonElement} otherRef
    */
   async function refocusIfDisabled(clickedRef, otherRef) {
     if (document.activeElement !== clickedRef) return;
     await tick();
-    if (clickedRef?.disabled) returnFocus(otherRef, clickedRef);
+    if (/** @type {HTMLButtonElement | null} */ (clickedRef)?.disabled)
+      returnFocus(otherRef, clickedRef);
   }
 
   /**
@@ -37,10 +38,13 @@
   /**
    * Filters page sizes to remove redundant options based on total items.
    * Keeps all sizes up to and including the first one >= totalItems.
+   * @param {readonly number[]} sizes
+   * @param {number} total
    * @returns {number[]} Filtered array of page sizes.
    */
   function getFilteredPageSizes(sizes, total) {
     if (total <= 0) return sizes.slice(0, 1);
+    /** @type {number[]} */
     const filtered = [];
     for (const size of sizes) {
       filtered.push(size);
@@ -264,10 +268,15 @@
   // Seeded by the first run of the `update` block below, after the initial
   // clamp, so clamping an out-of-range initial page isn't reported as an
   // update on mount (#2528).
+  /** @type {number | undefined} */
   let prevPage;
+  /** @type {number | undefined} */
   let prevPageSize;
+  /** @type {string | undefined} */
   let prevPageSizesKey;
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let backBtnRef = null;
+  /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let forwardBtnRef = null;
   let pageInputKey = 0;
 

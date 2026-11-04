@@ -1,5 +1,9 @@
 <script context="module">
   /** Explicit dimension wins; otherwise fall back to `size`. */
+  /**
+   * @param {number | string | undefined} explicit
+   * @param {number | string | undefined} fallback
+   */
   function resolveDimension(explicit, fallback) {
     if (explicit != null) return toCssLength(explicit);
     return fallback == null ? undefined : toCssLength(fallback);

@@ -201,6 +201,7 @@
     return node.querySelector(".bx--tag__close-icon:not(:disabled)");
   }
 
+  /** @param {TagSetItem} item */
   function handleTagClose(item) {
     const index = $items.indexOf(item);
     // Closing usually removes the tag, unmounting its focused close button.
@@ -271,8 +272,11 @@
   $: overflowCount = overflowTags.length;
   $: overflowTooltipText = overflowTags.map((tag) => tag.label).join(", ");
 
+  /** @type {null | HTMLSpanElement} */
   let overflowTriggerRef = null;
+  /** @type {null | HTMLButtonElement} */
   let overflowButtonRef = null;
+  /** @type {null | HTMLElement} */
   let overflowContentRef = null;
   let overflowOpen = false;
 
@@ -284,10 +288,12 @@
    */
   function rovingItems() {
     if (navigation !== "roving") return [];
-    const entries = $items
-      .slice(0, visibleCount)
-      .map((item) => ({ id: item.id, element: focusableIn(item.node) }))
-      .filter((entry) => entry.element);
+    const entries = /** @type {{ id: string; element: HTMLElement }[]} */ (
+      $items
+        .slice(0, visibleCount)
+        .map((item) => ({ id: item.id, element: focusableIn(item.node) }))
+        .filter((entry) => entry.element)
+    );
     if (visibleCount < $items.length && overflowButtonRef) {
       entries.push({ id: OVERFLOW_TAB_STOP, element: overflowButtonRef });
     }
@@ -402,7 +408,7 @@
     // A keyed reorder moves tags without re-registering them. Registered ids
     // aren't the tags' DOM ids, so compare by each node's own id.
     stops.push(
-      observeDomOrder(wrapperRef, {
+      observeDomOrder(/** @type {HTMLDivElement} */ (wrapperRef), {
         selector: ".bx--tag",
         getItems: () => $items.map((item) => ({ id: item.node?.id })),
         onReorder: () => batchedItemsUpdate(sortByDomOrder),
@@ -442,6 +448,7 @@
   $: mountAllTags = hasViewAll || allTagsOpen;
 
   let allTagsQuery = "";
+  /** @type {null | HTMLUListElement} */
   let allTagsListRef = null;
   $: allTagsMatches = allTagsOpen
     ? filterTags($items, allTagsQuery.trim().toLocaleLowerCase())

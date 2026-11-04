@@ -2,9 +2,17 @@
   // Compute the visible page window directly instead of
   // materializing a `total`-length array and slicing it down,
   // since the rendered window is bounded by `shown`.
+  /**
+   * @param {number} total
+   * @param {number} startOffset
+   * @param {number} front
+   * @param {number} back
+   * @returns {number[]}
+   */
   function computePageWindow(total, startOffset, front, back) {
     const start = startOffset + front;
     const end = total - back - 1;
+    /** @type {number[]} */
     const window = [];
 
     for (let i = start; i < end; i++) {

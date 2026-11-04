@@ -210,6 +210,7 @@
   // Runs in the capture phase so a visible tooltip is dismissed before any
   // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
   // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     // Escape that cancels an IME composition is not a close.
     if (event.key !== "Escape" || isImeComposition(event)) return;

@@ -51,6 +51,7 @@
   // Standalone (no wrapper context) is always single-select.
   const selectedValue =
     ctx?.selectedValue ?? writable(initialChecked ? value : undefined);
+  /** @type {(v: Value) => void} */
   const update = ctx?.update ?? ((v) => selectedValue.set(v));
   const inputName = ctx?.inputName ?? writable("");
   const register = ctx?.register ?? (() => noop);
@@ -99,7 +100,7 @@
         // Toggle once per press, like Space; a held key would otherwise
         // toggle on every auto-repeat.
         if (event.repeat) return;
-        ref.click();
+        /** @type {HTMLInputElement} */ (ref).click();
       }
     }}
   />
