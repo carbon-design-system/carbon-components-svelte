@@ -57,8 +57,8 @@ export function resolveStatusDescribedBy(options: {
    * doesn't point at it.
    */
   isFluid?: boolean;
-  errorId: string;
-  warnId: string;
+  errorId: string | undefined;
+  warnId: string | undefined;
   helperId?: string;
   /**
    * `false` when the invalid message is instead surfaced via
