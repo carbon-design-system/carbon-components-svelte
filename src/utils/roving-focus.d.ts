@@ -2,11 +2,17 @@
 
 export type RovingFocusOrientation = "horizontal" | "vertical" | "both";
 
-export type RovingFocusOptions = {
+/**
+ * `T` is what `getItems` returns: elements by default, or a component's
+ * own registry entries, read only through `isDisabled` and the index.
+ * `focusOnMove` and `itemsOnly` call `focus` and `contains` on the items,
+ * so they need elements.
+ */
+export type RovingFocusOptions<T = HTMLElement> = {
   /** Items inside `node`. Also filters which keydown events count. */
   selector: string;
   /** Item list in tab order. Default: `node.querySelectorAll(selector)`. */
-  getItems?: () => HTMLElement[];
+  getItems?: () => readonly T[];
   /** @default "horizontal" */
   orientation?: RovingFocusOrientation;
   /** Wrap at the ends. @default true */
@@ -18,7 +24,7 @@ export type RovingFocusOptions = {
   /** @default true */
   end?: boolean;
   /** @default el => el.disabled || aria-disabled */
-  isDisabled?: (item: HTMLElement) => boolean;
+  isDisabled?: (item: T) => boolean;
   getActiveIndex: () => number;
   onMove?: (index: number, event: KeyboardEvent) => void;
   /** Call `.focus()` on the new item. @default false */
@@ -30,10 +36,10 @@ export type RovingFocusOptions = {
 };
 
 /** Arrow/Home/End keydown on `node` calls `onMove` with the next index. */
-export function rovingFocus(
+export function rovingFocus<T = HTMLElement>(
   node: HTMLElement,
-  options: RovingFocusOptions,
+  options: RovingFocusOptions<T>,
 ): {
-  update: (options: RovingFocusOptions) => void;
+  update: (options: RovingFocusOptions<T>) => void;
   destroy: () => void;
 };
