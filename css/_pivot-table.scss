@@ -121,6 +121,7 @@
   .#{$prefix}--pivot-table__label {
     display: inline-flex;
     align-items: center;
+    vertical-align: middle;
     gap: $carbon--spacing-02;
     padding-inline-start: calc(var(--ccs-pivot-level, 0) * #{$carbon--spacing-05});
   }

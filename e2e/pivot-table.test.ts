@@ -379,3 +379,130 @@ test.describe("PivotTable", () => {
     expect(border).toBe("solid");
   });
 });
+
+test.describe("PivotFieldList", () => {
+  const zone = (page: Page, name: string) =>
+    page.getByTestId("builder").locator(`[data-pivot-zone="${name}"]`);
+  const chip = (page: Page, name: string, field: string) =>
+    zone(page, name).locator(`[data-pivot-field="${field}"]`);
+
+  test("drags a field to another area and into place", async ({ page }) => {
+    await page.goto("/pivot-table.html");
+    const country = chip(page, "available", "country");
+    const rows = zone(page, "rows");
+    // Mouse coordinates are the viewport's, so bring the list into it.
+    await page.getByTestId("builder").scrollIntoViewIfNeeded();
+    const first = chip(page, "rows", "region");
+    const target = (await first.boundingBox()) as {
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+    const from = (await country.boundingBox()) as typeof target;
+    await page.mouse.move(from.x + 20, from.y + from.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(from.x + 60, from.y + from.height / 2, { steps: 3 });
+    await page.mouse.move(target.x + 30, target.y + 2, { steps: 5 });
+    await expect(rows).toHaveClass(/bx--pivot-fields__zone--over/);
+    await expect(page.locator(".bx--pivot-fields__ghost")).toHaveText(
+      "Country",
+    );
+    await page.mouse.up();
+    // Dropped above Region, so Country is the outer row field.
+    await expect(rows.locator(".bx--pivot-fields__text")).toHaveText([
+      "Country",
+      "Region",
+    ]);
+    await expect(
+      zone(page, "available").locator(".bx--pivot-fields__text"),
+    ).not.toContainText(["Country"]);
+    await expect(page.getByTestId("moves")).toHaveText(
+      "country:available>rows;",
+    );
+    await expect(
+      grid(page, "builder").getByRole("columnheader").first(),
+    ).toHaveText("Country / Region");
+    await expect(page.locator(".bx--pivot-fields__ghost")).toHaveCount(0);
+  });
+
+  test("a press on the menu button is a click, not a drag", async ({
+    page,
+  }) => {
+    await page.goto("/pivot-table.html");
+    await chip(page, "rows", "region").getByRole("button").click();
+    await expect(page.getByRole("menu")).toBeVisible();
+    await expect(page.getByTestId("moves")).toHaveText("");
+  });
+
+  test("moves a field by its menu, with the keyboard", async ({ page }) => {
+    await page.goto("/pivot-table.html");
+    await chip(page, "available", "product").getByRole("button").focus();
+    await page.keyboard.press("Enter");
+    await page
+      .getByRole("menuitem", { name: "Move to Columns" })
+      .press("Enter");
+    await expect(
+      zone(page, "columns").locator(".bx--pivot-fields__text"),
+    ).toHaveText(["Year", "Product"]);
+    // Focus follows the field to its new area.
+    await expect(
+      chip(page, "columns", "product").getByRole("button"),
+    ).toBeFocused();
+    await expect(
+      page.getByTestId("builder").locator("[aria-live=polite]").first(),
+    ).toHaveText("Product moved to Columns");
+    await chip(page, "columns", "product").getByRole("button").press("Enter");
+    await page.getByRole("menuitem", { name: "Move up" }).press("Enter");
+    await expect(
+      zone(page, "columns").locator(".bx--pivot-fields__text"),
+    ).toHaveText(["Product", "Year"]);
+    await chip(page, "columns", "product").getByRole("button").press("Enter");
+    await page.getByRole("menuitem", { name: "Remove" }).press("Enter");
+    await expect(
+      zone(page, "columns").locator(".bx--pivot-fields__text"),
+    ).toHaveText(["Year"]);
+  });
+
+  test("changes an aggregate and filters values from the menus", async ({
+    page,
+  }) => {
+    await page.goto("/pivot-table.html");
+    const built = grid(page, "builder");
+    await chip(page, "values", "amount").getByRole("button").click();
+    await page.getByRole("menuitem", { name: "Summarize by" }).click();
+    await page.getByRole("menuitemcheckbox", { name: "Count", exact: true }).click();
+    await expect(chip(page, "values", "amount")).toContainText(
+      "Count of Amount",
+    );
+    await page.keyboard.press("Escape");
+    await expect(built.getByRole("gridcell").first()).not.toHaveText("879,805");
+
+    await chip(page, "available", "channel").getByRole("button").click();
+    await page.getByRole("menuitem", { name: "Move to Filters" }).click();
+    await chip(page, "filters", "channel").getByRole("button").click();
+    await page.getByRole("menuitem", { name: "Show values" }).click();
+    const before = await built
+      .getByRole("row")
+      .last()
+      .getByRole("gridcell")
+      .last()
+      .textContent();
+    await page.getByRole("menuitemcheckbox", { name: "Partner" }).click();
+    await page.keyboard.press("Escape");
+    await expect(
+      built.getByRole("row").last().getByRole("gridcell").last(),
+    ).not.toHaveText(before ?? "");
+  });
+
+  test("has no axe violations", async ({ page }) => {
+    await page.goto("/pivot-table.html");
+    await chip(page, "available", "country").getByRole("button").click();
+    await expect(page.getByRole("menu")).toBeVisible();
+    const results = await new AxeBuilder({ page })
+      .include("[data-testid=builder]")
+      .include(".bx--menu")
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});

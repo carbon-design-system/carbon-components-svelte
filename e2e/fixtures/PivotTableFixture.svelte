@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PivotTable } from "carbon-components-svelte";
+  import { PivotFieldList, PivotTable } from "carbon-components-svelte";
   import { onMount } from "svelte";
   import { makeSales, makeWide } from "./pivot-data";
 
@@ -18,6 +18,19 @@
 
   let basicExpandedRows: string[] = [];
   let deep: PivotTable;
+  const typed = fields.map((f) => ({
+    ...f,
+    type: ["amount", "units", "year"].includes(f.key)
+      ? ("number" as const)
+      : ("string" as const),
+  }));
+  let builder: Record<string, unknown> = {
+    rows: ["region"],
+    columns: ["year"],
+    values: [{ field: "amount" }],
+    filters: [],
+  };
+  let moves = "";
   let drilled = "";
   let toggles = "";
 
@@ -107,4 +120,23 @@
       values: [{ field: "hours", format: { maximumFractionDigits: 0 } }],
     }}
   />
+</div>
+
+<div data-testid="builder">
+  <PivotFieldList
+    fields={typed}
+    records={sales}
+    bind:config={builder}
+    on:move={(e) =>
+      (moves += `${e.detail.field}:${e.detail.from}>${e.detail.to};`)}
+  />
+  <PivotTable
+    labelText="Built pivot"
+    records={sales}
+    fields={typed}
+    size="short"
+    height={240}
+    config={builder}
+  />
+  <output data-testid="moves">{moves}</output>
 </div>

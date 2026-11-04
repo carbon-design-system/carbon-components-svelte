@@ -183,6 +183,7 @@ export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
 export { default as FluidPinCodeInputSkeleton } from "./PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";
 export { default as PinCodeInputSkeleton } from "./PinCodeInput/PinCodeInputSkeleton.svelte";
+export { default as PivotFieldList } from "./PivotTable/PivotFieldList.svelte";
 export { default as PivotTable } from "./PivotTable/PivotTable.svelte";
 export { layoutPivot, pivotToCsv } from "./PivotTable/pivot-layout.js";
 export { pivot } from "./PivotTable/pivot.js";

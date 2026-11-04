@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
+import PivotFieldList from "carbon-components-svelte/PivotTable/PivotFieldList.svelte";
 import PivotTable from "carbon-components-svelte/PivotTable/PivotTable.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
@@ -328,6 +329,15 @@ export const navigation: AriaEntry[] = [
     name: "ToggleButtonGroup",
     render: (attrs) => render(ToggleButtonGroupFixture, { props: attrs }),
     target: () => screen.getByRole("toolbar"),
+  },
+  {
+    name: "PivotFieldList",
+    render: (attrs) =>
+      render(PivotFieldList, {
+        props: { fields: [{ key: "region" }], config: {}, ...attrs },
+      }),
+    // Each area is a group too; the first is the list itself.
+    target: () => screen.getAllByRole("group")[0],
   },
   {
     name: "PivotTable",
