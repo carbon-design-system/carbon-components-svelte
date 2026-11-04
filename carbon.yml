@@ -647,6 +647,18 @@ assets:
       - shell
       - media
       - media
+  import-wizard:
+    name: Import wizard
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/import-wizard.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ImportWizard
   inline-edit:
     name: Inline edit
     status: stable

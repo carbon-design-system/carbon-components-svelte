@@ -1,0 +1,133 @@
+---
+components: ["ImportWizard"]
+description: Import wizards bring a CSV or Excel file into an app. Users upload it, match its columns to fields, fix the rows that fail validation, then import them with progress.
+---
+
+## Basic
+
+Pass the `fields` of the data you import and an `onImport` function. The wizard reads the file, matches each column to a field by name, alias and similarity, and lets the user correct a match. Every row is checked against its field's type and rules. The user fixes the cells that fail, in place, and `onImport` receives the valid rows in chunks.
+
+Download the sample file to try the whole flow. It has a misspelled email, rows with a role that doesn't exist, a number written as "many" and a repeated email.
+
+<FileSource src="/framed/ImportWizard/ImportWizardUsers" />
+
+## Fields
+
+Each field has a `key`, a `label` and a `type`. A field with `required: true` must have a column, and its cells can't be empty. `aliases` list the other names a column may have, such as "Mail" for Email.
+
+| Type | Accepts | Converts to |
+| --- | --- | --- |
+| `string` | Any text | The trimmed text |
+| `number`, `integer` | `42`, `-3.5`, `1,234.56`, or `1.234,56` with `decimal: ","` | A number |
+| `boolean` | yes, no, y, n, true, false, 1, 0, on, off | `true` or `false` |
+| `date` | The `dateFormats` of the field: `YYYY-MM-DD`, `MM/DD/YYYY`, `DD/MM/YYYY`, `DD.MM.YYYY`, `serial` | `YYYY-MM-DD` |
+| `email` | An address | The lowercase address |
+| `enum` | An option's `value`, `label` or one of its `aliases` | The option's `value` |
+
+Rules apply on top of the type: `minLength`, `maxLength`, `min`, `max` and `pattern`, with `patternMessage` for the text.
+
+### Custom validation
+
+`validate(value, record)` on a field returns a message for a bad value. `validateRow(record, index)` on the wizard runs once every cell of a row is valid, so it can compare fields, and returns a message for the row or an object of messages by field key.
+
+<FileSource src="/framed/ImportWizard/ImportWizardCrossField" />
+
+### Value mapping
+
+When a column of an `enum` or `boolean` field holds values that match no option, the Map step lists them with their counts. The user matches each one to an option, such as "Current" to Yes, and the choice applies to every row. A `date` field with several `dateFormats` picks the format that reads most of the column, and the user can change it.
+
+## Duplicates
+
+Set `keyField` to the field that identifies a row. A later row with the same value, ignoring case and spaces, is a duplicate of the first. `duplicates` decides what happens to it.
+
+| Value | Duplicate rows |
+| --- | --- |
+| `"skip"` | Left out, and counted apart from the errors |
+| `"error"` | Errors to fix, by changing the key or removing the row |
+| `"keep"` | Imported |
+
+<FileSource src="/framed/ImportWizard/ImportWizardDuplicates" />
+
+## Review
+
+The review step lists the rows with a problem. A cell that fails is an input with its message beneath it: type a fix and press <DocKbd label="Enter" />, and the row leaves the list once it is valid, with focus moving to the next problem. The table is virtualized, so a file of 100,000 rows stays responsive.
+
+| Control | Does |
+| --- | --- |
+| Show only rows with errors | Switches between the rows that need attention and every row |
+| Find and replace | Replaces text in one field's failing cells, such as "N/A" with nothing. Common bad values are offered as shortcuts |
+| Remove rows with errors | Removes every row that fails, at once |
+| The remove button of a row | Removes that row |
+
+## Import
+
+`onImport(records, { signal, chunk, chunks, offset })` receives each chunk of converted rows, `chunkSize` at a time (500 by default). A progress bar follows the chunks and the user can cancel; `signal` aborts so a request can stop.
+
+| `onImport` | Effect |
+| --- | --- |
+| Resolves | Every row of the chunk is imported |
+| Resolves `{ errors: [{ index, message }] }` | The named rows failed, the others are imported |
+| Throws or rejects | Every row of the chunk failed, and the import goes on with the next chunk, or stops with `stopOnError` |
+
+The result shows what was imported and what wasn't, and "Download rows not imported" saves a CSV of the original rows with the row number and the reason. The `complete` event carries the same result.
+
+## Files
+
+### Formats
+
+CSV (comma, semicolon, tab or pipe, found from the first rows), TSV and XLSX. The first visible sheet of a workbook is read, and cells with a date format become `YYYY-MM-DD`. Set `hasHeader` to `false` when the first row is data; the user can also toggle it in the Upload step.
+
+### Encoding and malformed files
+
+The file is read as UTF-8, with a byte order mark removed, or as UTF-16 when it has the mark Excel writes for "Unicode text". A file that is not valid UTF-8, such as an older Excel export, is read as Windows-1252. A `sep=;` first line, which Excel writes, is honored.
+
+A quote that never closes, text after a closing quote, and rows with fewer or more values than the header are reported in the Upload step. A short row is padded, since spreadsheets drop trailing empty cells. A long row is an error in the review, because its extra values would be lost.
+
+### Large files
+
+A file is read as a stream in a Web Worker, so the page stays responsive: 100,000 rows of 20 columns read in about 300 ms. Checking the rows runs in slices, and the review table renders only the rows in view. Set `maxRows` to stop reading at a limit, and `maxFileSize` to refuse a large file.
+
+`worker` controls where the file is read. `"auto"` creates the worker from an inline Blob, and falls back to the main thread, still in chunks, when there is no `Worker` or a content security policy blocks `blob:` workers. With a strict policy, host the worker yourself and return it from a function.
+
+```svelte
+<ImportWizard
+  {fields}
+  worker={() =>
+    new Worker(
+      new URL("carbon-components-svelte/src/ImportWizard/csv.worker.js", import.meta.url),
+      { type: "module" },
+    )}
+/>
+```
+
+## Parse only
+
+`parseFile`, `autoMap` and `createImportSession` are exported on their own, for a flow that doesn't use the wizard's steps. `parseFile` takes a file and returns the rows with the format, delimiter, encoding and issues.
+
+<FileSource src="/framed/ImportWizard/ImportWizardParseOnly" />
+
+## Text
+
+Every string the wizard shows is replaceable. Pass `translateWithId`, a function of an id such as `"step.map"` or `"import.done"` and the values to fill in. `messages` replaces the validation messages, one function per message. Handle the ids you change and fall back to `defaultTranslate` for the rest.
+
+```svelte
+<script>
+  import { ImportWizard } from "carbon-components-svelte";
+  import { defaultTranslate } from "carbon-components-svelte/src/ImportWizard/import-wizard-text.js";
+
+  const translateWithId = (id, values) =>
+    id === "step.map" ? "Match columns" : defaultTranslate(id, values);
+</script>
+
+<ImportWizard {fields} {translateWithId} />
+```
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Give every field a label users know and the aliases your exports use. | Matching uses them, and a column that matches needs no work. |
+| Mark a field `required` only when a row is useless without it. | Every required field must have a column before the user can continue. |
+| Set `keyField` when a repeated row would do harm. | Duplicates are found for you, with the row they repeat. |
+| Send the rows in chunks the server can take in one request. | A failed chunk fails only its rows, and the user gets a file of what to retry. |
+| Don't import in `validate`. | Validation runs again on every edit; import in `onImport`. |
