@@ -1,6 +1,5 @@
 {
   "Bleed/Bleed.svelte": 1,
   "Link/LinkDownload.svelte": 1,
-  "Select/Select.svelte": 1,
-  "TagSet/TagSetOverflow.svelte": 1
+  "Select/Select.svelte": 1
 }

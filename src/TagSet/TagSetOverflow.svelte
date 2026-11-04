@@ -49,7 +49,7 @@
   /**
    * Obtain a reference to the popover content, with `mode="popover"`.
    * @bindable readonly
-   * @type {null | HTMLElement}
+   * @type {null | HTMLDivElement}
    */
   export let contentRef = null;
 
