@@ -1,5 +1,5 @@
 ---
-components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "ToolbarDensity", "ToolbarColumnVisibility", "DataTableSkeleton"]
+components: ["DataTable", "Pagination","Toolbar", "ToolbarContent", "ToolbarSearch", "ToolbarMenu", "ToolbarMenuItem", "ToolbarBatchActions", "ToolbarDensity", "ToolbarColumnVisibility", "ToolbarExport", "DataTableSkeleton"]
 description: Data tables display structured data in rows and columns, with sorting, filtering, pagination, virtualization, and row selection and expansion.
 ---
 
@@ -1001,6 +1001,32 @@ Compose [SearchMenu](/components/SearchMenu) in the toolbar for a search typeahe
 Serialize headers and rows to a CSV string with `toCsv`. It applies each column's `display` formatting and skips empty and hidden columns, so the export matches what the table renders. It returns a string instead of triggering a download; pass the result to [`downloadFile`](/components/Link#download-link) (or wire it into [`LinkDownload`](/components/Link#download-link)) when you want a file. Export the current view by passing the rows matching `filteredRowIds`; values a spreadsheet would read as formulas are prefixed with a single quote unless `escapeFormulas` is `false`.
 
 <FileSource src="/framed/DataTable/DataTableExport" />
+
+### Toolbar menu
+
+Add `ToolbarExport` to a `Toolbar` for a ready-made export menu. It adds one item per entry in `formats` (`"csv"`, `"tsv"` and `"json"`), applies the same rules as `toCsv` and `toJson`, and starts the download. Press <DocKbd label="Escape" /> to close the menu and return focus to its trigger. Set `iconOnly` to `false` for a text trigger that matches the buttons in `ToolbarBatchActions`.
+
+`rowScope` picks the rows, always in the order the table shows them:
+
+| `rowScope` | Rows exported |
+| --- | --- |
+| `"filtered"` (default) | Every row that matches the search, across all pages |
+| `"page"` | The rows on the current page |
+| `"selected"` | The selected rows that match the search |
+
+| Do | Why |
+| --- | --- |
+| Use `rowScope="selected"` inside `ToolbarBatchActions`. | The batch bar replaces the toolbar while rows are selected, so the export has to live there. |
+| Give each `ToolbarExport` a distinct `labelText`. | Every trigger shows the same icon, and `labelText` is its accessible name. |
+| Set `bom` for csv files that hold non-ASCII text. | Excel reads a file without a byte order mark as a legacy code page. |
+
+<FileSource src="/framed/DataTable/DataTableToolbarExport" />
+
+### Server-side export
+
+`ToolbarExport` only sees the rows the table holds. When the table shows one page of a larger result, `rowScope="filtered"` exports that page. Call `preventDefault()` on the `export` event to skip the built-in file, then request the full result and pass it to `toCsv` and `downloadFile`.
+
+<FileSource src="/framed/DataTable/DataTableToolbarExportServer" />
 
 ## Filtering
 

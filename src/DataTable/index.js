@@ -13,6 +13,7 @@ export { default as ToolbarBatchActions } from "./ToolbarBatchActions.svelte";
 export { default as ToolbarColumnVisibility } from "./ToolbarColumnVisibility.svelte";
 export { default as ToolbarContent } from "./ToolbarContent.svelte";
 export { default as ToolbarDensity } from "./ToolbarDensity.svelte";
+export { default as ToolbarExport } from "./ToolbarExport.svelte";
 export { default as ToolbarMenu } from "./ToolbarMenu.svelte";
 export { default as ToolbarMenuItem } from "./ToolbarMenuItem.svelte";
 export { default as ToolbarSearch } from "./ToolbarSearch.svelte";
