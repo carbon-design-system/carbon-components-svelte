@@ -54,6 +54,7 @@
    */
   const part = formParts.part;
 
+  /** @type {import("svelte/store").Writable<{ id: string, labelId: string | undefined, describedBy: string | undefined, invalid: boolean }>} */
   const controlState = writable({
     id: controlId,
     labelId: undefined,
@@ -93,6 +94,7 @@
       !node.hasAttribute("aria-label");
     const ownInvalid = node.getAttribute("aria-invalid") ?? undefined;
     let appliedInvalid = false;
+    /** @type {{ id: string, labelId: string | undefined, describedBy: string | undefined, invalid: boolean }} */
     let state;
     /** @type {string | undefined} */
     let describedBy;

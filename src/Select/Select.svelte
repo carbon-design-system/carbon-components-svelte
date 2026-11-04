@@ -134,8 +134,11 @@
    * @type {import("svelte/store").Writable<string | number | undefined>}
    */
   const selectedValue = writable(selected);
+  /** @type {import("svelte/store").Writable<string | null>} */
   const defaultSelectId = writable(null);
+  /** @type {import("svelte/store").Writable<string | number | null>} */
   const defaultValue = writable(null);
+  /** @type {import("svelte/store").Writable<Record<string, string>>} */
   const itemTypesByValue = writable({});
   // Every `SelectItem` registers itself from its own script body during the
   // same synchronous mount pass; batch those updates into one flush instead
@@ -179,6 +182,7 @@
       return;
     }
 
+    /** @type {string | number} */
     let value = select.value;
 
     if ($itemTypesByValue[value] === "number") {
@@ -212,12 +216,13 @@
     }
   }
 
+  /** @type {string | number | null | undefined} */
   let prevSelected = null;
 
   afterUpdate(() => {
     if (selected !== $selectedValue) {
       const isInitialRender = prevSelected === null;
-      selected = $selectedValue;
+      selected = /** @type {Value | undefined} */ ($selectedValue);
       if (!isInitialRender) {
         dispatch("update", $selectedValue);
       }

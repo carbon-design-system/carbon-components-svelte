@@ -121,6 +121,7 @@
   /** @param {Event} event */
   function handleSelectChange(event) {
     const select = /** @type {HTMLSelectElement} */ (event.target);
+    /** @type {string | number} */
     let next = select.value;
     if (itemTypesByValue[next] === "number") next = Number(next);
     selectedValue.set(next);

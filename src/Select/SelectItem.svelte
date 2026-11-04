@@ -50,9 +50,12 @@
 
   let selected = false;
 
-  const unsubscribe = ctx.selectedValue.subscribe((currentValue) => {
-    selected = currentValue === value;
-  });
+  const unsubscribe = ctx.selectedValue.subscribe(
+    /** @param {string | number | null | undefined} currentValue */
+    (currentValue) => {
+      selected = currentValue === value;
+    },
+  );
 
   onMount(() => {
     return () => {

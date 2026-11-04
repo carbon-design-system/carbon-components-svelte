@@ -69,7 +69,9 @@
     xl: undefined,
   });
 
+  /** @type {import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
+  /** @type {import("svelte/store").Writable<undefined | "xs" | "sm" | "md" | "xl">} */
   const ownSize = writable(normalizeSize(size, FIELD_SIZE_ALIASES));
   $: ownSize.set(normalizeSize(size, FIELD_SIZE_ALIASES));
 

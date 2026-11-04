@@ -228,6 +228,7 @@
     return formatSliderRangeLabel(label, numericValue, formatValue);
   }
 
+  /** @type {(e: PointerEvent) => boolean | undefined} */
   function handleDragStart(event) {
     if (effectiveDisabled || readonly) return false;
     readDirection();
@@ -248,10 +249,13 @@
     }
   }
 
+  /** @type {(e: PointerEvent) => void} */
   function calcValue(event) {
     if (effectiveDisabled || readonly || !event) return;
 
-    const rect = trackRef.getBoundingClientRect();
+    const rect = /** @type {HTMLDivElement} */ (
+      trackRef
+    ).getBoundingClientRect();
     let nextValue = valueFromPointer(event, rect, {
       orientation,
       min,
@@ -261,7 +265,9 @@
     });
     if (nextValue == null) return;
     if (snapToMarks && resolvedMarks.length) {
-      nextValue = nearestMark(nextValue, resolvedMarks).value;
+      nextValue = /** @type {{ value: number }} */ (
+        nearestMark(nextValue, resolvedMarks)
+      ).value;
     } else {
       nextValue =
         markNearPointer(event, rect, {
@@ -431,6 +437,7 @@
 
           // Left and right move the thumb the way they point, as they do
           // on a native range input in RTL.
+          /** @type {Record<string, number>} */
           const keys = {
             ArrowDown: -1,
             ArrowLeft: horizontalRtl ? 1 : -1,

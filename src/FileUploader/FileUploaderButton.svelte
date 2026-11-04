@@ -188,6 +188,7 @@
   let initialLabelText = labelText;
   // The label a pick last wrote. Any other `labelText` came from the
   // consumer (e.g. a locale change), so clearing restores that instead.
+  /** @type {string | undefined} */
   let fileLabel;
 
   // Determine if this is icon-only (has icon but no label content)
@@ -360,7 +361,11 @@
   class:bx--visually-hidden={true}
   {...inputRestProps}
   on:change={(event) => {
-    processIncoming([.../** @type {HTMLInputElement} */ (event.target).files]);
+    processIncoming([
+      .../** @type {FileList} */ (
+        /** @type {HTMLInputElement} */ (event.target).files
+      ),
+    ]);
   }}
   on:click
   on:click={(event) => {

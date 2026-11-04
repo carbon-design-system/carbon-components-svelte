@@ -226,6 +226,10 @@
    * only to whichever declared itself first (the same check `declareRef`
    * uses to split `inputRef` from `inputRefTo`), so the restore runs once.
    */
+  /**
+   * @param {HTMLElement} node
+   * @param {() => void} onReset
+   */
   function attachFormReset(node, onReset) {
     if ($inputIds.indexOf(id) !== 0) return {};
     return formReset(node, onReset);

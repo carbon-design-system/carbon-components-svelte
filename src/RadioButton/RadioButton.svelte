@@ -141,6 +141,7 @@
   /**
    * Initialize registry for standalone mode with name.
    */
+  /** @param {string | undefined} radioName */
   function initRegistry(radioName) {
     // Clean up previous registration if any
     cleanupRegistry();

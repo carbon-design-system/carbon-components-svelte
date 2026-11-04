@@ -221,11 +221,13 @@
 
   /** @type {(nextChecked: boolean) => void} */
   function setGroupMembership(nextChecked) {
-    const hasValue = group.includes(value);
+    const hasValue = /** @type {ReadonlyArray<T>} */ (group).includes(value);
     if (nextChecked && !hasValue) {
-      group = [...group, value];
+      group = [.../** @type {ReadonlyArray<T>} */ (group), value];
     } else if (!nextChecked && hasValue) {
-      group = group.filter((_value) => _value !== value);
+      group = /** @type {ReadonlyArray<T>} */ (group).filter(
+        (_value) => _value !== value,
+      );
     }
   }
 

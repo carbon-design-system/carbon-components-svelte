@@ -174,16 +174,19 @@
     .join(" ");
 
   /** An outside change shows in the input, and is the new baseline unless editing. */
+  /** @param {string} nextValue */
   function syncFromValue(nextValue) {
     draft = nextValue;
     if (!focused) initialValue = nextValue;
   }
 
+  /** @param {string} nextValue */
   function setValue(nextValue) {
     draft = nextValue;
     value = nextValue;
   }
 
+  /** @param {EventTarget | null | undefined} relatedTarget */
   function isTargetingChild(relatedTarget) {
     return (
       relatedTarget instanceof Node && containerRef?.contains(relatedTarget)
@@ -199,6 +202,7 @@
     focused = true;
   }
 
+  /** @param {boolean} exitEditMode */
   function handleSave(exitEditMode) {
     initialValue = draft;
     dispatch("save");
@@ -211,6 +215,7 @@
     }
   }
 
+  /** @param {boolean} exitEditMode */
   function handleCancel(exitEditMode) {
     setValue(initialValue);
     dispatch("cancel");
@@ -258,6 +263,7 @@
     focused = false;
   }
 
+  /** @param {KeyboardEvent} event */
   function handleKeyDown(event) {
     // Enter commits and Escape cancels an IME composition, not the edit.
     if (isImeComposition(event)) return;

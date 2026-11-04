@@ -232,13 +232,13 @@
     class:bx--file-browse-btn--full-width={fullWidth}
     class:bx--file-browse-btn--disabled={effectiveDisabled}
     on:click={() => {
-      if (!effectiveDisabled) ref.click();
+      if (!effectiveDisabled) /** @type {HTMLInputElement} */ (ref).click();
     }}
     on:keydown
     on:keydown={(event) => {
       if (event.key === " " || event.key === "Enter") {
         event.preventDefault();
-        if (!effectiveDisabled) ref.click();
+        if (!effectiveDisabled) /** @type {HTMLInputElement} */ (ref).click();
       }
     }}
   >
@@ -265,7 +265,11 @@
     {multiple}
     class:bx--file-input={true}
     on:change={({ target }) => {
-      processIncoming([.../** @type {HTMLInputElement} */ (target).files]);
+      processIncoming([
+        .../** @type {FileList} */ (
+          /** @type {HTMLInputElement} */ (target).files
+        ),
+      ]);
     }}
     on:click
     on:click={(event) => {
