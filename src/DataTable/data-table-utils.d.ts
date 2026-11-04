@@ -189,3 +189,57 @@ export type DataTableSortValue<Row> = Row extends object
       : never
     : never
   : never;
+
+/** The narrowest a resized column gets. */
+export const MIN_COLUMN_WIDTH: number;
+
+/** Where a column without a `maxWidth` stops growing. */
+export const MAX_COLUMN_WIDTH: number;
+
+/**
+ * A length in pixels: a number, or `"120px"`. Anything else has no pixel
+ * width until it is laid out.
+ */
+export function parsePixelWidth(
+  value: string | number | null | undefined,
+): number | undefined;
+
+/** The pixel range a column can be resized to. */
+export function resolveColumnBounds(header: {
+  minWidth?: string | number | null;
+  maxWidth?: string | number | null;
+}): { min: number; max: number };
+
+/** The least an unsized resizable column takes before the first drag. */
+export const UNSIZED_COLUMN_MIN_WIDTH: string;
+
+/**
+ * The table's minimum width while a column is still unsized, so a narrow
+ * container scrolls the fixed layout instead of squeezing it.
+ */
+export function formatTableMinWidth(
+  leading: ReadonlyArray<string>,
+  headers: ReadonlyArray<{
+    key: string;
+    width?: string | number | null;
+    minWidth?: string | number | null;
+  }>,
+  widths: Record<string, number | undefined>,
+): string;
+
+/**
+ * The table's width once every column has a pixel width, or `undefined`
+ * while any is unsized.
+ */
+export function formatTableWidth(
+  leading: ReadonlyArray<string>,
+  headers: ReadonlyArray<{ key: string }>,
+  widths: Record<string, number | undefined>,
+): string | undefined;
+
+/** CSS lengths of the leading columns in render order. */
+export function leadingColumnLengths(
+  decorator: boolean,
+  expand: boolean,
+  selection: boolean,
+): string[];
