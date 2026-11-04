@@ -239,8 +239,7 @@
   /** True while Shift is held during a mousedown gesture inside the group; suppresses the browser's native Shift+click text-selection highlight spanning multiple tiles. */
   let shiftMouseActive = false;
 
-  // The context type is public API: keep it as it was.
-  /** @type {import("svelte/store").Writable<"sm" | "md">} */
+  /** @type {import("svelte/store").Writable<"sm" | "md" | undefined>} */
   const groupSize = writable(size);
   $: groupSize.set(size);
 

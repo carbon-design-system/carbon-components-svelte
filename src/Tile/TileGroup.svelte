@@ -168,8 +168,7 @@
     );
   }
 
-  // The context type is public API: keep it as it was.
-  /** @type {import("svelte/store").Writable<"sm" | "md">} */
+  /** @type {import("svelte/store").Writable<"sm" | "md" | undefined>} */
   const groupSize = writable(size);
   $: groupSize.set(size);
 

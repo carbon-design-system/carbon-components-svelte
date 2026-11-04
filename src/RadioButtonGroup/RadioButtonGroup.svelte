@@ -148,8 +148,7 @@
   // group has no `name` either.
   /** @type {string} */
   const fallbackName = uniqueId();
-  // The context type is public API: keep it as it was.
-  /** @type {import("svelte/store").Writable<boolean>} */
+  /** @type {import("svelte/store").Writable<boolean | undefined>} */
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupAllowDeselect = writable(allowDeselect);

@@ -141,7 +141,7 @@
    * Receives the current raw input string and locale.
    * Return `true` to force valid, `false` to force invalid,
    * or `undefined` to defer to built-in validation.
-   * @type {(value: string, locale: string | undefined) => boolean | undefined}
+   * @type {((value: string, locale: string | undefined) => boolean | undefined) | undefined}
    * @example
    * ```svelte
    * <NumberInput validate={(raw) => Number(raw) % 2 === 0} invalidText="Must be even" />

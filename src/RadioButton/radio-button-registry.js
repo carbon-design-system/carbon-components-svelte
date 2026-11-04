@@ -79,10 +79,11 @@ function unregisterRadioButton(name, key) {
  * Update the selected key for a name group.
  * Called when a radio button in the group is selected.
  *
- * @param {string} name - The radio button name (group identifier)
+ * @param {string | undefined} name - The radio button name (group identifier)
  * @param {InstanceKey} key - The key of the newly selected instance
  */
 export function updateGroupSelection(name, key) {
+  if (name === undefined) return;
   const group = groups.get(name);
   if (group) {
     group.selectedKey.set(key);

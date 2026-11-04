@@ -18,7 +18,10 @@ export function registerRadioButton(
   checked: boolean,
 ): RegisterResult;
 
-export function updateGroupSelection(name: string, key: InstanceKey): void;
+export function updateGroupSelection(
+  name: string | undefined,
+  key: InstanceKey,
+): void;
 
 export function getGroup(name: string): RadioGroup | undefined;
 
