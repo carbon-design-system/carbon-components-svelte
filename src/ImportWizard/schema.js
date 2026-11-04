@@ -74,7 +74,7 @@ export const defaultMessages = {
 
 const TRUE = new Set(["true", "yes", "y", "1", "t", "on", "x"]);
 const FALSE = new Set(["false", "no", "n", "0", "f", "off"]);
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SPACE = /\s/;
 const SPACES = /[\s\u00a0']/g;
 const SIGN = /^[+-]/;
 const SCIENTIFIC = /^\d+(\.\d+)?[eE][+-]?\d+$/;
@@ -82,6 +82,20 @@ const DATE_ISO = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ].*)?$/;
 const DATE_SLASH = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 const DATE_DOT = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
 const SERIAL = /^\d{1,7}(\.\d+)?$/;
+
+/**
+ * A cheap address check without a backtracking pattern: one "@", text on
+ * both sides, and a dot inside the domain. A pattern over file contents
+ * can take polynomial time on a hostile cell.
+ * @param {string} text
+ */
+function isEmail(text) {
+  if (SPACE.test(text)) return false;
+  const at = text.indexOf("@");
+  if (at < 1 || text.indexOf("@", at + 1) !== -1) return false;
+  const dot = text.lastIndexOf(".");
+  return dot > at + 1 && dot < text.length - 1;
+}
 
 /**
  * Parse a number, with or without thousands separators.
@@ -218,7 +232,12 @@ export function convertCell(field, raw, transform, messages = defaultMessages) {
       ? { error: messages.required(field) }
       : { value: null };
   }
-  const mapped = transform?.valueMap?.[text.toLowerCase()];
+  const valueMap = transform?.valueMap;
+  const lower = text.toLowerCase();
+  // Only a string is a mapped value, so a cell reading "constructor" doesn't
+  // find Object's.
+  const found = valueMap?.[lower];
+  const mapped = typeof found === "string" ? found : undefined;
   const type = field.type || "string";
   /** @type {any} */
   let value = text;
@@ -243,7 +262,7 @@ export function convertCell(field, raw, transform, messages = defaultMessages) {
     value = out;
   } else if (type === "email") {
     value = text.toLowerCase();
-    if (!EMAIL.test(text)) return { error: messages.email(field) };
+    if (!isEmail(text)) return { error: messages.email(field) };
   } else if (type === "enum") {
     const out = matchOption(field, mapped ?? text);
     if (out === undefined) return { error: messages.enum(field) };

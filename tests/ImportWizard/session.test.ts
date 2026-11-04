@@ -216,6 +216,28 @@ describe("import session", () => {
     });
   });
 
+  it("refuses a field key that names a prototype", () => {
+    for (const key of ["__proto__", "constructor", "prototype"]) {
+      expect(() =>
+        createImportSession({
+          fields: [{ key, label: "X" }],
+          headers: ["X"],
+          rows: [["1"]],
+          mapping: [key],
+        }),
+      ).toThrow("can't be the key of a field");
+    }
+  });
+
+  it("ignores an edit to a row that doesn't exist", async () => {
+    const session = make(base);
+    await session.validate();
+    session.setCell(-1, "name", "x");
+    session.setCell(99, "name", "x");
+    session.setCell(Number.NaN, "name", "x");
+    expect(session.summary().total).toBe(4);
+  });
+
   it("validates in slices and can be aborted", async () => {
     const records = [["Name", "Email"]];
     for (let i = 0; i < 20000; i++)

@@ -4,6 +4,9 @@ import { convertCell, defaultMessages } from "./schema.js";
 /** The key under which a problem with a whole row (not one cell) is stored. */
 export const ROW_ERROR = "$row";
 
+/** Field keys that would write to an object's prototype. */
+const UNSAFE_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
 /**
  * @typedef {import("./schema.js").ImportField} ImportField
  * @typedef {import("./schema.js").CellTransform} CellTransform
@@ -61,6 +64,11 @@ export const ROW_ERROR = "$row";
  */
 export function createImportSession(config) {
   const { fields, headers, rows } = config;
+  for (const field of config.fields) {
+    if (UNSAFE_KEYS.has(field.key)) {
+      throw new Error(`"${field.key}" can't be the key of a field`);
+    }
+  }
   const messages = { ...defaultMessages, ...config.messages };
   const transforms = config.transforms || {};
   const policy = config.duplicates || "skip";
@@ -216,6 +224,7 @@ export function createImportSession(config) {
   function setCell(id, fieldKey, text) {
     const column = columnOf.get(fieldKey);
     if (column === undefined || removed.has(id)) return;
+    if (!Number.isInteger(id) || id < 0 || id >= rows.length) return;
     rows[id][column] = text;
     check(id);
     if (column === keyColumn) findDuplicates();

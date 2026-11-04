@@ -256,6 +256,48 @@ describe("convertCell", () => {
   });
 });
 
+describe("hostile cells", () => {
+  it("checks an address in linear time", () => {
+    const email = { key: "e", label: "E", type: "email" as const };
+    const started = performance.now();
+    const result = convertCell(email, `!@!.${"!.".repeat(50_000)}`);
+    expect(performance.now() - started).toBeLessThan(500);
+    expect(result).toHaveProperty("error");
+    expect(convertCell(email, `a@b${"@".repeat(50_000)}`)).toHaveProperty(
+      "error",
+    );
+  });
+
+  it.each([
+    ["a@b.c", true],
+    ["first.last+tag@sub.example.com", true],
+    ["a@b", false],
+    ["@b.c", false],
+    ["a@@b.c", false],
+    ["a b@c.d", false],
+    ["a@b.", false],
+    ["a@.b", false],
+  ])("reads %s as an address: %s", (text, ok) => {
+    const email = { key: "e", label: "E", type: "email" as const };
+    expect("value" in convertCell(email, text)).toBe(ok);
+  });
+
+  it("doesn't find Object's members in a value map", () => {
+    const role = {
+      key: "r",
+      label: "Role",
+      type: "enum" as const,
+      options: ["admin"],
+    };
+    expect(
+      convertCell(role, "constructor", { valueMap: { guest: "admin" } }),
+    ).toHaveProperty("error");
+    expect(convertCell(role, "__proto__", { valueMap: {} })).toHaveProperty(
+      "error",
+    );
+  });
+});
+
 describe("unmatchedValues", () => {
   it("lists values that match no option, most frequent first", () => {
     const field = {
