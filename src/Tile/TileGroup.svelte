@@ -155,15 +155,16 @@
     // winner back, or none. `selectedValue.set` alone reaches `selected` via
     // the existing `$: selected = $selectedValue;` — do not call `update()`,
     // which also dispatches `select`; a reset fires no events. The input
-    // holds a string, so map it back to the tile's own value.
+    // holds a string, so map it back to the tile's own value; a checked radio
+    // that's no tile's leaves none selected.
     const checkedInput = /** @type {HTMLInputElement | null} */ (
       fieldsetRef.querySelector('input[type="radio"]:checked')
     );
     selectedValue.set(
       checkedInput
-        ? ([...mountedValues.keys()].find(
+        ? [...mountedValues.keys()].find(
             (value) => String(value) === checkedInput.value,
-          ) ?? checkedInput.value)
+          )
         : undefined,
     );
   }

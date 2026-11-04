@@ -60,6 +60,21 @@ describe("TileGroup form reset", () => {
     expect(radioB.nextElementSibling).toHaveClass("bx--tile--is-selected");
   });
 
+  it("selects no tile when the checked radio is no tile's", async () => {
+    render(TileGroupForm, { props: { selected: "a" } });
+    const [radioA] = getRadios();
+    const stray = document.createElement("input");
+    stray.type = "radio";
+    stray.value = "stray";
+    stray.defaultChecked = true;
+    radioA.closest("fieldset")?.append(stray);
+
+    await resetForm();
+
+    expect(stray).toBeChecked();
+    expect(getBoundText()).toBe("undefined");
+  });
+
   it("leaves the selection alone when the reset is canceled", async () => {
     const onSelect = vi.fn();
     render(TileGroupForm, { props: { selected: "a", onSelect } });
