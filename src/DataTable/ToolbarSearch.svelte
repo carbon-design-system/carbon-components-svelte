@@ -93,6 +93,7 @@
   import { getContext, onMount, tick } from "svelte";
   import Search from "../Search/Search.svelte";
   import { debounce as debounceFn } from "../utils/debounce.js";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { rowsEqual } from "./data-table-utils.js";
 
   const ctx = getContext("carbon:DataTable") ?? {};
@@ -242,7 +243,7 @@
 <Search
   size="xl"
   {labelText}
-  {tabindex}
+  tabindex={tabindexAttribute(tabindex)}
   {disabled}
   {selectTextOnFocus}
   {...$$restProps}

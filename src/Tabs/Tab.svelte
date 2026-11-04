@@ -94,6 +94,7 @@
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -235,11 +236,13 @@
   <a
     bind:this={ref}
     role={$navigation ? undefined : "tab"}
-    tabindex={$navigation
-      ? undefined
-      : (hasSelection ? !selected : disabled)
-        ? "-1"
-        : tabindex}
+    tabindex={tabindexAttribute(
+      $navigation
+        ? undefined
+        : (hasSelection ? !selected : disabled)
+          ? "-1"
+          : tabindex,
+    )}
     aria-selected={$navigation ? undefined : selected}
     aria-current={$navigation && selected ? "page" : undefined}
     aria-disabled={disabled}

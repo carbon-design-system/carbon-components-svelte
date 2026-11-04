@@ -100,6 +100,7 @@
   import OperationalTag from "../Tag/OperationalTag.svelte";
   import Tag from "../Tag/Tag.svelte";
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
+  import { tabindexAttribute } from "../utils/tabindex.js";
 
   // The indicator is presentational, not a registered group item — shadow
   // the context so it can't be mistaken for one.
@@ -171,7 +172,7 @@
       bind:open
       {id}
       {size}
-      {tabindex}
+      tabindex={tabindexAttribute(tabindex)}
       align={overflowAlign}
       direction={overflowDirection}
       class="bx--tag-set-overflow__popover-trigger"

@@ -121,6 +121,7 @@
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formReset } from "../utils/form-reset.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
@@ -226,7 +227,7 @@
     aria-label={ariaLabel}
     aria-describedby={ariaDescribedBy}
     aria-labelledby={ariaLabelledBy}
-    tabindex={effectiveDisabled ? -1 : tabindex}
+    tabindex={tabindexAttribute(effectiveDisabled ? -1 : tabindex)}
     aria-disabled={effectiveDisabled || undefined}
     class:bx--file-browse-btn={true}
     class:bx--file-browse-btn--full-width={fullWidth}

@@ -43,6 +43,7 @@
   import { getContext, onMount } from "svelte";
   import { readable, writable } from "svelte/store";
   import { noop } from "../utils/noop.js";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const initialChecked = checked;
@@ -83,7 +84,7 @@
   <input
     bind:this={ref}
     type={$multiple ? "checkbox" : "radio"}
-    {tabindex}
+    tabindex={tabindexAttribute(tabindex)}
     {checked}
     {id}
     name={groupName}

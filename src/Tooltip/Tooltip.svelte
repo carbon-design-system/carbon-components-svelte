@@ -139,6 +139,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -493,7 +494,7 @@
       ariaLabelledBy ??
       (ariaLabel ? undefined : triggerText ? triggerId : undefined),
     "aria-label": ariaLabel ?? (triggerText ? undefined : iconDescription),
-    tabindex,
+    tabindex: tabindexAttribute(tabindex),
     style: hideIcon ? $$restProps.style : undefined,
   };
 </script>

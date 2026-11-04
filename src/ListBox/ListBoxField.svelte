@@ -25,6 +25,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:MultiSelect");
@@ -58,7 +59,7 @@
   aria-controls={expanded ? menuId : undefined}
   aria-disabled={disabled ? "true" : "false"}
   aria-readonly={readonly ? "true" : undefined}
-  tabindex={disabled ? "-1" : tabindex}
+  tabindex={tabindexAttribute(disabled ? "-1" : tabindex)}
   class:bx--list-box__field={true}
   {...$$restProps}
   on:click
