@@ -1,0 +1,144 @@
+---
+components: ["DockLayout"]
+description: Dock layouts arrange document tabs in resizable groups that people drag, split and merge, as in a code editor or a notebook.
+---
+
+## Basic
+
+A dock layout is a tree. Splits hold groups, and each group is a strip of tabs over the panel of the selected one. Pass the `documents` the tabs stand for, bind `layout`, and render each document in the `panel` slot. The dock fills its container, so give the container a height.
+
+Drag a tab onto the edge of a group to split it, onto the middle to join it, or onto its strip to place it among the tabs. Drag a separator, or focus it and use the arrow keys, to resize. Close the last tab of a group and its split collapses.
+
+<FileSource src="/framed/DockLayout/DockLayoutBasic" />
+
+## Layout
+
+### Layout tree
+
+The layout is a plain object that survives `JSON.stringify`. A group holds the ids of its tabs and the id of the active one. A row places its children side by side, a column stacks them, and `sizes` gives each child's share as a percentage.
+
+```js
+const layout = {
+  type: "row",
+  sizes: [60, 40],
+  children: [
+    { type: "group", id: "group-1", tabs: ["main", "variables"], activeId: "main" },
+    { type: "group", id: "group-2", tabs: ["readme"] },
+  ],
+};
+```
+
+Rows run from the inline start, so the same layout is mirrored in a right-to-left page. The dock repairs a layout before it renders one, so a layout read from storage or a server can be passed as it is:
+
+| Repair | Result |
+| --- | --- |
+| A tab with no entry in `documents`, or a repeat of one | Dropped |
+| A group with no tab | Collapses, and its siblings take its space |
+| A split with one child, or inside a split of its own kind | Merged into its parent |
+| `sizes` that are missing, not positive, or do not add up to 100 | Scaled, or shared equally |
+| A group without an `id`, or an `activeId` that is not in its tabs | Given an id, or the first tab |
+
+### Tab type
+
+Set `type` to `"default"` for line tabs. The default is `"container"`, which suits a workspace of documents. `size` sets the tab height.
+
+<FileSource src="/framed/DockLayout/DockLayoutLine" />
+
+## Rearranging
+
+### Dragging
+
+Press a tab and drag. The strip reorders as `Tabs` does until the pointer leaves it. Then the part of the group under the pointer is framed, and the drop does what the frame shows. The label of the tab follows the pointer, and <DocKbd label="Escape" /> cancels the drag.
+
+| Drop on | Result |
+| --- | --- |
+| The tab strip of another group | The tab joins that group at the marked place |
+| The middle of another group | The tab joins that group at the end |
+| The left or right edge of a group | A new group beside it, taking half of its width |
+| The top or bottom edge of a group | A new group above or below it, taking half of its height |
+| The strip or the middle of its own group | Nothing moves, apart from the strip's own reorder |
+| An edge of its own group | The tab splits off, unless it is the only one |
+
+A strip that scrolls keeps scrolling while the pointer rests at its edge. In a right-to-left page the left and right edges swap, so an edge always means the side it is on. On a touch screen, rest a finger on a tab briefly before dragging, so a swipe still scrolls the strip.
+
+### Keyboard
+
+Dragging has a keyboard path for every move. Focus a tab, then use these keys. The focus follows the tab to its new place, and a live region says where it went.
+
+| Keys | Action |
+| --- | --- |
+| <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="←" /> or <DocKbd label="→" /> | Move the tab to the group on that side, or split it off that way when there is none |
+| <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="↑" /> or <DocKbd label="↓" /> | The same, above or below |
+| <DocKbd label="Ctrl" /> or <DocKbd label="⌘" />+<DocKbd label="\" /> | Split the tab to the right, into a new group |
+| <DocKbd label="Ctrl" /> or <DocKbd label="⌘" />+<DocKbd label="Shift" />+<DocKbd label="←" /> or <DocKbd label="→" /> | Reorder the tab within its strip, as in `Tabs` |
+| <DocKbd label="F6" /> and <DocKbd label="Shift" />+<DocKbd label="F6" /> | Move the focus to the next or previous group |
+| <DocKbd label="Shift" />+<DocKbd label="F10" /> or <DocKbd label="Menu" /> | Open the menu of the tab |
+| <DocKbd label="Delete" /> | Close the tab |
+
+The arrows follow what is on screen, so in a right-to-left page the left arrow reaches the group at the left. A group's only tab can move to a neighbor, but has no group to split off to, and the live region says so.
+
+### Tab menu
+
+Right-click a tab, or press <DocKbd label="Shift" />+<DocKbd label="F10" /> on it, for a menu of the same moves: split in any direction, move to another group, maximize the group, and close. Set `menuText` to replace the wording.
+
+## Changing the layout
+
+### Reading changes
+
+`bind:layout` follows every change. `on:layoutchange` runs before one, with the new `layout`, the `previous` one, the `type` (`"move"`, `"split"`, `"close"`, `"activate"` or `"resize"`), the `source` (`"pointer"`, `"keyboard"` or `"menu"`) and the `tabId` and `groupId` it concerns. Call `preventDefault()` on a `move`, `split` or `close` to refuse it. Selecting a tab and resizing a split cannot be refused.
+
+### Open and close
+
+The tree operations are pure functions: each takes a layout and returns a new one. Use them to open a document in the active group, close one, or move it from your own controls. They return the layout they were given when nothing changes.
+
+| Function | Result |
+| --- | --- |
+| `addDockTab(layout, tabId, groupId)` | Opens the tab in a group (the first by default), or activates it where it is |
+| `closeDockTab(layout, tabId)` | Closes the tab, and collapses its group when it was the last |
+| `moveDockTab(layout, tabId, groupId, index)` | Joins the tab to a group at an index |
+| `splitDockTab(layout, tabId, groupId, edge)` | Splits the group on `"start"`, `"end"`, `"top"` or `"bottom"` |
+| `dockTab(layout, tabId, groupId, position, index)` | Joins on `"center"`, splits on an edge |
+
+<FileSource src="/framed/DockLayout/DockLayoutOpen" />
+
+### Closing a modified document
+
+Mark a document `modified` to show a dot on its tab. A close is the dock's `layoutchange` with `type` `"close"`, so refuse it and ask. The handler closes the tab itself once the answer comes.
+
+<FileSource src="/framed/DockLayout/DockLayoutConfirm" />
+
+## Maximize
+
+Bind `maximized` to the id of a group to make it fill the dock. The other groups stay mounted, so their panels keep their state, but they are inert and the separators are disabled. The tab menu has the same action.
+
+<FileSource src="/framed/DockLayout/DockLayoutMaximize" />
+
+## Persistence
+
+Save the layout as it is: it is plain JSON. `LocalStorage` can hold it, since it keeps whatever `bind:value` holds.
+
+<FileSource src="/framed/DockLayout/DockLayoutPersist" />
+
+| Do | Why |
+| --- | --- |
+| Pass what you read back as `layout`, without checking it | The dock drops tabs that no longer exist and repairs the rest before it renders. Use `parseDockLayout` to turn stored text into a layout when you want an answer on bad JSON. |
+| Call `reconcileDockLayout(layout, ids)` once on load | It also places the documents the saved layout has never seen. The dock leaves those without a tab. |
+| Render the layout on the server when the first paint matters | `LocalStorage` reads on the client, so the first paint is the layout you start with. Keep the saved layout in a cookie, and pass it as `layout` on the server. The sizes and the active tabs render with no script, so nothing shifts. |
+| Key each document by a stable `id` | The layout names tabs by id, and the `id` becomes the DOM id of the tab. It must be unique on the page. |
+
+## Accessibility
+
+The dock follows the tabs pattern in each group, and adds regions and separators around them.
+
+- The dock is a group named by `aria-label`.
+- Each group is a region named by its place and its active tab, such as "Group 2 of 3, main.tf". Its strip is a navigation landmark named "Group 2 tabs". Set `groupLabelText` and `stripLabelText` to replace them.
+- Each separator is a `separator` with `aria-valuenow`, named by the groups it divides. Set `resizeLabelText` and `groupName` to replace them.
+- A live region says where a moved tab went. Set `announcementText` to replace what it says.
+- A dragged tab has a keyboard path for every move (see Keyboard), which satisfies a single-pointer alternative.
+- The drop frame and the marker use the focus color, and `Highlight` when forced colors are on.
+
+## Limits
+
+A split is two panes and a separator, and a split of three is two nested splits. Dragging the first separator therefore scales the groups after it together, and the second keeps its share of what is left. The `sizes` in the layout still add up to 100.
+
+A group's panels mount when the group does. A tab that moves to another group, or a group that moves up when a split collapses, mounts its panel again, so keep state that must survive in your data and not in the panel.

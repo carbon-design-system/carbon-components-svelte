@@ -1,0 +1,171 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/theme-tokens";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A workspace of tab groups, split into resizable panes. The splits are
+/// `Splitter`s (see `_splitter.scss`); this styles what they hold and the
+/// three things a drag draws: the drop preview over a group, the insertion
+/// mark in a strip, and the label that follows the pointer. The script
+/// places all three with a `transform` written to the element, in
+/// coordinates from the dock's own inline start, so they take no layout.
+/// @access private
+/// @group components
+@mixin dock-layout {
+  .#{$prefix}--dock {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    background-color: $background;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--dock__group {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    // The active group is marked above its strip.
+    border-block-start: 2px solid transparent;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--dock__group--active {
+    border-block-start-color: $border-interactive;
+  }
+
+  .#{$prefix}--dock__group:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // The strip keeps its height; the panel takes the rest and scrolls.
+  .#{$prefix}--dock__group > .#{$prefix}--tabs {
+    flex: none;
+  }
+
+  .#{$prefix}--dock__group > .#{$prefix}--tab-content {
+    min-height: 0;
+    flex: 1 1 0;
+    overflow: auto;
+  }
+
+  .#{$prefix}--dock__empty {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    @include type-style("body-compact-01");
+  }
+
+  // A maximized group covers the dock. The others stay mounted, and inert.
+  .#{$prefix}--dock__group--maximized {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    width: auto;
+    height: auto;
+  }
+
+  .#{$prefix}--dock__preview,
+  .#{$prefix}--dock__marker,
+  .#{$prefix}--dock__ghost {
+    position: absolute;
+    z-index: z("floating");
+    @include ccs-inset-inline($start: 0);
+    inset-block-start: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--dock__preview--visible,
+  .#{$prefix}--dock__marker--visible,
+  .#{$prefix}--dock__ghost--visible {
+    visibility: inherit;
+  }
+
+  // The drop: the group, or half of it, framed in the focus color with a
+  // wash of it inside.
+  .#{$prefix}--dock__preview {
+    box-sizing: border-box;
+    border: 2px solid $focus;
+
+    &::before {
+      position: absolute;
+      background-color: $focus;
+      content: "";
+      inset: 0;
+      opacity: 0.16;
+    }
+  }
+
+  // Where a tab dropped on a strip would sit.
+  .#{$prefix}--dock__marker {
+    width: 2px;
+    background-color: $focus;
+  }
+
+  .#{$prefix}--dock__ghost {
+    position: fixed;
+    z-index: z("floating");
+    max-width: to-rem(240px);
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    margin-block-start: $carbon--spacing-05;
+    margin-inline-start: $carbon--spacing-05;
+    background-color: $layer-accent;
+    box-shadow: 0 2px 6px $overlay;
+    color: $text-primary;
+    overflow-wrap: anywhere;
+    white-space: nowrap;
+    @include type-style("body-compact-01");
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // A menu opens for the tab it is sent, from an element that takes no room.
+  .#{$prefix}--dock__anchor {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  // Forced colors drop fills and shadows: frame the preview and the mark in
+  // Highlight, the label in CanvasText, and the active group in Highlight.
+  @media (forced-colors: active) {
+    .#{$prefix}--dock__group--active {
+      border-block-start-color: Highlight;
+    }
+
+    .#{$prefix}--dock__preview {
+      border-color: Highlight;
+
+      &::before {
+        background-color: Highlight;
+        opacity: 0.3;
+      }
+    }
+
+    .#{$prefix}--dock__marker {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--dock__ghost {
+      border: 1px solid CanvasText;
+    }
+  }
+}
+
+@include exports("dock-layout") {
+  @include dock-layout;
+}

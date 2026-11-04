@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+import DockLayout from "carbon-components-svelte/DockLayout/DockLayout.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
@@ -275,6 +276,18 @@ export const navigation: AriaEntry[] = [
     name: "SkipToContent",
     render: (attrs) => render(SkipToContent, { props: attrs }),
     target: () => screen.getByRole("link"),
+  },
+  {
+    name: "DockLayout",
+    render: (attrs) =>
+      render(DockLayout, {
+        props: {
+          layout: { type: "group", id: "group-1", tabs: ["a"] },
+          documents: [{ id: "a", label: "Alpha" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "Splitter",

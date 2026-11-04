@@ -17,6 +17,9 @@ const SCROLL_EDGE = 40;
 /** Largest scroll step, in pixels per frame. */
 const SCROLL_SPEED = 14;
 
+/** Pixels above or below the list where a drag still scrolls it. */
+const SCROLL_BAND = 48;
+
 const ITEM = ".bx--tabs__nav-item";
 const LINK = ".bx--tabs__nav-link";
 const CLOSE = ".bx--tabs__nav-item--close";
@@ -91,6 +94,19 @@ export function keyboardIndex(key, oldIndex, count, rtl = false) {
 }
 
 /**
+ * Whether a pointer is near enough to a list, along one axis, for a drag
+ * to scroll it: within `SCROLL_BAND` pixels of either end.
+ *
+ * @param {number} position - Pointer, in viewport coordinates.
+ * @param {number} top - The list's top edge.
+ * @param {number} bottom - The list's bottom edge.
+ * @returns {boolean}
+ */
+export function inScrollBand(position, top, bottom) {
+  return position >= top - SCROLL_BAND && position <= bottom + SCROLL_BAND;
+}
+
+/**
  * The scroll step for a pointer near the edge of a list: zero in the
  * middle, ramping up toward the edge.
  *
@@ -148,8 +164,11 @@ export function tabReorder(node, options) {
    *   centers: number[],
    *   listLeft: number,
    *   listRight: number,
+   *   listTop: number,
+   *   listBottom: number,
    *   startScroll: number,
    *   clientX: number,
+   *   clientY: number,
    *   slot: number,
    *   holdTimer: ReturnType<typeof setTimeout> | undefined,
    *   frame: number,
@@ -204,8 +223,11 @@ export function tabReorder(node, options) {
       centers: [],
       listLeft: 0,
       listRight: 0,
+      listTop: 0,
+      listBottom: 0,
       startScroll: 0,
       clientX: event.clientX,
+      clientY: event.clientY,
       slot: -1,
       holdTimer: undefined,
       frame: 0,
@@ -241,6 +263,7 @@ export function tabReorder(node, options) {
   function handlePointermove(event) {
     if (!session || event.pointerId !== session.pointerId) return;
     session.clientX = event.clientX;
+    session.clientY = event.clientY;
     if (!session.dragging) {
       const moved = Math.hypot(
         event.clientX - session.startX,
@@ -266,6 +289,8 @@ export function tabReorder(node, options) {
     session.oldIndex = items.indexOf(session.item);
     session.listLeft = listRect.left;
     session.listRight = listRect.right;
+    session.listTop = listRect.top;
+    session.listBottom = listRect.bottom;
     session.startScroll = node.scrollLeft;
     // Content coordinates: they do not move when the list scrolls.
     session.centers = items.map((item) => {
@@ -295,9 +320,17 @@ export function tabReorder(node, options) {
   }
 
   function edgeStep() {
-    return session
-      ? edgeScrollStep(session.clientX, session.listLeft, session.listRight)
-      : 0;
+    if (!session) return 0;
+    // A pointer well off the list, above, below or beside it, is not the
+    // list's to scroll: a dock drags a tab out of its strip, and the strip
+    // stays where it is.
+    if (
+      !inScrollBand(session.clientY, session.listTop, session.listBottom) ||
+      !inScrollBand(session.clientX, session.listLeft, session.listRight)
+    ) {
+      return 0;
+    }
+    return edgeScrollStep(session.clientX, session.listLeft, session.listRight);
   }
 
   function scrollFrame() {
