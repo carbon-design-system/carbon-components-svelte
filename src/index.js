@@ -97,6 +97,7 @@ export { default as DescriptionListItem } from "./DescriptionList/DescriptionLis
 export { default as Dialog } from "./Dialog/Dialog.svelte";
 export { default as Disclosure } from "./Disclosure/Disclosure.svelte";
 export { default as Divider } from "./Divider/Divider.svelte";
+export { default as DockLayout } from "./DockLayout/DockLayout.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
 export { default as DropdownSkeleton } from "./Dropdown/DropdownSkeleton.svelte";
 export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkeleton.svelte";
@@ -322,6 +323,16 @@ export {
 } from "./utils/column-settings.js";
 export { createLoadingDelay, delayedLoading } from "./utils/delayed-loading.js";
 export { dismiss } from "./utils/dismiss.js";
+export {
+  addDockTab,
+  closeDockTab,
+  dockTab,
+  moveDockTab,
+  normalizeDockLayout,
+  parseDockLayout,
+  reconcileDockLayout,
+  splitDockTab,
+} from "./utils/dock-layout.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,
