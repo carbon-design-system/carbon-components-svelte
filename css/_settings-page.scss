@@ -1,0 +1,275 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A settings page is sections of rows (a label and a description beside the
+/// control), a section list that follows the reader, and a save bar pinned
+/// to the bottom while there are unsaved changes. A row lays out by the width
+/// of its section, not the window, so the page also fits a side panel.
+/// @access private
+/// @group components
+@mixin settings-page {
+  .#{$prefix}--settings-page {
+    --ccs-settings-sticky-offset: #{$carbon--spacing-05};
+    --ccs-settings-save-bar-height: #{$carbon--spacing-11};
+
+    // A focused field would sit under the pinned save bar, so the browser
+    // scrolls it clear of the bar's height.
+    :focus {
+      scroll-margin-block-end: var(--ccs-settings-save-bar-height);
+    }
+
+    mark {
+      background-color: $highlight;
+      color: $text-primary;
+    }
+  }
+
+  .#{$prefix}--settings-section {
+    margin-block-end: $carbon--spacing-07;
+    container-type: inline-size;
+    scroll-margin-block-start: var(--ccs-settings-sticky-offset);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .#{$prefix}--settings-section__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: $carbon--spacing-05;
+    padding-block-end: $carbon--spacing-05;
+    padding-inline: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--settings-section__title {
+    color: $text-primary;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--settings-section__badge {
+    @include type-style("label-01");
+
+    display: inline-flex;
+    align-items: center;
+    color: $text-error;
+    column-gap: $carbon--spacing-02;
+
+    svg {
+      fill: $support-error;
+    }
+  }
+
+  .#{$prefix}--settings-section__description {
+    @include type-style("body-compact-01");
+
+    flex-basis: 100%;
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--settings-section__rows {
+    border-block-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--settings-section--danger {
+    padding-block: $carbon--spacing-05 0;
+    border: 1px solid $support-error;
+
+    .#{$prefix}--settings-section__title {
+      color: $text-error;
+    }
+
+    .#{$prefix}--settings-section__rows {
+      border-block-start-color: $support-error;
+    }
+
+    .#{$prefix}--settings-row:last-child {
+      border-block-end: 0;
+    }
+  }
+
+  .#{$prefix}--settings-row {
+    position: relative;
+    display: grid;
+    padding: $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    gap: $carbon--spacing-04 $carbon--spacing-07;
+    grid-template-columns: minmax(0, 1fr);
+
+    &[hidden] {
+      display: none;
+    }
+
+    @container (min-width: #{to-rem(576px)}) {
+      align-items: center;
+      grid-template-columns: minmax(0, 1fr) minmax(0, #{to-rem(320px)});
+    }
+  }
+
+  // The bar marks an unsaved field with a line, as a reader finds an edit in
+  // a long list.
+  .#{$prefix}--settings-row--modified::before {
+    position: absolute;
+    block-size: 100%;
+    content: "";
+    inline-size: $carbon--spacing-01;
+    background-color: $interactive;
+    @include ccs-inset-inline($start: 0);
+  }
+
+  .#{$prefix}--settings-row__heading {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-02;
+    min-block-size: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--settings-row__label {
+    @include type-style("heading-compact-01");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--settings-row__description {
+    @include type-style("helper-text-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--settings-row__control {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--settings-nav {
+    block-size: 100%;
+  }
+
+  .#{$prefix}--settings-nav__rail {
+    display: none;
+
+    @include carbon--breakpoint(lg) {
+      position: sticky;
+      top: var(--ccs-settings-sticky-offset);
+      display: block;
+    }
+  }
+
+  .#{$prefix}--settings-nav__jump {
+    margin-block-end: $carbon--spacing-05;
+
+    @include carbon--breakpoint(lg) {
+      display: none;
+    }
+  }
+
+  .#{$prefix}--settings-nav__text {
+    flex: 1;
+  }
+
+  .#{$prefix}--settings-nav__badge {
+    display: inline-flex;
+    align-items: center;
+
+    svg {
+      fill: $support-error;
+    }
+  }
+
+  // A border draws the dot, because forced colors repaint a background but
+  // keep a border.
+  .#{$prefix}--settings-nav__dot {
+    box-sizing: content-box;
+    block-size: 0;
+    border: $carbon--spacing-02 solid $interactive;
+    border-radius: 50%;
+    inline-size: 0;
+  }
+
+  .#{$prefix}--settings-save-bar {
+    position: sticky;
+    z-index: z("floating");
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    background-color: $layer;
+    column-gap: $carbon--spacing-05;
+    min-block-size: var(--ccs-settings-save-bar-height);
+    // The bar keeps its place while it is clear, so it never moves the page
+    // as it appears.
+    opacity: 0;
+    transform: translateY($carbon--spacing-05);
+    transition:
+      opacity $duration--moderate-01 motion(exit, productive),
+      transform $duration--moderate-01 motion(exit, productive),
+      visibility $duration--moderate-01 motion(exit, productive);
+    visibility: hidden;
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    &--visible {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity $duration--moderate-01 motion(entrance, productive),
+        transform $duration--moderate-01 motion(entrance, productive);
+      visibility: visible;
+
+      @media screen and (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
+  }
+
+  .#{$prefix}--settings-save-bar__message {
+    @include type-style("body-compact-01");
+
+    flex: 1 1 #{to-rem(192px)};
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--settings-save-bar--invalid .#{$prefix}--settings-save-bar__message {
+    color: $text-error;
+  }
+
+  .#{$prefix}--settings-save-bar__actions {
+    display: flex;
+    flex-shrink: 0;
+    column-gap: $carbon--spacing-03;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--settings-nav__badge svg,
+    .#{$prefix}--settings-section__badge svg {
+      fill: currentcolor;
+    }
+
+    .#{$prefix}--settings-row--modified::before {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--settings-page mark {
+      background-color: Mark;
+      color: MarkText;
+    }
+  }
+}
+
+@include exports("settings-page") {
+  @include settings-page;
+}
