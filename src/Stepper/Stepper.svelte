@@ -197,6 +197,7 @@
   >
     {#each steps as label, index (index)}
       <ProgressStep
+        id={$$restProps.id ? `${$$restProps.id}-step-${index}` : undefined}
         {label}
         complete={submitted || index < currentIndex}
         current={!submitted && index === currentIndex}

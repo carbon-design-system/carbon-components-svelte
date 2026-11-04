@@ -1,0 +1,78 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ImportWizard: upload, map, review and import steps inside a Stepper.
+/// @access private
+/// @group components
+@mixin import-wizard {
+  .#{$prefix}--import-wizard {
+    min-inline-size: 0;
+  }
+
+  // Four steps need more than a phone is wide; the rail scrolls instead of
+  // widening the page.
+  .#{$prefix}--import-wizard .#{$prefix}--progress {
+    max-inline-size: 100%;
+    overflow-x: auto;
+  }
+
+  .#{$prefix}--import-wizard__summary {
+    @include type-style("body-compact-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--import-wizard__heading {
+    @include type-style("heading-03");
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--import-wizard__counts {
+    @include type-style("body-01");
+
+    margin: 0;
+    padding: 0;
+    color: $text-primary;
+    list-style: none;
+  }
+
+  // Virtualization needs rows of one height, so a cell holds the input and
+  // one line of its message, and the message ellipsizes instead of wrapping.
+  .#{$prefix}--import-wizard__review {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--import-wizard__review .#{$prefix}--data-table td {
+    padding-block: $carbon--spacing-03;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--import-wizard__review .#{$prefix}--form-requirement {
+    max-block-size: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--import-wizard__row-number {
+    display: block;
+  }
+
+  .#{$prefix}--import-wizard__row-error {
+    @include type-style("helper-text-01");
+
+    display: block;
+    overflow: hidden;
+    color: $text-error;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@include exports("import-wizard") {
+  @include import-wizard;
+}
