@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import Meter from "carbon-components-svelte/Meter/Meter.svelte";
 
-  function shortRangeText(value, max) {
+  function shortRangeText(value: number, max: number) {
     return `${value}/${max}`;
   }
 </script>

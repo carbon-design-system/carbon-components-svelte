@@ -1,14 +1,6 @@
 import { render, screen, within } from "@testing-library/svelte";
 import MeterComponent from "carbon-components-svelte/Meter/Meter.svelte";
-// svelte-check's Svelte 4 compat pass can't resolve this fixture's
-// declaration file, for reasons independent of file content (reproduces
-// even for a trivial one-line fixture unrelated to Meter). @ts-expect-error
-// would itself fail under Svelte 5, where this import has no real error.
-// biome-ignore lint/suspicious/noTsIgnore: see comment above
-// @ts-ignore
 import Meter from "./Meter.test.svelte";
-// biome-ignore lint/suspicious/noTsIgnore: see comment above
-// @ts-ignore
 import MeterStatus from "./MeterStatus.test.svelte";
 
 /** Returns the `meter` element inside the fixture instance with this test id. */

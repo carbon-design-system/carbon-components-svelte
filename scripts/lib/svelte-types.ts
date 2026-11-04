@@ -1,6 +1,9 @@
-/** One TypeScript error svelte-check reported in a component script. */
+import { relative, sep } from "node:path";
+import type { Diagnostic } from "svelte-typecheck";
+
+/** One TypeScript error reported in a component script. */
 export type SvelteTypeError = {
-  /** Path relative to `src/`, as svelte-check prints it. */
+  /** Path relative to `src/`. */
   file: string;
   line: number;
   column: number;
@@ -10,35 +13,26 @@ export type SvelteTypeError = {
 /** Error count per component, keyed by path relative to `src/`. */
 export type Counts = Record<string, number>;
 
-const MACHINE_ERROR = /^\d+ ERROR "([^"]+)" (\d+):(\d+) "(.*)"$/;
-
 /**
- * The errors in `.svelte` files from `svelte-check --output machine`.
+ * The type errors in `.svelte` files, with paths relative to `src`.
  * `.js` files are left out: `test:src-js` checks them under `strict`.
  */
-export function parseErrors(output: string): SvelteTypeError[] {
-  return output.split("\n").flatMap((line) => {
-    const match = MACHINE_ERROR.exec(line.trim());
-    if (!match?.[1].endsWith(".svelte")) return [];
-    const [, file, row, column, message] = match;
-    return [
-      {
-        file,
-        line: Number(row),
-        column: Number(column),
-        message: unescapeMessage(message),
-      },
-    ];
-  });
-}
-
-/** svelte-check escapes the message like a JSON string. */
-function unescapeMessage(message: string): string {
-  try {
-    return JSON.parse(`"${message}"`);
-  } catch {
-    return message;
-  }
+export function svelteErrors(
+  diagnostics: Diagnostic[],
+  src: string,
+): SvelteTypeError[] {
+  return diagnostics.flatMap((d) =>
+    d.severity === "error" && d.file.endsWith(".svelte")
+      ? [
+          {
+            file: relative(src, d.file).split(sep).join("/"),
+            line: d.line,
+            column: d.column,
+            message: d.message,
+          },
+        ]
+      : [],
+  );
 }
 
 export function countByFile(errors: SvelteTypeError[]): Counts {

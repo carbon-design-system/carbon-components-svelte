@@ -1,17 +1,17 @@
-import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
+import { typecheck } from "svelte-typecheck";
 import {
   type Change,
   compare,
   countByFile,
-  parseErrors,
+  svelteErrors,
 } from "./lib/svelte-types";
 
 /**
- * Type-checks the component scripts in `src/` (`checkJs`, through
- * `tsconfig.svelte-types.json`) and holds each component to its error
+ * Type-checks the components in `src/` with svelte-typecheck (`checkJs`,
+ * through `tsconfig.svelte-types.json`) and holds each component to its error
  * count in `svelte-types-baseline.json`. Fails when a component gains an
  * error, or when one loses errors and the baseline still has the old count.
  *
@@ -28,27 +28,17 @@ const { values } = parseArgs({
 const ROOT = join(import.meta.dirname, "..");
 const BASELINE = join(ROOT, "scripts/svelte-types-baseline.json");
 
-const result = spawnSync(
-  join(ROOT, "node_modules/.bin/svelte-check"),
-  [
-    "--workspace",
-    join(ROOT, "src"),
-    "--tsconfig",
-    join(ROOT, "tsconfig.svelte-types.json"),
-    "--diagnostic-sources",
-    "js",
-    "--output",
-    "machine",
-  ],
-  { encoding: "utf-8", maxBuffer: 64 * 1024 * 1024 },
-);
-const output = `${result.stdout}\n${result.stderr}`;
-if (!/ COMPLETED /.test(output)) {
-  console.error(output);
-  throw new Error("svelte-check didn't complete");
-}
+// A component's imports resolve to their own `.svelte.d.ts`, from sveld.
+const { diagnostics } = await typecheck({
+  cwd: ROOT,
+  workspace: "src",
+  tsconfig: "../tsconfig.svelte-types.json",
+  declarations: false,
+  checker: "bun",
+  diagnosticSources: ["js"],
+});
 
-const errors = parseErrors(output);
+const errors = svelteErrors(diagnostics, join(ROOT, "src"));
 const current = countByFile(errors);
 const total = errors.length;
 
