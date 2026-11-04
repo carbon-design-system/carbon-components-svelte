@@ -305,6 +305,7 @@ export { default as ProfileMenuDivider } from "./UIShell/ProfileMenuDivider.svel
 export { default as ProfileMenuHeader } from "./UIShell/ProfileMenuHeader.svelte";
 export { default as ProfileMenuItem } from "./UIShell/ProfileMenuItem.svelte";
 export { default as ProfileMenuList } from "./UIShell/ProfileMenuList.svelte";
+export { default as ShellBanner } from "./UIShell/ShellBanner.svelte";
 export { default as SideNav } from "./UIShell/SideNav.svelte";
 export { default as SideNavDivider } from "./UIShell/SideNavDivider.svelte";
 export { default as SideNavItems } from "./UIShell/SideNavItems.svelte";

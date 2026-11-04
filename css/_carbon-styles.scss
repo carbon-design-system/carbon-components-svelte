@@ -99,6 +99,7 @@ $ccs-theme-switching: false !default;
 @import "./toggletip";
 @import "carbon-components/scss/components/ui-shell/ui-shell";
 @import "./ui-shell-classic";
+@import "./shell-banner";
 @import "carbon-components/scss/components/treeview/treeview";
 
 // 2. post-base library partials

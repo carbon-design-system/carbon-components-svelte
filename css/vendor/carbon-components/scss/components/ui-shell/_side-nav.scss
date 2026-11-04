@@ -93,7 +93,7 @@
   .#{$prefix}--side-nav {
     position: fixed;
     z-index: z('header');
-    top: 0;
+    top: var(--ccs-shell-offset, 0px); // ccs: below a `ShellBanner`
     bottom: 0;
     // Useful to toggle this property to see what's going on when not expanded
     overflow: hidden;
@@ -112,7 +112,7 @@
   }
 
   .#{$prefix}--side-nav--ux {
-    top: 2.25rem; // ccs
+    top: calc(var(--ccs-shell-offset, 0px) + 2.25rem); // ccs
     width: mini-units(32);
 
     @include carbon--breakpoint-down('lg') {
@@ -143,7 +143,7 @@
 
   .#{$prefix}--side-nav__overlay {
     position: fixed;
-    top: to-rem(48px);
+    top: calc(var(--ccs-shell-offset, 0px) + #{to-rem(48px)}); // ccs: below a `ShellBanner`
     left: 0;
     width: 0;
     height: 0;
@@ -168,8 +168,8 @@
   // When used alongside the header, we update the `top` positioning so that we
   // can fit both widgets on the same page without overlapping.
   .#{$prefix}--header ~ .#{$prefix}--side-nav {
-    top: mini-units(6);
-    height: calc(100% - 48px);
+    top: calc(var(--ccs-shell-offset, 0px) + #{mini-units(6)}); // ccs: below a `ShellBanner`
+    height: calc(100% - #{mini-units(6)} - var(--ccs-shell-offset, 0px)); // ccs
   }
 
   .#{$prefix}--side-nav--collapsed {

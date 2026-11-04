@@ -8,6 +8,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     label: "Navigation",
     components: [
       "UIShell",
+      "ShellBanner",
       "Breadcrumb",
       "Link",
       "PageHeader",

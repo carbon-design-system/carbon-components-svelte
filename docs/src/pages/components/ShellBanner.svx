@@ -1,0 +1,190 @@
+---
+components: ["ShellBanner"]
+description: Shell banners show an app-wide state, such as staging, impersonation, an incident, or being offline. They sit above the UI Shell header or at the top of the page content.
+---
+
+<script>
+  import {
+    NotificationActionButton,
+    ShellBanner,
+    Stack,
+  } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Place a `ShellBanner` with `placement="above-header"` next to the
+[UI Shell](/components/UIShell) header. It is fixed to the top of the
+viewport and moves the header, side navigation, header panels,
+`Content` and the default [NotificationQueue](/components/NotificationQueue)
+position down by its own height. Open the example in a new tab to try it.
+
+<FileSource src="/framed/ShellBanner/ShellBannerAboveHeader" />
+
+The banner publishes its height as the `--ccs-shell-offset` custom
+property on `<html>`, and everything that is fixed to the top reads it.
+Use it for anything of your own that is fixed under the header:
+
+```css
+.toolbar {
+  position: fixed;
+  top: calc(var(--ccs-shell-offset, 0px) + 3rem);
+}
+```
+
+The server markup reserves 2.5rem before the page measures the banner,
+so a one-line banner does not shift the layout when the page loads. A
+banner whose text wraps moves the shell once, when the page mounts.
+
+## Placement
+
+Set `placement` to choose where the banner sits.
+
+| Use case | Placement | Dismissible |
+| :-- | :-- | :-- |
+| Staging or sandbox environment | `"above-header"` | No |
+| Impersonation | `"above-header"` | No, it has an exit action |
+| Offline or reconnecting | `"above-header"` | No |
+| Incident or degraded service | `"content"` | Yes |
+| Maintenance window | `"content"` | Yes |
+| Announcement of a release | `"above-header"` | Yes, with `dismissId` |
+
+### Above the header
+
+`"above-header"` is the banner for something that applies to the whole
+app and that people should see on every page. Put it after the `Header`
+in the markup. It is fixed, so it still draws on top, and the skip link
+in the header stays the first <DocKbd label="Tab" /> stop.
+
+### Content
+
+`"content"` is the default. Render the banner as the first child of
+`Content`. Because it sits inside `Content`, it follows the side navigation's
+width in every mode, including the rail, a resizable nav, a collapsed nav,
+and right-to-left text. It bleeds across the content's 2rem padding so it
+sits flush under the header, which assumes the default padding.
+
+### Sticky
+
+Set `sticky` to keep a `"content"` banner under the header while the page
+scrolls. It also stays under an above-header banner.
+
+<FileSource src="/framed/ShellBanner/ShellBannerContent" />
+
+## Variants
+
+### Kinds
+
+Set `kind` to match the message. The status icon has a label, such as
+"Warning", so screen readers convey the kind without color.
+
+<Stack gap={5}>
+  <ShellBanner kind="info" title="This is the staging environment." />
+  <ShellBanner kind="warning" title="Billing is read-only on Saturday." />
+  <ShellBanner kind="success" title="All systems are operational." />
+  <ShellBanner kind="error" title="Some API requests are failing." />
+</Stack>
+
+### Thin
+
+Set `thin` for a 4px strip in the kind's color, with the kind's icon
+and the title in a tab that hangs below it. It suits a quiet reminder,
+such as the environment name. Give it a `title`, because the icon says
+the kind but not what the strip means. A thin banner has no subtitle or
+actions.
+
+The tab sits over the header's center, so keep that area of the header
+free of controls.
+
+<Stack gap={9}>
+  <ShellBanner thin kind="warning" title="Staging" />
+  <ShellBanner thin kind="info" title="Sandbox" dismissible />
+</Stack>
+
+### Low contrast
+
+Banners are low contrast by default. Set `lowContrast` to `false` for the
+high contrast variant, for a banner that has to stand out.
+
+<Stack gap={5}>
+  <ShellBanner lowContrast={false} kind="error" title="You are offline." />
+  <ShellBanner lowContrast={false} kind="warning" title="Maintenance starts in 10 minutes." />
+</Stack>
+
+### Actions and subtitle
+
+Add a `NotificationActionButton` in the "actions" slot. The banner's title
+describes the button for screen readers, with no extra setup. Use `subtitle`
+for a longer explanation.
+
+<Stack gap={5}>
+  <ShellBanner
+    kind="warning-alt"
+    title="Viewing as jane@acme.com."
+    subtitle="This session is read only."
+  >
+    <svelte:fragment slot="actions">
+      <NotificationActionButton>Exit</NotificationActionButton>
+    </svelte:fragment>
+  </ShellBanner>
+</Stack>
+
+## Dismissible
+
+Set `dismissible` to show a close button. Closing dispatches a cancelable
+`close` event, so a handler can keep the banner open with
+`event.preventDefault()`. Bind `open` to close or reopen the banner from
+your own code.
+
+When a mouse closes the banner, `open` turns `false` at once, but the
+empty banner keeps its space until the pointer leaves it or the page
+scrolls. The shell and the content then move up. Otherwise the header,
+or the content, would move under the pointer, and a second click would
+land on whatever moved there. A keyboard or touch close removes the
+space at once.
+
+Give the banner a `dismissId` to remember the dismissal in `localStorage`,
+under the key `ccs-shell-banner:{dismissId}`. It stays closed on later
+visits and in other tabs until the id changes, so give each announcement
+its own id.
+
+<FileSource src="/framed/ShellBanner/ShellBannerDismissible" />
+
+The server cannot read `localStorage`. A dismissed banner is in the server
+markup, and closes once the page mounts, so it flashes for one frame. To
+avoid that, read a cookie on the server and set `open` to `false`.
+
+When the close button holds focus, closing moves focus back to the element
+that had it before, or to `Content` when that takes focus.
+
+## Announcements
+
+A banner that is there when the page loads is part of the page, so it is a
+labeled region, not a live region. Set `announce` for a banner that appears
+while the page is open, such as going offline. It becomes `role="status"`,
+and screen readers announce it politely. A banner never uses `role="alert"`.
+
+Set `label` to name the region for screen readers. The default is
+"Site announcement".
+
+| Do | Why |
+| :-- | :-- |
+| Set `announce` only on a banner that appears after load | A banner at load would be read before the page, on every page |
+| Give each banner a `label` that says what it is | Screen reader users list landmarks by name |
+| Set a `title` on a `thin` banner | The strip's color is not a text alternative |
+| Keep one `"above-header"` banner at a time | Each one writes the shell offset |
+| Give a persistent announcement a `dismissId` | A new `dismissId` brings it back for the next announcement |
+
+## One at a time
+
+Two above-header banners would both write `--ccs-shell-offset`, and the
+last one mounted wins. Keep a list of notices in priority order and show
+the first one that applies.
+
+<FileSource src="/framed/ShellBanner/ShellBannerPriority" />
+
+## Keyboard
+
+<DocKbd label="Tab" /> moves to the banner's actions, then its close button.
+There is no arrow key navigation, and <DocKbd label="Escape" /> does nothing:
+a banner is not a dialog.
