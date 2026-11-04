@@ -850,7 +850,9 @@
   // Replay the active filter when the strategy flips so the rendered set and the
   // matched ids stay consistent (for example switching to "remove" must re-shrink
   // `tableRows`, and switching to "hide" must restore the full mounted set).
-  let prevHideMode = hideMode;
+  // `hideMode` is declared by the `$:` below, and unset until it runs.
+  /** @type {boolean | undefined} */
+  let prevHideMode;
   $: if (hideMode !== prevHideMode) {
     prevHideMode = hideMode;
     if (prevSearchValue.trim().length > 0) {
@@ -1203,7 +1205,8 @@
           return compareValues(itemA, itemB, ascending);
         })
       : $tableRows;
-  $: defaultRowHeight = ROW_HEIGHTS[effectiveSize] ?? DEFAULT_ROW_HEIGHT;
+  $: defaultRowHeight =
+    (effectiveSize && ROW_HEIGHTS[effectiveSize]) ?? DEFAULT_ROW_HEIGHT;
   $: virtualConfig = virtualize
     ? {
         itemHeight: defaultRowHeight,

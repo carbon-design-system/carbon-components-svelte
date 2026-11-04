@@ -887,7 +887,7 @@
         cachedIdByDomId.set(String(id), id);
       }
     }
-    return cachedIdByDomId.get(element.getAttribute(TREE_ROW_ID_ATTR));
+    return cachedIdByDomId.get(element.getAttribute(TREE_ROW_ID_ATTR) ?? "");
   }
 
   /**

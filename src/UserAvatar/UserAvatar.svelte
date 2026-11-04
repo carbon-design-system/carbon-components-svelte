@@ -371,8 +371,10 @@
       {id}
       {...$$restProps}
       class={avatarClass}
-      href={isLink ? href : undefined}
-      type={isButton ? "button" : undefined}
+      {...{
+        href: isLink ? href : undefined,
+        type: isButton ? "button" : undefined,
+      }}
       aria-label={$$restProps["aria-label"] ??
         (isInteractive && name ? name : undefined)}
       on:click
@@ -422,8 +424,10 @@
     {id}
     {...$$restProps}
     class={avatarClass}
-    href={isLink ? href : undefined}
-    type={isButton ? "button" : undefined}
+    {...{
+      href: isLink ? href : undefined,
+      type: isButton ? "button" : undefined,
+    }}
     aria-label={$$restProps["aria-label"] ??
       (isInteractive && name ? name : undefined)}
     data-overflow={groupOverflow ? "true" : undefined}
