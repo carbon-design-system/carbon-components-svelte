@@ -1,0 +1,96 @@
+---
+components: ["Tearsheet"]
+description: Tearsheets hold a focused task that outgrows a modal but should not become a page, such as a multi-field form or a review step.
+---
+
+<script>
+  import { Callout } from "carbon-components-svelte";
+</script>
+
+<Callout
+  title="Preview"
+  subtitle="Tearsheet follows Carbon React's Tearsheet from Carbon for IBM Products, which Carbon React does not export yet. Its API may change in a minor release."
+/>
+
+## Basic
+
+Bind `open` to show the tearsheet. It slides up from the bottom, stops short of the top of the window, and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. Use `label` for a step or category above the title, and `description` for a sentence below it.
+
+Put footer buttons in the `actions` slot; the tearsheet lays them out in an [ActionSet](/components/ActionSet). A tearsheet with `actions` is transactional: it hides the close button and stays open on an outside click, so a stray click can't discard a form. A tearsheet without `actions` is passive, shows the close button, and closes on an outside click. Omit the `actions` slot entirely for a passive tearsheet: an empty slot still counts as `actions`.
+
+<FileSource src="/framed/Tearsheet/Tearsheet" />
+
+## Sizes
+
+Set `size` to `"narrow"` for a single column. The default is `"wide"`, which spans the window with a margin on each side. A narrow tearsheet is as wide as a small [Modal](/components/Modal) and does not render `headerActions`. Both fill the window below the `md` breakpoint.
+
+<FileSource src="/framed/Tearsheet/TearsheetSizes" />
+
+## Closing
+
+### Passive
+
+Without `actions`, a tearsheet shows a close button and closes on an outside click. Set `preventCloseOnClickOutside` to `true` to keep it open.
+
+<FileSource src="/framed/Tearsheet/TearsheetPassive" />
+
+### Cancelable
+
+The `close` event fires with `trigger` set to `"close-button"`, `"escape-key"`, `"outside-click"` or `"programmatic"`. Call `preventDefault()` on the first three to keep the tearsheet open, for example to confirm before discarding changes.
+
+<FileSource src="/framed/Tearsheet/TearsheetCancelable" />
+
+## Slots
+
+### Influencer
+
+Put context for the task in the `influencer` slot, such as a list of steps. It sits beside the body, on the layer surface so fields in it contrast. Set `influencerPosition` to `"start"` or `"end"` for the side, and `influencerWidth` to `"narrow"` (256px, the default) or `"wide"` (320px). The rail comes before or after the body in the document, so keyboard focus follows the layout. Below the `md` breakpoint it stacks with the body instead. Wide tearsheets only.
+
+Keep `slot="influencer"` outside an `{#if}` block under Svelte 5, where a slotted element inside a block does not compile. Render the content conditionally inside the slot instead.
+
+<FileSource src="/framed/Tearsheet/TearsheetInfluencer" />
+
+### Header actions
+
+Put buttons in the `headerActions` slot to place them beside the title. Wide tearsheets only.
+
+<FileSource src="/framed/Tearsheet/TearsheetHeaderActions" />
+
+### AI label
+
+Put an [AILabel](/components/AILabel) in the `decorator` slot to mark AI-generated content. The tearsheet takes the AI surface.
+
+<FileSource src="/framed/Tearsheet/TearsheetAILabel" />
+
+## Stacking
+
+Opening a tearsheet over another stacks them: the first scales back and rises so its upper edge shows, and the page dims in steps. Stacking follows the order the tearsheets open, wherever they sit in the markup. The tearsheet beneath is inert, and closing the top one returns focus to where it was in the one beneath. Three levels show; more open tearsheets share the last level, and the first one that goes past three warns once.
+
+Render the tearsheets as siblings. A tearsheet written inside another one's content is placed and clipped by the one it sits in, which is scaled back and inert once it is covered. Wrap it in a [Portal](/components/Portal) to open it from there.
+
+<FileSource src="/framed/Tearsheet/TearsheetStacking" />
+
+## Layering
+
+The tearsheet is a layer, like a modal. Its header and footer sit on the layer surface. A wide body is the page surface, so fields in it use the field color of the page and a [Layer](/components/Layer) inside steps up once. A narrow body sits one level up on the layer surface, as a modal's body does.
+
+<FileSource src="/framed/Tearsheet/TearsheetLayer" />
+
+## Overlays inside
+
+Menus, dropdowns and the date picker calendar open in a portal, so a tearsheet body never clips them. A [Modal](/components/Modal) rendered inside the tearsheet opens above it, for example to confirm a discard. The tearsheet leaves no `transform` on its container once it has slid in, so the modal still covers the window.
+
+<FileSource src="/framed/Tearsheet/TearsheetModal" />
+
+To open a tearsheet from inside a modal, or from another overlay with a `transform`, wrap it in a [Portal](/components/Portal). A fixed element inside a transformed ancestor is placed and clipped by that ancestor instead of the window.
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Use `actions` for transactional work, and leave the slot out for read-only content | Its presence decides the close button and the outside-click rule, as in Carbon v11. |
+| Put a Modal that a tearsheet opens inside the tearsheet | A page-level Modal that comes earlier in the document sits under the tearsheet, which shares its z-index. |
+| Wrap a tearsheet rendered inside a modal or other transformed container in a Portal | The tearsheet is fixed to the window, and a transformed ancestor becomes its containing block. |
+| Open a second tearsheet from the first, not from the page | Focus returns into the first, and it scales back. |
+| Render stacked tearsheets as siblings, or wrap a nested one in a Portal | A tearsheet inside another is placed by the one it sits in, and goes inert with it. |
+| Give a tearsheet a `title`, or an `aria-label` | The dialog needs a name, and the title provides it. |

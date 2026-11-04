@@ -28,6 +28,7 @@ import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.sve
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
+import Tearsheet from "carbon-components-svelte/Tearsheet/Tearsheet.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
@@ -62,6 +63,7 @@ import OverflowMenuItem from "../fixtures/OverflowMenuItem.test.svelte";
 import RadioTile from "../fixtures/RadioTile.test.svelte";
 import SelectableTile from "../fixtures/SelectableTile.test.svelte";
 import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
+import UnsavedChangesPromptFixture from "../fixtures/UnsavedChangesPrompt.test.svelte";
 
 const nodes = [{ id: "docs", text: "Docs" }];
 
@@ -450,6 +452,14 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("dialog"),
   },
   {
+    name: "Tearsheet",
+    render: (attrs) =>
+      render(Tearsheet, {
+        props: { open: true, title: "Create integration", ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
     name: "Toggletip",
     render: (attrs) => render(Toggletip, { props: { open: true, ...attrs } }),
     target: () => screen.getByRole("button"),
@@ -725,6 +735,11 @@ export const interactive: AriaEntry[] = [
       render(ConfirmModal, {
         props: { open: true, title: "Delete this project?", ...attrs },
       }),
+    target: () => screen.getByRole("alertdialog"),
+  },
+  {
+    name: "UnsavedChangesPrompt",
+    render: (attrs) => render(UnsavedChangesPromptFixture, { props: attrs }),
     target: () => screen.getByRole("alertdialog"),
   },
   {

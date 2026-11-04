@@ -414,6 +414,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Countdown
+  create-flow:
+    name: Create flow
+    description: A multi-step flow for creating a resource, with a step list, per-step validation, Back, Next and Submit, and a guard against losing unsaved changes.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/create-flow.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CreateFlow
   css-grid:
     name: CSS grid
     status: stable
@@ -1330,6 +1343,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TagSet
+  tearsheet:
+    name: Tearsheet
+    description: A panel that slides up from the bottom for a focused task that outgrows a modal but should not become a page.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/tearsheet.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Tearsheet
   text:
     name: Text
     status: stable
@@ -1545,6 +1571,20 @@ assets:
     tags:
       - data-display
       
+  unsaved-changes:
+    name: Unsaved changes
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/unsaved-changes.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UnsavedChanges
+    tags:
+      - input-control
   user-avatar:
     name: User avatar
     status: stable

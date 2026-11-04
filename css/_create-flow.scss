@@ -1,0 +1,54 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+
+/// Create flow: a vertical step rail, the current step's content, and the
+/// buttons that move through them. The rail is `ProgressIndicator` as it
+/// is; this only spaces it, and below `md` shows the current step alone so
+/// a stacked rail (a `Tearsheet` influencer) takes a row of the window, not
+/// 40% of it.
+/// @access private
+/// @group components
+@mixin create-flow {
+  // A vertical rail sits in a column of its own, as a `Tearsheet`'s
+  // influencer, and takes its own inset. A horizontal one lines up with
+  // the content under it.
+  .#{$prefix}--create-flow__steps--vertical {
+    padding: $carbon--spacing-05;
+  }
+
+  // Hidden steps leave the tab order too, so Tab reaches the current one.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--create-flow__steps--vertical
+      .#{$prefix}--progress-step:not(.#{$prefix}--progress-step--current) {
+      display: none;
+    }
+
+    .#{$prefix}--create-flow__steps--vertical .#{$prefix}--progress-step {
+      min-height: 0;
+    }
+  }
+
+  .#{$prefix}--create-flow__count {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  // Focus lands here on each step change so reading starts at the step; the
+  // heading is not a control, so it draws no ring.
+  .#{$prefix}--create-flow__heading:focus,
+  .#{$prefix}--create-flow__error:focus,
+  .#{$prefix}--create-flow__submitted:focus {
+    outline: none;
+  }
+}
+
+@include exports("create-flow") {
+  @include create-flow;
+}
