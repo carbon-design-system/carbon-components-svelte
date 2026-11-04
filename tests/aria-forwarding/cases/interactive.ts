@@ -178,6 +178,7 @@ export const interactive: AriaEntry[] = [
     name: "ComposedModal",
     render: (attrs) => render(ComposedModal, { props: attrs }),
     target: () => screen.getByRole("alertdialog"),
+    also: ["aria-roledescription"],
   },
   {
     name: "ContextMenu",
@@ -335,6 +336,7 @@ export const interactive: AriaEntry[] = [
         props: { open: true, alert: true, modalHeading: "Delete", ...attrs },
       }),
     target: () => screen.getByRole("alertdialog"),
+    also: ["aria-roledescription"],
   },
   {
     name: "Modal",
