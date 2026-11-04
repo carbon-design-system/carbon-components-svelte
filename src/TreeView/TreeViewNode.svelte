@@ -38,7 +38,7 @@
 
   /**
    * Finds the nearest parent tree node
-   * @type {(node: HTMLElement | null) => null | HTMLElement}
+   * @type {(node: Node | null | undefined) => null | HTMLElement}
    */
   export function findParentTreeNode(node) {
     if (node == null || !(node instanceof HTMLElement)) return null;
@@ -231,7 +231,9 @@
         if (event.key === "Enter") event.stopPropagation();
 
         if (treeKey(event) === "ArrowLeft") {
-          const parentNode = findParentTreeNode(ref.parentNode?.parentNode);
+          const parentNode = findParentTreeNode(
+            event.currentTarget.parentNode?.parentNode,
+          );
           if (parentNode) parentNode.focus();
         }
 
@@ -308,7 +310,7 @@
       }
 
       if (treeKey(event) === "ArrowLeft") {
-        const parentNode = findParentTreeNode(ref.parentNode);
+        const parentNode = findParentTreeNode(event.currentTarget.parentNode);
         if (parentNode) parentNode.focus();
       }
 

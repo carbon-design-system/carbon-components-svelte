@@ -260,14 +260,16 @@
           expandNode(node, false);
           toggleNode(node);
         } else {
-          const parentNode = findParentTreeNode(ref.parentElement);
+          const parentNode = findParentTreeNode(
+            event.currentTarget.parentElement,
+          );
           if (parentNode instanceof HTMLElement) parentNode.focus();
         }
       }
 
       if (parent && key === "ArrowRight") {
         if (expanded) {
-          const groupUl = ref.lastElementChild;
+          const groupUl = event.currentTarget.lastElementChild;
           if (groupUl instanceof HTMLElement) {
             const next = firstTreeItemInGroup(groupUl);
             next?.focus();
@@ -287,7 +289,7 @@
           toggleNode(node);
         }
         clickNode(node, event);
-        ref.focus();
+        event.currentTarget.focus();
       }
     }}
     on:focus={() => {
