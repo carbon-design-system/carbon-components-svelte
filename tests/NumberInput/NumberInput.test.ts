@@ -1948,7 +1948,7 @@ describe("NumberInput", () => {
     const scrub = async (label: HTMLElement, moves: PointerEventInit[]) => {
       await fireEvent.pointerDown(label, { clientX: 100, pointerId: 1 });
       for (const move of moves) {
-        // biome-ignore lint/performance/noAwaitInLoops: sequential drag steps
+        // eslint-disable-next-line no-await-in-loop -- sequential drag steps
         await fireEvent.pointerMove(label, { pointerId: 1, ...move });
       }
       await fireEvent.pointerUp(label, { pointerId: 1 });

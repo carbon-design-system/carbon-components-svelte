@@ -101,7 +101,7 @@
 
   import {
     createEventDispatcher,
-    // biome-ignore lint/style/noRestrictedImports: the only hook the server runs after a render
+    // The only hook the server runs after a render.
     onDestroy,
     onMount,
     setContext,

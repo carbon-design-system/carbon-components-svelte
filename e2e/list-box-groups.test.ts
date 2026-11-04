@@ -49,7 +49,6 @@ test("spaces list box groups twice as far apart as their options", async ({
 }) => {
   let checked = 0;
   for (const size of ["xs", "sm", "md", "xl"]) {
-    // biome-ignore lint/performance/noAwaitInLoops: one size mounted at a time
     await page.goto(`/list-box-groups.html?size=${size}`);
     await page.evaluate(() => document.fonts.ready);
     const ids = ["dropdown", "combobox", "multiselect"];

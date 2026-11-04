@@ -82,7 +82,7 @@ function stubAnimationFrames() {
 /** Run frames until measurement stops asking for one. */
 async function settleMeasurement() {
   for (let pass = 0; pass < 50; pass++) {
-    // biome-ignore lint/performance/noAwaitInLoops: each frame's render must land before the next is judged
+    // eslint-disable-next-line no-await-in-loop -- each frame's render must land before the next is judged
     await flushMacrotask();
     if (frames.size === 0) return;
     const pending = [...frames.values()];

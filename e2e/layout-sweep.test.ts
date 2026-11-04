@@ -173,7 +173,6 @@ test.describe("layout sweep", () => {
     test(fixture, async ({ page }) => {
       const found = new Map<string, Entry>();
       for (const variant of VARIANTS) {
-        // biome-ignore lint/performance/noAwaitInLoops: one page, one variant at a time
         await page.setViewportSize({ width: variant.width, height: HEIGHT });
         await page.emulateMedia({
           forcedColors: variant.forcedColors ? "active" : "none",

@@ -581,7 +581,7 @@ export async function hydrateFixtures(
 
       for (const [i, spec] of specs.entries()) {
         if (results[i].serverRenderError) continue;
-        // biome-ignore lint/performance/noAwaitInLoops: fixtures share one document, so they hydrate one at a time.
+        // eslint-disable-next-line no-await-in-loop -- fixtures share one document, so they hydrate one at a time.
         await hydrateOnClient(
           clientRuntime,
           dom.document,

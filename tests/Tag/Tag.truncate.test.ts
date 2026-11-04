@@ -84,7 +84,7 @@ describe("Tag truncation", () => {
     let focused = document.activeElement;
     while (focused && focused !== document.body && stops.length < 5) {
       stops.push(focused);
-      // biome-ignore lint/performance/noAwaitInLoops: each tab moves focus once
+      // eslint-disable-next-line no-await-in-loop -- each tab moves focus once
       await user.tab();
       focused = document.activeElement;
     }

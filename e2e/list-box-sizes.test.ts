@@ -35,7 +35,6 @@ test("a text input and list boxes in one row line up at each size", async ({
   await page.goto("/list-box-sizes.html");
   for (const size of Object.keys(HEIGHTS)) {
     const row = page.locator(`[data-row="${size}"]`);
-    // biome-ignore lint/performance/noAwaitInLoops: one row at a time
     await test.step(size, async () => {
       const fields = [
         row.locator(".bx--text-input-wrapper input"),

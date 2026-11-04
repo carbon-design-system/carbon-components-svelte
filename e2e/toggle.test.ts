@@ -97,7 +97,6 @@ test.describe("Toggle", () => {
     await page.evaluate(() => document.fonts.ready);
     // Most pages set no `dir`, so that case must read as LTR.
     for (const dir of [null, "ltr", "rtl"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await page.evaluate((dir) => {
         if (dir) document.documentElement.dir = dir;
         else document.documentElement.removeAttribute("dir");
@@ -105,7 +104,6 @@ test.describe("Toggle", () => {
       for (const { testId, textStart, travel } of toggles) {
         const name = `${testId}, dir=${dir ?? "none"}`;
         // Poll: the handle slides for a moment after the flip.
-        // biome-ignore lint/performance/noAwaitInLoops: one toggle at a time
         await expect
           .poll(() => measure(testId), { message: `${name}, off` })
           .toEqual({ textStart, handleStart: 3, handleTravel: 0 });

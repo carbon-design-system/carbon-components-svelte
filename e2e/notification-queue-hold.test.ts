@@ -27,7 +27,6 @@ async function center(locator: Locator) {
 async function addToasts(page: Page, count: number) {
   await page.getByTestId("nq-hold-add").focus();
   for (let i = 0; i < count; i++) {
-    // biome-ignore lint/performance/noAwaitInLoops: one toast at a time, in order
     await page.keyboard.press("Enter");
   }
 }

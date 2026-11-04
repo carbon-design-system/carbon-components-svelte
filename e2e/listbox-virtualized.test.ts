@@ -78,7 +78,6 @@ for (const component of COMPONENTS) {
         );
 
         for (let step = 0; step <= 7; step++) {
-          // biome-ignore lint/performance/noAwaitInLoops: each step lands before the next
           await page.keyboard.press("ArrowDown");
           await page.waitForTimeout(30);
         }
@@ -105,7 +104,6 @@ for (const component of COMPONENTS) {
 
         for (const target of [12, 24, 36, 48, 60, 72, 84, 96, 108, 120]) {
           for (let step = 0; step < 12; step++) {
-            // biome-ignore lint/performance/noAwaitInLoops: keys go out in order, without waiting for a frame
             await page.keyboard.press("ArrowDown");
           }
           await expect(highlighted).toHaveText(`Item ${target}`);

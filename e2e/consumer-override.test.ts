@@ -39,7 +39,6 @@ const cell = (testId: string, row: number) => (page: Page) =>
 async function check(page: Page, cases: Case[]) {
   for (const { name, target, state, property, value, gap } of cases) {
     const el = target(page);
-    // biome-ignore lint/performance/noAwaitInLoops: one pointer, one focus
     if (state === "hover") await el.hover();
     if (state === "focus") await el.focus();
     if (!gap) {

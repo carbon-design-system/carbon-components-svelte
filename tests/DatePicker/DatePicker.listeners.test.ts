@@ -73,7 +73,7 @@ describe("DatePicker window listeners", () => {
     await cycle(0);
     const baseline = outstanding();
     for (let index = 1; index <= 30; index++) {
-      // biome-ignore lint/performance/noAwaitInLoops: each picker mounts, opens, closes, and unmounts before the next
+      // eslint-disable-next-line no-await-in-loop -- each picker mounts, opens, closes, and unmounts before the next
       await cycle(index);
     }
 

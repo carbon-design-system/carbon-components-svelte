@@ -75,7 +75,6 @@ test.describe("TextArea", () => {
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     for (const dir of ["ltr", "rtl"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       const { scrollWidth, clientWidth } = await page.evaluate((dir) => {
         document.documentElement.dir = dir;
         const { scrollWidth, clientWidth } = document.documentElement;

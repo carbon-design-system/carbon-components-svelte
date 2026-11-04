@@ -372,7 +372,6 @@ test.describe("right-to-left layout", () => {
       );
 
     for (const dir of ["ltr", "rtl"] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       const [headerTop, decoratorTop] = await tops();
       expect.soft(Math.abs(decoratorTop - headerTop - 8), dir).toBeLessThan(1);
@@ -429,7 +428,6 @@ test.describe("right-to-left layout", () => {
       const row = page
         .getByTestId(testId)
         .locator("[data-tree-row-id=storage]");
-      // biome-ignore lint/performance/noAwaitInLoops: one tree at a time
       await row.focus();
       await page.keyboard.press("ArrowLeft");
       await expect(row, testId).toHaveAttribute("aria-expanded", "true");
@@ -825,7 +823,6 @@ test.describe("right-to-left layout", () => {
       ["ltr", 1],
       ["rtl", -1],
     ] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       expect
         .soft(await shadowX(column.nth(0)), `${dir} selected`)
@@ -861,7 +858,6 @@ test.describe("right-to-left layout", () => {
       ["ltr", 1],
       ["rtl", -1],
     ] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       // The first tab is selected, so the second has no divider.
       expect
@@ -886,7 +882,6 @@ test.describe("right-to-left layout", () => {
     ] as const;
 
     for (const dir of ["ltr", "rtl"] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       const measured = await Promise.all(
         cases.map(([testId, item]) =>
@@ -960,7 +955,6 @@ test.describe("right-to-left layout", () => {
   // end, next to whatever follows the label.
   test("keeps Kbd's narrower key set at the inline end", async ({ page }) => {
     for (const dir of ["ltr", "rtl"] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       const offsets = await page.getByTestId("kbd").evaluate((node, dir) => {
         const root = node.querySelector(".bx--kbd")?.getBoundingClientRect();
@@ -1318,7 +1312,6 @@ test.describe("right-to-left text fields", () => {
       .getByRole("button");
     for (const [name, field] of Object.entries(fields)) {
       const open = name === "HeaderSearch" ? openHeaderSearch : undefined;
-      // biome-ignore lint/performance/noAwaitInLoops: each click moves focus
       expect.soft(await caretAtLeftEnd(page, field, open), name).toBe(0);
     }
   });
@@ -1341,7 +1334,6 @@ test.describe("right-to-left text fields", () => {
         .locator("input"),
     };
     for (const [name, field] of Object.entries(fields)) {
-      // biome-ignore lint/performance/noAwaitInLoops: one field at a time
       const { value, offsets } = await caretOffsets(field);
       expect(value.startsWith("-"), name).toBe(true);
       expect.soft(offsets, name).toEqual([...Array(value.length + 1).keys()]);
@@ -1736,11 +1728,9 @@ test.describe("right-to-left menus and keys", () => {
     ] as const;
 
     for (const dir of ["ltr", "rtl"] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       for (const [testId, name, rtlSide] of cases) {
         const button = page.getByTestId(testId).getByRole("button", { name });
-        // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
         await button.click();
         const menu = page.getByRole("menu", { name });
         await expect(menu).toBeVisible();
@@ -1775,7 +1765,6 @@ test.describe("right-to-left menus and keys", () => {
     ];
 
     for (const items of lists) {
-      // biome-ignore lint/performance/noAwaitInLoops: focus moves one list at a time
       await items.nth(0).focus();
       await page.keyboard.press("ArrowLeft");
       await expect(items.nth(1)).toBeFocused();
@@ -1976,7 +1965,6 @@ function floatOffsets(page: Page, item: FloatCase) {
 async function allFloatOffsets(page: Page, cases: Record<string, FloatCase>) {
   const result: Record<string, FloatOffsets | null> = {};
   for (const [name, item] of Object.entries(cases)) {
-    // biome-ignore lint/performance/noAwaitInLoops: one tooltip shows at a time
     if (item.focus) await page.locator(item.focus).focus();
     result[name] = await floatOffsets(page, item);
   }
@@ -2270,7 +2258,6 @@ test.describe("right-to-left date picker", () => {
     async function measure() {
       const result: Record<string, Box | null> = {};
       for (const name of ["static", "portal", "portal-inset", "portal-end"]) {
-        // biome-ignore lint/performance/noAwaitInLoops: one calendar open at a time
         await page
           .getByTestId(name)
           .getByRole("textbox", { name: "Start date" })
@@ -2397,7 +2384,6 @@ test.describe("right-to-left date picker", () => {
 
     await page.evaluate(() => document.fonts.ready);
     for (const dir of ["ltr", "rtl"] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       await setDirection(page, dir);
       const field = await read("time");
       expect(field.length, dir).toBeGreaterThan(0);

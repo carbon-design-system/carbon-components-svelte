@@ -65,7 +65,6 @@ test("SideNavMenu nests each level one step past its parent", async ({
     ["Storage", textLeft, 16],
     ["Volumes", textLeft, 32],
   ] as const) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     expect.soft(await read(page, name), name).toBeCloseTo(expected, 0);
   }
 
@@ -76,7 +75,6 @@ test("SideNavMenu nests each level one step past its parent", async ({
     ["Storage", "Volumes"],
     ["Backups", "Schedules"],
   ]) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
     const [childLeft, parentLeft] = await Promise.all([
       textLeft(page, child),
       textLeft(page, parent),
@@ -91,7 +89,6 @@ test("SideNavMenu nests each level one step past its parent", async ({
     ["Rollouts", "Clusters"],
     ["Backups", "Volumes"],
   ]) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one pair at a time
     const [icon, column] = await Promise.all([
       iconLeft(page, item),
       textLeft(page, sibling),
@@ -115,7 +112,6 @@ test("SideNavMenu large applies to its own row only", async ({ page }) => {
     // A nested SideNavLink can set large itself.
     ["Custom image", 48],
   ] as const) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one box at a time
     expect.soft(await rowHeight(page, name), name).toBeCloseTo(height, 0);
   }
 });

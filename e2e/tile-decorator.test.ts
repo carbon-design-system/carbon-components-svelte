@@ -105,7 +105,6 @@ test.describe("tile decorator", () => {
 
   test("the corner is the inline end", async ({ page }) => {
     for (const dir of ["ltr", "rtl"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
       const { obstacles, width } = await measure(page, dir, "selectable-tile");
       const host = page
         .getByTestId(`tiles-${dir}`)

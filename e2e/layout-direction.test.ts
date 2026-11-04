@@ -25,7 +25,6 @@ test.describe("LayoutDirection", () => {
       ["LTR replicas", 0.2],
     ] as const;
     for (const [name, position] of cases) {
-      // biome-ignore lint/performance/noAwaitInLoops: reads one slider at a time
       await expect
         .poll(() => thumbPosition(page, name), { message: name })
         .toBeCloseTo(position, 1);
@@ -60,7 +59,6 @@ test.describe("LayoutDirection", () => {
       ["RTL region", "rtl"],
       ["LTR region", "ltr"],
     ] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one menu opens at a time
       await page.getByRole("combobox", { name }).click();
       const option = page.getByRole("option", { name: "eu-west-1" });
       await expect(option).toBeVisible();

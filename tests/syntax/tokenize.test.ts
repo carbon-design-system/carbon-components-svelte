@@ -1,5 +1,5 @@
 // @vitest-environment node
-// biome-ignore-all lint/suspicious/noTemplateCurlyInString: the strings are source code to tokenize
+/* eslint-disable no-template-curly-in-string -- the strings are source code to tokenize */
 import { highlight, tokenize } from "../../src/syntax/tokenize.js";
 
 /** `type:text` for the named tokens, in order. */

@@ -115,7 +115,6 @@ for (const dir of ["ltr", "rtl"] as const)
           [320, 1280],
           [1280, 320],
         ]) {
-          // biome-ignore lint/performance/noAwaitInLoops: one popover opens at a time
           await resize(page, from);
           await button.click();
           await expectFits(button, `${kind} at ${from} px`);

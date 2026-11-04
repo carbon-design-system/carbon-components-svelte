@@ -37,7 +37,6 @@ test("sized tabs with a secondary label match unsized ones, before and after reg
   await page.goto("/tabs-tall.html");
   for (const size of ["sm", "xl"]) {
     const testId = `tabs-${size}`;
-    // biome-ignore lint/performance/noAwaitInLoops: reads one set at a time
     const registered = await layout(page, testId);
     expect.soft(new Set(registered.map((t) => t.height)).size, size).toBe(1);
     expect

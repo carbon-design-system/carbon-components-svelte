@@ -114,7 +114,7 @@ async function sweep(field: Field) {
     const { container } = render(FieldA11y, {
       props: { kind: field, fluid, props },
     });
-    // biome-ignore lint/performance/noAwaitInLoops: each combination mounts, settles, and unmounts before the next
+    // eslint-disable-next-line no-await-in-loop -- each combination mounts, settles, and unmounts before the next
     await tick();
 
     for (const attribute of [...IDREF_ATTRIBUTES, "for"]) {

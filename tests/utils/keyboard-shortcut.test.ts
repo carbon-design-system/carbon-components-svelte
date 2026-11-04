@@ -164,7 +164,7 @@ describe("platformScript", () => {
       expect(document.documentElement.dataset.ccsPlatform).toBe(expected);
     }
     platform.mockRestore();
-    delete document.documentElement.dataset.ccsPlatform;
+    document.documentElement.removeAttribute("data-ccs-platform");
   });
 });
 

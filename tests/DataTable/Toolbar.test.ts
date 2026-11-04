@@ -318,7 +318,7 @@ describe("DataTable Toolbar", () => {
         type Props = ComponentProps<ComponentType>;
 
         expectTypeOf<Props["selectedIds"]>().toEqualTypeOf<
-          // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
           ReadonlyArray<any> | undefined
         >();
       });

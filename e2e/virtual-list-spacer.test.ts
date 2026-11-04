@@ -12,7 +12,6 @@ function stepScroll(page: Page, testId: string, steps: number) {
     for (let step = 0; step < steps; step++) {
       // Long enough for the scroll handler, measured heights, and any
       // anchoring adjustment to land.
-      // biome-ignore lint/performance/noAwaitInLoops: each step must settle before the next
       await new Promise((resolve) => setTimeout(resolve, 80));
       positions.push(Math.round(el.scrollTop));
       el.scrollTop += 20;

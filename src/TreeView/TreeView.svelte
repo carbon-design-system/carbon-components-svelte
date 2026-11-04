@@ -663,7 +663,7 @@
         /** @type {HTMLElement | null | undefined} */
         let target = ref?.querySelector(selector);
         for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
-          // biome-ignore lint/performance/noAwaitInLoops: each tick waits for the next reveal flush
+          // Each tick waits for the next reveal flush.
           await tick();
           target = ref?.querySelector(selector);
         }

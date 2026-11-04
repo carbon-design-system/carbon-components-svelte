@@ -512,7 +512,7 @@ describe("UIShell", () => {
         type ComponentType = HeaderActionLinkComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
       });
     });
@@ -531,7 +531,7 @@ describe("UIShell", () => {
         type ComponentType = HeaderGlobalActionComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
       });
     });
@@ -560,7 +560,7 @@ describe("UIShell", () => {
         type ComponentType = SideNavLinkComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
       });
     });
@@ -589,7 +589,7 @@ describe("UIShell", () => {
         type ComponentType = SideNavMenuComponent;
         type Props = ComponentProps<ComponentType>;
 
-        // biome-ignore lint/suspicious/noExplicitAny: Testing default any type
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Testing default any type
         expectTypeOf<Props["icon"]>().toEqualTypeOf<any>();
       });
     });

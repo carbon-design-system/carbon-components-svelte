@@ -358,7 +358,7 @@
     });
   }
 
-  /** Stable keys for `{#each}` (and Biome-safe: no commas in the each header). */
+  /** Stable keys for `{#each}`. */
   $: filesWithKeys = keyFiles(files);
 
   /**

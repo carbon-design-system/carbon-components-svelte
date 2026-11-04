@@ -107,10 +107,8 @@ test.describe("CssGrid", () => {
     await page.goto("/css-grid.html");
 
     for (const [name, { width, expected }] of Object.entries(VIEWPORTS)) {
-      // biome-ignore lint/performance/noAwaitInLoops: one viewport at a time
       await page.setViewportSize({ width, height: 720 });
       for (const dir of ["ltr", "rtl"]) {
-        // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
         await page.evaluate((dir) => {
           document.documentElement.dir = dir;
         }, dir);
@@ -208,7 +206,6 @@ test("CssGrid takes v11's custom properties from any ancestor", async ({
   await page.goto("/css-grid.html");
 
   for (const scope of SCOPES) {
-    // biome-ignore lint/performance/noAwaitInLoops: one scope at a time
     await page.evaluate(
       ({ scope, override, grids }) => {
         document.getElementById("override")?.remove();
@@ -230,7 +227,6 @@ test("CssGrid takes v11's custom properties from any ancestor", async ({
     );
 
     for (const [name, { width }] of Object.entries(VIEWPORTS)) {
-      // biome-ignore lint/performance/noAwaitInLoops: one viewport at a time
       await page.setViewportSize({ width, height: 720 });
       const defaults = {
         sm: expected(32, 0, 4),
@@ -249,7 +245,6 @@ test("CssColumn aligns itself in a row of mixed heights", async ({ page }) => {
   await page.goto("/css-grid.html");
 
   for (const dir of ["ltr", "rtl"]) {
-    // biome-ignore lint/performance/noAwaitInLoops: one direction at a time
     const rows = await page.evaluate((dir) => {
       document.documentElement.dir = dir;
       const box = (name: string) =>

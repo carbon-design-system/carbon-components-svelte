@@ -25,7 +25,6 @@ export const SLACK = 1;
 export async function scrollToEnd(page: Page) {
   let previous = -1;
   for (let attempt = 0; attempt < 20; attempt++) {
-    // biome-ignore lint/performance/noAwaitInLoops: each jump must land before the next is judged
     const scrollTop = await page.evaluate(() => {
       const menu = document.querySelector('[role="listbox"]');
       if (!(menu instanceof HTMLElement)) return -1;

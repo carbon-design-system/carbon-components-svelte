@@ -21,7 +21,6 @@ test.describe("Modal a11y", () => {
     const primary = page.locator('[data-testid="modal"] .bx--btn--primary');
 
     for (const status of ["active", "finished", "error"]) {
-      // biome-ignore lint/performance/noAwaitInLoops: one status at a time
       await page.getByTestId(`status-${status}`).click();
       await expect(primary.locator(".bx--inline-loading")).toBeVisible();
 

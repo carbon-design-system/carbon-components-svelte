@@ -51,7 +51,6 @@ for (const dir of ["ltr", "rtl"] as const) {
           .getByTestId(`${name}-${edge}`)
           .locator(selector)
           .first();
-        // biome-ignore lint/performance/noAwaitInLoops: one tooltip opens at a time.
         const g = await geometry(page, trigger);
         expect.soft(g.content.left, label).toBeGreaterThanOrEqual(0);
         expect.soft(g.content.right, label).toBeLessThanOrEqual(g.width);

@@ -7,7 +7,6 @@ test("a read-only NumberInput without steppers keeps its icon clear of the decor
   await page.evaluate(() => document.fonts.ready);
 
   for (const size of ["xs", "sm", "md", "xl"]) {
-    // biome-ignore lint/performance/noAwaitInLoops: reads one field at a time
     const boxes = await page.getByTestId(size).evaluate((cell) => {
       const edge = (selector: string) => {
         const r = cell.querySelector(selector)?.getBoundingClientRect();

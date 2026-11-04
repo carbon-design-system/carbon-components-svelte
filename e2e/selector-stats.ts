@@ -415,7 +415,6 @@ async function measureRecalc(
   async function recalcMs(): Promise<number> {
     let best = Number.POSITIVE_INFINITY;
     for (let i = 0; i < INNER; i++) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by design
       const before = await read();
       await toggle(page, true);
       const after = await read();
@@ -432,11 +431,9 @@ async function measureRecalc(
     const sample: Record<string, number> = {};
     for (let j = 0; j < names.length; j++) {
       const name = names[(run + j) % names.length];
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by design
       await useVariant(page, name);
       // Warmup: let selector/style caches settle on the new sheet.
       for (let i = 0; i < 3; i++) {
-        // biome-ignore lint/performance/noAwaitInLoops: sequential by design
         await toggle(page, true);
         await toggle(page, false);
       }
@@ -491,7 +488,6 @@ async function runScenario(
   const typeTailAttemptShare: number[] = [];
 
   for (let run = 0; run < RUNS; run++) {
-    // biome-ignore lint/performance/noAwaitInLoops: sequential by design
     const events = await trace(cdp, () => toggle(page, true));
     await toggle(page, false);
 
@@ -630,7 +626,6 @@ async function runScenario(
   ];
   const removed: Record<string, number> = {};
   for (const v of variants) {
-    // biome-ignore lint/performance/noAwaitInLoops: sequential by design
     removed[v.name] = await buildVariant(page, v.name, v.drop);
   }
   const samples = await measureRecalc(
@@ -742,7 +737,6 @@ async function main(): Promise<void> {
   try {
     console.log(`chromium ${browser.version()}`);
     for (const key of keys) {
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by design
       const report = await runScenario(key, base, browser);
       print(report);
       reports.push(report);

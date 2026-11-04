@@ -45,7 +45,7 @@ const results = await Promise.all(
       const { default: component } = await server.ssrLoadModule(
         path.join(FRAMED, file),
       );
-      // `render` is lazy: reading `body` runs the component.
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions -- `render` is lazy: reading `body` runs the component.
       render(component).body;
     } catch (error) {
       return `${file}: ${(error as Error).message.split("\n")[0]}`;

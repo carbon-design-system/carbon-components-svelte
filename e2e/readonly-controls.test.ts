@@ -104,7 +104,6 @@ test("read-only outlines are the secondary icon color, with 3:1 contrast", async
 
   for (const theme of THEMES) {
     const { outlines, disabled, secondary, disabledToken, background } =
-      // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
       await read(page, theme);
 
     for (const { label, color } of outlines) {

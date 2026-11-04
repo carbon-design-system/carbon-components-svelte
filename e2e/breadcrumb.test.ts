@@ -36,7 +36,6 @@ test("wraps an item too long for a narrow trail", async ({ page }) => {
   const trail = page.getByTestId("narrow");
   const edge = await trail.evaluate((el) => el.getBoundingClientRect().right);
   for (const link of await trail.getByRole("link").all()) {
-    // biome-ignore lint/performance/noAwaitInLoops: one box at a time
     const box = await link.boundingBox();
     expect(box && box.x + box.width).toBeLessThanOrEqual(edge + 1);
   }

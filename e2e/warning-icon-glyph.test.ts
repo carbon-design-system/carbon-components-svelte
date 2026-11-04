@@ -48,7 +48,6 @@ test("the '!' in every warning icon reads on the yellow", async ({ page }) => {
   await page.goto("/warning-icon-glyph.html");
 
   for (const theme of THEMES) {
-    // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
     const glyphs = await page.evaluate(
       ([theme, ids]) => {
         document.documentElement.setAttribute("theme", theme);

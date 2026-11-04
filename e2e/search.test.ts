@@ -98,14 +98,12 @@ test("a hovered clear button adds no ring to the focused field", async ({
     },
   ];
   for (const { component, open, scope } of cases) {
-    // biome-ignore lint/performance/noAwaitInLoops: one page at a time
     await open();
     await page.addStyleTag({ content: "* { transition: none !important; }" });
     await page.locator(`${scope} input`).fill("us-east");
     await page.hover(`${scope} .bx--search-close`);
     for (const theme of ["white", "g100"]) {
       const name = `${component} ${theme}`;
-      // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
       const read = await page.evaluate(
         ([scope, theme]) => {
           document.documentElement.setAttribute("theme", theme);
