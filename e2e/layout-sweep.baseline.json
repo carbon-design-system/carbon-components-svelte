@@ -552,6 +552,14 @@
     "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
   },
   {
+    "fixture": "file-manager.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--file-manager__bar:nth-of-type(1) > div.bx--file-manager__bar-actions > div.bx--toggle-button-group.bx--toggle-button-group--sm > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2)",
+    "message": "div.bx--file-manager__bar:nth-of-type(1) > div.bx--file-manager__bar-actions > div.bx--toggle-button-group.bx--toggle-button-group--sm > button.bx--toggle-button.bx--toggle-button--icon-only:nth-of-type(2): 2px outline inside bordered box div[data-testid=\"host\"] > div.bx--file-manager, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "fluid-date-picker.html",
     "variant": "1280",
     "check": "borders",
