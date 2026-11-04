@@ -90,25 +90,54 @@ export function parse(raw, useLocaleNormalize = false) {
   return Number.isNaN(num) ? null : num;
 }
 
+/** Number with an optional symbol or unit text around it ("$-5.00", "12.5 kg"). */
+const RE_AFFIXED = /^[^\d.-]*(-?)[^\d.]*(\d*\.?\d*)[^\d.]*$/;
+/** Unicode minus sign ("−"), which some locales format negatives with. */
+const RE_MINUS = /−/g;
+/** Accounting format wraps a negative in brackets. */
+const RE_BRACKETED = /^\s*\(.*\)\s*$/;
+
 /**
  * Parse a display string with explicit group and decimal separators. Returns
  * `null` for `""`, `"-"`, or NaN.
  *
+ * For the `currency`, `percent` and `unit` styles, the symbol or unit text
+ * around the number is ignored, and a percent is read as a ratio ("26%" is
+ * 0.26), so the text `Intl.NumberFormat` displays reads back as its value.
+ *
  * @param {string} raw
  * @param {string} groupSeparator - Thousands separator (may be empty).
  * @param {string} decimalSeparator - Decimal separator.
+ * @param {Intl.NumberFormatOptions["style"]} [style]
  * @returns {number | null}
  */
-export function parseLocaleValue(raw, groupSeparator, decimalSeparator) {
+export function parseLocaleValue(
+  raw,
+  groupSeparator,
+  decimalSeparator,
+  style = "decimal",
+) {
   if (raw === "" || raw === "-") return null;
-  let normalized = raw;
+  let normalized = raw.replace(RE_MINUS, "-");
   if (groupSeparator) {
     normalized = normalized.split(groupSeparator).join("");
   }
   if (decimalSeparator !== ".") {
     normalized = normalized.replace(decimalSeparator, ".");
   }
-  const num = Number(normalizeDigits(normalized));
+  normalized = normalizeDigits(normalized);
+  if (style === "decimal") {
+    const num = Number(normalized);
+    return Number.isNaN(num) ? null : num;
+  }
+
+  const match = RE_AFFIXED.exec(normalized);
+  if (!match?.[2] || match[2] === ".") return null;
+  const negative = match[1] === "-" || RE_BRACKETED.test(normalized);
+  // `e-2` shifts the decimal point, so 12.3 is exactly 0.123.
+  const num = Number(
+    `${negative ? "-" : ""}${match[2]}${style === "percent" ? "e-2" : ""}`,
+  );
   return Number.isNaN(num) ? null : num;
 }
 
