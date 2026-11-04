@@ -192,7 +192,7 @@
   on:dragover|preventDefault|stopPropagation={(event) => {
     if (!effectiveDisabled) {
       over = true;
-      event.dataTransfer.dropEffect = "copy";
+      if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
     }
   }}
   on:dragleave
@@ -214,7 +214,7 @@
   on:drop|preventDefault|stopPropagation={(event) => {
     if (!effectiveDisabled) {
       over = false;
-      processIncoming([...event.dataTransfer.files]);
+      processIncoming([...(event.dataTransfer?.files ?? [])]);
     }
   }}
 >
@@ -274,7 +274,7 @@
     }}
     on:click
     on:click={(event) => {
-      /** @type {HTMLInputElement} */ (event.target).value = null;
+      /** @type {HTMLInputElement} */ (event.target).value = "";
     }}
     on:cancel={() => {
       // The click cleared the input so the same file can be picked again; a

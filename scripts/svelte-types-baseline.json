@@ -1,13 +1,11 @@
 {
-  "BigNumber/BigNumber.svelte": 3,
   "Bleed/Bleed.svelte": 1,
   "Card/Card.svelte": 2,
   "Checkbox/CheckboxGroup.svelte": 2,
   "ComboBox/ComboBox.svelte": 1,
-  "DataTable/DataTable.svelte": 7,
-  "DatePicker/DatePicker.svelte": 3,
+  "DataTable/DataTable.svelte": 4,
+  "DatePicker/DatePicker.svelte": 2,
   "Dropdown/Dropdown.svelte": 1,
-  "FileUploader/FileUploaderDropContainer.svelte": 3,
   "Link/LinkDownload.svelte": 1,
   "NumberInput/NumberInput.svelte": 1,
   "Popover/Popover.svelte": 1,
@@ -17,6 +15,5 @@
   "TagSet/TagSetOverflow.svelte": 1,
   "Tile/SelectableTileGroup.svelte": 1,
   "Tile/TileGroup.svelte": 2,
-  "TreeView/TreeView.svelte": 3,
-  "UserAvatar/UserAvatar.svelte": 2
+  "TreeView/TreeView.svelte": 2
 }

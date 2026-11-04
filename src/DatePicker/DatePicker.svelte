@@ -1170,7 +1170,7 @@
    * @type {() => void}
    */
   function openCalendar() {
-    engine.open();
+    engine?.open();
   }
 
   /**

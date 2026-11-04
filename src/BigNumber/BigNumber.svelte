@@ -212,12 +212,14 @@
     hasTotal &&
     (forceShowTotal || (!percentage && formattedValue !== formattedTotal));
   const TREND_ICONS = { up: ArrowUp, down: ArrowDown, flat: Subtract };
-  $: TrendIcon = TREND_ICONS[trend];
+  $: TrendIcon = trend && TREND_ICONS[trend];
   $: resolvedTrendColor =
-    trendColor ?? { up: "success", down: "error", flat: "neutral" }[trend];
+    trendColor ??
+    (trend && { up: "success", down: "error", flat: "neutral" }[trend]);
   $: resolvedTrendDescription =
     trendDescription ??
-    { up: "Trending up", down: "Trending down", flat: "No change" }[trend];
+    (trend &&
+      { up: "Trending up", down: "Trending down", flat: "No change" }[trend]);
   $: formattedDelta = formatDelta(delta, {
     locale,
     digits: fractionDigits,
