@@ -5,6 +5,9 @@
 /// Dialog primitive. carbon-components@10.58 ships no <dialog> styles, so
 /// layout, background, and backdrop dimming are authored from scratch here,
 /// using Carbon tokens ($layer, $text-primary, $border-subtle, $overlay).
+/// It opens and closes with the motion of `Modal`: the backdrop fades and
+/// the box slides down 24px, over `$duration--moderate-02`. `Dialog` adds
+/// the `--closing` class and holds the native `close()` until that ends.
 /// @access private
 /// @group components
 @mixin dialog {
@@ -23,6 +26,10 @@
     border: 1px solid $border-subtle;
     background-color: $layer;
     color: $text-primary;
+    animation: dialog-enter $duration--moderate-02
+      motion(entrance, expressive);
+    transition: opacity $duration--moderate-02 motion(entrance, expressive),
+      transform $duration--moderate-02 motion(entrance, expressive);
 
     @include carbon--breakpoint(md) {
       max-width: 84%;
@@ -38,7 +45,41 @@
   }
 
   .#{$prefix}--dialog::backdrop {
+    animation: dialog-fade-in $duration--moderate-02
+      motion(entrance, expressive);
     background-color: $overlay;
+    transition: opacity $duration--moderate-02 motion(entrance, expressive);
+  }
+
+  .#{$prefix}--dialog--closing,
+  .#{$prefix}--dialog--closing::backdrop {
+    opacity: 0;
+    transition-timing-function: motion(exit, expressive);
+  }
+
+  .#{$prefix}--dialog--closing {
+    transform: translate3d(0, -24px, 0);
+  }
+
+  @keyframes dialog-enter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -24px, 0);
+    }
+  }
+
+  @keyframes dialog-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--dialog,
+    .#{$prefix}--dialog::backdrop {
+      animation: none;
+      transition: none;
+    }
   }
 }
 
