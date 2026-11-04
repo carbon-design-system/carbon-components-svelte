@@ -49,19 +49,6 @@ const IGNORED = [
 const KNOWN: Array<[file: string, message: RegExp]> = [
   // `sort` gets the union of every cell type, so `new Date(a)` fails.
   ["src/pages/components/DataTable.svx", /^No overload matches this call/],
-  // A computed column's `key` isn't a key of `Row`.
-  [
-    "src/pages/framed/DataTable/DataTableEditableCells.svelte",
-    /not assignable to type 'DataTableHeader</,
-  ],
-  [
-    "src/pages/framed/DataTable/DataTableEditableCellsRefreshCells.svelte",
-    /not assignable to type 'DataTableHeader</,
-  ],
-  [
-    "src/pages/framed/InlineEdit/InlineEditDataTableCell.svelte",
-    /not assignable to type 'DataTableHeader</,
-  ],
 ];
 const knownHits = new Set<number>();
 

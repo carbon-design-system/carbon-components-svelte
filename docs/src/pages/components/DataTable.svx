@@ -158,6 +158,8 @@ Use the `cell` slot to render form inputs that edit row values inline. Bind the 
 
 The table rebuilds cells only when the rows array reference changes. After an in-place edit, call `refreshRow(id)` to update columns whose display reads other fields on the same row. Use `bind:this` to obtain a reference to the component instance.
 
+A column computed from other fields, such as a total, takes a `key` that isn't one of the row's, a `display` that computes its cells, and `sort: false`: it has no value of its own to sort by.
+
 <FileSource src="/framed/DataTable/DataTableEditableCells" />
 
 When you edit multiple painted rows in place, call `refreshCells()` once to rebuild derived columns for the visible window. Offscreen rows are computed when they scroll into view.
