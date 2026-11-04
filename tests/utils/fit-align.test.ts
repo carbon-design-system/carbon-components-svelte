@@ -198,6 +198,18 @@ describe("clippedBy", () => {
     expect(clippedBy(menu)).toBe(outer);
   });
 
+  it("finds a box that contains paint, which clips with no overflow set", () => {
+    const { outer, inner, menu } = tree();
+    place(outer, { top: 0, left: 0, width: 400, height: 120 });
+    outer.style.setProperty("contain", "paint");
+    place(inner, { top: 0, left: 0, width: 400, height: 40 });
+    place(menu, { top: 40, left: 0, width: 200, height: 160 });
+    expect(clippedBy(menu)).toBe(outer);
+
+    outer.style.removeProperty("contain");
+    expect(clippedBy(menu)).toBe(null);
+  });
+
   it("returns null for a menu that fits, or one with no layout", () => {
     const { outer, menu } = tree();
     place(
