@@ -17,13 +17,13 @@
 
   /**
    * Set to `true` to require at least one selection.
-   * @type {boolean}
+   * @type {boolean | undefined}
    */
   export let required = undefined;
 
   /**
    * Specify a name attribute for the checkbox inputs.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
@@ -84,7 +84,7 @@
 
   /**
    * Set an id for the container div element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 
@@ -120,8 +120,12 @@
    * @type {import("svelte/store").Writable<ReadonlyArray<Value>>}
    */
   const selectedValues = writable(selected);
+  // The context type is public API: keep it as it was.
+  /** @type {import("svelte/store").Writable<string>} */
   const groupName = writable(name);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const groupForm = writable(form);
+  /** @type {import("svelte/store").Writable<boolean>} */
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupDisabled = writable(disabled);

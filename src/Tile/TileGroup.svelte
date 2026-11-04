@@ -18,7 +18,7 @@
 
   /**
    * Set to `true` to require the selection of a radio button.
-   * @type {boolean}
+   * @type {boolean | undefined}
    */
   export let required = undefined;
 
@@ -27,7 +27,7 @@
    * Overrides each tile's own `name`. When neither is set, the tiles share
    * a generated id so they form one radio group; set a name explicitly when
    * form submission matters.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
@@ -56,7 +56,7 @@
   /**
    * Set the size of every tile in the group: `"sm"` for compact tiles,
    * such as rows in a list of choices.
-   * @type {"sm" | "md"}
+   * @type {"sm" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -168,6 +168,8 @@
     );
   }
 
+  // The context type is public API: keep it as it was.
+  /** @type {import("svelte/store").Writable<"sm" | "md">} */
   const groupSize = writable(size);
   $: groupSize.set(size);
 

@@ -47,7 +47,7 @@
   /**
    * Set the size of every tile in the group: `"sm"` for compact tiles,
    * such as rows in a list of choices.
-   * @type {"sm" | "md"}
+   * @type {"sm" | "md" | undefined}
    */
   export let size = undefined;
 
@@ -239,6 +239,8 @@
   /** True while Shift is held during a mousedown gesture inside the group; suppresses the browser's native Shift+click text-selection highlight spanning multiple tiles. */
   let shiftMouseActive = false;
 
+  // The context type is public API: keep it as it was.
+  /** @type {import("svelte/store").Writable<"sm" | "md">} */
   const groupSize = writable(size);
   $: groupSize.set(size);
 
