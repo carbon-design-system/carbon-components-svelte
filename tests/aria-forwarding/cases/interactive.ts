@@ -16,6 +16,7 @@ import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
+import ImageViewer from "carbon-components-svelte/ImageViewer/ImageViewer.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
@@ -255,6 +256,14 @@ export const interactive: AriaEntry[] = [
         vi.unstubAllGlobals();
       }
     },
+    target: () => screen.getByRole("img"),
+  },
+  {
+    name: "ImageViewer",
+    render: (attrs) =>
+      render(ImageViewer, {
+        props: { src: "a.png", alt: "Alt text", ...attrs },
+      }),
     target: () => screen.getByRole("img"),
   },
   {
