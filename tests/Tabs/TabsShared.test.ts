@@ -345,6 +345,24 @@ describe.each(variants)(
       expect(screen.getByText("Content C")).toBeVisible();
     });
 
+    it("selects a tab that is added in the same update as its selectedId", async () => {
+      const { rerender } = render(TabsSelectedId, {
+        props: { vertical, selectedId: "tab-a", showTabC: false },
+      });
+      await tick();
+
+      await rerender({ selectedId: "tab-c", showTabC: true });
+      await tick();
+
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("tab-c");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(screen.getByRole("tab", { name: "Tab C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(screen.getByText("Content C")).toBeVisible();
+    });
+
     it("keeps the bound index on the selected tab after a keyed reorder", async () => {
       const { rerender } = render(TabsKeyed, { props: { vertical } });
       await tick();

@@ -616,6 +616,24 @@ describe("ProgressIndicator", () => {
       expect(screen.getByTestId("current-index")).toHaveTextContent("0");
     });
 
+    it("selects a step that is added in the same update as its selectedId", async () => {
+      const { rerender } = render(ProgressIndicatorSelectedId, {
+        props: { selectedId: "step-a", showStepC: false },
+      });
+      await tick();
+
+      await rerender({ selectedId: "step-c", showStepC: true });
+
+      await waitFor(() => {
+        expect(screen.getAllByRole("listitem")).toHaveLength(3);
+      });
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("step-c");
+      expect(screen.getByTestId("current-index")).toHaveTextContent("2");
+      expect(screen.getAllByRole("listitem")[2]).toHaveClass(
+        "bx--progress-step--current",
+      );
+    });
+
     it("lets selectedId win over currentIndex", async () => {
       render(ProgressIndicatorSelectedId, {
         props: { currentIndex: 0, selectedId: "step-c" },

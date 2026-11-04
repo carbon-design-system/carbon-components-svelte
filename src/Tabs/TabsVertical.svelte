@@ -310,11 +310,20 @@
   }
 
   /**
+   * The `selectedId` last resolved. A new one may name a tab that registers
+   * in the same update, so it is not replaced by a fallback until then.
+   * @type {string | undefined}
+   */
+  let syncedId;
+
+  /**
    * Resolve selection from `selectedId` when set; otherwise use `selected`.
    * If the selected id was removed, keep the same index (next tab) or clamp.
    * @type {() => void}
    */
   function syncSelection() {
+    const idChanged = selectedId !== syncedId;
+    syncedId = selectedId;
     if (selectedId === undefined) {
       selectedIndex = selected;
       return;
@@ -324,10 +333,11 @@
       items: $tabs,
       selectedId,
       currentIndex: selectedIndex,
+      idChanged,
     });
     if (!resolved) return;
     selectedIndex = resolved.index;
-    selectedId = resolved.id;
+    selectedId = syncedId = resolved.id;
   }
 
   // Vertical tabs are never dismissible; this no-op satisfies the `Tab` context.

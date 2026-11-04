@@ -702,6 +702,22 @@ describe("ContentSwitcher", () => {
       expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
     });
 
+    it("selects a switch that is added in the same update as its selectedId", async () => {
+      const { rerender } = await renderAndFlush(ContentSwitcherSelectedId, {
+        props: { selectedId: "switch-a", showSwitchC: false },
+      });
+
+      await rerender({ selectedId: "switch-c", showSwitchC: true });
+      await tick();
+
+      expect(screen.getByTestId("selected-id")).toHaveTextContent("switch-c");
+      expect(screen.getByTestId("selected-index")).toHaveTextContent("2");
+      expect(screen.getByRole("tab", { name: "Switch C" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+    });
+
     it("lets selectedId win over selectedIndex", async () => {
       await renderAndFlush(ContentSwitcherSelectedId, {
         props: { selectedIndex: 0, selectedId: "switch-c" },
