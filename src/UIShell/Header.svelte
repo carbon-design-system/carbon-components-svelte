@@ -112,6 +112,7 @@
 
   /** @type {undefined | number} */
   let winWidth;
+  /** @type {boolean | undefined} */
   let wasAboveBreakpoint;
 
   /** @type {import("svelte/store").Writable<number>} */

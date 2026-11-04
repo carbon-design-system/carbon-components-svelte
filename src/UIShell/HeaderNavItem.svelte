@@ -53,13 +53,15 @@
 
   // True when focus leaves the menu past its last item in DOM order. The item
   // list is read on demand since only blur needs it.
+  /** @param {EventTarget | null} relatedTarget */
   function isLeavingMenu(relatedTarget) {
     const items = get(ctx.menuItems);
     return (
       items.includes(ref) &&
       !items.some(
-        (item) =>
-          ref.compareDocumentPosition(item) & Node.DOCUMENT_POSITION_FOLLOWING,
+        (/** @type {HTMLElement} */ item) =>
+          /** @type {HTMLAnchorElement} */ (ref).compareDocumentPosition(item) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
       ) &&
       !items.includes(relatedTarget)
     );

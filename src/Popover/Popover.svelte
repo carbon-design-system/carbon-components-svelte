@@ -257,6 +257,7 @@
   // `document.body` (outside `ref`), so a click on it looks like an outside
   // click. Flatpickr stamps the input with `_flatpickr`; walk the popover's
   // own inputs to check whether the clicked calendar belongs to one of them.
+  /** @param {EventTarget | null} target */
   function isDatePickerCalendarClick(target) {
     if (!ref || !(target instanceof Element)) return false;
     const calendar = target.closest(".bx--date-picker__calendar");
@@ -271,6 +272,7 @@
     return false;
   }
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (
       open &&
@@ -289,10 +291,15 @@
   // popover itself because focus is often on the trigger, not inside the
   // popover content. Does not `stopPropagation`: other layers (e.g. `Modal`)
   // rely on Escape bubbling to their own handlers.
+  /** @param {Event} event */
   function handleEscape(event) {
-    if (open && closeOnEscape && event.key === "Escape") {
+    if (
+      open &&
+      closeOnEscape &&
+      /** @type {KeyboardEvent} */ (event).key === "Escape"
+    ) {
       // Escape that cancels an IME composition is not a close.
-      if (isImeComposition(event)) return;
+      if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
       open = false;
       dispatch("close", { trigger: "escape-key" });
     }

@@ -183,6 +183,7 @@
     ctx.unregisterIcon(iconRegId);
   }
 
+  /** @param {MouseEvent | KeyboardEvent} event */
   function handleClick(event) {
     if (disabled) return;
 
@@ -221,18 +222,23 @@
   }
 
   onMount(() => {
+    /** @type {(() => void) | undefined} */
     let unsubscribe;
 
     if (ctxGroup) {
       if (selected) ctxGroup.addOption({ id });
-      unsubscribe = ctxGroup.currentIds.subscribe((currentIds) => {
-        selected = currentIds.includes(id);
-      });
+      unsubscribe = ctxGroup.currentIds.subscribe(
+        (/** @type {string[]} */ currentIds) => {
+          selected = currentIds.includes(id);
+        },
+      );
     } else if (ctxRadioGroup) {
       if (selected) ctxRadioGroup.addOption({ id });
-      unsubscribe = ctxRadioGroup.currentId.subscribe((currentId) => {
-        selected = id === currentId;
-      });
+      unsubscribe = ctxRadioGroup.currentId.subscribe(
+        (/** @type {string} */ currentId) => {
+          selected = id === currentId;
+        },
+      );
     }
 
     return () => {

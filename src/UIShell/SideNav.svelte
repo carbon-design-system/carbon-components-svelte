@@ -134,10 +134,12 @@
     sideNavWidth,
   } from "./nav-store.js";
 
+  /** @param {Event} event */
   function handleEscape(event) {
-    if (!dismissible || event.key !== "Escape") return;
+    if (!dismissible || /** @type {KeyboardEvent} */ (event).key !== "Escape")
+      return;
     // Escape that cancels an IME composition is not a close.
-    if (isImeComposition(event)) return;
+    if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
     // A control inside the nav (a `HeaderNavMenu`) already used this Escape.
     if (event.defaultPrevented) return;
     // Below the breakpoint the open nav traps focus, so any Escape closes
@@ -145,7 +147,7 @@
     // nav or its menu button does.
     if (
       !$isSideNavMobile &&
-      !navRef?.contains(event.target) &&
+      !navRef?.contains(/** @type {Node | null} */ (event.target)) &&
       event.target !== $hamburgerMenuRef
     ) {
       return;
@@ -158,6 +160,7 @@
   const RESIZE_KEYBOARD_LARGE_STEP = 64;
 
   // Rounded: `clientX` is fractional under zoom or on high-DPI displays.
+  /** @param {number} value */
   function clampWidth(value) {
     return Math.round(Math.max(minWidth, Math.min(maxWidth, value)));
   }
@@ -165,6 +168,7 @@
   // `pointerDrag` captures the pointer, so the drag follows it past the
   // handle, the nav, or (in an iframe) the document, and ignores secondary
   // buttons and other pointers.
+  /** @param {PointerEvent} event */
   function handleResizeStart(event) {
     resizing = true;
     resizeStartX = event.clientX;
@@ -179,6 +183,7 @@
     document.body.classList.add("bx--side-nav-resizing");
   }
 
+  /** @param {PointerEvent} event */
   function handleResizeMove(event) {
     width = clampWidth(
       resizeStartWidth + resizeDirection * (event.clientX - resizeStartX),
@@ -198,6 +203,7 @@
 
   // `bind:width` updates on every step of a drag; `resize` fires once per
   // gesture, e.g. for persisting the final width.
+  /** @param {number} prevWidth */
   function dispatchResize(prevWidth) {
     const nextWidth = clampWidth(width);
     if (nextWidth !== prevWidth) dispatch("resize", { width: nextWidth });
@@ -259,6 +265,7 @@
 
   /** @type {null | HTMLElement} */
   let navRef;
+  /** @type {undefined | number} */
   let winWidth;
 
   /** @type {import("svelte/store").Writable<number>} */

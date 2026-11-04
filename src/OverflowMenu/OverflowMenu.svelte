@@ -203,6 +203,7 @@
   // A menu whose items show shortcuts sizes to its content, so the keys
   // don't squeeze the labels.
   $: hasShortcuts = $items.some((item) => item.shortcut);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const currentId = writable(undefined);
   /**
    * @type {import("svelte/store").Writable<string | undefined>}
@@ -210,6 +211,7 @@
   const focusedId = writable(undefined);
   const focusedIndex = writable(-1);
 
+  /** @type {number | undefined} */
   let buttonWidth;
   let mounted = false;
 
@@ -265,6 +267,7 @@
    * a re-render (e.g. `buttonWidth` settling) never wipes the `top`/`left`
    * written here.
    */
+  /** @type {string | null} */
   let measuredPositionKey = null;
 
   // The side an in-place menu opens on: `direction`, unless it doesn't fit
@@ -409,8 +412,13 @@
     orientation: /** @type {const} */ ("vertical"),
     skipDisabled: true,
     getItems: () => $items,
+    /** @param {{ id: string; text: string; primaryFocus: boolean; disabled: boolean; shortcut: string; node: HTMLElement }} item */
     isDisabled: (item) => item.disabled,
     getActiveIndex: () => $focusedIndex,
+    /**
+     * @param {number} index
+     * @param {KeyboardEvent} event
+     */
     onMove: (index, event) => {
       if (!hasModifierKey(event)) focusedIndex.set(index);
     },
@@ -432,38 +440,51 @@
         // Menu is a button sibling; position from offsetTop/offsetLeft.
         const { offsetTop, offsetLeft } = buttonRef;
         // Read menu geometry up front, before any writes below: reading
-        // offsetHeight/offsetWidth after menuRef.style has already been
+        // offsetHeight/offsetWidth after /** @type {HTMLUListElement} */ (menuRef).style has already been
         // written forces a second synchronous layout recalc on top of the
         // one triggered by the reads above.
-        const menuHeight = menuRef.offsetHeight;
-        const menuWidth = menuRef.offsetWidth;
+        const menuHeight = /** @type {HTMLUListElement} */ (menuRef)
+          .offsetHeight;
+        const menuWidth = /** @type {HTMLUListElement} */ (menuRef).offsetWidth;
         menuPlacement = ctxBreadcrumbItem
           ? direction
-          : menuSide(buttonRef, menuRef, direction);
+          : menuSide(
+              buttonRef,
+              /** @type {HTMLUListElement} */ (menuRef),
+              direction,
+            );
 
         if (menuPlacement === "top") {
-          menuRef.style.top = `${offsetTop - menuHeight}px`;
+          /** @type {HTMLUListElement} */ (menuRef).style.top =
+            `${offsetTop - menuHeight}px`;
         } else {
-          menuRef.style.top = `${offsetTop + height}px`;
+          /** @type {HTMLUListElement} */ (menuRef).style.top =
+            `${offsetTop + height}px`;
         }
 
         if (alignRight) {
-          menuRef.style.left = `${offsetLeft + width - menuWidth}px`;
+          /** @type {HTMLUListElement} */ (menuRef).style.left =
+            `${offsetLeft + width - menuWidth}px`;
         } else {
-          menuRef.style.left = `${offsetLeft}px`;
+          /** @type {HTMLUListElement} */ (menuRef).style.left =
+            `${offsetLeft}px`;
         }
 
         if (ctxBreadcrumbItem) {
-          menuRef.style.top = `${offsetTop + height + 10}px`;
+          /** @type {HTMLUListElement} */ (menuRef).style.top =
+            `${offsetTop + height + 10}px`;
           // The caret sits 21px in from the menu's inline start, so the
           // menu mirrors around the trigger in RTL.
-          menuRef.style.left =
+          /** @type {HTMLUListElement} */ (menuRef).style.left =
             resolveLayoutDirection($layoutDirection, buttonRef) === "rtl"
               ? `${offsetLeft + width + 11 - menuWidth}px`
               : `${offsetLeft - 11}px`;
         }
 
-        if (portalMenu === undefined && clippedBy(menuRef)) {
+        if (
+          portalMenu === undefined &&
+          clippedBy(/** @type {HTMLUListElement} */ (menuRef))
+        ) {
           portalWhenClipped = true;
         }
       }
@@ -556,10 +577,12 @@
   // Listens on `window` in the capture phase, as Button does, so a hovered
   // tooltip also hides while focus is elsewhere, and an ancestor such as a
   // Modal doesn't also see the Escape that hid it.
+  /** @param {Event} event */
   function handleTooltipKeydown(event) {
-    if (event.key !== "Escape" || !tooltipOpen) return;
+    if (/** @type {KeyboardEvent} */ (event).key !== "Escape" || !tooltipOpen)
+      return;
     // Escape that cancels an IME composition is not a dismissal.
-    if (isImeComposition(event)) return;
+    if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
     event.stopPropagation();
     dismissTooltip();
   }
@@ -606,6 +629,7 @@
     : (BUTTON_WIDTHS[effectiveSize] ?? "2.5rem");
   $: maxHeightStyle = toCssLength(maxHeight);
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (menuRef && isOutsideClick(event, [buttonRef, menuRef])) {
       const shouldContinue = dispatch(

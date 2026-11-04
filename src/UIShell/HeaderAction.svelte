@@ -147,6 +147,7 @@
     .filter(Boolean)
     .join(" ");
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (
       isOpen &&
@@ -158,10 +159,11 @@
     }
   }
 
+  /** @param {Event} event */
   function handleKeydown(event) {
-    if (isOpen && event.key === "Escape") {
+    if (isOpen && /** @type {KeyboardEvent} */ (event).key === "Escape") {
       // Escape that cancels an IME composition is not a close.
-      if (isImeComposition(event)) return;
+      if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
       isOpen = false;
       dispatch("close", { trigger: "escape-key" });
       if (ref) focusQuietly(ref);

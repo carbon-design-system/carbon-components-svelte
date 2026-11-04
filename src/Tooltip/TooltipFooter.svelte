@@ -9,6 +9,12 @@
   let open = false;
   let openedByHover = false;
 
+  /**
+   * @type {{
+   *   tooltipOpen: import("svelte/store").Readable<boolean>,
+   *   openedByHover?: import("svelte/store").Readable<boolean>,
+   * } | null}
+   */
   const ctx = getContext("carbon:Tooltip") ?? null;
   const unsubscribeOpen = ctx?.tooltipOpen.subscribe((value) => {
     open = value;
@@ -28,7 +34,9 @@
   // programmatically. Focusing on mouse hover would yank focus away from a user
   // who is only pointing at the trigger.
   $: if (open && !openedByHover && footerRef) {
-    const node = footerRef.querySelector(selectorPrimaryFocus);
+    const node = /** @type {HTMLElement | null} */ (
+      footerRef.querySelector(selectorPrimaryFocus)
+    );
     if (node) node.focus();
   }
 </script>

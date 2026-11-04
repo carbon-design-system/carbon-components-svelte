@@ -184,6 +184,7 @@
   // The closed search shows its shortcut beside the icon.
   $: hasShortcutHint = Boolean(shortcut) && !active;
 
+  /** @type {boolean | undefined} */
   let prevActive;
   // Escape closes the menu but leaves the search bar open.
   let menuDismissed = false;
@@ -191,6 +192,7 @@
   // `menu` slot shares SearchMenu context with SearchMenuItem/SearchMenuGroup.
   $: richMenu = Boolean($$slots.menu);
 
+  /** @type {import("../utils/debounce.js").Debounced<(...args: unknown[]) => void> | null} */
   let dispatchSearch = null;
 
   $: {
@@ -297,6 +299,7 @@
   });
 
   /** Keyboard navigation for the `menu` slot (`role="option"`). */
+  /** @param {KeyboardEvent} event */
   function handleRichKeydown(event) {
     switch (event.key) {
       case "ArrowDown":
@@ -389,6 +392,7 @@
     ? `${id}-menuitem-${selectedResult.id ?? selectedResultIndex}`
     : undefined;
 
+  /** @param {Event} event */
   function handleOutsideMouseup(event) {
     if (active && isOutsideClick(event, refSearch)) {
       active = false;

@@ -24,7 +24,10 @@
    */
   export let iconClose = /** @type {Icon} */ (Close);
 
-  /** Obtain a reference to the HTML button element */
+  /**
+   * Obtain a reference to the HTML button element
+   * @type {null | HTMLButtonElement}
+   */
   export let ref = null;
 
   import { onMount } from "svelte";

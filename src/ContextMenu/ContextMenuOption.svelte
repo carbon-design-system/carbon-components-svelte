@@ -136,10 +136,13 @@
   const ctxGroup = getContext("carbon:ContextMenuGroup");
   const ctxRadioGroup = getContext("carbon:ContextMenuRadioGroup");
 
+  /** @type {(() => void) | undefined} */
   let unsubCurrentIds;
+  /** @type {(() => void) | undefined} */
   let unsubCurrentId;
   let rootMenuPosition = [0, 0];
   let focusIndex = 0;
+  /** @type {HTMLElement[]} */
   let options = [];
   let role = "menuitem";
   let submenuOpen = false;
@@ -161,10 +164,16 @@
     },
   );
 
-  const unsubPosition = ctx.position.subscribe((position) => {
-    rootMenuPosition = position;
-  });
+  const unsubPosition = ctx.position.subscribe(
+    (/** @type {[number, number]} */ position) => {
+      rootMenuPosition = position;
+    },
+  );
 
+  /**
+   * @param {MouseEvent | KeyboardEvent} event
+   * @param {{ fromKeyboard?: boolean, id?: string | null }} [options]
+   */
   function handleClick(event, options = {}) {
     if (disabled) return;
     if (subOptions) return;
@@ -193,15 +202,19 @@
     if (selected === true) selectable = true;
 
     if (ctxGroup) {
-      unsubCurrentIds = ctxGroup.currentIds.subscribe((_currentIds) => {
-        selected = _currentIds.includes(id);
-      });
+      unsubCurrentIds = ctxGroup.currentIds.subscribe(
+        (/** @type {string[]} */ _currentIds) => {
+          selected = _currentIds.includes(id);
+        },
+      );
     }
 
     if (ctxRadioGroup) {
-      unsubCurrentId = ctxRadioGroup.currentId.subscribe((_id) => {
-        selected = id === _id;
-      });
+      unsubCurrentId = ctxRadioGroup.currentId.subscribe(
+        (/** @type {string} */ _id) => {
+          selected = id === _id;
+        },
+      );
     }
 
     return () => {
@@ -224,7 +237,9 @@
   // it doesn't fit, and pins to the viewport edge when it fits on neither
   // side. The option spans its menu, which starts at `rootMenuPosition`.
   $: if (submenuOpen) {
-    const { width, y } = ref.getBoundingClientRect();
+    const { width, y } = /** @type {HTMLLIElement} */ (
+      ref
+    ).getBoundingClientRect();
     const x = fitMenuAxis({
       before: rootMenuPosition[0],
       after: rootMenuPosition[0] + width,
@@ -296,7 +311,9 @@
       if (disabled) return;
       submenuOpen = true;
       await tick();
-      options = [...ref.querySelectorAll("li[tabindex]")];
+      options = /** @type {HTMLElement[]} */ ([
+        .../** @type {HTMLLIElement} */ (ref).querySelectorAll("li[tabindex]"),
+      ]);
       if (options[focusIndex]) options[focusIndex].focus();
       return;
     }

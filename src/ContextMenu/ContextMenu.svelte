@@ -93,12 +93,14 @@
   const FOCUSABLE =
     'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+  /** @type {HTMLElement[]} */
   let options = [];
   let direction = 1;
   let prevX = 0;
   let prevY = 0;
   let prevOpen = false;
   let focusIndex = -1;
+  /** @type {EventTarget | null} */
   let openDetail = null;
   /** @type {HTMLElement | null} */
   let returnFocus = null;
@@ -162,7 +164,9 @@
   function openMenu(event) {
     event.preventDefault();
     focusFirstOption = event.button !== 2 && event.buttons === 0;
-    const { height, width } = ref.getBoundingClientRect();
+    const { height, width } = /** @type {HTMLUListElement} */ (
+      ref
+    ).getBoundingClientRect();
 
     // The menu opens toward the inline end of the pointer: the left in RTL.
     if (open || x === 0) {
@@ -241,7 +245,11 @@
 
   afterUpdate(() => {
     if (open) {
-      options = [...ref.querySelectorAll("li[data-nested='false']")];
+      options = /** @type {HTMLElement[]} */ ([
+        .../** @type {HTMLUListElement} */ (ref).querySelectorAll(
+          "li[data-nested='false']",
+        ),
+      ]);
 
       if (level === 1) {
         if (!prevOpen) {
@@ -249,13 +257,14 @@
           returnFocus =
             active instanceof HTMLElement &&
             active !== document.body &&
-            !ref.contains(active)
+            !(/** @type {HTMLUListElement} */ (ref).contains(active))
               ? active
               : openDetail instanceof Element
                 ? openDetail.closest(FOCUSABLE)
                 : null;
         }
-        if (prevX !== x || prevY !== y) ref.focus();
+        if (prevX !== x || prevY !== y)
+          /** @type {HTMLUListElement} */ (ref).focus();
         prevX = x;
         prevY = y;
         if (focusFirstOption) {
@@ -277,12 +286,18 @@
   $: focusedIndex.set(focusIndex);
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, ref)) close("outside-click");
   }
+  /** @param {Event} event */
   function handleEscape(event) {
     // Escape that cancels an IME composition is not a close.
-    if (open && event.key === "Escape" && !isImeComposition(event)) {
+    if (
+      open &&
+      /** @type {KeyboardEvent} */ (event).key === "Escape" &&
+      !isImeComposition(/** @type {KeyboardEvent} */ (event))
+    ) {
       close("escape-key");
     }
   }
