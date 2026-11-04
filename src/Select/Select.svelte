@@ -131,7 +131,8 @@
    */
   const aiLabelState = writable($$slots.decorator ? "active" : undefined);
   /**
-   * @type {import("svelte/store").Writable<string | number | undefined>}
+   * `null` until an item sets the default value.
+   * @type {import("svelte/store").Writable<string | number | null | undefined>}
    */
   const selectedValue = writable(selected);
   /** @type {import("svelte/store").Writable<string | null>} */
