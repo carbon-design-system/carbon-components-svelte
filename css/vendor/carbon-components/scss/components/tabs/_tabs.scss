@@ -1676,3 +1676,71 @@ $tabs-sizes: (
 @include exports("tabs-forced-colors") {
   @include tabs-forced-colors;
 }
+
+// carbon-components-svelte patch (tabs-reorder)
+// Reordering tabs by drag. The held tab slides under the pointer and the
+// tabs it passes step aside (the action sets each `transform`), which opens
+// the gap it would land in. Nothing moves until the app handles `reorder`,
+// so a tab never ends up in a place the data does not.
+
+/// A reorderable tab list: the tab being dragged and the tabs making room.
+/// @access private
+/// @group tabs
+@mixin tabs-reorder {
+  // A press that selects text would fight the drag.
+  .#{$prefix}--tabs--reorderable .#{$prefix}--tabs__nav-item {
+    position: relative;
+    user-select: none;
+  }
+
+  .#{$prefix}--tabs__nav--reordering {
+    cursor: grabbing;
+  }
+
+  // The tabs that step aside slide. The held tab follows the pointer, so it
+  // keeps its own transition.
+  .#{$prefix}--tabs__nav--reordering
+    .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--dragging) {
+    transition: background-color $duration--fast-01 motion(standard, productive),
+      transform $duration--fast-02 motion(standard, productive);
+  }
+
+  // A fill or a lower opacity would put the label under 4.5:1, so the held
+  // tab is lifted with a shadow and a dashed ring instead. Line tabs are
+  // transparent, and the tab passes over its neighbors, so it gets a fill.
+  .#{$prefix}--tabs__nav-item--dragging {
+    z-index: 2;
+    background-color: $background;
+    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
+    outline: 2px dashed $focus;
+    outline-offset: -2px;
+    pointer-events: none;
+    transition: none;
+  }
+
+  .#{$prefix}--tabs--container .#{$prefix}--tabs__nav-item--dragging {
+    background-color: $layer-accent;
+  }
+
+  .#{$prefix}--tabs--container
+    .#{$prefix}--tabs__nav-item--dragging.#{$prefix}--tabs__nav-item--selected {
+    background-color: $layer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--tabs__nav--reordering
+      .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--dragging) {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--tabs__nav-item--dragging {
+      outline-color: Highlight;
+    }
+  }
+}
+
+@include exports("tabs-reorder") {
+  @include tabs-reorder;
+}

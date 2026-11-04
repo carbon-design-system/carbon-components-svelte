@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { render } from "svelte/server";
 import { renderSSR } from "../utils/ssr";
+import TabsReorder from "./TabsReorder.test.svelte";
 import TabsSecondaryLabel from "./TabsSecondaryLabelSsr.test.svelte";
 import TabsSsr from "./TabsSsr.test.svelte";
 import TabsOwnPanelId from "./TabsSsrOwnPanelId.test.svelte";
@@ -107,5 +108,17 @@ describe("Tabs server render with a secondary label", () => {
     expect(
       document.querySelector(".bx--tabs__nav-item-secondary-label"),
     ).toBeNull();
+  });
+
+  it("renders a reorderable list with its hint, and no live message", () => {
+    const { document } = renderSSR(TabsReorder);
+
+    expect(document.querySelector(".bx--tabs--reorderable")).not.toBeNull();
+    const tab = document.querySelector("[role='tab']");
+    const hint = tab?.getAttribute("aria-describedby")?.split(" ")[1] ?? "";
+    expect(document.getElementById(hint)?.textContent).toContain(
+      "move this tab",
+    );
+    expect(document.querySelector("[role='status']")?.textContent).toBe("");
   });
 });

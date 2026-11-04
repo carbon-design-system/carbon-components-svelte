@@ -91,6 +91,7 @@
   export let tooltipAlignment = "center";
 
   import { getContext, onMount } from "svelte";
+  import { readable } from "svelte/store";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
@@ -107,6 +108,7 @@
     hasSecondaryLabel,
     secondaryLabelSupported,
     useContainer,
+    reorderHint = readable(undefined),
     navigation,
     add,
     remove,
@@ -246,7 +248,11 @@
     aria-controls={ariaControls ?? ($navigation ? undefined : panelId)}
     aria-label={ariaLabel ?? ($iconOnly ? label : undefined)}
     aria-labelledby={ariaLabelledBy}
-    aria-describedby={ariaDescribedBy}
+    aria-describedby={ariaDescribedBy
+      ? $reorderHint
+        ? `${ariaDescribedBy} ${$reorderHint}`
+        : ariaDescribedBy
+      : $reorderHint}
     {id}
     href={$navigation && disabled ? undefined : href}
     class:bx--tabs__nav-link={true}

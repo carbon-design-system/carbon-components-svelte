@@ -492,6 +492,48 @@ Set `type="container"` and `dismissible` to `true` for dismissible container tab
 
 <FileSource src="/framed/Tabs/TabsDismissibleContainer" />
 
+## Reordering
+
+Set `reorderable` to let people rearrange tabs by dragging them or with the
+keyboard. Tabs never move themselves. The `reorder` event reports the tab's
+`id`, the `oldIndex` it left, the `newIndex` it lands at (counted with the tab
+already out of its old place) and the `source`, either `"pointer"` or
+`"keyboard"`. Move the tab in your data and the tabs follow. If the handler moves
+nothing, nothing moves. Call `preventDefault()` on the event to refuse a move.
+
+Hold <DocKbd label="Ctrl" /> or <DocKbd label="⌘" /> and <DocKbd label="Shift" />,
+then press <DocKbd label="←" /> or <DocKbd label="→" /> to move the focused tab
+one place. Press <DocKbd label="Home" /> or <DocKbd label="End" /> instead to send
+it to the first or last place. The arrows swap in right-to-left pages. A live
+region announces the new place, and `reorderText` and `reorderHintText` replace
+the wording.
+
+A press that travels less than 4 pixels is still a click, and the dismiss button
+keeps working. Press <DocKbd label="Escape" /> during a drag to cancel it. Dragging
+does not select the tab. On a touch screen, rest a finger on a tab briefly before
+dragging, so a swipe still scrolls the list.
+
+### Basic
+
+<FileSource src="/framed/Tabs/TabsReorder" />
+
+### Container
+
+<FileSource src="/framed/Tabs/TabsReorderContainer" />
+
+### Refusing a move
+
+Call `preventDefault()` to keep a tab in place, as for a pinned tab.
+
+<FileSource src="/framed/Tabs/TabsReorderRefuse" />
+
+| Do | Why |
+| --- | --- |
+| Give each `Tab` a stable `id` and key the `each` block by it | A keyed block moves the existing tabs, so focus and the selection stay with the tab. |
+| Reorder the panels along with the tabs | A panel pairs with the tab at its position. |
+| Bind `selectedId`, not `selected` | An index points at a different tab once tabs move. |
+| Leave `reorderable` off for `navigation` tabs | Page navigation is a list of links, not a tab list, so it ignores `reorderable`. |
+
 ## Custom label
 
 Use the default slot with `let:selected` to customize the tab label based on
