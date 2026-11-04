@@ -183,7 +183,7 @@
   // membership still compares `value` itself.
   $: nativeValue = value === "" || value == null ? "on" : value;
   $: if (ctx) checked = $selectedValues.includes(value);
-  $: if (useGroup) checked = group.includes(value);
+  $: if (useGroup && group) checked = group.includes(value);
 
   $: effectiveName = ctx ? ($groupName ?? name) : name;
   // Native validation requires every `required` checkbox. A required group

@@ -417,7 +417,7 @@
           <slot name="labelChildren">{labelText}</slot>
         </label>
       {/if}
-      {#if hasMaxCount}
+      {#if typeof maxCount === "number"}
         <div
           class:bx--label={true}
           class:bx--label--disabled={effectiveDisabled}

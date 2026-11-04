@@ -8,7 +8,7 @@
   /**
    * Specify the DOM element to mount the portal into.
    * Defaults to `document.body`.
-   * @type {HTMLElement | null}
+   * @type {Element | null}
    */
   export let target = null;
 

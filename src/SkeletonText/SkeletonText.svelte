@@ -45,13 +45,13 @@
       const rand = `${Math.floor(RANDOM[i % 3] * (max - min + 1)) + min}px`;
 
       return widthPx ? rand : `calc(${width} - ${rand})`;
-    }) as width, i (i)}
+    }) as lineWidth, i (i)}
       <p
         class:bx--skeleton__text={true}
         class:bx--skeleton__heading={heading}
         class:bx--skeleton__text--no-margin={noMargin && i === lines - 1}
         class:bx--skeleton__text--ai={ai}
-        style:width
+        style:width={lineWidth}
       ></p>
     {/each}
   </div>
