@@ -5,7 +5,7 @@
 
   /**
    * Specify the ARIA label for the button.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let ariaLabel = undefined;
 

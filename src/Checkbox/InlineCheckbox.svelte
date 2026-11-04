@@ -10,7 +10,7 @@
 
   /**
    * Specify the title attribute for the label element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let title = undefined;
 

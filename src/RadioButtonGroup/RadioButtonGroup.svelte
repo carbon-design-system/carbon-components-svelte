@@ -19,7 +19,7 @@
 
   /**
    * Set to `true` to require the selection of a radio button.
-   * @type {boolean}
+   * @type {boolean | undefined}
    */
   export let required = undefined;
 
@@ -28,7 +28,7 @@
    * Overrides each button's own `name`. When neither is set, the buttons
    * share a generated id so they form one radio group; set a name
    * explicitly when form submission matters.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let name = undefined;
 
@@ -101,7 +101,7 @@
 
   /**
    * Set an id for the container div element.
-   * @type {string}
+   * @type {string | undefined}
    */
   export let id = undefined;
 
@@ -141,12 +141,15 @@
   const selectedValue = writable(selected);
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const groupName = writable(name || undefined);
+  /** @type {import("svelte/store").Writable<string | undefined>} */
   const groupForm = writable(form);
   // Unnamed radios are separate controls, so arrow keys would not move the
   // selection. Buttons with no name of their own share this one when the
   // group has no `name` either.
   /** @type {string} */
   const fallbackName = uniqueId();
+  // The context type is public API: keep it as it was.
+  /** @type {import("svelte/store").Writable<boolean>} */
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupAllowDeselect = writable(allowDeselect);
