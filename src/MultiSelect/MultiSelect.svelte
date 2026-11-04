@@ -622,7 +622,9 @@
     }
   }
 
+  /** @type {string | undefined} */
   let sortCollatorLocale;
+  /** @type {Intl.Collator | undefined} */
   let sortCollator;
   function getSortCollator() {
     if (!sortCollator || sortCollatorLocale !== locale) {
@@ -648,15 +650,20 @@
   // consumer made to the array it previously handed over.
   let prevSelectedIds = selectedIds.slice();
   /** Anchor item id for shift+click range selection; cleared when selection is reset entirely. */
+  /** @type {Item["id"] | null} */
   let prevSelectedItemId = null;
   /** Wrapper of the selected-item tags, for focus tracking. */
+  /** @type {null | HTMLDivElement} */
   let selectedTagsRef = null;
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
   /** Accumulated characters for first-character typeahead in the non-filterable field. */
-  /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
+  // Rows are items or group headers, told apart by the row index in the
+  // template, so the window's row type is `any`.
+  /** @type {import("../ListBox/menu-window.js").MenuWindowState<any>} */
   let menuState;
 
+  /** @type {import("../ListBox/menu-window.js").MenuWindow<any>} */
   const menuWindow = createMenuWindow({
     getContainer: () => listRef,
     onScrollTop: (scrollTop) => {
@@ -765,6 +772,7 @@
     prevSelectedItemId = item.id;
   }
 
+  /** @param {number} step */
   function change(step) {
     // Disabled options stay in the keyboard navigation sequence (APG:
     // "Focusability of disabled controls") so assistive-tech users can
@@ -851,7 +859,9 @@
       selectAllIndex !== -1 &&
       sortedItems[selectAllIndex].checked !== newAllSelected
     ) {
-      sortedItems[selectAllIndex] = {
+      /** @type {Array<Item & { checked: boolean }>} */ (sortedItems)[
+        selectAllIndex
+      ] = {
         ...sortedItems[selectAllIndex],
         checked: newAllSelected,
       };
@@ -929,7 +939,10 @@
     }
   }
 
-  /** Handle selection of an item, including isSelectAll logic. */
+  /**
+   * Handle selection of an item, including isSelectAll logic.
+   * @param {Item & { checked?: boolean }} item
+   */
   function selectItem(item) {
     // Read-only allows opening and navigating the menu to review values, but
     // never changing them. Guarding here covers every path (click, Enter,
@@ -939,9 +952,13 @@
     if (item.isSelectAll) {
       setSelectAllScopeChecked(!allSelected);
     } else {
-      const itemIndex = sortedItems.indexOf(item);
+      const itemIndex = sortedItems.indexOf(
+        /** @type {Item & { checked: boolean }} */ (item),
+      );
       if (itemIndex !== -1) {
-        sortedItems[itemIndex] = { ...item, checked: !item.checked };
+        /** @type {Array<Item & { checked: boolean }>} */ (sortedItems)[
+          itemIndex
+        ] = { ...item, checked: !item.checked };
       }
 
       syncSelectAllItem();
@@ -994,7 +1011,7 @@
       if (anchorIndex > targetIndex) changed.reverse();
       changed = changed.slice(
         0,
-        Math.max(0, maxSelectedItems - selectionCount),
+        Math.max(0, /** @type {number} */ (maxSelectedItems) - selectionCount),
       );
     }
     const rangeIds = new Set(changed.map((item) => item.id));
@@ -1050,12 +1067,13 @@
   }
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
+  /** @type {number | null} */
   let announcedFilterCount = null;
 
   const announceFilterResults = debounce((count) => {
     if (count === announcedFilterCount) return;
-    announcedFilterCount = count;
-    announceStatus(filterResultsText(count));
+    announcedFilterCount = /** @type {number} */ (count);
+    announceStatus(filterResultsText(/** @type {number} */ (count)));
   }, 800);
 
   onMount(() => {
@@ -1199,7 +1217,9 @@
    * re-sort (define it outside the markup, as with `filterItem`/date rules
    * elsewhere in this library).
    */
+  /** @type {typeof items} */
   let baseOrderItems;
+  /** @type {Array<{ item: Item; snapshot: Item }>} */
   let baseOrderPairs;
   function getBaseOrderPairs() {
     if (baseOrderItems === items) return baseOrderPairs;
@@ -1217,7 +1237,9 @@
     baseOrderPairs = orderByGroup(
       pairs,
       (pair) => pair.item.group,
-      sortItem === false ? undefined : (a, b) => sortItem(a.item, b.item),
+      sortItem === false
+        ? undefined
+        : (a, b) => /** @type {number} */ (sortItem(a.item, b.item)),
     );
     return baseOrderPairs;
   }
@@ -1242,6 +1264,12 @@
     // filtered order, not by id, so it also catches an in-place mutation
     // handed back under the same id).
     const prevById = indexById(sortedItems);
+    /**
+     * @param {Item} item
+     * @param {Item | undefined} snapshot
+     * @param {boolean} checked
+     * @returns {Item & { checked: boolean }}
+     */
     const reuseOrBuildEntry = (item, snapshot, checked) => {
       const bucket = prevById.get(item.id);
       const prev = bucket?.[0];
@@ -1445,7 +1473,8 @@
   $: hasMaxSelectedItems =
     typeof maxSelectedItems === "number" && maxSelectedItems > 0;
   $: isAtSelectionCap =
-    hasMaxSelectedItems && selectionCount >= maxSelectedItems;
+    hasMaxSelectedItems &&
+    selectionCount >= /** @type {number} */ (maxSelectedItems);
   $: maxSelectedId = `max-selected-${id}`;
   $: filteredItems =
     filterable && open
@@ -1565,6 +1594,7 @@
     dispatch,
   });
 
+  /** @param {Event} event */
   function handleOutsideInteraction(event) {
     if (
       open &&
@@ -1605,6 +1635,7 @@
     const measure = /** @type {HTMLElement | null} */ (node.firstElementChild);
     const action = overflowTitle(node, { title, measure });
     return {
+      /** @param {string | undefined} next */
       update: (next) => action.update({ title: next, measure }),
       destroy: action.destroy,
     };

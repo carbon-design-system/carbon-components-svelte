@@ -209,6 +209,7 @@
   /** @type {Search | null} */
   let search = null;
 
+  /** @type {null | import("../utils/debounce.js").Debounced<(searchValue: unknown) => void>} */
   let dispatchSearch = null;
 
   $: {
@@ -299,7 +300,7 @@
     selectItem(detail) {
       dispatchSearch?.cancel();
       // The field shows what was picked; `select` carries the item's value.
-      value = detail.item.text ?? detail.value ?? value;
+      value = /** @type {T} */ (detail.item.text ?? detail.value ?? value);
       dispatch("select", detail);
       close("select");
       dismissed = true;
@@ -339,6 +340,7 @@
     return !disabled && !readonly && focused && !dismissed;
   }
 
+  /** @param {"escape-key" | "outside-click" | "select" | "blur"} trigger */
   function close(trigger) {
     if (isMenuOpen()) dispatch("close", { trigger });
   }
@@ -353,6 +355,7 @@
     highlightedId,
   });
 
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     // Keys during an IME composition belong to the IME.
     if (isImeComposition(event)) return;
@@ -414,6 +417,7 @@
     highlightedId.set(null);
   }
 
+  /** @param {FocusEvent} event */
   function handleBlur(event) {
     const next = event.relatedTarget;
     if (
@@ -470,6 +474,7 @@
     if (detail) dispatch("scrollend", detail);
   }
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, [anchorRef, portal ? menuRef : null])) {
       close("outside-click");

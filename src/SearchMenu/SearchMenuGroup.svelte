@@ -25,6 +25,7 @@
     throw new Error("SearchMenuGroup must be used within a SearchMenu.");
   }
 
+  /** @type {import("svelte/store").Writable<boolean | undefined>} */
   const sharedFilter = writable(filter);
 
   $: sharedFilter.set(filter);

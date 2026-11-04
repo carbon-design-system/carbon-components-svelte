@@ -468,9 +468,12 @@
   let itemsById = new Map();
   /** Text content of the visually-hidden status live region. */
   let statusText = "";
-  /** @type {import("../ListBox/menu-window.js").MenuWindowState} */
+  // Rows are items or group headers, told apart by the row index in the
+  // template, so the window's row type is `any`.
+  /** @type {import("../ListBox/menu-window.js").MenuWindowState<any>} */
   let menuState;
 
+  /** @type {import("../ListBox/menu-window.js").MenuWindow<any>} */
   const menuWindow = createMenuWindow({
     getContainer: () => listRef,
     onScrollTop: (scrollTop) => {
@@ -749,6 +752,7 @@
     }
   }
 
+  /** @param {number} step */
   function change(step) {
     // Disabled options stay in the keyboard navigation sequence (APG:
     // "Focusability of disabled controls") so assistive-tech users can
@@ -772,6 +776,7 @@
     highlightOrigin = "keyboard";
   }
 
+  /** @param {string} character */
   function typeaheadSearch(character) {
     if (menuItems.length === 0) return;
 
@@ -894,6 +899,7 @@
     .filter(Boolean)
     .join(" ");
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     // The menu counts as inside even when not portaled: a click on a group
     // header lands in it without closing the menu itself.
@@ -951,7 +957,15 @@
       // Options close the menu themselves. Anything else in the menu, such
       // as a group header, is not a dismissal.
       if (listRef?.contains(/** @type {Node} */ (event.target))) return;
-      if (open || !ref.contains(event.target)) open = false;
+      if (
+        open ||
+        !(
+          /** @type {HTMLElement} */ (ref).contains(
+            /** @type {Node} */ (event.target),
+          )
+        )
+      )
+        open = false;
       else openMenu("click");
     }}
     disabled={effectiveDisabled}
