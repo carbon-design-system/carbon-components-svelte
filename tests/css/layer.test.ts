@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { parseRules } from "crassus";
+import { withContextualTokens } from "../../src/Theme/contextual-tokens.js";
 import { compileEntry } from "./compile";
 
 // Layer re-points each contextual token to its numbered token for the
@@ -85,6 +86,33 @@ describe("Layer tokens", () => {
         );
       }
     }
+  }, 30_000);
+
+  // Theme's `tokens` prop copies a first-layer override to its contextual
+  // token from a map in JS. It must name the same pairs as .bx--layer-one,
+  // and a deeper level's token must not set a contextual token.
+  it("matches Theme's contextual-token map", async () => {
+    const rules = parseRules(await compileEntry("all.scss"));
+    const pairsAt = (level: string) => {
+      const rule = rules.find((r) => r.selector === `.bx--layer-${level}`);
+      return [...(rule?.decls ?? [])].flatMap(([prop, value]) => {
+        const token = /^var\(--cds-([\w-]+)\)$/.exec(value)?.[1];
+        return token ? [[prop.slice("--cds-".length), token]] : [];
+      });
+    };
+    const levelOne = pairsAt("one");
+    expect(levelOne.length).toBeGreaterThan(0);
+
+    const overrides = Object.fromEntries(
+      [...levelOne, ...pairsAt("two"), ...pairsAt("three")].map(([, token]) => [
+        token,
+        token,
+      ]),
+    );
+    expect(withContextualTokens(overrides)).toEqual({
+      ...overrides,
+      ...Object.fromEntries(levelOne),
+    });
   }, 30_000);
 
   // The single-theme files declare no tokens on :root, so components read

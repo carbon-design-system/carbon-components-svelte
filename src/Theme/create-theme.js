@@ -6,6 +6,7 @@ import {
   toHex,
 } from "../utils/color-contrast.js";
 import { carbonPalette } from "./carbon-palette.js";
+import { withContextualTokens } from "./contextual-tokens.js";
 
 /**
  * @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme
@@ -323,7 +324,7 @@ export function createTheme(options) {
     tokens: result,
     warnings: checkContrast(theme, result),
     css(selector = `:root[theme="${theme}"]`) {
-      const lines = Object.entries(result).map(
+      const lines = Object.entries(withContextualTokens(result)).map(
         ([token, value]) => `  --cds-${token}: ${value};`,
       );
       return `${selector} {\n${lines.join("\n")}\n}\n`;

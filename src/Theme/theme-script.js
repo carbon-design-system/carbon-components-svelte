@@ -1,5 +1,7 @@
 // @ts-check
 
+import { withContextualTokens } from "./contextual-tokens.js";
+
 /** @typedef {"white" | "g10" | "g80" | "g90" | "g100"} CarbonTheme */
 
 const THEMES = ["white", "g10", "g80", "g90", "g100"];
@@ -36,7 +38,7 @@ export function themeScript(options = {}) {
 
   const key = persist ? inline(persistKey) : "null";
   const pair = system ? inline(systemThemes) : "null";
-  const custom = Object.entries(tokens)
+  const custom = Object.entries(withContextualTokens(tokens))
     .map(
       ([token, value]) =>
         `d.style.setProperty(${inline(`--cds-${token}`)},${inline(value)});`,
