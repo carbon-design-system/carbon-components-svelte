@@ -481,6 +481,9 @@
   // Without an icon for the spinner to replace, it takes the keys' place
   // instead, and the hidden keys keep the button's width.
   $: spinnerInShortcut = hasShortcutHint && !icon && !$$slots.icon;
+  // Spreads `$$restProps` and sets `type` over the `<button>`'s own
+  // literal one (which the linter wants), so it's typed as the loose bag it is.
+  /** @type {Record<string, any>} */
   $: buttonProps = {
     type: href && !isDisabled ? undefined : type,
     tabindex,

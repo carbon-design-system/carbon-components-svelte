@@ -1,7 +1,6 @@
 {
   "BigNumber/BigNumber.svelte": 3,
   "Bleed/Bleed.svelte": 1,
-  "Button/Button.svelte": 2,
   "Card/Card.svelte": 3,
   "Checkbox/Checkbox.svelte": 1,
   "Checkbox/CheckboxGroup.svelte": 2,
@@ -18,7 +17,6 @@
   "ListBox/ListBoxSelection.svelte": 1,
   "NumberInput/NumberInput.svelte": 1,
   "OverflowMenu/OverflowMenu.svelte": 5,
-  "OverflowMenu/OverflowMenuItem.svelte": 3,
   "Popover/Popover.svelte": 1,
   "Portal/FloatingPortal.svelte": 1,
   "RadioButton/RadioButton.svelte": 1,
