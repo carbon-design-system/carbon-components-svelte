@@ -1279,12 +1279,23 @@
     ? virtualData.visibleItems
     : rowsToVirtualize;
 
+  /**
+   * Every id the row blocks render comes from these rows, so `get` finds it.
+   * @param {ReadonlyArray<Row>} rows
+   * @returns {{ get(id: Row["id"]): Row } & Map<Row["id"], Row>}
+   */
+  function indexRowsById(rows) {
+    return /** @type {{ get(id: Row["id"]): Row } & Map<Row["id"], Row>} */ (
+      new Map(rows.map((row) => [row.id, row]))
+    );
+  }
+
   // The row `{#each}` blocks iterate ids, not row objects. Svelte 5's legacy
   // mode treats every object item as changed whenever the list is reassigned,
   // so iterating rows re-ran every row's and cell's props on each sort or
   // filter. Ids compare by value: a reorder only moves rows. `rowById`
   // follows `stableRows`, so a new `rows` array still refreshes every row.
-  $: rowById = new Map(stableRows.map((row) => [row.id, row]));
+  $: rowById = indexRowsById(stableRows);
   $: rowIdsToRender = rowsToRender.map((row) => row.id);
 
   // Walk the painted window, not `rows`. Virtualized and paginated tables
