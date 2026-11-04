@@ -199,6 +199,7 @@
   // as TooltipIcon does, so a hovered tooltip also hides while focus is
   // elsewhere, and an ancestor such as a Modal doesn't also see the
   // Escape that hid it.
+  /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (event.key !== "Escape" || !(tooltipOpen || feedbackOpen)) return;
     // Escape that cancels an IME composition is not a dismissal.

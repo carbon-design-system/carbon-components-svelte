@@ -307,6 +307,7 @@
   // Escape hides the inline snippet's copy feedback, as it does
   // CopyButton's. Listens on `window` in the capture phase, so an ancestor
   // such as a Modal doesn't also see the Escape that hid it.
+  /** @param {KeyboardEvent} event */
   function handleFeedbackKeydown(event) {
     if (event.key !== "Escape" || !feedbackOpen) return;
     // Escape that cancels an IME composition is not a dismissal.

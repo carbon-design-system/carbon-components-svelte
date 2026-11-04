@@ -143,6 +143,7 @@
   // A full-screen takeover has no ComposedModal to own Escape (modal-hosted
   // mode already gets this from ComposedModal's own handler); this listener
   // only ever runs for the full-screen case.
+  /** @param {KeyboardEvent} event */
   function handleWindowKeydown(event) {
     // Escape that cancels an IME composition is not a close.
     if (isImeComposition(event)) return;

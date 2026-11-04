@@ -14,7 +14,7 @@ const YEAR = 365.25 * DAY;
 /**
  * Convert a `Date`, epoch number, or date string to epoch milliseconds.
  *
- * @param {Date | number | string} input
+ * @param {Date | number | string | undefined} input
  * @returns {number}
  */
 export function toTimestamp(input) {
