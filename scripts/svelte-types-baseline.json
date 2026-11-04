@@ -24,8 +24,5 @@
   "Tile/SelectableTileGroup.svelte": 1,
   "Tile/TileGroup.svelte": 2,
   "TreeView/TreeView.svelte": 3,
-  "UIShell/Header.svelte": 1,
-  "UIShell/HeaderNavMenu.svelte": 6,
-  "UIShell/SideNav.svelte": 2,
   "UserAvatar/UserAvatar.svelte": 2
 }

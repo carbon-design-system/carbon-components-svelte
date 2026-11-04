@@ -409,7 +409,7 @@
   }}
   on:keydown={(event) => {
     if (isOpen && !fixed && $isSideNavMobile && event.key === "Tab") {
-      trapFocus({ container: navRef, event });
+      trapFocus({ container: event.currentTarget, event });
     }
   }}
   aria-hidden={rail ? undefined : isOpen ? "false" : "true"}
@@ -417,7 +417,9 @@
   class:bx--side-nav__navigation={true}
   class:bx--side-nav={true}
   class:bx--side-nav--ux={true}
-  class:bx--side-nav--expanded={rail && winWidth >= expansionBreakpoint
+  class:bx--side-nav--expanded={rail &&
+  winWidth !== undefined &&
+  winWidth >= expansionBreakpoint
     ? false
     : isOpen}
   class:bx--side-nav--collapsed={winWidth !== undefined && !isOpen && !rail}
