@@ -20,6 +20,10 @@
       "**",
       "!!**/.*/**/*",
       "!!**/docs/src/pages/index.svelte",
+      "!!**/src/flags/index.js",
+      "!!**/src/flags/all.js",
+      "!!**/src/flags/all.d.ts",
+      "!!**/src/flags/index.d.ts",
       "!**/*.svg",
       "!**/*.scss"
     ]
