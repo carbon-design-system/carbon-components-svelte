@@ -193,8 +193,10 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
 
   // The library's classes for content hidden on purpose: screen reader
   // text, and an icon's tooltip while it is closed.
+  // `TokenSearch` draws a transparent copy of the input's text behind it,
+  // clipped to the input's own box as the input clips its text.
   const LIBRARY_HIDDEN =
-    ".bx--visually-hidden, .bx--tooltip--hidden .bx--assistive-text";
+    ".bx--visually-hidden, .bx--tooltip--hidden .bx--assistive-text, .bx--token-search__backdrop";
 
   type Box = { left: number; right: number; top: number; bottom: number };
 
