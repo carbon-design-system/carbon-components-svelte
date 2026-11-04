@@ -2,11 +2,6 @@ import { render, screen, within } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import RecurrencePicker from "./RecurrencePicker.test.svelte";
 
-// The first hook waits for Vite to transform the picker's whole graph (the
-// DatePicker, NumberInput and Select), which takes over 10 s on a cold
-// Svelte 3 shard.
-vi.setConfig({ hookTimeout: 60_000 });
-
 const mount = (props: Record<string, unknown> = {}) =>
   render(RecurrencePicker, { props });
 const bound = () => screen.getByTestId("bound").textContent;
