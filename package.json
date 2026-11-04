@@ -53,7 +53,7 @@
     "bench:ab": "ostia ab --base origin/master $(ls bench/*.bench.ts | grep -v '\\.dom\\.')",
     "test:src-types": "bun check --project tsconfig.types.json",
     "test:src-js": "bun check --project tsconfig.js-check.json",
-    "test:src-svelte": "bun scripts/check-svelte-warnings.ts",
+    "test:src-svelte": "svelte-typecheck --workspace src --no-tsconfig --diagnostic-sources svelte --fail-on-warnings",
     "test:src-svelte-types": "bun scripts/check-svelte-types.ts",
     "test:package-exports": "bun check --project tsconfig.package-exports.json",
     "test:types": "svelte-typecheck --workspace tests --checker bun",
@@ -118,7 +118,7 @@
     "sass-embedded": "^1.107.1",
     "sveld": "^0.40.2",
     "svelte": "^5.57.3",
-    "svelte-typecheck": "^0.1.1",
+    "svelte-typecheck": "^0.1.2",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
     "vitest": "^5.1.0"

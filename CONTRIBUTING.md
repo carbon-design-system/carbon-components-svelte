@@ -837,7 +837,7 @@ For the E2E selection (`test:changed:e2e`, `test:plan`, and CI), a `css/` change
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
-- `bun test:src-svelte` compiles `src/` with `svelte/compiler` and fails on any warning (a11y, unused CSS)
+- `bun test:src-svelte` reports the Svelte compiler's diagnostics for `src/` with svelte-typecheck and fails on any warning (a11y, unused CSS)
 - `bun test:src-svelte-types` type-checks the component scripts in `src/` against a per-component error baseline (see [Component script types](#component-script-types))
 - `bun test:types` type-checks the `*.svelte` and `.ts` files in `tests/`, in about a second: [svelte-typecheck](https://github.com/metonym/svelte-typecheck) turns each component into TypeScript, runs `bun check` on it, and maps each error back to its `.svelte` line, as svelte-check reports it. `bun test:types:svelte3` and `bun test:types:svelte4` check the same files against Svelte 3 and 4
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
