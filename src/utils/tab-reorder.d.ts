@@ -48,6 +48,13 @@ export function keyboardIndex(
   rtl?: boolean,
 ): number;
 
+/** Whether a pointer is near enough to a list, along one axis, to scroll it. */
+export function inScrollBand(
+  position: number,
+  top: number,
+  bottom: number,
+): boolean;
+
 /** The scroll step for a pointer near the edge of a list. */
 export function edgeScrollStep(
   position: number,

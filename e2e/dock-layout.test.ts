@@ -61,13 +61,13 @@ async function drag(
   page: Page,
   from: number,
   to: { x: number; y: number },
-  { release = true } = {},
+  { release = true, steps = 10 } = {},
 ) {
   const start = await center(tab(page, from));
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   await page.mouse.move(start.x + 8, start.y + 2, { steps: 2 });
-  await page.mouse.move(to.x, to.y, { steps: 10 });
+  await page.mouse.move(to.x, to.y, { steps });
   if (release) await page.mouse.up();
 }
 
@@ -227,6 +227,44 @@ test.describe("Dock layout: drag", () => {
     expect(tabs).toContain("doc-1");
     // Over the far end of a scrolled strip, not at the start of it.
     expect(tabs.indexOf("doc-1")).toBeGreaterThan(5);
+  });
+
+  test("a tab dragged out of its strip does not scroll the strip", async ({
+    page,
+  }) => {
+    await open(page, "preset=stack&count=40&width=500&height=400");
+    const nav = group(page, 1).locator(".bx--tabs__nav");
+    const box = await group(page, 1).boundingBox();
+    if (!box) throw new Error("No box");
+    // Far to the right and well below the strip: past its edge, off its band.
+    await drag(
+      page,
+      1,
+      { x: box.x + box.width - 6, y: box.y + box.height - 20 },
+      { release: false },
+    );
+    await page.waitForTimeout(300);
+    expect(await nav.evaluate((node) => node.scrollLeft)).toBe(0);
+    await page.mouse.up();
+  });
+
+  test("a tab dragged to the strip beside its own does not scroll its own", async ({
+    page,
+  }) => {
+    await open(page, "count=40&width=700&height=400");
+    const nav = group(page, 1).locator(".bx--tabs__nav");
+    const beside = await group(page, 2).locator(".bx--tabs__nav").boundingBox();
+    if (!beside) throw new Error("No box");
+    await drag(
+      page,
+      1,
+      { x: beside.x + beside.width - 6, y: beside.y + beside.height / 2 },
+      { release: false, steps: 1 },
+    );
+    await page.waitForTimeout(300);
+    // A frame in the band may nudge it; resting beside it does not scroll on.
+    expect(await nav.evaluate((node) => node.scrollLeft)).toBeLessThan(30);
+    await page.mouse.up();
   });
 
   test("a maximized group takes the drop, not the groups under it", async ({

@@ -1,5 +1,6 @@
 import {
   edgeScrollStep,
+  inScrollBand,
   keyboardIndex,
   makeRoom,
   slotAt,
@@ -75,6 +76,16 @@ describe("edgeScrollStep", () => {
     expect(near).toBeGreaterThan(0);
     expect(at).toBeGreaterThan(near);
     expect(edgeScrollStep(10, 0, 400)).toBeLessThan(0);
+  });
+});
+
+describe("inScrollBand", () => {
+  it("covers the list and a margin above and below it, and no more", () => {
+    expect(inScrollBand(20, 0, 40)).toBe(true);
+    expect(inScrollBand(-30, 0, 40)).toBe(true);
+    expect(inScrollBand(80, 0, 40)).toBe(true);
+    expect(inScrollBand(-60, 0, 40)).toBe(false);
+    expect(inScrollBand(120, 0, 40)).toBe(false);
   });
 });
 
