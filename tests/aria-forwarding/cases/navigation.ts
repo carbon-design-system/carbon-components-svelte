@@ -4,6 +4,7 @@ import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
+import ColorTag from "carbon-components-svelte/Tag/ColorTag.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
 import SelectableTag from "carbon-components-svelte/Tag/SelectableTag.svelte";
 import Tag from "carbon-components-svelte/Tag/Tag.svelte";
@@ -225,6 +226,25 @@ export const navigation: AriaEntry[] = [
     name: "ProgressStep",
     render: (attrs) => render(ProgressStepFixture, { props: attrs }),
     target: () => first("button"),
+  },
+  {
+    name: "ColorTag",
+    variant: "interactive",
+    render: (attrs) =>
+      render(ColorTag, { props: { interactive: true, ...attrs } }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "ColorTag",
+    variant: "href",
+    render: (attrs) => render(ColorTag, { props: { href: "/tags", ...attrs } }),
+    target: () => screen.getByRole("link"),
+  },
+  {
+    name: "ColorTag",
+    variant: "filter",
+    render: (attrs) => render(ColorTag, { props: { filter: true, ...attrs } }),
+    target: () => screen.getByRole("button"),
   },
   {
     name: "OperationalTag",
