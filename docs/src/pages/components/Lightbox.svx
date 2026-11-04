@@ -1,0 +1,62 @@
+---
+components: ["Lightbox"]
+description: Lightboxes show a set of images full window, with a counter, captions, and a strip of thumbnails, so users can step through them and zoom in.
+---
+
+## Basic
+
+Set `items` to the images, each with a `src` and an `alt`, and bind `open`. The lightbox is a [ComposedModal](/components/ComposedModal) sized to the window: it traps focus, closes on <DocKbd label="Escape" /> and returns focus to what opened it. Each image is an [ImageViewer](/components/ImageViewer), so it zooms and pans too.
+
+There is no `openLightbox(items, index)` function. A function would have to mount a component outside your tree, which differs in Svelte 3, 4, and 5 and drops the theme, text direction, and key translations the lightbox reads from context. Bind `open` and `index` instead.
+
+The dialog is named by `labelText` and described as an "image gallery". Name the set, such as "Mission photos", so a screen reader announces "Mission photos, image gallery".
+
+<FileSource src="/framed/Lightbox/LightboxBasic" />
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Give each item a `thumbnail`. | Without one the strip loads the full image for every item, and a large image costs memory. |
+| Give each item `width` and `height` when you know them. | The image is laid out before it loads. |
+| Write `alt` for every item. | It names the image and its thumbnail. Without it the thumbnail is named "Image 3 of 12". |
+| Open it from a button or a link. | Focus returns to the element that was focused when it opened. |
+| Keep the set to images people compare or browse. | A single image is better in an [ImageViewer](/components/ImageViewer). |
+
+## Navigation
+
+### Open at an image
+
+Bind `index` to open at an image, such as the thumbnail a user clicked, and to read the image they ended on. It is clamped to the items.
+
+<FileSource src="/framed/Lightbox/LightboxGrid" />
+
+With the image fit, <DocKbd label="Left" /> and <DocKbd label="Right" /> show the previous and next image, and <DocKbd label="Home" /> and <DocKbd label="End" /> the first and last. In a right-to-left page the two arrow keys swap. Once the image is zoomed in the arrow keys pan it, and zooming out with <DocKbd label="0" /> hands them back. The thumbnail strip always uses them to move through the images. <DocKbd label="+" />, <DocKbd label="-" /> and <DocKbd label="0" /> zoom from anywhere in the dialog.
+
+### Loop
+
+Set `loop` to continue from the last image to the first and from the first to the last. Otherwise the buttons disable at the ends.
+
+### Preload
+
+Set `preload` to the number of images on each side of the shown one to load ahead, so a step to the next is instant. The default is 1. Set it to `0` to load only the shown image.
+
+## Thumbnails
+
+The strip is a listbox. One thumbnail is in the tab order, <DocKbd label="Left" /> and <DocKbd label="Right" /> move through the images, and the selected thumbnail is outlined with a border, not only a color, so it stays visible in forced colors. Set `thumbnails` to `false` to hide it. A single image shows neither the strip nor the buttons.
+
+Give an item a `thumbnailSrcset` for denser screens, such as `"/a-64.jpg 1x, /a-128.jpg 2x"`.
+
+## Captions
+
+An item's `caption` shows under the image. Use the `caption` slot for markup, such as a credit and a link. The position and caption are announced when the image changes.
+
+<FileSource src="/framed/Lightbox/LightboxCaption" />
+
+## Download
+
+Set `downloadable` to show a button that saves the shown image. It saves `src`, or an item's `downloadHref`, with `downloadName` as the file name. A browser ignores `download` for an image on another origin and opens it instead, so serve the file from your own origin or with a `Content-Disposition` header.
+
+## Text
+
+Every string is a prop: `labelText`, `counterText(current, total)`, `previousText`, `nextText`, `downloadText`, `closeText`, `thumbnailsText`, and `shortcutsText`. The keys in the header are [Kbd](/components/Kbd)s; set `showShortcuts` to `false` to hide them.
