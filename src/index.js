@@ -2,6 +2,14 @@ export { default as Accordion } from "./Accordion/Accordion.svelte";
 export { default as AccordionItem } from "./Accordion/AccordionItem.svelte";
 export { default as AccordionSkeleton } from "./Accordion/AccordionSkeleton.svelte";
 export { default as ActionSet } from "./ActionSet/ActionSet.svelte";
+export { default as ActivityBody } from "./ActivityFeed/ActivityBody.svelte";
+export { default as ActivityComposer } from "./ActivityFeed/ActivityComposer.svelte";
+export { default as ActivityFeed } from "./ActivityFeed/ActivityFeed.svelte";
+export {
+  activityBodyToText,
+  parseActivityBody,
+} from "./ActivityFeed/activity-body.js";
+export { createActivityFeed } from "./ActivityFeed/activity-store.js";
 export { default as AILabel } from "./AILabel/AILabel.svelte";
 export { default as AILabelActions } from "./AILabel/AILabelActions.svelte";
 export { default as AspectRatio } from "./AspectRatio/AspectRatio.svelte";
