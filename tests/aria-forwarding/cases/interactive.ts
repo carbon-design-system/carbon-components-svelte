@@ -18,6 +18,7 @@ import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import ImageViewer from "carbon-components-svelte/ImageViewer/ImageViewer.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+import Lightbox from "carbon-components-svelte/Lightbox/Lightbox.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
@@ -282,6 +283,14 @@ export const interactive: AriaEntry[] = [
     name: "InterstitialScreenHeader",
     exempt:
       "header container; its close button is a fixed control named by iconDescription",
+  },
+  {
+    name: "Lightbox",
+    render: (attrs) =>
+      render(Lightbox, {
+        props: { open: true, items: [{ src: "a.png", alt: "A" }], ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "Link",

@@ -1,0 +1,155 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Lightbox: a `ComposedModal` whose container fills the window, in rows of
+/// header, stage, caption and thumbnail strip. The controls that sit over
+/// the image have a surface of their own, so they read against any picture.
+/// @access private
+/// @group components
+@mixin lightbox {
+  // The modal's own rules size the container at each breakpoint, and again
+  // by container width, so this ties on the container and wins on the
+  // variant class.
+  .#{$prefix}--modal-container.#{$prefix}--lightbox {
+    position: static;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border: 0;
+    // The modal's transparent outline marks its edge in forced colors. This
+    // one fills the window, and the outline would box in everything on it.
+    outline: none;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .#{$prefix}--modal.is-visible
+    .#{$prefix}--modal-container.#{$prefix}--lightbox {
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .#{$prefix}--lightbox .#{$prefix}--modal-header {
+    display: flex;
+    align-items: center;
+    padding-block: $carbon--spacing-03;
+    margin-bottom: 0;
+  }
+
+  .#{$prefix}--lightbox__bar {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--lightbox__counter {
+    @include type-style("body-compact-01");
+
+    color: $text-primary;
+    font-variant-numeric: tabular-nums;
+    margin-inline-end: auto;
+  }
+
+  .#{$prefix}--lightbox__shortcuts {
+    display: none;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    color: $text-secondary;
+
+    @include carbon--breakpoint(lg) {
+      display: flex;
+    }
+  }
+
+  .#{$prefix}--lightbox__stage {
+    position: relative;
+    min-height: 0;
+    grid-row: 2;
+  }
+
+  .#{$prefix}--lightbox__nav {
+    position: absolute;
+    z-index: 1;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--lightbox__nav--previous {
+    inset-inline-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--lightbox__nav--next {
+    inset-inline-end: $carbon--spacing-05;
+  }
+
+  // Previous and next point to the inline start and end.
+  .#{$prefix}--lightbox__nav svg {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--lightbox__footer {
+    grid-row: 3;
+  }
+
+  .#{$prefix}--lightbox__caption {
+    @include type-style("body-compact-01");
+
+    min-height: to-rem(32px);
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  .#{$prefix}--lightbox__caption:empty {
+    display: none;
+  }
+
+  .#{$prefix}--lightbox__strip {
+    display: flex;
+    overflow-x: auto;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--lightbox__thumbnail {
+    display: block;
+    flex: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    img {
+      display: block;
+      width: to-rem(64px);
+      height: to-rem(48px);
+      object-fit: cover;
+    }
+
+    &[aria-selected="true"] {
+      border-color: $border-interactive;
+      opacity: 1;
+    }
+  }
+
+  // Forced colors drop the border's color and the dimming of the others
+  // is not enough, so the selected one takes the selection color.
+  @media (forced-colors: active) {
+    .#{$prefix}--lightbox__thumbnail[aria-selected="true"] {
+      border-color: Highlight;
+    }
+  }
+}
+
+@include exports("lightbox") {
+  @include lightbox;
+}
