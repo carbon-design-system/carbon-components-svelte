@@ -144,22 +144,32 @@
   }
 
   /**
+   * The `selectedId` last resolved. A new one may name a step that registers
+   * in the same update, so it is not replaced by a fallback until then.
+   * @type {string | undefined}
+   */
+  let syncedId;
+
+  /**
    * Resolve `currentIndex` from `selectedId` when set. If the selected id was
    * removed, keep the same index (next step) or clamp, and re-anchor
    * `selectedId` to whatever step that resolves to.
    * @type {() => void}
    */
   function syncSelection() {
+    const idChanged = selectedId !== syncedId;
+    syncedId = selectedId;
     if (selectedId === undefined) return;
 
     const resolved = resolveIdSelection({
       items: $steps,
       selectedId,
       currentIndex,
+      idChanged,
     });
     if (!resolved) return;
     currentIndex = resolved.index;
-    selectedId = resolved.id;
+    selectedId = syncedId = resolved.id;
   }
 
   /**

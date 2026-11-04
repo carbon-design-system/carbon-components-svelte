@@ -6,6 +6,7 @@
   export let selectedId: string | undefined = undefined;
   export let showSwitchA = true;
   export let showSwitchB = true;
+  export let showSwitchC = true;
 </script>
 
 <ContentSwitcher bind:selectedIndex bind:selectedId>
@@ -15,7 +16,9 @@
   {#if showSwitchB}
     <Switch id="switch-b" text="Switch B" />
   {/if}
-  <Switch id="switch-c" text="Switch C" />
+  {#if showSwitchC}
+    <Switch id="switch-c" text="Switch C" />
+  {/if}
 </ContentSwitcher>
 
 <button

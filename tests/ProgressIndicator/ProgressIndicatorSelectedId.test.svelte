@@ -5,6 +5,7 @@
   export let currentIndex = 0;
   export let selectedId: string | undefined = undefined;
   export let showStepA = true;
+  export let showStepC = true;
 </script>
 
 <ProgressIndicator bind:currentIndex bind:selectedId>
@@ -12,7 +13,9 @@
     <ProgressStep id="step-a" label="Step A" complete />
   {/if}
   <ProgressStep id="step-b" label="Step B" complete />
-  <ProgressStep id="step-c" label="Step C" />
+  {#if showStepC}
+    <ProgressStep id="step-c" label="Step C" />
+  {/if}
 </ProgressIndicator>
 
 <button

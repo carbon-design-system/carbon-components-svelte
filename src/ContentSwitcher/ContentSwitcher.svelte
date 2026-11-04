@@ -305,22 +305,33 @@
   }
 
   /**
+   * The `selectedId` last resolved. A new one may name a switch that
+   * registers in the same update, so it is not replaced by a fallback until
+   * then.
+   * @type {string | undefined}
+   */
+  let syncedId;
+
+  /**
    * Resolve `selectedIndex` from `selectedId` when set. If the selected id was
    * removed, keep the same index (next switch) or clamp, and re-anchor
    * `selectedId` to whatever switch that resolves to.
    * @type {() => void}
    */
   function syncSelection() {
+    const idChanged = selectedId !== syncedId;
+    syncedId = selectedId;
     if (selectedId === undefined) return;
 
     const resolved = resolveIdSelection({
       items: switches,
       selectedId,
       currentIndex: selectedIndex,
+      idChanged,
     });
     if (!resolved) return;
     selectedIndex = resolved.index;
-    selectedId = resolved.id;
+    selectedId = syncedId = resolved.id;
   }
 
   /** @param {number} index */
