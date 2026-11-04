@@ -1,107 +1,32 @@
 import fs from "node:fs";
 import path from "node:path";
-import { format as prettierFormat } from "prettier";
-import prettierPluginSvelte from "prettier-plugin-svelte";
-import { parse } from "svelte/compiler";
 import {
   BASE_URL,
   COMPONENT_MD_SIZES_PATH,
   COMPONENTS_PATH,
+  GUIDES_OUT_DIR,
   PAGE_EXTENSION,
+  PAGES_PATH,
   RAW_COMPONENTS_OUT_DIR,
 } from "./constants";
-import { stripDocsOnly } from "./strip-docs-only.ts";
-import { getComponentNames } from "./utils";
-
-type ComponentApiProp = {
-  name: string;
-  description?: string;
-  type?: string;
-  value?: unknown;
-  isRequired?: boolean;
-  reactive?: boolean;
-};
-
-type ComponentApiTypedef = {
-  ts?: string;
-};
-
-type ComponentApiSlot = {
-  default?: boolean;
-  name?: string | null;
-  slot_props?: string;
-};
-
-type ComponentApiEvent = {
-  type?: string;
-  name?: string;
-  detail?: string;
-  description?: string;
-};
-
-type ComponentApiEntry = {
-  moduleName: string;
-  props?: ComponentApiProp[];
-  typedefs?: ComponentApiTypedef[];
-  slots?: ComponentApiSlot[];
-  events?: ComponentApiEvent[];
-  rest_props?: { type: string; name: string };
-};
-
-type ComponentApiFile = {
-  components: ComponentApiEntry[];
-};
-
-const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
-const TAG_LINE_RE = /^\s*</;
-const WHITESPACE_RE = /\s+/;
-
-const HTML_TAG_RE = /<\s*(\/?)\s*([A-Za-z][\w:-]*)[^>]*?(\/?)\s*>/g;
-const HTML_VOID_TAGS = new Set([
-  "area",
-  "base",
-  "br",
-  "col",
-  "embed",
-  "hr",
-  "img",
-  "input",
-  "link",
-  "meta",
-  "param",
-  "source",
-  "track",
-  "wbr",
-]);
-
-const DOC_KBD_SELF_CLOSING_DQUOT_RE =
-  /<DocKbd\b\s+label\s*=\s*"([^"]*)"\s*\/>/g;
-const DOC_KBD_SELF_CLOSING_SQUOT_RE =
-  /<DocKbd\b\s+label\s*=\s*'([^']*)'\s*\/>/g;
-
-const KBD_HTML_ESCAPE_AMP = /&/g;
-const KBD_HTML_ESCAPE_LT = /</g;
-const KBD_HTML_ESCAPE_GT = />/g;
-const MD_LINE_OPENS_KBD_RE = /^<kbd\b/i;
-const MD_LINE_OPENS_KBD_CLOSE_RE = /^<\/kbd>/i;
-
-const LEADING_SVELTE_SCRIPT_BLOCK_RE = /^\s*<script\b[\s\S]*?<\/script>\s*\n*/i;
-const FILE_SOURCE_SRC_ATTR_RE = /src="([^"]+)"/i;
-const FILE_SOURCE_START_RE = /^\s*<FileSource\b/;
-const HAS_SCRIPT_TAG_RE = /<script\b/i;
-const ICON_NAME_RE = /[A-Z][a-z]*/;
-
-const componentApi = JSON.parse(
-  fs.readFileSync(path.join("src", "COMPONENT_API.json"), "utf8"),
-) as ComponentApiFile;
-
-const componentApiByName = componentApi.components.reduce<Record<string, true>>(
-  (a, c) => {
-    a[c.moduleName] = true;
-    return a;
-  },
-  {},
-);
+import {
+  asciiNormalizeGeneratedMarkdown,
+  componentApi,
+  type ComponentApiEntry,
+  type ComponentApiEvent,
+  type ComponentApiSlot,
+  type ComponentApiTypedef,
+  convertDocKbdToKbdForMarkdown,
+  fenceInlineSvelte,
+  formatMarkdown,
+  formatSvelteFences,
+  inlineFileSources,
+  LEADING_SVELTE_SCRIPT_BLOCK_RE,
+  renderGuideMarkdown,
+  shiftMarkdownHeadings,
+  splitFrontmatter,
+} from "./markdown.ts";
+import { getComponentNames, getGuideNames } from "./utils";
 
 const componentApiByModuleName = new Map(
   componentApi.components.map((c) => [c.moduleName, c]),
@@ -111,13 +36,6 @@ const PIPE_RE = /\|/g;
 const NEWLINE_RE = /\r?\n/g;
 const AT_EXAMPLE_RE = /@example/;
 const SVELTE_FENCE_RE = /```svelte\s*\n([\s\S]*?)```/;
-const ATX_HEADING_RE = /^(#{1,6})(\s+)(.*)$/;
-
-function splitFrontmatter(source: string) {
-  const match = source.match(FRONTMATTER_RE);
-  if (!match) return { frontmatter: null, body: source };
-  return { frontmatter: match[1], body: source.slice(match[0].length) };
-}
 
 /**
  * Parses with `Bun.YAML`, a strict YAML 1.2 parser, so frontmatter that
@@ -332,389 +250,22 @@ function renderComponentApiMarkdown(moduleName: string) {
   return sections.join("\n\n");
 }
 
-function escapeKbdInnerText(label: string) {
-  return label
-    .replace(KBD_HTML_ESCAPE_AMP, "&amp;")
-    .replace(KBD_HTML_ESCAPE_LT, "&lt;")
-    .replace(KBD_HTML_ESCAPE_GT, "&gt;");
-}
-
-function convertDocKbdToKbdForMarkdown(body: string) {
-  return body
-    .replace(DOC_KBD_SELF_CLOSING_DQUOT_RE, (_m, label: string) => {
-      return `<kbd>${escapeKbdInnerText(label)}</kbd>`;
-    })
-    .replace(DOC_KBD_SELF_CLOSING_SQUOT_RE, (_m, label: string) => {
-      return `<kbd>${escapeKbdInnerText(label)}</kbd>`;
-    });
-}
-
-function lineOpensKbdMarkdownHtml(line: string) {
-  const t = line.trimStart();
-  return MD_LINE_OPENS_KBD_RE.test(t) || MD_LINE_OPENS_KBD_CLOSE_RE.test(t);
-}
-
-function inlineFileSources(body: string) {
-  const lines = body.split("\n");
-  const out: string[] = [];
-
-  let inFence = false;
-  const isFence = (line: string) => line.trimStart().startsWith("```");
-
-  for (const line of lines) {
-    if (isFence(line)) {
-      inFence = !inFence;
-      out.push(line);
-      continue;
-    }
-
-    const trimmed = line.trimStart();
-    if (
-      inFence ||
-      !FILE_SOURCE_START_RE.test(trimmed) ||
-      !trimmed.includes("src=") ||
-      !trimmed.includes("/>")
-    ) {
-      out.push(line);
-      continue;
-    }
-
-    const srcMatch = line.match(FILE_SOURCE_SRC_ATTR_RE);
-    const src = srcMatch?.[1];
-    if (!src) {
-      out.push(line);
-      continue;
-    }
-
-    const rel = src.startsWith("/") ? src.slice(1) : src;
-    const filePath = path.join("src/pages", `${rel}.svelte`);
-
-    try {
-      const source = stripDocsOnly(fs.readFileSync(filePath, "utf8"));
-      out.push("```svelte");
-      out.push(source.trimEnd());
-      out.push("```");
-      out.push("");
-    } catch {
-      out.push(line);
-    }
-  }
-
-  return out.join("\n");
-}
-
-function isIconName(text: string): boolean {
-  return ICON_NAME_RE.test(text) && !(text in componentApiByName);
-}
-
-/** Depth-first walk of legacy (`modern: false`) Svelte template AST nodes (no `svelte/compiler` walk in v5). */
-function walkLegacySvelteNode(
-  node: unknown,
-  enter: (n: Record<string, unknown>) => void,
-): void {
-  if (node === null || node === undefined || typeof node !== "object") return;
-  const n = node as Record<string, unknown>;
-  if (typeof n.type === "string") enter(n);
-  for (const v of Object.values(n)) {
-    if (Array.isArray(v)) {
-      for (const item of v) walkLegacySvelteNode(item, enter);
-    } else if (v !== null && typeof v === "object") {
-      walkLegacySvelteNode(v, enter);
-    }
-  }
-}
-
-function injectImportsIntoSvelteSnippet(code: string): string {
-  const trimmed = code.trimStart();
-  if (HAS_SCRIPT_TAG_RE.test(code)) return code;
-  if (FILE_SOURCE_START_RE.test(trimmed)) return code;
-
-  const inlineComponents = new Set<string>();
-  const icons = new Set<string>();
-  const actions = new Set<string>();
-
-  try {
-    const ast = parse(code, { modern: false }) as { html?: unknown };
-    const root = ast.html;
-    if (!root) return code;
-
-    walkLegacySvelteNode(root, (node) => {
-      if (node.type === "InlineComponent" && typeof node.name === "string") {
-        if (node.name.startsWith("svelte:")) return;
-        if (isIconName(node.name)) icons.add(node.name);
-        else inlineComponents.add(node.name);
-      } else if (node.type === "MustacheTag") {
-        const expr = node.expression as
-          { type?: string; name?: string } | undefined;
-        if (expr?.type === "Identifier" && expr.name && isIconName(expr.name)) {
-          icons.add(expr.name);
-        }
-      } else if (node.type === "Action" && typeof node.name === "string") {
-        actions.add(node.name);
-      }
-    });
-  } catch {
-    return code;
-  }
-
-  const actionImports = [...actions];
-  const ccsImports = [...inlineComponents, ...actionImports].filter(Boolean);
-  const iconImports = [...icons].filter(Boolean);
-
-  if (ccsImports.length === 0 && iconImports.length === 0) return code;
-
-  ccsImports.sort();
-  iconImports.sort();
-
-  const scriptLines = [
-    "<script>",
-    ...(ccsImports.length
-      ? [
-          `  import { ${ccsImports.join(", ")} } from "carbon-components-svelte";`,
-        ]
-      : []),
-    ...iconImports.map(
-      (icon) =>
-        `  import ${icon} from "carbon-icons-svelte/lib/${icon}.svelte";`,
-    ),
-    "</script>",
-    "",
-  ];
-
-  return scriptLines.join("\n") + code.trimStart();
-}
-
-function fenceInlineSvelte(body: string) {
-  const lines = body.split("\n");
-  const out: string[] = [];
-
-  let inCodeFence = false;
-  let inSvelteFence = false;
-  let tagDepth = 0;
-
-  const isFence = (line: string) => line.trimStart().startsWith("```");
-  const isTagLine = (line: string) => TAG_LINE_RE.test(line);
-
-  const applyTagDepth = (line: string) => {
-    HTML_TAG_RE.lastIndex = 0;
-    let m = HTML_TAG_RE.exec(line);
-    while (m) {
-      const isClosing = m[1] === "/";
-      const tagName = m[2]?.toLowerCase() ?? "";
-      const isSelfClosing = m[3] === "/" || HTML_VOID_TAGS.has(tagName);
-
-      if (isClosing) tagDepth = Math.max(0, tagDepth - 1);
-      else if (!isSelfClosing) tagDepth += 1;
-
-      m = HTML_TAG_RE.exec(line);
-    }
-  };
-
-  for (let idx = 0; idx < lines.length; idx++) {
-    const line = lines[idx];
-    if (isFence(line)) {
-      if (inSvelteFence) {
-        out.push("```");
-        inSvelteFence = false;
-        tagDepth = 0;
-      }
-      inCodeFence = !inCodeFence;
-      out.push(line);
-      continue;
-    }
-
-    if (
-      !inCodeFence &&
-      !inSvelteFence &&
-      isTagLine(line) &&
-      !lineOpensKbdMarkdownHtml(line)
-    ) {
-      out.push("```svelte");
-      inSvelteFence = true;
-      tagDepth = 0;
-    }
-
-    if (inSvelteFence) {
-      applyTagDepth(line);
-      out.push(line);
-
-      const nextLine = lines[idx + 1] ?? "";
-      if (tagDepth === 0 && nextLine.trim() === "") {
-        out.push("```");
-        inSvelteFence = false;
-        tagDepth = 0;
-      }
-      continue;
-    }
-
-    out.push(line);
-  }
-
-  if (inSvelteFence) out.push("```");
-
-  return out.join("\n");
-}
-
-type MdChunk =
-  | { type: "line"; line: string }
-  | {
-      type: "fence";
-      open: string;
-      close: string | null;
-      lang: string;
-      code: string;
-    };
-
-async function formatSvelteFences(markdown: string) {
-  const lines = markdown.split("\n");
-
-  const chunks: MdChunk[] = [];
-  const isFenceLine = (line: string) => line.trimStart().startsWith("```");
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!isFenceLine(line)) {
-      chunks.push({ type: "line", line });
-      continue;
-    }
-
-    const open = line;
-    const info = line.trim().slice(3).trim();
-    const lang = info.split(WHITESPACE_RE)[0]?.toLowerCase() ?? "";
-
-    const codeLines: string[] = [];
-    let close: string | null = null;
-
-    for (let j = i + 1; j < lines.length; j++) {
-      if (isFenceLine(lines[j])) {
-        close = lines[j];
-        i = j;
-        break;
-      }
-      codeLines.push(lines[j]);
-    }
-
-    if (close === null) i = lines.length;
-
-    chunks.push({
-      type: "fence",
-      open,
-      close,
-      lang,
-      code: codeLines.join("\n"),
-    });
-  }
-
-  const fenceChunks = chunks.filter(
-    (c): c is Extract<MdChunk, { type: "fence" }> => c.type === "fence",
-  );
-  const svelteFences = fenceChunks.filter((c) => c.lang === "svelte");
-
-  const formattedCodes = await Promise.all(
-    svelteFences.map(async (c) => {
-      try {
-        const injected = injectImportsIntoSvelteSnippet(c.code);
-        const formatted = await prettierFormat(injected, {
-          parser: "svelte",
-          plugins: [prettierPluginSvelte],
-          svelteSortOrder: "scripts-markup-styles-options",
-        });
-        return String(formatted).trimEnd();
-      } catch {
-        return null;
-      }
-    }),
-  );
-
-  const out: string[] = [];
-  let formattedIdx = 0;
-
-  for (const chunk of chunks) {
-    if (chunk.type === "line") {
-      out.push(chunk.line);
-      continue;
-    }
-
-    out.push(chunk.open);
-    if (chunk.lang === "svelte") {
-      const formatted = formattedCodes[formattedIdx++];
-      const codeToUse = formatted ?? chunk.code ?? "";
-      if (codeToUse.length > 0) out.push(...codeToUse.split("\n"));
-    } else {
-      const md = chunk.code ?? "";
-      if (md.length > 0) out.push(...md.split("\n"));
-    }
-    if (chunk.close !== null) out.push(chunk.close);
-  }
-
-  return out.join("\n");
-}
-
-async function formatMarkdown(markdown: string) {
-  try {
-    const formatted = await prettierFormat(markdown, {
-      parser: "markdown",
-      proseWrap: "never",
-    });
-    return `${String(formatted).trimEnd()}\n`;
-  } catch {
-    return markdown;
-  }
-}
-
-/**
- * Output is always valid UTF-8, but some clients (browsers, editors, download
- * tools) assume Windows-1252/Latin-1 and show mojibake for typographic Unicode
- * (e.g. `â€"` for an em dash). Normalizing to ASCII keeps generated `.md` /
- * `llms-full.txt` readable everywhere without changing meaning much.
- */
-function asciiNormalizeGeneratedMarkdown(text: string): string {
-  return (
-    text
-      // Dashes / quotes / spaces (common in prose)
-      .replaceAll("\u2014", "--") // em dash —
-      .replaceAll("\u2013", "-") // en dash –
-      .replaceAll("\u2212", "-") // minus sign −
-      .replaceAll("\u2018", "'")
-      .replaceAll("\u2019", "'")
-      .replaceAll("\u201c", '"')
-      .replaceAll("\u201d", '"')
-      .replaceAll("\u2026", "...")
-      .replaceAll("\u00a0", " ")
-      // Keys / symbols sometimes pasted from macOS docs
-      .replaceAll("\u2318", "Cmd") // ⌘
-      .replaceAll("\u2325", "Option") // ⌥
-      .replaceAll("\u21e7", "Shift") // ⇧
-      .replaceAll("\u238b", "Esc") // ⎋ (less common)
-      // Strip BOM if present upstream
-      .replaceAll("\ufeff", "")
-  );
-}
-
-function shiftMarkdownHeadings(md: string) {
-  const lines = md.split("\n");
-  let inFence = false;
-  const isFence = (line: string) => line.trimStart().startsWith("```");
-
-  return lines
-    .map((line: string) => {
-      if (isFence(line)) {
-        inFence = !inFence;
-        return line;
-      }
-      if (inFence) return line;
-      if (ATX_HEADING_RE.test(line)) return `#${line}`;
-      return line;
-    })
-    .join("\n");
-}
-
-function generateLlmTxt(componentNames: string[]) {
+function generateLlmTxt(
+  componentNames: string[],
+  guides: { name: string; title: string }[],
+) {
   const sorted = [...componentNames].sort();
   const links = sorted.map(
     (name) => `- [${name}](${BASE_URL}/components/${name}.md)`,
   );
+  const guideLinks = guides.map(
+    ({ name, title }) => `- [${title}](${BASE_URL}/guides/${name}.md)`,
+  );
   return `# Carbon Components Svelte
+
+## Guides
+
+${guideLinks.join("\n")}
 
 ## Docs
 
@@ -783,14 +334,30 @@ fs.writeFileSync(
   "utf8",
 );
 
+// Guides: the pages directly under `src/pages`.
+fs.rmSync(GUIDES_OUT_DIR, { recursive: true, force: true });
+fs.mkdirSync(GUIDES_OUT_DIR, { recursive: true });
+
+const generatedGuides = await Promise.all(
+  getGuideNames().map(async (name) => {
+    const source = fs.readFileSync(
+      path.join(PAGES_PATH, `${name}${PAGE_EXTENSION}`),
+      "utf8",
+    );
+    const { title, md } = await renderGuideMarkdown(source, { name });
+    fs.writeFileSync(path.join(GUIDES_OUT_DIR, `${name}.md`), md, "utf8");
+    return { name, title, md };
+  }),
+);
+
 // Generate llms.txt file
 const componentNames = generatedMdByComponent.map(
   ({ componentName }) => componentName,
 );
-const llmTxtContent = generateLlmTxt(componentNames);
+const llmTxtContent = generateLlmTxt(componentNames, generatedGuides);
 fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent, "utf8");
 
-// Generate llms-full.txt: overview + all component docs with headings shifted
+// Generate llms-full.txt: overview + guides + all component docs with headings shifted
 const overviewPath = path.join("./content", "overview.md");
 let overviewMd: string;
 try {
@@ -808,6 +375,7 @@ const introPart = `# Carbon Components Svelte\n\n${overviewMd}`;
 const formattedIntro = asciiNormalizeGeneratedMarkdown(
   (await formatMarkdown(introPart)).trimEnd(),
 );
+const guideParts = generatedGuides.map(({ md }) => shiftMarkdownHeadings(md));
 const componentParts = sortedByComponentName.map(({ componentName }) => {
   const formattedPath = path.join(
     RAW_COMPONENTS_OUT_DIR,
@@ -816,7 +384,7 @@ const componentParts = sortedByComponentName.map(({ componentName }) => {
   const formattedMd = fs.readFileSync(formattedPath, "utf8");
   return shiftMarkdownHeadings(formattedMd);
 });
-const fullParts = [formattedIntro, ...componentParts];
+const fullParts = [formattedIntro, ...guideParts, ...componentParts];
 fs.writeFileSync(
   path.join("./public", "llms-full.txt"),
   asciiNormalizeGeneratedMarkdown(fullParts.join("\n\n")),
