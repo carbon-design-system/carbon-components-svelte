@@ -97,7 +97,8 @@
 
   /**
    * DOM node to mount the menu into.
-   * When unset, uses the anchor's nearest `<dialog>` or `[popover]`, else `document.body`.
+   * When unset, uses the anchor's nearest `<dialog>` or `[popover]`, else the
+   * fullscreen element holding the anchor, else `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;

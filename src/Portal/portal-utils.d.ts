@@ -7,3 +7,12 @@ export declare function observeModalClose(
   node: HTMLElement,
   onClose: () => void,
 ): () => void;
+
+/**
+ * The fullscreen element, when it holds `anchor`. Only a fullscreen element's
+ * subtree renders, so floating content portalled to `document.body` would be
+ * hidden. The root element is not returned: `document.body` renders inside it.
+ */
+export declare function getFullscreenRoot(
+  anchor: Element | null | undefined,
+): HTMLElement | null;

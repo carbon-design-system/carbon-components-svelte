@@ -1,4 +1,7 @@
-import { observeModalClose } from "../../src/Portal/portal-utils.js";
+import {
+  getFullscreenRoot,
+  observeModalClose,
+} from "../../src/Portal/portal-utils.js";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { makeVisibleModal } from "./helpers";
 
@@ -58,5 +61,24 @@ describe("observeModalClose", () => {
 
     expect(onClose).not.toHaveBeenCalled();
     modal.remove();
+  });
+});
+
+describe("getFullscreenRoot", () => {
+  afterEach(() => {
+    Reflect.deleteProperty(document, "fullscreenElement");
+  });
+
+  it("skips the root element so menus stay inside body", () => {
+    const anchor = document.createElement("button");
+    document.body.appendChild(anchor);
+    Object.defineProperty(document, "fullscreenElement", {
+      configurable: true,
+      value: document.documentElement,
+    });
+
+    expect(getFullscreenRoot(anchor)).toBeNull();
+
+    anchor.remove();
   });
 });
