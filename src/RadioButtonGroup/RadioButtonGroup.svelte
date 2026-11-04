@@ -212,7 +212,8 @@
       fieldsetRef.querySelector('input[type="radio"]:checked')
     );
     const nextSelected = checkedInput
-      ? (registeredValues.get(checkedInput.value) ?? checkedInput.value)
+      ? (registeredValues.get(checkedInput.value) ??
+        /** @type {Value} */ (checkedInput.value))
       : undefined;
     resettingFromForm = true;
     selectedValue.set(nextSelected);

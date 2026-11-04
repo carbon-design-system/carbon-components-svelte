@@ -281,6 +281,7 @@
     rest: wrapperRestProps,
   } = splitAriaNaming($$restProps));
 
+  /** @type {ReadonlyArray<File>} */
   let prevFiles = [];
 
   // Set by a row's remove button, so the removal also reports the new

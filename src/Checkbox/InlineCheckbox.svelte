@@ -17,7 +17,10 @@
   /** Set an id for the input label */
   export let id = uniqueId();
 
-  /** Obtain a reference to the input HTML element */
+  /**
+   * Obtain a reference to the input HTML element
+   * @type {null | HTMLInputElement}
+   */
   export let ref = null;
 </script>
 

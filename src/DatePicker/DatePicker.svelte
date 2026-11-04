@@ -4,7 +4,11 @@
     return value?.constructor === Object && "from" in value && "to" in value;
   }
 
-  /** @param {any} a @param {any} b */
+  /**
+   * @param {any} a
+   * @param {any} b
+   * @returns {boolean}
+   */
   function sameItem(a, b) {
     if (a === b) return true;
     if (a instanceof Date && b instanceof Date) {
@@ -512,6 +516,9 @@
   $: calendarPortalled = effectivePortalMenu || portalWhenClipped;
   $: isFluid = fluid || !!formContext?.isFluid;
 
+  /**
+   * @type {import("svelte/store").Writable<Array<{ id: string; labelText: string; readonly: boolean; disabled: boolean; invalid: boolean; warn: boolean }>>}
+   */
   const inputs = writable([]);
   /**
    * @type {import("svelte/store").Readable<ReadonlyArray<string>>}
@@ -572,7 +579,9 @@
 
   /** @type {null | HTMLDivElement} */
   let datePickerRef = null;
+  /** @type {HTMLInputElement | null} */
   let inputRef = null;
+  /** @type {HTMLInputElement | null} */
   let inputRefTo = null;
   let prevValue = value;
   let prevValueFrom = valueFrom;
@@ -580,12 +589,14 @@
   let prevDisabledDates = disabledDates;
   let prevEnabledDates = enabledDates;
   let prevInitialMonth = initialMonth;
+  /** @type {Record<string, unknown>} */
   let prevAppliedOptions = {};
   let changeDispatchedByCalendar = false;
   let creating = false;
   let creationFailed = false;
   // Bumped by `recreateCalendar()`. Named in the init block so it re-runs.
   let calendarEpoch = 0;
+  /** @type {Record<string, unknown> | null} */
   let pendingOptions = null;
   /** @type {import("./calendar.js").CalendarInstance | null} */
   let engine = null;
@@ -727,9 +738,15 @@
 
   /** The string flatpickr writes to the input for its current selection. */
   function formatSelectedDates() {
-    const { dateFormat, conjunction } = engine.config;
-    return engine.selectedDates
-      .map((date) => engine.formatDate(date, dateFormat))
+    const { dateFormat, conjunction } =
+      /** @type {NonNullable<typeof engine>} */ (engine).config;
+    return /** @type {NonNullable<typeof engine>} */ (engine).selectedDates
+      .map((date) =>
+        /** @type {NonNullable<typeof engine>} */ (engine).formatDate(
+          date,
+          dateFormat,
+        ),
+      )
       .join(conjunction);
   }
 
@@ -740,23 +757,31 @@
    * @param {string} to
    */
   function isRangePicked(from, to) {
-    const [start = "", end = ""] = engine.selectedDates.map((date) =>
-      engine.formatDate(date, engine.config.dateFormat),
+    const [start = "", end = ""] = /** @type {NonNullable<typeof engine>} */ (
+      engine
+    ).selectedDates.map((date) =>
+      /** @type {NonNullable<typeof engine>} */ (engine).formatDate(
+        date,
+        /** @type {NonNullable<typeof engine>} */ (engine).config.dateFormat,
+      ),
     );
     return from === start && to === end;
   }
 
   function currentDateStr() {
     return $range
-      ? { from: inputRef.value, to: inputRefTo.value }
-      : inputRef.value;
+      ? {
+          from: /** @type {HTMLInputElement} */ (inputRef).value,
+          to: /** @type {HTMLInputElement} */ (inputRefTo).value,
+        }
+      : /** @type {HTMLInputElement} */ (inputRef).value;
   }
 
   /** Mirror the inputs into `valueFrom`/`valueTo` in range mode. */
   function syncRangeValues() {
     if ($range) {
-      valueFrom = inputRef.value;
-      valueTo = inputRefTo.value;
+      valueFrom = /** @type {HTMLInputElement} */ (inputRef).value;
+      valueTo = /** @type {HTMLInputElement} */ (inputRefTo).value;
     }
   }
 
@@ -967,7 +992,10 @@
    */
   function applySelectedDates() {
     prevSelectedDates = selectedDates;
-    engine.setDate([...selectedDates], false);
+    /** @type {NonNullable<typeof engine>} */ (engine).setDate(
+      [...selectedDates],
+      false,
+    );
     writeSelectionToValue();
   }
 
@@ -980,8 +1008,13 @@
    */
   function writeSelectionToValue() {
     if ($range) {
-      const [from = "", to = ""] = engine.selectedDates.map((date) =>
-        engine.formatDate(date, engine.config.dateFormat),
+      const [from = "", to = ""] = /** @type {NonNullable<typeof engine>} */ (
+        engine
+      ).selectedDates.map((date) =>
+        /** @type {NonNullable<typeof engine>} */ (engine).formatDate(
+          date,
+          /** @type {NonNullable<typeof engine>} */ (engine).config.dateFormat,
+        ),
       );
       prevValueFrom = from;
       prevValueTo = to;
@@ -1097,6 +1130,7 @@
     );
   }
 
+  /** @param {"escape-key" | "outside-click" | "programmatic"} trigger */
   function dismissCalendar(trigger) {
     if (!calendarOpen) return;
     closeTrigger = trigger;
@@ -1150,7 +1184,9 @@
   function isFocusableDay(elem) {
     return (
       !!elem &&
-      engine.calendarContainer.contains(elem) &&
+      /** @type {NonNullable<typeof engine>} */ (
+        engine
+      ).calendarContainer.contains(elem) &&
       !elem.classList.contains("bx--date-picker__day--hidden") &&
       !elem.classList.contains("bx--date-picker__day--disabled") &&
       !elem.classList.contains("bx--date-picker__grid-cell--disabled")
@@ -1218,18 +1254,21 @@
     const rangeDates = [];
     const cursor = new Date(start);
     while (cursor.getTime() <= end.getTime()) {
-      if (engine.isEnabled(cursor)) rangeDates.push(new Date(cursor));
+      if (/** @type {NonNullable<typeof engine>} */ (engine).isEnabled(cursor))
+        rangeDates.push(new Date(cursor));
       cursor.setDate(cursor.getDate() + 1);
     }
 
     const existingTimes = new Set(
-      engine.selectedDates.map((date) => date.getTime()),
+      /** @type {NonNullable<typeof engine>} */ (engine).selectedDates.map(
+        (date) => date.getTime(),
+      ),
     );
     const merged = [
-      ...engine.selectedDates,
+      .../** @type {NonNullable<typeof engine>} */ (engine).selectedDates,
       ...rangeDates.filter((date) => !existingTimes.has(date.getTime())),
     ];
-    engine.setDate(merged, true);
+    /** @type {NonNullable<typeof engine>} */ (engine).setDate(merged, true);
   }
 
   /** @type {HTMLElement[]} */
@@ -1318,9 +1357,17 @@
     focusCalendar,
   });
 
+  /**
+   * @param {string} optionKey
+   * @param {unknown} value
+   * @param {unknown} [appliedValue]
+   */
   function applyOptionIfChanged(optionKey, value, appliedValue = value) {
     if (!sameValue(prevAppliedOptions[optionKey], value)) {
-      engine.set(optionKey, appliedValue);
+      /** @type {NonNullable<typeof engine>} */ (engine).set(
+        optionKey,
+        appliedValue,
+      );
       prevAppliedOptions[optionKey] = value;
     }
   }
@@ -1335,8 +1382,9 @@
    * field directly and redraw.
    */
   function clearCalendarEnable() {
-    engine.config._enable = undefined;
-    engine.redraw();
+    /** @type {NonNullable<typeof engine>} */ (engine).config._enable =
+      undefined;
+    /** @type {NonNullable<typeof engine>} */ (engine).redraw();
   }
 
   /** Track each prop with its own `prev*` reference, so clearing one back
@@ -1346,9 +1394,12 @@
     const hadOverride = prevDisabledDates.length > 0;
     prevDisabledDates = disabledDates;
     if (disabledDates.length > 0) {
-      engine.set("disable", disabledDates);
+      /** @type {NonNullable<typeof engine>} */ (engine).set(
+        "disable",
+        disabledDates,
+      );
     } else if (hadOverride) {
-      engine.set("disable", []);
+      /** @type {NonNullable<typeof engine>} */ (engine).set("disable", []);
     }
   }
 
@@ -1357,7 +1408,10 @@
     const hadOverride = prevEnabledDates.length > 0;
     prevEnabledDates = enabledDates;
     if (enabledDates.length > 0) {
-      engine.set("enable", enabledDates);
+      /** @type {NonNullable<typeof engine>} */ (engine).set(
+        "enable",
+        enabledDates,
+      );
     } else if (hadOverride) {
       clearCalendarEnable();
     }
@@ -1371,13 +1425,16 @@
    */
   function resolveInitialMonth() {
     if (initialMonth == null) return null;
-    const parsed = engine.parseDate(initialMonth, dateFormat);
+    const parsed = /** @type {NonNullable<typeof engine>} */ (engine).parseDate(
+      initialMonth,
+      dateFormat,
+    );
     if (!parsed) return null;
 
     let year = parsed.getFullYear();
     let month = parsed.getMonth();
     const { minDate: resolvedMinDate, maxDate: resolvedMaxDate } =
-      engine.config;
+      /** @type {NonNullable<typeof engine>} */ (engine).config;
     if (
       resolvedMaxDate &&
       monthValue(year, month) >
@@ -1409,6 +1466,7 @@
     engine.jumpToDate(target, false);
   }
 
+  /** @param {Record<string, unknown>} options */
   async function initCalendar(options) {
     if (engine) {
       const selectionCount = engine.selectedDates.length;
@@ -1463,10 +1521,10 @@
             : { appendTo: datePickerRef }),
           // An empty `value` leaves the calendar without a selection.
           ...($inputValue !== "" && { defaultDate: $inputValue }),
-          mode: $mode,
+          mode: /** @type {import("./calendar.js").CalendarMode} */ ($mode),
           rtl: isRtl,
         },
-        base: inputRef,
+        base: /** @type {HTMLInputElement} */ (inputRef),
         input: inputRefTo,
         isDayBlocked: isOutsideRangeWindow,
         dispatch: (event, eventDetail) => {
@@ -1751,10 +1809,10 @@
 
           // workaround to remove the default range plugin separator "to"
           if ($inputValueFrom !== "") {
-            inputRef.value = $inputValueFrom;
+            /** @type {HTMLInputElement} */ (inputRef).value = $inputValueFrom;
           }
           if ($inputValueTo !== "") {
-            inputRefTo.value = $inputValueTo;
+            /** @type {HTMLInputElement} */ (inputRefTo).value = $inputValueTo;
           }
           syncSelectedDatesFromCalendar();
         }
@@ -1911,6 +1969,7 @@
     prevLabel: previousLabelText,
     nextLabel: nextLabelText,
   };
+  /** @type {Record<string, string>} */
   const CALENDAR_NOUN = {
     month: "month",
     quarter: "quarter",

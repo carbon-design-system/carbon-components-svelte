@@ -273,6 +273,10 @@
    */
   const aiLabelState = writable($$slots.decorator ? "active" : undefined);
 
+  /**
+   * @param {boolean} isIncrementing
+   * @param {number} [multiplier]
+   */
   function updateValue(isIncrementing, multiplier = 1) {
     // When the input is empty (null) or zero and stepStartValue is set,
     // jump directly to stepStartValue on the first step.
@@ -314,11 +318,11 @@
       }
 
       if (isIncrementing) {
-        ref.stepUp(multiplier);
+        /** @type {HTMLInputElement} */ (ref).stepUp(multiplier);
       } else {
-        ref.stepDown(multiplier);
+        /** @type {HTMLInputElement} */ (ref).stepDown(multiplier);
       }
-      value = +ref.value;
+      value = +(/** @type {HTMLInputElement} */ (ref).value);
 
       dispatch("input", value);
       dispatch("change", value);
@@ -343,7 +347,9 @@
     : ".";
 
   let inputValue = value?.toString() ?? "";
+  /** @type {null | number | undefined} */
   let prevValue;
+  /** @type {Intl.NumberFormat | null | undefined} */
   let prevFormatter;
   let userInputActive = false;
   let inputFocused = false;
@@ -581,6 +587,10 @@
     dispatch("blur", { event, value });
   }
 
+  /**
+   * @param {FocusEvent} event
+   * @param {"up" | "down"} direction
+   */
   function handleStepperBlur(event, direction) {
     stopRepeat();
     dispatch("blur:stepper", { event, value, direction });

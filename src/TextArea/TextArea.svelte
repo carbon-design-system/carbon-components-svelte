@@ -282,6 +282,7 @@
 
     // `height` excludes padding/border under content-box but includes them
     // under border-box, while `scrollHeight` always includes padding only.
+    /** @param {number} contentAndPaddingHeight */
     const toStyleHeight = (contentAndPaddingHeight) =>
       sizing.isBorderBox
         ? contentAndPaddingHeight + borderTop + borderBottom
@@ -317,6 +318,7 @@
     }
   });
 
+  /** @type {number | undefined} */
   let lastWidth;
 
   onMount(() => {

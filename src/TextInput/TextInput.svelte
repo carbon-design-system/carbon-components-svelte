@@ -150,6 +150,7 @@
   const aiLabelState = writable($$slots.decorator ? "active" : undefined);
   const dispatch = createEventDispatcher();
 
+  /** @param {string} raw */
   function parse(raw) {
     if ($$restProps.type !== "number") return raw;
     return raw === "" ? null : Number(raw);
