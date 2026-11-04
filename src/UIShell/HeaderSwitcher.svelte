@@ -106,6 +106,7 @@
 
   $: maxWidthStyle = toCssLength(maxWidth);
 
+  /** @param {"outside-click" | "escape-key" | "select"} trigger */
   function close(trigger) {
     isOpen = false;
     dispatch("close", { trigger });
@@ -118,6 +119,7 @@
     close("select");
   }
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (
       isOpen &&
@@ -128,15 +130,17 @@
     }
   }
 
+  /** @param {Event} event */
   function handleKeydown(event) {
-    if (isOpen && event.key === "Escape") {
+    if (isOpen && /** @type {KeyboardEvent} */ (event).key === "Escape") {
       // Escape that cancels an IME composition is not a close.
-      if (isImeComposition(event)) return;
+      if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
       close("escape-key");
       ref?.focus();
     }
   }
 
+  /** @param {KeyboardEvent} event */
   async function handleTriggerKeydown(event) {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();

@@ -171,7 +171,7 @@
    */
   function handleMenuKeydown(event) {
     if (event.defaultPrevented || !isTypeaheadKey(event)) return;
-    const index = $menuItems.indexOf(event.target);
+    const index = $menuItems.indexOf(/** @type {HTMLElement} */ (event.target));
     const next = typeaheadIndex({
       items: $menuItems,
       query: typeahead.push(event.key),
@@ -211,6 +211,7 @@
     };
   });
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (expanded && isOutsideClick(event, ref)) {
       expanded = false;

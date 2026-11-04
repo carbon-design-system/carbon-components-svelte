@@ -346,6 +346,7 @@
     if (item) focusMenuItem(item);
   }
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (!open) return;
     // Clicks inside any menu (this one or a portalled submenu) are not outside
@@ -356,13 +357,21 @@
     if (isOutsideClick(event, [anchor, ref])) close("outside-click");
   }
 
+  /** @param {Event} event */
   function handleEscape(event) {
     if (!open || isSubmenu) return;
     // Tab is treated like Escape: without this, focus would leave the
     // (possibly portaled) menu for whatever happens to be next in the DOM.
-    if (event.key === "Escape" || event.key === "Tab") {
+    if (
+      /** @type {KeyboardEvent} */ (event).key === "Escape" ||
+      /** @type {KeyboardEvent} */ (event).key === "Tab"
+    ) {
       // Escape that cancels an IME composition is not a close.
-      if (event.key === "Escape" && isImeComposition(event)) return;
+      if (
+        /** @type {KeyboardEvent} */ (event).key === "Escape" &&
+        isImeComposition(/** @type {KeyboardEvent} */ (event))
+      )
+        return;
       event.preventDefault();
       close("escape-key");
     }

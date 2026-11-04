@@ -105,6 +105,7 @@
   /** @type {null | HTMLSpanElement} */
   let toggletipRef = null;
   // The popover, in place or in a portal.
+  /** @type {null | HTMLDivElement} */
   let popoverRef = null;
   let disconnectModalObserver = noop;
 
@@ -141,6 +142,7 @@
   // and close it again. Deferring past the current event mirrors the
   // post-render effect in the upstream component.
   let listenersEnabled = false;
+  /** @type {number} */
   let enableFrame;
 
   function toggle() {
@@ -166,6 +168,7 @@
   // "inside" for focus and outside-click handling.
   $: insideElements = [toggletipRef, popoverRef];
 
+  /** @param {Node | null} target */
   function containsTarget(target) {
     return insideElements.some((node) => node?.contains(target));
   }
@@ -175,9 +178,11 @@
     // Keep open when focus moves to the toggletip content itself (relatedTarget
     // is null on some browsers when clicking non-focusable content).
     if (open && event.relatedTarget === null) return;
-    if (!containsTarget(event.relatedTarget)) close();
+    if (!containsTarget(/** @type {Node | null} */ (event.relatedTarget)))
+      close();
   }
 
+  /** @param {Event} event */
   function handleOutsideClick(event) {
     if (open && isOutsideClick(event, insideElements)) close();
   }

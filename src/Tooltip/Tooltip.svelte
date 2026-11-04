@@ -232,10 +232,16 @@
   // the capture phase so it closes before an ancestor (e.g. a Modal) sees
   // Escape. Focus inside the tooltip is left to `handleKeydown`, so nested
   // widgets still get Escape first.
+  /** @param {Event} event */
   function handleWindowKeydown(event) {
     // Escape that cancels an IME composition is not a close.
-    if (event.key !== "Escape" || !open || isImeComposition(event)) return;
-    const target = event.target;
+    if (
+      /** @type {KeyboardEvent} */ (event).key !== "Escape" ||
+      !open ||
+      isImeComposition(/** @type {KeyboardEvent} */ (event))
+    )
+      return;
+    const target = /** @type {Node | null} */ (event.target);
     if (ref?.contains(target) || refTooltip?.contains(target)) return;
     event.stopPropagation();
     open = false;
@@ -472,6 +478,7 @@
     ariaDescribedBy,
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
+  /** @type {import("svelte/elements").HTMLAttributes<HTMLDivElement>} */
   $: buttonProps = {
     role: "button",
     "aria-haspopup": "true",
