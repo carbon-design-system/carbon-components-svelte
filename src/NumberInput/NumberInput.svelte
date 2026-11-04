@@ -336,8 +336,22 @@
     ((min !== undefined && value < min) || (max !== undefined && value > max));
   $: formatter = locale ? getNumberFormatter(locale, formatOptions) : null;
   $: useTextMode = allowDecimal || !!locale;
+  // Probe the marks with the style being displayed: a locale's money can use
+  // other marks than its plain numbers (fr-CH), and a percent shows no
+  // decimal mark unless a fraction digit is forced.
   $: separatorParts = locale
-    ? getNumberFormatter(locale, undefined).formatToParts(12345.6)
+    ? getNumberFormatter(
+        locale,
+        formatOptions?.style && formatOptions.style !== "decimal"
+          ? {
+              style: formatOptions.style,
+              currency: formatOptions.currency,
+              unit: formatOptions.unit,
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            }
+          : undefined,
+      ).formatToParts(12345.6)
     : null;
   $: groupSeparator = separatorParts
     ? (separatorParts.find((p) => p.type === "group")?.value ?? "")
@@ -397,7 +411,12 @@
     } else if (value != null) {
       const valueStr = formatter ? formatter.format(value) : value.toString();
       const parsedInput = locale
-        ? parseLocaleValue(inputValue, groupSeparator, decimalSeparator)
+        ? parseLocaleValue(
+            inputValue,
+            groupSeparator,
+            decimalSeparator,
+            formatOptions?.style,
+          )
         : parse(inputValue);
       // Sync inputValue to value when:
       // - The numeric values differ AND input is valid (preserves "1.0" formatting)
@@ -431,7 +450,12 @@
     const raw = ref.value;
     value =
       useTextMode && locale
-        ? parseLocaleValue(raw, groupSeparator, decimalSeparator)
+        ? parseLocaleValue(
+            raw,
+            groupSeparator,
+            decimalSeparator,
+            formatOptions?.style,
+          )
         : parse(raw);
   }
 
@@ -442,7 +466,12 @@
       userInputActive = true;
       inputValue = input.value;
       const parsed = locale
-        ? parseLocaleValue(input.value, groupSeparator, decimalSeparator)
+        ? parseLocaleValue(
+            input.value,
+            groupSeparator,
+            decimalSeparator,
+            formatOptions?.style,
+          )
         : parse(input.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
       // This provides better UX by letting users see and correct typos without losing data.
@@ -461,7 +490,12 @@
     const input = /** @type {HTMLInputElement} */ (event.target);
     userInputActive = false;
     let parsedValue = locale
-      ? parseLocaleValue(input.value, groupSeparator, decimalSeparator)
+      ? parseLocaleValue(
+          input.value,
+          groupSeparator,
+          decimalSeparator,
+          formatOptions?.style,
+        )
       : parse(input.value, useTextMode);
 
     // If allowEmpty is false and value would be null, use default value

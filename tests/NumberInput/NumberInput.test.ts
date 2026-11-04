@@ -1606,6 +1606,47 @@ describe("NumberInput", () => {
       expect(getBoundText()).toBe("1234.5");
     });
 
+    // The text a formatted number displays reads back as the same number:
+    // currency, percent and unit symbols are not part of the value, and a
+    // locale's money can use different marks than its plain numbers (fr-CH).
+    it.each([
+      ["en-US", { style: "currency", currency: "USD" }, "$1,234.56", "1234.56"],
+      [
+        "en-US",
+        { style: "currency", currency: "USD" },
+        "-$1,234.56",
+        "-1234.56",
+      ],
+      [
+        "de-DE",
+        { style: "currency", currency: "EUR" },
+        "1.234,56 €",
+        "1234.56",
+      ],
+      [
+        "fr-CH",
+        { style: "currency", currency: "CHF" },
+        "1'234.56 CHF",
+        "1234.56",
+      ],
+      ["en-US", { style: "percent" }, "26%", "0.26"],
+      ["en-US", { style: "unit", unit: "kilogram" }, "12.5 kg", "12.5"],
+    ] as const)(
+      "should read back the formatted text in %s %j (%s)",
+      async (locale, formatOptions, text, expected) => {
+        render(NumberInput, {
+          props: { locale, formatOptions, value: null, allowEmpty: true },
+        });
+
+        const input = screen.getByRole("textbox");
+        assert(input instanceof HTMLInputElement);
+        await fireEvent.input(input, { target: { value: text } });
+        await fireEvent.change(input);
+
+        expect(getBoundText()).toBe(expected);
+      },
+    );
+
     it("should fall back to standard parsing when locale is removed", async () => {
       const { rerender } = render(NumberInput, {
         props: { locale: "de-DE", value: 1234.5, allowEmpty: true },

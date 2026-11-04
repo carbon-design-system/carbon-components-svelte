@@ -5,11 +5,16 @@
 /** Parse a raw string; `null` for `""`, `"-"`, or NaN. */
 export function parse(raw: string, useLocaleNormalize?: boolean): number | null;
 
-/** Parse with explicit group and decimal separators; `null` for empty or NaN. */
+/**
+ * Parse with explicit group and decimal separators; `null` for empty or NaN.
+ * For the `currency`, `percent` and `unit` styles, ignores the symbol or unit
+ * text around the number and reads a percent as a ratio.
+ */
 export function parseLocaleValue(
   raw: string,
   groupSeparator: string,
   decimalSeparator: string,
+  style?: Intl.NumberFormatOptions["style"],
 ): number | null;
 
 /** First step when empty: `stepStartValue`, else `min`, else 0. */
