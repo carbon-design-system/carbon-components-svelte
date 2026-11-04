@@ -74,6 +74,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
+  import { tabindexAttribute } from "../utils/tabindex.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TileWrapper from "./TileWrapper.svelte";
 
@@ -257,7 +258,7 @@
     {id}
     aria-expanded={interactive ? undefined : expanded ? "true" : "false"}
     aria-controls={interactive ? undefined : `${id}-content`}
-    tabindex={interactive ? undefined : tabindex}
+    tabindex={tabindexAttribute(interactive ? undefined : tabindex)}
     title={interactive ? undefined : iconText}
     class:bx--tile={true}
     class:bx--tile--expandable={true}
@@ -293,7 +294,7 @@
         this={interactive ? "button" : "div"}
         bind:this={chevronRef}
         type={interactive ? "button" : undefined}
-        tabindex={interactive ? tabindex : undefined}
+        tabindex={tabindexAttribute(interactive ? tabindex : undefined)}
         class:bx--tile__chevron={true}
         aria-expanded={interactive ? expanded : undefined}
         aria-label={interactive

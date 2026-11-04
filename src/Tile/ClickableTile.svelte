@@ -64,7 +64,7 @@
   // button semantics for the Enter/Space handling below. Spread before
   // `$$restProps` so a consumer's own `role` or `tabindex` wins; omitted
   // entirely when disabled, where the anchor gets `role="link"`.
-  $: buttonProps = href || disabled ? {} : { role: "button", tabindex: "0" };
+  $: buttonProps = href || disabled ? {} : { role: "button", tabindex: 0 };
 
   /**
    * Starts active for a filled slot, so the server renders the AI surface.
