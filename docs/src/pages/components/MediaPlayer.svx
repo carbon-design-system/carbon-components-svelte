@@ -1,0 +1,138 @@
+---
+components: ["MediaPlayer", "MediaScrubber"]
+description: MediaPlayer draws Carbon controls over a native video or audio element, with a scrubber that shows buffering and chapters, captions and speed menus, keyboard shortcuts and controls that step aside while playing.
+---
+
+## Basic
+
+Set `src` to the media, and `poster` to the image shown before play. The browser still decodes and plays the media, so the formats it supports are the formats you can use. Give the player a name with `aria-label`; it labels the region.
+
+<FileSource src="/framed/MediaPlayer/MediaPlayerBasic" />
+
+For several formats, put `<source>` elements in the default slot instead of `src`.
+
+```svelte
+<MediaPlayer aria-label="Setup walkthrough">
+  <source src="/walkthrough.webm" type="video/webm" />
+  <source src="/walkthrough.mp4" type="video/mp4" />
+</MediaPlayer>
+```
+
+On the server, the player renders the poster and the controls, not working yet. The media is not touched until the page loads, and the picture-in-picture and fullscreen buttons appear then, once the browser says it supports them.
+
+## Tracks
+
+### Captions and subtitles
+
+Pass `tracks`, or put `<track>` elements in the default slot. The captions button lists every `captions` and `subtitles` track with an Off choice, and shows one at a time. The browser draws the cues. Set `crossorigin="anonymous"` when a caption file comes from another origin, and send a CORS header with it.
+
+### Chapters
+
+A `kind="chapters"` track marks each chapter's start on the scrubber, and its title shows in the preview over the track and in the position a screen reader hears. Its cues load as hidden, so nothing is drawn over the video. Set `chapters` to give them as data instead, as `{ start, title }`, which also shows from the first paint.
+
+<FileSource src="/framed/MediaPlayer/MediaPlayerTracks" />
+
+<FileSource src="/framed/MediaPlayer/MediaPlayerChapters" />
+
+### Styling captions
+
+Captions are drawn by the browser, so only `::cue` can style them. It takes `color`, `background`, `font`, `text-shadow`, `outline`, `opacity` and a few text properties, and no padding, margin, border radius or position. The player sets a black backing, white text, and Plex at 18 px, so a caption reads on any frame. To change them, write your own rule after the player's styles:
+
+```css
+.my-player video::cue {
+  font-size: 1.5rem;
+  background: black;
+}
+```
+
+A caption's position comes from the cue's own settings in the WebVTT file, not from CSS.
+
+## Audio
+
+Set `variant="audio"` for a compact bar: play, the scrubber, the time, volume and speed. There is no picture, fullscreen or auto-hide, and the bar follows the theme where the video controls always sit on a dark scrim.
+
+<FileSource src="/framed/MediaPlayer/MediaPlayerAudio" />
+
+## State and control
+
+### Bound props
+
+Bind `paused`, `currentTime`, `volume`, `muted` and `playbackRate` to read the media and to change it. Setting `currentTime` seeks.
+
+<FileSource src="/framed/MediaPlayer/MediaPlayerBind" />
+
+### Custom controls
+
+The `controls` slot replaces the control bar. It receives `state` (a snapshot) and `actions` (the methods of the state store). The scrubber, buffering indicator and shortcuts stay.
+
+<FileSource src="/framed/MediaPlayer/MediaPlayerCustomControls" />
+
+### Without the player
+
+`createMediaState` makes the same store without a component. Call `attach` with any `video` or `audio` element, and it follows the element's events and returns a function that stops. `MediaScrubber` works on its own with that state: pass it `currentTime`, `duration` and `buffered`, and seek on `change`.
+
+<FileSource src="/framed/MediaPlayer/MediaScrubberHeadless" />
+
+The store notifies subscribers only when a field changed, reads the media only after `attach`, and so is safe to create on the server.
+
+## Scrubber
+
+The scrubber is one `role="slider"`. Its `aria-valuetext` reads the position in words, of the length, then the chapter: "1 minute 5 seconds of 4 minutes, Setting up". The words follow `locale`. Over the track, a preview shows the time and chapter under the pointer.
+
+| Do | Why |
+| --- | --- |
+| Seek on `change` in a custom scrubber, and use `input` only for a preview | `input` fires for every pointer move; a seek for each one backs up behind the decoder. |
+| Leave `currentTime` alone while the thumb is held | The scrubber ignores it for you, so a `timeupdate` does not pull the thumb away from the pointer. |
+| Let the player seek on drag | It seeks once per frame, and only after the last seek finished, so a drag into unbuffered media does not queue requests. |
+
+### Direction
+
+A media timeline reads left to right in every writing direction, as on YouTube and in the browsers' own controls: time runs from the left edge, and <DocKbd label="ArrowRight" /> moves forward. The scrubber and volume slider set `dir="ltr"`. The buttons around them follow the page: in an RTL page, play sits at the right.
+
+## Keyboard
+
+Shortcuts apply only while focus is inside the player, so they cannot clash with the page. They do not fire in a text field, a menu or a dialog, and <DocKbd label="Space" /> is left to a focused button, link or slider, which acts on it already. Set `shortcuts={false}` to turn them off.
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Space" /> or <DocKbd label="K" /> | Play or pause. |
+| <DocKbd label="M" /> | Mute. |
+| <DocKbd label="F" /> | Fullscreen. |
+| <DocKbd label="C" /> | Captions on or off. |
+| <DocKbd label="J" /> and <DocKbd label="L" /> | Back and forward 10 seconds (`skipStep`). |
+| <DocKbd label="<" /> and <DocKbd label=">" /> | Slower and faster, in the steps of `playbackRates`. |
+| <DocKbd label="?" /> | Show this list. |
+| <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> | Back and forward 5 seconds, when the player itself has focus. |
+| <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> | Volume, when the player itself has focus. |
+
+On the scrubber, <DocKbd label="ArrowRight" /> and <DocKbd label="ArrowLeft" /> move 5 seconds (`seekStep`), <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> a tenth of the length, and <DocKbd label="Home" /> and <DocKbd label="End" /> go to the ends. The keyboard button opens the list in a dialog inside the player, so it shows in fullscreen. <DocKbd label="Escape" /> closes it and returns focus to the button.
+
+Screen readers hear the effect of a shortcut ("Paused", "Speed 1.5×") through a polite live region, since focus did not move to a control that would say it.
+
+## Controls that step aside
+
+While the media plays, the controls fade after `autoHideDelay` milliseconds without the pointer moving, and come back at once on pointer move, touch or focus. They never hide:
+
+| When | Why |
+| --- | --- |
+| The media is paused | There is nothing to see through them. |
+| Focus came from the keyboard and is inside the player | A keyboard user cannot see where focus is if the control fades. |
+| A menu or the shortcut list is open | They belong to the controls. |
+| The user prefers reduced motion | They stay up rather than fading. |
+
+Set `autoHide={false}` to keep them up during playback.
+
+## Text
+
+Every string is replaceable. `translateWithId` takes an id such as `"play"`, `"mute"`, `"captions"` or `"speed"` and returns the text, including the shortcut help's rows (`"playPause"`, `"back"`). `locale` writes times and speeds in words.
+
+## Forced colors
+
+The scrim and the translucent track vanish under forced colors, so the controls sit on a solid system `Canvas` strip, the track layers use `GrayText`, `ButtonText` and `Highlight`, and the volume slider falls back to the browser's own.
+
+## Notes
+
+- Fullscreen asks for the player, not the video, so the controls go with it. On iPhone Safari, which can only fullscreen a video, it asks for the video and the browser's own controls take over.
+- Picture-in-picture uses the standard API, and the button hides where it is missing or the video sets `disablePictureInPicture`.
+- A seek into media that has not loaded shows the thumb at the target at once, and a spinner after a short delay while the browser fetches.
+- Without a script, the page has the poster and drawn but idle controls. Add `controls` to your own `<noscript>` video if that matters.
