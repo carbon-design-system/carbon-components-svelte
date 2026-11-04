@@ -10,3 +10,9 @@
     <p>Content for section 2</p>
   </AccordionItem>
 </Accordion>
+
+<Accordion align="start" data-testid="accordion-start">
+  <AccordionItem title="Start 1">
+    <p>Content for start 1</p>
+  </AccordionItem>
+</Accordion>
