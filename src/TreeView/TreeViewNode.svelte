@@ -109,9 +109,11 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { toAriaChecked } from "../utils/tree-aria-checked.js";
 
+  /** @type {null | HTMLAnchorElement | HTMLLIElement} */
   let ref = null;
   /** @type {null | HTMLDivElement} */
   let refLabel = null;
+  /** @type {Node["id"] | undefined} */
   let prevActiveId;
 
   const {

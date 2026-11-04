@@ -79,6 +79,7 @@
   let ref = null;
   /** @type {null | HTMLDivElement} */
   let refLabel = null;
+  /** @type {string | number | undefined} */
   let prevActiveId;
 
   const {

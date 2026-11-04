@@ -43,6 +43,7 @@
     toggleNode,
   } = getContext("carbon:TreeView");
 
+  /** @type {string | number | undefined} */
   let prevActiveId;
 
   $: ({ node, depth, posInSet, setSize, hasChildren } = item);
