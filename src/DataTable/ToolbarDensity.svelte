@@ -73,6 +73,7 @@
   const ctx = getContext("carbon:DataTable");
   const tableSize = ctx?.tableSize;
   const toolbarCtx = getContext("carbon:Toolbar") ?? {};
+  /** @type {import("svelte/store").Readable<"xs" | "sm" | "default"> | undefined} */
   const toolbarSize = toolbarCtx.toolbarSize;
 
   $: selectedId =

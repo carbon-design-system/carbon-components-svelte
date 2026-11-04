@@ -7,6 +7,7 @@
 
   const ctx = getContext("carbon:Toolbar") ?? {};
 
+  /** @type {null | HTMLUListElement} */
   let menuRef = null;
   let prevVisible = false;
 

@@ -47,13 +47,17 @@
     }
   }
 
+  /** @type {undefined | (() => void)} */
   let unsubscribe;
 
   // Subscribe to DataTable context if available, otherwise use selectedIds prop
   if (ctx?.batchSelectedIds) {
-    unsubscribe = ctx.batchSelectedIds.subscribe((value) => {
-      batchSelectedIds = value;
-    });
+    unsubscribe = ctx.batchSelectedIds.subscribe(
+      /** @param {ReadonlyArray<any>} value */
+      (value) => {
+        batchSelectedIds = value;
+      },
+    );
   }
 
   // For standalone usage, watch the selectedIds prop
@@ -67,12 +71,16 @@
   let overflowVisible = false;
 
   const ctxToolbar = getContext("carbon:Toolbar");
+  /** @type {undefined | (() => void)} */
   let unsubscribeOverflow;
 
   if (ctxToolbar?.overflowVisible) {
-    unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe((value) => {
-      overflowVisible = value;
-    });
+    unsubscribeOverflow = ctxToolbar.overflowVisible.subscribe(
+      /** @param {boolean} value */
+      (value) => {
+        overflowVisible = value;
+      },
+    );
   }
 
   $: if (ctxToolbar?.batchActionsActive) {

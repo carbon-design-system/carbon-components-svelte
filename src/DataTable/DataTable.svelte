@@ -1,11 +1,18 @@
 <script context="module">
   import { deepEqual } from "../utils/deep-equal.js";
 
+  /** @type {Record<string, string>} */
   const alignClasses = {
     start: "bx--table-column--align-start",
     end: "bx--table-column--align-end",
   };
 
+  /**
+   * Typed `any` because a column without `columnAlign` passes `undefined`,
+   * which looks up nothing.
+   * @param {any} columnAlign
+   * @returns {string | undefined}
+   */
   function formatAlignClass(columnAlign) {
     return alignClasses[columnAlign];
   }
@@ -647,6 +654,7 @@
   /** Row height when `size` is unset */
   const DEFAULT_ROW_HEIGHT = 48;
 
+  /** @type {{ "aria-hidden": "true" | "false"; class: string; }} */
   const expandIconProps = {
     "aria-hidden": "true",
     class: "bx--table-expand__svg",
@@ -654,7 +662,9 @@
 
   let tableBodyScrollTop = 0;
   let prevExpandedRowIds = [];
+  /** @type {null | HTMLElement} */
   let tableRef = null;
+  /** @type {null | (() => void)} */
   let scrollListenerCleanup = null;
 
   const scrollEndTracker = createScrollEndTracker();
@@ -739,6 +749,7 @@
   let stableHeaders = headers;
   let headersSnapshot = headers.map((header) => ({ ...header }));
 
+  /** @param {ReadonlyArray<DataTableHeader<Row>>} nextHeaders */
   function headersUnchanged(nextHeaders) {
     return deepEqual(headersSnapshot, nextHeaders);
   }
@@ -771,6 +782,7 @@
   // Last filter applied via `filterRows`, replayed when `rows` changes so
   // an active search is not silently dropped on row reassignment.
   let prevSearchValue = "";
+  /** @type {undefined | ((row: Row, value: string) => boolean)} */
   let prevCustomFilter;
 
   /**
@@ -885,6 +897,7 @@
   }
 
   /** Anchor row id for shift+click range selection; cleared when the anchor no longer exists in the current row order. */
+  /** @type {null | Row["id"]} */
   let rangeAnchorRowId = null;
 
   /**
@@ -971,10 +984,12 @@
   });
 
   let expanded = false;
+  /** @type {null | Row["id"]} */
   let parentRowId = null;
 
   $: expandedRowIdsSet = new Set(expandedRowIds);
 
+  /** @type {ReadonlyArray<Row["id"]>} */
   let prevBatchSelected = [];
   $: if (
     prevBatchSelected.length !== selectedRowIds.length ||
@@ -1019,15 +1034,20 @@
   }
   $: isSelectionEnabled = selectable || radio || batchSelection;
 
+  /** @type {Record<string, ReturnType<typeof computeRowCells>>} */
   let tableCellsByRowId = {};
+  /** @type {undefined | ReadonlyArray<Row>} */
   let prevRows;
+  /** @type {undefined | ReadonlyArray<DataTableHeader<Row>>} */
   let prevVisibleHeaders;
+  /** @type {undefined | ReadonlyArray<Row>} */
   let prevRowsToRender;
 
   /**
    * Resolve whether a header is sortable. `header.sort` overrides the
    * table-level `sortable` in either direction (`false` opts out, `true` or
    * a comparator opts in); unset inherits `sortable`.
+   * @param {DataTableHeader<Row>} header
    */
   function isHeaderSortable(header) {
     if (header.sort === false) return false;
@@ -1037,8 +1057,12 @@
     return sortable;
   }
 
-  /** Build cell objects for one row. Always new objects so `display` columns re-run. */
+  /**
+   * Build cell objects for one row. Always new objects so `display` columns re-run.
+   * @param {Row} row
+   */
   function computeRowCells(row) {
+    /** @type {Array<{ key: string; value: DataTableValue; display?: (item: DataTableValue, row: any) => DataTableValue; empty?: boolean; columnMenu?: boolean; columnAlign?: "start" | "end"; }>} */
     const cells = [];
 
     // Index into `headers` rather than the visible subset so hiding a preceding
@@ -1097,6 +1121,7 @@
    * @param {Record<string, ReturnType<typeof computeRowCells>>} cache
    */
   function buildCellsForPaintedRows(paintedRows, cache) {
+    /** @type {Record<string, ReturnType<typeof computeRowCells>>} */
     const next = {};
     for (const row of paintedRows) {
       const prevCells = cache[row.id];
@@ -1327,7 +1352,11 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
-  /** Sort on a header click and dispatch the header click events. */
+  /**
+   * Sort on a header click and dispatch the header click events.
+   * @param {Event} event
+   * @param {DataTableNonEmptyHeader<Row>} header
+   */
   function handleHeaderClick(event, header) {
     dispatch("click", { header });
 
