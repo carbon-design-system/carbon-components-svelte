@@ -1876,7 +1876,6 @@
       totalHeight,
     };
   }
-  /** @type {NonNullable<ReturnType<typeof resolveVirtualData>>} */
   $: virtualData = resolveVirtualData(virtualConfig, virtualIndex, scrollTop);
 
   /** Observe the scroll container so percentage / relative heights
@@ -2332,7 +2331,8 @@
   </label>
 {/if}
 
-{#if virtualConfig}
+<!-- `virtualIndex` and `virtualData` are set whenever `virtualConfig` is. -->
+{#if virtualConfig && virtualIndex && virtualData}
   <ul
     {...$$restProps}
     {id}
