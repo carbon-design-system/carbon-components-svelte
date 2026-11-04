@@ -12,13 +12,13 @@ export default {
       tests: "tests/**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts,cjs,cts}",
       run: "bunx vitest run {files}",
       root: "tests",
-      // Read only by `test:types` (svelte-check), which runs whenever the
+      // Read only by `test:types` (svelte-typecheck), which runs whenever the
       // unit job does. `tests/tsconfig.json` isn't one: Vite reads it to
       // transform the tests.
       nonInputs: [
         "**/*.test-d.ts",
         "**/tsconfig.compat-check.json",
-        // Components only svelte-check renders, to check their types.
+        // Components only `test:types` renders, to check their types.
         "tests/DataTable/DataTable{DeepNesting,ExplicitGenerics,Skeleton}.test.svelte",
       ],
       // The Svelte 3/4 harnesses run the same unit tests. Vite reads

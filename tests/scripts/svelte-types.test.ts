@@ -1,15 +1,26 @@
 // @vitest-environment node
-import { compare, parseErrors } from "../../scripts/lib/svelte-types";
+import { join } from "node:path";
+import type { Diagnostic } from "svelte-typecheck";
+import { compare, svelteErrors } from "../../scripts/lib/svelte-types";
 
-describe("parseErrors", () => {
-  it("reads .svelte errors from svelte-check's machine output", () => {
-    const output = [
-      '1793012718195 START "/repo/src"',
-      "1793012718195 ERROR \"Tag/Tag.svelte\" 3:9 \"Type 'string' is not assignable to type 'number'.\\n  Detail.\"",
-      '1793012718195 ERROR "DatePicker/calendar.js" 18:42 "Not a component."',
-      "1793012718202 COMPLETED 950 FILES 2 ERRORS 0 WARNINGS 2 FILES_WITH_PROBLEMS",
-    ].join("\n");
-    expect(parseErrors(output)).toEqual([
+describe("svelteErrors", () => {
+  it("keeps the errors in components, relative to src/", () => {
+    const src = join("/repo", "src");
+    const at = (file: string, severity: Diagnostic["severity"]) => ({
+      file: join(src, file),
+      line: 3,
+      column: 9,
+      severity,
+      source: "ts" as const,
+      code: "TS2322",
+      message: "Type 'string' is not assignable to type 'number'.\n  Detail.",
+    });
+    const diagnostics: Diagnostic[] = [
+      at("Tag/Tag.svelte", "error"),
+      at("DatePicker/calendar.js", "error"),
+      at("Box/Box.svelte", "warning"),
+    ];
+    expect(svelteErrors(diagnostics, src)).toEqual([
       {
         file: "Tag/Tag.svelte",
         line: 3,
