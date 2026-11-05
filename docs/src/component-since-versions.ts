@@ -60,6 +60,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   LayoutDirection: "0.114.0",
   Link: "0.2.0",
   Loading: "0.2.0",
+  LocaleProvider: "0.114.0",
   LocalStorage: "0.30.0",
   Menu: "0.110.0",
   MenuButton: "0.110.0",

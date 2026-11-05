@@ -1,0 +1,263 @@
+---
+components: ["LocaleProvider"]
+description: LocaleProvider sets the locale, time zone, hour cycle, week start and text direction once, for every component below it that formats a value.
+---
+
+<script>
+  import {
+    DataTable,
+    DatePicker,
+    DatePickerInput,
+    FileUploader,
+    LocaleProvider,
+    NumberInput,
+    Pagination,
+    RelativeTime,
+    Select,
+    SelectItem,
+    Stack,
+  } from "carbon-components-svelte";
+
+  const locales = [
+    { id: "en-US", text: "English (United States)" },
+    { id: "de-DE", text: "Deutsch (Deutschland)" },
+    { id: "ar-EG", text: "العربية (مصر)" },
+    { id: "ja-JP", text: "日本語 (日本)" },
+    { id: "fr-CH", text: "Français (Suisse)" },
+  ];
+
+  const now = Date.parse("2026-09-13T12:00:00Z");
+  const file = new File(["x".repeat(1500)], "report.txt");
+  const headers = [{ key: "name", value: "Name" }];
+  const rows = [
+    { id: "a", name: "Zoë" },
+    { id: "b", name: "Ärger" },
+    { id: "c", name: "Anna" },
+    { id: "d", name: "Östen" },
+  ];
+
+  let locale = "de-DE";
+</script>
+
+## Basic
+
+Wrap the part of an app that formats values in `LocaleProvider` and set `locale` to a BCP 47 language tag. Every component below that formats a number, a date, a time or a sort order uses it, and each one updates when `locale` changes.
+
+Set `dir="auto"` to also set the writing direction from the locale: right to left for Arabic and Hebrew, left to right for the rest. The content then renders in an element with that `dir` and a `lang`.
+
+<Stack gap={7}>
+  <Select labelText="Locale" bind:selected={locale}>
+    {#each locales as { id, text } (id)}
+      <SelectItem value={id} {text} />
+    {/each}
+  </Select>
+  <LocaleProvider {locale} timeZone="UTC" dir="auto">
+    <Stack gap={6}>
+      <NumberInput labelText="Amount" value={1234567.89} />
+      <RelativeTime date={now - 5 * 60 * 1000} {now} />
+      <DatePicker datePickerType="single">
+        <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
+      </DatePicker>
+      <Pagination totalItems={12345} pageSize={10} pageSizes={[10]} />
+      <DataTable
+        sortable
+        sortKey="name"
+        sortDirection="ascending"
+        {headers}
+        {rows}
+      />
+      <FileUploader labelTitle="Files" files={[file]} fileSize />
+    </Stack>
+  </LocaleProvider>
+</Stack>
+
+## Precedence
+
+A component reads its own prop first, then the nearest `LocaleProvider`, then its own default. Without a provider nothing changes: each component keeps the default it has today, whether that is `"en"`, the runtime's locale or no formatting at all.
+
+| Do | Why |
+| :--- | :--- |
+| Set `locale` on a component that must differ from the rest | The prop wins over the provider, so one date can stay in ISO order. |
+| Leave `locale` unset on the rest | They follow the provider, including when it changes at runtime. |
+| Set `locale` on the provider | The tag is never read from the browser, so a server and a browser that set it print the same text. |
+
+Only the fields a provider sets take effect. A field it leaves unset comes from the provider above it, and from the component's default when there is none.
+
+## Number formatting
+
+`NumberInput`, `Pagination` and `FileUploader` write numbers with the locale's digits and separators. The `numberingSystem` of a provider swaps the digits only, such as Western digits in an Arabic locale.
+
+A `NumberInput` with a locale from a provider is a text field with `inputmode="decimal"`, as it is with its own `locale`, so it parses what a person types in that locale.
+
+<Stack gap={6}>
+  <LocaleProvider locale="ar-EG" dir="auto">
+    <NumberInput labelText="المبلغ" value={1234567.89} />
+  </LocaleProvider>
+  <LocaleProvider locale="ar-EG" numberingSystem="latn" dir="auto">
+    <NumberInput labelText="المبلغ" value={1234567.89} />
+  </LocaleProvider>
+</Stack>
+
+## Dates and times
+
+Set `timeZone` to an IANA zone, such as `"Europe/Zurich"`, so a time prints in that zone and not in the browser's. Set `hourCycle` to `"h23"` for a 24-hour clock or `"h12"` for a 12-hour one. Set `weekStart` from `0` (Sunday) to `6` (Saturday) for the first day of the week in a calendar, and `calendar` for a calendar such as `"buddhist"`.
+
+`hourCycle`, `numberingSystem` and `calendar` are written into the locale tag as Unicode extension keys, so every `Intl` formatter honors them. They need a `locale`.
+
+Hover the time to read the absolute time in the provider's zone and hour cycle.
+
+<LocaleProvider locale="en-US" timeZone="Asia/Tokyo" hourCycle="h23">
+  <RelativeTime date={now - 5 * 60 * 1000} {now} />
+</LocaleProvider>
+
+A `DatePicker` takes `weekStart` too. Here the week starts on Monday in an English calendar.
+
+<LocaleProvider locale="en-US" weekStart={1}>
+  <DatePicker datePickerType="single">
+    <DatePickerInput labelText="Date" placeholder="mm/dd/yyyy" />
+  </DatePicker>
+</LocaleProvider>
+
+## Sorting
+
+`DataTable` orders strings with the collation of the locale. In Swedish "ä" sorts after "z", and in German it sorts with "a". A `sort` function on the table or on a header takes precedence.
+
+<LocaleProvider locale="sv">
+  <DataTable
+    sortable
+    sortKey="name"
+    sortDirection="ascending"
+    {headers}
+    {rows}
+  />
+</LocaleProvider>
+
+## Nesting
+
+Providers nest. An inner one overrides the fields it sets and keeps the rest, so an inner provider that sets only `locale` keeps the `timeZone` above it.
+
+<LocaleProvider locale="de-CH">
+  <Stack gap={6}>
+    <NumberInput labelText="Betrag (de-CH)" value={1234567.89} />
+    <LocaleProvider locale="fr-CH">
+      <NumberInput labelText="Montant (fr-CH)" value={1234567.89} />
+    </LocaleProvider>
+  </Stack>
+</LocaleProvider>
+
+## Direction
+
+`dir` takes `"ltr"`, `"rtl"` or `"auto"`. `"auto"` reads the direction from the locale with `Intl.Locale`, and from the script of the locale's likely subtags where the browser has no text info. A provider with `dir` renders an element that carries `dir` and `lang`, and components inside read the direction as they do in a [LayoutDirection](/components/LayoutDirection). Use `tag` to render another element. A provider without `dir` renders no element.
+
+| Do | Why |
+| :--- | :--- |
+| Set `dir="auto"` on a provider that wraps one part of a page | The part follows its locale, such as an Arabic form in an English app. |
+| Write `<html lang dir>` for a whole app, with `getLocaleDirection(locale)` | The first paint is mirrored and the markup is the same on the server and in the browser. |
+| Nest a provider with `dir="ltr"` for code or identifiers | The nearest direction wins. |
+
+A provider does not change `<html>`. It cannot on the server, and two providers would overwrite each other.
+
+```svelte
+<!-- src/hooks.server.js -->
+<script module>
+  import { getLocaleDirection } from "carbon-components-svelte";
+
+  export const handle = ({ event, resolve }) => {
+    const locale = event.cookies.get("locale") ?? "en-US";
+    return resolve(event, {
+      transformPageChunk: ({ html }) =>
+        html
+          .replace("%lang%", locale)
+          .replace("%dir%", getLocaleDirection(locale)),
+    });
+  };
+</script>
+```
+
+See the [right-to-left guide](/right-to-left) for what flips and what stays left to right.
+
+## Server rendering
+
+A server and a browser that format with different defaults print different text, and Svelte replaces the text when it hydrates. `RelativeTime` and `Pagination` do this today when the server's locale or time zone is not the browser's.
+
+| Do | Why |
+| :--- | :--- |
+| Set `locale` and `timeZone` on the provider on the server and in the browser | Neither is read from the runtime, so the markup matches. |
+| Read the locale from the request, such as a cookie or `Accept-Language`, and send it to the client | The server has no `navigator.language`. |
+| Keep the provider in the root layout | Every component reads the same values, and a route change keeps them. |
+| Pass `now` to a `RelativeTime` until the page is mounted | Its text depends on the clock, so a prerendered page is stale at once. |
+| Do not use formatted text as an `id` or a `key` | Browsers disagree on some strings, such as `1'234.50 CHF` and `CHF 1'234.50`. |
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import { LocaleProvider } from "carbon-components-svelte";
+
+  export let data;
+</script>
+
+<LocaleProvider
+  locale={data.locale}
+  timeZone={data.timeZone}
+  dir="auto"
+>
+  <slot />
+</LocaleProvider>
+```
+
+## Translated text
+
+`translate` sets the translation function that components with a `translateWithId` prop read, the one `setTranslateContext` sets. Return `undefined` for an id to keep the English text. A nested provider's function is asked first.
+
+```svelte
+<LocaleProvider locale="de-DE" translate={(id) => messages[id]}>
+  <NumberInput labelText="Menge" />
+</LocaleProvider>
+```
+
+The text props, such as `Pagination`'s `itemsPerPageText`, are not covered: pass those on the component. `Pagination`'s text functions receive a `format` argument that writes a number in the locale, so a translated sentence keeps the locale's digits.
+
+```svelte
+<Pagination
+  totalItems={12345}
+  itemRangeText={(min, max, total, format) =>
+    `${format(min)}–${format(max)} von ${format(total)} Elementen`}
+/>
+```
+
+## Reading the context
+
+Call `getLocaleContext` during component initialization to read the nearest provider in your own components. It returns a store that holds the merged settings, and an empty object outside a provider.
+
+```svelte
+<script>
+  import { getLocaleContext } from "carbon-components-svelte";
+
+  export let date;
+  export let locale = undefined;
+
+  const context = getLocaleContext();
+
+  $: formatter = new Intl.DateTimeFormat(locale ?? $context.locale, {
+    dateStyle: "medium",
+    timeZone: $context.timeZone,
+  });
+</script>
+
+{formatter.format(date)}
+```
+
+`$context.locale` is the tag with `hourCycle`, `numberingSystem` and `calendar` applied, such as `de-CH-u-nu-arab`. `$context.baseLocale` is the tag as it was set.
+
+## Components that read it
+
+| Component | Reads |
+| :--- | :--- |
+| NumberInput | `locale` |
+| RelativeTime | `locale`, `timeZone` |
+| Pagination | `locale`, for the numbers in its default text |
+| DataTable | `locale`, for sorting |
+| FileUploader | `locale`, for file sizes |
+| DatePicker, DateCalendar | `locale`, `weekStart` |
+
+The other components that take a `locale` prop, such as `BigNumber`, `Meter` and `MultiSelect`, do not read the provider yet.
