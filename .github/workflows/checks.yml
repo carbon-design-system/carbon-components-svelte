@@ -49,6 +49,7 @@ jobs:
       - run: bunx --bun bivium check --max-unknown 0
       - run: bun fmt --check
       - run: bun lint
+      - run: bun run lint:svelte
 
       - name: Build docs
         run: bun run build:docs

@@ -66,7 +66,7 @@ files = ["e2e/**"]
 rules = { "no-await-in-loop" = "off" }
 
 [[lint.overrides]]
-files = ["**/*.test.ts", "docs/**"]
+files = ["**/*.test.ts", "**/*.test.svelte", "docs/**"]
 rules = { "no-restricted-syntax" = [
   "error",
   { selector = "UnaryExpression[operator='delete'] > MemberExpression[computed=false]", message = "Avoid the delete operator; assign undefined or rebuild the object." },
@@ -93,6 +93,16 @@ rules = { "no-restricted-imports" = [
   "error",
   { paths = [{ name = "svelte", importNames = ["onDestroy"], message = "Use the return function from onMount instead of onDestroy." }], patterns = [{ group = ["carbon-icons-svelte", "carbon-icons-svelte/**"], message = "Use the local icon in src/icons instead of importing from carbon-icons-svelte." }] },
 ] }
+
+# Rules for the markup of `.svelte` files, which `bun lint` can't read:
+# svelte-lint (`bun lint:svelte`) lints their scripts and markup expressions
+# with the rules above, and their markup with these.
+[svelte-lint]
+rules = { "svelte/require-each-key" = "off" }
+
+[[svelte-lint.overrides]]
+files = ["src/**/*.svelte"]
+rules = { "svelte/require-each-key" = "error" }
 
 [fmt]
 # Sass, Markdown and YAML stay hand-formatted.
