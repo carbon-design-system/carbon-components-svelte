@@ -12,7 +12,7 @@
   /**
    * Specify an element or list of elements to trigger the context menu.
    * If no element is specified, the context menu applies to the entire window.
-   * @type {null | ReadonlyArray<null | HTMLElement>}
+   * @type {null | HTMLElement | ReadonlyArray<null | HTMLElement>}
    */
   export let target = null;
 
