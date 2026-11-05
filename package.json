@@ -114,10 +114,10 @@
     "lightningcss": "^1.33.0",
     "ostia": "^0.2.12",
     "sass-embedded": "^1.107.1",
-    "sveld": "^0.40.2",
+    "sveld": "^0.40.3",
     "svelte": "^5.57.3",
     "svelte-lint": "^0.1.0",
-    "svelte-typecheck": "^0.1.8",
+    "svelte-typecheck": "^0.1.9",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
     "vitest": "^5.1.0"
