@@ -273,8 +273,39 @@
    */
   export let allowInput = true;
 
-  /** Set to `false` to keep the calendar open after a date is picked. */
+  /**
+   * Set to `false` to keep the calendar open after a date is picked.
+   * Ignored with `timeGranularity`, where the time is set after the day.
+   */
   export let closeOnSelect = true;
+
+  /**
+   * Show a time row below the calendar, down to this unit. `value`,
+   * `selectedDates` and `change` then carry the time, and `dateFormat`
+   * gains one if it has none.
+   * Only supported with the "single" date picker type.
+   * @type {undefined | "hour" | "minute" | "second"}
+   */
+  export let timeGranularity = undefined;
+
+  /**
+   * Show the time on a 12 or 24 hour clock. `"auto"` follows a time in
+   * `dateFormat`, else the `locale`'s clock.
+   * @type {"auto" | "12" | "24"}
+   */
+  export let hourFormat = "auto";
+
+  /** Minutes per arrow step in the time row. Must divide 60. */
+  export let minuteStep = 1;
+
+  /**
+   * Time given to a day picked while no time is set, as 24-hour `"HH:mm"`
+   * or `"HH:mm:ss"`.
+   */
+  export let defaultTime = "00:00";
+
+  /** Accessible name of the time row. */
+  export let timeLabelText = "Time";
 
   /**
    * Parse typed text into a date. Receives the text and `dateFormat`;
@@ -492,6 +523,7 @@
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import { createCalendarApi } from "./calendar-api.js";
+  import { effectiveDateFormat, resolveHourCycle } from "./calendar-time.js";
   import { createCalendar } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
@@ -549,6 +581,15 @@
    */
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
+  // The time row only exists in the single type.
+  $: usesTime = !!timeGranularity && datePickerType === "single";
+  $: hourCycle = resolveHourCycle(hourFormat, dateFormat, locale);
+  // `dateFormat`, with a time when the time row is on and it has none.
+  $: calendarDateFormat = effectiveDateFormat(
+    dateFormat,
+    usesTime ? timeGranularity : undefined,
+    hourCycle,
+  );
   const sharedDateFormat = writable(dateFormat);
   const sharedLocale = writable(locale);
   const sharedConjunction = writable(conjunction);
@@ -1481,7 +1522,7 @@
       }
       applyOptionIfChanged("locale", locale);
       applyOptionIfChanged("firstDayOfWeek", firstDayOfWeek);
-      applyOptionIfChanged("dateFormat", dateFormat);
+      applyOptionIfChanged("dateFormat", calendarDateFormat);
       applyDisabledDates();
       applyEnabledDates();
       return;
@@ -1829,7 +1870,7 @@
     }
   });
 
-  $: sharedDateFormat.set(dateFormat);
+  $: sharedDateFormat.set(calendarDateFormat);
   $: sharedLocale.set(locale);
   $: sharedConjunction.set(conjunction);
   // Repaint a pending range's window when the limits change.
@@ -1873,6 +1914,9 @@
     } else {
       engine.calendarContainer.removeAttribute("aria-disabled");
     }
+    engine.setBlocked?.(
+      $disabledAny ? "disabled" : $readonlyAny ? "readonly" : undefined,
+    );
   }
   // The range plugin writes to two inputs and has no alt input for the second.
   $: usesDisplayFormat = !!displayFormat && datePickerType !== "range";
@@ -1895,6 +1939,8 @@
       months,
       anchor,
       portalled: effectivePortalMenu,
+      timeGranularity,
+      minuteStep,
     })) {
       reportOnce(message);
     }
@@ -1922,7 +1968,7 @@
   }
   $: if ($hasCalendar && inputRef && calendarEpoch >= 0) {
     initCalendar({
-      dateFormat,
+      dateFormat: calendarDateFormat,
       locale,
       maxDate,
       minDate,
@@ -1968,6 +2014,11 @@
     dayClass,
     prevLabel: previousLabelText,
     nextLabel: nextLabelText,
+    timeGranularity: usesTime ? timeGranularity : undefined,
+    hourFormat: hourCycle,
+    minuteStep,
+    defaultTime,
+    timeLabel: timeLabelText,
   };
   /** @type {Record<string, string>} */
   const CALENDAR_NOUN = {

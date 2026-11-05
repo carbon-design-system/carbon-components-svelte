@@ -22,5 +22,13 @@ test.describe("DatePicker a11y", () => {
       .include("#app")
       .analyze();
     expect(openResults.violations).toEqual([]);
+
+    await page.keyboard.press("Escape");
+    await page.getByTestId("date-picker-time-input").click();
+    await expect(page.getByRole("spinbutton", { name: "Hours" })).toBeVisible();
+    const timeResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(timeResults.violations).toEqual([]);
   });
 });

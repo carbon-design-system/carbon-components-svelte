@@ -78,6 +78,48 @@ Set `inline` to `true` to render the calendar permanently below the input instea
 
 <FileSource src="/framed/DatePicker/DatePickerInline" />
 
+## Date and time
+
+Set `timeGranularity` on a `"single"` picker to add a time row below the calendar, down to the hour, minute, or second. `value`, `selectedDates`, and the `change` event then carry the time, and `dateFormat` gains one (`h:i K` or `H:i`) unless it already writes a time. Picking a day keeps the time already set, so the calendar stays open after a pick until the time is set too; press <DocKbd label="Enter" /> in a time field, or <DocKbd label="Escape" />, to close it.
+
+| Do | Why |
+| --- | --- |
+| Use the time row when a value is one moment, such as a maintenance window's start. | One field holds and returns one `Date`. |
+| Keep date and time in separate fields when the time is optional or needs its own validation. | The time row always gives a picked day a time. |
+| Convert time zones in app code. | Values are the browser's local time. |
+
+### Time row
+
+The fields are spinbuttons. <DocKbd label="Up" /> and <DocKbd label="Down" /> step a field, <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> move by 6 hours or 10 minutes, and <DocKbd label="Home" /> and <DocKbd label="End" /> go to the first and last value. Typing digits fills a field and moves on to the next. The fields read left to right in every language.
+
+<DatePicker datePickerType="single" timeGranularity="minute">
+  <DatePickerInput labelText="Maintenance window starts" placeholder="mm/dd/yyyy hh:mm" />
+</DatePicker>
+
+### Hour format
+
+`hourFormat` defaults to `"auto"`: the clock of a time in `dateFormat`, else the `locale`'s. Set `"24"` or `"12"` to choose one. A 12-hour clock adds an AM/PM select.
+
+<DatePicker datePickerType="single" timeGranularity="minute" hourFormat="24">
+  <DatePickerInput labelText="Deployment freeze starts" placeholder="mm/dd/yyyy hh:mm" />
+</DatePicker>
+
+### Seconds and step
+
+Set `timeGranularity="second"` to add a seconds field, and `minuteStep` to step minutes by more than one. `minuteStep` must divide 60.
+
+<DatePicker datePickerType="single" timeGranularity="minute" minuteStep={15}>
+  <DatePickerInput labelText="Report delivery" placeholder="mm/dd/yyyy hh:mm" />
+</DatePicker>
+
+### Default time
+
+`defaultTime` is the time a picked day gets before any time is set, as 24-hour `"HH:mm"`. It defaults to `"00:00"`.
+
+<DatePicker datePickerType="single" timeGranularity="minute" defaultTime="09:00">
+  <DatePickerInput labelText="SLA deadline" placeholder="mm/dd/yyyy hh:mm" />
+</DatePicker>
+
 ## Programmatic control
 
 Drive the calendar from outside the component—set values, select many dates at once, or read the underlying calendar instance.
@@ -719,7 +761,7 @@ The calendar used to be [flatpickr](https://flatpickr.js.org/). It is now built 
 | Replace `onDayCreate` with `dayDescription` or `dayClass`, and the other hooks with the component's events (`on:change`, `on:open`, `on:close`, `on:view`, `on:error`). | flatpickr's hooks are removed. |
 | Replace flatpickr's range, monthSelect, and weekSelect plugins with `datePickerType`. | Those modes are built in. Other plugins are not supported. |
 | Prefer a language tag such as `locale="de"` to an imported locale module. | Tags need no import; month and weekday names come from the browser's `Intl` data. A locale object still works when you need exact strings, so `locale={German}` behaves as before. |
-| Pair the DatePicker with a [TimePicker](/components/TimePicker) to collect a time. | The calendar has no time picker. |
+| Replace `enableTime` with `timeGranularity`, `time_24hr` with `hourFormat="24"`, `minuteIncrement` with `minuteStep`, and `enableSeconds` with `timeGranularity="second"`. | The time row is built in, on `"single"` pickers. |
 | Use `bind:calendar`'s `open()`, `close()`, `showMonth()`, `focusDate()`, `view`, and `selectedDates`; set dates with `bind:selectedDates`. | `bind:calendar` no longer hands out the engine. |
 | Rename flatpickr classes in app CSS and tests (table below). | The calendar's markup uses `bx--date-picker__*` classes, with a modifier for each state. |
 | Find the calendar by role in tests: `getByRole("dialog", { name: "Choose a date" })`, then `grid`, `row`, and `gridcell`. | The calendar is a dialog of month grids, not a `role="application"` labelled `calendar-container`. |

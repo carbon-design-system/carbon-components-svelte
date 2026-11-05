@@ -4,6 +4,8 @@ export function getPropWarnings(props: {
   months: number;
   anchor: HTMLElement | undefined;
   portalled: boolean;
+  timeGranularity?: string;
+  minuteStep?: number;
 }): string[];
 
 /** `short` only narrows the field of a `"simple"` picker. */
