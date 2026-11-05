@@ -2384,6 +2384,14 @@
     "message": "div[data-testid=\"fits\"]: spans 0px to 960px"
   },
   {
+    "fixture": "virtualizer-grid.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div[data-testid=\"header\"] > div.header-track > div.column-head:nth-of-type(4)",
+    "message": "div[data-testid=\"header\"] > div.header-track > div.column-head:nth-of-type(4): text is cut by div[data-testid=\"header\"] by 4.83px"
+  },
+  {
     "fixture": "warning-icon-glyph.html",
     "variant": "320",
     "check": "overflow",
