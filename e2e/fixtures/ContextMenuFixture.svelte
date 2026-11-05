@@ -2,7 +2,7 @@
   import { ContextMenu, ContextMenuOption } from "carbon-components-svelte";
 
   let target;
-  let open = false;
+  const open = false;
 </script>
 
 <div data-testid="context-target" bind:this={target}>Right click me</div>

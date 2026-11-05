@@ -8,7 +8,7 @@
   export let activeId: ComponentProps<TreeView>["activeId"] = "";
   let selectedIds: ComponentProps<TreeView>["selectedIds"] = [];
   let expandedIds: ComponentProps<TreeView>["expandedIds"] = [];
-  let nodes: ComponentProps<TreeView>["nodes"] = [
+  const nodes: ComponentProps<TreeView>["nodes"] = [
     {
       id: "folder1",
       text: "Folder 1",

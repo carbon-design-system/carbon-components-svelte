@@ -2,7 +2,7 @@
   import { Stack, toHierarchy, TreeView } from "carbon-components-svelte";
   import Analytics from "carbon-icons-svelte/lib/Analytics.svelte";
 
-  let nodesFlat = [
+  const nodesFlat = [
     { id: 0, text: "AI / Machine learning", icon: Analytics },
     { id: 1, text: "Analytics" },
     { id: 2, text: "IBM Analytics Engine", pid: 1 },

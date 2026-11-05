@@ -73,8 +73,8 @@
     return { nodes: [rootNode], count: idCounter, lastId };
   }
 
-  let genStart = performance.now();
-  let initialTree = generateLargeTree();
+  const genStart = performance.now();
+  const initialTree = generateLargeTree();
   let nodes = initialTree.nodes;
   let nodeCount = initialTree.count;
   let treeType = "large";

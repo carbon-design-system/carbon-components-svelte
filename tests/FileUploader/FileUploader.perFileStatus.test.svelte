@@ -5,7 +5,7 @@
 
   let files: File[] = [];
   let statusByKey: Record<string, "uploading" | "complete"> = {};
-  let timersByKey: Record<string, ReturnType<typeof setTimeout>> = {};
+  const timersByKey: Record<string, ReturnType<typeof setTimeout>> = {};
 
   function fileKey(file: File) {
     return `${file.name}-${file.size}-${file.lastModified}`;

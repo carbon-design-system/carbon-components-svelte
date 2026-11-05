@@ -3,7 +3,7 @@
 
   let activeId = "";
   let selectedIds = [];
-  let nodes = [
+  const nodes = [
     {
       id: 0,
       text: "IBM Cloud",

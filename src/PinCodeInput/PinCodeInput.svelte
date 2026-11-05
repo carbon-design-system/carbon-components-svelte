@@ -232,7 +232,7 @@
   );
 
   /** @type {HTMLInputElement[]} */
-  let inputs = [];
+  const inputs = [];
   let mounted = false;
   let prevComplete = false;
   let hadValue = false;

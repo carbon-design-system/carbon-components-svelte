@@ -4,7 +4,7 @@
   let activeId = 0;
   let selectedIds = [0];
   let expandedIds = [1];
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

@@ -29,7 +29,7 @@
     { id: "rtl", portal: false, dir: "rtl", position: "left" },
   ];
   /** @type {Record<string, string[]>} */
-  let pressed = { inline: [], portal: [], rtl: [] };
+  const pressed = { inline: [], portal: [], rtl: [] };
   /**
    * @param {string} toolbar
    * @param {string} name

@@ -2,7 +2,7 @@
   import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
   import { toHierarchy } from "carbon-components-svelte/utils/to-hierarchy";
 
-  let nodes = toHierarchy(
+  const nodes = toHierarchy(
     [
       { id: 1, text: "Item 1" },
       { id: 2, text: "Item 1a", pid: 1 },

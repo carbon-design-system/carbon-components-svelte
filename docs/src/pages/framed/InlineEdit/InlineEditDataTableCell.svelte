@@ -3,7 +3,7 @@
 
   let dataTable;
 
-  let rows = [
+  const rows = [
     { id: "a", item: "Widget", unitPrice: 10, qty: 3 },
     { id: "b", item: "Gadget", unitPrice: 25, qty: 1 },
     { id: "c", item: "Gizmo", unitPrice: 8, qty: 5 },

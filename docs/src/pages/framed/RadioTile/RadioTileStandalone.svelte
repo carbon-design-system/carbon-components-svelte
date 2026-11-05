@@ -7,7 +7,7 @@
   ];
 
   // One `checked` per tile; tiles sharing a `name` uncheck each other.
-  let checked = [true, false];
+  const checked = [true, false];
 
   $: selected = cycles.find((_, i) => checked[i]);
 </script>

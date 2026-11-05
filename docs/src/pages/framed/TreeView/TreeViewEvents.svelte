@@ -5,7 +5,7 @@
   let lastEvent = null;
   let lastToggleChange = null;
   let lastSelectChange = null;
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

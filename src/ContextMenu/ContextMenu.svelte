@@ -95,7 +95,7 @@
 
   /** @type {HTMLElement[]} */
   let options = [];
-  let direction = 1;
+  const direction = 1;
   let prevX = 0;
   let prevY = 0;
   let prevOpen = false;

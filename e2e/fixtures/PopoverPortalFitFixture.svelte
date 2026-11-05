@@ -8,7 +8,7 @@
   }
 
   let modalOpen = false;
-  let open = { modal: false, page: false };
+  const open = { modal: false, page: false };
   /** @type {"bottom" | "right-end" | "bottom-start"} */
   let pageAlign = "bottom";
   const text = "Replicated to two zones, backed up nightly, kept for 30 days.";

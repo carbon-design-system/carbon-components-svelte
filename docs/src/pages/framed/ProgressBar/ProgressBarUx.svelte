@@ -6,7 +6,7 @@
     Stack,
   } from "carbon-components-svelte";
 
-  let max = 328;
+  const max = 328;
   let value = 0;
   let status = "active";
 

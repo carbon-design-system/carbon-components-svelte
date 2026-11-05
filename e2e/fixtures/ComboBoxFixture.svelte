@@ -25,6 +25,7 @@
   {shouldFilterItem}
 />
 
+<!-- svelte-ignore a11y_invalid_attribute -->
 <a href="#" data-testid="outside-link">Outside</a>
 
 <ComboBox

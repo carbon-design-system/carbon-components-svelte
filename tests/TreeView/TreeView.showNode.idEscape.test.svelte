@@ -7,7 +7,7 @@
   const targetId = 'node-with-"-char';
 
   let treeview: TreeView;
-  let nodes: ComponentProps<TreeView>["nodes"] = [
+  const nodes: ComponentProps<TreeView>["nodes"] = [
     {
       id: "folder",
       text: "Folder",

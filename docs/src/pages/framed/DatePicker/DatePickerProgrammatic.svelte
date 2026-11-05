@@ -10,14 +10,14 @@
   let valueTo = "01/31/2024";
 
   function advanceMonth(value) {
-    var d = new Date(value);
-    var month = d.getMonth() + 1;
-    var year = d.getFullYear() + (month > 11 ? 1 : 0);
+    const d = new Date(value);
+    let month = d.getMonth() + 1;
+    const year = d.getFullYear() + (month > 11 ? 1 : 0);
     month = month % 12;
-    var lastDay = new Date(year, month + 1, 0).getDate();
-    var day = Math.min(d.getDate(), lastDay);
-    var mm = String(month + 1).padStart(2, "0");
-    var dd = String(day).padStart(2, "0");
+    const lastDay = new Date(year, month + 1, 0).getDate();
+    const day = Math.min(d.getDate(), lastDay);
+    const mm = String(month + 1).padStart(2, "0");
+    const dd = String(day).padStart(2, "0");
     return `${mm}/${dd}/${year}`;
   }
 

@@ -4,7 +4,7 @@
   let checkedIds = [3];
   let indeterminateIds = [];
   let expandedIds = [1, 2, 7];
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

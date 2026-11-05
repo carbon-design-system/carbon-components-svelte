@@ -10,7 +10,7 @@
   let activeId: number | undefined;
   let selectedIds: number[] = [];
   let expandedIds: number[] = [];
-  let nodes = toHierarchy<HierarchyNode, "pid">(
+  const nodes = toHierarchy<HierarchyNode, "pid">(
     [
       { id: 0, text: "AI / Machine learning", icon: Analytics },
       { id: 1, text: "Analytics" },
