@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TextInput, Theme, Tile } from "carbon-components-svelte";
 
   const tokens = {

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { RadioButton } from "carbon-components-svelte";
 </script>
 

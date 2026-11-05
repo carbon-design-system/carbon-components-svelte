@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboBox,
     Dropdown,
@@ -10,7 +10,7 @@
     { id: "a", text: "Alpha" },
     { id: "b", text: "Beta" },
   ];
-  const sizes = ["xs", "sm", undefined, "lg", "xl"];
+  const sizes = ["xs", "sm", undefined, "lg", "xl"] as const;
 </script>
 
 {#each sizes as size (size ?? "md")}

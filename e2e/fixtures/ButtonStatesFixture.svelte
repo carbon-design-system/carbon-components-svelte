@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 </script>
@@ -9,7 +9,7 @@
   the `.bx--btn__loading` and `--shortcut-*` rules no other fixture renders.
 -->
 <div class="row" data-testid="loading">
-  {#each ["ghost", "danger-ghost"] as kind}
+  {#each ["ghost", "danger-ghost"] as const as kind}
     <Button {kind} loading loadingDelay={0}>Saving</Button>
     <Button {kind} icon={Add} iconDescription="Add" loading loadingDelay={0} />
     <Button
@@ -23,7 +23,7 @@
   {/each}
 </div>
 <div class="row" data-testid="shortcut">
-  {#each ["xs", "sm"] as size}
+  {#each ["xs", "sm"] as const as size}
     <Button {size} shortcut="mod+s">Save</Button>
     <Button {size} kind="ghost" icon={Add} shortcut="mod+s">Save</Button>
   {/each}

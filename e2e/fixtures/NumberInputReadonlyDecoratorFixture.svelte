@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { AILabel, NumberInput } from "carbon-components-svelte";
 
-  const sizes = ["xs", "sm", undefined, "xl"];
+  const sizes = ["xs", "sm", undefined, "xl"] as const;
 </script>
 
 <div style="width: 16rem; padding: 1rem">

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Toggletip } from "carbon-components-svelte";
 </script>
 

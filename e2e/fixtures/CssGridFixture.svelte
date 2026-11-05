@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { CssColumn, CssGrid } from "carbon-components-svelte";
 </script>
 

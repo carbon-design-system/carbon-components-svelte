@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import { TreeView } from "carbon-components-svelte";
 
   let activeId = 0;
   let selectedIds = [0];
   let expandedIds = [1];
   const multiselect = true;
-  let multiselectMode = "node";
+  let multiselectMode: "node" | "shallow" | "deep" = "node";
 
   const nodes = [
     { id: 0, text: "AI / Machine learning" },

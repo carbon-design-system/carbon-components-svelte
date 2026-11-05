@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     captureFocusTarget,
@@ -9,8 +9,8 @@
 
   const headers = [
     { key: "name", value: "Name" },
-    { key: "actions", value: "Actions" },
-  ];
+    { key: "actions", value: "Actions", sort: false },
+  ] as const;
 
   let rows = Array.from({ length: 6 }, (_, i) => ({
     id: `r${i + 1}`,
@@ -21,14 +21,15 @@
   let tasks = ["alpha", "bravo", "charlie", "delta"];
   let announcement = "";
   let panelOpen = false;
-  let panel;
-  let trigger;
+  let panel: HTMLElement | null = null;
+  let trigger: HTMLButtonElement | null = null;
   let running = true;
-  let toggleWrap;
-  let tasksRef;
+  let toggleWrap: HTMLElement | null = null;
+  let tasksRef: HTMLElement | null = null;
 
-  function removeTask(event, id) {
-    const restore = captureFocusTarget(event.currentTarget.closest("li"), {
+  function removeTask(event: MouseEvent, id: string) {
+    const target = event.currentTarget as HTMLElement;
+    const restore = captureFocusTarget(target.closest("li"), {
       siblings: "li",
       fallback: () => tasksRef,
       announce: ({ reason }) => {
@@ -39,7 +40,7 @@
     restore();
   }
 
-  function moveTaskUp(id) {
+  function moveTaskUp(id: string) {
     const i = tasks.indexOf(id);
     if (i < 1) return;
     const next = tasks.slice();
@@ -47,7 +48,7 @@
     tasks = next;
   }
 
-  function moveRowUp(id) {
+  function moveRowUp(id: string) {
     const i = rows.findIndex((r) => r.id === id);
     if (i < 1) return;
     const next = rows.slice();
@@ -63,7 +64,7 @@
 
   function toggle() {
     const restore = captureFocusTarget(toggleWrap, {
-      find: () => toggleWrap.querySelector("button"),
+      find: () => toggleWrap?.querySelector("button") ?? null,
     });
     running = !running;
     restore();

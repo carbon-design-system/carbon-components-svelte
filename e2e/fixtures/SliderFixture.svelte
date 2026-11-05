@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Slider } from "carbon-components-svelte";
 
   let value = 50;

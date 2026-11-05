@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { CopyText } from "carbon-components-svelte";
 
   const cases = [
@@ -16,7 +16,7 @@
       before: "השתמשו בכתובת",
       after: "for requests.",
     },
-  ];
+  ] as const;
 </script>
 
 {#each cases as { id, dir, before, after }}

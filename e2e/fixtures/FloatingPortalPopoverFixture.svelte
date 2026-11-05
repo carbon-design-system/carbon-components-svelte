@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     Dropdown,
@@ -7,7 +7,7 @@
     Stack,
   } from "carbon-components-svelte";
 
-  let popover = null;
+  let popover: HTMLDivElement | null = null;
 </script>
 
 <button

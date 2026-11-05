@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     Toolbar,
@@ -15,7 +15,7 @@
   batch actions bar. CSS coverage for `.bx--table-toolbar--small` and
   `--xs`, which no other fixture renders.
 -->
-{#each ["sm", "xs"] as size}
+{#each ["sm", "xs"] as const as size}
   <div data-testid="toolbar-{size}">
     <Toolbar {size}>
       <ToolbarContent>

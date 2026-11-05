@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // Renders the full direction x alignment matrix for every component that
   // includes the `tooltip--trigger` / `tooltip--placement` mixins (see
   // css/vendor/carbon-components/scss/globals/scss/_tooltip.scss), so a CSS
@@ -13,10 +13,10 @@
   import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 
-  const directions4 = ["top", "right", "bottom", "left"];
+  const directions4 = ["top", "right", "bottom", "left"] as const;
   // TooltipDefinition only supports top/bottom, matching upstream Carbon.
-  const directions2 = ["top", "bottom"];
-  const aligns = ["start", "center", "end"];
+  const directions2 = ["top", "bottom"] as const;
+  const aligns = ["start", "center", "end"] as const;
 </script>
 
 <section data-testid="tooltip-definition-matrix">

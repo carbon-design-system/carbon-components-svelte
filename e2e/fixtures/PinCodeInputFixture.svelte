@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import { Button, PinCodeInput, Stack } from "carbon-components-svelte";
 
   let value = "";
   let complete = false;
   let alphanumericValue = "";
   let programmaticValue = "018";
-  let pinCodeInput;
+  let pinCodeInput: PinCodeInput | undefined;
 </script>
 
 <Stack gap={7}>

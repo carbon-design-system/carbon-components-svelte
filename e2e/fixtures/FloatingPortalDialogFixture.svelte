@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     Dropdown,
@@ -7,7 +7,7 @@
     Stack,
   } from "carbon-components-svelte";
 
-  let dialog = null;
+  let dialog: HTMLDialogElement | null = null;
 </script>
 
 <button

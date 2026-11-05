@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { DatePicker, DatePickerInput, Modal } from "carbon-components-svelte";
 </script>
 

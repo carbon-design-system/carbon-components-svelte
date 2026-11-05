@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { RangeSlider } from "carbon-components-svelte";
 
   let value = 20;

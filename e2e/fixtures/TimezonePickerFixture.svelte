@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { FluidForm, Modal, TimezonePicker } from "carbon-components-svelte";
 
   // `?locale=` starts the pickers in a locale, and the buttons switch it at
@@ -11,7 +11,7 @@
   let locale = params.get("locale") ?? "en";
   let value = "";
   let detected = "";
-  let changes = [];
+  let changes: string[] = [];
 
   // January, so the offsets do not depend on the day the test runs.
   const winter = new Date("2026-01-15T12:00:00Z");

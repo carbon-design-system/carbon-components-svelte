@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     announce,
     Announcer,
@@ -24,11 +24,10 @@
     { id: "2", text: "Fax" },
   ];
 
-  /** @param {MouseEvent} event */
-  function sayAbout(event) {
+  function sayAbout(event: MouseEvent) {
     announce("Saved in the dialog", {
       channel: "dialog",
-      source: /** @type {Element} */ (event.currentTarget),
+      source: event.currentTarget as Element,
     });
   }
 

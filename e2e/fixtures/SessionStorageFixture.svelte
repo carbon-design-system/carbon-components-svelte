@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { SessionStorage, TextInput } from "carbon-components-svelte";
 
   let value = "initial";
-  let storage;
+  let storage: SessionStorage | undefined;
 </script>
 
 <SessionStorage key="e2e-session-storage-key" bind:value bind:this={storage} />

@@ -1,15 +1,16 @@
-<script>
+<script lang="ts">
   import {
     DataTable,
     OverflowMenu,
     OverflowMenuItem,
   } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   const headers = [
     { key: "service", value: "Service" },
     { key: "status", value: "Status" },
     { key: "actions", value: "" },
-  ];
+  ] as const;
 
   const rows = Array.from({ length: 30 }, (_, i) => ({
     id: `row-${i}`,
@@ -18,7 +19,8 @@
   }));
 
   // `?size=compact` and the like pick the row height.
-  const size = new URLSearchParams(location.search).get("size") ?? undefined;
+  const size = (new URLSearchParams(location.search).get("size") ??
+    undefined) as ComponentProps<DataTable>["size"];
 </script>
 
 <div style="max-width: 600px">

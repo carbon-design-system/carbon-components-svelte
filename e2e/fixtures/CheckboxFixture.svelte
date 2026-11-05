@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Checkbox } from "carbon-components-svelte";
 
   let checked = false;

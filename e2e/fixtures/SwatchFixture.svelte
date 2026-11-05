@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Stack, Swatch, Tag, TagSet } from "carbon-components-svelte";
 
   const colors = [
@@ -10,7 +10,7 @@
     "teal",
     "green",
     "gray",
-  ];
+  ] as const;
   const teams = ["Platform", "Design", "Billing", "Security", "Data"];
 </script>
 

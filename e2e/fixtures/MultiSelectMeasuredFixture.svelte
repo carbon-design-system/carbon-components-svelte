@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { MultiSelect } from "carbon-components-svelte";
 
   // Filler words, appended to a label to push it onto more lines at the narrow
@@ -9,7 +9,7 @@
   const FILLER = "wrapping";
   const FILLER_WORDS = [0, 6, 14];
 
-  function label(prefix, index) {
+  function label(prefix: string, index: number) {
     const words = FILLER_WORDS[index % FILLER_WORDS.length];
     return [prefix, ...Array.from({ length: words }, () => FILLER)].join(" ");
   }
@@ -32,7 +32,7 @@
     })),
   ];
 
-  let selectedIds = [];
+  let selectedIds: Array<string | number> = [];
 
   // `?optimizeFastScroll` runs the same suite with the option on.
   const optimizeFastScroll = new URLSearchParams(location.search).has(

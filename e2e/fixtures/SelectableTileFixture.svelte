@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import {
     SelectableTile,
     SelectableTileGroup,
   } from "carbon-components-svelte";
 
-  let selected = [];
+  let selected: string[] = [];
 </script>
 
 <SelectableTileGroup

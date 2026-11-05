@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { CodeSnippet } from "carbon-components-svelte";
   import { highlightCode } from "carbon-components-svelte/syntax";
   import "carbon-components-svelte/css/syntax-tokens.css";
@@ -23,12 +23,14 @@
     { title: "main.ts", code: `const a = 1;` },
     { title: "style.css", code: `a { color: red; }` },
   ];
-  /** @type {Record<string, string>} */
-  const languages = { "main.ts": "ts", "style.css": "css" };
+  const languages: Record<string, string> = {
+    "main.ts": "ts",
+    "style.css": "css",
+  };
 
   let selectedId = "App.svelte";
   let coloredId = "main.ts";
-  let changes = [];
+  let changes: string[] = [];
 </script>
 
 <div data-testid="title">

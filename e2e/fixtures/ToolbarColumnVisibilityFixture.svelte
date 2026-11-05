@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     DataTable,
     Toolbar,
@@ -10,7 +10,7 @@
     { key: "name", value: "Name" },
     { key: "protocol", value: "Protocol" },
     { key: "port", value: "Port" },
-  ];
+  ] as const;
 
   const rows = [
     { id: "a", name: "Load Balancer 1", protocol: "HTTP", port: 443 },

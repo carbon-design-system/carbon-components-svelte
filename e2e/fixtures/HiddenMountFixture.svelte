@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import HiddenMountCases from "./HiddenMountCases.svelte";
 </script>
 

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Tag, TagSet } from "carbon-components-svelte";
 
   const regions = [

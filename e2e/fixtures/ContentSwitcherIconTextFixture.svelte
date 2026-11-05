@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
   import List from "carbon-icons-svelte/lib/List.svelte";
@@ -9,7 +9,7 @@
     { id: "low-contrast", props: { lowContrast: true } },
     { id: "sm", props: { size: "sm" } },
     { id: "xl", props: { size: "xl" } },
-  ];
+  ] as const;
 </script>
 
 {#each variants as { id, props } (id)}

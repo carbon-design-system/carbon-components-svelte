@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { BigNumber, Button, Link } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
 
-  const sizes = /** @type {const} */ (["default", "lg", "xl"]);
-  const dirs = /** @type {const} */ (["ltr", "rtl"]);
+  const sizes = ["default", "lg", "xl"] as const;
+  const dirs = ["ltr", "rtl"] as const;
 </script>
 
 {#each sizes as size (size)}

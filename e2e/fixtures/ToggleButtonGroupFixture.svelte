@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ToggleButton, ToggleButtonGroup } from "carbon-components-svelte";
   import TextBold from "carbon-icons-svelte/lib/TextBold.svelte";
   import TextUnderline from "carbon-icons-svelte/lib/TextUnderline.svelte";

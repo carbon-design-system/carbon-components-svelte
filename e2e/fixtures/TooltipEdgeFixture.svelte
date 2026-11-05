@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Tooltip } from "carbon-components-svelte";
 
   const text =

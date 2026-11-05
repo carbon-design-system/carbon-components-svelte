@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { DataTable } from "carbon-components-svelte";
 
   const headers = [
@@ -9,7 +9,7 @@
     { key: "owner", value: "Owner" },
     { key: "lastDeploy", value: "Last deploy" },
     { key: "incidents", value: "Incidents" },
-  ];
+  ] as const;
 
   const rows = Array.from({ length: 20 }, (_, i) => ({
     id: `row-${i}`,

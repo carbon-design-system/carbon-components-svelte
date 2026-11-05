@@ -1,16 +1,16 @@
-<script>
+<script lang="ts">
   import { Button, Popconfirm, Tag } from "carbon-components-svelte";
   import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
 
-  let log = [];
-  /** @param {string} entry */
-  const note = (entry) => (log = [...log, entry]);
+  let log: string[] = [];
+  const note = (entry: string) => (log = [...log, entry]);
 
   let open = false;
   let attempts = 0;
   let tags = ["alpha", "beta", "gamma"];
 
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   const succeed = async () => {
     await wait(150);
     note("deleted");

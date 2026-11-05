@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     TableOfContents,
     TableOfContentsGroup,
@@ -13,7 +13,7 @@
     { id: "articles", text: "Articles" },
   ];
 
-  let selectedId;
+  let selectedId: string | undefined;
 </script>
 
 <div class="layout">

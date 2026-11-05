@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Pagination } from "carbon-components-svelte";
 
   let page = 1;

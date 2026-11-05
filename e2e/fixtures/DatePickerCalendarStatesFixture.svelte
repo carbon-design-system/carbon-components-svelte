@@ -1,10 +1,9 @@
-<script>
+<script lang="ts">
   // Every calendar state the stylesheet draws, open without a click, so the
   // page-wide CSS checks (`check:css:compare`, the layout sweep) see them.
   import { DatePicker, DatePickerInput } from "carbon-components-svelte";
 
-  /** @param {Date} date */
-  const describe = (date) =>
+  const describe = (date: Date) =>
     date.getDate() === 10 || date.getDate() === 12 ? "2 events" : undefined;
 </script>
 

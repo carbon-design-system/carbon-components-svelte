@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import EmptyState from "carbon-components-svelte/EmptyState/EmptyState.svelte";
   import Search from "carbon-components-svelte/Search/Search.svelte";

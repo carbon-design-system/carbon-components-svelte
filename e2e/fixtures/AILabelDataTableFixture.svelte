@@ -4,7 +4,7 @@
   const headers = [
     { key: "service", value: "Service" },
     { key: "forecast", value: "Forecast" },
-  ];
+  ] as const;
   const rows = [
     { id: "a", service: "billing-api", forecast: "+12%" },
     { id: "b", service: "search", forecast: "+3%" },

@@ -1,16 +1,16 @@
-<script>
+<script lang="ts">
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
   import Dashboard from "carbon-icons-svelte/lib/Dashboard.svelte";
   import List from "carbon-icons-svelte/lib/List.svelte";
   import TableOfContents from "carbon-icons-svelte/lib/TableOfContents.svelte";
 
-  let lastIcon = List;
+  let lastIcon: typeof List | undefined = List;
 
   const sizes = [
     { id: "default", size: undefined, width: 40 },
     { id: "sm", size: "sm", width: 32 },
     { id: "xl", size: "xl", width: 48 },
-  ];
+  ] as const;
 </script>
 
 {#each sizes as { id, size, width } (id)}

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Search } from "carbon-components-svelte";
 
   let value = "";
@@ -26,7 +26,7 @@
 </div>
 <div style="height: 200vh"></div>
 <div data-testid="variants" style="width: 20rem">
-  {#each ["default", "fill", "ghost"] as variant (variant)}
+  {#each ["default", "fill", "ghost"] as const as variant (variant)}
     <div data-variant={variant}>
       <Search
         size="sm"

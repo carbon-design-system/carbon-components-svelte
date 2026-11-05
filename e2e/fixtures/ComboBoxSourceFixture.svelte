@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ComboBox, createAsyncSource } from "carbon-components-svelte";
 
   // `?latency=300` is the round trip in ms. `?fail=1` makes the source fail
@@ -9,8 +9,7 @@
 
   const people = ["Alice", "Alan", "Amir", "Anna", "Bea", "Bob", "Chen"];
 
-  /** @param {number} ms @param {AbortSignal} signal */
-  function sleep(ms, signal) {
+  function sleep(ms: number, signal: AbortSignal) {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(resolve, ms);
       signal.addEventListener("abort", () => {
@@ -21,9 +20,7 @@
   }
 
   /** Every request is logged, to count them from a test. */
-  const page = /** @type {Window & { requests: string[], healed: boolean }} */ (
-    window
-  );
+  const page = window as unknown as { requests: string[]; healed: boolean };
   page.requests = [];
   page.healed = false;
 

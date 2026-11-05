@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
   import Card from "carbon-components-svelte/Card/Card.svelte";
   import CardHeader from "carbon-components-svelte/Card/CardHeader.svelte";
@@ -16,7 +16,7 @@
   <p data-testid="kbd-muted">
     Press <Kbd variant="muted" shortcut="mod+k" /> to search.
   </p>
-  {#each ["mini", "2xs", "xs"] as size}
+  {#each ["mini", "2xs", "xs"] as const as size}
     <p data-testid="ai-label-{size}">
       Summary by <AILabel {size} /> from your notes.
     </p>
@@ -24,7 +24,7 @@
   <p data-testid="ai-label-inline">
     Summary by <AILabel variant="inline" size="lg" /> from your notes.
   </p>
-  {#each ["productive", "expressive"] as density}
+  {#each ["productive", "expressive"] as const as density}
     <Card data-testid="card-{density}" {density}>
       <CardHeader>
         <CardTitle>Quarterly report<Launch slot="titleEnd" /></CardTitle>

@@ -26,7 +26,10 @@
   let title = "Quarterly report";
   let notes = "";
 
-  async function save(value: { title: string; notes: string }, { attempt }) {
+  async function save(
+    value: { title: string; notes: string },
+    { attempt }: { attempt: number },
+  ) {
     server.saves.push({ value: JSON.stringify(value), attempt });
     await new Promise((resolve) => setTimeout(resolve, server.delay));
     if (server.fail > 0) {

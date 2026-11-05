@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Popover } from "carbon-components-svelte";
 
   const directions = [
@@ -14,7 +14,7 @@
     "right",
     "right-top",
     "right-bottom",
-  ];
+  ] as const;
 </script>
 
 {#each directions as align (align)}

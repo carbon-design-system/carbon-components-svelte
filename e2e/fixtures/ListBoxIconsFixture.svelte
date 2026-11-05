@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ComboBox, Dropdown, MultiSelect } from "carbon-components-svelte";
   import Email from "carbon-icons-svelte/lib/Email.svelte";
 

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     Checkbox,
@@ -66,19 +66,17 @@
     "inline-edit",
   ];
 
-  let form = null;
-  let summary = null;
+  let form: HTMLFormElement | null = null;
+  let summary: ErrorSummary | null = null;
   let submitted = false;
   let submits = 0;
-  /** @type {Array<{ fieldId?: string; message: string }>} */
-  let errors = [];
+  let errors: Array<{ fieldId?: string; message: string }> = [];
   let title = "There is a problem";
 
-  /** @param {string} name */
-  const message = (name) => `Enter ${name}`;
+  const message = (name: string) => `Enter ${name}`;
 
   /** "auto" collects from the DOM; "manual" lists ids the app chose. */
-  async function run(mode) {
+  async function run(mode: "auto" | "manual") {
     submitted = true;
     submits += 1;
     await tick();
@@ -94,7 +92,7 @@
     summary?.focus();
   }
 
-  function onSubmit(event) {
+  function onSubmit(event: Event) {
     event.preventDefault();
     return run("auto");
   }
