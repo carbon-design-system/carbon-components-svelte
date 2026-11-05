@@ -83,6 +83,12 @@ export interface CalendarOptions extends Partial<
   locale?: string | Partial<CalendarLocale>;
   maxDate?: string | number | Date;
   minDate?: string | number | Date;
+  /**
+   * The daily window of times, 24-hour `"HH:mm"`. A `minTime` later than
+   * `maxTime` wraps past midnight.
+   */
+  minTime?: string;
+  maxTime?: string;
   /** Minutes per step in the time row; must divide 60. */
   minuteStep?: number;
   mode?: CalendarMode;
