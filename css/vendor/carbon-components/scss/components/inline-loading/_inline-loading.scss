@@ -63,6 +63,36 @@
     }
   }
 
+  // ccs: the check on the `finished` disc. Carbon 10.58 strokes a bare
+  // polyline in `$interactive-04`; this one sits on the `$support-success`
+  // disc, in the color the glyph's cutout shows.
+  .#{$prefix}--inline-loading__checkmark {
+    fill: none;
+    stroke: $icon-inverse;
+    stroke-width: 2.25;
+  }
+
+  // ccs: forced colors keep the disc's author fill, as they did the icon's,
+  // so the check stays the color of the page behind it.
+  @media (forced-colors: active) {
+    .#{$prefix}--inline-loading__checkmark {
+      stroke: Canvas;
+    }
+  }
+
+  // ccs: Carbon's 250ms literal becomes the nearest token. The check draws
+  // on only after the status changes, and not at all under reduced motion,
+  // where the whole check shows at once.
+  @media (prefers-reduced-motion: no-preference) {
+    .#{$prefix}--inline-loading__checkmark--draw {
+      animation: stroke $duration--moderate-02 motion(entrance, productive)
+        forwards;
+      // The length of the check, 17.5 in a 32 unit box.
+      stroke-dasharray: 18;
+      stroke-dashoffset: 18;
+    }
+  }
+
   .#{$prefix}--inline-loading--error {
     width: to-rem(16px);
     height: to-rem(16px);

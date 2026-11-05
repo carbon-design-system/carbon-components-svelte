@@ -54,6 +54,42 @@ describe("InlineLoading", () => {
     ).toBeInTheDocument();
   });
 
+  it("draws the finished check as a polyline on a disc, named by its title", () => {
+    render(InlineLoading);
+    const icon = screen
+      .getByTestId("loader-finished")
+      .querySelector(".bx--inline-loading__checkmark-container");
+
+    expect(icon?.tagName).toBe("svg");
+    expect(icon).toHaveAttribute("role", "img");
+    expect(icon).not.toHaveAttribute("aria-hidden");
+    expect(icon).toHaveAttribute("viewBox", "0 0 32 32");
+    expect(icon).toHaveAttribute("width", "16");
+    expect(icon?.querySelector("circle")).toBeInTheDocument();
+    expect(
+      icon?.querySelector("polyline.bx--inline-loading__checkmark"),
+    ).toBeInTheDocument();
+  });
+
+  it("animates the check only when the status changes to finished", async () => {
+    const check = () =>
+      document.querySelector(".bx--inline-loading__checkmark");
+
+    const { unmount } = render(InlineLoadingTransition, {
+      props: { status: "finished" },
+    });
+    expect(check()).not.toHaveClass("bx--inline-loading__checkmark--draw");
+    unmount();
+
+    const { component } = render(InlineLoadingTransition, {
+      props: { status: "active" },
+    });
+    component.status = "finished";
+    await tick();
+
+    expect(check()).toHaveClass("bx--inline-loading__checkmark--draw");
+  });
+
   it("supports error state", () => {
     render(InlineLoading);
     const wrapper = screen.getByTestId("loader-error");
