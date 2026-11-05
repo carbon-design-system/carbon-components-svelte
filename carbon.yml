@@ -631,6 +631,20 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/IconIndicator
+  image-cropper:
+    name: Image cropper
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/image-cropper.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ImageCropper
+    tags:
+      - media
   image-loader:
     name: Image loader
     status: stable

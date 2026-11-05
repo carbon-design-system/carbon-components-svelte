@@ -1,0 +1,329 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A crop frame over an image. The stage is a photograph, not text, so it
+/// reads left to right whatever the page's direction: left is left in the
+/// picture, arrow keys are physical, and the crop's x is measured from the
+/// left. `direction: ltr` keeps the logical properties below, and the
+/// handles' offsets, on the image's own sides. The controls under the stage
+/// follow the page's direction.
+///
+/// The frame draws the crop and, through a box shadow, dims everything
+/// outside it. A light border with a dark ring outside it keeps the frame
+/// visible over a white photo and a black one. Forced colors drop the shadow
+/// and keep the borders, which take system colors.
+/// @access private
+/// @group components
+@mixin image-cropper {
+  .#{$prefix}--image-cropper {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  // `--ccs-image-cropper-height` sets the stage's height.
+  .#{$prefix}--image-cropper__stage {
+    position: relative;
+    overflow: hidden;
+    block-size: var(--ccs-image-cropper-height, #{to-rem(384px)});
+    background-color: $layer;
+    cursor: grab;
+    direction: ltr;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--image-cropper__stage:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--image-cropper__stage--dragging {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--image-cropper--box .#{$prefix}--image-cropper__stage {
+    cursor: default;
+  }
+
+  .#{$prefix}--image-cropper--disabled .#{$prefix}--image-cropper__stage {
+    cursor: not-allowed;
+  }
+
+  // The layer has the image's natural size and the component sets its
+  // transform. `will-change` only lasts for a gesture, so a zoomed image is
+  // drawn sharp once it ends.
+  .#{$prefix}--image-cropper__image {
+    position: absolute;
+    display: block;
+    max-width: none;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    pointer-events: none;
+    transform-origin: 0 0;
+  }
+
+  .#{$prefix}--image-cropper__image--hidden {
+    visibility: hidden;
+  }
+
+  .#{$prefix}--image-cropper__stage--active .#{$prefix}--image-cropper__image {
+    will-change: transform;
+  }
+
+  .#{$prefix}--image-cropper__frame {
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px solid $icon-on-color;
+    box-shadow:
+      0 0 0 1px $overlay,
+      0 0 0 100vmax $overlay;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--image-cropper__frame--hidden {
+    display: none;
+  }
+
+  .#{$prefix}--image-cropper__frame--circle {
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--image-cropper--box
+    .#{$prefix}--image-cropper__frame:not(.#{$prefix}--image-cropper__frame--hidden) {
+    cursor: move;
+    pointer-events: auto;
+  }
+
+  .#{$prefix}--image-cropper--disabled .#{$prefix}--image-cropper__frame {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // The rule-of-thirds grid shows during a drag, or always with `grid`.
+  .#{$prefix}--image-cropper__grid {
+    position: absolute;
+    opacity: 0;
+    transition: opacity $duration--fast-02 motion(standard, productive);
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--image-cropper__stage--dragging .#{$prefix}--image-cropper__grid,
+  .#{$prefix}--image-cropper__stage--grid .#{$prefix}--image-cropper__grid {
+    opacity: 1;
+  }
+
+  .#{$prefix}--image-cropper__stage--no-grid .#{$prefix}--image-cropper__grid {
+    opacity: 0;
+  }
+
+  // A light line between two dark ones, so it shows over any picture. Each
+  // is 3px wide and sits 1px before its third, which puts the light line on
+  // the third. The dark edges are borders, which forced colors keeps.
+  .#{$prefix}--image-cropper__line {
+    position: absolute;
+    border: 0 solid $overlay;
+    background-color: $icon-on-color;
+  }
+
+  .#{$prefix}--image-cropper__line--v1,
+  .#{$prefix}--image-cropper__line--v2 {
+    width: 3px;
+    border-inline-width: 1px;
+    inset-block: 0;
+  }
+
+  .#{$prefix}--image-cropper__line--h1,
+  .#{$prefix}--image-cropper__line--h2 {
+    height: 3px;
+    border-block-width: 1px;
+    inset-inline: 0;
+  }
+
+  .#{$prefix}--image-cropper__line--v1 {
+    inset-inline-start: calc(33.333% - 1px);
+  }
+
+  .#{$prefix}--image-cropper__line--v2 {
+    inset-inline-start: calc(66.667% - 1px);
+  }
+
+  .#{$prefix}--image-cropper__line--h1 {
+    inset-block-start: calc(33.333% - 1px);
+  }
+
+  .#{$prefix}--image-cropper__line--h2 {
+    inset-block-start: calc(66.667% - 1px);
+  }
+
+  // A 24px target (WCAG 2.5.8) centered on the edge or corner, drawing a
+  // 10px square. The offsets are physical: the stage reads left to right.
+  .#{$prefix}--image-cropper__handle {
+    position: absolute;
+    width: to-rem(24px);
+    height: to-rem(24px);
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    pointer-events: auto;
+    touch-action: none;
+    transform: translate(-50%, -50%);
+
+    &::before {
+      position: absolute;
+      border: 1px solid $overlay;
+      background-color: $icon-on-color;
+      content: "";
+      inset: to-rem(7px);
+    }
+
+    &:focus-visible {
+      @include focus-outline("outline", $omit: (outline-offset));
+      outline-offset: 0;
+    }
+  }
+
+  .#{$prefix}--image-cropper__handle--nw,
+  .#{$prefix}--image-cropper__handle--w,
+  .#{$prefix}--image-cropper__handle--sw {
+    inset-inline-start: 0;
+  }
+
+  .#{$prefix}--image-cropper__handle--n,
+  .#{$prefix}--image-cropper__handle--s {
+    inset-inline-start: 50%;
+  }
+
+  .#{$prefix}--image-cropper__handle--ne,
+  .#{$prefix}--image-cropper__handle--e,
+  .#{$prefix}--image-cropper__handle--se {
+    inset-inline-start: 100%;
+  }
+
+  .#{$prefix}--image-cropper__handle--nw,
+  .#{$prefix}--image-cropper__handle--n,
+  .#{$prefix}--image-cropper__handle--ne {
+    inset-block-start: 0;
+  }
+
+  .#{$prefix}--image-cropper__handle--w,
+  .#{$prefix}--image-cropper__handle--e {
+    inset-block-start: 50%;
+  }
+
+  .#{$prefix}--image-cropper__handle--sw,
+  .#{$prefix}--image-cropper__handle--s,
+  .#{$prefix}--image-cropper__handle--se {
+    inset-block-start: 100%;
+  }
+
+  .#{$prefix}--image-cropper__handle--n,
+  .#{$prefix}--image-cropper__handle--s {
+    cursor: ns-resize;
+  }
+
+  .#{$prefix}--image-cropper__handle--e,
+  .#{$prefix}--image-cropper__handle--w {
+    cursor: ew-resize;
+  }
+
+  .#{$prefix}--image-cropper__handle--nw,
+  .#{$prefix}--image-cropper__handle--se {
+    cursor: nwse-resize;
+  }
+
+  .#{$prefix}--image-cropper__handle--ne,
+  .#{$prefix}--image-cropper__handle--sw {
+    cursor: nesw-resize;
+  }
+
+  .#{$prefix}--image-cropper__message {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $carbon--spacing-05;
+    color: $text-primary;
+    gap: $carbon--spacing-03;
+    inset: 0;
+    @include type-style("body-compact-01");
+
+    p {
+      max-width: to-rem(320px);
+      margin: 0;
+    }
+
+    svg {
+      flex: none;
+      fill: $support-error;
+    }
+  }
+
+  .#{$prefix}--image-cropper__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--image-cropper__actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--image-cropper__sliders {
+    display: grid;
+    gap: $carbon--spacing-05 $carbon--spacing-07;
+    grid-template-columns: repeat(auto-fit, minmax(to-rem(224px), 1fr));
+  }
+
+  .#{$prefix}--image-cropper__helper {
+    margin: 0;
+    color: $text-helper;
+    @include type-style("helper-text-01");
+  }
+
+  .#{$prefix}--image-cropper__helper--error {
+    color: $text-error;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--image-cropper__grid {
+      transition: none;
+    }
+  }
+
+  // Forced colors drops the shadow that dims the outside of the frame, and
+  // paints fills as Canvas. Keep the frame and handles as two-tone borders
+  // in system colors, so they show over any picture.
+  @media (forced-colors: active) {
+    .#{$prefix}--image-cropper__frame {
+      border-color: CanvasText;
+      box-shadow: none;
+      outline: 1px solid Canvas;
+    }
+
+    .#{$prefix}--image-cropper__line {
+      border-color: CanvasText;
+      background-color: Canvas;
+    }
+
+    .#{$prefix}--image-cropper__handle::before {
+      border-color: Canvas;
+      background-color: ButtonText;
+    }
+  }
+}
+
+@include exports("image-cropper") {
+  @include image-cropper;
+}

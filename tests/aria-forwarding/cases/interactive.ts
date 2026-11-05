@@ -15,6 +15,7 @@ import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
+import ImageCropper from "carbon-components-svelte/ImageCropper/ImageCropper.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
@@ -231,6 +232,12 @@ export const interactive: AriaEntry[] = [
         props: { labelText: "Error 404", title: "Not found", ...attrs },
       }),
     target: () => screen.getByRole("main"),
+  },
+  {
+    name: "ImageCropper",
+    render: (attrs) => render(ImageCropper, { props: attrs }),
+    // The crop area takes focus once an image loads, and carries the name.
+    target: () => screen.getByRole("group"),
   },
   {
     name: "ImageLoader",
