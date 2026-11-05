@@ -12,6 +12,12 @@
     gap: $carbon--spacing-06;
   }
 
+  // Each step is at least 7rem wide, so a few steps are wider than a phone.
+  // The rail scrolls instead of widening the page.
+  .#{$prefix}--stepper > .#{$prefix}--progress {
+    overflow-x: auto;
+  }
+
   // Focus lands here on each step change so reading starts at the step;
   // the panel itself isn't a control, so it draws no ring.
   .#{$prefix}--stepper__panel:focus {

@@ -1664,22 +1664,6 @@
     "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2): 1px outline inside 2px outline div[data-testid=\"fluid-number-invalid\"] > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
   },
   {
-    "fixture": "rtl-icons.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "scrolls sideways",
-    "path": "page",
-    "message": "page scrolls sideways: scrollWidth 368px, clientWidth 320px"
-  },
-  {
-    "fixture": "rtl-icons.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
-    "path": "div[data-testid=\"stepper\"] > div.bx--stepper > ul.bx--progress > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3)",
-    "message": "div[data-testid=\"stepper\"] > div.bx--stepper > ul.bx--progress > li.bx--progress-step.bx--progress-step--incomplete:nth-of-type(3): spans 240px to 352px"
-  },
-  {
     "fixture": "rtl-placement.html",
     "variant": "320",
     "check": "overflow",
