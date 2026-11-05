@@ -24,7 +24,7 @@
   let isSideNavOpen = false;
   let isOpen = false;
   let selected = "0";
-  let transitions = {
+  const transitions = {
     0: {
       text: "None (default)",
       value: false,

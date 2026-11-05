@@ -1,9 +1,9 @@
 <script>
   import { Stack, Text, TreeView } from "carbon-components-svelte";
 
-  let activeId = 0;
-  let selectedIds = [0, 7, 9];
-  let nodes = [
+  const activeId = 0;
+  const selectedIds = [0, 7, 9];
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

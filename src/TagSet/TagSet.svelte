@@ -331,11 +331,11 @@
   // The popover's last tag closed while it held focus: fall back to the
   // "+N" indicator, else to the last visible tag.
   function handleOverflowEmpty() {
-    const lastVisible = $items
+    const visible = $items
       .slice(0, visibleCount)
       .map((other) => focusableIn(other.node))
-      .filter(Boolean)
-      .pop();
+      .filter(Boolean);
+    const lastVisible = visible[visible.length - 1];
     returnFocus(visibleCount < $items.length ? overflowButtonRef : lastVisible);
   }
 

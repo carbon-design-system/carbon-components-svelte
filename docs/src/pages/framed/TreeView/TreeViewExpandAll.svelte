@@ -2,7 +2,7 @@
   import { Button, Stack, TreeView } from "carbon-components-svelte";
 
   let treeview = null;
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

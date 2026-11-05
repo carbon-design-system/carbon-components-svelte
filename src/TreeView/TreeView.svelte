@@ -663,7 +663,7 @@
         /** @type {HTMLElement | null | undefined} */
         let target = ref?.querySelector(selector);
         for (let i = 0; !target && i < ancestorIds.length * 2 + 2; i++) {
-          // Each tick waits for the next reveal flush.
+          // eslint-disable-next-line no-await-in-loop -- each tick waits for the next reveal flush
           await tick();
           target = ref?.querySelector(selector);
         }
@@ -2065,7 +2065,7 @@
 
     // When focus sits on the scroll container after a row unmounted, resume
     // from virtualFocusedId / first enabled row.
-    let rowTarget =
+    const rowTarget =
       event.target instanceof Element
         ? event.target.closest(`[${TREE_ROW_ID_ATTR}]`)
         : null;

@@ -4,7 +4,7 @@
   let activeId = 0;
   let selectedIds = [0];
   let expandedIds = [1];
-  let multiselect = true;
+  const multiselect = true;
   let multiselectMode = "node";
 
   const nodes = [

@@ -6,7 +6,7 @@
 
   let treeview = null;
   let key = 0;
-  let nodes = [
+  const nodes = [
     targetNodeSelect,
     {
       id: 1,

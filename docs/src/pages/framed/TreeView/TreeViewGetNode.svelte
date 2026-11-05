@@ -4,7 +4,7 @@
   let treeview = null;
   let activeId = "";
   let selectedIds = [];
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

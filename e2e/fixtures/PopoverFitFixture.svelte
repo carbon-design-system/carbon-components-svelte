@@ -12,7 +12,7 @@
     document.documentElement.dir = "rtl";
   }
 
-  let open = {
+  const open = {
     edge: false,
     side: false,
     bottom: false,

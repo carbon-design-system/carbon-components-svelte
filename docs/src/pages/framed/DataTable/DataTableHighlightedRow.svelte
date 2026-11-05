@@ -21,7 +21,7 @@
     { id: "f", name: "Load Balancer 5", port: 80, rule: "DNS delegation" },
   ];
 
-  let openRows = {};
+  const openRows = {};
 
   $: highlightedRowIds = Object.entries(openRows)
     .filter(([, open]) => open)

@@ -3,7 +3,7 @@
 
   const values = ["monthly", "annual"];
 
-  let checked = [true, false];
+  const checked = [true, false];
 </script>
 
 {#each values as value, i}

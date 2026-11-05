@@ -38,6 +38,7 @@
       <ProfileMenuDivider />
       <ProfileMenuDetail label="Plan">
         Lite
+        <!-- svelte-ignore a11y_invalid_attribute -->
         <a slot="action" href="#">Upgrade</a>
       </ProfileMenuDetail>
       <ProfileMenuDivider />

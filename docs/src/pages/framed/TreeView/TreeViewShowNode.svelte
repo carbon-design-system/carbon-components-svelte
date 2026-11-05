@@ -5,7 +5,7 @@
   const nodeBlockchain = { id: 8, text: "IBM Blockchain Platform" };
 
   let treeview = null;
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

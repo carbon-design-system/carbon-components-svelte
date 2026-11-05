@@ -8,7 +8,7 @@
 
   let dataTable;
 
-  let rows = [
+  const rows = [
     { id: "a", item: "Enterprise seat", unitPrice: 89, qty: 12 },
     { id: "b", item: "Standard seat", unitPrice: 29, qty: 40 },
     { id: "c", item: "API overage (per 1K calls)", unitPrice: 2, qty: 150 },

@@ -3,7 +3,7 @@
 
   let activeId = 0;
   let selectedIds = [];
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning" },
     {
       id: 1,

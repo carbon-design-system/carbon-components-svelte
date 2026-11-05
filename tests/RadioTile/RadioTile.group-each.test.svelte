@@ -4,7 +4,7 @@
 
   const values = ["monthly", "annual"];
 
-  let checked = [true, false];
+  const checked = [true, false];
   let selected: string | undefined;
 </script>
 

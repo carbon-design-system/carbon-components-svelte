@@ -3,7 +3,7 @@
 
   let files = [];
   let statusByKey = {};
-  let timersByKey = {};
+  const timersByKey = {};
 
   function fileKey(file) {
     return `${file.name}-${file.size}-${file.lastModified}`;

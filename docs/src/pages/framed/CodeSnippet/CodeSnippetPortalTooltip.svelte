@@ -1,7 +1,7 @@
 <script>
   import { Box, CodeSnippet } from "carbon-components-svelte";
 
-  let multiCode =
+  const multiCode =
     "export function isAdmin(role) {\n  return role === 'admin';\n}\n\nexport function isExpired(expiresAt) {\n  return Date.now() > expiresAt;\n}";
 </script>
 

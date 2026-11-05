@@ -7,7 +7,7 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
 
-  let rows = Array.from({ length: 10 }).map((_, i) => ({
+  const rows = Array.from({ length: 10 }).map((_, i) => ({
     id: i,
     name: `Load Balancer ${i + 1}`,
     protocol: "HTTP",

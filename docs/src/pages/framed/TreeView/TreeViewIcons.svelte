@@ -8,7 +8,7 @@
 
   let activeId = 1;
   let selectedIds = [];
-  let nodes = [
+  const nodes = [
     { id: 0, text: "AI / Machine learning", icon: WatsonMachineLearning },
     {
       id: 1,

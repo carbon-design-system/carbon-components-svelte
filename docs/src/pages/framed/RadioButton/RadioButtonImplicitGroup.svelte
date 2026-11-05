@@ -7,7 +7,7 @@
     { value: "weekly", label: "Weekly digest" },
   ];
 
-  let checked = options.map(() => false);
+  const checked = options.map(() => false);
 
   $: selected = options.find((_, i) => checked[i]);
 </script>

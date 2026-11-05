@@ -6,7 +6,7 @@
   } from "carbon-components-svelte";
 
   let searchTerm = "";
-  let searchResults = Array.from(
+  const searchResults = Array.from(
     { length: 50 },
     (_, i) => `Ticket #${10000 + i}`,
   );

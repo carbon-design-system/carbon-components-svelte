@@ -101,7 +101,7 @@
 
   import {
     createEventDispatcher,
-    // The only hook the server runs after a render.
+    // eslint-disable-next-line no-restricted-imports -- the only hook the server runs after a render
     onDestroy,
     onMount,
     setContext,
