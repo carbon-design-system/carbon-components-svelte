@@ -66,11 +66,59 @@ Set `showAuthor` to also show the author's name above the first message of each 
 
 ## Streaming replies
 
-Set `streaming` on a message while it is still arriving, such as an assistant's reply streamed word by word. A caret blinks at the end of the text, holding still when reduced motion is preferred. The log announces new messages as they arrive, so without `streaming` screen readers would read every chunk; with it, they wait and read the reply once, in full.
+Set `streaming` on a message while it is still arriving, such as an assistant's reply streamed word by word. A caret blinks at the end of the text, holding still when reduced motion is preferred. Set `caret` to `false` when the content draws its own, as [Markdown](/components/Markdown) does at the end of its last block.
+
+The log announces what is added to it, so a reply that grows a word at a time would be read out a word at a time. A message that streams is marked busy, its text is kept out of the log's announcements, and a status announces `startedText`, "Response started", when it begins and `completeText`, "Response complete", when it ends. The reply isn't read out in full, since a long one would drown out everything else; screen reader users read it from the message when they choose to. Set either text to an empty string to announce nothing.
 
 ```svelte
 <ChatMessage author="Assistant" streaming={!reply.done}>{reply.text}</ChatMessage>
 ```
+
+## Jump to latest
+
+While the reader is at the latest message, new messages and the growth of the last one stay in view. Once they scroll back, the log leaves the scroll alone, even while a reply streams in below, and shows a button, "Jump to latest", over the bottom edge. It takes no space from the messages, so showing it moves nothing. The button scrolls to the end at once, never animated, and focus goes to the log, since the button is gone.
+
+Bind `atLatest` to read whether the reader is at the latest message, such as to show an unread count. Set `jumpText` to translate the button, and listen to `jump`. Call `scrollToLatest()` on the component to scroll programmatically.
+
+## AI assistant
+
+A conversation with an assistant adds a composer, a reply that streams, and what the reader does with a reply: stop it, ask again, edit the prompt, try again after an error, copy it, rate it and see its sources. The example puts them together from existing components. [PromptInput](/components/PromptInput) is the composer, Markdown draws each reply as it arrives, an [AILabel](/components/AILabel) marks each reply as generated, and `createChatSession` keeps the conversation.
+
+| Do | Why |
+| --- | --- |
+| Show the typing indicator until the first word, then the text. | The wait for a model to start can be seconds. The indicator says the request went through. |
+| Keep focus in the composer while the reply streams. | The reader can type the next question, or stop with <DocKbd label="Escape" />, without finding the field again. |
+| Keep what arrived when a reply is stopped, and say so. | A partial answer is often enough, and the reader should know it is partial. |
+| Show an error on the reply with `status="failed"` and a Retry button. | The failed reply and its retry stay where the reader is looking. |
+
+<FileSource src="/framed/Chat/ChatAssistant" />
+
+## Chat session
+
+`createChatSession` is a store of the conversation, so `$chat.messages` and `$chat.status` update as a reply arrives, and `chat.send`, `chat.stop`, `chat.regenerate` and `chat.edit` act on it. Give it an `onSend` that returns the reply as an async iterable, as `fetch` and a stream make easy to do. It is called with the prompt, its attachments, a `signal` that aborts when the reply is stopped or replaced, and the conversation so far.
+
+```svelte
+<script>
+  import { createChatSession, sseStream } from "carbon-components-svelte";
+
+  const chat = createChatSession({
+    onSend: async ({ messages, signal }) => {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ messages }),
+        signal,
+      });
+      return sseStream(response, { parse: (data) => JSON.parse(data).delta });
+    },
+  });
+</script>
+```
+
+A chunk is a string of text, or an object with a `type`: `{ type: "text", text }`, `{ type: "source", title, url }` for a citation, and `{ type: "status", text }` for a line such as "Searching the docs" while the model works. A `type` it doesn't know is left out, so an adapter can add new ones. Throw to show an error: the reply keeps what arrived, with `state: "error"`.
+
+`textStream` reads a response that streams plain text, and `sseStream` one that sends server-sent events, stopping at `[DONE]`. `fakeChatStream` makes up a reply with no network, a few words at a time, for a demo or a test; pass `failAfter` to try an error. Chunks that arrive within one frame update the store once, so a fast stream costs one render per frame.
+
+A reply can still be streaming when the reader leaves, so `stop()` it when the page goes away.
 
 ## Delivery status
 
