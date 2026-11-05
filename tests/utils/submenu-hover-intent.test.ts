@@ -230,6 +230,30 @@ describe("createSubmenuHoverIntent pointer aim", () => {
     expect(setSibling).not.toHaveBeenCalledWith(true);
   });
 
+  it("scheduleOpen(delay) opens after the delay, not openDelay", () => {
+    const setOpen = vi.fn();
+    const intent = createSubmenuHoverIntent(setOpen, options);
+    intent.scheduleOpen(40);
+    vi.advanceTimersByTime(40);
+    expect(setOpen).toHaveBeenCalledWith(true);
+  });
+
+  it("asks isAiming whether the pointer heads for the box", () => {
+    const setOpen = vi.fn();
+    const isAiming = vi.fn(() => true);
+    const intent = createSubmenuHoverIntent(setOpen, { ...options, isAiming });
+    intent.scheduleClose(leave(280, 120));
+    move(284, 124);
+    vi.advanceTimersByTime(150);
+    expect(isAiming).toHaveBeenCalledWith(
+      { x: 284, y: 124 },
+      { x: 280, y: 120 },
+      rect,
+    );
+    expect(setOpen).not.toHaveBeenCalled();
+    intent.cancel();
+  });
+
   it("removes its pointermove listener when the aim ends", () => {
     const add = vi.spyOn(window, "addEventListener");
     const remove = vi.spyOn(window, "removeEventListener");

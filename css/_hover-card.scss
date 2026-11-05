@@ -1,0 +1,76 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written. The card is a `Popover`; this adds the wrapper
+// that anchors it, its gap from the trigger, and the card's own layout.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+@import "carbon-components/scss/globals/scss/layout";
+
+/// HoverCard component
+/// @access private
+/// @group components
+@mixin hover-card {
+  // The anchor of the card, and the positioning context of an in-place one.
+  .#{$prefix}--hover-card {
+    position: relative;
+    display: inline-block;
+  }
+
+  // The gap between trigger and card. The popover's `::before` fills it, so
+  // the pointer can cross it without leaving the wrapper.
+  .#{$prefix}--hover-card-popover {
+    --cds-popover-offset: #{$carbon--spacing-03};
+
+    animation: hover-card-enter $duration--fast-02 motion(entrance, productive);
+  }
+
+  @keyframes hover-card-enter {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .#{$prefix}--hover-card__content {
+    @include type-style("body-compact-01");
+
+    display: grid;
+    box-sizing: border-box;
+    padding: $carbon--spacing-05;
+    row-gap: $carbon--spacing-05;
+    color: $text-primary;
+    inline-size: to-rem(320px);
+    max-inline-size: calc(100vw - #{$carbon--spacing-07});
+  }
+
+  .#{$prefix}--hover-card__content--sm {
+    inline-size: to-rem(256px);
+  }
+
+  .#{$prefix}--hover-card__content--lg {
+    inline-size: to-rem(368px);
+  }
+
+  // A bare paragraph keeps the card's type style, as in a toggletip.
+  .#{$prefix}--hover-card__content p:not([class]) {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  .#{$prefix}--hover-card__error {
+    color: $text-secondary;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--hover-card-popover {
+      animation: none;
+    }
+  }
+}
+
+@include exports("hover-card") {
+  @include hover-card;
+}
