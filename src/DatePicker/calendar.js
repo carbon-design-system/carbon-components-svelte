@@ -65,6 +65,8 @@ const QUIET_OPTIONS = new Set([
   "parseDate",
   "position",
   "positionElement",
+  "presets",
+  "presetsLabelText",
   "prevLabel",
   "nextLabel",
   "rtl",
@@ -220,6 +222,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     mode: "single",
     nextArrow: NEXT_ARROW,
     position: "auto",
+    presets: [],
+    presetsLabelText: "Shortcuts",
     prevArrow: PREV_ARROW,
     shorthandCurrentMonth: false,
     showMonths: 1,
@@ -422,6 +426,8 @@ export function createCalendarEngine(element, userConfig = {}) {
   const isGridMode = isYearView || pickerMode === "year";
   const isRange = pickerMode === "range";
   const isMultiple = pickerMode === "multiple";
+  /** Presets pick one date or one range. */
+  const hasPresetRail = pickerMode === "single" || isRange;
   config.pickerMode = pickerMode;
   if (isGridMode || pickerMode === "week") config.mode = "single";
   if (config.showMonths < 1 || isGridMode) config.showMonths = 1;
@@ -627,6 +633,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       self.input.value = dateString(config.dateFormat);
       if (self.altInput) self.altInput.value = dateString(config.altFormat);
     }
+    syncPresets();
     if (notify) triggerEvent("onValueUpdate");
   }
 
@@ -1396,6 +1403,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     buildDays();
     updateNavigation();
     bindContentEvents();
+    buildPresets();
   }
 
   function build() {
@@ -1499,6 +1507,190 @@ export function createCalendarEngine(element, userConfig = {}) {
       positionCalendar();
     }
     focused?.focus({ preventScroll: true });
+  }
+
+  // --- Presets ----------------------------------------------------------
+
+  /** What a preset's `value` reads: today, the week start, and time. */
+  function presetContext() {
+    return {
+      today: config.now === undefined ? new Date() : new Date(self.now),
+      firstDayOfWeek: self.l10n.firstDayOfWeek,
+      time: !!config.timeGranularity,
+    };
+  }
+
+  /**
+   * A preset's dates for this calendar: its range (or its first date, for a
+   * single picker) cut to `minDate` and `maxDate`. `undefined` when nothing
+   * of it can be picked, or an end is a disabled date.
+   *
+   * @param {import("./date-presets.js").DatePickerPreset} preset
+   * @returns {Date[] | undefined}
+   */
+  function presetDates(preset) {
+    if (preset.disabled) return undefined;
+    const value = preset.value(presetContext());
+    const [start, end = start] = Array.isArray(value) ? value : [value];
+    if (!(start instanceof Date) || !(end instanceof Date)) return undefined;
+    let from = new Date(start);
+    let to = new Date(end);
+    const { _minDate: min, _maxDate: max } = config;
+    if (min && compareDays(from, min) < 0) {
+      from = new Date(min.getFullYear(), min.getMonth(), min.getDate());
+    }
+    if (max && compareDays(to, max) > 0) {
+      to = new Date(max.getFullYear(), max.getMonth(), max.getDate());
+      to.setHours(end.getHours(), end.getMinutes(), end.getSeconds());
+    }
+    if (compareDays(from, to) > 0) return undefined;
+    const dates = isRange ? [from, to] : [from];
+    return dates.every((date) => isEnabled(date)) ? dates : undefined;
+  }
+
+  /**
+   * The shortcut buttons beside the calendar. With presets, the calendar
+   * is a row: the rail, then everything else in a wrapper, in its order.
+   */
+  function buildPresets() {
+    const container = self.calendarContainer;
+    if (!filled || !container) return;
+    const presets = hasPresetRail ? (config.presets ?? []) : [];
+    if (self.presetsElement) {
+      const main = self.presetsElement.nextElementSibling;
+      self.presetsElement.remove();
+      main?.replaceWith(...main.childNodes);
+      self.presetsElement = undefined;
+    }
+    toggleClass(
+      container,
+      "bx--date-picker__calendar--presets",
+      presets.length > 0,
+    );
+    if (presets.length === 0) return;
+    const rail = createElement("div", "bx--date-picker__presets");
+    rail.setAttribute("role", "group");
+    rail.setAttribute("aria-label", config.presetsLabelText);
+    for (const preset of presets) {
+      const button = createElement(
+        "button",
+        "bx--date-picker__preset",
+        preset.label,
+      );
+      button.type = "button";
+      button.$preset = preset;
+      rail.appendChild(button);
+    }
+    const main = createElement("div", "bx--date-picker__calendar-main");
+    main.append(...container.childNodes);
+    container.replaceChildren(rail, main);
+    self.presetsElement = rail;
+    syncPresets();
+    applyBlocked();
+  }
+
+  /**
+   * Whether a disabled or read-only input blocks the calendar. The picker
+   * blocks the grid's and the presets' clicks and keys; a disabled
+   * picker's presets are disabled too, so they leave the tab order.
+   * @type {undefined | "disabled" | "readonly"}
+   */
+  let blocked;
+
+  function applyBlocked() {
+    for (const button of self.presetsElement?.children ?? []) {
+      button.disabled = blocked === "disabled";
+    }
+  }
+
+  /** @param {undefined | "disabled" | "readonly"} state */
+  function setBlocked(state) {
+    blocked = state;
+    applyBlocked();
+  }
+  self.setBlocked = setBlocked;
+
+  /**
+   * Marks the preset that matches the selection (by day) and disables the
+   * ones that can't be picked.
+   */
+  function syncPresets() {
+    if (!self.presetsElement) return;
+    const selected = self.selectedDates;
+    for (const button of self.presetsElement.children) {
+      const dates = presetDates(button.$preset);
+      const active =
+        !!dates &&
+        selected.length === dates.length &&
+        dates.every(
+          (/** @type {Date} */ date, /** @type {number} */ i) =>
+            compareDays(date, selected[i]) === 0,
+        );
+      // Unavailable presets stay focusable, as in a toolbar.
+      if (dates) button.removeAttribute("aria-disabled");
+      else button.setAttribute("aria-disabled", "true");
+      toggleClass(button, "bx--date-picker__preset--active", active);
+      if (active) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    }
+    const buttons = [...self.presetsElement.children];
+    const current = buttons.findIndex((button) =>
+      button.hasAttribute("aria-current"),
+    );
+    setPresetStop(current === -1 ? presetStop : current);
+  }
+
+  /**
+   * The rail is one tab stop: the current preset, else the one focused
+   * last, else the first.
+   */
+  let presetStop = 0;
+
+  /** @param {number} index */
+  function setPresetStop(index) {
+    const buttons = [...self.presetsElement.children];
+    presetStop = index >= 0 && index < buttons.length ? index : 0;
+    buttons.forEach((button, i) => {
+      button.tabIndex = i === presetStop ? 0 : -1;
+    });
+  }
+
+  /** @param {Event} event */
+  function onPresetClick(event) {
+    const button = eventTarget(event).closest?.(".bx--date-picker__preset");
+    if (!button || button.getAttribute("aria-disabled") === "true") return;
+    setPresetStop([...self.presetsElement.children].indexOf(button));
+    const dates = presetDates(button.$preset);
+    if (!dates) return;
+    setDate(dates, true);
+    if (config.closeOnSelect) focusAndClose();
+  }
+
+  /**
+   * Up and Down move through the presets, Home and End to the first and
+   * last. Enter and Space click the focused one, as on any button.
+   *
+   * @param {KeyboardEvent} event
+   * @param {number} code
+   */
+  function onPresetKeyDown(event, code) {
+    const buttons = [...self.presetsElement.children];
+    if (buttons.length === 0) return;
+    const index = buttons.indexOf(document.activeElement);
+    const next =
+      code === 36
+        ? 0
+        : code === 35
+          ? buttons.length - 1
+          : code === 40
+            ? (index + 1) % buttons.length
+            : code === 38
+              ? (index - 1 + buttons.length) % buttons.length
+              : -1;
+    if (next === -1) return;
+    event.preventDefault();
+    setPresetStop(next);
+    buttons[next].focus();
   }
 
   // --- Navigation -------------------------------------------------------
@@ -1606,6 +1798,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function redraw() {
     updateNavigation();
     buildDays();
+    syncPresets();
   }
   self.redraw = redraw;
 
@@ -1801,6 +1994,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     ],
     clickOpens: [bindOpenTriggers],
     static: [placeContainer],
+    presets: [buildPresets],
+    presetsLabelText: [buildPresets],
   };
 
   /**
@@ -1963,11 +2158,18 @@ export function createCalendarEngine(element, userConfig = {}) {
     triggerEvent("onPreCalendarPosition");
     const anchor = customPositionElement || self._positionElement;
     const container = self.calendarContainer;
+    // The preset rail sits beside the calendar, or above it on a narrow
+    // screen.
+    const sideBySide =
+      !!self.presetsElement &&
+      getComputedStyle(container).flexDirection === "row";
     let height = 0;
     for (const child of /** @type {HTMLElement[]} */ ([
       ...container.children,
     ])) {
-      height += child.offsetHeight;
+      height = sideBySide
+        ? Math.max(height, child.offsetHeight)
+        : height + child.offsetHeight;
     }
     const width = container.offsetWidth;
     const [vertical, horizontal] = String(config.position).split(" ");
@@ -2169,6 +2371,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     const allowInlineKeydown = config.inline && isInput && !allowInput;
     const code = keyCodeOf(event);
     const inCalendar = self.calendarContainer.contains(target);
+    if (code !== 27 && self.presetsElement?.contains(target)) {
+      onPresetKeyDown(event, code);
+      triggerEvent("onKeyDown", event);
+      return;
+    }
 
     if (code === 13 && isInput) {
       if (allowInput) {
@@ -2255,7 +2462,9 @@ export function createCalendarEngine(element, userConfig = {}) {
             event.shiftKey
           ) {
             event.preventDefault();
-            self._input.focus();
+            // Back to the preset rail, which sits before the grid.
+            const stop = self.presetsElement?.querySelector("[tabindex='0']");
+            (stop ?? self._input).focus();
           }
           break;
         default:
@@ -2489,6 +2698,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     on(self.monthNav, "increment", onYearInput);
     on(self.monthNav, "input", onYearInput);
     on(self.daysContainer, "click", isGridMode ? selectGridCell : selectDate);
+    if (hasPresetRail) on(self.calendarContainer, "click", onPresetClick);
     if (isRange) {
       on(self.daysContainer, "mouseover", (event) =>
         previewRange(eventTarget(event)),

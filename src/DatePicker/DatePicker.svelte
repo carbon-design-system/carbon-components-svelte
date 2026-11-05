@@ -277,6 +277,19 @@
   export let closeOnSelect = true;
 
   /**
+   * Shortcut buttons beside the calendar, such as "Last 7 days". Each
+   * `value` is called when the shortcut is shown or picked, so build it
+   * from `today` rather than a fixed date; the `datePresets` helpers do.
+   * Picking one sets the date (or range) and closes the calendar like a
+   * picked day. Only for the "single" and "range" types.
+   * @type {ReadonlyArray<import("./date-presets.js").DatePickerPreset>}
+   */
+  export let presets = [];
+
+  /** Accessible name of the shortcut group. */
+  export let presetsLabelText = "Shortcuts";
+
+  /**
    * Parse typed text into a date. Receives the text and `dateFormat`;
    * return `undefined` for text that isn't a date.
    * @type {undefined | ((text: string, format: string) => Date | undefined)}
@@ -498,7 +511,11 @@
     isEventTargetInsidePortaledCalendar,
     positionFlatpickrCalendarFixed,
   } from "./date-picker-top-layer.js";
-  import { getPropWarnings, getShortWarning } from "./unsupported-options.js";
+  import {
+    getPresetsWarning,
+    getPropWarnings,
+    getShortWarning,
+  } from "./unsupported-options.js";
 
   const dispatch = createEventDispatcher();
   const insideModal = getContext(MODAL_CONTEXT_KEY);
@@ -1873,6 +1890,9 @@
     } else {
       engine.calendarContainer.removeAttribute("aria-disabled");
     }
+    engine.setBlocked?.(
+      $disabledAny ? "disabled" : $readonlyAny ? "readonly" : undefined,
+    );
   }
   // The range plugin writes to two inputs and has no alt input for the second.
   $: usesDisplayFormat = !!displayFormat && datePickerType !== "range";
@@ -1898,6 +1918,10 @@
     })) {
       reportOnce(message);
     }
+  }
+  $: if (presets.length > 0) {
+    const message = getPresetsWarning(datePickerType);
+    if (message) reportOnce(message);
   }
   $: if (short) {
     const message = getShortWarning(datePickerType);
@@ -1968,6 +1992,8 @@
     dayClass,
     prevLabel: previousLabelText,
     nextLabel: nextLabelText,
+    presets,
+    presetsLabelText,
   };
   /** @type {Record<string, string>} */
   const CALENDAR_NOUN = {

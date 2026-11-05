@@ -1,4 +1,5 @@
 import type { CalendarLocale } from "./calendar-dates.js";
+import type { DatePickerPreset } from "./date-presets.js";
 
 export type CalendarMode =
   "single" | "multiple" | "range" | "week" | "month" | "quarter" | "year";
@@ -90,6 +91,10 @@ export interface CalendarOptions extends Partial<
     | string
     | ((instance: CalendarInstance, customElement?: HTMLElement) => void);
   positionElement?: HTMLElement;
+  /** Shortcut buttons beside a single or range calendar. */
+  presets?: ReadonlyArray<DatePickerPreset>;
+  /** Accessible name of the shortcut group. Defaults to `"Shortcuts"`. */
+  presetsLabelText?: string;
   prevArrow?: string;
   /** Label of the previous month (year, decade) button. */
   prevLabel?: string;
@@ -151,6 +156,8 @@ export interface CalendarInstance {
   clear(triggerChangeEvent?: boolean, toInitial?: boolean): void;
   destroy(): void;
   redraw(): void;
+  /** Disables, or makes read-only, the parts the picker can't block by events. */
+  setBlocked(state: undefined | "disabled" | "readonly"): void;
   set(option: string | CalendarOptions, value?: unknown): void;
   setDate(date: unknown, triggerChange?: boolean, format?: string): void;
   jumpToDate(date?: unknown, triggerChange?: boolean): void;
