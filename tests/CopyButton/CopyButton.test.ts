@@ -139,9 +139,10 @@ describe("CopyButton", () => {
 
     expect(openTooltips()[0]).toHaveTextContent("Failed to copy");
 
-    // Error feedback holds the button until timeout/dismiss.
+    // A click during error feedback retries.
     await user.click(button);
-    expect(copy).toHaveBeenCalledTimes(1);
+    expect(copy).toHaveBeenCalledTimes(2);
+    expect(onCopyError).toHaveBeenCalledTimes(2);
   });
 
   describe("status announcement", () => {
