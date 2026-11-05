@@ -145,6 +145,7 @@ Patterns:
   - Key handlers on the component's root no longer see key presses from inside the portal. When focusable content moves into a portal, add a keyboard e2e: focus stays on the active item, and Escape returns focus to the trigger. See [`portal-when-clipped.test.ts`](e2e/portal-when-clipped.test.ts).
 - Keep state per instance. Do not write module-level stores or variables while a component renders: on a server, one request's values leak into the next, and two instances on one page share them. Put per-instance state in context (`setContext` in the owner). SideNav's rail state leaked across requests this way ([#4981](https://github.com/carbon-design-system/carbon-components-svelte/pull/4981)).
 - Check whether a difference from Carbon React is deliberate before you change it to match. Read the `// ccs:` comments, `git log -S`, the tests that pin the behavior, `e2e/forced-colors.test.ts`, and this file. If it is deliberate, keep it. Carbon React has bugs of its own, and this library is ahead in places: forced colors, the Toggletip caret, RTL keys in TreeView. Never regress a forced-colors row or an accessibility test for parity.
+- When you depart from Carbon React on purpose, say so in a `// ccs:` comment at that line, with the reason. A later change "to match React" then finds it. CopyButton ignored clicks during its feedback so a double click copies once, but no comment said so, and a PR removed the guard for parity ([#5338](https://github.com/carbon-design-system/carbon-components-svelte/pull/5338)).
 
 The `{#if skeleton}` early-return pattern is being phased out. Follow it only when maintaining existing skeleton code.
 
@@ -1000,6 +1001,7 @@ Common `expectTypeOf` matchers: `.toEqualTypeOf`, `.toExtend`, `.parameter(n)`, 
 - Scope runs: `bun run test ComboBox` (see [Checks](#checks)).
 - In the Svelte 5 suite, `rerender({ x: undefined })` falls back to the fixture's default for `x` instead of clearing it. To toggle an optional prop off, give the fixture a separate boolean and compute the prop from it. See `enabled` in [`DatePickerDisplayFormat.test.svelte`](tests/DatePicker/DatePickerDisplayFormat.test.svelte).
 - jsdom cannot select a flatpickr date by typing plus Enter, in popup or inline mode. Click a `.flatpickr-day` or call `calendar.setDate` in unit tests, and leave typed entry to e2e.
+- jsdom drops the `contain` property. To test code that reads it, stub `getComputedStyle` for that element. See `clippedBy` in [`fit-align.test.ts`](tests/utils/fit-align.test.ts).
 
 #### Server rendering tests
 
@@ -1173,6 +1175,9 @@ Between tests the host unmounts the fixture and resets what a fresh page would n
 | Turn off animations before you measure: `page.addStyleTag` with `animation: none`, as the buttons block in [`rtl.test.ts`](e2e/rtl.test.ts) does | A rotating element's box changes with its angle. A loading spinner measured 16px at one point in its turn and 20px at another. |
 | Keep `goto(` out of e2e comments | The test selector reads it as a navigation and makes the file depend on every page. |
 | Add new markup at the end of a shared fixture (`ForcedColorsFixture.svelte`, `RtlFixture.svelte`), and scope broad selectors | `style(page, ".bx--popover-contents")` reads the first match. A Toggletip added above the plain Popover changed what the caret test measured. |
+| In an RTL check, measure every part that has a physical margin or offset, such as an icon, not only the text | ProgressStep's label passed while its icon kept its gap on the wrong side, and the label touched the icon. |
+| Keep text in `RtlFixture.svelte` short enough to fit at 320px | Its open SideNav covers the content at 672px and 320px, so the layout sweep's hover lands on the nav. A truncated label there fails `no full text`, even when the component sets a `title`. |
+| Revert the fix and check that a new fixture case fails | Nothing type-checks `e2e/fixtures/`. A misspelled prop (`spaceEqual` for `spaceEqually`) renders the default and the check passes for the wrong reason. |
 | Run `bun build:css` after you switch branches, before e2e | The compiled `css/all.css` is not committed. A sheet left from another branch fails tests that pass in CI. |
 
 A leak the reset misses shows up as a failure that depends on which tests ran earlier in the worker. Run the file with `--workers=1 --repeat-each=3` to reproduce it.
