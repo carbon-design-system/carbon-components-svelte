@@ -109,3 +109,23 @@ test("an ImageCompare divider sits at its value before the script runs", async (
     );
   expect(await rect(page, selector)).toEqual(mounted);
 });
+
+test("an open HoverCard sits under its trigger before it's placed", async ({
+  page,
+}) => {
+  const selector = "[data-testid=hover-card] .bx--hover-card__content";
+  const mounted = await rect(page, selector);
+  // The server places the card at `align`, before the browser reads the
+  // text direction or fits it to the window.
+  await page
+    .locator("[data-testid=hover-card] .bx--hover-card-popover")
+    .evaluate((el) => {
+      el.classList.remove(
+        ...Array.from(el.classList).filter((name) =>
+          name.startsWith("bx--popover--bottom"),
+        ),
+      );
+      el.classList.add("bx--popover--bottom-left");
+    });
+  expect(await rect(page, selector)).toEqual(mounted);
+});

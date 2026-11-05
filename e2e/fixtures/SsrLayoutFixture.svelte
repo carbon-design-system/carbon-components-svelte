@@ -2,8 +2,10 @@
   import {
     Button,
     ExpandableTile,
+    HoverCard,
     ImageCompare,
     LanguagePicker,
+    Link,
     OverflowMenu,
     OverflowMenuItem,
     ShellBanner,
@@ -64,4 +66,14 @@
       style="width: 100%; height: 100%; background: #a7f0ba;"
     ></div>
   </ImageCompare>
+</div>
+
+<div
+  data-testid="hover-card"
+  style="position: relative; height: 12rem; padding: 1rem;"
+>
+  <HoverCard open aria-label="Profile">
+    <Link slot="trigger" href="#user">@octocat</Link>
+    Maintainer. San Francisco.
+  </HoverCard>
 </div>
