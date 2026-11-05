@@ -38,8 +38,11 @@
 
   /**
    * Set to `true` to enable the selected state for an icon-only, ghost button.
+   * Set to `false` to render it as a toggle that is not pressed. Left unset,
+   * the button is not a toggle and renders no `aria-pressed`.
+   * @type {boolean | undefined}
    */
-  export let isSelected = false;
+  export let isSelected = undefined;
 
   /**
    * Set to `true` to render an icon-only button even when default content
