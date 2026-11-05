@@ -4,6 +4,12 @@
   // `?passive` renders a passive modal, which closes on an outside click.
   const passiveModal = new URLSearchParams(location.search).has("passive");
 
+  // `?primary-disabled` disables the primary button and drops the select, so
+  // the modal has no input and the first focus falls back to a button.
+  const primaryDisabled = new URLSearchParams(location.search).has(
+    "primary-disabled",
+  );
+
   let open = false;
   let events = [];
   let closeEvents = [];
@@ -22,6 +28,7 @@
   {passiveModal}
   modalHeading="Modal title"
   primaryButtonText="Save"
+  primaryButtonDisabled={primaryDisabled}
   secondaryButtonText="Cancel"
   on:click:button--primary={() => (events = [...events, "primary"])}
   on:click:button--secondary={() => (events = [...events, "secondary"])}
@@ -29,10 +36,12 @@
     (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
 >
   <p data-testid="modal-body">Modal content</p>
-  <Select data-testid="modal-select" labelText="Contact method">
-    <SelectItem value="slack" text="Slack" />
-    <SelectItem value="email" text="Email" />
-  </Select>
+  {#if !primaryDisabled}
+    <Select data-testid="modal-select" labelText="Contact method">
+      <SelectItem value="slack" text="Slack" />
+      <SelectItem value="email" text="Email" />
+    </Select>
+  {/if}
   <!-- Custom in-modal control that closes via app code (sets `open = false`),
        not the built-in close affordance — exercises the "programmatic" trigger. -->
   <button

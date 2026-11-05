@@ -160,4 +160,20 @@ test.describe("Modal", () => {
     await page.keyboard.press("Escape");
     await expect(trigger).toBeFocused();
   });
+
+  test("closes on Escape when the primary button is disabled", async ({
+    page,
+  }) => {
+    await page.goto("/modal.html?primary-disabled");
+    await page.getByTestId("open-modal").click();
+    await expect(page.locator(".bx--modal")).toHaveClass(/is-visible/);
+
+    // A disabled button takes no focus, so first focus must land elsewhere
+    // in the dialog for its keydown handler to hear Escape.
+    await expect(page.getByRole("button", { name: "Save" })).toBeDisabled();
+    await expect(page.locator(".bx--modal:focus-within")).toBeAttached();
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".bx--modal")).not.toHaveClass(/is-visible/);
+  });
 });
