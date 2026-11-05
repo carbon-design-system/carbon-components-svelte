@@ -148,14 +148,15 @@
    */
 
   /**
-   * A column whose cells `display` computes from the row, under a key that
-   * isn't one of `Row`'s, such as a total. It has no value to sort by.
+   * A column under a key that isn't one of `Row`'s. Its cells come from
+   * `display`, such as a total, or from the `cell` slot, such as a link.
+   * It has no value to sort by.
    * @template [Row=DataTableRow]
    * @typedef {object} DataTableComputedHeader
    * @property {string & {}} key
    * @property {false} [empty]
    * @property {DataTableValue} value
-   * @property {(item: DataTableValue, row: Row) => DataTableValue} display
+   * @property {(item: DataTableValue, row: Row) => DataTableValue} [display]
    * @property {false} sort - A computed column has no value to sort by.
    * @property {boolean} [columnMenu] - Whether the column menu is enabled
    * @property {boolean} [columnHidden] - Whether the column is skipped in render while remaining in `headers`
