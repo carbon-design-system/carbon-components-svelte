@@ -1563,6 +1563,83 @@
       "defaultKind": "function"
     },
     {
+      "component": "PromptInput",
+      "prop": "attachmentsLabelText",
+      "type": "string",
+      "default": "Attachments",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "attachmentText",
+      "type": "(attachment: PromptAttachment) => string",
+      "default": "(attachment) => {\n  if (attachment.status === \"uploading\") {\n    return typeof attachment.progress === \"number\"\n      ? `Uploading ${Math.round(attachment.progress)}%`\n      : \"Uploading\";\n  }\n  if (attachment.status === \"error\") {\n    return attachment.errorText || \"Upload failed\";\n  }\n  return typeof attachment.size === \"number\"\n    ? formatFileSize(attachment.size)\n    : \"\";\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "attachText",
+      "type": "string",
+      "default": "Attach files",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "dropText",
+      "type": "string",
+      "default": "Drop files to attach",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "hintText",
+      "type": "string | ((value: string) => string) | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "labelText",
+      "type": "string",
+      "default": "Message",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "overLimitDescription",
+      "type": "(count: number, max: number) => string",
+      "default": "(count, max) => `${count} of ${max} characters. Shorten the message to send it.`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "removeText",
+      "type": "(name: string) => string",
+      "default": "(name) => `Remove ${name}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "sendText",
+      "type": "string",
+      "default": "Send",
+      "defaultKind": "text"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "statusDescription",
+      "type": "(event: PromptStatusEvent) => string",
+      "default": "({ type, name, reason }) => {\n  if (type === \"attached\") return `Attached ${name}`;\n  if (type === \"removed\") return `Removed ${name}`;\n  return `Couldn't attach ${name}: ${\n    {\n      type: \"type not accepted\",\n      size: \"too large\",\n      duplicate: \"already attached\",\n      count: \"too many files\",\n    }[reason ?? \"type\"]\n  }`;\n}",
+      "defaultKind": "function"
+    },
+    {
+      "component": "PromptInput",
+      "prop": "stopText",
+      "type": "string",
+      "default": "Stop",
+      "defaultKind": "text"
+    },
+    {
       "component": "QRCode",
       "prop": "alternativeLabelText",
       "type": "string",

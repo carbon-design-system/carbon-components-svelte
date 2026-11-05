@@ -2,6 +2,7 @@ import { screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import PromptInput from "carbon-components-svelte/PromptInput/PromptInput.svelte";
 import TileGrid from "carbon-components-svelte/TileGrid/TileGrid.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import DatePicker from "../DatePicker/DatePicker.test.svelte";
@@ -313,6 +314,33 @@ export const cases: CollectionCase[] = [
     check: () => {
       expect(treeItem("Bravo")).toHaveAttribute("aria-checked", "true");
       expect(treeItem("Alpha")).toHaveAttribute("aria-checked", "false");
+    },
+  },
+  {
+    name: "PromptInput",
+    component: PromptInput,
+    prop: "attachments",
+    initial: () => [{ id: "a", name: "q3-report.pdf" }],
+    replacement: () => [{ id: "b", name: "budget.xlsx" }],
+    check: async () => {
+      expect(screen.queryByText("q3-report.pdf")).toBeNull();
+      await user.click(
+        screen.getByRole("button", { name: "Remove budget.xlsx" }),
+      );
+      expect(screen.queryByText("budget.xlsx")).toBeNull();
+    },
+  },
+  {
+    name: "PromptInput",
+    component: PromptInput,
+    prop: "history",
+    initial: () => ["Summarize the incident"],
+    replacement: () => ["Draft the release note"],
+    check: async () => {
+      const field = screen.getByRole("textbox", { name: "Message" });
+      field.focus();
+      await user.keyboard("{ArrowUp}");
+      expect(field).toHaveValue("Draft the release note");
     },
   },
   {
