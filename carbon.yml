@@ -996,6 +996,21 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ProgressIndicator
+  prompt-input:
+    name: Prompt input
+    description: The composer for an AI conversation, with a growing text area, attachments, a send button that becomes stop, and prompt history.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/prompt-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PromptInput
+    tags:
+      - input-control
   prose:
     name: Prose
     description: Sets running copy written as plain HTML with Carbon type styles, spacing, and line length.
