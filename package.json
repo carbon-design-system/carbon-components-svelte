@@ -116,7 +116,7 @@
     "sass-embedded": "^1.107.1",
     "sveld": "^0.40.2",
     "svelte": "^5.57.3",
-    "svelte-typecheck": "^0.1.5",
+    "svelte-typecheck": "^0.1.6",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
     "vitest": "^5.1.0"
