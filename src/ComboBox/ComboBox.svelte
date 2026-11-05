@@ -436,13 +436,13 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { submitAttempts } from "../utils/submit-attempt.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";

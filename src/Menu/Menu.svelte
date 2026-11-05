@@ -117,16 +117,10 @@
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
-  import { createFrameJob } from "../utils/frame-batch.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
-  import {
-    getLayoutDirection,
-    resolveLayoutDirection,
-  } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
-  import { fitIntrinsicAlign, physicalAlign } from "../utils/menu-placement.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -148,39 +142,15 @@
   ).join(",");
 
   const dispatch = createEventDispatcher();
-  const layoutDirection = getLayoutDirection();
 
   let focusIndex = -1;
-  let rtl = false;
   let prevOpen = false;
-
-  // The physical alignment that keeps this open's menu inside the window,
-  // when `portalAlign` would run past a side.
-  /** @type {null | "start" | "center" | "end"} */
-  let fittedAlign = null;
-
-  // Reads layout only, so it runs with the other frame jobs' reads.
-  const fitJob = createFrameJob([
-    () => {
-      if (!(open && ref && placementAnchor)) return;
-      const { left, right } = placementAnchor.getBoundingClientRect();
-      const fitted = fitIntrinsicAlign({
-        before: left,
-        after: right,
-        size: ref.getBoundingClientRect().width,
-        max: document.documentElement.clientWidth,
-        align: portalAlign,
-      });
-      fittedAlign = fitted === portalAlign ? null : fitted;
-    },
-  ]);
 
   const typeahead = createTypeaheadBuffer();
 
   onMount(() => {
     return () => {
       typeahead.clear();
-      fitJob.cancel();
     };
   });
 
@@ -282,26 +252,10 @@
     prevOpen = open;
   }
 
-  // Read when the menu opens: nothing reports a `dir` change.
-  $: if (open) rtl = resolveLayoutDirection($layoutDirection, anchor) === "rtl";
-  // `start` and `end` along a top or bottom edge are inline sides. Along a
-  // left or right edge they are the top and bottom, which RTL leaves alone.
-  $: portalAlign =
-    direction === "top" || direction === "bottom"
-      ? physicalAlign(intrinsicAlign, rtl)
-      : intrinsicAlign;
+  // Along the top or bottom of the anchor, a menu that runs past a side of
+  // the window takes another alignment: the portal fits it, 8px inside.
   $: fitsAlign =
-    open && intrinsicWidth && (direction === "top" || direction === "bottom");
-  $: if (!fitsAlign) {
-    fittedAlign = null;
-    fitJob.cancel();
-  }
-  // Fit once the menu has its width, and again when the alignment changes.
-  $: if (fitsAlign) {
-    void portalAlign;
-    tick().then(fitJob.schedule);
-  }
-  $: placementAlign = fittedAlign ?? portalAlign;
+    intrinsicWidth && (direction === "top" || direction === "bottom");
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
   $: maxHeightStyle = toCssLength(maxHeight);
 
@@ -390,10 +344,14 @@
   {verticalAlignOffsetRight}
   {zIndex}
   {intrinsicWidth}
-  intrinsicAlign={placementAlign}
+  {intrinsicAlign}
+  logical
+  flipAlign={fitsAlign ? "any" : false}
+  padding={8}
   {target}
   lockDirection="always"
   let:direction={portalDirection}
+  let:align={placedAlign}
 >
   <ul
     bind:this={ref}
@@ -420,7 +378,7 @@
     role="menu"
     tabindex="-1"
     data-floating-menu-direction={portalDirection}
-    data-carbon-align={intrinsicWidth ? placementAlign : undefined}
+    data-carbon-align={intrinsicWidth ? placedAlign : undefined}
     style:position="relative"
     style:top="auto"
     style:left="auto"

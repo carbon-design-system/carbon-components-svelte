@@ -22,8 +22,25 @@
   export let target: ComponentProps<FloatingPortal>["target"] = null;
   export let lockDirection: ComponentProps<FloatingPortal>["lockDirection"] =
     "none";
+  export let flipAlign: ComponentProps<FloatingPortal>["flipAlign"] = false;
+  export let padding = 0;
+  export let shift: ComponentProps<FloatingPortal>["shift"] = false;
+  export let logical = false;
+  // An anchor that is a point, not an element.
+  export let virtual: { x: number; y: number } | null = null;
   export let dialogAncestor = false;
   export let popoverAncestor = false;
+
+  function resolveAnchor(
+    element: ComponentProps<FloatingPortal>["anchor"],
+    point: { x: number; y: number } | null,
+  ): ComponentProps<FloatingPortal>["anchor"] {
+    if (!point) return element;
+    return {
+      getBoundingClientRect: () => new DOMRect(point.x, point.y, 0, 0),
+      contextElement: element instanceof HTMLElement ? element : null,
+    };
+  }
 
   // Svelte 3's element typings predate the `popover` attribute.
   const popoverAttrs: Record<string, string> = { popover: "manual" };
@@ -46,7 +63,7 @@
 {/if}
 
 <FloatingPortal
-  {anchor}
+  anchor={resolveAnchor(anchor, virtual)}
   {direction}
   {open}
   {zIndex}
@@ -60,7 +77,14 @@
   {intrinsicAlign}
   {target}
   {lockDirection}
+  {flipAlign}
+  {padding}
+  {shift}
+  {logical}
   bind:ref
+  let:align
+  let:shift={slide}
 >
   Floating content
+  <span data-testid="slot" data-align={align} data-shift={slide}></span>
 </FloatingPortal>

@@ -204,6 +204,186 @@ describe("FloatingPortal", () => {
     );
   });
 
+  describe("fitting the alignment, sliding and logical alignment", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    // A 100px anchor near the right edge of a 1000px window, and a 200px box.
+    async function openNearRightEdge(
+      props: Record<string, unknown>,
+      anchorLeft = 880,
+    ) {
+      vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+        1000,
+      );
+      const { rerender } = render(FloatingPortalTest, {
+        props: { intrinsicWidth: true, direction: "bottom", ...props },
+      });
+      stubLayout({
+        anchor: rect({ top: 100, left: anchorLeft, width: 100, height: 40 }),
+        floating: rect({ width: 200, height: 30 }),
+      });
+      await rerender({ open: true });
+      await screen.findByText("Floating content");
+      await nextFrame();
+      await nextFrame();
+      return screen.getByTestId("slot");
+    }
+
+    it("keeps the alignment it was given without flipAlign", async () => {
+      const slot = await openNearRightEdge({ intrinsicAlign: "start" });
+      expect(slot).toHaveAttribute("data-align", "start");
+    });
+
+    it("takes the other edge when the box runs past the window, and says so", async () => {
+      const slot = await openNearRightEdge({
+        intrinsicAlign: "start",
+        flipAlign: true,
+      });
+      expect(slot).toHaveAttribute("data-align", "end");
+      const portal = slot.closest("[data-floating-portal]");
+      expect(portal).toHaveAttribute("data-floating-intrinsic-align", "end");
+      // Placed by the anchor's right edge, and slid back by its own width.
+      expectInlineStyle(portal, {
+        left: "980px",
+        transform: "translateX(-100%)",
+      });
+    });
+
+    it("fits the alignment of a side it has locked", async () => {
+      const slot = await openNearRightEdge({
+        intrinsicAlign: "start",
+        flipAlign: true,
+        lockDirection: "always",
+      });
+      expect(slot).toHaveAttribute("data-align", "end");
+    });
+
+    it("takes center only when told it may", async () => {
+      // A 1000px window with a 560px box: neither edge fits, center does.
+      const props = { intrinsicAlign: "start", direction: "bottom" } as const;
+      vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+        600,
+      );
+      const { rerender } = render(FloatingPortalTest, {
+        props: { intrinsicWidth: true, flipAlign: "any", padding: 8, ...props },
+      });
+      stubLayout({
+        anchor: rect({ top: 100, left: 250, width: 100, height: 40 }),
+        floating: rect({ width: 560, height: 30 }),
+      });
+      await rerender({ open: true });
+      await screen.findByText("Floating content");
+      await nextFrame();
+      await nextFrame();
+      expect(screen.getByTestId("slot")).toHaveAttribute(
+        "data-align",
+        "center",
+      );
+    });
+
+    it("reports how far the content slides, and leaves the portal on the anchor", async () => {
+      const slot = await openNearRightEdge({
+        intrinsicAlign: "center",
+        shift: 8,
+      });
+      // Centered on a 100px anchor at 880, the 200px box spans 830 to 1030.
+      expect(slot).toHaveAttribute("data-shift", "-38");
+      expectInlineStyle(slot.closest("[data-floating-portal]"), {
+        left: "930px",
+        transform: "translateX(-50%)",
+      });
+    });
+
+    it("reports no slide where the box fits", async () => {
+      const slot = await openNearRightEdge(
+        { intrinsicAlign: "center", shift: 8 },
+        400,
+      );
+      expect(slot).toHaveAttribute("data-shift", "0");
+    });
+
+    describe("logical", () => {
+      afterEach(() => {
+        document.documentElement.removeAttribute("dir");
+        document.documentElement.style.removeProperty("direction");
+      });
+
+      it.each([
+        ["ltr", false, "start", "start"],
+        ["rtl", false, "start", "start"],
+        ["ltr", true, "start", "start"],
+        ["rtl", true, "start", "end"],
+        ["rtl", true, "end", "start"],
+        ["rtl", true, "center", "center"],
+      ] as const)(
+        "in %s, with logical %s, reads %s as the %s edge",
+        async (dir, logical, intrinsicAlign, expected) => {
+          document.documentElement.style.direction = dir;
+          document.documentElement.dir = dir;
+          const slot = await openNearRightEdge(
+            { intrinsicAlign, logical },
+            400,
+          );
+          expect(slot).toHaveAttribute("data-align", expected);
+        },
+      );
+
+      it("leaves start and end beside the anchor alone in RTL", async () => {
+        document.documentElement.dir = "rtl";
+        const slot = await openNearRightEdge(
+          { intrinsicAlign: "start", logical: true, direction: "right" },
+          400,
+        );
+        expect(slot).toHaveAttribute("data-align", "start");
+      });
+    });
+  });
+
+  describe("anchors that are not elements", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("places the box at a point", async () => {
+      const { rerender } = render(FloatingPortalTest, {
+        props: { virtual: { x: 300, y: 200 } },
+      });
+      stubLayout({
+        anchor: rect({ top: 0, left: 0, width: 10, height: 10 }),
+        floating: rect({ width: 120, height: 40 }),
+      });
+      await rerender({ open: true });
+      const content = await screen.findByText("Floating content");
+      await nextFrame();
+      const portal = content.closest("[data-floating-portal]");
+
+      expectInlineStyle(portal, { top: "200px", left: "300px" });
+    });
+
+    it("moves with the point, in the next frame after a scroll", async () => {
+      const { rerender } = render(FloatingPortalTest, {
+        props: { virtual: { x: 300, y: 200 } },
+      });
+      stubLayout({
+        anchor: rect({ top: 0, left: 0, width: 10, height: 10 }),
+        floating: rect({ width: 120, height: 40 }),
+      });
+      await rerender({ open: true });
+      const content = await screen.findByText("Floating content");
+      await nextFrame();
+      await rerender({ virtual: { x: 340, y: 260 } });
+      window.dispatchEvent(new Event("scroll"));
+      await nextFrame();
+
+      expectInlineStyle(content.closest("[data-floating-portal]"), {
+        top: "260px",
+        left: "340px",
+      });
+    });
+  });
+
   describe("caret nudge and layout passes", () => {
     afterEach(() => {
       vi.restoreAllMocks();

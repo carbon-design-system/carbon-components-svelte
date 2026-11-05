@@ -141,9 +141,9 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";

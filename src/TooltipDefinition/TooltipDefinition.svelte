@@ -74,13 +74,12 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { clippedBy, slideIntoWindow } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { physicalAlign } from "../utils/inline-align.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -292,9 +291,12 @@
     open={shown}
     gapTop={direction === "top" ? PORTAL_VERTICAL_GAP_TOP_PX : 0}
     gapBottom={direction === "bottom" ? PORTAL_VERTICAL_GAP_BOTTOM_PX : 0}
-    intrinsicAlign={physicalAlign(align, portalRtl)}
+    intrinsicAlign={align}
+    logical
     intrinsicWidth={true}
+    shift={8}
     let:direction={actualDirection}
+    let:shift={slide}
   >
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
@@ -308,7 +310,8 @@
       <!-- The box lays out left to right (see _tooltip.scss); the text
       keeps the trigger's direction. -->
       <span
-        use:slideIntoWindow
+        style:position={slide ? "relative" : undefined}
+        style:left={slide ? `${slide}px` : undefined}
         {id}
         role="tooltip"
         class:bx--tooltip-portal__content={true}

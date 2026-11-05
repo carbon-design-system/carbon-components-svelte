@@ -17,8 +17,8 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { clippedBy } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { closeOverControls } from "../utils/tooltip-cover.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";

@@ -198,7 +198,9 @@ describe("ComboButton menu placement", () => {
     );
     vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
       function (this: Element) {
-        if (this.matches("[role='menu']")) return rect({ width: 200 });
+        if (this.matches("[role='menu'],[data-floating-portal]")) {
+          return rect({ width: 200 });
+        }
         if (this.matches(".bx--combo-button")) {
           return rect({ left, width: 146 });
         }

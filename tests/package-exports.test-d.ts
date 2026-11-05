@@ -1,7 +1,10 @@
 import type {
+  autoUpdate,
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  caretAnchor,
+  computePosition,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
@@ -12,8 +15,10 @@ import type {
   getAvatarBackgroundColor,
   getInitials,
   getLayoutDirection,
+  pointAnchor,
   preserveFocusSelection,
   queryParam,
+  rangeAnchor,
   rovingFocus,
   themeScript,
   ThemeZone as BarrelThemeZone,
@@ -109,6 +114,11 @@ type _TimePickerSkeleton = TimePickerSkeleton;
 type _Dismiss = ReturnType<typeof dismiss>;
 type _DismissParams = Parameters<typeof dismiss>[1];
 type _DismissParamsType = DismissParams;
+type _AutoUpdate = ReturnType<typeof autoUpdate>;
+type _CaretAnchor = ReturnType<typeof caretAnchor>;
+type _ComputePosition = ReturnType<typeof computePosition>;
+type _PointAnchor = ReturnType<typeof pointAnchor>;
+type _RangeAnchor = ReturnType<typeof rangeAnchor>;
 type _FloatingPosition = ReturnType<typeof floatingPosition>;
 type _FloatingPositionOptions = FloatingPositionOptions;
 type _FloatingPositionResult = FloatingPositionResult;

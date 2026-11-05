@@ -143,7 +143,6 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { clippedBy } from "../utils/fit-align.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -156,6 +155,7 @@
   import { menuSide } from "../utils/menu-placement.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
