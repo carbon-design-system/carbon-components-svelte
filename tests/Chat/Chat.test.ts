@@ -33,6 +33,53 @@ describe("Chat", () => {
     expect(screen.getByTestId("second")).toHaveAttribute("aria-busy", "true");
   });
 
+  it("announces when a reply starts and when it is complete, not its text", async () => {
+    const { rerender } = render(Chat);
+    const second = () => screen.getByTestId("second");
+    expect(within(second()).queryByRole("status")).toBeNull();
+
+    await rerender({ streaming: true });
+    expect(within(second()).getByRole("status")).toHaveTextContent(
+      "Response started",
+    );
+    // Its text is kept out of the log's announcements from now on.
+    expect(second().querySelector(".bx--chat-message__bubble")).toHaveAttribute(
+      "aria-live",
+      "off",
+    );
+
+    await rerender({ streaming: false });
+    expect(within(second()).getByRole("status")).toHaveTextContent(
+      "Response complete",
+    );
+    expect(second()).not.toHaveAttribute("aria-busy");
+  });
+
+  it("announces nothing for text set to empty, and takes other text", async () => {
+    const { rerender } = render(Chat, {
+      startedText: "",
+      completeText: "Antwort fertig",
+    });
+
+    await rerender({ streaming: true });
+    expect(
+      within(screen.getByTestId("second")).queryByRole("status"),
+    ).toBeNull();
+
+    await rerender({ streaming: false });
+    expect(
+      within(screen.getByTestId("second")).getByRole("status"),
+    ).toHaveTextContent("Antwort fertig");
+  });
+
+  it("leaves the caret to content that draws its own", () => {
+    render(Chat, { streaming: true, caret: false });
+
+    expect(screen.getByTestId("second")).toHaveClass(
+      "bx--chat-message--no-caret",
+    );
+  });
+
   it("shows the avatar on the first of a run and leaves it out after", () => {
     render(Chat);
 

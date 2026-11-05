@@ -1,0 +1,258 @@
+<script>
+  import {
+    AILabel,
+    Box,
+    Button,
+    ChatLog,
+    ChatMessage,
+    CopyButton,
+    createChatSession,
+    Disclosure,
+    fakeChatStream,
+    Link,
+    Markdown,
+    PromptInput,
+    Stack,
+    TextArea,
+    TextInput,
+  } from "carbon-components-svelte";
+  import { tokenize } from "carbon-components-svelte/syntax";
+  import Edit from "carbon-icons-svelte/lib/Edit.svelte";
+  import Restart from "carbon-icons-svelte/lib/Restart.svelte";
+  import ThumbsDown from "carbon-icons-svelte/lib/ThumbsDown.svelte";
+  import ThumbsDownFilled from "carbon-icons-svelte/lib/ThumbsDownFilled.svelte";
+  import ThumbsUp from "carbon-icons-svelte/lib/ThumbsUp.svelte";
+  import ThumbsUpFilled from "carbon-icons-svelte/lib/ThumbsUpFilled.svelte";
+
+  // For demo purposes only: a canned reply stands in for your model.
+  const reply = `## Why the invoice export is slow
+
+The export reads every row of \`invoices\` through **one** connection, so it can't use the replica's other cores. Three changes should bring it from 40 minutes to about 10:
+
+1. Split the table into ranges of 50,000 ids
+2. Read each range on its own connection
+3. Write one \`parquet\` file per range
+
+\`\`\`sql
+SELECT id, customer_id, total
+FROM invoices
+WHERE id BETWEEN 1 AND 50000
+ORDER BY id;
+\`\`\`
+
+| Workers | Estimated time |
+| :------ | -------------: |
+| 1 | 40 min |
+| 4 | 11 min |
+
+See the [export runbook](https://runbooks.example.com/billing/export) for the rollout steps.`;
+
+  const sources = [
+    {
+      title: "Billing export runbook",
+      url: "https://runbooks.example.com/billing/export",
+    },
+    {
+      title: "Replica sizing guide",
+      url: "https://runbooks.example.com/database/replicas",
+    },
+  ];
+
+  const chat = createChatSession({
+    messages: [
+      {
+        role: "user",
+        content: "Why is the nightly invoice export so slow?",
+      },
+      { role: "assistant", content: reply, sources },
+    ],
+    onSend: ({ text, signal }) =>
+      fakeChatStream(reply, {
+        signal,
+        startDelayMs: 700,
+        status: "Reading the billing runbook",
+        sources,
+        // Ask it to "fail" to see an error and its retry.
+        failAfter: /fail/i.test(text) ? 4 : undefined,
+      }),
+  });
+
+  let status = "ready";
+  $: status = $chat.status === "error" ? "ready" : $chat.status;
+  $: lastReply = $chat.messages.findLast((m) => m.role === "assistant");
+
+  let value = "";
+  let history = [];
+  let atLatest = true;
+  let editingId = "";
+  let editText = "";
+  let ratings = {};
+  let reasonFor = "";
+  let reason = "";
+
+  const rate = (id, rating) => {
+    ratings = { ...ratings, [id]: ratings[id] === rating ? undefined : rating };
+    reasonFor = ratings[id] === "down" ? id : "";
+  };
+</script>
+
+<Box display="flex" direction="column" height="38rem" gap={5}>
+  <ChatLog labelText="Conversation with the assistant" bind:atLatest>
+    {#each $chat.messages as message (message.id)}
+      {#if message.role === "user"}
+        <ChatMessage from="me" author="You">
+          {#if editingId === message.id}
+            <Stack gap={3}>
+              <TextArea
+                hideLabel
+                labelText="Edit your message"
+                rows={2}
+                bind:value={editText}
+              />
+              <Stack orientation="horizontal" gap={3}>
+                <Button
+                  size="sm"
+                  on:click={() => {
+                    chat.edit(message.id, editText);
+                    editingId = "";
+                  }}>Resend</Button
+                >
+                <Button size="sm" kind="ghost" on:click={() => (editingId = "")}
+                  >Cancel</Button
+                >
+              </Stack>
+            </Stack>
+          {:else}
+            {message.content}
+          {/if}
+          <svelte:fragment slot="actions">
+            {#if editingId !== message.id}
+              <Button
+                kind="ghost"
+                size="sm"
+                icon={Edit}
+                iconDescription="Edit and resend"
+                tooltipPosition="left"
+                disabled={$chat.status === "submitted" ||
+                  $chat.status === "streaming"}
+                on:click={() => {
+                  editingId = message.id;
+                  editText = message.content;
+                }}
+              />
+            {/if}
+          </svelte:fragment>
+        </ChatMessage>
+      {:else}
+        <ChatMessage
+          author="Assistant"
+          streaming={message.state === "streaming"}
+          typing={message.state === "streaming" && message.content === ""}
+          typingText="The assistant is thinking"
+          caret={false}
+          status={message.state === "error" ? "failed" : undefined}
+          statusText={() => "Response failed"}
+          on:retry={() => chat.regenerate()}
+        >
+          <AILabel slot="avatar" size="xs">
+            <p>
+              Generated by a model. Check it against the runbook before acting
+              on it.
+            </p>
+          </AILabel>
+          <Markdown
+            source={message.content}
+            streaming={message.state === "streaming"}
+            highlight={tokenize}
+          />
+          <svelte:fragment slot="meta">
+            {#if message.state === "streaming" && message.statusText}
+              {message.statusText}…
+            {:else if message.state === "stopped"}
+              Stopped
+            {:else if message.state === "done"}
+              <CopyButton
+                kind="ghost"
+                size="sm"
+                text={message.content}
+                iconDescription="Copy response"
+                tooltipPosition="top"
+              />
+              <Button
+                kind="ghost"
+                size="sm"
+                icon={ratings[message.id] === "up" ? ThumbsUpFilled : ThumbsUp}
+                iconDescription="Good response"
+                tooltipPosition="top"
+                aria-pressed={ratings[message.id] === "up" ? "true" : "false"}
+                on:click={() => rate(message.id, "up")}
+              />
+              <Button
+                kind="ghost"
+                size="sm"
+                icon={ratings[message.id] === "down"
+                  ? ThumbsDownFilled
+                  : ThumbsDown}
+                iconDescription="Bad response"
+                tooltipPosition="top"
+                aria-pressed={ratings[message.id] === "down" ? "true" : "false"}
+                on:click={() => rate(message.id, "down")}
+              />
+              {#if message === lastReply}
+                <Button
+                  kind="ghost"
+                  size="sm"
+                  icon={Restart}
+                  iconDescription="Regenerate response"
+                  tooltipPosition="top"
+                  on:click={() => chat.regenerate()}
+                />
+              {/if}
+            {/if}
+          </svelte:fragment>
+          <svelte:fragment slot="attachments">
+            {#if reasonFor === message.id}
+              <Stack orientation="horizontal" gap={3}>
+                <TextInput
+                  hideLabel
+                  size="sm"
+                  labelText="What went wrong? (optional)"
+                  placeholder="What went wrong? (optional)"
+                  bind:value={reason}
+                />
+                <Button
+                  size="sm"
+                  kind="tertiary"
+                  on:click={() => {
+                    reasonFor = "";
+                    reason = "";
+                  }}>Send feedback</Button
+                >
+              </Stack>
+            {/if}
+            {#if message.sources.length > 0 && message.state !== "streaming"}
+              <Disclosure
+                align="start"
+                summary="Sources ({message.sources.length})"
+              >
+                <ol>
+                  {#each message.sources as source}
+                    <li><Link href={source.url}>{source.title}</Link></li>
+                  {/each}
+                </ol>
+              </Disclosure>
+            {/if}
+          </svelte:fragment>
+        </ChatMessage>
+      {/if}
+    {/each}
+  </ChatLog>
+  <PromptInput
+    placeholder="Ask about the billing system. Include the word fail to see an error."
+    {status}
+    bind:value
+    bind:history
+    on:submit={(event) => chat.send(event.detail)}
+    on:stop={() => chat.stop()}
+  />
+</Box>

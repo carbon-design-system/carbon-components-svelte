@@ -37,10 +37,30 @@
 
   /**
    * Set to `true` while the message is still arriving, such as a reply
-   * streamed word by word. Screen readers wait and announce it once, in
-   * full, instead of every chunk.
+   * streamed word by word. A caret follows the text, and screen readers
+   * aren't read every chunk: the message is marked busy, its text is not
+   * announced as it grows, and `startedText` and `completeText` are
+   * announced instead.
    */
   export let streaming = false;
+
+  /**
+   * Set to `false` to leave out the caret while `streaming`, when the
+   * content draws its own, as `Markdown` does at the end of its last block.
+   */
+  export let caret = true;
+
+  /**
+   * Specify the text announced when the message starts to stream. Set to an
+   * empty string to announce nothing.
+   */
+  export let startedText = "Response started";
+
+  /**
+   * Specify the text announced when the message has finished streaming. Set
+   * to an empty string to announce nothing.
+   */
+  export let completeText = "Response complete";
 
   /**
    * Set to `true` to show a typing indicator in place of the content.
@@ -90,6 +110,21 @@
     read: CheckmarkFilled,
     failed: WarningFilled,
   };
+
+  // The log around the messages announces what is added to it. A reply
+  // that streams adds text a chunk at a time, so once a message has
+  // streamed its text is kept out of that region, and a status says when
+  // it starts and when it is done.
+  let announcement = "";
+  let wasStreaming = false;
+  let streamed = false;
+
+  $: if (streaming !== wasStreaming) {
+    announcement = streaming ? startedText : streamed ? completeText : "";
+    wasStreaming = streaming;
+  }
+
+  $: if (streaming) streamed = true;
 </script>
 
 <li
@@ -97,6 +132,7 @@
   class:bx--chat-message--me={from === "me"}
   class:bx--chat-message--continued={continued}
   class:bx--chat-message--streaming={streaming}
+  class:bx--chat-message--no-caret={!caret}
   class:bx--chat-message--with-status={!!status && !typing}
   aria-busy={streaming ? "true" : undefined}
   {...$$restProps}
@@ -130,7 +166,12 @@
           <span class:bx--visually-hidden={true}>{typingText}</span>
         </div>
       {:else}
-        <div class:bx--chat-message__bubble={true}><slot /></div>
+        <div
+          class:bx--chat-message__bubble={true}
+          aria-live={streamed ? "off" : undefined}
+        >
+          <slot />
+        </div>
       {/if}
       {#if $$slots.actions && !typing}
         <span class:bx--chat-message__actions={true}
@@ -138,6 +179,9 @@
         >
       {/if}
     </div>
+    {#if announcement}
+      <span class:bx--visually-hidden={true} role="status">{announcement}</span>
+    {/if}
     {#if $$slots.attachments && !typing}
       <div class:bx--chat-message__attachments={true}>
         <slot name="attachments" />

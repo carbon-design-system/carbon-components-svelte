@@ -216,6 +216,14 @@
     "message": "div#app > div:nth-of-type(2): spans 0px to 640px"
   },
   {
+    "fixture": "chat-assistant.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--chat-message__bubble > div.bx--prose.bx--prose--compact > figure > pre",
+    "message": "div.bx--chat-message__bubble > div.bx--prose.bx--prose--compact > figure > pre: 1px outline inside 1px outline li.bx--chat-message.bx--chat-message--no-caret:nth-of-type(2) > div.bx--chat-message__main > div.bx--chat-message__line:nth-of-type(1) > div.bx--chat-message__bubble, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "combo-button.html",
     "variant": "320",
     "check": "overflow",
