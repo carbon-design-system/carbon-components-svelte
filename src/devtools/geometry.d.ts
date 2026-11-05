@@ -83,3 +83,13 @@ export function mergeLabels(
   marks: { x: number; y: number; text: string; group: string }[],
   metrics?: { charWidth?: number; padding?: number; height?: number },
 ): (string | null)[];
+
+/**
+ * The targets that fail WCAG 2.2 target size (2.5.8), each with the index
+ * of the target that crowds it most and how many pixels more room it needs.
+ */
+export function targetConflicts(
+  targets: Box[],
+  size: number,
+  layers?: unknown[],
+): { index: number; by: number; needs: number }[];

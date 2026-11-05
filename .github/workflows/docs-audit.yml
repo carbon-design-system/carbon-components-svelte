@@ -1,0 +1,76 @@
+name: Docs audit
+
+# Runs the dev tools' page checks (`audit` from `/devtools`) on every framed
+# docs example and fails on a finding that `scripts/audit-docs.baseline.json`
+# does not list: off-scale spacing, low contrast, small targets, or overflow
+# in the examples' own code. Component styles change what the examples
+# render, so `src` and `css` changes run it too.
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "src/**"
+      - "css/**"
+      - "scripts/audit-docs*"
+      - ".github/workflows/docs-audit.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  IBM_TELEMETRY_DISABLED: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    # Bump tag with @playwright/test in bun.lock.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host --init
+    timeout-minutes: 15
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      HOME: /root
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Playwright image is minimal; setup-bun extracts a zip and needs unzip.
+      - run: DEBIAN_FRONTEND=noninteractive apt-get install -y unzip || { apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y unzip; }
+
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun ci --ignore-scripts
+      - run: bun ci --ignore-scripts
+        working-directory: docs
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: css
+        with:
+          path: css/*.css
+          key: css-${{ runner.os }}-${{ hashFiles('css/**/*.scss', 'scripts/build-css.ts', 'package.json', 'bun.lock') }}
+
+      - name: Build CSS
+        if: steps.css.outputs.cache-hit != 'true'
+        run: bun run build:css
+
+      - name: Generate types
+        run: bun run build:docs --no-strict
+
+      - name: Build docs
+        run: bun run build:audit
+        working-directory: docs
+
+      - name: Audit docs examples
+        # 320px finds overflow that 1056px hides. A sweep of RTL and the g100
+        # theme found nothing more, so they run on demand, not on every PR.
+        run: bun run audit:docs --baseline --width 320,1056 --out audit-docs
+
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: docs-audit
+          path: audit-docs
