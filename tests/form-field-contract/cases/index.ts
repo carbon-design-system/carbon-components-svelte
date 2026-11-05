@@ -341,10 +341,14 @@ export const exempt: Exemptions = {
   fluid: {},
   state: {
     InputGroup: NOT_AUDITED,
+    KeyValueEditor:
+      "a group of fields; aria-invalid is not allowed on a group, so the group's messages describe the fieldset and each row's fields carry their own state, covered by tests/KeyValueEditor",
     ListBox: "a wrapper with no control of its own",
     StarRating: NOT_AUDITED,
   },
   reset: {
+    KeyValueEditor:
+      "rows are state, not one control's value; a reset puts the initial rows back, covered by tests/KeyValueEditor",
     ListBoxRequiredInput:
       "a hidden validation proxy, covered by tests/ListBox/required-invalid.test.ts",
     NumberInput: "keeps its value on reset unless allowEmpty is set",

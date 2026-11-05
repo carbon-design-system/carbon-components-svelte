@@ -13,6 +13,7 @@ import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
 import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
+import KeyValueEditor from "carbon-components-svelte/KeyValueEditor/KeyValueEditor.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
 import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
@@ -342,6 +343,18 @@ export const forms: AriaEntry[] = [
     name: "StructuredListRow",
     render: (attrs) => render(StructuredListRow, { props: attrs }),
     target: () => screen.getByRole("row"),
+  },
+  {
+    name: "KeyValueEditor",
+    render: (attrs) =>
+      render(KeyValueEditor, {
+        props: {
+          labelText: "Variables",
+          helperText: "Per environment",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "TagInput",
