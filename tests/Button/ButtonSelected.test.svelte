@@ -4,7 +4,7 @@
   import type { ComponentProps } from "svelte";
 
   export let kind: ComponentProps<Button>["kind"] = "ghost";
-  export let isSelected = false;
+  export let isSelected: boolean | undefined = undefined;
 </script>
 
 <Button

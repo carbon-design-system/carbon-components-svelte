@@ -69,6 +69,7 @@ describe("Button", () => {
   it.each([
     ["ghost", true, "true", true],
     ["ghost", false, "false", false],
+    ["ghost", undefined, null, false],
     ["primary", true, null, false],
   ] as const)(
     "reflects isSelected on a %s icon-only button (%s)",
