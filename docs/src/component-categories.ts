@@ -104,6 +104,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "NumberInput",
       "PasswordInput",
       "PinCodeInput",
+      "PromptInput",
       "Slider",
       "TagInput",
       "TextArea",
