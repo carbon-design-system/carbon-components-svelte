@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Modal, Select, SelectItem } from "carbon-components-svelte";
 
   // `?passive` renders a passive modal, which closes on an outside click.
@@ -11,8 +11,8 @@
   );
 
   let open = false;
-  let events = [];
-  let closeEvents = [];
+  let events: string[] = [];
+  let closeEvents: string[] = [];
 </script>
 
 <button type="button" data-testid="open-modal" on:click={() => (open = true)}>

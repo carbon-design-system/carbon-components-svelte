@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { MultiSelect } from "carbon-components-svelte";
 
   const items = [

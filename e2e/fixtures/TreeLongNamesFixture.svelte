@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TreeView } from "carbon-components-svelte";
 
   const nodes = [

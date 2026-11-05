@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Dropdown, LayoutDirection, Slider } from "carbon-components-svelte";
 
   const items = [

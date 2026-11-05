@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import "carbon-components-svelte/css/prose.css";
   import {
     Button,

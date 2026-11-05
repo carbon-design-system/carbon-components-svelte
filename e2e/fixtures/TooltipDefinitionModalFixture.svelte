@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Modal, TooltipDefinition } from "carbon-components-svelte";
 
   let open = false;

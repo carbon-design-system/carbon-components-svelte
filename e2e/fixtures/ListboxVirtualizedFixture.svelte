@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ComboBox, Dropdown, MultiSelect } from "carbon-components-svelte";
 
   const items = Array.from({ length: 2000 }, (_, i) => ({

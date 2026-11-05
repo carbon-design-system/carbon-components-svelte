@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
   import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 

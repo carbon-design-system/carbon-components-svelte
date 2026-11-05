@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Tag, TagSet } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
@@ -27,8 +27,8 @@
 <div data-testid="tag-focus-order">
   <button type="button">Before</button>
   <TagSet multiline>
-    <Tag tabindex="-1">{longLabel} one</Tag>
-    <Tag tabindex="-1">{longLabel} two</Tag>
+    <Tag tabindex={-1}>{longLabel} one</Tag>
+    <Tag tabindex={-1}>{longLabel} two</Tag>
     <Tag>{longLabel} three</Tag>
   </TagSet>
   <button type="button">After</button>

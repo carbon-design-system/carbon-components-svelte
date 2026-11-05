@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     AILabel,
     BigNumber,
@@ -91,8 +91,7 @@
     { value: 10, label: "Full" },
   ];
 
-  /** @type {"ltr" | "rtl"} */
-  let regionDir = "ltr";
+  let regionDir: "ltr" | "rtl" = "ltr";
 
   const command = "npm install --save-dev carbon-components-svelte;";
   // 18 lines, past the 15 a collapsed snippet shows, so it gets the expand

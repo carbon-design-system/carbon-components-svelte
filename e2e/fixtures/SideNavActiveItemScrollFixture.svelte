@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Content,
     Header,
@@ -7,9 +7,11 @@
     SideNavLink,
     SkipToContent,
   } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
   const params = new URLSearchParams(window.location.search);
-  const activeItemScrollBlock = params.get("block") ?? "nearest";
+  const activeItemScrollBlock = (params.get("block") ??
+    "nearest") as ComponentProps<SideNav>["activeItemScrollBlock"];
   const activeItem = `Item ${params.get("active") ?? 35}`;
   const items = Array.from({ length: 40 }, (_, i) => `Item ${i + 1}`);
 </script>

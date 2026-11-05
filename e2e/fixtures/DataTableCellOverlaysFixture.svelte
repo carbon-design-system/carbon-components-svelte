@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     AILabel,
     Button,
@@ -47,7 +47,7 @@
   const headers = [
     { key: "name", value: "Name" },
     { key: "control", value: "Control" },
-  ];
+  ] as const;
   // `?portal=false` passes the opt-out to the components that measure.
   const portal =
     new URLSearchParams(location.search).get("portal") === "false"

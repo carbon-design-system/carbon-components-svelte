@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     ContentSwitcher,
@@ -22,19 +22,18 @@
 
   // Rows of ghost buttons whose tooltips open toward the next button and
   // cover it. Pressed buttons log here.
-  /** @type {Array<{ id: string; portal: boolean; dir: "ltr" | "rtl"; position: "right" | "left" }>} */
-  const toolbars = [
+  const toolbars: Array<{
+    id: string;
+    portal: boolean;
+    dir: "ltr" | "rtl";
+    position: "right" | "left";
+  }> = [
     { id: "inline", portal: false, dir: "ltr", position: "right" },
     { id: "portal", portal: true, dir: "ltr", position: "right" },
     { id: "rtl", portal: false, dir: "rtl", position: "left" },
   ];
-  /** @type {Record<string, string[]>} */
-  const pressed = { inline: [], portal: [], rtl: [] };
-  /**
-   * @param {string} toolbar
-   * @param {string} name
-   */
-  const press = (toolbar, name) => {
+  const pressed: Record<string, string[]> = { inline: [], portal: [], rtl: [] };
+  const press = (toolbar: string, name: string) => {
     pressed[toolbar] = [...pressed[toolbar], name];
   };
   const actions = [

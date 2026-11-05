@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ProgressIndicator, ProgressStep } from "carbon-components-svelte";
 
   let currentIndex = 0;

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     DataTable,
@@ -15,7 +15,7 @@
     { key: "name", value: "Name" },
     { key: "port", value: "Port" },
     { key: "rule", value: "Rule" },
-  ];
+  ] as const;
 
   const rows = [
     { id: "a", name: "Load Balancer 3", port: 3000, rule: "Round robin" },
@@ -29,7 +29,7 @@
     { key: "port", value: "Port", columnAlign: "end" },
     { key: "link", value: "Link" },
     { key: "menu", empty: true, columnMenu: true },
-  ];
+  ] as const;
 </script>
 
 <!--
@@ -38,7 +38,7 @@
   stays within its element budget.
 -->
 <section data-testid="sizes">
-  {#each ["compact", "short", "medium", "tall"] as size}
+  {#each ["compact", "short", "medium", "tall"] as const as size}
     <DataTable {size} {headers} rows={rows.slice(0, 2)} />
   {/each}
 </section>

@@ -1,14 +1,12 @@
-<script>
+<script lang="ts">
   import {
     AILabel,
     DatePicker,
     DatePickerInput,
   } from "carbon-components-svelte";
 
-  /** @type {string[]} */
-  let singleCloseTriggers = [];
-  /** @type {string[]} */
-  let rangeCloseTriggers = [];
+  let singleCloseTriggers: string[] = [];
+  let rangeCloseTriggers: string[] = [];
 </script>
 
 <div data-testid="date-picker-single">

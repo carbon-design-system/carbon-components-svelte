@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     BigNumber,
     BigNumberSkeleton,
@@ -71,9 +71,10 @@
     TreeView,
     TreeViewSkeleton,
   } from "carbon-components-svelte";
+  import type { ComponentProps } from "svelte";
 
-  const sizes = ["xs", "sm", undefined, "xl"];
-  const listBoxSizes = ["xs", "sm", undefined, "lg", "xl"];
+  const sizes = ["xs", "sm", undefined, "xl"] as const;
+  const listBoxSizes = ["xs", "sm", undefined, "lg", "xl"] as const;
   const items = [{ id: "eu", text: "Europe" }];
 </script>
 
@@ -160,7 +161,7 @@
     </div>
     <div data-part="skeleton"><DropdownSkeleton hideLabel /></div>
   </div>
-  {#each ["xs", "sm", "lg", "xl"] as size}
+  {#each ["xs", "sm", "lg", "xl"] as const as size}
     <div data-testid="search-{size}">
       <div data-part="real"><Search {size} labelText="Search" /></div>
       <div data-part="skeleton"><SearchSkeleton {size} /></div>
@@ -176,7 +177,7 @@
       <div data-part="skeleton"><FluidTextAreaSkeleton {rows} /></div>
     </div>
   {/each}
-  {#each ["default", "sm"] as size}
+  {#each ["default", "sm"] as const as size}
     <div data-testid="toggle-{size}">
       <div data-part="real"><Toggle {size} labelText="Alerts" /></div>
       <div data-part="skeleton">
@@ -196,7 +197,7 @@
       <div data-part="skeleton"><ToggleSkeleton {size} /></div>
     </div>
   {/each}
-  {#each ["xs", undefined] as size}
+  {#each ["xs", undefined] as const as size}
     {@const at = size ?? "md"}
     <div data-testid="slider-{at}">
       <div data-part="real">
@@ -206,7 +207,7 @@
     </div>
     <div data-testid="range-slider-{at}">
       <div data-part="real">
-        <RangeSlider {size} labelText="Price" valueFrom={20} valueTo={60} />
+        <RangeSlider {size} labelText="Price" value={20} valueUpper={60} />
       </div>
       <div data-part="skeleton"><RangeSliderSkeleton {size} /></div>
     </div>
@@ -260,7 +261,7 @@
       <div data-part="skeleton"><TimePickerSkeleton {size} /></div>
     </div>
   {/each}
-  {#each ["xs", "sm", "md", "lg"] as size}
+  {#each ["xs", "sm", "md", "lg"] as const as size}
     <div data-testid="pagination-{size}">
       <div data-part="real">
         <Pagination {size} totalItems={120} pageSizes={[10, 20]} />
@@ -268,7 +269,7 @@
       <div data-part="skeleton"><PaginationSkeleton {size} /></div>
     </div>
   {/each}
-  {#each ["small", "field", "default"] as size}
+  {#each ["small", "field", "default"] as const as size}
     <div data-testid="file-uploader-{size}">
       <div data-part="real">
         <FileUploader
@@ -281,7 +282,7 @@
       <div data-part="skeleton"><FileUploaderSkeleton {size} /></div>
     </div>
   {/each}
-  {#each ["sm", "md"] as size}
+  {#each ["sm", "md"] as const as size}
     <div data-testid="breadcrumb-{size}" style="width: 340px">
       <div data-part="real">
         <Breadcrumb {size}>
@@ -334,7 +335,7 @@
       </div>
     </div>
   {/each}
-  {#each [{}, { dismissible: true }, { dismissible: true, size: "sm" }, { dismissible: true, size: "xl" }, { type: "container" }, { type: "container", dismissible: true }] as variant, i}
+  {#each [{}, { dismissible: true }, { dismissible: true, size: "sm" }, { dismissible: true, size: "xl" }, { type: "container" }, { type: "container", dismissible: true }] satisfies ComponentProps<Tabs>[] as variant, i}
     <div data-testid="tabs-{i}">
       <div data-part="real">
         <Tabs {...variant}>
@@ -348,7 +349,7 @@
       </div>
     </div>
   {/each}
-  {#each ["sm", undefined, "xl"] as size}
+  {#each ["sm", undefined, "xl"] as const as size}
     {@const at = size ?? "md"}
     <div data-testid="content-switcher-{at}">
       <div data-part="real">
@@ -371,7 +372,7 @@
     </div>
     <div data-part="skeleton"><TreeViewSkeleton count={1} hideLabel /></div>
   </div>
-  {#each ["default", "compact"] as size}
+  {#each ["default", "compact"] as const as size}
     <div data-testid="tree-view-{size}">
       <div data-part="real">
         <TreeView
@@ -388,7 +389,7 @@
       <div data-part="skeleton"><TreeViewSkeleton {size} /></div>
     </div>
   {/each}
-  {#each ["default", "lg", "xl"] as size}
+  {#each ["default", "lg", "xl"] as const as size}
     <div data-testid="big-number-{size}">
       <div data-part="real">
         <BigNumber {size} labelText="Revenue" value={128400} />
@@ -396,7 +397,7 @@
       <div data-part="skeleton"><BigNumberSkeleton {size} /></div>
     </div>
   {/each}
-  {#each ["default", "sm"] as size}
+  {#each ["default", "sm"] as const as size}
     <div data-testid="page-header-{size}">
       <div data-part="real">
         <PageHeader
@@ -521,7 +522,7 @@
       <div data-part="skeleton"><FluidPinCodeInputSkeleton {count} /></div>
     </div>
   {/each}
-  {#each ["xs", "sm", "default", "xl"] as size}
+  {#each ["xs", "sm", "default", "xl"] as const as size}
     <div data-testid="pin-code-input-{size}">
       <div data-part="real">
         <PinCodeInput {size} count={6} labelText="Code" />

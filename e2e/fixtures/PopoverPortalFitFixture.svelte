@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button, Modal, Popover, Toggletip } from "carbon-components-svelte";
 
   // `?dir=rtl` sets the page direction before anything mounts, since the
@@ -9,8 +9,7 @@
 
   let modalOpen = false;
   const open = { modal: false, page: false };
-  /** @type {"bottom" | "right-end" | "bottom-start"} */
-  let pageAlign = "bottom";
+  let pageAlign: "bottom" | "right-end" | "bottom-start" = "bottom";
   const text = "Replicated to two zones, backed up nightly, kept for 30 days.";
 </script>
 

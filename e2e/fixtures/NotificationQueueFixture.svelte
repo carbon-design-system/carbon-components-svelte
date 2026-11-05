@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { Button, NotificationQueue } from "carbon-components-svelte";
 
-  let queue;
+  let queue: NotificationQueue | undefined;
   let undone = false;
 </script>
 

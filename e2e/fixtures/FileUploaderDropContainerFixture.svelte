@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { FileUploaderDropContainer } from "carbon-components-svelte";
 </script>
 

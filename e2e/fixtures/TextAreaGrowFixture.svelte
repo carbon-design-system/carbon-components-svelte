@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TextArea } from "carbon-components-svelte";
 
   const sixLines = Array.from({ length: 6 }, (_, i) => `Line ${i + 1}`).join(

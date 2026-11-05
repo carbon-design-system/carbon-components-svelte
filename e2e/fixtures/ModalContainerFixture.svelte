@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Modal } from "carbon-components-svelte";
 </script>
 

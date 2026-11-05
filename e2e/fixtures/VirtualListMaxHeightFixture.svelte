@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { VirtualList } from "carbon-components-svelte";
 
   // `?rows=` and `?itemHeight=` size the list. The default is taller than

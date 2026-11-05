@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     ComposedModal,
@@ -14,7 +14,7 @@
   const passive = new URLSearchParams(location.search).has("passive");
 
   let open = false;
-  let closeEvents = [];
+  let closeEvents: string[] = [];
 </script>
 
 <button type="button" data-testid="open-modal" on:click={() => (open = true)}>

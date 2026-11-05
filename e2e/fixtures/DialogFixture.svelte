@@ -1,11 +1,10 @@
-<script>
+<script lang="ts">
   import { Dialog } from "carbon-components-svelte";
 
   let modalOpen = false;
   let modalOpenCount = 0;
   let modalCloseCount = 0;
-  /** @type {string | null} */
-  let modalCloseTrigger = null;
+  let modalCloseTrigger: string | null = null;
 
   let nonModalOpen = false;
 </script>

@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { CopyButton } from "carbon-components-svelte";
   import CheckmarkIcon from "./CheckmarkIcon.svelte";
 
-  let copiedText = null;
+  let copiedText: string | null = null;
 </script>
 
 <CopyButton

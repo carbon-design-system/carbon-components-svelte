@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Tab,
     TabContent,
@@ -34,7 +34,7 @@
 </section>
 
 <section data-testid="sizes">
-  {#each ["sm", "md", "lg", "xl"] as size}
+  {#each ["sm", "md", "lg", "xl"] as const as size}
     <Tabs {size}>
       <Tab label="One" /><Tab label="Two" /><Tab label="Off" disabled />
     </Tabs>
@@ -131,7 +131,7 @@
       {/each}
     </svelte:fragment>
   </TabsVertical>
-  {#each ["sm", "md", "lg"] as size}
+  {#each ["sm", "md", "lg"] as const as size}
     <TabsVertical {size}>
       <Tab label="A long label that wraps onto a second line" />
       <Tab label="Two" />

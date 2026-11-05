@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { AILabel, ComboBox, MultiSelect } from "carbon-components-svelte";
 
   const items = [

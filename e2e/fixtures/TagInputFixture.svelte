@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TagInput } from "carbon-components-svelte";
 
   let value = ["Svelte", "TypeScript"];

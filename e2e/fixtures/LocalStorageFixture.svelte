@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { LocalStorage, TextInput } from "carbon-components-svelte";
 
   let value = "initial";
-  let storage;
+  let storage: LocalStorage | undefined;
 </script>
 
 <LocalStorage key="e2e-local-storage-key" bind:value bind:this={storage} />

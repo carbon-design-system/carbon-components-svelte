@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ActionSet,
     Button,
@@ -19,8 +19,8 @@
     "danger",
     "danger-tertiary",
     "danger-ghost",
-  ];
-  const sizes = ["xs", "small", "field", "default", "lg", "xl"];
+  ] as const;
+  const sizes = ["xs", "small", "field", "default", "lg", "xl"] as const;
 </script>
 
 <!-- Every case is measured from its own edges, so each sits on its own row. -->

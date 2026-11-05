@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     DataTable,
@@ -11,7 +11,7 @@
   } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
-  const headers = [{ key: "name", value: "Name" }];
+  const headers = [{ key: "name", value: "Name" }] as const;
   const rows = [
     { id: "r1", name: "First" },
     { id: "r2", name: "Second" },

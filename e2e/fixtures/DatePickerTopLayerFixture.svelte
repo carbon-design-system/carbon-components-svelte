@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
   import {
     Button,
     DatePicker,
     DatePickerInput,
   } from "carbon-components-svelte";
 
-  let dialog = null;
-  let popover = null;
+  let dialog: HTMLDialogElement | null = null;
+  let popover: HTMLDivElement | null = null;
 </script>
 
 <button
