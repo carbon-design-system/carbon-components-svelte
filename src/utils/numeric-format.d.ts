@@ -6,15 +6,21 @@
 export function parse(raw: string, useLocaleNormalize?: boolean): number | null;
 
 /**
+ * The symbols and words a formatter puts around its numbers, longest first.
+ */
+export function getAffixes(formatter: Intl.NumberFormat): string[];
+
+/**
  * Parse with explicit group and decimal separators; `null` for empty or NaN.
- * For the `currency`, `percent` and `unit` styles, ignores the symbol or unit
- * text around the number and reads a percent as a ratio.
+ * For the `currency`, `percent` and `unit` styles, removes the given
+ * `affixes`, rejects any other text, and reads a percent as a ratio.
  */
 export function parseLocaleValue(
   raw: string,
   groupSeparator: string,
   decimalSeparator: string,
   style?: Intl.NumberFormatOptions["style"],
+  affixes?: string[],
 ): number | null;
 
 /** First step when empty: `stepStartValue`, else `min`, else 0. */
