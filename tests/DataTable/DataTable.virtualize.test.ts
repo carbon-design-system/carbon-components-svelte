@@ -69,6 +69,49 @@ describe("DataTable virtualize + stickyHeader", () => {
     });
     expect(getRenderedRowIds()).toContain("7");
   });
+
+  it("renders ahead of the viewport in the direction it scrolled", async () => {
+    renderVirtualSticky();
+    const table = document.querySelector("table");
+    assert(table);
+
+    table.scrollTop = 500;
+    table.dispatchEvent(new Event("scroll"));
+
+    // 500 + 240 viewport + 240 lead reaches row 20; overscan adds three.
+    await waitFor(() => {
+      expect(getRenderedRowIds()).toContain("23");
+    });
+    expect(getRenderedRowIds()).not.toContain("24");
+  });
+
+  it("ends a table taller than the browser lays out at the last row that fits", async () => {
+    // 100 rows of 1,000,000px are 100 million pixels; the fallback limit is
+    // 16 million.
+    render(DataTable, {
+      props: {
+        headers: [{ key: "name", value: "Name" }],
+        rows: makeRows(100),
+        stickyHeader: true,
+        stickyHeaderMaxHeight: 240,
+        virtualize: { itemHeight: 1_000_000, threshold: 10 },
+      },
+    });
+    const table = document.querySelector("table");
+    assert(table);
+
+    table.scrollTop = 15_999_000;
+    table.dispatchEvent(new Event("scroll"));
+
+    await waitFor(() => {
+      expect(getRenderedRowIds()).toContain("15");
+    });
+    expect(getRenderedRowIds()).not.toContain("16");
+    const spacers = [...document.querySelectorAll<HTMLElement>("tbody > tr")]
+      .filter((row) => row.style.height)
+      .map((row) => Number.parseFloat(row.style.height));
+    expect(Math.max(...spacers)).toBeLessThanOrEqual(16_000_000);
+  });
 });
 
 describe("DataTable scrollend", () => {

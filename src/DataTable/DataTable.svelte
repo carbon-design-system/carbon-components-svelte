@@ -617,16 +617,15 @@
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { getMaxScrollHeight } from "../utils/max-scroll-height.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import {
     DATA_TABLE_SIZE_ALIASES,
     normalizeSize,
   } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import {
-    DEFAULT_VIRTUAL_LIST_CONFIG,
-    virtualize as virtualizeUtil,
-  } from "../utils/virtualize.js";
+  import { DEFAULT_VIRTUAL_LIST_CONFIG } from "../utils/virtualize.js";
+  import { createVirtualizer } from "../utils/virtualizer.js";
   import Table from "./Table.svelte";
   import TableBody from "./TableBody.svelte";
   import TableContainer from "./TableContainer.svelte";
@@ -679,6 +678,29 @@
 
   let tableBodyScrollTop = 0;
   let prevExpandedRowIds = [];
+
+  // The window of rows a virtualized body renders. A browser lays out only so
+  // tall a scroll area, so a body of more rows than that ends at the last that
+  // fits.
+  const virtualizer = createVirtualizer({ maxSize: getMaxScrollHeight() });
+
+  /**
+   * @param {number} rowCount
+   * @param {number} scrollTop
+   * @param {{ itemHeight: number, overscan: number, threshold: number, maxItems?: number }} config
+   * @param {number} viewportHeight
+   */
+  function resolveVirtualWindow(rowCount, scrollTop, config, viewportHeight) {
+    virtualizer.setScroll(scrollTop);
+    return virtualizer.setOptions({
+      count: rowCount,
+      size: config.itemHeight,
+      viewportSize: viewportHeight,
+      overscan: config.overscan,
+      threshold: config.threshold,
+      maxItems: config.maxItems,
+    });
+  }
   /** @type {null | HTMLElement} */
   let tableRef = null;
   /** @type {null | (() => void)} */
@@ -1271,15 +1293,12 @@
 
   $: rowsToVirtualize = sorting ? displayedSortedRows : displayedRows;
   $: virtualData = virtualConfig
-    ? virtualizeUtil({
-        items: rowsToVirtualize,
-        scrollTop: tableBodyScrollTop,
-        itemHeight: virtualConfig.itemHeight,
-        containerHeight: calculatedContainerHeight ?? 0,
-        overscan: virtualConfig.overscan,
-        threshold: virtualConfig.threshold,
-        maxItems: virtualConfig.maxItems,
-      })
+    ? resolveVirtualWindow(
+        rowsToVirtualize.length,
+        tableBodyScrollTop,
+        virtualConfig,
+        calculatedContainerHeight ?? 0,
+      )
     : null;
 
   // Recalculate virtual data when expanded rows change
@@ -1296,7 +1315,7 @@
   }
 
   $: rowsToRender = virtualData?.isVirtualized
-    ? virtualData.visibleItems
+    ? rowsToVirtualize.slice(virtualData.startIndex, virtualData.endIndex)
     : rowsToVirtualize;
 
   /**
@@ -1756,7 +1775,7 @@
         {#if virtualData?.isVirtualized}
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
-            <tr style:height="{virtualData.offsetY}px">
+            <tr style:height="{virtualData.startOffset}px">
               <td colspan={totalColumns} class:bx--table-cell={true}></td>
             </tr>
           {/if}
@@ -2042,10 +2061,9 @@
           {/each}
 
           <!-- Spacer row for remaining height -->
-          {#if virtualConfig && virtualData.endIndex < rowsToVirtualize.length}
+          {#if virtualConfig && virtualData.totalSize > virtualData.endOffset}
             {@const remainingHeight =
-              virtualData.totalHeight -
-              virtualData.endIndex * virtualConfig.itemHeight}
+              virtualData.totalSize - virtualData.endOffset}
             <tr style:height="{remainingHeight}px">
               <td colspan={totalColumns} class:bx--table-cell={true}></td>
             </tr>
