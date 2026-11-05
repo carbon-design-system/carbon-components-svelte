@@ -127,6 +127,21 @@ export type VirtualListStateResult<
   itemsToRender: Item[];
 };
 
+/**
+ * The windowing configuration for a listbox menu, or `null` when it is not
+ * windowed.
+ */
+export function resolveVirtualConfig(options: {
+  shouldVirtualize: boolean;
+  virtualize: boolean | Partial<VirtualListConfig> | undefined;
+  defaults?: Partial<VirtualListConfig>;
+  /**
+   * Height to assume for options nothing has measured yet, in place of the
+   * config's `itemHeight`.
+   */
+  estimate?: number;
+}): (VirtualListConfig & Record<string, unknown>) | null;
+
 /** Resolve config, virtualize result, and items to render for a listbox menu. */
 export function virtualListState<
   Item extends Record<string, unknown> = Record<string, unknown>,
