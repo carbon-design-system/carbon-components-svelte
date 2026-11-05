@@ -192,6 +192,7 @@ export { default as ProgressBar } from "./ProgressBar/ProgressBar.svelte";
 export { default as ProgressIndicator } from "./ProgressIndicator/ProgressIndicator.svelte";
 export { default as ProgressIndicatorSkeleton } from "./ProgressIndicator/ProgressIndicatorSkeleton.svelte";
 export { default as ProgressStep } from "./ProgressIndicator/ProgressStep.svelte";
+export { default as PromptInput } from "./PromptInput/PromptInput.svelte";
 export { default as Prose } from "./Prose/Prose.svelte";
 export { default as QRCode } from "./QRCode/QRCode.svelte";
 export { default as RadioButton } from "./RadioButton/RadioButton.svelte";
