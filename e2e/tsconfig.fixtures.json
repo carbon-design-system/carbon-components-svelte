@@ -1,0 +1,8 @@
+{
+  // `check:fixtures` reads the fixtures, most of them plain JS, for props
+  // and events their components don't have. Not `strict`, which adds only
+  // noise in JS.
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "allowJs": true, "checkJs": true, "strict": false },
+  "include": ["fixtures/**/*.svelte"]
+}

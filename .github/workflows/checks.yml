@@ -58,6 +58,9 @@ jobs:
 
       - run: bun run test:src-svelte
 
+      # Needs the declarations `build:docs` writes.
+      - run: bun run check:fixtures
+
       - run: bun run test:package-exports
 
       - run: bun run check:package

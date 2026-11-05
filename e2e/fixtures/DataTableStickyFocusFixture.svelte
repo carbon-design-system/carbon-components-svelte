@@ -41,6 +41,6 @@
         {cell.value}
       {/if}
     </svelte:fragment>
-    <svelte:fragment slot="expanded-row" let:row>{row.service}</svelte:fragment>
+    <svelte:fragment slot="expandedRow" let:row>{row.service}</svelte:fragment>
   </DataTable>
 </div>

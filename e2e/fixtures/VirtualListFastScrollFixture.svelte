@@ -62,7 +62,7 @@
 
 <div class="dropdown">
   <Dropdown
-    titleText="Fast scroll dropdown"
+    labelText="Fast scroll dropdown"
     {items}
     portalMenu={false}
     virtualize={{ optimizeFastScroll: true }}

@@ -62,13 +62,13 @@
   <Toggle labelText="Toggle" />
   <TextInput labelText="Text" />
   <TextArea labelText="Area" />
-  <NumberInput label="Number" />
+  <NumberInput labelText="Number" />
   <Search />
   <Select labelText="Select"><SelectItem value="a" /></Select>
-  <Dropdown titleText="Dropdown" {items} selectedId="a" />
-  <ComboBox titleText="Combo" {items} />
-  <MultiSelect titleText="Multi" {items} />
-  <MultiSelect titleText="Multi filterable" filterable {items} />
+  <Dropdown labelText="Dropdown" {items} selectedId="a" />
+  <ComboBox labelText="Combo" {items} />
+  <MultiSelect labelText="Multi" {items} />
+  <MultiSelect labelText="Multi filterable" filterable {items} />
   <DatePicker><DatePickerInput labelText="Date" /></DatePicker>
   <TimePicker labelText="Time" />
   <Slider labelText="Slider" />
@@ -94,15 +94,15 @@
   <FluidForm>
     <TextInput labelText="Fluid text" />
     <Select labelText="Fluid select"><SelectItem value="a" /></Select>
-    <Dropdown titleText="Fluid dropdown" {items} selectedId="a" />
-    <ComboBox titleText="Fluid combo" {items} />
+    <Dropdown labelText="Fluid dropdown" {items} selectedId="a" />
+    <ComboBox labelText="Fluid combo" {items} />
     <DatePicker datePickerType="single"
       ><DatePickerInput labelText="Fluid date" /></DatePicker
     >
     <TimePicker labelText="Fluid time" />
     <PinCodeInput labelText="Fluid pin" />
   </FluidForm>
-  <SideNav fixed expanded isOpen>
+  <SideNav fixed isOpen>
     <SideNavItems>
       <SideNavLink text="Side link" href="#s" />
       <SideNavMenu text="Side menu"
