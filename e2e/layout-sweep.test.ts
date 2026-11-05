@@ -25,6 +25,8 @@ const SKIP_PAGES: Record<string, string> = {
   "host.html": "the shared host page, with no fixture of its own",
   "index.html": "a list of links to the fixtures",
   "layout-checks.html": "the layout helpers' own failing cases",
+  "positioning-stress.html":
+    "holds 200 tooltips open on purpose, wherever the buttons scroll to",
 };
 
 type Check = Parameters<typeof findLayoutProblems>[1];
