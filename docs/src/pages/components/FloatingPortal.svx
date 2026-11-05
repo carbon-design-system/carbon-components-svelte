@@ -92,6 +92,47 @@ alignment.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalIntrinsicAlign" />
 
+### Fitting the alignment
+
+A box placed above or below the anchor with `intrinsicWidth` can run past the
+window along the anchor's edge. Set `flipAlign` to `true` to take the other
+edge when it does: `start` becomes `end` and the other way round, and `center`
+takes the edge with room. Set it to `"any"` to let an edge also fall back to
+`center`. Set `padding` to keep that many pixels between the box and the
+window's edges. The slot's `align` is the alignment it settled on, and
+`data-floating-intrinsic-align` follows it.
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalFlipAlign" />
+
+### Opening across the anchor
+
+Set `flipAxis` to `true` for a box that has no room on either side of
+`direction`. A `left` or `right` box opens below the anchor, or above it when
+only that fits; a `top` or `bottom` box opens to the right, or the left. The
+slot's `direction` is the side it settled on. [Popover](/components/Popover)
+uses this in a portal in a narrow window.
+
+### Sliding
+
+Set `shift` to a number of pixels to read how far the content would have to
+slide along the anchor's edge to stay that far inside the window. The slot's
+`shift` is that distance, `0` when the content fits. The portal itself stays
+on the anchor, so a caret keeps pointing at it: apply the slide to the
+content, as the portalled tooltips do.
+
+```svelte
+<FloatingPortal {anchor} {open} direction="top" intrinsicWidth shift={8} let:shift>
+  <div style:position="relative" style:left="{shift}px">Content</div>
+</FloatingPortal>
+```
+
+### Start and end
+
+Above and below the anchor, `intrinsicAlign` names the left and the right by
+default, as the other physical props do. Set `logical` to read `start` and
+`end` as the anchor's inline sides instead, so they swap under `dir="rtl"`.
+Beside the anchor they are the top and the bottom, which RTL leaves alone.
+
 ### Gaps and offsets
 
 Use these props to fine-tune spacing and nudge side-positioned content:
@@ -143,14 +184,28 @@ document.body. See the
 [Portal custom target example](/components/Portal#custom-target) for typical use
 cases.
 
+### Fullscreen
+
+An element in the fullscreen element's subtree is the only part of the page
+that renders, so floating content portalled to `<body>` would be hidden. When
+the anchor is inside the fullscreen element, the content mounts into it.
+Without that, a [Menu](/components/Menu) opened from a fullscreen video player
+would not show.
+
+### Transformed targets
+
+A box with `position: fixed` inside a `transform`, a `filter` or contained
+ancestor is placed from that ancestor's edge, not the window's. Pass such a
+box as `target` and the portal measures where it lands and corrects for it.
+
 ### Native dialog
 
 When the anchor is inside a [Dialog](/components/Dialog) opened as a modal, or
 any other
 [native dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog)
 element, floating content is automatically mounted into that dialog. The
-default target is `anchor.closest("dialog,[popover]")`, which resolves to the
-dialog when the anchor is nested under it. This keeps the content in the
+default target is the anchor's nearest `<dialog>`, `[popover]` or fullscreen
+element, which resolves to the dialog when the anchor is nested under it. This keeps the content in the
 dialog top layer so it stays visible and interactive.
 
 Components inside the dialog must still enable portalMenu for its menu or content
@@ -168,6 +223,61 @@ same default target applies: floating content mounts into that popover element s
 it participates in the popover top layer.
 
 <FileSource src="/framed/FloatingPortal/FloatingPortalPopover" />
+
+## Anchors that are not elements
+
+`anchor` is anything that answers `getBoundingClientRect()`, so a pointer, a
+text range or the caret of a field places a box as an element does. Give an
+anchor that lives in a scrolling box a `contextElement`, and a scroll in that
+box moves the content.
+
+| Anchor | Use |
+| ------ | --- |
+| `pointAnchor(x, y)` | A point in window coordinates, such as a context menu's pointer. `move(x, y)` follows a drag. |
+| `rangeAnchor(range)` | A selection or a word. It reads the range's rect each time, so it follows text that reflows. |
+| `caretAnchor(field, getIndex)` | A character index of an `<input>` or a `<textarea>`, by default the caret. Call `destroy()` when done. |
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalVirtualAnchor" />
+
+### Following a caret
+
+A field gives no geometry for its text, so `caretAnchor` lays the same text
+out in a hidden copy that shares the field's text styles and reads where a
+marker at the index falls. Hold `getIndex` at the character that opened the
+box, and it stays put while the query grows.
+
+<FileSource src="/framed/FloatingPortal/FloatingPortalCaret" />
+
+## Positioning engine
+
+`FloatingPortal` is built on two functions you can call yourself.
+
+`computePosition(anchorRect, floatingSize, options)` is the placement math:
+pure arithmetic on rects, with no DOM reads and no writes. It takes the
+placement (`bottom`, `top-start`, `left-end`, or `start` and `end` for the
+inline sides, which swap with `rtl`), an `offset`, a `boundary`, and what to
+do at its edge: `flip` to the other side or edge, `shift` along the anchor's
+edge, `size` for the room left, and `arrow` for where a caret goes. It returns
+`x`, `y`, the `side` and `align` it settled on, and the distance it slid.
+
+`autoUpdate(anchor, floating, update, options)` runs `update` now and again
+whenever the anchor, the box or what is around them moves: a scroll in any
+box around the anchor or in the window, a resize, an ancestor's transition or
+animation (a frame at a time while it runs), a change to the anchor's `style`
+or `class`, and a change in size of either box. Every overlay shares one
+listener or observer for each, so a page of open overlays costs the same as
+one. `update` may return a function; every overlay's `update` of a frame runs
+before any of those, so many open overlays force one layout between them.
+
+<FileSource src="/framed/FloatingPortal/ComputePositionAutoUpdate" />
+
+| Do | Why |
+| -- | --- |
+| Read in `update` and write in the function it returns | Every open overlay reads before any writes, so layout happens once a frame, not once per overlay. |
+| Pass a `boundary` | Without one, nothing flips or shifts: the function has no window to fit. |
+| Pass `rtl` and use `start` and `end` | The same placement then reads right in both directions. |
+| Call the function `autoUpdate` returns when the overlay closes | It removes the listeners the overlay held. |
+| Give a virtual anchor a `contextElement` | A scroll in its box then moves the overlay. |
 
 ## Positioning function
 
