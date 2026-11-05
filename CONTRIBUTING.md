@@ -783,7 +783,7 @@ The shortest loop, in order:
 
 | Step | Command | Cost |
 | --- | --- | --- |
-| Format and lint what you touched | `bun fmt <paths> && bun lint --fix <paths>` | Under a second |
+| Format and lint what you touched | `bun fmt <paths> && bun lint --fix <paths> && bun lint:svelte --fix <paths>` | Under a second |
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
 | Rerun only the unit tests that just failed | `bun run test:failed` | Reads the last run's results. Use it to tell a real failure from one that only fails under load |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
@@ -792,20 +792,24 @@ The shortest loop, in order:
 
 Don't run `bun run test` or `bun run test:e2e` to check a change. CI runs the same selection on the PR, and master runs everything after a merge.
 
-`bun lint` needs a [canary build](https://bun.com/docs/installation#canary-builds) of Bun until it ships in a stable release: `bun upgrade --canary`. `bun fmt` formats JavaScript, TypeScript, JSON, HTML and Svelte; Sass, Markdown and YAML are left as written. `bun lint` lints JavaScript and TypeScript. It skips `.svelte` files, which it can't parse without ESLint, so only `bun fmt` and the Svelte compiler check them. The options for both live in [`bunfig.toml`](bunfig.toml).
+`bun lint` needs a [canary build](https://bun.com/docs/installation#canary-builds) of Bun until it ships in a stable release: `bun upgrade --canary`. `bun fmt` formats JavaScript, TypeScript, JSON, HTML and Svelte; Sass, Markdown and YAML are left as written. `bun lint` lints JavaScript and TypeScript, and skips `.svelte` files, which it can't parse without ESLint. [svelte-lint](https://github.com/metonym/svelte-lint) (`bun lint:svelte`) lints those: it hands their scripts and markup expressions to `bun lint`, with the same rules, and checks their markup with its own rules and the Svelte compiler's a11y warnings. The options for all three live in [`bunfig.toml`](bunfig.toml): `[lint]` for the scripts and `[svelte-lint]` for the markup.
 
 ```sh
 # Specific paths: whatever is on disk now
-bun fmt src/DataTable && bun lint --fix src/DataTable
+bun fmt src/DataTable && bun lint --fix src/DataTable && bun lint:svelte --fix src/DataTable
 
 # Staged files only (what a commit would include): also `bun run lint:changed`
-bun fmt --staged && bun lint --staged --fix
+bun fmt --staged && bun lint --staged --fix && bun lint:svelte --staged --fix
 
 # Files that differ from master, committed or not
-bun fmt --changed && bun lint --changed
+bun fmt --changed && bun lint --changed && bun lint:svelte --changed
 ```
 
+`bun lint:svelte --watch` lints the components again each time one is saved, in tens of milliseconds, with the template and a11y problems first and `bun lint`'s after.
+
 `bun run lint:all` formats and lints the entire repository. Reserve it for broad sweeps.
+
+In a component, the scripts' rules know how Svelte works. `items = items` in a legacy component's `<script>`, a top-level `$:`, `export let size = undefined` and `let { a } = $props()` aren't reported, but the same code anywhere else is. A `// eslint-disable-next-line` comment works in a `<script>` as it does in a `.ts` file, and `<!-- svelte-ignore a11y_... -->` silences a compiler warning.
 
 There is no `lint` script. `bun lint` is the built-in linter, and a `lint` script that called it would run itself under a stable Bun, which has no linter.
 
@@ -832,7 +836,7 @@ Types and E2E:
 
 Three process traps:
 
-- Read the exit code, not the tail. A tail can hide the errors above it. Gate commits on the checks themselves: `bun fmt --check <paths> && bun lint <paths> && bun run test:types && git commit ...`.
+- Read the exit code, not the tail. A tail can hide the errors above it. Gate commits on the checks themselves: `bun fmt --check <paths> && bun lint <paths> && bun lint:svelte <paths> && bun run test:types && git commit ...`.
 - `bun test:types` reporting that a new prop or event "does not exist" usually means the generated `.d.ts` is stale, not that the code is wrong. Run `bun build:docs` first. This bites after a rebase as well as after an API change.
 - Before calling a failure flaky, rerun it once and compare. The same assertion failing with the same value is deterministic, even if the file passes alone; run it together with the file before it to reproduce the order.
 
@@ -1469,7 +1473,7 @@ The `changes` job picks the tests once, from the same graph as `bun run test:cha
 
 | Job | Runs on a PR |
 | --- | --- |
-| `static-checks` | Always: `bun fmt --check`, `bun lint`, `build:docs`, `test:src-types`, `test:src-svelte`, `test:package-exports`, `check:package`, `thumbnails catalog` and `bivium check` |
+| `static-checks` | Always: `bun fmt --check`, `bun lint`, `lint:svelte`, `build:docs`, `test:src-types`, `test:src-svelte`, `test:package-exports`, `check:package`, `thumbnails catalog` and `bivium check` |
 | `test` (2 shards) | The selected unit tests, skipped when there are none and types didn't change. `test:types` runs on the first shard |
 | `test-svelte-compat` (Svelte 3 and 4, 2 shards each) | The same selection, in each harness |
 | `test-e2e` (Chromium, 1 shard for up to 20 files, else 2) | The selected E2E tests |
