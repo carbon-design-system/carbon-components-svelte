@@ -306,6 +306,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ComboButton
+  command-palette:
+    name: Command palette
+    description: A dialog that finds and runs commands, routes and settings as people type, with keyboard shortcuts shown beside each command.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/command-palette.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CommandPalette
   composed-modal:
     name: Composed modal
     status: stable

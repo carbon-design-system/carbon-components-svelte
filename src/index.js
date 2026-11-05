@@ -46,6 +46,7 @@ export { default as ComboBox } from "./ComboBox/ComboBox.svelte";
 export { default as ComboBoxSkeleton } from "./ComboBox/ComboBoxSkeleton.svelte";
 export { default as FluidComboBoxSkeleton } from "./ComboBox/FluidComboBoxSkeleton.svelte";
 export { default as ComboButton } from "./ComboButton/ComboButton.svelte";
+export { default as CommandPalette } from "./CommandPalette/CommandPalette.svelte";
 export { default as ComposedModal } from "./ComposedModal/ComposedModal.svelte";
 export { default as ModalBody } from "./ComposedModal/ModalBody.svelte";
 export { default as ModalFooter } from "./ComposedModal/ModalFooter.svelte";

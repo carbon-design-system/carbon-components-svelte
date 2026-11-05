@@ -12,6 +12,7 @@
     Checkbox,
     ClickableTile,
     ComboBox,
+    CommandPalette,
     ContentSwitcher,
     CopyInput,
     DatePicker,
@@ -92,6 +93,7 @@
 
   let menuAnchor = null;
   let sidePanelOpen = false;
+  let commandPaletteOpen = false;
 
   const regions = [
     { id: "us-east", text: "US East" },
@@ -539,4 +541,25 @@
       </li>
     {/each}
   </ul>
+
+  <Button
+    data-testid="command-palette-open"
+    on:click={() => (commandPaletteOpen = true)}
+  >
+    Open command palette
+  </Button>
+  <CommandPalette
+    bind:open={commandPaletteOpen}
+    items={[
+      {
+        id: "deploy",
+        text: "Deploy",
+        description: "Latest commit",
+        icon: Add,
+        shortcut: "mod+d",
+      },
+      { id: "restart", text: "Restart", shortcut: "mod+r" },
+      { id: "delete", text: "Delete", disabled: true },
+    ]}
+  />
 </main>

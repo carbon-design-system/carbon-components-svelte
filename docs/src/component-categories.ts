@@ -74,7 +74,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Search",
-    components: ["Search", "SearchMenu"],
+    components: ["Search", "SearchMenu", "CommandPalette"],
   },
   {
     label: "Content",
