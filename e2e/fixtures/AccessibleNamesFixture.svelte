@@ -196,8 +196,8 @@
 />
 <RangeSlider
   labelText="Price"
-  valueFrom={10}
-  valueTo={90}
+  value={10}
+  valueUpper={90}
   min={0}
   max={100}
   aria-labelledby="range-label"
@@ -206,7 +206,7 @@
 
 <h2>Tiles</h2>
 <p id="tile-help">Billed every month</p>
-<TileGroup legend="Plan" name="plan">
+<TileGroup legendText="Plan" name="plan">
   <RadioTile value="monthly" aria-describedby="tile-help">Monthly</RadioTile>
   <RadioTile value="yearly">Yearly</RadioTile>
 </TileGroup>

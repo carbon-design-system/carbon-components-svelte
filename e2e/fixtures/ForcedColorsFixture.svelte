@@ -77,6 +77,7 @@
     TagSet,
     TextArea,
     TextInput,
+    ThemeZone,
     TimePicker,
     ToastNotification,
     Toggle,
@@ -285,10 +286,10 @@
   </svg>
 
   <ShapeIndicator kind="medium" label="Medium" />
-  <div theme="g100">
+  <ThemeZone theme="g100">
     <ShapeIndicator kind="low" label="Low" />
     <ShapeIndicator kind="cautious" label="Cautious" />
-  </div>
+  </ThemeZone>
 
   <Checkbox labelText="Checkbox" />
   <Checkbox labelText="Disabled checkbox" disabled />

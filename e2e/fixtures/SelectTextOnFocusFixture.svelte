@@ -69,7 +69,7 @@
   />
   <NumberInput
     data-testid="number-input"
-    label="Number input"
+    labelText="Number input"
     selectTextOnFocus
     value={123456}
   />
@@ -93,7 +93,6 @@
     labelText="Search menu"
     selectTextOnFocus
     value="abcdef"
-    items={["abcdef"]}
   />
   <Toolbar>
     <ToolbarContent>
@@ -122,7 +121,7 @@
   />
   <ComboBox
     data-testid="combo-box"
-    titleText="Combo box"
+    labelText="Combo box"
     selectTextOnFocus
     items={[
       { id: "0", text: "Slack" },
@@ -132,7 +131,7 @@
   />
   <MultiSelect
     data-testid="multi-select"
-    titleText="Multi select"
+    labelText="Multi select"
     filterable
     selectTextOnFocus
     items={[
