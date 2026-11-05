@@ -7,6 +7,9 @@
 
   export let typing = false;
   export let streaming = false;
+  export let caret = true;
+  export let startedText: string | undefined = undefined;
+  export let completeText: string | undefined = undefined;
   export let status:
     "sending" | "sent" | "delivered" | "read" | "failed" | undefined =
     undefined;
@@ -24,6 +27,9 @@
     showAuthor
     continued
     {streaming}
+    {caret}
+    {...startedText === undefined ? {} : { startedText }}
+    {...completeText === undefined ? {} : { completeText }}
     data-testid="second"
   >
     <span slot="avatar" data-testid="avatar-2">SC</span>

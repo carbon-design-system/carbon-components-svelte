@@ -33,6 +33,23 @@
     list-style: none;
   }
 
+  // The button back to the latest message sits at the end of the log in a
+  // box with no height, stuck to the bottom edge, so it floats over the
+  // messages without taking any space from them.
+  .#{$prefix}--chat-log__jump {
+    position: sticky;
+    z-index: 1;
+    display: flex;
+    height: 0;
+    flex: none;
+    justify-content: center;
+    inset-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--chat-log__jump > .#{$prefix}--btn {
+    transform: translateY(-100%);
+  }
+
   .#{$prefix}--chat-message {
     display: flex;
     align-items: flex-start;
@@ -139,7 +156,10 @@
 
   // A blinking caret while a reply is still arriving, spanning the text
   // from its ascenders to its descenders, in a quieter color than the text.
-  .#{$prefix}--chat-message--streaming .#{$prefix}--chat-message__bubble::after {
+  // Content that draws its own, such as Markdown at the end of its last
+  // block, turns it off with `caret={false}`.
+  .#{$prefix}--chat-message--streaming:not(.#{$prefix}--chat-message--no-caret)
+    .#{$prefix}--chat-message__bubble::after {
     display: inline-block;
     width: 0.5em;
     height: 1em;
