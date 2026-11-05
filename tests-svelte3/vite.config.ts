@@ -40,6 +40,9 @@ export default defineConfig({
       "../tests/syntax/**",
     ],
     setupFiles: ["./setup-tests.ts"],
+    // A cold CI runner can stall the first render of a large component, such
+    // as MultiSelect, past the 5 s default while other workers transform.
+    testTimeout: 15_000,
     // `@testing-library/*` resolve from the root `node_modules`, outside this
     // harness. On Node 22 the `vmThreads` loader can't load those externally
     // (`@testing-library/dom` ships ESM in a CommonJS package), so let Vite
