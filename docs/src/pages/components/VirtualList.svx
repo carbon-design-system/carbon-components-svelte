@@ -77,6 +77,70 @@ Set `measured` to `true` when rows vary in height, such as wrapping text. Each r
 | Set `itemHeight` close to the typical row height | The scrollbar is sized from estimates until rows are measured; a close guess keeps it from jumping. |
 | Pass `getKey` when items are reordered or removed | Rows are keyed by position by default, which is only stable when items are appended. Measured heights are always stored by position. |
 
+## Scroll position
+
+### Scroll to an item
+
+Call `scrollToIndex(index, { align })` on the bound list. `align` is `"start"` (the default), `"center"` or `"end"`, to place the item at that edge of the viewport, or `"nearest"` to move only as far as it takes to bring it fully into view, and not at all when it already is. The method returns the position it wrote, or `null` when the item was already there.
+
+With `measured`, the position is corrected as items above the item are measured, until the reader scrolls.
+
+<FileSource src="/framed/VirtualList/VirtualListScrollToIndex" />
+
+### Follow the end
+
+Set `follow="end"` for a log or a conversation. The list starts at its end and holds it there as items arrive or resize. Scrolling away with the wheel, a touch or a key lets go, so new items do not move a reader who is looking back. Scrolling back to the end, or calling `scrollToEnd()`, takes hold again. Bind `atEnd` to show a "Jump to latest" control while the reader is behind.
+
+<FileSource src="/framed/VirtualList/VirtualListFollow" />
+
+| Do | Why |
+| --- | --- |
+| Give the list a name with `aria-label` when it is a log | The list is the scroller, so the name goes on it. |
+| Announce new items from a separate status region, not the list | A windowed list changes as it scrolls, so a live region on it would read every row that scrolls in. |
+
+### Start at a position
+
+Set `initialScrollTop` to render the first window for a position other than the top. Server output then holds the rows the reader will see, and the list scrolls there on mount without a jump.
+
+## Items added before the first
+
+When `items` gains items at the front, the list moves by what was added, so the item the reader was looking at stays where it was. This holds for fixed and measured heights. It applies once the reader has scrolled: at the very top the list stays put, so the new items come into view, as the browser does.
+
+Items are matched by `getKey`, or by identity when the list holds objects. A list of strings or numbers cannot be told apart that way, so give it a `getKey` that reads the item.
+
+<FileSource src="/framed/VirtualList/VirtualListOlder" />
+
+| Do | Why |
+| --- | --- |
+| Pass `getKey` that returns a stable id | Rows keep their elements when items go in before them, and the list can tell a prepend from a replacement. |
+| Replace `items` when a filter or a sort changes the list | Only the same items with new ones in front count as a prepend. Anything else forgets measured heights. |
+
+## Sticky items
+
+Set `stickyIndices` to the indices of items, such as section headers, that pin to the top of the viewport once scrolled past. The next one replaces it. Give the item an opaque background, since rows scroll under it.
+
+<FileSource src="/framed/VirtualList/VirtualListSticky" />
+
+## Keep an item rendered
+
+An item that scrolls out of the window unmounts, and takes focus with it. List the indices to hold in `keepMounted`, such as the item that holds focus or is the target of `aria-activedescendant`. A kept item renders apart from the window, so its element is the same one wherever the window is.
+
+The example is a listbox with one tab stop. It names its active option with `aria-activedescendant`, and keeps that option in the page so the name always points at something.
+
+<FileSource src="/framed/VirtualList/VirtualListKeepMounted" />
+
+| Key | Action |
+| --- | --- |
+| Arrow Down, Arrow Up | Move the active option by one, scrolling it into view. |
+| Page Down, Page Up | Move it by a screen. |
+| Home, End | Move it to the first or last option. |
+
+`keepMounted` and `stickyIndices` have no effect with `spacerTag`, since there is nowhere to place an item that is not next to its neighbors.
+
+## Lists taller than a browser scrolls
+
+A browser scrolls only so far: about 17.9 million pixels in Firefox and 33.5 million in Chrome and Safari. A longer list ends at the last item that fits, so page or filter a list that large.
+
 ## Windowing threshold
 
 Every list is windowed by default. Set `threshold` to render lists shorter than it in full, which keeps every row in the DOM for find-in-page.
