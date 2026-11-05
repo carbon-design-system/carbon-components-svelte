@@ -268,6 +268,16 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
       - run: bun ci
 
+      # The css tests cache each compiled theme entry (tests/css/compile.ts),
+      # which took a third of this suite's time compiled cold. One cache per
+      # shard, since each compiles different entries. bun.lock is in the key
+      # because a sass-embedded bump changes the output, which the test cache
+      # doesn't key on.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/ccs-css-tests
+          key: css-tests-${{ matrix.shard }}-${{ hashFiles('css/**/*.scss', 'bun.lock') }}
+
       # static-checks fails on sveld diagnostics; this job only needs types.
       - name: Generate types
         run: bun run build:docs --no-strict
