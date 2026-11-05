@@ -30,10 +30,10 @@
         "lightningcss": "^1.33.0",
         "ostia": "^0.2.12",
         "sass-embedded": "^1.107.1",
-        "sveld": "^0.40.2",
+        "sveld": "^0.40.3",
         "svelte": "^5.57.3",
         "svelte-lint": "^0.1.0",
-        "svelte-typecheck": "^0.1.8",
+        "svelte-typecheck": "^0.1.9",
         "typescript": "^6.0.3",
         "vite": "^8.3.5",
         "vitest": "^5.1.0",
@@ -449,13 +449,13 @@
 
     "supports-color": ["supports-color@8.1.1", "", { "dependencies": { "has-flag": "^4.0.0" } }, "sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q=="],
 
-    "sveld": ["sveld@0.40.2", "", { "bin": { "sveld": "cli.js" } }, "sha512-nirHtmJ3gKAt3M8wYhf0gL/7fD5KdvqgUiY0R0GGOSsCV1GQ25cB6scuNHNlyZrrd4SqWpwRxPLBFah7kG2OoQ=="],
+    "sveld": ["sveld@0.40.3", "", { "bin": { "sveld": "cli.js" } }, "sha512-6BVA/AYbcZJHe2XYQf8vF1Efn+RArYdzzRrZkeejEBGjikh6d+m9jZeBMH6LhGQk98F1OAaTuN8SgFRhyziZLA=="],
 
     "svelte": ["svelte@5.57.3", "", { "dependencies": { "@jridgewell/remapping": "^2.3.5", "@jridgewell/sourcemap-codec": "^1.6.0", "@sveltejs/acorn-typescript": "^1.0.13", "@types/estree": "^1.0.9", "acorn": "^8.18.0", "aria-query": "5.3.1", "axobject-query": "^4.1.0", "clsx": "^2.1.1", "devalue": "^5.9.2", "esm-env": "^1.2.1", "esrap": "^2.3.6", "is-reference": "^3.0.3", "locate-character": "^3.0.0", "magic-string": "^0.30.11", "zimmerframe": "^1.1.2" } }, "sha512-5mAftM3SoDV9X0zdF386F9p2pv8iKOwi/KfBS1XnBAkVCKFzVOLHUoa8iGWAt4buoicLmyWVRpuuD5wplXOQsg=="],
 
     "svelte-lint": ["svelte-lint@0.1.0", "", { "peerDependencies": { "svelte": ">=3" }, "optionalPeers": ["svelte"], "bin": { "svelte-lint": "cli.js" } }, "sha512-60sloU68hPvX5sjlrSsRmS2TBGxNLB6nJQa0HDyiqjn+0vh1prgpEGI24anG23HC0gVnE1QP+SXHb4qz6KcSjA=="],
 
-    "svelte-typecheck": ["svelte-typecheck@0.1.8", "", { "bin": { "svelte-typecheck": "cli.js" } }, "sha512-aZyfAmpUwosh6KRACOXCRFtitqzlbqhmhJ1o46fiVymB3F56bmnKv2RetauSuyQcdNyerDKtX0RD5oiB33BelQ=="],
+    "svelte-typecheck": ["svelte-typecheck@0.1.9", "", { "bin": { "svelte-typecheck": "cli.js" } }, "sha512-gjrO+fsP+sCxRE2CLIRcY4LGbpoYCpUc2Exv2829xkQM+muIB4nxMOzbcMgdSQMgY8tXRdLzkWewVexnHRxY4g=="],
 
     "sync-child-process": ["sync-child-process@1.0.2", "", { "dependencies": { "sync-message-port": "^1.0.0" } }, "sha512-8lD+t2KrrScJ/7KXCSyfhT3/hRq78rC0wBFqNJXv3mZyn6hW2ypM05JmlSvtqRbeq6jqA94oHbxAr2vYsJ8vDA=="],
 
