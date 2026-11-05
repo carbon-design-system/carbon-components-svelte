@@ -125,6 +125,7 @@ export { default as Row } from "./Grid/Row.svelte";
 export { default as Heading } from "./Heading/Heading.svelte";
 export { default as Section } from "./Heading/Section.svelte";
 export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
+export { default as ImageCropper } from "./ImageCropper/ImageCropper.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineEdit } from "./InlineEdit/InlineEdit.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
@@ -333,6 +334,7 @@ export { formReset } from "./utils/form-reset.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
+export { cropToBlob, ImageCropError } from "./utils/image-crop-export.js";
 export { getInitials } from "./utils/initials.js";
 export {
   formatShortcut,

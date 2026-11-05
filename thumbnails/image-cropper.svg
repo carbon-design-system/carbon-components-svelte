@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>image-cropper</title>
+    <g id="image-cropper" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="image" fill="var(--cds-layer-accent-active, #a8a8a8)" x="68" y="36" width="184" height="108"></rect>
+        <rect id="frame" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-text-secondary, #525252)" stroke-width="2" x="105" y="54" width="110" height="72"></rect>
+        <rect id="grid-v1" fill="var(--cds-border-subtle, #e0e0e0)" x="141" y="55" width="1" height="70"></rect>
+        <rect id="grid-v2" fill="var(--cds-border-subtle, #e0e0e0)" x="178" y="55" width="1" height="70"></rect>
+        <rect id="grid-h1" fill="var(--cds-border-subtle, #e0e0e0)" x="106" y="78" width="108" height="1"></rect>
+        <rect id="grid-h2" fill="var(--cds-border-subtle, #e0e0e0)" x="106" y="102" width="108" height="1"></rect>
+        <rect id="handle-nw" fill="var(--cds-text-secondary, #525252)" x="99" y="48" width="12" height="12"></rect>
+        <rect id="handle-ne" fill="var(--cds-text-secondary, #525252)" x="209" y="48" width="12" height="12"></rect>
+        <rect id="handle-sw" fill="var(--cds-text-secondary, #525252)" x="99" y="120" width="12" height="12"></rect>
+        <rect id="handle-se" fill="var(--cds-text-secondary, #525252)" x="209" y="120" width="12" height="12"></rect>
+    </g>
+</svg>

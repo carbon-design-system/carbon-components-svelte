@@ -1,0 +1,237 @@
+---
+components: ["ImageCropper"]
+description: ImageCropper crops, turns and flips an image in the browser and returns the crop as a rectangle in source pixels or as an encoded Blob, for avatars, banners, product photos and scanned documents.
+---
+
+<script>
+  import { Box, Button, ImageCropper, Stack, Text } from "carbon-components-svelte";
+
+  const photo = "/image-cropper-sample.svg";
+
+  let basic;
+  let box;
+  let restored = {
+    x: 200,
+    y: 100,
+    width: 600,
+    height: 600,
+    rotate: 0,
+    flipX: false,
+    flipY: false,
+  };
+  let minimum;
+  let cropper;
+  let result = "";
+
+  async function exportCrop() {
+    const blob = await cropper.toBlob({ type: "image/jpeg", quality: 0.9, width: 320 });
+    result = `${blob.type}, ${blob.size} bytes`;
+  }
+
+  const describe = (crop) =>
+    crop
+      ? `${crop.width} × ${crop.height} px at ${crop.x}, ${crop.y}, turned ${crop.rotate}°`
+      : "Loading";
+</script>
+
+## Basic
+
+Set `src` to a URL, or to a `File` or `Blob` from a file input. The crop frame stays still and the image moves under it. Drag the image to move it, or use <DocKbd label="Ctrl" /> and the wheel, or pinch, to zoom. The zoom and straighten sliders and the buttons under the stage turn, flip and reset the image.
+
+`bind:value` holds the crop: a rectangle in source pixels, and the turn and flips it was made after. It updates when a gesture ends, and `change` fires at the same time.
+
+<Stack gap={5}>
+  <Box maxWidth="40rem">
+    <ImageCropper src={photo} bind:value={basic} />
+  </Box>
+  <Text>{describe(basic)}</Text>
+</Stack>
+
+## Mode
+
+`mode` decides what moves. Both modes report the same `value` and share the keyboard and the export.
+
+| Mode | The user moves | Use it for |
+| --- | --- | --- |
+| `"image"` (default) | The image, under a frame that stays still | Avatars, covers and banners, where the output has one shape |
+| `"box"` | A box with eight handles, over an image that stays still | Documents, scans and product photos, where the area is the choice |
+
+### Image
+
+The frame is the largest rectangle of the aspect ratio that fits the stage. Zoom is relative: 100% just covers the frame, so the frame never shows empty space.
+
+### Box
+
+The image fits the stage, and the box starts at 80% of the largest crop. Drag inside the box to move it and a handle to resize it. Each handle is a button, so it is also reachable with <DocKbd label="Tab" /> and moves with the arrow keys.
+
+<Stack gap={5}>
+  <Box maxWidth="40rem">
+    <ImageCropper src={photo} mode="box" aspect={null} bind:value={box} />
+  </Box>
+  <Text>{describe(box)}</Text>
+</Stack>
+
+## Aspect ratio
+
+`aspect` is width over height, such as `16 / 9`, and `null` for any ratio. A fixed ratio holds while the box is dragged. In `"image"` mode the frame needs a ratio, so `null` means `1`.
+
+### Fixed
+
+<Box maxWidth="40rem">
+  <ImageCropper src={photo} aspect={3 / 1} labelText="Crop the banner" />
+</Box>
+
+### Presets
+
+In `"box"` mode the group Free, 1:1, 4:3 and 16:9 shows by default. Pass `aspects` for your own, each `{ label, value }`, where `value` is the ratio or `null` for free. `"image"` mode shows no presets unless you pass them, and leaves out a free one.
+
+<Box maxWidth="40rem">
+  <ImageCropper
+    src={photo}
+    mode="box"
+    aspect={210 / 297}
+    aspects={[
+      { label: "A4", value: 210 / 297 },
+      { label: "Square", value: 1 },
+      { label: "Banner", value: 3 / 1 },
+    ]}
+    labelText="Crop the poster"
+  />
+</Box>
+
+### Circle
+
+Set `shape="circle"` for an avatar. It masks the frame with a circle and locks the ratio to 1. The exported image is still a square, so round it where you show it, as `UserAvatar` does.
+
+<Box maxWidth="40rem">
+  <ImageCropper src={photo} shape="circle" labelText="Crop your photo" />
+</Box>
+
+## Controls
+
+The row under the stage turns the image a quarter turn each way, flips it and resets everything. The sliders zoom, and straighten from -45° to 45°. A flip is what you see: after a quarter turn, "flip horizontally" still mirrors the picture left to right, and `value.rotate` and `value.flipX` are adjusted to say so.
+
+The crop always lies inside the turned image. Straightening shrinks the crop just enough to keep it there.
+
+### Grid
+
+The rule-of-thirds grid shows while the image or the box is being dragged. Set `grid="always"` to keep it, or `grid="none"`.
+
+<Box maxWidth="40rem">
+  <ImageCropper src={photo} grid="always" labelText="Crop with the grid" />
+</Box>
+
+### Hiding the controls
+
+Set `controls={false}` to build your own. `rotateBy(degrees)`, `flip("horizontal" | "vertical")` and `reset()` are methods on the component, and `bind:value` follows each of them.
+
+<Box maxWidth="40rem">
+  <ImageCropper src={photo} controls={false} labelText="Crop without controls" />
+</Box>
+
+### Height
+
+The stage is `24rem` tall and as wide as its container. Set the `--ccs-image-cropper-height` custom property to change it, for all croppers with `:root { --ccs-image-cropper-height: 16rem; }` or for one with `<ImageCropper --ccs-image-cropper-height="16rem">`.
+
+## Crop data
+
+`value` is `{ x, y, width, height, rotate, flipX, flipY }`. `x`, `y`, `width` and `height` are whole source pixels in the bounds of the image after it is flipped and turned, which for a `rotate` of 0 or 180 is the image itself. `rotate` is clockwise degrees in (-180, 180], and the flips mirror the image about its center before it is turned. Send this to a server to cut the original, or keep it to reopen the editor where the user left it.
+
+### Restoring a crop
+
+Set `value` to a saved crop and it is applied once the image has loaded. A later change to `value` from outside applies the same way, without a `change` event.
+
+<Box maxWidth="40rem">
+  <ImageCropper src={photo} bind:value={restored} labelText="Crop the restored area" />
+</Box>
+
+### Minimum size
+
+`minWidth` and `minHeight` are in source pixels. The crop can't be resized or zoomed below them, so the output is never blurrier than you accept. When the image is smaller than the minimum, the crop takes all of it and a message says so.
+
+<Stack gap={5}>
+  <Box maxWidth="40rem">
+    <ImageCropper src={photo} minWidth={800} minHeight={800} bind:value={minimum} labelText="Crop at least 800 pixels" />
+  </Box>
+  <Text>{describe(minimum)}</Text>
+</Stack>
+
+## Output
+
+### Exporting a Blob
+
+`toBlob({ type, quality, width, height, background })` returns a `Promise<Blob>`. It draws the original image, turned and flipped, into a canvas of the crop's size (an `OffscreenCanvas` when the browser has one), and encodes it. `width` or `height` scales the output; the crop's ratio holds. A JPEG gets a white `background`. The blob's `type` is what the browser wrote, which is `image/png` where it can't encode the type you asked for, such as WebP in Safari.
+
+<Stack gap={5}>
+  <Box maxWidth="40rem">
+    <ImageCropper bind:this={cropper} src={photo} labelText="Crop and export" />
+  </Box>
+  <Button size="small" kind="tertiary" on:click={exportCrop}>Export a 320 px JPEG</Button>
+  <Text>{result}</Text>
+</Stack>
+
+### Without the component
+
+`cropToBlob(source, data, options)` does the same from saved crop data, so a server-free job can re-cut an image later. `source` is a URL, a `File` or `Blob`, or an image element.
+
+```js
+import { cropToBlob } from "carbon-components-svelte";
+
+const blob = await cropToBlob(file, savedCrop, { type: "image/webp", width: 640 });
+```
+
+## Sources
+
+### Large images
+
+The editor draws a downscaled copy, at most `previewSize` pixels (`2048` by default) on its long side, and drops the decoded original once it has. A 6000 by 4000 photo is held as 2048 by 1365. `toBlob` loads the original again, so the output is not limited by the preview. The `load` event reports `downscaled: true`.
+
+### Photos from phones
+
+The browser applies the EXIF orientation when it decodes a JPEG, so a photo taken in portrait is upright, and `value` and `load` report the upright size. The export draws the same decoded image, so the result is upright too.
+
+### Errors
+
+An image that can't be decoded shows a message in the stage and fires `error` with `{ code, message }`. `code` is `"unsupported"` for a HEIC or HEIF file in a browser that can't open it (everything but Safari), and `"load"` otherwise. Translate the messages with `translateWithId`.
+
+`toBlob` rejects with an `ImageCropError`. Its `code` is `"tainted"` when the image comes from another origin that sends no CORS headers: the browser draws it but won't let a canvas read it back. Set `crossorigin="anonymous"` and serve the image with `Access-Control-Allow-Origin`. A file chosen by the user is never tainted.
+
+## Keyboard
+
+Focus the crop area, the group named by `labelText`, to use the keys. The arrow keys are physical: a right arrow moves toward the right edge of the picture, in any text direction.
+
+| Key | In `"image"` mode | In `"box"` mode |
+| --- | --- | --- |
+| <DocKbd label="ArrowLeft" />, <DocKbd label="ArrowRight" />, <DocKbd label="ArrowUp" />, <DocKbd label="ArrowDown" /> | Move the image that way | Move the box that way |
+| <DocKbd label="Shift" /> + <DocKbd label="ArrowRight" />, <DocKbd label="ArrowUp" /> | Show more of the image (zoom out) | Make the box larger: wider, taller |
+| <DocKbd label="Shift" /> + <DocKbd label="ArrowLeft" />, <DocKbd label="ArrowDown" /> | Show less of the image (zoom in) | Make the box smaller |
+| <DocKbd label="+" />, <DocKbd label="-" /> | Zoom in and out | Make the box smaller and larger, in proportion |
+| <DocKbd label="[" />, <DocKbd label="]" /> | Turn the image left and right | The same |
+
+With a free ratio in `"box"` mode, <DocKbd label="Shift" /> + <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> change the width alone, and <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> the height alone. A key moves the crop 8 pixels on the screen, so it covers the same distance at any zoom. A resize handle takes the arrow keys on its own edge or corner, and <DocKbd label="Shift" /> makes the step ten times as large.
+
+After the keys settle, a polite live region reads the crop's size and position: "Crop 400 by 400 pixels, 110 from the left and 0 from the top".
+
+## Right to left
+
+The controls follow the page's direction. The picture does not: the stage reads left to right in an `rtl` page, because left is left in a photograph. The crop's `x` is measured from the left edge, the handles keep their positions, and their names are physical ("Resize top left").
+
+## Accessibility
+
+The crop area is a focusable `group` with `aria-roledescription="image cropper"`, described by the keys. It is not a `slider`, because moving a crop is two dimensional, and not an `application`, which turns off a screen reader's navigation. The values that have one dimension are real sliders: zoom and straighten. The crop's size and position are announced as text. The frame, the grid and the dimming are drawn with an outline and a shadow, and forced colors keep the outline in system colors, so the crop is visible over any image.
+
+| Do | Why |
+| --- | --- |
+| Give `labelText` the task: "Crop your photo". | It names the focusable crop area, so a screen reader user knows what it edits. |
+| Set `minWidth` and `minHeight` to the smallest output you accept. | A crop can't be zoomed past the point where the output would be blurry. |
+| Keep the buttons that save and cancel outside the stage. | The crop area handles the arrow keys, Tab moves on to the controls. |
+| Show a preview at the size you will use. | The stage dims everything outside the frame, so a small preview shows the result. |
+| Revoke the object URLs you make from `toBlob`. | Each one holds its blob in memory until the page closes. |
+
+## Recipes
+
+### Upload an avatar
+
+Choose a file with `FileUploaderButton`, crop it in a `Modal`, and show the result in a `UserAvatar`. The modal is `lazy`, so the stage is measured when it opens. Save stays disabled until the image has loaded, and the dialog's own first focus has no enabled button to land on, so the `load` handler calls `focus()` to put focus on the crop area; Escape and the arrow keys then work at once. The preview is a small `toBlob` after each change, and Save exports 256 pixels. A failed export, such as a tainted image, shows its message in the dialog.
+
+<FileSource src="/framed/ImageCropper/AvatarUpload" />
