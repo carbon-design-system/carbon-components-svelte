@@ -943,6 +943,18 @@ assets:
     tags:
       - form
       - contextual-navigation
+  permissions-matrix:
+    name: Permissions matrix
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/permissions-matrix.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PermissionsMatrix
   pin-code-input:
     name: PIN code input
     status: stable

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>permissions-matrix</title>
+    <g id="permissions-matrix" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="header-1" fill="var(--cds-text-disabled, #c6c6c6)" x="136" y="48" width="20" height="6"></rect>
+        <rect id="header-2" fill="var(--cds-text-disabled, #c6c6c6)" x="176" y="48" width="20" height="6"></rect>
+        <rect id="header-3" fill="var(--cds-text-disabled, #c6c6c6)" x="216" y="48" width="20" height="6"></rect>
+        <rect id="rule" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="66" width="168" height="1"></rect>
+        <rect id="label-1" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="82" width="40" height="6"></rect>
+        <rect id="label-2" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="106" width="32" height="6"></rect>
+        <rect id="label-3" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="130" width="44" height="6"></rect>
+        <rect id="box-1-1" fill="var(--cds-background-brand, #0f62fe)" x="138" y="79" width="16" height="16"></rect>
+        <rect id="box-1-2" stroke="var(--cds-border-strong, #8d8d8d)" x="177" y="80" width="14" height="14"></rect>
+        <rect id="box-1-3" stroke="var(--cds-border-strong, #8d8d8d)" x="217" y="80" width="14" height="14"></rect>
+        <rect id="box-2-1" fill="var(--cds-background-brand, #0f62fe)" x="138" y="103" width="16" height="16"></rect>
+        <rect id="box-2-2" fill="var(--cds-background-brand, #0f62fe)" x="178" y="103" width="16" height="16"></rect>
+        <rect id="box-2-3" stroke="var(--cds-border-strong, #8d8d8d)" x="217" y="104" width="14" height="14"></rect>
+        <rect id="box-3-1" stroke="var(--cds-border-strong, #8d8d8d)" x="137" y="128" width="14" height="14"></rect>
+        <rect id="box-3-2" stroke="var(--cds-border-strong, #8d8d8d)" stroke-dasharray="3 2" x="177" y="128" width="14" height="14"></rect>
+        <rect id="box-3-3" fill="var(--cds-background-brand, #0f62fe)" x="218" y="127" width="16" height="16"></rect>
+    </g>
+</svg>

@@ -1,0 +1,103 @@
+---
+components: ["PermissionsMatrix"]
+description: Permissions matrices let admins grant permissions to roles in one grid, with inherited roles, group rollups, locked cells, and a save bar that shows what changed.
+---
+
+## Basic
+
+Permissions run down the rows, grouped by resource, and roles run across the columns. Each cell is a checkbox. A group row rolls up its children: it is checked when every child is, partly checked when some are, and toggling it grants or clears the whole group.
+
+`value` holds what each role sets, as `value[roleId][permissionId]`. The matrix writes a new object on every edit and never changes the one it is given.
+
+<FileSource src="/framed/PermissionsMatrix/PermissionsMatrixBasic" />
+
+The grid is one tab stop. Arrow keys move between cells, and the headers are cells too.
+
+| Key | Action |
+| --- | --- |
+| Arrow keys | Move one cell. In right-to-left pages, <DocKbd label="←" /> and <DocKbd label="→" /> swap |
+| <DocKbd label="Home" />, <DocKbd label="End" /> | First and last cell of the row |
+| <DocKbd label="Ctrl" />+<DocKbd label="Home" />, <DocKbd label="Ctrl" />+<DocKbd label="End" /> | First and last cell of the grid |
+| <DocKbd label="Page Up" />, <DocKbd label="Page Down" /> | A screen of rows |
+| <DocKbd label="Space" />, <DocKbd label="Enter" /> | Toggle a cell. On a group header, collapse or expand it |
+| <DocKbd label="Delete" /> | Clear the cell's own value, so it inherits again |
+| <DocKbd label="Shift" />+arrow keys | Select a range |
+| <DocKbd label="Ctrl" />+<DocKbd label="A" /> | Select every cell |
+| <DocKbd label="Escape" /> | Clear the selection |
+
+Screen readers hear each checkbox named by its row and column headers, such as "Billing, View invoices Editor", with its state. The headers carry a hidden path, so a nested permission also reads its groups. Inherited, changed, and locked cells add that to the checkbox's description.
+
+## Inheritance
+
+Set `parent` on a role to make it inherit that role's values. A cell the role does not set takes its parent's value and draws a dashed box, so inheriting never relies on color. Toggling it writes the role's own value. Toggling it back to what the parent gives removes the value, and the cell inherits again. A cell that revokes what its parent grants draws a cross.
+
+A parent that is unknown, or that makes a cycle, is ignored and the role resolves as a root. The example above has an Editor that inherits from Viewer, and an Administrator that inherits from Editor.
+
+## Levels
+
+Set `levels` to give each cell a level instead of a yes or no, from the lowest to the highest. <DocKbd label="Space" /> and <DocKbd label="Enter" /> step to the next level and wrap around, and <DocKbd label="Shift" />+<DocKbd label="Enter" /> steps back. The lowest level is what a role takes when it sets nothing. A group cell shows its level when every child agrees, and "Mixed" when they differ. Toggling a mixed group sets every child to the highest level.
+
+<FileSource src="/framed/PermissionsMatrix/PermissionsMatrixLevels" />
+
+## Locked cells
+
+Set `locked` on a role or a permission to make its cells read only, with a reason. A group's lock reaches its children. For a rule that depends on both, such as a policy, return the reason from `lockReason`. A locked cell draws a padlock, ignores edits, and shows the reason in a tooltip on hover and focus. Group edits skip locked children.
+
+<FileSource src="/framed/PermissionsMatrix/PermissionsMatrixLocked" />
+
+## Saved state
+
+The matrix compares `value` with the saved state. Changed cells carry a bar at their start, and the bar above the grid counts them, with Discard and Save changes. Without `saved`, the matrix keeps the `value` it was given as the saved state, and Save moves it to the current `value`.
+
+To save to a server, call `preventDefault()` on the `save` event, send the request, and set `saved` when it succeeds. The changes stay marked until then.
+
+<FileSource src="/framed/PermissionsMatrix/PermissionsMatrixSave" />
+
+## Bulk actions
+
+Select cells with <DocKbd label="Shift" />+arrow keys or <DocKbd label="Shift" />+click, or select a whole column or row from its header. The bar then offers to grant, revoke, or clear the selection. With `levels`, it offers each level. <DocKbd label="Space" /> on a selected cell applies the same change to the whole selection.
+
+## Layout
+
+The header row and the first column stay in view while the grid scrolls, and swap sides in right-to-left pages. Set `height` to the most the grid grows before it scrolls.
+
+### Sizes
+
+Set `size` to control the row height. The default is 48px, and `"compact"`, `"short"`, `"medium"`, and `"tall"` match `DataTable`.
+
+### Transposed
+
+Set `transposed` to put roles in the rows and permissions in the columns. Groups then collapse columns. A long permission name does not fit a narrow column, so set `headerLayout` to `"rotated"` to turn column headers with `writing-mode`. They stay text, so they can be selected and follow the page direction. `"wrap"`, the default, breaks a label over up to three lines.
+
+<FileSource src="/framed/PermissionsMatrix/PermissionsMatrixTransposed" />
+
+### Large matrices
+
+Set `virtualize` to paint only the rows and columns in view, and the cell with focus. The matrix stays responsive with 50 roles and 300 permissions, 15,000 cells. `aria-rowcount` and `aria-colcount` give assistive technology the full size, and it reaches unpainted rows by moving through the grid.
+
+<FileSource src="/framed/PermissionsMatrix/PermissionsMatrixLarge" />
+
+## Choosing a design
+
+| Do | Why |
+| --- | --- |
+| Use a matrix for editing who can do what | It shows every role and permission at once, so differences stand out |
+| Use `DataTable` with a checkbox column to pick records to act on | A matrix edits a relationship between two lists, not a selection of rows |
+| Set `virtualize` past a few thousand cells | Every painted cell costs script on each key press |
+| Leave `virtualize` off for small matrices | Screen reader users can then read every row without moving through the grid |
+| Give a locked cell a reason | A cell that cannot change without saying why looks broken |
+
+## States
+
+Every state is drawn without relying on color, so the grid stays usable in forced colors.
+
+| State | Drawn as |
+| --- | --- |
+| Granted | A check in a filled box |
+| Not granted | An empty box |
+| Mixed | A dash in a filled box |
+| Inherited | A dashed box |
+| Revoked from a parent | A cross in the box |
+| Changed | A bar at the cell's start |
+| Locked | A padlock |
+| Selected | An outline |
