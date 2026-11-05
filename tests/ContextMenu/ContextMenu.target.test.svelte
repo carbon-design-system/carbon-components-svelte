@@ -1,7 +1,7 @@
 <script lang="ts">
   import ContextMenu from "carbon-components-svelte/ContextMenu/ContextMenu.svelte";
   import ContextMenuOption from "carbon-components-svelte/ContextMenu/ContextMenuOption.svelte";
-  import { onMount } from "svelte";
+  import { type ComponentProps, onMount } from "svelte";
 
   export let onopen: (detail: unknown) => void = () => {};
 
@@ -16,6 +16,10 @@
   function swap() {
     target = [targetB];
   }
+
+  // `target` takes one element as well as a list.
+  const _single: ComponentProps<ContextMenu>["target"] = document.body;
+  void _single;
 </script>
 
 <div data-testid="target-a" bind:this={targetA}>A</div>
