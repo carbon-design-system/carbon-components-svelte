@@ -12,6 +12,8 @@ import type {
   getAvatarBackgroundColor,
   getInitials,
   getLayoutDirection,
+  getLocaleContext,
+  getLocaleDirection,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
@@ -26,6 +28,8 @@ import type DataTable from "carbon-components-svelte/src/DataTable/DataTable.sve
 import type { DataTableRow } from "carbon-components-svelte/src/DataTable/DataTable.svelte";
 import type LayoutDirection from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
 import type { LayoutDirectionProps } from "carbon-components-svelte/src/LayoutDirection/LayoutDirection.svelte";
+import type LocaleProvider from "carbon-components-svelte/src/LocaleProvider/LocaleProvider.svelte";
+import type { LocaleProviderProps } from "carbon-components-svelte/src/LocaleProvider/LocaleProvider.svelte";
 import type MultiSelectSkeleton from "carbon-components-svelte/src/MultiSelect/MultiSelectSkeleton.svelte";
 import type {
   CarbonTheme,
@@ -94,6 +98,10 @@ type _GetInitials = ReturnType<typeof getInitials>;
 type _GetLayoutDirection = ReturnType<typeof getLayoutDirection>;
 type _LayoutDirection = LayoutDirection;
 type _LayoutDirectionProps = LayoutDirectionProps<"section">["dir"];
+type _GetLocaleContext = ReturnType<typeof getLocaleContext>;
+type _GetLocaleDirection = ReturnType<typeof getLocaleDirection>;
+type _LocaleProvider = LocaleProvider;
+type _LocaleProviderProps = LocaleProviderProps<"section">["dir"];
 type _MultiSelectSkeleton = MultiSelectSkeleton;
 type _QueryParam = ReturnType<typeof queryParam<string>>;
 type _HeaderSearchResult = HeaderSearchResult;

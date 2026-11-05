@@ -3,6 +3,7 @@ import {
   compareValues,
   formatHeaderWidth,
   getDisplayedRows,
+  getSortCollator,
   resolvePath,
   rowsEqual,
   shouldIgnoreRowClick,
@@ -279,6 +280,30 @@ describe("resolvePath", () => {
     const obj = { name: "John" };
     // Empty string should try to access the object itself
     expect(resolvePath(obj, "")).toBe(obj);
+  });
+});
+
+describe("getSortCollator", () => {
+  it("is the runtime's collator without a locale, and one per locale with it", () => {
+    expect(getSortCollator()).toBe(getSortCollator(undefined));
+    expect(getSortCollator("sv")).toBe(getSortCollator("sv"));
+    expect(getSortCollator("sv")).not.toBe(getSortCollator());
+  });
+
+  it("sorts numerically and ignores case and accents", () => {
+    const { compare } = getSortCollator("en");
+    expect(compare("10", "2")).toBeGreaterThan(0);
+    expect(compare("Apple", "apple")).toBe(0);
+    expect(compare("café", "cafe")).toBe(0);
+  });
+
+  it("is what compareValues orders strings with", () => {
+    expect(
+      compareValues("z", "ä", true, undefined, getSortCollator("sv")),
+    ).toBeLessThan(0);
+    expect(
+      compareValues("z", "ä", true, undefined, getSortCollator("de")),
+    ).toBeGreaterThan(0);
   });
 });
 

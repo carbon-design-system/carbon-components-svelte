@@ -17,7 +17,8 @@
   export let now = undefined;
 
   /**
-   * Runtime locale when unset.
+   * Specify the locale. Unset, it uses the nearest `LocaleProvider`, then
+   * the runtime locale.
    * @type {string | undefined}
    */
   export let locale = undefined;
@@ -26,7 +27,8 @@
    * IANA time zone for the absolute time in `title`. Runtime time zone when
    * unset. Set a fixed value so the server and the client print the same
    * `title`. Equivalent to `titleFormatOptions={{ timeZone }}`, and overrides
-   * `titleFormatOptions.timeZone` when both are set.
+   * `titleFormatOptions.timeZone` when both are set. Unset, it uses the
+   * nearest `LocaleProvider`'s time zone.
    * @type {string | undefined}
    */
   export let timeZone = undefined;
@@ -55,6 +57,7 @@
 
   import { onMount } from "svelte";
   import { getDateTimeFormatter } from "../utils/intl-formatter-cache.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import { localeDirection } from "../utils/locale-direction.js";
   import { subscribeRelativeTimeTick } from "../utils/relative-time-timer-pool.js";
   import {
@@ -62,6 +65,12 @@
     getRelativeTimeRefreshMs,
     toTimestamp,
   } from "../utils/relative-time.js";
+
+  const localeContext = getLocaleContext();
+  $: resolvedLocale = locale ?? $localeContext.locale;
+  // The time zone of `titleFormatOptions` stays ahead of the provider's.
+  $: resolvedTimeZone =
+    timeZone ?? titleFormatOptions.timeZone ?? $localeContext.timeZone;
 
   let tickNow = Date.now();
   /** @type {(() => void) | undefined} */
@@ -84,7 +93,7 @@
   $: formatted = valid
     ? formatRelativeTime(timestamp, {
         now: referenceNow,
-        locale,
+        locale: resolvedLocale,
         numeric,
         style,
       })
@@ -93,12 +102,14 @@
   // isolated from the page, so "1 hr. ago" does not read "hr. ago 1" on an
   // RTL page. A custom slot has no known locale, so its text picks its own.
   /** @type {"auto" | "ltr" | "rtl"} */
-  $: dir = $$slots.default ? "auto" : localeDirection(locale);
+  $: dir = $$slots.default ? "auto" : localeDirection(resolvedLocale);
   $: isoString = valid ? new Date(timestamp).toISOString() : undefined;
   $: absoluteTitle = valid
     ? getDateTimeFormatter(
-        locale,
-        timeZone ? { ...titleFormatOptions, timeZone } : titleFormatOptions,
+        resolvedLocale,
+        resolvedTimeZone
+          ? { ...titleFormatOptions, timeZone: resolvedTimeZone }
+          : titleFormatOptions,
       ).format(timestamp)
     : undefined;
   $: ticking = live && now == null && valid && typeof window !== "undefined";

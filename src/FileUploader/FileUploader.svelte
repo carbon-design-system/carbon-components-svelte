@@ -73,6 +73,14 @@
   export let fileSize = false;
 
   /**
+   * Specify the locale that writes the number in `fileSize`, such as
+   * "1,5 kB" for `"de"`. Unset, it uses the nearest `LocaleProvider`; with
+   * neither, the number is written with a point, as `formatFileSize` does.
+   * @type {string | undefined}
+   */
+  export let locale = undefined;
+
+  /**
    * Set to `true` for the selected files to fill the container instead of
    * stopping at 20rem.
    */
@@ -251,11 +259,15 @@
   import { returnFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import FileUploaderButton from "./FileUploaderButton.svelte";
   import Filename from "./Filename.svelte";
+
+  const localeContext = getLocaleContext();
+  $: effectiveLocale = locale ?? $localeContext.locale;
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -365,13 +377,15 @@
    * @param {typeof fileSize} option
    * @param {File} file
    * @param {number} index
+   * @param {string | undefined} sizeLocale
    * @returns {string}
    */
-  function resolveFileSize(option, file, index) {
+  function resolveFileSize(option, file, index, sizeLocale) {
     if (typeof option === "function") return option(file, index);
     if (!option) return "";
     return formatFileSize(file.size, {
       units: option === "binary" ? "binary" : "decimal",
+      locale: sizeLocale,
     });
   }
 
@@ -500,7 +514,12 @@
         file,
         index,
       )}
-      {@const rowFileSize = resolveFileSize(fileSize, file, index)}
+      {@const rowFileSize = resolveFileSize(
+        fileSize,
+        file,
+        index,
+        effectiveLocale,
+      )}
       {@const rowErrorId =
         rowInvalid && rowErrorSubject ? `${id}-error-${index}` : undefined}
       {@const rowName = file.webkitRelativePath || file.name}

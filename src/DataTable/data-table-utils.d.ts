@@ -58,7 +58,15 @@ export function compareValues<T = unknown>(
   itemB: T,
   ascending: boolean,
   customSort?: ((a: T, b: T) => number) | false | undefined,
+  /** Compares strings; from `getSortCollator`. Defaults to the runtime locale's. */
+  stringCollator?: Intl.Collator,
 ): number;
+
+/**
+ * The collator `compareValues` sorts strings with: the runtime locale's
+ * without `locale`, numeric and accent- and case-insensitive.
+ */
+export function getSortCollator(locale?: string): Intl.Collator;
 
 export type ToCsvHeader<Row> = {
   /** Column key. Supports nested paths like `"contact.company"`. */

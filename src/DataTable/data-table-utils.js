@@ -1,6 +1,7 @@
 // @ts-check
 import { BoundedFifoCache } from "../utils/bounded-fifo-cache.js";
 import { deepEqual } from "../utils/deep-equal.js";
+import { getCollator } from "../utils/intl-formatter-cache.js";
 
 /**
  * Lightweight deep equality check optimized for DataTable rows.
@@ -128,14 +129,27 @@ export function formatHeaderWidth(header) {
 // options object is passed — reusing one Intl.Collator's .compare() instead
 // is ~30x faster at scale. Locale is undefined so it defaults to the user's
 // locale, matching localeCompare's prior behavior.
-const collator = new Intl.Collator(undefined, {
+/** @type {Intl.CollatorOptions} */
+const COLLATOR_OPTIONS = {
   // Enable numeric sorting for strings that look like numbers
   // E.g., "10" should come after "2"
   numeric: true,
   // Comparison is case- and accent-insensitive
   // E.g., "apple" == "Apple", "café" == "cafe"
   sensitivity: "base",
-});
+};
+const collator = new Intl.Collator(undefined, COLLATOR_OPTIONS);
+
+/**
+ * The collator `compareValues` sorts strings with. Without a locale it is the
+ * runtime's, as it always was. A table gets one per sort, not one per
+ * comparison: looking a collator up by locale builds a cache key.
+ * @param {string | undefined} [locale]
+ * @returns {Intl.Collator}
+ */
+export function getSortCollator(locale) {
+  return locale ? getCollator(locale, COLLATOR_OPTIONS) : collator;
+}
 
 /**
  * Compares two values for sorting in a data table.
@@ -145,9 +159,16 @@ const collator = new Intl.Collator(undefined, {
  * @param {T} itemB - Second value to compare
  * @param {boolean} ascending - Whether to sort in ascending order
  * @param {((a: T, b: T) => number) | false | undefined} customSort - Optional custom sort function
+ * @param {Intl.Collator} [stringCollator] - Compares strings; from `getSortCollator`. Defaults to the runtime locale's
  * @returns {number} Negative if a < b (ascending) or a > b (descending), positive if a > b (ascending) or a < b (descending), 0 if equal
  */
-export function compareValues(itemA, itemB, ascending, customSort) {
+export function compareValues(
+  itemA,
+  itemB,
+  ascending,
+  customSort,
+  stringCollator = collator,
+) {
   if (customSort) {
     const result = customSort(itemA, itemB);
     return ascending ? result : -result;
@@ -167,7 +188,7 @@ export function compareValues(itemA, itemB, ascending, customSort) {
     } else if (!itemB && itemB !== 0) {
       result = -1;
     } else {
-      result = collator.compare(String(itemA), String(itemB));
+      result = stringCollator.compare(String(itemA), String(itemB));
     }
   }
 

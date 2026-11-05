@@ -96,6 +96,8 @@
    * Specify a BCP 47 locale for number formatting.
    * When set, forces type="text" with inputmode="decimal"
    * and formats the display value using Intl.NumberFormat.
+   * Unset, it uses the nearest `LocaleProvider`, which sets the same
+   * mode.
    * @type {string | undefined}
    * @example
    * ```svelte
@@ -234,6 +236,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import {
     clamp,
     getDefaultValue,
@@ -262,6 +265,7 @@
   const dispatch = createEventDispatcher();
   const formContext = getContext(FORM_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
+  const localeContext = getLocaleContext();
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
@@ -334,10 +338,13 @@
   $: autoInvalid =
     value !== null &&
     ((min !== undefined && value < min) || (max !== undefined && value > max));
-  $: formatter = locale ? getNumberFormatter(locale, formatOptions) : null;
-  $: useTextMode = allowDecimal || !!locale;
-  $: separatorParts = locale
-    ? getNumberFormatter(locale, undefined).formatToParts(12345.6)
+  $: effectiveLocale = locale ?? $localeContext.locale;
+  $: formatter = effectiveLocale
+    ? getNumberFormatter(effectiveLocale, formatOptions)
+    : null;
+  $: useTextMode = allowDecimal || !!effectiveLocale;
+  $: separatorParts = effectiveLocale
+    ? getNumberFormatter(effectiveLocale, undefined).formatToParts(12345.6)
     : null;
   $: groupSeparator = separatorParts
     ? (separatorParts.find((p) => p.type === "group")?.value ?? "")
@@ -356,7 +363,10 @@
 
   $: customValid =
     typeof validate === "function"
-      ? validate(useTextMode ? inputValue : String(value ?? ""), locale)
+      ? validate(
+          useTextMode ? inputValue : String(value ?? ""),
+          effectiveLocale,
+        )
       : undefined;
 
   $: effectiveInvalid = computeEffectiveInvalid(
@@ -396,7 +406,7 @@
       // Don't interfere with user typing
     } else if (value != null) {
       const valueStr = formatter ? formatter.format(value) : value.toString();
-      const parsedInput = locale
+      const parsedInput = effectiveLocale
         ? parseLocaleValue(inputValue, groupSeparator, decimalSeparator)
         : parse(inputValue);
       // Sync inputValue to value when:
@@ -430,7 +440,7 @@
     userInputActive = false;
     const raw = ref.value;
     value =
-      useTextMode && locale
+      useTextMode && effectiveLocale
         ? parseLocaleValue(raw, groupSeparator, decimalSeparator)
         : parse(raw);
   }
@@ -441,7 +451,7 @@
     if (useTextMode) {
       userInputActive = true;
       inputValue = input.value;
-      const parsed = locale
+      const parsed = effectiveLocale
         ? parseLocaleValue(input.value, groupSeparator, decimalSeparator)
         : parse(input.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
@@ -460,7 +470,7 @@
   function handleChange(event) {
     const input = /** @type {HTMLInputElement} */ (event.target);
     userInputActive = false;
-    let parsedValue = locale
+    let parsedValue = effectiveLocale
       ? parseLocaleValue(input.value, groupSeparator, decimalSeparator)
       : parse(input.value, useTextMode);
 

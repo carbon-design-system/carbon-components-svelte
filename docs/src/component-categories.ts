@@ -46,6 +46,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Carousel",
       "Splitter",
       "LayoutDirection",
+      "LocaleProvider",
     ],
   },
   {

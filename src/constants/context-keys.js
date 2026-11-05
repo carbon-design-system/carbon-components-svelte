@@ -60,3 +60,10 @@ export const THEME_ZONE_CONTEXT_KEY = "carbon:ThemeZone";
  * to the menu's `anchor`, the trigger.
  */
 export const MENU_PLACEMENT_CONTEXT_KEY = "carbon:MenuPlacement";
+
+/**
+ * Set by `LocaleProvider` to a readable store of the app's locale, time
+ * zone and formatting defaults; read by components that format values,
+ * when their own prop is unset.
+ */
+export const LOCALE_CONTEXT_KEY = "carbon:Locale";

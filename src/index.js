@@ -150,6 +150,7 @@ export { default as ListBoxMenuItem } from "./ListBox/ListBoxMenuItem.svelte";
 export { default as ListBoxSelection } from "./ListBox/ListBoxSelection.svelte";
 export { default as ListItem } from "./ListItem/ListItem.svelte";
 export { default as Loading } from "./Loading/Loading.svelte";
+export { default as LocaleProvider } from "./LocaleProvider/LocaleProvider.svelte";
 export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
 export { default as Menu } from "./Menu/Menu.svelte";
 export { default as MenuDivider } from "./Menu/MenuDivider.svelte";
@@ -341,6 +342,8 @@ export {
   platformScript,
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
+export { getLocaleContext } from "./utils/locale-context.js";
+export { getLocaleDirection } from "./utils/locale-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";

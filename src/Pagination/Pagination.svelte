@@ -140,21 +140,30 @@
   export let itemsPerPageText = "Items per page:";
 
   /**
-   * Override the item text.
-   * @type {(min: number, max: number) => string}
+   * Specify the locale that formats the numbers in the default texts.
+   * Unset, it uses the nearest `LocaleProvider`, then the runtime locale.
+   * The words stay as they are: translate them with the text props.
+   * @type {string | undefined}
    */
-  export let itemText = function itemText(min, max) {
-    return `${min.toLocaleString()}–${max.toLocaleString()} item${max === 1 ? "" : "s"}`;
+  export let locale = undefined;
+
+  /**
+   * Override the item text. `format` writes a number in the locale.
+   * @type {(min: number, max: number, format: (value: number) => string) => string}
+   */
+  export let itemText = function itemText(min, max, format) {
+    return `${format(min)}–${format(max)} item${max === 1 ? "" : "s"}`;
   };
 
   /**
    * Override the item range text.
    * If overridden, the custom function must handle `total <= 0` itself.
-   * @type {(min: number, max: number, total: number) => string}
+   * `format` writes a number in the locale.
+   * @type {(min: number, max: number, total: number, format: (value: number) => string) => string}
    */
-  export let itemRangeText = function itemRangeText(min, max, total) {
+  export let itemRangeText = function itemRangeText(min, max, total, format) {
     if (total <= 0) return "0 items";
-    return `${min.toLocaleString()}–${max.toLocaleString()} of ${total.toLocaleString()} item${max === 1 ? "" : "s"}`;
+    return `${format(min)}–${format(max)} of ${format(total)} item${max === 1 ? "" : "s"}`;
   };
 
   /** Set to `true` to disable the page input */
@@ -219,19 +228,19 @@
   export let backButtonDisabled = undefined;
 
   /**
-   * Override the page text.
-   * @type {(page: number) => string}
+   * Override the page text. `format` writes a number in the locale.
+   * @type {(page: number, format: (value: number) => string) => string}
    */
-  export let pageText = function pageText(page) {
-    return `page ${page.toLocaleString()}`;
+  export let pageText = function pageText(page, format) {
+    return `page ${format(page)}`;
   };
 
   /**
-   * Override the page range text.
-   * @type {(current: number, total: number) => string}
+   * Override the page range text. `format` writes a number in the locale.
+   * @type {(current: number, total: number, format: (value: number) => string) => string}
    */
-  export let pageRangeText = function pageRangeText(_current, total) {
-    return `of ${total.toLocaleString()} page${total === 1 ? "" : "s"}`;
+  export let pageRangeText = function pageRangeText(_current, total, format) {
+    return `of ${format(total)} page${total === 1 ? "" : "s"}`;
   };
 
   /**
@@ -259,11 +268,22 @@
   import SelectItem from "../Select/SelectItem.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
+  import { getNumberFormatter } from "../utils/intl-formatter-cache.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import { clamp } from "../utils/numeric-format.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
+  const localeContext = getLocaleContext();
+
+  // Without a locale, `toLocaleString()` keeps what the runtime prints today.
+  // A new function when the locale changes, so the texts that take it run again.
+  $: effectiveLocale = locale ?? $localeContext.locale;
+  /** @type {(value: number) => string} */
+  $: format = effectiveLocale
+    ? (value) => getNumberFormatter(effectiveLocale).format(value)
+    : (value) => value.toLocaleString();
 
   // Seeded by the first run of the `update` block below, after the initial
   // clamp, so clamping an out-of-range initial page isn't reported as an
@@ -335,11 +355,12 @@
     forwardButtonDisabled ??
     (disabled || (!pagesUnknown && page === totalPages));
   $: itemsCountText = pagesUnknown
-    ? itemText(pageSize * (page - 1) + 1, page * pageSize)
+    ? itemText(pageSize * (page - 1) + 1, page * pageSize, format)
     : itemRangeText(
         Math.min(pageSize * (page - 1) + 1, totalItems),
         Math.min(page * pageSize, totalItems),
         totalItems,
+        format,
       );
 </script>
 
@@ -404,15 +425,15 @@
     {#if simple}
       <span class:bx--pagination__text={true}>
         {#if pagesUnknown}
-          {pageText(page)}
+          {pageText(page, format)}
         {:else}
-          {pageText(page)} {pageRangeText(page, totalPages)}
+          {pageText(page, format)} {pageRangeText(page, totalPages, format)}
         {/if}
       </span>
     {:else if pagesUnknown && !pageInputDisabled}
       <!-- With unknown pages there is no page list to pick from. -->
       <span class:bx--pagination__text={true}>
-        {pageText(page)}
+        {pageText(page, format)}
       </span>
     {:else if !pageInputDisabled}
       <slot
@@ -434,6 +455,7 @@
               hideLabel
               hideSteppers
               disableWheel
+              {locale}
               {disabled}
               min={1}
               max={totalPages}
@@ -475,7 +497,7 @@
         {/if}
       </slot>
       <span class:bx--pagination__text={true}>
-        {pageRangeText(page, totalPages)}
+        {pageRangeText(page, totalPages, format)}
       </span>
     {/if}
     <div class:bx--pagination__control-buttons={true}>
