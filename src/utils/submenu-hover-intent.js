@@ -32,12 +32,17 @@ function trackPointer(event) {
  * other items hold their own opens, so a diagonal path across them does not
  * switch submenus. The check repeats every `aimPause` and ends when the
  * pointer pauses, turns away, or enters the submenu.
+ *
+ * Any floating box can stand in for the submenu: `isAiming` swaps the
+ * check, as `HoverCard` does for a card above or below its trigger. The
+ * options are read each time they are used, so getters keep them current.
  * @param {(open: boolean) => void} setOpen - Applies the resolved open state.
  * @param {{
  *   openDelay: number;
  *   closeDelay: number;
  *   aimPause?: number;
  *   getSubmenu?: () => Element | null | undefined;
+ *   isAiming?: (point: { x: number, y: number }, from: { x: number, y: number }, rect: DOMRect) => boolean;
  * }} options
  */
 export function createSubmenuHoverIntent(setOpen, options) {
@@ -77,9 +82,10 @@ export function createSubmenuHoverIntent(setOpen, options) {
     open();
   }
 
-  function scheduleOpen() {
+  /** @param {number} [delay] */
+  function scheduleOpen(delay = options.openDelay) {
     cancel();
-    openTimeout = setTimeout(tryOpen, options.openDelay);
+    openTimeout = setTimeout(tryOpen, delay);
   }
 
   function tryClose() {
@@ -88,7 +94,11 @@ export function createSubmenuHoverIntent(setOpen, options) {
       submenu &&
       from &&
       pointer &&
-      isAimingAt(pointer, from, submenu.getBoundingClientRect())
+      (options.isAiming ?? isAimingAt)(
+        pointer,
+        from,
+        submenu.getBoundingClientRect(),
+      )
     ) {
       from = pointer;
       closeTimeout = setTimeout(tryClose, options.aimPause);

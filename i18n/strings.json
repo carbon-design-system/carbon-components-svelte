@@ -912,6 +912,20 @@
       "defaultKind": "text"
     },
     {
+      "component": "HoverCard",
+      "prop": "errorText",
+      "type": "string",
+      "default": "Unable to load.",
+      "defaultKind": "text"
+    },
+    {
+      "component": "HoverCard",
+      "prop": "retryText",
+      "type": "string",
+      "default": "Retry",
+      "defaultKind": "text"
+    },
+    {
       "component": "ImageCompare",
       "prop": "afterText",
       "type": "string",

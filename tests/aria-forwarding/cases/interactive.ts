@@ -16,6 +16,7 @@ import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import ErrorSummary from "carbon-components-svelte/ErrorSummary/ErrorSummary.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
+import HoverCard from "carbon-components-svelte/HoverCard/HoverCard.svelte";
 import ImageCompare from "carbon-components-svelte/ImageCompare/ImageCompare.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
@@ -528,6 +529,11 @@ export const interactive: AriaEntry[] = [
       render(Tearsheet, {
         props: { open: true, titleText: "Create integration", ...attrs },
       }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "HoverCard",
+    render: (attrs) => render(HoverCard, { props: { open: true, ...attrs } }),
     target: () => screen.getByRole("dialog"),
   },
   {
