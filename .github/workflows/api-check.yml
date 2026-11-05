@@ -1,10 +1,13 @@
 name: API check
 
-# Diffs the component API (props, events, slots, contexts) against the base
-# branch with `sveld --check`, which classifies each change as a semver bump.
-# A breaking change fails the check unless the PR has the "breaking changes"
-# label, which pr-labels.yml adds for a `!` title or a `BREAKING CHANGE:` body,
-# or a maintainer adds by hand. `labeled`/`unlabeled` re-run the check.
+# Diffs the component API (props, events, slots, contexts) with `sveld --check`,
+# which classifies each change as a semver bump. It runs twice: against the
+# base branch, for what this PR changes, and against the latest release, for
+# what users have. A change fails only when both call it breaking, so changing
+# an API that no release has shipped yet passes. A breaking change fails the
+# check unless the PR has the "breaking changes" label, which pr-labels.yml
+# adds for a `!` title or a `BREAKING CHANGE:` body, or a maintainer adds by
+# hand. `labeled`/`unlabeled` re-run the check.
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
@@ -47,14 +50,29 @@ jobs:
           bun run build:docs --no-strict
           cp docs/src/COMPONENT_API.json "$RUNNER_TEMP/base-api.json"
 
+      # Release tags sit on release branches, not on master, so take the
+      # highest stable `vX.Y.Z` tag rather than `git describe`.
+      - name: Build the latest release's API
+        run: |
+          git fetch --quiet --depth=1 origin "+refs/tags/v*:refs/tags/v*"
+          tag=$(git tag --list --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+          echo "Latest release: $tag"
+          git worktree add "$RUNNER_TEMP/release" "$tag"
+          cd "$RUNNER_TEMP/release"
+          bun ci --ignore-scripts
+          bun run build:docs --no-strict
+          cp docs/src/COMPONENT_API.json "$RUNNER_TEMP/release-api.json"
+
       - run: bun ci --ignore-scripts
 
-      - name: Diff the API against the base branch
+      - name: Diff the API against the base branch and the latest release
         id: check
         run: |
           set +e
           bunx sveld --glob --types=false --check="$RUNNER_TEMP/base-api.json" > "$RUNNER_TEMP/report.txt"
           code=$?
+          bunx sveld --glob --types=false --check="$RUNNER_TEMP/base-api.json" --format=json > "$RUNNER_TEMP/base.json"
+          bunx sveld --glob --types=false --check="$RUNNER_TEMP/release-api.json" --format=json > "$RUNNER_TEMP/release.json"
           set -e
           cat "$RUNNER_TEMP/report.txt"
           {
@@ -83,6 +101,23 @@ jobs:
             echo "::error::sveld --check exited $EXIT_CODE; see the log above."
             exit 1
           fi
+          # Keep the breaking changes the release diff also calls breaking. If
+          # the release can't be diffed (no report, or a different
+          # schemaVersion), keep them all.
+          breaking=$(jq -c --slurpfile release "$RUNNER_TEMP/release.json" '
+            def id: [.component, .kind, .name, .property];
+            ($release[0].changes // null) as $changes
+            | ($changes == null or ($changes | any(.kind == "schema"))) as $noRelease
+            | [($changes // [])[] | select(.bump == "major") | id] as $released
+            | .changes[] | select(.bump == "major")
+            | select($noRelease or (id as $id | $released | any(. == $id)))
+          ' "$RUNNER_TEMP/base.json")
+          if [ -z "$breaking" ]; then
+            echo "::notice::Every breaking change is to an API no release has shipped yet, so none reaches users."
+            exit 0
+          fi
+          echo "Breaking against the latest release too:"
+          echo "$breaking" | jq -r '"  \(.component): \(.message)"'
           # Read the labels now, not from the event: pr-labels.yml may have
           # added "breaking changes" while this job ran.
           if gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json labels --jq '.labels[].name' | grep -qx "breaking changes"; then
