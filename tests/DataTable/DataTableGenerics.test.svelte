@@ -77,6 +77,18 @@
   }
   void readHeader;
 
+  // A column the `cell` slot draws, with a visible label.
+  const _slotColumn: DataTableHeader<Row> = {
+    key: "link",
+    value: "Link",
+    sort: false,
+  };
+  void _slotColumn;
+
+  // @ts-expect-error A key that isn't a row's needs `sort: false`.
+  const _typoKey: DataTableHeader<Row> = { key: "nmae", value: "Name" };
+  void _typoKey;
+
   // @ts-expect-error
   const _badEmpty: DataTableEmptyHeader<Row> = { key: "x", empty: false };
   void _badEmpty;
