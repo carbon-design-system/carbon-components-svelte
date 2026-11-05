@@ -1,0 +1,380 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PropertyInspector: a dense side panel of label-left rows in collapsible
+/// groups. A row is 32px (`sm`) or 24px (`xs`) tall, and holds the Carbon
+/// field at the same size, so the rules here lay the rows out and fit the
+/// fields to them rather than restyle them. A property that was edited gets
+/// a bar on its row's inline start and a reset button; a mixed value gets a
+/// striped swatch or a half-way toggle where the field has no way to say it.
+/// @access private
+/// @group components
+@mixin property-inspector {
+  .#{$prefix}--property-inspector {
+    --ccs-property-inspector-row: #{$carbon--spacing-07};
+    --ccs-property-inspector-label-width: 40%;
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--property-inspector--xs {
+    --ccs-property-inspector-row: #{$carbon--spacing-06};
+  }
+
+  .#{$prefix}--property-inspector__header {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--property-inspector__summary {
+    @include type-style("label-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--property-inspector__empty {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-05;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--property-inspector__group {
+    border-block-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--property-inspector__heading {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+  }
+
+  .#{$prefix}--property-inspector__toggle-button {
+    @include type-style("heading-compact-01");
+
+    display: flex;
+    width: 100%;
+    min-height: var(--ccs-property-inspector-row);
+    align-items: center;
+    padding: 0 $carbon--spacing-05;
+    border: 0;
+    background-color: transparent;
+    color: $text-primary;
+    cursor: pointer;
+    gap: $carbon--spacing-03;
+    text-align: start;
+  }
+
+  .#{$prefix}--property-inspector__chevron {
+    flex: none;
+    fill: currentColor;
+    transition: transform $duration--fast-01 motion(standard, productive);
+
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--property-inspector__group--open
+    .#{$prefix}--property-inspector__chevron {
+    transform: rotate(90deg);
+
+    @include ccs-mirror-rtl(rotate(90deg));
+  }
+
+  .#{$prefix}--property-inspector__rows {
+    padding-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--property-inspector__rows[hidden] {
+    display: none;
+  }
+
+  .#{$prefix}--property-inspector__row {
+    position: relative;
+    display: grid;
+    min-height: var(--ccs-property-inspector-row);
+    align-items: center;
+    padding: $carbon--spacing-01 $carbon--spacing-05;
+    column-gap: $carbon--spacing-03;
+    grid-template-columns:
+      minmax(0, var(--ccs-property-inspector-label-width))
+      minmax(0, 1fr);
+  }
+
+  // A bar on the row's inline start marks a value that is not the default,
+  // for a person who cannot see the reset button's color.
+  .#{$prefix}--property-inspector__row--modified::before {
+    @include ccs-inset-inline(0);
+
+    position: absolute;
+    width: to-rem(2px);
+    background-color: $interactive;
+    content: "";
+    inset-block: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--property-inspector__label-cell {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--property-inspector__label {
+    @include type-style("label-01");
+
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    color: $text-secondary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--property-inspector__reset {
+    flex: none;
+  }
+
+  .#{$prefix}--property-inspector__controls {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--property-inspector__field {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    align-items: center;
+  }
+
+  .#{$prefix}--property-inspector__field
+    > .#{$prefix}--form-item,
+  .#{$prefix}--property-inspector__field
+    > .#{$prefix}--property-inspector__number,
+  .#{$prefix}--property-inspector__field
+    > .#{$prefix}--property-inspector__color {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .#{$prefix}--property-inspector__lock {
+    flex: none;
+  }
+
+  // A pair's label sits inside the field, on its inline start, and is the
+  // scrub handle.
+  .#{$prefix}--property-inspector__prefix {
+    @include type-style("label-01");
+    @include ccs-inset-inline($carbon--spacing-03);
+
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    color: $text-secondary;
+    inset-block: 0;
+    user-select: none;
+  }
+
+  .#{$prefix}--property-inspector__number {
+    position: relative;
+    display: flex;
+    min-width: 0;
+  }
+
+  .#{$prefix}--property-inspector__number .#{$prefix}--number {
+    width: 100%;
+  }
+
+  .#{$prefix}--property-inspector__number .#{$prefix}--number input {
+    padding-inline: $carbon--spacing-03;
+    text-align: start;
+  }
+
+  .#{$prefix}--property-inspector__number--unit .#{$prefix}--number input {
+    padding-inline-end: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--property-inspector__field--inline
+    .#{$prefix}--property-inspector__number
+    .#{$prefix}--number
+    input {
+    padding-inline: $carbon--spacing-06 $carbon--spacing-02;
+  }
+
+  .#{$prefix}--property-inspector__field > .#{$prefix}--list-box__wrapper,
+  .#{$prefix}--property-inspector__field
+    > .#{$prefix}--list-box__wrapper
+    .#{$prefix}--dropdown {
+    width: 100%;
+  }
+
+  .#{$prefix}--property-inspector__unit {
+    @include type-style("label-01");
+    @include ccs-inset-inline(null, $carbon--spacing-03);
+
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    color: $text-helper;
+    inset-block: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // Checkboxes, toggles and radios sit at the inline start of the control
+  // column, as tall as the row.
+  .#{$prefix}--property-inspector__field > .#{$prefix}--checkbox-wrapper,
+  .#{$prefix}--property-inspector__field > .#{$prefix}--toggle,
+  .#{$prefix}--property-inspector__toggle > .#{$prefix}--form-item {
+    min-height: var(--ccs-property-inspector-row);
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .#{$prefix}--property-inspector__toggle {
+    display: flex;
+  }
+
+  // A toggle cannot be "mixed": a switch is on or off. The knob rests
+  // half-way and the track stays neutral, and the hidden text says so.
+  .#{$prefix}--property-inspector__toggle--mixed
+    .#{$prefix}--toggle__switch::after {
+    transform: translateX(calc(#{to-rem(8px)} * var(--ccs-inline-sign, 1)));
+  }
+
+  .#{$prefix}--property-inspector__toggle--mixed
+    .#{$prefix}--toggle__switch::before {
+    background-color: $toggle-off;
+  }
+
+  .#{$prefix}--property-inspector__color {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--property-inspector__swatch {
+    position: relative;
+    display: inline-block;
+    width: var(--ccs-property-inspector-row);
+    height: var(--ccs-property-inspector-row);
+    flex: none;
+  }
+
+  .#{$prefix}--property-inspector__swatch-input {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 1px solid $border-strong;
+    appearance: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: 0;
+    }
+
+    &::-moz-color-swatch {
+      border: 0;
+    }
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  // The swatch of a mixed color: stripes over the field, so no one color
+  // is claimed. They draw over the native input and let pointer events
+  // through to it.
+  .#{$prefix}--property-inspector__swatch-mixed {
+    position: absolute;
+    background-color: $field;
+    background-image: repeating-linear-gradient(
+      135deg,
+      $text-secondary 0,
+      $text-secondary 1px,
+      transparent 1px,
+      transparent $carbon--spacing-03
+    );
+    inset: 1px;
+    pointer-events: none;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--property-inspector__toggle-button:hover {
+      background-color: $layer-hover;
+    }
+  }
+
+  // Keep the ring after the hover block: they tie on specificity.
+  .#{$prefix}--property-inspector__toggle-button:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--property-inspector__chevron {
+      transition: none;
+    }
+  }
+
+  // Forced colors drop background colors and images, so the stripes and the
+  // bar are drawn in system colors, and the swatch keeps its own.
+  @media (forced-colors: active) {
+    .#{$prefix}--property-inspector__row--modified::before {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--property-inspector__swatch-input {
+      border-color: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--property-inspector__swatch-mixed {
+      background-color: Canvas;
+      background-image: repeating-linear-gradient(
+        135deg,
+        CanvasText 0,
+        CanvasText 1px,
+        transparent 1px,
+        transparent $carbon--spacing-03
+      );
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--property-inspector__toggle--mixed
+      .#{$prefix}--toggle__switch::after {
+      background-color: CanvasText;
+    }
+  }
+}
+
+@include exports("property-inspector") {
+  @include property-inspector;
+}

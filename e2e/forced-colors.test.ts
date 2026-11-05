@@ -1360,3 +1360,28 @@ test("prefers-contrast: more dots the focus outline", async ({ page }) => {
     "dotted 2px",
   );
 });
+
+test("PropertyInspector draws a mixed color as stripes, and a modified row with Highlight", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/property-inspector.html");
+  await page.getByTestId("select-abc").click();
+  await expect(
+    page.locator(".bx--property-inspector__swatch-mixed").first(),
+  ).toBeVisible();
+  const system = await systemColors(page);
+
+  const stripes = await style(page, ".bx--property-inspector__swatch-mixed");
+  expect(stripes.backgroundImage).toContain("repeating-linear-gradient");
+  expect(stripes.backgroundImage).toContain(system.CanvasText);
+  expect(
+    (await style(page, ".bx--property-inspector__swatch-input")).borderColor,
+  ).toBe(system.CanvasText);
+  expect(
+    (await style(page, ".bx--property-inspector__row--modified", "::before"))
+      .background,
+  ).toBe(system.Highlight);
+});
