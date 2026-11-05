@@ -271,6 +271,14 @@ bun test:types   # type-check tests/ (svelte-typecheck)
 
 On a PR that touches `src/`, the API check workflow diffs the component API against the base branch with `sveld --check` and lists each change, with its semver bump, in the job summary. A breaking change (a prop removed or made required, a type narrowed, an event or slot removed) fails it unless the PR is marked breaking: a `!` in its title, a `BREAKING CHANGE:` footer in its description, or the "breaking changes" label. A sveld upgrade that changes the generated types counts too.
 
+sveld reads any change to a component's `rest_props`, `typedefs`, `generics` or `extends` as breaking, even one that only widens a type, such as adding rest props or making a typedef property optional. When the check fails on such a change, add an `API-Not-Breaking` trailer to a commit message in the PR, with the reason:
+
+```
+API-Not-Breaking: `display` becomes optional; every header that compiled still does
+```
+
+The trailer applies only to the PR's own commits. One with no reason fails the check. `git log --grep API-Not-Breaking` lists every PR that used one.
+
 When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/framed/` for the old name. Nothing type-checks the e2e fixtures, and the docs examples are type-checked only on PRs that change `docs/`. Svelte ignores an unknown prop, so a stale one passes until an E2E assertion fails or the next docs PR does.
 
 #### Component script types

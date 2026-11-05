@@ -5,6 +5,9 @@ name: API check
 # A breaking change fails the check unless the PR has the "breaking changes"
 # label, which pr-labels.yml adds for a `!` title or a `BREAKING CHANGE:` body,
 # or a maintainer adds by hand. `labeled`/`unlabeled` re-run the check.
+# sveld reads any change to `rest_props`, `typedefs`, `generics` or `extends`
+# as breaking, even one that only widens a type. For that false positive, an
+# `API-Not-Breaking: <reason>` trailer on a commit in the PR passes the check.
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
@@ -89,5 +92,12 @@ jobs:
             echo "::notice::Breaking API change, marked with the \"breaking changes\" label."
             exit 0
           fi
-          echo "::error::Breaking API change. If it's intended, add \`!\` to the PR title (for example \`feat(button)!: ...\`) or the \"breaking changes\" label."
+          # A trailer needs a reason, so an empty one doesn't pass.
+          reason=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/commits" --paginate --jq '.[].commit.message' \
+            | sed -n 's/^API-Not-Breaking:[[:space:]]*\(.*[^[:space:]].*\)$/\1/p' | head -1)
+          if [ -n "$reason" ]; then
+            echo "::notice::sveld reported a breaking change; an API-Not-Breaking trailer says it isn't: $reason"
+            exit 0
+          fi
+          echo "::error::Breaking API change. If it's intended, add \`!\` to the PR title (for example \`feat(button)!: ...\`) or the \"breaking changes\" label. If sveld is wrong, add an \`API-Not-Breaking: <reason>\` trailer to a commit."
           exit 1
