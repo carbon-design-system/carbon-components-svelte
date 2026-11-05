@@ -80,6 +80,7 @@
     "check:css:tokens": "crassus tokens",
     "check:css:coverage": "crassus coverage --entry all",
     "check:css:doctor": "crassus doctor",
+    "check:fixtures": "bun scripts/check-fixtures.ts",
     "check:package": "bun scripts/check-package-contents.ts",
     "thumbnails": "bun scripts/thumbnails.ts",
     "release:screenshots": "bun scripts/release-screenshots.ts",

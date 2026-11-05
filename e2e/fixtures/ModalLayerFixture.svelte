@@ -41,9 +41,9 @@
     <AccordionItem title="Billing">Billed monthly</AccordionItem>
   </Accordion>
   <DataTable size="compact" {headers} {rows} />
-  <NumberInput label="Seats" value={5} />
-  <Dropdown titleText="Region" items={regions} selectedId="us-east-1" />
-  <MultiSelect titleText="Replicas" label="Choose regions" items={regions} />
+  <NumberInput labelText="Seats" value={5} />
+  <Dropdown labelText="Region" items={regions} selectedId="us-east-1" />
+  <MultiSelect labelText="Replicas" label="Choose regions" items={regions} />
   <Select labelText="Plan">
     <SelectItem value="team" text="Team" />
   </Select>

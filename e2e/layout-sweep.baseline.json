@@ -1680,6 +1680,14 @@
     "message": "div.bx--number.bx--number--helpertext > div.bx--number__input-wrapper > div.bx--number__controls:nth-of-type(1) > button.bx--number__control-btn.up-icon:nth-of-type(2): 1px outline inside 2px outline div[data-testid=\"fluid-number-invalid\"] > div.bx--form-item.bx--number-input--fluid > div.bx--number.bx--number--helpertext, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "rtl-fields.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 2px outline div[data-testid=\"tag-input-invalid\"] > div.bx--form-item > div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "rtl-placement.html",
     "variant": "320",
     "check": "overflow",

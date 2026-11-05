@@ -79,14 +79,14 @@
             <OverflowMenuItem text="Delete" />
           </OverflowMenu>
         {:else if name === "MenuButton"}
-          <MenuButton label="Actions">
-            <MenuItem label="Rename" />
-            <MenuItem label="Delete" />
+          <MenuButton labelText="Actions">
+            <MenuItem labelText="Rename" />
+            <MenuItem labelText="Delete" />
           </MenuButton>
         {:else if name === "ComboButton"}
-          <ComboButton label="Save">
-            <MenuItem label="Save as" />
-            <MenuItem label="Save all" />
+          <ComboButton labelText="Save">
+            <MenuItem labelText="Save as" />
+            <MenuItem labelText="Save all" />
           </ComboButton>
         {:else if name === "Tooltip"}
           <Tooltip triggerText="Usage">

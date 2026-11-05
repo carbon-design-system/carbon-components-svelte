@@ -256,7 +256,7 @@
 
 <div data-testid="drop-fill">
   <Dropdown
-    titleText="Dropdown fill"
+    labelText="Dropdown fill"
     items={dropFillItems}
     bind:selectedId={dropFillSelectedId}
   />
