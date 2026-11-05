@@ -1,0 +1,197 @@
+---
+components: ["HoverCard"]
+description: Hover cards show an interactive card of supplementary detail, such as a profile, an issue, or a link preview, when the pointer rests on a trigger or keyboard focus reaches it.
+---
+
+<script>
+  import { Box, Button, HoverCard, Link, Stack, Tag, UserAvatar } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Put a focusable element, such as a link or a button, in the `trigger` slot and the card's content in the default slot. The card opens when the pointer rests on the trigger for half a second, or when keyboard focus rests on it for a moment. It closes shortly after the pointer or focus leaves. The pointer can cross the gap to the card, and its buttons and links work.
+
+Unlike a [Tooltip](/components/Tooltip), the content can be interactive. Unlike a [Toggletip](/components/Toggletip), it opens without a click. The card is supplementary: there is no hover on a touch screen, so it never opens there, and the trigger does what it would do without a card. Keep what a person needs on the trigger's own destination.
+
+Name the card with `aria-label`. Without one, the card takes the trigger's text as its name.
+
+<Stack orientation="horizontal" gap={3}>
+  <span>Assigned to</span>
+  <HoverCard aria-label="Profile of Marcus Webb">
+    <Link slot="trigger" href="#marcus">@marcus</Link>
+    <Stack orientation="horizontal" gap={5}>
+      <UserAvatar name="Marcus Webb" size="lg" />
+      <Stack gap={2}>
+        <strong>Marcus Webb</strong>
+        <span>Site reliability, Dublin</span>
+      </Stack>
+    </Stack>
+    <Button size="sm" kind="tertiary">View profile</Button>
+  </HoverCard>
+</Stack>
+
+## Content
+
+### User card
+
+A card for a person: an avatar, a few facts, and actions. Move the pointer onto the card to use its buttons.
+
+<FileSource src="/framed/HoverCard/HoverCardUser" />
+
+### Issue preview
+
+A card for a reference to another item, such as an issue or a pull request.
+
+<Stack orientation="horizontal" gap={3}>
+  <span>Blocked by</span>
+  <HoverCard size="sm" aria-label="Issue 4211">
+    <Link slot="trigger" href="#issue-4211">#4211</Link>
+    <Tag type="green">Open</Tag>
+    <strong>Rollout stalls when a node drains during a deploy</strong>
+    <span>Opened by Priya Raman, 2 days ago</span>
+  </HoverCard>
+</Stack>
+
+### Link preview
+
+A card for a link to a page on the same site, fetched when the card opens. See [Async content](#async-content).
+
+<FileSource src="/framed/HoverCard/HoverCardLink" />
+
+## Async content
+
+Set `load` to fetch the card's data when it opens. The default slot receives it as `data` and renders once it arrives. Until then the card shows a skeleton, or the `loading` slot. The function receives an `AbortSignal` that aborts when the card closes before the data arrives, so a pointer that moves on does not leave a request running.
+
+The result is kept for `cacheMs` (a minute by default). Set `cacheKey` to share it between cards with the same key, such as every mention of one person in a list. Change the key to fetch again.
+
+When `load` rejects, the card shows `errorText` and a retry button. Use the `error` slot for your own. In this example, the first request fails.
+
+<FileSource src="/framed/HoverCard/HoverCardAsync" />
+
+## Timing
+
+Set `openDelay` and `closeDelay`, in milliseconds. They default to `500` and `300`. A pointer that sweeps across a list of triggers opens none of them. A pointer that leaves the trigger but keeps moving toward the card does not close it, however long the trip takes. A pointer that stops, or turns away, does.
+
+Only one card is open at a time. Opening one closes the other at once.
+
+<Stack orientation="horizontal" gap={7}>
+  <HoverCard openDelay={0} closeDelay={1000} aria-label="No open delay">
+    <Link slot="trigger" href="#instant">Opens at once</Link>
+    Closes a second after the pointer leaves.
+  </HoverCard>
+  <HoverCard openDelay={1000} aria-label="Long open delay">
+    <Link slot="trigger" href="#slow">Opens after a second</Link>
+    Opens when the pointer has rested for a second.
+  </HoverCard>
+</Stack>
+
+### Disabled
+
+Set `disabled` to `true` to keep the card from opening. An open card closes.
+
+<HoverCard disabled>
+  <Link slot="trigger" href="#disabled">No card</Link>
+  This does not open.
+</HoverCard>
+
+## Reactive example
+
+Bind `open` to read or set the state. The pointer and focus set it too. Opening it from code needs no delay. The card closes on Escape, and after the pointer or focus has visited it and left.
+
+<FileSource src="/framed/HoverCard/HoverCardReactive" />
+
+## Placement
+
+Position the card with `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`) and `align` (`"start"`, `"center"`, `"end"`). The defaults are `direction="bottom"` and `align="start"`. A card that would run past the window or its container opens toward the other side. Above and below the trigger, `start` and `end` swap sides in RTL.
+
+### Directions
+
+<Stack orientation="horizontal" gap={10}>
+  <HoverCard direction="top" size="sm" aria-label="Top">
+    <Link slot="trigger" href="#top">top</Link>
+    Opens above the trigger.
+  </HoverCard>
+  <HoverCard direction="right" size="sm" aria-label="Right">
+    <Link slot="trigger" href="#right">right</Link>
+    Opens after the trigger.
+  </HoverCard>
+  <HoverCard direction="bottom" size="sm" aria-label="Bottom">
+    <Link slot="trigger" href="#bottom">bottom</Link>
+    Opens below the trigger.
+  </HoverCard>
+  <HoverCard direction="left" size="sm" aria-label="Left">
+    <Link slot="trigger" href="#left">left</Link>
+    Opens before the trigger.
+  </HoverCard>
+</Stack>
+
+### Alignment
+
+<Stack orientation="horizontal" gap={10}>
+  <HoverCard align="start" size="sm" aria-label="Start">
+    <Link slot="trigger" href="#start">start</Link>
+    Lines up with the trigger's start edge.
+  </HoverCard>
+  <HoverCard align="center" size="sm" aria-label="Center">
+    <Link slot="trigger" href="#center">center</Link>
+    Centers on the trigger.
+  </HoverCard>
+  <HoverCard align="end" size="sm" aria-label="End">
+    <Link slot="trigger" href="#end">end</Link>
+    Lines up with the trigger's end edge.
+  </HoverCard>
+</Stack>
+
+### Portal
+
+A card that a container would cut off, such as a box with `overflow: hidden` or a table's scroll area, opens in a portal. Set `portalCard` to `true` to always portal it, or to `false` to keep it in place. Portalled content leaves its container in the DOM, so CSS that targets it as a descendant of the container does not match it. Keyboard focus still moves from the trigger into the card and back.
+
+<Box padding={5} border="subtle" maxWidth="12rem" overflow="hidden">
+  <HoverCard aria-label="Retention policy">
+    <Link slot="trigger" href="#retention">Retention</Link>
+    Logs are kept for 30 days, then archived to cold storage for a year.
+  </HoverCard>
+</Box>
+
+## Sizes
+
+Set `size` to control the card's width: `"sm"` (16rem), `"md"` (20rem, the default), or `"lg"` (23rem).
+
+<Stack orientation="horizontal" gap={7}>
+  <HoverCard size="sm" aria-label="Small">
+    <Link slot="trigger" href="#sm">sm</Link>
+    A short note.
+  </HoverCard>
+  <HoverCard size="md" aria-label="Medium">
+    <Link slot="trigger" href="#md">md</Link>
+    A person, an issue, or a link preview fits here with room for one or two actions.
+  </HoverCard>
+  <HoverCard size="lg" aria-label="Large">
+    <Link slot="trigger" href="#lg">lg</Link>
+    A wider card suits a preview with a title and a paragraph of text below it.
+  </HoverCard>
+</Stack>
+
+## Accessibility
+
+A hover card is a non-modal dialog. It does not trap focus, and the page behind it stays available.
+
+| Do | Why |
+| --- | --- |
+| Use a link or a button as the trigger | The trigger takes keyboard focus, and it keeps its own role. A link stays a link and follows its `href` |
+| Make the same information reachable without the card | The card never opens on a touch screen, and a screen reader's virtual cursor does not focus the trigger. Put what a person needs on the destination |
+| Set `aria-label` to say what the card is | The default name is the trigger's text, which can be a bare "#4211" |
+| Keep the card short, with a few actions | It is a preview, not a place to work. Link to the full page for more |
+| Use [Toggletip](/components/Toggletip) for content a person asks for | A click is an explicit request. A card that opens on hover is an offer |
+
+### Keyboard
+
+Focus on the trigger opens the card after a short pause, so tabbing through a list of triggers opens none. While the card is open:
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Tab" /> | Moves from the trigger into the card, and from the card's last control on to what follows the trigger |
+| <DocKbd label="Shift" />+<DocKbd label="Tab" /> | Moves from the card's first control back to the trigger |
+| <DocKbd label="Escape" /> | Closes the card and returns focus to the trigger. This also works when the pointer opened it |
+
+The card stays open while focus is on the trigger or inside it. While open, the trigger points to the card with `aria-details`. The trigger gets no `aria-expanded` or `aria-haspopup`, because activating it follows the link instead of toggling the card.
