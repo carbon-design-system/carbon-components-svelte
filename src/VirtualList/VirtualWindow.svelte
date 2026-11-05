@@ -2,6 +2,8 @@
   /**
    * Internal. The scroll spacer and the rendered window of a virtualized list,
    * shared by `VirtualList` and the listbox menus.
+   * @slot {{}} sticky - Pinned to the start of the viewport, ahead of the window.
+   * @slot {{}} kept - Items held mounted apart from the window, placed from the spacer.
    */
 
   /** The height of the whole list in pixels. */
@@ -27,6 +29,11 @@
 
   import { tick } from "svelte";
   import { virtualWindow } from "../utils/virtual-window.js";
+
+  // The action places the window once the page runs, and takes over from
+  // here. Server output has no action, so it carries the first position, and a
+  // list rendered at an offset is already there when the page arrives.
+  const initialTransform = `translateY(${offsetY}px)`;
 
   /** @type {null | HTMLDivElement} */
   let spacerRef = null;
@@ -79,7 +86,13 @@
   style:height="{totalHeight}px"
   style:position="relative"
 >
-  <div bind:this={layerRef} use:virtualWindow={{ offsetY, scrollTop, pinned }}>
+  <slot name="sticky" />
+  <div
+    bind:this={layerRef}
+    style:transform={initialTransform}
+    use:virtualWindow={{ offsetY, scrollTop, pinned }}
+  >
     <slot />
   </div>
+  <slot name="kept" />
 </div>

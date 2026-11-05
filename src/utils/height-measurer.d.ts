@@ -10,7 +10,12 @@ export type HeightMeasurerOptions = {
    * been measured, and the heights they replace. Only called when a report
    * differs from the heights already held.
    */
-  onMeasure: (heights: number[], prevHeights: number[]) => void;
+  onMeasure?: (heights: number[], prevHeights: number[]) => void;
+  /**
+   * Called just before `onMeasure` with only the index and height pairs that
+   * changed, for a caller that holds the heights itself.
+   */
+  onEntries?: (entries: Array<[number, number]>) => void;
   /**
    * Add each element's vertical margins to its height. Adjacent margins that
    * collapse are counted in full, so this suits elements with a margin on one
@@ -35,6 +40,11 @@ export type HeightMeasurer = {
    * elements again rather than waiting for one of them to resize.
    */
   clear: () => void;
+  /**
+   * Move the measurements with their items when `delta` items are added at the
+   * front, or dropped from it when negative. Nothing is reported.
+   */
+  shift: (delta: number) => void;
   /** Stop observing for good. */
   disconnect: () => void;
 };

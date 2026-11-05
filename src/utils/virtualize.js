@@ -1,4 +1,18 @@
 // @ts-check
+// The pixel-and-array face of the virtualization engine, for callers that hold
+// a list of items and a vertical scroll position and ask for one answer at a
+// time: `DataTable`, `TreeView`, the listbox menus and `VirtualList`. The
+// arithmetic is `virtualizer.js`; this file adapts it to item arrays, per-item
+// height arrays and the names those callers use.
+import { createFixedOffsets, createOffsets } from "./virtual-offsets.js";
+import {
+  capToMaxItems,
+  getRange,
+  getScrollLead,
+  getScrollOffsetForIndex,
+  getWindow,
+} from "./virtualizer.js";
+
 /**
  * Per-option heights indexed by item.
  * @typedef {ArrayLike<number | undefined>} ItemHeights
@@ -70,186 +84,56 @@ function isUsableEstimate(estimate) {
 }
 
 /**
- * Accumulated positions for a list whose options each have their own height.
- * `offsets[i]` is the distance from the top of the list to the top of option
- * `i`, so `offsets[itemCount]` is the total scroll height.
+ * Positions for a list whose options each have their own height. An option
+ * with no usable height takes the average of the ones that have, or the seed.
  *
  * @param {Object} options
  * @param {number} options.itemCount
  * @param {ItemHeights | undefined} options.heights
  * @param {number} options.itemHeight Seed estimate for unmeasured options.
- * @returns {{ offsets: Float64Array, totalHeight: number }}
+ * @returns {import("./virtual-offsets.js").Offsets}
  */
-function accumulateOffsets({ itemCount, heights, itemHeight }) {
+function offsetsFor({ itemCount, heights, itemHeight }) {
   const estimate = getEstimatedHeight({ itemCount, heights, itemHeight });
-  const offsets = new Float64Array(itemCount + 1);
-
-  for (let index = 0; index < itemCount; index++) {
-    const height = heights?.[index];
-    offsets[index + 1] =
-      offsets[index] + (isMeasuredHeight(height) ? height : estimate);
-  }
-
-  return { offsets, totalHeight: offsets[itemCount] };
+  return createOffsets({ count: itemCount, estimate, sizes: heights });
 }
 
 /**
- * Narrow `[startIndex, endIndex)` to at most `maxItems` entries.
+ * The range of a list with its own per-option heights. Heights that add up to
+ * nothing can't be windowed: every option shares offset 0, so no search can
+ * separate them. Those render whole, as the fixed path does for a non-positive
+ * item height.
  *
- * @param {number} startIndex
- * @param {number} endIndex
+ * @param {import("./virtual-offsets.js").Offsets} offsets
+ * @param {number} itemCount
+ * @param {number} scrollTop
+ * @param {number} containerHeight
+ * @param {number} overscan
  * @param {number} [maxItems]
- * @returns {number} The capped `endIndex`.
- */
-function capToMaxItems(startIndex, endIndex, maxItems) {
-  if (maxItems && endIndex - startIndex > maxItems) {
-    return startIndex + maxItems;
-  }
-
-  return endIndex;
-}
-
-/**
- * Index of the first entry in `offsets[0..size)` greater than `target`, or
- * `size` when none is.
- *
- * @param {Float64Array} offsets
- * @param {number} size
- * @param {number} target
- * @returns {number}
- */
-function upperBound(offsets, size, target) {
-  let low = 0;
-  let high = size;
-
-  while (low < high) {
-    const mid = (low + high) >> 1;
-    if (offsets[mid] > target) high = mid;
-    else low = mid + 1;
-  }
-
-  return low;
-}
-
-/**
- * Index of the first entry in `offsets[0..size)` at or above `target`, or
- * `size` when none is.
- *
- * @param {Float64Array} offsets
- * @param {number} size
- * @param {number} target
- * @returns {number}
- */
-function lowerBound(offsets, size, target) {
-  let low = 0;
-  let high = size;
-
-  while (low < high) {
-    const mid = (low + high) >> 1;
-    if (offsets[mid] >= target) high = mid;
-    else low = mid + 1;
-  }
-
-  return low;
-}
-
-/**
- * `getVisibleRange` against already-accumulated positions, so a caller that
- * has built them once does not build them again.
- *
- * @param {Object} options
- * @param {ReturnType<typeof accumulateOffsets>} options.accumulated
- * @param {number} options.scrollTop
- * @param {number} options.containerHeight
- * @param {number} options.itemCount
- * @param {number} options.overscan
- * @param {number} [options.maxItems]
  * @returns {{ startIndex: number, endIndex: number }}
  */
-function measuredVisibleRange({
-  accumulated,
+function measuredRange(
+  offsets,
+  itemCount,
   scrollTop,
   containerHeight,
-  itemCount,
   overscan,
   maxItems,
-}) {
-  // Heights that accumulate to nothing can't be windowed: every option shares
-  // offset 0, so no search can separate them. Fall back to the full range, as
-  // the fixed path does for a non-positive item height.
-  if (!(accumulated.totalHeight > 0)) {
+) {
+  if (!(offsets.offsetOf(itemCount) > 0)) {
     return { startIndex: 0, endIndex: itemCount };
   }
 
-  const { offsets } = accumulated;
-  const size = itemCount + 1;
-  const firstVisible =
-    Math.min(itemCount, upperBound(offsets, size, scrollTop)) - 1;
-
-  const startIndex = Math.max(0, firstVisible - overscan);
-  const endIndex = Math.min(
+  const { startIndex, endIndex } = getRange(
+    offsets,
     itemCount,
-    lowerBound(offsets, size, scrollTop + containerHeight) + overscan,
+    scrollTop,
+    containerHeight,
+    overscan,
   );
-
   return {
     startIndex,
     endIndex: capToMaxItems(startIndex, endIndex, maxItems),
-  };
-}
-
-/**
- * How far past the viewport to render in the direction of travel. The browser
- * scrolls on the compositor and can paint a new position before the window
- * moves to it, so a fast scroll outruns `overscan` and shows blank space. The
- * next scroll is likely to move about as far as the last one did, so render
- * that far ahead, up to one viewport.
- *
- * @param {number} scrollDelta Signed distance the last scroll moved.
- * @param {number} containerHeight
- * @returns {number} Signed: negative extends the window upward.
- */
-function getScrollLead(scrollDelta, containerHeight) {
-  if (!Number.isFinite(scrollDelta) || !(containerHeight > 0)) return 0;
-  return Math.max(-containerHeight, Math.min(scrollDelta, containerHeight));
-}
-
-/**
- * `getVisibleRange` with the viewport extended by `lead` in the direction of
- * travel. `maxItems` trims the lead before the viewport, so a capped list
- * renders what is on screen first.
- *
- * @param {Object} options
- * @param {(scrollTop: number, containerHeight: number) => { startIndex: number, endIndex: number }} options.range
- * Resolves the uncapped range for a viewport.
- * @param {number} options.scrollTop
- * @param {number} options.containerHeight
- * @param {number} options.lead From `getScrollLead`.
- * @param {number} [options.maxItems]
- * @returns {{ startIndex: number, endIndex: number }}
- */
-function leadingRange({ range, scrollTop, containerHeight, lead, maxItems }) {
-  const extended = range(
-    scrollTop + Math.min(0, lead),
-    containerHeight + Math.abs(lead),
-  );
-
-  if (lead >= 0) {
-    return {
-      startIndex: extended.startIndex,
-      endIndex: capToMaxItems(extended.startIndex, extended.endIndex, maxItems),
-    };
-  }
-
-  if (!maxItems) return extended;
-
-  // Cap the viewport as if there were no lead, then spend what is left of
-  // `maxItems` on the lead above it.
-  const base = range(scrollTop, containerHeight);
-  const endIndex = capToMaxItems(base.startIndex, base.endIndex, maxItems);
-  return {
-    startIndex: Math.max(extended.startIndex, endIndex - maxItems),
-    endIndex,
   };
 }
 
@@ -280,14 +164,14 @@ export function getVisibleRange({
   heights = undefined,
 }) {
   if (heights) {
-    return measuredVisibleRange({
-      accumulated: accumulateOffsets({ itemCount, heights, itemHeight }),
+    return measuredRange(
+      offsetsFor({ itemCount, heights, itemHeight }),
+      itemCount,
       scrollTop,
       containerHeight,
-      itemCount,
       overscan,
       maxItems,
-    });
+    );
   }
 
   // A non-positive (or NaN) itemHeight can't be virtualized; the math below
@@ -296,10 +180,12 @@ export function getVisibleRange({
     return { startIndex: 0, endIndex: itemCount };
   }
 
-  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  const endIndex = Math.min(
+  const { startIndex, endIndex } = getRange(
+    createFixedOffsets({ count: itemCount, size: itemHeight }),
     itemCount,
-    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan,
+    scrollTop,
+    containerHeight,
+    overscan,
   );
 
   return {
@@ -333,6 +219,9 @@ export function getVisibleRange({
  * @param {number} [options.scrollDelta=0] Signed distance the last scroll
  * moved. The window extends that far past the viewport in the direction of
  * travel, up to one `containerHeight`, so a fast scroll does not outrun it.
+ * @param {number} [options.maxHeight] The tallest list to lay out, in pixels.
+ * The list ends at the last item that fits: a browser lays out only so tall a
+ * scroll area, and drops a taller one.
  * @returns {{
  *   visibleItems: Item[],
  *   startIndex: number,
@@ -354,6 +243,7 @@ export function virtualize({
   measured = false,
   heights = undefined,
   scrollDelta = 0,
+  maxHeight = undefined,
 }) {
   // A non-positive itemHeight can't be virtualized (the math divides by it and
   // yields NaN indices), so render the full list unvirtualized. This holds
@@ -373,12 +263,15 @@ export function virtualize({
     };
   }
 
-  const accumulated = measured
-    ? accumulateOffsets({ itemCount: items.length, heights, itemHeight })
-    : null;
-  const totalHeight = accumulated
-    ? accumulated.totalHeight
-    : items.length * itemHeight;
+  const offsets = measured
+    ? offsetsFor({ itemCount: items.length, heights, itemHeight })
+    : createFixedOffsets({ count: items.length, size: itemHeight });
+  // A browser lays out only so tall a scroll area, so the list can end early.
+  const itemCount =
+    maxHeight === undefined
+      ? items.length
+      : Math.min(items.length, offsets.countWithin(maxHeight));
+  const totalHeight = offsets.offsetOf(itemCount);
 
   // Clamp scrollTop to the scrollable range. A stale scrollTop (e.g. left over
   // from a longer list after the filter narrows it) would otherwise push
@@ -387,48 +280,30 @@ export function virtualize({
   const maxScroll = Math.max(0, totalHeight - containerHeight);
   const clampedScrollTop = Math.min(Math.max(0, scrollTop), maxScroll);
 
-  /**
-   * @param {number} top
-   * @param {number} height
-   */
-  const range = (top, height) =>
-    accumulated
-      ? measuredVisibleRange({
-          accumulated,
-          scrollTop: top,
-          containerHeight: height,
-          itemCount: items.length,
+  // Heights that add up to nothing can't be windowed: every option shares
+  // offset 0, so no search can separate them.
+  const { startIndex, endIndex } =
+    totalHeight > 0
+      ? getWindow({
+          offsets,
+          count: itemCount,
+          scrollOffset: clampedScrollTop,
+          viewportSize: containerHeight,
           overscan,
+          lead: getScrollLead(scrollDelta, containerHeight),
+          maxItems,
         })
-      : getVisibleRange({
-          scrollTop: top,
-          itemHeight,
-          containerHeight: height,
-          itemCount: items.length,
-          overscan,
-        });
-
-  const { startIndex, endIndex } = leadingRange({
-    range,
-    scrollTop: clampedScrollTop,
-    containerHeight,
-    lead: getScrollLead(scrollDelta, containerHeight),
-    maxItems,
-  });
-
-  const offsetY = accumulated
-    ? accumulated.offsets[startIndex]
-    : startIndex * itemHeight;
-  const endOffsetY = accumulated
-    ? accumulated.offsets[endIndex]
-    : endIndex * itemHeight;
+      : {
+          startIndex: 0,
+          endIndex: capToMaxItems(0, itemCount, maxItems),
+        };
 
   return {
     visibleItems: items.slice(startIndex, endIndex),
     startIndex,
     endIndex,
-    offsetY,
-    endOffsetY,
+    offsetY: offsets.offsetOf(startIndex),
+    endOffsetY: offsets.offsetOf(endIndex),
     totalHeight,
     isVirtualized: true,
   };
@@ -482,6 +357,44 @@ export function virtualListState({
   estimate = undefined,
   scrollDelta = 0,
 }) {
+  const config = resolveVirtualConfig({
+    shouldVirtualize,
+    virtualize: virtualizeProp,
+    defaults,
+    estimate,
+  });
+
+  const data = config
+    ? virtualize({ items, scrollTop, scrollDelta, heights, ...config })
+    : null;
+
+  const itemsToRender = data?.isVirtualized ? data.visibleItems : items;
+
+  return { config, data, itemsToRender };
+}
+
+/**
+ * The windowing configuration for a listbox menu, or `null` when it is not
+ * windowed. Resolved from the defaults, the component's own, and the
+ * consumer's `virtualize` prop, in that order.
+ *
+ * @param {Object} options
+ * @param {boolean} options.shouldVirtualize
+ * @param {boolean | object | undefined} options.virtualize
+ * @param {Partial<typeof DEFAULT_VIRTUAL_LIST_CONFIG>} [options.defaults]
+ * @param {number} [options.estimate] Height to assume for options nothing has
+ * measured yet, in place of the config's `itemHeight`. Read only when the
+ * config opts into measuring, where `itemHeight` is only the seed. On the fixed
+ * path `itemHeight` is the height of every option and nothing may displace it.
+ * Supply the average of heights measured earlier.
+ * @returns {(typeof DEFAULT_VIRTUAL_LIST_CONFIG & Record<string, unknown>) | null}
+ */
+export function resolveVirtualConfig({
+  shouldVirtualize,
+  virtualize: virtualizeProp,
+  defaults = {},
+  estimate = undefined,
+}) {
   const resolved = shouldVirtualize
     ? {
         ...DEFAULT_VIRTUAL_LIST_CONFIG,
@@ -493,18 +406,9 @@ export function virtualListState({
   // Everything downstream reads the seeded config, callers included: an offset
   // placed against one seed and a scroll position computed against another
   // describe different lists.
-  const config =
-    resolved?.measured && isUsableEstimate(estimate)
-      ? { ...resolved, itemHeight: estimate }
-      : resolved;
-
-  const data = config
-    ? virtualize({ items, scrollTop, scrollDelta, heights, ...config })
-    : null;
-
-  const itemsToRender = data?.isVirtualized ? data.visibleItems : items;
-
-  return { config, data, itemsToRender };
+  return resolved?.measured && isUsableEstimate(estimate)
+    ? { ...resolved, itemHeight: estimate }
+    : resolved;
 }
 
 /**
@@ -528,19 +432,11 @@ export function getBoundedScrollTop({
   itemCount,
   heights = undefined,
 }) {
-  if (heights) {
-    const { offsets, totalHeight } = accumulateOffsets({
-      itemCount,
-      heights,
-      itemHeight,
-    });
-    const maxScroll = Math.max(0, totalHeight - containerHeight);
-    const position = offsets[Math.max(0, Math.min(index, itemCount))];
-    return Math.max(0, Math.min(position, maxScroll));
-  }
-
-  const maxScroll = Math.max(0, itemCount * itemHeight - containerHeight);
-  return Math.max(0, Math.min(index * itemHeight, maxScroll));
+  const offsets = heights
+    ? offsetsFor({ itemCount, heights, itemHeight })
+    : createFixedOffsets({ count: itemCount, size: itemHeight });
+  const maxScroll = Math.max(0, offsets.offsetOf(itemCount) - containerHeight);
+  return Math.max(0, Math.min(offsets.offsetOf(index), maxScroll));
 }
 
 /**
@@ -578,58 +474,20 @@ export function scrollHighlightedIntoView({
   maxItems = undefined,
   heights = undefined,
 }) {
-  if (itemCount <= 0) return null;
+  const offsets = heights
+    ? offsetsFor({ itemCount, heights, itemHeight })
+    : createFixedOffsets({ count: itemCount, size: itemHeight });
 
-  const index = Math.max(0, Math.min(highlightedIndex, itemCount - 1));
-  const accumulated = heights
-    ? accumulateOffsets({ itemCount, heights, itemHeight })
-    : null;
-  const top = accumulated ? accumulated.offsets[index] : index * itemHeight;
-  const bottom = accumulated
-    ? accumulated.offsets[index + 1]
-    : top + itemHeight;
-  const totalHeight = accumulated
-    ? accumulated.totalHeight
-    : itemCount * itemHeight;
-  const maxScroll = Math.max(0, totalHeight - containerHeight);
-
-  /** @param {number} scrollTop */
-  const isRendered = (scrollTop) => {
-    const { startIndex, endIndex } = accumulated
-      ? measuredVisibleRange({
-          accumulated,
-          scrollTop,
-          containerHeight,
-          itemCount,
-          overscan,
-          maxItems,
-        })
-      : getVisibleRange({
-          scrollTop,
-          itemHeight,
-          containerHeight,
-          itemCount,
-          overscan,
-          maxItems,
-        });
-    return index >= startIndex && index < endIndex;
-  };
-
-  /** @param {number} scrollTop */
-  const bound = (scrollTop) => Math.max(0, Math.min(scrollTop, maxScroll));
-
-  let next = currentScrollTop;
-  if (top < currentScrollTop) {
-    next = top;
-  } else if (bottom > currentScrollTop + containerHeight) {
-    next = bottom - containerHeight;
-  }
-  next = bound(next);
-
-  // Past `maxItems`, put the item at the top, where the window starts.
-  if (!isRendered(next)) next = bound(top);
-
-  return next === currentScrollTop ? null : next;
+  return getScrollOffsetForIndex({
+    offsets,
+    count: itemCount,
+    index: highlightedIndex,
+    align: "nearest",
+    scrollOffset: currentScrollTop,
+    viewportSize: containerHeight,
+    overscan,
+    maxItems,
+  });
 }
 
 /**
@@ -663,55 +521,19 @@ export function scrollSelectedIntoView({
 }
 
 /**
- * The `scrollTop` delta that keeps the option at `index`, and everything below
- * it, where the reader last saw it once the options above it measure to heights
- * other than the ones assumed. Add the result to the current scroll position.
+ * The `scrollTop` delta that keeps the topmost option on screen where the
+ * reader last saw it once the options above it measure to heights other than
+ * the ones assumed. Add the result to the current scroll position.
  *
- * Positive means the options above grew and the anchor moved down. Each height
- * set is read with its own estimate for anything unmeasured, so a sharper
- * estimate shifting unmeasured options is corrected too.
+ * The anchor is the option at `scrollTop` under the heights that position was
+ * computed against: the one the reader is looking at, and so the one that must
+ * not move. Positive means the options above grew and the anchor moved down.
+ * Each height set is read with its own estimate for anything unmeasured, so a
+ * sharper estimate shifting unmeasured options is corrected too.
  *
- * @param {Object} options
- * @param {number} options.index Index anchoring the viewport. Options before
- * it are the ones whose height changes shift what is on screen.
- * @param {number} options.itemCount
- * @param {number} options.itemHeight Seed estimate for unmeasured options.
- * @param {ItemHeights | undefined} options.heights
- * Per-option heights as they are now.
- * @param {ItemHeights | undefined} options.previousHeights
- * Per-option heights the current scroll position was computed against.
- * @param {ReturnType<typeof accumulateOffsets>} [options.accumulatedBefore]
- * `previousHeights` already accumulated, when the caller has it.
- * @returns {number}
- */
-function getScrollCorrection({
-  index,
-  itemCount,
-  itemHeight,
-  heights,
-  previousHeights,
-  accumulatedBefore,
-}) {
-  const anchor = Math.max(0, Math.min(index, itemCount));
-  if (anchor === 0) return 0;
-
-  const after = accumulateOffsets({ itemCount, heights, itemHeight });
-  const before =
-    accumulatedBefore ??
-    accumulateOffsets({ itemCount, heights: previousHeights, itemHeight });
-
-  return after.offsets[anchor] - before.offsets[anchor];
-}
-
-/**
- * `getScrollCorrection` for a caller that knows its scroll position but not
- * which option to anchor on. The anchor is the topmost option on screen at
- * `scrollTop` under the heights that position was computed against: the one
- * the reader is looking at, and so the one that must not move.
- *
- * Every consumer of measured heights needs this pairing. Note that the
- * rendered window starts `overscan` options earlier than the viewport does, so
- * correcting against that index leaves the visible options shifting anyway.
+ * Note that the rendered window starts `overscan` options earlier than the
+ * viewport does, so correcting against that index would leave the visible
+ * options shifting anyway.
  *
  * @param {Object} options
  * @param {number} options.scrollTop Position the correction is relative to.
@@ -732,36 +554,26 @@ export function getMeasuredScrollCorrection({
   heights,
   previousHeights,
 }) {
-  // Accumulate `previousHeights` once; both the anchor lookup and the
-  // correction need the same offsets.
-  const accumulatedBefore = previousHeights
-    ? accumulateOffsets({ itemCount, heights: previousHeights, itemHeight })
-    : undefined;
-
-  const { startIndex } = accumulatedBefore
-    ? measuredVisibleRange({
-        accumulated: accumulatedBefore,
-        scrollTop,
-        containerHeight,
-        itemCount,
-        overscan: 0,
-      })
-    : getVisibleRange({
-        scrollTop,
-        itemHeight,
-        containerHeight,
-        itemCount,
-        overscan: 0,
-      });
-
-  return getScrollCorrection({
-    index: startIndex,
+  const before = offsetsFor({
     itemCount,
+    heights: previousHeights,
     itemHeight,
-    heights,
-    previousHeights,
-    accumulatedBefore,
   });
+  // Heights that add up to nothing leave nothing to anchor on.
+  if (!(before.offsetOf(itemCount) > 0)) return 0;
+
+  const { startIndex } = getRange(
+    before,
+    itemCount,
+    scrollTop,
+    containerHeight,
+    0,
+  );
+  const anchor = Math.max(0, Math.min(startIndex, itemCount));
+  if (anchor === 0) return 0;
+
+  const after = offsetsFor({ itemCount, heights, itemHeight });
+  return after.offsetOf(anchor) - before.offsetOf(anchor);
 }
 
 /**

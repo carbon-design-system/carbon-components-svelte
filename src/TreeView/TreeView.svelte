@@ -716,6 +716,7 @@
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { getLayoutDirection, inlineKey } from "../utils/layout-direction.js";
+  import { getMaxScrollHeight } from "../utils/max-scroll-height.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { observeResize } from "../utils/shared-observer.js";
@@ -734,9 +735,9 @@
   import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
-    getVisibleRange,
     scrollHighlightedIntoView,
   } from "../utils/virtualize.js";
+  import { createVirtualizer } from "../utils/virtualizer.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
   import TreeViewNodeList from "./TreeViewNodeList.svelte";
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
@@ -1849,6 +1850,10 @@
     }
   }
 
+  // A browser lays out only so tall a scroll area, so a tree of more rows than
+  // that ends at the last that fits.
+  const virtualizer = createVirtualizer({ maxSize: getMaxScrollHeight() });
+
   /**
    * @param {{ itemHeight: number; overscan: number } | null} virtualConfig
    * @param {ReturnType<typeof createTreeVirtualIndex<any>> | null} virtualIndex
@@ -1856,24 +1861,20 @@
    */
   function resolveVirtualData(virtualConfig, virtualIndex, scrollTop) {
     if (!virtualConfig || !virtualIndex) return null;
-    const itemHeight = virtualConfig.itemHeight;
-    const containerHeight = getVirtualContainerHeight();
-    const totalHeight = virtualIndex.totalCount * itemHeight;
-    const maxScroll = Math.max(0, totalHeight - containerHeight);
-    const clampedScrollTop = Math.min(Math.max(0, scrollTop), maxScroll);
-    const { startIndex, endIndex } = getVisibleRange({
-      scrollTop: clampedScrollTop,
-      itemHeight,
-      containerHeight,
-      itemCount: virtualIndex.totalCount,
-      overscan: virtualConfig.overscan,
-    });
+    virtualizer.setScroll(scrollTop);
+    const { startIndex, endIndex, startOffset, totalSize } =
+      virtualizer.setOptions({
+        count: virtualIndex.totalCount,
+        size: virtualConfig.itemHeight,
+        viewportSize: getVirtualContainerHeight(),
+        overscan: virtualConfig.overscan,
+      });
     return {
       visibleItems: virtualIndex.collectRows(startIndex, endIndex),
       startIndex,
       endIndex,
-      offsetY: startIndex * itemHeight,
-      totalHeight,
+      offsetY: startOffset,
+      totalHeight: totalSize,
     };
   }
   $: virtualData = resolveVirtualData(virtualConfig, virtualIndex, scrollTop);

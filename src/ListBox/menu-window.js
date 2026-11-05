@@ -4,16 +4,11 @@ import {
   createHeightMeasurer,
   VIRTUAL_INDEX_ATTRIBUTE,
 } from "../utils/height-measurer.js";
+import { getMaxScrollHeight } from "../utils/max-scroll-height.js";
 import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
 import { syncPinnedWindow } from "../utils/virtual-window.js";
-import {
-  getBoundedScrollTop,
-  getMeasuredAverage,
-  getMeasuredScrollCorrection,
-  scrollHighlightedIntoView,
-  scrollSelectedIntoView,
-  virtualListState,
-} from "../utils/virtualize.js";
+import { resolveVirtualConfig } from "../utils/virtualize.js";
+import { createVirtualizer } from "../utils/virtualizer.js";
 import { getMenuItemHeight, getMenuMaxHeight } from "./list-box-utils.js";
 
 /**
@@ -49,9 +44,11 @@ function withoutMeasured(virtualizeProp) {
 }
 
 /**
- * Which options a listbox menu renders and where they sit. Wraps the offset
- * arithmetic in `virtualize.js` and the height observation in
- * `heightMeasurer.js`
+ * Which options a listbox menu renders and where they sit. Resolves the
+ * menu's windowing configuration and hands the arithmetic, the measured
+ * heights and the scroll requests to a virtualizer, keeping what only a menu
+ * knows: the collection its heights describe, the estimate that outlives a
+ * close, the height observation, and the option's own rect once it is mounted.
  *
  * @param {Object} options
  * @param {() => HTMLElement | null | undefined} options.getContainer The menu's
@@ -64,8 +61,6 @@ function withoutMeasured(virtualizeProp) {
  * given.
  */
 export function createMenuWindow({ getContainer, onScrollTop, onState }) {
-  /** @type {number[]} Per-option heights, by position, sparse. */
-  let heights = [];
   /**
    * Height to assume for an unmeasured option: the average of the heights last
    * held.
@@ -80,8 +75,6 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   let knownKeys = [];
   /** @type {ResolvedConfig | null} */
   let config = null;
-  /** How many options the last `update` was given. */
-  let itemCount = 0;
   /** Whether that update resolved to measured heights. */
   let measured = false;
   /**
@@ -99,109 +92,59 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    */
   let prevOptions = null;
   /**
-   * The outstanding request.
-   * @type {null | {
-   *   index: number,
-   *   align: "top" | "nearest",
-   *   scrollTop: number,
-   *   heights: number[]
-   * }}
+   * Whether the next `resolve` records the position it is given without
+   * reading a move into it: before the first, and after a reset.
    */
-  let pending = null;
-  /**
-   * The position this last vouched for: written here, or read from a container
-   * this left where it was. Anything else is the reader's.
-   */
-  let prevWrittenScrollTop = -1;
-  /**
-   * The scroll position the last `resolve` was given or `scrollTo` wrote, or
-   * `null` after a reset, so the next one records a position without reading
-   * a move into it.
-   * @type {number | null}
-   */
-  let prevScrollTop = null;
-  /** How far, and which way, the menu last scrolled. */
-  let scrollDelta = 0;
+  let unsynced = true;
+  /** Whether the virtualizer wrote a position since measurement began. */
+  let wroteWhileMeasuring = false;
+  let measuring = false;
 
-  const measurer = createHeightMeasurer({ onMeasure: handleMeasured });
+  /**
+   * Move the menu and read back what the container took. The virtualizer's own
+   * writes come through here.
+   * @param {number} next
+   * @returns {number}
+   */
+  function writeContainer(next) {
+    const container = getContainer();
+    if (!container) return virtualizer.getScrollOffset();
 
-  /** Hand the caller a state resolved again, unless it is about to be told. */
-  function notifyChange() {
-    if (updating || !prevOptions) return;
-    onState?.(resolve(prevOptions));
+    container.scrollTop = next;
+    const actual = container.scrollTop;
+    syncPinnedWindow(container, actual);
+    if (measuring) wroteWhileMeasuring = true;
+    onScrollTop(actual);
+    return actual;
   }
 
   /**
-   * Move the menu and read back what the container took.
+   * Move the menu to a position the virtualizer did not ask for.
    * @param {number} next
    */
   function scrollTo(next) {
     const container = getContainer();
     if (!container) return;
     container.scrollTop = next;
-    prevWrittenScrollTop = container.scrollTop;
-    syncPinnedWindow(container, prevWrittenScrollTop);
+    const actual = container.scrollTop;
+    syncPinnedWindow(container, actual);
     // A position written here is not the reader moving, so it sets no lead.
-    prevScrollTop = prevWrittenScrollTop;
-    onScrollTop(prevWrittenScrollTop);
+    virtualizer.syncScroll(actual);
+    onScrollTop(actual);
   }
 
-  /**
-   * Where the option at `index` has to sit for the requested alignment under
-   * measured heights, or `null` when it is already close enough to leave alone.
-   * @param {number} index
-   * @param {"top" | "nearest"} align
-   * @param {number} currentScrollTop
-   * @param {ResolvedConfig} resolved
-   * @returns {number | null}
-   */
-  function measuredPosition(index, align, currentScrollTop, resolved) {
-    if (align === "top") {
-      return getBoundedScrollTop({
-        index,
-        itemHeight: resolved.itemHeight,
-        containerHeight: resolved.containerHeight,
-        itemCount,
-        heights,
-      });
-    }
+  const virtualizer = createVirtualizer({
+    scrollTo: writeContainer,
+    // A browser lays out only so tall a scroll area, and drops a taller one.
+    maxSize: getMaxScrollHeight(),
+  });
 
-    return scrollHighlightedIntoView({
-      highlightedIndex: index,
-      currentScrollTop,
-      itemCount,
-      itemHeight: resolved.itemHeight,
-      containerHeight: resolved.containerHeight,
-      overscan: resolved.overscan ?? 3,
-      maxItems: resolved.maxItems,
-      heights,
-    });
-  }
-
-  /**
-   * Place the option at `index` with the heights known so far.
-   * @param {number} index
-   * @param {"top" | "nearest"} align
-   */
-  function requestMeasured(index, align) {
-    const container = getContainer();
-    if (!measuredWindow || !config || !container) return;
-
-    if (index < 0) {
-      pending = null;
-      scrollTo(0);
-      return;
-    }
-
-    const next = measuredPosition(index, align, container.scrollTop, config);
-    if (next === null) prevWrittenScrollTop = container.scrollTop;
-    else scrollTo(next);
-    pending = {
-      index,
-      align,
-      scrollTop: next ?? container.scrollTop,
-      heights,
-    };
+  /** Hand the caller a state resolved again, unless it is about to be told. */
+  function notifyChange() {
+    if (updating || !prevOptions) return;
+    onState?.(
+      resolve({ ...prevOptions, scrollTop: virtualizer.getScrollOffset() }),
+    );
   }
 
   /**
@@ -239,69 +182,68 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   }
 
   /**
-   * Take the heights just measured and hold the reader's place against them.
-   * @param {number[]} next
-   * @param {number[]} previous
+   * Take the heights just measured, and let the virtualizer hold the reader's
+   * place against them.
+   * @param {Array<[number, number]>} entries
    */
-  function handleMeasured(next, previous) {
-    heights = next;
-    notifyChange();
-
-    if (next.length === 0) return;
-
+  function handleEntries(entries) {
     const container = getContainer();
-    if (!measuredWindow || !config || !container) return;
+    // Read where the reader left the menu before the correction below writes to
+    // it. After that write, the position on the container is one the
+    // virtualizer made, and a scroll the reader had made would be
+    // indistinguishable from it.
+    if (container && measuredWindow) noteScroll(container.scrollTop);
 
-    // Read where the reader left the menu before the correction below writes
-    // to it. After that write, the position on the container is one this made,
-    // and a scroll the reader had made would be indistinguishable from it.
-    noteScroll(container.scrollTop);
-
-    const correction = getMeasuredScrollCorrection({
-      scrollTop: container.scrollTop,
-      itemCount,
-      itemHeight: config.itemHeight,
-      containerHeight: config.containerHeight,
-      heights: next,
-      previousHeights: previous,
-    });
-
-    if (correction !== 0) {
-      scrollTo(Math.max(0, container.scrollTop + correction));
+    measuring = true;
+    wroteWhileMeasuring = false;
+    try {
+      virtualizer.measure(entries);
+    } finally {
+      measuring = false;
     }
-
-    settle();
   }
 
   /**
-   * Re-satisfy the outstanding request. Runs on every pass while one stands,
-   * because measurement arrives in batches and each batch can move the option
-   * out from under the last answer.
+   * @param {number[]} next
+   */
+  function handleMeasured(next) {
+    if (next.length === 0) {
+      // Forgetting the heights is not news that anything on screen moved, so
+      // there is no place to hold.
+      virtualizer.resetMeasurements();
+      notifyChange();
+      return;
+    }
+
+    notifyChange();
+    // A request the virtualizer just placed anew is not also placed by what the
+    // DOM says: it waits for the next pass.
+    if (!wroteWhileMeasuring) settle();
+  }
+
+  const measurer = createHeightMeasurer({
+    onEntries: handleEntries,
+    onMeasure: handleMeasured,
+  });
+
+  /**
+   * Finish an outstanding request by asking the DOM about the option itself,
+   * which no offsets can see: how tall it rendered, and where it sits against
+   * the viewport. Runs on every pass while one stands, because measurement
+   * arrives in batches and each can move the option out from under the last
+   * answer.
    */
   function settle() {
     const container = getContainer();
-    if (!pending || !measuredWindow || !config || !container) return;
+    if (!virtualizer.hasPendingScroll() || !measuredWindow || !container) {
+      return;
+    }
 
     // Read rather than wait: a scroll event and the measurer's own frame are
     // not ordered against each other.
     noteScroll(container.scrollTop);
+    const pending = virtualizer.getPendingScroll();
     if (!pending) return;
-
-    if (pending.heights !== heights) {
-      const previousScrollTop = pending.scrollTop;
-      const next = measuredPosition(
-        pending.index,
-        pending.align,
-        container.scrollTop,
-        config,
-      );
-      pending = { ...pending, scrollTop: next ?? previousScrollTop, heights };
-
-      if (next !== null && next !== previousScrollTop) {
-        scrollTo(next);
-        return;
-      }
-    }
 
     const option = container.querySelector(
       `[${VIRTUAL_INDEX_ATTRIBUTE}="${pending.index}"]`,
@@ -395,44 +337,55 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     try {
       if (shouldVirtualize && wrapOptions) noteCollection(items, getKey);
 
-      if (prevScrollTop !== null && scrollTop !== prevScrollTop) {
-        scrollDelta = scrollTop - prevScrollTop;
-      }
-      prevScrollTop = scrollTop;
-
-      const state = virtualListState({
-        items,
-        scrollTop,
+      config = resolveVirtualConfig({
         shouldVirtualize,
         virtualize: withoutMeasured(virtualizeProp),
         defaults: {
           itemHeight: getMenuItemHeight(size, { fluid }),
           measured: wrapOptions,
         },
-        heights,
         estimate,
-        scrollDelta,
       });
-
-      config = state.config;
-      itemCount = items.length;
       measured = Boolean(config?.measured);
-      measuredWindow = measured && Boolean(state.data?.isVirtualized);
+
+      /** @type {import("../utils/virtualizer.js").VirtualizerState | null} */
+      let state = null;
+      if (config) {
+        // Where the reader is comes before what a request asks for: options
+        // that re-place a request would otherwise place it from a position the
+        // reader has already left.
+        if (unsynced) virtualizer.syncScroll(scrollTop);
+        else virtualizer.setScroll(scrollTop);
+        unsynced = false;
+        state = virtualizer.setOptions({
+          count: items.length,
+          size: config.itemHeight,
+          measured,
+          viewportSize: config.containerHeight,
+          overscan: config.overscan,
+          threshold: config.threshold,
+          maxItems: config.maxItems,
+        });
+      }
+
+      const isVirtualized = Boolean(state?.isVirtualized);
+      measuredWindow = measured && isVirtualized;
 
       return {
-        itemsToRender: state.itemsToRender,
-        isVirtualized: Boolean(state.data?.isVirtualized),
-        startIndex: state.data?.startIndex ?? 0,
-        offsetY: state.data?.offsetY ?? 0,
-        totalHeight: state.data?.totalHeight ?? 0,
+        itemsToRender:
+          state && isVirtualized
+            ? items.slice(state.startIndex, state.endIndex)
+            : items,
+        isVirtualized,
+        startIndex: state?.startIndex ?? 0,
+        offsetY: state?.startOffset ?? 0,
+        totalHeight: state?.totalSize ?? 0,
         menuMaxHeight: config
           ? `${config.containerHeight}px`
           : getMenuMaxHeight(size),
         isWindowed: Boolean(config),
         isMeasured: measured,
-        isPinned:
-          Boolean(config?.optimizeFastScroll) &&
-          Boolean(state.data?.isVirtualized),
+        isPinned: Boolean(config?.optimizeFastScroll) && isVirtualized,
       };
     } finally {
       updating = false;
@@ -448,13 +401,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
   function scrollIntoView(index, align) {
     if (!config) return;
 
-    if (measured) {
-      if (measuredWindow) {
-        requestMeasured(index, align);
-        return;
-      }
-
-      pending = null;
+    if (measured && !measuredWindow) {
+      virtualizer.cancelScroll();
       placeFromDom(index, align);
       return;
     }
@@ -462,31 +410,17 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
     const container = getContainer();
     if (!container) return;
 
-    if (align === "top") {
-      scrollTo(
-        scrollSelectedIntoView({
-          selectedIndex: index,
-          itemCount,
-          itemHeight: config.itemHeight,
-          containerHeight: config.containerHeight,
-        }),
-      );
-      return;
-    }
+    // Keys can arrive faster than scroll events, so place against where the
+    // container is, not where it was last reported.
+    virtualizer.syncScroll(container.scrollTop);
 
-    if (index < 0) return;
+    // A fixed-height menu has nothing to show for a negative index, and
+    // nowhere to send the highlight: `"nearest"` leaves it where it is.
+    if (index < 0 && !measured && align === "nearest") return;
 
-    const next = scrollHighlightedIntoView({
-      highlightedIndex: index,
-      currentScrollTop: container.scrollTop,
-      itemCount,
-      itemHeight: config.itemHeight,
-      containerHeight: config.containerHeight,
-      overscan: config.overscan ?? 3,
-      maxItems: config.maxItems,
+    virtualizer.scrollToIndex(index, {
+      align: align === "top" ? "start" : "nearest",
     });
-
-    if (next !== null) scrollTo(next);
   }
 
   /**
@@ -520,9 +454,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * @param {number} scrollTop
    */
   function noteScroll(scrollTop) {
-    if (Math.abs(scrollTop - prevWrittenScrollTop) > 1) {
-      pending = null;
-    }
+    virtualizer.setScroll(scrollTop);
   }
 
   /**
@@ -531,11 +463,11 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * collection comes to hold other options.
    */
   function reset() {
-    pending = null;
-    prevScrollTop = null;
-    scrollDelta = 0;
+    virtualizer.cancelScroll();
+    virtualizer.clearLead();
+    unsynced = true;
 
-    const average = getMeasuredAverage(heights);
+    const average = virtualizer.getMeasuredAverage();
     if (average !== null && average !== estimate) {
       estimate = average;
       notifyChange();
@@ -546,7 +478,7 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
 
   /** Stop observing for good. */
   function destroy() {
-    pending = null;
+    virtualizer.cancelScroll();
     measurer.disconnect();
   }
 

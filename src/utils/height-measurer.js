@@ -1,5 +1,6 @@
 // @ts-check
 
+import { noop } from "./noop.js";
 import { observeResize } from "./shared-observer.js";
 
 /**
@@ -80,19 +81,27 @@ function readIndex(node) {
  * so offsets accumulate once for all of them.
  *
  * @param {Object} options
- * @param {(heights: number[], prevHeights: number[]) => void} options.onMeasure
+ * @param {(heights: number[], prevHeights: number[]) => void} [options.onMeasure]
  * Called on the animation frame after a report that differs from the heights
  * already held.
+ * @param {(entries: Array<[number, number]>) => void} [options.onEntries]
+ * Called just before `onMeasure` with only the index and height pairs that
+ * changed, for a caller that holds the heights itself.
  * @param {boolean} [options.includeMargins=false] Add each element's vertical
  * margins to its height. Adjacent margins that collapse are counted in full,
  * so this suits elements with a margin on one side only.
  * @returns {{
- *   sync: (container: Element | null | undefined) => void,
+ *   sync: (container: Element | ReadonlyArray<Element> | null | undefined) => void,
  *   clear: () => void,
+ *   shift: (delta: number) => void,
  *   disconnect: () => void
  * }}
  */
-export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
+export function createHeightMeasurer({
+  onMeasure = noop,
+  onEntries = undefined,
+  includeMargins = false,
+}) {
   /** @type {number[]} Indexed by item, sparse where unmeasured. */
   let heights = [];
   /**
@@ -118,17 +127,21 @@ export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
   function record(measurements) {
     /** @type {number[] | null} */
     let next = null;
+    /** @type {Array<[number, number]>} */
+    const changed = [];
 
     for (const [index, height] of measurements) {
       if (index < 0 || heights[index] === height) continue;
       if (next === null) next = heights.slice();
       next[index] = height;
+      changed.push([index, height]);
     }
 
     if (next === null) return;
 
     const prevHeights = heights;
     heights = next;
+    onEntries?.(changed);
     onMeasure(heights, prevHeights);
   }
 
@@ -249,11 +262,33 @@ export function createHeightMeasurer({ onMeasure, includeMargins = false }) {
     onMeasure(heights, prevHeights);
   }
 
+  /**
+   * Move the measurements with their items when `delta` items are added at the
+   * front, or dropped from it when negative. Nothing is reported: the caller
+   * moved its own copy.
+   *
+   * @param {number} delta
+   */
+  function shift(delta) {
+    if (heights.length === 0 || !Number.isInteger(delta) || delta === 0) return;
+
+    // A batch not yet reported names items by their old positions.
+    cancelBatch();
+    const next = [];
+    if (delta > 0) next.length = delta;
+    for (const [index, height] of heights.entries()) {
+      if (height === undefined) continue;
+      const moved = index + delta;
+      if (moved >= 0) next[moved] = height;
+    }
+    heights = next;
+  }
+
   /** Stop observing for good. Measurements are kept but never updated again. */
   function disconnect() {
     unobserveAll();
     active = false;
   }
 
-  return { sync, clear, disconnect };
+  return { sync, clear, shift, disconnect };
 }
