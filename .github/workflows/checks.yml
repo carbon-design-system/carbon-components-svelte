@@ -290,7 +290,9 @@ jobs:
 
       # The DatePicker calendar does its own date math. Run its tests where a
       # daylight-saving switch skips midnight, and where a whole day was
-      # skipped (Pacific/Apia, December 2011).
+      # skipped (Pacific/Apia, December 2011). The zones run side by side,
+      # one worker each: one after another, this step put 25-38 s on the
+      # longest job in the workflow.
       - name: Test calendar date math across time zones
         if: matrix.shard == 2
         env:
@@ -301,10 +303,21 @@ jobs:
             "" | all) ;;
             *) [[ " $TESTS " == *" tests/DatePicker/calendar"* ]] || exit 0 ;;
           esac
-          for zone in America/Santiago America/Havana Asia/Tehran Pacific/Apia; do
-            echo "TZ=$zone"
-            TZ="$zone" bunx vitest run tests/DatePicker/calendar
+          zones=(America/Santiago America/Havana Asia/Tehran Pacific/Apia)
+          pids=()
+          for zone in "${zones[@]}"; do
+            TZ="$zone" bunx vitest run tests/DatePicker/calendar --maxWorkers=1 \
+              > "$RUNNER_TEMP/tz-${zone//\//-}.log" 2>&1 &
+            pids+=($!)
           done
+          failed=0
+          for i in "${!zones[@]}"; do
+            if wait "${pids[$i]}"; then result=passed; else result=failed; failed=1; fi
+            echo "::group::TZ=${zones[$i]} ($result)"
+            cat "$RUNNER_TEMP/tz-${zones[$i]//\//-}.log"
+            echo "::endgroup::"
+          done
+          exit "$failed"
 
   # Starts as soon as the test selection is known, alongside the unit tests,
   # rather than after them: waiting put both suites on the critical path.
