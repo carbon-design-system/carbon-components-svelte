@@ -30,5 +30,13 @@ test.describe("DatePicker a11y", () => {
       .include("#app")
       .analyze();
     expect(timeResults.violations).toEqual([]);
+
+    await page.keyboard.press("Escape");
+    await page.getByTestId("date-picker-range-time-input").click();
+    await expect(page.getByRole("group", { name: "End time" })).toBeVisible();
+    const rangeTimeResults = await new AxeBuilder({ page })
+      .include("#app")
+      .analyze();
+    expect(rangeTimeResults.violations).toEqual([]);
   });
 });

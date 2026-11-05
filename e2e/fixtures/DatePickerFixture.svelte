@@ -46,6 +46,17 @@
   </DatePicker>
 </div>
 
+<div data-testid="date-picker-range-time">
+  <DatePicker datePickerType="range" timeGranularity="minute">
+    <DatePickerInput
+      data-testid="date-picker-range-time-input"
+      labelText="Freeze starts"
+      placeholder="mm/dd/yyyy hh:mm"
+    />
+    <DatePickerInput labelText="Freeze ends" placeholder="mm/dd/yyyy hh:mm" />
+  </DatePicker>
+</div>
+
 <div data-testid="outside-date-picker" style="margin-top: 1rem; padding: 1rem;">
   Click target (outside pickers)
 </div>
@@ -247,5 +258,19 @@
         <p>Estimated from your current usage trend.</p>
       </AILabel>
     </DatePickerInput>
+  </DatePicker>
+</div>
+
+<!-- The widest 12-hour time with seconds, which a range field must not cut. -->
+<div data-testid="date-picker-range-seconds">
+  <DatePicker
+    datePickerType="range"
+    timeGranularity="second"
+    hourFormat="12"
+    valueFrom="10/28/2026 12:45:59 AM"
+    valueTo="10/29/2026 12:45:59 PM"
+  >
+    <DatePickerInput labelText="Freeze starts" />
+    <DatePickerInput labelText="Freeze ends" />
   </DatePicker>
 </div>
