@@ -159,6 +159,25 @@ With `multiselect`, these keys also change the selection. A row's unit depends o
 | <DocKbd label="Ctrl" /> or <DocKbd label="CMD" /> + <DocKbd label="Shift" /> + <DocKbd label="Home" /> / <DocKbd label="End" /> | Adds every row from the focused row to the first or last row. |
 | <DocKbd label="Ctrl" /> or <DocKbd label="CMD" /> + <DocKbd label="A" /> | Adds every visible, non-disabled row. |
 
+## Reordering
+
+Let users move rows with the `sortableTree` action. It is an example of an adapter on the shared drag and drop engine, not a feature of `TreeView`: it reads the rendered rows (`role="treeitem"` and `data-tree-row-id`), never moves one, and never changes your `nodes`. A drop dispatches a cancelable `move` event with `id`, `targetId`, `position` and `source`, and `applyTreeMove` returns the new nodes.
+
+A row lands `"before"` or `"after"` another as its sibling, or `"inside"` it as its last child: the top third of a row is before, the middle inside, the bottom after, and a line or an outline shows which. A row cannot be dropped on itself or inside its own subtree. Pass `canDrop` to refuse any other place; it is not drawn and the keyboard skips it. Components do not take actions, so apply the action to an element around the `TreeView`.
+
+Put a grip in the row with the default slot and select it with `handleSelector`. A finger drags from the grip only, and a press on a row without one still drags with a pointer. The tree stays one tab stop and the grips are left out of the tab order, so a keyboard user presses <DocKbd label="Alt" /> + <DocKbd label="M" /> on a focused row, or <DocKbd label="Space" /> on a grip. Then <DocKbd label="Up" /> and <DocKbd label="Down" /> step through the places a row can go, including leaving a group after its last row, <DocKbd label="Space" /> drops it, and <DocKbd label="Escape" /> puts it back. Each step is announced in a live region.
+
+<FileSource src="/framed/TreeView/TreeViewReorder" />
+
+| Do | Why |
+| --- | --- |
+| Apply the move in the `move` handler with `applyTreeMove`, or `preventDefault()` to refuse it. | The action never changes the nodes, so the tree you render is the one that moved. |
+| Give the grip a name, or leave it unnamed so the action names it "Move" and the row's text. | A grip is a button, and axe reports one with no name. |
+| Offer a way to move a row that is not a drag, such as a menu, when the structure is the point of the screen. | The keyboard path is a pattern users learn once per site; a menu is discoverable. |
+| Set `childrenKey` on `applyTreeMove` when your nodes keep their children under another name. | `TreeView` calls them `nodes`, and the helper reads that by default. |
+
+Every spoken string goes through `translateWithId(id, values)`. The ids are `roleDescription`, `instructions`, `handleLabel`, `pickedUp`, `moved`, `movedBefore`, `movedInside`, `movedAfter`, `dropped`, `droppedBefore`, `droppedInside`, `droppedAfter` and `cancelled`. The values are `label`, `target`, `position` and `count`.
+
 ## Multi-select
 
 Set `multiselect` to allow more than one selected row; `multiselectMode` controls the unit each gesture applies to.

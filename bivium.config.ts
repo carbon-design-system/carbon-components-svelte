@@ -50,7 +50,8 @@ export default {
       types: false,
     },
   },
-  // The framed DatePicker pages are examples an e2e test renders from `src`.
+  // The framed DatePicker, sortable and tree pages are examples an e2e test
+  // renders from `src`.
   roots: [
     "src",
     "tests",
@@ -58,6 +59,9 @@ export default {
     "css",
     "scripts",
     "docs/src/pages/framed/DatePicker",
+    "docs/src/pages/framed/ContainedList",
+    "docs/src/pages/framed/DataTable/DataTableSortableRows.svelte",
+    "docs/src/pages/framed/TreeView/TreeViewReorder.svelte",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
   ],
