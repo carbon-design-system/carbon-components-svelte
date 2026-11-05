@@ -236,6 +236,7 @@
   } from "../utils/layout-direction.js";
   import {
     clamp,
+    getAffixes,
     getDefaultValue,
     parse,
     parseLocaleValue,
@@ -335,6 +336,10 @@
     value !== null &&
     ((min !== undefined && value < min) || (max !== undefined && value > max));
   $: formatter = locale ? getNumberFormatter(locale, formatOptions) : null;
+  $: affixes =
+    formatter && formatOptions?.style && formatOptions.style !== "decimal"
+      ? getAffixes(formatter)
+      : [];
   $: useTextMode = allowDecimal || !!locale;
   // Probe the marks with the style being displayed: a locale's money can use
   // other marks than its plain numbers (fr-CH), and a percent shows no
@@ -416,6 +421,7 @@
             groupSeparator,
             decimalSeparator,
             formatOptions?.style,
+            affixes,
           )
         : parse(inputValue);
       // Sync inputValue to value when:
@@ -455,6 +461,7 @@
             groupSeparator,
             decimalSeparator,
             formatOptions?.style,
+            affixes,
           )
         : parse(raw);
   }
@@ -471,6 +478,7 @@
             groupSeparator,
             decimalSeparator,
             formatOptions?.style,
+            affixes,
           )
         : parse(input.value);
       // Preserve last valid value when input is invalid (e.g., "1.5." with two decimals).
@@ -495,6 +503,7 @@
           groupSeparator,
           decimalSeparator,
           formatOptions?.style,
+          affixes,
         )
       : parse(input.value, useTextMode);
 

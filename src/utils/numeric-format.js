@@ -90,25 +90,69 @@ export function parse(raw, useLocaleNormalize = false) {
   return Number.isNaN(num) ? null : num;
 }
 
-/** Number with an optional symbol or unit text around it ("$-5.00", "12.5 kg"). */
-const RE_AFFIXED = /^[^\d.-]*(-?)[^\d.]*(\d*\.?\d*)[^\d.]*$/;
+/** A plain number after the symbols are gone ("-5", "12.", ".5"). */
+const RE_PLAIN_NUMBER = /^(-?)(\d*\.?\d*)$/;
 /** Unicode minus sign ("−"), which some locales format negatives with. */
 const RE_MINUS = /−/g;
 /** Accounting format wraps a negative in brackets. */
-const RE_BRACKETED = /^\s*\(.*\)\s*$/;
+const RE_BRACKETED = /^\((.*)\)$/;
+/** Spaces and the bidi marks Arabic and Hebrew formats put around a number. */
+const RE_INVISIBLE = /[\s\u061c\u200e\u200f]/g;
+/** Part types that hold the symbols and words around a formatted number. */
+const AFFIX_TYPES = new Set([
+  "currency",
+  "percentSign",
+  "unit",
+  "literal",
+  "compact",
+]);
+/**
+ * Numbers that reach each plural form, since a long unit name changes with
+ * the number ("2 килограмма", "5 килограмм"): zero, one, two, few, many,
+ * other, and a fraction.
+ */
+const AFFIX_SAMPLES = [-1, 0, 1, 2, 3, 5, 11, 21, 100, 0.5, 12345.6];
+
+/** @type {WeakMap<Intl.NumberFormat, string[]>} */
+const affixCache = new WeakMap();
+
+/**
+ * The symbols and words a formatter puts around its numbers: currency and
+ * percent signs, unit names and literals, longest first.
+ *
+ * @param {Intl.NumberFormat} formatter
+ * @returns {string[]}
+ */
+export function getAffixes(formatter) {
+  const cached = affixCache.get(formatter);
+  if (cached) return cached;
+  /** @type {Set<string>} */
+  const affixes = new Set();
+  for (const sample of AFFIX_SAMPLES) {
+    for (const part of formatter.formatToParts(sample)) {
+      const text = part.value.replace(RE_INVISIBLE, "");
+      if (text && AFFIX_TYPES.has(part.type)) affixes.add(text);
+    }
+  }
+  const sorted = [...affixes].sort((a, b) => b.length - a.length);
+  affixCache.set(formatter, sorted);
+  return sorted;
+}
 
 /**
  * Parse a display string with explicit group and decimal separators. Returns
  * `null` for `""`, `"-"`, or NaN.
  *
- * For the `currency`, `percent` and `unit` styles, the symbol or unit text
- * around the number is ignored, and a percent is read as a ratio ("26%" is
- * 0.26), so the text `Intl.NumberFormat` displays reads back as its value.
+ * For the `currency`, `percent` and `unit` styles, the symbols and words in
+ * `affixes` are removed wherever they occur, and a percent is read as a ratio
+ * ("26%" is 0.26), so the text `Intl.NumberFormat` displays reads back as its
+ * value. Any other text left beside the number makes the input invalid.
  *
  * @param {string} raw
  * @param {string} groupSeparator - Thousands separator (may be empty).
  * @param {string} decimalSeparator - Decimal separator.
  * @param {Intl.NumberFormatOptions["style"]} [style]
+ * @param {string[]} [affixes] - From `getAffixes` for the same formatter.
  * @returns {number | null}
  */
 export function parseLocaleValue(
@@ -116,9 +160,19 @@ export function parseLocaleValue(
   groupSeparator,
   decimalSeparator,
   style = "decimal",
+  affixes = [],
 ) {
   if (raw === "" || raw === "-") return null;
   let normalized = raw.replace(RE_MINUS, "-");
+  if (style !== "decimal") {
+    normalized = normalized.replace(RE_INVISIBLE, "");
+    // Before the separators: a symbol can hold one ("ج.م.").
+    for (const affix of affixes) {
+      if (affix !== "(" && affix !== ")") {
+        normalized = normalized.split(affix).join("");
+      }
+    }
+  }
   if (groupSeparator) {
     normalized = normalized.split(groupSeparator).join("");
   }
@@ -131,9 +185,10 @@ export function parseLocaleValue(
     return Number.isNaN(num) ? null : num;
   }
 
-  const match = RE_AFFIXED.exec(normalized);
+  const bracketed = RE_BRACKETED.exec(normalized);
+  const match = RE_PLAIN_NUMBER.exec(bracketed ? bracketed[1] : normalized);
   if (!match?.[2] || match[2] === ".") return null;
-  const negative = match[1] === "-" || RE_BRACKETED.test(normalized);
+  const negative = match[1] === "-" || bracketed !== null;
   // `e-2` shifts the decimal point, so 12.3 is exactly 0.123.
   const num = Number(
     `${negative ? "-" : ""}${match[2]}${style === "percent" ? "e-2" : ""}`,

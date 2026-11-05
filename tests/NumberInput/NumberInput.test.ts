@@ -1631,6 +1631,13 @@ describe("NumberInput", () => {
       ],
       ["en-US", { style: "percent" }, "26%", "0.26"],
       ["en-US", { style: "unit", unit: "kilogram" }, "12.5 kg", "12.5"],
+      // The symbol holds dots, and bidi marks wrap the number.
+      [
+        "ar-EG",
+        { style: "currency", currency: "EGP" },
+        "\u200f١٢٫٥٠ ج.م.\u200f",
+        "12.5",
+      ],
     ] as const)(
       "should read back the formatted text in %s %j (%s)",
       async (locale, formatOptions, text, expected) => {
@@ -1644,6 +1651,27 @@ describe("NumberInput", () => {
         await fireEvent.change(input);
 
         expect(getBoundText()).toBe(expected);
+      },
+    );
+
+    // Text the locale never puts beside a number is a typo, so the field
+    // keeps its value.
+    it.each([
+      ["en-US", { style: "currency", currency: "USD" }, "abc5def"],
+      ["en-US", { style: "percent" }, "a12b"],
+    ] as const)(
+      "should reject stray text around the number in %s %j (%s)",
+      async (locale, formatOptions, text) => {
+        render(NumberInput, {
+          props: { locale, formatOptions, value: 1, allowEmpty: true },
+        });
+
+        const input = screen.getByRole("textbox");
+        assert(input instanceof HTMLInputElement);
+        await fireEvent.input(input, { target: { value: text } });
+        await fireEvent.change(input);
+
+        expect(getBoundText()).toBe("1");
       },
     );
 
