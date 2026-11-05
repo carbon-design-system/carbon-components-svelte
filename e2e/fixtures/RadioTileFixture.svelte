@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { RadioTile, TileGroup } from "carbon-components-svelte";
 
-  let selected;
+  let selected: string | undefined;
 </script>
 
 <TileGroup data-testid="radio-tile-group" legendText="Choose one" bind:selected>

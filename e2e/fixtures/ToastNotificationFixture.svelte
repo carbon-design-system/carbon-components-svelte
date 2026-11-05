@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ToastNotification } from "carbon-components-svelte";
 
   let open = true;

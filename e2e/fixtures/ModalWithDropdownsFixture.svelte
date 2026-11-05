@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboBox,
     Dropdown,
@@ -8,7 +8,7 @@
   } from "carbon-components-svelte";
 
   let open = false;
-  let notificationIds = [];
+  let notificationIds: string[] = [];
 
   const contactItems = [
     { id: "0", text: "Slack" },

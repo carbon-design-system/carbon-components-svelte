@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { MultiSelect } from "carbon-components-svelte";
 
   const items = [
@@ -24,8 +24,8 @@
     { id: "us-west-2", text: "US West (Oregon)", group: "Americas" },
   ];
 
-  let selectedIds = [];
-  let selectedRoleIds = [];
+  let selectedIds: string[] = [];
+  let selectedRoleIds: string[] = [];
 </script>
 
 <MultiSelect

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ContentSwitcher, Switch } from "carbon-components-svelte";
 
   let selectedIndex = 0;

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     AILabel,
     ComboBox,
@@ -28,7 +28,7 @@
     ToolbarSearch,
   } from "carbon-components-svelte";
 
-  const headers = [{ key: "name", value: "Name" }];
+  const headers = [{ key: "name", value: "Name" }] as const;
   const rows = [{ id: "a", name: "Load balancer" }];
   const items = [{ id: "us-east", text: "US East" }];
 </script>

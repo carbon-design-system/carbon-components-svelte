@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // One passing and one failing case per helper in e2e/helpers/layout.ts.
   // `?wide` adds an element wider than the page.
   import Button from "carbon-components-svelte/Button/Button.svelte";
@@ -17,7 +17,7 @@
   let coveredAnchor = null;
 
   /** A hover handler that sets a `title` without the full text. */
-  function shortTitle(node) {
+  function shortTitle(node: HTMLElement) {
     const set = () => node.setAttribute("title", "Load balancer");
     node.addEventListener("mouseenter", set);
     return { destroy: () => node.removeEventListener("mouseenter", set) };

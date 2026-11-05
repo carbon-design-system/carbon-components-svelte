@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { Button } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
-  const kinds = ["primary", "ghost", "danger-ghost"];
-  const sizes = ["xs", "small", "field", "default", "lg", "xl"];
+  const kinds = ["primary", "ghost", "danger-ghost"] as const;
+  const sizes = ["xs", "small", "field", "default", "lg", "xl"] as const;
 
   let loading = false;
 </script>

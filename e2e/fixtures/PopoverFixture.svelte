@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { Button, Popover } from "carbon-components-svelte";
 
   let open = false;
-  let containerRef;
+  let containerRef: HTMLDivElement | undefined;
 </script>
 
 <div

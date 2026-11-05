@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ActionSet, Button, Layer } from "carbon-components-svelte";
 </script>
 

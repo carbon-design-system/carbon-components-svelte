@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import "carbon-components-svelte/css/prose.css";
   import CodeSnippet from "carbon-components-svelte/CodeSnippet/CodeSnippet.svelte";
   import Layer from "carbon-components-svelte/Layer/Layer.svelte";
@@ -8,9 +8,10 @@
   import Prose from "carbon-components-svelte/Prose/Prose.svelte";
   import Text from "carbon-components-svelte/Text/Text.svelte";
   import UnorderedList from "carbon-components-svelte/UnorderedList/UnorderedList.svelte";
+  import type { ComponentProps } from "svelte";
 
-  const variant =
-    new URLSearchParams(location.search).get("variant") ?? "default";
+  const variant = (new URLSearchParams(location.search).get("variant") ??
+    "default") as ComponentProps<Prose>["variant"];
 </script>
 
 <div style="padding: 2rem">

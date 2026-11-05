@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboBox,
     Dropdown,
@@ -41,7 +41,7 @@
     ...shortItems,
   ];
 
-  const contains = (item, value) =>
+  const contains = (item: { text: string }, value: string) =>
     item.text.toLowerCase().includes(value.toLowerCase());
 
   /**
@@ -49,7 +49,7 @@
    * `highlightSegments` splits on. Contiguous on purpose: a run long enough to
    * straddle a line break is the case that has to survive wrapping.
    */
-  function matchIndices(text, value) {
+  function matchIndices(text: string, value: string) {
     if (!value) return [];
     const start = text.toLowerCase().indexOf(value.toLowerCase());
     if (start === -1) return [];

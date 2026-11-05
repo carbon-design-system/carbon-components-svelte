@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     StructuredList,
     StructuredListBody,
@@ -8,7 +8,7 @@
     StructuredListRow,
   } from "carbon-components-svelte";
 
-  let selected;
+  let selected: string | undefined;
 </script>
 
 <StructuredList data-testid="structured-list" bind:selected selection>

@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 
-  let status = "active";
+  let status: "active" | "finished" = "active";
 </script>
 
 <button

@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { Tab, Tabs } from "carbon-components-svelte";
 </script>
 
 <!-- Sized container tabs where one tab has a secondary label. -->
-{#each ["sm", "xl"] as size}
+{#each ["sm", "xl"] as const as size}
   <div data-testid="tabs-{size}" style="margin: 1rem;">
     <Tabs type="container" {size}>
       <Tab label="Overview" />

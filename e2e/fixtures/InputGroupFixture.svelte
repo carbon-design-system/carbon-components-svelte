@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     InputGroup,
@@ -10,7 +10,7 @@
   import Send from "carbon-icons-svelte/lib/Send.svelte";
 </script>
 
-{#each ["xs", "sm", undefined, "xl"] as size}
+{#each ["xs", "sm", undefined, "xl"] as const as size}
   <div
     data-testid="group-{size ?? 'md'}"
     style:width="480px"

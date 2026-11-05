@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { FluidForm, Modal, TextArea } from "carbon-components-svelte";
 </script>
 

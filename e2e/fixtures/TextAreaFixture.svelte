@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TextArea } from "carbon-components-svelte";
 
   let value = "";

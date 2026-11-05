@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     DataTable,
     OverflowMenu,
@@ -11,17 +11,16 @@
   const headers = [
     { key: "name", value: "Name" },
     { key: "overflow", empty: true, value: "Actions", width: "72px" },
-  ];
+  ] as const;
 
   const rows = Array.from({ length: ROW_COUNT }, (_, i) => ({
     id: `row-${i}`,
     name: `Row ${i}`,
   }));
 
-  /** @type {boolean[]} */
-  let openStates = rows.map(() => false);
+  let openStates: boolean[] = rows.map(() => false);
 
-  async function setAllOpen(open) {
+  async function setAllOpen(open: boolean) {
     for (let i = 0; i < ROW_COUNT; i++) openStates[i] = open;
     openStates = openStates;
     await tick();

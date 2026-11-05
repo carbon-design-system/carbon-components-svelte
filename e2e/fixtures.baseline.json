@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "diagnostics": [
+    {
+      "file": "fixtures/ContextMenuFixture.svelte",
+      "code": "TS2740",
+      "message": "Type 'HTMLDivElement' is missing the following properties from type 'readonly (HTMLElement | null)[]': length, concat, join, slice, and 26 more.",
+      "line": "<ContextMenu bind:target {open}>",
+      "count": 1
+    },
+    {
+      "file": "fixtures/DataTableFixture.svelte",
+      "code": "TS2322",
+      "message": "Type 'readonly [{ readonly key: \"name\"; readonly value: \"Product\"; readonly width: \"12rem\"; }, { readonly key: \"price\"; readonly value: \"Price\"; readonly width: \"8rem\"; }]' is not assignable to type 'readonly DataTableHeader<{ id: string; name: string; }>[]'.\n  Type '{ readonly key: \"name\"; readonly value: \"Product\"; readonly width: \"12rem\"; } | { readonly key: \"price\"; readonly value: \"Price\"; readonly width: \"8rem\"; }' is not assignable to type 'DataTableHeader<{ id: string; name: string; }>'.\n    Type '{ readonly key: \"price\"; readonly value: \"Price\"; readonly width: \"8rem\"; }' is not assignable to type 'DataTableHeader<{ id: string; name: string; }>'.\n      Type '{ readonly key: \"price\"; readonly value: \"Price\"; readonly width: \"8rem\"; }' is not assignable to type 'DataTableComputedHeader<{ id: string; name: string; }> | DataTableEmptyHeader<{ id: string; name: string; }>'.\n        Property 'empty' is missing in type '{ readonly key: \"price\"; readonly value: \"Price\"; readonly width: \"8rem\"; }' but required in type 'DataTableEmptyHeader<{ id: string; name: string; }>'.",
+      "line": "headers={fixedLayoutHeaders}",
+      "count": 1
+    },
+    {
+      "file": "fixtures/DataTableStickyFocusFixture.svelte",
+      "code": "TS2322",
+      "message": "Type 'readonly [{ readonly key: \"service\"; readonly value: \"Service\"; }, { readonly key: \"status\"; readonly value: \"Status\"; }, { readonly key: \"actions\"; readonly value: \"\"; }]' is not assignable to type 'readonly DataTableHeader<{ id: string; service: string; status: string; }>[]'.\n  Type '{ readonly key: \"service\"; readonly value: \"Service\"; } | { readonly key: \"status\"; readonly value: \"Status\"; } | { readonly key: \"actions\"; readonly value: \"\"; }' is not assignable to type 'DataTableHeader<{ id: string; service: string; status: string; }>'.\n    Type '{ readonly key: \"actions\"; readonly value: \"\"; }' is not assignable to type 'DataTableHeader<{ id: string; service: string; status: string; }>'.\n      Type '{ readonly key: \"actions\"; readonly value: \"\"; }' is not assignable to type 'DataTableComputedHeader<{ id: string; service: string; status: string; }> | DataTableEmptyHeader<{ id: string; service: string; status: string; }>'.\n        Property 'empty' is missing in type '{ readonly key: \"actions\"; readonly value: \"\"; }' but required in type 'DataTableEmptyHeader<{ id: string; service: string; status: string; }>'.",
+      "line": "{headers}",
+      "count": 1
+    },
+    {
+      "file": "fixtures/DataTableVariantsFixture.svelte",
+      "code": "TS2322",
+      "message": "Type 'readonly [{ readonly key: \"name\"; readonly value: \"Name\"; }, { readonly key: \"port\"; readonly value: \"Port\"; readonly columnAlign: \"end\"; }, { readonly key: \"link\"; readonly value: \"Link\"; }, { readonly key: \"menu\"; readonly empty: true; readonly columnMenu: true; }]' is not assignable to type 'readonly DataTableHeader<{ id: string; name: string; port: number; rule: string; }>[]'.\n  Type '{ readonly key: \"name\"; readonly value: \"Name\"; } | { readonly key: \"port\"; readonly value: \"Port\"; readonly columnAlign: \"end\"; } | { readonly key: \"link\"; readonly value: \"Link\"; } | { readonly key: \"menu\"; readonly empty: true; readonly columnMenu: true; }' is not assignable to type 'DataTableHeader<{ id: string; name: string; port: number; rule: string; }>'.\n    Type '{ readonly key: \"link\"; readonly value: \"Link\"; }' is not assignable to type 'DataTableHeader<{ id: string; name: string; port: number; rule: string; }>'.\n      Type '{ readonly key: \"link\"; readonly value: \"Link\"; }' is not assignable to type 'DataTableComputedHeader<{ id: string; name: string; port: number; rule: string; }> | DataTableEmptyHeader<{ id: string; name: string; port: number; rule: string; }>'.\n        Property 'empty' is missing in type '{ readonly key: \"link\"; readonly value: \"Link\"; }' but required in type 'DataTableEmptyHeader<{ id: string; name: string; port: number; rule: string; }>'.",
+      "line": "headers={menuHeaders}",
+      "count": 2
+    }
+  ]
+}

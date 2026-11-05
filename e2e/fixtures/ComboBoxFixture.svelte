@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ComboBox } from "carbon-components-svelte";
 
   const items = [
@@ -7,7 +7,7 @@
     { id: "2", text: "Fax" },
   ];
 
-  function shouldFilterItem(item, value) {
+  function shouldFilterItem(item: { text: string }, value: string) {
     if (!value) return true;
     return item.text.toLowerCase().includes(value.toLowerCase());
   }

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Search, TextInput } from "carbon-components-svelte";
 </script>
 

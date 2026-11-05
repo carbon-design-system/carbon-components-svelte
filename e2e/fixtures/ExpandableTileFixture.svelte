@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ExpandableTile } from "carbon-components-svelte";
 </script>
 

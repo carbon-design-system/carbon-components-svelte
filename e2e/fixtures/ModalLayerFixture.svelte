@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Accordion,
     AccordionItem,
@@ -23,7 +23,7 @@
     Tile,
   } from "carbon-components-svelte";
 
-  const headers = [{ key: "name", value: "Name" }];
+  const headers = [{ key: "name", value: "Name" }] as const;
   const rows = [
     { id: "a", name: "Load balancer" },
     { id: "b", name: "Database" },

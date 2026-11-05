@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { OverflowMenu, OverflowMenuItem } from "carbon-components-svelte";
 
   let selectedAction = "";

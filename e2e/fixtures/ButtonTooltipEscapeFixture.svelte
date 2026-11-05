@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button, CopyButton, Modal } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Edit from "carbon-icons-svelte/lib/Edit.svelte";

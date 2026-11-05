@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Tab,
     TabContent,
@@ -7,11 +7,13 @@
   } from "carbon-components-svelte";
 
   const params = new URLSearchParams(location.search);
-  const dir = params.get("dir");
+  const dir = params.get("dir") as "ltr" | "rtl" | null;
   // `?vertical` renders the row layout of `TabsVertical`, which shares the
   // overflow buttons.
   const component = params.has("vertical") ? TabsVertical : Tabs;
-  const props = params.has("vertical") ? { orientation: "horizontal" } : {};
+  const props = params.has("vertical")
+    ? ({ orientation: "horizontal" } as const)
+    : {};
 
   const items = Array.from({ length: 10 }, (_, i) => `Tab label ${i + 1}`);
 </script>

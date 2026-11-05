@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     InlineNotification,
     SelectItem,
@@ -9,7 +9,7 @@
     ToastNotification,
   } from "carbon-components-svelte";
 
-  const kinds = ["warning", "warning-alt"];
+  const kinds = ["warning", "warning-alt"] as const;
 </script>
 
 <div

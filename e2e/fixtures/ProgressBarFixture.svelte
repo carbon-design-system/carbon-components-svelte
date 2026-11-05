@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { ProgressBar } from "carbon-components-svelte";
 </script>
 
 <div style="width: 400px; display: grid; gap: 2rem;">
-  {#each ["default", "inline", "indented"] as kind}
+  {#each ["default", "inline", "indented"] as const as kind}
     <ProgressBar
       data-testid="hidden-label-{kind}"
       {kind}

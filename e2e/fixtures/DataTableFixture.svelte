@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     DataTable,
     Table,
@@ -10,7 +10,7 @@
   const basicHeaders = [
     { key: "name", value: "Name" },
     { key: "value", value: "Value" },
-  ];
+  ] as const;
 
   const basicRows = Array.from({ length: 20 }, (_, i) => ({
     id: i,
@@ -21,7 +21,7 @@
   const sortHeaders = [
     { key: "name", value: "Name" },
     { key: "n", value: "N" },
-  ];
+  ] as const;
 
   const sortRows = [
     { id: "s1", name: "Zebra", n: 1 },
@@ -29,7 +29,7 @@
     { id: "s3", name: "Mike", n: 3 },
   ];
 
-  const expandHeaders = [{ key: "name", value: "Name" }];
+  const expandHeaders = [{ key: "name", value: "Name" }] as const;
 
   const expandRows = [
     { id: "e1", name: "First" },
@@ -40,19 +40,19 @@
 
   const prototypeIdRows = [{ id: "toString", name: "Prototype ID" }];
 
-  const batchHeaders = [{ key: "name", value: "Product" }];
+  const batchHeaders = [{ key: "name", value: "Product" }] as const;
 
   const batchRows = [
     { id: "b1", name: "Item A" },
     { id: "b2", name: "Item B" },
   ];
 
-  const selectRangeHeaders = [{ key: "name", value: "Product" }];
+  const selectRangeHeaders = [{ key: "name", value: "Product" }] as const;
 
   const fixedLayoutHeaders = [
     { key: "name", value: "Product", width: "12rem" },
     { key: "price", value: "Price", width: "8rem" },
-  ];
+  ] as const;
 
   const selectRangeRows = [
     { id: "r1", name: "Item A" },
@@ -60,7 +60,7 @@
     { id: "r3", name: "Item C" },
   ];
 
-  const radioHeaders = [{ key: "name", value: "Product" }];
+  const radioHeaders = [{ key: "name", value: "Product" }] as const;
 
   const radioRows = [
     { id: "q1", name: "Item A" },
@@ -76,7 +76,7 @@
     { key: "items", value: "Items" },
     { key: "status", value: "Status" },
     { key: "total", value: "Total" },
-  ];
+  ] as const;
 
   const wideRows = [
     {

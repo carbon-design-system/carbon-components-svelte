@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Column, Grid, PasswordInput } from "carbon-components-svelte";
 
   let value = "";

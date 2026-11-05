@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComposedModal,
     Modal,
@@ -10,8 +10,7 @@
   let open = false;
   let composedOpen = false;
   let passiveOpen = false;
-  /** @type {"inactive" | "active" | "finished" | "error"} */
-  let loadingStatus = "inactive";
+  let loadingStatus: "inactive" | "active" | "finished" | "error" = "inactive";
   let successCount = 0;
 </script>
 
@@ -57,7 +56,7 @@
 >
   <p>Save your changes to the Cloudant database configuration.</p>
   <p data-testid="success-count">{successCount}</p>
-  {#each ["inactive", "active", "finished", "error"] as status (status)}
+  {#each ["inactive", "active", "finished", "error"] as const as status (status)}
     <button
       type="button"
       data-testid="status-{status}"

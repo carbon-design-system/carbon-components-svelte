@@ -1,16 +1,15 @@
-<script>
+<script lang="ts">
   import { FileUploader } from "carbon-components-svelte";
 
-  /** @type {Array<{ file: File; reason: string }>} */
-  let rejectedMax = [];
+  let rejectedMax: Array<{ file: File; reason: string }> = [];
 
-  let filesMax = [];
+  let filesMax: File[] = [];
 
-  let filesPrepend = [];
+  let filesPrepend: File[] = [];
 
-  let filesIcon = [];
+  let filesIcon: File[] = [];
 
-  let filesSize = [];
+  let filesSize: File[] = [];
 </script>
 
 <section data-testid="section-max">

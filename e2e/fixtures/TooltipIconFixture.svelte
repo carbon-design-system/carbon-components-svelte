@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TooltipIcon } from "carbon-components-svelte";
   import Information from "carbon-icons-svelte/lib/Information.svelte";
 </script>

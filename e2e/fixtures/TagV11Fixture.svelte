@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     OperationalTag,
     SelectableTag,
@@ -50,7 +50,7 @@
 </div>
 
 <div data-testid="margins">
-  {#each ["sm", "default", "lg"] as size (size)}
+  {#each ["sm", "default", "lg"] as const as size (size)}
     <Tag {size}>Static</Tag>
     <Tag {size} filter>Filter</Tag>
     <Tag {size} interactive>Interactive</Tag>

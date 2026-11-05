@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import LayoutDirection from "carbon-components-svelte/LayoutDirection/LayoutDirection.svelte";
   import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
   import Slider from "carbon-components-svelte/Slider/Slider.svelte";

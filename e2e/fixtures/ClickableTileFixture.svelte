@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ClickableTile } from "carbon-components-svelte";
 
   let clicked = false;
