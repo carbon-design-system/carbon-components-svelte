@@ -54,6 +54,11 @@
     { key: "price", value: "Price", width: "8rem" },
   ];
 
+  const fixedLayoutRows = [
+    { id: "f1", name: "Item A", price: 10 },
+    { id: "f2", name: "Item B", price: 20 },
+  ];
+
   const selectRangeRows = [
     { id: "r1", name: "Item A" },
     { id: "r2", name: "Item B" },
@@ -152,7 +157,7 @@
     selectable
     fixedLayout
     headers={fixedLayoutHeaders}
-    rows={selectRangeRows}
+    rows={fixedLayoutRows}
   />
 </div>
 
