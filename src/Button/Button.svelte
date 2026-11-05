@@ -204,7 +204,6 @@
   } from "../constants/context-keys.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { clippedBy } from "../utils/fit-align.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
@@ -214,6 +213,7 @@
   } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";

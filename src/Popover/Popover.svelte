@@ -67,11 +67,7 @@
   import { createEventDispatcher, onMount, tick } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { dismiss } from "../utils/dismiss.js";
-  import {
-    clippedBy,
-    fitPopoverAlign,
-    sidePlacement,
-  } from "../utils/fit-align.js";
+  import { fitPopoverAlign, sidePlacement } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isInlineAlign, popoverPlacement } from "../utils/inline-align.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -79,6 +75,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
 
@@ -137,7 +134,7 @@
   const refit = rafThrottle(() => void fitPlacement());
   /** @type {null | (() => void)} */
   let stopRefit = null;
-  $: if (open && !relative && typeof window !== "undefined") {
+  $: if (open && !relative && !portalled && typeof window !== "undefined") {
     if (!stopRefit) {
       stopRefit = addPooledListener("resize", refit, { passive: true });
     }
@@ -153,50 +150,11 @@
 
   onMount(() => stopListening);
 
-  // The anchor's size, for styles that place the popover from its center
-  // (Toggletip's caret). In place, 100% of the anchor does that.
-  let anchorWidth = 0;
-  let anchorHeight = 0;
-
-  // Counts fits, so a fit that waits for the portal gives way to a later
-  // one, after a new align or a resize.
-  let fits = 0;
-
-  // Measures the popover where it is, at `placement`: `alignClass` on open,
-  // the fitted placement on a resize.
-  async function fitPlacement(tries = 0) {
-    if (!(open && ref)) return;
-    const run = ++fits;
+  // Measures the popover in place, at `placement`: `alignClass` on open, the
+  // fitted placement on a resize. A portalled popover is fitted by the portal.
+  async function fitPlacement() {
+    if (!(open && ref) || portalled) return;
     const from = alignClass;
-    if (portalled) {
-      const anchor = markerRef?.parentElement;
-      if (!anchor) return;
-      const before = anchor.getBoundingClientRect();
-      ({ width: anchorWidth, height: anchorHeight } = before);
-      // The portal places its content on the next frame, and once more on
-      // the frame after that.
-      await twoFrames();
-      if (!(open && portalled && ref) || run !== fits) return;
-      // The anchor moved while the portal placed the box, as in a resize
-      // or the Modal's entrance, so the box may still be where it was.
-      // Measure again once the portal has followed. An anchor that never
-      // stops gets measured after 10 tries.
-      const after = anchor.getBoundingClientRect();
-      const moved = after.left !== before.left || after.top !== before.top;
-      if (moved && tries < 10) return fitPlacement(tries + 1);
-      // The portal picks the side. The edge alignment along it is ours, and
-      // so is the move above or below when neither side has room.
-      const fit = fitPopoverAlign(ref, anchor, placement);
-      const [fitSide, fittedEdge] = fit.split("-");
-      const next =
-        isVertical(fitSide) === isVertical(side)
-          ? fittedEdge
-            ? `${side}-${fittedEdge}`
-            : side
-          : fit;
-      if (next !== placement) fitted = { from, to: next };
-      return;
-    }
     const anchor = ref.parentElement;
     if (!anchor) return;
     const next = fitPopoverAlign(ref, anchor, placement);
@@ -207,20 +165,6 @@
     if (portalPopover === undefined && open && ref && clippedBy(ref)) {
       portalWhenClipped = true;
     }
-  }
-
-  /** @param {string} placementSide */
-  function isVertical(placementSide) {
-    return placementSide === "top" || placementSide === "bottom";
-  }
-
-  // Two animation frames, or a timeout where there are none (tests).
-  function twoFrames() {
-    return new Promise((resolve) => {
-      if (typeof requestAnimationFrame === "function")
-        requestAnimationFrame(() => requestAnimationFrame(resolve));
-      else setTimeout(resolve);
-    });
   }
 
   // `FloatingPortal` places by side, and by start, center or end along it.
@@ -326,7 +270,12 @@
       {open}
       intrinsicWidth
       {intrinsicAlign}
+      flipAlign
+      flipAxis
       let:direction={portalSide}
+      let:align={portalAlign}
+      let:anchorWidth
+      let:anchorHeight
     >
       <div
         bind:this={ref}
@@ -340,7 +289,7 @@
         {...$$restProps}
         class={portalClass(
           portalSide ?? side,
-          intrinsicAlign,
+          portalAlign ?? intrinsicAlign,
           $$restProps.class,
         )}
         class:bx--popover--caret={caret}

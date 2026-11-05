@@ -481,13 +481,13 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { clippedBy } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
     declaredDirection,
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";

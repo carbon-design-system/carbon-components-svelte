@@ -132,13 +132,14 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { clippedBy, windowShift } from "../utils/fit-align.js";
+  import { windowShift } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { clippedBy } from "../utils/portal-decision.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";

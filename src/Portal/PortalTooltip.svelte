@@ -89,8 +89,6 @@
    */
   export let intrinsicAlign = "center";
 
-  import { slideIntoWindow } from "../utils/fit-align.js";
-  import { physicalAlign } from "../utils/inline-align.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
@@ -102,11 +100,6 @@
 
   // Read when the tooltip opens: nothing reports a `dir` change.
   $: rtl = open && resolveLayoutDirection($layoutDirection, anchor) === "rtl";
-  // `FloatingPortal` and the caret styles take the physical side.
-  $: sideAlign =
-    direction === "top" || direction === "bottom"
-      ? physicalAlign(intrinsicAlign, rtl)
-      : intrinsicAlign;
 </script>
 
 <FloatingPortal
@@ -119,10 +112,13 @@
   {gapBottom}
   {verticalAlignOffsetLeft}
   {verticalAlignOffsetRight}
-  intrinsicAlign={sideAlign}
+  {intrinsicAlign}
+  logical
   intrinsicWidth={true}
   lockDirection="after-flip"
+  shift={8}
   let:direction={actualDirection}
+  let:shift={slide}
 >
   <!-- The pointer can rest on the tooltip (WCAG 1.4.13). The owner keeps
        it open while the pointer is on it, and closes it at once on `cover`. -->
@@ -142,7 +138,8 @@
     <!-- The box lays out left to right (see _tooltip.scss); the text keeps
     the anchor's direction. -->
     <span
-      use:slideIntoWindow
+      style:position={slide ? "relative" : undefined}
+      style:left={slide ? `${slide}px` : undefined}
       class:bx--tooltip-portal__content={true}
       class:bx--assistive-text={Boolean(tooltipType)}
       role={id ? "tooltip" : undefined}

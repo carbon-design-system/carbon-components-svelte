@@ -335,7 +335,9 @@ describe("MenuButton near a side of the window", () => {
     );
     vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
       function (this: Element) {
-        if (this.matches("[role='menu']")) return rect({ width: 200 });
+        if (this.matches("[role='menu'],[data-floating-portal]")) {
+          return rect({ width: 200 });
+        }
         if (this.matches("button")) return rect({ left, width: 100 });
         return rect();
       },

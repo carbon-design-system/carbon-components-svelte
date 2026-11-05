@@ -108,6 +108,7 @@
   import CaretRight from "../icons/CaretRight.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
+  import { computePosition } from "../utils/compute-position.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
     applePlatform,
@@ -120,7 +121,6 @@
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
-  import { fitMenuAxis } from "../utils/menu-placement.js";
   import { createSubmenuHoverIntent } from "../utils/submenu-hover-intent.js";
   import {
     createTypeaheadBuffer,
@@ -237,16 +237,36 @@
   // it doesn't fit, and pins to the viewport edge when it fits on neither
   // side. The option spans its menu, which starts at `rootMenuPosition`.
   $: if (submenuOpen) {
-    const { width, y } = /** @type {HTMLLIElement} */ (
-      ref
-    ).getBoundingClientRect();
-    const x = fitMenuAxis({
-      before: rootMenuPosition[0],
-      after: rootMenuPosition[0] + width,
-      size: submenuRef?.getBoundingClientRect().width ?? width,
-      max: window.innerWidth,
-      reverse: resolveLayoutDirection($layoutDirection, ref) === "rtl",
-    });
+    const option = /** @type {HTMLLIElement} */ (ref).getBoundingClientRect();
+    // The menu is the anchor: the option spans it, and the submenu sits
+    // beside it at the option's height.
+    const menu = {
+      left: rootMenuPosition[0],
+      right: rootMenuPosition[0] + option.width,
+      top: option.top,
+      bottom: option.bottom,
+      width: option.width,
+      height: option.height,
+    };
+    const { x, y } = computePosition(
+      menu,
+      {
+        width: submenuRef?.getBoundingClientRect().width ?? option.width,
+        height: option.height,
+      },
+      {
+        placement: "end-start",
+        rtl: resolveLayoutDirection($layoutDirection, ref) === "rtl",
+        flip: { bestFit: false },
+        shift: { mainAxis: true },
+        boundary: {
+          left: 0,
+          right: window.innerWidth,
+          top: -Infinity,
+          bottom: Infinity,
+        },
+      },
+    );
 
     submenuPosition = [x, y];
   }

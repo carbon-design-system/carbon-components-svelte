@@ -25,8 +25,9 @@
 
   /**
    * Specify the anchor element to position the portal relative to.
+   * Any object with `getBoundingClientRect()` works, such as a caret.
    * Only used when `portal` is `true`.
-   * @type {null | HTMLElement}
+   * @type {null | HTMLElement | { getBoundingClientRect: () => DOMRectReadOnly, contextElement?: Element | null }}
    */
   export let anchor = null;
 

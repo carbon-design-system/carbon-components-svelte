@@ -1,13 +1,16 @@
 <script>
   /**
    * @restProps {div}
-   * @slot {{ direction: "bottom" | "top" | "left" | "right" }}
+   * @slot {{ direction: "bottom" | "top" | "left" | "right", align: "start" | "center" | "end", shift: number, anchorWidth: number, anchorHeight: number }}
    */
 
   /**
    * Required. Specify the anchor element to position the floating content relative to.
    * When using `bind:this`, this may be `null` initially until the element is mounted.
-   * @type {null | HTMLElement}
+   * Any object with `getBoundingClientRect()` works, such as a caret or a
+   * pointer (see `pointAnchor` and `caretAnchor`). Give it a `contextElement`
+   * when it lives in a scrolling box.
+   * @type {null | HTMLElement | { getBoundingClientRect: () => DOMRectReadOnly, contextElement?: Element | null }}
    */
   export let anchor;
 
@@ -102,6 +105,49 @@
   export let lockDirection = "none";
 
   /**
+   * Set to `true` to take another alignment along the anchor's edge when the
+   * box runs past the window: with `intrinsicWidth` above or below the anchor,
+   * `start` becomes `end` and the other way round, and `center` takes the edge
+   * with room. Set to `"any"` to let an edge also fall back to `center`.
+   * The alignment it settled on is the slot's `align`.
+   * @type {boolean | "any"}
+   */
+  export let flipAlign = false;
+
+  /**
+   * Set to `true` to open across the anchor when `direction` has no room on
+   * either side: a `left` or `right` box opens `bottom`, or `top` when only
+   * that fits, and a `top` or `bottom` box opens `right`, or `left`. The side
+   * it settled on is the slot's `direction`.
+   * @type {boolean}
+   */
+  export let flipAxis = false;
+
+  /**
+   * Room in pixels to keep between the floating content and the window's
+   * edges when it flips or reports a `shift`.
+   * @type {number}
+   */
+  export let padding = 0;
+
+  /**
+   * Set to a number of pixels to report how far the content would have to
+   * slide along the anchor's edge to sit that far inside the window, as the
+   * slot's `shift`. The portal itself stays on the anchor, so a caret can
+   * keep pointing at it: apply `shift` to the content.
+   * @type {number | false}
+   */
+  export let shift = false;
+
+  /**
+   * Set to `true` to read `intrinsicAlign` as `start` and `end` of the
+   * anchor's inline axis, so they swap under `dir="rtl"` on a box above or
+   * below the anchor. By default they are the left and the right.
+   * @type {boolean}
+   */
+  export let logical = false;
+
+  /**
    * Obtain a reference to the floating portal element.
    * @type {null | HTMLElement}
    * @bindable readonly
@@ -110,137 +156,72 @@
 
   /**
    * DOM node to mount the portal into. When unset, uses the anchor's nearest
-   * `<dialog>` or `[popover]`, else `document.body`.
+   * `<dialog>`, `[popover]` or fullscreen element, else `document.body`.
    * @type {HTMLElement | null}
    */
   export let target = null;
 
   import { onMount, tick } from "svelte";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
+  import { anchorElement, autoUpdate } from "../utils/auto-update.js";
   import { floatingPosition } from "../utils/floating-position.js";
-  import { getScrollableAncestors } from "../utils/get-scrollable-ancestors.js";
-  import { rafThrottle } from "../utils/raf-throttle.js";
-  import { observeResize } from "../utils/shared-observer.js";
-  import { addPooledListener } from "../utils/window-listener-pool.js";
+  import { physicalAlign } from "../utils/inline-align.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
+  import {
+    fixedBlockOffset,
+    hasFixedBlock,
+    portalRoot,
+  } from "../utils/portal-decision.js";
   import Portal from "./Portal.svelte";
 
+  const layoutDirection = getLayoutDirection();
+
   let mounted = true;
-
-  /** @type {Array<HTMLElement | Document>} */
-  let scrollableAncestors = [];
-
-  function addScrollListeners() {
-    for (const el of scrollableAncestors) {
-      el.addEventListener("scroll", scheduleUpdate, { passive: true });
-    }
-  }
-
-  function removeScrollListeners() {
-    for (const el of scrollableAncestors) {
-      el.removeEventListener("scroll", scheduleUpdate);
-    }
-  }
-
-  // Pooled `window` scroll/resize listeners: many `FloatingPortal` instances
-  // (every Tooltip, ListBoxMenu, Menu, ...) can be mounted at once while only
-  // a few are ever open, so each instance shares one real window listener
-  // per event type instead of registering its own for its whole mount
-  // lifetime.
-  /** @type {(() => void) | null} */
-  let unlistenWindowScroll = null;
-  /** @type {(() => void) | null} */
-  let unlistenWindowResize = null;
-
-  function addWindowListeners() {
-    // The `$: if (open)` caller also runs during server rendering.
-    if (typeof window === "undefined") return;
-    if (!unlistenWindowScroll) {
-      unlistenWindowScroll = addPooledListener("scroll", scheduleUpdate, {
-        passive: true,
-      });
-    }
-    if (!unlistenWindowResize) {
-      unlistenWindowResize = addPooledListener("resize", scheduleUpdate, {
-        passive: true,
-      });
-    }
-  }
-
-  function removeWindowListeners() {
-    unlistenWindowScroll?.();
-    unlistenWindowScroll = null;
-    unlistenWindowResize?.();
-    unlistenWindowResize = null;
-  }
 
   onMount(() => {
     return () => {
       mounted = false;
-      unobserveAnchor();
-      unobserveFloating();
-      removeScrollListeners();
-      removeWindowListeners();
-      scheduleUpdate.cancel();
+      stopUpdating();
     };
   });
 
-  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right", caretNudgePx?: number }} */
+  /** @type {{ top: number, left: number, width?: number, actualDirection: "bottom" | "top" | "left" | "right", actualAlign: "start" | "center" | "end", shiftX: number, exact: boolean, caretNudgePx?: number }} */
   let pos = {
     top: 0,
     left: 0,
     width: 0,
     actualDirection: direction,
+    actualAlign: intrinsicAlign,
+    shiftX: 0,
+    exact: false,
     caretNudgePx: undefined,
   };
+  // The anchor's size when the box was last placed, for styles that follow it.
+  let anchorWidth = 0;
+  let anchorHeight = 0;
 
-  /** @type {MutationObserver | null} */
-  let anchorObserver = null;
+  // Read when the portal opens: nothing reports a `dir` change. A `start` or
+  // `end` is an inline side above and below the anchor.
+  $: rtl =
+    open &&
+    logical &&
+    resolveLayoutDirection(
+      $layoutDirection,
+      anchor ? anchorElement(anchor) : null,
+    ) === "rtl";
+  $: alignment =
+    logical && (direction === "top" || direction === "bottom")
+      ? physicalAlign(intrinsicAlign, rtl)
+      : intrinsicAlign;
 
-  function observeAnchor() {
-    if (!anchor || anchorObserver) return;
-    anchorObserver = new MutationObserver(scheduleUpdate);
-    anchorObserver.observe(anchor, {
-      attributes: true,
-      attributeFilter: ["style", "class"],
-      childList: false,
-      subtree: false,
-    });
-  }
-
-  function unobserveAnchor() {
-    if (anchorObserver && anchor) {
-      anchorObserver.disconnect();
-      anchorObserver = null;
-    }
-  }
-
-  /** @type {(() => void) | null} */
-  let stopObservingFloating = null;
-
-  // Reposition when the floating content itself resizes (e.g. a tooltip whose
-  // text swaps). Caret nudge for intrinsic `start`/`end` alignment depends on
-  // the floating width, so a stale width leaves the caret off the anchor.
-  function observeFloating() {
-    if (
-      !ref ||
-      stopObservingFloating ||
-      typeof ResizeObserver === "undefined"
-    ) {
-      return;
-    }
-    // Reposition synchronously (not rAF-throttled). ResizeObserver fires after
-    // layout but before paint, so updating here applies the corrected position
-    // in the same frame the content resized — no one-frame caret drift.
-    stopObservingFloating = observeResize(ref, () => updatePosition());
-  }
-
-  function unobserveFloating() {
-    stopObservingFloating?.();
-    stopObservingFloating = null;
-  }
-
-  // Default portal target: nearest <dialog> or [popover] on the anchor. `target` wins.
-  $: effectiveTarget = target ?? anchor?.closest("dialog,[popover]") ?? null;
+  // Default portal target: the anchor's nearest top layer (`<dialog>`,
+  // `[popover]`) or fullscreen element. `target` wins. Read when opened:
+  // fullscreen can start any time.
+  $: effectiveTarget =
+    target ?? (open && anchor ? portalRoot(anchorElement(anchor)) : null);
 
   // Inside dialog/popover, absolute is relative to the target, not the viewport.
   // Use fixed + zero scroll offsets; scroll offsets only apply on document.body.
@@ -249,20 +230,32 @@
     typeof document !== "undefined" &&
     effectiveTarget !== document.body;
 
+  // Whether a transformed or contained ancestor of the portal places `fixed`
+  // from its own edge, not the window's. Read when an open session starts.
+  let fixedBlock = false;
+
   // The side latched for the rest of an open session per `lockDirection`.
   // Reset each open session.
   /** @type {"bottom" | "top" | "left" | "right" | null} */
   let lockedDirection = null;
 
-  function updatePosition() {
+  /**
+   * Reads layout, then returns the write: the engine runs every open
+   * overlay's read before any write.
+   * @returns {(() => void) | undefined}
+   */
+  function measure() {
     if (!mounted || !anchor || !ref) return;
 
-    pos = floatingPosition({
-      anchorRect: anchor.getBoundingClientRect(),
+    const anchorRect = anchor.getBoundingClientRect();
+    const next = floatingPosition({
+      anchorRect,
       floatingRect: ref.getBoundingClientRect(),
       viewport: {
-        innerWidth: window.innerWidth,
-        innerHeight: window.innerHeight,
+        // The room a box has is the page's, inside its scrollbars.
+        innerWidth: document.documentElement.clientWidth || window.innerWidth,
+        innerHeight:
+          document.documentElement.clientHeight || window.innerHeight,
         scrollX: window.scrollX,
         scrollY: window.scrollY,
       },
@@ -270,34 +263,52 @@
       lockedDirection: lockedDirection ?? undefined,
       useFixedPosition,
       intrinsicWidth,
-      intrinsicAlign,
+      intrinsicAlign: alignment,
       gapTop,
       gapBottom,
       horizontalGapLeft,
       horizontalGapRight,
       verticalAlignOffsetLeft,
       verticalAlignOffsetRight,
+      flipAlign,
+      flipAxis,
+      padding,
+      shift,
     });
-
-    // Latch the side only once it actually flips away from the preferred
-    // direction. Until then keep recomputing, so the initial layout passes
-    // (which run before the content's final width is known for side
-    // placements) can still flip. Once flipped, stay flipped for the session
-    // so a content resize does not snap the box back.
-    if (
-      lockDirection === "after-flip" &&
-      lockedDirection === null &&
-      pos.actualDirection !== direction
-    ) {
-      lockedDirection = pos.actualDirection;
+    if (useFixedPosition && fixedBlock) {
+      const offset = fixedBlockOffset(ref, next.left, next.top);
+      next.left -= offset.x;
+      next.top -= offset.y;
     }
+
+    return () => {
+      pos = next;
+      anchorWidth = anchorRect.width;
+      anchorHeight = anchorRect.height;
+      // Latch the side only once it actually flips away from the preferred
+      // direction. Until then keep recomputing, so the initial layout passes
+      // (which run before the content's final width is known for side
+      // placements) can still flip. Once flipped, stay flipped for the session
+      // so a content resize does not snap the box back.
+      if (
+        lockDirection === "after-flip" &&
+        lockedDirection === null &&
+        pos.actualDirection !== direction
+      ) {
+        lockedDirection = pos.actualDirection;
+      }
+    };
+  }
+
+  function updatePosition() {
+    measure()?.();
   }
 
   // Lock whatever side the open-time layout passes settled on, flipped or
   // not, so a later scroll/resize/mutation update repositions along that
   // side instead of re-running the flip check mid-interaction. Called once
   // the settling passes finish (see the `open` effect below), not from
-  // `updatePosition()` itself. Locking there would latch onto the very
+  // `measure()` itself. Locking there would latch onto the very
   // scroll/resize update that triggered the call, defeating the point.
   function lockAfterSettling() {
     if (lockDirection === "always" && lockedDirection === null) {
@@ -305,30 +316,67 @@
     }
   }
 
-  const scheduleUpdate = rafThrottle(updatePosition);
+  // Everything that moves the anchor or the box places it again: scroll,
+  // resize, a transition on an ancestor, the anchor's style, and either
+  // box's size. One shared listener or observer serves every open portal.
+  /** @type {null | (() => void) & { update?: () => void }} */
+  let stopAutoUpdate = null;
+  /** @type {null | { anchor: unknown, ref: unknown }} */
+  let updating = null;
+
+  function stopUpdating() {
+    stopAutoUpdate?.();
+    stopAutoUpdate = null;
+    updating = null;
+  }
+
+  /**
+   * @param {NonNullable<typeof anchor>} anchorNode
+   * @param {HTMLElement} node
+   */
+  function startUpdating(anchorNode, node) {
+    stopUpdating();
+    updating = { anchor: anchorNode, ref: node };
+    fixedBlock =
+      useFixedPosition && effectiveTarget
+        ? hasFixedBlock(effectiveTarget)
+        : false;
+    stopAutoUpdate = autoUpdate(anchorNode, node, measure, {
+      immediate: false,
+    });
+  }
 
   // Re-place when the alignment changes while open (the side doesn't move).
   // Compared by value: `ref` is a `bind:this` target, re-invalidated on
   // every update, so it can't gate this.
-  let placedAlign = intrinsicAlign;
-  $: if (intrinsicAlign !== placedAlign) {
-    placedAlign = intrinsicAlign;
-    if (open) scheduleUpdate();
+  let placedAlign = alignment;
+  $: if (alignment !== placedAlign) {
+    placedAlign = alignment;
+    if (open) stopAutoUpdate?.update?.();
   }
 
   $: actualDirection = pos.actualDirection;
+  $: actualAlign = pos.actualAlign;
 
   $: useIntrinsicWidthVertical =
     intrinsicWidth &&
     (actualDirection === "top" || actualDirection === "bottom");
 
+  // Placed by the point of the anchor its alignment names, the box slides
+  // back by its own width.
   $: intrinsicTranslateX = useIntrinsicWidthVertical
-    ? intrinsicAlign === "center"
+    ? actualAlign === "center"
       ? "transform: translateX(-50%)"
-      : intrinsicAlign === "end"
+      : actualAlign === "end"
         ? "transform: translateX(-100%)"
         : null
     : null;
+
+  // Fitting the alignment or the slide reads the box's own width. A box placed
+  // at the end of the page would be squeezed to the room left of its left
+  // edge, and fit it: let it have the width its content asks for.
+  $: needsOwnWidth =
+    useIntrinsicWidthVertical && (flipAlign || flipAxis || shift !== false);
 
   $: portalStyle = [
     useFixedPosition ? "position: fixed" : "position: absolute",
@@ -338,6 +386,7 @@
     !useIntrinsicWidthVertical && pos.width != null
       ? `width: ${pos.width}px`
       : null,
+    needsOwnWidth ? "width: max-content" : null,
     `z-index: ${zIndex}`,
     pos.caretNudgePx == null
       ? null
@@ -346,27 +395,21 @@
     .filter(Boolean)
     .join("; ");
 
-  $: if (open) {
-    addWindowListeners();
-  } else {
-    removeWindowListeners();
-    unobserveAnchor();
-    unobserveFloating();
-    removeScrollListeners();
-    scrollableAncestors = [];
-    scheduleUpdate.cancel();
+  $: if (!open) {
+    stopUpdating();
     // Recompute the side fresh on the next open.
     lockedDirection = null;
   }
 
-  $: if (open && anchor && ref) {
-    unobserveAnchor();
-    unobserveFloating();
-    removeScrollListeners();
-    scrollableAncestors = getScrollableAncestors(anchor);
-    addScrollListeners();
-    observeAnchor();
-    observeFloating();
+  // `ref` is re-invalidated on every update, so start only for a new anchor
+  // or a new box.
+  $: if (
+    open &&
+    anchor &&
+    ref &&
+    (updating?.anchor !== anchor || updating?.ref !== ref)
+  ) {
+    startUpdating(anchor, ref);
     tick().then(() => {
       updatePosition();
       // Second pass after layout: side placements need width; intrinsic caret needs stable rect.
@@ -393,9 +436,15 @@
     {...$$restProps}
     data-floating-portal
     data-floating-direction={pos.actualDirection}
-    data-floating-intrinsic-align={intrinsicWidth ? intrinsicAlign : undefined}
+    data-floating-intrinsic-align={intrinsicWidth ? actualAlign : undefined}
     style={portalStyle}
   >
-    <slot direction={actualDirection} />
+    <slot
+      direction={actualDirection}
+      align={actualAlign}
+      shift={pos.shiftX}
+      {anchorWidth}
+      {anchorHeight}
+    />
   </Portal>
 {/if}

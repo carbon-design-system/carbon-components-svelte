@@ -58,6 +58,7 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
+  import { computePosition } from "../utils/compute-position.js";
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
@@ -68,13 +69,13 @@
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
-  import { fitMenuAxis } from "../utils/menu-placement.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
     typeaheadIndex,
   } from "../utils/typeahead.js";
+  import { pointAnchor } from "../utils/virtual-anchor.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
@@ -168,25 +169,27 @@
       ref
     ).getBoundingClientRect();
 
-    // The menu opens toward the inline end of the pointer: the left in RTL.
-    if (open || x === 0) {
-      x = fitMenuAxis({
-        before: event.x,
-        after: event.x,
-        size: width,
-        max: window.innerWidth,
-        reverse: resolveLayoutDirection($layoutDirection, ref) === "rtl",
-      });
-    }
-
-    if (open || y === 0) {
-      y = fitMenuAxis({
-        before: event.y,
-        after: event.y,
-        size: height,
-        max: window.innerHeight,
-      });
-    }
+    // The menu opens below and toward the inline end of the pointer (the
+    // left in RTL). It goes above or to the other side when it doesn't fit,
+    // and is pinned to the window's edge when it fits on neither.
+    const fit = computePosition(
+      pointAnchor(event.x, event.y).getBoundingClientRect(),
+      { width, height },
+      {
+        placement: "bottom-start",
+        rtl: resolveLayoutDirection($layoutDirection, ref) === "rtl",
+        flip: { align: true, bestFit: false },
+        shift: { mainAxis: true },
+        boundary: {
+          left: 0,
+          top: 0,
+          right: window.innerWidth,
+          bottom: window.innerHeight,
+        },
+      },
+    );
+    if (open || x === 0) x = fit.x;
+    if (open || y === 0) y = fit.y;
     position.set([x, y]);
     open = true;
     openDetail = event.target;
