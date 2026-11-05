@@ -321,6 +321,8 @@ export {
   toColumnSettings,
 } from "./utils/column-settings.js";
 export { createLoadingDelay, delayedLoading } from "./utils/delayed-loading.js";
+export { autoUpdate } from "./utils/auto-update.js";
+export { computePosition } from "./utils/compute-position.js";
 export { dismiss } from "./utils/dismiss.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
@@ -347,6 +349,11 @@ export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
+export {
+  caretAnchor,
+  pointAnchor,
+  rangeAnchor,
+} from "./utils/virtual-anchor.js";
 export {
   resolveCheckboxState,
   toggleCheckboxNode,
