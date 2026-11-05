@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
   import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 
@@ -14,12 +14,12 @@
     { size: "medium", fieldSize: "sm", rowHeight: 40 },
     { size: undefined, fieldSize: "md", rowHeight: 48 },
     { size: "tall", fieldSize: "lg", rowHeight: 64 },
-  ];
+  ] as const;
 
   const headers = [
     { key: "item", value: "Item" },
     { key: "qty", value: "Quantity" },
-  ];
+  ] as const;
 </script>
 
 <div data-testid="states">

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { OperationalTag, Tag, TagSet } from "carbon-components-svelte";
 
   let tags = ["Production", "Staging", "Development", "QA", "Sandbox"];

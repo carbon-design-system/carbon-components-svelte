@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Dropdown } from "carbon-components-svelte";
 
   // Short selected label so the inline field is far narrower than the
@@ -8,7 +8,12 @@
     { id: "b", text: "A much longer option label" },
   ];
 
-  const cases = [
+  const cases: {
+    key: string;
+    portalMenu: boolean;
+    align?: "start" | "end";
+    direction?: "top" | "bottom";
+  }[] = [
     { key: "inline-start", portalMenu: false },
     { key: "inline-end", portalMenu: false, align: "end" },
     { key: "portal-start", portalMenu: true },

@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { Checkbox, CheckboxGroup } from "carbon-components-svelte";
 
-  let selected = [];
+  let selected: string[] = [];
 </script>
 
 <CheckboxGroup

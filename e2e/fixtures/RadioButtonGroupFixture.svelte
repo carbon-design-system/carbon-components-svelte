@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { RadioButton, RadioButtonGroup } from "carbon-components-svelte";
 
   let selected = "one";

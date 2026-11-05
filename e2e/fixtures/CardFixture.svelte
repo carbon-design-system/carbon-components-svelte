@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
   import Button from "carbon-components-svelte/Button/Button.svelte";
   import Card from "carbon-components-svelte/Card/Card.svelte";

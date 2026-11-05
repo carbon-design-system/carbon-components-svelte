@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Content,
     Header,
@@ -73,7 +73,7 @@
   </SideNavItems>
 </SideNav>
 
-<Content id="main-content" tabindex="-1">
+<Content id="main-content" tabindex={-1}>
   <p data-testid="main-paragraph">Primary page content</p>
   <button data-testid="outside-header-search" type="button">
     Dismiss region

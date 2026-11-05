@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { FileUploader } from "carbon-components-svelte";
 
-  let files = [];
+  let files: File[] = [];
 </script>
 
 <FileUploader

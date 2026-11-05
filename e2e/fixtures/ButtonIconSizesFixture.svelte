@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
@@ -10,8 +10,8 @@
     "danger",
     "danger-tertiary",
     "danger-ghost",
-  ];
-  const sizes = ["small", "field", "default", "lg", "xl"];
+  ] as const;
+  const sizes = ["small", "field", "default", "lg", "xl"] as const;
 </script>
 
 <!--

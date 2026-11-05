@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Tag from "carbon-components-svelte/Tag/Tag.svelte";
   import TagSet from "carbon-components-svelte/TagSet/TagSet.svelte";
 

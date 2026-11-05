@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { QRCode, Stack } from "carbon-components-svelte";
   import Locked from "carbon-icons-svelte/lib/Locked.svelte";
 

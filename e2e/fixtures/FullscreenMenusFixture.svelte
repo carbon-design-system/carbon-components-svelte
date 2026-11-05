@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboButton,
     MenuButton,
@@ -7,7 +7,7 @@
     OverflowMenuItem,
   } from "carbon-components-svelte";
 
-  let stage = null;
+  let stage: HTMLDivElement | null = null;
 </script>
 
 <button

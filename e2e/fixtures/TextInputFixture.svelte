@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { TextInput } from "carbon-components-svelte";
 
   let value = "";

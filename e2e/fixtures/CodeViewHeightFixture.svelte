@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import { CodeSnippet } from "carbon-components-svelte";
   import { codeViewHeight } from "../../docs/src/code-view-height";
 
   // Around the 15-row cap, and a trailing newline, which renders no line.
   const counts = [1, 2, 5, 13, 14, 15, 16, 40];
-  const codeOf = (lines) =>
+  const codeOf = (lines: number) =>
     Array.from(
       { length: lines },
       (_, i) => `const line${i + 1} = ${i + 1};`,

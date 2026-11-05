@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { CodeSnippet } from "carbon-components-svelte";
   import CheckmarkIcon from "./CheckmarkIcon.svelte";
 

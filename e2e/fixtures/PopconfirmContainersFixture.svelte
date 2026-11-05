@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     DataTable,
@@ -12,15 +12,14 @@
   // clicks on a row.
   const sticky = params.has("sticky");
 
-  let log = [];
-  /** @param {string} entry */
-  const note = (entry) => (log = [...log, entry]);
+  let log: string[] = [];
+  const note = (entry: string) => (log = [...log, entry]);
 
   const headers = [
     { key: "name", value: "Name" },
     { key: "region", value: "Region" },
-    { key: "actions", value: "Actions" },
-  ];
+    { key: "actions", value: "Actions", sort: false },
+  ] as const;
   let rows = Array.from({ length: 12 }, (_, i) => ({
     id: String(i),
     name: `Service ${i + 1}`,
@@ -30,7 +29,8 @@
   let modalOpen = params.has("modal");
   let modalClosed = 0;
   // For a test to close the modal with no pointer event.
-  /** @type {any} */ (window).closeModal = () => (modalOpen = false);
+  (window as Window & { closeModal?: () => void }).closeModal = () =>
+    (modalOpen = false);
 </script>
 
 <div

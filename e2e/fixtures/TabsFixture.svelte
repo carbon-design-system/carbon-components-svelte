@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Tab, TabContent, Tabs } from "carbon-components-svelte";
   import Calendar from "carbon-icons-svelte/lib/Calendar.svelte";
 

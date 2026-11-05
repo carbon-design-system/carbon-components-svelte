@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Masonry, Tile } from "carbon-components-svelte";
 
   export let native = true;

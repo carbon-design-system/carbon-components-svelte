@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Callout, NotificationActionButton } from "carbon-components-svelte";
 </script>
 

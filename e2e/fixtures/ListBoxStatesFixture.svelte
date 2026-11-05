@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Dropdown } from "carbon-components-svelte";
 
   const items = [
@@ -13,7 +13,7 @@
   inline, and loading. CSS coverage for the size, `--up` and menu-status
   rules of `.bx--list-box`, which no other fixture renders open.
 -->
-{#each ["xs", "sm", "lg", "xl"] as size}
+{#each ["xs", "sm", "lg", "xl"] as const as size}
   <div class="row" data-testid="size-{size}">
     <Dropdown {size} {items} labelText="Down {size}" open />
     <Dropdown {size} {items} labelText="Up {size}" direction="top" open />

@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
   import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
   import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
   import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+  import type { ComponentProps } from "svelte";
 
   // `?size=sm` renders every case at that size.
-  const size = new URLSearchParams(location.search).get("size") || undefined;
+  const size = (new URLSearchParams(location.search).get("size") ||
+    undefined) as ComponentProps<Dropdown>["size"];
 
   const items = [
     { id: "fra", text: "Frankfurt", group: "Europe" },

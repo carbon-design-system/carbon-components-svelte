@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { MenuButton, MenuItem } from "carbon-components-svelte";
 </script>
 

@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import { Theme } from "carbon-components-svelte";
+  import type { CarbonTheme } from "carbon-components-svelte/Theme/Theme.svelte";
 
-  let theme = "white";
+  let theme: CarbonTheme = "white";
 </script>
 
 <Theme bind:theme persist persistKey="e2e-theme-key">

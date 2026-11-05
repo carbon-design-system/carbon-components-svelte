@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Dropdown } from "carbon-components-svelte";
 
   const items = [

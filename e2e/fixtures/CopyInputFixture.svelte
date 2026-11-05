@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
   import { CopyInput, Stack } from "carbon-components-svelte";
 
   const params = new URLSearchParams(location.search);
-  const dir = params.get("dir") ?? undefined;
+  const dir = (params.get("dir") ?? undefined) as "ltr" | "rtl" | undefined;
 </script>
 
 <div {dir}>
   <Stack gap={5}>
-    {#each ["sm", "md", "xl"] as size}
+    {#each ["sm", "md", "xl"] as const as size}
       <div data-testid="toggle-{size}">
         <CopyInput
           labelText="API token {size}"

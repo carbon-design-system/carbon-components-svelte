@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { TagInput, TextInput } from "carbon-components-svelte";
 
-  const sizes = ["xs", "sm", undefined, "xl"];
+  const sizes = ["xs", "sm", undefined, "xl"] as const;
 </script>
 
 {#each sizes as size (size ?? "md")}

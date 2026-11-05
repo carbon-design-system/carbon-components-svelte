@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // Components that measure themselves after mount, each sized so the
   // measurement matters: a snippet past its row cap, tabs and tags that
   // overflow, a tile that crops, content that scrolls.
@@ -11,7 +11,7 @@
   import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
   import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 
-  const lines = (count, text = "line") =>
+  const lines = (count: number, text = "line") =>
     Array.from({ length: count }, (_, i) => `${text} ${i + 1}`).join("\n");
   const longLine =
     "function example() { return 'a line long enough to wrap'; }";

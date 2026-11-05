@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button, Masonry, Tile } from "carbon-components-svelte";
 
   // Deterministic, uneven heights: the order of tops is the thing under test.
@@ -11,7 +11,7 @@
   let tinted = false;
 
   // Images that arrive one after another and give their tile a height.
-  const image = (i) =>
+  const image = (i: number) =>
     `data:image/svg+xml,${encodeURIComponent(
       `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="${60 + ((i * 71) % 180)}"><rect width="100%" height="100%" fill="#8d8d8d"/></svg>`,
     )}`;

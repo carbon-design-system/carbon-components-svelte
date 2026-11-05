@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ActionBar,
     ActionBarButton,
@@ -20,12 +20,11 @@
   let bold = false;
   let italic = false;
   let align = "left";
-  let clicks = [];
+  let clicks: string[] = [];
   let overflowCount = 0;
   let exits = 0;
 
-  /** @param {string} name */
-  function log(name) {
+  function log(name: string) {
     clicks = [...clicks, name];
   }
 </script>

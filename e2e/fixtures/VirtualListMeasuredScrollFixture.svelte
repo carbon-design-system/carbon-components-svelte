@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { VirtualList } from "carbon-components-svelte";
 
   // Rows are taller than the 40px estimate, and the heights differ, so

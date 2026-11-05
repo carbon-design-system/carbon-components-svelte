@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Dropdown, VirtualList } from "carbon-components-svelte";
 
   const items = Array.from({ length: 2000 }, (_, i) => ({

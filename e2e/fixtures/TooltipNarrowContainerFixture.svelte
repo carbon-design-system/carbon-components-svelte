@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Link from "carbon-components-svelte/Link/Link.svelte";
   import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 </script>

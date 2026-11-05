@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboBox,
     DatePicker,
@@ -28,11 +28,11 @@
     { key: "md", size: undefined, fluid: false },
     { key: "xl", size: "xl", fluid: false },
     { key: "fluid", size: undefined, fluid: true },
-  ];
+  ] as const;
   const statuses = [
     { key: "invalid", props: { invalid: true, invalidText: "Fix this value" } },
     { key: "warn", props: { warn: true, warnText: "Check this value" } },
-  ];
+  ] as const;
 </script>
 
 <div

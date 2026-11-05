@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Header,
     HeaderSearch,
@@ -7,7 +7,7 @@
   } from "carbon-components-svelte";
 
   // Slow enough to inspect mid-exit.
-  const transition = { duration: "slow02" };
+  const transition = { duration: "slow02" } as const;
 
   const results = [
     { href: "#a", text: "Databases" },

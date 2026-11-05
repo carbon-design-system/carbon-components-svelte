@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     Link,
@@ -16,18 +16,21 @@
   `.bx--tooltip--align-*` and `[dir=rtl]` tooltip rules, which no other
   fixture renders.
 -->
-{#each ["ltr", "rtl"] as dir}
+{#each ["ltr", "rtl"] as const as dir}
   <div {dir} class="grid" data-testid="aligns-{dir}">
-    {#each ["top", "bottom", "left", "right"] as direction}
-      {#each ["start", "center", "end"] as align}
-        <TooltipDefinition
-          {direction}
-          {align}
-          tooltipText="{direction} {align}"
-        >
-          {direction}
-          {align}
-        </TooltipDefinition>
+    {#each ["top", "bottom", "left", "right"] as const as direction}
+      {#each ["start", "center", "end"] as const as align}
+        <!-- TooltipDefinition opens above or below its trigger only. -->
+        {#if direction === "top" || direction === "bottom"}
+          <TooltipDefinition
+            {direction}
+            {align}
+            tooltipText="{direction} {align}"
+          >
+            {direction}
+            {align}
+          </TooltipDefinition>
+        {/if}
         <TooltipIcon {direction} {align} tooltipText="{direction} {align}" />
         <Button
           iconOnly
@@ -43,7 +46,7 @@
 <!-- Tooltip keeps only top and bottom tooltips in the window, so each side
      tooltip opens from the edge that leaves it room. -->
 <div class="open" data-testid="open">
-  {#each ["left", "right"] as direction}
+  {#each ["left", "right"] as const as direction}
     <div class="open-{direction}">
       <Tooltip open {direction} align="end" triggerText="{direction} end">
         <p>Open, with a <Link href="#top">link</Link>.</p>

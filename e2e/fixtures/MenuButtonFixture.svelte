@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Button, MenuButton, MenuItem } from "carbon-components-svelte";
 
   let open = false;

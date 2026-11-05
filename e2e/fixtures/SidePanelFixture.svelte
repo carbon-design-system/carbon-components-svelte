@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     Header,
@@ -8,7 +8,7 @@
 
   const header = new URLSearchParams(location.search).has("header");
   let open = true;
-  let width;
+  let width: number | undefined;
 </script>
 
 {#if header}

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     createHistory,
@@ -13,7 +13,7 @@
   // A field recorded when the user commits it (on change), left to the
   // browser while they type: the case for `fields: "fallthrough"`.
   let committed = "";
-  let applied = [];
+  let applied: string[] = [];
   const history = createHistory();
   const { canUndo } = history;
   const snapshots = history.snapshots({
@@ -24,7 +24,7 @@
     },
   });
 
-  function record(value) {
+  function record(value: string) {
     committed = value;
     snapshots.record(value, { label: "commit" });
   }

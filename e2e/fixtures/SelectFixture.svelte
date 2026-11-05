@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Select, SelectItem } from "carbon-components-svelte";
 
   let selected = "";

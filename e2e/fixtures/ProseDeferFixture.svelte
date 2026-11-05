@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import "carbon-components-svelte/css/prose.css";
   import Prose from "carbon-components-svelte/Prose/Prose.svelte";
 
   // Code blocks of many lengths, so a reserved height that ignores the
   // line count is wrong for most of them.
   const counts = [1, 3, 8, 2, 20, 5, 13, 1, 34, 4, 9, 2, 16, 6, 27, 3, 11, 1];
-  const codeOf = (lines) =>
+  const codeOf = (lines: number) =>
     Array.from(
       { length: lines },
       (_, i) => `const line${i + 1} = ${i + 1};`,

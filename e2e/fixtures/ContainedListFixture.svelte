@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
   import {
     ContainedList,
     ContainedListItem,
     Search,
   } from "carbon-components-svelte";
 
-  let clickedItem = null;
+  let clickedItem: string | null = null;
 </script>
 
 <div data-testid="contained-list">

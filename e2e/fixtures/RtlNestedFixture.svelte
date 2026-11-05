@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     DatePicker,
     DatePickerInput,
@@ -10,7 +10,7 @@
 </script>
 
 <!-- The test sets the page's `dir` on <html>; each region sets its own. -->
-{#each ["ltr", "rtl"] as dir (dir)}
+{#each ["ltr", "rtl"] as const as dir (dir)}
   <div data-testid="region-{dir}" {dir} style="width: 20rem">
     <div data-field="password">
       <PasswordInput

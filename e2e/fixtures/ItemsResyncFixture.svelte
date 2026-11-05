@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboBox,
     Dropdown,
@@ -33,7 +33,7 @@
   let cbPreloadSelectedId = "orwell";
   let cbPreloadValue = "";
 
-  let cbFillItems = [];
+  let cbFillItems: ReturnType<typeof make> = [];
   let cbFillSelectedId = "orwell";
   let cbFillValue = "";
 
@@ -49,7 +49,7 @@
   let cbKeepSelectedId = "orwell";
   let cbKeepValue = "George Orwell";
 
-  let selFillItems = [];
+  let selFillItems: ReturnType<typeof make> = [];
   let selFillSelected = "orwell";
 
   let selSwapItems = make();
@@ -66,10 +66,10 @@
   let msRemoveItems = make();
   let msRemoveSelectedIds = ["orwell"];
 
-  let msFillItems = [];
+  let msFillItems: ReturnType<typeof make> = [];
   let msFillSelectedIds = ["orwell"];
 
-  let dropFillItems = [];
+  let dropFillItems: ReturnType<typeof make> = [];
   let dropFillSelectedId = "orwell";
 
   function load() {

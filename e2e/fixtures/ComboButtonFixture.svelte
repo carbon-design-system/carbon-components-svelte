@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import { ComboButton, MenuItem } from "carbon-components-svelte";
 
   let primaryClicks = 0;
   let selectedAction = "";
 
-  const aligns = /** @type {const} */ (["start", "center", "end"]);
+  const aligns = ["start", "center", "end"] as const;
 </script>
 
 <div style="padding-inline-start: 20rem">

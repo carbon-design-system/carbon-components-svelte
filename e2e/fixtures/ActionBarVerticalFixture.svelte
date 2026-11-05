@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { ActionBar, ActionBarButton } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Copy from "carbon-icons-svelte/lib/Copy.svelte";

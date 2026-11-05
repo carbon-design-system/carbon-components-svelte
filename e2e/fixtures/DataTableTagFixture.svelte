@@ -1,17 +1,17 @@
-<script>
+<script lang="ts">
   import { DataTable, Tag } from "carbon-components-svelte";
 
   const headers = [
     { key: "name", value: "Name" },
     { key: "status", value: "Status" },
-  ];
+  ] as const;
 
   const rows = [
     { id: "a", name: "Load Balancer 1", status: "Active" },
     { id: "b", name: "Load Balancer 2", status: "Idle" },
   ];
 
-  const sizes = ["compact", "short", "medium", undefined, "tall"];
+  const sizes = ["compact", "short", "medium", undefined, "tall"] as const;
 </script>
 
 {#each sizes as size}

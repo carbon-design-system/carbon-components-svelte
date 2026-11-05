@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     ComposedModal,
@@ -20,7 +20,7 @@
   );
 
   let open = false;
-  let closeEvents = [];
+  let closeEvents: string[] = [];
 </script>
 
 <button type="button" data-testid="open-modal" on:click={() => (open = true)}>

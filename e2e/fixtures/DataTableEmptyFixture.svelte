@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     DataTable,
@@ -12,16 +12,17 @@
   const headers = [
     { key: "name", value: "Name" },
     { key: "status", value: "Status" },
-  ];
+  ] as const;
   const rows = [
     { id: "a", name: "api-gateway", status: "Running" },
     { id: "b", name: "auth", status: "Stopped" },
   ];
-  const sizes = ["compact", "short", "medium", undefined, "tall"];
+  const noRows: typeof rows = [];
+  const sizes = ["compact", "short", "medium", undefined, "tall"] as const;
 </script>
 
 <div data-testid="empty-text">
-  <DataTable {headers} rows={[]} emptyText="No data" />
+  <DataTable {headers} rows={noRows} emptyText="No data" />
 </div>
 
 <div data-testid="no-results-text">
@@ -36,7 +37,7 @@
 
 {#each sizes as size}
   <div data-testid="empty-{size ?? 'default'}">
-    <DataTable {headers} rows={[]} {size}>
+    <DataTable {headers} rows={noRows} {size}>
       <EmptyState
         slot="empty"
         size="sm"

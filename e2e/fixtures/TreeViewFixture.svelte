@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { TreeView } from "carbon-components-svelte";
 
   let activeId = "";
-  let selectedIds = [];
-  let expandedIds = [];
+  let selectedIds: string[] = [];
+  let expandedIds: string[] = [];
 
   const nodes = [
     { id: "1", text: "Parent 1", nodes: [{ id: "1-1", text: "Child 1-1" }] },

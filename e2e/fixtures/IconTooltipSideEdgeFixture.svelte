@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Button,
     TooltipDefinition,
@@ -10,9 +10,9 @@
 
   const text = "Requests in the last 30 days, summed across every region";
 
-  const DIRECTIONS = ["top", "bottom", "left", "right"];
-  const ALIGNS = ["start", "center", "end"];
-  const COMPONENTS = ["TooltipIcon", "Button", "TooltipDefinition"];
+  const DIRECTIONS = ["top", "bottom", "left", "right"] as const;
+  const ALIGNS = ["start", "center", "end"] as const;
+  const COMPONENTS = ["TooltipIcon", "Button", "TooltipDefinition"] as const;
   // Where the trigger sits, a few px in from the edge or corner of the
   // window. `none` is the middle.
   const EDGES = {
@@ -25,7 +25,8 @@
     "top-right": "top: 0.25rem; right: 0.25rem",
     "bottom-left": "bottom: 0.25rem; left: 0.25rem",
     "bottom-right": "bottom: 0.25rem; right: 0.25rem",
-  };
+  } as const;
+  const EDGE_NAMES = Object.keys(EDGES) as (keyof typeof EDGES)[];
 
   // `?direction=right&align=start&edge=top-left&component=Button` opens one
   // case: the trigger sits at that edge or corner of the window, with its
@@ -38,29 +39,37 @@
     params.has(name),
   );
 
-  function pick(name, values, fallback) {
+  function pick<T extends string>(
+    name: string,
+    values: readonly T[],
+    fallback: T,
+  ): T {
     const value = params.get(name);
-    return values.includes(value) ? value : fallback;
+    return values.find((v) => v === value) ?? fallback;
   }
 
   const direction = pick("direction", DIRECTIONS, "right");
   const align = pick("align", ALIGNS, "center");
-  const edge = pick("edge", Object.keys(EDGES), "none");
+  const edge = pick("edge", EDGE_NAMES, "none");
   const component = pick("component", COMPONENTS, "TooltipIcon");
   const rtl = params.get("dir") === "rtl";
   const theme = params.get("theme");
 
   // TooltipDefinition opens above or below its trigger only.
-  const supported = (c, d) =>
-    c !== "TooltipDefinition" || d === "top" || d === "bottom";
+  const supported = (
+    c: (typeof COMPONENTS)[number],
+    d: (typeof DIRECTIONS)[number],
+  ) => c !== "TooltipDefinition" || d === "top" || d === "bottom";
 
-  let trigger;
+  let trigger: HTMLDivElement | null = null;
 
   onMount(() => {
     if (rtl) document.documentElement.setAttribute("dir", "rtl");
     if (theme) document.documentElement.setAttribute("theme", theme);
     if (parametric) {
-      trigger?.querySelector(".bx--btn, .bx--tooltip__trigger")?.focus();
+      trigger
+        ?.querySelector<HTMLElement>(".bx--btn, .bx--tooltip__trigger")
+        ?.focus();
     }
   });
 </script>
@@ -78,7 +87,7 @@
           <h2>{c}, direction {d}</h2>
           <table>
             <tbody>
-              {#each Object.keys(EDGES) as e}
+              {#each EDGE_NAMES as e}
                 <tr>
                   <th scope="row">{e}</th>
                   {#each ALIGNS as a}
@@ -121,7 +130,7 @@
           tooltipAlignment={align}
           portalTooltip
         />
-      {:else}
+      {:else if direction === "top" || direction === "bottom"}
         <TooltipDefinition tooltipText={text} {direction} {align} portalTooltip
           >Quota</TooltipDefinition
         >

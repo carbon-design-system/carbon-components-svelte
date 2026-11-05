@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { Truncate } from "carbon-components-svelte";
 
   const message =

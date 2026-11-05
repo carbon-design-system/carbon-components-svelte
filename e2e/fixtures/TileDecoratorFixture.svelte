@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     AILabel,
     ClickableTile,
@@ -15,7 +15,7 @@
 </script>
 
 <!-- 160px wide: narrow enough that the text meets the corner. -->
-{#each ["ltr", "rtl"] as dir}
+{#each ["ltr", "rtl"] as const as dir}
   <div
     {dir}
     data-testid="tiles-{dir}"

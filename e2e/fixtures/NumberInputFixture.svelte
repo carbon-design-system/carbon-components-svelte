@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { NumberInput } from "carbon-components-svelte";
 
   let value = 10;

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     ComboBox,
     CopyInput,
@@ -24,7 +24,7 @@
   } from "carbon-components-svelte";
 </script>
 
-<Header company="IBM" platformName="Carbon">
+<Header companyName="IBM" platformName="Carbon">
   <HeaderUtilities>
     <HeaderSearch
       data-testid="header-search"
