@@ -1,0 +1,98 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Markdown draws parsed Markdown, such as a model's reply, as plain
+/// elements that `Prose` styles. This adds what Prose has no element for: a
+/// header with a copy button on a code block, a box that scrolls a wide
+/// table, and the caret that follows text still arriving.
+///
+/// Elements here carry no Carbon class, because Prose styles only plain
+/// elements, so the rules reach them through the root.
+/// @access private
+/// @group components
+@mixin markdown {
+  // Inside a bubble or a panel, the first and last block sit flush with its
+  // padding.
+  .#{$prefix}--markdown > :first-child {
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--markdown > :last-child {
+    margin-block-end: 0;
+  }
+
+  // Inline code is a run of its own in right-to-left copy, so its
+  // punctuation doesn't flip.
+  .#{$prefix}--markdown code {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  // The language and the copy button sit over the code as one card.
+  .#{$prefix}--markdown figure > figcaption {
+    display: flex;
+    min-height: $carbon--spacing-07;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-02;
+    background-color: $layer-accent;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--markdown figure > pre {
+    margin: 0;
+  }
+
+  .#{$prefix}--markdown figure > pre:focus,
+  .#{$prefix}--markdown > [role="group"]:focus {
+    @include focus-outline("outline");
+  }
+
+  // A wide table scrolls inside its own box instead of the message.
+  .#{$prefix}--markdown > [role="group"] {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  // A blinking caret at the end of text still arriving, in a quieter color
+  // than the text.
+  .#{$prefix}--markdown__caret {
+    display: inline-block;
+    width: 0.5em;
+    height: 1em;
+    margin-inline-start: $carbon--spacing-01;
+    animation: markdown-caret 1s steps(1) infinite;
+    background-color: $icon-secondary;
+    vertical-align: -0.2em;
+  }
+
+  @keyframes markdown-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--markdown__caret {
+      animation: none;
+    }
+  }
+
+  // Forced colors repaint the caret as `Canvas`, which hides it, and drop
+  // the code header's surface.
+  @media (forced-colors: active) {
+    .#{$prefix}--markdown__caret {
+      background-color: CanvasText;
+    }
+
+    .#{$prefix}--markdown figure > figcaption {
+      border-bottom: 1px solid CanvasText;
+    }
+  }
+}
+
+@include exports("markdown") {
+  @include markdown;
+}
