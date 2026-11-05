@@ -9,6 +9,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import {
     compareDays,
     formatMonthYear,
@@ -51,14 +52,15 @@
   export let isDateDisabled = () => false;
 
   /**
-   * A language tag such as `"de"`, or a partial locale object.
-   * @type {string | Partial<import("./calendar-dates.js").CalendarLocale>}
+   * A language tag such as `"de"`, or a partial locale object. Unset, it
+   * uses the nearest `LocaleProvider`, then `"en"`.
+   * @type {undefined | string | Partial<import("./calendar-dates.js").CalendarLocale>}
    */
-  export let locale = "en";
+  export let locale = undefined;
 
   /**
    * First day of the week, 0 (Sunday) to 6 (Saturday). Defaults to the
-   * locale's.
+   * nearest `LocaleProvider`'s `weekStart`, then the locale's.
    * @type {number | undefined}
    */
   export let firstDayOfWeek = undefined;
@@ -84,11 +86,14 @@
   /** The day that takes Tab focus in the grid. */
   let focusTarget = value ?? today;
 
-  $: l10n = getCalendarLocale(locale);
-  $: firstDay = firstDayOfWeek ?? l10n.firstDayOfWeek;
+  const localeContext = getLocaleContext();
+  $: effectiveLocale = locale ?? $localeContext.locale ?? "en";
+  $: l10n = getCalendarLocale(effectiveLocale);
+  $: firstDay =
+    firstDayOfWeek ?? $localeContext.weekStart ?? l10n.firstDayOfWeek;
   $: year = month.getFullYear();
   $: monthIndex = month.getMonth();
-  $: heading = formatMonthYear(month, locale, l10n.months.longhand);
+  $: heading = formatMonthYear(month, effectiveLocale, l10n.months.longhand);
   $: weekdayLabels = [
     ...l10n.weekdays.shorthand.slice(firstDay),
     ...l10n.weekdays.shorthand.slice(0, firstDay),

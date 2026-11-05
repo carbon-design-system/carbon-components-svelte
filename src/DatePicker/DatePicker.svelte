@@ -248,14 +248,16 @@
   export let initialMonth = null;
 
   /**
-   * Specify the locale.
-   * @type {string | Partial<import("./calendar-dates.js").CalendarLocale>}
+   * Specify the locale: a language tag such as `"de"`, or a partial locale
+   * object. Unset, it uses the nearest `LocaleProvider`, then `"en"`.
+   * @type {undefined | string | Partial<import("./calendar-dates.js").CalendarLocale>}
    */
-  export let locale = "en";
+  export let locale = undefined;
 
   /**
    * Specify the first day of the week, from 0 (Sunday) to 6 (Saturday).
    * Overrides the locale's own first day, which is used when unset.
+   * Unset, it uses the nearest `LocaleProvider`'s `weekStart`.
    * @type {undefined | 0 | 1 | 2 | 3 | 4 | 5 | 6}
    */
   export let firstDayOfWeek = undefined;
@@ -488,6 +490,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -550,7 +553,13 @@
   const inputValueTo = writable(valueTo);
   const mode = writable(datePickerType);
   const sharedDateFormat = writable(dateFormat);
-  const sharedLocale = writable(locale);
+  const localeContext = getLocaleContext();
+  $: effectiveLocale = locale ?? $localeContext.locale ?? "en";
+  $: effectiveFirstDay = firstDayOfWeek ?? $localeContext.weekStart;
+  /**
+   * @type {import("svelte/store").Writable<string | Partial<import("./calendar-dates.js").CalendarLocale>>}
+   */
+  const sharedLocale = writable(locale ?? $localeContext.locale ?? "en");
   const sharedConjunction = writable(conjunction);
   const sharedClearable = writable(clearable);
   const sharedClearButtonLabelText = writable(clearButtonLabelText);
@@ -1479,8 +1488,8 @@
         writeSelectionToValue();
         syncSelectedDatesFromCalendar();
       }
-      applyOptionIfChanged("locale", locale);
-      applyOptionIfChanged("firstDayOfWeek", firstDayOfWeek);
+      applyOptionIfChanged("locale", effectiveLocale);
+      applyOptionIfChanged("firstDayOfWeek", effectiveFirstDay);
       applyOptionIfChanged("dateFormat", dateFormat);
       applyDisabledDates();
       applyEnabledDates();
@@ -1830,7 +1839,7 @@
   });
 
   $: sharedDateFormat.set(dateFormat);
-  $: sharedLocale.set(locale);
+  $: sharedLocale.set(effectiveLocale);
   $: sharedConjunction.set(conjunction);
   // Repaint a pending range's window when the limits change.
   $: if (
@@ -1923,7 +1932,7 @@
   $: if ($hasCalendar && inputRef && calendarEpoch >= 0) {
     initCalendar({
       dateFormat,
-      locale,
+      locale: effectiveLocale,
       maxDate,
       minDate,
       // default to static: true so the
@@ -1938,7 +1947,9 @@
       ...(usesDisplayFormat && { altInput: true, altFormat: displayFormat }),
       ...(usesInline && { inline: true }),
       ...(weekNumbers && { weekNumbers: true }),
-      ...(firstDayOfWeek !== undefined && { firstDayOfWeek }),
+      ...(effectiveFirstDay !== undefined && {
+        firstDayOfWeek: effectiveFirstDay,
+      }),
     })
       .then(() => {})
       .catch((error) => {

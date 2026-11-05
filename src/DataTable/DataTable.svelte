@@ -419,6 +419,15 @@
   export let sort = undefined;
 
   /**
+   * Specify the locale whose collation orders strings when sorting, such as
+   * `"sv"`, where "z" sorts before "ä". Unset, it uses the nearest
+   * `LocaleProvider`, then the runtime locale. A `sort` function takes
+   * precedence.
+   * @type {string | undefined}
+   */
+  export let locale = undefined;
+
+  /**
    * Override the text announced after `sortKey` or `sortDirection` changes.
    * `header` is the sorted column. For `"none"`, it is the column that was
    * sorted before.
@@ -617,6 +626,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
+  import { getLocaleContext } from "../utils/locale-context.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import {
     DATA_TABLE_SIZE_ALIASES,
@@ -638,11 +648,14 @@
     compareValues,
     formatHeaderWidth,
     getDisplayedRows,
+    getSortCollator,
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
 
   const dispatch = createEventDispatcher();
+  const localeContext = getLocaleContext();
+  $: sortCollator = getSortCollator(locale ?? $localeContext.locale);
   /**
    * @type {import("svelte/store").Writable<ReadonlyArray<Row["id"]>>}
    */
@@ -1219,7 +1232,13 @@
             });
             return ascending ? result : -result;
           }
-          return compareValues(itemA, itemB, ascending);
+          return compareValues(
+            itemA,
+            itemB,
+            ascending,
+            undefined,
+            sortCollator,
+          );
         })
       : $tableRows;
   $: defaultRowHeight =

@@ -7,6 +7,8 @@ const numberCache = new BoundedFifoCache(32);
 const relativeTimeCache = new BoundedFifoCache(32);
 /** @type {BoundedFifoCache<string, Intl.DateTimeFormat>} */
 const dateTimeCache = new BoundedFifoCache(32);
+/** @type {BoundedFifoCache<string, Intl.Collator>} */
+const collatorCache = new BoundedFifoCache(32);
 
 /**
  * @param {string | undefined} locale
@@ -64,4 +66,13 @@ export function getRelativeTimeFormatter(locale, options) {
  */
 export function getDateTimeFormatter(locale, options) {
   return getCached(dateTimeCache, Intl.DateTimeFormat, locale, options);
+}
+
+/**
+ * @param {string | undefined} locale
+ * @param {Intl.CollatorOptions} [options]
+ * @returns {Intl.Collator}
+ */
+export function getCollator(locale, options) {
+  return getCached(collatorCache, Intl.Collator, locale, options);
 }

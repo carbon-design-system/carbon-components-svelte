@@ -12,3 +12,8 @@ export function getDateTimeFormatter(
   locale: string | undefined,
   options?: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat;
+
+export function getCollator(
+  locale: string | undefined,
+  options?: Intl.CollatorOptions,
+): Intl.Collator;

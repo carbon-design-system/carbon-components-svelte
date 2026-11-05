@@ -1,5 +1,6 @@
 // @vitest-environment node
 import {
+  getCollator,
   getDateTimeFormatter,
   getNumberFormatter,
   getRelativeTimeFormatter,
@@ -90,5 +91,25 @@ describe("getDateTimeFormatter", () => {
     const b = getDateTimeFormatter("fr", options);
 
     expect(a).not.toBe(b);
+  });
+});
+
+describe("getCollator", () => {
+  it("returns the same instance for identical locale and options", () => {
+    const options = { numeric: true } as const;
+    expect(getCollator("sv", options)).toBe(getCollator("sv", options));
+  });
+
+  it("orders by the requested locale", () => {
+    expect(["ä", "z", "a"].sort(getCollator("sv").compare)).toEqual([
+      "a",
+      "z",
+      "ä",
+    ]);
+    expect(["ä", "z", "a"].sort(getCollator("de").compare)).toEqual([
+      "a",
+      "ä",
+      "z",
+    ]);
   });
 });
