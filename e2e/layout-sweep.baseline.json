@@ -1064,6 +1064,70 @@
     "message": "div[data-testid=\"bottom\"] > div:nth-of-type(3): spans 224.28px to 336.08px"
   },
   {
+    "fixture": "merge-resolver.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code",
+    "message": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code: text is cut by div.bx--merge-resolver__panes:nth-of-type(2) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) by 8.98px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code > span.tok-bool",
+    "message": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code > span.tok-bool: text is cut by div.bx--merge-resolver__panes:nth-of-type(2) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) by 8.98px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "1280",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__gutter > span.bx--merge-resolver__no:nth-of-type(2)",
+    "message": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__gutter > span.bx--merge-resolver__no:nth-of-type(2): text is cut by div.bx--merge-resolver__panes:nth-of-type(2) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--gutter:nth-of-type(2) by 8.98px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code",
+    "message": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code: text is cut by div.bx--merge-resolver__panes:nth-of-type(3) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) by 8.98px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(6) > span.bx--merge-resolver__code",
+    "message": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(6) > span.bx--merge-resolver__code: text is cut by div.bx--merge-resolver__panes:nth-of-type(3) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) by 116.11px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(9) > span.bx--merge-resolver__code",
+    "message": "div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) > div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(9) > span.bx--merge-resolver__code: text is cut by div.bx--merge-resolver__panes:nth-of-type(3) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) by 116.11px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code > span.tok-bool",
+    "message": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__code > span.tok-bool: text is cut by div.bx--merge-resolver__panes:nth-of-type(3) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--code:nth-of-type(3) by 8.98px"
+  },
+  {
+    "fixture": "merge-resolver.html",
+    "variant": "320",
+    "check": "fits",
+    "kind": "cut by ancestor",
+    "path": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__gutter > span.bx--merge-resolver__no:nth-of-type(2)",
+    "message": "div.bx--merge-resolver__window > div.bx--merge-resolver__row:nth-of-type(20) > span.bx--merge-resolver__gutter > span.bx--merge-resolver__no:nth-of-type(2): text is cut by div.bx--merge-resolver__panes:nth-of-type(3) > div.bx--merge-resolver__pane.bx--merge-resolver__pane--result:nth-of-type(2) > div.bx--merge-resolver__editor:nth-of-type(2) > div.bx--merge-resolver__layer.bx--merge-resolver__layer--gutter:nth-of-type(2) by 8.98px"
+  },
+  {
     "fixture": "modal-container.html",
     "variant": "320",
     "check": "overflow",
