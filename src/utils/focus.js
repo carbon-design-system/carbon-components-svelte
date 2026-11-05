@@ -6,8 +6,8 @@ const selectorFirstInput =
 
 /**
  * Resolve initial dialog focus: `selectorPrimaryFocus`, then the first form
- * input, then the first truthy `fallbacks` entry. Returns `null` when
- * `selectorPrimaryFocus` is null or no target is found.
+ * input, then the first `fallbacks` entry that is set and not disabled.
+ * Returns `null` when `selectorPrimaryFocus` is null or no target is found.
  *
  * @param {Object} options
  * @param {Element | null | undefined} options.container - Dialog container to search within.
@@ -24,7 +24,7 @@ export function initialFocus({
   const node =
     container.querySelector(selectorPrimaryFocus) ||
     container.querySelector(selectorFirstInput) ||
-    fallbacks.find(Boolean) ||
+    fallbacks.find((el) => el && !el.matches(":disabled")) ||
     null;
   return /** @type {HTMLElement | null} */ (node);
 }
