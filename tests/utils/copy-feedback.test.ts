@@ -139,7 +139,7 @@ describe("createCopyFeedbackState", () => {
     expect(state.feedbackOpen).toBe(true);
   });
 
-  it("rejected performCopy shows error feedback then allows retry after dismiss", async () => {
+  it("rejected performCopy shows error feedback and retries on the next click", async () => {
     const state = createCopyFeedbackState();
     const performCopy = vi
       .fn()
@@ -155,17 +155,61 @@ describe("createCopyFeedbackState", () => {
     expect(state.isError).toBe(true);
     expect(state.copyPending).toBe(false);
 
-    // Error feedback still holds copyActive, so a retry is blocked until dismiss.
-    await state.onClick(performCopy, 2000);
-    expect(performCopy).toHaveBeenCalledTimes(1);
-
-    state.dismiss();
-    expect(state.isError).toBe(false);
-
     await state.onClick(performCopy, 2000);
 
     expect(performCopy).toHaveBeenCalledTimes(2);
     expect(state.animation).toBe("fade-in");
+    expect(state.feedbackOpen).toBe(true);
     expect(state.isError).toBe(false);
+  });
+
+  it("ignores a click during success feedback, through the fade-out", async () => {
+    const state = createCopyFeedbackState();
+    const performCopy = vi.fn();
+
+    await state.onClick(performCopy, 100);
+    await state.onClick(performCopy, 100);
+    vi.advanceTimersByTime(100);
+    expect(state.animation).toBe("fade-out");
+    await state.onClick(performCopy, 100);
+    expect(performCopy).toHaveBeenCalledTimes(1);
+
+    state.onAnimationEnd({ animationName: "hide-feedback" });
+    await state.onClick(performCopy, 100);
+    expect(performCopy).toHaveBeenCalledTimes(2);
+  });
+
+  it("holds error feedback open until a slow retry settles", async () => {
+    const state = createCopyFeedbackState();
+    let resolveCopy: () => void = () => {};
+    const slowCopy = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveCopy = resolve;
+        }),
+    );
+
+    await expect(
+      state.onClick(() => Promise.reject(new Error("no")), 100),
+    ).rejects.toThrow();
+    const retry = state.onClick(slowCopy, 100);
+
+    // A click while the retry is in flight is ignored.
+    await state.onClick(slowCopy, 100);
+    expect(slowCopy).toHaveBeenCalledTimes(1);
+
+    // Longer than the timeout: the error stays up, with no fade-out.
+    vi.advanceTimersByTime(500);
+    expect(state.feedbackOpen).toBe(true);
+    expect(state.animation).toBe("fade-in");
+    expect(state.isError).toBe(true);
+
+    resolveCopy();
+    await retry;
+    expect(state.isError).toBe(false);
+    vi.advanceTimersByTime(99);
+    expect(state.animation).toBe("fade-in");
+    vi.advanceTimersByTime(1);
+    expect(state.animation).toBe("fade-out");
   });
 });

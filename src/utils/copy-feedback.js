@@ -17,7 +17,9 @@ function prefersReducedMotion() {
 
 /**
  * Copy-button feedback (fade-in/out, portal tooltip).
- * `copyActive` blocks a second click before Svelte assigns `animation`.
+ * After a successful copy, clicks are ignored until the feedback closes,
+ * so a double click copies once and dispatches `copy` once. A click during
+ * error feedback retries. A click while a copy is in flight is ignored.
  * The fade-out ends on the `animationend` of `hide-feedback`, or after
  * `COPY_FEEDBACK_FADE_MS` if that never fires (a hidden element, a
  * stylesheet without the animation). Under reduced motion there is no
@@ -120,11 +122,14 @@ export function createCopyFeedbackState(onSync) {
    * @returns {Promise<void>}
    */
   async function handleClick(performCopy, feedbackTimeout) {
-    if (copyActive || animation === "fade-in") return;
+    if (copyPending || (copyActive && !copyFailed)) return;
 
     copyActive = true;
     copyPending = true;
-    copyFailed = false;
+    // A retry keeps the error feedback open until the new copy settles,
+    // then `openFeedback` restarts the timeout.
+    clearTimeout(timeout);
+    clearTimeout(fadeTimeout);
     notify();
 
     const startEpoch = epoch;
