@@ -3,7 +3,9 @@ import type {
   breakpoints,
   Button as BarrelButton,
   captureFocusTarget,
+  createAsyncSource,
   createIdScope,
+  createPagedSource,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
@@ -65,6 +67,11 @@ import type ThemeZone from "carbon-components-svelte/src/ThemeZone/ThemeZone.sve
 import type { ThemeZoneProps } from "carbon-components-svelte/src/ThemeZone/ThemeZone.svelte";
 import type TimePickerSkeleton from "carbon-components-svelte/src/TimePicker/TimePickerSkeleton.svelte";
 import type { HeaderSearchResult } from "carbon-components-svelte/src/UIShell/HeaderSearch.svelte";
+import type {
+  AsyncSource,
+  AsyncState,
+  PagedSource,
+} from "carbon-components-svelte/src/utils/async-source.js";
 import type { DismissParams } from "carbon-components-svelte/src/utils/dismiss.js";
 import type {
   FloatingPositionOptions,
@@ -103,6 +110,11 @@ type _BreakpointObserver = ReturnType<typeof breakpointObserver>;
 type _BreakpointSize = BreakpointSize;
 type _Breakpoints = typeof breakpoints;
 type _Button = Button;
+type _AsyncSource = ReturnType<typeof createAsyncSource<string[]>>;
+type _AsyncSourceIsStore = AsyncSource<string[]>;
+type _AsyncState = AsyncState<string[]>["status"];
+type _PagedSource = ReturnType<typeof createPagedSource<number>>;
+type _PagedSourceType = PagedSource<number>;
 type _CarbonTheme = CarbonTheme;
 type _ComboBoxSkeleton = ComboBoxSkeleton;
 type _ContrastWarning = ContrastWarning;
