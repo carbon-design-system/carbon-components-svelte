@@ -66,6 +66,7 @@ export default {
     "docs/src/pages/framed/DatePicker",
     "docs/src/pages/framed/History",
     "docs/src/code-view-height.ts",
+    "docs/src/pages/framed/TwoFactorSetup",
     "crassus.config.ts",
     "codemods",
     "docs/src/token-reference.ts",
