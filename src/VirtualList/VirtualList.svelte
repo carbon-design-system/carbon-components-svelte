@@ -107,7 +107,11 @@
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { getMaxScrollHeight } from "../utils/max-scroll-height.js";
   import { noop } from "../utils/noop.js";
-  import { virtualize } from "../utils/virtualize.js";
+  import { syncPinnedWindow } from "../utils/virtual-window.js";
+  import {
+    getMeasuredScrollCorrection,
+    virtualize,
+  } from "../utils/virtualize.js";
   import VirtualWindow from "./VirtualWindow.svelte";
 
   const dispatch = createEventDispatcher();
@@ -133,9 +137,35 @@
    */
   const POSITIONED_ITEM = "li, [role=listitem], [role=option], [role=article]";
 
-  /** @param {number[]} nextHeights */
-  function handleMeasure(nextHeights) {
+  /**
+   * Keep the rows the reader is looking at where they are when measuring
+   * moves the rows above them: a row measured taller than its estimate pushes
+   * every row below it down, so the scroll position moves by as much.
+   *
+   * @param {number[]} nextHeights
+   * @param {number[]} previousHeights
+   */
+  function handleMeasure(nextHeights, previousHeights) {
     heights = nextHeights;
+
+    const target = scrollElement ?? ref;
+    if (!target) return;
+
+    const correction = getMeasuredScrollCorrection({
+      scrollTop: readScrollTop(target),
+      itemCount: items.length,
+      itemHeight,
+      containerHeight,
+      heights: nextHeights,
+      previousHeights,
+    });
+    if (correction === 0) return;
+
+    target.scrollTop = Math.max(0, target.scrollTop + correction);
+    // A position written here is not the reader moving, so it sets no lead.
+    scrollDelta = 0;
+    scrollTop = readScrollTop(target);
+    syncPinnedWindow(target, target.scrollTop);
   }
 
   // Rows in a parent list sit straight in its flow, where a margin such as
@@ -193,17 +223,26 @@
 
   $: pinned = optimizeFastScroll && !scrollElement && virtualData.isVirtualized;
 
-  /** @param {HTMLElement} target The element that scrolls the list. */
-  function syncScrollTop(target) {
+  /**
+   * How far the list's top has scrolled past the top of its scroller.
+   *
+   * @param {HTMLElement} target The element that scrolls the list.
+   * @returns {number}
+   */
+  function readScrollTop(target) {
     // An outer scroller can hold content above the list, so measure how far
     // the list's top has scrolled past the scroller's inner top edge.
     const listTop = spacerTag ? startSpacer : ref;
-    const nextScrollTop =
-      target === listTop || !listTop
-        ? target.scrollTop
-        : target.getBoundingClientRect().top +
+    return target === listTop || !listTop
+      ? target.scrollTop
+      : target.getBoundingClientRect().top +
           target.clientTop -
           listTop.getBoundingClientRect().top;
+  }
+
+  /** @param {HTMLElement} target The element that scrolls the list. */
+  function syncScrollTop(target) {
+    const nextScrollTop = readScrollTop(target);
     scrollDelta = nextScrollTop - scrollTop;
     scrollTop = nextScrollTop;
   }
