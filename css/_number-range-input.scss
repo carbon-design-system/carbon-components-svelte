@@ -1,0 +1,125 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// NumberRangeInput: a legend, two number fields with a separator between
+/// them, one message under both, and an optional slider.
+/// @access private
+/// @group components
+@mixin number-range-input {
+  // Sizes by its own width, not the viewport's: the same range sits in a
+  // 288px sidebar and a full-width form. See the end for the stacking.
+  .#{$prefix}--number-range-input {
+    container: #{$prefix}--number-range-input / inline-size;
+  }
+
+  // A fieldset's default minimum width is its content's, which would keep
+  // the row from fitting a narrow parent.
+  .#{$prefix}--number-range-input__fieldset {
+    min-inline-size: 0;
+    inline-size: 100%;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--number-range-input__row {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  // The fields share the row and shrink with it. Each keeps its own label
+  // and message, so a message under one field never moves the other.
+  .#{$prefix}--number-range-input__field {
+    min-inline-size: 0;
+    flex: 1 1 0;
+  }
+
+  // Centered on the input, not on the label and message around it: as tall
+  // as the input, and below the label when the labels show.
+  .#{$prefix}--number-range-input__separator {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    block-size: to-rem(40px);
+    color: $text-secondary;
+    // Wide enough for "to" without the number fields shrinking for it.
+    min-inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--number-range-input--xs .#{$prefix}--number-range-input__separator {
+    block-size: to-rem(24px);
+  }
+
+  .#{$prefix}--number-range-input--sm .#{$prefix}--number-range-input__separator {
+    block-size: to-rem(32px);
+  }
+
+  .#{$prefix}--number-range-input--xl .#{$prefix}--number-range-input__separator {
+    block-size: to-rem(48px);
+  }
+
+  // A visible label is 16px tall with 8px under it.
+  .#{$prefix}--number-range-input--labelled
+    .#{$prefix}--number-range-input__separator {
+    margin-block-start: to-rem(24px);
+  }
+
+  .#{$prefix}--number-range-input__fields > .#{$prefix}--form-requirement,
+  .#{$prefix}--number-range-input__fields > .#{$prefix}--form__helper-text {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--number-range-input__slider {
+    inline-size: 100%;
+    margin-block-start: $carbon--spacing-05;
+  }
+
+  // The slider is as wide as the fields, and its own form item adds none.
+  .#{$prefix}--number-range-input__slider .#{$prefix}--form-item {
+    inline-size: 100%;
+  }
+
+  // A FluidForm pins every `.bx--label` to the top of its field. The legend
+  // names the pair, so it stays above the two fields in the flow.
+  .#{$prefix}--number-range-input__fieldset
+    > .#{$prefix}--number-range-input__legend.#{$prefix}--label {
+    position: static;
+    margin-block-end: $carbon--spacing-03;
+    inset: auto;
+  }
+
+  // Fluid: two fluid fields side by side, divided by a hairline in place of
+  // the separator, as a fluid date range is.
+  .#{$prefix}--number-range-input--fluid .#{$prefix}--number-range-input__row {
+    gap: to-rem(1px);
+  }
+
+  .#{$prefix}--number-range-input--fluid
+    .#{$prefix}--number-range-input__fields
+    > .#{$prefix}--form-requirement {
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // Too narrow for two fields side by side: stack them, and drop the
+  // separator, which the labels make redundant.
+  @container #{$prefix}--number-range-input (width < #{to-rem(224px)}) {
+    .#{$prefix}--number-range-input__row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .#{$prefix}--number-range-input__separator {
+      display: none;
+    }
+  }
+}
+
+@include exports("number-range-input") {
+  @include number-range-input;
+}
