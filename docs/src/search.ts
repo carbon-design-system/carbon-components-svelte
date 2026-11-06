@@ -1,24 +1,30 @@
 /**
  * Full-text search over the site's search index: components and their h2
- * sections. BM25+ over `text` and `description` (boosted 2×), as MiniSearch
- * scored it, with each query word scored by its best match in a field: a
- * word or a part of a camel-case name, exactly, as a prefix, or from 4
- * letters, one edit away, a swap of two letters included. A document
- * matching more of the query's words ranks higher, and equal scores keep
- * the index's order.
+ * sections. BM25+ over each field, as MiniSearch scored it, with each
+ * query word scored by its best match in a field: a word or a part of a
+ * camel-case name, exactly, as a prefix, or from 4 letters, one edit
+ * away, a swap of two letters included. A document matching more of the
+ * query's words ranks higher, and equal scores keep the index's order.
  */
 
 export type SearchDocument = {
   id: string;
   text: string;
   description: string;
+  /** A component page's summary, its front matter's `description`. */
+  summary?: string;
   href: string;
   isComponent: boolean;
 };
 
 const WORD_SEPARATOR_RE = /[\n\r\p{Z}\p{P}]+/u;
-const FIELDS = ["text", "description"] as const;
-const FIELD_BOOSTS = [1, 2];
+const FIELDS = ["text", "description", "summary"] as const;
+/**
+ * The heading counts twice the component's name. A page's summary counts
+ * half: it catches other words for a component, such as "spinner" for
+ * Loading, but mentions many things a page isn't about.
+ */
+const FIELD_BOOSTS = [1, 2, 0.5];
 
 // BM25+ parameters and match weights, MiniSearch's defaults.
 const K = 1.2;
@@ -82,15 +88,20 @@ export function createSearch<T extends SearchDocument>(documents: T[]) {
   const index = new Map<string, Map<number, number>[]>();
   /** Per document, the number of distinct words in each field. */
   const fieldLengths: number[][] = [];
+  /** Per field, the number of documents that have it. */
+  const fieldCounts = FIELDS.map(() => 0);
   const averageFieldLengths = FIELDS.map(() => 0);
 
   documents.forEach((document, doc) => {
     fieldLengths[doc] = FIELDS.map((field, f) => {
-      const tokens = indexWords(document[field]);
+      const text = document[field];
+      if (text === undefined) return 0;
+      const tokens = indexWords(text);
       const length = new Set(tokens).size;
+      const count = fieldCounts[f]++;
       // A running mean, as MiniSearch keeps it, so scores tie as they did.
       averageFieldLengths[f] =
-        (averageFieldLengths[f] * doc + length) / (doc + 1);
+        (averageFieldLengths[f] * count + length) / (count + 1);
       for (const token of tokens) {
         const word = token.toLowerCase();
         if (!word) continue;
@@ -113,7 +124,7 @@ export function createSearch<T extends SearchDocument>(documents: T[]) {
     const match = (word: string, weight: number) => {
       index.get(word)?.forEach((docs, f) => {
         const idf = Math.log(
-          1 + (documents.length - docs.size + 0.5) / (docs.size + 0.5),
+          1 + (fieldCounts[f] - docs.size + 0.5) / (docs.size + 0.5),
         );
         for (const [doc, frequency] of docs) {
           const lengthRatio = fieldLengths[doc][f] / averageFieldLengths[f];
