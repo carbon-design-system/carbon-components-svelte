@@ -39,3 +39,20 @@ export function buildRoutes(files: string[]) {
   }
   return { routes, notFound };
 }
+
+/** `pathname` without URL escapes or a trailing slash. */
+export const normalizePath = (pathname: string) =>
+  decodeURI(pathname).replace(/(.)\/$/, "$1");
+
+export const FRAMED_PREFIX = "/framed/";
+
+/** A framed example's route, read from its path; its file may not exist. */
+export function framedRoute(path: string): Route {
+  const segments = path.slice(1).split("/");
+  return {
+    path,
+    name: segments.at(-1) ?? "",
+    parentName: segments.at(-2) ?? "",
+    file: `./pages${path}.svelte`,
+  };
+}

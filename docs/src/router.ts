@@ -7,7 +7,14 @@
  */
 import type { Component } from "svelte";
 import { derived, get, writable } from "svelte/store";
-import { buildRoutes, type Route } from "./routes";
+import { route } from "./current-route";
+import {
+  buildRoutes,
+  FRAMED_PREFIX,
+  framedRoute,
+  normalizePath as normalize,
+  type Route,
+} from "./routes";
 
 export type { Route };
 
@@ -21,10 +28,6 @@ const pages = import.meta.glob<{ default: Component }>([
 
 const { routes, notFound } = buildRoutes(Object.keys(pages));
 
-const normalize = (pathname: string) =>
-  decodeURI(pathname).replace(/(.)\/$/, "$1");
-
-const FRAMED_PREFIX = "/framed/";
 const framedRoutes = new Map<string, Route>();
 
 /**
@@ -35,18 +38,12 @@ const framedRoutes = new Map<string, Route>();
 export function matchRoute(pathname: string): Route | undefined {
   const path = normalize(pathname);
   if (!path.startsWith(FRAMED_PREFIX)) return routes.get(path) ?? notFound;
-  let route = framedRoutes.get(path);
-  if (!route) {
-    const segments = path.slice(1).split("/");
-    route = {
-      path,
-      name: segments.at(-1) ?? "",
-      parentName: segments.at(-2) ?? "",
-      file: `./pages${path}.svelte`,
-    };
-    framedRoutes.set(path, route);
+  let framed = framedRoutes.get(path);
+  if (!framed) {
+    framed = framedRoute(path);
+    framedRoutes.set(path, framed);
   }
-  return route;
+  return framed;
 }
 
 /** The page for `route`, or the not-found page if it has no file. */
@@ -78,8 +75,7 @@ const read = (): Location => ({
 
 export const location = writable<Location>(read());
 
-/** The route whose page is showing, set once it has loaded. */
-export const route = writable<Route | undefined>(undefined);
+export { route };
 
 /** The query string, as an object. */
 export const params = derived(location, ($location) =>

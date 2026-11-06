@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { route } from "../../router";
+  import { route } from "../../current-route";
 
   $: exampleName = $route?.name ?? "";
   $: componentName = $route?.parentName ?? "";
