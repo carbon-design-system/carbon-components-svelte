@@ -594,6 +594,11 @@ export const interactive: AriaEntry[] = [
       "file row container; its Filename control is named by iconDescription",
   },
   {
+    name: "Announcer",
+    exempt:
+      "two hidden live regions; a name on them would be read before every message",
+  },
+  {
     name: "FloatingPortal",
     exempt: "positioning wrapper; the slotted content carries its own role",
   },
