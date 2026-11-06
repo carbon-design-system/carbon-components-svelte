@@ -4,13 +4,11 @@
   export let src = "";
   export let framed = false;
 
-  import { url } from "@roxi/routify";
   import { Button, CodeSnippet } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { theme } from "../store";
 
-  $: resolvedSrc = src ? $url(src) : "";
-  $: themedSrcUrl = resolvedSrc ? `${resolvedSrc}?theme=${$theme}` : "";
+  $: themedSrcUrl = src ? `${src}?theme=${$theme}` : "";
 </script>
 
 <div class="preview">
@@ -20,7 +18,7 @@
         kind="ghost"
         target="_blank"
         size="small"
-        href={resolvedSrc}
+        href={src}
         icon={Launch}
         iconDescription="Isolated preview"
         tooltipPosition="top"

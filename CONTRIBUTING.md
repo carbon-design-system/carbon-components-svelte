@@ -35,7 +35,7 @@ bun setup
 
 This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`.
 
-Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/), [Routify 3](https://routify.dev/docs), and Svelte 5, and compiles its Markdown pages (`.svx`) with `docs/scripts/svx.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
+Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/) and Svelte 5, routes with `docs/src/router.ts`, and compiles its Markdown pages (`.svx`) with `docs/scripts/svx.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
 
 To preview the docs site locally:
 
@@ -347,13 +347,11 @@ Title a new-example commit after the example's exact heading:
 | `docs/src/pages/components/{Component}.svx` | Main component page (for example `Button.svx`): prose + examples |
 | `docs/src/pages/framed/{Component}/{Example}.svelte` | Interactive demos referenced by `<FileSource>` |
 
-Routify picks up new `.svx` files automatically. The docs config and scripts read the extension from `PAGE_EXTENSION` in [`docs/scripts/constants.ts`](docs/scripts/constants.ts), so change it there. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
+The router picks up new pages under `docs/src/pages` automatically. The docs config and scripts read the extension from `PAGE_EXTENSION` in [`docs/scripts/constants.ts`](docs/scripts/constants.ts), so change it there. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
 
 Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [SVX gotchas](#svx-gotchas).
 
 Preview locally with `cd docs && bun dev`.
-
-If every page shows a 404 after you add or remove files, Routify rebuilt an empty route map. Add and remove any page under `docs/src/pages`, or restart the server.
 
 #### Example conventions
 
