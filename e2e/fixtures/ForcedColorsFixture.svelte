@@ -267,6 +267,20 @@
     <IconIndicator kind="pending" label="Pending" />
   </section>
 
+  <!-- An outline icon from outside Carbon: no fill, a stroke. -->
+  <svg
+    data-testid="outline-svg"
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    aria-hidden="true"
+  >
+    <circle cx="8" cy="8" r="6" />
+  </svg>
+
   <ShapeIndicator kind="medium" label="Medium" />
   <div theme="g100">
     <ShapeIndicator kind="low" label="Low" />

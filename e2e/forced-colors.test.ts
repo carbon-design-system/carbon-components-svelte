@@ -665,6 +665,17 @@ test.describe("forced colors", () => {
     expect.soft(minorGlyph, "caution-minor glyph").toBe(system.Canvas);
   });
 
+  // The base sheet's `svg` fill outranks a `fill="none"` attribute, which
+  // turned an outline icon into a solid disc.
+  test("an svg that sets fill none stays an outline", async ({ page }) => {
+    const fill = await page.evaluate(() => {
+      const el = document.querySelector("[data-testid=outline-svg]");
+      if (!el) throw new Error("no outline svg");
+      return getComputedStyle(el).fill;
+    });
+    expect(fill).toBe("none");
+  });
+
   test("the active TableOfContents bar fills with Highlight", async ({
     page,
   }) => {
