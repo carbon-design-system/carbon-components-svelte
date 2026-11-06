@@ -9,7 +9,7 @@
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { flushSync, onMount } from "svelte";
   import { queueIdleExample } from "../idle-examples";
-  import { eagerExamples } from "../router";
+  import { eagerContent } from "../router";
   import { theme } from "../store";
 
   /**
@@ -93,7 +93,7 @@
       <LazyMount
         rootMargin="1200px"
         estimatedHeight={64}
-        eager={$eagerExamples || idle}
+        eager={$eagerContent || idle}
         bind:mounted
       >
         <slot />

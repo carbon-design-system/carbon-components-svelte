@@ -63,7 +63,21 @@
     UnorderedList,
   } from "carbon-components-svelte";
   import { onMount } from "svelte";
+  import { eagerContent } from "../router";
   import InlineSnippet from "./InlineSnippet.svelte";
+
+  /**
+   * A table's height, roughly, which it reserves while the browser skips
+   * it as off-screen: a row is 140 to 220 px wide-screen, with wrapped
+   * descriptions, and a slot's row is shorter. The guess moves nothing on
+   * screen, as a skipped table is below the reader unless the page scrolled
+   * past it, and then `$eagerContent` renders it from the start.
+   */
+  const PROP_ROW_HEIGHT = 180;
+  const SLOT_ROW_HEIGHT = 120;
+  const TABLE_HEAD_HEIGHT = 40;
+  const reserve = (rows: number, rowHeight: number) =>
+    `auto ${TABLE_HEAD_HEIGHT + rows * rowHeight}px`;
 
   let AsyncCodeBlock: typeof import("./CodeBlock.svelte").default | undefined;
 
@@ -147,7 +161,14 @@
 </h2>
 
 {#if component.props.length > 0}
-  <div class="overflow">
+  <div
+    class="overflow"
+    class:skip-offscreen={!$eagerContent}
+    style:contain-intrinsic-size={reserve(
+      component.props.length,
+      PROP_ROW_HEIGHT,
+    )}
+  >
     <StructuredList flush condensed>
       <StructuredListHead>
         <StructuredListRow head>
@@ -308,7 +329,14 @@
   >
 </h2>
 {#if component.slots.length > 0}
-  <div class="overflow">
+  <div
+    class="overflow"
+    class:skip-offscreen={!$eagerContent}
+    style:contain-intrinsic-size={reserve(
+      component.slots.length,
+      SLOT_ROW_HEIGHT,
+    )}
+  >
     <StructuredList flush condensed>
       <StructuredListHead>
         <StructuredListRow head>
@@ -450,6 +478,13 @@
   .overflow {
     overflow-x: auto;
     max-width: 100%;
+  }
+
+  /* The props table is a third of a long page's elements, at its end. Skip
+     its style, layout and paint until it nears the viewport; it stays in
+     find in page. Its tooltips are portaled, so containment clips none. */
+  .skip-offscreen {
+    content-visibility: auto;
   }
 
   :global(.my-layout-01-03) {
