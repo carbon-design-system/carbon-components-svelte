@@ -15,3 +15,14 @@ export function relativeLuminance(rgb: [number, number, number]): number;
  * either color is not `#rgb` or `#rrggbb`.
  */
 export function contrastRatio(a: string, b: string): number | null;
+
+/**
+ * Move a `#rrggbb` color toward black or white until it reads against a
+ * background, as a terminal's minimum contrast ratio does. Anything that is
+ * not `#rrggbb` is returned as is.
+ */
+export function ensureContrast(
+  color: string,
+  backgroundLuminance: number,
+  minRatio?: number,
+): string;

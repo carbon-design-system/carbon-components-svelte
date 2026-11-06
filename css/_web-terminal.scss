@@ -1,0 +1,281 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/colors/colors";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The 16 ANSI colors for one color scheme, as `--ccs-term-ansi-N`, with the
+/// text color to draw on each as `--ccs-term-ansi-on-N`.
+///
+/// Carbon v11 has no token for a text-safe yellow or orange, so these come
+/// from the palette. The dark set reads at 4.5:1 on Gray 100 and Gray 90, the
+/// light set on White and Gray 10. Black and white are not the palette's own:
+/// black text would vanish on a dark terminal, so position 0 is Gray 40 there
+/// and position 7 is Gray 20.
+/// @param {String} $scheme - `light` or `dark`
+/// @access private
+/// @group components
+@mixin web-terminal-palette($scheme) {
+  $light: (
+    $carbon__gray-100,
+    $carbon__red-70,
+    $carbon__green-70,
+    $carbon__yellow-70,
+    $carbon__blue-70,
+    $carbon__magenta-70,
+    $carbon__cyan-70,
+    $carbon__gray-70,
+    $carbon__gray-60,
+    $carbon__red-60,
+    $carbon__green-60,
+    $carbon__yellow-60,
+    $carbon__blue-60,
+    $carbon__magenta-60,
+    $carbon__cyan-60,
+    $carbon__gray-100
+  );
+  $dark: (
+    $carbon__gray-40,
+    $carbon__red-40,
+    $carbon__green-40,
+    $carbon__yellow-40,
+    $carbon__blue-30,
+    $carbon__magenta-40,
+    $carbon__cyan-30,
+    $carbon__gray-20,
+    $carbon__gray-30,
+    $carbon__red-30,
+    $carbon__green-30,
+    $carbon__yellow-30,
+    $carbon__blue-20,
+    $carbon__magenta-30,
+    $carbon__cyan-20,
+    $carbon__gray-10
+  );
+  $colors: if($scheme == light, $light, $dark);
+  $on: if($scheme == light, $carbon__white-0, $carbon__gray-100);
+
+  @for $index from 1 through 16 {
+    --ccs-term-ansi-#{$index - 1}: #{nth($colors, $index)};
+    --ccs-term-ansi-on-#{$index - 1}: #{$on};
+  }
+}
+
+/// WebTerminal: a command console with a scrollback of ANSI-styled output
+/// and a prompt line. The component renders inside a `ThemeZone`, so the
+/// tokens below are those of the zone's theme: Gray 100 unless the page
+/// chooses another.
+/// @access private
+/// @group components
+@mixin web-terminal {
+  // The dark set applies until a light theme says otherwise. For `"system"`
+  // the component reads the zone's background after it mounts and adds
+  // `--light` when it is light, since a `prefers-color-scheme` block here
+  // would add a second media query to the theme sheets' count.
+  .#{$prefix}--web-terminal {
+    @include web-terminal-palette(dark);
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $background;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--web-terminal--light {
+    @include web-terminal-palette(light);
+  }
+
+  .#{$prefix}--web-terminal__header {
+    display: flex;
+    min-height: $carbon--spacing-07;
+    flex: none;
+    align-items: center;
+    padding-inline-start: $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--web-terminal__title {
+    @include type-style("heading-compact-01");
+
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--web-terminal__actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+  }
+
+  .#{$prefix}--web-terminal__body {
+    position: relative;
+    min-height: 0;
+    flex: 1 1 0;
+    overflow: hidden;
+  }
+
+  // Code reads left to right in any language, so the terminal keeps its
+  // direction on an RTL page and only the header around it flips.
+  .#{$prefix}--web-terminal__output {
+    @include type-style("code-02");
+
+    overflow: auto;
+    overflow-anchor: none;
+    background-color: $background;
+    direction: ltr;
+    overscroll-behavior: contain;
+    tab-size: 8;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  // A whole pixel of line height, as `code-02`'s 1.43 rounds to 19.98px and
+  // the window places rows at a fixed pitch.
+  .#{$prefix}--web-terminal__line {
+    width: max-content;
+    min-width: 100%;
+    min-height: to-rem(20px);
+    padding: 0 $carbon--spacing-05;
+    line-height: to-rem(20px);
+    white-space: pre;
+  }
+
+  .#{$prefix}--web-terminal--wrap .#{$prefix}--web-terminal__line {
+    width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .#{$prefix}--web-terminal--selected .#{$prefix}--web-terminal__line {
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--web-terminal__prompt {
+    color: $text-secondary;
+    user-select: none;
+  }
+
+  .#{$prefix}--web-terminal__command {
+    font-weight: 600;
+  }
+
+  // The button follows the command, so it stays in reach of the text however
+  // wide the scrollback is. Where there is no hover it is always shown.
+  .#{$prefix}--web-terminal__copy-command {
+    display: inline-flex;
+    width: to-rem(20px);
+    height: to-rem(20px);
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    margin-inline-start: $carbon--spacing-03;
+    background: none;
+    color: $icon-secondary;
+    cursor: pointer;
+    vertical-align: top;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--web-terminal__copy-command {
+      opacity: 0;
+    }
+
+    .#{$prefix}--web-terminal__line:hover .#{$prefix}--web-terminal__copy-command,
+    .#{$prefix}--web-terminal__copy-command:focus-visible {
+      opacity: 1;
+    }
+  }
+
+  .#{$prefix}--web-terminal__jump {
+    position: absolute;
+    right: 0;
+    bottom: $carbon--spacing-05;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+
+    .#{$prefix}--btn {
+      pointer-events: auto;
+    }
+  }
+
+  .#{$prefix}--web-terminal__input-row {
+    @include type-style("code-02");
+
+    display: flex;
+    min-height: $carbon--spacing-08;
+    flex: none;
+    align-items: center;
+    padding: 0 $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    background-color: $layer;
+    direction: ltr;
+    gap: $carbon--spacing-03;
+
+    &:focus-within {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--web-terminal__ps {
+    flex: none;
+    color: $text-secondary;
+    user-select: none;
+    white-space: pre;
+  }
+
+  .#{$prefix}--web-terminal--running .#{$prefix}--web-terminal__ps {
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--web-terminal__input {
+    @include type-style("code-02");
+
+    min-width: 0;
+    flex: 1 1 auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    outline: none;
+  }
+
+  .#{$prefix}--web-terminal--running .#{$prefix}--web-terminal__input {
+    cursor: progress;
+  }
+
+  @media (forced-colors: active) {
+    // The system paints text and background, so a selected row is marked
+    // with an outline instead of a tint.
+    .#{$prefix}--web-terminal--selected .#{$prefix}--web-terminal__line {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    .#{$prefix}--web-terminal__copy-command {
+      color: ButtonText;
+    }
+  }
+}
+
+@include exports("web-terminal") {
+  @include web-terminal;
+}

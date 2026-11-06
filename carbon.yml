@@ -1581,3 +1581,15 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/VirtualList
+  web-terminal:
+    name: Web terminal
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/web-terminal.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/WebTerminal
