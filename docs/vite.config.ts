@@ -12,6 +12,18 @@ const componentMdSizesPath = path.resolve(
   "src/COMPONENT_MD_SIZES.json",
 );
 const componentMdSizesId = "\0component-md-sizes";
+const libraryUtilsDir = `${path.resolve(__dirname, "../src/utils")}${path.sep}`;
+/**
+ * The library's `src/utils` modules are small and shared by most pages,
+ * so on their own each became a chunk of a kilobyte or less, about 50 of
+ * them per page. One chunk loads them in one request.
+ */
+const CHUNK_GROUPS = [
+  {
+    name: "library-utils",
+    test: (id: string) => id.startsWith(libraryUtilsDir),
+  },
+];
 const componentApiPath = path.resolve(__dirname, "src/COMPONENT_API.json");
 const COMPONENT_API_PREFIX = "virtual:component-api/";
 
@@ -92,5 +104,12 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 700,
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: CHUNK_GROUPS,
+        },
+      },
+    },
   },
 });
