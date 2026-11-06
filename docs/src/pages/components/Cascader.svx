@@ -1,0 +1,218 @@
+---
+components: ["Cascader"]
+description: Cascaders pick a path through a hierarchy, such as region, country, city, in columns that each open the next, with search across levels, many choices, and lazy-loaded children.
+---
+
+<script>
+  import { Cascader, Stack } from "carbon-components-svelte";
+
+  const nodes = [
+    {
+      id: "europe",
+      text: "Europe",
+      nodes: [
+        {
+          id: "france",
+          text: "France",
+          nodes: [
+            { id: "paris", text: "Paris" },
+            { id: "lyon", text: "Lyon" },
+            { id: "nice", text: "Nice" },
+          ],
+        },
+        {
+          id: "germany",
+          text: "Germany",
+          nodes: [
+            { id: "berlin", text: "Berlin" },
+            { id: "munich", text: "Munich" },
+          ],
+        },
+        { id: "iceland", text: "Iceland", disabled: true },
+      ],
+    },
+    {
+      id: "north-america",
+      text: "North America",
+      nodes: [
+        {
+          id: "us",
+          text: "United States",
+          nodes: [
+            { id: "new-york", text: "New York" },
+            { id: "san-francisco", text: "San Francisco" },
+          ],
+        },
+        { id: "canada", text: "Canada", nodes: [{ id: "toronto", text: "Toronto" }] },
+      ],
+    },
+    { id: "antarctica", text: "Antarctica" },
+  ];
+
+  const sizes = ["xs", "sm", undefined, "lg"];
+</script>
+
+## Basic
+
+Pick a path through a hierarchy. Each column lists the children of the item open in the column before it, and the field shows the whole path. Set `nodes` to a tree where every node has an `id`, unique among its siblings, and `text`, and a node's `nodes` are its children.
+
+A click on a branch opens its column. A click on a leaf chooses the path and closes the menu.
+
+<Cascader labelText="Location" label="Choose a city" helperText="Region, country, city" {nodes} />
+
+## Value
+
+`value` is the path, the ids from a root to the chosen node. Two branches may reuse an id, such as a `paris` under France and another under Texas, because the path is what names a node. Bind it to read or set the choice.
+
+<FileSource src="/framed/Cascader/CascaderBound" />
+
+By default the field joins the labels with `separator`. Pass `pathToString` to write the path your own way. It receives the nodes from the root to the chosen one.
+
+<Stack gap={6}>
+  <Cascader labelText="Location" label="Choose a city" {nodes} value={["europe", "france", "paris"]} separator=" > " />
+  <Cascader
+    labelText="Location"
+    label="Choose a city"
+    {nodes}
+    value={["europe", "france", "paris"]}
+    pathToString={(path) => `${path[path.length - 1].text}, ${path[1].text}`}
+  />
+</Stack>
+
+## Selection
+
+### Leaf or any level
+
+By default only a leaf is chosen, so the path always ends at the deepest level. Set `changeOnSelect` to let a branch be chosen too, such as a country with no city picked. A click on a branch then chooses it and opens its column, and <DocKbd label="Enter" /> chooses it and closes the menu.
+
+<Cascader labelText="Place" label="Choose a place" {nodes} changeOnSelect clearable />
+
+### Many
+
+Set `multiple` to check many paths. Bind `values` to read or set them, a list of paths. A checkbox sits on every item, and a branch shows a mixed state while only some of the items under it are checked. Checking a branch checks everything under it, disabled items aside.
+
+A click on the label of a branch opens its column, and a click on its checkbox checks it. A click on a leaf checks it.
+
+`showChecked` decides which checked nodes `values` lists.
+
+| `showChecked` | `values` lists |
+| --- | --- |
+| `"parent"` (default) | A branch whose children are all checked as one path, its own |
+| `"leaf"` | The leaves under it |
+
+A checked branch whose children have not loaded is listed as itself either way, since there is nothing under it yet.
+
+<FileSource src="/framed/Cascader/CascaderProducts" />
+
+## Search
+
+Set `filterable` and the field becomes a text input. Typing lists every path whose labels contain all the words typed, in one flat list that names where each result lives, with the match marked. The words may land on different levels: `fra par` finds Europe / France / Paris. The list stops at `maxResults` and says so.
+
+<Cascader labelText="Find a city" placeholder="Search cities" {nodes} filterable />
+
+Only leaves are listed, or any node with `changeOnSelect`. While the text is typed, <DocKbd label="ArrowLeft" />, <DocKbd label="ArrowRight" />, <DocKbd label="Home" /> and <DocKbd label="End" /> keep moving the caret.
+
+A tree that is not all loaded cannot be searched in the browser. Pass `search` to ask a server. It receives the query and an abort signal, and returns the matching paths, each a list of nodes from a root. It runs 200 ms after the last key and a newer query aborts an older one. Choosing a result loads the levels above it.
+
+## Lazy loading
+
+Mark a branch with `hasChildren: true` and no `nodes`, and pass `loadChildren`. It runs the first time the branch opens, with the node and the path to it. While it runs, the column shows a loading row and the tree is `aria-busy`. Moving to another branch aborts the request through its `signal`. If it rejects, the column says so with a retry link, and <DocKbd label="ArrowRight" /> on the parent tries again.
+
+`Cascader` keeps the children it loads beside `nodes`, which it never changes. A `value` for a path that is not loaded loads each level above it in turn, so the field can show a saved choice.
+
+<FileSource src="/framed/Cascader/CascaderLazy" />
+
+## Narrow screens
+
+Columns need room, so below the `md` breakpoint `layout="auto"` shows one column at a time. A header holds a button that goes back a level and the name of the column in view. Choosing a branch moves to its column, and <DocKbd label="ArrowLeft" /> goes back. Set `layout="columns"` to keep columns whatever the width, or `layout="drill-in"` to always show one.
+
+<Cascader labelText="Location" label="Choose a city" {nodes} layout="drill-in" />
+
+## Sizes
+
+Set `size` to control field height. The default is `"md"` (40px).
+
+<Stack gap={6}>
+  {#each sizes as size}
+    <Cascader labelText="Size {size ?? 'md'}" label="Choose a city" {nodes} {size} />
+  {/each}
+</Stack>
+
+## States
+
+### Invalid
+
+<Cascader labelText="Location" label="Choose a city" {nodes} invalid invalidText="Choose a city" />
+
+### Warning
+
+<Cascader labelText="Location" label="Choose a city" {nodes} warn warnText="Support in this city is ending" />
+
+### Read-only
+
+A read-only field does not open.
+
+<Cascader labelText="Location" label="Choose a city" {nodes} value={["europe", "france", "paris"]} readonly />
+
+### Disabled
+
+Set `disabled` to prevent interaction. Set `disabled: true` on a node to disable just that node and what is under it.
+
+<Cascader labelText="Location" label="Choose a city" {nodes} value={["europe", "france", "paris"]} disabled />
+
+## Portal
+
+In a `Modal`, or when a box around the field would cut the menu off, the menu moves to a portal. Set `portalMenu` to `true` or `false` to choose. <DocKbd label="Escape" /> closes the menu and leaves the modal open.
+
+<FileSource src="/framed/Cascader/CascaderModal" />
+
+## Forms
+
+Set `name` to submit the choice. Each chosen path is one value, a JSON array of its ids, so `["europe","france","paris"]`. Set `required` to block submission while nothing is chosen.
+
+## Keyboard
+
+The field keeps focus, and the item under the cursor is named by `aria-activedescendant`. Left and Right swap in a right-to-left page, so Left opens the next column there.
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="ArrowDown" /> / <DocKbd label="ArrowUp" /> | Opens the menu, then moves the cursor within the column |
+| <DocKbd label="ArrowRight" /> | Opens the column of a branch and moves into it, to the chosen item if it holds one |
+| <DocKbd label="ArrowLeft" /> | Moves to the parent in the column before, and leaves the next column open |
+| <DocKbd label="Enter" /> | Chooses a leaf. On a branch it opens the column, or chooses it with `changeOnSelect` |
+| <DocKbd label="Space" /> | Does the same as Enter, except in a search field |
+| <DocKbd label="Home" /> / <DocKbd label="End" /> | Moves to the first or last item of the column, except in a search field |
+| <DocKbd label="PageUp" /> / <DocKbd label="PageDown" /> | Moves 10 items |
+| <DocKbd label="Escape" /> | Closes the menu |
+| <DocKbd label="Delete" /> / <DocKbd label="Backspace" /> | Clears the choice, when it can be cleared |
+
+Type a letter on the field to move to the next item in the column that starts with it. In `multiple` mode <DocKbd label="Enter" /> and <DocKbd label="Space" /> check the item under the cursor and keep the menu open.
+
+## Accessibility
+
+The field is a `combobox` with `aria-haspopup="tree"`, and the menu is a `tree` of one `group` per column. Every item is a `treeitem` with `aria-level` (its column), `aria-posinset`, and `aria-setsize`, and a branch has `aria-expanded`. A chosen item is `aria-selected`, and in `multiple` mode an item is `aria-checked`, `"mixed"` for a partly checked branch. While a search is typed, the popup is a `listbox` of options named by their whole path.
+
+Opening a column, choosing a path, the number checked, the number of results, and a failed load are said through one live region. Every string is a prop, and the ones with a number are functions.
+
+## Which component
+
+`Cascader` is for a path through levels that each hold many items. The levels are the point: the person looks at one level at a time and the field keeps the whole path.
+
+| Use | When |
+| --- | --- |
+| `Cascader` | A path of a fixed shape, such as region, country, city or category, subcategory, product. Each level is a list to scan, a level has many items, and the path is the value |
+| `TreeSelect` | A tree where depth varies, branches open in place, and the person wants to see siblings of different levels together. The value is a node, not a path |
+| `AddSelect` | A large catalog, in thousands, that is picked in a panel with filters and a review step, and confirmed once |
+| Chained `Dropdown`s | Two or three levels that the form must label and validate on their own, such as a billing address, where each level is a field in its own right |
+| `ComboBox` | One flat list, short enough to type in |
+
+## Design
+
+| Do | Why |
+| --- | --- |
+| Use `Cascader` when the path is the answer | The field reads "Europe / France / Paris", so a city shared by two countries stays unambiguous |
+| Give each level a name with `levelLabels` | Each column is a group, and a screen reader says its name, such as "Country" |
+| Pass `loadChildren` instead of changing `nodes` | The component tracks loading, aborting, failure and retry for you |
+| Use `search` for a tree that is too big to load | The search runs where the data is, and the levels above a result load when it is chosen |
+| Keep a level to a few dozen items | A column scrolls, but a person scans it. Past that, reach for search or `AddSelect` |
+| Do not use `Cascader` for a tree of uneven depth | Columns of different lengths leave the person guessing how deep the path goes. `TreeSelect` fits that shape |
