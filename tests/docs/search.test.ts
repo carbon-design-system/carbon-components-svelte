@@ -23,6 +23,7 @@ const search = createSearch([
     ...doc("Loading", "Loading"),
     summary: "Loading indicators display an inline spinner.",
   },
+  { ...doc("UIShell", "UIShell"), components: "Header SideNav SideNavLink" },
 ]);
 
 describe("createSearch", () => {
@@ -54,6 +55,8 @@ describe("createSearch", () => {
     ],
     // A page's summary.
     ["spinner", ["Loading-Loading"]],
+    // A component a page documents with others.
+    ["SideNavLink", ["UIShell-UIShell"]],
     // `button` matches `ButtonSet` once, not as a word and a prefix.
     ["button", ["Button-Button", "ButtonSet-ButtonSet"]],
   ])("ranks %j", (query, ids) => {

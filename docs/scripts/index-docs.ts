@@ -13,6 +13,7 @@ type SearchDocument = {
   text: string;
   description: string;
   summary?: string;
+  components?: string;
   href: string;
   isComponent: boolean;
 };
@@ -27,12 +28,14 @@ for (const componentName of getComponentNames()) {
   );
   const fileContent = fs.readFileSync(filePath, "utf8");
   const lines = fileContent.split("\n");
+  const frontmatter = readFrontmatter(fileContent, filePath);
 
   documents.push({
     id: `${componentName}-page`,
     text: componentName,
     description: componentName,
-    summary: readFrontmatter(fileContent, filePath).description,
+    summary: frontmatter.description,
+    components: frontmatter.components?.join(" "),
     href: `/components/${componentName}`,
     isComponent: true,
   });
