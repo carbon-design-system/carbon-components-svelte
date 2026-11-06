@@ -68,6 +68,7 @@ export default {
     "docs/scripts/markdown.ts",
     "docs/scripts/page.ts",
     "docs/scripts/format.ts",
+    "docs/scripts/compile-cache.ts",
   ],
   ignore: [
     "**/*.md",
@@ -113,6 +114,9 @@ export default {
   hermetic: [
     // Writes the code it formats to a temporary directory, not the repository.
     "docs/scripts/format.ts",
+    // Caches to a temporary directory.
+    "tests/docs/compile-cache.test.ts",
+    "docs/scripts/compile-cache.ts",
     // The e2e host reads only the fixture entry of the URL each test opens,
     // which the test's own navigation already reaches. A blanket `@reads` on
     // every entry made any fixture change select every e2e test.
