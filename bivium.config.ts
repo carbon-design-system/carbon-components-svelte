@@ -66,6 +66,7 @@ export default {
     "docs/scripts/frontmatter.ts",
     "docs/scripts/markdown.ts",
     "docs/scripts/svx.ts",
+    "docs/scripts/format.ts",
   ],
   ignore: [
     "**/*.md",
@@ -109,6 +110,8 @@ export default {
   // already runs as unknown.
   importOnly: ["**/*.svelte"],
   hermetic: [
+    // Writes the code it formats to a temporary directory, not the repository.
+    "docs/scripts/format.ts",
     // The e2e host reads only the fixture entry of the URL each test opens,
     // which the test's own navigation already reaches. A blanket `@reads` on
     // every entry made any fixture change select every e2e test.

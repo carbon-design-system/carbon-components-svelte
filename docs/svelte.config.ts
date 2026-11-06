@@ -2,12 +2,10 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { format, version as prettierVersion } from "prettier";
-import prettierPluginSvelte from "prettier-plugin-svelte";
-import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with { type: "json" };
 import { highlight } from "../src/syntax/index.js";
 import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
+import { createFormatter, formatterVersion } from "./scripts/format.ts";
 import type { Node as MdastNode } from "./scripts/markdown.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { rehypeSlug } from "./scripts/slug.ts";
@@ -32,7 +30,7 @@ const DOC_KBD_IMPORT_STMT =
 const DOC_KBD_IMPORT_RE = /import\s+DocKbd\s+from/;
 const DOC_KBD_USAGE_RE = /<DocKbd\b/;
 
-const SKIP_PREVIEW_PRETTIER = process.env.NODE_ENV === "development";
+const SKIP_PREVIEW_FORMAT = process.env.NODE_ENV === "development";
 
 type PreviewCode = { formattedCode: string; highlightedCode: string };
 
@@ -40,7 +38,7 @@ const previewCodeCache = new Map<string, PreviewCode>();
 
 /**
  * Formatted and highlighted example code persists here so a cold build only
- * runs prettier and the highlighter on examples that changed. Gitignored via `node_modules`.
+ * formats and highlights the examples that changed. Gitignored via `node_modules`.
  */
 const PREVIEW_CODE_CACHE_DIR = path.join(
   __dirname,
@@ -77,11 +75,7 @@ function highlightCodeBlock(code: string, lang: string | null): string {
   return `<pre class="language-${classLang}">{@html \`<code class="language-${classLang}">${highlighted}</code>\`}</pre>`;
 }
 
-const prettierSvelte = {
-  parser: "svelte" as const,
-  plugins: [prettierPluginSvelte],
-  svelteSortOrder: "scripts-markup-styles-options" as const,
-};
+const formatSvelte = createFormatter("svelte");
 
 function highlightSvelte(formattedCode: string): PreviewCode {
   const highlightedCode = highlight(formattedCode, "svelte") ?? "";
@@ -89,13 +83,10 @@ function highlightSvelte(formattedCode: string): PreviewCode {
 }
 
 /**
- * Changing prettier, its Svelte plugin, the prettier options, or the
- * highlighter invalidates every entry.
+ * Changing the formatter or the highlighter invalidates every entry.
  */
 const PREVIEW_CODE_CACHE_SALT = JSON.stringify([
-  prettierVersion,
-  prettierPluginSveltePkg.version,
-  { ...prettierSvelte, plugins: undefined },
+  formatterVersion(),
   hashKey(
     fs.readFileSync(path.join(__dirname, "../src/syntax/tokenize.js"), "utf8"),
   ),
@@ -152,18 +143,18 @@ async function formatAndHighlightSvelteCached(source: string) {
   const cached = await readPreviewCodeCache(file, key);
   if (cached) return cached;
 
-  const out = highlightSvelte(await format(source, prettierSvelte));
+  const out = highlightSvelte(await formatSvelte(source));
   await writePreviewCodeCache(file, key, out);
   return out;
 }
 
 async function formatAndHighlightSvelte(source: string) {
-  const mode = SKIP_PREVIEW_PRETTIER ? "raw" : "fmt";
+  const mode = SKIP_PREVIEW_FORMAT ? "raw" : "fmt";
   const cacheKey = `${mode}:${hashKey(source)}`;
   const cached = previewCodeCache.get(cacheKey);
   if (cached) return cached;
 
-  const out = SKIP_PREVIEW_PRETTIER
+  const out = SKIP_PREVIEW_FORMAT
     ? highlightSvelte(source)
     : await formatAndHighlightSvelteCached(source);
   previewCodeCache.set(cacheKey, out);

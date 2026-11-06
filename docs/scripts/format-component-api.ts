@@ -2,8 +2,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { format } from "prettier";
-import plugin from "prettier/plugins/typescript";
+import { createFormatter } from "./format.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outFile = path.join(__dirname, "../src/COMPONENT_API.json");
@@ -20,7 +19,7 @@ if (
   hash(fs.readFileSync(outFile, "utf8")) === cachedHash
 ) {
   // COMPONENT_API.json hasn't changed since it was last formatted;
-  // re-running the prettier pass on every `dev` startup is pure overhead.
+  // re-running the formatter on every `dev` startup is pure overhead.
   process.exit(0);
 }
 
@@ -48,14 +47,8 @@ const stripLeadingTypeAlias = (
   return s;
 };
 
-const formatTypeScript = async (value: string) => {
-  return await format(value, {
-    parser: "typescript",
-    plugins: [plugin],
-    printWidth: 40, // Force breaking onto new lines
-    bracketSameLine: false,
-  });
-};
+// A narrow print width breaks types onto lines for the API tables.
+const formatTypeScript = createFormatter("ts", ["--print-width=40"]);
 
 console.time("formatComponentApi");
 

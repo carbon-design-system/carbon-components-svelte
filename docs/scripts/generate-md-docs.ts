@@ -1,7 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import { format as prettierFormat } from "prettier";
-import prettierPluginSvelte from "prettier-plugin-svelte";
 import { markupVisitorKeys, parse, walk } from "sveast";
 import {
   BASE_URL,
@@ -10,9 +8,13 @@ import {
   PAGE_EXTENSION,
   RAW_COMPONENTS_OUT_DIR,
 } from "./constants";
+import { createFormatter } from "./format.ts";
 import { readFrontmatter, splitFrontmatter } from "./frontmatter.ts";
 import { stripDocsOnly } from "./strip-docs-only.ts";
 import { getComponentNames } from "./utils";
+
+const formatSvelte = createFormatter("svelte");
+const formatMarkdownText = createFormatter("md", ["--prose-wrap=never"]);
 
 type ComponentApiProp = {
   name: string;
@@ -575,11 +577,7 @@ async function formatSvelteFences(markdown: string) {
     svelteFences.map(async (c) => {
       try {
         const injected = injectImportsIntoSvelteSnippet(c.code);
-        const formatted = await prettierFormat(injected, {
-          parser: "svelte",
-          plugins: [prettierPluginSvelte],
-          svelteSortOrder: "scripts-markup-styles-options",
-        });
+        const formatted = await formatSvelte(injected);
         return String(formatted).trimEnd();
       } catch {
         return null;
@@ -613,10 +611,7 @@ async function formatSvelteFences(markdown: string) {
 
 async function formatMarkdown(markdown: string) {
   try {
-    const formatted = await prettierFormat(markdown, {
-      parser: "markdown",
-      proseWrap: "never",
-    });
+    const formatted = await formatMarkdownText(markdown);
     return `${String(formatted).trimEnd()}\n`;
   } catch {
     return markdown;
