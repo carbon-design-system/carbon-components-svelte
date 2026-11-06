@@ -3,10 +3,14 @@
  * (remark-parse 8 with mdsvex's Svelte-aware HTML blocks) parsed it:
  * front matter, ATX headings, paragraphs, fenced code, HTML and component
  * blocks, GFM tables, simple lists, and inline code, emphasis, strong,
- * links, bare URLs and inline HTML. It throws on Markdown the pages don't
- * use, such as block quotes or a Svelte block at the top level, rather
- * than parse it differently from what a reader expects.
+ * links, bare URLs and inline HTML. Unlike mdsvex, a block of Svelte
+ * markup (a component, or a top-level `{#if}` or `{#each}` block) ends
+ * where its tags close, not at the first blank line. It throws on
+ * Markdown the pages don't use, such as block quotes, rather than parse
+ * it differently from what a reader expects.
  */
+
+import { parse } from "sveast";
 
 export type Node = {
   type: string;
@@ -139,8 +143,16 @@ function parseBlocks(lines: string[], offset = 0): Node[] {
       continue;
     }
 
-    if (SVELTE_BLOCK_RE.test(line))
-      unsupported("a top-level Svelte block", line);
+    if (SVELTE_BLOCK_RE.test(line)) {
+      const end = svelteBlockEnd(lines, start, start);
+      if (end === undefined) unsupported("an unclosed Svelte block", line);
+      push(
+        { type: "html", value: lines.slice(start, end + 1).join("\n") },
+        start,
+      );
+      i = end + 1;
+      continue;
+    }
     if (SVELTE_TAG_RE.test(line)) unsupported("a top-level svelte: tag", line);
     if (/^ {0,3}>/.test(line))
       unsupported(
@@ -160,6 +172,7 @@ function parseBlocks(lines: string[], offset = 0): Node[] {
           i++;
         }
       }
+      i = svelteBlockEnd(lines, start, i) ?? i;
       push(
         { type: "html", value: lines.slice(start, i + 1).join("\n") },
         start,
@@ -268,6 +281,38 @@ function parseBlocks(lines: string[], offset = 0): Node[] {
     );
   }
   return nodes;
+}
+
+/**
+ * The last line of the Svelte markup that starts at `start`: `end`, or the
+ * line before a later blank line, whichever is the first where every tag
+ * and block opened since `start` has closed. `undefined` if none is.
+ */
+function svelteBlockEnd(
+  lines: string[],
+  start: number,
+  end: number,
+): number | undefined {
+  let last = end;
+  while (last < lines.length) {
+    if (parsesAsSvelte(lines.slice(start, last + 1).join("\n"))) return last;
+    // On to the next blank line after more content.
+    let next = last + 1;
+    while (next < lines.length && BLANK_RE.test(lines[next])) next++;
+    while (next + 1 < lines.length && !BLANK_RE.test(lines[next + 1])) next++;
+    if (next >= lines.length) return undefined;
+    last = next;
+  }
+  return undefined;
+}
+
+function parsesAsSvelte(markup: string): boolean {
+  try {
+    parse(markup, { css: false });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** A table row's cells, without the outer pipes; `\|` stays in a cell. */

@@ -73,6 +73,18 @@ describe("parseMarkdown", () => {
   });
 });
 
+describe("parseMarkdown block ends", () => {
+  const values = (source: string) =>
+    parseMarkdown(source).children.map((node) => node.value);
+
+  it.each([
+    ["a component", "<Stack>\n  <Text />\n\n  <Text />\n</Stack>"],
+    ["a top-level {#if} block", "{#if open}\n  <Text />\n\n  <Text />\n{/if}"],
+  ])("keeps %s with a blank line in it whole", (_, source) => {
+    expect(values(source)).toEqual([source]);
+  });
+});
+
 describe("compileSvx", () => {
   it("puts front matter in a module script and wraps the page in its layout", async () => {
     const code = await compileSvx(

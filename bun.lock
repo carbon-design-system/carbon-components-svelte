@@ -29,6 +29,7 @@
         "lightningcss": "^1.33.0",
         "ostia": "^0.2.12",
         "sass-embedded": "^1.107.1",
+        "sveast": "^0.9.7",
         "sveld": "^0.40.3",
         "svelte": "^5.57.3",
         "svelte-lint": "^0.1.0",
@@ -435,6 +436,8 @@
     "strip-indent": ["strip-indent@3.0.0", "", { "dependencies": { "min-indent": "^1.0.0" } }, "sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ=="],
 
     "supports-color": ["supports-color@8.1.1", "", { "dependencies": { "has-flag": "^4.0.0" } }, "sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q=="],
+
+    "sveast": ["sveast@0.9.7", "", {}, "sha512-oYHnASqbnrYX4DuegWDUshzIDZwh6bnEFslxTjBU/2H5AfCvn3BSn0F1etsMh8ZKh2vaxkLaBMsKcJdBtF4lCQ=="],
 
     "sveld": ["sveld@0.40.3", "", { "bin": { "sveld": "cli.js" } }, "sha512-6BVA/AYbcZJHe2XYQf8vF1Efn+RArYdzzRrZkeejEBGjikh6d+m9jZeBMH6LhGQk98F1OAaTuN8SgFRhyziZLA=="],
 
