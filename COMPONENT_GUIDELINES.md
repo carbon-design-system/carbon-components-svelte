@@ -401,6 +401,7 @@ Check `src/utils/` before you write a helper.
 | Need | Utility |
 | :--- | :--- |
 | Drag with pointer capture | `pointer-drag.js` (Splitter, RangeSlider, SidePanel) |
+| Tap, double tap, long press, pan, pinch, swipe | `gesture` in `gesture.js`; give every gesture a button or key too |
 | Element size and visibility | `observeResize`, `observeIntersection` in `shared-observer.js` |
 | Batched layout reads and writes | `createFrameJob` in `frame-batch.js` (TextArea, Menu) |
 | Virtualized lists | `VirtualList`, `virtualize.js`, `virtual-window.js` |

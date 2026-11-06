@@ -331,6 +331,8 @@ export {
 export { floatingPosition } from "./utils/floating-position.js";
 export { formReset } from "./utils/form-reset.js";
 export { formatFileSize } from "./utils/format-file-size.js";
+export { createGestures, gesture } from "./utils/gesture.js";
+export { INERTIA_MIN_SPEED, inertiaStep } from "./utils/gesture-math.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
