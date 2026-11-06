@@ -19,6 +19,7 @@
     height: i < 5 ? 100 : 40,
   }));
   export let measuring = true;
+  export let setSize: number | undefined = undefined;
 
   let scrollendCount = 0;
   let scrollendDetail = "";
@@ -99,6 +100,7 @@
       containerHeight={200}
       scrollElement={listScroller}
       spacerTag="li"
+      {setSize}
       getKey={(item) => item.id}
       let:item
       let:index
