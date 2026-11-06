@@ -19,7 +19,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "carbon-icons-svelte": "^13.17.0",
     "carbon-pictograms-svelte": "^13.21.0",
-    "sveast": "^0.9.7",
+    "sveast": "^0.9.8",
     "svelte": "^5.57.3",
     "vite": "^8.3.5"
   },
