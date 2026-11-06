@@ -27,6 +27,7 @@ import ToastNotification from "carbon-components-svelte/Notification/ToastNotifi
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
+import SavingStatus from "carbon-components-svelte/SavingStatus/SavingStatus.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
@@ -733,6 +734,12 @@ export const interactive: AriaEntry[] = [
     name: "Countdown",
     render: (attrs) => render(Countdown, { props: { seconds: 90, ...attrs } }),
     target: () => screen.getByRole("timer"),
+  },
+  {
+    name: "SavingStatus",
+    render: (attrs) =>
+      render(SavingStatus, { props: { status: "saved", ...attrs } }),
+    target: () => document.querySelector(".bx--saving-status") as HTMLElement,
   },
   {
     name: "ChatLog",
