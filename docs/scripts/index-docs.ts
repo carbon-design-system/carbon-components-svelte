@@ -6,11 +6,14 @@ import { getComponentNames } from "./utils";
 
 const SEARCH_INDEX_PATH = "./src/SEARCH_INDEX.json";
 const H2_DELMIMITER = "## ";
+/** The front matter's `description`, a plain one-line scalar on every page. */
+const SUMMARY_RE = /^---\n(?:.*\n)*?description: (.+)\n(?:.*\n)*?---\n/;
 
 type SearchDocument = {
   id: string;
   text: string;
   description: string;
+  summary?: string;
   href: string;
   isComponent: boolean;
 };
@@ -30,6 +33,7 @@ for (const componentName of getComponentNames()) {
     id: `${componentName}-page`,
     text: componentName,
     description: componentName,
+    summary: SUMMARY_RE.exec(fileContent)?.[1],
     href: `/components/${componentName}`,
     isComponent: true,
   });

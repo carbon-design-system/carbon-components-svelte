@@ -19,6 +19,10 @@ const search = createSearch([
   doc("Select", "Select"),
   doc("Select", "Basic"),
   doc("Tooltip", "Tooltip"),
+  {
+    ...doc("Loading", "Loading"),
+    summary: "Loading indicators display an inline spinner.",
+  },
 ]);
 
 describe("createSearch", () => {
@@ -48,6 +52,8 @@ describe("createSearch", () => {
         "Select-Basic",
       ],
     ],
+    // A page's summary.
+    ["spinner", ["Loading-Loading"]],
     // `button` matches `ButtonSet` once, not as a word and a prefix.
     ["button", ["Button-Button", "ButtonSet-ButtonSet"]],
   ])("ranks %j", (query, ids) => {
