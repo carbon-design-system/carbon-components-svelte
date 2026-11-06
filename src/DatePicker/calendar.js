@@ -1287,7 +1287,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     const anchor = self.selectedDates[0].getTime();
     const hover = hovered
-      ? /** @type {any} */ (hovered).dateObj.getTime()
+      ? /** @type {import("./calendar.js").DayElement} */ (
+          hovered
+        ).dateObj.getTime()
       : firstDay(self.days).dateObj.getTime();
     const from = Math.min(hover, anchor);
     const to = Math.max(hover, anchor);
@@ -2100,11 +2102,11 @@ export function createCalendarEngine(element, userConfig = {}) {
    */
   function focusDate(date) {
     const find = () =>
-      /** @type {HTMLElement[]} */ ([
+      /** @type {import("./calendar.js").DayElement[]} */ ([
         ...self.daysContainer.querySelectorAll(".bx--date-picker__day"),
       ]).find(
         (cell) =>
-          /** @type {any} */ (cell).dateObj.getTime() === date.getTime() &&
+          cell.dateObj.getTime() === date.getTime() &&
           !cell.classList.contains("bx--date-picker__day--hidden"),
       );
     let cell = find();
@@ -2339,7 +2341,9 @@ export function createCalendarEngine(element, userConfig = {}) {
       const count = cells.length;
       cells[(count + index + step) % count].focus();
     } else if (cells[0].parentNode.contains(document.activeElement)) {
-      const active = /** @type {any} */ (document.activeElement);
+      const active = /** @type {import("./calendar.js").DayElement} */ (
+        document.activeElement
+      );
       if (!active.classList.contains("bx--date-picker__grid-cell--disabled")) {
         setGridDate(active.dateObj);
         if (config.closeOnSelect) self.close();
@@ -2521,7 +2525,10 @@ export function createCalendarEngine(element, userConfig = {}) {
       self.altInput.parentNode?.removeChild(self.altInput);
       self.altInput = undefined;
     }
-    if (secondInput) /** @type {any} */ (secondInput)._flatpickr = undefined;
+    if (secondInput)
+      /** @type {import("./calendar.js").CalendarInput} */ (
+        secondInput
+      )._flatpickr = undefined;
     self.input.type = self.input._type;
     self.input.removeAttribute("readonly");
     self.input._flatpickr = undefined;
@@ -2557,7 +2564,10 @@ export function createCalendarEngine(element, userConfig = {}) {
     throw error;
   }
   self.input._flatpickr = self;
-  if (secondInput) /** @type {any} */ (secondInput)._flatpickr = self;
+  if (secondInput)
+    /** @type {import("./calendar.js").CalendarInput} */ (
+      secondInput
+    )._flatpickr = self;
   triggerEvent("onReady");
   return self;
 }

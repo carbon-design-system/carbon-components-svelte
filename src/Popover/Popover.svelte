@@ -275,7 +275,8 @@
     if (!calendar) return false;
     for (const input of ref.querySelectorAll("input")) {
       if (
-        /** @type {any} */ (input)._flatpickr?.calendarContainer === calendar
+        /** @type {import("../DatePicker/calendar.js").CalendarInput} */ (input)
+          ._flatpickr?.calendarContainer === calendar
       ) {
         return true;
       }

@@ -27,13 +27,12 @@ export function createCalendarApi(engine) {
     focusDate: (date) => {
       if (!engine.isOpen) engine.open();
       engine.jumpToDate(date);
-      const target = /** @type {HTMLElement[]} */ ([
+      const target = /** @type {import("./calendar.js").DayElement[]} */ ([
         ...engine.calendarContainer.querySelectorAll(".bx--date-picker__day"),
       ]).find(
         (cell) =>
           !cell.classList.contains("bx--date-picker__day--hidden") &&
-          /** @type {any} */ (cell).dateObj?.toDateString() ===
-            date.toDateString(),
+          cell.dateObj?.toDateString() === date.toDateString(),
       );
       target?.focus();
     },

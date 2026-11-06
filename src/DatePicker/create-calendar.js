@@ -120,8 +120,8 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
    * the label would point at nothing once the calendar is rebuilt without
    * one.
    *
-   * @param {any} _s
-   * @param {any} _d
+   * @param {Date[]} _s
+   * @param {string} _d
    * @param {CalendarInstance} instance
    */
   function disconnectAltInputObserver(_s, _d, instance) {
@@ -152,8 +152,8 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
   }
 
   /**
-   * @param {any} _s
-   * @param {any} _d
+   * @param {Date[]} _s
+   * @param {string} _d
    * @param {CalendarInstance} instance
    */
   function prepareOnReady(_s, _d, instance) {
@@ -187,7 +187,7 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
    * @param {CalendarInstance} instance
    */
   function emitView(_s, _d, instance) {
-    const { pickerMode, showMonths = 1 } = /** @type {any} */ (instance.config);
+    const { pickerMode, showMonths = 1 } = instance.config;
     const year = instance.currentYear;
     let start;
     let end;
