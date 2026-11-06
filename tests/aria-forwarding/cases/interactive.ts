@@ -40,6 +40,8 @@ import Tearsheet from "carbon-components-svelte/Tearsheet/Tearsheet.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import TileGrid from "carbon-components-svelte/TileGrid/TileGrid.svelte";
+import Timeline from "carbon-components-svelte/Timeline/Timeline.svelte";
+import TimelineItem from "carbon-components-svelte/Timeline/TimelineItem.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
@@ -888,5 +890,21 @@ export const interactive: AriaEntry[] = [
       render(Truncate, { props: { reveal: "tooltip", ...attrs } }),
     target: (result) =>
       result.container.querySelector<HTMLElement>("p") as HTMLElement,
+  },
+  {
+    // The wrapper holds the list and the show-earlier button; the list is
+    // what a name describes.
+    name: "Timeline",
+    render: (attrs) =>
+      render(Timeline, {
+        props: { items: [{ id: "a", title: "Ordered" }], ...attrs },
+      }),
+    target: () => screen.getByRole("list"),
+  },
+  {
+    name: "TimelineItem",
+    render: (attrs) =>
+      render(TimelineItem, { props: { title: "Ordered", ...attrs } }),
+    target: () => screen.getByRole("listitem"),
   },
 ];

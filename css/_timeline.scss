@@ -1,0 +1,303 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./status-tokens";
+
+/// Timeline: dated events down a rail, each with a marker, a title, a
+/// time, a description and optional content. The rail is a border, so it
+/// follows the theme and forced colors with no image. Each event draws the
+/// rail from under its own marker to the next marker; the last event of a
+/// list draws none. A day heading breaks the rail, since it stands on the
+/// rail's column.
+/// @access private
+/// @group components
+@mixin timeline {
+  $marker: to-rem(16px);
+  // The first line of an event, which the marker is centered on.
+  $line: to-rem(18px);
+  $gap: $carbon--spacing-05;
+  $status-red: get-token-value($status-colors, "status-red");
+  $status-orange: get-token-value($status-colors, "status-orange");
+  $status-yellow: get-token-value($status-colors, "status-yellow");
+  $status-green: get-token-value($status-colors, "status-green");
+  $status-blue: get-token-value($status-colors, "status-blue");
+
+  .#{$prefix}--timeline {
+    --ccs-timeline-space: #{$carbon--spacing-06};
+
+    position: relative;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--timeline--sm {
+    --ccs-timeline-space: #{$carbon--spacing-04};
+  }
+
+  .#{$prefix}--timeline__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--timeline__group {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--timeline__heading {
+    @include type-style("heading-compact-01");
+
+    padding-block: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--timeline--sticky .#{$prefix}--timeline__heading {
+    position: sticky;
+    z-index: 1;
+    inset-block-start: var(--ccs-timeline-sticky-offset, 0);
+    background-color: $background;
+  }
+
+  // One event: the marker in a column of its own, and the text beside it.
+  // The text sits in the second column, so a title, a time and a
+  // description stack without a wrapper around them.
+  .#{$prefix}--timeline__item {
+    position: relative;
+    display: grid;
+    align-items: start;
+    column-gap: $gap;
+    grid-template-columns: $marker minmax(0, 1fr);
+    padding-block-end: var(--ccs-timeline-space);
+  }
+
+  .#{$prefix}--timeline__item > * {
+    grid-column: 2;
+  }
+
+  // The rail, from just under this marker to just above the next one.
+  .#{$prefix}--timeline__item::before {
+    position: absolute;
+    border-inline-start: 1px solid $border-strong;
+    content: "";
+    inset-block-end: $carbon--spacing-02;
+    inset-block-start: calc(#{$line} + #{$carbon--spacing-02});
+    inset-inline-start: calc(#{$marker} / 2);
+  }
+
+  .#{$prefix}--timeline__list > .#{$prefix}--timeline__item:last-child {
+    padding-block-end: 0;
+  }
+
+  .#{$prefix}--timeline__list > .#{$prefix}--timeline__item:last-child::before {
+    content: none;
+  }
+
+  .#{$prefix}--timeline__marker {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    block-size: $line;
+    grid-column: 1;
+    grid-row: 1 / span 4;
+  }
+
+  // IconIndicator lays its icon out for a label beside it.
+  .#{$prefix}--timeline__marker .#{$prefix}--icon-indicator {
+    display: block;
+    line-height: 0;
+  }
+
+  .#{$prefix}--timeline__marker .#{$prefix}--icon-indicator svg {
+    margin-inline-end: 0;
+  }
+
+  // A plain dot: a thick border, so it shows in forced colors, which
+  // repaint borders but not backgrounds.
+  .#{$prefix}--timeline__dot {
+    display: block;
+    box-sizing: border-box;
+    border: to-rem(4px) solid $icon-secondary;
+    block-size: to-rem(8px);
+    border-radius: 50%;
+    inline-size: to-rem(8px);
+  }
+
+  .#{$prefix}--timeline__icon {
+    flex: none;
+    fill: $icon-secondary;
+  }
+
+  .#{$prefix}--timeline__item--success .#{$prefix}--timeline__icon {
+    fill: $status-green;
+  }
+
+  .#{$prefix}--timeline__item--warning .#{$prefix}--timeline__icon {
+    fill: $status-yellow;
+  }
+
+  .#{$prefix}--timeline__item--error .#{$prefix}--timeline__icon {
+    fill: $status-red;
+  }
+
+  .#{$prefix}--timeline__item--info .#{$prefix}--timeline__icon,
+  .#{$prefix}--timeline__item--pending .#{$prefix}--timeline__icon {
+    fill: $status-blue;
+  }
+
+  .#{$prefix}--timeline__title {
+    @include type-style("heading-compact-01");
+
+    min-block-size: $line;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--timeline__item--pending .#{$prefix}--timeline__title {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--timeline__time {
+    @include type-style("label-01");
+
+    // Shrink to the text and sit at the start of the grid, not of the
+    // time's own direction: an English time on an RTL page would else
+    // sit at its far side.
+    justify-self: start;
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--timeline__description {
+    @include type-style("body-compact-01");
+
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--timeline--sm .#{$prefix}--timeline__description {
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--timeline__content {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--timeline__content:empty {
+    display: none;
+  }
+
+  // The button that shows the collapsed events lines its text up with the
+  // titles.
+  .#{$prefix}--timeline__more {
+    margin-inline-start: calc(
+      #{$marker} + #{$gap} - #{$carbon--spacing-05}
+    );
+  }
+
+  .#{$prefix}--timeline__more:first-child {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--timeline__more:last-child {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // Alternate: the rail runs down the middle, events take turns on each
+  // side and the time sits opposite its event. It needs room, so it asks
+  // the timeline's own width, and below that the one-sided layout stays.
+  // A browser without container queries keeps the one-sided layout.
+  .#{$prefix}--timeline--alternate {
+    container: #{$prefix}--timeline / inline-size;
+  }
+
+  @container #{$prefix}--timeline (width >= #{to-rem(640px)}) {
+    .#{$prefix}--timeline--alternate .#{$prefix}--timeline__item {
+      grid-template-columns: minmax(0, 1fr) $marker minmax(0, 1fr);
+    }
+
+    .#{$prefix}--timeline--alternate .#{$prefix}--timeline__item::before {
+      inset-inline-start: 50%;
+    }
+
+    // Odd events: the time before the rail, the text after it.
+    .#{$prefix}--timeline--alternate .#{$prefix}--timeline__item > * {
+      grid-column: 3;
+    }
+
+    .#{$prefix}--timeline--alternate
+      .#{$prefix}--timeline__item
+      > .#{$prefix}--timeline__marker {
+      grid-column: 2;
+    }
+
+    .#{$prefix}--timeline--alternate
+      .#{$prefix}--timeline__item
+      > .#{$prefix}--timeline__time {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: end;
+    }
+
+    // Even events mirror that.
+    .#{$prefix}--timeline--alternate
+      .#{$prefix}--timeline__item:nth-child(even)
+      > * {
+      grid-column: 1;
+      text-align: end;
+    }
+
+    .#{$prefix}--timeline--alternate
+      .#{$prefix}--timeline__item:nth-child(even)
+      > .#{$prefix}--timeline__marker {
+      grid-column: 2;
+    }
+
+    .#{$prefix}--timeline--alternate
+      .#{$prefix}--timeline__item:nth-child(even)
+      > .#{$prefix}--timeline__time {
+      grid-column: 3;
+      justify-self: start;
+    }
+
+    .#{$prefix}--timeline--alternate .#{$prefix}--timeline__heading {
+      text-align: center;
+    }
+
+    .#{$prefix}--timeline--alternate .#{$prefix}--timeline__more {
+      margin-inline: 0;
+      text-align: center;
+    }
+  }
+
+  // Forced colors repaint borders and text but leave an SVG fill alone, so
+  // the rail and the markers are set to the system text color. The shapes
+  // still tell the statuses apart. The glyph cut into a filled warning
+  // icon takes the page color, as it does in every theme.
+  @media (forced-colors: active) {
+    .#{$prefix}--timeline__item::before {
+      border-inline-start-color: CanvasText;
+    }
+
+    .#{$prefix}--timeline__dot {
+      border-color: CanvasText;
+    }
+
+    .#{$prefix}--timeline__icon,
+    .#{$prefix}--timeline__item .#{$prefix}--icon-indicator svg {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--timeline__item
+      .#{$prefix}--icon-indicator--caution-minor
+      path:first-of-type {
+      fill: Canvas;
+    }
+  }
+}
+
+@include exports("timeline") {
+  @include timeline;
+}
