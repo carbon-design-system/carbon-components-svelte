@@ -1563,6 +1563,20 @@
       "defaultKind": "function"
     },
     {
+      "component": "QRCode",
+      "prop": "alternativeLabelText",
+      "type": "string",
+      "default": "Can't scan? Copy the text instead",
+      "defaultKind": "text"
+    },
+    {
+      "component": "QRCode",
+      "prop": "labelText",
+      "type": "string",
+      "default": "QR code",
+      "defaultKind": "text"
+    },
+    {
       "component": "RadioButton",
       "prop": "labelText",
       "type": "string",
