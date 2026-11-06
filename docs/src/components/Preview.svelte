@@ -7,10 +7,34 @@
   import { Button, CodeSnippet } from "carbon-components-svelte";
   import { highlight } from "carbon-components-svelte/syntax";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+  import { onMount } from "svelte";
   import { theme } from "../store";
 
+  /**
+   * Highlighting a code view adds hundreds of elements, so it waits until
+   * the view comes within this distance of the viewport. Until then it
+   * shows the same text, uncolored.
+   */
+  const HIGHLIGHT_MARGIN = "1000px 0px";
+
+  let codeView: HTMLElement;
+  let nearViewport = false;
+
+  onMount(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        nearViewport = true;
+        observer.disconnect();
+      },
+      { rootMargin: HIGHLIGHT_MARGIN },
+    );
+    observer.observe(codeView);
+    return () => observer.disconnect();
+  });
+
   $: themedSrcUrl = src ? `${src}?theme=${$theme}` : "";
-  $: highlighted = highlight(code, "svelte") ?? "";
+  $: highlighted = nearViewport ? (highlight(code, "svelte") ?? "") : "";
 </script>
 
 <div class="preview">
@@ -37,9 +61,9 @@
       <slot />
     {/if}
   </div>
-  <div class="code-override">
+  <div class="code-override" bind:this={codeView}>
     <CodeSnippet type="multi" {code}>
-      {@html highlighted}
+      {#if nearViewport}{@html highlighted}{:else}{code}{/if}
     </CodeSnippet>
   </div>
 </div>
