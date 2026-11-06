@@ -123,9 +123,7 @@
     }
   }
 
-  /**
-   * @type {null | (((...args: any[]) => void) & { cancel: () => void; flush: () => void })}
-   */
+  /** @type {null | import("../utils/debounce.js").Debounced<typeof runFilter>} */
   let debouncedFilter = null;
 
   // Bumped on every filter request so a yielded filter that was overtaken
@@ -163,10 +161,8 @@
   }
 
   /**
-   * Typed `any` so the function satisfies `debounceFn`'s inferred
-   * `(...args: unknown[]) => void` in the `$:` block below.
-   * @param {any} searchValue
-   * @param {any} filter
+   * @param {number | string} searchValue
+   * @param {boolean | ((row: Row, value: number | string) => boolean)} filter
    */
   function runFilter(searchValue, filter) {
     if (!deferFilter || !mounted) {
