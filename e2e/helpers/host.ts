@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type BrowserContext, type Page, test as base } from "@playwright/test";
+import { settleFontsReady } from "./fonts";
 
 export { expect } from "@playwright/test";
 
@@ -73,6 +74,7 @@ export const test = base.extend<
         hasTouch,
         isMobile,
       });
+      await settleFontsReady(context);
       const page = await context.newPage();
       const navigate = page.goto.bind(page);
       let onHost = false;
