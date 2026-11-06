@@ -115,6 +115,19 @@
   .#{$prefix}--loading-overlay--delayed {
     animation-name: loading-delay;
   }
+
+  // ccs: forced colors leave an SVG stroke alone, so the arc kept the
+  // theme's blue and the track its light gray, which can vanish on a dark
+  // or high-contrast `Canvas`. The arc reads as text, the track as disabled.
+  @media (forced-colors: active) {
+    .#{$prefix}--loading__stroke {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--loading__background {
+      stroke: GrayText;
+    }
+  }
 }
 
 @include exports('loading') {
