@@ -1661,6 +1661,55 @@
       "defaultKind": "text"
     },
     {
+      "component": "SavingStatus",
+      "prop": "detailsDescription",
+      "type": "string",
+      "default": "Show error details",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SavingStatus",
+      "prop": "errorText",
+      "type": "string",
+      "default": "Couldn't save",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SavingStatus",
+      "prop": "offlineText",
+      "type": "string",
+      "default": "Offline: changes will save when you reconnect",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SavingStatus",
+      "prop": "retryText",
+      "type": "string",
+      "default": "Retry",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SavingStatus",
+      "prop": "savedText",
+      "type": "string",
+      "default": "Saved",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SavingStatus",
+      "prop": "savingText",
+      "type": "string",
+      "default": "Saving…",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SavingStatus",
+      "prop": "unsavedText",
+      "type": "string",
+      "default": "Unsaved changes",
+      "defaultKind": "text"
+    },
+    {
       "component": "Search",
       "prop": "closeButtonLabelText",
       "type": "string",
