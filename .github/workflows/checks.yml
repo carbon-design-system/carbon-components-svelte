@@ -14,7 +14,7 @@ on:
       - "docs/scripts/visit.ts"
       - "docs/scripts/frontmatter.ts"
       - "docs/scripts/markdown.ts"
-      - "docs/scripts/svx.ts"
+      - "docs/scripts/page.ts"
       - "docs/scripts/format.ts"
       - "docs/src/pages/framed/DatePicker/**"
   push:
@@ -31,7 +31,7 @@ on:
       - "docs/scripts/visit.ts"
       - "docs/scripts/frontmatter.ts"
       - "docs/scripts/markdown.ts"
-      - "docs/scripts/svx.ts"
+      - "docs/scripts/page.ts"
       - "docs/scripts/format.ts"
       - "docs/src/pages/framed/DatePicker/**"
   workflow_dispatch:
@@ -125,7 +125,7 @@ jobs:
               - 'docs/scripts/visit.ts'
               - 'docs/scripts/frontmatter.ts'
               - 'docs/scripts/markdown.ts'
-              - 'docs/scripts/svx.ts'
+              - 'docs/scripts/page.ts'
               - 'docs/scripts/format.ts'
             e2e:
               - 'src/**'

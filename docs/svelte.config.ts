@@ -7,10 +7,10 @@ import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { createFormatter, formatterVersion } from "./scripts/format.ts";
 import type { Node as MdastNode } from "./scripts/markdown.ts";
+import { compilePage } from "./scripts/page.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { rehypeSlug } from "./scripts/slug.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
-import { compileSvx } from "./scripts/svx.ts";
 import { tocHeadings } from "./scripts/toc-headings.ts";
 import { visit } from "./scripts/visit.ts";
 
@@ -394,7 +394,7 @@ export default {
       }) {
         if (!filename.endsWith(PAGE_EXTENSION)) return null;
         return {
-          code: await compileSvx(content, filename, {
+          code: await compilePage(content, filename, {
             highlight: highlightCodeBlock,
             remarkPlugins: [requireLeadingHeading, plugin, carbonify],
             rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],

@@ -66,7 +66,7 @@ export default {
     "docs/scripts/visit.ts",
     "docs/scripts/frontmatter.ts",
     "docs/scripts/markdown.ts",
-    "docs/scripts/svx.ts",
+    "docs/scripts/page.ts",
     "docs/scripts/format.ts",
   ],
   ignore: [

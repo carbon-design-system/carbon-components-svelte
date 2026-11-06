@@ -173,7 +173,7 @@ describe("Carbon v11 tokens", () => {
       "docs/svelte.config.ts",
       ...roots.flatMap((root) =>
         readdirSync(root, { recursive: true, encoding: "utf8" })
-          .filter((file) => /\.(svelte|svx|ts|js|css)$/.test(file))
+          .filter((file) => /\.(svelte|md|ts|js|css)$/.test(file))
           .filter((file) => !file.includes("node_modules"))
           .map((file) => join(root, file)),
       ),

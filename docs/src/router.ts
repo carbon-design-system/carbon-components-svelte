@@ -13,7 +13,7 @@ export type { Route };
 
 const pages = import.meta.glob<{ default: Component }>([
   "./pages/**/*.svelte",
-  "./pages/**/*.svx",
+  "./pages/**/*.md",
   "!./pages/**/_*.svelte",
 ]);
 

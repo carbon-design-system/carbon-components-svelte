@@ -7,7 +7,7 @@ describe("buildRoutes", () => {
       "./pages/index.svelte",
       "./pages/_module.svelte",
       "./pages/[...404].svelte",
-      "./pages/components/Button.svx",
+      "./pages/components/Button.md",
       "./pages/framed/_module.svelte",
       "./pages/framed/Button/ButtonBasic.svelte",
     ]);
@@ -22,7 +22,7 @@ describe("buildRoutes", () => {
         path: "/components/Button",
         name: "Button",
         parentName: "components",
-        file: "./pages/components/Button.svx",
+        file: "./pages/components/Button.md",
       },
       {
         path: "/framed/Button/ButtonBasic",
