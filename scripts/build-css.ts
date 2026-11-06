@@ -6,7 +6,7 @@ import path from "node:path";
 import { Glob } from "bun";
 import { transform } from "lightningcss";
 import { initAsyncCompiler } from "sass-embedded";
-import { BROWSERSLIST, targets } from "./lib/css-targets";
+import { targets } from "./lib/css-targets";
 
 const PARTIAL_FILE_REGEX = /^_/;
 const CACHE_DIR = ".cache/build-css";
@@ -90,7 +90,6 @@ async function sharedInputs(): Promise<string> {
   const packageJson = JSON.parse(await readFile("package.json", "utf8")) as {
     devDependencies?: {
       lightningcss?: string;
-      browserslist?: string;
     };
   };
 
@@ -99,8 +98,7 @@ async function sharedInputs(): Promise<string> {
     await hashGlob("syntax/**/*.scss", "css"),
     await hashGlob("vendor/**/*.scss", "css"),
     packageJson.devDependencies?.lightningcss ?? "",
-    packageJson.devDependencies?.browserslist ?? "",
-    BROWSERSLIST.join(","),
+    JSON.stringify(targets),
     MINIFY ? "lightningcss-minify" : "lightningcss-targets",
     "stat-cache-v1",
   ].join("\0");
