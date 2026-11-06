@@ -75,7 +75,8 @@ const UNIT_PATTERN = "[smhdwMy]";
 const OP_PATTERN = new RegExp(`^([+-])(\\d+)(${UNIT_PATTERN})`);
 const ROUND_PATTERN = new RegExp(`^/(${UNIT_PATTERN})`);
 
-const RANGE_SEPARATORS = [/\s+to\s+/i, /\.\./, /\s+[-\u2013\u2014]\s+/];
+// Whitespace is collapsed to one space before these run, so none repeats.
+const RANGE_SEPARATORS = [/ to /i, /\.\./, / [-\u2013\u2014] /];
 const NOW_PREFIX = /^now/i;
 const NOW_ONLY = /^now$/i;
 const SPACE_BEFORE_DIGIT = /^\s+(?=\d)/;
@@ -624,7 +625,7 @@ export function parseTimeRangeText(text) {
   }
 
   // Original casing matters for `M` and `m`.
-  const original = text.trim();
+  const original = text.trim().replace(WHITESPACE, " ");
   for (const separator of RANGE_SEPARATORS) {
     const halves = original.split(separator);
     if (

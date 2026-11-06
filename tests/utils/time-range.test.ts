@@ -571,6 +571,26 @@ describe("parseTimeRangeText", () => {
   });
 });
 
+describe("a range typed with long runs of spaces", () => {
+  it.each([
+    ["spaces", " ".repeat(200_000) + "x"],
+    ["spaces and a separator word", `now${" ".repeat(100_000)}to`],
+    ["spaces around a dash", `now${" ".repeat(100_000)}-x`],
+  ])("is refused in linear time: %s", (_label, text) => {
+    const start = performance.now();
+    expect(parseTimeRangeText(text)).toBeNull();
+    expect(parseTimeRange(text)).toBeNull();
+    expect(performance.now() - start).toBeLessThan(500);
+  });
+
+  it("still reads one with extra spaces", () => {
+    expect(parseTimeRangeText("now-2h    to     now")).toEqual({
+      from: "now-2h",
+      to: "now",
+    });
+  });
+});
+
 describe("validateRange", () => {
   const now = "2026-11-06T17:30:00.000Z";
   const check = (value: { from: string; to: string }, extra = {}) =>
