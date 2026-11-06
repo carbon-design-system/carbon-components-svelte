@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
