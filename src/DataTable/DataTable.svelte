@@ -493,6 +493,25 @@
   export let nonSelectableRowIds = [];
 
   /**
+   * Set to `true` to select rows the way a file browser does. Requires `selectable` or `batchSelection`.
+   * Click a row to select it alone, Cmd or Ctrl+click to toggle it, and Shift+click to select the range from the last row clicked; Shift with Cmd or Ctrl adds the range.
+   * From a row checkbox, the arrow keys move between rows, Shift+arrow extends the range, Cmd or Ctrl+A selects every row and Escape clears the selection.
+   * The selection count is announced. Not supported with `radio`.
+   */
+  export let selectionRange = false;
+
+  /**
+   * Override the text announced after the selection changes with `selectionRange`.
+   * `hidden` counts selected rows the filter hides.
+   * @type {(count: number, hidden: number) => string}
+   */
+  export let selectedStatusText = function selectedStatusText(count, hidden) {
+    return hidden > 0
+      ? `${count} selected, ${hidden} not shown`
+      : `${count} selected`;
+  };
+
+  /**
    * Specify the row ids to highlight.
    * Adds `bx--data-table--highlighted-row`. The highlighted row class is themed by default.
    * @type {ReadonlyArray<Row["id"]>}
@@ -614,10 +633,20 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
+  import { debounce } from "../utils/debounce.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
-  import { rangeSlice } from "../utils/range-slice.js";
+  import {
+    applyClick,
+    applySelectionKey,
+    deselectScope,
+    extendTo,
+    selectAll as selectAllKeys,
+    selectionModifiers,
+    summarizeSelection,
+    toggleKey,
+  } from "../utils/selection.js";
   import {
     DATA_TABLE_SIZE_ALIASES,
     normalizeSize,
@@ -735,6 +764,7 @@
   onMount(() => {
     return () => {
       if (scrollListenerCleanup) scrollListenerCleanup();
+      announceSelection.cancel();
     };
   });
 
@@ -920,36 +950,247 @@
   let rangeAnchorRowId = null;
 
   /**
-   * Apply `checked` to every selectable row between the anchor row and `targetIndex` (inclusive),
-   * where `targetIndex` is a position in `rowsToVirtualize`. Returns `false` if the anchor row
-   * is no longer present (for example, filtered out), so the caller can fall back to a single toggle.
-   * @type {(targetIndex: number, checked: boolean) => boolean}
+   * The row whose checkbox the arrow keys last moved to: the cursor of
+   * `selectionRange`. Moving it never changes `selectedRowIds`.
+   * @type {null | Row["id"]}
    */
-  function selectRowRange(targetIndex, checked) {
-    const anchorIndex = rowsToVirtualize.findIndex(
-      (row) => row.id === rangeAnchorRowId,
-    );
-    const rows = rangeSlice(
-      rowsToVirtualize,
-      anchorIndex,
-      targetIndex,
-      (row) =>
-        !nonSelectableRowIdsSet.has(row.id) &&
-        // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
-        (!hideMode || matchedRowIdsSet.has(row.id)),
-    );
-    if (rows === null) return false;
+  let focusedRowId = null;
 
-    const next = new Set(selectedRowIds);
-    for (const row of rows) {
-      if (checked) {
-        next.add(row.id);
-      } else {
-        next.delete(row.id);
+  /** @type {ReadonlySet<Row["id"]>} */
+  const noRows = new Set();
+
+  /** @type {undefined | ReadonlyArray<Row>} */
+  let orderedRows;
+  /** @type {ReadonlyArray<Row["id"]>} */
+  let orderedIds = [];
+
+  /**
+   * The ids of `rowsToVirtualize`, kept while the rows are the same array so
+   * the model's index lookup is built once per sort, filter or page.
+   * @type {() => ReadonlyArray<Row["id"]>}
+   */
+  function selectionOrder() {
+    if (orderedRows !== rowsToVirtualize) {
+      orderedRows = rowsToVirtualize;
+      orderedIds = rowsToVirtualize.map((row) => row.id);
+    }
+    return orderedIds;
+  }
+
+  /**
+   * @param {"keep" | "move"} anchorOnRange - A checkbox range chains from the clicked row; a row-click range keeps its anchor, as a file browser does.
+   * @returns {import("../utils/selection.js").SelectionContext<Row["id"]>}
+   */
+  function selectionContext(anchorOnRange) {
+    return {
+      order: selectionOrder(),
+      scope: selectableRowIds,
+      anchorOnRange,
+      // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
+      isDisabled: (id) =>
+        nonSelectableRowIdsSet.has(id) ||
+        (hideMode && !matchedRowIdsSet.has(id)),
+    };
+  }
+
+  /**
+   * @returns {import("../utils/selection.js").SelectionState<Row["id"]>}
+   */
+  function selectionState() {
+    return {
+      selected: selectedRowIdsSet,
+      anchor: rangeAnchorRowId,
+      focus: focusedRowId,
+      indeterminate: noRows,
+    };
+  }
+
+  /**
+   * @param {import("../utils/selection.js").SelectionState<Row["id"]>} before
+   * @param {import("../utils/selection.js").SelectionState<Row["id"]>} next
+   */
+  function commitSelection(before, next) {
+    rangeAnchorRowId = next.anchor;
+    focusedRowId = next.focus;
+    if (next.selected !== before.selected) {
+      selectedRowIds = [...next.selected];
+      announceSelection();
+    }
+  }
+
+  const SELECTION_ANNOUNCE_DELAY = 250;
+  let selectionStatus = "";
+  const announceSelectionStatus = createStatusAnnouncer(
+    (text) => (selectionStatus = text),
+  );
+
+  const announceSelection = debounce(() => {
+    if (!selectionRange) return;
+    const { count, hidden } = summarizeSelection(
+      selectionState(),
+      selectableRowIds,
+    );
+    announceSelectionStatus(selectedStatusText(count, hidden));
+  }, SELECTION_ANNOUNCE_DELAY);
+
+  /**
+   * The header checkbox: select every selectable row matching the filter,
+   * or deselect them and keep the ones the filter hides.
+   * @param {boolean} checked
+   */
+  function handleSelectAll(checked) {
+    const before = selectionState();
+    const ctx = selectionContext("move");
+    const next = checked
+      ? selectAllKeys(before, ctx)
+      : deselectScope(before, ctx);
+    if (next.selected === before.selected) return;
+    selectedRowIds = [...next.selected];
+    announceSelection();
+  }
+
+  /**
+   * @param {Row} row
+   * @param {MouseEvent} event
+   */
+  function handleCheckboxClick(row, event) {
+    const checked = /** @type {HTMLInputElement} */ (event.target).checked;
+    const before = selectionState();
+    const ctx = selectionContext("move");
+    const next =
+      event.shiftKey && rangeAnchorRowId !== null
+        ? extendTo(before, row.id, ctx, checked ? "add" : "remove")
+        : toggleKey(before, row.id, ctx, checked);
+    commitSelection(before, next);
+    dispatch("click:row--select", { row, selected: checked });
+  }
+
+  const INTERACTIVE_IN_ROW =
+    'a[href], button, input, select, textarea, label, summary, [contenteditable=""], [contenteditable="true"], [role="button"], [role="menuitem"], [role="link"]';
+
+  /**
+   * Whether a pointer event hit something inside the row that does its own
+   * thing, such as a link or an overflow menu.
+   * @param {EventTarget | null} target
+   * @param {EventTarget | null} row
+   */
+  function isInteractiveInRow(target, row) {
+    const hit = /** @type {Element | null} */ (target)?.closest?.(
+      INTERACTIVE_IN_ROW,
+    );
+    return hit != null && /** @type {Element} */ (row).contains(hit);
+  }
+
+  /**
+   * With `selectionRange`, Shift+click starts a text selection across the
+   * rows. Stop it before it begins.
+   * @param {MouseEvent} event
+   */
+  function handleRowMouseDown(event) {
+    if (
+      selectionRange &&
+      event.shiftKey &&
+      !isInteractiveInRow(event.target, event.currentTarget)
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * A click on the body of a row, with `selectionRange`: click selects the
+   * row alone, Cmd or Ctrl toggles it, Shift selects the range from the
+   * anchor, Shift with Cmd or Ctrl adds the range.
+   * @param {Row} row
+   * @param {MouseEvent} event
+   */
+  function handleRowSelectionClick(row, event) {
+    if (
+      !selectionRange ||
+      radio ||
+      !isSelectionEnabled ||
+      nonSelectableRowIdsSet.has(row.id) ||
+      isInteractiveInRow(event.target, event.currentTarget)
+    ) {
+      return;
+    }
+    const before = selectionState();
+    const next = applyClick(
+      before,
+      row.id,
+      selectionModifiers(event),
+      selectionContext("keep"),
+    );
+    commitSelection(before, next);
+    if (next.selected !== before.selected) {
+      dispatch("click:row--select", {
+        row,
+        selected: next.selected.has(row.id),
+      });
+    }
+  }
+
+  /**
+   * Arrow keys on a row checkbox, with `selectionRange`: arrows move to the
+   * next row's checkbox, Shift+arrow extends the range, Home and End jump,
+   * Cmd or Ctrl+A selects every row, Escape clears. Space and Enter stay
+   * the checkbox's own.
+   * @param {Row} row
+   * @param {KeyboardEvent} event
+   */
+  function handleCheckboxKeydown(row, event) {
+    if (!selectionRange || event.key === " " || event.key === "Enter") return;
+    const before = { ...selectionState(), focus: row.id };
+    const result = applySelectionKey(before, event, {
+      ...selectionContext("keep"),
+      axis: "vertical",
+    });
+    focusedRowId = result.state.focus;
+    if (!result.handled) return;
+    event.preventDefault();
+    commitSelection(before, result.state);
+    if (result.focus !== null) focusRowCheckbox(result.focus);
+  }
+
+  /**
+   * Move the focus to a row's checkbox. A virtualized row outside the
+   * window is not in the DOM: scroll to it first.
+   * @param {Row["id"]} rowId
+   */
+  async function focusRowCheckbox(rowId) {
+    const find = () => {
+      if (!scrollContainerRef) return null;
+      for (const input of scrollContainerRef.querySelectorAll(
+        'input[type="checkbox"]',
+      )) {
+        const checkbox = /** @type {HTMLInputElement} */ (input);
+        if (
+          checkbox.name === selectionName &&
+          checkbox.value === String(rowId)
+        ) {
+          return checkbox;
+        }
+      }
+      return null;
+    };
+    let input = find();
+    if (!input && virtualConfig) {
+      const index = selectionOrder().indexOf(rowId);
+      const scroller = stickyHeader
+        ? (tableRef?.querySelector("table") ?? tableRef)
+        : scrollContainerRef;
+      if (index !== -1 && scroller) {
+        const height = calculatedContainerHeight ?? 0;
+        scroller.scrollTop = Math.max(
+          0,
+          index * virtualConfig.itemHeight -
+            (height - virtualConfig.itemHeight) / 2,
+        );
+        tableBodyScrollTop = scroller.scrollTop || 0;
+        await tick();
+        input = find();
       }
     }
-    selectedRowIds = [...next];
-    return true;
+    input?.focus();
   }
 
   /**
@@ -1035,16 +1276,12 @@
   // Count only the selectable rows matching the active filter: `selectedRowIds`
   // may also hold rows the filter hides (or ids no longer in `rows`), which
   // select all neither reflects nor touches.
-  $: selectedSelectableCount = selectableRowIds.reduce(
-    (count, id) => count + (selectedRowIdsSet.has(id) ? 1 : 0),
-    0,
+  $: selectionSummary = summarizeSelection(
+    { selected: selectedRowIdsSet },
+    selectableRowIds,
   );
-  $: selectAll =
-    selectableRowIds.length > 0 &&
-    selectedSelectableCount === selectableRowIds.length;
-  $: indeterminate =
-    selectedSelectableCount > 0 &&
-    selectedSelectableCount < selectableRowIds.length;
+  $: selectAll = selectionSummary.checked;
+  $: indeterminate = selectionSummary.indeterminate;
   $: if (batchExpansion) {
     expandable = true;
     expanded =
@@ -1675,16 +1912,9 @@
                       false;
                   }
 
-                  if (/** @type {HTMLInputElement} */ (event.target).checked) {
-                    const next = new Set(selectedRowIds);
-                    for (const id of selectableRowIds) next.add(id);
-                    selectedRowIds = [...next];
-                  } else {
-                    const scope = new Set(selectableRowIds);
-                    selectedRowIds = selectedRowIds.filter(
-                      (id) => !scope.has(id),
-                    );
-                  }
+                  handleSelectAll(
+                    /** @type {HTMLInputElement} */ (event.target).checked,
+                  );
                 }}
               />
             </th>
@@ -1792,12 +2022,14 @@
                 : ''} {$rowAILabelStates.get(row.id) === 'active'
                 ? 'bx--data-table--ai-label-row'
                 : ''} {rowClassValue ?? ''}"
+              on:mousedown={handleRowMouseDown}
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
                 if (shouldIgnoreRowClick(event.target)) {
                   return;
                 }
+                handleRowSelectionClick(row, event);
                 dispatch("click", { row });
                 dispatch("click:row", {
                   row,
@@ -1922,31 +2154,9 @@
                           checked={selectedRowIdsSet.has(row.id)}
                           aria-checked={selectedRowIdsSet.has(row.id)}
                           class:bx--checkbox={true}
-                          on:click={(event) => {
-                            const checked = /** @type {HTMLInputElement} */ (
-                              event.target
-                            ).checked;
-                            const usedRange =
-                              event.shiftKey &&
-                              rangeAnchorRowId !== null &&
-                              selectRowRange(actualIndex, checked);
-
-                            if (!usedRange) {
-                              const next = new Set(selectedRowIds);
-                              if (checked) {
-                                next.add(row.id);
-                              } else {
-                                next.delete(row.id);
-                              }
-                              selectedRowIds = [...next];
-                            }
-
-                            rangeAnchorRowId = row.id;
-                            dispatch("click:row--select", {
-                              row,
-                              selected: checked,
-                            });
-                          }}
+                          on:click={(event) => handleCheckboxClick(row, event)}
+                          on:keydown={(event) =>
+                            handleCheckboxKeydown(row, event)}
                         />
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -2089,12 +2299,14 @@
                 : ''} {$rowAILabelStates.get(row.id) === 'active'
                 ? 'bx--data-table--ai-label-row'
                 : ''} {rowClassValue ?? ''}"
+              on:mousedown={handleRowMouseDown}
               on:click={(event) => {
                 // forgo "click", "click:row" events if target
                 // resembles an overflow menu, a checkbox, or radio button
                 if (shouldIgnoreRowClick(event.target)) {
                   return;
                 }
+                handleRowSelectionClick(row, event);
                 dispatch("click", { row });
                 dispatch("click:row", {
                   row,
@@ -2217,31 +2429,9 @@
                           checked={isSelected}
                           aria-checked={isSelected}
                           class:bx--checkbox={true}
-                          on:click={(event) => {
-                            const checked = /** @type {HTMLInputElement} */ (
-                              event.target
-                            ).checked;
-                            const usedRange =
-                              event.shiftKey &&
-                              rangeAnchorRowId !== null &&
-                              selectRowRange(index, checked);
-
-                            if (!usedRange) {
-                              const next = new Set(selectedRowIds);
-                              if (checked) {
-                                next.add(row.id);
-                              } else {
-                                next.delete(row.id);
-                              }
-                              selectedRowIds = [...next];
-                            }
-
-                            rangeAnchorRowId = row.id;
-                            dispatch("click:row--select", {
-                              row,
-                              selected: checked,
-                            });
-                          }}
+                          on:click={(event) => handleCheckboxClick(row, event)}
+                          on:keydown={(event) =>
+                            handleCheckboxKeydown(row, event)}
                         />
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -2377,4 +2567,9 @@
   <span role="status" aria-live="polite" class:bx--visually-hidden={true}
     >{sortStatus}</span
   >
+  {#if selectionRange}
+    <span role="status" aria-live="polite" class:bx--visually-hidden={true}
+      >{selectionStatus}</span
+    >
+  {/if}
 </TableContainer>
