@@ -71,6 +71,7 @@ export default {
     "docs/scripts/format.ts",
     "docs/scripts/compile-cache.ts",
     "docs/src/idle-examples.ts",
+    "docs/scripts/page-html.ts",
   ],
   ignore: [
     "**/*.md",
@@ -119,6 +120,9 @@ export default {
     // Caches to a temporary directory.
     "tests/docs/compile-cache.test.ts",
     "docs/scripts/compile-cache.ts",
+    // Reads the build's output and lists the pages, only in a docs build;
+    // its test calls neither.
+    "docs/scripts/page-html.ts",
     // The e2e host reads only the fixture entry of the URL each test opens,
     // which the test's own navigation already reaches. A blanket `@reads` on
     // every entry made any fixture change select every e2e test.
