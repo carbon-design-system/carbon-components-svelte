@@ -81,6 +81,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ActionSet
+  announcer:
+    name: Announcer
+    description: Two live regions that say short messages to screen readers, and a function to send them.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/announcer.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Announcer
   aspect-ratio:
     status: stable
     framework: svelte

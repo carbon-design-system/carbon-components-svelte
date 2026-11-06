@@ -160,14 +160,14 @@
    */
   export let ref = null;
 
-  import { createEventDispatcher, getContext, tick } from "svelte";
-  import { createStatusAnnouncer } from "../ListBox/menu-status.js";
+  import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Tag from "../Tag/Tag.svelte";
   import TagSet from "../TagSet/TagSet.svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import EditOff from "../icons/EditOff.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -211,10 +211,11 @@
   let fieldRef = null;
   let draft = "";
   let focused = false;
-  /** Text of the visually hidden live region. */
-  let statusText = "";
-  // Clears the region before each message, so a repeat is announced too.
-  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
+  // Messages go to the page's shared live region, or into the dialog this
+  // field is in. A repeat is its own message, so it is announced too.
+  const status = createAnnouncerChannel(() => rootRef);
+  const announceStatus = status.announce;
+  onMount(status.connect);
   /** Message for the most recent rejected value; cleared on the next edit. */
   let rejectionText = "";
 
@@ -701,10 +702,5 @@
   {/if}
   <span id={instructionsId} class:bx--visually-hidden={true}
     >{instructionsText}</span
-  >
-  <!-- Always rendered (even while empty) so assistive tech registers the
-       region before its text changes. -->
-  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
-    >{statusText}</span
   >
 </div>

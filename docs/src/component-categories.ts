@@ -193,6 +193,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ImageLoader",
       "LazyMount",
       "Truncate",
+      "Announcer",
     ],
   },
   {

@@ -410,7 +410,6 @@
     applyPostClearOptions,
     createMenuCloseHandler,
     createMenuOpenHandler,
-    createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
     createMenuWindow,
@@ -425,6 +424,7 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { debounce } from "../utils/debounce.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
@@ -523,7 +523,6 @@
   // Set after the first `afterUpdate`, so a combo box rendered open doesn't
   // take focus (and scroll the page to itself) when it mounts.
   let rendered = false;
-  let statusText = "";
 
   /** @type {null | HTMLDivElement} */
   let fieldRef = null;
@@ -555,7 +554,11 @@
   });
 
   onMount(() => {
+    const disconnect = status.connect();
+    const disconnectFilter = filterStatus.connect();
     return () => {
+      disconnect();
+      disconnectFilter();
       announceFilterResults.cancel();
       menuWindow.destroy();
       loadingIndicator.cancel();
@@ -677,7 +680,11 @@
     return filteredIndex.byId.get(id);
   }
 
-  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
+  // Messages go to the page's shared live region, or into the dialog this
+  // combo box is in. The result count has its own channel: closing the menu
+  // drops it, but not the "Selection cleared" said as the menu closes.
+  const status = createAnnouncerChannel(() => ref);
+  const filterStatus = createAnnouncerChannel(() => ref);
 
   /** Filter result count last announced; null when the menu is closed so reopening announces again. */
   /** @type {number | null} */
@@ -686,7 +693,7 @@
   const announceFilterResults = debounce((count) => {
     if (count === announcedFilterCount) return;
     announcedFilterCount = /** @type {number} */ (count);
-    announceStatus(filterResultsText(/** @type {number} */ (count)));
+    filterStatus.announce(filterResultsText(/** @type {number} */ (count)));
   }, 800);
 
   /**
@@ -722,7 +729,7 @@
     selectedItem = undefined;
     open = false;
     value = "";
-    if (announce) announceStatus(selectionClearedText);
+    if (announce) status.announce(selectionClearedText);
     // Ensure binding updates are complete before focusing.
     await applyPostClearOptions(
       options,
@@ -945,7 +952,7 @@
   }
   $: if (!open) {
     announcedFilterCount = null;
-    statusText = "";
+    filterStatus.clear();
   }
   $: hasNoMatches = open && !loading && filteredItems.length === 0;
   $: emptyMessage = hasNoMatches
@@ -1849,9 +1856,4 @@
       <span id="group-{id}-{groupIndex}" hidden>{header.group}</span>
     {/each}
   {/if}
-  <!-- Live region for selection announcements. Always rendered (even while
-       empty) so assistive tech registers the region before its text changes. -->
-  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
-    >{statusText}</span
-  >
 </div>

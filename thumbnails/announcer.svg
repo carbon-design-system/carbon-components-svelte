@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>announcer</title>
+    <g id="announcer" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="message">
+            <rect x="82.5" y="70.5" width="100" height="40" rx="2" fill="var(--cds-layer-01, #f4f4f4)" stroke="var(--cds-border-subtle-01, #c6c6c6)"></rect>
+            <rect x="94" y="84" width="68" height="4" fill="var(--cds-text-primary, #161616)"></rect>
+            <rect x="94" y="94" width="44" height="4" fill="var(--cds-text-secondary, #525252)"></rect>
+        </g>
+        <g id="waves" stroke="var(--cds-text-primary, #161616)" stroke-width="2" stroke-linecap="round">
+            <path d="M200 80 C 206 86, 206 94, 200 100"></path>
+            <path d="M210 74 C 220 84, 220 96, 210 106"></path>
+            <path d="M220 68 C 234 82, 234 98, 220 112"></path>
+        </g>
+    </g>
+</svg>
