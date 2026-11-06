@@ -92,17 +92,18 @@ function subsequenceMatch(lowerText, lowerQuery) {
   for (const char of lowerQuery) {
     let found = -1;
     for (; textIndex < lowerText.length; textIndex++) {
-      if (lowerText[textIndex] === char) {
+      if (lowerText.startsWith(char, textIndex)) {
         found = textIndex;
-        textIndex++;
+        textIndex += char.length;
         break;
       }
     }
     if (found === -1) return null;
     if (found === prev + 1) score += 5;
     if (isWordBoundary(lowerText, found)) score += 3;
-    indices.push(found);
-    prev = found;
+    // An astral character takes two code units; highlight both.
+    for (let i = 0; i < char.length; i++) indices.push(found + i);
+    prev = found + char.length - 1;
   }
   return { indices, score };
 }

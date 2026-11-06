@@ -54,6 +54,13 @@ describe("fuzzyMatch", () => {
     expect(indices.map((i) => text[i]).join("")).toBe("stan");
   });
 
+  it("matches astral characters as a subsequence", () => {
+    const text = "a😀b😀c";
+    const { matched, indices } = fuzzyMatch(text, "😀😀");
+    expect(matched).toBe(true);
+    expect(indices).toEqual([1, 2, 4, 5]);
+  });
+
   describe("options", () => {
     it("score is normalized between 0 and 1", () => {
       for (const [text, query] of [
