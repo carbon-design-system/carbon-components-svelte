@@ -26,10 +26,12 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
 
   let currentActiveId = "";
 
-  // Mirrors the side nav's `scrollIntoView({ block: "center" })` on the
-  // current page item: keep the active TOC entry visible in its own scroll
-  // container (`.table__scroll`) as the page scrolls through many headings,
-  // without disturbing an entry that's already in view.
+  // Like the side nav's `scrollIntoView({ block: "center" })` on the current
+  // page item: keep the active TOC entry visible in its own scroll container
+  // (`.table__scroll`) as the page scrolls through many headings, without
+  // disturbing an entry that's already in view. Only the container scrolls:
+  // `scrollIntoView` would also scroll the page when the container reaches
+  // past the window, moving it off a restored scroll position.
   function scrollTocLinkIntoViewIfNeeded(link: HTMLAnchorElement) {
     // Skip the hidden mobile/desktop clone; only the rendered copy has a box.
     if (link.offsetParent === null) return;
@@ -44,7 +46,12 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
       linkRect.top >= containerRect.top &&
       linkRect.bottom <= containerRect.bottom;
 
-    if (!inView) link.scrollIntoView({ block: "center" });
+    if (!inView) {
+      container.scrollTop +=
+        linkRect.top -
+        containerRect.top -
+        (container.clientHeight - linkRect.height) / 2;
+    }
   }
 
   function setActive(activeId: string) {
