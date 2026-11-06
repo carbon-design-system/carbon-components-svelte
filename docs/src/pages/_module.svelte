@@ -31,7 +31,6 @@
   import Document from "carbon-icons-svelte/lib/Document.svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
-  import MiniSearch from "minisearch";
   import { onMount } from "svelte";
   import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import {
@@ -39,23 +38,12 @@
     COMPONENT_CATEGORIES,
   } from "../component-categories";
   import { subscribeRoutifyGoto } from "../routify-nav";
+  import { createSearch, type SearchDocument } from "../search";
   import { theme } from "../store";
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
 
-  type SearchIndexDocument = ModuleSearchResult & { id: string };
-
-  const miniSearch = new MiniSearch<SearchIndexDocument>({
-    fields: ["text", "description"],
-    storeFields: ["text", "description", "href", "isComponent"],
-    searchOptions: {
-      prefix: true,
-      boost: { description: 2 },
-      fuzzy: 0.1,
-    },
-  });
-
-  miniSearch.addAll(SEARCH_INDEX as SearchIndexDocument[]);
+  const search = createSearch(SEARCH_INDEX as SearchDocument[]);
 
   /** Routify + Svelte 5: `$goto` in event handlers runs outside fragment context; keep a root-level subscription. */
   const routifyNav = subscribeRoutifyGoto(goto);
@@ -71,19 +59,10 @@
   let value = "";
   let active = false;
   let results: ModuleSearchResult[] = [];
-  $: results = miniSearch
-    .search(value)
-    .slice(0, 10)
-    .map((r): ModuleSearchResult => ({
-      id: String(r.id),
-      href: String(r.href),
-      text: String(r.text),
-      description: r.description == null ? undefined : String(r.description),
-      isComponent: Boolean(r.isComponent),
-    }));
+  $: results = search(value).slice(0, 10);
 
-  // Split MiniSearch hits into two groups. MiniSearch already ranks and filters,
-  // so pass shouldFilter={false} and let `matchQuery` highlight labels.
+  // Split the hits into two groups. `search` already ranks and filters, so
+  // pass shouldFilter={false} and let `matchQuery` highlight labels.
   $: componentHits = results.filter((r) => r.isComponent);
   $: sectionHits = results.filter((r) => !r.isComponent);
 
@@ -104,7 +83,7 @@
 
   /**
    * Match `query` against `text` by OR-ing per-term fuzzy matches, mirroring how
-   * MiniSearch matched each term independently. A single whole-string match would
+   * `search` matches each term independently. A single whole-string match would
    * fail whenever the query spans two displayed fields (e.g. "multiselect bas"
    * matching text "MultiSelect" + description "Basic") or a query term isn't
    * present in this particular field at all.
