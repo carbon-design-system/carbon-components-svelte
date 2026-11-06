@@ -291,6 +291,9 @@ sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some t
 | A typedef the module script uses, declared in the module script | Declared in the instance script |
 | `@template {import("../utils/icon-component.js").IconComponent} [Icon=any]` for a component prop such as `icon` | An unconstrained `@template [Icon=any]` |
 | A `@slot` prop type that covers every value the slot gets on every path. A slot rendered per visible header also gets empty headers | A type for the common path only |
+| `unknown`, or the real type, for a value the code passes along or narrows | `any` |
+| `(...args: never[]) => void` to constrain a callback type parameter, with `@param` tags on each callback passed in (it infers `never` otherwise) | `(...args: any[])`, or `(...args: unknown[])`, which rejects a callback with typed parameters |
+| A property a library stamps on a DOM node, or that an engine adds to its config, declared on the type: `HTMLElement & { dateObj: Date }` in the helper's `.d.ts` | A `/** @type {any} */` cast at each read |
 
 sveld types a ref from its element only when the ref has no `@type`. A declared type ships as written, and where it names an element type the ref is never bound to, `bun build:docs` fails with `sveld/bind-this-type-mismatch` and suggests the type to declare.
 
@@ -300,6 +303,8 @@ sveld writes a `CarbonXContext` type for each `setContext` value. Where it can o
 | --- | --- |
 | A store from `writable(undefined)`, `writable(null)` or `derived(...)` | `/** @type {import("svelte/store").Writable<string \| undefined>} */` on the declaration |
 | A function, declared outside the object or as a method in it | `@param` tags. Without `@returns`, the return type is read off the body |
+
+Keep `any` where `unknown` would reject a consumer's code: icon props (see [`icon-component.d.ts`](src/utils/icon-component.d.ts)), item generic defaults such as `Item=ComboBoxItem<any>`, which type `selectedId` when nothing narrows it, and parameter positions in public types such as `Action<HTMLFormElement, any>`. An `any` cast can also hide a wrong read. The DatePicker `view` handler cast the engine config to `any` to read `pickerMode`, which its type didn't declare.
 
 `bun test:src-svelte` ignores a JSDoc cast in a `$:` statement or a template expression, so the cast doesn't fix an error there. Put a `/** @type {T} */` line above the `$:` declaration, or move the expression into a script variable.
 
@@ -1445,6 +1450,7 @@ PRs land with a rebase merge, so each commit reaches master and the changelog.
 
 - A `feat` or `fix` commit holds its own `src/` and `tests/` changes and nothing under `docs/`. Ship docs as a separate `docs(...)` commit.
 - Fold a fix or refactor of code that the same PR adds into the commit that adds it. Otherwise the changelog lists a fix for something that never shipped.
+- A types-only change is `fix` or `feat` only when the generated consumer types change. They're gitignored, so run `bun build:docs` at the merge base and on your branch and diff the `src/**/*.d.ts` output. Internal types are `chore(types)`. A behavior bug that a type cleanup turns up gets its own `fix` commit with a test.
 - Resolve rebase conflicts inside the commits they touch. Never push a "resolve rebase onto master" commit.
 
 ### Keep your branch current
