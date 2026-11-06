@@ -1514,6 +1514,34 @@
       "defaultKind": "text"
     },
     {
+      "component": "Popconfirm",
+      "prop": "cancelText",
+      "type": "string",
+      "default": "Cancel",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Popconfirm",
+      "prop": "confirmText",
+      "type": "string",
+      "default": "Confirm",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Popconfirm",
+      "prop": "errorText",
+      "type": "string | ((error: unknown) => string)",
+      "default": "Something went wrong. Try again.",
+      "defaultKind": "text"
+    },
+    {
+      "component": "Popconfirm",
+      "prop": "loadingDescription",
+      "type": "string",
+      "default": "Working",
+      "defaultKind": "text"
+    },
+    {
       "component": "ProfileMenu",
       "prop": "iconDescription",
       "type": "string",
