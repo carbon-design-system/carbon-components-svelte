@@ -19,6 +19,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
+const METADATA_RE = /export const metadata = (\{.*\});/;
 const LAYOUT_OPEN_TAG_RE = /<PageLayout\b[^>]*>/;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 /** Prose-only inline HTML: do not wrap in Preview (see visitHtml). */
@@ -415,11 +416,23 @@ export default {
             : null;
         }
 
-        // The layout renders the table of contents from the page's headings.
+        // The layout renders the table of contents from the page's headings,
+        // and the API of each component the page documents, imported one by
+        // one so the page doesn't carry every component's.
+        const metadata = JSON.parse(METADATA_RE.exec(content)?.[1] ?? "{}");
+        const names: string[] = metadata.components ?? [
+          path.basename(filename, PAGE_EXTENSION),
+        ];
+        const apiLocals = names.map((_, i) => `__component_api_${i}`);
         let code = content.replace(
           LAYOUT_OPEN_TAG_RE,
           (tag) =>
-            `${tag.slice(0, -1)} headings={${JSON.stringify(tocHeadings(content))}}>`,
+            `${tag.slice(0, -1)} headings={${JSON.stringify(tocHeadings(content))}} api={[${apiLocals.join(", ")}]}>`,
+        );
+        code = code.replace(
+          SCRIPT_TAG_REGEX,
+          (open) =>
+            `${open}\n${names.map((name, i) => `  import ${apiLocals[i]} from "virtual:component-api/${name}";`).join("\n")}`,
         );
 
         // Auto-import Preview component used by the remark plugin.

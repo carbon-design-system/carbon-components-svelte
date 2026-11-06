@@ -1,5 +1,5 @@
+import FILE_PATHS from "virtual:component-api/file-paths";
 import pkg from "../../package.json" with { type: "json" };
-import COMPONENT_API from "./COMPONENT_API.json";
 import {
   CATEGORY_BY_COMPONENT,
   COMPONENT_CATEGORIES,
@@ -44,12 +44,7 @@ const VALID_CATEGORY_LABELS = new Set(
   COMPONENT_CATEGORIES.map((category) => category.label),
 );
 
-const FILE_PATH_BY_MODULE = new Map(
-  COMPONENT_API.components.map((component) => [
-    component.moduleName,
-    component.filePath,
-  ]),
-);
+const FILE_PATH_BY_MODULE = new Map(Object.entries(FILE_PATHS));
 
 function sourcePathFor(name: string): string {
   return FILE_PATH_BY_MODULE.get(name) ?? `src/${name}/${name}.svelte`;
