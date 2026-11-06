@@ -1,0 +1,175 @@
+---
+components: ["QRCode"]
+description: QR codes hand a short value, such as a sign-in link, a Wi-Fi network, or a two-factor key, to a phone's camera, drawn as one scalable SVG that renders the same on the server.
+---
+
+<script>
+  import { Box, Stack, QRCode, ThemeZone } from "carbon-components-svelte";
+  import Locked from "carbon-icons-svelte/lib/Locked.svelte";
+</script>
+
+## Basic
+
+Set `value` to the text to encode. The code picks the smallest version that holds it, and draws every dark module in a single SVG `path`, so it stays sharp at any size and weighs a few kilobytes. Under the code, a text alternative shows the same value with a copy button, for people who cannot scan.
+
+<QRCode
+  value="https://acme.io/devices/pair?code=482913"
+  labelText="Scan to pair this device"
+/>
+
+Set `labelText` to say what the code is for, as in "Scan to pair this device". Screen readers announce it as an image with that name, and never read the encoded data aloud as the name.
+
+## Text alternative
+
+A QR code can only be read with a camera, so every code needs the same value as text. `QRCode` builds that in. The code points `aria-describedby` at the text, so a screen reader reads the value from the image.
+
+### Copy
+
+By default, `alternative="copy"` shows the text with a copy button under the code. Set `text` when the value to type differs from the payload, such as the key inside a link, and `alternativeLabel` to word the prompt.
+
+<QRCode
+  value="otpauth://totp/Acme:alice@acme.io?secret=JBSWY3DPEHPK3PXP&issuer=Acme"
+  text="JBSWY3DPEHPK3PXP"
+  alternativeLabel="Can't scan? Enter this key"
+  labelText="Scan to set up two-factor authentication"
+/>
+
+### Disclosure
+
+Set `alternative="disclosure"` to fold the text behind the label, for a flow where the code comes first and the text is the fallback. Fill the `textAlternative` slot to change how the text reads. The copy button still copies `text`.
+
+<QRCode
+  value="otpauth://totp/Acme:alice@acme.io?secret=JBSWY3DPEHPK3PXP&issuer=Acme"
+  text="JBSWY3DPEHPK3PXP"
+  alternative="disclosure"
+  alternativeLabel="Can't scan? Enter this key"
+  labelText="Scan to set up two-factor authentication"
+>
+  <span slot="textAlternative" let:text>{text.replace(/(.{4})(?=.)/g, "$1 ")}</span>
+</QRCode>
+
+### Your own
+
+Set `alternative="none"` when the page already shows the value as text, such as a link beside the code. Point `aria-describedby` at it, and keep it on the page: the code is not an alternative to it.
+
+<Stack gap={4}>
+  <QRCode
+    value="https://acme.io/download"
+    alternative="none"
+    aria-describedby="download-link"
+    labelText="Scan to download the app"
+  />
+  <p id="download-link">https://acme.io/download</p>
+</Stack>
+
+## Size and correction
+
+### Size
+
+Set `size` to the width and height in pixels, quiet zone included. The default is 192. The code shrinks to fit a narrower parent and keeps its proportions.
+
+<Stack orientation="horizontal" gap={7}>
+  <QRCode value="https://acme.io/s" size={128} alternative="none" labelText="Small code" />
+  <QRCode value="https://acme.io/s" size={256} alternative="none" labelText="Large code" />
+</Stack>
+
+Keep each module at least about 3 pixels wide, or scanners struggle to resolve it. A value that makes a version 10 code (57 modules) needs about 200 pixels.
+
+### Error correction
+
+Set `ecc` to choose how much damage a scan survives. A higher level adds redundancy and a denser code, so the same value gets a larger version. The default is `"M"`.
+
+| Level | Recovers | Largest value (bytes) | Largest value (digits) |
+| --- | --- | --- | --- |
+| `"L"` | 7% | 2,953 | 7,089 |
+| `"M"` | 15% | 2,331 | 5,596 |
+| `"Q"` | 25% | 1,663 | 3,993 |
+| `"H"` | 30% | 1,273 | 3,057 |
+
+<Stack orientation="horizontal" gap={7}>
+  <QRCode value="https://acme.io/s/9f3a" ecc="L" size={140} alternative="none" labelText="Level L" />
+  <QRCode value="https://acme.io/s/9f3a" ecc="H" size={140} alternative="none" labelText="Level H" />
+</Stack>
+
+A value too long for the level draws no code and warns in the console. The text alternative stays, so check the value in development.
+
+### Quiet zone
+
+Set `quietZone` to the light border in modules. The default and the ISO 18004 minimum is `4`. A smaller border saves space, and some scanners then miss the code.
+
+## Logo
+
+Fill the `logo` slot to put a mark in the center, such as a product icon. The modules behind it are left out and error correction fills them back in, so a logo needs `ecc="H"`. With a logo and no `ecc`, the level defaults to `"H"`. Set a lower level explicitly and the console warns that the code may not scan.
+
+`logoSize` sets the mark's width as a share of the code, up to `0.3`. The default is `0.2`. Keep the mark simple and test the result with the phones your users hold.
+
+<QRCode
+  value="https://acme.io/devices/pair?code=482913"
+  size={240}
+  labelText="Scan to pair this device"
+>
+  <Locked slot="logo" size={32} />
+</QRCode>
+
+## Appearance
+
+### Colors
+
+The code is always dark modules on a light tile, in every theme. A scanner reads a dark symbol on a light ground, and many fail on an inverted code, so `QRCode` ignores the theme tokens. In Gray 100 the tile reads as a light card on the dark page, and its edge keeps the quiet zone as light as the code expects.
+
+<ThemeZone theme="g100">
+  <Box padding={5}>
+    <QRCode
+      value="https://acme.io/devices/pair?code=482913"
+      alternativeLabel="Can't scan? Copy the link"
+      labelText="Scan to pair this device"
+    />
+  </Box>
+</ThemeZone>
+
+### Forced colors
+
+In forced colors mode, such as a Windows contrast theme, the tile and modules keep their own black and white. The code sets `forced-color-adjust: none` on the SVG for this. Without it, the browser replaces the tile with the system `Canvas` color and leaves the black modules alone, and on a dark contrast theme the code vanishes into a black tile. The text alternative and the copy button follow the system colors.
+
+### Right to left
+
+A QR code never mirrors under `dir="rtl"`. A mirrored symbol is not a valid code. The logo stays centered, and the text alternative around the code flows with the page.
+
+## Content
+
+The code picks the smallest of three modes for the whole value: numeric for digits only, alphanumeric for digits, capital letters and `` $%*+-./: ``, and bytes for anything else. Bytes are UTF-8, so emoji and CJK text work, at the cost of a larger code.
+
+<Stack orientation="horizontal" gap={7}>
+  <QRCode
+    value="WIFI:T:WPA;S:Acme Guest;P:welcome-2026;;"
+    ecc="Q"
+    size={160}
+    alternativeLabel="Can't scan? Use the password"
+    text="welcome-2026"
+    labelText="Scan to join the Acme Guest Wi-Fi network"
+  />
+  <QRCode
+    value="https://acme.io/ようこそ"
+    size={160}
+    alternative="none"
+    aria-describedby="welcome-link"
+    labelText="Scan to open the welcome page"
+  />
+</Stack>
+<p id="welcome-link">https://acme.io/ようこそ</p>
+
+## Server rendering
+
+The code is plain SVG, so it renders on the server and hydrates without changes. The encoder runs the same on the server and in the browser, with no `window` or `document`, so the markup matches byte for byte.
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Set `labelText` to the purpose, such as "Scan to set up two-factor authentication". | The name is announced as an image. The data is not what a person needs to hear. |
+| Keep the text alternative, and show it where the code is. | A code needs a camera. A user on a laptop with no phone, a screen reader user, or someone whose camera cannot focus needs the value as text. |
+| Show the code at 150 pixels or more, on a light tile with its quiet zone. | Scanners need about 3 pixels per module and a clear border. A smaller code or a cropped border fails to scan. |
+| Encode a short value, such as a link to a page that holds the detail. | A longer value needs a denser code, which needs more pixels and a steadier hand. |
+| Use `ecc="H"` with a logo, and test with real phones. | The logo erases modules, and only the highest level restores them. |
+| Do not invert the code or tint it with a brand color on a dark theme. | A scanner expects dark modules on a light ground. Contrast below about 4:1 fails on many devices. |
+| Do not use a code to carry a secret in a context that others can see. | A code is plain text to anyone who can photograph it. |

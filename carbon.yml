@@ -1009,6 +1009,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Prose
+  qr-code:
+    name: QR code
+    description: Draws a short value as a scannable code on a light tile, with the same value as text beside it.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/qr-code.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/QRCode
   radio-button:
     status: stable
     framework: svelte
