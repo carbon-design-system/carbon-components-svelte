@@ -1,3 +1,5 @@
+import { type Node, visit } from "./visit";
+
 /**
  * Everything GitHub drops from a heading's slug: all but letters, marks,
  * digits, connector punctuation, spaces and hyphens.
@@ -25,5 +27,32 @@ export function createSlugger(): (text: string) => string {
     }
     occurrences.set(result, 0);
     return result;
+  };
+}
+
+type HastNode = {
+  type: string;
+  tagName?: string;
+  value?: string;
+  properties?: Record<string, unknown>;
+  children?: HastNode[];
+};
+
+const HEADING_TAG_RE = /^h[1-6]$/;
+
+function textContent(node: HastNode): string {
+  if (node.type === "text") return node.value ?? "";
+  return node.children?.map(textContent).join("") ?? "";
+}
+
+/** Rehype plugin: gives each heading without an `id` its slug, unique within the page. */
+export function rehypeSlug() {
+  return (tree: Node) => {
+    const slugger = createSlugger();
+    visit<HastNode>(tree, "element", (node) => {
+      if (!node.tagName || !HEADING_TAG_RE.test(node.tagName)) return;
+      node.properties ??= {};
+      if (!node.properties.id) node.properties.id = slugger(textContent(node));
+    });
   };
 }

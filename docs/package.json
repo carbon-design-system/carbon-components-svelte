@@ -28,7 +28,6 @@
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "prismjs": "^1.30.0",
-    "rehype-slug": "^6.0.0",
     "svelte": "^5.57.3",
     "vite": "^8.3.5"
   },
