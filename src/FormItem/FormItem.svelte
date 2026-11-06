@@ -10,7 +10,7 @@
    * components derive their `for` and `id` attributes from it.
    * Apply it to the control with the `control` slot prop action.
    */
-  export let controlId = uniqueId();
+  export let controlId = useId("form-item");
 
   /** Set to `true` to style child labels and helper text as disabled */
   export let disabled = false;
@@ -24,7 +24,7 @@
   } from "../constants/context-keys.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { createFormParts, partsDescribedBy } from "../utils/form-parts.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   /** Elements a `<label for>` names; others need `aria-labelledby`. */
   const LABELABLE = new Set([

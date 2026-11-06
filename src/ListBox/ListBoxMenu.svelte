@@ -1,6 +1,6 @@
 <script>
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("list-box-menu");
 
   /**
    * Obtain a reference to the HTML element.
@@ -76,7 +76,7 @@
 
   import { setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     createHighlightCursor,
     HIGHLIGHT_CURSOR_KEY,

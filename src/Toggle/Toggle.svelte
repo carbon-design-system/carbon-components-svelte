@@ -34,7 +34,7 @@
   export let hideLabel = false;
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("toggle");
 
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
@@ -98,7 +98,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

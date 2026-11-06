@@ -28,7 +28,7 @@
   import { readable } from "svelte/store";
   import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const context = getContext(FORM_ITEM_CONTEXT_KEY);
   // A FormGroup's fieldset is named by its legend, not a label.
@@ -38,7 +38,7 @@
   // A disabled fieldset around the label disables it too.
   let inDisabledFieldset = false;
   const part = formItem?.part("label");
-  const fallbackId = uniqueId();
+  const fallbackId = useId("form-label");
 
   $: htmlFor = forId ?? id ?? $controlId ?? fallbackId;
   // Only a label for the item's own control labels it.

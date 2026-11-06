@@ -73,7 +73,7 @@
   export let value = undefined;
 
   /** Set an id for the filterable tag */
-  export let id = uniqueId();
+  export let id = useId("tag");
 
   /**
    * Obtain a reference to the outer HTML element.
@@ -90,10 +90,10 @@
   import TooltipDefinition from "../TooltipDefinition/TooltipDefinition.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { useId } from "../utils/id-scope.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
   import { observeTruncation } from "./tag-truncation.js";
 

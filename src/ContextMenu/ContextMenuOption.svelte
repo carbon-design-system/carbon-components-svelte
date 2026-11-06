@@ -90,7 +90,7 @@
    * Specify the id.
    * It's recommended to provide an id as a value to bind to within a selectable/radio menu group.
    */
-  export let id = uniqueId();
+  export let id = useId("context-menu-option");
 
   /**
    * Obtain a reference to the list item HTML element.
@@ -109,6 +109,7 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     applePlatform,
     ariaKeyShortcuts,
@@ -127,7 +128,6 @@
     isTypeaheadKey,
     typeaheadIndex,
   } from "../utils/typeahead.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import ContextMenu from "./ContextMenu.svelte";
 
   const dispatch = createEventDispatcher();

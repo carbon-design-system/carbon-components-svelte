@@ -83,7 +83,7 @@
    * Set an id for the top-level element.
    * The start pane id derives from it as `{id}-start`.
    */
-  export let id = uniqueId();
+  export let id = useId("splitter");
 
   import {
     createEventDispatcher,
@@ -95,6 +95,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
     inlineKey,
@@ -104,7 +105,6 @@
   import { clamp } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const LARGE_STEP_MULTIPLIER = 10;
 

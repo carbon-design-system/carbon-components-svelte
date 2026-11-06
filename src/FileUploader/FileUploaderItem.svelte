@@ -54,7 +54,7 @@
   export let errorBody = "";
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("file-uploader-item");
 
   /** Specify the file uploader name */
   export let name = "";
@@ -71,12 +71,12 @@
 
   import { createEventDispatcher } from "svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { useId } from "../utils/id-scope.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import {
     FILE_ITEM_SIZE_ALIASES,
     normalizeSize,
   } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
 
   const dispatch = createEventDispatcher();

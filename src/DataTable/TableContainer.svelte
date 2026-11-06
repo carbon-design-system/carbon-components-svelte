@@ -16,11 +16,11 @@
    * The title and description ids derive from it as `{id}-title` and
    * `{id}-description`. They are read once when the component is created.
    */
-  export let id = uniqueId();
+  export let id = useId("table-container");
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const titleId = `${id}-title`;
   const descriptionId = `${id}-description`;

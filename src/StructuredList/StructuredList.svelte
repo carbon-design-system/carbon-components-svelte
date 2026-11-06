@@ -47,7 +47,7 @@
   import { get, readonly, writable } from "svelte/store";
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import { formReset } from "../utils/form-reset.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { createIdScope } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();
 
@@ -69,7 +69,7 @@
   const selectedValue = writable(toMode(selected, multiple));
 
   // Radios need a shared name to move on the arrow keys.
-  const fallbackName = uniqueId("structured-list");
+  const fallbackName = createIdScope($$restProps.id, "structured-list");
   /** @type {import("svelte/store").Writable<string>} */
   const inputName = writable(
     selection && !multiple ? name || fallbackName : "",

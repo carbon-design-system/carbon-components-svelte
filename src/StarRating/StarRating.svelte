@@ -89,7 +89,7 @@
   export let form = undefined;
 
   /** Set an id for the rating's legend and messages */
-  export let id = uniqueId();
+  export let id = useId("star-rating");
 
   import { createEventDispatcher } from "svelte";
   import Star from "../icons/Star.svelte";
@@ -105,7 +105,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

@@ -29,7 +29,7 @@
   export let labelText = "";
 
   /** Set an id for the select element */
-  export let id = uniqueId();
+  export let id = useId("time-picker-select");
 
   /**
    * Specify a name attribute for the select element.
@@ -57,7 +57,7 @@
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const formContext = getContext(FORM_CONTEXT_KEY);
   const timePickerContext = getContext("carbon:TimePicker");

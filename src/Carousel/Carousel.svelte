@@ -44,7 +44,7 @@
    * Set an id for the top-level element.
    * The viewport id derives from it as `{id}-viewport`.
    */
-  export let id = uniqueId();
+  export let id = useId("carousel");
 
   /**
    * Override the counter text.
@@ -64,11 +64,11 @@
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { initCarousel } from "../utils/carousel.js";
   import { returnFocus } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

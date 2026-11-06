@@ -333,6 +333,7 @@ export { formReset } from "./utils/form-reset.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
+export { createIdScope, useId } from "./utils/id-scope.js";
 export { getInitials } from "./utils/initials.js";
 export {
   formatShortcut,

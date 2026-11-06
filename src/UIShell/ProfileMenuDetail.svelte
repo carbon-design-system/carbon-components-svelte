@@ -1,5 +1,5 @@
 <script>
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   /**
    * Specify the label describing the value (for example, "Plan" or "Location").
@@ -11,7 +11,7 @@
    * Set an id for the top-level element.
    * The label id derives from it as `{id}-label`.
    */
-  export let id = uniqueId();
+  export let id = useId("profile-menu-detail");
 </script>
 
 <div {id} class:bx--profile-menu__detail={true}>

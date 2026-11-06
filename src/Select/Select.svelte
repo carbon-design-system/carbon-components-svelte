@@ -27,7 +27,7 @@
   export let disabled = false;
 
   /** Set an id for the select element */
-  export let id = uniqueId();
+  export let id = useId("select");
 
   /**
    * Specify a name attribute for the select element.
@@ -110,9 +110,9 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { useId } from "../utils/id-scope.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

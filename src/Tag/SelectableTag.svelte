@@ -42,15 +42,15 @@
   export let value = undefined;
 
   /** Set an id for the tag */
-  export let id = uniqueId();
+  export let id = useId("selectable-tag");
 
   import { createEventDispatcher, onMount } from "svelte";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { observeTruncation } from "./tag-truncation.js";
 
   // A disabled `<fieldset>` around the component disables it too.

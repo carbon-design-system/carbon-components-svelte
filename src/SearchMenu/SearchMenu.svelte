@@ -151,7 +151,7 @@
   export let searchClass = "";
 
   /** Set an id for the search input */
-  export let id = uniqueId();
+  export let id = useId("search-menu");
 
   /**
    * Obtain a reference to the input HTML element.
@@ -190,12 +190,12 @@
   import { dismiss } from "../utils/dismiss.js";
   import { buildFieldIds, joinDescribedBy } from "../utils/field-status.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
@@ -287,6 +287,7 @@
     .filter(Boolean)
     .join(" ");
 
+  createIdScope(id);
   setContext("carbon:SearchMenu", {
     query,
     shouldFilter: sharedShouldFilter,

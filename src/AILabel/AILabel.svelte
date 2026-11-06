@@ -84,7 +84,7 @@
    * Set an id for the label's toggletip.
    * The explanation id derives from it as `{id}-content`.
    */
-  export let id = uniqueId();
+  export let id = useId("ai-label");
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Button from "../Button/Button.svelte";
@@ -92,7 +92,7 @@
   import { AI_LABEL_HOST_CONTEXT_KEY } from "../constants/context-keys.js";
   import Undo from "../icons/Undo.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();
 

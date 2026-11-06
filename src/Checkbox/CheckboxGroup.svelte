@@ -101,7 +101,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { createIdScope } from "../utils/id-scope.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -192,16 +192,14 @@
     readonly,
   }));
 
-  const fallbackHelperId = uniqueId();
-  const fallbackErrorId = uniqueId();
-  const fallbackWarnId = uniqueId();
-  const fallbackReadonlyId = uniqueId();
-  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(id, {
-    helperId: fallbackHelperId,
-    errorId: fallbackErrorId,
-    warnId: fallbackWarnId,
-    readonlyId: fallbackReadonlyId,
-  }));
+  const fallbackIds =
+    /** @type {{ helperId: string, errorId: string, warnId: string, readonlyId: string }} */ (
+      buildFieldIds(createIdScope(id, "checkbox-group"))
+    );
+  $: ({ helperId, errorId, warnId, readonlyId } = buildFieldIds(
+    id,
+    fallbackIds,
+  ));
 
   /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
   const aiLabelState = writable(undefined);

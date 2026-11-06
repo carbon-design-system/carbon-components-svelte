@@ -234,7 +234,7 @@
    * The file input id derives from it as `{id}-input`, and the label
    * description id as `{id}-description`.
    */
-  export let id = uniqueId();
+  export let id = useId("file-uploader");
 
   /**
    * Obtain a reference to the input HTML element.
@@ -251,9 +251,9 @@
   import { returnFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
+  import { useId } from "../utils/id-scope.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import FileUploaderButton from "./FileUploaderButton.svelte";
   import Filename from "./Filename.svelte";
 

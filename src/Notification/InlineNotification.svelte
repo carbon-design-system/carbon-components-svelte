@@ -96,13 +96,13 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { createDismissibleNotification } from "../utils/dismissible-notification.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
   import NotificationButton from "./NotificationButton.svelte";
   import NotificationIcon from "./NotificationIcon.svelte";
   import { statusIconLabel } from "./status-icon-label.js";
 
   const dispatch = createEventDispatcher();
-  const fallbackId = uniqueId();
+  const fallbackId = useId("inline-notification");
   $: titleId = `${id ?? fallbackId}-title`;
   $: subtitleId = `${id ?? fallbackId}-subtitle`;
 

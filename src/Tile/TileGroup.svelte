@@ -63,7 +63,7 @@
   import { createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
   import { formReset } from "../utils/form-reset.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { createIdScope } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();
   /** @type {HTMLFieldSetElement | undefined} */
@@ -84,7 +84,7 @@
   // between tiles. Tiles with no name of their own share this one when the
   // group has no `name` either.
   /** @type {string} */
-  const fallbackName = uniqueId();
+  const fallbackName = createIdScope($$restProps.id, "tile-group");
   /**
    * @type {import("svelte/store").Writable<boolean | undefined>}
    */

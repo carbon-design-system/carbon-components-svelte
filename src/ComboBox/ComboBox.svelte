@@ -286,7 +286,7 @@
   export let emptyText = "No results";
 
   /** Set an id for the list box component */
-  export let id = uniqueId();
+  export let id = useId("combo-box");
 
   /**
    * Specify a name attribute for the input.
@@ -438,6 +438,7 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -446,7 +447,6 @@
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { submitAttempts } from "../utils/submit-attempt.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
   // A disabled `<fieldset>` around the component disables it too.

@@ -73,7 +73,7 @@
    * The header label, header title, and body ids derive from it as
    * `{id}-label`, `{id}-title`, and `{id}-body`.
    */
-  export let id = uniqueId();
+  export let id = useId("composed-modal");
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, readable, writable } from "svelte/store";
@@ -87,9 +87,9 @@
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { trapFocus } from "../utils/trap-focus.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   /** @type {import("svelte/store").Writable<string | undefined>} */

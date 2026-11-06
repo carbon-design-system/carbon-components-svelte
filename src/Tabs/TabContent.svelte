@@ -4,7 +4,7 @@
    * Without one, the panel takes `{tabId}-panel` from the tab at its position.
    * Prefer a stable value when pairing panels with dynamic tabs.
    */
-  export let id = uniqueId();
+  export let id = useId("tab-content");
 
   /**
    * Set to `true` to defer mounting panel content until this tab is first selected
@@ -23,7 +23,7 @@
   export let flush = false;
 
   import { getContext, onMount } from "svelte";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const {
     selectedContent,

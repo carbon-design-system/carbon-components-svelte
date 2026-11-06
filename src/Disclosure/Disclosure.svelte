@@ -34,12 +34,12 @@
    * Set an id for the top-level element.
    * The content id derives from it as `{id}-content`.
    */
-  export let id = uniqueId();
+  export let id = useId("disclosure");
 
   import { createEventDispatcher } from "svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();
 

@@ -100,7 +100,7 @@
   export let tooltipAlignment = "center";
 
   /** Set an id for the button element */
-  export let id = uniqueId();
+  export let id = useId("overflow-menu");
 
   /**
    * Obtain a reference to the trigger button element.
@@ -146,6 +146,7 @@
   import { clippedBy } from "../utils/fit-align.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
@@ -167,7 +168,6 @@
     isTypeaheadKey,
     typeaheadIndex,
   } from "../utils/typeahead.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const ctxBreadcrumbItem = getContext("carbon:BreadcrumbItem");
   const insideModal = getContext(MODAL_CONTEXT_KEY);
@@ -392,6 +392,7 @@
     );
   }
 
+  createIdScope(id);
   setContext("carbon:OverflowMenu", {
     focusedId,
     moveFocus,

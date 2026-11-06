@@ -119,7 +119,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { createIdScope } from "../utils/id-scope.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;
@@ -146,16 +146,17 @@
   // Unnamed radios are separate controls, so arrow keys would not move the
   // selection. Buttons with no name of their own share this one when the
   // group has no `name` either.
+  const fallbackId = createIdScope(id, "radio-button-group");
   /** @type {string} */
-  const fallbackName = uniqueId();
+  const fallbackName = fallbackId;
   /** @type {import("svelte/store").Writable<boolean | undefined>} */
   const groupRequired = writable(required);
   const groupReadonly = writable(readonly);
   const groupAllowDeselect = writable(allowDeselect);
-  const fallbackHelperId = uniqueId();
-  const fallbackErrorId = uniqueId();
-  const fallbackWarnId = uniqueId();
-  const fallbackReadonlyId = uniqueId();
+  const fallbackIds =
+    /** @type {{ helperId: string, errorId: string, warnId: string, readonlyId: string }} */ (
+      buildFieldIds(fallbackId)
+    );
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const helperId = writable(undefined);
   let initialRender = true;
@@ -268,12 +269,7 @@
     warnId,
     helperId: rawHelperId,
     readonlyId,
-  } = buildFieldIds(id, {
-    helperId: fallbackHelperId,
-    errorId: fallbackErrorId,
-    warnId: fallbackWarnId,
-    readonlyId: fallbackReadonlyId,
-  }));
+  } = buildFieldIds(id, fallbackIds));
   // The `helperId` store holds the *resolved* description id (not the
   // raw helper id) — child RadioButtons point their own
   // aria-describedby at whichever tier is currently showing.

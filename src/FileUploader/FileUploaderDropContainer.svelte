@@ -96,7 +96,7 @@
   export let tabindex = "0";
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("file-uploader-drop-container");
 
   /** Specify a name attribute for the input */
   export let name = "";
@@ -120,9 +120,9 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

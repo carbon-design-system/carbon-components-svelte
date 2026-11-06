@@ -77,7 +77,7 @@
   export let preventCloseOnClickOutside = false;
 
   /** Set an id for the trigger button element. Also used to label the panel. */
-  export let id = uniqueId();
+  export let id = useId("header-action");
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { slide } from "svelte/transition";
@@ -86,11 +86,11 @@
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly, returnFocusOnClose } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 
