@@ -9,13 +9,15 @@
  * had: a round trip each. `index.html` starts loading the app, and the
  * home page's modules on the home page. Each other page also gets a file
  * of its own, `components/Button.html` for `/components/Button`, that
- * starts loading its modules too. The host serves a page's file when it
- * has one, and `index.html` for any other path.
+ * starts loading its modules too, and has the page's title and
+ * description. The host serves a page's file when it has one, and
+ * `index.html` for any other path.
  */
 import fs from "node:fs";
 import path from "node:path";
 import type { Plugin, ResolvedConfig } from "vite";
 import { buildRoutes, FRAMED_PREFIX } from "../src/routes.ts";
+import { parseFrontmatter, splitFrontmatter } from "./frontmatter.ts";
 
 /** The parts of an output chunk the preloads are read from. */
 export type Chunk = {
@@ -64,6 +66,59 @@ export function preloadsFor(
 /** The inline script that adds `preloads`, if `when` holds. */
 function preloadScript(preloads: Preload[], when = "true") {
   return `if(${when})for(const[rel,href]of ${JSON.stringify(preloads)}){const link=document.createElement("link");link.rel=rel;link.href=href;link.crossOrigin="";if(rel==="preload")link.as="style";document.head.append(link)}`;
+}
+
+export type PageHead = { title?: string; description?: string };
+
+const SITE_NAME = "Carbon Components Svelte";
+const TITLE_RE = /<title>([^<{]+)<\/title>/;
+
+/**
+ * The title and description a page sets once it renders, read from its
+ * source, so its HTML file has them for readers that don't run scripts,
+ * such as link previews. A component page is titled with its name and a
+ * guide page with its front matter's `title`; a Svelte page's own literal
+ * `<title>` is used as written.
+ */
+export function pageHead(source: string, file: string): PageHead {
+  if (!file.endsWith(".md")) {
+    const title = TITLE_RE.exec(source)?.[1].trim();
+    return title ? { title } : {};
+  }
+  const { frontmatter } = splitFrontmatter(source);
+  const data = frontmatter ? parseFrontmatter(frontmatter) : {};
+  const description =
+    typeof data.description === "string" ? data.description : undefined;
+  const title =
+    data.layout === "guide"
+      ? `${String(data.title)} · ${SITE_NAME}`
+      : path.basename(file, ".md");
+  return { title, description };
+}
+
+const escapeHtml = (text: string) =>
+  text
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+
+/** `html` with `head`'s title and description in place of the site's. */
+export function withHead(html: string, head: PageHead): string {
+  let out = html;
+  if (head.title) {
+    out = out.replace(
+      `<title>${SITE_NAME}</title>`,
+      `<title>${escapeHtml(head.title)}</title>`,
+    );
+  }
+  if (head.description) {
+    out = out.replace(
+      /(<meta\s+name="description"\s+content=")[^"]*"/,
+      (_, start: string) => `${start}${escapeHtml(head.description ?? "")}"`,
+    );
+  }
+  return out;
 }
 
 /** Marks where the preload script goes in `index.html`. */
@@ -147,7 +202,12 @@ export function pageHtml(pagesDir: string): Plugin {
         const file = path.join(outDir, `${route.path.slice(1)}.html`);
         fs.mkdirSync(path.dirname(file), { recursive: true });
         const preloads = [...appPreloads, ...pageOnly(route.file)];
-        fs.writeFileSync(file, fill(preloadScript(preloads)));
+        const source = path.join(
+          pagesDir,
+          route.file.slice(PAGES_PREFIX.length),
+        );
+        const head = pageHead(fs.readFileSync(source, "utf8"), route.file);
+        fs.writeFileSync(file, withHead(fill(preloadScript(preloads)), head));
         written++;
       }
     },
