@@ -1,0 +1,87 @@
+---
+components: ["Announcer"]
+description: Announcer is one pair of live regions for the whole page, and announce() sends a short message to screen readers through them.
+---
+
+## Basic
+
+Call `announce(message)` for the result of something the person did that nothing on the page shows to a screen reader: a save, a copy, a failure. The message is read after what is being read now, and does not move focus.
+
+Place one `<Announcer />` near the root of the app, outside any container that is `inert` or `aria-hidden`. It renders the two regions in the first paint, so a screen reader knows them before the first message. Without it, `announce()` makes the regions on the first message and holds that message back for a moment.
+
+<FileSource src="/framed/Announcer/AnnouncerBasic" />
+
+## Politeness
+
+A message is polite by default: it waits until the reader is done. Set `politeness` to `"assertive"` to interrupt, only for a failure the person must act on. An assertive region is made the first time it is used.
+
+| Do | Why |
+| --- | --- |
+| Announce the result of an action: "Saved", "3 files uploaded". | The page may not show it to a screen reader. |
+| Announce counts and the edges of a process: "Loading", "12 results", "Failed". | They tell the person the state changed. |
+| Don't announce text as it grows, such as a streaming reply. Announce that it started and that it finished. | A reader that follows every word falls behind, and the person cannot get ahead of it. |
+| Don't announce what a focused control already says. | The person hears it twice. |
+| Reserve `"assertive"` for errors. | It cuts off the person's speech. |
+
+## Channels and timing
+
+Every message belongs to a `channel`, `"default"` unless set. A newer message on a channel replaces one that has not been spoken yet, so a count that changes five times in a second is said once. Different channels do not replace each other.
+
+| Option | Does |
+| --- | --- |
+| `channel` | Names a source. The latest message of a channel wins while it waits. |
+| `debounce` | Waits this many ms after the last message of the channel, then says the latest. For a count that changes while someone types or clicks. |
+| `throttle` | Says at most one message per this many ms: the first at once, then the latest after the gap. For a steady stream, such as "N new events". |
+| `dedupe` | Skips a message equal to the channel's last one, while that one is still in the region. For a count that comes back to what was said. |
+| `clearAfter` | Removes the message after this many ms. The default is 7 seconds. |
+
+A debounce says nothing while messages keep arriving, so don't use it for a live tail. Use a throttle.
+
+The same message sent twice is read twice. Each message is its own element in the region, so no tick between messages and no invisible suffix is needed to make a screen reader say it again. Set `dedupe` when it should not be.
+
+<FileSource src="/framed/Announcer/AnnouncerChannels" />
+
+`clearAnnouncements(channel)` drops the waiting message and removes the spoken one of a channel, or of every channel without an argument. Call it when the thing the message was about is gone.
+
+## In a dialog
+
+A modal dialog takes the rest of the page out of what a screen reader can reach: a native `<dialog>` opened with `showModal()` removes everything outside it from the accessibility tree, and a screen reader that honors `aria-modal` ignores it. A message in a region outside the dialog is not heard.
+
+Pass `source`, the element the message is about, and a message from inside a modal dialog goes into the dialog. Modal components that announce their own status do this already. An overlay that wants every message inside it while it is open, such as a menu that takes over the screen, calls `pushAnnouncerHost(element)` and calls the function it returns when it closes. A message still waiting when the host closes is said again from the page.
+
+<FileSource src="/framed/Announcer/AnnouncerDialog" />
+
+## Async source
+
+`announceSourceStatus` connects the `onStatus` hook of an async source to the announcer. The source reports its edges and the announcer decides what to say: "Loading" only when the answer is slow, the count once the answers settle and only when it changed, how many a page added, and a failure assertively. A cancel or a reset says nothing.
+
+The text comes from you, so it goes through your translations.
+
+<FileSource src="/framed/Announcer/AnnouncerAsyncSource" />
+
+## Translations
+
+The announcer says what it is given. Build the message with `translateWithId` or your own translation function before the call.
+
+```js
+announce(translateWithId("saved", { count: 3 }), { channel: "save" });
+```
+
+## In components
+
+A component that announces calls `createAnnouncerChannel(() => element)` for a channel of its own, `connect()` in `onMount` for regions that exist before the first message, and `clear()` when the thing the message was about goes away.
+
+```svelte
+<script>
+  import { onMount } from "svelte";
+  import { createAnnouncerChannel } from "carbon-components-svelte";
+
+  let ref;
+  const status = createAnnouncerChannel(() => ref);
+  onMount(status.connect);
+</script>
+```
+
+## Notes
+
+The regions are `role="status"` for polite and `role="alert"` for assertive, both `aria-atomic="false"` and `aria-relevant="additions"`, so a reader says only the message that was added. They are visually hidden with `bx--visually-hidden`. The regions leave the page when nothing holds them and the last message has been removed. The server renders nothing and every call does nothing there.
