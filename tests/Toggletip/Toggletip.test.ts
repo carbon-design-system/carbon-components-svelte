@@ -181,6 +181,19 @@ describe("Toggletip", () => {
       },
     );
 
+    it("points aria-controls at the content only while it exists", async () => {
+      render(ToggletipInModal, { props: { portalTooltip: true } });
+      const trigger = screen.getByRole("button", { name: "Information" });
+
+      expect(content()).not.toBeInTheDocument();
+      expect(trigger).not.toHaveAttribute("aria-controls");
+
+      await user.click(trigger);
+
+      expect(trigger).toHaveAttribute("aria-controls", "tt-content");
+      expect(content()).toBeInTheDocument();
+    });
+
     it("closes when the modal closes", async () => {
       const { rerender } = render(ToggletipInModal, {
         props: { toggletipOpen: true },

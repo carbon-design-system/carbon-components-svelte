@@ -246,7 +246,7 @@ whitespace gap; the label's end margin is then the only spacing. -->
       aria-label={ariaLabel ?? (iconDescription || undefined)}
       aria-labelledby={ariaLabelledBy}
       aria-expanded={open}
-      aria-controls={contentId}
+      aria-controls={open ? contentId : undefined}
       aria-describedby={joinDescribedBy(
         open ? contentId : undefined,
         ariaDescribedBy,
