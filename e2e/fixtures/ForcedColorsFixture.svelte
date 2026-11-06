@@ -14,6 +14,7 @@
     ComboBox,
     ContentSwitcher,
     CopyInput,
+    DataTable,
     DatePicker,
     DatePickerInput,
     Disclosure,
@@ -549,4 +550,14 @@
       </li>
     {/each}
   </ul>
+
+  <DataTable
+    selectable
+    selectedRowIds={["selected"]}
+    headers={[{ key: "name", value: "Name" }]}
+    rows={[
+      { id: "selected", name: "Selected row" },
+      { id: "plain", name: "Plain row" },
+    ]}
+  />
 </main>

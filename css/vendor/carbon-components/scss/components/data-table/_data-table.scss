@@ -122,6 +122,47 @@
   @include data-table-tooltip-link;
 }
 
+// carbon-components-svelte patch (data-table-selected-forced-colors)
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A selected row is a background tint. Forced-colors mode repaints it as
+/// `Canvas`, so a selected row looked like any other and only its checkbox
+/// told them apart. It fills with `Highlight` instead, as a selected tree
+/// node does. The row opts out of forcing so the fill and `HighlightText`
+/// hold under hover and for the zebra and highlighted-row variants, which
+/// the selector outranks. The checkbox box follows the text color.
+/// @access private
+/// @group components
+@mixin data-table-selected-forced-colors {
+  @media (forced-colors: active) {
+    .#{$prefix}--data-table
+      tbody
+      .#{$prefix}--data-table--selected
+      td,
+    .#{$prefix}--data-table
+      tbody
+      .#{$prefix}--data-table--selected:hover
+      td {
+      forced-color-adjust: none;
+      border-block-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--data-table
+      tbody
+      .#{$prefix}--data-table--selected
+      .#{$prefix}--checkbox-label::before {
+      border-color: HighlightText;
+    }
+  }
+}
+
+@include exports("data-table-selected-forced-colors") {
+  @include data-table-selected-forced-colors;
+}
+
 // carbon-components-svelte patch (formerly css/_data-table-sticky-column-menu.scss)
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";

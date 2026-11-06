@@ -234,6 +234,10 @@ test.describe("forced colors", () => {
       ".bx--structured-list-row:not(.bx--structured-list-row--selected)",
     ],
     [
+      ".bx--data-table--selected td:last-of-type",
+      ".bx--data-table tbody tr:not(.bx--data-table--selected) td:last-of-type",
+    ],
+    [
       ".bx--tabs__nav-link--selected",
       ".bx--tabs__nav-item--default .bx--tabs__nav-link",
     ],
