@@ -244,7 +244,7 @@
   };
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("pagination");
 
   /**
    * Specify the size of the pagination.
@@ -259,9 +259,9 @@
   import SelectItem from "../Select/SelectItem.svelte";
   import CaretLeft from "../icons/CaretLeft.svelte";
   import CaretRight from "../icons/CaretRight.svelte";
+  import { useId } from "../utils/id-scope.js";
   import { clamp } from "../utils/numeric-format.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

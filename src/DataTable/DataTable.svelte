@@ -337,7 +337,7 @@
    * The title, description, header, cell and selection ids derive from it,
    * for example `{id}-title` and `{id}-{header.key}`.
    */
-  export let id = uniqueId();
+  export let id = useId("data-table");
 
   /**
    * Provide a class name for every body cell, or a function
@@ -616,13 +616,13 @@
   import { toCssLength } from "../utils/css-length.js";
   import { formReset } from "../utils/form-reset.js";
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import {
     DATA_TABLE_SIZE_ALIASES,
     normalizeSize,
   } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
     virtualize as virtualizeUtil,
@@ -991,6 +991,7 @@
     });
   }
 
+  createIdScope(id);
   setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,

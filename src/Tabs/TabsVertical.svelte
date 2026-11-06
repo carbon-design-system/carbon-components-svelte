@@ -76,6 +76,7 @@
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { keyBy } from "../utils/key-by.js";
   import {
     getLayoutDirection,
@@ -403,6 +404,7 @@
     if (isRow) scrollTabIntoView(activeTab);
   }
 
+  createIdScope($$restProps.id, "tabs-vertical");
   setContext("carbon:Tabs", {
     tabs,
     tabsById,

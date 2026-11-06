@@ -61,6 +61,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
@@ -235,6 +236,7 @@
     hasPopup.set(popup);
   }
 
+  createIdScope($$restProps.id, "context-menu");
   setContext("carbon:ContextMenu", {
     focusedIndex,
     position,

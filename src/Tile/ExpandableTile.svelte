@@ -48,7 +48,7 @@
   export let tabindex = "0";
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("expandable-tile");
 
   /**
    * Set to `true` if the tile contains interactive content, such as links,
@@ -72,10 +72,10 @@
   import { writable } from "svelte/store";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import TileWrapper from "./TileWrapper.svelte";
 
   const dispatch = createEventDispatcher();

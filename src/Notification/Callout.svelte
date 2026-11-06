@@ -33,7 +33,7 @@
    * the callout is described by it. Point the `aria-describedby` of other
    * interactive content, such as a link, at the same id.
    */
-  export let titleId = uniqueId();
+  export let titleId = useId("callout");
 
   /**
    * Specify the label of the status icon for screen readers.
@@ -50,7 +50,7 @@
 
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
   import NotificationIcon from "./NotificationIcon.svelte";
   import { statusIconLabel } from "./status-icon-label.js";
 

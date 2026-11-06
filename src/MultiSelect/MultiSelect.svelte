@@ -278,7 +278,7 @@
   export let hideLabel = false;
 
   /** Set an id for the list box component */
-  export let id = uniqueId();
+  export let id = useId("multi-select");
 
   /** Set to `true` to use the read-only variant */
   export let readonly = false;
@@ -548,6 +548,7 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
@@ -562,7 +563,6 @@
     isTypeaheadKey,
     typeaheadIndex,
   } from "../utils/typeahead.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { resetVirtualScrollOnClose } from "../utils/virtualize.js";
 
   // A disabled `<fieldset>` around the component disables it too.

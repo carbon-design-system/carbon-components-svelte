@@ -133,7 +133,7 @@
   export let orientation = "horizontal";
 
   /** Set an id for the slider div element */
-  export let id = uniqueId();
+  export let id = useId("range-slider");
 
   /** Set to `true` to indicate an invalid state */
   export let invalid = false;
@@ -207,6 +207,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { useId } from "../utils/id-scope.js";
   import { getLayoutDirection } from "../utils/layout-direction.js";
   import { clamp, parse } from "../utils/numeric-format.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
@@ -234,7 +235,6 @@
     trackSign,
     valueFromPointer,
   } from "../utils/slider-value.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

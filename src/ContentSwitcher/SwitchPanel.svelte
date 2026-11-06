@@ -3,7 +3,7 @@
    * Set an id for the panel element.
    * Prefer a stable value when switches are added or removed.
    */
-  export let id = uniqueId();
+  export let id = useId("switch-panel");
 
   /**
    * Set to `true` to defer mounting panel content until its switch is first selected
@@ -23,7 +23,7 @@
   export let ref = null;
 
   import { getContext, onMount } from "svelte";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const { currentId, pairs, addPanel, removePanel } = getContext(
     "carbon:ContentSwitcher",

@@ -35,6 +35,7 @@
 
   import { onMount, setContext } from "svelte";
   import { get, writable } from "svelte/store";
+  import { createIdScope } from "../utils/id-scope.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
@@ -92,6 +93,7 @@
     return mounted;
   }
 
+  createIdScope($$restProps.id, "accordion");
   setContext("carbon:Accordion", {
     disableItems,
     openId,

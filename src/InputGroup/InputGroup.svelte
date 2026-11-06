@@ -48,7 +48,7 @@
   export let size = undefined;
 
   /** Set an id for the group's label and messages */
-  export let id = uniqueId();
+  export let id = useId("input-group");
 
   import { getContext, setContext } from "svelte";
   import { derived, readable, writable } from "svelte/store";
@@ -58,8 +58,8 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
+  import { useId } from "../utils/id-scope.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   /** Button size whose height matches a field of each size. */
   const BUTTON_SIZE = /** @type {const} */ ({

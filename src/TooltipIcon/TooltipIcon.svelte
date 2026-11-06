@@ -19,12 +19,12 @@
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { isPointerFocus } from "../utils/focus.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { closeOverControls } from "../utils/tooltip-cover.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   /**
    * Specify the tooltip text.
@@ -69,7 +69,7 @@
   export let direction = "bottom";
 
   /** Set an id for the span element */
-  export let id = uniqueId();
+  export let id = useId("tooltip-icon");
 
   /**
    * Specify the duration in milliseconds to delay before displaying the tooltip.

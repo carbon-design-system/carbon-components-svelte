@@ -142,7 +142,7 @@
    * Set an id for the top-level element.
    * The overflow tooltip id derives from it as `{id}-overflow`.
    */
-  export let id = uniqueId();
+  export let id = useId("tag-set");
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
@@ -150,6 +150,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
@@ -165,7 +166,6 @@
     sortByDomOrder,
   } from "../utils/sort-by-dom-order.js";
   import { getVisibleTagCount } from "../utils/tag-overflow.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import TagSetAllTags from "./TagSetAllTags.svelte";
   import TagSetOverflow from "./TagSetOverflow.svelte";
 
@@ -230,6 +230,7 @@
   // missing not-yet-flushed registrations.
   const batchedItemsUpdate = batchStoreUpdates(items);
 
+  createIdScope(id);
   setContext("carbon:TagSet", {
     items,
     overflowIds,

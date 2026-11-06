@@ -424,7 +424,7 @@
    * The label, node label, subtree, and checkbox ids derive from it,
    * for example `{id}-label` and `{id}-{node.id}-subtree`.
    */
-  export let id = uniqueId();
+  export let id = useId("tree-view");
 
   /**
    * Set to `true` to automatically collapse sibling nodes when expanding a node.
@@ -715,6 +715,7 @@
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
+  import { createIdScope, useId } from "../utils/id-scope.js";
   import { getLayoutDirection, inlineKey } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
@@ -731,7 +732,6 @@
     createTreeVirtualIndex,
     isExpandableNode,
   } from "../utils/tree-virtual-index.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
     getVisibleRange,
@@ -1301,6 +1301,7 @@
     return inlineKey(event.key, $layoutDirection, node);
   }
 
+  createIdScope(id);
   setContext("carbon:TreeView", {
     treeId,
     serverTabStopId,

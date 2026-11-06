@@ -180,7 +180,7 @@
   };
 
   /** Set an id for the input group */
-  export let id = uniqueId();
+  export let id = useId("pin-code-input");
 
   /**
    * Obtain a reference to the outer element.
@@ -205,6 +205,7 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
@@ -215,7 +216,6 @@
     PIN_CODE_INPUT_SIZE_ALIASES,
   } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

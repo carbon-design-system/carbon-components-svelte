@@ -95,7 +95,7 @@
   export let preventCloseOnClickOutside = true;
 
   /** Set an id for the top-level element */
-  export let id = uniqueId();
+  export let id = useId("confirm-modal");
 
   /**
    * Obtain a reference to the top-level HTML element.
@@ -108,7 +108,7 @@
   import Modal from "../Modal/Modal.svelte";
   import TextInput from "../TextInput/TextInput.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();
 

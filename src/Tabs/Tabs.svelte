@@ -108,6 +108,7 @@
     scrollByViewport,
     scrollIntoViewX,
   } from "../utils/horizontal-scroll.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { keyBy } from "../utils/key-by.js";
   import {
     getLayoutDirection,
@@ -489,6 +490,7 @@
     dismiss,
   };
 
+  createIdScope($$restProps.id, "tabs");
   setContext("carbon:Tabs", tabsContext);
 
   // Lets `TabContent` in a `PageHeader` body pair with tabs slotted into

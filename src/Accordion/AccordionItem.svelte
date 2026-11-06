@@ -51,13 +51,13 @@
    * The heading button and panel ids derive from it as `{id}-button` and
    * `{id}-content`.
    */
-  export let id = uniqueId();
+  export let id = useId("accordion-item");
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { uniqueId } from "../utils/unique-id.js";
+  import { useId } from "../utils/id-scope.js";
 
   const dispatch = createEventDispatcher();
 

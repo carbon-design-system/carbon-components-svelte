@@ -173,7 +173,7 @@
   export let minExpandedNumberOfRows = 16;
 
   /** Set an id for the code element */
-  export let id = uniqueId();
+  export let id = useId("code-snippet");
 
   /**
    * Obtain a reference to the pre HTML element.
@@ -234,12 +234,12 @@
   } from "../utils/copy-feedback.js";
   import { dismiss } from "../utils/dismiss.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();

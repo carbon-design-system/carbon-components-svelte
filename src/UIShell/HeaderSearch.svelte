@@ -133,7 +133,7 @@
    * Previously a passed `id` was discarded; it now sets the top-level element
    * id and the input id becomes `{id}-input`.
    */
-  export let id = uniqueId();
+  export let id = useId("header-search");
 
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
@@ -145,6 +145,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
   import { fuzzyMatch } from "../utils/fuzzy-match.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
@@ -155,7 +156,6 @@
   import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
 

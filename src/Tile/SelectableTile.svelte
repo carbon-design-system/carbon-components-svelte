@@ -60,7 +60,7 @@
   export let iconDescription = "Tile checkmark";
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("selectable-tile");
 
   /**
    * Specify a name attribute for the input.
@@ -89,8 +89,8 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { noop } from "../utils/noop.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import TileWrapper from "./TileWrapper.svelte";
 
   const dispatch = createEventDispatcher();

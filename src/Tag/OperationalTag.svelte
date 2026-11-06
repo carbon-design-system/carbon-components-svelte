@@ -70,7 +70,7 @@
    * Set an id for the tag.
    * The popover id derives from it as `{id}-content`.
    */
-  export let id = uniqueId();
+  export let id = useId("operational-tag");
 
   /**
    * Obtain a reference to the tag's button element.
@@ -95,11 +95,11 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
   import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { observeTruncation } from "./tag-truncation.js";
 
   // A disabled `<fieldset>` around the component disables it too.

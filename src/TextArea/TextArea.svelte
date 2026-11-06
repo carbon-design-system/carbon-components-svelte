@@ -97,7 +97,7 @@
   export let fluid = false;
 
   /** Set an id for the textarea element */
-  export let id = uniqueId();
+  export let id = useId("text-area");
 
   /**
    * Specify a name attribute for the input.
@@ -131,12 +131,12 @@
   import { formReset } from "../utils/form-reset.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { graphemeCount, truncateGraphemes } from "../utils/grapheme-count.js";
+  import { useId } from "../utils/id-scope.js";
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { wordCount, wordLimitAction } from "../utils/word-count.js";
 
   // A disabled `<fieldset>` around the component disables it too.

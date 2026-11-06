@@ -145,7 +145,7 @@
     `${tag} removed. ${count} ${count === 1 ? "tag" : "tags"}.`;
 
   /** Set an id for the text input */
-  export let id = uniqueId();
+  export let id = useId("tag-input");
 
   /**
    * Specify a name to submit each tag as a hidden input with the form.
@@ -176,13 +176,13 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

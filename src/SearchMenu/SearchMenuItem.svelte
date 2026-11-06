@@ -92,13 +92,13 @@
   export let filter = undefined;
 
   /** Set an id for the item element */
-  export let id = uniqueId();
+  export let id = useId("search-menu-item");
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
   import { highlightSegments } from "../utils/fuzzy-match.js";
+  import { useId } from "../utils/id-scope.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const menu = getContext("carbon:SearchMenu");

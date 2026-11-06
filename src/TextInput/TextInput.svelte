@@ -34,7 +34,7 @@
   export let helperText = "";
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("text-input");
 
   /**
    * Specify a name attribute for the input.
@@ -127,11 +127,11 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
   import { graphemeCount } from "../utils/grapheme-count.js";
+  import { useId } from "../utils/id-scope.js";
   import { createLimitAnnouncement } from "../utils/limit-announcement.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
   let inDisabledFieldset = false;

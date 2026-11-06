@@ -57,17 +57,17 @@
    * The helper text and status ids derive from it as `{id}-helper` and
    * `{id}-status`.
    */
-  export let id = uniqueId();
+  export let id = useId("progress-bar");
 
   import CheckmarkFilled from "../icons/CheckmarkFilled.svelte";
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { useId } from "../utils/id-scope.js";
   import {
     normalizeSize,
     PROGRESS_BAR_SIZE_ALIASES,
   } from "../utils/size-aliases.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   /** @type {Record<string, import("../utils/icon-component.js").IconComponent>} */
   const statusIcons = {

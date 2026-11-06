@@ -35,7 +35,7 @@
   export let iconDescription = "";
 
   /** Set an id for the input element */
-  export let id = uniqueId();
+  export let id = useId("date-picker-input");
 
   /** Specify the label text */
   export let labelText = "";
@@ -87,10 +87,10 @@
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { formReset } from "../utils/form-reset.js";
+  import { useId } from "../utils/id-scope.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
   import { getCalendarLocale } from "./calendar-dates.js";
   import {
     dateFormatToMultiplePattern,

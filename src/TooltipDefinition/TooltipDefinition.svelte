@@ -28,7 +28,7 @@
   export let direction = "bottom";
 
   /** Set an id for the tooltip div element */
-  export let id = uniqueId();
+  export let id = useId("tooltip-definition");
 
   /**
    * By default, the tooltip is opened on hover or focus.
@@ -75,6 +75,7 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy, slideIntoWindow } from "../utils/fit-align.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -83,7 +84,6 @@
   } from "../utils/layout-direction.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();

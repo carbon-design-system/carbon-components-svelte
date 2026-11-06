@@ -55,17 +55,22 @@
    */
   export let tabindex = "0";
 
+  // Both ids follow `id` (set on the wrapper), so one id pins them.
+  const baseId = $$restProps.id || useId("tooltip");
+
   /**
    * Set an id for the tooltip.
+   * Defaults to `{id}-tooltip`.
    * @type {string}
    */
-  export let tooltipId = uniqueId();
+  export let tooltipId = `${baseId}-tooltip`;
 
   /**
    * Set an id for the tooltip button.
+   * Defaults to `{id}-trigger`.
    * @type {string}
    */
-  export let triggerId = uniqueId();
+  export let triggerId = `${baseId}-trigger`;
 
   /**
    * Set the tooltip button text.
@@ -133,6 +138,7 @@
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy, windowShift } from "../utils/fit-align.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
@@ -142,7 +148,6 @@
   import { tabindexAttribute } from "../utils/tabindex.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();

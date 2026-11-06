@@ -82,7 +82,7 @@
    * Set an id for the toggletip element.
    * The content id derives from it as `{id}-content`.
    */
-  export let id = uniqueId();
+  export let id = useId("toggletip");
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import Popover from "../Popover/Popover.svelte";
@@ -93,10 +93,10 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { useId } from "../utils/id-scope.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
   const notifyOpenChange = createOpenCloseDispatcher(dispatch);

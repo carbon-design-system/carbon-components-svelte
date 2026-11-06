@@ -69,6 +69,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { createIdScope } from "../utils/id-scope.js";
   import { createInitOrder } from "../utils/init-order.js";
   import {
     getLayoutDirection,
@@ -372,6 +373,7 @@
     await focusSwitchElement(index);
   }
 
+  createIdScope($$restProps.id, "content-switcher");
   setContext("carbon:ContentSwitcher", {
     currentId,
     add,

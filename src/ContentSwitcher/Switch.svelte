@@ -43,7 +43,7 @@
   export let tooltipAlignment = "center";
 
   /** Set an id for the button element */
-  export let id = uniqueId();
+  export let id = useId("switch");
 
   /**
    * Obtain a reference to the button HTML element.
@@ -55,8 +55,8 @@
   import { getContext, onMount } from "svelte";
   import { get } from "svelte/store";
   import AnchoredTooltip from "../Portal/AnchoredTooltip.svelte";
+  import { useId } from "../utils/id-scope.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const ctx = getContext("carbon:ContentSwitcher");
   const tabStopId = ctx.tabStopId;
