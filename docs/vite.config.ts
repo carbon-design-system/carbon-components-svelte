@@ -2,12 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import pkg from "../package.json" with { type: "json" };
 import { carbonAlias } from "./carbon-alias.ts";
 import { cacheSvelteSteps } from "./scripts/compile-cache.ts";
 import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { formatterVersion } from "./scripts/format.ts";
+import { FRAMED_PREFIX } from "./src/routes.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const componentMdSizesPath = path.resolve(
@@ -122,12 +123,73 @@ function componentApi() {
     },
   };
 }
+/**
+ * The entry imports the site's app dynamically, so a framed example's page
+ * doesn't load it, which leaves the browser to find the app, and then its
+ * styles, only once the entry has run. A script in the page starts loading
+ * the app's modules and styles alongside the entry, except on a framed
+ * example's page.
+ */
+function preloadApp(): Plugin {
+  let base = "/";
+  return {
+    name: "preload-app",
+    apply: "build",
+    configResolved(config) {
+      base = config.base;
+    },
+    transformIndexHtml: {
+      order: "post",
+      handler(_html, { bundle }) {
+        if (!bundle) return;
+        const chunks = new Map(
+          Object.values(bundle).flatMap((output) =>
+            output.type === "chunk" ? [[output.fileName, output] as const] : [],
+          ),
+        );
+        const app = [...chunks.values()].find((chunk) =>
+          chunk.facadeModuleId?.endsWith("/src/App.svelte"),
+        );
+        if (!app) throw new Error("preload-app: no chunk for App.svelte");
+        // What the entry imports statically already has a modulepreload.
+        const loaded = new Set<string>();
+        const add = (file: string, into: Set<string>) => {
+          if (into.has(file) || loaded.has(file)) return;
+          into.add(file);
+          for (const next of chunks.get(file)?.imports ?? []) add(next, into);
+        };
+        for (const chunk of chunks.values()) {
+          if (chunk.isEntry) add(chunk.fileName, loaded);
+        }
+        const files = new Set<string>();
+        add(app.fileName, files);
+        const styles = [...files].flatMap((file) => [
+          ...(chunks.get(file)?.viteMetadata?.importedCss ?? []),
+        ]);
+        const links = JSON.stringify([
+          ...[...files].map((file) => ["modulepreload", base + file]),
+          ...styles.map((file) => ["preload", base + file]),
+        ]);
+        return [
+          {
+            tag: "script",
+            // Before the stylesheets, which a classic script waits for.
+            injectTo: "head-prepend",
+            children: `if(!location.pathname.startsWith(${JSON.stringify(FRAMED_PREFIX)}))for(const[rel,href]of ${links}){const link=document.createElement("link");link.rel=rel;link.href=href;link.crossOrigin="";if(rel==="preload")link.as="style";document.head.append(link)}`,
+          },
+        ];
+      },
+    },
+  };
+}
+
 export default defineConfig({
   resolve: {
     alias: carbonAlias,
   },
   plugins: [
     componentApi(),
+    preloadApp(),
     {
       name: "component-md-sizes",
       resolveId(source) {
