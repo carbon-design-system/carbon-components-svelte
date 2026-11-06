@@ -77,6 +77,25 @@
     align-items: center;
   }
 
+  // Beside the trigger, a `start` box lines its top edge up with the
+  // trigger's and an `end` box its bottom edge. The caret follows: half the
+  // trigger's height from that edge, not the center of the box.
+  [data-floating-portal][data-floating-direction="right"][data-floating-intrinsic-align="start"]
+    .#{$prefix}--tooltip-portal__caret,
+  [data-floating-portal][data-floating-direction="left"][data-floating-intrinsic-align="start"]
+    .#{$prefix}--tooltip-portal__caret {
+    align-self: flex-start;
+    margin-top: calc(var(--ccs-tooltip-caret-nudge) - to-rem(5px));
+  }
+
+  [data-floating-portal][data-floating-direction="right"][data-floating-intrinsic-align="end"]
+    .#{$prefix}--tooltip-portal__caret,
+  [data-floating-portal][data-floating-direction="left"][data-floating-intrinsic-align="end"]
+    .#{$prefix}--tooltip-portal__caret {
+    align-self: flex-end;
+    margin-bottom: calc(var(--ccs-tooltip-caret-nudge) - to-rem(5px));
+  }
+
   .#{$prefix}--tooltip-portal[data-tooltip-type="definition"] {
     filter: drop-shadow(0 2px 6px $shadow);
   }
