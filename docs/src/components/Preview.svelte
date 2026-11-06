@@ -7,7 +7,6 @@
   import { url } from "@roxi/routify";
   import { Button, CodeSnippet } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
-  import copy from "clipboard-copy";
   import { theme } from "../store";
 
   $: resolvedSrc = src ? $url(src) : "";
@@ -39,7 +38,7 @@
     {/if}
   </div>
   <div class="code-override">
-    <CodeSnippet type="multi" code={codeRaw} copy={(text) => copy(text)}>
+    <CodeSnippet type="multi" code={codeRaw}>
       {@html code}
     </CodeSnippet>
   </div>
