@@ -28,6 +28,7 @@ import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.sve
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
+import TextAnnotations from "carbon-components-svelte/TextAnnotations/TextAnnotations.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
@@ -450,6 +451,11 @@ export const interactive: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "TextAnnotations",
+    render: (attrs) => render(TextAnnotations, { props: attrs }),
+    target: () => screen.getByRole("region"),
   },
   {
     name: "Toggletip",
