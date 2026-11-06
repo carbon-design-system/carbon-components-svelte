@@ -401,6 +401,29 @@ describe("overlay stack", () => {
       expect(onCovered).not.toHaveBeenCalled();
     });
 
+    it("keep what names or describes the modal out of the inert page", () => {
+      const note = div();
+      note.id = "note";
+      const holder = div();
+      const nearby = div(holder);
+      const label = div(holder);
+      label.id = "label";
+      const dialog = div();
+      dialog.setAttribute("aria-labelledby", "label");
+      dialog.setAttribute("aria-describedby", "note");
+
+      createOverlay({
+        element: dialog,
+        modal: true,
+        onDismiss: vi.fn(),
+      }).open();
+
+      expect(note).not.toHaveAttribute("inert");
+      expect(label).not.toHaveAttribute("inert");
+      expect(holder).not.toHaveAttribute("inert");
+      expect(nearby).toHaveAttribute("inert");
+    });
+
     it("leave an element that is inert for its own reasons alone", () => {
       const closedModal = div();
       closedModal.setAttribute("inert", "");

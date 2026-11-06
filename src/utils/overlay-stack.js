@@ -383,6 +383,40 @@ function refreshListeners() {
 
 const NON_CONTENT = /^(SCRIPT|STYLE|LINK|TEMPLATE|NOSCRIPT)$/;
 
+const WHITESPACE = /\s+/;
+const REFERENCES = ["aria-labelledby", "aria-describedby", "aria-details"];
+
+/**
+ * The elements a dialog names or describes itself with.
+ * @param {Element} dialog
+ * @returns {Element[]}
+ */
+function referencedBy(dialog) {
+  /** @type {Element[]} */
+  const found = [];
+  for (const attribute of REFERENCES) {
+    for (const id of (dialog.getAttribute(attribute) ?? "").split(WHITESPACE)) {
+      const target = id ? document.getElementById(id) : null;
+      if (target && !dialog.contains(target)) found.push(target);
+    }
+  }
+  return found;
+}
+
+/**
+ * @param {Element} element
+ * @param {Set<Element>} keep
+ */
+function keepWithPath(element, keep) {
+  for (
+    let node = /** @type {Element | null} */ (element);
+    node;
+    node = node.parentElement
+  ) {
+    keep.add(node);
+  }
+}
+
 /**
  * Elements the stack leaves alone: portal hosts, which hold the menus and
  * tooltips of the open layers; roots that set their own `inert` from
@@ -470,12 +504,15 @@ function applyBackground() {
         continue;
       }
       roots.add(element);
-      for (
-        let node = /** @type {Element | null} */ (element);
-        node;
-        node = node.parentElement
-      ) {
-        keep.add(node);
+      keepWithPath(element, keep);
+      // What names or describes the dialog stays in the accessibility tree,
+      // wherever it is on the page: `inert` hides it from the name
+      // computation too.
+      for (const target of referencedBy(
+        resolve(layers[i].options.host) ?? element,
+      )) {
+        roots.add(target);
+        keepWithPath(target, keep);
       }
     }
     if (complete) {
