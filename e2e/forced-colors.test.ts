@@ -629,6 +629,42 @@ test.describe("forced colors", () => {
       .toBe(system.Highlight);
   });
 
+  // Forced colors keep SVG fills, so the theme's status colors stayed: blue
+  // is about 2:1 on a black Canvas. The shapes already tell the kinds apart.
+  test("icon indicators read CanvasText, and the warning glyph reads Canvas", async ({
+    page,
+  }) => {
+    const fills = await page.evaluate(() => {
+      const fill = (selector: string) => {
+        const el = document.querySelector(
+          `[data-testid=icon-indicators] ${selector}`,
+        );
+        if (!el) throw new Error(`no ${selector}`);
+        return getComputedStyle(el).fill;
+      };
+      return {
+        failed: fill(".bx--icon-indicator--failed"),
+        succeeded: fill(".bx--icon-indicator--succeeded"),
+        inProgress: fill(".bx--icon-indicator--in-progress"),
+        pending: fill(".bx--icon-indicator--pending"),
+        major: fill(".bx--icon-indicator--caution-major"),
+        majorGlyph: fill(
+          ".bx--icon-indicator--caution-major path:first-of-type",
+        ),
+        minor: fill(".bx--icon-indicator--caution-minor"),
+        minorGlyph: fill(
+          ".bx--icon-indicator--caution-minor path:first-of-type",
+        ),
+      };
+    });
+    const { majorGlyph, minorGlyph, ...shapes } = fills;
+    for (const [kind, fill] of Object.entries(shapes)) {
+      expect.soft(fill, kind).toBe(system.CanvasText);
+    }
+    expect.soft(majorGlyph, "caution-major glyph").toBe(system.Canvas);
+    expect.soft(minorGlyph, "caution-minor glyph").toBe(system.Canvas);
+  });
+
   test("the active TableOfContents bar fills with Highlight", async ({
     page,
   }) => {

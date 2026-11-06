@@ -83,6 +83,21 @@
   .#{$prefix}--icon-indicator--informative {
     fill: $status-blue;
   }
+
+  // Forced colors leave an SVG fill alone, so the status colors stayed: the
+  // blue is about 2:1 on a black Canvas. The shapes already tell the kinds
+  // apart, so the icon reads as text, and the warning glyph, drawn black on
+  // the triangle, reads as the page behind it so it shows on either Canvas.
+  @media (forced-colors: active) {
+    .#{$prefix}--icon-indicator svg {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--icon-indicator--caution-major path:first-of-type,
+    .#{$prefix}--icon-indicator--caution-minor path:first-of-type {
+      fill: Canvas;
+    }
+  }
 }
 
 @include exports("icon-indicator") {
