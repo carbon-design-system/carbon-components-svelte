@@ -28,6 +28,7 @@ import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.sve
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
+import TaskStatusList from "carbon-components-svelte/TaskStatusList/TaskStatusList.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
@@ -728,6 +729,17 @@ export const interactive: AriaEntry[] = [
         props: { open: true, title: "Delete this project?", ...attrs },
       }),
     target: () => screen.getByRole("alertdialog"),
+  },
+  {
+    name: "TaskStatusList",
+    render: (attrs) =>
+      render(TaskStatusList, {
+        props: {
+          steps: [{ id: "vpc", label: "Create VPC", status: "succeeded" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("list"),
   },
   {
     name: "Countdown",
