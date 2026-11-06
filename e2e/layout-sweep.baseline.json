@@ -2272,6 +2272,46 @@
     "message": "div[data-testid=\"time-picker-400\"]: spans 0px to 400px"
   },
   {
+    "fixture": "time-range-picker-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item:nth-of-type(1) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input.bx--select-input--sm",
+    "message": "div.bx--form-item:nth-of-type(1) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input.bx--select-input--sm: 2px outline inside 1px outline main > div.bx--time-range-picker > div.bx--time-range-picker__popover.bx--popover > div.bx--popover-contents, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "time-range-picker-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item:nth-of-type(2) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input.bx--select-input--sm",
+    "message": "div.bx--form-item:nth-of-type(2) > div.bx--select > div.bx--select-input__wrapper > select.bx--select-input.bx--select-input--sm: 2px outline inside 1px outline main > div.bx--time-range-picker > div.bx--time-range-picker__popover.bx--popover > div.bx--popover-contents, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "time-range-picker-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(1) > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper:nth-of-type(1) > input.bx--text-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(1) > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper:nth-of-type(1) > input.bx--text-input: 2px outline inside 1px outline main > div.bx--time-range-picker > div.bx--time-range-picker__popover.bx--popover > div.bx--popover-contents, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "time-range-picker-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(2) > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input",
+    "message": "div.bx--form-item.bx--text-input-wrapper:nth-of-type(2) > div.bx--text-input__field-outer-wrapper:nth-of-type(2) > div.bx--text-input__field-wrapper > input.bx--text-input: 2px outline inside 1px outline main > div.bx--time-range-picker > div.bx--time-range-picker__popover.bx--popover > div.bx--popover-contents, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "time-range-picker-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--time-range-picker__panel > form.bx--time-range-picker__form > div.bx--layer-two.bx--time-range-picker__custom:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1)",
+    "message": "div.bx--time-range-picker__panel > form.bx--time-range-picker__form > div.bx--layer-two.bx--time-range-picker__custom:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--sm:nth-of-type(1): 1px outline inside 1px outline main > div.bx--time-range-picker > div.bx--time-range-picker__popover.bx--popover > div.bx--popover-contents, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "toast-notification.html",
     "variant": "1280-forced",
     "check": "borders",
