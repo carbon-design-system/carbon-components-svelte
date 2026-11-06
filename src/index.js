@@ -344,6 +344,13 @@ export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
+export {
+  createOverlay,
+  getModalHost,
+  overlay,
+  routeEscape,
+  subscribeModalHost,
+} from "./utils/overlay-stack.js";
 export { rovingFocus } from "./utils/roving-focus.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
