@@ -161,6 +161,19 @@ test.describe("Modal", () => {
     await expect(trigger).toBeFocused();
   });
 
+  test("returns focus to a trigger opened by a mouse click", async ({
+    page,
+  }) => {
+    // Safari does not focus a button on click, so focus sits on `<body>` when
+    // the modal opens and there is nothing to return to.
+    const trigger = page.getByTestId("open-modal");
+    await trigger.click();
+    await expect(page.getByTestId("modal-select")).toBeFocused();
+
+    await page.keyboard.press("Escape");
+    await expect(trigger).toBeFocused();
+  });
+
   test("closes on Escape when the primary button is disabled", async ({
     page,
   }) => {
