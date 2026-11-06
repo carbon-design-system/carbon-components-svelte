@@ -1,0 +1,99 @@
+---
+components: ["AddSelect", "MultiAddSelect"]
+description: Add select picks one or many items from a large, nested catalog in a panel, with search, filters, breadcrumb drill-in and a column of the chosen items.
+---
+
+<script>
+  import { Callout } from "carbon-components-svelte";
+</script>
+
+<Callout
+  title="Preview"
+  subtitle="AddSelect follows the Add select pattern of Carbon for IBM Products. Its API may change in a minor release."
+/>
+
+## Basic
+
+`MultiAddSelect` lists the items of one level at a time. Open a level with its arrow, or with <DocKbd label="ArrowRight" />, and go back from the breadcrumb or with <DocKbd label="ArrowLeft" />. Choose items on any level: the column beside the list keeps them all, with where each came from. Nothing is added until the confirm button, which sets `value` and fires `confirm`.
+
+The component is the panel's content, not the panel. It fills its container, so put it in a [SidePanel](/components/SidePanel) as here, a [Modal](/components/Modal), or a page. Pass a `source` function for a catalog on a server, or `items` for one in memory.
+
+<FileSource src="/framed/AddSelect/AddSelectBasic" />
+
+## Which component
+
+| Use | When |
+| --- | --- |
+| AddSelect or MultiAddSelect | The catalog is large (hundreds to thousands of items), nested, and the user needs to search, filter, look at what they chose across levels and confirm once. |
+| [MultiSelect](/components/MultiSelect) | The list is short and flat, and the choice belongs in a form field. |
+| TreeSelect | The hierarchy is small enough to show as a tree in a menu, and the choice sits in a field. |
+| TransferList | The user moves items between "available" and "chosen" lists and sorts the chosen ones. |
+| PeoplePicker | The user types a name or an address and the choice sits in a field. |
+| [TreeView](/components/TreeView) | The tree is the content of the page, not a choice to confirm. |
+
+## Data
+
+### In memory
+
+Pass `items` as a flat array. An item has an `id`, a `title` and optional `description`, `meta`, `icon` or `avatar`. Set `parentId` to put it under another item, and `hasChildren` on the item that can be opened. The array is searched, filtered and paged in memory, so ten thousand items search in about 10 ms.
+
+<FileSource src="/framed/AddSelect/AddSelectInline" />
+
+### From a server
+
+Pass `source` instead. It gets `{ query, parentId, filters, scope }`, an `AbortSignal` and the `cursor` of the page, and returns `{ items, nextCursor, total }`. A newer request aborts the one before it, and only the newest answer is shown, however long each takes. The list loads the next page as the cursor nears the end of the rows it has, or from the "Load more" button.
+
+| Do | Why |
+| --- | --- |
+| Return `total` with the first page. | The count under the list and the "N results" announcement say how many there are, not how many loaded. |
+| Give each item a stable `id`. | The chosen items are kept by id, across levels, searches and pages. |
+| Honor the `signal`. | Typing fast sends many requests; the aborted ones should stop work. |
+| Pass `resolveItems` when `value` starts with keys. | The chosen column needs a title for each key, and the first page may not hold them. |
+
+## Hierarchy
+
+An item with `hasChildren` is opened, not chosen, unless `selectParents` is set. A level is the children of one item, and `path` holds the levels opened.
+
+<FileSource src="/framed/AddSelect/AddSelectSelectParents" />
+
+### Search
+
+A search covers the open level. Once a level is open, a button offers to search every level, and each result then shows where it lives. Set `searchScope="all"` to always search every level.
+
+<FileSource src="/framed/AddSelect/AddSelectSearchAll" />
+
+### Filters
+
+Pass `filters` and each group shows as chips. A group ORs its chosen options and groups AND together. With `items`, an item matches a group when its `attributes[group.id]` holds a chosen option. Items that can be opened stay in a level whatever the filters, so the level can still be entered. With a `source`, `filterValue` reaches the function in the request.
+
+## Choosing
+
+`AddSelect` chooses one item, and `MultiAddSelect` any number. Set `commit="change"` to drop the footer and update `value` with every change, such as in a form. In the default `commit="confirm"`, `change` fires as the draft changes and `confirm` fires when it is confirmed. The cancel button throws the draft away.
+
+<FileSource src="/framed/AddSelect/AddSelectSingle" />
+
+### Keyboard
+
+The list is one tab stop. <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> move the cursor, <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the ends of the loaded rows, and <DocKbd label="PageDown" /> and <DocKbd label="PageUp" /> move eight rows. <DocKbd label="Space" /> chooses the row. <DocKbd label="Shift" /> + <DocKbd label="ArrowDown" /> and <DocKbd label="Shift" /> + <DocKbd label="ArrowUp" /> choose a range from where the cursor started, and <DocKbd label="Control" /> + <DocKbd label="A" /> chooses every selectable row loaded on the level. <DocKbd label="Enter" /> or <DocKbd label="ArrowRight" /> opens a row that can be opened and chooses any other. <DocKbd label="ArrowLeft" /> or <DocKbd label="Backspace" /> goes up a level. <DocKbd label="Alt" /> + <DocKbd label="Enter" /> shows the details of a row. In a right-to-left page the arrow keys swap. <DocKbd label="Escape" /> is left to the panel around the list, so it closes the panel and never clears the choice. <DocKbd label="ArrowDown" /> in the search field moves into the list.
+
+## Rows
+
+Give an item an `icon`, or an `avatar` for a person. On `MultiAddSelect`, pass a `details` slot and each row gets an information button that fills the column with the slot. The slot opens from the keyboard with <DocKbd label="Alt" /> + <DocKbd label="Enter" />. The `item` slot replaces the text of a row. Rows share one 64px height, so the list can window them: a long description is cut with an ellipsis.
+
+<FileSource src="/framed/AddSelect/AddSelectPeople" />
+
+## States
+
+The first load shows skeleton rows, and a later search keeps the last answer on screen with `aria-busy` until the new one arrives. A failure shows `errorText` with a retry button, and the next search tries again. An empty level shows `emptyText` and a search or filter with no match shows `noResultsText`; both have slots.
+
+<FileSource src="/framed/AddSelect/AddSelectStates" />
+
+## Accessibility
+
+The list is a `listbox` with `aria-activedescendant`, so focus stays on one element while the cursor moves. Rows are options with `aria-selected`, and an item that can only be opened has none. The pointer buttons on a row, which open a level or show details, are hidden from assistive technology because an option's children are presentational: the same actions are on the keys above. Results, the selection count and a level change are announced through one polite live region, and a failed request through an assertive one. Every string is a prop, and the ones with a number are functions.
+
+| Do | Why |
+| --- | --- |
+| Name the list with `labelText`. | It is the listbox's accessible name. |
+| Put the component in a modal panel when it must hold focus. | The component does not trap focus; the panel around it does. |
+| Set `--ccs-add-select-height` when the container has no height. | The list windows against a fixed height; the default is 40rem. |

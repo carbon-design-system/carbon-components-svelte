@@ -81,6 +81,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ActionSet
+  add-select:
+    name: Add select
+    description: A side panel pattern for picking one or many items from a large catalog, with search, filters, breadcrumb drill-in and a column of the chosen items.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/add-select.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/AddSelect
   aspect-ratio:
     status: stable
     framework: svelte

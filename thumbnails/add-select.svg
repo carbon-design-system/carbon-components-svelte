@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>add-select</title>
+    <g id="add-select" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="panel" fill="var(--cds-field-01, #f4f4f4)" x="40" y="28" width="240" height="124"></rect>
+        <rect id="selected-column" fill="var(--cds-layer-02, #ffffff)" x="196" y="28" width="84" height="98"></rect>
+        <rect id="column-divider" fill="var(--cds-border-subtle, #e0e0e0)" x="196" y="28" width="1" height="98"></rect>
+        <rect id="search" fill="var(--cds-layer-02, #ffffff)" x="48" y="36" width="140" height="14"></rect>
+        <rect id="search-underline" fill="var(--cds-border-strong, #8d8d8d)" x="48" y="49" width="140" height="1"></rect>
+        <rect id="chip-1" fill="var(--cds-border-strong, #8d8d8d)" x="48" y="58" width="24" height="8" rx="4"></rect>
+        <rect id="chip-2" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="58" width="24" height="8" rx="4"></rect>
+        <rect id="row-1-check" fill="var(--cds-icon-primary, #161616)" x="48" y="76" width="8" height="8"></rect>
+        <path id="row-1-tick" stroke="var(--cds-icon-inverse, #ffffff)" stroke-width="1" d="M49.5 80 L51.5 82 L54.5 78"></path>
+        <rect id="row-1-title" fill="var(--cds-text-secondary, #525252)" x="64" y="76" width="64" height="4"></rect>
+        <rect id="row-1-line" fill="var(--cds-border-subtle, #e0e0e0)" x="64" y="82" width="48" height="3"></rect>
+        <rect id="row-2-check" fill="var(--cds-icon-primary, #161616)" x="48" y="94" width="8" height="8"></rect>
+        <path id="row-2-tick" stroke="var(--cds-icon-inverse, #ffffff)" stroke-width="1" d="M49.5 98 L51.5 100 L54.5 96"></path>
+        <rect id="row-2-title" fill="var(--cds-text-secondary, #525252)" x="64" y="94" width="56" height="4"></rect>
+        <rect id="row-2-line" fill="var(--cds-border-subtle, #e0e0e0)" x="64" y="100" width="40" height="3"></rect>
+        <rect id="row-3-box" fill="none" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" x="48.5" y="112.5" width="7" height="7"></rect>
+        <rect id="row-3-title" fill="var(--cds-text-secondary, #525252)" x="64" y="112" width="60" height="4"></rect>
+        <path id="drill" stroke="var(--cds-icon-primary, #161616)" stroke-width="1.5" d="M176 77 L180 81 L176 85"></path>
+        <rect id="selected-title" fill="var(--cds-text-secondary, #525252)" x="204" y="38" width="36" height="5"></rect>
+        <rect id="chosen-1" fill="var(--cds-border-subtle, #e0e0e0)" x="204" y="54" width="52" height="5"></rect>
+        <rect id="chosen-2" fill="var(--cds-border-subtle, #e0e0e0)" x="204" y="68" width="44" height="5"></rect>
+        <path id="remove-1" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" d="M266 54 L270 58 M270 54 L266 58"></path>
+        <path id="remove-2" stroke="var(--cds-icon-primary, #161616)" stroke-width="1" d="M266 68 L270 72 M270 68 L266 72"></path>
+        <rect id="secondary-button" fill="var(--cds-button-secondary, #393939)" x="196" y="126" width="42" height="26"></rect>
+        <rect id="primary-button" fill="var(--cds-background-brand, #0f62fe)" x="238" y="126" width="42" height="26"></rect>
+    </g>
+</svg>

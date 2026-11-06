@@ -19,6 +19,8 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: [
       "DataTable",
       "TreeView",
+      "AddSelect",
+      "MultiAddSelect",
       "StructuredList",
       "ContainedList",
       "OrderedList",
