@@ -31,7 +31,6 @@
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import LogoGithub from "carbon-icons-svelte/lib/LogoGithub.svelte";
   import { onMount } from "svelte";
-  import SEARCH_INDEX from "../SEARCH_INDEX.json";
   import {
     assertCategoriesCover,
     COMPONENT_CATEGORIES,
@@ -42,14 +41,25 @@
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
 
-  const search = createSearch(SEARCH_INDEX as SearchDocument[]);
+  /**
+   * The search index loads on its own, when the search opens or the page
+   * is idle, so it isn't in the site's main chunk.
+   */
+  let search: ((query: string) => SearchDocument[]) | undefined;
+  let searchLoading: Promise<void> | undefined;
+  function loadSearch() {
+    searchLoading ??= import("../SEARCH_INDEX.json").then((module) => {
+      search = createSearch(module.default as SearchDocument[]);
+    });
+  }
 
   const deprecated: string[] = [];
 
   let value = "";
   let active = false;
   let results: ModuleSearchResult[] = [];
-  $: results = search(value).slice(0, 10);
+  $: if (active || value) loadSearch();
+  $: results = search?.(value).slice(0, 10) ?? [];
 
   // Split the hits into two groups. `search` already ranks and filters, so
   // pass shouldFilter={false} and let `matchQuery` highlight labels.
@@ -141,6 +151,16 @@
       if (isMobile) isSideNavOpen = false;
     }),
   );
+
+  onMount(() => {
+    // Safari has no `requestIdleCallback`.
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(loadSearch, { timeout: 5000 });
+      return () => cancelIdleCallback(id);
+    }
+    const id = setTimeout(loadSearch, 2000);
+    return () => clearTimeout(id);
+  });
 
   function subheadingClass(index: number) {
     return index === 0
