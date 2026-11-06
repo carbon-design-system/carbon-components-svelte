@@ -38,6 +38,13 @@
       <CarouselItem>Faster log search</CarouselItem>
     </Carousel>
   </div>
+  <div data-testid="carousel-counter">
+    <Carousel labelText="What's new" showCounter>
+      <CarouselItem>Scheduled deployments</CarouselItem>
+      <CarouselItem>Faster log search</CarouselItem>
+      <CarouselItem>Audit trail</CarouselItem>
+    </Carousel>
+  </div>
   <div data-testid="tabs" class="narrow">
     <Tabs>
       <Tab label="Overview" />

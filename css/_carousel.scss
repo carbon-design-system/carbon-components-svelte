@@ -51,6 +51,9 @@
     margin-inline-end: $carbon--spacing-03;
     color: $text-secondary;
     font-variant-numeric: tabular-nums;
+    // The counter reads in the direction of its own text. Inheriting `rtl`,
+    // the digits of English "1 of 3" ran apart from the words: "of 3 1".
+    unicode-bidi: plaintext;
   }
 
   .#{$prefix}--carousel__button {

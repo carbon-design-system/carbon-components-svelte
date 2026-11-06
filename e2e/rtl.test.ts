@@ -1098,6 +1098,38 @@ test.describe("right-to-left icons", () => {
   });
 });
 
+test.describe("right-to-left carousel counter", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/rtl-icons.html");
+    await expect(page.locator(".bx--carousel__counter")).toBeAttached();
+  });
+
+  // The default text is English, so "1 of 3" reads in that order.
+  test("shows the English count in reading order", async ({ page }) => {
+    await setDirection(page, "rtl");
+    const order = await page.evaluate(() => {
+      const el = document.querySelector(
+        "[data-testid=carousel-counter] .bx--carousel__counter",
+      );
+      const text = el?.firstChild;
+      if (!text?.textContent) throw new Error("no counter text");
+      const left = (index: number) => {
+        const range = document.createRange();
+        range.setStart(text, index);
+        range.setEnd(text, index + 1);
+        return range.getBoundingClientRect().left;
+      };
+      return {
+        text: text.textContent,
+        first: left(0),
+        last: left(text.textContent.length - 1),
+      };
+    });
+    expect(order.text).toBe("1 of 3");
+    expect(order.first).toBeLessThan(order.last);
+  });
+});
+
 // Each text field case sits in a fixed-width box. In RTL every part sits
 // as far from the box's right edge as it sat from its left edge in LTR.
 // "text" is the input's content box, so it checks the reserved padding.
