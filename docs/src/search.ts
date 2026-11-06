@@ -2,9 +2,10 @@
  * Full-text search over the site's search index: components and their h2
  * sections. BM25+ over `text` and `description` (boosted 2×), as MiniSearch
  * scored it, with each query word scored by its best match in a field: a
- * word or a part of a camel-case name, exactly, as a prefix, or within one
- * edit for every ten letters. A document matching more of the query's
- * words ranks higher, and equal scores keep the index's order.
+ * word or a part of a camel-case name, exactly, as a prefix, or from 4
+ * letters, one edit away, a swap of two letters included. A document
+ * matching more of the query's words ranks higher, and equal scores keep
+ * the index's order.
  */
 
 export type SearchDocument = {
@@ -25,12 +26,16 @@ const B = 0.7;
 const D = 0.5;
 const PREFIX_WEIGHT = 0.375;
 const FUZZY_WEIGHT = 0.45;
-/** Edits allowed per letter of a query term, rounded: one from 5 letters. */
-const FUZZINESS = 0.1;
+/** A query word of 4 letters or more matches a word one edit away. */
+const MIN_FUZZY_LENGTH = 4;
 
-/** Levenshtein distance between `a` and `b`, or `max + 1` once it exceeds `max`. */
+/**
+ * Edits between `a` and `b`, counting an insertion, deletion, substitution
+ * or swap of two neighbors as one, or `max + 1` once it exceeds `max`.
+ */
 function editDistance(a: string, b: string, max: number): number {
   if (Math.abs(a.length - b.length) > max) return max + 1;
+  let beforePrevious: number[] = [];
   let previous = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) {
     const current = [i];
@@ -42,9 +47,13 @@ function editDistance(a: string, b: string, max: number): number {
         current[j - 1] + 1,
         previous[j - 1] + cost,
       );
+      if (j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        current[j] = Math.min(current[j], beforePrevious[j - 2] + 1);
+      }
       rowMin = Math.min(rowMin, current[j]);
     }
     if (rowMin > max) return max + 1;
+    beforePrevious = previous;
     previous = current;
   }
   return previous[b.length];
@@ -122,7 +131,7 @@ export function createSearch<T extends SearchDocument>(documents: T[]) {
     };
 
     match(term, 1);
-    const maxDistance = Math.round(term.length * FUZZINESS);
+    const maxDistance = term.length >= MIN_FUZZY_LENGTH ? 1 : 0;
     for (const word of index.keys()) {
       if (word === term) continue;
       if (word.startsWith(term)) {

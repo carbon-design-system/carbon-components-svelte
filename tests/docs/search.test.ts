@@ -34,6 +34,9 @@ describe("createSearch", () => {
       ],
     ],
     ["tooltp", ["Tooltip-Tooltip"]],
+    // A swap of two letters is one edit, and 4 letters allow one.
+    ["toolitp", ["Tooltip-Tooltip"]],
+    ["adta", ["DataTable-DataTable", "DataTable-Sorting"]],
     // A word of a component's name.
     ["table", ["DataTable-DataTable", "DataTable-Sorting"]],
     [
