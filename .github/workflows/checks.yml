@@ -16,6 +16,7 @@ on:
       - "docs/scripts/markdown.ts"
       - "docs/scripts/page.ts"
       - "docs/scripts/format.ts"
+      - "docs/scripts/compile-cache.ts"
       - "docs/src/pages/framed/DatePicker/**"
   push:
     branches: [master]
@@ -33,6 +34,7 @@ on:
       - "docs/scripts/markdown.ts"
       - "docs/scripts/page.ts"
       - "docs/scripts/format.ts"
+      - "docs/scripts/compile-cache.ts"
       - "docs/src/pages/framed/DatePicker/**"
   workflow_dispatch:
 
@@ -127,6 +129,7 @@ jobs:
               - 'docs/scripts/markdown.ts'
               - 'docs/scripts/page.ts'
               - 'docs/scripts/format.ts'
+              - 'docs/scripts/compile-cache.ts'
             e2e:
               - 'src/**'
               - 'css/**'

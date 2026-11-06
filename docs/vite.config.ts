@@ -5,6 +5,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
 import { carbonAlias } from "./carbon-alias.ts";
+import { cacheSvelteCompile } from "./scripts/compile-cache.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const componentMdSizesPath = path.resolve(
@@ -24,6 +25,29 @@ const CHUNK_GROUPS = [
     test: (id: string) => id.startsWith(libraryUtilsDir),
   },
 ];
+/**
+ * What changes compiled components without changing their code: Svelte,
+ * vite-plugin-svelte, and the Svelte config's compiler options.
+ */
+const COMPILE_CACHE_SALT = JSON.stringify([
+  "svelte",
+  JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, "node_modules/svelte/package.json"),
+      "utf8",
+    ),
+  ).version,
+  JSON.parse(
+    fs.readFileSync(
+      path.join(
+        __dirname,
+        "node_modules/@sveltejs/vite-plugin-svelte/package.json",
+      ),
+      "utf8",
+    ),
+  ).version,
+  fs.readFileSync(path.join(__dirname, "svelte.config.ts"), "utf8"),
+]);
 const componentApiPath = path.resolve(__dirname, "src/COMPONENT_API.json");
 const COMPONENT_API_PREFIX = "virtual:component-api/";
 
@@ -91,7 +115,11 @@ export default defineConfig({
         return `export default ${JSON.stringify(JSON.parse(json))}`;
       },
     },
-    svelte(),
+    ...cacheSvelteCompile(
+      svelte(),
+      path.join(__dirname, "node_modules/.cache/ccs-docs-svelte-compile"),
+      COMPILE_CACHE_SALT,
+    ),
   ],
   define: {
     __PKG_VERSION: JSON.stringify(pkg.version),
