@@ -164,6 +164,16 @@
     }
   }
 
+  // Safari does not focus a button on click, so after a mouse open the key
+  // never reaches the wrapper's handler above. Listen on `window` too. Focus
+  // stays where it is, since it may be on a control the user moved to.
+  /** @param {Event} event */
+  function handleWindowKeydown(event) {
+    const keyEvent = /** @type {KeyboardEvent} */ (event);
+    if (open && keyEvent.key === "Escape" && !isImeComposition(keyEvent))
+      close();
+  }
+
   // Portalled content lives outside `toggletipRef`, so treat the popover as
   // "inside" for focus and outside-click handling.
   $: insideElements = [toggletipRef, popoverRef];
@@ -233,7 +243,10 @@ whitespace gap; the label's end margin is then the only spacing. -->
     class:bx--toggletip--open={open}
     use:dismiss={{
       enabled: listenersEnabled,
-      listeners: [{ type: "click", handler: handleOutsideClick }],
+      listeners: [
+        { type: "click", handler: handleOutsideClick },
+        { type: "keydown", handler: handleWindowKeydown },
+      ],
     }}
     on:keydown={handleKeydown}
     on:focusout={handleFocusout}
