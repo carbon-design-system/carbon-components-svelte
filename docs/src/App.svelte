@@ -25,10 +25,10 @@
       return;
     }
     const token = ++loading;
-    const module = await loadPage(next);
-    if (token !== loading) return;
-    Page = module.default;
-    route.set(next);
+    const loaded = await loadPage(next);
+    if (token !== loading || !loaded) return;
+    Page = loaded.component;
+    route.set(loaded.route);
     await tick();
     restoreScroll();
   }

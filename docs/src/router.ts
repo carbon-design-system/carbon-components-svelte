@@ -11,10 +11,12 @@ import { buildRoutes, type Route } from "./routes";
 
 export type { Route };
 
+// The framed examples have their own map, in `framed-pages.ts`.
 const pages = import.meta.glob<{ default: Component }>([
   "./pages/**/*.svelte",
   "./pages/**/*.md",
   "!./pages/**/_*.svelte",
+  "!./pages/framed/**",
 ]);
 
 const { routes, notFound } = buildRoutes(Object.keys(pages));
@@ -22,13 +24,41 @@ const { routes, notFound } = buildRoutes(Object.keys(pages));
 const normalize = (pathname: string) =>
   decodeURI(pathname).replace(/(.)\/$/, "$1");
 
-/** The route for `pathname`, ignoring a trailing slash, or the not-found route. */
+const FRAMED_PREFIX = "/framed/";
+const framedRoutes = new Map<string, Route>();
+
+/**
+ * The route for `pathname`, ignoring a trailing slash, or the not-found
+ * route. A framed example's route is read from its path, and checked
+ * against its file when it loads.
+ */
 export function matchRoute(pathname: string): Route | undefined {
-  return routes.get(normalize(pathname)) ?? notFound;
+  const path = normalize(pathname);
+  if (!path.startsWith(FRAMED_PREFIX)) return routes.get(path) ?? notFound;
+  let route = framedRoutes.get(path);
+  if (!route) {
+    const segments = path.slice(1).split("/");
+    route = {
+      path,
+      name: segments.at(-1) ?? "",
+      parentName: segments.at(-2) ?? "",
+      file: `./pages${path}.svelte`,
+    };
+    framedRoutes.set(path, route);
+  }
+  return route;
 }
 
-export function loadPage(route: Route) {
-  return pages[route.file]();
+/** The page for `route`, or the not-found page if it has no file. */
+export async function loadPage(
+  route: Route,
+): Promise<{ route: Route; component: Component } | undefined> {
+  const load = route.path.startsWith(FRAMED_PREFIX)
+    ? (await import("./framed-pages")).framedPages[route.file]
+    : pages[route.file];
+  if (load) return { route, component: (await load()).default };
+  if (notFound && route !== notFound) return loadPage(notFound);
+  return undefined;
 }
 
 /** The component pages, by name, for the side navigation. */
