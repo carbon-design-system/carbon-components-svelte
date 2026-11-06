@@ -118,9 +118,43 @@ export function goto(to: string, options: NavigateOptions = {}) {
   location.set(read());
 }
 
-/** Starts routing: links, the back and forward buttons, and hash changes. */
+/** How long the pointer rests on a link before its page is fetched. */
+const PREFETCH_HOVER_DELAY = 65;
+
+/** The route a link goes to in this app, if any. */
+function linkRoute(target: EventTarget | null): Route | undefined {
+  const anchor = (target as Element | null)?.closest?.("a");
+  if (!anchor?.href || anchor.hasAttribute("download")) return undefined;
+  const url = new URL(anchor.href, window.location.href);
+  if (url.origin !== window.location.origin) return undefined;
+  return routes.get(normalize(url.pathname));
+}
+
+const prefetched = new Set<Route>();
+
+/** Starts loading `route`'s page so following its link is instant. */
+function prefetch(next: Route | undefined) {
+  if (!next || prefetched.has(next) || next === get(route)) return;
+  prefetched.add(next);
+  loadPage(next).catch(() => prefetched.delete(next));
+}
+
+/**
+ * Starts routing: links, the back and forward buttons, and hash changes.
+ * A link's page starts loading when the pointer rests on it, it gets
+ * focus, or a touch starts on it.
+ */
 export function startRouter() {
   history.scrollRestoration = "manual";
+
+  let hoverTimer: ReturnType<typeof setTimeout> | undefined;
+  const onPointerOver = (event: PointerEvent) => {
+    clearTimeout(hoverTimer);
+    const next = linkRoute(event.target);
+    if (next) hoverTimer = setTimeout(prefetch, PREFETCH_HOVER_DELAY, next);
+  };
+  const onPointerOut = () => clearTimeout(hoverTimer);
+  const onIntent = (event: Event) => prefetch(linkRoute(event.target));
 
   const onClick = (event: MouseEvent) => {
     if (
@@ -152,10 +186,19 @@ export function startRouter() {
   const onHashChange = () => location.set(read());
 
   document.addEventListener("click", onClick);
+  document.addEventListener("pointerover", onPointerOver, { passive: true });
+  document.addEventListener("pointerout", onPointerOut, { passive: true });
+  document.addEventListener("focusin", onIntent);
+  document.addEventListener("touchstart", onIntent, { passive: true });
   window.addEventListener("popstate", onPopState);
   window.addEventListener("hashchange", onHashChange);
   return () => {
+    clearTimeout(hoverTimer);
     document.removeEventListener("click", onClick);
+    document.removeEventListener("pointerover", onPointerOver);
+    document.removeEventListener("pointerout", onPointerOut);
+    document.removeEventListener("focusin", onIntent);
+    document.removeEventListener("touchstart", onIntent);
     window.removeEventListener("popstate", onPopState);
     window.removeEventListener("hashchange", onHashChange);
   };
