@@ -8,8 +8,7 @@
  * imports, rather than guessing which capitalized names are icons, gives
  * the code view what a reader needs to copy and run it.
  */
-import { walk } from "estree-walker";
-import { parse } from "svelte/compiler";
+import { parse, SKIP, walk } from "sveast";
 
 type Node = {
   type: string;
@@ -71,8 +70,8 @@ function isReference(parent: Node | null, key: PropertyKey | null | undefined) {
 
 /**
  * Names a template node binds for its children: `{#each items as item, i}`,
- * `{:then value}`, `let:x`, `{#snippet s(a)}`, and `{@const x = …}` among
- * its children.
+ * `{:then value}`, `let:x`, `{#snippet s(a)}`, and a fragment's
+ * `{@const x = …}`.
  */
 function templateBindings(node: Node): string[] {
   const names: string[] = [];
@@ -95,16 +94,16 @@ function templateBindings(node: Node): string[] {
       break;
   }
   for (const attribute of (node.attributes as Node[] | undefined) ?? []) {
-    if (attribute.type !== "Let") continue;
+    if (attribute.type !== "LetDirective") continue;
     if (attribute.expression) add(attribute.expression);
     else names.push(attribute.name as string);
   }
-  for (const child of (node.children as Node[] | undefined) ?? []) {
-    if (child.type !== "ConstTag") continue;
-    const declaration = child.declaration as Node | undefined;
-    for (const d of (declaration?.declarations as Node[] | undefined) ?? [])
-      add(d.id);
-    add((child.expression as Node | undefined)?.left);
+  if (node.type === "Fragment") {
+    for (const child of node.nodes as Node[]) {
+      if (child.type !== "ConstTag") continue;
+      const declaration = child.declaration as Node;
+      for (const d of declaration.declarations as Node[]) add(d.id);
+    }
   }
   return names;
 }
@@ -173,7 +172,7 @@ function assignedNames(node: Node): string[] {
   walk(node as unknown as Parameters<typeof walk>[0], {
     enter(child) {
       const n = child as unknown as Node;
-      if (FUNCTION_TYPES.has(n.type)) return this.skip();
+      if (FUNCTION_TYPES.has(n.type)) return SKIP;
       if (n.type === "AssignmentExpression") {
         patternNames(n.left as Node, names);
       } else if (n.type === "UpdateExpression") {
@@ -264,7 +263,7 @@ const pageStatementsCache = new Map<string, Statement[]>();
 function pageStatements(pageScript: string): Statement[] {
   let statements = pageStatementsCache.get(pageScript);
   if (!statements) {
-    const program = parse(pageScript).instance?.content as unknown as
+    const program = parse(pageScript, { css: false }).instance?.content as
       { body: Node[] } | undefined;
     statements = (program?.body ?? []).map((node) =>
       parseStatement(node, pageScript),
@@ -280,19 +279,17 @@ function pageStatements(pageScript: string): Statement[] {
  * shorthand `bind:x` and `class:x`.
  */
 function markupReferences(markup: string): Set<string> {
-  const html = parse(markup).html;
-  const references = referencesOf(html);
-  walk(html as unknown as Parameters<typeof walk>[0], {
+  const fragment = parse(markup, { css: false }).fragment;
+  const references = referencesOf(fragment);
+  walk(fragment, {
     enter(node) {
-      const n = node as unknown as Node;
       if (
-        n.type === "InlineComponent" ||
-        n.type === "Action" ||
-        n.type === "Transition" ||
-        n.type === "Animation"
+        node.type === "Component" ||
+        node.type === "UseDirective" ||
+        node.type === "TransitionDirective" ||
+        node.type === "AnimateDirective"
       ) {
-        const name = (n.name as string).split(".")[0];
-        if (!name.startsWith("svelte:")) references.add(name);
+        references.add(node.name.split(".")[0]);
       }
     },
   });
