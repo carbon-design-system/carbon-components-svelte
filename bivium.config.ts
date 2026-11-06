@@ -58,6 +58,8 @@ export default {
     "css",
     "scripts",
     "docs/src/pages/framed/DatePicker",
+    // The catalog page, which unit tests and an e2e fixture render from `docs`.
+    "docs/src/catalog-page",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
   ],

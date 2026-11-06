@@ -6,8 +6,10 @@
 let segmenter;
 
 // The first `Intl.Segmenter` a page builds costs several milliseconds, so it
-// is created on first use rather than when this module loads.
-function getSegmenter() {
+// is created on first use rather than when this module loads. Shared with
+// `grapheme-boundary.js`.
+/** @returns {Intl.Segmenter | null} */
+export function getSegmenter() {
   if (segmenter === undefined) {
     segmenter =
       typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
