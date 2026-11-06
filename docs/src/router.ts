@@ -78,13 +78,14 @@ export const location = writable<Location>(read());
 export { route };
 
 /**
- * Whether a page's live examples mount right away, rather than when they
- * near the viewport. Set when the page will scroll somewhere other than
- * its top: to a heading, or back to where the reader was. An example that
- * mounts above that place would change height after the scroll and move
- * the content, and Safari doesn't anchor the scroll to make up for it.
+ * Whether a page renders all of its content right away: its live examples
+ * mount, and its API tables render, rather than when they near the
+ * viewport. Set when the page will scroll somewhere other than its top: to
+ * a heading, or back to where the reader was. Content that renders above
+ * that place would change height after the scroll and move the page, and
+ * Safari doesn't anchor the scroll to make up for it.
  */
-export const eagerExamples = writable(false);
+export const eagerContent = writable(false);
 
 /** Whether the current URL scrolls the page away from its top. */
 export function scrollsAwayFromTop(): boolean {
