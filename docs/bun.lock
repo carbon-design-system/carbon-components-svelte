@@ -7,14 +7,12 @@
         "@roxi/routify": "^3.6.4",
         "@sveltejs/vite-plugin-svelte": "^7.3.1",
         "@types/mdast": "^4.0.4",
-        "@types/prismjs": "^1.26.5",
         "@types/unist": "^3.0.3",
         "carbon-icons-svelte": "^13.17.0",
         "carbon-pictograms-svelte": "^13.21.0",
         "mdsvex": "^0.12.8",
         "prettier": "^3.9.10",
         "prettier-plugin-svelte": "^4.1.1",
-        "prismjs": "^1.30.0",
         "sveast": "^0.9.7",
         "svelte": "^5.57.3",
         "vite": "^8.3.5",
@@ -75,8 +73,6 @@
     "@types/estree": ["@types/estree@1.0.9", "", {}, "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg=="],
 
     "@types/mdast": ["@types/mdast@4.0.4", "", { "dependencies": { "@types/unist": "*" } }, "sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA=="],
-
-    "@types/prismjs": ["@types/prismjs@1.26.6", "", {}, "sha512-vqlvI7qlMvcCBbVe0AKAb4f97//Hy0EBTaiW8AalRnG/xAN5zOiWWyrNqNXeq8+KAuvRewjCVY1+IPxk4RdNYw=="],
 
     "@types/unist": ["@types/unist@3.0.3", "", {}, "sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q=="],
 
