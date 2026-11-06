@@ -330,7 +330,7 @@ The original value is automatically restored if you close the dropdown without m
 
 ### Async
 
-For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async behavior with a debounced input value change.
+For async (for example, server-side) filtering, bind to `value` and update `items` when input changes. This example simulates async behavior with a debounced input value change. [Async source](#async-source) does the debouncing, cancelling and ordering for you.
 
 Set `loading` to `true` while a request is in flight. The menu shows a loading row after the options, is marked busy for screen readers, and holds back the empty state until the results arrive.
 
@@ -370,6 +370,51 @@ items={[
   {id: "1", text: "Email"},
   {id: "2", text: "Webhook"}
   ]}  />
+
+## Async source
+
+Pass a store from `createAsyncSource` as `source` to load items as the user types. While the menu is open, the typed text is the query and the answer replaces `items`. `items` shows until the source has an answer, such as before the first query.
+
+The source waits for a pause in typing, then calls your function with the query and an `AbortSignal`. A newer query aborts the request in flight, and an answer to an older query never shows, even when your function ignores the signal.
+
+<FileSource src="/framed/ComboBox/ComboBoxSource" />
+
+The last answer stays in the menu while the next one loads, so fast typing never flashes an empty or older list. The menu is marked busy and shows the loading row. Set `loadingDelay` to hold the row back for quick answers. The result count is announced once the answer settles.
+
+The selected item stays selected when a later answer does not include it.
+
+### Requests
+
+| Option | Default | Description |
+| :--- | :--- | :--- |
+| `debounce` | `0` | Milliseconds to wait after the last keystroke. An answer in the cache shows at once, without waiting |
+| `minLength` | `0` | The shortest trimmed query that is sent. A shorter one leaves the source idle and `items` shows |
+| `keepPrevious` | `true` | Keep the last answer in the menu while the next one loads |
+| `cache` | `{ max: 50, ttl: 0 }` | Answers by query, least recently used out first. Within `ttl` milliseconds an answer shows without a request. After that it still shows, then is fetched again. `false` keeps nothing |
+| `retry` | `0` | How many times to try again after a failure, with exponential backoff. While the browser is offline, a retry waits for it to come back |
+| `initialData`, `initialQuery` | none | An answer to start with, such as one a server render has |
+
+A source does nothing until it is set, so creating one while the page renders on the server starts no request and no timer. It works for the components that subscribe to it: when the last one goes away, the request in flight is aborted.
+
+| Do | Why |
+| :--- | :--- |
+| Pass the `signal` to `fetch` | The request is cancelled on the network, not only ignored |
+| Set `debounce` to about 200 for a server and leave it at `0` for a function that filters in memory | Each keystroke is an instant answer in memory, and a request on a server |
+| Raise `cache.ttl` for data that changes slowly | Going back to an earlier query shows its answer with no request |
+| Keep `ttl` at `0` for data that changes under the user | The cached answer still shows at once, and a fresh one replaces it |
+| Create the source once per field | The cache and the request in flight belong to the source |
+
+### Pages
+
+Use `createPagedSource` for a list that comes in pages. Your function returns `{ items, nextCursor }` and receives the `cursor` of the page to fetch. The menu asks for the next page when it is scrolled to the bottom, and shows the loading row below the options while it loads. A new query starts over from the first page. Set `itemKey` to drop an item that two pages both return.
+
+<FileSource src="/framed/ComboBox/ComboBoxPagedSource" />
+
+### Failures
+
+A failed request shows `errorText` in place of "No results", and the next keystroke tries again. Set `retry` to try again by itself first. When the browser goes offline, the source stops using up its attempts, and when it comes back online it fetches a failed query again.
+
+<FileSource src="/framed/ComboBox/ComboBoxSourceRetry" />
 
 ## Virtualization
 
