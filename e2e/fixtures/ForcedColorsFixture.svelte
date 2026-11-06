@@ -29,6 +29,7 @@
     HeaderPanelLinks,
     HeaderSearch,
     HeaderUtilities,
+    IconIndicator,
     InlineEdit,
     Kbd,
     Menu,
@@ -255,6 +256,15 @@
       <p slot="start">Start</p>
       <p slot="end">End</p>
     </Splitter>
+  </section>
+
+  <section data-testid="icon-indicators">
+    <IconIndicator kind="failed" label="Failed" />
+    <IconIndicator kind="caution-major" label="Caution major" />
+    <IconIndicator kind="caution-minor" label="Caution minor" />
+    <IconIndicator kind="succeeded" label="Succeeded" />
+    <IconIndicator kind="in-progress" label="In progress" />
+    <IconIndicator kind="pending" label="Pending" />
   </section>
 
   <ShapeIndicator kind="medium" label="Medium" />
