@@ -19,7 +19,7 @@
   import OpenPanelFilledRight from "carbon-icons-svelte/lib/OpenPanelFilledRight.svelte";
   import OpenPanelRight from "carbon-icons-svelte/lib/OpenPanelRight.svelte";
   import { onMount, tick } from "svelte";
-  import COMPONENT_API from "../COMPONENT_API.json";
+  import type COMPONENT_API from "../COMPONENT_API.json";
   import { CATEGORY_BY_COMPONENT } from "../component-categories";
   import {
     categoryFilterHref,
@@ -44,18 +44,17 @@
   }
 
   export let component = $route?.name ?? "";
-  export let components = [component];
   export let description = "";
   /** The page's h2/h3 headings, for the table of contents. */
   export let headings: { id: string; text: string; depth: number }[] = [];
 
-  const componentMap = new Map(
-    COMPONENT_API.components.map((c) => [c.moduleName, c]),
-  );
+  /**
+   * The API of each component the page documents, which the page compiler
+   * imports from `virtual:component-api/<Name>`.
+   */
+  export let api: (DocComponent | null)[] = [];
 
-  $: api_components = components
-    .map((i) => componentMap.get(i))
-    .filter((c): c is DocComponent => c != null);
+  $: api_components = api.filter((c): c is DocComponent => c != null);
   $: multiple = api_components.length > 1;
   $: category = CATEGORY_BY_COMPONENT[component] ?? "";
   $: categoryHref = category
