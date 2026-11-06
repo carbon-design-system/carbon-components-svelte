@@ -1,0 +1,51 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// SavingStatus: one line for the state of an autosave. The icon and text
+/// come from `IconIndicator` and `InlineLoading`; this lays them out in a
+/// row that keeps its height in every status, so nothing around it moves
+/// when the status changes.
+/// @access private
+/// @group components
+@mixin saving-status {
+  .#{$prefix}--saving-status {
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: $carbon--spacing-07;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--saving-status--sm {
+    min-height: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--saving-status__content {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-width: 0;
+  }
+
+  // Programmatic focus lands here when Retry leaves with the error. The
+  // ring is for a keyboard user only.
+  .#{$prefix}--saving-status:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // `InlineLoading` fills its line; here it sits in a row.
+  .#{$prefix}--saving-status .#{$prefix}--inline-loading {
+    width: auto;
+  }
+
+  .#{$prefix}--saving-status--sm .#{$prefix}--icon-indicator {
+    @include type-style("label-01");
+  }
+}
+
+@include exports("saving-status") {
+  @include saving-status;
+}
