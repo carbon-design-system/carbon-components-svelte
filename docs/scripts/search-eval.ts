@@ -59,6 +59,15 @@ export const CASES: [query: string, id: string, place: number][] = [
   ["input", "TextInput-page", 5],
   ["date", "DatePicker-page", 3],
   ["copy", "CopyButton-page", 3],
+  // A component a page documents with others.
+  ["HeaderSearch", "UIShell-page", 1],
+  ["SideNav", "UIShell-page", 1],
+  ["ProfileMenu", "UIShell-page", 1],
+  ["side nav", "UIShellside-navigation", 1],
+  ["profile menu", "UIShellprofile-menu", 1],
+  ["SelectableTag", "Tag-page", 1],
+  ["ToolbarSearch", "Toolbar-page", 2],
+  ["skeleton", "SkeletonText-page", 3],
   // Typos.
   ["modl", "Modal-page", 1],
   ["buton", "Button-page", 1],

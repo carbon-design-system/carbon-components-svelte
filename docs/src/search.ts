@@ -13,18 +13,23 @@ export type SearchDocument = {
   description: string;
   /** A component page's summary, its front matter's `description`. */
   summary?: string;
+  /** The components a page documents, its front matter's `components`. */
+  components?: string;
   href: string;
   isComponent: boolean;
 };
 
 const WORD_SEPARATOR_RE = /[\n\r\p{Z}\p{P}]+/u;
-const FIELDS = ["text", "description", "summary"] as const;
+const FIELDS = ["text", "description", "summary", "components"] as const;
 /**
  * The heading counts twice the component's name. A page's summary counts
  * half: it catches other words for a component, such as "spinner" for
- * Loading, but mentions many things a page isn't about.
+ * Loading, but mentions many things a page isn't about. The components a
+ * page documents count a quarter, so `SideNav` finds UIShell without
+ * ComposedModal's ModalHeader, ModalBody and ModalFooter outranking Modal
+ * for `modal`.
  */
-const FIELD_BOOSTS = [1, 2, 0.5];
+const FIELD_BOOSTS = [1, 2, 0.5, 0.25];
 
 // BM25+ parameters and match weights, MiniSearch's defaults.
 const K = 1.2;
