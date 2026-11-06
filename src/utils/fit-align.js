@@ -173,49 +173,94 @@ export function sidePlacement(side, align) {
 }
 
 /**
- * How far to slide `el` sideways so it sits at least `margin` px inside the
- * window, measured as if no slide were applied. A box wider than the window
- * keeps its left edge in view. A box with no layout (zero size), or a window
- * with none, stays put.
+ * How far to slide `el` sideways, or up and down for `"y"`, so it sits at
+ * least `margin` px inside the window, measured as if no slide were applied.
+ * A box larger than the window keeps its left (or top) edge in view. A box
+ * with no layout (zero size), or a window with none, stays put.
  * @param {Element} el
  * @param {number} applied The slide already applied to `el`, in px.
  * @param {number} [margin]
+ * @param {"x" | "y"} [axis]
  * @returns {number}
  */
-export function windowShift(el, applied, margin = 8) {
+export function windowShift(el, applied, margin = 8, axis = "x") {
   const rect = el.getBoundingClientRect();
-  if (rect.width === 0) return applied;
-  const left = rect.left - applied;
-  const right = rect.right - applied;
-  const width = document.documentElement.clientWidth;
+  const horizontal = axis === "x";
+  if ((horizontal ? rect.width : rect.height) === 0) return applied;
+  const start = (horizontal ? rect.left : rect.top) - applied;
+  const end = (horizontal ? rect.right : rect.bottom) - applied;
+  const size = horizontal
+    ? document.documentElement.clientWidth
+    : document.documentElement.clientHeight;
   // No layout viewport (jsdom), so nothing to fit inside.
-  if (width === 0) return applied;
-  if (right > width - margin) {
-    return Math.max(width - margin - right, margin - left);
+  if (size === 0) return applied;
+  if (end > size - margin) {
+    return Math.max(size - margin - end, margin - start);
   }
-  if (left < margin) return margin - left;
+  if (start < margin) return margin - start;
   return 0;
 }
 
 /**
- * Keeps a portalled tooltip's body inside the window while the tooltip
- * sits above or below its anchor. The body slides sideways by `windowShift`
- * each time the portal places it and each time the body resizes. The caret
- * is a sibling of the body, so it stays on the anchor.
+ * Limits a slide so the caret's center stays at least `inset` px inside the
+ * body, as Carbon places a start- or end-aligned caret 1rem from the edge.
+ * Where the caret already sits closer than `inset` before any slide, that
+ * distance is the limit instead, so a slide never moves the body toward the
+ * caret. A caret kept clear of the corner can leave the body short of the
+ * window margin.
+ * @param {number} shift The slide `windowShift` asks for, in px.
+ * @param {number} start The body's start edge on the slide axis, unslid.
+ * @param {number} end The body's end edge on the slide axis, unslid.
+ * @param {number} caret The caret's center on the slide axis.
+ * @param {number} inset
+ * @returns {number}
+ */
+export function keepCaretInset(shift, start, end, caret, inset) {
+  const max = caret - start - Math.min(inset, caret - start);
+  const min = caret - end + Math.min(inset, end - caret);
+  return Math.min(Math.max(shift, min), max);
+}
+
+/**
+ * Keeps a portalled tooltip's body inside the window. Above or below its
+ * anchor the body slides sideways, and beside its anchor up or down, by
+ * `windowShift` each time the portal places it and each time the body
+ * resizes. The caret is a sibling of the body, so it stays on the anchor,
+ * and the slide stops 1rem short of it (`keepCaretInset`).
  * @param {HTMLElement} node The body, inside a `FloatingPortal`.
  */
 export function slideIntoWindow(node) {
   const portal = node.closest("[data-floating-portal]");
   function slide() {
     const side = portal?.getAttribute("data-floating-direction");
-    const applied = Number.parseFloat(node.style.left) || 0;
-    const next =
-      side === "top" || side === "bottom" ? windowShift(node, applied) : 0;
+    const across = side === "top" || side === "bottom";
+    const property = across ? "left" : "top";
+    // A flip from one axis to the other leaves the old slide behind.
+    node.style[across ? "top" : "left"] = "";
+    const applied = Number.parseFloat(node.style[property]) || 0;
+    let next = side ? windowShift(node, applied, 8, across ? "x" : "y") : 0;
+    const caret = node.parentElement?.querySelector(
+      ":scope > [class$='__caret']",
+    );
+    if (next && caret) {
+      const body = node.getBoundingClientRect();
+      const tip = caret.getBoundingClientRect();
+      const start = (across ? body.left : body.top) - applied;
+      const end = (across ? body.right : body.bottom) - applied;
+      const center = across
+        ? (tip.left + tip.right) / 2
+        : (tip.top + tip.bottom) / 2;
+      const rem =
+        Number.parseFloat(
+          getComputedStyle(document.documentElement).fontSize,
+        ) || 16;
+      next = keepCaretInset(next, start, end, center, rem);
+    }
     // A slide moves the body, not the portal, so this settles. Skip
     // sub-pixel changes.
     if (Math.abs(next - applied) < 0.5) return;
     node.style.position = next ? "relative" : "";
-    node.style.left = next ? `${next}px` : "";
+    node.style[property] = next ? `${next}px` : "";
   }
   const observer = new MutationObserver(slide);
   if (portal) {

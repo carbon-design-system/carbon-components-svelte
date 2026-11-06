@@ -1,6 +1,7 @@
 import {
   clippedBy,
   fitPopoverAlign,
+  keepCaretInset,
   shouldFlipAlign,
   sidePlacement,
   slideIntoWindow,
@@ -93,6 +94,15 @@ describe("windowShift", () => {
     expect(windowShift(box({ left: 300, width: 100 }), 0)).toBe(0);
   });
 
+  it("slides a box up or down on the y axis", () => {
+    vi.spyOn(document.documentElement, "clientHeight", "get").mockReturnValue(
+      600,
+    );
+    expect(windowShift(box({ top: -20, height: 60 }), 0, 8, "y")).toBe(28);
+    expect(windowShift(box({ top: 560, height: 60 }), 0, 8, "y")).toBe(-28);
+    expect(windowShift(box({ top: 300, height: 60 }), 0, 8, "y")).toBe(0);
+  });
+
   it("keeps the applied slide when there's no layout to measure", () => {
     windowWidth(1000);
     expect(windowShift(box({ left: -20 }), 12)).toBe(12);
@@ -100,6 +110,28 @@ describe("windowShift", () => {
     // jsdom: the window itself has no width.
     windowWidth(0);
     expect(windowShift(box({ left: 300, width: 100 }), 12)).toBe(12);
+  });
+});
+
+describe("keepCaretInset", () => {
+  // A body from 0 to 100 on the slide axis.
+  it("stops a slide 1rem short of the caret", () => {
+    // Sliding down 40 would leave the caret at 10, 6px from the top edge.
+    expect(keepCaretInset(40, 0, 100, 50, 16)).toBe(34);
+    // Sliding up 45 would leave the caret 5px from the bottom edge.
+    expect(keepCaretInset(-45, 0, 100, 50, 16)).toBe(-34);
+  });
+
+  it("leaves a slide that keeps the caret clear alone", () => {
+    expect(keepCaretInset(20, 0, 100, 50, 16)).toBe(20);
+    expect(keepCaretInset(-20, 0, 100, 50, 16)).toBe(-20);
+  });
+
+  it("never slides toward a caret already closer than the inset", () => {
+    // A start-aligned caret 8px from the edge: a slide toward it is
+    // dropped, and one away from it still applies.
+    expect(keepCaretInset(5, 0, 100, 8, 16)).toBe(0);
+    expect(keepCaretInset(-30, 0, 100, 8, 16)).toBe(-30);
   });
 });
 
