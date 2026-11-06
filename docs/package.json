@@ -23,7 +23,6 @@
     "carbon-icons-svelte": "^13.17.0",
     "carbon-pictograms-svelte": "^13.21.0",
     "estree-walker": "^3.0.3",
-    "github-slugger": "^2.0.0",
     "mdsvex": "^0.12.8",
     "minisearch": "^7.1.0",
     "prettier": "^3.9.10",
