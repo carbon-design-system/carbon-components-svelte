@@ -8,14 +8,13 @@
  * imports, rather than guessing which capitalized names are icons, gives
  * the code view what a reader needs to copy and run it.
  */
-import { parse, SKIP, walk } from "sveast";
+import { analyzeScopes, type Binding, parse, type Scope } from "sveast";
 
 type Node = {
   type: string;
   start: number;
   end: number;
   name?: string;
-  computed?: boolean;
   [key: string]: unknown;
 };
 
@@ -46,141 +45,23 @@ const FUNCTION_TYPES = new Set([
   "FunctionDeclaration",
 ]);
 
-/** Whether an `Identifier` refers to a binding, rather than naming a property, key, or label. */
-function isReference(parent: Node | null, key: PropertyKey | null | undefined) {
-  if (!parent) return true;
-  switch (parent.type) {
-    case "MemberExpression":
-      return parent.computed || key === "object";
-    case "Property":
-    case "MethodDefinition":
-    case "PropertyDefinition":
-      return parent.computed || key === "value";
-    case "LabeledStatement":
-    case "BreakStatement":
-    case "ContinueStatement":
-    case "ImportSpecifier":
-    case "ExportSpecifier":
-    case "MetaProperty":
-      return false;
-    default:
-      return !(FUNCTION_TYPES.has(parent.type) && key === "params");
-  }
-}
-
-/**
- * Names a template node binds for its children: `{#each items as item, i}`,
- * `{:then value}`, `let:x`, `{#snippet s(a)}`, and a fragment's
- * `{@const x = …}`.
- */
-function templateBindings(node: Node): string[] {
-  const names: string[] = [];
-  const add = (pattern: unknown) => {
-    if (pattern && typeof pattern === "object")
-      patternNames(pattern as Node, names);
+/** A component's AST and the bindings its `<script>` declares. */
+function analyze(source: string) {
+  const ast = parse(source, { css: false });
+  const scopes = analyzeScopes(ast);
+  return {
+    body: (ast.instance?.content.body ?? []) as unknown as Node[],
+    instance: scopes.instance,
+    bindings: [...scopes.instance.declarations.values()],
   };
-  switch (node.type) {
-    case "EachBlock":
-      add(node.context);
-      if (typeof node.index === "string") names.push(node.index);
-      break;
-    case "AwaitBlock":
-      add(node.value);
-      add(node.error);
-      break;
-    case "SnippetBlock":
-      for (const parameter of (node.parameters as unknown[]) ?? [])
-        add(parameter);
-      break;
-  }
-  for (const attribute of (node.attributes as Node[] | undefined) ?? []) {
-    if (attribute.type !== "LetDirective") continue;
-    if (attribute.expression) add(attribute.expression);
-    else names.push(attribute.name as string);
-  }
-  if (node.type === "Fragment") {
-    for (const child of node.nodes as Node[]) {
-      if (child.type !== "ConstTag") continue;
-      const declaration = child.declaration as Node;
-      for (const d of declaration.declarations as Node[]) add(d.id);
-    }
-  }
-  return names;
 }
 
-/** Identifiers a script or template subtree refers to, minus template-local names. */
-function referencesOf(root: unknown) {
-  const references = new Set<string>();
-  const scopes: Set<string>[] = [];
-  const scoped = new Set<unknown>();
-  walk(root as Parameters<typeof walk>[0], {
-    enter(node, parent, key) {
-      const n = node as unknown as Node;
-      const bindings = templateBindings(n);
-      if (bindings.length > 0) {
-        scopes.push(new Set(bindings));
-        scoped.add(node);
-      }
-      if (
-        n.type === "Identifier" &&
-        n.name &&
-        isReference(parent as unknown as Node | null, key) &&
-        !scopes.some((scope) => scope.has(n.name as string))
-      ) {
-        references.add(n.name);
-      }
-    },
-    leave(node) {
-      if (scoped.delete(node)) scopes.pop();
-    },
-  });
-  return references;
-}
-
-/** Names bound by a declaration pattern, including destructuring. */
-function patternNames(pattern: Node, names: string[] = []): string[] {
-  switch (pattern.type) {
-    case "Identifier":
-      names.push(pattern.name as string);
-      break;
-    case "ObjectPattern":
-      for (const p of pattern.properties as Node[]) {
-        patternNames(
-          p.type === "RestElement" ? (p.argument as Node) : (p.value as Node),
-          names,
-        );
-      }
-      break;
-    case "ArrayPattern":
-      for (const el of pattern.elements as (Node | null)[]) {
-        if (el) patternNames(el, names);
-      }
-      break;
-    case "RestElement":
-      patternNames(pattern.argument as Node, names);
-      break;
-    case "AssignmentPattern":
-      patternNames(pattern.left as Node, names);
-      break;
+/** Whether `scope` is in a function, short of the `<script>`'s scope. */
+function inFunction(scope: Scope, instance: Scope): boolean {
+  for (let s: Scope | null = scope; s && s !== instance; s = s.parent) {
+    if (s.node && FUNCTION_TYPES.has(s.node.type)) return true;
   }
-  return names;
-}
-
-/** Top-level names a statement assigns, e.g. `headings` in `$: if (a) headings = …`. */
-function assignedNames(node: Node): string[] {
-  const names: string[] = [];
-  walk(node as unknown as Parameters<typeof walk>[0], {
-    enter(child) {
-      const n = child as unknown as Node;
-      if (FUNCTION_TYPES.has(n.type)) return SKIP;
-      if (n.type === "AssignmentExpression") {
-        patternNames(n.left as Node, names);
-      } else if (n.type === "UpdateExpression") {
-        patternNames(n.argument as Node, names);
-      }
-    },
-  });
-  return names;
+  return false;
 }
 
 function dedent(text: string): string {
@@ -201,7 +82,12 @@ function dedent(text: string): string {
     .join("\n");
 }
 
-function parseStatement(node: Node, source: string): Statement {
+function parseStatement(
+  node: Node,
+  source: string,
+  bindings: Binding[],
+  instance: Scope,
+): Statement {
   if (node.type === "ImportDeclaration") {
     const specifiers = (node.specifiers as Node[]).map((s): Specifier => ({
       kind:
@@ -226,36 +112,32 @@ function parseStatement(node: Node, source: string): Statement {
     };
   }
 
-  const declaration =
-    node.type === "ExportNamedDeclaration" && node.declaration
-      ? (node.declaration as Node)
-      : node;
-  let declares: string[];
-  switch (declaration.type) {
-    case "VariableDeclaration":
-      declares = (declaration.declarations as Node[]).flatMap((d) =>
-        patternNames(d.id as Node),
-      );
-      break;
-    case "FunctionDeclaration":
-    case "ClassDeclaration":
-    case "TSInterfaceDeclaration":
-    case "TSTypeAliasDeclaration":
-      declares = [(declaration.id as Node).name as string];
-      break;
-    default:
-      // `$: x = …`, `$: if (…) { x = … }`, `onMount(() => …)`: a statement
-      // that writes page state comes along with that state.
-      declares = assignedNames(declaration);
+  const within = (n: { start: number }) =>
+    n.start >= node.start && n.start < node.end;
+  const declares = new Set<string>();
+  const references = new Set<string>();
+  for (const binding of bindings) {
+    if (binding.node && within(binding.node)) declares.add(binding.name);
+    for (const reference of binding.references) {
+      if (!within(reference.node)) continue;
+      references.add(binding.name);
+      // `$: x = …`, `$: if (…) { x = … }`: a statement that writes page
+      // state comes along with that state.
+      if (reference.writes && !inFunction(reference.scope, instance)) {
+        declares.add(binding.name);
+      }
+    }
   }
+  for (const name of declares) references.delete(name);
 
   // Keep a leading comment (`/** … */`) with its declaration.
   const comments = node.leadingComments as Node[] | undefined;
   const start = comments?.length ? comments[0].start : node.start;
-  const references = referencesOf(node);
-  for (const name of declares) references.delete(name);
-  references.delete("$");
-  return { text: dedent(source.slice(start, node.end)), declares, references };
+  return {
+    text: dedent(source.slice(start, node.end)),
+    declares: [...declares],
+    references,
+  };
 }
 
 const pageStatementsCache = new Map<string, Statement[]>();
@@ -263,10 +145,9 @@ const pageStatementsCache = new Map<string, Statement[]>();
 function pageStatements(pageScript: string): Statement[] {
   let statements = pageStatementsCache.get(pageScript);
   if (!statements) {
-    const program = parse(pageScript, { css: false }).instance?.content as
-      { body: Node[] } | undefined;
-    statements = (program?.body ?? []).map((node) =>
-      parseStatement(node, pageScript),
+    const { body, bindings, instance } = analyze(pageScript);
+    statements = body.map((node) =>
+      parseStatement(node, pageScript, bindings, instance),
     );
     pageStatementsCache.set(pageScript, statements);
   }
@@ -274,25 +155,19 @@ function pageStatements(pageScript: string): Statement[] {
 }
 
 /**
- * Names an example's markup uses: component tags, `use:`/`transition:`/
- * `in:`/`out:`/`animate:` directives, and every `{…}` expression, including
- * shorthand `bind:x` and `class:x`.
+ * The page-script names an example's markup uses, read from the page
+ * script and the markup as one component: tags, directives, `{…}`
+ * expressions and `$store` subscriptions, but not names the markup
+ * declares itself, such as an `{#each}` item or a `let:` directive.
  */
-function markupReferences(markup: string): Set<string> {
-  const fragment = parse(markup, { css: false }).fragment;
-  const references = referencesOf(fragment);
-  walk(fragment, {
-    enter(node) {
-      if (
-        node.type === "Component" ||
-        node.type === "UseDirective" ||
-        node.type === "TransitionDirective" ||
-        node.type === "AnimateDirective"
-      ) {
-        references.add(node.name.split(".")[0]);
-      }
-    },
-  });
+function markupReferences(markup: string, pageScript: string): Set<string> {
+  const markupStart = pageScript.length + 1;
+  const references = new Set<string>();
+  for (const binding of analyze(`${pageScript}\n${markup}`).bindings) {
+    if (binding.references.some((r) => r.node.start >= markupStart)) {
+      references.add(binding.name);
+    }
+  }
   return references;
 }
 
@@ -325,7 +200,7 @@ export function exampleSource(
   // Everything the markup uses, then what those statements use, to a fixpoint.
   const needed = new Set<string>();
   const included = new Set<Statement>();
-  const queue = [...markupReferences(markup)];
+  const queue = [...markupReferences(markup, pageScript)];
   while (queue.length > 0) {
     const name = queue.pop() as string;
     if (needed.has(name) || !byName.has(name)) continue;
