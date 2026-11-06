@@ -129,7 +129,6 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy, windowShift } from "../utils/fit-align.js";
@@ -139,6 +138,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { tabindexAttribute } from "../utils/tabindex.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
@@ -229,23 +229,15 @@
     }
   }
 
-  // A hover-opened tooltip must close on Escape wherever focus is. Runs in
-  // the capture phase so it closes before an ancestor (e.g. a Modal) sees
-  // Escape. Focus inside the tooltip is left to `handleKeydown`, so nested
-  // widgets still get Escape first.
-  /** @param {Event} event */
-  function handleWindowKeydown(event) {
-    // Escape that cancels an IME composition is not a close.
-    if (
-      /** @type {KeyboardEvent} */ (event).key !== "Escape" ||
-      !open ||
-      isImeComposition(/** @type {KeyboardEvent} */ (event))
-    )
-      return;
-    const target = /** @type {Node | null} */ (event.target);
-    if (ref?.contains(target) || refTooltip?.contains(target)) return;
-    event.stopPropagation();
-    open = false;
+  // A hover-opened tooltip must close on Escape wherever focus is. It is a
+  // layer in the overlay stack while open, taking the key in the capture
+  // phase so it closes before an ancestor (e.g. a Modal) sees Escape, unless
+  // a layer opened after it is above. Focus inside the tooltip is left to
+  // `handleKeydown`, so nested widgets still get Escape first.
+  /** @param {KeyboardEvent} [event] */
+  function escapeMode(event) {
+    const target = /** @type {Node | null} */ (event?.target ?? null);
+    return !(ref?.contains(target) || refTooltip?.contains(target));
   }
 
   // Bound to both the trigger and the tooltip content (which can hold
@@ -501,11 +493,15 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-  use:dismiss={{
+  use:overlay={{
     enabled: open,
-    type: "keydown",
-    handler: handleWindowKeydown,
-    options: { capture: true },
+    kind: "tooltip",
+    capture: true,
+    outside: "ignore",
+    escape: escapeMode,
+    onDismiss: () => {
+      open = false;
+    },
   }}
   style:position="relative"
   style:z-index={open ? 1 : undefined}

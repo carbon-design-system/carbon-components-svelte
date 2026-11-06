@@ -1,8 +1,8 @@
 // @ts-check
 import { derived, get, writable } from "svelte/store";
-import { dismiss as windowListener } from "./dismiss.js";
 import { isPointerFocus } from "./focus.js";
 import { isImeComposition } from "./ime-composition.js";
+import { createOverlay } from "./overlay-stack.js";
 import { ignoreTooltipClicks } from "./tooltip-clicks.js";
 import { closeOverControls } from "./tooltip-cover.js";
 import { createTooltipHandoff } from "./tooltip-handoff.js";
@@ -135,11 +135,6 @@ export function createAnchoredTooltip({
     handoff.dismiss();
   }
 
-  /** @param {Event} event */
-  function handleWindowKeydown(event) {
-    handleKeydown(/** @type {KeyboardEvent} */ (event));
-  }
-
   /**
    * The pointer moved onto a part of a portalled tooltip that covers
    * another control: close at once, so the pointer and the next click
@@ -161,12 +156,13 @@ export function createAnchoredTooltip({
   }
 
   /**
-   * Listen for hover, focus and activation on `node`, and for Escape on
-   * `window` while the tooltip shows. A click on an inline tooltip inside
-   * `node` does nothing, and the pointer on a part of it that covers
-   * another control closes it at once. The capture phase lets a tooltip
-   * opened by hover hide while focus is elsewhere, before an ancestor sees
-   * the key.
+   * Listen for hover, focus and activation on `node`. While the tooltip
+   * shows it is a layer in the overlay stack, so Escape reaches it when it
+   * is the top layer: a menu opened after it takes the key first. A layer
+   * takes Escape in the capture phase, so a tooltip opened by hover hides
+   * while focus is elsewhere, before an ancestor sees the key. A click on an
+   * inline tooltip inside `node` does nothing, and the pointer on a part of
+   * it that covers another control closes it at once.
    * @param {HTMLElement} node
    * @returns {() => void} Removes the listeners.
    */
@@ -182,17 +178,18 @@ export function createAnchoredTooltip({
     for (const [type, listener] of listeners) {
       node.addEventListener(type, listener);
     }
-    /** @type {import("./dismiss.js").DismissParams} */
-    const escapeOptions = {
-      enabled: false,
-      type: "keydown",
-      handler: handleWindowKeydown,
-      options: { capture: true },
-    };
-    const escapeListener = windowListener(null, escapeOptions);
-    const unsubscribe = open.subscribe(($open) => {
-      escapeListener.update({ ...escapeOptions, enabled: $open });
+    const layer = createOverlay({
+      kind: "tooltip",
+      element: node,
+      capture: true,
+      // A tooltip never takes a click; it closes with the pointer or focus.
+      outside: "ignore",
+      escape: () =>
+        passEscape() || (passEscapeWhenFocused && get(focused)) ? "pass" : true,
+      onDismiss: (_trigger, event) =>
+        handleKeydown(/** @type {KeyboardEvent} */ (event)),
     });
+    const unsubscribe = open.subscribe(($open) => layer.sync($open));
     const tooltipClicks = ignoreTooltipClicks(node);
     const tooltipCover = closeOverControls(node, { onCover: dismiss });
     return () => {
@@ -200,7 +197,7 @@ export function createAnchoredTooltip({
         node.removeEventListener(type, listener);
       }
       unsubscribe();
-      escapeListener.destroy();
+      layer.close();
       tooltipClicks.destroy();
       tooltipCover.destroy();
     };

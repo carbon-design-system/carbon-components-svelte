@@ -71,16 +71,15 @@
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy, slideIntoWindow } from "../utils/fit-align.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
   import { physicalAlign } from "../utils/inline-align.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -207,26 +206,23 @@
     };
   });
 
-  // Runs in the capture phase so a visible tooltip is dismissed before any
-  // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
-  // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
-  /** @param {KeyboardEvent} event */
-  function handleKeydown(event) {
-    // Escape that cancels an IME composition is not a close.
-    if (event.key !== "Escape" || isImeComposition(event)) return;
-    const visible = shown;
-    hide();
-    if (visible) event.stopPropagation();
-  }
+  // A visible tooltip is a layer in the overlay stack. It takes Escape in the
+  // capture phase so it is dismissed before any ancestor (e.g. a Modal) sees
+  // the key, whether focus is on the trigger or elsewhere, unless a layer
+  // opened after it (a menu) is above it. A second Escape, with nothing
+  // left to dismiss, still bubbles.
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <span
-  use:dismiss={{
+  use:overlay={{
     enabled: open,
-    type: "keydown",
-    handler: handleKeydown,
-    options: { capture: true },
+    kind: "tooltip",
+    capture: true,
+    outside: "ignore",
+    // Hidden but listening: hide, and let the key go on.
+    escape: shown ? true : "pass",
+    onDismiss: hide,
   }}
   class:bx--tooltip--definition={true}
   class:bx--tooltip--a11y={true}
