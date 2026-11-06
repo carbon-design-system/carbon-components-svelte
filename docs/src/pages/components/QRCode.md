@@ -48,6 +48,8 @@ Set `alternative="disclosure"` to fold the text behind the label, for a flow whe
   <span slot="textAlternative" let:text>{text.replace(/(.{4})(?=.)/g, "$1 ")}</span>
 </QRCode>
 
+For a whole enrollment flow, with the code, the key, a verification step, and recovery codes, see [Two-factor setup](/two-factor-setup).
+
 ### Your own
 
 Set `alternative="none"` when the page already shows the value as text, such as a link beside the code. Point `aria-describedby` at it, and keep it on the page: the code is not an alternative to it.
