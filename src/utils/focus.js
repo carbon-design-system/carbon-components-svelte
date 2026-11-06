@@ -1,5 +1,6 @@
 // @ts-check
 import { tick } from "svelte";
+import { selectorTabbable } from "./trap-focus.js";
 
 const selectorFirstInput =
   'input:not([type="hidden"]):not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"])';
@@ -103,9 +104,10 @@ export function isPointerFocus(node) {
 
 /**
  * Save focus before an overlay opens and restore it on close when the element
- * is still connected. Pass the overlay as `region` to skip the restore when
- * focus has already moved outside it (e.g. a close handler opened another
- * dialog).
+ * is still connected. With nothing focused, it saves the control a pointer
+ * last pressed (Safari does not focus a clicked button). Pass the overlay as
+ * `region` to skip the restore when focus has already moved outside it (e.g. a
+ * close handler opened another dialog).
  *
  * @returns {{ save: () => void; restore: (region?: Element | null) => void }}
  */
@@ -116,10 +118,18 @@ export function restoreFocus() {
     save() {
       // Also runs while rendering an open overlay on the server.
       if (typeof document === "undefined") return;
-      prevFocus =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
+      const active = document.activeElement;
+      prevFocus = active instanceof HTMLElement ? active : null;
+      // Safari does not focus a button on click, so `<body>` holds focus when
+      // a click opens the overlay. Return to the control that was pressed.
+      if (!active || active === document.body) {
+        const pressed =
+          pressTarget instanceof Element
+            ? pressTarget.closest(selectorTabbable)
+            : null;
+        if (pressed instanceof HTMLElement && pressed.isConnected)
+          prevFocus = pressed;
+      }
     },
     restore(region) {
       if (!prevFocus?.isConnected) return;
