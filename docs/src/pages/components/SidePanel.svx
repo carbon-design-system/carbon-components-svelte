@@ -1,6 +1,7 @@
 ---
 components: ["SidePanel"]
 description: Side panels keep users in the context of a page while they view details, edit settings or work through a short flow.
+keywords: ["drawer"]
 ---
 
 <script>

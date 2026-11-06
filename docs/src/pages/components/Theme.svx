@@ -1,6 +1,7 @@
 ---
 components: ["Theme"]
 description: Theme provides dynamic client-side theming using CSS variables, with five built-in themes and custom token overrides.
+keywords: ["dark mode", "light mode"]
 ---
 
 <script>

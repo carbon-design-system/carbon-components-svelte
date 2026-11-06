@@ -14,6 +14,7 @@ type SearchDocument = {
   description: string;
   summary?: string;
   components?: string;
+  keywords?: string;
   href: string;
   isComponent: boolean;
 };
@@ -36,6 +37,7 @@ for (const componentName of getComponentNames()) {
     description: componentName,
     summary: frontmatter.description,
     components: frontmatter.components?.join(" "),
+    keywords: frontmatter.keywords?.join(" "),
     href: `/components/${componentName}`,
     isComponent: true,
   });

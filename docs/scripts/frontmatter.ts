@@ -6,6 +6,8 @@ export type Frontmatter = {
   components?: string[];
   /** A one-sentence summary of the page. */
   description?: string;
+  /** Other words readers search for the page by, such as `chip` for Tag. */
+  keywords?: string[];
 };
 
 /** A page's front matter, unparsed, and the rest of the page. */
