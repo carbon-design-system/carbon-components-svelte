@@ -6,7 +6,7 @@
 //   bun run build:docs   # from the repo root, for the .d.ts files
 //   cd docs && bun scripts/typecheck-examples.ts
 //
-// Framed examples are checked in place. Live examples (markup in a `.svx`
+// Framed examples are checked in place. Live examples (markup in a `.md`
 // page) are written, one file per page, to a scratch directory with the
 // page's `<script>`, the way the page compiles them.
 import fs from "node:fs";
@@ -48,7 +48,7 @@ const IGNORED = [
  */
 const KNOWN: Array<[file: string, message: RegExp]> = [
   // `sort` gets the union of every cell type, so `new Date(a)` fails.
-  ["src/pages/components/DataTable.svx", /^No overload matches this call/],
+  ["src/pages/components/DataTable.md", /^No overload matches this call/],
 ];
 const knownHits = new Set<number>();
 
@@ -71,8 +71,8 @@ function isLiveExample(node: HtmlNode) {
 /** Line in the generated file → line in the page. */
 const lineMaps = new Map<string, number[]>();
 
-function writePage(svx: string) {
-  const source = fs.readFileSync(svx, "utf8");
+function writePage(page: string) {
+  const source = fs.readFileSync(page, "utf8");
   const scripts: string[] = [];
   const examples: HtmlNode[] = [];
   visit(parseMarkdown(source), "html", (node: HtmlNode) => {
@@ -85,7 +85,7 @@ function writePage(svx: string) {
   const script = scripts
     .join("\n")
     .replace(RELATIVE_IMPORT_RE, (_, keyword, quote, specifier) => {
-      const resolved = path.resolve(path.dirname(svx), specifier);
+      const resolved = path.resolve(path.dirname(page), specifier);
       return `${keyword}${quote}${path.relative(OUT, resolved)}${quote}`;
     });
   const lines = script.split("\n");
@@ -106,7 +106,7 @@ function writePage(svx: string) {
       map.push(start + i);
     }
   }
-  const name = `${path.basename(svx, PAGE_EXTENSION)}.svelte`;
+  const name = `${path.basename(page, PAGE_EXTENSION)}.svelte`;
   fs.writeFileSync(path.join(OUT, name), lines.join("\n"));
   lineMaps.set(name, map);
 }

@@ -15,7 +15,7 @@ export type Route = {
   file: string;
 };
 
-const PAGE_FILE_RE = /^\.\/pages\/(.*)\.(svelte|svx)$/;
+const PAGE_FILE_RE = /^\.\/pages\/(.*)\.(svelte|md)$/;
 const NOT_FOUND = "[...404]";
 
 /** Routes for page files, keyed by path, and the not-found route. */

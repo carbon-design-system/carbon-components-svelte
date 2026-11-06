@@ -1,7 +1,7 @@
 # Thumbnails
 
 Every component with a docs page gets a 320×180 SVG here, named after
-the page in kebab case (`ToggleButtonGroup.svx` →
+the page in kebab case (`ToggleButtonGroup.md` →
 `toggle-button-group.svg`). `carbon.yml` points at these through
 `thumbnailPath`, and they're the preview a catalog shows next to the
 component name.

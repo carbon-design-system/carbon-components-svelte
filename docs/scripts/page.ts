@@ -1,5 +1,5 @@
 /**
- * Compiles a docs page (`.svx`, Markdown with Svelte in it) to a Svelte
+ * Compiles a docs page (`.md`, Markdown with Svelte in it) to a Svelte
  * component, as mdsvex did with the site's options: front matter becomes
  * a module script's `metadata`, the Markdown becomes HTML through the
  * site's remark and rehype plugins, code blocks go through `highlight`,
@@ -13,7 +13,7 @@ type File = { filename: string };
 type Transformer = (tree: Root, file: File) => void | Promise<void>;
 export type Plugin = () => Transformer;
 
-export type SvxOptions = {
+export type PageOptions = {
   remarkPlugins?: Plugin[];
   rehypePlugins?: Plugin[];
   /** HTML for a fenced code block. */
@@ -253,10 +253,10 @@ const MODULE_SCRIPT_RE = /^<script\b[^>]*\bcontext=["']?module/i;
 const STYLE_RE = /^<style\b/i;
 const SPECIAL_RE = /^<svelte:(options|head|window|body)\b/;
 
-export async function compileSvx(
+export async function compilePage(
   source: string,
   filename: string,
-  options: SvxOptions,
+  options: PageOptions,
 ): Promise<string> {
   const file = { filename };
   const tree = parseMarkdown(source);

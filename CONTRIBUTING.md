@@ -35,7 +35,7 @@ bun setup
 
 This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`.
 
-Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/) and Svelte 5, routes with `docs/src/router.ts`, and compiles its Markdown pages (`.svx`) with `docs/scripts/svx.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
+Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/) and Svelte 5, routes with `docs/src/router.ts`, and compiles its Markdown pages (`.md`) with `docs/scripts/page.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
 
 To preview the docs site locally:
 
@@ -197,7 +197,7 @@ API, docs, and workflow:
 
 - Never hand-edit generated files. `src/**/*.svelte.d.ts`, `src/index.d.ts`, and `docs/src/COMPONENT_API.json` are produced by sveld and are gitignored.
 - Document the public API in JSDoc. Cover every exported prop, event, slot, and rest-props target. See [Typing with JSDoc](#typing-with-jsdoc).
-- Update component docs when appropriate. New props, features, and behavior changes need matching `.svx` updates. See [Component documentation](#component-documentation).
+- Update component docs when appropriate. New props, features, and behavior changes need matching `.md` updates. See [Component documentation](#component-documentation).
 - Use `$$restProps` + `@restProps` for passthrough attributes (see [`Search.svelte`](src/Search/Search.svelte)).
 - Scope lint and tests to what you changed. See [Checks](#checks) and [Unit tests](#unit-tests).
 
@@ -230,7 +230,7 @@ Types live in JSDoc comments, not TypeScript inside `.svelte` files. [sveld](htt
 - `src/**/*.svelte.d.ts` and `src/index.d.ts` (consumer types)
 - `docs/src/COMPONENT_API.json` (docs site API tables)
 
-The auto-generated Props / Typedefs / Slots / Events tables at the bottom of each docs page come from `COMPONENT_API.json`. JSDoc is the source of truth for API tables; the `.svx` file covers usage examples and prose.
+The auto-generated Props / Typedefs / Slots / Events tables at the bottom of each docs page come from `COMPONENT_API.json`. JSDoc is the source of truth for API tables; the `.md` file covers usage examples and prose.
 
 #### JSDoc tags
 
@@ -349,18 +349,18 @@ Title a new-example commit after the example's exact heading:
 
 | Path | Purpose |
 | --- | --- |
-| `docs/src/pages/components/{Component}.svx` | Main component page (for example `Button.svx`): prose + examples |
+| `docs/src/pages/components/{Component}.md` | Main component page (for example `Button.md`): prose + examples |
 | `docs/src/pages/framed/{Component}/{Example}.svelte` | Interactive demos referenced by `<FileSource>` |
 
 The router picks up new pages under `docs/src/pages` automatically. The docs config and scripts read the extension from `PAGE_EXTENSION` in [`docs/scripts/constants.ts`](docs/scripts/constants.ts), so change it there. [`docs/scripts/index-docs.ts`](docs/scripts/index-docs.ts) indexes each page and its `##` headings for search. The sidebar is built from [`docs/src/component-categories.ts`](docs/src/component-categories.ts): add new pages to a category there, or they land under "Other". Record the first release in [`docs/src/component-since-versions.ts`](docs/src/component-since-versions.ts) for the "new" badge and the component index.
 
-Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [SVX gotchas](#svx-gotchas).
+Prose conventions: see [Prose and inline code](#prose-and-inline-code) and [Markdown page gotchas](#markdown-page-gotchas).
 
 Preview locally with `cd docs && bun dev`.
 
 #### Example conventions
 
-Before adding an example, read the component's `.svx` and follow its order, grouping, and voice. Reference pages: [`Button.svx`](docs/src/pages/components/Button.svx), [`ComboBox.svx`](docs/src/pages/components/ComboBox.svx).
+Before adding an example, read the component's `.md` and follow its order, grouping, and voice. Reference pages: [`Button.md`](docs/src/pages/components/Button.md), [`ComboBox.md`](docs/src/pages/components/ComboBox.md).
 
 Page structure:
 
@@ -388,16 +388,16 @@ Headings and grouping:
 
 - The first, plainest example is `## Basic` — never `## Default`.
 - Keep headings concise. The page title already names the component, so drop the repeated component-noun prefix (`Header with app switcher` → `App switcher`) and trailing `state` / `variant` / `size` (`Invalid state` → `Invalid`, `Light variant` → `Light`, `Small size` → `Small`).
-- Group related examples under a `## Group` heading with `###` children when several share an axis: `Sizes`, `States` (invalid / warning / disabled / read-only), `Fluid`, `Variants`, `Skeleton`, `Selectable`, `Filterable`, `Low contrast`, and the like. Prefer this over a long flat list of `##` headings. Lead each group with its simplest member using a descriptive label (never `Default`); the group's base example can sit directly under the `## Group` heading. See [`TextInput.svx`](docs/src/pages/components/TextInput.svx) (Sizes / States / Fluid), [`Tag.svx`](docs/src/pages/components/Tag.svx) (Filterable / Selectable), and [`TreeView.svx`](docs/src/pages/components/TreeView.svx).
+- Group related examples under a `## Group` heading with `###` children when several share an axis: `Sizes`, `States` (invalid / warning / disabled / read-only), `Fluid`, `Variants`, `Skeleton`, `Selectable`, `Filterable`, `Low contrast`, and the like. Prefer this over a long flat list of `##` headings. Lead each group with its simplest member using a descriptive label (never `Default`); the group's base example can sit directly under the `## Group` heading. See [`TextInput.md`](docs/src/pages/components/TextInput.md) (Sizes / States / Fluid), [`Tag.md`](docs/src/pages/components/Tag.md) (Filterable / Selectable), and [`TreeView.md`](docs/src/pages/components/TreeView.md).
 - Name variant families with a `Base (qualifier)` form: `Fluid (invalid)`, `Icon-only (large)`.
 
 Renaming headings (anchors):
 
 Heading slugs are GitHub-style ([rehype-slug](https://github.com/rehypejs/rehype-slug)): lowercase, spaces to `-`, parentheses and punctuation stripped (`Fluid variant (invalid)` → `fluid-invalid`). When you rename a heading that is a link target:
 
-- Fix in-page links: `grep -nE '\(#' <file>.svx`
+- Fix in-page links: `grep -nE '\(#' <file>.md`
 - Fix cross-page links: `grep -rn '<Component>#<old-anchor>' docs/src/pages`
-- To keep an anchor while grouping, demote the heading to `###` with its text unchanged — the slug is preserved. See `#selectable` / `#radio-group` in [`ContextMenu.svx`](docs/src/pages/components/ContextMenu.svx) and `Portal#custom-target`.
+- To keep an anchor while grouping, demote the heading to `###` with its text unchanged — the slug is preserved. See `#selectable` / `#radio-group` in [`ContextMenu.md`](docs/src/pages/components/ContextMenu.md) and `Portal#custom-target`.
 
 Description language: lead with an imperative instruction when the section introduces a prop to set. Switch to a declarative sentence only to state resulting behavior, not a new action. See [Writing style](#writing-style) for Carbon content rules.
 
@@ -428,7 +428,7 @@ Insert new sections in the logical group, and nest the variants above under `## 
 
 Inline vs framed:
 
-- Inline: simple, static demos directly in the `.svx` file
+- Inline: simple, static demos directly in the `.md` file
 - `<FileSource src="/framed/Component/Example" />`: reactive state, `bind:this`, events, async behavior, or demos too large for inline. Add the Svelte file under `docs/src/pages/framed/{Component}/` (PascalCase name, for example `ReactiveComboBox.svelte`)
 
 Use a framed example whenever the demo contains script logic (state, handlers, async work). The full source shows in the docs, so keep it readable:
@@ -448,10 +448,10 @@ Other patterns:
   - When a long string is needed to demonstrate overflow or truncation, make the content itself realistic (a file path, a log line, an error message) instead of padding a short phrase with filler.
 - Don't hardcode layout styles in examples: no `style="margin-…"`, `max-width` wrappers, or `display: flex` / `grid` divs with a `gap`, and no `style` on a component to space it. Compose with library components instead, so the example shows how to build the layout with the library:
   - [`Stack`](docs/src/pages/framed/Dropdown/MultipleDropdown.svelte) for stacking and gaps (`gap`, `orientation="horizontal"`).
-  - [`Box`](docs/src/pages/components/Box.svx) for widths, margins, padding and borders (`maxWidth`, `marginTop`, `padding`).
+  - [`Box`](docs/src/pages/components/Box.md) for widths, margins, padding and borders (`maxWidth`, `marginTop`, `padding`).
   - The component's own props when it has them, such as `noMargin` or `fullWidth`.
 
-  Reserve inline styles for what these can't express, such as setting a CSS custom property the example is about. Before committing, run `grep -n 'style=' <file>.svx` on the lines you added.
+  Reserve inline styles for what these can't express, such as setting a CSS custom property the example is about. Before committing, run `grep -n 'style=' <file>.md` on the lines you added.
 - Add `data-outline` to an element when an outline makes the demo clearer, for example marking a right-click target in a context menu. The framed module provides the global style; see `<p data-outline …>` in [`ContextMenuTarget.svelte`](docs/src/pages/framed/ContextMenu/ContextMenuTarget.svelte).
 
 #### Writing style
@@ -460,12 +460,12 @@ Follow [Carbon's writing style](https://carbondesignsystem.com/guidelines/conten
 
 #### Prose and inline code
 
-Inline code in `.svx` prose is styled as Carbon code tokens. Keep backticks sparse so section intros stay readable.
+Inline code in `.md` prose is styled as Carbon code tokens. Keep backticks sparse so section intros stay readable.
 
 **Split of responsibilities:**
 
 - JSDoc + auto-generated API tables = exhaustive identifier reference
-- `.svx` prose = readable explanation; examples = copy-paste usage
+- `.md` prose = readable explanation; examples = copy-paste usage
 
 **Backtick when essential** (one primary target per paragraph):
 
@@ -484,16 +484,16 @@ Inline code in `.svx` prose is styled as Carbon code tokens. Keep backticks spar
 
 - Live Svelte examples, `<FileSource />`, fenced code blocks, reference tables (events/gestures/slot vars)
 
-#### SVX gotchas
+#### Markdown page gotchas
 
-In `.svx` files, markdown prose is compiled as Svelte. **Bare `{ ... }` in prose is parsed as JavaScript**, not displayed text.
+Docs pages are `.md` files, but not plain Markdown: the prose is compiled as Svelte, next to `<script>` blocks and components. `bun fmt` skips them; don't let an editor's Markdown formatter rewrite them either. **Bare `{ ... }` in prose is parsed as JavaScript**, not displayed text.
 
 | Bad (runtime error) | Good |
 | --- | --- |
 | `` `event.detail` as { key, direction } `` | `` `event.detail` shaped like `{ key, direction }` `` |
 | `receives (a, b, { key, ascending })` | `` receives `(a, b, { key, ascending })` `` |
 
-Always wrap object literals and expressions in backticks, or rephrase without braces. See [`DataTable.svx`](docs/src/pages/components/DataTable.svx) sort section for a real incident.
+Always wrap object literals and expressions in backticks, or rephrase without braces. See [`DataTable.md`](docs/src/pages/components/DataTable.md) sort section for a real incident.
 
 **Don't start a wrapped prose line with a component tag.** The page compiler ends the paragraph at a line that opens with a tag such as `<DocKbd>`, and the rest loses Markdown parsing, so its backticks render literally. Keep the preceding word on the tag's line:
 
@@ -517,7 +517,7 @@ press <DocKbd label="Enter" /> to toggle `expanded`.
 | Varied `hideLabel` / `hideLegend` wording | Standard boilerplate (below) |
 | Listing every prop in backticks in one intro sentence | Plain-language data shape; one configuring prop backtick per paragraph |
 | `` `selectedIds` tracks a single id` `` (implementation narration) | "Only one node is selected at a time" |
-| Prop laundry lists in intros | Links to sibling sections ([TreeView Basic](docs/src/pages/components/TreeView.svx) pattern) |
+| Prop laundry lists in intros | Links to sibling sections ([TreeView Basic](docs/src/pages/components/TreeView.md) pattern) |
 
 Standard boilerplate for hidden labels (copy verbatim):
 
@@ -580,7 +580,7 @@ The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click
 
 1. Export from `src/index.js`
 2. JSDoc all public API → `bun build:docs`
-3. Create `docs/src/pages/components/{Component}.svx` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow the prose conventions in [Prose and inline code](#prose-and-inline-code).
+3. Create `docs/src/pages/components/{Component}.md` modeled on a similar existing component: a frontmatter `description:`, then `## Basic` first (see [Example conventions](#example-conventions) for structure and grouping). Follow the prose conventions in [Prose and inline code](#prose-and-inline-code).
 4. Add framed examples only where interactivity requires them
 5. Add the page to a category in `docs/src/component-categories.ts` and its first version to `docs/src/component-since-versions.ts`
 6. Preview with `cd docs && bun dev`

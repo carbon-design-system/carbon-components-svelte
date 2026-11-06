@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { parseMarkdown } from "../../docs/scripts/markdown";
-import { compileSvx } from "../../docs/scripts/svx";
+import { compilePage } from "../../docs/scripts/page";
 
 const strip = (value: unknown): unknown =>
   JSON.parse(
@@ -85,9 +85,9 @@ describe("parseMarkdown block ends", () => {
   });
 });
 
-describe("compileSvx", () => {
+describe("compilePage", () => {
   it("puts front matter in a module script and wraps the page in its layout", async () => {
-    const code = await compileSvx(
+    const code = await compilePage(
       [
         "---",
         "description: A summary.",
@@ -102,7 +102,7 @@ describe("compileSvx", () => {
         "",
         "Use `{x}`.",
       ].join("\n"),
-      "Button.svx",
+      "Button.md",
       { highlight: (code) => code, layouts: { _: "/Layout.svelte" } },
     );
     expect(code).toBe(
