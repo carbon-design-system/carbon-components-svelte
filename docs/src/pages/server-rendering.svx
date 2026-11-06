@@ -165,31 +165,72 @@ Most components generate an id with a random value, such as `ccs-8t2995v243o`, f
 | A CSS selector, anchor, or script that uses a generated id sees a different value after hydration. | The rewrite is silent. |
 | A form submitted without JavaScript posts a random field name. | Applies to `RadioButtonGroup`, `TileGroup`, and `StructuredList` with `selection` when you pass no `name`, and to `DataTable` selection inputs with neither `id` nor `inputName`. |
 
-Pass your own `id` or `name` to make the markup identical on every render. Ids must be unique on the page, so derive them from the item key inside `{#each}` blocks. In a Svelte 5 component, `$props.id()` gives you a value that matches on the server and the client.
+Svelte warns about none of this, so a quiet console does not prove the ids match. Three levels of work make the markup identical on every render.
+
+| Do | Why |
+| :--- | :--- |
+| Call `createIdScope("app")` in the root layout. | Every component without an `id` takes `app-…` from a counter in render order, which the server and the browser repeat. |
+| Pass an `id` to a component. | Its inner ids derive from it (`{id}-helper`, `{id}-label`), and so do the ids of the children it owns. |
+| Pass your own `id` or `name` to a field. | It also fixes the form field name and any selector, anchor, or script that uses the id. |
 
 ```svelte
-<TextInput id="email" labelText="Email" name="email" />
-<RadioButtonGroup legendText="Plan" name="plan" id="plan">
-  <RadioButton id="plan-free" value="free" labelText="Free" />
-  <RadioButton id="plan-pro" value="pro" labelText="Pro" />
-</RadioButtonGroup>
+<!-- src/routes/+layout.svelte -->
+<script>
+  import { createIdScope } from "carbon-components-svelte";
+
+  createIdScope("app");
+</script>
+
+<slot />
+```
+
+`createIdScope(id)` starts a scope for the component that calls it and everything below it, slotted children included, and returns the prefix. A later `useId(name)` call returns `{prefix}-{name}-{n}` (or `{prefix}-{n}` with no name), counting each name from 0 in render order. The compound components start a scope from their own `id`, so a `Tab`, `AccordionItem`, `Switch`, `RadioButton`, `DatePickerInput`, or `OverflowMenuItem` with no `id` gets a stable one without you passing it.
+
+```svelte
+<TextInput labelText="Email" />
+<Tabs id="settings">
+  <Tab label="Profile" />
+  <Tab label="Billing" />
+  <svelte:fragment slot="content">
+    <TabContent>Profile</TabContent>
+    <TabContent>Billing</TabContent>
+  </svelte:fragment>
+</Tabs>
 <DataTable id="orders" selectable {headers} {rows} />
 ```
 
-| Component | Props that fix its ids |
+In your own components, call `useId` while the component initializes:
+
+```svelte
+<script>
+  import { createIdScope, useId } from "carbon-components-svelte";
+
+  export let id = useId("search-field");
+  createIdScope(id);
+</script>
+
+<label for="{id}-input">Search</label>
+<input id="{id}-input" />
+<slot />
+```
+
+| Do | Why |
+| :--- | :--- |
+| Keep one root scope per page and give a second one (a micro frontend, a widget) its own prefix. | Two scopes with the same prefix hand out the same ids. |
+| Call `useId` in the component's script, not in an event handler or `onMount`. | It reads the scope from the component tree, which only exists during init. Outside init it returns a random id. |
+| Render the same components in the same order on the server and the browser. | The counter assumes it. `{#if browser}` around a component shifts every id after it. |
+| Derive ids from the item key inside `{#each}` blocks when you set them yourself. | Ids must be unique on the page. |
+
+With no scope and no `id`, a component still gets a random id, and Svelte rewrites it on hydration. The server cannot do better without a hook from the framework: nothing in Svelte 3 or 4 tells a component which render it belongs to, and Svelte 5's `$props.id()` is a compiler rune that only a runes-mode component can use, so a library that supports Svelte 3, 4, and 5 cannot call it. In a Svelte 5 component of your own, `$props.id()` is a fine value to pass as `id`.
+
+| Component | What fixes its ids |
 | :--- | :--- |
 | TextInput, PasswordInput, TextArea, NumberInput, Search, Slider, Toggle, Select, Dropdown, ComboBox, MultiSelect, Modal, ComposedModal, InterstitialScreen, Pagination, CodeSnippet, CopyInput, Tag, TooltipIcon, TooltipDefinition, Disclosure, Carousel, Toggletip, HeaderSearch, HeaderSwitcher, ProfileMenu, InlineNotification, ToastNotification, TreeView, TableContainer, FormGroup, ProgressBar, Meter, FileUploader | `id` |
 | DataTable | `id` (`inputName` sets the selection name) |
-| OverflowMenu | `id`, and `id` on each `OverflowMenuItem` |
-| Tooltip | `tooltipId` and `triggerId` |
-| Tabs, TabsVertical | `id` on each `Tab` (a `TabContent` without one takes `{tabId}-panel`) |
-| Accordion | `id` on each `AccordionItem` |
-| ContentSwitcher | `id` on each `Switch` and `SwitchPanel` |
-| ProgressIndicator | `id` on each `ProgressStep` |
-| CheckboxGroup, RadioButtonGroup | `id` on the group and on each `Checkbox` or `RadioButton` |
-| RadioButtonGroup, TileGroup, StructuredList | `name` on the group |
-| TagSet | `id` on `TagSet` and on each `Tag` |
-| DatePicker | `id` on `DatePicker` and on each `DatePickerInput` |
+| Tooltip | `id` on the wrapper sets `{id}-tooltip` and `{id}-trigger`; `tooltipId` and `triggerId` override them |
+| Tabs, TabsVertical, Accordion, ContentSwitcher, ProgressIndicator, OverflowMenu, TagSet, DatePicker, TimePicker | `id` on the parent; a child with no `id` derives its own |
+| CheckboxGroup, RadioButtonGroup, TileGroup, StructuredList | `id` on the group. Add `name` too, or a radio posts the group id as its field name |
+| Theme | `id` inside `toggleProps`, `selectProps`, or `dropdownProps` |
 
 ## Locale and time
 
