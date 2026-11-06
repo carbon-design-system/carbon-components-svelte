@@ -15,6 +15,8 @@ export interface DialogLifecycleOptions {
   saveFocusReturn: () => void;
   restoreFocusReturn: () => void;
   getContainer: () => Element | null;
+  /** Whether a press on the backdrop may close the dialog. */
+  canDismissOutside?: () => boolean;
   focus: () => void;
   getOpen: () => boolean;
 }
