@@ -1,9 +1,8 @@
-// @vitest-environment node
 import {
   type Chunk,
-  pageHead,
+  pageManifest,
+  preloadScript,
   preloadsFor,
-  withHead,
 } from "../../docs/scripts/page-html";
 
 const chunk = (fileName: string, imports: string[], css: string[] = []) =>
@@ -45,35 +44,44 @@ describe("preloadsFor", () => {
   });
 });
 
-describe("pageHead", () => {
-  it("reads the title and description each kind of page sets", () => {
-    expect(
-      pageHead(
-        '---\ndescription: "Buttons <trigger> actions."\n---\n',
-        "./pages/components/Button.md",
-      ),
-    ).toEqual({ title: "Button", description: "Buttons <trigger> actions." });
-    expect(
-      pageHead(
-        "---\ntitle: Performance\nlayout: guide\n---\n",
-        "./pages/performance.md",
-      ).title,
-    ).toBe("Performance · Carbon Components Svelte");
-    expect(
-      pageHead(
-        "<svelte:head><title>Tokens · Carbon Components Svelte</title></svelte:head>",
-        "./pages/tokens.svelte",
-      ),
-    ).toEqual({ title: "Tokens · Carbon Components Svelte" });
+describe("preloadScript", () => {
+  afterEach(() => {
+    document.head.replaceChildren();
+    history.replaceState(null, "", "/");
   });
 
-  it("writes them into the HTML, escaped", () => {
-    const html =
-      '<title>Carbon Components Svelte</title><meta\n  name="description"\n  content="Svelte implementation" />';
-    expect(
-      withHead(html, { title: "Button", description: 'A "b" & <c>' }),
-    ).toBe(
-      '<title>Button</title><meta\n  name="description"\n  content="A &quot;b&quot; &amp; &lt;c&gt;" />',
+  it("preloads the app and the current page's files from the manifest", () => {
+    const manifest = pageManifest(
+      new Map([
+        ["/components/Button", [["modulepreload", "/assets/button.js"]]],
+        [
+          "/components/Modal",
+          [
+            ["modulepreload", "/assets/button.js"],
+            ["preload", "/assets/modal.css"],
+          ],
+        ],
+      ]),
     );
+    expect(manifest).toEqual({
+      files: ["assets/button.js", "assets/modal.css"],
+      pages: { "/components/Button": [0], "/components/Modal": [0, 1] },
+    });
+    history.replaceState(null, "", "/components/Modal/");
+
+    new Function(
+      preloadScript([["modulepreload", "/assets/app.js"]], manifest, "/"),
+    )();
+
+    const links = () =>
+      [...document.head.querySelectorAll("link")].map((link) => [
+        link.rel,
+        link.getAttribute("href"),
+      ]);
+    expect(links()).toEqual([
+      ["modulepreload", "/assets/app.js"],
+      ["modulepreload", "/assets/button.js"],
+      ["preload", "/assets/modal.css"],
+    ]);
   });
 });
