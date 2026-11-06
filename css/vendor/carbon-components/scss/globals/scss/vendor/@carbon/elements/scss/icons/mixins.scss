@@ -11,7 +11,11 @@
 /// @group @carbon/icons
 @mixin carbon--icons {
   @media (forced-colors: active) {
-    svg {
+    // ccs: an `svg` that sets `fill="none"` is an outline icon. A rule beats
+    // a presentation attribute, so the fill turned it into a solid shape.
+    // `:where()` keeps the specificity of the bare `svg` rule, so component
+    // fills outrank it as before.
+    svg:not(:where([fill="none"])) {
       fill: ButtonText;
     }
   }
