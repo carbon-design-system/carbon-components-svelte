@@ -45,14 +45,21 @@ const FUNCTION_TYPES = new Set([
   "FunctionDeclaration",
 ]);
 
-/** A component's AST and the bindings its `<script>` declares. */
+/**
+ * A component's AST and the bindings its `<script>` declares, types as
+ * well as values, so a `lang="ts"` page keeps the `import type` and
+ * `type` declarations an example's code uses.
+ */
 function analyze(source: string) {
   const ast = parse(source, { css: false });
-  const scopes = analyzeScopes(ast);
+  const scopes = analyzeScopes(ast, { types: true });
   return {
     body: (ast.instance?.content.body ?? []) as unknown as Node[],
     instance: scopes.instance,
-    bindings: [...scopes.instance.declarations.values()],
+    bindings: [
+      ...scopes.instance.declarations.values(),
+      ...scopes.instance.types.values(),
+    ],
   };
 }
 

@@ -72,6 +72,7 @@ export default {
     "docs/scripts/compile-cache.ts",
     "docs/src/idle-examples.ts",
     "docs/scripts/page-html.ts",
+    "docs/scripts/example-source.ts",
   ],
   ignore: [
     "**/*.md",
