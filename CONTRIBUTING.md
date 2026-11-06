@@ -832,6 +832,8 @@ Types and E2E:
 - `bun test:types` type-checks the `*.svelte` and `.ts` files in `tests/`, in about a second: [svelte-typecheck](https://github.com/metonym/svelte-typecheck) turns each component into TypeScript, runs `bun check` on it, and maps each error back to its `.svelte` line, as svelte-check reports it. `bun test:types:svelte3` and `bun test:types:svelte4` check the same files against Svelte 3 and 4
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
+To run `bun test:types` again and again, keep svelte-typecheck alive between runs: set `SVELTE_TYPECHECK_DAEMON=1` in your environment. The first run starts a daemon for the worktree, and later runs hand it the check, so they skip starting a runtime and loading the compiler and config: about 15 to 25% faster after a one-file change. It prints what the check prints without it, so read the exit code as usual. It restarts itself after a rebase that changes `bun.lock` or Svelte, and exits after 10 idle minutes (`SVELTE_TYPECHECK_DAEMON_IDLE` in seconds; shorter with many worktrees, as each idle daemon holds about 115 MB). `bunx svelte-typecheck status` shows it and `bunx svelte-typecheck stop` stops it. CI ignores it.
+
 Three process traps:
 
 - Read the exit code, not the tail. A tail can hide the errors above it. Gate commits on the checks themselves: `bun fmt --check <paths> && bun lint <paths> && bun lint:svelte <paths> && bun run test:types && git commit ...`.
