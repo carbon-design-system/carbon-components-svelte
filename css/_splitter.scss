@@ -123,6 +123,20 @@
   .#{$prefix}--splitter__separator:focus-visible {
     @include focus-outline("outline");
   }
+
+  // The line is a 1px background, which forced colors repaint as the page's
+  // own, so it vanished. Draw it in a system color; hover and drag highlight
+  // it, as they do in color.
+  @media (forced-colors: active) {
+    .#{$prefix}--splitter__separator::after {
+      background-color: CanvasText;
+    }
+
+    .#{$prefix}--splitter__separator--hover::after,
+    .#{$prefix}--splitter--resizing > .#{$prefix}--splitter__separator::after {
+      background-color: Highlight;
+    }
+  }
 }
 
 @include exports("splitter") {

@@ -57,6 +57,7 @@
     SelectItem,
     ShapeIndicator,
     SidePanel,
+    Splitter,
     StructuredList,
     StructuredListBody,
     StructuredListCell,
@@ -245,6 +246,15 @@
     <MenuItem labelText="Item" />
     <MenuItem labelText="Disabled item" shortcutText="⌘S" disabled />
   </Menu>
+
+  <!-- Not a div: the layout baseline names an element by its place among its
+  sibling divs. -->
+  <section data-testid="splitter" style="width: 240px; height: 80px">
+    <Splitter separatorLabel="Resize panes">
+      <p slot="start">Start</p>
+      <p slot="end">End</p>
+    </Splitter>
+  </section>
 
   <ShapeIndicator kind="medium" label="Medium" />
   <div theme="g100">

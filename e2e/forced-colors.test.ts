@@ -605,6 +605,26 @@ test.describe("forced colors", () => {
     });
   });
 
+  // The divider is a 1px background, which forced colors repaint as Canvas.
+  test("the Splitter divider reads CanvasText, and Highlight on hover", async ({
+    page,
+  }) => {
+    const separator = "[data-testid=splitter] .bx--splitter__separator";
+    expect((await style(page, separator, "::after")).background).toBe(
+      system.CanvasText,
+    );
+
+    // The hover class follows the pointer after a short delay.
+    await page.locator(separator).hover();
+    await expect(page.locator(separator)).toHaveClass(
+      /bx--splitter__separator--hover/,
+    );
+    // The color transitions in.
+    await expect
+      .poll(async () => (await style(page, separator, "::after")).background)
+      .toBe(system.Highlight);
+  });
+
   test("the active TableOfContents bar fills with Highlight", async ({
     page,
   }) => {
