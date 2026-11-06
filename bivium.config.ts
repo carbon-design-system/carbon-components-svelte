@@ -60,6 +60,7 @@ export default {
     "docs/src/pages/framed/DatePicker",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
+    "docs/scripts/slug.ts",
   ],
   ignore: [
     "**/*.md",

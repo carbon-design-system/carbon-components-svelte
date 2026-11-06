@@ -1,10 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import GithubSlugger from "github-slugger";
 import { COMPONENTS_PATH, PAGE_EXTENSION } from "./constants";
+import { createSlugger } from "./slug";
 import { getComponentNames } from "./utils";
-
-const slugger = new GithubSlugger();
 
 const SEARCH_INDEX_PATH = "./src/SEARCH_INDEX.json";
 const H2_DELMIMITER = "## ";
@@ -20,7 +18,7 @@ type SearchDocument = {
 const documents: SearchDocument[] = [];
 
 for (const componentName of getComponentNames()) {
-  slugger.reset();
+  const slug = createSlugger();
   const filePath = path.join(
     COMPONENTS_PATH,
     `${componentName}${PAGE_EXTENSION}`,
@@ -40,7 +38,7 @@ for (const componentName of getComponentNames()) {
     if (line.startsWith(H2_DELMIMITER)) {
       const [, h2] = line.split(H2_DELMIMITER);
       if (!h2) continue;
-      const hash = slugger.slug(h2);
+      const hash = slug(h2);
 
       documents.push({
         id: componentName + hash,

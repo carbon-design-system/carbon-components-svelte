@@ -8,6 +8,7 @@ on:
       - "!docs/**"
       - "!examples/**"
       - "docs/src/token-reference.ts"
+      - "docs/scripts/slug.ts"
       - "docs/src/pages/framed/DatePicker/**"
   push:
     branches: [master]
@@ -17,6 +18,7 @@ on:
       - "!docs/**"
       - "!examples/**"
       - "docs/src/token-reference.ts"
+      - "docs/scripts/slug.ts"
       - "docs/src/pages/framed/DatePicker/**"
   workflow_dispatch:
 
@@ -103,6 +105,7 @@ jobs:
               - 'bun.lock'
               - '.github/**'
               - 'docs/src/token-reference.ts'
+              - 'docs/scripts/slug.ts'
             e2e:
               - 'src/**'
               - 'css/**'
