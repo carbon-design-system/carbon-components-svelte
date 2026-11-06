@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { beforeUrlChange, goto, isActive, node, url } from "@roxi/routify";
   import {
     Header,
     HeaderAction,
@@ -37,22 +36,13 @@
     assertCategoriesCover,
     COMPONENT_CATEGORIES,
   } from "../component-categories";
-  import { subscribeRoutifyGoto } from "../routify-nav";
+  import { beforeNavigate, componentPages, goto, isActive } from "../router";
   import { createSearch, type SearchDocument } from "../search";
   import { theme } from "../store";
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
 
   const search = createSearch(SEARCH_INDEX as SearchDocument[]);
-
-  /** Routify + Svelte 5: `$goto` in event handlers runs outside fragment context; keep a root-level subscription. */
-  const routifyNav = subscribeRoutifyGoto(goto);
-
-  onMount(() => {
-    return () => {
-      routifyNav.unsubscribe();
-    };
-  });
 
   const deprecated: string[] = [];
 
@@ -115,9 +105,7 @@
   let innerWidth = 2048;
 
   $: isMobile = innerWidth < 1056;
-  $: components = $node.children.find((child) => child.name === "components");
-
-  $: componentChildren = (components?.children ?? []).filter(
+  const componentChildren = componentPages.filter(
     (child) => !deprecated.includes(child.name),
   );
 
@@ -148,10 +136,11 @@
     return groups;
   })();
 
-  $beforeUrlChange(() => {
-    if (isMobile) isSideNavOpen = false;
-    return true;
-  });
+  onMount(() =>
+    beforeNavigate(() => {
+      if (isMobile) isSideNavOpen = false;
+    }),
+  );
 
   function subheadingClass(index: number) {
     return index === 0
@@ -187,7 +176,7 @@
 <Theme persist bind:theme={$theme}>
   <Header
     aria-label="Navigation"
-    href={$url("/")}
+    href="/"
     expandedByDefault={true}
     bind:isSideNavOpen
   >
@@ -198,7 +187,7 @@
       &nbsp;<code class="code-01 platform-name-version">v{__PKG_VERSION}</code>
     </span>
     <HeaderNav aria-label="Carbon Svelte sections">
-      <HeaderNavItem href={$url("/")} text="Components" isSelected />
+      <HeaderNavItem href="/" text="Components" isSelected />
       <HeaderNavItem
         href="https://github.com/carbon-design-system/carbon-icons-svelte"
         target="_blank"
@@ -221,16 +210,10 @@
         shouldFilter={false}
         match={matchQuery}
         on:select={(e) => {
-          // Selecting a link item would navigate natively; intercept it and
-          // route through Routify for SPA navigation instead.
+          // Selecting a link item would navigate natively; go there in the
+          // page instead.
           e.detail.event?.preventDefault();
-          const href = e.detail.item.href;
-          // Hash must not be part of the path: getChainTo treats "/" segments literally,
-          // so "Toolbar#slug" would not match the Toolbar route node.
-          const u = new URL(href, window.location.origin);
-          const path = u.pathname;
-          const hash = u.hash.slice(1);
-          routifyNav.getNavigate()?.(path, hash ? { "#": hash } : undefined);
+          goto(e.detail.item.href);
         }}
       >
         <svelte:fragment slot="menu">
@@ -318,18 +301,18 @@
       <SideNavItems>
         <SideNavLink
           text="Introduction"
-          href={$url("/")}
-          isSelected={$isActive($url("/"), {}, { recursive: false })}
+          href="/"
+          isSelected={$isActive("/", { recursive: false })}
         />
         <SideNavLink
           text="Quick start"
-          href={$url("/quick-start")}
-          isSelected={$isActive($url("/quick-start"))}
+          href="/quick-start"
+          isSelected={$isActive("/quick-start")}
         />
         <SideNavLink
           text="Component index"
-          href={$url("/component-index")}
-          isSelected={$isActive($url("/component-index"))}
+          href="/component-index"
+          isSelected={$isActive("/component-index")}
         />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
@@ -344,8 +327,8 @@
           {#each group.children as child (child.path)}
             <SideNavLink
               text={child.name}
-              href={$url(child.path)}
-              isSelected={$isActive($url(child.path))}
+              href={child.path}
+              isSelected={$isActive(child.path)}
             />
           {/each}
         {/each}

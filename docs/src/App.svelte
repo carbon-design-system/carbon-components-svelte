@@ -1,8 +1,47 @@
-<script lang="ts" context="module">
-  import { createRouter, Router } from "@roxi/routify";
-  import routes from "../.routify/routes.default.js";
+<script lang="ts">
+  import type { Component } from "svelte";
+  import { onMount, tick } from "svelte";
+  import RootLayout from "./pages/_module.svelte";
+  import FramedLayout from "./pages/framed/_module.svelte";
+  import {
+    loadPage,
+    location,
+    matchRoute,
+    restoreScroll,
+    type Route,
+    route,
+    startRouter,
+  } from "./router";
 
-  export const router = createRouter({ routes });
+  let Page: Component | undefined;
+  let loading = 0;
+
+  async function show(next: Route | undefined) {
+    if (!next) return;
+    if (next === $route) {
+      // Same page, another heading or query.
+      await tick();
+      restoreScroll();
+      return;
+    }
+    const token = ++loading;
+    const module = await loadPage(next);
+    if (token !== loading) return;
+    Page = module.default;
+    route.set(next);
+    await tick();
+    restoreScroll();
+  }
+
+  $: show(matchRoute($location.pathname));
+
+  onMount(startRouter);
 </script>
 
-<Router {router} />
+{#if Page}
+  {#if $route?.path.startsWith("/framed/")}
+    <FramedLayout><svelte:component this={Page} /></FramedLayout>
+  {:else}
+    <RootLayout><svelte:component this={Page} /></RootLayout>
+  {/if}
+{/if}

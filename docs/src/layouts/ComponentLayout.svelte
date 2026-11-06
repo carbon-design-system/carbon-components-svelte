@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { activeRoute } from "@roxi/routify";
   import {
     Box,
     Breadcrumb,
@@ -32,6 +31,7 @@
   import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
   import ComponentTocLabel from "../components/ComponentTocLabel.svelte";
   import ComponentTocNav from "../components/ComponentTocNav.svelte";
+  import { route } from "../router";
   import { componentTocOpen, DOC_THEMES, theme } from "../store";
   import { setupTocScrollSpy } from "../toc-scroll-spy";
 
@@ -43,7 +43,7 @@
     return value !== null && DOC_THEMES.includes(value as CarbonTheme);
   }
 
-  export let component = $activeRoute?.leaf?.node?.name ?? "";
+  export let component = $route?.name ?? "";
   export let components = [component];
   export let description = "";
   /** The page's h2/h3 headings, for the table of contents. */

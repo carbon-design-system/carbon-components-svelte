@@ -1,9 +1,9 @@
 <script>
-  import { activeRoute } from "@roxi/routify";
   import { onMount } from "svelte";
+  import { route } from "../../router";
 
-  $: exampleName = $activeRoute?.leaf?.node?.name ?? "";
-  $: componentName = $activeRoute?.leaf?.node?.parent?.name ?? "";
+  $: exampleName = $route?.name ?? "";
+  $: componentName = $route?.parentName ?? "";
 
   const validThemes = ["white", "g10", "g80", "g90", "g100", "system"];
 
@@ -49,7 +49,6 @@
   }
 </script>
 
-<!-- routify:meta reset -->
 <svelte:head>
   <title>{exampleName} – Carbon Components Svelte</title>
   <meta
@@ -58,8 +57,7 @@
   />
   <link
     rel="canonical"
-    href="https://svelte.carbondesignsystem.com{$activeRoute?.leaf?.node
-      ?.path ?? ''}"
+    href="https://svelte.carbondesignsystem.com{$route?.path ?? ''}"
   />
 </svelte:head>
 

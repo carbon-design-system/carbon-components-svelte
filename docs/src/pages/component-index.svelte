@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto, params, url } from "@roxi/routify";
   import {
     Box,
     Column,
@@ -37,7 +36,7 @@
   import { markdownBytesFor } from "../component-md-sizes";
   import CopyMarkdownButton from "../components/CopyMarkdownButton.svelte";
   import DocHero from "../components/DocHero.svelte";
-  import { subscribeRoutifyGoto } from "../routify-nav";
+  import { goto, params } from "../router";
 
   const entries = buildComponentIndex();
 
@@ -55,8 +54,6 @@
   let sortKey: SortKey = "name";
   let sortDirection: SortDirection = "asc";
   let searchRef: HTMLInputElement | null = null;
-
-  const routifyNav = subscribeRoutifyGoto(goto);
 
   let lastUrlCategories = "";
   let lastUrlQuery = "";
@@ -89,9 +86,6 @@
     currentParams: Record<string, unknown>,
   ) {
     if (!urlSyncEnabled) return;
-    const navigateTo = routifyNav.getNavigate();
-    if (!navigateTo) return;
-
     const serializedCategories = serializeCategoryFilterParam(ids);
     const normalizedQuery = searchQuery.trim();
     const currentCategories = normalizeCategories(
@@ -124,13 +118,11 @@
 
     lastUrlCategories = serializedCategories;
     lastUrlQuery = normalizedQuery;
-    navigateTo("$leaf", nextParams, { mode: "replace" });
+    goto(window.location.pathname, { query: nextParams, replace: true });
   }
 
   onMount(() => {
     urlSyncEnabled = true;
-
-    return routifyNav.unsubscribe;
   });
 
   function clearFilters() {
@@ -254,7 +246,7 @@
                           wrap="wrap"
                           class="component-name-cell"
                         >
-                          <Link href={$url(entry.href)}>
+                          <Link href={entry.href}>
                             {entry.name}
                           </Link>
                           {#if entry.isNew}
