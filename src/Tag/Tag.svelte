@@ -167,7 +167,7 @@
     ? omitTabindex($$restProps)
     : $$restProps;
 
-  /** @param {Record<string, any>} props */
+  /** @param {Record<string, unknown>} props */
   function omitTabindex({ tabindex, ...props }) {
     return props;
   }

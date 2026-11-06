@@ -10,7 +10,7 @@
   /** @type {string} */
   export let key;
 
-  /** @type {any} */
+  /** @type {unknown} */
   export let value;
 
   /** @type {"on" | "off"} */

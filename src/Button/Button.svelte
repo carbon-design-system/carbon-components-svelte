@@ -503,7 +503,7 @@
     showSpinner && !spinnerInShortcut && !hasIconOnly && !icon && !$$slots.icon;
   // Spreads `$$restProps` and sets `type` over the `<button>`'s own
   // literal one (which the linter wants), so it's typed as the loose bag it is.
-  /** @type {Record<string, any>} */
+  /** @type {Record<string, unknown>} */
   $: buttonProps = {
     type: href && !isDisabled ? undefined : type,
     tabindex,

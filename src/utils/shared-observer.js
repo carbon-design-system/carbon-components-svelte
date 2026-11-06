@@ -13,25 +13,34 @@
  * Observers are kept per constructor, so tests that stub
  * `globalThis.ResizeObserver` get an observer of the stubbed class.
  *
- * @typedef {(entry: any) => void} EntryCallback
+ */
+
+/**
+ * @template {{ target: Element }} Entry
+ * @typedef {(entry: Entry) => void} EntryCallback
+ */
+
+/**
+ * @template {{ target: Element }} Entry
  * @typedef {{
  *   observer: { observe(element: Element): void; unobserve(element: Element): void },
- *   callbacks: Map<Element, Set<EntryCallback>>,
+ *   callbacks: Map<Element, Set<EntryCallback<Entry>>>,
  * }} SharedObserver
  */
 
-/** @type {WeakMap<object, SharedObserver>} */
+/** @type {WeakMap<object, SharedObserver<ResizeObserverEntry>>} */
 const resizeObservers = new WeakMap();
 
-/** @type {WeakMap<object, Map<string, SharedObserver>>} */
+/** @type {WeakMap<object, Map<string, SharedObserver<IntersectionObserverEntry>>>} */
 const intersectionObservers = new WeakMap();
 
 /**
  * Run every callback for each entry. A callback that throws doesn't stop
  * the rest; its error is reported once the batch is done.
  *
- * @param {Map<Element, Set<EntryCallback>>} callbacks
- * @param {ReadonlyArray<{ target: Element }>} entries
+ * @template {{ target: Element }} Entry
+ * @param {Map<Element, Set<EntryCallback<Entry>>>} callbacks
+ * @param {ReadonlyArray<Entry>} entries
  */
 function deliver(callbacks, entries) {
   /** @type {unknown[]} */
@@ -59,16 +68,17 @@ function deliver(callbacks, entries) {
 /**
  * Subscribe `callback` to `element` on a shared observer.
  *
- * @param {SharedObserver} shared
+ * @template {{ target: Element }} Entry
+ * @param {SharedObserver<Entry>} shared
  * @param {Element} element
- * @param {EntryCallback} callback
+ * @param {EntryCallback<Entry>} callback
  * @returns {() => void}
  */
 function subscribe(shared, element, callback) {
   const { observer, callbacks } = shared;
   // A wrapper per call, so the same function subscribed twice stays two
   // subscriptions and each unsubscribe removes only its own.
-  /** @type {EntryCallback} */
+  /** @type {EntryCallback<Entry>} */
   const subscription = (entry) => callback(entry);
   let set = callbacks.get(element);
   if (set) {
@@ -117,7 +127,7 @@ export function observeResize(element, callback) {
   if (typeof Observer !== "function") return () => {};
   let shared = resizeObservers.get(Observer);
   if (!shared) {
-    /** @type {Map<Element, Set<EntryCallback>>} */
+    /** @type {Map<Element, Set<EntryCallback<ResizeObserverEntry>>>} */
     const callbacks = new Map();
     shared = {
       observer: new Observer((entries) => deliver(callbacks, entries)),
@@ -167,7 +177,7 @@ export function observeIntersection(element, callback, options = {}) {
   }
   let shared = byKey.get(key);
   if (!shared) {
-    /** @type {Map<Element, Set<EntryCallback>>} */
+    /** @type {Map<Element, Set<EntryCallback<IntersectionObserverEntry>>>} */
     const callbacks = new Map();
     shared = {
       observer: new Observer((entries) => deliver(callbacks, entries), {

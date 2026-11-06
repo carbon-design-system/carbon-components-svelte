@@ -100,8 +100,7 @@
 
   // Spread before `$$restProps`, so a consumer's own `role` or `tabindex`
   // wins. A disabled link drops its `href`, so it needs `role="link"`.
-  // `tabindex` is a string at runtime; Svelte's element types ask for a number.
-  /** @type {{ role?: string; "aria-disabled"?: "true"; href?: string; rel?: string | null; tabindex?: any }} */
+  /** @type {{ role?: string; "aria-disabled"?: "true"; href?: string; rel?: string | null; tabindex?: number }} */
   $: cardProps = link
     ? disabled
       ? { role: "link", "aria-disabled": "true" }
@@ -109,7 +108,7 @@
     : clickable
       ? {
           role: "button",
-          tabindex: disabled ? "-1" : "0",
+          tabindex: disabled ? -1 : 0,
           "aria-disabled": disabled ? "true" : undefined,
         }
       : {};

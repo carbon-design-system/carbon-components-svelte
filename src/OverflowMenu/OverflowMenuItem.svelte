@@ -162,7 +162,7 @@
   $: ({ aria: ariaProps, rest: wrapperProps } = splitAria($$restProps));
 
   // Carries the consumer's own `aria-*` props, whatever their values.
-  /** @type {Record<string, any>} */
+  /** @type {Record<string, unknown>} */
   $: buttonProps = {
     ...ariaProps,
     role: "menuitem",

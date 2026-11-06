@@ -10,7 +10,8 @@
  * @returns {Record<string, T>}
  */
 export function keyBy(items, getKey) {
-  const key = getKey ?? ((item) => /** @type {any} */ (item).id);
+  const key =
+    getKey ?? ((item) => /** @type {{ id: string | number }} */ (item).id);
   /** @type {Record<string, T>} */
   const result = {};
   for (const item of items) {

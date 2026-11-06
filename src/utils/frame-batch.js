@@ -11,7 +11,7 @@
  *
  * Each stage receives what the job's previous stage returned.
  *
- * @typedef {(carry: any) => any} FrameStage
+ * @typedef {(carry: never) => unknown} FrameStage
  * @typedef {{ schedule: () => void, cancel: () => void }} FrameJob
  */
 
@@ -48,7 +48,7 @@ function runFrame() {
       const stage = run.stages[index];
       if (run.cancelled || !stage) continue;
       try {
-        run.carry = stage(run.carry);
+        run.carry = stage(/** @type {never} */ (run.carry));
       } catch (error) {
         // A throwing job stops, and doesn't stop the others.
         run.cancelled = true;
