@@ -123,7 +123,7 @@ Prefetch on hover with `on:mouseenter:copy-button` on the copy control. The exam
 
 Pass a function to `copy` to replace the default Clipboard API behavior.
 
-This example uses [clipboard-copy](https://github.com/feross/clipboard-copy) to copy the text instead of the default Clipboard API.
+This example calls the Clipboard API directly, without the `document.execCommand("copy")` fallback.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetOverride" />
 

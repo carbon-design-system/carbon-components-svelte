@@ -22,7 +22,6 @@
     "@types/unist": "^3.0.3",
     "carbon-icons-svelte": "^13.17.0",
     "carbon-pictograms-svelte": "^13.21.0",
-    "clipboard-copy": "^4.0.1",
     "estree-walker": "^3.0.3",
     "github-slugger": "^2.0.0",
     "mdsvex": "^0.12.8",

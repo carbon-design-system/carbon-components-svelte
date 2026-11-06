@@ -83,7 +83,7 @@ Replace or disable the default clipboard behavior.
 
 Pass a function to `copy` to replace the default Clipboard API behavior.
 
-This example uses the [clipboard-copy](https://github.com/feross/clipboard-copy) package instead of the Clipboard API.
+This example calls the Clipboard API directly, without the `document.execCommand("copy")` fallback.
 
 <FileSource src="/framed/CopyButton/CopyButtonOverride" />
 

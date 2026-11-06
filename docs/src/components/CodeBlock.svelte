@@ -10,7 +10,6 @@
 
   import { CodeSnippet } from "carbon-components-svelte";
   import { highlight } from "carbon-components-svelte/syntax";
-  import copy from "clipboard-copy";
 
   $: highlighted =
     highlight(code, language) ??
@@ -22,7 +21,6 @@
     type="inline"
     class="code-override-inline"
     {code}
-    copy={(text) => copy(text)}
     {portalTooltip}
   >
     {@html highlighted}
@@ -36,7 +34,6 @@
       {showMoreLess}
       {expanded}
       {wrapText}
-      copy={(text) => copy(text)}
       {portalTooltip}
     >
       {@html highlighted}

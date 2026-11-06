@@ -76,7 +76,6 @@ export default defineConfig({
     ),
   },
   optimizeDeps: {
-    include: ["clipboard-copy"],
     exclude: [
       "carbon-components-svelte",
       "carbon-icons-svelte",
