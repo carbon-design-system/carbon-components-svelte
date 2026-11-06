@@ -10,30 +10,44 @@ const doc = (text: string, description: string) => ({
 });
 
 const search = createSearch([
+  doc("Button", "Button"),
+  doc("ButtonSet", "ButtonSet"),
+  doc("DataTable", "DataTable"),
+  doc("DataTable", "Sorting"),
   doc("MultiSelect", "MultiSelect"),
   doc("MultiSelect", "Basic"),
-  doc("MultiSelect", "Filterable"),
   doc("Select", "Select"),
   doc("Select", "Basic"),
   doc("Tooltip", "Tooltip"),
-  doc("Tooltip", "Custom icon"),
 ]);
 
 describe("createSearch", () => {
-  // Expected orders are MiniSearch's with the options the site used.
   it.each([
+    // Prefix and typo.
     [
-      "multiselect bas",
+      "sel",
+      [
+        "Select-Select",
+        "MultiSelect-MultiSelect",
+        "Select-Basic",
+        "MultiSelect-Basic",
+      ],
+    ],
+    ["tooltp", ["Tooltip-Tooltip"]],
+    // A word of a component's name.
+    ["table", ["DataTable-DataTable", "DataTable-Sorting"]],
+    [
+      "multi select",
       [
         "MultiSelect-MultiSelect",
+        "Select-Select",
         "MultiSelect-Basic",
-        "MultiSelect-Filterable",
         "Select-Basic",
       ],
     ],
-    ["tooltp", ["Tooltip-Tooltip", "Tooltip-Custom icon"]],
-    ["sel", ["Select-Select", "Select-Basic"]],
-  ])("ranks %j as MiniSearch did", (query, ids) => {
+    // `button` matches `ButtonSet` once, not as a word and a prefix.
+    ["button", ["Button-Button", "ButtonSet-ButtonSet"]],
+  ])("ranks %j", (query, ids) => {
     expect(search(query).map((d) => d.id)).toEqual(ids);
   });
 });

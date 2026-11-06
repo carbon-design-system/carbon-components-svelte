@@ -1,10 +1,10 @@
 /**
  * Full-text search over the site's search index: components and their h2
- * sections. Scores as MiniSearch did with the options the site used:
- * BM25+ over `text` and `description` (boosted 2×), each query term
- * matching a word exactly, as a prefix, or within one edit for every ten
- * letters; a document matching more of the terms ranks higher. Equal
- * scores keep the index's order, where MiniSearch's followed its tree.
+ * sections. BM25+ over `text` and `description` (boosted 2×), as MiniSearch
+ * scored it, with each query word scored by its best match in a field: a
+ * word or a part of a camel-case name, exactly, as a prefix, or within one
+ * edit for every ten letters. A document matching more of the query's
+ * words ranks higher, and equal scores keep the index's order.
  */
 
 export type SearchDocument = {
@@ -27,8 +27,6 @@ const PREFIX_WEIGHT = 0.375;
 const FUZZY_WEIGHT = 0.45;
 /** Edits allowed per letter of a query term, rounded: one from 5 letters. */
 const FUZZINESS = 0.1;
-
-type Hit = { score: number; terms: string[] };
 
 /** Levenshtein distance between `a` and `b`, or `max + 1` once it exceeds `max`. */
 function editDistance(a: string, b: string, max: number): number {
@@ -56,6 +54,20 @@ function words(text: string): string[] {
   return text.split(WORD_SEPARATOR_RE);
 }
 
+/** A capitalized run, a word, or digits: `UIShell` → `UI`, `Shell`. */
+const SUBWORD_RE = /\p{Lu}+(?!\p{Ll})|\p{Lu}?\p{Ll}+|\p{N}+/gu;
+
+/**
+ * A field's words, each followed by its parts if it joins several, so
+ * `table` finds `DataTable`.
+ */
+function indexWords(text: string): string[] {
+  return words(text).flatMap((word) => {
+    const parts = word.match(SUBWORD_RE) ?? [];
+    return parts.length > 1 ? [word, ...parts] : [word];
+  });
+}
+
 export function createSearch<T extends SearchDocument>(documents: T[]) {
   /** Word → per field, the documents that have it and how often. */
   const index = new Map<string, Map<number, number>[]>();
@@ -65,7 +77,7 @@ export function createSearch<T extends SearchDocument>(documents: T[]) {
 
   documents.forEach((document, doc) => {
     fieldLengths[doc] = FIELDS.map((field, f) => {
-      const tokens = words(document[field]);
+      const tokens = indexWords(document[field]);
       const length = new Set(tokens).size;
       // A running mean, as MiniSearch keeps it, so scores tie as they did.
       averageFieldLengths[f] =
@@ -81,85 +93,80 @@ export function createSearch<T extends SearchDocument>(documents: T[]) {
     });
   });
 
-  function addMatches(
-    hits: Map<number, Hit>,
-    queryTerm: string,
-    word: string,
-    weight: number,
-  ) {
-    const fields = index.get(word);
-    if (!fields) return;
-    fields.forEach((docs, f) => {
-      const idf = Math.log(
-        1 + (documents.length - docs.size + 0.5) / (docs.size + 0.5),
-      );
-      for (const [doc, frequency] of docs) {
-        const lengthRatio = fieldLengths[doc][f] / averageFieldLengths[f];
-        const bm25 =
-          idf *
-          (D +
-            (frequency * (K + 1)) /
-              (frequency + K * (1 - B + B * lengthRatio)));
-        const score = weight * FIELD_BOOSTS[f] * bm25;
-        const hit = hits.get(doc);
-        if (hit) {
-          hit.score += score;
-          if (!hit.terms.includes(queryTerm)) hit.terms.push(queryTerm);
-        } else {
-          hits.set(doc, { score, terms: [queryTerm] });
+  /**
+   * Per document, the best score `term` reaches in each field: matching
+   * a word exactly, as its prefix, or within a few edits. Only the best
+   * match counts, so `button` doesn't score `ButtonSet` for both `button`
+   * and `buttonset`.
+   */
+  function searchTerm(term: string): Map<number, number[]> {
+    const best = new Map<number, number[]>();
+    const match = (word: string, weight: number) => {
+      index.get(word)?.forEach((docs, f) => {
+        const idf = Math.log(
+          1 + (documents.length - docs.size + 0.5) / (docs.size + 0.5),
+        );
+        for (const [doc, frequency] of docs) {
+          const lengthRatio = fieldLengths[doc][f] / averageFieldLengths[f];
+          const bm25 =
+            idf *
+            (D +
+              (frequency * (K + 1)) /
+                (frequency + K * (1 - B + B * lengthRatio)));
+          const score = weight * FIELD_BOOSTS[f] * bm25;
+          let scores = best.get(doc);
+          if (!scores) best.set(doc, (scores = FIELDS.map(() => 0)));
+          scores[f] = Math.max(scores[f], score);
         }
-      }
-    });
-  }
+      });
+    };
 
-  function searchTerm(term: string): Map<number, Hit> {
-    const hits = new Map<number, Hit>();
-    addMatches(hits, term, term, 1);
+    match(term, 1);
     const maxDistance = Math.round(term.length * FUZZINESS);
-    const fuzzy: [string, number][] = [];
     for (const word of index.keys()) {
       if (word === term) continue;
       if (word.startsWith(term)) {
         const distance = word.length - term.length;
-        const weight =
-          (PREFIX_WEIGHT * word.length) / (word.length + 0.3 * distance);
-        addMatches(hits, term, word, weight);
+        match(
+          word,
+          (PREFIX_WEIGHT * word.length) / (word.length + 0.3 * distance),
+        );
       } else if (maxDistance > 0) {
         const distance = editDistance(term, word, maxDistance);
-        if (distance <= maxDistance) fuzzy.push([word, distance]);
+        if (distance <= maxDistance) {
+          match(word, (FUZZY_WEIGHT * word.length) / (word.length + distance));
+        }
       }
     }
-    for (const [word, distance] of fuzzy) {
-      const weight = (FUZZY_WEIGHT * word.length) / (word.length + distance);
-      addMatches(hits, term, word, weight);
-    }
-    return hits;
+    return best;
   }
 
-  /** Documents matching any word of `query`, best first. */
+  /**
+   * Documents matching any word of `query`, best first: each matched word
+   * adds its score, and the total is multiplied by the number of words
+   * matched.
+   */
   return function search(query: string): T[] {
-    const terms = words(query)
-      .map((word) => word.toLowerCase())
-      .filter(Boolean);
-    const hits = new Map<number, Hit>();
+    const terms = new Set(
+      words(query)
+        .map((word) => word.toLowerCase())
+        .filter(Boolean),
+    );
+    const hits = new Map<number, { score: number; terms: number }>();
     for (const term of terms) {
-      for (const [doc, hit] of searchTerm(term)) {
-        const existing = hits.get(doc);
-        if (existing) {
-          existing.score += hit.score;
-          for (const t of hit.terms) {
-            if (!existing.terms.includes(t)) existing.terms.push(t);
-          }
+      for (const [doc, scores] of searchTerm(term)) {
+        const score = scores.reduce((sum, s) => sum + s, 0);
+        const hit = hits.get(doc);
+        if (hit) {
+          hit.score += score;
+          hit.terms++;
         } else {
-          hits.set(doc, hit);
+          hits.set(doc, { score, terms: 1 });
         }
       }
     }
     return (
-      Array.from(hits, ([doc, hit]) => ({
-        doc,
-        score: hit.score * hit.terms.length,
-      }))
+      Array.from(hits, ([doc, hit]) => ({ doc, score: hit.score * hit.terms }))
         // Equal scores keep the index's order: components, then their
         // sections as the page has them.
         .sort((a, b) => b.score - a.score || a.doc - b.doc)
