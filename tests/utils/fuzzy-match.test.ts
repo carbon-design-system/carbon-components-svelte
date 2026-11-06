@@ -47,6 +47,13 @@ describe("fuzzyMatch", () => {
     expect(substring).toBeGreaterThan(scattered);
   });
 
+  it("keeps indices on the original text when lowercasing changes its length", () => {
+    const text = "İstanbul";
+    const { matched, indices } = fuzzyMatch(text, "stan");
+    expect(matched).toBe(true);
+    expect(indices.map((i) => text[i]).join("")).toBe("stan");
+  });
+
   describe("options", () => {
     it("score is normalized between 0 and 1", () => {
       for (const [text, query] of [

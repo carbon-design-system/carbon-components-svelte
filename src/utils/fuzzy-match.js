@@ -26,6 +26,24 @@ const QUALITY = {
 const SEPARATORS = new Set([" ", "-", "_", "/", ".", ":", "@", "&"]);
 
 /**
+ * Lowercase `value` one code point at a time, keeping its length. A whole-string
+ * `toLowerCase()` can change the length (`İ` becomes two code units), which shifts
+ * every later index off the original text. A code point whose lowercase form has a
+ * different length is cut to its length, so `İ` becomes `i`.
+ *
+ * @param {string} value
+ * @returns {string}
+ */
+function lowerCase(value) {
+  let result = "";
+  for (const char of value) {
+    const lower = char.toLowerCase();
+    result += lower.length > char.length ? lower.slice(0, char.length) : lower;
+  }
+  return result;
+}
+
+/**
  * Whether the character at `index` starts a word (index 0 or preceded by a separator).
  *
  * @param {string} text
@@ -150,8 +168,8 @@ export function fuzzyMatch(text, query, options = {}) {
   const needle = (query ?? "").trim();
   if (needle === "") return { matched: true, score: 0, indices: [] };
 
-  const haystack = caseSensitive ? source : source.toLowerCase();
-  const pattern = caseSensitive ? needle : needle.toLowerCase();
+  const haystack = caseSensitive ? source : lowerCase(source);
+  const pattern = caseSensitive ? needle : lowerCase(needle);
 
   let score = 0;
   let indices = [];
