@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { format as prettierFormat } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
-import { parse } from "svelte/compiler";
+import { markupVisitorKeys, parse, walk } from "sveast";
 import {
   BASE_URL,
   COMPONENT_MD_SIZES_PATH,
@@ -407,23 +407,6 @@ function isIconName(text: string): boolean {
   return ICON_NAME_RE.test(text) && !(text in componentApiByName);
 }
 
-/** Depth-first walk of legacy (`modern: false`) Svelte template AST nodes (no `svelte/compiler` walk in v5). */
-function walkLegacySvelteNode(
-  node: unknown,
-  enter: (n: Record<string, unknown>) => void,
-): void {
-  if (node === null || node === undefined || typeof node !== "object") return;
-  const n = node as Record<string, unknown>;
-  if (typeof n.type === "string") enter(n);
-  for (const v of Object.values(n)) {
-    if (Array.isArray(v)) {
-      for (const item of v) walkLegacySvelteNode(item, enter);
-    } else if (v !== null && typeof v === "object") {
-      walkLegacySvelteNode(v, enter);
-    }
-  }
-}
-
 function injectImportsIntoSvelteSnippet(code: string): string {
   const trimmed = code.trimStart();
   if (HAS_SCRIPT_TAG_RE.test(code)) return code;
@@ -434,25 +417,26 @@ function injectImportsIntoSvelteSnippet(code: string): string {
   const actions = new Set<string>();
 
   try {
-    const ast = parse(code, { modern: false }) as { html?: unknown };
-    const root = ast.html;
-    if (!root) return code;
-
-    walkLegacySvelteNode(root, (node) => {
-      if (node.type === "InlineComponent" && typeof node.name === "string") {
-        if (node.name.startsWith("svelte:")) return;
-        if (isIconName(node.name)) icons.add(node.name);
-        else inlineComponents.add(node.name);
-      } else if (node.type === "MustacheTag") {
-        const expr = node.expression as
-          { type?: string; name?: string } | undefined;
-        if (expr?.type === "Identifier" && expr.name && isIconName(expr.name)) {
-          icons.add(expr.name);
-        }
-      } else if (node.type === "Action" && typeof node.name === "string") {
-        actions.add(node.name);
-      }
-    });
+    const { fragment } = parse(code, { css: false });
+    walk(
+      fragment,
+      {
+        enter(node) {
+          if (node.type === "Component") {
+            if (isIconName(node.name)) icons.add(node.name);
+            else inlineComponents.add(node.name);
+          } else if (node.type === "ExpressionTag") {
+            const expr = node.expression;
+            if (expr.type === "Identifier" && isIconName(expr.name)) {
+              icons.add(expr.name);
+            }
+          } else if (node.type === "UseDirective") {
+            actions.add(node.name);
+          }
+        },
+      },
+      markupVisitorKeys,
+    );
   } catch {
     return code;
   }
