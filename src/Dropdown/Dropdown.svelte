@@ -361,7 +361,6 @@
     applyPostClearOptions,
     createMenuCloseHandler,
     createMenuOpenHandler,
-    createStatusAnnouncer,
   } from "../ListBox/menu-status.js";
   import {
     createMenuWindow,
@@ -376,6 +375,7 @@
   import Checkmark from "../icons/Checkmark.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnnouncerChannel } from "../utils/announcer.js";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
@@ -479,8 +479,6 @@
   /** Set when a required, empty dropdown blocked form submission. */
   let requiredError = false;
   let itemsById = new Map();
-  /** Text content of the visually-hidden status live region. */
-  let statusText = "";
   // Rows are items or group headers, told apart by the row index in the
   // template, so the window's row type is `any`.
   /** @type {import("../ListBox/menu-window.js").MenuWindowState<any>} */
@@ -509,7 +507,9 @@
   });
 
   onMount(() => {
+    const disconnect = status.connect();
     return () => {
+      disconnect();
       typeahead.clear();
       menuWindow.destroy();
       loadingIndicator.cancel();
@@ -811,7 +811,10 @@
     });
   }
 
-  const announceStatus = createStatusAnnouncer((text) => (statusText = text));
+  // Messages go to the page's shared live region, or into the dialog this
+  // dropdown is in.
+  const status = createAnnouncerChannel(() => ref);
+  const announceStatus = status.announce;
 
   // The empty row is hidden from assistive tech, since a listbox holds only
   // options and groups, so the live region carries its message instead.
@@ -1497,9 +1500,4 @@
       >{clearSelectionText}</span
     >
   {/if}
-  <!-- Live region for selection announcements. Always rendered (even while
-       empty) so assistive tech registers the region before its text changes. -->
-  <span role="status" aria-live="polite" class:bx--visually-hidden={true}
-    >{statusText}</span
-  >
 </div>
