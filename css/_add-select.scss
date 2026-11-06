@@ -1,0 +1,537 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+
+$ccs-add-select-row-height: to-rem(64px);
+
+/// The chosen items below the list instead of beside it.
+/// @access private
+/// @group components
+@mixin add-select-stacked {
+  grid-template-areas:
+    "main"
+    "selected"
+    "footer";
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  // Stacked, the content sets the height. Each list still needs a bounded
+  // height to window against, so it gets a fixed one.
+  block-size: auto;
+
+  .#{$prefix}--add-select__body {
+    flex: none;
+    block-size: to-rem(384px);
+  }
+
+  .#{$prefix}--add-select__selected {
+    overflow: visible;
+    border-block-start: 1px solid $border-subtle;
+    border-inline-start: 0;
+  }
+
+  .#{$prefix}--add-select__chosen {
+    flex: none;
+    block-size: to-rem(256px);
+  }
+}
+
+/// AddSelect and MultiAddSelect styles, after the Add select pattern of
+/// Carbon for IBM Products: a searchable list of items that can be opened
+/// level by level, a column of the chosen items, and a footer. A grid of two
+/// columns that stacks below `md` or with `--stacked`. The rows are a
+/// listbox of two-line options on one 64px pitch, so the list can window
+/// them; Carbon's list box menu rows are one line and drawn as a popup, so
+/// the rows are drawn here from the same tokens.
+/// @access private
+/// @group components
+@mixin add-select {
+  .#{$prefix}--add-select {
+    @include type-style("body-compact-01");
+
+    display: grid;
+    box-sizing: border-box;
+    // A list of 10,000 rows needs a bounded height to window against, so the
+    // default is a fixed height. A panel or a modal body fills instead.
+    block-size: var(--ccs-add-select-height, #{to-rem(640px)});
+    min-block-size: 0;
+    grid-template-areas:
+      "main"
+      "footer";
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  // Cancel the body's padding: the component has its own, and its footer
+  // sits flush with the panel's edge.
+  .#{$prefix}--side-panel__body > .#{$prefix}--add-select {
+    block-size: calc(100% + #{$carbon--spacing-05 * 2});
+    margin: -$carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select--multiple {
+    grid-template-areas:
+      "main selected"
+      "footer footer";
+    grid-template-columns: minmax(0, 1fr) minmax(0, to-rem(320px));
+  }
+
+  .#{$prefix}--add-select--multiple.#{$prefix}--add-select--stacked {
+    @include add-select-stacked;
+  }
+
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--add-select--multiple {
+      @include add-select-stacked;
+    }
+  }
+
+  .#{$prefix}--add-select__main {
+    display: flex;
+    min-block-size: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-04;
+    grid-area: main;
+    padding: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select__scope {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .#{$prefix}--add-select__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03 $carbon--spacing-06;
+  }
+
+  .#{$prefix}--add-select__filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--add-select__filter-label {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--add-select__filter-group .#{$prefix}--tag {
+    margin: 0;
+  }
+
+  .#{$prefix}--add-select__crumbs .#{$prefix}--link {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .#{$prefix}--add-select__list-heading,
+  .#{$prefix}--add-select__selected-heading {
+    display: flex;
+    align-items: baseline;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--add-select__selected-heading {
+    align-items: center;
+    min-block-size: to-rem(32px);
+  }
+
+  .#{$prefix}--add-select__selected-heading > .#{$prefix}--btn {
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--add-select__list-label {
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--add-select__count {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--add-select__body {
+    position: relative;
+    min-block-size: to-rem(160px);
+    flex: 1;
+    border: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--add-select__body--focused {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--add-select__list {
+    block-size: 100%;
+    overflow-y: auto;
+    outline: none;
+  }
+
+  .#{$prefix}--add-select__option {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    block-size: $ccs-add-select-row-height;
+    border-block-end: 1px solid $border-subtle;
+    cursor: pointer;
+    gap: $carbon--spacing-04;
+    padding-block: 0;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--add-select__option--selected {
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--add-select__option--disabled {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--add-select__option--disabled .#{$prefix}--add-select__description,
+  .#{$prefix}--add-select__option--disabled .#{$prefix}--add-select__meta {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--add-select__body--focused
+    .#{$prefix}--add-select__option--active {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--add-select__check {
+    display: inline-flex;
+    box-sizing: border-box;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $icon-primary;
+    block-size: to-rem(16px);
+    inline-size: to-rem(16px);
+  }
+
+  .#{$prefix}--add-select__check svg {
+    block-size: to-rem(12px);
+    fill: $icon-inverse;
+    inline-size: to-rem(12px);
+  }
+
+  .#{$prefix}--add-select__option--selected .#{$prefix}--add-select__check {
+    background-color: $icon-primary;
+  }
+
+  .#{$prefix}--add-select__check--radio {
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--add-select__check--radio svg {
+    display: none;
+  }
+
+  .#{$prefix}--add-select__option--selected
+    .#{$prefix}--add-select__check--radio {
+    box-shadow: inset 0 0 0 3px $layer-selected;
+  }
+
+  .#{$prefix}--add-select__icon {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}--add-select__icon > svg {
+    block-size: to-rem(20px);
+    fill: $icon-primary;
+    inline-size: to-rem(20px);
+  }
+
+  .#{$prefix}--add-select__option--disabled .#{$prefix}--add-select__icon > svg {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--add-select__text {
+    display: flex;
+    min-inline-size: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: $carbon--spacing-01;
+  }
+
+  .#{$prefix}--add-select__title-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select__title,
+  .#{$prefix}--add-select__description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--add-select__title {
+    min-inline-size: 0;
+    flex: 0 1 auto;
+  }
+
+  .#{$prefix}--add-select__description,
+  .#{$prefix}--add-select__meta {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--add-select__meta {
+    overflow: hidden;
+    max-inline-size: 45%;
+    flex: 0 1 auto;
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--add-select__row-action {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    block-size: to-rem(32px);
+    cursor: pointer;
+    inline-size: to-rem(32px);
+  }
+
+  .#{$prefix}--add-select__row-action svg {
+    fill: $icon-primary;
+  }
+
+  .#{$prefix}--add-select__row-action--drill svg {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--add-select__placeholder {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $carbon--spacing-05;
+    inset: 0;
+    padding: $carbon--spacing-05;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--add-select__placeholder .#{$prefix}--btn {
+    pointer-events: auto;
+  }
+
+  .#{$prefix}--add-select__placeholder-text {
+    @include type-style("body-compact-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--add-select__skeleton {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--add-select__skeleton-row {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    block-size: $ccs-add-select-row-height;
+    border-block-end: 1px solid $border-subtle;
+    padding-inline: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select__skeleton-row .#{$prefix}--skeleton__text {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--add-select__skeleton-row
+    .#{$prefix}--skeleton__text:first-child {
+    inline-size: 40%;
+  }
+
+  .#{$prefix}--add-select__skeleton-row
+    .#{$prefix}--skeleton__text:last-child {
+    margin-block-end: 0;
+    inline-size: 65%;
+  }
+
+  // Room for the loading text, the retry and the next-page button, so none
+  // of them moves the list.
+  .#{$prefix}--add-select__status {
+    display: flex;
+    align-items: center;
+    min-block-size: to-rem(32px);
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--add-select__status-error {
+    @include type-style("label-01");
+
+    color: $text-error;
+  }
+
+  .#{$prefix}--add-select__selected {
+    display: flex;
+    overflow: hidden;
+    min-block-size: 0;
+    flex-direction: column;
+    border-inline-start: 1px solid $border-subtle;
+    gap: $carbon--spacing-03;
+    grid-area: selected;
+    padding: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select__selected:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--add-select__details {
+    overflow: auto;
+    max-block-size: 50%;
+    flex: none;
+    border-block-end: 1px solid $border-subtle;
+    padding-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select__chosen {
+    overflow-y: auto;
+    min-block-size: 0;
+    flex: 1;
+  }
+
+  .#{$prefix}--add-select__chosen-item {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    block-size: to-rem(56px);
+    border-block-end: 1px solid $border-subtle;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--add-select__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-block-start: 1px solid $border-subtle;
+    gap: $carbon--spacing-05;
+    grid-area: footer;
+    padding-inline-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--add-select__footer-note {
+    @include type-style("body-compact-01");
+
+    overflow: hidden;
+    margin-inline-end: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--add-select__footer .#{$prefix}--action-set {
+    inline-size: min(100%, to-rem(384px));
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--add-select__option:not(.#{$prefix}--add-select__option--disabled):hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--add-select__option--selected:not(.#{$prefix}--add-select__option--disabled):hover {
+      background-color: $layer-selected-hover;
+    }
+
+    .#{$prefix}--add-select__row-action:hover {
+      background-color: $layer-hover;
+    }
+
+    @media (forced-colors: active) {
+      .#{$prefix}--add-select__option--selected:hover {
+        background-color: Highlight;
+      }
+    }
+  }
+
+  // Forced colors drop fills, so a chosen row would look like any other.
+  // It fills with `Highlight` and opts out of forcing, so every part of
+  // the row needs a system color. The cursor row is outlined as a focused
+  // control is; on a chosen row the outline is the row's text color.
+  @media (forced-colors: active) {
+    .#{$prefix}--add-select__option--selected {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--add-select__option--selected
+      .#{$prefix}--add-select__description,
+    .#{$prefix}--add-select__option--selected .#{$prefix}--add-select__meta {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--add-select__option--selected .#{$prefix}--add-select__check {
+      border-color: HighlightText;
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--add-select__option--selected .#{$prefix}--add-select__check svg,
+    .#{$prefix}--add-select__option--selected .#{$prefix}--add-select__icon > svg,
+    .#{$prefix}--add-select__option--selected .#{$prefix}--add-select__row-action svg {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--add-select__option--selected
+      .#{$prefix}--add-select__check--radio {
+      background-color: HighlightText;
+      box-shadow: inset 0 0 0 3px Highlight;
+    }
+
+    .#{$prefix}--add-select__body--focused
+      .#{$prefix}--add-select__option--active {
+      outline: 2px solid CanvasText;
+      outline-offset: -4px;
+    }
+
+    .#{$prefix}--add-select__option--selected
+      .#{$prefix}--add-select__row-action {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--add-select__check {
+      border-color: ButtonText;
+    }
+
+    .#{$prefix}--add-select__row-action svg {
+      fill: ButtonText;
+    }
+  }
+}
+
+@include exports("add-select") {
+  @include add-select;
+}

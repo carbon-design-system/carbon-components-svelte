@@ -42,6 +42,12 @@ const SVELD_OPTIONS = {
         component: "./Chat/ChatButtonSkeleton.svelte",
         name: "size",
       },
+      // MultiAddSelect's value is the array form of AddSelect's key or keys.
+      {
+        code: "sveld/extend-props-override",
+        component: "./AddSelect/MultiAddSelect.svelte",
+        name: "value",
+      },
     ],
   },
 };

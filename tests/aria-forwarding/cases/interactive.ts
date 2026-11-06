@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
+import AddSelect from "carbon-components-svelte/AddSelect/AddSelect.svelte";
+import MultiAddSelect from "carbon-components-svelte/AddSelect/MultiAddSelect.svelte";
 import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
@@ -65,7 +67,21 @@ import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
 
 const nodes = [{ id: "docs", text: "Docs" }];
 
+const addSelectItems = [{ id: "a", title: "Alpha" }];
+
 export const interactive: AriaEntry[] = [
+  {
+    name: "AddSelect",
+    render: (attrs) =>
+      render(AddSelect, { props: { items: addSelectItems, ...attrs } }),
+    target: () => screen.getByRole("listbox"),
+  },
+  {
+    name: "MultiAddSelect",
+    render: (attrs) =>
+      render(MultiAddSelect, { props: { items: addSelectItems, ...attrs } }),
+    target: () => screen.getByRole("listbox"),
+  },
   {
     name: "AILabel",
     render: (attrs) => render(AILabel, { props: attrs }),
