@@ -109,6 +109,14 @@ export interface CalendarOptions extends Partial<
   weekNumbers?: boolean;
 }
 
+/** A day or grid cell, stamped with the date it shows. */
+export type DayElement = HTMLElement & { dateObj: Date };
+
+/** An input the engine is attached to. */
+export type CalendarInput = HTMLInputElement & {
+  _flatpickr?: CalendarInstance;
+};
+
 export interface CalendarInstance {
   config: Required<
     Pick<CalendarOptions, "dateFormat" | "conjunction" | "ignoredFocusElements">
@@ -116,6 +124,8 @@ export interface CalendarInstance {
     CalendarOptions & {
       minDate?: Date;
       maxDate?: Date;
+      /** The mode asked for. Grid and week modes run `mode` as `"single"`. */
+      pickerMode: CalendarMode;
       _enable?: unknown;
       _disable: unknown[];
     };

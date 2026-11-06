@@ -1,12 +1,27 @@
 <script context="module">
-  /** @param {any} value */
-  function isRangeRule(value) {
-    return value?.constructor === Object && "from" in value && "to" in value;
+  /**
+   * @param {unknown} value
+   * @returns {value is Record<string, unknown>}
+   */
+  function isPlainObject(value) {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      value.constructor === Object
+    );
   }
 
   /**
-   * @param {any} a
-   * @param {any} b
+   * @param {unknown} value
+   * @returns {value is { from: unknown; to: unknown }}
+   */
+  function isRangeRule(value) {
+    return isPlainObject(value) && "from" in value && "to" in value;
+  }
+
+  /**
+   * @param {unknown} a
+   * @param {unknown} b
    * @returns {boolean}
    */
   function sameItem(a, b) {
@@ -29,8 +44,8 @@
    * but equal, so compare one level deep: `Date`s by time, `{ from, to }`
    * rules by their ends, other items by identity.
    *
-   * @param {any} a
-   * @param {any} b
+   * @param {unknown} a
+   * @param {unknown} b
    */
   function sameValue(a, b) {
     if (sameItem(a, b)) return true;
@@ -40,8 +55,8 @@
       );
     }
     if (
-      a?.constructor === Object &&
-      b?.constructor === Object &&
+      isPlainObject(a) &&
+      isPlainObject(b) &&
       Object.keys(a).length === Object.keys(b).length
     ) {
       return Object.keys(a).every((key) => sameItem(a[key], b[key]));
@@ -1235,7 +1250,9 @@
     )
       return;
 
-    const clickedDate = /** @type {any} */ (dayElem).dateObj;
+    const clickedDate = /** @type {import("./calendar.js").DayElement} */ (
+      dayElem
+    ).dateObj;
     if (!clickedDate) return;
 
     if (!event.shiftKey || !multipleSelectAnchor) {
@@ -1298,7 +1315,9 @@
     );
     if (!dayElem) return;
 
-    const hoveredDate = /** @type {any} */ (dayElem).dateObj;
+    const hoveredDate = /** @type {import("./calendar.js").DayElement} */ (
+      dayElem
+    ).dateObj;
     if (!hoveredDate) return;
 
     clearRangePreview();
@@ -1311,7 +1330,8 @@
     for (const el of engine.calendarContainer.querySelectorAll(
       ".bx--date-picker__day",
     )) {
-      const date = /** @type {any} */ (el).dateObj;
+      const date = /** @type {import("./calendar.js").DayElement} */ (el)
+        .dateObj;
       if (
         date &&
         date.getTime() >= start.getTime() &&
@@ -1698,7 +1718,10 @@
    */
   function keepFocusAfterEnter(event) {
     if (!engine?.isOpen) return;
-    const time = /** @type {any} */ (event.target)?.dateObj?.getTime();
+    const time =
+      /** @type {Partial<import("./calendar.js").DayElement> | null} */ (
+        event.target
+      )?.dateObj?.getTime();
     if (time === undefined) return;
     setTimeout(() => {
       if (!engine?.isOpen) return;
@@ -1709,7 +1732,9 @@
         ),
       ].find(
         (el) =>
-          /** @type {any} */ (el).dateObj?.getTime() === time &&
+          /** @type {import("./calendar.js").DayElement} */ (
+            el
+          ).dateObj?.getTime() === time &&
           isFocusableDay(/** @type {HTMLElement} */ (el)),
       );
       /** @type {HTMLElement | undefined} */ (day)?.focus();
