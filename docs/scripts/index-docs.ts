@@ -1,62 +1,35 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { CompactPage } from "../src/search-index.ts";
 import { COMPONENTS_PATH, PAGE_EXTENSION } from "./constants";
 import { readFrontmatter } from "./frontmatter";
-import { createSlugger } from "./slug";
 import { getComponentNames } from "./utils";
 
 const SEARCH_INDEX_PATH = "./src/SEARCH_INDEX.json";
 const H2_DELMIMITER = "## ";
 
-type SearchDocument = {
-  id: string;
-  text: string;
-  description: string;
-  summary?: string;
-  components?: string;
-  keywords?: string;
-  href: string;
-  isComponent: boolean;
-};
-
-const documents: SearchDocument[] = [];
+const pages: CompactPage[] = [];
 
 for (const componentName of getComponentNames()) {
-  const slug = createSlugger();
   const filePath = path.join(
     COMPONENTS_PATH,
     `${componentName}${PAGE_EXTENSION}`,
   );
   const fileContent = fs.readFileSync(filePath, "utf8");
-  const lines = fileContent.split("\n");
   const frontmatter = readFrontmatter(fileContent, filePath);
+  const headings = fileContent
+    .split("\n")
+    .filter((line) => line.startsWith(H2_DELMIMITER))
+    .map((line) => line.split(H2_DELMIMITER)[1])
+    .filter((heading): heading is string => Boolean(heading));
 
-  documents.push({
-    id: `${componentName}-page`,
-    text: componentName,
-    description: componentName,
-    summary: frontmatter.description,
-    components: frontmatter.components?.join(" "),
-    keywords: frontmatter.keywords?.join(" "),
-    href: `/components/${componentName}`,
-    isComponent: true,
-  });
-
-  for (const line of lines) {
-    if (line.startsWith(H2_DELMIMITER)) {
-      const [, h2] = line.split(H2_DELMIMITER);
-      if (!h2) continue;
-      const hash = slug(h2);
-
-      documents.push({
-        id: componentName + hash,
-        text: componentName,
-        description: h2,
-        href: `/components/${componentName}#${hash}`,
-        isComponent: false,
-      });
-    }
-  }
+  pages.push([
+    componentName,
+    frontmatter.description ?? "",
+    frontmatter.components?.join(" ") ?? "",
+    frontmatter.keywords?.join(" ") ?? "",
+    headings,
+  ]);
 }
 
-fs.writeFileSync(SEARCH_INDEX_PATH, JSON.stringify(documents, null, 2));
+fs.writeFileSync(SEARCH_INDEX_PATH, JSON.stringify(pages));

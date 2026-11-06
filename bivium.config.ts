@@ -62,6 +62,7 @@ export default {
     "docs/src/token-reference.ts",
     "docs/src/search.ts",
     "docs/src/routes.ts",
+    "docs/src/search-index.ts",
     "docs/scripts/slug.ts",
     "docs/scripts/visit.ts",
     "docs/scripts/frontmatter.ts",
