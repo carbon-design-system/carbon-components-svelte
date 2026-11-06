@@ -1,0 +1,95 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// SavingStatus: one line for the state of an autosave. The icon and text
+/// come from `IconIndicator` and `InlineLoading`; this lays them out in a
+/// row that keeps its height in every status, so nothing around it moves
+/// when the status changes.
+/// @access private
+/// @group components
+@mixin saving-status {
+  .#{$prefix}--saving-status {
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: $carbon--spacing-07;
+    color: $text-secondary;
+  }
+
+  // The live regions are visually hidden and absolutely positioned. With no
+  // offset they sit where the row would put them, and a status that is empty
+  // and last in a row ends at the edge of the page, so a pixel of them
+  // scrolls it sideways. Anchor them inside the row instead.
+  .#{$prefix}--saving-status__live {
+    inset-block-start: 0;
+    inset-inline-end: 0;
+  }
+
+  .#{$prefix}--saving-status--sm {
+    min-height: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--saving-status__content {
+    display: flex;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+    min-width: 0;
+  }
+
+  // Programmatic focus lands here when Retry leaves with the error. The
+  // ring is for a keyboard user only.
+  .#{$prefix}--saving-status:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // `InlineLoading` fills its line; here it sits in a row.
+  .#{$prefix}--saving-status .#{$prefix}--inline-loading {
+    width: auto;
+  }
+
+  // The base rule gaps the spinner from its text with a physical
+  // `margin-right`, which lands on the wrong side in RTL.
+  .#{$prefix}--saving-status .#{$prefix}--inline-loading__animation {
+    margin-right: 0;
+    margin-inline-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--saving-status--sm .#{$prefix}--icon-indicator {
+    @include type-style("label-01");
+  }
+
+  // Forced colors leave an SVG fill alone, so the status colors would stay
+  // on a Canvas they were not drawn for. The shapes carry the meaning
+  // (check, cross, pending dots, triangle, spinner), so the icons read
+  // `CanvasText`.
+  @media (forced-colors: active) {
+    .#{$prefix}--saving-status .#{$prefix}--icon-indicator svg {
+      fill: CanvasText;
+    }
+
+    // The spinner strokes are author colors too: the arc is `$interactive`
+    // blue, which sits badly on a dark Canvas.
+    .#{$prefix}--saving-status .#{$prefix}--loading__stroke {
+      stroke: CanvasText;
+    }
+
+    .#{$prefix}--saving-status .#{$prefix}--loading__background {
+      stroke: GrayText;
+    }
+
+    // IconIndicator paints the exclamation mark in the offline triangle
+    // black, which vanishes on a triangle that forced colors paint black.
+    .#{$prefix}--saving-status
+      .#{$prefix}--icon-indicator--caution-minor
+      path:first-of-type {
+      fill: Canvas;
+    }
+  }
+}
+
+@include exports("saving-status") {
+  @include saving-status;
+}

@@ -1059,6 +1059,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/RelativeTime
+  saving-status:
+    name: Saving status
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/saving-status.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SavingStatus
   scroll-gradient:
     name: Scroll gradient
     status: stable
