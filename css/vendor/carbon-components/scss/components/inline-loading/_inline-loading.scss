@@ -52,7 +52,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: $carbon--spacing-03;
+    // ccs: the gap to the text, on the text's side in RTL too.
+    margin-inline-end: $carbon--spacing-03;
   }
 
   .#{$prefix}--inline-loading__checkmark-container {

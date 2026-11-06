@@ -24,3 +24,8 @@
 <div data-testid="initial">
   <InlineLoading status="finished" description="Saved" />
 </div>
+
+<!-- Reads right to left. -->
+<div data-testid="rtl" dir="rtl">
+  <InlineLoading description="Saving" />
+</div>

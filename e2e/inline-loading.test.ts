@@ -157,4 +157,29 @@ test.describe("InlineLoading finished check", () => {
         .boundingBox(),
     ).toMatchObject({ width: 16, height: 16 });
   });
+
+  test("keeps the spinner off its text, also right to left", async ({
+    page,
+  }) => {
+    const gap = (region: string) =>
+      page.evaluate((region) => {
+        const box = (selector: string) =>
+          (
+            document.querySelector(
+              `[data-testid="${region}"] ${selector}`,
+            ) as Element
+          ).getBoundingClientRect();
+        const spinner = box(".bx--inline-loading__animation");
+        const text = box(".bx--inline-loading__text");
+        return Math.round(
+          spinner.left < text.left
+            ? text.left - spinner.right
+            : spinner.left - text.right,
+        );
+      }, region);
+
+    // `$carbon--spacing-03`
+    expect(await gap("live")).toBe(8);
+    expect(await gap("rtl")).toBe(8);
+  });
 });
