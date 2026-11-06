@@ -7,6 +7,7 @@ import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
+import NumberRangeInput from "carbon-components-svelte/NumberRangeInput/NumberRangeInput.svelte";
 import FluidPinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import FluidSearchSkeleton from "carbon-components-svelte/Search/FluidSearchSkeleton.svelte";
@@ -163,6 +164,24 @@ export const cases: FieldCase[] = [
     fluidSkeleton: {
       component: FluidNumberInputSkeleton,
       ...textInputSkeleton,
+    },
+  },
+  {
+    name: "NumberRangeInput",
+    component: NumberRangeInput,
+    // Read-only renders text inputs, which NVDA announces as read-only.
+    control: () => [
+      ...(screen.queryAllByRole("spinbutton").length
+        ? screen.getAllByRole("spinbutton")
+        : screen.getAllByRole("textbox")),
+    ],
+    state: {
+      // The fieldset carries the description for both fields.
+      described: () => screen.getByRole("group"),
+    },
+    fluid: {
+      className: "bx--number-range-input--fluid",
+      wrapper: ".bx--number-range-input__fields",
     },
   },
   {
