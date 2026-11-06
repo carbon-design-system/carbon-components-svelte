@@ -77,6 +77,19 @@
   export let items = [];
 
   /**
+   * Set an async source for the items, from `createAsyncSource` or
+   * `createPagedSource`. While the menu is open, the typed text becomes the
+   * source's query, its answer replaces `items`, and a pending request shows
+   * the loading row. `items` shows while the source has no answer, such as
+   * before the first query or below its `minLength`. With a paged source, the
+   * menu asks for the next page when it is scrolled near the bottom.
+   *
+   * The selected item stays selected when a later answer does not hold it.
+   * @type {import("../utils/async-source.js").AsyncSource<ReadonlyArray<Item>> | import("../utils/async-source.js").PagedSource<Item> | undefined}
+   */
+  export let source = undefined;
+
+  /**
    * Override the display of a combobox item.
    * @type {(item: Item) => string}
    */
@@ -284,6 +297,9 @@
    * @type {string | ((value: string) => string)}
    */
   export let emptyText = "No results";
+
+  /** Specify the message shown in the menu when `source` fails */
+  export let errorText = "Unable to load results";
 
   /** Set an id for the list box component */
   export let id = uniqueId();
@@ -569,7 +585,21 @@
   const loadingIndicator = createLoadingIndicator((shown) => {
     showLoading = shown;
   });
-  $: loadingIndicator(loading, loadingDelay);
+  // The typed text is the query. The source ignores a repeat, so opening the
+  // menu asks for the current text once. A server render asks for nothing:
+  // it would start a timer no one clears. This stays above `sourceState`: a
+  // source that answers at once invalidates `$source` here, and Svelte 3 and 4
+  // only re-run the reactive statements that come after.
+  $: if (source && open && typeof window !== "undefined") source.set(value);
+  $: sourceState = source ? $source : undefined;
+  $: sourceFailed = sourceState?.status === "error";
+  $: busy =
+    loading ||
+    sourceState?.status === "loading" ||
+    (!!sourceState &&
+      "loadingMore" in sourceState &&
+      !!sourceState.loadingMore);
+  $: loadingIndicator(busy, loadingDelay);
 
   $: statusDescribedById = resolveStatusDescribedBy({
     showInvalid,
@@ -614,6 +644,7 @@
     });
     if (detail) {
       dispatch("scrollend", detail);
+      if (source && "loadMore" in source) source.loadMore();
     }
   }
 
@@ -746,7 +777,7 @@
   function handleFormReset() {
     if (!ref) return;
     const nextValue = ref.defaultValue;
-    const matchedItem = findExactMatch(items, nextValue);
+    const matchedItem = findExactMatch(options, nextValue);
     const nextSelectedId = matchedItem ? matchedItem.id : undefined;
     // Pre-sync `prevSelectedId` so the reactive `selectedId` block treats
     // this as already seen and does not dispatch `select`; a reset fires no
@@ -861,7 +892,10 @@
     selectedItem = undefined;
   } else {
     // Re-resolve selectedItem when items changes but selectedId does not.
-    const resolvedItem = itemsById.get(selectedId);
+    // A source's answer to the next query may not hold the selected item.
+    const resolvedItem =
+      itemsById.get(selectedId) ??
+      (source && selectedItem?.id === selectedId ? selectedItem : undefined);
     if (prevSelectedId !== selectedId) {
       // Only dispatch select event if not initial render (prevSelectedId was not null)
       const isInitialRender = prevSelectedId === null;
@@ -885,7 +919,14 @@
     if (initialItem) value = itemToString(initialItem);
   }
 
-  $: itemsById = new Map(items.map((item) => [item.id, item]));
+  // The items on offer: the source's answer when it has one. A failed source
+  // offers none, so the error row stands alone.
+  $: options = sourceState
+    ? sourceFailed
+      ? []
+      : (sourceState.data ?? items)
+    : items;
+  $: itemsById = new Map(options.map((item) => [item.id, item]));
   $: ariaLabel = $$props["aria-label"] ?? (labelText || "Choose an item");
   $: menuId = `menu-${id}`;
   $: comboId = `combo-${id}`;
@@ -916,11 +957,13 @@
   // Fluid (non-condensed) menu items are 64px tall (see css/_fluid-list-box.scss).
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
-  $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
-  $: grouped = items.some((item) => !!item.group);
+  $: shouldVirtualize = shouldVirtualizeMenu({ items: options, virtualize });
+  $: grouped = options.some((item) => !!item.group);
   // Each group is contiguous: ungrouped items first, then groups in order of
   // first appearance. Highlight indexes point into this order.
-  $: orderedItems = grouped ? orderByGroup(items, (item) => item.group) : items;
+  $: orderedItems = grouped
+    ? orderByGroup(options, (item) => item.group)
+    : options;
   $: hideMode = filterMode === "hide" && !shouldVirtualize && !grouped;
   // The default `shouldFilterItem` keeps every item whatever is typed, so the
   // open menu reuses `orderedItems` rather than copying all of them on each
@@ -932,7 +975,7 @@
       ? orderedItems
       : orderedItems.filter((item) => filterFn(item, filterValue))
     : [];
-  $: menuItems = hideMode && open ? items : filteredItems;
+  $: menuItems = hideMode && open ? options : filteredItems;
   // Group headers render as rows of their own, so the menu window indexes
   // rows, not items. `toRowIndex` maps between the two. Built from the
   // filtered items, so a group with no matches has no header.
@@ -941,7 +984,15 @@
   $: scrollEndTracker.noteItemCount(filteredItems.length);
   // The default `shouldFilterItem` keeps every item, so only announce while a
   // filter can actually narrow the list.
-  $: if (open && value.length > 0 && filterFn !== defaultShouldFilter) {
+  // Nobody listens to a server render, and its debounce timer would never end.
+  $: sourceSettled =
+    typeof window !== "undefined" &&
+    sourceState?.status === "success" &&
+    !sourceState.stale;
+  $: if (
+    open &&
+    (sourceSettled || (value.length > 0 && filterFn !== defaultShouldFilter))
+  ) {
     announceFilterResults(filteredItems.length);
   } else {
     announceFilterResults.cancel();
@@ -950,7 +1001,8 @@
     announcedFilterCount = null;
     statusText = "";
   }
-  $: hasNoMatches = open && !loading && filteredItems.length === 0;
+  $: hasNoMatches =
+    open && !busy && !sourceFailed && filteredItems.length === 0;
   $: emptyMessage = hasNoMatches
     ? typeof emptyText === "function"
       ? emptyText(value)
@@ -1304,7 +1356,7 @@
             // the filled text.
             if (effectiveDisabled || readonly || inputHasFocus()) return;
             selectedId = findExactMatch(
-              items,
+              options,
               /** @type {HTMLInputElement} */ (event.target).value,
             )?.id;
           }}
@@ -1535,7 +1587,7 @@
         {direction}
         {highlightedId}
         {wrapOptions}
-        aria-busy={loading ? "true" : undefined}
+        aria-busy={busy ? "true" : undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         bind:ref={listRef}
@@ -1815,6 +1867,9 @@
           <ListBoxMenuStatus>
             <slot name="empty" {value}>{emptyMessage}</slot>
           </ListBoxMenuStatus>
+        {/if}
+        {#if open && sourceFailed}
+          <ListBoxMenuStatus>{errorText}</ListBoxMenuStatus>
         {/if}
         {#if showLoading}
           <ListBoxMenuStatus>
