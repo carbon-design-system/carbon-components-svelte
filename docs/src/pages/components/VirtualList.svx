@@ -104,7 +104,7 @@ Set `scrollElement` to scroll the list from an ancestor instead of its own conta
 
 ## In a list
 
-Set `spacerTag` to `"li"` to render items straight into a list. The list keeps only `li` children: an empty `li` above and below the items holds the scroll height. Each item must render exactly one element, and each `li` gets `aria-posinset` and `aria-setsize` so screen readers announce its place in the full list.
+Set `spacerTag` to `"li"` to render items straight into a list. The list keeps only `li` children: an empty `li` above and below the items holds the scroll height. Each item must render exactly one element, and each `li` gets `aria-posinset` and `aria-setsize` so screen readers announce its place in the full list. When `items` holds only the pages loaded so far, set `setSize` to the total, or to `-1` when it is not known, so `aria-setsize` does not read the loaded count.
 
 The list has no scroll container of its own. Wrap the list in a [ScrollGradient](/components/ScrollGradient), pass its `scrollElementRef` as `scrollElement`, and set `containerHeight` to its height. The gradients show that more items lie past each edge.
 

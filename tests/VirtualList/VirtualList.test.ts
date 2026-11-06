@@ -292,6 +292,20 @@ describe("VirtualList", () => {
       expect(rows[2]).toHaveAttribute("aria-posinset", "3");
     });
 
+    it("reads aria-setsize from setSize when the items are part of a larger set", async () => {
+      const { rerender } = render(VirtualList, { props: { setSize: 9433 } });
+      await tick();
+
+      const rows = within(getList()).getAllByRole("listitem");
+      expect(rows[0]).toHaveAttribute("aria-posinset", "1");
+      expect(rows[0]).toHaveAttribute("aria-setsize", "9433");
+
+      await rerender({ setSize: -1 });
+      await tick();
+
+      expect(rows[0]).toHaveAttribute("aria-setsize", "-1");
+    });
+
     it("windows against scrollElement", async () => {
       render(VirtualList);
 
