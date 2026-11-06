@@ -163,6 +163,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: [
       "Loading",
       "InlineLoading",
+      "SavingStatus",
       "ProgressBar",
       "ProgressIndicator",
       "SkeletonText",
