@@ -1,4 +1,4 @@
-import { type Node, visit } from "./visit";
+import { type Node, visit } from "./visit.ts";
 
 /**
  * Everything GitHub drops from a heading's slug: all but letters, marks,
