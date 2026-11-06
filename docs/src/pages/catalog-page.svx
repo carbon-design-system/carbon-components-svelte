@@ -1,0 +1,102 @@
+---
+title: Catalog page
+layout: guide
+description: A browse page built from a search field, facets, a sort, a card grid and incremental loading, all editing one URL.
+---
+
+A catalog page is one question asked four ways: a typed search, a click on a facet, a sort, and how far down the list you have read. This page composes the pieces for it, the way a cloud catalog, a package registry or a shop listing does. The facets, the text highlight and the virtualizer are drafts that are not part of the library yet, so the example imports them from their paths.
+
+## Full page
+
+5,000 items behind a cursor, with a 150 ms delay on every query. Type `vault` and watch the matches mark in the titles and snippets, check a category, sort, turn on the list view, or press Load more. Tab through a card: the title link, then Favorite, then Compare.
+
+<FileSource src="/framed/CatalogPage/CatalogPage" />
+
+## One state, in the URL
+
+The page keeps no second copy of what the reader chose. Every control writes the URL, and the page reads its state back from it, so a link, a reload and the back button mean the same thing.
+
+| Control | Edits | Written to the URL as | History entry |
+| :--- | :--- | :--- | :--- |
+| Search | Free text, matched on every word | `q` | One when the search starts, then replaced as it is refined |
+| Facets and their chips | One parameter per checked value | `category=Compute&category=Security`, `verified=true` | A new entry |
+| Sort | The order | `sort`, left out for relevance | A new entry |
+| View | Grid or list | `view`, left out for grid | Replaced |
+| Load more | How many pages the first load covers | `page`, left out for 1 | Replaced |
+
+A parameter the page does not own, such as a theme or a campaign tag, is left where it was. Because the facet panel's own URL helpers read and write the same names, a facet is checked on the server, in the first render, from the URL alone.
+
+## The source
+
+The page asks a source for one page at a time. Nothing about it is specific to the in-memory one the example uses.
+
+| Method | Receives | Returns |
+| :--- | :--- | :--- |
+| `query` | `q`, `filters`, `sort`, `cursor`, `limit`, `signal` | `items`, `nextCursor`, `total`, and on the first page `counts` |
+
+`counts` are per option and ignore the facet's own choice, so checking one category does not zero the others. They come with the first page only, since a later page does not change them. A source that cannot return as many results as the URL's `page` asks for is asked again with the cursor, until the depth is reached.
+
+## Cards
+
+A card that opens the item and also has its own buttons is the nested interactive problem: a link cannot hold a button. `ClickableTile` and a clickable `Card` are one link or one button as a whole, so they cannot hold the Favorite and Compare buttons at all.
+
+| Choice | Result |
+| :--- | :--- |
+| `ClickableTile` or `Card clickable` with buttons inside | A link that contains buttons. Axe does not report it, but pressing a button also follows the link, and a screen reader hears one link with a button in it |
+| A plain `Card` with a stretched link | One link, around the title text. Its `::after` covers the card, so the whole card is a target. The buttons sit above it. Nothing is nested |
+
+The stretched link takes three rules: the card is the containing block, the link's `::after` fills it, and the buttons sit above it with `z-index`. `Card`'s header is positioned, so it needs `position: static` for the link to cover the card and not only the header. The focus ring is drawn on the pseudo-element, so it surrounds the card.
+
+A card made this way cannot have text selected inside it, since the overlay takes the pointer. Keep long, copyable text on the item's own page.
+
+## Loading
+
+| Choice | Use it when |
+| :--- | :--- |
+| Load more, every card drawn | A reader rarely goes past a few pages. Find in page and server rendering work, and nothing depends on a column count |
+| Infinite load, every card drawn | The same, with the next page fetched as the end nears. Keep the Load more button as the keyboard and fallback path |
+| Virtualized | A reader may go dozens of pages deep. Only the rows near the viewport are drawn |
+
+Each page of 24 cards adds about 650 nodes. Measured in a production build in Chromium, with 5,000 items:
+
+| | Every card drawn | Virtualized |
+| :--- | ---: | ---: |
+| Nodes after 50 pages (1,200 cards) | 32,871 | 1,455 |
+| Frames over 50 ms while loading 50 pages | 7 of 119 | 0 of 77 |
+| Main thread blocked while loading 50 pages, 4x CPU slowdown | 6.4 s | 56 ms |
+| Open with `page=50`, 4x CPU slowdown | 5.0 s | 0.7 s |
+| Open with `page=10`, 4x CPU slowdown | 1.6 s | 0.7 s |
+| Scroll a loaded list, 4x CPU slowdown | 22 long tasks | none |
+
+Searching and filtering 5,000 items is cheap either way. Typing a query causes no long task even at a 4x slowdown, and the results settle about 20 ms after the search's pause. A click on a facet settles in about 50 ms, or 110 to 130 ms at 4x.
+
+Virtualizing a grid is virtualizing rows of cards. The column count follows the width, so the page measures it, and keeps the reader on the same card when it changes. The virtualizer scrolls an element, and a catalog scrolls the page, so the page feeds it the window's position itself.
+
+## Scroll restoration
+
+The browser can put a scroll position back only if the page is tall enough when it tries, and a list loaded as it is read is not. So the page turns off the browser's restoration, and saves the reader's place in the history entry: the first card in view, and how far into its row, with the page's pixel offset as a fallback. It saves on a pause in scrolling and when the page is left. On the way back it loads as many pages as the URL's `page` says, holds the page open at its old height meanwhile, and scrolls to that card. The card, not the pixel, is what it restores, so a different column count still lands on the same card.
+
+## Keyboard
+
+| Key | Where | Action |
+| :--- | :--- | :--- |
+| `/` | Anywhere | Focus the search |
+| Tab | The page | Breadcrumb, facets, search, sort, view, applied filters, then each card's title link, Favorite and Compare |
+| Space | A facet option, Favorite, Compare | Check it, or press it |
+| Enter | A title link | Open the item |
+| Enter | Load more | Load the next page, and move focus to its first card |
+| Escape | The facet flyout | Close it and return focus to the Filters button |
+
+## Practices
+
+| Do | Why |
+| :--- | :--- |
+| Make the title the card's one link, and stretch it | A whole-card target with no nested interactive content |
+| Keep the old results visible while new ones load | The list does not flash to a skeleton on each keystroke or click. It dims, and is marked busy |
+| Show skeleton cards only before the first results | There is nothing to keep yet |
+| Speak the result count once it stops changing | A screen reader falls behind if it reads each change. The count at load is not news |
+| Wrap marked text in a `span` when its parent is a flex container | A link is a flex container, which drops the space beside each mark |
+| Give every card the same height | Rows can be counted and positioned without measuring each one, and a card that grows does not move the others |
+| Put the state in the URL, and read it back from the URL | There is one state to restore, share and render on the server |
+| Ask for the facet counts on the first page only | They are one scan of the matches, and a later page does not change them |
+| Cap how deep a reader can load, or virtualize | Past a few dozen pages, the DOM is the cost |

@@ -216,6 +216,22 @@
     "message": "div#app > div:nth-of-type(2): spans 0px to 640px"
   },
   {
+    "fixture": "catalog-page.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.ccs-catalog-card.bx--card > div.bx--card__body:nth-of-type(2) > div.ccs-catalog-card__meta > div.bx--tag.bx--tag--sm:nth-of-type(1)",
+    "message": "div.ccs-catalog-card.bx--card > div.bx--card__body:nth-of-type(2) > div.ccs-catalog-card__meta > div.bx--tag.bx--tag--sm:nth-of-type(1): 1px outline inside 1px outline div.ccs-catalog__results:nth-of-type(4) > ul.ccs-catalog__grid > li.ccs-catalog__cell:nth-of-type(1) > div.ccs-catalog-card.bx--card, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "catalog-page.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.ccs-catalog-card.bx--card > div.bx--card__body:nth-of-type(2) > div.ccs-catalog-card__meta > div.bx--tag.bx--tag--sm:nth-of-type(2)",
+    "message": "div.ccs-catalog-card.bx--card > div.bx--card__body:nth-of-type(2) > div.ccs-catalog-card__meta > div.bx--tag.bx--tag--sm:nth-of-type(2): 1px outline inside 1px outline div.ccs-catalog__results:nth-of-type(4) > ul.ccs-catalog__grid > li.ccs-catalog__cell:nth-of-type(1) > div.ccs-catalog-card.bx--card, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "combo-button.html",
     "variant": "320",
     "check": "overflow",
