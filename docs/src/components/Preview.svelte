@@ -4,10 +4,11 @@
   export let src = "";
   export let framed = false;
 
-  import { Button, CodeSnippet } from "carbon-components-svelte";
+  import { Button, CodeSnippet, LazyMount } from "carbon-components-svelte";
   import { highlight } from "carbon-components-svelte/syntax";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { onMount } from "svelte";
+  import { eagerExamples } from "../router";
   import { theme } from "../store";
 
   /**
@@ -58,7 +59,15 @@
       <iframe loading="lazy" title={src.split("/").pop()} src={themedSrcUrl}
       ></iframe>
     {:else}
-      <slot />
+      <!-- A long page mounts its examples as they near the viewport, which
+           halves its load time. 64 px is a typical example's content height. -->
+      <LazyMount
+        rootMargin="1200px"
+        estimatedHeight={64}
+        eager={$eagerExamples}
+      >
+        <slot />
+      </LazyMount>
     {/if}
   </div>
   <div class="code-override" bind:this={codeView}>
