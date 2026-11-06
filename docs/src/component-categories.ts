@@ -97,6 +97,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ChatButton",
       "Countdown",
       "QRCode",
+      "Timeline",
     ],
   },
   {
