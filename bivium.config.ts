@@ -58,6 +58,7 @@ export default {
     "css",
     "scripts",
     "docs/src/pages/framed/DatePicker",
+    "docs/src/pages/framed/TwoFactorSetup",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
   ],
