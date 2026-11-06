@@ -37,9 +37,8 @@
   } from "../utils/size-aliases.js";
 
   $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
-  $: values = headers.map(
-    /** @param {any} header A string has no `value`, so it is read as `undefined`. */
-    (header) => (header.value === undefined ? header : header.value),
+  $: values = headers.map((header) =>
+    typeof header === "string" ? header : header.value,
   );
   $: cols = Array.from(
     { length: headers.length > 0 ? headers.length : columns },

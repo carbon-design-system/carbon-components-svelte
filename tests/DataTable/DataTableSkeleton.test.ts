@@ -66,6 +66,14 @@ describe("DataTableSkeleton", () => {
     );
   });
 
+  it("leaves a header cell blank for a header without a value", () => {
+    const { container } = render(DataTableSkeleton, {
+      props: { headers: ["Name", { key: "port" }] },
+    });
+
+    expect(container.querySelectorAll("thead th")[1]?.textContent).toBe("");
+  });
+
   it("names an empty header with its value, visually hidden", () => {
     const { container } = render(DataTableSkeleton, {
       props: { headers: ["Name", { empty: true, value: "Actions" }] },
