@@ -1,0 +1,217 @@
+---
+components: ["InlineTip", "Guidebanner"]
+description: Inline tips teach a feature in place, next to the page they are about. A tip stays dismissed once a user closes it, and a guidebanner steps through a set of tips.
+keywords: ["onboarding", "hint", "tour", "tip of the day", "coach", "guide"]
+---
+
+<script>
+  import { Button, InlineTip } from "carbon-components-svelte";
+  import Dashboard from "carbon-pictograms-svelte/lib/Dashboard.svelte";
+</script>
+
+## Basic
+
+Place a tip beside the setting or view it explains. Give it a `title` and put
+the text in the default slot. A tip with no `id` is dismissed for as long as
+the component lives, so these examples return when the page reloads. Give a tip
+an `id` to remember its dismissal (see [Remembering dismissals](#remembering-dismissals)).
+
+<InlineTip title="Sync your settings">
+  Keep your layout, filters and theme on every device you sign in to.
+</InlineTip>
+
+## InlineTip, Callout or InlineNotification
+
+| Use | When |
+| --- | --- |
+| InlineTip | The text teaches something the user can do, and the user may want it gone for good. A dismissal is remembered. |
+| [Callout](/components/Callout) | The text is true for as long as the page is open, such as a limit or a prerequisite. It can't be dismissed. |
+| [InlineNotification](/components/InlineNotification) | The text reports the result of something the user just did, such as a failed save. It is announced, and closing it is not remembered. |
+
+## Content
+
+### Learn more link
+
+Set `href` for a "Learn more" link. The title describes it, so a page of tips
+does not hold a list of identical link names. Change the wording with
+`learnMoreText`.
+
+<InlineTip title="Filter by owner" href="#filters">
+  Narrow the table to the rows one person owns.
+</InlineTip>
+
+### Actions
+
+Use the `actions` slot for what the tip teaches the user to do, after the
+"Learn more" link.
+
+<InlineTip title="Sync your settings" href="#sync">
+  Keep your layout, filters and theme on every device you sign in to.
+  <Button slot="actions" kind="tertiary" size="small">Turn on sync</Button>
+</InlineTip>
+
+### Illustration
+
+The `illustration` slot holds art beside the text. It is hidden from screen
+readers, and a collapsed tip hides it. In forced colors every `svg` takes the
+`ButtonText` fill, so draw outline art with a CSS `fill: none` rule, not the
+`fill="none"` attribute, which the forced rule outranks.
+
+<InlineTip title="Read a dashboard at a glance" href="#dashboards">
+  Each tile shows one metric over the range you pick above the charts.
+  <Dashboard slot="illustration" />
+</InlineTip>
+
+### Heading level
+
+The title is a heading. Inside a [Section](/components/Heading) it sits one
+level below the section's heading, and elsewhere it is an `h3`. Set
+`headingLevel` to fit the page outline.
+
+<InlineTip headingLevel={2} title="Keep a backup">
+  Export your workspace before you delete a project.
+</InlineTip>
+
+## Collapsible
+
+Set `collapsible` to let users collapse a tip to its title. The title becomes
+the disclosure button, so its name stays the same in both states. On the title,
+press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to toggle it. Set
+`collapsed` to start collapsed, or bind it. Reduced motion skips the animation.
+
+<InlineTip collapsible title="Work faster with keyboard shortcuts">
+  Open the shortcut list from anywhere on the page to see every key for the
+  view you are on.
+</InlineTip>
+
+## Dismissing
+
+Press the close button, named "Dismiss tip" followed by the title, to remove a
+tip. Keyboard focus returns to the control it came from, so the page does not
+lose your place. Call `preventDefault()` on `on:dismiss` to keep the tip, and
+set `dismissible` to `false` to remove the button. Replace the label with
+`dismissText`, a function that receives the title.
+
+<InlineTip
+  title="Cuenta de facturación"
+  dismissText={(title) => `Cerrar el consejo: ${title}`}
+>
+  Cambie los datos de facturación desde la página de Facturación.
+</InlineTip>
+
+## Remembering dismissals
+
+### Tip store
+
+A tip with an `id` is remembered. By default it keeps the dismissed ids in
+`localStorage`, and every tab and every store on the page that shares the key
+follows. For a page with several tips, create one store with `createTipStore`
+and share it with `setTipStore`, so tips do not each read the storage. A tip
+dismissed in code, with `tips.dismiss(id)`, is remembered like one the user
+closed; do it when the user does what the tip taught.
+
+Create the store inside a component, not at module scope, so server-rendered
+requests do not share one.
+
+<FileSource src="/framed/InlineTip/InlineTipSettings" />
+
+### Show tips again
+
+`tips.reset()` forgets every dismissal, and `tips.reset(id)` forgets one. Put it
+behind a control on the settings page. The store is a Svelte store, so
+`$tips.dismissed` is a reactive `Set` of the dismissed ids.
+
+<FileSource src="/framed/InlineTip/InlineTipShowAgain" />
+
+### Server rendering
+
+A server does not know what a visitor dismissed, and the store never reads its
+storage while it renders, so the server and the first browser paint agree. Until
+the page mounts, a tip follows the store's `pending` option:
+
+| Setup | A new visitor | A returning visitor |
+| --- | --- | --- |
+| `pending: "hide"`, the default | The tips appear when the page hydrates and push the content below them down by their height. | Nothing: no flash, no shift. |
+| `pending: "show"` | Nothing. | The tips show, then remove themselves when the page hydrates, and the content moves up. |
+| `initial`, from a cookie | Nothing. | Nothing. |
+| Rendered in the browser only | Nothing: the tips mount before the first paint. | Nothing. |
+
+Use the default for tips most visitors dismiss. It never shows a tip someone
+already closed, and a page rendered with JavaScript off shows none. Use
+`pending: "show"` for a tip that most visitors leave open, so their page does
+not grow after load. To remove both shifts, store the dismissals in a cookie
+with `cookieTipStorage`, read it on the server with `parseTipCookie`, and pass
+the ids as `initial`. The store is then `ready` from the first render.
+
+```ts
+// src/hooks.server.ts
+import { parseTipCookie } from "carbon-components-svelte";
+
+export function handle({ event, resolve }) {
+  event.locals.dismissedTips = parseTipCookie(
+    event.request.headers.get("cookie"),
+  );
+  return resolve(event);
+}
+```
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import {
+    cookieTipStorage,
+    createTipStore,
+    setTipStore,
+  } from "carbon-components-svelte";
+
+  export let data;
+
+  setTipStore(
+    createTipStore({
+      storage: cookieTipStorage(),
+      initial: data.dismissedTips,
+    }),
+  );
+</script>
+
+<slot />
+```
+
+### Custom storage
+
+Pass any object with `read()` and `write(ids)` as `storage` to keep the ids
+somewhere else, such as the user's preferences on a server. Both may return a
+promise. Until a read settles, tips follow `pending`, and a dismissal made in
+that time is kept. Add `subscribe(callback)` to report changes made elsewhere.
+A failed read or write calls `onError`; the dismissal still holds until the page
+closes.
+
+<FileSource src="/framed/InlineTip/InlineTipServerSynced" />
+
+## Guidebanner
+
+### Basic
+
+Pass the tips as an array. A guidebanner shows one tip at a time with a
+counter, and previous and next buttons that wrap from the last tip to the
+first. The close button dismisses every tip in the set, and the store
+remembers each tip's id, so a tip added later shows on its own. A guidebanner
+with one tip left drops the counter and the buttons.
+
+Screen readers hear the region as a carousel and the tip as "1 of 3". The tip
+is announced when a button changes it, and not when the banner first appears.
+
+Share the store with a "Show tips again" control, and listen for `on:change`
+and `on:dismiss`.
+
+<FileSource src="/framed/InlineTip/GuidebannerDashboard" />
+
+## Guidance
+
+| Do | Why |
+| --- | --- |
+| Give every tip that should stay dismissed a stable `id`. | The id is the tip's name in storage. Renaming it shows the tip again. |
+| Dismiss a tip in code once the user does what it taught. | The tip has done its job, and the user does not have to close it. |
+| Keep a tip to a sentence or two, with one link. | A tip sits in the flow, so a long one pushes the page down. |
+| Offer "Show tips again" somewhere users can find it. | A closed tip is gone for good, including one closed by mistake. |
+| Pass the cookie ids as `initial` when the page is server rendered. | The server then renders the right tips, and nothing moves on hydration. |
