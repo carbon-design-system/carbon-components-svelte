@@ -1,0 +1,250 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// InlineTip and Guidebanner: a tip that sits in the page flow beside what
+/// it teaches. A Guidebanner is an InlineTip that holds a set of tips and
+/// steps through them, so it shares the surface, the icon and the close
+/// button, and reuses the Carousel's counter and previous/next buttons.
+/// @access private
+/// @group components
+@mixin inline-tip {
+  .#{$prefix}--inline-tip {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    align-items: flex-start;
+    padding: $carbon--spacing-05;
+    border: 1px solid $border-subtle;
+    border-inline-start-color: $border-interactive;
+    border-inline-start-width: 3px;
+    background-color: $layer;
+    color: $text-primary;
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--inline-tip__icon {
+    display: flex;
+    flex: none;
+    // Centers the 20px icon on the heading's 18px line.
+    margin-block-start: to-rem(-1px);
+    color: $icon-primary;
+
+    svg {
+      fill: currentColor;
+    }
+  }
+
+  .#{$prefix}--inline-tip__main {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .#{$prefix}--inline-tip__heading {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--inline-tip__toggle {
+    @include type-style("heading-compact-01");
+
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    // The inline padding keeps the focus ring off the letters, and the
+    // negative margin keeps the title aligned with the text below it.
+    padding: 0 $carbon--spacing-02;
+    border: 0;
+    margin: 0;
+    margin-inline-start: (-$carbon--spacing-02);
+    background: transparent;
+    color: $text-primary;
+    column-gap: $carbon--spacing-03;
+    cursor: pointer;
+    text-align: start;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--inline-tip__chevron {
+    flex: none;
+    fill: currentColor;
+    transform: rotate(180deg);
+    transition: transform $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--inline-tip--collapsed .#{$prefix}--inline-tip__chevron {
+    transform: rotate(0deg);
+  }
+
+  .#{$prefix}--inline-tip--collapsed .#{$prefix}--inline-tip__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // The body collapses by animating its grid track to zero. The content
+  // stays in the DOM, so the toggle's `aria-controls` target exists, and
+  // `visibility` takes it out of the tab order and the accessibility tree
+  // once the track has closed. Visibility is discrete: it reads `visible`
+  // for the whole transition and flips at its end.
+  .#{$prefix}--inline-tip__body {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition:
+      grid-template-rows $duration--moderate-01 motion(standard, productive),
+      visibility $duration--moderate-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--inline-tip--collapsed .#{$prefix}--inline-tip__body {
+    grid-template-rows: 0fr;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--inline-tip__body-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--inline-tip__content {
+    @include type-style("body-compact-01");
+
+    margin-top: $carbon--spacing-02;
+    color: $text-secondary;
+    text-wrap: pretty;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .#{$prefix}--inline-tip__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: $carbon--spacing-04;
+    column-gap: $carbon--spacing-05;
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--inline-tip__illustration {
+    display: flex;
+    max-width: to-rem(128px);
+    flex: none;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+
+    svg,
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .#{$prefix}--inline-tip--collapsed .#{$prefix}--inline-tip__illustration {
+    display: none;
+  }
+
+  .#{$prefix}--inline-tip__close {
+    display: flex;
+    width: $carbon--spacing-07;
+    height: $carbon--spacing-07;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    // Lets the 32px target sit flush with the tip's 16px padding.
+    margin-block: (-$carbon--spacing-03) 0;
+    margin-inline: 0 (-$carbon--spacing-03);
+    background: transparent;
+    color: $icon-primary;
+    cursor: pointer;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    svg {
+      fill: currentColor;
+    }
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--guidebanner {
+    flex-wrap: wrap;
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--guidebanner__slide {
+    min-width: 0;
+  }
+
+  .#{$prefix}--guidebanner__controls {
+    display: flex;
+    flex: none;
+    align-items: center;
+    margin-inline-start: auto;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--guidebanner__controls .#{$prefix}--inline-tip__close {
+    margin: 0;
+  }
+
+  // The tip's title and text wrap onto their own line below the controls
+  // before they get narrower than a short sentence.
+  .#{$prefix}--guidebanner .#{$prefix}--inline-tip__main {
+    min-width: to-rem(192px);
+  }
+
+  // "1 of 3" reads "of 3 1" under `dir="rtl"` without this: the digits take
+  // the page's direction. Plaintext takes it from the first letter, so a
+  // translated counter still follows its own script.
+  .#{$prefix}--guidebanner .#{$prefix}--carousel__counter {
+    unicode-bidi: plaintext;
+  }
+
+  // A moving collapse is the one animation a tip has. Reduced motion
+  // snaps it open or closed, and the chevron turns at once.
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--inline-tip__body,
+    .#{$prefix}--inline-tip--collapsed .#{$prefix}--inline-tip__body,
+    .#{$prefix}--inline-tip__chevron {
+      transition: none;
+    }
+  }
+
+  // Forced colors drop the layer fill, so the border alone separates the
+  // tip from the page. The accent bar reads Highlight.
+  @media (forced-colors: active) {
+    .#{$prefix}--inline-tip {
+      border-color: CanvasText;
+      border-inline-start-color: Highlight;
+    }
+  }
+
+  .#{$prefix}--inline-tip__close:active {
+    background-color: $layer-active;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--inline-tip__close:hover {
+      background-color: $layer-hover;
+    }
+  }
+}
+
+@include exports("inline-tip") {
+  @include inline-tip;
+}

@@ -128,6 +128,8 @@ export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineEdit } from "./InlineEdit/InlineEdit.svelte";
 export { default as InlineLoading } from "./InlineLoading/InlineLoading.svelte";
+export { default as Guidebanner } from "./InlineTip/Guidebanner.svelte";
+export { default as InlineTip } from "./InlineTip/InlineTip.svelte";
 export { default as InputGroup } from "./InputGroup/InputGroup.svelte";
 export { default as InterstitialScreen } from "./InterstitialScreen/InterstitialScreen.svelte";
 export { default as InterstitialScreenBody } from "./InterstitialScreen/InterstitialScreenBody.svelte";
@@ -345,6 +347,14 @@ export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
+export {
+  cookieTipStorage,
+  createTipStore,
+  getTipStore,
+  localTipStorage,
+  parseTipCookie,
+  setTipStore,
+} from "./utils/tip-store.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
 export {
