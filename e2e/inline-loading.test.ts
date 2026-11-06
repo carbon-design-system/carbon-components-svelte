@@ -129,6 +129,34 @@ test.describe("InlineLoading finished check", () => {
     expect((await style(page, "live", CHECK)).stroke).toBe(canvas);
   });
 
+  test("draws the spinner arc and track in system colors in forced colors", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    // The theme's arc and track colors differ from the system colors.
+    await page.evaluate(() =>
+      document.documentElement.setAttribute("theme", "g100"),
+    );
+
+    const system = await page.evaluate(() => {
+      const read = (name: string) => {
+        const probe = document.createElement("i");
+        probe.style.color = name;
+        document.body.append(probe);
+        const { color } = getComputedStyle(probe);
+        probe.remove();
+        return color;
+      };
+      return { text: read("CanvasText"), gray: read("GrayText") };
+    });
+    expect((await style(page, "live", ".bx--loading__stroke")).stroke).toBe(
+      system.text,
+    );
+    expect((await style(page, "live", ".bx--loading__background")).stroke).toBe(
+      system.gray,
+    );
+  });
+
   test("keeps the size of the icon and the row", async ({ page }) => {
     const measure = () =>
       page.evaluate(() => {
