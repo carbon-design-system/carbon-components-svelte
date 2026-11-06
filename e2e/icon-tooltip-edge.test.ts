@@ -1,7 +1,8 @@
 import { expect, type Locator, type Page, test } from "./helpers/host";
 
 // A portalled icon or definition tooltip at the window's edge slides back
-// inside it, and its caret still points at the trigger.
+// inside it, and its caret still points at the trigger, 1rem or more from
+// the corner of the box.
 const TRIGGERS = {
   Button: ".bx--btn",
   TooltipIcon: ".bx--tooltip__trigger",
@@ -52,8 +53,16 @@ for (const dir of ["ltr", "rtl"] as const) {
           .locator(selector)
           .first();
         const g = await geometry(page, trigger);
-        expect.soft(g.content.left, label).toBeGreaterThanOrEqual(0);
-        expect.soft(g.content.right, label).toBeLessThanOrEqual(g.width);
+        // The slide stops 1rem short of the caret, so a box can reach
+        // past the edge by as much as that inset needs.
+        const overLeft = Math.max(0, 16 - g.caret.center);
+        const overRight = Math.max(0, g.caret.center + 16 - g.width);
+        expect
+          .soft(g.content.left, label)
+          .toBeGreaterThanOrEqual(-overLeft - 0.5);
+        expect
+          .soft(g.content.right, label)
+          .toBeLessThanOrEqual(g.width + overRight + 0.5);
         expect
           .soft(Math.abs(g.caret.center - g.anchor.center), label)
           .toBeLessThan(2);
