@@ -297,6 +297,13 @@
     },
     {
       "component": "ComboBox",
+      "prop": "errorText",
+      "type": "string",
+      "default": "Unable to load results",
+      "defaultKind": "text"
+    },
+    {
+      "component": "ComboBox",
       "prop": "filterResultsText",
       "type": "(count: number) => string",
       "default": "(count) => count === 0\n  ? \"No results\"\n  : `${count} result${count === 1 ? \"\" : \"s\"} available`",
