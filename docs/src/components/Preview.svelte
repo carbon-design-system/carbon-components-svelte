@@ -50,6 +50,18 @@
     };
   });
 
+  /**
+   * A code view's height once rendered, which it reserves while the browser
+   * skips it as off-screen: a 16 px row a line and the code's 24 px bottom
+   * padding, capped at the collapsed snippet's 240 px, plus 32 px around
+   * them, inside the view's border. With a guess instead, a view above the
+   * reader changed height as it rendered, and moved the page in Safari,
+   * which doesn't anchor the scroll. Keep in step with CodeSnippet's
+   * multi-line styles.
+   */
+  $: codeViewHeight =
+    Math.min(code.replace(/\n$/, "").split("\n").length * 16 + 24, 240) + 32;
+
   $: themedSrcUrl = src ? `${src}?theme=${$theme}` : "";
   $: highlighted = nearViewport ? (highlight(code, "svelte") ?? "") : "";
 </script>
@@ -88,7 +100,11 @@
       </LazyMount>
     {/if}
   </div>
-  <div class="code-override" bind:this={codeView}>
+  <div
+    class="code-override"
+    style:contain-intrinsic-size="auto {codeViewHeight}px"
+    bind:this={codeView}
+  >
     <CodeSnippet type="multi" {code}>
       {#if nearViewport}{@html highlighted}{:else}{code}{/if}
     </CodeSnippet>
@@ -148,7 +164,6 @@
      would clip menus and tooltips that overflow the example. */
   .code-override {
     content-visibility: auto;
-    contain-intrinsic-size: auto 250px;
   }
 
   .framed-header {
