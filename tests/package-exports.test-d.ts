@@ -2,6 +2,7 @@ import type {
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  createGestures,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
@@ -9,9 +10,11 @@ import type {
   formatFileSize,
   formReset,
   fuzzyMatch,
+  gesture,
   getAvatarBackgroundColor,
   getInitials,
   getLayoutDirection,
+  inertiaStep,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
@@ -113,6 +116,9 @@ type _FloatingPosition = ReturnType<typeof floatingPosition>;
 type _FloatingPositionOptions = FloatingPositionOptions;
 type _FloatingPositionResult = FloatingPositionResult;
 type _FormReset = ReturnType<typeof formReset>;
+type _Gesture = ReturnType<typeof gesture>;
+type _CreateGestures = ReturnType<typeof createGestures>;
+type _InertiaStep = ReturnType<typeof inertiaStep>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;

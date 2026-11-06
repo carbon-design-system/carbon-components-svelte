@@ -1,3 +1,4 @@
+import { isPointerClaimed } from "../../src/utils/pointer-claim.js";
 import { pointerDrag } from "../../src/utils/pointer-drag.js";
 
 function pointer(type: string, init: PointerEventInit = {}) {
@@ -36,6 +37,19 @@ describe("pointerDrag", () => {
     expect(onEnd).toHaveBeenCalledTimes(1);
     expect(onEnd.mock.calls[0][0].type).toBe("pointerup");
 
+    action.destroy();
+  });
+
+  it("marks the press as claimed unless onStart declines it", () => {
+    const action = pointerDrag(node, { onStart: () => false });
+    const declined = pointer("pointerdown");
+    node.dispatchEvent(declined);
+    expect(isPointerClaimed(declined)).toBe(false);
+
+    action.update({});
+    const taken = pointer("pointerdown");
+    node.dispatchEvent(taken);
+    expect(isPointerClaimed(taken)).toBe(true);
     action.destroy();
   });
 

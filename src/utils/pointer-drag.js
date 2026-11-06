@@ -1,5 +1,7 @@
 // @ts-check
 
+import { claimPointer } from "./pointer-claim.js";
+
 /**
  * @typedef {import("./pointer-drag.js").PointerDragOptions} PointerDragOptions
  */
@@ -12,6 +14,9 @@
  * iframe) the document. No `window` listeners are involved, and the drag
  * starts synchronously, so a fast press-release is never missed. An idle
  * node only listens for `pointerdown`.
+ *
+ * The press is marked with `claimPointer`, so a `gesture` on an ancestor
+ * does not also act on it.
  *
  * Only the primary button starts a drag, and a second pointer is ignored
  * while one is active. `onStart` may return `false` to decline the drag.
@@ -34,6 +39,8 @@ export function pointerDrag(node, options) {
     // matching `pointerup`.
     if (event.button !== 0) return;
     if (current.onStart?.(event) === false) return;
+    // An ancestor that recognizes gestures leaves this press alone.
+    claimPointer(event);
     activePointerId = event.pointerId;
     node.addEventListener("pointermove", handlePointermove);
     node.addEventListener("pointerup", endDrag);
