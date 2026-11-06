@@ -63,6 +63,9 @@ export default {
     "docs/src/search.ts",
     "docs/scripts/slug.ts",
     "docs/scripts/visit.ts",
+    "docs/scripts/frontmatter.ts",
+    "docs/scripts/markdown.ts",
+    "docs/scripts/svx.ts",
   ],
   ignore: [
     "**/*.md",

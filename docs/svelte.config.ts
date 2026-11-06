@@ -9,7 +9,6 @@ import type {
   PhrasingContent,
   Table,
 } from "mdast";
-import { escapeSvelte, mdsvex } from "mdsvex";
 import { format, version as prettierVersion } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
 import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with { type: "json" };
@@ -19,6 +18,7 @@ import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { rehypeSlug } from "./scripts/slug.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
+import { compileSvx } from "./scripts/svx.ts";
 import { tocHeadings } from "./scripts/toc-headings.ts";
 import { visit } from "./scripts/visit.ts";
 
@@ -27,7 +27,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const NODE_MODULES_REGEX = /node_modules/;
 const PAGES_COMPONENTS_REGEX = /pages\/(components)/;
 const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
-const LAYOUT_OPEN_TAG_RE = /<Layout_MDSVEX_DEFAULT\b[^>]*>/;
+const LAYOUT_OPEN_TAG_RE = /<PageLayout\b[^>]*>/;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
 /** Prose-only inline HTML: do not wrap in Preview (see visitHtml). */
 const NO_PREVIEW_HTML_RE = /^\s*<DocKbd\b/;
@@ -38,7 +38,7 @@ const DOC_KBD_IMPORT_STMT =
 const DOC_KBD_IMPORT_RE = /import\s+DocKbd\s+from/;
 const DOC_KBD_USAGE_RE = /<DocKbd\b/;
 
-const SKIP_MDSVEX_PRETTIER = process.env.NODE_ENV === "development";
+const SKIP_PREVIEW_PRETTIER = process.env.NODE_ENV === "development";
 
 type PreviewCode = { formattedCode: string; highlightedCode: string };
 
@@ -65,21 +65,22 @@ function escapeHtmlText(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function mdsvexHighlighter(
-  code: string,
-  lang: string | null | undefined,
-  _meta: string | null | undefined,
-  _filename?: string,
-  optimize = true,
-): string {
+/** Escapes what would end `{@html \`...\`}` early or read as Svelte. */
+function escapeSvelte(html: string): string {
+  return html
+    .replace(
+      /[{}`]/g,
+      (char) => ({ "{": "&#123;", "}": "&#125;", "`": "&#96;" })[char] ?? char,
+    )
+    .replace(/\\([trn])/g, "&#92;$1");
+}
+
+function highlightCodeBlock(code: string, lang: string | null): string {
   const raw = lang?.toLowerCase().trim() ?? "";
   const classLang = raw || "text";
   const inner = (raw && highlight(code, raw)) || escapeHtmlText(code);
   const highlighted = escapeSvelte(inner);
-
-  return optimize
-    ? `<pre class="language-${classLang}">{@html \`<code class="language-${classLang}">${highlighted}</code>\`}</pre>`
-    : `<pre class="language-${classLang}"><code class="language-${classLang}">${highlighted}</code></pre>`;
+  return `<pre class="language-${classLang}">{@html \`<code class="language-${classLang}">${highlighted}</code>\`}</pre>`;
 }
 
 const prettierSvelte = {
@@ -163,12 +164,12 @@ async function formatAndHighlightSvelteCached(source: string) {
 }
 
 async function formatAndHighlightSvelte(source: string) {
-  const mode = SKIP_MDSVEX_PRETTIER ? "raw" : "fmt";
+  const mode = SKIP_PREVIEW_PRETTIER ? "raw" : "fmt";
   const cacheKey = `${mode}:${hashKey(source)}`;
   const cached = previewCodeCache.get(cacheKey);
   if (cached) return cached;
 
-  const out = SKIP_MDSVEX_PRETTIER
+  const out = SKIP_PREVIEW_PRETTIER
     ? highlightSvelte(source)
     : await formatAndHighlightSvelteCached(source);
   previewCodeCache.set(cacheKey, out);
@@ -176,7 +177,6 @@ async function formatAndHighlightSvelte(source: string) {
 }
 
 function plugin() {
-  /** mdsvex / remark can surface `html` nodes that carry fenced-block metadata on `lang`. */
   async function visitHtml(
     node: { lang?: string; value: string } & import("unist").Node,
     isWholeParagraph: boolean,
@@ -533,17 +533,28 @@ function carbonify() {
 export default {
   extensions: [".svelte", PAGE_EXTENSION],
   preprocess: [
-    mdsvex({
-      extensions: [PAGE_EXTENSION],
-      smartypants: false,
-      highlight: { highlighter: mdsvexHighlighter },
-      remarkPlugins: [requireLeadingHeading, plugin, carbonify],
-      rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
-      layout: {
-        guide: path.join(__dirname, "src/layouts/GuideLayout.svelte"),
-        _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
+    {
+      async markup({
+        content,
+        filename,
+      }: {
+        content: string;
+        filename: string;
+      }) {
+        if (!filename.endsWith(PAGE_EXTENSION)) return null;
+        return {
+          code: await compileSvx(content, filename, {
+            highlight: highlightCodeBlock,
+            remarkPlugins: [requireLeadingHeading, plugin, carbonify],
+            rehypePlugins: [rehypeSlug, rehypeHeadingAnchors],
+            layouts: {
+              guide: path.join(__dirname, "src/layouts/GuideLayout.svelte"),
+              _: path.join(__dirname, "src/layouts/ComponentLayout.svelte"),
+            },
+          }),
+        };
       },
-    }),
+    },
     {
       markup({ content, filename }: { content: string; filename: string }) {
         if (NODE_MODULES_REGEX.test(filename)) return null;
@@ -560,7 +571,7 @@ export default {
             `${tag.slice(0, -1)} headings={${JSON.stringify(tocHeadings(content))}}>`,
         );
 
-        // Auto-import Preview component used by the mdsvex remark plugin.
+        // Auto-import Preview component used by the remark plugin.
         if (!code.includes("import Preview")) {
           code = code.replace(
             SCRIPT_TAG_REGEX,
