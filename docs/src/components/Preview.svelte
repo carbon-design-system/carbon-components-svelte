@@ -7,7 +7,8 @@
   import { Button, CodeSnippet, LazyMount } from "carbon-components-svelte";
   import { highlight } from "carbon-components-svelte/syntax";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
-  import { onMount } from "svelte";
+  import { flushSync, onMount } from "svelte";
+  import { queueIdleExample } from "../idle-examples";
   import { eagerExamples } from "../router";
   import { theme } from "../store";
 
@@ -19,9 +20,21 @@
   const HIGHLIGHT_MARGIN = "1000px 0px";
 
   let codeView: HTMLElement;
+  let viewer: HTMLElement;
   let nearViewport = false;
+  let mounted = false;
+  let idle = false;
+  let unqueue = () => {};
+
+  $: if (mounted) unqueue();
 
   onMount(() => {
+    if (!framed && !mounted) {
+      unqueue = queueIdleExample(viewer, () => {
+        idle = true;
+        flushSync();
+      });
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry?.isIntersecting) return;
@@ -31,7 +44,10 @@
       { rootMargin: HIGHLIGHT_MARGIN },
     );
     observer.observe(codeView);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      unqueue();
+    };
   });
 
   $: themedSrcUrl = src ? `${src}?theme=${$theme}` : "";
@@ -54,17 +70,19 @@
       ></Button>
     </div>
   {/if}
-  <div class="preview-viewer" class:framed>
+  <div class="preview-viewer" class:framed bind:this={viewer}>
     {#if framed}
       <iframe loading="lazy" title={src.split("/").pop()} src={themedSrcUrl}
       ></iframe>
     {:else}
       <!-- A long page mounts its examples as they near the viewport, which
-           halves its load time. 64 px is a typical example's content height. -->
+           halves its load time, and the rest once the browser is idle.
+           64 px is a typical example's content height. -->
       <LazyMount
         rootMargin="1200px"
         estimatedHeight={64}
-        eager={$eagerExamples}
+        eager={$eagerExamples || idle}
+        bind:mounted
       >
         <slot />
       </LazyMount>
