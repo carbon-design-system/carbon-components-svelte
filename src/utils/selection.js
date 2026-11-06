@@ -33,6 +33,7 @@ import {
  * @typedef {Object} SelectionContext
  * @property {ReadonlyArray<Key>} order - Every key in the order it is shown. Ranges and arrow keys walk it. Treat it as immutable: pass a new array when the order changes.
  * @property {"single" | "multiple"} [mode="multiple"]
+ * @property {ReadonlyArray<Key>} [scope] - The keys select all covers and the header checkbox reports on. Defaults to `order`. A table that pages passes every filtered row, not the page.
  * @property {(key: Key) => boolean} [isDisabled] - A disabled key is never selected by a range, select all, or an arrow step.
  * @property {"keep" | "move"} [anchorOnRange="keep"] - Where the anchor goes after a Shift range. `"keep"` (Finder, Explorer, TreeView) holds it, so the opposite direction shrinks the range. `"move"` (a checkbox column, Gmail) sets it to the clicked key, so ranges chain.
  * @property {(from: Key, to: Key, order: ReadonlyArray<Key>) => Key[] | null} [range] - Replace the linear range, for a grid that selects a rectangle. Return `null` for no range.
@@ -317,14 +318,14 @@ export function extendTo(state, key, ctx, how = "replace") {
 }
 
 /**
- * Add every selectable key of `scope` (default: the order).
+ * Add every selectable key of `scope` (default: `ctx.scope`, then the order).
  * @template {SelectionKey} Key
  * @param {SelectionState<Key>} state
  * @param {SelectionContext<Key>} ctx
  * @param {ReadonlyArray<Key>} [scope]
  * @returns {SelectionState<Key>}
  */
-export function selectAll(state, ctx, scope = ctx.order) {
+export function selectAll(state, ctx, scope = ctx.scope ?? ctx.order) {
   if (ctx.mode === "single") return state;
   const selected = new Set(state.selected);
   for (const key of scope) if (!disabled(ctx, key)) selected.add(key);
@@ -336,14 +337,14 @@ export function selectAll(state, ctx, scope = ctx.order) {
 }
 
 /**
- * Remove the keys of `scope` and keep the rest, such as rows a filter hides.
+ * Remove the keys of `scope` (default: `ctx.scope`, then the order) and keep the rest, such as rows a filter hides.
  * @template {SelectionKey} Key
  * @param {SelectionState<Key>} state
  * @param {SelectionContext<Key>} ctx
  * @param {ReadonlyArray<Key>} [scope]
  * @returns {SelectionState<Key>}
  */
-export function deselectScope(state, ctx, scope = ctx.order) {
+export function deselectScope(state, ctx, scope = ctx.scope ?? ctx.order) {
   if (state.selected.size === 0) return state;
   const selected = new Set(state.selected);
   for (const key of scope) selected.delete(key);
@@ -369,7 +370,7 @@ export function clearSelection(state) {
 /**
  * What a header checkbox shows and does for `scope`.
  * @template {SelectionKey} Key
- * @param {SelectionState<Key>} state
+ * @param {Pick<SelectionState<Key>, "selected">} state
  * @param {ReadonlyArray<Key>} scope
  * @param {(key: Key) => boolean} [isDisabled]
  * @returns {SelectionSummary}
@@ -405,7 +406,12 @@ export function summarizeSelection(state, scope, isDisabled) {
  * @param {"clear" | "all"} [partial]
  * @returns {SelectionState<Key>}
  */
-export function toggleAll(state, ctx, scope = ctx.order, partial = "clear") {
+export function toggleAll(
+  state,
+  ctx,
+  scope = ctx.scope ?? ctx.order,
+  partial = "clear",
+) {
   const { state: level } = summarizeSelection(state, scope, ctx.isDisabled);
   if (level === "all" || (level === "some" && partial === "clear")) {
     return deselectScope(state, ctx, scope);

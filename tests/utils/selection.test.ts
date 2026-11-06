@@ -23,20 +23,26 @@ import {
 const order = ["a", "b", "c", "d", "e", "f"];
 const ctx = { order };
 
+const makeState = (
+  selected: string[] = [],
+  anchor: string | null = null,
+  focus: string | null = null,
+) => createSelectionState<string>(selected, anchor, focus);
+
 const picked = (state: { selected: ReadonlySet<string | number> }) => [
   ...state.selected,
 ];
 
 describe("selectKey", () => {
   it("selects one key and sets the anchor and focus", () => {
-    const state = selectKey(createSelectionState(["a", "b"]), "c", ctx);
+    const state = selectKey(makeState(["a", "b"]), "c", ctx);
     expect(picked(state)).toEqual(["c"]);
     expect(state.anchor).toBe("c");
     expect(state.focus).toBe("c");
   });
 
   it("ignores a disabled key", () => {
-    const before = createSelectionState(["a"]);
+    const before = makeState(["a"]);
     const state = selectKey(before, "c", {
       ...ctx,
       isDisabled: (key) => key === "c",
@@ -47,7 +53,7 @@ describe("selectKey", () => {
 
 describe("toggleKey", () => {
   it("adds and removes a key and keeps the rest", () => {
-    let state = createSelectionState(["a"]);
+    let state = makeState(["a"]);
     state = toggleKey(state, "c", ctx);
     expect(picked(state)).toEqual(["a", "c"]);
     state = toggleKey(state, "a", ctx);
@@ -56,7 +62,7 @@ describe("toggleKey", () => {
   });
 
   it("honors force", () => {
-    const state = createSelectionState(["a"]);
+    const state = makeState(["a"]);
     expect(picked(toggleKey(state, "a", ctx, true))).toEqual(["a"]);
     expect(picked(toggleKey(state, "a", ctx, false))).toEqual([]);
     expect(picked(toggleKey(state, "b", ctx, true))).toEqual(["a", "b"]);
@@ -64,7 +70,7 @@ describe("toggleKey", () => {
 
   it("single mode replaces, and deselects only with allowDeselect", () => {
     const single = { ...ctx, mode: "single" as const };
-    let state = toggleKey(createSelectionState(["a"]), "b", single);
+    let state = toggleKey(makeState(["a"]), "b", single);
     expect(picked(state)).toEqual(["b"]);
     const same = toggleKey(state, "b", single);
     expect(picked(same)).toEqual(["b"]);
@@ -129,7 +135,7 @@ describe("extendTo", () => {
   });
 
   it("selects just the target when there is no anchor", () => {
-    const state = extendTo(createSelectionState(["a"]), "d", ctx);
+    const state = extendTo(makeState(["a"]), "d", ctx);
     expect(picked(state)).toEqual(["d"]);
   });
 
@@ -195,7 +201,7 @@ describe("rangeKeys", () => {
 
 describe("selectAll, deselectScope, clear", () => {
   it("selects every selectable key in scope and keeps hidden ones", () => {
-    const state = selectAll(createSelectionState(["x"]), {
+    const state = selectAll(makeState(["x"]), {
       ...ctx,
       isDisabled: (key) => key === "b",
     });
@@ -203,8 +209,16 @@ describe("selectAll, deselectScope, clear", () => {
   });
 
   it("is a no-op in single mode", () => {
-    const state = createSelectionState(["a"]);
+    const state = makeState(["a"]);
     expect(selectAll(state, { ...ctx, mode: "single" })).toBe(state);
+  });
+
+  it("covers ctx.scope instead of the order, for a table that pages", () => {
+    const paged = { order: ["a", "b"], scope: order };
+    expect(picked(selectAll(createSelectionState<string>(), paged))).toEqual(
+      order,
+    );
+    expect(picked(toggleAll(makeState(order), paged))).toEqual([]);
   });
 
   it("selects a scope other than the order", () => {
@@ -214,13 +228,13 @@ describe("selectAll, deselectScope, clear", () => {
   });
 
   it("deselects only the scope", () => {
-    const state = deselectScope(createSelectionState(["a", "b", "x"]), ctx);
+    const state = deselectScope(makeState(["a", "b", "x"]), ctx);
     expect(picked(state)).toEqual(["x"]);
   });
 
   it("clears the selection and the anchor but keeps the focus", () => {
     const state = clearSelection({
-      ...createSelectionState(["a", "b"], "a", "b"),
+      ...makeState(["a", "b"], "a", "b"),
     });
     expect(picked(state)).toEqual([]);
     expect(state.anchor).toBeNull();
@@ -235,25 +249,21 @@ describe("summarizeSelection and toggleAll", () => {
     expect(
       summarizeSelection(createSelectionState<string>(), order).state,
     ).toBe("none");
-    expect(
-      summarizeSelection(createSelectionState(["a"]), order),
-    ).toMatchObject({
+    expect(summarizeSelection(makeState(["a"]), order)).toMatchObject({
       state: "some",
       indeterminate: true,
       checked: false,
       count: 1,
       total: 6,
     });
-    expect(
-      summarizeSelection(createSelectionState(order), order),
-    ).toMatchObject({ state: "all", checked: true });
+    expect(summarizeSelection(makeState(order), order)).toMatchObject({
+      state: "all",
+      checked: true,
+    });
   });
 
   it("counts selected keys outside the scope as hidden, not as selected", () => {
-    const summary = summarizeSelection(createSelectionState(["a", "x", "y"]), [
-      "a",
-      "b",
-    ]);
+    const summary = summarizeSelection(makeState(["a", "x", "y"]), ["a", "b"]);
     expect(summary).toMatchObject({
       count: 1,
       total: 2,
@@ -265,7 +275,7 @@ describe("summarizeSelection and toggleAll", () => {
 
   it("skips disabled keys", () => {
     const summary = summarizeSelection(
-      createSelectionState(["a", "c"]),
+      makeState(["a", "c"]),
       ["a", "b", "c"],
       (key) => key === "b",
     );
@@ -274,9 +284,7 @@ describe("summarizeSelection and toggleAll", () => {
   });
 
   it("is none for an empty scope", () => {
-    expect(summarizeSelection(createSelectionState(["a"]), []).state).toBe(
-      "none",
-    );
+    expect(summarizeSelection(makeState(["a"]), []).state).toBe("none");
   });
 
   it("toggleAll: none selects all, all clears the scope, some clears by default", () => {
@@ -284,7 +292,7 @@ describe("summarizeSelection and toggleAll", () => {
     const all = toggleAll(none, ctx);
     expect(picked(all)).toEqual(order);
     expect(picked(toggleAll(all, ctx))).toEqual([]);
-    const some = createSelectionState(["a", "x"]);
+    const some = makeState(["a", "x"]);
     expect(picked(toggleAll(some, ctx))).toEqual(["x"]);
     expect(picked(toggleAll(some, ctx, order, "all"))).toEqual([
       "a",
@@ -300,7 +308,7 @@ describe("summarizeSelection and toggleAll", () => {
 
 describe("pruneSelection", () => {
   it("drops keys, the anchor and the focus that left", () => {
-    const state = createSelectionState(["a", "b", "c"], "a", "b");
+    const state = makeState(["a", "b", "c"], "a", "b");
     const pruned = pruneSelection(state, new Set(["b", "c"]));
     expect(picked(pruned)).toEqual(["b", "c"]);
     expect(pruned.anchor).toBeNull();
@@ -308,7 +316,7 @@ describe("pruneSelection", () => {
   });
 
   it("returns the same state when nothing left", () => {
-    const state = createSelectionState(["a"], "a", "a");
+    const state = makeState(["a"], "a", "a");
     expect(pruneSelection(state, new Set(["a", "b"]))).toBe(state);
   });
 });
@@ -382,7 +390,7 @@ describe("applySelectionKey", () => {
     focus: string,
     selected: string[] = [],
     anchor: string | null = focus,
-  ) => createSelectionState(selected, anchor, focus);
+  ) => makeState(selected, anchor, focus);
   const press = (
     state: ReturnType<typeof from>,
     key: string,
@@ -672,7 +680,7 @@ describe("createSelection", () => {
   const rows = order.map((id) => ({ id }));
 
   it("is a store: subscribers see each change once", () => {
-    const selection = createSelection({ keys: order });
+    const selection = createSelection<string>({ keys: order });
     const seen: number[] = [];
     const stop = selection.subscribe((state) => seen.push(state.selected.size));
     selection.select("a");
@@ -685,7 +693,7 @@ describe("createSelection", () => {
 
   it("reads keys from items with getKey and from a function", () => {
     let current = rows;
-    const selection = createSelection({
+    const selection = createSelection<string, { id: string }>({
       keys: () => current,
       getKey: (row: { id: string }) => row.id,
     });
@@ -699,13 +707,19 @@ describe("createSelection", () => {
   });
 
   it("starts from initial", () => {
-    const selection = createSelection({ keys: order, initial: ["a", "c"] });
+    const selection = createSelection<string>({
+      keys: order,
+      initial: ["a", "c"],
+    });
     expect(selection.isSelected("c")).toBe(true);
     expect(selection.summary().state).toBe("some");
   });
 
   it("keeps selections a filter hides by default, and counts them as hidden", () => {
-    const selection = createSelection({ keys: order, initial: ["a", "b"] });
+    const selection = createSelection<string>({
+      keys: order,
+      initial: ["a", "b"],
+    });
     selection.setKeys(["b", "c"]);
     expect(selection.toArray()).toEqual(["a", "b"]);
     expect(selection.summary()).toMatchObject({
@@ -720,7 +734,7 @@ describe("createSelection", () => {
   });
 
   it("drops them with hidden drop", () => {
-    const selection = createSelection({
+    const selection = createSelection<string>({
       keys: order,
       initial: ["a", "b"],
       hidden: "drop",
@@ -732,7 +746,10 @@ describe("createSelection", () => {
   });
 
   it("selectAll all reaches keys the order leaves out", () => {
-    const selection = createSelection({ keys: ["a", "b"], allKeys: order });
+    const selection = createSelection<string>({
+      keys: ["a", "b"],
+      allKeys: order,
+    });
     selection.selectAll("all");
     expect(selection.toArray()).toEqual(order);
     expect(selection.summary()).toMatchObject({
@@ -743,14 +760,14 @@ describe("createSelection", () => {
   });
 
   it("separates focus from selection", () => {
-    const selection = createSelection({ keys: order, initial: ["a"] });
+    const selection = createSelection<string>({ keys: order, initial: ["a"] });
     selection.onItemFocus("d");
     expect(selection.get().focus).toBe("d");
     expect(selection.toArray()).toEqual(["a"]);
   });
 
   it("handles clicks with the event's modifiers", () => {
-    const selection = createSelection({ keys: order });
+    const selection = createSelection<string>({ keys: order });
     selection.onItemClick({}, "b");
     selection.onItemClick({ shiftKey: true }, "d");
     expect(selection.toArray()).toEqual(["b", "c", "d"]);
@@ -763,7 +780,7 @@ describe("createSelection", () => {
   });
 
   it("handles keys, calls preventDefault and returns the key to focus", () => {
-    const selection = createSelection({ keys: order, initial: ["b"] });
+    const selection = createSelection<string>({ keys: order, initial: ["b"] });
     selection.onItemFocus("b");
     const preventDefault = vi.fn();
     const focus = selection.onItemKeydown({
@@ -786,14 +803,14 @@ describe("createSelection", () => {
 
   it("set replaces the selection without announcing", () => {
     const announce = vi.fn();
-    const selection = createSelection({ keys: order, announce });
+    const selection = createSelection<string>({ keys: order, announce });
     selection.set(["c", "d"]);
     expect(selection.toArray()).toEqual(["c", "d"]);
     expect(announce).not.toHaveBeenCalled();
   });
 
   it("works in tree mode and reports levels", () => {
-    const selection = createSelection({
+    const selection = createSelection<string>({
       keys: ["p", "c1", "c2"],
       tree: { nodes: [{ id: "p", nodes: [{ id: "c1" }, { id: "c2" }] }] },
     });
@@ -806,7 +823,11 @@ describe("createSelection", () => {
   describe("announcements", () => {
     it("says how many are selected, on the selection's channel, debounced", () => {
       const announce = vi.fn();
-      const selection = createSelection({ keys: order, announce, id: "files" });
+      const selection = createSelection<string>({
+        keys: order,
+        announce,
+        id: "files",
+      });
       selection.select("a");
       selection.extendTo("c");
       expect(announce).toHaveBeenLastCalledWith("3 selected", {
@@ -818,7 +839,7 @@ describe("createSelection", () => {
 
     it("says nothing when nothing changed", () => {
       const announce = vi.fn();
-      const selection = createSelection({ keys: order, announce });
+      const selection = createSelection<string>({ keys: order, announce });
       selection.select("a");
       announce.mockClear();
       selection.select("a");
@@ -833,7 +854,7 @@ describe("createSelection", () => {
 
     it("says what a select all and a clear did", () => {
       const announce = vi.fn();
-      const selection = createSelection({ keys: order, announce });
+      const selection = createSelection<string>({ keys: order, announce });
       selection.selectAll();
       expect(announce).toHaveBeenLastCalledWith(
         "6 selected",
@@ -848,7 +869,7 @@ describe("createSelection", () => {
 
     it("counts selections a filter hides", () => {
       const announce = vi.fn();
-      const selection = createSelection({
+      const selection = createSelection<string>({
         keys: order,
         initial: ["a", "b"],
         announce,
@@ -863,7 +884,7 @@ describe("createSelection", () => {
 
     it("takes its own texts and delay", () => {
       const announce = vi.fn();
-      const selection = createSelection({
+      const selection = createSelection<string>({
         keys: order,
         announce,
         announceDelay: 0,
@@ -883,7 +904,7 @@ describe("createSelection", () => {
 
     it("announces keyboard changes, and not a plain focus move", () => {
       const announce = vi.fn();
-      const selection = createSelection({ keys: order, announce });
+      const selection = createSelection<string>({ keys: order, announce });
       selection.onItemFocus("a");
       const event = (key: string, extra = {}) =>
         ({ key, preventDefault() {}, ...extra }) as unknown as KeyboardEvent;
@@ -903,13 +924,13 @@ describe("createSelection", () => {
   });
 
   it("moveFocus keeps the selection", () => {
-    const state = moveFocus(createSelectionState(["a"]), "c");
+    const state = moveFocus(makeState(["a"]), "c");
     expect(picked(state)).toEqual(["a"]);
   });
 
   it("10,000 keys: a range across a sorted list is fast and exact", () => {
     const ids = Array.from({ length: 10_000 }, (_, index) => `row-${index}`);
-    const selection = createSelection({ keys: () => ids });
+    const selection = createSelection<string>({ keys: () => ids });
     selection.select("row-100");
     const start = performance.now();
     selection.extendTo("row-9000");

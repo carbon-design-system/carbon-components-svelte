@@ -78,6 +78,9 @@
   export let radio = false;
   export let allowDeselect = false;
   export let batchSelection = false;
+  export let selectionRange = false;
+  export let selectedStatusText: ComponentProps<DataTable>["selectedStatusText"] =
+    undefined;
   export let nonSelectableRowIds: ComponentProps<DataTable>["nonSelectableRowIds"] =
     [];
   export let nonExpandableRowIds: ComponentProps<DataTable>["nonExpandableRowIds"] =
@@ -139,6 +142,8 @@
   {radio}
   {allowDeselect}
   {batchSelection}
+  {selectionRange}
+  {selectedStatusText}
   {nonSelectableRowIds}
   {nonExpandableRowIds}
   bind:selectedRowIds

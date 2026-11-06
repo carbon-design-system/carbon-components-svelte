@@ -22,6 +22,17 @@ describe("DataTable server render", () => {
     batchSelection: true,
   };
 
+  it("renders selectionRange on the server with its status region and selected rows", () => {
+    const html = renderRaw(DataTable, {
+      ...props,
+      selectionRange: true,
+      selectedRowIds: ["b"],
+    });
+    expect(html.match(/role="status"/g)).toHaveLength(2);
+    expect(html).toContain("bx--data-table--selected");
+    expect(html.match(RANDOM_ID)).toBeNull();
+  });
+
   it("derives every id from an explicit id, with no random id left over", () => {
     expect(renderRaw(DataTable, props).match(RANDOM_ID)).toBeNull();
   });

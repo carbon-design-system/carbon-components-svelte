@@ -25,6 +25,11 @@ export interface SelectionContext<Key extends SelectionKey = SelectionKey> {
   order: ReadonlyArray<Key>;
   /** @default "multiple" */
   mode?: "single" | "multiple";
+  /**
+   * The keys select all covers. Defaults to `order`. A table that pages
+   * passes every filtered row, not the page.
+   */
+  scope?: ReadonlyArray<Key>;
   /** A disabled key is never selected by a range, select all, or an arrow step. */
   isDisabled?: (key: Key) => boolean;
   /**
@@ -172,7 +177,7 @@ export function clearSelection<Key extends SelectionKey>(
 ): SelectionState<Key>;
 
 export function summarizeSelection<Key extends SelectionKey>(
-  state: SelectionState<Key>,
+  state: Pick<SelectionState<Key>, "selected">,
   scope: ReadonlyArray<Key>,
   isDisabled?: (key: Key) => boolean,
 ): SelectionSummary;
