@@ -318,8 +318,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * whose option objects are rebuilt as well, such as a checkbox toggle
    * replacing the toggled item, where what stays put is an id.
    *
-   * @param {ArrayLike<unknown>} items
-   * @param {((item: any, index: number) => unknown) | undefined} getKey
+   * @param {ArrayLike<Record<string, unknown>>} items
+   * @param {((item: Record<string, unknown>, index: number) => unknown) | undefined} getKey
    */
   function noteCollection(items, getKey) {
     if (isSameCollection(items, getKey)) return;
@@ -332,8 +332,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * without materialising a key per option: `update` runs on every scroll
    * event, and a long list would allocate an array per event to learn nothing.
    *
-   * @param {ArrayLike<unknown>} items
-   * @param {((item: any, index: number) => unknown) | undefined} getKey
+   * @param {ArrayLike<Record<string, unknown>>} items
+   * @param {((item: Record<string, unknown>, index: number) => unknown) | undefined} getKey
    * @returns {boolean}
    */
   function isSameCollection(items, getKey) {
@@ -352,10 +352,10 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
    * Resolve the window for the options the menu is about to render.
    *
    * @param {Object} options
-   * @param {any[]} options.items The collection the menu renders, filtered
+   * @param {ReadonlyArray<Record<string, unknown>>} options.items The collection the menu renders, filtered
    * where there is a filter, since its positions are what heights and offsets
    * are indexed against.
-   * @param {(item: any, index: number) => unknown} [options.getKey] What
+   * @param {(item: Record<string, unknown>, index: number) => unknown} [options.getKey] What
    * identifies an option across a rebuild of `items`. Defaults to the option
    * itself; only called while heights are being measured.
    * @param {boolean} options.shouldVirtualize The threshold gate, from

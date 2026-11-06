@@ -5,7 +5,7 @@
  * that is a child, the component places them there and spreads `rest`
  * on the root.
  *
- * @param {Record<string, any>} restProps
+ * @param {Record<string, unknown>} restProps
  */
 export function splitAriaNaming(restProps) {
   const {
@@ -23,12 +23,12 @@ export function splitAriaNaming(restProps) {
  * `li`. Those attributes describe the control inside it. The rest stay on
  * the wrapper.
  *
- * @param {Record<string, any>} restProps
+ * @param {Record<string, unknown>} restProps
  */
 export function splitAria(restProps) {
-  /** @type {Record<string, any>} */
+  /** @type {Record<string, unknown>} */
   const aria = {};
-  /** @type {Record<string, any>} */
+  /** @type {Record<string, unknown>} */
   const rest = {};
   for (const [name, value] of Object.entries(restProps)) {
     (name.startsWith("aria-") ? aria : rest)[name] = value;

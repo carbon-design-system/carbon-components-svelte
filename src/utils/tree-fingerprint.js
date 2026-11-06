@@ -66,7 +66,8 @@ export function matchesFingerprint(fingerprint, list) {
 
   for (let i = 0; i < fingerprint.length; i++) {
     const snapshot = fingerprint[i];
-    const node = /** @type {Record<string, unknown>} */ (list[i]);
+    const item = list[i];
+    const node = /** @type {Record<string, unknown>} */ (item);
     if (!Object.is(snapshot.id, node.id)) return false;
 
     const snapshotKeyCount = Object.keys(snapshot.keys).length;
@@ -79,10 +80,9 @@ export function matchesFingerprint(fingerprint, list) {
     }
     if (nodeKeyCount !== snapshotKeyCount) return false;
 
-    const children = Array.isArray(node.nodes) ? node.nodes : [];
+    const children = Array.isArray(item.nodes) ? item.nodes : [];
     if (snapshot.children.length === 0 && children.length === 0) continue;
-    if (!matchesFingerprint(snapshot.children, /** @type {any} */ (children)))
-      return false;
+    if (!matchesFingerprint(snapshot.children, children)) return false;
   }
 
   return true;

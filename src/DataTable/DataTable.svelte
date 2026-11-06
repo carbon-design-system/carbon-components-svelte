@@ -8,13 +8,11 @@
   };
 
   /**
-   * Typed `any` because a column without `columnAlign` passes `undefined`,
-   * which looks up nothing.
-   * @param {any} columnAlign
+   * @param {string | undefined} columnAlign
    * @returns {string | undefined}
    */
   function formatAlignClass(columnAlign) {
-    return alignClasses[columnAlign];
+    return columnAlign === undefined ? undefined : alignClasses[columnAlign];
   }
 
   /**
@@ -36,8 +34,8 @@
    * value-equal to their predecessor counts as unchanged; any same-reference
    * element means it could have been mutated in place, so fall through and
    * redo the work, matching today's behavior.
-   * @param {ReadonlyArray<{ id: any }>} prev
-   * @param {ReadonlyArray<{ id: any }>} next
+   * @param {ReadonlyArray<{ id: unknown }>} prev
+   * @param {ReadonlyArray<{ id: unknown }>} next
    * @returns {boolean}
    */
   function rowsUnchanged(prev, next) {
@@ -72,8 +70,8 @@
   }
 
   /**
-   * @param {ReadonlyArray<{ id: any }> | undefined} a
-   * @param {ReadonlyArray<{ id: any }> | undefined} b
+   * @param {ReadonlyArray<{ id: unknown }> | undefined} a
+   * @param {ReadonlyArray<{ id: unknown }> | undefined} b
    */
   function paintedRowListChanged(a, b) {
     if (a === b) return false;

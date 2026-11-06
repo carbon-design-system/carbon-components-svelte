@@ -18,10 +18,11 @@ function cacheKey(locale, options) {
 
 /**
  * @template T
+ * @template {object} Options
  * @param {BoundedFifoCache<string, T>} cache
- * @param {new (locale: string | undefined, options?: any) => T} Ctor
+ * @param {new (locale: string | undefined, options?: Options) => T} Ctor
  * @param {string | undefined} locale
- * @param {any} [options]
+ * @param {Options} [options]
  * @returns {T}
  */
 function getCached(cache, Ctor, locale, options) {

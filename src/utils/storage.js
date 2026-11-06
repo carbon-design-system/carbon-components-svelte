@@ -3,7 +3,7 @@
 /**
  * JSON.parse the string; return it unchanged if parse fails.
  * @param {string} raw
- * @returns {any}
+ * @returns {unknown}
  */
 export function parseStoredValue(raw) {
   try {
@@ -18,7 +18,7 @@ export function parseStoredValue(raw) {
  * Strings that parseStoredValue would read back as something else ("123",
  * "true", '{"a":1}') are JSON-encoded; other strings stay raw, so values
  * stored by older versions read back unchanged.
- * @param {any} value
+ * @param {unknown} value
  * @returns {string}
  */
 export function serializeStoredValue(value) {

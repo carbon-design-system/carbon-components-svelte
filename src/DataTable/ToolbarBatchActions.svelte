@@ -29,7 +29,7 @@
   import Button from "../Button/Button.svelte";
   import { returnFocus } from "../utils/focus.js";
 
-  /** @type {ReadonlyArray<any>} */
+  /** @type {ReadonlyArray<unknown>} */
   let batchSelectedIds = [];
   /** @type {null | HTMLDivElement} */
   let wrapperRef = null;
@@ -53,7 +53,7 @@
   // Subscribe to DataTable context if available, otherwise use selectedIds prop
   if (ctx?.batchSelectedIds) {
     unsubscribe = ctx.batchSelectedIds.subscribe(
-      /** @param {ReadonlyArray<any>} value */
+      /** @param {ReadonlyArray<unknown>} value */
       (value) => {
         batchSelectedIds = value;
       },
