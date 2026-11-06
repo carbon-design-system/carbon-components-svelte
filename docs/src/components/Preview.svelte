@@ -1,14 +1,16 @@
 <script lang="ts">
+  /** The example's code, highlighted here rather than in the bundle. */
   export let code = "";
-  export let codeRaw = "";
   export let src = "";
   export let framed = false;
 
   import { Button, CodeSnippet } from "carbon-components-svelte";
+  import { highlight } from "carbon-components-svelte/syntax";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { theme } from "../store";
 
   $: themedSrcUrl = src ? `${src}?theme=${$theme}` : "";
+  $: highlighted = highlight(code, "svelte") ?? "";
 </script>
 
 <div class="preview">
@@ -36,8 +38,8 @@
     {/if}
   </div>
   <div class="code-override">
-    <CodeSnippet type="multi" code={codeRaw}>
-      {@html code}
+    <CodeSnippet type="multi" {code}>
+      {@html highlighted}
     </CodeSnippet>
   </div>
 </div>
