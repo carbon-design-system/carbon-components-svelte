@@ -58,24 +58,6 @@ type ComponentApiFile = {
 const TAG_LINE_RE = /^\s*</;
 const WHITESPACE_RE = /\s+/;
 
-const HTML_TAG_RE = /<\s*(\/?)\s*([A-Za-z][\w:-]*)[^>]*?(\/?)\s*>/g;
-const HTML_VOID_TAGS = new Set([
-  "area",
-  "base",
-  "br",
-  "col",
-  "embed",
-  "hr",
-  "img",
-  "input",
-  "link",
-  "meta",
-  "param",
-  "source",
-  "track",
-  "wbr",
-]);
-
 const DOC_KBD_SELF_CLOSING_DQUOT_RE =
   /<DocKbd\b\s+label\s*=\s*"([^"]*)"\s*\/>/g;
 const DOC_KBD_SELF_CLOSING_SQUOT_RE =
@@ -447,31 +429,26 @@ function injectImportsIntoSvelteSnippet(code: string): string {
   return scriptLines.join("\n") + code.trimStart();
 }
 
+function parsesAsSvelte(markup: string): boolean {
+  try {
+    parse(markup, { css: false });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function fenceInlineSvelte(body: string) {
   const lines = body.split("\n");
   const out: string[] = [];
 
   let inCodeFence = false;
   let inSvelteFence = false;
-  let tagDepth = 0;
+  /** The example's lines so far, to tell when its markup has closed. */
+  let example: string[] = [];
 
   const isFence = (line: string) => line.trimStart().startsWith("```");
   const isTagLine = (line: string) => TAG_LINE_RE.test(line);
-
-  const applyTagDepth = (line: string) => {
-    HTML_TAG_RE.lastIndex = 0;
-    let m = HTML_TAG_RE.exec(line);
-    while (m) {
-      const isClosing = m[1] === "/";
-      const tagName = m[2]?.toLowerCase() ?? "";
-      const isSelfClosing = m[3] === "/" || HTML_VOID_TAGS.has(tagName);
-
-      if (isClosing) tagDepth = Math.max(0, tagDepth - 1);
-      else if (!isSelfClosing) tagDepth += 1;
-
-      m = HTML_TAG_RE.exec(line);
-    }
-  };
 
   for (let idx = 0; idx < lines.length; idx++) {
     const line = lines[idx];
@@ -479,7 +456,6 @@ function fenceInlineSvelte(body: string) {
       if (inSvelteFence) {
         out.push("```");
         inSvelteFence = false;
-        tagDepth = 0;
       }
       inCodeFence = !inCodeFence;
       out.push(line);
@@ -494,18 +470,19 @@ function fenceInlineSvelte(body: string) {
     ) {
       out.push("```svelte");
       inSvelteFence = true;
-      tagDepth = 0;
+      example = [];
     }
 
     if (inSvelteFence) {
-      applyTagDepth(line);
       out.push(line);
+      example.push(line);
 
+      // The example ends at a blank line once its tags have closed, as the
+      // page compiler ends it: `<Slider` … `/>` spans lines.
       const nextLine = lines[idx + 1] ?? "";
-      if (tagDepth === 0 && nextLine.trim() === "") {
+      if (nextLine.trim() === "" && parsesAsSvelte(example.join("\n"))) {
         out.push("```");
         inSvelteFence = false;
-        tagDepth = 0;
       }
       continue;
     }
