@@ -12,6 +12,7 @@
     "build:vite": "vite build",
     "typecheck:examples": "bun scripts/typecheck-examples.ts",
     "render:examples": "bun scripts/render-examples.ts",
+    "eval:search": "bun scripts/index-docs.ts && bun scripts/search-eval.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
