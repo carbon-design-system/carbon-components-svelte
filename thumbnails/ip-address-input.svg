@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>ip-address-input</title>
+    <g id="ip-address-input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="46" width="64" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="62" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="93" width="168" height="1"></rect>
+        <rect id="octet-1" fill="var(--cds-text-secondary, #525252)" x="88" y="74" width="18" height="8"></rect>
+        <rect id="dot-1" fill="var(--cds-text-secondary, #525252)" x="110" y="78" width="4" height="4"></rect>
+        <rect id="octet-2" fill="var(--cds-text-secondary, #525252)" x="118" y="74" width="18" height="8"></rect>
+        <rect id="dot-2" fill="var(--cds-text-secondary, #525252)" x="140" y="78" width="4" height="4"></rect>
+        <rect id="octet-3" fill="var(--cds-text-secondary, #525252)" x="148" y="74" width="18" height="8"></rect>
+        <rect id="dot-3" fill="var(--cds-text-secondary, #525252)" x="170" y="78" width="4" height="4"></rect>
+        <rect id="octet-4" fill="var(--cds-text-secondary, #525252)" x="178" y="74" width="18" height="8"></rect>
+        <polygon id="slash" fill="var(--cds-text-secondary, #525252)" points="206,72 210,72 204,84 200,84"></polygon>
+        <rect id="prefix" fill="var(--cds-text-secondary, #525252)" x="214" y="74" width="16" height="8"></rect>
+        <rect id="span-start" fill="var(--cds-background-brand, #0f62fe)" x="76" y="106" width="2" height="10"></rect>
+        <rect id="span" fill="var(--cds-background-brand, #0f62fe)" x="76" y="110" width="168" height="2"></rect>
+        <rect id="span-end" fill="var(--cds-background-brand, #0f62fe)" x="242" y="106" width="2" height="10"></rect>
+        <rect id="first" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="122" width="56" height="6"></rect>
+        <rect id="last" fill="var(--cds-border-subtle, #e0e0e0)" x="188" y="122" width="56" height="6"></rect>
+    </g>
+</svg>
