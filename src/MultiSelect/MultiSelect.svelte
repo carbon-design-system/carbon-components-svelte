@@ -554,6 +554,7 @@
   import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
   import { overflowTitle } from "../utils/overflow-title.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
@@ -1595,7 +1596,7 @@
   });
 
   /** @param {Event} event */
-  function handleOutsideInteraction(event) {
+  function handleOutsideFocus(event) {
     if (
       open &&
       isOutsideClick(event, [multiSelectRef, effectivePortalMenu && listRef])
@@ -1603,6 +1604,21 @@
       close("outside-click");
     }
   }
+
+  // An open menu is a layer in the overlay stack: a click outside closes it
+  // unless a layer above it takes the click, and Escape from outside the
+  // field reaches it when it is the top layer. Focus moving outside closes it
+  // too.
+  $: menuLayer = {
+    enabled: open,
+    kind: "listbox",
+    element: () => multiSelectRef,
+    anchors: () => [effectivePortalMenu ? listRef : null],
+    /** @param {"escape-key" | "outside-click" | "tab"} trigger */
+    onDismiss: (trigger) => {
+      if (open) close(trigger === "tab" ? "escape-key" : trigger);
+    },
+  };
 
   // A form reset clears the filter field without an input event. Svelte 5
   // syncs `bind:value` back on its own; Svelte 3 and 4 do not, so read the
@@ -1646,10 +1662,11 @@
   use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={multiSelectRef}
   use:formReset={handleOptionFormReset}
+  use:overlay={menuLayer}
   use:dismiss={{
     enabled: open,
-    type: ["click", "focusin"],
-    handler: handleOutsideInteraction,
+    type: "focusin",
+    handler: handleOutsideFocus,
   }}
   class:bx--multi-select__wrapper={true}
   class:bx--list-box__wrapper={true}

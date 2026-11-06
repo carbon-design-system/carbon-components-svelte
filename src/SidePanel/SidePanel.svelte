@@ -184,27 +184,42 @@
   import ArrowLeft from "../icons/ArrowLeft.svelte";
   import Close from "../icons/Close.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import {
-    acquireBodyScrollLock,
-    releaseBodyScrollLock,
-  } from "../utils/body-scroll-lock.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
+  import { focusQuietly, initialFocus } from "../utils/focus.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
+  import { createOverlay } from "../utils/overlay-stack.js";
   import { pointerDrag } from "../utils/pointer-drag.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
-  const focusReturn = restoreFocus();
+
+  let covered = false;
+
+  // The panel's place in the overlay stack. A modal panel makes the page
+  // behind it `inert`, locks scroll and traps Tab; a slide-in panel sits
+  // beside the page and takes none of Escape, Tab or clicks.
+  const stack = createOverlay({
+    kind: "side-panel",
+    // A control inside the panel may already have used this key.
+    respectHandled: true,
+    // Under a modal, the panel is inert too.
+    onCovered: (value) => {
+      covered = value;
+    },
+    element: () => ref,
+    focusTarget: () => ref,
+    onDismiss: () => {
+      if (open) lifecycle.close("escape-key");
+    },
+  });
+  onMount(() => stack.close);
   const layoutDirection = getLayoutDirection();
 
   /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
@@ -223,10 +238,11 @@
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
     passive: () => !$$slots.actions,
-    saveFocusReturn: focusReturn.save,
+    saveFocusReturn: stack.open,
     // The closing panel is inert, so focus goes back at once rather than
     // after the exit animation.
-    restoreFocusReturn: () => focusReturn.restore(ref),
+    restoreFocusReturn: () => stack.restoreFocus(ref),
+    canDismissOutside: () => !stack.hasLayerAbove(),
     getContainer: () => null,
     focus: () => focusPanel(),
     getOpen: () => open,
@@ -282,16 +298,9 @@
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     if (!open || slideIn) return;
-    if (event.key === "Escape") {
-      // Escape that cancels an IME composition is not a close, and a
-      // control inside the panel may already have used this one.
-      if (isImeComposition(event) || event.defaultPrevented) return;
-      // A panel nested in this one closes on its own.
-      event.stopPropagation();
-      close("escape-key");
-    } else if (event.key === "Tab" && modal && !event.defaultPrevented) {
-      trapFocus({ container: /** @type {HTMLElement} */ (ref), event });
-    }
+    // A panel nested in this one, a menu, a tooltip: the stack gives the key
+    // to the top layer and stops it there.
+    if (event.key === "Escape") stack.escape(event);
   }
 
   // Svelte reruns this only when `open` changes. The exit animation ends
@@ -551,7 +560,6 @@
       stopMeasuring();
       stopResizing();
       releasePage();
-      if (holdsBodyLock) releaseBodyScrollLock();
     };
   });
 
@@ -582,18 +590,15 @@
     );
   }
 
-  // Shared and ref-counted with Modal and SideNav.
-  let holdsBodyLock = false;
-  $: {
-    const shouldLock = open && modal;
-    if (shouldLock && !holdsBodyLock) {
-      holdsBodyLock = true;
-      acquireBodyScrollLock();
-    } else if (!shouldLock && holdsBodyLock) {
-      holdsBodyLock = false;
-      releaseBodyScrollLock();
-    }
-  }
+  // The scroll lock is the stack's, shared and ref-counted with Modal and
+  // SideNav.
+  $: stack.update({
+    modal,
+    trap: modal,
+    escape: !slideIn,
+    outside: modal ? "block" : "ignore",
+  });
+  $: if (!open) stack.close();
 
   // A new step starts at the top of the body.
   let prevStep = currentStep;
@@ -649,7 +654,8 @@
       ariaDescribedBy,
     )}
     tabindex="-1"
-    inert={closing || undefined}
+    inert={closing || covered || undefined}
+    data-overlay-managed
     class:bx--side-panel={true}
     class:bx--layer-one={true}
     class:bx--side-panel--xs={sizeName === "xs"}

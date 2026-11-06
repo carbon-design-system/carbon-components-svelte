@@ -379,7 +379,6 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { clampIndex } from "../utils/clamp-index.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -389,10 +388,10 @@
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { isImeComposition } from "../utils/ime-composition.js";
-  import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import {
     createTypeaheadBuffer,
@@ -912,14 +911,21 @@
     .filter(Boolean)
     .join(" ");
 
-  /** @param {Event} event */
-  function handleOutsideClick(event) {
-    // The menu counts as inside even when not portaled: a click on a group
-    // header lands in it without closing the menu itself.
-    if (open && isOutsideClick(event, [ref, listRef])) {
-      close("outside-click");
-    }
-  }
+  // An open menu is a layer in the overlay stack: a click outside closes it
+  // unless a layer above it takes the click, and Escape from outside the
+  // field reaches it when it is the top layer. The menu counts as inside even
+  // when not portaled: a click on a group header lands in it without closing
+  // the menu itself.
+  $: menuLayer = {
+    enabled: open,
+    kind: "listbox",
+    element: () => ref,
+    anchors: () => [listRef],
+    /** @param {"escape-key" | "outside-click" | "tab"} trigger */
+    onDismiss: (trigger) => {
+      if (open) close(trigger === "tab" ? "escape-key" : trigger);
+    },
+  };
 </script>
 
 <div
@@ -937,7 +943,7 @@
   class:bx--list-box__wrapper--fluid--disabled={isFluid && effectiveDisabled}
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
-  use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
+  use:overlay={menuLayer}
   {...wrapperProps}
 >
   {#if labelText || $$slots.labelChildren}

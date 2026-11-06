@@ -58,17 +58,15 @@
     setContext,
   } from "svelte";
   import { writable } from "svelte/store";
-  import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
-  import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitMenuAxis } from "../utils/menu-placement.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import {
     createTypeaheadBuffer,
@@ -286,21 +284,17 @@
   $: focusedIndex.set(focusIndex);
   $: menuAriaLabel = ($$props["aria-label"] ?? labelText) || undefined;
 
-  /** @param {Event} event */
-  function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, ref)) close("outside-click");
-  }
-  /** @param {Event} event */
-  function handleEscape(event) {
-    // Escape that cancels an IME composition is not a close.
-    if (
-      open &&
-      /** @type {KeyboardEvent} */ (event).key === "Escape" &&
-      !isImeComposition(/** @type {KeyboardEvent} */ (event))
-    ) {
-      close("escape-key");
-    }
-  }
+  // Each level is a layer in the overlay stack while open. A nested menu is
+  // above its parent, takes the key first, and passes it on, so one Escape
+  // closes the whole tree.
+  $: layer = {
+    enabled: open,
+    kind: "context-menu",
+    element: () => ref,
+    escape: /** @type {true | "pass"} */ (level === 1 ? true : "pass"),
+    /** @param {"escape-key" | "outside-click"} trigger */
+    onDismiss: (trigger) => close(trigger),
+  };
 </script>
 
 <ul
@@ -315,13 +309,7 @@
       focusIndex = index;
     },
   }}
-  use:dismiss={{
-    enabled: open,
-    listeners: [
-      { type: "click", handler: handleOutsideClick },
-      { type: "keydown", handler: handleEscape },
-    ],
-  }}
+  use:overlay={layer}
   role="menu"
   tabindex="-1"
   data-direction={direction}

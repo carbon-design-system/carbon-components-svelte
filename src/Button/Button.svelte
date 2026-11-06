@@ -206,11 +206,9 @@
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { isPointerFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
   import {
     applePlatform,
     ariaKeyShortcuts,
@@ -218,6 +216,7 @@
   } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
@@ -409,25 +408,23 @@
     tooltipShown = !dismissed;
   }
 
-  // Listens on `window` in the capture phase, as TooltipIcon does, so a
+  // A visible tooltip is a layer in the overlay stack, so Escape reaches it
+  // when it is the top layer. It takes the key in the capture phase, so a
   // hovered tooltip also hides while focus is elsewhere, and an ancestor
-  // such as a Modal doesn't also see the Escape that hid it.
-  /** @param {KeyboardEvent} event */
-  function handleKeydown(event) {
-    if (event.key !== "Escape" || !(portalOpen || inlineOpen)) return;
-    // Escape that cancels an IME composition is not a dismissal.
-    if (isImeComposition(event)) return;
-    event.stopPropagation();
+  // such as a Modal doesn't also see the Escape that hid it. A menu opened
+  // after the tooltip is above it and takes the key first.
+  function hideForEscape() {
     dismissed = true;
     tooltipShown = false;
     tooltipHandoff.dismiss();
   }
 
-  $: escapeListener = {
+  $: escapeLayer = {
     enabled: portalOpen || inlineOpen,
-    type: "keydown",
-    handler: handleKeydown,
-    options: { capture: true },
+    kind: "tooltip",
+    capture: true,
+    outside: /** @type {const} */ ("ignore"),
+    onDismiss: hideForEscape,
   };
 
   function handleBlur() {
@@ -584,7 +581,7 @@
     <div class:bx--btn__badge-wrapper={true}>
       <a
         bind:this={ref}
-        use:dismiss={escapeListener}
+        use:overlay={escapeLayer}
         use:keyboardShortcut={shortcutParams}
         use:ignoreTooltipClicks
         use:closeOverControls={{ onCover: handleTooltipCover }}
@@ -655,7 +652,7 @@
   {:else}
     <a
       bind:this={ref}
-      use:dismiss={escapeListener}
+      use:overlay={escapeLayer}
       use:keyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
@@ -727,7 +724,7 @@
     <button
       type="button"
       bind:this={ref}
-      use:dismiss={escapeListener}
+      use:overlay={escapeLayer}
       use:keyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
@@ -799,7 +796,7 @@
   <button
     type="button"
     bind:this={ref}
-    use:dismiss={escapeListener}
+    use:overlay={escapeLayer}
     use:keyboardShortcut={shortcutParams}
     use:ignoreTooltipClicks
     use:closeOverControls={{ onCover: handleTooltipCover }}

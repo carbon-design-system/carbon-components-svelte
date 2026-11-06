@@ -78,7 +78,6 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { derived, readable, writable } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
-  import { trackModal } from "../Modal/modal-store.js";
   import {
     LAYER_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
@@ -86,9 +85,8 @@
   import { splitAria, splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
-  import { trapFocus } from "../utils/trap-focus.js";
+  import { focusQuietly, initialFocus } from "../utils/focus.js";
+  import { createOverlay } from "../utils/overlay-stack.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -98,7 +96,26 @@
   const title = writable(undefined);
   /** @type {import("svelte/store").Writable<string | undefined>} */
   const bodyId = writable(undefined);
-  const focusReturn = restoreFocus();
+
+  let covered = false;
+
+  // The modal's place in the overlay stack. See `Modal`.
+  const stack = createOverlay({
+    kind: "modal",
+    modal: true,
+    // Under another modal, the page behind it is inert too.
+    onCovered: (value) => {
+      covered = value;
+    },
+    trap: true,
+    element: () => ref,
+    host: () => innerModalRef,
+    focusTarget: () => innerModalRef,
+    onDismiss: () => {
+      if (open) lifecycle.close("escape-key");
+    },
+  });
+  onMount(() => stack.close);
 
   // Ids for ModalHeader's label/title headings, so ModalBody (when
   // `hasScrollingContent`) can name its region via `aria-labelledby`.
@@ -124,8 +141,9 @@
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
     passive: () => footerCount === 0,
-    saveFocusReturn: focusReturn.save,
-    restoreFocusReturn: () => focusReturn.restore(ref),
+    saveFocusReturn: stack.open,
+    restoreFocusReturn: () => stack.restoreFocus(ref),
+    canDismissOutside: () => !stack.hasLayerAbove(),
     getContainer: () => innerModalRef,
     focus: () => focus(),
     getOpen: () => open,
@@ -240,9 +258,7 @@
     if (target) focusQuietly(target);
   }
 
-  const sharedOpen = writable(open);
-  $: $sharedOpen = open;
-  trackModal(sharedOpen);
+  $: if (!open) stack.close();
 
   // Name the dialog from ModalHeader's label/title. The header registers
   // them after this element is serialized, so on the server (and the first
@@ -301,25 +317,16 @@
   class:bx--modal--danger={danger}
   class:bx--modal--decorator={$$slots.decorator}
   class:bx--modal--ai-label={$aiLabelState === "active"}
-  inert={open ? undefined : true}
+  inert={open && !covered ? undefined : true}
+  data-overlay-managed
   {id}
   {...wrapperProps}
   on:keydown
   on:keydown={(event) => {
-    if (open) {
-      if (event.key === "Escape") {
-        // Escape that cancels an IME composition is not a close.
-        if (isImeComposition(event)) return;
-        // Stop stacked (DOM-nested) modals from also closing: this
-        // handler is on each modal's own root and Escape bubbles from
-        // the focused (innermost, topmost) modal up through ancestors.
-        event.stopPropagation();
-        close("escape-key");
-      } else if (event.key === "Tab" && !event.defaultPrevented) {
-        // A nested modal or a child that uses Tab itself (an editor that
-        // indents) already handled this Tab; trapping again moves focus twice.
-        trapFocus({ container: /** @type {HTMLDivElement} */ (ref), event });
-      }
+    if (open && event.key === "Escape") {
+      // Stacked (DOM-nested) modals, a menu, a tooltip: the stack gives
+      // the key to the top layer and stops it there.
+      stack.escape(event);
     }
   }}
   on:click
@@ -333,7 +340,7 @@
   on:transitionend={(event) => {
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
-      if (!open) focusReturn.restore(ref);
+      if (!open) stack.restoreFocus(ref);
     }
   }}
 >

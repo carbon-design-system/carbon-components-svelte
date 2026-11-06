@@ -14,12 +14,11 @@
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
   import { clippedBy } from "../utils/fit-align.js";
   import { isPointerFocus } from "../utils/focus.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { closeOverControls } from "../utils/tooltip-cover.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -248,19 +247,18 @@
     hide();
   }
 
-  // Runs in the capture phase so a visible tooltip is dismissed before any
-  // ancestor (e.g. a Modal) sees Escape, whether focus is on the trigger or
-  // elsewhere. A second Escape, with nothing left to dismiss, still bubbles.
-  /** @param {KeyboardEvent} event */
-  function handleKeydown(event) {
-    // Escape that cancels an IME composition is not a close.
-    if (event.key !== "Escape" || isImeComposition(event)) return;
-    const visible = effectivePortalTooltip
-      ? portalOpen
-      : open && !disabled && !tooltipHidden;
+  // A visible tooltip is a layer in the overlay stack. It takes Escape in the
+  // capture phase so it is dismissed before any ancestor (e.g. a Modal) sees
+  // the key, whether focus is on the trigger or elsewhere, unless a layer
+  // opened after it (a menu) is above it. A second Escape, with nothing
+  // left to dismiss, still bubbles.
+  $: visible = effectivePortalTooltip
+    ? portalOpen
+    : open && !disabled && !tooltipHidden;
+
+  function hideForEscape() {
     hidden = true;
     hide();
-    if (visible) event.stopPropagation();
   }
 
   // In portal mode the assistive-text span is not rendered, so name the
@@ -285,11 +283,14 @@
   bind:this={ref}
   use:ignoreTooltipClicks
   use:closeOverControls={{ onCover: handleTooltipCover }}
-  use:dismiss={{
+  use:overlay={{
     enabled: open || portalOpen,
-    type: "keydown",
-    handler: handleKeydown,
-    options: { capture: true },
+    kind: "tooltip",
+    capture: true,
+    outside: "ignore",
+    // Hidden but listening: hide, and let the key go on.
+    escape: visible ? true : "pass",
+    onDismiss: hideForEscape,
   }}
   {disabled}
   type="button"

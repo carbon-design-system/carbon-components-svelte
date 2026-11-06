@@ -146,7 +146,6 @@
   import { clippedBy } from "../utils/fit-align.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { keyBy } from "../utils/key-by.js";
   import {
@@ -156,6 +155,7 @@
   import { menuSide } from "../utils/menu-placement.js";
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
@@ -574,18 +574,10 @@
     tooltipHandoff.dismiss();
   }
 
-  // Listens on `window` in the capture phase, as Button does, so a hovered
-  // tooltip also hides while focus is elsewhere, and an ancestor such as a
-  // Modal doesn't also see the Escape that hid it.
-  /** @param {Event} event */
-  function handleTooltipKeydown(event) {
-    if (/** @type {KeyboardEvent} */ (event).key !== "Escape" || !tooltipOpen)
-      return;
-    // Escape that cancels an IME composition is not a dismissal.
-    if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
-    event.stopPropagation();
-    dismissTooltip();
-  }
+  // A visible tooltip is a layer in the overlay stack, taking Escape in the
+  // capture phase, as Button does, so a hovered tooltip also hides while
+  // focus is elsewhere, and an ancestor such as a Modal doesn't also see the
+  // Escape that hid it.
 
   // The pointer moved onto a part of the tooltip that covers another
   // control: close at once, so the pointer and the next click reach that
@@ -684,11 +676,12 @@
 <button
   bind:this={buttonRef}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
-  use:dismiss={{
+  use:overlay={{
     enabled: tooltipOpen,
-    type: "keydown",
-    handler: handleTooltipKeydown,
-    options: { capture: true },
+    kind: "tooltip",
+    capture: true,
+    outside: "ignore",
+    onDismiss: dismissTooltip,
   }}
   type="button"
   {disabled}

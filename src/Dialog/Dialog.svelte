@@ -27,14 +27,25 @@
   export let preventCloseOnClickOutside = false;
 
   import { createEventDispatcher } from "svelte";
-  import { restoreFocus } from "../utils/focus.js";
   import { createOutsideDismiss } from "../utils/outside-dismiss.js";
+  import { createOverlay } from "../utils/overlay-stack.js";
 
   const dispatch = createEventDispatcher();
-  const focusReturn = restoreFocus();
 
   /** @type {DialogCloseTrigger | null} */
   let pendingTrigger = null;
+
+  // An open dialog is a layer in the overlay stack, so a menu or tooltip
+  // opened over it takes Escape first. A modal one is in the browser's top
+  // layer: the browser makes the page behind inert and closes the dialog
+  // on Escape itself, so the stack leaves both to it.
+  const stack = createOverlay({
+    kind: "dialog",
+    element: () => dialog,
+    escape: false,
+    outside: "ignore",
+    onDismiss: () => {},
+  });
 
   /** @type {HTMLDialogElement} */
   let dialog;
@@ -68,7 +79,9 @@
 
     return {
       update: sync,
-      destroy() {},
+      destroy() {
+        stack.close();
+      },
     };
 
     /** @param {{ open: boolean; modal: boolean }} options */
@@ -79,7 +92,12 @@
       if (shouldOpen) {
         if (!node.open || fromAttribute) {
           if (fromAttribute) node.removeAttribute("open");
-          focusReturn.save();
+          stack.update({
+            modal: isModal,
+            native: isModal,
+            escape: isModal ? "native" : false,
+          });
+          stack.open();
           if (isModal) {
             node.showModal();
           } else {
@@ -132,9 +150,10 @@
   function handleClose(event) {
     const trigger = pendingTrigger ?? "close-button";
     pendingTrigger = null;
+    stack.close();
     open = false;
     dispatch("close", { trigger });
-    focusReturn.restore(event.currentTarget);
+    stack.restoreFocus(event.currentTarget);
   }
 </script>
 

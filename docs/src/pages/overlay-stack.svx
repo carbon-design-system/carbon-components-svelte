@@ -1,0 +1,86 @@
+---
+title: Overlay stack
+layout: guide
+description: One stack decides which open overlay takes Escape and outside clicks, traps focus, makes the page behind a modal inert, and returns focus when a layer closes.
+---
+
+## Layers
+
+Modal, ComposedModal, SidePanel, Dialog, Popover, Toggletip, Menu, ContextMenu, the list of a Dropdown, ComboBox or MultiSelect, and every tooltip are layers in one stack while they are open. Layers stack in the order they open. The top layer takes <DocKbd label="Escape" />, and a click lands on the highest layer it hits.
+
+<FileSource src="/framed/OverlayStack/NestedLayers" />
+
+| Do | Why |
+| :--- | :--- |
+| Open overlays from the control that owns them. | Focus returns to the control that was focused, or was pressed, when the layer opened. |
+| Leave Escape to the stack. | A key that an inner widget stops (a ComboBox that closes its list) never reaches the layer around it. |
+| Expect two Escapes from a button that shows a tooltip. | A tooltip is a layer, and WCAG 1.4.13 asks for it to be dismissible. A menu opened after the tooltip is above it and takes the key first. |
+
+## Escape
+
+The layer that takes the key is the top one that does not skip it. A tooltip takes it in the capture phase, before the widget under it acts. Every other layer takes it in the bubble phase, after the widgets inside it have had it.
+
+| Layer option | Escape does |
+| :--- | :--- |
+| `escape: true` (default) | Dismisses the layer and stops the key. |
+| `escape: false` | Skips the layer. A Popover without `closeOnEscape` is skipped. |
+| `escape: "pass"` | Dismisses the layer and lets the key go on to the next. A nested ContextMenu does this, so one key closes the tree. |
+| `escape: "native"` | Leaves the key to the browser. A modal `Dialog` closes itself on Escape and blocks the layers below it. |
+
+## Outside clicks
+
+A click, or the press that began it, lands on the highest layer that holds it. Every layer above that one is dismissed, top down. A click on the page dismisses every layer that takes clicks.
+
+| `outside` | The click |
+| :--- | :--- |
+| `"dismiss"` (default) | Dismisses the layer and goes on to the layer below. |
+| `"block"` | Stops the walk. A modal is `"block"`: its backdrop belongs to the modal. |
+| `"ignore"` | Passes over the layer. A tooltip never takes a click. |
+
+A layer opened by a click is not dismissed by that click. A press that begins inside a layer and ends outside, such as a text selection, does not dismiss it.
+
+## Focus, scroll and the page behind
+
+| Part | What the stack does |
+| :--- | :--- |
+| Tab | `trap: true` loops Tab inside the layer's element while it is the topmost layer that traps. A tooltip or menu above a modal does not lift the trap. |
+| Focus return | `restoreFocus()` goes back to the control that was focused when the layer opened. In Safari a click does not focus a button, so the control the click landed on is used. When it is gone, `returnFocusTo` is used, then the layer below. |
+| Page behind a modal | Everything outside the top modal and the layers above it is `inert`. Portals, and roots that set their own `inert` (Modal, SidePanel), are left alone. |
+| Body scroll | A modal holds the scroll lock. Several modals share it, and the last one to close releases it. |
+| Native top layer | A layer with `native: true` is in the browser's top layer (`dialog.showModal()`). The browser makes the page behind inert, so the stack does not. |
+
+## Custom layers
+
+Use `createOverlay` for an overlay that does not build on a component of the library, or the `overlay` action on the element of the layer.
+
+<FileSource src="/framed/OverlayStack/CustomLayer" />
+
+```svelte
+<div use:overlay={{ enabled: open, onDismiss: () => (open = false) }}>
+  ...
+</div>
+```
+
+| Option | Use |
+| :--- | :--- |
+| `element`, `anchors`, `contains` | Where a click is inside the layer. |
+| `onDismiss(trigger, event)` | Close the layer. `trigger` is `"escape-key"`, `"outside-click"` or `"tab"`. You flip your own `open`. |
+| `modal`, `trap`, `scrollLock` | A modal layer: `inert` page, Tab trap, scroll lock. |
+| `capture` | Take Escape before the widgets inside the layer, as a tooltip does. |
+| `returnFocus` | When the layer closes with focus inside, move focus back to the control that opened it. |
+| `onCovered(covered)` | Follow a modal opened above the layer, to set your own `inert`. |
+
+## Announcements
+
+A live region outside an open modal is hidden from the accessibility tree in some browsers. `getModalHost()` returns the element a live region should be in, and `subscribeModalHost(listener)` tells you when it changes.
+
+```js
+import { subscribeModalHost } from "carbon-components-svelte";
+
+// Move the announcer into the open modal, and back out when it closes.
+const stop = subscribeModalHost((host) => announcer.moveInto(host ?? document.body));
+```
+
+## Server rendering
+
+Nothing in the stack touches `window` or `document` at import or on the server. A layer opens on the client, and the first client render of a modal that is open locks body scroll as before.

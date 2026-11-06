@@ -88,6 +88,17 @@ if (typeof document !== "undefined") {
 }
 
 /**
+ * The element the last pointer press landed on, until the next key press.
+ * Safari does not focus a button on click, so this is how a control that
+ * opened an overlay is known.
+ *
+ * @returns {EventTarget | null}
+ */
+export function getPressTarget() {
+  return pressTarget;
+}
+
+/**
  * Whether focus on `node` came from a pointer press on it, with no key
  * pressed since. A tooltip ignores that focus, as Carbon React's does
  * (`focusByMouse`), so it closes when the pointer leaves.
@@ -138,7 +149,7 @@ export function restoreFocus() {
  * @param {Element | null | undefined} region
  * @returns {boolean}
  */
-function focusIsFree(region) {
+export function focusIsFree(region) {
   const active = document.activeElement;
   return !active || active === document.body || !!region?.contains(active);
 }

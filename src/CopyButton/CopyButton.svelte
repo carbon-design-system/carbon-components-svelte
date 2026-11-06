@@ -103,10 +103,9 @@
     COPY_FEEDBACK_TIMEOUT_MS,
     createCopyFeedbackState,
   } from "../utils/copy-feedback.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { isPointerFocus } from "../utils/focus.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
   import { noop } from "../utils/noop.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { createTooltipHandoff } from "../utils/tooltip-handoff.js";
@@ -215,16 +214,11 @@
   }
 
   // Escape hides whatever the tooltip surface shows: the description, or
-  // the feedback after a copy. Listens on `window` in the capture phase,
-  // as TooltipIcon does, so a hovered tooltip also hides while focus is
-  // elsewhere, and an ancestor such as a Modal doesn't also see the
-  // Escape that hid it.
-  /** @param {KeyboardEvent} event */
-  function handleKeydown(event) {
-    if (event.key !== "Escape" || !(tooltipOpen || feedbackOpen)) return;
-    // Escape that cancels an IME composition is not a dismissal.
-    if (isImeComposition(event)) return;
-    event.stopPropagation();
+  // the feedback after a copy. It is a layer in the overlay stack while it
+  // shows, taking Escape in the capture phase, as TooltipIcon does, so a
+  // hovered tooltip also hides while focus is elsewhere, and an ancestor
+  // such as a Modal doesn't also see the Escape that hid it.
+  function hideForEscape() {
     dismissed = true;
     if (feedbackOpen) copyFeedback.dismiss();
     tooltipHandoff.dismiss();
@@ -291,11 +285,12 @@
 
 <button
   bind:this={ref}
-  use:dismiss={{
+  use:overlay={{
     enabled: tooltipOpen || feedbackOpen,
-    type: "keydown",
-    handler: handleKeydown,
-    options: { capture: true },
+    kind: "tooltip",
+    capture: true,
+    outside: "ignore",
+    onDismiss: hideForEscape,
   }}
   type="button"
   aria-busy={copyPending ? "true" : undefined}

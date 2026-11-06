@@ -15,6 +15,13 @@ export function focusQuietly(target: HTMLElement, options?: FocusOptions): void;
 export function isQuietFocus(node: Element | null | undefined): boolean;
 
 /**
+ * The element the last pointer press landed on, until the next key press.
+ * Safari does not focus a button on click, so this is how a control that
+ * opened an overlay is known.
+ */
+export function getPressTarget(): EventTarget | null;
+
+/**
  * Whether focus on `node` came from a pointer press on it, with no key
  * pressed since. A tooltip ignores that focus, so it closes when the
  * pointer leaves.
@@ -35,3 +42,9 @@ export function returnFocusOnClose(
   getTrigger: () => HTMLElement | null | undefined,
   getPanel: () => Element | null | undefined,
 ): (open: boolean) => void;
+
+/**
+ * Whether focus was dropped to `<body>` or is still inside `region`: nothing
+ * else has claimed it since `region` started closing.
+ */
+export function focusIsFree(region: Element | null | undefined): boolean;

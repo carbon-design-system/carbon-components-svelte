@@ -226,15 +226,36 @@
   import { splitAria, splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
+  import { focusQuietly, initialFocus } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
+  import { createOverlay } from "../utils/overlay-stack.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
-  import { trapFocus } from "../utils/trap-focus.js";
   import { uniqueId } from "../utils/unique-id.js";
-  import { trackModal } from "./modal-store.js";
 
   const dispatch = createEventDispatcher();
-  const focusReturn = restoreFocus();
+
+  let covered = false;
+
+  // The modal's place in the overlay stack: Escape, focus trap, `inert`
+  // background, scroll lock and focus return. Its outside click is the
+  // backdrop's own press-and-release, below, so a layer above it (a menu)
+  // takes that click first.
+  const stack = createOverlay({
+    kind: "modal",
+    modal: true,
+    // Under another modal, the page behind it is inert too.
+    onCovered: (value) => {
+      covered = value;
+    },
+    trap: true,
+    element: () => ref,
+    host: () => innerModalRef,
+    focusTarget: () => innerModalRef,
+    onDismiss: () => {
+      if (open) lifecycle.close("escape-key");
+    },
+  });
+  onMount(() => stack.close);
 
   /** @type {null | HTMLAnchorElement | HTMLButtonElement} */
   let buttonRef = null;
@@ -270,17 +291,16 @@
     },
     preventCloseOnClickOutside: () => preventCloseOnClickOutside,
     passive: () => passiveModal,
-    saveFocusReturn: focusReturn.save,
-    restoreFocusReturn: () => focusReturn.restore(ref),
+    saveFocusReturn: stack.open,
+    restoreFocusReturn: () => stack.restoreFocus(ref),
+    canDismissOutside: () => !stack.hasLayerAbove(),
     getContainer: () => innerModalRef,
     focus: () => focus(),
     getOpen: () => open,
   });
   const { close, outsideDismiss } = lifecycle;
 
-  const sharedOpen = writable(open);
-  $: $sharedOpen = open;
-  trackModal(sharedOpen);
+  $: if (!open) stack.close();
 
   setContext(MODAL_CONTEXT_KEY, {});
   // As in v11, the modal starts a layer at level 0 wherever it renders,
@@ -353,23 +373,16 @@
   class:bx--modal--danger={danger}
   class:bx--modal--decorator={$$slots.decorator}
   class:bx--modal--ai-label={$aiLabelState === "active"}
-  inert={open ? undefined : true}
+  inert={open && !covered ? undefined : true}
+  data-overlay-managed
   {...wrapperProps}
   on:keydown
   on:keydown={(event) => {
     if (open) {
       if (event.key === "Escape") {
-        // Escape that cancels an IME composition is not a close.
-        if (isImeComposition(event)) return;
-        // Stop stacked (DOM-nested) modals from also closing: this
-        // handler is on each modal's own root and Escape bubbles from
-        // the focused (innermost, topmost) modal up through ancestors.
-        event.stopPropagation();
-        close("escape-key");
-      } else if (event.key === "Tab" && !event.defaultPrevented) {
-        // A nested modal or a child that uses Tab itself (an editor that
-        // indents) already handled this Tab; trapping again moves focus twice.
-        trapFocus({ container: /** @type {HTMLDivElement} */ (ref), event });
+        // Stacked (DOM-nested) modals, a menu, a tooltip: the stack gives
+        // the key to the top layer and stops it there.
+        stack.escape(event);
       } else if (
         shouldSubmitOnEnter &&
         event.key === "Enter" &&
@@ -409,7 +422,7 @@
   on:transitionend={(event) => {
     if (event.propertyName === "transform") {
       dispatch("transitionend", { open });
-      if (!open) focusReturn.restore(ref);
+      if (!open) stack.restoreFocus(ref);
     }
   }}
 >

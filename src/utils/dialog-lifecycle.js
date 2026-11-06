@@ -13,12 +13,9 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  * from, its own:
  * - `setContext(MODAL_CONTEXT_KEY, {})` (and any component-specific
  *   context, e.g. ComposedModal's `"carbon:ComposedModal"`).
- * - The `sharedOpen`/`trackModal` registration (`const sharedOpen =
- *   writable(open); $: $sharedOpen = open; trackModal(sharedOpen);`).
- *   `trackModal` calls Svelte's `onMount` internally, which must run
- *   during real component initialization — bundling it into this factory
- *   would make the factory untestable outside a mounted component for a
- *   3-line saving, so it stays inline in each component.
+ * - Its `createOverlay` layer (`utils/overlay-stack.js`): pass its `open`
+ *   as `saveFocusReturn` and call `close()` when `open` turns false, so the
+ *   layer, the scroll lock and the `inert` page behind it follow `open`.
  * - `onMount`: call `setMounted()`, then this component's own *initial*
  *   focus — Modal focuses synchronously there ("DOM is already in place —
  *   no `tick()` needed"), ComposedModal wraps it in `tick()`. That drift
@@ -48,6 +45,9 @@ import { createOutsideDismiss } from "./outside-dismiss.js";
  *   never fires. A second call must do nothing.
  * @param {() => Element | null} options.getContainer - The element whose
  *   transform transition ends the close animation.
+ * @param {() => boolean} [options.canDismissOutside] - Whether a press on
+ *   the backdrop may close the dialog. Return `false` while a layer above
+ *   it (a menu) is open: that layer takes the click.
  * @param {() => boolean} options.getOpen - Re-read the current `open`
  *   prop value inside the deferred `tick()` callback, which needs the
  *   *live* value (the dialog may have closed again before the tick
@@ -68,6 +68,7 @@ export function createDialogLifecycle({
   focus,
   restoreFocusReturn,
   getContainer,
+  canDismissOutside = () => true,
   getOpen,
 }) {
   let closeDispatched = false;
@@ -88,7 +89,10 @@ export function createDialogLifecycle({
   }
 
   const outsideDismiss = createOutsideDismiss(() => {
-    if (closesOnOutsideClick(preventCloseOnClickOutside(), passive())) {
+    if (
+      closesOnOutsideClick(preventCloseOnClickOutside(), passive()) &&
+      canDismissOutside()
+    ) {
       close("outside-click");
     }
   });
