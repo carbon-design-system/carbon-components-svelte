@@ -8,7 +8,8 @@
  *   cd docs && bun run eval:search
  */
 import SEARCH_INDEX from "../src/SEARCH_INDEX.json";
-import { createSearch, type SearchDocument } from "../src/search";
+import { createSearch } from "../src/search";
+import { type CompactPage, expandSearchIndex } from "../src/search-index";
 
 /** Query, the id it should find, and the place it should reach or beat. */
 export const CASES: [query: string, id: string, place: number][] = [
@@ -94,7 +95,7 @@ export const CASES: [query: string, id: string, place: number][] = [
 ];
 
 if (import.meta.main) {
-  const search = createSearch(SEARCH_INDEX as SearchDocument[]);
+  const search = createSearch(expandSearchIndex(SEARCH_INDEX as CompactPage[]));
   const misses: string[] = [];
   for (const [query, id, place] of CASES) {
     const results = search(query).slice(0, 10);

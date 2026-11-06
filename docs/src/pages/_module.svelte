@@ -37,6 +37,7 @@
   } from "../component-categories";
   import { beforeNavigate, componentPages, goto, isActive } from "../router";
   import { createSearch, type SearchDocument } from "../search";
+  import type { CompactPage } from "../search-index";
   import { theme } from "../store";
 
   type ModuleSearchResult = HeaderSearchResult & { isComponent: boolean };
@@ -48,8 +49,11 @@
   let search: ((query: string) => SearchDocument[]) | undefined;
   let searchLoading: Promise<void> | undefined;
   function loadSearch() {
-    searchLoading ??= import("../SEARCH_INDEX.json").then((module) => {
-      search = createSearch(module.default as SearchDocument[]);
+    searchLoading ??= Promise.all([
+      import("../SEARCH_INDEX.json"),
+      import("../search-index"),
+    ]).then(([index, { expandSearchIndex }]) => {
+      search = createSearch(expandSearchIndex(index.default as CompactPage[]));
     });
   }
 
