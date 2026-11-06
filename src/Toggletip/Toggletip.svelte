@@ -90,12 +90,10 @@
   import { MODAL_CONTEXT_KEY } from "../constants/context-keys.js";
   import Information from "../icons/Information.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
-  import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -135,33 +133,12 @@
           `${direction}-${align}`
         );
 
-  // Window listeners are enabled on the animation frame after opening. Svelte
-  // flushes the open state synchronously while the triggering click is still
-  // propagating, so enabling them immediately would let the click that opened
-  // the toggletip (e.g. from an external trigger) bubble to the window handler
-  // and close it again. Deferring past the current event mirrors the
-  // post-render effect in the upstream component.
-  let listenersEnabled = false;
-  /** @type {number} */
-  let enableFrame;
-
   function toggle() {
     open = !open;
   }
 
   function close() {
     open = false;
-  }
-
-  /** @param {KeyboardEvent} event */
-  function handleKeydown(event) {
-    if (open && event.key === "Escape") {
-      // Escape that cancels an IME composition is not a close.
-      if (isImeComposition(event)) return;
-      event.stopPropagation();
-      close();
-      ref?.focus();
-    }
   }
 
   // Portalled content lives outside `toggletipRef`, so treat the popover as
@@ -182,10 +159,23 @@
       close();
   }
 
-  /** @param {Event} event */
-  function handleOutsideClick(event) {
-    if (open && isOutsideClick(event, insideElements)) close();
-  }
+  // The toggletip is a layer in the overlay stack while open. The click that
+  // opens it, from an external trigger too, does not close it. Escape closes
+  // it wherever focus is, and takes focus back to the button only from
+  // inside.
+  $: layer = {
+    enabled: open,
+    kind: "toggletip",
+    element: () => toggletipRef,
+    anchors: () => [popoverRef],
+    /** @param {"escape-key" | "outside-click"} trigger */
+    onDismiss: (trigger) => {
+      if (!open) return;
+      const focusInside = containsTarget(document.activeElement);
+      close();
+      if (trigger === "escape-key" && focusInside) ref?.focus();
+    },
+  };
 
   // Close when an ancestor modal closes so the portalled content does not linger.
   $: {
@@ -194,22 +184,10 @@
       effectivePortalTooltip && ref ? observeModalClose(ref, close) : () => {};
   }
 
-  $: if (typeof requestAnimationFrame !== "undefined") {
-    if (open) {
-      cancelAnimationFrame(enableFrame);
-      enableFrame = requestAnimationFrame(() => {
-        if (open) listenersEnabled = true;
-      });
-    } else {
-      cancelAnimationFrame(enableFrame);
-      listenersEnabled = false;
-    }
-  }
   $: notifyOpenChange(open);
 
   onMount(() => {
     return () => {
-      cancelAnimationFrame(enableFrame);
       disconnectModalObserver();
     };
   });
@@ -231,11 +209,7 @@ whitespace gap; the label's end margin is then the only spacing. -->
     {id}
     class:bx--toggletip={true}
     class:bx--toggletip--open={open}
-    use:dismiss={{
-      enabled: listenersEnabled,
-      listeners: [{ type: "click", handler: handleOutsideClick }],
-    }}
-    on:keydown={handleKeydown}
+    use:overlay={layer}
     on:focusout={handleFocusout}
     {...wrapperProps}
   >
@@ -269,11 +243,7 @@ whitespace gap; the label's end margin is then the only spacing. -->
     >
       <!-- In a portal, the content is outside the wrapper's listeners. -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
-      <div
-        class:bx--toggletip-content={true}
-        on:keydown={handleKeydown}
-        on:focusout={handleFocusout}
-      >
+      <div class:bx--toggletip-content={true} on:focusout={handleFocusout}>
         <slot />
       </div>
     </Popover>

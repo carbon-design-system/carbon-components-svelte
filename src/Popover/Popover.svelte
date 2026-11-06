@@ -66,19 +66,17 @@
 
   import { createEventDispatcher, onMount, tick } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
-  import { dismiss } from "../utils/dismiss.js";
   import {
     clippedBy,
     fitPopoverAlign,
     sidePlacement,
   } from "../utils/fit-align.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
   import { isInlineAlign, popoverPlacement } from "../utils/inline-align.js";
-  import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
 
@@ -283,38 +281,33 @@
     return false;
   }
 
-  /** @param {Event} event */
-  function handleOutsideClick(event) {
-    if (
-      open &&
-      isOutsideClick(event, ref) &&
-      !isDatePickerCalendarClick(event.target)
-    ) {
-      dispatch("click:outside", { target: event.target });
-      if (closeOnOutsideClick) {
-        open = false;
-        dispatch("close", { trigger: "outside-click" });
-      }
-    }
-  }
-
-  // Escape is listened for on `window` (via `dismiss`) rather than on the
-  // popover itself because focus is often on the trigger, not inside the
-  // popover content. Does not `stopPropagation`: other layers (e.g. `Modal`)
-  // rely on Escape bubbling to their own handlers.
-  /** @param {Event} event */
-  function handleEscape(event) {
-    if (
-      open &&
-      closeOnEscape &&
-      /** @type {KeyboardEvent} */ (event).key === "Escape"
-    ) {
-      // Escape that cancels an IME composition is not a close.
-      if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
+  // The popover is a layer in the overlay stack while open. Escape goes to
+  // the top layer wherever focus is (often on the trigger, not in the
+  // popover), and a click outside reaches it only when no layer above it
+  // holds the click, so a popover in a `Modal` closes before the modal does.
+  $: layer = {
+    enabled: open,
+    kind: "popover",
+    element: () => ref,
+    returnFocus: true,
+    contains: isDatePickerCalendarClick,
+    escape: closeOnEscape,
+    // A popover that stays open on an outside click lets the click go on to
+    // the layers below it.
+    outside: /** @type {"dismiss" | "ignore"} */ (
+      closeOnOutsideClick ? "dismiss" : "ignore"
+    ),
+    /** @param {Event} event */
+    onOutsidePress: (event) => {
+      if (open) dispatch("click:outside", { target: event.target });
+    },
+    /** @param {"escape-key" | "outside-click"} trigger */
+    onDismiss: (trigger) => {
+      if (!open) return;
       open = false;
-      dispatch("close", { trigger: "escape-key" });
-    }
-  }
+      dispatch("close", { trigger });
+    },
+  };
 </script>
 
 {#if portalled}
@@ -330,13 +323,7 @@
     >
       <div
         bind:this={ref}
-        use:dismiss={{
-          enabled: open,
-          listeners: [
-            { type: "click", handler: handleOutsideClick },
-            { type: "keydown", handler: handleEscape },
-          ],
-        }}
+        use:overlay={layer}
         {...$$restProps}
         class={portalClass(
           portalSide ?? side,
@@ -357,13 +344,7 @@
 {:else}
   <div
     bind:this={ref}
-    use:dismiss={{
-      enabled: open,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "keydown", handler: handleEscape },
-      ],
-    }}
+    use:overlay={layer}
     class:bx--popover={true}
     class:bx--popover--caret={caret}
     class:bx--popover--high-contrast={highContrast}

@@ -116,18 +116,16 @@
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly, returnFocus } from "../utils/focus.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
-  import { isOutsideClick } from "../utils/is-outside-click.js";
   import {
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { menuOptionLabel } from "../utils/menu-option-label.js";
   import { fitIntrinsicAlign, physicalAlign } from "../utils/menu-placement.js";
+  import { overlay } from "../utils/overlay-stack.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import {
@@ -347,36 +345,25 @@
     if (item) focusMenuItem(item);
   }
 
-  /** @param {Event} event */
-  function handleOutsideClick(event) {
-    if (!open) return;
+  // The root menu is a layer in the overlay stack while open. A submenu is
+  // not: it leaves Escape and Tab to the root. Tab is treated like Escape:
+  // without this, focus would leave the (possibly portaled) menu for
+  // whatever happens to be next in the DOM.
+  $: layer = {
+    enabled: open && !isSubmenu,
+    kind: "menu",
+    element: () => ref,
+    anchors: () => [anchor],
     // Clicks inside any menu (this one or a portalled submenu) are not outside
     // clicks. A submenu's <ul> isn't a DOM descendant of this menu even though
-    // it's logically nested, so isOutsideClick alone misses it.
-    const target = event.target;
-    if (target instanceof Element && target.closest("[role='menu']")) return;
-    if (isOutsideClick(event, [anchor, ref])) close("outside-click");
-  }
-
-  /** @param {Event} event */
-  function handleEscape(event) {
-    if (!open || isSubmenu) return;
-    // Tab is treated like Escape: without this, focus would leave the
-    // (possibly portaled) menu for whatever happens to be next in the DOM.
-    if (
-      /** @type {KeyboardEvent} */ (event).key === "Escape" ||
-      /** @type {KeyboardEvent} */ (event).key === "Tab"
-    ) {
-      // Escape that cancels an IME composition is not a close.
-      if (
-        /** @type {KeyboardEvent} */ (event).key === "Escape" &&
-        isImeComposition(/** @type {KeyboardEvent} */ (event))
-      )
-        return;
-      event.preventDefault();
-      close("escape-key");
-    }
-  }
+    // it's logically nested.
+    contains: (/** @type {Node} */ target) =>
+      target instanceof Element && !!target.closest("[role='menu']"),
+    closeOnTab: true,
+    onDismiss: (
+      /** @type {"escape-key" | "outside-click" | "tab"} */ trigger,
+    ) => close(trigger === "tab" ? "escape-key" : trigger),
+  };
 </script>
 
 <FloatingPortal
@@ -411,13 +398,7 @@
         if (item) focusMenuItem(item);
       },
     }}
-    use:dismiss={{
-      enabled: open,
-      listeners: [
-        { type: "click", handler: handleOutsideClick },
-        { type: "keydown", handler: handleEscape },
-      ],
-    }}
+    use:overlay={layer}
     role="menu"
     tabindex="-1"
     data-floating-menu-direction={portalDirection}
