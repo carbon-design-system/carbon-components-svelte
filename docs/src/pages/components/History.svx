@@ -1,0 +1,179 @@
+---
+description: createHistory keeps an undo and redo timeline for commands or state snapshots, folds a drag or a burst of typing into one step, and historyKeys binds it to the keyboard.
+---
+
+<script>
+</script>
+
+`createHistory` keeps a timeline of steps. Each step is a pair of functions, so
+one history serves edits you describe as commands and edits you capture as
+whole states. `historyKeys` is an action that binds Command or Control + Z to
+it, and decides what happens when focus is in a text field that has an undo of
+its own. Neither touches the DOM, so both are safe to import on the server.
+
+```js
+import { createHistory, historyKeys } from "carbon-components-svelte";
+
+const history = createHistory({ limit: 100, coalesceMs: 500 });
+const { canUndo, canRedo, undoLabel } = history;
+```
+
+```svelte
+<div use:historyKeys={history}>
+  <button disabled={!$canUndo} on:click={() => history.undo()}>
+    Undo {$undoLabel}
+  </button>
+</div>
+```
+
+## Commands
+
+Describe a change as a pair of functions and record it with `run`, which calls
+`do` and then keeps the step. Use `push` when the change has already happened,
+such as one made by a drag. A new step after an undo drops the steps that were
+undone. The `label` names the step, so a button can read "Undo move Ada up".
+
+Make `do` and `undo` set absolute values, as the example does: the list after
+the change, and the list before it. A step that holds its own copy of both
+sides stays correct however many steps come before it.
+
+<FileSource src="/framed/History/HistoryCommands" />
+
+## Snapshots
+
+When the state is a value you can keep, such as a form's values, record each
+state after a change with `snapshots`. Undo applies the state before the step
+and redo applies the state after it. Treat states as immutable and build each
+one from the last with a spread, so a step shares everything that did not
+change and costs only what moved. Recording a state equal to the current one
+adds nothing (compared with `Object.is`, or the `equals` you pass), which is
+also why a reactive statement that records after every update does not record
+an undo again. A control that echoes an event when you set its value from
+script, such as the `check` event of `Checkbox`, hands you a new object with
+the same fields: compare before you record, as the example does.
+
+Typing is the case for `key`. Steps with the same key that arrive within
+`coalesceMs` fold into one, so a burst of typing in a field is one step and a
+pause starts a new one, the way the browser's own undo groups it. Choose how
+Command or Control + Z behaves inside the text fields with the selector.
+
+<FileSource src="/framed/History/HistorySnapshots" />
+
+### Large states
+
+`record` takes the state after the change, so building it costs time and memory
+for every keystroke. For a state too large for that, such as a rich text
+document held as a string, set `capture` and call `checkpoint` before the
+change instead. It reads the state only when a step starts, so a folded
+keystroke costs a timestamp check, and redo reads the state again when you
+undo.
+
+```js
+const doc = history.snapshots({
+  initial: editor.innerHTML,
+  capture: () => editor.innerHTML,
+  apply: (html) => (editor.innerHTML = html),
+  cost: (html) => html.length,
+});
+
+editor.addEventListener("beforeinput", () =>
+  doc.checkpoint({ key: "typing", label: "typing" }),
+);
+```
+
+## Gestures
+
+A drag sends dozens of changes and should undo as one. Two tools cover it.
+
+| Tool | Use it when | Why |
+| --- | --- | --- |
+| `key` on each step | The steps are absolute (set the opacity to 40) and arrive in a burst. | A folded step keeps the first `undo` and the last `do`, so a million steps hold one step's memory. |
+| `begin()` and `commit()` | The steps are relative (move by 4), or you want the drag to end the step instead of a pause. | A group composes every step in order, and undoes them in reverse. |
+
+`cancel()` ends the group and undoes what it recorded, with nothing left to
+redo. Use it for Escape during a drag. While a group is open, `undo()` and
+`redo()` do nothing, so a key pressed mid-drag cannot take back a step the
+drag depends on. `transaction(label, fn)` wraps the three calls: it commits
+when `fn` returns and cancels when it throws.
+
+Drag the slider, then undo: the whole drag comes back as one step. Press
+<DocKbd label="Escape" /> during a drag to put the value back.
+
+<FileSource src="/framed/History/HistoryGesture" />
+
+## Keyboard
+
+`historyKeys` listens for keydown inside the element it is on, so a page with
+more than one history gives each its own container. A handled key calls
+`preventDefault`, so the browser's undo stays out of the way.
+
+The keys reach the element only while focus is inside it, and focus does not
+always stay. Removing or moving the focused element drops focus to the page,
+and Safari does not focus a checkbox or a button when it is clicked. Either
+way the next Command + Z goes nowhere. Keep focus in the container, as the
+commands example does after a delete, or set `scope: "document"` to listen to
+every key on the page. Use the document for the one history that owns the
+page, as the snapshots example does.
+
+| Platform | Undo | Redo |
+| --- | --- | --- |
+| macOS and iOS | <DocKbd label="Command" />+<DocKbd label="Z" /> | <DocKbd label="Command" />+<DocKbd label="Shift" />+<DocKbd label="Z" /> |
+| Windows and Linux | <DocKbd label="Control" />+<DocKbd label="Z" /> | <DocKbd label="Control" />+<DocKbd label="Shift" />+<DocKbd label="Z" /> or <DocKbd label="Control" />+<DocKbd label="Y" /> |
+
+Control + Y is not bound on macOS, where text fields use it to paste the last
+text cut with Control + K. A key pressed during an IME composition, or one
+another handler already prevented, is left alone. A held key repeats.
+
+## Text fields
+
+A text field has an undo stack of its own, and Command or Control + Z there
+belongs to it unless you say otherwise. The `fields` option decides.
+
+| `fields` | Command or Control + Z in a text field | Use it when |
+| --- | --- | --- |
+| `"native"` (default) | The browser undoes its own typing. The history is untouched. | The field is a plain input and the history tracks other things. |
+| `"fallthrough"` | The browser tries first. If it had nothing to undo, the history undoes a step. | The history records the field only when the user commits it, on blur or on Enter. |
+| `"app"` | The history undoes a step. The browser's undo never runs. | The history records every edit in the field, as the snapshots example does. |
+
+Outside a text field, which includes a read-only field, a checkbox, a select
+and a button, the history always handles the key.
+
+| Do | Why |
+| --- | --- |
+| Keep the default `"native"` when the history does not record typing. | The browser undoes typing correctly. Taking the key would leave typed text nobody can undo. |
+| Use `"app"` when the history records typing, and write edits through `value` and an `input` event. | Two undo stacks over one field disagree: the browser undoes text the history still counts. |
+| Keep scripted edits to a field you leave to the browser in `execCommand("insertText")`. | Setting `value` or calling `setRangeText` clears the browser's undo stack for that field. |
+| Do not split one form between the two. | In Chromium and WebKit the browser keeps one undo stack for the whole page, so Command + Z in an untouched field can undo typing in another. |
+
+## Limits
+
+`limit` keeps the newest steps (100 by default). Set `maxCost` and give steps a
+`cost`, such as a string's length, to cap memory when states differ in size;
+the newest step always stays. Steps hold what they close over, so a history of
+snapshots holds the states and a history of commands holds the closures: about
+200 bytes a step for commands, and for snapshots the part of each state that
+changed, about 8 kB a step for a 1,000-row list.
+
+## Announcements
+
+Pressing the key gives a screen reader nothing to hear on its own. Pass
+`announce` and the history calls it after every undo and redo with a message
+such as "Undid move Ada up". Send it to a live region, or to the shared
+announcer.
+
+```js
+const history = createHistory({
+  announce: (message) => announce(message, { channel: "history" }),
+  undoneText: (label) => `Undid ${label ?? "the last change"}`,
+  redoneText: (label) => `Redid ${label ?? "the last change"}`,
+});
+```
+
+The history keeps no language of its own beyond the two English defaults, so
+pass translated functions to `undoneText` and `redoneText`.
+
+## Server rendering
+
+Both are safe to import and call on the server. `createHistory` is plain data
+and `svelte/store`, and an action never runs there. A history made at module
+level is shared by every request, so make one per component instance.
