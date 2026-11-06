@@ -13,8 +13,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { compile } from "mdsvex";
 import { compilerDiagnostics, typecheck } from "svelte-typecheck";
-import { visit } from "unist-util-visit";
 import { PAGE_EXTENSION } from "./constants";
+import { visit } from "./visit";
 
 const DOCS = path.resolve(import.meta.dirname, "..");
 const PAGES = path.join(DOCS, "src/pages");

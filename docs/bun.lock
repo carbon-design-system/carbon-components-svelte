@@ -19,7 +19,6 @@
         "prismjs": "^1.30.0",
         "rehype-slug": "^6.0.0",
         "svelte": "^5.57.3",
-        "unist-util-visit": "^5.2.0",
         "vite": "^8.3.5",
       },
     },
@@ -265,13 +264,13 @@
 
     "undici": ["undici@7.24.5", "", {}, "sha512-3IWdCpjgxp15CbJnsi/Y9TCDE7HWVN19j1hmzVhoAkY/+CJx449tVxT5wZc1Gwg8J+P0LWvzlBzxYRnHJ+1i7Q=="],
 
-    "unist-util-is": ["unist-util-is@6.0.1", "", { "dependencies": { "@types/unist": "^3.0.0" } }, "sha512-LsiILbtBETkDz8I9p1dQ0uyRUWuaQzd/cuEeS1hoRSyW5E5XGmTzlwY1OrNzzakGowI9Dr/I8HVaw4hTtnxy8g=="],
+    "unist-util-is": ["unist-util-is@4.1.0", "", {}, "sha512-ZOQSsnce92GrxSqlnEEseX0gi7GH9zTJZ0p9dtu87WRb/37mMPO2Ilx1s/t9vBHrFhbgweUwb+t7cIn5dxPhZg=="],
 
     "unist-util-stringify-position": ["unist-util-stringify-position@2.0.3", "", { "dependencies": { "@types/unist": "^2.0.2" } }, "sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g=="],
 
-    "unist-util-visit": ["unist-util-visit@5.2.0", "", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.1.0" } }, "sha512-fpsYs/VVoZxfGY9/j3FQpZmN8wdLJaV1Pt38AaJNZu9uKIHcFU3halCdBveEq1HGKO1OEfJY65w1zvoFV1b3qQ=="],
+    "unist-util-visit": ["unist-util-visit@2.0.3", "", { "dependencies": { "@types/unist": "^2.0.0", "unist-util-is": "^4.0.0", "unist-util-visit-parents": "^3.0.0" } }, "sha512-iJ4/RczbJMkD0712mGktuGpm/U4By4FfDonL7N/9tATGIF4imikjOuagyMY53tnZq3NP6BcmlrHhEKAfGWjh7Q=="],
 
-    "unist-util-visit-parents": ["unist-util-visit-parents@6.1.0", "", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-vKXxz6O38sKDj1mtx/k2cWvkkFBuYGx6uGrlzBkVeWCRF/F8sdI0j3Wbkz/5rVNRRuVc8UrgRdbCxNhmYXgP3w=="],
+    "unist-util-visit-parents": ["unist-util-visit-parents@3.1.1", "", { "dependencies": { "@types/unist": "^2.0.0", "unist-util-is": "^4.0.0" } }, "sha512-1KROIZWo6bcMrZEwiH2UrXDyalAa0uqzWCxCJj6lPOvTve2WkfgCytoDTPaMnodXh1WrXOq0haVYHj99ynJlsg=="],
 
     "universalify": ["universalify@2.0.1", "", {}, "sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw=="],
 
@@ -293,20 +292,24 @@
 
     "mdsvex/@types/unist": ["@types/unist@2.0.11", "", {}, "sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA=="],
 
-    "mdsvex/unist-util-visit": ["unist-util-visit@2.0.3", "", { "dependencies": { "@types/unist": "^2.0.0", "unist-util-is": "^4.0.0", "unist-util-visit-parents": "^3.0.0" } }, "sha512-iJ4/RczbJMkD0712mGktuGpm/U4By4FfDonL7N/9tATGIF4imikjOuagyMY53tnZq3NP6BcmlrHhEKAfGWjh7Q=="],
-
     "parse5/entities": ["entities@6.0.1", "", {}, "sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g=="],
 
     "prompts/kleur": ["kleur@3.0.3", "", {}, "sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w=="],
+
+    "rehype-slug/unist-util-visit": ["unist-util-visit@5.2.0", "", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0", "unist-util-visit-parents": "^6.1.0" } }, "sha512-fpsYs/VVoZxfGY9/j3FQpZmN8wdLJaV1Pt38AaJNZu9uKIHcFU3halCdBveEq1HGKO1OEfJY65w1zvoFV1b3qQ=="],
 
     "svelte/magic-string": ["magic-string@0.30.21", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.5" } }, "sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ=="],
 
     "unist-util-stringify-position/@types/unist": ["@types/unist@2.0.11", "", {}, "sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA=="],
 
+    "unist-util-visit/@types/unist": ["@types/unist@2.0.11", "", {}, "sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA=="],
+
+    "unist-util-visit-parents/@types/unist": ["@types/unist@2.0.11", "", {}, "sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA=="],
+
     "vfile-message/@types/unist": ["@types/unist@2.0.11", "", {}, "sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA=="],
 
-    "mdsvex/unist-util-visit/unist-util-is": ["unist-util-is@4.1.0", "", {}, "sha512-ZOQSsnce92GrxSqlnEEseX0gi7GH9zTJZ0p9dtu87WRb/37mMPO2Ilx1s/t9vBHrFhbgweUwb+t7cIn5dxPhZg=="],
+    "rehype-slug/unist-util-visit/unist-util-is": ["unist-util-is@6.0.1", "", { "dependencies": { "@types/unist": "^3.0.0" } }, "sha512-LsiILbtBETkDz8I9p1dQ0uyRUWuaQzd/cuEeS1hoRSyW5E5XGmTzlwY1OrNzzakGowI9Dr/I8HVaw4hTtnxy8g=="],
 
-    "mdsvex/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@3.1.1", "", { "dependencies": { "@types/unist": "^2.0.0", "unist-util-is": "^4.0.0" } }, "sha512-1KROIZWo6bcMrZEwiH2UrXDyalAa0uqzWCxCJj6lPOvTve2WkfgCytoDTPaMnodXh1WrXOq0haVYHj99ynJlsg=="],
+    "rehype-slug/unist-util-visit/unist-util-visit-parents": ["unist-util-visit-parents@6.1.0", "", { "dependencies": { "@types/unist": "^3.0.0", "unist-util-is": "^6.0.0" } }, "sha512-vKXxz6O38sKDj1mtx/k2cWvkkFBuYGx6uGrlzBkVeWCRF/F8sdI0j3Wbkz/5rVNRRuVc8UrgRdbCxNhmYXgP3w=="],
   }
 }
