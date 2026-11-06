@@ -21,7 +21,7 @@
   {selectedId}
   clearable
   labelText="Contact"
-  label="Choose a contact method"
+  placeholder="Choose a contact method"
 />
 
 <button type="button" on:click={() => dropdownRef?.clear(clearOptions)}>

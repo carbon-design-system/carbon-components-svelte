@@ -20,7 +20,7 @@
 
 <Dropdown
   labelText="Contact"
-  label="Select a contact method"
+  placeholder="Select a contact method"
   {items}
   {loading}
   on:open={handleOpen}

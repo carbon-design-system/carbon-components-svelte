@@ -11,7 +11,7 @@
 <Dropdown
   data-testid="dropdown-contact"
   labelText="Contact"
-  label="Choose an option"
+  placeholder="Choose an option"
   {items}
 />
 
@@ -20,7 +20,7 @@
     fluid
     data-testid="dropdown-fluid-neutral-select"
     labelText="Channel"
-    label="Choose a channel"
+    placeholder="Choose a channel"
     {items}
   />
 </div>

@@ -29,9 +29,9 @@ Control which item is selected through `selectedId`.
 
 ### No selection
 
-Omit `selectedId` to render the dropdown with no item selected. The label appears as placeholder text until the user makes a selection.
+Omit `selectedId` to render the dropdown with no item selected. Set `placeholder` to the text shown until the user makes a selection.
 
-<Dropdown labelText="Contact" label="Choose a contact method" items="{[{id: "0", text: "Slack"},
+<Dropdown labelText="Contact" placeholder="Choose a contact method" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -41,7 +41,7 @@ Set `clearable` to `true` to show a clear button when an item is selected. Clear
 
 A long selected label truncates with an ellipsis before the clear button instead of running underneath it.
 
-<Dropdown clearable labelText="Contact" selectedId="1" label="Choose a contact method" items={[
+<Dropdown clearable labelText="Contact" selectedId="1" placeholder="Choose a contact method" items={[
   { id: "0", text: "Slack" },
   { id: "1", text: "A very long contact method name that fills the field" },
   { id: "2", text: "Fax" },
@@ -77,7 +77,7 @@ By default, the menu is closed after clearing the selection.
 
 Set `openOnClear` to `true` to reopen the menu after clearing the selection. This lets users immediately browse all available items without needing to click the field again.
 
-<Dropdown openOnClear clearable labelText="Contact" label="Choose a contact method" selectedId="0" items="{[{id: "0", text: "Slack"},
+<Dropdown openOnClear clearable labelText="Contact" placeholder="Choose a contact method" selectedId="0" items="{[{id: "0", text: "Slack"},
   {id: "1", text: "Email"},
   {id: "2", text: "Fax"}]}" />
 
@@ -165,7 +165,7 @@ Set `group` on items to list them under a non-selectable header. Items without a
 
 Each group is exposed to screen readers as a group named by its label. The selection is still a single id.
 
-<Dropdown labelText="Region" label="Select a region"
+<Dropdown labelText="Region" placeholder="Select a region"
   items="{[{id: "0", text: "Frankfurt", group: "Europe"},
     {id: "1", text: "Toronto", group: "Americas"},
     {id: "2", text: "London", group: "Europe"},
@@ -177,7 +177,7 @@ Each group is exposed to screen readers as a group named by its label. The selec
 
 Override the `group` slot to customize a header. Use `let:group` for the label and `let:items` for the group's items. The slot changes the visible header only; screen readers still announce the plain label.
 
-<Dropdown labelText="Region" label="Select a region"
+<Dropdown labelText="Region" placeholder="Select a region"
   items="{[{id: "0", text: "Frankfurt", group: "Europe"},
     {id: "1", text: "Toronto", group: "Americas"},
     {id: "2", text: "London", group: "Europe"},
@@ -243,11 +243,11 @@ When `items` is empty, the open menu shows "No options". `loading` holds the mes
 
 Set `emptyText` to change the message, or set it to `""` to leave the menu empty instead.
 
-<Dropdown labelText="Contact" label="Select a contact method" emptyText="No contact methods yet" items={[]} />
+<Dropdown labelText="Contact" placeholder="Select a contact method" emptyText="No contact methods yet" items={[]} />
 
 Use the `empty` slot for richer content. The slot changes the visible row only; screen readers still hear `emptyText`.
 
-<Dropdown labelText="Contact" label="Select a contact method" emptyText="No contact methods yet" items={[]}>
+<Dropdown labelText="Contact" placeholder="Select a contact method" emptyText="No contact methods yet" items={[]}>
   <svelte:fragment slot="empty">
     No contact methods yet. Add one in Settings.
   </svelte:fragment>

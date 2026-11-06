@@ -180,10 +180,10 @@
   export let condensed = false;
 
   /**
-   * Specify the list box label.
+   * Specify the text shown when no item is selected.
    * @type {string | undefined}
    */
-  export let label = undefined;
+  export let placeholder = undefined;
 
   /** Set to `true` to visually hide the label text */
   export let hideLabel = false;
@@ -1146,7 +1146,7 @@
           {#if selectedItem}
             {itemToString(selectedItem)}
           {:else}
-            {label ?? ""}
+            {placeholder ?? ""}
           {/if}
         </span>
         {#if clearable && selectedId !== undefined}

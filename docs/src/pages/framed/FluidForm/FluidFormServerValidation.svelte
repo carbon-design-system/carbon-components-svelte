@@ -77,7 +77,7 @@
   <Dropdown
     name="region"
     labelText="Deployment region"
-    label="Choose a region"
+    placeholder="Choose a region"
     items={regions}
     bind:selectedId={region}
     invalid={!!errors.region}
