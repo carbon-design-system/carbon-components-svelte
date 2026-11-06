@@ -53,21 +53,35 @@ export function sidePlacement(
 ): string;
 
 /**
- * How far to slide `el` sideways so it sits at least `margin` px (8 by
- * default) inside the window, measured as if `applied` px weren't applied.
- * A box with no layout (zero size), or a window with none, keeps `applied`.
+ * How far to slide `el` sideways (`axis` `"x"`, the default) or up and down
+ * (`"y"`) so it sits at least `margin` px (8 by default) inside the window,
+ * measured as if `applied` px weren't applied. A box with no layout (zero
+ * size), or a window with none, keeps `applied`.
  */
 export function windowShift(
   el: Element,
   applied: number,
   margin?: number,
+  axis?: "x" | "y",
 ): number;
 
 /**
- * Keeps a portalled tooltip's body inside the window while the tooltip
- * sits above or below its anchor: slides it sideways by `windowShift` each
- * time the portal places it or the body resizes. The caret, a sibling,
- * stays on the anchor.
+ * Limits a slide so the caret's center stays at least `inset` px inside the
+ * body, or no closer than it already was before the slide.
+ */
+export function keepCaretInset(
+  shift: number,
+  start: number,
+  end: number,
+  caret: number,
+  inset: number,
+): number;
+
+/**
+ * Keeps a portalled tooltip's body inside the window: slides it sideways
+ * when the tooltip sits above or below its anchor, and up or down when it
+ * sits beside it, by `windowShift` each time the portal places it or the
+ * body resizes. The caret, a sibling, stays on the anchor.
  */
 export function slideIntoWindow(node: HTMLElement): { destroy(): void };
 
