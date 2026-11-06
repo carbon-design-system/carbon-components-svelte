@@ -283,6 +283,7 @@ export { default as TreeView } from "./TreeView/TreeView.svelte";
 export { default as TreeViewSkeleton } from "./TreeView/TreeViewSkeleton.svelte";
 export { default as Truncate } from "./Truncate/Truncate.svelte";
 export { truncate } from "./Truncate/truncate.js";
+export { default as TruncatedList } from "./TruncatedList/TruncatedList.svelte";
 export { default as Content } from "./UIShell/Content.svelte";
 export { default as Header } from "./UIShell/Header.svelte";
 export { default as HeaderAction } from "./UIShell/HeaderAction.svelte";
@@ -330,6 +331,7 @@ export {
 } from "./utils/filter-tree-nodes.js";
 export { floatingPosition } from "./utils/floating-position.js";
 export { formReset } from "./utils/form-reset.js";
+export { formatListParts } from "./TruncatedList/format-list-parts.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";

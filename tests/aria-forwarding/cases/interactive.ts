@@ -35,6 +35,7 @@ import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
+import TruncatedList from "carbon-components-svelte/TruncatedList/TruncatedList.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import type { AriaEntry } from "../contract";
@@ -748,5 +749,18 @@ export const interactive: AriaEntry[] = [
       render(Truncate, { props: { reveal: "tooltip", ...attrs } }),
     target: (result) =>
       result.container.querySelector<HTMLElement>("p") as HTMLElement,
+  },
+  {
+    // A naming attribute makes the list a group; the "more" button keeps its
+    // own visible name.
+    name: "TruncatedList",
+    render: (attrs) =>
+      render(TruncatedList, {
+        props: { items: ["Ada", "Grace", "Alan"], max: 2, ...attrs },
+      }),
+    target: (result) =>
+      result.container.querySelector<HTMLElement>(
+        ".bx--truncated-list",
+      ) as HTMLElement,
   },
 ];

@@ -8,6 +8,11 @@ const relativeTimeCache = new BoundedFifoCache(32);
 /** @type {BoundedFifoCache<string, Intl.DateTimeFormat>} */
 const dateTimeCache = new BoundedFifoCache(32);
 
+/** @type {BoundedFifoCache<string, Intl.ListFormat>} */
+const listCache = new BoundedFifoCache(32);
+/** @type {BoundedFifoCache<string, Intl.PluralRules>} */
+const pluralCache = new BoundedFifoCache(32);
+
 /**
  * @param {string | undefined} locale
  * @param {object | undefined} options
@@ -64,4 +69,22 @@ export function getRelativeTimeFormatter(locale, options) {
  */
 export function getDateTimeFormatter(locale, options) {
   return getCached(dateTimeCache, Intl.DateTimeFormat, locale, options);
+}
+
+/**
+ * @param {string | undefined} locale
+ * @param {Intl.ListFormatOptions} [options]
+ * @returns {Intl.ListFormat}
+ */
+export function getListFormatter(locale, options) {
+  return getCached(listCache, Intl.ListFormat, locale, options);
+}
+
+/**
+ * @param {string | undefined} locale
+ * @param {Intl.PluralRulesOptions} [options]
+ * @returns {Intl.PluralRules}
+ */
+export function getPluralRules(locale, options) {
+  return getCached(pluralCache, Intl.PluralRules, locale, options);
 }
