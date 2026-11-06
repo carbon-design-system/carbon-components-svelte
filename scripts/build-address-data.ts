@@ -1,0 +1,253 @@
+/**
+ * Writes src/AddressForm/address-data.js and address-regions.js from
+ * Google's libaddressinput address data (Chromium i18n address data).
+ *
+ *   bun scripts/build-address-data.ts
+ *
+ * Pass `--all <dir>` to also write the full table (every country, formats
+ * only) to <dir>/address-data-all.js, which the repo does not ship.
+ *
+ * The code of libaddressinput is licensed under Apache 2.0. Its data is
+ * licensed under CC BY 4.0, so the generated files carry the attribution.
+ * https://github.com/google/libaddressinput
+ */
+import { mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+const BASE =
+  "https://www.gstatic.com/chrome/autofill/libaddressinput/chromium-i18n/ssl-address/data";
+
+/** About 40 countries, by how often a checkout meets them. */
+const COUNTRIES = (
+  "AE AR AT AU BE BR CA CH CL CN CO DE DK ES FI FR GB HK ID IE IL IN IT JP KR MX " +
+  "NL NO NZ PH PL PT RU SA SE SG TH TR US ZA"
+).split(" ");
+
+/** Countries whose region list ships in the core table. */
+const REGION_LISTS = ["US", "CA", "AU", "BR", "MX", "IN", "JP", "AE"];
+
+/**
+ * What the table adds or corrects. Each entry says why.
+ *
+ * - `fmt`/`lfmt`/`require` for JP: libaddressinput has no city line for
+ *   Japan (the street address holds the municipality). Checkouts ask for
+ *   the city (市区町村), so the table adds it.
+ * - `zipType`: libaddressinput names only zip, postal, pin and eircode.
+ *   People in these countries know the postal code by its own name.
+ * - `norm`: where the separator goes, so a typed "sw1a1aa" becomes
+ *   "SW1A 1AA". A positive number counts from the start, a negative one
+ *   from the end.
+ */
+const PATCH: Record<string, Record<string, unknown>> = {
+  JP: {
+    fmt: "〒%Z%n%S%C%n%A%n%O%n%N",
+    lfmt: "%N%n%O%n%A%n%C, %S%n%Z",
+    require: "ACSZ",
+    norm: [3, "-"],
+  },
+  GB: { zipType: "postcode", norm: [-3, " "] },
+  AU: { zipType: "postcode" },
+  NZ: { zipType: "postcode" },
+  NL: { zipType: "postcode", norm: [4, " "] },
+  DE: { zipType: "plz" },
+  AT: { zipType: "plz" },
+  CH: { zipType: "plz" },
+  BR: { zipType: "cep", subType: "bairro", norm: [5, "-"] },
+  US: { norm: [5, "-"] },
+  CA: { norm: [3, " "] },
+  IE: { norm: [3, " "] },
+  SE: { norm: [3, " "] },
+  PL: { norm: [2, "-"] },
+  PT: { norm: [4, "-"] },
+};
+
+const DEFAULTS = {
+  require: "AC",
+  upper: "C",
+  zipType: "postal",
+  stateType: "province",
+  localityType: "city",
+  subType: "suburb",
+} as const;
+
+interface Raw {
+  fmt?: string;
+  lfmt?: string;
+  require?: string;
+  upper?: string;
+  zip?: string;
+  zipex?: string;
+  zip_name_type?: string;
+  state_name_type?: string;
+  locality_name_type?: string;
+  sublocality_name_type?: string;
+  sub_keys?: string;
+  sub_names?: string;
+  sub_lnames?: string;
+}
+
+async function load(code: string): Promise<Raw> {
+  const response = await fetch(`${BASE}/${code}`);
+  if (!response.ok) throw new Error(`${code}: ${response.status}`);
+  return (await response.json()) as Raw;
+}
+
+function entry(raw: Raw, code: string) {
+  const patch = PATCH[code] ?? {};
+  const out: Record<string, unknown> = { fmt: raw.fmt, ...patch };
+  if (raw.lfmt && !("lfmt" in out)) out.lfmt = raw.lfmt;
+  const pairs: [string, unknown, unknown][] = [
+    ["require", raw.require, DEFAULTS.require],
+    ["upper", raw.upper, DEFAULTS.upper],
+    ["zipType", raw.zip_name_type, DEFAULTS.zipType],
+    ["stateType", raw.state_name_type, DEFAULTS.stateType],
+    ["localityType", raw.locality_name_type, DEFAULTS.localityType],
+    ["subType", raw.sublocality_name_type, DEFAULTS.subType],
+  ];
+  for (const [key, value, fallback] of pairs) {
+    if (value !== undefined && value !== fallback && !(key in out)) {
+      out[key] = value;
+    }
+  }
+  if (raw.zip) out.zip = raw.zip;
+  if (raw.zipex) out.zipex = raw.zipex.split(",")[0];
+  return Object.fromEntries(
+    Object.entries(out).sort(([a], [b]) => order(a) - order(b)),
+  );
+}
+
+const KEYS = [
+  "fmt",
+  "lfmt",
+  "require",
+  "upper",
+  "zip",
+  "zipex",
+  "zipType",
+  "stateType",
+  "localityType",
+  "subType",
+  "norm",
+];
+const order = (key: string) => KEYS.indexOf(key);
+
+const TRAILING_BARS = /\|+$/;
+
+function regions(raw: Raw) {
+  if (!raw.sub_keys) return undefined;
+  const keys = raw.sub_keys.split("~");
+  const names = raw.sub_names?.split("~") ?? [];
+  const latin = raw.sub_lnames?.split("~") ?? [];
+  return keys
+    .map((key, i) =>
+      [key, names[i] && names[i] !== key ? names[i] : "", latin[i] ?? ""]
+        .join("|")
+        .replace(TRAILING_BARS, ""),
+    )
+    .join("~");
+}
+
+const NOTICE = `// Address formats derived from the address data of Google's libaddressinput
+// (https://github.com/google/libaddressinput), licensed under CC BY 4.0
+// (https://creativecommons.org/licenses/by/4.0/). The data was reduced to
+// the fields this table uses and patched in places; see
+// scripts/build-address-data.ts for each change.
+// Generated by scripts/build-address-data.ts. Do not edit.
+`;
+
+const json = (value: unknown) => JSON.stringify(value, null, 2);
+
+const [, , flag, allDir] = process.argv;
+
+const rows = await Promise.all(
+  COUNTRIES.map(async (c) => [c, await load(c)] as const),
+);
+const formats = Object.fromEntries(rows.map(([c, raw]) => [c, entry(raw, c)]));
+const subdivisions = Object.fromEntries(
+  rows.flatMap(([c, raw]) => {
+    const value = REGION_LISTS.includes(c) ? regions(raw) : undefined;
+    return value ? [[c, value]] : [];
+  }),
+);
+
+const defaultRaw = await load("ZZ");
+writeFileSync(
+  "src/AddressForm/address-data.js",
+  `// @ts-check
+${NOTICE}
+/**
+ * @typedef {Object} AddressFormat
+ * @property {string} fmt The format string. \`%N\` name, \`%O\` organization,
+ * \`%A\` address lines, \`%D\` dependent locality, \`%C\` locality, \`%S\` region,
+ * \`%Z\` postal code, \`%X\` sorting code, \`%n\` a new line.
+ * @property {string} [lfmt] The format string in Latin script, where it differs.
+ * @property {string} [require] Letters of the fields a country requires.
+ * @property {string} [upper] Letters of the fields a postal label writes in capitals.
+ * @property {string} [zip] Source of the postal code pattern.
+ * @property {string} [zipex] A sample postal code.
+ * @property {string} [zipType] \`zip\`, \`postal\`, \`pin\`, \`eircode\`, \`postcode\`, \`plz\` or \`cep\`.
+ * @property {string} [stateType] What the region is called: \`state\`, \`province\`, \`prefecture\`...
+ * @property {string} [localityType] What the locality is called: \`city\`, \`post_town\`, \`district\`...
+ * @property {string} [subType] What the dependent locality is called.
+ * @property {[number, string]} [norm] Where the separator of a postal code goes, and what it is.
+ */
+
+/** @type {Required<Pick<AddressFormat, "fmt" | "require" | "upper" | "zipType" | "stateType" | "localityType" | "subType">>} */
+export const DEFAULT_ADDRESS_FORMAT = ${json({
+    fmt: defaultRaw.fmt,
+    ...DEFAULTS,
+  })};
+
+/** @type {Record<string, AddressFormat>} */
+export const ADDRESS_FORMATS = ${json(formats)};
+`,
+);
+
+writeFileSync(
+  "src/AddressForm/address-regions.js",
+  `// @ts-check
+${NOTICE}
+/**
+ * Regions by country, as \`key|name|latin name\` joined by \`~\`. A missing name
+ * is the key. Read them through \`getRegions\`.
+ * @type {Record<string, string>}
+ */
+export const ADDRESS_REGIONS = ${json(subdivisions)};
+`,
+);
+
+if (flag === "--all" && allDir) {
+  mkdirSync(allDir, { recursive: true });
+  const index = await fetch(
+    "https://chromium-i18n.appspot.com/ssl-address/data",
+  );
+  const list = ((await index.json()) as { countries: string }).countries.split(
+    "~",
+  );
+  const all: Record<string, unknown> = {};
+  const allRegions: Record<string, string> = {};
+  for (const code of list) {
+    // The index lists a few codes, such as KP, that have no data of their own.
+    // eslint-disable-next-line no-await-in-loop -- one request at a time, to be gentle on the server
+    const raw = await load(code).catch(() => undefined);
+    if (!raw) continue;
+    all[code] = entry(raw, code);
+    const value = regions(raw);
+    if (value) allRegions[code] = value;
+  }
+  writeFileSync(
+    join(allDir, "address-regions-all.json"),
+    JSON.stringify(allRegions),
+  );
+  writeFileSync(
+    join(allDir, "address-data-all.js"),
+    `${NOTICE}\nexport const ADDRESS_FORMATS_ALL = ${JSON.stringify(all)};\n`,
+  );
+  console.log(
+    `[build-address-data] wrote ${list.length} countries to ${allDir}`,
+  );
+}
+
+console.log(
+  `[build-address-data] ${COUNTRIES.length} countries, ${Object.keys(subdivisions).length} with regions`,
+);
