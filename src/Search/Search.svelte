@@ -268,6 +268,7 @@
     dispatchSearch =
       debounce > 0
         ? debounceFn(
+            /** @param {unknown} searchValue */
             (searchValue) => dispatch("search", searchValue ?? ""),
             debounce,
           )

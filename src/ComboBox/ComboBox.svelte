@@ -683,11 +683,14 @@
   /** @type {number | null} */
   let announcedFilterCount = null;
 
-  const announceFilterResults = debounce((count) => {
-    if (count === announcedFilterCount) return;
-    announcedFilterCount = /** @type {number} */ (count);
-    announceStatus(filterResultsText(/** @type {number} */ (count)));
-  }, 800);
+  const announceFilterResults = debounce(
+    /** @param {number} count */ (count) => {
+      if (count === announcedFilterCount) return;
+      announcedFilterCount = count;
+      announceStatus(filterResultsText(count));
+    },
+    800,
+  );
 
   /**
    * Clear the combo box programmatically.

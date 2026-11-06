@@ -199,7 +199,11 @@
     dispatchSearch?.cancel();
     dispatchSearch =
       debounce > 0
-        ? debounceFn((searchValue) => dispatch("search", searchValue), debounce)
+        ? debounceFn(
+            /** @param {unknown} searchValue */
+            (searchValue) => dispatch("search", searchValue),
+            debounce,
+          )
         : null;
   }
 
