@@ -126,9 +126,12 @@ export function goto(to: string, options: NavigateOptions = {}) {
   if (options.query) url.search = new URLSearchParams(options.query).toString();
   for (const callback of beforeNavigateCallbacks) callback();
   // Remember where the page was scrolled, for the back button.
-  history.replaceState({ ...history.state, ...currentScroll() }, "");
-  if (options.replace) history.replaceState(null, "", url);
-  else history.pushState(null, "", url);
+  const scroll = currentScroll();
+  if (entry) scrolls.set(entry, scroll);
+  history.replaceState({ ...history.state, ...scroll }, "");
+  entry = newEntryKey();
+  if (options.replace) history.replaceState({ key: entry }, "", url);
+  else history.pushState({ key: entry }, "", url);
   location.set(read());
 }
 
@@ -137,6 +140,36 @@ type SavedScroll = {
   /** The first heading on screen, and how far from the top it was. */
   anchor?: { id: string; top: number };
 };
+
+type EntryState = Partial<SavedScroll> & { key?: string };
+
+/**
+ * Where each history entry was scrolled when the reader left it, by the
+ * entry's key. Leaving with the back or forward button can't write to the
+ * entry left, as `history.state` is already the next one's, so the
+ * positions live here; leaving by a link also writes to the entry, which
+ * outlasts a reload.
+ */
+const scrolls = new Map<string, SavedScroll>();
+
+/** The current history entry's key. */
+let entry: string | undefined;
+
+const newEntryKey = () => Math.random().toString(36).slice(2);
+
+/** The current entry's key, giving it one if it has none. */
+function entryKey(): string {
+  const state = history.state as EntryState | null;
+  if (state?.key) return state.key;
+  const key = newEntryKey();
+  history.replaceState({ ...state, key }, "");
+  return key;
+}
+
+/** Remembers where the current entry is scrolled, as the reader leaves it. */
+function leaveEntry() {
+  if (entry) scrolls.set(entry, currentScroll());
+}
 
 /**
  * Where the page is scrolled to, by its first heading on screen as well as
@@ -157,7 +190,9 @@ function currentScroll(): SavedScroll {
 }
 
 function savedScroll(): SavedScroll | undefined {
-  return (history.state as SavedScroll | null) ?? undefined;
+  const state = history.state as EntryState | null;
+  const saved = (state?.key && scrolls.get(state.key)) || state;
+  return saved?.scrollY === undefined ? undefined : (saved as SavedScroll);
 }
 
 /** How long the pointer rests on a link before its page is fetched. */
@@ -188,6 +223,10 @@ function prefetch(next: Route | undefined) {
  */
 export function startRouter() {
   history.scrollRestoration = "manual";
+  entry = entryKey();
+  // A link to a heading on this page adds an entry that the browser
+  // scrolls to before `popstate`, so the entry left is saved here.
+  let leftByHashLink = false;
 
   let hoverTimer: ReturnType<typeof setTimeout> | undefined;
   const onPointerOver = (event: PointerEvent) => {
@@ -215,7 +254,14 @@ export function startRouter() {
     const url = new URL(anchor.href, window.location.href);
     if (url.origin !== window.location.origin) return;
     // A link to a heading on this page: the browser scrolls to it.
-    if (url.pathname === window.location.pathname && url.hash) return;
+    if (url.pathname === window.location.pathname && url.hash) {
+      // The same URL scrolls without adding an entry.
+      if (url.href !== window.location.href) {
+        leaveEntry();
+        leftByHashLink = true;
+      }
+      return;
+    }
     // Files such as `/llms.txt` and `/components/Button.md` load as files.
     if (!routes.has(normalize(url.pathname))) return;
     event.preventDefault();
@@ -223,9 +269,15 @@ export function startRouter() {
   };
   const onPopState = () => {
     for (const callback of beforeNavigateCallbacks) callback();
+    if (!leftByHashLink) leaveEntry();
+    leftByHashLink = false;
+    entry = entryKey();
     location.set(read());
   };
-  const onHashChange = () => location.set(read());
+  const onHashChange = () => {
+    leftByHashLink = false;
+    location.set(read());
+  };
 
   document.addEventListener("click", onClick);
   document.addEventListener("pointerover", onPointerOver, { passive: true });
