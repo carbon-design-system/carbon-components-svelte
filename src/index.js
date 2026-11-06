@@ -324,6 +324,7 @@ export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
 export { announce } from "./utils/announcer.js";
 export { createAsyncSource, createPagedSource } from "./utils/async-source.js";
+export { createAutosave } from "./utils/autosave.js";
 export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
 export {
   applyColumnSettings,
