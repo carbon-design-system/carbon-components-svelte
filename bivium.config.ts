@@ -50,7 +50,8 @@ export default {
       types: false,
     },
   },
-  // The framed DatePicker pages are examples an e2e test renders from `src`.
+  // The framed DatePicker and Gestures pages are examples an e2e test renders
+  // from `src`.
   roots: [
     "src",
     "tests",
@@ -58,6 +59,7 @@ export default {
     "css",
     "scripts",
     "docs/src/pages/framed/DatePicker",
+    "docs/src/pages/framed/Gestures",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
     "docs/src/search.ts",
