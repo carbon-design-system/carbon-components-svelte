@@ -33,13 +33,11 @@ const DOC_KBD_USAGE_RE = /<DocKbd\b/;
 
 const SKIP_PREVIEW_FORMAT = process.env.NODE_ENV === "development";
 
-type PreviewCode = { formattedCode: string; highlightedCode: string };
-
-const previewCodeCache = new Map<string, PreviewCode>();
+const previewCodeCache = new Map<string, string>();
 
 /**
- * Formatted and highlighted example code persists here so a cold build only
- * formats and highlights the examples that changed. Gitignored via `node_modules`.
+ * Formatted example code persists here so a cold build only formats the
+ * examples that changed. Gitignored via `node_modules`.
  */
 const PREVIEW_CODE_CACHE_DIR = path.join(
   __dirname,
@@ -78,33 +76,14 @@ function highlightCodeBlock(code: string, lang: string | null): string {
 
 const formatSvelte = createFormatter("svelte");
 
-function highlightSvelte(formattedCode: string): PreviewCode {
-  const highlightedCode = highlight(formattedCode, "svelte") ?? "";
-  return { formattedCode, highlightedCode };
-}
-
-/**
- * Changing the formatter or the highlighter invalidates every entry.
- */
-const PREVIEW_CODE_CACHE_SALT = JSON.stringify([
-  formatterVersion(),
-  hashKey(
-    fs.readFileSync(path.join(__dirname, "../src/syntax/tokenize.js"), "utf8"),
-  ),
-]);
+/** Changing the formatter invalidates every entry. */
+const PREVIEW_CODE_CACHE_SALT = formatterVersion();
 
 async function readPreviewCodeCache(file: string, key: string) {
   try {
     const entry = JSON.parse(await fs.promises.readFile(file, "utf8"));
-    if (
-      entry?.key === key &&
-      typeof entry.formattedCode === "string" &&
-      typeof entry.highlightedCode === "string"
-    ) {
-      return {
-        formattedCode: entry.formattedCode,
-        highlightedCode: entry.highlightedCode,
-      } as PreviewCode;
+    if (entry?.key === key && typeof entry.formattedCode === "string") {
+      return entry.formattedCode as string;
     }
   } catch {
     // Missing or corrupt entry: format again.
@@ -117,7 +96,7 @@ let previewCodeCacheDirReady: Promise<unknown> | undefined;
 async function writePreviewCodeCache(
   file: string,
   key: string,
-  code: PreviewCode,
+  formattedCode: string,
 ) {
   // Write to a unique temp file, then rename, so parallel builds never see a
   // partial entry.
@@ -127,14 +106,14 @@ async function writePreviewCodeCache(
       recursive: true,
     });
     await previewCodeCacheDirReady;
-    await fs.promises.writeFile(tmp, JSON.stringify({ key, ...code }));
+    await fs.promises.writeFile(tmp, JSON.stringify({ key, formattedCode }));
     await fs.promises.rename(tmp, file);
   } catch {
     await fs.promises.rm(tmp, { force: true }).catch(() => {});
   }
 }
 
-async function formatAndHighlightSvelteCached(source: string) {
+async function formatSvelteCached(source: string) {
   const key = createHash("sha256")
     .update(PREVIEW_CODE_CACHE_SALT, "utf8")
     .update("\0")
@@ -142,24 +121,27 @@ async function formatAndHighlightSvelteCached(source: string) {
     .digest("hex");
   const file = path.join(PREVIEW_CODE_CACHE_DIR, `${key}.json`);
   const cached = await readPreviewCodeCache(file, key);
-  if (cached) return cached;
+  if (cached !== undefined) return cached;
 
-  const out = highlightSvelte(await formatSvelte(source));
-  await writePreviewCodeCache(file, key, out);
-  return out;
+  const formattedCode = await formatSvelte(source);
+  await writePreviewCodeCache(file, key, formattedCode);
+  return formattedCode;
 }
 
-async function formatAndHighlightSvelte(source: string) {
-  const mode = SKIP_PREVIEW_FORMAT ? "raw" : "fmt";
-  const cacheKey = `${mode}:${hashKey(source)}`;
-  const cached = previewCodeCache.get(cacheKey);
-  if (cached) return cached;
-
-  const out = SKIP_PREVIEW_FORMAT
-    ? highlightSvelte(source)
-    : await formatAndHighlightSvelteCached(source);
-  previewCodeCache.set(cacheKey, out);
-  return out;
+/**
+ * An example's code as its code view shows it: formatted in production
+ * builds, as written in dev. `Preview` highlights it in the browser, which
+ * keeps the highlighted markup, most of a page's size, out of the bundle.
+ */
+async function formatPreviewCode(source: string) {
+  if (SKIP_PREVIEW_FORMAT) return source;
+  const cacheKey = hashKey(source);
+  let formatted = previewCodeCache.get(cacheKey);
+  if (formatted === undefined) {
+    formatted = await formatSvelteCached(source);
+    previewCodeCache.set(cacheKey, formatted);
+  }
+  return formatted;
 }
 
 function plugin() {
@@ -191,11 +173,11 @@ function plugin() {
       !node.value.startsWith("<FileSource") &&
       !node.value.startsWith("<script>")
     ) {
-      const { formattedCode, highlightedCode } = await formatAndHighlightSvelte(
+      const formattedCode = await formatPreviewCode(
         exampleSource(node.value, pageScript),
       );
 
-      node.value = `<Preview codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}}>${node.value}</Preview>`;
+      node.value = `<Preview code={${JSON.stringify(formattedCode)}}>${node.value}</Preview>`;
     }
 
     if (node.value.startsWith("<FileSource")) {
@@ -204,10 +186,9 @@ function plugin() {
 
       const filePath = path.join(__dirname, "src/pages", `${src}.svelte`);
       const sourceCode = stripDocsOnly(fs.readFileSync(filePath, "utf-8"));
-      const { formattedCode, highlightedCode } =
-        await formatAndHighlightSvelte(sourceCode);
+      const formattedCode = await formatPreviewCode(sourceCode);
 
-      node.value = `<Preview framed src="${src}" codeRaw={${JSON.stringify(formattedCode)}} code={${JSON.stringify(highlightedCode)}} />`;
+      node.value = `<Preview framed src="${src}" code={${JSON.stringify(formattedCode)}} />`;
     }
   }
 
