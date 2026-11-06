@@ -1844,6 +1844,58 @@ Use `nonSelectableRowIds` to prevent selection of specific rows.
 
 <FileSource src="/framed/DataTable/DataTableNonSelectableRows" />
 
+### Range selection
+
+Set `selectionRange` with `selectable` or `batchSelection` to select rows the way a file browser does.
+
+| Gesture | Effect |
+| --- | --- |
+| Click a row | Select it alone, replacing the selection |
+| <DocKbd label="Ctrl" /> or <DocKbd label="Cmd" /> + click | Toggle the row and keep the rest |
+| <DocKbd label="Shift" /> + click | Select the range from the last row clicked; the anchor stays, so a shorter range shrinks |
+| <DocKbd label="Ctrl" /> or <DocKbd label="Cmd" /> + <DocKbd label="Shift" /> + click | Add the range to the selection |
+
+Without `selectionRange`, clicking the body of a row does nothing to the selection, and <DocKbd label="Shift" /> + click on a checkbox still selects the range.
+
+<FileSource src="/framed/DataTable/DataTableSelectionRange" />
+
+### Keyboard
+
+From a row checkbox, with `selectionRange`:
+
+| Key | Effect |
+| --- | --- |
+| <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> | Move to the checkbox of the previous or next row. The selection does not change |
+| <DocKbd label="Shift" /> + <DocKbd label="ArrowUp" /> or <DocKbd label="ArrowDown" /> | Move and extend the range from the anchor |
+| <DocKbd label="Home" /> and <DocKbd label="End" /> | Move to the first or last row, scrolling a virtualized table to it. With <DocKbd label="Shift" /> they extend |
+| <DocKbd label="Space" /> | Toggle the row, as a checkbox does |
+| <DocKbd label="Ctrl" /> or <DocKbd label="Cmd" /> + <DocKbd label="A" /> | Select every selectable row that matches the filter |
+| <DocKbd label="Escape" /> | Clear the selection. With nothing selected, the key is left to a dialog around the table |
+
+The table says "3 selected" in a live region after the selection settles, so holding <DocKbd label="Shift" /> + <DocKbd label="ArrowDown" /> says the last count. Set `selectedStatusText` to change the words. Every row checkbox stays a tab stop.
+
+<FileSource src="/framed/DataTable/DataTableSelectionRange" />
+
+### Sort, filter and virtualization
+
+A selection is a set of row ids, so it survives a sort, a filter and a scroll. A range follows the rows as they are shown: sort by a column and <DocKbd label="Shift" /> + click selects the rows between the two in that order. Rows a filter hides stay selected and are counted ("2 selected, 1 not shown"). The header checkbox and <DocKbd label="Ctrl" /> + <DocKbd label="A" /> cover only the rows that match, across pages.
+
+| Do | Why |
+| --- | --- |
+| Give every row a stable `id`. | The selection, the anchor and the focus are ids. Index-based ids select the wrong rows after a sort. |
+| Bind `selectedRowIds` and read it for the action. | It holds hidden rows too. Compare it with the filtered rows if the action should only touch what is shown. |
+| Add `virtualize` for thousands of rows. | A range over 10,000 rows is one pass over ids, and the keyboard scrolls the window to the row it moves to. |
+
+<FileSource src="/framed/DataTable/DataTableSelectionRangeVirtualized" />
+
+### Selection model
+
+`selectionRange` runs on `createSelection`, a headless model you can use for any list, grid or tree. It keeps the selection as a set of keys and offers `select`, `toggle`, `extendTo`, `selectAll` and `clear`. The `state` of `summary()` is `none`, `some` or `all` for a header checkbox. Focus is kept apart from selection, so moving the cursor never changes what is selected. `onItemClick(event, key)` reads <DocKbd label="Shift" /> and <DocKbd label="Cmd" /> or <DocKbd label="Ctrl" /> from the event, and `onItemKeydown(event)` returns the key to focus.
+
+Set `hidden` to `"keep"` (default) or `"drop"` for selections a filter hides. Pass `announce`, such as the announcer's `announce`, to say "3 selected". Pass `tree` for parents that select their descendants and show an indeterminate state.
+
+<FileSource src="/framed/DataTable/DataTableSelectionModel" />
+
 ## Expansion
 
 Set `expandable` to reveal additional content per row.
