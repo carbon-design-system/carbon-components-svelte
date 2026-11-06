@@ -10,6 +10,7 @@ import {
   PAGE_EXTENSION,
   RAW_COMPONENTS_OUT_DIR,
 } from "./constants";
+import { readFrontmatter, splitFrontmatter } from "./frontmatter.ts";
 import { stripDocsOnly } from "./strip-docs-only.ts";
 import { getComponentNames } from "./utils";
 
@@ -52,7 +53,6 @@ type ComponentApiFile = {
   components: ComponentApiEntry[];
 };
 
-const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
 const TAG_LINE_RE = /^\s*</;
 const WHITESPACE_RE = /\s+/;
 
@@ -112,29 +112,6 @@ const NEWLINE_RE = /\r?\n/g;
 const AT_EXAMPLE_RE = /@example/;
 const SVELTE_FENCE_RE = /```svelte\s*\n([\s\S]*?)```/;
 const ATX_HEADING_RE = /^(#{1,6})(\s+)(.*)$/;
-
-function splitFrontmatter(source: string) {
-  const match = source.match(FRONTMATTER_RE);
-  if (!match) return { frontmatter: null, body: source };
-  return { frontmatter: match[1], body: source.slice(match[0].length) };
-}
-
-/**
- * Parses with `Bun.YAML`, a strict YAML 1.2 parser, so frontmatter that
- * only mdsvex's lenient parser accepts fails the build.
- */
-function extractComponents(
-  frontmatter: string | null,
-  filePath: string,
-): string[] {
-  if (!frontmatter) return [];
-
-  try {
-    return Bun.YAML.parse(frontmatter)?.components ?? [];
-  } catch (error) {
-    throw new Error(`${filePath}: invalid frontmatter`, { cause: error });
-  }
-}
 
 function escapeTableCell(text: unknown) {
   return String(text ?? "")
@@ -718,8 +695,8 @@ for (const componentName of getComponentNames()) {
     `${componentName}${PAGE_EXTENSION}`,
   );
   const fileContent = fs.readFileSync(filePath, "utf8");
-  const { frontmatter, body } = splitFrontmatter(fileContent);
-  const components = extractComponents(frontmatter, filePath);
+  const { body } = splitFrontmatter(fileContent);
+  const components = readFrontmatter(fileContent, filePath).components ?? [];
 
   const componentsForUsage =
     components.length > 0 ? components : [componentName];

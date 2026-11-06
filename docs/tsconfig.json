@@ -2,6 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "allowImportingTsExtensions": true,
+    "types": ["bun"],
     "paths": {
       "carbon-components-svelte": ["../src"],
       "carbon-components-svelte/tokens": ["../src/tokens/index.d.ts"],
