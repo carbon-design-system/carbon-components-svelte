@@ -44,11 +44,12 @@
   /**
    * Override how the search value is matched against each item's `text`.
    * Receives the item `text` and the current search value, and returns whether
-   * the item `matched` along with the `indices` of characters to highlight.
+   * the item `matched` along with the `indices` of characters to highlight (or the
+   * `ranges` of text, such as `fuzzyMatchText` returns).
    * Defaults to fuzzy matching. Supply your own function for custom filtering
    * and highlighting, or pass a no-op like `() => ({ matched: true })` to keep
    * every item and disable highlighting.
-   * @type {(text: string, query: string) => { matched: boolean; indices?: number[] }}
+   * @type {(text: string, query: string) => { matched: boolean; indices?: number[]; ranges?: Array<{ start: number; end: number }> }}
    */
   export let match = fuzzyMatch;
 
