@@ -1,0 +1,145 @@
+---
+components: ["SavingStatus"]
+description: SavingStatus shows whether a form or an editor that saves as you go has saved, with createAutosave to drive it.
+---
+
+<script>
+  import { SavingStatus, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create an autosave with `createAutosave` and call `change` with the value on every edit. The latest value is saved after a pause in typing, and `SavingStatus` shows how it went. Destroy the autosave when the component unmounts, by returning `autosave.destroy` from `onMount`.
+
+<FileSource src="/framed/SavingStatus/SavingStatusForm" />
+
+```svelte
+<script>
+  import { createAutosave, SavingStatus, TextInput } from "carbon-components-svelte";
+  import { onMount } from "svelte";
+
+  let title = "Quarterly report";
+
+  const autosave = createAutosave((value) => api.put("/report", value), {
+    initial: title,
+  });
+  onMount(() => autosave.destroy);
+
+  $: autosave.change(title);
+</script>
+
+<SavingStatus {autosave} />
+<TextInput labelText="Title" bind:value={title} />
+```
+
+Pass `initial`, the value as loaded. An edit equal to the last saved value is no edit, so the reactive `$: autosave.change(title)` does nothing on mount and a change that is typed back leaves the form clean.
+
+## Statuses
+
+The status follows the autosave. Set `status` to drive it from a save of your own.
+
+<Stack gap={5}>
+  <SavingStatus status="unsaved" />
+  <SavingStatus status="saving" />
+  <SavingStatus status="saved" />
+  <SavingStatus status="error" error={new Error("The server answered 503.")} />
+  <SavingStatus status="offline" />
+</Stack>
+
+| Status | Shown | When |
+| --- | --- | --- |
+| `idle` | Nothing | Nothing has changed or been saved yet. |
+| `unsaved` | "Unsaved changes" | An edit waits for the pause in typing. |
+| `saving` | A spinner and "Saving…" | A request is in flight, or a failed one will be tried again. |
+| `saved` | "Saved", then "Saved 2 min. ago" | The last save worked and nothing changed since. |
+| `error` | "Couldn't save", Retry and details | The tries ran out. It stays until a save works. |
+| `offline` | "Offline: changes will save when you reconnect" | Something is unsaved and the browser is offline. |
+
+## Sizes
+
+Set `size` to `"sm"` for a line of small text in a page header or a toolbar, and `"md"` (the default) at the foot of a form. The row keeps its height in every status, so nothing around it moves when the status changes.
+
+<Stack gap={5}>
+  <SavingStatus size="sm" status="saved" />
+  <SavingStatus size="md" status="saved" />
+</Stack>
+
+## Document title
+
+For a value that is saved when it is committed, such as a rename, call `change` from the commit event. A `debounce` of `0` saves at once.
+
+<FileSource src="/framed/SavingStatus/SavingStatusRename" />
+
+## Placement
+
+| Do | Why |
+| --- | --- |
+| Put it where the eye already is: beside the document title, in the page header, or at the foot of the form. | A status that is far from what is being edited goes unseen. |
+| Use `size="sm"` in a page header or a toolbar. | It is one line of 12px text, so it does not push the title around. |
+| Leave a Save button out of a form that saves itself. | Two ways to save make people wonder which one counts. Keep one for the actions that really are a choice. |
+| Keep a Save button for a form that must be submitted whole, such as a payment. | Autosave suits drafts and settings. A half-saved order is not one. |
+
+## Timing
+
+| Option | Default | Effect |
+| --- | --- | --- |
+| `debounce` | `1000` | Quiet time in milliseconds before a save. |
+| `maxWait` | `10000` | The longest an edit waits, so typing that never pauses still saves. `0` removes the limit. |
+| `retry` | `3` | Tries after a failure. A number, `false`, or `{ count, delay, factor, max, when }`. Each wait is `delay` times `factor` longer, up to `max`. |
+
+One save runs at a time, so they land in order. Edits made during a save are not queued one by one: the next save carries the latest value and the ones in between are dropped. Write the save so that sending the whole value is safe to repeat.
+
+The status does not flash. "Saving…" shows only when a save takes longer than `savingDelay` (400 ms) and then stays for 600 ms. "Saved" shows only after it has held for a moment, so a save in the middle of a sentence shows "Unsaved changes" all the way.
+
+## Errors
+
+A failure is tried again with backoff, and is not shown as an error while tries remain. When they run out the status is `error`, with a Retry button and, when the error has a `message`, a popover that shows it. Retry tries again at once. So does the next edit, and the error stays until a save works.
+
+Set `retry.when` to give up at once on an error that another try cannot fix, such as a validation failure.
+
+```js
+const autosave = createAutosave(save, {
+  retry: { count: 3, when: (error) => error.status !== 422 },
+});
+```
+
+Replace the popover content with the `details` slot, which receives `error` and `attempts`.
+
+## Offline
+
+While the browser is offline nothing is sent and the status says so. The save resumes the moment it is back, without waiting out a backoff, and a request that failed because the network went away does not use up a retry.
+
+The autosave follows the browser's `online` and `offline` events. `navigator.onLine` says only whether the device has a network, so a captive portal reads as online and the save fails and retries instead. For a connection check of your own, such as a socket, call `autosave.setOnline(false)` and `autosave.setOnline(true)`.
+
+## Leaving the page
+
+While a value is unsaved or saving, closing the tab or reloading asks the browser to confirm, with `beforeunload`. The listener exists only while something is unsaved. Set `beforeUnload` to `false` to turn it off.
+
+To save before an in-app navigation, `await autosave.flush()`. It saves now, and resolves `true` when everything is saved and `false` when it could not be.
+
+```js
+async function leave() {
+  if (await autosave.flush()) goto("/reports");
+}
+```
+
+## Announcements
+
+Screen readers are not told about every keystroke or every save.
+
+| Status | Heard | How |
+| --- | --- | --- |
+| `unsaved`, `saving` | Nothing | Typing would read out continuously, and a spinner is a state, not news. |
+| `saved` | "Saved" | Politely, once, after typing has settled for a moment. A save in the middle of typing is not read. |
+| `error` | "Couldn't save" | At once, assertively: the work is at risk and needs an action. |
+| `offline` | The offline text | Politely, once. |
+
+The visible text is not live. Set `announce` to `false` to leave screen readers silent, such as when the page has its own live region.
+
+## Colors and contrast
+
+Each status has its own icon as well as its color: a check, a cross, three dots and a triangle. The color adds to the meaning and never carries it alone. In forced-colors mode the icons take the system text color and the shapes remain.
+
+## Server rendering
+
+`createAutosave` starts no timer and adds no listener until the first edit, so it is safe to create during server rendering. The component renders the status it is given, with its live regions empty, and writes the age after it mounts, so the server HTML and the first client render agree.
