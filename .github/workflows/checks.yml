@@ -11,6 +11,9 @@ on:
       - "docs/src/search.ts"
       - "docs/scripts/slug.ts"
       - "docs/scripts/visit.ts"
+      - "docs/scripts/frontmatter.ts"
+      - "docs/scripts/markdown.ts"
+      - "docs/scripts/svx.ts"
       - "docs/src/pages/framed/DatePicker/**"
   push:
     branches: [master]
@@ -23,6 +26,9 @@ on:
       - "docs/src/search.ts"
       - "docs/scripts/slug.ts"
       - "docs/scripts/visit.ts"
+      - "docs/scripts/frontmatter.ts"
+      - "docs/scripts/markdown.ts"
+      - "docs/scripts/svx.ts"
       - "docs/src/pages/framed/DatePicker/**"
   workflow_dispatch:
 
@@ -112,6 +118,9 @@ jobs:
               - 'docs/src/search.ts'
               - 'docs/scripts/slug.ts'
               - 'docs/scripts/visit.ts'
+              - 'docs/scripts/frontmatter.ts'
+              - 'docs/scripts/markdown.ts'
+              - 'docs/scripts/svx.ts'
             e2e:
               - 'src/**'
               - 'css/**'

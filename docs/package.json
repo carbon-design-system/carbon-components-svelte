@@ -22,7 +22,6 @@
     "@types/unist": "^3.0.3",
     "carbon-icons-svelte": "^13.17.0",
     "carbon-pictograms-svelte": "^13.21.0",
-    "mdsvex": "^0.12.8",
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "sveast": "^0.9.7",

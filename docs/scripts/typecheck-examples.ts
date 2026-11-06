@@ -11,9 +11,9 @@
 // page's `<script>`, the way the page compiles them.
 import fs from "node:fs";
 import path from "node:path";
-import { compile } from "mdsvex";
 import { compilerDiagnostics, typecheck } from "svelte-typecheck";
 import { PAGE_EXTENSION } from "./constants";
+import { parseMarkdown } from "./markdown.ts";
 import { visit } from "./visit";
 
 const DOCS = path.resolve(import.meta.dirname, "..");
@@ -71,21 +71,13 @@ function isLiveExample(node: HtmlNode) {
 /** Line in the generated file → line in the page. */
 const lineMaps = new Map<string, number[]>();
 
-async function writePage(svx: string) {
+function writePage(svx: string) {
   const source = fs.readFileSync(svx, "utf8");
   const scripts: string[] = [];
   const examples: HtmlNode[] = [];
-  await compile(source, {
-    smartypants: false,
-    highlight: false,
-    remarkPlugins: [
-      () => (tree: Parameters<typeof visit>[0]) => {
-        visit(tree, "html", (node: HtmlNode) => {
-          if (node.value.startsWith("<script")) scripts.push(node.value);
-          else if (isLiveExample(node)) examples.push(node);
-        });
-      },
-    ],
+  visit(parseMarkdown(source), "html", (node: HtmlNode) => {
+    if (node.value.startsWith("<script")) scripts.push(node.value);
+    else if (isLiveExample(node)) examples.push(node);
   });
   if (examples.length === 0) return;
 
@@ -126,7 +118,7 @@ const pages = fs
   .readdirSync(PAGES, { recursive: true, encoding: "utf8" })
   .filter((f) => f.endsWith(PAGE_EXTENSION))
   .map((f) => path.join(PAGES, f));
-await Promise.all(pages.map(writePage));
+for (const page of pages) writePage(page);
 
 const framedFiles = fs
   .readdirSync(path.join(PAGES, "framed"), {

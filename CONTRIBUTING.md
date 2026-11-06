@@ -35,7 +35,7 @@ bun setup
 
 This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`.
 
-Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/), [Routify 3](https://routify.dev/docs), Svelte 5, and MDsveX. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
+Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/), [Routify 3](https://routify.dev/docs), and Svelte 5, and compiles its Markdown pages (`.svx`) with `docs/scripts/svx.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
 
 To preview the docs site locally:
 
@@ -438,7 +438,7 @@ Use a framed example whenever the demo contains script logic (state, handlers, a
 Other patterns:
 
 - No admonitions. Fold accessibility notes and non-obvious caveats into the relevant example's prose. Do not use `> [!NOTE]` / `> [!WARNING]` / `> [!TIP]` / `> [!CAUTION]` blocks.
-- Keyboard keys in prose: use `<DocKbd label="Enter" />` for named keys (`Enter`, `Escape`, `Shift`, `Ctrl`, `Space`, etc.). mdsvex auto-imports `DocKbd`; do not add a manual import. Do not use backticks (`Escape`), raw `<kbd>`, or bold (`**Enter**`). For combinations, use one component per key: `<DocKbd label="⌘" />+<DocKbd label="C" />`. Keep collective phrases as plain text ("arrow keys", "modifier keys", "keyboard navigation"). Prop values and UI copy inside component examples are out of scope (e.g. `placeholder="Enter user name..."`, `shortcutText="⌘C"`).
+- Keyboard keys in prose: use `<DocKbd label="Enter" />` for named keys (`Enter`, `Escape`, `Shift`, `Ctrl`, `Space`, etc.). The docs build auto-imports `DocKbd`; do not add a manual import. Do not use backticks (`Escape`), raw `<kbd>`, or bold (`**Enter**`). For combinations, use one component per key: `<DocKbd label="⌘" />+<DocKbd label="C" />`. Keep collective phrases as plain text ("arrow keys", "modifier keys", "keyboard navigation"). Prop values and UI copy inside component examples are out of scope (e.g. `placeholder="Enter user name..."`, `shortcutText="⌘C"`).
 - Cross-links to related components: `[Modal](/components/Modal#modal-with-dropdowns)`
 - Use realistic, enterprise-flavored mock data instead of generic placeholders. Avoid `Tab label 1` / `Option 2` / `Item 3`, fruit or frontend-framework lists (Apple/Banana/Cherry, Angular/React/Vue), `foo`/`bar`, and lorem ipsum. Use something concrete instead, like a deployment region, an account plan tier, a service name, an incident summary, or a workspace setting. Reuse the same sample data shapes as neighboring examples on that page, and check whether an existing theme from a sibling section already fits before inventing a new one.
   - Exception: pure layout/mechanics demos (`Stack`, `Grid`, `Box`, `AspectRatio`, breakpoint/gap/offset demos) where the label is the thing being demonstrated, such as a prop value, a breakpoint name, or an ordinal position. Abstract content (`Item 1`, `16:9`, `Offset 3`) is correct there. Forcing a business narrative onto it only obscures the mechanic. Don't rename a label that documents its own prop value (`direction="top" tooltipText="Top"`).
@@ -492,7 +492,7 @@ In `.svx` files, markdown prose is compiled as Svelte. **Bare `{ ... }` in prose
 
 Always wrap object literals and expressions in backticks, or rephrase without braces. See [`DataTable.svx`](docs/src/pages/components/DataTable.svx) sort section for a real incident.
 
-**Don't start a wrapped prose line with a component tag.** mdsvex ends the paragraph at a line that opens with a tag such as `<DocKbd>`, and the rest loses Markdown parsing, so its backticks render literally. Keep the preceding word on the tag's line:
+**Don't start a wrapped prose line with a component tag.** The page compiler ends the paragraph at a line that opens with a tag such as `<DocKbd>`, and the rest loses Markdown parsing, so its backticks render literally. Keep the preceding word on the tag's line:
 
 ```md
 <!-- Bad -->
