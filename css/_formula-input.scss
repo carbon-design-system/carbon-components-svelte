@@ -1,0 +1,383 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/component-tokens";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/components/tag/tokens";
+
+/// `FormulaInput`: a `<textarea>` that grows with its formula, under a
+/// transparent-text copy of itself that is drawn in colors.
+///
+/// The textarea owns the text, the caret, the selection, the IME and undo, and
+/// shows no text of its own once script has painted the layer. The layer is
+/// drawn above it, repeats the same text in the same box, and lets every
+/// pointer event through. Nothing in the layer changes a glyph's width (no
+/// bold, no horizontal padding), or it would drift from the textarea.
+///
+/// A formula reads left to right in any language, as code does, so the field
+/// is left to right and only the label and messages follow the page.
+/// @access private
+/// @group components
+@mixin formula-input {
+  $blue: get-token-value($tag-colors, "tag-color-blue");
+  $purple: get-token-value($tag-colors, "tag-color-purple");
+  $purple-fill: get-token-value($tag-colors, "tag-background-purple");
+  $green: get-token-value($tag-colors, "tag-color-green");
+  $teal: get-token-value($tag-colors, "tag-color-teal");
+  $magenta: get-token-value($tag-colors, "tag-color-magenta");
+
+  .#{$prefix}--formula-input {
+    --ccs-formula-input-line-height: #{to-rem(20px)};
+    --ccs-formula-input-padding: #{$carbon--spacing-04};
+    --ccs-formula-input-max-rows: 6;
+  }
+
+  // The wrapper is the field: it draws the fill, the rule and the ring, so
+  // the textarea and the layer inside it draw none.
+  .#{$prefix}--formula-input__wrapper {
+    @include focus-outline("reset");
+
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    &:focus-within {
+      @include focus-outline("outline");
+    }
+
+    &[data-invalid]:not(:focus-within) {
+      @include focus-outline("invalid");
+    }
+  }
+
+  // The status icon sits at the right in any direction: the formula does.
+  .#{$prefix}--formula-input__wrapper > .#{$prefix}--text-area__invalid-icon {
+    right: $carbon--spacing-05;
+    left: auto;
+  }
+
+  .#{$prefix}--formula-input__wrapper--readonly {
+    border-bottom-color: $border-subtle;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--formula-input__wrapper--disabled {
+    border-bottom-color: transparent;
+    cursor: not-allowed;
+  }
+
+  // Scrolls past `--ccs-formula-input-max-rows` lines. The textarea never
+  // scrolls: it is as tall as its text, so the layer needs no scroll sync.
+  .#{$prefix}--formula-input__scroller {
+    @include type-style("code-02");
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    direction: ltr;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    text-align: left;
+    max-block-size: calc(
+      var(--ccs-formula-input-max-rows) * var(--ccs-formula-input-line-height) +
+        2 * var(--ccs-formula-input-padding)
+    );
+  }
+
+  .#{$prefix}--formula-input__content {
+    position: relative;
+    isolation: isolate;
+    font-variant-ligatures: none;
+    letter-spacing: 0;
+    line-height: var(--ccs-formula-input-line-height);
+  }
+
+  // One box and one set of font metrics for the textarea and the layer, so
+  // a glyph and its color fall on the same pixels. Until script has painted
+  // the layer the textarea shows its own text.
+  .#{$prefix}--formula-input__input {
+    @include reset;
+
+    display: block;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: var(--ccs-formula-input-padding) $carbon--spacing-05;
+    border: 0;
+    background: transparent;
+    caret-color: $text-primary;
+    color: $text-primary;
+    direction: ltr;
+    font: inherit;
+    inline-size: 100%;
+    letter-spacing: inherit;
+    min-block-size: calc(
+      var(--ccs-formula-input-line-height) + 2 * var(--ccs-formula-input-padding)
+    );
+    outline: none;
+    overflow-wrap: break-word;
+    resize: none;
+    tab-size: 2;
+    text-align: left;
+    unicode-bidi: normal;
+    white-space: pre-wrap;
+    word-break: normal;
+
+    &::placeholder {
+      @include placeholder-colors;
+    }
+
+    &::selection {
+      background-color: $highlight;
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      cursor: not-allowed;
+    }
+
+    &:read-only {
+      cursor: default;
+    }
+  }
+
+  .#{$prefix}--formula-input__scroller--ready .#{$prefix}--formula-input__input {
+    color: transparent;
+  }
+
+  // Above the textarea, so the selection it draws does not cover the colors.
+  .#{$prefix}--formula-input__layer {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: var(--ccs-formula-input-padding) $carbon--spacing-05;
+    color: $text-primary;
+    direction: ltr;
+    inset: 0;
+    letter-spacing: inherit;
+    overflow-wrap: break-word;
+    pointer-events: none;
+    tab-size: 2;
+    text-align: left;
+    unicode-bidi: normal;
+    user-select: none;
+    white-space: pre-wrap;
+    word-break: normal;
+  }
+
+  .#{$prefix}--formula-input__layer[hidden] {
+    display: none;
+  }
+
+  // Where the popups hang: a point the component moves to the caret.
+  .#{$prefix}--formula-input__anchor {
+    position: absolute;
+    pointer-events: none;
+    visibility: hidden;
+    inline-size: 0;
+  }
+
+  .#{$prefix}--formula-input__function {
+    color: $blue;
+  }
+
+  .#{$prefix}--formula-input__field {
+    background-color: $purple-fill;
+    color: $purple;
+  }
+
+  .#{$prefix}--formula-input__string {
+    color: $green;
+  }
+
+  .#{$prefix}--formula-input__number {
+    color: $teal;
+  }
+
+  .#{$prefix}--formula-input__constant {
+    color: $magenta;
+  }
+
+  .#{$prefix}--formula-input__operator,
+  .#{$prefix}--formula-input__punctuation {
+    color: $text-secondary;
+  }
+
+  // A wavy rule, as a spell checker draws one: it does not rest on color.
+  .#{$prefix}--formula-input__error {
+    text-decoration: underline wavy $support-error;
+    text-decoration-skip-ink: none;
+    text-underline-offset: to-rem(3px);
+  }
+
+  // After the kinds above, which it ties: disabled text is one color.
+  .#{$prefix}--formula-input__wrapper--disabled .#{$prefix}--formula-input__layer,
+  .#{$prefix}--formula-input__wrapper--disabled
+    .#{$prefix}--formula-input__layer
+    span {
+    background-color: transparent;
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--formula-input--fluid .#{$prefix}--formula-input__scroller {
+    margin-block-start: to-rem(32px);
+  }
+
+  .#{$prefix}--formula-input--fluid .#{$prefix}--formula-input__input,
+  .#{$prefix}--formula-input--fluid .#{$prefix}--formula-input__layer {
+    padding-block: 0 to-rem(13px);
+  }
+
+  .#{$prefix}--formula-input--fluid .#{$prefix}--formula-input__input {
+    min-block-size: calc(var(--ccs-formula-input-line-height) + #{to-rem(13px)});
+  }
+
+  // Signature help and the result.
+  .#{$prefix}--formula-input__signature {
+    @include type-style("code-01");
+
+    max-inline-size: to-rem(480px);
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border: 1px solid $border-strong;
+    background-color: $layer;
+    color: $text-primary;
+    direction: ltr;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  .#{$prefix}--formula-input__signature-description {
+    @include type-style("helper-text-01");
+
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+    direction: inherit;
+  }
+
+  // The active parameter is marked by weight and a rule, not by color alone.
+  .#{$prefix}--formula-input__param--active {
+    border-block-end: 2px solid $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--formula-input__menu {
+    min-inline-size: to-rem(200px);
+    max-inline-size: to-rem(420px);
+    direction: ltr;
+    text-align: left;
+  }
+
+  .#{$prefix}--formula-input__menu .#{$prefix}--list-box__menu-item__option {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    block-size: auto;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--formula-input__item-label {
+    @include type-style("code-01");
+
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--formula-input__item-detail {
+    @include type-style("helper-text-01");
+
+    flex: 1 1 auto;
+    overflow: hidden;
+    color: $text-secondary;
+    text-align: end;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--formula-input__item-match {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--formula-input__preview {
+    @include type-style("helper-text-01");
+
+    display: flex;
+    flex-wrap: wrap;
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+    gap: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--formula-input__preview-value {
+    @include type-style("code-01");
+
+    color: $text-primary;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  .#{$prefix}--formula-input--fluid .#{$prefix}--formula-input__preview {
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // Forced colors keep one color for text, so the layer adds only what the
+  // text cannot say alone: a wavy rule under an error, a dotted one under a
+  // field. The textarea shows the text itself, in the system colors.
+  @media (forced-colors: active) {
+    .#{$prefix}--formula-input__layer,
+    .#{$prefix}--formula-input__layer span {
+      background-color: transparent;
+      color: transparent;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--formula-input__layer .#{$prefix}--formula-input__field {
+      text-decoration: underline dotted CanvasText;
+      text-underline-offset: to-rem(3px);
+    }
+
+    .#{$prefix}--formula-input__layer .#{$prefix}--formula-input__error {
+      text-decoration: underline wavy CanvasText;
+      text-decoration-skip-ink: none;
+      text-underline-offset: to-rem(3px);
+    }
+
+    // Forced colors keep a `transparent` text color transparent, so the
+    // textarea's text is named, in the system colors.
+    .#{$prefix}--formula-input__scroller--ready .#{$prefix}--formula-input__input {
+      caret-color: auto;
+      color: CanvasText;
+
+      &:disabled {
+        color: GrayText;
+      }
+
+      &::selection {
+        background-color: Highlight;
+        color: HighlightText;
+      }
+    }
+
+    .#{$prefix}--formula-input__wrapper:focus-within {
+      outline: 4px $focus-outline-style Highlight;
+      outline-offset: -4px;
+    }
+
+    .#{$prefix}--formula-input__signature {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--formula-input__param--active {
+      text-decoration: underline;
+    }
+  }
+
+  // After the forced-colors ring above, so a fluid field keeps only the ring
+  // its wrapper draws as `::after`.
+  .#{$prefix}--formula-input--fluid .#{$prefix}--formula-input__wrapper {
+    outline: none;
+  }
+}
+
+@include exports("formula-input") {
+  @include formula-input;
+}

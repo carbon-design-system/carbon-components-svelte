@@ -193,8 +193,10 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
 
   // The library's classes for content hidden on purpose: screen reader
   // text, and an icon's tooltip while it is closed.
+  // `FormulaInput` draws its text again above the field, in color, and the
+  // field clips both.
   const LIBRARY_HIDDEN =
-    ".bx--visually-hidden, .bx--tooltip--hidden .bx--assistive-text";
+    ".bx--visually-hidden, .bx--tooltip--hidden .bx--assistive-text, .bx--formula-input__layer";
 
   type Box = { left: number; right: number; top: number; bottom: number };
 
