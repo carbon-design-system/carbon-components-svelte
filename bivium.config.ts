@@ -61,6 +61,7 @@ export default {
     "crassus.config.ts",
     "docs/src/token-reference.ts",
     "docs/scripts/slug.ts",
+    "docs/scripts/visit.ts",
   ],
   ignore: [
     "**/*.md",

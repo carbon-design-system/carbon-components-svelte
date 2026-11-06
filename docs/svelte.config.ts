@@ -14,13 +14,13 @@ import { format, version as prettierVersion } from "prettier";
 import prettierPluginSvelte from "prettier-plugin-svelte";
 import prettierPluginSveltePkg from "prettier-plugin-svelte/package.json" with { type: "json" };
 import rehypeSlug from "rehype-slug";
-import { visit } from "unist-util-visit";
 import { highlight } from "../src/syntax/index.js";
 import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { exampleSource, isInstanceScript } from "./scripts/example-source.ts";
 import { requireLeadingHeading } from "./scripts/require-leading-heading.ts";
 import { stripDocsOnly } from "./scripts/strip-docs-only.ts";
 import { tocHeadings } from "./scripts/toc-headings.ts";
+import { visit } from "./scripts/visit.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

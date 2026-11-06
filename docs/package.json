@@ -30,7 +30,6 @@
     "prismjs": "^1.30.0",
     "rehype-slug": "^6.0.0",
     "svelte": "^5.57.3",
-    "unist-util-visit": "^5.2.0",
     "vite": "^8.3.5"
   },
   "type": "module"
