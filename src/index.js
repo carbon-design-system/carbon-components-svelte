@@ -180,6 +180,22 @@ export { default as PageHeaderSkeleton } from "./PageHeader/PageHeaderSkeleton.s
 export { default as Pagination } from "./Pagination/Pagination.svelte";
 export { default as PaginationSkeleton } from "./Pagination/PaginationSkeleton.svelte";
 export { default as PaginationNav } from "./PaginationNav/PaginationNav.svelte";
+export {
+  createBlocklist,
+  decodeBlocklist,
+} from "./PasswordStrength/blocklist.js";
+export {
+  DEFAULT_FEEDBACK_TEXTS,
+  estimatePasswordStrength,
+  isCommonPassword,
+} from "./PasswordStrength/estimate.js";
+export { default as PasswordRequirements } from "./PasswordStrength/PasswordRequirements.svelte";
+export { default as PasswordStrength } from "./PasswordStrength/PasswordStrength.svelte";
+export {
+  checkRequirements,
+  defaultRequirements,
+  passwordRules,
+} from "./PasswordStrength/rules.js";
 export { default as FluidPinCodeInputSkeleton } from "./PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 export { default as PinCodeInput } from "./PinCodeInput/PinCodeInput.svelte";
 export { default as PinCodeInputSkeleton } from "./PinCodeInput/PinCodeInputSkeleton.svelte";
