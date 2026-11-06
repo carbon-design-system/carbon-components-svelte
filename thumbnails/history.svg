@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>history</title>
+    <g id="history" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="line" fill="var(--cds-border-strong, #8d8d8d)" x="64" y="89" width="192" height="2"></rect>
+        <rect id="step-1" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-strong, #8d8d8d)" x="64.5" y="72.5" width="35" height="35" rx="2"></rect>
+        <rect id="step-2" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-border-strong, #8d8d8d)" x="116.5" y="72.5" width="35" height="35" rx="2"></rect>
+        <rect id="current" fill="var(--cds-layer-02, #ffffff)" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="2" x="169" y="72" width="36" height="36" rx="2"></rect>
+        <rect id="redo" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-dasharray="3 2" x="220.5" y="72.5" width="35" height="35" rx="2"></rect>
+    </g>
+</svg>
