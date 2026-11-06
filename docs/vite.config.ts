@@ -5,7 +5,9 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
 import { carbonAlias } from "./carbon-alias.ts";
-import { cacheSvelteCompile } from "./scripts/compile-cache.ts";
+import { cacheSvelteSteps } from "./scripts/compile-cache.ts";
+import { PAGE_EXTENSION } from "./scripts/constants.ts";
+import { formatterVersion } from "./scripts/format.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const componentMdSizesPath = path.resolve(
@@ -29,25 +31,53 @@ const CHUNK_GROUPS = [
  * What changes compiled components without changing their code: Svelte,
  * vite-plugin-svelte, and the Svelte config's compiler options.
  */
+const readVersion = (pkg: string) =>
+  JSON.parse(
+    fs.readFileSync(
+      path.join(__dirname, "node_modules", pkg, "package.json"),
+      "utf8",
+    ),
+  ).version as string;
+
+/** The contents of the files in `dir` with `extension`, for a cache salt. */
+const filesIn = (dir: string, extension: string) =>
+  fs
+    .readdirSync(dir)
+    .filter((file) => file.endsWith(extension))
+    .sort()
+    .map((file) => fs.readFileSync(path.join(dir, file), "utf8"));
+
+/**
+ * What changes compiled components without changing their code: Svelte,
+ * vite-plugin-svelte, and the Svelte config's compiler options.
+ */
 const COMPILE_CACHE_SALT = JSON.stringify([
-  "svelte",
-  JSON.parse(
-    fs.readFileSync(
-      path.join(__dirname, "node_modules/svelte/package.json"),
-      "utf8",
-    ),
-  ).version,
-  JSON.parse(
-    fs.readFileSync(
-      path.join(
-        __dirname,
-        "node_modules/@sveltejs/vite-plugin-svelte/package.json",
-      ),
-      "utf8",
-    ),
-  ).version,
+  readVersion("svelte"),
+  readVersion("@sveltejs/vite-plugin-svelte"),
   fs.readFileSync(path.join(__dirname, "svelte.config.ts"), "utf8"),
 ]);
+
+/**
+ * What changes a preprocessed page without changing its source: the
+ * Svelte config and the docs scripts it runs, the library's highlighter
+ * (code blocks are highlighted at build time) and the formatter.
+ */
+const PREPROCESS_CACHE_SALT = JSON.stringify([
+  COMPILE_CACHE_SALT,
+  filesIn(path.join(__dirname, "scripts"), ".ts"),
+  filesIn(path.resolve(__dirname, "../src/syntax"), ".js"),
+  formatterVersion(),
+]);
+
+const FILE_SOURCE_RE = /<FileSource\s+src="([^"]+)"/g;
+
+/** A page also depends on the framed examples its `<FileSource>` tags show. */
+function fileSourceKey(code: string) {
+  return Array.from(code.matchAll(FILE_SOURCE_RE), ([, src]) => {
+    const file = path.join(__dirname, "src/pages", `${src}.svelte`);
+    return fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
+  }).join("\0");
+}
 const componentApiPath = path.resolve(__dirname, "src/COMPONENT_API.json");
 const COMPONENT_API_PREFIX = "virtual:component-api/";
 
@@ -115,10 +145,25 @@ export default defineConfig({
         return `export default ${JSON.stringify(JSON.parse(json))}`;
       },
     },
-    ...cacheSvelteCompile(
+    ...cacheSvelteSteps(
       svelte(),
-      path.join(__dirname, "node_modules/.cache/ccs-docs-svelte-compile"),
-      COMPILE_CACHE_SALT,
+      path.join(__dirname, "node_modules/.cache/ccs-docs-svelte-build"),
+      [
+        {
+          plugin: "vite-plugin-svelte:preprocess",
+          label: "preprocess",
+          salt: PREPROCESS_CACHE_SALT,
+          key: fileSourceKey,
+          // Preprocessing only does work on pages; for components, reading
+          // a cached result would cost more than the preprocess.
+          include: (id: string) => id.endsWith(PAGE_EXTENSION),
+        },
+        {
+          plugin: "vite-plugin-svelte:compile",
+          label: "compile",
+          salt: COMPILE_CACHE_SALT,
+        },
+      ],
     ),
   ],
   define: {
