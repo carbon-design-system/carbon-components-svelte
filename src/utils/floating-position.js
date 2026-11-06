@@ -169,6 +169,23 @@ export function floatingPosition({
     // changes — no recompute, no bounce. The CSS applies it from the matching
     // edge per alignment.
     caretNudgePx = rect.width / 2;
+  } else if (
+    intrinsicWidth &&
+    (actualDirection === "left" || actualDirection === "right") &&
+    (intrinsicAlign === "start" || intrinsicAlign === "end")
+  ) {
+    // Beside the anchor the box lines its top (`start`) or bottom (`end`)
+    // edge up with the anchor's, so the caret sits half the anchor height
+    // from that edge, the same as above and below with the width. The
+    // vertical offset moves the box off the anchor's edge, so the caret
+    // takes it back to stay on the anchor's center.
+    const alignOffset =
+      actualDirection === "right"
+        ? verticalAlignOffsetRight
+        : verticalAlignOffsetLeft;
+    caretNudgePx =
+      rect.height / 2 +
+      (intrinsicAlign === "start" ? -alignOffset : alignOffset);
   }
 
   return {

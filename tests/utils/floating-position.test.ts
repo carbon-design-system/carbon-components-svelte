@@ -204,6 +204,88 @@ describe("floatingPosition", () => {
     });
   });
 
+  describe("intrinsic width (horizontal)", () => {
+    const anchorRect = rect(400, 300, 16, 16); // center y = 308
+
+    it("sets caretNudgePx to half the anchor height for start and end", () => {
+      for (const direction of ["left", "right"] as const) {
+        for (const intrinsicAlign of ["start", "end"] as const) {
+          const result = floatingPosition({
+            anchorRect,
+            floatingRect: rect(0, 0, 200, 40),
+            viewport,
+            direction,
+            intrinsicWidth: true,
+            intrinsicAlign,
+          });
+          expect(result.actualDirection).toBe(direction);
+          // Applied from the box's top (start) or bottom (end) edge, which
+          // lines up with the anchor's, so the caret lands on its center.
+          expect(result.caretNudgePx).toBe(8);
+        }
+      }
+    });
+
+    it("does not depend on the floating height", () => {
+      const nudge = (height: number) =>
+        floatingPosition({
+          anchorRect,
+          floatingRect: rect(0, 0, 200, height),
+          viewport,
+          direction: "right",
+          intrinsicWidth: true,
+          intrinsicAlign: "start",
+        }).caretNudgePx;
+      expect(nudge(24)).toBe(nudge(60));
+    });
+
+    it("leaves the nudge unset for center and without intrinsic width", () => {
+      const base = {
+        anchorRect,
+        floatingRect: rect(0, 0, 200, 40),
+        viewport,
+        direction: "right" as const,
+      };
+      expect(
+        floatingPosition({
+          ...base,
+          intrinsicWidth: true,
+          intrinsicAlign: "center",
+        }).caretNudgePx,
+      ).toBeUndefined();
+      expect(
+        floatingPosition({ ...base, intrinsicAlign: "start" }).caretNudgePx,
+      ).toBeUndefined();
+    });
+
+    it("puts the caret on the anchor center despite the vertical offset", () => {
+      // Box top = anchor top - 3, so the caret sits 3px further down.
+      const start = floatingPosition({
+        anchorRect,
+        floatingRect: rect(0, 0, 200, 40),
+        viewport,
+        direction: "left",
+        intrinsicWidth: true,
+        intrinsicAlign: "start",
+        verticalAlignOffsetLeft: -3,
+      });
+      expect(start.top).toBe(297);
+      expect(start.top + (start.caretNudgePx ?? 0)).toBe(308);
+
+      // Box bottom = anchor bottom + 1, so the caret sits 1px further up.
+      const end = floatingPosition({
+        anchorRect,
+        floatingRect: rect(0, 0, 200, 40),
+        viewport,
+        direction: "right",
+        intrinsicWidth: true,
+        intrinsicAlign: "end",
+        verticalAlignOffsetRight: 1,
+      });
+      expect(end.top + 40 - (end.caretNudgePx ?? 0)).toBe(308);
+    });
+  });
+
   describe("useFixedPosition", () => {
     it("ignores scroll offsets when useFixedPosition is true", () => {
       const scrolled = { ...viewport, scrollX: 50, scrollY: 300 };

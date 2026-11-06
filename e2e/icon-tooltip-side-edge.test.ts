@@ -2,7 +2,8 @@ import { expect, test } from "./helpers/host";
 
 // A portalled tooltip, with its trigger at each edge and corner of the
 // window or in the middle, slides back inside the window, and its caret
-// still points at the trigger, 1rem or more from the corner of the box.
+// still points at the trigger, 1rem or more from the corner of the box. The
+// text of a side tooltip is never cut off by the window.
 // The fixture opens any one case from its URL:
 // /icon-tooltip-side-edge.html?direction=right&align=start&edge=top-left
 //   &component=Button
@@ -49,6 +50,8 @@ interface Measure {
   trigger: Box;
   caret: Box;
   content: Box;
+  /** The body's text box: the body less its padding. */
+  text: Box;
   /** The slide the box carries, in px. */
   applied: number;
 }
@@ -93,6 +96,17 @@ async function measure(page: import("@playwright/test").Page, name: Name) {
       trigger: box(trigger),
       caret: box(caret),
       content: box(content),
+      text: (() => {
+        const { top, right, bottom, left } = box(content);
+        const style = getComputedStyle(content);
+        const pad = (name: string) => Number.parseFloat(style[name as "top"]);
+        return {
+          top: top + pad("paddingTop"),
+          right: right - pad("paddingRight"),
+          bottom: bottom - pad("paddingBottom"),
+          left: left + pad("paddingLeft"),
+        };
+      })(),
       applied:
         Number.parseFloat(across ? content.style.left : content.style.top) || 0,
     };
@@ -105,7 +119,7 @@ function axis(m: Measure, b: Box) {
   return { start, end, center: (start + end) / 2 };
 }
 
-function check(m: Measure, direction: string, align: string, edge: string) {
+function check(m: Measure, direction: string, edge: string) {
   const trigger = axis(m, m.trigger);
   const caret = axis(m, m.caret);
   const content = axis(m, m.content);
@@ -130,15 +144,9 @@ function check(m: Measure, direction: string, align: string, edge: string) {
   }[m.side as "top"];
   expect(facing?.(), `caret faces the trigger on the ${m.side}`).toBe(true);
 
-  // (a) The caret stays on the trigger. Beside the trigger, a start or end
-  // aligned box lines its edge up with the trigger's and centers the caret
-  // on the box, not on the trigger (see _tooltip.scss), so there the caret
-  // must stay at the center of the box as placed, before any slide.
-  const aimed =
-    m.across || align === "center"
-      ? trigger.center
-      : (content.start + content.end) / 2 - m.applied;
-  expect(Math.abs(caret.center - aimed)).toBeLessThan(2);
+  // (a) The caret stays on the trigger, whichever way the tooltip opens
+  // and however it is aligned.
+  expect.soft(Math.abs(caret.center - trigger.center)).toBeLessThan(2);
 
   // (b) The caret stays 1rem inside the box. Where the unslid box already
   // had it closer (a start or end aligned tooltip on a small trigger), the
@@ -156,10 +164,24 @@ function check(m: Measure, direction: string, align: string, edge: string) {
 
   // (c) The box stays in the window, except where that inset needs it to
   // reach past the edge.
-  const overStart = Math.max(0, 16 - caret.center);
-  const overEnd = Math.max(0, caret.center + 16 - m.size);
-  expect(content.start).toBeGreaterThanOrEqual(-overStart - 0.5);
-  expect(content.end).toBeLessThanOrEqual(m.size + overEnd + 0.5);
+  const overStart = Math.max(0, 16 - trigger.center);
+  const overEnd = Math.max(0, trigger.center + 16 - m.size);
+  expect.soft(content.start).toBeGreaterThanOrEqual(-overStart - 0.5);
+  expect.soft(content.end).toBeLessThanOrEqual(m.size + overEnd + 0.5);
+
+  // (e) Beside the trigger, the text itself, the box less its padding, is
+  // fully in the window whenever the trigger is. Where the 1rem inset
+  // keeps the box past the edge, only the padding may go with it.
+  if (!m.across && trigger.start >= 0 && trigger.end <= m.size) {
+    const padStart = m.text.top - m.content.top;
+    const padEnd = m.content.bottom - m.text.bottom;
+    expect
+      .soft(m.text.top)
+      .toBeGreaterThanOrEqual(-Math.max(0, overStart - padStart) - 0.5);
+    expect
+      .soft(m.text.bottom)
+      .toBeLessThanOrEqual(m.size + Math.max(0, overEnd - padEnd) + 0.5);
+  }
 }
 
 for (const name of Object.keys(TRIGGERS) as Name[]) {
@@ -178,7 +200,7 @@ for (const name of Object.keys(TRIGGERS) as Name[]) {
                 `/icon-tooltip-side-edge.html?direction=${direction}&align=${align}&edge=${edge}&component=${name}${dir === "rtl" ? "&dir=rtl" : ""}`,
               );
               await page.evaluate(() => document.fonts.ready);
-              check(await measure(page, name), direction, align, edge);
+              check(await measure(page, name), direction, edge);
             });
           }
         }
