@@ -142,7 +142,11 @@ function parseBlocks(lines: string[], offset = 0): Node[] {
     if (SVELTE_BLOCK_RE.test(line))
       unsupported("a top-level Svelte block", line);
     if (SVELTE_TAG_RE.test(line)) unsupported("a top-level svelte: tag", line);
-    if (/^ {0,3}>/.test(line)) unsupported("a block quote", line);
+    if (/^ {0,3}>/.test(line))
+      unsupported(
+        "a block quote (CONTRIBUTING.md rules out admonitions)",
+        line,
+      );
 
     const sequence = htmlSequence(line);
     if (sequence) {
