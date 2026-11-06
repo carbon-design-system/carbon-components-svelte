@@ -112,10 +112,38 @@ export function goto(to: string, options: NavigateOptions = {}) {
   if (options.query) url.search = new URLSearchParams(options.query).toString();
   for (const callback of beforeNavigateCallbacks) callback();
   // Remember where the page was scrolled, for the back button.
-  history.replaceState({ ...history.state, scrollY: window.scrollY }, "");
+  history.replaceState({ ...history.state, ...currentScroll() }, "");
   if (options.replace) history.replaceState(null, "", url);
   else history.pushState(null, "", url);
   location.set(read());
+}
+
+type SavedScroll = {
+  scrollY: number;
+  /** The first heading on screen, and how far from the top it was. */
+  anchor?: { id: string; top: number };
+};
+
+/**
+ * Where the page is scrolled to, by its first heading on screen as well as
+ * by offset: anything above that heading that changes height before the
+ * reader comes back, such as a code view's "Show more", would make the
+ * offset land elsewhere.
+ */
+function currentScroll(): SavedScroll {
+  for (const heading of document.querySelectorAll<HTMLElement>(
+    "h2[id], h3[id]",
+  )) {
+    const { top } = heading.getBoundingClientRect();
+    if (top >= 0) {
+      return { scrollY: window.scrollY, anchor: { id: heading.id, top } };
+    }
+  }
+  return { scrollY: window.scrollY };
+}
+
+function savedScroll(): SavedScroll | undefined {
+  return (history.state as SavedScroll | null) ?? undefined;
 }
 
 /** How long the pointer rests on a link before its page is fetched. */
@@ -212,10 +240,15 @@ export function restoreScroll() {
   const { hash } = get(location);
   const target =
     hash && document.getElementById(decodeURIComponent(hash.slice(1)));
-  if (target) target.scrollIntoView();
-  else
-    window.scrollTo(
-      0,
-      (history.state as { scrollY?: number } | null)?.scrollY ?? 0,
-    );
+  if (target) {
+    target.scrollIntoView();
+    return;
+  }
+  const saved = savedScroll();
+  const anchor = saved?.anchor && document.getElementById(saved.anchor.id);
+  if (anchor && saved?.anchor) {
+    window.scrollBy(0, anchor.getBoundingClientRect().top - saved.anchor.top);
+  } else {
+    window.scrollTo(0, saved?.scrollY ?? 0);
+  }
 }
