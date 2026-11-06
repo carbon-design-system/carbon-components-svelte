@@ -361,7 +361,7 @@ Before adding an example, read the component's `.svx` and follow its order, grou
 
 Page structure:
 
-1. Frontmatter block at the very top: a `description:` field, plus `components:` when the page renders an API table or imports components in a `<script>`.
+1. Frontmatter block at the very top: a `description:` field, plus `components:` when the page renders an API table or imports components in a `<script>`. Add `keywords:` for other words readers search for the component by, such as `["chip"]` for Tag or `["dark mode"]` for Theme.
 2. Optional `<script>` imports (components + icons used inline).
 3. `## Basic` first, then one `## Section title` per variant/feature, each with a short description then the demo.
 
