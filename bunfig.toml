@@ -62,7 +62,7 @@ maxWarnings = 0
 
 # The steps of a browser test run one after another.
 [[lint.overrides]]
-files = ["e2e/**"]
+files = ["e2e/**", "docs/e2e/**"]
 rules = { "no-await-in-loop" = "off" }
 
 [[lint.overrides]]
