@@ -15,6 +15,7 @@
   export let size: ComponentProps<InputGroup>["size"] = undefined;
   export let disabled = false;
   export let formSize: ComponentProps<Form>["size"] = undefined;
+  export let ariaLabel: string | undefined = undefined;
 </script>
 
 <Form size={formSize}>
@@ -28,6 +29,7 @@
     {warnText}
     {size}
     {disabled}
+    aria-label={ariaLabel}
     let:describedBy
     let:invalid={fieldInvalid}
     let:warn={slotWarn}

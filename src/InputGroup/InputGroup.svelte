@@ -106,6 +106,13 @@
     warnId,
     helperId,
   });
+  // An unnamed fieldset reads as a bare "group", which only adds noise.
+  // Drop the role then; the fieldset still disables its fields.
+  $: named =
+    !!legendText ||
+    !!$$slots.legendChildren ||
+    !!$$restProps["aria-label"] ||
+    !!$$restProps["aria-labelledby"];
 </script>
 
 <fieldset
@@ -116,6 +123,7 @@
   class:bx--input-group--invalid={showInvalid}
   class:bx--input-group--warning={showWarn}
   disabled={disabled || undefined}
+  role={named ? undefined : "none"}
   {...$$restProps}
 >
   {#if legendText || $$slots.legendChildren}

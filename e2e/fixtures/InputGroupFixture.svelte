@@ -67,3 +67,10 @@
     </div>
   </InputGroup>
 </div>
+
+<div data-testid="group-disabled" style:width="480px">
+  <InputGroup disabled helperText="Codes apply at checkout">
+    <TextInput labelText="Promo code" />
+    <Button kind="tertiary">Apply</Button>
+  </InputGroup>
+</div>
