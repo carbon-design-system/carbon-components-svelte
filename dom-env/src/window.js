@@ -16,7 +16,7 @@ import {
   StorageEvent,
 } from "./events.js";
 import { current } from "./node.js";
-import { INTERNAL, illegalConstructor, str, tag } from "./shared.js";
+import { illegalConstructor, INTERNAL, str, tag } from "./shared.js";
 
 // --- Storage --------------------------------------------------------------------------
 

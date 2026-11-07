@@ -15,18 +15,18 @@ import { parseFragmentInto } from "./parser.js";
 import {
   CDATA_SECTION_NODE,
   COMMENT_NODE,
+  defineConstants,
   DOCUMENT_FRAGMENT_NODE,
   DOCUMENT_NODE,
   DOCUMENT_TYPE_NODE,
-  defineConstants,
   domException,
   ELEMENT_NODE,
-  INTERNAL,
   illegalConstructor,
+  INTERNAL,
   PROCESSING_INSTRUCTION_NODE,
   str,
-  TEXT_NODE,
   tag,
+  TEXT_NODE,
 } from "./shared.js";
 
 const liveRanges = new Set();
@@ -278,7 +278,7 @@ export class Range extends AbstractRange {
     let out = "";
     if (this._sc.nodeType === TEXT_NODE) out += this._sc._data.slice(this._so);
     const root = this.commonAncestorContainer;
-    for (let n = root._first ?? null; n; ) {
+    for (let n = root._first ?? null; n;) {
       if (
         n.nodeType === TEXT_NODE &&
         n !== this._sc &&

@@ -652,7 +652,7 @@ export function parseDocumentInto(doc, html) {
   let head = null;
   let body = null;
   const loose = [];
-  for (let c = source._first; c; ) {
+  for (let c = source._first; c;) {
     const next = c._next;
     if (c.nodeType === 1 && c._localName === "head" && !head) head = c;
     else if (c.nodeType === 1 && c._localName === "body" && !body) body = c;

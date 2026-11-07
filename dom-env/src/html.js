@@ -19,8 +19,8 @@ import { Event, fire } from "./events.js";
 import {
   adopt,
   cloneNode,
-  DocumentFragment,
   descendantText,
+  DocumentFragment,
   nextInTree,
   setTextContent,
 } from "./node.js";
