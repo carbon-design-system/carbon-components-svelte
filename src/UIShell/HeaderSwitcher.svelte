@@ -1,5 +1,19 @@
 <script>
   /**
+   * @template {HeaderSwitcherItem} [Item=HeaderSwitcherItem]
+   */
+
+  /**
+   * @typedef {object} HeaderSwitcherItem
+   * @property {string | number} id - Unique within `items`.
+   * @property {string} text - The account or workspace name.
+   * @property {string} [description] - Secondary text, such as the organization.
+   * @property {string} [group] - Group label. Items sharing a label render together under a heading, ungrouped items first and groups in order of first appearance.
+   * @property {string} [href] - Render the item as a link.
+   * @property {string} [image] - URL of the avatar image. Without it the avatar shows the initials of `text`.
+   */
+
+  /**
    * @event open
    * @type {object}
    * @property {"toggle"} trigger
@@ -12,7 +26,22 @@
    */
 
   /**
-   * @slot {{}} avatar - Optional leading avatar. Renders nothing by default.
+   * @event select
+   * @type {object}
+   * @property {Item["id"]} selectedId
+   * @property {Item} selectedItem
+   */
+
+  /**
+   * Dispatched as the filter field changes, for a list that is filtered on a
+   * server. Set `filterItems` to `() => true` to leave the filtering to it.
+   * @event filter
+   * @type {object}
+   * @property {string} query
+   */
+
+  /**
+   * @slot {{}} avatar - Optional leading avatar. With `items`, falls back to the avatar of the selected item; otherwise renders nothing.
    */
 
   /**
@@ -22,7 +51,60 @@
   export let isOpen = false;
 
   /**
+   * Specify the accounts or workspaces to list. Omit it to compose the
+   * menu from `ProfileMenuItem`s in the default slot instead. With both, the
+   * default slot renders after the items, for actions such as "Create
+   * workspace".
+   * @type {ReadonlyArray<Item> | undefined}
+   */
+  export let items = undefined;
+
+  /**
+   * Specify the `id` of the current account. It gets `aria-current="true"` and
+   * a checkmark, and fills the trigger when `text` is not set.
+   * @type {Item["id"] | undefined}
+   * @bindable writable
+   */
+  export let selectedId = undefined;
+
+  /**
+   * Set to `true` to show the current account's avatar, name and
+   * `description` at the top of the menu.
+   */
+  export let showDetail = false;
+
+  /**
+   * Specify how many `items` it takes for the menu to show a filter field.
+   * Set to `0` to always show it, or to `Infinity` to never show it.
+   */
+  export let searchThreshold = 8;
+
+  /**
+   * Customize how the filter field matches an item. By default every word
+   * typed must appear in the item's `text` or `description`, ignoring case
+   * and accents.
+   * @type {((item: Item, query: string) => boolean) | undefined}
+   */
+  export let filterItems = undefined;
+
+  /** Specify the label of the filter field. */
+  export let searchLabelText = "Search accounts";
+
+  /** Specify the message shown when no item matches. */
+  export let emptyText = "No accounts found";
+
+  /**
+   * Build the message announced to screen readers when the filter settles.
+   * @type {(count: number) => string}
+   */
+  export let resultsText = (count) =>
+    count === 0
+      ? "No accounts found"
+      : `${count} account${count === 1 ? "" : "s"} found`;
+
+  /**
    * Specify the workspace or account name shown next to the avatar.
+   * Defaults to the name of the selected item.
    * @type {string | undefined}
    */
   export let text = undefined;
@@ -69,6 +151,7 @@
   import { createEventDispatcher, setContext, tick } from "svelte";
   import { get } from "svelte/store";
   import { slide } from "svelte/transition";
+  import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
   import ChevronDown from "../icons/ChevronDown.svelte";
   import { toCssLength } from "../utils/css-length.js";
@@ -78,8 +161,14 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
+  import {
+    createTypeaheadBuffer,
+    isTypeaheadKey,
+    typeaheadIndex,
+  } from "../utils/typeahead.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { verticalListFocus } from "../utils/vertical-list-focus.js";
+  import HeaderSwitcherMenu from "./HeaderSwitcherMenu.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -105,6 +194,8 @@
   });
 
   $: maxWidthStyle = toCssLength(maxWidth);
+  $: selectedItem = items?.find((item) => item.id === selectedId);
+  $: triggerText = text ?? selectedItem?.text;
 
   /** @param {"outside-click" | "escape-key" | "select"} trigger */
   function close(trigger) {
@@ -130,9 +221,71 @@
     }
   }
 
+  /** @param {Item} item */
+  function handlePick(item) {
+    selectedId = item.id;
+    dispatch("select", { selectedId: item.id, selectedItem: item });
+  }
+
+  const ITEM_SELECTOR = ".bx--profile-menu__item";
+  const typeahead = createTypeaheadBuffer();
+
+  // Runs in the capture phase, before `verticalListFocus` sees the key, for
+  // the keys that cross between the filter field and the items.
+  /** @param {KeyboardEvent} event */
+  function handleMenuKeydown(event) {
+    const target = event.target;
+    if (!refMenu || !(target instanceof HTMLElement)) return;
+    const search = /** @type {HTMLInputElement | null} */ (
+      refMenu.querySelector("input[type='search']")
+    );
+    const rows = /** @type {HTMLElement[]} */ (
+      Array.from(refMenu.querySelectorAll(ITEM_SELECTOR))
+    );
+    if (target === search) {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        const edge = pickEdgeMenuItem(event.key, rows);
+        if (!edge) return;
+        event.preventDefault();
+        event.stopPropagation();
+        edge.focus();
+      }
+      return;
+    }
+    const index = rows.indexOf(target);
+    if (index < 0) return;
+    if (search) {
+      if (event.key === "ArrowUp" && index === 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        search.focus();
+      } else if (isTypeaheadKey(event)) {
+        // The character is typed into the field once it has focus.
+        search.focus();
+      }
+      return;
+    }
+    if (!isTypeaheadKey(event)) return;
+    const query = typeahead.push(event.key);
+    const next = typeaheadIndex({
+      items: rows,
+      query,
+      itemToString: (row) =>
+        (
+          row.querySelector(".bx--header-switcher__item-text") ?? row
+        ).textContent?.trim() ?? "",
+      // `typeaheadIndex` starts after `index` for every query, so a second
+      // letter skips the item that still matches (see #5578).
+      index: query.length > 1 ? index - 1 : index,
+    });
+    if (next !== index && rows[next]) rows[next].focus();
+  }
+
   /** @param {Event} event */
   function handleKeydown(event) {
     if (isOpen && /** @type {KeyboardEvent} */ (event).key === "Escape") {
+      // The filter field clears first; a second Escape closes.
+      if (event.defaultPrevented) return;
       // Escape that cancels an IME composition is not a close.
       if (isImeComposition(/** @type {KeyboardEvent} */ (event))) return;
       close("escape-key");
@@ -176,7 +329,7 @@
     type="button"
     aria-expanded={isOpen ? "true" : "false"}
     aria-controls={isOpen ? menuId : undefined}
-    aria-label={text ? undefined : iconDescription}
+    aria-label={triggerText ? undefined : iconDescription}
     {id}
     class:bx--header__action={true}
     class:bx--header__action--active={isOpen}
@@ -191,22 +344,37 @@
       if (!wasOpen && isOpen && event.detail === 0) {
         await tick();
         menuItemRegistry.flush();
-        get(menuItems)[0]?.focus();
+        const search = refMenu?.querySelector("input[type='search']");
+        /** @type {HTMLElement | undefined} */ (
+          search ?? get(menuItems)[0]
+        )?.focus();
       }
     }}
     on:keydown={handleTriggerKeydown}
   >
-    {#if $$slots.avatar}
+    {#if $$slots.avatar || selectedItem}
       <span class:bx--header-switcher__avatar={true}>
-        <slot name="avatar" />
+        <slot name="avatar">
+          {#if selectedItem}
+            <UserAvatar
+              name={selectedItem.text}
+              image={selectedItem.image}
+              imageDescription=""
+              aria-hidden="true"
+              backgroundColor="auto"
+              size="sm"
+            />
+          {/if}
+        </slot>
       </span>
     {/if}
-    {#if text}
+    {#if triggerText}
       <span
         class:bx--header__action-text={true}
         class:bx--header-switcher__text={true}
-        class:bx--header-switcher__text--flush={!$$slots.avatar}
-        style:max-width={maxWidthStyle}>{text}</span
+        class:bx--header-switcher__text--flush={!$$slots.avatar &&
+          !selectedItem}
+        style:max-width={maxWidthStyle}>{triggerText}</span
       >
     {/if}
     <span
@@ -217,26 +385,66 @@
     </span>
   </button>
   {#if isOpen && transition}
+    <!-- The handler only reads keys that bubble up from the items and the
+         filter field inside. -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div
       bind:this={refMenu}
+      role="group"
       use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
+      on:keydown|capture={handleMenuKeydown}
       id={menuId}
       aria-label={iconDescription}
       class:bx--profile-menu={true}
       class:bx--header-switcher__menu={true}
       transition:slide|local={transition}
     >
+      {#if items}
+        <HeaderSwitcherMenu
+          {items}
+          {selectedId}
+          {menuId}
+          {showDetail}
+          {searchThreshold}
+          {filterItems}
+          {searchLabelText}
+          {emptyText}
+          {resultsText}
+          on:pick={(event) => handlePick(event.detail)}
+          on:filter
+        />
+      {/if}
       <slot />
     </div>
   {:else if isOpen}
+    <!-- The handler only reads keys that bubble up from the items and the
+         filter field inside. -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div
       bind:this={refMenu}
+      role="group"
       use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
+      on:keydown|capture={handleMenuKeydown}
       id={menuId}
       aria-label={iconDescription}
       class:bx--profile-menu={true}
       class:bx--header-switcher__menu={true}
     >
+      {#if items}
+        <HeaderSwitcherMenu
+          {items}
+          {selectedId}
+          {menuId}
+          {showDetail}
+          {searchThreshold}
+          {filterItems}
+          {searchLabelText}
+          {emptyText}
+          {resultsText}
+          on:pick={(event) => handlePick(event.detail)}
+          on:filter
+        />
+      {/if}
       <slot />
     </div>
   {/if}
