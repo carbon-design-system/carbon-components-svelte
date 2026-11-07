@@ -3,10 +3,14 @@
 import { BoundedFifoCache } from "./bounded-fifo-cache.js";
 import { getNumberFormatter } from "./intl-formatter-cache.js";
 
-/** Scripts written right to left, as ISO 15924 codes. */
+/**
+ * Scripts written right to left, as ISO 15924 codes. JavaScriptCore
+ * maximizes Urdu to `Aran`, Arabic in Nastaliq style; V8 gives `Arab`.
+ */
 const RTL_SCRIPTS = new Set([
   "Adlm",
   "Arab",
+  "Aran",
   "Hebr",
   "Mand",
   "Mend",
