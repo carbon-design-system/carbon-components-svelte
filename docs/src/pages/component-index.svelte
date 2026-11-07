@@ -1,8 +1,9 @@
 <script lang="ts">
   import {
-    Box,
+    Button,
     Column,
     Content,
+    EmptyState,
     Grid,
     Link,
     MultiSelect,
@@ -19,6 +20,7 @@
     TooltipGroup,
   } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
+  import Binocular from "carbon-pictograms-svelte/lib/Binocular.svelte";
   import { onMount } from "svelte";
   import { COMPONENT_CATEGORIES } from "../component-categories";
   import {
@@ -315,25 +317,20 @@
             </TooltipGroup>
           </div>
 
-          {#if visible.length === 0}
-            <Box display="flex" direction="column" gap={3} paddingY={4}>
-              <Text tag="p" type="heading-03" color="primary">No results</Text>
-              <Text type="body-01" color="secondary" balance maxWidth="52ch">
-                No components match your search or category filters. Try a
-                different query or broaden the category selection.
-              </Text>
-              <Link
-                href="#"
-                size="lg"
-                on:click={(e) => {
-                  e.preventDefault();
-                  clearFilters();
-                }}
+          <div role="status">
+            {#if visible.length === 0}
+              <EmptyState
+                headingLevel={2}
+                titleText="No results"
+                subtitleText="No components match your search or category filters. Try a different query or broaden the category selection."
               >
-                Clear filters
-              </Link>
-            </Box>
-          {/if}
+                <Binocular slot="illustration" />
+                <Button kind="tertiary" on:click={clearFilters}>
+                  Clear filters
+                </Button>
+              </EmptyState>
+            {/if}
+          </div>
         </div>
       </Column>
     </Row>
