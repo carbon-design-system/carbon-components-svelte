@@ -363,6 +363,24 @@ describe("Splitter", () => {
       expect(boundSize()).toHaveTextContent("30");
     });
 
+    it("holds a set size at min when a narrow splitter puts it past halfway", async () => {
+      const { separator } = setup({
+        size: 30,
+        min: "200px",
+        collapsedSize: 0,
+      });
+      // 200px is 67% of 300px, so 30% is past halfway to collapsed.
+      report(300, 200);
+      await tick();
+
+      expect(separator).toHaveAttribute("aria-valuenow", "66.67");
+      expect(boundCollapsed()).toHaveTextContent("false");
+
+      report(1000, 200);
+      await tick();
+      expect(separator).toHaveAttribute("aria-valuenow", "30");
+    });
+
     it("uses the height when vertical", async () => {
       const { separator } = setup({ orientation: "vertical", min: "50px" });
       report(400, 200);

@@ -98,6 +98,22 @@
     cursor: row-resize;
   }
 
+  // A finger needs a larger target than 8px. On a device with a touch
+  // screen, widen the hit target to 24px; the line and the layout stay the
+  // same. `any-pointer` also covers laptops with a touch screen.
+  @media (any-pointer: coarse) {
+    .#{$prefix}--splitter__separator {
+      width: to-rem(24px);
+      margin: 0 to-rem(-12px);
+    }
+
+    .#{$prefix}--splitter--vertical > .#{$prefix}--splitter__separator {
+      width: auto;
+      height: to-rem(24px);
+      margin: to-rem(-12px) 0;
+    }
+  }
+
   // Panes stop taking pointer events mid-drag, so an iframe or a link under
   // the pointer can't steal the cursor or the gesture.
   .#{$prefix}--splitter--resizing {
