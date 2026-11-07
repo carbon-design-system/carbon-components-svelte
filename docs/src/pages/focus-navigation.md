@@ -88,7 +88,7 @@ Lists wrap at the ends and grids stop, which is what the WAI-ARIA patterns do. S
 | Option | Default | Does |
 | :--- | :--- | :--- |
 | `orientation` | `"horizontal"` | `"horizontal"`, `"vertical"`, `"both"`, or `"grid"` |
-| `columns`, `layout` | `1` | Cells per line in a grid. `layout` takes `{ lineCount, lineOf, lineStart, lineLength }` for lines of different lengths, such as sections that each start a new line |
+| `columns`, `layout` | `1` | Cells per line in a grid. A function is read on each key, for a grid that reflows with its width. `layout` takes `{ lineCount, lineOf, lineStart, lineLength }` for lines of different lengths, such as sections that each start a new line |
 | `wrap` | `true` for a list, `false` for a grid | Wrap at the ends |
 | `flow` | `false` | Grid only. Left and Right carry on into the next line |
 | `rtl` | `false` | A boolean or a function read on each key |
