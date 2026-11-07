@@ -21,9 +21,11 @@
     color: $icon-secondary;
   }
 
+  // A pictogram draws at 64px, and an icon at its own size, 32px at most.
+  // The caps keep any larger art to the pictogram size.
   .#{$prefix}--empty-state__illustration svg {
-    width: to-rem(64px);
-    height: to-rem(64px);
+    max-width: to-rem(64px);
+    max-height: to-rem(64px);
     fill: currentColor;
   }
 
@@ -61,8 +63,8 @@
   }
 
   .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__illustration svg {
-    width: to-rem(48px);
-    height: to-rem(48px);
+    max-width: to-rem(48px);
+    max-height: to-rem(48px);
   }
 
   .#{$prefix}--empty-state--sm .#{$prefix}--empty-state__title {

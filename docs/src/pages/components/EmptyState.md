@@ -6,14 +6,17 @@ description: Empty states fill a panel, card or table that has nothing to show y
 <script>
   import { Button, EmptyState } from "carbon-components-svelte";
   import Add from "carbon-icons-svelte/lib/Add.svelte";
-  import Folder from "carbon-icons-svelte/lib/Folder.svelte";
-  import Locked from "carbon-icons-svelte/lib/Locked.svelte";
-  import Search from "carbon-icons-svelte/lib/Search.svelte";
+  import Folder from "carbon-pictograms-svelte/lib/Folder.svelte";
+  import Lock from "carbon-pictograms-svelte/lib/Lock_01.svelte";
+  import Binocular from "carbon-pictograms-svelte/lib/Binocular.svelte";
+  import ShoppingCart from "carbon-pictograms-svelte/lib/ShoppingCart.svelte";
 </script>
 
 ## Basic
 
-Give the empty state a `title`, a `subtitle` that says why it's empty, and the action that fills it in the default slot. Put an icon or pictogram in the `illustration` slot; it is hidden from screen readers.
+Give the empty state a `title`, a `subtitle` that says why it's empty, and the action that fills it in the default slot. Put a pictogram from [carbon-pictograms-svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte) in the `illustration` slot. It is hidden from screen readers.
+
+The pictogram draws at 64px, and at 48px in the small size. Icons are drawn for 32px and smaller, so an icon in this slot keeps its own size. Give it `size={32}`.
 
 <EmptyState
   title="Create your first project"
@@ -33,7 +36,7 @@ For a search or filter with no matches, offer a way back. Set `role="status"` so
   title="No results for “invoces”"
   subtitle="Check the spelling, or try a shorter, broader term."
 >
-  <Search slot="illustration" />
+  <Binocular slot="illustration" />
   <Button kind="tertiary">Clear search</Button>
 </EmptyState>
 
@@ -42,7 +45,7 @@ For a search or filter with no matches, offer a way back. Set `role="status"` so
 Use the `subtitleChildren` slot for a subtitle with a link. `titleChildren` does the same for the title.
 
 <EmptyState title="You don't have access to Billing">
-  <Locked slot="illustration" />
+  <Lock slot="illustration" />
   <svelte:fragment slot="subtitleChildren">
     Ask a workspace admin, or <a href="#roles">read about roles</a>.
   </svelte:fragment>
@@ -54,7 +57,7 @@ Use the `subtitleChildren` slot for a subtitle with a link. `titleChildren` does
 Set `size` to `"sm"` in a card, drawer or table body.
 
 <EmptyState size="sm" title="Your bag is empty" subtitle="Items you add show up here.">
-  <Folder slot="illustration" />
+  <ShoppingCart slot="illustration" />
   <Button kind="tertiary" size="small">Continue shopping</Button>
 </EmptyState>
 
