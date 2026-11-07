@@ -14,6 +14,7 @@
     scrollsAwayFromTop,
     startRouter,
   } from "./router";
+  import { reloadForNewBuild } from "./stale-build";
 
   let Page: Component | undefined;
   let loading = 0;
@@ -29,7 +30,7 @@
       return;
     }
     const token = ++loading;
-    const loaded = await loadPage(next);
+    const loaded = await loadPage(next).catch(reloadForNewBuild);
     if (token !== loading || !loaded) return;
     eagerContent.set(scrollsAwayFromTop());
     Page = loaded.component;
