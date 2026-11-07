@@ -525,6 +525,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/EmptyState
+  error-boundary:
+    name: Error boundary
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/error-boundary.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ErrorBoundary
   expandable-tile:
     name: Expandable tile
     status: stable
