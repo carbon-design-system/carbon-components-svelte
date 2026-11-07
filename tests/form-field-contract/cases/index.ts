@@ -5,6 +5,7 @@ import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import NaturalDateInput from "carbon-components-svelte/NaturalDateInput/NaturalDateInput.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import FluidPinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/FluidPinCodeInputSkeleton.svelte";
@@ -147,6 +148,14 @@ export const cases: FieldCase[] = [
     component: InlineEditField,
     control: () => screen.getByRole("textbox"),
     selectOnFocus: { value: "hello world" },
+  },
+  {
+    name: "NaturalDateInput",
+    component: NaturalDateInput,
+    control: () => screen.getByRole("textbox"),
+    // The messages sit under the input group, which names them in the
+    // description, as for Dropdown.
+    state: { errorAttribute: "aria-describedby" },
   },
   {
     name: "NumberInput",
