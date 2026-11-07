@@ -1,9 +1,11 @@
 <script lang="ts">
   import {
     Box,
+    Button,
     Column,
     Content,
     CopyButton,
+    EmptyState,
     Grid,
     LazyMount,
     Link,
@@ -20,6 +22,7 @@
     Text,
   } from "carbon-components-svelte";
   import ColorPalette from "carbon-icons-svelte/lib/ColorPalette.svelte";
+  import SearchIcon from "carbon-icons-svelte/lib/Search.svelte";
   import ColorTokenTable from "../components/ColorTokenTable.svelte";
   import DocHero from "../components/DocHero.svelte";
   import DocSection from "../components/DocSection.svelte";
@@ -141,15 +144,17 @@
     <Grid>
       <Row>
         <Column>
-          <Box paddingY={9}>
-            <Stack gap={3}>
-              <Text tag="p" type="heading-03" color="primary">No results</Text>
-              <Text type="body-01" color="secondary" maxWidth="52ch">
-                No token name or value matches "{query}". Try a shorter query,
-                such as layer or #0f62fe.
-              </Text>
-            </Stack>
-          </Box>
+          <EmptyState
+            role="status"
+            headingLevel={2}
+            title="No results"
+            subtitle="No token name or value matches “{query}”. Try a shorter query, such as layer or #0f62fe."
+          >
+            <SearchIcon slot="illustration" />
+            <Button kind="tertiary" on:click={() => (query = "")}>
+              Clear search
+            </Button>
+          </EmptyState>
         </Column>
       </Row>
     </Grid>

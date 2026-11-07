@@ -1,8 +1,9 @@
 <script lang="ts">
   import {
-    Box,
+    Button,
     Column,
     Content,
+    EmptyState,
     Grid,
     Link,
     MultiSelect,
@@ -19,6 +20,7 @@
     TooltipGroup,
   } from "carbon-components-svelte";
   import Catalog from "carbon-icons-svelte/lib/Catalog.svelte";
+  import SearchIcon from "carbon-icons-svelte/lib/Search.svelte";
   import { onMount } from "svelte";
   import { COMPONENT_CATEGORIES } from "../component-categories";
   import {
@@ -316,23 +318,17 @@
           </div>
 
           {#if visible.length === 0}
-            <Box display="flex" direction="column" gap={3} paddingY={4}>
-              <Text tag="p" type="heading-03" color="primary">No results</Text>
-              <Text type="body-01" color="secondary" balance maxWidth="52ch">
-                No components match your search or category filters. Try a
-                different query or broaden the category selection.
-              </Text>
-              <Link
-                href="#"
-                size="lg"
-                on:click={(e) => {
-                  e.preventDefault();
-                  clearFilters();
-                }}
-              >
+            <EmptyState
+              role="status"
+              headingLevel={2}
+              title="No results"
+              subtitle="No components match your search or category filters. Try a different query or broaden the category selection."
+            >
+              <SearchIcon slot="illustration" />
+              <Button kind="tertiary" on:click={clearFilters}>
                 Clear filters
-              </Link>
-            </Box>
+              </Button>
+            </EmptyState>
           {/if}
         </div>
       </Column>
