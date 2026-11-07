@@ -1,0 +1,236 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// FilterPanel: a faceted filter sidebar made of Carbon's own controls. The
+/// partial lays out the panel (header, accordion body, a footer that stays
+/// in view), sets each option's count at the inline end of its label, and
+/// styles the applied-filters bar.
+/// @access private
+/// @group components
+@mixin filter-panel {
+  .#{$prefix}--filter-panel {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-block-size: 100%;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--filter-panel__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: $carbon--spacing-05 $carbon--spacing-05 $carbon--spacing-03;
+    gap: $carbon--spacing-02 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--filter-panel__title {
+    @include type-style("heading-02");
+  }
+
+  .#{$prefix}--filter-panel__results {
+    @include type-style("helper-text-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--filter-panel__toolbar {
+    display: flex;
+    justify-content: flex-end;
+    padding-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--filter-panel__body {
+    flex: 1 1 auto;
+  }
+
+  // The accordion's content keeps 25% of its width as padding at the widest
+  // size. A sidebar is narrow by design, and the options should use it.
+  .#{$prefix}--filter-panel .#{$prefix}--accordion__content {
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // The accordion's start-aligned arrow and title keep their gap on the
+  // left. Restate it logically so the arrow sits at the inline start in RTL.
+  .#{$prefix}--filter-panel .#{$prefix}--accordion--start .#{$prefix}--accordion__arrow {
+    margin: 2px 0 0;
+    margin-inline-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--filter-panel .#{$prefix}--accordion--start .#{$prefix}--accordion__title {
+    margin-right: 0;
+    margin-inline-end: $carbon--spacing-05;
+    text-align: start;
+  }
+
+  .#{$prefix}--filter-panel__facet-title {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--filter-panel__badge {
+    @include type-style("label-01");
+
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: to-rem(20px);
+    padding-inline: $carbon--spacing-02;
+    border-radius: to-rem(10px);
+    background-color: $background-inverse;
+    color: $text-inverse;
+  }
+
+  // Each option reads as "label ... count": the count sits at the inline
+  // end, and the label wraps inside its own column.
+  .#{$prefix}--filter-panel__option {
+    display: flex;
+    inline-size: 100%;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--filter-panel__option-label {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--filter-panel__count {
+    @include type-style("helper-text-01");
+
+    flex: none;
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--filter-panel__empty {
+    @include type-style("helper-text-01");
+
+    margin: $carbon--spacing-03 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--filter-panel .#{$prefix}--search {
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--filter-panel .#{$prefix}--fieldset {
+    min-inline-size: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--filter-panel__range-inputs {
+    display: grid;
+    margin-block-start: $carbon--spacing-04;
+    gap: $carbon--spacing-04;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  // Carbon keeps a number field at least 150px wide; two of them overflow a
+  // sidebar.
+  .#{$prefix}--filter-panel__range-inputs .#{$prefix}--form-item,
+  .#{$prefix}--filter-panel__range-inputs .#{$prefix}--number,
+  .#{$prefix}--filter-panel__range-inputs .#{$prefix}--number input {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--filter-panel__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $carbon--spacing-03;
+  }
+
+  // A range picker's two inputs sit side by side at 8rem each, which is wider
+  // than a sidebar. Stack them at the panel's width.
+  .#{$prefix}--filter-panel .#{$prefix}--date-picker--range {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--filter-panel .#{$prefix}--date-picker-container,
+  .#{$prefix}--filter-panel .#{$prefix}--date-picker__input {
+    inline-size: 100%;
+  }
+
+  // Batch mode: the footer stays at the foot of the panel, or of the
+  // scrolling area the panel sits in, so Apply never scrolls away.
+  .#{$prefix}--filter-panel__footer {
+    position: sticky;
+    z-index: 1;
+    display: grid;
+    inset-block-end: 0;
+    border-block-start: 1px solid $border-subtle;
+    background-color: $layer;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .#{$prefix}--filter-panel__footer .#{$prefix}--btn {
+    max-inline-size: none;
+    inline-size: 100%;
+  }
+
+  // In a side panel the panel runs to the edges of the body, which pads its
+  // content.
+  .#{$prefix}--side-panel__body > .#{$prefix}--filter-panel {
+    margin: -$carbon--spacing-05;
+  }
+
+  // The applied-filters bar: chips that wrap, then Clear all.
+  .#{$prefix}--filter-panel__applied {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--filter-panel__applied--empty {
+    display: block;
+    block-size: 0;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--filter-panel__applied:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--filter-panel__chips {
+    display: contents;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--filter-panel__chips > li {
+    display: inline-flex;
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--filter-panel__chips .#{$prefix}--tag {
+    margin: 0;
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--filter-panel__badge {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--filter-panel__footer {
+      border-block-start-color: CanvasText;
+    }
+  }
+}
+
+@include exports("filter-panel") {
+  @include filter-panel;
+}

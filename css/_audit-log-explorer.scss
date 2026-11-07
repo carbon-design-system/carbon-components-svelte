@@ -1,0 +1,253 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AuditLogExplorer: a full-page event log. A query bar and a time range on
+/// top, a facet column at the inline start, and a virtualized grid of events
+/// beside it. The partial lays those out and styles the grid; every control in
+/// them is a component of its own.
+/// @access private
+/// @group components
+@mixin audit-log-explorer {
+  .#{$prefix}--audit-log {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-block-size: 0;
+    background-color: $background;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--audit-log__query {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--audit-log__search {
+    flex: 1 1 to-rem(352px);
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--audit-log__range {
+    flex: 0 1 to-rem(224px);
+    min-inline-size: to-rem(160px);
+  }
+
+  .#{$prefix}--audit-log__live {
+    flex: 0 0 auto;
+    padding-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--audit-log__export {
+    flex: 0 0 auto;
+  }
+
+  .#{$prefix}--audit-log__custom {
+    display: flex;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--audit-log__body {
+    display: grid;
+    flex: 1 1 0;
+    min-block-size: 0;
+    grid-template-columns: to-rem(304px) minmax(0, 1fr);
+  }
+
+  .#{$prefix}--audit-log__facets {
+    overflow-y: auto;
+    border-inline-end: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--audit-log__results {
+    display: flex;
+    min-inline-size: 0;
+    min-block-size: 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--audit-log__status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--audit-log__count {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--audit-log__table {
+    position: relative;
+    display: flex;
+    overflow-x: auto;
+    flex: 1 1 0;
+    flex-direction: column;
+    border-block-start: 1px solid $border-subtle;
+    min-block-size: to-rem(128px);
+  }
+
+  // The grid is also the scroller, so a keyboard user has one stop and the
+  // sticky header row stays inside the grid's own structure.
+  .#{$prefix}--audit-log__grid {
+    overflow-y: auto;
+    flex: 1 1 0;
+    min-block-size: 0;
+    min-inline-size: to-rem(704px);
+  }
+
+  .#{$prefix}--audit-log__grid:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--audit-log__grid--busy .#{$prefix}--audit-log__row:not(.#{$prefix}--audit-log__row--head) {
+    opacity: 0.6;
+  }
+
+  .#{$prefix}--audit-log__row {
+    @include type-style("body-compact-01");
+
+    display: grid;
+    box-sizing: border-box;
+    align-items: center;
+    border-block-end: 1px solid $border-subtle;
+    border-inline-start: 3px solid transparent;
+    block-size: to-rem(32px);
+    grid-template-columns:
+      to-rem(152px) minmax(to-rem(160px), 1.2fr) minmax(to-rem(160px), 1fr)
+      minmax(to-rem(128px), 1fr) to-rem(96px);
+  }
+
+  .#{$prefix}--audit-log__row:not(.#{$prefix}--audit-log__row--head) {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--audit-log__row--head {
+    @include type-style("heading-compact-01");
+
+    position: sticky;
+    z-index: 1;
+    inset-block-start: 0;
+    background-color: $layer-accent;
+  }
+
+  .#{$prefix}--audit-log__cell {
+    overflow: hidden;
+    padding-inline: $carbon--spacing-05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--audit-log__cell--time {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--audit-log__row--selected {
+    border-inline-start-color: $interactive;
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--audit-log__row--active {
+    @include focus-outline("outline");
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--audit-log__row:not(.#{$prefix}--audit-log__row--head):hover {
+      background-color: $layer-hover;
+    }
+  }
+
+  .#{$prefix}--audit-log__new {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: to-rem(40px);
+    inset-inline: 0;
+    inline-size: fit-content;
+    margin-inline: auto;
+  }
+
+  .#{$prefix}--audit-log__footer {
+    @include type-style("helper-text-01");
+
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--audit-log__footer p {
+    margin: 0;
+  }
+
+  .#{$prefix}--audit-log__empty {
+    padding: $carbon--spacing-07 $carbon--spacing-05;
+    text-align: center;
+  }
+
+  .#{$prefix}--audit-log__empty-title {
+    @include type-style("heading-03");
+  }
+
+  .#{$prefix}--audit-log__details {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--audit-log__copyable {
+    display: inline-flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    overflow-wrap: anywhere;
+  }
+
+  // Below the large breakpoint the facets stack over the events.
+  @include carbon--breakpoint-down(lg) {
+    .#{$prefix}--audit-log__body {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, auto) minmax(0, 1fr);
+    }
+
+    .#{$prefix}--audit-log__facets {
+      max-block-size: to-rem(192px);
+      border-inline-end: 0;
+      border-block-end: 1px solid $border-subtle;
+    }
+  }
+
+  // Forced colors repaint every fill with the page's, so a selected row is
+  // read from a thick edge and the focused one from its outline.
+  @media (forced-colors: active) {
+    .#{$prefix}--audit-log__row--selected {
+      border-inline-start-color: Highlight;
+    }
+
+    .#{$prefix}--audit-log__row--active {
+      outline: 2px solid Highlight;
+    }
+
+    .#{$prefix}--audit-log__row,
+    .#{$prefix}--audit-log__query,
+    .#{$prefix}--audit-log__facets {
+      border-color: CanvasText;
+    }
+  }
+}
+
+@include exports("audit-log-explorer") {
+  @include audit-log-explorer;
+}
