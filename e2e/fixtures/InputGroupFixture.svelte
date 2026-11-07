@@ -5,6 +5,7 @@
     NumberInput,
     Select,
     SelectItem,
+    TextArea,
     TextInput,
   } from "carbon-components-svelte";
   import Send from "carbon-icons-svelte/lib/Send.svelte";
@@ -19,6 +20,19 @@
     <InputGroup {size}>
       <TextInput labelText="Promo code" />
       <Button kind="tertiary">Apply</Button>
+    </InputGroup>
+  </div>
+{/each}
+
+{#each ["sm", undefined, "xl"] as size}
+  <div
+    data-testid="group-text-area-{size ?? 'md'}"
+    style:width="480px"
+    style:margin-bottom="24px"
+  >
+    <InputGroup {size}>
+      <TextArea hideLabel labelText="Message" rows={1} />
+      <Button icon={Send} iconDescription="Send" />
     </InputGroup>
   </div>
 {/each}

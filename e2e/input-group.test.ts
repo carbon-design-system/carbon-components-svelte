@@ -31,6 +31,25 @@ test.describe("InputGroup", () => {
     });
   }
 
+  for (const [size, height] of [
+    ["sm", 32],
+    ["md", 40],
+    ["xl", 48],
+  ] as const) {
+    test(`sizes a one-row ${size} text area to the button`, async ({
+      page,
+    }) => {
+      const { field, button } = await rows(
+        page.getByTestId(`group-text-area-${size}`),
+        "textarea",
+      );
+
+      expect(field?.height).toBe(height);
+      expect(button?.height).toBe(height);
+      expect(button?.top).toBe(field?.top);
+    });
+  }
+
   test("keeps the button level when the group shows a message", async ({
     page,
   }) => {
