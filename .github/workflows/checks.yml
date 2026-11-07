@@ -311,6 +311,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        # Vitest runs on Bun, and only canary runs it reliably so far.
+        with:
+          bun-version: canary
       - run: bun ci
 
       # The css tests cache each compiled theme entry (tests/css/compile.ts),
@@ -338,9 +341,9 @@ jobs:
           SHARD: ${{ matrix.shard }}/2
         run: |
           case "$TESTS" in
-            "" | all) bunx vitest run --shard="$SHARD" --passWithNoTests ;;
+            "" | all) bunx --bun vitest run --shard="$SHARD" --passWithNoTests ;;
             none) echo "No unit tests affected." ;;
-            *) read -ra files <<< "$TESTS" && bunx vitest run --shard="$SHARD" --passWithNoTests "${files[@]}" ;;
+            *) read -ra files <<< "$TESTS" && bunx --bun vitest run --shard="$SHARD" --passWithNoTests "${files[@]}" ;;
           esac
 
       # The DatePicker calendar does its own date math. Run its tests where a
@@ -361,7 +364,7 @@ jobs:
           zones=(America/Santiago America/Havana Asia/Tehran Pacific/Apia)
           pids=()
           for zone in "${zones[@]}"; do
-            TZ="$zone" bunx vitest run tests/DatePicker/calendar --maxWorkers=1 \
+            TZ="$zone" bunx --bun vitest run tests/DatePicker/calendar --maxWorkers=1 \
               > "$RUNNER_TEMP/tz-${zone//\//-}.log" 2>&1 &
             pids+=($!)
           done
@@ -452,6 +455,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        # Vitest runs on Bun, and only canary runs it reliably so far.
+        with:
+          bun-version: canary
       - run: bun ci
 
       - name: Setup ${{ matrix.label }}
@@ -478,9 +484,9 @@ jobs:
         run: |
           cd ${{ matrix.dir }}
           case "$TESTS" in
-            "" | all) bunx vitest run --shard="$SHARD" --passWithNoTests ;;
+            "" | all) bunx --bun vitest run --shard="$SHARD" --passWithNoTests ;;
             none) echo "No unit tests affected." ;;
-            *) read -ra files <<< "$TESTS" && bunx vitest run --shard="$SHARD" --passWithNoTests "${files[@]/#/../}" ;;
+            *) read -ra files <<< "$TESTS" && bunx --bun vitest run --shard="$SHARD" --passWithNoTests "${files[@]/#/../}" ;;
           esac
 
   deploy-docs:
