@@ -8,15 +8,17 @@ import { hasModifierKey } from "./has-modifier-key.js";
  * here gives every engine the same answer: ArrowRight goes toward the inline
  * start, ArrowLeft toward the inline end.
  *
- * Call it from a `keydown` handler on the element that holds the radios. It
- * wraps at the ends, as native radios do, skips disabled radios, and checks
- * the radio it lands on, which fires its `change` like a click.
+ * Call it from a `keydown` handler on the element that holds the radios, or
+ * on each radio with `scope` set to that element. It wraps at the ends, as
+ * native radios do, skips disabled radios, and checks the radio it lands on,
+ * which fires its `change` like a click.
  *
  * @param {KeyboardEvent} event
  * @param {boolean} rtl - Whether the group reads right to left.
+ * @param {HTMLElement} [scope] - Holds the radios. Defaults to the element the handler is on.
  * @returns {boolean} Whether it moved the focus.
  */
-export function moveRadioInRtl(event, rtl) {
+export function moveRadioInRtl(event, rtl, scope) {
   if (!rtl || hasModifierKey(event)) return false;
   if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return false;
 
@@ -26,9 +28,9 @@ export function moveRadioInRtl(event, rtl) {
   }
 
   const group = Array.from(
-    /** @type {HTMLElement} */ (event.currentTarget).querySelectorAll(
-      'input[type="radio"]',
-    ),
+    (
+      scope ?? /** @type {HTMLElement} */ (event.currentTarget)
+    ).querySelectorAll('input[type="radio"]'),
   ).filter(
     (radio) =>
       radio instanceof HTMLInputElement &&
