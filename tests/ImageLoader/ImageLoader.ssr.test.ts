@@ -32,23 +32,86 @@ describe("ImageLoader server render", () => {
     expect(document.querySelector("img")).toHaveAttribute("src", src);
   });
 
-  it("does not forward rest props to the hidden <img>", () => {
+  it("forwards only the attributes that choose the file to the hidden <img>", () => {
     const { document } = renderSSR(ImageLoader, {
       src,
       id: "logo",
       "data-testid": "logo",
       crossorigin: "anonymous",
-      srcset: `${src} 2x`,
+      referrerpolicy: "no-referrer",
+      fetchpriority: "high",
+      decoding: "async",
+      srcset: `${src} 1x, https://example.com/logo@2x.svg 2x`,
+      sizes: "100vw",
     });
 
     const img = document.querySelector("img");
     expect(img).not.toBeNull();
     expect(img).not.toHaveAttribute("id");
     expect(img).not.toHaveAttribute("data-testid");
-    expect(img).not.toHaveAttribute("crossorigin");
-    expect(img).not.toHaveAttribute("srcset");
+    expect(img).toHaveAttribute("crossorigin", "anonymous");
+    expect(img).toHaveAttribute("referrerpolicy", "no-referrer");
+    expect(img).toHaveAttribute("fetchpriority", "high");
+    expect(img).toHaveAttribute("decoding", "async");
+    expect(img).toHaveAttribute(
+      "srcset",
+      `${src} 1x, https://example.com/logo@2x.svg 2x`,
+    );
+    expect(img).toHaveAttribute("sizes", "100vw");
     expect(document.querySelectorAll("#logo")).toHaveLength(0);
     expect(document.querySelectorAll("img")).toHaveLength(1);
+  });
+
+  it("renders sources in a <picture> ahead of the hidden <img>", () => {
+    const { document } = renderSSR(ImageLoader, {
+      src,
+      sources: [
+        { srcset: "logo.avif", type: "image/avif" },
+        {
+          srcset: "logo-wide.webp",
+          type: "image/webp",
+          media: "(min-width: 800px)",
+        },
+      ],
+    });
+
+    const picture = document.querySelector("picture");
+    assert(picture);
+    const children = Array.from(picture.children);
+    expect(children.map((child) => child.tagName)).toEqual([
+      "SOURCE",
+      "SOURCE",
+      "IMG",
+    ]);
+    expect(children[1]).toHaveAttribute("media", "(min-width: 800px)");
+    expect(children[1]).toHaveAttribute("type", "image/webp");
+  });
+
+  it("reserves the box from width and height", () => {
+    const { document } = renderSSR(ImageLoader, {
+      src,
+      width: 800,
+      height: 600,
+    });
+
+    const frame = document.querySelector(".bx--aspect-ratio");
+    expect(frame).toHaveClass("bx--aspect-ratio--custom");
+    expect(frame).toHaveStyle({ "--ccs-aspect-ratio": "75.000%" });
+  });
+
+  it("renders the placeholder in the server HTML", () => {
+    const { document } = renderSSR(ImageLoader, {
+      src,
+      ratio: "16x9",
+      placeholder: "#8d8d8d",
+    });
+
+    const placeholder = document.querySelector(
+      ".bx--image-loader__placeholder",
+    );
+    assert(placeholder);
+    expect(placeholder).toHaveStyle({ "--ccs-image-placeholder": "#8d8d8d" });
+    expect(placeholder).not.toHaveClass("bx--image-loader__placeholder--done");
   });
 
   it("renders no <img> without a src", () => {

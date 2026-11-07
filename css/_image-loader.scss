@@ -1,0 +1,72 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/theme";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ImageLoader (absent from v10): the placeholder that fills the image's
+/// box until it loads, and the fit and focal point of the shown image.
+/// @access private
+/// @group components
+@mixin image-loader {
+  // The skeleton color, so the box reads as loading in every theme. A
+  // `--ccs-image-placeholder` color or image paints over it.
+  .#{$prefix}--image-loader__placeholder {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: $skeleton-background;
+    pointer-events: none;
+  }
+
+  // Outset by a tenth so the blur's soft edge falls outside the clip.
+  .#{$prefix}--image-loader__placeholder::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    background: var(--ccs-image-placeholder, transparent) center / cover
+      no-repeat;
+  }
+
+  .#{$prefix}--image-loader__placeholder--image::before {
+    filter: blur(to-rem(24px));
+  }
+
+  .#{$prefix}--image-loader__placeholder--done {
+    opacity: 0;
+  }
+
+  // Cross-fade with the image rather than cut.
+  .#{$prefix}--image-loader__placeholder--fade {
+    transition: opacity $duration--fast-02 motion(standard, productive);
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  // Forced colors replace the fill with Canvas, which would leave the
+  // reserved box invisible. Outline it so the loading area stays visible.
+  @media (forced-colors: active) {
+    .#{$prefix}--image-loader__placeholder {
+      outline: 1px solid GrayText;
+      outline-offset: -1px;
+    }
+  }
+
+  // A `width` and `height` attribute would stretch the image to that height
+  // beside the loader's full width. `:where()` keeps this a default that a
+  // consumer's height rule or inline style still beats.
+  :where(.#{$prefix}--image-loader__img) {
+    height: auto;
+  }
+
+  .#{$prefix}--image-loader__img--fit {
+    height: 100%;
+    object-fit: var(--ccs-image-fit, fill);
+    object-position: var(--ccs-image-position, 50% 50%);
+  }
+}
+
+@include exports("image-loader") {
+  @include image-loader;
+}
