@@ -196,7 +196,7 @@
   >
     <CardHeader>
       <CardTitle>
-        <svelte:fragment slot="label">Label</svelte:fragment>
+        <svelte:fragment slot="labelChildren">Label</svelte:fragment>
         Disabled card
       </CardTitle>
     </CardHeader>

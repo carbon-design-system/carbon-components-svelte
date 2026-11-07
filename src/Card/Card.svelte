@@ -13,8 +13,8 @@
   /**
    * Set to `true` to make the whole card interactive. It renders as a
    * button, or as a link when `href` is set, and shows `icon` at the
-   * bottom. Give it an accessible name with `aria-label` or
-   * `aria-labelledby`.
+   * bottom. Its accessible name is the `CardTitle`; set `aria-label` or
+   * `aria-labelledby` to replace it.
    */
   export let clickable = false;
 
@@ -66,10 +66,11 @@
    */
   export let ref = null;
 
-  import { setContext } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import ArrowRight from "../icons/ArrowRight.svelte";
   import { resolveLinkRel } from "../utils/link-rel.js";
+  import { uniqueId } from "../utils/unique-id.js";
   import CardWrapper from "./CardWrapper.svelte";
 
   const sharedHorizontal = writable(horizontal);
@@ -83,10 +84,31 @@
   /** @type {import("svelte/store").Writable<null | { block: number; inline: string }>} */
   const media = writable(null);
 
+  const titleId = uniqueId();
+
+  // The first `CardTitle` takes `titleId`, and the card points
+  // `aria-labelledby` at it. The server can't know yet whether a title
+  // renders, so the card keeps the reference until it mounts.
+  let titled = false;
+  let mounted = false;
+
   setContext("carbon:Card", {
     horizontal: sharedHorizontal,
     clickable: sharedClickable,
     media,
+    /** @returns {string | undefined} */
+    claimTitle: () => {
+      if (titled) return undefined;
+      titled = true;
+      return titleId;
+    },
+    releaseTitle: () => {
+      titled = false;
+    },
+  });
+
+  onMount(() => {
+    mounted = true;
   });
 
   /**
@@ -98,34 +120,32 @@
 
   $: link = clickable && Boolean(href);
 
-  // Spread before `$$restProps`, so a consumer's own `role` or `tabindex`
-  // wins. A disabled link drops its `href`, so it needs `role="link"`.
-  /** @type {{ role?: string; "aria-disabled"?: "true"; href?: string; rel?: string | null; tabindex?: number }} */
+  // A consumer's `aria-label` replaces the title, so the reference drops.
+  $: labelledBy =
+    clickable && !$$restProps["aria-label"] && (titled || !mounted)
+      ? titleId
+      : undefined;
+
+  // Spread before `$$restProps`, so a consumer's own `role`, `tabindex` or
+  // `aria-labelledby` wins. A disabled link drops its `href`, so it needs
+  // `role="link"`.
+  /** @type {{ role?: string; "aria-disabled"?: "true"; "aria-labelledby"?: string; href?: string; rel?: string | null; tabindex?: number }} */
   $: cardProps = link
     ? disabled
-      ? { role: "link", "aria-disabled": "true" }
-      : { href, rel: resolveLinkRel($$restProps.target) }
+      ? { role: "link", "aria-disabled": "true", "aria-labelledby": labelledBy }
+      : {
+          href,
+          rel: resolveLinkRel($$restProps.target),
+          "aria-labelledby": labelledBy,
+        }
     : clickable
       ? {
           role: "button",
           tabindex: disabled ? -1 : 0,
           "aria-disabled": disabled ? "true" : undefined,
+          "aria-labelledby": labelledBy,
         }
       : {};
-
-  let warned = false;
-
-  $: if (
-    clickable &&
-    !warned &&
-    !$$restProps["aria-label"] &&
-    !$$restProps["aria-labelledby"]
-  ) {
-    warned = true;
-    console.warn(
-      "[Card.svelte] a clickable card needs an accessible name. Set `aria-label` or `aria-labelledby`.",
-    );
-  }
 
   // `svelte:element` types its events loosely, so the handlers are typed here.
   /** @param {MouseEvent} event */

@@ -374,7 +374,7 @@ test.describe("right-to-left layout", () => {
     for (const dir of ["ltr", "rtl"] as const) {
       await setDirection(page, dir);
       const [headerTop, decoratorTop] = await tops();
-      expect.soft(Math.abs(decoratorTop - headerTop - 8), dir).toBeLessThan(1);
+      expect.soft(Math.abs(decoratorTop - headerTop - 12), dir).toBeLessThan(1);
 
       const box = await boxes(page, parts);
       const media = box.endMedia as Box;

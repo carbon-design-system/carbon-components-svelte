@@ -14,17 +14,14 @@
   export let mediaPosition: ComponentProps<Card>["mediaPosition"] = "start";
 </script>
 
-<Card
-  clickable
-  href="/reports"
-  {horizontal}
-  {mediaPosition}
-  aria-label="Quarterly report"
->
+<Card clickable href="/reports" {horizontal} {mediaPosition}>
   <CardMedia slot="media" mediaWidth="40%">
     <img src="/chart.png" alt="Usage chart" />
   </CardMedia>
   <AILabel slot="decorator" />
+  <CardHeader>
+    <CardTitle>Quarterly report</CardTitle>
+  </CardHeader>
   <CardBody>Usage grew 12% over the last quarter.</CardBody>
 </Card>
 
