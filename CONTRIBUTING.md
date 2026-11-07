@@ -46,6 +46,8 @@ bun dev
 
 The site serves at http://localhost:5173/ (or the next available port).
 
+A production docs build (`cd docs && bun run build`) caches compiled components and preprocessed pages in `docs/node_modules/.cache/ccs-docs-svelte-build`, and logs how many results it reused. Delete that directory to build from scratch.
+
 ## Best practices
 
 Conventions used across `src/`. Follow them in new and changed code.
@@ -85,6 +87,7 @@ Patterns:
 - ComboBox, Dropdown, and MultiSelect share listbox behavior (virtualization, keyboard navigation, outside-click) through `src/utils/`. When you change shared menu behavior, apply and test the change in all three. The per-component wiring is parallel but not abstracted.
 - Use Carbon v10 markup: `bx--` BEM classes in templates; SCSS patches use `$prefix` and tokens. See [Custom styles](#custom-styles-patching-carbon-v10).
 - Do not add themeable styles in per-component `<style>` blocks (see [Custom styles](#custom-styles-patching-carbon-v10)).
+- Svelte drops a scoped selector that matches nothing in the template, so a rule on an attribute or class set from script needs `:global(...)` around that part: `.preview-viewer:global([data-offscreen])` in [`Preview.svelte`](docs/src/components/Preview.svelte).
 - Use the legacy Svelte 5 API. Components use `export let`, `$:`, and `createEventDispatcher`. Do not introduce runes (`$state`, `$derived`, `$effect`) unless the project explicitly migrates.
 - Bind per-iteration values once with `{@const}` inside `{#each}` blocks, then reuse them across the markup instead of recomputing inline. See `isSelected` / `isExpanded` / `rowClassValue` in [`DataTable.svelte`](src/DataTable/DataTable.svelte) and `actualIndex` in [`ComboBox.svelte`](src/ComboBox/ComboBox.svelte).
 - Keep reactive inputs visible in `$:` and `{@const}` expressions. Svelte 3/4 track dependencies by the identifiers in the statement, so `$: x = compute()` or `{@const x = compute(item)}` where `compute` closes over other component state never re-runs when that state changes (Svelte 5's signals hide the bug locally, but the compatibility suites will not). Pass the state as arguments (`compute(item, isAtSelectionCap)`) or keep the expression inline.
@@ -576,6 +579,18 @@ The menu closes from the trigger, the `Escape` key, or an outside click.
 The menu closes from the trigger, <DocKbd label="Escape" />, or an outside click.
 ```
 
+#### Docs site performance
+
+The docs site defers work a page doesn't need yet. Keep to these when changing pages, examples or the site's components:
+
+| Do | Why |
+| --- | --- |
+| Expect a page's live examples and its API section to mount as they near the viewport or once the browser is idle, not on load. | Building them held up the first render. A script or test that reads them must scroll to them or wait for them. |
+| In an inline example, animate with CSS, or start a JavaScript loop (a timer, `requestAnimationFrame`) only on a reader's action. | An inline example's CSS animations pause while it's off screen. A JavaScript loop doesn't, and runs for as long as the tab is open, since examples mount once the browser is idle. |
+| When changing CodeSnippet's multi-line styles (row height, padding, row limits), update [`code-view-height.ts`](docs/src/code-view-height.ts). | The docs reserve that height before a code view renders. A mismatch moves the page in Safari, which doesn't anchor the scroll. `e2e/code-view-height.test.ts` fails on it. |
+| Measure docs performance on a production build: `cd docs && bun run build`, then `bun run preview`. | The dev server is slower and skips the build's caches, so its timings mislead. |
+| Check a scroll or lazy-loading change in WebKit too. | Safari has no scroll anchoring and no `requestIdleCallback`, so layout shifts and idle timing that Chromium hides show there. |
+
 #### New component checklist
 
 1. Export from `src/index.js`
@@ -904,6 +919,7 @@ Import shared utilities (for example exported helpers) from the component file o
 - A test that reads files from disk (`node:fs`) must list them in a `// @depends-on <glob> [glob…]` comment, for example `// @depends-on css/**`. Without it the test runs on every pull request, and `bivium check` in `static-checks` fails. `bunx bivium check` lists each unreadable file with a fix.
 - A file that only reads other files as text, not what they import, lists them in `// @reads <glob>` instead, so a change to their imports does not select it. A file that reads only what its caller already reaches, such as `e2e/helpers/host.ts` reading the fixture entry of the URL a test opens, is listed in `hermetic` in `bivium.config.ts` instead, so one fixture change doesn't select every E2E test. A file whose `import.meta.glob` is a lookup table, with each caller naming the entry it loads, marks it `// @glob-registry` (`e2e/fixtures/host.ts`). Keep `goto(` out of e2e comments: the selector reads it as a navigation.
 - A `@depends-on`, `@reads` or `import.meta.glob` glob must reach files the selector reads. One that matches nothing, or files it ignores (`docs/**`), fails `bivium check`, since a change to them would never select the file. List an intended one under `deadGlobs` in `bivium.config.ts`, with the reason.
+- A test that imports a file under `docs/` needs that file listed in three places, or CI never runs the test when the file changes: the `paths` of both triggers and the matching `unit` or `e2e` filter in [`checks.yml`](.github/workflows/checks.yml), and `roots` in [`bivium.config.ts`](bivium.config.ts). bivium ignores the rest of `docs/**`.
 - Narrow types with an assertion, not a cast. Write `assert(input instanceof HTMLInputElement)` instead of `as HTMLInputElement`. The global `assert` fails the test with a clear message when the element is wrong, and TypeScript narrows the variable after it. Use `assert(el)` for a nullable lookup. Do not use `expect.assert` or non-null `!`.
 - Skip the narrowing when a jest-dom matcher does the job. `expect(input).toHaveValue("a")`, `toBeChecked()`, and `toHaveFocus()` accept any element, so reading `.value` or `.checked` through a cast is rarely needed.
 - Type `querySelector` through its generic: `container.querySelector<HTMLInputElement>("input")`, then `assert(input)`.
