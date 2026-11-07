@@ -742,6 +742,13 @@ $ccs-prose-variants: (
     }
   }
 
+  // A code block that scrolls sideways takes keyboard focus (`Prose` adds
+  // the tab stop). The ring sits inside it, as on CodeSnippet.
+  #{$p} pre#{$x}:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
   // Footnote references and other superscripts don't push their line apart.
   #{$p} sup#{$x},
   #{$p} sub#{$x} {

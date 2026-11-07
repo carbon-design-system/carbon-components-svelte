@@ -66,3 +66,13 @@ test("scrolling up through deferred code blocks doesn't move the page", async ({
   }
   expect(moves).toEqual([]);
 });
+
+// Chrome and Safari have no lines to measure in a skipped block, so its tab
+// stop can wait until it renders.
+test("a deferred wide code block gets a tab stop", async ({ page }) => {
+  await page.goto("/prose-defer.html");
+  const wide = page.getByTestId("wide-pre");
+  await wide.scrollIntoViewIfNeeded();
+  await expect(wide).toHaveAttribute("tabindex", "0");
+  await expect(page.getByTestId("pre-0")).not.toHaveAttribute("tabindex");
+});

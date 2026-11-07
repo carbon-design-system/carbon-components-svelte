@@ -158,33 +158,108 @@
     if (!reserveAddsPadding) reserve();
   }
 
-  let stopReserving = noop;
+  /**
+   * Code blocks Prose gave a tab stop, so it only removes its own.
+   * @type {WeakSet<HTMLElement>}
+   */
+  const tabStops = new WeakSet();
 
-  /** @param {HTMLElement} root */
-  function startReserving(root) {
-    reserveCodeHeights(root);
+  /**
+   * A code block that scrolls sideways gets a tab stop, so a keyboard can
+   * scroll it. Chrome and Firefox focus a scroller on their own; Safari
+   * doesn't. A block that fits gets none, so it adds no stop.
+   * @param {HTMLElement} pre
+   */
+  function syncTabStop(pre) {
+    // A skipped block has no lines to measure. Firefox measures one anyway,
+    // and a tab stop there changed the size it reserves for other blocks.
+    const skipped =
+      pre.firstElementChild?.checkVisibility?.({
+        contentVisibilityAuto: true,
+      }) === false;
+    if (skipped) return;
+    const overflows = pre.scrollWidth > pre.clientWidth;
+    if (overflows && !pre.hasAttribute("tabindex")) {
+      pre.tabIndex = 0;
+      tabStops.add(pre);
+    } else if (!overflows && tabStops.has(pre)) {
+      pre.removeAttribute("tabindex");
+      tabStops.delete(pre);
+    }
+  }
+
+  /**
+   * The code blocks Prose styles: not a component's, and not a nested
+   * Prose's, which handles its own.
+   * @param {HTMLElement} root
+   */
+  function ownCodeBlocks(root) {
+    return [...root.querySelectorAll("pre")].filter(
+      (pre) => pre.closest('[class*="bx--"]') === root,
+    );
+  }
+
+  /**
+   * Watches each code block's width and lines. Its `code` is watched too:
+   * a skipped block keeps its size when it first renders, but its lines
+   * don't.
+   * @param {HTMLElement} root
+   */
+  function startTabStops(root) {
+    if (typeof ResizeObserver === "undefined") return noop;
+    const observer = new ResizeObserver((entries) => {
+      for (const { target } of entries) {
+        const pre = target.closest("pre");
+        if (pre) syncTabStop(pre);
+      }
+    });
+    const observe = () => {
+      observer.disconnect();
+      for (const pre of ownCodeBlocks(root)) {
+        observer.observe(pre);
+        if (pre.firstElementChild) observer.observe(pre.firstElementChild);
+      }
+    };
+    observe();
+    return () => observer.disconnect();
+  }
+
+  let stop = noop;
+
+  /**
+   * @param {HTMLElement} root
+   * @param {boolean} defer
+   */
+  function start(root, defer) {
+    if (defer) reserveCodeHeights(root);
+    let stopTabStops = startTabStops(root);
+    if (typeof MutationObserver === "undefined") return stopTabStops;
     // The slot's content can change after mount, from a parent or `{@html}`.
-    const observer = new MutationObserver(() => reserveCodeHeights(root));
+    const observer = new MutationObserver(() => {
+      if (defer) reserveCodeHeights(root);
+      stopTabStops();
+      stopTabStops = startTabStops(root);
+    });
     observer.observe(root, {
       childList: true,
       subtree: true,
       characterData: true,
     });
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      stopTabStops();
+    };
   }
 
   let mounted = false;
   onMount(() => {
     mounted = true;
-    return () => stopReserving();
+    return () => stop();
   });
 
   $: if (mounted) {
-    stopReserving();
-    stopReserving =
-      deferOffscreen && ref && typeof MutationObserver !== "undefined"
-        ? startReserving(ref)
-        : noop;
+    stop();
+    stop = ref ? start(ref, deferOffscreen) : noop;
   }
 
   $: proseClass = [

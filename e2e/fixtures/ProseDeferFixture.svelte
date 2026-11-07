@@ -19,5 +19,9 @@
       <p>Block {i + 1} has {lines} lines.</p>
       <pre data-testid="pre-{i}"><code>{codeOf(lines)}</code></pre>
     {/each}
+    <p>The last block has one long line.</p>
+    <pre data-testid="wide-pre"><code
+        >{"const wide = [" + "1, ".repeat(80) + "];"}</code
+      ></pre>
   </Prose>
 </div>
