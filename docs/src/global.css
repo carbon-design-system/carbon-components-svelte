@@ -49,10 +49,6 @@ html {
   cursor: text;
 }
 
-.code-override .bx--snippet--multi .bx--snippet-container pre {
-  overflow-x: auto;
-}
-
 .fix-overflow {
   min-width: 0;
 }
