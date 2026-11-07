@@ -431,8 +431,9 @@ jobs:
       # the cache below covers.
       - run: bun ci --ignore-scripts
 
+      # Read, not `bunx playwright --version`, which took a second to start.
       - id: playwright
-        run: echo "version=$(bunx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(jq -r .version node_modules/playwright/package.json)" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: browsers
         with:
