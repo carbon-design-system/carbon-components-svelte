@@ -30,6 +30,7 @@ import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
+import TimeRangePicker from "carbon-components-svelte/TimeRangePicker/TimeRangePicker.svelte";
 import Toggletip from "carbon-components-svelte/Toggletip/Toggletip.svelte";
 import Tooltip from "carbon-components-svelte/Tooltip/Tooltip.svelte";
 import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte";
@@ -531,6 +532,11 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(ComboButton, { props: { labelText: "Save", ...attrs } }),
     target: () => screen.getAllByRole("button")[0],
+  },
+  {
+    name: "TimeRangePicker",
+    render: (attrs) => render(TimeRangePicker, { props: attrs }),
+    target: () => screen.getByRole("button", { expanded: false }),
   },
   {
     name: "UserAvatar",
