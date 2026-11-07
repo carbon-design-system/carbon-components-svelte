@@ -700,8 +700,8 @@
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(31) > button.bx--toast-notification__close-button",
-    "message": "div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(31) > button.bx--toast-notification__close-button: 2px outline inside 1px outline div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(31), both on rgb(255, 255, 255)"
+    "path": "div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(32) > button.bx--toast-notification__close-button",
+    "message": "div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(32) > button.bx--toast-notification__close-button: 2px outline inside 1px outline div#app > main > div.bx--toast-notification.bx--toast-notification--high-contrast:nth-of-type(32), both on rgb(255, 255, 255)"
   },
   {
     "fixture": "forced-colors.html",

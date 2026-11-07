@@ -15,6 +15,7 @@ const CONTROLS = [
 ] as const;
 
 const COMPONENTS = [
+  "AILabel",
   "Button",
   "DataTable",
   "ComboBox",
