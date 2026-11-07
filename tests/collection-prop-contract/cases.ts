@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+import ErrorSummary from "carbon-components-svelte/ErrorSummary/ErrorSummary.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import PromptInput from "carbon-components-svelte/PromptInput/PromptInput.svelte";
@@ -99,6 +100,19 @@ export const cases: CollectionCase[] = [
         screen.getByRole("menuitemcheckbox", { name });
       expect(option("Option 2")).toHaveAttribute("aria-checked", "true");
       expect(option("Option 1")).toHaveAttribute("aria-checked", "false");
+    },
+  },
+  {
+    name: "ErrorSummary",
+    component: ErrorSummary,
+    prop: "errors",
+    initial: () => [{ fieldId: "name", message: "Enter a name" }],
+    replacement: () => [{ fieldId: "plan", message: "Choose a plan" }],
+    check: () => {
+      expect(
+        screen.getByRole("link", { name: "Choose a plan" }),
+      ).toHaveAttribute("href", "#plan");
+      expect(screen.queryByText("Enter a name")).not.toBeInTheDocument();
     },
   },
   {
