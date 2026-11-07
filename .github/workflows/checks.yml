@@ -368,7 +368,8 @@ jobs:
             *) read -ra files <<< "$TESTS" && bunx --bun vitest run --shard="$SHARD" --passWithNoTests "${files[@]}" ;;
           esac
 
-      # The DatePicker calendar does its own date math. Run its tests where a
+      # The DatePicker calendar does its own date math, and so does the
+      # zoned-time util (src/utils/zoned-time.js). Run their tests where a
       # daylight-saving switch skips midnight, and where a whole day was
       # skipped (Pacific/Apia, December 2011). The zones run side by side,
       # one worker each: one after another, this step put 25-38 s on the
@@ -381,12 +382,12 @@ jobs:
           case "$TESTS" in
             none) exit 0 ;;
             "" | all) ;;
-            *) [[ " $TESTS " == *" tests/DatePicker/calendar"* ]] || exit 0 ;;
+            *) [[ " $TESTS " == *" tests/DatePicker/calendar"* || " $TESTS " == *" tests/utils/zoned-time"* || " $TESTS " == *" tests/utils/group-chat-messages"* ]] || exit 0 ;;
           esac
           zones=(America/Santiago America/Havana Asia/Tehran Pacific/Apia)
           pids=()
           for zone in "${zones[@]}"; do
-            TZ="$zone" bunx --bun vitest run tests/DatePicker/calendar --maxWorkers=1 \
+            TZ="$zone" bunx --bun vitest run tests/DatePicker/calendar tests/utils/zoned-time tests/utils/group-chat-messages --maxWorkers=1 \
               > "$RUNNER_TEMP/tz-${zone//\//-}.log" 2>&1 &
             pids+=($!)
           done
