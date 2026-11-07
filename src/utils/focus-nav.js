@@ -442,7 +442,7 @@ export function mountedIndexes(start, end, active) {
  * @property {number} [index] - The initial active index. Default `-1`.
  * @property {(index: number) => HTMLElement | null | undefined} [getItem] - The mounted element, or nothing when virtualization has not rendered it. Default: the matches of `selector`.
  * @property {(index: number) => string} [getId] - The id for "activedescendant". Default: the id of `getItem(index)`.
- * @property {(index: number) => void | Promise<void>} [reveal] - Virtualization hook. Called when `getItem(index)` is nothing: scroll or window to it and resolve once it is mounted. Focus or `activeId` follow. A newer move supersedes a pending one.
+ * @property {(index: number) => void | Promise<void>} [reveal] - Virtualization hook, called before every move to `index`. Scroll it into view, and return a promise (such as Svelte's `tick()`) when it needs a render to be mounted. Focus or `activeId` follow once the promise settles. Return nothing when it is already in view. A newer move supersedes a pending one.
  * @property {(index: number, move: FocusNavMove) => void | false} [onMove] - Called with the target before the cursor moves. Return `false` to take over (an extending Shift move that keeps the active cell, say); then call `set` yourself if the cursor should follow.
  * @property {(event: KeyboardEvent) => boolean} [ownsKey] - Return `true` to leave the key to the focused control, such as the caret keys of a text field inside a toolbar.
  * @property {FocusOptions} [focusOptions] - Passed to `focus()` in "roving" mode. `{ preventScroll: true }` when the widget scrolls itself.
@@ -555,7 +555,9 @@ export function createFocusNav(options = {}) {
   function apply(index, focus) {
     const item = getItem(index);
     if (config.mode === "activedescendant") {
-      const id = item || config.getId ? idOf(index) : null;
+      // Point at an item only once it is in the DOM, when that can be told.
+      const lookup = config.getItem || config.selector;
+      const id = item || !lookup ? idOf(index) : null;
       publish(index, id || null);
       return;
     }
@@ -576,14 +578,16 @@ export function createFocusNav(options = {}) {
     current = index;
     sequence += 1;
     const ticket = sequence;
-    if (index >= 0 && !getItem(index) && config.reveal) {
+    const pending = index >= 0 ? config.reveal?.(index) : undefined;
+    if (pending && typeof pending.then === "function") {
       publish(index, null);
-      Promise.resolve(config.reveal(index)).then(() => {
+      pending.then(() => {
         itemCache = null;
         if (ticket === sequence) apply(index, focus);
       });
       return;
     }
+    itemCache = null;
     apply(index, focus);
   }
 

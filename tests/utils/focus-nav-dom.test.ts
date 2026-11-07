@@ -288,10 +288,12 @@ describe("focusNav (activedescendant)", () => {
       getItem: (i) => els.get(i),
       getId: (i) => `row-${i}`,
       reveal: (i) => {
+        if (els.has(i)) return undefined;
         revealed.push(i);
         mounted.clear();
         for (let n = i; n < i + 3; n++) mounted.add(n);
-        render();
+        // A later render, as a framework's would be.
+        return Promise.resolve().then(render);
       },
     });
     focusNav(host, nav);

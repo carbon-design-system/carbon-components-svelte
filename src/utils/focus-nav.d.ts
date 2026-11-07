@@ -168,7 +168,7 @@ export type FocusNavOptions = {
   getItem?: (index: number) => HTMLElement | null | undefined;
   /** The id for "activedescendant". Default: the id of `getItem(index)`. */
   getId?: (index: number) => string;
-  /** Virtualization hook. Called when `getItem(index)` is nothing: scroll or window to it and resolve once it is mounted. */
+  /** Virtualization hook, called before every move to `index`. Scroll it into view, and return a promise (such as Svelte's `tick()`) when it needs a render to be mounted. Return nothing when it is already in view. */
   reveal?: (index: number) => void | Promise<void>;
   /** Called with the target before the cursor moves. Return `false` to take over. */
   onMove?: (index: number, move: FocusNavMove) => void | false;
