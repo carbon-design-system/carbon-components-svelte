@@ -1,0 +1,172 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PeoplePicker: a `TagInput`-shaped field (see `_tag-input.scss`) whose chips
+/// carry an avatar, and whose menu is a list box menu of people. The field
+/// reuses the tag input's classes; this partial adds the avatar chip and the
+/// menu. The menu sits in a portal, outside any `bx--list-box`, so the option
+/// sizes Carbon scopes under `bx--list-box--sm` are restated here.
+/// @access private
+/// @group components
+@mixin people-picker {
+  // The tag's icon box is 16px. The avatar is a little larger, so the chip
+  // reads as a person and not as an icon: 20px in a 24px tag, 2px off each
+  // edge. The chip's own padding stays as Carbon's `--with-icon` sets it.
+  .#{$prefix}--people-picker .#{$prefix}--tag__custom-icon {
+    display: flex;
+    width: auto;
+    height: auto;
+    align-items: center;
+  }
+
+  .#{$prefix}--people-picker .#{$prefix}--tag__custom-icon .#{$prefix}--user-avatar {
+    width: to-rem(20px);
+    height: to-rem(20px);
+  }
+
+  .#{$prefix}--people-picker .#{$prefix}--tag__custom-icon .#{$prefix}--user-avatar__text {
+    font-size: to-rem(10px);
+    line-height: 1;
+  }
+
+  .#{$prefix}--people-picker .#{$prefix}--tag__custom-icon .#{$prefix}--user-avatar svg {
+    width: to-rem(12px);
+    height: to-rem(12px);
+  }
+
+  .#{$prefix}--people-picker__menu {
+    min-width: to-rem(192px);
+    background-color: $field;
+    box-shadow: 0 2px 6px rgba($carbon--black-100, 0.3);
+  }
+
+  .#{$prefix}--people-picker__menu .#{$prefix}--list-box__menu-item {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--people-picker__menu .#{$prefix}--list-box__menu-item__option {
+    display: flex;
+    height: to-rem(32px);
+    align-items: center;
+    padding-top: to-rem(3px);
+    padding-bottom: to-rem(3px);
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--people-picker__menu--md .#{$prefix}--list-box__menu-item {
+    height: to-rem(40px);
+  }
+
+  .#{$prefix}--people-picker__menu--md
+    .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(40px);
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(7px);
+  }
+
+  .#{$prefix}--people-picker__menu--lg .#{$prefix}--list-box__menu-item {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--people-picker__menu--lg
+    .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(48px);
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(7px);
+  }
+
+  // The name keeps its room and the muted text follows it, giving way first
+  // when the row is narrow. `plaintext` keeps an address's `@` in place under
+  // `dir="rtl"`, and the muted text sized to its content stays beside the
+  // name in either direction.
+  .#{$prefix}--people-picker__text {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    align-items: baseline;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--people-picker__name {
+    min-width: 0;
+    unicode-bidi: plaintext;
+    flex: 0 1 auto;
+    overflow: hidden;
+    color: $text-primary;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--people-picker__secondary {
+    min-width: 0;
+    unicode-bidi: plaintext;
+    flex: 0 1 auto;
+    overflow: hidden;
+    color: $text-secondary;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--people-picker__heading {
+    @include type-style("label-01");
+
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    color: $text-secondary;
+  }
+
+  // The error row is not an option, so it sits after the listbox rather than
+  // in it, and carries the retry button.
+  .#{$prefix}--people-picker__error {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: to-rem(40px);
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $carbon--spacing-05;
+    color: $text-error;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--people-picker__retry {
+    @include type-style("body-compact-01");
+
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $link-primary;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  // Forced colors turn an avatar's fill to Canvas, so its edge is drawn as an
+  // outline. In a chip or a menu row it sits inside a box that has its own
+  // edge, and a second one only doubles it: the initials and the name stay.
+  // The highlighted row fills with `Highlight` and opts out of forcing (see
+  // the list box), so its text needs the system color the fill asks for.
+  @media (forced-colors: active) {
+    .#{$prefix}--people-picker .#{$prefix}--tag__custom-icon .#{$prefix}--user-avatar,
+    .#{$prefix}--people-picker__menu .#{$prefix}--user-avatar {
+      outline: none;
+    }
+
+    .#{$prefix}--list-box__menu-item--highlighted .#{$prefix}--people-picker__name,
+    .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--people-picker__secondary {
+      color: HighlightText;
+    }
+
+    .#{$prefix}--people-picker__error,
+    .#{$prefix}--people-picker__retry {
+      color: CanvasText;
+    }
+
+    .#{$prefix}--people-picker__retry {
+      color: LinkText;
+    }
+  }
+}
+
+@include exports("people-picker") {
+  @include people-picker;
+}

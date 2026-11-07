@@ -74,6 +74,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Pagination: "0.2.0",
   PaginationNav: "0.8.4",
   PasswordInput: "0.2.0",
+  PeoplePicker: "0.114.0",
   PinCodeInput: "0.109.0",
   Popover: "0.31.0",
   Portal: "0.95.0",
