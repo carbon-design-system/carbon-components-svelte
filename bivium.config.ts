@@ -24,7 +24,12 @@ export default {
       // The Svelte 3/4 harnesses run the same unit tests. Vite reads
       // tests/tsconfig.json to transform the tests, and vite.config.ts takes
       // its test options from tests/utils.ts.
-      wiring: ["tests-svelte{3,4}/**", "tests/tsconfig.json", "tests/utils.ts"],
+      wiring: [
+        "tests-svelte{3,4}/**",
+        "tests/tsconfig.json",
+        "tests/utils.ts",
+        "vite.config.ts",
+      ],
       // Vitest loads it before every test (`setupFiles`), so every test
       // depends on it and on what it imports.
       setup: "tests/setup-tests.ts",
@@ -39,7 +44,7 @@ export default {
       urls: { "/*": "e2e/fixtures/*" },
       pages: "e2e/fixtures/**/*.html",
       // Playwright's web server builds the fixtures with it.
-      wiring: "e2e/vite.config.ts",
+      wiring: ["e2e/vite.config.ts", "playwright.config.ts"],
       // The perf harnesses and the dev server they start, which no e2e test
       // runs.
       nonInputs: [
@@ -86,6 +91,8 @@ export default {
     // A test reporter's output, which nothing reads.
     "tests/.vitest/**",
     "ostia.config.ts",
+    // Only `bun run test:perf` reads it, which CI doesn't run.
+    "vite.config.perf.ts",
     // Options for `bun fmt` and `bun lint` only.
     "bunfig.toml",
     "carbon.yml",

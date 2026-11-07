@@ -1,5 +1,6 @@
 # `paths`, not `paths-ignore`, so the docs files a test imports can opt back
-# in. Keep them in step with the `unit` and `e2e` filters below.
+# in: the docs files in `roots` (bivium.config.ts). Which suites run is
+# bivium's to decide, in the changes job.
 on:
   pull_request:
     paths:
@@ -99,12 +100,12 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-      unit: ${{ steps.filter.outputs.unit }}
-      e2e: ${{ steps.filter.outputs.e2e }}
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
       css: ${{ steps.filter.outputs.css }}
       css-size: ${{ steps.filter.outputs.css-size }}
-      types: ${{ steps.filter.outputs.types }}
+      # Whether `test:types` runs: a change to what it can read, or one
+      # that selects a unit test.
+      types: ${{ steps.filter.outputs.types == 'true' || (steps.select.outputs.unit-tests != '' && steps.select.outputs.unit-tests != 'none') }}
       # `all`, `none`, or space-separated test files; empty (= all) off PRs.
       unit-tests: ${{ steps.select.outputs.unit-tests }}
       e2e-tests: ${{ steps.select.outputs.e2e-tests }}
@@ -184,32 +185,24 @@ jobs:
             done
             echo "$name=false" | tee -a "$GITHUB_OUTPUT"
           }
-          filter unit \
-            'src/*' 'css/*' 'tests/*' 'tests-svelte3/*' 'tests-svelte4/*' \
-            'scripts/*' 'e2e/*' crassus.config.ts vite.config.ts \
-            'tsconfig*.json' package.json bun.lock '.github/*' \
-            docs/src/token-reference.ts docs/src/search.ts docs/src/routes.ts \
-            docs/src/search-index.ts docs/scripts/slug.ts docs/scripts/visit.ts \
-            docs/scripts/frontmatter.ts docs/scripts/markdown.ts \
-            docs/scripts/page.ts docs/scripts/format.ts \
-            docs/scripts/compile-cache.ts docs/src/idle-mount.ts \
-            docs/src/offscreen.ts docs/src/ibm-scripts.ts \
-            docs/scripts/page-html.ts docs/scripts/example-source.ts
-          filter e2e \
-            'src/*' 'css/*' 'e2e/*' 'scripts/*' playwright.config.ts \
-            'tsconfig*.json' package.json bun.lock '.github/*' \
-            'docs/src/pages/framed/DatePicker/*' docs/src/code-view-height.ts
           filter css 'css/*' crassus.config.ts
           filter css-size \
             'css/*' crassus.config.ts scripts/check-css-size.ts \
             scripts/lib/css-size.ts scripts/lib/css-targets.ts package.json bun.lock
           filter docs-deploy \
             'src/*' 'css/*' 'scripts/*' package.json bun.lock '.github/*'
-          # Type checks read src/, tests/ and what they import, never the
-          # Sass sources, so a PR that only changes .scss skips them.
+          # `test:types` checks tests/ and what it imports. It never reads the
+          # Sass sources, the e2e suite (a unit test that imports from e2e/
+          # selects that test, which runs it too), or the files below, which
+          # only other jobs and tools read.
           types=false
           for file in "${files[@]}"; do
-            [[ $file == css/*.scss ]] || { types=true; break; }
+            case "$file" in
+              css/*.scss | e2e/* | bench/* | thumbnails/* | carbon.yml | \
+                telemetry.yml | ostia.config.ts | bunfig.toml | \
+                playwright.config.ts | vite.config.perf.ts | .gitignore) ;;
+              *) types=true && break ;;
+            esac
           done
           [ -z "$BASE" ] && types=true
           echo "types=$types" | tee -a "$GITHUB_OUTPUT"
@@ -330,8 +323,8 @@ jobs:
     # Skipped when bivium selects no unit tests, unless `test:types` has to run.
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (needs.changes.outputs.unit == 'true' &&
-        (needs.changes.outputs.unit-tests != 'none' || needs.changes.outputs.types == 'true'))
+      needs.changes.outputs.unit-tests != 'none' ||
+      needs.changes.outputs.types == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -411,9 +404,7 @@ jobs:
   test-e2e:
     name: test-e2e (${{ matrix.shard }}/${{ strategy.job-total }})
     needs: [changes]
-    if: |
-      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.e2e == 'true') &&
-      needs.changes.outputs.e2e-tests != 'none'
+    if: needs.changes.outputs.e2e-tests != 'none'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -469,8 +460,8 @@ jobs:
     # Skipped when bivium selects no unit tests, unless `test:types` has to run.
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (needs.changes.outputs.unit == 'true' &&
-        (needs.changes.outputs.unit-tests != 'none' || needs.changes.outputs.types == 'true'))
+      needs.changes.outputs.unit-tests != 'none' ||
+      needs.changes.outputs.types == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

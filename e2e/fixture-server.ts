@@ -1,4 +1,4 @@
-// @depends-on e2e/fixtures/*.html
+// @lists e2e/fixtures/*.html
 /**
  * Fixture discovery and the e2e vite dev server, for the Playwright perf
  * harnesses (e2e/selector-stats.ts, e2e/transition-perf.ts). Computed-style
