@@ -103,6 +103,18 @@ describe("Stepper", () => {
     expect(screen.queryByRole("button", { name: "Back" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Place order" })).toBeNull();
     expect(stepsWith("complete")).toBe(3);
+    expect(stepsWith("current")).toBe(0);
+    expect(document.querySelector("[aria-current]")).toBeNull();
+  });
+
+  it("focuses the first step when the flow starts again", async () => {
+    const { rerender } = render(Stepper, { currentIndex: 2 });
+    await rerender({ submitted: true });
+
+    await user.click(screen.getByRole("button", { name: "Start again" }));
+
+    expect(screen.getByRole("group", { name: "Cart" })).toHaveFocus();
+    expect(stepsWith("current")).toBe(1);
   });
 
   it("waits for an async validate, showing its loading state", async () => {

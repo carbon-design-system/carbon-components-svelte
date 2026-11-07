@@ -41,6 +41,15 @@
 >
   {#if done}
     <p>Order placed</p>
+    <button
+      type="button"
+      on:click={() => {
+        currentIndex = 0;
+        submitted = false;
+      }}
+    >
+      Start again
+    </button>
   {:else}
     <p>Step {current + 1} content</p>
     {#if current === 1}
