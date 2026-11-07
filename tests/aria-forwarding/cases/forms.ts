@@ -5,6 +5,7 @@ import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import FieldRepeater from "carbon-components-svelte/FieldRepeater/FieldRepeater.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
@@ -379,6 +380,19 @@ export const forms: AriaEntry[] = [
         props: { labelText: "Alerts", readonly: true, ...attrs },
       }),
     target: () => screen.getByRole("switch"),
+  },
+  {
+    name: "FieldRepeater",
+    render: (attrs) =>
+      render(FieldRepeater, {
+        props: {
+          legendText: "Emails",
+          helperText: "Where we send receipts",
+          items: [],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "FormGroup",

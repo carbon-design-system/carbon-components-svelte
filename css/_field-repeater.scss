@@ -1,0 +1,128 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// FieldRepeater: a list of repeated field groups. Each item is its fields
+/// beside a column of icon buttons, with an Add button under the list.
+/// @access private
+/// @group components
+@mixin field-repeater {
+  // A fieldset is as wide as its content at the least, so a row of buttons
+  // beside a long summary widened the page at 320px.
+  .#{$prefix}--field-repeater {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--field-repeater > .#{$prefix}--form__helper-text {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--field-repeater__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--field-repeater__item + .#{$prefix}--field-repeater__item {
+    margin-block-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--field-repeater__group {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  // Focus lands here only when an item has no field to take it; the group
+  // is not a control, so it draws no ring.
+  .#{$prefix}--field-repeater__group:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--field-repeater__main {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+
+  // The buttons sit at the top of the item, level with its label. When the
+  // item's label is hidden, a field's own label takes that row, so they drop
+  // below it to sit level with the field. `--ccs-field-repeater-actions-offset`
+  // sets the drop for fields that have no label, or a taller one.
+  .#{$prefix}--field-repeater__actions {
+    display: flex;
+    flex: none;
+    margin-block-start: var(--ccs-field-repeater-actions-offset, 0);
+  }
+
+  // A summary row is as tall as a field, so its buttons sit level with it.
+  .#{$prefix}--field-repeater__list--hidden-label .#{$prefix}--field-repeater__actions,
+  .#{$prefix}--field-repeater__list--summary .#{$prefix}--field-repeater__actions {
+    margin-block-start: var(
+      --ccs-field-repeater-actions-offset,
+      #{$carbon--spacing-06}
+    );
+  }
+
+  // An item at either end of the list keeps its Move button focusable, so
+  // focus is not lost when a move reaches the end, but it cannot act.
+  .#{$prefix}--field-repeater__actions
+    .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[aria-disabled="true"] {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  // Forced colors drop the gray, so a Move button that cannot act read as
+  // an enabled one.
+  @media (forced-colors: active) {
+    .#{$prefix}--field-repeater__actions
+      .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[aria-disabled="true"] {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    .#{$prefix}--field-repeater__actions
+      .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[aria-disabled="true"]
+      .#{$prefix}--btn__icon
+      path {
+      fill: GrayText;
+    }
+  }
+
+  .#{$prefix}--field-repeater__summary {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    align-items: center;
+    min-block-size: $carbon--spacing-07;
+    margin: 0;
+    color: $text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--field-repeater__empty {
+    @include type-style("body-compact-01");
+
+    padding-block: $carbon--spacing-05;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--field-repeater__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+    margin-block-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--field-repeater__footer .#{$prefix}--form__helper-text {
+    margin: 0;
+  }
+}
+
+@include exports("field-repeater") {
+  @include field-repeater;
+}
