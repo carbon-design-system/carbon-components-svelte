@@ -44,7 +44,7 @@ Fill the `placeholder` slot to show something while the content waits, such as a
 
 ## Idle
 
-Set `when` to `"idle"` to mount the content once the browser is idle, or sooner if it comes near the viewport. Use it for content just below the fold that should be ready without waiting for a scroll.
+Set `when` to `"idle"` to mount the content once the browser is idle, or sooner if it comes near the viewport. Use it for content just below the fold that should be ready without waiting for a scroll. Several take turns, one each time the browser is idle, from the top of the page down. Content above the viewport waits until the reader scrolls near it, since mounting it would move what's on screen.
 
 <LazyMount when="idle" estimatedHeight={160}>
   <SkeletonPlaceholder slot="placeholder" width="100%" height={160} />
