@@ -193,52 +193,58 @@ $focus-outline-style: var(--#{$custom-property-prefix}-focus-outline-style, soli
 }
 
 @include exports('skeleton') {
+  // ccs: transform only, from a fixed left origin, so the compositor runs it.
+  // Upstream switched `transform-origin` between left and right, which no
+  // browser animates off the main thread: each skeleton on screen restyled
+  // the page every frame. Scaling about the right edge by `s` is
+  // `translateX((1 - s) * 100%) scaleX(s)` about the left one, and the
+  // origin switched only at `scaleX(1)`, so every frame is the same.
   @keyframes skeleton {
     0% {
       opacity: 0.3;
-      transform: scaleX(0);
+      transform: translateX(0) scaleX(0); // ccs: translateX(0) to match the others
       transform-origin: left;
     }
 
     20% {
       opacity: 1;
-      transform: scaleX(1);
+      transform: translateX(0) scaleX(1); // ccs: translateX(0) to match the others
       transform-origin: left;
     }
 
     28% {
-      transform: scaleX(1);
-      transform-origin: right;
+      transform: translateX(0) scaleX(1); // ccs: was scaleX(1) from the right
+      transform-origin: left;
     }
 
     51% {
-      transform: scaleX(0);
-      transform-origin: right;
+      transform: translateX(100%) scaleX(0); // ccs: was scaleX(0) from the right
+      transform-origin: left;
     }
 
     58% {
-      transform: scaleX(0);
-      transform-origin: right;
+      transform: translateX(100%) scaleX(0); // ccs: was scaleX(0) from the right
+      transform-origin: left;
     }
 
     82% {
-      transform: scaleX(1);
-      transform-origin: right;
+      transform: translateX(0) scaleX(1); // ccs: was scaleX(1) from the right
+      transform-origin: left;
     }
 
     83% {
-      transform: scaleX(1);
+      transform: translateX(0) scaleX(1); // ccs: translateX(0) to match the others
       transform-origin: left;
     }
 
     96% {
-      transform: scaleX(0);
+      transform: translateX(0) scaleX(0); // ccs: translateX(0) to match the others
       transform-origin: left;
     }
 
     100% {
       opacity: 0.3;
-      transform: scaleX(0);
+      transform: translateX(0) scaleX(0); // ccs: translateX(0) to match the others
       transform-origin: left;
     }
   }
