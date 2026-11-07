@@ -17,15 +17,26 @@ const componentMdSizesPath = path.resolve(
 );
 const componentMdSizesId = "\0component-md-sizes";
 const libraryUtilsDir = `${path.resolve(__dirname, "../src/utils")}${path.sep}`;
+const svelteRuntimeRe = /[\\/]node_modules[\\/]svelte[\\/]/;
 /**
  * The library's `src/utils` modules are small and shared by most pages,
  * so on their own each became a chunk of a kilobyte or less, about 50 of
  * them per page. One chunk loads them in one request.
+ *
+ * The Svelte runtime is a chunk of its own, ahead of the utils: in theirs
+ * it changed with them, most days, so readers downloaded it again after
+ * most deploys, though it changes only with Svelte.
  */
 const CHUNK_GROUPS = [
   {
+    name: "svelte-runtime",
+    test: (id: string) => svelteRuntimeRe.test(id),
+    priority: 2,
+  },
+  {
     name: "library-utils",
     test: (id: string) => id.startsWith(libraryUtilsDir),
+    priority: 1,
   },
 ];
 /**
