@@ -1,0 +1,55 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Highlight marks the part of a text that matches a search. It fills the
+/// match with the theme's `highlight` token, which the browser's yellow
+/// `mark` would not follow. The mark takes no padding, margin or border, so
+/// letters on both sides of it stay joined in Arabic and other cursive scripts,
+/// and it sets no `unicode-bidi`, so it does not split a bidirectional run.
+/// @access private
+/// @group components
+@mixin text-highlight {
+  .#{$prefix}--highlight__mark {
+    padding: 0;
+    background-color: var(--ccs-highlight-background, $highlight);
+    color: var(--ccs-highlight-color, $text-primary);
+    font: inherit;
+  }
+
+  // Heavier type with no fill, for menus where a fill beside the row's own
+  // hover and selected fills is too much.
+  .#{$prefix}--highlight__mark--bold {
+    background-color: transparent;
+    color: inherit;
+    font-weight: 600;
+  }
+
+  // Painted by the CSS Custom Highlight API (`highlightText`). The API takes
+  // only color, background and text decoration. Forced colors paint it with
+  // `Highlight` and `HighlightText` whatever is set here, so it needs no rule.
+  ::highlight(ccs-text-highlight) {
+    background-color: $highlight;
+    color: $text-primary;
+  }
+
+  @media (forced-colors: active) {
+    // Forced colors repaint backgrounds with Canvas, which would hide the
+    // match. `Mark` and `MarkText` are the system colors made for it.
+    .#{$prefix}--highlight__mark {
+      forced-color-adjust: none;
+      background-color: Mark;
+      color: MarkText;
+    }
+
+    .#{$prefix}--highlight__mark--bold {
+      forced-color-adjust: auto;
+      background-color: transparent;
+      color: inherit;
+    }
+  }
+}
+
+@include exports("text-highlight") {
+  @include text-highlight;
+}

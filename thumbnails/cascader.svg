@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>cascader</title>
+    <g id="cascader" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="56" y="28" width="208" height="32"></rect>
+        <rect id="field-border" fill="var(--cds-border-strong, #8d8d8d)" x="56" y="59" width="208" height="1"></rect>
+        <rect id="label-selected" fill="var(--cds-text-secondary, #525252)" x="68" y="40" width="96" height="8"></rect>
+        <g id="chevron-field" transform="translate(240, 36) scale(0.5)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M16 22L6 12l1.4-1.4 8.6 8.6 8.6-8.6L26 12z"></path>
+        </g>
+        <rect id="menu" fill="var(--cds-field-01, #f4f4f4)" x="56" y="60" width="208" height="96"></rect>
+        <rect id="divider-1" fill="var(--cds-border-subtle, #c6c6c6)" x="125" y="60" width="1" height="96"></rect>
+        <rect id="divider-2" fill="var(--cds-border-subtle, #c6c6c6)" x="194" y="60" width="1" height="96"></rect>
+        <rect id="open-1" fill="var(--cds-layer-selected, #e0e0e0)" x="56" y="60" width="69" height="24"></rect>
+        <rect id="open-2" fill="var(--cds-layer-selected, #e0e0e0)" x="126" y="84" width="68" height="24"></rect>
+        <rect id="label-1a" fill="var(--cds-text-secondary, #525252)" x="64" y="69" width="34" height="6"></rect>
+        <rect id="label-1b" fill="var(--cds-layer-accent-active, #a8a8a8)" x="64" y="93" width="40" height="6"></rect>
+        <rect id="label-1c" fill="var(--cds-layer-accent-active, #a8a8a8)" x="64" y="117" width="30" height="6"></rect>
+        <rect id="label-1d" fill="var(--cds-layer-accent-active, #a8a8a8)" x="64" y="141" width="36" height="6"></rect>
+        <g id="chevron-1" transform="translate(106, 68) scale(0.5) rotate(-90 16 16)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M24 12L16 22 8 12z"></path>
+        </g>
+        <rect id="label-2a" fill="var(--cds-layer-accent-active, #a8a8a8)" x="134" y="69" width="36" height="6"></rect>
+        <rect id="label-2b" fill="var(--cds-text-secondary, #525252)" x="134" y="93" width="30" height="6"></rect>
+        <rect id="label-2c" fill="var(--cds-layer-accent-active, #a8a8a8)" x="134" y="117" width="38" height="6"></rect>
+        <g id="chevron-2" transform="translate(175, 92) scale(0.5) rotate(-90 16 16)" fill="var(--cds-icon-primary, #161616)">
+            <path d="M24 12L16 22 8 12z"></path>
+        </g>
+        <rect id="label-3a" fill="var(--cds-layer-accent-active, #a8a8a8)" x="203" y="69" width="40" height="6"></rect>
+        <rect id="label-3b" fill="var(--cds-layer-accent-active, #a8a8a8)" x="203" y="93" width="32" height="6"></rect>
+        <rect id="label-3c" fill="var(--cds-layer-accent-active, #a8a8a8)" x="203" y="117" width="44" height="6"></rect>
+        <rect id="focus" fill="none" stroke="var(--cds-focus, #0f62fe)" stroke-width="2" x="196" y="85" width="67" height="22"></rect>
+    </g>
+</svg>

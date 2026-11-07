@@ -32,6 +32,7 @@ export { default as CardTitle } from "./Card/CardTitle.svelte";
 export { default as CardTitleMedia } from "./Card/CardTitleMedia.svelte";
 export { default as Carousel } from "./Carousel/Carousel.svelte";
 export { default as CarouselItem } from "./Carousel/CarouselItem.svelte";
+export { default as Cascader } from "./Cascader/Cascader.svelte";
 export { default as ChatButton } from "./Chat/ChatButton.svelte";
 export { default as ChatButtonSkeleton } from "./Chat/ChatButtonSkeleton.svelte";
 export { default as ChatDivider } from "./Chat/ChatDivider.svelte";
