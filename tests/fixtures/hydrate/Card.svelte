@@ -43,6 +43,6 @@
     <img src="/chart.png" alt="" />
   </CardMedia>
   <CardHeader>
-    <CardTitle>Coastal sensors</CardTitle>
+    <CardTitle>Cloud spend</CardTitle>
   </CardHeader>
 </Card>
