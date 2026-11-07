@@ -148,6 +148,7 @@
   import { writable } from "svelte/store";
   import Stack from "../Stack/Stack.svelte";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
+  import { captureFocusTarget } from "../utils/focus-handoff.js";
   import { returnFocus } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import {
@@ -207,22 +208,18 @@
     // Closing usually removes the tag, unmounting its focused close button.
     // Hand focus to the next visible tag, else the previous one, else the
     // overflow trigger, instead of letting it fall to <body>.
-    const hadFocus = item.node?.contains(document.activeElement);
-    const neighbours = hadFocus
-      ? [...$items.slice(index + 1), ...$items.slice(0, index).reverse()]
-          .filter((other) => !$overflowIds.has(other.id))
-          .map((other) => focusableIn(other.node))
-      : [];
+    const restore = captureFocusTarget(item.node, {
+      siblings: () =>
+        $items
+          .filter((other) => other === item || !$overflowIds.has(other.id))
+          .map((other) => other.node)
+          .filter((node) => node != null),
+      target: (node) => focusableIn(/** @type {HTMLElement} */ (node)),
+      fallback: () => overflowTriggerRef,
+    });
 
     dispatch("close:tag", { tag: item, index });
-
-    if (!hadFocus) return;
-    tick().then(() => {
-      if (item.node?.isConnected) return;
-      returnFocus(
-        [...neighbours, overflowTriggerRef].find((el) => el?.isConnected),
-      );
-    });
+    restore();
   }
 
   // Route register, unregister, and update through the same batched queue.
@@ -475,30 +472,14 @@
 
   /**
    * A dismissible tag in the modal was closed: close the original, as the
-   * popover does, then keep focus in the list.
+   * popover does.
    * @param {TagSetItem} item
    */
   function handleAllTagsClose(item) {
-    const position = allTagsMatches.indexOf(item);
-    const hadFocus = allTagsListRef?.contains(document.activeElement);
+    // The list keeps focus itself (see `focusHandoff` in `TagSetAllTags`).
     handleOverflowTagClose(
       /** @type {CustomEvent<TagSetItem>} */ ({ detail: item }),
     );
-    if (!hadFocus) return;
-    tick().then(() => {
-      if (item.node?.isConnected) return;
-      const buttons = Array.from(
-        allTagsListRef?.querySelectorAll(
-          ".bx--tag__close-icon:not(:disabled)",
-        ) ?? [],
-      );
-      returnFocus(
-        /** @type {HTMLElement | undefined} */ (
-          buttons[Math.min(position, buttons.length - 1)]
-        ) ?? allTagsListRef?.closest(".bx--modal")?.querySelector("input"),
-        allTagsListRef,
-      );
-    });
   }
 
   function handleTriggerClick() {

@@ -248,7 +248,7 @@
   import { joinDescribedBy } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { filterIncomingFiles } from "../utils/filter-incoming-files.js";
-  import { returnFocus } from "../utils/focus.js";
+  import { captureFocusTarget } from "../utils/focus-handoff.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
@@ -300,34 +300,19 @@
     // next row's remove button, else the previous row's, else the add
     // button, instead of letting it fall to <body>.
     const rows = root
-      ? [...root.querySelectorAll(".bx--file__selected-file")]
+      ? /** @type {HTMLElement[]} */ ([
+          ...root.querySelectorAll(".bx--file__selected-file"),
+        ])
       : [];
-    const row = rows[index];
-    const hadFocus = row?.contains(document.activeElement);
-    const neighbours = hadFocus
-      ? [...rows.slice(index + 1), ...rows.slice(0, index).reverse()].map(
-          (other) =>
-            /** @type {HTMLElement | null} */ (
-              other.querySelector(".bx--file-close")
-            ),
-        )
-      : [];
+    const restore = captureFocusTarget(rows[index], {
+      siblings: () => rows,
+      target: ".bx--file-close",
+      fallback: () => root?.querySelector(":scope > .bx--btn"),
+    });
 
     rowRemoved = true;
     files = files.filter((f) => f !== file);
-
-    if (!hadFocus) return;
-    tick().then(() => {
-      if (row.isConnected) return;
-      returnFocus(
-        [
-          ...neighbours,
-          /** @type {HTMLElement | null | undefined} */ (
-            root?.querySelector(":scope > .bx--btn")
-          ),
-        ].find((el) => el?.isConnected),
-      );
-    });
+    restore();
   }
 
   // Per-file stable id: assigned once on first sight and carried with the
