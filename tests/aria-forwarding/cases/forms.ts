@@ -35,6 +35,7 @@ import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svel
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
+import TimezonePicker from "carbon-components-svelte/TimezonePicker/TimezonePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { AriaEntry } from "../contract";
 import DatePickerInputFixture from "../fixtures/DatePickerInput.test.svelte";
@@ -72,6 +73,20 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(ComboBox, {
         props: { items, labelText: "Fruit", helperText: "Pick one", ...attrs },
+      }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "TimezonePicker",
+    render: (attrs) =>
+      render(TimezonePicker, {
+        props: {
+          values: ["Europe/Paris", "UTC"],
+          detect: false,
+          labelText: "Time zone",
+          helperText: "Your zone",
+          ...attrs,
+        },
       }),
     target: () => screen.getByRole("combobox"),
   },

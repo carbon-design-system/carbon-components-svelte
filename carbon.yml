@@ -1401,6 +1401,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/TimePicker
+  timezone-picker:
+    name: Timezone picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/timezone-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TimezonePicker
   toast-notification:
     name: Toast notification
     status: stable
