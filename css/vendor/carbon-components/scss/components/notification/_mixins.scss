@@ -8,7 +8,7 @@
 /// @access private
 /// @group notification
 @mixin notification--experimental($color, $background-color) {
-  border-left: 3px solid $color;
+  border-inline-start: 3px solid $color;
   background: $background-color;
 }
 
