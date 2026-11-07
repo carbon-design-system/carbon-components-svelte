@@ -1059,6 +1059,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/RelativeTime
+  schema-form:
+    name: Schema form
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/schema-form.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SchemaForm
   scroll-gradient:
     name: Scroll gradient
     status: stable

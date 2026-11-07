@@ -334,12 +334,37 @@ export const cases: FieldCase[] = [
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
+const SCHEMA_FORM_WIDGET =
+  "a SchemaForm widget; passes the state to the field it wraps, whose case covers it";
 const NOT_AUDITED =
   "covered by its own tests; not audited against the contract yet";
 
 export const exempt: Exemptions = {
-  fluid: {},
+  fluid: {
+    SchemaForm: "a form, not a field; it picks Form or FluidForm",
+  },
   state: {
+    CheckboxGroupWidget: SCHEMA_FORM_WIDGET,
+    CheckboxWidget: SCHEMA_FORM_WIDGET,
+    ComboBoxWidget: SCHEMA_FORM_WIDGET,
+    DatePickerWidget: SCHEMA_FORM_WIDGET,
+    DropdownWidget: SCHEMA_FORM_WIDGET,
+    FileWidget: SCHEMA_FORM_WIDGET,
+    MultiSelectWidget: SCHEMA_FORM_WIDGET,
+    NumberWidget: SCHEMA_FORM_WIDGET,
+    PasswordWidget: SCHEMA_FORM_WIDGET,
+    PinWidget: SCHEMA_FORM_WIDGET,
+    RadioWidget: SCHEMA_FORM_WIDGET,
+    RangeSliderWidget: SCHEMA_FORM_WIDGET,
+    RatingWidget: SCHEMA_FORM_WIDGET,
+    SearchWidget: SCHEMA_FORM_WIDGET,
+    SelectWidget: SCHEMA_FORM_WIDGET,
+    SliderWidget: SCHEMA_FORM_WIDGET,
+    TagsWidget: SCHEMA_FORM_WIDGET,
+    TextAreaWidget: SCHEMA_FORM_WIDGET,
+    TextWidget: SCHEMA_FORM_WIDGET,
+    TimeWidget: SCHEMA_FORM_WIDGET,
+    ToggleWidget: SCHEMA_FORM_WIDGET,
     InputGroup: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
     StarRating: NOT_AUDITED,

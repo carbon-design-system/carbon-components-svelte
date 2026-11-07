@@ -51,6 +51,7 @@ export default {
     },
   },
   // The framed DatePicker pages are examples an e2e test renders from `src`.
+  // The framed SchemaForm page is the form that tests and an e2e fixture run.
   roots: [
     "src",
     "tests",
@@ -58,6 +59,7 @@ export default {
     "css",
     "scripts",
     "docs/src/pages/framed/DatePicker",
+    "docs/src/pages/framed/SchemaForm",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
     "docs/src/search.ts",
