@@ -54,6 +54,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Heading: "0.98.0",
   History: "0.115.0",
   IconIndicator: "0.110.0",
+  ImageCompare: "0.114.0",
   ImageLoader: "0.30.0",
   InlineEdit: "0.114.0",
   InlineLoading: "0.2.0",
