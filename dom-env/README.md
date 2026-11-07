@@ -80,6 +80,19 @@ Structural accessibility rules that need no layout, run on the live document, so
 
 This repo runs them in a custom vitest runner (`tests/utils/dom-check-runner.ts`) between a test's body and its `afterEach` hooks, and fails the test on findings about the library's own generated ids or on the other rules. `skipDomChecks(rule)` lets a test opt out.
 
+## CSS coverage
+
+Which selectors of a stylesheet some DOM state in the tests matches. With `DOM_ENV_CSS_COVERAGE=<dir>` and a stylesheet (`DOM_ENV_CSS=<file>`, or `environmentOptions: { domEnv: { cssCoverage: { stylesheet } } }`), dom-env checks the selectors after each dispatched event's effects settle and when `__domEnv.coverage.check()` is called, and each test file writes the ones that matched to a JSON file in `<dir>`.
+
+| Choice | Why |
+| --- | --- |
+| Pseudo-elements and `:hover`/`:focus`/`:active`... come off first | A test's DOM can't show those states; the markup they style is what counts |
+| A selector is checked until it first matches | Coverage only needs one match |
+| Selectors are indexed by a class of their last compound | Only those whose element could be in the document are tried |
+| Selectors parse once per worker | The stylesheet can be large (`all.css` has 7,190) |
+
+This repo's `bun run test:css-coverage` runs the Svelte 5 tests this way and reports, with `scripts/css-coverage.ts`, the selectors no test matched: dead CSS (a `bx--` class `src/` never produces) and states no test renders.
+
 ## Develop
 
 ```sh
