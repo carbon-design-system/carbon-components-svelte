@@ -178,10 +178,11 @@
     }
   }
 
-  // Focus the confirmation once the flow is submitted.
+  // Focus the confirmation once the flow is submitted, and the first step
+  // when it starts again, since the button that restarted it is gone.
   let wasSubmitted = submitted;
   afterUpdate(() => {
-    if (submitted && !wasSubmitted) panelRef?.focus();
+    if (submitted !== wasSubmitted) panelRef?.focus();
     wasSubmitted = submitted;
   });
 </script>
@@ -189,15 +190,20 @@
 <div class:bx--stepper={true} {...$$restProps}>
   <!-- A completed step can be clicked to go back to it; steps ahead can't,
        so validation can't be skipped. -->
+  <!-- ProgressIndicator marks the step at `currentIndex` current, so a
+       submitted flow points past the last step to leave none current. -->
   <ProgressIndicator
-    {currentIndex}
+    currentIndex={submitted ? steps.length : currentIndex}
     {spaceEqually}
     preventChangeOnClick={submitted || busy}
     on:change={(event) => go(event.detail)}
   >
     {#each steps as label, index (index)}
+      <!-- Spread, so a stepper without an `id` leaves each step its own
+           default. Svelte 3 and 4 keep an explicit `undefined`, and steps
+           that share an id merge into one. -->
       <ProgressStep
-        id={$$restProps.id ? `${$$restProps.id}-step-${index}` : undefined}
+        {...$$restProps.id ? { id: `${$$restProps.id}-step-${index}` } : {}}
         {label}
         complete={submitted || index < currentIndex}
         current={!submitted && index === currentIndex}
