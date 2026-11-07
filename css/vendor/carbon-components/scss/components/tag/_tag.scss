@@ -250,6 +250,14 @@
     box-shadow: inset 0 0 0 1px $focus-inverse;
   }
 
+  // ccs: removing a tag hands focus to the next tag's close button, so a
+  // click would ring a button the pointer never touched. Ring it only for
+  // the keyboard. A browser without `:focus-visible` drops this rule and
+  // keeps the ring.
+  .#{$prefix}--tag__close-icon:focus:not(:focus-visible) {
+    box-shadow: none;
+  }
+
   .#{$prefix}--tag--filter.#{$prefix}--tag--disabled svg {
     fill: $icon-disabled;
   }
