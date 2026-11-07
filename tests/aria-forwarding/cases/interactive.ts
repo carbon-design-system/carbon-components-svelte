@@ -741,6 +741,11 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("log"),
   },
   {
+    name: "Markdown",
+    exempt:
+      "the root is a plain container of text; its code blocks and wide tables are named by the component (`codeLabel`, `tableLabel`)",
+  },
+  {
     // The text takes focus while clipped; the expand toggle has its own
     // visible label.
     name: "Truncate",
