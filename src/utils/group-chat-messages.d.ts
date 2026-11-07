@@ -22,7 +22,7 @@ export type ChatMessageItem<Message> = {
  * minutes), and `last` when it ends its group, and insert a divider before a
  * new day or after a pause longer than `dividerGap` (default an hour).
  * Labels read "Today", "Yesterday", a date, or the time after a pause, in
- * `locale`; pass `label` to write your own.
+ * `locale` and `timeZone`; pass `label` to write your own.
  */
 export function groupChatMessages<
   Message extends {
@@ -39,6 +39,13 @@ export function groupChatMessages<
     /** Milliseconds of silence after which a divider shows the time. */
     dividerGap?: number;
     locale?: string;
+    /**
+     * An IANA time zone, such as `"America/New_York"`: the zone whose days
+     * the dividers and "Today" and "Yesterday" follow, and whose clock the
+     * labels show. Defaults to the host's, which differs between a server
+     * and a browser, so set it when the page renders on a server.
+     */
+    timeZone?: string;
     /** The current time, for "Today" and "Yesterday". */
     now?: Date | number;
     /** Who sent a message. Defaults to `author`, then `from`. */

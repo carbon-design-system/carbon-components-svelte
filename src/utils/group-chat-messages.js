@@ -4,20 +4,18 @@ import {
   getDateTimeFormatter,
   getRelativeTimeFormatter,
 } from "./intl-formatter-cache.js";
+import {
+  diffCalendarDays,
+  endOf,
+  hostTimeZone,
+  startOf,
+} from "./zoned-time.js";
 
 const MINUTE = 60_000;
-const DAY = 24 * 60 * MINUTE;
 
 /** @param {Date | number | string} time */
 function toTime(time) {
   return time instanceof Date ? time.getTime() : new Date(time).getTime();
-}
-
-/** @param {number} time */
-function startOfDay(time) {
-  const date = new Date(time);
-  date.setHours(0, 0, 0, 0);
-  return date.getTime();
 }
 
 /** @param {string} text */
@@ -30,18 +28,24 @@ function capitalize(text) {
  * day, and the time for a gap within the same day.
  *
  * @param {number} time
- * @param {{ newDay: boolean, now: number, locale?: string }} context
+ * @param {{ newDay: boolean, now: number, locale?: string, timeZone?: string }} context
  */
-function defaultLabel(time, { newDay, now, locale }) {
+function defaultLabel(time, { newDay, now, locale, timeZone }) {
   if (!newDay) {
-    return getDateTimeFormatter(locale, { timeStyle: "short" }).format(time);
+    return getDateTimeFormatter(locale, {
+      timeStyle: "short",
+      timeZone,
+    }).format(time);
   }
-  const daysAgo = Math.round((startOfDay(now) - startOfDay(time)) / DAY);
+  const daysAgo = diffCalendarDays(time, now, timeZone ?? hostTimeZone());
   if (daysAgo === 0 || daysAgo === 1) {
     const relative = getRelativeTimeFormatter(locale, { numeric: "auto" });
     return capitalize(relative.format(-daysAgo, "day"));
   }
-  return getDateTimeFormatter(locale, { dateStyle: "medium" }).format(time);
+  return getDateTimeFormatter(locale, {
+    dateStyle: "medium",
+    timeZone,
+  }).format(time);
 }
 
 /**
@@ -56,6 +60,7 @@ function defaultLabel(time, { newDay, now, locale }) {
  *   groupGap?: number,
  *   dividerGap?: number,
  *   locale?: string,
+ *   timeZone?: string,
  *   now?: Date | number,
  *   author?: (message: Message) => unknown,
  *   label?: (time: Date, context: { newDay: boolean }) => string,
@@ -66,9 +71,25 @@ export function groupChatMessages(messages, options = {}) {
     groupGap = 5 * MINUTE,
     dividerGap = 60 * MINUTE,
     locale,
+    timeZone,
     author = (message) => message.author ?? message.from,
   } = options;
   const now = toTime(options.now ?? Date.now());
+  // The days are the zone's days. With no `timeZone`, the host's.
+  const zone = timeZone ?? hostTimeZone();
+  // Zone math costs microseconds, and a conversation is mostly runs of
+  // messages on one day, so the window of the last day found answers them.
+  let windowStart = Number.NaN;
+  let windowEnd = Number.NaN;
+  /** @param {number} time */
+  const dayStart = (time) => {
+    if (!Number.isFinite(time)) return Number.NaN;
+    if (!(time >= windowStart && time < windowEnd)) {
+      windowStart = startOf("day", time, zone);
+      windowEnd = endOf("day", time, zone) + 1;
+    }
+    return windowStart;
+  };
 
   /** @type {Array<{ type: "divider", key: string, time: Date, label: string } | { type: "message", key: string | number, message: Message, continued: boolean, last: boolean }>} */
   const items = [];
@@ -78,12 +99,12 @@ export function groupChatMessages(messages, options = {}) {
 
   messages.forEach((message, index) => {
     const time = toTime(message.time);
-    const newDay = !previous || startOfDay(time) !== startOfDay(previousTime);
+    const newDay = !previous || dayStart(time) !== dayStart(previousTime);
     const pause = !previous || time - previousTime > dividerGap;
     if (newDay || pause) {
       const label = options.label
         ? options.label(new Date(time), { newDay })
-        : defaultLabel(time, { newDay, now, locale });
+        : defaultLabel(time, { newDay, now, locale, timeZone });
       items.push({
         type: "divider",
         key: `divider-${time}`,
