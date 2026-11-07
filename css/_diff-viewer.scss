@@ -1,0 +1,346 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// DiffViewer: a text and code diff, side by side or unified. Rows are
+/// virtualized and a fixed height, unless `wrap` lets long lines wrap.
+/// Everything inside the scroller is code and reads left to right in any
+/// language; only the toolbar around it follows the page direction.
+///
+/// Row tints are an overlay at low opacity, because the theme tokens compile
+/// to `var()` strings that Sass cannot mix, and a dark theme has no tinted
+/// notification token. The overlay sits under the text (`z-index: -1` in an
+/// isolated row), so the text keeps its contrast.
+/// @access private
+/// @group components
+@mixin diff-viewer {
+  .#{$prefix}--diff-viewer {
+    --ccs-diff-row-height: #{to-rem(20px)};
+
+    display: flex;
+    flex-direction: column;
+    background: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--diff-viewer--sm {
+    --ccs-diff-row-height: #{to-rem(16px)};
+  }
+
+  .#{$prefix}--diff-viewer__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $carbon--spacing-03;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-03;
+    border-block-end: 1px solid $border-subtle;
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--diff-viewer__summary,
+  .#{$prefix}--diff-viewer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--diff-viewer__stat {
+    @include type-style("code-01");
+  }
+
+  .#{$prefix}--diff-viewer__stat--added,
+  .#{$prefix}--diff-viewer__row--insert .#{$prefix}--diff-viewer__marker,
+  .#{$prefix}--diff-viewer__cell--insert .#{$prefix}--diff-viewer__marker {
+    color: var(--cds-tag-color-green);
+  }
+
+  .#{$prefix}--diff-viewer__stat--removed,
+  .#{$prefix}--diff-viewer__row--delete .#{$prefix}--diff-viewer__marker,
+  .#{$prefix}--diff-viewer__cell--delete .#{$prefix}--diff-viewer__marker {
+    color: var(--cds-tag-color-red);
+  }
+
+  .#{$prefix}--diff-viewer__count {
+    margin-inline-end: $carbon--spacing-03;
+    color: $text-secondary;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--diff-viewer__scroller {
+    // One character: a `ch`, plus the 0.32px letter spacing the code type
+    // styles add, which `ch` leaves out.
+    --ccs-diff-char: calc(1ch + 0.32px);
+    --ccs-diff-number-width: calc(
+      var(--ccs-diff-digits, 4) * 1ch + #{$carbon--spacing-06}
+    );
+    --ccs-diff-gutter: calc(
+      var(--ccs-diff-number-width) + #{$carbon--spacing-06}
+    );
+
+    position: relative;
+    overflow: auto;
+    direction: ltr;
+    text-align: start;
+    // Rows are the same height, so let the browser's anchoring stay out.
+    overflow-anchor: none;
+    background: $layer;
+
+    @include type-style("code-02");
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--diff-viewer--sm .#{$prefix}--diff-viewer__scroller {
+    @include type-style("code-01");
+  }
+
+  .#{$prefix}--diff-viewer__probe {
+    position: absolute;
+    inset-block-start: 0;
+    inline-size: 0;
+    block-size: var(--ccs-diff-row-height);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--diff-viewer__labels {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    background: $layer-accent;
+    border-block-end: 1px solid $border-subtle;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--diff-viewer__label {
+    padding: $carbon--spacing-02 $carbon--spacing-05;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--diff-viewer__empty {
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    color: $text-secondary;
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--diff-viewer__list {
+    // Rows scroll sideways together, so the list is as wide as the longest
+    // line. One `ch` is one character of the code font.
+    min-inline-size: calc(
+      var(--ccs-diff-chars, 0) * var(--ccs-diff-char) + var(--ccs-diff-gutter) +
+        #{$carbon--spacing-05}
+    );
+  }
+
+  .#{$prefix}--diff-viewer--unified .#{$prefix}--diff-viewer__list {
+    min-inline-size: calc(
+      var(--ccs-diff-chars, 0) * var(--ccs-diff-char) + 2 * var(--ccs-diff-number-width) +
+        #{$carbon--spacing-08}
+    );
+  }
+
+  .#{$prefix}--diff-viewer--split .#{$prefix}--diff-viewer__list {
+    min-inline-size: calc(
+      2 * (var(--ccs-diff-chars, 0) * var(--ccs-diff-char) + var(--ccs-diff-gutter))
+    );
+  }
+
+  .#{$prefix}--diff-viewer--wrap .#{$prefix}--diff-viewer__list {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--diff-viewer__row {
+    box-sizing: border-box;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    block-size: var(--ccs-diff-row-height);
+  }
+
+  .#{$prefix}--diff-viewer--wrap .#{$prefix}--diff-viewer__row {
+    block-size: auto;
+    min-block-size: var(--ccs-diff-row-height);
+  }
+
+  .#{$prefix}--diff-viewer__row--pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .#{$prefix}--diff-viewer__cell {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--diff-viewer__cell + .#{$prefix}--diff-viewer__cell {
+    border-inline-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--diff-viewer__cell--empty {
+    background: $layer-accent;
+  }
+
+  // The tint: an overlay in the row's own stacking context.
+  .#{$prefix}--diff-viewer__row--insert::before,
+  .#{$prefix}--diff-viewer__row--delete::before,
+  .#{$prefix}--diff-viewer__cell--insert::before,
+  .#{$prefix}--diff-viewer__cell--delete::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--diff-viewer__row--insert::before,
+  .#{$prefix}--diff-viewer__cell--insert::before {
+    background: $support-success;
+  }
+
+  .#{$prefix}--diff-viewer__row--delete::before,
+  .#{$prefix}--diff-viewer__cell--delete::before {
+    background: $support-error;
+  }
+
+  .#{$prefix}--diff-viewer__row--current::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-inline-start: $carbon--spacing-02 solid $focus;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--diff-viewer__number {
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--ccs-diff-number-width);
+    padding-inline-end: $carbon--spacing-04;
+    color: $text-secondary;
+    text-align: end;
+    user-select: none;
+  }
+
+  .#{$prefix}--diff-viewer__marker {
+    flex: none;
+    inline-size: $carbon--spacing-06;
+    text-align: center;
+    user-select: none;
+  }
+
+  // Text for assistive technology: visually hidden, and left out of copied text.
+  .#{$prefix}--diff-viewer__sr {
+    user-select: none;
+  }
+
+  .#{$prefix}--diff-viewer__code {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    padding-inline-end: $carbon--spacing-05;
+    white-space: pre;
+    tab-size: 4;
+  }
+
+  .#{$prefix}--diff-viewer--wrap .#{$prefix}--diff-viewer__code {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--diff-viewer__word {
+    background: var(--cds-tag-background-red);
+    color: $text-primary;
+  }
+
+  .#{$prefix}--diff-viewer__row--insert .#{$prefix}--diff-viewer__word,
+  .#{$prefix}--diff-viewer__cell--insert .#{$prefix}--diff-viewer__word {
+    background: var(--cds-tag-background-green);
+  }
+
+  // Selecting in one half of the split view leaves the other half out.
+  .#{$prefix}--diff-viewer[data-select-side="old"]
+    .#{$prefix}--diff-viewer__cell[data-side="new"],
+  .#{$prefix}--diff-viewer[data-select-side="new"]
+    .#{$prefix}--diff-viewer__cell[data-side="old"] {
+    user-select: none;
+  }
+
+  .#{$prefix}--diff-viewer__hunk {
+    align-items: center;
+    gap: $carbon--spacing-05;
+    padding-inline-start: $carbon--spacing-05;
+    // The link color only holds 4.5:1 on the page background and the layer,
+    // not on the darker accent the column labels use.
+    background: $background;
+    border-block: 1px solid $border-subtle;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--diff-viewer__expand {
+    flex: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $link-primary;
+    font: inherit;
+    line-height: inherit;
+    // Always underlined: color alone must not mark it as a control, and it
+    // saves the page a hover block.
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--diff-viewer__omitted,
+  .#{$prefix}--diff-viewer__header {
+    white-space: pre;
+  }
+
+  // Forced colors drop backgrounds, so the +/- marker and the hidden text
+  // carry the change. The current change gets a system-colored bar, and the
+  // word marks an underline.
+  @media (forced-colors: active) {
+    .#{$prefix}--diff-viewer__marker,
+    .#{$prefix}--diff-viewer__stat,
+    .#{$prefix}--diff-viewer__number,
+    .#{$prefix}--diff-viewer__expand {
+      color: CanvasText;
+    }
+
+    .#{$prefix}--diff-viewer__expand {
+      color: LinkText;
+    }
+
+    .#{$prefix}--diff-viewer__word {
+      color: CanvasText;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+    }
+
+    .#{$prefix}--diff-viewer__row--current::after {
+      border-inline-start-color: Highlight;
+    }
+  }
+}
+
+@include exports("diff-viewer") {
+  @include diff-viewer;
+}
