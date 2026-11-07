@@ -259,8 +259,8 @@ import "carbon-components-svelte/css/syntax.css";
 
 | Group | Token types |
 | --- | --- |
-| Keywords | `keyword` (including runes such as `$state`, `$:`, and directive prefixes such as `on`), `control-keyword` (including `{#each}` and `{@html}`), `definition-keyword`, `module-keyword` |
-| Names | `variable-name`, `definition` (including parameters and the names that blocks and destructuring declare), `function`, `property-name`, `type-name`, `class-name`, `self`, `special` (including `$store` references and template `${}` delimiters), `annotation` (decorators) |
+| Keywords | `keyword` (including runes such as `$state`, `$:`, and directive prefixes such as `on`), `control-keyword` (including `{#each}` and `{@html}`), `definition-keyword`, `module-keyword` (including `export default`) |
+| Names | `variable-name`, `definition` (including parameters, imports, and the names that blocks and destructuring declare), `function`, `property-name`, `type-name`, `class-name`, `self`, `special` (including `$store` references and template `${}` delimiters), `annotation` (decorators) |
 | Literals | `string`, `special-string` (module specifiers such as `"carbon-components-svelte"`), `escape` (escape sequences in strings), `number`, `bool`, `null`, `regexp`, `color`, `unit` |
 | Markup | `tag-name`, `attribute-name`, `attribute-value`, `angle-bracket`, `modifier` (directive modifiers such as `preventDefault`), `character` (HTML character references) |
 | Punctuation | `operator`, `punctuation`, `paren`, `brace`, `bracket` |
