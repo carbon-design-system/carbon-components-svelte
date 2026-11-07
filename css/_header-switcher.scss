@@ -5,6 +5,7 @@
 // right-most position). Colors come from theme tokens; see _profile-menu.scss.
 
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// HeaderSwitcher component styles (trigger layout, chevron, anchored menu).
@@ -52,7 +53,7 @@
   .#{$prefix}--header-switcher__text {
     overflow: hidden;
     min-width: 0;
-    text-align: left;
+    text-align: start;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -61,13 +62,13 @@
   // icon/avatar. Without one (no `avatar` slot), that margin is a stray gap
   // before the text — cancel it.
   .#{$prefix}--header-switcher__text--flush {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .#{$prefix}--header-switcher__chevron {
     display: flex;
     flex-shrink: 0;
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
     transition: transform $duration--fast-02 motion(standard, productive);
   }
 
@@ -95,18 +96,134 @@
     // Offset the reserved border so the avatar lands at the same inset as
     // `.#{$prefix}--profile-menu__item`'s avatar (padding only, no border)
     // in the menu below, keeping both flush with the same left edge.
-    padding-left: calc(#{$carbon--spacing-05} - #{$button-border-width});
+    padding-inline-start: calc(
+      #{$carbon--spacing-05} - #{$button-border-width}
+    );
   }
 
   .#{$prefix}--header-switcher__menu {
     position: absolute;
     top: 100%;
-    left: 0;
-    right: auto;
+    // The menu hangs from the trigger's start edge, so it opens toward the
+    // page's end in both directions. The physical `left` and `right` it
+    // replaces anchored it to the left in a right-to-left page.
+    @include ccs-inset-inline($start: 0);
     width: to-rem(256px);
     // The menu shares `.bx--profile-menu`, whose `max-width: 100%` reads the
     // header. Here that would be the trigger's width.
     max-width: 100vw;
+  }
+
+  // Below the medium breakpoint the trigger can sit anywhere along the
+  // header, and a menu that hangs from it ran off the far edge. It becomes
+  // the width of the header instead, as Carbon's header panels do.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--header-switcher__menu {
+      position: fixed;
+      top: to-rem(48px);
+      @include ccs-inset-inline($start: 0, $end: 0);
+      width: auto;
+      max-width: none;
+    }
+  }
+
+  // The menu is a disclosure, not a menu: items are reached with the arrow
+  // keys but the container is never a Tab stop. It takes focus only from
+  // script, so it shows a ring only when the focus was not a pointer's.
+  .#{$prefix}--header-switcher__menu:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--header-switcher__menu:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--header-switcher__menu .#{$prefix}--profile-menu__item {
+    text-align: start;
+  }
+
+  .#{$prefix}--header-switcher__menu
+    .#{$prefix}--profile-menu__item[aria-current="true"] {
+    color: $text-primary;
+  }
+
+  // The filter field stays at the top while the list scrolls.
+  .#{$prefix}--header-switcher__search {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    background-color: $layer;
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--header-switcher__menu
+    .#{$prefix}--profile-menu__list
+    + .#{$prefix}--profile-menu__list {
+    border-top: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--header-switcher__group-heading {
+    @include type-style('label-01');
+    padding: $carbon--spacing-03 $carbon--spacing-05 $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  // Two lines in a row: the name, and the organization or similar below it.
+  .#{$prefix}--header-switcher__item-text,
+  .#{$prefix}--header-switcher__item-description {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .#{$prefix}--header-switcher__item-description {
+    @include type-style('label-01');
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--header-switcher__error {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    border-inline-start: 3px solid $support-error;
+    color: $text-primary;
+    @include type-style('body-compact-01');
+  }
+
+  .#{$prefix}--header-switcher__error svg {
+    flex-shrink: 0;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--header-switcher__skeleton {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    min-height: to-rem(40px);
+    padding: 0 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--header-switcher__skeleton > .#{$prefix}--skeleton__text {
+    flex: 1;
+    margin: 0;
+  }
+
+  .#{$prefix}--header-switcher__skeleton-avatar {
+    display: block;
+    flex-shrink: 0;
+    background: $skeleton-background;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--header-switcher__empty {
+    padding: $carbon--spacing-05;
+    color: $text-secondary;
+    @include type-style('body-compact-01');
   }
 }
 
