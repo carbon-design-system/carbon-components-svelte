@@ -62,7 +62,10 @@ export function shortcutKeys(
 
 /**
  * The key caps to display for a shortcut, in platform order: `⌃ ⌥ ⇧ ⌘`
- * on Apple platforms, `Ctrl Alt Shift` elsewhere.
+ * on Apple platforms, `Ctrl Alt Shift` elsewhere. The labels are plain
+ * text, for a string such as a `title`. To draw keys on the page, use
+ * `Kbd`: IBM Plex has no `⌘ ⌥ ⇧ ⌃` glyphs, so the browser downloads a
+ * fallback font to draw them, and `Kbd` draws Carbon icons in their place.
  */
 export function formatShortcut(
   shortcut: string,

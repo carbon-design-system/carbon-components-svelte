@@ -89,3 +89,4 @@ To show a shortcut in a button, set the button's own `shortcut`: it shows the ke
 | Use `Kbd` for keys in UI chrome: a hint, a legend, a menu | It sizes to controls and reads the platform |
 | Write keys in copy as `kbd` in `Prose` | Prose keeps them inline with the text's size and line height |
 | Set `shortcut` on a Button rather than placing a `Kbd` in it | The button also announces and binds the keys |
+| Draw keys with `Kbd`, and keep `formatShortcut` for plain strings such as a `title` | IBM Plex has no Apple modifier glyphs, so text on the page makes the browser download a 63 KB fallback font |
