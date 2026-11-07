@@ -31,7 +31,7 @@
 <SidePanel
   bind:open
   {currentStep}
-  title={steps[currentStep]}
+  titleText={steps[currentStep]}
   on:back={() => (currentStep -= 1)}
 >
   {#if currentStep === 0}

@@ -38,7 +38,7 @@
   slideIn
   selectorPageContent="#main-content"
   size="sm"
-  title="Activity"
+  titleText="Activity"
 >
   <StructuredList condensed>
     <StructuredListBody>

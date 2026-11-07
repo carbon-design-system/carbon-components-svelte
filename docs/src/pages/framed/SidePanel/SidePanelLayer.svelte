@@ -18,7 +18,7 @@
   <Button on:click={() => (open = true)}>Edit scaling</Button>
 </Content>
 
-<SidePanel bind:open title="Scaling">
+<SidePanel bind:open titleText="Scaling">
   <Stack gap={6}>
     <TextInput labelText="Minimum instances" value="2" />
     <Tile>

@@ -21,8 +21,8 @@
 <SidePanel
   bind:open
   labelText="checkout-api"
-  title="Edit deployment"
-  subtitle="Changes apply on the next deploy."
+  titleText="Edit deployment"
+  subtitleText="Changes apply on the next deploy."
 >
   <Stack gap={6}>
     <TextInput labelText="Service name" value="checkout-api" />

@@ -24,6 +24,6 @@
   </Stack>
 </Content>
 
-<SidePanel bind:open {placement} size="sm" title="Filters">
+<SidePanel bind:open {placement} size="sm" titleText="Filters">
   <p>Show services by runtime, region and plan.</p>
 </SidePanel>

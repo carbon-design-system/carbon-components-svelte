@@ -23,8 +23,8 @@
   includeOverlay
   currentStep={1}
   labelText="Production"
-  title="Edit deployment"
-  subtitle="Changes apply on the next deploy."
+  titleText="Edit deployment"
+  subtitleText="Changes apply on the next deploy."
 >
   <TextInput labelText="Region" />
   <svelte:fragment slot="actions">

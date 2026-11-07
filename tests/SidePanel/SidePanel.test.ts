@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import SidePanelComponent from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import SidePanel from "./SidePanel.test.svelte";
@@ -34,7 +35,7 @@ describe("SidePanel", () => {
       props: {
         open: true,
         labelText: "Production",
-        subtitle: "Changes apply on the next deploy.",
+        subtitleText: "Changes apply on the next deploy.",
       },
     });
     const dialog = screen.getByRole("dialog", { name: "Edit deployment" });
@@ -42,6 +43,18 @@ describe("SidePanel", () => {
       "Changes apply on the next deploy.",
     );
     expect(screen.getByText("Production")).toHaveClass("bx--side-panel__label");
+  });
+
+  it("passes a native title through to the panel", () => {
+    render(SidePanelComponent, {
+      props: {
+        open: true,
+        titleText: "Edit deployment",
+        title: "Deployment settings",
+      },
+    });
+    const dialog = screen.getByRole("dialog", { name: "Edit deployment" });
+    expect(dialog).toHaveAttribute("title", "Deployment settings");
   });
 
   it("renders the title as an h2, or one level below a Section", () => {
