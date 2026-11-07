@@ -25,9 +25,14 @@
   import { getContext, onMount } from "svelte";
   import { uniqueId } from "../utils/unique-id.js";
 
-  const { currentId, pairs, addPanel, removePanel } = getContext(
+  const { currentId, pairs, addPanel, claimPanel, removePanel } = getContext(
     "carbon:ContentSwitcher",
   );
+
+  // The switch at this panel's position, known while the panel initializes.
+  // Registration flushes after the first render (never on the server), so
+  // until it pairs the panel, this keeps the selected panel visible.
+  const claimedSwitchId = claimPanel(id);
 
   addPanel(id);
 
@@ -40,7 +45,10 @@
   let selectedOnce = false;
 
   // Paired by position with the switch at the same index.
-  $: switchId = $pairs.switchByPanel[id];
+  let paired = false;
+  $: if ($pairs.switchByPanel[id] !== undefined) paired = true;
+  $: switchId =
+    $pairs.switchByPanel[id] ?? (paired ? undefined : claimedSwitchId);
   $: selected = switchId !== undefined && $currentId === switchId;
   $: if (selected) selectedOnce = true;
   $: shouldMount = unmountOnHide ? selected : lazy ? selectedOnce : true;
