@@ -178,6 +178,26 @@ export default defineConfig({
         },
       ],
     ),
+    // Last, after the other plugins add their tags. Scripts and styles stay
+    // as written: the preload script's placeholder is a comment.
+    {
+      name: "minify-index-html",
+      apply: "build",
+      transformIndexHtml: {
+        order: "post",
+        handler: (html) =>
+          html.replace(
+            /(<(script|style)\b[\s\S]*?<\/\2>)|<!--[\s\S]*?-->|\s+/gi,
+            (match, raw: string | undefined, _tag, at: number) => {
+              if (raw) return raw;
+              if (match.startsWith("<!--")) return "";
+              const before = html[at - 1] ?? ">";
+              const after = html[at + match.length] ?? "<";
+              return before === ">" || after === "<" ? "" : " ";
+            },
+          ),
+      },
+    },
   ],
   define: {
     __PKG_VERSION: JSON.stringify(pkg.version),
