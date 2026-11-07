@@ -9,6 +9,7 @@ import { cacheSvelteSteps } from "./scripts/compile-cache.ts";
 import { PAGE_EXTENSION } from "./scripts/constants.ts";
 import { formatterVersion } from "./scripts/format.ts";
 import { pageHtml } from "./scripts/page-html.ts";
+import { selfHostPlex } from "./scripts/self-host-plex.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const componentMdSizesPath = path.resolve(
@@ -118,6 +119,7 @@ export default defineConfig({
     alias: carbonAlias,
   },
   plugins: [
+    selfHostPlex(path.join(__dirname, "node_modules")),
     componentApi(),
     pageHtml(path.join(__dirname, "src/pages")),
     {
