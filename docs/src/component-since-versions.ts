@@ -59,6 +59,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Layer: "0.114.0",
   LayoutDirection: "0.114.0",
   Link: "0.2.0",
+  ListDetailLayout: "0.114.0",
   Loading: "0.2.0",
   LocalStorage: "0.30.0",
   Menu: "0.110.0",
