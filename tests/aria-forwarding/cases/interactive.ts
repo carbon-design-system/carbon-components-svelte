@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
 import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
+import BookingSlots from "carbon-components-svelte/BookingSlots/BookingSlots.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
 import ChatLog from "carbon-components-svelte/Chat/ChatLog.svelte";
@@ -728,6 +729,19 @@ export const interactive: AriaEntry[] = [
         props: { open: true, title: "Delete this project?", ...attrs },
       }),
     target: () => screen.getByRole("alertdialog"),
+  },
+  {
+    // The group around the calendar and the times. The calendar and each
+    // day's times are named by their own props.
+    name: "BookingSlots",
+    render: (attrs) =>
+      render(BookingSlots, {
+        props: { now: "2026-11-06T12:00:00Z", ...attrs },
+      }),
+    target: (result) =>
+      result.container.querySelector<HTMLElement>(
+        ".bx--booking-slots",
+      ) as HTMLElement,
   },
   {
     name: "Countdown",

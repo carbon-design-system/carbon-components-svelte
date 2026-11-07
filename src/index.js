@@ -9,6 +9,12 @@ export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelt
 export { default as BigNumber } from "./BigNumber/BigNumber.svelte";
 export { default as BigNumberSkeleton } from "./BigNumber/BigNumberSkeleton.svelte";
 export { default as Bleed } from "./Bleed/Bleed.svelte";
+export { default as BookingSlots } from "./BookingSlots/BookingSlots.svelte";
+export {
+  groupSlotsByDay,
+  slotsFromWindows,
+  wallTimeToInstant,
+} from "./BookingSlots/booking-slots.js";
 export { default as Box } from "./Box/Box.svelte";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
