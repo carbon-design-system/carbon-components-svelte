@@ -25,7 +25,8 @@ export const usageExample = `<script>
 
 <Button>Hello Carbon</Button>`;
 
-export const dynamicThemeCss = `import "carbon-components-svelte/css/all.css";`;
+export const dynamicThemeCss = `import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/fonts.css";`;
 
 export const iconsInstallCmds = installCmdsFor("carbon-icons-svelte");
 

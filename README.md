@@ -88,11 +88,41 @@ import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/all.css";
 ```
 
+Then load IBM Plex, unless you use your own fonts (see [Fonts](#fonts)):
+
+```js
+import "carbon-components-svelte/css/fonts.css";
+```
+
 ### Smaller CSS
 
 Each precompiled StyleSheet contains the styles for every component. To ship only the styles your app uses, add [`optimizeCss`](#optimizecss) to your production build. Set `propAware: true` to also drop the styles of prop values your app never passes; see [prop-aware pruning](#prop-aware-pruning).
 
 The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yourself gives v10 colors and type, and misses styles for components and variants that only this library provides.
+
+### Fonts
+
+The theme StyleSheets load no web fonts. `css/fonts.css` loads IBM Plex Sans, Mono and Serif from Carbon's CDN (`1.www.s81c.com`). Text falls back to Helvetica Neue and Arial until a family loads, or when none does.
+
+| You want | Do this |
+| :--- | :--- |
+| IBM Plex from the CDN | Import `carbon-components-svelte/css/fonts.css`. |
+| IBM Plex from your own server | Skip `fonts.css`. Install `@ibm/plex-sans` and `@ibm/plex-mono`, and import `@ibm/plex-sans/css/ibm-plex-sans-default.min.css` and `@ibm/plex-mono/css/ibm-plex-mono-default.min.css`. Your bundler copies the font files. |
+| IBM Plex from another URL | Copy `fonts.css` and replace its base URL. |
+| Another font | Load its `@font-face` rules and set the family variables below. |
+| No web fonts | Skip `fonts.css`. |
+
+The sans, mono and serif families read three variables:
+
+```css
+:root {
+  --ccs-font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --ccs-font-mono: "JetBrains Mono", monospace;
+  --ccs-font-serif: Georgia, serif;
+}
+```
+
+Set them on `:root` or a theme zone element: the code type tokens resolve `--ccs-font-mono` where they are declared.
 
 ### Dynamic theming
 
