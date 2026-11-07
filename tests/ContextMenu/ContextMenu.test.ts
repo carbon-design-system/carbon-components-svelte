@@ -213,6 +213,20 @@ describe("ContextMenu", () => {
     expect(submenuTrigger).toHaveFocus();
   });
 
+  it("hides the focus ring after a right-click open until a key press", async () => {
+    render(ContextMenu);
+
+    await user.pointer({
+      target: screen.getByTestId("target"),
+      keys: "[MouseRight]",
+    });
+    const menu = screen.getByRole("menu");
+    expect(menu).toHaveClass("bx--menu--pointer");
+
+    await user.keyboard("{ArrowDown}");
+    expect(menu).not.toHaveClass("bx--menu--pointer");
+  });
+
   it("should handle custom target", async () => {
     const onopen = vi.fn();
     render(ContextMenu, { props: { onopen } });

@@ -59,7 +59,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { dismiss } from "../utils/dismiss.js";
-  import { focusQuietly } from "../utils/focus.js";
+  import { focusQuietly, pointerInput } from "../utils/focus.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
@@ -330,6 +330,7 @@
   data-level={level}
   class:bx--menu={true}
   class:bx--menu--open={open}
+  class:bx--menu--pointer={$pointerInput}
   class:bx--menu--invisible={open && x === 0 && y === 0}
   class:bx--menu--root={level === 1}
   style:left="{x}px"

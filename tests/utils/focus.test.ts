@@ -1,8 +1,10 @@
+import { get } from "svelte/store";
 import {
   focusQuietly,
   initialFocus,
   isPointerFocus,
   isQuietFocus,
+  pointerInput,
   restoreFocus,
   returnFocus,
 } from "../../src/utils/focus.js";
@@ -297,5 +299,17 @@ describe("isPointerFocus", () => {
 
     await user.keyboard("{Tab}");
     expect(isPointerFocus(a)).toBe(false);
+  });
+});
+
+describe("pointerInput", () => {
+  it("is true from a pointer press until a key press", async () => {
+    document.body.innerHTML = "<button>A</button>";
+
+    await user.click(document.querySelector("button") as HTMLButtonElement);
+    expect(get(pointerInput)).toBe(true);
+
+    await user.keyboard("{Tab}");
+    expect(get(pointerInput)).toBe(false);
   });
 });

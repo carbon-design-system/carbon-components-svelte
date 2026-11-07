@@ -1,5 +1,6 @@
 // @ts-check
 import { tick } from "svelte";
+import { writable } from "svelte/store";
 import { selectorTabbable } from "./trap-focus.js";
 
 const selectorFirstInput =
@@ -90,6 +91,18 @@ export function isQuietFocus(node) {
   return node != null && node === quietTarget;
 }
 
+const pointerInputStore = writable(false);
+
+/**
+ * `true` from a pointer press until the next key press. A menu that opens
+ * from a click reads it to skip the focus ring on the item it focuses.
+ * Chromium and Safari match `:focus-visible` on script focus after some
+ * clicks, so CSS alone cannot tell the two apart.
+ *
+ * @type {import("svelte/store").Readable<boolean>}
+ */
+export const pointerInput = { subscribe: pointerInputStore.subscribe };
+
 /**
  * The element the last pointer press landed on, until the next key press.
  * @type {EventTarget | null}
@@ -100,6 +113,7 @@ if (typeof document !== "undefined") {
   /** @param {Event} event */
   const press = (event) => {
     pressTarget = event.target;
+    pointerInputStore.set(true);
   };
   document.addEventListener("pointerdown", press, true);
   document.addEventListener("mousedown", press, true);
@@ -107,6 +121,7 @@ if (typeof document !== "undefined") {
     "keydown",
     () => {
       pressTarget = null;
+      pointerInputStore.set(false);
     },
     true,
   );

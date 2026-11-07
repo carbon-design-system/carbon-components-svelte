@@ -61,6 +61,15 @@
     color: $text-on-color;
   }
 
+  // ccs: a click that opens a menu focuses the menu or its first item, as
+  // in Carbon React, and browsers can match `:focus-visible` on that focus.
+  // `--pointer` stays on the menu from a pointer press to the next key
+  // press, so the ring follows the keyboard.
+  .#{$prefix}--menu--pointer:focus,
+  .#{$prefix}--menu--pointer .#{$prefix}--menu-option:focus {
+    outline: none;
+  }
+
   @media (any-hover: hover) {
     .#{$prefix}--menu-option:hover {
       background-color: $layer-hover;

@@ -117,7 +117,7 @@
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
   import { toCssLength } from "../utils/css-length.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { focusQuietly, returnFocus } from "../utils/focus.js";
+  import { focusQuietly, pointerInput, returnFocus } from "../utils/focus.js";
   import { createFrameJob } from "../utils/frame-batch.js";
   import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -428,6 +428,7 @@
     style:max-height={maxHeightStyle}
     class:bx--menu={true}
     class:bx--menu--open={open}
+    class:bx--menu--pointer={$pointerInput}
     class:bx--menu--xs={size === "xs"}
     class:bx--menu--md={size === "md"}
     class:bx--menu--lg={size === "lg"}

@@ -33,6 +33,12 @@ export function isQuietFocus(node: Element | null | undefined): boolean;
  * pressed since. A tooltip ignores that focus, so it closes when the
  * pointer leaves.
  */
+/**
+ * `true` from a pointer press until the next key press. A menu that opens
+ * from a click reads it to skip the focus ring on the item it focuses.
+ */
+export const pointerInput: import("svelte/store").Readable<boolean>;
+
 export function isPointerFocus(node: Element | null | undefined): boolean;
 
 export function restoreFocus(): {

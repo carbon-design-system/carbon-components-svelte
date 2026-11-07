@@ -55,6 +55,25 @@ describe("Menu", () => {
     expect(onOpen).toHaveBeenCalledWith(expect.any(HTMLElement));
   });
 
+  it("hides the focus ring after a click open until a key press", async () => {
+    render(MenuFixture);
+
+    await user.click(screen.getByRole("button", { name: "Trigger" }));
+    const menu = screen.getByRole("menu");
+    expect(menu).toHaveClass("bx--menu--pointer");
+
+    await user.keyboard("{ArrowDown}");
+    expect(menu).not.toHaveClass("bx--menu--pointer");
+  });
+
+  it("shows the focus ring after a keyboard open", async () => {
+    render(MenuFixture);
+
+    screen.getByRole("button", { name: "Trigger" }).focus();
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("menu")).not.toHaveClass("bx--menu--pointer");
+  });
+
   it("focuses the menu itself and still dispatches open when every item is disabled", async () => {
     const onOpen = vi.fn();
     render(MenuFixture, { props: { allDisabled: true, onOpen } });
