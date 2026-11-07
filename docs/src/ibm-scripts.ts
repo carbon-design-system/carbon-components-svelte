@@ -16,12 +16,59 @@ const LATEST_MS = 3000;
 /** Safari has no `requestIdleCallback`; there, this long after load. */
 const FALLBACK_MS = 1000;
 
+/**
+ * TrustArc, which IBM's analytics load for the cookie banner, adds its own
+ * `@font-face` rules for IBM Plex Sans 400 and 600. They come last, so they
+ * win over the faces the page already uses, and all of its text goes blank
+ * while TrustArc's copies of the font download. This deletes those rules
+ * as their `<style>` is added, before the browser renders it. The banner
+ * then uses the page's own IBM Plex Sans, which is the same font.
+ */
+function deleteTrustArcFonts(style: HTMLStyleElement) {
+  const sheet = style.sheet;
+  if (!sheet) return;
+  for (let i = sheet.cssRules.length - 1; i >= 0; i--) {
+    const rule = sheet.cssRules[i];
+    if (rule instanceof CSSFontFaceRule && isFromTrustArc(rule)) {
+      sheet.deleteRule(i);
+    }
+  }
+}
+
+/** Whether any `url()` in the rule's `src` is on TrustArc's host. */
+function isFromTrustArc(rule: CSSFontFaceRule) {
+  const src = rule.style.getPropertyValue("src");
+  for (const [, url] of src.matchAll(/url\("?([^")]+)/g)) {
+    if (new URL(url, location.href).hostname === "consent.trustarc.com") {
+      return true;
+    }
+  }
+  return false;
+}
+
+function watchForTrustArcFonts() {
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      for (const node of mutation.addedNodes) {
+        if (node instanceof HTMLStyleElement) {
+          deleteTrustArcFonts(node);
+        } else if (node instanceof Element) {
+          for (const style of node.getElementsByTagName("style")) {
+            deleteTrustArcFonts(style);
+          }
+        }
+      }
+    }
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
 type IbmWindow = Window & {
   _ibmAnalytics?: unknown;
   digitalData?: unknown;
 };
 
 function addScripts() {
+  watchForTrustArcFonts();
   // The analytics read their settings when they load, and count the page
   // view then.
   const win = window as IbmWindow;
