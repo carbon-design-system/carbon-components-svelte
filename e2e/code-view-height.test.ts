@@ -17,14 +17,23 @@ for (const rootFontSize of ["16px", "20px"]) {
 
     for (const id of ids) {
       const view = page.getByTestId(`view-${id}`);
+      const reserved = page.getByTestId(`reserved-${id}`);
       await expect(view.locator(".bx--snippet")).toBeVisible();
-      const rendered = await view.evaluate(
-        (el) => el.getBoundingClientRect().height,
-      );
-      const reserved = await page
-        .getByTestId(`reserved-${id}`)
-        .evaluate((el) => el.getBoundingClientRect().height);
-      expect(Math.abs(rendered - reserved), `${id} lines`).toBeLessThan(0.5);
+      // Poll: the snippet animates its max-height to a new root font size.
+      await expect
+        .poll(
+          async () => {
+            const rendered = await view.evaluate(
+              (el) => el.getBoundingClientRect().height,
+            );
+            const expected = await reserved.evaluate(
+              (el) => el.getBoundingClientRect().height,
+            );
+            return Math.abs(rendered - expected);
+          },
+          { message: `${id} lines` },
+        )
+        .toBeLessThan(0.5);
     }
   });
 }
