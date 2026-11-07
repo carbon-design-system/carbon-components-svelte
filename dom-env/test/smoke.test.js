@@ -190,3 +190,26 @@ test("leak checks list what a test left on long-lived targets", () => {
     1,
   );
 });
+
+test("DOM checks find dangling id references and focus problems", () => {
+  const run = window({ checks: true });
+  assert.equal(
+    run(`document.body.innerHTML = \`
+      <button aria-controls="gone" aria-expanded="true">open</button>
+      <button aria-controls="later" aria-expanded="false">closed</button>
+      <label for="nothing">Name</label>
+      <p id="twice"></p><p id="twice"></p>
+      <div aria-hidden="true"><a href="#">in tab order</a></div>
+      <div aria-hidden="true" style="visibility: hidden"><a href="#">hidden</a></div>
+      <div role="button" tabindex="0"><button>inner</button></div>\`;
+      __domEnv.checks.run();
+      __domEnv.checks.take().map((f) => f.rule + " " + (f.id ?? f.element)).join("\\n")`),
+    [
+      "duplicate-id twice",
+      "idref gone",
+      "idref nothing",
+      'aria-hidden-focus <a href="#">',
+      "nested-interactive <button>",
+    ].join("\n"),
+  );
+});

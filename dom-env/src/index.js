@@ -1,6 +1,7 @@
 // Entry point. The bundle of this file is evaluated inside the target
 // global context and exposes `__domEnv.install(options)`.
 
+import * as checks from "./checks.js";
 import * as collections from "./collections.js";
 import * as css from "./css.js";
 import * as document from "./document.js";
@@ -64,6 +65,7 @@ function install(options = {}) {
   ]);
   if (options.strict) strict.enable(classes);
   if (options.leaks) leaks.enable();
+  if (options.checks) checks.enable(global);
   return doc;
 }
 
@@ -71,4 +73,10 @@ globalThis.__domEnv = {
   install,
   gaps: strict.collect,
   leaks: { enabled: leaks.isEnabled, mark: leaks.mark, since: leaks.since },
+  checks: {
+    enabled: checks.isEnabled,
+    run: () => checks.run(globalThis.document),
+    take: checks.take,
+    cancel: checks.cancel,
+  },
 };
