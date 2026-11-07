@@ -82,6 +82,37 @@ describe("Theme", () => {
     expect(onUpdate).toHaveBeenCalledWith({ theme: "g100" });
   });
 
+  it("cancels the transitions a theme change starts", async () => {
+    class CSSTransitionMock {
+      cancel = vi.fn();
+    }
+    vi.stubGlobal("CSSTransition", CSSTransitionMock);
+    const { rerender } = render(Theme);
+
+    const running = new CSSTransitionMock();
+    const started = new CSSTransitionMock();
+    const animations = [[running], [running, started]];
+    Object.defineProperty(document, "getAnimations", {
+      configurable: true,
+      value: vi.fn(() => animations.shift() ?? []),
+    });
+
+    try {
+      await rerender({ theme: "g100" });
+      await tick();
+    } finally {
+      // jsdom has no getAnimations; put that back for later tests.
+      Object.defineProperty(document, "getAnimations", {
+        configurable: true,
+        value: undefined,
+      });
+      vi.unstubAllGlobals();
+    }
+
+    expect(started.cancel).toHaveBeenCalledOnce();
+    expect(running.cancel).not.toHaveBeenCalled();
+  });
+
   it("should apply custom tokens", async () => {
     const tokens = {
       "button-primary": "#ff0000",
