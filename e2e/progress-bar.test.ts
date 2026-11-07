@@ -23,6 +23,50 @@ test.describe("ProgressBar", () => {
     });
   }
 
+  // The value text is English here, so "1 of 4 complete" must read in that
+  // order even when the page is right to left.
+  test("keeps the value text in reading order in RTL", async ({ page }) => {
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    const order = await page.evaluate(() => {
+      const el = document.querySelector(
+        "[data-testid=value-text] .bx--progress-bar__value-text",
+      );
+      const text = el?.firstChild;
+      if (!text?.textContent) throw new Error("no value text");
+      const left = (index: number) => {
+        const range = document.createRange();
+        range.setStart(text, index);
+        range.setEnd(text, index + 1);
+        return range.getBoundingClientRect().left;
+      };
+      return {
+        text: text.textContent,
+        first: left(0),
+        last: left(text.textContent.length - 1),
+      };
+    });
+    expect(order.text).toBe("1 of 4 complete");
+    expect(order.first).toBeLessThan(order.last);
+  });
+
+  test("puts the value text at the end of the label row in RTL", async ({
+    page,
+  }) => {
+    await page.evaluate(() => {
+      document.documentElement.dir = "rtl";
+    });
+    const root = page.getByTestId("value-text");
+    const rootBox = await root.boundingBox();
+    const valueBox = await root
+      .locator(".bx--progress-bar__value-text")
+      .boundingBox();
+    if (!rootBox || !valueBox) throw new Error("not rendered");
+
+    expect(valueBox.x).toBeCloseTo(rootBox.x, 0);
+  });
+
   test("paints the track with border-subtle, as in v11", async ({ page }) => {
     const subtle = await page.evaluate(() => {
       const probe = document.createElement("div");
