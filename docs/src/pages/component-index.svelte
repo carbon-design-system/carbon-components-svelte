@@ -143,7 +143,12 @@
     since: "desc",
   };
 
-  function handleSort(key: SortKey, direction: "ascending" | "descending") {
+  function handleSort(
+    key: SortKey,
+    direction: "ascending" | "descending" | "none",
+  ) {
+    // `sortAlways` keeps a column sorted, so it never reports "none".
+    if (direction === "none") return;
     if (sortKey === key) {
       sortDirection = direction === "ascending" ? "asc" : "desc";
     } else {
@@ -242,7 +247,7 @@
                         <Stack
                           orientation="horizontal"
                           gap={3}
-                          align="flex-start"
+                          align="start"
                           wrap="wrap"
                           class="component-name-cell"
                         >
@@ -319,7 +324,7 @@
               </Text>
               <Link
                 href="#"
-                size="xl"
+                size="lg"
                 on:click={(e) => {
                   e.preventDefault();
                   clearFilters();

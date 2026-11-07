@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Stack, Text } from "carbon-components-svelte";
-  import type { ComponentType } from "svelte";
+  import type { CarbonIconProps } from "carbon-icons-svelte";
+  import type { Component } from "svelte";
 
   export let eyebrow = "";
-  export let icon: ComponentType | undefined = undefined;
+  export let icon: Component<CarbonIconProps> | undefined = undefined;
 </script>
 
 <Stack orientation="horizontal" gap={3} align="center">

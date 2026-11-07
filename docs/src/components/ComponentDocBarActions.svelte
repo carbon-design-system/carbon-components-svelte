@@ -37,14 +37,14 @@
   });
 
   async function copyMarkdownFromMenu() {
-    await copyFeedback.onClick(
-      async () => {
+    try {
+      await copyFeedback.onClick(async () => {
         const ok = await copyComponentMarkdown(component, markdownUrl);
         if (!ok) throw new Error("Failed to copy markdown");
-      },
-      2000,
-      false,
-    );
+      }, 2000);
+    } catch {
+      // The feedback shows the failure.
+    }
   }
 
   onMount(() => copyFeedback.cleanup);

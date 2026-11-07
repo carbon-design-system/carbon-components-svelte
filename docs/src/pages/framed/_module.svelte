@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { route } from "../../current-route";
 
@@ -7,8 +7,8 @@
 
   const validThemes = ["white", "g10", "g80", "g90", "g100", "system"];
 
-  function applyTheme(theme) {
-    if (validThemes.includes(theme)) {
+  function applyTheme(theme: string | null) {
+    if (theme && validThemes.includes(theme)) {
       document.documentElement.setAttribute("theme", theme);
     }
   }
@@ -19,13 +19,13 @@
     // Intercept localStorage.setItem in this frame so that
     // theme changes made via localStorage are applied immediately.
     const _setItem = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = (key, value) => {
+    localStorage.setItem = (key: string, value: string) => {
       _setItem(key, value);
       if (key === "theme") applyTheme(value);
     };
 
     // Listen for cross-document storage changes (e.g., from the parent docs page).
-    function handleStorage(event) {
+    function handleStorage(event: StorageEvent) {
       if (event.key === "theme") applyTheme(event.newValue);
     }
 

@@ -7,11 +7,12 @@
     Stack,
     Text,
   } from "carbon-components-svelte";
-  import type { ComponentType } from "svelte";
+  import type { CarbonIconProps } from "carbon-icons-svelte";
+  import type { Component } from "svelte";
   import DocEyebrow from "./DocEyebrow.svelte";
 
   export let eyebrow = "";
-  export let icon: ComponentType | undefined = undefined;
+  export let icon: Component<CarbonIconProps> | undefined = undefined;
   export let title = "";
   export let titleType: "fluid-heading-04" | "heading-06" = "heading-06";
   export let description = "";
