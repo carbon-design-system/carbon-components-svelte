@@ -38,6 +38,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Layer",
       "ThemeZone",
       "AspectRatio",
+      "Masonry",
       "ScrollGradient",
       "Accordion",
       "Disclosure",
