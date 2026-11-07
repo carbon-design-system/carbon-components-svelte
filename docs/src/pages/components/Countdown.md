@@ -24,15 +24,23 @@ Set `format` to `"h:mm:ss"` to always show hours.
 Set `until` to a `Date` or timestamp when the end comes from the server, such as a session timeout or a seat hold. The time left follows the clock, so it stays right after a reload and agrees across tabs. Set `seconds` to the full length too if a slot uses `fraction`.
 
 ```svelte
-<Countdown until={hold.expiresAt} seconds={600} on:end={releaseSeats} />
+<Countdown
+  until={hold.expiresAt}
+  seconds={600}
+  on:end={releaseSeats}
+/>
 ```
 
 ## Announcements
 
-Screen readers hear `warnDescription` when `warnAt` seconds are left, and `expiredDescription` at zero, not every second. Neither is shown. For a session that times out, warn early enough to act: at least 20 seconds, and more when the page holds a long form.
+Screen readers hear `warnDescription` when `warnAt` seconds are left, and `expiredDescription` at zero, not every second. Neither is shown. For a session that times out, warn early enough to act: at least 20 seconds, and more when the page holds a long form. The default `warnDescription` says "One minute left", so change it when you change `warnAt`.
 
 ```svelte
-<Countdown until={session.expiresAt} warnAt={120} warnDescription="Two minutes until you're signed out" />
+<Countdown
+  until={session.expiresAt}
+  warnAt={120}
+  warnDescription="Two minutes until you're signed out"
+/>
 ```
 
 ## Extend and pause
@@ -43,6 +51,6 @@ With `until`, the deadline sets the time left and changing `remaining` has no la
 
 ## Custom rendering
 
-The default slot receives `remaining`, `formatted` and `fraction` (the share of `seconds` left), such as for a ProgressBar.
+The default slot receives `remaining`, `formatted` and `fraction` (the share of `seconds` left), such as for a ProgressBar. Below, added time fills the bar again, and the bar grows when the hold passes its first length.
 
 <FileSource src="/framed/Countdown/CountdownProgress" />
