@@ -11,6 +11,20 @@ export function initialFocus(options: {
  */
 export function focusQuietly(target: HTMLElement, options?: FocusOptions): void;
 
+/**
+ * Give a dialog's first target focus quietly, and try once more on the next
+ * frame if focus did not land in the dialog (WebKit, for an element created
+ * in the update that opens it).
+ */
+export function focusFirstQuietly(
+  target: HTMLElement,
+  options: {
+    container: Element | null | undefined;
+    isOpen: () => boolean;
+    focusOptions?: FocusOptions;
+  },
+): void;
+
 /** Whether focus is moving to `node` through `focusQuietly`. */
 export function isQuietFocus(node: Element | null | undefined): boolean;
 

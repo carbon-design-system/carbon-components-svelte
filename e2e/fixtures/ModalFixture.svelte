@@ -10,6 +10,11 @@
     "primary-disabled",
   );
 
+  // `?select-on-open` mounts the select in the update that opens the modal.
+  const selectOnOpen = new URLSearchParams(location.search).has(
+    "select-on-open",
+  );
+
   let open = false;
   let events = [];
   let closeEvents = [];
@@ -36,7 +41,7 @@
     (closeEvents = [...closeEvents, e.detail?.trigger ?? "null"])}
 >
   <p data-testid="modal-body">Modal content</p>
-  {#if !primaryDisabled}
+  {#if !primaryDisabled && (!selectOnOpen || open)}
     <Select data-testid="modal-select" labelText="Contact method">
       <SelectItem value="slack" text="Slack" />
       <SelectItem value="email" text="Email" />
