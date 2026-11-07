@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>session-timeout-modal</title>
+    <defs>
+        <filter id="session-timeout-modal-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="session-timeout-modal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="box-shadow" fill="black" filter="url(#session-timeout-modal-shadow)" x="80" y="40" width="160" height="100"></rect>
+        <rect id="box" fill="var(--cds-layer-02, #ffffff)" x="80" y="40" width="160" height="100"></rect>
+        <rect id="title" fill="var(--cds-text-secondary, #525252)" x="90" y="52" width="70" height="8"></rect>
+        <circle id="clock-face" stroke="var(--cds-icon-primary, #161616)" stroke-width="2" cx="106" cy="86" r="12"></circle>
+        <path id="clock-hands" stroke="var(--cds-icon-primary, #161616)" stroke-width="2" stroke-linecap="square" d="M106 79 L106 86 L111 89"></path>
+        <rect id="body-1" fill="var(--cds-border-subtle, #e0e0e0)" x="128" y="76" width="102" height="6"></rect>
+        <rect id="time-left" fill="var(--cds-support-warning, #f1c21b)" x="128" y="88" width="48" height="6"></rect>
+        <rect id="secondary-button" fill="var(--cds-button-secondary, #393939)" x="80" y="114" width="80" height="26"></rect>
+        <rect id="primary-button" fill="var(--cds-background-brand, #0f62fe)" x="160" y="114" width="80" height="26"></rect>
+    </g>
+</svg>
