@@ -45,8 +45,27 @@ $ccs-side-panel-sizes: (
     animation: side-panel-enter $duration--moderate-01
       motion(entrance, productive);
     background-color: $layer;
-    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
     color: $text-primary;
+    // The panel takes focus only as a fallback (no field or close button
+    // to focus, or a step change removed the focused button). Like the
+    // modal container, it draws no ring: focus is a starting point for
+    // Tab, and the panel itself does nothing on Enter or Space.
+    outline: none;
+
+    // The shadow falls only toward the page. A layer under the content
+    // casts it, clipped flush with the panel's top and bottom so none
+    // reaches the header. Wider and lighter than the menu shadow, since
+    // it runs the full height of the window.
+    &::before {
+      position: absolute;
+      z-index: -1;
+      box-shadow: 0 0 to-rem(12px) $shadow;
+      clip-path: inset(0 0 0 to-rem(-32px));
+      content: "";
+      inset: 0;
+      opacity: 0.6;
+      pointer-events: none;
+    }
   }
 
   // No `Header` is on the page, so the panel spans the full height. The
@@ -76,6 +95,13 @@ $ccs-side-panel-sizes: (
 
     [dir="rtl"] & {
       --ccs-side-panel-shift: #{ccs-dir(to-rem(320px), to-rem(-320px))};
+
+      &::before {
+        clip-path: ccs-dir(
+          inset(0 0 0 to-rem(-32px)),
+          inset(0 to-rem(-32px) 0 0)
+        );
+      }
     }
   }
 
@@ -85,15 +111,26 @@ $ccs-side-panel-sizes: (
     border-inline-end: 1px solid $border-subtle;
     @include ccs-inset-inline($start: 0);
 
+    &::before {
+      clip-path: inset(0 to-rem(-32px) 0 0);
+    }
+
     [dir="rtl"] & {
       --ccs-side-panel-shift: #{ccs-dir(to-rem(-320px), to-rem(320px))};
+
+      &::before {
+        clip-path: ccs-dir(
+          inset(0 to-rem(-32px) 0 0),
+          inset(0 0 0 to-rem(-32px))
+        );
+      }
     }
   }
 
   // A panel over an overlay, or beside the page, casts no shadow.
-  .#{$prefix}--side-panel--overlay,
-  .#{$prefix}--side-panel--slide-in {
-    box-shadow: none;
+  .#{$prefix}--side-panel--overlay::before,
+  .#{$prefix}--side-panel--slide-in::before {
+    display: none;
   }
 
   // The component unmounts the panel when this ends.
@@ -154,12 +191,9 @@ $ccs-side-panel-sizes: (
     border-bottom: 1px solid $border-subtle;
   }
 
+  // The back button takes a 48px row of its own above the title.
   .#{$prefix}--side-panel__header--back {
-    padding-top: $carbon--spacing-07;
-  }
-
-  .#{$prefix}--side-panel__header--back.#{$prefix}--side-panel__header--lg {
-    padding-top: $carbon--spacing-08;
+    padding-top: $carbon--spacing-09;
   }
 
   .#{$prefix}--side-panel__label,
@@ -182,6 +216,7 @@ $ccs-side-panel-sizes: (
     @include type-style("heading-03");
 
     padding-bottom: $carbon--spacing-05;
+    text-wrap: balance;
   }
 
   .#{$prefix}--side-panel__header--subtitle .#{$prefix}--side-panel__title {
@@ -199,13 +234,16 @@ $ccs-side-panel-sizes: (
     align-items: center;
   }
 
+  // The close and back buttons sit centered in a 48px corner, as the
+  // modal's close button does. Their icons then line up with the 16px
+  // header padding and the first line of the header.
   .#{$prefix}--side-panel__corner {
     position: absolute;
     z-index: 1;
-    top: 0;
+    top: $carbon--spacing-03;
     display: flex;
     align-items: center;
-    @include ccs-inset-inline($end: 0);
+    @include ccs-inset-inline($end: $carbon--spacing-03);
   }
 
   .#{$prefix}--side-panel__decorator {
@@ -215,8 +253,18 @@ $ccs-side-panel-sizes: (
 
   .#{$prefix}--side-panel__back {
     position: absolute;
-    top: 0;
-    @include ccs-inset-inline($start: 0);
+    top: $carbon--spacing-03;
+    @include ccs-inset-inline($start: $carbon--spacing-03);
+  }
+
+  .#{$prefix}--side-panel__header--lg .#{$prefix}--side-panel__corner {
+    top: $carbon--spacing-02;
+    @include ccs-inset-inline($end: $carbon--spacing-02);
+  }
+
+  .#{$prefix}--side-panel__header--lg .#{$prefix}--side-panel__back {
+    top: $carbon--spacing-02;
+    @include ccs-inset-inline($start: $carbon--spacing-02);
   }
 
   .#{$prefix}--side-panel__back .#{$prefix}--btn__icon {
@@ -336,12 +384,17 @@ $ccs-side-panel-sizes: (
   }
 
   // The AI surface, as on a modal: a transparent edge, an inner aura and
-  // a drop shadow.
+  // a drop shadow. The drop shadow takes the default shadow's place.
   .#{$prefix}--side-panel--ai-label {
     border-color: transparent;
-    box-shadow:
-      inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px) ai-token("ai-inner-shadow"),
-      0 to-rem(4px) to-rem(10px) to-rem(2px) ai-token("ai-drop-shadow");
+    box-shadow: inset 0 to-rem(-80px) to-rem(70px) to-rem(-65px)
+      ai-token("ai-inner-shadow");
+
+    &::before {
+      display: block;
+      box-shadow: 0 0 to-rem(10px) to-rem(2px) ai-token("ai-drop-shadow");
+      opacity: 1;
+    }
   }
 
   .#{$prefix}--side-panel--ai-label .#{$prefix}--side-panel__body {
