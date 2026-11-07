@@ -626,7 +626,6 @@
     virtualize as virtualizeUtil,
   } from "../utils/virtualize.js";
   import Table from "./Table.svelte";
-  import TableBody from "./TableBody.svelte";
   import TableContainer from "./TableContainer.svelte";
   import TableFoot from "./TableFoot.svelte";
   import TableHead from "./TableHead.svelte";
@@ -639,6 +638,7 @@
     resolvePath,
     shouldIgnoreRowClick,
   } from "./data-table-utils.js";
+  import { keepRowFocus } from "./row-focus.js";
 
   const dispatch = createEventDispatcher();
   /**
@@ -1750,7 +1750,7 @@
           {/each}
         </TableRow>
       </TableHead>
-      <TableBody>
+      <tbody use:keepRowFocus={{ enabled: !virtualData?.isVirtualized }}>
         {#if virtualData?.isVirtualized}
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
@@ -2333,7 +2333,7 @@
             {/if}
           {/each}
         {/if}
-      </TableBody>
+      </tbody>
       {#if $$slots.footerCell}
         <TableFoot>
           <TableRow>
