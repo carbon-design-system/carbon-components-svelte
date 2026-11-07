@@ -13,6 +13,9 @@ const group = () =>
     skipDelayMs: () => 0,
   });
 
+/** Detaches what `setup` attached, so no test's listeners reach the next. */
+const detaches = new Set<() => void>();
+
 function setup(
   options: Parameters<typeof createAnchoredTooltip>[0] = {},
   tag = "p",
@@ -20,7 +23,11 @@ function setup(
   const node = document.createElement(tag);
   document.body.append(node);
   const tooltip = createAnchoredTooltip({ group: group(), ...options });
-  const detach = tooltip.attach(node);
+  const attached = tooltip.attach(node);
+  const detach = () => {
+    if (detaches.delete(detach)) attached();
+  };
+  detaches.add(detach);
   return {
     node,
     tooltip,
@@ -47,6 +54,7 @@ describe("createAnchoredTooltip", () => {
   });
 
   afterEach(() => {
+    for (const detach of detaches) detach();
     vi.useRealTimers();
     document.body.innerHTML = "";
   });

@@ -175,6 +175,7 @@ describe("createTimeoutDismiss", () => {
         dismiss.sync(true, 1000, cb);
         dismiss.sync(true, 1000, cb);
         expect(count(add)).toBe(1);
+        dismiss.clear();
       });
 
       it("stops listening when the timer fires", () => {
