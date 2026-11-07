@@ -424,7 +424,7 @@ export function mountedIndexes(start, end, active) {
  * @typedef {Object} FocusNavOptions
  * @property {number | (() => number)} [count] - Number of items. Default: the matches of `selector`.
  * @property {FocusNavOrientation} [orientation]
- * @property {number} [columns]
+ * @property {number | (() => number)} [columns] - Cells per line. A function is read on each key, for a grid that reflows with its width.
  * @property {FocusNavLayout} [layout]
  * @property {boolean} [wrap]
  * @property {boolean} [flow]
@@ -668,7 +668,7 @@ export function createFocusNav(options = {}) {
       event.key,
       {
         orientation,
-        columns: config.columns,
+        columns: read(config.columns),
         layout: config.layout,
         wrap: config.wrap,
         flow: config.flow,

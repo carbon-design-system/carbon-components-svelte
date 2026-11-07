@@ -133,7 +133,8 @@ export type FocusNavOptions = {
   /** Number of items. Default: the matches of `selector`. */
   count?: number | (() => number);
   orientation?: FocusNavOrientation;
-  columns?: number;
+  /** Cells per line. A function is read on each key, for a grid that reflows with its width. */
+  columns?: number | (() => number);
   layout?: FocusNavLayout;
   wrap?: boolean;
   flow?: boolean;

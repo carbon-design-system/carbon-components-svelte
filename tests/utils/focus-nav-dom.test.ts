@@ -419,6 +419,27 @@ describe("createFocusNav (headless)", () => {
     expect(get(nav).index).toBe(1);
   });
 
+  it("reads `columns` on each key, for a grid that reflows", () => {
+    let columns = 4;
+    const moves: number[] = [];
+    const nav = createFocusNav({
+      count: 20,
+      orientation: "grid",
+      columns: () => columns,
+      onMove: (index) => {
+        moves.push(index);
+      },
+    });
+    const down = () =>
+      nav.handleKeydown(new KeyboardEvent("keydown", { key: "ArrowDown" }), {
+        from: 1,
+      });
+    down();
+    columns = 6;
+    down();
+    expect(moves).toEqual([5, 7]);
+  });
+
   it("moves from `at.from` instead of the active index", () => {
     const nav = createFocusNav({ count: 10, index: 0 });
     const moves: number[] = [];
