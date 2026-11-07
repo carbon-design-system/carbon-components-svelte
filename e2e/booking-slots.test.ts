@@ -350,6 +350,21 @@ test.describe("BookingSlots", () => {
       await radios(page, "demo").nth(1).focus();
       await page.keyboard.press("ArrowLeft");
       await expect(radios(page, "demo").nth(2)).toBeFocused();
+
+      // A time keeps its order, "9:00 AM", not "AM 9:00".
+      const hourBeforeMeridiem = await radios(page, "demo")
+        .first()
+        .evaluate((radio) => {
+          const text = radio.querySelector("bdi")?.firstChild as Text;
+          const at = (start: number, end: number) => {
+            const range = document.createRange();
+            range.setStart(text, start);
+            range.setEnd(text, end);
+            return range.getBoundingClientRect().left;
+          };
+          return at(0, 4) < at(5, 7);
+        });
+      expect(hourBeforeMeridiem).toBe(true);
     });
 
     test("fills the chosen time with Highlight under forced colors", async ({

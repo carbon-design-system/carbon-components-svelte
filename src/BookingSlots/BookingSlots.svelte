@@ -770,7 +770,9 @@
     >
       <div class:bx--booking-slots__meta={true}>
         <p class:bx--booking-slots__zone-text={true}>{timeZoneText(zone)}</p>
-        <p class:bx--booking-slots__duration={true}>{durationText(duration)}</p>
+        <p class:bx--booking-slots__duration={true}>
+          <bdi>{durationText(duration)}</bdi>
+        </p>
       </div>
       {#if zoneOptions.length > 1}
         <div class:bx--booking-slots__zone={true}>
@@ -857,7 +859,8 @@
                         {disabled}
                         on:click={() => pick(slot, column.key)}
                       >
-                        {slot.text}
+                        <!-- Keeps "4:00 PM" in order on a right-to-left page. -->
+                        <bdi>{slot.text}</bdi>
                       </button>
                     {/each}
                   </div>
