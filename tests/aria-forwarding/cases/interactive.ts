@@ -27,6 +27,7 @@ import ToastNotification from "carbon-components-svelte/Notification/ToastNotifi
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
+import QRCode from "carbon-components-svelte/QRCode/QRCode.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
@@ -728,6 +729,12 @@ export const interactive: AriaEntry[] = [
         props: { open: true, title: "Delete this project?", ...attrs },
       }),
     target: () => screen.getByRole("alertdialog"),
+  },
+  {
+    name: "QRCode",
+    render: (attrs) =>
+      render(QRCode, { props: { value: "https://example.com", ...attrs } }),
+    target: () => screen.getByRole("img"),
   },
   {
     name: "Countdown",
