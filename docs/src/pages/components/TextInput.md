@@ -83,6 +83,69 @@ The action takes a boolean, so pass an expression to turn it on and off. Pass `f
 
 <FileSource src="/framed/TextInput/PreserveFocusSelectionToggling" />
 
+## Text layer
+
+A native `<input>` or `<textarea>` cannot draw a fill under a word, color part of its text, or show a suggestion after the caret. `createInputLayer` adds a layer of text behind or over the field, lined up with the field's own text, to draw them. The field stays the field: its caret, selection, IME, spell check, undo and form value are the browser's, and the layer is `aria-hidden` and ignores the pointer.
+
+Pass the field and a `segments` function that cuts the value into runs. Each run is a `<span>` of text with the classes you give it, and the runs join back to the value. The layer draws again on every `input`. Call `destroy()` to remove it.
+
+`TextInput`, `TextArea` and `Search` give the field through `bind:ref`. Add the layer in `onMount`, which returns the cleanup.
+
+### Behind the text
+
+`position: "behind"` is the default. The layer holds the field's fill, the field's own is made transparent, and the field's text is drawn over what the layer paints. Use it for a fill or a rule under a run, such as a qualifier in a search.
+
+<FileSource src="/framed/TextInput/InputLayerQualifiers" />
+
+A fluid field changes its fill on hover and focus, which a layer behind it does not follow. Set `--ccs-input-layer-fill` where the fill is not `$field`, such as inside a `Layer`.
+
+### Over the text
+
+`position: "above"` draws over the field. The layer's text is transparent, so a run opts in with a color. Mark a run `ghost: true` for text that is not in the value, such as a suggestion after the caret. It is drawn after the value and is not counted by `caretRect` and `rangeRects`.
+
+A suggestion cannot sit where the caret is when it would move the text the field already shows: Latin text in a right to left field sits against the right edge, and a word that no longer fits wraps. `ghostShifts()` reports that, so the suggestion can be left out.
+
+<FileSource src="/framed/TextInput/InputLayerGhost" />
+
+### Coloring the text
+
+`ink: "layer"` makes the field's own glyphs transparent and draws them from the layer, in color. See [TextArea](/components/TextArea#text-layer) for a formula in a `TextArea`. In forced colors the glyphs go back to the field, so only what a color does not carry, such as a rule, stays on the layer.
+
+### Native fields
+
+`inputLayer` is the Svelte action of the same function. Add it to a native field you build yourself, with Carbon's markup around it. Pass `value` too, so the layer draws again when the app sets it.
+
+<FileSource src="/framed/TextInput/InputLayerAction" />
+
+### Where the text is
+
+`caretRect(field, index)` and `rangeRects(field, start, end)` return where characters of a field's value are drawn, in viewport coordinates, as the field is scrolled now. They measure the field's layer, or a hidden copy that goes away two frames later, so they work on any field. Use them to anchor a menu or a marker to the caret.
+
+<FileSource src="/framed/TextInput/InputLayerCaret" />
+
+### Options
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `position` | `"behind"` | `"behind"` or `"above"` the field's text |
+| `ink` | `"field"` | `"layer"` draws the glyphs from the layer and implies `"above"` |
+| `segments` | the value as one run | `(value) => [{ text, className?, ghost? }]` |
+| `className` | none | Classes for the layer's root |
+| `container` | the field's parent | Where the layer is added. It must be positioned |
+
+The layer has `render(segments)`, `update(segments?)`, `sync()`, `ghostShifts()`, `caretRect(index)`, `rangeRects(start, end)` and `destroy()`, and the elements `element` and `content`.
+
+| Do | Why |
+| --- | --- |
+| Cut the value into runs that join back to it | The layer's text is the field's text. A different length drifts |
+| Keep runs the width of plain text: no horizontal padding, bold or letter spacing | A glyph that changes width moves everything after it |
+| Call `update()` after you set `value` from code | Setting `value` fires no event |
+| Keep a layer to a few hundred runs | Chromium rounds each run's width up by about 0.01px, so a long line with thousands of runs drifts. Neighbours of one class are joined |
+| Draw a rule or a fill, not a color alone | Forced colors drop colors and keep rules |
+| Put the field in a positioned parent, as Carbon's field wrappers are | The layer is placed from measurements, in its parent's coordinates |
+| Call `sync()` after you move the field with a script that fires no event | Nothing tells the layer a field moved without resizing |
+| Do not use a layer on a password field | The layer holds the text the field hides |
+
 ## AI label
 
 Put an `AILabel` in the `decorator` slot to mark the value as AI-generated. The field shows the AI gradient. See [AI label](/components/AILabel#fields) for the revert flow.

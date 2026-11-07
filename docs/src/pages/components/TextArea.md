@@ -78,6 +78,12 @@ Set `selectTextOnFocus` to select the full value when the field receives focus.
 
 <TextArea selectTextOnFocus labelText="Deployment notes" value="Rolled out v2.4.1 to production; no issues observed." />
 
+## Text layer
+
+Color the text of a `TextArea`, or draw a fill or a suggestion in it, with `createInputLayer`. Set `ink: "layer"` to make the field's own glyphs transparent and draw them, in color, from a layer above it. The field keeps its caret, selection, undo and spell check. The layer wraps and scrolls as the field does, and follows it as it grows. See [TextInput](/components/TextInput#text-layer) for the options.
+
+<FileSource src="/framed/TextArea/InputLayerSyntax" />
+
 ## Hidden label
 
 Hide the label visually by setting `hideLabel` to `true`. The label remains available to screen readers.
