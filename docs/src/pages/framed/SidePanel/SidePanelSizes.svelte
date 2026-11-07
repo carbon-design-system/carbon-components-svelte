@@ -27,7 +27,7 @@
   </Stack>
 </Content>
 
-<SidePanel bind:open {size} title="checkout-api">
+<SidePanel bind:open {size} titleText="checkout-api">
   <p>Node.js web service in US East, on the Standard plan.</p>
   <svelte:fragment slot="actions">
     <Button kind="secondary" on:click={() => (open = false)}>Close</Button>

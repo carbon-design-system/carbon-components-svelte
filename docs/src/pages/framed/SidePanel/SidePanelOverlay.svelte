@@ -17,7 +17,7 @@
   <Button on:click={() => (open = true)}>Report an incident</Button>
 </Content>
 
-<SidePanel bind:open includeOverlay title="Report an incident">
+<SidePanel bind:open includeOverlay titleText="Report an incident">
   <Stack gap={6}>
     <TextInput labelText="Summary" value="Checkout latency above 2s" />
     <TextArea

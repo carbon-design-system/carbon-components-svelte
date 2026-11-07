@@ -205,7 +205,7 @@
   <Button data-testid="side-panel-open" on:click={() => (sidePanelOpen = true)}>
     Open side panel
   </Button>
-  <SidePanel bind:open={sidePanelOpen} resizable title="Side panel">
+  <SidePanel bind:open={sidePanelOpen} resizable titleText="Side panel">
     Side panel
   </SidePanel>
 

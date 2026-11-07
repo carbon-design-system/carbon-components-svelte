@@ -17,7 +17,7 @@
     <Button on:click={() => (open = true)}>تعديل الخدمة</Button>
   </Content>
 
-  <SidePanel bind:open resizable currentStep={1} title="تعديل الخدمة">
+  <SidePanel bind:open resizable currentStep={1} titleText="تعديل الخدمة">
     <TextInput labelText="اسم الخدمة" value="checkout-api" />
     <svelte:fragment slot="actions">
       <Button kind="secondary" on:click={() => (open = false)}>إلغاء</Button>

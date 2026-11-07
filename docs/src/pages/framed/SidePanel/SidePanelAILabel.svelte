@@ -17,8 +17,8 @@
 
 <SidePanel
   bind:open
-  title="Incident summary"
-  subtitle="Generated from the last hour of logs."
+  titleText="Incident summary"
+  subtitleText="Generated from the last hour of logs."
 >
   <AILabel slot="decorator">
     <p>Summarized by a language model. Check it against the logs.</p>
