@@ -409,7 +409,12 @@
   }}
   on:click
   on:mousedown={(event) => {
-    if (event.target === event.currentTarget) outsideDismiss.pressOutside();
+    if (event.target === event.currentTarget) {
+      // A press on the backdrop would otherwise blur the focused control,
+      // dropping focus to <body> even when the dialog stays open.
+      event.preventDefault();
+      outsideDismiss.pressOutside();
+    }
   }}
   on:mouseup={outsideDismiss.release}
   on:mouseover

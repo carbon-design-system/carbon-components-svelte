@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { absorbUnhandledRejection } from "../utils/absorb-unhandled-rejection";
+import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import ComposedModalTest from "./ComposedModal.test.svelte";
 import ComposedModalFocusReturnTest from "./ComposedModalFocusReturn.test.svelte";
@@ -251,6 +252,29 @@ describe("ComposedModal", () => {
       expect(modalWrapper.classList.contains("is-visible")).toBe(!closes);
     },
   );
+
+  it("keeps focus in the dialog when a backdrop press does not dismiss it", async () => {
+    const { container } = render(ComposedModalTest, {
+      props: {
+        open: true,
+        preventCloseOnClickOutside: true,
+        headerTitle: "Test Modal",
+        footerPrimaryButtonText: "Save",
+      },
+    });
+    // Let the dialog take its initial focus before moving it.
+    await flushMacrotask();
+    const save = screen.getByRole("button", { name: "Save" });
+    save.focus();
+
+    const modalWrapper = container.querySelector(".bx--modal");
+    assert(modalWrapper);
+    await user.click(modalWrapper);
+    await tick();
+
+    expect(modalWrapper.classList.contains("is-visible")).toBe(true);
+    expect(save).toHaveFocus();
+  });
 
   it("becomes passive when its ModalFooter unmounts", async () => {
     const onclose = vi.fn();
