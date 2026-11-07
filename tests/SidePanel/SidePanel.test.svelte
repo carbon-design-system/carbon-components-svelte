@@ -12,8 +12,8 @@
   type Props = ComponentProps<SidePanel>;
 
   export let open = false;
-  export let title: Props["title"] = "Edit deployment";
-  export let subtitle: Props["subtitle"] = undefined;
+  export let titleText: Props["titleText"] = "Edit deployment";
+  export let subtitleText: Props["subtitleText"] = undefined;
   export let labelText: Props["labelText"] = undefined;
   export let placement: Props["placement"] = "end";
   export let size: Props["size"] = "md";
@@ -44,8 +44,8 @@
   <SidePanel
     bind:open
     bind:width
-    {title}
-    {subtitle}
+    {titleText}
+    {subtitleText}
     {labelText}
     {placement}
     {size}

@@ -444,8 +444,8 @@ export const interactive: AriaEntry[] = [
       render(SidePanel, {
         props: {
           open: true,
-          title: "Edit deployment",
-          subtitle: "Changes apply on the next deploy.",
+          titleText: "Edit deployment",
+          subtitleText: "Changes apply on the next deploy.",
           ...attrs,
         },
       }),
