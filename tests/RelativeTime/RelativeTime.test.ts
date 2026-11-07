@@ -11,10 +11,11 @@ describe("RelativeTime", () => {
     const el = screen.getByTestId("basic");
     expect(el).toHaveTextContent("5 minutes ago");
     expect(el).toHaveAttribute("datetime", "2026-09-13T11:55:00.000Z");
-    // Newer ICU versions put a narrow no-break space before AM/PM.
-    expect(el.getAttribute("title")?.replace(/\s/g, " ")).toBe(
-      "Sep 13, 2026, 11:55 AM",
-    );
+    // Newer ICU versions put a narrow no-break space before AM/PM, and
+    // JavaScriptCore's ICU joins the date and time with " at ".
+    expect(
+      el.getAttribute("title")?.replace(/\s/g, " ").replace(" at ", ", "),
+    ).toBe("Sep 13, 2026, 11:55 AM");
   });
 
   it.each([
