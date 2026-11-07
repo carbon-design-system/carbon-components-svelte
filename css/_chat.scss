@@ -16,7 +16,6 @@
     flex: 1 1 auto;
     flex-direction: column;
     overflow-y: auto;
-    overscroll-behavior: contain;
 
     &:focus {
       @include focus-outline("outline");
@@ -28,6 +27,12 @@
     &:focus:not(:focus-visible) {
       outline: none;
     }
+  }
+
+  // Keep the page still at the ends of a log that scrolls. Chromium also
+  // stops the wheel at a log that can't scroll, so only set it on overflow.
+  .#{$prefix}--chat-log--scrollable {
+    overscroll-behavior: contain;
   }
 
   // Padding inside the scrolling area, so messages clear the edges of the
