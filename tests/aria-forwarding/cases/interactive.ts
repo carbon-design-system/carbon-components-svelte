@@ -74,8 +74,7 @@ export const interactive: AriaEntry[] = [
   {
     name: "AILabel",
     variant: "revert",
-    render: (attrs) =>
-      render(AILabel, { props: { revertActive: true, ...attrs } }),
+    render: (attrs) => render(AILabel, { props: { edited: true, ...attrs } }),
     target: () => screen.getByRole("button"),
   },
   {

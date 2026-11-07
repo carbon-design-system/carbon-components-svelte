@@ -336,7 +336,7 @@
       <Decorator
         class="bx--radio-button-group-inner--decorator"
         state={aiLabelState}
-        labelKind="default"
+        labelVariant="default"
         labelAlign="start"
       >
         <slot name="decorator" />

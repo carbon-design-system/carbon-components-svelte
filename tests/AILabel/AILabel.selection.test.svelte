@@ -12,7 +12,7 @@
   import Tile from "carbon-components-svelte/Tile/Tile.svelte";
 
   export let selected = false;
-  export let revertActive = false;
+  export let edited = false;
 </script>
 
 <div data-testid="checkbox">
@@ -20,12 +20,12 @@
 </div>
 <div data-testid="checkbox-inline">
   <Checkbox labelText="Inline">
-    <AILabel slot="decorator" kind="inline" />
+    <AILabel slot="decorator" variant="inline" />
   </Checkbox>
 </div>
 <div data-testid="checkbox-group">
   <CheckboxGroup legendText="Channels">
-    <AILabel slot="decorator" kind="inline" />
+    <AILabel slot="decorator" variant="inline" />
     <Checkbox labelText="Email" />
   </CheckboxGroup>
 </div>
@@ -42,7 +42,7 @@
   <Tag>Forecast<AILabel slot="decorator" /></Tag>
 </div>
 <div data-testid="tile">
-  <Tile>Forecast<AILabel slot="decorator" size="xl" bind:revertActive /></Tile>
+  <Tile>Forecast<AILabel slot="decorator" size="xl" bind:edited /></Tile>
 </div>
 <div data-testid="clickable-tile">
   <ClickableTile href="#">Open<AILabel slot="decorator" /></ClickableTile>
