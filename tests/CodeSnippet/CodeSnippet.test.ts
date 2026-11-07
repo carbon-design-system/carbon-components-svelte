@@ -1123,6 +1123,20 @@ describe("CodeSnippet rows", () => {
   const lines = (count: number) =>
     Array.from({ length: count }, (_, i) => `line ${i}`).join("\n");
 
+  it("decides the expand control from the line count until it's measured", () => {
+    // jsdom lays out nothing, so the snippet is never measured here.
+    render(CodeSnippet, { props: { type: "multi", code: lines(16) } });
+    expect(screen.getByText("Show more")).toBeInTheDocument();
+  });
+
+  it("leaves the expand control out when the code fits, or may wrap", () => {
+    render(CodeSnippet, { props: { type: "multi", code: `${lines(15)}\n` } });
+    render(CodeSnippet, {
+      props: { type: "multi", code: lines(16), wrapText: true },
+    });
+    expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+  });
+
   it("measures rows in rem, at the reader's font size", async () => {
     const nativeGetComputedStyle = window.getComputedStyle;
     const style = vi
