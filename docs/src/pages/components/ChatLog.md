@@ -25,6 +25,8 @@ The composer is a TextArea that grows with the message up to four lines (`grow`,
 
 `groupChatMessages` works out the grouping from your messages' `author` and `time`. A message continues the group when it follows one from the same author within five minutes (`groupGap`), and the last message of each group is marked `last`, the place for its time and delivery status. A divider comes before each new day ("Today", "Yesterday", or a date) and after a pause of more than an hour (`dividerGap`), showing the time. Labels use `locale`; pass `label` to write your own.
 
+Days start at midnight in the viewer's time zone by default. Set `timeZone` to an IANA name such as `"America/New_York"` to group, label "Today" and "Yesterday", and write dates and times in that zone instead. A server often runs in UTC while the browser runs in the viewer's zone, so without it a message sent at 11 pm can sit under a different day on each side. Pass the same `timeZone` on both.
+
 ```svelte
 {#each groupChatMessages(messages) as item (item.key)}
   {#if item.type === "divider"}
