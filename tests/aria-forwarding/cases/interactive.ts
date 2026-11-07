@@ -13,6 +13,7 @@ import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
+import FilePreview from "carbon-components-svelte/FilePreview/FilePreview.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
@@ -728,6 +729,14 @@ export const interactive: AriaEntry[] = [
         props: { open: true, title: "Delete this project?", ...attrs },
       }),
     target: () => screen.getByRole("alertdialog"),
+  },
+  {
+    name: "FilePreview",
+    render: (attrs) =>
+      render(FilePreview, {
+        props: { text: "notes", name: "notes.txt", ...attrs },
+      }),
+    target: () => screen.getByRole("region"),
   },
   {
     name: "Countdown",
