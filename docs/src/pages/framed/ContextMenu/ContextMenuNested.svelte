@@ -12,8 +12,8 @@
 </script>
 
 <ContextMenu>
-  <ContextMenuOption labelText="Copy" shortcutText="⌘C" icon={CopyFile} />
-  <ContextMenuOption labelText="Cut" shortcutText="⌘X" icon={Cut} />
+  <ContextMenuOption labelText="Copy" shortcut="mod+c" icon={CopyFile} />
+  <ContextMenuOption labelText="Cut" shortcut="mod+x" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Open with">
     <ContextMenuOption labelText="Preview" />

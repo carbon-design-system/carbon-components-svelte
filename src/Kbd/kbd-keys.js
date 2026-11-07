@@ -23,6 +23,8 @@ export const KBD_TRANSLATIONS = {
   backspace: "Backspace",
   delete: "Delete",
   forwardDelete: "Forward Delete",
+  del: "Del",
+  forwardDel: "Fwd Del",
   space: "Space",
   arrowUp: "Up Arrow",
   arrowDown: "Down Arrow",
@@ -35,22 +37,35 @@ export const KBD_TRANSLATIONS = {
 };
 
 /**
- * Symbols on Apple platforms, as macOS menus show them.
- * @type {Record<string, string>}
+ * @typedef {"command" | "option" | "shift" | "control" | "return" | "tab" | "arrowUp" | "arrowDown" | "arrowLeft" | "arrowRight"} KbdIcon
  */
-const APPLE_SYMBOLS = {
-  ctrl: "⌃",
-  alt: "⌥",
-  shift: "⇧",
-  meta: "⌘",
-  enter: "↵",
-  tab: "⇥",
-  backspace: "⌫",
-  delete: "⌦",
+
+/**
+ * Icons on Apple platforms, for the symbols macOS menus show. Carbon
+ * icons, so the keys draw the same in every browser: IBM Plex has no ⌘.
+ * @type {Record<string, KbdIcon>}
+ */
+const APPLE_ICONS = {
+  ctrl: "control",
+  alt: "option",
+  shift: "shift",
+  meta: "command",
+  enter: "return",
+  tab: "tab",
 };
 
 /**
- * What screen readers hear for each Apple symbol.
+ * Short words on Apple platforms for the keys Carbon has no icon for, so
+ * they sit with the icons. Screen readers hear the full names.
+ * @type {Record<string, KbdTranslationId>}
+ */
+const APPLE_WORDS = {
+  backspace: "del",
+  delete: "forwardDel",
+};
+
+/**
+ * What screen readers hear for each Apple icon or short word.
  * @type {Record<string, KbdTranslationId>}
  */
 const APPLE_NAMES = {
@@ -64,12 +79,12 @@ const APPLE_NAMES = {
   delete: "forwardDelete",
 };
 
-/** @type {Record<string, string>} */
+/** @type {Record<string, KbdIcon>} */
 const ARROWS = {
-  arrowup: "↑",
-  arrowdown: "↓",
-  arrowleft: "←",
-  arrowright: "→",
+  arrowup: "arrowUp",
+  arrowdown: "arrowDown",
+  arrowleft: "arrowLeft",
+  arrowright: "arrowRight",
 };
 
 /**
@@ -107,25 +122,25 @@ const NAMES = {
 };
 
 /**
- * The keys of a shortcut as a `Kbd` shows them: the text on each key, and
- * the name a screen reader hears for it. Empty when the shortcut doesn't
- * parse.
+ * The keys of a shortcut as a `Kbd` shows them: the text or the icon on
+ * each key, and the name a screen reader hears for it. A key with an icon
+ * has an empty `label`. Empty when the shortcut doesn't parse.
  * @param {string} shortcut
  * @param {boolean} apple
  * @param {(id: KbdTranslationId) => string} translate
- * @returns {Array<{ label: string; name: string }>}
+ * @returns {Array<{ label: string; name: string; icon?: KbdIcon }>}
  */
 export function kbdKeys(shortcut, apple, translate) {
   return shortcutKeys(shortcut, { apple }).map((key) => {
-    const word = WORDS[key];
-    const label =
-      (apple && APPLE_SYMBOLS[key]) ||
-      ARROWS[key] ||
-      (word && translate(word)) ||
-      (key.length === 1
-        ? key.toUpperCase()
-        : key.charAt(0).toUpperCase() + key.slice(1));
+    const icon = (apple && APPLE_ICONS[key]) || ARROWS[key];
     const nameId = (apple && APPLE_NAMES[key]) || NAMES[key];
+    if (icon) return { label: "", name: translate(nameId), icon };
+    const word = (apple && APPLE_WORDS[key]) || WORDS[key];
+    const label = word
+      ? translate(word)
+      : key.length === 1
+        ? key.toUpperCase()
+        : key.charAt(0).toUpperCase() + key.slice(1);
     return { label, name: nameId ? translate(nameId) : label };
   });
 }

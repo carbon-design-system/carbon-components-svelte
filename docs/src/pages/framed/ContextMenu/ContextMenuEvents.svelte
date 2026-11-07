@@ -14,8 +14,8 @@
   on:open={(e) => console.log("open", e.detail)}
   on:close={(e) => console.log("close", e.detail.trigger)}
 >
-  <ContextMenuOption labelText="Copy" shortcutText="⌘C" icon={CopyFile} />
-  <ContextMenuOption labelText="Cut" shortcutText="⌘X" icon={Cut} />
+  <ContextMenuOption labelText="Copy" shortcut="mod+c" icon={CopyFile} />
+  <ContextMenuOption labelText="Cut" shortcut="mod+x" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption kind="danger" labelText="Delete" icon={TrashCan} />
 </ContextMenu>

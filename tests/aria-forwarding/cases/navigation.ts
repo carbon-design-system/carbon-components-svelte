@@ -471,6 +471,11 @@ export const navigation: AriaEntry[] = [
     skip: NO_ROLE_ROOT,
   },
   {
+    name: "Kbd",
+    exempt:
+      "Inline text; its key icons are aria-hidden and take no focus or role",
+  },
+  {
     name: "Stack",
     exempt: "Layout wrapper; renders the element or component it is given",
   },

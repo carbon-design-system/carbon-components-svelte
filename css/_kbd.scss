@@ -80,6 +80,14 @@
     font-family: inherit;
   }
 
+  // Modifier symbols and arrows are Carbon icons at the key's font size,
+  // since IBM Plex has no ⌘ and fallback fonts draw the rest unevenly.
+  .#{$prefix}--kbd__icon {
+    flex: none;
+    width: 1em;
+    height: 1em;
+  }
+
   .#{$prefix}--kbd--sm .#{$prefix}--kbd__key {
     min-width: to-rem(20px);
     height: to-rem(20px);
@@ -87,7 +95,7 @@
   }
 
   // Muted: the keys as text in the surrounding type, run together on Apple
-  // platforms (⇧⌘P) and joined by a plus elsewhere (Ctrl+Shift+P). After
+  // platforms and joined by a plus elsewhere (Ctrl+Shift+P). After
   // `--sm`, which it overrides.
   .#{$prefix}--kbd--muted {
     gap: 0;

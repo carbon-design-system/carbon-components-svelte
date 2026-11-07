@@ -20,22 +20,18 @@
 <Button bind:ref={anchor} on:click={() => (open = !open)}>Edit</Button>
 
 <Menu {anchor} bind:open labelText="Edit menu">
-  <MenuItem icon={Cut} shortcutText="⌘X" on:click={() => console.log("Cut")}>
+  <MenuItem icon={Cut} shortcut="mod+x" on:click={() => console.log("Cut")}>
     Cut
   </MenuItem>
-  <MenuItem icon={Copy} shortcutText="⌘C" on:click={() => console.log("Copy")}>
+  <MenuItem icon={Copy} shortcut="mod+c" on:click={() => console.log("Copy")}>
     Copy
   </MenuItem>
-  <MenuItem
-    icon={Paste}
-    shortcutText="⌘V"
-    on:click={() => console.log("Paste")}
-  >
+  <MenuItem icon={Paste} shortcut="mod+v" on:click={() => console.log("Paste")}>
     Paste
   </MenuItem>
   <MenuDivider />
   <MenuItemGroup labelText="Style" bind:selectedIds>
-    <MenuItem id="bold" icon={TextBold} shortcutText="⌘B">Bold</MenuItem>
-    <MenuItem id="italic" icon={TextItalic} shortcutText="⌘I">Italic</MenuItem>
+    <MenuItem id="bold" icon={TextBold} shortcut="mod+b">Bold</MenuItem>
+    <MenuItem id="italic" icon={TextItalic} shortcut="mod+i">Italic</MenuItem>
   </MenuItemGroup>
 </Menu>

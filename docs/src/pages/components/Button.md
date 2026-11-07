@@ -359,7 +359,7 @@ To do something other than click, handle `on:shortcut`, dispatched before the cl
 | Do | Why |
 | :--- | :--- |
 | Use `mod` for Command or Ctrl | One shortcut reads and works on every platform |
-| Pick shortcuts the browser doesn't keep, such as ⌘ S over ⌘ W | Browsers don't let a page take ⌘ W, ⌘ T or ⌘ N |
+| Pick shortcuts the browser doesn't keep, such as `mod+s` over `mod+w` | Browsers don't let a page take `mod+w`, `mod+t` or `mod+n` |
 | Avoid the editing keys: `mod+a`, `mod+c`, `mod+v`, `mod+x` and `mod+z` | A shortcut with a modifier also fires in text fields, so it takes select all, copy, paste, cut or undo from every field |
 | Keep single-key shortcuts such as `/` for actions that make sense while reading | They don't fire while typing in a field, but they do everywhere else |
 | Let users turn off single-key shortcuts, or add a modifier to them | Speech input and stray key presses fire them by accident. WCAG 2.1.4 asks for a way to turn them off or remap them |
