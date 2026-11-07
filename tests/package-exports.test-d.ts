@@ -2,11 +2,13 @@ import type {
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  captureFocusTarget,
   createIdScope,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
   floatingPosition,
+  focusHandoff,
   formatFileSize,
   formReset,
   fuzzyMatch,
@@ -135,6 +137,8 @@ type _DismissParamsType = DismissParams;
 type _FloatingPosition = ReturnType<typeof floatingPosition>;
 type _FloatingPositionOptions = FloatingPositionOptions;
 type _FloatingPositionResult = FloatingPositionResult;
+type _CaptureFocusTarget = ReturnType<typeof captureFocusTarget>;
+type _FocusHandoff = ReturnType<typeof focusHandoff>;
 type _FormReset = ReturnType<typeof formReset>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
