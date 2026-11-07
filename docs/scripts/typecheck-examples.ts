@@ -131,6 +131,8 @@ fs.writeFileSync(
         types: [],
         paths: {
           "carbon-components-svelte": [relative("../src")],
+          // The package exports `./src/*`, so deep imports keep the prefix.
+          "carbon-components-svelte/src/*": [relative("../src/*")],
           "carbon-components-svelte/*": [relative("../src/*")],
         },
       },

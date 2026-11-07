@@ -25,6 +25,8 @@ import InlineNotification from "carbon-components-svelte/Notification/InlineNoti
 import NotificationButton from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
+import PasswordRequirements from "carbon-components-svelte/PasswordStrength/PasswordRequirements.svelte";
+import PasswordStrength from "carbon-components-svelte/PasswordStrength/PasswordStrength.svelte";
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
@@ -327,6 +329,18 @@ export const interactive: AriaEntry[] = [
           ...attrs,
         },
       }),
+    target: () => screen.getByRole("meter"),
+  },
+  {
+    name: "PasswordRequirements",
+    render: (attrs) =>
+      render(PasswordRequirements, { props: { value: "x", ...attrs } }),
+    target: () => screen.getByRole("list"),
+  },
+  {
+    name: "PasswordStrength",
+    render: (attrs) =>
+      render(PasswordStrength, { props: { value: "password", ...attrs } }),
     target: () => screen.getByRole("meter"),
   },
   {
