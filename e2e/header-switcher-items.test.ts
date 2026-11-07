@@ -1,12 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./helpers/host";
 
-const URL = "/header-switcher-items.html";
-
 test("lists the items under their group headings, with the current one marked", async ({
   page,
 }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   const accounts = page.getByRole("group", { name: "Accounts" });
   await expect(accounts.getByRole("button")).toHaveCount(7);
   await expect(page.getByRole("group", { name: "Apps" })).toBeVisible();
@@ -16,7 +14,7 @@ test("lists the items under their group headings, with the current one marked", 
 });
 
 test("has no detectable accessibility violations", async ({ page }) => {
-  await page.goto(`${URL}?detail`);
+  await page.goto("/header-switcher-items.html?detail");
   await expect(page.getByRole("search")).toBeVisible();
   const results = await new AxeBuilder({ page }).include("#app").analyze();
   expect(results.violations).toEqual([]);
@@ -25,7 +23,7 @@ test("has no detectable accessibility violations", async ({ page }) => {
 test("filters as you type, ignoring accents, and says how many matched", async ({
   page,
 }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   const search = page.getByRole("searchbox", { name: "Search accounts" });
   await search.fill("zoe");
   await expect(page.locator(".bx--profile-menu__item")).toHaveCount(2); // Zoë + footer item
@@ -38,7 +36,7 @@ test("filters as you type, ignoring accents, and says how many matched", async (
 test("moves focus between the field and the items with the arrow keys", async ({
   page,
 }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   const search = page.getByRole("searchbox");
   await search.focus();
   await search.fill("o");
@@ -64,7 +62,7 @@ test("Enter on the trigger opens the menu with focus in the filter field", async
 });
 
 test("typing on an item types into the field", async ({ page }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   await page.getByRole("button", { name: /Globex/ }).focus();
   await page.keyboard.type("hoo");
   const search = page.getByRole("searchbox");
@@ -75,7 +73,7 @@ test("typing on an item types into the field", async ({ page }) => {
 });
 
 test("Escape clears the field, then closes the menu", async ({ page }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   const search = page.getByRole("searchbox");
   await search.fill("glo");
   await page.keyboard.press("Escape");
@@ -87,7 +85,7 @@ test("Escape clears the field, then closes the menu", async ({ page }) => {
 });
 
 test("choosing an item selects it and closes the menu", async ({ page }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   await page.getByRole("button", { name: /Initech/ }).click();
   await expect(page.locator("#selected")).toHaveText("initech");
   await expect(page.locator("#last")).toHaveText("initech");
@@ -100,7 +98,7 @@ test("choosing an item selects it and closes the menu", async ({ page }) => {
 test("a short list has no field and jumps to the item that starts with the typed letters", async ({
   page,
 }) => {
-  await page.goto(`${URL}?threshold=100`);
+  await page.goto("/header-switcher-items.html?threshold=100");
   await expect(page.getByRole("searchbox")).toHaveCount(0);
   const item = (name: string) =>
     page.locator(".bx--profile-menu__item", { hasText: name });
@@ -133,7 +131,7 @@ test("a name that is cut off shows in full on hover", async ({ page }) => {
 
 test("the menu stays inside a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 600 });
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   const box = await page.locator(".bx--header-switcher__menu").boundingBox();
   expect(box?.x).toBeGreaterThanOrEqual(0);
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(320);
@@ -142,7 +140,7 @@ test("the menu stays inside a narrow screen", async ({ page }) => {
 test("the menu opens from the trigger's end edge in a right-to-left page", async ({
   page,
 }) => {
-  await page.goto(URL);
+  await page.goto("/header-switcher-items.html");
   await page.evaluate(() =>
     document.documentElement.setAttribute("dir", "rtl"),
   );
@@ -164,7 +162,7 @@ const row = (page: import("@playwright/test").Page, name: string) =>
 test("lists the accounts you left under Recent, and keeps them across a reload", async ({
   page,
 }) => {
-  await page.goto(`${URL}?recent`);
+  await page.goto("/header-switcher-items.html?recent");
   const recent = page.getByRole("group", { name: "Recent" });
   await expect(recent).toHaveCount(0);
 
@@ -191,7 +189,7 @@ test("lists the accounts you left under Recent, and keeps them across a reload",
 test("filtering lists every match under its own group, without Recent", async ({
   page,
 }) => {
-  await page.goto(`${URL}?recent`);
+  await page.goto("/header-switcher-items.html?recent");
   await row(page, "Initech").click();
   await trigger(page).click();
   await page.getByRole("searchbox").fill("acme");
@@ -201,4 +199,54 @@ test("filtering lists every match under its own group, without Recent", async ({
       .getByRole("group", { name: "Accounts" })
       .locator(".bx--profile-menu__item"),
   ).toHaveCount(1);
+});
+
+test("shows placeholder rows while loading, then the accounts", async ({
+  page,
+}) => {
+  await page.goto("/header-switcher-items.html?load=ok");
+  await trigger(page).click();
+  const menu = page.locator(".bx--header-switcher__menu");
+  await expect(menu).toHaveAttribute("aria-busy", "true");
+  await expect(menu.locator(".bx--header-switcher__skeleton")).toHaveCount(3);
+  await expect(page.getByRole("status")).toHaveText("Loading accounts");
+  await expect(row(page, "Acme Corp")).toBeVisible();
+  await expect(menu).not.toHaveAttribute("aria-busy");
+  await expect(menu.locator(".bx--header-switcher__skeleton")).toHaveCount(0);
+});
+
+test("says it failed, retries from a row, and keeps focus inside the menu", async ({
+  page,
+}) => {
+  await page.goto("/header-switcher-items.html?load=fail");
+  await trigger(page).click();
+  await expect(page.locator(".bx--header-switcher__error")).toHaveText(
+    "Could not load accounts",
+  );
+  await expect(page.getByRole("status")).toHaveText("Could not load accounts");
+
+  const retry = row(page, "Retry");
+  await retry.focus();
+  await page.keyboard.press("Enter");
+  // The menu stays open and takes focus from the row that is going away.
+  const menu = page.locator(".bx--header-switcher__menu");
+  await expect(menu).toBeFocused();
+  await expect(row(page, "Acme Corp")).toBeVisible();
+  await expect(page.locator(".bx--header-switcher__error")).toHaveCount(0);
+  await page.keyboard.press("ArrowDown");
+  await expect(page.locator(".bx--profile-menu__item").first()).toBeFocused();
+});
+
+test("has no detectable accessibility violations while loading or failed", async ({
+  page,
+}) => {
+  await page.goto("/header-switcher-items.html?load=fail");
+  await trigger(page).click();
+  await expect(page.locator(".bx--header-switcher__skeleton")).toHaveCount(3);
+  let results = await new AxeBuilder({ page }).include("#app").analyze();
+  expect(results.violations).toEqual([]);
+
+  await expect(page.locator(".bx--header-switcher__error")).toBeVisible();
+  results = await new AxeBuilder({ page }).include("#app").analyze();
+  expect(results.violations).toEqual([]);
 });

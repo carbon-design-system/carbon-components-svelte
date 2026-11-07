@@ -18,6 +18,12 @@
   export let recentLimit = 3;
   export let recentText = "Recent";
 
+  /** @type {"idle" | "loading" | "success" | "error"} */
+  export let status = "success";
+  export let loadingText = "Loading accounts";
+  export let errorText = "Could not load accounts";
+  export let retryText = "Retry";
+
   /**
    * The id of the menu; ids inside it derive from it.
    * @type {string}
@@ -36,8 +42,10 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { createStatusAnnouncer } from "../ListBox/menu-status.js";
   import Search from "../Search/Search.svelte";
+  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import Checkmark from "../icons/Checkmark.svelte";
+  import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { debounce } from "../utils/debounce.js";
   import { buildSwitcherSections } from "../utils/switcher-items.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
@@ -73,13 +81,31 @@
     /** @param {number} total */ (total) => announceStatus(resultsText(total)),
     800,
   );
-  $: if (searchable && query.trim() !== "") {
+  // A change of state is said at once, and once: typing while it loads does
+  // not repeat it.
+  let lastStateMessage = "";
+  $: stateMessage =
+    status === "error" ? errorText : status === "loading" ? loadingText : "";
+  $: if (stateMessage) {
+    announceCount.cancel();
+    if (stateMessage !== lastStateMessage) announceStatus(stateMessage);
+    lastStateMessage = stateMessage;
+  } else if (searchable && query.trim() !== "") {
+    lastStateMessage = "";
     announceCount(count);
   } else {
+    lastStateMessage = "";
     announceCount.cancel();
     statusText = "";
   }
   onMount(() => () => announceCount.cancel());
+
+  /** @param {MouseEvent} event */
+  function handleRetry(event) {
+    // Keep the menu open: this is not a choice of account.
+    event.preventDefault();
+    dispatch("retry");
+  }
 
   /** @param {Item} item */
   function avatarProps(item) {
@@ -112,6 +138,8 @@
       size="sm"
       id="{menuId}-search"
       bind:value={query}
+      loading={status === "loading"}
+      loadingDescription={loadingText}
       labelText={searchLabelText}
       placeholder={searchLabelText}
       hideLabel
@@ -119,7 +147,29 @@
       on:clear={() => dispatch("filter", { query: "" })}
     />
   </div>
-  <span role="status" class:bx--visually-hidden={true}>{statusText}</span>
+{/if}
+<span role="status" class:bx--visually-hidden={true}>{statusText}</span>
+{#if status === "error"}
+  <div class:bx--header-switcher__error={true}>
+    <ErrorFilled size={16} />
+    <span>{errorText}</span>
+  </div>
+  <div class:bx--profile-menu__list={true}>
+    <ProfileMenuItem on:click={handleRetry}>{retryText}</ProfileMenuItem>
+  </div>
+{:else if status === "loading" && items.length === 0}
+  <!-- The status region says it is loading; the rows are only a shape. -->
+  <div aria-hidden="true" class:bx--profile-menu__list={true}>
+    {#each [0, 1, 2] as row (row)}
+      <div class:bx--header-switcher__skeleton={true}>
+        <span
+          class:bx--skeleton={true}
+          class:bx--header-switcher__skeleton-avatar={true}
+        ></span>
+        <SkeletonText lines={1} noMargin width="{[70, 55, 80][row]}%" />
+      </div>
+    {/each}
+  </div>
 {/if}
 {#each sections as section (section.key)}
   <div
@@ -159,6 +209,6 @@
     {/each}
   </div>
 {/each}
-{#if count === 0}
+{#if count === 0 && (status === "success" || status === "idle")}
   <div class:bx--header-switcher__empty={true}>{emptyText}</div>
 {/if}

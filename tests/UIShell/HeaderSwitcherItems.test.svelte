@@ -7,6 +7,9 @@
   export let showDetail = false;
   export let recentIds: string[] | undefined = undefined;
   export let onSelect: (e: CustomEvent) => void = () => {};
+  export let status: "idle" | "loading" | "success" | "error" = "success";
+  export let noItems = false;
+  export let onRetry: (e: CustomEvent) => void = () => {};
   export let onFilter: (e: CustomEvent) => void = () => {};
 
   const items = [
@@ -24,13 +27,15 @@
 
 <HeaderSwitcher
   isOpen
-  {items}
+  items={noItems ? [] : items}
+  {status}
   {searchThreshold}
   {showDetail}
   bind:selectedId
   bind:recentIds
   on:select={onSelect}
   on:filter={onFilter}
+  on:retry={onRetry}
 >
   <ProfileMenuItem>Create workspace</ProfileMenuItem>
 </HeaderSwitcher>

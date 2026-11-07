@@ -104,4 +104,35 @@ describe("HeaderSwitcher items", () => {
 
     expect(screen.queryByRole("group", { name: "Recent" })).toBeNull();
   });
+
+  it("shows placeholder rows and says it is loading while there are no items", () => {
+    render(HeaderSwitcherItems, {
+      props: { status: "loading", noItems: true },
+    });
+
+    expect(
+      document.querySelectorAll(".bx--header-switcher__skeleton"),
+    ).toHaveLength(3);
+    expect(screen.queryByText("No accounts found")).toBeNull();
+    expect(
+      screen.getByRole("group", { name: "Switch account" }),
+    ).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("keeps the items it has while loading or after an error", () => {
+    render(HeaderSwitcherItems, { props: { status: "error" } });
+
+    expect(screen.getByText("Could not load accounts")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Globex" })).toBeVisible();
+  });
+
+  it("asks to try again without closing, and moves focus to the menu", async () => {
+    const onRetry = vi.fn();
+    render(HeaderSwitcherItems, { props: { status: "error", onRetry } });
+
+    await user.click(screen.getByRole("button", { name: "Retry" }));
+
+    expect(onRetry).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("group", { name: "Switch account" })).toHaveFocus();
+  });
 });

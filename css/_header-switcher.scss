@@ -117,7 +117,7 @@
   // Below the medium breakpoint the trigger can sit anywhere along the
   // header, and a menu that hangs from it ran off the far edge. It becomes
   // the width of the header instead, as Carbon's header panels do.
-  @media (max-width: #{to-rem(671px)}) {
+  @include carbon--breakpoint-down(md) {
     .#{$prefix}--header-switcher__menu {
       position: fixed;
       top: to-rem(48px);
@@ -181,6 +181,43 @@
   .#{$prefix}--header-switcher__item-description {
     @include type-style('label-01');
     color: $text-secondary;
+  }
+
+  .#{$prefix}--header-switcher__error {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    border-inline-start: 3px solid $support-error;
+    color: $text-primary;
+    @include type-style('body-compact-01');
+  }
+
+  .#{$prefix}--header-switcher__error svg {
+    flex-shrink: 0;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--header-switcher__skeleton {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    min-height: to-rem(40px);
+    padding: 0 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--header-switcher__skeleton > .#{$prefix}--skeleton__text {
+    flex: 1;
+    margin: 0;
+  }
+
+  .#{$prefix}--header-switcher__skeleton-avatar {
+    display: block;
+    flex-shrink: 0;
+    background: $skeleton-background;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    border-radius: 50%;
   }
 
   .#{$prefix}--header-switcher__empty {

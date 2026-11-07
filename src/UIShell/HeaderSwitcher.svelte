@@ -33,6 +33,13 @@
    */
 
   /**
+   * Dispatched when "Retry" is chosen while `status` is `"error"`. The menu
+   * stays open and focus moves to it, so it is not lost when the row goes.
+   * @event retry
+   * @type {null}
+   */
+
+  /**
    * Dispatched as the filter field changes, for a list that is filtered on a
    * server. Set `filterItems` to `() => true` to leave the filtering to it.
    * @event filter
@@ -85,6 +92,25 @@
 
   /** Specify the heading of the recent accounts. */
   export let recentText = "Recent";
+
+  /**
+   * Specify the state of the list. Set it from the request that fills
+   * `items`, for example in `on:open`. `"loading"` shows placeholder rows
+   * while there are no `items` yet, and a spinner in the filter field after
+   * that, and keeps the items it has. `"error"` shows `errorText` and a
+   * "Retry" row above the items it has. Each is announced to screen readers.
+   * @type {"idle" | "loading" | "success" | "error"}
+   */
+  export let status = "success";
+
+  /** Specify the message announced while `status` is `"loading"`. */
+  export let loadingText = "Loading accounts";
+
+  /** Specify the message shown and announced while `status` is `"error"`. */
+  export let errorText = "Could not load accounts";
+
+  /** Specify the label of the row that asks to try again. */
+  export let retryText = "Retry";
 
   /**
    * Set to `true` to show the current account's avatar, name and
@@ -223,6 +249,10 @@
     recentIds,
     recentLimit,
     recentText,
+    status,
+    loadingText,
+    errorText,
+    retryText,
     menuId,
     showDetail,
     searchThreshold,
@@ -254,6 +284,13 @@
     ) {
       close("outside-click");
     }
+  }
+
+  // The retry row goes as the list reloads, which would drop focus to the
+  // page. The menu takes it instead, and an arrow key goes on from there.
+  function handleRetry() {
+    dispatch("retry");
+    refMenu?.focus();
   }
 
   /** @param {Item} item */
@@ -384,7 +421,7 @@
         menuItemRegistry.flush();
         const search = refMenu?.querySelector("input[type='search']");
         /** @type {HTMLElement | undefined} */ (
-          search ?? get(menuItems)[0]
+          search ?? get(menuItems)[0] ?? refMenu
         )?.focus();
       }
     }}
@@ -429,6 +466,8 @@
     <div
       bind:this={refMenu}
       role="group"
+      tabindex="-1"
+      aria-busy={status === "loading" ? "true" : undefined}
       use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
       on:keydown|capture={handleMenuKeydown}
       id={menuId}
@@ -441,6 +480,7 @@
         <HeaderSwitcherMenu
           {...menuProps}
           on:pick={(event) => handlePick(event.detail)}
+          on:retry={handleRetry}
           on:filter
         />
       {/if}
@@ -453,6 +493,8 @@
     <div
       bind:this={refMenu}
       role="group"
+      tabindex="-1"
+      aria-busy={status === "loading" ? "true" : undefined}
       use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
       on:keydown|capture={handleMenuKeydown}
       id={menuId}
@@ -464,6 +506,7 @@
         <HeaderSwitcherMenu
           {...menuProps}
           on:pick={(event) => handlePick(event.detail)}
+          on:retry={handleRetry}
           on:filter
         />
       {/if}

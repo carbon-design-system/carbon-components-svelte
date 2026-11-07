@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import {
     Content,
     Header,
@@ -8,12 +8,15 @@
     SkipToContent,
   } from "carbon-components-svelte";
 
+  // `?load=ok` or `?load=fail` start closed with no accounts and fetch them
+  // when the menu opens; `fail` fails once, then succeeds on retry.
   // `?detail` shows the current-account block; `?threshold=N` sets
   // `searchThreshold`; `?recent` lists recent accounts, kept in `LocalStorage`.
   const params = new URLSearchParams(location.search);
   const showDetail = params.has("detail");
   const searchThreshold = Number(params.get("threshold") ?? 8);
   const recent = params.has("recent");
+  const load = params.get("load");
 
   const items = [
     {
@@ -60,8 +63,26 @@
 
   let selectedId = "acme";
   let recentIds = recent ? [] : undefined;
-  let isOpen = true;
+  let isOpen = !load;
   let last = "";
+  let list = load ? [] : items;
+  let status: "idle" | "loading" | "success" | "error" = load
+    ? "idle"
+    : "success";
+  let attempts = 0;
+
+  function fetchAccounts() {
+    status = "loading";
+    attempts += 1;
+    setTimeout(() => {
+      if (load === "fail" && attempts === 1) {
+        status = "error";
+      } else {
+        list = items;
+        status = "success";
+      }
+    }, 400);
+  }
 </script>
 
 {#if recent}
@@ -70,7 +91,12 @@
 <Header companyName="E2E" platformName="Switcher items">
   <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderSwitcher
-    {items}
+    items={list}
+    {status}
+    on:open={() => {
+      if (load && status === "idle") fetchAccounts();
+    }}
+    on:retry={fetchAccounts}
     {showDetail}
     {searchThreshold}
     bind:selectedId
