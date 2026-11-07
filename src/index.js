@@ -42,6 +42,7 @@ export { default as CheckboxGroup } from "./Checkbox/CheckboxGroup.svelte";
 export { default as CheckboxSkeleton } from "./Checkbox/CheckboxSkeleton.svelte";
 export { default as CodeSnippet } from "./CodeSnippet/CodeSnippet.svelte";
 export { default as CodeSnippetSkeleton } from "./CodeSnippet/CodeSnippetSkeleton.svelte";
+export { default as ColorPicker } from "./ColorPicker/ColorPicker.svelte";
 export { default as ComboBox } from "./ComboBox/ComboBox.svelte";
 export { default as ComboBoxSkeleton } from "./ComboBox/ComboBoxSkeleton.svelte";
 export { default as FluidComboBoxSkeleton } from "./ComboBox/FluidComboBoxSkeleton.svelte";

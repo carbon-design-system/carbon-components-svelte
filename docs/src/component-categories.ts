@@ -112,6 +112,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Checkbox",
       "RadioButton",
       "StarRating",
+      "ColorPicker",
       "Toggle",
       "Form",
       "FluidForm",
