@@ -16,19 +16,21 @@ html {
 }
 
 .prose > pre {
-  padding: 1rem;
-  margin-bottom: 1rem;
+  padding: var(--cds-spacing-05);
+  margin: var(--cds-spacing-07) calc(-1 * var(--cds-spacing-05));
   overflow: auto;
+  background-color: var(--cds-layer-01);
+  color: var(--cds-text-primary);
 }
 
-.prose > pre,
+@media (max-width: 672px) {
+  .prose > pre {
+    margin-inline: 0;
+  }
+}
+
 .code-override {
   border: 1px solid var(--cds-border-subtle-01);
-}
-
-.prose > pre {
-  background-color: var(--cds-background);
-  color: #f4f4f4;
 }
 
 .code-override .bx--copy-btn,
@@ -45,12 +47,6 @@ html {
 
 .code-override .bx--snippet__icon {
   fill: #f4f4f4;
-}
-
-[theme="white"] .prose > pre,
-[theme="g10"] .prose > pre {
-  background-color: var(--cds-background);
-  color: var(--cds-text-primary, #161616);
 }
 
 [theme="white"] .code-override .bx--copy-btn,
