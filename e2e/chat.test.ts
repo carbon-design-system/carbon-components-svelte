@@ -23,6 +23,21 @@ test.describe("ChatLog", () => {
     await expect.poll(() => distanceFromEnd(log)).toBeLessThan(2);
   });
 
+  test("stays at the end when a message grows without a DOM change", async ({
+    page,
+  }) => {
+    const log = page.getByTestId("log");
+    // Stands in for a web font or an image that loads after mount.
+    await log
+      .locator(".bx--chat-message__bubble")
+      .last()
+      .evaluate((node) => {
+        (node as HTMLElement).style.paddingBottom = "80px";
+      });
+
+    await expect.poll(() => distanceFromEnd(log)).toBeLessThan(2);
+  });
+
   test("leaves the scroll alone while reading back", async ({ page }) => {
     const log = page.getByTestId("log");
     await log.evaluate((node) => {

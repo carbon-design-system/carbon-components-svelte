@@ -4,8 +4,9 @@ description: Chat logs show a conversation, with messages aligned by author, gro
 ---
 
 <script>
-  import { ChatDivider, ChatLog, ChatMessage, ClickableTile, CodeSnippet, FileDownloadItem, FileUploaderItem, Link, linkSegments, Stack, Text, UserAvatar } from "carbon-components-svelte";
+  import { Button, ChatDivider, ChatLog, ChatMessage, ClickableTile, CodeSnippet, FileDownloadItem, FileUploaderItem, Link, linkSegments, Stack, Text, UserAvatar } from "carbon-components-svelte";
   import Bot from "carbon-icons-svelte/lib/Bot.svelte";
+  import Copy from "carbon-icons-svelte/lib/Copy.svelte";
   import DocumentPdf from "carbon-icons-svelte/lib/DocumentPdf.svelte";
 
   const tracking = "Track it at https://shipping.example.com/track/1Z999AA1. The link javascript://example stays text.";
@@ -15,7 +16,7 @@ description: Chat logs show a conversation, with messages aligned by author, gro
 
 ChatLog is a `role="log"` region around a list of messages that scrolls itself. It starts at the latest message and keeps new messages in view while the reader is at the end, but leaves the scroll alone while they read back; a message the user sends always comes into view. It takes focus so keyboard users can scroll it. Name it with `labelText`, and give it a height, such as by placing it in a flex column, where it fills the space left.
 
-Each ChatMessage sets `from` to `"me"` (end-aligned, in the accent color) or `"them"` (start-aligned, beside the `avatar` slot), and `author` to who sent it, such as "Sam", or "You" for the user's own. Alignment alone doesn't tell screen reader users who is speaking, so they hear the author before each message. Set `continued` on a message from the same author as the one before, to group them. ChatDivider labels a break, such as a new day.
+Each ChatMessage sets `from` to `"me"` (end-aligned, in a filled bubble) or `"them"` (start-aligned, beside the `avatar` slot), and `author` to who sent it, such as "Sam", or "You" for the user's own. Alignment alone doesn't tell screen reader users who is speaking, so they hear the author before each message. Set `continued` on a message from the same author as the one before, to group them. ChatDivider labels a break, such as a new day.
 
 <FileSource src="/framed/Chat/Chat" />
 
@@ -160,6 +161,7 @@ The `meta` slot sits under a message, such as for the time, and the `actions` sl
   <ChatMessage author="Sam">
     <UserAvatar slot="avatar" size="sm" name="Sam Carter" />
     Your order shipped this morning.
+    <Button slot="actions" kind="ghost" size="small" icon={Copy} iconDescription="Copy message" />
     <span slot="meta">9:41 AM</span>
   </ChatMessage>
 </ChatLog>

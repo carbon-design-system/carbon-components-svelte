@@ -52,7 +52,21 @@
       subtree: true,
       characterData: true,
     });
-    return () => observer.disconnect();
+    // Content also grows without a DOM change, such as when a web font
+    // loads and text wraps, or an image loads. The log can shrink too,
+    // such as when the composer grows. Either way, stay at the end.
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(() => {
+            if (ref && pinned) ref.scrollTop = ref.scrollHeight;
+          });
+    resizeObserver?.observe(ref);
+    if (ref.firstElementChild) resizeObserver?.observe(ref.firstElementChild);
+    return () => {
+      observer.disconnect();
+      resizeObserver?.disconnect();
+    };
   });
 </script>
 
