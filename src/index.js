@@ -196,6 +196,12 @@ export { default as RadioButtonSkeleton } from "./RadioButton/RadioButtonSkeleto
 export { default as RadioButtonGroup } from "./RadioButtonGroup/RadioButtonGroup.svelte";
 export { default as RecursiveList } from "./RecursiveList/RecursiveList.svelte";
 export { default as RelativeTime } from "./RelativeTime/RelativeTime.svelte";
+export { default as RichTextEditor } from "./RichTextEditor/RichTextEditor.svelte";
+export {
+  htmlToText,
+  sanitizeHtml,
+  textToHtml,
+} from "./RichTextEditor/sanitize.js";
 export { default as ScrollGradient } from "./ScrollGradient/ScrollGradient.svelte";
 export { default as FluidSearchSkeleton } from "./Search/FluidSearchSkeleton.svelte";
 export { default as Search } from "./Search/Search.svelte";
