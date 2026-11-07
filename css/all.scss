@@ -72,6 +72,15 @@ $ccs-classic-side-nav: ".#{$prefix}--side-nav--ui-shell-classic";
   color: var(--cds-text-primary);
 }
 
+// `Theme` sets this attribute while it swaps tokens, so colors that a
+// component transitions on hover change at once with the rest.
+:root[data-ccs-theme-changing],
+:root[data-ccs-theme-changing] *,
+:root[data-ccs-theme-changing] *::before,
+:root[data-ccs-theme-changing] *::after {
+  transition: none !important;
+}
+
 // The dark blocks set `color-scheme: dark`; a light zone nested in one
 // resets it.
 .#{$prefix}--white,

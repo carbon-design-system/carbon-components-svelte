@@ -193,20 +193,27 @@
   // Apply theme before dispatching update. Reactive blocks run in source order,
   // and a throwing on:update handler aborts the rest of the flush.
   $: if (typeof window !== "undefined") {
+    const root = document.documentElement;
+
+    // Components that fade a color on hover would also fade it to the new
+    // theme. all.css turns transitions off under this attribute, and the
+    // style flush below applies the new tokens while they are off.
+    root.setAttribute("data-ccs-theme-changing", "");
+
     for (const token of appliedTokens) {
       if (token in appliedValues) continue;
-      document.documentElement.style.removeProperty(`--cds-${token}`);
+      root.style.removeProperty(`--cds-${token}`);
       appliedTokens.delete(token);
     }
 
     for (const [token, value] of Object.entries(appliedValues)) {
-      document.documentElement.style.setProperty(`--cds-${token}`, value);
+      root.style.setProperty(`--cds-${token}`, value);
       appliedTokens.add(token);
     }
 
     if (theme in themes) {
-      document.documentElement.setAttribute("theme", theme);
-      document.documentElement.style.setProperty(
+      root.setAttribute("theme", theme);
+      root.style.setProperty(
         "color-scheme",
         theme === "white" || theme === "g10" ? "light" : "dark",
       );
@@ -223,6 +230,10 @@
         }`,
       );
     }
+
+    // A layout read flushes styles, so no transition starts on the swap.
+    root.getBoundingClientRect();
+    root.removeAttribute("data-ccs-theme-changing");
   }
 
   $: if (mounted && theme !== prevTheme) {

@@ -82,6 +82,29 @@ describe("Theme", () => {
     expect(onUpdate).toHaveBeenCalledWith({ theme: "g100" });
   });
 
+  it("turns transitions off while it swaps the theme", async () => {
+    const root = document.documentElement;
+    const { rerender } = render(Theme);
+
+    const changing: boolean[] = [];
+    documentMock.setAttribute.mockImplementation(function (
+      this: HTMLElement,
+      name: string,
+      value: string,
+    ) {
+      if (name === "theme") {
+        changing.push(root.hasAttribute("data-ccs-theme-changing"));
+      }
+      Element.prototype.setAttribute.call(this, name, value);
+    });
+
+    await rerender({ theme: "g100" });
+    await tick();
+
+    expect(changing).toEqual([true]);
+    expect(root.hasAttribute("data-ccs-theme-changing")).toBe(false);
+  });
+
   it("should apply custom tokens", async () => {
     const tokens = {
       "button-primary": "#ff0000",
