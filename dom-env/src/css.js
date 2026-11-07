@@ -11,7 +11,7 @@
 // defaults; with <style> elements it also applies matching rules.
 
 import { compile, matchesSelector } from "./selector.js";
-import { HTML_NS, INTERNAL, illegalConstructor, str, tag } from "./shared.js";
+import { HTML_NS, illegalConstructor, INTERNAL, str, tag } from "./shared.js";
 
 // --- Property names -----------------------------------------------------------
 

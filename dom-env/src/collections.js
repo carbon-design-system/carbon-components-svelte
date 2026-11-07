@@ -6,7 +6,7 @@
 // a mutation without touching `length`/`item()` first may see stale values.
 // Callers almost always re-read `childNodes`/`children`, which refreshes.
 
-import { INTERNAL, illegalConstructor, tag } from "./shared.js";
+import { illegalConstructor, INTERNAL, tag } from "./shared.js";
 
 const INDEX_RE = /^(?:0|[1-9]\d*)$/;
 

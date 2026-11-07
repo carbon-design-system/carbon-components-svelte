@@ -9,22 +9,22 @@ import {
 import { CSSStyleDeclaration } from "./css.js";
 import {
   dispatch,
-  FocusEvent,
   fire,
+  FocusEvent,
   MouseEvent,
   PointerEvent,
 } from "./events.js";
 import { DOMRect, DOMRectList } from "./geometry.js";
 import { observing, queueMutation } from "./mutation.js";
 import {
-  ChildNode,
   childArray,
-  DocumentFragment,
+  ChildNode,
   descendantText,
+  DocumentFragment,
   insertNode,
+  nextInTree,
   Node,
   NonDocumentTypeChildNode,
-  nextInTree,
   ParentNode,
   preInsert,
   replaceAll,
@@ -44,12 +44,12 @@ import {
   domException,
   ELEMENT_NODE,
   HTML_NS,
-  INTERNAL,
   illegalConstructor,
+  INTERNAL,
   mixin,
-  SVG_NS,
   splitTokens,
   str,
+  SVG_NS,
   tag,
   XML_NS,
   XMLNS_NS,

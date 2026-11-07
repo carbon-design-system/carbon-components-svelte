@@ -34,8 +34,8 @@ import {
   domException,
   ELEMENT_NODE,
   HTML_NS,
-  INTERNAL,
   illegalConstructor,
+  INTERNAL,
   str,
   tag,
 } from "./shared.js";

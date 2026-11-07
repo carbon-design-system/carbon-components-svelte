@@ -3,7 +3,7 @@
 
 import { staticNodeList } from "./collections.js";
 import { hooks } from "./events.js";
-import { INTERNAL, illegalConstructor, str, tag } from "./shared.js";
+import { illegalConstructor, INTERNAL, str, tag } from "./shared.js";
 
 /** Number of live registrations across all observers in this realm. */
 export const observing = { count: 0 };

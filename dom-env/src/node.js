@@ -15,19 +15,19 @@ import {
   ATTRIBUTE_NODE,
   CDATA_SECTION_NODE,
   COMMENT_NODE,
+  defineConstants,
   DOCUMENT_FRAGMENT_NODE,
   DOCUMENT_NODE,
   DOCUMENT_TYPE_NODE,
-  defineConstants,
   domException,
   ELEMENT_NODE,
-  INTERNAL,
   illegalConstructor,
+  INTERNAL,
   mixin,
   PROCESSING_INSTRUCTION_NODE,
   str,
-  TEXT_NODE,
   tag,
+  TEXT_NODE,
 } from "./shared.js";
 
 /** Live Range bookkeeping, filled in by range.js. */
