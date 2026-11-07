@@ -50,6 +50,22 @@ function getScript() {
   return script;
 }
 
+/**
+ * Strict mode (`domEnv: { strict: "warn" | "error" }`, or `DOM_ENV_STRICT`)
+ * lists what a test file reached for that dom-env doesn't implement: members
+ * read, written or probed with `in`, and CSS property names. "warn" prints
+ * the list; "error" fails the file's teardown with it.
+ */
+function reportGaps(gaps, mode) {
+  const lines = gaps.map(
+    ({ kind, name, count, at }) =>
+      `  ${kind} ${name}${count > 1 ? ` (x${count})` : ""}${at ? ` at ${at}` : ""}`,
+  );
+  const text = `dom-env strict: ${gaps.length} gap(s)\n${lines.join("\n")}`;
+  if (mode === "error") throw new Error(text);
+  process.stderr.write(`${text}\n`);
+}
+
 export default {
   name: "dom-env",
   viteEnvironment: "client",
@@ -58,12 +74,17 @@ export default {
     const context = nodeEnv.getVmContext();
     getScript().runInContext(context);
     const global = vm.runInContext("this", context);
-    global.__domEnv.install({ url: options?.domEnv?.url });
+    const strict = options?.domEnv?.strict ?? process.env.DOM_ENV_STRICT;
+    global.__domEnv.install({ url: options?.domEnv?.url, strict });
     global.__domEnvUncaught = (error) =>
       process.emit("uncaughtException", error);
     return {
       getVmContext: () => context,
-      teardown: () => nodeEnv.teardown(),
+      teardown: () => {
+        const gaps = strict ? global.__domEnv.gaps() : [];
+        nodeEnv.teardown();
+        if (gaps.length) reportGaps(gaps, strict);
+      },
     };
   },
   setup() {

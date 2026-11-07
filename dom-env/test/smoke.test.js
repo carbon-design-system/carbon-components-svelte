@@ -12,7 +12,7 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 execFileSync("bun", ["run", "build"], { cwd: root, stdio: "ignore" });
 const code = fs.readFileSync(path.join(root, "dist/dom-env.js"), "utf8");
 
-function window() {
+function window(options = {}) {
   const ctx = vm.createContext({
     setTimeout,
     clearTimeout,
@@ -25,9 +25,11 @@ function window() {
     Blob,
     File,
   });
-  vm.runInContext(code, ctx);
-  vm.runInContext("__domEnv.install({})", ctx);
-  return (src) => vm.runInContext(src, ctx);
+  vm.runInContext(code, ctx, { filename: path.join(root, "dist/dom-env.js") });
+  vm.runInContext(`__domEnv.install(${JSON.stringify(options)})`, ctx);
+  // A file name, as test code has: strict mode reports only lookups made
+  // from a file outside node_modules.
+  return (src) => vm.runInContext(src, ctx, { filename: "/test/code.js" });
 }
 
 test("parses and serializes HTML, including SVG case fixes", () => {
@@ -137,4 +139,25 @@ test("scrolls elements, tracks pointer capture and has fonts ready", async () =>
     "5,50,true,false,loaded",
   );
   assert.equal(await run("document.fonts.ready"), run("document.fonts"));
+});
+
+test("strict mode reports members and CSS properties it doesn't implement", () => {
+  const run = window({ strict: true });
+  run(`const d = document.createElement("div");
+    d.popoverTargetElement; d.foo = 1; d.style.zoomLevel = "2";
+    d.style.setProperty("text-wrap-mode", "wrap"); d.style.setProperty("--x", "1");
+    d.__svelte = 1; d.id;
+    if (!Element.prototype.polyfilled) Element.prototype.polyfilled = () => {};`);
+  assert.equal(
+    run(`__domEnv
+      .gaps()
+      .map((gap) => gap.kind + " " + gap.name + " " + gap.at.replace(/:\\d+$/, ""))
+      .join("\\n")`),
+    [
+      "get HTMLDivElement.popoverTargetElement /test/code.js:2",
+      "set HTMLDivElement.foo /test/code.js:2",
+      "set CSSStyleDeclaration.zoomLevel /test/code.js:2",
+      "css text-wrap-mode /test/code.js:3",
+    ].join("\n"),
+  );
 });
