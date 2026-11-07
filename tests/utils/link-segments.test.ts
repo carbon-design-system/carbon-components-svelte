@@ -45,4 +45,30 @@ describe("linkSegments", () => {
       { text: "tel:+15550100", href: "tel:+15550100" },
     ]);
   });
+
+  // A message is untrusted input, so a crafted one must not stall the
+  // thread that renders it.
+  describe("long runs", () => {
+    const BUDGET = 1000;
+
+    it("trims a run of closing brackets in linear time", () => {
+      const text = `https://example.com/${")".repeat(40_000)}`;
+      const start = performance.now();
+      const segments = linkSegments(text);
+
+      expect(performance.now() - start).toBeLessThan(BUDGET);
+      expect(segments).toEqual([
+        { text: "https://example.com/", href: "https://example.com/" },
+        { text: ")".repeat(40_000) },
+      ]);
+    });
+
+    it("scans a dotted run in linear time", () => {
+      const text = "a.".repeat(40_000);
+      const start = performance.now();
+
+      expect(linkSegments(text)).toEqual([{ text }]);
+      expect(performance.now() - start).toBeLessThan(BUDGET);
+    });
+  });
 });
