@@ -1,0 +1,302 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/motion";
+@import "carbon-components/scss/globals/scss/layout";
+
+/// BottomSheet styles. A fixed box as tall as its tallest snap point
+/// (`--ccs-bottom-sheet-height`), moved down by `--ccs-bottom-sheet-offset`
+/// so that only the current snap point shows. Moving it is a transform,
+/// so a drag never lays out. The footer rides the visible bottom by
+/// undoing the offset. Like a modal, the sheet starts a layer at level 0
+/// (`bx--layer-one`) and its body steps up to level 1.
+///
+/// At and above the component's `breakpoint` the `--wide` class turns the
+/// sheet into a centered dialog (modal) or a panel on the inline-end edge
+/// (non-modal), with the same markup.
+/// @access private
+/// @group components
+@mixin bottom-sheet {
+  .#{$prefix}--bottom-sheet {
+    position: fixed;
+    z-index: z("modal");
+    // A keyboard that covers the bottom of the layout viewport lifts the
+    // sheet by its height.
+    bottom: var(--ccs-bottom-sheet-keyboard-inset, 0);
+    display: flex;
+    overflow: visible;
+    height: var(--ccs-bottom-sheet-height, 0);
+    box-sizing: border-box;
+    flex-direction: column;
+    // The component limits the height to the window less a gap; this
+    // keeps a sheet taller than the window from running off it first.
+    max-height: calc(100vh - #{$carbon--spacing-09});
+    max-height: calc(100dvh - #{$carbon--spacing-09});
+    animation: bottom-sheet-enter $duration--moderate-02
+      motion(entrance, expressive);
+    background-color: $layer;
+    border-block-start: 1px solid $border-subtle;
+    box-shadow: 0 (-$carbon--spacing-01) $carbon--spacing-03 $overlay;
+    color: $text-primary;
+    overscroll-behavior: contain;
+    transform: translateY(var(--ccs-bottom-sheet-offset, 0));
+    transition: transform $duration--moderate-02 motion(standard, expressive);
+    @include ccs-inset-inline($start: 0, $end: 0);
+
+    // A sheet pulled past its tallest snap point shows the gap below it
+    // in its own color.
+    &::after {
+      position: absolute;
+      top: 100%;
+      height: 100vh;
+      background-color: inherit;
+      content: "";
+      @include ccs-inset-inline($start: 0, $end: 0);
+    }
+  }
+
+  // The server and the first frame cannot size the sheet.
+  .#{$prefix}--bottom-sheet--unmeasured {
+    visibility: hidden;
+  }
+
+  // A finger or pointer holds the sheet, so it follows without easing.
+  .#{$prefix}--bottom-sheet--dragging,
+  .#{$prefix}--bottom-sheet--dragging .#{$prefix}--bottom-sheet__footer {
+    transition: none;
+  }
+
+  .#{$prefix}--bottom-sheet--closing {
+    animation: bottom-sheet-exit $duration--moderate-02
+      motion(exit, expressive) forwards;
+  }
+
+  .#{$prefix}--bottom-sheet--modal {
+    // A modal sheet casts no shadow: the scrim separates it from the page.
+    box-shadow: none;
+  }
+
+  @keyframes bottom-sheet-enter {
+    from {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes bottom-sheet-exit {
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes bottom-sheet-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes bottom-sheet-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  .#{$prefix}--bottom-sheet__scrim {
+    position: fixed;
+    z-index: z("overlay");
+    animation: bottom-sheet-fade-in $duration--moderate-02
+      motion(entrance, productive);
+    background-color: $overlay;
+    inset: 0;
+    // The page behind does not scroll or pan under a finger on the scrim.
+    touch-action: none;
+  }
+
+  .#{$prefix}--bottom-sheet__scrim--closing {
+    animation: bottom-sheet-fade-out $duration--moderate-02
+      motion(exit, productive) forwards;
+  }
+
+  // The header is what a pointer drags: it takes the whole gesture, so a
+  // finger on it never pans the page.
+  .#{$prefix}--bottom-sheet__header {
+    position: relative;
+    flex: none;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .#{$prefix}--bottom-sheet__grabber {
+    position: relative;
+    display: block;
+    height: $carbon--spacing-06;
+
+    // The bar is 4px; the box around it is the 24px target.
+    &::before {
+      position: absolute;
+      top: 50%;
+      width: $carbon--spacing-09;
+      height: 4px;
+      background-color: $border-strong;
+      border-radius: 2px;
+      content: "";
+      transform: translateY(-50%);
+      @include ccs-inset-inline(
+        $start: calc(50% - #{$carbon--spacing-09 * 0.5})
+      );
+    }
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--bottom-sheet__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-block-end: 1px solid $border-subtle;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-02;
+  }
+
+  .#{$prefix}--bottom-sheet__title {
+    @include type-style("heading-03");
+
+    flex: 1;
+    padding-block: $carbon--spacing-03;
+  }
+
+  // Without a grabber (wide, or an undismissible single snap point) the
+  // heading is the top edge.
+  .#{$prefix}--bottom-sheet__header > .#{$prefix}--bottom-sheet__heading:first-child {
+    padding-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--bottom-sheet__body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: $carbon--spacing-05;
+    // Scrolling stops at the body's edge instead of chaining to the page,
+    // and a vertical pan is the body's to scroll or hand to the sheet.
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+
+  // With no footer, the body's last line clears a home indicator.
+  .#{$prefix}--bottom-sheet__body:last-child {
+    padding-block-end: calc(
+      #{$carbon--spacing-05} + env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  // Below its tallest snap point the sheet's drag moves it and content
+  // does not scroll, so the browser's scrollbar and wheel stay out of it.
+  .#{$prefix}--bottom-sheet--partial .#{$prefix}--bottom-sheet__body {
+    overflow-y: hidden;
+  }
+
+  .#{$prefix}--bottom-sheet__footer {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    background-color: $layer;
+    border-block-start: 1px solid $border-subtle;
+    padding-block-end: env(safe-area-inset-bottom, 0px);
+    // The footer undoes the sheet's offset, so it sits on the visible
+    // bottom at every snap point.
+    transform: translateY(calc(var(--ccs-bottom-sheet-offset, 0px) * -1));
+    transition: transform $duration--moderate-02 motion(standard, expressive);
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--bottom-sheet__header {
+      cursor: grab;
+    }
+
+    .#{$prefix}--bottom-sheet--dragging .#{$prefix}--bottom-sheet__header {
+      cursor: grabbing;
+    }
+
+    .#{$prefix}--bottom-sheet__grabber:hover::before {
+      background-color: $icon-secondary;
+    }
+  }
+
+  // Wide: no snap points and no drag. A modal sheet centers like a
+  // dialog; a sheet beside the page docks to the inline-end edge.
+  .#{$prefix}--bottom-sheet--wide {
+    height: auto;
+    animation-name: bottom-sheet-fade-in;
+    transform: none;
+    transition: none;
+
+    &::after {
+      content: none;
+    }
+
+    &.#{$prefix}--bottom-sheet--closing {
+      animation-name: bottom-sheet-fade-out;
+    }
+
+    .#{$prefix}--bottom-sheet__footer {
+      transform: none;
+    }
+  }
+
+  .#{$prefix}--bottom-sheet--wide.#{$prefix}--bottom-sheet--modal {
+    width: min(to-rem(512px), calc(100% - #{$carbon--spacing-07}));
+    height: fit-content;
+    max-height: min(to-rem(640px), 80vh);
+    max-height: min(to-rem(640px), 80dvh);
+    margin: auto;
+    border: 1px solid $border-subtle;
+    inset: 0;
+  }
+
+  .#{$prefix}--bottom-sheet--wide:not(.#{$prefix}--bottom-sheet--modal) {
+    top: 0;
+    bottom: 0;
+    width: to-rem(384px);
+    max-height: none;
+    border-block-start: 0;
+    border-inline-start: 1px solid $border-subtle;
+    @include ccs-inset-inline($end: 0);
+  }
+
+  // Reduced motion: no easing between snap points and no entrance slide.
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--bottom-sheet,
+    .#{$prefix}--bottom-sheet__footer {
+      transition: none;
+    }
+
+    .#{$prefix}--bottom-sheet {
+      animation-name: bottom-sheet-fade-in;
+    }
+
+    .#{$prefix}--bottom-sheet--closing {
+      animation-name: bottom-sheet-fade-out;
+    }
+  }
+
+  // Forced colors drop the shadow and the grabber's fill. The sheet's top
+  // border (a full border when it is wide) draws as CanvasText, so it needs
+  // no outline, which would nest around its fields' edges. The bar gets a
+  // CanvasText fill.
+  @media (forced-colors: active) {
+    .#{$prefix}--bottom-sheet__grabber::before {
+      background-color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("bottom-sheet") {
+  @include bottom-sheet;
+}

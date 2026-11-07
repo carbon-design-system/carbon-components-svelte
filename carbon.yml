@@ -126,6 +126,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Bleed
+  bottom-sheet:
+    name: Bottom sheet
+    description: A sheet that slides up from the bottom edge on small screens, with snap points, drag to resize or dismiss, and modal and persistent modes.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/bottom-sheet.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/BottomSheet
   box:
     name: Box
     status: stable
