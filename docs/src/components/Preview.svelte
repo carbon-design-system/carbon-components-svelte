@@ -10,6 +10,7 @@
   import { flushSync, onMount } from "svelte";
   import { codeViewHeight } from "../code-view-height";
   import { queueIdleMount } from "../idle-mount";
+  import { markOffscreen } from "../offscreen";
   import { eagerContent } from "../router";
   import { theme } from "../store";
 
@@ -31,6 +32,7 @@
   $: if (mounted) unqueue();
 
   onMount(() => {
+    const unmarkOffscreen = framed ? () => {} : markOffscreen(viewer);
     if (!framed && !mounted) {
       unqueue = queueIdleMount(viewer, () => {
         idle = true;
@@ -49,6 +51,7 @@
     return () => {
       observer.disconnect();
       unqueue();
+      unmarkOffscreen();
     };
   });
 
@@ -108,6 +111,16 @@
 </div>
 
 <style>
+  /* An example's looping animations, such as skeleton shimmers and loading
+     spinners, keep restyling the page while it's off screen: 293 of them
+     on DataTable's page cost a third of the main thread at rest. They
+     pause there and pick up where they were as it comes back. */
+  .preview-viewer:global([data-offscreen]) :global(*),
+  .preview-viewer:global([data-offscreen]) :global(*::before),
+  .preview-viewer:global([data-offscreen]) :global(*::after) {
+    animation-play-state: paused;
+  }
+
   .code-placeholder {
     overflow: hidden;
     margin: 0;

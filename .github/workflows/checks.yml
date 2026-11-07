@@ -19,6 +19,7 @@ on:
       - "docs/scripts/format.ts"
       - "docs/scripts/compile-cache.ts"
       - "docs/src/idle-mount.ts"
+      - "docs/src/offscreen.ts"
       - "docs/scripts/page-html.ts"
       - "docs/scripts/example-source.ts"
       - "docs/src/pages/framed/DatePicker/**"
@@ -42,6 +43,7 @@ on:
       - "docs/scripts/format.ts"
       - "docs/scripts/compile-cache.ts"
       - "docs/src/idle-mount.ts"
+      - "docs/src/offscreen.ts"
       - "docs/scripts/page-html.ts"
       - "docs/scripts/example-source.ts"
       - "docs/src/pages/framed/DatePicker/**"
@@ -142,6 +144,7 @@ jobs:
               - 'docs/scripts/format.ts'
               - 'docs/scripts/compile-cache.ts'
               - 'docs/src/idle-mount.ts'
+              - 'docs/src/offscreen.ts'
               - 'docs/scripts/page-html.ts'
               - 'docs/scripts/example-source.ts'
             e2e:
