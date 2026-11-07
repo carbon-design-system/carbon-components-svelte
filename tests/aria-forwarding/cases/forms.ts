@@ -492,6 +492,11 @@ export const forms: AriaEntry[] = [
     target: () => screen.getByRole("img"),
   },
   {
+    name: "ImportWizard",
+    exempt:
+      "container of a Stepper; every control inside is a Carbon field named by its own label",
+  },
+  {
     name: "Stepper",
     exempt:
       "container; each step's panel is named by its label, and its buttons by their text",
