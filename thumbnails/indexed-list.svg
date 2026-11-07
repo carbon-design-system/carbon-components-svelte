@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>indexed-list</title>
+    <g id="indexed-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="header" fill="var(--cds-layer-accent-active, #a8a8a8)" x="76" y="30" width="146" height="20"></rect>
+        <rect id="header-letter" fill="var(--cds-text-secondary, #525252)" x="86" y="36" width="8" height="8"></rect>
+        <rect id="row-1" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="62" width="100" height="8"></rect>
+        <rect id="row-2" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="82" width="76" height="8"></rect>
+        <rect id="row-3" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="102" width="112" height="8"></rect>
+        <rect id="row-4" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="122" width="88" height="8"></rect>
+        <rect id="row-5" fill="var(--cds-border-subtle, #e0e0e0)" x="86" y="142" width="104" height="8"></rect>
+        <rect id="rail" fill="var(--cds-border-subtle, #e0e0e0)" x="230" y="30" width="2" height="120"></rect>
+        <circle id="letter-active" fill="var(--cds-background-brand, #0f62fe)" cx="246" cy="42" r="6"></circle>
+        <circle id="dot-1" fill="var(--cds-layer-accent-active, #a8a8a8)" cx="246" cy="62" r="2"></circle>
+        <circle id="letter-1" fill="var(--cds-text-secondary, #525252)" cx="246" cy="80" r="4"></circle>
+        <circle id="dot-2" fill="var(--cds-layer-accent-active, #a8a8a8)" cx="246" cy="98" r="2"></circle>
+        <circle id="letter-2" fill="var(--cds-text-secondary, #525252)" cx="246" cy="116" r="4"></circle>
+        <circle id="dot-3" fill="var(--cds-layer-accent-active, #a8a8a8)" cx="246" cy="134" r="2"></circle>
+    </g>
+</svg>
