@@ -117,6 +117,13 @@
 
   /**
    * @template [Row=DataTableRow]
+   * @typedef {object} DataTableSortRule One column of a multi-column sort.
+   * @property {DataTableKey<Row>} key
+   * @property {"ascending" | "descending"} direction
+   */
+
+  /**
+   * @template [Row=DataTableRow]
    * @typedef {object} DataTableEmptyHeader
    * @property {DataTableKey<Row> | (string & {})} key
    * @property {true} empty - Whether the header is empty
@@ -245,9 +252,10 @@
    */
 
   /**
-   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
-   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
+   * @event {{ key: null; direction: "none"; sortBy?: ReadonlyArray<DataTableSortRule<Row>> } | { key: DataTableKey<Row>; direction: "ascending" | "descending"; sortBy?: ReadonlyArray<DataTableSortRule<Row>> }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` / `sortBy` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
+   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`. With `sortMode="multiple"`, the highest priority column of `sortBy`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
+   * @property {ReadonlyArray<DataTableSortRule<Row>>} [sortBy] - With `sortMode="multiple"`, the proposed sort list, highest priority first. Absent when `sortMode` is `"single"`. A Shift+click on a secondary column leaves `key` and `direction` unchanged, so read `sortBy` to see it.
    */
 
   /**
@@ -386,6 +394,25 @@
   export let sortDirection = "none";
 
   /**
+   * Specify how many columns a header click can sort by.
+   * `"multiple"` lets Shift+click (or Shift+Enter) add a header to the sort
+   * as the next priority key; a plain click sorts by that header alone.
+   * Headers show their priority once two or more are sorted.
+   * @type {"single" | "multiple"}
+   */
+  export let sortMode = "single";
+
+  /**
+   * Specify the columns to sort by, highest priority first. Read when
+   * `sortMode` is `"multiple"`, where `sortKey` and `sortDirection` mirror
+   * the first entry. Setting `sortKey` or `sortDirection` instead replaces
+   * the list with that one column.
+   * @type {ReadonlyArray<DataTableSortRule<Row>>}
+   * @bindable writable
+   */
+  export let sortBy = [];
+
+  /**
    * Set to `true` to only toggle between "ascending" and
    * "descending" sort directions, skipping "none".
    */
@@ -417,14 +444,37 @@
   export let sort = undefined;
 
   /**
-   * Override the text announced after `sortKey` or `sortDirection` changes.
-   * `header` is the sorted column. For `"none"`, it is the column that was
-   * sorted before.
-   * @type {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending") => string}
+   * Override the text announced after the sort changes.
+   * `header` is the primary sorted column. For `"none"`, it is the column
+   * that was sorted before. With `sortMode="multiple"` and two or more sorted
+   * columns, `context.sortBy` lists them, highest priority first.
+   * @type {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending", context?: { sortBy: ReadonlyArray<{ key: DataTableKey<Row>; header: DataTableHeader<Row> | undefined; direction: "ascending" | "descending" }> }) => string}
    */
-  export let sortStatusText = function sortStatusText(header, direction) {
+  export let sortStatusText = function sortStatusText(
+    header,
+    direction,
+    context,
+  ) {
     if (direction === "none" || !header) return "Not sorted";
+    if (context && context.sortBy.length > 1) {
+      return `Sorted by ${context.sortBy
+        .map((rule) => `${rule.header?.value ?? rule.key}, ${rule.direction}`)
+        .join("; then ")}`;
+    }
     return `Sorted by ${header.value ?? header.key}, ${direction}`;
+  };
+
+  /**
+   * Override the description of a header's place in a multi-column sort,
+   * read after its label. Used once two or more columns are sorted.
+   * @type {(direction: "ascending" | "descending", priority: number, count: number) => string}
+   */
+  export let sortPriorityText = function sortPriorityText(
+    direction,
+    priority,
+    count,
+  ) {
+    return `Sorted ${direction}, priority ${priority} of ${count}`;
   };
 
   /**
@@ -633,11 +683,13 @@
   import TableHeader from "./TableHeader.svelte";
   import TableRow from "./TableRow.svelte";
   import {
-    compareValues,
     formatHeaderWidth,
     getDisplayedRows,
     resolvePath,
     shouldIgnoreRowClick,
+    sortListsEqual,
+    sortRows,
+    toggleSortRule,
   } from "./data-table-utils.js";
 
   const dispatch = createEventDispatcher();
@@ -989,6 +1041,20 @@
     });
   }
 
+  /**
+   * What `ToolbarSortBy` reads: the sort in effect and the columns it can pick.
+   * @type {import("svelte/store").Writable<{ mode: "single" | "multiple"; list: ReadonlyArray<DataTableSortRule<Row>>; columns: ReadonlyArray<DataTableHeader<Row>> }>}
+   */
+  const sortState = writable({ mode: "single", list: [], columns: [] });
+
+  /**
+   * Sort by a list of columns, as a header click would.
+   * @param {ReadonlyArray<DataTableSortRule<Row>>} nextList
+   */
+  function applySort(nextList) {
+    requestSort(nextList.slice(0, sortMode === "multiple" ? undefined : 1));
+  }
+
   setContext("carbon:DataTable", {
     batchSelectedIds,
     tableRows,
@@ -998,6 +1064,8 @@
     refreshRow,
     refreshCells,
     setColumnAILabel,
+    sortState,
+    applySort,
   });
 
   let expanded = false;
@@ -1065,13 +1133,14 @@
    * table-level `sortable` in either direction (`false` opts out, `true` or
    * a comparator opts in); unset inherits `sortable`.
    * @param {DataTableHeader<Row>} header
+   * @param {boolean} [tableSortable] - Pass `sortable` from a `$:` statement so Svelte 3 and 4 re-run it
    */
-  function isHeaderSortable(header) {
+  function isHeaderSortable(header, tableSortable = sortable) {
     if (header.sort === false) return false;
     if (header.sort === true || typeof header.sort === "function") {
       return true;
     }
-    return sortable;
+    return tableSortable;
   }
 
   /**
@@ -1170,56 +1239,137 @@
     return next;
   }
 
+  /**
+   * The columns the table sorts by, highest priority first. In
+   * `"multiple"` mode that is `sortBy`, or the one column `sortKey` and
+   * `sortDirection` name while `sortBy` is empty.
+   * @param {"single" | "multiple"} mode
+   * @param {ReadonlyArray<DataTableSortRule<Row>>} by
+   * @param {DataTableKey<Row> | null} key
+   * @param {"none" | "ascending" | "descending"} direction
+   * @returns {ReadonlyArray<DataTableSortRule<Row>>}
+   */
+  function resolveSortList(mode, by, key, direction) {
+    if (mode === "multiple" && by.length > 0) return by;
+    return key != null && direction !== "none" ? [{ key, direction }] : [];
+  }
+
+  /**
+   * Keep `sortBy` and `sortKey` / `sortDirection` describing the same sort.
+   * Whichever side was assigned since the last run wins; `sortBy` wins a tie.
+   * An empty `sortBy` at the start leaves `sortKey` in charge, so a table
+   * that only sets `sortKey` still opens sorted.
+   * @type {ReadonlyArray<DataTableSortRule<Row>> | null}
+   */
+  let prevSortBy = sortBy.length > 0 ? null : sortBy;
+
+  $: if (sortMode === "multiple") {
+    const first = sortBy[0];
+    const firstKey = first ? first.key : null;
+    const firstDirection = first ? first.direction : "none";
+    if (sortBy !== prevSortBy) {
+      if (sortKey !== firstKey) sortKey = firstKey;
+      if (sortDirection !== firstDirection) sortDirection = firstDirection;
+    } else if (
+      firstKey !== (sortDirection === "none" ? null : sortKey) ||
+      (firstKey !== null && firstDirection !== sortDirection)
+    ) {
+      sortBy = resolveSortList("single", [], sortKey, sortDirection);
+    }
+    prevSortBy = sortBy;
+  }
+
+  $: sortList = resolveSortList(sortMode, sortBy, sortKey, sortDirection);
+
   let sortStatus = "";
   const announceSortStatus = createStatusAnnouncer(
     (text) => (sortStatus = text),
   );
-  let prevSortKey = sortKey;
-  let prevSortDirection = sortDirection;
+  let prevSortList = resolveSortList(sortMode, sortBy, sortKey, sortDirection);
 
   // Announce each sort once from a status region. The rows are not a live
   // region: a reorder would read every row again.
-  $: if (sortKey !== prevSortKey || sortDirection !== prevSortDirection) {
-    const statusKey = sortDirection === "none" ? prevSortKey : sortKey;
-    prevSortKey = sortKey;
-    prevSortDirection = sortDirection;
+  $: if (!sortListsEqual(sortList, prevSortList)) {
+    const previous = prevSortList[0];
+    prevSortList = sortList;
+    const primary = sortList[0] ?? previous;
     announceSortStatus(
       sortStatusText(
-        headers.find((header) => header.key === statusKey),
-        sortDirection,
+        headers.find((header) => header.key === primary?.key),
+        sortList[0]?.direction ?? "none",
+        sortList.length > 1
+          ? {
+              sortBy: sortList.map((rule) => ({
+                key: rule.key,
+                header: headers.find((header) => header.key === rule.key),
+                direction: rule.direction,
+              })),
+            }
+          : undefined,
       ),
     );
   }
 
-  $: ascending = sortDirection === "ascending";
-  $: sortingHeader = stableHeaders.find((header) => header.key === sortKey);
-  $: sorting =
-    sortKey != null &&
-    (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
-  $: sortPath = sortKey == null ? "" : String(sortKey);
-  $: sortedRows =
-    sorting && sortDirection !== "none"
-      ? [...$tableRows].sort((a, b) => {
-          const itemA = sortValueAt(a, sortPath);
-          const itemB = sortValueAt(b, sortPath);
-          const headerSort = sortingHeader?.sort;
+  /**
+   * The sorts that can run: a column in the list that is not sortable, or a
+   * repeat of one already listed, is skipped.
+   * @param {ReadonlyArray<DataTableSortRule<Row>>} list
+   * @param {ReadonlyArray<DataTableHeader<Row>>} columns
+   * @param {boolean} tableSortable
+   * @returns {import("./data-table-utils.js").SortSpec[]}
+   */
+  function resolveSortSpecs(list, columns, tableSortable) {
+    /** @type {import("./data-table-utils.js").SortSpec[]} */
+    const specs = [];
+    for (const rule of list) {
+      if (specs.some((spec) => spec.key === rule.key)) continue;
+      const header = columns.find((column) => column.key === rule.key);
+      if (header ? !isHeaderSortable(header, tableSortable) : !tableSortable) {
+        continue;
+      }
+      specs.push({
+        key: rule.key,
+        path: String(rule.key),
+        ascending: rule.direction === "ascending",
+        headerSort:
+          typeof header?.sort === "function" ? header.sort : undefined,
+      });
+    }
+    return specs;
+  }
 
-          if (typeof headerSort === "function") {
-            return compareValues(itemA, itemB, ascending, headerSort);
-          }
+  $: sortSpecs = resolveSortSpecs(sortList, stableHeaders, sortable);
+  $: sorting = sortSpecs.length > 0;
+  $: sortedRows = sorting ? sortRows($tableRows, sortSpecs, sort) : $tableRows;
 
-          if (sort) {
-            const result = sort(itemA, itemB, {
-              key: sortingKey(),
-              ascending,
-              row_a: a,
-              row_b: b,
-            });
-            return ascending ? result : -result;
-          }
-          return compareValues(itemA, itemB, ascending);
-        })
-      : $tableRows;
+  // Each sorted column's place in a multi-column sort. Single mode reads
+  // `sortKey` and `sortDirection` per header, as it always did.
+  $: multiSort = sortMode === "multiple";
+  $: sortSpecByKey = new Map(
+    multiSort
+      ? sortSpecs.map((spec, i) => [
+          spec.key,
+          {
+            direction: /** @type {"ascending" | "descending"} */ (
+              spec.ascending ? "ascending" : "descending"
+            ),
+            rank: i + 1,
+          },
+        ])
+      : [],
+  );
+  $: showSortPriority = multiSort && sortSpecs.length > 1;
+  $: sortState.set({
+    mode: sortMode,
+    list: sortList,
+    columns: stableHeaders.filter(
+      (header) =>
+        !header.empty &&
+        !header.columnHidden &&
+        header.sort !== false &&
+        isHeaderSortable(header, sortable),
+    ),
+  });
   $: defaultRowHeight =
     (effectiveSize && ROW_HEIGHTS[effectiveSize]) ?? DEFAULT_ROW_HEIGHT;
   $: virtualConfig = virtualize
@@ -1296,24 +1446,6 @@
   $: rowsToRender = virtualData?.isVirtualized
     ? virtualData.visibleItems
     : rowsToVirtualize;
-
-  /**
-   * A row's value at a sort key: one of its cell values.
-   * @param {Row} row
-   * @param {string} path
-   * @returns {DataTableSortValue<Row>}
-   */
-  function sortValueAt(row, path) {
-    return /** @type {DataTableSortValue<Row>} */ (resolvePath(row, path));
-  }
-
-  /**
-   * The key a sort runs by: set whenever `sorting` is.
-   * @returns {DataTableKey<Row>}
-   */
-  function sortingKey() {
-    return /** @type {DataTableKey<Row>} */ (sortKey);
-  }
 
   /**
    * Every id the row blocks render comes from these rows, so `get` finds it.
@@ -1399,6 +1531,16 @@
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
 
+  // Whether the last Enter or Space on a header held Shift.
+  let keyboardShift = false;
+
+  /** @param {KeyboardEvent} event */
+  function rememberHeaderShift(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      keyboardShift = event.shiftKey;
+    }
+  }
+
   /**
    * Sort on a header click and dispatch the header click events.
    * @param {Event} event
@@ -1409,35 +1551,20 @@
 
     // A computed column never sorts: it has no value to sort by.
     if (header.sort !== false && isHeaderSortable(header)) {
-      const currentSortDirection =
-        sortKey === header.key ? sortDirection : "none";
-      const effectiveSortAlways = header.sortAlways ?? sortAlways;
-      /** @type {Record<"none" | "ascending" | "descending", "none" | "ascending" | "descending">} */
-      const sortDirectionMap = effectiveSortAlways
-        ? {
-            none: "ascending",
-            ascending: "descending",
-            descending: "ascending",
-          }
-        : {
-            none: "ascending",
-            ascending: "descending",
-            descending: "none",
-          };
-      const nextSortDirection = sortDirectionMap[currentSortDirection];
-      const nextSortKey = nextSortDirection === "none" ? null : header.key;
-      const applySort = dispatch(
-        "sort",
-        { key: nextSortKey, direction: nextSortDirection },
-        { cancelable: true },
-      );
-      if (applySort) {
-        sortDirection = nextSortDirection;
-        sortKey = nextSortKey;
-      }
+      const click = /** @type {MouseEvent} */ (event);
+      const nextList = toggleSortRule(sortList, header.key, {
+        // Firefox drops Shift from the click a key press makes.
+        additive:
+          multiSort &&
+          (click.shiftKey || (click.detail === 0 && keyboardShift)),
+        always: header.sortAlways ?? sortAlways,
+      });
+      keyboardShift = false;
+      requestSort(nextList);
       dispatch("click:header", {
         header,
-        sortDirection: nextSortDirection,
+        sortDirection:
+          nextList.find((rule) => rule.key === header.key)?.direction ?? "none",
         target: event.target,
         currentTarget: event.currentTarget,
       });
@@ -1447,6 +1574,26 @@
         target: event.target,
         currentTarget: event.currentTarget,
       });
+    }
+  }
+
+  /**
+   * Dispatch the cancelable `sort` event for a new sort list and, unless it
+   * is cancelled, apply it.
+   * @param {ReadonlyArray<DataTableSortRule<Row>>} nextList
+   */
+  function requestSort(nextList) {
+    const key = nextList[0]?.key ?? null;
+    const direction = nextList[0]?.direction ?? "none";
+    const proceed = dispatch(
+      "sort",
+      multiSort ? { key, direction, sortBy: nextList } : { key, direction },
+      { cancelable: true },
+    );
+    if (proceed) {
+      if (multiSort) sortBy = nextList;
+      sortDirection = direction;
+      sortKey = key;
     }
   }
 
@@ -1708,20 +1855,41 @@
                 </th>
               {/if}
             {:else}
+              {@const sortEntry = multiSort
+                ? sortSpecByKey.get(header.key)
+                : undefined}
+              {@const headerSortActive = multiSort
+                ? sortEntry !== undefined
+                : sortKey === header.key}
+              {@const headerSortDirection = multiSort
+                ? (sortEntry?.direction ?? "none")
+                : sortKey === header.key
+                  ? sortDirection
+                  : "none"}
+              {@const headerSortPriority = showSortPriority
+                ? sortEntry?.rank
+                : undefined}
               {#if $$slots.headerDecorator}
                 <TableHeader
                   id="{id}-{header.key}"
                   class={formatAlignClass(header.columnAlign)}
                   style={formatHeaderWidth(header)}
                   sortable={isHeaderSortable(header)}
-                  sortDirection={sortKey === header.key
-                    ? sortDirection
-                    : "none"}
-                  active={sortKey === header.key}
+                  sortDirection={headerSortDirection}
+                  active={headerSortActive}
+                  sortPriority={headerSortPriority}
+                  sortDescription={headerSortPriority !== undefined && sortEntry
+                    ? sortPriorityText(
+                        sortEntry.direction,
+                        headerSortPriority,
+                        sortSpecs.length,
+                      )
+                    : undefined}
                   {...tableHeaderTranslateWithId
                     ? { translateWithId: tableHeaderTranslateWithId }
                     : {}}
                   on:click={(event) => handleHeaderClick(event, header)}
+                  on:keydown={rememberHeaderShift}
                 >
                   <slot name="cellHeader" {header}>{header.value}</slot>
                   <svelte:fragment slot="decorator">
@@ -1734,14 +1902,21 @@
                   class={formatAlignClass(header.columnAlign)}
                   style={formatHeaderWidth(header)}
                   sortable={isHeaderSortable(header)}
-                  sortDirection={sortKey === header.key
-                    ? sortDirection
-                    : "none"}
-                  active={sortKey === header.key}
+                  sortDirection={headerSortDirection}
+                  active={headerSortActive}
+                  sortPriority={headerSortPriority}
+                  sortDescription={headerSortPriority !== undefined && sortEntry
+                    ? sortPriorityText(
+                        sortEntry.direction,
+                        headerSortPriority,
+                        sortSpecs.length,
+                      )
+                    : undefined}
                   {...tableHeaderTranslateWithId
                     ? { translateWithId: tableHeaderTranslateWithId }
                     : {}}
                   on:click={(event) => handleHeaderClick(event, header)}
+                  on:keydown={rememberHeaderShift}
                 >
                   <slot name="cellHeader" {header}>{header.value}</slot>
                 </TableHeader>
