@@ -778,8 +778,8 @@ test.describe("forced colors", () => {
       .toBe(system.CanvasText);
   });
 
-  // Forced colors draw the reserved border on every InlineEdit, so the
-  // red invalid border reads like the resting one. The icon carries it.
+  // Forced colors turn the red invalid ring into CanvasText, so color
+  // alone can't mark the field. The icon carries it.
   test("an invalid InlineEdit keeps its warning icon", async ({ page }) => {
     const icon = ".bx--edit-in-place--invalid .bx--edit-in-place__warning-icon";
     expect.soft((await style(page, icon)).fill, icon).toBe(system.CanvasText);
