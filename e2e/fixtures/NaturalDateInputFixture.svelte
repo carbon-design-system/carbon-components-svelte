@@ -69,6 +69,11 @@
     />
   </div>
 
+  <!-- A box that cuts the calendar off, so the popover moves to a portal. -->
+  <div data-testid="clipped" style="overflow: hidden; height: 6.5rem">
+    <NaturalDateInput labelText="Clipped" {now} {timeZone} locale="en-US" />
+  </div>
+
   <div data-testid="disabled">
     <NaturalDateInput
       labelText="Archived"

@@ -288,6 +288,10 @@
 
   /** @type {null | HTMLElement} */
   let wrapper = null;
+  // The calendar. Popover moves it to a portal when a box around the field
+  // would cut it off, so it is not always inside `wrapper`.
+  /** @type {null | HTMLDivElement} */
+  let dialogRef = null;
   /** @type {null | HTMLButtonElement | HTMLAnchorElement} */
   let buttonRef = null;
   let mounted = false;
@@ -638,9 +642,23 @@
     open = true;
     dispatch("open", null);
     await tick();
-    /** @type {HTMLElement | null | undefined} */ (
-      wrapper?.querySelector('[role="gridcell"][tabindex="0"]')
-    )?.focus();
+    focusDay(4);
+  }
+
+  // A calendar that a box would cut off is built again in a portal a frame
+  // or two later, and the day that had focus goes with the first one. Look
+  // again for a few frames.
+  /** @param {number} framesLeft */
+  function focusDay(framesLeft) {
+    if (!open) return;
+    /** @type {HTMLElement | null | undefined} */
+    const day = dialogRef?.querySelector('[role="gridcell"][tabindex="0"]');
+    // Focus that leaves for another control closes the calendar, so what is
+    // left outside it is the field, the button or the page.
+    if (day && !dialogRef?.contains(document.activeElement)) day.focus();
+    if (framesLeft > 0 && typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(() => focusDay(framesLeft - 1));
+    }
   }
 
   /**
@@ -682,6 +700,24 @@
     closeCalendar("calendar", true);
   }
 
+  /**
+   * Add listeners straight to an element.
+   * @param {HTMLElement} node
+   * @param {Record<string, (event: any) => void>} handlers
+   */
+  function listen(node, handlers) {
+    for (const [type, handler] of Object.entries(handlers)) {
+      node.addEventListener(type, handler);
+    }
+    return {
+      destroy() {
+        for (const [type, handler] of Object.entries(handlers)) {
+          node.removeEventListener(type, handler);
+        }
+      },
+    };
+  }
+
   /** @param {KeyboardEvent} event */
   function handleCalendarKeydown(event) {
     if (event.key === "Escape" && open && !isImeComposition(event)) {
@@ -694,7 +730,12 @@
   /** @param {FocusEvent} event */
   function handleCalendarFocusout(event) {
     const next = event.relatedTarget;
-    if (open && next instanceof Node && !wrapper?.contains(next)) {
+    if (
+      open &&
+      next instanceof Node &&
+      !wrapper?.contains(next) &&
+      !dialogRef?.contains(next)
+    ) {
       closeCalendar("blur");
     }
   }
@@ -756,7 +797,7 @@
       <div
         bind:this={wrapper}
         class:bx--natural-date__calendar={true}
-        on:keydown={handleCalendarKeydown}
+        on:keydown|capture={handleCalendarKeydown}
         on:focusout={handleCalendarFocusout}
       >
         <Button
@@ -764,6 +805,7 @@
           kind="tertiary"
           icon={Calendar}
           iconDescription={translateWithId("calendar")}
+          hideTooltip={open}
           disabled={disabled || readonly}
           aria-haspopup="dialog"
           aria-expanded={open ? "true" : "false"}
@@ -777,7 +819,15 @@
           on:close={(event) => dispatch("close", event.detail)}
         >
           {#if open}
+            <!-- In a portal the events do not reach the wrapper, and Svelte 5
+                 does not delegate to a root that the portal is outside of, so
+                 the listeners are added to the element itself. -->
             <div
+              bind:this={dialogRef}
+              use:listen={{
+                keydown: handleCalendarKeydown,
+                focusout: handleCalendarFocusout,
+              }}
               id={calendarId}
               class:bx--natural-date__popover={true}
               role="dialog"

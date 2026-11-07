@@ -85,6 +85,33 @@ test.describe("NaturalDateInput", () => {
     await expect(field(page)).toHaveValue("Mar 12, 2027");
   });
 
+  // A box that would cut the calendar off moves it to a portal, outside the
+  // component's own element. Escape and focus must still reach it.
+  test("closes a calendar in a portal with Escape, and when focus leaves", async ({
+    page,
+  }) => {
+    const clipped = page.getByTestId("clipped");
+    await clipped.getByRole("button", { name: "Choose a date" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    expect(
+      await dialog.evaluate((el) => !el.closest("[data-testid=clipped]")),
+    ).toBe(true);
+    // The portal builds the calendar again, and focus finds the day after it.
+    await expect(dialog.locator("[role=gridcell][tabindex='0']")).toBeFocused();
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(
+      clipped.getByRole("button", { name: "Choose a date" }),
+    ).toBeFocused();
+
+    await clipped.getByRole("button", { name: "Choose a date" }).click();
+    await expect(dialog.locator("[role=gridcell][tabindex='0']")).toBeFocused();
+    await field(page).focus();
+    await expect(dialog).toBeHidden();
+  });
+
   test("explains text that is not a date when the field is left", async ({
     page,
   }) => {
