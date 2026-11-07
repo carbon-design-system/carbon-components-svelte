@@ -172,15 +172,18 @@
     return Math.round(clamp(percent, 0, 100) * 100) / 100;
   }
 
-  // Below `min`, a size snaps to `collapsedPercent` past the halfway point
-  // and back up to `min` before it. Without `collapsedSize` the two match,
-  // and this is a plain clamp.
+  // Below `min`, a size renders at `min`, and at `collapsedPercent` once it
+  // reaches it. A drag or arrow key also snaps to `collapsedPercent` past
+  // halfway between the two, so a `size` set from outside, or a splitter
+  // that narrows, never collapses a pane the user left open. Without
+  // `collapsedSize` the two match, and this is a plain clamp.
   // Reactive statements pass the bounds so Svelte sees them as dependencies.
   /**
    * @param {number} value
    * @param {number} [lower]
    * @param {number} [upper]
    * @param {number} [collapsedTo]
+   * @param {boolean} [snap]
    * @returns {number}
    */
   function constrain(
@@ -188,16 +191,24 @@
     lower = minPercent,
     upper = maxPercent,
     collapsedTo = collapsedPercent,
+    snap = false,
   ) {
-    if (value < lower && value <= (collapsedTo + lower) / 2) return collapsedTo;
+    const snapAt = snap ? (collapsedTo + lower) / 2 : collapsedTo;
+    if (value < lower && value <= snapAt) return collapsedTo;
     return clamp(value, lower, upper);
   }
 
   // Drag math yields long fractions; two decimals is finer than a pixel on
   // any realistic splitter and keeps `aria-valuenow` readable.
-  /** @param {number} next */
-  function setSize(next) {
-    size = Math.round(constrain(next) * 100) / 100;
+  /**
+   * @param {number} next
+   * @param {boolean} [snap]
+   */
+  function setSize(next, snap = false) {
+    size =
+      Math.round(
+        constrain(next, minPercent, maxPercent, collapsedPercent, snap) * 100,
+      ) / 100;
   }
 
   // `bind:size` updates on every step of a drag; `resize` fires once per
@@ -269,6 +280,7 @@
     if (!length) return;
     setSize(
       dragStartSize + dragDirection * ((point - dragStartPoint) / length) * 100,
+      true,
     );
   }
 
@@ -303,7 +315,7 @@
     }
     event.preventDefault();
     const prevSize = renderedSize;
-    setSize(next);
+    setSize(next, true);
     dispatchResize(prevSize);
   }
 

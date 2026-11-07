@@ -13,7 +13,7 @@ description: Splitters divide a view into two resizable panes, such as a list be
 
 Place content in the `start` and `end` slots. The splitter fills its container, so give the container a height. `size` sets the start pane's share as a percentage and defaults to `50`.
 
-Drag the separator to resize the panes, or focus it and use the arrow keys; <DocKbd label="Shift" /> + arrow key moves 10 times as far. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the limits, <DocKbd label="Enter" /> collapses the start pane and restores it, and a double click restores the starting size.
+Drag the separator to resize the panes, or focus it and use the arrow keys; <DocKbd label="Shift" /> + arrow key moves 10 times as far. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the limits, <DocKbd label="Enter" /> collapses the start pane and restores it, and a double click restores the starting size. On a touch screen, the separator takes taps across 24px.
 
 <Box height="12rem" border="subtle">
   <Splitter size={30}>
@@ -48,6 +48,8 @@ Pass a pixel length such as `"200px"` to `min` or `max` to hold the start pane a
 
 Use `bind:collapsed` to collapse the start pane to `min` from your own control, such as a toolbar button. Setting it back to `false` restores the size the pane had before. It also turns `true` whenever the user moves the separator to `min`, whether with <DocKbd label="Enter" />, <DocKbd label="Home" />, or a drag. A pane shrunk to nothing is inert, so its content leaves the tab order.
 
+WCAG 2.5.7 asks for a way to resize with one pointer and no drag. A button like this one meets it.
+
 <Stack gap={5}>
   <Box height="12rem" border="subtle">
     <Splitter size={30} bind:collapsed separatorLabel="Resize file tree">
@@ -62,7 +64,7 @@ Use `bind:collapsed` to collapse the start pane to `min` from your own control, 
 
 ### Collapse below min
 
-Set `collapsedSize` to let the start pane collapse further than it resizes, such as a sidebar that stays at least `200px` wide but can still be hidden. <DocKbd label="Enter" /> and `collapsed` go to `collapsedSize`, and dragging past halfway between `min` and `collapsedSize` snaps the pane collapsed; dragging back snaps it open. <DocKbd label="Home" /> still stops at `min`.
+Set `collapsedSize` to let the start pane collapse further than it resizes, such as a sidebar that stays at least `200px` wide but can still be hidden. <DocKbd label="Enter" /> and `collapsed` go to `collapsedSize`, and dragging past halfway between `min` and `collapsedSize` snaps the pane collapsed; dragging back snaps it open. <DocKbd label="Home" /> still stops at `min`. A `size` below `min` opens the pane at `min`, even when the splitter narrows, so only the user or `collapsed` collapses it.
 
 <Box height="12rem" border="subtle">
   <Splitter size={30} min="200px" collapsedSize={0} separatorLabel="Resize service list">
