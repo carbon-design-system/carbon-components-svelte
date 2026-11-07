@@ -43,6 +43,13 @@
   export let ref = null;
 
   /**
+   * Internal: set by `DataTable` when its rows can stack. A stacked row is
+   * not a table row to CSS, so the table, its rows and cells say what they
+   * are.
+   */
+  export let explicitRoles = false;
+
+  /**
    * Id of an element that labels the table (e.g. `DataTable`'s title heading).
    * Internal: set directly by `DataTable`. Standalone compositions
    * (`TableContainer` wrapping `Table`) get this from context instead.
@@ -178,6 +185,7 @@
   >
     <table
       bind:this={tableRef}
+      role={explicitRoles ? "table" : undefined}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}
@@ -191,6 +199,7 @@
       class:bx--data-table--static={useStaticWidth}
       class:bx--data-table--sticky-header={stickyHeader}
       class:bx--data-table--fixed-layout={fixedLayout}
+      class:bx--data-table--stacked={explicitRoles}
       style={tableStyle}
     >
       <slot />
@@ -217,6 +226,8 @@
       class:bx--data-table--static={useStaticWidth}
       class:bx--data-table--sticky-header={stickyHeader}
       class:bx--data-table--fixed-layout={fixedLayout}
+      class:bx--data-table--stacked={explicitRoles}
+      role={explicitRoles ? "table" : undefined}
       {...$$restProps}
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}

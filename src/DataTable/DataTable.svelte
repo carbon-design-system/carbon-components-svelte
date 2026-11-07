@@ -129,6 +129,8 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {string} [stackedLabel] - The label shown above the value in a stacked row. Defaults to `value`; `""` shows none. Only applies when `stacked` is not `"never"`.
+   * @property {boolean} [stackedHidden] - Whether the column is left out of a stacked row. Only applies when `stacked` is not `"never"`.
    */
 
   /**
@@ -145,6 +147,9 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {string} [stackedLabel] - The label shown above the value in a stacked row. Defaults to `value`; `""` shows none. Only applies when `stacked` is not `"never"`.
+   * @property {boolean} [stackedHidden] - Whether the column is left out of a stacked row. Only applies when `stacked` is not `"never"`.
+   * @property {boolean} [primary] - Whether the column is the title of a stacked row: its value shows first, with no label. Only applies when `stacked` is not `"never"`.
    */
 
   /**
@@ -162,6 +167,9 @@
    * @property {string} [width]
    * @property {string} [minWidth]
    * @property {"start" | "end"} [columnAlign] - Horizontal alignment of the column header and cells. Logical, so `end` is the right edge in LTR and the left edge in RTL. Defaults to `"start"`.
+   * @property {string} [stackedLabel] - The label shown above the value in a stacked row. Defaults to `value`; `""` shows none. Only applies when `stacked` is not `"never"`.
+   * @property {boolean} [stackedHidden] - Whether the column is left out of a stacked row. Only applies when `stacked` is not `"never"`.
+   * @property {boolean} [primary] - Whether the column is the title of a stacked row: its value shows first, with no label. Only applies when `stacked` is not `"never"`.
    */
 
   /**
@@ -513,6 +521,43 @@
   export let useStaticWidth = false;
 
   /**
+   * Set how the table lays out its rows in a narrow space.
+   * - `"never"`: a table that scrolls sideways (default).
+   * - `"auto"`: each row becomes a card of "label: value" pairs while the
+   *   table's own box is narrower than `stackedBreakpoint`. CSS decides, so
+   *   the server render needs no script and does not flash. `useStaticWidth`
+   *   is ignored, as the box has to be sized by its parent.
+   * - `"always"`: always cards.
+   *
+   * In cards the header row is hidden and every cell carries its label, so
+   * sorting and select all move to a bar above the cards. `stickyHeader`
+   * has no header to stick, and `virtualize` is off (card heights vary).
+   * @type {"never" | "auto" | "always"}
+   */
+  export let stacked = "never";
+
+  /**
+   * Set the table width below which `stacked="auto"` stacks: `"md"` is
+   * 42rem and `"lg"` 66rem. A container query cannot read a custom
+   * property, so the breakpoints are fixed.
+   * @type {"md" | "lg"}
+   */
+  export let stackedBreakpoint = "md";
+
+  /**
+   * Override the text of the sort control a stacked table shows in place of
+   * its header row: its label, its option for no sort, and the word after a
+   * column's name in each option.
+   * @type {{ label: string; none: string; ascending: string; descending: string }}
+   */
+  export let stackedSortText = {
+    label: "Sort by",
+    none: "Default order",
+    ascending: "ascending",
+    descending: "descending",
+  };
+
+  /**
    * Set to `true` to use a fixed table layout, where a header's `width`/`minWidth`
    * is the column's exact rendered size instead of a floor that content can grow past.
    * Unset columns share the remaining space equally.
@@ -609,6 +654,7 @@
   import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import { createStatusAnnouncer } from "../ListBox/menu-status.js";
+  import ChevronDown from "../icons/ChevronDown.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { toCssLength } from "../utils/css-length.js";
@@ -1075,11 +1121,38 @@
   }
 
   /**
+   * The label a stacked row shows above a header's value. An empty column
+   * (actions) has none unless it sets `stackedLabel`.
+   * @param {DataTableHeader<Row>} header
+   * @returns {string | undefined}
+   */
+  function stackedLabelOf(header) {
+    if (header.stackedLabel !== undefined) return header.stackedLabel;
+    if (header.empty) return undefined;
+    const label = header.value;
+    return typeof label === "string" || typeof label === "number"
+      ? String(label)
+      : undefined;
+  }
+
+  /**
+   * How a stacked row places a header's cell.
+   * @param {DataTableHeader<Row>} header
+   * @returns {"primary" | "hidden" | "actions" | undefined}
+   */
+  function stackedRoleOf(header) {
+    if (header.stackedHidden) return "hidden";
+    if (!header.empty && header.primary) return "primary";
+    if (header.empty) return "actions";
+    return undefined;
+  }
+
+  /**
    * Build cell objects for one row. Always new objects so `display` columns re-run.
    * @param {Row} row
    */
   function computeRowCells(row) {
-    /** @type {Array<{ key: string; value: DataTableValue; display?: (item: DataTableValue, row: any) => DataTableValue; empty?: boolean; columnMenu?: boolean; columnAlign?: "start" | "end"; }>} */
+    /** @type {Array<{ key: string; value: DataTableValue; display?: (item: DataTableValue, row: any) => DataTableValue; empty?: boolean; columnMenu?: boolean; columnAlign?: "start" | "end"; stackedLabel?: string; stacked?: "primary" | "hidden" | "actions"; }>} */
     const cells = [];
 
     // Index into `headers` rather than the visible subset so hiding a preceding
@@ -1093,6 +1166,8 @@
         empty: header.empty,
         columnMenu: header.columnMenu,
         columnAlign: header.columnAlign,
+        stackedLabel: stackedLabelOf(header),
+        stacked: stackedRoleOf(header),
       });
     });
 
@@ -1155,7 +1230,9 @@
             a.display === b.display &&
             a.empty === b.empty &&
             a.columnMenu === b.columnMenu &&
-            a.columnAlign === b.columnAlign
+            a.columnAlign === b.columnAlign &&
+            a.stackedLabel === b.stackedLabel &&
+            a.stacked === b.stacked
           ) {
             newCells[i] = a;
           } else {
@@ -1222,17 +1299,22 @@
       : $tableRows;
   $: defaultRowHeight =
     (effectiveSize && ROW_HEIGHTS[effectiveSize]) ?? DEFAULT_ROW_HEIGHT;
-  $: virtualConfig = virtualize
-    ? {
-        itemHeight: defaultRowHeight,
-        maxVisibleRows: 10,
-        containerHeight: undefined,
-        overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
-        threshold: DEFAULT_VIRTUAL_LIST_CONFIG.threshold,
-        maxItems: undefined,
-        ...(typeof virtualize === "object" ? virtualize : {}),
-      }
-    : null;
+  // Cards vary in height, and the window math assumes one row height.
+  $: stackedOn = stacked === "auto" || stacked === "always";
+  $: rowRole = stackedOn ? "row" : undefined;
+  $: cellRole = stackedOn ? "cell" : undefined;
+  $: virtualConfig =
+    virtualize && !stackedOn
+      ? {
+          itemHeight: defaultRowHeight,
+          maxVisibleRows: 10,
+          containerHeight: undefined,
+          overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
+          threshold: DEFAULT_VIRTUAL_LIST_CONFIG.threshold,
+          maxItems: undefined,
+          ...(typeof virtualize === "object" ? virtualize : {}),
+        }
+      : null;
 
   // "hide" filtering keeps every row mounted; it is incompatible with strategies that
   // already render a bounded subset (pagination, virtualization), so fall back to
@@ -1450,6 +1532,86 @@
     }
   }
 
+  /** @param {Event} event */
+  function handleSelectAllChange(event) {
+    const input = /** @type {HTMLInputElement} */ (event.target);
+    dispatch("click:header--select", {
+      indeterminate,
+      selected: !indeterminate && input.checked,
+    });
+
+    if (indeterminate) {
+      input.checked = false;
+    }
+
+    if (input.checked) {
+      const next = new Set(selectedRowIds);
+      for (const id of selectableRowIds) next.add(id);
+      selectedRowIds = [...next];
+    } else {
+      const scope = new Set(selectableRowIds);
+      selectedRowIds = selectedRowIds.filter((id) => !scope.has(id));
+    }
+  }
+
+  function handleExpandAllClick() {
+    expanded = !expanded;
+    if (expanded) {
+      const next = new Set(expandedRowIds);
+      for (const rid of expandableRowIds) next.add(rid);
+      expandedRowIds = [...next];
+    } else {
+      const scope = new Set(expandableRowIds);
+      expandedRowIds = expandedRowIds.filter((rid) => !scope.has(rid));
+    }
+
+    dispatch("click:header--expand", { expanded });
+  }
+
+  // Cards have no header row, so the controls it holds (sort, select all,
+  // expand all) move to a bar above them.
+  $: stackedSortHeaders = visibleHeaders.filter(
+    (header) =>
+      !header.empty &&
+      !header.stackedHidden &&
+      header.sort !== false &&
+      isHeaderSortable(header),
+  );
+  $: stackedSortValue =
+    sortKey == null || sortDirection === "none"
+      ? ""
+      : `${stackedSortHeaders.findIndex((header) => header.key === sortKey)}:${sortDirection}`;
+  $: stackedHasSelectAll = batchSelection && !radio;
+  $: stackedHasControls =
+    stackedOn &&
+    (stackedSortHeaders.length > 0 || stackedHasSelectAll || batchExpansion);
+
+  const sortDirections = /** @type {const} */ (["ascending", "descending"]);
+
+  /** @param {Event} event */
+  function handleStackedSort(event) {
+    const select = /** @type {HTMLSelectElement} */ (event.currentTarget);
+    const [index, direction] = select.value.split(":");
+    const header = select.value ? stackedSortHeaders[Number(index)] : undefined;
+    const nextKey = header
+      ? /** @type {DataTableKey<Row>} */ (header.key)
+      : null;
+    const nextDirection = header
+      ? /** @type {"ascending" | "descending"} */ (direction)
+      : "none";
+    const applySort = dispatch(
+      "sort",
+      { key: nextKey, direction: nextDirection },
+      { cancelable: true },
+    );
+    if (applySort) {
+      sortDirection = nextDirection;
+      sortKey = nextKey;
+    } else {
+      select.value = stackedSortValue;
+    }
+  }
+
   $: hasRowDecorator = $$slots.rowDecorator;
 
   // The title decorator has no AI surface, so its state is not read.
@@ -1499,7 +1661,18 @@
   }
 </script>
 
-<TableContainer {id} {useStaticWidth} {...wrapperProps}>
+<TableContainer
+  {id}
+  useStaticWidth={useStaticWidth && stacked !== "auto"}
+  {...wrapperProps}
+  class={joinClasses(
+    wrapperProps.class,
+    stackedOn ? "bx--data-table-container--stacked" : undefined,
+    stackedOn
+      ? `bx--data-table-container--stacked-${stacked === "auto" ? stackedBreakpoint : stacked}`
+      : undefined,
+  )}
+>
   {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren || $$slots.decorator}
     <div
       class:bx--data-table-header={true}
@@ -1537,6 +1710,79 @@
     </div>
   {/if}
   <slot />
+  {#if stackedHasControls}
+    <div class:bx--data-table-stacked-controls={true}>
+      {#if stackedHasSelectAll}
+        <div class:bx--data-table-stacked-controls__select={true}>
+          <InlineCheckbox
+            id="{id}-stacked-select-all"
+            name="{id}-stacked-select-all"
+            value="all"
+            checked={selectAll}
+            {indeterminate}
+            on:change={handleSelectAllChange}
+          />
+          <label
+            for="{id}-stacked-select-all"
+            class:bx--data-table-stacked-controls__label={true}
+            >{translateWithId("selectAll")}</label
+          >
+        </div>
+      {/if}
+      {#if batchExpansion}
+        <button
+          type="button"
+          class:bx--btn={true}
+          class:bx--btn--ghost={true}
+          class:bx--btn--sm={true}
+          aria-expanded={expanded}
+          aria-controls={expandableRowIds
+            .map((rid) => `${id}-expandable-row-${rid}`)
+            .join(" ")}
+          on:click={handleExpandAllClick}
+        >
+          {translateWithId(expanded ? "collapseAll" : "expandAll")}
+        </button>
+      {/if}
+      {#if stackedSortHeaders.length > 0}
+        <div
+          class:bx--select={true}
+          class:bx--select--inline={true}
+          class:bx--data-table-stacked-controls__sort={true}
+        >
+          <label for="{id}-stacked-sort" class:bx--label={true}
+            >{stackedSortText.label}</label
+          >
+          <div class:bx--select-input--inline__wrapper={true}>
+            <div class:bx--select-input__wrapper={true}>
+              <select
+                id="{id}-stacked-sort"
+                class:bx--select-input={true}
+                class:bx--select-input--sm={true}
+                on:change={handleStackedSort}
+              >
+                <option value="" selected={stackedSortValue === ""}
+                  >{stackedSortText.none}</option
+                >
+                {#each stackedSortHeaders as header, index (header.key)}
+                  {#each sortDirections as direction (direction)}
+                    <option
+                      value="{index}:{direction}"
+                      selected={stackedSortValue === `${index}:${direction}`}
+                      >{stackedLabelOf(header) ?? header.key}, {stackedSortText[
+                        direction
+                      ]}</option
+                    >
+                  {/each}
+                {/each}
+              </select>
+              <ChevronDown class="bx--select__arrow" />
+            </div>
+          </div>
+        </div>
+      {/if}
+    </div>
+  {/if}
   <div
     bind:this={scrollContainerRef}
     use:formReset={handleFormReset}
@@ -1555,6 +1801,7 @@
       {sortable}
       {useStaticWidth}
       {fixedLayout}
+      explicitRoles={stackedOn}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
       aria-label={ariaLabel}
@@ -1608,21 +1855,7 @@
                   aria-controls={expandableRowIds
                     .map((rid) => `${id}-expandable-row-${rid}`)
                     .join(" ")}
-                  on:click={() => {
-                    expanded = !expanded;
-                    if (expanded) {
-                      const next = new Set(expandedRowIds);
-                      for (const rid of expandableRowIds) next.add(rid);
-                      expandedRowIds = [...next];
-                    } else {
-                      const scope = new Set(expandableRowIds);
-                      expandedRowIds = expandedRowIds.filter(
-                        (rid) => !scope.has(rid),
-                      );
-                    }
-
-                    dispatch("click:header--expand", { expanded });
-                  }}
+                  on:click={handleExpandAllClick}
                 >
                   <slot
                     name="expandIcon"
@@ -1660,30 +1893,7 @@
                 value="all"
                 checked={selectAll}
                 {indeterminate}
-                on:change={(event) => {
-                  dispatch("click:header--select", {
-                    indeterminate,
-                    selected:
-                      !indeterminate &&
-                      /** @type {HTMLInputElement} */ (event.target).checked,
-                  });
-
-                  if (indeterminate) {
-                    /** @type {HTMLInputElement} */ (event.target).checked =
-                      false;
-                  }
-
-                  if (/** @type {HTMLInputElement} */ (event.target).checked) {
-                    const next = new Set(selectedRowIds);
-                    for (const id of selectableRowIds) next.add(id);
-                    selectedRowIds = [...next];
-                  } else {
-                    const scope = new Set(selectableRowIds);
-                    selectedRowIds = selectedRowIds.filter(
-                      (id) => !scope.has(id),
-                    );
-                  }
-                }}
+                on:change={handleSelectAllChange}
               />
             </th>
           {/if}
@@ -1750,7 +1960,7 @@
           {/each}
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody role={stackedOn ? "rowgroup" : undefined}>
         {#if virtualData?.isVirtualized}
           <!-- Spacer row for offset -->
           {#if virtualData.startIndex > 0}
@@ -2067,6 +2277,7 @@
                   })
                 : rowClass}
             <tr
+              role={rowRole}
               data-row={row.id}
               data-parent-row={expandable ? true : undefined}
               hidden={hideMode && !matchedRowIdsSet.has(row.id)
@@ -2109,6 +2320,7 @@
             >
               {#if hasRowDecorator}
                 <td
+                  role={cellRole}
                   class="bx--table-column-decorator"
                   class:bx--table-cell={true}
                 >
@@ -2123,6 +2335,7 @@
               {/if}
               {#if expandable}
                 <td
+                  role={cellRole}
                   class="bx--table-expand"
                   class:bx--table-cell={true}
                   headers="{id}-expand"
@@ -2165,6 +2378,7 @@
               {/if}
               {#if isSelectionEnabled}
                 <td
+                  role={cellRole}
                   class:bx--table-cell={true}
                   class:bx--table-column-checkbox={true}
                   class:bx--table-column-radio={radio}
@@ -2273,6 +2487,9 @@
                   cellClassValue,
                 )}
                 <td
+                  role={cellRole}
+                  data-label={stackedOn ? cell.stackedLabel : undefined}
+                  data-stacked={stackedOn ? cell.stacked : undefined}
                   class={cellClasses}
                   class:bx--table-cell={true}
                   class:bx--table-column-menu={cell.empty && cell.columnMenu}
@@ -2307,6 +2524,7 @@
 
             {#if expandable}
               <tr
+                role={rowRole}
                 id="{id}-expandable-row-{row.id}"
                 data-child-row
                 hidden={hideMode && !matchedRowIdsSet.has(row.id)
@@ -2323,7 +2541,11 @@
                 }}
               >
                 {#if isExpanded && isExpandable}
-                  <td colspan={totalColumns} class:bx--table-cell={true}>
+                  <td
+                    role={cellRole}
+                    colspan={totalColumns}
+                    class:bx--table-cell={true}
+                  >
                     <div class:bx--child-row-inner-container={true}>
                       <slot name="expandedRow" {row} rowSelected={isSelected} />
                     </div>
@@ -2335,10 +2557,11 @@
         {/if}
       </TableBody>
       {#if $$slots.footerCell}
-        <TableFoot>
-          <TableRow>
+        <TableFoot role={stackedOn ? "rowgroup" : undefined}>
+          <TableRow role={rowRole}>
             {#if hasRowDecorator}
               <td
+                role={cellRole}
                 aria-hidden="true"
                 class:bx--table-cell={true}
                 class:bx--table-column-decorator={true}
@@ -2346,6 +2569,7 @@
             {/if}
             {#if expandable}
               <td
+                role={cellRole}
                 aria-hidden="true"
                 class:bx--table-cell={true}
                 class:bx--table-expand={true}
@@ -2353,6 +2577,7 @@
             {/if}
             {#if isSelectionEnabled}
               <td
+                role={cellRole}
                 aria-hidden="true"
                 class:bx--table-cell={true}
                 class:bx--table-column-checkbox={true}
@@ -2361,6 +2586,9 @@
             {/if}
             {#each visibleHeaders as header, index (header.key)}
               <td
+                role={cellRole}
+                data-label={stackedOn ? stackedLabelOf(header) : undefined}
+                data-stacked={stackedOn ? stackedRoleOf(header) : undefined}
                 class={formatAlignClass(header.columnAlign)}
                 class:bx--table-cell={true}
               >
