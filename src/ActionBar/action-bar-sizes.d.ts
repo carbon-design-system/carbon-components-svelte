@@ -1,0 +1,12 @@
+/** The square size of a button, and of the "More" trigger, in pixels. */
+export const ACTION_BAR_SIZE_PX: Readonly<
+  Record<"xs" | "sm" | "md" | "lg", number>
+>;
+
+/** `Button` size for a bar size. */
+export const BUTTON_SIZE_BY_ACTION_BAR_SIZE: Readonly<{
+  xs: "xs";
+  sm: "small";
+  md: "field";
+  lg: "default";
+}>;
