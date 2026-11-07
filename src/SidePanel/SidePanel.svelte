@@ -600,6 +600,21 @@
   $: if (currentStep !== prevStep) {
     prevStep = currentStep;
     if (innerContentRef) innerContentRef.scrollTop = 0;
+    keepFocusInPanel();
+  }
+
+  // A step change can remove the focused control, as the back button
+  // hides at step 0. Focus then goes to the new step, as it does on open,
+  // so Escape and the focus trap keep working. This runs before the DOM
+  // update, so `activeElement` is still the control that had focus.
+  function keepFocusInPanel() {
+    if (!open || !ref?.contains(document.activeElement)) return;
+    tick().then(() => {
+      if (!open || !ref || ref.contains(document.activeElement)) return;
+      focusPanel();
+      // A slide-in panel focuses only a `selectorPrimaryFocus` match.
+      if (!ref.contains(document.activeElement)) ref.focus();
+    });
   }
 
   $: titleId = `${id}-title`;
