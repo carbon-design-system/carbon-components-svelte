@@ -1,5 +1,6 @@
 <script lang="ts">
-  /** The page's h2/h3 headings, as `tocHeadings` in `docs/scripts/toc-headings.ts` scrapes them. */
+  import { Text } from "carbon-components-svelte";
+
   export let headings: { id: string; text: string; depth: number }[] = [];
 
   const API_LINKS = [
@@ -12,6 +13,9 @@
   ];
 </script>
 
+<Text tag="h5" type="label-01" color="primary" class="toc-section-label">
+  Examples
+</Text>
 <nav class="toc-nav">
   {#each headings as heading}
     <a
