@@ -1733,7 +1733,7 @@ Bind `sortBy` to read or set the whole sort. A table that mounts with `sortBy` o
 
 #### Server-side
 
-The `sort` event also carries `event.detail.sortBy`, the proposed list. Its `key` and `direction` are the first entry, so a Shift+click on a secondary column leaves them unchanged: read `sortBy` to see the change. Cancel the event with `preventDefault()`, request the order from your API, and assign `sortBy` once the response arrives. `ToolbarSortBy` dispatches the same event when its dialog is applied, once for the whole list.
+The `sort` event also carries `event.detail.sortBy`, the proposed list. Its `key` and `direction` are the first entry, so a Shift+click on a secondary column leaves them unchanged: read `sortBy` to see the change. Set `externalSort` so the table keeps the order of `rows` and only reflects the list in its headers, then request the order from your API. Without `externalSort`, cancel the event with `preventDefault()` and assign `sortBy` once the response arrives. `ToolbarSortBy` dispatches the same event when its dialog is applied, once for the whole list.
 
 <FileSource src="/framed/DataTable/DataTableMultiSortServer" />
 
