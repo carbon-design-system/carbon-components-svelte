@@ -791,6 +791,20 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
+  markdown-editor:
+    name: Markdown editor
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/markdown-editor.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MarkdownEditor
+    tags:
+      - input-control
   menu:
     name: Menu
     status: stable
