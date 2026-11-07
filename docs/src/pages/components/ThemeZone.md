@@ -44,7 +44,7 @@ Set `theme` to `"system"` to follow the operating system color scheme with CSS a
 
 ## Layers
 
-A zone starts a new layer stack, as in Carbon React. The zone's surface is the page surface, so a `Layer` inside it is layer 2, even when the zone itself sits in a `Layer`.
+A zone starts a new layer stack, as in Carbon React. The zone's surface is the page surface, so a `Layer` inside it is level 1, even when the zone itself sits in a `Layer`.
 
 <FileSource src="/framed/ThemeZone/ThemeZoneLayer" />
 
