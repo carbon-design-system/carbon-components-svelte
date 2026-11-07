@@ -117,6 +117,8 @@
   // that same update refuses focus in WebKit, so the focus stays on the
   // trigger behind the dialog. Ask again once the frame has painted.
   async function focusFirstField() {
+    // Nothing to focus on the server.
+    if (typeof requestAnimationFrame === "undefined") return;
     await tick();
     await new Promise((resolve) => requestAnimationFrame(resolve));
     const field = rulesRef?.querySelector("select");
