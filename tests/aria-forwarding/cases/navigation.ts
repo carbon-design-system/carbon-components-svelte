@@ -482,6 +482,11 @@ export const navigation: AriaEntry[] = [
       "Inline text; its key icons are aria-hidden and take no focus or role",
   },
   {
+    name: "Prose",
+    exempt:
+      "Text container; its only tab stop lets the keyboard scroll a wide code block",
+  },
+  {
     name: "Stack",
     exempt: "Layout wrapper; renders the element or component it is given",
   },

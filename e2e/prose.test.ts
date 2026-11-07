@@ -18,6 +18,29 @@ test.describe("Prose", () => {
     expect(results.violations).toEqual([]);
   });
 
+  test("gives a code block a tab stop only while it scrolls sideways", async ({
+    page,
+  }) => {
+    const pre = page.getByTestId("raw-pre");
+    await expect(pre).not.toHaveAttribute("tabindex");
+
+    await page.setViewportSize({ width: 320, height: 800 });
+    await expect(pre).toHaveAttribute("tabindex", "0");
+    // A skipped block gets its tab stop once it renders. WebKit reports a
+    // skipped block as overflowing, so axe checks it rendered.
+    const deferred = page.getByTestId("deferred-pre");
+    await deferred.scrollIntoViewIfNeeded();
+    await expect(deferred).toHaveAttribute("tabindex", "0");
+    const results = await new AxeBuilder({ page })
+      .include("#app")
+      .withRules(["scrollable-region-focusable"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await expect(pre).not.toHaveAttribute("tabindex");
+  });
+
   test("sets plain markup in the variant's type scale", async ({ page }) => {
     expect(await style(page.getByTestId("raw-p"), "font-size")).toBe("16px");
     expect(
