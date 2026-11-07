@@ -791,6 +791,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
+  media-player:
+    name: Media player
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/media-player.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MediaPlayer
   menu:
     name: Menu
     status: stable
