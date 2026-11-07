@@ -4,15 +4,7 @@ html {
 
 .prose > pre,
 .code-override .bx--snippet {
-  color-scheme: dark;
   max-width: none;
-}
-
-[theme="white"] .prose > pre,
-[theme="g10"] .prose > pre,
-[theme="white"] .code-override .bx--snippet,
-[theme="g10"] .code-override .bx--snippet {
-  color-scheme: light;
 }
 
 .prose > pre {
@@ -36,42 +28,17 @@ html {
 .code-override .bx--copy-btn,
 .code-override .bx--snippet,
 .code-override button.bx--btn.bx--snippet-btn--expand {
-  background-color: var(--cds-layer-01, var(--cds-layer-01));
-  color: #f4f4f4;
+  background-color: var(--cds-layer-01);
+  color: var(--cds-text-primary);
 }
 
 .code-override .bx--copy-btn:hover,
 .code-override button.bx--btn.bx--snippet-btn--expand:hover {
-  background-color: var(--cds-layer-hover-01, #393939);
+  background-color: var(--cds-layer-hover-01);
 }
 
 .code-override .bx--snippet__icon {
-  fill: #f4f4f4;
-}
-
-[theme="white"] .code-override .bx--copy-btn,
-[theme="g10"] .code-override .bx--copy-btn,
-[theme="white"] .code-override .bx--snippet,
-[theme="g10"] .code-override .bx--snippet,
-[theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand,
-[theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand {
-  background-color: var(--cds-layer-01, var(--cds-layer-01));
-  color: var(--cds-text-primary, #161616);
-}
-
-[theme="white"] .code-override .bx--copy-btn:hover,
-[theme="g10"] .code-override .bx--copy-btn:hover,
-[theme="white"] .code-override button.bx--btn.bx--snippet-btn--expand:hover,
-[theme="g10"] .code-override button.bx--btn.bx--snippet-btn--expand:hover {
-  background-color: var(
-    --cds-layer-hover-01,
-    var(--cds-field-hover-01, #e8e8e8)
-  );
-}
-
-[theme="white"] .code-override .bx--snippet__icon,
-[theme="g10"] .code-override .bx--snippet__icon {
-  fill: var(--cds-icon-primary, #161616);
+  fill: var(--cds-icon-primary);
 }
 
 .prose > pre,
@@ -88,16 +55,6 @@ html {
 
 .fix-overflow {
   min-width: 0;
-}
-
-[theme="white"] .code-override-inline,
-[theme="g10"] .code-override-inline {
-  background-color: var(--cds-field-01, #f4f4f4);
-}
-
-[theme="g80"] .code-override,
-[theme="g80"] .code-override-inline {
-  background-color: var(--cds-layer-01, var(--cds-layer-01));
 }
 
 /**
