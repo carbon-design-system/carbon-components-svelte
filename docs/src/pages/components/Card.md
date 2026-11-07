@@ -8,7 +8,6 @@ description: Cards group related content and actions on one surface, built from 
     AILabel,
     Box,
     Button,
-    Callout,
     Card,
     CardAction,
     CardActions,
@@ -21,18 +20,17 @@ description: Cards group related content and actions on one surface, built from 
     ContainedList,
     ContainedListItem,
     Layer,
+    OverflowMenu,
+    OverflowMenuItem,
     Stack,
   } from "carbon-components-svelte";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
-  import OverflowMenuVertical from "carbon-icons-svelte/lib/OverflowMenuVertical.svelte";
   import Report from "carbon-icons-svelte/lib/Report.svelte";
   import Star from "carbon-icons-svelte/lib/Star.svelte";
-</script>
+  import StarFilled from "carbon-icons-svelte/lib/StarFilled.svelte";
 
-<Callout
-  title="Preview"
-  subtitle="Card follows Carbon React's preview Card. Its API may change in a minor release."
-/>
+  let favorite = false;
+</script>
 
 ## Basic
 
@@ -54,14 +52,16 @@ Compose a card from `CardHeader`, `CardBody` and `CardFooter`, the same way as a
 
 ## Clickable
 
-Set `clickable` to `true` to make the whole card one interactive element, with hover, press and focus styles. Give it an accessible name with `aria-label` or `aria-labelledby`. A clickable card has no `CardFooter`; it shows an arrow at the bottom instead.
+Set `clickable` to `true` to make the whole card one interactive element, with hover, press and focus styles. The `CardTitle` gives the card its accessible name. Set `aria-label` or `aria-labelledby` to use a different name.
+
+A clickable card can't hold other buttons or links, so it doesn't render a `CardFooter` or `CardActions`. It shows an arrow at the bottom instead.
 
 ### Link
 
 Set `href` to render the card as a link.
 
 <Box maxWidth="20rem">
-  <Card clickable href="/components/Tile" aria-label="Object storage">
+  <Card clickable href="/components/Tile">
     <CardHeader>
       <CardTitle>Object storage</CardTitle>
     </CardHeader>
@@ -74,11 +74,7 @@ Set `href` to render the card as a link.
 Without `href`, the card renders as a button. <DocKbd label="Enter" /> and <DocKbd label="Space" /> both click it.
 
 <Box maxWidth="20rem">
-  <Card
-    clickable
-    aria-label="Project settings"
-    on:click={() => console.log("Open project settings")}
-  >
+  <Card clickable on:click={() => console.log("Open project settings")}>
     <CardHeader>
       <CardTitle>Project settings</CardTitle>
     </CardHeader>
@@ -96,7 +92,6 @@ Set `icon` to change the arrow, such as `Launch` for a link that leaves the app.
     href="https://www.carbondesignsystem.com/"
     target="_blank"
     icon={Launch}
-    aria-label="Carbon Design System"
   >
     <CardHeader>
       <CardTitle>Carbon Design System</CardTitle>
@@ -122,20 +117,17 @@ Set `density` to `"expressive"` for a larger title. The default is `"productive"
 
 ## Media
 
-Put a `CardMedia` in the `media` slot. It renders above the content at the aspect ratio set with `ratio`, and images fill it.
+Put a `CardMedia` in the `media` slot. It renders above the content at the aspect ratio set with `ratio`. An image fills it and is cropped to fit. Use an empty `alt` for a decorative image.
 
 <Box maxWidth="20rem">
   <Card>
     <CardMedia slot="media" ratio="2x1">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-        alt="IBM logo"
-      />
+      <img src="/card-media.svg" alt="" />
     </CardMedia>
     <CardHeader>
-      <CardTitle>Partner program</CardTitle>
+      <CardTitle>Coastal sensors</CardTitle>
     </CardHeader>
-    <CardBody>Joint offerings and co-marketing for registered partners.</CardBody>
+    <CardBody>Tide and wave readings from 14 stations, every 10 minutes.</CardBody>
   </Card>
 </Box>
 
@@ -146,15 +138,12 @@ Set `horizontal` to `true` to put the media beside the content. It fills the car
 <Box maxWidth="32rem">
   <Card horizontal>
     <CardMedia slot="media" mediaWidth="40%">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-        alt="IBM logo"
-      />
+      <img src="/card-media.svg" alt="" />
     </CardMedia>
     <CardHeader>
-      <CardTitle>Partner program</CardTitle>
+      <CardTitle>Coastal sensors</CardTitle>
     </CardHeader>
-    <CardBody>Joint offerings and co-marketing for registered partners.</CardBody>
+    <CardBody>Tide and wave readings from 14 stations, every 10 minutes.</CardBody>
   </Card>
 </Box>
 
@@ -180,6 +169,8 @@ Set `noPadding` on `CardBody` for content with its own spacing, such as a list, 
 ## Title
 
 `CardTitle` takes a `labelChildren` slot above the title and a `description` slot below it. Put an icon before the title with `CardTitleMedia`, or in the `titleStart` and `titleEnd` slots.
+
+The title is a heading. Inside a [Section](/components/Heading), it is one level below the section's heading; otherwise it is an `h3`. Set `headingLevel` to fit the page outline.
 
 <Box maxWidth="20rem">
   <Card>
@@ -212,7 +203,7 @@ Set `titleTruncate` to `true` to cut the title to one line, or to a number to cl
 
 ## Actions
 
-Put `CardActions` in the `actions` slot of `CardHeader` for quick actions, with each button in a `CardAction`. They sit in the top corner, and the title leaves room for them, on the server too.
+Put `CardActions` in the `actions` slot of `CardHeader` for quick actions, with each button in a `CardAction`. They sit in the top corner, and the title leaves room for them.
 
 <Box maxWidth="20rem">
   <Card>
@@ -223,8 +214,10 @@ Put `CardActions` in the `actions` slot of `CardHeader` for quick actions, with 
           <Button
             kind="ghost"
             size="sm"
-            icon={Star}
-            iconDescription="Add to favorites"
+            icon={favorite ? StarFilled : Star}
+            iconDescription={favorite ? "Remove from favorites" : "Add to favorites"}
+            isSelected={favorite}
+            on:click={() => (favorite = !favorite)}
           />
         </CardAction>
       </CardActions>
@@ -237,27 +230,27 @@ Put `CardActions` in the `actions` slot of `CardHeader` for quick actions, with 
 
 ### Footer actions
 
-Set `actionSet` on `CardFooter` to fill the footer with `CardAction`s. The footer gets a top border and the actions share the row. Set `iconOnly` on a `CardAction` that holds an icon-only button, so it keeps its width at the end of the row.
+Set `actionSet` on `CardFooter` to fill the footer with `CardAction`s. The footer gets a top border and the actions share the row. Set `iconOnly` on a `CardAction` that holds an icon-only control, such as an [OverflowMenu](/components/OverflowMenu), so it keeps its width at the end of the row.
 
 <Box maxWidth="20rem">
   <Card>
     <CardHeader>
-      <CardTitle>Delete the staging bucket?</CardTitle>
+      <CardTitle>Staging bucket</CardTitle>
     </CardHeader>
-    <CardBody>Its 1,204 objects are deleted too.</CardBody>
+    <CardBody>1,204 objects, updated 2 hours ago.</CardBody>
     <CardFooter actionSet>
       <CardAction>
-        <Button kind="secondary">Cancel</Button>
+        <Button kind="secondary">Share</Button>
       </CardAction>
       <CardAction>
-        <Button kind="danger">Delete</Button>
+        <Button>Open</Button>
       </CardAction>
       <CardAction iconOnly>
-        <Button
-          kind="ghost"
-          icon={OverflowMenuVertical}
-          iconDescription="More options"
-        />
+        <OverflowMenu size="xl" flipped iconDescription="More options">
+          <OverflowMenuItem text="Rename" />
+          <OverflowMenuItem text="Duplicate" />
+          <OverflowMenuItem danger text="Delete" />
+        </OverflowMenu>
       </CardAction>
     </CardFooter>
   </Card>
@@ -271,10 +264,7 @@ Put an `AILabel` in the `decorator` slot to mark the card's content as AI-genera
   <Stack gap={5}>
     <Card>
       <CardMedia slot="media" ratio="2x1">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-          alt="IBM logo"
-        />
+        <img src="/card-media.svg" alt="" />
       </CardMedia>
       <AILabel slot="decorator">
         <p>Generated from 90 days of billing data.</p>
@@ -284,7 +274,7 @@ Put an `AILabel` in the `decorator` slot to mark the card's content as AI-genera
       </CardHeader>
       <CardBody>Spend is projected to grow 12% next month.</CardBody>
     </Card>
-    <Card clickable href="/components/AILabel" aria-label="Usage forecast">
+    <Card clickable href="/components/AILabel">
       <AILabel slot="decorator">
         <p>Generated from 90 days of billing data.</p>
       </AILabel>
@@ -303,10 +293,7 @@ With media at the end, the label sits at the corner of the content, clear of the
 <Box maxWidth="32rem">
   <Card horizontal mediaPosition="end">
     <CardMedia slot="media" mediaWidth="40%">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
-        alt="IBM logo"
-      />
+      <img src="/card-media.svg" alt="" />
     </CardMedia>
     <AILabel slot="decorator">
       <p>Generated from 90 days of billing data.</p>
@@ -342,7 +329,7 @@ Place the card in a [Layer](/components/Layer) to put it on the next surface, so
 Set `disabled` to `true` to prevent interaction.
 
 <Box maxWidth="20rem">
-  <Card clickable disabled aria-label="Archived report">
+  <Card clickable disabled>
     <CardHeader>
       <CardTitle>Quarterly report</CardTitle>
     </CardHeader>

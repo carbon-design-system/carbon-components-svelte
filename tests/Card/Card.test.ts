@@ -3,7 +3,6 @@ import { user } from "../utils/user";
 import Card from "./Card.test.svelte";
 import CardDecorated from "./CardDecorated.test.svelte";
 import CardTitle from "./CardTitle.test.svelte";
-import CardTitleLabelSlot from "./CardTitleLabelSlot.test.svelte";
 
 describe("Card", () => {
   it("renders a static surface with the productive title style", () => {
@@ -121,25 +120,44 @@ describe("Card", () => {
     expect(launch?.getAttribute("d")).not.toBe(arrow);
   });
 
-  it("warns once when a clickable card has no accessible name", async () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { rerender } = render(Card, {
-      props: { clickable: true, label: "" },
-    });
-    await rerender({ density: "expressive" });
+  it.each([
+    [undefined, "button"],
+    ["/reports", "link"],
+  ] as const)("names a clickable card (href=%s) by its title", (href, role) => {
+    render(Card, { props: { clickable: true, href } });
 
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls[0][0]).toMatch(/accessible name/);
-    warn.mockRestore();
+    const card = screen.getByRole(role, { name: "Quarterly report" });
+    const title = screen.getByRole("heading", { name: "Quarterly report" });
+    expect(card).toHaveAttribute("aria-labelledby", title.id);
   });
 
-  it("skips a CardFooter in a clickable card, with a warning", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    render(Card, { props: { clickable: true, footer: true } });
+  it("lets aria-label replace the title as the name", () => {
+    render(Card, { props: { clickable: true, label: "Open the report" } });
+
+    const card = screen.getByRole("button", { name: "Open the report" });
+    expect(card).not.toHaveAttribute("aria-labelledby");
+  });
+
+  it("drops the title reference when a clickable card has no title", () => {
+    render(Card, { props: { clickable: true, title: false } });
+
+    expect(screen.getByTestId("card")).not.toHaveAttribute("aria-labelledby");
+  });
+
+  it("does not label a static card", () => {
+    render(Card);
+
+    expect(screen.getByTestId("card")).not.toHaveAttribute("aria-labelledby");
+  });
+
+  it("skips a CardFooter and CardActions in a clickable card", () => {
+    render(Card, { props: { clickable: true, footer: true, actions: true } });
 
     expect(screen.queryByTestId("footer")).toBeNull();
-    expect(warn).toHaveBeenCalledWith(expect.stringMatching(/CardFooter/));
-    warn.mockRestore();
+    expect(screen.queryByRole("button", { name: "Share" })).toBeNull();
+    expect(screen.getByTestId("header")).not.toHaveClass(
+      "bx--card__header--actions",
+    );
   });
 
   it("lays out an action set footer", () => {
@@ -290,19 +308,18 @@ describe("CardTitle", () => {
   });
 
   it.each([
-    ["labelChildren", "New label"],
-    ["label", "Old label"],
-  ] as const)("renders the %s slot above the title", (slots, text) => {
-    render(CardTitleLabelSlot, { props: { slots } });
+    [{}, 3],
+    [{ sectionLevel: 2 }, 3],
+    [{ sectionLevel: 4 }, 5],
+    [{ sectionLevel: 6 }, 6],
+    [{ headingLevel: 2 }, 2],
+    [{ sectionLevel: 2, headingLevel: 4 }, 4],
+  ] as const)("renders the title as a heading for %o", (props, level) => {
+    render(CardTitle, { props });
 
-    expect(screen.getByText(text)).toHaveClass("bx--card__label");
-  });
-
-  it("prefers the labelChildren slot over the label slot", () => {
-    render(CardTitleLabelSlot, { props: { slots: "both" } });
-
-    expect(screen.getByText("New label")).toHaveClass("bx--card__label");
-    expect(screen.queryByText("Old label")).toBeNull();
+    expect(
+      screen.getByRole("heading", { name: "Quarterly report", level }),
+    ).toHaveClass("bx--card__title-text-row");
   });
 
   it("truncates the title to one line at a maximum width", () => {
