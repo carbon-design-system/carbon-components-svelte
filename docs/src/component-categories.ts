@@ -120,6 +120,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Toggle",
       "Form",
       "FluidForm",
+      "ErrorSummary",
       "Stepper",
     ],
   },
