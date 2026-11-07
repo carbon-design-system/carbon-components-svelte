@@ -96,6 +96,7 @@
   class:bx--chat-message={true}
   class:bx--chat-message--me={from === "me"}
   class:bx--chat-message--continued={continued}
+  class:bx--chat-message--with-author={!!author && showAuthor && !continued}
   class:bx--chat-message--streaming={streaming}
   class:bx--chat-message--with-status={!!status && !typing}
   aria-busy={streaming ? "true" : undefined}
