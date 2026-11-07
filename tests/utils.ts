@@ -6,8 +6,10 @@ export const testConfig = {
   // Resolved from each harness root (tests/, tests-svelte3/, tests-svelte4/).
   environment: "../dom-env/vitest.js",
   // Fail a test that leaves the library's window and document listeners
-  // behind; see `tests/utils/setup-globals.ts`.
-  environmentOptions: { domEnv: { leaks: true } },
+  // behind (`tests/utils/setup-globals.ts`), or whose DOM breaks a
+  // structural accessibility rule (`tests/utils/dom-check-runner.ts`).
+  environmentOptions: { domEnv: { leaks: true, checks: true } },
+  runner: "../tests/utils/dom-check-runner.ts",
   clearMocks: true,
   // Suppress `console` output in CI.
   silent: !!process.env.CI,
