@@ -62,8 +62,8 @@
     Tag,
     UnorderedList,
   } from "carbon-components-svelte";
-  import { onMount } from "svelte";
   import { eagerContent } from "../router";
+  import CodeBlock from "./CodeBlock.svelte";
   import InlineSnippet from "./InlineSnippet.svelte";
 
   /**
@@ -78,12 +78,6 @@
   const TABLE_HEAD_HEIGHT = 40;
   const reserve = (rows: number, rowHeight: number) =>
     `auto ${TABLE_HEAD_HEIGHT + rows * rowHeight}px`;
-
-  let AsyncCodeBlock: typeof import("./CodeBlock.svelte").default | undefined;
-
-  onMount(async () => {
-    AsyncCodeBlock = (await import("./CodeBlock.svelte")).default;
-  });
 
   const mdn_api = "https://developer.mozilla.org/en-US/docs/Web/API/";
   const typeMap: Record<string, string> = {
@@ -226,8 +220,7 @@
                     <div
                       style="display: inline-flex; max-width: 220px; white-space: nowrap;"
                     >
-                      <svelte:component
-                        this={AsyncCodeBlock}
+                      <CodeBlock
                         language="typescript"
                         type="inline"
                         code={typeMap[type] ?? type}
@@ -238,8 +231,7 @@
                     <div
                       style="display: inline-flex; max-width: 220px; word-break: break-word;"
                     >
-                      <svelte:component
-                        this={AsyncCodeBlock}
+                      <CodeBlock
                         language="typescript"
                         type="inline"
                         code={type}
@@ -263,8 +255,7 @@
                     <strong>Example</strong>
                   </Box>
                   <Box marginBottom={6} maxWidth="85%">
-                    <svelte:component
-                      this={AsyncCodeBlock}
+                    <CodeBlock
                       language="typescript"
                       type="multi"
                       code={parsed.exampleCode}
@@ -280,8 +271,7 @@
                 {#if prop.value === undefined}
                   <em>undefined</em>
                 {:else}
-                  <svelte:component
-                    this={AsyncCodeBlock}
+                  <CodeBlock
                     language="typescript"
                     type={codeBlockType(prop.value)}
                     code={prop.value ?? ""}
@@ -310,8 +300,7 @@
 
 {#if component.typedefs.length > 0}
   <div class="my-layout-01-03">
-    <svelte:component
-      this={AsyncCodeBlock}
+    <CodeBlock
       language="typescript"
       code={component.typedefs.map((t) => t.ts ?? "").join("\n")}
     />
@@ -351,8 +340,7 @@
               <strong>{slot.default ? "default" : slot.name}</strong>
             </StructuredListCell>
             <StructuredListCell>
-              <svelte:component
-                this={AsyncCodeBlock}
+              <CodeBlock
                 language="typescript"
                 type={codeBlockType(slot.slot_props)}
                 code={slot.slot_props ?? ""}
@@ -415,8 +403,7 @@
               <strong>on:{dispatched_event.name}</strong>
             </StructuredListCell>
             <StructuredListCell>
-              <svelte:component
-                this={AsyncCodeBlock}
+              <CodeBlock
                 language="typescript"
                 type={codeBlockType(dispatched_event.detail)}
                 code={dispatched_event.detail ?? ""}
