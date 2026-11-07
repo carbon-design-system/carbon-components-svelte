@@ -540,6 +540,21 @@ assets:
     tags:
       - data-display
       - content-element
+  file-manager:
+    name: File manager
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/file-manager.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FileManager
+    tags:
+      - data-display
+      - content-element
   file-uploader:
     status: stable
     framework: svelte

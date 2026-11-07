@@ -1,0 +1,127 @@
+---
+components: ["FileManager"]
+description: A file manager browses folders and files in a tree, a table and a grid, and renames, moves, deletes and uploads them against any file system you adapt.
+---
+
+## Basic
+
+A file manager is a folder [TreeView](/components/TreeView), a path, and the open folder as a [DataTable](/components/DataTable) or a grid of tiles. Give it an `adapter`, which is the file system it browses. `createMemoryFileSystem` makes one that lives in memory, for docs and tests. Each call is async, so the tree loads a folder when it opens and the table shows a loading state, then the entries.
+
+<FileSource src="/framed/FileManager/FileManager" />
+
+## Adapter
+
+The adapter is an object with `list`, `stat`, `mkdir`, `move`, `remove` and `upload`, and an optional `url` for a preview or a thumbnail. Every path is absolute, with `/` as the root, and an entry's `path` is its id. A rename is a `move` to a new name in the same folder.
+
+| Method | What it does |
+| --- | --- |
+| `list(path, { signal })` | Resolves the entries of a folder. The signal aborts a listing the user left. |
+| `stat(path)` | Resolves one entry. |
+| `mkdir(path)` | Creates a folder. Rejects with code `"exists"` when the name is taken. |
+| `move(from, to)` | Moves or renames. `to` is the full new path. |
+| `remove(path)` | Deletes an entry. A folder goes with everything in it. |
+| `upload(file, path, { onProgress, signal })` | Stores a file at `path`, reporting progress. |
+| `url(path)` | Resolves where the content can be fetched. Used for the grid thumbnails and the preview. |
+
+Reject with a `FileSystemError` to give the error a `code`. Its message is shown to the user, so write it for them. This adapter fails one folder to show the error and its Retry button.
+
+<FileSource src="/framed/FileManager/FileManagerAdapter" />
+
+| Do | Why |
+| --- | --- |
+| Return an entry's `modified` in milliseconds. | The column formats it for the page's locale. |
+| Reject with a message a person can act on. | It is the text of the notice. |
+| Honor the `signal` in `list`. | The user can leave a slow folder, and the request should stop. |
+| Give an image entry a `url`, or implement `url(path)`. | The grid draws a thumbnail only from a URL. |
+
+## Views
+
+The toggle above the table switches between the list and the grid. Bind `view` to read it or to set it. Both show the same entries in the same order, and the selection is shared, so selected items stay selected when the view changes and when the sort does.
+
+The list is a table: a header you sort, a checkbox for each row and `aria-selected` on the row. The grid is a list box with a roving cursor: arrow keys move across and down, Home and End go to the ends of a line, and Page Up and Page Down move a screen. Both are windowed, so a folder of ten thousand files keeps a few dozen rows or tiles in the DOM.
+
+## Selection
+
+Click selects one entry. <DocKbd label="Cmd" /> or <DocKbd label="Ctrl" /> with a click toggles one, and <DocKbd label="Shift" /> with a click selects the range from the last one you clicked. <DocKbd label="Ctrl" /> with <DocKbd label="A" /> selects every entry in the folder. A selection shows a bar with the count, **Move to…** and **Delete**, in place of the toolbar.
+
+Bind `selectedIds` to read the paths, and `sortKey` and `sortDirection` for the order. Folders always sort first.
+
+<FileSource src="/framed/FileManager/FileManagerBindings" />
+
+## Operations
+
+| Operation | Pointer | Keyboard |
+| --- | --- | --- |
+| Open a folder | Double click, or click it in the tree or the path | <DocKbd label="Enter" /> on the entry, or <DocKbd label="Alt" /> + <DocKbd label="Up" /> for the parent |
+| New folder | The new folder button | Move to the button. The folder is created and its name is selected for typing. |
+| Rename | **Rename** in the bar, with one entry selected | <DocKbd label="F2" /> |
+| Delete | **Delete** in the bar | <DocKbd label="Delete" />, then confirm in the dialog |
+| Move | Drag onto a folder in the tree, the table, the grid or the path | **Move to…**, or <DocKbd label="M" />. Or <DocKbd label="Ctrl" /> + <DocKbd label="X" />, open the folder, <DocKbd label="Ctrl" /> + <DocKbd label="V" />. |
+| Select the next entry whose name starts with a letter | | Type the letter |
+
+Every drag has a keyboard path. The move dialog is a second tree that loads folders as it opens, and it will not offer a folder inside what you are moving. Cut and paste moves into the open folder, so it also works in an empty one, which takes focus itself. Dragging over a closed folder in the tree opens it after a moment.
+
+A rename checks the name as you type, and the dialog or field says why a name is refused. After a delete, focus moves to the entry that took its place, or to the folder when it is empty. Moves, deletes, renames and finished uploads are announced to a screen reader.
+
+## Upload
+
+Drop files or a folder anywhere on the open folder to upload them there. Drop onto a folder in the table, the grid or the tree to upload into it. A file picker button uploads files, and a second one uploads a folder with its structure. An upload list shows a progress bar for each file, with cancel while it runs and retry when it failed or was canceled.
+
+The drop is read with `webkitGetAsEntry`, which Chromium, Firefox and WebKit all support, so folders walk through the same code in all three. `getAsFileSystemHandle` is Chromium only and adds nothing a drop needs.
+
+A name that already exists in the open folder gets a number: `report (2).pdf`.
+
+## Details and preview
+
+Set `detailsOpen`, or use the **Details** button, to dock a [SidePanel](/components/SidePanel) inside the file manager. It shows the selected entry's kind, size, date, owner and location, and a preview: an image in an `img`, a PDF in an `object`, and text in a sandboxed `iframe`. An entry with no preview shows a message. Double click a file to see its preview full size.
+
+Use the `preview` slot to replace the preview, for example with an image viewer.
+
+<FileSource src="/framed/FileManager/FileManagerPreview" />
+
+## Large folders
+
+The table windows its rows and the grid its lines, so a folder of ten thousand files opens and scrolls like a small one. Sorting ten thousand names takes about 25 ms. The tree windows too, so a folder of two thousand subfolders loads one listing and shows a few dozen rows.
+
+<FileSource src="/framed/FileManager/FileManagerLarge" />
+
+| Do | Why |
+| --- | --- |
+| Return a whole folder from `list`. | The table sorts and windows it. A page at a time would sort only the page. |
+| Cache on your side if `list` is slow. | The file manager keeps a listing until something changes it, but a reload asks again. |
+| Keep `modified` and `size` as numbers. | Sorting compares numbers, not formatted text. |
+
+## Keyboard
+
+The tree, the table or grid, and the toolbar are each one tab stop. In the table and the grid:
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Up" /> <DocKbd label="Down" /> | Move the cursor and select that entry. In the grid, <DocKbd label="Left" /> and <DocKbd label="Right" /> move across, and swap in a right-to-left page. |
+| <DocKbd label="Shift" /> + arrow | Extend the selection from where it started. |
+| <DocKbd label="Ctrl" /> + arrow | Move the cursor and leave the selection alone. |
+| <DocKbd label="Space" /> | Toggle the entry under the cursor. |
+| <DocKbd label="Home" /> <DocKbd label="End" /> | First and last entry (in the grid, with <DocKbd label="Ctrl" />, the ends of the grid). |
+| <DocKbd label="Enter" /> | Open a folder, or preview a file. |
+| <DocKbd label="Escape" /> | Clear a cut, then the selection. |
+
+## Text
+
+Pass `texts` with only the strings you change. Every string a person sees or hears is in it, including the messages announced to a screen reader. A string that builds a sentence from values is a function. Set `locale` for dates and sizes.
+
+<FileSource src="/framed/FileManager/FileManagerTexts" />
+
+## Composition
+
+The file manager is built from components you can use alone. Where they fit, it uses them as they are. Where they did not, this is what was added around them.
+
+| Piece | Used as | Added around it |
+| --- | --- | --- |
+| [TreeView](/components/TreeView) | The folder tree, with `hasChildren` and `virtualize` | A cache that shares one listing with the table and the move dialog |
+| [DataTable](/components/DataTable) | The list view, with `selectable`, `sortable` and `virtualize` | Row attributes (`aria-selected`, a tab stop, `draggable`) stamped from outside, since a row takes none |
+| [Breadcrumb](/components/Breadcrumb) | The path | A menu for the middle folders of a long path |
+| [SidePanel](/components/SidePanel) | The details panel, with `slideIn` | A containing block, since the panel pins itself to the viewport |
+| [Toolbar](/components/DataTable) and batch actions | The actions and the selection bar | Controls that must stay reachable sit outside it, since the bar covers the toolbar |
+| [InlineEdit](/components/InlineEdit) | Renaming | Focus and the name without its extension selected on open |
+| [ConfirmModal](/components/ConfirmModal) | Delete | |
+| [ProgressBar](/components/ProgressBar) | Each upload | A list with cancel, retry and remove |
