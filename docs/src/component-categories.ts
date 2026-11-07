@@ -140,6 +140,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     components: [
       "Callout",
       "InlineNotification",
+      "InlineTip",
       "ToastNotification",
       "NotificationQueue",
       "BadgeIndicator",
