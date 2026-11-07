@@ -90,6 +90,10 @@ describe("LazyMount", () => {
       await tick();
       expect(screen.queryByText("Content 0")).toBeNull();
 
+      await vi.advanceTimersByTimeAsync(249);
+      await tick();
+      expect(screen.queryByText("Content 0")).toBeNull();
+
       await vi.advanceTimersByTimeAsync(1);
       await tick();
       expect(screen.getByText("Content 0")).toBeInTheDocument();
