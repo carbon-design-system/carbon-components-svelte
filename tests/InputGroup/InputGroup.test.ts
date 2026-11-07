@@ -18,6 +18,19 @@ describe("InputGroup", () => {
     expect(screen.getByRole("group", { name: "Promo code" })).toBeVisible();
   });
 
+  it("drops the group role when nothing names the group", () => {
+    render(InputGroup, { legendText: "", disabled: true });
+
+    expect(screen.queryByRole("group")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toBeDisabled();
+  });
+
+  it("keeps the group role when aria-label names the group", () => {
+    render(InputGroup, { legendText: "", ariaLabel: "Promo code" });
+
+    expect(screen.getByRole("group", { name: "Promo code" })).toBeVisible();
+  });
+
   it("disables every field and button with disabled", () => {
     render(InputGroup, { disabled: true });
 
