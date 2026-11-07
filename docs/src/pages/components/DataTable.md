@@ -1711,6 +1711,42 @@ Control sorting programmatically with `sortKey` and `sortDirection`. Set sortKey
 
 <FileSource src="/framed/DataTable/DataTableProgrammaticSorting" />
 
+### Multiple columns
+
+Set `sortMode="multiple"` to sort by more than one column. Rows that tie on the first column are ordered by the second, and so on; rows equal on every column keep their original order. The default, `"single"`, is unchanged.
+
+| Input | Result |
+| --- | --- |
+| Click a header | Sorts by that column alone: ascending, descending, then unsorted. |
+| <DocKbd label="Shift" />+click, or <DocKbd label="Shift" /> + <DocKbd label="Enter" /> on a focused header | Adds the column as the lowest priority key, or moves a sorted column to its next direction in place. The third step removes it. |
+| `ToolbarSortBy` | Opens a dialog to add, reorder and remove sort rules, and pick each rule's column and direction. It needs no Shift key or pointer. |
+
+With two or more sorted columns, each header shows its priority as a number beside the arrow. The list is `sortBy`, an array of `{ key, direction }`, highest priority first. `sortKey` and `sortDirection` mirror its first entry, so code that reads them keeps working. Set `sortKey` or `sortDirection` instead and the list becomes that one column.
+
+<FileSource src="/framed/DataTable/DataTableMultiSort" />
+
+#### Bound state
+
+Bind `sortBy` to read or set the whole sort. A table that mounts with `sortBy` opens sorted by it.
+
+<FileSource src="/framed/DataTable/DataTableMultiSortInitial" />
+
+#### Server-side
+
+The `sort` event also carries `event.detail.sortBy`, the proposed list. Its `key` and `direction` are the first entry, so a Shift+click on a secondary column leaves them unchanged: read `sortBy` to see the change. Cancel the event with `preventDefault()`, request the order from your API, and assign `sortBy` once the response arrives. `ToolbarSortBy` dispatches the same event when its dialog is applied, once for the whole list.
+
+<FileSource src="/framed/DataTable/DataTableMultiSortServer" />
+
+#### Accessibility
+
+Only the first sorted column sets `aria-sort`, since ARIA asks for one sorted header at a time. The other sorted columns have `aria-sort="none"` and a description such as "Sorted descending, priority 2 of 3" (override it with `sortPriorityText`). The number beside the arrow is hidden from assistive technology because the description says the same. The visually hidden status region announces the whole sort, for example "Sorted by Team, ascending; then Age, descending" (`sortStatusText` receives the list as its third argument).
+
+| Do | Why |
+| --- | --- |
+| Add `ToolbarSortBy` to any table with `sortMode="multiple"`. | Shift+click is not available on touch, and it is a secret handshake for everyone else. The dialog is the same feature with labelled controls. |
+| Read `event.detail.sortBy`, not `key` and `direction`, to sync a server or a URL. | A secondary column changes the list without changing the first entry. |
+| Keep `sortMode="single"` when rows order by one column. | The badges, the dialog's reorder buttons and the extra description all add noise to a table that never uses them. |
+
 ## Pagination
 
 Combine the table with Pagination.
