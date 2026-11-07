@@ -426,6 +426,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/CssGrid
+  currency-input:
+    name: Currency input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/currency-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/CurrencyInput
   data-table:
     status: stable
     framework: svelte
@@ -1530,6 +1542,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/UIShell
+  unit-input:
+    name: Unit input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/unit-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/UnitInput
   unordered-list:
     name: Unordered list
     status: stable
