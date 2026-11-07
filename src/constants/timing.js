@@ -79,3 +79,22 @@ export const STEPPER_REPEAT_INTERVAL_MS = 50;
  * element is hidden or its animation is off.
  */
 export const COPY_FEEDBACK_FADE_MS = 110;
+
+/**
+ * Default hover time before a `HoverCard` opens. Longer than a tooltip's
+ * delay: the card is heavier, and a pointer crossing a list of triggers
+ * should open none of them.
+ */
+export const HOVER_CARD_OPEN_DELAY_MS = 500;
+
+/**
+ * Default time a `HoverCard` stays open after the pointer or focus leaves,
+ * so the pointer can cross the gap to the card (WCAG 1.4.13).
+ */
+export const HOVER_CARD_CLOSE_DELAY_MS = 300;
+
+/**
+ * Time keyboard focus rests on a `HoverCard` trigger before the card opens,
+ * so tabbing through a list of triggers opens none of them.
+ */
+export const HOVER_CARD_FOCUS_DELAY_MS = 150;
