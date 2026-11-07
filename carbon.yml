@@ -647,6 +647,18 @@ assets:
       - shell
       - media
       - media
+  image-compare:
+    name: Image compare
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/image-compare.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ImageCompare
   inline-edit:
     name: Inline edit
     status: stable
