@@ -62,15 +62,15 @@ Set `variant` to `"muted"` to run the keys together as secondary text, as a menu
 
 ## Translations
 
-Override `translateWithId` to translate the words on the keys and the names screen readers hear for Apple's symbols, such as "Strg" for Ctrl on a German keyboard.
+Override `translateWithId` to translate the words on the keys and the names screen readers hear for Apple's symbols, such as "Strg" for Ctrl on a German keyboard. A key it returns `undefined` for keeps its English name.
 
 <Kbd
   shortcut="mod+shift+s"
   apple={false}
-  translateWithId={(id) => ({ ctrl: "Strg", shift: "Umschalt" })[id] ?? id}
+  translateWithId={(id) => ({ ctrl: "Strg", shift: "Umschalt" })[id]}
 />
 
-To translate every key on the page, including the keys a Button, Search or menu item shows for its `shortcut`, call `setKbdTranslations` once near the root of the app with the names to replace. A key left out keeps its English name, and a `Kbd`'s own `translateWithId` still wins. It also takes a function of the id.
+To translate every key on the page, including the keys a Button, Search or menu item shows for its `shortcut`, call `setKbdTranslations` once near the root of the app with the names to replace. A key left out keeps its English name. A `Kbd`'s own `translateWithId` still wins, and a key it returns `undefined` for uses these names. It also takes a function of the id.
 
 ```svelte
 <script>

@@ -4,9 +4,8 @@
   export let shortcut = "ctrl+k";
   export let locale: "de" | "fr" = "de";
 
-  const german = (id: string) =>
-    ({ ctrl: "Strg", shift: "Umschalt" })[id] ?? id;
-  const french = (id: string) => ({ ctrl: "Ctrl", shift: "Maj" })[id] ?? id;
+  const german = (id: string) => ({ ctrl: "Strg", shift: "Umschalt" })[id];
+  const french = (id: string) => ({ ctrl: "Ctrl", shift: "Maj" })[id];
 </script>
 
 <Kbd data-testid="apple" shortcut="mod+shift+p" apple />
@@ -20,6 +19,12 @@
   data-testid="german"
   shortcut="mod+shift+s"
   apple={false}
+  translateWithId={german}
+/>
+<Kbd
+  data-testid="german-escape"
+  shortcut="mod+escape"
+  apple
   translateWithId={german}
 />
 <Kbd

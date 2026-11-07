@@ -8,7 +8,7 @@
 <Kbd data-testid="shared" shortcut="mod+shift+enter" apple={false} />
 <Kbd
   data-testid="own"
-  shortcut="mod+k"
+  shortcut="mod+shift+k"
   apple={false}
-  translateWithId={(id) => (id === "ctrl" ? "Control" : id)}
+  translateWithId={(id) => (id === "ctrl" ? "Control" : undefined)}
 />
