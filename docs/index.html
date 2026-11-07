@@ -2,6 +2,13 @@
 <html lang="en" theme="white">
   <head>
     <meta charset="utf-8" />
+    <!-- Fonts load only from IBM's CDN. TrustArc's cookie banner asks for
+         its own 156 KB of IBM Plex Sans TTFs, which the page already has.
+         The browser logs a CSP error for each one it blocks. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="font-src 'self' https://1.www.s81c.com data:"
+    />
     <!-- IBM Plex fonts and IBM's scripts load from this CDN. -->
     <link rel="preconnect" href="https://1.www.s81c.com" crossorigin />
     <!-- The fonts nearly every page's text uses. The stylesheet asks for them
