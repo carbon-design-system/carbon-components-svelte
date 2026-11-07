@@ -633,6 +633,24 @@ describe("Modal", () => {
     },
   );
 
+  it("keeps focus in the dialog when a backdrop press does not dismiss it", async () => {
+    render(ModalTest, {
+      props: {
+        open: true,
+        preventCloseOnClickOutside: true,
+        modalHeading: "Outside click",
+        primaryButtonText: "Save",
+      },
+    });
+    const save = screen.getByRole("button", { name: "Save" });
+    save.focus();
+
+    await closeVia["outside-click"]();
+
+    expect(getOverlay().classList.contains("is-visible")).toBe(true);
+    expect(save).toHaveFocus();
+  });
+
   it("applies the outside-click rule when passiveModal changes after mount", async () => {
     const closeHandler = vi.fn();
     const { rerender } = render(ModalTest, {
