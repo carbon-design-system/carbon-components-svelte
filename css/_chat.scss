@@ -150,7 +150,7 @@
     display: inline-block;
     width: 0.5em;
     height: 1em;
-    margin-left: $carbon--spacing-01;
+    margin-inline-start: $carbon--spacing-01;
     animation: chat-caret 1s steps(1) infinite;
     background-color: $icon-secondary;
     content: "";
