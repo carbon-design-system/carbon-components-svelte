@@ -137,7 +137,7 @@
    * Set to `0` for no maximum.
    *
    * NOTE: this prop only works with the `type="multi"` variant.
-   * Row height is 16px.
+   * A row is 1rem, the code's line height (16px by default).
    * @type {number}
    */
   export let maxCollapsedNumberOfRows = 15;
@@ -147,7 +147,7 @@
    * Set to `0` for no maximum (default).
    *
    * NOTE: this prop only works with the `type="multi"` variant.
-   * Row height is 16px.
+   * A row is 1rem, the code's line height (16px by default).
    * @type {number}
    */
   export let maxExpandedNumberOfRows = 0;
@@ -157,7 +157,7 @@
    * Set to `0` for no minimum.
    *
    * NOTE: this prop only works with the `type="multi"` variant.
-   * Row height is 16px.
+   * A row is 1rem, the code's line height (16px by default).
    * @type {number}
    */
   export let minCollapsedNumberOfRows = 3;
@@ -167,7 +167,7 @@
    * Set to `0` for no minimum.
    *
    * NOTE: this prop only works with the `type="multi"` variant.
-   * Row height is 16px.
+   * A row is 1rem, the code's line height (16px by default).
    * @type {number}
    */
   export let minExpandedNumberOfRows = 16;
@@ -285,10 +285,13 @@
   let atTop = true;
   let atBottom = true;
 
-  /** Carbon row height used to convert row-count props to pixels. */
-  const rowHeightInPixels = 16;
+  /**
+   * A row is the code's line height, 1rem, so the row-count props follow
+   * the reader's font size as the text does.
+   */
+  const rowHeightInRem = 1;
 
-  /** @type {number | undefined} */
+  /** @type {string | undefined} */
   let minHeight;
   /** @type {string | undefined} */
   let maxHeight;
@@ -357,7 +360,11 @@
     // its padding box, so it falls through and clears the expand control.
     if (boxHeight <= 0) return;
     const height = boxHeight - padding;
-    const collapsedMaxHeight = maxCollapsedNumberOfRows * rowHeightInPixels;
+    const remInPixels =
+      Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
+      16;
+    const collapsedMaxHeight =
+      maxCollapsedNumberOfRows * rowHeightInRem * remInPixels;
     // Mirror Carbon React: the expand control is only useful when collapsed
     // content is capped and expanding can reveal more rows than that cap.
     const canExpand =
@@ -395,26 +402,26 @@
 
   $: expandText = expanded ? showLessText : showMoreText;
 
-  // Multi-line min/max heights come from row-count props (16px per row).
+  // Multi-line min/max heights come from row-count props (1rem a row).
   // A value of `0` means no constraint for that axis (Carbon React parity).
   $: if (type === "multi") {
     if (expanded) {
       minHeight =
         minExpandedNumberOfRows > 0
-          ? minExpandedNumberOfRows * rowHeightInPixels
+          ? `${minExpandedNumberOfRows * rowHeightInRem}rem`
           : undefined;
       maxHeight =
         maxExpandedNumberOfRows > 0
-          ? `${maxExpandedNumberOfRows * rowHeightInPixels}px`
+          ? `${maxExpandedNumberOfRows * rowHeightInRem}rem`
           : "none";
     } else {
       minHeight =
         minCollapsedNumberOfRows > 0
-          ? minCollapsedNumberOfRows * rowHeightInPixels
+          ? `${minCollapsedNumberOfRows * rowHeightInRem}rem`
           : undefined;
       maxHeight =
         maxCollapsedNumberOfRows > 0
-          ? `${maxCollapsedNumberOfRows * rowHeightInPixels}px`
+          ? `${maxCollapsedNumberOfRows * rowHeightInRem}rem`
           : undefined;
     }
     // Without the show-more control, overflowing content must remain reachable
@@ -634,7 +641,7 @@
       class:bx--snippet-container--fade-top={showTopFade}
       class:bx--snippet-container--fade-bottom={showBottomFade}
       style:width="100%"
-      style:min-height={minHeight == null ? undefined : `${minHeight}px`}
+      style:min-height={minHeight}
       style:max-height={maxHeight}
       style:overflow-y={overflowY}
       bind:this={containerRef}
