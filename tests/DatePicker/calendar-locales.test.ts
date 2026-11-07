@@ -90,6 +90,11 @@ describe.each(TAGS)("%s", (tag) => {
   it("starts the week on the locale's first day", (context) => {
     const info = weekInfo(tag);
     if (!info) context.skip();
+    // Bun on macOS uses the system ICU, whose week data departs from CLDR
+    // (`zh` starts on Sunday). The table follows CLDR.
+    if (process.versions.bun && process.platform === "darwin") {
+      context.skip("system ICU week data differs from CLDR");
+    }
     // Intl numbers days 1 (Monday) to 7 (Sunday).
     expect(locale.firstDayOfWeek).toBe((info?.firstDay ?? 0) % 7);
   });

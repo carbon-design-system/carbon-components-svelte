@@ -13,11 +13,13 @@ function renderTitle(timeZone: string) {
     timeZone,
   });
 
-  // Newer ICU versions put a narrow no-break space before AM/PM.
+  // Newer ICU versions put a narrow no-break space before AM/PM, and
+  // JavaScriptCore's ICU joins the date and time with " at ".
   return document
     .querySelector("time")
     ?.getAttribute("title")
-    ?.replace(/\s/g, " ");
+    ?.replace(/\s/g, " ")
+    .replace(" at ", ", ");
 }
 
 describe("RelativeTime server render", () => {
