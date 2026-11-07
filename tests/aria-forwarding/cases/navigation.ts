@@ -475,6 +475,11 @@ export const navigation: AriaEntry[] = [
     exempt: "Layout wrapper; renders the element or component it is given",
   },
   {
+    name: "LinkifiedText",
+    exempt:
+      "Inline text; rest props land on the span, and each link is named by its own URL",
+  },
+  {
     name: "UserAvatarGroup",
     exempt:
       "Layout row of avatars; its +N overflow avatar is named by its count",
