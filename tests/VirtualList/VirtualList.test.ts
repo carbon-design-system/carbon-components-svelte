@@ -11,6 +11,16 @@ import { virtualWindowLayer } from "../utils/virtual-window-layer";
 import VirtualList from "./VirtualList.test.svelte";
 import { scrollListTo } from "./helpers";
 
+/**
+ * Fills the stack below the caller with numbers, so the frames of a call
+ * made next start on numbers instead of stale pointers.
+ */
+function clobberStack(depth: number): number {
+  const a = depth * 3;
+  const b = a + 1;
+  return depth === 0 ? a + b : clobberStack(depth - 1) + b;
+}
+
 describe("VirtualList", () => {
   afterEach(vi.restoreAllMocks);
 
@@ -142,15 +152,19 @@ describe("VirtualList", () => {
     await view.rerender({ items: [{ id: 100 }] });
 
     // Collect after a macrotask, so no task that touched the first list is
-    // still running, and repeat in case one pass leaves it. Read `tracked`
-    // only once: `deref` keeps its target alive until the task ends.
-    const collect = async () => {
+    // still running. Bun's collector also scans the stack conservatively: a
+    // heap snapshot of a failed run showed the list held only by arrays
+    // nothing else pointed to, kept by stale pointers in the frames `gc()`
+    // runs in. Clear the stack first, and repeat until the list is gone; a
+    // list something still holds never is. Each pass reads `tracked` in its
+    // own task: `deref` keeps its target alive until the task ends.
+    for (let pass = 0; pass < 20; pass++) {
+      // eslint-disable-next-line no-await-in-loop -- each pass needs its own task
       await flushMacrotask();
+      clobberStack(500);
       gc();
-    };
-    await collect();
-    await collect();
-    await collect();
+      if (tracked.deref() === undefined) break;
+    }
 
     expect(
       tracked.deref(),
