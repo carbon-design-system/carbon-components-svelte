@@ -52,7 +52,7 @@ Toggle the example below to grow the content past the threshold and reveal the e
 
 ### Collapsed row count
 
-Set `maxCollapsedNumberOfRows` to shorten the collapsed preview. Each row is 16px tall; the default is `15` (240px). Use `minCollapsedNumberOfRows`, `minExpandedNumberOfRows`, and `maxExpandedNumberOfRows` for the matching minimum and expanded limits.
+Set `maxCollapsedNumberOfRows` to shorten the collapsed preview. Each row is 1rem tall, the code's line height, so the row counts hold at any text size; the default is `15`. Use `minCollapsedNumberOfRows`, `minExpandedNumberOfRows`, and `maxExpandedNumberOfRows` for the matching minimum and expanded limits.
 
 <FileSource src="/framed/CodeSnippet/CodeSnippetRowCounts" />
 
