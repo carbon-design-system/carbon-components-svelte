@@ -83,4 +83,25 @@ describe("HeaderSwitcher items", () => {
     expect(detail).toHaveTextContent("Acme Corp");
     expect(detail).toHaveTextContent("Engineering");
   });
+
+  it("lists recent accounts under a heading, and adds the one left when switching", async () => {
+    render(HeaderSwitcherItems, { props: { recentIds: ["zoe"] } });
+
+    const recent = screen.getByRole("group", { name: "Recent" });
+    expect(within(recent).getAllByRole("button")).toHaveLength(1);
+    // It left the Accounts group, so it is read once.
+    expect(
+      screen.getAllByRole("button", { name: "Zoë Personal" }),
+    ).toHaveLength(1);
+
+    await user.click(screen.getByRole("button", { name: "Globex" }));
+
+    expect(screen.getByTestId("recent")).toHaveTextContent('["acme","zoe"]');
+  });
+
+  it("has no recent section unless recentIds is set", () => {
+    render(HeaderSwitcherItems);
+
+    expect(screen.queryByRole("group", { name: "Recent" })).toBeNull();
+  });
 });

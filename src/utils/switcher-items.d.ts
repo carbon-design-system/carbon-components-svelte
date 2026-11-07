@@ -21,5 +21,17 @@ export function matchesSwitcherQuery(
 export function buildSwitcherSections<Item extends SwitcherItemLike>(options: {
   items: ReadonlyArray<Item>;
   query: string;
+  /** `undefined` turns the recent section off. */
+  recentIds?: ReadonlyArray<string | number> | undefined;
+  recentLimit?: number;
+  selectedId?: string | number | undefined;
+  recentHeading?: string;
   matches?: (item: Item, query: string) => boolean;
 }): SwitcherSection<Item>[];
+
+export function pushRecentId(
+  recentIds: ReadonlyArray<string | number>,
+  previousId: string | number | undefined,
+  nextId: string | number,
+  limit: number,
+): Array<string | number>;

@@ -13,6 +13,11 @@
   /** @type {Item["id"] | undefined} */
   export let selectedId = undefined;
 
+  /** @type {ReadonlyArray<Item["id"]> | undefined} */
+  export let recentIds = undefined;
+  export let recentLimit = 3;
+  export let recentText = "Recent";
+
   /**
    * The id of the menu; ids inside it derive from it.
    * @type {string}
@@ -49,6 +54,11 @@
   $: sections = buildSwitcherSections({
     items,
     query: searchable ? query : "",
+    // `LocalStorage` binds `""` before it reads a stored value.
+    recentIds: Array.isArray(recentIds) ? recentIds : undefined,
+    recentLimit,
+    selectedId,
+    recentHeading: recentText,
     matches: filterItems,
   });
   $: count = sections.reduce(

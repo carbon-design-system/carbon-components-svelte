@@ -3,15 +3,17 @@
     Content,
     Header,
     HeaderSwitcher,
+    LocalStorage,
     ProfileMenuItem,
     SkipToContent,
   } from "carbon-components-svelte";
 
   // `?detail` shows the current-account block; `?threshold=N` sets
-  // `searchThreshold`.
+  // `searchThreshold`; `?recent` lists recent accounts, kept in `LocalStorage`.
   const params = new URLSearchParams(location.search);
   const showDetail = params.has("detail");
   const searchThreshold = Number(params.get("threshold") ?? 8);
+  const recent = params.has("recent");
 
   const items = [
     {
@@ -57,10 +59,14 @@
   ];
 
   let selectedId = "acme";
+  let recentIds = recent ? [] : undefined;
   let isOpen = true;
   let last = "";
 </script>
 
+{#if recent}
+  <LocalStorage key="e2e-switcher-recent" bind:value={recentIds} />
+{/if}
 <Header companyName="E2E" platformName="Switcher items">
   <svelte:fragment slot="skipToContent"><SkipToContent /></svelte:fragment>
   <HeaderSwitcher
@@ -68,6 +74,7 @@
     {showDetail}
     {searchThreshold}
     bind:selectedId
+    bind:recentIds
     bind:isOpen
     on:select={(event) => (last = String(event.detail.selectedId))}
   >

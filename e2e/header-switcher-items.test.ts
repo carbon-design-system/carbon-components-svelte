@@ -155,3 +155,50 @@ test("the menu opens from the trigger's end edge in a right-to-left page", async
     0,
   );
 });
+
+const trigger = (page: import("@playwright/test").Page) =>
+  page.locator(".bx--header-switcher__trigger");
+const row = (page: import("@playwright/test").Page, name: string) =>
+  page.locator(".bx--profile-menu__item", { hasText: name });
+
+test("lists the accounts you left under Recent, and keeps them across a reload", async ({
+  page,
+}) => {
+  await page.goto(`${URL}?recent`);
+  const recent = page.getByRole("group", { name: "Recent" });
+  await expect(recent).toHaveCount(0);
+
+  await row(page, "Initech").click();
+  await trigger(page).click();
+  await expect(recent.locator(".bx--profile-menu__item")).toHaveCount(1);
+  await expect(recent).toContainText("Acme Corp");
+  // It left its own group, so a screen reader reads it once.
+  await expect(row(page, "Acme Corp")).toHaveCount(1);
+
+  await row(page, "Globex").click();
+  await trigger(page).click();
+  await expect(recent.locator(".bx--profile-menu__item")).toHaveCount(2);
+  await expect(recent.locator(".bx--profile-menu__item").first()).toContainText(
+    "Initech",
+  );
+
+  // A reload keeps storage and starts on Acme again, which leaves the list.
+  await page.reload();
+  await expect(recent.locator(".bx--profile-menu__item")).toHaveCount(1);
+  await expect(recent).toContainText("Initech");
+});
+
+test("filtering lists every match under its own group, without Recent", async ({
+  page,
+}) => {
+  await page.goto(`${URL}?recent`);
+  await row(page, "Initech").click();
+  await trigger(page).click();
+  await page.getByRole("searchbox").fill("acme");
+  await expect(page.getByRole("group", { name: "Recent" })).toHaveCount(0);
+  await expect(
+    page
+      .getByRole("group", { name: "Accounts" })
+      .locator(".bx--profile-menu__item"),
+  ).toHaveCount(1);
+});

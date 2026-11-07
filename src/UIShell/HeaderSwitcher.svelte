@@ -68,6 +68,25 @@
   export let selectedId = undefined;
 
   /**
+   * Specify the ids of the accounts used most recently, newest first, to list
+   * under a "Recent" heading ahead of the rest. An account moves out of the
+   * list while it is current. Switching adds the account that was left.
+   * Omit it to turn the section off.
+   *
+   * Nothing is stored for you: bind it to persist it, for example with
+   * `LocalStorage`, or keep it on a server and update it from `select`.
+   * @type {ReadonlyArray<Item["id"]> | undefined}
+   * @bindable writable
+   */
+  export let recentIds = undefined;
+
+  /** Specify how many recent accounts to list. */
+  export let recentLimit = 3;
+
+  /** Specify the heading of the recent accounts. */
+  export let recentText = "Recent";
+
+  /**
    * Set to `true` to show the current account's avatar, name and
    * `description` at the top of the menu.
    */
@@ -161,6 +180,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { pickEdgeMenuItem } from "../utils/pick-edge-menu-item.js";
+  import { pushRecentId } from "../utils/switcher-items.js";
   import {
     createTypeaheadBuffer,
     isTypeaheadKey,
@@ -196,6 +216,21 @@
   $: maxWidthStyle = toCssLength(maxWidth);
   $: selectedItem = items?.find((item) => item.id === selectedId);
   $: triggerText = text ?? selectedItem?.text;
+  // One object for both menu branches below, so they cannot drift apart.
+  $: menuProps = {
+    items: items ?? [],
+    selectedId,
+    recentIds,
+    recentLimit,
+    recentText,
+    menuId,
+    showDetail,
+    searchThreshold,
+    filterItems,
+    searchLabelText,
+    emptyText,
+    resultsText,
+  };
 
   /** @param {"outside-click" | "escape-key" | "select"} trigger */
   function close(trigger) {
@@ -223,6 +258,9 @@
 
   /** @param {Item} item */
   function handlePick(item) {
+    if (Array.isArray(recentIds)) {
+      recentIds = pushRecentId(recentIds, selectedId, item.id, recentLimit);
+    }
     selectedId = item.id;
     dispatch("select", { selectedId: item.id, selectedItem: item });
   }
@@ -401,15 +439,7 @@
     >
       {#if items}
         <HeaderSwitcherMenu
-          {items}
-          {selectedId}
-          {menuId}
-          {showDetail}
-          {searchThreshold}
-          {filterItems}
-          {searchLabelText}
-          {emptyText}
-          {resultsText}
+          {...menuProps}
           on:pick={(event) => handlePick(event.detail)}
           on:filter
         />
@@ -432,15 +462,7 @@
     >
       {#if items}
         <HeaderSwitcherMenu
-          {items}
-          {selectedId}
-          {menuId}
-          {showDetail}
-          {searchThreshold}
-          {filterItems}
-          {searchLabelText}
-          {emptyText}
-          {resultsText}
+          {...menuProps}
           on:pick={(event) => handlePick(event.detail)}
           on:filter
         />
