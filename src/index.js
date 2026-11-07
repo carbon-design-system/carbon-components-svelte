@@ -329,7 +329,7 @@ export {
   filterTreeNodes,
 } from "./utils/filter-tree-nodes.js";
 export { floatingPosition } from "./utils/floating-position.js";
-export { createFocusNav, focusNav } from "./utils/focus-nav.js";
+export { createFocusNav, focusNav, mountedIndexes } from "./utils/focus-nav.js";
 export { formReset } from "./utils/form-reset.js";
 export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";

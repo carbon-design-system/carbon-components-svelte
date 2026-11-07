@@ -14,6 +14,7 @@ import type {
   getAvatarBackgroundColor,
   getInitials,
   getLayoutDirection,
+  mountedIndexes,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
@@ -121,6 +122,7 @@ type _FloatingPositionResult = FloatingPositionResult;
 type _FocusNav = ReturnType<typeof createFocusNav>;
 type _FocusNavAction = ReturnType<typeof focusNav>;
 type _FocusNavOptions = FocusNavOptions;
+type _MountedIndexes = ReturnType<typeof mountedIndexes>;
 type _NextIndexConfig = NextIndexConfig;
 type _FormReset = ReturnType<typeof formReset>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
