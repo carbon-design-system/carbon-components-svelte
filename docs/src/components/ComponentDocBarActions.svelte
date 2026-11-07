@@ -112,7 +112,7 @@
     display: none;
   }
 
-  @media (max-width: 1056px) {
+  @media (max-width: 65.98rem) {
     .bar-actions--desktop {
       display: none;
     }

@@ -80,7 +80,7 @@
     color: var(--cds-text-secondary);
   }
 
-  @media (max-width: 671px) {
+  @media (max-width: 41.98rem) {
     .card-wrapper,
     .borderRight {
       border-right: 0;

@@ -375,7 +375,7 @@
 
 <style>
   /** Hide logo to make space for search bar on narrower screens. */
-  @media (max-width: 1056px) {
+  @media (max-width: 65.98rem) {
     .platform-name.hidden {
       display: none;
     }
@@ -392,7 +392,7 @@
     font-family: var(--cds-code-01-font-family);
   }
 
-  @media (max-width: 1056px) {
+  @media (max-width: 65.98rem) {
     .platform-name-version {
       display: none;
     }
@@ -436,7 +436,7 @@
     height: 2rem;
   }
 
-  @media (min-width: 1056px) {
+  @media (min-width: 66rem) {
     footer {
       margin-left: 256px;
     }

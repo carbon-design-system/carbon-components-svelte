@@ -147,7 +147,7 @@
     margin-right: -1rem;
   }
 
-  @media (max-width: 672px) {
+  @media (max-width: 41.98rem) {
     .preview {
       margin-left: 0;
       margin-right: 0;

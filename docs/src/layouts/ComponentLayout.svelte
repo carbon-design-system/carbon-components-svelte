@@ -311,7 +311,7 @@
     display: none;
   }
 
-  @media (max-width: 1056px) {
+  @media (max-width: 65.98rem) {
     .toc.mobile {
       display: block;
       margin-bottom: var(--cds-spacing-09);

@@ -602,7 +602,7 @@
     min-height: 8.75rem;
   }
 
-  @media (max-width: 672px) {
+  @media (max-width: 41.98rem) {
     .glyph-grid--icons,
     .glyph-grid--pictograms {
       grid-template-columns: repeat(2, minmax(0, 1fr));
