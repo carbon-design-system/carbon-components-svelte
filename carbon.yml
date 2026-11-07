@@ -550,6 +550,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/FileUploader
+  filter-panel:
+    name: Filter panel
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/filter-panel.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FilterPanel
   floating-portal:
     name: Floating portal
     status: stable
