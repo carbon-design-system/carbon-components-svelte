@@ -1129,6 +1129,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/SessionStorage
+  settings-page:
+    name: Settings page
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/settings-page.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SettingsPage
   shape-indicator:
     name: Shape indicator
     status: stable

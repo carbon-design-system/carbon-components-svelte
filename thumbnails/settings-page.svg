@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>settings-page</title>
+    <g id="settings-page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="rail" fill="var(--cds-border-subtle, #c6c6c6)" x="64" y="40" width="2" height="48"></rect>
+        <rect id="rail-active" fill="var(--cds-interactive, #0f62fe)" x="64" y="40" width="2" height="16"></rect>
+        <rect id="rail-label-1" fill="var(--cds-text-secondary, #525252)" x="74" y="46" width="32" height="4"></rect>
+        <rect id="rail-label-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="74" y="64" width="26" height="4"></rect>
+        <rect id="rail-label-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="74" y="80" width="30" height="4"></rect>
+        <rect id="title" fill="var(--cds-text-secondary, #525252)" x="124" y="36" width="56" height="6"></rect>
+        <rect id="divider-1" fill="var(--cds-border-subtle, #c6c6c6)" x="124" y="50" width="132" height="1"></rect>
+        <rect id="label-1" fill="var(--cds-text-secondary, #525252)" x="124" y="60" width="44" height="5"></rect>
+        <rect id="hint-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="124" y="70" width="64" height="3"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="204" y="58" width="52" height="16"></rect>
+        <rect id="divider-2" fill="var(--cds-border-subtle, #c6c6c6)" x="124" y="82" width="132" height="1"></rect>
+        <rect id="label-2" fill="var(--cds-text-secondary, #525252)" x="124" y="92" width="52" height="5"></rect>
+        <rect id="hint-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="124" y="102" width="56" height="3"></rect>
+        <rect id="track" fill="var(--cds-background-brand, #0f62fe)" x="232" y="90" width="24" height="12" rx="6"></rect>
+        <circle id="knob" fill="var(--cds-layer-02, #ffffff)" cx="250" cy="96" r="4.5"></circle>
+        <rect id="bar" fill="var(--cds-layer-01, #f4f4f4)" x="108" y="126" width="164" height="24"></rect>
+        <rect id="bar-edge" fill="var(--cds-border-subtle, #c6c6c6)" x="108" y="126" width="164" height="1"></rect>
+        <rect id="bar-message" fill="var(--cds-text-secondary, #525252)" x="118" y="136" width="52" height="4"></rect>
+        <rect id="save" fill="var(--cds-button-primary, #0f62fe)" x="228" y="130" width="38" height="16"></rect>
+    </g>
+</svg>
