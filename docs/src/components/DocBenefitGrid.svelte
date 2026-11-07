@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Stack, Text } from "carbon-components-svelte";
-  import type { ComponentType } from "svelte";
+  import type { CarbonIconProps } from "carbon-icons-svelte";
+  import type { Component } from "svelte";
 
   export let items: {
-    icon?: ComponentType;
+    icon?: Component<CarbonIconProps>;
     title: string;
     body: string;
   }[] = [];

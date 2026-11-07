@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Column, Row, Stack, Text } from "carbon-components-svelte";
-  import type { ComponentType } from "svelte";
+  import type { CarbonIconProps } from "carbon-icons-svelte";
+  import type { Component } from "svelte";
 
   export let variant: "example" | "step" | "principle" = "example";
-  export let icon: ComponentType | undefined = undefined;
+  export let icon: Component<CarbonIconProps> | undefined = undefined;
   export let step = "";
   export let eyebrow = "";
   export let title = "";

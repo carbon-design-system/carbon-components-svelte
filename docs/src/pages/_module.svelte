@@ -234,9 +234,10 @@
         shouldFilter={false}
         match={matchQuery}
         on:select={(e) => {
-          // Selecting a link item would navigate natively; go there in the
-          // page instead.
-          e.detail.event?.preventDefault();
+          // The menu's items are links, which would navigate natively; go
+          // there in the page instead.
+          if (!("item" in e.detail) || !e.detail.item.href) return;
+          e.detail.event.preventDefault();
           goto(e.detail.item.href);
         }}
       >
