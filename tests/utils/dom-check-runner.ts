@@ -14,7 +14,10 @@ type Checks = {
   cancel(): void;
 };
 type Globals = {
-  __domEnv?: { checks: Checks };
+  __domEnv?: {
+    checks: Checks;
+    coverage: { enabled(): boolean; check(): void };
+  };
   __domChecksSkip?: Set<string>;
 };
 
@@ -54,6 +57,8 @@ export default class DomCheckRunner extends TestRunner {
     ...args: Parameters<TestRunner["onAfterTryTask"]>
   ) {
     await super.onAfterTryTask(...args);
+    // CSS coverage (`DOM_ENV_CSS_COVERAGE`): the DOM as the test left it.
+    if (globals.__domEnv?.coverage.enabled()) globals.__domEnv.coverage.check();
     const checks = globals.__domEnv?.checks;
     if (!checks?.enabled()) return;
     checks.cancel();
