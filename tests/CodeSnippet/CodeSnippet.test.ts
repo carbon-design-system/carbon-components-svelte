@@ -650,8 +650,8 @@ describe("CodeSnippet", () => {
     });
     const snippet = container.querySelector(".bx--snippet-container");
     expectInlineStyle(snippet, {
-      "min-height": "48px",
-      "max-height": "240px",
+      "min-height": "3rem",
+      "max-height": "15rem",
     });
   });
 
@@ -671,15 +671,15 @@ describe("CodeSnippet", () => {
 
     const snippet = container.querySelector(".bx--snippet-container");
     expectInlineStyle(snippet, {
-      "min-height": "32px",
-      "max-height": "80px",
+      "min-height": "2rem",
+      "max-height": "5rem",
     });
 
     await user.click(await screen.findByText("Show more"));
 
     expectInlineStyle(snippet, {
-      "min-height": "160px",
-      "max-height": "320px",
+      "min-height": "10rem",
+      "max-height": "20rem",
     });
   });
 
@@ -692,7 +692,7 @@ describe("CodeSnippet", () => {
     {
       name: "maxExpandedNumberOfRows 0 sets max-height none",
       props: { expanded: true, maxExpandedNumberOfRows: 0 },
-      expected: { "min-height": "256px", "max-height": "none" },
+      expected: { "min-height": "16rem", "max-height": "none" },
     },
     {
       name: "collapsed rows of 0 set neither",
@@ -723,7 +723,7 @@ describe("CodeSnippet", () => {
     await waitForSnippetMeasurement();
     const snippet = container.querySelector(".bx--snippet-container");
     expectInlineStyle(snippet, {
-      "max-height": "240px",
+      "max-height": "15rem",
       "overflow-y": "auto",
     });
     expect(screen.queryByText("Show more")).not.toBeInTheDocument();
@@ -1107,10 +1107,46 @@ describe("CodeSnippet", () => {
         (target) => ({ target }) as ResizeObserverEntry,
       );
       deliver(entries, {} as ResizeObserver);
-      expect(getComputedStyle).toHaveBeenCalledTimes(1);
+      // One measurement: the code's own style is read once.
+      const reads = getComputedStyle.mock.calls.filter(
+        ([element]) => element instanceof HTMLPreElement,
+      );
+      expect(reads).toHaveLength(1);
     } finally {
       getComputedStyle.mockRestore();
       vi.unstubAllGlobals();
+    }
+  });
+});
+
+describe("CodeSnippet rows", () => {
+  const lines = (count: number) =>
+    Array.from({ length: count }, (_, i) => `line ${i}`).join("\n");
+
+  it("measures rows in rem, at the reader's font size", async () => {
+    const nativeGetComputedStyle = window.getComputedStyle;
+    const style = vi
+      .spyOn(window, "getComputedStyle")
+      .mockImplementation((element) =>
+        element.tagName === "PRE"
+          ? ({
+              paddingTop: "0px",
+              paddingBottom: "24px",
+            } as CSSStyleDeclaration)
+          : element === document.documentElement
+            ? ({ fontSize: "20px" } as CSSStyleDeclaration)
+            : nativeGetComputedStyle(element),
+      );
+    // 14 rows of 20 px: under the 15-row cap of 300 px, though over 240.
+    const rect = mockSnippetOverflowHeight(24 + 20 * 14);
+    try {
+      render(CodeSnippet, { props: { type: "multi", code: lines(14) } });
+      await waitForSnippetMeasurement();
+      await tick();
+      expect(screen.queryByText("Show more")).not.toBeInTheDocument();
+    } finally {
+      rect.mockRestore();
+      style.mockRestore();
     }
   });
 });
