@@ -62,16 +62,16 @@ Set `size` to control the button size. The default is `"xs"`.
 
 ## Inline
 
-Set `kind` to `"inline"` to render the label as text. Use `textLabel` to add text beside it.
+Set `variant` to `"inline"` to render the label as text. Use `labelText` to add text beside it.
 
 <Stack orientation="horizontal" gap={5}>
-  <AILabel kind="inline" size="sm">
+  <AILabel variant="inline" size="sm">
     <p>Summarized from the incident timeline and the on-call notes.</p>
   </AILabel>
-  <AILabel kind="inline" size="md" textLabel="Generated summary">
+  <AILabel variant="inline" size="md" labelText="Generated summary">
     <p>Summarized from the incident timeline and the on-call notes.</p>
   </AILabel>
-  <AILabel kind="inline" size="lg" textLabel="Generated summary">
+  <AILabel variant="inline" size="lg" labelText="Generated summary">
     <p>Summarized from the incident timeline and the on-call notes.</p>
   </AILabel>
 </Stack>
@@ -269,55 +269,55 @@ A data table has three slots: `decorator` beside the title, `headerDecorator` fo
 
 ## Revert
 
-Set `revertActive` to `true` after the user edits an AI-generated value. The label turns into a revert button. Clicking it sets `revertActive` back to `false` and dispatches `revert`, so you can restore the AI value.
+Set `edited` to `true` after the user edits an AI-generated value. The label turns into a revert button. Clicking it sets `edited` back to `false` and dispatches `revert`, so you can restore the AI value.
 
 <FileSource src="/framed/AILabel/AILabelRevert" />
 
-## Direction and alignment
+## Alignment
 
-Set `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`) and `align` (`"start"`, `"center"`, `"end"`) to place the explanation. Inside a field, the explanation aligns to the end of the label by default; elsewhere it aligns to the start. The caret always points at the label.
+Set `align` to place the explanation. The first part names the side it opens on: `"top"`, `"right"`, `"bottom"`, or `"left"`. The optional second part lines it up along that side: `"start"` or `"end"`. Without it, the explanation is centered. The default is `"bottom-start"`. Inside a field, it is `"bottom-end"`. The caret always points at the label.
 
-### Directions
+### Sides
 
 <Stack orientation="horizontal" gap={10}>
-  <AILabel kind="inline" size="md" textLabel="Top" direction="top">
+  <AILabel variant="inline" size="md" labelText="Top" align="top">
     <p>Opens above the label.</p>
   </AILabel>
-  <AILabel kind="inline" size="md" textLabel="Right" direction="right">
+  <AILabel variant="inline" size="md" labelText="Right" align="right">
     <p>Opens to the right of the label.</p>
   </AILabel>
-  <AILabel kind="inline" size="md" textLabel="Bottom" direction="bottom">
+  <AILabel variant="inline" size="md" labelText="Bottom" align="bottom">
     <p>Opens below the label.</p>
   </AILabel>
-  <AILabel kind="inline" size="md" textLabel="Left" direction="left">
+  <AILabel variant="inline" size="md" labelText="Left" align="left">
     <p>Opens to the left of the label.</p>
   </AILabel>
 </Stack>
 
-### Alignment
+### Start and end
 
-`align` places the explanation along the side it opens on. Below or above the label, `"start"` lines it up on the left and `"end"` on the right. To the left or right, `"start"` lines it up at the top and `"end"` at the bottom.
+Below or above the label, `"start"` lines the explanation up with the left side and `"end"` with the right side. In a right-to-left layout, the two swap. To the left or right, `"start"` lines it up with the top and `"end"` with the bottom.
 
 <Stack gap={7}>
   <Stack orientation="horizontal" gap={10}>
-    <AILabel kind="inline" size="md" textLabel="Bottom start" align="start">
+    <AILabel variant="inline" size="md" labelText="Bottom start" align="bottom-start">
       <p>Opens below, lined up with the label's left side.</p>
     </AILabel>
-    <AILabel kind="inline" size="md" textLabel="Bottom center" align="center">
+    <AILabel variant="inline" size="md" labelText="Bottom center" align="bottom">
       <p>Opens below, centered on the label.</p>
     </AILabel>
-    <AILabel kind="inline" size="md" textLabel="Bottom end" align="end">
+    <AILabel variant="inline" size="md" labelText="Bottom end" align="bottom-end">
       <p>Opens below, lined up with the label's right side.</p>
     </AILabel>
   </Stack>
   <Stack orientation="horizontal" gap={10}>
-    <AILabel kind="inline" size="md" textLabel="Right start" direction="right" align="start">
+    <AILabel variant="inline" size="md" labelText="Right start" align="right-start">
       <p>Opens to the right, lined up with the label's top.</p>
     </AILabel>
-    <AILabel kind="inline" size="md" textLabel="Right center" direction="right" align="center">
+    <AILabel variant="inline" size="md" labelText="Right center" align="right">
       <p>Opens to the right, centered on the label.</p>
     </AILabel>
-    <AILabel kind="inline" size="md" textLabel="Right end" direction="right" align="end">
+    <AILabel variant="inline" size="md" labelText="Right end" align="right-end">
       <p>Opens to the right, lined up with the label's bottom.</p>
     </AILabel>
   </Stack>
@@ -328,7 +328,7 @@ Set `direction` (`"top"`, `"right"`, `"bottom"`, `"left"`) and `align` (`"start"
 If a start- or end-aligned explanation would run past its container, such as a table's scroll area, it opens toward the other side. This label is aligned to the start at the right edge of a scroll box, so it opens to the left.
 
 <Box display="flex" justify="end" overflowX="auto" maxWidth="24rem" padding={5} paddingBottom="12rem" border="subtle">
-  <AILabel align="start">
+  <AILabel align="bottom-start">
     <p>Aligned to the start, but there is no room on the right, so it opens to the left.</p>
   </AILabel>
 </Box>
@@ -345,4 +345,4 @@ Set `portalTooltip` to `true` to render the explanation in a portal, so a contai
 
 ## Server rendering
 
-A filled `decorator` slot renders the AI surface on the server, so the surface does not pop in after the page loads. The server can't tell what the slot holds. If it holds another element, or a label with `revertActive` set, the surface drops once the page loads. Data table rows and `headerDecorator` columns can each differ, so their gradient appears once the page loads.
+A filled `decorator` slot renders the AI surface on the server, so the surface does not pop in after the page loads. The server can't tell what the slot holds. If it holds another element, or a label with `edited` set, the surface drops once the page loads. Data table rows and `headerDecorator` columns can each differ, so their gradient appears once the page loads.
