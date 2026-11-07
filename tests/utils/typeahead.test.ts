@@ -30,6 +30,20 @@ describe("typeaheadIndex", () => {
     ).toBe(1);
   });
 
+  it("keeps the current item while a longer query still matches it", () => {
+    const items = ["Apple", "Banana", "Bacon"].map((text) => ({ text }));
+
+    expect(typeaheadIndex({ items, query: "b", itemToString, index: 0 })).toBe(
+      1,
+    );
+    expect(typeaheadIndex({ items, query: "ba", itemToString, index: 1 })).toBe(
+      1,
+    );
+    expect(
+      typeaheadIndex({ items, query: "bac", itemToString, index: 1 }),
+    ).toBe(2);
+  });
+
   it("is case-insensitive and starts at the first item when index is -1", () => {
     expect(
       typeaheadIndex({ items: fruits, query: "A", itemToString, index: -1 }),
