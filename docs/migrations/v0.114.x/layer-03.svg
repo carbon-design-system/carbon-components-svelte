@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="230" viewBox="0 0 820 230">
+<rect width="820" height="230" fill="#ffffff"/>
+<text x="16" y="28" fill="#161616" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Box fill=&quot;layer-03&quot;</text>
+<text x="16" y="54" fill="#525252" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">theme</text>
+<text x="290" y="54" fill="#525252" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">0.113</text>
+<text x="560" y="54" fill="#525252" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">0.114</text>
+<line x1="16" x2="804" y1="64" y2="64" stroke="#c6c6c6"/>
+<text x="16" y="84" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">White</text>
+<rect x="290" y="70" width="36" height="18" fill="#e0e0e0" stroke="#525252" stroke-opacity="0.4"/>
+<text x="336" y="84" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#e0e0e0</text>
+<rect x="560" y="70" width="36" height="18" fill="#f4f4f4" stroke="#525252" stroke-opacity="0.4"/>
+<text x="606" y="84" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#f4f4f4</text>
+<line x1="16" x2="804" y1="94" y2="94" stroke="#c6c6c6"/>
+<text x="16" y="114" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">Gray 10</text>
+<rect x="290" y="100" width="36" height="18" fill="#e0e0e0" stroke="#525252" stroke-opacity="0.4"/>
+<text x="336" y="114" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#e0e0e0</text>
+<rect x="560" y="100" width="36" height="18" fill="#ffffff" stroke="#525252" stroke-opacity="0.4"/>
+<text x="606" y="114" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#ffffff</text>
+<line x1="16" x2="804" y1="124" y2="124" stroke="#c6c6c6"/>
+<text x="16" y="144" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">Gray 80</text>
+<rect x="290" y="130" width="36" height="18" fill="#6f6f6f" stroke="#525252" stroke-opacity="0.4"/>
+<text x="336" y="144" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#6f6f6f</text>
+<rect x="560" y="130" width="36" height="18" fill="#525252" stroke="#525252" stroke-opacity="0.4"/>
+<text x="606" y="144" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#525252</text>
+<line x1="16" x2="804" y1="154" y2="154" stroke="#c6c6c6"/>
+<text x="16" y="174" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">Gray 90</text>
+<rect x="290" y="160" width="36" height="18" fill="#525252" stroke="#525252" stroke-opacity="0.4"/>
+<text x="336" y="174" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#525252</text>
+<rect x="560" y="160" width="36" height="18" fill="#6f6f6f" stroke="#525252" stroke-opacity="0.4"/>
+<text x="606" y="174" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#6f6f6f</text>
+<line x1="16" x2="804" y1="184" y2="184" stroke="#c6c6c6"/>
+<text x="16" y="204" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">Gray 100</text>
+<rect x="290" y="190" width="36" height="18" fill="#393939" stroke="#525252" stroke-opacity="0.4"/>
+<text x="336" y="204" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#393939</text>
+<rect x="560" y="190" width="36" height="18" fill="#525252" stroke="#525252" stroke-opacity="0.4"/>
+<text x="606" y="204" fill="#161616" font-family="IBM Plex Mono, Menlo, Consolas, monospace" font-size="13">#525252</text>
+</svg>
