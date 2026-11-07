@@ -29,6 +29,7 @@ import StarRating from "carbon-components-svelte/StarRating/StarRating.svelte";
 import StructuredListCell from "carbon-components-svelte/StructuredList/StructuredListCell.svelte";
 import StructuredListInput from "carbon-components-svelte/StructuredList/StructuredListInput.svelte";
 import StructuredListRow from "carbon-components-svelte/StructuredList/StructuredListRow.svelte";
+import LikertMatrix from "carbon-components-svelte/SurveyScale/LikertMatrix.svelte";
 import SurveyScale from "carbon-components-svelte/SurveyScale/SurveyScale.svelte";
 import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
@@ -491,6 +492,19 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("img"),
+  },
+  {
+    name: "LikertMatrix",
+    render: (attrs) =>
+      render(LikertMatrix, {
+        props: {
+          legendText: "Setup",
+          helperText: "Rate each statement",
+          statements: [{ id: "a", text: "It was quick." }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "SurveyScale",

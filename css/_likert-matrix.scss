@@ -1,0 +1,263 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// The width a matrix needs to stay a table: the statements column plus a
+// 72px column for each point, so a heading such as "Strongly disagree"
+// wraps onto two lines. Below it each statement becomes its own card. The
+// count is in the markup (`--points-N`), since a container query can't
+// read a custom property.
+$likert-matrix-points: (3, 4, 5, 6, 7, 8, 9, 10, 11);
+
+/// LikertMatrix: a table of statements by scale points, a native radio in
+/// each cell, that stacks into one card per statement in a narrow container.
+/// @access private
+/// @group components
+@mixin likert-matrix {
+  .#{$prefix}--likert-matrix {
+    width: 100%;
+    align-items: stretch;
+    container: #{$prefix}--likert-matrix / inline-size;
+  }
+
+  .#{$prefix}--likert-matrix__fieldset {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--likert-matrix__table {
+    @include type-style("body-compact-01");
+
+    width: 100%;
+    border-collapse: collapse;
+    color: $text-primary;
+    table-layout: fixed;
+  }
+
+  .#{$prefix}--likert-matrix__heading {
+    @include type-style("label-01");
+
+    padding: $carbon--spacing-03 $carbon--spacing-02;
+    border-block-end: 1px solid $border-strong;
+    color: $text-secondary;
+    text-align: center;
+    vertical-align: bottom;
+  }
+
+  .#{$prefix}--likert-matrix__corner {
+    width: 28%;
+    border-block-end: 1px solid $border-strong;
+  }
+
+  .#{$prefix}--likert-matrix__row {
+    border-block-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--likert-matrix__statement {
+    padding: $carbon--spacing-03 $carbon--spacing-05 $carbon--spacing-03
+      $carbon--spacing-03;
+    font-weight: 400;
+    text-align: start;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--likert-matrix__row--invalid
+    .#{$prefix}--likert-matrix__statement {
+    padding-inline-start: calc(#{$carbon--spacing-03} - #{to-rem(3px)});
+    border-inline-start: to-rem(3px) solid $support-error;
+  }
+
+  .#{$prefix}--likert-matrix__cell {
+    padding: 0;
+  }
+
+  .#{$prefix}--likert-matrix__option {
+    display: flex;
+    min-height: to-rem(48px);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    gap: $carbon--spacing-03;
+  }
+
+  // The radio is hidden, so the mark carries the focus ring and the state.
+  .#{$prefix}--likert-matrix__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    clip-path: inset(50%);
+    opacity: 0;
+  }
+
+  .#{$prefix}--likert-matrix__mark {
+    display: flex;
+    width: to-rem(18px);
+    height: to-rem(18px);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $icon-primary;
+    background-color: $field;
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--likert-matrix__input:checked
+    + .#{$prefix}--likert-matrix__mark::before {
+    width: 100%;
+    height: 100%;
+    background-color: $icon-primary;
+    border-radius: 50%;
+    content: "";
+    transform: scale(0.5);
+  }
+
+  .#{$prefix}--likert-matrix__input:focus-visible
+    + .#{$prefix}--likert-matrix__mark {
+    @include focus-outline("outline");
+  }
+
+  // The point's name, drawn only where there is no heading above its column.
+  .#{$prefix}--likert-matrix__point {
+    @include hidden;
+  }
+
+  .#{$prefix}--likert-matrix--invalid .#{$prefix}--likert-matrix__mark {
+    border-color: $support-error;
+  }
+
+  .#{$prefix}--likert-matrix--readonly .#{$prefix}--likert-matrix__option {
+    cursor: default;
+  }
+
+  .#{$prefix}--likert-matrix--disabled .#{$prefix}--likert-matrix__option {
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--likert-matrix__input:disabled
+    + .#{$prefix}--likert-matrix__mark {
+    border-color: $icon-disabled;
+  }
+
+  .#{$prefix}--likert-matrix__input:disabled:checked
+    + .#{$prefix}--likert-matrix__mark::before {
+    background-color: $icon-disabled;
+  }
+
+  .#{$prefix}--likert-matrix--disabled .#{$prefix}--likert-matrix__heading,
+  .#{$prefix}--likert-matrix--disabled .#{$prefix}--likert-matrix__statement,
+  .#{$prefix}--likert-matrix--disabled .#{$prefix}--likert-matrix__point {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--likert-matrix__validation-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  // The row renders only while a message applies, so show it outright:
+  // Carbon reveals a message from a field's `[data-invalid]`, which a
+  // warning doesn't set.
+  .#{$prefix}--likert-matrix__validation-msg .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: none;
+    margin-top: 0;
+  }
+
+  .#{$prefix}--likert-matrix__invalid-icon {
+    flex: none;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--likert-matrix__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--likert-matrix__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+    opacity: 1;
+  }
+
+  // Below the table's width every part becomes a block: the headings leave
+  // the layout (the radios keep them in their name), each row is a card
+  // headed by its statement, and each option draws its own label.
+  @each $points in $likert-matrix-points {
+    $width: to-rem(192px) + to-rem(72px) * $points;
+
+    @container #{$prefix}--likert-matrix (width < #{$width}) {
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__table,
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__table
+        tbody,
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__row,
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__statement,
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__cell {
+        display: block;
+      }
+
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__table
+        thead {
+        @include hidden;
+      }
+
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__row {
+        padding: $carbon--spacing-03 0;
+        border-block-end-color: $border-subtle;
+      }
+
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__statement {
+        padding: $carbon--spacing-03;
+        font-weight: 600;
+      }
+
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__option {
+        justify-content: flex-start;
+        padding-inline: $carbon--spacing-03;
+      }
+
+      .#{$prefix}--likert-matrix--points-#{$points}
+        .#{$prefix}--likert-matrix__point {
+        position: static;
+        overflow: visible;
+        width: auto;
+        height: auto;
+        margin: 0;
+        clip: auto;
+        white-space: normal;
+      }
+    }
+  }
+
+  // Forced colors paint the dot with the fill they keep for text, which
+  // leaves a checked radio and an empty one apart only by the dot. It keeps
+  // a system color so the dot stays.
+  @media (forced-colors: active) {
+    .#{$prefix}--likert-matrix__input:checked
+      + .#{$prefix}--likert-matrix__mark::before {
+      background-color: ButtonText;
+    }
+
+    .#{$prefix}--likert-matrix__input:disabled:checked
+      + .#{$prefix}--likert-matrix__mark::before {
+      background-color: GrayText;
+    }
+  }
+}
+
+@include exports("likert-matrix") {
+  @include likert-matrix;
+}

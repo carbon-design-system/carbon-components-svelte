@@ -139,6 +139,7 @@ export { setKbdTranslations } from "./Kbd/kbd-translations.js";
 export { default as Layer } from "./Layer/Layer.svelte";
 export { default as LayoutDirection } from "./LayoutDirection/LayoutDirection.svelte";
 export { default as LazyMount } from "./LazyMount/LazyMount.svelte";
+export { default as LikertMatrix } from "./SurveyScale/LikertMatrix.svelte";
 export { default as Link } from "./Link/Link.svelte";
 export { default as LinkDownload } from "./Link/LinkDownload.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";

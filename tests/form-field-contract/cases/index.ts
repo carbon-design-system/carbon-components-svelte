@@ -27,6 +27,7 @@ import type { Exemptions, FieldCase } from "../contract";
 import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
 import InlineEditField from "../fixtures/InlineEditField.test.svelte";
+import LikertMatrixField from "../fixtures/LikertMatrixField.test.svelte";
 import RadioButtonGroupField from "../fixtures/RadioButtonGroupField.test.svelte";
 import SurveyScaleField from "../fixtures/SurveyScaleField.test.svelte";
 
@@ -339,6 +340,13 @@ export const cases: FieldCase[] = [
     control: () => screen.getByRole("radiogroup"),
     state: { errorAttribute: "aria-describedby" },
   },
+  {
+    name: "LikertMatrix",
+    component: LikertMatrixField,
+    // The fieldset is marked invalid and carries every message.
+    control: () => screen.getByRole("group"),
+    state: { errorAttribute: "aria-describedby" },
+  },
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
@@ -353,6 +361,7 @@ export const exempt: Exemptions = {
     StarRating: NOT_AUDITED,
   },
   reset: {
+    LikertMatrix: NOT_A_TEXT_FIELD,
     ListBoxRequiredInput:
       "a hidden validation proxy, covered by tests/ListBox/required-invalid.test.ts",
     NumberInput: "keeps its value on reset unless allowEmpty is set",
