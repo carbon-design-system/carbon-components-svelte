@@ -107,6 +107,9 @@
     }
 
     .#{$prefix}--tree-parent-node__toggle {
+      // ccs: a flex box drops the line box, so the caret no longer sits on
+      // the text baseline 2px above the row's center.
+      display: flex;
       padding: 0;
       border: 0;
       margin-inline-end: $spacing-03;
