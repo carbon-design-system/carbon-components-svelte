@@ -1,0 +1,409 @@
+---
+components: ["PivotTable", "PivotFieldList"]
+description: PivotTable groups flat records by row and column fields and shows an aggregate for every group, with subtotals, grand totals and the records behind each cell.
+---
+
+<script>
+  import {
+    Button,
+    PivotFieldList,
+    PivotTable,
+    Stack,
+    pivot,
+  } from "carbon-components-svelte";
+
+  const countries = {
+    Americas: ["Brazil", "Canada", "United States"],
+    Asia: ["India", "Japan", "Singapore"],
+    Europe: ["France", "Germany", "Spain"],
+  };
+  const products = ["Analytics", "Storage"];
+  const years = [2023, 2024, 2025];
+
+  // 216 sales: three regions, three countries each, three years, four
+  // quarters and two products.
+  const records = Object.entries(countries).flatMap(([region, list], r) =>
+    list.flatMap((country, c) =>
+      years.flatMap((year, y) =>
+        ["Q1", "Q2", "Q3", "Q4"].flatMap((quarter, q) =>
+          products.map((product, p) => ({
+            region,
+            country,
+            year,
+            quarter,
+            product,
+            amount: 1200 + ((r * 7 + c * 5 + y * 11 + q * 3 + p * 13) % 17) * 310,
+            units: 4 + ((r + c * 3 + y + q * 5 + p) % 9),
+          })),
+        ),
+      ),
+    ),
+  );
+
+  /** @type {import("carbon-components-svelte/PivotTable/pivot-config.js").PivotField[]} */
+  const fields = [
+    { key: "region", label: "Region" },
+    { key: "country", label: "Country" },
+    { key: "product", label: "Product" },
+    { key: "year", label: "Year", type: "number" },
+    { key: "quarter", label: "Quarter" },
+    { key: "amount", label: "Amount", type: "number" },
+    { key: "units", label: "Units", type: "number" },
+  ];
+
+  /** @type {Intl.NumberFormatOptions} */
+  const usd = { style: "currency", currency: "USD", maximumFractionDigits: 0 };
+
+  let table;
+  /** @type {import("carbon-components-svelte/PivotTable/pivot.js").PivotConfig} */
+  let builder = {
+    rows: ["region"],
+    columns: ["year"],
+    values: [{ field: "amount", format: usd }],
+    filters: [],
+  };
+  let expandedRowIds = [];
+  let drilled = "";
+</script>
+
+## Basic
+
+Pass flat `records` and a `config` that names the `rows`, the `columns` and the `values` to aggregate. Every group, subtotal and grand total is computed in one pass, so opening a group never pivots again. The table renders collapsed, so a server render and the first paint match.
+
+<PivotTable
+  labelText="Sales by region and year"
+  {records}
+  {fields}
+  size="short"
+  config={{
+    rows: ["region", "country"],
+    columns: ["year"],
+    values: [{ field: "amount", format: usd }],
+  }}
+/>
+
+Click a group, or focus its header and press <DocKbd label="Enter" />, to open it. A group row shows its subtotal whether it is open or closed. Row groups open downward; an open column group adds a subtotal column.
+
+```svelte
+<PivotTable
+  labelText="Sales by region and year"
+  {records}
+  config={{
+    rows: ["region", "country"],
+    columns: ["year"],
+    values: [{ field: "amount", format: usd }],
+  }}
+/>
+```
+
+## Keyboard
+
+The table is one tab stop. <DocKbd label="Tab" /> enters it, and the arrow keys move between cells, including the header cells. A cell in a header and a cell in the body are both reachable, so a keyboard user can open a column group as easily as a row group.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="ArrowUp" />, <DocKbd label="ArrowDown" />, <DocKbd label="ArrowLeft" />, <DocKbd label="ArrowRight" /> | Move one cell. Left and Right swap under `dir="rtl"`. A header cell that spans several columns is one stop. |
+| <DocKbd label="Home" />, <DocKbd label="End" /> | First and last cell of the row. With <DocKbd label="Control" />, first and last cell of the table. |
+| <DocKbd label="PageUp" />, <DocKbd label="PageDown" /> | Move one page of rows. |
+| <DocKbd label="Enter" />, <DocKbd label="Space" /> | On a group header, open or close it. On a value cell, list its records. |
+| <DocKbd label="Shift" /> + <DocKbd label="ArrowRight" />, <DocKbd label="Shift" /> + <DocKbd label="ArrowLeft" /> | Open or close the group, toward the inline end and start. |
+
+## Accessibility
+
+The table is a `treegrid`. Rows carry `aria-level`, `aria-posinset`, `aria-setsize` and `aria-expanded`, and the grid is `aria-readonly`. The row header cell names its row, and a column header with `colspan` is `scope="colgroup"`.
+
+| Do | Why |
+| :--- | :--- |
+| Set `labelText`, or `aria-label` or `aria-labelledby`. | The treegrid needs a name. A consumer `aria-label` replaces the label. |
+| Keep `locale` at its default, or set one for both server and browser. | Number formats differ by locale, so the server and the browser must agree. |
+| Use a plain `table` from `DataTable` when the data has no groups. | A treegrid is one tab stop with arrow keys. A flat table needs neither. |
+
+## Values
+
+A value is `{ field, aggregate, label, format }`. `aggregate` is `"sum"` (the default), `"count"`, `"avg"`, `"min"`, `"max"`, `"countDistinct"` or a function. Omit `field` with `"count"` to count records. A blank value is left out of every aggregate except a record count. `format` takes `Intl.NumberFormat` options.
+
+| Aggregate | Result |
+| :--- | :--- |
+| `"sum"` | The sum of the numbers. |
+| `"count"` | How many records have a value. |
+| `"avg"` | The mean of the records under a group, not of its children's means. |
+| `"min"`, `"max"` | The smallest and largest number. |
+| `"countDistinct"` | How many different values, counted once across a subtotal. |
+| A function | Receives the field values of every record under the cell. Return a number. |
+
+With several values, each column group gets one column per value.
+
+<PivotTable
+  labelText="Amount and units"
+  {records}
+  {fields}
+  size="short"
+  config={{
+    rows: ["region"],
+    columns: ["year"],
+    values: [
+      { field: "amount", aggregate: "sum", format: usd },
+      { field: "units", aggregate: "avg", label: "Avg units", format: { maximumFractionDigits: 1 } },
+      { aggregate: "count", label: "Sales" },
+    ],
+  }}
+/>
+
+## Layout
+
+### Nesting
+
+Rows nest to any depth. The label column indents each level.
+
+<PivotTable
+  labelText="Four levels"
+  {records}
+  {fields}
+  size="compact"
+  height={320}
+  config={{
+    rows: ["region", "country", "product"],
+    columns: ["year"],
+    values: [{ field: "units" }],
+  }}
+/>
+
+### Column groups
+
+Columns nest too. A group with children opens to its children and a subtotal column.
+
+<PivotTable
+  labelText="Years and quarters"
+  {records}
+  {fields}
+  size="short"
+  config={{
+    rows: ["region"],
+    columns: ["year", "quarter"],
+    values: [{ field: "amount", format: usd }],
+  }}
+/>
+
+### Height and scrolling
+
+Set `height` to scroll the body. The header rows stay at the top and the row header column stays at the start while the table scrolls in either direction. A focused cell is scrolled clear of both. Set `rowHeaderWidth` to change the width of the pinned column.
+
+<PivotTable
+  labelText="Sticky headers"
+  {records}
+  {fields}
+  size="short"
+  height={240}
+  zebra
+  config={{
+    rows: ["region", "country", "product"],
+    columns: ["year", "quarter"],
+    values: [{ field: "units" }],
+  }}
+/>
+
+### Totals
+
+Set `grandTotals` to `false` to drop the grand total row and column.
+
+<PivotTable
+  labelText="Without totals"
+  {records}
+  {fields}
+  size="short"
+  grandTotals={false}
+  config={{
+    rows: ["region"],
+    columns: ["year"],
+    values: [{ field: "units" }],
+  }}
+/>
+
+## Data
+
+### Blank values
+
+A missing value (`null`, `undefined`, an empty string or `NaN`) forms its own group, labeled by `blankLabel`. It always sorts last.
+
+### Sorting
+
+Groups sort by label, with numbers in numeric order. Set `sort` on a row or column field to order by an aggregate instead: `{ field: "country", sort: { by: "value", direction: "desc" } }` orders the countries of each region by their total.
+
+<PivotTable
+  labelText="Countries by amount"
+  {records}
+  {fields}
+  size="short"
+  config={{
+    rows: [
+      "region",
+      { field: "country", sort: { by: "value", direction: "desc" } },
+    ],
+    columns: [],
+    values: [{ field: "amount", format: usd }],
+  }}
+/>
+
+### Grouping values
+
+A `group` function maps a field value to the value to group by, such as a date to a quarter. `formatKey` sets the label.
+
+```js
+const config = {
+  rows: [
+    {
+      field: "date",
+      group: (date) => `${new Date(date).getFullYear()}-Q${Math.floor(new Date(date).getMonth() / 3) + 1}`,
+    },
+  ],
+  values: [{ field: "amount" }],
+};
+```
+
+### Filters
+
+A filter keeps the records whose field value is in `include`, or drops those in `exclude`. `null` stands for a blank value. A filter can name a field that is not in the table.
+
+<PivotTable
+  labelText="Asia and Europe, 2024 and later"
+  {records}
+  {fields}
+  size="short"
+  config={{
+    rows: ["region", "country"],
+    columns: ["year"],
+    values: [{ field: "amount", format: usd }],
+    filters: [
+      { field: "region", exclude: ["Americas"] },
+      { field: "year", include: [2024, 2025] },
+    ],
+  }}
+/>
+
+## State
+
+### Open groups
+
+Bind `expandedRowIds` and `expandedColumnIds` to read or set which groups are open. An id is the path of keys from the outermost group, so it survives a data change. `toggle:row` and `toggle:column` fire after a group opens or closes.
+
+<Stack gap={5}>
+  <Button size="small" kind="tertiary" on:click={() => (expandedRowIds = [])}>Close all</Button>
+  <PivotTable
+    labelText="Bound groups"
+    {records}
+    {fields}
+    size="short"
+    bind:expandedRowIds
+    config={{
+      rows: ["region", "country"],
+      columns: ["year"],
+      values: [{ field: "units" }],
+    }}
+  />
+  <p>Open groups: {expandedRowIds.length}</p>
+</Stack>
+
+### Expand and collapse all
+
+The toolbar has **Expand all** and **Collapse all**. Call `expandAll()` and `collapseAll()` on the component from your own controls, and set `hideToolbar` to hide the built-in one. The `toolbar` slot adds buttons after the built-in ones.
+
+<Stack gap={5}>
+  <Stack gap={3} orientation="horizontal">
+    <Button size="small" on:click={() => table.expandAll()}>Expand all</Button>
+    <Button size="small" kind="secondary" on:click={() => table.collapseAll()}>Collapse all</Button>
+  </Stack>
+  <PivotTable
+    bind:this={table}
+    hideToolbar
+    labelText="Controlled from outside"
+    {records}
+    {fields}
+    size="short"
+    height={280}
+    config={{
+      rows: ["region", "country"],
+      columns: ["year"],
+      values: [{ field: "units" }],
+    }}
+  />
+</Stack>
+
+## Records behind a cell
+
+Click a value cell, or press <DocKbd label="Enter" /> on it, to list the records behind it in a side panel. A group's subtotal lists every record under it. The panel shows the first `drillLimit` records and the fields in `drillFields`. Closing it returns focus to the cell.
+
+The `drill` event fires first and is cancelable. Call `preventDefault()` to open your own panel, or set `drillDown` to `false` to only listen.
+
+<Stack gap={5}>
+  <PivotTable
+    labelText="Drill down"
+    {records}
+    {fields}
+    size="short"
+    drillFields={["region", "country", "product", "year", "quarter", "amount"]}
+    config={{
+      rows: ["region"],
+      columns: ["year"],
+      values: [{ field: "amount", format: usd }],
+    }}
+    on:drill={(event) => (drilled = `${event.detail.records.length} records, ${event.detail.rowPath.join(" / ")}, ${event.detail.columnPath.join(" / ")}`)}
+  />
+  <p>Last cell: {drilled || "none"}</p>
+</Stack>
+
+## Export
+
+The toolbar's **Export CSV** downloads the pivot as it shows. `toCsv()` returns the text and `downloadCsv(filename)` saves it. Row labels take one column per row field, each group's label in the column of its level. The header takes one line per column field, with a group's label on the first line of its span. Numbers are raw by default; pass `{ formatted: true }` for the displayed text. A label that starts like a formula (`=`, `+`, `-`, `@`) is prefixed with `'`.
+
+To export without the component, `pivotToCsv(result, layout)` takes the results of `pivot()` and `layoutPivot()`.
+
+## Field list
+
+`PivotFieldList` shows the fields of the records and the areas of a pivot: the unplaced fields, **Rows**, **Columns**, **Values** and **Filters**. Bind the same `config` to the list and the table.
+
+<Stack gap={6}>
+  <PivotFieldList {fields} {records} bind:config={builder} />
+  <PivotTable
+    labelText="Pivot built with the field list"
+    {records}
+    {fields}
+    size="short"
+    height={320}
+    config={builder}
+  />
+</Stack>
+
+Drag a field to another area, or within an area to reorder it. A row, column or filter field sits in one of the three at a time; a value can repeat, such as the sum and the average of one field. The menu on each field does everything a drag does, for keyboard and single-pointer use:
+
+| Menu item | Does |
+| :--- | :--- |
+| **Move to** an area | Moves the field. Focus follows it to its new area. |
+| **Move up**, **Move down** | Reorders the field within its area. |
+| **Summarize by** | On a value, sets the aggregate. |
+| **Show values** | On a filter, lists the values of the field from `records`. Clear one to leave it out. |
+| **Remove** | Returns the field to the unplaced list. |
+
+The `move` event fires before a field moves and is cancelable. `change` fires after the config changes.
+
+## Building your own
+
+The engine has no dependencies and runs on the server. `pivot()` returns a tree, and `layoutPivot()` turns it into the visible rows, columns and header cells for a set of open groups. Opening a group calls only `layoutPivot()`.
+
+```js
+import { layoutPivot, pivot } from "carbon-components-svelte";
+
+const result = pivot(records, {
+  rows: ["region", "country"],
+  columns: ["year"],
+  values: [{ field: "amount" }],
+});
+
+const layout = layoutPivot(result, {
+  expandedRowIds: new Set([result.rowRoot.children[0].id]),
+});
+
+layout.rows[0].label; // "Americas"
+result.get(layout.rows[0].node, layout.columns[0].node); // the sum for Americas in 2023
+```
+
+100,000 records grouped by three row fields and two column fields pivot in about 30 ms. A pivot with more than `maxCells` row groups x column groups x values is not computed, and the table shows an error and fires `pivot:error`.
