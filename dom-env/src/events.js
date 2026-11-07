@@ -1,6 +1,6 @@
 // Event, its subclasses, and EventTarget with the DOM dispatch algorithm.
 
-import { afterDispatch, isEnabled as checksOn } from "./checks.js";
+import { afterDispatch } from "./checks.js";
 import { trackListener } from "./leaks.js";
 import { defineConstants, domException, str, tag } from "./shared.js";
 
@@ -840,7 +840,7 @@ export function dispatch(target, event) {
     if (event._canceled) activation.cancel?.();
     else activation.run?.();
   }
-  if (checksOn()) afterDispatch(globalThis.document);
+  afterDispatch(globalThis.document);
   return !event._canceled;
 }
 

@@ -213,3 +213,23 @@ test("DOM checks find dangling id references and focus problems", () => {
     ].join("\n"),
   );
 });
+
+test("CSS coverage records the selectors some DOM state matched", () => {
+  const selectors = [
+    ".btn",
+    ".btn:hover::after",
+    ".btn--danger",
+    ".menu .item:focus-visible",
+    "p > em",
+  ];
+  const run = window({ cssCoverage: selectors });
+  run(`document.body.innerHTML = '<button class="btn">a</button><div class="menu"></div>';
+    __domEnv.coverage.check();
+    document.querySelector(".menu").innerHTML = '<span class="item"></span>';
+    __domEnv.coverage.check();
+    document.body.innerHTML = '';`);
+  assert.equal(
+    run(`__domEnv.coverage.result().covered.join(",")`),
+    ".btn,.btn:hover::after,.menu .item:focus-visible",
+  );
+});
