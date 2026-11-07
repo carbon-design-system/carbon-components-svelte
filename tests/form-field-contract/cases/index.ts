@@ -23,6 +23,7 @@ import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svel
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+import TreeSelect from "carbon-components-svelte/TreeSelect/TreeSelect.svelte";
 import type { Exemptions, FieldCase } from "../contract";
 import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
@@ -36,6 +37,11 @@ const textInputSkeleton = {
 
 const listItems = [
   { id: "0", text: "Ada" },
+  { id: "1", text: "Grace" },
+];
+
+const treeNodes = [
+  { id: "0", text: "Ada", nodes: [{ id: "0a", text: "Ada Jr" }] },
   { id: "1", text: "Grace" },
 ];
 
@@ -76,6 +82,26 @@ export const cases: FieldCase[] = [
     // The filter text is a query, not the submitted value.
     reset: { initial: "Ada", typed: "x", events: ["input"], submits: false },
     selectOnFocus: { value: "Ada" },
+  },
+  {
+    name: "TreeSelect",
+    component: TreeSelect,
+    props: { nodes: treeNodes },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
+    fluid: {
+      className: "bx--list-box__wrapper--fluid",
+      wrapper: ".bx--list-box__wrapper--fluid",
+      errorAttribute: "aria-describedby",
+    },
+  },
+  {
+    name: "TreeSelect",
+    variant: "filterable",
+    component: TreeSelect,
+    props: { nodes: treeNodes, filterable: true },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
   },
   {
     name: "ComboBox",

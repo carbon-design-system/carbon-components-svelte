@@ -37,6 +37,9 @@
     border: 2px solid $focus;
     border-top-width: 1px;
     content: "";
+    // The ring covers the row, so a control inside it, such as TreeSelect's
+    // expander, would lose its clicks to the ring.
+    pointer-events: none;
   }
 
   // Forced colors repaint the highlight ring as the rows' own edge color,

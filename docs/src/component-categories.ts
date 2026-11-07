@@ -70,7 +70,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
   },
   {
     label: "Dropdowns",
-    components: ["Dropdown", "ComboBox", "MultiSelect", "Select"],
+    components: ["Dropdown", "ComboBox", "MultiSelect", "TreeSelect", "Select"],
   },
   {
     label: "Search",
