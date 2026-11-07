@@ -65,11 +65,9 @@
     color: $link-inverse;
   }
 
+  // ccs: underlined at rest. In a low-contrast notification on g90 and
+  // g100, the link color is too close to the text's to mark a link alone.
   .#{$prefix}--toast-notification a {
-    text-decoration: none;
-  }
-
-  .#{$prefix}--toast-notification a:hover {
     text-decoration: underline;
   }
 

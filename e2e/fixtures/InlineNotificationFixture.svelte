@@ -49,3 +49,29 @@
   <UnorderedList><ListItem>Backups are on.</ListItem></UnorderedList>
   <Link href="#runbook">Runbook</Link>
 </ToastNotification>
+
+{#each [false, true] as lowContrast}
+  <InlineNotification
+    data-testid="inline-link-{lowContrast ? 'low' : 'high'}"
+    {lowContrast}
+    hideCloseButton
+    kind="info"
+    title="Styles"
+  >
+    <svelte:fragment slot="subtitleChildren">
+      Import the CSS once, as the <a href="#setup">setup guide</a> shows.
+    </svelte:fragment>
+  </InlineNotification>
+  <ToastNotification
+    data-testid="toast-link-{lowContrast ? 'low' : 'high'}"
+    {lowContrast}
+    hideCloseButton
+    timeout={0}
+    kind="info"
+    title="Styles"
+  >
+    <svelte:fragment slot="subtitleChildren">
+      Import the CSS once, as the <a href="#setup">setup guide</a> shows.
+    </svelte:fragment>
+  </ToastNotification>
+{/each}
