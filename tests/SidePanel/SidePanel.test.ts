@@ -230,6 +230,43 @@ describe("SidePanel", () => {
     expect(onBack).toHaveBeenCalledTimes(1);
   });
 
+  it("keeps focus in the panel when a step change removes the focused control", async () => {
+    const { component } = render(SidePanel, {
+      props: { open: true, field: true, currentStep: 1 },
+    });
+    screen.getByRole("button", { name: "Back" }).focus();
+
+    component.currentStep = 0;
+    await tick();
+    await tick();
+    expect(screen.getByRole("textbox", { name: "Region" })).toHaveFocus();
+  });
+
+  it("focuses a slide-in panel itself when a step change removes the focused control", async () => {
+    const { component } = render(SidePanel, {
+      props: { open: true, slideIn: true, currentStep: 1 },
+    });
+    screen.getByRole("button", { name: "Back" }).focus();
+
+    component.currentStep = 0;
+    await tick();
+    await tick();
+    expect(getPanel()).toHaveFocus();
+  });
+
+  it("leaves focus on the page when the step changes", async () => {
+    const { component } = render(SidePanel, {
+      props: { open: true, field: true, currentStep: 1 },
+    });
+    const trigger = screen.getByRole("button", { name: "Open panel" });
+    trigger.focus();
+
+    component.currentStep = 0;
+    await tick();
+    await tick();
+    expect(trigger).toHaveFocus();
+  });
+
   it("docks under a UI Shell Header, and spans the full height without one", async () => {
     const { component } = render(SidePanel, { props: { open: true } });
     expect(getPanel()).toHaveClass("bx--side-panel--no-header");
