@@ -101,6 +101,10 @@ Lists wrap at the ends and grids stop, which is what the WAI-ARIA patterns do. S
 | `ownsKey` | | `(event) => boolean`. Leave the key to the focused control, such as the caret keys of a text field in a toolbar |
 | `shift` | `"extend"` | `"ignore"` leaves Shift+key to the element |
 
+## Server rendering
+
+On the server there is no DOM to query, so `selector` finds no items and `tabStop` is `-1`: every item renders with `tabindex="-1"` until the page hydrates. Pass `count` (and `skip` for disabled items) as well, and the first enabled item renders with `tabindex="0"`.
+
 ## Selection
 
 The helper moves the cursor and never changes what is selected. When Shift is held with a navigation key, `onMove` receives `extend: true` and the helper still moves the cursor. Extend a selection from there, with the selection model of your choice, and return `false` from `onMove` to keep the cursor where it is.
