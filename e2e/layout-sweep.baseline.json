@@ -1752,6 +1752,30 @@
     "message": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "rtl.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline-notification-narrow\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2)",
+    "message": "div[data-testid=\"inline-notification-narrow\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"inline-notification-narrow\"] > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline-notification\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2)",
+    "message": "div[data-testid=\"inline-notification\"] > div.bx--inline-notification.bx--inline-notification--high-contrast > button.bx--inline-notification__close-button:nth-of-type(2): 2px outline inside 1px outline div[data-testid=\"inline-notification\"] > div.bx--inline-notification.bx--inline-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "rtl.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"toast-notification\"] > div.bx--toast-notification.bx--toast-notification--high-contrast > button.bx--toast-notification__close-button",
+    "message": "div[data-testid=\"toast-notification\"] > div.bx--toast-notification.bx--toast-notification--high-contrast > button.bx--toast-notification__close-button: 2px outline inside 1px outline div[data-testid=\"toast-notification\"] > div.bx--toast-notification.bx--toast-notification--high-contrast, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "search-fluid-status.html",
     "variant": "320",
     "check": "overflow",

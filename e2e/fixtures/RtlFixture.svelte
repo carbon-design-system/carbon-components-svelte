@@ -4,6 +4,7 @@
     BigNumber,
     Box,
     Button,
+    Callout,
     Card,
     CardAction,
     CardActions,
@@ -24,11 +25,13 @@
     HeaderNavItem,
     HeaderNavMenu,
     HeaderUtilities,
+    InlineNotification,
     Kbd,
     LayoutDirection,
     MenuButton,
     MenuItem,
     MultiSelect,
+    NotificationActionButton,
     Pagination,
     PaginationSkeleton,
     ProgressIndicator,
@@ -45,6 +48,7 @@
     Tabs,
     TabsSkeleton,
     TabsVertical,
+    ToastNotification,
     TreeView,
   } from "carbon-components-svelte";
   import ArrowRight from "carbon-icons-svelte/lib/ArrowRight.svelte";
@@ -403,6 +407,30 @@ export async function rollback(region, id) {
   <div data-testid="tabs-default-skeleton">
     <TabsSkeleton count={3} />
   </div>
+  <div data-testid="inline-notification" class="notification">
+    <InlineNotification kind="warning" title="Storage" subtitle="90% used.">
+      <svelte:fragment slot="actions">
+        <NotificationActionButton>Upgrade</NotificationActionButton>
+      </svelte:fragment>
+    </InlineNotification>
+  </div>
+  <div data-testid="inline-notification-narrow" class="field">
+    <InlineNotification kind="warning" title="Storage" subtitle="90% used.">
+      <svelte:fragment slot="actions">
+        <NotificationActionButton>Upgrade</NotificationActionButton>
+      </svelte:fragment>
+    </InlineNotification>
+  </div>
+  <div data-testid="callout" class="notification">
+    <Callout lowContrast title="Read-only" subtitle="Ask an admin." />
+  </div>
+  <div data-testid="toast-notification" class="field">
+    <ToastNotification kind="error" title="Upload failed" subtitle="Timed out.">
+      <svelte:fragment slot="actions">
+        <NotificationActionButton>Retry</NotificationActionButton>
+      </svelte:fragment>
+    </ToastNotification>
+  </div>
   <div data-testid="kbd">
     <Kbd shortcut="mod+shift+k" />
   </div>
@@ -431,6 +459,11 @@ export async function rollback(region, id) {
 </Content>
 
 <style>
+  .notification {
+    max-width: 40rem;
+    margin-bottom: 1.5rem;
+  }
+
   .field {
     max-width: 20rem;
     margin-bottom: 1.5rem;
