@@ -235,4 +235,4 @@ With no scope and no `id`, a component still gets a random id, and Svelte rewrit
 
 ## Locale and time
 
-`Pagination` formats its item and page counts with the runtime locale, so a server in one locale and a browser in another print `12,345` and `12.345`. Svelte replaces the text on hydration. Pass `itemText`, `itemRangeText`, `pageText`, and `pageRangeText` functions that format with a fixed locale. `BigNumber`, `Meter`, and `RelativeTime` accept `locale`. `RelativeTime` also accepts `now` and `timeZone`. Pass fixed values from the request to keep prerendered HTML correct.
+`Pagination` formats its item and page counts with the runtime locale, so a server in one locale and a browser in another print `12,345` and `12.345`. Svelte replaces the text on hydration. Pass `itemText`, `itemRangeText`, `pageText`, and `pageRangeText` functions that format with a fixed locale. `BigNumber`, `Meter`, and `RelativeTime` accept `locale`. `RelativeTime` also accepts `now` and `timeZone`, and `groupChatMessages` accepts `timeZone`, `now` and `locale`. Pass fixed values from the request to keep prerendered HTML correct.
