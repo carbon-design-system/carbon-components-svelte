@@ -1,5 +1,5 @@
 import type { Config } from "bivium";
-import { cssNarrower } from "./scripts/lib/css-narrower";
+import { cssNarrower } from "./scripts/lib/css-narrower.ts";
 
 // Types only, so `bivium plan` runs before an install: CI's changes job
 // plans every PR without one.
