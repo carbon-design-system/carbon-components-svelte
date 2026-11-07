@@ -276,6 +276,8 @@
   let copyFailed = false;
   let prevExpanded = expanded;
   let exceedsThreshold = false;
+  /** Whether the content's height has been measured, which then decides. */
+  let measured = false;
   let mounted = false;
   let stopObserving = noop;
 
@@ -365,12 +367,7 @@
       16;
     const collapsedMaxHeight =
       maxCollapsedNumberOfRows * rowHeightInRem * remInPixels;
-    // Mirror Carbon React: the expand control is only useful when collapsed
-    // content is capped and expanding can reveal more rows than that cap.
-    const canExpand =
-      maxCollapsedNumberOfRows > 0 &&
-      (maxExpandedNumberOfRows <= 0 ||
-        maxExpandedNumberOfRows > maxCollapsedNumberOfRows);
+    measured = true;
     exceedsThreshold = canExpand && height > collapsedMaxHeight;
     // If the content no longer overflows, collapse so the expanded min-height
     // doesn't leave the snippet taller than its (now shorter) content.
@@ -401,6 +398,28 @@
   $: showBottomFade = type === "multi" && yScrollable && !atBottom;
 
   $: expandText = expanded ? showLessText : showMoreText;
+
+  // Mirror Carbon React: the expand control is only useful when collapsed
+  // content is capped and expanding can reveal more rows than that cap.
+  $: canExpand =
+    maxCollapsedNumberOfRows > 0 &&
+    (maxExpandedNumberOfRows <= 0 ||
+      maxExpandedNumberOfRows > maxCollapsedNumberOfRows);
+
+  // Until the snippet is first measured, and in server-rendered HTML, the
+  // line count decides, so the expand control is there from the start
+  // instead of adding a row when the measurement lands. A trailing newline
+  // renders no line. Wrapped text can take more rows than it has lines, so
+  // it waits for the measurement.
+  $: if (!measured) {
+    exceedsThreshold =
+      type === "multi" &&
+      showMoreLess &&
+      !wrapText &&
+      typeof code === "string" &&
+      canExpand &&
+      code.replace(/\n$/, "").split("\n").length > maxCollapsedNumberOfRows;
+  }
 
   // Multi-line min/max heights come from row-count props (1rem a row).
   // A value of `0` means no constraint for that axis (Carbon React parity).

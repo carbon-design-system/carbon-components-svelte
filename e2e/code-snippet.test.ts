@@ -76,11 +76,12 @@ test.describe("CodeSnippet", () => {
     ).toBeHidden();
   });
 
-  test("expand button appears when a hidden snippet becomes visible", async ({
+  test("a hidden snippet has its expand button when it becomes visible", async ({
     page,
   }) => {
+    // A hidden snippet can't be measured, so its line count decides.
     const snippet = page.getByTestId("snippet-multi-hidden");
-    await expect(snippet.locator(".bx--snippet-btn--expand")).toHaveCount(0);
+    await expect(snippet.locator(".bx--snippet-btn--expand")).toHaveCount(1);
 
     await page.getByTestId("toggle-hidden-snippet").click();
 
