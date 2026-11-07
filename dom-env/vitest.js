@@ -75,7 +75,8 @@ export default {
     getScript().runInContext(context);
     const global = vm.runInContext("this", context);
     const strict = options?.domEnv?.strict ?? process.env.DOM_ENV_STRICT;
-    global.__domEnv.install({ url: options?.domEnv?.url, strict });
+    const leaks = options?.domEnv?.leaks ?? process.env.DOM_ENV_LEAKS;
+    global.__domEnv.install({ url: options?.domEnv?.url, strict, leaks });
     global.__domEnvUncaught = (error) =>
       process.emit("uncaughtException", error);
     return {

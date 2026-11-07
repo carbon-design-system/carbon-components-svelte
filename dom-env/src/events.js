@@ -1,5 +1,6 @@
 // Event, its subclasses, and EventTarget with the DOM dispatch algorithm.
 
+import { trackListener } from "./leaks.js";
 import { defineConstants, domException, str, tag } from "./shared.js";
 
 const NONE = 0;
@@ -713,6 +714,7 @@ export class EventTarget {
       removed: false,
     };
     list.push(listener);
+    trackListener(this, type, listener);
     if (signal) {
       signal.addEventListener(
         "abort",

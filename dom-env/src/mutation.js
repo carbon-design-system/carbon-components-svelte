@@ -3,6 +3,7 @@
 
 import { staticNodeList } from "./collections.js";
 import { hooks } from "./events.js";
+import { trackObservation } from "./leaks.js";
 import { illegalConstructor, INTERNAL, str, tag } from "./shared.js";
 
 /** Number of live registrations across all observers in this realm. */
@@ -115,6 +116,7 @@ export class MutationObserver {
     }
     regs.push({ observer: this, options: opts });
     this._nodes.push(target);
+    trackObservation(this, target);
     observing.count++;
   }
 
