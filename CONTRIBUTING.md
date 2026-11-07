@@ -590,6 +590,9 @@ The docs site defers work a page doesn't need yet. Keep to these when changing p
 | When changing CodeSnippet's multi-line styles (row height, padding, row limits), update [`code-view-height.ts`](docs/src/code-view-height.ts). | The docs reserve that height before a code view renders. A mismatch moves the page in Safari, which doesn't anchor the scroll. `e2e/code-view-height.test.ts` fails on it. |
 | Measure docs performance on a production build: `cd docs && bun run build`, then `bun run preview`. | The dev server is slower and skips the build's caches, so its timings mislead. |
 | Check a scroll or lazy-loading change in WebKit too. | Safari has no scroll anchoring and no `requestIdleCallback`, so layout shifts and idle timing that Chromium hides show there. |
+| In content that renders lazily, import what it renders statically, or reserve its height. | Content that renders after the page has scrolled to a heading grows above it and moves the page in Safari: the API section's code views moved a deep link 1,735 px. |
+| Load a third-party script from [`ibm-scripts.ts`](docs/src/ibm-scripts.ts), once the page has loaded and the browser is idle, not in `<svelte:head>`. | IBM's footer and analytics pull in about 90 files; loaded with the page, they delayed DataTable's first heading by 337 ms. |
+| After changing lazy rendering, scroll restore, or anything above a heading, run `cd docs && bun run build && bun run test:e2e`. | The scroll tests in `docs/e2e` run in CI only when `docs/` changes, not for a library change that affects the site. |
 
 #### New component checklist
 
@@ -645,6 +648,7 @@ Values:
 - Type: `type-style("…")`.
 - Motion: `$duration--*` with `motion(standard, productive)` and friends, never a literal `ms` or `cubic-bezier()`. Never `transition: all`: list the properties, and leave out `border-color`/`box-shadow`/`outline` when they double as the focus ring so the ring snaps instead of fading.
 - `will-change`: only `transform` or `opacity`, the two properties the hint can promote to a compositor layer. Not on an element that is idle most of the time, and not on one whose running animation already promotes it (skeletons).
+- A looping (`infinite`) animation animates only `transform` and `opacity`, which the browser runs on the compositor. Any other property, such as `transform-origin` or `background-position`, restyles or repaints every frame on the main thread, for as long as the animation runs: 28 skeleton shimmers cost 367 ms of every 2 s until their keyframes moved to `transform`.
 - No `!important`; `conventions.test.ts` rejects it outright. A consumer can only override one with another `!important`. See [Winning the cascade](#winning-the-cascade).
 - Focus rings: `@include focus-outline("outline")` / `("invalid")`, not a hand-written `outline`.
 - Set one spelling of a box property per rule. `width` and `inline-size` (likewise `top`/`inset-block-start`, `height`/`block-size`) share a cascade slot, so the earlier one is dead; `check:css:overrides` reports it.
@@ -803,6 +807,7 @@ The shortest loop, in order:
 | Run the unit tests your branch can reach | `bun run test:changed` | Plans in under a second, then runs Vitest on the selection |
 | Rerun only the unit tests that just failed | `bun run test:failed` | Reads the last run's results. Use it to tell a real failure from one that only fails under load |
 | Type-check tests after an API change | `bun build:docs && bun test:types` | `build:docs` refreshes the generated `.d.ts` |
+| Type-check the docs site after changing `docs/` | `bun run test:docs-types` | Runs svelte-typecheck over `docs/`, as CI does for a docs change |
 | Run the E2E tests your branch can reach | `bun run test:changed:e2e` | Chromium only, as in CI. About 7 s more to plan when `css/` changed |
 | See what CI will run | `bun run test:plan` | Same plan as CI, with the reason for any full run. `bunx bivium why <test>` shows why a test was picked |
 
