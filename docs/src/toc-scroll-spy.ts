@@ -26,10 +26,6 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
 
   let currentActiveId = "";
 
-  // Like the side nav's `scrollIntoView({ block: "center" })` on the current
-  // page item: keep the active TOC entry visible in its own scroll container
-  // (`.table__scroll`) as the page scrolls through many headings, without
-  // disturbing an entry that's already in view. Only the container scrolls:
   // `scrollIntoView` would also scroll the page when the container reaches
   // past the window, moving it off a restored scroll position.
   function scrollTocLinkIntoViewIfNeeded(link: HTMLAnchorElement) {
@@ -73,13 +69,9 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
     }
   }
 
-  // Height of the fixed UI shell header. Sections snap to this offset on click
-  // via `scroll-margin-top: 3rem`, so the active threshold must match it.
+  // Matches `scroll-margin-top: 3rem`.
   const HEADER_HEIGHT = 48;
-  // Sub-pixel rounding from getBoundingClientRect() can land a clicked section a
-  // fraction below HEADER_HEIGHT (e.g. 48.3), which would fail a strict `<=`
-  // check and let the previous section steal the active state. A 1px tolerance
-  // absorbs that rounding.
+  // A clicked section can land at 48.3 from sub-pixel rounding.
   const OFFSET = HEADER_HEIGHT + 1;
   let raf = 0;
 
@@ -96,9 +88,7 @@ export function setupTocScrollSpy(page: ParentNode): () => void {
       }
     }
 
-    // When the page is scrolled to the bottom, trailing sections that are too
-    // short to ever reach OFFSET would otherwise never activate. Promote the
-    // last section that has scrolled into view so it gets the active style.
+    // Short trailing sections never reach OFFSET.
     const atBottom =
       window.innerHeight + window.scrollY >=
       document.documentElement.scrollHeight - 1;

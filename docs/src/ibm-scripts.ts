@@ -1,28 +1,21 @@
 /**
- * IBM's footer (`dds-footer-container`) and analytics, which every page of
- * the site loads in production. They pull in about 90 more files, from
- * IBM's CDN, Tealium, TrustArc and Google, and loaded with the page they
- * held up its first render. They now load once the page has loaded and
- * the browser is idle, or a few seconds after it has loaded, at most.
+ * IBM's footer and analytics pull in about 90 files. Loaded with the page,
+ * they held up its first render, so they wait for idle.
  */
 
 const FOOTER_SCRIPT =
   "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/footer.min.js";
 const STATS_SCRIPT = "https://1.www.s81c.com/common/stats/ibm-common.js";
 
-/** At most this long after the page has loaded, even if never idle. */
 const LATEST_MS = 3000;
 
-/** Safari has no `requestIdleCallback`; there, this long after load. */
+/** Safari has no `requestIdleCallback`. */
 const FALLBACK_MS = 1000;
 
 /**
- * TrustArc, which IBM's analytics load for the cookie banner, adds its own
- * `@font-face` rules for IBM Plex Sans 400 and 600. They come last, so they
- * win over the faces the page already uses, and all of its text goes blank
- * while TrustArc's copies of the font download. This deletes those rules
- * as their `<style>` is added, before the browser renders it. The banner
- * then uses the page's own IBM Plex Sans, which is the same font.
+ * TrustArc adds its own IBM Plex Sans `@font-face` rules. They win over the
+ * page's, so all text goes blank while they download. Delete them before
+ * the browser renders them.
  */
 function deleteTrustArcFonts(style: HTMLStyleElement) {
   const sheet = style.sheet;
@@ -35,7 +28,6 @@ function deleteTrustArcFonts(style: HTMLStyleElement) {
   }
 }
 
-/** Whether any `url()` in the rule's `src` is on TrustArc's host. */
 function isFromTrustArc(rule: CSSFontFaceRule) {
   const src = rule.style.getPropertyValue("src");
   for (const [, url] of src.matchAll(/url\("?([^")]+)/g)) {
@@ -69,8 +61,7 @@ type IbmWindow = Window & {
 
 function addScripts() {
   watchForTrustArcFonts();
-  // The analytics read their settings when they load, and count the page
-  // view then.
+  // The analytics read these when they load.
   const win = window as IbmWindow;
   win._ibmAnalytics = {
     settings: {
@@ -94,10 +85,6 @@ function addScripts() {
   document.head.append(footer, stats);
 }
 
-/**
- * Adds IBM's scripts once the page has loaded and the browser is idle.
- * Returns a function that cancels it, if they haven't been added yet.
- */
 export function loadIbmScripts(): () => void {
   let cancel = () => {};
   const whenIdle = () => {

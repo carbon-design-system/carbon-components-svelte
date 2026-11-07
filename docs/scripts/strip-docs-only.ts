@@ -1,9 +1,4 @@
-/**
- * Lines between `docs-only:start` and `docs-only:end` markers (as `//` or
- * `<!-- -->` comments), inclusive. They run in the framed example but are
- * dropped from the displayed source, for docs-site workarounds that readers
- * should not copy.
- */
+/** Docs-site workarounds that run in the example but readers should not copy. */
 const DOCS_ONLY_BLOCK_RE =
   /^[ \t]*(?:\/\/|<!--)[ \t]*docs-only:start\b[\s\S]*?^[ \t]*(?:\/\/|<!--)[ \t]*docs-only:end\b.*(?:\r?\n|$)/gm;
 const EXTRA_BLANK_LINES_RE = /\n{3,}/g;

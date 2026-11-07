@@ -1,11 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-/**
- * End-to-end checks of the built docs site: that lazily rendered content
- * never moves the page, in Chromium and in WebKit, which has no scroll
- * anchoring. Build the site first (`bun run build`); the tests serve
- * `dist` with `vite preview`.
- */
+/** Serves `dist`, so run `bun run build` first. */
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: true,

@@ -1,24 +1,14 @@
 /**
- * The preloads that start loading a page's modules and styles alongside
- * the site's entry.
- *
- * The entry imports the site's app dynamically, so a framed example's page
- * doesn't load it, and the app imports each page dynamically. Without a
- * head start, the browser would find the app, and then its styles, only
- * once the entry had run, and the page's own modules only once the app
- * had: a round trip each. A script at the top of `index.html`, which the
- * host serves for every path, starts loading the app, and the current
- * page's modules from a manifest of every page's, so both load with the
- * entry. The manifest is in the script, not a file of its own: fetching it
- * would take the round trip it saves. It adds about 6 kB to `index.html`
- * compressed, which still arrives in the server's first round trip.
+ * The entry imports the app dynamically, and the app imports each page
+ * dynamically, so without preloads each costs a round trip. The manifest
+ * is inlined in `index.html` because fetching it would cost the round trip
+ * it saves. It adds about 6 kB compressed.
  */
 import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "vite";
 import { buildRoutes, FRAMED_PREFIX } from "../src/routes.ts";
 
-/** The parts of an output chunk the preloads are read from. */
 export type Chunk = {
   fileName: string;
   imports: string[];
@@ -27,13 +17,9 @@ export type Chunk = {
   viteMetadata?: { importedCss: Set<string> };
 };
 
-/** A link to add: `modulepreload` for a module, `preload` for styles. */
 export type Preload = [rel: "modulepreload" | "preload", href: string];
 
-/**
- * What loading `start` fetches beyond `loaded`: its module and the ones it
- * imports statically, then their styles. Adds them to `loaded`.
- */
+/** Modules first, then styles. Adds them to `loaded`. */
 export function preloadsFor(
   chunks: Map<string, Chunk>,
   start: string,
@@ -63,13 +49,12 @@ export function preloadsFor(
 }
 
 export type PageManifest = {
-  /** Every page's files, relative to the base URL. */
+  /** Relative to the base URL. */
   files: string[];
-  /** Each page's path, and the indexes in `files` of what it loads. */
+  /** Indexes into `files`. */
   pages: Record<string, number[]>;
 };
 
-/** The manifest of `pages`, a map from each page's path to its preloads. */
 export function pageManifest(
   pages: Map<string, Preload[]>,
   base = "/",
@@ -91,11 +76,7 @@ export function pageManifest(
   return manifest;
 }
 
-/**
- * The script in `index.html`. Its `add` makes a preload link, for styles
- * when the file is CSS. The page path is read as the router reads it:
- * unescaped, without a trailing slash.
- */
+/** Reads the path as the router does: unescaped, no trailing slash. */
 export function preloadScript(
   app: Preload[],
   manifest: PageManifest,
@@ -105,12 +86,10 @@ export function preloadScript(
   return `(()=>{const p=location.pathname;if(p.startsWith(${JSON.stringify(FRAMED_PREFIX)}))return;const add=h=>{const l=document.createElement("link");if(h.endsWith(".css")){l.rel="preload";l.as="style"}else l.rel="modulepreload";l.href=h;l.crossOrigin="";document.head.append(l)};${hrefs}.forEach(add);const m=${JSON.stringify(manifest)};let k;try{k=decodeURI(p)}catch{return}if(k.length>1&&k.endsWith("/"))k=k.slice(0,-1);for(const i of m.pages[k]??[])add(${JSON.stringify(base)}+m.files[i])})()`;
 }
 
-/** Marks where the preload script goes in `index.html`. */
 const SCRIPT_MARKER = "<!--page-preloads-->";
 
 const PAGES_PREFIX = "./pages/";
 
-/** Writes the preload script into `index.html`. */
 export function pageHtml(pagesDir: string): Plugin {
   let base = "/";
   let outDir = "";
@@ -154,7 +133,6 @@ export function pageHtml(pagesDir: string): Plugin {
       if (!app) throw new Error("page-html: no chunk for App.svelte");
       const appLoaded = new Set(entry);
       const appPreloads = preloadsFor(chunks, app.fileName, appLoaded, base);
-      /** What a page loads beyond the app. */
       const pageOnly = (file: string) =>
         preloadsFor(chunks, chunkOf(file), new Set(appLoaded), base);
 

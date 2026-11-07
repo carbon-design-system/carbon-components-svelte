@@ -1,24 +1,14 @@
-/**
- * Routes for the docs site's page files: one per file under `src/pages`.
- * `index` is its directory's path, `[...404]` matches anything no other
- * route does, and `_module.svelte` files are layouts, not routes.
- */
-
 export type Route = {
-  /** URL path, such as `/components/Button`. */
   path: string;
-  /** File name without its extension, such as `Button`. */
   name: string;
-  /** Name of the directory the file is in, such as `components`; `""` at the root. */
+  /** `""` at the root. */
   parentName: string;
-  /** Module path, as `import.meta.glob` keys it. */
   file: string;
 };
 
 const PAGE_FILE_RE = /^\.\/pages\/(.*)\.(svelte|md)$/;
 const NOT_FOUND = "[...404]";
 
-/** Routes for page files, keyed by path, and the not-found route. */
 export function buildRoutes(files: string[]) {
   const routes = new Map<string, Route>();
   let notFound: Route | undefined;
@@ -40,13 +30,12 @@ export function buildRoutes(files: string[]) {
   return { routes, notFound };
 }
 
-/** `pathname` without URL escapes or a trailing slash. */
 export const normalizePath = (pathname: string) =>
   decodeURI(pathname).replace(/(.)\/$/, "$1");
 
 export const FRAMED_PREFIX = "/framed/";
 
-/** A framed example's route, read from its path; its file may not exist. */
+/** Its file may not exist. */
 export function framedRoute(path: string): Route {
   const segments = path.slice(1).split("/");
   return {

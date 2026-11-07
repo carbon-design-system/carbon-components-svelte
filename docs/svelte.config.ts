@@ -21,9 +21,7 @@ const SCRIPT_TAG_REGEX = /(<script[^>]*>)/i;
 const METADATA_RE = /export const metadata = (\{.*\});/;
 const LAYOUT_OPEN_TAG_RE = /<PageLayout\b[^>]*>/;
 const FILE_SOURCE_SRC_REGEX = /src="([^"]+)"/;
-/** Prose-only inline HTML: do not wrap in Preview (see visitHtml). */
 const NO_PREVIEW_HTML_RE = /^\s*<DocKbd\b/;
-/** HTML comments (such as maintainer notes in guide pages) render nothing and must not become a Preview. */
 const HTML_COMMENT_RE = /^\s*<!--/;
 const DOC_KBD_IMPORT_STMT =
   '  import DocKbd from "../../components/DocKbd.svelte";';
@@ -34,10 +32,6 @@ const SKIP_PREVIEW_FORMAT = process.env.NODE_ENV === "development";
 
 const previewCodeCache = new Map<string, string>();
 
-/**
- * Formatted example code persists here so a cold build only formats the
- * examples that changed. Gitignored via `node_modules`.
- */
 const PREVIEW_CODE_CACHE_DIR = path.join(
   __dirname,
   "node_modules/.cache/ccs-docs-preview-code",
@@ -75,7 +69,6 @@ function highlightCodeBlock(code: string, lang: string | null): string {
 
 const formatSvelte = createFormatter("svelte");
 
-/** Changing the formatter invalidates every entry. */
 const PREVIEW_CODE_CACHE_SALT = formatterVersion();
 
 async function readPreviewCodeCache(file: string, key: string) {
@@ -84,9 +77,7 @@ async function readPreviewCodeCache(file: string, key: string) {
     if (entry?.key === key && typeof entry.formattedCode === "string") {
       return entry.formattedCode as string;
     }
-  } catch {
-    // Missing or corrupt entry: format again.
-  }
+  } catch {}
   return undefined;
 }
 
@@ -97,8 +88,7 @@ async function writePreviewCodeCache(
   key: string,
   formattedCode: string,
 ) {
-  // Write to a unique temp file, then rename, so parallel builds never see a
-  // partial entry.
+  // Rename a temp file so parallel builds never see a partial entry.
   const tmp = `${file}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
   try {
     previewCodeCacheDirReady ??= fs.promises.mkdir(PREVIEW_CODE_CACHE_DIR, {
@@ -128,9 +118,8 @@ async function formatSvelteCached(source: string) {
 }
 
 /**
- * An example's code as its code view shows it: formatted in production
- * builds, as written in dev. `Preview` highlights it in the browser, which
- * keeps the highlighted markup, most of a page's size, out of the bundle.
+ * `Preview` highlights in the browser, which keeps the highlighted markup,
+ * most of a page's size, out of the bundle.
  */
 async function formatPreviewCode(source: string) {
   if (SKIP_PREVIEW_FORMAT) return source;
@@ -149,15 +138,9 @@ function plugin() {
     isWholeParagraph: boolean,
     pageScript: string | undefined,
   ) {
-    // A paragraph that *opens* with `<DocKbd ...>` parses as a raw HTML
-    // block instead of a normal paragraph (CommonMark treats a line
-    // starting with a tag as an HTML block), so the whole paragraph becomes
-    // this "html" node directly under the document root (not nested inside
-    // a "paragraph" node) and never gets `carbonify()`'s `<p>` wrapper/class.
-    // Restore both here. A `<DocKbd ...>` used mid-sentence stays nested
-    // inside a real "paragraph" node, which is already wrapped correctly,
-    // and one inside a table cell must stay inline, so only touch the
-    // root-level case.
+    // A paragraph that opens with `<DocKbd>` parses as an HTML block, so it
+    // misses carbonify's `<p>`. Add it back at the root only: in a
+    // paragraph or table cell it must stay inline.
     if (NO_PREVIEW_HTML_RE.test(node.value)) {
       if (isWholeParagraph) {
         node.value = `<p class="bx--type-body-02">${node.value}</p>`;
@@ -192,7 +175,6 @@ function plugin() {
   }
 
   return async (tree: Parameters<typeof visit>[0]) => {
-    // An inline example's code view takes what it uses from the page script.
     const pageScript = (
       (tree as { children?: { type: string; value?: string }[] }).children ?? []
     ).find(
@@ -214,11 +196,6 @@ function plugin() {
   };
 }
 
-/**
- * Imports `Preview` and `DocKbd` into a guide page that uses them, as the
- * markup preprocessor does for component pages. The remark plugin wraps
- * each live example in `Preview`, so a page never imports it itself.
- */
 function importGuideHelpers(code: string, filename: string): string {
   const dir = path
     .relative(path.dirname(filename), path.join(__dirname, "src/components"))
@@ -238,7 +215,6 @@ function importGuideHelpers(code: string, filename: string): string {
     : `<script>\n${block}\n</script>\n\n${code}`;
 }
 
-/** h2 intro that leads to subsections or a table—not a multi-paragraph demo block. */
 function isStandaloneSectionIntro(next: unknown): boolean {
   if (!next || typeof next !== "object" || !("type" in next)) return false;
   const node = next as { type?: string; depth?: number };
@@ -270,7 +246,6 @@ function isH2SectionIntro(
   );
 }
 
-/** Appends a `#` anchor link to each slugged h2/h3 so its heading can be hovered/copied. */
 function rehypeHeadingAnchors() {
   return (tree: Parameters<typeof visit>[0]) => {
     visit(tree, "element", (node) => {
@@ -385,7 +360,6 @@ function decodeEntities(text: string): string {
   );
 }
 
-/** The slugged h2/h3 headings in rendered page HTML, as plain text. */
 function tocHeadings(html: string) {
   return Array.from(html.matchAll(HEADING_RE), (match) => ({
     id: match[2],
@@ -430,9 +404,8 @@ export default {
             : null;
         }
 
-        // The layout renders the table of contents from the page's headings,
-        // and the API of each component the page documents, imported one by
-        // one so the page doesn't carry every component's.
+        // Import each documented component's API on its own, so the page
+        // doesn't carry every component's.
         const metadata = JSON.parse(METADATA_RE.exec(content)?.[1] ?? "{}");
         const names: string[] = metadata.components ?? [
           path.basename(filename, PAGE_EXTENSION),
@@ -449,7 +422,6 @@ export default {
             `${open}\n${names.map((name, i) => `  import ${apiLocals[i]} from "virtual:component-api/${name}";`).join("\n")}`,
         );
 
-        // Auto-import Preview component used by the remark plugin.
         if (!code.includes("import Preview")) {
           code = code.replace(
             SCRIPT_TAG_REGEX,

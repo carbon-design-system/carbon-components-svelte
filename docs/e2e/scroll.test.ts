@@ -1,9 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-// The docs site renders live examples, code views and the API section
-// lazily. None of it may move the page: Safari doesn't anchor the scroll,
-// so content that changes height above the reader moves what's on screen.
-// These checks cover the ways a reader lands on or returns to a place.
+// Lazy content must never move the page: Safari doesn't anchor the scroll.
 
 test.beforeEach(async ({ page }) => {
   // IBM's CDN (fonts, footer, analytics) and the framed examples' iframes
@@ -25,7 +22,6 @@ const clickHashLink = (page: Page, hash: string) =>
     link.remove();
   }, hash);
 
-/** The first `h2` with an id at or below the top of the viewport. */
 const firstVisibleHeading = (page: Page) =>
   page.evaluate(
     () =>
@@ -34,10 +30,6 @@ const firstVisibleHeading = (page: Page) =>
       )?.id ?? "",
   );
 
-/**
- * That `selector` lands near the top of the viewport, or as near as the
- * page scrolled to its end allows, and stays there.
- */
 async function expectLandsAndStays(page: Page, selector: string) {
   await page.waitForTimeout(400);
   const landed = await top(page, selector);

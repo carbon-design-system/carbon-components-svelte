@@ -1,12 +1,7 @@
 /**
- * Formats code with `bun fmt`, which has no JavaScript API. Calls made
- * within a few milliseconds of each other are written to a temporary
- * directory and formatted in one run, so formatting a page's examples,
- * or a build's, starts one process rather than one per example.
- *
- * It runs outside the repository with `--no-config`, so the repository's
- * `[fmt]` settings (sorted imports, ignored Markdown) don't apply: the
- * output is Prettier's defaults plus `flags`.
+ * `bun fmt` has no JavaScript API, so calls made close together share one
+ * process. It runs with `--no-config`, so the repo's `[fmt]` settings don't
+ * apply.
  */
 import { execFileSync, spawn } from "node:child_process";
 import fs from "node:fs";
@@ -75,7 +70,6 @@ export function createFormatter(
     });
 }
 
-/** Runs `bun` with `args` in `cwd`; resolves with its stderr. */
 function run(args: string[], cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = spawn("bun", args, {

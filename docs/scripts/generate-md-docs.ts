@@ -595,33 +595,23 @@ async function formatMarkdown(markdown: string) {
   }
 }
 
-/**
- * Output is always valid UTF-8, but some clients (browsers, editors, download
- * tools) assume Windows-1252/Latin-1 and show mojibake for typographic Unicode
- * (e.g. `â€"` for an em dash). Normalizing to ASCII keeps generated `.md` /
- * `llms-full.txt` readable everywhere without changing meaning much.
- */
+/** Some clients read UTF-8 as Windows-1252 and show mojibake. */
 function asciiNormalizeGeneratedMarkdown(text: string): string {
-  return (
-    text
-      // Dashes / quotes / spaces (common in prose)
-      .replaceAll("\u2014", "--") // em dash —
-      .replaceAll("\u2013", "-") // en dash –
-      .replaceAll("\u2212", "-") // minus sign −
-      .replaceAll("\u2018", "'")
-      .replaceAll("\u2019", "'")
-      .replaceAll("\u201c", '"')
-      .replaceAll("\u201d", '"')
-      .replaceAll("\u2026", "...")
-      .replaceAll("\u00a0", " ")
-      // Keys / symbols sometimes pasted from macOS docs
-      .replaceAll("\u2318", "Cmd") // ⌘
-      .replaceAll("\u2325", "Option") // ⌥
-      .replaceAll("\u21e7", "Shift") // ⇧
-      .replaceAll("\u238b", "Esc") // ⎋ (less common)
-      // Strip BOM if present upstream
-      .replaceAll("\ufeff", "")
-  );
+  return text
+    .replaceAll("\u2014", "--") // em dash —
+    .replaceAll("\u2013", "-") // en dash –
+    .replaceAll("\u2212", "-") // minus sign −
+    .replaceAll("\u2018", "'")
+    .replaceAll("\u2019", "'")
+    .replaceAll("\u201c", '"')
+    .replaceAll("\u201d", '"')
+    .replaceAll("\u2026", "...")
+    .replaceAll("\u00a0", " ")
+    .replaceAll("\u2318", "Cmd") // ⌘
+    .replaceAll("\u2325", "Option") // ⌥
+    .replaceAll("\u21e7", "Shift") // ⇧
+    .replaceAll("\u238b", "Esc") // ⎋ (less common)
+    .replaceAll("\ufeff", "");
 }
 
 function shiftMarkdownHeadings(md: string) {
@@ -655,7 +645,6 @@ ${links.join("\n")}
 `;
 }
 
-// Fresh output every run.
 fs.rmSync(RAW_COMPONENTS_OUT_DIR, { recursive: true, force: true });
 fs.mkdirSync(RAW_COMPONENTS_OUT_DIR, { recursive: true });
 
@@ -716,14 +705,12 @@ fs.writeFileSync(
   "utf8",
 );
 
-// Generate llms.txt file
 const componentNames = generatedMdByComponent.map(
   ({ componentName }) => componentName,
 );
 const llmTxtContent = generateLlmTxt(componentNames);
 fs.writeFileSync(path.join("./public", "llms.txt"), llmTxtContent, "utf8");
 
-// Generate llms-full.txt: overview + all component docs with headings shifted
 const overviewPath = path.join("./content", "overview.md");
 let overviewMd: string;
 try {

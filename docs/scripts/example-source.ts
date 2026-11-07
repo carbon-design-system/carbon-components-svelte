@@ -1,13 +1,3 @@
-/**
- * The standalone source of an inline example: its markup, plus exactly the
- * imports and declarations from the page's `<script>` that it uses,
- * followed to whatever those declarations use in turn.
- *
- * An inline example compiles inside its page, so every name it uses is
- * declared in the page script (or is a global). Reading the page's real
- * imports, rather than guessing which capitalized names are icons, gives
- * the code view what a reader needs to copy and run it.
- */
 import { analyzeScopes, type Binding, parse, type Scope } from "sveast";
 
 type Node = {
@@ -30,7 +20,6 @@ type Statement = {
   /** Names the statement declares, or (for `$:` and bare statements) assigns. */
   declares: string[];
   references: Set<string>;
-  /** For an import: its specifiers, so unused ones can be dropped. */
   imports?: { source: string; typeOnly: boolean; specifiers: Specifier[] };
 };
 
@@ -45,11 +34,7 @@ const FUNCTION_TYPES = new Set([
   "FunctionDeclaration",
 ]);
 
-/**
- * A component's AST and the bindings its `<script>` declares, types as
- * well as values, so a `lang="ts"` page keeps the `import type` and
- * `type` declarations an example's code uses.
- */
+/** With `types`, a `lang="ts"` page keeps the type imports it uses. */
 function analyze(source: string) {
   const ast = parse(source, { css: false });
   const scopes = analyzeScopes(ast, { types: true });
@@ -63,7 +48,6 @@ function analyze(source: string) {
   };
 }
 
-/** Whether `scope` is in a function, short of the `<script>`'s scope. */
 function inFunction(scope: Scope, instance: Scope): boolean {
   for (let s: Scope | null = scope; s && s !== instance; s = s.parent) {
     if (s.node && FUNCTION_TYPES.has(s.node.type)) return true;
@@ -162,10 +146,8 @@ function pageStatements(pageScript: string): Statement[] {
 }
 
 /**
- * The page-script names an example's markup uses, read from the page
- * script and the markup as one component: tags, directives, `{…}`
- * expressions and `$store` subscriptions, but not names the markup
- * declares itself, such as an `{#each}` item or a `let:` directive.
+ * Parses script and markup as one component, so names the markup declares
+ * itself, such as an `{#each}` item, don't count.
  */
 function markupReferences(markup: string, pageScript: string): Set<string> {
   const markupStart = pageScript.length + 1;
@@ -178,16 +160,13 @@ function markupReferences(markup: string, pageScript: string): Set<string> {
   return references;
 }
 
-/** The `<script>` (not `context="module"`) among a page's top-level HTML blocks. */
 export function isInstanceScript(html: string): boolean {
   return INSTANCE_SCRIPT_RE.test(html);
 }
 
 /**
- * The example's standalone source: a `<script>` with the page-script
- * imports and declarations it needs (unused import specifiers dropped),
- * then the markup. Without a page script, or when the example needs none
- * of it, the markup alone.
+ * An example's markup, after the page-script imports and declarations it
+ * uses, followed to a fixpoint.
  */
 export function exampleSource(
   markup: string,
@@ -204,7 +183,6 @@ export function exampleSource(
     }
   }
 
-  // Everything the markup uses, then what those statements use, to a fixpoint.
   const needed = new Set<string>();
   const included = new Set<Statement>();
   const queue = [...markupReferences(markup, pageScript)];
@@ -227,7 +205,6 @@ export function exampleSource(
     if (!included.has(statement)) continue;
     const imports = statement.imports;
     if (!imports) {
-      // A blank line between the imports and the declarations.
       if (!afterImports && lines.length > 0) lines.push("");
       afterImports = true;
       lines.push(statement.text);

@@ -24,10 +24,6 @@ const baseTokens: Record<string, Record<CarbonTheme, string>> = {
 const OVERRIDE_LINE = /^(?:--cds-)?([a-z0-9-]+)\s*:\s*(.+?);?$/;
 const BARE_KEY = /^[a-z]\w*$/i;
 
-/**
- * Parse `token: value` lines. Lines that name no color token are returned in
- * `invalid`.
- */
 export function parseOverrides(text: string) {
   const tokens: Tokens = {};
   const invalid: string[] = [];
@@ -44,7 +40,6 @@ export function parseOverrides(text: string) {
   return { tokens, invalid };
 }
 
-/** Every color token of `theme` with `tokens` on top, as custom properties. */
 export function previewStyle(theme: CarbonTheme, tokens: Tokens) {
   const values: Record<string, string> = {};
   for (const [token, byTheme] of Object.entries(baseTokens)) {

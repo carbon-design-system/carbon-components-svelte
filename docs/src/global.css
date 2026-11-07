@@ -8,7 +8,6 @@ html {
   max-width: none;
 }
 
-/* Light themes use light color scheme */
 [theme="white"] .prose > pre,
 [theme="g10"] .prose > pre,
 [theme="white"] .code-override .bx--snippet,
@@ -27,7 +26,6 @@ html {
   border: 1px solid var(--cds-border-subtle-01);
 }
 
-/* Dark theme code block styles (default for g80, g90, g100) */
 .prose > pre {
   background-color: var(--cds-background);
   color: #f4f4f4;
@@ -49,7 +47,6 @@ html {
   fill: #f4f4f4;
 }
 
-/* Light theme code block styles (white, g10) */
 [theme="white"] .prose > pre,
 [theme="g10"] .prose > pre {
   background-color: var(--cds-background);
@@ -93,18 +90,15 @@ html {
   overflow-x: auto;
 }
 
-/* Addig this to the layout grid fixes overstretching. */
 .fix-overflow {
   min-width: 0;
 }
 
-/* Light theme inline code background */
 [theme="white"] .code-override-inline,
 [theme="g10"] .code-override-inline {
   background-color: var(--cds-field-01, #f4f4f4);
 }
 
-/** Gray 80 is the "lighted" dark theme. Ensure the background is dark. */
 [theme="g80"] .code-override,
 [theme="g80"] .code-override-inline {
   background-color: var(--cds-layer-01, var(--cds-layer-01));
@@ -139,10 +133,7 @@ html {
   width: auto !important;
 }
 
-/*
- * Main content needs to supersede z-index of SideNav but not that of the Header.
- * UI Shell Header shares the same z-index.
- */
+/* Above SideNav, level with the Header. */
 [aria-label="Navigation"] {
   z-index: 10000;
 }
@@ -170,8 +161,6 @@ html {
   margin-bottom: var(--cds-layout-01);
 }
 
-/* Auto-generated TOC (aside slot): a compact stack of anchor links,
-   no list markup. bx--link already applies body-compact-01 and link color. */
 .toc-nav {
   display: flex;
   flex-direction: column;
@@ -187,7 +176,6 @@ html {
   padding-left: var(--cds-spacing-05);
 }
 
-/* Last sub-item in a group: add separation before the next section. */
 .toc-nav .bx--link.toc-nav__sub:not(:has(+ .toc-nav__sub)) {
   margin-bottom: var(--cds-spacing-03);
 }
@@ -255,11 +243,8 @@ html {
   background-color: var(--cds-border-subtle);
 }
 
-/* Always-visible (not hover-triggered) thin scrollbar for the side nav.
-   The side nav's separator border comes from SideNav's `border` prop. */
 .docs-sidenav .bx--scroll-gradient__scroll-element {
-  /* The side nav's own background differs from the `layer` token
-     ScrollGradient paints by default; let the nav's background show through. */
+  /* ScrollGradient paints `layer` by default, which differs from the nav. */
   background-color: transparent;
   scrollbar-width: thin;
   scrollbar-color: var(--cds-border-subtle) transparent;
@@ -374,8 +359,6 @@ html {
   line-height: var(--cds-body-compact-01-line-height);
 }
 
-/* Font styling comes from the Text component's type class
-   (bx--type-fluid-heading-06); this rule only owns layout. */
 .bx--col > h1 {
   margin-bottom: var(--cds-layout-01);
 }
@@ -511,7 +494,6 @@ html {
   margin-bottom: var(--cds-layout-01);
 }
 
-/* Sub-section headings (### within a ## group): layout only; type from bx--type-*. */
 [class*="bx--col"] > h3.bx--type-heading-03,
 .bx--tab-content > h3.bx--type-heading-03 {
   padding-top: var(--cds-layout-02);
@@ -535,7 +517,6 @@ html {
   scroll-margin-top: 3rem;
 }
 
-/* `#` heading anchor: hidden until hover, always shown on devices without hover. */
 .heading-anchor {
   margin-left: var(--cds-spacing-03);
   color: var(--cds-text-placeholder, var(--cds-text-helper));
@@ -566,17 +547,12 @@ h3:hover .heading-anchor,
   margin-bottom: var(--cds-layout-02);
 }
 
-/* Moved from ComponentApi.svelte - code snippet white-space */
 .cell .bx--snippet--inline code,
 .cell .bx--snippet--single pre,
 .bx--snippet--inline code {
   white-space: pre-wrap !important;
 }
 
-/* Doc page layout */
-
-/* Full-bleed fill band: background spans the full content width while the
-   inner Grid stays flush-aligned with the sections below. */
 .band {
   margin-inline: calc(-1 * var(--cds-spacing-07));
   padding-inline: var(--cds-spacing-07);
@@ -595,32 +571,22 @@ h3:hover .heading-anchor,
   min-height: calc(var(--cds-spacing-13) + var(--cds-spacing-08));
 }
 
-/* Hero lives in the prose column; skip band bleed offsets used on standalone pages. */
 [data-components] .hero.band {
   margin-inline: 0;
   padding-inline: 0;
 }
 
-/* Breakout: an example escapes the content grid to use the full content
-   width (cancels Content's inline padding). Unlike `.band`, the padding is
-   not re-added, so the example itself, not just a background, spans wider. */
 .breakout {
   margin-inline: calc(-1 * var(--cds-spacing-07));
 }
 
-/* Full-width example band: a `.band` (full-bleed fill) with vertical padding,
-   used to wrap a grid-constrained example so the fill reads edge to edge. */
 .example-band {
   padding-block: var(--cds-spacing-07);
 }
 
-/* Mobile: tighten horizontal padding.
-   On small viewports the default content padding (2rem) plus the grid's net
-   column gutter (grid +1rem, row -1rem, col +1rem = 1rem) inset doc content
-   3rem from each edge, wasting space. Drop the content padding to 1rem and
-   collapse the grid/row/column gutters so content sits 1rem from the edges.
-   Grid resets are scoped to the doc page shells so framed grid examples keep
-   their gutters. The bleed helpers below are re-aligned to the 1rem padding. */
+/* Content padding plus grid gutters inset content 3rem on mobile. Cut it
+   to 1rem. Scoped to doc page shells so framed grid examples keep their
+   gutters. */
 @media (max-width: 672px) {
   .bx--content {
     padding-inline: var(--cds-spacing-05);
