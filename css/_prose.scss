@@ -720,6 +720,11 @@ $ccs-prose-variants: (
     contain-intrinsic-size: auto to-rem(160px);
   }
 
+  // A code block reserves the height of its lines, which `Prose` sets.
+  #{$p}--defer-offscreen pre#{$x} {
+    contain-intrinsic-size: auto var(--ccs-prose-defer-height, to-rem(160px));
+  }
+
   // Code in a block takes the block's type and surface, not inline code's.
   #{$p} pre code#{$x} {
     padding: 0;

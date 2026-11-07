@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/svelte";
+import { render, screen, waitFor } from "@testing-library/svelte";
 import Prose from "./Prose.test.svelte";
+import ProseDeferHeights from "./ProseDeferHeights.test.svelte";
 
 describe("Prose", () => {
   it("renders a div with the base class and the slotted markup", () => {
@@ -73,5 +74,21 @@ describe("Prose", () => {
     render(Prose, { props: { tag: "article" } });
 
     expect(screen.getByTestId("prose").tagName).toBe("ARTICLE");
+  });
+
+  it("reserves each deferred code block the height of its lines", async () => {
+    const { rerender } = render(ProseDeferHeights, { props: { lines: 3 } });
+    const pre = screen.getByTestId("pre");
+    // 3 lines of 20 px at a 16 px font size.
+    expect(pre.style.getPropertyValue("--ccs-prose-defer-height")).toBe(
+      "3.75em",
+    );
+
+    await rerender({ lines: 8 });
+    await waitFor(() =>
+      expect(pre.style.getPropertyValue("--ccs-prose-defer-height")).toBe(
+        "10em",
+      ),
+    );
   });
 });

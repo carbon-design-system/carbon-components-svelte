@@ -67,8 +67,10 @@
   /**
    * Set to `true` to skip rendering code blocks (`pre`) and figures while
    * they are offscreen, with `content-visibility: auto`. They stay in find
-   * in page, anchor navigation, and the accessibility tree. Each reserves
-   * 10rem until it first renders, then its last rendered height.
+   * in page, anchor navigation, and the accessibility tree. A code block
+   * reserves the height of its lines until it first renders, then its last
+   * rendered height; a figure, and a code block in server-rendered HTML
+   * before the script runs, reserves 10rem.
    */
   export let deferOffscreen = false;
 
@@ -85,7 +87,105 @@
    */
   export let ref = null;
 
+  import { onMount } from "svelte";
   import { toCssLength } from "../utils/css-length.js";
+  import { noop } from "../utils/noop.js";
+
+  const TRAILING_NEWLINE_RE = /\n$/;
+
+  /**
+   * Whether this browser adds a skipped block's padding and border to the
+   * height it reserves, as the spec has it. Firefox doesn't, so there the
+   * reservation includes them. Found from the first skipped block.
+   * @type {boolean | undefined}
+   */
+  let reserveAddsPadding;
+
+  /**
+   * Gives each code block the height of its lines to reserve while it's
+   * skipped. With one guess for every block, a block above the reader
+   * changed height as it first rendered, and moved the page in Safari,
+   * which doesn't anchor the scroll. In `em`, it follows the block's font
+   * size. Lines don't wrap in a code block; it scrolls instead.
+   * @param {HTMLElement} root
+   */
+  function reserveCodeHeights(root) {
+    /** @type {{ pre: HTMLElement, content: number, extra: number, fontSize: number }[]} */
+    const blocks = [];
+    for (const pre of root.querySelectorAll("pre")) {
+      const style = getComputedStyle(pre);
+      // Only the blocks Prose styles are skipped, not a component's.
+      if (style.contentVisibility && style.contentVisibility !== "auto") {
+        continue;
+      }
+      const lineHeight = Number.parseFloat(style.lineHeight);
+      const fontSize = Number.parseFloat(style.fontSize);
+      if (!lineHeight || !fontSize) continue;
+      // A trailing newline renders no line.
+      const lines = (pre.textContent ?? "")
+        .replace(TRAILING_NEWLINE_RE, "")
+        .split("\n").length;
+      const extra = [
+        style.paddingTop,
+        style.paddingBottom,
+        style.borderTopWidth,
+        style.borderBottomWidth,
+      ].reduce((sum, value) => sum + (Number.parseFloat(value) || 0), 0);
+      blocks.push({ pre, content: lines * lineHeight, extra, fontSize });
+    }
+    const reserve = () => {
+      for (const { pre, content, extra, fontSize } of blocks) {
+        const px = reserveAddsPadding === false ? content + extra : content;
+        const height = `${Math.round((px * 1000) / fontSize) / 1000}em`;
+        if (pre.style.getPropertyValue("--ccs-prose-defer-height") !== height) {
+          pre.style.setProperty("--ccs-prose-defer-height", height);
+        }
+      }
+    };
+    reserve();
+    if (reserveAddsPadding !== undefined) return;
+    const skipped = blocks.find(
+      ({ pre }) =>
+        pre.firstElementChild?.checkVisibility?.({
+          contentVisibilityAuto: true,
+        }) === false,
+    );
+    if (!skipped) return;
+    const height = skipped.pre.getBoundingClientRect().height;
+    reserveAddsPadding =
+      Math.abs(height - skipped.content - skipped.extra) <
+      Math.abs(height - skipped.content);
+    if (!reserveAddsPadding) reserve();
+  }
+
+  let stopReserving = noop;
+
+  /** @param {HTMLElement} root */
+  function startReserving(root) {
+    reserveCodeHeights(root);
+    // The slot's content can change after mount, from a parent or `{@html}`.
+    const observer = new MutationObserver(() => reserveCodeHeights(root));
+    observer.observe(root, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    return () => observer.disconnect();
+  }
+
+  let mounted = false;
+  onMount(() => {
+    mounted = true;
+    return () => stopReserving();
+  });
+
+  $: if (mounted) {
+    stopReserving();
+    stopReserving =
+      deferOffscreen && ref && typeof MutationObserver !== "undefined"
+        ? startReserving(ref)
+        : noop;
+  }
 
   $: proseClass = [
     "bx--prose",
