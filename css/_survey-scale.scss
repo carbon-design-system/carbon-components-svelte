@@ -1,0 +1,313 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+// How many points fit in one row of a container, by count. A numbered row
+// needs a 44px target per point; a labeled row needs room for a phrase such
+// as "Neither agree nor disagree". Below that the numbers wrap onto two
+// rows and the labels stack. The count is in the markup (`--points-N`),
+// since a container query can't read a custom property.
+$survey-scale-number-wrap: (
+  8: 4,
+  9: 5,
+  10: 5,
+  11: 6,
+  12: 6,
+);
+$survey-scale-label-points: (3, 4, 5, 6, 7, 8, 9);
+
+/// SurveyScale: a radio per point, drawn as a segmented option, with the
+/// end labels of the scale around the options.
+/// @access private
+/// @group components
+@mixin survey-scale {
+  // A container, so the scale wraps by its own width rather than the
+  // window's. It fills its parent: the form item centers shrink-wrapped
+  // content.
+  .#{$prefix}--survey-scale {
+    width: 100%;
+    align-items: stretch;
+    container: #{$prefix}--survey-scale / inline-size;
+  }
+
+  .#{$prefix}--survey-scale__fieldset {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--survey-scale__body {
+    display: grid;
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--survey-scale__body--ends {
+    grid-template-areas:
+      "options options"
+      "min max";
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--survey-scale__body--ends .#{$prefix}--survey-scale__options {
+    grid-area: options;
+  }
+
+  .#{$prefix}--survey-scale__options {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--survey-scale__end {
+    @include type-style("helper-text-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--survey-scale__end--min {
+    grid-area: min;
+    justify-self: start;
+    text-align: start;
+  }
+
+  .#{$prefix}--survey-scale__end--max {
+    grid-area: max;
+    justify-self: end;
+    text-align: end;
+  }
+
+  .#{$prefix}--survey-scale__option {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  // The radio is hidden, so the option's box carries the focus ring and
+  // the checked state.
+  .#{$prefix}--survey-scale__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    clip-path: inset(50%);
+    opacity: 0;
+  }
+
+  .#{$prefix}--survey-scale__content {
+    @include type-style("body-compact-01");
+
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: to-rem(48px);
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $carbon--spacing-03 $carbon--spacing-02;
+    border: 1px solid $border-strong;
+    background-color: $field;
+    color: $text-primary;
+    gap: $carbon--spacing-02;
+    text-align: center;
+    transition: background-color $duration--fast-01 motion(standard, productive),
+      color $duration--fast-01 motion(standard, productive);
+  }
+
+  // Carbon icons are filled glyphs. The built-in faces are strokes.
+  .#{$prefix}--survey-scale__icon {
+    flex: none;
+    fill: currentColor;
+  }
+
+  .#{$prefix}--survey-scale__face {
+    flex: none;
+  }
+
+  .#{$prefix}--survey-scale__input:checked + .#{$prefix}--survey-scale__content {
+    border-color: $layer-selected-inverse;
+    background-color: $layer-selected-inverse;
+    color: $text-inverse;
+  }
+
+  // Not only the fill: a check, so the choice survives a grayscale screen
+  // and forced colors.
+  .#{$prefix}--survey-scale__check {
+    position: absolute;
+    width: to-rem(12px);
+    height: to-rem(12px);
+    fill: currentColor;
+    inset-block-start: to-rem(2px);
+    inset-inline-end: to-rem(2px);
+  }
+
+  .#{$prefix}--survey-scale__input:focus-visible
+    + .#{$prefix}--survey-scale__content {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--survey-scale--invalid .#{$prefix}--survey-scale__content {
+    border-color: $support-error;
+  }
+
+  .#{$prefix}--survey-scale--invalid
+    .#{$prefix}--survey-scale__input:checked
+    + .#{$prefix}--survey-scale__content {
+    border-color: $support-error;
+  }
+
+  .#{$prefix}--survey-scale--readonly .#{$prefix}--survey-scale__option {
+    cursor: default;
+  }
+
+  .#{$prefix}--survey-scale--disabled .#{$prefix}--survey-scale__option {
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--survey-scale__input:disabled
+    + .#{$prefix}--survey-scale__content {
+    border-color: $border-disabled;
+    background-color: $field;
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--survey-scale__input:disabled:checked
+    + .#{$prefix}--survey-scale__content {
+    border-color: $layer-selected-disabled;
+    background-color: $layer-selected-disabled;
+  }
+
+  .#{$prefix}--survey-scale--disabled .#{$prefix}--survey-scale__end {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--survey-scale__validation-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  // The row renders only while a message applies, so show it outright:
+  // Carbon reveals a message from a field's `[data-invalid]`, which a
+  // warning doesn't set.
+  .#{$prefix}--survey-scale__validation-msg .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: none;
+    margin-top: 0;
+  }
+
+  .#{$prefix}--survey-scale__invalid-icon {
+    flex: none;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--survey-scale__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--survey-scale__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+    opacity: 1;
+  }
+
+  // More than seven numbers wrap onto two rows below the width that gives
+  // each a 44px target. The first end label then sits above the options and
+  // the last below them, which keeps the order they are read in.
+  @each $points, $columns in $survey-scale-number-wrap {
+    $width: to-rem(44px) * $points + to-rem(4px) * ($points - 1);
+
+    @container #{$prefix}--survey-scale (width < #{$width}) {
+      .#{$prefix}--survey-scale__body--number.#{$prefix}--survey-scale__body--points-#{$points}
+        .#{$prefix}--survey-scale__options {
+        grid-auto-flow: row;
+        grid-template-columns: repeat(#{$columns}, minmax(0, 1fr));
+      }
+
+      .#{$prefix}--survey-scale__body--number.#{$prefix}--survey-scale__body--points-#{$points}.#{$prefix}--survey-scale__body--ends {
+        grid-template-areas:
+          "min"
+          "options"
+          "max";
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .#{$prefix}--survey-scale__body--number.#{$prefix}--survey-scale__body--points-#{$points}
+        .#{$prefix}--survey-scale__end--max {
+        justify-self: start;
+        text-align: start;
+      }
+    }
+  }
+
+  // Labeled options stack into a list when a phrase no longer fits beside
+  // its neighbors.
+  @each $points in $survey-scale-label-points {
+    $width: to-rem(104px) * $points + to-rem(4px) * ($points - 1);
+
+    @container #{$prefix}--survey-scale (width < #{$width}) {
+      .#{$prefix}--survey-scale__body--label.#{$prefix}--survey-scale__body--points-#{$points}
+        .#{$prefix}--survey-scale__options {
+        grid-auto-flow: row;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .#{$prefix}--survey-scale__body--label.#{$prefix}--survey-scale__body--points-#{$points}
+        .#{$prefix}--survey-scale__content {
+        align-items: flex-start;
+        padding-inline-end: $carbon--spacing-07;
+        padding-inline-start: $carbon--spacing-05;
+        text-align: start;
+      }
+
+      .#{$prefix}--survey-scale__body--label.#{$prefix}--survey-scale__body--points-#{$points}
+        .#{$prefix}--survey-scale__check {
+        inset-block-start: calc(50% - #{to-rem(8px)});
+        inset-inline-end: $carbon--spacing-05;
+      }
+    }
+  }
+
+  // Hover only where a pointer can hover, so a tap doesn't leave an option
+  // stuck in its hover state. After the focus ring: a hover fill must not
+  // erase it.
+  @media (any-hover: hover) {
+    .#{$prefix}--survey-scale__option:hover
+      .#{$prefix}--survey-scale__input:enabled:not(:checked)
+      + .#{$prefix}--survey-scale__content {
+      background-color: $layer-hover;
+    }
+  }
+
+  // Forced colors repaint the fill, which leaves a checked option looking
+  // like the rest. It fills with `Highlight` and opts out of forcing, so the
+  // fill, its border and the check all stay, and the label keeps
+  // `HighlightText`.
+  @media (forced-colors: active) {
+    .#{$prefix}--survey-scale__input:checked
+      + .#{$prefix}--survey-scale__content {
+      border-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--survey-scale__input:disabled:checked
+      + .#{$prefix}--survey-scale__content {
+      border-color: GrayText;
+      background-color: Canvas;
+      color: GrayText;
+    }
+  }
+}
+
+@include exports("survey-scale") {
+  @include survey-scale;
+}
