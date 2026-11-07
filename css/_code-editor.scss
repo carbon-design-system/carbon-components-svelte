@@ -1,0 +1,307 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `CodeEditor`: a transparent `<textarea>` laid over a layer of colored
+/// lines. The textarea owns the text, caret, selection, IME and undo; the
+/// layer above it repeats the visible lines as tokens. Both sit in one scroll
+/// container, so they scroll as one, with no script in the scroll path.
+///
+/// The wrapper, label, helper text, requirement and fluid rules are the
+/// `bx--text-area__*` ones TextArea uses, so the field reads as a TextArea.
+/// The code area is always left to right, as in CodeSnippet, so its sides are
+/// physical.
+/// @access private
+/// @group components
+@mixin code-editor {
+  .#{$prefix}--code-editor {
+    --ccs-code-editor-line-height: #{to-rem(20px)};
+    --ccs-code-editor-padding: #{$carbon--spacing-04};
+  }
+
+  .#{$prefix}--code-editor--sm {
+    --ccs-code-editor-line-height: #{to-rem(16px)};
+  }
+
+  // The wrapper is the field, so it draws the resting box forced colors
+  // show, as a TextArea's textarea does. The textarea spans the whole text
+  // and scrolls, so it draws none.
+  .#{$prefix}--code-editor__wrapper {
+    @include focus-outline("reset");
+
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    &:focus-within {
+      @include focus-outline("outline");
+    }
+
+    &[data-invalid]:not(:focus-within) {
+      @include focus-outline("invalid");
+    }
+  }
+
+  // The code area is left to right, so its scrollbar and the status icon sit
+  // at the right in any direction. TextArea's icon follows the page's.
+  .#{$prefix}--code-editor__wrapper > .#{$prefix}--text-area__invalid-icon {
+    right: $carbon--spacing-05;
+    left: auto;
+  }
+
+  .#{$prefix}--code-editor__wrapper--readonly {
+    border-bottom-color: $border-subtle;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--code-editor__wrapper--disabled {
+    border-bottom-color: transparent;
+    cursor: not-allowed;
+  }
+
+  // The scroll container. `ch` is the width of one code column, so the
+  // content is sized in columns and the textarea never needs to scroll.
+  .#{$prefix}--code-editor__scroller {
+    @include type-style("code-02");
+
+    --ccs-code-editor-inset: #{$carbon--spacing-05};
+
+    position: relative;
+    overflow: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    direction: ltr;
+    text-align: left;
+    block-size: calc(
+      var(--ccs-code-editor-rows, 10) * var(--ccs-code-editor-line-height) + 2 *
+        var(--ccs-code-editor-padding)
+    );
+  }
+
+  .#{$prefix}--code-editor--sm .#{$prefix}--code-editor__scroller {
+    @include type-style("code-01");
+  }
+
+  // The gutter is the line numbers' width plus a padding either side, and the
+  // code starts one padding after it. Its rule is drawn by the scroller, not
+  // the lines, so it fills the gutter whatever the text's height.
+  .#{$prefix}--code-editor__scroller--numbered {
+    --ccs-code-editor-gutter: calc(
+      var(--ccs-code-editor-digits, 2) * 1ch + #{$carbon--spacing-05 * 2}
+    );
+    --ccs-code-editor-inset: calc(
+      var(--ccs-code-editor-gutter) + #{$carbon--spacing-05}
+    );
+
+    background-image: linear-gradient($border-subtle, $border-subtle);
+    background-repeat: no-repeat;
+    background-size: 1px 100%;
+    background-position: calc(var(--ccs-code-editor-gutter) - 1px) 0;
+  }
+
+  // The lines sit on the 16px or 20px grid the layer and the textarea share,
+  // whatever line height the type style gives the scroller. The content is
+  // sized in `ch`, which leaves out the type style's letter spacing, so the
+  // code has none.
+  .#{$prefix}--code-editor__content {
+    position: relative;
+    isolation: isolate;
+    font-variant-ligatures: none;
+    letter-spacing: 0;
+    line-height: var(--ccs-code-editor-line-height);
+    min-inline-size: calc(
+      var(--ccs-code-editor-inset) + var(--ccs-code-editor-columns, 0) * 1ch +
+        #{$carbon--spacing-05}
+    );
+    min-block-size: 100%;
+    block-size: calc(
+      var(--ccs-code-editor-lines, 1) * var(--ccs-code-editor-line-height) + 2 *
+        var(--ccs-code-editor-padding)
+    );
+  }
+
+  .#{$prefix}--code-editor__scroller--wrap .#{$prefix}--code-editor__content {
+    min-inline-size: 0;
+    block-size: auto;
+  }
+
+  // The textarea and the layer share one box and one set of font metrics, so
+  // a line and its colors fall on the same pixels. Until script has painted
+  // the layer, the textarea shows its own text.
+  .#{$prefix}--code-editor__input {
+    @include reset;
+
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    outline: none;
+    padding: var(--ccs-code-editor-padding) $carbon--spacing-05
+      var(--ccs-code-editor-padding) var(--ccs-code-editor-inset);
+    // The reset keeps the browser's 1px border, which would move the text
+    // 1px off the layer's.
+    border: 0;
+    background: transparent;
+    caret-color: $text-primary;
+    color: $text-primary;
+    direction: ltr;
+    font: inherit;
+    inset: 0;
+    letter-spacing: inherit;
+    resize: none;
+    text-align: left;
+    white-space: pre;
+    block-size: 100%;
+    inline-size: 100%;
+
+    &::placeholder {
+      @include placeholder-colors;
+    }
+
+    &::selection {
+      background-color: $highlight;
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      cursor: not-allowed;
+    }
+
+    &:read-only {
+      cursor: default;
+    }
+  }
+
+  .#{$prefix}--code-editor__scroller--wrap .#{$prefix}--code-editor__input {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .#{$prefix}--code-editor__scroller--ready .#{$prefix}--code-editor__input {
+    color: transparent;
+  }
+
+  // The layer sits above the textarea so token colors are not hidden by the
+  // selection it draws, and lets every pointer event through.
+  .#{$prefix}--code-editor__highlight {
+    position: absolute;
+    min-inline-size: 100%;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    user-select: none;
+    white-space: pre;
+  }
+
+  .#{$prefix}--code-editor__scroller--wrap .#{$prefix}--code-editor__highlight {
+    position: relative;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .#{$prefix}--code-editor__scroller--wrap
+    .#{$prefix}--code-editor__highlight::before {
+    display: block;
+    block-size: var(--ccs-code-editor-padding);
+    content: "";
+  }
+
+  .#{$prefix}--code-editor__scroller--wrap
+    .#{$prefix}--code-editor__highlight::after {
+    display: block;
+    block-size: var(--ccs-code-editor-padding);
+    content: "";
+  }
+
+  // A line is a block, even when empty, so it holds its height.
+  .#{$prefix}--code-editor__line {
+    position: relative;
+    min-block-size: var(--ccs-code-editor-line-height);
+    padding-inline: var(--ccs-code-editor-inset) $carbon--spacing-05;
+    color: $text-primary;
+    counter-increment: ccs-code-line;
+  }
+
+  // The number stays at the left edge while the code scrolls sideways. Its
+  // transparent border shows only in forced colors, which keeps the rule.
+  .#{$prefix}--code-editor__scroller--numbered
+    .#{$prefix}--code-editor__line::before {
+    position: sticky;
+    box-sizing: border-box;
+    float: left;
+    padding-inline: $carbon--spacing-05;
+    border-right: 1px solid transparent;
+    color: $text-helper;
+    content: counter(ccs-code-line);
+    font-variant-numeric: tabular-nums;
+    inline-size: var(--ccs-code-editor-gutter);
+    left: 0;
+    margin-inline-start: calc(-1 * var(--ccs-code-editor-inset));
+    text-align: right;
+  }
+
+  // The current line is marked in the gutter only. Carbon tunes the syntax
+  // colors for the field, and a band behind the code takes some of them
+  // below 4.5:1. The band stops at the rule, which shows through the border.
+  .#{$prefix}--code-editor__scroller--numbered
+    .#{$prefix}--code-editor__line--active::before {
+    background-clip: padding-box;
+    background-color: $field-hover;
+    color: $text-primary;
+  }
+
+  // After the number's color above, which this ties. Untyped text takes the
+  // line's color, so the line is disabled too, not only the tokens.
+  .#{$prefix}--code-editor__wrapper--disabled .#{$prefix}--code-editor__line,
+  .#{$prefix}--code-editor__wrapper--disabled
+    .#{$prefix}--code-editor__line::before,
+  .#{$prefix}--code-editor__wrapper--disabled .#{$prefix}--code-editor__code * {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--code-editor--fluid .#{$prefix}--code-editor__scroller {
+    margin-block-start: to-rem(32px);
+  }
+
+  // Forced colors keep one color for text, so the layer adds nothing. The
+  // textarea shows the code itself, in the system text and selection colors,
+  // and the layer keeps only the line numbers.
+  @media (forced-colors: active) {
+    .#{$prefix}--code-editor__code {
+      visibility: hidden;
+    }
+
+    // Forced colors keep a `transparent` text color transparent, so the
+    // textarea's text is named, in the system colors.
+    .#{$prefix}--code-editor__scroller--ready .#{$prefix}--code-editor__input {
+      z-index: 1;
+      caret-color: auto;
+      color: CanvasText;
+
+      &:disabled {
+        color: GrayText;
+      }
+
+      &::selection {
+        background-color: Highlight;
+        color: HighlightText;
+      }
+    }
+
+    // As every field's ring in forced colors: twice the resting ring, inset.
+    .#{$prefix}--code-editor__wrapper:focus-within {
+      outline: 4px $focus-outline-style Highlight;
+      outline-offset: -4px;
+    }
+  }
+
+  // After the forced-colors ring above, so a fluid editor keeps only the
+  // ring its TextArea wrapper draws as `::after`.
+  .#{$prefix}--code-editor--fluid .#{$prefix}--code-editor__wrapper {
+    outline: none;
+  }
+}
+
+@include exports("code-editor") {
+  @include code-editor;
+}

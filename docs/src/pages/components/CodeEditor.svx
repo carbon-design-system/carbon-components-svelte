@@ -1,0 +1,201 @@
+---
+components: ["CodeEditor"]
+description: Code editors provide a multi-line field for writing code, with syntax highlighting, line numbers, and indentation that works from the keyboard.
+---
+
+<script>
+  import { Box, CodeEditor, FluidForm, Stack } from "carbon-components-svelte";
+  import { tokenize } from "carbon-components-svelte/syntax";
+
+  const script = `import { writable } from "svelte/store";
+
+// Count how many times a deploy was retried.
+export function createRetries(limit = 3) {
+  const attempts = writable(0);
+  return {
+    subscribe: attempts.subscribe,
+    retry: () => attempts.update((n) => Math.min(n + 1, limit)),
+  };
+}
+`;
+
+  const json = `{
+  "service": "billing-api",
+  "region": "us-south",
+  "replicas": 3,
+  "healthy": true
+}`;
+
+  const styles = `.deploy-banner {
+  padding: 1rem;
+  color: var(--cds-text-primary);
+  border-inline-start: 4px solid #0f62fe;
+}`;
+
+  const markup = `<script>
+  export let region = "us-south";
+<\/script>
+
+<p class="status">Deploying to {region}</p>`;
+
+  const wide = `const status = "A long line of code that scrolls sideways in the editor instead of wrapping onto a second line";
+const next = 2;`;
+
+  const short = `const region = "us-south";
+const replicas = 3;`;
+</script>
+
+## Basic
+
+Create an editor with a label, the `language` to color, and `tokenize`. Without `tokenize`, or with a language it does not know, the code stays plain.
+
+`CodeEditor` does not import the tokenizer, so the core stays small. Pass `tokenize` from `carbon-components-svelte/syntax` and load the syntax stylesheets, as for [CodeSnippet](/components/CodeSnippet#syntax-highlighting).
+
+```js
+import "carbon-components-svelte/css/all.css";
+import "carbon-components-svelte/css/syntax-tokens.css";
+import "carbon-components-svelte/css/syntax.css";
+```
+
+<CodeEditor labelText="Retry helper" language="js" {tokenize} value={script} />
+
+## Language
+
+The editor colors code as the `language` you set. It accepts what `tokenize` does: `js`, `ts`, `svelte`, `html`, `css`, `scss`, `json`, `bash`, `diff`, and their aliases.
+
+<Stack gap={5}>
+  <CodeEditor labelText="Settings" language="json" {tokenize} rows={6} value={json} />
+  <CodeEditor labelText="Banner styles" language="css" {tokenize} rows={6} value={styles} />
+  <CodeEditor labelText="Component" language="svelte" {tokenize} rows={6} value={markup} />
+</Stack>
+
+## Layout
+
+### Rows
+
+Set `rows` to the number of lines the editor shows before it scrolls. The default is `10`.
+
+<CodeEditor labelText="Retry helper" language="js" {tokenize} rows={4} value={script} />
+
+### Sizes
+
+Set `size` to control the type size. The default is `"md"`, 14px on 20px lines. `"sm"` is 12px on 16px lines, the size of [CodeSnippet](/components/CodeSnippet).
+
+<Stack gap={5}>
+  <CodeEditor labelText="Medium" language="js" {tokenize} rows={3} value={short} />
+  <CodeEditor labelText="Small" size="sm" language="js" {tokenize} rows={3} value={short} />
+</Stack>
+
+### Line numbers
+
+Set `lineNumbers` to `false` to hide the gutter.
+
+<CodeEditor labelText="Region" language="js" {tokenize} rows={3} lineNumbers={false} value={short} />
+
+### Wrapped text
+
+Long lines scroll sideways by default. Set `wrapText` to wrap them instead. A wrapped editor paints every line, so it suits short code; keep long files unwrapped.
+
+<Stack gap={5}>
+  <CodeEditor labelText="Scrolls" language="js" {tokenize} rows={3} value={wide} />
+  <CodeEditor labelText="Wraps" language="js" {tokenize} rows={3} wrapText value={wide} />
+</Stack>
+
+### Fluid
+
+Set `fluid` for the fluid variant. Inside a `FluidForm` it applies on its own.
+
+<FluidForm>
+  <CodeEditor labelText="Retry helper" language="js" {tokenize} rows={4} value={script} />
+</FluidForm>
+
+## Indentation
+
+### Tab key
+
+<DocKbd label="Tab" /> indents the line, or every line in the selection, and <DocKbd label="Shift" />+<DocKbd label="Tab" /> outdents it. Each is one undo step.
+
+A field that takes Tab must still let keyboard users leave it. Press <DocKbd label="Escape" />, then <DocKbd label="Tab" /> or <DocKbd label="Shift" />+<DocKbd label="Tab" /> to move focus out. Typing anything takes Tab back. The editor describes this to screen readers, announces when Tab is released, and keeps the first <DocKbd label="Escape" /> for itself, so inside a `Modal` it takes a second press to close.
+
+| Do | Why |
+| --- | --- |
+| Leave `indentWithTab` on for code | Tab is how code is indented, and Escape then Tab always leaves |
+| Set `indentWithTab={false}` for a short snippet field in a long form | A reader who never indents then tabs through the form as usual |
+| Keep the default `escapeHintText`, or translate it | Screen reader users hear how to leave when the field takes focus |
+| Don't remap Tab with your own `keydown` handler | The editor already releases it, and two handlers can trap focus |
+
+<CodeEditor labelText="Retry helper" language="js" {tokenize} rows={4} value={script} />
+
+### Tab size and tabs
+
+Set `tabSize` to the width of a tab stop, and the spaces one indent holds. The default is `2`. Set `indent` to `"tabs"` to insert a tab character instead.
+
+<CodeEditor labelText="Makefile" indent="tabs" tabSize={4} rows={3} value={"build:\n\tbun run build"} />
+
+### Disable Tab indentation
+
+Set `indentWithTab` to `false` to let Tab move focus, as in a plain field.
+
+<CodeEditor labelText="Notes" indentWithTab={false} rows={3} value="Tab moves focus here." />
+
+### Auto indent
+
+<DocKbd label="Enter" /> keeps the indent of the line above, adds a level after an opening bracket, and opens a block when the caret is between a bracket and its closer. Set `autoIndent` to `false` to turn it off.
+
+### Bracket pairing
+
+Set `autoClose` to type the closing bracket or quote with the opening one, wrap a selection in a pair, step over a closer that is already there, and remove an empty pair with <DocKbd label="Backspace" />.
+
+<CodeEditor labelText="Handler" language="js" {tokenize} rows={3} autoClose value="" />
+
+## States
+
+Reflect validation and interaction states. Validation text and helper text work as in [TextArea](/components/TextArea).
+
+### Helper text
+
+<CodeEditor labelText="Settings" helperText="Saved as the service manifest" language="json" {tokenize} rows={5} value={json} />
+
+### Invalid
+
+Set `invalid` to `true` and `invalidText` to the message. The message is announced and the field is marked invalid.
+
+<FileSource src="/framed/CodeEditor/CodeEditorValidation" />
+
+### Warning
+
+<CodeEditor labelText="Settings" warn warnText="replicas is deprecated" language="json" {tokenize} rows={5} value={json} />
+
+### Disabled
+
+Set `disabled` to `true` to prevent interaction.
+
+<CodeEditor labelText="Settings" disabled language="json" {tokenize} rows={5} value={json} />
+
+### Read-only
+
+Set `readonly` to `true` to show code that can be selected and copied but not changed. Tab moves focus, since nothing is indented.
+
+<CodeEditor labelText="Settings" readonly language="json" {tokenize} rows={5} value={json} />
+
+## Forms
+
+The textarea carries `name`, so the code submits with its form, and it clears when the form resets, like a TextArea.
+
+<FileSource src="/framed/CodeEditor/CodeEditorForm" />
+
+## Large files
+
+The textarea holds the whole text, and the colors are drawn for the lines in view and a few either side. An editor of 5,000 lines keeps about 60 line nodes, so scrolling and typing do not slow with the file. After an edit to a large file in JavaScript, TypeScript, JSON, or diff, only the edited lines are colored at once, and the whole file once typing pauses.
+
+<FileSource src="/framed/CodeEditor/CodeEditorLarge" />
+
+## Direction
+
+Code reads left to right in any language. Under `dir="rtl"` the label, helper text, and message mirror, and the code area and its line numbers stay left to right, as in [CodeSnippet](/components/CodeSnippet).
+
+## Accessibility
+
+The editor is a native textarea with a label, so screen readers, spell and autofill settings, IME composition, and the browser's undo work as in any field. The colored layer and the line numbers are hidden from assistive technology, and spellcheck, autocorrect, and autocapitalize are off. In forced colors the text takes the system colors and the layer is hidden, so the caret and the selection stay visible.
+
+In White and Gray 10, the syntax colors at the 60 grade take the 70 grade of the same hue in the editor, so selected code reads at 4.5:1 or more on the selection color. CodeSnippet and the dark themes keep Carbon's colors.

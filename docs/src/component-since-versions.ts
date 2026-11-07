@@ -20,6 +20,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   ChatMessage: "0.114.0",
   Checkbox: "0.2.0",
   ClickableTile: "0.2.0",
+  CodeEditor: "0.114.0",
   CodeSnippet: "0.2.0",
   ComboBox: "0.2.0",
   ComboButton: "0.110.0",

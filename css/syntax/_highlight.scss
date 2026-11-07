@@ -38,3 +38,33 @@ $syntax-background-tokens: ("inserted", "deleted");
     }
   }
 }
+
+/// Carbon's light syntax colors at the 60 grade read at 3.8:1 on the
+/// selection's `$highlight`, so CodeEditor, where code is selected, takes
+/// the 70 grade of the same hue: 5.9:1 on the selection and 7:1 on the
+/// field. `light-dark()` follows the color scheme each theme root and zone
+/// sets, so dark themes keep their property. A disabled editor keeps its
+/// disabled color, whichever stylesheet loads last.
+/// @access private
+/// @group syntax
+@mixin syntax-code-editor {
+  $steps: (
+    $carbon--blue-60: $carbon--blue-70,
+    $carbon--cool-gray-60: $carbon--cool-gray-70,
+    $carbon--green-60: $carbon--green-70,
+    $carbon--purple-60: $carbon--purple-70,
+    $carbon--red-60: $carbon--red-70,
+    $carbon--teal-60: $carbon--teal-70,
+    $carbon--yellow-60: $carbon--yellow-70,
+  );
+
+  $wrapper: ".#{$prefix}--code-editor__wrapper";
+
+  @each $name, $color in map-get($ccs-syntax-tokens, light) {
+    @if map-has-key($steps, $color) {
+      #{$wrapper}:not(#{$wrapper}--disabled) .tok-#{$name} {
+        color: light-dark(map-get($steps, $color), var(--cds-syntax-#{$name}));
+      }
+    }
+  }
+}

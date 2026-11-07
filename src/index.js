@@ -40,6 +40,7 @@ export { default as ChatMessage } from "./Chat/ChatMessage.svelte";
 export { default as Checkbox } from "./Checkbox/Checkbox.svelte";
 export { default as CheckboxGroup } from "./Checkbox/CheckboxGroup.svelte";
 export { default as CheckboxSkeleton } from "./Checkbox/CheckboxSkeleton.svelte";
+export { default as CodeEditor } from "./CodeEditor/CodeEditor.svelte";
 export { default as CodeSnippet } from "./CodeSnippet/CodeSnippet.svelte";
 export { default as CodeSnippetSkeleton } from "./CodeSnippet/CodeSnippetSkeleton.svelte";
 export { default as ComboBox } from "./ComboBox/ComboBox.svelte";
