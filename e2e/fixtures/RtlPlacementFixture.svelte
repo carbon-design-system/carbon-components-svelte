@@ -11,6 +11,7 @@
     ProgressStep,
     RadioButton,
     RadioButtonGroup,
+    SurveyScale,
     Switch,
     Tag,
     TagSet,
@@ -103,6 +104,12 @@
     <RadioButton value="medium" labelText="Medium" />
     <RadioButton value="large" labelText="Large" />
   </RadioButtonGroup>
+  <SurveyScale
+    data-testid="survey-scale"
+    preset="likert"
+    display="number"
+    legendText="The setup was easy"
+  />
 </div>
 
 <style>

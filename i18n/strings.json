@@ -2137,6 +2137,62 @@
       "defaultKind": "text"
     },
     {
+      "component": "SurveyScale",
+      "prop": "helperText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "invalidText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "legendText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "maxLabelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "minLabelText",
+      "type": "string | undefined",
+      "default": null,
+      "defaultKind": "none"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "readonlyText",
+      "type": "string",
+      "default": "Read-only",
+      "defaultKind": "text"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "scaleDescription",
+      "type": "(low: { value: string; label: string }, high: { value: string; label: string }) => string",
+      "default": "(low, high) => `${low.value} is ${low.label}, ${high.value} is ${high.label}`",
+      "defaultKind": "function"
+    },
+    {
+      "component": "SurveyScale",
+      "prop": "warnText",
+      "type": "string",
+      "default": "",
+      "defaultKind": "text"
+    },
+    {
       "component": "TableOfContents",
       "prop": "labelText",
       "type": "string",
@@ -2801,6 +2857,27 @@
       }
     },
     {
+      "component": "SurveyScale",
+      "prop": "translateWithId",
+      "type": "(id: import(\"../utils/survey-scale-points.js\").ScaleTranslationId) => string",
+      "ids": {
+        "stronglyDisagree": "Strongly disagree",
+        "disagree": "Disagree",
+        "somewhatDisagree": "Somewhat disagree",
+        "neitherAgreeNorDisagree": "Neither agree nor disagree",
+        "somewhatAgree": "Somewhat agree",
+        "agree": "Agree",
+        "stronglyAgree": "Strongly agree",
+        "veryDissatisfied": "Very dissatisfied",
+        "dissatisfied": "Dissatisfied",
+        "neutral": "Neutral",
+        "satisfied": "Satisfied",
+        "verySatisfied": "Very satisfied",
+        "notAtAllLikely": "Not at all likely",
+        "extremelyLikely": "Extremely likely"
+      }
+    },
+    {
       "component": "TableHeader",
       "prop": "translateWithId",
       "type": "(id: TableHeaderTranslationId) => string",
@@ -2811,6 +2888,7 @@
     }
   ],
   "ids": {
+    "agree": "Agree",
     "alt": "Alt",
     "arrowDown": "Down Arrow",
     "arrowLeft": "Left Arrow",
@@ -2830,6 +2908,8 @@
     "decrement": "Decrement number",
     "del": "Del",
     "delete": "Delete",
+    "disagree": "Disagree",
+    "dissatisfied": "Dissatisfied",
     "end": "End",
     "enter": "Enter",
     "escape": "Esc",
@@ -2837,20 +2917,31 @@
     "expandAll": "Expand all rows",
     "expandColumn": "Expand rows",
     "expandRow": "Expand current row",
+    "extremelyLikely": "Extremely likely",
     "forwardDel": "Fwd Del",
     "forwardDelete": "Forward Delete",
     "home": "Home",
     "increment": "Increment number",
     "meta": "Meta",
+    "neitherAgreeNorDisagree": "Neither agree nor disagree",
+    "neutral": "Neutral",
+    "notAtAllLikely": "Not at all likely",
     "open": "Open menu",
     "option": "Option",
     "pageDown": "Page Down",
     "pageUp": "Page Up",
     "return": "Return",
+    "satisfied": "Satisfied",
     "selectAll": "Select all rows",
     "selectRow": "Select row",
     "shift": "Shift",
+    "somewhatAgree": "Somewhat agree",
+    "somewhatDisagree": "Somewhat disagree",
     "space": "Space",
-    "tab": "Tab"
+    "stronglyAgree": "Strongly agree",
+    "stronglyDisagree": "Strongly disagree",
+    "tab": "Tab",
+    "veryDissatisfied": "Very dissatisfied",
+    "verySatisfied": "Very satisfied"
   }
 }

@@ -1955,6 +1955,26 @@ test.describe("right-to-left menus and keys", () => {
     await expect(radios.nth(0)).toBeFocused();
     await expect(radios.nth(0)).toBeChecked();
   });
+
+  test("starts a SurveyScale at the inline start and follows the arrows", async ({
+    page,
+  }) => {
+    const scale = page.getByTestId("survey-scale");
+    const radios = scale.getByRole("radio");
+    const options = scale.locator(".bx--survey-scale__option");
+    // The lowest point sits at the inline start, the right.
+    expect((await edges(options.nth(1))).right).toBeLessThanOrEqual(
+      (await edges(options.nth(0))).left,
+    );
+
+    await options.nth(0).click();
+    await radios.nth(0).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(radios.nth(1)).toBeFocused();
+    await expect(radios.nth(1)).toBeChecked();
+    await page.keyboard.press("ArrowRight");
+    await expect(radios.nth(0)).toBeChecked();
+  });
 });
 
 // Each floating case: what it points at, its surface, and its caret, either
