@@ -1,0 +1,210 @@
+---
+components: ["TransferList"]
+description: A dual list box that moves items between an available list and a selected list, with search, reordering, drag and drop, and form support.
+---
+
+<script>
+  import { Stack, TransferList } from "carbon-components-svelte";
+
+  const items = [
+    { id: "billing", text: "Billing administrator" },
+    { id: "audit", text: "Audit log viewer" },
+    { id: "deploy", text: "Deploy to production" },
+    { id: "keys", text: "Manage API keys" },
+    { id: "members", text: "Invite members" },
+    { id: "alerts", text: "Edit alert rules" },
+    { id: "sso", text: "Configure single sign-on", disabled: true },
+    { id: "support", text: "Open support cases" },
+  ];
+</script>
+
+## Basic
+
+Pass the choices as `items` and bind `selectedIds`, the ids the selected list
+holds in the order it shows them. The available list holds the rest, in the
+order of `items`.
+
+Click a row to mark it, hold <DocKbd label="Shift" /> to mark a range, then
+press an add or remove button, double-click a row, or press <DocKbd label="Enter" />
+to move the marked rows. With no row marked, <DocKbd label="Enter" /> moves the row under the cursor.
+
+<FileSource src="/framed/TransferList/TransferListBasic" />
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Use a transfer list to build a set from a long list of choices, or when the order of the set matters. | Two lists show both what is chosen and what is left, which a multi-select menu hides. |
+| Use a [MultiSelect](/components/MultiSelect) or [CheckboxGroup](/components/CheckboxGroup) for a short list where order does not matter. | Moving rows between lists takes more steps than checking a box. |
+| Set `legendText` to name the whole field, such as "Workspace permissions". | The two lists sit in a group with that name, so a screen reader announces it with each list. |
+| Turn on `filterable` once a list passes about ten items. | Searching each list is faster than scrolling, and a long list is windowed so searching stays quick. |
+| Keep `reorderable` on when the order is a priority, and off when it is not. | The selected list is submitted in order, so a user who cannot see that order matters will not set it. |
+
+## Keyboard
+
+Each list is a multi-select listbox with one tab stop, and the cursor moves
+with the arrow keys while focus stays on the list. The move buttons are a
+toolbar with one tab stop, and every arrow key moves between its buttons.
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Up" /> / <DocKbd label="Down" /> | Move the cursor. |
+| <DocKbd label="Shift" />+<DocKbd label="Up" /> / <DocKbd label="Down" /> | Mark the rows from where the range started. |
+| <DocKbd label="Space" /> | Mark or unmark the row under the cursor. <DocKbd label="Shift" />+<DocKbd label="Space" /> marks a range. |
+| <DocKbd label="Ctrl" />+<DocKbd label="A" /> | Mark every row. <DocKbd label="Escape" /> clears the marks. |
+| <DocKbd label="Enter" /> | Move the marked rows to the other list. |
+| <DocKbd label="Delete" /> / <DocKbd label="Backspace" /> | In the selected list, move the marked rows back. |
+| <DocKbd label="Alt" />+<DocKbd label="Up" /> / <DocKbd label="Down" /> | In the selected list, move the marked rows up or down. |
+| Printable characters | Move the cursor to the next row that starts with them. |
+
+Moves are announced to screen readers, such as "Audit log viewer moved to
+position 2 of 3."
+
+## Filterable
+
+Set `filterable` to add a search field to each list. A search narrows what a
+list shows, and the buttons that move all items move the rows left by the
+search. Marks on rows the search hides are dropped. Set `shouldFilterItem` to
+match on more than the item's text.
+
+<FileSource src="/framed/TransferList/TransferListFilterable" />
+
+## Reordering
+
+The selected list can be reordered with the up and down buttons above it, with
+<DocKbd label="Alt" />+<DocKbd label="Up" /> and <DocKbd label="Down" />, or by dragging a row. Set `reorderable` to `false` to keep the
+list in the order rows were added.
+
+<TransferList
+  {items}
+  selectedIds={["deploy", "audit", "keys"]}
+  reorderable={false}
+  legendText="Fixed order"
+/>
+
+## Drag and drop
+
+With a mouse or pen, drag a row, or all the marked rows, onto the other list.
+Drop onto the selected list to choose where the rows land, and drop selected
+rows onto the available list to remove them. Touch screens scroll instead, so
+use the buttons there. Set `dragDrop` to `false` to turn dragging off.
+
+<TransferList
+  {items}
+  selectedIds={["audit"]}
+  dragDrop={false}
+  legendText="Buttons and keys only"
+/>
+
+## Sizes
+
+Set `size` to control row and button height. The default is `"md"`.
+
+<Stack gap={7}>
+  <TransferList {items} selectedIds={["audit"]} size="sm" rows={4} legendText="Small" />
+  <TransferList {items} selectedIds={["audit"]} size="lg" rows={4} legendText="Large" />
+</Stack>
+
+## Layout
+
+Set `rows` to control how many rows each list shows before it scrolls. The
+default is 8. Below the medium breakpoint the lists stack, and the arrows on
+the move buttons turn to point down and up. In right-to-left pages the lists
+swap sides and the arrows mirror.
+
+## States
+
+Reflect validation and interaction states. A disabled item stays where it is,
+and the buttons that move all items skip it.
+
+### Invalid and warning
+
+Set `invalid` and `invalidText`, or `warn` and `warnText`. Set `required` to
+block a form from submitting with nothing selected.
+
+<Stack gap={7}>
+  <TransferList
+    {items}
+    selectedIds={[]}
+    invalid
+    invalidText="Select at least one permission."
+    legendText="Invalid"
+  />
+  <TransferList
+    {items}
+    selectedIds={["billing", "deploy"]}
+    warn
+    warnText="Billing administrators can see every invoice."
+    legendText="Warning"
+  />
+</Stack>
+
+### Disabled and read-only
+
+Set `disabled` to prevent interaction. Set `readonly` to let the lists scroll
+and mark rows without moving them.
+
+<Stack gap={7}>
+  <TransferList {items} selectedIds={["audit"]} disabled legendText="Disabled" />
+  <TransferList {items} selectedIds={["audit"]} readonly legendText="Read-only" />
+</Stack>
+
+## Large lists
+
+Lists of a hundred items or more render only the rows in view, so 2,000 items
+filter and move in a frame or two. Moving a long list through a form submits one
+hidden input per selected item.
+
+<FileSource src="/framed/TransferList/TransferListLarge" />
+
+## Form
+
+Set `name` to submit the selected ids, one entry per item, in the order the
+selected list shows. `FormData.getAll(name)` returns them in order. A form reset
+puts the selection back to what it was on first render.
+
+<FileSource src="/framed/TransferList/TransferListForm" />
+
+## Cancel a move
+
+Each move dispatches `move` before the lists change. Its `detail` holds the
+`ids` that would move, the list they come `from` and go `to`, and the
+`selectedIds` the move would set. Call `preventDefault()` to keep the lists as
+they are, for example to save the change first and set `selectedIds` when the
+save succeeds. `change` follows each move that is not canceled.
+
+```svelte
+<TransferList
+  {items}
+  bind:selectedIds
+  on:move={(event) => {
+    event.preventDefault();
+    save(event.detail.selectedIds).then(() => {
+      selectedIds = event.detail.selectedIds;
+    });
+  }}
+/>
+```
+
+## Text
+
+Every string is a prop, so the component can be translated. Visible text ends
+in `Text`, and text that only a screen reader reads ends in `Description`. Set
+`countText` and `announcementDescription` to build the item counts and the move
+announcements from their numbers.
+
+<TransferList
+  {items}
+  selectedIds={["audit"]}
+  availableTitleText="Disponibles"
+  selectedTitleText="Elegidos"
+  addText="Agregar los elegidos"
+  addAllText="Agregar todos"
+  removeText="Quitar los elegidos"
+  removeAllText="Quitar todos"
+  moveUpText="Subir"
+  moveDownText="Bajar"
+  countText={({ marked, shown, total }) => marked > 0 ? `${marked} de ${shown} elegidos` : `${shown} de ${total}`}
+  announcementDescription={({ type, count }) => `${count} movidos (${type}).`}
+  legendText="Permisos"
+/>
