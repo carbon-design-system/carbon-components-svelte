@@ -1,22 +1,25 @@
-<script>
+<script lang="ts">
   import {
     createFocusNav,
     focusNav,
+    type FocusNavOptions,
   } from "carbon-components-svelte/utils/focus-nav.js";
 
-  export let mode = "roving";
+  export let mode: "roving" | "activedescendant" = "roving";
   export let rtl = false;
   export let items = ["Cut", "Copy", "Paste", "Delete", "Select"];
   export let disabled = [1, 2];
 
-  function options() {
+  function options(): FocusNavOptions {
     return {
       selector: "[data-item]",
-      skip: (/** @type {number} */ i) => disabled.includes(i),
+      // Without a DOM, the server needs the count to place the tab stop.
+      count: items.length,
+      skip: (i) => disabled.includes(i),
       rtl: () => rtl,
       mode,
       orientation: mode === "roving" ? "horizontal" : "vertical",
-      typeahead: { label: (/** @type {number} */ i) => items[i] },
+      typeahead: { label: (i) => items[i] },
     };
   }
 

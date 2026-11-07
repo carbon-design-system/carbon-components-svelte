@@ -34,7 +34,9 @@ describe("nextIndex: lists", () => {
     ] as const)("%s", (orientation, handled) => {
       for (const key of keys) {
         const result = go({ index: 2 }, key, { orientation });
-        expect(result !== null).toBe(handled.includes(key));
+        expect(result !== null).toBe(
+          (handled as readonly string[]).includes(key),
+        );
       }
     });
 
