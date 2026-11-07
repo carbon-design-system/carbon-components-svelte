@@ -592,8 +592,8 @@ test.describe("forced colors", () => {
   }) => {
     const edges = [
       ".bx--shape-indicator--medium path:first-of-type",
-      "[theme=g100] .bx--shape-indicator--low path:nth-of-type(2)",
-      "[theme=g100] .bx--shape-indicator--cautious path:first-of-type",
+      ".bx--g100 .bx--shape-indicator--low path:nth-of-type(2)",
+      ".bx--g100 .bx--shape-indicator--cautious path:first-of-type",
     ];
     const fills = await page.evaluate(
       (selectors) =>

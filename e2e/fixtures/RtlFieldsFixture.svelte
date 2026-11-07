@@ -228,7 +228,7 @@
   <div data-testid="tag-input-invalid">
     <TagInput
       labelText="Labels"
-      tags={["prod"]}
+      value={["prod"]}
       invalid
       invalidText="Too many labels"
     />

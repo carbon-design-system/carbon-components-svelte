@@ -40,7 +40,7 @@
     {items}
     selectedId="0"
     clearable
-    inline
+    type="inline"
     invalid
     invalidText="This field is required"
   />
