@@ -3,7 +3,8 @@
 
   /**
    * Set the id of the control this label is for.
-   * Inside a `FormItem`, defaults to the item's `controlId`.
+   * Inside a `FormItem`, defaults to the item's `controlId`; elsewhere,
+   * the label has no `for` until you set one.
    * @type {string}
    */
   export { forId as for };
@@ -28,7 +29,6 @@
   import { readable } from "svelte/store";
   import { FORM_ITEM_CONTEXT_KEY } from "../constants/context-keys.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { uniqueId } from "../utils/unique-id.js";
 
   const context = getContext(FORM_ITEM_CONTEXT_KEY);
   // A FormGroup's fieldset is named by its legend, not a label.
@@ -38,12 +38,11 @@
   // A disabled fieldset around the label disables it too.
   let inDisabledFieldset = false;
   const part = formItem?.part("label");
-  const fallbackId = uniqueId();
 
-  $: htmlFor = forId ?? id ?? $controlId ?? fallbackId;
+  $: htmlFor = forId ?? id ?? $controlId;
   // Only a label for the item's own control labels it.
   $: labelId =
-    formItem && htmlFor === $controlId
+    formItem && htmlFor !== undefined && htmlFor === $controlId
       ? part?.numbered(`label-${$controlId}`)
       : undefined;
   $: part?.(labelId);
