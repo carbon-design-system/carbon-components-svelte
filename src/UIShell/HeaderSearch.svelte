@@ -162,6 +162,9 @@
   $: inputId = `${id}-input`;
   $: labelId = `${id}-label`;
   $: menuId = `${id}-menu`;
+  // Whether the menu is in the page, for the attributes that name it: the
+  // rich menu while active, the results menu while active with results.
+  $: menuRendered = active && (richMenu || results.length > 0);
 
   /** @type {null | HTMLDivElement} */
   let refSearch = null;
@@ -461,7 +464,7 @@
   >
   <div
     class:bx--header__search-menu={true}
-    aria-owns={active ? menuId : undefined}
+    aria-owns={menuRendered ? menuId : undefined}
     aria-haspopup="menu"
   >
     <button
@@ -504,7 +507,7 @@
       id={inputId}
       role={richMenu ? "combobox" : undefined}
       aria-autocomplete="list"
-      aria-controls={active ? menuId : undefined}
+      aria-controls={menuRendered ? menuId : undefined}
       aria-expanded={richMenu
         ? richMenuVisible
           ? "true"
