@@ -16,6 +16,10 @@ import { tokenize } from "./tokenize.js";
  * `node` re-highlights when the code's text or nodes change, whether
  * Svelte or other code changes them.
  *
+ * Sets `data-ccs-highlight` on `node`. `syntax.css` scopes its
+ * `::highlight()` rules to that attribute, so the rules don't test every
+ * element on the page.
+ *
  * A Svelte action: `<pre use:highlightCode={"ts"}>`.
  * Without Highlight API support (`CSS.highlights`) it does nothing.
  * @param {HTMLElement} node
@@ -27,6 +31,7 @@ export function highlightCode(node, options) {
     return { update: () => {}, destroy: () => {} };
   }
 
+  node.setAttribute("data-ccs-highlight", "");
   let language = typeof options === "string" ? options : options.language;
   /** @type {Map<string, StaticRange[]>} */
   let owned = new Map();
@@ -118,6 +123,7 @@ export function highlightCode(node, options) {
     destroy: () => {
       observer.disconnect();
       clear();
+      node.removeAttribute("data-ccs-highlight");
     },
   };
 }

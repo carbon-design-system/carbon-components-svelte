@@ -123,11 +123,13 @@ describe("syntax stylesheets", () => {
       ":root",
     );
     const rules = parseRules(css);
-    expect(rules).toHaveLength(88 * 2);
+    // `.tok-x`, plus `[data-ccs-highlight]::highlight(syntax-x)` and its
+    // descendant form, which the parser lists as separate rules.
+    expect(rules).toHaveLength(88 * 3);
 
     for (const { selector, decls } of rules) {
       const type = selector.match(
-        /^(?:\.tok-|::highlight\(syntax-)([\w-]+)/,
+        /^(?:\.tok-|\[data-ccs-highlight\] ?::highlight\(syntax-)([\w-]+)/,
       )?.[1];
       expect(type, selector).toBeDefined();
       const property = ["inserted", "deleted"].includes(type ?? "")
@@ -138,6 +140,12 @@ describe("syntax stylesheets", () => {
         `var(--cds-syntax-${type})`,
       );
       expect(declared.has(`--cds-syntax-${type}`), selector).toBe(true);
+    }
+    // Each `::highlight()` rule is scoped to the element `highlightCode`
+    // marks; an unscoped one is tested against every element on the page.
+    for (const { selector } of rules) {
+      if (!selector.includes("::highlight")) continue;
+      expect(selector).toMatch(/^\[data-ccs-highlight\]/);
     }
     // No theme values: the same sheet serves every theme.
     expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);

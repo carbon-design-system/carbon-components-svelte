@@ -26,6 +26,9 @@ $syntax-background-tokens: ("inserted", "deleted");
 
   // Kept apart from the `.tok-*` rules: a browser without the Highlight API
   // drops any selector list that contains `::highlight()`.
+  // Scoped to `[data-ccs-highlight]`, which `highlightCode` sets. Unscoped,
+  // each rule is tested against every element on the page in each style
+  // pass, which tripled style time on a large docs page.
   @each $name, $color in map-get($ccs-syntax-tokens, light) {
     $property: if(
       index($syntax-background-tokens, $name),
@@ -33,7 +36,8 @@ $syntax-background-tokens: ("inserted", "deleted");
       color
     );
 
-    ::highlight(syntax-#{$name}) {
+    [data-ccs-highlight]::highlight(syntax-#{$name}),
+    [data-ccs-highlight] ::highlight(syntax-#{$name}) {
       #{$property}: var(--cds-syntax-#{$name});
     }
   }
