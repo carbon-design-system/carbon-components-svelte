@@ -14,6 +14,8 @@
    * Specify when the content mounts.
    * `"visible"` mounts it once the wrapper comes within `rootMargin` of the viewport.
    * `"idle"` mounts it once the browser is idle, or sooner if it comes that close.
+   * Idle mounts take turns, one an idle period, top to bottom, and skip
+   * content above the viewport, which mounts as the reader scrolls near it.
    * @type {"visible" | "idle"}
    */
   export let when = "visible";
@@ -45,6 +47,7 @@
 
   import { afterUpdate, createEventDispatcher, onMount } from "svelte";
   import { toCssLength } from "../utils/css-length.js";
+  import { queueIdleMount } from "../utils/idle-mount.js";
   import { noop } from "../utils/noop.js";
   import { observeIntersection } from "../utils/shared-observer.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -101,15 +104,7 @@
       ),
       addPooledListener("beforeprint", show),
     ];
-    if (trigger === "idle") {
-      if (typeof requestIdleCallback === "function") {
-        const handle = requestIdleCallback(show);
-        stops.push(() => cancelIdleCallback(handle));
-      } else {
-        const handle = setTimeout(show, 1);
-        stops.push(() => clearTimeout(handle));
-      }
-    }
+    if (trigger === "idle") stops.push(queueIdleMount(element, show));
     return () => {
       for (const stop of stops) stop();
     };
