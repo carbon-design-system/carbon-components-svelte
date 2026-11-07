@@ -130,4 +130,5 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   UserAvatar: "0.110.0",
   UserAvatarGroup: "0.110.0",
   VirtualList: "0.113.0",
+  WebTerminal: "0.114.0",
 };
