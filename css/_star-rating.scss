@@ -122,10 +122,14 @@
     gap: $carbon--spacing-02;
   }
 
+  // The fill grows from the inline start. The star is symmetric, so RTL
+  // mirrors the clipped fill.
   .#{$prefix}--star-rating__fill {
     position: absolute;
     inset: 0;
     clip-path: inset(0 calc((1 - var(--ccs-star-rating-fill, 0)) * 100%) 0 0);
+
+    @include ccs-mirror-rtl;
   }
 }
 

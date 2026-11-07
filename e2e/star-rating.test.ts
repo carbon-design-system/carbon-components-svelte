@@ -54,6 +54,17 @@ test.describe("StarRating", () => {
     expect(box.clip).toBe("inset(0px 50% 0px 0px)");
   });
 
+  test("fills a half star from the right in RTL", async ({ page }) => {
+    const transform = await page
+      .getByTestId("readonly-rtl")
+      .locator(".bx--star-rating__fill")
+      .nth(3)
+      .evaluate((node) => getComputedStyle(node).transform);
+
+    // The left half is clipped away, so mirroring shows the right half.
+    expect(transform).toBe("matrix(-1, 0, 0, 1, 0, 0)");
+  });
+
   for (const [size, px] of [
     ["sm", 16],
     ["lg", 32],
