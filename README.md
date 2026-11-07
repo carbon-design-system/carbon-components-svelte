@@ -94,6 +94,24 @@ Each precompiled StyleSheet contains the styles for every component. To ship onl
 
 The SCSS sources are not published. Compiling `carbon-components` v10 SCSS yourself gives v10 colors and type, and misses styles for components and variants that only this library provides.
 
+### Fonts
+
+The theme StyleSheets load IBM Plex Sans, Mono and Serif from Carbon's CDN (`1.www.s81c.com`). A browser only downloads a face that rendered text uses.
+
+To use another font, set the family variables on `:root`:
+
+```css
+:root {
+  --ccs-font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --ccs-font-mono: "JetBrains Mono", monospace;
+  --ccs-font-serif: Georgia, serif;
+}
+```
+
+Plex is then never requested. Set them on `:root` or a theme zone element: the code type tokens resolve `--ccs-font-mono` where they are declared.
+
+`css/fonts.css` holds the same `@font-face` rules on their own. A later release drops them from the theme StyleSheets ([#5291](https://github.com/carbon-design-system/carbon-components-svelte/issues/5291)); import `fonts.css` now as well to keep Plex loading then. Until then the two copies are identical, so the browser loads each face once.
+
 ### Dynamic theming
 
 To switch themes at runtime, import the combined "all.css" StyleSheet instead of a single theme. It bundles all five themes and toggles between them through a `theme` attribute on the HTML element.
