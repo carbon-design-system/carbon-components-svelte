@@ -647,6 +647,18 @@ assets:
       - shell
       - media
       - media
+  infinite-list:
+    name: Infinite list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/infinite-list.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/InfiniteList
   inline-edit:
     name: Inline edit
     status: stable
