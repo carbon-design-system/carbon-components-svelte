@@ -65,6 +65,21 @@ __domEnv.leaks.since(mark, "/src/"); // [{ what: "keydown listener on window", a
 
 `include` keeps entries whose innermost line's path contains it, so a test's own listeners can be left out. Records hold their listener and observer weakly, so tracking never keeps alive what a test expects to be collected. This repo checks after every test in `tests/utils/setup-globals.ts`.
 
+## DOM checks
+
+Structural accessibility rules that need no layout, run on the live document, so markup is checked in every state the tests reach. With `environmentOptions: { domEnv: { checks: true } }` (or `DOM_ENV_CHECKS`), dom-env runs them when a dispatched event's effects settle (the next macrotask), and `__domEnv.checks.run()` runs them on demand; `__domEnv.checks.take()` returns the findings so far.
+
+| Rule | Finds |
+| --- | --- |
+| `idref` | An `aria-*` id reference, `for`, `list`, `form` or `headers` naming an id not in the document. As in axe, `aria-controls` and `aria-owns` may dangle while `aria-expanded="false"`. |
+| `duplicate-id` | Two elements in the document with one id |
+| `aria-hidden-focus` | An element in the tab order inside `aria-hidden="true"` |
+| `nested-interactive` | An element in the tab order inside a role whose content is presentational (button, checkbox, option, tab...) |
+
+"In the tab order" uses `checkVisibility`, so content hidden with `display` or `visibility` in inline styles or `<style>` sheets doesn't count. The checks use the DOM methods as they were when enabled, so a test spying on `querySelectorAll` doesn't see them.
+
+This repo runs them in a custom vitest runner (`tests/utils/dom-check-runner.ts`) between a test's body and its `afterEach` hooks, and fails the test on findings about the library's own generated ids or on the other rules. `skipDomChecks(rule)` lets a test opt out.
+
 ## Develop
 
 ```sh
