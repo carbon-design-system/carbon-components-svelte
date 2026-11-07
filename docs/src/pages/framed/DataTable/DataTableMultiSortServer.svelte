@@ -22,7 +22,7 @@
   ];
 
   let rows = [...fromServer];
-  /** @type {ReadonlyArray<import("carbon-components-svelte/DataTable/DataTable.svelte").DataTableSortRule>} */
+  /** @type {import("carbon-components-svelte/DataTable/DataTable.svelte").DataTableSortRule[]} */
   let sortBy = [];
 
   // Simulate a request that sorts by every key in order.
@@ -48,15 +48,13 @@
 <DataTable
   sortable
   sortMode="multiple"
+  externalSort
   bind:sortBy
   {headers}
   {rows}
   on:sort={async (event) => {
-    // Hold the table where it is until the server answers.
-    event.preventDefault();
-    const next = event.detail.sortBy;
-    rows = await fakeServerSort(next);
-    sortBy = next;
+    // The headers update now; the rows follow when the server answers.
+    rows = await fakeServerSort(event.detail.sortBy);
   }}
 >
   <Toolbar>

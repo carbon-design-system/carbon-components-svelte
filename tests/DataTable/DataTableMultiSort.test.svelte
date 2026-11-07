@@ -11,6 +11,7 @@
   export let sortDirection: ComponentProps<DataTable>["sortDirection"] = "none";
   export let sortAlways = false;
   export let selectable = false;
+  export let externalSort = false;
   export let sort: ComponentProps<DataTable>["sort"] = undefined;
   export let toolbar = false;
   export let sortStatusText: ComponentProps<DataTable>["sortStatusText"] =
@@ -40,6 +41,7 @@
   bind:sortKey
   bind:sortDirection
   {sortAlways}
+  {externalSort}
   {selectable}
   {sort}
   {headers}

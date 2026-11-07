@@ -252,7 +252,7 @@
    */
 
   /**
-   * @event {{ key: null; direction: "none"; sortBy?: ReadonlyArray<DataTableSortRule<Row>> } | { key: DataTableKey<Row>; direction: "ascending" | "descending"; sortBy?: ReadonlyArray<DataTableSortRule<Row>> }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` / `sortBy` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
+   * @event {{ key: null; direction: "none"; sortBy?: ReadonlyArray<DataTableSortRule<Row>> } | { key: DataTableKey<Row>; direction: "ascending" | "descending"; sortBy?: ReadonlyArray<DataTableSortRule<Row>> }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` / `sortBy` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side, unless `externalSort` is set. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
    * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`. With `sortMode="multiple"`, the highest priority column of `sortBy`.
    * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
    * @property {ReadonlyArray<DataTableSortRule<Row>>} [sortBy] - With `sortMode="multiple"`, the proposed sort list, highest priority first. Absent when `sortMode` is `"single"`. A Shift+click on a secondary column leaves `key` and `direction` unchanged, so read `sortBy` to see it.
@@ -411,6 +411,15 @@
    * @bindable writable
    */
   export let sortBy = [];
+
+  /**
+   * Set to `true` when `rows` already arrive in sorted order, for example
+   * from a server. The headers still reflect `sortKey`, `sortDirection` and
+   * `sortBy`, and a header click still dispatches `sort` and updates them,
+   * but rows render in the order given. `sort` and `header.sort` are not
+   * called.
+   */
+  export let externalSort = false;
 
   /**
    * Set to `true` to only toggle between "ascending" and
@@ -585,7 +594,11 @@
    */
   export let filterMode = "remove";
 
-  /** Specify the number of items to display in a page */
+  /**
+   * Specify the number of items to display in a page. This slices `rows`
+   * client side. For server pagination, pass only the current page as `rows`
+   * and bind `page` and `pageSize` on `Pagination` instead.
+   */
   export let pageSize = 0;
 
   /** Set to `number` to set current page */
@@ -1340,7 +1353,10 @@
 
   $: sortSpecs = resolveSortSpecs(sortList, stableHeaders, sortable);
   $: sorting = sortSpecs.length > 0;
-  $: sortedRows = sorting ? sortRows($tableRows, sortSpecs, sort) : $tableRows;
+  $: sortedRows =
+    !externalSort && sorting
+      ? sortRows($tableRows, sortSpecs, sort)
+      : $tableRows;
 
   // Each sorted column's place in a multi-column sort. Single mode reads
   // `sortKey` and `sortDirection` per header, as it always did.
