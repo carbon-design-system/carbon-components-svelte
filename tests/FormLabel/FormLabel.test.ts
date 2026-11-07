@@ -15,16 +15,14 @@ describe("FormLabel", () => {
     expect(label).toHaveClass("bx--label");
   });
 
-  it("should generate default id", () => {
+  it("leaves out `for` when it names no control", () => {
     render(FormLabelTest, {
       props: {
         slotContent: "Label",
       },
     });
 
-    const forAttr = screen.getByText("Label").getAttribute("for");
-    expect(forAttr).toBeTruthy();
-    expect(forAttr).toMatch(/^ccs-/);
+    expect(screen.getByText("Label")).not.toHaveAttribute("for");
   });
 
   it.each([
