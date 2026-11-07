@@ -1,0 +1,122 @@
+---
+components: ["TokenSearch"]
+description: Token search is a Search whose text mixes free words with key:value qualifiers, highlights them in the field, suggests keys and values at the caret, and returns the query as data.
+---
+
+## Basic
+
+Describe the `keys` a query may use. Each has a `key` (what is written before the colon), a `type` and, for an `enum` or a `user`, the `values` to offer. `bind:value` is the text. `bind:query` is the same text as data: the free `text`, the `terms`, the `filters` and the `errors`.
+
+Focus the empty field for the keys, or type a word and press <DocKbd label="ArrowDown" /> for the keys that match it. Choosing a key writes it with its colon and opens its values.
+
+<FileSource src="/framed/TokenSearch/TokenSearchBasic" />
+
+## Query language
+
+| Written | Means |
+| :--- | :--- |
+| `is:open` | A filter: key, then value |
+| `label:bug,ui` | A comma lists values: any of them |
+| `-label:wontfix` | A minus negates a filter or a word |
+| `"exact phrase"` | A phrase of free text. `\"` and `\\` escape inside quotes |
+| `comments:>=3`, `<`, `<=`, `>` | A comparison, for a `number` or a `date` |
+| `created:2026-01-01..2026-02-01` | A range. Leave an end open: `comments:3..`, `created:..@today` |
+| `created:@today-7d` | A date shortcut: `@today`, `@yesterday`, `@tomorrow`, with `+` or `-` and `d`, `w`, `m` or `y` |
+
+Repeated keys are "and"; a comma is "or"; there is no `OR` keyword and no grouping, so a query is a flat list of filters. A key starts with a letter, so `10:30` is free text, and `http://example.com` is too, since its colon is followed by two slashes. Other text with a colon, such as `Note:`, reads as a key; quote it to keep it free.
+
+The parser never throws. A problem is listed in `errors` and drawn with a wavy underline: `unknown-key`, `missing-value`, `invalid-value`, `invalid-operator` and `unterminated-quote`. Each has the `start` and `end` of the text it covers. `parseQuery(text, { keys, now })` and `formatQuery(query)` run without the component, on a server too, and `parseQuery(formatQuery(query))` returns `query`.
+
+## Key types
+
+| Type | Checks | Offers |
+| :--- | :--- | :--- |
+| `enum` | The value is one of `values`, in any case | The `values`, with their `description` |
+| `user` | Anything. `@me` is yours to resolve | The `values`, and a function `source` |
+| `date` | An ISO date or a shortcut. Takes comparisons and ranges | Shortcuts such as "Last 7 days" |
+| `number` | A number. Takes comparisons and ranges | Nothing |
+| `text` | Anything | The `values` or a `source`, if you give them |
+
+## Suggestions
+
+The menu follows the caret. On a key it lists the keys that match what is typed. On a value it lists that key's values, without those already in the list, and it hangs from the word being typed, not from the start of the field. Nothing is chosen until an arrow key chooses it, so <DocKbd label="Enter" /> still searches.
+
+### Async
+
+Give a key a `source`: a function that takes the typed text and returns values, or a promise of them. It gets `{ signal, key }`. Pass the signal to `fetch`, or listen for its `abort` event, to stop the request when a newer one replaces it. Only the newest request may answer: a slower, older response is dropped even when the function ignores the signal. The `values` of the key show at once, while the source answers.
+
+<FileSource src="/framed/TokenSearch/TokenSearchUsers" />
+
+### Dates
+
+A `date` key offers shortcuts. Replace them with `datePresets`. Pass `now` to resolve `@today` against a date of your own, such as a server's.
+
+<FileSource src="/framed/TokenSearch/TokenSearchDates" />
+
+### Recent queries
+
+Pass `recentQueries`, an array of strings, newest first. They show under the keys while the field is empty, and choosing one writes it into the field. Keeping the list is yours: add to it on `search`.
+
+<FileSource src="/framed/TokenSearch/TokenSearchRecent" />
+
+### Custom rows
+
+Fill the default slot to draw each row. It receives the `item`, its `index` and whether it is `highlighted`. Mark the text with `bx--token-search__text` and `bx--token-search__secondary` to keep the ellipsis and the colors.
+
+<FileSource src="/framed/TokenSearch/TokenSearchCustomItem" />
+
+## Results
+
+### Filter
+
+`query` is what to filter by. Skip a filter that has an error so a half-typed query does not empty a list.
+
+<FileSource src="/framed/TokenSearch/TokenSearchFilter" />
+
+### QueryBuilder conditions
+
+`queryToConditions(query, keys)` turns a query into the condition tree of a `QueryBuilder`: an "and" group of `{ field, operator, value }` conditions, and `conditionsToQuery(tree, keys)` writes one back as text. `keysToQueryFields(keys)` gives the builder its fields. The helpers copy the tree's shape and import nothing from it. A filter a tree cannot hold, and a condition a query cannot say (`startsWith`, `isEmpty`, an "or" across fields), come back in `skipped`, never lost silently. Free text has no place in the tree, so it is returned beside it.
+
+<FileSource src="/framed/TokenSearch/TokenSearchConditions" />
+
+## Highlight
+
+Qualifiers are drawn behind the text of the input, not instead of it, so the caret, the selection, spell checking and an IME are the browser's own. A transparent copy of the text sits under the input and draws a fill and a rule under each qualifier. Set `highlight` to `false` for a plain `Search` that still suggests.
+
+| Looks like | Means |
+| :--- | :--- |
+| Solid rule under the qualifier | A filter |
+| Dashed rule | A negated filter |
+| Dotted rule under quoted text | A phrase |
+| Wavy underline | A problem. Read `errors` for what it is |
+
+Each one is told apart by the line, not by color, so they hold in forced colors and Gray 100.
+
+| Do | Why |
+| :--- | :--- |
+| Keep to one line of text | The layer follows a single-line input. A long query scrolls with the caret |
+| Leave `spellcheck` off, as it is set | A spell checker marks `label:bug` as a typo, and its squiggle would sit beside ours |
+| Put no padding or bold on a custom `bx--token-search__qualifier` | Anything that changes a letter's width drifts the layer from the text |
+
+<FileSource src="/framed/TokenSearch/TokenSearchSizes" />
+
+## Keyboard
+
+Focus stays in the field. The menu is operated with the keys below and ignores a key while an IME is composing, since the candidate window opens where the menu would.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="ArrowDown" /> | Open the menu, then highlight the next row, wrapping at the end |
+| <DocKbd label="ArrowUp" /> | Highlight the previous row, wrapping at the start |
+| <DocKbd label="Enter" /> or <DocKbd label="Tab" /> | Choose the highlighted row. With none highlighted, Enter searches and Tab leaves |
+| <DocKbd label="Escape" /> | Close the menu and keep the text. With the menu closed, clear the field |
+
+## Accessibility
+
+The field is a combobox with `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` and `aria-activedescendant`, as in [SearchMenu](/components/SearchMenu). A live region announces the number of suggestions after a pause in typing. The problems in the query are named in a description of the field, so a screen reader hears `1 problem in the query: Unknown key "nope"` where a sighted user sees the wavy underline.
+
+| Do | Why |
+| :--- | :--- |
+| Give the field a `labelText` | The qualifiers are not a label |
+| Translate `resultsText`, `problemsText`, `emptyText`, `loadingText` and `errorText` | They are the only strings the component writes |
+| Keep `limit` at 8 or fewer unless you set `menuMaxHeight` | A menu that scrolls is a scrollable region |

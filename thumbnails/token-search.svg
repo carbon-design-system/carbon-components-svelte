@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>token-search</title>
+    <defs>
+        <filter id="token-search-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="token-search" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="60" y="44" width="200" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="60" y="75" width="200" height="1"></rect>
+        <circle id="magnifier-lens" cx="74" cy="58" r="4" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.25" fill="none"></circle>
+        <path id="magnifier-handle" d="M77 61L80.5 64.5" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.25" stroke-linecap="round"></path>
+        <rect id="token-1" fill="var(--cds-border-subtle, #e0e0e0)" x="88" y="52" width="44" height="14"></rect>
+        <rect id="token-1-rule" fill="var(--cds-border-strong, #8d8d8d)" x="88" y="65" width="44" height="1"></rect>
+        <rect id="token-1-text" fill="var(--cds-text-secondary, #525252)" x="92" y="57" width="36" height="4"></rect>
+        <rect id="token-2" fill="var(--cds-border-subtle, #e0e0e0)" x="138" y="52" width="52" height="14"></rect>
+        <rect id="token-2-rule" fill="var(--cds-border-strong, #8d8d8d)" x="138" y="65" width="52" height="1"></rect>
+        <rect id="token-2-text" fill="var(--cds-text-secondary, #525252)" x="142" y="57" width="44" height="4"></rect>
+        <rect id="free-text" fill="var(--cds-text-secondary, #525252)" x="196" y="57" width="30" height="4"></rect>
+        <rect x="138" y="80" width="100" height="56" fill="black" filter="url(#token-search-shadow)"></rect>
+        <rect x="138" y="80" width="100" height="56" fill="var(--cds-layer-02, #ffffff)"></rect>
+        <rect id="item-highlight" fill="var(--cds-border-subtle, #e0e0e0)" x="138" y="84" width="100" height="18"></rect>
+        <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="148" y="90" width="50" height="6"></rect>
+        <rect id="item-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="148" y="108" width="66" height="6"></rect>
+        <rect id="item-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="148" y="122" width="40" height="6"></rect>
+    </g>
+</svg>
