@@ -172,6 +172,8 @@ export { default as ToastNotification } from "./Notification/ToastNotification.s
 export { default as FluidNumberInputSkeleton } from "./NumberInput/FluidNumberInputSkeleton.svelte";
 export { default as NumberInput } from "./NumberInput/NumberInput.svelte";
 export { default as NumberInputSkeleton } from "./NumberInput/NumberInputSkeleton.svelte";
+export { default as OnboardingChecklist } from "./OnboardingChecklist/OnboardingChecklist.svelte";
+export { default as OnboardingChecklistLauncher } from "./OnboardingChecklist/OnboardingChecklistLauncher.svelte";
 export { default as OrderedList } from "./OrderedList/OrderedList.svelte";
 export { default as OverflowMenu } from "./OverflowMenu/OverflowMenu.svelte";
 export { default as OverflowMenuItem } from "./OverflowMenu/OverflowMenuItem.svelte";
@@ -321,6 +323,15 @@ export {
   toColumnSettings,
 } from "./utils/column-settings.js";
 export { createLoadingDelay, delayedLoading } from "./utils/delayed-loading.js";
+export {
+  cookieChecklistStorage,
+  createChecklistStore,
+  getChecklistStore,
+  localChecklistStorage,
+  parseChecklistCookie,
+  resolveChecklist,
+  setChecklistStore,
+} from "./utils/checklist-store.js";
 export { dismiss } from "./utils/dismiss.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
