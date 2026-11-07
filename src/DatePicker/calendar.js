@@ -147,6 +147,10 @@ function arrayify(value) {
   return Array.isArray(value) ? value : [value];
 }
 
+/** A day a click or Enter can pick. */
+const SELECTABLE_DAY =
+  ".bx--date-picker__day:not(.bx--date-picker__day--disabled):not(.bx--date-picker__day--blocked)";
+
 /** @param {Event} event */
 function eventTarget(event) {
   return /** @type {any} */ (
@@ -1655,17 +1659,11 @@ export function createCalendarEngine(element, userConfig = {}) {
   function selectDate(event) {
     event.preventDefault();
     event.stopPropagation();
-    let target = eventTarget(event);
-    while (
-      target &&
-      !(
-        target.classList?.contains("bx--date-picker__day") &&
-        !target.classList.contains("bx--date-picker__day--disabled") &&
-        !target.classList.contains("bx--date-picker__day--blocked")
-      )
-    ) {
-      target = target.parentNode;
-    }
+    // Enter on an input or a month control lands here too.
+    const target =
+      /** @type {import("./calendar.js").DayElement | null | undefined} */ (
+        eventTarget(event).closest?.(SELECTABLE_DAY)
+      );
     if (!target) return;
     const selected = selectDateValue(target.dateObj);
     const changeView =
