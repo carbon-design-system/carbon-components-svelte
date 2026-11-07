@@ -339,6 +339,11 @@
           isSelected={$isActive("/quick-start")}
         />
         <SideNavLink
+          text="Motion"
+          href={$url("/motion")}
+          isSelected={$isActive($url("/motion"))}
+        />
+        <SideNavLink
           text="Component index"
           href="/component-index"
           isSelected={$isActive("/component-index")}
