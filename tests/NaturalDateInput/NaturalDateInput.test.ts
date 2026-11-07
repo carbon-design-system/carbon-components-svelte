@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import NaturalDateInput from "./NaturalDateInput.test.svelte";
@@ -393,7 +393,7 @@ describe("NaturalDateInput", () => {
       await user.click(input());
       await user.keyboard("{Alt>}{ArrowDown}{/Alt}");
 
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     });
 
     it("shows an invalid state the app sets, over the date's own", () => {
@@ -443,7 +443,7 @@ describe("NaturalDateInput", () => {
 
       await user.keyboard("{Escape}");
 
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
       expect(button()).toHaveFocus();
       expect(button()).toHaveAttribute("aria-expanded", "false");
     });
@@ -469,7 +469,7 @@ describe("NaturalDateInput", () => {
       await user.click(button());
       await user.keyboard("{ArrowRight}{Enter}");
 
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
       expect(button()).toHaveFocus();
       expect(input()).toHaveValue("Dec 4, 2026, 3:00 PM");
       expect(bound()).toBe("2026-12-04T20:00:00.000Z");
@@ -511,13 +511,13 @@ describe("NaturalDateInput", () => {
 
       await user.click(button());
       await user.click(document.body);
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
       expect(onClose).toHaveBeenLastCalledWith({ trigger: "outside-click" });
 
       await user.click(button());
       input().focus();
       await tick();
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
       expect(onClose).toHaveBeenLastCalledWith({ trigger: "blur" });
     });
 
@@ -527,7 +527,7 @@ describe("NaturalDateInput", () => {
       await user.click(button());
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       await user.click(button());
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     });
 
     it("greys out days outside min and max", async () => {
@@ -550,10 +550,10 @@ describe("NaturalDateInput", () => {
         props: { readonly: true },
       });
       await fireEvent.keyDown(input(), { key: "ArrowDown", altKey: true });
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
 
       await rerender({ readonly: false, disabled: true });
-      expect(screen.queryByRole("dialog")).toBeNull();
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     });
   });
 });
