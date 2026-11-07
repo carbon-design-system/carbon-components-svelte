@@ -117,7 +117,7 @@
     "sveast": "^0.9.8",
     "sveld": "^0.40.3",
     "svelte": "^5.57.3",
-    "svelte-lint": "^0.1.0",
+    "svelte-lint": "^0.1.1",
     "svelte-typecheck": "^0.1.12",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
