@@ -75,6 +75,12 @@
     outline: 1px solid var(--cds-interactive);
   }
 
+  /* Keep the label off the outline, so stacked columns stay readable. A
+     column that holds a subgrid keeps no padding, so the tracks line up. */
+  :global(.framed .bx--css-grid-column:not(:has(> .bx--subgrid))) {
+    padding: var(--cds-spacing-02) var(--cds-spacing-03);
+  }
+
   /* A column that holds a subgrid is outlined by the subgrid's columns. */
   :global(.framed .bx--css-grid-column:has(> .bx--subgrid)) {
     outline: 0;

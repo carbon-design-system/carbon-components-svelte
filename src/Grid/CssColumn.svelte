@@ -67,9 +67,10 @@
   export let align = undefined;
 
   /**
-   * Classes for one breakpoint, as Carbon React builds them. `true` spans
-   * the remaining columns, a percent strips its `%`, and an offset of N
-   * starts the column at grid line N + 1. An offset or start of 0 is auto.
+   * Classes for one breakpoint, as Carbon React builds them. `true` places
+   * the column automatically, one column wide. A percent strips its `%`,
+   * and an offset of N starts the column at grid line N + 1. An offset or
+   * start of 0 is auto.
    * @param {string} prefix
    * @param {CssColumnBreakpoint | undefined} value
    * @returns {string[]}

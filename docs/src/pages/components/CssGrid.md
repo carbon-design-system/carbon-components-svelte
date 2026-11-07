@@ -31,7 +31,7 @@ Set a span to `"25%"`, `"50%"`, `"75%"` or `"100%"` of the current column count.
 
 ### Responsive
 
-Each breakpoint prop takes the same values as `span`: a number, a percentage, `true` to fill the remaining space, or a placement object. A value holds from its breakpoint up until a larger breakpoint changes it. Set `0` to hide the column, as `sm={0}` does here below `md`.
+Each breakpoint prop takes the same values as `span`: a number, a percentage, `true` to place the column automatically at one column wide, or a placement object. A value holds from its breakpoint up until a larger breakpoint changes it. Set `0` to hide the column, as `sm={0}` does here below `md`.
 
 <FileSource src="/framed/CssGrid/CssGridResponsive" />
 
