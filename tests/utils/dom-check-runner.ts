@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- a runner extends vitest's; it isn't a global
 import { TestRunner } from "vitest";
 
 type Finding = {

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { skipDomChecks } from "../utils/dom-checks";
 import { flushMacrotask } from "../utils/flush-macrotask";
 import { user } from "../utils/user";
 import ExpandableTileDetect from "./ExpandableTileDetect.test.svelte";
@@ -48,6 +49,8 @@ describe("ExpandableTile interactive content", () => {
   );
 
   it("keeps the tile button when `hasInteractiveContent` is `false`", async () => {
+    // A consumer forcing the button around a link is the case under test.
+    skipDomChecks("nested-interactive");
     render(ExpandableTileDetect, {
       content: "link",
       hasInteractiveContent: false,
