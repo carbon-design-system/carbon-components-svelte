@@ -64,6 +64,19 @@ test.describe("focusNav", () => {
       ).toBeFocused();
     });
 
+    test("makes a clicked button the tab stop, in engines that do not focus it", async ({
+      page,
+    }) => {
+      await page.getByRole("button", { name: "Italic" }).click();
+      await expect(
+        page.getByRole("button", { name: "Italic" }),
+      ).toHaveAttribute("tabindex", "0");
+      await expect(page.getByRole("button", { name: "Bold" })).toHaveAttribute(
+        "tabindex",
+        "-1",
+      );
+    });
+
     test("wraps, and Home and End go to the ends", async ({ page }) => {
       await page.getByRole("button", { name: "Bold" }).focus();
       await page.keyboard.press("ArrowLeft");
@@ -318,6 +331,42 @@ test.describe("focusNav", () => {
       const stops = smallGrid(page).locator('[role="gridcell"][tabindex="0"]');
       await expect(stops).toHaveCount(1);
       await expect(stops).toHaveText("0");
+    });
+  });
+
+  test.describe("native radios", () => {
+    const radio = (page: Page, score: number) =>
+      page.getByRole("radio", { name: `${score}`, exact: true });
+
+    test("arrows move the cursor, check the radio and skip a disabled one", async ({
+      page,
+    }) => {
+      // Safari does not focus a radio on click.
+      await radio(page, 1).focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(radio(page, 2)).toBeChecked();
+      await expect(radio(page, 2)).toBeFocused();
+      // 3 is disabled.
+      await page.keyboard.press("ArrowRight");
+      await expect(radio(page, 4)).toBeChecked();
+      await page.keyboard.press("ArrowLeft");
+      await expect(radio(page, 2)).toBeChecked();
+    });
+
+    test("go toward the inline start on Right in RTL, in every engine", async ({
+      page,
+    }) => {
+      await page.evaluate(() =>
+        document.documentElement.setAttribute("dir", "rtl"),
+      );
+      await radio(page, 4).focus();
+      await page.keyboard.press("ArrowLeft");
+      await expect(radio(page, 5)).toBeChecked();
+      await page.keyboard.press("ArrowRight");
+      await expect(radio(page, 4)).toBeChecked();
+      await page.keyboard.press("ArrowRight");
+      // 3 is disabled: the cursor lands on 2.
+      await expect(radio(page, 2)).toBeChecked();
     });
   });
 

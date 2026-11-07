@@ -78,6 +78,14 @@ describe("focusNav (roving)", () => {
     expect(get(nav).index).toBe(2);
   });
 
+  it("makes a clicked item the tab stop even when the browser does not focus it", () => {
+    // Safari does not focus a button on click, so no `focusin` follows.
+    const { items, nav } = setup();
+    items[2].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    expect(nav.index).toBe(2);
+    expect(get(nav).tabStop).toBe(2);
+  });
+
   it("skips disabled items, including a cluster", () => {
     const { items } = setup({ skipDisabled: true });
     items[1].setAttribute("disabled", "");

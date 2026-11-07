@@ -110,6 +110,24 @@
     rtl: () => isRtl(smallEl ?? null),
   });
 
+  // E. Native radios. Moving the cursor also checks the radio, and one
+  // handler gives every engine the same answer in RTL (WebKit moves the
+  // wrong way on its own).
+  const scores = [1, 2, 3, 4, 5];
+  /** @type {HTMLElement | undefined} */
+  let radiogroup;
+  const radioNav = createFocusNav({
+    selector: "input[type=radio]",
+    skipDisabled: true,
+    rtl: () => isRtl(radiogroup ?? null),
+    onMove: (index) => {
+      const radios = radiogroup?.querySelectorAll("input[type=radio]");
+      radios?.[index]?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    },
+  });
+
   /**
    * Scroll row `row` into `el` and, when that changes the window, wait for
    * the render that mounts it.
@@ -229,6 +247,29 @@
           </div>
         {/each}
       </div>
+    </div>
+  </section>
+
+  <section data-testid="radios">
+    <h2 id="radios-label">Radio group</h2>
+    <div
+      bind:this={radiogroup}
+      role="radiogroup"
+      aria-labelledby="radios-label"
+      class="tools"
+      use:focusNav={radioNav}
+    >
+      {#each scores as score (score)}
+        <label>
+          <input
+            type="radio"
+            name="score"
+            value={score}
+            disabled={score === 3}
+          />
+          {score}
+        </label>
+      {/each}
     </div>
   </section>
 

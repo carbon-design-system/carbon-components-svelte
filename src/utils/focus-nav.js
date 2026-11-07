@@ -731,8 +731,8 @@ export function createFocusNav(options = {}) {
   }
 
   /**
-   * Bind to `node`: keydown, plus focus tracking in "roving" mode so a click
-   * or Tab onto an item becomes the active one, and the `aria-activedescendant`
+   * Bind to `node`: keydown, plus focus and click tracking in "roving" mode so a
+   * click or Tab onto an item becomes the active one, and the `aria-activedescendant`
    * attribute in "activedescendant" mode.
    *
    * @param {HTMLElement} node
@@ -772,8 +772,11 @@ export function createFocusNav(options = {}) {
       handleKeydown(event, from === undefined ? {} : { from });
     }
 
-    /** @param {FocusEvent} event */
-    function onFocusin(event) {
+    // A click makes the item the tab stop. Safari does not focus a button,
+    // radio or checkbox on click, so `focusin` alone would leave the tab stop
+    // on the item that was active before.
+    /** @param {Event} event */
+    function onItemFocus(event) {
       if (config.mode === "activedescendant") return;
       const target = event.target;
       if (!(target instanceof Element) || target === node) return;
@@ -791,11 +794,13 @@ export function createFocusNav(options = {}) {
     });
 
     node.addEventListener("keydown", onKeydown);
-    node.addEventListener("focusin", onFocusin);
+    node.addEventListener("focusin", onItemFocus);
+    node.addEventListener("click", onItemFocus);
     return {
       destroy() {
         node.removeEventListener("keydown", onKeydown);
-        node.removeEventListener("focusin", onFocusin);
+        node.removeEventListener("focusin", onItemFocus);
+        node.removeEventListener("click", onItemFocus);
         unsubscribe();
         buffer?.clear();
         if (root === node) root = null;
