@@ -67,9 +67,10 @@
   /**
    * Override the default translations of the key names. Words such as
    * "Ctrl" are shown on the keys; names such as "Command" are read by
-   * screen readers for the icons shown on Apple platforms. Unset, it uses
-   * the nearest `setKbdTranslations`, then English.
-   * @type {(id: KbdTranslationId) => string}
+   * screen readers for the icons shown on Apple platforms. A key it
+   * returns `undefined` for uses the nearest `setKbdTranslations`, then
+   * English.
+   * @type {(id: KbdTranslationId) => string | undefined}
    */
   export let translateWithId = function translateWithId(id) {
     return shared?.(id) ?? KBD_TRANSLATIONS[id];
@@ -112,6 +113,9 @@
   };
 
   $: isApple = apple ?? $applePlatform;
+  /** @param {KbdTranslationId} id */
+  $: translate = (id) =>
+    translateWithId(id) ?? shared?.(id) ?? KBD_TRANSLATIONS[id];
 
   /**
    * @param {string} value
@@ -130,13 +134,13 @@
   $: platforms =
     apple === undefined
       ? [
-          { id: "other", ...describe(shortcut, false, translateWithId) },
-          { id: "apple", ...describe(shortcut, true, translateWithId) },
+          { id: "other", ...describe(shortcut, false, translate) },
+          { id: "apple", ...describe(shortcut, true, translate) },
         ]
       : [
           {
             id: apple ? "apple" : "other",
-            ...describe(shortcut, apple, translateWithId),
+            ...describe(shortcut, apple, translate),
           },
         ];
   $: hasKeys = platforms[0].keys.length > 0;
