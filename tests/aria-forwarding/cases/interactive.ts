@@ -61,6 +61,7 @@ import OutboundLink from "../fixtures/OutboundLink.test.svelte";
 import OverflowMenuItem from "../fixtures/OverflowMenuItem.test.svelte";
 import RadioTile from "../fixtures/RadioTile.test.svelte";
 import SelectableTile from "../fixtures/SelectableTile.test.svelte";
+import ShortcutHelp from "../fixtures/ShortcutHelp.test.svelte";
 import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
 
 const nodes = [{ id: "docs", text: "Docs" }];
@@ -363,6 +364,11 @@ export const interactive: AriaEntry[] = [
     name: "ModalHeader",
     exempt:
       "header container; its close button is a fixed control named by iconDescription",
+  },
+  {
+    name: "ShortcutHelp",
+    render: (attrs) => render(ShortcutHelp, { props: attrs }),
+    target: () => screen.getByRole("dialog"),
   },
   {
     name: "NotificationButton",
