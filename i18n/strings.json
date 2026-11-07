@@ -248,6 +248,13 @@
     },
     {
       "component": "CodeSnippet",
+      "prop": "linesDescription",
+      "type": "(kind: \"highlighted\" | \"added\" | \"removed\", runs: Array<[number, number]>) => string",
+      "default": "defaultLinesDescription",
+      "defaultKind": "described"
+    },
+    {
+      "component": "CodeSnippet",
       "prop": "showLessText",
       "type": "string",
       "default": "Show less",
