@@ -53,6 +53,18 @@ test: {
 
 A Proxy at the end of every DOM prototype chain sees only the lookups that miss, so implemented members cost nothing. Some reports are members browsers lack too (`navigator.userAgentData` outside Chromium), which the code under test checks for.
 
+## Leak checks
+
+A listener on the window, the document, `<html>` or `<body>` outlives the component that added it, and so does a MutationObserver on a node still in the page. With `environmentOptions: { domEnv: { leaks: true } }` (or `DOM_ENV_LEAKS=1`), dom-env records each one with up to four lines that asked for it, skipping library frames such as Svelte's runtime:
+
+```ts
+const mark = __domEnv.leaks.mark(); // before a test
+// ...after its cleanup:
+__domEnv.leaks.since(mark, "/src/"); // [{ what: "keydown listener on window", at: "src/utils/dismiss.js:44:27 <- ..." }]
+```
+
+`include` keeps entries whose innermost line's path contains it, so a test's own listeners can be left out. Records hold their listener and observer weakly, so tracking never keeps alive what a test expects to be collected. This repo checks after every test in `tests/utils/setup-globals.ts`.
+
 ## Develop
 
 ```sh
