@@ -193,6 +193,13 @@
   // Apply theme before dispatching update. Reactive blocks run in source order,
   // and a throwing on:update handler aborts the rest of the flush.
   $: if (typeof window !== "undefined") {
+    // Components that fade a color on hover would also fade it to the new
+    // theme. Note the transitions running now, so only the ones the swap
+    // starts are canceled below.
+    const running = document.getAnimations
+      ? new Set(document.getAnimations())
+      : undefined;
+
     for (const token of appliedTokens) {
       if (token in appliedValues) continue;
       document.documentElement.style.removeProperty(`--cds-${token}`);
@@ -222,6 +229,15 @@
             : ""
         }`,
       );
+    }
+
+    if (running) {
+      // `getAnimations` applies the new styles, which starts the transitions.
+      for (const animation of document.getAnimations()) {
+        if (animation instanceof CSSTransition && !running.has(animation)) {
+          animation.cancel();
+        }
+      }
     }
   }
 
