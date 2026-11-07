@@ -892,14 +892,6 @@
     "variant": "320",
     "check": "overflow",
     "kind": "widens page",
-    "path": "div[data-testid=\"group-invalid\"]",
-    "message": "div[data-testid=\"group-invalid\"]: spans 0px to 480px"
-  },
-  {
-    "fixture": "input-group.html",
-    "variant": "320",
-    "check": "overflow",
-    "kind": "widens page",
     "path": "div[data-testid=\"group-md\"]",
     "message": "div[data-testid=\"group-md\"]: spans 0px to 480px"
   },
@@ -910,6 +902,14 @@
     "kind": "widens page",
     "path": "div[data-testid=\"group-sm\"]",
     "message": "div[data-testid=\"group-sm\"]: spans 0px to 480px"
+  },
+  {
+    "fixture": "input-group.html",
+    "variant": "320",
+    "check": "overflow",
+    "kind": "widens page",
+    "path": "div[data-testid=\"group-text-area-sm\"]",
+    "message": "div[data-testid=\"group-text-area-sm\"]: spans 0px to 480px"
   },
   {
     "fixture": "input-group.html",
