@@ -22,6 +22,7 @@ on:
       - "docs/scripts/page-html.ts"
       - "docs/scripts/example-source.ts"
       - "docs/src/pages/framed/DatePicker/**"
+      - "docs/src/code-view-height.ts"
   push:
     branches: [master]
     paths:
@@ -44,6 +45,7 @@ on:
       - "docs/scripts/page-html.ts"
       - "docs/scripts/example-source.ts"
       - "docs/src/pages/framed/DatePicker/**"
+      - "docs/src/code-view-height.ts"
   workflow_dispatch:
 
 # Key on the PR number, not the branch name: two fork PRs can both come
@@ -153,6 +155,7 @@ jobs:
               - 'bun.lock'
               - '.github/**'
               - 'docs/src/pages/framed/DatePicker/**'
+              - 'docs/src/code-view-height.ts'
             css:
               - 'css/**'
               - 'crassus.config.ts'

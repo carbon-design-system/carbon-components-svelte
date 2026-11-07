@@ -58,6 +58,7 @@ export default {
     "css",
     "scripts",
     "docs/src/pages/framed/DatePicker",
+    "docs/src/code-view-height.ts",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
     "docs/src/search.ts",
