@@ -355,7 +355,7 @@
     flex: 1 1 auto;
   }
 
-  @media (max-width: 672px) {
+  @media (max-width: 41.98rem) {
     :global(.filter-bar.bx--stack-horizontal) {
       flex-direction: column;
       gap: var(--cds-spacing-03);
@@ -399,7 +399,7 @@
     min-width: 0;
   }
 
-  @media (max-width: 672px) {
+  @media (max-width: 41.98rem) {
     :global(.component-name-cell.bx--stack-horizontal) {
       flex-direction: column;
       align-items: flex-start;
