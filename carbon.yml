@@ -1129,6 +1129,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/SessionStorage
+  session-timeout-modal:
+    name: Session timeout modal
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/session-timeout-modal.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SessionTimeoutModal
   shape-indicator:
     name: Shape indicator
     status: stable
