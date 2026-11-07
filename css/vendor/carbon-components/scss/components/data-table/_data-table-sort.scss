@@ -147,3 +147,38 @@
 @include exports('data-table-sort') {
   @include data-table-sort;
 }
+
+// carbon-components-svelte patch
+// The priority badge of a column in a multi-column sort (`sortMode="multiple"`).
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The number beside a sorted header's arrow: 1 is the primary sort.
+/// @access private
+/// @group data-table
+@mixin data-table-sort-priority {
+  // The border, not a fill, carries the badge: it stays visible in forced
+  // colors, where backgrounds are dropped.
+  .#{$prefix}--table-sort__priority {
+    @include type-style("label-01");
+
+    display: inline-flex;
+    box-sizing: border-box;
+    min-inline-size: to-rem(20px);
+    block-size: to-rem(20px);
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding-inline: $carbon--spacing-02;
+    border: 1px solid $border-inverse;
+    border-radius: to-rem(10px);
+    // Sit next to the arrow; the label keeps the rest of the row.
+    margin-inline-start: auto;
+    color: $text-primary;
+  }
+}
+
+@include exports("data-table-sort-priority") {
+  @include data-table-sort-priority;
+}

@@ -1,0 +1,43 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ToolbarSortBy: the dialog that lists a DataTable's sort rules. Each rule
+/// is a row of a column field, a direction field and icon buttons.
+/// @access private
+/// @group components
+@mixin data-table-sort-by {
+  .#{$prefix}--sort-by {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--sort-by__rule {
+    display: flex;
+    align-items: flex-end;
+    inline-size: 100%;
+    gap: $carbon--spacing-03;
+  }
+
+  // The column field takes the room; the direction field keeps its width.
+  .#{$prefix}--sort-by__field {
+    min-inline-size: 0;
+    flex: 1 1 0;
+  }
+
+  .#{$prefix}--sort-by__field--direction {
+    flex: 0 0 auto;
+  }
+
+    .#{$prefix}--sort-by__empty {
+    @include type-style("body-01");
+
+    color: $text-secondary;
+  }
+}
+
+@include exports("data-table-sort-by") {
+  @include data-table-sort-by;
+}

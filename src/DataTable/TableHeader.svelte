@@ -16,6 +16,22 @@
   export let active = false;
 
   /**
+   * Specify the column's place in a multi-column sort, where `1` is the
+   * primary sort. A number shows as a badge beside the arrow. Only the
+   * primary column reports `aria-sort`, since ARIA asks for one sorted
+   * header at a time; set `sortDescription` to say the rest.
+   * @type {number | undefined}
+   */
+  export let sortPriority = undefined;
+
+  /**
+   * Specify an accessible description of the column's place in a
+   * multi-column sort, such as "Sorted ascending, priority 2 of 3".
+   * @type {string | undefined}
+   */
+  export let sortDescription = undefined;
+
+  /**
    * Specify the `scope` attribute
    * @type {"col" | "row" | "colgroup" | "rowgroup"}
    */
@@ -59,6 +75,7 @@
     : translationIds.columnSortAscending;
   $: ariaLabel =
     translateWithId?.(translationId) ?? defaultTranslations[translationId];
+  $: descriptionId = sortDescription ? `${id}-sort-description` : undefined;
 
   // Inside a DataTable, an active AI label marks the whole column.
   const setColumnAILabel = getContext("carbon:DataTable")?.setColumnAILabel;
@@ -80,7 +97,7 @@
 {#if sortable}
   <th
     {id}
-    aria-sort={active ? sortDirection : "none"}
+    aria-sort={active && (sortPriority ?? 1) <= 1 ? sortDirection : "none"}
     {scope}
     data-header={id}
     class:bx--table-sort__header--decorator={$$slots.decorator}
@@ -98,9 +115,16 @@
           class:bx--table-sort--active={active}
           class:bx--table-sort--ascending={active &&
             sortDirection === "descending"}
+          aria-describedby={descriptionId}
           on:click
+          on:keydown
         >
           <div class:bx--table-header-label={true}><slot /></div>
+          {#if sortPriority !== undefined}
+            <span class:bx--table-sort__priority={true} aria-hidden="true"
+              >{sortPriority}</span
+            >
+          {/if}
           <ArrowUp
             size={20}
             aria-label={ariaLabel}
@@ -127,9 +151,16 @@
         class:bx--table-sort--active={active}
         class:bx--table-sort--ascending={active &&
           sortDirection === "descending"}
+        aria-describedby={descriptionId}
         on:click
+        on:keydown
       >
         <div class:bx--table-header-label={true}><slot /></div>
+        {#if sortPriority !== undefined}
+          <span class:bx--table-sort__priority={true} aria-hidden="true"
+            >{sortPriority}</span
+          >
+        {/if}
         <ArrowUp
           size={20}
           aria-label={ariaLabel}
@@ -141,6 +172,11 @@
           class="bx--table-sort__icon-unsorted"
         />
       </button>
+    {/if}
+    {#if descriptionId}
+      <span id={descriptionId} class:bx--visually-hidden={true}
+        >{sortDescription}</span
+      >
     {/if}
   </th>
 {:else}
