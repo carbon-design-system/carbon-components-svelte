@@ -104,93 +104,115 @@ jobs:
       docs-deploy: ${{ steps.filter.outputs.docs-deploy }}
       css: ${{ steps.filter.outputs.css }}
       css-size: ${{ steps.filter.outputs.css-size }}
-      types: ${{ steps.types.outputs.types }}
+      types: ${{ steps.filter.outputs.types }}
       # `all`, `none`, or space-separated test files; empty (= all) off PRs.
       unit-tests: ${{ steps.select.outputs.unit-tests }}
       e2e-tests: ${{ steps.select.outputs.e2e-tests }}
       e2e-shards: ${{ steps.shards.outputs.e2e }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          # Full history for the merge base, without old file contents: git
-          # fetches a blob when bivium or crassus first reads it.
-          fetch-depth: 0
-          filter: blob:none
-      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
-        id: filter
-        with:
-          filters: |
-            unit:
-              - 'src/**'
-              - 'css/**'
-              - 'tests/**'
-              - 'tests-svelte3/**'
-              - 'tests-svelte4/**'
-              - 'scripts/**'
-              - 'e2e/**'
-              - 'crassus.config.ts'
-              - 'vite.config.ts'
-              - 'tsconfig*.json'
-              - 'package.json'
-              - 'bun.lock'
-              - '.github/**'
-              - 'docs/src/token-reference.ts'
-              - 'docs/src/search.ts'
-              - 'docs/src/routes.ts'
-              - 'docs/src/search-index.ts'
-              - 'docs/scripts/slug.ts'
-              - 'docs/scripts/visit.ts'
-              - 'docs/scripts/frontmatter.ts'
-              - 'docs/scripts/markdown.ts'
-              - 'docs/scripts/page.ts'
-              - 'docs/scripts/format.ts'
-              - 'docs/scripts/compile-cache.ts'
-              - 'docs/src/idle-mount.ts'
-              - 'docs/src/offscreen.ts'
-              - 'docs/src/ibm-scripts.ts'
-              - 'docs/scripts/page-html.ts'
-              - 'docs/scripts/example-source.ts'
-            e2e:
-              - 'src/**'
-              - 'css/**'
-              - 'e2e/**'
-              - 'scripts/**'
-              - 'playwright.config.ts'
-              - 'tsconfig*.json'
-              - 'package.json'
-              - 'bun.lock'
-              - '.github/**'
-              - 'docs/src/pages/framed/DatePicker/**'
-              - 'docs/src/code-view-height.ts'
-            css:
-              - 'css/**'
-              - 'crassus.config.ts'
-            css-size:
-              - 'css/**'
-              - 'crassus.config.ts'
-              - 'scripts/check-css-size.ts'
-              - 'scripts/lib/css-size.ts'
-              - 'scripts/lib/css-targets.ts'
-              - 'package.json'
-              - 'bun.lock'
-            docs-deploy:
-              - 'src/**'
-              - 'css/**'
-              - 'scripts/**'
-              - 'package.json'
-              - 'bun.lock'
-              - '.github/**'
+      # Not actions/checkout, which took 3-7 s here to fetch every commit and
+      # tag. Two commits are enough: a PR's merge commit, whose first parent
+      # is the base tip it merges into, or a push's commit and the one before
+      # it. The PR's diff is then HEAD^1..HEAD, which is what bivium plans
+      # against once origin/<base> points at HEAD^1.
+      - name: Check out
+        id: checkout
+        env:
+          AUTH: ${{ github.token }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          git init -q .
+          git remote add origin "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          # fetch <commit> [depth]: the commit, and with depth 2 its parents.
+          fetch() {
+            git -c "http.extraHeader=Authorization: basic $(printf 'x-access-token:%s' "$AUTH" | base64 -w0)" \
+              fetch -q --no-tags --depth="${2:-1}" origin "$1"
+          }
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              fetch "$GITHUB_SHA" 2
+              git checkout -q --detach "$GITHUB_SHA"
+              git update-ref "refs/remotes/origin/$BASE_REF" HEAD^1
+              echo "base=$(git rev-parse HEAD^1)" >> "$GITHUB_OUTPUT"
+              ;;
+            push)
+              fetch "$GITHUB_SHA"
+              git checkout -q --detach "$GITHUB_SHA"
+              # A new branch has no commit before it, and a force push can
+              # leave one GitHub no longer serves. Both diff as everything.
+              case "$BEFORE" in
+                "" | 0000000000000000000000000000000000000000) ;;
+                *) fetch "$BEFORE" && echo "base=$BEFORE" >> "$GITHUB_OUTPUT" || true ;;
+              esac
+              ;;
+            *)
+              fetch "$GITHUB_SHA"
+              git checkout -q --detach "$GITHUB_SHA"
+              ;;
+          esac
 
-      # Type checks read src/, tests/ and what they import, never the Sass
-      # sources, so a PR that only changes .scss skips them.
-      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
-        id: types
-        with:
-          predicate-quantifier: every
-          filters: |
-            types:
-              - '**'
-              - '!css/**/*.scss'
+      # Which jobs the diff concerns. A pattern matches a changed path as a
+      # bash `[[ == ]]` glob, where `*` crosses `/`. With no base to diff
+      # against (a manual run, or a push with no commit before it), every
+      # filter is true.
+      - name: Filter changed paths
+        id: filter
+        env:
+          BASE: ${{ steps.checkout.outputs.base }}
+        run: |
+          files=()
+          if [ -n "$BASE" ]; then
+            list=$(git -c core.quotePath=false diff --name-only --no-renames "$BASE" HEAD)
+            [ -z "$list" ] || while IFS= read -r file; do files+=("$file"); done <<< "$list"
+            echo "${#files[@]} changed files against $BASE"
+          fi
+          filter() {
+            local name=$1 file pattern
+            shift
+            if [ -z "$BASE" ]; then
+              echo "$name=true" >> "$GITHUB_OUTPUT"
+              return
+            fi
+            for file in "${files[@]}"; do
+              for pattern in "$@"; do
+                if [[ $file == $pattern ]]; then
+                  echo "$name=true" | tee -a "$GITHUB_OUTPUT"
+                  return
+                fi
+              done
+            done
+            echo "$name=false" | tee -a "$GITHUB_OUTPUT"
+          }
+          filter unit \
+            'src/*' 'css/*' 'tests/*' 'tests-svelte3/*' 'tests-svelte4/*' \
+            'scripts/*' 'e2e/*' crassus.config.ts vite.config.ts \
+            'tsconfig*.json' package.json bun.lock '.github/*' \
+            docs/src/token-reference.ts docs/src/search.ts docs/src/routes.ts \
+            docs/src/search-index.ts docs/scripts/slug.ts docs/scripts/visit.ts \
+            docs/scripts/frontmatter.ts docs/scripts/markdown.ts \
+            docs/scripts/page.ts docs/scripts/format.ts \
+            docs/scripts/compile-cache.ts docs/src/idle-mount.ts \
+            docs/src/offscreen.ts docs/src/ibm-scripts.ts \
+            docs/scripts/page-html.ts docs/scripts/example-source.ts
+          filter e2e \
+            'src/*' 'css/*' 'e2e/*' 'scripts/*' playwright.config.ts \
+            'tsconfig*.json' package.json bun.lock '.github/*' \
+            'docs/src/pages/framed/DatePicker/*' docs/src/code-view-height.ts
+          filter css 'css/*' crassus.config.ts
+          filter css-size \
+            'css/*' crassus.config.ts scripts/check-css-size.ts \
+            scripts/lib/css-size.ts scripts/lib/css-targets.ts package.json bun.lock
+          filter docs-deploy \
+            'src/*' 'css/*' 'scripts/*' package.json bun.lock '.github/*'
+          # Type checks read src/, tests/ and what they import, never the
+          # Sass sources, so a PR that only changes .scss skips them.
+          types=false
+          for file in "${files[@]}"; do
+            [[ $file == css/*.scss ]] || { types=true; break; }
+          done
+          [ -z "$BASE" ] && types=true
+          echo "types=$types" | tee -a "$GITHUB_OUTPUT"
 
       # PRs run only the unit and e2e tests the diff can reach in bivium's
       # static dependency graph (bivium.config.ts). bivium has no
@@ -212,15 +234,11 @@ jobs:
           restore-keys: crassus-select-
       # bivium caches what it reads from each file by git blob, so only the
       # files a PR changed are read again.
-      - name: Find the merge base
-        id: merge-base
-        if: github.event_name == 'pull_request'
-        run: echo "sha=$(git merge-base "origin/${{ github.base_ref }}" HEAD)" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: github.event_name == 'pull_request'
         with:
           path: .bivium/cache
-          key: bivium-${{ steps.merge-base.outputs.sha }}
+          key: bivium-${{ steps.checkout.outputs.base }}
           restore-keys: bivium-
       # The version package.json pins, run without the install when no css/
       # change needed one. `--bun` because the config is TypeScript, which the
