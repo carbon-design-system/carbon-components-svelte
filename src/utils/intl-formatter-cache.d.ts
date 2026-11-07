@@ -12,3 +12,13 @@ export function getDateTimeFormatter(
   locale: string | undefined,
   options?: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat;
+
+export function getListFormatter(
+  locale: string | undefined,
+  options?: Intl.ListFormatOptions,
+): Intl.ListFormat;
+
+export function getPluralRules(
+  locale: string | undefined,
+  options?: Intl.PluralRulesOptions,
+): Intl.PluralRules;

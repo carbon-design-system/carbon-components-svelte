@@ -1520,6 +1520,20 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/Truncate
     tags:
       - data-display
+  truncated-list:
+    name: Truncated list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/truncated-list.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/TruncatedList
+    tags:
+      - data-display
   ui-shell-header:
     status: stable
     framework: svelte
