@@ -9,6 +9,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { builtinEnvironments } from "vitest/runtime";
+import { selectorsOf } from "./src/coverage.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const bundle = path.join(here, "dist/dom-env.js");
@@ -66,6 +67,27 @@ function reportGaps(gaps, mode) {
   process.stderr.write(`${text}\n`);
 }
 
+/** Each stylesheet's selectors, parsed once per worker. */
+const selectorCache = new Map();
+
+/**
+ * CSS coverage (`DOM_ENV_CSS_COVERAGE=<dir>`, with the stylesheet in
+ * `domEnv.cssCoverage.stylesheet` or `DOM_ENV_CSS`): each test file writes
+ * the selectors its DOM matched to a JSON file in `<dir>`.
+ */
+function coverageOptions(options) {
+  const out = process.env.DOM_ENV_CSS_COVERAGE;
+  const stylesheet =
+    options?.domEnv?.cssCoverage?.stylesheet ?? process.env.DOM_ENV_CSS;
+  if (!out || !stylesheet) return null;
+  let selectors = selectorCache.get(stylesheet);
+  if (!selectors) {
+    selectors = selectorsOf(fs.readFileSync(stylesheet, "utf8"));
+    selectorCache.set(stylesheet, selectors);
+  }
+  return { out, selectors };
+}
+
 export default {
   name: "dom-env",
   viteEnvironment: "client",
@@ -77,11 +99,13 @@ export default {
     const strict = options?.domEnv?.strict ?? process.env.DOM_ENV_STRICT;
     const leaks = options?.domEnv?.leaks ?? process.env.DOM_ENV_LEAKS;
     const checks = options?.domEnv?.checks ?? process.env.DOM_ENV_CHECKS;
+    const cssCoverage = coverageOptions(options);
     global.__domEnv.install({
       url: options?.domEnv?.url,
       strict,
       leaks,
       checks,
+      cssCoverage: cssCoverage?.selectors,
     });
     global.__domEnvUncaught = (error) =>
       process.emit("uncaughtException", error);
@@ -89,6 +113,13 @@ export default {
       getVmContext: () => context,
       teardown: () => {
         const gaps = strict ? global.__domEnv.gaps() : [];
+        if (cssCoverage) {
+          fs.mkdirSync(cssCoverage.out, { recursive: true });
+          fs.writeFileSync(
+            path.join(cssCoverage.out, `${randomUUID()}.json`),
+            JSON.stringify(global.__domEnv.coverage.result()),
+          );
+        }
         nodeEnv.teardown();
         if (gaps.length) reportGaps(gaps, strict);
       },

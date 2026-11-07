@@ -15,6 +15,8 @@
 // With checks on, they run when a dispatched event's effects have settled
 // (the next macrotask), and on demand.
 
+import { check as checkCoverage, isEnabled as coverageOn } from "./coverage.js";
+
 let enabled = false;
 let realSetTimeout = null;
 let pending = null;
@@ -94,7 +96,15 @@ export function enable(global) {
     attributes: (el) => attributes.call(el),
   };
   enabled = true;
-  realSetTimeout = global.__realTimers?.setTimeout ?? global.setTimeout;
+  watchSettle(global);
+}
+
+/**
+ * Turns on the check after each dispatch settles, for the DOM checks or
+ * CSS coverage (coverage.js), whichever is on.
+ */
+export function watchSettle(global) {
+  realSetTimeout ??= global.__realTimers?.setTimeout ?? global.setTimeout;
 }
 
 export function isEnabled() {
@@ -103,10 +113,11 @@ export function isEnabled() {
 
 /** Called after a top-level dispatch: check once its effects settle. */
 export function afterDispatch(doc) {
-  if (!enabled || pending) return;
+  if (!realSetTimeout || pending) return;
   pending = realSetTimeout(() => {
     pending = null;
-    run(doc);
+    if (enabled) run(doc);
+    if (coverageOn()) checkCoverage(doc);
   }, 0);
 }
 

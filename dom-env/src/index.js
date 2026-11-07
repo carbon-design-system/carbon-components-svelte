@@ -3,6 +3,7 @@
 
 import * as checks from "./checks.js";
 import * as collections from "./collections.js";
+import * as coverage from "./coverage.js";
 import * as css from "./css.js";
 import * as document from "./document.js";
 import * as element from "./element.js";
@@ -66,6 +67,10 @@ function install(options = {}) {
   if (options.strict) strict.enable(classes);
   if (options.leaks) leaks.enable();
   if (options.checks) checks.enable(global);
+  if (options.cssCoverage) {
+    coverage.enable(global, options.cssCoverage);
+    checks.watchSettle(global);
+  }
   return doc;
 }
 
@@ -73,6 +78,11 @@ globalThis.__domEnv = {
   install,
   gaps: strict.collect,
   leaks: { enabled: leaks.isEnabled, mark: leaks.mark, since: leaks.since },
+  coverage: {
+    enabled: coverage.isEnabled,
+    check: () => coverage.check(globalThis.document),
+    result: coverage.result,
+  },
   checks: {
     enabled: checks.isEnabled,
     run: () => checks.run(globalThis.document),
