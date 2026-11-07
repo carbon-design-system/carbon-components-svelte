@@ -10,5 +10,5 @@
       "*": ["./*"]
     }
   },
-  "include": ["src/**/*", "scripts/**/*", "*.ts"]
+  "include": ["src/**/*", "scripts/**/*", "e2e/**/*", "*.ts"]
 }
