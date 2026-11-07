@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>survey-scale</title>
+    <g id="survey-scale" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="52" y="52" width="96" height="8"></rect>
+        <rect id="option-0" fill="var(--cds-border-subtle, #e0e0e0)" x="52" y="72" width="16" height="36"></rect>
+        <rect id="option-1" fill="var(--cds-border-subtle, #e0e0e0)" x="72" y="72" width="16" height="36"></rect>
+        <rect id="option-2" fill="var(--cds-border-subtle, #e0e0e0)" x="92" y="72" width="16" height="36"></rect>
+        <rect id="option-3" fill="var(--cds-border-subtle, #e0e0e0)" x="112" y="72" width="16" height="36"></rect>
+        <rect id="option-4" fill="var(--cds-border-subtle, #e0e0e0)" x="132" y="72" width="16" height="36"></rect>
+        <rect id="option-5" fill="var(--cds-border-subtle, #e0e0e0)" x="152" y="72" width="16" height="36"></rect>
+        <rect id="option-6" fill="var(--cds-border-subtle, #e0e0e0)" x="172" y="72" width="16" height="36"></rect>
+        <rect id="option-7" fill="var(--cds-background-brand, #0f62fe)" x="192" y="72" width="16" height="36"></rect>
+        <rect id="option-8" fill="var(--cds-border-subtle, #e0e0e0)" x="212" y="72" width="16" height="36"></rect>
+        <rect id="option-9" fill="var(--cds-border-subtle, #e0e0e0)" x="232" y="72" width="16" height="36"></rect>
+        <rect id="option-10" fill="var(--cds-border-subtle, #e0e0e0)" x="252" y="72" width="16" height="36"></rect>
+        <rect id="min-label" fill="var(--cds-text-disabled, #c6c6c6)" x="52" y="120" width="40" height="6"></rect>
+        <rect id="max-label" fill="var(--cds-text-disabled, #c6c6c6)" x="228" y="120" width="40" height="6"></rect>
+    </g>
+</svg>
