@@ -89,6 +89,11 @@
     align-items: flex-end;
   }
 
+  // A shown name sits above the bubble. Move the avatar down past the
+  // name's line and the column gap, so it lines up with the bubble.
+  .#{$prefix}--chat-message--with-author .#{$prefix}--chat-message__avatar {
+    padding-top: calc(1rem + #{$carbon--spacing-02});
+  }
   .#{$prefix}--chat-message__author {
     @include type-style("label-01");
 

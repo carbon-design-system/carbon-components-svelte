@@ -25,6 +25,16 @@ describe("Chat", () => {
     expect(within(screen.getByTestId("mine")).getByText("You")).toHaveClass(
       "bx--visually-hidden",
     );
+    // Only a shown name moves the avatar down to the bubble.
+    expect(screen.getByTestId("first")).toHaveClass(
+      "bx--chat-message--with-author",
+    );
+    expect(screen.getByTestId("second")).not.toHaveClass(
+      "bx--chat-message--with-author",
+    );
+    expect(screen.getByTestId("mine")).not.toHaveClass(
+      "bx--chat-message--with-author",
+    );
   });
 
   it("holds a streaming message's announcement until it's done", () => {
