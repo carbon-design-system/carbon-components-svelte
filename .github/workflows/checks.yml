@@ -233,14 +233,6 @@ jobs:
           path: node_modules/.cache/crassus
           key: crassus-select-${{ hashFiles('css/**', 'crassus.config.ts', 'bun.lock') }}
           restore-keys: crassus-select-
-      # bivium caches what it reads from each file by git blob, so only the
-      # files a PR changed are read again.
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name == 'pull_request'
-        with:
-          path: .bivium/cache
-          key: bivium-${{ steps.checkout.outputs.base }}
-          restore-keys: bivium-
       # The bivium bun.lock pins, fetched straight from the registry and
       # checked against the lock's hash: npx took 1.4 s to install it, and
       # bunx needs Bun. Node loads the TypeScript config, so only the css/
