@@ -55,6 +55,7 @@
     "test:src-svelte": "svelte-typecheck --workspace src --tsconfig ../tsconfig.svelte-types.json --no-declarations --checker bun --fail-on-warnings",
     "test:package-exports": "bun check --project tsconfig.package-exports.json",
     "test:types": "svelte-typecheck --workspace tests --checker bun",
+    "test:css-coverage": "bun run build:css && rm -rf node_modules/.cache/css-coverage && DOM_ENV_CSS_COVERAGE=node_modules/.cache/css-coverage DOM_ENV_CSS=css/all.css vitest run --project dom; bun scripts/css-coverage.ts node_modules/.cache/css-coverage css/all.css",
     "test:docs-types": "bun run --cwd docs build:index-docs && svelte-typecheck --workspace docs --checker bun --fail-on-warnings",
     "test:svelte3": "cd tests-svelte3 && bunx --bun vitest",
     "test:types:svelte3": "cd tests-svelte3 && bun run test:types",
