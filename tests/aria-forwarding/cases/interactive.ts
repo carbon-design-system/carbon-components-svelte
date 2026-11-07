@@ -24,6 +24,8 @@ import Modal from "carbon-components-svelte/Modal/Modal.svelte";
 import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
 import NotificationButton from "carbon-components-svelte/Notification/NotificationButton.svelte";
 import ToastNotification from "carbon-components-svelte/Notification/ToastNotification.svelte";
+import OnboardingChecklist from "carbon-components-svelte/OnboardingChecklist/OnboardingChecklist.svelte";
+import OnboardingChecklistLauncher from "carbon-components-svelte/OnboardingChecklist/OnboardingChecklistLauncher.svelte";
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
@@ -367,6 +369,19 @@ export const interactive: AriaEntry[] = [
   {
     name: "NotificationButton",
     render: (attrs) => render(NotificationButton, { props: attrs }),
+    target: () => screen.getByRole("button"),
+  },
+  {
+    name: "OnboardingChecklist",
+    render: (attrs) =>
+      render(OnboardingChecklist, {
+        props: { tasks: [{ id: "a", title: "Connect" }], ...attrs },
+      }),
+    target: () => screen.getByRole("region"),
+  },
+  {
+    name: "OnboardingChecklistLauncher",
+    render: (attrs) => render(OnboardingChecklistLauncher, { props: attrs }),
     target: () => screen.getByRole("button"),
   },
   {
