@@ -1,0 +1,71 @@
+---
+components: ["PromptInput"]
+description: PromptInput is the composer for an AI conversation: a text area that grows, files attached as chips, a send button that becomes stop, and the recall of earlier prompts.
+---
+
+<script>
+  import { PromptInput } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+PromptInput is one surface for the message, its attachments and the buttons that act on them. It starts a line high and grows with the message up to `maxRows`, then scrolls. Bind `value` to read or set the text, and listen to `submit`, which carries the trimmed `text` and the `attachments`. The field is cleared after sending, and keeps focus, so the next message can be typed at once. Set `clearOnSubmit` to `false` to keep the message.
+
+Set `labelText` to name the field. It is visually hidden, like the label of any field whose purpose a placeholder and the surrounding conversation already give. Other attributes, such as `aria-describedby` and `name`, go to the text area.
+
+<FileSource src="/framed/PromptInput/PromptInputBasic" />
+
+## Keys
+
+| Key | Does |
+| --- | --- |
+| <DocKbd label="Enter" /> | Sends. |
+| <DocKbd label="Shift" />+<DocKbd label="Enter" /> | Starts a new line. |
+| <DocKbd label="Escape" /> | Stops the response, while one is arriving. |
+| <DocKbd label="↑" /> | In an empty field, recalls the last message sent, then older ones. In a recalled message, with the caret on its first line, recalls the one before it. |
+| <DocKbd label="↓" /> | In a recalled message, with the caret on its last line, goes to the next one, and back to the draft. |
+
+The Enter that confirms an IME composition, such as choosing a Japanese word, never sends. A key another handler already took, such as a menu choosing a command, is left alone.
+
+Set `submitOn` to `"mod-enter"` for long messages: <DocKbd label="Enter" /> starts a new line and <DocKbd label="Ctrl" />+<DocKbd label="Enter" /> or <DocKbd label="⌘" />+<DocKbd label="Enter" /> sends.
+
+## History
+
+Bind `history` to the messages sent before, oldest first, to recall them with the arrow keys. Each message sent is added, and `historyLimit` keeps the most recent 50. Keep the array in `LocalStorage` to recall messages across visits.
+
+## Response
+
+Set `status` to what the app is doing with the last message: `"ready"`, `"submitted"` while waiting for the first word, or `"streaming"` while the reply arrives. Once it isn't `"ready"`, the send button becomes a stop button, and <DocKbd label="Escape" /> stops. Enter doesn't send. Listen to `stop` to cancel the request. It is the same button, so focus stays on it when it turns. While `"submitted"`, a ring turns around the stop icon, which holds still when reduced motion is preferred.
+
+<FileSource src="/framed/PromptInput/PromptInputStreaming" />
+
+## Attachments
+
+The attach button opens the file picker, and files can also be pasted or dropped on the composer. A paste carries a file only when it has no text, since a spreadsheet copies its cells as both text and a picture. Each file becomes a chip above the field, with a preview for an image, its size, and a button that removes it. Screen readers hear when a file is attached, removed or turned away.
+
+Set `accept`, `maxFileSize` and `maxFiles` to limit what can be attached. A file turned away dispatches `reject`, with its `reason`: `"type"`, `"size"`, `"duplicate"` or `"count"`. Set `attachable` to `false` to leave attachments out.
+
+The composer adds each file as an attachment with `status: "complete"` and dispatches `attach`. To upload them, set each attachment's `status` to `"uploading"` and its `progress` from 0 to 100, then to `"complete"` or `"error"` with an `errorText`. Send is held while a file uploads or has failed, so a message never goes without its files. Remove a failed chip to send without it. Listen to `remove` to cancel an upload.
+
+| Do | Why |
+| --- | --- |
+| Set `accept` and `maxFileSize` to what your API takes. | The composer turns a file away at once, instead of after an upload that fails. |
+| Update an attachment by its `id`, with a new object. | A chip redraws when its object changes, and the `id` keeps it in place. |
+
+<FileSource src="/framed/PromptInput/PromptInputAttachments" />
+
+## Tools and hint
+
+The `tools` slot follows the attach button, for a model or mode selector. The `end` slot comes before the hint and the send button, for a voice input button. Compose them from Carbon components, such as [MenuButton](/components/MenuButton).
+
+The hint is a line before the send button. Unset, it counts characters against `maxCount`. Set `hint` to a string or a function of the message, such as a token estimate. Past `maxCount` the hint turns to the error color, the composer is outlined as invalid, and Send is held.
+
+For commands that start with a slash, or for mentions, attach a menu to the text area through `bind:ref`, as to any text area. PromptInput leaves a key the menu already took alone, so choosing a command with <DocKbd label="Enter" /> doesn't send the message.
+
+<FileSource src="/framed/PromptInput/PromptInputTools" />
+
+## Disabled
+
+Set `disabled` to disable the field and every button, the stop button too, such as when the conversation has ended.
+
+<PromptInput disabled placeholder="The conversation has ended" />
