@@ -1,0 +1,156 @@
+---
+components: ["TaskStatusList"]
+description: Task status lists show the progress of a multi-step operation, such as provisioning a cluster, with each step's status and time and an overall summary.
+---
+
+<script>
+  import { TaskStatusList } from "carbon-components-svelte";
+
+  /** @typedef {import("carbon-components-svelte/TaskStatusList/TaskStatusList.svelte").TaskStep} TaskStep */
+
+  const started = Date.now() - 82000;
+
+  /** @type {TaskStep[]} */
+  const steps = [
+    { id: "vpc", label: "Create VPC", status: "succeeded", startedAt: started, endedAt: started + 12000 },
+    { id: "subnets", label: "Create subnets", status: "succeeded", startedAt: started + 12000, endedAt: started + 41000 },
+    { id: "cluster", label: "Create cluster", status: "running", startedAt: started + 41000, detail: "2 of 3 nodes ready" },
+    { id: "ingress", label: "Install ingress", status: "pending" },
+  ];
+
+  /** @type {TaskStep[]} */
+  const statuses = [
+    { id: "a", label: "Create VPC", status: "succeeded", startedAt: 0, endedAt: 12000 },
+    { id: "b", label: "Create cluster", status: "running", startedAt: started },
+    { id: "c", label: "Install ingress", status: "pending" },
+    { id: "d", label: "Configure network", status: "failed", startedAt: 0, endedAt: 31000 },
+    { id: "e", label: "Seed sample data", status: "skipped" },
+    { id: "f", label: "Send invitations", status: "canceled" },
+  ];
+
+  /** @type {TaskStep[]} */
+  const details = [
+    { id: "vpc", label: "Create VPC", status: "succeeded", startedAt: 0, endedAt: 12000, href: "#" },
+    {
+      id: "network",
+      label: "Configure network",
+      status: "failed",
+      startedAt: 12000,
+      endedAt: 43000,
+      detail: "The gateway did not answer in time.",
+      href: "#",
+      error: "NetworkTimeout: gateway 10.240.0.1 did not answer within 30s\n  region: us-south-2\n  request: PUT /v1/gateways/gw-4f2a",
+    },
+    { id: "cluster", label: "Create cluster", status: "pending" },
+  ];
+
+  let expandedIds = ["network"];
+
+  function clock(ms) {
+    const seconds = Math.floor(ms / 1000);
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+  }
+</script>
+
+## Basic
+
+Set `steps` to the steps in order. Each has an `id`, a `label` and a `status`: `"pending"`, `"running"`, `"succeeded"`, `"failed"`, `"skipped"` or `"canceled"`. The list shows the steps; it does not run them. Replace the array, or a step in it, as the work moves on. A summary line above the steps adds them up.
+
+Name the list with `aria-label`.
+
+<TaskStatusList aria-label="Cluster provisioning" {steps} />
+
+## Statuses
+
+Each status has its own icon shape and its own text after the step's label, which screen readers read, so a status never depends on color. A step that runs is the current step. Skipped steps were not needed, and canceled steps did not run or were stopped.
+
+<TaskStatusList aria-label="Statuses" steps={statuses} />
+
+## Time
+
+A step with `startedAt` and `endedAt`, in milliseconds or as a `Date`, shows how long it took. A running step with `startedAt` shows how long it has run, counting up each second. One timer serves the whole list and runs only while a step does. The server and the first render show no running time, so hydration matches.
+
+Set `durationText` to write the time another way, such as m:ss. It receives the length in milliseconds.
+
+<TaskStatusList aria-label="Cluster provisioning, as a clock" {steps} durationText={clock} />
+
+## Details and errors
+
+A step can have a `detail` line under its label, an `href` to its log, and an `error`: the failure in full, as a string or an `Error`. The error opens under the step's Show details button, which names the step it belongs to. Bind `expandedIds` to open errors from your own code, such as to open the first failure.
+
+<TaskStatusList aria-label="Network setup" steps={details} bind:expandedIds />
+
+## Sizes
+
+Set `size` to `"sm"` for a compact list in a modal or a side panel. The default is `"md"`. Set `hideSummary` when a heading near the list already says how far along it is.
+
+<TaskStatusList aria-label="Cluster provisioning, compact" size="sm" {steps} />
+
+## Running the steps
+
+### With createTaskRunner
+
+`createTaskRunner` runs the tasks and keeps the steps. It is a store: pass `$runner.steps` to the list. Each task is `{ id, label, run }`. `run` receives an `AbortSignal` that `cancel()` aborts, and `setDetail` to replace the step's detail line while it works.
+
+Set `cancelable` and `retryable` to show Cancel, Retry from the failed step and Retry all. The buttons dispatch `cancel` and `retry`; call the runner from them. A failure stops the run at that step. Retry runs the failed step and the steps after it again, and keeps what finished. The Configure network step fails the first time.
+
+<FileSource src="/framed/TaskStatusList/ProvisionCluster" />
+
+```svelte
+const runner = createTaskRunner([
+  { id: "vpc", label: "Create VPC", run: createVpc },
+  { id: "cluster", label: "Create cluster", run: createCluster },
+]);
+```
+
+### Bulk operations
+
+Set `concurrency` to run several tasks at once, and `onError` to `"continue"` to run the rest after a failure. The list then reads "2 steps failed" and offers Retry failed steps, which runs only the failed steps again.
+
+<FileSource src="/framed/TaskStatusList/BulkDelete" />
+
+### Your own steps
+
+The runner is optional. Anything that can describe its steps can fill `steps`: an upload queue, a server job you poll, or a wizard that already tracks its progress. Set the status, and `startedAt` and `endedAt` as they change.
+
+```svelte
+<TaskStatusList
+  aria-label="Import"
+  steps={job.steps}
+  retryable
+  on:retry={() => api.retry(job.id)}
+/>
+```
+
+## In a modal
+
+Set `size="sm"` and put the actions in the modal's footer, where users look for them. Leave `cancelable` and `retryable` off and call the runner from the footer buttons. Closing the modal cancels the run.
+
+<FileSource src="/framed/TaskStatusList/ModalProgress" />
+
+## Announcements
+
+Screen readers hear changes, not content. Nothing is read as the list mounts or as a time counts up.
+
+| Change | Announced |
+| --- | --- |
+| The steps finish | "All 5 steps complete", at once |
+| A step fails | "Failed at step 4: Configure network", at once and assertive |
+| The run is canceled | "Canceled, 2 of 5 complete", at once |
+| Steps start and finish | "2 of 5 complete: Create cluster", at most once per `announceDelay` (1 second), only the newest |
+
+Fifty steps that finish in a second say the first message and the last one. Set `announceText` to change the words, or `announce` to `false` to say nothing. Focus does not move on a failure; the announcement and the Retry button tell the user what happened. When the button a user pressed leaves, such as Cancel after a cancel, focus moves to the next action, or to the summary.
+
+Where the user prefers reduced motion, a running step shows a static half-filled circle instead of the spinner. In forced colors, every icon reads in the text color and keeps its shape.
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Name the list with `aria-label`, such as "Cluster provisioning". | A screen reader says what the steps belong to when it reaches the list. |
+| Give every step a unique `id`. | The `id` keys the row, so a status change updates one row, and it keeps the open error with its step. |
+| Keep labels to what the step does, such as "Create subnets". | The label is read before the status, so the pair reads as one sentence. |
+| Put long output in `error` and a short reason in `detail`. | The detail line stays visible at a glance; the error opens when a user wants it. |
+| Show times only for steps that take seconds or more. | A step under a second reads as less than one second, which tells the user nothing. |
+| Use ProgressIndicator for steps the user moves through. | A task status list reports work that runs by itself. |
+| Use ProgressBar for one percentage, and InlineLoading for one action. | The list is for a handful of named steps, each with its own outcome. |
