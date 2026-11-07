@@ -346,7 +346,7 @@ Set `loadingDelay` to wait a number of milliseconds after `loading` becomes `tru
 
 ## Keyboard shortcut
 
-Set `shortcut` to show its keys after the label, in the tooltip of an icon-only button, and to the screen reader through `aria-keyshortcuts`. Pressing the keys clicks the button, so `on:click` runs, as does a form's submit or a link's navigation. `mod` is Command on Apple platforms and Ctrl elsewhere. The examples run in a frame, so click in one before you press its keys.
+Set `shortcut` to show its keys after the label, in the tooltip of an icon-only button, and to the screen reader through `aria-keyshortcuts`. Pressing the keys clicks the button, so `on:click` runs, as does a form's submit or a link's navigation. `mod` is the platform's main modifier, so `"mod+s"` shows <DocKbd shortcut="mod+s" /> on your platform. The examples run in a frame, so click in one before you press its keys.
 
 <FileSource src="/framed/Button/ButtonShortcut" />
 
@@ -358,7 +358,7 @@ To do something other than click, handle `on:shortcut`, dispatched before the cl
 
 | Do | Why |
 | :--- | :--- |
-| Use `mod` for Command or Ctrl | One shortcut reads and works on every platform |
+| Use `mod` for the platform's main modifier | One shortcut reads and works on every platform |
 | Pick shortcuts the browser doesn't keep, such as `mod+s` over `mod+w` | Browsers don't let a page take `mod+w`, `mod+t` or `mod+n` |
 | Avoid the editing keys: `mod+a`, `mod+c`, `mod+v`, `mod+x` and `mod+z` | A shortcut with a modifier also fires in text fields, so it takes select all, copy, paste, cut or undo from every field |
 | Keep single-key shortcuts such as `/` for actions that make sense while reading | They don't fire while typing in a field, but they do everywhere else |
