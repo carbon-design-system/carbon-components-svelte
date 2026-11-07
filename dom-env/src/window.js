@@ -566,6 +566,16 @@ export function installWindow(global, classes, options = {}) {
   };
 
   Object.setPrototypeOf(global, Window.prototype);
+  // Bun's global is an EventTarget of its own, and the context vitest's
+  // node environment builds copies its methods in as own properties,
+  // which would shadow the window's: drop them so the window's apply.
+  for (const name of [
+    "addEventListener",
+    "removeEventListener",
+    "dispatchEvent",
+  ]) {
+    if (Object.hasOwn(global, name)) delete global[name];
+  }
   global._listeners = null;
 
   const doc = createHTMLDocument(new URL(url).href);
