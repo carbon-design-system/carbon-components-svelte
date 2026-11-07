@@ -1009,6 +1009,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Prose
+  property-inspector:
+    name: Property inspector
+    description: Edits the properties of the selected objects in a dense side panel, with Mixed values, scrub fields, and reset.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/property-inspector.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PropertyInspector
   radio-button:
     status: stable
     framework: svelte
