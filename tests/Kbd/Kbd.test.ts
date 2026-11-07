@@ -48,6 +48,14 @@ describe("Kbd", () => {
     expect(keys("german")).toEqual(["Strg", "Umschalt", "S"]);
   });
 
+  it("keeps the English name of a key translateWithId leaves out", () => {
+    render(Kbd);
+
+    expect(spoken("german")).toBe("Control Umschalt S");
+    expect(keys("german-escape")).toEqual(["command", "Esc"]);
+    expect(spoken("german-escape")).toBe("Command Escape");
+  });
+
   it("updates the keys when shortcut or translateWithId changes", async () => {
     const { rerender } = render(Kbd);
     expect(keys("dynamic")).toEqual(["Strg", "K"]);
@@ -74,6 +82,7 @@ describe("Kbd", () => {
     render(KbdTranslations);
 
     expect(keys("shared")).toEqual(["Strg", "Umschalt", "Enter"]);
-    expect(keys("own")).toEqual(["Control", "K"]);
+    // Own translations first, then shared ones, then English.
+    expect(keys("own")).toEqual(["Control", "Umschalt", "K"]);
   });
 });
