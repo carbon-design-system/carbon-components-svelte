@@ -13,9 +13,28 @@
   <StarRating readonly value={3.5} legendText="Average" />
 </div>
 
+<div data-testid="readonly-rtl" dir="rtl">
+  <StarRating readonly value={3.5} legendText="Average" />
+</div>
+
 <div data-testid="sm" style="display: inline-block">
   <StarRating size="sm" legendText="Small" hideLegend />
 </div>
 <div data-testid="lg" style="display: inline-block">
   <StarRating size="lg" legendText="Large" hideLegend />
+</div>
+
+<div data-testid="invalid">
+  <StarRating legendText="Quality" invalid invalidText="Choose a rating" />
+</div>
+<div data-testid="warn">
+  <StarRating
+    legendText="Value"
+    value={1}
+    warn
+    warnText="A one-star review asks for a comment"
+  />
+</div>
+<div data-testid="disabled">
+  <StarRating legendText="Delivery" value={3} disabled />
 </div>
