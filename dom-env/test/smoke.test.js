@@ -161,3 +161,32 @@ test("strict mode reports members and CSS properties it doesn't implement", () =
     ].join("\n"),
   );
 });
+
+test("leak checks list what a test left on long-lived targets", () => {
+  const run = window({ leaks: true });
+  run(`const kept = () => {}, removed = () => {};
+    const mark = __domEnv.leaks.mark();
+    window.addEventListener("resize", kept);
+    document.addEventListener("keydown", removed);
+    document.removeEventListener("keydown", removed);
+    const el = document.createElement("div");
+    el.addEventListener("click", kept);
+    document.body.append(el);
+    new MutationObserver(() => {}).observe(el, { childList: true });
+    new MutationObserver(() => {}).observe(document.createElement("p"), { childList: true });
+    globalThis.mark = mark;`);
+  assert.equal(
+    run(`__domEnv.leaks
+      .since(mark, "/test/")
+      .map((leak) => leak.what + " " + leak.at.split(" <- ")[0].replace(/:\\d+$/, ""))
+      .join("\\n")`),
+    [
+      "resize listener on window /test/code.js:3",
+      "MutationObserver on div /test/code.js:9",
+    ].join("\n"),
+  );
+  assert.equal(
+    run(`el.remove(); __domEnv.leaks.since(mark, "/test/").length`),
+    1,
+  );
+});

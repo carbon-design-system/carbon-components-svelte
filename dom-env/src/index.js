@@ -9,6 +9,7 @@ import * as events from "./events.js";
 import * as forms from "./forms.js";
 import * as geometry from "./geometry.js";
 import * as html from "./html.js";
+import * as leaks from "./leaks.js";
 import * as mutation from "./mutation.js";
 import * as node from "./node.js";
 import * as range from "./range.js";
@@ -62,7 +63,12 @@ function install(options = {}) {
     "visibilitychange",
   ]);
   if (options.strict) strict.enable(classes);
+  if (options.leaks) leaks.enable();
   return doc;
 }
 
-globalThis.__domEnv = { install, gaps: strict.collect };
+globalThis.__domEnv = {
+  install,
+  gaps: strict.collect,
+  leaks: { enabled: leaks.isEnabled, mark: leaks.mark, since: leaks.since },
+};
