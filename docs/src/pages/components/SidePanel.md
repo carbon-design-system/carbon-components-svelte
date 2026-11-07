@@ -4,24 +4,37 @@ description: Side panels keep users in the context of a page while they view det
 keywords: ["drawer"]
 ---
 
-<script>
-  import { Callout } from "carbon-components-svelte";
-</script>
-
-<Callout
-  title="Preview"
-  subtitle="SidePanel follows Carbon React's SidePanel from Carbon for IBM Products, which Carbon React does not export yet. Its API may change in a minor release."
-/>
-
 ## Basic
 
-Bind `open` to show the panel. It docks under the UI Shell header and closes from its close button or <DocKbd label="Escape" />. Focus moves to the first field when it opens and returns to the trigger when it closes. A panel already open when the page loads leaves focus where it is, unless it's modal. Put footer buttons in the `actions` slot; the panel lays them out in an [ActionSet](/components/ActionSet) sized to the panel.
+Bind `open` to show the panel. It docks under the UI Shell header and closes from its close button or <DocKbd label="Escape" />. Put footer buttons in the `actions` slot. The panel lays them out in an [ActionSet](/components/ActionSet) sized to the panel. Set `condensedActions` to `true` for 48px buttons in place of 64px.
+
+Use a side panel for work that relates to the page under it, such as editing a row or filtering a list. For a task that needs the user's full attention, use a [Modal](/components/Modal). For global tools such as notifications or a switcher, use a [UI Shell](/components/UIShell) `HeaderPanel`.
+
+`titleText` names the panel for screen readers. A panel without a title needs an `aria-label`. A long title wraps onto more lines. It is never cut off.
 
 <FileSource src="/framed/SidePanel/SidePanel" />
 
+## Focus
+
+When the panel opens, focus moves to the first match:
+
+1. The element that matches `selectorPrimaryFocus` (default: `[data-modal-primary-focus]`)
+2. The first input, textarea or select
+3. The close button
+
+When the panel closes, focus goes back to the element that opened it. A panel already open when the page loads leaves focus where it is, unless it's modal. Set `selectorPrimaryFocus` to `null` to move focus yourself.
+
+## Closing
+
+The panel dispatches a cancelable `close` event. Call `e.preventDefault()` to keep it open, for example while a form has unsaved changes. `e.detail.trigger` tells you what closed it: `"escape-key"`, `"outside-click"`, `"close-button"` or `"programmatic"`. The last one means your code set `open` to `false`.
+
+Set `hideCloseButton` to `true` to remove the close button. Give the user another way out, such as a Cancel button.
+
+<FileSource src="/framed/SidePanel/SidePanelPreventClose" />
+
 ## Without a header
 
-The panel docks under the UI Shell `Header` when one is on the page, and spans the full height without one. To dock it under another fixed bar, set the `--ccs-side-panel-top` custom property to the bar's height, for all panels with `:root { --ccs-side-panel-top: 4rem; }` or for one with `<SidePanel --ccs-side-panel-top="4rem">`. A server render places the panel under the header until the page loads.
+The panel docks under the UI Shell `Header` when one is on the page, and spans the full height without one. To dock it under another fixed bar, set the `--ccs-side-panel-top` custom property to the bar's height. Set it on `:root` for all panels, or as a prop on one: `<SidePanel --ccs-side-panel-top="4rem">`. A server render places the panel under the header until the page loads.
 
 <FileSource src="/framed/SidePanel/SidePanelNoHeader" />
 
@@ -39,25 +52,25 @@ Set `placement` to `"start"` or `"end"` to choose the edge the panel docks to. T
 
 ## Overlay
 
-Set `includeOverlay` to `true` to dim the page behind the panel. The panel is then modal: it keeps focus inside and stops the page from scrolling. Clicking the overlay closes a panel without actions. A panel with actions stays open, so a stray click can't discard a form; set `preventCloseOnClickOutside` to change either.
+Set `includeOverlay` to `true` to dim the page behind the panel. The panel is then modal: it keeps focus inside and stops the page from scrolling. Clicking the overlay closes a panel without actions. A panel with actions stays open, so a stray click can't discard a form. Set `preventCloseOnClickOutside` to change either.
 
 <FileSource src="/framed/SidePanel/SidePanelOverlay" />
 
 ## Slide-in
 
-Set `slideIn` to `true` to push the page content aside instead of covering it. Set `selectorPageContent` to the element to push, such as the UI Shell `Content`. A slide-in panel is part of the page: it leaves focus where it is and does not close on <DocKbd label="Escape" />.
+Set `slideIn` to `true` to push the page content aside so the panel doesn't cover it. Set `selectorPageContent` to the element to push, such as the UI Shell `Content`. A slide-in panel is part of the page: it leaves focus where it is and does not close on <DocKbd label="Escape" />.
 
 <FileSource src="/framed/SidePanel/SidePanelSlideIn" />
 
 ## Resizable
 
-Set `resizable` to `true` to let users drag the panel's free edge, or move it with the arrow keys once it has focus. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the narrowest and widest widths, and a double click restores `size`. Bind `width` to read or persist the width; `resize` fires once per gesture. The handle hides on narrow screens.
+Set `resizable` to `true` to let users drag the panel's free edge, or move it with the arrow keys once it has focus. <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the narrowest and widest widths, and a double click restores `size`. Bind `width` to read or save the width. The `resize` event fires once per gesture. The handle hides on narrow screens.
 
 <FileSource src="/framed/SidePanel/SidePanelResizable" />
 
 ## Multi-step
 
-Set `currentStep` to show a back button from the second step on. Listen for `back` to go to the previous step.
+Set `currentStep` to show a back button from the second step on. Listen for `back` to go to the previous step. If the button that has focus goes away when the step changes, focus moves to the first field of the new step.
 
 <FileSource src="/framed/SidePanel/SidePanelMultiStep" />
 
