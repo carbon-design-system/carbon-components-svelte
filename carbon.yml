@@ -757,6 +757,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/LazyMount
+  likert-matrix:
+    name: Likert matrix
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/likert-matrix.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LikertMatrix
   link:
     status: stable
     framework: svelte
