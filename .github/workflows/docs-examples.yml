@@ -51,11 +51,7 @@ jobs:
       - name: Generate types
         run: bun run build:docs
 
-      # The site imports the search index, which the docs build generates.
-      - name: Generate the search index
-        run: bun run build:index-docs
-        working-directory: docs
-
+      # Generates the search index the site imports before it checks.
       - name: Type-check the docs site
         run: bun run test:docs-types
 
