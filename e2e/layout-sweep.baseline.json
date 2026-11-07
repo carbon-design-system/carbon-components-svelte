@@ -1256,6 +1256,14 @@
     "message": "div[data-testid=\"modal\"] > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--tile:nth-of-type(2): 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "natural-date-input-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(4)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(3) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(4): 1px outline inside 1px outline div.bx--popover.bx--popover--drop-shadow > div.bx--popover-contents > div.bx--natural-date__popover > div.bx--date-picker__calendar.bx--date-picker__calendar--inline, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "notification-fit.html",
     "variant": "1280-forced",
     "check": "borders",
