@@ -3,8 +3,6 @@
    * @restProps {div}
    * @slot {{}}
    * @slot {{}} labelChildren - Text above the title, such as a category.
-   * @deprecated use the `labelChildren` slot
-   * @slot {{}} label
    * @slot {{}} description - Text below the title, such as a date.
    * @slot {{}} titleStart - An icon before the title text.
    * @slot {{}} titleEnd - An icon after the title text.
@@ -36,13 +34,40 @@
    */
   export let descriptionTruncate = false;
 
+  /**
+   * Specify the heading level of the title, to fit the page outline.
+   * Inside a `Section`, defaults to one level below the section's heading;
+   * otherwise to 3.
+   * @type {1 | 2 | 3 | 4 | 5 | 6 | undefined}
+   */
+  export let headingLevel = undefined;
+
+  import { getContext, onMount } from "svelte";
+
+  // Undefined outside a `Section`; `$sectionLevel` is read only when it is set.
+  /** @type {import("svelte/store").Readable<1 | 2 | 3 | 4 | 5 | 6>} */
+  const sectionLevel = getContext("carbon:Section");
+
+  /** @type {undefined | { claimTitle: () => string | undefined; releaseTitle: () => void }} */
+  const card = getContext("carbon:Card");
+
+  // A clickable card takes its accessible name from this title.
+  const titleId = card?.claimTitle();
+  onMount(() => () => {
+    if (titleId) card?.releaseTitle();
+  });
+
+  $: headingTag = `h${
+    headingLevel ?? (sectionLevel ? Math.min($sectionLevel + 1, 6) : 3)
+  }`;
+
   $: titleClamped = typeof titleTruncate === "number";
   $: labelClamped = typeof labelTruncate === "number";
   $: descriptionClamped = typeof descriptionTruncate === "number";
 </script>
 
 <div class:bx--card__title={true} {...$$restProps}>
-  {#if $$slots.labelChildren || $$slots.label}
+  {#if $$slots.labelChildren}
     <div
       class:bx--card__label={true}
       class:bx--card__label--truncate={labelTruncate === true}
@@ -51,10 +76,12 @@
         ? labelTruncate
         : undefined}
     >
-      <slot name="labelChildren"><slot name="label" /></slot>
+      <slot name="labelChildren" />
     </div>
   {/if}
-  <span
+  <svelte:element
+    this={headingTag}
+    id={titleId}
     class:bx--card__title-text-row={true}
     class:bx--card__title-text-row--truncate={titleTruncate === true}
     class:bx--card__title-text-row--truncate-multi={titleClamped}
@@ -78,7 +105,7 @@
         <slot name="titleEnd" />
       </span>
     {/if}
-  </span>
+  </svelte:element>
   {#if $$slots.description}
     <div
       class:bx--card__description={true}

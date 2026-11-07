@@ -2,7 +2,7 @@
   /**
    * @restProps {div}
    * @slot {{}} - Actions, such as buttons, under the subtitle.
-   * @slot {{}} illustration - Decorative art above the title, hidden from assistive technology.
+   * @slot {{}} illustration - Decorative art above the title, hidden from assistive technology. Use a pictogram; it draws at 64px, or 48px at `size="sm"`. An icon draws at its own size, so give it `size={32}`.
    * @slot {{}} titleChildren
    * @slot {{}} subtitleChildren
    */

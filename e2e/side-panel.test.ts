@@ -8,6 +8,8 @@ const PARTS = {
   handle: ".bx--side-panel__resize-handle",
   back: ".bx--side-panel__back",
   close: ".bx--side-panel__close",
+  backIcon: ".bx--side-panel__back svg",
+  closeIcon: ".bx--side-panel__close svg",
   title: ".bx--side-panel__title",
   field: ".bx--side-panel__body .bx--text-input",
   primary: ".bx--side-panel__actions .bx--btn--primary",
@@ -54,9 +56,10 @@ test.describe("SidePanel", () => {
     );
     const ltr = await boxes(page);
     expect(ltr.panel.right).toBe(viewportWidth);
-    expect(ltr.close.right).toBe(ltr.panel.right);
-    // The panel's border is the outer pixel; the back button sits inside it.
-    expect(ltr.back.left - ltr.panel.left).toBeLessThanOrEqual(1);
+    // The close and back icons sit on the header's 16px padding. The
+    // panel's border adds a pixel on the start side.
+    expect(ltr.panel.right - ltr.closeIcon.right).toBe(16);
+    expect(ltr.backIcon.left - ltr.panel.left).toBe(17);
     expect(
       Math.abs((ltr.handle.left + ltr.handle.right) / 2 - ltr.panel.left),
     ).toBeLessThanOrEqual(1);
@@ -81,6 +84,18 @@ test.describe("SidePanel", () => {
         ).transform,
     );
     expect(transform).toBe("matrix(-1, 0, 0, 1, 0, 0)");
+  });
+
+  // The panel takes focus only as a fallback, so it draws no ring, as
+  // the modal container does. Its buttons and fields keep theirs.
+  test("draws no focus ring on the panel itself", async ({ page }) => {
+    const panel = page.locator(PARTS.panel);
+    await page.keyboard.press("Tab");
+    await panel.focus();
+    await expect(panel).toBeFocused();
+    expect(
+      await panel.evaluate((el) => getComputedStyle(el).outlineStyle),
+    ).toBe("none");
   });
 
   // The free edge faces the page, so dragging it toward the page widens

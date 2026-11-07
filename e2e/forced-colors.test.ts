@@ -401,6 +401,27 @@ test.describe("forced colors", () => {
       .toBe(system.Highlight);
   });
 
+  // The AI label's gradient callout edge drops, so the callout draws a
+  // CanvasText outline on Canvas. The button keeps its forced border.
+  test("an AI label keeps its border, and its callout keeps an edge", async ({
+    page,
+  }) => {
+    expect
+      .soft(
+        (await style(page, ".bx--ai-label .bx--toggletip-button")).borderColor,
+      )
+      .toBe(system.CanvasText);
+
+    await page.locator(".bx--ai-label .bx--toggletip-button").press("Enter");
+    const callout = ".bx--ai-label-popover .bx--popover-contents";
+    await expect(page.locator(callout)).toBeVisible();
+    expect.soft(await style(page, callout)).toMatchObject({
+      background: system.Canvas,
+      outline: "solid 1px",
+      outlineColor: system.CanvasText,
+    });
+  });
+
   // The empty and the checked box differ only in shape and fill, and the
   // forced border is the same either way, so the fill carries the state.
   test("selectable tile checkboxes follow the text, fill with Highlight when selected, or read GrayText when disabled", async ({
@@ -757,8 +778,8 @@ test.describe("forced colors", () => {
       .toBe(system.CanvasText);
   });
 
-  // Forced colors draw the reserved border on every InlineEdit, so the
-  // red invalid border reads like the resting one. The icon carries it.
+  // Forced colors turn the red invalid ring into CanvasText, so color
+  // alone can't mark the field. The icon carries it.
   test("an invalid InlineEdit keeps its warning icon", async ({ page }) => {
     const icon = ".bx--edit-in-place--invalid .bx--edit-in-place__warning-icon";
     expect.soft((await style(page, icon)).fill, icon).toBe(system.CanvasText);

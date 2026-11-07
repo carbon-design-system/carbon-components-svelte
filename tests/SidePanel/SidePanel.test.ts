@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
+import SidePanelComponent from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import { tick } from "svelte";
 import { user } from "../utils/user";
 import SidePanel from "./SidePanel.test.svelte";
@@ -34,7 +35,7 @@ describe("SidePanel", () => {
       props: {
         open: true,
         labelText: "Production",
-        subtitle: "Changes apply on the next deploy.",
+        subtitleText: "Changes apply on the next deploy.",
       },
     });
     const dialog = screen.getByRole("dialog", { name: "Edit deployment" });
@@ -42,6 +43,18 @@ describe("SidePanel", () => {
       "Changes apply on the next deploy.",
     );
     expect(screen.getByText("Production")).toHaveClass("bx--side-panel__label");
+  });
+
+  it("passes a native title through to the panel", () => {
+    render(SidePanelComponent, {
+      props: {
+        open: true,
+        titleText: "Edit deployment",
+        title: "Deployment settings",
+      },
+    });
+    const dialog = screen.getByRole("dialog", { name: "Edit deployment" });
+    expect(dialog).toHaveAttribute("title", "Deployment settings");
   });
 
   it("renders the title as an h2, or one level below a Section", () => {
@@ -228,6 +241,43 @@ describe("SidePanel", () => {
     await tick();
     await user.click(screen.getByRole("button", { name: "Back" }));
     expect(onBack).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps focus in the panel when a step change removes the focused control", async () => {
+    const { component } = render(SidePanel, {
+      props: { open: true, field: true, currentStep: 1 },
+    });
+    screen.getByRole("button", { name: "Back" }).focus();
+
+    component.currentStep = 0;
+    await tick();
+    await tick();
+    expect(screen.getByRole("textbox", { name: "Region" })).toHaveFocus();
+  });
+
+  it("focuses a slide-in panel itself when a step change removes the focused control", async () => {
+    const { component } = render(SidePanel, {
+      props: { open: true, slideIn: true, currentStep: 1 },
+    });
+    screen.getByRole("button", { name: "Back" }).focus();
+
+    component.currentStep = 0;
+    await tick();
+    await tick();
+    expect(getPanel()).toHaveFocus();
+  });
+
+  it("leaves focus on the page when the step changes", async () => {
+    const { component } = render(SidePanel, {
+      props: { open: true, field: true, currentStep: 1 },
+    });
+    const trigger = screen.getByRole("button", { name: "Open panel" });
+    trigger.focus();
+
+    component.currentStep = 0;
+    await tick();
+    await tick();
+    expect(trigger).toHaveFocus();
   });
 
   it("docks under a UI Shell Header, and spans the full height without one", async () => {

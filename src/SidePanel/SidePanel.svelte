@@ -22,7 +22,7 @@
    * @slot {{}} actions - Footer buttons. The panel lays them out in an `ActionSet` sized to the panel.
    * @slot {{}} toolbar - Buttons in the header's action toolbar, below the title.
    * @slot {{}} decorator - An `AILabel`, beside the close button.
-   * @slot {{}} subtitleChildren - Rich subtitle content. Overrides `subtitle`.
+   * @slot {{}} subtitleChildren - Rich subtitle content. Overrides `subtitleText`.
    */
 
   /**
@@ -80,19 +80,20 @@
   export let preventCloseOnClickOutside = undefined;
 
   /**
-   * Specify the title. It names the panel.
+   * Specify the title. It names the panel. A `title` attribute passes
+   * through to the panel element.
    * @type {string | undefined}
    */
-  export let title = undefined;
+  export let titleText = undefined;
 
   /**
    * Specify the subtitle. It describes the panel.
    * @type {string | undefined}
    */
-  export let subtitle = undefined;
+  export let subtitleText = undefined;
 
   /**
-   * Specify a label above the title. Renders only with a `title`.
+   * Specify a label above the title. Renders only with a `titleText`.
    * @type {string | undefined}
    */
   export let labelText = undefined;
@@ -600,11 +601,26 @@
   $: if (currentStep !== prevStep) {
     prevStep = currentStep;
     if (innerContentRef) innerContentRef.scrollTop = 0;
+    keepFocusInPanel();
+  }
+
+  // A step change can remove the focused control, as the back button
+  // hides at step 0. Focus then goes to the new step, as it does on open,
+  // so Escape and the focus trap keep working. This runs before the DOM
+  // update, so `activeElement` is still the control that had focus.
+  function keepFocusInPanel() {
+    if (!open || !ref?.contains(document.activeElement)) return;
+    tick().then(() => {
+      if (!open || !ref || ref.contains(document.activeElement)) return;
+      focusPanel();
+      // A slide-in panel focuses only a `selectorPrimaryFocus` match.
+      if (!ref.contains(document.activeElement)) ref.focus();
+    });
   }
 
   $: titleId = `${id}-title`;
   $: subtitleId = `${id}-subtitle`;
-  $: hasSubtitle = Boolean(subtitle) || $$slots.subtitleChildren;
+  $: hasSubtitle = Boolean(subtitleText) || $$slots.subtitleChildren;
   $: ({
     ariaLabel,
     ariaLabelledBy,
@@ -643,7 +659,7 @@
     aria-modal={modal ? "true" : undefined}
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledBy ??
-      (ariaLabel === undefined && title ? titleId : undefined)}
+      (ariaLabel === undefined && titleText ? titleId : undefined)}
     aria-describedby={joinDescribedBy(
       hasSubtitle ? subtitleId : undefined,
       ariaDescribedBy,
@@ -705,7 +721,7 @@
     {/if}
     <div
       class:bx--side-panel__header={true}
-      class:bx--side-panel__header--title={Boolean(title)}
+      class:bx--side-panel__header--title={Boolean(titleText)}
       class:bx--side-panel__header--subtitle={hasSubtitle}
       class:bx--side-panel__header--back={currentStep > 0}
       class:bx--side-panel__header--toolbar={$$slots.toolbar}
@@ -723,15 +739,16 @@
           on:click={() => dispatch("back")}
         />
       {/if}
-      {#if title && labelText}
+      {#if titleText && labelText}
         <p class:bx--side-panel__label={true}>{labelText}</p>
       {/if}
-      {#if title}
-        <Heading id={titleId} class="bx--side-panel__title">{title}</Heading>
+      {#if titleText}
+        <Heading id={titleId} class="bx--side-panel__title">{titleText}</Heading
+        >
       {/if}
       {#if hasSubtitle}
         <div id={subtitleId} class:bx--side-panel__subtitle={true}>
-          <slot name="subtitleChildren">{subtitle}</slot>
+          <slot name="subtitleChildren">{subtitleText}</slot>
         </div>
       {/if}
       {#if $$slots.toolbar}

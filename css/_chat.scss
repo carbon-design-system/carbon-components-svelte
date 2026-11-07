@@ -16,7 +16,6 @@
     flex: 1 1 auto;
     flex-direction: column;
     overflow-y: auto;
-    overscroll-behavior: contain;
 
     &:focus {
       @include focus-outline("outline");
@@ -28,6 +27,12 @@
     &:focus:not(:focus-visible) {
       outline: none;
     }
+  }
+
+  // Keep the page still at the ends of a log that scrolls. Chromium also
+  // stops the wheel at a log that can't scroll, so only set it on overflow.
+  .#{$prefix}--chat-log--scrollable {
+    overscroll-behavior: contain;
   }
 
   // Padding inside the scrolling area, so messages clear the edges of the
@@ -84,6 +89,11 @@
     align-items: flex-end;
   }
 
+  // A shown name sits above the bubble. Move the avatar down past the
+  // name's line and the column gap, so it lines up with the bubble.
+  .#{$prefix}--chat-message--with-author .#{$prefix}--chat-message__avatar {
+    padding-top: calc(1rem + #{$carbon--spacing-02});
+  }
   .#{$prefix}--chat-message__author {
     @include type-style("label-01");
 
@@ -150,7 +160,7 @@
     display: inline-block;
     width: 0.5em;
     height: 1em;
-    margin-left: $carbon--spacing-01;
+    margin-inline-start: $carbon--spacing-01;
     animation: chat-caret 1s steps(1) infinite;
     background-color: $icon-secondary;
     content: "";

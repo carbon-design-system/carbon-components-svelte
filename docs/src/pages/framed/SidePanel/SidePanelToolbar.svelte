@@ -14,8 +14,8 @@
 
 <SidePanel
   bind:open
-  title="Environment"
-  subtitle="Variables for checkout-api in production."
+  titleText="Environment"
+  subtitleText="Variables for checkout-api in production."
 >
   <svelte:fragment slot="toolbar">
     <Button kind="ghost" size="small" icon={Renew}>Sync</Button>

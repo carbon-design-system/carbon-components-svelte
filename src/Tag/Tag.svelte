@@ -275,7 +275,7 @@
         class="bx--tag__decorator"
         state={aiLabelState}
         labelSize="sm"
-        labelKind="inline"
+        labelVariant="inline"
         labelAlign="start"
       >
         <slot name="decorator" />
@@ -463,7 +463,7 @@
         class="bx--tag__decorator"
         state={aiLabelState}
         labelSize="sm"
-        labelKind="inline"
+        labelVariant="inline"
         labelAlign="start"
       >
         <slot name="decorator" />

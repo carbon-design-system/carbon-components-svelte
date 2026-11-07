@@ -19,6 +19,15 @@
   /** How close to the end, in pixels, still counts as reading the latest. */
   const NEAR_END = 48;
   let pinned = true;
+  /** Whether the content overflows the log. */
+  let scrollable = false;
+
+  /** Stay at the end while the reader is there, and track overflow. */
+  function update() {
+    if (!ref) return;
+    if (pinned) ref.scrollTop = ref.scrollHeight;
+    scrollable = ref.scrollHeight > ref.clientHeight;
+  }
 
   function handleScroll() {
     if (!ref) return;
@@ -37,22 +46,31 @@
   }
 
   onMount(() => {
-    if (!ref) return;
-    ref.scrollTop = ref.scrollHeight;
+    update();
     // New messages scroll into view only while the reader is at the end,
     // so reading back through the conversation is never interrupted. A
     // message the user just sent always comes into view.
     const observer = new MutationObserver((records) => {
       if (!ref) return;
       if (sentByMe(records)) pinned = true;
-      if (pinned) ref.scrollTop = ref.scrollHeight;
+      update();
     });
     observer.observe(ref, {
       childList: true,
       subtree: true,
       characterData: true,
     });
-    return () => observer.disconnect();
+    // Content also grows without a DOM change, such as when a web font
+    // loads and text wraps, or an image loads. The log can shrink too,
+    // such as when the composer grows. Either way, stay at the end.
+    const resizeObserver =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
+    resizeObserver?.observe(ref);
+    if (ref.firstElementChild) resizeObserver?.observe(ref.firstElementChild);
+    return () => {
+      observer.disconnect();
+      resizeObserver?.disconnect();
+    };
   });
 </script>
 
@@ -66,6 +84,7 @@
   aria-label={labelText || undefined}
   tabindex="0"
   class:bx--chat-log={true}
+  class:bx--chat-log--scrollable={scrollable}
   {...$$restProps}
   on:scroll={handleScroll}
 >

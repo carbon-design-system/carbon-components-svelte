@@ -13,8 +13,8 @@
 <Section level={3}>
   <SidePanel
     bind:open
-    title="Edit deployment"
-    subtitle="Changes apply on the next deploy."
+    titleText="Edit deployment"
+    subtitleText="Changes apply on the next deploy."
     {size}
     {includeOverlay}
     {preventCloseOnClickOutside}

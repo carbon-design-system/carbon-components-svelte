@@ -24,7 +24,7 @@ describe("AILabel in selection controls, tags, and tiles", () => {
     expect(label(testId)).toHaveClass(sizeClass);
   });
 
-  it("forces the default kind in groups and the inline kind in tags", () => {
+  it("forces the default variant in groups and the inline variant in tags", () => {
     render(AILabelSelection);
 
     expect(label("checkbox-group")).not.toHaveClass("bx--ai-label--inline");
@@ -91,7 +91,7 @@ describe("AILabel in selection controls, tags, and tiles", () => {
     const { rerender } = render(AILabelSelection);
     const tile = screen.getByTestId("tile").querySelector(".bx--tile");
 
-    await rerender({ revertActive: true });
+    await rerender({ edited: true });
 
     expect(tile).toHaveClass("bx--tile--decorator");
     expect(tile).not.toHaveClass("bx--tile--ai-label");

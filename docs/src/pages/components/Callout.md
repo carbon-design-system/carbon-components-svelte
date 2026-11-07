@@ -1,6 +1,6 @@
 ---
 components: ["Callout", "NotificationActionButton"]
-description: Callouts show static guidance next to the content it is about. They stay on the page, can't be dismissed, and screen readers don't announce them.
+description: Callouts show static guidance next to the content it describes. They stay on the page, can't be dismissed, and screen readers don't announce them.
 ---
 
 <script>
@@ -9,10 +9,12 @@ description: Callouts show static guidance next to the content it is about. They
     Callout,
     Form,
     Link,
+    ListItem,
     NotificationActionButton,
     Stack,
     TextInput,
     Tile,
+    UnorderedList,
   } from "carbon-components-svelte";
 </script>
 
@@ -21,6 +23,8 @@ description: Callouts show static guidance next to the content it is about. They
 Place a callout next to the content it explains. The default kind is
 `"info"`. See [detailed usage](https://carbondesignsystem.com/components/notification/usage)
 for Carbon's guidance.
+
+Long titles and subtitles wrap onto more lines. They don't truncate.
 
 <Callout
   title="Scheduled downtime"
@@ -154,6 +158,24 @@ title describes the button for screen readers, with no extra setup.
   <svelte:fragment slot="actions">
     <NotificationActionButton>View changes</NotificationActionButton>
   </svelte:fragment>
+</Callout>
+
+## Extra content
+
+Put more content, such as a list, in the default slot. It renders under
+the subtitle. Components such as `UnorderedList` set their own text
+color, so use them in a low-contrast callout.
+
+<Callout
+  lowContrast
+  kind="warning"
+  title="Before you migrate"
+  subtitle="Check these settings on the old cluster:"
+>
+  <UnorderedList>
+    <ListItem>Backups are on.</ListItem>
+    <ListItem>No jobs are running.</ListItem>
+  </UnorderedList>
 </Callout>
 
 ## Status icon label

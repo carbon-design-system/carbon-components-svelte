@@ -75,6 +75,11 @@
   import { COPY_FEEDBACK_TIMEOUT_MS } from "../utils/copy-feedback.js";
   import { copyText } from "../utils/copy-text.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
+  import { uniqueId } from "../utils/unique-id.js";
+
+  // The button describes itself with the value, so each copy button in a
+  // list reads as "Copy to clipboard, <value>".
+  const valueId = uniqueId();
 
   /** @type {null | HTMLSpanElement} */
   let valueNode = null;
@@ -93,7 +98,7 @@
 </script>
 
 <span bind:this={ref} class:bx--copy-text={true} {...wrapperProps}>
-  <span bind:this={valueNode} class:bx--copy-text__value={true}
+  <span bind:this={valueNode} id={valueId} class:bx--copy-text__value={true}
     ><slot>{text ?? ""}</slot></span
   ><CopyButton
     kind="ghost"
@@ -109,7 +114,7 @@
     copy={() => copy(text ?? valueNode?.textContent?.trim() ?? "")}
     aria-label={ariaLabel ?? iconDescription}
     aria-labelledby={ariaLabelledBy}
-    aria-describedby={ariaDescribedBy}
+    aria-describedby={[valueId, ariaDescribedBy].filter(Boolean).join(" ")}
     on:copy
     on:copy:error
   />

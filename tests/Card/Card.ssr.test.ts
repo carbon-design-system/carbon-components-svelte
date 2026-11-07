@@ -18,6 +18,17 @@ describe("Card (server)", () => {
     ).not.toBeNull();
   });
 
+  // The server can't know yet whether a title renders, so it keeps the
+  // reference, and the title takes the id.
+  it("names the link by its title", () => {
+    const { document } = renderSSR(Card);
+
+    const link = document.querySelector("a.bx--card");
+    const id = link?.getAttribute("aria-labelledby");
+    expect(id).toBeTruthy();
+    expect(link?.querySelector(`h3#${id}`)).not.toBeNull();
+  });
+
   // An AILabel sets the class through context after the card renders, so
   // the server reads it from the filled slot.
   it("renders the AI surface", () => {

@@ -84,7 +84,7 @@
   }
 </script>
 
-<Box display="flex" direction="column" height="26rem" gap={5}>
+<Box display="flex" direction="column" height="calc(100vh - 3rem)">
   <ChatLog labelText="Conversation with Sam">
     {#each groupChatMessages(messages) as item (item.key)}
       {#if item.type === "divider"}

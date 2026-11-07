@@ -261,9 +261,9 @@
   /** @type {import("svelte/store").Writable<undefined | "active" | "revert">} */
   const aiLabelState = writable(undefined);
 
-  /** @param {"default" | "inline"} kind */
-  function labelSizeForKind(kind) {
-    return kind === "inline" ? "md" : "mini";
+  /** @param {"default" | "inline"} variant */
+  function labelSizeForVariant(variant) {
+    return variant === "inline" ? "md" : "mini";
   }
 </script>
 
@@ -375,7 +375,7 @@
       <Decorator
         class="bx--checkbox-wrapper-inner--decorator"
         state={aiLabelState}
-        labelSize={labelSizeForKind}
+        labelSize={labelSizeForVariant}
         labelAlign="start"
       >
         <slot name="decorator" />

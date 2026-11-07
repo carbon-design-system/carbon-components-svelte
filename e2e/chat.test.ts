@@ -23,6 +23,38 @@ test.describe("ChatLog", () => {
     await expect.poll(() => distanceFromEnd(log)).toBeLessThan(2);
   });
 
+  test("stays at the end when a message grows without a DOM change", async ({
+    page,
+  }) => {
+    const log = page.getByTestId("log");
+    // Stands in for a web font or an image that loads after mount.
+    await log
+      .locator(".bx--chat-message__bubble")
+      .last()
+      .evaluate((node) => {
+        (node as HTMLElement).style.paddingBottom = "80px";
+      });
+
+    await expect.poll(() => distanceFromEnd(log)).toBeLessThan(2);
+  });
+
+  test("holds the wheel only while it has something to scroll", async ({
+    page,
+  }) => {
+    const log = page.getByTestId("log");
+    const overscroll = () =>
+      log.evaluate((node) => getComputedStyle(node).overscrollBehaviorY);
+    await expect.poll(overscroll).toBe("contain");
+
+    // Chromium stops the wheel at a `contain` box even when it can't
+    // scroll, so the page around a log that fits would never move.
+    await log.evaluate((node) => {
+      (node as HTMLElement).style.flex = "none";
+      (node as HTMLElement).style.height = `${node.scrollHeight + 100}px`;
+    });
+    await expect.poll(overscroll).toBe("auto");
+  });
+
   test("leaves the scroll alone while reading back", async ({ page }) => {
     const log = page.getByTestId("log");
     await log.evaluate((node) => {

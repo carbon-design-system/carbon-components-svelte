@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <rect width="1200" height="800" fill="#edf5ff"/>
+  <g stroke="#d0e2ff" stroke-width="4">
+    <path d="M0 280 H1200 M0 430 H1200 M0 580 H1200 M0 730 H1200"/>
+  </g>
+  <g fill="#a6c8ff">
+    <rect x="40" y="600" width="60" height="200"/>
+    <rect x="140" y="550" width="60" height="250"/>
+    <rect x="240" y="620" width="60" height="180"/>
+    <rect x="340" y="510" width="60" height="290"/>
+    <rect x="440" y="540" width="60" height="260"/>
+    <rect x="540" y="460" width="60" height="340"/>
+    <rect x="640" y="490" width="60" height="310"/>
+    <rect x="740" y="410" width="60" height="390"/>
+    <rect x="840" y="430" width="60" height="370"/>
+  </g>
+  <g fill="#4589ff">
+    <rect x="940" y="350" width="60" height="450"/>
+    <rect x="1040" y="310" width="60" height="490"/>
+    <rect x="1140" y="260" width="60" height="540"/>
+  </g>
+  <path d="M70 510 L170 480 L270 520 L370 420 L470 440 L570 370 L670 390 L770 310 L870 330 L970 250 L1070 220 L1170 170"
+        fill="none" stroke="#0f62fe" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
+  <g fill="#ffffff" stroke="#0f62fe" stroke-width="8">
+    <circle cx="770" cy="310" r="14"/>
+    <circle cx="1170" cy="170" r="14"/>
+  </g>
+</svg>

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
@@ -34,6 +36,19 @@
   .#{$prefix}--input-group__fields > .#{$prefix}--list-box__wrapper {
     min-width: 0;
     flex: 1 1 auto;
+  }
+
+  // A text area's 11px padding makes one row 43px tall, 3px taller than
+  // the button. Split what the 20px line and 1px border leave of the field
+  // height, so one row matches the button and more rows grow from there.
+  // The text area's 40px minimum height would keep a smaller row tall.
+  @each $size, $height in (md: 40px, xs: 24px, sm: 32px, xl: 48px) {
+    $group: if($size == md, "", ".#{$prefix}--input-group--#{$size} ");
+    #{$group}.#{$prefix}--input-group__fields .#{$prefix}--text-area {
+      min-height: to-rem($height);
+      padding-top: to-rem(math.div($height - 21px, 2));
+      padding-bottom: to-rem(math.div($height - 21px, 2));
+    }
   }
 }
 

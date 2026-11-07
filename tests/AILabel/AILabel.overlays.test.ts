@@ -37,7 +37,7 @@ describe("AILabel in data tables", () => {
     const { rerender } = render(AILabelOverlays);
     const [aiRow] = table().querySelectorAll("tbody tr");
 
-    await rerender({ revertActive: true });
+    await rerender({ edited: true });
 
     expect(aiRow).not.toHaveClass("bx--data-table--ai-label-row");
     expect(aiLabel(aiRow)).toHaveClass("bx--ai-label--revert");

@@ -92,8 +92,8 @@
   export let readonlyToggletipText = undefined;
 
   /**
-   * Vertical size of the control. `"xs"` matches DataTable's `compact` row
-   * size.
+   * Vertical size of the control: 24px (`"xs"`), 40px (`"sm"`), 48px (`"md"`)
+   * or 64px (`"lg"`). In a DataTable cell, `"xs"` fits a `compact` row.
    * @type {"xs" | "sm" | "md" | "lg"}
    */
   export let size = "sm";

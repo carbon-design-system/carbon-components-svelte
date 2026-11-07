@@ -1,6 +1,7 @@
 <script>
   import "carbon-components-svelte/css/prose.css";
   import {
+    AILabel,
     Button,
     Card,
     CardBody,
@@ -205,9 +206,11 @@
   <Button data-testid="side-panel-open" on:click={() => (sidePanelOpen = true)}>
     Open side panel
   </Button>
-  <SidePanel bind:open={sidePanelOpen} resizable title="Side panel">
+  <SidePanel bind:open={sidePanelOpen} resizable titleText="Side panel">
     Side panel
   </SidePanel>
+
+  <AILabel data-testid="ai-label">Generated from usage.</AILabel>
 
   <ClickableTile href="/" icon={ArrowRight}>Tile</ClickableTile>
   <ClickableTile icon={ArrowRight} disabled>Disabled tile</ClickableTile>

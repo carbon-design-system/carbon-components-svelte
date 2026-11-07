@@ -5,20 +5,32 @@
 /// @access private
 /// @group components
 @mixin copy-text {
+  // Isolate from the surrounding text, so the button always sits at the end
+  // of the value in the paragraph's direction. Without it, an LTR value in
+  // an RTL line followed by LTR text pulls the button to the far side.
+  .#{$prefix}--copy-text {
+    unicode-bidi: isolate;
+  }
+
   // Inline, so a wrapped value keeps the button at the end of its last line.
+  // Browsers may always break before an inline button, so reserve the
+  // button's width at the end of the value instead. The button then pulls
+  // back into that space and never wraps onto a line by itself.
   .#{$prefix}--copy-text__value {
+    padding-inline-end: $carbon--spacing-02 + $carbon--spacing-06;
     overflow-wrap: anywhere;
   }
 
   // Pull the button's 24px box into the line height so it never grows the
-  // text's row, and follow the value with a small gap.
+  // text's row, and place it in the space the value reserves, a small gap
+  // after the text.
   .#{$prefix}--copy-text .#{$prefix}--copy-btn.#{$prefix}--copy-btn--sm {
     display: inline-flex;
     width: $carbon--spacing-06;
     height: $carbon--spacing-06;
     min-height: 0;
     margin-block: (-$carbon--spacing-02);
-    margin-inline-start: $carbon--spacing-02;
+    margin-inline-start: -$carbon--spacing-06;
     vertical-align: middle;
   }
 }
