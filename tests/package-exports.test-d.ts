@@ -2,10 +2,12 @@ import type {
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  createFocusNav,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
   floatingPosition,
+  focusNav,
   formatFileSize,
   formReset,
   fuzzyMatch,
@@ -46,6 +48,10 @@ import type {
   FloatingPositionOptions,
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
+import type {
+  FocusNavOptions,
+  NextIndexConfig,
+} from "carbon-components-svelte/src/utils/focus-nav.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
 import {
   highlight,
@@ -112,6 +118,10 @@ type _DismissParamsType = DismissParams;
 type _FloatingPosition = ReturnType<typeof floatingPosition>;
 type _FloatingPositionOptions = FloatingPositionOptions;
 type _FloatingPositionResult = FloatingPositionResult;
+type _FocusNav = ReturnType<typeof createFocusNav>;
+type _FocusNavAction = ReturnType<typeof focusNav>;
+type _FocusNavOptions = FocusNavOptions;
+type _NextIndexConfig = NextIndexConfig;
 type _FormReset = ReturnType<typeof formReset>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
