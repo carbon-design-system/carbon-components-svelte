@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { Text } from "carbon-components-svelte";
+  import {
+    TableOfContents,
+    TableOfContentsGroup,
+    TableOfContentsItem,
+  } from "carbon-components-svelte";
 
   export let headings: { id: string; text: string; depth: number }[] = [];
 
@@ -13,22 +17,20 @@
   ];
 </script>
 
-<Text tag="h5" type="label-01" color="primary" class="toc-section-label">
-  Examples
-</Text>
-<nav class="toc-nav">
-  {#each headings as heading}
-    <a
-      class={heading.depth === 3
-        ? "bx--link toc-nav__sub bx--type-label-01"
-        : "bx--link"}
-      href="#{heading.id}">{heading.text}</a
-    >
-  {/each}
-  <div class="toc-section-label bx--type-label-01 bx--type-text-primary">
-    Component API
-  </div>
-  {#each API_LINKS as link}
-    <a class="bx--link" href="#{link.id}">{link.text}</a>
-  {/each}
-</nav>
+<!-- Sections land 3rem down, below the sticky header (`scroll-margin-top`). -->
+<TableOfContents size="sm" scrollOffset={48}>
+  <TableOfContentsGroup labelText="Examples">
+    {#each headings as heading (heading.id)}
+      <TableOfContentsItem
+        href="#{heading.id}"
+        level={heading.depth === 3 ? 2 : 1}
+        text={heading.text}
+      />
+    {/each}
+  </TableOfContentsGroup>
+  <TableOfContentsGroup labelText="Component API">
+    {#each API_LINKS as link (link.id)}
+      <TableOfContentsItem href="#{link.id}" text={link.text} />
+    {/each}
+  </TableOfContentsGroup>
+</TableOfContents>

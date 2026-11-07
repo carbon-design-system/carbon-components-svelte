@@ -19,7 +19,9 @@
       raf = requestAnimationFrame(sync);
     }
 
-    schedule();
+    // Size the sidebar now, not on the next frame, so it already scrolls
+    // when the table of contents first reveals the active item on load.
+    sync();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule, { passive: true });
 

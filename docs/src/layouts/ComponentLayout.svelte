@@ -19,7 +19,7 @@
   import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import OpenPanelFilledRight from "carbon-icons-svelte/lib/OpenPanelFilledRight.svelte";
   import OpenPanelRight from "carbon-icons-svelte/lib/OpenPanelRight.svelte";
-  import { flushSync, onMount, tick } from "svelte";
+  import { flushSync, onMount } from "svelte";
   import type COMPONENT_API from "../COMPONENT_API.json";
   import { CATEGORY_BY_COMPONENT } from "../component-categories";
   import {
@@ -34,7 +34,6 @@
   import { queueIdleMount } from "../idle-mount";
   import { eagerContent, route } from "../router";
   import { componentTocOpen, DOC_THEMES, theme } from "../store";
-  import { setupTocScrollSpy } from "../toc-scroll-spy";
 
   type DocComponent = (typeof COMPONENT_API.components)[number];
 
@@ -57,10 +56,6 @@
     ? categoryFilterHref([category])
     : "/component-index";
 
-  let destroyTocSpy: (() => void) | undefined;
-  let mounted = false;
-  let tocSpyToken = 0;
-
   /**
    * The API section is a long page's largest part, 3,371 of DataTable's
    * 12,238 elements, and held up the first render. Mount it lazily.
@@ -79,7 +74,6 @@
     (selectedApiComponent?.slots.length ?? 0) * 120;
 
   onMount(() => {
-    mounted = true;
     if (!apiMounted) {
       unqueueApi = queueIdleMount(apiSection, () => {
         apiIdle = true;
@@ -94,30 +88,9 @@
     }
 
     return () => {
-      mounted = false;
       unqueueApi();
-      destroyTocSpy?.();
     };
   });
-
-  // Again once the API section mounts, so its headings have sections.
-  $: if (mounted) {
-    void initTocSpy(component, apiMounted);
-  }
-
-  async function initTocSpy(name: string, _apiMounted: boolean) {
-    destroyTocSpy?.();
-    destroyTocSpy = undefined;
-    const token = ++tocSpyToken;
-    await tick();
-
-    if (token !== tocSpyToken) return;
-
-    const page = document.querySelector(`[data-component="${name}"]`);
-    if (page) {
-      destroyTocSpy = setupTocScrollSpy(page);
-    }
-  }
 
   $: sourceCode = sourceRepoUrlForFilePath(
     api_components[0]?.filePath ?? "",

@@ -128,10 +128,9 @@ test("the table of contents follows into the API section", async ({ page }) => {
   await page.evaluate(() =>
     document.getElementById("component-api-slots")?.scrollIntoView(),
   );
-  await expect(page.locator(".toc-nav a.is-active").first()).toHaveAttribute(
-    "href",
-    "#component-api-slots",
-  );
+  await expect(
+    page.locator('.bx--toc a[aria-current="location"]').first(),
+  ).toHaveAttribute("href", "#component-api-slots");
 });
 
 test("scrolling down through the API tables doesn't move the page", async ({
