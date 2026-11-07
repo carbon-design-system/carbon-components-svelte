@@ -1,0 +1,87 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+// The floating surface is a `Popover` (see `_popover.scss`); this partial
+// lays out the question, the failure message and the two actions in it.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// Popconfirm component
+/// @access private
+/// @group components
+@mixin popconfirm {
+  // The popover places itself from this box, so it shrinks to the trigger.
+  .#{$prefix}--popconfirm {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  .#{$prefix}--popconfirm__trigger {
+    display: inline-flex;
+  }
+
+  // A narrow screen leaves the popover less than its width: it shrinks, and
+  // the title and description wrap. The margin keeps an edge-aligned popover
+  // on screen when its trigger sits near a side: `Popover` picks the side and
+  // edge that overflow least but does not slide the box back in.
+  .#{$prefix}--popconfirm__content {
+    display: grid;
+    box-sizing: border-box;
+    padding: $carbon--spacing-05;
+    inline-size: to-rem(288px);
+    max-inline-size: calc(100vw - #{$carbon--spacing-10});
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--popconfirm__title {
+    @include type-style("heading-compact-01");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--popconfirm__title-icon {
+    margin-inline-end: $carbon--spacing-03;
+    fill: $support-warning;
+    vertical-align: text-bottom;
+  }
+
+  .#{$prefix}--popconfirm__description {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--popconfirm__error {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    align-items: flex-start;
+    color: $text-error;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--popconfirm__error svg {
+    flex-shrink: 0;
+    fill: $support-error;
+    margin-block-start: to-rem(2px);
+  }
+
+  .#{$prefix}--popconfirm__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-block-start: $carbon--spacing-03;
+    column-gap: $carbon--spacing-03;
+  }
+
+  // A finger needs more than the 32px small button.
+  @media (pointer: coarse) {
+    .#{$prefix}--popconfirm__actions .#{$prefix}--btn {
+      min-block-size: to-rem(40px);
+    }
+  }
+}
+
+@include exports("popconfirm") {
+  @include popconfirm;
+}
