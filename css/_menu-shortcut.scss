@@ -35,6 +35,23 @@
     padding-inline-start: 0;
   }
 
+  // On Apple platforms, each key gets a fixed cell with a little space
+  // between cells, so the keys read as icons and line up in columns down
+  // the menu, as in macOS menus. Wider keys, such as "Esc" or "Delete",
+  // keep their own width.
+  .#{$prefix}--menu-option__info,
+  .#{$prefix}--overflow-menu-options__option-shortcut {
+    .#{$prefix}--kbd--muted .#{$prefix}--kbd__platform--apple {
+      gap: $carbon--spacing-01;
+    }
+
+    .#{$prefix}--kbd--muted
+      .#{$prefix}--kbd__platform--apple
+      .#{$prefix}--kbd__key {
+      min-width: 1em;
+    }
+  }
+
   .#{$prefix}--menu-option--disabled
     .#{$prefix}--menu-option__info
     .#{$prefix}--kbd__key,
