@@ -11,6 +11,7 @@ describe("localeDirection", () => {
     ["fa", "rtl"],
     ["he", "rtl"],
     ["ur", "rtl"],
+    ["ur-Aran", "rtl"],
     ["pa-Arab", "rtl"],
     ["pa", "ltr"],
   ])("%s is %s", (locale, expected) => {
