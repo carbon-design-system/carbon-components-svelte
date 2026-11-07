@@ -694,20 +694,22 @@ for (const componentName of getComponentNames()) {
   generatedMdByComponent.push({ componentName, md: generatedMd });
 }
 
-const componentMdSizes: Record<string, number> = {};
-
-await Promise.all(
-  generatedMdByComponent.map(async ({ componentName, md }) => {
-    const svelteFormatted = await formatSvelteFences(md);
-    const docFormatted = await formatMarkdown(svelteFormatted);
-    const docOut = asciiNormalizeGeneratedMarkdown(docFormatted);
-    fs.writeFileSync(
-      path.join(RAW_COMPONENTS_OUT_DIR, `${componentName}.md`),
-      docOut,
-      "utf8",
-    );
-    componentMdSizes[componentName] = Buffer.byteLength(docOut, "utf8");
-  }),
+// Promise.all keeps input order, so the keys keep one order across builds.
+// The order is part of the chunk hashes.
+const componentMdSizes = Object.fromEntries(
+  await Promise.all(
+    generatedMdByComponent.map(async ({ componentName, md }) => {
+      const svelteFormatted = await formatSvelteFences(md);
+      const docFormatted = await formatMarkdown(svelteFormatted);
+      const docOut = asciiNormalizeGeneratedMarkdown(docFormatted);
+      fs.writeFileSync(
+        path.join(RAW_COMPONENTS_OUT_DIR, `${componentName}.md`),
+        docOut,
+        "utf8",
+      );
+      return [componentName, Buffer.byteLength(docOut, "utf8")] as const;
+    }),
+  ),
 );
 
 fs.writeFileSync(
