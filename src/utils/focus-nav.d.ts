@@ -166,6 +166,8 @@ export type FocusNavOptions = {
   index?: number;
   /** The mounted element, or nothing when virtualization has not rendered it. Default: the matches of `selector`. */
   getItem?: (index: number) => HTMLElement | null | undefined;
+  /** The index of the item an element belongs to, or `-1`. Needed for a click or Tab onto an item to become the active one when there is no `selector`. */
+  getIndex?: (element: Element) => number;
   /** The id for "activedescendant". Default: the id of `getItem(index)`. */
   getId?: (index: number) => string;
   /** Virtualization hook, called before every move to `index`. Scroll it into view, and return a promise (such as Svelte's `tick()`) when it needs a render to be mounted. Return nothing when it is already in view. */

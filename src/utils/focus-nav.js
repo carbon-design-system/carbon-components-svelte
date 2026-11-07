@@ -441,6 +441,7 @@ export function mountedIndexes(start, end, active) {
  * @property {"extend" | "ignore"} [shift] - "extend" (default) moves on Shift+key and sets `extend`. "ignore" leaves Shift+key to the element, such as text selection in a search field.
  * @property {number} [index] - The initial active index. Default `-1`.
  * @property {(index: number) => HTMLElement | null | undefined} [getItem] - The mounted element, or nothing when virtualization has not rendered it. Default: the matches of `selector`.
+ * @property {(element: Element) => number} [getIndex] - The index of the item an element belongs to, or `-1`. Lets a click or Tab onto an item, and a key pressed on it, start from that item when there is no `selector` to find it by (a virtualized list).
  * @property {(index: number) => string} [getId] - The id for "activedescendant". Default: the id of `getItem(index)`.
  * @property {(index: number) => void | Promise<void>} [reveal] - Virtualization hook, called before every move to `index`. Scroll it into view, and return a promise (such as Svelte's `tick()`) when it needs a render to be mounted. Focus or `activeId` follow once the promise settles. Return nothing when it is already in view. A newer move supersedes a pending one.
  * @property {(index: number, move: FocusNavMove) => void | false} [onMove] - Called with the target before the cursor moves. Return `false` to take over (an extending Shift move that keeps the active cell, say); then call `set` yourself if the cursor should follow.
@@ -742,17 +743,29 @@ export function createFocusNav(options = {}) {
     itemCache = null;
     publish(current, get(store).activeId);
 
+    /**
+     * The item index an element belongs to, or -1: `getIndex` when given,
+     * else the position of the closest `selector` match.
+     * @param {Element} target
+     */
+    function indexOfTarget(target) {
+      if (config.getIndex) return config.getIndex(target);
+      if (!config.selector) return -1;
+      const item = target.closest(config.selector);
+      if (!item || !node.contains(item)) return -1;
+      itemCache = null;
+      return items().indexOf(/** @type {HTMLElement} */ (item));
+    }
+
     /** @param {KeyboardEvent} event */
     function onKeydown(event) {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const selector = config.selector;
       let from;
-      if (selector && target !== node) {
-        const item = target.closest(selector);
-        if (!item || !node.contains(item)) return;
-        itemCache = null;
-        const found = items().indexOf(/** @type {HTMLElement} */ (item));
+      if (target !== node) {
+        const found = indexOfTarget(target);
+        // With a selector, keys from elsewhere in the node are not ours.
+        if (found < 0 && config.selector && !config.getIndex) return;
         // Start from the item that holds focus, not a stale index.
         if (found >= 0 && config.mode !== "activedescendant") from = found;
       }
@@ -761,13 +774,10 @@ export function createFocusNav(options = {}) {
 
     /** @param {FocusEvent} event */
     function onFocusin(event) {
-      if (config.mode === "activedescendant" || !config.selector) return;
+      if (config.mode === "activedescendant") return;
       const target = event.target;
       if (!(target instanceof Element) || target === node) return;
-      const item = target.closest(config.selector);
-      if (!item) return;
-      itemCache = null;
-      const found = items().indexOf(/** @type {HTMLElement} */ (item));
+      const found = indexOfTarget(target);
       if (found >= 0 && found !== current) {
         current = found;
         publish(found, null);
