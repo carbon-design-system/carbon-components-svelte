@@ -47,6 +47,7 @@
   import Modal from "../Modal/Modal.svelte";
   import Search from "../Search/Search.svelte";
   import Tag from "../Tag/Tag.svelte";
+  import { focusHandoff } from "../utils/focus-handoff.js";
 
   // These tags list the set's tags; they must not register with it.
   setContext("carbon:TagSet", undefined);
@@ -65,6 +66,11 @@
     bind:this={listRef}
     class:bx--tag-set-modal__list={true}
     aria-label={title}
+    use:focusHandoff={{
+      items: "li",
+      target: ".bx--tag__close-icon:not(:disabled)",
+      fallback: () => listRef?.closest(".bx--modal")?.querySelector("input"),
+    }}
   >
     {#each tags as tag (tag.id)}
       <li>
