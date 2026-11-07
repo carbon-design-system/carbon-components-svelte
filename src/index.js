@@ -354,6 +354,7 @@ export {
   safeUrl,
   stripBidi,
 } from "./utils/safe-url.js";
+export { htmlToText, sanitizeHtml } from "./utils/sanitize-html.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
 export {
