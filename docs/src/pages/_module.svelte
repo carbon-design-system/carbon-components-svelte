@@ -35,6 +35,7 @@
     assertCategoriesCover,
     COMPONENT_CATEGORIES,
   } from "../component-categories";
+  import { loadIbmScripts } from "../ibm-scripts";
   import { beforeNavigate, componentPages, goto, isActive } from "../router";
   import { createSearch, type SearchDocument } from "../search";
   import type { CompactPage } from "../search-index";
@@ -149,6 +150,9 @@
     }
     return groups;
   })();
+
+  // IBM's footer and analytics, in production only.
+  onMount(() => (import.meta.env.DEV ? undefined : loadIbmScripts()));
 
   onMount(() =>
     beforeNavigate(() => {
@@ -363,40 +367,6 @@
   </SideNav>
   <slot />
 </Theme>
-
-<svelte:head>
-  {#if !import.meta.env.DEV}
-    <!-- Tealium/GA Set up -->
-    <script type="text/javascript">
-      window._ibmAnalytics = {
-        settings: {
-          name: "CarbonSvelte",
-          isSpa: true,
-          tealiumProfileName: "ibm-web-app",
-        },
-        onLoad: [["ibmStats.pageview", []]],
-      };
-      digitalData = {
-        page: {
-          pageInfo: {
-            ibm: { siteId: `IBM_${_ibmAnalytics.settings.name}` },
-          },
-          category: { primaryCategory: "PC100" },
-        },
-      };
-    </script>
-    <script
-      type="module"
-      src="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/footer.min.js"
-      defer
-    ></script>
-    <script
-      src="//1.www.s81c.com/common/stats/ibm-common.js"
-      type="text/javascript"
-      defer
-    ></script>
-  {/if}
-</svelte:head>
 
 <footer>
   <dds-footer-container disable-locale-button="true" size="micro"

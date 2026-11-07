@@ -73,6 +73,7 @@ export default {
     "docs/scripts/compile-cache.ts",
     "docs/src/idle-mount.ts",
     "docs/src/offscreen.ts",
+    "docs/src/ibm-scripts.ts",
     "docs/scripts/page-html.ts",
     "docs/scripts/example-source.ts",
   ],
