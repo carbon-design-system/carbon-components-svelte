@@ -1,7 +1,8 @@
 name: Docs examples
 
-# Type-checks the docs examples against the library's types, checks the
-# docs markup against the CSS, and server-renders the framed examples.
+# Type-checks and lints the docs site, type-checks its examples against the
+# library's types, checks the docs markup against the CSS, and
+# server-renders the framed examples.
 # Runs only when the docs change; `checks.yml` ignores `docs/**`.
 on:
   pull_request:
@@ -21,6 +22,18 @@ env:
   IBM_TELEMETRY_DISABLED: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # `bun lint`, which svelte-lint also runs, is only in canary builds.
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: canary
+      - run: bun ci --ignore-scripts
+      - run: bun lint docs
+      - run: bun run lint:svelte docs
+
   typecheck:
     runs-on: ubuntu-latest
     steps:
@@ -37,6 +50,14 @@ jobs:
 
       - name: Generate types
         run: bun run build:docs
+
+      # The site imports the search index, which the docs build generates.
+      - name: Generate the search index
+        run: bun run build:index-docs
+        working-directory: docs
+
+      - name: Type-check the docs site
+        run: bun run test:docs-types
 
       - name: Type-check examples
         run: bun run typecheck:examples
