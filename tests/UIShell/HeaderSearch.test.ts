@@ -391,13 +391,27 @@ describe("HeaderSearch", () => {
 
   describe("Accessibility", () => {
     it("should have proper ARIA attributes", () => {
-      render(HeaderSearchTest, { props: { active: true } });
+      render(HeaderSearchTest, {
+        props: { active: true, results: [{ id: "1", text: "Result one" }] },
+      });
 
       const searchInput = screen.getByRole("textbox");
       expect(searchInput).toHaveAttribute("aria-autocomplete", "list");
-      expect(searchInput.getAttribute("aria-controls")).toMatch(
-        /^ccs-[a-z0-9.]+-menu$/,
+      expect(searchInput.getAttribute("aria-controls")).toBe(
+        screen.getByRole("menu").id,
       );
+    });
+
+    it("should not reference the menu while there are no results to show", () => {
+      const { container } = render(HeaderSearchTest, {
+        props: { active: true },
+      });
+
+      expect(
+        container.querySelector(".bx--header__search-menu"),
+      ).not.toHaveAttribute("aria-owns");
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("aria-controls");
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     });
 
     it("should not reference a menu id via aria-owns/aria-controls/aria-activedescendant while closed", () => {
