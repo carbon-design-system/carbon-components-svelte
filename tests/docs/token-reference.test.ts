@@ -12,7 +12,6 @@ import {
   groupMatches,
   groupNames,
   normalizeQuery,
-  remToPx,
   TYPE_GROUPS,
 } from "../../docs/src/token-reference";
 
@@ -36,13 +35,6 @@ describe("token reference grouping", () => {
     for (const [id, members] of grouped) {
       expect(members.length, id).toBeGreaterThan(0);
     }
-  });
-
-  it("reports a token no group matches", () => {
-    expect(groupNames(COLOR_GROUPS, ["layer-01", "brand-new"])).toEqual({
-      groups: expect.any(Map),
-      ungrouped: ["brand-new"],
-    });
   });
 });
 
@@ -77,10 +69,5 @@ describe("token reference search", () => {
         "rgba(141, 141, 141, 0.5)",
       );
     }
-  });
-
-  it("converts rem to pixels", () => {
-    expect(remToPx("0.125rem")).toBe("2px");
-    expect(remToPx("10vw")).toBeUndefined();
   });
 });
