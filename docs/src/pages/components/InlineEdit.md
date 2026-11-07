@@ -143,6 +143,18 @@ Set `disabled` to `true` to turn off the field entirely: no edit affordance, and
 
 ## DataTable cells
 
-Use the `cell` slot to render `InlineEdit` for inline editing of a row field, the same way as other form inputs. Bind to the row field, then call `refreshRow(id)` from `on:save` so columns that derive from other fields on the same row (like `Total` below) stay in sync — `on:save` only fires on a real commit, unlike an input's `on:input`.
+Use the `cell` slot to render `InlineEdit` for inline editing of a row field, the same way as other form inputs.
+
+In a table cell, the field fills the cell's padding, so its text lines up with the column header. Pick the `size` that matches the table's row size, and the row keeps its height:
+
+| DataTable `size` | InlineEdit `size` |
+| ---------------- | ----------------- |
+| `compact`        | `"xs"`            |
+| `short`          | `"xs"`            |
+| `medium`         | `"sm"`            |
+| default          | `"md"`            |
+| `tall`           | `"lg"`            |
+
+A `short` row is 32px, and no InlineEdit size matches it, so an `"xs"` field sits centered in the row. Bind to the row field, then call `refreshRow(id)` from `on:save` so columns that derive from other fields on the same row (like `Total` below) stay in sync — `on:save` only fires on a real commit, unlike an input's `on:input`.
 
 <FileSource src="/framed/InlineEdit/InlineEditDataTableCell" />
