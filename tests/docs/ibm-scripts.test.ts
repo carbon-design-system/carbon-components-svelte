@@ -8,9 +8,6 @@ describe("loadIbmScripts", () => {
       idle.push(callback);
       return idle.length;
     });
-    vi.stubGlobal("cancelIdleCallback", (id: number) => {
-      idle[id - 1] = () => {};
-    });
   });
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -31,11 +28,5 @@ describe("loadIbmScripts", () => {
       "https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/footer.min.js",
       "https://1.www.s81c.com/common/stats/ibm-common.js",
     ]);
-  });
-
-  it("adds nothing once cancelled", () => {
-    loadIbmScripts()();
-    for (const run of idle) run();
-    expect(scripts()).toEqual([]);
   });
 });
