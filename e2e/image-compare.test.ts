@@ -319,26 +319,7 @@ test.describe("ImageCompare touch", () => {
     expect(await page.evaluate(() => scrollY)).toBe(0);
   });
 
-  test("a vertical swipe scrolls the page and does not move the divider", async ({
-    browserName,
-  }) => {
-    test.skip(browserName !== "chromium", "Touch swipes need CDP");
-    const client = await context.newCDPSession(page);
-    const from = await pointAt(stage(page, "slider"), 0.8);
-
-    await client.send("Input.synthesizeScrollGesture", {
-      x: from.x,
-      y: from.y,
-      yDistance: -300,
-      gestureSourceType: "touch",
-      speed: 800,
-    });
-
-    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(100);
-    await expect(valueDisplay(page)).toHaveText("50");
-  });
-
-  test("a slow vertical touch pan that starts on the stage never moves the divider", async ({
+  test("a vertical touch pan that starts on the stage scrolls the page and never moves the divider", async ({
     browserName,
   }) => {
     test.skip(browserName !== "chromium", "Touch swipes need CDP");
