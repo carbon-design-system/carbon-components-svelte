@@ -13,4 +13,10 @@
       helperText="40 of 100 records synced"
     />
   {/each}
+  <ProgressBar
+    data-testid="value-text"
+    value={25}
+    labelText="Setup"
+    valueText="1 of 4 complete"
+  />
 </div>

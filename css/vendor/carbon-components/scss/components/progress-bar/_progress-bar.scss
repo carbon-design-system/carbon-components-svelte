@@ -166,12 +166,15 @@
 // `valueText` sits after the (optional) status icon in the label row. Anchor
 // it to the row's end with its own margin so it doesn't compete with the
 // label/icon `space-between` for position. Tabular figures keep the
-// digits still as the value counts up.
+// digits still as the value counts up. The text reads in the direction of its
+// own script: inheriting `rtl`, English "1 of 4 complete" ran apart from its
+// digits ("of 4 complete 1").
 @mixin progress-bar-value-text {
   .#{$prefix}--progress-bar__value-text {
-    margin-left: auto;
+    margin-inline-start: auto;
     color: $text-secondary;
     font-variant-numeric: tabular-nums;
+    unicode-bidi: plaintext;
   }
 }
 
