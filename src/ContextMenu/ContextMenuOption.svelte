@@ -348,6 +348,8 @@
           query,
           itemToString: menuOptionLabel,
           index: focusIndex,
+          // Disabled options stay focusable, as with the arrow keys.
+          isDisabled: () => false,
         });
       }
 
