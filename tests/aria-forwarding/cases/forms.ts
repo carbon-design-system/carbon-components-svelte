@@ -11,6 +11,8 @@ import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/Fil
 import Filename from "carbon-components-svelte/FileUploader/Filename.svelte";
 import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
+import IPAddressInput from "carbon-components-svelte/IPAddressInput/IPAddressInput.svelte";
+import IPAddressListInput from "carbon-components-svelte/IPAddressInput/IPAddressListInput.svelte";
 import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
@@ -180,6 +182,22 @@ export const forms: AriaEntry[] = [
   {
     name: "ListBox",
     exempt: "container; ListBoxField and ListBoxMenu carry the roles",
+  },
+  {
+    name: "IPAddressInput",
+    render: (attrs) =>
+      render(IPAddressInput, {
+        props: { labelText: "Address", helperText: "A subnet", ...attrs },
+      }),
+    target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "IPAddressListInput",
+    render: (attrs) =>
+      render(IPAddressListInput, {
+        props: { labelText: "Sources", helperText: "CIDR blocks", ...attrs },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "ListBoxField",

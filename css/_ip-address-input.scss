@@ -1,0 +1,76 @@
+// IPAddressInput: a text input with a preview of the CIDR block or range.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// IPAddressInput: an address reads left to right on a right-to-left page
+/// @access private
+/// @group components
+@mixin ip-address-input {
+  // `::1` and `2001:db8::` mix digits, letters and colons, which a
+  // right-to-left base direction reorders (`::1` shows as `1::`). The
+  // field's own direction is set, not its text's, so the padding that makes
+  // room for the status icon has to move to the icon's side by hand: the icon
+  // sits at the page's inline end, and the field's inline end is now the
+  // other side. The `ccs-dir()` pairs hold for an `dir="ltr"` region inside a
+  // right-to-left page, where the icon is back on the right.
+  // The field and the preview fill the width, as a bare text input does.
+  .#{$prefix}--ip-address-input {
+    align-items: stretch;
+  }
+
+  .#{$prefix}--ip-address-input .#{$prefix}--text-input {
+    direction: ltr;
+    unicode-bidi: normal;
+  }
+
+  [dir="rtl"]
+    .#{$prefix}--ip-address-input
+    .#{$prefix}--text-input--invalid,
+  [dir="rtl"]
+    .#{$prefix}--ip-address-input
+    .#{$prefix}--text-input--warning,
+  [dir="rtl"]
+    .#{$prefix}--ip-address-input
+    .#{$prefix}--text-input-wrapper--readonly
+    .#{$prefix}--text-input {
+    padding-inline-start: ccs-dir($carbon--spacing-05, $carbon--spacing-08);
+    padding-inline-end: ccs-dir($carbon--spacing-08, $carbon--spacing-05);
+  }
+
+  .#{$prefix}--ip-address-input__preview {
+    @include type-style("helper-text-01");
+
+    inline-size: 100%;
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  // A bare `p` takes the body type style, so set the helper's here.
+  .#{$prefix}--ip-address-input__summary {
+    @include type-style("helper-text-01");
+
+    margin: 0;
+  }
+
+  .#{$prefix}--ip-address-input__details {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    margin: $carbon--spacing-02 0 0;
+    column-gap: $carbon--spacing-05;
+    row-gap: $carbon--spacing-01;
+
+    dd {
+      @include type-style("code-01");
+
+      margin: 0;
+      color: $text-primary;
+    }
+  }
+}
+
+@include exports("ip-address-input") {
+  @include ip-address-input;
+}
