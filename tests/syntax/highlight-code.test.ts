@@ -118,6 +118,14 @@ describe("highlightCode", () => {
     expect(painted()).toEqual(["syntax-bool: true"]);
   });
 
+  it("marks the element for the scoped ::highlight() rules", () => {
+    const div = mount("<div><code>1</code></div>");
+    const action = highlightCode(div, "js");
+    expect(div.hasAttribute("data-ccs-highlight")).toBe(true);
+    action.destroy();
+    expect(div.hasAttribute("data-ccs-highlight")).toBe(false);
+  });
+
   it("stops watching the text on destroy", async () => {
     const code = mount("<code>1</code>");
     highlightCode(code, "js").destroy();
