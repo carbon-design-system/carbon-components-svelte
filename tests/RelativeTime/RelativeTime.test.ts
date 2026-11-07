@@ -99,6 +99,40 @@ describe("RelativeTime", () => {
       expect(vi.getTimerCount()).toBe(0);
     });
 
+    it("with minUnit minute, reads now, then counts minutes", async () => {
+      render(RelativeTimeLive, {
+        props: { date: now - 2_000, minUnit: "minute" },
+      });
+
+      expect(screen.getByTestId("live")).toHaveTextContent("now");
+
+      vi.advanceTimersByTime(30_000);
+      await tick();
+      expect(screen.getByTestId("live")).toHaveTextContent("now");
+
+      vi.advanceTimersByTime(30_000);
+      await tick();
+      expect(screen.getByTestId("live")).toHaveTextContent("1 minute ago");
+    });
+
+    it("switches to the absolute time after absoluteAfter and stops", async () => {
+      render(RelativeTimeLive, {
+        props: { date: now - 59 * 60_000, absoluteAfter: 60 * 60_000 },
+      });
+
+      expect(screen.getByTestId("live")).toHaveTextContent("59 minutes ago");
+      expect(vi.getTimerCount()).toBe(1);
+
+      vi.advanceTimersByTime(60_000);
+      await tick();
+
+      // Newer ICU versions put a narrow no-break space before AM/PM.
+      expect(screen.getByTestId("live").textContent?.replace(/\s/g, " ")).toBe(
+        "11:01 AM",
+      );
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
     it.each([
       ["live is false", { live: false }],
       ["now is set", { now }],

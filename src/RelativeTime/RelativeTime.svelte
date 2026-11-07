@@ -42,6 +42,29 @@
   export let style = "long";
 
   /**
+   * Set the smallest unit shown. `"minute"` shows the locale's word for
+   * the present, such as "now", for any time under a minute, then counts
+   * minutes. `"second"` counts seconds.
+   * @type {"second" | "minute"}
+   */
+  export let minUnit = "second";
+
+  /**
+   * Show the absolute time once `date` is at least this many milliseconds
+   * in the past, such as `3_600_000` for one hour. The timer then stops.
+   * Leave unset to always show relative time.
+   * @type {number | undefined}
+   */
+  export let absoluteAfter = undefined;
+
+  /**
+   * Format for the absolute time shown after `absoluteAfter`. Honors
+   * `timeZone` the same way `titleFormatOptions` does.
+   * @type {Intl.DateTimeFormatOptions}
+   */
+  export let absoluteFormatOptions = { timeStyle: "short" };
+
+  /**
    * Set to `false` to disable the adaptive refresh timer.
    * @type {boolean}
    */
@@ -77,18 +100,28 @@
 
   // Re-read the clock whenever the inputs change. Otherwise `tickNow` is stale
   // (the timer is off, or its cadence is slow) and the new text is wrong.
-  $: handleTick(date, live, now);
+  $: handleTick(date, live, now, absoluteAfter);
   $: timestamp = toTimestamp(date);
   $: valid = !Number.isNaN(timestamp);
   $: referenceNow = now == null ? tickNow : toTimestamp(now);
-  $: formatted = valid
-    ? formatRelativeTime(timestamp, {
-        now: referenceNow,
-        locale,
-        numeric,
-        style,
-      })
-    : "";
+  $: absolute =
+    valid && absoluteAfter != null && referenceNow - timestamp >= absoluteAfter;
+  $: formatted = !valid
+    ? ""
+    : absolute
+      ? getDateTimeFormatter(
+          locale,
+          timeZone
+            ? { ...absoluteFormatOptions, timeZone }
+            : absoluteFormatOptions,
+        ).format(timestamp)
+      : formatRelativeTime(timestamp, {
+          now: referenceNow,
+          locale,
+          numeric,
+          style,
+          minUnit,
+        });
   // Intl writes the text for its own locale. Lay it out in that direction,
   // isolated from the page, so "1 hr. ago" does not read "hr. ago 1" on an
   // RTL page. A custom slot has no known locale, so its text picks its own.
@@ -101,7 +134,9 @@
         timeZone ? { ...titleFormatOptions, timeZone } : titleFormatOptions,
       ).format(timestamp)
     : undefined;
-  $: ticking = live && now == null && valid && typeof window !== "undefined";
+  // Absolute text never changes, so it needs no timer.
+  $: ticking =
+    live && now == null && valid && !absolute && typeof window !== "undefined";
   $: refreshMs = ticking ? getRelativeTimeRefreshMs(timestamp - tickNow) : 0;
 
   // Resubscribe only when `ticking` or `refreshMs` change. Reading `tickNow`

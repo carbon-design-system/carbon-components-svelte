@@ -48,7 +48,7 @@ function getRelativeTimeParts(diffMs) {
  * Format `target` relative to `now` using `Intl.RelativeTimeFormat`.
  *
  * @param {Date | number | string} target
- * @param {{ now?: number, locale?: string, numeric?: "always" | "auto", style?: "long" | "short" | "narrow" }} [options]
+ * @param {{ now?: number, locale?: string, numeric?: "always" | "auto", style?: "long" | "short" | "narrow", minUnit?: "second" | "minute" }} [options]
  * @returns {string} `""` when `target` is invalid.
  */
 export function formatRelativeTime(target, options = {}) {
@@ -57,9 +57,19 @@ export function formatRelativeTime(target, options = {}) {
     locale,
     numeric = "auto",
     style = "long",
+    minUnit = "second",
   } = options;
   const timestamp = toTimestamp(target);
   if (Number.isNaN(timestamp)) return "";
+
+  // Under a minute, a coarse clock reads Intl's own word for the present,
+  // such as "now", "jetzt" or "今", instead of counting seconds.
+  if (minUnit === "minute" && Math.abs(timestamp - now) < MINUTE) {
+    return getRelativeTimeFormatter(locale, { numeric: "auto", style }).format(
+      0,
+      "second",
+    );
+  }
 
   const { value, unit } = getRelativeTimeParts(timestamp - now);
   return getRelativeTimeFormatter(locale, { numeric, style }).format(
