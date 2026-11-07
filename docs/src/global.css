@@ -86,6 +86,19 @@ html {
   --cds-syntax-special-string: var(--cds-syntax-string);
 }
 
+/**
+ * Carbon gives `const`, `let`, and `function` the same cyan as the name
+ * they declare, so `const max` read as one word. They take the purple of
+ * the other keywords. Comments share the number green; they take the
+ * muted angle-bracket gray, so they step back from the code. Each color
+ * keeps 4.5:1 on the snippet in every theme.
+ */
+:root,
+:root[theme] {
+  --cds-syntax-definition-keyword: var(--cds-syntax-control-keyword);
+  --cds-syntax-comment: var(--cds-syntax-angle-bracket);
+}
+
 .override-tabs a.bx--tabs__nav-link,
 .override-tabs a.bx--tabs__nav-link:focus,
 .override-tabs a.bx--tabs__nav-link:active {
