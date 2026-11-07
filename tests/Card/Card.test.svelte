@@ -20,7 +20,8 @@
   export let horizontal: ComponentProps<Card>["horizontal"] = false;
   export let mediaPosition: ComponentProps<Card>["mediaPosition"] = "start";
   export let customIcon = false;
-  export let label: string | undefined = "Quarterly report";
+  export let label: string | undefined = undefined;
+  export let title = true;
   export let media = false;
   export let actions = false;
   export let footer = false;
@@ -56,7 +57,7 @@
         </CardAction>
       </CardActions>
     </CardHeader>
-  {:else}
+  {:else if title}
     <CardHeader data-testid="header">
       <CardTitle>Quarterly report</CardTitle>
     </CardHeader>

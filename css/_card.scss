@@ -83,6 +83,13 @@
     padding: $carbon--spacing-05;
   }
 
+  // A leading ghost button sits at the footer's edge, so its text lines
+  // up with the body text above it.
+  .#{$prefix}--card__footer:not(.#{$prefix}--card__footer--action-set)
+    > .#{$prefix}--btn--ghost:not(.#{$prefix}--btn--icon-only):first-child {
+    margin-inline-start: -$carbon--spacing-05;
+  }
+
   .#{$prefix}--card__footer--action-set {
     padding: 0;
     border-top: 1px solid $border-subtle;
@@ -117,9 +124,10 @@
     display: inline-flex;
   }
 
+  // Centered on the title's first line.
   .#{$prefix}--card__actions {
     position: absolute;
-    top: $carbon--spacing-03;
+    top: $carbon--spacing-04;
     display: inline-flex;
     width: calc(50% - #{$carbon--spacing-03});
     height: $carbon--spacing-07;
@@ -299,7 +307,7 @@
   .#{$prefix}--card__decorator {
     position: absolute;
     z-index: 1;
-    top: $carbon--spacing-03;
+    top: $carbon--spacing-04;
     display: flex;
     height: $carbon--spacing-07;
     align-items: center;
