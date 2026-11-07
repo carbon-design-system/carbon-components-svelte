@@ -13,9 +13,9 @@
    * @example
    * ```svelte
    * <Layer>
-   *   <TextInput labelText="On layer 2" />
+   *   <TextInput labelText="At level 1" />
    *   <Layer>
-   *     <TextInput labelText="On layer 3" />
+   *     <TextInput labelText="At level 2" />
    *   </Layer>
    * </Layer>
    * ```

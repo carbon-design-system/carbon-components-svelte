@@ -8,21 +8,21 @@ description: Layer puts content on the next Carbon surface, so fields, tiles, an
 
 ## Basic
 
-Carbon stacks surfaces in up to three layers. Components read contextual tokens (`layer`, `field`, `border-subtle`, …) instead of a fixed layer, and `Layer` re-points those tokens to the next level for everything inside it. A field on a layer-2 surface takes `field-02`, so it still stands out.
+Carbon stacks surfaces in up to three layers. Components read contextual tokens (`layer`, `field`, `border-subtle`, …) instead of a fixed layer, and `Layer` re-points those tokens to the next level for everything inside it. Levels count from 0, the page surface. Level 0 uses the `-01` tokens, so a field inside a level 1 `Layer` takes `field-02` and still stands out.
 
 `Layer` works with `all.css` and with the single-theme stylesheets.
 
 Each nested `Layer` steps up one level. Set `withBackground` to paint the layer's surface.
 
 <Stack gap={5}>
-  <TextInput labelText="Page (layer 1)" placeholder="field-01" />
+  <TextInput labelText="Page (level 0)" placeholder="field-01" />
   <Layer withBackground>
     <Box padding={5}>
       <Stack gap={5}>
-        <TextInput labelText="Layer 2" placeholder="field-02" />
+        <TextInput labelText="Level 1" placeholder="field-02" />
         <Layer withBackground>
           <Box padding={5}>
-            <TextInput labelText="Layer 3" placeholder="field-03" />
+            <TextInput labelText="Level 2" placeholder="field-03" />
           </Box>
         </Layer>
       </Stack>
@@ -36,14 +36,14 @@ A `Tile` paints the `layer` token, so a tile inside a `Layer` takes the next sur
 
 <Tile>
   <Stack gap={5}>
-    <Text>Tile on layer 1</Text>
+    <Text>Tile at level 0</Text>
     <Layer>
       <Tile>
         <Stack gap={5}>
-          <Text>Tile on layer 2</Text>
+          <Text>Tile at level 1</Text>
           <Layer>
             <Tile>
-              <Text>Tile on layer 3</Text>
+              <Text>Tile at level 2</Text>
             </Tile>
           </Layer>
         </Stack>
@@ -58,7 +58,7 @@ Set `level` to pick a level instead of counting from the parent: `0` is the page
 
 <Layer level={2} withBackground>
   <Box padding={5}>
-    <Search placeholder="Search on layer 3" />
+    <Search placeholder="Search at level 2" />
   </Box>
 </Layer>
 
