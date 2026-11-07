@@ -1,5 +1,11 @@
 <script>
-  import { Button, Content, Header, SidePanel } from "carbon-components-svelte";
+  import {
+    Button,
+    Content,
+    Header,
+    SidePanel,
+    Stack,
+  } from "carbon-components-svelte";
 
   let open = true;
   let width;
@@ -7,8 +13,10 @@
 
 <Header companyName="IBM" platformName="Cloud" />
 <Content>
-  <Button on:click={() => (open = true)}>View logs</Button>
-  <p>Width: {width ?? "md"}</p>
+  <Stack gap={5}>
+    <Button on:click={() => (open = true)}>View logs</Button>
+    <p>Width: {width ?? "md"}</p>
+  </Stack>
 </Content>
 
 <SidePanel bind:open bind:width resizable titleText="Logs">
