@@ -13,6 +13,12 @@
   // modal.
   const passive = new URLSearchParams(location.search).has("passive");
 
+  // `?select-on-open` mounts the select (and nothing else focusable in the
+  // body) in the update that opens the modal.
+  const selectOnOpen = new URLSearchParams(location.search).has(
+    "select-on-open",
+  );
+
   let open = false;
   let closeEvents = [];
 </script>
@@ -31,16 +37,20 @@
   <ModalHeader title="Modal title" />
   <ModalBody>
     <p data-testid="modal-body">Modal content</p>
-    <input
-      type="text"
-      data-modal-primary-focus
-      data-testid="modal-primary-focus"
-      aria-label="Primary focus input"
-    />
-    <Select data-testid="modal-select" labelText="Contact method">
-      <SelectItem value="slack" text="Slack" />
-      <SelectItem value="email" text="Email" />
-    </Select>
+    {#if !selectOnOpen}
+      <input
+        type="text"
+        data-modal-primary-focus
+        data-testid="modal-primary-focus"
+        aria-label="Primary focus input"
+      />
+    {/if}
+    {#if !selectOnOpen || open}
+      <Select data-testid="modal-select" labelText="Contact method">
+        <SelectItem value="slack" text="Slack" />
+        <SelectItem value="email" text="Email" />
+      </Select>
+    {/if}
   </ModalBody>
   {#if !passive}
     <ModalFooter>

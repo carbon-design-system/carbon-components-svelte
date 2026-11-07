@@ -17,6 +17,15 @@ test.describe("ComposedModal", () => {
     await expect(page.getByTestId("modal-body")).toHaveText("Modal content");
   });
 
+  test("focuses a select that mounts in the update that opens the modal", async ({
+    page,
+  }) => {
+    await page.goto("/composed-modal.html?select-on-open");
+    await page.getByTestId("open-modal").click();
+
+    await expect(page.getByTestId("modal-select")).toBeFocused();
+  });
+
   test("closes when close button is clicked", async ({ page }) => {
     await page.getByTestId("open-modal").click();
     await expect(page.locator(".bx--modal")).toHaveClass(/is-visible/);

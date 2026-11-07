@@ -56,6 +56,30 @@ export function focusQuietly(target, options) {
 }
 
 /**
+ * Give a dialog's first target focus quietly, and try once more on the next
+ * frame if focus did not land in the dialog. WebKit refuses to focus an
+ * element created in the same update that makes its dialog visible: it
+ * inherits the dialog's `visibility: hidden` until the next frame. The retry
+ * is skipped once the dialog closes or focus has landed inside it.
+ *
+ * @param {HTMLElement} target
+ * @param {Object} options
+ * @param {Element | null | undefined} options.container - The dialog.
+ * @param {() => boolean} options.isOpen
+ * @param {FocusOptions} [options.focusOptions]
+ * @returns {void}
+ */
+export function focusFirstQuietly(target, { container, isOpen, focusOptions }) {
+  focusQuietly(target, focusOptions);
+  if (container?.contains(document.activeElement)) return;
+  requestAnimationFrame(() => {
+    if (!isOpen() || !target.isConnected) return;
+    if (container?.contains(document.activeElement)) return;
+    focusQuietly(target, focusOptions);
+  });
+}
+
+/**
  * Whether focus is moving to `node` through `focusQuietly`. Call it from a
  * `focus` listener, which runs while focus moves.
  *

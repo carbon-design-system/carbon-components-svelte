@@ -174,6 +174,20 @@ test.describe("Modal", () => {
     await expect(trigger).toBeFocused();
   });
 
+  test("focuses a select that mounts in the update that opens the modal", async ({
+    page,
+  }) => {
+    await page.goto("/modal.html?select-on-open");
+    const trigger = page.getByTestId("open-modal");
+    await trigger.click();
+    await expect(page.getByTestId("modal-select")).toBeFocused();
+
+    await page.keyboard.press("Escape");
+    await expect(page.locator(".bx--modal")).not.toHaveClass(/is-visible/);
+    await trigger.click();
+    await expect(page.getByTestId("modal-select")).toBeFocused();
+  });
+
   test("closes on Escape when the primary button is disabled", async ({
     page,
   }) => {

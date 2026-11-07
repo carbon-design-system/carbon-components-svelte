@@ -226,7 +226,11 @@
   import { splitAria, splitAriaNaming } from "../utils/aria-naming.js";
   import { createDialogLifecycle } from "../utils/dialog-lifecycle.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { focusQuietly, initialFocus, restoreFocus } from "../utils/focus.js";
+  import {
+    focusFirstQuietly,
+    initialFocus,
+    restoreFocus,
+  } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
   import { trapFocus } from "../utils/trap-focus.js";
@@ -260,7 +264,12 @@
     });
     // The user didn't ask for a tooltip on the first focus target, so a
     // single Escape still closes the modal.
-    if (target) focusQuietly(target);
+    if (target) {
+      focusFirstQuietly(target, {
+        container,
+        isOpen: () => open,
+      });
+    }
   }
 
   const lifecycle = createDialogLifecycle({
