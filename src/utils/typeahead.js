@@ -4,8 +4,11 @@ import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
 import { debounce } from "./debounce.js";
 
 /**
- * Next enabled item whose text starts with `query`, searching forward from
- * `index` and wrapping once. Returns `index` if nothing matches.
+ * Next enabled item whose text starts with `query`, searching forward and
+ * wrapping once. A single character starts after `index`, so repeating it
+ * cycles through the matches; a longer query starts at `index`, so
+ * refining it keeps the current item if it still matches. Returns `index`
+ * if nothing matches.
  *
  * @template T
  * @param {object} options
@@ -29,7 +32,7 @@ export function typeaheadIndex({
     ((/** @type {T} */ item) =>
       Boolean(/** @type {{ disabled?: boolean }} */ (item)?.disabled));
   const needle = query.toLowerCase();
-  const start = index >= 0 ? index + 1 : 0;
+  const start = index < 0 ? 0 : query.length > 1 ? index : index + 1;
   for (let offset = 0; offset < items.length; offset++) {
     const i = (start + offset) % items.length;
     if (
