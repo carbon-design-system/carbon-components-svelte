@@ -17,6 +17,7 @@ import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownload
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+import JsonViewer from "carbon-components-svelte/JsonViewer/JsonViewer.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
@@ -510,6 +511,12 @@ export const interactive: AriaEntry[] = [
       render(TreeView, {
         props: { labelText: "Files", nodes, virtualize: true, ...attrs },
       }),
+    target: () => screen.getByRole("tree"),
+  },
+  {
+    name: "JsonViewer",
+    render: (attrs) =>
+      render(JsonViewer, { props: { value: { a: 1 }, ...attrs } }),
     target: () => screen.getByRole("tree"),
   },
   {

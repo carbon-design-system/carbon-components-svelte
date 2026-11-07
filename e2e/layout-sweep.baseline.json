@@ -960,6 +960,22 @@
     "message": "div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field > div.bx--tag.bx--tag--filter:nth-of-type(1): 1px outline inside 2px outline div.bx--multi-select__wrapper.bx--list-box__wrapper > div.bx--multi-select.bx--multi-select--selected > div.bx--list-box__field--wrapper > button.bx--list-box__field, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "json-viewer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--json-viewer__toolbar:nth-of-type(1) > div.bx--json-viewer__search > div.bx--search.bx--search--sm > input.bx--search-input",
+    "message": "div.bx--json-viewer__toolbar:nth-of-type(1) > div.bx--json-viewer__search > div.bx--search.bx--search--sm > input.bx--search-input: 2px outline inside bordered box div[data-testid=\"json-viewer\"] > div.bx--json-viewer__frame:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "json-viewer.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"json-viewer\"] > div.bx--json-viewer__frame:nth-of-type(2) > div.bx--json-viewer__tree:nth-of-type(2) > div.bx--json-viewer__row.bx--json-viewer__row--active:nth-of-type(2)",
+    "message": "div[data-testid=\"json-viewer\"] > div.bx--json-viewer__frame:nth-of-type(2) > div.bx--json-viewer__tree:nth-of-type(2) > div.bx--json-viewer__row.bx--json-viewer__row--active:nth-of-type(2): 2px outline inside bordered box div[data-testid=\"json-viewer\"] > div.bx--json-viewer__frame:nth-of-type(2), both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "list-box-icons.html",
     "variant": "1280-forced",
     "check": "borders",
