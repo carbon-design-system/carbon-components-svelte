@@ -88,4 +88,14 @@ $border-tile: map-get($carbon--theme, 'border-tile') !default;
   $border-subtle-selected: ccs-contextual('border-subtle-selected', $theme) !global;
   $border-strong: ccs-contextual('border-strong', $theme) !global;
   $border-tile: ccs-contextual('border-tile', $theme) !global;
+
+  // Text, icon, link and focus colors flip to their inverse values in a
+  // high-contrast notification, so its content reads on the dark fill.
+  $text-primary: ccs-contextual('text-primary', $theme) !global;
+  $text-secondary: ccs-contextual('text-secondary', $theme) !global;
+  $icon-primary: ccs-contextual('icon-primary', $theme) !global;
+  $icon-secondary: ccs-contextual('icon-secondary', $theme) !global;
+  $link-primary: ccs-contextual('link-primary', $theme) !global;
+  $link-primary-hover: ccs-contextual('link-primary-hover', $theme) !global;
+  $focus: ccs-contextual('focus', $theme) !global;
 }

@@ -63,6 +63,11 @@
     }
   }
 
+  .#{$prefix}--inline-notification--high-contrast
+    .#{$prefix}--inline-notification__text-wrapper {
+    @include notification--inverse-content;
+  }
+
   .#{$prefix}--inline-notification--high-contrast a { // ccs: flatten
     color: $link-inverse;
   }
