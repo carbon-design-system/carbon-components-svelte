@@ -52,6 +52,7 @@ $ccs-theme-switching: false !default;
 @import "carbon-components/scss/components/content-switcher/content-switcher";
 @import "carbon-components/scss/components/copy-button/copy-button";
 @import "carbon-components/scss/components/data-table/data-table";
+@import "./data-table-stacked";
 @import "carbon-components/scss/components/date-picker/date-picker";
 @import "carbon-components/scss/components/dropdown/dropdown";
 @import "carbon-components/scss/components/file-uploader/file-uploader";

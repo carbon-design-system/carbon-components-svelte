@@ -1,0 +1,268 @@
+// New feature: Carbon v10 has no stacked layout for its data table, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// Stacked rows for `DataTable`: each body row is a card, and each cell a
+/// label over a value. The label is the cell's `data-label`, set from the
+/// column header, so the cards read the same with no script.
+///
+/// The header row is hidden (`display: none`), not clipped. A clipped header
+/// would leave its sort buttons in the tab order with nothing to see. The
+/// cells keep their labels in text instead, and the table, its rows and its
+/// cells carry explicit roles (see `Table`), so changing `display` does not
+/// cost a browser the table.
+///
+/// Emitted once per breakpoint inside a container query on the container
+/// the `auto` mode sets, and once unconditionally for `always`. A container
+/// condition cannot read `var()`, so the two widths are fixed.
+/// @access private
+/// @group components
+@mixin data-table-stacked-layout($scope) {
+  // `Table` marks the table, which puts these above the size variants'
+  // `tbody tr` and `td` rules.
+  $table: ".#{$prefix}--data-table--stacked";
+
+  // The bar that holds the controls the hidden header held.
+  #{$scope} .#{$prefix}--data-table-stacked-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-06;
+    row-gap: $carbon--spacing-03;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  // Without a sticky header, the box is no taller than its cards. With
+  // `stickyHeaderMaxHeight`, the inline style still bounds it.
+  #{$scope} .#{$prefix}--data-table_inner-container {
+    max-height: none;
+    background-color: transparent;
+  }
+
+  #{$scope} #{$table},
+  #{$scope} #{$table} tbody,
+  #{$scope} #{$table} tfoot {
+    display: block;
+    background-color: transparent;
+  }
+
+  #{$scope} #{$table} thead {
+    display: none;
+  }
+
+  #{$scope} #{$table} tbody tr,
+  #{$scope} #{$table} tfoot tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    height: auto;
+    margin-block-end: $carbon--spacing-03;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  // A child row is the lower half of its parent's card, when expanded and
+  // there is anything in it.
+  #{$scope} #{$table} tbody tr[data-child-row]:empty {
+    display: none;
+  }
+
+  #{$scope} #{$table} tbody .#{$prefix}--expandable-row:not([data-child-row]) {
+    margin-block-end: 0;
+    border-block-end: 0;
+  }
+
+  #{$scope} #{$table} tbody tr[data-child-row] {
+    display: block;
+    border-block-start: 0;
+  }
+
+  // The cells. Each takes a line; the ones that lead a card share its first.
+  #{$scope} #{$table} td {
+    flex: 0 0 100%;
+    order: 5;
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
+    padding-block: $carbon--spacing-03;
+    text-align: start;
+  }
+
+  #{$scope} #{$table} td[colspan] {
+    order: 0;
+  }
+
+  // The cells on a card's first line stretch to its height, so no strip of
+  // the row's own fill shows above a shorter one, and center what they hold.
+  #{$scope} #{$table} .#{$prefix}--table-column-decorator,
+  #{$scope} #{$table} .#{$prefix}--table-expand,
+  #{$scope} #{$table} .#{$prefix}--table-column-checkbox,
+  #{$scope} #{$table} td[data-stacked="primary"],
+  #{$scope} #{$table} td[data-stacked="actions"] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  // The checkbox box is drawn by the label's `::before`, so a label in a
+  // flex cell shrinks to nothing, and with it its target.
+  #{$scope} #{$table} .#{$prefix}--table-column-checkbox .#{$prefix}--checkbox--inline {
+    min-width: $carbon--spacing-05;
+  }
+
+  #{$scope} #{$table} .#{$prefix}--table-column-decorator {
+    flex: 0 0 auto;
+    order: 0;
+  }
+
+  #{$scope} #{$table} .#{$prefix}--table-expand {
+    flex: 0 0 auto;
+    order: 1;
+    width: auto;
+  }
+
+  #{$scope} #{$table} .#{$prefix}--table-column-checkbox {
+    flex: 0 0 auto;
+    order: 2;
+  }
+
+  #{$scope} #{$table} td[data-stacked="primary"] {
+    @include type-style("heading-compact-01");
+
+    flex: 1 1 0;
+    order: 3;
+    color: $text-primary;
+  }
+
+  #{$scope} #{$table} td[data-stacked="actions"] {
+    flex: 0 0 auto;
+    order: 4;
+    margin-inline-start: auto;
+  }
+
+  #{$scope} #{$table} td[data-stacked="hidden"] {
+    display: none;
+  }
+
+  #{$scope} #{$table} tfoot td:empty,
+  #{$scope} #{$table} tfoot td[aria-hidden="true"] {
+    display: none;
+  }
+
+  // Alignment is for a column, and there is none.
+  #{$scope} #{$table} .#{$prefix}--table-column--align-end {
+    text-align: start;
+  }
+
+  // The label, over its value.
+  #{$scope} #{$table} td[data-label]::before {
+    @include type-style("label-01");
+
+    display: block;
+    margin-block-end: $carbon--spacing-01;
+    color: $text-secondary;
+    content: attr(data-label);
+  }
+
+  #{$scope} #{$table} td[data-stacked="primary"]::before,
+  #{$scope} #{$table} td[data-stacked="actions"]:not([data-label])::before {
+    content: none;
+  }
+
+  // A selected row fills with `Highlight` and its cells take `HighlightText`
+  // (see the table's forced-colors rule). The label and the title set
+  // their own colors above, so they take it back.
+  @media (forced-colors: active) {
+    #{$scope} #{$table} .#{$prefix}--data-table--selected td[data-label]::before,
+    #{$scope} #{$table} .#{$prefix}--data-table--selected td[data-stacked="primary"] {
+      color: HighlightText;
+    }
+  }
+
+  // Row heights step the padding between the pairs. The cells hold two
+  // lines, so each step is smaller than Carbon's row.
+  #{$scope} #{$table}.#{$prefix}--data-table--compact td {
+    padding-block: $carbon--spacing-01;
+  }
+
+  #{$scope} #{$table}.#{$prefix}--data-table--short td {
+    padding-block: $carbon--spacing-02;
+  }
+
+  #{$scope} #{$table}.#{$prefix}--data-table--md td {
+    padding-block: to-rem(6px);
+  }
+
+  #{$scope} #{$table}.#{$prefix}--data-table--tall td {
+    padding-block: $carbon--spacing-04;
+  }
+
+  // The first line of a card has no label to make room for.
+  #{$scope} #{$table} .#{$prefix}--table-column-decorator,
+  #{$scope} #{$table} .#{$prefix}--table-expand,
+  #{$scope} #{$table} .#{$prefix}--table-column-checkbox,
+  #{$scope} #{$table} td[data-stacked="actions"]:not([data-label]) {
+    height: auto;
+  }
+
+  #{$scope} #{$table} .#{$prefix}--table-column-menu {
+    height: auto;
+    padding-block: 0;
+  }
+
+  // A card has no pointer over it on a touch screen, and no row to hover.
+  // The menu is shown rather than found.
+  #{$scope} #{$table}
+    .#{$prefix}--table-column-menu
+    .#{$prefix}--overflow-menu
+    .#{$prefix}--overflow-menu__icon {
+    opacity: 1;
+  }
+}
+
+@include exports("data-table-stacked") {
+  // Hidden until a layout shows it.
+  .#{$prefix}--data-table-stacked-controls {
+    display: none;
+  }
+
+  .#{$prefix}--data-table-stacked-controls__select {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--data-table-stacked-controls__label {
+    @include type-style("body-compact-01");
+
+    margin-inline-start: $carbon--spacing-03;
+    color: $text-primary;
+    cursor: pointer;
+  }
+
+  // The container the `auto` mode queries. A container ignores its content
+  // when it sizes itself, so it must be sized by its parent.
+  .#{$prefix}--data-table-container--stacked-md,
+  .#{$prefix}--data-table-container--stacked-lg {
+    container: #{$prefix}--data-table-container / inline-size;
+    width: 100%;
+  }
+
+  @include data-table-stacked-layout(
+    ".#{$prefix}--data-table-container--stacked-always"
+  );
+
+  @each $name, $width in (md: 672px, lg: 1056px) {
+    @container #{$prefix}--data-table-container (width < #{to-rem($width)}) {
+      @include data-table-stacked-layout(
+        ".#{$prefix}--data-table-container--stacked-#{$name}"
+      );
+    }
+  }
+}
