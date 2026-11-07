@@ -98,7 +98,9 @@ rules = { "no-restricted-imports" = [
 # svelte-lint (`bun lint:svelte`) lints their scripts and markup expressions
 # with the rules above, and their markup with these.
 [svelte-lint]
-rules = { "svelte/require-each-key" = "off" }
+# `svelte/compiler`: the compiler's own warnings, such as a scoped selector
+# that matches nothing, which Svelte drops from the CSS without a word.
+rules = { "svelte/require-each-key" = "off", "svelte/compiler" = "error" }
 
 [[svelte-lint.overrides]]
 files = ["src/**/*.svelte"]
