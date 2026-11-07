@@ -125,9 +125,9 @@ Put a `CardMedia` in the `media` slot. It renders above the content at the aspec
       <img src="/card-media.svg" alt="" />
     </CardMedia>
     <CardHeader>
-      <CardTitle>Coastal sensors</CardTitle>
+      <CardTitle>Cloud spend</CardTitle>
     </CardHeader>
-    <CardBody>Tide and wave readings from 14 stations, every 10 minutes.</CardBody>
+    <CardBody>Spend by service across 12 accounts, updated daily.</CardBody>
   </Card>
 </Box>
 
@@ -141,9 +141,9 @@ Set `horizontal` to `true` to put the media beside the content. It fills the car
       <img src="/card-media.svg" alt="" />
     </CardMedia>
     <CardHeader>
-      <CardTitle>Coastal sensors</CardTitle>
+      <CardTitle>Cloud spend</CardTitle>
     </CardHeader>
-    <CardBody>Tide and wave readings from 14 stations, every 10 minutes.</CardBody>
+    <CardBody>Spend by service across 12 accounts, updated daily.</CardBody>
   </Card>
 </Box>
 
