@@ -472,7 +472,6 @@ function tokenize(html, b, initialMode) {
 
     if (next === "!") {
       if (html.startsWith("<!--", i)) {
-        let end;
         if (html.startsWith("<!-->", i)) {
           b.comment("");
           i += 5;
@@ -483,7 +482,7 @@ function tokenize(html, b, initialMode) {
           i += 6;
           continue;
         }
-        end = html.indexOf("-->", i + 4);
+        const end = html.indexOf("-->", i + 4);
         if (end === -1) {
           b.comment(html.slice(i + 4));
           i = len;

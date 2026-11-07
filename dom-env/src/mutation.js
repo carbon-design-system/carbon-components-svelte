@@ -58,15 +58,15 @@ export class MutationObserver {
   }
 
   observe(target, options = {}) {
-    let {
+    const {
       childList,
-      attributes,
-      characterData,
       subtree,
       attributeOldValue,
       characterDataOldValue,
       attributeFilter,
     } = options;
+    // Implied by the old-value and filter options when not set.
+    let { attributes, characterData } = options;
     if (
       (attributeOldValue !== undefined || attributeFilter !== undefined) &&
       attributes === undefined
