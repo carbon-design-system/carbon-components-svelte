@@ -2,36 +2,36 @@
 <html lang="en" theme="white">
   <head>
     <meta charset="utf-8" />
-    <!-- Fonts load only from IBM's CDN. TrustArc's cookie banner asks for
+    <!-- Fonts load only from the site. TrustArc's cookie banner asks for
          its own 156 KB of IBM Plex Sans TTFs, which the page already has.
          The browser logs a CSP error for each one it blocks. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="font-src 'self' https://1.www.s81c.com data:"
+      content="font-src 'self' data:"
     />
-    <link rel="preconnect" href="https://1.www.s81c.com" crossorigin />
     <!-- The fonts nearly every page's text uses. The stylesheet asks for them
-         only once a page renders, and text waits for its font. -->
+         only once a page renders, and text waits for its font. The site
+         serves them; see scripts/self-host-plex.ts. -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       crossorigin
-      href="https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-Regular-Latin1.woff2"
+      href="./node_modules/@ibm/plex-sans/fonts/split/woff2/IBMPlexSans-Regular-Latin1.woff2"
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       crossorigin
-      href="https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Sans/fonts/split/woff2/IBMPlexSans-SemiBold-Latin1.woff2"
+      href="./node_modules/@ibm/plex-sans/fonts/split/woff2/IBMPlexSans-SemiBold-Latin1.woff2"
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       crossorigin
-      href="https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Mono/fonts/split/woff2/IBMPlexMono-Regular-Latin1.woff2"
+      href="./node_modules/@ibm/plex-mono/fonts/split/woff2/IBMPlexMono-Regular-Latin1.woff2"
     />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
