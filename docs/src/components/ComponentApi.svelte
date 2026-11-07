@@ -52,6 +52,7 @@
 
   import {
     Box,
+    CodeSnippet,
     ListItem,
     OutboundLink,
     StructuredList,
@@ -64,7 +65,6 @@
   } from "carbon-components-svelte";
   import { eagerContent } from "../router";
   import CodeBlock from "./CodeBlock.svelte";
-  import InlineSnippet from "./InlineSnippet.svelte";
 
   /**
    * A table's height, roughly, which it reserves while the browser skips
@@ -187,7 +187,7 @@
         }) as prop (prop.name)}
           <StructuredListRow>
             <StructuredListCell noWrap>
-              <InlineSnippet code={prop.name} portalTooltip />
+              <CodeSnippet code={prop.name} type="inline" portalTooltip />
               {#if prop.reactive}
                 <Box
                   marginTop={3}

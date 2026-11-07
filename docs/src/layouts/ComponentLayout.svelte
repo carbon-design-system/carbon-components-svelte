@@ -30,7 +30,6 @@
   import ComponentApi from "../components/ComponentApi.svelte";
   import ComponentDocBarActions from "../components/ComponentDocBarActions.svelte";
   import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
-  import ComponentTocLabel from "../components/ComponentTocLabel.svelte";
   import ComponentTocNav from "../components/ComponentTocNav.svelte";
   import { queueIdleMount } from "../idle-mount";
   import { eagerContent, route } from "../router";
@@ -208,7 +207,6 @@
       />
     </div>
     <div class="toc mobile">
-      <ComponentTocLabel />
       <ComponentTocNav {headings} />
     </div>
     <slot />
@@ -270,7 +268,6 @@
 
     <svelte:fragment slot="aside">
       <div class="toc">
-        <ComponentTocLabel />
         <ComponentTocNav {headings} />
       </div>
     </svelte:fragment>

@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+  let offscreenObserver: IntersectionObserver | undefined;
+</script>
+
 <script lang="ts">
   /** The example's code, highlighted here rather than in the bundle. */
   export let code = "";
@@ -10,7 +14,6 @@
   import { flushSync, onMount } from "svelte";
   import { codeViewHeight } from "../code-view-height";
   import { queueIdleMount } from "../idle-mount";
-  import { markOffscreen } from "../offscreen";
   import { eagerContent } from "../router";
   import { theme } from "../store";
 
@@ -32,7 +35,20 @@
   $: if (mounted) unqueue();
 
   onMount(() => {
-    const unmarkOffscreen = framed ? () => {} : markOffscreen(viewer);
+    if (!framed) {
+      offscreenObserver ??= new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            entry.target.toggleAttribute(
+              "data-offscreen",
+              !entry.isIntersecting,
+            );
+          }
+        },
+        { rootMargin: "200px 0px" },
+      );
+      offscreenObserver.observe(viewer);
+    }
     if (!framed && !mounted) {
       unqueue = queueIdleMount(viewer, () => {
         idle = true;
@@ -51,7 +67,10 @@
     return () => {
       observer.disconnect();
       unqueue();
-      unmarkOffscreen();
+      if (!framed) {
+        offscreenObserver?.unobserve(viewer);
+        viewer.removeAttribute("data-offscreen");
+      }
     };
   });
 
