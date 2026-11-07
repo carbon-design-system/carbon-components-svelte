@@ -50,6 +50,7 @@ padding-block-start padding-bottom padding-inline padding-inline-end padding-inl
 padding-left padding-right padding-top page-break-after page-break-before page-break-inside
 perspective perspective-origin place-content place-items place-self pointer-events position
 quotes resize right rotate row-gap scale scroll-behavior scroll-margin scroll-padding
+scroll-margin-top scroll-margin-right scroll-margin-bottom scroll-margin-left scroll-margin-block scroll-margin-inline scroll-margin-block-start scroll-margin-block-end scroll-margin-inline-start scroll-margin-inline-end scroll-padding-top scroll-padding-right scroll-padding-bottom scroll-padding-left scroll-padding-block scroll-padding-inline scroll-padding-block-start scroll-padding-block-end scroll-padding-inline-start scroll-padding-inline-end
 scroll-snap-align scroll-snap-type scrollbar-color scrollbar-gutter scrollbar-width shape-outside
 stroke stroke-dasharray stroke-dashoffset stroke-linecap stroke-linejoin stroke-opacity stroke-width
 tab-size table-layout text-align text-align-last text-decoration text-decoration-color
@@ -92,7 +93,7 @@ border-top-width border-right-width border-bottom-width border-left-width border
 border-top-left-radius border-top-right-radius border-bottom-left-radius border-bottom-right-radius
 outline-width outline-offset letter-spacing word-spacing text-indent flex-basis font-size
 block-size inline-size min-block-size min-inline-size max-block-size max-inline-size
-scroll-margin scroll-padding`
+scroll-margin scroll-padding scroll-margin-top scroll-margin-right scroll-margin-bottom scroll-margin-left scroll-margin-block scroll-margin-inline scroll-margin-block-start scroll-margin-block-end scroll-margin-inline-start scroll-margin-inline-end scroll-padding-top scroll-padding-right scroll-padding-bottom scroll-padding-left scroll-padding-block scroll-padding-inline scroll-padding-block-start scroll-padding-block-end scroll-padding-inline-start scroll-padding-inline-end`
     .split(/\s+/)
     .filter(Boolean),
 );
