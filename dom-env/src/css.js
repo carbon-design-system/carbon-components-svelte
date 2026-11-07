@@ -701,6 +701,9 @@ const INITIAL = {
   clear: "none",
   "overflow-x": "visible",
   "overflow-y": "visible",
+  // As browsers report them: code that checks for clipping reads these.
+  contain: "none",
+  "content-visibility": "visible",
   opacity: "1",
   transform: "none",
   visibility: "visible",
