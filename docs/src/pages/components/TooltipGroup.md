@@ -59,6 +59,8 @@ Any component with a hover or focus tooltip joins the nearest group. Members of 
 | `Tooltip` | Always. A hover-opened `Tooltip` closes when another tooltip opens; one opened by keyboard stays open |
 | `PasswordInput` | Its visibility toggle, which opens without a delay but still hands off |
 | `Switch`, `Tab`, `ToggleButton` | When icon-only |
+| `OverflowMenu` | When it has an `iconDescription` and no `menu` slot |
+| `HeaderAction`, `FileUploaderButton` | When icon-only with an `iconDescription` |
 | `UserAvatar` | When it has `tooltipText` |
 
 ## Built-in groups
