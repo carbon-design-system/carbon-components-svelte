@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./helpers/host";
 
 test.describe("InlineNotification", () => {
@@ -68,6 +69,33 @@ test.describe("InlineNotification", () => {
           .soft(colors.link, `${theme} ${id} link`)
           .toBe(colors.linkInverse);
       }
+    }
+  });
+
+  // In a low-contrast notification on g100, the link color is too close to
+  // the text's to mark a link by color alone.
+  test("underlines a plain link in the subtitle", async ({ page }) => {
+    for (const theme of ["white", "g100"]) {
+      await page.evaluate(
+        (t) => document.documentElement.setAttribute("theme", t),
+        theme,
+      );
+      for (const kind of ["inline", "toast"]) {
+        for (const contrast of ["low", "high"]) {
+          const link = page
+            .getByTestId(`${kind}-link-${contrast}`)
+            .locator("a");
+          await expect
+            .soft(link, `${theme} ${kind} ${contrast}`)
+            .toHaveCSS("text-decoration-line", "underline");
+        }
+      }
+      const results = await new AxeBuilder({ page })
+        .include('[data-testid$="-link-low"]')
+        .include('[data-testid$="-link-high"]')
+        .withRules(["link-in-text-block"])
+        .analyze();
+      expect.soft(results.violations, theme).toEqual([]);
     }
   });
 });
