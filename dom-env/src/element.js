@@ -6,7 +6,7 @@ import {
   liveHTMLCollection,
   staticNodeList,
 } from "./collections.js";
-import { CSSStyleDeclaration } from "./css.js";
+import { computedProperty, CSSStyleDeclaration } from "./css.js";
 import {
   dispatch,
   fire,
@@ -54,6 +54,22 @@ import {
   XML_NS,
   XMLNS_NS,
 } from "./shared.js";
+
+/** Elements' captured pointer ids, for the few that capture any. */
+const captures = new WeakMap();
+
+function scrollElement(el, x, y, relative) {
+  let left = x;
+  let top = y;
+  if (x !== null && typeof x === "object") {
+    left = x.left;
+    top = x.top;
+  }
+  if (left !== undefined)
+    el.scrollLeft = (relative ? el.scrollLeft : 0) + (Number(left) || 0);
+  if (top !== undefined)
+    el.scrollTop = (relative ? el.scrollTop : 0) + (Number(top) || 0);
+}
 
 // --- Attr -------------------------------------------------------------------------
 
@@ -856,6 +872,56 @@ export class Element extends Node {
   }
   set scrollLeft(v) {
     this._scrollLeft = Number(v) || 0;
+  }
+  scroll(x, y) {
+    scrollElement(this, x, y, false);
+  }
+  scrollTo(x, y) {
+    scrollElement(this, x, y, false);
+  }
+  scrollBy(x, y) {
+    scrollElement(this, x, y, true);
+  }
+
+  // Pointer capture is bookkeeping only: there is no hit testing to
+  // redirect, and no `gotpointercapture` events.
+  setPointerCapture(pointerId) {
+    let ids = captures.get(this);
+    if (!ids) captures.set(this, (ids = new Set()));
+    ids.add(Number(pointerId));
+  }
+  releasePointerCapture(pointerId) {
+    captures.get(this)?.delete(Number(pointerId));
+  }
+  hasPointerCapture(pointerId) {
+    return captures.get(this)?.has(Number(pointerId)) ?? false;
+  }
+
+  /**
+   * Whether the element renders, from computed styles: connected, with a
+   * box (not `display: none` on it or an ancestor, nor `display: contents`
+   * on it), and not inside a `content-visibility: hidden` subtree; with the
+   * options, also visible and not transparent.
+   */
+  checkVisibility(options = {}) {
+    if (!this.isConnected) return false;
+    if (computedProperty(this, "display", null) === "contents") return false;
+    const opacity = options.opacityProperty || options.checkOpacity;
+    for (let el = this; el && el.nodeType === ELEMENT_NODE; el = el._parent) {
+      if (computedProperty(el, "display", null) === "none") return false;
+      if (
+        el !== this &&
+        computedProperty(el, "content-visibility", null) === "hidden"
+      )
+        return false;
+      if (opacity && Number(computedProperty(el, "opacity", null) || 1) === 0)
+        return false;
+    }
+    if (options.visibilityProperty || options.checkVisibilityCSS) {
+      const v = computedProperty(this, "visibility", null);
+      if (v === "hidden" || v === "collapse") return false;
+    }
+    return true;
   }
 
   // Shadow DOM: enough for code that probes it; no slotting or retargeting.

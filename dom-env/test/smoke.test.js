@@ -112,3 +112,29 @@ test("simplifies calc() and resolves rem like jsdom", () => {
     "calc(-2rem),2rem,24px,0",
   );
 });
+
+test("checks visibility from computed styles", () => {
+  const run = window();
+  assert.equal(
+    run(`document.body.innerHTML = '<div id="a"><b id="b">b</b></div><i id="c" style="visibility: hidden">c</i>';
+      const vis = (id, o) => document.getElementById(id).checkVisibility(o);
+      const before = [vis("b"), vis("c"), vis("c", { visibilityProperty: true })];
+      document.getElementById("a").style.display = "none";
+      [...before, vis("b"), document.createElement("p").checkVisibility()].join(",")`),
+    "true,true,false,false,false",
+  );
+});
+
+test("scrolls elements, tracks pointer capture and has fonts ready", async () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.scrollTo({ top: 40 }); d.scrollBy(5, 10);
+      d.setPointerCapture(1);
+      const captured = d.hasPointerCapture(1);
+      d.releasePointerCapture(1);
+      [d.scrollLeft, d.scrollTop, captured, d.hasPointerCapture(1), document.fonts.status].join(",")`),
+    "5,50,true,false,loaded",
+  );
+  assert.equal(await run("document.fonts.ready"), run("document.fonts"));
+});
