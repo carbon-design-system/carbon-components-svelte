@@ -1,0 +1,93 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./spacing-scale";
+
+$masonry-lanes: "(display: grid-lanes) and ((fit-tolerance: 0) or (flow-tolerance: 0) or (item-tolerance: 0))";
+
+/// Masonry: cards of uneven height packed into columns, in source order.
+///
+/// One grid template decides the column count in every state:
+/// - Before the script runs, and without one, the container is a plain grid
+///   with the items in rows, which reads in source order.
+/// - Where `display: grid-lanes` exists the browser packs the items.
+/// - Elsewhere the script places each item in the shortest column with an
+///   absolute offset inside its grid column (`--ccs-masonry-column` and
+///   `--ccs-masonry-top`), so the grid still sizes and mirrors the columns.
+///
+/// Hooks: `--ccs-masonry-column-width` (minimum column width),
+/// `--ccs-masonry-columns` (a fixed count) and `--ccs-masonry-gap`.
+/// @access private
+/// @group components
+@mixin masonry-layout {
+  .#{$prefix}--masonry {
+    --ccs-masonry-gap: #{$carbon--spacing-05};
+
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(var(--ccs-masonry-column-width, #{to-rem(256px)}), 100%), 1fr)
+    );
+    gap: var(--ccs-masonry-gap);
+    align-items: start;
+  }
+
+  .#{$prefix}--masonry--columns {
+    grid-template-columns: repeat(var(--ccs-masonry-columns), minmax(0, 1fr));
+  }
+
+  @each $step, $size in $ccs-spacing-scale {
+    .#{$prefix}--masonry--gap-#{$step} {
+      --ccs-masonry-gap: #{$size};
+    }
+  }
+
+  .#{$prefix}--masonry--gap-0 {
+    --ccs-masonry-gap: 0;
+  }
+
+  .#{$prefix}--masonry > * {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--masonry--placed {
+    block-size: var(--ccs-masonry-height);
+  }
+
+  .#{$prefix}--masonry--placed > * {
+    position: absolute;
+    grid-column: var(--ccs-masonry-column, 1) / span 1;
+    inset-block-start: var(--ccs-masonry-top, 0);
+    @include ccs-inset-inline(0, 0);
+  }
+
+  // The items sit in rows until the script packs them. Hidden, they do not
+  // jump. Where scripting is off the rows are all there is, so they show.
+  @media (scripting: enabled) {
+    .#{$prefix}--masonry--hide-until-placed.#{$prefix}--masonry--js:not(.#{$prefix}--masonry--placed) {
+      visibility: hidden;
+    }
+
+    @supports not (#{$masonry-lanes}) {
+      .#{$prefix}--masonry--hide-until-placed:not(.#{$prefix}--masonry--placed) {
+        visibility: hidden;
+      }
+    }
+  }
+
+  // A zero tolerance puts each item in the shortest lane, as the script does,
+  // so the tops never decrease along the source order. The property was
+  // item-tolerance and flow-tolerance before it was fit-tolerance.
+  @supports #{$masonry-lanes} {
+    .#{$prefix}--masonry:not(.#{$prefix}--masonry--js) {
+      display: grid-lanes;
+      fit-tolerance: 0;
+      flow-tolerance: 0;
+      item-tolerance: 0;
+    }
+  }
+}
+
+@include exports("masonry-layout") {
+  @include masonry-layout;
+}
