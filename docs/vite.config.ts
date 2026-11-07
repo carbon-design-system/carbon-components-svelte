@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import pkg from "../package.json" with { type: "json" };
+import { platformScript } from "../src/utils/keyboard-shortcut.js";
 import { carbonAlias } from "./carbon-alias.ts";
 import { cacheSvelteSteps } from "./scripts/compile-cache.ts";
 import { PAGE_EXTENSION } from "./scripts/constants.ts";
@@ -120,6 +121,14 @@ export default defineConfig({
   plugins: [
     componentApi(),
     pageHtml(path.join(__dirname, "src/pages")),
+    {
+      // Marks <html> with the platform before the first paint, so every Kbd
+      // shows the reader's keys at their own width.
+      name: "platform-script",
+      transformIndexHtml: () => [
+        { tag: "script", children: platformScript(), injectTo: "head-prepend" },
+      ],
+    },
     {
       name: "component-md-sizes",
       resolveId(source) {

@@ -201,7 +201,7 @@ Set `icon` for an icon at the start or `iconEnd` for one at the end; the label f
 
 ### Keyboard shortcuts
 
-Set `shortcut` to show an item's keys at the end of the row, such as `"mod+d"`: Command D on Apple platforms, Ctrl+D elsewhere. The item announces them with `aria-keyshortcuts`, and the menu widens, up to 20rem, so the keys don't squeeze the labels. The menu only shows the keys: bind the command itself with `onShortcut`.
+Set `shortcut` to show an item's keys at the end of the row, such as `"mod+d"`, which shows <DocKbd shortcut="mod+d" variant="muted" /> on your platform. The item announces them with `aria-keyshortcuts`, and the menu widens, up to 20rem, so the keys don't squeeze the labels. The menu only shows the keys: bind the command itself with `onShortcut`.
 
 <OverflowMenu>
   <OverflowMenuItem text="Edit" shortcut="mod+e" />

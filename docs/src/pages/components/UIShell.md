@@ -339,7 +339,7 @@ Add a global search component to the header.
 
 ### Keyboard shortcut
 
-Set `shortcut` to open the search from anywhere on the page, such as `"mod+k"` (Command K on Apple platforms, Ctrl K elsewhere). While closed, the search shows the keys beside its icon, or the icon alone on small screens, and announces them with `aria-keyshortcuts`. The global search above uses `mod+k`. To do something else, such as opening a command palette, handle `on:shortcut` and call `preventDefault()`.
+Set `shortcut` to open the search from anywhere on the page, such as `"mod+k"` (<DocKbd shortcut="mod+k" /> on your platform). While closed, the search shows the keys beside its icon, or the icon alone on small screens, and announces them with `aria-keyshortcuts`. The global search above uses `mod+k`. To do something else, such as opening a command palette, handle `on:shortcut` and call `preventDefault()`.
 
 ### Custom results
 
