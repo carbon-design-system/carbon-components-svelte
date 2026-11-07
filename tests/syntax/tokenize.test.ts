@@ -22,6 +22,7 @@ describe("tokenize", () => {
     ).toEqual([
       "module-keyword:import",
       "brace:{",
+      "definition:a",
       "brace:}",
       "module-keyword:from",
       'special-string:"x"',
@@ -312,6 +313,62 @@ describe("tokenize: keys, specifiers, and nesting", () => {
         'string:"x"',
       ]),
     );
+  });
+
+  test("marks import bindings as definitions and components as types", () => {
+    expect(
+      types(
+        'import Default, { a as b, type C } from "m";\nimport type { D } from "n";\nimport * as e from "o";\nimport type from "p";',
+        "ts",
+      ),
+    ).toEqual([
+      "module-keyword:import",
+      "type-name:Default",
+      "punctuation:,",
+      "brace:{",
+      "definition:a",
+      "keyword:as",
+      "definition:b",
+      "punctuation:,",
+      "definition-keyword:type",
+      "type-name:C",
+      "brace:}",
+      "module-keyword:from",
+      'special-string:"m"',
+      "punctuation:;",
+      "module-keyword:import",
+      "definition-keyword:type",
+      "brace:{",
+      "type-name:D",
+      "brace:}",
+      "module-keyword:from",
+      'special-string:"n"',
+      "punctuation:;",
+      "module-keyword:import",
+      "operator:*",
+      "keyword:as",
+      "definition:e",
+      "module-keyword:from",
+      'special-string:"o"',
+      "punctuation:;",
+      "module-keyword:import",
+      "definition:type",
+      "module-keyword:from",
+      'special-string:"p"',
+      "punctuation:;",
+    ]);
+  });
+
+  test("marks export default as a module keyword", () => {
+    const tokens = types(
+      "export default function f() {}\nconst m = import.meta.url;",
+      "js",
+    );
+    expect(tokens.slice(0, 2)).toEqual([
+      "module-keyword:export",
+      "module-keyword:default",
+    ]);
+    expect(tokens).toContain("property-name:meta");
   });
 
   test("reads rules, not declarations, inside an at-rule block", () => {

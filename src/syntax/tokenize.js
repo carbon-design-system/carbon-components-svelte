@@ -201,6 +201,8 @@ const JS_OPERATOR =
 const WHITESPACE = /\s+/y;
 const PUNCTUATION = /[{}()[\];,.:]/y;
 const UPPERCASE = /^[A-Z]/;
+/** A name or `{` after `type` in an import: `import type { A }`, `type A`. */
+const NEXT_IS_BINDING = /\s+(?!from\b)[\w${]|\s*\{/y;
 const TS_PRIMITIVES = new Set(
   "string number boolean any unknown never void object bigint symbol".split(
     " ",
@@ -285,6 +287,30 @@ function lastSignificant(out, end = out.length) {
     if (out[i].type !== null || out[i].text.trim() !== "") return out[i];
   }
   return undefined;
+}
+/**
+ * Whether the next token is in an `import` statement's bindings, before
+ * `from`: `import a, { b as c, type D } from …`, `import * as e from …`.
+ * @param {Token[]} out
+ */
+function inImportClause(out) {
+  for (let i = out.length - 1; i >= 0; i--) {
+    const { type, text } = out[i];
+    if (type === null) continue;
+    if (type === "module-keyword") return text === "import";
+    if (!(
+      text === "{" ||
+      text === "," ||
+      text === "*" ||
+      type === "definition" ||
+      type === "type-name" ||
+      type === "definition-keyword" ||
+      type === "keyword"
+    )) {
+      return false;
+    }
+  }
+  return false;
 }
 /**
  * Whether a `/` here starts a regular expression rather than division.
@@ -620,6 +646,21 @@ function opensBlock(previous) {
  */
 function classifyIdentifier(name, code, pos, out, bracket, svelte) {
   const previous = lastSignificant(out);
+  // `export default`: the module's default export, not a `switch` case.
+  if (name === "default" && previous?.text === "export") {
+    return "module-keyword";
+  }
+  if (inImportClause(out)) {
+    if (name === "from") return "module-keyword";
+    if (name === "as") return "keyword";
+    // `import type { A }`, `import { type A }`.
+    if (name === "type") {
+      NEXT_IS_BINDING.lastIndex = pos + name.length;
+      if (NEXT_IS_BINDING.test(code)) return "definition-keyword";
+    }
+    // A component or class keeps its tag and type color; others are bindings.
+    return UPPERCASE.test(name) ? "type-name" : "definition";
+  }
   const inBraces = bracket === "{" || bracket === "{pattern";
   if (previous?.text === "." || previous?.text === "?.") {
     NEXT_IS_CALL.lastIndex = pos + name.length;
