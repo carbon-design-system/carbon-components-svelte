@@ -9,6 +9,7 @@
    * @event {null} expand
    * @event {null} collapse
    * @event {null} copy
+   * @event {{ selectedIndex: number; title: string | undefined }} change
    * @event {{ error: unknown }} copy:error
    * @event {MouseEvent} mouseenter:copy-button
    * @event {MouseEvent} mouseleave:copy-button
@@ -68,6 +69,34 @@
    * container instead of stopping at 48rem.
    */
   export let fullWidth = false;
+
+  /**
+   * Specify a title, such as a file name, for a header above the code. It
+   * names the code container.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   * @type {string | undefined}
+   */
+  export let title = undefined;
+
+  /**
+   * Specify files to show one at a time, chosen from tabs in the header.
+   * The copy button copies the selected file's `code`. Takes the place of
+   * `code`.
+   *
+   * NOTE: this prop only works with the `type="multi"` variant.
+   * @type {Array<{ title: string; code: string }> | undefined}
+   */
+  export let files = undefined;
+
+  /**
+   * Specify the index of the selected file.
+   * @bindable writable
+   */
+  export let selectedIndex = 0;
+
+  /** Specify the ARIA label of the file tabs. */
+  export let filesLabel = "Files";
 
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
@@ -234,15 +263,22 @@
   } from "../utils/copy-feedback.js";
   import { dismiss } from "../utils/dismiss.js";
   import { joinDescribedBy } from "../utils/field-status.js";
+  import { hasModifierKey } from "../utils/has-modifier-key.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isScrollNearEnd } from "../utils/is-scroll-near-end.js";
+  import {
+    getLayoutDirection,
+    resolveLayoutDirection,
+  } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
+  import { rovingFocus } from "../utils/roving-focus.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
 
   const dispatch = createEventDispatcher();
+  const layoutDirection = getLayoutDirection();
 
   // Single/multi: naming and description belong on the `role="textbox"`
   // container, not the root `div`. A consumer `aria-label` wins over
@@ -253,6 +289,35 @@
     ariaDescribedBy,
     rest: wrapperProps,
   } = splitAriaNaming($$restProps));
+
+  // The header: file tabs, or a title. Single and inline snippets have none.
+  $: hasFiles = type === "multi" && !!files && files.length > 0;
+  $: hasHeader = type === "multi" && (hasFiles || !!title);
+  $: activeIndex = hasFiles
+    ? Math.min(
+        Math.max(Math.trunc(selectedIndex) || 0, 0),
+        (files ?? []).length - 1,
+      )
+    : 0;
+  $: activeCode = hasFiles ? files?.[activeIndex]?.code : code;
+
+  // The header names the code container, unless the consumer did.
+  $: headerLabelledBy =
+    !hasHeader || ariaLabelledBy || ariaLabel
+      ? undefined
+      : hasFiles
+        ? `${id}-tab-${activeIndex}`
+        : `${id}-title`;
+
+  /** @type {null | HTMLDivElement} */
+  let tabListRef = null;
+
+  /** @param {number} index */
+  function selectFile(index) {
+    if (index === activeIndex || disabled) return;
+    selectedIndex = index;
+    dispatch("change", { selectedIndex: index, title: files?.[index]?.title });
+  }
 
   // Feedback is portalled by default; only an explicit `portalTooltip={false}`
   // opts back into Carbon's inline caret.
@@ -329,7 +394,7 @@
    * @returns {string}
    */
   function getCopyText() {
-    if (code !== undefined) return code;
+    if (activeCode !== undefined) return activeCode;
     // The inline <code> pads the slot with template spaces; trim only there.
     // Single/multi read the <pre>, where leading indentation is content.
     if (type === "inline") return inlineCodeRef?.textContent?.trim() ?? "";
@@ -416,9 +481,10 @@
       type === "multi" &&
       showMoreLess &&
       !wrapText &&
-      typeof code === "string" &&
+      typeof activeCode === "string" &&
       canExpand &&
-      code.replace(/\n$/, "").split("\n").length > maxCollapsedNumberOfRows;
+      activeCode.replace(/\n$/, "").split("\n").length >
+        maxCollapsedNumberOfRows;
   }
 
   // Multi-line min/max heights come from row-count props (1rem a row).
@@ -640,6 +706,7 @@
     class:bx--snippet--wraptext={wrapText}
     class:bx--snippet--single={type === "single"}
     class:bx--snippet--multi={type === "multi"}
+    class:bx--snippet--has-header={hasHeader}
     class:bx--snippet--disabled={disabled}
     class:bx--snippet--full-width={fullWidth}
     {...wrapperProps}
@@ -647,14 +714,65 @@
     on:mouseenter
     on:mouseleave
   >
+    {#if hasHeader}
+      <div class:bx--snippet__header={true}>
+        {#if hasFiles}
+          <!-- The files are tabs, and the code container is their tab panel,
+               which a read-only textbox cannot also be. -->
+          <div
+            bind:this={tabListRef}
+            role="tablist"
+            aria-label={filesLabel}
+            class:bx--snippet__tabs={true}
+            use:rovingFocus={{
+              selector: "[role='tab']",
+              orientation: "horizontal",
+              skipDisabled: true,
+              focusOnMove: true,
+              getActiveIndex: () => activeIndex,
+              rtl: () =>
+                resolveLayoutDirection($layoutDirection, tabListRef) === "rtl",
+              onMove: (index, event) => {
+                // Alt/Ctrl/Meta+Arrow belong to the browser.
+                if (hasModifierKey(event)) return;
+                event.preventDefault();
+                selectFile(index);
+              },
+            }}
+          >
+            {#each files ?? [] as file, index (index)}
+              <button
+                type="button"
+                role="tab"
+                id="{id}-tab-{index}"
+                aria-selected={index === activeIndex}
+                aria-controls={id}
+                tabindex={index === activeIndex ? 0 : -1}
+                {disabled}
+                dir="auto"
+                class:bx--snippet__tab={true}
+                class:bx--snippet__tab--selected={index === activeIndex}
+                on:click={() => selectFile(index)}>{file.title}</button
+              >
+            {/each}
+          </div>
+        {:else}
+          <span id="{id}-title" dir="auto" class:bx--snippet__title={true}
+            >{title}</span
+          >
+        {/if}
+      </div>
+    {/if}
+    <!-- A tab panel with no focusable content takes the tab stop itself. -->
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       {id}
-      role="textbox"
+      role={hasFiles ? "tabpanel" : "textbox"}
       tabindex={disabled ? undefined : 0}
-      aria-readonly="true"
-      aria-multiline={type === "multi" ? "true" : undefined}
-      aria-label={ariaLabel ?? codeLabel}
-      aria-labelledby={ariaLabelledBy}
+      aria-readonly={hasFiles ? undefined : "true"}
+      aria-multiline={type === "multi" && !hasFiles ? "true" : undefined}
+      aria-label={ariaLabel ?? (headerLabelledBy ? undefined : codeLabel)}
+      aria-labelledby={ariaLabelledBy ?? headerLabelledBy}
       aria-describedby={ariaDescribedBy}
       class:bx--snippet-container={true}
       class:bx--snippet-container--fade-top={showTopFade}
@@ -666,7 +784,7 @@
       bind:this={containerRef}
       on:scroll={updateScrollState}
     >
-      <pre bind:this={ref}><code><slot>{code}</slot></code></pre>
+      <pre bind:this={ref}><code><slot>{activeCode}</slot></code></pre>
     </div>
     {#if !hideCopyButton}
       <CopyButton
