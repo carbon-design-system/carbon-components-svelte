@@ -2,9 +2,11 @@
 
 // Anything that looks like a URL: a scheme with `//`, `mailto:`, `tel:`,
 // or a bare `www.` host. Whether it becomes a link is decided after
-// parsing, against the allowed schemes.
+// parsing, against the allowed schemes. The scheme is capped so a failed
+// attempt reads a bounded number of characters; without the cap, a long
+// run such as "a.a.a." is rescanned from every dot, which is quadratic.
 const CANDIDATE =
-  /(?:\b[a-z][a-z0-9+.-]*:\/\/|\bmailto:|\btel:|\bwww\.)[^\s<>]+/gi;
+  /(?:\b[a-z][a-z0-9+.-]{0,31}:\/\/|\bmailto:|\btel:|\bwww\.)[^\s<>]+/gi;
 
 const TRAILING = /[.,!?;:'"]$/;
 const BARE_HOST = /^www\./i;
@@ -17,20 +19,22 @@ const BARE_HOST = /^www\./i;
  * @param {string} url
  */
 function trimEnd(url) {
-  let end = url;
-  for (;;) {
-    if (TRAILING.test(end)) {
-      end = end.slice(0, -1);
-      continue;
+  let end = url.length;
+  // Brackets are counted once and adjusted as characters are dropped.
+  /** @type {Record<string, number>} */
+  const count = { "(": 0, ")": 0, "[": 0, "]": 0 };
+  for (const char of url) if (char in count) count[char]++;
+
+  while (end > 0) {
+    const last = url[end - 1];
+    if (!TRAILING.test(last)) {
+      const open = last === ")" ? "(" : last === "]" ? "[" : undefined;
+      if (!open || count[last] <= count[open]) break;
     }
-    const last = end[end.length - 1];
-    const open = last === ")" ? "(" : last === "]" ? "[" : undefined;
-    if (open && end.split(last).length > end.split(open).length) {
-      end = end.slice(0, -1);
-      continue;
-    }
-    return end;
+    if (last in count) count[last]--;
+    end--;
   }
+  return url.slice(0, end);
 }
 
 /**
