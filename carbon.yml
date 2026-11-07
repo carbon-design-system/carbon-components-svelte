@@ -721,6 +721,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Kbd
+  key-value-editor:
+    name: Key value editor
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/key-value-editor.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/KeyValueEditor
   layer:
     name: Layer
     status: stable
