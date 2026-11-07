@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "vitest",
+    "test": "bun --bun vitest",
     "test:types": "svelte-typecheck --workspace ../tests --tsconfig ../tests-svelte3/tsconfig.check.json --svelte node_modules/svelte --checker bun --diagnostic-sources js --out-dir node_modules/.cache/svelte-typecheck/tests"
   },
   "devDependencies": {
