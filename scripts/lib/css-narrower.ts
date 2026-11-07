@@ -34,7 +34,7 @@ export const cssNarrower: Narrower<"unit" | "e2e"> = {
     const entries = stylesheetEntries(graph);
     try {
       const [{ changedSelectors, selectorSources }, { compileAt }] =
-        await Promise.all([import("./css-delta"), import("crassus/git")]);
+        await Promise.all([import("./css-delta.ts"), import("crassus/git")]);
       const [before, after] = await Promise.all([
         compileAt(base.commit, { cwd: root, entries }),
         compileAt(head.commit, { cwd: root, entries }),

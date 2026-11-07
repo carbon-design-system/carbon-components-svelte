@@ -219,9 +219,10 @@ jobs:
       # dependencies, so it plans without an install, except to compile and
       # diff the CSS for a css/ change, which narrows the e2e tests to the
       # pages that render a changed class (scripts/lib/css-narrower.ts).
-      # Pushes to master run everything, which catches any miss.
+      # Pushes to master run everything, which catches any miss. Bun only
+      # for that css/ install: crassus runs on Bun's APIs.
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
       - run: bun ci --ignore-scripts
         if: github.event_name == 'pull_request' && steps.filter.outputs.css == 'true'
       # crassus caches each compile by css/ tree, so a rerun or a later push
@@ -240,13 +241,28 @@ jobs:
           path: .bivium/cache
           key: bivium-${{ steps.checkout.outputs.base }}
           restore-keys: bivium-
-      # The version package.json pins, run without the install when no css/
-      # change needed one. `--bun` because the config is TypeScript, which the
-      # runner's Node can't load.
+      # The bivium bun.lock pins, fetched straight from the registry and
+      # checked against the lock's hash: npx took 1.4 s to install it, and
+      # bunx needs Bun. Node loads the TypeScript config, so only the css/
+      # narrower, which runs crassus on Bun's APIs, needs Bun.
       - name: Select affected tests
         id: select
         if: github.event_name == 'pull_request'
-        run: bunx --bun "bivium@$(jq -r '.devDependencies.bivium' package.json)" plan "origin/${{ github.base_ref }}" --github
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          CSS: ${{ steps.filter.outputs.css }}
+        run: |
+          read -r version integrity < <(sed -n 's/^ *"bivium": \["bivium@\([^"]*\)".*"\(sha512-[^"]*\)"\],$/\1 \2/p' bun.lock) ||
+            { echo "::error::No bivium in bun.lock"; exit 1; }
+          curl -fsS -o "$RUNNER_TEMP/bivium.tgz" "https://registry.npmjs.org/bivium/-/bivium-$version.tgz"
+          if [ "sha512-$(openssl dgst -sha512 -binary "$RUNNER_TEMP/bivium.tgz" | openssl base64 -A)" != "$integrity" ]; then
+            echo "::error::bivium-$version.tgz doesn't match its bun.lock integrity"
+            exit 1
+          fi
+          tar -xzf "$RUNNER_TEMP/bivium.tgz" -C "$RUNNER_TEMP"
+          if [ "$CSS" = true ]; then runtime=bun; else runtime=node; fi
+          echo "bivium $version on $runtime $("$runtime" --version)"
+          "$runtime" "$RUNNER_TEMP/package/cli.js" plan "origin/$BASE_REF" --github
 
       # One e2e shard for a small selection. A second one costs a runner and
       # its own install, browser and CSS setup to save ~0.3 s of tests per
