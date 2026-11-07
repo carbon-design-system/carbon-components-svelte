@@ -167,6 +167,25 @@ describe("CopyText", () => {
     expect(writeText).toHaveBeenCalledWith("abc");
   });
 
+  it("describes the button with the value", () => {
+    render(CopyText, { props: { text: "abc" } });
+
+    expect(screen.getByRole("button")).toHaveAccessibleDescription("abc");
+  });
+
+  it("joins a consumer's aria-describedby after the value", () => {
+    render(CopyText, {
+      props: { text: "abc", extra: { "aria-describedby": "hint" } },
+    });
+
+    const button = screen.getByRole("button");
+    const [valueId, hint] = (
+      button.getAttribute("aria-describedby") ?? ""
+    ).split(" ");
+    expect(document.getElementById(valueId)).toHaveTextContent("abc");
+    expect(hint).toBe("hint");
+  });
+
   it("merges restProps and keeps the root class", () => {
     render(CopyText, {
       props: {
