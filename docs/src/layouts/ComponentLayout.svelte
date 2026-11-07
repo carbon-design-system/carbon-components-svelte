@@ -270,8 +270,8 @@
   /* A top margin collapses with the last example's, so the break is the
      same size on every page. */
   .component-api-header {
-    margin-top: var(--cds-layout-06);
-    margin-bottom: var(--cds-layout-02);
+    margin-top: var(--cds-spacing-12);
+    margin-bottom: var(--cds-spacing-06);
   }
 
   .tab-content-spacing {

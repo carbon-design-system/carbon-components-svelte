@@ -133,7 +133,7 @@
   .code-placeholder {
     overflow: hidden;
     margin: 0;
-    padding: 1rem;
+    padding: var(--cds-spacing-05);
     background-color: var(--cds-layer-01);
     color: var(--cds-text-primary);
     font-family: "IBM Plex Mono", Menlo, "DejaVu Sans Mono", monospace;
@@ -142,9 +142,8 @@
   }
 
   .preview {
-    margin-bottom: var(--cds-layout-04);
-    margin-left: -1rem;
-    margin-right: -1rem;
+    margin-bottom: var(--cds-spacing-09);
+    margin-inline: calc(-1 * var(--cds-spacing-05));
   }
 
   @media (max-width: 672px) {
