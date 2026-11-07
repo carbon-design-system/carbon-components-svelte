@@ -198,6 +198,13 @@
    */
   const initialSwitches = createInitOrder();
   let claimedBySelected = false;
+  /**
+   * Panels claim their position too, so a panel renders paired with the
+   * switch at the same position before registration flushes. Closed on
+   * mount.
+   * @type {ReturnType<typeof createInitOrder<string>>}
+   */
+  const initialPanels = createInitOrder();
 
   /**
    * @type {(id: string, selected: boolean) => void}
@@ -281,6 +288,14 @@
       needsPanelSync = true;
       return [...current, { id }];
     });
+  }
+
+  /**
+   * @type {(id: string) => string | undefined}
+   */
+  function claimPanel(id) {
+    const index = initialPanels.claim(id);
+    return index === undefined ? undefined : initialSwitches.at(index);
   }
 
   /**
@@ -382,11 +397,13 @@
     tabStopId,
     pairs,
     addPanel,
+    claimPanel,
     removePanel,
   });
 
   onMount(() => {
     initialSwitches.close();
+    initialPanels.close();
     // A keyed reorder moves switches without re-registering them. Resync in
     // afterUpdate, which keeps the selected switch selected.
     return observeDomOrder(/** @type {HTMLDivElement} */ (ref), {
