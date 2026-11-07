@@ -1026,6 +1026,55 @@ test.describe("right-to-left layout", () => {
       expect.soft(offsets, `${dir} end offsets`).toEqual([0, 0]);
     }
   });
+
+  // The accent edge, the icon, the text, the action and the close button
+  // sit as far from the inline start as they do in LTR, at every width.
+  test("mirrors notifications and callouts", async ({ page }) => {
+    const offsets = (dir: "ltr" | "rtl") =>
+      page.evaluate(async (dir) => {
+        await document.fonts.ready;
+        const parts = [
+          "__icon",
+          "__text-wrapper",
+          "__action-button",
+          "__close-button",
+        ];
+        const result: Record<string, unknown> = {};
+        for (const root of document.querySelectorAll<HTMLElement>(
+          "[data-testid*=notification], [data-testid=callout]",
+        )) {
+          const node = root.firstElementChild as HTMLElement;
+          const box = node.getBoundingClientRect();
+          const style = getComputedStyle(node);
+          const kind = node.className.match(/bx--(inline|toast)-notification/);
+          const name = root.dataset.testid;
+          result[`${name} accent`] =
+            dir === "rtl" ? style.borderRightWidth : style.borderLeftWidth;
+          const edge = getComputedStyle(node, "::before");
+          if (edge.content !== "none") {
+            result[`${name} low-contrast edge`] =
+              dir === "rtl" ? edge.borderRightWidth : edge.borderLeftWidth;
+          }
+          for (const part of parts) {
+            const rect = node
+              .querySelector(`.bx--${kind?.[1]}-notification${part}`)
+              ?.getBoundingClientRect();
+            if (!rect) continue;
+            result[`${name} ${part}`] =
+              dir === "rtl"
+                ? [box.right - rect.right, box.right - rect.left].map(Math.round)
+                : [rect.left - box.left, rect.right - box.left].map(Math.round);
+          }
+        }
+        return result;
+      }, dir);
+
+    const ltr = await offsets("ltr");
+    // Guard against a selector that stops matching.
+    expect(Object.keys(ltr).length).toBeGreaterThan(12);
+    await setDirection(page, "rtl");
+    expect(await offsets("rtl")).toEqual(ltr);
+  });
 });
 
 // Icons that point forward or back, by meaning, mirror in RTL. A `dir="ltr"`

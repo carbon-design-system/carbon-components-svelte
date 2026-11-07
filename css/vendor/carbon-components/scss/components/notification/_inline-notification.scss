@@ -103,11 +103,12 @@
     &::before {
       position: absolute;
       top: 0;
-      left: 0;
+      inset-inline-start: 0;
       width: 100%;
       height: 100%;
       box-sizing: border-box;
-      border-width: 1px 1px 1px 0;
+      border-width: 1px;
+      border-inline-start-width: 0;
       border-style: solid;
       content: '';
       filter: opacity(0.4);
@@ -197,17 +198,18 @@
     // pushing the action onto the next line.
     min-width: 0;
     flex: 1 1 0%;
-    margin: 0 $carbon--spacing-09 0 $carbon--spacing-05;
+    margin: 0;
+    margin-inline: $carbon--spacing-05 $carbon--spacing-09;
 
     @include carbon--breakpoint(md) {
-      margin: 0 $carbon--spacing-05;
+      margin-inline: $carbon--spacing-05;
     }
   }
 
   .#{$prefix}--inline-notification__icon {
     flex-shrink: 0;
     margin-top: to-rem(14px);
-    margin-right: $carbon--spacing-05;
+    margin-inline-end: $carbon--spacing-05;
   }
 
   .#{$prefix}--inline-notification__text-wrapper {
@@ -226,7 +228,8 @@
     .#{$prefix}--inline-notification__title {
       @include type-style('heading-compact-01');
 
-      margin: 0 $carbon--spacing-02 0 0;
+      margin: 0;
+      margin-inline-end: $carbon--spacing-02;
     }
 
     .#{$prefix}--inline-notification__subtitle {
@@ -239,10 +242,11 @@
   .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
     height: to-rem(32px);
     margin-bottom: $carbon--spacing-03;
-    margin-left: $carbon--spacing-08;
+    margin-inline-start: $carbon--spacing-08;
 
     @include carbon--breakpoint(md) {
       margin: $carbon--spacing-03 0;
+      margin-inline: 0;
     }
   }
 
@@ -280,7 +284,7 @@
 
   .#{$prefix}--inline-notification--hide-close-button
     .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
-    margin-right: $carbon--spacing-03;
+    margin-inline-end: $carbon--spacing-03;
   }
 
   .#{$prefix}--inline-notification__close-button {
@@ -288,7 +292,7 @@
 
     position: absolute;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     display: flex;
     width: to-rem(48px);
     min-width: to-rem(48px);
@@ -320,11 +324,13 @@
   @container #{$prefix}--inline-notification (width < 30rem) {
     .#{$prefix}--inline-notification__details {
       flex-basis: 100%;
-      margin: 0 $carbon--spacing-09 0 $carbon--spacing-05;
+      margin: 0;
+      margin-inline: $carbon--spacing-05 $carbon--spacing-09;
     }
 
     .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
-      margin: 0 0 $carbon--spacing-03 $carbon--spacing-08;
+      margin: 0 0 $carbon--spacing-03;
+      margin-inline: $carbon--spacing-08 0;
     }
 
     .#{$prefix}--inline-notification__close-button {

@@ -19,7 +19,7 @@
   // `md` and in a narrow container. A callout has no close button.
   .#{$prefix}--inline-notification--callout
     .#{$prefix}--inline-notification__details {
-    margin-right: $carbon--spacing-05;
+    margin-inline-end: $carbon--spacing-05;
   }
 }
 
