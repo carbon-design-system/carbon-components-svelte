@@ -6,9 +6,8 @@ const COMPONENT_PAGE = `${path.sep}pages${path.sep}components${path.sep}`;
 type Tree = { children?: { type?: string; value?: string }[] };
 
 /**
- * A remark plugin. A component page's lead lives in its frontmatter
- * `description`, and its body starts with a heading. Fail on a leading body
- * paragraph, which would render above the first heading, apart from both.
+ * A component page's lead lives in its frontmatter `description`. A leading
+ * body paragraph would render above the first heading, apart from both.
  */
 export function requireLeadingHeading() {
   return (tree: Tree, file: { filename?: string }) => {

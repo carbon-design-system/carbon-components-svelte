@@ -1,7 +1,6 @@
 /** 1 token ≈ 4 characters; 1 kB (1,000 bytes) ≈ 250 tokens. */
 const BYTES_PER_TOKEN = 4;
 
-/** Shared across pages so a component's Markdown is fetched at most once per session. */
 const markdownCache = new Map<string, string>();
 
 function formatFileSize(bytes: number): string {
@@ -27,10 +26,6 @@ export function formatCopyIconDescription(
   return `${label}\n${formatFileSize(bytes)} (${formatTokenEstimate(bytes)})`;
 }
 
-/**
- * Fetch a component's Markdown (cached) and write it to the clipboard.
- * Returns `true` when the clipboard write succeeded.
- */
 export async function copyComponentMarkdown(
   name: string,
   href: string,

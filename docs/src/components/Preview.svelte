@@ -3,7 +3,6 @@
 </script>
 
 <script lang="ts">
-  /** The example's code, highlighted here rather than in the bundle. */
   export let code = "";
   export let src = "";
   export let framed = false;
@@ -17,12 +16,7 @@
   import { eagerContent } from "../router";
   import { theme } from "../store";
 
-  /**
-   * A code view is a CodeSnippet, with its buttons, and highlighting adds
-   * hundreds of elements, so both wait until the view comes within this
-   * distance of the viewport. Until then it's the same text, uncolored, in
-   * a plain `<pre>` of the same height, which find in page still reaches.
-   */
+  /** Highlighting adds hundreds of elements, so it waits until near. */
   const HIGHLIGHT_MARGIN = "1000px 0px";
 
   let codeView: HTMLElement;
@@ -101,9 +95,7 @@
       <iframe loading="lazy" title={src.split("/").pop()} src={themedSrcUrl}
       ></iframe>
     {:else}
-      <!-- A long page mounts its examples as they near the viewport, which
-           halves its load time, and the rest once the browser is idle.
-           64 px is a typical example's content height. -->
+      <!-- Mounting near the viewport halves a long page's load time. -->
       <LazyMount
         rootMargin="1200px"
         estimatedHeight={64}
@@ -130,10 +122,8 @@
 </div>
 
 <style>
-  /* An example's looping animations, such as skeleton shimmers and loading
-     spinners, keep restyling the page while it's off screen: 293 of them
-     on DataTable's page cost a third of the main thread at rest. They
-     pause there and pick up where they were as it comes back. */
+  /* 293 looping animations on DataTable's page cost a third of the main
+     thread at rest. */
   .preview-viewer:global([data-offscreen]) :global(*),
   .preview-viewer:global([data-offscreen]) :global(*::before),
   .preview-viewer:global([data-offscreen]) :global(*::after) {
@@ -168,7 +158,7 @@
     border: 1px solid var(--cds-border-subtle-01);
     border-bottom: 0;
     position: relative;
-    /* Above side nav for breakout content but below portal content */
+    /* Above side nav, below portals. */
     z-index: 9100;
   }
 
@@ -198,9 +188,7 @@
     }
   }
 
-  /* Skip style, layout and paint for off-screen snippets; the highlighted
-     code is most of a page's rendering cost. Not on `.preview`: containment
-     would clip menus and tooltips that overflow the example. */
+  /* Not on `.preview`: containment would clip overflowing menus. */
   .code-override {
     content-visibility: auto;
   }

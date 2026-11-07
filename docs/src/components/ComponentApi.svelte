@@ -67,11 +67,9 @@
   import CodeBlock from "./CodeBlock.svelte";
 
   /**
-   * A table's height, roughly, which it reserves while the browser skips
-   * it as off-screen: a row is 140 to 220 px wide-screen, with wrapped
-   * descriptions, and a slot's row is shorter. The guess moves nothing on
-   * screen, as a skipped table is below the reader unless the page scrolled
-   * past it, and then `$eagerContent` renders it from the start.
+   * Reserved while the table is skipped off-screen. The guess moves nothing
+   * on screen: a skipped table is below the reader, or `$eagerContent`
+   * renders it from the start.
    */
   const PROP_ROW_HEIGHT = 180;
   const SLOT_ROW_HEIGHT = 120;
@@ -88,9 +86,6 @@
     Date: "JavaScript Date",
   };
 
-  // Regex to extract code blocks from @example annotations
-  // Pattern: ```svelte\n...code...\n``` or ```svelte\n...code...```
-  // The regex uses [\s\S]*? to match any character including newlines (non-greedy)
   const EXAMPLE_CODE_BLOCK_REGEX = /```svelte\s*\n([\s\S]*?)```/;
 
   function parseDescription(description: string) {
@@ -106,7 +101,6 @@
     const mainDescription = description.slice(0, exampleIndex).trim();
     const exampleSection = description.slice(exampleIndex);
 
-    // Extract code block from example section
     const codeBlockMatch = exampleSection.match(EXAMPLE_CODE_BLOCK_REGEX);
     const exampleCode = codeBlockMatch ? codeBlockMatch[1].trim() : null;
 
@@ -173,8 +167,6 @@
       </StructuredListHead>
       <StructuredListBody>
         {#each component.props.sort((a, b) => {
-          // Sort props so required props are listed first, then reactive props.
-
           if (a.isRequired !== b.isRequired) {
             return b.isRequired ? 1 : -1;
           }
@@ -467,9 +459,8 @@
     max-width: 100%;
   }
 
-  /* The props table is a third of a long page's elements, at its end. Skip
-     its style, layout and paint until it nears the viewport; it stays in
-     find in page. Its tooltips are portaled, so containment clips none. */
+  /* The props table is a third of a long page's elements. Its tooltips are
+     portaled, so containment clips none. */
   .skip-offscreen {
     content-visibility: auto;
   }

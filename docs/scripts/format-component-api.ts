@@ -18,8 +18,6 @@ if (
   cachedHash !== null &&
   hash(fs.readFileSync(outFile, "utf8")) === cachedHash
 ) {
-  // COMPONENT_API.json hasn't changed since it was last formatted;
-  // re-running the formatter on every `dev` startup is pure overhead.
   process.exit(0);
 }
 
@@ -70,9 +68,7 @@ const modified = {
           }
 
           const formatted = (await formatTypeScript(normalizedValue))
-            // Remove prefix needed for formatting.
             .replace(new RegExp(`^${prefix}`), "")
-            // Remove trailing semi-colon.
             .replace(TRAILING_SEMICOLON_REGEX, "");
 
           return {
@@ -113,9 +109,7 @@ const modified = {
           const normalizedValue = `type EventDetail = ${detailBody}`;
 
           const formatted = (await formatTypeScript(normalizedValue))
-            // Remove prefix needed for formatting.
             .replace(EVENT_DETAIL_PREFIX_REGEX, "")
-            // Remove trailing semi-colon.
             .replace(TRAILING_SEMICOLON_REGEX, "");
 
           return {
@@ -141,9 +135,7 @@ const modified = {
           }
 
           const formatted = (await formatTypeScript(normalizedValue))
-            // Remove prefix needed for formatting.
             .replace(SLOT_PROPS_PREFIX_REGEX, "")
-            // Remove trailing semi-colon.
             .replace(TRAILING_SEMICOLON_REGEX, "");
 
           return {

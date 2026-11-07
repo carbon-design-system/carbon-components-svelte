@@ -1,4 +1,3 @@
-/** A unist node, such as an mdast or hast node. */
 export type Node = { type: string; data?: unknown; children?: Node[] };
 export type Parent = Node & { children: Node[] };
 
@@ -9,14 +8,9 @@ type Visitor<T> = (
 ) => void;
 
 /**
- * Calls `visitor` on `tree` and every node under it, depth-first in
- * document order, with the node's index in its parent. With a `type`, only
- * on nodes of that type, which the visitor's parameter type is trusted to
- * describe.
- *
- * A node's children are read after its visitor returns, so the visitor can
- * rewrite them. A visitor that swaps its node out of `parent` should keep
- * `parent.children` the same length, or siblings are skipped or revisited.
+ * Reads children after the visitor returns, so it can rewrite them. A
+ * visitor that swaps its node out must keep `parent.children` the same
+ * length.
  */
 export function visit(tree: Node, visitor: Visitor<Node>): void;
 export function visit<T = Node>(

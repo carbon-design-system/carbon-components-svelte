@@ -6,11 +6,9 @@
     formatCopyIconDescription,
   } from "../copy-markdown";
 
-  /** Component name, used as the cache key. */
+  /** The cache key. */
   export let name: string;
-  /** URL to the component's Markdown document. */
   export let href: string;
-  /** Markdown size in bytes; shown as size/token estimate in the tooltip. */
   export let bytes = 0;
   export let size: "sm" | "md" | "lg" | "xl" = "md";
   export let tooltipPosition: "top" | "right" | "bottom" | "left" = "bottom";

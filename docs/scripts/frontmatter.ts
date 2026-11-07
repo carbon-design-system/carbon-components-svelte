@@ -1,23 +1,19 @@
 const FRONTMATTER_RE = /^---\s*\n([\s\S]*?)\n---\s*\n/;
 
-/** The fields a docs page's front matter sets. */
 export type Frontmatter = {
-  /** The components the page documents. */
   components?: string[];
-  /** A one-sentence summary of the page. */
   description?: string;
   /** Other words readers search for the page by, such as `chip` for Tag. */
   keywords?: string[];
 };
 
-/** A page's front matter, unparsed, and the rest of the page. */
 export function splitFrontmatter(source: string) {
   const match = source.match(FRONTMATTER_RE);
   if (!match) return { frontmatter: null, body: source };
   return { frontmatter: match[1], body: source.slice(match[0].length) };
 }
 
-/** The YAML the pages' front matter uses: plain scalars and `[...]` lists of quoted strings. */
+/** Only plain scalars and `[...]` lists of quoted strings. */
 export function parseFrontmatter(yaml: string): Record<string, unknown> {
   const data: Record<string, unknown> = {};
   const lines = yaml.split("\n");
@@ -46,7 +42,6 @@ export function parseFrontmatter(yaml: string): Record<string, unknown> {
   return data;
 }
 
-/** A page's front matter, read as the page compiler reads it. */
 export function readFrontmatter(source: string, filePath: string): Frontmatter {
   const { frontmatter } = splitFrontmatter(source);
   if (!frontmatter) return {};

@@ -1,11 +1,6 @@
 /**
- * Scores the site search on queries a reader types, each with the result it
- * should return and the place it should reach. The search menu shows the
- * top 10 results, components above sections, so a result's place is its
- * place in its group there. Prints the misses and exits 1 if any query
- * misses.
- *
- *   cd docs && bun run eval:search
+ * The search menu shows components above sections, so a result's place is
+ * its place in its group.
  */
 import SEARCH_INDEX from "../src/SEARCH_INDEX.json";
 import { createSearch } from "../src/search";

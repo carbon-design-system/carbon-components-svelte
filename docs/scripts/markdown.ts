@@ -1,13 +1,8 @@
 /**
- * The Markdown the docs pages use, parsed into mdast as mdsvex's parser
- * (remark-parse 8 with mdsvex's Svelte-aware HTML blocks) parsed it:
- * front matter, ATX headings, paragraphs, fenced code, HTML and component
- * blocks, GFM tables, simple lists, and inline code, emphasis, strong,
- * links, bare URLs and inline HTML. Unlike mdsvex, a block of Svelte
- * markup (a component, or a top-level `{#if}` or `{#each}` block) ends
- * where its tags close, not at the first blank line. It throws on
- * Markdown the pages don't use, such as block quotes, rather than parse
- * it differently from what a reader expects.
+ * Parses the Markdown subset the docs pages use into mdast, as mdsvex did.
+ * Unlike mdsvex, a block of Svelte markup ends where its tags close, not at
+ * the first blank line. It throws on Markdown the pages don't use, such as
+ * block quotes, rather than parse it in a way a reader doesn't expect.
  */
 
 import { parse } from "sveast";
@@ -54,7 +49,6 @@ function htmlSequence(line: string) {
   return HTML_SEQUENCES.find(([open]) => open.test(trimmed));
 }
 
-/** Whether `line` starts a block that ends the paragraph before it. */
 function interruptsParagraph(line: string): boolean {
   return (
     ATX_RE.test(line) ||
@@ -81,7 +75,7 @@ export function parseMarkdown(source: string): Root {
   return { type: "root", children };
 }
 
-/** Block nodes, each with the 1-based line it starts on (`offset` lines in). */
+/** Lines are 1-based, `offset` lines in. */
 function parseBlocks(lines: string[], offset = 0): Node[] {
   const nodes: Node[] = [];
   let i = 0;
@@ -284,9 +278,8 @@ function parseBlocks(lines: string[], offset = 0): Node[] {
 }
 
 /**
- * The last line of the Svelte markup that starts at `start`: `end`, or the
- * line before a later blank line, whichever is the first where every tag
- * and block opened since `start` has closed. `undefined` if none is.
+ * The first of `end` or a line before a later blank line where every tag
+ * and block opened since `start` has closed.
  */
 function svelteBlockEnd(
   lines: string[],
@@ -296,7 +289,6 @@ function svelteBlockEnd(
   let last = end;
   while (last < lines.length) {
     if (parsesAsSvelte(lines.slice(start, last + 1).join("\n"))) return last;
-    // On to the next blank line after more content.
     let next = last + 1;
     while (next < lines.length && BLANK_RE.test(lines[next])) next++;
     while (next + 1 < lines.length && !BLANK_RE.test(lines[next + 1])) next++;
@@ -315,7 +307,7 @@ function parsesAsSvelte(markup: string): boolean {
   }
 }
 
-/** A table row's cells, without the outer pipes; `\|` stays in a cell. */
+/** `\|` stays in a cell. */
 function splitRow(row: string): string[] {
   const cells: string[] = [];
   let cell = "";
@@ -342,8 +334,6 @@ function splitRow(row: string): string[] {
   cells.push(cell.trim());
   return cells;
 }
-
-// Inline.
 
 const ESCAPABLE = new Set("\\`*{}[]()#+-.!_>~|");
 const INLINE_HTML_RE = new RegExp(

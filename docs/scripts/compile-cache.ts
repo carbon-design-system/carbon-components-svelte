@@ -1,11 +1,7 @@
 /**
  * A disk cache for vite-plugin-svelte's preprocess and compile steps in
- * production builds. Each step's transform turns code into code (compile
- * also puts the component's CSS in the module's `meta`), so caching its
- * result, keyed by the code it was given, skips the work for unchanged
- * pages and components: editing one page preprocesses and compiles only
- * that page. Dev and watch builds run as before. A build ends by logging
- * how many results each step reused.
+ * production builds, keyed by input code. Compile also puts the
+ * component's CSS in the module's `meta`, so the cache stores that too.
  */
 import { createHash } from "node:crypto";
 import fs from "node:fs";
@@ -20,23 +16,15 @@ type Handler = (
 ) => Promise<unknown>;
 
 export type CachedStep = {
-  /** The vite-plugin-svelte plugin, such as `vite-plugin-svelte:compile`. */
   plugin: string;
-  /** What the step is called in the build's log, such as `compile`. */
   label: string;
   /** What changes the step's output without changing its input code. */
   salt: string;
   /** More of the key, for output that depends on files besides the code. */
   key?: (code: string, id: string) => string;
-  /** The ids worth caching; the step runs as usual for the rest. */
   include?: (id: string) => boolean;
 };
 
-/**
- * Wraps each step's plugin among `plugins` so a production build reads its
- * result from `dir` when the code, id, salt and extra key match, and
- * writes it there otherwise.
- */
 export function cacheSvelteSteps(
   plugins: Plugin[],
   dir: string,
@@ -101,9 +89,7 @@ export function cacheSvelteSteps(
         const cached = JSON.parse(await fs.promises.readFile(file, "utf8"));
         reused++;
         return cached;
-      } catch {
-        // Not cached yet, or unreadable: run the step.
-      }
+      } catch {}
       const result = await run.call(this, code, id, ...rest);
       ran++;
       // A unique temp file, then a rename, so a parallel build never reads

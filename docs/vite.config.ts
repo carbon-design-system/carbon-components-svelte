@@ -19,13 +19,9 @@ const componentMdSizesId = "\0component-md-sizes";
 const libraryUtilsDir = `${path.resolve(__dirname, "../src/utils")}${path.sep}`;
 const svelteRuntimeRe = /[\\/]node_modules[\\/]svelte[\\/]/;
 /**
- * The library's `src/utils` modules are small and shared by most pages,
- * so on their own each became a chunk of a kilobyte or less, about 50 of
- * them per page. One chunk loads them in one request.
- *
- * The Svelte runtime is a chunk of its own, ahead of the utils: in theirs
- * it changed with them, most days, so readers downloaded it again after
- * most deploys, though it changes only with Svelte.
+ * Alone, each `src/utils` module became a chunk of 1 kB or less, about 50
+ * per page. The Svelte runtime gets its own chunk so it stays cached
+ * across deploys that change only the utils.
  */
 const CHUNK_GROUPS = [
   {
@@ -39,10 +35,6 @@ const CHUNK_GROUPS = [
     priority: 1,
   },
 ];
-/**
- * What changes compiled components without changing their code: Svelte,
- * vite-plugin-svelte, and the Svelte config's compiler options.
- */
 const readVersion = (pkg: string) =>
   JSON.parse(
     fs.readFileSync(
@@ -51,7 +43,6 @@ const readVersion = (pkg: string) =>
     ),
   ).version as string;
 
-/** The contents of the files in `dir` with `extension`, for a cache salt. */
 const filesIn = (dir: string, extension: string) =>
   fs
     .readdirSync(dir)
@@ -59,21 +50,14 @@ const filesIn = (dir: string, extension: string) =>
     .sort()
     .map((file) => fs.readFileSync(path.join(dir, file), "utf8"));
 
-/**
- * What changes compiled components without changing their code: Svelte,
- * vite-plugin-svelte, and the Svelte config's compiler options.
- */
+/** What changes compiled components without changing their code. */
 const COMPILE_CACHE_SALT = JSON.stringify([
   readVersion("svelte"),
   readVersion("@sveltejs/vite-plugin-svelte"),
   fs.readFileSync(path.join(__dirname, "svelte.config.ts"), "utf8"),
 ]);
 
-/**
- * What changes a preprocessed page without changing its source: the
- * Svelte config and the docs scripts it runs, the library's highlighter
- * (code blocks are highlighted at build time) and the formatter.
- */
+/** What changes a preprocessed page without changing its source. */
 const PREPROCESS_CACHE_SALT = JSON.stringify([
   COMPILE_CACHE_SALT,
   filesIn(path.join(__dirname, "scripts"), ".ts"),
@@ -95,12 +79,7 @@ const COMPONENT_API_PREFIX = "virtual:component-api/";
 
 type ApiComponent = { moduleName: string; filePath: string };
 
-/**
- * `virtual:component-api/<Name>` is one component's entry in
- * `COMPONENT_API.json`, so a page bundles only the components it
- * documents; `virtual:component-api/file-paths` maps every component to
- * its source file.
- */
+/** Serves one component's API entry, so a page bundles only its own. */
 function componentApi() {
   let cache: { mtime: number; byName: Map<string, ApiComponent> } | undefined;
   const read = () => {

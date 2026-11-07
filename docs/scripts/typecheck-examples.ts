@@ -1,14 +1,4 @@
-// Type-checks the docs examples against the library's types with
-// svelte-typecheck, non-strict, and fails on Svelte compiler errors. Exits
-// 1 on any error, except the ones only TypeScript's inference produces (see
-// `IGNORED`).
-//
-//   bun run build:docs   # from the repo root, for the .d.ts files
-//   cd docs && bun scripts/typecheck-examples.ts
-//
-// Framed examples are checked in place. Live examples (markup in a `.md`
-// page) are written, one file per page, to a scratch directory with the
-// page's `<script>`, the way the page compiles them.
+// Needs the library's .d.ts files: run `bun run build:docs` at the root.
 import fs from "node:fs";
 import path from "node:path";
 import { compilerDiagnostics, typecheck } from "svelte-typecheck";
@@ -25,10 +15,8 @@ const DOC_KBD_RE = /^\s*<DocKbd\b/;
 const RELATIVE_IMPORT_RE = /(from\s+|import\s+)(["'])(\.\.?\/[^"']+)\2/g;
 
 /**
- * Errors a JavaScript reader never hits. The examples are plain JS, so
- * TypeScript widens their literals and types DOM events loosely; flagging
- * that would mean annotating every example. Wrong prop names, invalid
- * literal values, and unknown events still fail.
+ * The examples are plain JS, so TypeScript widens their literals and types
+ * DOM events loosely. A JavaScript reader never hits these.
  */
 const IGNORED = [
   // `let kind = "red"` widens to `string`, not Tag's `"red" | …`.
@@ -42,9 +30,8 @@ const IGNORED = [
 ];
 
 /**
- * Library typing gaps that TypeScript users hit too: `[file, message]`.
- * Fix the type, then delete the entry. An entry that no longer matches
- * anything fails the run, so the list only shrinks.
+ * Library typing gaps that TypeScript users hit too. Fix the type, then
+ * delete the entry: a stale entry fails the run.
  */
 const KNOWN: Array<[file: string, message: RegExp]> = [
   // `sort` gets the union of every cell type, so `new Date(a)` fails.
@@ -58,7 +45,7 @@ type HtmlNode = {
   position?: { start: { line: number } };
 };
 
-/** Whether the docs' remark plugin renders this `html` node as a live example. */
+/** Matches the remark plugin in svelte.config.ts. */
 function isLiveExample(node: HtmlNode) {
   return (
     node.lang !== "svelte" &&
@@ -81,7 +68,6 @@ function writePage(page: string) {
   });
   if (examples.length === 0) return;
 
-  // Resolve the page's relative imports from the scratch directory.
   const script = scripts
     .join("\n")
     .replace(RELATIVE_IMPORT_RE, (_, keyword, quote, specifier) => {
@@ -179,7 +165,6 @@ const found: Array<
     d.column,
     d.message.split("\n")[0],
   ]);
-// The compiler's errors (not its warnings) fail an example too.
 for (const file of [
   ...[...lineMaps.keys()].map((name) => path.join(OUT, name)),
   ...framedFiles.map((f) => path.join(PAGES, "framed", f)),

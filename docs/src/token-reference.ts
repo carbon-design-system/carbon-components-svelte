@@ -227,10 +227,7 @@ export function groupMatches(group: TokenGroupDefinition, name: string) {
   return name === group.prefix || name.startsWith(`${group.prefix}-`);
 }
 
-/**
- * Sorts `names` into `groups`, keeping each name's order. Returns the names
- * no group matched, so a new token can't go missing from the page.
- */
+/** Returns the names no group matched, so a new token can't go missing. */
 export function groupNames(
   groups: TokenGroupDefinition[],
   names: string[],
@@ -332,7 +329,6 @@ export function sassVar(name: string) {
   return `$${name}`;
 }
 
-/** Converts a rem value to pixels at a 16px root, or returns `undefined`. */
 export function remToPx(value: string) {
   const match = REM_RE.exec(value);
   if (!match) return undefined;
@@ -354,7 +350,6 @@ export function normalizeQuery(query: string) {
     .replace(SASS_PREFIX_RE, "");
 }
 
-/** Matches a token by name, or by any of its values. */
 export function matchesToken(
   query: string,
   name: string,

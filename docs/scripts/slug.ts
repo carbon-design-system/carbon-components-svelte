@@ -1,9 +1,6 @@
 import { type Node, visit } from "./visit.ts";
 
-/**
- * Everything GitHub drops from a heading's slug: all but letters, marks,
- * digits, connector punctuation, spaces and hyphens.
- */
+/** What GitHub drops from a heading's slug. */
 const NON_WORD_RE = /[^\p{Alphabetic}\p{M}\p{Nd}\p{Pc} -]/gu;
 
 /** A heading's anchor as GitHub makes it, e.g. `Copy behavior` → `copy-behavior`. */
@@ -11,10 +8,6 @@ export function slug(text: string): string {
   return text.toLowerCase().replace(NON_WORD_RE, "").replaceAll(" ", "-");
 }
 
-/**
- * Unique slugs for one page's headings: a repeat gets `-1`, `-2` and so on,
- * skipping any a heading already took.
- */
 export function createSlugger(): (text: string) => string {
   const occurrences = new Map<string, number>();
   return (text) => {
@@ -45,7 +38,6 @@ function textContent(node: HastNode): string {
   return node.children?.map(textContent).join("") ?? "";
 }
 
-/** Rehype plugin: gives each heading without an `id` its slug, unique within the page. */
 export function rehypeSlug() {
   return (tree: Node) => {
     const slugger = createSlugger();

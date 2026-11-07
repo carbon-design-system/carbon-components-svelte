@@ -46,13 +46,8 @@
 
   export let component = $route?.name ?? "";
   export let description = "";
-  /** The page's h2/h3 headings, for the table of contents. */
   export let headings: { id: string; text: string; depth: number }[] = [];
 
-  /**
-   * The API of each component the page documents, which the page compiler
-   * imports from `virtual:component-api/<Name>`.
-   */
   export let api: (DocComponent | null)[] = [];
 
   $: api_components = api.filter((c): c is DocComponent => c != null);
@@ -68,10 +63,7 @@
 
   /**
    * The API section is a long page's largest part, 3,371 of DataTable's
-   * 12,238 elements, and building it held up the page's first render, so
-   * it mounts as it nears the viewport or once the browser is idle, as the
-   * live examples do. Of several components' APIs, only the selected tab's
-   * renders.
+   * 12,238 elements, and held up the first render. Mount it lazily.
    */
   let apiSection: HTMLElement;
   let apiMounted = false;
@@ -275,10 +267,8 @@
 </Content>
 
 <style>
-  /* The heading sits inside this wrapper, so the column's h2 padding rule in
-     global.css never reaches it. A top margin collapses with whatever the
-     last example ends with, so the section break is the same size on every
-     page. */
+  /* A top margin collapses with the last example's, so the break is the
+     same size on every page. */
   .component-api-header {
     margin-top: var(--cds-layout-06);
     margin-bottom: var(--cds-layout-02);

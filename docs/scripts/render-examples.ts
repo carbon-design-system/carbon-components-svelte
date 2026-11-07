@@ -1,8 +1,5 @@
-// Server-renders every framed example with `svelte/server` and exits 1 if
-// any of them throws. Examples are copied into SvelteKit apps, where code
-// that touches `window`, `document`, or `Image` at init crashes SSR.
-//
-//   cd docs && bun scripts/render-examples.ts
+// Readers copy examples into SvelteKit apps, where code that touches
+// `window`, `document`, or `Image` at init crashes SSR.
 import fs from "node:fs";
 import path from "node:path";
 import { svelte } from "@sveltejs/vite-plugin-svelte";

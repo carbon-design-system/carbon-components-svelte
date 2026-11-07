@@ -1,10 +1,4 @@
-/**
- * Compiles a docs page (`.md`, Markdown with Svelte in it) to a Svelte
- * component, as mdsvex did with the site's options: front matter becomes
- * a module script's `metadata`, the Markdown becomes HTML through the
- * site's remark and rehype plugins, code blocks go through `highlight`,
- * and the markup is wrapped in the page's layout.
- */
+/** Compiles a docs page to a Svelte component, as mdsvex did. */
 import { parseFrontmatter } from "./frontmatter.ts";
 import { type Node, parseMarkdown, type Root } from "./markdown.ts";
 import { visit } from "./visit.ts";
@@ -16,7 +10,6 @@ export type Plugin = () => Transformer;
 export type PageOptions = {
   remarkPlugins?: Plugin[];
   rehypePlugins?: Plugin[];
-  /** HTML for a fenced code block. */
   highlight: (code: string, lang: string | null, meta: string | null) => string;
   /** Layout component paths: a front matter `layout` names one, `_` is the rest. */
   layouts: Record<string, string>;
@@ -51,7 +44,7 @@ function escape(tree: Root) {
   });
 }
 
-// mdast to hast, as mdast-util-to-hast 10 converts what the pages use.
+// As mdast-util-to-hast 10 converts it.
 
 export type HastNode = {
   type: string;
@@ -63,7 +56,6 @@ export type HastNode = {
 
 const newline = (): HastNode => ({ type: "text", value: "\n" });
 
-/** `nodes` with a newline between each, and around them if `loose`. */
 function wrap(nodes: HastNode[], loose = false): HastNode[] {
   const result: HastNode[] = loose ? [newline()] : [];
   nodes.forEach((node, i) => {
@@ -209,8 +201,6 @@ export function toHast(node: Node, parent?: Node): HastNode | null {
   }
 }
 
-// hast to HTML.
-
 const VOID_ELEMENTS = new Set(["br", "hr", "img", "input", "wbr"]);
 
 function attributeName(name: string): string {
@@ -244,8 +234,6 @@ export function toHtml(node: HastNode): string {
       throw new Error(`Unsupported hast node: ${node.type}`);
   }
 }
-
-// Assembling the component.
 
 const SCRIPT_RE = /^<script\b/i;
 const SCRIPT_OPEN_RE = /^<script\b[^>]*>/i;

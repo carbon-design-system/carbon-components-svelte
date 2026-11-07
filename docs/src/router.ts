@@ -1,10 +1,5 @@
 /// <reference types="vite/client" />
 
-/**
- * The docs site's router: one route per page file under `src/pages`, the
- * URL in a store kept in step with the History API, and clicks on
- * same-origin links turned into in-page navigation.
- */
 import type { Component } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { route } from "./current-route";
@@ -31,9 +26,8 @@ const { routes, notFound } = buildRoutes(Object.keys(pages));
 const framedRoutes = new Map<string, Route>();
 
 /**
- * The route for `pathname`, ignoring a trailing slash, or the not-found
- * route. A framed example's route is read from its path, and checked
- * against its file when it loads.
+ * A framed example's route comes from its path, and `loadPage` checks it
+ * against its file.
  */
 export function matchRoute(pathname: string): Route | undefined {
   const path = normalize(pathname);
@@ -46,7 +40,6 @@ export function matchRoute(pathname: string): Route | undefined {
   return framed;
 }
 
-/** The page for `route`, or the not-found page if it has no file. */
 export async function loadPage(
   route: Route,
 ): Promise<{ route: Route; component: Component } | undefined> {
@@ -58,12 +51,9 @@ export async function loadPage(
   return undefined;
 }
 
-/** The component pages, by name, for the side navigation. */
 export const componentPages: Route[] = [...routes.values()]
   .filter((route) => route.parentName === "components")
   .sort((a, b) => a.name.localeCompare(b.name));
-
-// Location.
 
 type Location = { pathname: string; search: string; hash: string };
 
@@ -78,26 +68,20 @@ export const location = writable<Location>(read());
 export { route };
 
 /**
- * Whether a page renders all of its content right away: its live examples
- * mount, and its API tables render, rather than when they near the
- * viewport. Set when the page will scroll somewhere other than its top: to
- * a heading, or back to where the reader was. Content that renders above
- * that place would change height after the scroll and move the page, and
- * Safari doesn't anchor the scroll to make up for it.
+ * Renders all lazy content at once when the page will scroll away from its
+ * top. Safari doesn't anchor the scroll, so content that mounts above the
+ * target would move the page.
  */
 export const eagerContent = writable(false);
 
-/** Whether the current URL scrolls the page away from its top. */
 export function scrollsAwayFromTop(): boolean {
   return Boolean(get(location).hash) || (savedScroll()?.scrollY ?? 0) > 0;
 }
 
-/** The query string, as an object. */
 export const params = derived(location, ($location) =>
   Object.fromEntries(new URLSearchParams($location.search)),
 );
 
-/** Whether `path` is the current page, or with `recursive`, one it contains. */
 export const isActive = derived(
   location,
   ($location) =>
@@ -108,7 +92,6 @@ export const isActive = derived(
 
 const beforeNavigateCallbacks = new Set<() => void>();
 
-/** Calls `callback` before each navigation, until the returned function is called. */
 export function beforeNavigate(callback: () => void): () => void {
   beforeNavigateCallbacks.add(callback);
   return () => beforeNavigateCallbacks.delete(callback);
@@ -117,16 +100,13 @@ export function beforeNavigate(callback: () => void): () => void {
 export type NavigateOptions = {
   /** Query parameters; the current ones are dropped. */
   query?: Record<string, string>;
-  /** Replace the current history entry instead of adding one. */
   replace?: boolean;
 };
 
-/** Goes to `to`, a same-origin URL such as `/components/Button#basic`. */
 export function goto(to: string, options: NavigateOptions = {}) {
   const url = new URL(to, window.location.href);
   if (options.query) url.search = new URLSearchParams(options.query).toString();
   for (const callback of beforeNavigateCallbacks) callback();
-  // Remember where the page was scrolled, for the back button.
   const scroll = currentScroll();
   if (entry) scrolls.set(entry, scroll);
   history.replaceState({ ...history.state, ...scroll }, "");
@@ -138,27 +118,22 @@ export function goto(to: string, options: NavigateOptions = {}) {
 
 type SavedScroll = {
   scrollY: number;
-  /** The first heading on screen, and how far from the top it was. */
   anchor?: { id: string; top: number };
 };
 
 type EntryState = Partial<SavedScroll> & { key?: string };
 
 /**
- * Where each history entry was scrolled when the reader left it, by the
- * entry's key. Leaving with the back or forward button can't write to the
- * entry left, as `history.state` is already the next one's, so the
- * positions live here; leaving by a link also writes to the entry, which
+ * On back or forward, `history.state` is already the next entry's, so the
+ * entry left can't be written to. A link also writes to the entry, which
  * outlasts a reload.
  */
 const scrolls = new Map<string, SavedScroll>();
 
-/** The current history entry's key. */
 let entry: string | undefined;
 
 const newEntryKey = () => Math.random().toString(36).slice(2);
 
-/** The current entry's key, giving it one if it has none. */
 function entryKey(): string {
   const state = history.state as EntryState | null;
   if (state?.key) return state.key;
@@ -167,16 +142,13 @@ function entryKey(): string {
   return key;
 }
 
-/** Remembers where the current entry is scrolled, as the reader leaves it. */
 function leaveEntry() {
   if (entry) scrolls.set(entry, currentScroll());
 }
 
 /**
- * Where the page is scrolled to, by its first heading on screen as well as
- * by offset: anything above that heading that changes height before the
- * reader comes back, such as a code view's "Show more", would make the
- * offset land elsewhere.
+ * Saves the first heading on screen too: content above it, such as a code
+ * view's "Show more", can change height before the reader comes back.
  */
 function currentScroll(): SavedScroll {
   for (const heading of document.querySelectorAll<HTMLElement>(
@@ -196,10 +168,8 @@ function savedScroll(): SavedScroll | undefined {
   return saved?.scrollY === undefined ? undefined : (saved as SavedScroll);
 }
 
-/** How long the pointer rests on a link before its page is fetched. */
 const PREFETCH_HOVER_DELAY = 65;
 
-/** The route a link goes to in this app, if any. */
 function linkRoute(target: EventTarget | null): Route | undefined {
   const anchor = (target as Element | null)?.closest?.("a");
   if (!anchor?.href || anchor.hasAttribute("download")) return undefined;
@@ -210,18 +180,12 @@ function linkRoute(target: EventTarget | null): Route | undefined {
 
 const prefetched = new Set<Route>();
 
-/** Starts loading `route`'s page so following its link is instant. */
 function prefetch(next: Route | undefined) {
   if (!next || prefetched.has(next) || next === get(route)) return;
   prefetched.add(next);
   loadPage(next).catch(() => prefetched.delete(next));
 }
 
-/**
- * Starts routing: links, the back and forward buttons, and hash changes.
- * A link's page starts loading when the pointer rests on it, it gets
- * focus, or a touch starts on it.
- */
 export function startRouter() {
   history.scrollRestoration = "manual";
   entry = entryKey();
@@ -299,10 +263,6 @@ export function startRouter() {
   };
 }
 
-/**
- * After a page renders: back to where it was for the back and forward
- * buttons, to the URL's heading if it has one, or to the top.
- */
 export function restoreScroll() {
   const { hash } = get(location);
   const target =

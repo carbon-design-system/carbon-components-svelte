@@ -4,10 +4,8 @@ import type { Alias } from "vite";
 const carbonRoot = path.resolve(import.meta.dirname, "..");
 
 /**
- * Resolves `carbon-components-svelte` to this checkout, for the docs site
- * and `scripts/render-examples.ts`. An alias bypasses
- * `package.json#exports`, so each subpath export needs its own entry.
- * Array form: the first match wins.
+ * An alias bypasses `package.json#exports`, so each subpath export needs
+ * its own entry. The first match wins.
  */
 export const carbonAlias: Alias[] = [
   {
