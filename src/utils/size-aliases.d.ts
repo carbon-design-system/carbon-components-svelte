@@ -46,6 +46,12 @@ export const DATA_TABLE_SIZE_ALIASES: ReadonlyMap<
   "compact" | "short" | "medium" | "tall" | undefined
 >;
 
+/** DataGrid row heights: v11 `xs` 24px through `xl` 64px. */
+export const DATA_GRID_SIZE_ALIASES: ReadonlyMap<
+  "xs" | "sm" | "md" | "lg" | "xl",
+  "compact" | "short" | "medium" | "default" | "tall"
+>;
+
 /** DataTable `Toolbar`: v11 `lg` is the 48px default. */
 export const TOOLBAR_SIZE_ALIASES: ReadonlyMap<"lg", "default">;
 

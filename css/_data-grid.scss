@@ -1,0 +1,212 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// `DataGrid`: a spreadsheet-like grid of cells. The markup is `div`s, not a
+/// `table`, so the grid can paint only the rows and columns in view, and so
+/// DataTable's `td` and `th` rules do not apply.
+///
+/// Geometry is fixed. Every row is `--ccs-data-grid-row-height` tall and
+/// every cell has an inline `width`, so the component places a cell from its
+/// column offset, `--ccs-data-grid-x`, without measuring anything:
+/// - The column header row and the frozen rows are `sticky`, in flow, at the
+///   top of the pane. Their `top` is where they sit unscrolled.
+/// - Every other row is `absolute` at its own `top`.
+/// - A frozen column is `sticky` at its own offset, which is where it sits
+///   unscrolled, so it never moves. Any other cell is `absolute` at its
+///   offset. `ccs-inset-inline` turns the offset into `left` or `right`.
+///
+/// Cells are opaque, so a frozen cell hides what scrolls beneath it. The
+/// selection is the `::after` border of the cells on the rectangle's edge. A
+/// border shows in forced colors, where a fill does not.
+/// @access private
+/// @group components
+@mixin data-grid {
+  .#{$prefix}--data-grid {
+    @include type-style("body-compact-01");
+
+    position: relative;
+    overflow: auto;
+    // Contains the stacking of the frozen cells and rows.
+    isolation: isolate;
+    background-color: $layer;
+    color: $text-primary;
+    cursor: default;
+    outline: 1px solid $border-subtle;
+    outline-offset: -1px;
+    user-select: none;
+  }
+
+  .#{$prefix}--data-grid__pane {
+    position: relative;
+  }
+
+  .#{$prefix}--data-grid__row {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: var(--ccs-data-grid-row-height);
+  }
+
+  .#{$prefix}--data-grid__row--header,
+  .#{$prefix}--data-grid__row--frozen {
+    position: sticky;
+    z-index: 2;
+  }
+
+  .#{$prefix}--data-grid__cell,
+  .#{$prefix}--data-grid__header {
+    position: absolute;
+    top: 0;
+    display: flex;
+    min-width: 0;
+    height: var(--ccs-data-grid-row-height);
+    box-sizing: border-box;
+    align-items: center;
+    padding-inline: $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    border-inline-end: 1px solid $border-subtle;
+    background-color: $layer;
+    @include ccs-inset-inline($start: var(--ccs-data-grid-x, 0));
+  }
+
+  .#{$prefix}--data-grid--compact .#{$prefix}--data-grid__cell,
+  .#{$prefix}--data-grid--compact .#{$prefix}--data-grid__header {
+    padding-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--data-grid__header {
+    @include type-style("heading-compact-01");
+
+    background-color: $layer-accent;
+  }
+
+  // The row numbers are short, so they are centered in their column.
+  .#{$prefix}--data-grid__header--row,
+  .#{$prefix}--data-grid__header--corner {
+    justify-content: center;
+    padding-inline: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  // Each value takes its direction from its own first strong character, as
+  // a `<bdi>` would, with no element per cell. A value with none, such as
+  // "-4.2" or "3 / 4", reads left to right on a right-to-left page.
+  .#{$prefix}--data-grid__text {
+    overflow: hidden;
+    min-width: 0;
+    text-overflow: ellipsis;
+    unicode-bidi: plaintext;
+    white-space: nowrap;
+  }
+
+  // An empty value shows an em dash, which a screen reader reads as
+  // `emptyCellDescription`. A rule draws it, so a cell keeps one element
+  // and a copy still gives an empty string.
+  .#{$prefix}--data-grid__cell > .#{$prefix}--data-grid__text:empty::before {
+    content: "\2014";
+
+    // Browsers without alternative text for `content` keep the dash.
+    @supports (content: "" / "") {
+      content: "\2014" / var(--ccs-data-grid-empty-description);
+    }
+  }
+
+  .#{$prefix}--data-grid__cell--align-end {
+    justify-content: flex-end;
+    text-align: end;
+  }
+
+  .#{$prefix}--data-grid__cell--align-center {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .#{$prefix}--data-grid__frozen {
+    position: sticky;
+    z-index: 1;
+    flex: none;
+  }
+
+  .#{$prefix}--data-grid__frozen--edge {
+    border-inline-end-color: $border-strong;
+  }
+
+  .#{$prefix}--data-grid__row--frozen-edge > .#{$prefix}--data-grid__cell,
+  .#{$prefix}--data-grid__row--frozen-edge > .#{$prefix}--data-grid__header {
+    border-block-end-color: $border-strong;
+  }
+
+  // A header lights up for the active cell and the selection that cross it.
+  .#{$prefix}--data-grid__header--selected {
+    background-color: $layer-accent-hover;
+  }
+
+  .#{$prefix}--data-grid__header--column.#{$prefix}--data-grid__header--selected {
+    border-block-end-color: $border-interactive;
+  }
+
+  .#{$prefix}--data-grid__header--row.#{$prefix}--data-grid__header--selected {
+    border-inline-end-color: $border-interactive;
+  }
+
+  .#{$prefix}--data-grid__cell--selected {
+    background-color: $highlight;
+  }
+
+  // The active cell is the one cell of a selection that is not shaded.
+  .#{$prefix}--data-grid__cell--active {
+    background-color: $layer;
+  }
+
+  .#{$prefix}--data-grid__cell--selected::after {
+    position: absolute;
+    border: 0 solid $border-interactive;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--data-grid__cell--range-top::after {
+    border-block-start-width: 2px;
+  }
+
+  .#{$prefix}--data-grid__cell--range-bottom::after {
+    border-block-end-width: 2px;
+  }
+
+  .#{$prefix}--data-grid__cell--range-start::after {
+    border-inline-start-width: 2px;
+  }
+
+  .#{$prefix}--data-grid__cell--range-end::after {
+    border-inline-end-width: 2px;
+  }
+
+  .#{$prefix}--data-grid__cell:focus {
+    @include focus-outline("outline");
+  }
+
+  // Forced colors drop the fills. The rectangle's border and the lit
+  // headers take the system highlight. Frozen edges stay 1 px, so the
+  // selection and the focus ring are the only 2 px lines.
+  @media (forced-colors: active) {
+    .#{$prefix}--data-grid__cell--selected::after {
+      border-color: Highlight;
+    }
+
+    .#{$prefix}--data-grid__header--selected {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("data-grid") {
+  @include data-grid;
+}

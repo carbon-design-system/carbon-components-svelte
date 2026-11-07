@@ -52,6 +52,15 @@ export const DATA_TABLE_SIZE_ALIASES = new Map([
   ["xl", "tall"],
 ]);
 
+/** DataGrid row heights: v11 `xs` 24px through `xl` 64px. */
+export const DATA_GRID_SIZE_ALIASES = new Map([
+  ["xs", "compact"],
+  ["sm", "short"],
+  ["md", "medium"],
+  ["lg", "default"],
+  ["xl", "tall"],
+]);
+
 /** DataTable `Toolbar`: v11 `lg` is the 48px default. */
 export const TOOLBAR_SIZE_ALIASES = new Map([["lg", "default"]]);
 
