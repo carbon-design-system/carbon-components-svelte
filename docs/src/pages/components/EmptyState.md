@@ -8,7 +8,6 @@ description: Empty states fill a panel, card or table that has nothing to show y
   import Add from "carbon-icons-svelte/lib/Add.svelte";
   import Folder from "carbon-pictograms-svelte/lib/Folder.svelte";
   import Lock from "carbon-pictograms-svelte/lib/Lock_01.svelte";
-  import Binocular from "carbon-pictograms-svelte/lib/Binocular.svelte";
   import ShoppingCart from "carbon-pictograms-svelte/lib/ShoppingCart.svelte";
 </script>
 
@@ -29,16 +28,11 @@ The pictogram draws at 64px, and at 48px in the small size. Icons are drawn for 
 
 ## No results
 
-For a search or filter with no matches, offer a way back. Set `role="status"` so screen readers announce it when the results empty out.
+For a search or filter with no matches, offer a way back.
 
-<EmptyState
-  role="status"
-  title="No results for “invoces”"
-  subtitle="Check the spelling, or try a shorter, broader term."
->
-  <Binocular slot="illustration" />
-  <Button kind="tertiary">Clear search</Button>
-</EmptyState>
+To have screen readers announce it, put the empty state in an element with `role="status"` that is always on the page. Screen readers often skip a live region that appears with its content already inside, so a `role` on the `EmptyState` itself is not reliable.
+
+<FileSource src="/framed/EmptyState/EmptyStateNoResults" />
 
 ## Subtitle slot
 
