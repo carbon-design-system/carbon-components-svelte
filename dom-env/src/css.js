@@ -12,6 +12,7 @@
 
 import { compile, matchesSelector } from "./selector.js";
 import { HTML_NS, illegalConstructor, INTERNAL, str, tag } from "./shared.js";
+import { enabled as strict, report } from "./strict.js";
 
 // --- Property names -----------------------------------------------------------
 
@@ -65,6 +66,14 @@ z-index zoom -webkit-appearance -webkit-box-orient -webkit-line-clamp -webkit-fo
 -ms-overflow-style`
     .split(/\s+/)
     .filter(Boolean);
+const KNOWN = new Set(PROPERTIES);
+KNOWN.add("float");
+
+/** In strict mode, records a property name dom-env doesn't know. */
+function checkName(name) {
+  if (strict() && !KNOWN.has(name) && !name.startsWith("--"))
+    report("css", name);
+}
 
 function camel(name) {
   return name.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
@@ -451,6 +460,7 @@ function parseDeclarations(text) {
     let name = part.slice(0, colon).trim();
     if (!name) continue;
     if (!name.startsWith("--")) name = name.toLowerCase();
+    checkName(name);
     let raw = part.slice(colon + 1);
     let important = false;
     const m = /!\s*important\s*$/i.exec(raw);
@@ -560,6 +570,7 @@ export class CSSStyleDeclaration {
 
   getPropertyValue(property) {
     const name = normalizeName(property);
+    checkName(name);
     if (this._computedFor)
       return computedProperty(this._computedFor, name, this._pseudo);
     return specifiedProperty(this._map(), name);
@@ -575,6 +586,7 @@ export class CSSStyleDeclaration {
   setProperty(property, value, priority = "") {
     this._readonlyCheck();
     const name = normalizeName(property);
+    checkName(name);
     if (value === null || value === undefined || str(value) === "") {
       this.removeProperty(name);
       return;

@@ -12,6 +12,7 @@ import * as html from "./html.js";
 import * as mutation from "./mutation.js";
 import * as node from "./node.js";
 import * as range from "./range.js";
+import * as strict from "./strict.js";
 import * as win from "./window.js";
 
 const EXCLUDE = new Set([
@@ -60,7 +61,8 @@ function install(options = {}) {
     "readystatechange",
     "visibilitychange",
   ]);
+  if (options.strict) strict.enable(classes);
   return doc;
 }
 
-globalThis.__domEnv = { install };
+globalThis.__domEnv = { install, gaps: strict.collect };
