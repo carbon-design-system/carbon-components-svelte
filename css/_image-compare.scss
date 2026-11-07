@@ -1,0 +1,286 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ImageCompare: two sides in one frame, divided by a draggable divider.
+/// `--ccs-image-compare-position` (0 to 100, no unit) is the share of the
+/// frame the "before" side covers. It moves two things and nothing else:
+/// the `clip-path` of the "before" layer and the `transform` of the
+/// divider's track, so a drag never lays out the frame. "Before" sits at
+/// the inline start, so the offsets that have no logical form multiply by
+/// `--ccs-inline-sign`, which is `-1` under `dir="rtl"`.
+/// @access private
+/// @group components
+@mixin image-compare {
+  .#{$prefix}--image-compare {
+    --ccs-image-compare-handle-size: #{$carbon--spacing-08};
+    --ccs-image-compare-line-size: #{to-rem(2px)};
+
+    width: 100%;
+  }
+
+  .#{$prefix}--image-compare__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: $layer;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--image-compare--slider .#{$prefix}--image-compare__stage {
+    // A horizontal drag moves the divider and a vertical one scrolls the
+    // page. The vertical divider swaps the axes.
+    cursor: ew-resize;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .#{$prefix}--image-compare--slider.#{$prefix}--image-compare--vertical
+    .#{$prefix}--image-compare__stage {
+    cursor: ns-resize;
+    touch-action: pan-x;
+  }
+
+  .#{$prefix}--image-compare__layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  .#{$prefix}--image-compare__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-user-drag: none;
+  }
+
+  // The "before" layer sits above "after" and is cut back to its share of
+  // the frame. The cut is on the end side: the right in LTR, the left in
+  // RTL. `(1 + sign) / 2` is 1 for the side that cuts and 0 for the other.
+  .#{$prefix}--image-compare--slider .#{$prefix}--image-compare__layer--before {
+    z-index: 1;
+    clip-path: inset(
+      0
+        calc(
+          (1 + var(--ccs-inline-sign, 1)) / 2 *
+            (100% - var(--ccs-image-compare-position) * 1%)
+        )
+        0
+        calc(
+          (1 - var(--ccs-inline-sign, 1)) / 2 *
+            (100% - var(--ccs-image-compare-position) * 1%)
+        )
+    );
+  }
+
+  .#{$prefix}--image-compare--slider.#{$prefix}--image-compare--vertical
+    .#{$prefix}--image-compare__layer--before {
+    clip-path: inset(
+      0 0 calc(100% - var(--ccs-image-compare-position) * 1%) 0
+    );
+  }
+
+  // Toggle: the "before" layer fades over the "after" one. Once faded out
+  // it is hidden, so it stops catching the pointer in front of the other side.
+  .#{$prefix}--image-compare--toggle .#{$prefix}--image-compare__layer--before {
+    z-index: 1;
+    opacity: 1;
+    transition:
+      opacity $duration--fast-02 motion(standard, productive),
+      visibility $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--image-compare--toggle .#{$prefix}--image-compare__layer--off {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--image-compare--toggle
+      .#{$prefix}--image-compare__layer--before {
+      transition: none;
+    }
+  }
+
+  .#{$prefix}--image-compare__switcher {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // The label sits in its own layer, so the divider hides it with the side
+  // it names. An opaque inverse chip reads over any image.
+  .#{$prefix}--image-compare__label {
+    @include type-style("label-01");
+    @include ccs-inset-inline($start: $carbon--spacing-03);
+
+    position: absolute;
+    inset-block-start: $carbon--spacing-03;
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    background-color: $background-inverse;
+    color: $text-inverse;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--image-compare--slider
+    .#{$prefix}--image-compare__label--after {
+    @include ccs-inset-inline($end: $carbon--spacing-03);
+  }
+
+  .#{$prefix}--image-compare--slider.#{$prefix}--image-compare--vertical
+    .#{$prefix}--image-compare__label--after {
+    @include ccs-inset-inline($start: $carbon--spacing-03);
+
+    inset-block: auto $carbon--spacing-03;
+  }
+
+  // The track fills the frame and slides by the share of its own width (or
+  // height), so the divider needs no measuring. The divider sits on the
+  // track's end edge, centered on it.
+  .#{$prefix}--image-compare__track {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+    transform: translateX(
+      calc(
+        var(--ccs-inline-sign, 1) *
+          (var(--ccs-image-compare-position) - 100) * 1%
+      )
+    );
+  }
+
+  .#{$prefix}--image-compare--vertical .#{$prefix}--image-compare__track {
+    transform: translateY(calc((var(--ccs-image-compare-position) - 100) * 1%));
+  }
+
+  .#{$prefix}--image-compare__divider {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: calc(var(--ccs-image-compare-handle-size) / -2);
+    display: flex;
+    width: var(--ccs-image-compare-handle-size);
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    // The line is a light core in a dark edge, so it reads over a light
+    // image and a dark one.
+    &::before {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 50%;
+      width: var(--ccs-image-compare-line-size);
+      margin-inline-start: calc(var(--ccs-image-compare-line-size) / -2);
+      background-color: $background;
+      box-shadow: 0 0 0 1px $background-inverse;
+      content: "";
+    }
+  }
+
+  .#{$prefix}--image-compare--vertical .#{$prefix}--image-compare__divider {
+    inset-block: auto calc(var(--ccs-image-compare-handle-size) / -2);
+    inset-inline: 0;
+    width: auto;
+    height: var(--ccs-image-compare-handle-size);
+
+    &::before {
+      inset-block: 50% auto;
+      inset-inline: 0;
+      width: auto;
+      height: var(--ccs-image-compare-line-size);
+      margin-block-start: calc(var(--ccs-image-compare-line-size) / -2);
+      margin-inline-start: 0;
+    }
+  }
+
+  .#{$prefix}--image-compare__handle {
+    position: relative;
+    display: flex;
+    width: var(--ccs-image-compare-handle-size);
+    height: var(--ccs-image-compare-handle-size);
+    align-items: center;
+    justify-content: center;
+    border: 2px solid $background;
+    border-radius: 50%;
+    background-color: $background-inverse;
+    box-shadow: 0 0 0 1px $background-inverse;
+    color: $icon-inverse;
+  }
+
+  .#{$prefix}--image-compare__handle-icon {
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+    fill: currentColor;
+  }
+
+  .#{$prefix}--image-compare__divider:focus-visible
+    .#{$prefix}--image-compare__handle {
+    @include focus-outline("outline", $omit: (outline-offset));
+
+    outline-offset: 2px;
+  }
+
+  // Side by side: each side in its own frame, named below it.
+  .#{$prefix}--image-compare__panels {
+    display: grid;
+    gap: $carbon--spacing-05;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .#{$prefix}--image-compare--vertical .#{$prefix}--image-compare__panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .#{$prefix}--image-compare__panel {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--image-compare__caption {
+    @include type-style("label-01");
+
+    margin-block-start: $carbon--spacing-03;
+    color: $text-secondary;
+  }
+
+  // Forced colors drop the box shadows and repaint the fills, so the line and
+  // the handle are drawn with borders and system colors.
+  @media (forced-colors: active) {
+    .#{$prefix}--image-compare__divider::before {
+      border-width: 0 1px;
+      border-style: solid;
+      border-color: CanvasText;
+      background-color: Canvas;
+      box-shadow: none;
+    }
+
+    .#{$prefix}--image-compare--vertical
+      .#{$prefix}--image-compare__divider::before {
+      border-width: 1px 0;
+    }
+
+    .#{$prefix}--image-compare__handle {
+      border: 2px solid CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+      box-shadow: none;
+    }
+
+    .#{$prefix}--image-compare__handle-icon {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--image-compare__label {
+      border: 1px solid CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}
+
+@include exports("image-compare") {
+  @include image-compare;
+}
