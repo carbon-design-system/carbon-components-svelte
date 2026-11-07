@@ -1,0 +1,65 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ErrorSummary lists the errors of a form at its top, as GOV.UK's error
+/// summary does: a heading and one link per error. It takes the look of an
+/// inline error notification (a layer, an error-colored edge at the inline
+/// start) but is a plain block, so it can be focused as a whole. A link
+/// keeps its underline: color alone does not mark it as a link. It has no
+/// outer margin; the layout that holds it (`Stack`) spaces it.
+/// @access private
+/// @group components
+@mixin error-summary {
+  .#{$prefix}--error-summary {
+    padding: $carbon--spacing-05;
+    background-color: $layer;
+    border: 1px solid $border-subtle;
+    border-inline-start: 3px solid $support-error;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--error-summary__title {
+    margin: 0 0 $carbon--spacing-04;
+    @include type-style("heading-03");
+  }
+
+  .#{$prefix}--error-summary__description {
+    margin: 0 0 $carbon--spacing-04;
+    @include type-style("body-01");
+  }
+
+  .#{$prefix}--error-summary__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    @include type-style("body-01");
+  }
+
+  .#{$prefix}--error-summary__list > li + li {
+    margin-top: $carbon--spacing-03;
+  }
+
+  // The link is a `bx--link`, which brings its colors, hover, focus ring and
+  // underline on focus. A message wraps like text, so it is not a flex box,
+  // and it keeps its underline at rest: color alone does not mark a link.
+  .#{$prefix}--error-summary__link {
+    display: inline;
+    font: inherit;
+    letter-spacing: inherit;
+    text-decoration: underline;
+  }
+
+  // The page moves focus here, not the user's Tab. The ring is drawn
+  // outside the edge so it does not cover the error-colored border.
+  .#{$prefix}--error-summary:focus {
+    @include focus-outline("outline", $omit: (outline-offset));
+
+    outline-offset: 2px;
+  }
+}
+
+@include exports("error-summary") {
+  @include error-summary;
+}
