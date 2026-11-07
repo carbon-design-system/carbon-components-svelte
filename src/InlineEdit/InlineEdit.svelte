@@ -384,7 +384,7 @@
     </div>
   </div>
   {#if showInvalid}
-    <p class:bx--edit-in-place__warning-text={true} id={errorId}>
+    <p role="alert" class:bx--edit-in-place__warning-text={true} id={errorId}>
       {invalidText}
     </p>
   {/if}

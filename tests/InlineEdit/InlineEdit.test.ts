@@ -176,6 +176,17 @@ describe("InlineEdit", () => {
     expect(cancelButton()).toBeEnabled();
   });
 
+  it("announces invalidText as an alert", () => {
+    render(InlineEdit, {
+      invalid: true,
+      invalidText: "This field is required",
+    });
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "This field is required",
+    );
+  });
+
   it("disables the input and shows no edit affordance when disabled", () => {
     render(InlineEdit, { disabled: true });
 
