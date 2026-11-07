@@ -67,6 +67,6 @@
 
 <div data-testid="text-input-revert">
   <TextInput labelText="Incident title" value="Database failover">
-    <AILabel slot="decorator" revertActive />
+    <AILabel slot="decorator" edited />
   </TextInput>
 </div>

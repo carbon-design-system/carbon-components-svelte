@@ -253,7 +253,7 @@
       <Decorator
         class="bx--checkbox-group-inner--decorator"
         state={aiLabelState}
-        labelKind="default"
+        labelVariant="default"
         labelAlign="start"
       >
         <slot name="decorator" />

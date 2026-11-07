@@ -4,9 +4,9 @@
   import type { ComponentProps } from "svelte";
 
   export let size: ComponentProps<AILabel>["size"] = undefined;
-  export let kind: ComponentProps<AILabel>["kind"] = undefined;
-  export let textLabel = "";
-  export let revertActive = false;
+  export let variant: ComponentProps<AILabel>["variant"] = undefined;
+  export let labelText = "";
+  export let edited = false;
   export let onrevert: (() => void) | undefined = undefined;
   export let open = false;
   export let align: ComponentProps<AILabel>["align"] = undefined;
@@ -16,10 +16,10 @@
 
 <AILabel
   {size}
-  {kind}
-  {textLabel}
+  {variant}
+  {labelText}
   {align}
-  bind:revertActive
+  bind:edited
   bind:open
   on:revert={() => onrevert?.()}
   on:open={() => onopen?.()}
@@ -30,5 +30,5 @@
     <button type="button">View details</button>
   </AILabelActions>
 </AILabel>
-<span data-testid="revert-active">{revertActive}</span>
+<span data-testid="edited">{edited}</span>
 <span data-testid="open">{open}</span>

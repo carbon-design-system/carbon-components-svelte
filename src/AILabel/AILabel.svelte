@@ -15,35 +15,35 @@
   export let size = "xs";
 
   /**
-   * Set the kind of AI label.
-   * The inline kind renders as text and can show `textLabel` next to it.
-   * Inside a `Tag`, the kind is always `"inline"`.
+   * Set the form of the label.
+   * The inline variant renders as text and can show `labelText` next to it.
+   * Inside a `Tag`, the variant is always `"inline"`.
    * @type {"default" | "inline"}
    */
-  export let kind = "default";
+  export let variant = "default";
 
   /** Specify the AI text in the button */
   export let aiText = "AI";
 
-  /** Specify extra text shown beside the AI text in the inline kind */
-  export let textLabel = "";
+  /** Specify extra text shown beside the AI text in the inline variant */
+  export let labelText = "";
 
   /**
-   * Specify the ARIA label for the button.
-   * It is announced after `aiText`.
+   * Specify the text that screen readers hear after `aiText`.
+   * The inline variant is named by its visible text and ignores it.
    */
-  export let ariaLabel = "Show information";
+  export let iconDescription = "Show information";
 
   /**
-   * Set to `true` to replace the label with a revert button.
-   * Use it after the user edits an AI-generated value.
+   * Set to `true` after the user edits an AI-generated value.
+   * The label turns into a revert button.
    * Clicking the revert button sets it back to `false`.
    * @bindable writable
    */
-  export let revertActive = false;
+  export let edited = false;
 
-  /** Specify the label of the revert button */
-  export let revertLabel = "Revert to AI input";
+  /** Specify the tooltip text of the revert button */
+  export let revertText = "Revert to AI input";
 
   /**
    * Set to `true` to open the explanation.
@@ -52,16 +52,13 @@
   export let open = false;
 
   /**
-   * Set the direction of the explanation relative to the button.
-   * @type {"top" | "right" | "bottom" | "left"}
-   */
-  export let direction = "bottom";
-
-  /**
-   * Set the alignment of the explanation relative to the button.
-   * Defaults to `"end"` inside a field or tile `decorator` slot,
-   * otherwise `"start"`.
-   * @type {"start" | "center" | "end" | undefined}
+   * Set where the explanation opens: the side of the button, then its
+   * alignment along that side.
+   * Above and below the button, `start` and `end` name inline sides, so
+   * they swap under `dir="rtl"`.
+   * Defaults to `"bottom-end"` inside a field or tile `decorator` slot,
+   * otherwise `"bottom-start"`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | undefined}
    */
   export let align = undefined;
 
@@ -100,36 +97,50 @@
    * @type {undefined | {
    *   size: import("svelte/store").Readable<undefined | string>;
    *   state: { set: (value: undefined | "active" | "revert") => void };
-   *   labelSize: string | ((kind: "default" | "inline") => string);
-   *   labelKind: undefined | "default" | "inline";
+   *   labelSize: string | ((variant: "default" | "inline") => string);
+   *   labelVariant: undefined | "default" | "inline";
    *   labelAlign: "start" | "center" | "end";
    * }}
    */
   const host = getContext(AI_LABEL_HOST_CONTEXT_KEY);
   const hostSize = host?.size;
 
-  $: effectiveKind = host?.labelKind ?? kind;
-  $: effectiveSize = host ? hostLabelSize(effectiveKind) : size;
-  $: effectiveAlign = align ?? host?.labelAlign ?? "start";
-  $: inlineWithContent = effectiveKind === "inline" && !!textLabel;
-  $: host?.state.set(revertActive ? "revert" : "active");
+  $: effectiveVariant = host?.labelVariant ?? variant;
+  $: effectiveSize = host ? hostLabelSize(effectiveVariant) : size;
+  $: [direction, alignment] = splitPlacement(
+    align ?? `bottom-${host?.labelAlign ?? "start"}`,
+  );
+  $: inlineWithContent = effectiveVariant === "inline" && !!labelText;
+  $: host?.state.set(edited ? "revert" : "active");
   // The revert button replaces the Toggletip, so the explanation
   // would otherwise reappear open once the label is restored.
-  $: if (revertActive) open = false;
+  $: if (edited) open = false;
 
   onMount(() => {
     return () => host?.state.set(undefined);
   });
 
-  /** @param {"default" | "inline"} labelKind */
-  function hostLabelSize(labelKind) {
+  /**
+   * Toggletip takes the side and the alignment as two props.
+   * @param {string} placement
+   * @returns {["top" | "right" | "bottom" | "left", "start" | "center" | "end"]}
+   */
+  function splitPlacement(placement) {
+    const [side, along = "center"] = placement.split("-");
+    return /** @type {any} */ ([side, along]);
+  }
+
+  /** @param {"default" | "inline"} labelVariant */
+  function hostLabelSize(labelVariant) {
     const { labelSize } = /** @type {NonNullable<typeof host>} */ (host);
-    return typeof labelSize === "function" ? labelSize(labelKind) : labelSize;
+    return typeof labelSize === "function"
+      ? labelSize(labelVariant)
+      : labelSize;
   }
 
   /** @param {MouseEvent} event */
   async function handleRevert(event) {
-    revertActive = false;
+    edited = false;
     dispatch("revert");
     // The revert button unmounts with the click. A keyboard press
     // (`detail` 0) would drop focus on the body, so move it to the label.
@@ -152,9 +163,9 @@
 
 <div
   class:bx--ai-label={true}
-  class:bx--ai-label--revert={revertActive}
+  class:bx--ai-label--revert={edited}
   class:bx--ai-label--field-xs={$hostSize === "xs"}
-  class:bx--ai-label--inline={effectiveKind === "inline"}
+  class:bx--ai-label--inline={effectiveVariant === "inline"}
   class:bx--ai-label--inline-with-content={inlineWithContent}
   class:bx--ai-label--mini={effectiveSize === "mini"}
   class:bx--ai-label--2xs={effectiveSize === "2xs"}
@@ -165,14 +176,14 @@
   class:bx--ai-label--xl={effectiveSize === "xl"}
   {...wrapperProps}
 >
-  {#if revertActive}
+  {#if edited}
     <Button
       bind:ref
       kind="ghost"
       size="small"
       iconOnly
       icon={Undo}
-      iconDescription={revertLabel}
+      iconDescription={revertText}
       tooltipAlignment="end"
       class="bx--ai-label__revert"
       aria-label={consumerLabel}
@@ -186,11 +197,11 @@
       bind:ref
       {id}
       {direction}
-      align={effectiveAlign}
+      align={alignment}
       {portalTooltip}
-      iconDescription={effectiveKind === "inline"
+      iconDescription={effectiveVariant === "inline"
         ? ""
-        : `${aiText} ${ariaLabel}`}
+        : `${aiText} ${iconDescription}`}
       popoverClass="bx--ai-label-popover"
       aria-label={consumerLabel}
       aria-labelledby={ariaLabelledBy}
@@ -201,7 +212,7 @@
       <svelte:fragment slot="icon">
         <span class:bx--ai-label__text={true}>{aiText}</span>
         {#if inlineWithContent}
-          <span class:bx--ai-label__additional-text={true}>{textLabel}</span>
+          <span class:bx--ai-label__additional-text={true}>{labelText}</span>
         {/if}
       </svelte:fragment>
       <slot />

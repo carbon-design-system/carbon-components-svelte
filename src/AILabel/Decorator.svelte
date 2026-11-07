@@ -17,16 +17,16 @@
   export let size = undefined;
 
   /**
-   * Set the size an `AILabel` renders at, or derive it from the label kind.
-   * @type {string | ((kind: "default" | "inline") => string)}
+   * Set the size an `AILabel` renders at, or derive it from the label variant.
+   * @type {string | ((variant: "default" | "inline") => string)}
    */
   export let labelSize = "mini";
 
   /**
-   * Force the kind of an `AILabel`.
+   * Force the variant of an `AILabel`.
    * @type {undefined | "default" | "inline"}
    */
-  export let labelKind = undefined;
+  export let labelVariant = undefined;
 
   /**
    * Set the default alignment of the explanation.
@@ -56,7 +56,7 @@
     size: sharedSize,
     state: labelState,
     labelSize,
-    labelKind,
+    labelVariant,
     labelAlign,
   });
 

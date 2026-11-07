@@ -21,9 +21,9 @@ describe("AILabel", () => {
     },
   );
 
-  it("names the inline kind by its text", () => {
+  it("names the inline variant by its text", () => {
     const { container } = render(AILabel, {
-      props: { kind: "inline", textLabel: "Generated" },
+      props: { variant: "inline", labelText: "Generated" },
     });
 
     expect(aiLabel(container)).toHaveClass(
@@ -83,8 +83,8 @@ describe("AILabel", () => {
     await user.click(
       screen.getByRole("button", { name: "AI Show information" }),
     );
-    await rerender({ revertActive: true });
-    await rerender({ revertActive: false });
+    await rerender({ edited: true });
+    await rerender({ edited: false });
 
     expect(
       screen.getByRole("button", { name: "AI Show information" }),
@@ -98,7 +98,7 @@ describe("AILabel", () => {
 
   it("reverts on click of the revert button", async () => {
     const onrevert = vi.fn();
-    render(AILabel, { props: { revertActive: true, onrevert } });
+    render(AILabel, { props: { edited: true, onrevert } });
 
     expect(
       screen.queryByRole("button", { name: "AI Show information" }),
@@ -109,7 +109,7 @@ describe("AILabel", () => {
     );
 
     expect(onrevert).toHaveBeenCalledTimes(1);
-    expect(screen.getByTestId("revert-active")).toHaveTextContent("false");
+    expect(screen.getByTestId("edited")).toHaveTextContent("false");
     // A pointer click leaves focus, so the label shows no focus ring.
     expect(
       screen.getByRole("button", { name: "AI Show information" }),
@@ -117,7 +117,7 @@ describe("AILabel", () => {
   });
 
   it("moves focus to the label when the keyboard reverts", async () => {
-    render(AILabel, { props: { revertActive: true } });
+    render(AILabel, { props: { edited: true } });
 
     screen.getByRole("button", { name: "Revert to AI input" }).focus();
     await user.keyboard("{Enter}");
@@ -204,11 +204,11 @@ describe("AILabel in a field decorator", () => {
       .getByTestId("text-input")
       .querySelector(".bx--text-input__field-wrapper");
 
-    await rerender({ revertActive: true });
+    await rerender({ edited: true });
     expect(wrapper).toHaveClass("bx--text-input__field-wrapper--decorator");
     expect(wrapper).not.toHaveClass("bx--text-input__field-wrapper--ai-label");
 
-    await rerender({ revertActive: false });
+    await rerender({ edited: false });
     expect(wrapper).toHaveClass("bx--text-input__field-wrapper--ai-label");
 
     await rerender({ showLabel: false });

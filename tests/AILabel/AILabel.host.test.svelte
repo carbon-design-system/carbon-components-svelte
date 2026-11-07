@@ -11,7 +11,7 @@
   import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
   import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 
-  export let revertActive = false;
+  export let edited = false;
   export let showLabel = true;
 
   const items = [{ id: "us-east-1", text: "US East" }];
@@ -21,7 +21,7 @@
   <TextInput labelText="Summary" size="xs">
     <svelte:fragment slot="decorator">
       {#if showLabel}
-        <AILabel size="xl" bind:revertActive />
+        <AILabel size="xl" bind:edited />
       {/if}
     </svelte:fragment>
   </TextInput>
@@ -62,7 +62,7 @@
 </div>
 <div data-testid="aligned">
   <TextInput labelText="Aligned">
-    <AILabel slot="decorator" align="start" />
+    <AILabel slot="decorator" align="bottom-start" />
   </TextInput>
 </div>
 <div data-testid="plain">

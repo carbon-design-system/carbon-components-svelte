@@ -60,7 +60,7 @@
     </Stepper>
   </div>
   <div data-testid="ai-label">
-    <AILabel revertActive />
+    <AILabel edited />
   </div>
   <div data-testid="own-icon">
     <ArrowRight class="bx--icon--mirror-rtl" />
