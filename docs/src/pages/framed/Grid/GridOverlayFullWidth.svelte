@@ -1,12 +1,6 @@
 <script>
-  import {
-    Button,
-    Column,
-    Grid,
-    GridOverlay,
-    Row,
-    Tile,
-  } from "carbon-components-svelte";
+  import { Button, Column, Grid, Row, Tile } from "carbon-components-svelte";
+  import { GridOverlay } from "carbon-components-svelte/devtools";
 
   let open = true;
 </script>
@@ -40,13 +34,13 @@
 <!-- docs-only:start -->
 <style>
   /* The overlay is fixed to the viewport, so drop the frame's side padding
-     to line the Grid up with it, and hide the frame's column outlines. */
+     to line the Grid up with it, and hide the frame's column guides. */
   :global(body.framed) {
     padding-inline: 0;
   }
 
   :global(body.framed :not(.bx--content) [class^="bx--col"]) {
-    outline: 0;
+    box-shadow: none;
   }
 </style>
 <!-- docs-only:end -->

@@ -22,6 +22,9 @@ const SHEETS: Record<string, { floor: number; ceiling?: Size }> = {
   // per-PR limit is sized for all.css and would let it grow by half.
   // min 62,493 and gzip 4,469 measured 2026-10-23
   "prose.scss": { floor: 55_000, ceiling: { min: 68_800, gzip: 4_950 } },
+  // The devtools opt-in sheet, sized the same way. min 15,407 and gzip
+  // 2,424 measured 2026-10-24
+  "devtools.scss": { floor: 13_000, ceiling: { min: 17_000, gzip: 2_700 } },
 };
 
 describe("css size", () => {
