@@ -466,13 +466,13 @@
   }
 
   :global(.my-layout-01-03) {
-    margin-top: var(--cds-layout-01);
-    margin-bottom: var(--cds-layout-03);
+    margin-top: var(--cds-spacing-05);
+    margin-bottom: var(--cds-spacing-07);
   }
 
   :global(.overflow .bx--structured-list) {
-    margin-top: var(--cds-layout-01);
-    margin-bottom: var(--cds-layout-04);
+    margin-top: var(--cds-spacing-05);
+    margin-bottom: var(--cds-spacing-09);
   }
 
   code {

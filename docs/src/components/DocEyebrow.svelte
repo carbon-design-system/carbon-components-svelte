@@ -21,7 +21,7 @@
 
 <style>
   :global(.eyebrow-icon) {
-    fill: var(--cds-text-secondary, var(--cds-text-secondary));
+    fill: var(--cds-text-secondary);
     flex-shrink: 0;
   }
 </style>

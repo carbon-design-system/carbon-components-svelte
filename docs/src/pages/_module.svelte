@@ -405,7 +405,7 @@
   :global(.docs-search-hit) {
     display: flex;
     align-items: baseline;
-    gap: 0.5rem;
+    gap: var(--cds-spacing-03);
     min-width: 0;
   }
 
@@ -421,15 +421,15 @@
   }
 
   :global(.bx--side-nav__items .bx--side-nav__divider) {
-    margin: 1rem 1rem 0;
+    margin: var(--cds-spacing-05) var(--cds-spacing-05) 0;
   }
 
   :global(.sidenav-subheading) {
-    padding: 1.25rem 1rem 0.25rem;
+    padding: 1.25rem var(--cds-spacing-05) var(--cds-spacing-02);
   }
 
   :global(.sidenav-subheading-first) {
-    padding-top: 0.75rem;
+    padding-top: var(--cds-spacing-04);
   }
 
   :global(.sidenav-bottom-spacer) {
