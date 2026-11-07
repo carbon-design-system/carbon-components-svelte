@@ -6,7 +6,7 @@ permissions: {}
 
 jobs:
   deploy-docs:
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     steps:
       - name: Trigger deploy
         env:
