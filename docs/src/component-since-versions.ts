@@ -73,6 +73,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   PageHeader: "0.113.0",
   Pagination: "0.2.0",
   PaginationNav: "0.8.4",
+  PermissionsMatrix: "0.114.0",
   PasswordInput: "0.2.0",
   PinCodeInput: "0.109.0",
   Popover: "0.31.0",
