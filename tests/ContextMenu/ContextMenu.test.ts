@@ -161,6 +161,20 @@ describe("ContextMenu", () => {
     expect(options[1]).toHaveFocus();
   });
 
+  it("should move focus onto disabled options with typeahead", async () => {
+    render(ContextMenu, { props: { open: true, optionDisabled: true } });
+
+    const menu = screen.getAllByRole("menu")[0];
+    menu.focus();
+
+    const options = screen.getAllByRole("menuitem");
+
+    await user.keyboard("{ArrowDown}");
+    await user.keyboard("o");
+    expect(options[1]).toHaveAttribute("aria-disabled", "true");
+    expect(options[1]).toHaveFocus();
+  });
+
   it("should scope typeahead search to the open submenu's own options", async () => {
     render(ContextMenu, {
       props: {
