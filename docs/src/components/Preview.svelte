@@ -13,9 +13,10 @@
   import { theme } from "../store";
 
   /**
-   * Highlighting a code view adds hundreds of elements, so it waits until
-   * the view comes within this distance of the viewport. Until then it
-   * shows the same text, uncolored.
+   * A code view is a CodeSnippet, with its buttons, and highlighting adds
+   * hundreds of elements, so both wait until the view comes within this
+   * distance of the viewport. Until then it's the same text, uncolored, in
+   * a plain `<pre>` of the same height, which find in page still reaches.
    */
   const HIGHLIGHT_MARGIN = "1000px 0px";
 
@@ -105,13 +106,30 @@
     style:contain-intrinsic-size="auto {codeViewHeight}px"
     bind:this={codeView}
   >
-    <CodeSnippet type="multi" {code}>
-      {#if nearViewport}{@html highlighted}{:else}{code}{/if}
-    </CodeSnippet>
+    {#if nearViewport}
+      <CodeSnippet type="multi" {code}>
+        {#if highlighted}{@html highlighted}{:else}{code}{/if}
+      </CodeSnippet>
+    {:else}
+      <pre
+        class="code-placeholder"
+        style:height="{codeViewHeight}px">{code}</pre>
+    {/if}
   </div>
 </div>
 
 <style>
+  .code-placeholder {
+    overflow: hidden;
+    margin: 0;
+    padding: 1rem;
+    background-color: var(--cds-layer-01);
+    color: var(--cds-text-primary);
+    font-family: "IBM Plex Mono", Menlo, "DejaVu Sans Mono", monospace;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
   .preview {
     margin-bottom: var(--cds-layout-04);
     margin-left: -1rem;
