@@ -23,7 +23,7 @@ Set `text` to the string to copy. Use it when the copied value differs from what
 
 ## Inline in text
 
-The value and button flow inline, so `CopyText` sits inside a sentence. Long values wrap, and the button follows the last line. When a value nearly fills its line, the button can drop to the next line by itself.
+The value and button flow inline, so `CopyText` sits inside a sentence. Long values wrap, and the button stays on the last line of the value.
 
 <Text>Send requests to <CopyText>https://api.acme.io/v1</CopyText> with your API token in the <code>Authorization</code> header.</Text>
 
@@ -35,7 +35,7 @@ Set `feedback` to customize the message shown after copying. Set `errorFeedback`
 
 ## Icon description
 
-Set `iconDescription` to change the button's accessible name and hover tooltip. Give each button a distinct name when several appear on one page, so screen readers can tell them apart.
+Set `iconDescription` to change the button's accessible name and hover tooltip. The value describes the button, so screen readers announce "Copy to clipboard" followed by the value. Each button on a page stays distinct with the default name.
 
 <CopyText text="postgres-prod-01.acme.io:5432" iconDescription="Copy endpoint" />
 
