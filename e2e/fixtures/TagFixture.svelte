@@ -3,6 +3,7 @@
   import Add from "carbon-icons-svelte/lib/Add.svelte";
 
   let showTag = true;
+  let pointerTags = ["Alpha", "Beta", "Gamma"];
 
   const longLabel = "status:active AND region:us-south AND service:storage";
 </script>
@@ -17,6 +18,19 @@
     Carbon
   </Tag>
 {/if}
+
+<div data-testid="tag-pointer-focus">
+  <TagSet>
+    {#each pointerTags as tag (tag)}
+      <Tag
+        filter
+        title="Remove"
+        on:close={() => (pointerTags = pointerTags.filter((t) => t !== tag))}
+        >{tag}</Tag
+      >
+    {/each}
+  </TagSet>
+</div>
 
 <Tag data-testid="tag-static">Static tag</Tag>
 

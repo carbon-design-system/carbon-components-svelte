@@ -30,6 +30,38 @@ test.describe("Tag", () => {
     await expect(page.getByTestId("tag-filter")).not.toBeVisible();
   });
 
+  test("rings a close button for the keyboard, not the pointer", async ({
+    page,
+    browserName,
+  }) => {
+    const set = page.getByTestId("tag-pointer-focus");
+    const ringed = () =>
+      set
+        .locator(".bx--tag__close-icon")
+        .evaluateAll((buttons) =>
+          buttons
+            .filter((button) => getComputedStyle(button).boxShadow !== "none")
+            .map((button) => button.closest(".bx--tag")?.textContent?.trim()),
+        );
+
+    // A click removes Alpha. TagSet hands focus to Beta's button, which
+    // the pointer never touched, so it shows no ring. WebKit doesn't focus
+    // a clicked button, so focus doesn't move there at all.
+    await set.getByRole("button", { name: "Remove Alpha" }).click();
+    await expect(set.getByText("Alpha")).toHaveCount(0);
+    expect(await ringed()).toEqual([]);
+
+    // From the keyboard, Beta's button shows the ring. WebKit's Tab skips
+    // buttons, so this half runs in Chromium and Firefox.
+    if (browserName === "webkit") return;
+    await page.getByRole("button", { name: "Clear filter" }).focus();
+    await page.keyboard.press("Tab");
+    await expect(
+      set.getByRole("button", { name: "Remove Beta" }),
+    ).toBeFocused();
+    expect(await ringed()).toEqual(["Beta"]);
+  });
+
   test("keeps the same space beside the icon in RTL as in LTR", async ({
     page,
   }) => {
