@@ -1,13 +1,13 @@
 <script>
   /**
-   * @typedef {"ctrl" | "control" | "alt" | "option" | "shift" | "meta" | "command" | "enter" | "return" | "escape" | "escapeName" | "tab" | "backspace" | "delete" | "forwardDelete" | "space" | "arrowUp" | "arrowDown" | "arrowLeft" | "arrowRight" | "pageUp" | "pageDown" | "home" | "end"} KbdTranslationId
+   * @typedef {"ctrl" | "control" | "alt" | "option" | "shift" | "meta" | "command" | "enter" | "return" | "escape" | "escapeName" | "tab" | "backspace" | "delete" | "forwardDelete" | "del" | "forwardDel" | "space" | "arrowUp" | "arrowDown" | "arrowLeft" | "arrowRight" | "pageUp" | "pageDown" | "home" | "end"} KbdTranslationId
    * @restProps {kbd}
    * @slot {{}}
    */
 
   /**
    * Specify the shortcut to show, such as `"mod+k"` or `"shift+?"`. `mod`
-   * shows Command (⌘) on Apple platforms and Ctrl elsewhere. Leave it empty
+   * shows Command on Apple platforms and Ctrl elsewhere. Leave it empty
    * to show the default slot as one key.
    */
   export let shortcut = "";
@@ -20,8 +20,8 @@
 
   /**
    * Specify how the keys look: `"keycap"` boxes each key; `"muted"` runs
-   * them together as secondary text, as menus show shortcuts (⇧⌘P on Apple
-   * platforms, Ctrl+Shift+P elsewhere).
+   * them together as secondary text, as menus show shortcuts: icons run
+   * together on Apple platforms, Ctrl+Shift+P elsewhere.
    * @type {"keycap" | "muted"}
    */
   export let variant = "keycap";
@@ -51,6 +51,8 @@
     backspace: "backspace",
     delete: "delete",
     forwardDelete: "forwardDelete",
+    del: "del",
+    forwardDel: "forwardDel",
     space: "space",
     arrowUp: "arrowUp",
     arrowDown: "arrowDown",
@@ -65,7 +67,7 @@
   /**
    * Override the default translations of the key names. Words such as
    * "Ctrl" are shown on the keys; names such as "Command" are read by
-   * screen readers for the symbols shown on Apple platforms. Unset, it uses
+   * screen readers for the icons shown on Apple platforms. Unset, it uses
    * the nearest `setKbdTranslations`, then English.
    * @type {(id: KbdTranslationId) => string}
    */
@@ -80,11 +82,34 @@
    */
   export let ref = null;
 
+  import ArrowDown from "../icons/ArrowDown.svelte";
+  import ArrowLeft from "../icons/ArrowLeft.svelte";
+  import ArrowRight from "../icons/ArrowRight.svelte";
+  import ArrowUp from "../icons/ArrowUp.svelte";
+  import ChevronUp from "../icons/ChevronUp.svelte";
+  import MacCommand from "../icons/MacCommand.svelte";
+  import MacOption from "../icons/MacOption.svelte";
+  import MacShift from "../icons/MacShift.svelte";
+  import PageLast from "../icons/PageLast.svelte";
+  import Return from "../icons/Return.svelte";
   import { applePlatform } from "../utils/keyboard-shortcut.js";
   import { KBD_TRANSLATIONS, kbdKeys } from "./kbd-keys.js";
   import { getKbdTranslations } from "./kbd-translations.js";
 
   const shared = getKbdTranslations();
+
+  const ICONS = {
+    command: MacCommand,
+    option: MacOption,
+    shift: MacShift,
+    control: ChevronUp,
+    return: Return,
+    tab: PageLast,
+    arrowUp: ArrowUp,
+    arrowDown: ArrowDown,
+    arrowLeft: ArrowLeft,
+    arrowRight: ArrowRight,
+  };
 
   $: isApple = apple ?? $applePlatform;
 
@@ -135,7 +160,12 @@
         ><span class:bx--visually-hidden={true}>{platform.names}</span
         >{#each platform.keys as key, index (index)}<kbd
             class:bx--kbd__key={true}
-            aria-hidden="true">{key.label}</kbd
+            aria-hidden="true"
+            >{#if key.icon}<svelte:component
+                this={ICONS[key.icon]}
+                class="bx--kbd__icon"
+                data-icon={key.icon}
+              />{:else}{key.label}{/if}</kbd
           >{/each}</span
       >
     {/each}

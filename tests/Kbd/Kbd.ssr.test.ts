@@ -10,13 +10,13 @@ describe("Kbd server render", () => {
         ...document.querySelectorAll(
           `[data-testid="sm"] .bx--kbd__platform--${platform} .bx--kbd__key`,
         ),
-      ].map((key) => key.textContent);
+      ].map((key) => (key.querySelector("svg") ? "icon" : key.textContent));
 
     expect(document.querySelector('[data-testid="sm"]')?.className).toContain(
       "bx--kbd--both",
     );
     expect(keys("other")).toEqual(["Ctrl", "K"]);
-    expect(keys("apple")).toEqual(["⌘", "K"]);
+    expect(keys("apple")).toEqual(["icon", "K"]);
   });
 
   it("renders one platform when apple is set", () => {

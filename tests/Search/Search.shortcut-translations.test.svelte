@@ -8,3 +8,7 @@
 <div data-testid="translated">
   <Search shortcut="ctrl+shift+f" />
 </div>
+
+<div data-testid="arrows">
+  <Search shortcut="alt+arrowup" />
+</div>

@@ -8,7 +8,7 @@ description: Kbd shows a key, or the keys of a keyboard shortcut, as key caps, w
 
 ## Basic
 
-Set `shortcut` to the keys joined by `+`. `mod` is Command on Apple platforms and Ctrl elsewhere, so one shortcut reads right on both: ⌘ K on a Mac, Ctrl K on Windows and Linux. Modifiers show in the platform's order, and screen readers hear the key names ("Command K"), not the symbols.
+Set `shortcut` to the keys joined by `+`. `mod` is Command on Apple platforms and Ctrl elsewhere, so one shortcut reads right on both: Command K on a Mac, Ctrl K on Windows and Linux. Modifiers show in the platform's order, and screen readers hear the key names ("Command K"), not the symbols.
 
 <Stack orientation="horizontal" gap={5} align="center">
   <Kbd shortcut="mod+k" />
@@ -53,7 +53,7 @@ Set `size` to control key height. The default is `"default"`, 24px tall. Use `"s
 
 ## Muted
 
-Set `variant` to `"muted"` to run the keys together as secondary text, as a menu shows shortcuts: ⇧⌘S on Apple platforms, Ctrl+Shift+S elsewhere. Buttons show their `shortcut` this way.
+Set `variant` to `"muted"` to run the keys together as secondary text, as a menu shows shortcuts: icons run together on Apple platforms, Ctrl+Shift+S elsewhere. Buttons show their `shortcut` this way.
 
 <Stack orientation="horizontal" gap={5} align="center">
   <Kbd shortcut="mod+shift+s" variant="muted" apple />

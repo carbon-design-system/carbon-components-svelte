@@ -4,17 +4,18 @@ import KbdTranslations from "./KbdTranslations.test.svelte";
 
 const keys = (testId: string) =>
   [...screen.getByTestId(testId).querySelectorAll(".bx--kbd__key")].map(
-    (key) => key.textContent,
+    (key) =>
+      key.querySelector("svg")?.getAttribute("data-icon") ?? key.textContent,
   );
 
 const spoken = (testId: string) =>
   screen.getByTestId(testId).querySelector(".bx--visually-hidden")?.textContent;
 
 describe("Kbd", () => {
-  it("shows a shortcut in each platform's order and symbols", () => {
+  it("shows a shortcut in each platform's order, with icons on Apple", () => {
     render(Kbd);
 
-    expect(keys("apple")).toEqual(["⇧", "⌘", "P"]);
+    expect(keys("apple")).toEqual(["shift", "command", "P"]);
     expect(keys("other")).toEqual(["Ctrl", "Shift", "P"]);
   });
 

@@ -221,7 +221,7 @@
   // The keys show in the empty field, where the clear button goes, and
   // make room for themselves: their width in `ch`, near enough for the
   // short run of keys, in the names `setKbdTranslations` gives them, and
-  // known on the server.
+  // known on the server. An icon is 1em, under 2ch.
   $: hasShortcutHint =
     Boolean(shortcut) &&
     (value === "" || value == null) &&
@@ -229,9 +229,13 @@
     !(expandable && !expanded) &&
     !showInvalid &&
     !showWarn;
-  $: shortcutWidth = kbdKeys(shortcut, $applePlatform, translateKey)
-    .map((key) => key.label)
-    .join($applePlatform ? "" : "+").length;
+  $: shortcutWidth = kbdKeys(shortcut, $applePlatform, translateKey).reduce(
+    (width, key, index) =>
+      width +
+      (key.icon ? 2 : key.label.length) +
+      (index > 0 && !$applePlatform ? 1 : 0),
+    0,
+  );
 
   let skipSelectOnFocus = false;
 

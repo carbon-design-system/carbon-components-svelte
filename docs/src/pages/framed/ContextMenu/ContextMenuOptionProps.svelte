@@ -11,12 +11,12 @@
 
 <ContextMenu>
   <ContextMenuOption labelText="View details" />
-  <ContextMenuOption labelText="Search" shortcutText="⌘K" />
-  <ContextMenuOption labelText="Copy" shortcutText="⌘C" icon={CopyFile} />
+  <ContextMenuOption labelText="Search" shortcut="mod+k" />
+  <ContextMenuOption labelText="Copy" shortcut="mod+c" icon={CopyFile} />
   <ContextMenuDivider />
   <ContextMenuOption indented labelText="Rename" />
   <ContextMenuDivider />
-  <ContextMenuOption disabled labelText="Cut" shortcutText="⌘X" icon={Cut} />
+  <ContextMenuOption disabled labelText="Cut" shortcut="mod+x" icon={Cut} />
   <ContextMenuDivider />
   <ContextMenuOption kind="danger" labelText="Delete" icon={TrashCan} />
 </ContextMenu>

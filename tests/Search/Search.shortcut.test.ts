@@ -66,6 +66,8 @@ describe("Search shortcut", () => {
     expect(width("search")).toBe("1ch");
     // "Strg+Umschalt+F", not "Ctrl+Shift+F"
     expect(width("translated")).toBe("15ch");
+    // "Alt+", then an icon at 2ch
+    expect(width("arrows")).toBe("6ch");
   });
 
   it("expands a collapsed search and focuses it", async () => {

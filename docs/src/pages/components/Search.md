@@ -6,7 +6,7 @@ description: Search provides a flexible search input, with support for expandabl
 <script>
   import Information from "carbon-icons-svelte/lib/Information.svelte";
   import Query from "carbon-icons-svelte/lib/Query.svelte";
-  import { Box, FluidSearchSkeleton, Layer, Search, TooltipIcon } from "carbon-components-svelte";
+  import { Box, FluidSearchSkeleton, Kbd, Layer, Search, TooltipIcon } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -73,7 +73,7 @@ Set `closeButtonLabelText` to customize the accessible label of the clear button
 
 Set `shortcut` to focus the field from anywhere on the page, such as `"/"` or `"mod+k"` (`mod` is Command on Apple platforms and Ctrl elsewhere). The keys show at the end of the empty field until it's focused, and the input announces them with `aria-keyshortcuts`. A key without a modifier, such as `/`, doesn't fire while typing in another field. An expandable search expands first, and its search button announces the keys while it's collapsed. To do something else, handle `on:shortcut` and call `preventDefault()`.
 
-This site already uses <DocKbd label="/" /> and <DocKbd label="⌘" />+<DocKbd label="K" /> for its own search, so the example uses `"mod+shift+f"`.
+This site already uses <Kbd shortcut="/" size="sm" /> and <Kbd shortcut="mod+k" size="sm" /> for its own search, so the example uses `"mod+shift+f"`.
 
 <Search shortcut="mod+shift+f" placeholder="Search components" />
 

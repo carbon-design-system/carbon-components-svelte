@@ -48,7 +48,7 @@
    * @example
    * ```svelte
    * <MenuItem>
-   *   <span slot="shortcutChildren">⌘S</span>
+   *   <span slot="shortcutChildren">Save: S</span>
    * </MenuItem>
    * ```
    */
@@ -60,7 +60,7 @@
    * `shortcutText` goes, and the item gets `aria-keyshortcuts`. Display only:
    * bind the command itself with `onShortcut`, since the menu is usually
    * closed. `shortcutText` and its slot take precedence. A value that isn't
-   * a shortcut, such as `"⌘C"`, shows as written.
+   * a shortcut, such as `"Ctrl C"`, shows as written.
    */
   export let shortcut = "";
 

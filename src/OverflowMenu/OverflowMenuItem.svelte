@@ -88,7 +88,7 @@
    * Command on Apple platforms and Ctrl elsewhere. The keys show at the end
    * of the item, and it gets `aria-keyshortcuts`. Display only: bind the
    * command itself with `onShortcut`, since the menu is usually closed. A
-   * value that isn't a shortcut, such as `"⌘D"`, shows as written.
+   * value that isn't a shortcut, such as `"Ctrl D"`, shows as written.
    */
   export let shortcut = "";
 
