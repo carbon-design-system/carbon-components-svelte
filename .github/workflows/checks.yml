@@ -189,6 +189,8 @@ jobs:
           filter css-size \
             'css/*' crassus.config.ts scripts/check-css-size.ts \
             scripts/lib/css-size.ts scripts/lib/css-targets.ts package.json bun.lock
+          # A docs/ change deploys from deploy-docs.yml, whose guard repeats
+          # these patterns.
           filter docs-deploy \
             'src/*' 'css/*' 'scripts/*' package.json bun.lock '.github/*'
           # `test:types` checks tests/ and what it imports. It never reads the
@@ -518,4 +520,6 @@ jobs:
       (github.event_name == 'workflow_dispatch' || needs.changes.outputs.docs-deploy == 'true') &&
       !failure() && !cancelled()
     uses: ./.github/workflows/deploy-docs.yml
+    with:
+      after-checks: true
     secrets: inherit

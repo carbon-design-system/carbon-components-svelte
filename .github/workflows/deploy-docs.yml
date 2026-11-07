@@ -1,14 +1,50 @@
 on:
   workflow_call:
+    inputs:
+      # checks.yml sets this: it deploys once its tests pass.
+      after-checks:
+        type: boolean
+        default: false
   workflow_dispatch:
+  # checks.yml skips a push that changes only docs/, and deploys only for
+  # changes outside it, so a docs change deploys from here.
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
 
 permissions: {}
 
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
+      # A push that also changes what checks.yml deploys for is its to
+      # deploy, after the tests. Keep the patterns in step with its
+      # docs-deploy filter. If the compare fails, deploy: a second deploy
+      # costs a build, and a missed one leaves the site stale.
+      - name: Leave the deploy to checks.yml
+        id: guard
+        if: github.event_name == 'push' && !inputs.after-checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          files=$(gh api "repos/$GITHUB_REPOSITORY/compare/$BEFORE...$GITHUB_SHA" --jq '.files[].filename') || exit 0
+          while IFS= read -r file; do
+            case "$file" in
+              src/* | css/* | scripts/* | package.json | bun.lock | .github/*)
+                echo "$file changed, so checks.yml deploys after its tests."
+                echo "skip=true" >> "$GITHUB_OUTPUT"
+                exit 0
+                ;;
+            esac
+          done <<< "$files"
+
       - name: Trigger deploy
+        if: steps.guard.outputs.skip != 'true'
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: curl -f "$deploy_url"
