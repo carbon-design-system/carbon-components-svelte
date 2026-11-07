@@ -45,7 +45,7 @@
   } from "svelte";
   import { derived, writable } from "svelte/store";
   import { batchStoreUpdates } from "../utils/batch-store-updates.js";
-  import { hasModifierKey } from "../utils/has-modifier-key.js";
+  import { focusNav } from "../utils/focus-nav.js";
   import { keyBy } from "../utils/key-by.js";
   import {
     getLayoutDirection,
@@ -53,7 +53,6 @@
   } from "../utils/layout-direction.js";
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
-  import { rovingFocus } from "../utils/roving-focus.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
 
   const dispatch = createEventDispatcher();
@@ -256,28 +255,11 @@
   class:bx--progress--vertical={vertical}
   class:bx--progress--space-equal={spaceEqually && !vertical}
   {...$$restProps}
-  use:rovingFocus={{
+  use:focusNav={{
     selector: ".bx--progress-step-button",
     rtl: () => resolveLayoutDirection($layoutDirection, listRef) === "rtl",
     orientation: vertical ? "vertical" : "horizontal",
     skipDisabled: true,
-    focusOnMove: false,
-    getActiveIndex: () => {
-      if (!listRef) return -1;
-      const items = /** @type {(Element | null)[]} */ (
-        Array.from(listRef.querySelectorAll(".bx--progress-step-button"))
-      );
-      return items.indexOf(document.activeElement);
-    },
-    onMove: (index, event) => {
-      // Leave Alt/Ctrl/Meta+Arrow (Back, scroll) to the browser.
-      if (hasModifierKey(event)) return;
-      // Arrow keys would otherwise also scroll the page.
-      event.preventDefault();
-      /** @type {HTMLElement | undefined} */ (
-        listRef?.querySelectorAll(".bx--progress-step-button")[index]
-      )?.focus();
-    },
   }}
   on:click
   on:mouseover
