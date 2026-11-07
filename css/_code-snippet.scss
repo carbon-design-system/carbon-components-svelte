@@ -1,6 +1,7 @@
 @import "carbon-components/scss/globals/scss/vars";
 @import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
 
 /// Disabled treatment for the inline code snippet variant. Carbon's vendored
 /// v10.58 CSS only styles `.bx--snippet--disabled` on the single/multi
@@ -24,15 +25,110 @@
   }
 
   // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  // This partial's one block: it holds the header tabs' hover as well.
   @media (any-hover: hover) {
     .#{$prefix}--snippet--inline:disabled:hover {
       background-color: $field;
       border-color: transparent;
       cursor: not-allowed;
     }
+
+    .#{$prefix}--snippet__tab:hover:not(:disabled) {
+      background-color: $layer-hover;
+      color: $text-primary;
+    }
   }
 }
 
 @include exports("code-snippet-inline-disabled") {
   @include code-snippet-inline-disabled;
+}
+
+/// A header above a multi-line snippet's code: a title, or one tab for each
+/// file. It runs the snippet's full width, over the snippet's padding, and
+/// the copy button sits in it. The header's content follows the page's
+/// direction; the code under it stays left to right.
+/// @access private
+/// @group components
+@mixin code-snippet-header {
+  // Two classes, to come after the multi snippet's own padding and copy
+  // button position, which have the specificity of one.
+  .#{$prefix}--snippet--multi.#{$prefix}--snippet--has-header {
+    flex-direction: column;
+    padding-block-start: 0;
+
+    .#{$prefix}--copy-btn {
+      top: calc((#{$carbon--spacing-08} - #{$carbon--spacing-07}) / 2);
+    }
+  }
+
+  // The tab panel takes focus so the keyboard can scroll the code. Ring it
+  // only for the keyboard, so a click on the code leaves it plain. A browser
+  // without `:focus-visible` drops this rule and keeps the ring.
+  .#{$prefix}--snippet--multi
+    .#{$prefix}--snippet-container[role="tabpanel"]:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .#{$prefix}--snippet__header {
+    display: flex;
+    min-height: $carbon--spacing-08;
+    // Room for the copy button.
+    padding-inline-end: $carbon--spacing-08;
+    border-block-end: 1px solid $border-subtle;
+    margin-block-end: $carbon--spacing-05;
+    margin-inline: calc(-1 * #{$carbon--spacing-05});
+    order: 0;
+  }
+
+  .#{$prefix}--snippet__title,
+  .#{$prefix}--snippet__tab {
+    @include type-style("body-compact-01");
+    @include carbon--font-family("sans");
+
+    display: inline-flex;
+    align-items: center;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--snippet__title {
+    padding-inline: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--snippet__tabs {
+    display: flex;
+    min-width: 0;
+    overflow-x: auto;
+  }
+
+  .#{$prefix}--snippet__tab {
+    padding: 0 $carbon--spacing-05 2px;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      cursor: not-allowed;
+    }
+
+    // The selected tab is more than a color: a bar, and a heavier weight.
+    // The bar's room is taken from the padding, so no tab shifts.
+    &--selected {
+      padding-block-end: 0;
+      border-block-end: 2px solid $border-interactive;
+      color: $text-primary;
+      font-weight: 600;
+    }
+  }
+}
+
+@include exports("code-snippet-header") {
+  @include code-snippet-header;
 }

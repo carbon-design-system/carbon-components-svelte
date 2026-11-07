@@ -255,6 +255,13 @@
     },
     {
       "component": "CodeSnippet",
+      "prop": "filesDescription",
+      "type": "string",
+      "default": "Files",
+      "defaultKind": "text"
+    },
+    {
+      "component": "CodeSnippet",
       "prop": "showLessText",
       "type": "string",
       "default": "Show less",
