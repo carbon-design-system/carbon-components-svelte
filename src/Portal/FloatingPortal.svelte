@@ -118,6 +118,7 @@
 
   import { onMount, tick } from "svelte";
   import { FLOATING_PORTAL_Z_INDEX } from "../constants/layout.js";
+  import { fixedBlockOffset } from "../utils/fixed-block-offset.js";
   import { floatingPosition } from "../utils/floating-position.js";
   import { getScrollableAncestors } from "../utils/get-scrollable-ancestors.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
@@ -217,6 +218,12 @@
     caretNudgePx: undefined,
   };
 
+  /**
+   * Where a `fixed` box in the target measures from, as a distance from the
+   * window's corner: not zero in a transformed target.
+   */
+  let fixedOffset = { x: 0, y: 0 };
+
   /** @type {MutationObserver | null} */
   let anchorObserver = null;
 
@@ -285,6 +292,11 @@
 
   function updatePosition() {
     if (!mounted || !anchor || !ref) return;
+
+    fixedOffset =
+      useFixedPosition && effectiveTarget
+        ? fixedBlockOffset(effectiveTarget)
+        : { x: 0, y: 0 };
 
     pos = floatingPosition({
       anchorRect: anchor.getBoundingClientRect(),
@@ -361,8 +373,8 @@
 
   $: portalStyle = [
     useFixedPosition ? "position: fixed" : "position: absolute",
-    `top: ${pos.top}px`,
-    `left: ${pos.left}px`,
+    `top: ${pos.top - fixedOffset.y}px`,
+    `left: ${pos.left - fixedOffset.x}px`,
     intrinsicTranslateX,
     !useIntrinsicWidthVertical && pos.width != null
       ? `width: ${pos.width}px`
