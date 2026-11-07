@@ -6,6 +6,7 @@ import "../../css/syntax.css";
 import { route } from "./current-route";
 import "./global.css";
 import { FRAMED_PREFIX, framedRoute, normalizePath } from "./routes";
+import { reloadForNewBuild } from "./stale-build";
 
 /** A framed example skips the site's shell, router and search. */
 async function start() {
@@ -14,19 +15,19 @@ async function start() {
     const [{ framedPages }, { default: FramedApp }] = await Promise.all([
       import("./framed-pages"),
       import("./FramedApp.svelte"),
-    ]);
+    ]).catch(reloadForNewBuild);
     const framed = framedRoute(path);
     const load = framedPages[framed.file];
     if (load) {
+      const { default: page } = await load().catch(reloadForNewBuild);
       route.set(framed);
-      mount(FramedApp, {
-        target: document.body,
-        props: { page: (await load()).default },
-      });
+      mount(FramedApp, { target: document.body, props: { page } });
       return;
     }
   }
-  const { default: App } = await import("./App.svelte");
+  const { default: App } = await import("./App.svelte").catch(
+    reloadForNewBuild,
+  );
   mount(App, { target: document.body });
 }
 
