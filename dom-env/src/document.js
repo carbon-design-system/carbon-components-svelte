@@ -8,7 +8,7 @@ import {
   elementsByTagName,
   HTMLElement,
 } from "./element.js";
-import { CREATE_EVENT_INTERFACES, hooks } from "./events.js";
+import { CREATE_EVENT_INTERFACES, EventTarget, hooks } from "./events.js";
 import {
   adopt,
   CDATASection,
@@ -109,6 +109,9 @@ export class Document extends Node {
 
   get implementation() {
     return (this._implementation ??= new DOMImplementation(INTERNAL, this));
+  }
+  get fonts() {
+    return (this._fonts ??= new FontFaceSet(INTERNAL));
   }
   get URL() {
     return this._url;
@@ -530,6 +533,57 @@ export class Document extends Node {
 }
 mixin(Document, ParentNode);
 tag(Document);
+
+/**
+ * `document.fonts` with nothing to load: every font is ready, so code that
+ * waits on `ready` before measuring text runs its browser path.
+ */
+export class FontFaceSet extends EventTarget {
+  constructor(token) {
+    if (token !== INTERNAL) illegalConstructor();
+    super();
+    this._faces = new Set();
+    this._ready = Promise.resolve(this);
+  }
+  get status() {
+    return "loaded";
+  }
+  get ready() {
+    return this._ready;
+  }
+  get size() {
+    return this._faces.size;
+  }
+  add(face) {
+    this._faces.add(face);
+    return this;
+  }
+  delete(face) {
+    return this._faces.delete(face);
+  }
+  has(face) {
+    return this._faces.has(face);
+  }
+  clear() {
+    this._faces.clear();
+  }
+  forEach(callback, thisArg) {
+    for (const face of this._faces) callback.call(thisArg, face, face, this);
+  }
+  values() {
+    return this._faces.values();
+  }
+  [Symbol.iterator]() {
+    return this._faces.values();
+  }
+  check() {
+    return true;
+  }
+  load() {
+    return Promise.resolve([]);
+  }
+}
+tag(FontFaceSet);
 
 export class HTMLDocument extends Document {
   constructor(token) {
