@@ -32,6 +32,27 @@ Where tests observe jsdom-specific behavior, dom-env matches jsdom instead of th
 
 It follows browsers where jsdom doesn't: `inert` subtrees can't take focus.
 
+## Strict mode
+
+A member dom-env lacks reads as `undefined`, and writing it makes an expando, so a missing API can go unnoticed. Strict mode lists those lookups per test file, with the line that made each:
+
+```ts
+test: {
+  environmentOptions: { domEnv: { strict: "warn" } }, // or "error"
+}
+```
+
+`DOM_ENV_STRICT=warn` turns it on for one run. "warn" prints the list; "error" fails the file's teardown with it.
+
+| Reported | Left out |
+| --- | --- |
+| Reads and writes of members no DOM class has, from tests and the code under test | Lookups made by libraries, which probe for what browsers lack |
+| CSS properties set or read that dom-env doesn't know | Lookups on prototypes, which is how setup code polyfills |
+| | Private expandos (`_x`, `__click`) and other classes' fields |
+| | Globals that setup code defines after checking for them |
+
+A Proxy at the end of every DOM prototype chain sees only the lookups that miss, so implemented members cost nothing. Some reports are members browsers lack too (`navigator.userAgentData` outside Chromium), which the code under test checks for.
+
 ## Develop
 
 ```sh
