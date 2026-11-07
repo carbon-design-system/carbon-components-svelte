@@ -48,6 +48,11 @@
     }
   }
 
+  .#{$prefix}--toast-notification--high-contrast
+    .#{$prefix}--toast-notification__details {
+    @include notification--inverse-content;
+  }
+
   .#{$prefix}--toast-notification--high-contrast a { // ccs: flatten
     color: $link-inverse;
   }

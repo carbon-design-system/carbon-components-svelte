@@ -12,6 +12,25 @@
   background: $background-color;
 }
 
+/// ccs: points the text, icon, link and focus tokens at their inverse
+/// values, so components in a high-contrast notification's text, such as
+/// an UnorderedList, read on its inverse background.
+/// @access private
+/// @group notification
+@mixin notification--inverse-content {
+  @each $token, $inverse in (
+    text-primary: text-inverse,
+    text-secondary: text-inverse,
+    icon-primary: icon-inverse,
+    icon-secondary: icon-inverse,
+    link-primary: link-inverse,
+    link-primary-hover: link-inverse-hover,
+    focus: focus-inverse
+  ) {
+    --#{$custom-property-prefix}-#{$token}: var(--#{$custom-property-prefix}-#{$inverse});
+  }
+}
+
 /// Icon fill per kind. NotificationIcon emits exactly one of these markers on
 /// the svg, so every rule is a single class and one consumer class can
 /// override it.
