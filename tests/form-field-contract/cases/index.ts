@@ -13,6 +13,7 @@ import FluidSearchSkeleton from "carbon-components-svelte/Search/FluidSearchSkel
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import FluidSelectSkeleton from "carbon-components-svelte/Select/FluidSelectSkeleton.svelte";
 import Select from "carbon-components-svelte/Select/Select.svelte";
+import SignaturePad from "carbon-components-svelte/SignaturePad/SignaturePad.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
 import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
@@ -322,6 +323,14 @@ export const cases: FieldCase[] = [
     },
   },
   {
+    name: "SignaturePad",
+    component: SignaturePad,
+    // The group carries the state; the text input also shows it while the
+    // Type tab is open.
+    control: () => screen.getByRole("group"),
+    state: { errorAttribute: "aria-describedby" },
+  },
+  {
     name: "RadioButtonGroup",
     component: RadioButtonGroupField,
     // The radiogroup is marked invalid; each radio carries the messages.
@@ -356,6 +365,8 @@ export const exempt: Exemptions = {
     RadioButtonGroup: NOT_A_TEXT_FIELD,
     RadioTile: NOT_A_TEXT_FIELD,
     SelectableTile: NOT_A_TEXT_FIELD,
+    SignaturePad:
+      "draws with a pointer; its reset is covered by tests/SignaturePad",
     StarRating: NOT_A_TEXT_FIELD,
     StructuredList: NOT_A_TEXT_FIELD,
     TagInput: NOT_A_TEXT_FIELD,
