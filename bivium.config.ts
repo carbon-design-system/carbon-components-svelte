@@ -70,7 +70,7 @@ export default {
     "docs/scripts/page.ts",
     "docs/scripts/format.ts",
     "docs/scripts/compile-cache.ts",
-    "docs/src/idle-examples.ts",
+    "docs/src/idle-mount.ts",
     "docs/scripts/page-html.ts",
     "docs/scripts/example-source.ts",
   ],

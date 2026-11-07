@@ -8,7 +8,7 @@
   import { highlight } from "carbon-components-svelte/syntax";
   import Launch from "carbon-icons-svelte/lib/Launch.svelte";
   import { flushSync, onMount } from "svelte";
-  import { queueIdleExample } from "../idle-examples";
+  import { queueIdleMount } from "../idle-mount";
   import { eagerContent } from "../router";
   import { theme } from "../store";
 
@@ -31,7 +31,7 @@
 
   onMount(() => {
     if (!framed && !mounted) {
-      unqueue = queueIdleExample(viewer, () => {
+      unqueue = queueIdleMount(viewer, () => {
         idle = true;
         flushSync();
       });

@@ -6,6 +6,7 @@
     Column,
     Content,
     Dropdown,
+    LazyMount,
     Link,
     Row,
     Stack,
@@ -18,7 +19,7 @@
   import { themes as themeLabels } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import OpenPanelFilledRight from "carbon-icons-svelte/lib/OpenPanelFilledRight.svelte";
   import OpenPanelRight from "carbon-icons-svelte/lib/OpenPanelRight.svelte";
-  import { onMount, tick } from "svelte";
+  import { flushSync, onMount, tick } from "svelte";
   import type COMPONENT_API from "../COMPONENT_API.json";
   import { CATEGORY_BY_COMPONENT } from "../component-categories";
   import {
@@ -31,7 +32,8 @@
   import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
   import ComponentTocLabel from "../components/ComponentTocLabel.svelte";
   import ComponentTocNav from "../components/ComponentTocNav.svelte";
-  import { route } from "../router";
+  import { queueIdleMount } from "../idle-mount";
+  import { eagerContent, route } from "../router";
   import { componentTocOpen, DOC_THEMES, theme } from "../store";
   import { setupTocScrollSpy } from "../toc-scroll-spy";
 
@@ -65,8 +67,34 @@
   let mounted = false;
   let tocSpyToken = 0;
 
+  /**
+   * The API section is a long page's largest part, 3,371 of DataTable's
+   * 12,238 elements, and building it held up the page's first render, so
+   * it mounts as it nears the viewport or once the browser is idle, as the
+   * live examples do. Of several components' APIs, only the selected tab's
+   * renders.
+   */
+  let apiSection: HTMLElement;
+  let apiMounted = false;
+  let apiIdle = false;
+  let selectedApi = 0;
+  let unqueueApi = () => {};
+  $: if (apiMounted) unqueueApi();
+  $: selectedApiComponent = api_components[selectedApi] ?? api_components[0];
+  /** Room for the API section until it mounts, from its tables' rows. */
+  $: apiEstimatedHeight =
+    600 +
+    (selectedApiComponent?.props.length ?? 0) * 180 +
+    (selectedApiComponent?.slots.length ?? 0) * 120;
+
   onMount(() => {
     mounted = true;
+    if (!apiMounted) {
+      unqueueApi = queueIdleMount(apiSection, () => {
+        apiIdle = true;
+        flushSync();
+      });
+    }
     const searchParams = new URLSearchParams(window.location.search);
     const current_theme = searchParams.get("theme");
 
@@ -76,15 +104,17 @@
 
     return () => {
       mounted = false;
+      unqueueApi();
       destroyTocSpy?.();
     };
   });
 
+  // Again once the API section mounts, so its headings have sections.
   $: if (mounted) {
-    void initTocSpy(component);
+    void initTocSpy(component, apiMounted);
   }
 
-  async function initTocSpy(name: string) {
+  async function initTocSpy(name: string, _apiMounted: boolean) {
     destroyTocSpy?.();
     destroyTocSpy = undefined;
     const token = ++tocSpyToken;
@@ -209,20 +239,31 @@
     <svelte:fragment slot="rows">
       <Row>
         <Column class="prose" noGutter={multiple}>
-          {#if multiple}
-            <Tabs class="override-tabs">
-              {#each api_components as component (component.moduleName)}
-                <Tab label={component.moduleName} />
-              {/each}
-              <div slot="content" class="tab-content-spacing">
-                {#each api_components as component (component.moduleName)}
-                  <TabContent><ComponentApi {component} /></TabContent>
-                {/each}
-              </div>
-            </Tabs>
-          {:else}
-            <ComponentApi component={api_components[0]} />
-          {/if}
+          <div bind:this={apiSection}>
+            <LazyMount
+              rootMargin="1200px"
+              estimatedHeight={apiEstimatedHeight}
+              eager={$eagerContent || apiIdle}
+              bind:mounted={apiMounted}
+            >
+              {#if multiple}
+                <Tabs class="override-tabs" bind:selected={selectedApi}>
+                  {#each api_components as component (component.moduleName)}
+                    <Tab label={component.moduleName} />
+                  {/each}
+                  <div slot="content" class="tab-content-spacing">
+                    {#each api_components as component, i (component.moduleName)}
+                      <TabContent>
+                        {#if i === selectedApi}<ComponentApi {component} />{/if}
+                      </TabContent>
+                    {/each}
+                  </div>
+                </Tabs>
+              {:else}
+                <ComponentApi component={api_components[0]} />
+              {/if}
+            </LazyMount>
+          </div>
         </Column>
       </Row>
     </svelte:fragment>
