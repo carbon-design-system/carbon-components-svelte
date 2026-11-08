@@ -33,7 +33,7 @@ git remote -v
 bun setup
 ```
 
-This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`.
+This installs root and docs dependencies, generates TypeScript definitions and `docs/src/COMPONENT_API.json`, and builds the theme StyleSheets in `css/`. Run `bun setup` again after a pull that changes a `package.json`. A missing package can fail without an error: the docs dev server sends its HTML page for a missing font, and the site falls back to Arial.
 
 Component documentation lives in `docs/`. The site uses [Vite](https://vite.dev/) and Svelte 5, routes with `docs/src/router.ts`, and compiles its Markdown pages (`.md`) with `docs/scripts/page.ts`. The Vite config resolves `carbon-components-svelte` to the repository root, so edits under `src/` show up in the docs without a separate package link.
 
@@ -1244,6 +1244,12 @@ CI runs the sweep when a change reaches a fixture page, which covers `src/`, `cs
 [`pointer-focus-ring.test.ts`](e2e/pointer-focus-ring.test.ts) sweeps every fixture the same way for focus rings the pointer draws. On each page, at 1280px and 360px, it clicks the text of each focusable element that is not a control, and fails on any new ring in `$focus` that no `:focus-visible` element explains. It has no baseline, so every finding is a bug.
 
 A few gotchas:
+
+CI runs only Chromium. When a test fails locally in Firefox or WebKit, run it on `master` before you blame your change, and note a failure that already exists in the PR.
+
+WebKit's Tab key skips buttons and links by default, as Safari does. Reach them another way there, or run the Tab part of the test in Chromium and Firefox only.
+
+Add new blocks at the end of a shared fixture. A block added earlier shifts the CSS paths in the [layout sweep](#layout-sweep) keys, so known findings show up as new ones.
 
 For components that hide content with CSS (for example ComposedModal), `toBeVisible()` can lie because the element stays in the DOM. Prefer `toHaveClass(/is-visible/)` on the container, or assert on `aria-hidden` / `inert`.
 
