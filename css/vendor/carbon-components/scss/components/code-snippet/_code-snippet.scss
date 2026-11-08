@@ -64,17 +64,18 @@
     display: inline;
     padding: 0;
     border: 2px solid transparent;
-    background-color: $field;
+    // ccs: v11 draws the inline snippet on layer, with its hover and active.
+    background-color: $layer;
     border-radius: 4px;
     color: $text-primary;
     cursor: pointer;
 
     &:hover {
-      background-color: $layer-accent;
+      background-color: $layer-hover;
     }
 
     &:active {
-      background-color: $copy-active;
+      background-color: $layer-active;
     }
 
     &:focus {
