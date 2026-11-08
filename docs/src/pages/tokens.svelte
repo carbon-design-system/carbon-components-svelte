@@ -7,6 +7,7 @@
     CopyText,
     EmptyState,
     LazyMount,
+    Link,
     Row,
     Search,
     SkeletonText,
@@ -241,7 +242,12 @@
         {#if types.length}
           <DocSection>
             <Box id="type" class="token-anchor">
-              <DocSectionHeader title="Type tokens" wide />
+              <DocSectionHeader title="Type tokens" wide>
+                <Text type="body-01" color="secondary">
+                  To change the font family, set the font variables. See
+                  <Link inline href="/fonts">Fonts</Link>.
+                </Text>
+              </DocSectionHeader>
             </Box>
             {#each types as group (group.id)}
               <Row>
