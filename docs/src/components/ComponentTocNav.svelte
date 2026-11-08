@@ -18,7 +18,7 @@
 </script>
 
 <!-- Sections land 3rem down, below the sticky header (`scroll-margin-top`). -->
-<TableOfContents size="sm" scrollOffset={48}>
+<TableOfContents size="sm" scrollOffset={48} labelText="On this page">
   <TableOfContentsGroup labelText="Examples">
     {#each headings as heading (heading.id)}
       <TableOfContentsItem
