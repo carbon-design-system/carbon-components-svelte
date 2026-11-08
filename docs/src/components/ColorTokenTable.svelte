@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     Box,
-    CopyButton,
+    CopyText,
     Stack,
     StructuredList,
     StructuredListBody,
@@ -22,8 +22,8 @@
   export let currentTheme: CarbonTheme;
 </script>
 
-<Box overflowX="auto">
-  <Box minWidth="64rem">
+<Box overflowX="auto" class="token-scroll">
+  <Box minWidth="48rem">
     <StructuredList
       condensed
       flush
@@ -36,14 +36,16 @@
             Token
           </StructuredListCell>
           {#each TOKEN_THEMES as theme (theme)}
-            <StructuredListCell
-              head
-              class={theme === currentTheme ? "token-current" : undefined}
-            >
-              <Stack orientation="horizontal" gap={2} align="center">
+            <StructuredListCell head>
+              <Stack
+                orientation="horizontal"
+                gap={3}
+                align="center"
+                wrap="wrap"
+              >
                 {themes[theme]}
                 {#if theme === currentTheme}
-                  <Tag size="sm" type="blue" inline>Current</Tag>
+                  <Tag size="xs" type="blue" inline>Current</Tag>
                 {/if}
               </Stack>
             </StructuredListCell>
@@ -58,9 +60,7 @@
             </StructuredListCell>
             {#each TOKEN_THEMES as theme (theme)}
               {@const value = row.values[theme]}
-              <StructuredListCell
-                class={theme === currentTheme ? "token-current" : undefined}
-              >
+              <StructuredListCell>
                 <Stack gap={2}>
                   <!-- Translucent values draw over the theme's background. -->
                   <span
@@ -71,17 +71,14 @@
                     ]}
                     aria-hidden="true"
                   ></span>
-                  <Stack orientation="horizontal" gap={1} align="center">
-                    <Text tag="code" type="code-01" color="secondary">
+                  <CopyText
+                    text={value}
+                    iconDescription="Copy {themes[theme]} value"
+                  >
+                    <Text tag="span" type="label-01" color="secondary">
                       {value}
                     </Text>
-                    <CopyButton
-                      kind="ghost"
-                      size="sm"
-                      text={value}
-                      iconDescription="Copy {themes[theme]} value"
-                    />
-                  </Stack>
+                  </CopyText>
                 </Stack>
               </StructuredListCell>
             {/each}

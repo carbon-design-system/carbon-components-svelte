@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CopyButton, Stack, Text } from "carbon-components-svelte";
+  import { CopyText, Stack, Text } from "carbon-components-svelte";
   import { cssVar, sassVar } from "../token-reference";
 
   export let name: string;
@@ -7,24 +7,22 @@
   export let copyable = true;
 </script>
 
-<Stack gap={2}>
+<!-- One tight group: the name and the variables that set it. -->
+<Stack gap={1}>
   <Text tag="span" type="heading-compact-01" color="primary" wrap="break-word">
     {name}
   </Text>
   {#if copyable}
     {#each [{ label: "CSS variable", text: cssVar(name) }, { label: "Sass variable", text: sassVar(name) }] as copy (copy.label)}
-      <Stack orientation="horizontal" gap={1} align="center">
-        <Text tag="code" type="code-01" color="secondary" wrap="break-word">
+      <CopyText
+        text={copy.text}
+        iconDescription="Copy {copy.label}"
+        tooltipPosition="right"
+      >
+        <Text tag="span" type="label-01" color="secondary" wrap="nowrap">
           {copy.text}
         </Text>
-        <CopyButton
-          kind="ghost"
-          size="sm"
-          text={copy.text}
-          iconDescription="Copy {copy.label}"
-          tooltipPosition="right"
-        />
-      </Stack>
+      </CopyText>
     {/each}
   {/if}
 </Stack>
