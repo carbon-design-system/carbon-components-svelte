@@ -658,3 +658,8 @@ h3:hover .heading-anchor,
 .overview-page {
   overflow-x: clip;
 }
+
+/* Code under tabs sits close to the tab line. */
+.bx--tab-content.doc-code-tab {
+  padding-block: var(--cds-spacing-03) 0;
+}
