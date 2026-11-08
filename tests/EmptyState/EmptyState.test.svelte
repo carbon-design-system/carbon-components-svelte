@@ -4,8 +4,8 @@
   import Add from "carbon-components-svelte/icons/Add.svelte";
   import type { ComponentProps } from "svelte";
 
-  export let title = "No projects yet";
-  export let subtitle =
+  export let titleText = "No projects yet";
+  export let subtitleText =
     "Projects hold the files and people for one piece of work.";
   export let size: ComponentProps<EmptyState>["size"] = "lg";
   export let headingLevel: ComponentProps<EmptyState>["headingLevel"] =
@@ -15,17 +15,29 @@
 </script>
 
 {#if withSlots}
-  <EmptyState {title} {subtitle} {size} {headingLevel} data-testid="empty">
+  <EmptyState
+    {titleText}
+    {subtitleText}
+    {size}
+    {headingLevel}
+    data-testid="empty"
+  >
     <Add slot="illustration" />
     <svelte:fragment slot="subtitleChildren">
       {#if linkSubtitle}
         Try <a href="#docs">the docs</a>
       {:else}
-        {subtitle}
+        {subtitleText}
       {/if}
     </svelte:fragment>
     <Button>Create project</Button>
   </EmptyState>
 {:else}
-  <EmptyState {title} {subtitle} {size} {headingLevel} data-testid="empty" />
+  <EmptyState
+    {titleText}
+    {subtitleText}
+    {size}
+    {headingLevel}
+    data-testid="empty"
+  />
 {/if}

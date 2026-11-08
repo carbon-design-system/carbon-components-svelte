@@ -11,13 +11,13 @@
    * Specify the title.
    * Alternatively, use the named slot "titleChildren".
    */
-  export let title = "";
+  export let titleText = "";
 
   /**
    * Specify one or two short lines under the title.
    * Alternatively, use the named slot "subtitleChildren", such as for a link.
    */
-  export let subtitle = "";
+  export let subtitleText = "";
 
   /**
    * Set the size: `"lg"` for a page or panel, `"sm"` for a card, drawer or
@@ -55,14 +55,14 @@
       <slot name="illustration" />
     </div>
   {/if}
-  {#if title || $$slots.titleChildren}
+  {#if titleText || $$slots.titleChildren}
     <svelte:element this={headingTag} class:bx--empty-state__title={true}>
-      <slot name="titleChildren">{title}</slot>
+      <slot name="titleChildren">{titleText}</slot>
     </svelte:element>
   {/if}
-  {#if subtitle || $$slots.subtitleChildren}
+  {#if subtitleText || $$slots.subtitleChildren}
     <p class:bx--empty-state__subtitle={true}>
-      <slot name="subtitleChildren">{subtitle}</slot>
+      <slot name="subtitleChildren">{subtitleText}</slot>
     </p>
   {/if}
   {#if $$slots.default}
