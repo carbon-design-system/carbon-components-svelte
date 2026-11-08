@@ -343,6 +343,16 @@
           href="/component-index"
           isSelected={$isActive("/component-index")}
         />
+        <SideNavLink
+          text="Tokens"
+          href="/tokens"
+          isSelected={$isActive("/tokens")}
+        />
+        <SideNavLink
+          text="Theme builder"
+          href="/theme-builder"
+          isSelected={$isActive("/theme-builder")}
+        />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
           <Text
