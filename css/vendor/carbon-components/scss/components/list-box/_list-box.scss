@@ -71,7 +71,9 @@ $list-box-width: 100%;
       border-bottom-color $duration--fast-01 motion(standard, productive);
 
     &:hover {
-      background-color: $layer-hover;
+      // ccs: v11 hovers a field with field-hover, which differs from
+      // layer-hover in dark themes inside a Layer.
+      background-color: $field-hover;
     }
   }
 

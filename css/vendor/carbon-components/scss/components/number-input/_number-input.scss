@@ -191,13 +191,13 @@
     }
 
     &:hover {
-      background-color: $layer-hover;
+      background-color: $field-hover;
       color: $icon-primary;
       cursor: pointer;
 
       &::before,
       &::after {
-        background-color: $layer-hover;
+        background-color: $field-hover;
       }
     }
 
