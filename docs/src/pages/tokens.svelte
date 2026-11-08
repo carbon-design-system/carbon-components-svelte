@@ -4,11 +4,9 @@
     Button,
     Column,
     Content,
-    CopyButton,
+    CopyText,
     EmptyState,
-    Grid,
     LazyMount,
-    Link,
     Row,
     Search,
     SkeletonText,
@@ -24,11 +22,13 @@
   import ColorPalette from "carbon-icons-svelte/lib/ColorPalette.svelte";
   import Binocular from "carbon-pictograms-svelte/lib/Binocular.svelte";
   import ColorTokenTable from "../components/ColorTokenTable.svelte";
+  import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
   import DocHero from "../components/DocHero.svelte";
   import DocSection from "../components/DocSection.svelte";
   import DocSectionHeader from "../components/DocSectionHeader.svelte";
   import DocThemePicker from "../components/DocThemePicker.svelte";
   import TokenName from "../components/TokenName.svelte";
+  import TokenTocNav from "../components/TokenTocNav.svelte";
   import { theme } from "../store";
   import {
     colorGroups,
@@ -85,405 +85,432 @@
   $: types = filterGroups(typeGroups, normalized, typeValues);
   $: scales = filterGroups(scaleGroups, normalized, scaleValues);
   $: sections = [
-    { id: "color", label: "Color", count: countRows(colors) },
-    { id: "component", label: "Component", count: countRows(components) },
-    { id: "type", label: "Type", count: countRows(types) },
-    {
-      id: "spacing-and-size",
-      label: "Spacing and size",
-      count: countRows(scales),
-    },
+    { id: "color", label: "Color", groups: colors },
+    { id: "component", label: "Component", groups: components },
+    { id: "type", label: "Type", groups: types },
+    { id: "spacing-and-size", label: "Spacing and size", groups: scales },
   ];
-  $: total = sections.reduce((sum, section) => sum + section.count, 0);
+  $: total = sections.reduce(
+    (sum, section) => sum + countRows(section.groups),
+    0,
+  );
 </script>
 
 <svelte:head>
   <title>Tokens · Carbon Components Svelte</title>
   <meta
     name="description"
-    content="Every Carbon v11 token in Carbon Components Svelte, with live values in all five themes: colors, component colors, type styles, spacing and sizes."
+    content="Carbon tokens and their values in each theme: color, type, spacing and size."
   />
 </svelte:head>
 
 <Content class="tokens-page">
-  <DocHero
-    eyebrow="Reference"
-    icon={ColorPalette}
-    title="Tokens"
-    description="Every token, with its value in all five themes. Copy a CSS variable, a Sass variable or a value."
-  />
+  <DocHero eyebrow="Reference" icon={ColorPalette} title="Tokens" />
 
-  <Grid>
-    <Row>
-      <Column>
-        <Stack gap={6}>
-          <Search
-            size="lg"
-            bind:value={query}
-            labelText="Search tokens"
-            placeholder="Search by name or value, such as layer-01 or #0f62fe"
-            spellcheck="false"
-          />
-          <DocThemePicker legendText="Current theme" orientation="horizontal" />
-          <Stack orientation="horizontal" gap={6} wrap="wrap">
-            {#each sections as section (section.id)}
-              {#if section.count > 0}
-                <Link href="#{section.id}">
-                  {section.label}
-                  ({section.count})
-                </Link>
-              {/if}
-            {/each}
-          </Stack>
-        </Stack>
-      </Column>
-    </Row>
-  </Grid>
+  <div class="tokens-layout">
+    <ComponentDocLayout>
+      <Stack gap={6}>
+        <Text type="body-02" color="primary" maxWidth="68ch">
+          Tokens are the named values that style each component: colors, type
+          styles, spacing and sizes. Each theme gives a token its own value, so
+          one token works on White and on Gray 100. Use tokens in place of fixed
+          values, and your styles follow the theme.
+        </Text>
+        <Search
+          size="lg"
+          bind:value={query}
+          labelText="Search tokens"
+          placeholder="Search by name or value, such as layer-01 or #0f62fe"
+          spellcheck="false"
+        />
+      </Stack>
 
-  <div role="status">
-    {#if total === 0}
-      <Grid>
-        <Row>
+      <svelte:fragment slot="rows">
+        <Row class="tokens-toc-mobile">
           <Column>
-            <EmptyState
-              headingLevel={2}
-              titleText="No results"
-              subtitleText="No token name or value matches “{query}”. Try a shorter query, such as layer or #0f62fe."
-            >
-              <Binocular slot="illustration" />
-              <Button kind="tertiary" on:click={() => (query = "")}>
-                Clear search
-              </Button>
-            </EmptyState>
+            <Stack gap={6}>
+              <DocThemePicker
+                legendText="Current theme"
+                orientation="horizontal"
+              />
+              <TokenTocNav {sections} sectionsOnly />
+            </Stack>
           </Column>
         </Row>
-      </Grid>
-    {/if}
+        <div role="status">
+          {#if total === 0}
+            <Row>
+              <Column>
+                <EmptyState
+                  headingLevel={2}
+                  titleText="No results"
+                  subtitleText="No token name or value matches “{query}”. Try a shorter query, such as layer or #0f62fe."
+                >
+                  <Binocular slot="illustration" />
+                  <Button kind="tertiary" on:click={() => (query = "")}>
+                    Clear search
+                  </Button>
+                </EmptyState>
+              </Column>
+            </Row>
+          {/if}
+        </div>
+
+        {#if colors.length}
+          <DocSection>
+            <Box id="color" class="token-anchor">
+              <DocSectionHeader title="Color tokens" wide />
+            </Box>
+            {#each colors as group (group.id)}
+              <Row>
+                <Column>
+                  <Box marginBottom={9}>
+                    <Stack gap={5}>
+                      <Stack orientation="horizontal" gap={3} align="center">
+                        <Text
+                          tag="h3"
+                          id={group.id}
+                          class="token-anchor"
+                          type="heading-03"
+                          color="primary"
+                        >
+                          {group.label}
+                        </Text>
+                        <Tag size="xs" type="gray">{group.rows.length}</Tag>
+                      </Stack>
+                      <LazyMount
+                        estimatedHeight={(group.rows.length + 1) *
+                          COLOR_ROW_HEIGHT}
+                      >
+                        <SkeletonText slot="placeholder" paragraph lines={4} />
+                        <ColorTokenTable
+                          label={group.label}
+                          rows={group.rows}
+                          {currentTheme}
+                        />
+                      </LazyMount>
+                    </Stack>
+                  </Box>
+                </Column>
+              </Row>
+            {/each}
+          </DocSection>
+        {/if}
+
+        {#if components.length}
+          <DocSection>
+            <Box id="component" class="token-anchor">
+              <DocSectionHeader title="Component tokens" wide />
+            </Box>
+            {#each components as group (group.id)}
+              <Row>
+                <Column>
+                  <Box marginBottom={9}>
+                    <Stack gap={5}>
+                      <Stack orientation="horizontal" gap={3} align="center">
+                        <Text
+                          tag="h3"
+                          id={group.id}
+                          class="token-anchor"
+                          type="heading-03"
+                          color="primary"
+                        >
+                          {group.label}
+                        </Text>
+                        <Tag size="xs" type="gray">{group.rows.length}</Tag>
+                      </Stack>
+                      <LazyMount
+                        estimatedHeight={(group.rows.length + 1) *
+                          COLOR_ROW_HEIGHT}
+                      >
+                        <SkeletonText slot="placeholder" paragraph lines={4} />
+                        <ColorTokenTable
+                          label={group.label}
+                          rows={group.rows}
+                          {currentTheme}
+                        />
+                      </LazyMount>
+                    </Stack>
+                  </Box>
+                </Column>
+              </Row>
+            {/each}
+          </DocSection>
+        {/if}
+
+        {#if types.length}
+          <DocSection>
+            <Box id="type" class="token-anchor">
+              <DocSectionHeader title="Type tokens" wide />
+            </Box>
+            {#each types as group (group.id)}
+              <Row>
+                <Column>
+                  <Box marginBottom={9}>
+                    <Stack gap={5}>
+                      <Stack orientation="horizontal" gap={3} align="center">
+                        <Text
+                          tag="h3"
+                          id={group.id}
+                          class="token-anchor"
+                          type="heading-03"
+                          color="primary"
+                        >
+                          {group.label}
+                        </Text>
+                        <Tag size="xs" type="gray">{group.rows.length}</Tag>
+                      </Stack>
+                      <Box overflowX="auto" class="token-scroll">
+                        <Box minWidth="48rem">
+                          <StructuredList
+                            condensed
+                            flush
+                            aria-label="{group.label} type tokens"
+                          >
+                            <StructuredListHead>
+                              <StructuredListRow head>
+                                <StructuredListCell head
+                                  >Token</StructuredListCell
+                                >
+                                <StructuredListCell head
+                                  >Specimen</StructuredListCell
+                                >
+                                <StructuredListCell head
+                                  >Font size</StructuredListCell
+                                >
+                                <StructuredListCell head
+                                  >Line height</StructuredListCell
+                                >
+                                <StructuredListCell head
+                                  >Weight</StructuredListCell
+                                >
+                                <StructuredListCell head
+                                  >Letter spacing</StructuredListCell
+                                >
+                              </StructuredListRow>
+                            </StructuredListHead>
+                            <StructuredListBody>
+                              {#each group.rows as row (row.name)}
+                                {@const weight = row.style["font-weight"]}
+                                <StructuredListRow>
+                                  <StructuredListCell>
+                                    <TokenName
+                                      name={row.name}
+                                      copyable={false}
+                                    />
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <Text type={row.name} color="primary">
+                                      {SPECIMEN}
+                                    </Text>
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <Text
+                                      tag="span"
+                                      type="label-01"
+                                      color="secondary"
+                                      wrap="nowrap"
+                                    >
+                                      {withPx(row.style["font-size"])}
+                                    </Text>
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <Text
+                                      tag="span"
+                                      type="label-01"
+                                      color="secondary"
+                                      wrap="nowrap"
+                                    >
+                                      {row.style["line-height"]}
+                                    </Text>
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <Text
+                                      tag="span"
+                                      type="label-01"
+                                      color="secondary"
+                                      wrap="nowrap"
+                                    >
+                                      {weight
+                                        ? `${weight} ${WEIGHT_NAMES[weight] ?? ""}`
+                                        : "—"}
+                                    </Text>
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <Text
+                                      tag="span"
+                                      type="label-01"
+                                      color="secondary"
+                                      wrap="nowrap"
+                                    >
+                                      {row.style["letter-spacing"]}
+                                    </Text>
+                                  </StructuredListCell>
+                                </StructuredListRow>
+                              {/each}
+                            </StructuredListBody>
+                          </StructuredList>
+                        </Box>
+                      </Box>
+                    </Stack>
+                  </Box>
+                </Column>
+              </Row>
+            {/each}
+          </DocSection>
+        {/if}
+
+        {#if scales.length}
+          <DocSection>
+            <Box id="spacing-and-size" class="token-anchor">
+              <DocSectionHeader
+                title="Spacing, layout, container and size tokens"
+                wide
+              />
+            </Box>
+            {#each scales as group (group.id)}
+              <Row>
+                <Column>
+                  <Box marginBottom={9}>
+                    <Stack gap={5}>
+                      <Stack orientation="horizontal" gap={3} align="center">
+                        <Text
+                          tag="h3"
+                          id={group.id}
+                          class="token-anchor"
+                          type="heading-03"
+                          color="primary"
+                        >
+                          {group.label}
+                        </Text>
+                        <Tag size="xs" type="gray">{group.rows.length}</Tag>
+                      </Stack>
+                      <Box overflowX="auto" class="token-scroll">
+                        <Box minWidth="40rem">
+                          <StructuredList
+                            condensed
+                            flush
+                            class="token-table"
+                            aria-label="{group.label} tokens"
+                          >
+                            <StructuredListHead>
+                              <StructuredListRow head>
+                                <StructuredListCell
+                                  head
+                                  class="token-name-column"
+                                  >Token</StructuredListCell
+                                >
+                                <StructuredListCell
+                                  head
+                                  class="token-metric-column"
+                                  >Value</StructuredListCell
+                                >
+                                <StructuredListCell head
+                                  >Scale</StructuredListCell
+                                >
+                              </StructuredListRow>
+                            </StructuredListHead>
+                            <StructuredListBody>
+                              {#each group.rows as row (row.name)}
+                                <StructuredListRow>
+                                  <StructuredListCell>
+                                    <TokenName name={row.name} />
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <CopyText
+                                      text={row.value}
+                                      iconDescription="Copy value"
+                                    >
+                                      <Text
+                                        tag="span"
+                                        type="label-01"
+                                        color="secondary"
+                                      >
+                                        {withPx(row.value)}
+                                      </Text>
+                                    </CopyText>
+                                  </StructuredListCell>
+                                  <StructuredListCell>
+                                    <Box
+                                      width={row.value}
+                                      height={5}
+                                      fill="brand"
+                                      class="token-bar"
+                                      aria-hidden="true"
+                                    />
+                                  </StructuredListCell>
+                                </StructuredListRow>
+                              {/each}
+                            </StructuredListBody>
+                          </StructuredList>
+                        </Box>
+                      </Box>
+                    </Stack>
+                  </Box>
+                </Column>
+              </Row>
+            {/each}
+          </DocSection>
+        {/if}
+      </svelte:fragment>
+
+      <svelte:fragment slot="aside">
+        <Stack gap={7}>
+          <DocThemePicker legendText="Current theme" />
+          <TokenTocNav {sections} />
+        </Stack>
+      </svelte:fragment>
+    </ComponentDocLayout>
   </div>
-
-  {#if colors.length}
-    <DocSection>
-      <Grid>
-        <Box id="color">
-          <DocSectionHeader
-            eyebrow="Color"
-            title="Color tokens"
-            description="Theme colors, grouped by role. Translucent values show on each theme's background. The column for the current docs theme is highlighted."
-            wide
-          />
-        </Box>
-        {#each colors as group (group.id)}
-          <Row>
-            <Column>
-              <Box marginBottom={9}>
-                <Stack gap={5}>
-                  <Stack gap={3}>
-                    <Stack orientation="horizontal" gap={3} align="center">
-                      <Text tag="h3" type="heading-03" color="primary">
-                        {group.label}
-                      </Text>
-                      <Tag size="sm" type="gray">{group.rows.length}</Tag>
-                    </Stack>
-                    <Text type="body-01" color="secondary" maxWidth="64ch">
-                      {group.description}
-                    </Text>
-                  </Stack>
-                  <LazyMount
-                    estimatedHeight={(group.rows.length + 1) * COLOR_ROW_HEIGHT}
-                  >
-                    <SkeletonText slot="placeholder" paragraph lines={4} />
-                    <ColorTokenTable
-                      label={group.label}
-                      rows={group.rows}
-                      {currentTheme}
-                    />
-                  </LazyMount>
-                </Stack>
-              </Box>
-            </Column>
-          </Row>
-        {/each}
-      </Grid>
-    </DocSection>
-  {/if}
-
-  {#if components.length}
-    <DocSection>
-      <Grid>
-        <Box id="component">
-          <DocSectionHeader
-            eyebrow="Component"
-            title="Component tokens"
-            description="Colors that only one component uses, grouped by component."
-            wide
-          />
-        </Box>
-        {#each components as group (group.id)}
-          <Row>
-            <Column>
-              <Box marginBottom={9}>
-                <Stack gap={5}>
-                  <Stack gap={3}>
-                    <Stack orientation="horizontal" gap={3} align="center">
-                      <Text tag="h3" type="heading-03" color="primary">
-                        {group.label}
-                      </Text>
-                      <Tag size="sm" type="gray">{group.rows.length}</Tag>
-                    </Stack>
-                    <Text type="body-01" color="secondary" maxWidth="64ch">
-                      {group.description}
-                    </Text>
-                  </Stack>
-                  <LazyMount
-                    estimatedHeight={(group.rows.length + 1) * COLOR_ROW_HEIGHT}
-                  >
-                    <SkeletonText slot="placeholder" paragraph lines={4} />
-                    <ColorTokenTable
-                      label={group.label}
-                      rows={group.rows}
-                      {currentTheme}
-                    />
-                  </LazyMount>
-                </Stack>
-              </Box>
-            </Column>
-          </Row>
-        {/each}
-      </Grid>
-    </DocSection>
-  {/if}
-
-  {#if types.length}
-    <DocSection>
-      <Grid>
-        <Box id="type">
-          <DocSectionHeader
-            eyebrow="Type"
-            title="Type tokens"
-            description="Each type style, with its font size, line height, weight and letter spacing. Set one with the Text component's type prop."
-            wide
-          />
-        </Box>
-        {#each types as group (group.id)}
-          <Row>
-            <Column>
-              <Box marginBottom={9}>
-                <Stack gap={5}>
-                  <Stack gap={3}>
-                    <Stack orientation="horizontal" gap={3} align="center">
-                      <Text tag="h3" type="heading-03" color="primary">
-                        {group.label}
-                      </Text>
-                      <Tag size="sm" type="gray">{group.rows.length}</Tag>
-                    </Stack>
-                    <Text type="body-01" color="secondary" maxWidth="64ch">
-                      {group.description}
-                    </Text>
-                  </Stack>
-                  <Box overflowX="auto">
-                    <Box minWidth="56rem">
-                      <StructuredList
-                        condensed
-                        flush
-                        aria-label="{group.label} type tokens"
-                      >
-                        <StructuredListHead>
-                          <StructuredListRow head>
-                            <StructuredListCell head>Token</StructuredListCell>
-                            <StructuredListCell head
-                              >Specimen</StructuredListCell
-                            >
-                            <StructuredListCell head
-                              >Font size</StructuredListCell
-                            >
-                            <StructuredListCell head
-                              >Line height</StructuredListCell
-                            >
-                            <StructuredListCell head>Weight</StructuredListCell>
-                            <StructuredListCell head
-                              >Letter spacing</StructuredListCell
-                            >
-                          </StructuredListRow>
-                        </StructuredListHead>
-                        <StructuredListBody>
-                          {#each group.rows as row (row.name)}
-                            {@const weight = row.style["font-weight"]}
-                            <StructuredListRow>
-                              <StructuredListCell>
-                                <TokenName name={row.name} copyable={false} />
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Text type={row.name} color="primary">
-                                  {SPECIMEN}
-                                </Text>
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Text
-                                  tag="code"
-                                  type="code-01"
-                                  color="secondary"
-                                  wrap="nowrap"
-                                >
-                                  {withPx(row.style["font-size"])}
-                                </Text>
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Text
-                                  tag="code"
-                                  type="code-01"
-                                  color="secondary"
-                                  wrap="nowrap"
-                                >
-                                  {row.style["line-height"]}
-                                </Text>
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Text
-                                  tag="code"
-                                  type="code-01"
-                                  color="secondary"
-                                  wrap="nowrap"
-                                >
-                                  {weight
-                                    ? `${weight} ${WEIGHT_NAMES[weight] ?? ""}`
-                                    : "—"}
-                                </Text>
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Text
-                                  tag="code"
-                                  type="code-01"
-                                  color="secondary"
-                                  wrap="nowrap"
-                                >
-                                  {row.style["letter-spacing"]}
-                                </Text>
-                              </StructuredListCell>
-                            </StructuredListRow>
-                          {/each}
-                        </StructuredListBody>
-                      </StructuredList>
-                    </Box>
-                  </Box>
-                </Stack>
-              </Box>
-            </Column>
-          </Row>
-        {/each}
-      </Grid>
-    </DocSection>
-  {/if}
-
-  {#if scales.length}
-    <DocSection>
-      <Grid>
-        <Box id="spacing-and-size">
-          <DocSectionHeader
-            eyebrow="Spacing and size"
-            title="Spacing, layout, container and size tokens"
-            description="Each bar is drawn at the token's size. Pixel values assume a 16px root font size."
-            wide
-          />
-        </Box>
-        {#each scales as group (group.id)}
-          <Row>
-            <Column>
-              <Box marginBottom={9}>
-                <Stack gap={5}>
-                  <Stack gap={3}>
-                    <Stack orientation="horizontal" gap={3} align="center">
-                      <Text tag="h3" type="heading-03" color="primary">
-                        {group.label}
-                      </Text>
-                      <Tag size="sm" type="gray">{group.rows.length}</Tag>
-                    </Stack>
-                    <Text type="body-01" color="secondary" maxWidth="64ch">
-                      {group.description}
-                    </Text>
-                  </Stack>
-                  <Box overflowX="auto">
-                    <Box minWidth="40rem">
-                      <StructuredList
-                        condensed
-                        flush
-                        class="token-table"
-                        aria-label="{group.label} tokens"
-                      >
-                        <StructuredListHead>
-                          <StructuredListRow head>
-                            <StructuredListCell head class="token-name-column"
-                              >Token</StructuredListCell
-                            >
-                            <StructuredListCell head class="token-metric-column"
-                              >Value</StructuredListCell
-                            >
-                            <StructuredListCell head>Scale</StructuredListCell>
-                          </StructuredListRow>
-                        </StructuredListHead>
-                        <StructuredListBody>
-                          {#each group.rows as row (row.name)}
-                            <StructuredListRow>
-                              <StructuredListCell>
-                                <TokenName name={row.name} />
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Stack
-                                  orientation="horizontal"
-                                  gap={1}
-                                  align="center"
-                                >
-                                  <Text
-                                    tag="code"
-                                    type="code-01"
-                                    color="secondary"
-                                  >
-                                    {withPx(row.value)}
-                                  </Text>
-                                  <CopyButton
-                                    kind="ghost"
-                                    size="sm"
-                                    text={row.value}
-                                    iconDescription="Copy value"
-                                  />
-                                </Stack>
-                              </StructuredListCell>
-                              <StructuredListCell>
-                                <Box
-                                  width={row.value}
-                                  height={5}
-                                  fill="brand"
-                                  class="token-bar"
-                                  aria-hidden="true"
-                                />
-                              </StructuredListCell>
-                            </StructuredListRow>
-                          {/each}
-                        </StructuredListBody>
-                      </StructuredList>
-                    </Box>
-                  </Box>
-                </Stack>
-              </Box>
-            </Column>
-          </Row>
-        {/each}
-      </Grid>
-    </DocSection>
-  {/if}
 </Content>
 
 <style>
+  /* Land a section below the sticky header, with room to spare. */
+  :global(.token-anchor) {
+    scroll-margin-top: calc(3rem + var(--cds-spacing-05));
+  }
+
+  /*
+   * From 66rem the tables fit their column, so they drop the scroll box and
+   * the head row sticks under the site header while the rows scroll. A
+   * scroll box would hold the sticky head inside itself.
+   */
+  @media (min-width: 66rem) {
+    :global(.token-scroll.bx--box-overflow-x-auto) {
+      overflow: visible;
+    }
+
+    :global(.token-scroll .bx--structured-list-thead .bx--structured-list-th) {
+      position: sticky;
+      z-index: 1;
+      top: 3rem;
+      background-color: var(--cds-background);
+    }
+  }
+
+  /* The hero sits above, so the aside starts level with the content. */
+  :global(.tokens-layout .component-body .table) {
+    margin-top: 0;
+  }
+
+  :global(.tokens-toc-mobile) {
+    display: none;
+  }
+
+  @media (max-width: 65.98rem) {
+    :global(.tokens-toc-mobile) {
+      display: flex;
+      padding-top: var(--cds-spacing-07);
+    }
+  }
+
   /* Equal theme columns, so swatches line up from table to table. */
   :global(.token-table) {
     table-layout: fixed;
   }
 
   :global(.token-name-column) {
-    width: 16rem;
-  }
-
-  :global(.token-current) {
-    background-color: var(--cds-layer-01);
+    width: 18rem;
   }
 
   :global(.token-metric-column) {
@@ -491,11 +518,6 @@
   }
 
   @media (forced-colors: active) {
-    :global(.token-current) {
-      outline: 1px solid Highlight;
-      outline-offset: -1px;
-    }
-
     :global(.token-bar) {
       forced-color-adjust: none;
       background-color: CanvasText;
