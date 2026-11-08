@@ -154,7 +154,8 @@ export const preprocessors = [
 ] as const;
 
 export function themeCssImport(theme: CarbonTheme) {
-  return `import "carbon-components-svelte/css/${theme}.css";`;
+  return `import "carbon-components-svelte/css/${theme}.css";
+import "carbon-components-svelte/css/fonts.css";`;
 }
 
 export function themeToggle(theme: CarbonTheme) {

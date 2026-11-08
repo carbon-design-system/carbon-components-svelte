@@ -105,8 +105,10 @@
               />
             </DocCodeBox>
             <Text type="label-01" color="secondary">
-              Import this once at the top-level, like index.js or
-              src/+layout.svelte.
+              Import these once at the top-level, like index.js or
+              src/+layout.svelte. fonts.css loads IBM Plex; to self-host it
+              or use another font, see
+              <Link inline size="sm" href="/fonts">Fonts</Link>.
             </Text>
           </Stack>
         </svelte:fragment>
