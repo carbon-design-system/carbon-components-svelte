@@ -83,7 +83,10 @@ describe("Callout", () => {
 
   it("gives the title its titleId", () => {
     render(Callout, {
-      props: { title: "Scheduled downtime", subtitle: "Tonight, 22:00 UTC" },
+      props: {
+        titleText: "Scheduled downtime",
+        subtitleText: "Tonight, 22:00 UTC",
+      },
     });
 
     const title = document.getElementById("callout-title");
@@ -95,13 +98,13 @@ describe("Callout", () => {
   });
 
   it("generates a title id by default", () => {
-    render(CalloutComponent, { props: { title: "Scheduled downtime" } });
+    render(CalloutComponent, { props: { titleText: "Scheduled downtime" } });
 
     expect(document.querySelector(`.${root}__title`)?.id).toMatch(/^ccs-/);
   });
 
   it("renders no title or subtitle element when both are empty", () => {
-    render(Callout, { props: { title: "", subtitle: "" } });
+    render(Callout, { props: { titleText: "", subtitleText: "" } });
 
     expect(document.querySelector(`.${root}__title`)).toBeNull();
     expect(document.querySelector(`.${root}__subtitle`)).toBeNull();
@@ -130,7 +133,7 @@ describe("Callout", () => {
   });
 
   it("does not describe the action by a missing title", () => {
-    render(Callout, { props: { action: true, title: "" } });
+    render(Callout, { props: { action: true, titleText: "" } });
 
     expect(screen.getByRole("button")).not.toHaveAttribute("aria-describedby");
   });

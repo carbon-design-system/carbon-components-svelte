@@ -27,8 +27,8 @@ for Carbon's guidance.
 Long titles and subtitles wrap onto more lines. They don't truncate.
 
 <Callout
-  title="Scheduled downtime"
-  subtitle="Billing is read-only on Saturday from 02:00 to 04:00 UTC."
+  titleText="Scheduled downtime"
+  subtitleText="Billing is read-only on Saturday from 02:00 to 04:00 UTC."
 />
 
 ## Callout or InlineNotification
@@ -58,33 +58,33 @@ readers convey the kind without color.
 <Stack gap={5}>
   <Callout
     kind="info"
-    title="Read-only role"
-    subtitle="You can view this project. Ask a workspace admin for edit access."
+    titleText="Read-only role"
+    subtitleText="You can view this project. Ask a workspace admin for edit access."
   />
   <Callout
     kind="warning"
-    title="Shared credentials"
-    subtitle="Changing this key signs out every service that uses it."
+    titleText="Shared credentials"
+    subtitleText="Changing this key signs out every service that uses it."
   />
   <Callout
     kind="success"
-    title="Verified domain"
-    subtitle="Mail from acme.com passes SPF and DKIM checks."
+    titleText="Verified domain"
+    subtitleText="Mail from acme.com passes SPF and DKIM checks."
   />
   <Callout
     kind="error"
-    title="Unsupported region"
-    subtitle="GPU instances aren't available in eu-west-3."
+    titleText="Unsupported region"
+    subtitleText="GPU instances aren't available in eu-west-3."
   />
   <Callout
     kind="info-square"
-    title="Beta feature"
-    subtitle="Usage-based alerts may change before general availability."
+    titleText="Beta feature"
+    subtitleText="Usage-based alerts may change before general availability."
   />
   <Callout
     kind="warning-alt"
-    title="Retention limit"
-    subtitle="Logs older than 30 days are deleted on the Starter plan."
+    titleText="Retention limit"
+    subtitleText="Logs older than 30 days are deleted on the Starter plan."
   />
 </Stack>
 
@@ -97,34 +97,34 @@ content without drawing as much attention.
   <Callout
     lowContrast
     kind="info"
-    title="Read-only role"
-    subtitle="You can view this project. Ask a workspace admin for edit access."
+    titleText="Read-only role"
+    subtitleText="You can view this project. Ask a workspace admin for edit access."
   />
   <Callout
     lowContrast
     kind="warning"
-    title="Shared credentials"
-    subtitle="Changing this key signs out every service that uses it."
+    titleText="Shared credentials"
+    subtitleText="Changing this key signs out every service that uses it."
   />
   <Callout
     lowContrast
     kind="success"
-    title="Verified domain"
-    subtitle="Mail from acme.com passes SPF and DKIM checks."
+    titleText="Verified domain"
+    subtitleText="Mail from acme.com passes SPF and DKIM checks."
   />
   <Callout
     lowContrast
     kind="error"
-    title="Unsupported region"
-    subtitle="GPU instances aren't available in eu-west-3."
+    titleText="Unsupported region"
+    subtitleText="GPU instances aren't available in eu-west-3."
   />
 </Stack>
 
 ## Title only
 
-Leave out `subtitle` when the title says it all.
+Leave out `subtitleText` when the title says it all.
 
-<Callout kind="warning" title="This workspace is archived." />
+<Callout kind="warning" titleText="This workspace is archived." />
 
 ## Subtitle with a link
 
@@ -134,7 +134,7 @@ readers read the title along with the link.
 
 <Callout
   kind="warning"
-  title="Storage almost full"
+  titleText="Storage almost full"
   titleId="storage-callout-title"
 >
   <svelte:fragment slot="subtitleChildren">
@@ -152,8 +152,8 @@ title describes the button for screen readers, with no extra setup.
 
 <Callout
   kind="info"
-  title="New audit log format"
-  subtitle="Exports now include the actor's IP address and session id."
+  titleText="New audit log format"
+  subtitleText="Exports now include the actor's IP address and session id."
 >
   <svelte:fragment slot="actions">
     <NotificationActionButton>View changes</NotificationActionButton>
@@ -169,8 +169,8 @@ color, so use them in a low-contrast callout.
 <Callout
   lowContrast
   kind="warning"
-  title="Before you migrate"
-  subtitle="Check these settings on the old cluster:"
+  titleText="Before you migrate"
+  subtitleText="Check these settings on the old cluster:"
 >
   <UnorderedList>
     <ListItem>Backups are on.</ListItem>
@@ -184,8 +184,8 @@ Translate the status icon's label with `statusIconDescription`.
 
 <Callout
   kind="warning"
-  title="Maintenance planifiée"
-  subtitle="La facturation est en lecture seule samedi de 02:00 à 04:00 UTC."
+  titleText="Maintenance planifiée"
+  subtitleText="La facturation est en lecture seule samedi de 02:00 à 04:00 UTC."
   statusIconDescription="Avertissement"
 />
 
@@ -200,8 +200,8 @@ it lines up with the fields instead of the page's width limits.
       fullWidth
       lowContrast
       kind="warning"
-      title="Changing the domain"
-      subtitle="Members sign in again, and old invite links stop working."
+      titleText="Changing the domain"
+      subtitleText="Members sign in again, and old invite links stop working."
     />
     <TextInput name="domain" labelText="Workspace domain" value="acme" />
     <Button type="submit">Save domain</Button>
@@ -220,8 +220,8 @@ Set `fullWidth` to `true` to fill a tile or card.
       fullWidth
       lowContrast
       kind="info"
-      title="Rate limit"
-      subtitle="Each key can make 100 requests per second."
+      titleText="Rate limit"
+      subtitleText="Each key can make 100 requests per second."
     />
   </Stack>
 </Tile>

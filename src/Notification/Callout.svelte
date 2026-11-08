@@ -20,13 +20,13 @@
    * Specify the title text.
    * Alternatively, use the named slot "titleChildren".
    */
-  export let title = "";
+  export let titleText = "";
 
   /**
    * Specify the subtitle text.
    * Alternatively, use the named slot "subtitleChildren", such as for a link.
    */
-  export let subtitle = "";
+  export let subtitleText = "";
 
   /**
    * Specify the id of the title element. A `NotificationActionButton` in
@@ -59,7 +59,7 @@
 
   setContext("carbon:NotificationAction", { describedBy, toast: false });
 
-  $: titled = Boolean(title || $$slots.titleChildren);
+  $: titled = Boolean(titleText || $$slots.titleChildren);
   $: describedBy.set(titled ? titleId : undefined);
 </script>
 
@@ -104,12 +104,12 @@
     <div class:bx--inline-notification__text-wrapper={true}>
       {#if titled}
         <p id={titleId} class:bx--inline-notification__title={true}>
-          <strong><slot name="titleChildren">{title}</slot></strong>
+          <strong><slot name="titleChildren">{titleText}</slot></strong>
         </p>
       {/if}
-      {#if subtitle || $$slots.subtitleChildren}
+      {#if subtitleText || $$slots.subtitleChildren}
         <div class:bx--inline-notification__subtitle={true}>
-          <slot name="subtitleChildren">{subtitle}</slot>
+          <slot name="subtitleChildren">{subtitleText}</slot>
         </div>
       {/if}
       <slot />

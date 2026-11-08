@@ -5,8 +5,9 @@
 
   export let kind: ComponentProps<Callout>["kind"] = "info";
   export let lowContrast: ComponentProps<Callout>["lowContrast"] = false;
-  export let title: ComponentProps<Callout>["title"] = "Scheduled downtime";
-  export let subtitle: ComponentProps<Callout>["subtitle"] = "";
+  export let titleText: ComponentProps<Callout>["titleText"] =
+    "Scheduled downtime";
+  export let subtitleText: ComponentProps<Callout>["subtitleText"] = "";
   export let titleId: ComponentProps<Callout>["titleId"] = "callout-title";
   export let statusIconDescription: ComponentProps<Callout>["statusIconDescription"] =
     undefined;
@@ -19,8 +20,8 @@
 <Callout
   {kind}
   {lowContrast}
-  {title}
-  {subtitle}
+  {titleText}
+  {subtitleText}
   {titleId}
   {statusIconDescription}
   {fullWidth}
