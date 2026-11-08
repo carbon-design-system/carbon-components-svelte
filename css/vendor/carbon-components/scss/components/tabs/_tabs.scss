@@ -471,9 +471,10 @@
       }
     }
 
+    // ccs: v11 hovers a contained tab with the hover of its layer-accent fill.
     .#{$prefix}--tabs--container
       .#{$prefix}--tabs__nav-item:hover:not(.#{$prefix}--tabs__nav-item--disabled) {
-      background-color: $layer-selected-hover;
+      background-color: $layer-accent-hover;
     }
 
     .#{$prefix}--tabs__nav-item--disabled:hover {
@@ -523,7 +524,7 @@
 
     .#{$prefix}--tabs--scrollable.#{$prefix}--tabs--scrollable--container
       .#{$prefix}--tabs--scrollable__nav-item:hover {
-      background-color: $layer-selected-hover;
+      background-color: $layer-accent-hover;
     }
   }
 }
