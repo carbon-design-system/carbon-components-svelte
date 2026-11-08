@@ -49,6 +49,20 @@ describe("formatRelativeTime", () => {
     ).toBe("5 min. ago");
   });
 
+  it.each([
+    [-30 * SECOND, "en", "always", "now"],
+    [30 * SECOND, "en", "auto", "now"],
+    [-30 * SECOND, "de", "auto", "jetzt"],
+    [-MINUTE, "en", "auto", "1 minute ago"],
+  ] as const)(
+    "with minUnit minute, formats %d ms in %s (numeric %s) as %s",
+    (diff, locale, numeric, expected) => {
+      expect(
+        formatRelativeTime(diff, { now, locale, numeric, minUnit: "minute" }),
+      ).toBe(expected);
+    },
+  );
+
   it("returns an empty string for invalid input", () => {
     expect(formatRelativeTime("not a date", { now, locale: "en" })).toBe("");
   });
