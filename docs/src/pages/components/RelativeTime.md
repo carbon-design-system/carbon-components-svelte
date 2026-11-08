@@ -92,6 +92,16 @@ Set `timeZone` to an IANA time zone to format the `title` in that zone instead o
   timeZone="Asia/Tokyo"
 />
 
+## Chat timestamps
+
+Set `minUnit="minute"` to show the locale's word for the present, such as "now", for any time under a minute instead of counting seconds. Set `absoluteAfter` to a duration in milliseconds to show the clock time once `date` is that far in the past. Set `absoluteFormatOptions` to change its format. The default is the short time, such as "9:00 AM".
+
+<Stack gap={5}>
+  <RelativeTime date={now - 20 * 1000} {now} minUnit="minute" absoluteAfter={60 * 60 * 1000} timeZone="UTC" />
+  <RelativeTime date={now - 5 * 60 * 1000} {now} minUnit="minute" absoluteAfter={60 * 60 * 1000} timeZone="UTC" />
+  <RelativeTime date={now - 3 * 60 * 60 * 1000} {now} minUnit="minute" absoluteAfter={60 * 60 * 1000} timeZone="UTC" />
+</Stack>
+
 ## Live
 
 Leave `live` at its default of `true` to keep the output refreshing on an adaptive timer as time passes.
