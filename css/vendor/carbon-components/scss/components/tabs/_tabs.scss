@@ -1060,9 +1060,10 @@
   // ccs: hover rules for this breakpoint, guarded together, same relative
   // order they had unguarded.
   @media (any-hover: hover) {
+    // ccs: the row is filled with layer-accent, as contained tabs are.
     #{$root}
       .#{$prefix}--tabs__nav-item:not(.#{$prefix}--tabs__nav-item--selected):not(.#{$prefix}--tabs__nav-item--disabled):hover {
-      background-color: $layer-selected-hover;
+      background-color: $layer-accent-hover;
     }
 
     #{$root} .#{$prefix}--tabs__nav-item--disabled:hover {
