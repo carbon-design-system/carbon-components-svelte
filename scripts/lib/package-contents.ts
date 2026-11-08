@@ -37,11 +37,12 @@ const REQUIRED: [string, RegExp][] = [
 ];
 
 /**
- * Release builds (all themes, doc comments stripped) unpack to ~5.7 MB as of
- * 0.112.1. The budget leaves room for real source growth while still
- * tripping on an artifact the size of the parse cache.
+ * Release builds (all themes, doc comments stripped) unpack to ~8.4 MB as of
+ * 0.114.0, up from ~5.7 MB at 0.112.1: the v11 tokens grow each theme's CSS,
+ * and the release adds 27 components. The budget leaves room for real source
+ * growth while still tripping on an artifact the size of the parse cache.
  */
-export const UNPACKED_SIZE_BUDGET = 6_500_000;
+export const UNPACKED_SIZE_BUDGET = 9_500_000;
 
 export function packageContentProblems(
   files: PackedFile[],
