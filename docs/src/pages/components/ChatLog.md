@@ -137,7 +137,7 @@ Show a file someone sent with FileDownloadItem, a link that downloads it, and a 
 
 ## Links and rich text
 
-Message text rendered with `{text}` is escaped, so it can't inject markup, but its URLs aren't links. `linkSegments` splits plain text into text and links without parsing HTML. Only `http:`, `https:` and `mailto:` URLs become links (pass `schemes` to change them), so `javascript:` and `data:` stay text, and a link's text is its own URL.
+Message text rendered with `{text}` is escaped, so it can't inject markup, but its URLs aren't links. `linkSegments` splits plain text into text and links without parsing HTML. Only `http:`, `https:` and `mailto:` URLs become links (pass `schemes` to change them), so `javascript:` and `data:` stay text, and a link's text is its own URL. For the common case, [LinkifiedText](/components/LinkifiedText) does the same and renders the links for you, also linking email addresses and showing the real address of a look-alike host.
 
 <ChatLog labelText="Conversation with support">
   <ChatMessage author="Dana">

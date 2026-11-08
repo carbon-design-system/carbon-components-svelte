@@ -142,6 +142,7 @@ export { default as LazyMount } from "./LazyMount/LazyMount.svelte";
 export { default as Link } from "./Link/Link.svelte";
 export { default as LinkDownload } from "./Link/LinkDownload.svelte";
 export { default as OutboundLink } from "./Link/OutboundLink.svelte";
+export { default as LinkifiedText } from "./LinkifiedText/LinkifiedText.svelte";
 export { default as ListBox } from "./ListBox/ListBox.svelte";
 export { default as ListBoxField } from "./ListBox/ListBoxField.svelte";
 export { default as ListBoxMenu } from "./ListBox/ListBoxMenu.svelte";
@@ -343,9 +344,18 @@ export {
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
+export { linkify } from "./utils/linkify.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
+export {
+  displayHost,
+  displayHref,
+  linkLabel,
+  safeUrl,
+  stripBidi,
+} from "./utils/safe-url.js";
+export { htmlToText, sanitizeHtml } from "./utils/sanitize-html.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
 export {

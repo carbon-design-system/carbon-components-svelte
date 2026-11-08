@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>linkified-text</title>
+    <g id="linkified-text" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="line-1" fill="var(--cds-text-disabled, #c6c6c6)" x="80" y="68" width="160" height="6" rx="1"></rect>
+        <rect id="line-2-start" fill="var(--cds-text-disabled, #c6c6c6)" x="80" y="86" width="44" height="6" rx="1"></rect>
+        <rect id="link" fill="var(--cds-background-brand, #0f62fe)" x="132" y="86" width="72" height="6" rx="1"></rect>
+        <rect id="link-underline" fill="var(--cds-background-brand, #0f62fe)" x="132" y="94" width="72" height="1"></rect>
+        <rect id="line-2-end" fill="var(--cds-text-disabled, #c6c6c6)" x="212" y="86" width="28" height="6" rx="1"></rect>
+        <rect id="line-3" fill="var(--cds-text-disabled, #c6c6c6)" x="80" y="104" width="104" height="6" rx="1"></rect>
+    </g>
+</svg>
