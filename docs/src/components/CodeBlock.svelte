@@ -1,6 +1,7 @@
 <script lang="ts">
   export let code = "";
-  export let language: "bash" | "svelte" | "javascript" | "typescript" = "bash";
+  export let language: "bash" | "svelte" | "javascript" | "typescript" | "css" =
+    "bash";
   export let type: "single" | "multi" | "inline" = "multi";
   export let hideCopyButton = false;
   export let showMoreLess = true;
