@@ -12,9 +12,12 @@ import { compile } from "svelte/compiler";
 import { stripDocComments, stripSvelteDocComments } from "./lib/doc-comments";
 
 const WRITE = process.argv.includes("--write");
-const transpiler = new Bun.Transpiler({ loader: "js" });
+// Minify whitespace: dropping a JSDoc cast such as
+// `/** @type {HTMLDivElement} */ (ref)` can make Svelte print an object
+// on one line, which changes the layout but not the code.
+const transpiler = new Bun.Transpiler({ loader: "js", minifyWhitespace: true });
 
-/** Comment-free, formatting-normalized JS for `code`. */
+/** Comment-free, whitespace-free JS for `code`. */
 function normalize(code: string): string {
   return transpiler.transformSync(code);
 }
