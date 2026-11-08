@@ -12,6 +12,7 @@ export function formatRelativeTime(
     locale?: string;
     numeric?: "always" | "auto";
     style?: "long" | "short" | "narrow";
+    minUnit?: "second" | "minute";
   },
 ): string;
 
