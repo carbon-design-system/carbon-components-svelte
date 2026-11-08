@@ -150,8 +150,8 @@ export function focusSection(target) {
 const SCROLLABLE_OVERFLOW = /(auto|scroll)/;
 
 /**
- * Scroll `item` into view, as `block: "nearest"` would, within its nearest
- * scrollable ancestor that doesn't also contain `section`, such as a sticky
+ * Center `item` once it leaves view, as `block: "center"` would, within its
+ * nearest scrollable ancestor that doesn't also contain `section`, such as a sticky
  * sidebar that overflows. An ancestor that contains the section scrolls the
  * page, so the search stops there and the page never moves.
  *
@@ -170,10 +170,17 @@ export function revealItem(item, section) {
     }
     const itemRect = item.getBoundingClientRect();
     const rootRect = element.getBoundingClientRect();
-    if (itemRect.top < rootRect.top) {
-      element.scrollTop -= rootRect.top - itemRect.top;
-    } else if (itemRect.bottom > rootRect.bottom) {
-      element.scrollTop += itemRect.bottom - rootRect.bottom;
+    // An item flush with an edge reads as cut off, and centering leaves room
+    // for the items around it, so the sidebar moves less often.
+    if (itemRect.top < rootRect.top || itemRect.bottom > rootRect.bottom) {
+      const delta =
+        itemRect.top +
+        itemRect.height / 2 -
+        (rootRect.top + rootRect.height / 2);
+      element.scrollTop = Math.min(
+        Math.max(element.scrollTop + delta, 0),
+        element.scrollHeight - element.clientHeight,
+      );
     }
     return;
   }

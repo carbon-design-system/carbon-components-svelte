@@ -232,6 +232,7 @@ export { default as StructuredListRow } from "./StructuredList/StructuredListRow
 export { default as StructuredListSkeleton } from "./StructuredList/StructuredListSkeleton.svelte";
 export { default as TableOfContents } from "./TableOfContents/TableOfContents.svelte";
 export { default as TableOfContentsItem } from "./TableOfContents/TableOfContentsItem.svelte";
+export { default as TableOfContentsGroup } from "./TableOfContents/TableOfContentsGroup.svelte";
 export { default as Tab } from "./Tabs/Tab.svelte";
 export { default as TabContent } from "./Tabs/TabContent.svelte";
 export { default as Tabs } from "./Tabs/Tabs.svelte";

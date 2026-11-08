@@ -42,6 +42,12 @@
    */
   export let scrollContainer = null;
 
+  /**
+   * Specify the row size.
+   * @type {"sm" | "md"}
+   */
+  export let size = "md";
+
   /** Specify the ARIA label for the nav */
   export let labelText = "Table of contents";
 
@@ -91,6 +97,9 @@
   // Off for the first placement so the bar appears in place instead of
   // sliding in from the top.
   let barAnimated = false;
+  // A click jumps the bar to its row. A slide across a long list reads as
+  // lag; the bar slides only as the reader scrolls.
+  let jumpBar = false;
   /** @type {string | undefined} */
   let revealedId;
 
@@ -125,10 +134,11 @@
     // box to measure. Leaving the bar unplaced lets it appear in place once
     // the nav shows, instead of sliding in from the top.
     if (!active || active.node.offsetHeight === 0) {
-      barVisible = barAnimated = false;
+      barVisible = barAnimated = jumpBar = false;
       return;
     }
-    barAnimated = barVisible;
+    barAnimated = barVisible && !jumpBar;
+    jumpBar = false;
     barTop = active.node.offsetTop;
     barHeight = active.node.offsetHeight;
     barVisible = true;
@@ -185,6 +195,7 @@
    */
   function select(id, event) {
     if (!noScrollSpy) lock();
+    if (id !== selectedId) jumpBar = true;
     setSelected(id);
 
     // A native hash jump scrolls every scrollable ancestor of the section:
@@ -205,10 +216,15 @@
     focusSection(target);
   }
 
+  let grouped = false;
+
   setContext("carbon:TableOfContents", {
     selectedId: selectedStore,
     register,
     select,
+    registerGroup: () => {
+      grouped = true;
+    },
   });
 
   /** @type {undefined | (() => void)} */
@@ -276,6 +292,8 @@
   aria-label={labelText}
   class:bx--toc={true}
   class:bx--toc--measured={barVisible}
+  class:bx--toc--grouped={grouped}
+  class:bx--toc--sm={size === "sm"}
   {...$$restProps}
 >
   <div

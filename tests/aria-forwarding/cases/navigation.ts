@@ -29,6 +29,7 @@ import SideNavFixture from "../fixtures/SideNav.test.svelte";
 import StructuredListFixture from "../fixtures/StructuredList.test.svelte";
 import TableFixture from "../fixtures/Table.test.svelte";
 import TableHeaderFixture from "../fixtures/TableHeader.test.svelte";
+import TableOfContentsGroupFixture from "../fixtures/TableOfContentsGroup.test.svelte";
 import TableOfContentsItemFixture from "../fixtures/TableOfContentsItem.test.svelte";
 import TabsFixture from "../fixtures/Tabs.test.svelte";
 import ToggleButtonGroupFixture from "../fixtures/ToggleButtonGroup.test.svelte";
@@ -408,6 +409,11 @@ export const navigation: AriaEntry[] = [
     name: "PaginationNav",
     render: (attrs) => render(PaginationNav, { props: attrs }),
     target: () => screen.getByRole("navigation"),
+  },
+  {
+    name: "TableOfContentsGroup",
+    render: (attrs) => render(TableOfContentsGroupFixture, { props: attrs }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "TableOfContentsItem",
