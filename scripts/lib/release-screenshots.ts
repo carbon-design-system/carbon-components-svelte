@@ -75,11 +75,12 @@ export function css(view: View, text: string): Promise<unknown> {
   );
 }
 
-/** Wait for fonts, running animations, and two frames. */
+/** Wait for fonts, finite running animations, and two frames. Looping
+ * animations, such as a typing indicator, never finish, so they are skipped. */
 export function settle(view: View): Promise<unknown> {
   return ev(
     view,
-    "Promise.all([document.fonts.ready, ...document.getAnimations().map((a) => a.finished)]).then(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))",
+    "Promise.all([document.fonts.ready, ...document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished)]).then(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))",
   );
 }
 

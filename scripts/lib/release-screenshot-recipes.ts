@@ -11,6 +11,8 @@ const BOLD = /Bold/;
 const NEXT = /next/i;
 const COLUMN = /column/i;
 const ANY = /./;
+const DUPLICATE = /Duplicate/;
+const EDIT_NAME = /Edit project name/;
 
 /**
  * Per-shot recipes, keyed by marker name. These are the v0.113.0 entries;
@@ -111,4 +113,51 @@ export const recipes: Record<string, Recipe> = {
     },
   },
   "grid-overlay": { viewport: { width: 1056, height: 270 } },
+  // v0.114.0
+  "theme-zone": { width: 560 },
+  "layout-direction": { width: 480 },
+  "chat-log": { width: 560 },
+  "chat-button": { width: 560 },
+  "date-picker-locale": {
+    async act(view) {
+      await view.click("input");
+      await waitFor(view, ".bx--date-picker__calendar--open");
+      await css(view, "#app{min-height:470px}");
+      await quiet(view, false);
+    },
+  },
+  "ai-label": {
+    async act(view) {
+      await css(view, "#app{min-height:220px}");
+    },
+  },
+  "side-panel": { viewport: { width: 1056, height: 640 } },
+  "css-grid": { width: 1000 },
+  "table-of-contents": { width: 320 },
+  card: { width: 360 },
+  "tooltip-group": {
+    async act(view) {
+      await css(view, "#app{min-height:140px}");
+      const sel = await tag(view, "button", DUPLICATE);
+      const box = await ev<{ x: number; y: number }>(
+        view,
+        `(() => { const b = document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 } })()`,
+      );
+      await view.cdp("Input.dispatchMouseEvent", {
+        type: "mouseMoved",
+        ...box,
+      });
+    },
+  },
+  "inline-edit": {
+    async act(view) {
+      // The edit button only shows on hover; click it through the DOM.
+      await ev(
+        view,
+        `document.querySelector(${JSON.stringify(await tag(view, "button", EDIT_NAME))}).click()`,
+      );
+      await quiet(view, false);
+    },
+  },
+  "confirm-modal": { viewport: { width: 800, height: 460 } },
 };
