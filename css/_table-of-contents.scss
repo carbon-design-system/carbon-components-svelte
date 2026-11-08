@@ -124,11 +124,12 @@
     padding-block: $carbon--spacing-02;
   }
 
+  // 4px padding around the 16px line keeps each row a 24px target.
   .#{$prefix}--toc--sm .#{$prefix}--toc__item--nested .#{$prefix}--toc__link {
     @include type-style("label-01");
 
     min-height: 0;
-    padding-block: $carbon--spacing-01;
+    padding-block: $carbon--spacing-02;
   }
 
   .#{$prefix}--toc--sm
@@ -147,7 +148,9 @@
     margin-block-start: $carbon--spacing-06;
   }
 
-  .#{$prefix}--toc__item--active .#{$prefix}--toc__link {
+  // `.toc` matches the small nested rule's weight, so its type style can't
+  // reset the active row to regular.
+  .#{$prefix}--toc .#{$prefix}--toc__item--active .#{$prefix}--toc__link {
     color: $text-primary;
     font-weight: 600;
   }

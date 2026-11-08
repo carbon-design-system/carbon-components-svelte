@@ -413,7 +413,7 @@ export const navigation: AriaEntry[] = [
   {
     name: "TableOfContentsGroup",
     render: (attrs) => render(TableOfContentsGroupFixture, { props: attrs }),
-    target: () => screen.getByRole("group"),
+    target: () => screen.getAllByRole("list")[1],
   },
   {
     name: "TableOfContentsItem",

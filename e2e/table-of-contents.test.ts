@@ -13,6 +13,28 @@ test.describe("TableOfContents", () => {
     expect(results.violations).toEqual([]);
   });
 
+  test("bolds the active nested item at size sm", async ({ page }) => {
+    const toc = page.getByTestId("toc-grouped");
+    const weight = (name: string) =>
+      toc
+        .getByRole("link", { name })
+        .evaluate((el) => getComputedStyle(el).fontWeight);
+
+    await expect(toc.getByRole("link", { name: "Milestones" })).toHaveAttribute(
+      "aria-current",
+      "location",
+    );
+    expect(await weight("Milestones")).toBe("600");
+    expect(await weight("Walkthroughs")).toBe("400");
+  });
+
+  test("keeps each group's items in a named list", async ({ page }) => {
+    const guides = page.getByRole("list", { name: "Guides" });
+
+    await expect(guides.getByRole("listitem")).toHaveCount(3);
+    await expect(page.getByRole("list", { name: "Reading" })).toBeVisible();
+  });
+
   test("moves the active bar onto a clicked item", async ({ page }) => {
     const link = page.getByRole("link", { name: "Key moments" });
     await link.click();
@@ -21,7 +43,7 @@ test.describe("TableOfContents", () => {
     await expect(page.getByTestId("selected-id")).toHaveText("key-moments");
 
     const item = await link.locator("..").boundingBox();
-    const bar = page.locator(".bx--toc__bar");
+    const bar = page.getByTestId("toc").locator(".bx--toc__bar");
     await expect
       .poll(async () => (await bar.boundingBox())?.y)
       .toBeCloseTo(item?.y ?? Number.NaN, 0);
