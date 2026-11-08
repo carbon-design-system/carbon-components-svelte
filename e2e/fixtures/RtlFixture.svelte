@@ -422,7 +422,7 @@ export async function rollback(region, id) {
     </InlineNotification>
   </div>
   <div data-testid="callout" class="notification">
-    <Callout lowContrast title="Read-only" subtitle="Ask an admin." />
+    <Callout lowContrast titleText="Read-only" subtitleText="Ask an admin." />
   </div>
   <div data-testid="toast-notification" class="field">
     <ToastNotification kind="error" title="Upload failed" subtitle="Timed out.">

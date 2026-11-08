@@ -6,8 +6,8 @@
   <div data-width={rem} style="width: {rem}rem">
     <Callout
       kind="warning"
-      title="Scheduled downtime"
-      subtitle="Billing is read-only on Saturday from 02:00 to 04:00 UTC."
+      titleText="Scheduled downtime"
+      subtitleText="Billing is read-only on Saturday from 02:00 to 04:00 UTC."
     >
       <svelte:fragment slot="actions">
         <NotificationActionButton>View schedule</NotificationActionButton>
@@ -19,6 +19,6 @@
 <Callout
   lowContrast
   kind="info"
-  title="Read-only role"
-  subtitle="Ask a workspace admin for edit access."
+  titleText="Read-only role"
+  subtitleText="Ask a workspace admin for edit access."
 />

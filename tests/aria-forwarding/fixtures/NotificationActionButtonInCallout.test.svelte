@@ -3,7 +3,7 @@
   import NotificationActionButton from "carbon-components-svelte/Notification/NotificationActionButton.svelte";
 </script>
 
-<Callout title="Scheduled downtime">
+<Callout titleText="Scheduled downtime">
   <svelte:fragment slot="actions">
     <NotificationActionButton {...$$restProps}>
       View schedule
