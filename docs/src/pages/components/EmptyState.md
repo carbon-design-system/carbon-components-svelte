@@ -13,13 +13,13 @@ description: Empty states fill a panel, card or table that has nothing to show y
 
 ## Basic
 
-Give the empty state a `title`, a `subtitle` that says why it's empty, and the action that fills it in the default slot. Put a pictogram from [carbon-pictograms-svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte) in the `illustration` slot. It is hidden from screen readers.
+Give the empty state a `titleText`, a `subtitleText` that says why it's empty, and the action that fills it in the default slot. Put a pictogram from [carbon-pictograms-svelte](https://github.com/carbon-design-system/carbon-pictograms-svelte) in the `illustration` slot. It is hidden from screen readers.
 
 The pictogram draws at 64px, and at 48px in the small size. Icons are drawn for 32px and smaller, so an icon in this slot keeps its own size. Give it `size={32}`.
 
 <EmptyState
-  title="Create your first project"
-  subtitle="Projects hold the files, comments and people for one piece of work."
+  titleText="Create your first project"
+  subtitleText="Projects hold the files, comments and people for one piece of work."
 >
   <Folder slot="illustration" />
   <Button icon={Add}>Create project</Button>
@@ -38,7 +38,7 @@ To have screen readers announce it, put the empty state in an element with `role
 
 Use the `subtitleChildren` slot for a subtitle with a link. `titleChildren` does the same for the title.
 
-<EmptyState title="You don't have access to Billing">
+<EmptyState titleText="You don't have access to Billing">
   <Lock slot="illustration" />
   <svelte:fragment slot="subtitleChildren">
     Ask a workspace admin, or <a href="#roles">read about roles</a>.
@@ -50,7 +50,7 @@ Use the `subtitleChildren` slot for a subtitle with a link. `titleChildren` does
 
 Set `size` to `"sm"` in a card, drawer or table body.
 
-<EmptyState size="sm" title="Your bag is empty" subtitle="Items you add show up here.">
+<EmptyState size="sm" titleText="Your bag is empty" subtitleText="Items you add show up here.">
   <ShoppingCart slot="illustration" />
   <Button kind="tertiary" size="small">Continue shopping</Button>
 </EmptyState>
@@ -59,4 +59,4 @@ Set `size` to `"sm"` in a card, drawer or table body.
 
 Inside a [Section](/components/Heading), the title is one level below the section's heading; elsewhere it is an `h3`. Set `headingLevel` to fit the page outline.
 
-<EmptyState headingLevel={2} title="No reports yet" subtitle="Reports you schedule appear here." />
+<EmptyState headingLevel={2} titleText="No reports yet" subtitleText="Reports you schedule appear here." />

@@ -17,15 +17,15 @@
   <h1>Workspace</h1>
   <h2>Projects</h2>
   <EmptyState
-    title="Create your first project"
-    subtitle="Projects hold the files, comments and people for one piece of work."
+    titleText="Create your first project"
+    subtitleText="Projects hold the files, comments and people for one piece of work."
   >
     <Folder slot="illustration" size={32} />
     <Button>Create project</Button>
     <Button kind="ghost">Import files</Button>
   </EmptyState>
   <h2>Billing</h2>
-  <EmptyState title="You don't have access to Billing">
+  <EmptyState titleText="You don't have access to Billing">
     <Folder slot="illustration" size={32} />
     <svelte:fragment slot="subtitleChildren">
       Ask a workspace admin, or <a href="#roles">read about roles</a>.
@@ -33,8 +33,8 @@
   </EmptyState>
   <EmptyState
     size="sm"
-    title="Your bag is empty"
-    subtitle="Items you add show up here."
+    titleText="Your bag is empty"
+    subtitleText="Items you add show up here."
   />
   <h2>Reports</h2>
   <Search bind:value={query} labelText="Search reports" />
@@ -46,8 +46,8 @@
   <div role="status" data-testid="status">
     {#if results.length === 0}
       <EmptyState
-        title="No results for “{query}”"
-        subtitle="Check the spelling, or try a shorter, broader term."
+        titleText="No results for “{query}”"
+        subtitleText="Check the spelling, or try a shorter, broader term."
       >
         <Button kind="tertiary" on:click={() => (query = "")}>
           Clear search

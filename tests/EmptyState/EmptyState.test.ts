@@ -41,7 +41,7 @@ describe("EmptyState", () => {
   });
 
   it("renders no heading without a title", () => {
-    render(EmptyStateComponent, { subtitle: "Nothing here" });
+    render(EmptyStateComponent, { subtitleText: "Nothing here" });
 
     expect(screen.queryByRole("heading")).toBeNull();
   });
@@ -54,7 +54,7 @@ describe("EmptyState", () => {
     ).toBeVisible();
   });
 
-  it("renders the `subtitle` prop when there is no subtitle slot", () => {
+  it("renders the `subtitleText` prop when there is no subtitle slot", () => {
     render(EmptyState, { withSlots: false });
 
     expect(
@@ -89,7 +89,7 @@ describe("EmptyState", () => {
   });
 
   it("omits the illustration, subtitle and actions when not given", () => {
-    render(EmptyState, { withSlots: false, subtitle: "" });
+    render(EmptyState, { withSlots: false, subtitleText: "" });
 
     const root = screen.getByTestId("empty");
     expect(root.querySelector(".bx--empty-state__illustration")).toBeNull();

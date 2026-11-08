@@ -30,8 +30,8 @@
   <div role="status">
     {#if results.length === 0}
       <EmptyState
-        title="No results for “{query}”"
-        subtitle="Check the spelling, or try a shorter, broader term."
+        titleText="No results for “{query}”"
+        subtitleText="Check the spelling, or try a shorter, broader term."
       >
         <Binocular slot="illustration" />
         <Button kind="tertiary" on:click={() => (query = "")}>

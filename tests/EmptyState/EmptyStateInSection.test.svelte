@@ -8,5 +8,5 @@
 
 <Section {level}>
   <Heading>Files</Heading>
-  <EmptyState title="No files yet" />
+  <EmptyState titleText="No files yet" />
 </Section>
