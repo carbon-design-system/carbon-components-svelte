@@ -38,7 +38,13 @@ The composer is a TextArea that grows with the message up to four lines (`grow`,
     >
       {item.message.text}
       <svelte:fragment slot="meta">
-        {#if item.last}<RelativeTime date={item.message.time} />{/if}
+        {#if item.last}
+          <RelativeTime
+            date={item.message.time}
+            minUnit="minute"
+            absoluteAfter={60 * 60 * 1000}
+          />
+        {/if}
       </svelte:fragment>
     </ChatMessage>
   {/if}
