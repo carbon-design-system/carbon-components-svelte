@@ -69,7 +69,7 @@ Use `inverse` for text on an inverse surface, such as a tooltip or notification:
 
 ## Type styles
 
-Set `type` to a Carbon v11 type token. The scale covers supporting text, body copy, fixed headings for product UI, and fluid styles that scale with the viewport for editorial layouts.
+Set `type` to a Carbon v11 type token. The scale covers supporting text, body copy, fixed headings for product UI, and fluid styles that scale with the viewport for editorial layouts. To change the font family, see [Fonts](/fonts).
 
 | Token                | Description                                              |
 | -------------------- | -------------------------------------------------------- |

@@ -17,6 +17,8 @@ import "carbon-components-svelte/css/all.css";
 
 `Theme` sets the theme for the whole page. To theme one part of it, such as a sidebar, use [ThemeZone](/components/ThemeZone).
 
+The theme stylesheets load no fonts. Import `fonts.css` for IBM Plex, or use your own font. See [Fonts](/fonts).
+
 ## Basic
 
 Create a basic theme component that can be controlled programmatically.
