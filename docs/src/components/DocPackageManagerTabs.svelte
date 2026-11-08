@@ -22,7 +22,7 @@
   {/each}
   <svelte:fragment slot="content">
     {#each PACKAGE_MANAGERS as pm (pm)}
-      <TabContent flush>
+      <TabContent flush class="doc-code-tab">
         <DocCodeBox>
           <CodeBlock type="single" language="bash" code={cmds[pm]} />
         </DocCodeBox>

@@ -262,22 +262,22 @@
               <Tab label="Rollup" />
               <Tab label="Webpack" />
               <svelte:fragment slot="content">
-                <TabContent flush>
+                <TabContent flush class="doc-code-tab">
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={viteConfig} />
                   </DocCodeBox>
                 </TabContent>
-                <TabContent flush>
+                <TabContent flush class="doc-code-tab">
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={sveltekitConfig} />
                   </DocCodeBox>
                 </TabContent>
-                <TabContent flush>
+                <TabContent flush class="doc-code-tab">
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={rollupConfig} />
                   </DocCodeBox>
                 </TabContent>
-                <TabContent flush>
+                <TabContent flush class="doc-code-tab">
                   <DocCodeBox>
                     <CodeBlock language="javascript" code={webpackConfig} />
                   </DocCodeBox>
