@@ -18,9 +18,10 @@
 
   getContext("carbon:TableOfContents")?.registerGroup?.();
 
-  // Naming and description belong on the `role="group"` list, not the
-  // wrapping `li`. A consumer `aria-labelledby` or `aria-label` wins over
-  // the built-in label.
+  // Naming and description belong on the nested list, not the wrapping
+  // `li`. The list keeps its implicit role, so screen readers announce
+  // "Examples, list, 4 items". A consumer `aria-labelledby` or `aria-label`
+  // wins over the built-in label.
   $: ({ ariaLabel, ariaLabelledBy, ariaDescribedBy, rest } =
     splitAriaNaming($$restProps));
 </script>
@@ -30,7 +31,6 @@
     <slot name="labelChildren">{labelText}</slot>
   </div>
   <ul
-    role="group"
     aria-labelledby={ariaLabelledBy ?? (ariaLabel ? undefined : id)}
     aria-label={ariaLabel}
     aria-describedby={ariaDescribedBy}

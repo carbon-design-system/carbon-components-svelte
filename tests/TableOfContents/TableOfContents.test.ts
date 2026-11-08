@@ -436,10 +436,10 @@ describe("TableOfContents", () => {
     it("renders each group as a list labelled by its title", () => {
       render(TableOfContentsGroups);
 
-      expect(screen.getByRole("group", { name: "Examples" })).toContainElement(
+      expect(screen.getByRole("list", { name: "Examples" })).toContainElement(
         screen.getByRole("link", { name: "Overview" }),
       );
-      expect(screen.getByRole("group", { name: "Reference" })).toContainElement(
+      expect(screen.getByRole("list", { name: "Reference" })).toContainElement(
         screen.getByRole("link", { name: "Props" }),
       );
       expect(screen.getByTestId("toc")).toHaveClass("bx--toc--grouped");

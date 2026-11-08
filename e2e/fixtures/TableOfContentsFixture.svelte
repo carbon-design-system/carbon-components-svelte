@@ -1,6 +1,7 @@
 <script>
   import {
     TableOfContents,
+    TableOfContentsGroup,
     TableOfContentsItem,
   } from "carbon-components-svelte";
 
@@ -31,6 +32,22 @@
     {/each}
   </main>
 </div>
+<TableOfContents
+  size="sm"
+  noScrollSpy
+  selectedId="key-moments"
+  labelText="Grouped contents"
+  data-testid="toc-grouped"
+>
+  <TableOfContentsGroup labelText="Guides">
+    <TableOfContentsItem href="#overview" text="Start here" />
+    <TableOfContentsItem href="#key-moments" level={2} text="Milestones" />
+    <TableOfContentsItem href="#tutorials" level={2} text="Walkthroughs" />
+  </TableOfContentsGroup>
+  <TableOfContentsGroup labelText="Reading">
+    <TableOfContentsItem href="#articles" text="Long reads" />
+  </TableOfContentsGroup>
+</TableOfContents>
 <output data-testid="selected-id">{selectedId ?? ""}</output>
 
 <style>
