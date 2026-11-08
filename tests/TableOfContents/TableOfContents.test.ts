@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import { nextFrame } from "../utils/next-frame";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
+import TableOfContentsGroups from "./TableOfContents.groups.test.svelte";
 import TableOfContentsItems from "./TableOfContents.items.test.svelte";
 import TableOfContents from "./TableOfContents.test.svelte";
 import { renderMeasured } from "./helpers";
@@ -404,6 +405,69 @@ describe("TableOfContents", () => {
     expect(nav).toHaveClass("bx--toc--measured");
     expect(nav.querySelector(".bx--toc__bar")).not.toHaveClass(
       "bx--toc__bar--animated",
+    );
+  });
+
+  it("jumps the bar to a clicked item without sliding", async () => {
+    renderMeasured(32);
+    await nextFrame();
+
+    await user.click(screen.getByRole("link", { name: "Key moments" }));
+    await nextFrame();
+
+    expect(
+      screen.getByTestId("toc").querySelector(".bx--toc__bar"),
+    ).not.toHaveClass("bx--toc__bar--animated");
+  });
+
+  it("slides the bar when selectedId changes", async () => {
+    const { rerender } = renderMeasured(32);
+    await nextFrame();
+
+    await rerender({ selectedId: "key-moments" });
+    await nextFrame();
+
+    expect(
+      screen.getByTestId("toc").querySelector(".bx--toc__bar"),
+    ).toHaveClass("bx--toc__bar--animated");
+  });
+
+  describe("TableOfContentsGroup", () => {
+    it("renders each group as a list labelled by its title", () => {
+      render(TableOfContentsGroups);
+
+      expect(screen.getByRole("group", { name: "Examples" })).toContainElement(
+        screen.getByRole("link", { name: "Overview" }),
+      );
+      expect(screen.getByRole("group", { name: "Reference" })).toContainElement(
+        screen.getByRole("link", { name: "Props" }),
+      );
+      expect(screen.getByTestId("toc")).toHaveClass("bx--toc--grouped");
+    });
+
+    it("selects items across groups", async () => {
+      render(TableOfContentsGroups);
+
+      await user.click(screen.getByRole("link", { name: "Props" }));
+
+      expect(screen.getByRole("link", { name: "Props" })).toHaveAttribute(
+        "aria-current",
+        "location",
+      );
+      expect(
+        screen.getByRole("link", { name: "Overview" }),
+      ).not.toHaveAttribute("aria-current");
+    });
+  });
+
+  it.each([
+    ["md", false],
+    ["sm", true],
+  ] as const)("size %s sets the small class: %s", (size, small) => {
+    render(TableOfContentsGroups, { size });
+
+    expect(screen.getByTestId("toc").classList.contains("bx--toc--sm")).toBe(
+      small,
     );
   });
 

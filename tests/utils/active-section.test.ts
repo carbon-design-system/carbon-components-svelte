@@ -263,7 +263,7 @@ describe("revealItem", () => {
     return { sidebar, item, section };
   }
 
-  it("scrolls the sidebar down to an item below its bottom", () => {
+  it("centers an item below the sidebar's bottom", () => {
     const { sidebar, item, section } = setup();
     rects = {
       sidebar: { top: 0, height: 200 },
@@ -272,12 +272,12 @@ describe("revealItem", () => {
 
     revealItem(item, section);
 
-    expect(sidebar.scrollTop).toBe(132);
+    expect(sidebar.scrollTop).toBe(216);
   });
 
-  it("scrolls the sidebar up to an item above its top", () => {
+  it("centers an item above the sidebar's top", () => {
     const { sidebar, item, section } = setup();
-    sidebar.scrollTop = 100;
+    sidebar.scrollTop = 300;
     rects = {
       sidebar: { top: 0, height: 200 },
       item: { top: -40, height: 32 },
@@ -285,7 +285,20 @@ describe("revealItem", () => {
 
     revealItem(item, section);
 
-    expect(sidebar.scrollTop).toBe(60);
+    expect(sidebar.scrollTop).toBe(176);
+  });
+
+  it("clamps to the sidebar's scroll range", () => {
+    const { sidebar, item, section } = setup();
+    sidebar.scrollTop = 20;
+    rects = {
+      sidebar: { top: 0, height: 200 },
+      item: { top: -10, height: 32 },
+    };
+
+    revealItem(item, section);
+
+    expect(sidebar.scrollTop).toBe(0);
   });
 
   it("leaves an item already in view", () => {
