@@ -414,6 +414,64 @@ When a table's columns need more space than its container, the table becomes hor
   ]}
 />
 
+## Stacked rows
+
+A table with many columns scrolls sideways in a narrow space. Set `stacked` to lay each row out as a card instead, a label over a value for each cell. The label is the column's header, so there is nothing to configure.
+
+| Value | Rows are cards |
+| --- | --- |
+| `"never"` | Never. The default, and the same table as before. |
+| `"auto"` | While the table's own box is narrower than `stackedBreakpoint`. |
+| `"always"` | Always. |
+
+### Always
+
+<FileSource src="/framed/DataTable/DataTableStacked" />
+
+### By container width
+
+`"auto"` follows the width of the box the table sits in, not the window, so a table in a narrow panel stacks on a wide screen. `stackedBreakpoint` picks the width: `"md"` (42rem, the default) or `"lg"` (66rem). A CSS container query decides, so the server's markup is already right and nothing flashes while the page loads.
+
+The table has to get its width from its parent. A box that sizes itself to its content, such as an inline block or an auto-width flex item, has no width for the query to read, and `useStaticWidth` is ignored.
+
+<FileSource src="/framed/DataTable/DataTableStackedAuto" />
+
+### Primary column and actions
+
+A header with `primary` is the card's title: its value comes first with no label, beside the select and expand controls. A column with an empty header (an actions menu) sits at the end of that line. `stackedLabel` replaces a column's label, and `stackedHidden` leaves a column out of the cards.
+
+<FileSource src="/framed/DataTable/DataTableStackedPrimary" />
+
+### Selection and sorting
+
+Cards have no header row, so what it held moves to a bar above them: the select all checkbox (`batchSelection`), an expand all button (`batchExpansion`) and, for a sortable table, a "Sort by" select with each sortable column in both directions. Set `stackedSortText` to change its text.
+
+<FileSource src="/framed/DataTable/DataTableStackedSelectable" />
+
+### Other features
+
+| Feature | In a stacked table |
+| --- | --- |
+| `selectable`, `radio` | The control leads the card. |
+| `expandable` | The expand button leads the card, and the expanded content is the card's lower half. |
+| `stickyHeader` | There is no header to stick. The box scrolls only when `stickyHeaderMaxHeight` is set. |
+| `virtualize` | Off. A card's height varies, and the window math assumes one row height. Use `pageSize` for a long list. |
+| `zebra`, `size`, `highlightedRowIds` | Apply to the cards. `size` sets the space between a card's pairs. |
+| `columnAlign`, `fixedLayout`, widths | Ignored. A cell takes the card's width. |
+| The `cell` slot | Renders as it does in a table, under the label. |
+
+### Accessibility
+
+The header row is hidden with `display: none`, so it leaves the tab order and the accessibility tree along with its sort buttons. Each cell keeps its label as text, so a screen reader reads "Protocol HTTP" in the cell. The `table`, its row groups, rows and cells carry explicit ARIA roles, so a browser that drops table semantics when `display` changes still reports a table.
+
+| Do | Why |
+| --- | --- |
+| Give the table a `title` or `aria-label` | The table keeps its name when it stacks, and a screen reader announces it with the row count. |
+| Keep header text short | It is the label in every card. Set `stackedLabel` for a longer or custom header. |
+| Set `primary` on the column a row is known by | The title lets a reader tell the cards apart. |
+| Use `"auto"` with a parent that has a width | A container query reads the box's width. |
+| Don't put the only copy of an action in a hidden header | The header is not reachable when stacked. |
+
 ## Column visibility
 
 Control which columns render without editing the `headers` definition.
