@@ -1,46 +1,67 @@
 <script lang="ts">
   import {
     Box,
+    Breadcrumb,
+    BreadcrumbItem,
     Button,
     Checkbox,
-    CodeSnippet,
     Column,
     Content,
     createTheme,
+    DataTable,
+    Dropdown,
     Grid,
+    InlineLoading,
     InlineNotification,
     Link,
-    ListItem,
     NotificationActionButton,
+    OverflowMenu,
+    OverflowMenuItem,
+    PaginationNav,
+    ProgressBar,
     ProgressIndicator,
     ProgressStep,
     RadioButton,
     RadioButtonGroup,
     Row,
+    Search,
+    Slider,
     Stack,
     Tab,
     TabContent,
     Tabs,
+    Tag,
     Text,
-    TextArea,
     TextInput,
     Tile,
-    UnorderedList,
+    Toggle,
+    Toolbar,
+    ToolbarBatchActions,
+    ToolbarContent,
+    ToolbarSearch,
   } from "carbon-components-svelte";
   import {
     type CarbonTheme,
     themes,
   } from "carbon-components-svelte/src/Theme/Theme.svelte";
   import { parseHex } from "carbon-components-svelte/src/utils/color-contrast.js";
+  import Checkmark from "carbon-icons-svelte/lib/Checkmark.svelte";
   import ColorPalette from "carbon-icons-svelte/lib/ColorPalette.svelte";
+  import Save from "carbon-icons-svelte/lib/Save.svelte";
+  import { onMount } from "svelte";
+  import CodeBlock from "../components/CodeBlock.svelte";
+  import DocCodeBox from "../components/DocCodeBox.svelte";
   import DocHero from "../components/DocHero.svelte";
   import DocSection from "../components/DocSection.svelte";
+  import TokenOverrides from "../components/TokenOverrides.svelte";
   import { theme as docTheme } from "../store";
   import {
     brandPresets,
     createThemeSnippet,
+    parseBuilderState,
     parseOverrides,
     previewStyle,
+    serializeBuilderState,
     themeSnippet,
   } from "../theme-builder";
 
@@ -48,12 +69,9 @@
 
   let base: CarbonTheme = $docTheme;
   let brandInput = brandPresets[0].color;
-  let overridesText = "";
   let overrides: ReturnType<typeof parseOverrides>["tokens"] = {};
-  let invalid: string[] = [];
 
   $: brandValid = parseHex(brandInput.trim()) !== null;
-  $: ({ tokens: overrides, invalid } = parseOverrides(overridesText));
 
   // Keep the last valid theme while the brand color is being typed.
   let result = createTheme({ theme: base, brand: brandPresets[0].color });
@@ -67,6 +85,80 @@
 
   $: brand = result.tokens["button-primary"] ?? brandInput;
   $: preset = brandPresets.find((p) => p.color === brand)?.color;
+
+  // A shared link sets the starting state. Save writes the current state
+  // to the URL and copies the link.
+  let saved = false;
+  let savedTimeout: ReturnType<typeof setTimeout> | undefined;
+
+  onMount(() => {
+    const state = parseBuilderState(
+      new URLSearchParams(window.location.search),
+      themeKeys,
+    );
+    if (state.theme) base = state.theme;
+    if (state.brand) brandInput = state.brand;
+    if (state.overrides) overrides = parseOverrides(state.overrides).tokens;
+    return () => clearTimeout(savedTimeout);
+  });
+
+  async function save() {
+    const search = serializeBuilderState({
+      theme: base,
+      brand: brandInput,
+      overrides: Object.entries(overrides)
+        .map(([token, value]) => `${token}: ${value}`)
+        .join("\n"),
+    });
+    // Write the URL without a route change, so the page keeps its scroll.
+    history.replaceState(history.state, "", `?${search}`);
+    await navigator.clipboard.writeText(window.location.href);
+    saved = true;
+    clearTimeout(savedTimeout);
+    savedTimeout = setTimeout(() => (saved = false), 2000);
+  }
+
+  const tagTypes = [
+    "red",
+    "magenta",
+    "purple",
+    "blue",
+    "cyan",
+    "teal",
+    "green",
+    "gray",
+    "cool-gray",
+    "warm-gray",
+  ] as const;
+  const notificationKinds = [
+    {
+      kind: "success",
+      title: "Deployed:",
+      subtitle: "cron is live in us-west.",
+    },
+    {
+      kind: "warning",
+      title: "Usage at 80%:",
+      subtitle: "add instances before the next peak.",
+    },
+    {
+      kind: "error",
+      title: "Health check failed:",
+      subtitle: "worker is down.",
+    },
+  ] as const;
+
+  const tableHeaders = [
+    { key: "name", value: "Service" },
+    { key: "region", value: "Region" },
+    { key: "status", value: "Status" },
+    { key: "overflow", empty: true },
+  ] as const;
+  const tableRows = [
+    { id: "a", name: "api-gateway", region: "us-east", status: "Live" },
+    { id: "b", name: "worker", region: "eu-west", status: "Deploying" },
+    { id: "c", name: "cron", region: "us-west", status: "Live" },
+  ];
 </script>
 
 <svelte:head>
@@ -78,12 +170,7 @@
 </svelte:head>
 
 <Content>
-  <DocHero
-    eyebrow="Theming"
-    icon={ColorPalette}
-    title="Theme builder"
-    description="Pick a base theme and a brand color. The builder derives the tokens Carbon pairs with its brand blue, checks contrast, and gives you the code."
-  />
+  <DocHero eyebrow="Theming" icon={ColorPalette} title="Theme builder" />
 
   <DocSection>
     <Grid>
@@ -140,46 +227,23 @@
                 </RadioButtonGroup>
               </Stack>
 
-              <TextArea
-                labelText="Overrides (optional)"
-                helperText="One token per line. Overrides win over derived tokens."
-                placeholder="text-on-color: #161616"
-                rows={4}
-                warn={invalid.length > 0}
-                warnText="Not a color token: {invalid.join(', ')}"
-                bind:value={overridesText}
+              <TokenOverrides
+                theme={base}
+                derived={result.tokens}
+                bind:overrides
               />
 
               <Stack gap={3}>
-                <Text tag="h2" type="heading-02" color="primary">Contrast</Text>
-                {#if result.warnings.length > 0}
-                  <InlineNotification
-                    kind="warning"
-                    role="status"
-                    lowContrast
-                    hideCloseButton
-                    title="Below WCAG AA:"
-                  >
-                    <UnorderedList slot="subtitleChildren">
-                      {#each result.warnings as warning (warning.foreground + warning.background)}
-                        <ListItem>
-                          {warning.foreground}
-                          on {warning.background} is
-                          {warning.ratio}:1 and needs {warning.minimum}:1.
-                        </ListItem>
-                      {/each}
-                    </UnorderedList>
-                  </InlineNotification>
-                {:else}
-                  <InlineNotification
-                    kind="success"
-                    role="status"
-                    lowContrast
-                    hideCloseButton
-                    title="Passes WCAG AA:"
-                    subtitle="Text on the brand, links, and focus all have enough contrast."
-                  />
-                {/if}
+                <Button
+                  icon={saved ? Checkmark : Save}
+                  disabled={!brandValid}
+                  on:click={save}
+                >
+                  {saved ? "Link copied" : "Save"}
+                </Button>
+                <span class="bx--visually-hidden" role="status">
+                  {saved ? "Link copied" : ""}
+                </span>
               </Stack>
             </Stack>
           </Box>
@@ -187,6 +251,42 @@
 
         <Column sm={4} md={8} lg={11}>
           <Stack gap={7}>
+            <Stack gap={3}>
+              <Text tag="h2" type="heading-02" color="primary">Code</Text>
+              <Tabs autoWidth>
+                <Tab label="Theme" />
+                <Tab label="createTheme" />
+                <Tab label="CSS" />
+                <svelte:fragment slot="content">
+                  <TabContent flush class="doc-code-tab">
+                    <DocCodeBox>
+                      <CodeBlock
+                        language="svelte"
+                        code={themeSnippet(result.theme, result.tokens)}
+                      />
+                    </DocCodeBox>
+                  </TabContent>
+                  <TabContent flush class="doc-code-tab">
+                    <DocCodeBox>
+                      <CodeBlock
+                        language="javascript"
+                        code={createThemeSnippet(
+                          result.theme,
+                          brand,
+                          overrides,
+                        )}
+                      />
+                    </DocCodeBox>
+                  </TabContent>
+                  <TabContent flush class="doc-code-tab">
+                    <DocCodeBox>
+                      <CodeBlock language="css" code={result.css()} />
+                    </DocCodeBox>
+                  </TabContent>
+                </svelte:fragment>
+              </Tabs>
+            </Stack>
+
             <Stack gap={3}>
               <Text tag="h2" type="heading-02" color="primary">Preview</Text>
               <!-- The base theme and brand tokens, scoped to this box. -->
@@ -197,6 +297,14 @@
                 style={previewStyle(base, result.tokens)}
               >
                 <Stack gap={7}>
+                  <Breadcrumb noTrailingSlash>
+                    <BreadcrumbItem href="#preview">Services</BreadcrumbItem>
+                    <BreadcrumbItem href="#preview">api-gateway</BreadcrumbItem>
+                    <BreadcrumbItem href="#preview" isCurrentPage>
+                      Deploys
+                    </BreadcrumbItem>
+                  </Breadcrumb>
+
                   <Stack orientation="horizontal" gap={4} wrap="wrap">
                     <Button>Deploy service</Button>
                     <Button kind="tertiary">Preview build</Button>
@@ -217,43 +325,147 @@
                     <ProgressStep label="Deploy" />
                   </ProgressIndicator>
 
-                  <Tabs>
-                    <Tab label="Overview" />
-                    <Tab label="Metrics" />
-                    <Tab label="Settings" />
-                    <svelte:fragment slot="content">
-                      <TabContent>
-                        <Text color="primary">api-gateway runs in us-east.</Text
-                        >
-                      </TabContent>
-                      <TabContent>
-                        <Text color="primary">p95 latency is 120 ms.</Text>
-                      </TabContent>
-                      <TabContent>
-                        <Text color="primary">Autoscaling is on.</Text>
-                      </TabContent>
-                    </svelte:fragment>
-                  </Tabs>
+                  <!-- One child, so the Stack gap stays out of the tab panel. -->
+                  <div>
+                    <Tabs type="container">
+                      <Tab label="Overview" />
+                      <Tab label="Metrics" />
+                      <Tab label="Settings" />
+                      <svelte:fragment slot="content">
+                        <Box fill="layer-01">
+                          <TabContent>
+                            <Stack gap={3}>
+                              <Text color="primary"
+                                >api-gateway runs in us-east.</Text
+                              >
+                              <InlineLoading
+                                description="Deploying build 142"
+                              />
+                            </Stack>
+                          </TabContent>
+                          <TabContent>
+                            <Text color="primary">p95 latency is 120 ms.</Text>
+                          </TabContent>
+                          <TabContent>
+                            <Text color="primary">Autoscaling is on.</Text>
+                          </TabContent>
+                        </Box>
+                      </svelte:fragment>
+                    </Tabs>
+                  </div>
 
-                  <Stack gap={5}>
-                    <TextInput
-                      labelText="Service name"
-                      placeholder="api-gateway"
-                    />
-                    <Checkbox labelText="Enable autoscaling" checked />
+                  <Box
+                    display="grid"
+                    columns="repeat(auto-fit, minmax(16rem, 1fr))"
+                    gap={7}
+                    align="start"
+                  >
+                    <Stack gap={6}>
+                      <Search size="lg" labelText="Search services" />
+                      <TextInput
+                        labelText="Service name"
+                        placeholder="api-gateway"
+                      />
+                      <Dropdown
+                        labelText="Region"
+                        selectedId="us-east"
+                        items={[
+                          { id: "us-east", text: "us-east" },
+                          { id: "eu-west", text: "eu-west" },
+                        ]}
+                      />
+                      <Slider
+                        labelText="Instances"
+                        min={1}
+                        max={10}
+                        value={3}
+                      />
+                    </Stack>
+                    <Stack gap={6}>
+                      <Toggle labelText="Autoscaling" toggled />
+                      <Checkbox labelText="Notify on deploy" checked />
+                      <RadioButtonGroup
+                        legendText="Plan"
+                        selected="team"
+                        orientation="vertical"
+                      >
+                        <RadioButton labelText="Hobby" value="hobby" />
+                        <RadioButton labelText="Team" value="team" />
+                      </RadioButtonGroup>
+                      <ProgressBar
+                        labelText="Build"
+                        helperText="Step 3 of 5"
+                        value={60}
+                      />
+                      <Stack orientation="horizontal" gap={3} wrap="wrap">
+                        {#each tagTypes as type (type)}
+                          <Tag {type}>{type}</Tag>
+                        {/each}
+                      </Stack>
+                    </Stack>
+                  </Box>
+
+                  <Stack gap={3}>
+                    <DataTable
+                      title="Services"
+                      description="Select services to redeploy them together."
+                      size="short"
+                      batchSelection
+                      selectedRowIds={["a", "c"]}
+                      headers={tableHeaders}
+                      rows={tableRows}
+                    >
+                      <Toolbar>
+                        <ToolbarBatchActions>
+                          <Button>Redeploy</Button>
+                        </ToolbarBatchActions>
+                        <ToolbarContent>
+                          <ToolbarSearch />
+                          <Button>Add service</Button>
+                        </ToolbarContent>
+                      </Toolbar>
+                      <svelte:fragment slot="cell" let:cell>
+                        {#if cell.key === "overflow"}
+                          <OverflowMenu flipped size="sm">
+                            <OverflowMenuItem text="View logs" />
+                            <OverflowMenuItem text="Restart" />
+                          </OverflowMenu>
+                        {:else}
+                          {cell.value}
+                        {/if}
+                      </svelte:fragment>
+                    </DataTable>
+                    <PaginationNav page={2} total={8} shown={5} />
                   </Stack>
 
-                  <InlineNotification
-                    kind="info"
-                    lowContrast
-                    hideCloseButton
-                    title="Deploy queued:"
-                    subtitle="api-gateway starts in about two minutes."
-                  >
-                    <NotificationActionButton slot="actions">
-                      View queue
-                    </NotificationActionButton>
-                  </InlineNotification>
+                  <Stack gap={3}>
+                    <InlineNotification
+                      kind="info"
+                      lowContrast
+                      hideCloseButton
+                      title="Deploy queued:"
+                      subtitle="api-gateway starts in about two minutes."
+                    >
+                      <NotificationActionButton slot="actions">
+                        View queue
+                      </NotificationActionButton>
+                    </InlineNotification>
+                    {#each notificationKinds as { kind, title, subtitle } (kind)}
+                      <InlineNotification
+                        {kind}
+                        lowContrast
+                        hideCloseButton
+                        {title}
+                        {subtitle}
+                      />
+                    {/each}
+                    <InlineNotification
+                      kind="error"
+                      hideCloseButton
+                      title="Build failed:"
+                      subtitle="worker exited with code 1."
+                    />
+                  </Stack>
 
                   <Tile>
                     <Stack gap={3}>
@@ -266,36 +478,6 @@
                   </Tile>
                 </Stack>
               </Box>
-            </Stack>
-
-            <Stack gap={3}>
-              <Text tag="h2" type="heading-02" color="primary">Export</Text>
-              <Tabs>
-                <Tab label="Theme" />
-                <Tab label="createTheme" />
-                <Tab label="CSS" />
-                <svelte:fragment slot="content">
-                  <TabContent>
-                    <CodeSnippet
-                      type="multi"
-                      code={themeSnippet(result.theme, result.tokens)}
-                    />
-                  </TabContent>
-                  <TabContent>
-                    <CodeSnippet
-                      type="multi"
-                      code={createThemeSnippet(result.theme, brand, overrides)}
-                    />
-                  </TabContent>
-                  <TabContent>
-                    <CodeSnippet type="multi" code={result.css()} />
-                  </TabContent>
-                </svelte:fragment>
-              </Tabs>
-              <Text type="body-01" color="secondary">
-                Load the CSS after all.css. It applies while the base theme is
-                set on the html element.
-              </Text>
             </Stack>
           </Stack>
         </Column>

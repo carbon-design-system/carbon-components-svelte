@@ -66,6 +66,7 @@ export default {
     "docs/src/code-view-height.ts",
     "crassus.config.ts",
     "docs/src/token-reference.ts",
+    "docs/src/theme-builder.ts",
     "docs/src/search.ts",
     "docs/src/routes.ts",
     "docs/src/search-index.ts",
