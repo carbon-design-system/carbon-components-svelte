@@ -222,7 +222,7 @@
     // the wrapper's own base background above, which is lower specificity
     // and earlier in the file either way.
     .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--neutral:hover {
-      background-color: $layer-hover;
+      background-color: $field-hover;
     }
 
     // Invalid/warn fluid (matches fluid-select): hover tint only the input
@@ -250,7 +250,7 @@
       .#{$prefix}--list-box.#{$prefix}--list-box--expanded:hover:not(
         .#{$prefix}--combo-box
       ) {
-      background-color: $layer-hover;
+      background-color: $field-hover;
     }
 
     .#{$prefix}--list-box__wrapper--fluid
