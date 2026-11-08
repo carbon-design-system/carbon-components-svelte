@@ -188,6 +188,7 @@ These names apply to new components and new props. Shipped components keep their
 
 - Choose a [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/) pattern before you write markup. Document each deviation and its reason.
 - Use native elements where they fit: `button`, `a`, `input`, `select`, `dialog`.
+- Do not put a `role` on a `ul` or `ol` whose children stay `li`. The role replaces the list, so screen readers drop the item count, and axe flags each `li` (`listitem`). Name a list with `aria-labelledby`.
 - Give every control an accessible name. Connect helper and error text with `aria-describedby`; join multiple ids with spaces.
 - Expose state with `aria-expanded`, `aria-selected`, `aria-checked`, `aria-pressed`, `aria-current`, `aria-invalid` and `aria-busy`.
 - Use `aria-disabled` for items that must stay focusable while unavailable, such as menu items and toolbar buttons. Ignore their activation in the handler.
@@ -233,7 +234,7 @@ These names apply to new components and new props. Shipped components keep their
 
 - Keyboard only, for every feature.
 - VoiceOver with Safari. For new ARIA patterns, also NVDA with Firefox or Chrome.
-- An `e2e/a11y-<component>.test.ts` that runs axe through `@axe-core/playwright` on each state.
+- An `e2e/a11y-<component>.test.ts` that runs axe through `@axe-core/playwright` on each state. Axe checks only what the fixture renders, so the fixture shows every structure the component can make: groups, nesting and each size.
 
 ## Motion
 
@@ -419,6 +420,7 @@ Check `src/utils/` before you write a helper.
 - With pointer capture, the `click` after a press fires on the capturing element. Read the target in `pointerdown`. In a draggable item, ignore presses that start on links, buttons and form controls, or those controls stop working.
 - Svelte 5: if a `$:` block assigns a value that an earlier `$:` block reads, the earlier block does not run again in the same flush. Assign state set by a user action in the event handler.
 - Svelte 3 and 4: `bind:value` with a spread on a `<textarea>` that has text content resets the value. Set the value only through `bind:value`.
+- Svelte 3 and 4: a child that receives `prop={undefined}` keeps `undefined` and skips its default, such as `export let id = uniqueId()`. Pass the prop only when it is set: `` {...(id ? { id: `${id}-step` } : {})} ``. Svelte 5 uses the default, so only the Svelte 3 and 4 tests catch it.
 - A function called in the markup (`{#if}`, `{#each}`, `{@const}`, attribute values) that reads component state must receive that state as arguments. Svelte tracks only the names written in the expression, so the function does not run again when the state changes. This fails on Svelte 3, 4 and 5.
 - A `<bdi>` or an element with its own `dir` resolves logical properties (`margin-inline-start`, `auto` margins) in its own direction. Put layout margins on its parent.
 - `cursor` or `user-select` on a large container restyles every descendant. Set it on the dragged item, or on an element with `contain`.
@@ -436,7 +438,7 @@ Measure positions and sizes in the browser (`getBoundingClientRect`, computed st
 | Check | Method |
 | :--- | :--- |
 | Carbon spec | Compare with Carbon's spec at the same size and theme. Carbon React's Storybook is a working reference. Record each intentional difference and the reason. |
-| States | One fixture shows every size with every state (`invalid`, `warn`, `disabled`, `readonly`, skeleton), with one field invalid beside valid ones in the same row, and with zero, one and many items. Review them together. |
+| States | One fixture shows every size with every state (`invalid`, `warn`, `disabled`, `readonly`, skeleton, active or current), with one field invalid beside valid ones in the same row, and with zero, one and many items. Review them together. A size's type style can outweigh the state rule, so check the active weight at each size. |
 | Themes and layers | White and Gray 100 at minimum. `Layer` nested to level 3. |
 | Right to left | Test with `dir="rtl"`, using sample values that read differently when reversed ("3 / 4", never "3 / 3"),, `dir="ltr"` and no `dir`. Forward and back icons mirror. Inline-axis arrow keys swap. Time and progress run toward the inline end. Add a row to `e2e/rtl.test.ts`. |
 | Forced colors | Chromium with `forced-colors: active`. Draw rings only on the focused or selected item; a ring on every cell hides which one is active. Structural edges, such as a card's 1 px border or a field's resting box, stay: without them a field or card disappears in forced colors. The focus ring is wider than those edges so it stands out. Show selection with a `Highlight` border; forced colors remove background fills. Draw lines with `CanvasText`. Draw progress as an element with a system color; forced colors remove `background-image`. `forced-color-adjust: none` inherits, so set it on one element only. Add a row to `e2e/forced-colors.test.ts`. |
