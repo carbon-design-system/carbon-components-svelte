@@ -170,11 +170,12 @@
     return () => clearTimeout(id);
   });
 
-  function subheadingClass(index: number) {
-    return index === 0
-      ? "sidenav-subheading sidenav-subheading-first"
-      : "sidenav-subheading";
-  }
+  const guides = [
+    { name: "Fonts", path: "/fonts" },
+    { name: "Right-to-left", path: "/right-to-left" },
+    { name: "Server-side rendering", path: "/server-rendering" },
+    { name: "Performance", path: "/performance" },
+  ];
 </script>
 
 <svelte:window bind:innerWidth />
@@ -354,12 +355,27 @@
           isSelected={$isActive("/theme-builder")}
         />
         <SideNavDivider />
-        {#each groupedNav as group, groupIndex (group.label)}
+        <Text
+          tag="li"
+          type="label-01"
+          color="secondary"
+          class="sidenav-subheading sidenav-subheading-first"
+        >
+          Guides
+        </Text>
+        {#each guides as guide (guide.path)}
+          <SideNavLink
+            text={guide.name}
+            href={guide.path}
+            isSelected={$isActive(guide.path)}
+          />
+        {/each}
+        {#each groupedNav as group (group.label)}
           <Text
             tag="li"
             type="label-01"
             color="secondary"
-            class={subheadingClass(groupIndex)}
+            class="sidenav-subheading"
           >
             {group.label}
           </Text>
