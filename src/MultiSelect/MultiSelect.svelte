@@ -1668,6 +1668,12 @@
       destroy: action.destroy,
     };
   }
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the list box button or filter input.
+  // The class falls back to "", since Svelte 3 and 4 render an unset class
+  // as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <div
@@ -1693,6 +1699,8 @@
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
   class:bx--multi-select--filterable__wrapper={isFluid && filterable}
+  class={rootClass ?? ""}
+  style={rootStyle}
 >
   {#each formItems as item (item.id)}
     {@const itemInput = itemToInput(item) ?? {}}
@@ -1776,7 +1784,7 @@
             bind:value
             aria-invalid={showInvalid ? "true" : undefined}
             aria-required={required ? "true" : undefined}
-            {...$$restProps}
+            {...controlProps}
             role="combobox"
             tabindex="0"
             autocomplete="off"
@@ -1932,7 +1940,7 @@
         <ListBoxField
           aria-invalid={showInvalid || undefined}
           aria-required={required || undefined}
-          {...$$restProps}
+          {...controlProps}
           role="combobox"
           tabindex="0"
           aria-expanded={open ? "true" : "false"}

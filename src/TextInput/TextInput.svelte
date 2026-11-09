@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {input} */
+
   /**
    * @event {null | number | string} change
    * @event {null | number | string} input
@@ -207,6 +209,11 @@
   // so a read-only number field renders as a text input.
   $: typeOverride =
     readonly && $$restProps.type === "number" ? { type: "text" } : {};
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -219,6 +226,8 @@
   class:bx--text-input-wrapper--inline={inline}
   class:bx--text-input-wrapper--readonly={readonly}
   class:bx--text-input--fluid={isFluid}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:click
   on:mouseover
   on:mouseenter
@@ -351,7 +360,7 @@
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}
         maxlength={maxCount ?? undefined}
-        {...$$restProps}
+        {...controlProps}
         {...typeOverride}
         aria-describedby={joinDescribedBy(
           resolveStatusDescribedBy({

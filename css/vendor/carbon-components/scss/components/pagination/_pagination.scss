@@ -135,16 +135,17 @@ $css--helpers: true;
   }
 
   // ccs: the separators, gaps and padding on the inline axis are logical,
-  // so they sit on the mirrored side in RTL. Select puts the class on the
-  // `<select>` itself, so match both classes on one element: as
-  // descendants (v10 and v11 markup), neither separator rendered.
+  // so they sit on the mirrored side in RTL. Select puts the class on its
+  // root, so the `<select>` is a descendant.
   .#{$prefix}--pagination
-    .#{$prefix}--select-input.#{$prefix}--select__item-count {
+    .#{$prefix}--select__item-count
+    .#{$prefix}--select-input {
     border-inline-end: 1px solid $border-subtle;
   }
 
   .#{$prefix}--pagination
-    .#{$prefix}--select-input.#{$prefix}--select__page-number {
+    .#{$prefix}--select__page-number
+    .#{$prefix}--select-input {
     border-inline-start: 1px solid $border-subtle;
   }
 
@@ -410,8 +411,12 @@ $css--helpers: true;
 /// @group components
 @mixin pagination-page-input {
   .#{$prefix}--pagination
+    .#{$prefix}--pagination__page-number-input
     .#{$prefix}--number
-    .#{$prefix}--pagination__page-number-input {
+    :where(input) {
+    // NumberInput puts the class on its root, so match the input inside.
+    // `:where()` keeps the old specificity, so the disabled field rules
+    // still win.
     // Fit the widest page number. Pagination sets the digit count of
     // `totalPages`; `ch` plus letter-spacing covers each digit, then the
     // padding and the start border. `min-width` keeps the 64px floor.
@@ -429,22 +434,25 @@ $css--helpers: true;
   }
 
   .#{$prefix}--pagination--xs
+    .#{$prefix}--pagination__page-number-input
     .#{$prefix}--number
-    .#{$prefix}--pagination__page-number-input {
+    :where(input) {
     height: $size-xs;
     min-height: $size-xs;
   }
 
   .#{$prefix}--pagination--sm
+    .#{$prefix}--pagination__page-number-input
     .#{$prefix}--number
-    .#{$prefix}--pagination__page-number-input {
+    :where(input) {
     height: $size-sm;
     min-height: $size-sm;
   }
 
   .#{$prefix}--pagination--lg
+    .#{$prefix}--pagination__page-number-input
     .#{$prefix}--number
-    .#{$prefix}--pagination__page-number-input {
+    :where(input) {
     height: $size-lg;
     min-height: $size-lg;
   }

@@ -44,7 +44,7 @@ describe("MultiSelect", () => {
       { filterable: false, fieldClass: "bx--list-box__field" },
       { filterable: true, fieldClass: "bx--text-input" },
     ])(
-      "forwards rest props to the trigger when filterable is $filterable",
+      "forwards rest props to the trigger and the class to the root when filterable is $filterable",
       ({ filterable, fieldClass }) => {
         render(MultiSelectRestProps, {
           props: { items, labelText: "Contact methods", filterable },
@@ -55,7 +55,10 @@ describe("MultiSelect", () => {
         expect(trigger).toHaveAttribute("aria-required", "true");
         expect(trigger).toHaveAttribute("data-custom", "passthrough");
         expect(trigger).toHaveClass(fieldClass);
-        expect(trigger).toHaveClass("custom-class");
+        expect(trigger).not.toHaveClass("custom-class");
+        expect(trigger.closest(".bx--list-box__wrapper")).toHaveClass(
+          "custom-class",
+        );
       },
     );
   });

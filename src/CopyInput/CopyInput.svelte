@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {input} */
+
   import { COPY_FEEDBACK_TIMEOUT_MS } from "../utils/copy-feedback.js";
   import { copyText } from "../utils/copy-text.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
@@ -218,6 +220,11 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -229,6 +236,8 @@
   class:bx--text-input-wrapper={true}
   class:bx--text-input-wrapper--inline={inline}
   class:bx--text-input--fluid={isFluid}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:click
   on:mouseover
   on:mouseenter
@@ -306,7 +315,7 @@
         class:bx--text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}
-        {...$$restProps}
+        {...controlProps}
         dir={$$restProps.dir ?? "auto"}
         aria-describedby={joinDescribedBy(
           helperText && !isFluid ? helperId : undefined,
