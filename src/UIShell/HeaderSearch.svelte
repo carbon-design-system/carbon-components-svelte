@@ -23,6 +23,10 @@
    * @event {{ value: string }} submit
    * @event {string} search
    * @event {KeyboardEvent} shortcut - Dispatched when `shortcut` is pressed, before the search opens. Call `preventDefault()` to keep it closed.
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
    * @slot {{ result: Result; index: number; selected: boolean; }}
    * @slot {{}} menu
    * @slot {{}} noResults
@@ -127,6 +131,16 @@
   export let debounce = 0;
 
   /**
+   * Animate the results menu as it opens and closes. Set to `true` for
+   * Carbon's slide (`fast02`), to slide params (e.g.,
+   * `{ duration: "moderate01" }`) to customize it, or to `{ fn }` to use
+   * another transition. The menu does not animate by default. Unset, it
+   * uses `menu` from the enclosing `Motion`.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
+   */
+  export let transition = undefined;
+
+  /**
    * Set an id for the top-level element.
    * The input, label, menu, and result ids derive from it as `{id}-input`,
    * `{id}-label`, `{id}-menu`, and `{id}-menuitem-{result id or index}`.
@@ -138,9 +152,11 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Kbd from "../Kbd/Kbd.svelte";
-  import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
+  import { getMotionDefault } from "../motion/context.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { slide } from "../motion/transitions.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { dismiss } from "../utils/dismiss.js";
   import { returnFocus } from "../utils/focus.js";
@@ -156,8 +172,23 @@
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import HeaderSearchResults from "./HeaderSearchResults.svelte";
+  import HeaderSearchRichMenuContent from "./HeaderSearchRichMenuContent.svelte";
 
   const dispatch = createEventDispatcher();
+
+  const slidePreset = {
+    fn: slide,
+    params: /** @type {const} */ ({ duration: "fast02" }),
+  };
+
+  const motionDefault = getMotionDefault("menu");
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition ?? $motionDefault, slidePreset));
 
   $: inputId = `${id}-input`;
   $: labelId = `${id}-label`;
@@ -373,6 +404,25 @@
     selectedResultIndex = 0;
     menuDismissed = false;
     highlightedId.set(null);
+  }
+
+  /** @param {CustomEvent<number>} event */
+  async function handleResultSelect(event) {
+    selectedResultIndex = event.detail;
+    await tick();
+    selectResult();
+  }
+
+  // Svelte 5 makes an element inert while it leaves; Svelte 3 and 4 do not.
+  // A close that reverses mid-exit starts the intro again.
+  /** @param {Event} event */
+  function handleMenuOutroStart(event) {
+    /** @type {HTMLElement} */ (event.currentTarget).inert = true;
+  }
+
+  /** @param {Event} event */
+  function handleMenuIntroStart(event) {
+    /** @type {HTMLElement} */ (event.currentTarget).inert = false;
   }
 
   function selectResult() {
@@ -608,7 +658,40 @@
     {/if}
   </div>
 
-  {#if richMenu && active}
+  {#if richMenu && active && animated}
+    <div
+      bind:this={menuRef}
+      id={menuId}
+      role="listbox"
+      tabindex="-1"
+      aria-labelledby={labelId}
+      aria-busy={loading || undefined}
+      hidden={!richMenuVisible}
+      class:bx--header__search-menu-rich={true}
+      class:bx--header__search-menu-rich--sm={size === "sm"}
+      class:bx--header__search-menu-rich--lg={size === "lg"}
+      class:bx--header__search-menu-rich--xl={size === "xl"}
+      transition:transitionFn|local={transitionParams}
+      on:introstart
+      on:introstart={handleMenuIntroStart}
+      on:introend
+      on:outrostart
+      on:outrostart={handleMenuOutroStart}
+      on:outroend
+      on:mousedown={handleMenuPointerDown}
+    >
+      <HeaderSearchRichMenuContent
+        {loading}
+        {skeletonWidths}
+        {showNoResults}
+        hasLoadingSlot={Boolean($$slots.loading)}
+      >
+        <slot name="loading" slot="loading" />
+        <slot name="menu" slot="menu" />
+        <slot name="noResults" slot="noResults" />
+      </HeaderSearchRichMenuContent>
+    </div>
+  {:else if richMenu && active}
     <div
       bind:this={menuRef}
       id={menuId}
@@ -623,26 +706,51 @@
       class:bx--header__search-menu-rich--xl={size === "xl"}
       on:mousedown={handleMenuPointerDown}
     >
-      {#if loading}
-        <slot name="loading">
-          {#each skeletonWidths as width, i (i)}
-            <div
-              class:bx--search-menu-item={true}
-              class:bx--search-menu-item--skeleton={true}
-            >
-              <SkeletonText {width} />
-            </div>
-          {/each}
-        </slot>
-      {:else}
-        <slot name="menu" />
-        {#if showNoResults}
-          <div class:bx--search-menu__no-results={true}>
-            <slot name="noResults" />
-          </div>
-        {/if}
-      {/if}
+      <HeaderSearchRichMenuContent
+        {loading}
+        {skeletonWidths}
+        {showNoResults}
+        hasLoadingSlot={Boolean($$slots.loading)}
+      >
+        <slot name="loading" slot="loading" />
+        <slot name="menu" slot="menu" />
+        <slot name="noResults" slot="noResults" />
+      </HeaderSearchRichMenuContent>
     </div>
+  {:else if active && results.length > 0 && animated}
+    <ul
+      aria-labelledby={labelId}
+      role="menu"
+      id={menuId}
+      class:bx--header-search-menu={true}
+      transition:transitionFn|local={transitionParams}
+      on:introstart
+      on:introstart={handleMenuIntroStart}
+      on:introend
+      on:outrostart
+      on:outrostart={handleMenuOutroStart}
+      on:outroend
+    >
+      <HeaderSearchResults
+        {results}
+        {id}
+        {selectedId}
+        {selectedResultIndex}
+        on:select={handleResultSelect}
+        let:result
+        let:index
+        let:selected
+      >
+        <slot {result} {index} {selected}>
+          {result.text}
+          {#if result.description}
+            <span class:bx--header-search-menu-description={true}
+              >– {result.description}</span
+            >
+          {/if}
+        </slot>
+      </HeaderSearchResults>
+    </ul>
   {:else if active && results.length > 0}
     <ul
       aria-labelledby={labelId}
@@ -650,33 +758,25 @@
       id={menuId}
       class:bx--header-search-menu={true}
     >
-      {#each results as result, index (result.id ?? index)}
-        <li role="none">
-          <a
-            tabindex="-1"
-            id="{id}-menuitem-{result.id ?? index}"
-            role="menuitem"
-            href={result.href}
-            class:bx--header-search-menu-item={true}
-            class:bx--header-search-menu-item--selected={selectedId ===
-              `${id}-menuitem-${result.id ?? index}`}
-            on:click|preventDefault={async () => {
-              selectedResultIndex = index;
-              await tick();
-              selectResult();
-            }}
-          >
-            <slot {result} {index} selected={selectedResultIndex === index}>
-              {result.text}
-              {#if result.description}
-                <span class:bx--header-search-menu-description={true}
-                  >– {result.description}</span
-                >
-              {/if}
-            </slot>
-          </a>
-        </li>
-      {/each}
+      <HeaderSearchResults
+        {results}
+        {id}
+        {selectedId}
+        {selectedResultIndex}
+        on:select={handleResultSelect}
+        let:result
+        let:index
+        let:selected
+      >
+        <slot {result} {index} {selected}>
+          {result.text}
+          {#if result.description}
+            <span class:bx--header-search-menu-description={true}
+              >– {result.description}</span
+            >
+          {/if}
+        </slot>
+      </HeaderSearchResults>
     </ul>
   {/if}
 </div>
