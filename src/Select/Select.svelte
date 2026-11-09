@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {select} */
+
   /**
    * @template {string | number} [Value=string | number]
    * @event {Value} update The selected value.
@@ -273,6 +275,11 @@
     readonly ? readonlyId : null,
     statusDescribedById,
   );
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the select. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <div
@@ -280,6 +287,8 @@
   class:bx--form-item={true}
   class:bx--select--fluid={isFluid}
   class:bx--select__form-item--inline={inline}
+  class={rootClass ?? ""}
+  style={rootStyle}
 >
   <div
     class:bx--select={true}
@@ -322,7 +331,7 @@
             class:bx--select-input--xs={effectiveSize === "xs"}
             class:bx--select-input--sm={effectiveSize === "sm"}
             class:bx--select-input--xl={effectiveSize === "xl"}
-            {...$$restProps}
+            {...controlProps}
             aria-describedby={joinDescribedBy(
               describedById,
               $$restProps["aria-describedby"],
@@ -403,7 +412,7 @@
           class:bx--select-input--xs={effectiveSize === "xs"}
           class:bx--select-input--sm={effectiveSize === "sm"}
           class:bx--select-input--xl={effectiveSize === "xl"}
-          {...$$restProps}
+          {...controlProps}
           aria-describedby={joinDescribedBy(
             describedById,
             $$restProps["aria-describedby"],

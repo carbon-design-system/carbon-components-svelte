@@ -23,6 +23,8 @@
 </script>
 
 <script>
+  /** @restProps {input} */
+
   /**
    * @template {ComboBoxItem<any>} [Item=ComboBoxItem<any>]
    */
@@ -1205,6 +1207,11 @@
       close("outside-click");
     }
   }
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <div
@@ -1218,6 +1225,8 @@
   class:bx--list-box__wrapper--fluid--disabled={isFluid && effectiveDisabled}
   class:bx--list-box__wrapper--fluid--readonly={isFluid && readonly}
   class:bx--list-box__wrapper--fluid--condensed={isFluid && condensed}
+  class={rootClass ?? ""}
+  style={rootStyle}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
 >
   {#if labelText || $$slots.labelChildren}
@@ -1283,7 +1292,7 @@
           {id}
           {name}
           {required}
-          {...$$restProps}
+          {...controlProps}
           aria-describedby={joinDescribedBy(
             readonly ? readonlyId : null,
             statusDescribedById,

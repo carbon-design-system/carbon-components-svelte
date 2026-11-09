@@ -34,6 +34,13 @@ const textInputSkeleton = {
   field: "bx--text-input",
 };
 
+// The fixture passes its rest props to DatePickerInput, inside DatePicker.
+const datePickerInputRoot = () => {
+  const root = document.querySelector(".bx--date-picker-container");
+  assert(root instanceof HTMLElement);
+  return root;
+};
+
 const listItems = [
   { id: "0", text: "Ada" },
   { id: "1", text: "Grace" },
@@ -280,6 +287,7 @@ export const cases: FieldCase[] = [
     component: DatePickerField,
     props: { datePickerType: "single" },
     control: () => screen.getByRole("textbox"),
+    root: datePickerInputRoot,
     fluid: {
       className: "bx--date-picker--fluid",
       wrapper: ".bx--date-picker-container",
@@ -289,6 +297,7 @@ export const cases: FieldCase[] = [
     name: "DatePickerInput",
     component: DatePickerField,
     control: () => screen.getByRole("textbox"),
+    root: datePickerInputRoot,
     state: {},
     selectOnFocus: { value: "01/01/2023" },
     reset: { initial: "01/01/2023", typed: "x", events: ["input", "change"] },

@@ -65,7 +65,8 @@
   color: rgb(200, 0, 0);
 }
 
-.my-input {
+/* TextInput puts a consumer class on the field root, so match the input. */
+.my-input input {
   background-color: rgb(255, 230, 230);
 }
 

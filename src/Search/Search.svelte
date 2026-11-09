@@ -325,6 +325,11 @@
     prevExpanded = expanded;
     dispatch(nextExpanded ? "expand" : "collapse");
   }
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The style falls back to "",
+  // since Svelte 3 and 4 render an unset style as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-autofocus -->
@@ -356,7 +361,8 @@
     style:--ccs-search-shortcut-width={hasShortcutHint
       ? `${shortcutWidth}ch`
       : undefined}
-    class={searchClass}
+    class={[searchClass, rootClass].filter(Boolean).join(" ")}
+    style={rootStyle ?? ""}
   >
     {#if expandable && !expanded}
       <button
@@ -440,7 +446,7 @@
       data-warn={showWarn || undefined}
       aria-errormessage={showInvalid && invalidText ? errorId : undefined}
       aria-keyshortcuts={ariaShortcut}
-      {...$$restProps}
+      {...controlProps}
       aria-describedby={joinDescribedBy(
         describedById,
         $$restProps["aria-describedby"],

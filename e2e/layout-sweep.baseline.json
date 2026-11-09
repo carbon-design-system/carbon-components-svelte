@@ -1228,16 +1228,8 @@
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__item-count.bx--select-input",
-    "message": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__item-count.bx--select-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
-  },
-  {
-    "fixture": "modal-layer.html",
-    "variant": "1280-forced",
-    "check": "borders",
-    "kind": "nested edge",
-    "path": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__page-number.bx--select-input",
-    "message": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select__page-number.bx--select-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
+    "path": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select-input",
+    "message": "div.bx--select.bx--select--inline > div.bx--select-input--inline__wrapper > div.bx--select-input__wrapper > select.bx--select-input: 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "modal-layer.html",

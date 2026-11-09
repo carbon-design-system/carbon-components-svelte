@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {input} */
+
   /**
    * Set the size of the input.
    * Inherits the parent `Form` size when unset.
@@ -254,6 +256,11 @@
     position: effectiveTooltipPosition,
     alignment: effectiveTooltipAlignment,
   } = tooltipPlacement(tooltipAlign, tooltipPosition, tooltipAlignment));
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -267,6 +274,8 @@
   class:bx--text-input-wrapper--inline={inline}
   class:bx--text-input-wrapper--readonly={readonly}
   class:bx--text-input--fluid={isFluid}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:click
   on:mouseover
   on:mouseenter
@@ -362,7 +371,7 @@
         class:bx--text-input--xs={effectiveSize === "xs"}
         class:bx--text-input--sm={effectiveSize === "sm"}
         class:bx--text-input--xl={effectiveSize === "xl"}
-        {...$$restProps}
+        {...controlProps}
         aria-describedby={joinDescribedBy(
           resolveStatusDescribedBy({
             showInvalid,

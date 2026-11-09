@@ -486,12 +486,19 @@
       highlightedId.set(null);
     }
   }
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <div
   bind:this={anchorRef}
   class:bx--search-menu={true}
   class:bx--search-menu--bar={$$slots.before}
+  class={rootClass ?? ""}
+  style={rootStyle}
   use:dismiss={{ enabled: open, type: "click", handler: handleOutsideClick }}
 >
   {#if $$slots.before}
@@ -531,10 +538,10 @@
       aria-expanded={menuVisible}
       aria-controls={menuVisible ? menuDomId : undefined}
       aria-activedescendant={$highlightedId ?? undefined}
-      {...$$restProps}
+      {...controlProps}
       aria-describedby={joinDescribedBy(
         describedById,
-        $$restProps["aria-describedby"],
+        controlProps["aria-describedby"],
       )}
       on:focus
       on:focus={handleFocus}

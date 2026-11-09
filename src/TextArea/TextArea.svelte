@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {textarea} */
+
   /**
    * Specify the textarea value.
    * Follows the field when the owning form resets.
@@ -387,6 +389,11 @@
     ref.setRangeText(truncateGraphemes(data, room), start, end, "end");
     ref.dispatchEvent(new Event("input", { bubbles: true }));
   }
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the textarea. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -400,6 +407,8 @@
   on:mouseleave
   class:bx--form-item={true}
   class:bx--text-area--fluid={isFluid}
+  class={rootClass ?? ""}
+  style={rootStyle}
 >
   {#if labelText || $$slots.labelChildren || hasMaxCount}
     <div class:bx--text-area__label-wrapper={true}>
@@ -477,7 +486,7 @@
       class:bx--text-area--invalid={showInvalid}
       class:bx--text-area--warning={showWarn}
       style:resize={typeof cols === "number" || grow ? "none" : undefined}
-      {...$$restProps}
+      {...controlProps}
       aria-describedby={joinDescribedBy(
         describedBy,
         $$restProps["aria-describedby"],

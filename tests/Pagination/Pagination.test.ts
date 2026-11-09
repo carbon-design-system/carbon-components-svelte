@@ -288,8 +288,10 @@ describe("Pagination", () => {
     });
 
     const input = screen.getByRole("spinbutton", { name: /Page number/ });
+    const field = input.closest(".bx--pagination__page-number-input");
+    assert(field instanceof HTMLElement);
     expect(
-      input.style.getPropertyValue("--ccs-pagination-page-input-digits"),
+      field.style.getPropertyValue("--ccs-pagination-page-input-digits"),
     ).toBe(digits);
   });
 
@@ -302,8 +304,10 @@ describe("Pagination", () => {
     });
 
     const input = screen.getByRole("spinbutton", { name: /Page number/ });
+    const field = input.closest(".bx--pagination__page-number-input");
+    assert(field instanceof HTMLElement);
     expect(
-      input.style.getPropertyValue("--ccs-pagination-page-input-digits"),
+      field.style.getPropertyValue("--ccs-pagination-page-input-digits"),
     ).toBe("");
   });
 

@@ -1,4 +1,6 @@
 <script>
+  /** @restProps {input} */
+
   /**
    * Specify the size of the input.
    * Inherits the parent `Form` size when unset.
@@ -150,6 +152,11 @@
   $: groupDisabled.set(effectiveDisabled);
   $: groupHideLabel.set(hideLabel);
   $: fluidErrorText = showInvalid ? invalidText : showWarn ? warnText : "";
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -160,6 +167,8 @@
   class:bx--form-item={true}
   class:bx--form-item--fit={!isFluid}
   class:bx--time-picker__form-item--fluid={isFluid}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:click
   on:mouseover
   on:mouseenter
@@ -214,7 +223,7 @@
                   {name}
                   disabled={effectiveDisabled}
                   readonly={readonly || undefined}
-                  {...$$restProps}
+                  {...controlProps}
                   aria-describedby={joinDescribedBy(
                     resolveStatusDescribedBy({
                       showInvalid,
@@ -321,7 +330,7 @@
               {name}
               disabled={effectiveDisabled}
               readonly={readonly || undefined}
-              {...$$restProps}
+              {...controlProps}
               aria-describedby={joinDescribedBy(
                 resolveStatusDescribedBy({
                   showInvalid,
