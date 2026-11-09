@@ -75,9 +75,10 @@
    * Animate the panel. Set to `true` for Carbon's slide, to slide params
    * (e.g., `{ duration: "slow01" }`) to customize it, or to `{ fn }` to use
    * another transition. The panel does not animate by default.
+   * When `undefined`, the nearest `Motion` sets it through the `panel` role.
    * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
    */
-  export let transition = false;
+  export let transition = undefined;
 
   /** Set to `true` to prevent the panel from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
@@ -88,6 +89,7 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
+  import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { slide } from "../motion/transitions.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
@@ -106,11 +108,13 @@
 
   const slidePreset = { fn: slide };
 
+  const motionDefault = getMotionDefault("panel");
+
   $: ({
     fn: transitionFn,
     params: transitionParams,
     animated,
-  } = resolveTransition(transition, slidePreset));
+  } = resolveTransition(transition ?? $motionDefault, slidePreset));
 
   $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);
   $: hasTooltip = hasIconOnly && !hideTooltip;
