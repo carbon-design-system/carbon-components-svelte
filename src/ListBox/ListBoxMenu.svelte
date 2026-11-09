@@ -1,4 +1,12 @@
 <script>
+  /**
+   * @restProps {div}
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
   /** Set an id for the top-level element */
   export let id = uniqueId();
 
@@ -74,13 +82,50 @@
    */
   export let highlightScroll = true;
 
+  /**
+   * Animate the menu as it opens and closes. Set to `true` for Carbon's
+   * slide at `fast02` (a fade at `fast02` when `portal` is `true`), to
+   * params (e.g., `{ duration: "moderate01" }`) to customize it, or to
+   * `{ fn }` to use another transition. The menu does not animate by default.
+   * When `undefined`, the nearest `Motion` sets it through the `menu` role.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
+   */
+  export let transition = undefined;
+
   import { setContext } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { getMotionDefault } from "../motion/context.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fade, slide } from "../motion/transitions.js";
   import { uniqueId } from "../utils/unique-id.js";
+  import ListBoxMenuContent from "./ListBoxMenuContent.svelte";
   import {
     createHighlightCursor,
     HIGHLIGHT_CURSOR_KEY,
   } from "./highlight-cursor.js";
+
+  // Carbon's `.bx--list-box__menu` animates `max-height` at `fast02`. A portal
+  // measures the menu to place it and to pick a side, so a menu that grows
+  // from zero height would open below a field and jump above it once it no
+  // longer fits, and one that opens upward would shrink away from its field.
+  // In a portal the preset fades instead, which leaves the size alone.
+  // The parent's `{#if open}` adds and removes the menu, so the directive is
+  // global.
+  /** @type {{ fn: import("../motion/resolve-transition.js").TransitionFunction; params: import("../motion/transitions.js").SlideParams }} */
+  const slidePreset = { fn: slide, params: { duration: "fast02" } };
+  /** @type {{ fn: import("../motion/resolve-transition.js").TransitionFunction; params: import("../motion/transitions.js").SlideParams }} */
+  const fadePreset = { fn: fade, params: { duration: "fast02" } };
+
+  const motionDefault = getMotionDefault("menu");
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(
+    transition ?? $motionDefault,
+    portal ? fadePreset : slidePreset,
+  ));
 
   /** @type {ReturnType<typeof import("./highlight-cursor.js").createHighlightCursor>} */
   const highlightCursor = createHighlightCursor();
@@ -95,34 +140,44 @@
       class={portalHostClass}
       class:bx--list-box__menu-host--align-end={align === "end"}
     >
-      <div
-        bind:this={ref}
-        role="listbox"
-        id="menu-{id}"
-        class:bx--list-box__menu={true}
-        class:bx--list-box__menu--align-end={align === "end"}
-        class:bx--list-box__menu--wrap-options={wrapOptions}
+      <ListBoxMenuContent
+        bind:ref
+        {id}
+        alignEnd={align === "end"}
+        {wrapOptions}
+        positionStatic
+        {animated}
+        {transitionFn}
+        {transitionParams}
         {...$$restProps}
-        style="position: static; {$$restProps.style || ''}"
         on:scroll
         on:mouseleave
+        on:introstart
+        on:introend
+        on:outrostart
+        on:outroend
       >
         <slot />
-      </div>
+      </ListBoxMenuContent>
     </div>
   </FloatingPortal>
 {:else}
-  <div
-    bind:this={ref}
-    role="listbox"
-    id="menu-{id}"
-    class:bx--list-box__menu={true}
-    class:bx--list-box__menu--align-end={align === "end"}
-    class:bx--list-box__menu--wrap-options={wrapOptions}
+  <ListBoxMenuContent
+    bind:ref
+    {id}
+    alignEnd={align === "end"}
+    {wrapOptions}
+    {animated}
+    {transitionFn}
+    {transitionParams}
     {...$$restProps}
     on:scroll
     on:mouseleave
+    on:introstart
+    on:introend
+    on:outrostart
+    on:outroend
   >
     <slot />
-  </div>
+  </ListBoxMenuContent>
 {/if}
