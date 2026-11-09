@@ -1591,7 +1591,6 @@
                       id={optionId}
                       active={selectedId === item.id}
                       disabled={item.disabled}
-                      hasLeftIcon={Boolean($$slots.icon || item.icon)}
                       aria-setsize={filteredItems.length}
                       aria-posinset={actualIndex + 1}
                       data-virtual-index={isMeasured ? rowIndex : undefined}
@@ -1717,7 +1716,6 @@
                     id={optionId}
                     active={selectedId === item.id}
                     disabled={item.disabled}
-                    hasLeftIcon={Boolean($$slots.icon || item.icon)}
                     hidden={hideMode && matchIndex === undefined
                       ? true
                       : undefined}
