@@ -36,7 +36,24 @@
       </CardActions>
     </CardHeader>
     <CardBody>Usage grew 12% over the last quarter.</CardBody>
-    <CardFooter actionSet>
+    <CardFooter data-testid="footer">
+      <CardAction>
+        <Button kind="secondary">Share</Button>
+      </CardAction>
+      <CardAction>
+        <Button>Open</Button>
+      </CardAction>
+      <CardAction>
+        <OverflowMenu size="xl" flipped iconDescription="More options">
+          <OverflowMenuItem text="Rename" />
+          <OverflowMenuItem danger text="Delete" />
+        </OverflowMenu>
+      </CardAction>
+    </CardFooter>
+  </Card>
+  <Card>
+    <CardBody>The deprecated props still lay out the footer.</CardBody>
+    <CardFooter actionSet data-testid="footer-props">
       <CardAction>
         <Button kind="secondary">Share</Button>
       </CardAction>
@@ -44,9 +61,8 @@
         <Button>Open</Button>
       </CardAction>
       <CardAction iconOnly>
-        <OverflowMenu size="xl" flipped iconDescription="More options">
+        <OverflowMenu size="xl" flipped iconDescription="Legacy options">
           <OverflowMenuItem text="Rename" />
-          <OverflowMenuItem danger text="Delete" />
         </OverflowMenu>
       </CardAction>
     </CardFooter>

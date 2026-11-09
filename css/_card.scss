@@ -6,12 +6,10 @@
 
 /// Card styles. Ported from Carbon React's `preview__Card`
 /// (`packages/styles/scss/components/card`), with the same v11 tokens,
-/// type styles and spacing. Upstream relies on `:has()`, which is newer
-/// than the Safari 14 baseline, so marker classes stand in: CardFooter's
-/// `actionSet`, CardAction's `iconOnly`, and `__header--actions`, which
-/// CardHeader sets when its `actions` slot is filled. Title media pairs
-/// with the title through `+`. Media keeps AspectRatio's padding box
-/// instead of the `aspect-ratio` property, which Safari 14 also lacks.
+/// type styles and spacing. As upstream, `:has()` reads what a part holds:
+/// a footer of `CardAction`s, an action with an icon-only button or an
+/// OverflowMenu, and a header with `CardActions`. Title media pairs with the title through
+/// `+`. Media keeps AspectRatio's padding box.
 /// The decorator sits on a wrapper beside the card (CardWrapper), so a
 /// clickable card never nests the AI label's button. CardMedia reports
 /// its shape, so the decorator still sits at the header's corner, where
@@ -83,40 +81,45 @@
     padding: $carbon--spacing-05;
   }
 
+  // The footer of `CardAction`s. `--action-set` is the deprecated
+  // `actionSet` prop.
+  $action-set: ".#{$prefix}--card__footer:is(:has(> .#{$prefix}--card__action), .#{$prefix}--card__footer--action-set)";
+
   // A leading ghost button sits at the footer's edge, so its text lines
   // up with the body text above it.
-  .#{$prefix}--card__footer:not(.#{$prefix}--card__footer--action-set)
+  .#{$prefix}--card__footer:not(#{$action-set})
     > .#{$prefix}--btn--ghost:not(.#{$prefix}--btn--icon-only):first-child {
     margin-inline-start: -$carbon--spacing-05;
   }
 
-  .#{$prefix}--card__footer--action-set {
+  #{$action-set} {
     padding: 0;
     border-top: 1px solid $border-subtle;
     gap: 1px;
   }
 
   // Text actions share the row.
-  .#{$prefix}--card__footer--action-set > .#{$prefix}--card__action {
+  .#{$prefix}--card__footer > .#{$prefix}--card__action {
     min-width: 0;
     flex: 1 0 0;
   }
 
-  .#{$prefix}--card__footer--action-set
-    > .#{$prefix}--card__action
-    > .#{$prefix}--btn {
+  .#{$prefix}--card__footer > .#{$prefix}--card__action > .#{$prefix}--btn {
     width: 100%;
     max-width: none;
   }
 
-  // Icon-only actions keep their width at the inline end. Only the first
-  // of a run takes the auto margin.
-  .#{$prefix}--card__footer--action-set > .#{$prefix}--card__action--icon-only {
+  // Icon-only actions, an icon-only button or an OverflowMenu, keep their
+  // width at the inline end. Only the first of a run takes the auto
+  // margin. `--icon-only` is the deprecated `iconOnly` prop.
+  $icon-action: ".#{$prefix}--card__action:is(:has(.#{$prefix}--btn--icon-only, .#{$prefix}--overflow-menu), .#{$prefix}--card__action--icon-only)";
+
+  .#{$prefix}--card__footer > #{$icon-action} {
     flex: 0 0 auto;
     margin-inline-start: auto;
   }
 
-  .#{$prefix}--card__action--icon-only + .#{$prefix}--card__action--icon-only {
+  #{$icon-action} + #{$icon-action} {
     margin-inline-start: 0;
   }
 
@@ -137,7 +140,8 @@
     @include ccs-inset-inline($end: $carbon--spacing-03);
   }
 
-  .#{$prefix}--card__header--actions > .#{$prefix}--card__title {
+  .#{$prefix}--card__header:has(> .#{$prefix}--card__actions)
+    > .#{$prefix}--card__title {
     max-width: calc(50% - #{$carbon--spacing-03});
   }
 

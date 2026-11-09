@@ -1,5 +1,6 @@
 <script>
   import { ComboBox, Dropdown, MultiSelect } from "carbon-components-svelte";
+  import Email from "carbon-icons-svelte/lib/Email.svelte";
 
   const items = [
     { id: "0", text: "Slack" },
@@ -28,4 +29,15 @@
 
 <div data-testid="multiselect">
   <MultiSelect labelText="Contact" {items} selectedIds={["1"]} />
+</div>
+
+<div data-testid="dropdown-item-icons">
+  <Dropdown
+    labelText="Contact"
+    items={[
+      { id: "0", text: "Email", icon: Email },
+      { id: "1", text: "Fax" },
+    ]}
+    selectedId="0"
+  />
 </div>

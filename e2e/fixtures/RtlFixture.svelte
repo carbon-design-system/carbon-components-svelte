@@ -238,11 +238,11 @@ export async function rollback(region, id) {
         </CardActions>
       </CardHeader>
       <CardBody>Three invoices are due this month.</CardBody>
-      <CardFooter actionSet>
+      <CardFooter>
         <CardAction>
           <Button kind="ghost">View invoices</Button>
         </CardAction>
-        <CardAction iconOnly>
+        <CardAction>
           <Button
             kind="ghost"
             icon={OverflowMenuVertical}
