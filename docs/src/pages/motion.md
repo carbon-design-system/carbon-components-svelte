@@ -179,12 +179,20 @@ Components that mount and unmount take a `transition` prop. It is off by default
 <InlineLoading transition={{ fn: fly, y: -8, duration: "moderate02" }} />
 ```
 
-| Component | Preset | Directive |
-| :--- | :--- | :--- |
-| [InlineLoading](/components/InlineLoading#transition) | `fade`, `fast02` | Global: the parent's `{#if}` plays it |
-| [Loading](/components/Loading#transition) | `fade`, `moderate02`, overlay included | Global: the parent's `{#if}` plays it |
-| [ImageLoader](/components/ImageLoader#fade-in) | `fade`, `fast02` | Local: its own `{#if}` plays it |
-| [HeaderAction, HeaderSwitcher, ProfileMenu](/components/UIShell#app-switcher) | `slide`, `moderate02` | Local: their own `{#if}` plays it |
+| Component | Motion role | Preset | Directive |
+| :--- | :--- | :--- | :--- |
+| [InlineLoading](/components/InlineLoading#transition) | `loading` | `fade`, `fast02` | Global: the parent's `{#if}` plays it |
+| [Loading](/components/Loading#transition) | `loading` | `fade`, `moderate02`, overlay included | Global: the parent's `{#if}` plays it |
+| [ImageLoader](/components/ImageLoader#fade-in) | `loading` | `fade`, `fast02` | Local: its own `{#if}` plays it |
+| [HeaderAction, HeaderSwitcher, ProfileMenu](/components/UIShell#app-switcher) | `panel` | `slide`, `moderate02` | Local: their own `{#if}` plays it |
+| [InlineNotification](/components/InlineNotification#transition) | `notification` | `slide`, `moderate02` | Global: the parent's `{#if}` plays it |
+| [ToastNotification](/components/ToastNotification#transition) | `notification` | `fly` from 32 px, collapsing, `moderate02` | Global: the parent's `{#if}` plays it |
+| [NotificationQueue](/components/NotificationQueue#transition) | `notification` | The toast preset, from the queue's side; `NotificationData.transition` per item | Global: adding and removing entries plays it |
+| [Dropdown, ComboBox, MultiSelect](/components/Dropdown#transition) | `menu` | `slide`, `fast02`; `fade`, `fast02` in a portal | Global: the field's `{#if open}` plays it |
+| [HeaderSearch](/components/UIShell#search-transition) | `menu` | `slide`, `fast02` | Local: its own `{#if}` plays it |
+| [Menu](/components/Menu#transition), [MenuButton](/components/MenuButton#transition), [OverflowMenu](/components/OverflowMenu#transition) | `menu` | `fly` 2 px from the open edge, `fast01` | Global in a portal, local in place |
+| [Tooltip](/components/Tooltip#transition), [Toggletip](/components/Toggletip#transition), [Popover](/components/Popover#transition) | `tooltip` | `fade`, `fast01` | Local in place, global in a portal |
+| [SideNavMenu](/components/UIShell#side-nav-menus) | `collapse` | `collapse`, `moderate01` | An action: the list stays mounted |
 
 A component adds the directive only when `transition` is on. Svelte 3 and 4 remove an element that carries a `transition:` directive one frame late even at zero duration, so with the prop off the element leaves at once. When a swapped `fn` brings its own parameters, the preset's are dropped, because a preset's `x` means nothing to `blur`.
 
@@ -208,9 +216,9 @@ Wrap the app in `Motion` to turn motion on in one place. `Motion` renders no ele
 </Motion>
 ```
 
-The `InlineLoading` below has no `transition` prop. The `Motion` around it decides.
+None of the components below has a `transition` prop. The `Motion` around them decides: the tooltip fades, the menus open with their own presets, the loading state fades, and the notification slides in. Turn the toggle off and each one appears and leaves at once.
 
-<FileSource src="/framed/Motion/MotionDefaults" />
+<FileSource src="/framed/Motion/MotionApp" />
 
 ### Roles
 
