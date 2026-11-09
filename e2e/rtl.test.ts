@@ -34,9 +34,9 @@ const PARTS = {
   cardActions: "[data-testid=card-actions] .bx--card__actions",
   cardActionsDecorator: "[data-testid=card-actions] .bx--card__decorator",
   cardFooterAction:
-    "[data-testid=card-actions] .bx--card__action:not(.bx--card__action--icon-only)",
+    "[data-testid=card-actions] .bx--card__action:not(:has(.bx--btn--icon-only))",
   cardFooterIconAction:
-    "[data-testid=card-actions] .bx--card__action--icon-only",
+    "[data-testid=card-actions] .bx--card__action:has(.bx--btn--icon-only)",
   cardMediaDecorator: "[data-testid=card-media] .bx--card__decorator",
   cardMediaEndDecorator: "[data-testid=card-media-end] .bx--card__decorator",
   treeToggle:

@@ -14,7 +14,11 @@
   /** Set to `true` to disable the menu item */
   export let disabled = false;
 
-  /** Set to `true` to add inline padding for a left-aligned icon */
+  /**
+   * Set to `true` to add inline padding for a left-aligned icon.
+   * @deprecated An option holding a `bx--list-box__menu-item__icon--left`
+   * element makes room for it. Remove the prop.
+   */
   export let hasLeftIcon = false;
 
   /**
