@@ -230,7 +230,7 @@ Put `CardActions` in the `actions` slot of `CardHeader` for quick actions, with 
 
 ### Footer actions
 
-Set `actionSet` on `CardFooter` to fill the footer with `CardAction`s. The footer gets a top border and the actions share the row. Set `iconOnly` on a `CardAction` that holds an icon-only control, such as an [OverflowMenu](/components/OverflowMenu), so it keeps its width at the end of the row.
+Put `CardAction`s in a `CardFooter` to fill it. The footer gets a top border and the actions share the row. An action that holds an icon-only control, such as an icon-only `Button` or an [OverflowMenu](/components/OverflowMenu), keeps its width at the end of the row.
 
 <Box maxWidth="20rem">
   <Card>
@@ -238,14 +238,14 @@ Set `actionSet` on `CardFooter` to fill the footer with `CardAction`s. The foote
       <CardTitle>Staging bucket</CardTitle>
     </CardHeader>
     <CardBody>1,204 objects, updated 2 hours ago.</CardBody>
-    <CardFooter actionSet>
+    <CardFooter>
       <CardAction>
         <Button kind="secondary">Share</Button>
       </CardAction>
       <CardAction>
         <Button>Open</Button>
       </CardAction>
-      <CardAction iconOnly>
+      <CardAction>
         <OverflowMenu size="xl" flipped iconDescription="More options">
           <OverflowMenuItem text="Rename" />
           <OverflowMenuItem text="Duplicate" />
