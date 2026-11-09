@@ -55,11 +55,13 @@
    * adds or removes it. Set to `true` for Carbon's fade, to fade params
    * (e.g., `{ duration: "moderate02" }`) to customize it, or to `{ fn }` to
    * use another transition. The status does not animate by default.
+   * When `undefined`, the nearest `Motion` sets it through the `loading` role.
    * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
    */
   export let transition = undefined;
 
   import { createEventDispatcher, onMount } from "svelte";
+  import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { fade } from "../motion/transitions.js";
   import { createLoadingDelay } from "../utils/delayed-loading.js";
@@ -70,11 +72,13 @@
   const scheduleSuccess = createDelayedSetter();
   const fadePreset = { fn: fade };
 
+  const motionDefault = getMotionDefault("loading");
+
   $: ({
     fn: transitionFn,
     params: transitionParams,
     animated,
-  } = resolveTransition(transition, fadePreset));
+  } = resolveTransition(transition ?? $motionDefault, fadePreset));
 
   // `shown` is the spinner the user sees. With a delay, an active spinner
   // first renders `waiting`: in the page but hidden, and CSS reveals it

@@ -49,8 +49,8 @@
   /**
    * Customize how the image appears and leaves. Set to `true` for Carbon's
    * fade, to fade params (e.g., `{ duration: "moderate02" }`) to customize
-   * it, or to `{ fn }` to use another transition. Falls back to `fadeIn`
-   * when `undefined`.
+   * it, or to `{ fn }` to use another transition. When `undefined`, falls
+   * back to `fadeIn`, then to the `loading` role of the nearest `Motion`.
    * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
    */
   export let transition = undefined;
@@ -100,6 +100,7 @@
 
   import { createEventDispatcher, onMount } from "svelte";
   import AspectRatio from "../AspectRatio/AspectRatio.svelte";
+  import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { fade } from "../motion/transitions.js";
   import { noop } from "../utils/noop.js";
@@ -109,13 +110,15 @@
 
   const fadePreset = { fn: fade };
 
+  const motionDefault = getMotionDefault("loading");
+
   // The image always carries the directive, as before: with the fade off it
   // runs for zero time.
   $: ({
     fn: transitionFn,
     params: transitionParams,
     animated,
-  } = resolveTransition(transition ?? fadeIn, fadePreset));
+  } = resolveTransition(transition ?? (fadeIn || $motionDefault), fadePreset));
   $: imageTransitionParams = animated ? transitionParams : { duration: 0 };
 
   /** @type {null | HTMLImageElement} */

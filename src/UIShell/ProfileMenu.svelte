@@ -36,9 +36,10 @@
    * Animate the menu. Set to `true` for Carbon's slide, to slide params
    * (for example, `{ duration: "slow01" }`) to customize it, or to `{ fn }`
    * to use another transition. By default, the menu does not animate.
+   * When `undefined`, the nearest `Motion` sets it through the `panel` role.
    * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
    */
-  export let transition = false;
+  export let transition = undefined;
 
   /** Set to `true` to prevent the menu from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
@@ -54,6 +55,7 @@
   import { get } from "svelte/store";
   import UserAvatar from "../UserAvatar/UserAvatar.svelte";
   import { PROFILE_MENU_CONTEXT_KEY } from "../constants/context-keys.js";
+  import { getMotionDefault } from "../motion/context.js";
   import { resolveTransition } from "../motion/resolve-transition.js";
   import { slide } from "../motion/transitions.js";
   import { dismiss } from "../utils/dismiss.js";
@@ -75,11 +77,13 @@
 
   const slidePreset = { fn: slide };
 
+  const motionDefault = getMotionDefault("panel");
+
   $: ({
     fn: transitionFn,
     params: transitionParams,
     animated,
-  } = resolveTransition(transition, slidePreset));
+  } = resolveTransition(transition ?? $motionDefault, slidePreset));
 
   const menuItemRegistry = createDomNodeRegistry();
   /** @type {import("svelte/store").Writable<ReadonlyArray<HTMLElement>>} */
