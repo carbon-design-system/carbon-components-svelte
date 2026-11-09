@@ -119,7 +119,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - **Enums for variants** (`selectionMode`, `size`, `kind`). Use a boolean only for a true on/off state.
 - **`id` prop.** Derive inner ids from `id`. Call `uniqueId()` only when `id` is unset. Do not build ids from consumer data: a space in an id breaks `aria-activedescendant` and `aria-controls`. Use the item's index.
 - **No writes to props.** Store measured values in internal variables.
-- **`$$restProps`** go on the primary element. A consumer `aria-label` replaces the default `aria-labelledby`.
+- **`$$restProps`** go on the primary element; for a form field, `class` and `style` go on its root, so layout classes such as margins affect the whole field. A consumer `aria-label` replaces the default `aria-labelledby`.
 
 ### Props
 
