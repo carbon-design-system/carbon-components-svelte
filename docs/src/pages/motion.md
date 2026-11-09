@@ -156,11 +156,12 @@ Svelte 3 and 4 run a transition by injecting a `<style>` rule with keyframes. A 
 
 ## Component props
 
-Components that mount and unmount take a `transition` prop. It is off by default, so nothing animates until you opt in.
+Components that mount and unmount take a `transition` prop. It is off by default, so nothing animates until you opt in, on the component or with [`Motion`](#app-wide-defaults).
 
 | Value | Result |
 | :--- | :--- |
-| `undefined` or `false` | No animation |
+| `undefined` | The nearest [`Motion`](#app-wide-defaults) decides, or no animation |
+| `false` | No animation |
 | `true` | The component's own preset |
 | An object of parameters | The preset, with those parameters changed |
 | An object with `fn` | `fn` instead of the preset, with the rest of the object as its parameters |
@@ -191,6 +192,78 @@ A component adds the directive only when `transition` is on. Svelte 3 and 4 remo
 | :--- | :--- |
 | Prefer `transition` on the component over a wrapper `<div transition:fade>`. | A wrapper's margin collapses outside it, and some elements, such as a table row, cannot be wrapped. |
 | Listen for `on:outroend` to run code after the exit. | The element is still in the page while it leaves, and a leaving `Loading` overlay is inert. |
+
+## App-wide defaults
+
+Wrap the app in `Motion` to turn motion on in one place. `Motion` renders no element. It sets the default `transition` for every component inside it, and a component's own `transition` prop still wins.
+
+```svelte
+<!-- +layout.svelte -->
+<script>
+  import { Motion } from "carbon-components-svelte";
+</script>
+
+<Motion transition>
+  <slot />
+</Motion>
+```
+
+The `InlineLoading` below has no `transition` prop. The `Motion` around it decides.
+
+<FileSource src="/framed/Motion/MotionDefaults" />
+
+### Roles
+
+Each component that animates belongs to one role. `Motion` takes `transition` for every role, and one prop per role that wins over it. A role turns on each component's own preset, so a menu and a toast keep their own motion.
+
+| Prop | Components |
+| :--- | :--- |
+| `notification` | InlineNotification, ToastNotification, NotificationQueue |
+| `menu` | Dropdown, ComboBox, MultiSelect, Menu, MenuButton, OverflowMenu |
+| `tooltip` | Tooltip, Toggletip, Popover |
+| `loading` | Loading, InlineLoading, ImageLoader |
+| `panel` | HeaderAction, HeaderSwitcher, ProfileMenu |
+| `collapse` | SideNavMenu |
+
+```svelte
+<!-- Only notifications and menus -->
+<Motion notification menu>
+
+<!-- Everything except tooltips -->
+<Motion transition tooltip={false}>
+
+<!-- Everything, with quicker menus -->
+<Motion transition={{ duration: "moderate01" }} menu={{ duration: "fast01" }}>
+```
+
+| Value | Result |
+| :--- | :--- |
+| `undefined` | The enclosing `Motion` decides. Outside any `Motion`, motion is off. |
+| `true` | On, with each component's preset |
+| `false` | Off |
+| Shared parameters, such as `{ duration: "fast02" }` | On, with those parameters. A role's parameters override the ones from `transition`. |
+
+A role takes only the parameters every preset accepts: `duration`, `easing`, `delay`, `mode`, and `reducedMotion`. Offsets such as `fly`'s `x`, and a swapped `fn`, belong on the component, because they do not fit every component in a role.
+
+### Nesting
+
+A `Motion` inside another one overrides only the props it sets. The rest fall back to the outer one, as `ThemeZone` does for themes.
+
+```svelte
+<Motion transition>
+  <App>
+    <!-- A dense table that updates often -->
+    <Motion transition={false}>
+      <DataTable ... />
+    </Motion>
+  </App>
+</Motion>
+```
+
+| Do | Why |
+| :--- | :--- |
+| Set `Motion` once, at the root of the app. | Every component gets the same motion, and a new one picks it up with no extra prop. |
+| Set `transition` on a component only to differ from the app. | The prop wins over `Motion`, so a one-off stays a one-off. |
 
 ## Reduced motion
 
