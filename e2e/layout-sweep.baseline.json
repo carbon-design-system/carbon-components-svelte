@@ -1256,6 +1256,22 @@
     "message": "div[data-testid=\"modal\"] > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--tile:nth-of-type(2): 2px outline inside bordered box div[data-testid=\"modal\"] > div.bx--modal-container, both on rgb(255, 255, 255)"
   },
   {
+    "fixture": "motion-notifications.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"inline\"] > button.bx--inline-notification__close-button",
+    "message": "div[data-testid=\"inline\"] > button.bx--inline-notification__close-button: 2px outline inside 1px outline div[data-testid=\"inline\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "motion-notifications.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div[data-testid=\"toast\"] > button.bx--toast-notification__close-button",
+    "message": "div[data-testid=\"toast\"] > button.bx--toast-notification__close-button: 2px outline inside 1px outline div[data-testid=\"toast\"], both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "notification-fit.html",
     "variant": "1280-forced",
     "check": "borders",
