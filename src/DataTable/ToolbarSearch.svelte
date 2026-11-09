@@ -243,7 +243,7 @@
   {disabled}
   {selectTextOnFocus}
   {...$$restProps}
-  searchClass={[classes, $$restProps.class].filter(Boolean).join(" ")}
+  searchClass={classes}
   bind:ref
   bind:value
   on:clear

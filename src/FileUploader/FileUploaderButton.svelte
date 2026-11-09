@@ -177,13 +177,17 @@
     "small";
 
   // Rest props go to the hidden input, which never takes focus. Move the
-  // naming and description attributes to the button that does.
+  // naming and description attributes to the button that does. A consumer
+  // class and style go on the button too, the only part on screen. It falls
+  // back to "", since Svelte 3 and 4 render an unset class as "undefined" on
+  // the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
   $: ({
     ariaLabel,
     ariaLabelledBy,
     ariaDescribedBy,
     rest: inputRestProps,
-  } = splitAriaNaming($$restProps));
+  } = splitAriaNaming(controlProps));
 
   let initialLabelText = labelText;
   // The label a pick last wrote. Any other `labelText` came from the
@@ -328,6 +332,8 @@
   class:bx--tooltip--hidden={hasTooltip && $tooltipHidden}
   class:bx--tooltip--visible={hasTooltip && $tooltipOpen}
   class:bx--tooltip--instant={hasTooltip && $tooltipInstant}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:keydown
 >
   {#if hasIconOnly}

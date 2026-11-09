@@ -17,6 +17,11 @@ export type FieldCase = {
    * label is always the text "Field", passed through `labelChildren`.
    */
   control: () => HTMLElement | HTMLElement[];
+  /**
+   * The field's outermost element, which takes a consumer `class` and
+   * `style`. Defaults to the first element the case renders.
+   */
+  root?: () => HTMLElement;
   fluid?: {
     /** Class the fluid variant adds. */
     className: string;
