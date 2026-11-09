@@ -5,9 +5,10 @@
    */
 
   /**
-   * Set to `true` when the action is an icon-only button in a
-   * `CardFooter` with `actionSet`. It keeps its width and moves to the
-   * inline end, instead of stretching to fill the row.
+   * An action that holds an icon-only button or an OverflowMenu keeps
+   * its width at the inline end of the footer, instead of stretching to
+   * fill the row. The card now detects that itself.
+   * @deprecated The card detects an icon-only control. Remove the prop.
    */
   export let iconOnly = false;
 </script>

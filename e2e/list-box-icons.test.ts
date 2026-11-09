@@ -108,6 +108,25 @@ test.describe("list box icons and highlight", () => {
     expect((await ring(email)).outline).toBe("none");
   });
 
+  // An option makes room for its left icon through `:has()`, with no prop.
+  test("pads an option that holds a left icon", async ({ page }) => {
+    await page
+      .getByTestId("dropdown-item-icons")
+      .locator(".bx--list-box__field")
+      .click();
+    const option = (text: string) =>
+      options(page, "dropdown-item-icons")
+        .filter({ hasText: text })
+        .locator(".bx--list-box__menu-item__option");
+
+    const padding = (text: string) =>
+      option(text).evaluate(
+        (node) => getComputedStyle(node).paddingInlineStart,
+      );
+    expect(await padding("Email")).toBe("24px");
+    expect(await padding("Fax")).not.toBe("24px");
+  });
+
   // As in Carbon React, the pointer gets the hover fill and the ring stays
   // with the keyboard.
   for (const testId of ["combobox", "dropdown", "multiselect"]) {
