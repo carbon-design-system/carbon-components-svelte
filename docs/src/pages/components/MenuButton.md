@@ -248,6 +248,19 @@ Choosing an item closes the menu by default, including any open submenus. Call `
 
 <FileSource src="/framed/MenuButton/MenuButtonKeepOpen" />
 
+## Transition
+
+The menu opens and closes at once by default. Set `transition` to animate it. `true` uses Carbon's fly (`fast01`, 70 ms): the menu moves 2 px toward the side it opens on while it fades, and moves back as it closes. Fly parameters such as `{ duration: "fast02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). Submenus take the same setting. Under `prefers-reduced-motion: reduce` the menu still opens and closes at once. To animate every menu in an app, set `menu` on [`Motion`](/motion#app-wide-defaults).
+
+While the menu leaves, the trigger already reads `aria-expanded="false"` and the menu takes no clicks or keys. MenuButton forwards `introstart`, `introend`, `outrostart`, and `outroend`. See [Menu transition](/components/Menu#transition) for the details.
+
+<FileSource src="/framed/MenuButton/MenuButtonTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Set `transition` and leave the menu's own props alone. | MenuButton passes it to the `Menu` it renders, so the menu and its submenus move together. |
+| Run work that follows the close from `on:outroend`, not from `on:close` or a timer. | `close` fires when the menu is dismissed, before it has finished leaving. `outroend` fires when it has left, and fires at once under reduced motion. |
+
 ## Events
 
 Respond to menu close attempts.
