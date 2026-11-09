@@ -159,6 +159,7 @@ export { default as MenuItemRadioGroup } from "./Menu/MenuItemRadioGroup.svelte"
 export { default as MenuButton } from "./MenuButton/MenuButton.svelte";
 export { default as Meter } from "./Meter/Meter.svelte";
 export { default as Modal } from "./Modal/Modal.svelte";
+export { default as Motion } from "./motion/Motion.svelte";
 export { default as FluidMultiSelectSkeleton } from "./MultiSelect/FluidMultiSelectSkeleton.svelte";
 export { default as MultiSelect } from "./MultiSelect/MultiSelect.svelte";
 export { default as MultiSelectSkeleton } from "./MultiSelect/MultiSelectSkeleton.svelte";
