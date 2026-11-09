@@ -136,6 +136,40 @@ describe("ImageLoader", () => {
     expect(durations.some((duration) => duration > 0)).toBe(true);
   });
 
+  it.skipIf(!isSvelte5)(
+    "transition takes precedence over fadeIn, with token durations",
+    async () => {
+      const animate = vi.spyOn(Element.prototype, "animate");
+      const durations = () =>
+        animate.mock.calls
+          .map(([, options]) =>
+            Number((options as KeyframeAnimationOptions).duration),
+          )
+          .filter((duration) => duration > 0);
+
+      const { container, rerender } = render(ImageLoaderComponent, {
+        props: {
+          src: validImageSrc,
+          alt: "Logo",
+          fadeIn: true,
+          transition: false,
+        },
+      });
+      await settle(validImageSrc, "onload");
+      expect(visibleImg(container)).toHaveAttribute("src", validImageSrc);
+      expect(durations()).toEqual([]);
+
+      await rerender({
+        src: "",
+        fadeIn: false,
+        transition: { duration: "moderate02" },
+      });
+      await rerender({ src: validImageSrc });
+      await settle(validImageSrc, "onload");
+      expect(durations()).toContain(240);
+    },
+  );
+
   it("supports programmatic image loading", async () => {
     const { component } = render(ImageLoader);
     await tick();

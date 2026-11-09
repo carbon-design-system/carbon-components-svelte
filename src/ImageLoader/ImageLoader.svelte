@@ -42,8 +42,18 @@
   /**
    * Set to `true` to fade in the image on load.
    * The duration uses the `fast-02` value following Carbon guidelines on motion.
+   * `transition` takes precedence when set.
    */
   export let fadeIn = false;
+
+  /**
+   * Customize how the image appears and leaves. Set to `true` for Carbon's
+   * fade, to fade params (e.g., `{ duration: "moderate02" }`) to customize
+   * it, or to `{ fn }` to use another transition. When `undefined`, falls
+   * back to `fadeIn`, then to the `loading` role of the nearest `Motion`.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
+   */
+  export let transition = undefined;
 
   /**
    * Set to `true` to start loading the image once it comes within
@@ -89,15 +99,27 @@
   }
 
   import { createEventDispatcher, onMount } from "svelte";
-  import { fade } from "svelte/transition";
   import AspectRatio from "../AspectRatio/AspectRatio.svelte";
+  import { getMotionDefault } from "../motion/context.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fade } from "../motion/transitions.js";
   import { noop } from "../utils/noop.js";
   import { observeIntersection } from "../utils/shared-observer.js";
 
   const dispatch = createEventDispatcher();
 
-  // "fast-02" duration (ms) from Carbon motion recommended for fading micro-interactions
-  const fast02 = 110;
+  const fadePreset = { fn: fade };
+
+  const motionDefault = getMotionDefault("loading");
+
+  // The image always carries the directive, as before: with the fade off it
+  // runs for zero time.
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition ?? (fadeIn || $motionDefault), fadePreset));
+  $: imageTransitionParams = animated ? transitionParams : { duration: 0 };
 
   /** @type {null | HTMLImageElement} */
   let image = null;
@@ -174,7 +196,7 @@
         {...$$restProps}
         src={currentSrc}
         {alt}
-        transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
+        transition:transitionFn|local={imageTransitionParams}
       />
     {/if}
   {/key}
@@ -197,7 +219,7 @@
           {...$$restProps}
           src={currentSrc}
           {alt}
-          transition:fade|local={{ duration: fadeIn ? fast02 : 0 }}
+          transition:transitionFn|local={imageTransitionParams}
         />
       {/if}
     {/key}

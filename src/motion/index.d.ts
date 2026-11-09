@@ -1,4 +1,14 @@
 export { prefersReducedMotion, shouldReduceMotion } from "./reduced-motion.js";
+export type {
+  MotionRole,
+  MotionSettings,
+  MotionSharedParams,
+  MotionValue,
+} from "./context.js";
+export type {
+  TransitionFunction,
+  TransitionProp,
+} from "./resolve-transition.js";
 export {
   type DurationToken,
   duration,

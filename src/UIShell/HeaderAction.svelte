@@ -66,12 +66,13 @@
   export let ref = null;
 
   /**
-   * Customize the panel transition (e.g., `transition:slide`).
-   * The panel does not animate by default; provide slide
-   * params (e.g., `{ duration: 200 }`) to enable the transition.
-   * @type {false | import("svelte/transition").SlideParams}
+   * Animate the panel. Set to `true` for Carbon's slide, to slide params
+   * (e.g., `{ duration: "slow01" }`) to customize it, or to `{ fn }` to use
+   * another transition. The panel does not animate by default.
+   * When `undefined`, the nearest `Motion` sets it through the `panel` role.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").SlideParams>}
    */
-  export let transition = false;
+  export let transition = undefined;
 
   /** Set to `true` to prevent the panel from closing when clicking outside */
   export let preventCloseOnClickOutside = false;
@@ -80,9 +81,11 @@
   export let id = uniqueId();
 
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import { slide } from "svelte/transition";
   import Close from "../icons/Close.svelte";
   import Switcher from "../icons/Switcher.svelte";
+  import { getMotionDefault } from "../motion/context.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { slide } from "../motion/transitions.js";
   import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { dismiss } from "../utils/dismiss.js";
   import { focusQuietly, returnFocusOnClose } from "../utils/focus.js";
@@ -96,6 +99,16 @@
 
   /** @type {null | HTMLDivElement} */
   let refPanel = null;
+
+  const slidePreset = { fn: slide };
+
+  const motionDefault = getMotionDefault("panel");
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition ?? $motionDefault, slidePreset));
 
   $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);
 
@@ -229,7 +242,7 @@
     {/if}
   </slot>
 </button>
-{#if isOpen && transition}
+{#if isOpen && animated}
   <div
     bind:this={refPanel}
     id="{id}-panel"
@@ -237,7 +250,7 @@
     aria-labelledby={id}
     class:bx--header-panel={true}
     class:bx--header-panel--expanded={true}
-    transition:slide|local={transition}
+    transition:transitionFn|local={transitionParams}
   >
     <slot />
   </div>
