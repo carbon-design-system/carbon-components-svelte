@@ -57,6 +57,20 @@ export function createTooltipHandoff({
     ([$active, $claimedWarm]) => $active && $claimedWarm,
   );
 
+  /**
+   * `true` while another tooltip in this group holds the slot it took by
+   * warm handoff. This tooltip is the one handed off from, so it can drop
+   * its exit fade as the other drops its entrance.
+   */
+  const handedOff = derived(
+    activeTooltip,
+    ($active) =>
+      $active !== null &&
+      $active !== token &&
+      $active.scope === token.scope &&
+      $active.warm === true,
+  );
+
   function isWarm() {
     const current = get(activeTooltip);
     if (current !== null) {
@@ -76,7 +90,9 @@ export function createTooltipHandoff({
   function claim({ instant = false } = {}) {
     if (typeof window === "undefined") return;
     if (get(activeTooltip) === token) return;
-    claimedWarm.set(instant || isWarm());
+    const warm = isWarm();
+    token.warm = warm;
+    claimedWarm.set(instant || warm);
     activeTooltip.set(token);
   }
 
@@ -145,6 +161,7 @@ export function createTooltipHandoff({
   return {
     active,
     hidden,
+    handedOff,
     instant,
     scheduleEnter,
     scheduleLeave,

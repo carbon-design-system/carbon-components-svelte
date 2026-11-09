@@ -163,6 +163,19 @@ Wrap related tooltips in a [TooltipGroup](/components/TooltipGroup). Once one is
   </Stack>
 </TooltipGroup>
 
+## Transition
+
+The tooltip appears and disappears at once by default. Set `transition` to fade it in and out, in place or in a portal. `true` uses Carbon's fade (`fast01`, 70 ms), fade parameters such as `{ duration: "fast02" }` customize it, and `{ fn }` swaps in another [transition](/motion#transitions). The enter and leave delays run first, and the fade starts after them. Under `prefers-reduced-motion: reduce` it still appears and disappears at once. The tooltip forwards `introstart`, `introend`, `outrostart`, and `outroend`. To animate every tooltip in an app, set `tooltip` on [`Motion`](/motion#app-wide-defaults).
+
+In a [TooltipGroup](/components/TooltipGroup), a tooltip that opens right after another one closed appears at once, with no fade, as it does without `transition`, and the tooltip it replaces leaves at once too, so the group reads as one tooltip moving. Move between the triggers to see the first tooltip fade in and the next ones skip the fade both ways.
+
+<FileSource src="/framed/Tooltip/TooltipTransition" />
+
+| Do | Why |
+| :--- | :--- |
+| Set `transition` on every tooltip in a group. | A tooltip without it opens at once, so the group would fade some tooltips and not others. |
+| Keep the duration near `fast01` or `fast02`. | A tooltip answers a hover, so a slow fade reads as lag. |
+
 ## Portal
 
 A tooltip that a container would cut off, such as a box with `overflow: hidden` or a scroll area, opens in a portal. Inside a Modal, the tooltip always opens in a portal.

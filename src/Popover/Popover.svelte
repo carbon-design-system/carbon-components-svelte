@@ -11,6 +11,13 @@
    */
 
   /**
+   * @event {CustomEvent<null>} introstart
+   * @event {CustomEvent<null>} introend
+   * @event {CustomEvent<null>} outrostart
+   * @event {CustomEvent<null>} outroend
+   */
+
+  /**
    * Set to `true` to display the popover.
    * @bindable writable
    */
@@ -57,6 +64,18 @@
   export let portalPopover = undefined;
 
   /**
+   * Animate the contents as they appear and leave. Set to `true` for
+   * Carbon's fade (`fast01`), to fade params (e.g., `{ duration: "fast02" }`)
+   * to customize it, or to `{ fn }` to use another transition. The popover
+   * does not animate by default. While animated, the contents are in the
+   * page only when `open` is `true`, and the popover stays displayed until
+   * they have left.
+   * When `undefined`, the nearest `Motion` sets it through the `tooltip` role.
+   * @type {import("../motion/resolve-transition.js").TransitionProp<import("../motion/transitions.js").FadeParams>}
+   */
+  export let transition = undefined;
+
+  /**
    * Obtain a reference to the popover element.
    * In a portal, this is the portalled element.
    * @bindable readonly
@@ -66,6 +85,9 @@
 
   import { createEventDispatcher, onMount, tick } from "svelte";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
+  import { getMotionDefault } from "../motion/context.js";
+  import { resolveTransition } from "../motion/resolve-transition.js";
+  import { fade } from "../motion/transitions.js";
   import { dismiss } from "../utils/dismiss.js";
   import {
     clippedBy,
@@ -84,6 +106,33 @@
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();
+
+  /** @type {{ fn: typeof fade; params: import("../motion/transitions.js").FadeParams }} */
+  const fadePreset = { fn: fade, params: { duration: "fast01" } };
+  const motionDefault = getMotionDefault("tooltip");
+
+  $: ({
+    fn: transitionFn,
+    params: transitionParams,
+    animated,
+  } = resolveTransition(transition ?? $motionDefault, fadePreset));
+
+  // An animated popover stays displayed until its contents have left.
+  let displayed = open;
+  $: if (open) displayed = true;
+  else if (!animated) displayed = false;
+
+  function handleOutroEnd() {
+    if (!open) displayed = false;
+  }
+
+  // The in-place and portalled roots bind their own refs, so a root that is
+  // still leaving cannot clear `ref` after its replacement has set it.
+  /** @type {null | HTMLDivElement} */
+  let inPlaceRef = null;
+  /** @type {null | HTMLDivElement} */
+  let portalRef = null;
+  $: ref = portalled ? portalRef : inPlaceRef;
 
   // Marks the popover's place while it's portalled. Its parent is the
   // anchor, as it is for the popover in place.
@@ -330,7 +379,7 @@
       let:direction={portalSide}
     >
       <div
-        bind:this={ref}
+        bind:this={portalRef}
         use:dismiss={{
           enabled: open,
           listeners: [
@@ -351,13 +400,27 @@
         style:--ccs-popover-anchor-width="{anchorWidth}px"
         style:--ccs-popover-anchor-height="{anchorHeight}px"
       >
-        <div class:bx--popover-contents={true}><slot /></div>
+        {#if animated}
+          <div
+            class:bx--popover-contents={true}
+            transition:transitionFn|global={transitionParams}
+            on:introstart
+            on:introend
+            on:outrostart
+            on:outroend
+            on:outroend={handleOutroEnd}
+          >
+            <slot />
+          </div>
+        {:else}
+          <div class:bx--popover-contents={true}><slot /></div>
+        {/if}
       </div>
     </FloatingPortal>
   {/if}
 {:else}
   <div
-    bind:this={ref}
+    bind:this={inPlaceRef}
     use:dismiss={{
       enabled: open,
       listeners: [
@@ -382,11 +445,25 @@
     class:bx--popover--right={placement === "right"}
     class:bx--popover--right-bottom={placement === "right-bottom"}
     class:bx--popover--right-top={placement === "right-top"}
-    class:bx--popover--open={open}
+    class:bx--popover--open={displayed}
     class:bx--popover--relative={relative}
     style:position={relative ? "relative" : undefined}
     {...$$restProps}
   >
-    <div class:bx--popover-contents={true}><slot /></div>
+    {#if open && animated}
+      <div
+        class:bx--popover-contents={true}
+        transition:transitionFn|local={transitionParams}
+        on:introstart
+        on:introend
+        on:outrostart
+        on:outroend
+        on:outroend={handleOutroEnd}
+      >
+        <slot />
+      </div>
+    {:else if !animated}
+      <div class:bx--popover-contents={true}><slot /></div>
+    {/if}
   </div>
 {/if}

@@ -27,6 +27,8 @@ import {
 /**
  * @typedef {object} TooltipToken
  * @property {TooltipGroupScope} scope
+ * @property {boolean} [warm] `true` while the tooltip holds the slot it
+ *   took by warm handoff from another tooltip in its scope.
  */
 
 const TOOLTIP_GROUP_CONTEXT_KEY = "carbon:TooltipGroup";
