@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
+import PropertyInspector from "carbon-components-svelte/PropertyInspector/PropertyInspector.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
@@ -276,6 +277,11 @@ export const navigation: AriaEntry[] = [
     name: "SkipToContent",
     render: (attrs) => render(SkipToContent, { props: attrs }),
     target: () => screen.getByRole("link"),
+  },
+  {
+    name: "PropertyInspector",
+    render: (attrs) => render(PropertyInspector, { props: attrs }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "Splitter",
