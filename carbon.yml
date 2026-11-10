@@ -767,6 +767,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Link
+  list-detail-layout:
+    name: List detail layout
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/list-detail-layout.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ListDetailLayout
   loading:
     status: stable
     framework: svelte
