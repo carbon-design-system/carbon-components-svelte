@@ -70,9 +70,8 @@ describe("Tabs server render", () => {
 });
 
 describe("Tabs server render with a secondary label", () => {
-  // The tabs learn a tab has a secondary label only once it registers,
-  // after their own markup is written, so the tab draws its own and marks
-  // its item; CSS sizes the row from that.
+  // Each tab renders from its own props, so the server markup is the
+  // markup the browser keeps. CSS sizes the row with `:has()`.
   function items(document: Document) {
     return [...document.querySelectorAll(".bx--tabs__nav-item")];
   }
@@ -81,29 +80,17 @@ describe("Tabs server render with a secondary label", () => {
     const { document } = renderSSR(TabsSecondaryLabel);
     const [overview, details] = items(document);
 
-    expect(details).toHaveClass("bx--tabs__nav-item--secondary-label");
     expect(
       details.querySelector(".bx--tabs__nav-item-secondary-label"),
     ).toHaveTextContent("(3)");
-    expect(overview).not.toHaveClass("bx--tabs__nav-item--secondary-label");
-  });
-
-  it("marks the sibling links that draw no secondary line", () => {
-    const { document } = renderSSR(TabsSecondaryLabel);
-    const [overview, details] = items(document).map((item) =>
-      item.querySelector(".bx--tabs__nav-link"),
-    );
-
-    expect(overview).toHaveClass("bx--tabs__nav-link--single-line");
-    expect(details).not.toHaveClass("bx--tabs__nav-link--single-line");
+    expect(
+      overview.querySelector(".bx--tabs__nav-item-label-wrapper"),
+    ).toBeNull();
   });
 
   it("leaves secondary labels off line tabs", () => {
     const { document } = renderSSR(TabsSecondaryLabel, { type: "default" });
 
-    expect(
-      document.querySelector(".bx--tabs__nav-item--secondary-label"),
-    ).toBeNull();
     expect(
       document.querySelector(".bx--tabs__nav-item-secondary-label"),
     ).toBeNull();
