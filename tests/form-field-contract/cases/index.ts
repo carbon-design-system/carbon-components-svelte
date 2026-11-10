@@ -28,6 +28,7 @@ import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
 import InlineEditField from "../fixtures/InlineEditField.test.svelte";
 import RadioButtonGroupField from "../fixtures/RadioButtonGroupField.test.svelte";
+import TransferListField from "../fixtures/TransferListField.test.svelte";
 
 const textInputSkeleton = {
   className: "bx--text-input--fluid__skeleton",
@@ -331,6 +332,14 @@ export const cases: FieldCase[] = [
       described: () => screen.getAllByRole("radio"),
     },
   },
+  {
+    name: "TransferList",
+    component: TransferListField,
+    // The selected list holds the value, so it carries the invalid state;
+    // the fieldset carries the descriptions.
+    control: () => screen.getByRole("listbox", { name: "Selected" }),
+    state: { described: () => screen.getByRole("group") },
+  },
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
@@ -361,6 +370,8 @@ export const exempt: Exemptions = {
     TagInput: NOT_A_TEXT_FIELD,
     TileGroup: NOT_A_TEXT_FIELD,
     Toggle: NOT_A_TEXT_FIELD,
+    TransferList:
+      "restores its selection on reset, covered by tests/TransferList",
   },
   selectOnFocus: {
     PinCodeInput: "selects the focused segment, which its own tests cover",

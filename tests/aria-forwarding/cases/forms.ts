@@ -36,6 +36,7 @@ import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+import TransferList from "carbon-components-svelte/TransferList/TransferList.svelte";
 import type { AriaEntry } from "../contract";
 import DatePickerInputFixture from "../fixtures/DatePickerInput.test.svelte";
 import RadioButtonGroupFixture from "../fixtures/RadioButtonGroup.test.svelte";
@@ -446,6 +447,19 @@ export const forms: AriaEntry[] = [
           legendText: "Topics",
           invalid: true,
           invalidText: "Pick one",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "TransferList",
+    render: (attrs) =>
+      render(TransferList, {
+        props: {
+          items: [{ id: "a", text: "Alpha" }],
+          legendText: "Teams",
+          helperText: "Pick any",
           ...attrs,
         },
       }),
