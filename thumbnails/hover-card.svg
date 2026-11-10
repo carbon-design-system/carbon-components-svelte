@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>hover-card</title>
+    <defs>
+        <filter id="hover-card-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="hover-card" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="trigger-text" fill="var(--cds-background-brand, #0f62fe)" x="64" y="40" width="64" height="8"></rect>
+        <rect id="trigger-underline" fill="var(--cds-background-brand, #0f62fe)" x="64" y="52" width="64" height="2"></rect>
+        <rect id="card-shadow" fill="black" filter="url(#hover-card-shadow)" x="64" y="62" width="192" height="88" rx="2"></rect>
+        <rect id="card" fill="var(--cds-layer-02, #ffffff)" x="64" y="62" width="192" height="88" rx="2"></rect>
+        <circle id="avatar" fill="var(--cds-border-strong, #8d8d8d)" cx="90" cy="88" r="14"></circle>
+        <rect id="name" fill="var(--cds-icon-primary, #161616)" x="114" y="80" width="80" height="8"></rect>
+        <rect id="detail" fill="var(--cds-text-secondary, #525252)" x="114" y="94" width="116" height="6"></rect>
+        <rect id="action" fill="var(--cds-background-brand, #0f62fe)" x="78" y="118" width="64" height="20"></rect>
+        <rect id="action-secondary" fill="var(--cds-border-subtle, #e0e0e0)" x="150" y="118" width="64" height="20"></rect>
+    </g>
+</svg>

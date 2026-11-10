@@ -619,6 +619,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Heading
+  hover-card:
+    name: Hover card
+    description: An interactive card that opens when the pointer rests on a trigger or keyboard focus reaches it, for a person, an issue or a link preview.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/hover-card.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/HoverCard
   icon-indicator:
     name: Icon indicator
     status: stable

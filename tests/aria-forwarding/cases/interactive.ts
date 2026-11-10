@@ -15,6 +15,7 @@ import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
+import HoverCard from "carbon-components-svelte/HoverCard/HoverCard.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
@@ -448,6 +449,11 @@ export const interactive: AriaEntry[] = [
           ...attrs,
         },
       }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "HoverCard",
+    render: (attrs) => render(HoverCard, { props: { open: true, ...attrs } }),
     target: () => screen.getByRole("dialog"),
   },
   {

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { isAimingAt } from "../../src/utils/pointer-aim.js";
+import { isAimingAt, isAimingAtFloating } from "../../src/utils/pointer-aim.js";
 
 // A submenu 200px wide and 256px tall, opening on the right of x = 300.
 const right = { left: 300, right: 500, top: 100, bottom: 356 };
@@ -130,5 +130,53 @@ describe("isAimingAt", () => {
       expect(isAimingAt({ x: 280, y: 160 }, from, right)).toBe(true);
       expect(isAimingAt({ x: 240, y: 160 }, from, right)).toBe(false);
     });
+  });
+});
+
+describe("isAimingAtFloating", () => {
+  // A card 320px wide below a trigger that spans y 100 to 120.
+  const anchor = { top: 100, bottom: 120 };
+  const below = { left: 100, right: 420, top: 128, bottom: 248 };
+  const above = { left: 100, right: 420, top: -28, bottom: 92 };
+
+  it("is true for a diagonal move toward a card below the trigger", () => {
+    expect(
+      isAimingAtFloating({ x: 260, y: 124 }, { x: 200, y: 118 }, below, anchor),
+    ).toBe(true);
+  });
+
+  it("is true for a diagonal move toward a card above the trigger", () => {
+    expect(
+      isAimingAtFloating({ x: 260, y: 96 }, { x: 200, y: 102 }, above, anchor),
+    ).toBe(true);
+  });
+
+  it("is false for a move that leaves the card's span", () => {
+    expect(
+      isAimingAtFloating({ x: 600, y: 140 }, { x: 200, y: 118 }, below, anchor),
+    ).toBe(false);
+    expect(
+      isAimingAtFloating({ x: 200, y: 60 }, { x: 200, y: 118 }, below, anchor),
+    ).toBe(false);
+  });
+
+  it("checks a card beside the trigger as isAimingAt does", () => {
+    const beside = { left: 300, right: 500, top: 90, bottom: 210 };
+    expect(
+      isAimingAtFloating(
+        { x: 220, y: 110 },
+        { x: 200, y: 105 },
+        beside,
+        anchor,
+      ),
+    ).toBe(true);
+    expect(
+      isAimingAtFloating(
+        { x: 180, y: 110 },
+        { x: 200, y: 105 },
+        beside,
+        anchor,
+      ),
+    ).toBe(false);
   });
 });

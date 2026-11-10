@@ -50,6 +50,31 @@ export function isAimingAt(point, from, rect, tolerance = 4) {
 }
 
 /**
+ * `isAimingAt` for floating content on any side of its anchor. A box above
+ * or below the anchor has its near edge on the block axis, so the check
+ * runs with the axes swapped. A box beside the anchor (or one that overlaps
+ * it) takes the inline-axis check unchanged.
+ *
+ * @param {{ x: number, y: number }} point Current pointer position.
+ * @param {{ x: number, y: number }} from Earlier pointer position.
+ * @param {{ top: number, right: number, bottom: number, left: number }} rect The floating box.
+ * @param {{ top: number, bottom: number }} anchor The anchor's box.
+ * @param {number} [tolerance]
+ * @returns {boolean}
+ */
+export function isAimingAtFloating(point, from, rect, anchor, tolerance = 4) {
+  if (rect.top < anchor.bottom && rect.bottom > anchor.top) {
+    return isAimingAt(point, from, rect, tolerance);
+  }
+  return isAimingAt(
+    { x: point.y, y: point.x },
+    { x: from.y, y: from.x },
+    { top: rect.left, right: rect.bottom, bottom: rect.right, left: rect.top },
+    tolerance,
+  );
+}
+
+/**
  * @param {number} px
  * @param {number} py
  * @param {number} x1
