@@ -23,6 +23,8 @@ const IGNORED = [
   /^Type '(string|number|boolean)(\[\])?' is not assignable to type/,
   // `const headers = [{ key: "name" }]` widens `key` to `string`.
   /^Type '.*\bkey: string\b.*\[\]' is not assignable to type 'readonly DataTableHeader</,
+  // `const keys = [{ key: "is", type: "enum" }]` widens `type` to `string`.
+  /^(Type|Argument of type) '.*\btype: string\b.*\[\]' is not assignable to (type|parameter of type) 'readonly TokenKey\[\]'/,
   // `e.target.value`: the target is typed `EventTarget`.
   /^Property '\w+' does not exist on type '(EventTarget|Element)'/,
   // `new Date(a) - new Date(b)`, and `a - b` on a `string | number` cell.
