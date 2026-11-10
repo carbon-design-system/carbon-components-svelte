@@ -943,6 +943,18 @@ assets:
     tags:
       - form
       - contextual-navigation
+  people-picker:
+    name: People picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/people-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PeoplePicker
   pin-code-input:
     name: PIN code input
     status: stable
