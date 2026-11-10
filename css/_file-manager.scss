@@ -1,0 +1,357 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+
+/// FileManager: a folder tree, a main pane that shows a folder as a table or
+/// a grid, a details panel and an upload list. The pieces are Carbon's own
+/// (TreeView, DataTable, Breadcrumb, SidePanel, ProgressBar); this adds the
+/// frame around them and the states Carbon has no class for: the cursor, a
+/// drop target and a tile.
+///
+/// The root is a containing block for `position: fixed`, so the details
+/// panel, which SidePanel pins to the viewport, docks inside the file manager.
+/// @access private
+/// @group components
+@mixin file-manager {
+  .#{$prefix}--file-manager {
+    --ccs-side-panel-top: 0;
+
+    position: relative;
+    display: grid;
+    box-sizing: border-box;
+    // Contains the details panel, which is `position: fixed`.
+    contain: layout;
+    block-size: var(--ccs-file-manager-height, #{to-rem(576px)});
+    background-color: $layer;
+    border: 1px solid $border-subtle;
+    color: $text-primary;
+    grid-template-columns: minmax(to-rem(160px), to-rem(256px)) minmax(0, 1fr);
+  }
+
+  .#{$prefix}--file-manager__sidebar {
+    min-inline-size: 0;
+    min-block-size: 0;
+    border-inline-end: 1px solid $border-subtle;
+    // The virtualized tree scrolls itself.
+    overflow: hidden;
+  }
+
+  // Below `md` the tree gives way to the path and the move dialog, which
+  // reach every folder, so the table keeps the width.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--file-manager {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .#{$prefix}--file-manager__sidebar {
+      display: none;
+    }
+  }
+
+  .#{$prefix}--file-manager__main {
+    display: flex;
+    min-inline-size: 0;
+    min-block-size: 0;
+    flex-direction: column;
+  }
+
+  // The path and the controls that stay put while a selection replaces the
+  // toolbar with its batch actions.
+  .#{$prefix}--file-manager__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline-end: $carbon--spacing-03;
+    border-block-end: 1px solid $border-subtle;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--file-manager__bar > nav {
+    min-inline-size: 0;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--file-manager__bar-actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+  }
+
+  .#{$prefix}--file-manager__pane {
+    position: relative;
+    flex: 1 1 0;
+    min-block-size: 0;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--file-manager__state {
+    padding: $carbon--spacing-05;
+  }
+
+  // List view ---------------------------------------------------------------
+
+  .#{$prefix}--file-manager__list {
+    block-size: 100%;
+  }
+
+  .#{$prefix}--file-manager__list .#{$prefix}--data-table-container {
+    padding-block-start: 0;
+  }
+
+  .#{$prefix}--file-manager__list tr[data-file-row] {
+    cursor: default;
+  }
+
+  .#{$prefix}--file-manager__list tr[data-file-row]:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--file-manager__name {
+    display: flex;
+    min-inline-size: 0;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--file-manager__name-icon {
+    display: inline-flex;
+    flex: none;
+    color: $icon-secondary;
+  }
+
+  .#{$prefix}--file-manager__name-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--file-manager__name .#{$prefix}--edit-in-place {
+    min-inline-size: to-rem(160px);
+  }
+
+  // Grid view ---------------------------------------------------------------
+
+  .#{$prefix}--file-manager__grid {
+    block-size: 100%;
+    outline: none;
+  }
+
+  .#{$prefix}--file-manager__grid-line {
+    display: grid;
+    box-sizing: border-box;
+    block-size: to-rem(136px);
+    padding-inline: $carbon--spacing-03;
+    grid-template-columns: repeat(var(--ccs-file-manager-columns, 1), minmax(0, 1fr));
+  }
+
+  .#{$prefix}--file-manager__tile {
+    display: flex;
+    min-inline-size: 0;
+    flex-direction: column;
+    align-items: center;
+    padding: $carbon--spacing-03;
+    border: 1px solid transparent;
+    cursor: default;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--file-manager__tile-picture {
+    display: flex;
+    overflow: hidden;
+    inline-size: 100%;
+    block-size: to-rem(80px);
+    align-items: center;
+    justify-content: center;
+    color: $icon-secondary;
+  }
+
+  .#{$prefix}--file-manager__thumb {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .#{$prefix}--file-manager__thumb-icon {
+    display: inline-flex;
+  }
+
+  .#{$prefix}--file-manager__tile-name {
+    @include type-style("body-compact-01");
+
+    display: -webkit-box;
+    max-inline-size: 100%;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  .#{$prefix}--file-manager__tile--selected {
+    background-color: $layer-selected;
+    border-color: $border-interactive;
+  }
+
+  .#{$prefix}--file-manager__grid:focus-visible
+    .#{$prefix}--file-manager__tile[data-cursor] {
+    @include focus-outline("outline");
+  }
+
+  // Drops -------------------------------------------------------------------
+
+  [data-drop-target] {
+    background-color: $layer-selected-hover;
+    outline: 2px solid $border-interactive;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--file-manager__drop {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $overlay;
+    inset: 0;
+    outline: 2px dashed $border-interactive;
+    outline-offset: -$carbon--spacing-03;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--file-manager__drop span {
+    @include type-style("heading-compact-02");
+
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  // Uploads -----------------------------------------------------------------
+
+  .#{$prefix}--file-manager__uploads {
+    max-block-size: to-rem(192px);
+    flex: none;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    overflow: auto;
+  }
+
+  .#{$prefix}--file-manager__uploads-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .#{$prefix}--file-manager__uploads-title {
+    @include type-style("heading-01");
+  }
+
+  .#{$prefix}--file-manager__uploads-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--file-manager__upload {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--file-manager__upload-bar {
+    min-inline-size: 0;
+    flex: 1 1 0;
+  }
+
+  // Preview -----------------------------------------------------------------
+
+  .#{$prefix}--file-manager__preview {
+    margin-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--file-manager__preview-image {
+    display: block;
+    max-inline-size: 100%;
+    max-block-size: to-rem(256px);
+    margin-inline: auto;
+  }
+
+  .#{$prefix}--file-manager__preview-frame {
+    display: block;
+    inline-size: 100%;
+    block-size: to-rem(256px);
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--file-manager__preview--large .#{$prefix}--file-manager__preview-image {
+    max-block-size: 60vh;
+  }
+
+  .#{$prefix}--file-manager__preview--large .#{$prefix}--file-manager__preview-frame {
+    block-size: 60vh;
+  }
+
+  .#{$prefix}--file-manager__preview-fallback {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--file-manager__move-tree {
+    min-block-size: to-rem(240px);
+  }
+
+  // Hover is for a pointer that has one.
+  @media (any-hover: hover) {
+    .#{$prefix}--file-manager__tile:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--file-manager__tile--selected:hover {
+      background-color: $layer-selected-hover;
+    }
+  }
+
+  // Forced colors drop background colors, so a selection reads as Highlight,
+  // as a drop target does, and the cursor keeps its ring.
+  @media (forced-colors: active) {
+    .#{$prefix}--file-manager__tile--selected,
+    .#{$prefix}--file-manager__tile--selected:hover,
+    .#{$prefix}--file-manager__list tr[aria-selected="true"] > td,
+    .#{$prefix}--file-manager__list tr[aria-selected="true"]:hover > td {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+
+    // An icon draws with its own fill, which forced colors leave alone.
+    .#{$prefix}--file-manager__tile--selected svg,
+    .#{$prefix}--file-manager__list
+      tr[aria-selected="true"]
+      .#{$prefix}--file-manager__name-icon
+      svg {
+      fill: HighlightText;
+    }
+
+    [data-drop-target] {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    .#{$prefix}--file-manager__drop {
+      background-color: Canvas;
+      outline-color: Highlight;
+    }
+  }
+}
+
+@include exports("file-manager") {
+  @include file-manager;
+}
