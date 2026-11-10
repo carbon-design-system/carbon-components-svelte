@@ -1,0 +1,391 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "./fluid-shared";
+
+/// RichTextEditor: a field with a text-formatting toolbar above an editable
+/// surface. The field's box, border, focus ring and status colors follow
+/// TextArea; the toolbar is a row of ghost icon buttons.
+/// @access private
+/// @group components
+@mixin rich-text-editor {
+  .#{$prefix}--rich-text-editor {
+    position: relative;
+  }
+
+  .#{$prefix}--rich-text-editor__box {
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
+  }
+
+  // The rings draw on a layer above the toolbar. Its buttons reach the
+  // box's top edge, and a pressed or hovered button would paint over an
+  // outline on the box itself.
+  .#{$prefix}--rich-text-editor__box--invalid::after,
+  .#{$prefix}--rich-text-editor__box--focused::after {
+    position: absolute;
+    z-index: 1;
+    content: "";
+    pointer-events: none;
+    inset: 0;
+  }
+
+  .#{$prefix}--rich-text-editor__box--invalid::after {
+    @include focus-outline("invalid");
+  }
+
+  // After the invalid ring: focus wins while typing.
+  .#{$prefix}--rich-text-editor__box--focused::after {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--rich-text-editor__box--disabled {
+    border-bottom-color: transparent;
+  }
+
+  .#{$prefix}--rich-text-editor__box--readonly {
+    border-bottom-color: $border-subtle;
+    background-color: transparent;
+  }
+
+  // `.bx--form-requirement` stays hidden until a field's status reveals it.
+  .#{$prefix}--rich-text-editor__box[data-invalid] ~ .#{$prefix}--form-requirement,
+  .#{$prefix}--rich-text-editor__box[data-warn] ~ .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    max-height: to-rem(200px);
+    font-weight: 400;
+  }
+
+  .#{$prefix}--rich-text-editor__box[data-invalid] ~ .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  // Toolbar
+
+  // Buttons fill the toolbar's height, as in DataTable's toolbar. The
+  // inline padding puts the first icon's ink 16px in, on the text's edge:
+  // 4px beside a 40px button, 8px beside 32px and 12px beside 24px.
+  .#{$prefix}--rich-text-editor__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 $carbon--spacing-02;
+    border-bottom: 1px solid $border-subtle;
+    gap: 0 $carbon--spacing-01;
+  }
+
+  .#{$prefix}--rich-text-editor__separator {
+    flex: none;
+    margin-inline: $carbon--spacing-02;
+    // A border, not a fill: forced colors remove fills and keep borders.
+    border-inline-start: 1px solid $border-subtle;
+    block-size: to-rem(16px);
+  }
+
+  .#{$prefix}--rich-text-editor__glyph {
+    @include type-style("heading-compact-01");
+
+    display: inline-block;
+    min-inline-size: to-rem(16px);
+    text-align: center;
+  }
+
+  // The popover is absolute inside it, below the link button.
+  .#{$prefix}--rich-text-editor__link-anchor {
+    position: relative;
+    display: inline-block;
+  }
+
+  .#{$prefix}--rich-text-editor__link-form {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-05;
+    gap: $carbon--spacing-05;
+    inline-size: to-rem(288px);
+    max-inline-size: calc(100vw - #{$carbon--spacing-07});
+  }
+
+  .#{$prefix}--rich-text-editor__link-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $carbon--spacing-03;
+  }
+
+  // Undo and redo point back and forward, and the indent icons point
+  // toward and away from the inline start.
+  .#{$prefix}--rich-text-editor__tool--mirror .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
+  // Undo, redo and the indent buttons stay focusable when there is nothing
+  // for them to do, so focus doesn't drop out of the toolbar as one turns
+  // off. They draw as disabled.
+  .#{$prefix}--rich-text-editor__toolbar
+    .#{$prefix}--btn--ghost[aria-disabled="true"],
+  .#{$prefix}--rich-text-editor__toolbar
+    .#{$prefix}--btn--ghost[aria-disabled="true"]:hover {
+    background-color: transparent;
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--rich-text-editor__toolbar
+    .#{$prefix}--btn--ghost[aria-disabled="true"]
+    .#{$prefix}--btn__icon {
+    fill: $icon-disabled;
+  }
+
+  // Surface
+
+  .#{$prefix}--rich-text-editor__surface {
+    position: relative;
+  }
+
+  .#{$prefix}--rich-text-editor__content {
+    @include type-style("body-01");
+
+    min-block-size: calc(
+      var(--ccs-rich-text-editor-rows, 4) * #{to-rem(20px)} + #{to-rem(22px)}
+    );
+    max-block-size: calc(
+      var(--ccs-rich-text-editor-max-rows) * #{to-rem(20px)} + #{to-rem(22px)}
+    );
+    overflow-y: auto;
+    padding: to-rem(11px) $carbon--spacing-05;
+    color: $text-primary;
+    outline: none;
+    // A long URL breaks only when nothing else fits, and does not set the
+    // field's min-content width, so a flex or grid parent can shrink it.
+    // `break-word` rather than `overflow-wrap: anywhere` (Safari 15.4+), as
+    // in `_long-words.scss`.
+    word-break: break-word;
+  }
+
+  .#{$prefix}--rich-text-editor__box--invalid
+    .#{$prefix}--rich-text-editor__content,
+  .#{$prefix}--rich-text-editor__box--warn .#{$prefix}--rich-text-editor__content {
+    padding-inline-end: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--rich-text-editor__box--disabled
+    .#{$prefix}--rich-text-editor__content {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--rich-text-editor__placeholder {
+    @include type-style("body-01");
+    @include ccs-inset-inline($start: $carbon--spacing-05);
+
+    position: absolute;
+    color: $text-placeholder;
+    inset-block-start: to-rem(11px);
+    pointer-events: none;
+  }
+
+  .#{$prefix}--rich-text-editor__box--disabled
+    .#{$prefix}--rich-text-editor__placeholder {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--rich-text-editor__surface .#{$prefix}--text-area__invalid-icon {
+    inset-block-start: $carbon--spacing-04;
+  }
+
+  // Content
+
+  // Each paragraph takes its direction and alignment from its first strong
+  // character, as a `dir="auto"` element does, so an English paragraph on
+  // an RTL page keeps its period at the end. List items keep the page's
+  // direction: their marker would stay on the page's side of the text.
+  .#{$prefix}--rich-text-editor__content p,
+  .#{$prefix}--rich-text-editor__content h2,
+  .#{$prefix}--rich-text-editor__content h3 {
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--rich-text-editor__content > * + * {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--rich-text-editor__content h2 {
+    @include type-style("heading-03");
+  }
+
+  .#{$prefix}--rich-text-editor__content h3 {
+    @include type-style("heading-02");
+  }
+
+  .#{$prefix}--rich-text-editor__content ul,
+  .#{$prefix}--rich-text-editor__content ol {
+    padding-inline-start: $carbon--spacing-07;
+  }
+
+  .#{$prefix}--rich-text-editor__content ul {
+    list-style: disc outside;
+  }
+
+  .#{$prefix}--rich-text-editor__content ul ul {
+    list-style-type: circle;
+  }
+
+  .#{$prefix}--rich-text-editor__content ol {
+    list-style: decimal outside;
+  }
+
+  .#{$prefix}--rich-text-editor__content ol ol {
+    list-style-type: lower-alpha;
+  }
+
+  .#{$prefix}--rich-text-editor__content li > ul,
+  .#{$prefix}--rich-text-editor__content li > ol {
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--rich-text-editor__content blockquote {
+    padding-inline-start: $carbon--spacing-05;
+    border-inline-start: to-rem(4px) solid $border-strong;
+  }
+
+  .#{$prefix}--rich-text-editor__content blockquote > p + p {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--rich-text-editor__content a {
+    color: $link-primary;
+    text-decoration: underline;
+  }
+
+  .#{$prefix}--rich-text-editor__content strong {
+    font-weight: 600;
+  }
+
+  .#{$prefix}--rich-text-editor__content em {
+    font-style: italic;
+  }
+
+  .#{$prefix}--rich-text-editor__content u {
+    text-decoration: underline;
+  }
+
+  .#{$prefix}--rich-text-editor__content s {
+    text-decoration: line-through;
+  }
+
+  .#{$prefix}--rich-text-editor__content code {
+    @include carbon--font-family("mono");
+
+    padding: 0 $carbon--spacing-02;
+    background-color: $layer-accent;
+    font-size: 0.875em;
+  }
+
+  // Sizes. The toolbar buttons follow the size; the surface's padding does
+  // too, so a small field is as tall as a small TextArea.
+
+  .#{$prefix}--rich-text-editor--xs .#{$prefix}--rich-text-editor__content {
+    padding-block: to-rem(3px);
+  }
+
+  .#{$prefix}--rich-text-editor--sm .#{$prefix}--rich-text-editor__content {
+    padding-block: to-rem(7px);
+  }
+
+  .#{$prefix}--rich-text-editor--xl .#{$prefix}--rich-text-editor__content {
+    padding-block: to-rem(15px);
+  }
+
+  .#{$prefix}--rich-text-editor--xs .#{$prefix}--rich-text-editor__toolbar {
+    padding-inline: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--rich-text-editor--sm .#{$prefix}--rich-text-editor__toolbar {
+    padding-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--rich-text-editor--xl .#{$prefix}--rich-text-editor__toolbar {
+    padding-inline: 0;
+  }
+
+  .#{$prefix}--rich-text-editor--xs .#{$prefix}--rich-text-editor__placeholder {
+    inset-block-start: to-rem(3px);
+  }
+
+  .#{$prefix}--rich-text-editor--sm .#{$prefix}--rich-text-editor__placeholder {
+    inset-block-start: to-rem(7px);
+  }
+
+  .#{$prefix}--rich-text-editor--xl .#{$prefix}--rich-text-editor__placeholder {
+    inset-block-start: to-rem(15px);
+  }
+
+  // Fluid: the label sits inside the top of the field, above the toolbar.
+
+  .#{$prefix}--rich-text-editor--fluid .#{$prefix}--text-area__label-wrapper {
+    display: block;
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--rich-text-editor--fluid .#{$prefix}--label {
+    @include fluid-label;
+  }
+
+  .#{$prefix}--rich-text-editor--fluid .#{$prefix}--label.#{$prefix}--label--slotted {
+    @include fluid-label-slotted;
+  }
+
+  .#{$prefix}--rich-text-editor--fluid
+    .#{$prefix}--label.#{$prefix}--text-area__label-counter {
+    inline-size: auto;
+    @include ccs-inset-inline(auto, $carbon--spacing-05);
+  }
+
+  .#{$prefix}--rich-text-editor--fluid .#{$prefix}--rich-text-editor__box {
+    padding-block-start: to-rem(32px);
+  }
+
+  .#{$prefix}--rich-text-editor--fluid .#{$prefix}--form__helper-text {
+    display: none;
+  }
+
+  .#{$prefix}--rich-text-editor--fluid
+    .#{$prefix}--rich-text-editor__box
+    .#{$prefix}--form-requirement {
+    @include fluid-requirement;
+    @include fluid-requirement-padding;
+
+    position: relative;
+    background-color: $field;
+    color: $text-error;
+  }
+
+  .#{$prefix}--rich-text-editor--fluid
+    .#{$prefix}--rich-text-editor__box
+    .#{$prefix}--text-area__invalid-icon {
+    @include fluid-status-icon(to-rem(8px));
+  }
+
+  // Forced colors repaint each ghost button's transparent border, which
+  // drew a box around every button in the field. Only the focused button
+  // and a pressed one (a `Highlight` fill) keep an edge.
+  @media (forced-colors: active) {
+    .#{$prefix}--rich-text-editor__toolbar .#{$prefix}--rich-text-editor__tool {
+      border-color: Canvas;
+    }
+
+    .#{$prefix}--rich-text-editor__toolbar
+      .#{$prefix}--rich-text-editor__tool:focus,
+    .#{$prefix}--rich-text-editor__toolbar
+      .#{$prefix}--rich-text-editor__tool.#{$prefix}--btn--selected {
+      border-color: Highlight;
+    }
+  }
+}
+
+@include exports("rich-text-editor") {
+  @include rich-text-editor;
+}

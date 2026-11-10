@@ -1,0 +1,190 @@
+---
+components: ["RichTextEditor"]
+description: A rich text field with a formatting toolbar, for notes, comments, and descriptions. It stores a small, safe set of HTML and has no dependencies.
+---
+
+<script>
+  import { Layer, RichTextEditor, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Bind `value` to read or set the content as an HTML string. Type, then format with the toolbar or the keyboard.
+
+<FileSource src="/framed/RichTextEditor/RichTextEditorValue" />
+
+| Do | Why |
+| --- | --- |
+| Use for text that needs emphasis, headings, lists, quotes, or links | The toolbar covers these and nothing else, so the content stays consistent |
+| Use `TextArea` for plain text | A plain field is lighter, and its value needs no sanitizing |
+| Set `labelText` | The editor is a textbox, and a screen reader needs its name |
+
+## Content
+
+The editor keeps to a small set of HTML: paragraphs, `h2` and `h3` headings, quotes, bulleted and numbered lists (nested), line breaks, and the marks bold (`strong`), italic (`em`), underline (`u`), strikethrough (`s`), code, and links. Anything else is dropped or unwrapped as it goes in, whether it comes from `value` or a paste. Headings follow the page's own `h1`: `h1` becomes `h2`, and `h4` to `h6` become `h3`.
+
+An empty editor has the value `""`, not an empty paragraph.
+
+### Sanitizing on the server
+
+The editor cleans what it renders, but a form post or an API call never passes through it. Treat a submitted value as untrusted: run it through `sanitizeHtml` before you store or render it. It needs no DOM, so it runs in Node, Bun, or an edge worker.
+
+```js
+import { sanitizeHtml } from "carbon-components-svelte";
+
+const safe = sanitizeHtml(untrusted);
+```
+
+`sanitizeHtml` rebuilds the HTML from an allowlist rather than filtering it, so the output holds only the tags above, with all text escaped. Links keep `http`, `https`, `mailto`, `tel`, and relative URLs. Pass `protocols` to change that.
+
+## Formatting
+
+The toolbar is a single tab stop. Move between buttons with the arrow keys, <DocKbd label="Home" />, and <DocKbd label="End" />. A button pressed from the keyboard keeps focus, and <DocKbd label="Escape" /> returns focus to the editor. Toggle buttons are announced as pressed.
+
+Every command has a shortcut in the editor. The tooltips show the one for your platform.
+
+| Command | Windows and Linux | macOS |
+| --- | --- | --- |
+| Bold | <DocKbd label="Ctrl+B" /> | <DocKbd label="⌘B" /> |
+| Italic | <DocKbd label="Ctrl+I" /> | <DocKbd label="⌘I" /> |
+| Underline | <DocKbd label="Ctrl+U" /> | <DocKbd label="⌘U" /> |
+| Strikethrough | <DocKbd label="Ctrl+Shift+X" /> | <DocKbd label="⇧⌘X" /> |
+| Code | <DocKbd label="Ctrl+E" /> | <DocKbd label="⌘E" /> |
+| Heading 2, Heading 3 | <DocKbd label="Ctrl+Alt+2" />, <DocKbd label="Ctrl+Alt+3" /> | <DocKbd label="⌥⌘2" />, <DocKbd label="⌥⌘3" /> |
+| Bulleted list, numbered list | <DocKbd label="Ctrl+Shift+8" />, <DocKbd label="Ctrl+Shift+7" /> | <DocKbd label="⇧⌘8" />, <DocKbd label="⇧⌘7" /> |
+| Quote | <DocKbd label="Ctrl+Shift+9" /> | <DocKbd label="⇧⌘9" /> |
+| Link | <DocKbd label="Ctrl+K" /> | <DocKbd label="⌘K" /> |
+| Clear formatting | <DocKbd label="Ctrl+\" /> | <DocKbd label="⌘\" /> |
+| Undo, redo | <DocKbd label="Ctrl+Z" />, <DocKbd label="Ctrl+Shift+Z" /> or <DocKbd label="Ctrl+Y" /> | <DocKbd label="⌘Z" />, <DocKbd label="⇧⌘Z" /> |
+
+With a caret and no selection, a mark applies to the text you type next. Clear formatting removes the marks and turns headings into paragraphs, and keeps links and lists.
+
+### Lists
+
+In a list, <DocKbd label="Tab" /> nests the item under the one before it and <DocKbd label="Shift+Tab" /> moves it out a level. On the first item, where it can't nest, <DocKbd label="Tab" /> leaves the editor as it does anywhere else. To leave from any item, press <DocKbd label="Escape" />, then <DocKbd label="Tab" /> or <DocKbd label="Shift+Tab" />: the next one moves focus and leaves the list as it is, so the keyboard is never trapped. <DocKbd label="Enter" /> on an empty item, or <DocKbd label="Backspace" /> at the start of one, ends the list.
+
+### Choosing the toolbar
+
+Set `toolbar` to the commands you want, in order, with `"|"` between groups. A command left out has no button and no shortcut.
+
+<RichTextEditor
+  labelText="Comment"
+  toolbar={["bold", "italic", "|", "ul", "ol", "|", "link"]}
+  placeholder="Add a comment"
+/>
+
+Use `toolbar={false}` for an editor with no formatting at all. A `readonly` editor has no toolbar.
+
+### Link
+
+The link button, or <DocKbd label="Ctrl+K" />, opens a small dialog for the URL. A bare domain such as `carbondesignsystem.com` becomes `https://carbondesignsystem.com`, and an email address becomes a `mailto:` link. With nothing selected, the dialog also asks for the link's text. Open it on a link to change or remove it. Links with a scheme the editor does not allow, such as `javascript:`, are refused.
+
+## Placeholder
+
+<RichTextEditor labelText="Notes" placeholder="Write something" />
+
+## Sizes
+
+Set `size` to match the surrounding fields. The toolbar buttons and the padding follow it. Inside a `Form`, the editor takes the form's `size` unless it sets its own.
+
+### Extra small
+
+<RichTextEditor size="xs" labelText="Notes" value="<p>Extra small</p>" rows={2} />
+
+### Small
+
+<RichTextEditor size="sm" labelText="Notes" value="<p>Small</p>" rows={2} />
+
+### Extra large
+
+<RichTextEditor size="xl" labelText="Notes" value="<p>Extra large</p>" rows={2} />
+
+### Height
+
+`rows` sets the minimum height, in lines of text. The editor grows with its content. Set `maxRows` to cap it, and it scrolls past that.
+
+<RichTextEditor labelText="Notes" rows={2} maxRows={4} value="<p>One</p><p>Two</p><p>Three</p><p>Four</p><p>Five</p>" />
+
+## Layer
+
+Place the editor in a [`Layer`](/components/Layer) to put it on the next surface, so it contrasts with the surface below.
+
+<Layer withBackground>
+  <RichTextEditor labelText="Notes" value="<p>On the first layer</p>" rows={2} />
+</Layer>
+
+## Fluid
+
+Inside a `FluidForm`, or with `fluid`, the label sits inside the top of the field. The helper text is hidden, and messages show below the field.
+
+<RichTextEditor fluid labelText="Notes" value="<p>Fluid</p>" rows={2} />
+
+## States
+
+### Invalid
+
+<RichTextEditor labelText="Summary" invalid invalidText="Add a summary" value="<p>Draft</p>" rows={2} />
+
+### Warning
+
+<RichTextEditor labelText="Summary" warn warnText="This will be public" value="<p>Heads up</p>" rows={2} />
+
+### Read-only
+
+<RichTextEditor labelText="Summary" readonly value="<p>Read-only <strong>content</strong></p>" rows={2} />
+
+### Disabled
+
+<RichTextEditor labelText="Summary" disabled value="<p>Disabled content</p>" rows={2} />
+
+## Character count
+
+Set `maxCount` to show a counter. Count words instead of characters with `counterMode="word"`. The editor does not stop typing at the limit; it turns the counter red and marks the field invalid, so a long paste isn't cut off without warning.
+
+<RichTextEditor labelText="Abstract" maxCount={10} counterMode="word" value="<p>This abstract has more than ten words in it</p>" rows={2} />
+
+## Forms
+
+Set `name` to submit the HTML with the form. Set `required` to require some text; a form with an empty editor won't submit, and the editor shows `requiredText`. A form reset restores the value the field started with.
+
+<FileSource src="/framed/RichTextEditor/RichTextEditorForm" />
+
+## Text
+
+Every string the editor shows is a prop. Rename buttons with `commandText`, the link dialog with `linkText`, and the toolbar with `toolbarLabelText`.
+
+<RichTextEditor
+  labelText="Notiz"
+  toolbarLabelText="Textformatierung"
+  commandText={{ bold: "Fett", italic: "Kursiv" }}
+  toolbar={["bold", "italic"]}
+  rows={2}
+/>
+
+## Events
+
+`input` fires on each edit with the new HTML. `change` fires when the editor loses focus after an edit.
+
+`paste` fires before a paste goes in, with the sanitized HTML and the plain text. Call `preventDefault()` to cancel it, for example to reject a paste that is too long or to insert it yourself.
+
+<RichTextEditor
+  labelText="Notes"
+  rows={2}
+  on:input={(e) => console.log(e.detail)} // string
+  on:change={(e) => console.log(e.detail)} // string
+  on:paste={(e) => console.log(e.detail)} // { html, text }
+/>
+
+## Accessibility
+
+The editable region is a `textbox` with `aria-multiline`. The toolbar is labelled and follows the WAI-ARIA toolbar pattern with a roving tab stop. Toggle buttons carry `aria-pressed`, and each button lists its shortcut in `aria-keyshortcuts`. Undo and redo stay focusable when there is nothing to undo, so focus doesn't drop out of the toolbar as they turn off. In a list, <DocKbd label="Tab" /> and <DocKbd label="Shift+Tab" /> change the item's level; <DocKbd label="Escape" /> first lets the next one move focus out of the editor, as in CodeMirror (WCAG 2.1.2).
+
+## Limitations
+
+The editor is a few hundred lines on top of the browser's own `contenteditable`. That keeps it small, and it comes with limits.
+
+- Tables, images, embeds, text color, alignment, and font choices are not part of the content.
+- Bold, italic, and the other marks on an empty selection drop any inner marks you were in: leaving bold inside italic text also leaves the italic.
+- A list from Word arrives as paragraphs unless Word marks it as a list, which it does for lists made with its list buttons.
+- Dragging text inside the editor moves it as the browser does. Dropping content from elsewhere inserts it as the schema.
+- Collaborative editing, comments, and mentions need a model-based editor such as ProseMirror or Lexical.
