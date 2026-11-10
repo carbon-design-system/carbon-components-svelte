@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>timeline</title>
+    <g id="timeline" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="rail-1" fill="var(--cds-border-strong, #8d8d8d)" x="95" y="62" width="1" height="20"></rect>
+        <rect id="rail-2" fill="var(--cds-border-strong, #8d8d8d)" x="95" y="100" width="1" height="20"></rect>
+        <circle id="marker-1" fill="var(--cds-icon-primary, #161616)" cx="96" cy="54" r="6"></circle>
+        <circle id="marker-2" fill="var(--cds-icon-primary, #161616)" cx="96" cy="92" r="6"></circle>
+        <circle id="marker-3" fill="var(--cds-background-brand, #0f62fe)" cx="96" cy="130" r="6"></circle>
+        <rect id="title-1" fill="var(--cds-icon-primary, #161616)" x="116" y="46" width="88" height="8"></rect>
+        <rect id="time-1" fill="var(--cds-text-disabled, #c6c6c6)" x="116" y="58" width="56" height="6"></rect>
+        <rect id="title-2" fill="var(--cds-icon-primary, #161616)" x="116" y="84" width="72" height="8"></rect>
+        <rect id="time-2" fill="var(--cds-text-disabled, #c6c6c6)" x="116" y="96" width="56" height="6"></rect>
+        <rect id="title-3" fill="var(--cds-icon-primary, #161616)" x="116" y="122" width="104" height="8"></rect>
+        <rect id="time-3" fill="var(--cds-text-disabled, #c6c6c6)" x="116" y="134" width="56" height="6"></rect>
+    </g>
+</svg>
