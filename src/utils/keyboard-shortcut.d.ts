@@ -113,3 +113,21 @@ export function keyboardShortcut(
   update: (params: KeyboardShortcutParams) => void;
   destroy: () => void;
 };
+
+/** Whether the event target is a text field, a select or editable content. */
+export function isEditableTarget(target: EventTarget | null): boolean;
+
+/** Whether an element is shown: not `display: none`, hidden or invisible. */
+export function isShown(node: Element): boolean;
+
+/**
+ * Whether a component's element can take its shortcut now: connected,
+ * enabled, shown, and not inert.
+ */
+export function isShortcutTarget(node: HTMLElement): boolean;
+
+/**
+ * The open modal dialog in front, if any. `except` skips the dialogs inside
+ * one element.
+ */
+export function frontModal(except?: Element | null): Element | null;

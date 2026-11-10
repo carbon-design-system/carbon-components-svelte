@@ -336,7 +336,7 @@ export function ariaKeyShortcuts(shortcut, options = {}) {
  * @param {EventTarget | null} target
  * @returns {boolean}
  */
-function isEditable(target) {
+export function isEditableTarget(target) {
   if (!(target instanceof HTMLElement)) return false;
   return (
     target.isContentEditable ||
@@ -413,7 +413,7 @@ function listen(set, binding) {
  * @param {Element} node
  * @returns {boolean}
  */
-function isShown(node) {
+export function isShown(node) {
   if (typeof node.checkVisibility === "function") {
     return node.checkVisibility({ visibilityProperty: true });
   }
@@ -426,7 +426,7 @@ function isShown(node) {
  * @param {HTMLElement} node
  * @returns {boolean}
  */
-function isAvailable(node) {
+export function isShortcutTarget(node) {
   return (
     node.isConnected &&
     !node.matches(":disabled") &&
@@ -438,14 +438,22 @@ function isAvailable(node) {
 
 /**
  * The open modal dialog in front, if any: the last one shown. A modal
- * `<dialog>` counts too, though it sets no `aria-modal`.
+ * `<dialog>` counts too, though it sets no `aria-modal`. `except` skips
+ * the dialogs inside one element, such as a help sheet that lists the
+ * shortcuts under it.
+ * @param {null | Element} [except]
  * @returns {null | Element}
  */
-function frontModal() {
+export function frontModal(except) {
   const modals = document.querySelectorAll('[aria-modal="true"], dialog[open]');
   for (let i = modals.length - 1; i >= 0; i--) {
     const modal = modals[i];
-    if (isModalDialog(modal) && !modal.closest("[inert]") && isShown(modal)) {
+    if (
+      !except?.contains(modal) &&
+      isModalDialog(modal) &&
+      !modal.closest("[inert]") &&
+      isShown(modal)
+    ) {
       return modal;
     }
   }
@@ -460,7 +468,7 @@ function handleKeydown(event) {
   }
   const apple = isApplePlatform();
   const target = event.composedPath?.()[0] ?? event.target;
-  const editable = isEditable(target);
+  const editable = isEditableTarget(target);
   /** @param {Binding} binding */
   const matches = (binding) =>
     !(binding.typed && editable) &&
@@ -483,7 +491,7 @@ function handleKeydown(event) {
   let modal;
   for (const binding of bound) {
     const node = /** @type {HTMLElement} */ (binding.node);
-    if (!matches(binding) || !isAvailable(node)) continue;
+    if (!matches(binding) || !isShortcutTarget(node)) continue;
     if (modal === undefined) modal = frontModal();
     if (modal && !modal.contains(node)) continue;
     winner = binding;
