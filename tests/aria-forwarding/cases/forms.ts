@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import Cascader from "carbon-components-svelte/Cascader/Cascader.svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
@@ -45,6 +46,11 @@ import TimePickerSelectFixture from "../fixtures/TimePickerSelect.test.svelte";
 
 const items = [
   { id: "1", text: "One" },
+  { id: "2", text: "Two" },
+];
+
+const placeNodes = [
+  { id: "1", text: "One", nodes: [{ id: "1a", text: "One A" }] },
   { id: "2", text: "Two" },
 ];
 
@@ -101,6 +107,34 @@ export const forms: AriaEntry[] = [
     name: "DatePickerInput",
     render: (attrs) => render(DatePickerInputFixture, { props: attrs }),
     target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "Cascader",
+    render: (attrs) =>
+      render(Cascader, {
+        props: {
+          nodes: placeNodes,
+          labelText: "Place",
+          helperText: "Pick one",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "Cascader",
+    variant: "filterable",
+    render: (attrs) =>
+      render(Cascader, {
+        props: {
+          nodes: placeNodes,
+          filterable: true,
+          labelText: "Place",
+          helperText: "Pick one",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("combobox"),
   },
   {
     name: "Dropdown",

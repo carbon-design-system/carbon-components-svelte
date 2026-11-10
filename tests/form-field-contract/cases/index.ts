@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/svelte";
+import Cascader from "carbon-components-svelte/Cascader/Cascader.svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
@@ -39,7 +40,27 @@ const listItems = [
   { id: "1", text: "Grace" },
 ];
 
+const places = [
+  { id: "0", text: "Ada", nodes: [{ id: "0a", text: "Ada Jr" }] },
+  { id: "1", text: "Grace" },
+];
+
 export const cases: FieldCase[] = [
+  {
+    name: "Cascader",
+    component: Cascader,
+    props: { nodes: places },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
+  },
+  {
+    name: "Cascader",
+    variant: "filterable",
+    component: Cascader,
+    props: { nodes: places, filterable: true },
+    control: () => screen.getByRole("combobox"),
+    state: { errorAttribute: "aria-describedby" },
+  },
   {
     name: "Dropdown",
     component: Dropdown,
