@@ -28,6 +28,7 @@ import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
 import InlineEditField from "../fixtures/InlineEditField.test.svelte";
 import RadioButtonGroupField from "../fixtures/RadioButtonGroupField.test.svelte";
+import SurveyScaleField from "../fixtures/SurveyScaleField.test.svelte";
 
 const textInputSkeleton = {
   className: "bx--text-input--fluid__skeleton",
@@ -331,6 +332,13 @@ export const cases: FieldCase[] = [
       described: () => screen.getAllByRole("radio"),
     },
   },
+  {
+    name: "SurveyScale",
+    component: SurveyScaleField,
+    // The group is marked invalid and carries every message.
+    control: () => screen.getByRole("radiogroup"),
+    state: { errorAttribute: "aria-describedby" },
+  },
 ];
 
 const NOT_A_TEXT_FIELD = "not a text field; covered by its own form tests";
@@ -359,6 +367,7 @@ export const exempt: Exemptions = {
     StarRating: NOT_A_TEXT_FIELD,
     StructuredList: NOT_A_TEXT_FIELD,
     TagInput: NOT_A_TEXT_FIELD,
+    SurveyScale: NOT_A_TEXT_FIELD,
     TileGroup: NOT_A_TEXT_FIELD,
     Toggle: NOT_A_TEXT_FIELD,
   },

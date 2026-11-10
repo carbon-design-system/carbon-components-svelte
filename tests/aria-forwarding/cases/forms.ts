@@ -29,6 +29,7 @@ import StarRating from "carbon-components-svelte/StarRating/StarRating.svelte";
 import StructuredListCell from "carbon-components-svelte/StructuredList/StructuredListCell.svelte";
 import StructuredListInput from "carbon-components-svelte/StructuredList/StructuredListInput.svelte";
 import StructuredListRow from "carbon-components-svelte/StructuredList/StructuredListRow.svelte";
+import SurveyScale from "carbon-components-svelte/SurveyScale/SurveyScale.svelte";
 import TagInput from "carbon-components-svelte/TagInput/TagInput.svelte";
 import TextArea from "carbon-components-svelte/TextArea/TextArea.svelte";
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
@@ -490,6 +491,14 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("img"),
+  },
+  {
+    name: "SurveyScale",
+    render: (attrs) =>
+      render(SurveyScale, {
+        props: { legendText: "Recommend", helperText: "Be honest", ...attrs },
+      }),
+    target: () => screen.getByRole("radiogroup"),
   },
   {
     name: "Stepper",
