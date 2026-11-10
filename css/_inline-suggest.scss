@@ -1,0 +1,115 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `InlineSuggest`: grey text that continues what the user typed in a
+/// `TextInput` or `TextArea`. A frame the size of the field sits over it in
+/// the field's wrapper and ignores the pointer. Inside, a layer repeats
+/// the field's text in a transparent colour, followed by the suggestion in a
+/// visible one, so the suggestion starts exactly where the typed text ends
+/// and wraps as the field's text does. The component copies the field's
+/// font, padding and scroll onto the layer (it is a mirror, so it follows
+/// any restyle of the field), and sets the frame's and layer's sizes in
+/// pixels from measurements. The layer's `left` is physical because the
+/// measurements are. Everything else is logical.
+/// @access private
+/// @group components
+@mixin inline-suggest {
+  .#{$prefix}--inline-suggest {
+    position: absolute;
+    z-index: 1;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--inline-suggest__layer {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin: 0;
+    border: 0;
+    color: transparent;
+    pointer-events: none;
+    text-overflow: clip;
+    user-select: none;
+  }
+
+  .#{$prefix}--inline-suggest__typed {
+    color: transparent;
+  }
+
+  .#{$prefix}--inline-suggest__ghost {
+    color: $text-helper;
+  }
+
+  // The tap target for devices with no Tab key. It floats at the inline
+  // end of the field: centred in a single line, in the bottom corner of
+  // several.
+  .#{$prefix}--inline-suggest__accept {
+    @include type-style("label-01");
+
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: $carbon--spacing-03;
+    display: inline-flex;
+    height: to-rem(24px);
+    align-items: center;
+    padding: 0 $carbon--spacing-03;
+    border: 1px solid $border-strong;
+    margin-block-start: to-rem(-12px);
+    background-color: $layer;
+    border-radius: to-rem(2px);
+    color: $text-primary;
+    cursor: pointer;
+    pointer-events: auto;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--inline-suggest__accept[hidden] {
+    display: none;
+  }
+
+  .#{$prefix}--inline-suggest--multiline .#{$prefix}--inline-suggest__accept {
+    inset-block: auto $carbon--spacing-03;
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--inline-suggest__accept:focus {
+    @include focus-outline("outline");
+  }
+
+  // The native placeholder and a suggestion in an empty field occupy the same
+  // spot. The suggestion wins while it shows. Forced colors repaints the
+  // placeholder's colour, so it is also made fully transparent.
+  [data-ccs-inline-suggest]::placeholder {
+    color: transparent;
+    opacity: 0;
+  }
+
+  // Forced colors repaints transparent text, which would draw the
+  // typed copy over the field's own text. The layer opts out (the typed
+  // copy keeps its clear colour), and the suggestion is `GrayText`, the
+  // system's colour for text that is not live, so it still reads as
+  // different from typed text without relying on opacity.
+  @media (forced-colors: active) {
+    .#{$prefix}--inline-suggest__layer {
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--inline-suggest__ghost {
+      color: GrayText;
+    }
+
+    .#{$prefix}--inline-suggest__accept {
+      border-color: ButtonText;
+      background-color: ButtonFace;
+      color: ButtonText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+@include exports("inline-suggest") {
+  @include inline-suggest;
+}
