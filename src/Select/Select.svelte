@@ -334,8 +334,6 @@
       <div class:bx--select-input--inline__wrapper={true}>
         <div
           class:bx--select-input__wrapper={true}
-          class:bx--select-input__wrapper--decorator={$$slots.decorator &&
-            !isFluid}
           class:bx--select-input__wrapper--ai-label={$aiLabelState === "active"}
           data-invalid={showInvalid || undefined}
         >
@@ -419,8 +417,6 @@
     {#if !inline}
       <div
         class:bx--select-input__wrapper={true}
-        class:bx--select-input__wrapper--decorator={$$slots.decorator &&
-          !isFluid}
         class:bx--select-input__wrapper--ai-label={$aiLabelState === "active"}
         data-invalid={showInvalid || undefined}
       >

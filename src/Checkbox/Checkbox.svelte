@@ -302,7 +302,6 @@
     class:bx--checkbox-wrapper--readonly={effectiveReadonly}
     class:bx--checkbox-wrapper--invalid={showInvalid}
     class:bx--checkbox-wrapper--warning={showWarn}
-    class:bx--checkbox-wrapper--decorator={$$slots.decorator}
     {...wrapperProps}
     on:click
     on:mouseover

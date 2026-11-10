@@ -42,7 +42,6 @@
   class:bx--tile--sm={size === "sm"}
   class:bx--tile--full-height={fullHeight}
   class:bx--tile--no-padding={noPadding}
-  class:bx--tile--decorator={$$slots.decorator}
   class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
   class:bx--tile--ai-label={$aiLabelState === "active"}
   {...$$restProps}

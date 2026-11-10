@@ -320,7 +320,6 @@
   class:bx--layer-one={true}
   class:is-visible={open}
   class:bx--modal--danger={danger}
-  class:bx--modal--decorator={$$slots.decorator}
   class:bx--modal--ai-label={$aiLabelState === "active"}
   inert={open ? undefined : true}
   {id}

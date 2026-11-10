@@ -80,7 +80,6 @@
     size === "sm" && "bx--tile--sm",
     fullHeight && "bx--tile--full-height",
     noPadding && "bx--tile--no-padding",
-    $$slots.decorator && "bx--tile--decorator",
     rounded && $$slots.decorator && "bx--tile--decorator-rounded",
     $aiLabelState === "active" && "bx--tile--ai-label",
     $$restProps.class,

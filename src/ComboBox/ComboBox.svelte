@@ -1184,7 +1184,6 @@
 
   $: comboBoxListBoxClass = [
     "bx--combo-box",
-    $$slots.decorator && !isFluid && "bx--list-box--decorator",
     $aiLabelState === "active" && "bx--list-box--ai-label",
     // A clear button shows by the chevron.
     value && "bx--list-box--clearable",

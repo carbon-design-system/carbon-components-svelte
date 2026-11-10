@@ -259,7 +259,6 @@
     class:bx--tile--sm={effectiveSize === "sm"}
     class:bx--tile--disabled={effectiveDisabled}
     class:bx--tile--full-height={fullHeight}
-    class:bx--tile--decorator={$$slots.decorator}
     class:bx--tile--decorator-rounded={rounded && $$slots.decorator}
     class:bx--tile--ai-label={$aiLabelState === "active"}
     {...labelRestProps}
