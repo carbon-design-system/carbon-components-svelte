@@ -68,6 +68,8 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as CopyText } from "./CopyText/CopyText.svelte";
 export { default as Countdown } from "./Countdown/Countdown.svelte";
+export { default as DataGrid } from "./DataGrid/DataGrid.svelte";
+export { applyDataGridPaste } from "./DataGrid/data-grid-utils.js";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
 export { toCsv } from "./DataTable/data-table-utils.js";
