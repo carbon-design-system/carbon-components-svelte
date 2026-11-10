@@ -955,6 +955,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/PinCodeInput
+  popconfirm:
+    name: Popconfirm
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/popconfirm.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Popconfirm
   popover:
     status: stable
     framework: svelte

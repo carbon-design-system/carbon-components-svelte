@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>popconfirm</title>
+    <defs>
+        <filter id="popconfirm-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="popconfirm" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="panel-shadow" fill="black" filter="url(#popconfirm-shadow)" x="80" y="30" width="160" height="82"></rect>
+        <rect id="panel" fill="var(--cds-layer-02, #ffffff)" x="80" y="30" width="160" height="82"></rect>
+        <polygon id="caret" fill="var(--cds-layer-02, #ffffff)" points="154 112 166 112 160 118"></polygon>
+        <rect id="title" fill="var(--cds-text-primary, #161616)" x="94" y="44" width="80" height="8"></rect>
+        <rect id="description" fill="var(--cds-border-subtle, #e0e0e0)" x="94" y="60" width="110" height="6"></rect>
+        <rect id="cancel-button" fill="none" stroke="var(--cds-link-primary, #0f62fe)" x="150" y="78" width="40" height="22"></rect>
+        <rect id="confirm-button" fill="var(--cds-support-error, #da1e28)" x="194" y="78" width="40" height="22"></rect>
+        <rect id="trigger" fill="var(--cds-icon-primary, #161616)" x="150" y="130" width="20" height="20"></rect>
+        <rect id="trigger-icon" fill="var(--cds-layer-02, #ffffff)" x="156" y="136" width="8" height="8"></rect>
+    </g>
+</svg>
