@@ -408,20 +408,20 @@ $ai-label-sizes: (
     @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
-  .#{$prefix}--text-input__field-wrapper--decorator .#{$prefix}--text-input {
+  .#{$prefix}--text-input__field-wrapper:where(:has(> .#{$prefix}--text-input__field-inner-wrapper--decorator):not(.#{$prefix}--text-input--fluid *)) .#{$prefix}--text-input {
     padding-inline-end: $carbon--spacing-08;
   }
 
-  .#{$prefix}--text-input__field-wrapper--decorator
+  .#{$prefix}--text-input__field-wrapper:where(:has(> .#{$prefix}--text-input__field-inner-wrapper--decorator):not(.#{$prefix}--text-input--fluid *))
     .#{$prefix}--text-input--invalid,
-  .#{$prefix}--text-input__field-wrapper--decorator
+  .#{$prefix}--text-input__field-wrapper:where(:has(> .#{$prefix}--text-input__field-inner-wrapper--decorator):not(.#{$prefix}--text-input--fluid *))
     .#{$prefix}--text-input--warning {
     padding-inline-end: $carbon--spacing-10;
   }
 
-  .#{$prefix}--text-input__field-wrapper--decorator
+  .#{$prefix}--text-input__field-wrapper:where(:has(> .#{$prefix}--text-input__field-inner-wrapper--decorator):not(.#{$prefix}--text-input--fluid *))
     .#{$prefix}--text-input__invalid-icon,
-  .#{$prefix}--text-input__field-wrapper--decorator
+  .#{$prefix}--text-input__field-wrapper:where(:has(> .#{$prefix}--text-input__field-inner-wrapper--decorator):not(.#{$prefix}--text-input--fluid *))
     .#{$prefix}--text-input__readonly-icon {
     @include ccs-inset-inline($end: $carbon--spacing-08);
   }
@@ -437,16 +437,16 @@ $ai-label-sizes: (
     @include ccs-inset-inline($end: $carbon--spacing-05);
   }
 
-  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area {
+  .#{$prefix}--text-area__wrapper:where(:has(> .#{$prefix}--text-area__inner-wrapper--decorator):not(.#{$prefix}--text-area--fluid *)) .#{$prefix}--text-area {
     padding-inline-end: $carbon--spacing-08;
   }
 
-  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area--invalid,
-  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area--warning {
+  .#{$prefix}--text-area__wrapper:where(:has(> .#{$prefix}--text-area__inner-wrapper--decorator):not(.#{$prefix}--text-area--fluid *)) .#{$prefix}--text-area--invalid,
+  .#{$prefix}--text-area__wrapper:where(:has(> .#{$prefix}--text-area__inner-wrapper--decorator):not(.#{$prefix}--text-area--fluid *)) .#{$prefix}--text-area--warning {
     padding-inline-end: $carbon--spacing-10;
   }
 
-  .#{$prefix}--text-area__wrapper--decorator .#{$prefix}--text-area__invalid-icon {
+  .#{$prefix}--text-area__wrapper:where(:has(> .#{$prefix}--text-area__inner-wrapper--decorator):not(.#{$prefix}--text-area--fluid *)) .#{$prefix}--text-area__invalid-icon {
     @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
@@ -474,19 +474,19 @@ $ai-label-sizes: (
     @include ccs-inset-inline($end: to-rem(-8px));
   }
 
-  .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select-input {
+  .#{$prefix}--select-input__wrapper:where(:has(> .#{$prefix}--select__inner-wrapper--decorator):not(.#{$prefix}--select--fluid *)) .#{$prefix}--select-input {
     padding-inline-end: to-rem(72px);
   }
 
-  .#{$prefix}--select-input__wrapper--decorator[data-invalid]
+  .#{$prefix}--select-input__wrapper:where(:has(> .#{$prefix}--select__inner-wrapper--decorator):not(.#{$prefix}--select--fluid *))[data-invalid]
     .#{$prefix}--select-input,
   .#{$prefix}--select--warning
-    .#{$prefix}--select-input__wrapper--decorator
+    .#{$prefix}--select-input__wrapper:where(:has(> .#{$prefix}--select__inner-wrapper--decorator):not(.#{$prefix}--select--fluid *))
     .#{$prefix}--select-input {
     padding-inline-end: $carbon--spacing-12;
   }
 
-  .#{$prefix}--select-input__wrapper--decorator .#{$prefix}--select__invalid-icon {
+  .#{$prefix}--select-input__wrapper:where(:has(> .#{$prefix}--select__inner-wrapper--decorator):not(.#{$prefix}--select--fluid *)) .#{$prefix}--select__invalid-icon {
     @include ccs-inset-inline($end: to-rem(72px));
   }
 
@@ -495,13 +495,13 @@ $ai-label-sizes: (
   }
 
   // Dropdown, ComboBox, and MultiSelect
-  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field,
-  .#{$prefix}--list-box--decorator .#{$prefix}--text-input {
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)) .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)) .#{$prefix}--text-input {
     padding-inline-end: to-rem(72px);
   }
 
-  .#{$prefix}--list-box--decorator[data-invalid] .#{$prefix}--list-box__field,
-  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *))[data-invalid] .#{$prefix}--list-box__field,
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field {
     padding-inline-end: $carbon--spacing-12;
   }
@@ -509,11 +509,11 @@ $ai-label-sizes: (
   // A ComboBox, like a filterable MultiSelect, pads its input instead of the
   // field around it, so the input, its border, and its focus ring span the
   // whole field.
-  .#{$prefix}--list-box--decorator.#{$prefix}--combo-box
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--combo-box
     .#{$prefix}--list-box__field,
-  .#{$prefix}--list-box--decorator.#{$prefix}--combo-box[data-invalid]
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--combo-box[data-invalid]
     .#{$prefix}--list-box__field,
-  .#{$prefix}--list-box--decorator.#{$prefix}--combo-box.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--combo-box.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field {
     padding-inline-end: 0;
   }
@@ -522,9 +522,9 @@ $ai-label-sizes: (
   // label moves left of it: label | clear | chevron, as in v11. The label's
   // divider already parts it from the clear button, so an invalid or warn
   // field drops the clear button's own.
-  .#{$prefix}--list-box--decorator[data-invalid]
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *))[data-invalid]
     .#{$prefix}--list-box__selection::before,
-  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--list-box--warning
     .#{$prefix}--list-box__selection::before {
     content: none;
   }
@@ -533,35 +533,35 @@ $ai-label-sizes: (
     @include ccs-inset-inline($end: to-rem(82px));
   }
 
-  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--clearable
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--list-box--clearable
     .#{$prefix}--text-input {
     padding-inline-end: to-rem(112px);
   }
 
-  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__selection--multi {
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)) .#{$prefix}--list-box__selection--multi {
     @include ccs-inset-inline($end: auto);
   }
 
-  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__invalid-icon {
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)) .#{$prefix}--list-box__invalid-icon {
     @include ccs-inset-inline($end: to-rem(72px));
   }
 
-  .#{$prefix}--list-box--decorator[data-invalid]
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *))[data-invalid]
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon,
-  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input
     + .#{$prefix}--list-box__invalid-icon {
     @include ccs-inset-inline($end: to-rem(106px));
   }
 
-  .#{$prefix}--list-box--decorator[data-invalid]
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *))[data-invalid]
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input--empty
     + .#{$prefix}--list-box__invalid-icon,
-  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input--empty
     + .#{$prefix}--list-box__invalid-icon {
@@ -571,27 +571,27 @@ $ai-label-sizes: (
   // ComboBox and filterable MultiSelect inputs paint over the list box.
   // A clearable Dropdown keeps its label clear of the clear button, and its
   // invalid or warn icon moves left of it.
-  .#{$prefix}--list-box--decorator .#{$prefix}--list-box__field--clearable {
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)) .#{$prefix}--list-box__field--clearable {
     padding-inline-end: to-rem(112px);
   }
 
-  .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--dropdown--clearable
     .#{$prefix}--list-box__invalid-icon {
     @include ccs-inset-inline($end: to-rem(106px));
   }
 
-  .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable[data-invalid]
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--dropdown--clearable[data-invalid]
     .#{$prefix}--list-box__field--clearable,
-  .#{$prefix}--list-box--decorator.#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--dropdown--clearable.#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field--clearable {
     padding-inline-end: to-rem(130px);
   }
 
   // ComboBox text stops short of the invalid or warn icon.
-  .#{$prefix}--list-box--decorator[data-invalid]
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *))[data-invalid]
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input,
-  .#{$prefix}--list-box--decorator.#{$prefix}--list-box--warning
+  .#{$prefix}--list-box:where(:has(> .#{$prefix}--list-box__inner-wrapper--decorator):not(.#{$prefix}--list-box__wrapper--fluid *)).#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field
     .#{$prefix}--text-input {
     padding-inline-end: to-rem(130px);
@@ -613,7 +613,7 @@ $ai-label-sizes: (
     @include ccs-inset-inline($end: $carbon--spacing-08);
   }
 
-  .#{$prefix}--date-picker-input__wrapper--decorator
+  .#{$prefix}--date-picker-input__wrapper:where(:has(> .#{$prefix}--date-picker-input-inner-wrapper--decorator):not(.#{$prefix}--date-picker--fluid *))
     .#{$prefix}--date-picker__input {
     padding-inline-end: $carbon--spacing-10;
   }
@@ -621,13 +621,13 @@ $ai-label-sizes: (
   // A clear button beside an invalid or warn icon pushes the decorator out
   // one more slot. Key off the button: the calendar wraps the input in
   // `__anchor`, so the input is no sibling of the decorator.
-  .#{$prefix}--date-picker-input__wrapper--decorator
+  .#{$prefix}--date-picker-input__wrapper:where(:has(> .#{$prefix}--date-picker-input-inner-wrapper--decorator):not(.#{$prefix}--date-picker--fluid *))
     .#{$prefix}--date-picker__clear--with-icon
     ~ .#{$prefix}--date-picker-input-inner-wrapper--decorator {
     @include ccs-inset-inline($end: $carbon--spacing-10);
   }
 
-  .#{$prefix}--date-picker-input__wrapper--decorator
+  .#{$prefix}--date-picker-input__wrapper:where(:has(> .#{$prefix}--date-picker-input-inner-wrapper--decorator):not(.#{$prefix}--date-picker--fluid *))
     .#{$prefix}--date-picker__input--with-clear.#{$prefix}--date-picker__input--with-icon {
     padding-inline-end: to-rem(88px);
   }
@@ -657,20 +657,20 @@ $ai-label-sizes: (
       @include ccs-inset-inline($end: to-rem($steppers + 16px));
     }
 
-    #{$scope}.#{$prefix}--number__input-wrapper--decorator
+    #{$scope}.#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *))
       .#{$prefix}--number__invalid {
       @include ccs-inset-inline($end: to-rem($steppers + 40px));
     }
 
     // The base padding already leaves room for the decorator (steppers
     // plus 48px). Only the invalid and warn icons need more.
-    #{$scope}.#{$prefix}--number__input-wrapper--decorator
+    #{$scope}.#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *))
       input[type="number"][data-invalid],
-    #{$scope}.#{$prefix}--number__input-wrapper--decorator
+    #{$scope}.#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *))
       input[type="text"][data-invalid],
-    #{$scope}.#{$prefix}--number__input-wrapper--decorator.#{$prefix}--number__input-wrapper--warning
+    #{$scope}.#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *)).#{$prefix}--number__input-wrapper--warning
       input[type="number"],
-    #{$scope}.#{$prefix}--number__input-wrapper--decorator.#{$prefix}--number__input-wrapper--warning
+    #{$scope}.#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *)).#{$prefix}--number__input-wrapper--warning
       input[type="text"] {
       padding-inline-end: to-rem($steppers + 72px);
     }
@@ -679,20 +679,20 @@ $ai-label-sizes: (
   // Without steppers, the read-only icon shows in their place. It takes the
   // invalid icon's spot left of the decorator, and the text stops short.
   .#{$prefix}--number--nosteppers
-    .#{$prefix}--number__input-wrapper--decorator
+    .#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *))
     .#{$prefix}--text-input__readonly-icon {
     @include ccs-inset-inline($end: to-rem(40px));
   }
 
   .#{$prefix}--number--readonly.#{$prefix}--number--nosteppers
-    .#{$prefix}--number__input-wrapper--decorator
+    .#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *))
     input[type="text"] {
     padding-inline-end: to-rem(72px);
   }
 
   // A divider between the label and the steppers, as in v11. The first
   // rule divider is otherwise drawn only beside an invalid icon.
-  .#{$prefix}--number__input-wrapper--decorator
+  .#{$prefix}--number__input-wrapper:where(:has(> .#{$prefix}--number__inner-wrapper--decorator):not(.#{$prefix}--number-input--fluid *))
     .#{$prefix}--number__controls
     .#{$prefix}--number__rule-divider:first-of-type {
     background-color: $border-subtle;
@@ -727,20 +727,20 @@ $ai-label-sizes: (
 @mixin ai-label-selection {
   // Checkbox and RadioButton: the decorator follows the label text, and the
   // validation and helper text wrap below.
-  .#{$prefix}--checkbox-wrapper--decorator,
-  .#{$prefix}--radio-button-wrapper--decorator {
+  .#{$prefix}--checkbox-wrapper:where(:has(> .#{$prefix}--checkbox-wrapper-inner--decorator)),
+  .#{$prefix}--radio-button-wrapper:where(:has(> .#{$prefix}--radio-button-wrapper-inner--decorator)) {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
   }
 
-  .#{$prefix}--checkbox-wrapper--decorator > .#{$prefix}--checkbox__validation-msg,
-  .#{$prefix}--checkbox-wrapper--decorator > .#{$prefix}--form__helper-text {
+  .#{$prefix}--checkbox-wrapper:where(:has(> .#{$prefix}--checkbox-wrapper-inner--decorator)) > .#{$prefix}--checkbox__validation-msg,
+  .#{$prefix}--checkbox-wrapper:where(:has(> .#{$prefix}--checkbox-wrapper-inner--decorator)) > .#{$prefix}--form__helper-text {
     width: 100%;
   }
 
-  .#{$prefix}--radio-button-wrapper--decorator .#{$prefix}--radio-button__label {
+  .#{$prefix}--radio-button-wrapper:where(:has(> .#{$prefix}--radio-button-wrapper-inner--decorator)) .#{$prefix}--radio-button__label {
     margin-right: 0;
   }
 
@@ -755,18 +755,18 @@ $ai-label-sizes: (
   }
 
   // CheckboxGroup and RadioButtonGroup: the decorator follows the legend.
-  .#{$prefix}--radio-button-group--decorator {
+  .#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator)) {
     display: block;
   }
 
-  .#{$prefix}--radio-button-group--decorator::after {
+  .#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator))::after {
     display: block;
     clear: both;
     content: "";
   }
 
-  .#{$prefix}--checkbox-group--decorator > .#{$prefix}--label,
-  .#{$prefix}--radio-button-group--decorator > .#{$prefix}--label,
+  .#{$prefix}--checkbox-group:where(:has(> .#{$prefix}--checkbox-group-inner--decorator)) > .#{$prefix}--label,
+  .#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator)) > .#{$prefix}--label,
   .#{$prefix}--checkbox-group-inner--decorator,
   .#{$prefix}--radio-button-group-inner--decorator {
     float: left;
@@ -778,24 +778,24 @@ $ai-label-sizes: (
     margin-left: $carbon--spacing-03;
   }
 
-  .#{$prefix}--checkbox-group--decorator > .#{$prefix}--checkbox-wrapper,
-  .#{$prefix}--checkbox-group--decorator
+  .#{$prefix}--checkbox-group:where(:has(> .#{$prefix}--checkbox-group-inner--decorator)) > .#{$prefix}--checkbox-wrapper,
+  .#{$prefix}--checkbox-group:where(:has(> .#{$prefix}--checkbox-group-inner--decorator))
     > .#{$prefix}--checkbox-group__validation-msg,
-  .#{$prefix}--radio-button-group--decorator
+  .#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator))
     > .#{$prefix}--radio-button-group-inner--decorator
     + .#{$prefix}--radio-button-wrapper,
-  .#{$prefix}--radio-button-group--vertical.#{$prefix}--radio-button-group--decorator
+  .#{$prefix}--radio-button-group--vertical.#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator))
     > .#{$prefix}--radio-button-wrapper,
-  .#{$prefix}--radio-button-group--decorator
+  .#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator))
     > .#{$prefix}--radio-button-group__validation-msg {
     clear: both;
   }
 
-  .#{$prefix}--radio-button-group--decorator > .#{$prefix}--radio-button-wrapper {
+  .#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator)) > .#{$prefix}--radio-button-wrapper {
     float: left;
   }
 
-  .#{$prefix}--radio-button-group--vertical.#{$prefix}--radio-button-group--decorator
+  .#{$prefix}--radio-button-group--vertical.#{$prefix}--radio-button-group:where(:has(> .#{$prefix}--radio-button-group-inner--decorator))
     > .#{$prefix}--radio-button-wrapper {
     float: none;
   }
@@ -838,7 +838,7 @@ $ai-label-sizes: (
   $tile-decorator-size: to-rem(nth(map-get($ai-label-sizes, xs), 1));
   $tile-decorator-gap: $carbon--spacing-03;
 
-  .#{$prefix}--tile--decorator,
+  .#{$prefix}--tile:where(:has(> .#{$prefix}--tile--inner-decorator, + .#{$prefix}--tile--inner-decorator)),
   .#{$prefix}--tile__wrapper--decorator {
     position: relative;
   }
@@ -862,7 +862,7 @@ $ai-label-sizes: (
   // Keep the text out from under the decorator. Padding on the tile
   // reaches every kind, including those without a content wrapper. A
   // `noPadding` tile lays out its own content.
-  .#{$prefix}--tile.#{$prefix}--tile--decorator:not(.#{$prefix}--tile--no-padding) {
+  .#{$prefix}--tile:has(> .#{$prefix}--tile--inner-decorator, + .#{$prefix}--tile--inner-decorator):not(.#{$prefix}--tile--no-padding) {
     padding-inline-end: $carbon--spacing-05 + $tile-decorator-size +
       $tile-decorator-gap;
   }
@@ -870,7 +870,7 @@ $ai-label-sizes: (
   // A selectable tile also holds the checkbox. A radio tile reserves the
   // room before it is selected, since the decorator moves over for the
   // checkmark, and the text should not reflow when it does.
-  .#{$prefix}--tile.#{$prefix}--tile--selectable.#{$prefix}--tile--decorator {
+  .#{$prefix}--tile.#{$prefix}--tile--selectable:has(> .#{$prefix}--tile--inner-decorator, + .#{$prefix}--tile--inner-decorator) {
     padding-inline-end: $carbon--spacing-08 + $tile-decorator-size +
       $tile-decorator-gap;
   }
@@ -931,7 +931,7 @@ $ai-label-sizes: (
     @include ccs-inset-inline($end: $carbon--spacing-09);
   }
 
-  .#{$prefix}--modal--decorator .#{$prefix}--modal-header {
+  .#{$prefix}--modal-container:where(:has(> .#{$prefix}--modal--inner__decorator, > .#{$prefix}--modal-header > .#{$prefix}--modal--inner__decorator)) .#{$prefix}--modal-header {
     padding-inline-end: to-rem(88px);
   }
 
@@ -963,7 +963,7 @@ $ai-label-sizes: (
   }
 
   // DataTable title
-  .#{$prefix}--data-table-header--decorator {
+  .#{$prefix}--data-table-header:where(:has(> .#{$prefix}--data-table-header__decorator)) {
     position: relative;
     padding-right: to-rem(56px);
   }
@@ -976,7 +976,7 @@ $ai-label-sizes: (
   }
 
   // DataTable column headers
-  .#{$prefix}--table-header-label--decorator {
+  .#{$prefix}--table-header-label:where(:has(> .#{$prefix}--table-header-label--decorator-inner)) {
     display: flex;
     align-items: center;
   }
@@ -994,7 +994,7 @@ $ai-label-sizes: (
     height: 100%;
   }
 
-  .#{$prefix}--table-sort__header--decorator .#{$prefix}--table-header-label {
+  .#{$prefix}--table-sort__decorator-wrapper .#{$prefix}--table-header-label {
     padding-right: $carbon--spacing-07;
   }
 

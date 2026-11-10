@@ -680,7 +680,6 @@
     class:bx--side-panel--overlay={modal}
     class:bx--side-panel--resizing={resizing}
     class:bx--side-panel--condensed-actions={condensedActions}
-    class:bx--side-panel--decorator={$$slots.decorator}
     class:bx--side-panel--ai-label={$aiLabelState === "active"}
     class:bx--side-panel--closing={closing}
     class:bx--side-panel--no-header={noHeader}

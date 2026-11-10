@@ -86,7 +86,6 @@ describe("AILabel in data tables", () => {
     const header = screen
       .getByTestId("table")
       .querySelector(".bx--data-table-header");
-    expect(header).toHaveClass("bx--data-table-header--decorator");
     expect(
       header?.querySelector(".bx--data-table-header__decorator .bx--ai-label"),
     ).toHaveClass("bx--ai-label--xs");
@@ -107,7 +106,7 @@ describe("AILabel in modals", () => {
     render(AILabelOverlays);
 
     const modal = screen.getByTestId(testId).querySelector(".bx--modal");
-    expect(modal).toHaveClass("bx--modal--decorator", "bx--modal--ai-label");
+    expect(modal).toHaveClass("bx--modal--ai-label");
     expect(
       modal?.querySelector(".bx--modal--inner__decorator .bx--ai-label"),
     ).toHaveClass("bx--ai-label--sm");

@@ -179,16 +179,22 @@ describe("AILabel in a field decorator", () => {
     ["multi-select", ".bx--list-box", "bx--list-box"],
   ] as const;
 
-  it.each(hosts)("marks the %s field", (testId, selector, block) => {
-    render(AILabelHost);
+  it.each(hosts)(
+    "puts the decorator in the %s field",
+    (testId, selector, block) => {
+      render(AILabelHost);
 
-    const host = screen.getByTestId(testId);
-    const wrapper = host.querySelector(selector);
-    expect(wrapper).toHaveClass(`${block}--decorator`, `${block}--ai-label`);
-    expect(
-      within(host).getByRole("button", { name: "AI Show information" }),
-    ).toBeInTheDocument();
-  });
+      const host = screen.getByTestId(testId);
+      const wrapper = host.querySelector(selector);
+      expect(wrapper).toHaveClass(`${block}--ai-label`);
+      expect(
+        wrapper?.querySelector(":scope > .bx--field-decorator"),
+      ).not.toBeNull();
+      expect(
+        within(host).getByRole("button", { name: "AI Show information" }),
+      ).toBeInTheDocument();
+    },
+  );
 
   it("always renders the mini size inside a field", () => {
     render(AILabelHost);
@@ -205,7 +211,9 @@ describe("AILabel in a field decorator", () => {
       .querySelector(".bx--text-input__field-wrapper");
 
     await rerender({ edited: true });
-    expect(wrapper).toHaveClass("bx--text-input__field-wrapper--decorator");
+    expect(
+      wrapper?.querySelector(":scope > .bx--field-decorator"),
+    ).not.toBeNull();
     expect(wrapper).not.toHaveClass("bx--text-input__field-wrapper--ai-label");
 
     await rerender({ edited: false });
@@ -218,10 +226,6 @@ describe("AILabel in a field decorator", () => {
   it("leaves fields without a decorator unmarked", () => {
     render(AILabelHost);
 
-    const wrapper = screen
-      .getByTestId("plain")
-      .querySelector(".bx--text-input__field-wrapper");
-    expect(wrapper).not.toHaveClass("bx--text-input__field-wrapper--decorator");
     expect(
       screen.getByTestId("plain").querySelector(".bx--field-decorator"),
     ).toBeNull();

@@ -322,7 +322,6 @@
     class:bx--radio-button-group--readonly={readonly}
     class:bx--radio-button-group--invalid={showInvalid}
     class:bx--radio-button-group--warning={showWarn}
-    class:bx--radio-button-group--decorator={$$slots.decorator}
     disabled={effectiveDisabled}
     data-invalid={showInvalid || undefined}
     aria-invalid={showInvalid || undefined}

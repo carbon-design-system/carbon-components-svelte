@@ -1502,10 +1502,7 @@
 
 <TableContainer {id} {useStaticWidth} {...wrapperProps}>
   {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren || $$slots.decorator}
-    <div
-      class:bx--data-table-header={true}
-      class:bx--data-table-header--decorator={$$slots.decorator}
-    >
+    <div class:bx--data-table-header={true}>
       {#if title || $$slots.titleChildren}
         <slot
           name="titleChildren"

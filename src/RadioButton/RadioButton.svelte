@@ -236,7 +236,6 @@
   class:bx--radio-button-wrapper={true}
   class:bx--radio-button-wrapper--label-left={labelPosition === "left"}
   class:bx--radio-button-wrapper--readonly={effectiveReadonly}
-  class:bx--radio-button-wrapper--decorator={$$slots.decorator}
   {...wrapperProps}
 >
   <input

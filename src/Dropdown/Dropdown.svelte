@@ -893,7 +893,6 @@
 
   $: dropdownListBoxClass = [
     "bx--dropdown",
-    $$slots.decorator && !isFluid && "bx--list-box--decorator",
     $aiLabelState === "active" && "bx--list-box--ai-label",
     placement === "top" && "bx--list-box--up",
     showInvalid && "bx--dropdown--invalid",

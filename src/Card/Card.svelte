@@ -189,7 +189,6 @@
     class:bx--card--productive={density !== "expressive"}
     class:bx--card--expressive={density === "expressive"}
     class:bx--card--horizontal={horizontal}
-    class:bx--card--decorator={$$slots.decorator}
     class:bx--card--ai-label={$aiLabelState === "active"}
     {...cardProps}
     {...$$restProps}

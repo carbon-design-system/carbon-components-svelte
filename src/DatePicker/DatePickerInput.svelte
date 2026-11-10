@@ -266,8 +266,6 @@
     class:bx--date-picker-input__wrapper--warn={showWarn}
     class:bx--date-picker-input__wrapper--readonly={readonly}
     class:bx--date-picker-input__wrapper--disabled={effectiveDisabled}
-    class:bx--date-picker-input__wrapper--decorator={$$slots.decorator &&
-      !$isFluid}
     class:bx--date-picker-input__wrapper--ai-label={$aiLabelState === "active"}
     use:titleWhenTruncated={{
       measure: ".bx--date-picker__input-overlay > span",

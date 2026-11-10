@@ -202,9 +202,9 @@ $ccs-side-panel-sizes: (
     padding-inline-end: $carbon--spacing-07;
   }
 
-  .#{$prefix}--side-panel--decorator .#{$prefix}--side-panel__label,
-  .#{$prefix}--side-panel--decorator .#{$prefix}--side-panel__title,
-  .#{$prefix}--side-panel--decorator .#{$prefix}--side-panel__subtitle {
+  .#{$prefix}--side-panel:where(:has(.#{$prefix}--side-panel__decorator)) .#{$prefix}--side-panel__label,
+  .#{$prefix}--side-panel:where(:has(.#{$prefix}--side-panel__decorator)) .#{$prefix}--side-panel__title,
+  .#{$prefix}--side-panel:where(:has(.#{$prefix}--side-panel__decorator)) .#{$prefix}--side-panel__subtitle {
     padding-inline-end: $carbon--spacing-10;
   }
 
