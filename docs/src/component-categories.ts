@@ -124,6 +124,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Dialog",
       "Modal",
       "ConfirmModal",
+      "SessionTimeoutModal",
       "ComposedModal",
       "InterstitialScreen",
       "SidePanel",

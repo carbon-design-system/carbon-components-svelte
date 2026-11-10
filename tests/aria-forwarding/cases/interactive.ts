@@ -27,6 +27,7 @@ import ToastNotification from "carbon-components-svelte/Notification/ToastNotifi
 import OverflowMenu from "carbon-components-svelte/OverflowMenu/OverflowMenu.svelte";
 import Popover from "carbon-components-svelte/Popover/Popover.svelte";
 import ProgressBar from "carbon-components-svelte/ProgressBar/ProgressBar.svelte";
+import SessionTimeoutModal from "carbon-components-svelte/SessionTimeout/SessionTimeoutModal.svelte";
 import SidePanel from "carbon-components-svelte/SidePanel/SidePanel.svelte";
 import ExpandableTile from "carbon-components-svelte/Tile/ExpandableTile.svelte";
 import SelectableTileGroup from "carbon-components-svelte/Tile/SelectableTileGroup.svelte";
@@ -37,6 +38,7 @@ import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
+import { createIdleTimer } from "../../../src/utils/idle-timer.js";
 import type { AriaEntry } from "../contract";
 import AccordionItem from "../fixtures/AccordionItem.test.svelte";
 import BreadcrumbItemFixture from "../fixtures/BreadcrumbItem.test.svelte";
@@ -725,6 +727,21 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(ConfirmModal, {
         props: { open: true, title: "Delete this project?", ...attrs },
+      }),
+    target: () => screen.getByRole("alertdialog"),
+  },
+  {
+    name: "SessionTimeoutModal",
+    render: (attrs) =>
+      render(SessionTimeoutModal, {
+        props: {
+          timer: createIdleTimer({
+            expiresAt: Date.now() + 60_000,
+            warnBefore: 120_000,
+            crossTab: false,
+          }),
+          ...attrs,
+        },
       }),
     target: () => screen.getByRole("alertdialog"),
   },
