@@ -312,8 +312,6 @@
       data-warn={showWarn || undefined}
       class:bx--text-input__field-wrapper={true}
       class:bx--text-input__field-wrapper--warning={showWarn}
-      class:bx--text-input__field-wrapper--decorator={$$slots.decorator &&
-        !isFluid}
       class:bx--text-input__field-wrapper--ai-label={$aiLabelState === "active"}
     >
       {#if readonly}

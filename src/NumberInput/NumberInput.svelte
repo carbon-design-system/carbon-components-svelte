@@ -744,7 +744,6 @@
     <div
       class:bx--number__input-wrapper={true}
       class:bx--number__input-wrapper--warning={showWarn}
-      class:bx--number__input-wrapper--decorator={$$slots.decorator && !isFluid}
       class:bx--number__input-wrapper--ai-label={$aiLabelState === "active"}
     >
       {#if useTextMode}

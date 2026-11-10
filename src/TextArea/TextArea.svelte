@@ -444,7 +444,6 @@
     class:bx--text-area__wrapper={true}
     class:bx--text-area__wrapper--readonly={readonly}
     class:bx--text-area__wrapper--warn={showWarn}
-    class:bx--text-area__wrapper--decorator={$$slots.decorator && !isFluid}
     class:bx--text-area__wrapper--ai-label={$aiLabelState === "active"}
     data-invalid={showInvalid || undefined}
     data-warn={showWarn || undefined}

@@ -12,8 +12,6 @@ const NEAREST_DIR = /var\(--ccs-(ltr|mirror-rtl),/;
 // Twins whose value is the same in both directions.
 const SAME_BOTH_WAYS = new Set([
   "[dir=rtl] .bx--snippet--multi.bx--snippet--no-copy .bx--snippet-container pre padding-left",
-  "[dir=rtl] .bx--list-box--decorator .bx--list-box__selection--multi left",
-  "[dir=rtl] .bx--list-box--decorator .bx--list-box__selection--multi right",
 ]);
 
 describe("[dir=rtl] twins", () => {

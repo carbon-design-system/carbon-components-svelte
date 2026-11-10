@@ -224,7 +224,6 @@
     class:bx--checkbox-group--readonly={readonly}
     class:bx--checkbox-group--invalid={showInvalid}
     class:bx--checkbox-group--warning={showWarn}
-    class:bx--checkbox-group--decorator={$$slots.decorator}
     disabled={effectiveDisabled}
     data-invalid={showInvalid || undefined}
     aria-label={ariaLabel}

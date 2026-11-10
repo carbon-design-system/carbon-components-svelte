@@ -1568,7 +1568,6 @@
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
-    $$slots.decorator && !isFluid && "bx--list-box--decorator",
     $aiLabelState === "active" && "bx--list-box--ai-label",
     placement === "top" && "bx--list-box--up",
     filterable && "bx--combo-box",

@@ -297,10 +297,10 @@ describe("SidePanel", () => {
     render(SidePanelSlots, { props: { size: "xs" } });
     const actions = document.querySelector(".bx--side-panel__actions");
     expect(actions).toHaveClass("bx--action-set--sm");
-    expect(getPanel()).toHaveClass(
-      "bx--side-panel--decorator",
-      "bx--side-panel--ai-label",
-    );
+    expect(getPanel()).toHaveClass("bx--side-panel--ai-label");
+    expect(
+      getPanel().querySelector(".bx--side-panel__decorator"),
+    ).not.toBeNull();
     expect(
       document.querySelector(".bx--side-panel__header--toolbar"),
     ).not.toBeNull();

@@ -332,13 +332,13 @@
   }
 
   // Clear of the decorator in the corner
-  .#{$prefix}--card--decorator
+  .#{$prefix}--card:where(:has(~ .#{$prefix}--card__decorator))
     .#{$prefix}--card__header
     > .#{$prefix}--card__title {
     padding-inline-end: $carbon--spacing-06;
   }
 
-  .#{$prefix}--card--decorator .#{$prefix}--card__actions {
+  .#{$prefix}--card:where(:has(~ .#{$prefix}--card__decorator)) .#{$prefix}--card__actions {
     @include ccs-inset-inline(
       $end: calc(#{$carbon--spacing-03} * 2 + #{$carbon--spacing-06})
     );

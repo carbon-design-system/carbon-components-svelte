@@ -244,7 +244,7 @@ describe("Card", () => {
     expect(decorator).not.toBeNull();
     expect(card.contains(decorator ?? null)).toBe(false);
     expect(decorator?.querySelector(".bx--ai-label")).not.toBeNull();
-    expect(card).toHaveClass("bx--card--decorator", "bx--card--ai-label");
+    expect(card).toHaveClass("bx--card--ai-label");
   });
 
   it("moves the decorator below top media, to the header's corner", async () => {
@@ -286,7 +286,7 @@ describe("Card", () => {
 
     const card = screen.getByTestId("card");
     expect(card.parentElement).not.toHaveClass("bx--card__wrapper");
-    expect(card).not.toHaveClass("bx--card--decorator");
+    expect(document.querySelector(".bx--card__decorator")).toBeNull();
   });
 });
 

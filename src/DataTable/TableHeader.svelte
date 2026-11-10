@@ -83,7 +83,6 @@
     aria-sort={active ? sortDirection : "none"}
     {scope}
     data-header={id}
-    class:bx--table-sort__header--decorator={$$slots.decorator}
     class:bx--table-header--ai-label={$aiLabelState === "active"}
     {...$$restProps}
     on:mouseover
@@ -155,10 +154,7 @@
     on:mouseenter
     on:mouseleave
   >
-    <div
-      class:bx--table-header-label={true}
-      class:bx--table-header-label--decorator={$$slots.decorator}
-    >
+    <div class:bx--table-header-label={true}>
       <slot />
       {#if $$slots.decorator}
         <Decorator

@@ -34,12 +34,12 @@ describe("AILabel in selection controls, tags, and tiles", () => {
   it.each([
     ["checkbox", "bx--checkbox-wrapper"],
     ["radio", "bx--radio-button-wrapper"],
-  ])("marks the %s wrapper", (testId, wrapper) => {
+  ])("puts the decorator in the %s wrapper", (testId, wrapper) => {
     render(AILabelSelection);
 
-    expect(label(testId).closest(`.${wrapper}`)).toHaveClass(
-      `${wrapper}--decorator`,
-    );
+    expect(
+      label(testId).closest(`.${wrapper} > .${wrapper}-inner--decorator`),
+    ).not.toBeNull();
   });
 
   it.each([
@@ -52,7 +52,6 @@ describe("AILabel in selection controls, tags, and tiles", () => {
     render(AILabelSelection);
 
     expect(screen.getByTestId(testId).querySelector(".bx--tile")).toHaveClass(
-      "bx--tile--decorator",
       "bx--tile--ai-label",
     );
   });
@@ -93,7 +92,9 @@ describe("AILabel in selection controls, tags, and tiles", () => {
 
     await rerender({ edited: true });
 
-    expect(tile).toHaveClass("bx--tile--decorator");
+    expect(
+      tile?.querySelector(":scope > .bx--tile--inner-decorator"),
+    ).not.toBeNull();
     expect(tile).not.toHaveClass("bx--tile--ai-label");
   });
 
@@ -102,8 +103,6 @@ describe("AILabel in selection controls, tags, and tiles", () => {
 
     const host = screen.getByTestId("plain-tile");
     expect(host.querySelector(".bx--tile__wrapper--decorator")).toBeNull();
-    expect(host.querySelector(".bx--tile")).not.toHaveClass(
-      "bx--tile--decorator",
-    );
+    expect(host.querySelector(".bx--tile--inner-decorator")).toBeNull();
   });
 });
