@@ -3,6 +3,8 @@ import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
+import SettingsSaveBar from "carbon-components-svelte/SettingsPage/SettingsSaveBar.svelte";
+import SettingsSection from "carbon-components-svelte/SettingsPage/SettingsSection.svelte";
 import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
 import SelectableTag from "carbon-components-svelte/Tag/SelectableTag.svelte";
@@ -276,6 +278,35 @@ export const navigation: AriaEntry[] = [
     name: "SkipToContent",
     render: (attrs) => render(SkipToContent, { props: attrs }),
     target: () => screen.getByRole("link"),
+  },
+  {
+    name: "SettingRow",
+    exempt:
+      "layout row with no role; the control inside it is named by `label` and described by the row",
+  },
+  {
+    name: "SettingsNav",
+    exempt:
+      "layout wrapper with no role; the section list is named by `labelText` and the menu by `jumpText`",
+  },
+  {
+    name: "SettingsPage",
+    exempt: "layout wrapper with no role",
+  },
+  {
+    name: "SettingsSaveBar",
+    render: (attrs) => render(SettingsSaveBar, { props: attrs }),
+    // Inert while the page is clean, so it is out of the accessibility tree.
+    target: () => screen.getByRole("region", { hidden: true }),
+  },
+  {
+    name: "SettingsSection",
+    render: (attrs) =>
+      render(SettingsSection, { props: { id: "a", title: "A", ...attrs } }),
+    target: () => screen.getByRole("group"),
+    skip: {
+      "aria-labelledby": "a consumer id replaces the heading that names it",
+    },
   },
   {
     name: "Splitter",
