@@ -1,0 +1,122 @@
+---
+components: ["Mentions"]
+description: Mentions suggest people, tickets, emoji or commands as a user types a trigger character such as @ or #, inside a TextArea or TextInput.
+---
+
+## Basic
+
+Pass the `ref` of a [TextArea](/components/TextArea) or [TextInput](/components/TextInput) to `field`, and list the `triggers`. Each trigger has a `char` and the `items` to suggest. Type `@` after a space to open the menu, keep typing to narrow it, and press <DocKbd label="Enter" /> or <DocKbd label="Tab" /> to choose the highlighted item. <DocKbd label="Escape" /> closes the menu and keeps what was typed.
+
+`Mentions` renders no field. It attaches to the one you give it, so every prop of `TextArea` and `TextInput`, such as `maxCount`, `invalid` or `bind:value`, works as before.
+
+<FileSource src="/framed/Mentions/MentionsBasic" />
+
+## Triggers
+
+A trigger opens at the start of a word, not in the middle of one: `a@b.com` is an address, so it opens nothing. The query ends at a space or at punctuation such as a comma or a closing bracket. A dot, a dash and an apostrophe stay in the query, so `@jo.doe` is one name.
+
+Use several triggers on one field. When the caret sits after more than one, the nearest trigger wins.
+
+| Option | Use it for |
+| :--- | :--- |
+| `position="line-start"` | A command such as `/assign`, which means nothing mid-sentence |
+| `minQueryLength` | A noisy trigger such as `:`, so `10:30` and `Note:` open nothing |
+| `allowSpaces` | Names with spaces, so `@Priya Ra` still matches |
+| `limit` | The number of options shown. Raise it only with `menuMaxHeight`: a menu that scrolls is a scrollable region |
+
+<FileSource src="/framed/Mentions/MentionsTriggers" />
+
+## Sources
+
+### Array
+
+Pass an array of items. Each item has an `id` and the `text` to show, and may have `secondary` text, `insertText` to write instead of `text`, and `disabled`. The list is ranked as the user types: a name that starts with the query comes first, then one with a word that starts with it, then one that contains it, then one that matches the secondary text only. Accents and case are ignored, so `jose` finds José.
+
+Replace the array, not its contents, to change the list: the lowercase copy that makes each key cheap is built once per array.
+
+### Async
+
+Pass a function that takes the query and returns the items, or a promise of them. The function gets `{ signal }`. Pass the signal to `fetch`, or listen for its `abort` event, to stop the request when a newer query replaces it. Only the newest request may answer: a slower, older response is dropped even when the function ignores the signal.
+
+The menu keeps the last results while the next ones load, shows a loading row after `loadingDelay`, and shows `errorText` when the function rejects. Set `debounce` on the trigger to wait for a pause in typing before calling the function.
+
+<FileSource src="/framed/Mentions/MentionsAsync" />
+
+### Large lists
+
+An array of 10,000 accounts needs no virtualization or server. A key ranks the array in one pass and stops as soon as enough names start with the query, and only the first few matches reach the DOM.
+
+<FileSource src="/framed/Mentions/MentionsLargeList" />
+
+## Formats
+
+Set `format` on a trigger to choose what is written into the field. `bind:mentions` lists the mentions the field holds, with the position of each.
+
+| Do | Why |
+| :--- | :--- |
+| Use `"text"` when the field shows what a reader sees and the app sends `mentions` with it | The value stays readable, and `mentions` follows each edit |
+| Use `"token"` when the value alone must say who was mentioned | It writes `@[Name](id)`, so the id survives a save and a reload |
+| Use `"plain"` for emoji and commands | It replaces the trigger with the text and records nothing |
+| Pass `insertText` with a handle for `"text"` | `@praman` is easier to type, search and parse than `@Priya Raman` |
+
+### Text
+
+The default. The trigger and the item's text are written, and the mention is recorded. Text typed before it moves it, text typed after it leaves it alone, and a change to any character of it drops it, since `@Priya` with an edit no longer names her. Deleting back into a mention opens the menu again.
+
+The record lives only as long as the field. After a reload there is a string and no ids, so send `mentions` with the value.
+
+<FileSource src="/framed/Mentions/MentionsText" />
+
+### Token
+
+The value carries the id: `Thanks @[Priya Raman](u-1042)`. `bind:mentions` is read from the value, so it survives a reload and an edit made elsewhere. The field shows the raw token. `mentionsToPlainText` turns a stored value back into text a reader sees, and `parseMentionTokens` reads the tokens on a server. Ids read from a token are strings.
+
+<FileSource src="/framed/Mentions/MentionsToken" />
+
+## Custom items
+
+Fill the default slot to draw each option. It receives the `item`, its `index`, the `trigger`, the `query` and whether it is `highlighted`. Put a [UserAvatar](/components/UserAvatar) beside the name, and mark the text with `bx--mentions__text` and `bx--mentions__secondary` to keep the ellipsis and the colors. Hovering an option that is cut short shows its full text.
+
+<FileSource src="/framed/Mentions/MentionsCustomItem" />
+
+## TextInput
+
+A single-line field works the same way. The menu sits under the trigger and follows it as the field scrolls.
+
+<FileSource src="/framed/Mentions/MentionsTextInput" />
+
+## Sizes
+
+Set `size` to control the height of each option. The default is `"sm"`, 32px. Use `"md"`, 40px, or `"lg"`, 48px, to match a larger field or a custom item with an avatar.
+
+<FileSource src="/framed/Mentions/MentionsSizes" />
+
+## In a modal
+
+The menu opens above the modal and takes the keys the field would take. <DocKbd label="Escape" /> closes the menu first and the modal on the next press.
+
+<FileSource src="/framed/Mentions/MentionsModal" />
+
+## Keyboard
+
+Focus stays in the field. The menu is operated with the keys below and ignores a key while an IME is composing, since the candidate window opens where the menu would.
+
+| Key | Action |
+| :--- | :--- |
+| <DocKbd label="ArrowDown" /> | Highlight the next option, wrapping at the end |
+| <DocKbd label="ArrowUp" /> | Highlight the previous option, wrapping at the start |
+| <DocKbd label="Enter" /> or <DocKbd label="Tab" /> | Choose the highlighted option |
+| <DocKbd label="Escape" /> | Close the menu and keep the text. It does not reopen until a new mention starts |
+| <DocKbd label="Ctrl" />+<DocKbd label="Enter" />, <DocKbd label="Shift" />+<DocKbd label="Tab" /> | Pass through to the field, so a submit shortcut keeps working |
+
+## Accessibility
+
+The field stays a text box, with `aria-autocomplete="list"`, `aria-controls` and `aria-activedescendant` pointing at the menu and its highlighted option. A live region announces the number of suggestions after a pause in typing, and says when nothing matched or the source failed.
+
+`role="combobox"` and `aria-expanded` are not set. ARIA does not allow `role="combobox"` on a `<textarea>`, and `aria-expanded` is not a text box attribute, so axe reports both. Translate the announcements and the status rows with `resultsText`, `emptyText`, `loadingText` and `errorText`.
+
+| Do | Why |
+| :--- | :--- |
+| Give each trigger a `label` | It names the menu for a screen reader, such as "Teammates" |
+| Keep the field's own label and helper text | `Mentions` adds no label of its own |
+| Keep `limit` at 8 or fewer unless you set `menuMaxHeight` | A menu that scrolls is a scrollable region that axe expects to be reachable by keyboard |
