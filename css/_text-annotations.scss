@@ -1,0 +1,431 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TextAnnotations: read-only text with comments anchored to ranges of it.
+/// The highlights are painted with the CSS Custom Highlight API
+/// (`::highlight()`), which takes only color, background and text
+/// decoration, and with `<mark>` where the browser has no such API. Both
+/// look alike, and in forced colors, where the system paints every
+/// highlight alike, an underline style tells a selected annotation, an
+/// overlap and an unsaved comment apart.
+/// @access private
+/// @group components
+@mixin text-annotations {
+  $rail-width: to-rem(288px);
+
+  .#{$prefix}--text-annotations {
+    position: relative;
+    display: grid;
+    align-items: start;
+    column-gap: $carbon--spacing-07;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .#{$prefix}--text-annotations--scroll {
+    block-size: var(--ccs-text-annotations-height);
+    overflow: auto;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--text-annotations--rail {
+      grid-template-columns: minmax(0, 1fr) var(--ccs-text-annotations-rail-width, #{$rail-width});
+    }
+  }
+
+  .#{$prefix}--text-annotations__column {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--text-annotations__document {
+    @include type-style("body-02");
+
+    color: $text-primary;
+    outline-offset: $carbon--spacing-02;
+    overflow-wrap: break-word;
+  }
+
+  .#{$prefix}--text-annotations__document--text {
+    white-space: pre-wrap;
+  }
+
+  // The reader's only way into the text with a keyboard: ring it on
+  // keyboard focus, not after a click.
+  .#{$prefix}--text-annotations__document:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // Painted ranges. A browser without `::highlight()` drops a whole rule
+  // that lists it, so the highlight and the `<mark>` each get their own.
+
+  ::highlight(ccs-text-annotation) {
+    background-color: $highlight;
+  }
+
+  .#{$prefix}--text-annotations__mark {
+    background-color: $highlight;
+    color: inherit;
+  }
+
+  ::highlight(ccs-text-annotation-overlap) {
+    background-color: color-mix(in srgb, #{$highlight} 60%, #{$interactive});
+  }
+
+  .#{$prefix}--text-annotations__mark--overlap {
+    background-color: color-mix(in srgb, #{$highlight} 60%, #{$interactive});
+  }
+
+  ::highlight(ccs-text-annotation-active) {
+    background-color: color-mix(in srgb, #{$highlight} 50%, #{$interactive});
+    text-decoration: underline;
+    text-decoration-color: $border-interactive;
+    text-decoration-thickness: $carbon--spacing-01 / 2;
+    text-underline-offset: $carbon--spacing-01 / 2;
+  }
+
+  .#{$prefix}--text-annotations__mark--active {
+    background-color: color-mix(in srgb, #{$highlight} 50%, #{$interactive});
+    text-decoration: underline;
+    text-decoration-color: $border-interactive;
+    text-decoration-thickness: $carbon--spacing-01 / 2;
+    text-underline-offset: $carbon--spacing-01 / 2;
+  }
+
+  ::highlight(ccs-text-annotation-draft) {
+    background-color: color-mix(in srgb, #{$highlight} 50%, #{$interactive});
+    text-decoration: underline dashed;
+    text-decoration-color: $border-interactive;
+  }
+
+  .#{$prefix}--text-annotations__mark--draft {
+    background-color: color-mix(in srgb, #{$highlight} 50%, #{$interactive});
+    text-decoration: underline dashed;
+    text-decoration-color: $border-interactive;
+  }
+
+  // The button beside selected text, and the card for a thread
+
+  .#{$prefix}--text-annotations__selection {
+    position: absolute;
+    z-index: z("floating");
+    transform: translateX(-50%);
+  }
+
+  .#{$prefix}--text-annotations__card {
+    @include high-contrast-mode("outline");
+
+    position: absolute;
+    z-index: z("floating");
+    // The card scrolls, not the list in it: a scrolling list is a tab stop
+    // of its own in Firefox.
+    overflow-y: auto;
+    max-block-size: min(70vh, to-rem(512px));
+    max-inline-size: 100%;
+    background-color: $layer;
+    border-radius: 2px;
+    color: $text-primary;
+    filter: drop-shadow(0 $carbon--spacing-01 $carbon--spacing-01 rgba(0, 0, 0, 0.2));
+    inline-size: to-rem(352px);
+    left: var(--ccs-text-annotations-card-left, 0);
+    top: var(--ccs-text-annotations-card-top, 0);
+    visibility: hidden;
+  }
+
+  .#{$prefix}--text-annotations__card--placed {
+    visibility: visible;
+  }
+
+  .#{$prefix}--text-annotations__card:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // A narrow window has no room beside the text: the card is a sheet at the
+  // bottom of the window.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--text-annotations__card {
+      position: fixed;
+      max-block-size: 70vh;
+      inline-size: auto;
+      inset: auto 0 0;
+      overflow-y: auto;
+      visibility: visible;
+    }
+  }
+
+  .#{$prefix}--text-annotations__thread {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-03 $carbon--spacing-05 $carbon--spacing-05;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-annotations__thread-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-annotations__thread-quote {
+    @include type-style("label-01");
+
+    padding-block-start: $carbon--spacing-03;
+    border-inline-start: $carbon--spacing-02 solid $border-subtle;
+    color: $text-secondary;
+    padding-inline-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-annotations__comments {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    gap: $carbon--spacing-05;
+    list-style: none;
+  }
+
+  .#{$prefix}--text-annotations__comment {
+    display: flex;
+    align-items: start;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-annotations__comment-main {
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--text-annotations__comment-meta {
+    @include type-style("label-01");
+
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-annotations__comment-author {
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--text-annotations__comment-body {
+    @include type-style("body-compact-01");
+
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .#{$prefix}--text-annotations__composer-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--text-annotations__also {
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-03 $carbon--spacing-05 $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--text-annotations__also-label {
+    @include type-style("label-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--text-annotations__also-item {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-02 0;
+    border: 0;
+    background: none;
+    color: $link-primary;
+    cursor: pointer;
+    text-align: start;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  // The margin rail. Until the cards are measured (server rendering, or
+  // before mount), and below the breakpoint, they stack in order.
+
+  .#{$prefix}--text-annotations__rail {
+    min-inline-size: 0;
+    user-select: none;
+  }
+
+  .#{$prefix}--text-annotations__list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    gap: $carbon--spacing-03;
+    list-style: none;
+  }
+
+  .#{$prefix}--text-annotations__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border-inline-start: $carbon--spacing-02 solid $border-subtle;
+    background-color: $layer;
+    color: $text-primary;
+    gap: $carbon--spacing-02;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--text-annotations--positioned .#{$prefix}--text-annotations__list {
+      display: block;
+      block-size: var(--ccs-text-annotations-rail-height, auto);
+    }
+
+    .#{$prefix}--text-annotations--positioned .#{$prefix}--text-annotations__item {
+      position: absolute;
+      inset-block-start: var(--ccs-text-annotations-top, 0);
+      inset-inline: 0;
+    }
+  }
+
+  .#{$prefix}--text-annotations__item--active {
+    border-inline-start-color: $interactive;
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--text-annotations__item--orphaned {
+    border-inline-start-style: dashed;
+  }
+
+  // The button holds the quote and stretches over the card, so a click
+  // anywhere on it opens the thread.
+  .#{$prefix}--text-annotations__item-button {
+    @include type-style("label-01");
+
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $text-secondary;
+    cursor: pointer;
+    text-align: start;
+
+    &::after {
+      position: absolute;
+      content: "";
+      inset: 0;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:focus-visible::after {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--text-annotations__item-quote {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .#{$prefix}--text-annotations__item-details {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-02;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--text-annotations__item-author {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+  }
+
+  .#{$prefix}--text-annotations__item-body {
+    @include type-style("body-compact-01");
+
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .#{$prefix}--text-annotations__item-replies,
+  .#{$prefix}--text-annotations__item-orphaned {
+    @include type-style("label-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--text-annotations__empty {
+    @include type-style("body-compact-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  // Forced colors paint every highlight in `Highlight`, so the selected
+  // annotation, an overlap and an unsaved comment differ by the line under
+  // them, which keeps its style. A mark takes the system `Mark` pair.
+  @media (forced-colors: active) {
+    ::highlight(ccs-text-annotation-overlap) {
+      text-decoration: underline dotted;
+    }
+
+    .#{$prefix}--text-annotations__mark--overlap {
+      text-decoration: underline dotted;
+    }
+
+    ::highlight(ccs-text-annotation-active) {
+      text-decoration: underline solid;
+      text-decoration-thickness: $carbon--spacing-02 / 2;
+    }
+
+    .#{$prefix}--text-annotations__mark--active {
+      text-decoration: underline solid;
+      text-decoration-thickness: $carbon--spacing-02 / 2;
+    }
+
+    ::highlight(ccs-text-annotation-draft) {
+      text-decoration: underline dashed;
+    }
+
+    .#{$prefix}--text-annotations__mark--draft {
+      text-decoration: underline dashed;
+    }
+
+    .#{$prefix}--text-annotations__mark {
+      background-color: Mark;
+      color: MarkText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--text-annotations__item {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--text-annotations__item--active {
+      border-inline-start: $carbon--spacing-02 solid Highlight;
+    }
+  }
+}
+
+@include exports("text-annotations") {
+  @include text-annotations;
+}

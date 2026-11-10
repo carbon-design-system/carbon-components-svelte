@@ -246,6 +246,7 @@ export { default as TagSkeleton } from "./Tag/TagSkeleton.svelte";
 export { default as TagInput } from "./TagInput/TagInput.svelte";
 export { default as TagSet } from "./TagSet/TagSet.svelte";
 export { default as Text } from "./Text/Text.svelte";
+export { default as TextAnnotations } from "./TextAnnotations/TextAnnotations.svelte";
 export { default as FluidTextAreaSkeleton } from "./TextArea/FluidTextAreaSkeleton.svelte";
 export { default as TextArea } from "./TextArea/TextArea.svelte";
 export { default as TextAreaSkeleton } from "./TextArea/TextAreaSkeleton.svelte";

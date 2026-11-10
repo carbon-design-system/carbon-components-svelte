@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>text-annotations</title>
+    <g id="text-annotations" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="text">
+            <rect id="line-1" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="53" width="104" height="6"></rect>
+            <rect id="line-2" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="73" width="22" height="6"></rect>
+            <rect id="line-2-end" fill="var(--cds-text-disabled, #c6c6c6)" x="156" y="73" width="24" height="6"></rect>
+            <rect id="line-3" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="93" width="96" height="6"></rect>
+            <rect id="line-4" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="113" width="64" height="6"></rect>
+        </g>
+        <g id="annotated-run">
+            <rect id="band" fill="var(--cds-border-subtle, #e0e0e0)" x="96" y="69" width="62" height="14"></rect>
+            <rect id="run" fill="var(--cds-layer-accent-active, #a8a8a8)" x="100" y="73" width="54" height="6"></rect>
+        </g>
+        <g id="card">
+            <rect id="connector" fill="var(--cds-background-brand, #0f62fe)" x="158" y="75" width="38" height="2"></rect>
+            <rect id="card-surface" fill="var(--cds-field-01, #f4f4f4)" x="196" y="57" width="48" height="40"></rect>
+            <rect id="card-edge" fill="var(--cds-background-brand, #0f62fe)" x="196" y="57" width="3" height="40"></rect>
+            <rect id="card-author" fill="var(--cds-text-secondary, #525252)" x="206" y="65" width="22" height="6"></rect>
+            <rect id="card-body-1" fill="var(--cds-text-disabled, #c6c6c6)" x="206" y="76" width="30" height="4"></rect>
+            <rect id="card-body-2" fill="var(--cds-text-disabled, #c6c6c6)" x="206" y="84" width="20" height="4"></rect>
+        </g>
+    </g>
+</svg>
