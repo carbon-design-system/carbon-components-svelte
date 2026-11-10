@@ -47,6 +47,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   FluidForm: "0.15.0",
   FullPageError: "0.112.0",
   Form: "0.2.0",
+  FormulaInput: "0.114.0",
   Grid: "0.8.4",
   Heading: "0.98.0",
   IconIndicator: "0.110.0",
