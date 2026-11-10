@@ -8,7 +8,6 @@
   export let selected = 0;
   export let activation: ComponentProps<Tabs>["activation"] = "automatic";
   export let type: ComponentProps<Tabs>["type"] = "default";
-  export let autoWidth = false;
   export let fullWidth = false;
   export let dismissible = false;
   export let size: ComponentProps<Tabs>["size"] = undefined;
@@ -16,7 +15,7 @@
   export let ariaLabel = "";
   /** Applies `flush` to the first panel only. */
   export let flush = false;
-  /** Renders `TabsVertical` instead of `Tabs`; `type`, `autoWidth`, `fullWidth`, `dismissible`, `customClass` and `ariaLabel` are `Tabs`-only. */
+  /** Renders `TabsVertical` instead of `Tabs`; `type`, `fullWidth`, `dismissible`, `customClass` and `ariaLabel` are `Tabs`-only. */
   export let vertical = false;
   /** Only read by `TabsVertical`. */
   export let orientation: ComponentProps<TabsVertical>["orientation"] =
@@ -37,7 +36,6 @@
     ? { orientation }
     : {
         type,
-        autoWidth,
         fullWidth,
         dismissible,
         class: customClass,

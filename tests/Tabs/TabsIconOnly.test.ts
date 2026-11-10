@@ -27,10 +27,10 @@ describe("Tabs (icon-only)", () => {
     expect(settings.querySelector("svg")).toBeInTheDocument();
   });
 
-  it("ignores autoWidth and fullWidth so icon tabs stay square", async () => {
+  it("ignores fullWidth so icon tabs stay square", async () => {
     const { rerender } = await renderIconOnly(
       {
-        props: { autoWidth: true, fullWidth: true },
+        props: { fullWidth: true },
       }.props,
     );
 

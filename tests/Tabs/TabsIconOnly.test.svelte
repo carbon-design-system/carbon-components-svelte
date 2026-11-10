@@ -14,11 +14,10 @@
   export let tooltipDirection: ComponentProps<Tab>["tooltipDirection"] =
     "bottom";
   export let disabledFirst = false;
-  export let autoWidth = false;
   export let fullWidth = false;
 </script>
 
-<Tabs {iconOnly} {iconSize} {autoWidth} {fullWidth}>
+<Tabs {iconOnly} {iconSize} {fullWidth}>
   <Tab label="Calendar" icon={Calendar} disabled={disabledFirst} />
   <Tab label="Settings" icon={Settings} {tooltipAlignment} {tooltipDirection} />
   <Tab label="Information" icon={Information} />

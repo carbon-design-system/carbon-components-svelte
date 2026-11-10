@@ -286,7 +286,6 @@ describe("Tabs", () => {
   });
 
   it.each([
-    [{ autoWidth: true }, "auto"],
     [{ fullWidth: true }, "100%"],
     [{}, ""],
   ])("sets the tab link width for %o", async (props, width) => {
@@ -299,7 +298,7 @@ describe("Tabs", () => {
     }
 
     // Reacts to the prop changing after mount.
-    await rerender({ autoWidth: false, fullWidth: false });
+    await rerender({ fullWidth: false });
     for (const tab of tabs) {
       expect(tab.style.width).toBe("");
     }
