@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import AddressForm from "carbon-components-svelte/AddressForm/AddressForm.svelte";
 import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
@@ -390,6 +391,14 @@ export const forms: AriaEntry[] = [
           messageText: "Pick at least one",
           ...attrs,
         },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "AddressForm",
+    render: (attrs) =>
+      render(AddressForm, {
+        props: { value: { country: "US" }, ...attrs },
       }),
     target: () => screen.getByRole("group"),
   },
