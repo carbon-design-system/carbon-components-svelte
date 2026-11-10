@@ -1,0 +1,189 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// SignaturePad: a signing area drawn as SVG paths, a typed preview in the
+/// same coordinates, and the tabs and actions around them.
+/// @access private
+/// @group components
+@mixin signature-pad {
+  // A form item shrinks its content to fit; the pad fills the width it is
+  // given in every mode, so it doesn't change size with the tab.
+  .#{$prefix}--signature-pad__fieldset {
+    min-width: 0;
+    inline-size: 100%;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--signature-pad .#{$prefix}--signature-pad__switcher--single {
+    display: none;
+  }
+
+  .#{$prefix}--signature-pad__panels {
+    padding-block-start: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--signature-pad__draw,
+  .#{$prefix}--signature-pad__upload {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--signature-pad__type {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  // The area that holds a signature. It is as wide as its container and as
+  // tall as its aspect ratio, because the SVG inside has a viewBox.
+  .#{$prefix}--signature-pad__surface {
+    position: relative;
+    overflow: hidden;
+    background-color: $field;
+    border-block-end: 1px solid $border-strong;
+    color: $text-primary;
+  }
+
+  // The line to sign on, under the ink.
+  .#{$prefix}--signature-pad__surface::before {
+    position: absolute;
+    @include ccs-inset-inline($carbon--spacing-05, $carbon--spacing-05);
+    inset-block-end: 28%;
+    border-block-end: 1px solid $border-subtle;
+    content: "";
+    pointer-events: none;
+  }
+
+  // Only the signing area takes the pointer from the page. A finger on the
+  // rest of the page still scrolls it.
+  .#{$prefix}--signature-pad__pad {
+    cursor: crosshair;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--signature-pad__canvas {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .#{$prefix}--signature-pad__ink {
+    fill: currentColor;
+  }
+
+  // Sits on the line to sign on. The block offset is a share of the height;
+  // a percentage of padding would be a share of the width.
+  .#{$prefix}--signature-pad__placeholder {
+    @include type-style("body-compact-01");
+    @include ccs-inset-inline(0, 0);
+
+    position: absolute;
+    inset-block-end: calc(28% + #{$carbon--spacing-03});
+    color: $text-placeholder;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .#{$prefix}--signature-pad__image {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .#{$prefix}--signature-pad__surface--invalid {
+    outline: 2px solid $support-error;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--signature-pad--disabled .#{$prefix}--signature-pad__surface {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--signature-pad--disabled .#{$prefix}--signature-pad__pad,
+  .#{$prefix}--signature-pad--readonly .#{$prefix}--signature-pad__pad {
+    cursor: default;
+  }
+
+  .#{$prefix}--signature-pad--disabled .#{$prefix}--signature-pad__pad {
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--signature-pad__instructions {
+    @include type-style("helper-text-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--signature-pad__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--signature-pad__undo .#{$prefix}--btn__icon {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--signature-pad__validation-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--signature-pad__validation-msg .#{$prefix}--form-requirement {
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--signature-pad__invalid-icon {
+    flex: none;
+    fill: $support-error;
+  }
+
+  .#{$prefix}--signature-pad__invalid-icon--warning {
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--signature-pad__invalid-icon--warning path:first-of-type {
+    fill: $carbon__black-100;
+    opacity: 1;
+  }
+
+  // Forced colors drop the field's fill and its border color: draw the
+  // area's edge and the ink in the system colors.
+  @media (forced-colors: active) {
+    .#{$prefix}--signature-pad__surface {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--signature-pad__surface::before {
+      border-block-end-color: GrayText;
+    }
+
+    .#{$prefix}--signature-pad__ink {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--signature-pad--disabled .#{$prefix}--signature-pad__ink {
+      fill: GrayText;
+    }
+
+    .#{$prefix}--signature-pad__placeholder {
+      color: GrayText;
+    }
+  }
+}
+
+@include exports("signature-pad") {
+  @include signature-pad;
+}
