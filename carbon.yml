@@ -815,6 +815,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/MenuButton
+  merge-resolver:
+    name: Merge resolver
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/merge-resolver.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/MergeResolver
   meter:
     name: Meter
     status: stable
