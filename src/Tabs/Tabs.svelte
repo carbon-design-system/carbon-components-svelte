@@ -47,9 +47,6 @@
    */
   export let navigation = false;
 
-  /** Set to `true` for tabs to have an auto-width */
-  export let autoWidth = false;
-
   /** Set to `true` to render a dismiss button for each tab */
   export let dismissible = false;
 
@@ -133,10 +130,6 @@
   const tabs = writable([]);
   /** @type {import("svelte/store").Readable<Record<string, { id: string; label: string; disabled: boolean; hasSecondaryLabel: boolean; index: number }>>} */
   const tabsById = derived(tabs, (_) => keyBy(_));
-  /**
-   * @type {import("svelte/store").Writable<boolean>}
-   */
-  const useAutoWidth = writable(autoWidth);
   /**
    * @type {import("svelte/store").Writable<boolean>}
    */
@@ -471,7 +464,6 @@
     selectedTab,
     selectedContent,
     iconOnly: useIconOnly,
-    useAutoWidth,
     useFullWidth,
     useDismissible,
     useDismissText,
@@ -616,7 +608,6 @@
   $: if ($tabs) {
     tick().then(remeasureOverflow);
   }
-  $: useAutoWidth.set(autoWidth);
   $: useFullWidth.set(fullWidth);
   $: useDismissible.set(dismissible);
   $: useDismissText.set(dismissText);

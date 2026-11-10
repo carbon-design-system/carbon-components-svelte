@@ -101,7 +101,6 @@
   const {
     selectedTab,
     iconOnly,
-    useAutoWidth,
     useFullWidth,
     useDismissible,
     useDismissText,
@@ -261,13 +260,7 @@
     class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
     class:bx--tabs__nav-link--icon-only={$iconOnly}
     class:bx--tabs__nav-link--single-line={singleLine}
-    style:width={$iconOnly
-      ? undefined
-      : $useFullWidth
-        ? "100%"
-        : $useAutoWidth
-          ? "auto"
-          : undefined}
+    style:width={!$iconOnly && $useFullWidth ? "100%" : undefined}
   >
     {#if $iconOnly}
       <div class:bx--tabs__nav-item--icon={true}>

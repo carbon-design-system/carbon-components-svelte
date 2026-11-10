@@ -146,9 +146,8 @@
       : window.matchMedia?.(`(max-width: ${breakpoints.md / 16 - 0.02}rem)`);
   let belowMd = belowMdQuery?.matches ?? false;
 
-  // Vertical tabs do not support the auto-width, full-width, dismissible, or
+  // Vertical tabs do not support the full-width, dismissible, or
   // icon-only variants. These stores satisfy the shared `Tab` context contract.
-  const useAutoWidth = writable(false);
   const useFullWidth = writable(false);
   const useDismissible = writable(false);
   // Vertical tabs are never container type.
@@ -411,7 +410,6 @@
     selectedTab,
     selectedContent,
     iconOnly: useIconOnly,
-    useAutoWidth,
     useFullWidth,
     useDismissible,
     useContainer,

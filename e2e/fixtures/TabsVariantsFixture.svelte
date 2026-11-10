@@ -102,7 +102,7 @@
   <Tabs fullWidth>
     <Tab label="One" /><Tab label="Two" />
   </Tabs>
-  <Tabs autoWidth>
+  <Tabs>
     <Tab label="One" /><Tab label="Two" />
   </Tabs>
 </section>
