@@ -709,6 +709,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/InterstitialScreen
+  json-viewer:
+    name: JSON viewer
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/json-viewer.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/JsonViewer
   kbd:
     name: Kbd
     status: stable
