@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+import InfiniteList from "carbon-components-svelte/InfiniteList/InfiniteList.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
@@ -441,6 +442,23 @@ export const navigation: AriaEntry[] = [
     render: (attrs) =>
       render(ToolbarMenuFixture, { props: { under: "item", ...attrs } }),
     target: () => screen.getByRole("menuitem"),
+  },
+  {
+    name: "InfiniteList",
+    render: (attrs) =>
+      render(InfiniteList, {
+        props: { initial: { items: [{ id: 1 }] }, ...attrs },
+      }),
+    target: () => screen.getByRole("list"),
+  },
+  {
+    name: "InfiniteList",
+    variant: "feed",
+    render: (attrs) =>
+      render(InfiniteList, {
+        props: { initial: { items: [{ id: 1 }] }, pattern: "feed", ...attrs },
+      }),
+    target: () => screen.getByRole("feed"),
   },
   {
     name: "RecursiveList",
