@@ -1,0 +1,155 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// TimeRangePicker: a list box field that opens a panel of quick ranges
+/// (a contained list) beside a custom range form. The field, the list and
+/// the form fields are Carbon's own, so this partial only lays them out:
+/// the control row, the popover's width, the two columns and the form's
+/// rhythm. Below `md` the columns stack.
+/// @access private
+/// @group components
+@mixin time-range-picker {
+  .#{$prefix}--time-range-picker {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    max-inline-size: 100%;
+    gap: $carbon--spacing-02;
+
+    // The field keeps its floor on a narrow page, so the buttons after it
+    // wrap to the next line.
+    @include carbon--breakpoint-down(md) {
+      flex-wrap: wrap;
+    }
+  }
+
+  // The field takes the width of the text it shows, from a floor that holds
+  // "Last 15 minutes" and a short absolute range, to a ceiling that
+  // truncates a long one.
+  .#{$prefix}--time-range-picker__anchor {
+    display: inline-flex;
+    min-inline-size: to-rem(240px);
+    max-inline-size: to-rem(480px);
+  }
+
+  .#{$prefix}--time-range-picker__anchor > .#{$prefix}--list-box {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-range-picker .#{$prefix}--list-box__field {
+    justify-content: flex-start;
+    cursor: pointer;
+  }
+
+  .#{$prefix}--time-range-picker__icon {
+    flex: none;
+    margin-inline-end: $carbon--spacing-03;
+    fill: $icon-primary;
+  }
+
+  .#{$prefix}--time-range-picker
+    .#{$prefix}--list-box--disabled
+    .#{$prefix}--time-range-picker__icon {
+    fill: $icon-disabled;
+  }
+
+  .#{$prefix}--time-range-picker__text {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--time-range-picker .#{$prefix}--btn--icon-only svg {
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--time-range-picker__popover .#{$prefix}--popover-contents {
+    max-inline-size: none;
+  }
+
+  .#{$prefix}--time-range-picker__panel {
+    max-block-size: 80vh;
+    overflow-y: auto;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--time-range-picker__form {
+    display: grid;
+    grid-template-columns: to-rem(304px);
+
+    @include carbon--breakpoint(md) {
+      grid-template-columns: to-rem(192px) to-rem(352px);
+    }
+  }
+
+  .#{$prefix}--time-range-picker__quick {
+    border-block-end: 1px solid $border-subtle;
+    padding-block: $carbon--spacing-03;
+
+    @include carbon--breakpoint(md) {
+      border-block-end: 0;
+      border-inline-end: 1px solid $border-subtle;
+    }
+  }
+
+  .#{$prefix}--time-range-picker__custom {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+    padding: $carbon--spacing-05;
+  }
+
+  // Zone, refresh and Apply sit under both columns, so the form's own
+  // fields stay together. The footer stays in view while the panel scrolls,
+  // so Apply is never below the fold.
+  .#{$prefix}--time-range-picker__footer {
+    position: sticky;
+    inset-block-end: 0;
+    display: grid;
+    align-items: end;
+    gap: $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    background-color: $layer;
+    padding: $carbon--spacing-05;
+
+    @include carbon--breakpoint(md) {
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) to-rem(112px) auto;
+    }
+  }
+
+  .#{$prefix}--time-range-picker__heading {
+    @include type-style("heading-compact-01");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--time-range-picker__absolute,
+  .#{$prefix}--time-range-picker__relative {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--time-range-picker__times {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--time-range-picker__times .#{$prefix}--time-picker {
+    inline-size: 100%;
+  }
+
+  .#{$prefix}--time-range-picker__help {
+    @include type-style("helper-text-01");
+
+    color: $text-secondary;
+  }
+}
+
+@include exports("time-range-picker") {
+  @include time-range-picker;
+}
