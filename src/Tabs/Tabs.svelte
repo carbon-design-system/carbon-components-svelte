@@ -250,12 +250,6 @@
   // This is necessary to avoid infinite loops in Svelte 5.
   let needsDomSync = false;
 
-  /** @type {import("svelte/store").Readable<boolean>} */
-  const hasSecondaryLabel = derived(
-    [tabs, useContainer],
-    ([_, container]) => container && _.some((tab) => tab.hasSecondaryLabel),
-  );
-
   /**
    * Mirror the `iconOnly` prop into the context so each `Tab` reacts to it.
    * @type {import("svelte/store").Writable<boolean>}
@@ -478,7 +472,6 @@
     useContainer,
     navigation: useNavigation,
     secondaryLabelSupported: useContainer,
-    hasSecondaryLabel,
     add,
     remove,
     addContent,
@@ -643,7 +636,6 @@
   class:bx--tabs={true}
   class:bx--tabs--container={type === "container"}
   class:bx--tabs--line={type !== "container"}
-  class:bx--tabs--tall={$hasSecondaryLabel}
   class:bx--tabs--full-width={fullWidth}
   class:bx--tabs--dismissible={dismissible}
   class:bx--tabs--icon-only={iconOnly}

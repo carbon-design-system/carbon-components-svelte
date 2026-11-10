@@ -105,7 +105,6 @@
     useFullWidth,
     useDismissible,
     useDismissText,
-    hasSecondaryLabel,
     secondaryLabelSupported,
     useContainer,
     navigation,
@@ -122,20 +121,15 @@
   // `undefined` for a tab added after mount.
   const initialTab = claimTab?.(id);
 
-  // Re-register when these change so `bx--tabs--tall` and the `dismiss`
-  // detail follow the current props.
+  // Re-register when these change so the `dismiss` detail follows the
+  // current props.
   $: hasOwnSecondaryLabel = Boolean(
     secondaryLabel || $$slots.secondaryChildren,
   );
-  // A tab draws its own secondary label from the first render; its
-  // siblings learn of it, and make room, only once it registers. Until
-  // then (server markup), CSS sizes the row from this tab's own class.
+  // Each tab draws its markup from its own props. A set that holds a
+  // secondary label grows taller in CSS (`:has()`), so siblings never
+  // need to know about it.
   $: ownSecondaryLabel = $secondaryLabelSupported && hasOwnSecondaryLabel;
-  // A container tab that draws its label alone, with no secondary label
-  // or placeholder under it. Before the tabs register, a sized set with a
-  // secondary label gives these links the placeholder's empty line in CSS.
-  $: singleLine =
-    $useContainer && !$iconOnly && !($hasSecondaryLabel || ownSecondaryLabel);
 
   $: add({
     id,
@@ -193,7 +187,6 @@
   class:bx--tabs__nav-item--selected={selected}
   class:bx--tabs__nav-item--default={!disabled && !selected}
   class:bx--tabs__nav-item--container={$useContainer}
-  class:bx--tabs__nav-item--secondary-label={ownSecondaryLabel}
   class:bx--tabs__nav-item--container-selected={$useContainer &&
     selected &&
     !disabled}
@@ -260,7 +253,6 @@
       !disabled}
     class:bx--tabs__nav-link--icon={Boolean(icon) && !$iconOnly}
     class:bx--tabs__nav-link--icon-only={$iconOnly}
-    class:bx--tabs__nav-link--single-line={singleLine}
     style:width={$iconOnly
       ? undefined
       : $useFullWidth
@@ -275,7 +267,7 @@
       </div>
       <!-- Visible only in the mobile dropdown; hidden in the desktop icon-only row. -->
       <span class:bx--tabs__nav-item-label={true}>{label}</span>
-    {:else if $hasSecondaryLabel || ownSecondaryLabel}
+    {:else if ownSecondaryLabel}
       <div class:bx--tabs__nav-item-label-wrapper={true}>
         <span
           class:bx--tabs__nav-item-label={true}
@@ -289,19 +281,12 @@
           </div>
         {/if}
       </div>
-      {#if secondaryLabel || $$slots.secondaryChildren}
-        <div
-          class:bx--tabs__nav-item-secondary-label={true}
-          title={secondaryLabel || undefined}
-        >
-          <slot name="secondaryChildren">{secondaryLabel}</slot>
-        </div>
-      {:else}
-        <div
-          class:bx--tabs__nav-item-secondary-label={true}
-          aria-hidden="true"
-        ></div>
-      {/if}
+      <div
+        class:bx--tabs__nav-item-secondary-label={true}
+        title={secondaryLabel || undefined}
+      >
+        <slot name="secondaryChildren">{secondaryLabel}</slot>
+      </div>
     {:else}
       {#if $useDismissible && icon}
         <div class:bx--tabs__nav-item--icon-left={true}>
