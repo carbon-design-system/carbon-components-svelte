@@ -256,7 +256,7 @@
       >
         <svelte:fragment slot="right">
           <div class="install-tabs">
-            <Tabs autoWidth>
+            <Tabs>
               <Tab label="Vite" />
               <Tab label="SvelteKit" />
               <Tab label="Rollup" />

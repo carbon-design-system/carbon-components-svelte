@@ -13,7 +13,6 @@
 </script>
 
 <Tabs
-  autoWidth
   selected={$packageManagerIndex}
   on:change={(e) => packageManagerIndex.set(e.detail)}
 >

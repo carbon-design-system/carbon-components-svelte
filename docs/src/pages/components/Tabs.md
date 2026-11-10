@@ -267,26 +267,7 @@ Set `flush` on `TabContent` to drop the panel's horizontal padding so content, s
 
 ## Width
 
-By default, each tab has a fixed width of `10rem`. Adjust how tabs size themselves with `autoWidth` and `fullWidth`.
-
-### Auto width
-
-Set `autoWidth` to `true` for tabs to automatically adjust their width based on content.
-
-<Tabs autoWidth>
-  <Tab label="Dashboard" />
-  <Tab label="Monitoring" />
-  <Tab label="Activity" />
-  <svelte:fragment slot="content">
-    <TabContent>Dashboard content with analytics and overview.</TabContent>
-    <TabContent>Monitoring content for uptime and alerts.</TabContent>
-    <TabContent>Activity content for recent user actions.</TabContent>
-  </svelte:fragment>
-</Tabs>
-
-### Full width
-
-Set `fullWidth` to `true` for tabs to evenly span the full width of the container.
+By default, each tab sizes to its label. Set `fullWidth` to `true` for tabs to evenly span the full width of the container.
 
 <Tabs fullWidth>
   <Tab label="Dashboard" />
@@ -540,7 +521,7 @@ container sizes, see [Container skeleton sizes](#skeleton-sizes).
 
 ## Container
 
-Use the container type for a more prominent tab interface. By default, container types have an auto-width.
+Use the container type for a more prominent tab interface.
 
 ### Basic
 
