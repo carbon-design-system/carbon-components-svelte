@@ -253,7 +253,7 @@
           <Stack gap={7}>
             <Stack gap={3}>
               <Text tag="h2" type="heading-02" color="primary">Code</Text>
-              <Tabs autoWidth>
+              <Tabs>
                 <Tab label="Theme" />
                 <Tab label="createTheme" />
                 <Tab label="CSS" />
