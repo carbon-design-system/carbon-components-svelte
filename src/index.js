@@ -124,6 +124,8 @@ export { default as GridOverlay } from "./Grid/GridOverlay.svelte";
 export { default as Row } from "./Grid/Row.svelte";
 export { default as Heading } from "./Heading/Heading.svelte";
 export { default as Section } from "./Heading/Section.svelte";
+export { default as IPAddressInput } from "./IPAddressInput/IPAddressInput.svelte";
+export { default as IPAddressListInput } from "./IPAddressInput/IPAddressListInput.svelte";
 export { default as IconIndicator } from "./IconIndicator/IconIndicator.svelte";
 export { default as ImageLoader } from "./ImageLoader/ImageLoader.svelte";
 export { default as InlineEdit } from "./InlineEdit/InlineEdit.svelte";
@@ -335,6 +337,16 @@ export { formatFileSize } from "./utils/format-file-size.js";
 export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
+export {
+  checkIPAddressBounds,
+  cleanIPAddressText,
+  describeIPRange,
+  formatIPAddress,
+  ipRangeContains,
+  ipRangesOverlap,
+  parseIPAddress,
+  resolveIPRanges,
+} from "./utils/ip-address.js";
 export {
   formatShortcut,
   matchesShortcut,
