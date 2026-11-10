@@ -69,6 +69,7 @@ export default {
     "docs/src/theme-builder.ts",
     "docs/src/search.ts",
     "docs/src/routes.ts",
+    "docs/src/page-links.ts",
     "docs/src/search-index.ts",
     "docs/scripts/slug.ts",
     "docs/scripts/visit.ts",
