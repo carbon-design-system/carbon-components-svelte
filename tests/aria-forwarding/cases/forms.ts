@@ -20,6 +20,7 @@ import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
+import PromptInput from "carbon-components-svelte/PromptInput/PromptInput.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
@@ -357,6 +358,11 @@ export const forms: AriaEntry[] = [
       render(TextArea, {
         props: { labelText: "Notes", helperText: "Optional", ...attrs },
       }),
+    target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "PromptInput",
+    render: (attrs) => render(PromptInput, { props: attrs }),
     target: () => screen.getByRole("textbox"),
   },
   {
