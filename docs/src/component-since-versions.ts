@@ -68,6 +68,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Meter: "0.113.0",
   Modal: "0.2.0",
   MultiSelect: "0.2.0",
+  NaturalDateInput: "0.114.0",
   NotificationQueue: "0.94.0",
   NumberInput: "0.2.0",
   OrderedList: "0.2.0",
