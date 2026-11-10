@@ -68,6 +68,8 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as CopyText } from "./CopyText/CopyText.svelte";
 export { default as Countdown } from "./Countdown/Countdown.svelte";
+export { default as DashboardGrid } from "./DashboardGrid/DashboardGrid.svelte";
+export { default as DashboardGridItem } from "./DashboardGrid/DashboardGridItem.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
 export { toCsv } from "./DataTable/data-table-utils.js";
@@ -323,6 +325,13 @@ export {
 } from "./utils/column-settings.js";
 export { createLoadingDelay, delayedLoading } from "./utils/delayed-loading.js";
 export { dismiss } from "./utils/dismiss.js";
+export {
+  compactLayout,
+  moveLayoutItem,
+  nudgeLayoutItem,
+  reconcileLayout,
+  resizeLayoutItem,
+} from "./utils/dashboard-layout.js";
 export { downloadFile } from "./utils/download-file.js";
 export {
   filterTreeById,
