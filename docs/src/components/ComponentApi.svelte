@@ -431,7 +431,7 @@
     to the
     {#if component.rest_props.type === "Element"}
       <code>{component.rest_props.name}</code>
-      element.
+      element. In Svelte 5, <code>{"{@attach}"}</code> attachments go there too.
     {:else}
       <code>{component.rest_props.name}</code>
       component.

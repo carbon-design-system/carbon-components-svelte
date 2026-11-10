@@ -264,7 +264,8 @@ here.
 
 Set `actions` to apply SvelteKit's `enhance` (or any other action) to the
 underlying form element. See [Form](/components/Form#sveltekit-enhance) for
-usage details.
+usage details. In Svelte 5, `{@attach fromAction(enhance)}` works too; see
+[Svelte 5 attachments](/components/Form#svelte-5-attachments).
 
 ```svelte
 <script>
