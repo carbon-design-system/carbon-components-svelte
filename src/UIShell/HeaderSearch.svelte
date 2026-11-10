@@ -94,7 +94,7 @@
    * `text`. Receives the item `text` and the current search value, and returns
    * whether the item `matched` along with the `indices` of characters to
    * highlight. Defaults to fuzzy matching. Requires the `menu` slot.
-   * @type {(text: string, query: string) => { matched: boolean; indices?: number[] }}
+   * @type {(text: string, query: string) => { matched: boolean; indices?: number[]; ranges?: Array<{ start: number; end: number }> }}
    */
   export let match = fuzzyMatch;
 
