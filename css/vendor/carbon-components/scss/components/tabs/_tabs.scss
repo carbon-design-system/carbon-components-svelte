@@ -1242,6 +1242,15 @@
     align-items: flex-start;
   }
 
+  // ccs: a tab with a secondary label stacks it under the label. As a row
+  // the link squeezed the label to nothing beside its secondary label.
+  #{$root}
+    .#{$prefix}--tabs__nav-link:has(> .#{$prefix}--tabs__nav-item-label-wrapper) {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+
   // One line tall so the centered icon lands on the label's first line.
   #{$root}
     .#{$prefix}--tabs__nav-link--icon

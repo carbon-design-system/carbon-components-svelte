@@ -13,3 +13,9 @@
     </Tabs>
   </div>
 {/each}
+<div data-testid="vertical" style="margin: 1rem; height: 16rem;">
+  <TabsVertical>
+    <Tab label="Overview" />
+    <Tab label="Alerts" secondaryLabel="12" />
+  </TabsVertical>
+</div>
