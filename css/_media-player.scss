@@ -1,0 +1,568 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// MediaPlayer and MediaScrubber (absent from v10; new partial).
+///
+/// The video variant draws its controls over arbitrary frames, so the
+/// controls always sit on a dark scrim and use light foregrounds, whatever
+/// the theme: Carbon's on-color pairing, written with palette values
+/// because no theme token stays dark in every theme. The audio variant has
+/// no picture behind it and follows the theme.
+///
+/// A media timeline reads left to right in every writing direction, as on
+/// YouTube and in the browsers' own controls: the scrubber and the volume
+/// slider set `dir="ltr"`, and the arrow keys do not swap. The buttons
+/// around them follow the page's direction.
+/// @access private
+/// @group components
+@mixin media-player {
+  $media-size: to-rem(40px);
+  $media-fg: $carbon--white-0;
+  $media-track: rgba($carbon--white-0, 0.3);
+  $media-buffered: rgba($carbon--white-0, 0.5);
+  $media-progress: $carbon--blue-40;
+  $media-scrim: $carbon--black-100;
+
+  .#{$prefix}--media-player {
+    position: relative;
+    box-sizing: border-box;
+    inline-size: 100%;
+    background: $media-scrim;
+    color: var(--ccs-media-color);
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--media-player--video {
+    --ccs-media-color: #{$media-fg};
+    --ccs-media-track: #{$media-track};
+    --ccs-media-buffered: #{$media-buffered};
+    --ccs-media-progress: #{$media-progress};
+    --ccs-media-hover: #{rgba($carbon--white-0, 0.2)};
+  }
+
+  .#{$prefix}--media-player--audio {
+    --ccs-media-color: #{$icon-primary};
+    --ccs-media-track: #{$border-subtle};
+    --ccs-media-buffered: #{$border-strong};
+    --ccs-media-progress: #{$interactive};
+    --ccs-media-hover: #{$layer-hover};
+    background: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--media-player--fullscreen {
+    block-size: 100%;
+  }
+
+  .#{$prefix}--media-player:focus {
+    outline: none;
+  }
+
+  .#{$prefix}--media-player__stage {
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .#{$prefix}--media-player__media {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+    background: $media-scrim;
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__media {
+    display: none;
+  }
+
+  // Captions are drawn by the browser. `::cue` takes only color, background,
+  // font, text-shadow, outline, opacity, visibility and a few text
+  // properties: no padding, margin, border-radius or position, and no
+  // custom properties in some engines, so these are plain tokens, not hooks.
+  // A caption keeps its contrast on any frame, so it gets its own backing.
+  .#{$prefix}--media-player__media::cue {
+    background: $carbon--black-100;
+    color: $carbon--white-0;
+    font-family: carbon--font-family("sans");
+    font-size: to-rem(18px);
+    line-height: to-rem(24px);
+  }
+
+  // Chromium and WebKit draw cues in a container the page can move, so the
+  // cues rise above the controls while they show. Firefox draws them in a
+  // closed tree, and its captions stay at the bottom under the scrim; only
+  // a cue's own line setting moves them.
+  .#{$prefix}--media-player--video
+    .#{$prefix}--media-player__media::-webkit-media-text-track-container {
+    transform: translateY(to-rem(-112px));
+  }
+
+  .#{$prefix}--media-player--video.#{$prefix}--media-player--controls-hidden
+    .#{$prefix}--media-player__media::-webkit-media-text-track-container {
+    transform: none;
+  }
+
+  .#{$prefix}--media-player__status {
+    position: absolute;
+    inset-block-start: 50%;
+    @include ccs-inset-inline($start: 50%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__status {
+    display: none;
+  }
+
+  .#{$prefix}--media-player__error {
+    position: absolute;
+    inset-block-start: 50%;
+    @include ccs-inset-inline($start: 0, $end: 0);
+    padding: $carbon--spacing-05;
+    text-align: center;
+    transform: translateY(-50%);
+
+    @include type-style("body-compact-02");
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__error {
+    position: static;
+    transform: none;
+  }
+
+  // The scrim fades with the controls. The fade is the only motion; it is
+  // not used at all under `prefers-reduced-motion`, where the controls never
+  // hide.
+  .#{$prefix}--media-player__controls {
+    position: absolute;
+    inset-block-end: 0;
+    @include ccs-inset-inline($start: 0, $end: 0);
+    box-sizing: border-box;
+    padding-block: to-rem(40px) $carbon--spacing-02;
+    padding-inline: $carbon--spacing-03;
+    background: linear-gradient(
+      to top,
+      rgba($media-scrim, 0.85),
+      rgba($media-scrim, 0.6) 60%,
+      rgba($media-scrim, 0)
+    );
+    transition: opacity $duration--moderate-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__controls {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    padding-block: 0;
+    padding-inline: $carbon--spacing-03;
+    background: none;
+  }
+
+  .#{$prefix}--media-player--controls-hidden
+    .#{$prefix}--media-player__controls {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--media-player--controls-hidden .#{$prefix}--media-player__media {
+    cursor: none;
+  }
+
+  .#{$prefix}--media-player__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-01;
+  }
+
+  // The audio bar is one row: play, the scrubber, then the rest.
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__bar {
+    display: contents;
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__bar > * {
+    order: 2;
+  }
+
+  .#{$prefix}--media-player--audio
+    .#{$prefix}--media-player__bar
+    > .#{$prefix}--media-player__button:first-child {
+    order: 0;
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-scrubber {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    order: 1;
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__spacer {
+    display: none;
+  }
+
+  .#{$prefix}--media-player__spacer {
+    flex: 1 1 0;
+  }
+
+  .#{$prefix}--media-player__button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-inline-size: $media-size;
+    block-size: $media-size;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ccs-media-color);
+    cursor: pointer;
+    fill: currentColor;
+
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--media-player__button--text {
+    padding-inline: $carbon--spacing-03;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--media-player__button--active {
+    box-shadow: inset 0 -2px 0 var(--ccs-media-progress);
+  }
+
+  .#{$prefix}--media-player__time {
+    padding-inline: $carbon--spacing-03;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__time {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--media-player__volume {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  // A native range input: the keys, touch, and screen reader support come
+  // with it. It reads left to right in every direction, like the scrubber.
+  .#{$prefix}--media-player__volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: to-rem(80px);
+    block-size: $media-size;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    direction: ltr;
+    touch-action: pan-y;
+  }
+
+  .#{$prefix}--media-player__volume-slider::-webkit-slider-runnable-track {
+    block-size: to-rem(4px);
+    background: linear-gradient(
+      to right,
+      var(--ccs-media-progress) var(--ccs-media-volume, 100%),
+      var(--ccs-media-track) var(--ccs-media-volume, 100%)
+    );
+  }
+
+  .#{$prefix}--media-player__volume-slider::-moz-range-track {
+    block-size: to-rem(4px);
+    background: linear-gradient(
+      to right,
+      var(--ccs-media-progress) var(--ccs-media-volume, 100%),
+      var(--ccs-media-track) var(--ccs-media-volume, 100%)
+    );
+  }
+
+  .#{$prefix}--media-player__volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    inline-size: to-rem(12px);
+    block-size: to-rem(12px);
+    margin-block-start: to-rem(-4px);
+    border: 0;
+    border-radius: 50%;
+    background: var(--ccs-media-color);
+  }
+
+  .#{$prefix}--media-player__volume-slider::-moz-range-thumb {
+    inline-size: to-rem(12px);
+    block-size: to-rem(12px);
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ccs-media-color);
+  }
+
+  // The shortcut help covers the player; the controls under it are inert.
+  .#{$prefix}--media-player__help {
+    position: absolute;
+    inset-block: 0;
+    @include ccs-inset-inline($start: 0, $end: 0);
+    z-index: 1;
+    box-sizing: border-box;
+    padding: $carbon--spacing-05;
+    overflow: auto;
+    background: rgba($media-scrim, 0.92);
+    color: $media-fg;
+  }
+
+  // A bar is too short to hold the list, so it opens above the bar.
+  .#{$prefix}--media-player--audio .#{$prefix}--media-player__help {
+    inset-block: auto;
+    inset-block-end: 100%;
+    max-block-size: 70vh;
+    background: $layer;
+    color: $text-primary;
+    box-shadow: 0 2px 6px rgba($carbon--black-100, 0.3);
+  }
+
+  .#{$prefix}--media-player__help-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-end: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--media-player__help-title {
+    margin: 0;
+
+    @include type-style("heading-compact-02");
+  }
+
+  .#{$prefix}--media-player__help-list {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: $carbon--spacing-03 $carbon--spacing-07;
+    align-items: center;
+    margin: 0;
+
+    @include type-style("body-compact-01");
+
+    @include carbon--breakpoint(md) {
+      grid-template-columns: 1fr auto 1fr auto;
+    }
+  }
+
+  .#{$prefix}--media-player__help-list dt {
+    margin: 0;
+  }
+
+  .#{$prefix}--media-player__help-list dd {
+    display: flex;
+    gap: $carbon--spacing-02;
+    margin: 0;
+  }
+
+  // A menu opens inside the player, so it stays on screen in fullscreen.
+  .#{$prefix}--media-player .#{$prefix}--menu {
+    color: $text-primary;
+  }
+
+  // The scrubber.
+  .#{$prefix}--media-scrubber {
+    position: relative;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: to-rem(20px);
+    cursor: pointer;
+    touch-action: pan-y;
+  }
+
+  .#{$prefix}--media-scrubber--disabled {
+    cursor: default;
+  }
+
+  .#{$prefix}--media-scrubber__track {
+    position: absolute;
+    inset-block-start: 50%;
+    @include ccs-inset-inline($start: 0, $end: 0);
+    block-size: to-rem(4px);
+    background: var(--ccs-media-track);
+    transform: translateY(-50%);
+  }
+
+  .#{$prefix}--media-scrubber__buffered,
+  .#{$prefix}--media-scrubber__filled {
+    position: absolute;
+    inset-block: 0;
+  }
+
+  .#{$prefix}--media-scrubber__buffered {
+    background: var(--ccs-media-buffered);
+  }
+
+  .#{$prefix}--media-scrubber__filled {
+    inset-inline-start: 0;
+    inline-size: 100%;
+    background: var(--ccs-media-progress);
+    transform-origin: 0 50%;
+  }
+
+  .#{$prefix}--media-scrubber__chapter {
+    position: absolute;
+    inset-block: 0;
+    inline-size: to-rem(2px);
+    background: $media-scrim;
+    transform: translateX(-50%);
+  }
+
+  .#{$prefix}--media-scrubber__thumb {
+    position: absolute;
+    inset-block-start: 50%;
+    box-sizing: border-box;
+    inline-size: to-rem(12px);
+    block-size: to-rem(12px);
+    border-radius: 50%;
+    background: var(--ccs-media-color);
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--media-scrubber--disabled .#{$prefix}--media-scrubber__thumb {
+    display: none;
+  }
+
+  .#{$prefix}--media-scrubber__preview {
+    position: absolute;
+    inset-block-end: calc(100% + #{$carbon--spacing-02});
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-inline-size: 100%;
+    padding: $carbon--spacing-01 $carbon--spacing-03;
+    border: 1px solid $media-track;
+    background: $media-scrim;
+    color: $media-fg;
+    pointer-events: none;
+    transform: translateX(-50%);
+    white-space: nowrap;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--media-scrubber__preview-time {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .#{$prefix}--media-scrubber__preview-chapter {
+    overflow: hidden;
+    max-inline-size: 100%;
+    text-overflow: ellipsis;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--media-player__button:hover {
+      background: var(--ccs-media-hover);
+    }
+
+    .#{$prefix}--media-scrubber:not(.#{$prefix}--media-scrubber--disabled):hover
+      .#{$prefix}--media-scrubber__track {
+      block-size: to-rem(6px);
+    }
+  }
+
+  .#{$prefix}--media-scrubber--scrubbing .#{$prefix}--media-scrubber__track {
+    block-size: to-rem(6px);
+  }
+
+  .#{$prefix}--media-player__button:focus,
+  .#{$prefix}--media-player__volume-slider:focus,
+  .#{$prefix}--media-scrubber__thumb:focus {
+    @include focus-outline("outline");
+  }
+
+  // On the dark scrim the blue ring is dim over a bright frame, so the
+  // ring is white; the scrubber thumb sits on the track, so its ring sits
+  // outside it.
+  .#{$prefix}--media-player--video .#{$prefix}--media-player__button:focus,
+  .#{$prefix}--media-player--video
+    .#{$prefix}--media-player__volume-slider:focus,
+  .#{$prefix}--media-player--video .#{$prefix}--media-scrubber__thumb:focus {
+    outline-color: $media-fg;
+  }
+
+  .#{$prefix}--media-scrubber__thumb:focus {
+    outline-offset: to-rem(2px);
+  }
+
+  // Forced colors repaints backgrounds as Canvas, which would erase the
+  // scrim, the track and the thumb. The controls sit on a solid Canvas
+  // strip, and the track layers use system colors, which survive forcing.
+  @media (forced-colors: active) {
+    .#{$prefix}--media-player__controls,
+    .#{$prefix}--media-player--audio .#{$prefix}--media-player__controls {
+      background: Canvas;
+    }
+
+    .#{$prefix}--media-player__button {
+      color: ButtonText;
+    }
+
+    .#{$prefix}--media-player__button--active {
+      outline: 1px solid Highlight;
+      outline-offset: -1px;
+    }
+
+    .#{$prefix}--media-player__help {
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .#{$prefix}--media-player__volume-slider {
+      -webkit-appearance: auto;
+      appearance: auto;
+      accent-color: Highlight;
+    }
+
+    .#{$prefix}--media-scrubber__track {
+      background-color: GrayText;
+    }
+
+    .#{$prefix}--media-scrubber__buffered {
+      background-color: ButtonText;
+    }
+
+    .#{$prefix}--media-scrubber__filled {
+      background-color: Highlight;
+    }
+
+    .#{$prefix}--media-scrubber__chapter {
+      background-color: Canvas;
+    }
+
+    .#{$prefix}--media-scrubber__thumb {
+      border: 2px solid Canvas;
+      background-color: ButtonText;
+      outline: 1px solid ButtonText;
+    }
+
+    .#{$prefix}--media-scrubber__preview {
+      border-color: CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--media-player__controls {
+      transition: none;
+    }
+  }
+}
+
+@include exports("media-player") {
+  @include media-player;
+}

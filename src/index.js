@@ -151,6 +151,9 @@ export { default as ListBoxSelection } from "./ListBox/ListBoxSelection.svelte";
 export { default as ListItem } from "./ListItem/ListItem.svelte";
 export { default as Loading } from "./Loading/Loading.svelte";
 export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
+export { default as MediaPlayer } from "./MediaPlayer/MediaPlayer.svelte";
+export { default as MediaScrubber } from "./MediaPlayer/MediaScrubber.svelte";
+export { createMediaState } from "./MediaPlayer/media-state.js";
 export { default as Menu } from "./Menu/Menu.svelte";
 export { default as MenuDivider } from "./Menu/MenuDivider.svelte";
 export { default as MenuItem } from "./Menu/MenuItem.svelte";
@@ -343,6 +346,11 @@ export {
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
+export {
+  describeTime,
+  formatClock,
+  PLAYBACK_RATES,
+} from "./utils/media-time.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
