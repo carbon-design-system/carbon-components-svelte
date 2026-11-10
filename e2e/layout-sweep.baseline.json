@@ -168,6 +168,22 @@
     "message": "div[data-testid=\"table\"]: spans 0px to 480px"
   },
   {
+    "fixture": "booking-slots.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(1) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(1)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(1) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(1): 1px outline inside 1px outline div.bx--booking-slots > div.bx--booking-slots__layout > div.bx--booking-slots__calendar:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--inline, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "booking-slots.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(2) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(4)",
+    "message": "div.bx--date-picker__days:nth-of-type(2) > div.bx--date-picker__month-days > div.bx--date-picker__week:nth-of-type(2) > span.bx--date-picker__day.bx--date-picker__day--selected:nth-of-type(4): 1px outline inside 1px outline div.bx--booking-slots.bx--booking-slots--week > div.bx--booking-slots__layout > div.bx--booking-slots__calendar:nth-of-type(1) > div.bx--date-picker__calendar.bx--date-picker__calendar--inline, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "button-set.html",
     "variant": "320",
     "check": "overflow",
