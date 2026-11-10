@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
+import PermissionsMatrix from "carbon-components-svelte/PermissionsMatrix/PermissionsMatrix.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
 import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
@@ -441,6 +442,18 @@ export const navigation: AriaEntry[] = [
     render: (attrs) =>
       render(ToolbarMenuFixture, { props: { under: "item", ...attrs } }),
     target: () => screen.getByRole("menuitem"),
+  },
+  {
+    name: "PermissionsMatrix",
+    render: (attrs) =>
+      render(PermissionsMatrix, {
+        props: {
+          roles: [{ id: "viewer", label: "Viewer" }],
+          permissions: [{ id: "audit", label: "Audit log" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("grid"),
   },
   {
     name: "RecursiveList",
