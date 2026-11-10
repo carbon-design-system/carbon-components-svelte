@@ -43,3 +43,14 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
           npm publish --provenance --access public --tag next
+
+  # Production docs follow the stable release. A -next tag leaves them.
+  deploy-docs:
+    needs: release
+    if: ${{ ! contains(github.ref, '-next') }}
+    permissions:
+      contents: read
+    uses: ./.github/workflows/deploy-docs.yml
+    with:
+      target: production
+    secrets: inherit
