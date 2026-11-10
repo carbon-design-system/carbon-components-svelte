@@ -1,3 +1,6 @@
+# Production serves the latest release, so its docs match what npm
+# installs. release.yml deploys it from the tag after it publishes.
+# master deploys to the preview site, if one is set up.
 on:
   workflow_call:
     inputs:
@@ -5,7 +8,16 @@ on:
       after-checks:
         type: boolean
         default: false
+      target:
+        type: string
+        default: preview
   workflow_dispatch:
+    inputs:
+      # To redeploy production, run this from the latest release tag.
+      target:
+        type: choice
+        options: [preview, production]
+        default: preview
   # checks.yml skips a push that changes only docs/, and deploys only for
   # changes outside it, so a docs change deploys from here.
   push:
@@ -27,7 +39,7 @@ jobs:
       # costs a build, and a missed one leaves the site stale.
       - name: Leave the deploy to checks.yml
         id: guard
-        if: github.event_name == 'push' && !inputs.after-checks
+        if: github.event_name == 'push' && !inputs.after-checks && inputs.target != 'production'
         env:
           GH_TOKEN: ${{ github.token }}
           BEFORE: ${{ github.event.before }}
@@ -43,8 +55,23 @@ jobs:
             esac
           done <<< "$files"
 
+      # The hook deploys this commit, not the service branch's head.
       - name: Trigger deploy
         if: steps.guard.outputs.skip != 'true'
         env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: curl -f "$deploy_url"
+          TARGET: ${{ inputs.target || 'preview' }}
+          production_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          preview_url: ${{ secrets.RENDER_PREVIEW_DEPLOY_HOOK_URL }}
+        run: |
+          if [ "$TARGET" = production ]; then
+            deploy_url=$production_url
+          else
+            deploy_url=$preview_url
+          fi
+          if [ -z "$deploy_url" ]; then
+            echo "No deploy hook for $TARGET, so nothing deploys."
+            exit 0
+          fi
+          case "$deploy_url" in *\?*) sep='&' ;; *) sep='?' ;; esac
+          curl -fsS -o /dev/null "${deploy_url}${sep}ref=${GITHUB_SHA}"
+          echo "Deployed $GITHUB_SHA to $TARGET."
