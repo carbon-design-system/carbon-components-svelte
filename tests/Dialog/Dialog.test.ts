@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import { tick } from "svelte";
+import { DIALOG_CLOSE_MS } from "../../src/constants/timing.js";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import Dialog from "./Dialog.test.svelte";
@@ -10,9 +11,25 @@ interface CloseContext {
   onclose: () => void;
 }
 
+function stubReducedMotion(reduce: boolean) {
+  vi.stubGlobal("matchMedia", (media: string) => ({
+    matches: reduce && media === "(prefers-reduced-motion: reduce)",
+    media,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+}
+
 describe("Dialog", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    // Closing is immediate under reduced motion; the exit motion has its
+    // own tests below.
+    stubReducedMotion(true);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it.each([
@@ -225,5 +242,128 @@ describe("Dialog", () => {
 
     expect(onopen).toHaveBeenCalledTimes(2);
     expect(dialogEl).toHaveAttribute("open");
+  });
+
+  describe("exit motion", () => {
+    beforeEach(() => {
+      stubReducedMotion(false);
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    function openDialog(onclose = vi.fn()) {
+      const result = render(Dialog, {
+        props: { modal: true, open: true, onclose },
+      });
+      const dialogEl = screen.getByRole("dialog");
+      assert(dialogEl instanceof HTMLDialogElement);
+      const closeSpy = vi.spyOn(dialogEl, "close");
+      return { ...result, dialogEl, closeSpy, onclose };
+    }
+
+    it("holds close() until the exit motion has run", async () => {
+      const { rerender, dialogEl, closeSpy, onclose } = openDialog();
+
+      await rerender({ modal: true, open: false, onclose });
+
+      expect(dialogEl).toHaveClass("bx--dialog--closing");
+      expect(dialogEl).toHaveAttribute("open");
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS - 1);
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(1);
+      await tick();
+
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+      expect(dialogEl).not.toHaveAttribute("open");
+      expect(dialogEl).not.toHaveClass("bx--dialog--closing");
+      expect(onclose).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        trigger: "programmatic",
+      });
+    });
+
+    it("closes when the box's transform transition ends", async () => {
+      const { rerender, dialogEl, closeSpy, onclose } = openDialog();
+      await rerender({ modal: true, open: false, onclose });
+
+      await fireEvent(
+        dialogEl,
+        new TransitionEvent("transitionend", { propertyName: "opacity" }),
+      );
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      await fireEvent(
+        dialogEl,
+        new TransitionEvent("transitionend", { propertyName: "transform" }),
+      );
+      await tick();
+
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS);
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("closes at once under reduced motion", async () => {
+      stubReducedMotion(true);
+      const { rerender, dialogEl, closeSpy, onclose } = openDialog();
+
+      await rerender({ modal: true, open: false, onclose });
+
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+      expect(dialogEl).not.toHaveClass("bx--dialog--closing");
+      expect(dialogEl).not.toHaveAttribute("open");
+    });
+
+    it("cancels the close when it reopens during the hold", async () => {
+      const { rerender, dialogEl, closeSpy, onclose } = openDialog();
+      await rerender({ modal: true, open: false, onclose });
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS / 2);
+
+      await rerender({ modal: true, open: true, onclose });
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS);
+      await tick();
+
+      expect(closeSpy).not.toHaveBeenCalled();
+      expect(dialogEl).toHaveAttribute("open");
+      expect(dialogEl).not.toHaveClass("bx--dialog--closing");
+      expect(onclose).not.toHaveBeenCalled();
+    });
+
+    it("holds a backdrop click and an Escape the same way", async () => {
+      const { dialogEl, closeSpy, onclose } = openDialog();
+
+      await fireEvent.mouseDown(dialogEl);
+      await fireEvent.mouseUp(dialogEl);
+      expect(dialogEl).toHaveClass("bx--dialog--closing");
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS);
+      await tick();
+      expect(onclose.mock.calls[0][0].detail).toEqual({ trigger: "backdrop" });
+    });
+
+    it("holds an Escape and keeps it from closing at once", async () => {
+      const { dialogEl, closeSpy, onclose } = openDialog();
+
+      const cancel = new Event("cancel", { cancelable: true });
+      dialogEl.dispatchEvent(cancel);
+
+      expect(cancel.defaultPrevented).toBe(true);
+      expect(closeSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(DIALOG_CLOSE_MS);
+      await tick();
+
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+      expect(onclose.mock.calls[0][0].detail).toEqual({
+        trigger: "escape-key",
+      });
+    });
   });
 });
