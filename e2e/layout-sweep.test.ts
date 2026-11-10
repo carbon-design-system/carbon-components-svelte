@@ -81,6 +81,14 @@ const UNSTABLE: (Partial<Omit<Entry, "message">> & { reason: string })[] = [
     reason: "the 'multiple' value stops inside a date on Linux only",
   },
   {
+    fixture: "code-snippet-lines.html",
+    variant: "320",
+    check: "fits",
+    kind: "overflows box",
+    reason:
+      "a wrapped line ends in a space that hangs past its box, and where a row ends depends on the font: it does on Linux, not on macOS",
+  },
+  {
     fixture: "form-reset.html",
     variant: "320",
     check: "overflow",
