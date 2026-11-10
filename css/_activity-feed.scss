@@ -1,0 +1,309 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// ActivityFeed: a feed of comments, with replies, reactions and an editor,
+/// and compact rows for system events. It reuses the chat day divider.
+/// @access private
+/// @group components
+@mixin activity-feed {
+  .#{$prefix}--activity-feed {
+    display: block;
+    color: $text-primary;
+  }
+
+  // The feed scrolls only when it is given a height. A scroller that is
+  // not bounded leaves scrolling to the page.
+  .#{$prefix}--activity-feed__scroller--bounded {
+    position: relative;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .#{$prefix}--activity-feed__older,
+  .#{$prefix}--activity-feed__empty {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-05;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  // Rows far from the viewport are skipped by the browser. The size it
+  // keeps for a skipped row is the last one it drew, so the scroll bar
+  // does not jump as rows come and go.
+  .#{$prefix}--activity-feed__list--lazy > .#{$prefix}--activity-row {
+    contain-intrinsic-block-size: auto to-rem(96px);
+    content-visibility: auto;
+  }
+
+  // The end marker is how near the end counts as the end.
+  .#{$prefix}--activity-feed__end {
+    height: $carbon--spacing-07;
+  }
+
+  // The "N new" button floats at the foot of the scroller while the
+  // reader is above the newest item.
+  .#{$prefix}--activity-feed__new {
+    position: sticky;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    padding: $carbon--spacing-03;
+    inset-block-end: $carbon--spacing-03;
+    margin-block-start: -$carbon--spacing-09;
+    pointer-events: none;
+
+    .#{$prefix}--btn {
+      pointer-events: auto;
+    }
+  }
+
+  .#{$prefix}--activity-row {
+    padding: $carbon--spacing-05 $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    // The divider sits above the first article of a day and is drawn by the
+    // chat divider rules. Its own bottom margin spaces it from the comment.
+    > .#{$prefix}--chat-divider {
+      margin-block-end: $carbon--spacing-05;
+    }
+  }
+
+  .#{$prefix}--activity-comment {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--activity-comment__main {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .#{$prefix}--activity-comment__header {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: to-rem(24px);
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--activity-comment__author {
+    @include type-style("heading-compact-01");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--activity-comment__time,
+  .#{$prefix}--activity-comment__edited {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  // The menu sits at the end of the header, out of the way of the text.
+  .#{$prefix}--activity-comment__menu {
+    margin-inline-start: auto;
+  }
+
+  .#{$prefix}--activity-comment--sending,
+  .#{$prefix}--activity-comment--failed {
+    .#{$prefix}--activity-body {
+      color: $text-secondary;
+    }
+  }
+
+  .#{$prefix}--activity-comment__status {
+    @include type-style("label-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--activity-comment__status--error {
+    color: $text-error;
+  }
+
+  .#{$prefix}--activity-comment__confirm {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--activity-comment__editor {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // Replies indent under the comment, to the edge of its text, which sits
+  // an avatar and a gap in. A ghost button's text sits in its padding, so
+  // the button moves back by that much to line up with the text.
+  .#{$prefix}--activity-thread {
+    margin-block-start: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-08;
+
+    > .#{$prefix}--btn--ghost {
+      margin-inline-start: -$carbon--spacing-05;
+    }
+  }
+
+  .#{$prefix}--activity-thread__replies {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    > li {
+      padding-block: $carbon--spacing-03;
+    }
+  }
+
+  .#{$prefix}--activity-thread__composer {
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  // The body: paragraphs, quotes, lists, code and mentions.
+  .#{$prefix}--activity-body {
+    @include type-style("body-01");
+
+    min-width: 0;
+    overflow-wrap: anywhere;
+
+    > :first-child {
+      margin-block-start: 0;
+    }
+
+    > :last-child {
+      margin-block-end: 0;
+    }
+
+    p,
+    blockquote,
+    ul,
+    pre {
+      margin-block: $carbon--spacing-03 0;
+    }
+
+    blockquote {
+      padding-inline-start: $carbon--spacing-04;
+      border-inline-start: 2px solid $border-strong;
+      color: $text-secondary;
+    }
+
+    ul {
+      padding-inline-start: $carbon--spacing-05;
+      list-style: disc;
+    }
+
+    pre {
+      padding: $carbon--spacing-03 $carbon--spacing-04;
+      background-color: $layer-accent;
+      overflow-x: auto;
+
+      &:focus {
+        @include focus-outline("outline");
+      }
+    }
+
+    pre code {
+      @include type-style("code-02");
+
+      padding: 0;
+      background: none;
+    }
+  }
+
+  .#{$prefix}--activity-body__code {
+    @include type-style("code-01");
+
+    padding: 0 $carbon--spacing-02;
+    background-color: $layer-accent;
+  }
+
+  .#{$prefix}--activity-body__mention {
+    color: $link-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--activity-reactions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $carbon--spacing-02;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--activity-reactions__emoji {
+    margin-inline-end: $carbon--spacing-02;
+  }
+
+  // System events: one compact line each, with the author in bold.
+  .#{$prefix}--activity-events {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--activity-events__line {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+    padding-block: $carbon--spacing-02;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--activity-events__text {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--activity-composer {
+    display: block;
+  }
+
+  .#{$prefix}--activity-composer__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $carbon--spacing-03;
+    margin-block-start: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--activity-composer__hint {
+    @include type-style("label-01");
+
+    margin-inline-end: auto;
+    color: $text-secondary;
+  }
+
+  // Forced colors drop the background that sets a block of code apart.
+  @media (forced-colors: active) {
+    .#{$prefix}--activity-body pre,
+    .#{$prefix}--activity-body__code {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--activity-body__mention {
+      color: LinkText;
+    }
+  }
+}
+
+@include exports("activity-feed") {
+  @include activity-feed;
+}
