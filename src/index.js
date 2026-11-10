@@ -95,6 +95,7 @@ export { default as FluidDatePickerSkeleton } from "./DatePicker/FluidDatePicker
 export { default as DescriptionList } from "./DescriptionList/DescriptionList.svelte";
 export { default as DescriptionListItem } from "./DescriptionList/DescriptionListItem.svelte";
 export { default as Dialog } from "./Dialog/Dialog.svelte";
+export { default as DiffViewer } from "./DiffViewer/DiffViewer.svelte";
 export { default as Disclosure } from "./Disclosure/Disclosure.svelte";
 export { default as Divider } from "./Divider/Divider.svelte";
 export { default as Dropdown } from "./Dropdown/Dropdown.svelte";
