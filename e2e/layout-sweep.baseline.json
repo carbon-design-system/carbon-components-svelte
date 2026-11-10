@@ -2332,8 +2332,8 @@
     "variant": "1280",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
-    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
   },
   {
     "fixture": "tooltip-escape.html",
@@ -2364,24 +2364,24 @@
     "variant": "1280-forced",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
-    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(255, 255, 255)"
   },
   {
     "fixture": "tooltip-escape.html",
     "variant": "320",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
-    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
   },
   {
     "fixture": "tooltip-escape.html",
     "variant": "672",
     "check": "borders",
     "kind": "nested edge",
-    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1)",
-    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher.bx--content-switcher--icon-only:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
+    "path": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1)",
+    "message": "div.bx--modal.bx--layer-one > div.bx--modal-container > div.bx--modal-content.bx--layer-two:nth-of-type(2) > div.bx--content-switcher:nth-of-type(1): 1px outline inside bordered box div#app > div.bx--modal.bx--layer-one > div.bx--modal-container, both on rgb(244, 244, 244)"
   },
   {
     "fixture": "truncated-titles.html",

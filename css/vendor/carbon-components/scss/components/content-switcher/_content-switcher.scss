@@ -20,8 +20,7 @@
     width: 100%;
     height: to-rem(40px);
     // ccs: start-aligned, not space-evenly. Text switches fill the row
-    // either way; icon switches, at fixed widths, sit together in
-    // server-rendered markup, before the switcher is marked icon-only.
+    // either way; icon switches, at fixed widths, sit together.
     justify-content: flex-start;
     // ccs: v11's 1px outline around the switcher. The switches' own borders
     // cover it, except above and below the selected switch's rounded fill.
@@ -297,18 +296,18 @@
 /// @access private
 /// @group components
 @mixin content-switcher-icon-only {
-  // ccs: the switcher infers `--icon-only` once its switches register,
-  // after it renders. The `iconOnly` prop sets it from the first render,
-  // so server-rendered markup fits its switches too.
-  .#{$prefix}--content-switcher--icon-only {
+  // ccs: a switcher whose switches all set `icon` fits them. Each Switch
+  // marks itself `--icon` as it renders, so `:has()` reads the set from
+  // the first paint, server-rendered markup included. `--icon-only` is
+  // the deprecated `iconOnly` prop.
+  .#{$prefix}--content-switcher--icon-only,
+  .#{$prefix}--content-switcher:has(> .#{$prefix}--content-switcher-btn--icon):not(
+      :has(> .#{$prefix}--content-switcher-btn:not(.#{$prefix}--content-switcher-btn--icon))
+    ) {
     width: fit-content;
   }
 
-  // ccs: the switch styles key on `--icon`, which each Switch sets as it
-  // renders, not the switcher's `--icon-only`, which is known only once
-  // the switches register: server-rendered markup lacked it, so icon
-  // switches drew at text widths and the selected fill hid its icon until
-  // hydration.
+  // ccs: the switch styles key on each Switch's own `--icon`.
   .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher-btn--icon {
     width: to-rem(40px);
     justify-content: center;

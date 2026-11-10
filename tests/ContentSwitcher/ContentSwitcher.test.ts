@@ -85,15 +85,17 @@ describe("ContentSwitcher", () => {
     expect(screen.getByRole("tablist")).toHaveClass(className);
   });
 
-  it("combines the low contrast and icon-only modifiers", async () => {
+  it("combines low contrast with icon switches", async () => {
     await renderAndFlush(ContentSwitcherLowContrastIconOnly);
 
-    // Both modifiers must coexist on the tablist; this is the precondition for
-    // the low-contrast rule that recolors the selected icon to `$icon-primary`
-    // (the icon-only default of `$icon-inverse` is invisible on the light card).
-    const tablist = screen.getByRole("tablist");
-    expect(tablist).toHaveClass("bx--content-switcher--low-contrast");
-    expect(tablist).toHaveClass("bx--content-switcher--icon-only");
+    // The low-contrast rule that recolors the selected icon to `$icon-primary`
+    // keys on the tablist's modifier and each switch's `--icon` (the default
+    // `$icon-inverse` is invisible on the light card).
+    expect(screen.getByRole("tablist")).toHaveClass(
+      "bx--content-switcher--low-contrast",
+    );
+    for (const tab of screen.getAllByRole("tab"))
+      expect(tab).toHaveClass("bx--content-switcher-btn--icon");
   });
 
   it("does not dispatch change event on initial render", async () => {
