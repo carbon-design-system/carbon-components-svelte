@@ -28,7 +28,7 @@
   <OverflowMenuItem text="Edit" />
 </OverflowMenu>
 
-<ContentSwitcher iconOnly>
+<ContentSwitcher>
   <Switch text="Grid" icon={Grid} />
   <Switch text="List" icon={List} />
 </ContentSwitcher>

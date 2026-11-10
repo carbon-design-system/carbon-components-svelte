@@ -21,7 +21,7 @@
 
   /**
    * Render an icon-only switch.
-   * The parent `ContentSwitcher` becomes icon-only when every `Switch` sets `icon`.
+   * The parent `ContentSwitcher` fits its switches when every `Switch` sets `icon`.
    * `text` is used as the accessible label and the tooltip shown on hover and focus.
    * @type {Icon | undefined}
    */
@@ -62,13 +62,13 @@
   const tabStopId = ctx.tabStopId;
   const pairs = ctx.pairs;
 
-  let hasIcon = icon !== undefined;
+  $: hasIcon = icon !== undefined;
 
   // Last `selected` value seen here, so the block below reacts to caller writes
   // and not to the currentId echo.
   let prevSelected = selected;
 
-  ctx.add({ id, text, selected, icon: hasIcon, disabled });
+  ctx.add({ id, text, selected, disabled });
 
   const unsubscribe = ctx.currentId.subscribe(
     /** @param {string | null} currentId */
@@ -92,12 +92,6 @@
   $: if (disabled !== prevDisabled) {
     prevDisabled = disabled;
     ctx.setDisabled(id, disabled);
-  }
-
-  // Same for `icon`, so the switcher re-infers its icon-only variant.
-  $: if ((icon !== undefined) !== hasIcon) {
-    hasIcon = icon !== undefined;
-    ctx.setIcon(id, hasIcon);
   }
 
   onMount(() => {

@@ -33,11 +33,14 @@ describe("layout in the server's markup", () => {
     expect(menu).toHaveClass("bx--overflow-menu-options--below-left");
   });
 
-  it("fits a ContentSwitcher marked icon-only before its switches register", () => {
+  it("marks every icon switch, so CSS fits the switcher before hydration", () => {
     const { document } = renderSSR(SsrLayout);
-
-    expect(document.querySelector(".bx--content-switcher")).toHaveClass(
-      "bx--content-switcher--icon-only",
+    const switches = document.querySelectorAll(
+      ".bx--content-switcher .bx--content-switcher-btn",
     );
+
+    expect(switches).toHaveLength(2);
+    for (const button of switches)
+      expect(button).toHaveClass("bx--content-switcher-btn--icon");
   });
 });

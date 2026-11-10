@@ -8,16 +8,13 @@ import IconOnlyMixed from "./ContentSwitcher.iconOnlyMixed.test.svelte";
 import { renderAndFlush } from "./helpers";
 
 describe("ContentSwitcher (icon-only)", () => {
-  it("infers the icon-only variant when every Switch sets `icon`", async () => {
+  // CSS fits the switcher with `:has()` on the switches' `--icon` class,
+  // so the switcher sets no class of its own. e2e covers the widths.
+  it("marks each icon switch and leaves the switcher unmarked", async () => {
     await renderAndFlush(IconOnly);
 
-    const tablist = screen.getByRole("tablist");
-    expect(tablist).toHaveClass("bx--content-switcher--icon-only");
-  });
-
-  it("does not infer icon-only when a Switch has no `icon`", async () => {
-    await renderAndFlush(IconOnlyMixed);
-
+    for (const tab of screen.getAllByRole("tab"))
+      expect(tab).toHaveClass("bx--content-switcher-btn--icon");
     expect(screen.getByRole("tablist")).not.toHaveClass(
       "bx--content-switcher--icon-only",
     );
@@ -33,9 +30,20 @@ describe("ContentSwitcher (icon-only)", () => {
     expect(plain).toHaveAttribute("aria-label", "Plain");
     expect(plain).toHaveClass("bx--content-switcher-btn--icon");
     expect(plain.querySelector("svg")).toBeInTheDocument();
-    expect(screen.getByRole("tablist")).toHaveClass(
-      "bx--content-switcher--icon-only",
-    );
+  });
+
+  it("drops the icon mark when `icon` is unset after mount", async () => {
+    const { rerender } = await renderAndFlush(IconOnlyMixed, {
+      props: { plainIcon: List },
+    });
+
+    await rerender({ plainIcon: undefined });
+    await tick();
+
+    const plain = screen.getByRole("tab", { name: "Plain" });
+    expect(plain).not.toHaveClass("bx--content-switcher-btn--icon");
+    expect(plain).not.toHaveAttribute("aria-label");
+    expect(plain).toHaveTextContent("Plain");
   });
 
   it("labels each icon switch with `text` and renders the icon, not a text label", async () => {

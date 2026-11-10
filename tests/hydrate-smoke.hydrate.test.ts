@@ -23,6 +23,7 @@ const COMPONENTS = [
   "Modal",
   "SidePanel",
   "Tabs",
+  "ContentSwitcher",
 ] as const;
 
 type Name = (typeof CONTROLS)[number] | (typeof COMPONENTS)[number];
