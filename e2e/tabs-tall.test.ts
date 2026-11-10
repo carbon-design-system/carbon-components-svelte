@@ -1,11 +1,10 @@
 import { expect, test } from "./helpers/host";
 
 /**
- * Sized container tabs with a secondary label lay out like unsized ones:
- * every tab as tall as the tallest, labels and secondary labels at the
- * tab's start edge. The server sends the set without `--tall` and its
- * siblings without the label wrapper (they register in the browser), so
- * the test rebuilds that markup and checks nothing moves.
+ * A set grows tall when it holds a secondary label, read in CSS with
+ * `:has()`. Each tab renders from its own props, so this layout is also
+ * the server's first paint. Every tab is as tall as the tallest, and
+ * every label sits on the same line at the tab's start edge.
  */
 const layout = (page, testId: string) =>
   page
@@ -18,12 +17,16 @@ const layout = (page, testId: string) =>
           .querySelector(".bx--tabs__nav-item-label")
           ?.getBoundingClientRect();
         const secondary = item
-          .querySelector(".bx--tabs__nav-item-secondary-label:not(:empty)")
+          .querySelector(".bx--tabs__nav-item-secondary-label")
           ?.getBoundingClientRect();
         return {
           height: Math.round(box.height),
           labelTop: Math.round((label?.top ?? 0) - box.top),
           labelLeft: Math.round((label?.left ?? 0) - box.left),
+          labelWidth: Math.round(label?.width ?? 0),
+          secondaryTop: secondary
+            ? Math.round(secondary.top - box.top)
+            : undefined,
           secondaryLeft: secondary
             ? Math.round(secondary.left - box.left)
             : undefined,
@@ -31,32 +34,32 @@ const layout = (page, testId: string) =>
       }),
     );
 
-test("sized tabs with a secondary label match unsized ones, before and after registering", async ({
+test("container tabs with a secondary label share one height and label line", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/tabs-tall.html");
-  for (const size of ["sm", "xl"]) {
-    const testId = `tabs-${size}`;
-    const registered = await layout(page, testId);
-    expect.soft(new Set(registered.map((t) => t.height)).size, size).toBe(1);
+  for (const size of ["default", "sm", "xl"]) {
+    const tabs = await layout(page, `tabs-${size}`);
     expect
-      .soft(registered[1].secondaryLeft, size)
-      .toBe(registered[1].labelLeft);
-
-    // The server's markup: no `--tall`, plain sibling labels marked
-    // `--single-line`.
-    await page.getByTestId(testId).evaluate((root) => {
-      root.querySelector(".bx--tabs")?.classList.remove("bx--tabs--tall");
-      for (const link of root.querySelectorAll(
-        ".bx--tabs__nav-item:not(.bx--tabs__nav-item--secondary-label) .bx--tabs__nav-link",
-      )) {
-        const text = link.textContent?.trim() ?? "";
-        link.innerHTML = `<span class="bx--tabs__nav-item-label">${text}</span>`;
-        link.classList.add("bx--tabs__nav-link--single-line");
-      }
-    });
+      .soft(new Set(tabs.map((t) => t.height)), size)
+      .toEqual(new Set([64]));
     expect
-      .soft(await layout(page, testId), `${size} as served`)
-      .toEqual(registered);
+      .soft(new Set(tabs.map((t) => t.labelTop)).size, `${size} label line`)
+      .toBe(1);
+    expect.soft(tabs[1].secondaryLeft, size).toBe(tabs[1].labelLeft);
   }
+});
+
+test("a vertical tab stacks its secondary label under its label", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/tabs-tall.html");
+  const [overview, alerts] = await layout(page, "vertical");
+
+  expect(overview.labelWidth).toBeGreaterThan(0);
+  expect(alerts.labelWidth).toBeGreaterThan(0);
+  expect(alerts.secondaryLeft).toBe(alerts.labelLeft);
+  expect(alerts.secondaryTop).toBeGreaterThan(alerts.labelTop);
 });

@@ -628,16 +628,20 @@ describe("Tabs dismissible", () => {
 });
 
 describe("Tab registration", () => {
-  it("drops the tall layout when the secondary label is cleared", async () => {
+  it("drops the secondary label when it is cleared", async () => {
     render(TabsRegistration);
 
     await user.click(screen.getByRole("button", { name: "Load count" }));
     await tick();
-    expect(tabsRoot()).toHaveClass("bx--tabs--tall");
+    expect(
+      tabsRoot().querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Clear count" }));
     await tick();
-    expect(tabsRoot()).not.toHaveClass("bx--tabs--tall");
+    expect(
+      tabsRoot().querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toBeNull();
   });
 
   it("reports the current label in the dismiss detail", async () => {
@@ -894,25 +898,30 @@ describe("Container tabs with icons and secondary label", () => {
 });
 
 describe("Container tabs with secondary label", () => {
-  it("should render container with tall class when any tab has secondary label", async () => {
+  it("sets no marker class on the set; CSS reads the secondary label", async () => {
     render(TabSecondaryLabel);
     await tick();
 
     const tabsContainer = tabsRoot();
     expect(tabsContainer).toHaveClass("bx--tabs--container");
-    expect(tabsContainer).toHaveClass("bx--tabs--tall");
+    expect(tabsContainer).not.toHaveClass("bx--tabs--tall");
+    expect(
+      tabsContainer.querySelector(".bx--tabs__nav-item-secondary-label"),
+    ).toBeInTheDocument();
   });
 
-  it("updates the tall class when type changes after mount", async () => {
+  it("drops secondary labels when the type changes after mount", async () => {
     const { rerender } = render(TabSecondaryLabel);
     await tick();
     const nav = tabsRoot();
+    const secondary = () =>
+      nav.querySelector(".bx--tabs__nav-item-secondary-label");
 
     await rerender({ type: "default" });
-    expect(nav).not.toHaveClass("bx--tabs--tall");
+    expect(secondary()).toBeNull();
 
     await rerender({ type: "container" });
-    expect(nav).toHaveClass("bx--tabs--tall");
+    expect(secondary()).toBeInTheDocument();
   });
 
   it("should have label wrapper and secondary label element for tab with prop", async () => {
@@ -951,7 +960,7 @@ describe("Container tabs with secondary label", () => {
     expect(secondaryLabel).toHaveTextContent("(12/16)");
   });
 
-  it("should render label wrapper and empty spacer for tab without secondary label (for alignment)", async () => {
+  it("renders a tab without a secondary label on its own, with no spacer", async () => {
     const { container } = render(TabSecondaryLabel);
     await tick();
 
@@ -964,10 +973,8 @@ describe("Container tabs with secondary label", () => {
       ".bx--tabs__nav-item-secondary-label",
     );
 
-    expect(labelWrapper).toBeInTheDocument();
-    expect(secondaryLabelEl).toBeInTheDocument();
-    expect(secondaryLabelEl).toHaveAttribute("aria-hidden", "true");
-    expect(secondaryLabelEl).toHaveTextContent("");
+    expect(labelWrapper).toBeNull();
+    expect(secondaryLabelEl).toBeNull();
     expect(plainTab).toHaveTextContent("Plain");
   });
 

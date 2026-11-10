@@ -127,13 +127,6 @@
    */
   const selectedContent = writable(undefined);
 
-  // Vertical tabs are always the contained type, so a secondary label renders
-  // whenever any tab provides one.
-  /** @type {import("svelte/store").Readable<boolean>} */
-  const hasSecondaryLabel = derived(tabs, (_) =>
-    _.some((tab) => tab.hasSecondaryLabel),
-  );
-
   // Below `md` the tabs switch from a vertical column to a horizontal,
   // scrollable row (Carbon React vertical-tabs responsive design), unless
   // `orientation` pins one layout. The query is the one the CSS compiles
@@ -417,7 +410,6 @@
     useContainer,
     navigation: useNavigation,
     secondaryLabelSupported: readable(true),
-    hasSecondaryLabel,
     add,
     remove,
     addContent,
@@ -570,7 +562,6 @@
     class:bx--tabs--vertical--responsive={orientation === undefined}
     class:bx--tabs--vertical--row={orientation === "horizontal"}
     class:bx--tabs--vertical--column={orientation === "vertical"}
-    class:bx--tabs--tall={$hasSecondaryLabel}
     class:bx--tabs--scrollable={isOverflow}
     class:bx--tabs--scrollable--container={isOverflow}
     class:bx--layout--size-sm={size === "sm"}
