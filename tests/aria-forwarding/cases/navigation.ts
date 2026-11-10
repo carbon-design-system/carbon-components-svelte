@@ -7,6 +7,7 @@ import Splitter from "carbon-components-svelte/Splitter/Splitter.svelte";
 import OperationalTag from "carbon-components-svelte/Tag/OperationalTag.svelte";
 import SelectableTag from "carbon-components-svelte/Tag/SelectableTag.svelte";
 import Tag from "carbon-components-svelte/Tag/Tag.svelte";
+import ThemeBuilder from "carbon-components-svelte/ThemeBuilder/ThemeBuilder.svelte";
 import Header from "carbon-components-svelte/UIShell/Header.svelte";
 import HeaderAction from "carbon-components-svelte/UIShell/HeaderAction.svelte";
 import HeaderActionLink from "carbon-components-svelte/UIShell/HeaderActionLink.svelte";
@@ -281,6 +282,12 @@ export const navigation: AriaEntry[] = [
     name: "Splitter",
     render: (attrs) => render(Splitter, { props: attrs }),
     target: () => screen.getByRole("separator"),
+  },
+  {
+    name: "ThemeBuilder",
+    render: (attrs) => render(ThemeBuilder, { props: attrs }),
+    target: ({ container }) =>
+      container.querySelector<HTMLElement>(".bx--theme-builder") as HTMLElement,
   },
   {
     name: "Tab",

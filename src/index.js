@@ -257,6 +257,7 @@ export { default as TextInputSkeleton } from "./TextInput/TextInputSkeleton.svel
 export { createTheme } from "./Theme/create-theme.js";
 export { default as Theme } from "./Theme/Theme.svelte";
 export { themeScript } from "./Theme/theme-script.js";
+export { default as ThemeBuilder } from "./ThemeBuilder/ThemeBuilder.svelte";
 export { default as ThemeZone } from "./ThemeZone/ThemeZone.svelte";
 export { default as ClickableTile } from "./Tile/ClickableTile.svelte";
 export { default as ExpandableTile } from "./Tile/ExpandableTile.svelte";

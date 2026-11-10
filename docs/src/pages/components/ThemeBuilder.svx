@@ -1,0 +1,151 @@
+---
+components: ["ThemeBuilder"]
+description: ThemeBuilder is a live Carbon theme customizer. Pick a base theme, override tokens, preview real components, check contrast, and export CSS, Sass, or JSON.
+---
+
+<script>
+</script>
+
+## Basic
+
+`ThemeBuilder` edits a theme: a base theme plus token overrides. The preview is a [ThemeZone](/components/ThemeZone) that carries your overrides as inline custom properties, so nothing outside the preview changes. Use it on a docs page, or in an app for an admin branding screen.
+
+It needs `all.css`, which declares every theme as `--cds-*` custom properties.
+
+```js
+import "carbon-components-svelte/css/all.css";
+```
+
+Open a group, type a color, or use the swatch. Each token shows its name, so you can search for one with the filter. Hover, active, and brand tokens follow the token Carbon derives them from; see [Related tokens](#related-tokens).
+
+<FileSource src="/framed/ThemeBuilder/ThemeBuilderBasic" />
+
+## Base theme
+
+Set `base` to `"white"`, `"g10"`, `"g80"`, `"g90"`, or `"g100"`. Overrides stay when the base changes, so you can check one brand on all five themes.
+
+<FileSource src="/framed/ThemeBuilder/ThemeBuilderBase" />
+
+## Related tokens
+
+Carbon v11 stores every hover, active, and selected color as a palette value, not as a function of a base color. At runtime there is no Sass, so `ThemeBuilder` derives them: when you override a token, the tokens Carbon steps from it move by the step Carbon chose for the base theme, in OKLCH (the same change in lightness, the same ratio of chroma, and your hue).
+
+| Source token | Follows it |
+| --- | --- |
+| `button-primary` (the brand) | `button-primary-hover`, `button-primary-active`, `background-brand`, `interactive`, `highlight`, and on light themes `button-tertiary` |
+| `interactive` | `border-interactive`, `link-primary`, `link-inverse`, and on light themes `icon-interactive` and `focus` |
+| `link-primary` | `link-primary-hover`, `link-secondary` |
+| `layer-01` to `layer-03` | `layer-hover`, `layer-active`, `layer-selected`, `layer-accent`, and the hover and active states of those |
+| `field-01` to `field-03` | `field-hover` |
+| `support-error` | `text-error`, `button-danger-primary`, and `button-danger-secondary`, whose hover and active tokens then follow |
+| `tag-background-*` | `tag-hover-*` |
+
+A derived token shows a "Derived" tag. Type a value into it and it becomes an override that no longer follows. A token that follows another numbered token (`layer` for `layer-01`) shows "Follows"; `all.css` gives `--cds-layer` a literal value per theme, so the builder sets it too.
+
+Set `derive` to `false` to turn this off and edit each token on its own.
+
+| Do | Why |
+| --- | --- |
+| Override the brand first, then fix single tokens. | The brand moves about 18 tokens together, and later edits pin only the ones you set. |
+| Check hover and active in the preview. | The step keeps Carbon's change in lightness. A dark layer on a light theme still hovers darker. |
+
+### How close it gets
+
+The step is measured against the real Carbon values. The distance is ΔE in OKLab, scaled by 100; about 2 is the smallest difference most people can see.
+
+| Test | Result |
+| --- | --- |
+| A source at its own base value gives its derived token, all five themes, 304 tokens | mean 0.2, 95th percentile 1.1, worst 2.9 |
+| The blue 60 step applied to red 60 gives Carbon's danger hover and active | 2.0 and 2.1 on every theme |
+| The blue tag step applied to ten tag hues, per theme | mean 2.3, median 1.0, worst 15.6 on gray tags |
+| No derivation, red hover left at the blue step's value | 38 and 28 |
+
+Carbon's own layer hovers are fixed gray values, not a step from the layer color. So a layer override moves its hovers by the same lightness as the base theme, but cannot match values that Carbon hand-picked.
+
+<FileSource src="/framed/ThemeBuilder/ThemeBuilderDerive" />
+
+## Use the result
+
+Bind `base`, `tokens`, and `resolved`. `tokens` holds only what the user set. `resolved` holds every token that differs from the base theme, including derived tokens and contextual tokens like `layer`. Pass it to [Theme](/components/Theme).
+
+```svelte
+<script>
+  import { Theme, ThemeBuilder } from "carbon-components-svelte";
+
+  let base = "white";
+  let tokens = {};
+  let resolved = {};
+</script>
+
+<ThemeBuilder bind:base bind:tokens bind:resolved />
+<Theme theme={base} tokens={resolved} />
+```
+
+`change` fires when the user edits, not on mount, with `{ base, tokens, resolved }`. Save `{ base, tokens }` and load it back later; `resolved` is always computed from them.
+
+<FileSource src="/framed/ThemeBuilder/ThemeBuilderBound" />
+
+## Contrast
+
+The list checks the token pairs Carbon components put on top of each other, not every pair. Text pairs need 4.5:1 and icons, borders, and focus need 3:1, the WCAG 2.2 AA minimums.
+
+| Pairs | Needs |
+| --- | --- |
+| `text-primary` on `background`, `layer-01` to `layer-03`, `field-01` to `field-03`, and the hover and selected layer | 4.5:1 |
+| `text-secondary` on the same surfaces, `text-helper`, `text-placeholder`, `text-error`, `text-inverse` on `background-inverse` | 4.5:1 |
+| `text-on-color` on `button-primary` (and its hover and active), `button-secondary`, `button-danger-primary`, `background-brand` | 4.5:1 |
+| `link-primary`, `link-primary-hover`, `link-secondary`, `link-visited`, `link-inverse`, `button-tertiary` on their surfaces | 4.5:1 |
+| `tag-color-*` on `tag-background-*`, and `text-primary` on the four notification backgrounds | 4.5:1 |
+| `icon-primary`, `icon-secondary`, `icon-interactive`, `icon-on-color` | 3:1 |
+| `focus` on `background`, `layer-01` to `layer-03`, and `field-01`; `focus-inverse` on `background-inverse` | 3:1 |
+| `border-strong-01` on `background` and `field-01`, `border-interactive`, `toggle-off` | 3:1 |
+| `support-error`, `support-success`, `support-warning`, `support-info` on `background` | 3:1 |
+
+A pair that Carbon's own theme already fails is marked "Fails in base", not as a new failure. `support-warning` on White fails at 1.68:1 and `text-placeholder` on `field-03` fails on Gray 100 at 3.29:1. The status line names only new failures first; check "Show passing pairs" to see all 73.
+
+The status line is a live region. It updates at most once a second, so dragging a color does not flood a screen reader. The table is not live.
+
+The APCA column is the lightness contrast Lc (APCA-W3 0.0.98G). It is advisory: WCAG 2 is the conformance baseline, and APCA's target changes with font size and weight. About 75 suits body text and 60 suits large text.
+
+Set `hideContrast` to leave the checks out.
+
+## Export and import
+
+The Export panel writes the resolved theme three ways. "Only changed tokens" (on by default) writes just what differs from the base theme.
+
+| Format | Use |
+| --- | --- |
+| CSS | `--cds-*` custom properties on a selector. Use `:root`, or a class to scope a brand. Load it after `all.css`. |
+| Sass | A `$theme` map for `@use "@carbon/styles/scss/theme" with (...)`, and a second map for component tokens. |
+| JSON | Design Tokens Community Group, in the shape of `carbon-components-svelte/tokens.json`: an `overrides` set, `$themes`, and `$metadata`. |
+
+Carbon keeps component tokens (`button-*`, `tag-*`, `notification-*`) outside its theme map. The Sass output puts them in `$component-tokens` and passes them to `theme.theme()`. Carbon has no Gray 80 theme, so a Gray 80 base falls back to Gray 90 and lists every difference from it.
+
+Import reads CSS declarations, a `{ token: value }` object, `{ base, tokens }`, or a DTCG file, including a full theme set from `tokens.json`. It keeps only the tokens a person would set, so an exported theme stays editable: derived tokens come back as "Derived". Entries that name no token or hold an unsupported value are skipped and listed.
+
+Colors are `#rgb`, `#rrggbb`, `#rrggbbaa`, `rgb()`, `rgba()`, or `var(--cds-token)`. Anything else is rejected, so a value from a share link, import, or storage cannot add a CSS declaration.
+
+## Persist and share
+
+Set `persist` to save the theme in `localStorage`; use `persistKey` for a custom key. Set `readHash` to read a share link from the page URL on mount. The share link at the bottom of the export panel encodes the base and the overrides, such as `#b=g100&button-primary=8a3ffc`. Hover and active values are derived again on load.
+
+Each row has a Reset button once you edit it. "Reset all" clears every override.
+
+<FileSource src="/framed/ThemeBuilder/ThemeBuilderPersist" />
+
+## Custom preview
+
+Use the `preview` slot to show your own screens. It gets `theme`, `style`, and `resolved`. Pass `style` to every `ThemeZone` you render. A zone declares all of its theme's tokens on itself, so a nested zone drops the overrides of the zone around it unless it gets the same `style`.
+
+<FileSource src="/framed/ThemeBuilder/ThemeBuilderPreview" />
+
+## Accessibility
+
+The builder uses native controls. Each token has a labelled text field and a native color input named `token color picker`, such as `button-primary color picker`. Invalid input marks the field invalid and is not applied. Tab moves between rows; Enter or Space opens an accordion group or the color input.
+
+In forced colors mode the browser replaces theme colors with system colors, so the preview cannot show your tokens. The builder says so, and the swatches keep their colors. The exported theme is unchanged. In right-to-left pages the editor and preview swap sides.
+
+| Do | Why |
+| --- | --- |
+| Review the contrast list before you ship a brand. | A bright brand color often passes on a button and fails as link text on the page. |
+| Test the exported CSS in forced colors mode too. | A forced-colors user sees system colors whatever your tokens are. |
