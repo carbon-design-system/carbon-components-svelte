@@ -869,6 +869,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/NumberInput
+  onboarding-checklist:
+    name: Onboarding checklist
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/onboarding-checklist.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/OnboardingChecklist
   ordered-list:
     name: Ordered list
     status: stable
