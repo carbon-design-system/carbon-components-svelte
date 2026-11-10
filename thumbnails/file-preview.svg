@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>file-preview</title>
+    <g id="file-preview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="frame" stroke="var(--cds-border-strong, #8d8d8d)" stroke-width="1.5" x="76" y="38" width="168" height="104"></rect>
+        <rect id="name" fill="var(--cds-icon-primary, #161616)" x="88" y="48" width="56" height="6"></rect>
+        <path id="download-shaft" d="M228 47L228 55" stroke="var(--cds-text-secondary, #525252)" stroke-width="1.25" stroke-linecap="square"></path>
+        <path id="download-head" d="M225 52L228 55L231 52" stroke="var(--cds-text-secondary, #525252)" stroke-width="1.25" fill="none" stroke-linecap="square" stroke-linejoin="miter"></path>
+        <path id="divider" d="M76 64L244 64" stroke="var(--cds-border-subtle, #e0e0e0)" stroke-width="1.5"></path>
+        <rect id="image" fill="var(--cds-border-subtle, #e0e0e0)" x="88" y="74" width="144" height="56"></rect>
+        <polygon id="hills" fill="var(--cds-layer-accent-active, #a8a8a8)" points="88 130 120 100 140 118 172 90 232 130"></polygon>
+        <circle id="sun" fill="var(--cds-background-brand, #0f62fe)" cx="208" cy="90" r="6"></circle>
+    </g>
+</svg>

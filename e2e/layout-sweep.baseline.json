@@ -552,6 +552,62 @@
     "message": "div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid > div.bx--date-picker.bx--date-picker--range > div.bx--date-picker-container.bx--date-picker--fluid--invalid:nth-of-type(2): 2px outline inside 2px outline div[data-testid=\"date-picker-fluid-invalid-range\"] > div.bx--form-item.bx--date-picker--fluid, both on rgb(244, 244, 244)"
   },
   {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"code\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"code\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"code\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"csv\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"csv\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"csv\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"image\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"image\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"image\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"json\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"json\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"json\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"markdown\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"markdown\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"markdown\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"pdf\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"pdf\"] > div.bx--file-preview__header:nth-of-type(1) > div.bx--file-preview__actions:nth-of-type(2) > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"pdf\"], both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "file-preview.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "section[data-testid=\"zip\"] > div.bx--file-preview__body:nth-of-type(2) > div.bx--file-preview__card > a.bx--btn.bx--btn--sm",
+    "message": "section[data-testid=\"zip\"] > div.bx--file-preview__body:nth-of-type(2) > div.bx--file-preview__card > a.bx--btn.bx--btn--sm: bordered box inside bordered box section[data-testid=\"zip\"], both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "fluid-date-picker.html",
     "variant": "1280",
     "check": "borders",

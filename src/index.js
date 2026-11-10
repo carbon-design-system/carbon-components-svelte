@@ -103,6 +103,8 @@ export { default as FluidDropdownSkeleton } from "./Dropdown/FluidDropdownSkelet
 export { default as EmptyState } from "./EmptyState/EmptyState.svelte";
 export { default as FileDownloadItem } from "./FileUploader/FileDownloadItem.svelte";
 export { default as Filename } from "./FileUploader/Filename.svelte";
+export { default as FilePreview } from "./FilePreview/FilePreview.svelte";
+export { defaultRenderers, fileKind } from "./FilePreview/file-preview.js";
 export { default as FileUploader } from "./FileUploader/FileUploader.svelte";
 export { default as FileUploaderButton } from "./FileUploader/FileUploaderButton.svelte";
 export { default as FileUploaderDropContainer } from "./FileUploader/FileUploaderDropContainer.svelte";

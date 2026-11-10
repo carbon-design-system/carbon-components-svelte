@@ -42,6 +42,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Dropdown: "0.2.0",
   EmptyState: "0.114.0",
   ExpandableTile: "0.2.0",
+  FilePreview: "0.114.0",
   FileUploader: "0.2.0",
   FloatingPortal: "0.101.0",
   FluidForm: "0.15.0",

@@ -1,0 +1,396 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// FilePreview: a header over a body that one renderer fills. The body is
+/// as tall as `--ccs-file-preview-height` (384px) at most; text scrolls in
+/// it, and images, PDFs and video fill it.
+/// @access private
+/// @group components
+@mixin file-preview {
+  .#{$prefix}--file-preview {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--file-preview__header {
+    display: flex;
+    min-height: to-rem(48px);
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: $carbon--spacing-02;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-03;
+    border-block-end: 1px solid $border-subtle;
+    column-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--file-preview__title {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--file-preview__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--file-preview__meta {
+    display: flex;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-03;
+
+    @include type-style("label-01");
+  }
+
+  // A rule between the type and the size; drawn, so no one hears it.
+  .#{$prefix}--file-preview__meta > span + span {
+    padding-inline-start: $carbon--spacing-03;
+    border-inline-start: 1px solid $border-strong;
+  }
+
+  .#{$prefix}--file-preview__actions {
+    display: flex;
+    flex: none;
+  }
+
+  .#{$prefix}--file-preview__body {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  // The file card: while loading, and when there is no preview.
+  .#{$prefix}--file-preview__card {
+    display: flex;
+    min-height: to-rem(192px);
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $carbon--spacing-07 $carbon--spacing-05;
+    row-gap: $carbon--spacing-04;
+    text-align: center;
+
+    svg {
+      fill: $icon-secondary;
+    }
+
+    p {
+      max-width: 100%;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .#{$prefix}--file-preview__card-name {
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--file-preview__card-meta {
+    color: $text-secondary;
+
+    @include type-style("label-01");
+  }
+
+  .#{$prefix}--file-preview__card-message {
+    max-width: to-rem(320px);
+    color: $text-secondary;
+
+    @include type-style("body-compact-01");
+  }
+
+  // Text, source, tables and documents: as tall as the content, up to the
+  // body height, with the footer pinned under the scrolling part.
+  .#{$prefix}--file-preview__text {
+    display: flex;
+    max-height: var(--ccs-file-preview-height, #{to-rem(384px)});
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--file-preview__code,
+  .#{$prefix}--file-preview__table,
+  .#{$prefix}--file-preview__document {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: auto;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--file-preview__code pre {
+    min-width: min-content;
+    margin: 0;
+    padding: $carbon--spacing-05;
+    background: none;
+    color: $text-primary;
+    tab-size: 4;
+    white-space: pre;
+
+    @include type-style("code-02");
+  }
+
+  .#{$prefix}--file-preview__code code {
+    font: inherit;
+    letter-spacing: 0;
+  }
+
+  .#{$prefix}--file-preview__table {
+    .#{$prefix}--data-table {
+      width: auto;
+      min-width: 100%;
+    }
+
+    th,
+    td {
+      max-width: to-rem(320px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    th {
+      position: sticky;
+      z-index: 1;
+      inset-block-start: 0;
+    }
+  }
+
+  // Rendered Markdown. Self-contained, so the preview does not depend on
+  // the opt-in `prose.css`.
+  .#{$prefix}--file-preview__document {
+    padding: $carbon--spacing-05;
+    @include type-style("body-compact-01");
+
+    > :first-child {
+      margin-block-start: 0;
+    }
+
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-block: $carbon--spacing-06 $carbon--spacing-03;
+    }
+
+    h3 {
+      @include type-style("heading-03");
+    }
+
+    h4 {
+      @include type-style("heading-02");
+    }
+
+    h5 {
+      @include type-style("heading-compact-02");
+    }
+
+    h6 {
+      @include type-style("heading-compact-01");
+    }
+
+    p,
+    ul,
+    ol,
+    blockquote,
+    pre {
+      margin-block: 0 $carbon--spacing-04;
+    }
+
+    ul,
+    ol {
+      padding-inline-start: $carbon--spacing-06;
+    }
+
+    ul {
+      list-style: disc;
+    }
+
+    ul ul {
+      list-style: circle;
+    }
+
+    ol {
+      list-style: decimal;
+    }
+
+    li {
+      margin-block-start: $carbon--spacing-02;
+    }
+
+    blockquote {
+      padding-inline-start: $carbon--spacing-05;
+      border-inline-start: 2px solid $border-strong;
+      color: $text-secondary;
+    }
+
+    code {
+      padding-inline: $carbon--spacing-02;
+      background: $layer-accent;
+
+      @include type-style("code-01");
+    }
+
+    // Token colors are checked against the layer, not `$layer-accent`.
+    pre {
+      overflow: auto;
+      padding: $carbon--spacing-04;
+      border-inline-start: 2px solid $border-subtle;
+    }
+
+    pre code {
+      padding: 0;
+      background: none;
+    }
+
+    hr {
+      margin-block: $carbon--spacing-05;
+      border: 0;
+      border-block-start: 1px solid $border-subtle;
+    }
+  }
+
+  .#{$prefix}--file-preview__footer {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-block: $carbon--spacing-02;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-03;
+    border-block-start: 1px solid $border-subtle;
+    color: $text-secondary;
+    column-gap: $carbon--spacing-05;
+
+    @include type-style("label-01");
+
+    .#{$prefix}--btn {
+      margin-inline-start: auto;
+    }
+  }
+
+  // Images: a scrolling viewport over a zoom bar. An image fits the viewport
+  // until zoomed; auto margins center it while it is smaller than the
+  // viewport and let it scroll from its start once it is larger.
+  .#{$prefix}--file-preview__image {
+    display: flex;
+    height: var(--ccs-file-preview-height, #{to-rem(384px)});
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--file-preview__viewport {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: auto;
+
+    img {
+      max-width: none;
+      flex: none;
+      margin: auto;
+    }
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+  }
+
+  .#{$prefix}--file-preview__viewport--fit img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .#{$prefix}--file-preview__zoom {
+    display: flex;
+    flex: none;
+    justify-content: flex-end;
+    padding-inline: $carbon--spacing-03;
+    border-block-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--file-preview__frame {
+    display: block;
+    width: 100%;
+    height: var(--ccs-file-preview-height, #{to-rem(384px)});
+    border: 0;
+  }
+
+  .#{$prefix}--file-preview__video {
+    width: 100%;
+    max-height: var(--ccs-file-preview-height, #{to-rem(384px)});
+
+    video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .#{$prefix}--file-preview__audio {
+    display: flex;
+    align-items: center;
+    padding: $carbon--spacing-05;
+    column-gap: $carbon--spacing-05;
+
+    svg {
+      flex: none;
+      fill: $icon-secondary;
+    }
+
+    audio {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+  }
+
+  // In full screen the body takes the screen and the renderers fill it.
+  .#{$prefix}--file-preview--fullscreen {
+    border: 0;
+
+    .#{$prefix}--file-preview__text,
+    .#{$prefix}--file-preview__video {
+      max-height: none;
+    }
+
+    .#{$prefix}--file-preview__image,
+    .#{$prefix}--file-preview__frame {
+      height: auto;
+      min-height: 0;
+      flex: 1 1 auto;
+    }
+
+    .#{$prefix}--file-preview__video {
+      height: 100%;
+    }
+  }
+}
+
+@include exports("file-preview") {
+  @include file-preview;
+}
