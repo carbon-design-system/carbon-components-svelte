@@ -1,0 +1,37 @@
+//
+// carbon-components-svelte patch: not in the vendored v10 tree.
+//
+
+@import 'settings';
+
+/// IBM Plex Serif faces. `carbon--font-family("serif")` names Plex Serif,
+/// but the vendored v10 tree only loads Sans and Mono, so serif text fell
+/// back to Georgia. v11 loads Serif by default. Light, regular and
+/// semibold, upright and italic, as for Sans and Mono, from the complete
+/// files: serif text is rare, so no unicode-range split.
+/// @access public
+/// @group @carbon/type
+@mixin carbon--font-face-serif {
+  $base: "https://1.www.s81c.com/common/carbon/plex/fonts/IBM-Plex-Serif/fonts/complete/woff2";
+  $faces: (
+    (300, normal, "Light", "Light"),
+    (300, italic, "LightItalic", "Light Italic"),
+    (400, normal, "Regular", "Regular"),
+    (400, italic, "Italic", "Italic"),
+    (600, normal, "SemiBold", "SemiBold"),
+    (600, italic, "SemiBoldItalic", "SemiBold Italic")
+  );
+
+  @each $weight, $style, $file, $local in $faces {
+    @font-face {
+      font-display: $carbon--font-display;
+      font-family: "IBM Plex Serif";
+      font-style: $style;
+      font-weight: $weight;
+      src:
+        local("IBM Plex Serif #{$local}"),
+        local("IBMPlexSerif-#{$file}"),
+        url("#{$base}/IBMPlexSerif-#{$file}.woff2") format("woff2");
+    }
+  }
+}
