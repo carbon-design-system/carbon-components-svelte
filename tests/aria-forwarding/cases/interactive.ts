@@ -16,6 +16,7 @@ import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
+import IndexedList from "carbon-components-svelte/IndexedList/IndexedList.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
@@ -738,6 +739,14 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(ChatLog, { props: { labelText: "Conversation", ...attrs } }),
     target: () => screen.getByRole("log"),
+  },
+  {
+    name: "IndexedList",
+    render: (attrs) =>
+      render(IndexedList, {
+        props: { items: [{ text: "Ada" }], ...attrs },
+      }),
+    target: () => screen.getByRole("region"),
   },
   {
     // The text takes focus while clipped; the expand toggle has its own
