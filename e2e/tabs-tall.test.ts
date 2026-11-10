@@ -50,3 +50,16 @@ test("container tabs with a secondary label share one height and label line", as
     expect.soft(tabs[1].secondaryLeft, size).toBe(tabs[1].labelLeft);
   }
 });
+
+test("a vertical tab stacks its secondary label under its label", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/tabs-tall.html");
+  const [overview, alerts] = await layout(page, "vertical");
+
+  expect(overview.labelWidth).toBeGreaterThan(0);
+  expect(alerts.labelWidth).toBeGreaterThan(0);
+  expect(alerts.secondaryLeft).toBe(alerts.labelLeft);
+  expect(alerts.secondaryTop).toBeGreaterThan(alerts.labelTop);
+});
