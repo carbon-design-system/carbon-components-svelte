@@ -51,6 +51,12 @@ import "carbon-components-svelte/css/g100.css";
 import "carbon-components-svelte/css/all.css";
 ```
 
+Then load IBM Plex, unless you use your own fonts (see [Fonts](https://github.com/carbon-design-system/carbon-components-svelte#fonts)):
+
+```javascript
+import "carbon-components-svelte/css/fonts.css";
+```
+
 ### 3. Import a component
 
 ```svelte

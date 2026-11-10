@@ -37,9 +37,9 @@ describe("@font-face sources", () => {
   });
 
   it("has a face for every weight the compiled CSS asks for", async () => {
-    const css = await compileEntry("all.scss");
-    const faces = css.match(/@font-face\s*\{[^}]*\}/g) ?? [];
-    const rest = css.replace(/@font-face\s*\{[^}]*\}/g, "");
+    const faces =
+      (await compileEntry("fonts.scss")).match(/@font-face\s*\{[^}]*\}/g) ?? [];
+    const rest = await compileEntry("all.scss");
     const declared = new Set(
       faces.map((face) => face.match(/font-weight:\s*(\w+)/)?.[1]),
     );

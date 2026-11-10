@@ -10,19 +10,26 @@
 /// @type Map
 /// @access public
 /// @group @carbon/type
+// ccs: sans, mono and serif read `--ccs-font-sans`, `--ccs-font-mono` and
+// `--ccs-font-serif`, so an app can swap the family on `:root` or a
+// subtree. Unset, they fall back to the Plex stacks.
 $carbon--font-families: (
   'mono':
     unquote(
-      "'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace"
+      "var(--ccs-font-mono, 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, monospace)"
     ),
-  'sans': unquote("'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif"),
+  'sans':
+    unquote(
+      "var(--ccs-font-sans, 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif)"
+    ),
   'sans-condensed':
     unquote("'IBM Plex Sans Condensed', 'Helvetica Neue', Arial, sans-serif"),
   'sans-hebrew':
     unquote(
       "'IBM Plex Sans Hebrew', 'Helvetica Hebrew', 'Arial Hebrew', sans-serif"
     ),
-  'serif': unquote("'IBM Plex Serif', 'Georgia', Times, serif"),
+  'serif':
+    unquote("var(--ccs-font-serif, 'IBM Plex Serif', 'Georgia', Times, serif)"),
 ) !default;
 
 /// Get the font-family for an IBM Plex font
