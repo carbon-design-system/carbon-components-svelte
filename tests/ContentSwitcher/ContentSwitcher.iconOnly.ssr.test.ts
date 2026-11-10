@@ -3,11 +3,9 @@ import { renderSSR } from "../utils/ssr";
 import IconOnly from "./ContentSwitcher.iconOnly.test.svelte";
 import IconOnlyMixed from "./ContentSwitcher.iconOnlyMixed.test.svelte";
 
-// The switcher learns it's icon-only once its switches register, after
-// its own markup is rendered, so server markup can't carry
-// `--icon-only`. Each icon switch marks itself instead, which the
-// icon-only styles key on: right widths and a visible selected icon
-// before hydration.
+// Each icon switch marks itself `--icon` as it renders. The icon-only
+// styles key on that mark, the switcher's width through `:has()`, so the
+// server markup has the right widths and a visible selected icon.
 describe("ContentSwitcher icon switches, server-rendered", () => {
   it("marks every icon switch", () => {
     const { document } = renderSSR(IconOnly, {});

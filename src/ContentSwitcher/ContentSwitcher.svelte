@@ -47,9 +47,9 @@
   export let autoWidth = false;
 
   /**
-   * Set to `true` when every switch sets `icon`, so the switcher fits its
-   * switches from the first render, server-rendered markup included. The
-   * switcher infers icon-only once its switches register, and that wins.
+   * Set to `true` when every switch sets `icon`.
+   * @deprecated The switcher detects icon-only switches, server-rendered
+   * markup included. Remove the prop.
    */
   export let iconOnly = false;
 
@@ -131,7 +131,7 @@
   let committedId;
   let focusedIndex = -1;
   /**
-   * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }>>}
+   * @type {import("svelte/store").Writable<Array<{ id: string; text: string; selected: boolean; disabled: boolean }>>}
    */
   const sharedSwitches = writable([]);
   // Batch child registration. Leave afterUpdate's syncDomOrder unbatched
@@ -169,12 +169,6 @@
     }
     return { panelBySwitch, switchByPanel };
   });
-
-  // Inferred when every registered switch provides an `icon`. The switches
-  // register after the switcher renders, never on the server, so until
-  // then the `iconOnly` prop stands in.
-  $: isIconOnly =
-    switches.length > 0 ? switches.every((s) => s.icon) : iconOnly;
 
   $: if (selectedId !== undefined && switches) {
     syncSelection();
@@ -251,9 +245,9 @@
   }
 
   /**
-   * @type {(data: { id: string; text: string; selected: boolean; icon: boolean; disabled: boolean }) => void}
+   * @type {(data: { id: string; text: string; selected: boolean; disabled: boolean }) => void}
    */
-  function add({ id, text, selected, icon, disabled }) {
+  function add({ id, text, selected, disabled }) {
     claimSwitch(id, selected);
     batchedSwitchesUpdate((current) => {
       if (current.some((s) => s.id === id)) {
@@ -265,7 +259,7 @@
       }
 
       needsDomSync = true;
-      return [...current, { id, text, selected, icon, disabled }];
+      return [...current, { id, text, selected, disabled }];
     });
   }
 
@@ -288,19 +282,6 @@
       if (index === -1 || current[index].disabled === disabled) return current;
       const next = [...current];
       next[index] = { ...current[index], disabled };
-      return next;
-    });
-  }
-
-  /**
-   * @type {(id: string, icon: boolean) => void}
-   */
-  function setIcon(id, icon) {
-    batchedSwitchesUpdate((current) => {
-      const index = current.findIndex((s) => s.id === id);
-      if (index === -1 || current[index].icon === icon) return current;
-      const next = [...current];
-      next[index] = { ...current[index], icon };
       return next;
     });
   }
@@ -458,7 +439,6 @@
     remove,
     update,
     setDisabled,
-    setIcon,
     tabStopId,
     pairs,
     addPanel,
@@ -561,7 +541,7 @@
       class:bx--content-switcher--xs={effectiveSize === "xs"}
       class:bx--content-switcher--sm={effectiveSize === "sm"}
       class:bx--content-switcher--xl={effectiveSize === "xl"}
-      class:bx--content-switcher--icon-only={isIconOnly}
+      class:bx--content-switcher--icon-only={iconOnly}
       class:bx--content-switcher--low-contrast={lowContrast}
       class:bx--content-switcher--auto-width={autoWidth || !!inputGroup}
       {...$$restProps}
@@ -584,7 +564,7 @@
     class:bx--content-switcher--xs={effectiveSize === "xs"}
     class:bx--content-switcher--sm={effectiveSize === "sm"}
     class:bx--content-switcher--xl={effectiveSize === "xl"}
-    class:bx--content-switcher--icon-only={isIconOnly}
+    class:bx--content-switcher--icon-only={iconOnly}
     class:bx--content-switcher--low-contrast={lowContrast}
     class:bx--content-switcher--auto-width={autoWidth || !!inputGroup}
     {...$$restProps}
