@@ -1,0 +1,297 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// KeyValueEditor: rows of key and value fields (environment variables,
+/// headers, labels). The fields, checkboxes and buttons are Carbon's own;
+/// this lays them out on one grid, hides the per-row labels where a column
+/// header stands in for them, and styles the summary, the paste prompt, the
+/// empty state and the mask of a stored secret.
+/// @access private
+/// @group components
+@mixin key-value-editor {
+  .#{$prefix}--key-value-editor {
+    // The height of one field. It sets where the checkboxes and row
+    // buttons center, and follows the editor's `size`.
+    --ccs-key-value-control: #{$carbon--spacing-09};
+    --ccs-key-value-check: #{to-rem(64px)};
+    --ccs-key-value-action: #{$carbon--spacing-08};
+  }
+
+  .#{$prefix}--key-value-editor--sm {
+    --ccs-key-value-control: #{$carbon--spacing-08};
+  }
+
+  .#{$prefix}--key-value-editor--lg {
+    --ccs-key-value-control: #{$carbon--spacing-10};
+  }
+
+  .#{$prefix}--key-value-editor__fieldset {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .#{$prefix}--key-value-editor__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $carbon--spacing-03;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--key-value-editor__toolbar-start,
+  .#{$prefix}--key-value-editor__toolbar-end {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--key-value-editor__head {
+    display: none;
+  }
+
+  .#{$prefix}--key-value-editor__head .#{$prefix}--label {
+    margin-bottom: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--key-value-editor__rows {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--key-value-editor__row {
+    display: grid;
+    align-items: start;
+    gap: $carbon--spacing-03;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  // Stacked rows are told apart by a rule above each one.
+  .#{$prefix}--key-value-editor__row:nth-child(n + 2) {
+    padding-top: $carbon--spacing-05;
+    border-top: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--key-value-editor__cell {
+    min-width: 0;
+  }
+
+  // A row that is kept but not used reads quieter, and stays readable.
+  .#{$prefix}--key-value-editor__row--disabled .#{$prefix}--text-input {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--key-value-editor__cell .#{$prefix}--form-item,
+  .#{$prefix}--key-value-editor__cell .#{$prefix}--text-input-wrapper {
+    width: 100%;
+  }
+
+  // Keys and values are things people copy and compare. A key reads left to
+  // right in any language (`dir="ltr"` on the field), a value takes the
+  // direction of its own text.
+  .#{$prefix}--key-value-editor__cell .#{$prefix}--text-input,
+  .#{$prefix}--key-value-editor__cell .#{$prefix}--text-input__field-wrapper {
+    font-family: carbon--font-family("mono");
+  }
+
+  .#{$prefix}--key-value-editor__check {
+    display: flex;
+    min-height: var(--ccs-key-value-control);
+    align-items: center;
+  }
+
+  .#{$prefix}--key-value-editor__check .#{$prefix}--form-item {
+    flex: none;
+  }
+
+  .#{$prefix}--key-value-editor__actions {
+    display: flex;
+    min-height: var(--ccs-key-value-control);
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .#{$prefix}--key-value-editor__actions .#{$prefix}--btn {
+    flex: none;
+  }
+
+  // A button that cannot act stays in the tab order, so focus is not lost
+  // when a row reaches the top or the bottom.
+  .#{$prefix}--key-value-editor__actions
+    .#{$prefix}--btn[aria-disabled="true"] {
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--key-value-editor__stored {
+    display: flex;
+    min-height: var(--ccs-key-value-control);
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-03;
+    background-color: $field;
+    border-block-end: 1px solid $border-strong;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--key-value-editor__mask {
+    color: $text-secondary;
+    @include type-style("code-02");
+  }
+
+  .#{$prefix}--key-value-editor__summary,
+  .#{$prefix}--key-value-editor__import {
+    padding: $carbon--spacing-05;
+    border: 1px solid $border-subtle;
+    margin-bottom: $carbon--spacing-05;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--key-value-editor__summary {
+    border-color: $support-error;
+    border-inline-start-width: $carbon--spacing-02;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--key-value-editor__import {
+    border-inline-start: $carbon--spacing-02 solid $support-info;
+  }
+
+  .#{$prefix}--key-value-editor__summary-title,
+  .#{$prefix}--key-value-editor__import-title {
+    margin: 0 0 $carbon--spacing-03;
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--key-value-editor__summary-title {
+    display: flex;
+    align-items: center;
+    color: $text-error;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--key-value-editor__summary-icon {
+    fill: $support-error;
+  }
+
+  .#{$prefix}--key-value-editor__summary-list,
+  .#{$prefix}--key-value-editor__parse-errors {
+    padding: 0;
+    margin: 0 0 $carbon--spacing-03;
+    list-style: none;
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--key-value-editor__parse-errors {
+    color: $text-error;
+  }
+
+  // The links are buttons: they focus a field, they go nowhere.
+  .#{$prefix}--key-value-editor__summary-list .#{$prefix}--link,
+  .#{$prefix}--key-value-editor__parse-errors .#{$prefix}--link {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+
+  .#{$prefix}--key-value-editor__import-actions {
+    display: flex;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--key-value-editor__add {
+    display: flex;
+    align-items: center;
+    margin-top: $carbon--spacing-05;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--key-value-editor__empty {
+    padding: $carbon--spacing-07 $carbon--spacing-05;
+    border: 1px dashed $border-strong;
+    margin-bottom: $carbon--spacing-05;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--key-value-editor__empty-title {
+    margin: 0 0 $carbon--spacing-02;
+    color: $text-primary;
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--key-value-editor__empty-description {
+    margin: 0;
+    color: $text-secondary;
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--key-value-editor__text .#{$prefix}--text-area {
+    font-family: carbon--font-family("mono");
+  }
+
+  // Below the medium breakpoint a row stacks and each field keeps its visible
+  // label. From medium up the rows share one grid and the column header
+  // names the fields, so the labels leave the screen but not the page.
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--key-value-editor__head,
+    .#{$prefix}--key-value-editor__row {
+      display: grid;
+      align-items: start;
+      gap: $carbon--spacing-03;
+      grid-template-columns: var(--ccs-key-value-columns);
+    }
+
+    .#{$prefix}--key-value-editor__rows {
+      gap: $carbon--spacing-03;
+    }
+
+    .#{$prefix}--key-value-editor__row:nth-child(n + 2) {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .#{$prefix}--key-value-editor__row .#{$prefix}--label,
+    .#{$prefix}--key-value-editor__row .#{$prefix}--checkbox-label-text {
+      @include hidden;
+    }
+
+    .#{$prefix}--key-value-editor__check .#{$prefix}--checkbox-label {
+      min-height: $carbon--spacing-05;
+      padding-inline-start: $carbon--spacing-05;
+    }
+  }
+
+  // Forced colors drop the fills, so the boxes keep their edges.
+  @media (forced-colors: active) {
+    .#{$prefix}--key-value-editor__summary,
+    .#{$prefix}--key-value-editor__import,
+    .#{$prefix}--key-value-editor__empty {
+      border-color: CanvasText;
+    }
+
+    .#{$prefix}--key-value-editor__stored {
+      border-block-end-color: CanvasText;
+    }
+
+    .#{$prefix}--key-value-editor__actions
+      .#{$prefix}--btn[aria-disabled="true"] {
+      color: GrayText;
+    }
+  }
+}
+
+@include exports("key-value-editor") {
+  @include key-value-editor;
+}
