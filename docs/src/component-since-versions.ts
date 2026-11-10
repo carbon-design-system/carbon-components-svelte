@@ -70,6 +70,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   MultiSelect: "0.2.0",
   NotificationQueue: "0.94.0",
   NumberInput: "0.2.0",
+  NumberRangeInput: "0.114.0",
   OrderedList: "0.2.0",
   OverflowMenu: "0.2.0",
   PageHeader: "0.113.0",

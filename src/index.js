@@ -172,6 +172,7 @@ export { default as ToastNotification } from "./Notification/ToastNotification.s
 export { default as FluidNumberInputSkeleton } from "./NumberInput/FluidNumberInputSkeleton.svelte";
 export { default as NumberInput } from "./NumberInput/NumberInput.svelte";
 export { default as NumberInputSkeleton } from "./NumberInput/NumberInputSkeleton.svelte";
+export { default as NumberRangeInput } from "./NumberRangeInput/NumberRangeInput.svelte";
 export { default as OrderedList } from "./OrderedList/OrderedList.svelte";
 export { default as OverflowMenu } from "./OverflowMenu/OverflowMenu.svelte";
 export { default as OverflowMenuItem } from "./OverflowMenu/OverflowMenuItem.svelte";
