@@ -190,6 +190,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "FloatingPortal",
       "LocalStorage",
       "SessionStorage",
+      "ImageCompare",
       "ImageLoader",
       "LazyMount",
       "Truncate",
