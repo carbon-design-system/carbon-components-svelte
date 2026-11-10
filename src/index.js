@@ -68,6 +68,7 @@ export { default as CopyInputSkeleton } from "./CopyInput/CopyInputSkeleton.svel
 export { default as FluidCopyInputSkeleton } from "./CopyInput/FluidCopyInputSkeleton.svelte";
 export { default as CopyText } from "./CopyText/CopyText.svelte";
 export { default as Countdown } from "./Countdown/Countdown.svelte";
+export { default as CurrencyInput } from "./CurrencyInput/CurrencyInput.svelte";
 export { default as DataTable } from "./DataTable/DataTable.svelte";
 export { default as DataTableSkeleton } from "./DataTable/DataTableSkeleton.svelte";
 export { toCsv } from "./DataTable/data-table-utils.js";
@@ -314,6 +315,7 @@ export { default as SideNavMenu } from "./UIShell/SideNavMenu.svelte";
 export { default as SideNavMenuItem } from "./UIShell/SideNavMenuItem.svelte";
 export { default as SkipToContent } from "./UIShell/SkipToContent.svelte";
 export { default as UnorderedList } from "./UnorderedList/UnorderedList.svelte";
+export { default as UnitInput } from "./UnitInput/UnitInput.svelte";
 export { default as UserAvatar } from "./UserAvatar/UserAvatar.svelte";
 export { default as UserAvatarGroup } from "./UserAvatarGroup/UserAvatarGroup.svelte";
 export { getAvatarBackgroundColor } from "./utils/avatar-color.js";
@@ -343,6 +345,14 @@ export {
 } from "./utils/keyboard-shortcut.js";
 export { getLayoutDirection } from "./utils/layout-direction.js";
 export { linkSegments } from "./utils/link-segments.js";
+export { numberFormat } from "./utils/number-field.js";
+export {
+  compareDecimal,
+  createNumberFormat,
+  currencyFractionDigits,
+  fromMinorUnits,
+  toMinorUnits,
+} from "./utils/number-format.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";

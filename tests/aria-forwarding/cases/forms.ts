@@ -3,6 +3,7 @@ import Checkbox from "carbon-components-svelte/Checkbox/Checkbox.svelte";
 import CheckboxGroup from "carbon-components-svelte/Checkbox/CheckboxGroup.svelte";
 import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
+import CurrencyInput from "carbon-components-svelte/CurrencyInput/CurrencyInput.svelte";
 import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
@@ -36,6 +37,7 @@ import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+import UnitInput from "carbon-components-svelte/UnitInput/UnitInput.svelte";
 import type { AriaEntry } from "../contract";
 import DatePickerInputFixture from "../fixtures/DatePickerInput.test.svelte";
 import RadioButtonGroupFixture from "../fixtures/RadioButtonGroup.test.svelte";
@@ -238,6 +240,32 @@ export const forms: AriaEntry[] = [
         props: { labelText: "Count", helperText: "1 to 10", ...attrs },
       }),
     target: () => screen.getByRole("spinbutton"),
+  },
+  {
+    name: "CurrencyInput",
+    render: (attrs) =>
+      render(CurrencyInput, {
+        props: {
+          labelText: "Price",
+          helperText: "In dollars",
+          currency: "USD",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "UnitInput",
+    render: (attrs) =>
+      render(UnitInput, {
+        props: {
+          labelText: "Weight",
+          helperText: "In kilograms",
+          unit: "kg",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "PasswordInput",

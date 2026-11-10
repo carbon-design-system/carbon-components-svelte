@@ -1,0 +1,35 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A field the `numberFormat` action works on. The digits, the group and
+/// decimal marks, and the symbol or unit read in the order the locale gives
+/// them only in a box that runs in the direction of that locale: `$1,234.56`
+/// in a right-to-left page would otherwise show as `1,234.56$`, and an Arabic
+/// amount in a left-to-right page would put its symbol on the wrong side. The
+/// direction is set here and not with a `dir` attribute, so `ccs-dir()` still
+/// reads the page's direction and the text stays at the page's inline start,
+/// beside the label.
+/// @access private
+/// @group components
+@mixin number-field {
+  input[data-ccs-number-format="ltr"] {
+    direction: ltr;
+  }
+
+  input[data-ccs-number-format="rtl"] {
+    direction: rtl;
+  }
+
+  input[data-ccs-number-format] {
+    text-align: left;
+  }
+
+  [dir="rtl"] input[data-ccs-number-format] {
+    text-align: ccs-dir(left, right);
+  }
+}
+
+@include exports("number-field") {
+  @include number-field;
+}
