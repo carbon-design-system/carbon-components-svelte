@@ -432,6 +432,12 @@ export const navigation: AriaEntry[] = [
     target: () => screen.getByRole("button"),
   },
   {
+    name: "ToolbarSortBy",
+    render: (attrs) =>
+      render(ToolbarActionsFixture, { props: { under: "sortBy", ...attrs } }),
+    target: () => screen.getByRole("button"),
+  },
+  {
     name: "ToolbarMenu",
     render: (attrs) => render(ToolbarMenuFixture, { props: attrs }),
     target: () => screen.getByRole("button"),
