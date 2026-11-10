@@ -116,6 +116,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Form",
       "FluidForm",
       "Stepper",
+      "FieldRepeater",
     ],
   },
   {
