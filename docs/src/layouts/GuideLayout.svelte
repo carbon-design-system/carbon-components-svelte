@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Box, Content, Stack, Text } from "carbon-components-svelte";
   import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
+  import DocPageLinks from "../components/DocPageLinks.svelte";
 
   export let title = "";
   export let description = "";
@@ -36,6 +37,7 @@
       </Stack>
     </Box>
     <slot />
+    <DocPageLinks name={title} />
   </ComponentDocLayout>
 </Content>
 

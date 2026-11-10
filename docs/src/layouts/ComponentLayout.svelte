@@ -31,6 +31,7 @@
   import ComponentDocBarActions from "../components/ComponentDocBarActions.svelte";
   import ComponentDocLayout from "../components/ComponentDocLayout.svelte";
   import ComponentTocNav from "../components/ComponentTocNav.svelte";
+  import DocPageLinks from "../components/DocPageLinks.svelte";
   import { queueIdleMount } from "../idle-mount";
   import { eagerContent, route } from "../router";
   import { componentTocOpen, DOC_THEMES, theme } from "../store";
@@ -175,6 +176,7 @@
       <ComponentTocNav {headings} />
     </div>
     <slot />
+    <DocPageLinks name={component} component />
     <div class="component-api-header">
       <Stack gap={4}>
         <Text tag="h2" id="component-api" type="heading-05" color="primary">
