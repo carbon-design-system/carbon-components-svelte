@@ -22,6 +22,7 @@ const COMPONENTS = [
   "ComboBox",
   "Modal",
   "SidePanel",
+  "Tabs",
 ] as const;
 
 type Name = (typeof CONTROLS)[number] | (typeof COMPONENTS)[number];

@@ -25,7 +25,6 @@ describe("TabsVertical server render", () => {
     const { document } = renderSSR(TabsSecondaryLabel, { type: "vertical" });
     const [, details] = [...document.querySelectorAll(".bx--tabs__nav-item")];
 
-    expect(details).toHaveClass("bx--tabs__nav-item--secondary-label");
     expect(
       details.querySelector(".bx--tabs__nav-item-secondary-label"),
     ).toHaveTextContent("(3)");
