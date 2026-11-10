@@ -791,6 +791,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
+  log-viewer:
+    name: Log viewer
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/log-viewer.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/LogViewer
   menu:
     name: Menu
     status: stable
