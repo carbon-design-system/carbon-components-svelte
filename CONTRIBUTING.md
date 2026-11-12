@@ -172,7 +172,9 @@ The `{#if skeleton}` early-return pattern is being phased out. Follow it only wh
 
 Many `size` props use Carbon v10 names. They also accept Carbon v11's names, so code ported from Carbon React gets the right height. A v11 name is an alias only where the component doesn't already use it. A name that collides keeps this library's meaning.
 
-Resolve an alias with `normalizeSize` and the maps in [`size-aliases.js`](src/utils/size-aliases.js). Resolve it before the value reaches a class, a child or a context, so children only see this library's names. List the aliases in the prop's `@type` union.
+Resolve an alias with the family's helper in [`size-aliases.js`](src/utils/size-aliases.js), such as `normalizeButtonSize(size)`. Resolve it before the value reaches a class, a child or a context, so children only see this library's names. List the aliases in the prop's `@type` union.
+
+Write each helper as a chain of `if (size === "sm") return "small";` checks. CSS optimizers such as carbon-preprocess-svelte follow these checks and remove the size classes an app never renders. They can't see into a lookup in an exported `Map` or object, so they keep every size class.
 
 | Component | Our names | v11 aliases | Kept on collision |
 | :--- | :--- | :--- | :--- |
