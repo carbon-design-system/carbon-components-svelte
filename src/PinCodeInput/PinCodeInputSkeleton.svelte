@@ -16,17 +16,11 @@
 
   import { getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
-  import {
-    normalizeSize,
-    PIN_CODE_INPUT_SIZE_ALIASES,
-  } from "../utils/size-aliases.js";
+  import { normalizePinCodeInputSize } from "../utils/size-aliases.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(
-    size ?? $formSize ?? "default",
-    PIN_CODE_INPUT_SIZE_ALIASES,
-  );
+  $: effectiveSize = normalizePinCodeInputSize(size ?? $formSize ?? "default");
 </script>
 
 <div

@@ -194,7 +194,7 @@
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
-  import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeSearchSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -281,7 +281,7 @@
   $: describedById = joinDescribedBy(readonly ? readonlyId : null);
   $: menuLabel = labelText || placeholder;
   $: menuAnchor = $$slots.before ? searchAnchorRef : anchorRef;
-  $: resolvedMenuSize = normalizeSize(menuSize ?? size, SEARCH_SIZE_ALIASES);
+  $: resolvedMenuSize = normalizeSearchSize(menuSize ?? size);
   $: resolvedMenuMaxHeight = toCssLength(menuMaxHeight);
   $: menuClass = [
     "bx--search-menu__menu",

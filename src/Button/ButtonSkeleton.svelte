@@ -18,14 +18,12 @@
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
-  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeButtonSize } from "../utils/size-aliases.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize =
-    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
-    formButtonSize($formSize) ??
-    "default";
+    normalizeButtonSize(size) ?? formButtonSize($formSize) ?? "default";
 </script>
 
 {#if href}

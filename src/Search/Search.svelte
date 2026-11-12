@@ -181,7 +181,7 @@
     keyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeSearchSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
@@ -250,10 +250,7 @@
   const formContext = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(
-    size ?? $formSize ?? "lg",
-    SEARCH_SIZE_ALIASES,
-  );
+  $: effectiveSize = normalizeSearchSize(size ?? $formSize ?? "lg");
 
   /** @type {null | HTMLButtonElement | HTMLDivElement} */
   let searchRef = null;

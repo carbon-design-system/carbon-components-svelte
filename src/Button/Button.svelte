@@ -218,7 +218,7 @@
   } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
-  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeButtonSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
   import { closeOverControls } from "../utils/tooltip-cover.js";
@@ -464,7 +464,7 @@
   $: isVisuallyDisabled = isDisabled || showSpinner;
   $: effectiveSize = $$slots.badge
     ? "lg"
-    : (normalizeSize(size, BUTTON_SIZE_ALIASES) ??
+    : (normalizeButtonSize(size) ??
       $actionSetSize ??
       $inputGroupSize ??
       formButtonSize($formSize) ??

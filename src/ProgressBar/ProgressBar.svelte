@@ -63,10 +63,7 @@
   import ErrorFilled from "../icons/ErrorFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import {
-    normalizeSize,
-    PROGRESS_BAR_SIZE_ALIASES,
-  } from "../utils/size-aliases.js";
+  import { normalizeProgressBarSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   /** @type {Record<string, import("../utils/icon-component.js").IconComponent>} */
@@ -86,7 +83,7 @@
   $: helperId = `${id}-helper`;
   $: statusDescriptionId = `${id}-status`;
 
-  $: resolvedSize = normalizeSize(size, PROGRESS_BAR_SIZE_ALIASES);
+  $: resolvedSize = normalizeProgressBarSize(size);
   $: indeterminate = value === undefined && status === "active";
   /** @type {number} */
   let capped;

@@ -157,7 +157,7 @@
   import { nextEnabledIndex } from "../utils/move-index.js";
   import { noop } from "../utils/noop.js";
   import { rovingFocus } from "../utils/roving-focus.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { insertByDomOrder } from "../utils/sort-by-dom-order.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -173,7 +173,7 @@
   const insideModal = getContext(MODAL_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
 
-  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size);
 
   // Arrow keys the menu owns while open, so the page doesn't also scroll.
   const ARROW_KEYS = ["ArrowDown", "ArrowLeft", "ArrowRight", "ArrowUp"];

@@ -13,11 +13,11 @@
 
   import { getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size ?? $formSize);
 </script>
 
 <div

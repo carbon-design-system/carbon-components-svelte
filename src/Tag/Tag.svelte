@@ -92,7 +92,7 @@
   import { splitAriaNaming } from "../utils/aria-naming.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
-  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeTagSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import TagSkeleton from "./TagSkeleton.svelte";
   import { observeTruncation } from "./tag-truncation.js";
@@ -136,8 +136,7 @@
   } = splitAriaNaming($$restProps));
 
   // Fall back to the group's size, then to "default".
-  $: resolvedSize =
-    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
+  $: resolvedSize = normalizeTagSize(size) ?? $groupSize ?? "default";
 
   $: hasIcon = Boolean(icon || $$slots.icon);
 

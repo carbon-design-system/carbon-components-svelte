@@ -719,10 +719,7 @@
   import { noop } from "../utils/noop.js";
   import { rangeSlice } from "../utils/range-slice.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import {
-    normalizeSize,
-    TREE_VIEW_SIZE_ALIASES,
-  } from "../utils/size-aliases.js";
+  import { normalizeTreeViewSize } from "../utils/size-aliases.js";
   import {
     resolveCheckboxState,
     toggleCheckboxNode,
@@ -742,7 +739,7 @@
   import TreeViewNodeVirtual from "./TreeViewNodeVirtual.svelte";
 
   const dispatch = createEventDispatcher();
-  $: effectiveSize = normalizeSize(size, TREE_VIEW_SIZE_ALIASES);
+  $: effectiveSize = normalizeTreeViewSize(size);
 
   /** @type {import("svelte/store").Writable<string>} */
   const treeId = writable(id);

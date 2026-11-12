@@ -12,9 +12,9 @@
   /** Set to `true` to stand in for icon-only switches */
   export let iconOnly = false;
 
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
 
-  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size);
 </script>
 
 <div

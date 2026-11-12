@@ -110,7 +110,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -122,7 +122,7 @@
   const formContext = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size ?? $formSize);
 
   /**
    * Starts active for a filled slot, so the server renders the AI surface.

@@ -252,7 +252,7 @@
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
-  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeButtonSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import FileUploaderButton from "./FileUploaderButton.svelte";
   import Filename from "./Filename.svelte";
@@ -265,9 +265,7 @@
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize =
-    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
-    formButtonSize($formSize) ??
-    "small";
+    normalizeButtonSize(size) ?? formButtonSize($formSize) ?? "small";
 
   $: descriptionId = `${id}-description`;
   $: hasDescription = Boolean(labelDescription || $$slots.labelDescription);

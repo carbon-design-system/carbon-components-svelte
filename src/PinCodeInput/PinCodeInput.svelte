@@ -210,10 +210,7 @@
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import {
-    normalizeSize,
-    PIN_CODE_INPUT_SIZE_ALIASES,
-  } from "../utils/size-aliases.js";
+  import { normalizePinCodeInputSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
 
@@ -226,10 +223,7 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
-  $: effectiveSize = normalizeSize(
-    size ?? $formSize ?? "default",
-    PIN_CODE_INPUT_SIZE_ALIASES,
-  );
+  $: effectiveSize = normalizePinCodeInputSize(size ?? $formSize ?? "default");
 
   /** @type {HTMLInputElement[]} */
   const inputs = [];

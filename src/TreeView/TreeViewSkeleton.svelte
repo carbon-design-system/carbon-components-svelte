@@ -13,12 +13,9 @@
   /** Set to `true` to leave out the label bar, as TreeView's `hideLabel` does */
   export let hideLabel = false;
 
-  import {
-    normalizeSize,
-    TREE_VIEW_SIZE_ALIASES,
-  } from "../utils/size-aliases.js";
+  import { normalizeTreeViewSize } from "../utils/size-aliases.js";
 
-  $: effectiveSize = normalizeSize(size, TREE_VIEW_SIZE_ALIASES);
+  $: effectiveSize = normalizeTreeViewSize(size);
 </script>
 
 <div

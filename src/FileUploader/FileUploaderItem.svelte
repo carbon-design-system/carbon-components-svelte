@@ -72,10 +72,7 @@
   import { createEventDispatcher } from "svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
-  import {
-    FILE_ITEM_SIZE_ALIASES,
-    normalizeSize,
-  } from "../utils/size-aliases.js";
+  import { normalizeFileItemSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import Filename from "./Filename.svelte";
 
@@ -85,7 +82,7 @@
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
 
-  $: effectiveSize = normalizeSize(size, FILE_ITEM_SIZE_ALIASES);
+  $: effectiveSize = normalizeFileItemSize(size);
 </script>
 
 <span

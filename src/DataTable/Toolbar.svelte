@@ -31,10 +31,7 @@
   import { writable } from "svelte/store";
   import { isHeaderRendered } from "../UIShell/nav-store.js";
   import { toCssLength } from "../utils/css-length.js";
-  import {
-    normalizeSize,
-    TOOLBAR_SIZE_ALIASES,
-  } from "../utils/size-aliases.js";
+  import { normalizeToolbarSize } from "../utils/size-aliases.js";
 
   // Matches `.bx--header`'s fixed height (`mini-units(6)` in
   // _header.scss); Header has no prop to override it.
@@ -59,8 +56,7 @@
   $: inheritedSize = $tableSize
     ? TOOLBAR_SIZE_BY_TABLE_SIZE[$tableSize]
     : undefined;
-  $: effectiveSize =
-    normalizeSize(size, TOOLBAR_SIZE_ALIASES) ?? inheritedSize ?? "default";
+  $: effectiveSize = normalizeToolbarSize(size) ?? inheritedSize ?? "default";
   $: effectiveStickyOffset =
     stickyOffset ?? ($isHeaderRendered ? UI_SHELL_HEADER_HEIGHT : 0);
 

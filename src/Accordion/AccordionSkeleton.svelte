@@ -26,9 +26,9 @@
 
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import ChevronRight from "../icons/ChevronRight.svelte";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
 
-  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size);
 </script>
 
 <ul

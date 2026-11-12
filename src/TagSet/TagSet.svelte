@@ -159,7 +159,7 @@
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { rovingFocus } from "../utils/roving-focus.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeTagSize } from "../utils/size-aliases.js";
   import {
     insertByDomOrder,
     sortByDomOrder,
@@ -177,8 +177,8 @@
   /** @type {import("svelte/store").Writable<Set<string>>} */
   const overflowIds = writable(new Set());
   /** @type {import("svelte/store").Writable<"xs" | "sm" | "default" | "lg" | undefined>} */
-  const sharedSize = writable(normalizeSize(size, TAG_SIZE_ALIASES));
-  $: sharedSize.set(normalizeSize(size, TAG_SIZE_ALIASES));
+  const sharedSize = writable(normalizeTagSize(size));
+  $: sharedSize.set(normalizeTagSize(size));
   const sharedNavigation = writable(navigation);
   $: sharedNavigation.set(navigation);
 

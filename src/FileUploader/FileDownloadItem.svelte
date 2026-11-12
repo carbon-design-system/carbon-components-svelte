@@ -78,15 +78,12 @@
   import Download from "../icons/Download.svelte";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
-  import {
-    FILE_ITEM_SIZE_ALIASES,
-    normalizeSize,
-  } from "../utils/size-aliases.js";
+  import { normalizeFileItemSize } from "../utils/size-aliases.js";
 
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
 
-  $: effectiveSize = normalizeSize(size, FILE_ITEM_SIZE_ALIASES);
+  $: effectiveSize = normalizeFileItemSize(size);
 </script>
 
 {#if href !== undefined}

@@ -158,7 +158,7 @@
   import { formButtonSize } from "../utils/form-button-size.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
-  import { BUTTON_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeButtonSize } from "../utils/size-aliases.js";
   import { syncInputFiles } from "../utils/sync-input-files.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
@@ -172,9 +172,7 @@
 
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   $: effectiveSize =
-    normalizeSize(size, BUTTON_SIZE_ALIASES) ??
-    formButtonSize($formSize) ??
-    "small";
+    normalizeButtonSize(size) ?? formButtonSize($formSize) ?? "small";
 
   // Rest props go to the hidden input, which never takes focus. Move the
   // naming and description attributes to the button that does.
