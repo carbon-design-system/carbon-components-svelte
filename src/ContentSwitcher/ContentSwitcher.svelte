@@ -77,11 +77,11 @@
   import { observeDomOrder } from "../utils/observe-dom-order.js";
   import { resolveIdSelection } from "../utils/resolve-id-selection.js";
   import { rovingFocus } from "../utils/roving-focus.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { syncDomOrder } from "../utils/sync-dom-order.js";
   import { provideTooltipGroup } from "../utils/tooltip-group.js";
 
-  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size);
 
   const dispatch = createEventDispatcher();
   const layoutDirection = getLayoutDirection();

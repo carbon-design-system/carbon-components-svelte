@@ -98,7 +98,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { noop } from "../utils/noop.js";
-  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeTagSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { observeTruncation } from "./tag-truncation.js";
 
@@ -142,8 +142,7 @@
   /** @type {number} */
   let enableFrame;
 
-  $: resolvedSize =
-    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
+  $: resolvedSize = normalizeTagSize(size) ?? $groupSize ?? "default";
   // Without `content`, the tag is a plain action trigger: no popover, and
   // no disclosure state.
   $: hasContent = !!$$slots.content;

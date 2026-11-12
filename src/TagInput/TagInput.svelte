@@ -181,7 +181,7 @@
     getLayoutDirection,
     resolveLayoutDirection,
   } from "../utils/layout-direction.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   // A disabled `<fieldset>` around the component disables it too.
@@ -193,7 +193,7 @@
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
   const layoutDirection = getLayoutDirection();
-  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size ?? $formSize);
   /** @type {"xs" | "sm" | "lg" | "default"} */
   $: tagSize =
     effectiveSize === "xs" || effectiveSize === "sm"

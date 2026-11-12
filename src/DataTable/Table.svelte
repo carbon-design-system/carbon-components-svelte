@@ -64,15 +64,12 @@
   import { joinDescribedBy } from "../utils/field-status.js";
   import { noop } from "../utils/noop.js";
   import { observeResize } from "../utils/shared-observer.js";
-  import {
-    DATA_TABLE_SIZE_ALIASES,
-    normalizeSize,
-  } from "../utils/size-aliases.js";
+  import { normalizeDataTableSize } from "../utils/size-aliases.js";
 
   // Context is only consulted for the standalone `TableContainer` + `Table`
   // composition: an explicit `labelledBy`/`describedBy` prop (set by
   // `DataTable`, which renders its own title/description markup) always wins.
-  $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
+  $: effectiveSize = normalizeDataTableSize(size);
 
   const tableContainerCtx = getContext("carbon:TableContainer");
   const hasContextTitle = tableContainerCtx?.hasTitle ?? writable(false);

@@ -31,12 +31,9 @@
   /** Set to `false` to hide the toolbar */
   export let showToolbar = true;
 
-  import {
-    DATA_TABLE_SIZE_ALIASES,
-    normalizeSize,
-  } from "../utils/size-aliases.js";
+  import { normalizeDataTableSize } from "../utils/size-aliases.js";
 
-  $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
+  $: effectiveSize = normalizeDataTableSize(size);
   $: values = headers.map((header) =>
     typeof header === "string" ? header : header.value,
   );

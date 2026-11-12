@@ -35,10 +35,10 @@
 
   import { onMount, setContext } from "svelte";
   import { get, writable } from "svelte/store";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import AccordionSkeleton from "./AccordionSkeleton.svelte";
 
-  $: effectiveSize = normalizeSize(size, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size);
 
   /**
    * @type {import("svelte/store").Writable<boolean>}

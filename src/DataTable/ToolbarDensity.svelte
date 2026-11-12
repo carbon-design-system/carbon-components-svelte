@@ -63,10 +63,7 @@
   import MenuButton from "../MenuButton/MenuButton.svelte";
   import { MENU_SIZE_BY_TOOLBAR_SIZE } from "../constants/sizes.js";
   import RowExpand from "../icons/RowExpand.svelte";
-  import {
-    DATA_TABLE_SIZE_ALIASES,
-    normalizeSize,
-  } from "../utils/size-aliases.js";
+  import { normalizeDataTableSize } from "../utils/size-aliases.js";
 
   const dispatch = createEventDispatcher();
 
@@ -76,8 +73,7 @@
   /** @type {import("svelte/store").Readable<"xs" | "sm" | "default"> | undefined} */
   const toolbarSize = toolbarCtx.toolbarSize;
 
-  $: selectedId =
-    normalizeSize(size, DATA_TABLE_SIZE_ALIASES) ?? $tableSize ?? "medium";
+  $: selectedId = normalizeDataTableSize(size) ?? $tableSize ?? "medium";
 
   $: menuSize = MENU_SIZE_BY_TOOLBAR_SIZE[$toolbarSize ?? "default"] ?? "lg";
 

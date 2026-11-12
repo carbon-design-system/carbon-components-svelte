@@ -58,7 +58,7 @@
     resolveStatusDescribedBy,
     resolveValidationVisibility,
   } from "../utils/field-status.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   /** Button size whose height matches a field of each size. */
@@ -72,8 +72,8 @@
   /** @type {import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY) ?? readable(undefined);
   /** @type {import("svelte/store").Writable<undefined | "xs" | "sm" | "md" | "xl">} */
-  const ownSize = writable(normalizeSize(size, FIELD_SIZE_ALIASES));
-  $: ownSize.set(normalizeSize(size, FIELD_SIZE_ALIASES));
+  const ownSize = writable(normalizeFieldSize(size));
+  $: ownSize.set(normalizeFieldSize(size));
 
   /** @type {import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const sharedSize = derived(

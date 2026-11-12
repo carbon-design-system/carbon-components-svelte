@@ -63,13 +63,13 @@
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
 
   // Children get this library's names, so a field, button or search that
   // maps the form size never sees an alias.
   /** @type {import("svelte/store").Writable<undefined | "xs" | "sm" | "md" | "xl">} */
-  const sharedSize = writable(normalizeSize(size, FIELD_SIZE_ALIASES));
-  $: sharedSize.set(normalizeSize(size, FIELD_SIZE_ALIASES));
+  const sharedSize = writable(normalizeFieldSize(size));
+  $: sharedSize.set(normalizeFieldSize(size));
 
   setContext(FORM_SIZE_CONTEXT_KEY, sharedSize);
 

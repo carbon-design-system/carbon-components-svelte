@@ -19,14 +19,11 @@
 
   import { getContext } from "svelte";
   import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
-  import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeSearchSize } from "../utils/size-aliases.js";
 
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(
-    size ?? $formSize ?? "lg",
-    SEARCH_SIZE_ALIASES,
-  );
+  $: effectiveSize = normalizeSearchSize(size ?? $formSize ?? "lg");
 </script>
 
 <div

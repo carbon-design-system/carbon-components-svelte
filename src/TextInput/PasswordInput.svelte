@@ -145,7 +145,7 @@
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
-  import { FIELD_SIZE_ALIASES, normalizeSize } from "../utils/size-aliases.js";
+  import { normalizeFieldSize } from "../utils/size-aliases.js";
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
@@ -157,7 +157,7 @@
   const ctx = getContext(FORM_CONTEXT_KEY);
   /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
   const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
-  $: effectiveSize = normalizeSize(size ?? $formSize, FIELD_SIZE_ALIASES);
+  $: effectiveSize = normalizeFieldSize(size ?? $formSize);
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   $: ({ showInvalid, showWarn } = resolveValidationVisibility({

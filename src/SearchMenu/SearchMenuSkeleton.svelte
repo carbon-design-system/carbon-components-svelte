@@ -11,11 +11,11 @@
   export let count = 4;
 
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
-  import { normalizeSize, SEARCH_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeSearchSize } from "../utils/size-aliases.js";
 
   const widths = ["75%", "90%", "65%", "80%"];
 
-  $: effectiveSize = normalizeSize(size, SEARCH_SIZE_ALIASES);
+  $: effectiveSize = normalizeSearchSize(size);
 </script>
 
 <div

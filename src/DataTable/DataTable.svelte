@@ -617,10 +617,7 @@
   import { forwardShiftClick } from "../utils/forward-shift-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
   import { rangeSlice } from "../utils/range-slice.js";
-  import {
-    DATA_TABLE_SIZE_ALIASES,
-    normalizeSize,
-  } from "../utils/size-aliases.js";
+  import { normalizeDataTableSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import {
     DEFAULT_VIRTUAL_LIST_CONFIG,
@@ -655,8 +652,8 @@
    * so it can derive a matching size unless explicitly overridden.
    * @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined>}
    */
-  const tableSize = writable(normalizeSize(size, DATA_TABLE_SIZE_ALIASES));
-  $: effectiveSize = normalizeSize(size, DATA_TABLE_SIZE_ALIASES);
+  const tableSize = writable(normalizeDataTableSize(size));
+  $: effectiveSize = normalizeDataTableSize(size);
   $: $tableSize = effectiveSize;
 
   /** Row heights per size variant, matching `bx--data-table--<size>` */

@@ -49,7 +49,7 @@
   import { joinTagSet } from "../TagSet/join-tag-set.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
   import { noop } from "../utils/noop.js";
-  import { normalizeSize, TAG_SIZE_ALIASES } from "../utils/size-aliases.js";
+  import { normalizeTagSize } from "../utils/size-aliases.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { observeTruncation } from "./tag-truncation.js";
 
@@ -82,8 +82,7 @@
     tabindex: rovingTabindex,
   } = group;
 
-  $: resolvedSize =
-    normalizeSize(size, TAG_SIZE_ALIASES) ?? $groupSize ?? "default";
+  $: resolvedSize = normalizeTagSize(size) ?? $groupSize ?? "default";
   $: group.update({
     value,
     type,

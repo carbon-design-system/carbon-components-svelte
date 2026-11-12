@@ -1,37 +1,34 @@
 // @vitest-environment node
 import {
-  BUTTON_SIZE_ALIASES,
-  DATA_TABLE_SIZE_ALIASES,
-  FIELD_SIZE_ALIASES,
-  normalizeSize,
-  PROGRESS_BAR_SIZE_ALIASES,
+  normalizeButtonSize,
+  normalizeDataTableSize,
+  normalizeFieldSize,
+  normalizeProgressBarSize,
 } from "../../src/utils/size-aliases.js";
 
-describe("normalizeSize", () => {
-  it("resolves an alias to the component's own name", () => {
-    expect(normalizeSize("sm", BUTTON_SIZE_ALIASES)).toBe("small");
-    expect(normalizeSize("md", BUTTON_SIZE_ALIASES)).toBe("field");
-    expect(normalizeSize("2xl", BUTTON_SIZE_ALIASES)).toBe("xl");
-    expect(normalizeSize("lg", FIELD_SIZE_ALIASES)).toBe("xl");
-    expect(normalizeSize("small", PROGRESS_BAR_SIZE_ALIASES)).toBe("sm");
-    expect(normalizeSize("big", PROGRESS_BAR_SIZE_ALIASES)).toBe("md");
+describe("size alias helpers", () => {
+  it("resolve an alias to the component's own name", () => {
+    expect(normalizeButtonSize("sm")).toBe("small");
+    expect(normalizeButtonSize("md")).toBe("field");
+    expect(normalizeButtonSize("2xl")).toBe("xl");
+    expect(normalizeFieldSize("lg")).toBe("xl");
+    expect(normalizeProgressBarSize("small")).toBe("sm");
+    expect(normalizeProgressBarSize("big")).toBe("md");
   });
 
-  it("resolves an alias of the default size to undefined", () => {
-    expect(normalizeSize("lg", DATA_TABLE_SIZE_ALIASES)).toBeUndefined();
+  it("resolve an alias of the default size to undefined", () => {
+    expect(normalizeDataTableSize("lg")).toBeUndefined();
   });
 
-  it("returns a name that is not an alias unchanged", () => {
-    expect(normalizeSize("lg", BUTTON_SIZE_ALIASES)).toBe("lg");
-    expect(normalizeSize("xl", BUTTON_SIZE_ALIASES)).toBe("xl");
-    expect(normalizeSize("md", FIELD_SIZE_ALIASES)).toBe("md");
-    expect(normalizeSize(undefined, FIELD_SIZE_ALIASES)).toBeUndefined();
+  it("return a name that is not an alias unchanged", () => {
+    expect(normalizeButtonSize("lg")).toBe("lg");
+    expect(normalizeButtonSize("xl")).toBe("xl");
+    expect(normalizeFieldSize("md")).toBe("md");
+    expect(normalizeFieldSize(undefined)).toBeUndefined();
   });
 
-  it("ignores keys inherited from Object.prototype", () => {
-    expect(normalizeSize("toString", FIELD_SIZE_ALIASES)).toBe("toString");
-    expect(normalizeSize("constructor", FIELD_SIZE_ALIASES)).toBe(
-      "constructor",
-    );
+  it("ignore keys inherited from Object.prototype", () => {
+    expect(normalizeFieldSize("toString")).toBe("toString");
+    expect(normalizeFieldSize("constructor")).toBe("constructor");
   });
 });
