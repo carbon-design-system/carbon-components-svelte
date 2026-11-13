@@ -21,5 +21,8 @@
 >
   Replace rows
 </button>
+<button type="button" onclick={() => (rows[0].name = "Echo")}>
+  Rename first row
+</button>
 
 <DataTable sortable headers={[{ key: "name", value: "Name" }]} {rows} />

@@ -795,10 +795,12 @@
   // seen `rows`" by identity, a new-but-equal array would still look changed
   // to whichever block wasn't updated, defeating the guard.
   let stableRows = rows;
+  // The `rows` array `stableRows` holds, or was copied from.
+  let rowsSource = rows;
 
   /** @param {ReadonlyArray<Row>} next */
   function syncStableRows(next) {
-    if (next === stableRows) {
+    if (next === rowsSource) {
       // The array was mutated in place (`rows.splice(...); rows = rows`, or
       // a Svelte 5 `$state` array edited without reassignment).
       // `originalRows` is a copy of its old contents. If it holds the same
@@ -809,6 +811,7 @@
       if (!sameRowObjects(originalRows, next)) stableRows = [...next];
       return;
     }
+    rowsSource = next;
     if (!rowsUnchanged(stableRows, next)) stableRows = next;
   }
 
