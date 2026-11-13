@@ -1,4 +1,6 @@
 <script context="module">
+  import { sameArrayItems, sameItemSet } from "../utils/array-set-ops.js";
+
   /**
    * Index `entries` by id, bucketing same-id entries in order so duplicate
    * ids pair up positionally (first old duplicate reused for the first new
@@ -17,21 +19,6 @@
   }
 
   /**
-   * Whether `ids` holds exactly the ids in `idSet`, ignoring order and
-   * duplicates. Sizes are compared as sets, not by `ids.length`: a duplicate
-   * (`["1", "1"]` against `{"1", "2"}`) matches on length and membership
-   * while selecting something different.
-   * @param {ReadonlyArray<any>} ids
-   * @param {Set<any>} idSet
-   * @returns {boolean}
-   */
-  function sameIdSet(ids, idSet) {
-    if (ids.length < idSet.size) return false;
-    if (!ids.every((id) => idSet.has(id))) return false;
-    return new Set(ids).size === idSet.size;
-  }
-
-  /**
    * Value-compare two `selectedIds` arrays, ignoring order: `sort()` only
    * ever tests membership via a `Set`, so a reordered-but-otherwise-equal
    * array produces the same result and shouldn't trigger a re-sort.
@@ -40,15 +27,7 @@
    * @returns {boolean}
    */
   function sameSelectedIds(a, b) {
-    return sameIdSet(a, new Set(b));
-  }
-
-  /**
-   * @param {ReadonlyArray<unknown>} a
-   * @param {ReadonlyArray<unknown>} b
-   */
-  function sameIdsInOrder(a, b) {
-    return a.length === b.length && a.every((id, i) => id === b[i]);
+    return sameItemSet(a, new Set(b));
   }
 </script>
 
@@ -1120,7 +1099,7 @@
       // Skip a write that changes nothing, as on mount. In Svelte 5, once a
       // component writes a prop it keeps that value over the parent's later
       // in-place edits, such as a spliced `$state` array.
-      if (!sameIdsInOrder(nextSelectedIds, selectedIds)) {
+      if (!sameArrayItems(nextSelectedIds, selectedIds)) {
         selectedIds = nextSelectedIds;
       }
       prevSelectedIds = selectedIds.slice();
@@ -1346,7 +1325,7 @@
       if (item.checked && !item.isSelectAll) checkedIds.add(item.id);
     }
 
-    return sameIdSet(nextSelectedIds, checkedIds);
+    return sameItemSet(nextSelectedIds, checkedIds);
   }
 
   $: menuId = `menu-${id}`;

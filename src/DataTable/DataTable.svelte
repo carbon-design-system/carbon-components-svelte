@@ -1,4 +1,5 @@
 <script context="module">
+  import { sameArrayItems } from "../utils/array-set-ops.js";
   import { deepEqual } from "../utils/deep-equal.js";
 
   /** @type {Record<string, string>} */
@@ -52,19 +53,6 @@
       if (!deepEqual(prev[i], next[i])) return false;
     }
 
-    return true;
-  }
-
-  /**
-   * Whether two row arrays hold the same row objects in the same order.
-   * @param {ReadonlyArray<unknown>} a
-   * @param {ReadonlyArray<unknown>} b
-   */
-  function sameRowObjects(a, b) {
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i++) {
-      if (a[i] !== b[i]) return false;
-    }
     return true;
   }
 
@@ -808,7 +796,7 @@
       // for `refreshRow`. Otherwise copy it: the blocks below compare
       // `stableRows` by reference, and `rowById` must hold every row id the
       // row blocks render.
-      if (!sameRowObjects(originalRows, next)) stableRows = [...next];
+      if (!sameArrayItems(originalRows, next)) stableRows = [...next];
       return;
     }
     rowsSource = next;

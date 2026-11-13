@@ -43,3 +43,19 @@ export function sameArrayItems(a, b) {
   }
   return true;
 }
+
+/**
+ * Whether `items` holds exactly the members of `set`, ignoring order and
+ * duplicates. Sizes are compared as sets, not by `items.length`: a
+ * duplicate (`["1", "1"]` against `{"1", "2"}`) matches on length and
+ * membership while holding something different.
+ *
+ * @param {ReadonlyArray<unknown>} items
+ * @param {ReadonlySet<unknown>} set
+ * @returns {boolean}
+ */
+export function sameItemSet(items, set) {
+  if (items.length < set.size) return false;
+  if (!items.every((item) => set.has(item))) return false;
+  return new Set(items).size === set.size;
+}

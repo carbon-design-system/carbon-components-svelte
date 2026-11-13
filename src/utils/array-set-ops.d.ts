@@ -22,3 +22,12 @@ export function sameArrayItems(
   a: ReadonlyArray<unknown>,
   b: ReadonlyArray<unknown>,
 ): boolean;
+
+/**
+ * Whether `items` holds exactly the members of `set`, ignoring order and
+ * duplicates.
+ */
+export function sameItemSet(
+  items: ReadonlyArray<unknown>,
+  set: ReadonlySet<unknown>,
+): boolean;
