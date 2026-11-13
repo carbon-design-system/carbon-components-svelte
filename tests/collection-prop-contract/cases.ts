@@ -216,7 +216,6 @@ export const cases: CollectionCase[] = [
     },
     initial: () => ["a"],
     replacement: () => ["b"],
-    fails: { runes: "not diagnosed yet: the options stay unchecked" },
     check: async () => {
       await openMenu();
       expect(screen.getByRole("option", { name: "Bravo" })).toHaveAttribute(

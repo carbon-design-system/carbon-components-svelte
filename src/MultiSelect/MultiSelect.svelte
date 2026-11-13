@@ -42,6 +42,14 @@
   function sameSelectedIds(a, b) {
     return sameIdSet(a, new Set(b));
   }
+
+  /**
+   * @param {ReadonlyArray<unknown>} a
+   * @param {ReadonlyArray<unknown>} b
+   */
+  function sameIdsInOrder(a, b) {
+    return a.length === b.length && a.every((id, i) => id === b[i]);
+  }
 </script>
 
 <script>
@@ -1106,9 +1114,15 @@
     // driven changes always alter the count.
     if (checked.length !== prevChecked.length) {
       prevChecked = checked;
-      selectedIds = checked
+      const nextSelectedIds = checked
         .filter((item) => !item.isSelectAll)
         .map((item) => item.id);
+      // Skip a write that changes nothing, as on mount. In Svelte 5, once a
+      // component writes a prop it keeps that value over the parent's later
+      // in-place edits, such as a spliced `$state` array.
+      if (!sameIdsInOrder(nextSelectedIds, selectedIds)) {
+        selectedIds = nextSelectedIds;
+      }
       prevSelectedIds = selectedIds.slice();
       if (!initialRender) {
         dispatch("select", {
