@@ -1,4 +1,4 @@
-// Run with `bun test dom-env/test` (or `node --test`). Evaluates the bundle in
+// Run with `node --test dom-env/test` (or `bun test`). Evaluates the bundle in
 // a fresh VM context, the same way the vitest environment does.
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-execFileSync("bun", ["run", "build"], { cwd: root, stdio: "ignore" });
+execFileSync(process.execPath, ["build.js"], { cwd: root, stdio: "ignore" });
 const code = fs.readFileSync(path.join(root, "dist/dom-env.js"), "utf8");
 
 function window(options = {}) {

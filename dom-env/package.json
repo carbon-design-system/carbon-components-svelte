@@ -8,7 +8,7 @@
     "./vitest": "./vitest.js"
   },
   "scripts": {
-    "build": "bun build src/index.js --format=iife --target=browser --outfile=dist/dom-env.js",
+    "build": "node build.js",
     "test": "node --test test/smoke.test.js"
   }
 }

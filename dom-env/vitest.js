@@ -2,13 +2,13 @@
 // `pool: "vmThreads"`. Builds the per-file context the way vitest's own
 // `node` environment does, then evaluates the DOM bundle inside it.
 
-import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { builtinEnvironments } from "vitest/runtime";
+import { buildBundle } from "./build.js";
 import { selectorsOf } from "./src/coverage.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -20,7 +20,7 @@ const srcDir = path.join(here, "src");
  * Workers start in parallel, so each builds to its own temp file and
  * renames it into place; readers never see a half-written bundle.
  */
-function ensureBundle() {
+async function ensureBundle() {
   const built = fs.existsSync(bundle) ? fs.statSync(bundle).mtimeMs : 0;
   const stale = fs
     .readdirSync(srcDir)
@@ -28,24 +28,14 @@ function ensureBundle() {
   if (!stale) return;
   // Workers are threads of one process, so the pid alone isn't unique.
   const tmp = `${bundle}.${randomUUID()}.tmp`;
-  execFileSync(
-    "bun",
-    [
-      "build",
-      "src/index.js",
-      "--format=iife",
-      "--target=browser",
-      `--outfile=${tmp}`,
-    ],
-    { cwd: here, stdio: "ignore" },
-  );
+  await buildBundle(tmp);
   fs.renameSync(tmp, bundle);
 }
 
 let script = null;
-function getScript() {
+async function getScript() {
   if (script) return script;
-  ensureBundle();
+  await ensureBundle();
   // One compiled Script per worker, run in each file's fresh context.
   script = new vm.Script(fs.readFileSync(bundle, "utf8"), { filename: bundle });
   return script;
@@ -94,7 +84,7 @@ export default {
   async setupVM(options) {
     const nodeEnv = await builtinEnvironments.node.setupVM(options);
     const context = nodeEnv.getVmContext();
-    getScript().runInContext(context);
+    (await getScript()).runInContext(context);
     const global = vm.runInContext("this", context);
     const strict = options?.domEnv?.strict ?? process.env.DOM_ENV_STRICT;
     const leaks = options?.domEnv?.leaks ?? process.env.DOM_ENV_LEAKS;
