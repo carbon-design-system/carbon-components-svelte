@@ -6,6 +6,8 @@ export type Mode = "legacy" | "runes";
 export type CollectionCase = {
   /** Component name, as exported from the package. */
   name: string;
+  /** Tells cases apart when a prop has more than one. */
+  variant?: string;
   component: ComponentType;
   /** The array prop the host mutates in place. */
   prop: string;
@@ -37,3 +39,6 @@ export const inBothModes = (reason: string) => ({
 
 export const key = (c: Pick<CollectionCase, "name" | "prop">) =>
   `${c.name}.${c.prop}`;
+
+export const title = (c: CollectionCase) =>
+  c.variant ? `${key(c)} (${c.variant})` : key(c);
