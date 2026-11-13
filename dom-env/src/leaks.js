@@ -28,9 +28,24 @@ export function enable() {
  * helpers such as a shared listener pool. `null` when only libraries asked
  * (testing-library, user-event, Svelte's own event delegation).
  */
+/**
+ * Listeners a library adds once for the page's lifetime and never removes:
+ * Svelte 5's capture `reset` listener on the document, which restores bound
+ * form fields. They outlive every test by design.
+ */
+const PAGE_LIFETIME = ["add_form_reset_listener"];
+
 function site() {
+  // A fixed depth, so what's attributed doesn't depend on the runtime's
+  // default (Node's 10 frames end inside Svelte's runtime, before the
+  // component that asked).
+  const limit = Error.stackTraceLimit;
+  Error.stackTraceLimit = 50;
+  const stack = new Error().stack ?? "";
+  Error.stackTraceLimit = limit;
+  if (PAGE_LIFETIME.some((name) => stack.includes(`at ${name} `))) return null;
   const frames = [];
-  for (const line of new Error().stack?.split("\n").slice(2) ?? []) {
+  for (const line of stack.split("\n").slice(2)) {
     if (line.includes(bundleFile) || line.includes("node:")) continue;
     const m = /\(?((?:file:\/\/)?\/[^\s()]+:\d+:\d+)\)?\s*$/.exec(line);
     if (m && !m[1].includes("/node_modules/")) frames.push(m[1]);
