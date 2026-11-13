@@ -1,6 +1,7 @@
 // @vitest-environment node
 import {
   addUniqueArrayItem,
+  sameArrayItems,
   toggleArrayItem,
 } from "../../src/utils/array-set-ops.js";
 
@@ -22,5 +23,17 @@ describe("addUniqueArrayItem", () => {
   it("returns the same reference when the item is already present", () => {
     const array = ["a", "b"];
     expect(addUniqueArrayItem(array, "a")).toBe(array);
+  });
+});
+
+describe("sameArrayItems", () => {
+  it("compares items in order, not the array reference", () => {
+    const array = ["a", "b"];
+    const before = [...array];
+    array.splice(0, 2, "b", "a");
+
+    expect(sameArrayItems(array, before)).toBe(false);
+    expect(sameArrayItems(array, ["b", "a"])).toBe(true);
+    expect(sameArrayItems([], [])).toBe(true);
   });
 });

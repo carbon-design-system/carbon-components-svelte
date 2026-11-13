@@ -10,7 +10,7 @@ import { openMenu, optionTexts } from "../MultiSelect/helpers";
 import SelectableTileGroup from "../Tile/SelectableTileGroup.test.svelte";
 import CheckboxGroupField from "../form-field-contract/fixtures/CheckboxGroupField.test.svelte";
 import { user } from "../utils/user";
-import { type CollectionCase, type Exemptions, inBothModes } from "./contract";
+import type { CollectionCase, Exemptions } from "./contract";
 
 const NAME_HEADER = /Name/;
 const PORT_HEADER = /Port/;
@@ -22,9 +22,6 @@ const bodyRowTexts = () =>
     .map((row) => row.textContent?.trim());
 
 const DISABLED_DAY = "bx--date-picker__day--disabled";
-
-const GROUP_STORE_SAME_ARRAY =
-  "the group store already holds the same array, so it is never set";
 
 const checkbox = (name: string) => screen.getByRole("checkbox", { name });
 
@@ -68,7 +65,6 @@ export const cases: CollectionCase[] = [
     prop: "selected",
     initial: () => ["a"],
     replacement: () => ["b"],
-    fails: inBothModes(GROUP_STORE_SAME_ARRAY),
     check: async () => {
       expect(checkbox("B")).toBeChecked();
       expect(checkbox("A")).not.toBeChecked();
@@ -82,7 +78,6 @@ export const cases: CollectionCase[] = [
     prop: "selected",
     initial: () => ["option1"],
     replacement: () => ["option2"],
-    fails: inBothModes(GROUP_STORE_SAME_ARRAY),
     check: async () => {
       expect(checkbox("Option 2")).toBeChecked();
       expect(checkbox("Option 1")).not.toBeChecked();
