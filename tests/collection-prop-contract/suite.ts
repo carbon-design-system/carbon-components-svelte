@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/svelte";
 import { user } from "../utils/user";
 import { cases } from "./cases";
-import { type CollectionCase, key, type Mode } from "./contract";
+import { type CollectionCase, type Mode, title } from "./contract";
 
 /** Runs every case through `Host`, which replaces the collection in place. */
 export function describeMutatedInPlace(
   mode: Mode,
   Host: Parameters<typeof render>[0],
 ) {
-  describe.each(cases.map((c) => [key(c), c] as const))(
+  describe.each(cases.map((c) => [title(c), c] as const))(
     `%s replaced in place (${mode})`,
     (_, c: CollectionCase) => {
       const test = c.fails?.[mode] ? it.fails : it;

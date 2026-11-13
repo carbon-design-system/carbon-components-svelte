@@ -201,7 +201,9 @@ describe("TreeView selectionMode=checkbox", () => {
         });
         await tick();
 
-        expect(component.checkedIds).toEqual(expected);
+        // Order is not part of the contract: an unchanged set keeps the
+        // order it was passed in.
+        expect(new Set(component.checkedIds)).toEqual(new Set(expected));
         for (const call of onCheckChange.mock.calls) {
           expect(call[0].removed).toEqual([]);
         }

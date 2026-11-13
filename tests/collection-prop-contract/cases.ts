@@ -300,6 +300,20 @@ export const cases: CollectionCase[] = [
       expect(treeItem("Alpha")).toHaveAttribute("aria-checked", "false");
     },
   },
+  {
+    name: "TreeView",
+    variant: 'checkMode="deep"',
+    component: TreeView,
+    prop: "checkedIds",
+    props: { labelText: "Tree", selectionMode: "checkbox", nodes: treeNodes() },
+    // Already cascaded, in a different order than the tree's.
+    initial: () => ["a1", "a"],
+    replacement: () => ["b1", "b"],
+    check: () => {
+      expect(treeItem("Bravo")).toHaveAttribute("aria-checked", "true");
+      expect(treeItem("Alpha")).toHaveAttribute("aria-checked", "false");
+    },
+  },
 ];
 
 /** Enforced by `coverage.test.ts`, which fails once the component compares the prop by reference. */

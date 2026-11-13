@@ -959,6 +959,19 @@
   }
 
   /**
+   * Whether `a` and `b` hold the same ids, in any order. Compared as sets, so
+   * a duplicate (`["a", "a"]` against `["a", "b"]`) doesn't pass for a
+   * different id.
+   * @param {ReadonlyArray<Node["id"]>} a
+   * @param {ReadonlyArray<Node["id"]>} b
+   */
+  function sameIdSet(a, b) {
+    const ids = new Set(b);
+    if (!a.every((id) => ids.has(id))) return false;
+    return new Set(a).size === ids.size;
+  }
+
+  /**
    * Re-derive the `expanded`/`selected`/`checked`/`indeterminate` flags from
    * the source-of-truth state at dispatch time. The `node` object passed by
    * the child components is computed reactively, so its flags still reflect
@@ -1700,7 +1713,10 @@
           pendingIds.length > 0
             ? [...checkboxState.checkedIds, ...pendingIds]
             : checkboxState.checkedIds;
-        if (!arrayIdsEqual(nextCheckedIds, checkedIds)) {
+        // Write only when the checked set changed, not its order. In Svelte
+        // 5, once a component writes a prop it keeps that value over the
+        // parent's later in-place edits, such as a spliced `$state` array.
+        if (!sameIdSet(nextCheckedIds, checkedIds)) {
           setCheckedIds(nextCheckedIds);
         }
         if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
