@@ -25,7 +25,6 @@ const DISABLED_DAY = "bx--date-picker__day--disabled";
 
 const GROUP_STORE_SAME_ARRAY =
   "the group store already holds the same array, so it is never set";
-const SAME_VALUE_SHORTCUT = "sameValue() returns early on the same reference";
 
 const checkbox = (name: string) => screen.getByRole("checkbox", { name });
 
@@ -98,7 +97,6 @@ export const cases: CollectionCase[] = [
     props: { datePickerType: "single", value: "03/01/2024" },
     initial: () => ["03/15/2024"],
     replacement: () => ["03/16/2024"],
-    fails: inBothModes(SAME_VALUE_SHORTCUT),
     check: async () => {
       const calendar = await openCalendar();
       expect(getDayByNumber(calendar, 16)).toHaveClass(DISABLED_DAY);
@@ -113,7 +111,6 @@ export const cases: CollectionCase[] = [
     props: { datePickerType: "single", value: "03/15/2024" },
     initial: () => ["03/15/2024"],
     replacement: () => ["03/15/2024", "03/16/2024"],
-    fails: inBothModes(SAME_VALUE_SHORTCUT),
     check: async () => {
       const calendar = await openCalendar();
       expect(getDayByNumber(calendar, 16)).not.toHaveClass(DISABLED_DAY);
@@ -126,7 +123,6 @@ export const cases: CollectionCase[] = [
     prop: "selectedDates",
     initial: () => [new Date(2024, 2, 1)],
     replacement: () => [new Date(2024, 2, 5)],
-    fails: inBothModes("compared with prevSelectedDates by reference"),
     check: () => {
       expect(screen.getByLabelText("Date")).toHaveValue("03/05/2024");
     },
