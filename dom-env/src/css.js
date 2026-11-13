@@ -10,6 +10,7 @@
 // component tests) it resolves inline style, inheritance, and per-element
 // defaults; with <style> elements it also applies matching rules.
 
+import { splitSelectors } from "./selector-list.js";
 import { compile, matchesSelector } from "./selector.js";
 import { HTML_NS, illegalConstructor, INTERNAL, str, tag } from "./shared.js";
 import { enabled as strict, report } from "./strict.js";
@@ -788,22 +789,21 @@ function sheetDeclarations(el) {
   for (const sheet of sheets) {
     for (const rule of sheet._rules()) {
       order++;
+      // A rule applies with the highest specificity of its selectors that
+      // match, not the first.
+      let specificity = -1;
       for (const sel of rule.selectors) {
+        if (sel.specificity <= specificity) continue;
         let compiled;
         try {
           compiled = compile(sel.text);
         } catch {
           continue;
         }
-        if (matchesSelector(el, compiled, null)) {
-          matched.push({
-            specificity: sel.specificity,
-            order,
-            decls: rule.decls,
-          });
-          break;
-        }
+        if (matchesSelector(el, compiled, null)) specificity = sel.specificity;
       }
+      if (specificity >= 0)
+        matched.push({ specificity, order, decls: rule.decls });
     }
   }
   if (matched.length === 0) return null;
@@ -930,11 +930,10 @@ export function parseStyleSheet(text) {
       }
       if (!prelude.startsWith("@")) {
         const decls = parseDeclarations(src.slice(open + 1, j - 1));
-        const selectors = prelude
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean)
-          .map((s) => ({ text: s, specificity: specificityOf(s) }));
+        const selectors = splitSelectors(prelude).map((s) => ({
+          text: s,
+          specificity: specificityOf(s),
+        }));
         rules.push({ selectors, decls });
       }
       i = j;

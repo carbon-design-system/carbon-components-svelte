@@ -9,27 +9,13 @@
 // could be in the document: selectors are indexed by a class of their last
 // compound, checked against the classes in the document.
 
+import { splitSelectors } from "./selector-list.js";
+
+export { splitSelectors };
+
 /** Pseudo-elements and user-action pseudo-classes, longest names first. */
 const DYNAMIC =
   /::?(?:before|after|placeholder|selection|marker|backdrop|file-selector-button|first-line|first-letter|-webkit-[\w-]+|-moz-[\w-]+|-ms-[\w-]+)(?:\([^)]*\))?|:(?:focus-visible|focus-within|focus|hover|active|visited|link|target|autofill|-webkit-autofill)(?![\w-])/g;
-
-/** Splits on commas outside parentheses and brackets. */
-export function splitSelectors(text) {
-  const out = [];
-  let depth = 0;
-  let start = 0;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (ch === "(" || ch === "[") depth++;
-    else if (ch === ")" || ch === "]") depth--;
-    else if (ch === "," && depth === 0) {
-      out.push(text.slice(start, i).trim());
-      start = i + 1;
-    }
-  }
-  out.push(text.slice(start).trim());
-  return out.filter(Boolean);
-}
 
 /** Every style rule's selectors in `css`, once each, in order. */
 export function selectorsOf(css) {

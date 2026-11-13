@@ -233,3 +233,18 @@ test("CSS coverage records the selectors some DOM state matched", () => {
     ".btn,.btn:hover::after,.menu .item:focus-visible",
   );
 });
+
+test("cascades rules by their most specific matching selector, lists and all", () => {
+  const run = window();
+  assert.equal(
+    run(`document.head.innerHTML = \`<style>
+        .a, #x { color: red }
+        .a.b { color: blue }
+        :is(.c, .d) { width: 5px }
+      </style>\`;
+      document.body.innerHTML = '<p id="x" class="a b"></p><p class="d"></p>';
+      const [p, q] = document.querySelectorAll("p");
+      [getComputedStyle(p).color, getComputedStyle(q).width].join(" | ")`),
+    "rgb(255, 0, 0) | 5px",
+  );
+});
