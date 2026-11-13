@@ -2,6 +2,7 @@
 import {
   addUniqueArrayItem,
   sameArrayItems,
+  sameItemSet,
   toggleArrayItem,
 } from "../../src/utils/array-set-ops.js";
 
@@ -35,5 +36,13 @@ describe("sameArrayItems", () => {
     expect(sameArrayItems(array, before)).toBe(false);
     expect(sameArrayItems(array, ["b", "a"])).toBe(true);
     expect(sameArrayItems([], [])).toBe(true);
+  });
+});
+
+describe("sameItemSet", () => {
+  it("ignores order but not a duplicate standing in for another item", () => {
+    expect(sameItemSet(["b", "a"], new Set(["a", "b"]))).toBe(true);
+    expect(sameItemSet(["a", "a"], new Set(["a", "b"]))).toBe(false);
+    expect(sameItemSet(["a", "a", "b"], new Set(["a", "b"]))).toBe(true);
   });
 });

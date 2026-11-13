@@ -714,6 +714,7 @@
   } from "svelte";
   import { writable } from "svelte/store";
   import { TYPEAHEAD_RESET_MS } from "../constants/timing.js";
+  import { sameArrayItems, sameItemSet } from "../utils/array-set-ops.js";
   import { createDelayedSetter } from "../utils/delayed-setter.js";
   import { getLayoutDirection, inlineKey } from "../utils/layout-direction.js";
   import { noop } from "../utils/noop.js";
@@ -944,32 +945,6 @@
   let prevSelectedIdsPushed = selectedIds.slice();
   /** @type {ReadonlyArray<Node["id"]>} */
   let prevExpandedIdsPushed = expandedIds.slice();
-
-  /**
-   * @param {ReadonlyArray<unknown>} a
-   * @param {ReadonlyArray<unknown>} b
-   * @returns {boolean}
-   */
-  function arrayIdsEqual(a, b) {
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i++) {
-      if (a[i] !== b[i]) return false;
-    }
-    return true;
-  }
-
-  /**
-   * Whether `a` and `b` hold the same ids, in any order. Compared as sets, so
-   * a duplicate (`["a", "a"]` against `["a", "b"]`) doesn't pass for a
-   * different id.
-   * @param {ReadonlyArray<Node["id"]>} a
-   * @param {ReadonlyArray<Node["id"]>} b
-   */
-  function sameIdSet(a, b) {
-    const ids = new Set(b);
-    if (!a.every((id) => ids.has(id))) return false;
-    return new Set(a).size === ids.size;
-  }
 
   /**
    * Re-derive the `expanded`/`selected`/`checked`/`indeterminate` flags from
@@ -1694,7 +1669,7 @@
       if (
         checkboxInputNodes !== prevCheckboxInputNodes ||
         prevCheckboxCheckedIds === null ||
-        !arrayIdsEqual(checkedIds, prevCheckboxCheckedIds) ||
+        !sameArrayItems(checkedIds, prevCheckboxCheckedIds) ||
         checkMode !== prevCheckboxCheckMode
       ) {
         const seedIds =
@@ -1716,10 +1691,10 @@
         // Write only when the checked set changed, not its order. In Svelte
         // 5, once a component writes a prop it keeps that value over the
         // parent's later in-place edits, such as a spliced `$state` array.
-        if (!sameIdSet(nextCheckedIds, checkedIds)) {
+        if (!sameItemSet(nextCheckedIds, new Set(checkedIds))) {
           setCheckedIds(nextCheckedIds);
         }
-        if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
+        if (!sameArrayItems(checkboxState.indeterminateIds, indeterminateIds)) {
           indeterminateIds = checkboxState.indeterminateIds;
           indeterminateIdsSet = new Set(indeterminateIds);
           prevIndeterminateIds = indeterminateIds.slice();
@@ -1738,21 +1713,21 @@
 
     // External `bind:checkedIds` / `bind:indeterminateIds` updates that
     // bypass `setCheckedIds` still need the sync mirrors refreshed.
-    if (!arrayIdsEqual(checkedIds, prevCheckedIds)) {
+    if (!sameArrayItems(checkedIds, prevCheckedIds)) {
       checkedIdsSet = new Set(checkedIds);
       prevCheckedIds = checkedIds.slice();
     }
-    if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIds)) {
+    if (!sameArrayItems(indeterminateIds, prevIndeterminateIds)) {
       indeterminateIdsSet = new Set(indeterminateIds);
       prevIndeterminateIds = indeterminateIds.slice();
     }
 
-    if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIdsPushed)) {
+    if (!sameArrayItems(indeterminateIds, prevIndeterminateIdsPushed)) {
       prevIndeterminateIdsPushed = indeterminateIds.slice();
       indeterminateIdSet.set(new Set(indeterminateIds));
     }
 
-    if (!arrayIdsEqual(checkedIds, prevCheckedIdsPushed)) {
+    if (!sameArrayItems(checkedIds, prevCheckedIdsPushed)) {
       const wasCheckedIds = prevCheckedIdsPushed;
       prevCheckedIdsPushed = checkedIds.slice();
       checkedIdSet.set(new Set(checkedIds));
@@ -1832,9 +1807,9 @@
     } else if (
       stableNodes !== prevVirtualIndexNodes ||
       prevVirtualIndexExpandedIds === null ||
-      !arrayIdsEqual(expandedIds, prevVirtualIndexExpandedIds)
+      !sameArrayItems(expandedIds, prevVirtualIndexExpandedIds)
     ) {
-      const expandedArg = arrayIdsEqual(expandedIds, prevExpandedIds)
+      const expandedArg = sameArrayItems(expandedIds, prevExpandedIds)
         ? expandedIdsSet
         : new Set(expandedIds);
       virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg);
@@ -2280,14 +2255,14 @@
   let prevActiveIdForAutoCollapse = activeId;
 
   $: {
-    if (!arrayIdsEqual(expandedIds, prevExpandedIds)) {
+    if (!sameArrayItems(expandedIds, prevExpandedIds)) {
       expandedIdsSet = new Set(expandedIds);
       prevExpandedIds = expandedIds.slice();
     }
 
     // Catches `selectedIds` reassignments that didn't go through
     // `setSelectedIds` (e.g. an external `bind:selectedIds` update).
-    if (!arrayIdsEqual(selectedIds, prevSelectedIds)) {
+    if (!sameArrayItems(selectedIds, prevSelectedIds)) {
       selectedIdsSet = new Set(selectedIds);
       prevSelectedIds = selectedIds.slice();
     }
@@ -2318,7 +2293,7 @@
       prevActiveIdPushed = activeId;
       activeNodeId.set(activeId);
     }
-    if (!arrayIdsEqual(selectedIds, prevSelectedIdsPushed)) {
+    if (!sameArrayItems(selectedIds, prevSelectedIdsPushed)) {
       const wasSelectedIds = prevSelectedIdsPushed;
       prevSelectedIdsPushed = selectedIds.slice();
       selectedIdSet.set(new Set(selectedIds));
@@ -2337,7 +2312,7 @@
         });
       });
     }
-    if (!arrayIdsEqual(expandedIds, prevExpandedIdsPushed)) {
+    if (!sameArrayItems(expandedIds, prevExpandedIdsPushed)) {
       const wasExpandedIds = prevExpandedIdsPushed;
       prevExpandedIdsPushed = expandedIds.slice();
       expandedIdSet.set(expandedIdsSet);
