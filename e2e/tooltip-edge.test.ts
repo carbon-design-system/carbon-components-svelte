@@ -63,6 +63,38 @@ for (const [dir, edge] of [
   }
 }
 
+// A side tooltip opens on the other side when it runs past the window's
+// edge, or below when neither side has room.
+for (const [name, side] of [
+  ["Left at the left edge", "right"],
+  ["Right at the right edge", "left"],
+] as const) {
+  test(`${name.toLowerCase()} opens on the ${side} inside the window`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 600 });
+    await page.goto("/tooltip-edge.html");
+    const g = await geometry(page, name);
+    expect(g.left).toBeGreaterThanOrEqual(0);
+    expect(g.right).toBeLessThanOrEqual(g.width);
+    await expect(page.locator(SHOWN).last()).toHaveClass(
+      new RegExp(`bx--tooltip--${side}`),
+    );
+  });
+}
+
+test("a side tooltip with no room on either side opens below", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 600 });
+  await page.goto("/tooltip-edge.html");
+  const g = await geometry(page, "Right in the middle");
+  expect(g.left).toBeGreaterThanOrEqual(0);
+  expect(g.right).toBeLessThanOrEqual(g.width);
+  expect(g.top).toBeGreaterThanOrEqual(g.iconTop);
+  await expect(page.locator(SHOWN).last()).toHaveClass(/bx--tooltip--bottom/);
+});
+
 test("a tooltip at the bottom of the window opens above", async ({ page }) => {
   await page.setViewportSize({ width: 900, height: 600 });
   await page.goto("/tooltip-edge.html");
