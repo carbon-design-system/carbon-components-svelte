@@ -271,7 +271,6 @@ export const cases: CollectionCase[] = [
     props: { labelText: "Tree", nodes: treeNodes() },
     initial: () => ["a"],
     replacement: () => ["b"],
-    fails: inBothModes("compared with prevSelectedIds by reference"),
     check: () => {
       expect(treeItem("Bravo")).toHaveAttribute("aria-selected", "true");
       expect(treeItem("Alpha")).toHaveAttribute("aria-selected", "false");
@@ -284,7 +283,6 @@ export const cases: CollectionCase[] = [
     props: { labelText: "Tree", nodes: treeNodes() },
     initial: () => ["a"],
     replacement: () => ["b"],
-    fails: inBothModes("compared with prevExpandedIds by reference"),
     check: () => {
       expect(treeItem("Bravo")).toHaveAttribute("aria-expanded", "true");
       expect(treeItem("Alpha")).toHaveAttribute("aria-expanded", "false");
@@ -294,10 +292,19 @@ export const cases: CollectionCase[] = [
     name: "TreeView",
     component: TreeView,
     prop: "checkedIds",
-    props: { labelText: "Tree", selectionMode: "checkbox", nodes: treeNodes() },
-    initial: () => ["a1"],
-    replacement: () => ["b1"],
-    fails: { runes: "compared with prevCheckedIds by reference" },
+    props: {
+      labelText: "Tree",
+      selectionMode: "checkbox",
+      // "deep" rewrites the ids on mount, and in Svelte 5 a prop the
+      // component wrote keeps its own value over the parent's later edits.
+      checkMode: "node",
+      nodes: [
+        { id: "a", text: "Alpha" },
+        { id: "b", text: "Bravo" },
+      ],
+    },
+    initial: () => ["a"],
+    replacement: () => ["b"],
     check: () => {
       expect(treeItem("Bravo")).toHaveAttribute("aria-checked", "true");
       expect(treeItem("Alpha")).toHaveAttribute("aria-checked", "false");
