@@ -56,6 +56,19 @@
   }
 
   /**
+   * Whether two row arrays hold the same row objects in the same order.
+   * @param {ReadonlyArray<unknown>} a
+   * @param {ReadonlyArray<unknown>} b
+   */
+  function sameRowObjects(a, b) {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
+  /**
    * Whether two cell records map the same row ids to the same cell arrays.
    * @param {Record<string, unknown>} a
    * @param {Record<string, unknown>} b
@@ -782,9 +795,24 @@
   // seen `rows`" by identity, a new-but-equal array would still look changed
   // to whichever block wasn't updated, defeating the guard.
   let stableRows = rows;
-  $: if (!rowsUnchanged(stableRows, rows)) {
-    stableRows = rows;
+
+  /** @param {ReadonlyArray<Row>} next */
+  function syncStableRows(next) {
+    if (next === stableRows) {
+      // The array was mutated in place (`rows.splice(...); rows = rows`, or
+      // a Svelte 5 `$state` array edited without reassignment).
+      // `originalRows` is a copy of its old contents. If it holds the same
+      // rows in the same order, only a row's fields changed, which waits
+      // for `refreshRow`. Otherwise copy it: the blocks below compare
+      // `stableRows` by reference, and `rowById` must hold every row id the
+      // row blocks render.
+      if (!sameRowObjects(originalRows, next)) stableRows = [...next];
+      return;
+    }
+    if (!rowsUnchanged(stableRows, next)) stableRows = next;
   }
+
+  $: syncStableRows(rows);
 
   // Store a copy of the original rows for filter restoration.
   let prevFilterRows = stableRows;

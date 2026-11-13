@@ -4,7 +4,9 @@ import { tick } from "svelte";
 import { user } from "../utils/user";
 import DataTable from "./DataTable.test.svelte";
 import DataTableRefreshRow from "./DataTableRefreshRow.test.svelte";
+import DataTableRowsMutatedInPlace from "./DataTableRowsMutatedInPlace.test.svelte";
 import { eventNames, getBodyRows, getCells, getFirstBodyRow } from "./helpers";
+import { describeRowsMutatedInPlace } from "./rows-mutated-in-place-suite";
 
 describe("DataTable body cells", () => {
   const rows = [
@@ -135,3 +137,5 @@ describe("DataTable highlightedRowIds", () => {
     );
   });
 });
+
+describeRowsMutatedInPlace("reassigned to itself", DataTableRowsMutatedInPlace);
