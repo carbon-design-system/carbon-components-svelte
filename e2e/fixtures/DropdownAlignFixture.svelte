@@ -42,3 +42,27 @@
     />
   </div>
 {/each}
+
+<!-- Near the window's edges: a labelled one, whose menu starts after the
+     label, and one against the right edge. -->
+<div style="padding: 1rem">
+  <Dropdown
+    data-testid="edge-labelled"
+    type="inline"
+    labelText="Contact"
+    selectedId="a"
+    {items}
+    portalMenu={false}
+  />
+</div>
+<div style="display: flex; justify-content: flex-end; padding: 1rem 0.5rem">
+  <Dropdown
+    data-testid="edge-right"
+    type="inline"
+    labelText="edge-right"
+    hideLabel
+    selectedId="a"
+    {items}
+    portalMenu={false}
+  />
+</div>

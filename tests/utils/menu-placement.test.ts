@@ -1,5 +1,6 @@
 // @vitest-environment node
 import {
+  fitEdgeMenu,
   fitIntrinsicAlign,
   fitMenuAxis,
   menuSide,
@@ -86,6 +87,67 @@ describe("fitIntrinsicAlign", () => {
     expect(align).toBe("end");
     expect(fitAt(20, align)).toBe("start");
     expect(fitAt(400, align)).toBe("end");
+  });
+});
+
+describe("fitEdgeMenu", () => {
+  // A 288px inline menu under a 100px field, 8px margin.
+  const fit = (before: number, max: number, align: "start" | "end") =>
+    fitEdgeMenu({ before, after: before + 100, size: 288, max, align });
+
+  it.each([
+    [
+      "keeps start with room",
+      100,
+      1000,
+      "start",
+      { align: "start", width: null },
+    ],
+    ["keeps end with room", 400, 1000, "end", { align: "end", width: null }],
+    [
+      "takes end near the right edge",
+      800,
+      1000,
+      "start",
+      { align: "end", width: null },
+    ],
+    [
+      "takes start near the left edge",
+      50,
+      1000,
+      "end",
+      { align: "start", width: null },
+    ],
+    // 320px window, field at 90px: 222px to the right, 182px to the left.
+    [
+      "narrows to the roomier edge",
+      90,
+      320,
+      "start",
+      { align: "start", width: 222 },
+    ],
+    [
+      // 132px to the right, 272px to the left.
+      "narrows from end when start has less room",
+      180,
+      320,
+      "start",
+      { align: "end", width: 272 },
+    ],
+    [
+      // 97px of room either side of a 100px field.
+      "never narrows below the field",
+      5,
+      110,
+      "start",
+      { align: "start", width: 100 },
+    ],
+  ] as const)("%s", (_, before, max, align, expected) => {
+    expect(fit(before, max, align)).toEqual(expected);
+  });
+
+  it("keeps the menu as it is without a layout", () => {
+    expect(fit(90, 0, "start")).toEqual({ align: "start", width: null });
   });
 });
 
