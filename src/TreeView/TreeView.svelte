@@ -847,6 +847,12 @@
   let stableNodes = nodes;
 
   /**
+   * The `nodes` array `stableNodes` holds, or was copied from.
+   * @type {ReadonlyArray<Node>}
+   */
+  let nodesSource = nodes;
+
+  /**
    * Snapshot of `stableNodes`, refreshed every time `stableNodes` is set.
    * See `fingerprintTree` / `matchesFingerprint`.
    * @type {ReturnType<typeof fingerprintTree>}
@@ -1613,14 +1619,23 @@
   // reassignment — and the update cascade it triggers, since `{...child}`
   // spread in `TreeViewNodeList` marks every descendant dirty regardless of
   // value — is skipped entirely.
-  $: if (nodes === stableNodes) {
+  //
+  // A mutated tree is copied, not reassigned: the blocks below compare
+  // `stableNodes` by reference, so handing back the same array would skip
+  // rebuilding the node maps `getNode` and `showNode` read. `nodesSource`
+  // remembers the array the copy came from, so its next `nodes = nodes`
+  // still takes the fingerprint path.
+  $: if (nodes === nodesSource) {
     if (!matchesFingerprint(stableNodesFingerprint, nodes)) {
+      stableNodes = [...nodes];
+      stableNodesFingerprint = fingerprintTree(nodes);
+    }
+  } else {
+    nodesSource = nodes;
+    if (!sameTreeDifferentObjects(stableNodes, nodes)) {
       stableNodes = nodes;
       stableNodesFingerprint = fingerprintTree(nodes);
     }
-  } else if (!sameTreeDifferentObjects(stableNodes, nodes)) {
-    stableNodes = nodes;
-    stableNodesFingerprint = fingerprintTree(nodes);
   }
 
   $: if (stableNodes !== cachedNodes) {
