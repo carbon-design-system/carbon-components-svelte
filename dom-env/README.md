@@ -13,7 +13,7 @@ test: {
 }
 ```
 
-The adapter builds `dist/dom-env.js` with `bun build` when a source file is newer than the bundle, then evaluates it inside each test file's VM context. Evaluating it there, rather than importing it, means the DOM's classes use that context's own `Array`, `Object`, and `Error`, so `instanceof` checks in tests and libraries behave.
+The adapter builds `dist/dom-env.js` with Rolldown (`build.js`) when a source file is newer than the bundle, then evaluates it inside each test file's VM context. Evaluating it there, rather than importing it, means the DOM's classes use that context's own `Array`, `Object`, and `Error`, so `instanceof` checks in tests and libraries behave.
 
 ## Design
 
@@ -96,6 +96,6 @@ This repo's `bun run test:css-coverage` runs the Svelte 5 tests this way and rep
 ## Develop
 
 ```sh
-bun run build   # dist/dom-env.js
+node build.js   # dist/dom-env.js
 bun run test    # smoke tests in a bare VM context
 ```
