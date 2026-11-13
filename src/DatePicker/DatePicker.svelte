@@ -601,8 +601,11 @@
   let prevValue = value;
   let prevValueFrom = valueFrom;
   let prevValueTo = valueTo;
-  let prevDisabledDates = disabledDates;
-  let prevEnabledDates = enabledDates;
+  // Copies, so `disabledDates` or `enabledDates` mutated in place
+  // (`disabledDates.push(date); disabledDates = disabledDates`) still
+  // compares as changed: `sameValue` returns early on the same array.
+  let prevDisabledDates = [...disabledDates];
+  let prevEnabledDates = [...enabledDates];
   let prevInitialMonth = initialMonth;
   /** @type {Record<string, unknown>} */
   let prevAppliedOptions = {};
@@ -737,9 +740,10 @@
   // Set from onOpen/onClose. Outside-click listener attaches only while open.
   let calendarOpen = false;
   let prevOpen = open;
-  // The `selectedDates` array this component last wrote or applied, so a
-  // consumer write can be told apart from its own echo.
-  let prevSelectedDates = selectedDates;
+  // A copy of the `selectedDates` this component last wrote or applied, so a
+  // consumer write can be told apart from its own echo, including one that
+  // mutates the array in place.
+  let prevSelectedDates = [...selectedDates];
   let prevMinRangeDays = minRangeDays;
   let prevMaxRangeDays = maxRangeDays;
   // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
@@ -998,7 +1002,7 @@
     if (!engine) return;
     const next = engine.selectedDates.map((date) => new Date(date));
     if (!sameValue(next, selectedDates)) selectedDates = next;
-    prevSelectedDates = selectedDates;
+    prevSelectedDates = [...selectedDates];
   }
 
   /**
@@ -1006,7 +1010,7 @@
    * A prop write is not a user change, so nothing is dispatched.
    */
   function applySelectedDates() {
-    prevSelectedDates = selectedDates;
+    prevSelectedDates = [...selectedDates];
     /** @type {NonNullable<typeof engine>} */ (engine).setDate(
       [...selectedDates],
       false,
@@ -1412,7 +1416,7 @@
   function applyDisabledDates() {
     if (sameValue(disabledDates, prevDisabledDates)) return;
     const hadOverride = prevDisabledDates.length > 0;
-    prevDisabledDates = disabledDates;
+    prevDisabledDates = [...disabledDates];
     if (disabledDates.length > 0) {
       /** @type {NonNullable<typeof engine>} */ (engine).set(
         "disable",
@@ -1426,7 +1430,7 @@
   function applyEnabledDates() {
     if (sameValue(enabledDates, prevEnabledDates)) return;
     const hadOverride = prevEnabledDates.length > 0;
-    prevEnabledDates = enabledDates;
+    prevEnabledDates = [...enabledDates];
     if (enabledDates.length > 0) {
       /** @type {NonNullable<typeof engine>} */ (engine).set(
         "enable",
@@ -1866,9 +1870,9 @@
     prevMaxRangeDays = maxRangeDays;
     if (engine?.selectedDates.length === 1) engine.redraw();
   }
-  $: if (engine && selectedDates !== prevSelectedDates) {
+  $: if (engine && !sameValue(selectedDates, prevSelectedDates)) {
     if (sameValue(selectedDates, engine.selectedDates)) {
-      prevSelectedDates = selectedDates;
+      prevSelectedDates = [...selectedDates];
     } else {
       applySelectedDates();
     }
