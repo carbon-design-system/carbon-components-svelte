@@ -94,6 +94,7 @@
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
   import { splitAriaNaming } from "../utils/aria-naming.js";
+  import { sameArrayItems } from "../utils/array-set-ops.js";
   import {
     buildFieldIds,
     joinDescribedBy,
@@ -162,10 +163,26 @@
     update,
   });
 
-  $: if (!readonly && selected !== $selectedValues) $selectedValues = selected;
+  // A copy of the values the store last held. `selected` mutated in place
+  // (`selected.push(value); selected = selected`) is the store's own array,
+  // so only its contents tell the change apart from the store's echo below.
+  let syncedValues = [...selected];
+
+  /**
+   * @param {ReadonlyArray<Value>} next
+   * @param {boolean} isReadonly
+   */
+  function syncSelected(next, isReadonly) {
+    if (isReadonly) return;
+    if (next === $selectedValues && sameArrayItems(next, syncedValues)) return;
+    $selectedValues = next;
+  }
+
+  $: syncSelected(selected, readonly);
 
   const unsubscribe = selectedValues.subscribe((value) => {
     selected = value;
+    syncedValues = [...value];
     if (!initialRender && !resettingFromForm) {
       dispatch("change", value);
     }
