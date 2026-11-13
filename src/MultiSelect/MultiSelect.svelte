@@ -1220,7 +1220,7 @@
    * re-sort (define it outside the markup, as with `filterItem`/date rules
    * elsewhere in this library).
    */
-  /** @type {typeof items} */
+  /** @type {typeof items | undefined} */
   let baseOrderItems;
   /** @type {Array<{ item: Item; snapshot: Item }>} */
   let baseOrderPairs;
@@ -1318,7 +1318,6 @@
   // which reads it to decide whether an entry can be reused.
   let prevItemsSnapshot = items.map((item) => ({ ...item }));
   sortedItems = sort();
-  let prevItems = items;
 
   /**
    * Whether `sortedItems` already describes `nextItems` and `nextSelectedIds`,
@@ -1400,18 +1399,27 @@
   // for readability of the selector it replaces.
   $: fluidHoverable = isFluid && !effectiveDisabled && !readonly;
   $: ariaLabel = $$props["aria-label"] ?? "Choose an item";
-  $: if (items !== prevItems) {
-    prevItems = items;
-    if (!isAlreadySorted(items, selectedIds)) {
-      // `sort()` reads the OLD `prevItemsSnapshot` to decide which entries
-      // changed, so it must run before the snapshot is refreshed to match
-      // the new `items` — otherwise every entry would compare equal to its
-      // own just-taken snapshot and get stale-reused.
-      sortedItems = sort();
-      prevItemsSnapshot = items.map((item) => ({ ...item }));
-      prevChecked = sortedItems.filter((item) => item.checked);
-    }
+  /**
+   * Runs on every `items` update, including the same array mutated in place
+   * (`items.push(item); items = items`), which is why it compares against
+   * `prevItemsSnapshot` rather than the previous `items` reference.
+   * @param {typeof items} nextItems
+   */
+  function syncItems(nextItems) {
+    if (isAlreadySorted(nextItems, selectedIds)) return;
+    // The base-order cache is keyed on the `items` reference, which an
+    // in-place mutation keeps.
+    baseOrderItems = undefined;
+    // `sort()` reads the OLD `prevItemsSnapshot` to decide which entries
+    // changed, so it must run before the snapshot is refreshed to match
+    // the new `items` — otherwise every entry would compare equal to its
+    // own just-taken snapshot and get stale-reused.
+    sortedItems = sort();
+    prevItemsSnapshot = nextItems.map((item) => ({ ...item }));
+    prevChecked = sortedItems.filter((item) => item.checked);
   }
+
+  $: syncItems(items);
   $: if (
     selectedIds &&
     ((selectionFeedback === "top" &&
