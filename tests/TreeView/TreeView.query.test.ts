@@ -42,6 +42,18 @@ describe("TreeView.getNode / getNodes", () => {
     );
   });
 
+  it("finds a node added to nodes in place", async () => {
+    const onGetNode = vi.fn();
+    render(TreeViewGetNode, { onGetNode });
+
+    await user.click(getButton("add-late-node"));
+    await user.click(getButton("get-late-node"));
+
+    expect(onGetNode).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "late", text: "Loaded later" }),
+    );
+  });
+
   it("resolves multiple ids and omits ids with no matching node", async () => {
     const onGetNodes = vi.fn();
     render(TreeViewGetNode, { onGetNodes });
