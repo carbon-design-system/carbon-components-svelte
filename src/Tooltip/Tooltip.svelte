@@ -19,6 +19,9 @@
 
   /**
    * Set the direction of the tooltip relative to the button.
+   * A tooltip that runs past the window's edge opens on the other side when
+   * that has room; a side tooltip with room on neither side opens below or
+   * above.
    * @type {"top" | "right" | "bottom" | "left"}
    */
   export let direction = "bottom";
@@ -176,7 +179,9 @@
 
   // The side the tooltip opens on: `direction`, unless it doesn't fit there
   // and fits on the other side (in place; a portalled tooltip flips itself).
-  /** @type {"top" | "bottom" | null} */
+  // A side tooltip that fits on neither side opens below or above instead,
+  // where it slides to stay inside the window.
+  /** @type {"top" | "bottom" | "left" | "right" | null} */
   let flip = null;
   $: placement = flip ?? direction;
 
@@ -389,6 +394,23 @@
     ) {
       flip = "bottom";
       return;
+    } else if (
+      inView &&
+      flip === null &&
+      (direction === "left" || direction === "right")
+    ) {
+      const side = sideFit(
+        direction,
+        button,
+        rect,
+        iconRight,
+        iconWidth,
+        iconHeight,
+      );
+      if (side) {
+        flip = side;
+        return;
+      }
     }
 
     shift =
@@ -400,6 +422,37 @@
     if (portalTooltip === undefined && clippedBy(refTooltip)) {
       portalWhenClipped = true;
     }
+  }
+
+  /**
+   * Where a tooltip beside its trigger should open instead, when it runs
+   * past the window's edge: the other side if that has room, else below or
+   * above. `null` keeps it where it is.
+   * @param {"left" | "right"} side The side it's placed on.
+   * @param {DOMRect} button
+   * @param {DOMRect} rect The tooltip, as placed on `direction`.
+   * @param {number} iconRight The icon's right edge, from the label's left.
+   * @param {number} iconWidth
+   * @param {number} iconHeight
+   * @returns {"top" | "bottom" | "left" | "right" | null}
+   */
+  function sideFit(side, button, rect, iconRight, iconWidth, iconHeight) {
+    const width = document.documentElement.clientWidth;
+    const height = document.documentElement.clientHeight;
+    // No layout viewport (jsdom), so nothing to fit inside.
+    if (width === 0) return null;
+    const margin = 8;
+    if (rect.left >= margin && rect.right <= width - margin) return null;
+    // The edges the tooltip opens from: the icon's, or the label's without one.
+    const start = hideIcon ? button.left : button.left + iconRight - iconWidth;
+    const end = hideIcon ? button.right : button.left + iconRight;
+    const fitsLeft = start - 8 - rect.width >= margin;
+    const fitsRight = end + 6 + rect.width <= width - margin;
+    if (side === "right" && fitsLeft) return "left";
+    if (side === "left" && fitsRight) return "right";
+    if (button.bottom + rect.height + iconHeight < height) return "bottom";
+    if (button.top - rect.height - iconHeight > 0) return "top";
+    return null;
   }
 
   // A portalled tooltip is placed by `FloatingPortal`, which rewrites the
