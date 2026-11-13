@@ -53,6 +53,7 @@
 
   import { createEventDispatcher, setContext } from "svelte";
   import { get, readonly, writable } from "svelte/store";
+  import { sameArrayItems } from "../utils/array-set-ops.js";
   import { rangeSlice } from "../utils/range-slice.js";
 
   const dispatch = createEventDispatcher();
@@ -255,10 +256,24 @@
     register,
   });
 
-  $: selected = $selectedValues;
+  // A copy of the values the store last held. `selected` mutated in place
+  // (`selected.push(value); selected = selected`) is the store's own array,
+  // so only its contents tell the change apart from the store's echo.
+  /** @type {ReadonlyArray<T>} */
+  let syncedValues = [...selected];
+
+  $: {
+    selected = $selectedValues;
+    syncedValues = [...$selectedValues];
+  }
   // Skip echoing the store's own array back into it: an object `set` always
   // notifies, which would re-run every tile's subscription per toggle.
-  $: if (selected !== $selectedValues) selectedValues.set(selected);
+  $: if (
+    selected !== $selectedValues ||
+    !sameArrayItems(selected, syncedValues)
+  ) {
+    selectedValues.set(selected);
+  }
   $: groupName.set(name);
   $: groupForm.set(form);
   $: groupDisabled.set(disabled);
