@@ -534,7 +534,7 @@
     }
     expandedIdsSet = new Set(expandableIds);
     expandedIds = expandableIds;
-    prevExpandedIds = expandedIds;
+    prevExpandedIds = expandedIds.slice();
   }
 
   /**
@@ -549,7 +549,7 @@
   export function collapseAll() {
     expandedIdsSet.clear();
     expandedIds = [];
-    prevExpandedIds = expandedIds;
+    prevExpandedIds = expandedIds.slice();
   }
 
   /**
@@ -579,7 +579,7 @@
       expandedIdsSet.add(node.id);
     }
     expandedIds = Array.from(expandedIdsSet);
-    prevExpandedIds = expandedIds;
+    prevExpandedIds = expandedIds.slice();
   }
 
   /**
@@ -603,7 +603,7 @@
       }
     }
     expandedIds = Array.from(expandedIdsSet);
-    prevExpandedIds = expandedIds;
+    prevExpandedIds = expandedIds.slice();
   }
 
   /**
@@ -635,7 +635,7 @@
         expandedIdsSet.add(ancestorId);
       }
       expandedIds = Array.from(expandedIdsSet);
-      prevExpandedIds = expandedIds;
+      prevExpandedIds = expandedIds.slice();
     }
 
     if (select) {
@@ -919,28 +919,31 @@
   /** @type {Node["id"] | null} */
   let anchorId = null;
 
+  // Every `prev*` id array below is a copy, compared by contents: an id prop
+  // mutated in place (`expandedIds.push(id); expandedIds = expandedIds`) is
+  // the same array, so a reference check would never see it change.
   /** @type {Set<Node["id"]>} */
   let expandedIdsSet = new Set(expandedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevExpandedIds = expandedIds;
+  let prevExpandedIds = expandedIds.slice();
   /** @type {Set<Node["id"]>} */
   let selectedIdsSet = new Set(selectedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevSelectedIds = selectedIds;
+  let prevSelectedIds = selectedIds.slice();
   /** @type {Set<Node["id"]>} */
   let checkedIdsSet = new Set(checkedIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevCheckedIds = checkedIds;
+  let prevCheckedIds = checkedIds.slice();
   /** @type {Set<Node["id"]>} */
   let indeterminateIdsSet = new Set(indeterminateIds);
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevIndeterminateIds = indeterminateIds;
+  let prevIndeterminateIds = indeterminateIds.slice();
   /** @type {Node["id"]} */
   let prevActiveIdPushed = activeId;
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevSelectedIdsPushed = selectedIds;
+  let prevSelectedIdsPushed = selectedIds.slice();
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevExpandedIdsPushed = expandedIds;
+  let prevExpandedIdsPushed = expandedIds.slice();
 
   /**
    * @param {ReadonlyArray<unknown>} a
@@ -984,7 +987,7 @@
   function setSelectedIds(next) {
     selectedIds = next;
     selectedIdsSet = new Set(next);
-    prevSelectedIds = next;
+    prevSelectedIds = next.slice();
   }
 
   /**
@@ -1068,7 +1071,7 @@
   function setCheckedIds(next) {
     checkedIds = next;
     checkedIdsSet = new Set(next);
-    prevCheckedIds = next;
+    prevCheckedIds = next.slice();
   }
 
   /**
@@ -1259,7 +1262,7 @@
       expandedIdsSet.delete(node.id);
       expandedIds = expandedIds.filter((id) => id !== node.id);
     }
-    prevExpandedIds = expandedIds;
+    prevExpandedIds = expandedIds.slice();
   }
 
   /** @type {(node: Node) => void} */
@@ -1653,9 +1656,9 @@
   $: sharedSelectionMode.set(selectionMode);
 
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevIndeterminateIdsPushed = indeterminateIds;
+  let prevIndeterminateIdsPushed = indeterminateIds.slice();
   /** @type {ReadonlyArray<Node["id"]>} */
-  let prevCheckedIdsPushed = checkedIds;
+  let prevCheckedIdsPushed = checkedIds.slice();
 
   /** @type {ReadonlyArray<Node> | null} */
   let prevCheckboxInputNodes = null;
@@ -1677,7 +1680,8 @@
       const checkboxInputNodes = cachedNodes ?? stableNodes;
       if (
         checkboxInputNodes !== prevCheckboxInputNodes ||
-        checkedIds !== prevCheckboxCheckedIds ||
+        prevCheckboxCheckedIds === null ||
+        !arrayIdsEqual(checkedIds, prevCheckboxCheckedIds) ||
         checkMode !== prevCheckboxCheckMode
       ) {
         const seedIds =
@@ -1702,39 +1706,39 @@
         if (!arrayIdsEqual(checkboxState.indeterminateIds, indeterminateIds)) {
           indeterminateIds = checkboxState.indeterminateIds;
           indeterminateIdsSet = new Set(indeterminateIds);
-          prevIndeterminateIds = indeterminateIds;
+          prevIndeterminateIds = indeterminateIds.slice();
         }
         prevCheckboxInputNodes = checkboxInputNodes;
         // Re-read `checkedIds`: `setCheckedIds` above may have just
         // reassigned it, and this should snapshot the settled value.
-        prevCheckboxCheckedIds = checkedIds;
+        prevCheckboxCheckedIds = checkedIds.slice();
         prevCheckboxCheckMode = checkMode;
       }
     } else if (indeterminateIds.length > 0) {
       indeterminateIds = [];
       indeterminateIdsSet = new Set();
-      prevIndeterminateIds = indeterminateIds;
+      prevIndeterminateIds = indeterminateIds.slice();
     }
 
     // External `bind:checkedIds` / `bind:indeterminateIds` updates that
     // bypass `setCheckedIds` still need the sync mirrors refreshed.
-    if (checkedIds !== prevCheckedIds) {
+    if (!arrayIdsEqual(checkedIds, prevCheckedIds)) {
       checkedIdsSet = new Set(checkedIds);
-      prevCheckedIds = checkedIds;
+      prevCheckedIds = checkedIds.slice();
     }
-    if (indeterminateIds !== prevIndeterminateIds) {
+    if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIds)) {
       indeterminateIdsSet = new Set(indeterminateIds);
-      prevIndeterminateIds = indeterminateIds;
+      prevIndeterminateIds = indeterminateIds.slice();
     }
 
     if (!arrayIdsEqual(indeterminateIds, prevIndeterminateIdsPushed)) {
-      prevIndeterminateIdsPushed = indeterminateIds;
+      prevIndeterminateIdsPushed = indeterminateIds.slice();
       indeterminateIdSet.set(new Set(indeterminateIds));
     }
 
     if (!arrayIdsEqual(checkedIds, prevCheckedIdsPushed)) {
       const wasCheckedIds = prevCheckedIdsPushed;
-      prevCheckedIdsPushed = checkedIds;
+      prevCheckedIdsPushed = checkedIds.slice();
       checkedIdSet.set(new Set(checkedIds));
 
       const nextCheckedIds = checkedIds.slice();
@@ -1811,13 +1815,15 @@
       prevVirtualIndexExpandedIds = null;
     } else if (
       stableNodes !== prevVirtualIndexNodes ||
-      expandedIds !== prevVirtualIndexExpandedIds
+      prevVirtualIndexExpandedIds === null ||
+      !arrayIdsEqual(expandedIds, prevVirtualIndexExpandedIds)
     ) {
-      const expandedArg =
-        expandedIds === prevExpandedIds ? expandedIdsSet : new Set(expandedIds);
+      const expandedArg = arrayIdsEqual(expandedIds, prevExpandedIds)
+        ? expandedIdsSet
+        : new Set(expandedIds);
       virtualIndex = createTreeVirtualIndex(stableNodes, expandedArg);
       prevVirtualIndexNodes = stableNodes;
-      prevVirtualIndexExpandedIds = expandedIds;
+      prevVirtualIndexExpandedIds = expandedIds.slice();
     }
   }
 
@@ -2258,16 +2264,16 @@
   let prevActiveIdForAutoCollapse = activeId;
 
   $: {
-    if (expandedIds !== prevExpandedIds) {
+    if (!arrayIdsEqual(expandedIds, prevExpandedIds)) {
       expandedIdsSet = new Set(expandedIds);
-      prevExpandedIds = expandedIds;
+      prevExpandedIds = expandedIds.slice();
     }
 
     // Catches `selectedIds` reassignments that didn't go through
     // `setSelectedIds` (e.g. an external `bind:selectedIds` update).
-    if (selectedIds !== prevSelectedIds) {
+    if (!arrayIdsEqual(selectedIds, prevSelectedIds)) {
       selectedIdsSet = new Set(selectedIds);
-      prevSelectedIds = selectedIds;
+      prevSelectedIds = selectedIds.slice();
     }
 
     // `autoCollapse` should also be triggered when activeId changes programmatically.
@@ -2287,7 +2293,7 @@
         }
 
         expandedIds = Array.from(expandedIdsSet);
-        prevExpandedIds = expandedIds;
+        prevExpandedIds = expandedIds.slice();
       }
     }
 
@@ -2298,7 +2304,7 @@
     }
     if (!arrayIdsEqual(selectedIds, prevSelectedIdsPushed)) {
       const wasSelectedIds = prevSelectedIdsPushed;
-      prevSelectedIdsPushed = selectedIds;
+      prevSelectedIdsPushed = selectedIds.slice();
       selectedIdSet.set(new Set(selectedIds));
       selectedNodeIds.set(selectedIds);
 
@@ -2317,7 +2323,7 @@
     }
     if (!arrayIdsEqual(expandedIds, prevExpandedIdsPushed)) {
       const wasExpandedIds = prevExpandedIdsPushed;
-      prevExpandedIdsPushed = expandedIds;
+      prevExpandedIdsPushed = expandedIds.slice();
       expandedIdSet.set(expandedIdsSet);
       expandedNodeIds.set(expandedIds);
 
