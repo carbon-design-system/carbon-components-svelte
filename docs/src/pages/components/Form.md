@@ -487,6 +487,28 @@ the default handling, here without resetting the form:
 </Form>
 ```
 
+### Svelte 5 attachments
+
+In Svelte 5, use `{@attach}` instead of `actions`. An attachment goes to the
+element that takes a component's rest props, so it works on any component,
+including Form, fields and buttons. Wrap an action such as `enhance` with
+`fromAction`:
+
+```svelte
+<script>
+  import { enhance } from "$app/forms";
+  import { fromAction } from "svelte/attachments";
+  import { Button, Form, TextInput } from "carbon-components-svelte";
+</script>
+
+<Form method="POST" action="?/save" {@attach fromAction(enhance)}>
+  <TextInput name="name" labelText="Name" />
+  <Button type="submit">Save</Button>
+</Form>
+```
+
+Each component's API table names the element that takes its rest props.
+
 ### Pending state
 
 Use the submit callback to track the request and set `loading` on the submit
