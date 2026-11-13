@@ -1363,6 +1363,22 @@
   $: rowById = indexRowsById(stableRows);
   $: rowIdsToRender = rowsToRender.map((row) => row.id);
 
+  /**
+   * A `rows` array changed without Svelte seeing it (`rows.push(row)` with
+   * no `rows = rows`) still paints its current rows on the next sort or
+   * page change, but `stableRows`, and so `rowById`, missed them. Index
+   * them rather than crash.
+   * @param {ReadonlyArray<Row>} painted
+   */
+  function indexPaintedRows(painted) {
+    if (painted.every((row) => rowById.get(row.id) === row)) return;
+    const next = indexRowsById(stableRows);
+    for (const row of painted) next.set(row.id, row);
+    rowById = next;
+  }
+
+  $: indexPaintedRows(rowsToRender);
+
   // Walk the painted window, not `rows`. Virtualized and paginated tables
   // otherwise allocate cell records for every row on each `rows`/headers
   // invalidation. Compare against `stableRows`/`visibleHeaders`, not the raw

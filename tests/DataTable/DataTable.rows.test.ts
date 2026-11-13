@@ -8,6 +8,8 @@ import DataTableRowsMutatedInPlace from "./DataTableRowsMutatedInPlace.test.svel
 import { eventNames, getBodyRows, getCells, getFirstBodyRow } from "./helpers";
 import { describeRowsMutatedInPlace } from "./rows-mutated-in-place-suite";
 
+const NAME_HEADER = /Name/;
+
 describe("DataTable body cells", () => {
   const rows = [
     { id: "a", name: "Load Balancer 3", protocol: "HTTP" },
@@ -139,3 +141,18 @@ describe("DataTable highlightedRowIds", () => {
 });
 
 describeRowsMutatedInPlace("reassigned to itself", DataTableRowsMutatedInPlace);
+
+describe("DataTable rows mutated in place without reassignment", () => {
+  it("sorts the rows it holds", async () => {
+    render(DataTableRowsMutatedInPlace);
+    await user.click(
+      screen.getByRole("button", { name: "Replace rows silently" }),
+    );
+    await user.click(screen.getByRole("button", { name: NAME_HEADER }));
+
+    expect(getBodyRows().map((row) => row.textContent?.trim())).toEqual([
+      "Charlie",
+      "Delta",
+    ]);
+  });
+});
