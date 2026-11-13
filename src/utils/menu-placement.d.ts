@@ -48,4 +48,29 @@ export function fitIntrinsicAlign(options: {
   margin?: number;
 }): "start" | "center" | "end";
 
+/**
+ * Fit a menu that lines up with one edge of its anchor inside the
+ * viewport's sides: keep `align` if it fits, else the other edge if that
+ * fits, else the edge with more room, narrowed to that room (never below
+ * the anchor's width). Physical names: `start` is the anchor's left edge.
+ */
+export function fitEdgeMenu(options: {
+  /** The anchor's left edge. */
+  before: number;
+  /** The anchor's right edge. */
+  after: number;
+  /** The menu's width. */
+  size: number;
+  /** The viewport's width. */
+  max: number;
+  /** The preferred edge. */
+  align: "start" | "end";
+  /** @default 8 */
+  margin?: number;
+}): {
+  align: "start" | "end";
+  /** The width to narrow to, or `null` to keep the menu's own. */
+  width: number | null;
+};
+
 export { physicalAlign } from "./inline-align";

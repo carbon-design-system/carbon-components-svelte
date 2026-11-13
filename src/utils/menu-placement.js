@@ -102,3 +102,36 @@ export function fitIntrinsicAlign({
 
 // One helper for menus, tooltips and popovers.
 export { physicalAlign } from "./inline-align.js";
+
+/**
+ * Fit a menu that lines up with one edge of its anchor, as a list box menu
+ * wider than its field does, inside the viewport's sides (`margin` px in).
+ * A menu that fits keeps `align`; else it takes the anchor's other edge if
+ * it fits there; else it keeps the edge with more room and narrows to that
+ * room, but never below the anchor's width. A menu with no width, or a
+ * viewport with none, keeps `align` at its width.
+ *
+ * Physical names, as `physicalAlign` returns them: `start` lines the menu
+ * up with the anchor's left edge, `end` with its right edge.
+ *
+ * @param {Object} options
+ * @param {number} options.before - The anchor's left edge.
+ * @param {number} options.after - The anchor's right edge.
+ * @param {number} options.size - The menu's width.
+ * @param {number} options.max - The viewport's width.
+ * @param {"start" | "end"} options.align - The preferred edge.
+ * @param {number} [options.margin=8]
+ * @returns {{ align: "start" | "end", width: number | null }} `width` is
+ *   the width to narrow to, or `null` to keep the menu's own.
+ */
+export function fitEdgeMenu({ before, after, size, max, align, margin = 8 }) {
+  if (size <= 0 || max <= 0) return { align, width: null };
+  /** @param {"start" | "end"} edge */
+  const room = (edge) =>
+    edge === "start" ? max - margin - before : after - margin;
+  if (size <= room(align)) return { align, width: null };
+  const other = align === "start" ? "end" : "start";
+  if (size <= room(other)) return { align: other, width: null };
+  const edge = room(other) > room(align) ? other : align;
+  return { align: edge, width: Math.max(room(edge), after - before) };
+}

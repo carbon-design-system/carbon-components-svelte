@@ -46,3 +46,27 @@ test("Dropdown menu aligns to its field", async ({ page }) => {
     });
   }
 });
+
+// An in-place menu that would run past the window lines up with the field's
+// other edge, or, with room on neither, narrows to fit.
+test("Dropdown menu stays inside the window", async ({ page }) => {
+  await page.goto("/dropdown-align.html");
+
+  await test.step("against the right edge, it lines up with the field's right edge", async () => {
+    await page.setViewportSize({ width: 900, height: 900 });
+    const { field, menu } = await openMenu(page, "edge-right");
+    expect.soft(menu.width).toBeCloseTo(288, 0);
+    expect.soft(menu.x + menu.width).toBeCloseTo(field.x + field.width, 0);
+  });
+
+  await test.step("after a label in a 320px window, it narrows to fit", async () => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    const { menu } = await openMenu(page, "edge-labelled");
+    expect.soft(menu.x).toBeGreaterThanOrEqual(0);
+    expect.soft(menu.x + menu.width).toBeLessThanOrEqual(320);
+    const width = await page.evaluate(
+      () => document.documentElement.scrollWidth,
+    );
+    expect.soft(width).toBeLessThanOrEqual(320);
+  });
+});

@@ -391,7 +391,7 @@
   import { isImeComposition } from "../utils/ime-composition.js";
   import { isOutsideClick } from "../utils/is-outside-click.js";
   import { createScrollEndTracker } from "../utils/is-scroll-near-end.js";
-  import { menuSide } from "../utils/menu-placement.js";
+  import { fitEdgeMenu, menuSide } from "../utils/menu-placement.js";
   import { moveIndex } from "../utils/move-index.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import {
@@ -436,11 +436,21 @@
   /** @type {"top" | "bottom" | null} */
   let measuredSide = null;
   $: placement = measuredSide ?? direction;
+  // Likewise along the field: a menu wider than the field (an inline one is
+  // at least 18rem) that runs past the window's side lines up with the
+  // field's other edge, or, with room on neither, narrows to fit.
+  /** @type {"start" | "end" | null} */
+  let measuredAlign = null;
+  /** @type {number | null} */
+  let menuWidth = null;
+  $: menuAlign = measuredAlign ?? align;
   $: if (open && !effectivePortalMenu) {
     void direction;
     tick().then(placeMenu);
   } else {
     measuredSide = null;
+    measuredAlign = null;
+    menuWidth = null;
   }
 
   async function placeMenu() {
@@ -450,6 +460,7 @@
       portalWhenClipped = true;
       return;
     }
+    fitMenuToWindow(listRef);
     const side = menuSide(ref, listRef, direction);
     if (side === placement) return;
     measuredSide = side;
@@ -457,6 +468,26 @@
     if (mayPortal && open && listRef && clippedBy(listRef)) {
       portalWhenClipped = true;
     }
+  }
+
+  /** @param {HTMLElement} menu */
+  function fitMenuToWindow(menu) {
+    const box = menu.offsetParent?.getBoundingClientRect();
+    if (!box) return;
+    const rtl = getComputedStyle(menu).direction === "rtl";
+    // `fitEdgeMenu` takes physical edges; in RTL, start is the right one.
+    /** @param {"start" | "end"} edge */
+    const mirror = (edge) =>
+      rtl ? (edge === "start" ? "end" : "start") : edge;
+    const fit = fitEdgeMenu({
+      before: box.left,
+      after: box.right,
+      size: menu.getBoundingClientRect().width,
+      max: document.documentElement.clientWidth,
+      align: mirror(align),
+    });
+    measuredAlign = mirror(fit.align);
+    menuWidth = fit.width;
   }
 
   // Naming and description belong on the combobox button. On the role-less
@@ -1190,18 +1221,25 @@
         {open}
         anchor={ref}
         {direction}
-        {align}
+        align={menuAlign}
         {highlightedId}
         {wrapOptions}
         aria-busy={loading || undefined}
         on:scroll
         on:scroll={handleMenuScroll}
         bind:ref={listRef}
-        style={isWindowed
-          ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
-          : effectivePortalMenu
-            ? `max-height: ${menuMaxHeight};`
-            : undefined}
+        style={[
+          isWindowed
+            ? `max-height: ${menuMaxHeight}; overflow-y: auto;`
+            : effectivePortalMenu
+              ? `max-height: ${menuMaxHeight};`
+              : "",
+          menuWidth === null
+            ? ""
+            : `min-width: ${menuWidth}px; max-width: ${menuWidth}px;`,
+        ]
+          .filter(Boolean)
+          .join(" ") || undefined}
       >
         {#if isVirtualized}
           <VirtualWindow
