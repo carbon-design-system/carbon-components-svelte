@@ -11,6 +11,7 @@ import SelectableTileGroup from "../Tile/SelectableTileGroup.test.svelte";
 import CheckboxGroupField from "../form-field-contract/fixtures/CheckboxGroupField.test.svelte";
 import { user } from "../utils/user";
 import type { CollectionCase, Exemptions } from "./contract";
+import ContextMenuGroupHost from "./fixtures/ContextMenuGroupHost.test.svelte";
 
 const NAME_HEADER = /Name/;
 const PORT_HEADER = /Port/;
@@ -83,6 +84,19 @@ export const cases: CollectionCase[] = [
       expect(checkbox("Option 1")).not.toBeChecked();
       await user.click(checkbox("Option 1"));
       expect(checkbox("Option 2")).toBeChecked();
+    },
+  },
+  {
+    name: "ContextMenuGroup",
+    component: ContextMenuGroupHost,
+    prop: "selectedIds",
+    initial: () => ["option1"],
+    replacement: () => ["option2"],
+    check: () => {
+      const option = (name: string) =>
+        screen.getByRole("menuitemcheckbox", { name });
+      expect(option("Option 2")).toHaveAttribute("aria-checked", "true");
+      expect(option("Option 1")).toHaveAttribute("aria-checked", "false");
     },
   },
   {
@@ -324,7 +338,6 @@ const INTERNAL = "internal, not exported; covered through its parent";
 
 export const exempt: Exemptions = {
   "ComboBox.items": NO_REFERENCE_CHECK,
-  "ContextMenuGroup.selectedIds": NO_REFERENCE_CHECK,
   "DataTable.highlightedRowIds": NO_REFERENCE_CHECK,
   "DataTable.nonExpandableRowIds": NO_REFERENCE_CHECK,
   "DataTable.nonSelectableRowIds": NO_REFERENCE_CHECK,
