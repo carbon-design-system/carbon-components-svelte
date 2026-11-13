@@ -24,5 +24,18 @@
 <button type="button" on:click={() => (rows[0].name = "Echo")}>
   Rename first row
 </button>
+<!-- Never reassigned, so Svelte doesn't see it. -->
+<button
+  type="button"
+  on:click={() =>
+    rows.splice(
+      0,
+      rows.length,
+      { id: "d", name: "Delta" },
+      { id: "c", name: "Charlie" },
+    )}
+>
+  Replace rows silently
+</button>
 
 <DataTable sortable headers={[{ key: "name", value: "Name" }]} {rows} />
