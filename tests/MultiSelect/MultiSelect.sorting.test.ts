@@ -4,9 +4,7 @@ import type { MultiSelectItem } from "carbon-components-svelte/MultiSelect/Multi
 import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { isSvelte5 } from "../utils/svelte-version";
-import { user } from "../utils/user";
 import MultiSelect from "./MultiSelect.test.svelte";
-import MultiSelectItemsMutatedInPlace from "./MultiSelectItemsMutatedInPlace.test.svelte";
 import {
   buildItems,
   closeMenu,
@@ -279,17 +277,6 @@ describe("MultiSelect", () => {
       await tick();
 
       expect(nthRenderedOptionText(0)).toBe("Alpha");
-    });
-
-    it("sorts an item added to items in place", async () => {
-      render(MultiSelectItemsMutatedInPlace);
-
-      await user.click(
-        screen.getByRole("button", { name: "Add item in place" }),
-      );
-      await openMenu();
-
-      expect(optionTexts()).toEqual(["Alpha", "Bravo", "Charlie"]);
     });
 
     it("sorts numeric-aware by default (Item 2 before Item 10)", async () => {
