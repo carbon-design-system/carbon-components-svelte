@@ -29,5 +29,11 @@ export type CollectionCase = {
 /** Components and props the contract skips, with the reason. Keyed `Component.prop`. */
 export type Exemptions = Record<string, string>;
 
+/** `fails` for a case that fails the same way in both modes. */
+export const inBothModes = (reason: string) => ({
+  legacy: reason,
+  runes: reason,
+});
+
 export const key = (c: Pick<CollectionCase, "name" | "prop">) =>
   `${c.name}.${c.prop}`;
