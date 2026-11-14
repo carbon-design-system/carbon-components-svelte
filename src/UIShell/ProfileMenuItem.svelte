@@ -59,7 +59,7 @@
   >
     <span class:bx--profile-menu__item-label={true}>
       {#if $$slots.avatar}
-        <span class:bx--profile-menu__item-avatar={true}
+        <span class:bx--profile-menu__item-avatar={true} aria-hidden="true"
           ><slot name="avatar" /></span
         >
       {/if}
@@ -81,7 +81,7 @@
   >
     <span class:bx--profile-menu__item-label={true}>
       {#if $$slots.avatar}
-        <span class:bx--profile-menu__item-avatar={true}
+        <span class:bx--profile-menu__item-avatar={true} aria-hidden="true"
           ><slot name="avatar" /></span
         >
       {/if}
