@@ -198,7 +198,11 @@
     unlistenAnimationEnd = null;
   }
 
+  // Set once mounted in a browser, so the server render never warns below.
+  let hydrated = false;
+
   onMount(() => {
+    hydrated = true;
     return () => {
       mounted = false;
       unobserveAnchor();
@@ -398,6 +402,22 @@
     scheduleUpdate.cancel();
     // Recompute the side fresh on the next open.
     lockedDirection = null;
+  }
+
+  // Without an anchor the box has nothing to place against: it sits at the
+  // top left of the page with no width, which looks like nothing opened.
+  // Check a tick after opening, since a parent may bind its anchor in the
+  // same update that opens the portal. Warn once per instance.
+  let warnedNoAnchor = false;
+  $: if (hydrated && open && !anchor && !warnedNoAnchor) {
+    tick().then(() => {
+      if (mounted && open && !anchor && !warnedNoAnchor) {
+        warnedNoAnchor = true;
+        console.warn(
+          "[FloatingPortal.svelte] opened without an `anchor`, so it can't be positioned.",
+        );
+      }
+    });
   }
 
   $: if (open && anchor && ref) {
