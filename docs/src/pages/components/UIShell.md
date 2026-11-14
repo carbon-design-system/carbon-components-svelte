@@ -479,6 +479,77 @@ Use the `avatar` slot to render a plain icon instead of a `UserAvatar`, for exam
 
 <FileSource src="/framed/UIShell/HeaderSwitcherIconAvatar" />
 
+### Items
+
+Pass `items` instead of composing `ProfileMenuItem`s when the menu lists accounts: each item needs a unique `id` and a `text`. Set `description` for a second line, such as the organization, `group` to list items under a heading, `href` to render an item as a link, and `image` for a photo avatar (otherwise the avatar shows initials). Bind `selectedId` to the current account. It gets `aria-current="true"` and a checkmark, and the trigger shows its name and avatar unless you set `text`. `HeaderSwitcher` dispatches `select` with `selectedId` and `selectedItem` when an item is chosen, then closes.
+
+Ungrouped items come first and groups follow in order of first appearance, as in `Dropdown`. The default slot still renders, after the items, for actions that are not accounts.
+
+| Do | Why |
+| --- | --- |
+| Give every item a unique `id` and keep it across loads. | The id keys the list and is what `selectedId` and `recentIds` store. |
+| Use `group` to separate accounts from apps, or work from personal. | Screen readers announce the group name on entering it, so a heading is not read twice. |
+| Put actions such as "Create workspace" in the default slot. | They are not accounts, so they should not be filtered, grouped or marked as current. |
+
+<FileSource src="/framed/UIShell/HeaderSwitcherItems" />
+
+### Current account
+
+Set `showDetail` to show the current account's avatar, name and `description` at the top of the menu, in the same layout as `ProfileMenuHeader`. Use it when the trigger truncates the name or the organization is not obvious from the name.
+
+### Filter
+
+From `searchThreshold` items (8 by default) the menu shows a filter field at the top, which stays in view while the list scrolls. Every word you type must appear in an item's `text` or `description`, ignoring case and accents, and matches stay under their groups. Set `searchThreshold` to `0` to always show the field, or to `Infinity` to never show it. Customize matching with `filterItems`.
+
+The field filters the list and does not select from it, so it is not a combobox: the rows can be links, which a listbox cannot hold. The result count ("3 accounts found", set with `resultsText`) is announced politely once typing settles, in a status region that is always in the menu.
+
+| Key | Where | Does |
+| --- | --- | --- |
+| <DocKbd label="Enter" />, <DocKbd label="Space" /> | Trigger | Opens the menu and focuses the filter field, or the first item without one. |
+| <DocKbd label="ArrowDown" />, <DocKbd label="ArrowUp" /> | Trigger | Opens the menu and focuses the first or last item. |
+| <DocKbd label="ArrowDown" />, <DocKbd label="ArrowUp" /> | Filter field | Focuses the first or last item. |
+| <DocKbd label="ArrowUp" /> | First item | Focuses the filter field. Elsewhere the arrows move between items, wrapping at the ends. |
+| A letter or digit | Item, with a filter field | Focuses the field and types it. |
+| A letter or digit | Item, without a filter field | Focuses the next item whose name starts with what you typed. |
+| <DocKbd label="Escape" /> | Filter field with text | Clears the field. |
+| <DocKbd label="Escape" /> | Anywhere else | Closes the menu and returns focus to the trigger. |
+
+A pointer opens the menu without moving focus, so a touch screen does not raise its keyboard. For a list that is filtered on a server, set `filterItems` to `() => true` and listen for `filter`, which carries the `query`:
+
+```svelte
+<HeaderSwitcher
+  {items}
+  {status}
+  filterItems={() => true}
+  on:filter={(event) => search(event.detail.query)}
+/>
+```
+
+### Recent accounts
+
+Bind `recentIds` to list the accounts you used last under a "Recent" heading, newest first, up to `recentLimit` (3). Switching adds the account that was left, and the current account is never listed. An account is in one section only. While a filter is typed, the Recent section gives way to the matches.
+
+`HeaderSwitcher` stores nothing. Bind the same variable to `LocalStorage` to keep it across visits, or keep it on a server and update it from `select`. Leave `recentIds` unset to turn the section off.
+
+<FileSource src="/framed/UIShell/HeaderSwitcherRecent" />
+
+### Loading and errors
+
+Set `status` from the request that fills `items`: `"loading"`, `"error"`, or `"success"` (the default). The `open` event is the place to start a first request.
+
+| State | With no items | With items |
+| --- | --- | --- |
+| `"loading"` | Three placeholder rows. | The items stay, and the filter field spins. |
+| `"error"` | `errorText` and a Retry row. | The same, above the items. |
+
+Each change of state is announced once through the status region, in `loadingText` or `errorText`. The Retry row dispatches `retry` and keeps the menu open. The row is gone once the request starts, so focus moves to the menu itself, and an arrow key goes on from there.
+
+<FileSource src="/framed/UIShell/HeaderSwitcherAsync" />
+
+### Narrow screens and right-to-left
+
+Below the medium breakpoint the menu fills the width of the header, so it cannot run off the screen whatever the trigger's position. In a right-to-left page it opens from the trigger's end edge and its rows mirror. Under forced colors the checkmark, the error icon and the avatars use system colors.
+
 ### Events
 
 `HeaderSwitcher` dispatches `open` and `close` as the menu toggles, with `event.detail.trigger` set to `"toggle"`, `"outside-click"`, `"escape-key"`, or `"select"` (`close` only). Activating a `ProfileMenuItem` closes the menu and dispatches `close` with `trigger: "select"`; call `event.preventDefault()` in the item's `click` handler to keep it open:
@@ -492,6 +563,8 @@ Use the `avatar` slot to render a plain icon instead of a `UserAvatar`, for exam
   <ProfileMenuList>...</ProfileMenuList>
 </HeaderSwitcher>
 ```
+
+With `items`, `select` fires when an account is chosen, `retry` when the Retry row is activated, and `filter` as the filter field changes.
 
 ## Integrations
 
