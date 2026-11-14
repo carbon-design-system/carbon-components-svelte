@@ -5,6 +5,7 @@
 // right-most position). Colors come from theme tokens; see _profile-menu.scss.
 
 @import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
 /// HeaderSwitcher component styles (trigger layout, chevron, anchored menu).
@@ -46,28 +47,28 @@
   // `min-width: 0` overrides the flex item's default `auto` minimum, which
   // would otherwise let the text's intrinsic content width win over
   // `max-width` (set via the `maxWidth` prop) and defeat truncation.
-  // `text-align: left` overrides the browser's default centered text-align
+  // `text-align: start` overrides the browser's default centered text-align
   // on `<button>`, which otherwise centers a second line if the text ever
   // wraps (for example `maxWidth="none"` inside a width-constrained header).
   .#{$prefix}--header-switcher__text {
     overflow: hidden;
     min-width: 0;
-    text-align: left;
+    text-align: start;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  // `.#{$prefix}--header__action-text`'s `margin-left` assumes a preceding
+  // `.#{$prefix}--header__action-text`'s margin assumes a preceding
   // icon/avatar. Without one (no `avatar` slot), that margin is a stray gap
   // before the text — cancel it.
   .#{$prefix}--header-switcher__text--flush {
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .#{$prefix}--header-switcher__chevron {
     display: flex;
     flex-shrink: 0;
-    margin-left: $carbon--spacing-03;
+    margin-inline-start: $carbon--spacing-03;
     transition: transform $duration--fast-02 motion(standard, productive);
   }
 
@@ -94,19 +95,35 @@
     border-color: transparent;
     // Offset the reserved border so the avatar lands at the same inset as
     // `.#{$prefix}--profile-menu__item`'s avatar (padding only, no border)
-    // in the menu below, keeping both flush with the same left edge.
-    padding-left: calc(#{$carbon--spacing-05} - #{$button-border-width});
+    // in the menu below, keeping both flush with the same start edge.
+    padding-inline-start: calc(
+      #{$carbon--spacing-05} - #{$button-border-width}
+    );
   }
 
   .#{$prefix}--header-switcher__menu {
     position: absolute;
     top: 100%;
-    left: 0;
-    right: auto;
+    // Hangs from the trigger's start edge, so it opens toward the page's end
+    // in both directions.
+    @include ccs-inset-inline($start: 0);
     width: to-rem(256px);
     // The menu shares `.bx--profile-menu`, whose `max-width: 100%` reads the
     // header. Here that would be the trigger's width.
     max-width: 100vw;
+  }
+
+  // Below the medium breakpoint the trigger can sit anywhere along the
+  // header, and a menu hanging from it ran off the far edge. It spans the
+  // header instead, as Carbon's header panels do.
+  @include carbon--breakpoint-down(md) {
+    .#{$prefix}--header-switcher__menu {
+      position: fixed;
+      top: to-rem(48px);
+      @include ccs-inset-inline($start: 0, $end: 0);
+      width: auto;
+      max-width: none;
+    }
   }
 }
 
