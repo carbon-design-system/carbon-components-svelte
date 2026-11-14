@@ -86,6 +86,13 @@
     img.onerror = () => {
       if (image === img) error = true;
     };
+    // A cached image is `complete` already, but `load` fires in a later
+    // task, so the loading slot was painted for a frame first. A microtask,
+    // not a sync check: in Svelte 3 and 4 `load` is dispatched before the
+    // parent's `on:load` is attached during the first render.
+    queueMicrotask(() => {
+      if (image === img && img.complete && img.naturalWidth > 0) loaded = true;
+    });
   }
 
   import { createEventDispatcher, onMount } from "svelte";
