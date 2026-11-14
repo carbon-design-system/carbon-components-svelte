@@ -83,6 +83,11 @@ export const interactive: AriaEntry[] = [
     target: () => screen.getByRole("button"),
   },
   {
+    name: "AnnotatedImage",
+    exempt:
+      "container; each pin is named by its number and label, and the group of pins and the legend by hotspotsLabel",
+  },
+  {
     name: "Button",
     render: (attrs) => render(Button, { props: attrs }),
     target: () => screen.getByRole("button"),
