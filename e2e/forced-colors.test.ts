@@ -1452,3 +1452,19 @@ test("prefers-contrast: more dots the focus outline", async ({ page }) => {
     "dotted 2px",
   );
 });
+
+// A theme fill on the item's icon outranks the base sheet's `ButtonText`, so
+// on a dark `Canvas` it kept the dark token color.
+test("forced colors: a ProfileMenuItem icon reads ButtonText", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/profile-menu.html");
+  await expect(page.locator(".bx--profile-menu__item svg")).toBeVisible();
+  const system = await systemColors(page);
+  expect((await style(page, ".bx--profile-menu__item svg")).fill).toBe(
+    system.ButtonText,
+  );
+});

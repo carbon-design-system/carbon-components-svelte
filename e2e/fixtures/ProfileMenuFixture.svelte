@@ -8,6 +8,7 @@
     ProfileMenuHeader,
     ProfileMenuItem,
   } from "carbon-components-svelte";
+  import Logout from "carbon-icons-svelte/lib/Logout.svelte";
 </script>
 
 <Header companyName="E2E" platformName="ProfileMenu">
@@ -22,7 +23,9 @@
       </ProfileMenuDetail>
       <ProfileMenuDivider />
       <ProfileMenuItem href="#">Settings</ProfileMenuItem>
-      <ProfileMenuItem on:click={() => {}}>Log out</ProfileMenuItem>
+      <ProfileMenuItem icon={Logout} on:click={() => {}}
+        >Log out</ProfileMenuItem
+      >
     </ProfileMenu>
   </HeaderUtilities>
 </Header>
