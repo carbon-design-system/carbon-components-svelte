@@ -156,6 +156,25 @@ describe("ImageLoader", () => {
     expect(wrapper.querySelector("img")).toHaveAttribute("src", newSrc);
   });
 
+  it("skips the loading slot for an image the browser already has", async () => {
+    // A cached image is `complete` as soon as `src` is set, but `load` only
+    // fires in a later task, which painted the loading slot for a frame.
+    vi.stubGlobal(
+      "Image",
+      class extends FakeImage {
+        complete = true;
+        naturalWidth = 1;
+      },
+    );
+    const { container } = render(ImageLoaderLazyToggle, {
+      props: { src: "a.jpg" },
+    });
+    await tick();
+
+    expect(screen.queryByTestId("loading-state")).not.toBeInTheDocument();
+    expect(visibleImg(container)).toHaveAttribute("src", "a.jpg");
+  });
+
   it("ignores a superseded image settling after src changes", async () => {
     const { container, rerender } = render(ImageLoaderComponent, {
       props: { src: "a.jpg", alt: "Logo" },
