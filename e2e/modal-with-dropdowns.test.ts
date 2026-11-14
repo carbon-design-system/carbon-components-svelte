@@ -98,6 +98,35 @@ test.describe("Modal with Dropdowns", () => {
     await expect(page.getByTestId("notification-ids")).toHaveText("0,1,4");
   });
 
+  // Regression test for https://github.com/carbon-design-system/carbon-components-svelte/issues/5676
+  test("filterable MultiSelect menu is anchored to its field", async ({
+    page,
+  }) => {
+    const input = page.getByRole("combobox", { name: "Notification tags" });
+    // Before 0.114 the menu is placed once, so open it after the Modal
+    // stops moving.
+    await page
+      .locator(".bx--modal")
+      .evaluate((el) =>
+        Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished)),
+      );
+    await input.click();
+
+    const menu = page.getByRole("listbox", { name: "Choose an item" });
+    await expect(menu.getByRole("option", { name: "Slack" })).toBeVisible();
+
+    const field = await page
+      .locator(".bx--list-box__field", { has: input })
+      .boundingBox();
+    const box = await menu.boundingBox();
+    expect(field).not.toBeNull();
+    expect(box).not.toBeNull();
+    if (!field || !box) return;
+    expect(box.width).toBeCloseTo(field.width, 0);
+    expect(box.x).toBeCloseTo(field.x, 0);
+    expect(box.y).toBeGreaterThanOrEqual(field.y + field.height - 1);
+  });
+
   test("Dropdown menu renders outside the dialog (portal)", async ({
     page,
   }) => {
