@@ -183,6 +183,7 @@
     bind:this={refMenu}
     use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
     id={menuId}
+    role="group"
     aria-label={iconDescription}
     class:bx--profile-menu={true}
     transition:slide|local={transition}
@@ -194,6 +195,7 @@
     bind:this={refMenu}
     use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
     id={menuId}
+    role="group"
     aria-label={iconDescription}
     class:bx--profile-menu={true}
   >

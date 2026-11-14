@@ -35,6 +35,16 @@ const hosts = [
   },
 ] as const;
 
+it("names the HeaderSwitcher panel as a group", async () => {
+  render(HeaderPanelHost, { props: { variant: "switcher" } });
+
+  await user.click(screen.getByRole("button", { name: "Acme" }));
+
+  expect(screen.getByRole("group", { name: "Switch account" })).toHaveClass(
+    "bx--header-switcher__menu",
+  );
+});
+
 describe.each(hosts)(
   "$item closes its $host",
   ({ variant, triggerName, hasOutsideItem }) => {
