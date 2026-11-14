@@ -54,5 +54,11 @@
       items={contactItems}
       bind:selectedIds={notificationIds}
     />
+    <MultiSelect
+      filterable
+      labelText="Notification tags"
+      placeholder="Filter tags..."
+      items={contactItems}
+    />
   </Stack>
 </Modal>
