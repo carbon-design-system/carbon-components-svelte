@@ -13,9 +13,10 @@ describe("ProfileMenu", () => {
 
     await user.click(getTrigger());
 
-    expect(
-      screen.getByText("Settings").closest(".bx--profile-menu"),
-    ).toHaveAttribute("aria-label", "Profile");
+    // A `div` has no role to carry a name, so the panel is a group.
+    expect(screen.getByRole("group", { name: "Profile" })).toContainElement(
+      screen.getByText("Settings"),
+    );
   });
 
   it("renders a default UserAvatar when no avatar slot is provided", async () => {

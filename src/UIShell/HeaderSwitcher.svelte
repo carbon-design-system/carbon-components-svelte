@@ -221,6 +221,7 @@
       bind:this={refMenu}
       use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
       id={menuId}
+      role="group"
       aria-label={iconDescription}
       class:bx--profile-menu={true}
       class:bx--header-switcher__menu={true}
@@ -233,6 +234,7 @@
       bind:this={refMenu}
       use:verticalListFocus={{ selector: ".bx--profile-menu__item" }}
       id={menuId}
+      role="group"
       aria-label={iconDescription}
       class:bx--profile-menu={true}
       class:bx--header-switcher__menu={true}
