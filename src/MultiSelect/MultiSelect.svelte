@@ -385,6 +385,16 @@
   export let fieldRef = null;
 
   /**
+   * The filterable field box. It is a plain element rather than a
+   * `ListBoxField`, so it never declares `fieldRef`.
+   * @type {null | HTMLDivElement}
+   */
+  let filterFieldRef = null;
+
+  // Positions the menu (portalled or flipped) against the visible field box.
+  $: menuAnchor = filterable ? filterFieldRef : fieldRef;
+
+  /**
    * Obtain a reference to the selection element.
    * @type {null | HTMLDivElement}
    * @bindable readonly
@@ -594,13 +604,13 @@
   }
 
   async function placeMenu() {
-    if (!(open && listRef && fieldRef)) return;
+    if (!(open && listRef && menuAnchor)) return;
     const mayPortal = portalMenu === undefined;
     if (mayPortal && clippedBy(listRef)) {
       portalWhenClipped = true;
       return;
     }
-    const side = menuSide(fieldRef, listRef, direction);
+    const side = menuSide(menuAnchor, listRef, direction);
     if (side === placement) return;
     measuredSide = side;
     await tick();
@@ -1729,6 +1739,7 @@
         class:bx--list-box__field--wrapper--input-focused={showFluidFieldFocus}
       >
         <div
+          bind:this={filterFieldRef}
           class:bx--list-box__field={true}
           class:bx--list-box__field--wrapper--input-focused={!isFluid &&
             showFieldFocus}
@@ -2055,7 +2066,7 @@
         portal={effectivePortalMenu}
         portalHostClass="bx--multi-select bx--list-box--expanded"
         {open}
-        anchor={fieldRef}
+        anchor={menuAnchor}
         {direction}
         highlightedId={activeDescendantId}
         {wrapOptions}
