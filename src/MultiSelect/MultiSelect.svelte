@@ -201,6 +201,16 @@
   export let fieldRef = null;
 
   /**
+   * The filterable field box. It is a plain element rather than a
+   * `ListBoxField`, so it never declares `fieldRef`.
+   * @type {null | HTMLDivElement}
+   */
+  let filterFieldRef = null;
+
+  // Positions the portalled menu against the visible field box.
+  $: menuAnchor = filterable ? filterFieldRef : fieldRef;
+
+  /**
    * Obtain a reference to the selection element.
    * @type {null | HTMLDivElement}
    * @bindable readonly
@@ -709,6 +719,7 @@
         class:bx--list-box__field--wrapper--input-focused={showFluidFieldFocus}
       >
         <div
+          bind:this={filterFieldRef}
           class:bx--list-box__field={true}
           class:bx--list-box__field--wrapper--input-focused={!isFluid &&
             showFieldFocus}
@@ -966,7 +977,7 @@
         portal={effectivePortalMenu}
         portalHostClass="bx--multi-select bx--list-box--expanded"
         {open}
-        anchor={fieldRef}
+        anchor={menuAnchor}
         {direction}
         aria-multiselectable="true"
         on:scroll
