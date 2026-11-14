@@ -34,6 +34,34 @@ test.describe("FloatingPortal", () => {
     );
   });
 
+  test("follows the anchor when content above it moves it", async ({
+    page,
+  }) => {
+    await page.getByTestId("toggle").click();
+    const anchor = page.getByTestId("anchor");
+    const portal = page.locator("[data-floating-portal]");
+    await expect(portal).toBeVisible();
+
+    // The gap between the anchor's bottom and the portal's top.
+    const gap = async () => {
+      const a = await anchor.boundingBox();
+      const p = await portal.boundingBox();
+      if (!a || !p) throw new Error("anchor or portal has no box");
+      return Math.round(p.y - (a.y + a.height));
+    };
+    const initial = await gap();
+    const top = async () => (await anchor.boundingBox())?.y;
+    const before = await top();
+
+    await page.getByTestId("shift").click();
+    await expect.poll(top).toBe((before ?? 0) + 80);
+    await expect.poll(gap).toBe(initial);
+
+    await page.getByTestId("shift").click();
+    await expect.poll(top).toBe(before);
+    await expect.poll(gap).toBe(initial);
+  });
+
   test("portal is child of document.body", async ({ page }) => {
     await page.getByTestId("toggle").click();
 

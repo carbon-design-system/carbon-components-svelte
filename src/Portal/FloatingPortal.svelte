@@ -121,6 +121,7 @@
   import { fixedBlockOffset } from "../utils/fixed-block-offset.js";
   import { floatingPosition } from "../utils/floating-position.js";
   import { getScrollableAncestors } from "../utils/get-scrollable-ancestors.js";
+  import { observeMove } from "../utils/observe-move.js";
   import { rafThrottle } from "../utils/raf-throttle.js";
   import { observeResize } from "../utils/shared-observer.js";
   import { addPooledListener } from "../utils/window-listener-pool.js";
@@ -202,6 +203,7 @@
     return () => {
       mounted = false;
       unobserveAnchor();
+      unobserveAnchorMove();
       unobserveFloating();
       removeScrollListeners();
       removeWindowListeners();
@@ -243,6 +245,22 @@
       anchorObserver.disconnect();
       anchorObserver = null;
     }
+  }
+
+  // Content added or removed elsewhere (a notification above a Modal's
+  // field) moves the anchor without a scroll, a resize or a change to the
+  // anchor itself.
+  /** @type {(() => void) | null} */
+  let stopObservingMove = null;
+
+  function observeAnchorMove() {
+    if (!anchor || stopObservingMove) return;
+    stopObservingMove = observeMove(anchor, scheduleUpdate);
+  }
+
+  function unobserveAnchorMove() {
+    stopObservingMove?.();
+    stopObservingMove = null;
   }
 
   /** @type {(() => void) | null} */
@@ -392,6 +410,7 @@
   } else {
     removeWindowListeners();
     unobserveAnchor();
+    unobserveAnchorMove();
     unobserveFloating();
     removeScrollListeners();
     scrollableAncestors = [];
@@ -402,11 +421,13 @@
 
   $: if (open && anchor && ref) {
     unobserveAnchor();
+    unobserveAnchorMove();
     unobserveFloating();
     removeScrollListeners();
     scrollableAncestors = getScrollableAncestors(anchor);
     addScrollListeners();
     observeAnchor();
+    observeAnchorMove();
     observeFloating();
     tick().then(() => {
       updatePosition();
