@@ -48,6 +48,16 @@
     height: to-rem(40px);
   }
 
+  // The header's `lg` avatar is wider than this frame, which clips it to a
+  // circle. The 1px edge that forced colors draw on `UserAvatar` lies
+  // outside the clip, so the circle lost its edge. Draw it on the frame.
+  @media (forced-colors: active) {
+    .#{$prefix}--profile-menu__header .#{$prefix}--profile-menu__avatar {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+  }
+
   .#{$prefix}--profile-menu {
     position: absolute;
     top: to-rem(48px);
