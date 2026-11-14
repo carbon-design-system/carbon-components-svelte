@@ -66,6 +66,14 @@ describe("ProfileMenu", () => {
 });
 
 describe("ProfileMenuHeader", () => {
+  it("keeps the avatar's initials out of the link's name", () => {
+    render(ProfileMenuHeader);
+
+    expect(screen.getByRole("link", { name: "Ada Lovelace alovelace" })).toBe(
+      screen.getByTestId("with-avatar"),
+    );
+  });
+
   it("renders the view-profile text, customizable and optional", () => {
     render(ProfileMenuHeader);
 
@@ -82,6 +90,14 @@ describe("ProfileMenuHeader", () => {
 });
 
 describe("ProfileMenuItem", () => {
+  it("keeps the avatar's initials out of the item's name", () => {
+    render(ProfileMenuItem);
+
+    expect(screen.getByRole("button", { name: "Acme Corp" })).toBe(
+      screen.getByTestId("with-avatar"),
+    );
+  });
+
   it("renders the icon prop, omitting the icon when unset", () => {
     render(ProfileMenuItem);
 

@@ -46,7 +46,7 @@
     on:click
   >
     <span class:bx--profile-menu__identity={true}>
-      <span class:bx--profile-menu__avatar={true}>
+      <span class:bx--profile-menu__avatar={true} aria-hidden="true">
         <slot name="avatar"><UserAvatar size="lg" /></slot>
       </span>
       <span class:bx--profile-menu__meta={true}>
@@ -66,7 +66,7 @@
     on:click
   >
     <span class:bx--profile-menu__identity={true}>
-      <span class:bx--profile-menu__avatar={true}>
+      <span class:bx--profile-menu__avatar={true} aria-hidden="true">
         <slot name="avatar"><UserAvatar size="lg" /></slot>
       </span>
       <span class:bx--profile-menu__meta={true}>
