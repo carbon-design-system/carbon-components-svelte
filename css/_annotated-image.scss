@@ -1,0 +1,296 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AnnotatedImage: numbered pins over an image that open popovers, with an
+/// optional legend. The pins are children of the image's box, positioned in
+/// percent of it, so they move with the image whatever its size or crop.
+/// @access private
+/// @group components
+@mixin annotated-image {
+  $pin-sm: to-rem(24px);
+  $pin-md: to-rem(32px);
+
+  .#{$prefix}--annotated-image {
+    display: flex;
+    flex-direction: column;
+    row-gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--annotated-image__toolbar {
+    display: flex;
+  }
+
+  .#{$prefix}--annotated-image__body {
+    display: flex;
+    flex-direction: column;
+    row-gap: $carbon--spacing-05;
+  }
+
+  // Beside the image from the medium breakpoint up. The row follows the
+  // page's direction, so the legend lands on the inline end side.
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--annotated-image--legend-end .#{$prefix}--annotated-image__body {
+      flex-direction: row;
+      align-items: flex-start;
+      column-gap: $carbon--spacing-06;
+    }
+
+    .#{$prefix}--annotated-image--legend-end .#{$prefix}--annotated-image__legend {
+      flex: 0 0 to-rem(240px);
+    }
+  }
+
+  // The media takes the room the legend leaves. `min-inline-size` lets a
+  // wide image shrink in a flex row instead of overflowing it.
+  .#{$prefix}--annotated-image__media {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+
+  .#{$prefix}--annotated-image__frame,
+  .#{$prefix}--annotated-image__plane {
+    position: absolute;
+    inset: 0;
+  }
+
+  // A crop sizes the plane (the image's own rectangle, which the pins are
+  // in) from the frame: `cover` is the smaller box that covers the frame,
+  // `contain` the larger that fits in it. The focal point is where the
+  // overflow, or the leftover room, falls. All of it is CSS, so the pins
+  // are on the image before any script runs. The plane is inside the
+  // frame, so `cqw` and `cqh` are the frame's width and height.
+  .#{$prefix}--annotated-image__frame--crop {
+    overflow: hidden;
+    container-type: size;
+  }
+
+  .#{$prefix}--annotated-image__frame--crop .#{$prefix}--annotated-image__plane {
+    right: auto;
+    bottom: auto;
+    inline-size: var(--ccs-annotated-image-plane-width);
+    block-size: var(--ccs-annotated-image-plane-height);
+    // The image's rectangle is not text: its edges are physical.
+    left: calc((100cqw - var(--ccs-annotated-image-plane-width)) * var(--ccs-annotated-image-focal-x));
+    top: calc((100cqh - var(--ccs-annotated-image-plane-height)) * var(--ccs-annotated-image-focal-y));
+  }
+
+  .#{$prefix}--annotated-image__frame--cover {
+    --ccs-annotated-image-plane-width: #{"max(100cqw, 100cqh * var(--ccs-annotated-image-aspect))"};
+    --ccs-annotated-image-plane-height: #{"max(100cqh, 100cqw / var(--ccs-annotated-image-aspect))"};
+  }
+
+  .#{$prefix}--annotated-image__frame--contain {
+    --ccs-annotated-image-plane-width: #{"min(100cqw, 100cqh * var(--ccs-annotated-image-aspect))"};
+    --ccs-annotated-image-plane-height: #{"min(100cqh, 100cqw / var(--ccs-annotated-image-aspect))"};
+  }
+
+  .#{$prefix}--annotated-image__img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .#{$prefix}--annotated-image--editable .#{$prefix}--annotated-image__plane {
+    cursor: crosshair;
+  }
+
+  // The anchor is the point on the image, and the pin is centered on it. The
+  // popover is placed against the anchor, so its caret points at the pin's
+  // center. `left` and `top` are the image's own edges, set inline.
+  .#{$prefix}--annotated-image__anchor {
+    position: absolute;
+    display: flex;
+    transform: translate(-50%, -50%);
+  }
+
+  // A pin that is open sits above the pins around it, so the popover and a
+  // crowded neighbor never cover its pin.
+  .#{$prefix}--annotated-image__anchor--open,
+  .#{$prefix}--annotated-image__anchor:focus-within {
+    z-index: 1;
+  }
+
+  .#{$prefix}--annotated-image__anchor--dragging {
+    z-index: 2;
+  }
+
+  // Two tones, so a pin shows on a light and a dark image: a light edge on a
+  // dark fill, and a dark line around the edge. The line is a shadow;
+  // forced colors drops it and uses a double border instead (see below).
+  .#{$prefix}--annotated-image__pin {
+    @include type-style("body-compact-01");
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 2px solid $background;
+    border-radius: 50%;
+    background-color: $background-inverse;
+    block-size: $pin-md;
+    box-shadow: 0 0 0 1px $background-inverse;
+    color: $text-inverse;
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+    inline-size: $pin-md;
+    transition:
+      background-color $duration--fast-01 motion(standard, productive),
+      color $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--annotated-image__pin--sm {
+    @include type-style("label-01");
+
+    block-size: $pin-sm;
+    inline-size: $pin-sm;
+  }
+
+  .#{$prefix}--annotated-image__pin--open {
+    background-color: $background;
+    border-color: $background-inverse;
+    box-shadow: 0 0 0 1px $background;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--annotated-image__pin--highlighted {
+    background-color: $interactive;
+    color: $text-on-color;
+  }
+
+  .#{$prefix}--annotated-image--editable .#{$prefix}--annotated-image__pin {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .#{$prefix}--annotated-image__anchor--dragging .#{$prefix}--annotated-image__pin {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--annotated-image__marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}--annotated-image__marker svg {
+    fill: currentColor;
+  }
+
+  // The ring sits outside the line, so it never covers the pin's two tones.
+  .#{$prefix}--annotated-image__pin:focus {
+    @include focus-outline("outline", (outline-offset));
+
+    outline-offset: 3px;
+  }
+
+  // The popover leaves a gap for the line around the pin.
+  .#{$prefix}--annotated-image__popover {
+    --cds-popover-offset: #{to-rem(4px)};
+  }
+
+  .#{$prefix}--annotated-image__title {
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--annotated-image__legend {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--annotated-image__legend-item {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    align-items: center;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    border: 0;
+    background-color: transparent;
+    color: $text-primary;
+    column-gap: $carbon--spacing-04;
+    cursor: pointer;
+    inline-size: 100%;
+    min-block-size: to-rem(40px);
+    text-align: start;
+  }
+
+  .#{$prefix}--annotated-image__legend-item--open {
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--annotated-image__legend-item:focus {
+    @include focus-outline("outline");
+  }
+
+  // The legend's number is the pin's, in the same two tones, smaller.
+  .#{$prefix}--annotated-image__legend-marker {
+    @include type-style("label-01");
+
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: $background-inverse;
+    block-size: $pin-sm;
+    color: $text-inverse;
+    font-variant-numeric: tabular-nums;
+    inline-size: $pin-sm;
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  @media (any-hover: hover) {
+    .#{$prefix}--annotated-image__pin:hover {
+      background-color: $interactive;
+      color: $text-on-color;
+    }
+
+    .#{$prefix}--annotated-image__legend-item:hover {
+      background-color: $layer-hover;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--annotated-image__pin {
+      transition: none;
+    }
+  }
+
+  // Forced colors drops shadows and background colors. The pin is system
+  // colors with a double border, which has two lines of its own, so it shows
+  // on any image. The open and highlighted states color the border, not the
+  // fill: a `Highlight` fill gets a backplate behind its number, which hides
+  // the number in `HighlightText`.
+  @media (forced-colors: active) {
+    .#{$prefix}--annotated-image__pin,
+    .#{$prefix}--annotated-image__pin--open,
+    .#{$prefix}--annotated-image__pin--highlighted {
+      border: 3px double ButtonText;
+      background-color: ButtonFace;
+      color: ButtonText;
+    }
+
+    .#{$prefix}--annotated-image__pin--open,
+    .#{$prefix}--annotated-image__pin--highlighted {
+      border-color: Highlight;
+    }
+
+    .#{$prefix}--annotated-image__legend-marker {
+      border: 1px solid ButtonText;
+    }
+
+    .#{$prefix}--annotated-image__legend-item--open {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+  }
+}
+
+@include exports("annotated-image") {
+  @include annotated-image;
+}
