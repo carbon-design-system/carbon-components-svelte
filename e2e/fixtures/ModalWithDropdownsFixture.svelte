@@ -48,5 +48,11 @@
       label="Select methods..."
       items={contactItems}
     />
+    <MultiSelect
+      filterable
+      labelText="Notification tags"
+      placeholder="Filter tags..."
+      items={contactItems}
+    />
   </Stack>
 </Modal>
