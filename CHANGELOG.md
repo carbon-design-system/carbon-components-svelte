@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.0...v0.114.1) (2026-11-14)
+
+### Bug Fixes
+
+- **checkbox, tile:** sync `selected` mutated in place to the group ([7f56fd7](https://github.com/carbon-design-system/carbon-components-svelte/commit/7f56fd760007c9ae928dc8b4b224df36a406d50f))
+- **code-snippet:** draw the inline snippet with layer tokens ([af0fe45](https://github.com/carbon-design-system/carbon-components-svelte/commit/af0fe451d42cf8206118eeffac808d643d545616))
+- **data-table:** keep a row's field edit for refreshRow after a splice ([b4fbbe1](https://github.com/carbon-design-system/carbon-components-svelte/commit/b4fbbe15c4a26aa246e5c8be496fa8f3e8cb2d5d))
+- **data-table:** render rows replaced in place without throwing ([52fa6d4](https://github.com/carbon-design-system/carbon-components-svelte/commit/52fa6d48fc3fcf10308c5c2269d221ffcaef03f1))
+- **data-table:** sort rows added without reassigning `rows` ([af9652e](https://github.com/carbon-design-system/carbon-components-svelte/commit/af9652ec3d88a5138c69a6a51eedf43b8dc31b59))
+- **date-picker:** apply date arrays mutated in place ([71e6eea](https://github.com/carbon-design-system/carbon-components-svelte/commit/71e6eea42cb3eed1cdaaf3935c09cf5e7b9ad308))
+- **dropdown:** keep an in-place menu inside the window ([2b7a877](https://github.com/carbon-design-system/carbon-components-svelte/commit/2b7a877a8da964b28d2d7e1415f7c5de26d9ac89)), closes [#5660](https://github.com/carbon-design-system/carbon-components-svelte/issues/5660)
+- **list-box, select, number-input:** hover fields with field-hover ([67074e5](https://github.com/carbon-design-system/carbon-components-svelte/commit/67074e5405b4cc7304dded009e6a3723f024591a))
+- **multi-select:** list items added to `items` in place ([ff924e9](https://github.com/carbon-design-system/carbon-components-svelte/commit/ff924e94e010d4396b8834759d834eadc0c7dcf4))
+- **multi-select:** skip writing an unchanged `selectedIds` ([aba3263](https://github.com/carbon-design-system/carbon-components-svelte/commit/aba326318842ff012341b92c9f004c8a6bbdd3ab))
+- **tabs:** hover a contained tab with layer-accent-hover ([7e06769](https://github.com/carbon-design-system/carbon-components-svelte/commit/7e06769440cbac9947feb199561cd1bf2413f299))
+- **tabs:** hover a vertical tab row with layer-accent-hover ([81327e6](https://github.com/carbon-design-system/carbon-components-svelte/commit/81327e6ee44cb5bacfb429f44aa5162cabc2b3c2))
+- **tabs:** remove autoWidth, which has no effect ([e9eb11e](https://github.com/carbon-design-system/carbon-components-svelte/commit/e9eb11e63de37252a1792303dcd82a32fe885421)), closes [#5648](https://github.com/carbon-design-system/carbon-components-svelte/issues/5648)
+- **tooltip:** keep side tooltips inside the window ([fb02513](https://github.com/carbon-design-system/carbon-components-svelte/commit/fb025138e0a516f3f232db45ef91f1e555fd1433)), closes [#5659](https://github.com/carbon-design-system/carbon-components-svelte/issues/5659)
+- **tree-view:** find nodes added to `nodes` in place ([525f204](https://github.com/carbon-design-system/carbon-components-svelte/commit/525f20438e07e64ff8dbbc61107cdf883c809f7e))
+- **tree-view:** keep reordered `checkedIds` as passed ([c104269](https://github.com/carbon-design-system/carbon-components-svelte/commit/c1042692b08b77c0e7d212d0c5abaf6a639d1cdf))
+- **tree-view:** sync id arrays mutated in place ([c4b01a8](https://github.com/carbon-design-system/carbon-components-svelte/commit/c4b01a80f1f872be2fc853a90a4e6393fa6a8f0e))
+
 ### [0.114.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.113.0...v0.114.0) (2026-11-08)
 
 ### ⚠ BREAKING CHANGES
