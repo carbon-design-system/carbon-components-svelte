@@ -1,5 +1,7 @@
 /// <reference types="vitest/globals" />
 
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   activeTooltip,
   rootTooltipGroup,
@@ -154,11 +156,6 @@ if (
   };
 }
 
-// jsdom's selector engine adds its own capture listeners to `window` (click,
-// keydown, focus, ...) the first time it matches a selector. Match once here
-// so that happens before a test spies on `window.addEventListener`.
-document.documentElement.matches(":focus-visible");
-
 // Tooltips outside any `TooltipGroup` share one page-wide group, so a
 // tooltip closed in one test would otherwise make the next test's first
 // tooltip skip its enter delay.
@@ -166,3 +163,37 @@ beforeEach(() => {
   activeTooltip.set(null);
   rootTooltipGroup.scope.releasedAt = Number.NEGATIVE_INFINITY;
 });
+
+// Leak check: once a test's components are cleaned up, listeners the
+// library added to the window, document, `<html>` or `<body>` during the
+// test, and MutationObservers it left on a node still in the page, should
+// be gone; a test that leaves any fails. Vitest runs `afterEach` hooks last
+// registered first, so this runs after testing-library's cleanup. A test
+// that calls a util directly undoes what it attached itself. Only the
+// library's `src/` counts: the docs site's code keeps page-long observers
+// on purpose.
+// (`new URL(…, import.meta.url)` would be rewritten by Vite as an asset.)
+const LIBRARY = `${path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../src")}/`;
+const leaks = (
+  globalThis as {
+    __domEnv?: {
+      leaks: {
+        enabled(): boolean;
+        mark(): number;
+        since(mark: number, include: string): { what: string; at: string }[];
+      };
+    };
+  }
+).__domEnv?.leaks;
+if (leaks?.enabled()) {
+  let mark = 0;
+  beforeEach(() => {
+    mark = leaks.mark();
+  });
+  afterEach(() => {
+    const found = leaks.since(mark, LIBRARY);
+    if (found.length === 0) return;
+    const list = found.map(({ what, at }) => `  ${what} at ${at}`).join("\n");
+    throw new Error(`Left registered after cleanup:\n${list}`);
+  });
+}
