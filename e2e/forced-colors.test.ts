@@ -1452,3 +1452,22 @@ test("prefers-contrast: more dots the focus outline", async ({ page }) => {
     "dotted 2px",
   );
 });
+
+// The header's avatar is wider than the 40px frame that clips it to a circle,
+// so the `UserAvatar` edge that forced colors draw is clipped away. The frame
+// draws the circle instead.
+test("forced colors: the ProfileMenuHeader avatar keeps its circle", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/profile-menu.html");
+  const frame = ".bx--profile-menu__header .bx--profile-menu__avatar";
+  await expect(page.locator(frame).first()).toBeVisible();
+  const system = await systemColors(page);
+  expect(await style(page, frame)).toMatchObject({
+    outline: "solid 1px",
+    outlineColor: system.CanvasText,
+  });
+});
