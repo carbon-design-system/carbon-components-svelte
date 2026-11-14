@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/svelte";
+import FloatingPortal from "carbon-components-svelte/Portal/FloatingPortal.svelte";
 import { type ComponentProps, tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { nextFrame } from "../utils/next-frame";
@@ -655,6 +656,36 @@ describe("FloatingPortal", () => {
       await rerender({ open: false });
       await tick();
       expect(observed.size).toBe(0);
+    });
+  });
+
+  describe("anchor warning", () => {
+    const NO_ANCHOR = /opened without an `anchor`/;
+    const anchorWarnings = (calls: unknown[][]) =>
+      calls.filter(([message]) => NO_ANCHOR.test(String(message)));
+
+    it("warns once when opened without an anchor", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const { rerender } = render(FloatingPortal, {
+        props: { anchor: null, open: true },
+      });
+      await tick();
+      await tick();
+      expect(anchorWarnings(warn.mock.calls)).toHaveLength(1);
+
+      await rerender({ open: false });
+      await rerender({ open: true });
+      await tick();
+      expect(anchorWarnings(warn.mock.calls)).toHaveLength(1);
+      warn.mockRestore();
+    });
+
+    it("does not warn when the anchor is bound in the same update", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      await renderOpen();
+      await tick();
+      expect(anchorWarnings(warn.mock.calls)).toHaveLength(0);
+      warn.mockRestore();
     });
   });
 });
