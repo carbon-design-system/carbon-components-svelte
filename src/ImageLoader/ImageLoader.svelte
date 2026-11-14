@@ -78,6 +78,10 @@
     const img = new Image();
     image = img;
     currentSrc = url || src;
+    // Fetch like the shown `<img>` will, so it reuses this download.
+    for (const [name, value] of Object.entries(fetchAttributes)) {
+      img.setAttribute(name, value);
+    }
     img.src = currentSrc;
     // Ignore a superseded image that settles after `src` has changed.
     img.onload = () => {
@@ -99,6 +103,12 @@
   // "fast-02" duration (ms) from Carbon motion recommended for fading micro-interactions
   const fast02 = 110;
 
+  /** @type {Record<string, string>} */
+  const camelAlias = {
+    crossorigin: "crossOrigin",
+    referrerpolicy: "referrerPolicy",
+  };
+
   /** @type {null | HTMLImageElement} */
   let image = null;
 
@@ -115,6 +125,21 @@
   // the image has loaded doesn't reload it.
   $: if (!lazy) nearViewport = true;
   $: deferLoad = lazy && !nearViewport;
+  // The attributes that choose what the browser downloads. The preload and
+  // the hidden `<img>` carry them too: with only `src`, they fetched the
+  // fallback and the shown image then fetched the candidate it picked.
+  /** @type {Record<string, string>} */
+  let fetchAttributes = {};
+  $: {
+    fetchAttributes = {};
+    for (const name of ["srcset", "sizes", "crossorigin", "referrerpolicy"]) {
+      const value = $$restProps[name] ?? $$restProps[camelAlias[name]];
+      if (value != null && value !== false) {
+        fetchAttributes[name] = value === true ? "" : String(value);
+      }
+    }
+  }
+
   $: if (!src) {
     loaded = false;
     error = false;
@@ -213,16 +238,17 @@
   visible `<img>` above takes over once the image has loaded. It is also in the
   first client render so hydration matches.
 
-  It only carries `src`, `alt`, and `loading="lazy"` in lazy mode, so preload
-  scanners skip it then. Forwarding `$$restProps` would duplicate
-  attributes like `id` and `data-testid` with the visible `<img>`, and
-  `srcset`/`crossorigin` could trigger a second request.
+  It carries `src`, `alt`, the attributes that choose the download (`srcset`,
+  `sizes`, `crossorigin`, `referrerpolicy`) and `loading="lazy"` in lazy mode,
+  so preload scanners skip it then. Forwarding all of `$$restProps` would
+  duplicate attributes like `id` and `data-testid` with the visible `<img>`.
 -->
 {#if loading && src}
   <img
     style:display="none"
     aria-hidden="true"
     loading={lazy ? "lazy" : undefined}
+    {...fetchAttributes}
     {src}
     {alt}
   />

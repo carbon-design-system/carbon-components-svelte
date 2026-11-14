@@ -13,11 +13,16 @@ const validImageSrc =
 class FakeImage {
   static instances: FakeImage[] = [];
   src = "";
+  attributes: Record<string, string> = {};
   onload: (() => void) | null = null;
   onerror: (() => void) | null = null;
 
   constructor() {
     FakeImage.instances.push(this);
+  }
+
+  setAttribute(name: string, value: string) {
+    this.attributes[name] = value;
   }
 }
 
@@ -154,6 +159,32 @@ describe("ImageLoader", () => {
     await settle(newSrc, "onload");
 
     expect(wrapper.querySelector("img")).toHaveAttribute("src", newSrc);
+  });
+
+  it("fetches the srcset candidate once, not src and then the candidate", () => {
+    const { container } = render(ImageLoaderComponent, {
+      props: {
+        src: "a.jpg",
+        alt: "Logo",
+        srcset: "a-1x.jpg 1x, a-2x.jpg 2x",
+        sizes: "50vw",
+        crossorigin: "anonymous",
+        referrerpolicy: "no-referrer",
+      },
+    });
+
+    const expected = {
+      srcset: "a-1x.jpg 1x, a-2x.jpg 2x",
+      sizes: "50vw",
+      crossorigin: "anonymous",
+      referrerpolicy: "no-referrer",
+    };
+    expect(FakeImage.instances[0].attributes).toEqual(expected);
+    // The hidden `<img>` also downloads while loading.
+    const hidden = container.querySelector("img");
+    for (const [name, value] of Object.entries(expected)) {
+      expect(hidden).toHaveAttribute(name, value);
+    }
   });
 
   it("ignores a superseded image settling after src changes", async () => {
