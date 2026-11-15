@@ -55,7 +55,7 @@
   /**
    * @event open
    * @type {object}
-   * @property {"click" | "keydown" | "input" | "programmatic"} trigger
+   * @property {"click" | "keydown" | "input" | "focus" | "programmatic"} trigger
    */
 
   /**
@@ -194,6 +194,13 @@
    * This allows users to immediately see all available items after clearing.
    */
   export let openOnClear = false;
+
+  /**
+   * Set to `true` to open the menu when the input receives focus from
+   * outside the combo box, including a Modal's first focus. Focus the combo
+   * box moves back to its input doesn't open it.
+   */
+  export let openOnFocus = false;
 
   /** Set to `true` to enable autocomplete with typeahead */
   export let typeahead = false;
@@ -418,6 +425,7 @@
     scheduleHighlightScroll,
     unwindowedMenuState,
   } from "../ListBox/menu-window.js";
+  import { createFocusOpener } from "../ListBox/open-on-focus.js";
   import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
   import {
     FORM_CONTEXT_KEY,
@@ -560,6 +568,12 @@
     setOpen: (v) => (open = v),
     dispatch,
   });
+
+  // For `openOnFocus`: focus counts only when it arrives from outside,
+  // the portalled menu included.
+  const focusOpener = createFocusOpener(
+    (node) => !!(fieldRef?.contains(node) || listRef?.contains(node)),
+  );
 
   onMount(() => {
     return () => {
@@ -1491,14 +1505,19 @@
           }}
           on:keyup
           on:focus
-          on:focus={() => {
+          on:focus={(event) => {
             if (isFluid) fieldFocused = true;
             if (selectTextOnFocus && !effectiveDisabled) {
               tick().then(() => ref?.select());
             }
+            const arrived = focusOpener.focus(event);
+            if (openOnFocus && arrived && !effectiveDisabled && !readonly) {
+              openMenu("focus");
+            }
           }}
           on:blur
           on:blur={(event) => {
+            focusOpener.blur(event);
             if (isFluid) fieldFocused = false;
             if (!open || !event.relatedTarget) return;
             if (
