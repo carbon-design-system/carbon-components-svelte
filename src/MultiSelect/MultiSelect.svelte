@@ -56,7 +56,7 @@
    * @property {Item[]} unselected
    * @event {KeyboardEvent | MouseEvent} clear
    * @event {FocusEvent | CustomEvent<FocusEvent>} blur
-   * @event {{ trigger: "click" | "keydown" | "input" | "programmatic" }} open
+   * @event {{ trigger: "click" | "keydown" | "input" | "focus" | "programmatic" }} open
    * @event {{ trigger: "escape-key" | "outside-click" }} close
    * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
@@ -313,6 +313,14 @@
   export let openOnClear = false;
 
   /**
+   * Set to `true` to open the menu when the filter input receives focus
+   * from outside the multiselect, including a Modal's first focus. Focus
+   * the multiselect moves back to its input doesn't open it. Applies only
+   * when `filterable` is `true`.
+   */
+  export let openOnFocus = false;
+
+  /**
    * Build the assistive message announced through the status live region when
    * typing in the filterable variant changes how many options match.
    * The count excludes any "select all" item.
@@ -523,6 +531,7 @@
     scheduleHighlightScroll,
     unwindowedMenuState,
   } from "../ListBox/menu-window.js";
+  import { createFocusOpener } from "../ListBox/open-on-focus.js";
   import Tag from "../Tag/Tag.svelte";
   import TagSet from "../TagSet/TagSet.svelte";
   import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
@@ -688,6 +697,12 @@
     setOpen: (v) => (open = v),
     dispatch,
   });
+
+  // For `openOnFocus`: focus counts only when it arrives from outside,
+  // the portalled menu included.
+  const focusOpener = createFocusOpener(
+    (node) => !!(multiSelectRef?.contains(node) || listRef?.contains(node)),
+  );
 
   /**
    * @type {(data: { key: "field" | "selection"; ref: HTMLDivElement | HTMLButtonElement }) => void}
@@ -1867,14 +1882,19 @@
             }}
             on:keyup
             on:focus
-            on:focus={() => {
+            on:focus={(event) => {
               fieldFocused = true;
               if (selectTextOnFocus && !effectiveDisabled) {
                 tick().then(() => inputRef?.select());
               }
+              const arrived = focusOpener.focus(event);
+              if (openOnFocus && arrived && !effectiveDisabled) {
+                openMenu("focus");
+              }
             }}
             on:blur
-            on:blur={() => {
+            on:blur={(event) => {
+              focusOpener.blur(event);
               fieldFocused = false;
             }}
             on:paste
