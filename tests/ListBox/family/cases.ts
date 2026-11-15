@@ -131,7 +131,7 @@ export const cases: ListBoxCase[] = [
     // Enter in the filter input does not open the menu.
     openKeys: ["{ArrowDown}"],
     opensOnInput: true,
-    opensOnFocus: false,
+    opensOnFocus: true,
     selectCloses: false,
     windowEvents: ["click", "focusin"],
     preselect: preselectInPlace,
