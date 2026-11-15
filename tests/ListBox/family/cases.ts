@@ -28,6 +28,11 @@ export type ListBoxCase = {
   openKeys: string[];
   /** Typing in the field opens the menu, with trigger `input`. */
   opensOnInput: boolean;
+  /**
+   * `openOnFocus` opens the menu when focus reaches the field from outside,
+   * with trigger `focus`. Only fields you type in take the prop.
+   */
+  opensOnFocus: boolean;
   /** Picking an option closes the menu, with trigger `select`. */
   selectCloses: boolean;
   /** Window events an open menu listens for. */
@@ -64,6 +69,7 @@ export const cases: ListBoxCase[] = [
     props: { labelText: "Contact" },
     openKeys: ["{ArrowDown}", "{Enter}"],
     opensOnInput: false,
+    opensOnFocus: false,
     selectCloses: true,
     windowEvents: ["click"],
     preselect: (id) => ({ selectedId: id }),
@@ -82,6 +88,7 @@ export const cases: ListBoxCase[] = [
     props: { labelText: "Contact", placeholder: "Select…" },
     openKeys: ["{ArrowDown}", "{Enter}"],
     opensOnInput: true,
+    opensOnFocus: true,
     selectCloses: true,
     windowEvents: ["click"],
     preselect: (id) => ({ selectedId: id }),
@@ -100,6 +107,7 @@ export const cases: ListBoxCase[] = [
     props: { labelText: "Contact", label: "Select contact methods" },
     openKeys: ["{ArrowDown}", "{Enter}"],
     opensOnInput: false,
+    opensOnFocus: false,
     selectCloses: false,
     windowEvents: ["click", "focusin"],
     preselect: preselectInPlace,
@@ -123,6 +131,7 @@ export const cases: ListBoxCase[] = [
     // Enter in the filter input does not open the menu.
     openKeys: ["{ArrowDown}"],
     opensOnInput: true,
+    opensOnFocus: false,
     selectCloses: false,
     windowEvents: ["click", "focusin"],
     preselect: preselectInPlace,
