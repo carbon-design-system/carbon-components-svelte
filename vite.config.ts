@@ -32,8 +32,10 @@ export function createConfig({ dev }: { dev?: boolean } = {}) {
         ...(dev === undefined ? {} : { compilerOptions: { dev } }),
         // `*.async.svelte5.test.svelte` fixtures compile with
         // `experimental.async`, which turns on Svelte 5's async runtime for
-        // the whole test file, library components included.
+        // the whole test file, library components included. `test:async`
+        // compiles everything that way.
         dynamicCompileOptions: ({ filename }) =>
+          process.env.SVELTE_ASYNC ||
           filename.endsWith(".async.svelte5.test.svelte")
             ? { experimental: { async: true } }
             : undefined,
@@ -47,7 +49,10 @@ export function createConfig({ dev }: { dev?: boolean } = {}) {
     },
     test: {
       ...testConfig,
-      setupFiles: ["./setup-tests.ts"],
+      setupFiles: [
+        "./setup-tests.ts",
+        ...(process.env.SVELTE_ASYNC ? ["./setup-async.ts"] : []),
+      ],
       projects: [
         {
           extends: true,

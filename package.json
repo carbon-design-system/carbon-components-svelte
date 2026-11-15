@@ -47,6 +47,7 @@
     "test:changed": "bunx --bun bivium run --suite unit",
     "test:changed:e2e": "bunx --bun bivium run --suite e2e",
     "test:plan": "bunx --bun bivium plan --json",
+    "test:async": "SVELTE_ASYNC=1 bun --bun vitest --project dom",
     "test:failed": "bun --bun vitest run --lastFailed --passWithNoTests",
     "test:perf": "NODE_ENV=production bun --bun vitest run --config vite.config.perf.ts --no-file-parallelism",
     "bench": "ostia bench",
