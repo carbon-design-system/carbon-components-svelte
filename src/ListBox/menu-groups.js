@@ -162,6 +162,22 @@ export function createGroupRows() {
 }
 
 /**
+ * Whether a menu row is a group header. Read it from the row itself: a row
+ * block can see its index maps from a newer render than its row (Svelte's
+ * `experimental.async` mode renders between `$:` statements).
+ *
+ * @param {unknown} row
+ * @returns {row is GroupHeaderRow<Groupable>}
+ */
+export function isGroupHeader(row) {
+  return (
+    typeof row === "object" &&
+    row !== null &&
+    typeof (/** @type {{ id?: unknown }} */ (row).id) === "symbol"
+  );
+}
+
+/**
  * @template [Row=unknown]
  * @typedef {Object} GroupRun
  * @property {unknown} key Stable key for a keyed `{#each}`.

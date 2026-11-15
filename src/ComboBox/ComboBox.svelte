@@ -403,6 +403,7 @@
   } from "../ListBox/list-box-utils.js";
   import {
     createGroupRows,
+    isGroupHeader,
     orderByGroup,
     splitGroupRuns,
   } from "../ListBox/menu-groups.js";
@@ -1570,7 +1571,7 @@
                   {@const actualIndex = groupRows
                     ? groupRows.itemIndexByRow[rowIndex]
                     : rowIndex}
-                  {#if actualIndex === -1}
+                  {#if isGroupHeader(item)}
                     <!-- Hidden from assistive tech: the enclosing group is named
                          by a hidden label, which stays rendered when a virtualized
                          window leaves this header out. -->
@@ -1694,7 +1695,7 @@
                 {@const index = groupRows
                   ? groupRows.itemIndexByRow[rowIndex]
                   : rowIndex}
-                {#if index === -1}
+                {#if isGroupHeader(item)}
                   <!-- Hidden from assistive tech: the enclosing group is named
                        by a hidden label, which stays rendered when a virtualized
                        window leaves this header out. -->
