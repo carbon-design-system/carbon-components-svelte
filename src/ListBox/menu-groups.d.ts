@@ -55,6 +55,15 @@ export declare function createGroupRows<Item extends Groupable>(): (
   items: ReadonlyArray<Item>,
 ) => GroupRows<Item>;
 
+/**
+ * Whether a menu row is a group header. Read it from the row itself: a row
+ * block can see its index maps from a newer render than its row (Svelte's
+ * `experimental.async` mode renders between `$:` statements).
+ */
+export declare function isGroupHeader(
+  row: unknown,
+): row is GroupHeaderRow<Groupable>;
+
 export type GroupRun<Row = unknown> = {
   /** Stable key for a keyed `{#each}`. */
   key: unknown;
