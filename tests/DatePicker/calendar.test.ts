@@ -5,6 +5,8 @@ import {
   createCalendarEngine,
   inlineStep,
 } from "../../src/DatePicker/calendar.js";
+import { stubIntersectionObserver } from "../utils/intersection-observer-mock";
+import { rect } from "../utils/rect";
 
 const instances: CalendarInstance[] = [];
 
@@ -787,6 +789,36 @@ describe("right to left", () => {
     it("lines up with the anchor's left edge when its right edge would push it out of view", () => {
       const style = place({ rtl: () => true }, { left: 8, right: 128 });
       expect([style.left, style.right]).toEqual(["8px", "auto"]);
+    });
+
+    describe("when the anchor moves while open", () => {
+      afterEach(() => {
+        vi.unstubAllGlobals();
+      });
+
+      it("places the calendar again, until it closes", () => {
+        const { instances: observers } = stubIntersectionObserver();
+        const { instance, input } = create({ static: false });
+        let box = rect({ top: 100, left: 20, width: 200, height: 40 });
+        input.getBoundingClientRect = () => box;
+        instance.open();
+        const top = instance.calendarContainer.style.top;
+
+        box = rect({ top: 180, left: 20, width: 200, height: 40 });
+        const observer = observers.at(-1);
+        assert(observer);
+        expect(observer.elements.has(input)).toBe(true);
+        observer.callback(
+          [
+            { target: input, intersectionRatio: 0.5 },
+          ] as unknown as IntersectionObserverEntry[],
+          observer as unknown as IntersectionObserver,
+        );
+        expect(instance.calendarContainer.style.top).not.toBe(top);
+
+        instance.close();
+        expect(observers.every((o) => o.elements.size === 0)).toBe(true);
+      });
     });
   });
 });

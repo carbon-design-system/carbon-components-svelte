@@ -2,6 +2,7 @@
 
 import { isImeComposition } from "../utils/ime-composition.js";
 import { resolveLayoutDirection } from "../utils/inline-direction.js";
+import { observeMove } from "../utils/observe-move.js";
 import {
   compareDays,
   DAY_MS,
@@ -1889,7 +1890,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (!wasOpen) {
       self.calendarContainer.classList.add("bx--date-picker__calendar--open");
       self._input.classList.add("active");
-      bindOpenListeners();
+      bindOpenListeners(positionElement);
       triggerEvent("onOpen");
       positionCalendar(positionElement);
     }
@@ -1901,6 +1902,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.calendarContainer?.classList.remove("bx--date-picker__calendar--open");
     if (self._input) self._input.classList.remove("active");
     openListeners.clear();
+    stopFollowing();
     triggerEvent("onClose");
   }
   self.close = close;
@@ -1914,13 +1916,25 @@ export function createCalendarEngine(element, userConfig = {}) {
     close();
   }
 
-  /** Document listeners that only matter while the calendar is open. */
-  function bindOpenListeners() {
+  /** Stops re-placing the calendar when its anchor moves. */
+  let stopFollowing = () => {};
+
+  /**
+   * Document listeners that only matter while the calendar is open.
+   * @param {HTMLElement} [positionElement] The element the calendar opens against.
+   */
+  function bindOpenListeners(positionElement = self._positionElement) {
     openListeners.clear();
+    stopFollowing();
     openListeners.add(document, "mousedown", documentClick);
     openListeners.add(document, "focus", documentClick, { capture: true });
     if (!config.inline && !config.static) {
       openListeners.add(window, "resize", onResize);
+      // Content added or removed above the field (a notice in a Modal) moves
+      // it without a resize; follow it.
+      stopFollowing = observeMove(positionElement, () => {
+        if (self.isOpen) positionCalendar(positionElement);
+      });
     }
   }
 
@@ -2547,6 +2561,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     listeners.clear();
     triggerListeners.clear();
     openListeners.clear();
+    stopFollowing();
     clearTimeout(resizeTimer);
     self.calendarContainer?.remove();
     // Unwrap the field, wherever `static` left the calendar.
