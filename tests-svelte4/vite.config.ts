@@ -38,6 +38,14 @@ export default defineConfig({
       // `/syntax` tokenizer. The root harness covers them.
       "../tests/scripts/**",
       "../tests/syntax/**",
+      // DataTable is a runes component (Svelte 5 only) in this spike, and
+      // these suites render it.
+      "../tests/DataTable/**",
+      "../tests/collection-prop-contract/**",
+      "../tests/aria-forwarding/**",
+      "../tests/TranslatableStrings/**",
+      "../tests/AILabel/AILabel.overlays.test.ts",
+      "../tests/size-aliases/**",
     ],
     setupFiles: ["./setup-tests.ts"],
     // `@testing-library/*` resolve from the root `node_modules`, outside this

@@ -29,18 +29,18 @@
     {expandable}
     expandedRowIds={expandable ? ["a"] : []}
   >
-    <svelte:fragment slot="decorator"><AILabel /></svelte:fragment>
-    <svelte:fragment slot="headerDecorator" let:header>
+    {#snippet decorator()}<AILabel />{/snippet}
+    {#snippet headerDecorator({ header })}
       {#if header.key === "forecast"}
         <AILabel />
       {/if}
-    </svelte:fragment>
-    <svelte:fragment slot="rowDecorator" let:row>
+    {/snippet}
+    {#snippet rowDecorator({ row })}
       {#if row.ai}
         <AILabel bind:edited />
       {/if}
-    </svelte:fragment>
-    <svelte:fragment slot="expandedRow">Details</svelte:fragment>
+    {/snippet}
+    {#snippet expandedRow()}Details{/snippet}
   </DataTable>
 </div>
 <div data-testid="plain-table">

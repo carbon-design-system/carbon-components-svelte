@@ -14,14 +14,14 @@
 </script>
 
 <DataTable expandable {headers} {rows}>
-  <svelte:fragment slot="expandIcon" let:expanded let:props>
+  {#snippet expandIcon({ expanded, props })}
     <ChevronRight
       {...props}
       data-testid="custom-expand-icon"
       data-expanded={expanded}
     />
-  </svelte:fragment>
-  <svelte:fragment slot="expandedRow" let:row>
+  {/snippet}
+  {#snippet expandedRow({ row })}
     <pre>{JSON.stringify(row, null, 2)}</pre>
-  </svelte:fragment>
+  {/snippet}
 </DataTable>

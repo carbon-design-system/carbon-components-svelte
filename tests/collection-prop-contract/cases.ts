@@ -172,6 +172,9 @@ export const cases: CollectionCase[] = [
     name: "DataTable",
     component: DataTable,
     prop: "selectedRowIds",
+    // Runes spike: a legacy parent's `ids = ids` after an in-place edit
+    // doesn't reach this `$bindable` prop. Reassign a new array instead.
+    fails: { legacy: "DataTable runes spike" },
     props: { selectable: true, headers: nameHeader, rows: twoRows },
     initial: () => ["a"],
     replacement: () => ["b"],
@@ -186,6 +189,9 @@ export const cases: CollectionCase[] = [
     name: "DataTable",
     component: DataTable,
     prop: "expandedRowIds",
+    // Runes spike: a legacy parent's `ids = ids` after an in-place edit
+    // doesn't reach this `$bindable` prop. Reassign a new array instead.
+    fails: { legacy: "DataTable runes spike" },
     props: { expandable: true, headers: nameHeader, rows: twoRows },
     initial: () => ["a"],
     replacement: () => ["b"],

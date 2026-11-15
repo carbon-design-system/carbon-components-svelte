@@ -10,7 +10,7 @@ import type {
   DataTableValueAtPath,
   PropertyPath,
 } from "carbon-components-svelte/DataTable/data-table-utils";
-import type { ComponentEvents, ComponentProps } from "svelte";
+import type { ComponentProps } from "svelte";
 import { tick } from "svelte";
 import { expectInlineStyle } from "../utils/inline-style";
 import { user } from "../utils/user";
@@ -269,7 +269,7 @@ describe("DataTable", () => {
       await clickHeader("Name");
 
       expect(onsort).toHaveBeenCalledTimes(1);
-      expect(onsort.mock.calls[0][0].detail).toEqual({
+      expect(onsort.mock.calls[0][0]).toMatchObject({
         key: "name",
         direction: "ascending",
       });
@@ -543,15 +543,15 @@ describe("DataTable", () => {
     await tick();
 
     expect(sortHandler).toHaveBeenCalledTimes(3);
-    expect(sortHandler.mock.calls[0][0].detail).toEqual({
+    expect(sortHandler.mock.calls[0][0]).toMatchObject({
       key: "name",
       direction: "ascending",
     });
-    expect(sortHandler.mock.calls[1][0].detail).toEqual({
+    expect(sortHandler.mock.calls[1][0]).toMatchObject({
       key: "name",
       direction: "descending",
     });
-    expect(sortHandler.mock.calls[2][0].detail).toEqual({
+    expect(sortHandler.mock.calls[2][0]).toMatchObject({
       key: null,
       direction: "none",
     });
@@ -1638,17 +1638,11 @@ describe("DataTable", () => {
 
     await user.click(getCell(0, 0));
 
-    expect(eventNames(onevent, "click")).toEqual([
-      "click",
-      "click:cell",
-      "click",
-      "click:row",
-    ]);
-    const [cellClick, rowClick] = eventDetails(onevent, "click");
+    expect(eventNames(onevent, "click")).toEqual(["click:cell", "click:row"]);
+    const [cellClick] = eventDetails(onevent, "click:cell");
     expect(cellClick).toEqual(
-      expect.objectContaining({ cell: expect.any(Object) }),
+      expect.objectContaining({ row: rows[0], cell: expect.any(Object) }),
     );
-    expect(rowClick).not.toHaveProperty("cell");
   });
 
   it("handles row hover events", async () => {
@@ -1819,6 +1813,7 @@ describe("DataTable", () => {
 
     expect(eventDetails(onevent, "click:cell")).toEqual([
       {
+        row: rows[0],
         cell: expect.objectContaining({ key: "name" }),
         target: expect.any(HTMLElement),
         currentTarget: expect.any(HTMLElement),
@@ -2060,50 +2055,60 @@ describe("DataTable", () => {
   });
 
   // Regression test for issue https://github.com/carbon-design-system/carbon-components-svelte/issues/2344
-  describe("TypeScript event type definitions", () => {
+  describe("TypeScript callback type definitions", () => {
     it("click:row event type includes target and currentTarget", () => {
-      type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
-      type ClickRowEventType = Events["click:row"];
-      type ClickRowEvent =
-        ClickRowEventType extends CustomEvent<infer T> ? T : never;
+      type Callbacks = ComponentProps<
+        DataTableComponent<(typeof rows)[number]>
+      >;
+      type ClickRowEvent = Parameters<NonNullable<Callbacks["onrowclick"]>>[0];
 
       expectTypeOf<ClickRowEvent>().toHaveProperty("row");
       expectTypeOf<ClickRowEvent>().toHaveProperty("target");
       expectTypeOf<ClickRowEvent>().toHaveProperty("currentTarget");
-      expectTypeOf<ClickRowEvent["target"]>().toEqualTypeOf<EventTarget>();
+      expectTypeOf<
+        ClickRowEvent["target"]
+      >().toEqualTypeOf<EventTarget | null>();
       expectTypeOf<
         ClickRowEvent["currentTarget"]
-      >().toEqualTypeOf<EventTarget>();
+      >().toEqualTypeOf<EventTarget | null>();
     });
 
     it("click:cell event type includes target and currentTarget", () => {
-      type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
-      type ClickCellEventType = Events["click:cell"];
-      type ClickCellEvent =
-        ClickCellEventType extends CustomEvent<infer T> ? T : never;
+      type Callbacks = ComponentProps<
+        DataTableComponent<(typeof rows)[number]>
+      >;
+      type ClickCellEvent = Parameters<
+        NonNullable<Callbacks["oncellclick"]>
+      >[0];
 
       expectTypeOf<ClickCellEvent>().toHaveProperty("cell");
       expectTypeOf<ClickCellEvent>().toHaveProperty("target");
       expectTypeOf<ClickCellEvent>().toHaveProperty("currentTarget");
-      expectTypeOf<ClickCellEvent["target"]>().toEqualTypeOf<EventTarget>();
+      expectTypeOf<
+        ClickCellEvent["target"]
+      >().toEqualTypeOf<EventTarget | null>();
       expectTypeOf<
         ClickCellEvent["currentTarget"]
-      >().toEqualTypeOf<EventTarget>();
+      >().toEqualTypeOf<EventTarget | null>();
     });
 
     it("click:header event type includes target and currentTarget", () => {
-      type Events = ComponentEvents<DataTableComponent<(typeof rows)[number]>>;
-      type ClickHeaderEventType = Events["click:header"];
-      type ClickHeaderEvent =
-        ClickHeaderEventType extends CustomEvent<infer T> ? T : never;
+      type Callbacks = ComponentProps<
+        DataTableComponent<(typeof rows)[number]>
+      >;
+      type ClickHeaderEvent = Parameters<
+        NonNullable<Callbacks["onheaderclick"]>
+      >[0];
 
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("header");
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("target");
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("currentTarget");
-      expectTypeOf<ClickHeaderEvent["target"]>().toEqualTypeOf<EventTarget>();
+      expectTypeOf<
+        ClickHeaderEvent["target"]
+      >().toEqualTypeOf<EventTarget | null>();
       expectTypeOf<
         ClickHeaderEvent["currentTarget"]
-      >().toEqualTypeOf<EventTarget>();
+      >().toEqualTypeOf<EventTarget | null>();
 
       expectTypeOf<ClickHeaderEvent>().toHaveProperty("sortDirection");
     });
@@ -2127,7 +2132,7 @@ describe("DataTable", () => {
       expectTypeOf<"id">().toExtend<Props["sortKey"]>();
     });
 
-    it("should support generic types with ComponentProps and ComponentEvents", () => {
+    it("should support generic types with ComponentProps", () => {
       type CustomRow = {
         id: string;
         name: string;
@@ -2138,29 +2143,22 @@ describe("DataTable", () => {
 
       type ComponentType = DataTableComponent<CustomRow>;
       type Props = ComponentProps<ComponentType>;
-      type Events = ComponentEvents<ComponentType>;
+      type Callbacks = ComponentProps<ComponentType>;
 
       expectTypeOf<NonNullable<Props["rows"]>>().toEqualTypeOf<
         readonly CustomRow[]
       >();
 
-      type ClickRowEvent = Events["click:row"];
-      type ClickRowEventDetail =
-        ClickRowEvent extends CustomEvent<infer T> ? T : never;
+      type ClickRowEventDetail = Parameters<
+        NonNullable<Callbacks["onrowclick"]>
+      >[0];
       expectTypeOf<ClickRowEventDetail["row"]>().toEqualTypeOf<CustomRow>();
 
-      type ClickCellEvent = Events["click:cell"];
-      type ClickCellEventDetail =
-        ClickCellEvent extends CustomEvent<infer T> ? T : never;
+      type ClickCellEventDetail = Parameters<
+        NonNullable<Callbacks["oncellclick"]>
+      >[0];
       expectTypeOf<ClickCellEventDetail["cell"]>().toHaveProperty("key");
       expectTypeOf<ClickCellEventDetail["cell"]>().toHaveProperty("value");
-
-      type ClickEvent = Events["click"];
-      type ClickEventDetail =
-        ClickEvent extends CustomEvent<infer T> ? T : never;
-      expectTypeOf<ClickEventDetail["row"]>().toEqualTypeOf<
-        CustomRow | undefined
-      >();
     });
 
     it("sort prop types comparator args from the row generic", () => {
@@ -2221,16 +2219,16 @@ describe("DataTable", () => {
     it("should default to DataTableRow when generic is not specified", () => {
       type ComponentType = DataTableComponent;
       type Props = ComponentProps<ComponentType>;
-      type Events = ComponentEvents<ComponentType>;
+      type Callbacks = ComponentProps<ComponentType>;
 
       expectTypeOf<NonNullable<Props["rows"]>>().toHaveProperty("length");
 
       type RowElement = NonNullable<Props["rows"]>[number];
       expectTypeOf<RowElement>().toHaveProperty("id");
 
-      type ClickRowEvent = Events["click:row"];
-      type ClickRowEventDetail =
-        ClickRowEvent extends CustomEvent<infer T> ? T : never;
+      type ClickRowEventDetail = Parameters<
+        NonNullable<Callbacks["onrowclick"]>
+      >[0];
       expectTypeOf<ClickRowEventDetail>().toHaveProperty("row");
       expectTypeOf<ClickRowEventDetail["row"]>().toHaveProperty("id");
     });
@@ -2336,10 +2334,10 @@ describe("DataTable", () => {
       };
 
       type ComponentType = DataTableComponent<NestedRow>;
-      type Events = ComponentEvents<ComponentType>;
-      type ClickCellEvent = Events["click:cell"];
-      type ClickCellEventDetail =
-        ClickCellEvent extends CustomEvent<infer T> ? T : never;
+      type Callbacks = ComponentProps<ComponentType>;
+      type ClickCellEventDetail = Parameters<
+        NonNullable<Callbacks["oncellclick"]>
+      >[0];
 
       type CellKey = ClickCellEventDetail["cell"]["key"];
       type ExpectedCellKey = DataTableKey<NestedRow> | (string & {});

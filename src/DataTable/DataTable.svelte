@@ -1,7 +1,4 @@
-<script context="module">
-  import { sameArrayItems } from "../utils/array-set-ops.js";
-  import { deepEqual } from "../utils/deep-equal.js";
-
+<script module>
   /** @type {Record<string, string>} */
   const alignClasses = {
     start: "bx--table-column--align-start",
@@ -25,63 +22,36 @@
     return parts.filter(Boolean).join(" ") || undefined;
   }
 
-  /**
-   * Whether `next` describes the same row values as `prev`. Unlike
-   * `rowsEqual` (used by `ToolbarSearch`), a same-reference element does NOT
-   * count as equal: `rowsEqual` short-circuits per element on `rowA ===
-   * rowB`, so `rows[0].name = "x"; rows = [...rows]` (a legitimate in-place
-   * edit copied into a new array) would read as unchanged even though row 0
-   * moved. Here, only an array of entirely DIFFERENT objects that are each
-   * value-equal to their predecessor counts as unchanged; any same-reference
-   * element means it could have been mutated in place, so fall through and
-   * redo the work, matching today's behavior.
-   * @param {ReadonlyArray<{ id: unknown }>} prev
-   * @param {ReadonlyArray<{ id: unknown }>} next
-   * @returns {boolean}
-   */
-  function rowsUnchanged(prev, next) {
-    if (prev === next) return true;
-    if (prev.length !== next.length) return false;
+  /** Row heights per size variant, matching `bx--data-table--<size>` */
+  const ROW_HEIGHTS = {
+    compact: 24,
+    short: 32,
+    medium: 40,
+    tall: 64,
+  };
 
-    // Fast path: bail on the first id mismatch before paying for deep compares.
-    for (let i = 0; i < prev.length; i++) {
-      if (prev[i]?.id !== next[i]?.id) return false;
-    }
+  /** Row height when `size` is unset */
+  const DEFAULT_ROW_HEIGHT = 48;
 
-    for (let i = 0; i < prev.length; i++) {
-      if (prev[i] === next[i]) return false;
-      if (!deepEqual(prev[i], next[i])) return false;
-    }
+  /** @type {{ "aria-hidden": "true" | "false"; class: string; }} */
+  const expandIconProps = {
+    "aria-hidden": "true",
+    class: "bx--table-expand__svg",
+  };
 
-    return true;
-  }
+  /** @type {Record<"none" | "ascending" | "descending", "none" | "ascending" | "descending">} */
+  const NEXT_SORT_DIRECTION = {
+    none: "ascending",
+    ascending: "descending",
+    descending: "none",
+  };
 
-  /**
-   * Whether two cell records map the same row ids to the same cell arrays.
-   * @param {Record<string, unknown>} a
-   * @param {Record<string, unknown>} b
-   */
-  function sameCellRecords(a, b) {
-    const keys = Object.keys(a);
-    if (keys.length !== Object.keys(b).length) return false;
-    for (const key of keys) {
-      if (a[key] !== b[key]) return false;
-    }
-    return true;
-  }
-
-  /**
-   * @param {ReadonlyArray<{ id: unknown }> | undefined} a
-   * @param {ReadonlyArray<{ id: unknown }> | undefined} b
-   */
-  function paintedRowListChanged(a, b) {
-    if (a === b) return false;
-    if (!a || !b || a.length !== b.length) return true;
-    for (let i = 0; i < a.length; i++) {
-      if (a[i].id !== b[i].id) return true;
-    }
-    return false;
-  }
+  /** @type {Record<"none" | "ascending" | "descending", "none" | "ascending" | "descending">} */
+  const NEXT_SORT_DIRECTION_ALWAYS = {
+    none: "ascending",
+    ascending: "descending",
+    descending: "ascending",
+  };
 </script>
 
 <script>
@@ -178,88 +148,6 @@
    * @property {DataTableValue} value
    * @property {(item: DataTableValue, row: DataTableRow) => DataTableValue} [display]
    */
-
-  /**
-   * @slot {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon
-   * @slot {{ row: Row; rowSelected: boolean; }} expandedRow
-   * @slot {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} cellHeader
-   * @slot {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell
-   * @slot {{ header: DataTableHeader<Row>; index: number; }} footerCell
-   * @slot {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} headerDecorator
-   * @slot {{ row: Row; }} rowDecorator
-   */
-
-  /**
-   * @event click
-   * @type {object}
-   * @property {DataTableHeader<Row>} [header]
-   * @property {Row} [row]
-   * @property {DataTableCell<Row>} [cell]
-   */
-
-  /**
-   * @event click:header--expand
-   * @type {object}
-   * @property {boolean} expanded
-   */
-
-  /**
-   * @event click:header
-   * @type {object}
-   * @property {DataTableHeader<Row>} header
-   * @property {"ascending" | "descending" | "none"} [sortDirection] - The intended next sort direction for this click, reported regardless of whether the `sort` event was cancelled.
-   * @property {EventTarget} target
-   * @property {EventTarget} currentTarget
-   */
-
-  /**
-   * @event click:header--select
-   * @type {object}
-   * @property {boolean} indeterminate
-   * @property {boolean} selected
-   */
-
-  /**
-   * @event click:row
-   * @type {object}
-   * @property {Row} row
-   * @property {EventTarget} target
-   * @property {EventTarget} currentTarget
-   */
-
-  /**
-   * @event {Row} mouseenter:row
-   * @event {Row} mouseleave:row
-   */
-
-  /**
-   * @event click:row--expand
-   * @type {object}
-   * @property {boolean} expanded
-   * @property {Row} row
-   */
-
-  /**
-   * @event click:row--select
-   * @type {object}
-   * @property {boolean} selected
-   * @property {Row} row
-   */
-
-  /**
-   * @event {{ key: null; direction: "none" } | { key: DataTableKey<Row>; direction: "ascending" | "descending" }} sort - Dispatched when a sortable column header would change the active sort. The event is cancelable: call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting for that click (for example full server side sorting while still reading `detail.key` / `detail.direction` for your API). If not cancelled, the table applies the new sort and sorts the current `rows` client side. Typical uses: server side sorting, URL or query string sync, analytics, and persisting sort preferences.
-   * @property {DataTableKey<Row> | null} key - Proposed sort column (`header.key`), or `null` when the proposed `direction` is `none`.
-   * @property {"ascending" | "descending" | "none"} direction - Proposed sort direction for this click (applied internally unless the event is cancelled).
-   */
-
-  /**
-   * @event click:cell
-   * @type {object}
-   * @property {DataTableCell<Row>} cell
-   * @property {EventTarget} target
-   * @property {EventTarget} currentTarget
-   */
-
   /**
    * @template [Row=DataTableRow]
    * @typedef {{ row: Row, rowIndex: number, selected: boolean, expanded: boolean }} DataTableRowClassArgs
@@ -280,334 +168,29 @@
    * @typedef {string | ((args: DataTableCellClassArgs<Row>) => string | undefined)} DataTableCellClass
    */
 
+  /**
+   * @template [Row=DataTableRow]
+   * @typedef {{ key: null; direction: "none"; preventDefault: () => void } | { key: DataTableKey<Row>; direction: "ascending" | "descending"; preventDefault: () => void }} DataTableSortEvent
+   */
+
+  /**
+   * @snippet {{ props: { class: string } }} titleChildren - Replace the title heading. Spread `props` on your element.
+   * @snippet {{ props: { class: string } }} descriptionChildren - Replace the description paragraph. Spread `props` on your element.
+   * @snippet {{}} decorator - An `AILabel` for the table title.
+   * @snippet {{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; }; }} expandIcon - Replace the expand chevron. Spread `props` on your icon.
+   * @snippet {{ row: Row; rowSelected: boolean; }} expandedRow - Content of an expanded row.
+   * @snippet {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} cellHeader - Render a column header label.
+   * @snippet {{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean; }} cell - Render a body cell.
+   * @snippet {{ header: DataTableHeader<Row>; index: number; }} footerCell - Render a footer cell. The footer renders only with this snippet.
+   * @snippet {{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>; }} headerDecorator - An `AILabel` for a column header.
+   * @snippet {{ row: Row; }} rowDecorator - An `AILabel` for a row.
+   */
+
   /** @restProps {div} */
 
-  /**
-   * Dispatched when the virtualized table body is scrolled near the bottom
-   * (load-more signal). Not the browser's native `scrollend` (scroll stopped).
-   * Only fires when `virtualize` is enabled.
-   * @event {{ scrollTop: number; scrollHeight: number; clientHeight: number }} scrollend
-   */
-
-  /**
-   * Specify the data table headers.
-   * @type {ReadonlyArray<DataTableHeader<Row>>}
-   */
-  export let headers = [];
-
-  /**
-   * Specify the rows the data table should render.
-   * Keys defined in `headers` are used for the row ids.
-   * @type {ReadonlyArray<Row>}
-   */
-  export let rows = [];
-
-  /**
-   * Set the size of the data table.
-   * Also accepts Carbon v11's row heights: `"xs"` (`"compact"`), `"sm"`
-   * (`"short"`), `"md"` (`"medium"`), `"lg"` (the 48px default) and `"xl"`
-   * (`"tall"`).
-   * @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined}
-   */
-  export let size = undefined;
-
-  /** Specify the title of the data table */
-  export let title = "";
-
-  /** Specify the description of the data table */
-  export let description = "";
-
-  /**
-   * Specify a custom class name for each row.
-   * Provide a function to return a class name based
-   * on row properties, allowing conditional classes
-   * based on selected/expanded state.
-   * @example
-   * ```svelte
-   * <DataTable rowClass={({ row, rowIndex, selected, expanded }) => {
-   *   return `row-${rowIndex} ${selected ? 'selected' : ''} ${expanded ? 'expanded' : ''}`;
-   * }} />
-   * ```
-   * @type {DataTableRowClass<Row> | undefined}
-   */
-  export let rowClass = undefined;
-
-  /**
-   * Set an id for the table container.
-   * The title, description, header, cell and selection ids derive from it,
-   * for example `{id}-title` and `{id}-{header.key}`.
-   */
-  export let id = uniqueId();
-
-  /**
-   * Provide a class name for every body cell, or a function
-   * that returns one based on the row, cell, and row state.
-   * @example
-   * ```svelte
-   * <DataTable cellClass={({ cell }) => cell.key === "status" && cell.value === "Failed" ? "cell-failed" : undefined} />
-   * ```
-   * @type {DataTableCellClass<Row> | undefined}
-   */
-  export let cellClass = undefined;
-
-  /**
-   * Specify a name attribute for the input elements
-   * in a selectable data table (radio or checkbox).
-   * When the table is inside a form, this name will
-   * be included in the form data on submit.
-   * Defaults to the table `id`.
-   * @type {string | undefined}
-   */
-  export let inputName = undefined;
-
-  /**
-   * Specify the id of a form element outside the table to associate the
-   * selection inputs with.
-   * @type {string | undefined}
-   */
-  export let inputForm = undefined;
-
-  /** Set to `true` to use zebra styles */
-  export let zebra = false;
-
-  /** Set to `true` for the sortable variant. Individual columns can opt out (or, if this is `false`, opt in) via `header.sort`. */
-  export let sortable = false;
-
-  /**
-   * Specify the header key to sort by.
-   * @type {DataTableKey<Row> | null}
-   * @bindable writable
-   */
-  export let sortKey = null;
-
-  /**
-   * Specify the sort direction.
-   * @type {"none" | "ascending" | "descending"}
-   * @bindable writable
-   */
-  export let sortDirection = "none";
-
-  /**
-   * Set to `true` to only toggle between "ascending" and
-   * "descending" sort directions, skipping "none".
-   */
-  export let sortAlways = false;
-
-  /**
-   * Specify a default sort comparator for all sortable columns.
-   * Per-header `sort` functions take precedence over this prop.
-   *
-   * With a typed row generic, `a` and `b` are {@link DataTableSortValue} (the union of cell value types over every {@link DataTableKey} on `Row`). Narrow using `context.key` (typed as {@link DataTableKey}) or runtime checks.
-   *
-   * @example
-   * ```svelte
-   * <DataTable
-   *   sort={(a, b, { key }) => {
-   *     switch (key) {
-   *       case "expireDate":
-   *         return new Date(a) - new Date(b);
-   *       case "port":
-   *         return a - b;
-   *       default:
-   *         return String(a).localeCompare(String(b));
-   *     }
-   *   }}
-   * />
-   * ```
-   * @type {((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number) | undefined}
-   */
-  export let sort = undefined;
-
-  /**
-   * Override the text announced after `sortKey` or `sortDirection` changes.
-   * `header` is the sorted column. For `"none"`, it is the column that was
-   * sorted before.
-   * @type {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending") => string}
-   */
-  export let sortStatusText = function sortStatusText(header, direction) {
-    if (direction === "none" || !header) return "Not sorted";
-    return `Sorted by ${header.value ?? header.key}, ${direction}`;
-  };
-
-  /**
-   * Set to `true` for the expandable variant.
-   * Automatically set to `true` if `batchExpansion` is `true`.
-   * @bindable writable
-   */
-  export let expandable = false;
-
-  /**
-   * Set to `true` to enable batch expansion.
-   */
-  export let batchExpansion = false;
-
-  /**
-   * Specify the row ids to be expanded.
-   * @type {ReadonlyArray<Row["id"]>}
-   * @bindable writable
-   */
-  export let expandedRowIds = [];
-
-  /**
-   * Specify the ids for rows that should not be expandable.
-   * @type {ReadonlyArray<Row["id"]>}
-   */
-  export let nonExpandableRowIds = [];
-
-  /**
-   * Set to `true` for the radio selection variant.
-   * Row selection is enabled regardless of `selectable`.
-   */
-  export let radio = false;
-
-  /**
-   * Set to `true` so clicking an already-selected `radio` row clears the
-   * selection instead of leaving it selected. Only applies with `radio`.
-   */
-  export let allowDeselect = false;
-
-  /**
-   * Set to `true` for the selectable variant.
-   * Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
-   * @bindable writable
-   */
-  export let selectable = false;
-
-  /**
-   * Set to `true` to enable batch selection.
-   * Row selection is enabled regardless of `selectable`.
-   */
-  export let batchSelection = false;
-
-  /**
-   * Specify the row ids to be selected.
-   * @type {ReadonlyArray<Row["id"]>}
-   * @bindable writable
-   */
-  export let selectedRowIds = [];
-
-  /**
-   * Specify the ids of rows that should not be selectable.
-   * @type {ReadonlyArray<Row["id"]>}
-   */
-  export let nonSelectableRowIds = [];
-
-  /**
-   * Specify the row ids to highlight.
-   * Adds `bx--data-table--highlighted-row`. The highlighted row class is themed by default.
-   * @type {ReadonlyArray<Row["id"]>}
-   * @bindable writable
-   */
-  export let highlightedRowIds = [];
-
-  /** Set to `true` to enable a sticky header */
-  export let stickyHeader = false;
-
-  /**
-   * Override the maximum height of the sticky header table, replacing the
-   * default `300px`. Only applies when `stickyHeader` is `true`. Pass a number
-   * (interpreted as `px`) or a CSS length string (e.g. `"100%"`, `"24rem"`).
-   * @type {number | string | undefined}
-   */
-  export let stickyHeaderMaxHeight = undefined;
-
-  /** Set to `true` to use static width */
-  export let useStaticWidth = false;
-
-  /**
-   * Set to `true` to use a fixed table layout, where a header's `width`/`minWidth`
-   * is the column's exact rendered size instead of a floor that content can grow past.
-   * Unset columns share the remaining space equally.
-   */
-  export let fixedLayout = false;
-
-  /**
-   * Set the filtering strategy used by `ToolbarSearch`.
-   * - `"remove"`: remove non-matching rows from the DOM and recreate them when the
-   *   filter clears.
-   * - `"hide"`: keep all rows mounted and hide non-matching rows with the `hidden`
-   *   attribute, preserving focus, inputs, and open menus.
-   *
-   * `"hide"` falls back to `"remove"` when `pageSize` is set or `virtualize` is enabled.
-   *
-   * Because `"hide"` keeps every row mounted, each keystroke re-renders all
-   * rows, not just matching ones. For large row counts (hundreds or more),
-   * prefer `"remove"`, pagination, or virtualization.
-   * @type {"remove" | "hide"}
-   */
-  export let filterMode = "remove";
-
-  /** Specify the number of items to display in a page */
-  export let pageSize = 0;
-
-  /** Set to `number` to set current page */
-  export let page = 0;
-
-  /**
-   * Enable virtualization for large row lists. Virtualization renders only the rows currently visible in the viewport, improving performance for large datasets.
-   *
-   * Virtualization is opt-in. Set `virtualize={true}` to enable with default settings, or pass a configuration object to customize.
-   * Virtualized tables are intended for use with `stickyHeader={true}` so the header stays visible while scrolling. Pagination is ignored when virtualization is enabled.
-   * Virtualization assumes a uniform row height; combining it with `expandable` rows is not supported and may cause incorrect scroll-spacer sizing when rows are expanded mid-list.
-   *
-   * Provide an object to customize virtualization behavior:
-   * - `itemHeight` (default: 48 for medium size, adjusted for size variant): The height in pixels of each row. Specify a custom value when using custom slots with multi-line content or different heights.
-   * - `maxVisibleRows` (default: 10): The maximum number of rows to display in the viewport. The container height will be calculated as `itemHeight * maxVisibleRows`. Overridden by `containerHeight` if explicitly provided.
-   * - `containerHeight` (default: calculated from maxVisibleRows): The maximum height in pixels of the table body container. If not provided and `stickyHeader` is `true` with a numeric `stickyHeaderMaxHeight`, that value is used instead so the virtual window matches the visible scroll area; otherwise calculated from `itemHeight * maxVisibleRows`. A string `stickyHeaderMaxHeight` (e.g. `"50vh"`) does not feed virtualization.
-   * - `overscan` (default: 3): The number of extra rows to render above and below the viewport for smoother scrolling. Higher values may cause more flickering during very fast scrolling.
-   * - `threshold` (default: 100): The minimum number of rows required before virtualization activates. Tables with fewer rows will render all rows normally without virtualization.
-   * - `maxItems` (default: undefined): The maximum number of rows to render. When undefined, all visible rows are rendered.
-   * @type {undefined | boolean | { itemHeight?: number, maxVisibleRows?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }}
-   */
-  export let virtualize = undefined;
-
-  /**
-   * Obtain a reference to the table wrapper element. When virtualization is enabled and `stickyHeader` is false, this element is the scroll container—use `bind:scrollContainerRef` to programmatically control scroll position (e.g. `scrollContainerRef.scrollTop = 0`).
-   * @type {null | HTMLDivElement}
-   * @bindable readonly
-   */
-  export let scrollContainerRef = null;
-
-  /**
-   * Override the default table header translation ids.
-   * @type {((id: import("./TableHeader.svelte").TableHeaderTranslationId) => string) | undefined}
-   */
-  export let tableHeaderTranslateWithId = undefined;
-
-  /**
-   * Override the default translation ids for the expand and select controls.
-   * @type {(id: DataTableTranslationId) => string}
-   */
-  export let translateWithId = function translateWithId(id) {
-    return defaultTranslations[id];
-  };
-
-  /**
-   * Default translation ids.
-   * @type {{ expandAll: "expandAll"; collapseAll: "collapseAll"; expandRow: "expandRow"; collapseRow: "collapseRow"; expandColumn: "expandColumn"; selectAll: "selectAll"; selectRow: "selectRow" }}
-   */
-  export const translationIds = {
-    expandAll: "expandAll",
-    collapseAll: "collapseAll",
-    expandRow: "expandRow",
-    collapseRow: "collapseRow",
-    expandColumn: "expandColumn",
-    selectAll: "selectAll",
-    selectRow: "selectRow",
-  };
-
-  const defaultTranslations = {
-    [translationIds.expandAll]: "Expand all rows",
-    [translationIds.collapseAll]: "Collapse all rows",
-    [translationIds.expandRow]: "Expand current row",
-    [translationIds.collapseRow]: "Collapse current row",
-    [translationIds.expandColumn]: "Expand rows",
-    [translationIds.selectAll]: "Select all rows",
-    [translationIds.selectRow]: "Select row",
-  };
-
-  import { createEventDispatcher, onMount, setContext, tick } from "svelte";
-  import { writable } from "svelte/store";
+  import { setContext, untrack } from "svelte";
+  import { SvelteMap, SvelteSet } from "svelte/reactivity";
+  import { toStore } from "svelte/store";
   import Decorator from "../AILabel/Decorator.svelte";
   import InlineCheckbox from "../Checkbox/InlineCheckbox.svelte";
   import { createStatusAnnouncer } from "../ListBox/menu-status.js";
@@ -639,54 +222,460 @@
   } from "./data-table-utils.js";
   import { keepRowFocus } from "./row-focus.js";
 
-  const dispatch = createEventDispatcher();
   /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<Row["id"]>>}
+   * Default translation ids.
+   * @type {{ expandAll: "expandAll"; collapseAll: "collapseAll"; expandRow: "expandRow"; collapseRow: "collapseRow"; expandColumn: "expandColumn"; selectAll: "selectAll"; selectRow: "selectRow" }}
    */
-  const batchSelectedIds = writable([]);
-  /**
-   * @type {import("svelte/store").Writable<ReadonlyArray<Row>>}
-   */
-  const tableRows = writable(rows);
-  /**
-   * Exposes the table size to slotted content (e.g. `Toolbar`)
-   * so it can derive a matching size unless explicitly overridden.
-   * @type {import("svelte/store").Writable<"compact" | "short" | "medium" | "tall" | undefined>}
-   */
-  const tableSize = writable(normalizeDataTableSize(size));
-  $: effectiveSize = normalizeDataTableSize(size);
-  $: $tableSize = effectiveSize;
-
-  /** Row heights per size variant, matching `bx--data-table--<size>` */
-  const ROW_HEIGHTS = {
-    compact: 24,
-    short: 32,
-    medium: 40,
-    tall: 64,
+  export const translationIds = {
+    expandAll: "expandAll",
+    collapseAll: "collapseAll",
+    expandRow: "expandRow",
+    collapseRow: "collapseRow",
+    expandColumn: "expandColumn",
+    selectAll: "selectAll",
+    selectRow: "selectRow",
   };
 
-  /** Row height when `size` is unset */
-  const DEFAULT_ROW_HEIGHT = 48;
-
-  /** @type {{ "aria-hidden": "true" | "false"; class: string; }} */
-  const expandIconProps = {
-    "aria-hidden": "true",
-    class: "bx--table-expand__svg",
+  const defaultTranslations = {
+    [translationIds.expandAll]: "Expand all rows",
+    [translationIds.collapseAll]: "Collapse all rows",
+    [translationIds.expandRow]: "Expand current row",
+    [translationIds.collapseRow]: "Collapse current row",
+    [translationIds.expandColumn]: "Expand rows",
+    [translationIds.selectAll]: "Select all rows",
+    [translationIds.selectRow]: "Select row",
   };
 
-  let tableBodyScrollTop = 0;
-  let prevExpandedRowIds = [];
+  /**
+   * @template {DataTableRow} [Row=DataTableRow]
+   * @typedef {object} DataTableOwnProps
+   * @property {ReadonlyArray<DataTableHeader<Row>>} [headers=[]] Specify the data table headers.
+   * @property {ReadonlyArray<Row>} [rows=[]] Specify the rows the data table should render. A `$state` array (or its rows) can be edited in place; plain objects edited in place need `refreshRow` or `refreshCells`.
+   * @property {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined} [size] Set the size of the data table. Also accepts Carbon v11's row heights: `"xs"` (`"compact"`), `"sm"` (`"short"`), `"md"` (`"medium"`), `"lg"` (the 48px default) and `"xl"` (`"tall"`).
+   * @property {string} [title=""] Specify the title of the data table
+   * @property {string} [description=""] Specify the description of the data table
+   * @property {DataTableRowClass<Row> | undefined} [rowClass] Specify a custom class name for each row, or a function that returns one based on the row and its selected/expanded state.
+   * @property {string} [id] Set an id for the table container. The title, description, header, cell and selection ids derive from it, for example `{id}-title` and `{id}-{header.key}`.
+   * @property {DataTableCellClass<Row> | undefined} [cellClass] Provide a class name for every body cell, or a function that returns one based on the row, cell, and row state.
+   * @property {string | undefined} [inputName] Specify a name attribute for the selection inputs. Defaults to `id`.
+   * @property {string | undefined} [inputForm] Specify the id of a form element outside the table to associate the selection inputs with.
+   * @property {boolean} [zebra=false] Set to `true` to use zebra styles
+   * @property {boolean} [sortable=false] Set to `true` for the sortable variant. Individual columns can opt out (or, if this is `false`, opt in) via `header.sort`.
+   * @property {DataTableKey<Row> | null} [sortKey=null] Specify the header key to sort by.
+   * @property {"none" | "ascending" | "descending"} [sortDirection="none"] Specify the sort direction.
+   * @property {boolean} [sortAlways=false] Set to `true` to only toggle between "ascending" and "descending" sort directions, skipping "none".
+   * @property {((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number) | undefined} [sort] Specify a default sort comparator for all sortable columns. Per-header `sort` functions take precedence over this prop.
+   * @property {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending") => string} [sortStatusText] Override the text announced after `sortKey` or `sortDirection` changes. `header` is the sorted column. For `"none"`, it is the column that was sorted before.
+   * @property {boolean} [expandable=false] Set to `true` for the expandable variant. `batchExpansion` implies it.
+   * @property {boolean} [batchExpansion=false] Set to `true` to enable batch expansion.
+   * @property {ReadonlyArray<Row["id"]>} [expandedRowIds=[]] Specify the row ids to be expanded.
+   * @property {ReadonlyArray<Row["id"]>} [nonExpandableRowIds=[]] Specify the ids for rows that should not be expandable.
+   * @property {boolean} [radio=false] Set to `true` for the radio selection variant. Row selection is enabled regardless of `selectable`.
+   * @property {boolean} [allowDeselect=false] Set to `true` so clicking an already-selected `radio` row clears the selection instead of leaving it selected. Only applies with `radio`.
+   * @property {boolean} [selectable=false] Set to `true` for the selectable variant. Shift-clicking a row checkbox extends selection to every row between it and the last row clicked (not supported with `radio`).
+   * @property {boolean} [batchSelection=false] Set to `true` to enable batch selection. Row selection is enabled regardless of `selectable`.
+   * @property {ReadonlyArray<Row["id"]>} [selectedRowIds=[]] Specify the row ids to be selected.
+   * @property {ReadonlyArray<Row["id"]>} [nonSelectableRowIds=[]] Specify the ids of rows that should not be selectable.
+   * @property {ReadonlyArray<Row["id"]>} [highlightedRowIds=[]] Specify the row ids to highlight. Adds `bx--data-table--highlighted-row`. The highlighted row class is themed by default.
+   * @property {boolean} [stickyHeader=false] Set to `true` to enable a sticky header
+   * @property {number | string | undefined} [stickyHeaderMaxHeight] Override the maximum height of the sticky header table, replacing the default `300px`. Only applies when `stickyHeader` is `true`. Pass a number (interpreted as `px`) or a CSS length string (e.g. `"100%"`, `"24rem"`).
+   * @property {boolean} [useStaticWidth=false] Set to `true` to use static width
+   * @property {boolean} [fixedLayout=false] Set to `true` to use a fixed table layout, where a header's `width`/`minWidth` is the column's exact rendered size instead of a floor that content can grow past.
+   * @property {"remove" | "hide"} [filterMode="remove"] Set the filtering strategy used by `ToolbarSearch`: `"remove"` drops non-matching rows, `"hide"` keeps them mounted with `hidden`. `"hide"` falls back to `"remove"` when `pageSize` is set or `virtualize` is enabled.
+   * @property {number} [pageSize=0] Specify the number of items to display in a page
+   * @property {number} [page=0] Set to `number` to set current page
+   * @property {undefined | boolean | { itemHeight?: number, maxVisibleRows?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }} [virtualize] Enable virtualization for large row lists. Pass `true` for the defaults or an object to customize `itemHeight`, `maxVisibleRows`, `containerHeight`, `overscan`, `threshold` and `maxItems`.
+   * @property {null | HTMLDivElement} [scrollContainerRef=null] Obtain a reference to the table wrapper element. When virtualization is enabled and `stickyHeader` is false, this element is the scroll container.
+   * @property {((id: import("./TableHeader.svelte").TableHeaderTranslationId) => string) | undefined} [tableHeaderTranslateWithId] Override the default table header translation ids.
+   * @property {(id: DataTableTranslationId) => string} [translateWithId] Override the default translation ids for the expand and select controls.
+   * @property {((event: DataTableSortEvent<Row>) => void) | undefined} [onsort] Called when a sortable column header would change the active sort. Call `preventDefault()` to skip updating `sortKey` / `sortDirection` and skip client side sorting, for example to sort on the server.
+   * @property {((detail: { header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none"; target: EventTarget | null; currentTarget: EventTarget | null }) => void) | undefined} [onheaderclick] Called when a column header is clicked. `sortDirection` is the next direction for a sortable column, even if `onsort` prevented it.
+   * @property {((detail: { row: Row; target: EventTarget | null; currentTarget: EventTarget | null }) => void) | undefined} [onrowclick] Called when a row is clicked, except on its controls.
+   * @property {((detail: { row: Row; cell: DataTableCell<Row>; target: EventTarget | null; currentTarget: EventTarget | null }) => void) | undefined} [oncellclick] Called when a body cell is clicked.
+   * @property {((row: Row) => void) | undefined} [onrowmouseenter] Called when the pointer enters a row.
+   * @property {((row: Row) => void) | undefined} [onrowmouseleave] Called when the pointer leaves a row.
+   * @property {((detail: { row: Row; selected: boolean }) => void) | undefined} [onrowselect] Called when a row is selected or deselected.
+   * @property {((detail: { indeterminate: boolean; selected: boolean }) => void) | undefined} [onheaderselect] Called when the select-all checkbox changes.
+   * @property {((detail: { row: Row; expanded: boolean }) => void) | undefined} [onrowexpand] Called when a row is expanded or collapsed.
+   * @property {((detail: { expanded: boolean }) => void) | undefined} [onheaderexpand] Called when the expand-all button is clicked.
+   * @property {((detail: { scrollTop: number; scrollHeight: number; clientHeight: number }) => void) | undefined} [onscrollend] Called when a virtualized table body is scrolled near the bottom, as a load-more signal. Not the browser's native `scrollend`.
+   * @property {import("svelte").Snippet} [children] Content above the table, such as a `Toolbar`.
+   * @property {import("svelte").Snippet<[{ props: { class: string } }]>} [titleChildren] Replace the title heading. Spread `props` on your element.
+   * @property {import("svelte").Snippet<[{ props: { class: string } }]>} [descriptionChildren] Replace the description paragraph. Spread `props` on your element.
+   * @property {import("svelte").Snippet} [decorator] An `AILabel` for the table title.
+   * @property {import("svelte").Snippet<[{ expanded: boolean; row: Row | undefined; props: { "aria-hidden": "true" | "false"; class: string; } }]>} [expandIcon] Replace the expand chevron. Spread `props` on your icon.
+   * @property {import("svelte").Snippet<[{ row: Row; rowSelected: boolean }]>} [expandedRow] Content of an expanded row.
+   * @property {import("svelte").Snippet<[{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row> }]>} [cellHeader] Render a column header label.
+   * @property {import("svelte").Snippet<[{ row: Row; cell: DataTableCell<Row>; rowIndex: number; cellIndex: number; rowSelected: boolean; rowExpanded: boolean }]>} [cell] Render a body cell.
+   * @property {import("svelte").Snippet<[{ header: DataTableHeader<Row>; index: number }]>} [footerCell] Render a footer cell. The footer renders only with this snippet.
+   * @property {import("svelte").Snippet<[{ header: DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row> }]>} [headerDecorator] An `AILabel` for a column header.
+   * @property {import("svelte").Snippet<[{ row: Row }]>} [rowDecorator] An `AILabel` for a row.
+   */
+
+  /** @type {DataTableOwnProps<Row>} */
+  let {
+    /** @type {ReadonlyArray<DataTableHeader<Row>>} */
+    headers = [],
+    /** @type {ReadonlyArray<Row>} */
+    rows = [],
+    /** @type {"compact" | "short" | "medium" | "tall" | "xs" | "sm" | "md" | "lg" | "xl" | undefined} */
+    size = undefined,
+    title = "",
+    description = "",
+    /** @type {DataTableRowClass<Row> | undefined} */
+    rowClass = undefined,
+    id = uniqueId(),
+    /** @type {DataTableCellClass<Row> | undefined} */
+    cellClass = undefined,
+    /** @type {string | undefined} */
+    inputName = undefined,
+    /** @type {string | undefined} */
+    inputForm = undefined,
+    zebra = false,
+    sortable = false,
+    /** @type {DataTableKey<Row> | null} */
+    sortKey = $bindable(null),
+    /** @type {"none" | "ascending" | "descending"} */
+    sortDirection = $bindable("none"),
+    sortAlways = false,
+    /** @type {((a: DataTableSortValue<Row>, b: DataTableSortValue<Row>, context: { key: DataTableKey<Row>; ascending: boolean; row_a: Row; row_b: Row }) => number) | undefined} */
+    sort = undefined,
+    /** @type {(header: DataTableHeader<Row> | undefined, direction: "none" | "ascending" | "descending") => string} */
+    sortStatusText = defaultSortStatusText,
+    expandable = false,
+    batchExpansion = false,
+    /** @type {ReadonlyArray<Row["id"]>} */
+    expandedRowIds = $bindable([]),
+    /** @type {ReadonlyArray<Row["id"]>} */
+    nonExpandableRowIds = [],
+    radio = false,
+    allowDeselect = false,
+    selectable = false,
+    batchSelection = false,
+    /** @type {ReadonlyArray<Row["id"]>} */
+    selectedRowIds = $bindable([]),
+    /** @type {ReadonlyArray<Row["id"]>} */
+    nonSelectableRowIds = [],
+    /** @type {ReadonlyArray<Row["id"]>} */
+    highlightedRowIds = [],
+    stickyHeader = false,
+    /** @type {number | string | undefined} */
+    stickyHeaderMaxHeight = undefined,
+    useStaticWidth = false,
+    fixedLayout = false,
+    /** @type {"remove" | "hide"} */
+    filterMode = "remove",
+    pageSize = 0,
+    page = $bindable(0),
+    /** @type {undefined | boolean | { itemHeight?: number, maxVisibleRows?: number, containerHeight?: number, overscan?: number, threshold?: number, maxItems?: number }} */
+    virtualize = undefined,
+    /** @type {null | HTMLDivElement} */
+    scrollContainerRef = $bindable(null),
+    /** @type {((id: import("./TableHeader.svelte").TableHeaderTranslationId) => string) | undefined} */
+    tableHeaderTranslateWithId = undefined,
+    /** @type {(id: DataTableTranslationId) => string} */
+    translateWithId = (id) => defaultTranslations[id],
+    /** @type {((event: DataTableSortEvent<Row>) => void) | undefined} */
+    onsort = undefined,
+    /** @type {((detail: { header: DataTableHeader<Row>; sortDirection?: "ascending" | "descending" | "none"; target: EventTarget | null; currentTarget: EventTarget | null }) => void) | undefined} */
+    onheaderclick = undefined,
+    /** @type {((detail: { row: Row; target: EventTarget | null; currentTarget: EventTarget | null }) => void) | undefined} */
+    onrowclick = undefined,
+    /** @type {((detail: { row: Row; cell: DataTableCell<Row>; target: EventTarget | null; currentTarget: EventTarget | null }) => void) | undefined} */
+    oncellclick = undefined,
+    /** @type {((row: Row) => void) | undefined} */
+    onrowmouseenter = undefined,
+    /** @type {((row: Row) => void) | undefined} */
+    onrowmouseleave = undefined,
+    /** @type {((detail: { row: Row; selected: boolean }) => void) | undefined} */
+    onrowselect = undefined,
+    /** @type {((detail: { indeterminate: boolean; selected: boolean }) => void) | undefined} */
+    onheaderselect = undefined,
+    /** @type {((detail: { row: Row; expanded: boolean }) => void) | undefined} */
+    onrowexpand = undefined,
+    /** @type {((detail: { expanded: boolean }) => void) | undefined} */
+    onheaderexpand = undefined,
+    /** @type {((detail: { scrollTop: number; scrollHeight: number; clientHeight: number }) => void) | undefined} */
+    onscrollend = undefined,
+    children = undefined,
+    titleChildren = undefined,
+    descriptionChildren = undefined,
+    decorator = undefined,
+    expandIcon = undefined,
+    expandedRow = undefined,
+    cellHeader = undefined,
+    cell = undefined,
+    footerCell = undefined,
+    headerDecorator = undefined,
+    rowDecorator = undefined,
+    ...restProps
+  } = $props();
+
+  /**
+   * @param {DataTableHeader<Row> | undefined} header
+   * @param {"none" | "ascending" | "descending"} direction
+   */
+  function defaultSortStatusText(header, direction) {
+    if (direction === "none" || !header) return "Not sorted";
+    return `Sorted by ${header.value ?? header.key}, ${direction}`;
+  }
+
+  const effectiveSize = $derived(normalizeDataTableSize(size));
+  const visibleHeaders = $derived(
+    headers.filter((header) => !header.columnHidden),
+  );
+  const selectionName = $derived(inputName ?? id);
+  const titleId = $derived(`${id}-title`);
+  const descriptionId = $derived(`${id}-description`);
+  const hasTitle = $derived(!!title && !titleChildren);
+  const hasDescription = $derived(!!description && !descriptionChildren);
+  const isSelectionEnabled = $derived(selectable || radio || batchSelection);
+  const isExpandableTable = $derived(expandable || batchExpansion);
+
+  // Rest props go on the container, but naming and description belong on
+  // the `table`. `Table` joins them with the title and description ids.
+  const aria = $derived(splitAriaNaming(restProps));
+
+  /**
+   * Resolve whether a header is sortable. `header.sort` overrides the
+   * table-level `sortable` in either direction.
+   * @param {DataTableHeader<Row>} header
+   */
+  function isHeaderSortable(header) {
+    if (header.sort === false) return false;
+    if (header.sort === true || typeof header.sort === "function") {
+      return true;
+    }
+    return sortable;
+  }
+
+  // ---- Filtering (driven by `ToolbarSearch` through context) ----
+
+  let searchValue = $state("");
+  /** @type {undefined | ((row: Row, value: string) => boolean)} */
+  let customFilter = $state.raw();
+
+  // Hidden columns are excluded: matching on a column the user cannot see
+  // produces results they cannot explain.
+  const searchableKeys = $derived(
+    visibleHeaders
+      .filter((header) => !header.empty && header.key)
+      .map((header) => String(header.key)),
+  );
+
+  /**
+   * Rows matching the active filter. Re-filters when `rows` changes. Always
+   * a new array: a legacy-mode parent's `rows.splice(...); rows = rows`
+   * passes the same array again, which a `$derived` would treat as
+   * unchanged.
+   */
+  const matchedRows = $derived.by(() => {
+    const value = searchValue.trim().toLowerCase();
+    if (value.length === 0) return [...rows];
+    if (customFilter) {
+      const filter = customFilter;
+      return rows.filter((row) => filter(row, value));
+    }
+    return rows.filter((row) =>
+      searchableKeys.some((key) => {
+        const cellValue = resolvePath(row, key);
+        return (
+          (typeof cellValue === "string" || typeof cellValue === "number") &&
+          `${cellValue}`.toLowerCase().includes(value)
+        );
+      }),
+    );
+  });
+  const matchedRowIdsSet = $derived(new Set(matchedRows.map((row) => row.id)));
+
+  const virtualConfig = $derived.by(() => {
+    if (!virtualize) return null;
+    return {
+      itemHeight:
+        (effectiveSize && ROW_HEIGHTS[effectiveSize]) ?? DEFAULT_ROW_HEIGHT,
+      maxVisibleRows: 10,
+      containerHeight: /** @type {number | undefined} */ (undefined),
+      overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
+      threshold: DEFAULT_VIRTUAL_LIST_CONFIG.threshold,
+      maxItems: /** @type {number | undefined} */ (undefined),
+      ...(typeof virtualize === "object" ? virtualize : {}),
+    };
+  });
+
+  // "hide" filtering keeps every row mounted; it is incompatible with
+  // strategies that already render a bounded subset, so fall back to "remove".
+  const hideMode = $derived(
+    filterMode === "hide" && !virtualConfig && !(pageSize > 0),
+  );
+  /** Rows the table holds: every row in "hide" mode, else the matches. */
+  const tableRows = $derived(hideMode ? rows : matchedRows);
+
+  /**
+   * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
+   */
+  function filterRows(value, filter) {
+    searchValue = value;
+    customFilter = typeof filter === "function" ? filter : undefined;
+    return untrack(() => matchedRows.map((row) => row.id));
+  }
+
+  // ---- Sorting ----
+
+  const sortingHeader = $derived(
+    headers.find((header) => header.key === sortKey),
+  );
+  const sorting = $derived(
+    sortKey != null &&
+      (sortingHeader ? isHeaderSortable(sortingHeader) : sortable),
+  );
+  const sortedRows = $derived.by(() => {
+    if (!sorting || sortDirection === "none") return tableRows;
+    const path = String(sortKey);
+    const ascending = sortDirection === "ascending";
+    const headerSort = sortingHeader?.sort;
+    const key = /** @type {DataTableKey<Row>} */ (sortKey);
+    return [...tableRows].sort((a, b) => {
+      const itemA = /** @type {DataTableSortValue<Row>} */ (
+        resolvePath(a, path)
+      );
+      const itemB = /** @type {DataTableSortValue<Row>} */ (
+        resolvePath(b, path)
+      );
+      if (typeof headerSort === "function") {
+        return compareValues(itemA, itemB, ascending, headerSort);
+      }
+      if (sort) {
+        const result = sort(itemA, itemB, {
+          key,
+          ascending,
+          row_a: a,
+          row_b: b,
+        });
+        return ascending ? result : -result;
+      }
+      return compareValues(itemA, itemB, ascending);
+    });
+  });
+
+  let sortStatus = $state("");
+  const announceSortStatus = createStatusAnnouncer(
+    (text) => (sortStatus = text),
+  );
+  let prevSortKey = untrack(() => sortKey);
+  let prevSortDirection = untrack(() => sortDirection);
+
+  // Announce each sort once from a status region. The rows are not a live
+  // region: a reorder would read every row again.
+  $effect(() => {
+    if (sortKey === prevSortKey && sortDirection === prevSortDirection) return;
+    const statusKey = sortDirection === "none" ? prevSortKey : sortKey;
+    prevSortKey = sortKey;
+    prevSortDirection = sortDirection;
+    const direction = sortDirection;
+    untrack(() =>
+      announceSortStatus(
+        sortStatusText(
+          headers.find((header) => header.key === statusKey),
+          direction,
+        ),
+      ),
+    );
+  });
+
+  /**
+   * Sort on a header click and call the header callbacks.
+   * @param {MouseEvent} event
+   * @param {DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>} header
+   */
+  function handleHeaderClick(event, header) {
+    const { target, currentTarget } = event;
+    // A computed column never sorts: it has no value to sort by.
+    if (header.sort === false || !isHeaderSortable(header)) {
+      onheaderclick?.({ header, target, currentTarget });
+      return;
+    }
+    const current = sortKey === header.key ? sortDirection : "none";
+    const next = (
+      (header.sortAlways ?? sortAlways)
+        ? NEXT_SORT_DIRECTION_ALWAYS
+        : NEXT_SORT_DIRECTION
+    )[current];
+    const nextKey = next === "none" ? null : header.key;
+    let prevented = false;
+    onsort?.(
+      /** @type {DataTableSortEvent<Row>} */ ({
+        key: nextKey,
+        direction: next,
+        preventDefault: () => (prevented = true),
+      }),
+    );
+    if (!prevented) {
+      sortDirection = next;
+      sortKey = nextKey;
+    }
+    onheaderclick?.({ header, sortDirection: next, target, currentTarget });
+  }
+
+  // ---- Paging and virtualization ----
+
+  let tableBodyScrollTop = $state(0);
   /** @type {null | HTMLElement} */
-  let tableRef = null;
-  /** @type {null | (() => void)} */
-  let scrollListenerCleanup = null;
+  let tableRef = $state(null);
+
+  const calculatedContainerHeight = $derived(
+    virtualConfig
+      ? (virtualConfig.containerHeight ??
+          (stickyHeader && typeof stickyHeaderMaxHeight === "number"
+            ? stickyHeaderMaxHeight
+            : virtualConfig.itemHeight * virtualConfig.maxVisibleRows))
+      : null,
+  );
+  const virtualScrollContainer = $derived(!!virtualConfig && !stickyHeader);
+
+  // With `stickyHeader`, the `<table>` itself scrolls. Render its bounds from
+  // props so the server output is already height-bounded.
+  const tableStyle = $derived(
+    [
+      fixedLayout ? "table-layout: fixed" : undefined,
+      virtualConfig && stickyHeader && calculatedContainerHeight
+        ? `max-height: ${calculatedContainerHeight}px; overflow-y: auto`
+        : undefined,
+    ]
+      .filter(Boolean)
+      .join("; "),
+  );
+
+  // Pagination is ignored when virtualization is enabled.
+  const rowsToVirtualize = $derived(
+    virtualConfig ? sortedRows : getDisplayedRows(sortedRows, page, pageSize),
+  );
+  const virtualData = $derived(
+    virtualConfig
+      ? virtualizeUtil({
+          items: rowsToVirtualize,
+          scrollTop: tableBodyScrollTop,
+          itemHeight: virtualConfig.itemHeight,
+          containerHeight: calculatedContainerHeight ?? 0,
+          overscan: virtualConfig.overscan,
+          threshold: virtualConfig.threshold,
+          maxItems: virtualConfig.maxItems,
+        })
+      : null,
+  );
+  const isVirtualized = $derived(!!virtualData?.isVirtualized);
+  const rowsToRender = $derived(
+    virtualData?.isVirtualized ? virtualData.visibleItems : rowsToVirtualize,
+  );
+  /** Index of `rowsToRender[0]` in `rowsToVirtualize`. */
+  const rowOffset = $derived(
+    virtualData?.isVirtualized ? virtualData.startIndex : 0,
+  );
 
   const scrollEndTracker = createScrollEndTracker();
 
   /**
    * Shared by the sticky-header `<table>` listener and the non-sticky
-   * container's `on:scroll`, so `scrollend` rides the existing scroll
-   * tracking instead of adding a second listener on the same element.
+   * container's `onscroll`.
    * @param {Event} event
    */
   function handleScroll(event) {
@@ -698,221 +687,182 @@
       clientHeight: target.clientHeight,
       itemCount: rowsToVirtualize.length,
     });
-    if (detail) dispatch("scrollend", detail);
+    if (detail) onscrollend?.(detail);
   }
 
-  // Clean up scroll listener when virtualization or sticky header is disabled
-  $: if ((!virtualConfig || !stickyHeader) && scrollListenerCleanup) {
-    scrollListenerCleanup();
-    scrollListenerCleanup = null;
-  }
-
-  // Set up scroll listener for sticky header container
-  $: if (
-    virtualConfig &&
-    stickyHeader &&
-    tableRef &&
-    calculatedContainerHeight
-  ) {
-    if (scrollListenerCleanup) {
-      scrollListenerCleanup();
-      scrollListenerCleanup = null;
-    }
-    // When `stickyHeader` is true, `tableRef` is the wrapping `<section>`
-    // (see Table.svelte); the `<table>` inside it is the element that
-    // actually scrolls, so the listener must target that, not the section,
-    // or it never fires and the virtual window freezes on the initial rows.
+  // With `stickyHeader`, `tableRef` is the wrapping `<section>`; the
+  // `<table>` inside it is the element that scrolls.
+  $effect(() => {
+    if (!virtualConfig || !stickyHeader || !tableRef) return;
+    if (!calculatedContainerHeight) return;
     const container = tableRef.querySelector("table") ?? tableRef;
     container.addEventListener("scroll", handleScroll, { passive: true });
-    scrollListenerCleanup = () => {
-      container.removeEventListener("scroll", handleScroll);
-    };
-  }
-
-  onMount(() => {
-    return () => {
-      if (scrollListenerCleanup) scrollListenerCleanup();
-    };
+    return () => container.removeEventListener("scroll", handleScroll);
   });
 
-  // `id` prefixes the ids of radio buttons, checkboxes, etc.
-  // since there may be multiple `DataTable` instances that have overlapping row ids.
-  $: selectionName = inputName ?? id;
+  // Expanding a row changes the scroll height: re-read the scroll position
+  // once the DOM has updated.
+  $effect(() => {
+    if (!virtualConfig) return;
+    void expandedRowIds.length;
+    const container = stickyHeader
+      ? (tableRef?.querySelector("table") ?? tableRef)
+      : scrollContainerRef;
+    if (container) tableBodyScrollTop = container.scrollTop || 0;
+  });
 
-  // Label the table with its title/description. Only when the default
-  // heading markup renders (not overridden via the titleChildren /
-  // descriptionChildren slots, whose custom markup we don't control ids for).
-  $: titleId = `${id}-title`;
-  $: descriptionId = `${id}-description`;
-  $: hasTitle = !!title && !$$slots.titleChildren;
-  $: hasDescription = !!description && !$$slots.descriptionChildren;
+  // ---- Selection and expansion ----
 
-  // `headers` is compared by identity, so a consumer that rebuilds a
-  // new-but-equal array (or reassigns from an object reassigned to an equal
-  // one) would otherwise re-sort and re-render every cell for an identical
-  // result. Alias to a stable reference that only moves when the header set
-  // actually differs, and derive every reader below from it. Functions
-  // (`sort`, `display`) are compared by identity: a consumer that rebuilds
-  // `headers` with inline arrow functions still re-runs, as it must.
-  //
-  // Compared against shallow copies, not `headers` itself: an in-place edit
-  // (`headers[i].columnHidden = true; headers = headers`) keeps the same
-  // array reference, so `deepEqual(stableHeaders, headers)` would take the
-  // reference fast path and report "unchanged" even though the content
-  // moved. A snapshot of independent copies forces the real comparison.
-  let stableHeaders = headers;
-  let headersSnapshot = headers.map((header) => ({ ...header }));
+  const selectedRowIdsSet = $derived(new Set(selectedRowIds));
+  const expandedRowIdsSet = $derived(new Set(expandedRowIds));
+  const highlightedRowIdsSet = $derived(new Set(highlightedRowIds));
+  const nonSelectableRowIdsSet = $derived(new Set(nonSelectableRowIds));
+  const nonExpandableRowIdsSet = $derived(new Set(nonExpandableRowIds));
 
-  /** @param {ReadonlyArray<DataTableHeader<Row>>} nextHeaders */
-  function headersUnchanged(nextHeaders) {
-    return deepEqual(headersSnapshot, nextHeaders);
-  }
+  // Selection, "select all", and the expand-all state reflect only the rows
+  // matching the active filter, in either filter mode.
+  const expandableRowIds = $derived(
+    matchedRows
+      .map((row) => row.id)
+      .filter((rowId) => !nonExpandableRowIdsSet.has(rowId)),
+  );
+  const selectableRowIds = $derived(
+    matchedRows
+      .map((row) => row.id)
+      .filter((rowId) => !nonSelectableRowIdsSet.has(rowId)),
+  );
+  // `selectedRowIds` may also hold rows the filter hides (or ids no longer in
+  // `rows`), which select all neither reflects nor touches.
+  const selectedSelectableCount = $derived(
+    selectableRowIds.filter((rowId) => selectedRowIdsSet.has(rowId)).length,
+  );
+  const selectAll = $derived(
+    selectableRowIds.length > 0 &&
+      selectedSelectableCount === selectableRowIds.length,
+  );
+  const indeterminate = $derived(
+    selectedSelectableCount > 0 &&
+      selectedSelectableCount < selectableRowIds.length,
+  );
+  const allExpanded = $derived(
+    batchExpansion &&
+      expandableRowIds.length > 0 &&
+      expandableRowIds.every((rowId) => expandedRowIdsSet.has(rowId)),
+  );
 
-  $: if (!headersUnchanged(headers)) {
-    stableHeaders = headers;
-    headersSnapshot = headers.map((header) => ({ ...header }));
-  }
+  /** Anchor row id for shift+click range selection. */
+  /** @type {null | Row["id"]} */
+  let rangeAnchorRowId = null;
+  /** @type {null | Row["id"]} */
+  let parentRowId = $state(null);
 
-  // A columnHidden header stays in `headers`, the column definition, and is
-  // skipped everywhere the rendered column set is meant.
-  $: visibleHeaders = stableHeaders.filter((header) => !header.columnHidden);
-
-  // A single stable reference that only moves when `rows` genuinely differs
-  // by value, shared by the filter-replay block and the cell cache block
-  // below. Sharing one signal matters: if each block tracked its own "last
-  // seen `rows`" by identity, a new-but-equal array would still look changed
-  // to whichever block wasn't updated, defeating the guard.
-  let stableRows = rows;
-  // The `rows` array `stableRows` holds, or was copied from.
-  let rowsSource = rows;
-
-  /** @param {ReadonlyArray<Row>} next */
-  function syncStableRows(next) {
-    if (next === rowsSource) {
-      // The array was mutated in place (`rows.splice(...); rows = rows`, or
-      // a Svelte 5 `$state` array edited without reassignment).
-      // `originalRows` is a copy of its old contents. If it holds the same
-      // rows in the same order, only a row's fields changed, which waits
-      // for `refreshRow`. Otherwise copy it: the blocks below compare
-      // `stableRows` by reference, and `rowById` must hold every row id the
-      // row blocks render.
-      if (!sameArrayItems(originalRows, next)) stableRows = [...next];
-      return;
-    }
-    rowsSource = next;
-    if (!rowsUnchanged(stableRows, next)) stableRows = next;
-  }
-
-  $: syncStableRows(rows);
-
-  // Store a copy of the original rows for filter restoration.
-  let prevFilterRows = stableRows;
-  let originalRows = [...stableRows];
-  // Row ids that match the active filter. In "hide" mode this toggles `hidden` on rows
-  // instead of shrinking `tableRows`.
-  let matchedRowIdsSet = new Set(originalRows.map((row) => row.id));
-  // Last filter applied via `filterRows`, replayed when `rows` changes so
-  // an active search is not silently dropped on row reassignment.
-  let prevSearchValue = "";
-  /** @type {undefined | ((row: Row, value: string) => boolean)} */
-  let prevCustomFilter;
-
-  /**
-   * @type {(searchValue: string, customFilter?: (row: Row, value: string) => boolean) => ReadonlyArray<Row["id"]>}
-   */
-  function filterRows(searchValue, customFilter) {
-    prevSearchValue = searchValue;
-    prevCustomFilter = customFilter;
-    const value = searchValue.trim().toLowerCase();
-
-    if (value.length === 0) {
-      // Reset to original rows.
-      const ids = originalRows.map((row) => row.id);
-      matchedRowIdsSet = new Set(ids);
-      tableRows.set(originalRows);
-      return ids;
-    }
-
-    let filteredRows = [];
-
-    if (typeof customFilter === "function") {
-      // Apply custom filter if provided.
-      filteredRows = originalRows.filter((row) => customFilter(row, value));
-    } else {
-      // Get searchable keys from headers (non-empty headers with keys).
-      // Hidden columns are excluded: matching on a column the user cannot
-      // see produces results they cannot explain.
-      const searchableKeys = visibleHeaders
-        .filter((header) => !header.empty && header.key)
-        .map((header) => header.key);
-
-      // Default filter checks fields defined in headers
-      // for a basic, case-insensitive match (non-fuzzy).
-      // This supports nested keys like "contact.company".
-      filteredRows = originalRows.filter((row) => {
-        return searchableKeys.some((searchKey) => {
-          const cellValue = resolvePath(row, searchKey);
-          if (typeof cellValue === "string" || typeof cellValue === "number") {
-            return `${cellValue}`?.toLowerCase().includes(value);
-          }
-          return false;
-        });
-      });
-    }
-
-    const ids = filteredRows.map((row) => row.id);
-    matchedRowIdsSet = new Set(ids);
-    // "hide" mode keeps every row mounted and drives visibility via `matchedRowIdsSet`;
-    // otherwise shrink the rendered set as before.
-    tableRows.set(hideMode ? originalRows : filteredRows);
-    return ids;
-  }
-
-  $: if (stableRows !== prevFilterRows) {
-    originalRows = [...stableRows];
-    prevFilterRows = stableRows;
-    if (prevSearchValue.trim().length > 0) {
-      filterRows(prevSearchValue, prevCustomFilter);
-    } else {
-      matchedRowIdsSet = new Set(stableRows.map((row) => row.id));
-      $tableRows = stableRows;
-    }
-  }
-
-  // Replay the active filter when the strategy flips so the rendered set and the
-  // matched ids stay consistent (for example switching to "remove" must re-shrink
-  // `tableRows`, and switching to "hide" must restore the full mounted set).
-  // `hideMode` is declared by the `$:` below, and unset until it runs.
-  /** @type {boolean | undefined} */
-  let prevHideMode;
-  $: if (hideMode !== prevHideMode) {
-    prevHideMode = hideMode;
-    if (prevSearchValue.trim().length > 0) {
-      filterRows(prevSearchValue, prevCustomFilter);
-    }
-  }
-
-  /**
-   * @type {() => void}
-   */
   function resetSelectedRowIds() {
     selectedRowIds = [];
     rangeAnchorRowId = null;
   }
 
   /**
+   * Apply `checked` to every selectable row between the anchor row and
+   * `targetIndex`, a position in `rowsToVirtualize`. Returns `false` if the
+   * anchor row is gone, so the caller falls back to a single toggle.
+   * @type {(targetIndex: number, checked: boolean) => boolean}
+   */
+  function selectRowRange(targetIndex, checked) {
+    const anchorIndex = rowsToVirtualize.findIndex(
+      (row) => row.id === rangeAnchorRowId,
+    );
+    const range = rangeSlice(
+      rowsToVirtualize,
+      anchorIndex,
+      targetIndex,
+      (row) =>
+        !nonSelectableRowIdsSet.has(row.id) &&
+        (!hideMode || matchedRowIdsSet.has(row.id)),
+    );
+    if (range === null) return false;
+    const next = new Set(selectedRowIds);
+    for (const row of range) {
+      if (checked) next.add(row.id);
+      else next.delete(row.id);
+    }
+    selectedRowIds = [...next];
+    return true;
+  }
+
+  /**
+   * @param {Row} row
+   * @param {boolean} checked
+   */
+  function toggleRowSelected(row, checked) {
+    const next = new Set(selectedRowIds);
+    if (checked) next.add(row.id);
+    else next.delete(row.id);
+    selectedRowIds = [...next];
+  }
+
+  /** @param {Row} row */
+  function toggleRowExpanded(row) {
+    const expanded = expandedRowIdsSet.has(row.id);
+    const next = new Set(expandedRowIds);
+    if (expanded) next.delete(row.id);
+    else next.add(row.id);
+    expandedRowIds = [...next];
+    onrowexpand?.({ row, expanded: !expanded });
+  }
+
+  function toggleAllExpanded() {
+    const expanded = !allExpanded;
+    if (expanded) {
+      const next = new Set(expandedRowIds);
+      for (const rowId of expandableRowIds) next.add(rowId);
+      expandedRowIds = [...next];
+    } else {
+      const scope = new Set(expandableRowIds);
+      expandedRowIds = expandedRowIds.filter((rowId) => !scope.has(rowId));
+    }
+    onheaderexpand?.({ expanded });
+  }
+
+  /** @param {Event} event */
+  function handleSelectAllChange(event) {
+    const input = /** @type {HTMLInputElement} */ (event.target);
+    onheaderselect?.({
+      indeterminate,
+      selected: !indeterminate && input.checked,
+    });
+    if (indeterminate) input.checked = false;
+    if (input.checked) {
+      const next = new Set(selectedRowIds);
+      for (const rowId of selectableRowIds) next.add(rowId);
+      selectedRowIds = [...next];
+    } else {
+      const scope = new Set(selectableRowIds);
+      selectedRowIds = selectedRowIds.filter((rowId) => !scope.has(rowId));
+    }
+  }
+
+  /**
+   * With `allowDeselect`, clicking an already-selected radio row clears the
+   * selection. `preventDefault` stops the native activation (and a label's
+   * re-dispatch) that would re-check the input.
+   * @type {(row: Row, event: MouseEvent) => void}
+   */
+  function handleRadioColumnClick(row, event) {
+    if (!radio || !allowDeselect || !selectedRowIdsSet.has(row.id)) return;
+    event.preventDefault();
+    selectedRowIds = [];
+    onrowselect?.({ row, selected: false });
+  }
+
+  /**
    * A form reset unchecks the row inputs without a change event. Read the
-   * rows still checked (none, unless the markup was server-rendered with
-   * `checked`) back into `selectedRowIds`, mapping each input's string value
-   * to its row id. Inputs of a nested data table are skipped. Fires no
-   * events.
-   * @type {() => void}
+   * rows still checked back into `selectedRowIds`. Fires no callbacks.
    */
   function handleFormReset() {
     if (!isSelectionEnabled || !scrollContainerRef) return;
     const table = scrollContainerRef.querySelector("table");
     const rowIdByValue = new Map(
-      $tableRows.map((row) => [String(row.id), row.id]),
+      tableRows.map((row) => [String(row.id), row.id]),
     );
     const next = [];
     for (const input of scrollContainerRef.querySelectorAll("input")) {
@@ -930,177 +880,28 @@
     rangeAnchorRowId = null;
   }
 
-  /** Anchor row id for shift+click range selection; cleared when the anchor no longer exists in the current row order. */
-  /** @type {null | Row["id"]} */
-  let rangeAnchorRowId = null;
+  // ---- Cells ----
+
+  // A row's cells derive from the row and the headers, per row. A sort only
+  // moves rows, so no row recomputes them. Plain row objects edited in place
+  // aren't seen; these counters let `refreshRow` and `refreshCells` force it.
+  let cellsVersion = $state(0);
+  /** @type {SvelteMap<Row["id"], number>} */
+  const rowCellsVersion = new SvelteMap();
 
   /**
-   * Apply `checked` to every selectable row between the anchor row and `targetIndex` (inclusive),
-   * where `targetIndex` is a position in `rowsToVirtualize`. Returns `false` if the anchor row
-   * is no longer present (for example, filtered out), so the caller can fall back to a single toggle.
-   * @type {(targetIndex: number, checked: boolean) => boolean}
-   */
-  function selectRowRange(targetIndex, checked) {
-    const anchorIndex = rowsToVirtualize.findIndex(
-      (row) => row.id === rangeAnchorRowId,
-    );
-    const rows = rangeSlice(
-      rowsToVirtualize,
-      anchorIndex,
-      targetIndex,
-      (row) =>
-        !nonSelectableRowIdsSet.has(row.id) &&
-        // "hide" mode keeps filtered-out rows mounted (and in `rowsToVirtualize`).
-        (!hideMode || matchedRowIdsSet.has(row.id)),
-    );
-    if (rows === null) return false;
-
-    const next = new Set(selectedRowIds);
-    for (const row of rows) {
-      if (checked) {
-        next.add(row.id);
-      } else {
-        next.delete(row.id);
-      }
-    }
-    selectedRowIds = [...next];
-    return true;
-  }
-
-  /**
-   * With `allowDeselect`, clicking an already-selected radio row clears the
-   * selection. This listens for `click` rather than `change`: clicking a
-   * radio's associated `<label>` re-dispatches the click onto the hidden
-   * input, whose native activation behavior re-checks it and fires `change`
-   * right after this handler clears the selection. `preventDefault` stops
-   * that native activation (and the label's re-dispatch) so the clear
-   * sticks.
-   * @type {(row: Row, event: MouseEvent) => void}
-   */
-  function handleRadioColumnClick(row, event) {
-    if (!radio || !allowDeselect || !selectedRowIdsSet.has(row.id)) return;
-
-    event.preventDefault();
-    selectedRowIds = [];
-    dispatch("click:row--select", { row, selected: false });
-  }
-
-  /**
-   * Header ids whose `headerDecorator` holds an active `AILabel`. The cells in
-   * those columns take the AI gradient, as in Carbon v11.
-   * @type {import("svelte/store").Writable<Set<string>>}
-   */
-  const aiLabelColumns = writable(new Set());
-
-  /**
-   * @param {string} headerId
-   * @param {boolean} active
-   */
-  function setColumnAILabel(headerId, active) {
-    aiLabelColumns.update((columns) => {
-      if (active === columns.has(headerId)) return columns;
-      const next = new Set(columns);
-      if (active) next.add(headerId);
-      else next.delete(headerId);
-      return next;
-    });
-  }
-
-  setContext("carbon:DataTable", {
-    batchSelectedIds,
-    tableRows,
-    tableSize,
-    resetSelectedRowIds,
-    filterRows,
-    refreshRow,
-    refreshCells,
-    setColumnAILabel,
-  });
-
-  let expanded = false;
-  /** @type {null | Row["id"]} */
-  let parentRowId = null;
-
-  $: expandedRowIdsSet = new Set(expandedRowIds);
-
-  /** @type {ReadonlyArray<Row["id"]>} */
-  let prevBatchSelected = [];
-  $: if (
-    prevBatchSelected.length !== selectedRowIds.length ||
-    selectedRowIds.some((id, i) => id !== prevBatchSelected[i])
-  ) {
-    prevBatchSelected = selectedRowIds;
-    batchSelectedIds.set(selectedRowIds);
-  }
-  // In "hide" mode `tableRows` holds every row; selection, "select all", and the empty
-  // state must reflect only the rows matching the active filter.
-  $: matchedRows = hideMode
-    ? $tableRows.filter((row) => matchedRowIdsSet.has(row.id))
-    : $tableRows;
-  $: rowIds = matchedRows.map((row) => row.id);
-
-  // Use Sets for faster row lookups.
-  $: selectedRowIdsSet = new Set(selectedRowIds);
-  $: highlightedRowIdsSet = new Set(highlightedRowIds);
-  $: nonSelectableRowIdsSet = new Set(nonSelectableRowIds);
-  $: nonExpandableRowIdsSet = new Set(nonExpandableRowIds);
-
-  $: expandableRowIds = rowIds.filter((id) => !nonExpandableRowIdsSet.has(id));
-  $: selectableRowIds = rowIds.filter((id) => !nonSelectableRowIdsSet.has(id));
-  // Count only the selectable rows matching the active filter: `selectedRowIds`
-  // may also hold rows the filter hides (or ids no longer in `rows`), which
-  // select all neither reflects nor touches.
-  $: selectedSelectableCount = selectableRowIds.reduce(
-    (count, id) => count + (selectedRowIdsSet.has(id) ? 1 : 0),
-    0,
-  );
-  $: selectAll =
-    selectableRowIds.length > 0 &&
-    selectedSelectableCount === selectableRowIds.length;
-  $: indeterminate =
-    selectedSelectableCount > 0 &&
-    selectedSelectableCount < selectableRowIds.length;
-  $: if (batchExpansion) {
-    expandable = true;
-    expanded =
-      expandableRowIds.length > 0 &&
-      expandableRowIds.every((id) => expandedRowIdsSet.has(id));
-  }
-  $: isSelectionEnabled = selectable || radio || batchSelection;
-
-  /** @type {Record<string, ReturnType<typeof computeRowCells>>} */
-  let tableCellsByRowId = {};
-  /** @type {undefined | ReadonlyArray<Row>} */
-  let prevRows;
-  /** @type {undefined | ReadonlyArray<DataTableHeader<Row>>} */
-  let prevVisibleHeaders;
-  /** @type {undefined | ReadonlyArray<Row>} */
-  let prevRowsToRender;
-
-  /**
-   * Resolve whether a header is sortable. `header.sort` overrides the
-   * table-level `sortable` in either direction (`false` opts out, `true` or
-   * a comparator opts in); unset inherits `sortable`.
-   * @param {DataTableHeader<Row>} header
-   */
-  function isHeaderSortable(header) {
-    if (header.sort === false) return false;
-    if (header.sort === true || typeof header.sort === "function") {
-      return true;
-    }
-    return sortable;
-  }
-
-  /**
-   * Build cell objects for one row. Always new objects so `display` columns re-run.
+   * The cells one row renders. Reads `headers`, the refresh counters, and
+   * (through a `$state` proxy) the row's fields, so it reruns for exactly
+   * those.
    * @param {Row} row
    */
-  function computeRowCells(row) {
+  function cellsFor(row) {
+    void cellsVersion;
+    void rowCellsVersion.get(row.id);
     /** @type {Array<{ key: string; value: DataTableValue; display?: (item: DataTableValue, row: any) => DataTableValue; empty?: boolean; columnMenu?: boolean; columnAlign?: "start" | "end"; }>} */
     const cells = [];
-
-    // Index into `headers` rather than the visible subset so hiding a preceding
-    // column does not renumber the generated keys the `{#each}` blocks key on.
+    // Index into `headers` rather than the visible subset so hiding a
+    // preceding column does not renumber the generated keys.
     headers.forEach((header, index) => {
       if (header.columnHidden) return;
       cells.push({
@@ -1112,405 +913,89 @@
         columnAlign: header.columnAlign,
       });
     });
-
     return cells;
   }
 
   /**
-   * Rebuild cells for a single row after an in-place edit to `rows`.
+   * Rebuild cells for a single row after an in-place edit to a plain (not
+   * `$state`) row object.
    * @type {(id: Row["id"]) => void}
-   * @example
-   * ```svelte
-   * <DataTable bind:this={dataTable} {headers} {rows} />
-   * <NumberInput min={0} bind:value={row.qty} on:input={() => dataTable.refreshRow(row.id)} />
-   * ```
    */
   export function refreshRow(id) {
-    const row = rows.find((row) => row.id === id);
-    if (!row) return;
-    tableCellsByRowId = {
-      ...tableCellsByRowId,
-      [id]: computeRowCells(row),
-    };
+    rowCellsVersion.set(id, (rowCellsVersion.get(id) ?? 0) + 1);
   }
 
   /**
-   * Rebuild cells for currently painted rows after batch in-place edits to
-   * `rows`. Offscreen rows are computed when they enter the window.
+   * Rebuild cells for every row after batch in-place edits to plain (not
+   * `$state`) row objects.
    * @type {() => void}
-   * @example
-   * ```svelte
-   * <DataTable bind:this={dataTable} {headers} {rows} />
-   * <button on:click={() => dataTable.refreshCells()}>Refresh table</button>
-   * ```
    */
   export function refreshCells() {
-    tableCellsByRowId = buildCellsForPaintedRows(rowsToRender ?? [], {});
+    cellsVersion++;
   }
 
   /**
-   * Build cell records for the painted row list, reusing cached cell objects
-   * when the resolved values are unchanged.
-   * @param {ReadonlyArray<Row>} paintedRows
-   * @param {Record<string, ReturnType<typeof computeRowCells>>} cache
+   * @param {DataTableCellClass<Row> | undefined} cellClass
+   * @param {DataTableCellClassArgs<Row>} args
+   * @returns {string | undefined}
    */
-  function buildCellsForPaintedRows(paintedRows, cache) {
-    /** @type {Record<string, ReturnType<typeof computeRowCells>>} */
-    const next = {};
-    for (const row of paintedRows) {
-      const prevCells = cache[row.id];
-      const newCells = computeRowCells(row);
-
-      if (prevCells && prevCells.length === newCells.length) {
-        let allEqual = true;
-        for (let i = 0; i < newCells.length; i++) {
-          const a = prevCells[i];
-          const b = newCells[i];
-          if (
-            a.key === b.key &&
-            a.value === b.value &&
-            a.display === b.display &&
-            a.empty === b.empty &&
-            a.columnMenu === b.columnMenu &&
-            a.columnAlign === b.columnAlign
-          ) {
-            newCells[i] = a;
-          } else {
-            allEqual = false;
-          }
-        }
-        next[row.id] = allEqual ? prevCells : newCells;
-      } else {
-        next[row.id] = newCells;
-      }
-    }
-    return next;
+  function resolveCellClass(cellClass, args) {
+    return typeof cellClass === "function" ? cellClass(args) : cellClass;
   }
 
-  let sortStatus = "";
-  const announceSortStatus = createStatusAnnouncer(
-    (text) => (sortStatus = text),
+  // In "hide" mode hidden rows still occupy `:nth-child` positions, which
+  // breaks zebra striping. Recompute parity over the matched rows.
+  const zebraVisibleEvenIds = $derived.by(() => {
+    if (!hideMode || !zebra) return null;
+    const set = new Set();
+    let visibleIndex = 0;
+    for (const row of rowsToRender) {
+      if (!matchedRowIdsSet.has(row.id)) continue;
+      visibleIndex += 1;
+      if (visibleIndex % 2 === 0) set.add(row.id);
+    }
+    return set;
+  });
+
+  const hasCustomHeaderWidth = $derived(
+    visibleHeaders.some((header) => header.width ?? header.minWidth),
   );
-  let prevSortKey = sortKey;
-  let prevSortDirection = sortDirection;
-
-  // Announce each sort once from a status region. The rows are not a live
-  // region: a reorder would read every row again.
-  $: if (sortKey !== prevSortKey || sortDirection !== prevSortDirection) {
-    const statusKey = sortDirection === "none" ? prevSortKey : sortKey;
-    prevSortKey = sortKey;
-    prevSortDirection = sortDirection;
-    announceSortStatus(
-      sortStatusText(
-        headers.find((header) => header.key === statusKey),
-        sortDirection,
-      ),
-    );
-  }
-
-  $: ascending = sortDirection === "ascending";
-  $: sortingHeader = stableHeaders.find((header) => header.key === sortKey);
-  $: sorting =
-    sortKey != null &&
-    (sortingHeader ? isHeaderSortable(sortingHeader) : sortable);
-  $: sortPath = sortKey == null ? "" : String(sortKey);
-  $: sortedRows =
-    sorting && sortDirection !== "none"
-      ? [...$tableRows].sort((a, b) => {
-          const itemA = sortValueAt(a, sortPath);
-          const itemB = sortValueAt(b, sortPath);
-          const headerSort = sortingHeader?.sort;
-
-          if (typeof headerSort === "function") {
-            return compareValues(itemA, itemB, ascending, headerSort);
-          }
-
-          if (sort) {
-            const result = sort(itemA, itemB, {
-              key: sortingKey(),
-              ascending,
-              row_a: a,
-              row_b: b,
-            });
-            return ascending ? result : -result;
-          }
-          return compareValues(itemA, itemB, ascending);
-        })
-      : $tableRows;
-  $: defaultRowHeight =
-    (effectiveSize && ROW_HEIGHTS[effectiveSize]) ?? DEFAULT_ROW_HEIGHT;
-  $: virtualConfig = virtualize
-    ? {
-        itemHeight: defaultRowHeight,
-        maxVisibleRows: 10,
-        containerHeight: undefined,
-        overscan: DEFAULT_VIRTUAL_LIST_CONFIG.overscan,
-        threshold: DEFAULT_VIRTUAL_LIST_CONFIG.threshold,
-        maxItems: undefined,
-        ...(typeof virtualize === "object" ? virtualize : {}),
-      }
-    : null;
-
-  // "hide" filtering keeps every row mounted; it is incompatible with strategies that
-  // already render a bounded subset (pagination, virtualization), so fall back to
-  // "remove" when either is active.
-  $: hideMode = filterMode === "hide" && !virtualConfig && !(pageSize > 0);
-
-  $: calculatedContainerHeight = virtualConfig
-    ? (virtualConfig.containerHeight ??
-      (stickyHeader && typeof stickyHeaderMaxHeight === "number"
-        ? stickyHeaderMaxHeight
-        : virtualConfig.itemHeight * virtualConfig.maxVisibleRows))
-    : null;
-
-  $: virtualScrollContainer = virtualConfig && !stickyHeader;
-
-  // With `stickyHeader`, the `<table>` itself scrolls. Render its bounds from
-  // props so the server output is already height-bounded.
-  $: tableStyle = [
-    fixedLayout ? "table-layout: fixed" : undefined,
-    virtualConfig && stickyHeader && calculatedContainerHeight
-      ? `max-height: ${calculatedContainerHeight}px; overflow-y: auto`
-      : undefined,
-  ]
-    .filter(Boolean)
-    .join("; ");
-
-  // Ignore pagination when virtualization is enabled.
-  $: displayedRows = virtualConfig
-    ? $tableRows
-    : getDisplayedRows($tableRows, page, pageSize);
-  $: displayedSortedRows = virtualConfig
-    ? sortedRows
-    : getDisplayedRows(sortedRows, page, pageSize);
-
-  $: rowsToVirtualize = sorting ? displayedSortedRows : displayedRows;
-  $: virtualData = virtualConfig
-    ? virtualizeUtil({
-        items: rowsToVirtualize,
-        scrollTop: tableBodyScrollTop,
-        itemHeight: virtualConfig.itemHeight,
-        containerHeight: calculatedContainerHeight ?? 0,
-        overscan: virtualConfig.overscan,
-        threshold: virtualConfig.threshold,
-        maxItems: virtualConfig.maxItems,
-      })
-    : null;
-
-  // Recalculate virtual data when expanded rows change
-  $: if (virtualConfig && prevExpandedRowIds.length !== expandedRowIds.length) {
-    prevExpandedRowIds = [...expandedRowIds];
-    tick().then(() => {
-      const scrollContainer = stickyHeader
-        ? (tableRef?.querySelector("table") ?? tableRef)
-        : scrollContainerRef;
-      if (scrollContainer) {
-        tableBodyScrollTop = scrollContainer.scrollTop || 0;
-      }
-    });
-  }
-
-  $: rowsToRender = virtualData?.isVirtualized
-    ? virtualData.visibleItems
-    : rowsToVirtualize;
-
-  /**
-   * A row's value at a sort key: one of its cell values.
-   * @param {Row} row
-   * @param {string} path
-   * @returns {DataTableSortValue<Row>}
-   */
-  function sortValueAt(row, path) {
-    return /** @type {DataTableSortValue<Row>} */ (resolvePath(row, path));
-  }
-
-  /**
-   * The key a sort runs by: set whenever `sorting` is.
-   * @returns {DataTableKey<Row>}
-   */
-  function sortingKey() {
-    return /** @type {DataTableKey<Row>} */ (sortKey);
-  }
-
-  /**
-   * Every id the row blocks render comes from these rows, so `get` finds it.
-   * @param {ReadonlyArray<Row>} rows
-   * @returns {{ get(id: Row["id"]): Row } & Map<Row["id"], Row>}
-   */
-  function indexRowsById(rows) {
-    return /** @type {{ get(id: Row["id"]): Row } & Map<Row["id"], Row>} */ (
-      new Map(rows.map((row) => [row.id, row]))
-    );
-  }
-
-  // The row `{#each}` blocks iterate ids, not row objects. Svelte 5's legacy
-  // mode treats every object item as changed whenever the list is reassigned,
-  // so iterating rows re-ran every row's and cell's props on each sort or
-  // filter. Ids compare by value: a reorder only moves rows. `rowById`
-  // follows `stableRows`, so a new `rows` array still refreshes every row.
-  $: rowById = indexRowsById(stableRows);
-  $: rowIdsToRender = rowsToRender.map((row) => row.id);
-
-  /**
-   * A `rows` array changed without Svelte seeing it (`rows.push(row)` with
-   * no `rows = rows`) still paints its current rows on the next sort or
-   * page change, but `stableRows`, and so `rowById`, missed them. Index
-   * them rather than crash.
-   * @param {ReadonlyArray<Row>} painted
-   */
-  function indexPaintedRows(painted) {
-    if (painted.every((row) => rowById.get(row.id) === row)) return;
-    const next = indexRowsById(stableRows);
-    for (const row of painted) next.set(row.id, row);
-    rowById = next;
-  }
-
-  $: indexPaintedRows(rowsToRender);
-
-  // Walk the painted window, not `rows`. Virtualized and paginated tables
-  // otherwise allocate cell records for every row on each `rows`/headers
-  // invalidation. Compare against `stableRows`/`visibleHeaders`, not the raw
-  // props: both are fresh references on every prop invalidation (Svelte
-  // treats every object/array prop write as changed), so comparing against
-  // the raw prop would defeat the guards above and rebuild every cell for a
-  // new-but-equal `rows` or `headers`. `visibleHeaders` still changes
-  // reference when `columnHidden` is toggled in place, so that case keeps
-  // rebuilding cells.
-  $: if (
-    stableRows !== prevRows ||
-    visibleHeaders !== prevVisibleHeaders ||
-    paintedRowListChanged(rowsToRender, prevRowsToRender)
-  ) {
-    const nextCells = buildCellsForPaintedRows(
-      rowsToRender ?? [],
-      tableCellsByRowId,
-    );
-    // A reorder (sort) reuses every row's cell array. Keep the old record
-    // then, so the per-row cell `{#each}` blocks don't re-run.
-    if (!sameCellRecords(nextCells, tableCellsByRowId)) {
-      tableCellsByRowId = nextCells;
-    }
-    prevRows = stableRows;
-    prevVisibleHeaders = visibleHeaders;
-    prevRowsToRender = rowsToRender;
-  }
-
-  // In "hide" mode hidden rows still occupy `:nth-child` positions, which breaks
-  // Carbon's CSS zebra striping. Recompute parity over the visible (matched) rows and
-  // drive striping with a data attribute the stylesheet keys off instead.
-  $: zebraVisibleEvenIds =
-    hideMode && zebra
-      ? (() => {
-          const set = new Set();
-          let visibleIndex = 0;
-          for (const row of rowsToRender) {
-            if (!matchedRowIdsSet.has(row.id)) continue;
-            visibleIndex += 1;
-            if (visibleIndex % 2 === 0) set.add(row.id);
-          }
-          return set;
-        })()
-      : null;
-
-  $: hasCustomHeaderWidth = visibleHeaders.some(
-    (header) => header.width ?? header.minWidth,
+  const totalColumns = $derived(
+    (rowDecorator ? 1 : 0) +
+      (isExpandableTable ? 1 : 0) +
+      (isSelectionEnabled ? 1 : 0) +
+      visibleHeaders.length,
   );
 
-  // Calculate total columns for spacer rows and expanded row cells
-  $: totalColumns =
-    (hasRowDecorator ? 1 : 0) +
-    (expandable ? 1 : 0) +
-    (isSelectionEnabled ? 1 : 0) +
-    visibleHeaders.length;
-
-  // Rest props go on the container, but naming and description belong on
-  // the `table`. `Table` joins them with the title and description ids.
-  $: ({
-    ariaLabel,
-    ariaLabelledBy,
-    ariaDescribedBy,
-    rest: wrapperProps,
-  } = splitAriaNaming($$restProps));
-
-  /**
-   * Sort on a header click and dispatch the header click events.
-   * @param {Event} event
-   * @param {DataTableNonEmptyHeader<Row> | DataTableComputedHeader<Row>} header
-   */
-  function handleHeaderClick(event, header) {
-    dispatch("click", { header });
-
-    // A computed column never sorts: it has no value to sort by.
-    if (header.sort !== false && isHeaderSortable(header)) {
-      const currentSortDirection =
-        sortKey === header.key ? sortDirection : "none";
-      const effectiveSortAlways = header.sortAlways ?? sortAlways;
-      /** @type {Record<"none" | "ascending" | "descending", "none" | "ascending" | "descending">} */
-      const sortDirectionMap = effectiveSortAlways
-        ? {
-            none: "ascending",
-            ascending: "descending",
-            descending: "ascending",
-          }
-        : {
-            none: "ascending",
-            ascending: "descending",
-            descending: "none",
-          };
-      const nextSortDirection = sortDirectionMap[currentSortDirection];
-      const nextSortKey = nextSortDirection === "none" ? null : header.key;
-      const applySort = dispatch(
-        "sort",
-        { key: nextSortKey, direction: nextSortDirection },
-        { cancelable: true },
-      );
-      if (applySort) {
-        sortDirection = nextSortDirection;
-        sortKey = nextSortKey;
-      }
-      dispatch("click:header", {
-        header,
-        sortDirection: nextSortDirection,
-        target: event.target,
-        currentTarget: event.currentTarget,
-      });
-    } else {
-      dispatch("click:header", {
-        header,
-        target: event.target,
-        currentTarget: event.currentTarget,
-      });
-    }
-  }
-
-  $: hasRowDecorator = $$slots.rowDecorator;
+  // ---- AI labels ----
 
   // The title decorator has no AI surface, so its state is not read.
   const titleAILabelState = { set() {} };
 
   /**
-   * AI label state per row id, set by an `AILabel` in the `rowDecorator`
-   * slot. Mutated in place: a Map is always "changed" to Svelte, so `set`
-   * still notifies. `set` skips an unchanged value, since every row reads
-   * the store.
-   * @type {Map<Row["id"], "active" | "revert">}
+   * Header ids whose `headerDecorator` holds an active `AILabel`. The cells
+   * in those columns take the AI gradient.
+   * @type {SvelteSet<string>}
    */
-  const rowAILabelMap = new Map();
-  const rowAILabelStates = writable(rowAILabelMap);
-  /** @type {Map<Row["id"], { set: (value: undefined | "active" | "revert") => void }>} */
-  const rowAILabelSetters = new Map();
+  const aiLabelColumns = new SvelteSet();
 
   /**
-   * Resolve `cellClass` for one body cell. Rows come from a lookup by id,
-   * so `row` is typed as possibly missing.
-   * @param {DataTableCellClass<Row> | undefined} cellClass
-   * @param {Omit<DataTableCellClassArgs<Row>, "row"> & { row: Row | undefined }} args
-   * @returns {string | undefined}
+   * @param {string} headerId
+   * @param {boolean} active
    */
-  function resolveCellClass(cellClass, { row, ...args }) {
-    if (typeof cellClass !== "function") return cellClass;
-    return row ? cellClass({ row, ...args }) : undefined;
+  function setColumnAILabel(headerId, active) {
+    if (active) aiLabelColumns.add(headerId);
+    else aiLabelColumns.delete(headerId);
   }
+
+  /**
+   * AI label state per row id, set by an `AILabel` in `rowDecorator`. A
+   * `SvelteMap` is tracked per key, so a change re-renders only its row.
+   * @type {SvelteMap<Row["id"], "active" | "revert">}
+   */
+  const rowAILabelStates = new SvelteMap();
+  /** @type {Map<Row["id"], { set: (value: undefined | "active" | "revert") => void }>} */
+  const rowAILabelSetters = new Map();
 
   /** @param {Row["id"]} rowId */
   function rowAILabelState(rowId) {
@@ -1518,58 +1003,71 @@
     if (!setter) {
       setter = {
         set(value) {
-          if (rowAILabelMap.get(rowId) === value) return;
-          rowAILabelStates.update((states) => {
-            if (value === undefined) states.delete(rowId);
-            else states.set(rowId, value);
-            return states;
-          });
+          if (value === undefined) rowAILabelStates.delete(rowId);
+          else rowAILabelStates.set(rowId, value);
         },
       };
       rowAILabelSetters.set(rowId, setter);
     }
     return setter;
   }
+
+  /** @type {import("svelte/store").Readable<ReadonlyArray<Row["id"]>>} */
+  const batchSelectedIds = toStore(() => selectedRowIds);
+  /** @type {import("svelte/store").Readable<ReadonlyArray<Row>>} */
+  const tableRowsStore = toStore(() => tableRows);
+  /** @type {import("svelte/store").Readable<"compact" | "short" | "medium" | "tall" | undefined>} */
+  const tableSize = toStore(() => effectiveSize);
+
+  // The toolbar components read these as stores.
+  setContext("carbon:DataTable", {
+    batchSelectedIds,
+    tableRows: tableRowsStore,
+    tableSize,
+    resetSelectedRowIds,
+    filterRows,
+    refreshRow,
+    refreshCells,
+    setColumnAILabel,
+  });
 </script>
 
-<TableContainer {id} {useStaticWidth} {...wrapperProps}>
-  {#if title || $$slots.titleChildren || description || $$slots.descriptionChildren || $$slots.decorator}
+<TableContainer {id} {useStaticWidth} {...aria.rest}>
+  {#if title || titleChildren || description || descriptionChildren || decorator}
     <div
       class:bx--data-table-header={true}
-      class:bx--data-table-header--decorator={$$slots.decorator}
+      class:bx--data-table-header--decorator={!!decorator}
     >
-      {#if title || $$slots.titleChildren}
-        <slot
-          name="titleChildren"
-          props={{ class: "bx--data-table-header__title" }}
-        >
-          <h4 id={titleId} class:bx--data-table-header__title={true}>
-            {title}
-          </h4>
-        </slot>
+      {#if titleChildren}
+        {@render titleChildren({
+          props: { class: "bx--data-table-header__title" },
+        })}
+      {:else if title}
+        <h4 id={titleId} class:bx--data-table-header__title={true}>
+          {title}
+        </h4>
       {/if}
-      {#if description || $$slots.descriptionChildren}
-        <slot
-          name="descriptionChildren"
-          props={{ class: "bx--data-table-header__description" }}
-        >
-          <p id={descriptionId} class:bx--data-table-header__description={true}>
-            {description}
-          </p>
-        </slot>
+      {#if descriptionChildren}
+        {@render descriptionChildren({
+          props: { class: "bx--data-table-header__description" },
+        })}
+      {:else if description}
+        <p id={descriptionId} class:bx--data-table-header__description={true}>
+          {description}
+        </p>
       {/if}
-      {#if $$slots.decorator}
+      {#if decorator}
         <Decorator
           class="bx--data-table-header__decorator"
           state={titleAILabelState}
           labelSize="xs"
         >
-          <slot name="decorator" />
+          {@render decorator()}
         </Decorator>
       {/if}
     </div>
   {/if}
-  <slot />
+  {@render children?.()}
   <div
     bind:this={scrollContainerRef}
     use:formReset={handleFormReset}
@@ -1578,7 +1076,7 @@
       ? `${calculatedContainerHeight}px`
       : undefined}
     style:overflow-y={virtualScrollContainer ? "auto" : undefined}
-    on:scroll={virtualScrollContainer ? handleScroll : undefined}
+    onscroll={virtualScrollContainer ? handleScroll : undefined}
   >
     <Table
       bind:ref={tableRef}
@@ -1590,9 +1088,9 @@
       {fixedLayout}
       labelledBy={hasTitle ? titleId : undefined}
       describedBy={hasDescription ? descriptionId : undefined}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledBy}
-      aria-describedby={ariaDescribedBy}
+      aria-label={aria.ariaLabel}
+      aria-labelledby={aria.ariaLabelledBy}
+      aria-describedby={aria.ariaDescribedBy}
       tableStyle={tableStyle || undefined}
       containerStyle={stickyHeader && stickyHeaderMaxHeight != null
         ? `max-height: ${toCssLength(stickyHeaderMaxHeight)}`
@@ -1600,10 +1098,10 @@
     >
       {#if hasCustomHeaderWidth}
         <colgroup>
-          {#if hasRowDecorator}
+          {#if rowDecorator}
             <col />
           {/if}
-          {#if expandable}
+          {#if isExpandableTable}
             <col />
           {/if}
           {#if isSelectionEnabled}
@@ -1618,53 +1116,40 @@
         style={virtualScrollContainer ? "position: sticky; top: 0;" : undefined}
       >
         <TableRow>
-          {#if hasRowDecorator}
+          {#if rowDecorator}
             <th scope="col" class:bx--table-column-decorator={true}>
               <span class:bx--visually-hidden={true}>AI label</span>
             </th>
           {/if}
-          {#if expandable}
+          {#if isExpandableTable}
             <th
               scope="col"
               id="{id}-expand"
               class:bx--table-expand={true}
-              data-previous-value={expanded ? "collapsed" : undefined}
+              data-previous-value={allExpanded ? "collapsed" : undefined}
             >
               {#if batchExpansion}
                 <button
                   type="button"
                   class:bx--table-expand__button={true}
                   aria-label={translateWithId(
-                    expanded ? "collapseAll" : "expandAll",
+                    allExpanded ? "collapseAll" : "expandAll",
                   )}
-                  aria-expanded={expanded}
+                  aria-expanded={allExpanded}
                   aria-controls={expandableRowIds
-                    .map((rid) => `${id}-expandable-row-${rid}`)
+                    .map((rowId) => `${id}-expandable-row-${rowId}`)
                     .join(" ")}
-                  on:click={() => {
-                    expanded = !expanded;
-                    if (expanded) {
-                      const next = new Set(expandedRowIds);
-                      for (const rid of expandableRowIds) next.add(rid);
-                      expandedRowIds = [...next];
-                    } else {
-                      const scope = new Set(expandableRowIds);
-                      expandedRowIds = expandedRowIds.filter(
-                        (rid) => !scope.has(rid),
-                      );
-                    }
-
-                    dispatch("click:header--expand", { expanded });
-                  }}
+                  onclick={toggleAllExpanded}
                 >
-                  <slot
-                    name="expandIcon"
-                    {expanded}
-                    row={undefined}
-                    props={expandIconProps}
-                  >
+                  {#if expandIcon}
+                    {@render expandIcon({
+                      expanded: allExpanded,
+                      row: undefined,
+                      props: expandIconProps,
+                    })}
+                  {:else}
                     <ChevronRight {...expandIconProps} />
-                  </slot>
+                  {/if}
                 </button>
               {:else}
                 <span class:bx--visually-hidden={true}
@@ -1693,30 +1178,7 @@
                 value="all"
                 checked={selectAll}
                 {indeterminate}
-                on:change={(event) => {
-                  dispatch("click:header--select", {
-                    indeterminate,
-                    selected:
-                      !indeterminate &&
-                      /** @type {HTMLInputElement} */ (event.target).checked,
-                  });
-
-                  if (indeterminate) {
-                    /** @type {HTMLInputElement} */ (event.target).checked =
-                      false;
-                  }
-
-                  if (/** @type {HTMLInputElement} */ (event.target).checked) {
-                    const next = new Set(selectedRowIds);
-                    for (const id of selectableRowIds) next.add(id);
-                    selectedRowIds = [...next];
-                  } else {
-                    const scope = new Set(selectableRowIds);
-                    selectedRowIds = selectedRowIds.filter(
-                      (id) => !scope.has(id),
-                    );
-                  }
-                }}
+                on:change={handleSelectAllChange}
               />
             </th>
           {/if}
@@ -1740,644 +1202,322 @@
                   </div>
                 </th>
               {/if}
+            {:else if headerDecorator}
+              <TableHeader
+                id="{id}-{header.key}"
+                class={formatAlignClass(header.columnAlign)}
+                style={formatHeaderWidth(header)}
+                sortable={isHeaderSortable(header)}
+                sortDirection={sortKey === header.key ? sortDirection : "none"}
+                active={sortKey === header.key}
+                {...tableHeaderTranslateWithId
+                  ? { translateWithId: tableHeaderTranslateWithId }
+                  : {}}
+                on:click={(event) => handleHeaderClick(event, header)}
+              >
+                {#if cellHeader}
+                  {@render cellHeader({ header })}
+                {:else}
+                  {header.value}
+                {/if}
+                <svelte:fragment slot="decorator">
+                  {@render headerDecorator({ header })}
+                </svelte:fragment>
+              </TableHeader>
             {:else}
-              {#if $$slots.headerDecorator}
-                <TableHeader
-                  id="{id}-{header.key}"
-                  class={formatAlignClass(header.columnAlign)}
-                  style={formatHeaderWidth(header)}
-                  sortable={isHeaderSortable(header)}
-                  sortDirection={sortKey === header.key
-                    ? sortDirection
-                    : "none"}
-                  active={sortKey === header.key}
-                  {...tableHeaderTranslateWithId
-                    ? { translateWithId: tableHeaderTranslateWithId }
-                    : {}}
-                  on:click={(event) => handleHeaderClick(event, header)}
-                >
-                  <slot name="cellHeader" {header}>{header.value}</slot>
-                  <svelte:fragment slot="decorator">
-                    <slot name="headerDecorator" {header} />
-                  </svelte:fragment>
-                </TableHeader>
-              {:else}
-                <TableHeader
-                  id="{id}-{header.key}"
-                  class={formatAlignClass(header.columnAlign)}
-                  style={formatHeaderWidth(header)}
-                  sortable={isHeaderSortable(header)}
-                  sortDirection={sortKey === header.key
-                    ? sortDirection
-                    : "none"}
-                  active={sortKey === header.key}
-                  {...tableHeaderTranslateWithId
-                    ? { translateWithId: tableHeaderTranslateWithId }
-                    : {}}
-                  on:click={(event) => handleHeaderClick(event, header)}
-                >
-                  <slot name="cellHeader" {header}>{header.value}</slot>
-                </TableHeader>
-              {/if}
+              <TableHeader
+                id="{id}-{header.key}"
+                class={formatAlignClass(header.columnAlign)}
+                style={formatHeaderWidth(header)}
+                sortable={isHeaderSortable(header)}
+                sortDirection={sortKey === header.key ? sortDirection : "none"}
+                active={sortKey === header.key}
+                {...tableHeaderTranslateWithId
+                  ? { translateWithId: tableHeaderTranslateWithId }
+                  : {}}
+                on:click={(event) => handleHeaderClick(event, header)}
+              >
+                {#if cellHeader}
+                  {@render cellHeader({ header })}
+                {:else}
+                  {header.value}
+                {/if}
+              </TableHeader>
             {/if}
           {/each}
         </TableRow>
       </TableHead>
-      <tbody use:keepRowFocus={{ enabled: !virtualData?.isVirtualized }}>
-        {#if virtualData?.isVirtualized}
-          <!-- Spacer row for offset -->
-          {#if virtualData.startIndex > 0}
-            <tr style:height="{virtualData.offsetY}px">
-              <td colspan={totalColumns} class:bx--table-cell={true}></td>
-            </tr>
-          {/if}
-
-          <!-- Visible rows -->
-          {#each rowIdsToRender as rowId, index (rowId)}
-            {@const row = rowById.get(rowId)}
-            {@const actualIndex = virtualData.startIndex + index}
-            {@const isSelected = selectedRowIdsSet.has(row.id)}
-            {@const isExpanded = expandedRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
-            {@const rowClassValue =
-              typeof rowClass === "function"
-                ? rowClass({
-                    row,
-                    rowIndex: actualIndex,
-                    selected: isSelected,
-                    expanded: isExpanded,
-                  })
-                : rowClass}
-            <tr
-              data-row={row.id}
-              data-parent-row={expandable ? true : undefined}
-              class="{isSelected ? 'bx--data-table--selected' : ''} {isExpanded
-                ? 'bx--expandable-row'
-                : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
-              parentRowId === row.id
-                ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted
-                ? 'bx--data-table--highlighted-row'
-                : ''} {expandable && isSelectionEnabled
-                ? 'bx--expandable-row--with-selection'
-                : ''} {$rowAILabelStates.get(row.id) === 'active'
-                ? 'bx--data-table--ai-label-row'
-                : ''} {rowClassValue ?? ''}"
-              on:click={(event) => {
-                // forgo "click", "click:row" events if target
-                // resembles an overflow menu, a checkbox, or radio button
-                if (shouldIgnoreRowClick(event.target)) {
-                  return;
-                }
-                dispatch("click", { row });
-                dispatch("click:row", {
+      <tbody use:keepRowFocus={{ enabled: !isVirtualized }}>
+        {#if isVirtualized && rowOffset > 0}
+          <tr style:height="{virtualData?.offsetY}px">
+            <td colspan={totalColumns} class:bx--table-cell={true}></td>
+          </tr>
+        {/if}
+        <!-- Keyed by row: a sort or filter only moves or removes rows. -->
+        {#each rowsToRender as row, index (row.id)}
+          {@const rowIndex = rowOffset + index}
+          {@const isSelected = selectedRowIdsSet.has(row.id)}
+          {@const isExpanded = expandedRowIdsSet.has(row.id)}
+          {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
+          {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
+          {@const isHidden = hideMode && !matchedRowIdsSet.has(row.id)}
+          {@const rowClassValue =
+            typeof rowClass === "function"
+              ? rowClass({
                   row,
-                  target: event.target,
-                  currentTarget: event.currentTarget,
-                });
-              }}
-              on:mouseenter={() => {
-                dispatch("mouseenter:row", row);
-              }}
-              on:mouseleave={() => {
-                dispatch("mouseleave:row", row);
-              }}
-            >
-              {#if hasRowDecorator}
-                <td
-                  class="bx--table-column-decorator"
-                  class:bx--table-cell={true}
-                >
-                  <Decorator
-                    class="bx--table-column-decorator__inner"
-                    state={rowAILabelState(row.id)}
-                    labelAlign="start"
-                  >
-                    <slot name="rowDecorator" {row} />
-                  </Decorator>
-                </td>
-              {/if}
-              {#if expandable}
-                <td
-                  class="bx--table-expand"
-                  class:bx--table-cell={true}
-                  headers="{id}-expand"
-                  data-previous-value={!nonExpandableRowIdsSet.has(row.id) &&
-                  expandedRowIdsSet.has(row.id)
-                    ? "collapsed"
-                    : undefined}
-                >
-                  {#if !nonExpandableRowIdsSet.has(row.id)}
-                    <button
-                      type="button"
-                      class:bx--table-expand__button={true}
-                      aria-controls="{id}-expandable-row-{row.id}"
-                      aria-label={expandedRowIdsSet.has(row.id)
-                        ? translateWithId("collapseRow")
-                        : translateWithId("expandRow")}
-                      aria-expanded={expandedRowIdsSet.has(row.id)}
-                      on:click|stopPropagation={() => {
-                        const rowExpanded = expandedRowIdsSet.has(row.id);
-
-                        expandedRowIds = rowExpanded
-                          ? expandedRowIds.filter((id) => id !== row.id)
-                          : [...expandedRowIds, row.id];
-
-                        dispatch("click:row--expand", {
-                          row,
-                          expanded: !rowExpanded,
-                        });
-                      }}
-                    >
-                      <slot
-                        name="expandIcon"
-                        expanded={expandedRowIdsSet.has(row.id)}
-                        {row}
-                        props={expandIconProps}
-                      >
-                        <ChevronRight {...expandIconProps} />
-                      </slot>
-                    </button>
-                  {/if}
-                </td>
-              {/if}
-              {#if isSelectionEnabled}
-                <td
-                  class:bx--table-cell={true}
-                  class:bx--table-column-checkbox={true}
-                  class:bx--table-column-radio={radio}
-                  on:click={(event) => handleRadioColumnClick(row, event)}
-                >
-                  {#if !nonSelectableRowIdsSet.has(row.id)}
-                    {@const inputId = `${id}-${row.id}`}
-                    {#if radio}
-                      <div class:bx--radio-button-wrapper={true}>
-                        <input
-                          type="radio"
-                          class:bx--radio-button={true}
-                          id={inputId}
-                          name={selectionName}
-                          form={inputForm}
-                          checked={selectedRowIdsSet.has(row.id)}
-                          value={row.id}
-                          on:change={() => {
-                            selectedRowIds = [row.id];
-                            dispatch("click:row--select", {
-                              row,
-                              selected: true,
-                            });
-                          }}
-                        />
-                        <label
-                          class:bx--radio-button__label={true}
-                          for={inputId}
-                        >
-                          <span class:bx--radio-button__appearance={true}
-                          ></span>
-                          <span
-                            class:bx--radio-button__label-text={true}
-                            class:bx--visually-hidden={true}
-                            >{translateWithId("selectRow")}</span
-                          >
-                        </label>
-                      </div>
-                    {:else}
-                      <div class:bx--checkbox--inline={true}>
-                        <input
-                          type="checkbox"
-                          id={inputId}
-                          name={selectionName}
-                          form={inputForm}
-                          aria-label={translateWithId("selectRow")}
-                          value={row.id}
-                          checked={selectedRowIdsSet.has(row.id)}
-                          aria-checked={selectedRowIdsSet.has(row.id)}
-                          class:bx--checkbox={true}
-                          on:click={(event) => {
-                            const checked = /** @type {HTMLInputElement} */ (
-                              event.target
-                            ).checked;
-                            const usedRange =
-                              event.shiftKey &&
-                              rangeAnchorRowId !== null &&
-                              selectRowRange(actualIndex, checked);
-
-                            if (!usedRange) {
-                              const next = new Set(selectedRowIds);
-                              if (checked) {
-                                next.add(row.id);
-                              } else {
-                                next.delete(row.id);
-                              }
-                              selectedRowIds = [...next];
-                            }
-
-                            rangeAnchorRowId = row.id;
-                            dispatch("click:row--select", {
-                              row,
-                              selected: checked,
-                            });
-                          }}
-                        />
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-                        <label
-                          for={inputId}
-                          class:bx--checkbox-label={true}
-                          on:click={(event) =>
-                            forwardShiftClick(
-                              event,
-                              /** @type {HTMLInputElement} */ (
-                                event.currentTarget.previousElementSibling
-                              ),
-                            )}
-                        ></label>
-                      </div>
-                    {/if}
-                  {/if}
-                </td>
-              {/if}
-              {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
-                {@const cellClassValue = resolveCellClass(cellClass, {
-                  row,
-                  cell,
-                  rowIndex: actualIndex,
-                  cellIndex: j,
+                  rowIndex,
                   selected: isSelected,
                   expanded: isExpanded,
-                })}
-                {@const cellClasses = joinClasses(
-                  formatAlignClass(cell.columnAlign),
-                  cellClassValue,
-                )}
-                <td
-                  class={cellClasses}
-                  class:bx--table-cell={true}
-                  class:bx--table-column-menu={cell.empty && cell.columnMenu}
-                  class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
-                    `${id}-${cell.key}`,
-                  )}
-                  headers={cell.empty ? undefined : `${id}-${cell.key}`}
-                  on:click={(event) => {
-                    if (cell.empty) return;
-                    dispatch("click", { row, cell });
-                    dispatch("click:cell", {
-                      cell,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  }}
-                >
-                  <slot
-                    name="cell"
-                    {row}
-                    {cell}
-                    rowIndex={actualIndex}
-                    cellIndex={j}
-                    rowSelected={isSelected}
-                    rowExpanded={isExpanded}
-                  >
-                    {cell.display ? cell.display(cell.value, row) : cell.value}
-                  </slot>
-                </td>
-              {/each}
-            </tr>
-
-            {#if expandable}
-              <tr
-                id="{id}-expandable-row-{row.id}"
-                data-child-row
-                class:bx--expandable-row={true}
-                on:mouseenter={() => {
-                  if (nonExpandableRowIdsSet.has(row.id)) return;
-                  parentRowId = row.id;
-                }}
-                on:mouseleave={() => {
-                  if (nonExpandableRowIdsSet.has(row.id)) return;
-                  parentRowId = null;
-                }}
+                })
+              : rowClass}
+          <tr
+            data-row={row.id}
+            data-parent-row={isExpandableTable ? true : undefined}
+            hidden={isHidden ? true : undefined}
+            data-zebra-even={zebraVisibleEvenIds?.has(row.id) ? "" : undefined}
+            class={[
+              isSelected && "bx--data-table--selected",
+              isExpanded && "bx--expandable-row",
+              isExpandableTable && "bx--parent-row",
+              isExpandableTable &&
+                parentRowId === row.id &&
+                "bx--expandable-row--hover",
+              highlightedRowIdsSet.has(row.id) &&
+                "bx--data-table--highlighted-row",
+              isExpandableTable &&
+                isSelectionEnabled &&
+                "bx--expandable-row--with-selection",
+              rowAILabelStates.get(row.id) === "active" &&
+                "bx--data-table--ai-label-row",
+              rowClassValue,
+            ]}
+            onclick={(event) => {
+              // Skip clicks on an overflow menu, a checkbox, or a radio button.
+              if (shouldIgnoreRowClick(event.target)) return;
+              onrowclick?.({
+                row,
+                target: event.target,
+                currentTarget: event.currentTarget,
+              });
+            }}
+            onmouseenter={() => onrowmouseenter?.(row)}
+            onmouseleave={() => onrowmouseleave?.(row)}
+          >
+            {#if rowDecorator}
+              <td
+                class="bx--table-column-decorator"
+                class:bx--table-cell={true}
               >
-                {#if expandedRowIdsSet.has(row.id) && !nonExpandableRowIdsSet.has(row.id)}
-                  <td colspan={totalColumns} class:bx--table-cell={true}>
-                    <div class:bx--child-row-inner-container={true}>
-                      <slot
-                        name="expandedRow"
-                        {row}
-                        rowSelected={selectedRowIdsSet.has(row.id)}
-                      />
-                    </div>
-                  </td>
-                {/if}
-              </tr>
+                <Decorator
+                  class="bx--table-column-decorator__inner"
+                  state={rowAILabelState(row.id)}
+                  labelAlign="start"
+                >
+                  {@render rowDecorator({ row })}
+                </Decorator>
+              </td>
             {/if}
-          {/each}
-
-          <!-- Spacer row for remaining height -->
-          {#if virtualConfig && virtualData.endIndex < rowsToVirtualize.length}
-            {@const remainingHeight =
-              virtualData.totalHeight -
-              virtualData.endIndex * virtualConfig.itemHeight}
-            <tr style:height="{remainingHeight}px">
-              <td colspan={totalColumns} class:bx--table-cell={true}></td>
-            </tr>
-          {/if}
-        {:else}
-          <!-- Non-virtualized: render all rows normally -->
-          {#each rowIdsToRender as rowId, index (rowId)}
-            {@const row = rowById.get(rowId)}
-            {@const isSelected = selectedRowIdsSet.has(row.id)}
-            {@const isExpanded = expandedRowIdsSet.has(row.id)}
-            {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
-            {@const isSelectable = !nonSelectableRowIdsSet.has(row.id)}
-            {@const isHighlighted = highlightedRowIdsSet.has(row.id)}
-            {@const rowClassValue =
-              typeof rowClass === "function"
-                ? rowClass({
-                    row,
-                    rowIndex: index,
-                    selected: isSelected,
-                    expanded: isExpanded,
-                  })
-                : rowClass}
-            <tr
-              data-row={row.id}
-              data-parent-row={expandable ? true : undefined}
-              hidden={hideMode && !matchedRowIdsSet.has(row.id)
-                ? true
-                : undefined}
-              data-zebra-even={zebraVisibleEvenIds?.has(row.id)
-                ? ""
-                : undefined}
-              class="{isSelected ? 'bx--data-table--selected' : ''} {isExpanded
-                ? 'bx--expandable-row'
-                : ''} {expandable ? 'bx--parent-row' : ''} {expandable &&
-              parentRowId === row.id
-                ? 'bx--expandable-row--hover'
-                : ''} {isHighlighted
-                ? 'bx--data-table--highlighted-row'
-                : ''} {expandable && isSelectionEnabled
-                ? 'bx--expandable-row--with-selection'
-                : ''} {$rowAILabelStates.get(row.id) === 'active'
-                ? 'bx--data-table--ai-label-row'
-                : ''} {rowClassValue ?? ''}"
-              on:click={(event) => {
-                // forgo "click", "click:row" events if target
-                // resembles an overflow menu, a checkbox, or radio button
-                if (shouldIgnoreRowClick(event.target)) {
-                  return;
-                }
-                dispatch("click", { row });
-                dispatch("click:row", {
-                  row,
-                  target: event.target,
-                  currentTarget: event.currentTarget,
-                });
-              }}
-              on:mouseenter={() => {
-                dispatch("mouseenter:row", row);
-              }}
-              on:mouseleave={() => {
-                dispatch("mouseleave:row", row);
-              }}
-            >
-              {#if hasRowDecorator}
-                <td
-                  class="bx--table-column-decorator"
-                  class:bx--table-cell={true}
-                >
-                  <Decorator
-                    class="bx--table-column-decorator__inner"
-                    state={rowAILabelState(row.id)}
-                    labelAlign="start"
-                  >
-                    <slot name="rowDecorator" {row} />
-                  </Decorator>
-                </td>
-              {/if}
-              {#if expandable}
-                <td
-                  class="bx--table-expand"
-                  class:bx--table-cell={true}
-                  headers="{id}-expand"
-                  data-previous-value={isExpandable && isExpanded
-                    ? "collapsed"
-                    : undefined}
-                >
-                  {#if isExpandable}
-                    <button
-                      type="button"
-                      class:bx--table-expand__button={true}
-                      aria-controls="{id}-expandable-row-{row.id}"
-                      aria-label={isExpanded
-                        ? translateWithId("collapseRow")
-                        : translateWithId("expandRow")}
-                      aria-expanded={isExpanded}
-                      on:click|stopPropagation={() => {
-                        const next = new Set(expandedRowIds);
-                        if (isExpanded) next.delete(row.id);
-                        else next.add(row.id);
-                        expandedRowIds = [...next];
-
-                        dispatch("click:row--expand", {
-                          row,
-                          expanded: !isExpanded,
-                        });
-                      }}
-                    >
-                      <slot
-                        name="expandIcon"
-                        expanded={isExpanded}
-                        {row}
-                        props={expandIconProps}
-                      >
-                        <ChevronRight {...expandIconProps} />
-                      </slot>
-                    </button>
-                  {/if}
-                </td>
-              {/if}
-              {#if isSelectionEnabled}
-                <td
-                  class:bx--table-cell={true}
-                  class:bx--table-column-checkbox={true}
-                  class:bx--table-column-radio={radio}
-                  on:click={(event) => handleRadioColumnClick(row, event)}
-                >
-                  {#if isSelectable}
-                    {@const inputId = `${id}-${row.id}`}
-                    {#if radio}
-                      <div class:bx--radio-button-wrapper={true}>
-                        <input
-                          type="radio"
-                          class:bx--radio-button={true}
-                          id={inputId}
-                          name={selectionName}
-                          form={inputForm}
-                          checked={isSelected}
-                          value={row.id}
-                          on:change={() => {
-                            selectedRowIds = [row.id];
-                            dispatch("click:row--select", {
-                              row,
-                              selected: true,
-                            });
-                          }}
-                        />
-                        <label
-                          class:bx--radio-button__label={true}
-                          for={inputId}
-                        >
-                          <span class:bx--radio-button__appearance={true}
-                          ></span>
-                          <span
-                            class:bx--radio-button__label-text={true}
-                            class:bx--visually-hidden={true}
-                            >{translateWithId("selectRow")}</span
-                          >
-                        </label>
-                      </div>
-                    {:else}
-                      <div class:bx--checkbox--inline={true}>
-                        <input
-                          type="checkbox"
-                          id={inputId}
-                          name={selectionName}
-                          form={inputForm}
-                          aria-label={translateWithId("selectRow")}
-                          value={row.id}
-                          checked={isSelected}
-                          aria-checked={isSelected}
-                          class:bx--checkbox={true}
-                          on:click={(event) => {
-                            const checked = /** @type {HTMLInputElement} */ (
-                              event.target
-                            ).checked;
-                            const usedRange =
-                              event.shiftKey &&
-                              rangeAnchorRowId !== null &&
-                              selectRowRange(index, checked);
-
-                            if (!usedRange) {
-                              const next = new Set(selectedRowIds);
-                              if (checked) {
-                                next.add(row.id);
-                              } else {
-                                next.delete(row.id);
-                              }
-                              selectedRowIds = [...next];
-                            }
-
-                            rangeAnchorRowId = row.id;
-                            dispatch("click:row--select", {
-                              row,
-                              selected: checked,
-                            });
-                          }}
-                        />
-                        <!-- svelte-ignore a11y-click-events-have-key-events -->
-                        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-                        <label
-                          for={inputId}
-                          class:bx--checkbox-label={true}
-                          on:click={(event) =>
-                            forwardShiftClick(
-                              event,
-                              /** @type {HTMLInputElement} */ (
-                                event.currentTarget.previousElementSibling
-                              ),
-                            )}
-                        ></label>
-                      </div>
-                    {/if}
-                  {/if}
-                </td>
-              {/if}
-              {#each tableCellsByRowId[row.id] as cell, j (cell.key)}
-                {@const cellClassValue = resolveCellClass(cellClass, {
-                  row,
-                  cell,
-                  rowIndex: index,
-                  cellIndex: j,
-                  selected: isSelected,
-                  expanded: isExpanded,
-                })}
-                {@const cellClasses = joinClasses(
-                  formatAlignClass(cell.columnAlign),
-                  cellClassValue,
-                )}
-                <td
-                  class={cellClasses}
-                  class:bx--table-cell={true}
-                  class:bx--table-column-menu={cell.empty && cell.columnMenu}
-                  class:bx--table-cell--column-ai-label={$aiLabelColumns.has(
-                    `${id}-${cell.key}`,
-                  )}
-                  headers={cell.empty ? undefined : `${id}-${cell.key}`}
-                  on:click={(event) => {
-                    if (cell.empty) return;
-                    dispatch("click", { row, cell });
-                    dispatch("click:cell", {
-                      cell,
-                      target: event.target,
-                      currentTarget: event.currentTarget,
-                    });
-                  }}
-                >
-                  <slot
-                    name="cell"
-                    {row}
-                    {cell}
-                    rowIndex={index}
-                    cellIndex={j}
-                    rowSelected={isSelected}
-                    rowExpanded={isExpanded}
-                  >
-                    {cell.display ? cell.display(cell.value, row) : cell.value}
-                  </slot>
-                </td>
-              {/each}
-            </tr>
-
-            {#if expandable}
-              <tr
-                id="{id}-expandable-row-{row.id}"
-                data-child-row
-                hidden={hideMode && !matchedRowIdsSet.has(row.id)
-                  ? true
+            {#if isExpandableTable}
+              <td
+                class="bx--table-expand"
+                class:bx--table-cell={true}
+                headers="{id}-expand"
+                data-previous-value={isExpandable && isExpanded
+                  ? "collapsed"
                   : undefined}
-                class:bx--expandable-row={true}
-                on:mouseenter={() => {
-                  if (!isExpandable) return;
-                  parentRowId = row.id;
-                }}
-                on:mouseleave={() => {
-                  if (!isExpandable) return;
-                  parentRowId = null;
+              >
+                {#if isExpandable}
+                  <button
+                    type="button"
+                    class:bx--table-expand__button={true}
+                    aria-controls="{id}-expandable-row-{row.id}"
+                    aria-label={translateWithId(
+                      isExpanded ? "collapseRow" : "expandRow",
+                    )}
+                    aria-expanded={isExpanded}
+                    onclick={(event) => {
+                      event.stopPropagation();
+                      toggleRowExpanded(row);
+                    }}
+                  >
+                    {#if expandIcon}
+                      {@render expandIcon({
+                        expanded: isExpanded,
+                        row: row,
+                        props: expandIconProps,
+                      })}
+                    {:else}
+                      <ChevronRight {...expandIconProps} />
+                    {/if}
+                  </button>
+                {/if}
+              </td>
+            {/if}
+            {#if isSelectionEnabled}
+              <td
+                class:bx--table-cell={true}
+                class:bx--table-column-checkbox={true}
+                class:bx--table-column-radio={radio}
+                onclick={(event) => handleRadioColumnClick(row, event)}
+              >
+                {#if isSelectable}
+                  {@const inputId = `${id}-${row.id}`}
+                  {#if radio}
+                    <div class:bx--radio-button-wrapper={true}>
+                      <input
+                        type="radio"
+                        class:bx--radio-button={true}
+                        id={inputId}
+                        name={selectionName}
+                        form={inputForm}
+                        checked={isSelected}
+                        value={row.id}
+                        onchange={() => {
+                          selectedRowIds = [row.id];
+                          onrowselect?.({ row, selected: true });
+                        }}
+                      />
+                      <label class:bx--radio-button__label={true} for={inputId}>
+                        <span class:bx--radio-button__appearance={true}></span>
+                        <span
+                          class:bx--radio-button__label-text={true}
+                          class:bx--visually-hidden={true}
+                          >{translateWithId("selectRow")}</span
+                        >
+                      </label>
+                    </div>
+                  {:else}
+                    <div class:bx--checkbox--inline={true}>
+                      <input
+                        type="checkbox"
+                        id={inputId}
+                        name={selectionName}
+                        form={inputForm}
+                        aria-label={translateWithId("selectRow")}
+                        value={row.id}
+                        checked={isSelected}
+                        aria-checked={isSelected}
+                        class:bx--checkbox={true}
+                        onclick={(event) => {
+                          const checked = event.currentTarget.checked;
+                          const usedRange =
+                            event.shiftKey &&
+                            rangeAnchorRowId !== null &&
+                            selectRowRange(rowIndex, checked);
+                          if (!usedRange) toggleRowSelected(row, checked);
+                          rangeAnchorRowId = row.id;
+                          onrowselect?.({ row, selected: checked });
+                        }}
+                      />
+                      <!-- svelte-ignore a11y_click_events_have_key_events -->
+                      <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                      <label
+                        for={inputId}
+                        class:bx--checkbox-label={true}
+                        onclick={(event) =>
+                          forwardShiftClick(
+                            event,
+                            /** @type {HTMLInputElement} */ (
+                              event.currentTarget.previousElementSibling
+                            ),
+                          )}
+                      ></label>
+                    </div>
+                  {/if}
+                {/if}
+              </td>
+            {/if}
+            {#each cellsFor(row) as rowCell, cellIndex (rowCell.key)}
+              <td
+                class={joinClasses(
+                  formatAlignClass(rowCell.columnAlign),
+                  resolveCellClass(cellClass, {
+                    row,
+                    cell: rowCell,
+                    rowIndex,
+                    cellIndex,
+                    selected: isSelected,
+                    expanded: isExpanded,
+                  }),
+                )}
+                class:bx--table-cell={true}
+                class:bx--table-column-menu={rowCell.empty &&
+                  rowCell.columnMenu}
+                class:bx--table-cell--column-ai-label={aiLabelColumns.has(
+                  `${id}-${rowCell.key}`,
+                )}
+                headers={rowCell.empty ? undefined : `${id}-${rowCell.key}`}
+                onclick={(event) => {
+                  if (rowCell.empty) return;
+                  oncellclick?.({
+                    row,
+                    cell: rowCell,
+                    target: event.target,
+                    currentTarget: event.currentTarget,
+                  });
                 }}
               >
-                {#if isExpanded && isExpandable}
-                  <td colspan={totalColumns} class:bx--table-cell={true}>
-                    <div class:bx--child-row-inner-container={true}>
-                      <slot name="expandedRow" {row} rowSelected={isSelected} />
-                    </div>
-                  </td>
+                {#if cell}
+                  {@render cell({
+                    row,
+                    cell: rowCell,
+                    rowIndex,
+                    cellIndex,
+                    rowSelected: isSelected,
+                    rowExpanded: isExpanded,
+                  })}
+                {:else}
+                  {rowCell.display
+                    ? rowCell.display(rowCell.value, row)
+                    : rowCell.value}
                 {/if}
-              </tr>
-            {/if}
-          {/each}
+              </td>
+            {/each}
+          </tr>
+
+          {#if isExpandableTable}
+            <tr
+              id="{id}-expandable-row-{row.id}"
+              data-child-row
+              hidden={isHidden ? true : undefined}
+              class:bx--expandable-row={true}
+              onmouseenter={() => {
+                if (isExpandable) parentRowId = row.id;
+              }}
+              onmouseleave={() => {
+                if (isExpandable) parentRowId = null;
+              }}
+            >
+              {#if isExpanded && isExpandable}
+                <td colspan={totalColumns} class:bx--table-cell={true}>
+                  <div class:bx--child-row-inner-container={true}>
+                    {@render expandedRow?.({ row, rowSelected: isSelected })}
+                  </div>
+                </td>
+              {/if}
+            </tr>
+          {/if}
+        {/each}
+        {#if virtualConfig && virtualData && virtualData.endIndex < rowsToVirtualize.length}
+          <tr
+            style:height="{virtualData.totalHeight -
+              virtualData.endIndex * virtualConfig.itemHeight}px"
+          >
+            <td colspan={totalColumns} class:bx--table-cell={true}></td>
+          </tr>
         {/if}
       </tbody>
-      {#if $$slots.footerCell}
+      {#if footerCell}
         <TableFoot>
           <TableRow>
-            {#if hasRowDecorator}
+            {#if rowDecorator}
               <td
                 aria-hidden="true"
                 class:bx--table-cell={true}
                 class:bx--table-column-decorator={true}
               ></td>
             {/if}
-            {#if expandable}
+            {#if isExpandableTable}
               <td
                 aria-hidden="true"
                 class:bx--table-cell={true}
@@ -2397,7 +1537,7 @@
                 class={formatAlignClass(header.columnAlign)}
                 class:bx--table-cell={true}
               >
-                <slot name="footerCell" {header} {index} />
+                {@render footerCell({ header, index })}
               </td>
             {/each}
           </TableRow>

@@ -16,5 +16,7 @@
 </script>
 
 <DataTable {headers} {rows}>
-  <h2 slot="titleChildren" let:props {...props}>Custom Title</h2>
+  {#snippet titleChildren({ props })}
+    <h2 {...props}>Custom Title</h2>
+  {/snippet}
 </DataTable>

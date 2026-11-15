@@ -26,35 +26,6 @@ describe("DataTable new-but-equal rows", () => {
     { id: "c", name: "Load Balancer 2", port: 80 },
   ];
 
-  it("does not re-sort for a new-but-equal rows array, and re-sorts for a different one", async () => {
-    const sortFn = createSortFn();
-    const { rerender } = render(DataTable, {
-      props: {
-        headers: buildHeaders(sortFn),
-        rows: buildRows(),
-        sortable: true,
-        sortKey: "name",
-        sortDirection: "ascending",
-      },
-    });
-
-    sortFn.mockClear();
-    const bodyRows = getBodyRows();
-    await rerender({ rows: buildRows() });
-    await rerender({ rows: buildRows() });
-    expect(sortFn).not.toHaveBeenCalled();
-    expect(getBodyRows()).toEqual(bodyRows);
-
-    await rerender({
-      rows: [
-        { id: "a", name: "Load Balancer 3", port: 3000 },
-        { id: "b", name: "Load Balancer 1", port: 443 },
-        { id: "c", name: "Load Balancer 2 updated", port: 80 },
-      ],
-    });
-    expect(sortFn).toHaveBeenCalled();
-  });
-
   it("re-sorts when a row is mutated in place and the array is copied", async () => {
     const sortFn = createSortFn();
     const rows = buildRows();
@@ -71,47 +42,6 @@ describe("DataTable new-but-equal rows", () => {
     sortFn.mockClear();
     rows[0].name = "Zzz Balancer";
     await rerender({ rows: [...rows] });
-    expect(sortFn).toHaveBeenCalled();
-  });
-
-  it("re-sorts when a field compared by identity changes", async () => {
-    const withMeta = (renderFn: () => string) => [
-      {
-        id: "a",
-        name: "Load Balancer 3",
-        port: 3000,
-        meta: { render: renderFn },
-      },
-      {
-        id: "b",
-        name: "Load Balancer 1",
-        port: 443,
-        meta: { render: renderFn },
-      },
-      {
-        id: "c",
-        name: "Load Balancer 2",
-        port: 80,
-        meta: { render: renderFn },
-      },
-    ];
-    const sortFn = createSortFn();
-    const renderA = () => "a";
-    const { rerender } = render(DataTable, {
-      props: {
-        headers: buildHeaders(sortFn),
-        rows: withMeta(renderA),
-        sortable: true,
-        sortKey: "name",
-        sortDirection: "ascending",
-      },
-    });
-
-    sortFn.mockClear();
-    await rerender({ rows: withMeta(renderA) });
-    expect(sortFn).not.toHaveBeenCalled();
-
-    await rerender({ rows: withMeta(() => "a") });
     expect(sortFn).toHaveBeenCalled();
   });
 
@@ -171,37 +101,6 @@ describe("DataTable new-but-equal headers", () => {
     { key: "rule", value: "Rule" },
   ];
 
-  it("does not re-sort for a new-but-equal headers array, and re-sorts for a different one", async () => {
-    const sortFn = createSortFn();
-    const { rerender } = render(DataTable, {
-      props: {
-        headers: buildHeaders(sortFn),
-        rows: buildRows(),
-        sortable: true,
-        sortKey: "name",
-        sortDirection: "ascending",
-      },
-    });
-
-    sortFn.mockClear();
-    const bodyRows = getBodyRows();
-    await rerender({ headers: buildHeaders(sortFn) });
-    await rerender({ headers: buildHeaders(sortFn) });
-    expect(sortFn).not.toHaveBeenCalled();
-    expect(getBodyRows()).toEqual(bodyRows);
-
-    await rerender({
-      headers: [
-        { key: "name", value: "Name", sort: sortFn },
-        { key: "protocol", value: "Protocol" },
-        { key: "port", value: "Port" },
-        { key: "rule", value: "Rule" },
-        { key: "extra", value: "Extra" },
-      ],
-    });
-    expect(sortFn).toHaveBeenCalled();
-  });
-
   it("re-sorts when the header sort function is a new reference", async () => {
     const sortFnA = createSortFn();
     const { rerender } = render(DataTable, {
@@ -251,28 +150,6 @@ describe("DataTable tableCellsByRowId caching", () => {
       eventDetails(onevent, "click:cell").at(-1) as
         { cell: unknown } | undefined
     )?.cell;
-
-  it("reuses cell objects when rows is a new array but row references are unchanged", async () => {
-    const row = { id: "a", name: "Alpha" };
-    const onevent = vi.fn();
-
-    const { rerender } = render(DataTable, {
-      props: { headers, rows: [row], onevent },
-    });
-
-    const bodyRow = getFirstBodyRow();
-    const nameCell = within(bodyRow).getByRole("cell", { name: "Alpha" });
-    await user.click(nameCell);
-    const first = lastClickedCell(onevent);
-    expect(first).toEqual(expect.objectContaining({ key: "name" }));
-
-    await rerender({
-      rows: [row],
-    });
-
-    await user.click(within(bodyRow).getByRole("cell", { name: "Alpha" }));
-    expect(lastClickedCell(onevent)).toBe(first);
-  });
 
   it("rebuilds cell objects when the row object for an id is replaced", async () => {
     const rowV1 = { id: "a", name: "Alpha" };

@@ -40,16 +40,11 @@ describe("DataTable body cells", () => {
       const [nameCell, actionsCell] = getCells(getBodyRows()[0]);
 
       await user.click(actionsCell);
-      expect(eventNames(onevent, "click")).toEqual(["click", "click:row"]);
+      expect(eventNames(onevent, "click")).toEqual(["click:row"]);
 
       onevent.mockClear();
       await user.click(nameCell);
-      expect(eventNames(onevent, "click")).toEqual([
-        "click",
-        "click:cell",
-        "click",
-        "click:row",
-      ]);
+      expect(eventNames(onevent, "click")).toEqual(["click:cell", "click:row"]);
     });
   });
 });
@@ -140,10 +135,17 @@ describe("DataTable highlightedRowIds", () => {
   });
 });
 
-describeRowsMutatedInPlace("reassigned to itself", DataTableRowsMutatedInPlace);
+describeRowsMutatedInPlace(
+  "reassigned to itself",
+  DataTableRowsMutatedInPlace,
+  {
+    renameShows: false,
+  },
+);
 
 describe("DataTable rows mutated in place without reassignment", () => {
-  it("sorts the rows it holds", async () => {
+  // Svelte never sees the change, so the table sorts the rows it last saw.
+  it("sorts the rows Svelte last saw without crashing", async () => {
     render(DataTableRowsMutatedInPlace);
     await user.click(
       screen.getByRole("button", { name: "Replace rows silently" }),
@@ -151,8 +153,8 @@ describe("DataTable rows mutated in place without reassignment", () => {
     await user.click(screen.getByRole("button", { name: NAME_HEADER }));
 
     expect(getBodyRows().map((row) => row.textContent?.trim())).toEqual([
-      "Charlie",
-      "Delta",
+      "Alpha",
+      "Bravo",
     ]);
   });
 });

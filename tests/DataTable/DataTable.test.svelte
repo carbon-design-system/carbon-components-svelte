@@ -5,7 +5,7 @@
   import ToolbarContent from "carbon-components-svelte/DataTable/ToolbarContent.svelte";
   import ToolbarSearch from "carbon-components-svelte/DataTable/ToolbarSearch.svelte";
   import type { DataTableSortValue } from "carbon-components-svelte/DataTable/data-table-utils";
-  import type { ComponentEvents, ComponentProps } from "svelte";
+  import type { ComponentProps } from "svelte";
 
   type BaseRow = {
     id: string;
@@ -98,9 +98,7 @@
     undefined;
   export let sortStatusText: ComponentProps<DataTable>["sortStatusText"] =
     undefined;
-  export let onsort:
-    ((e: ComponentEvents<DataTableComponent>["sort"]) => void) | undefined =
-    undefined;
+  export let onsort: ComponentProps<DataTableComponent>["onsort"] = undefined;
   export let rowClass: ComponentProps<DataTable>["rowClass"] = undefined;
   export let cellClass: ComponentProps<DataTable>["cellClass"] = undefined;
   /** When true, `on:sort` calls preventDefault() so the table does not apply client-side sort. */
@@ -156,20 +154,19 @@
   bind:scrollContainerRef
   {tableHeaderTranslateWithId}
   {sortStatusText}
-  on:click={(e) => onevent?.("click", e.detail)}
-  on:click:header={(e) => onevent?.("click:header", e.detail)}
-  on:click:row={(e) => onevent?.("click:row", e.detail)}
-  on:click:cell={(e) => onevent?.("click:cell", e.detail)}
-  on:click:header--expand={(e) => onevent?.("click:header--expand", e.detail)}
-  on:click:header--select={(e) => onevent?.("click:header--select", e.detail)}
-  on:click:row--expand={(e) => onevent?.("click:row--expand", e.detail)}
-  on:click:row--select={(e) => onevent?.("click:row--select", e.detail)}
-  on:mouseenter:row={(e) => onevent?.("mouseenter:row", e.detail)}
-  on:mouseleave:row={(e) => onevent?.("mouseleave:row", e.detail)}
-  on:scrollend={(e) => onevent?.("scrollend", e.detail)}
-  on:sort={(e) => {
-    onsort?.(e);
-    if (preventSortDefault) e.preventDefault();
+  onheaderclick={(detail) => onevent?.("click:header", detail)}
+  onrowclick={(detail) => onevent?.("click:row", detail)}
+  oncellclick={(detail) => onevent?.("click:cell", detail)}
+  onheaderexpand={(detail) => onevent?.("click:header--expand", detail)}
+  onheaderselect={(detail) => onevent?.("click:header--select", detail)}
+  onrowexpand={(detail) => onevent?.("click:row--expand", detail)}
+  onrowselect={(detail) => onevent?.("click:row--select", detail)}
+  onrowmouseenter={(row) => onevent?.("mouseenter:row", row)}
+  onrowmouseleave={(row) => onevent?.("mouseleave:row", row)}
+  onscrollend={(detail) => onevent?.("scrollend", detail)}
+  onsort={(event) => {
+    onsort?.(event);
+    if (preventSortDefault) event.preventDefault();
   }}
 >
   {#if search}

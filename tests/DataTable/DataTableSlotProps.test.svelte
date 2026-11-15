@@ -13,13 +13,13 @@
 </script>
 
 <DataTable {headers} {rows} expandable expandedRowIds={["b"]}>
-  <svelte:fragment slot="cellHeader" let:header>
+  {#snippet cellHeader({ header })}
     <span data-testid="header-slot">{header.key}={header.value}</span>
-  </svelte:fragment>
-  <svelte:fragment slot="cell" let:cell let:row>
+  {/snippet}
+  {#snippet cell({ cell, row })}
     <span data-testid="cell-slot">{row.id}.{cell.key}={cell.value}</span>
-  </svelte:fragment>
-  <svelte:fragment slot="expandedRow" let:row>
+  {/snippet}
+  {#snippet expandedRow({ row })}
     <span data-testid="expanded-slot">{row.id}={row.name}</span>
-  </svelte:fragment>
+  {/snippet}
 </DataTable>
