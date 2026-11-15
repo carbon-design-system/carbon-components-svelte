@@ -30,6 +30,13 @@ export function createConfig({ dev }: { dev?: boolean } = {}) {
       svelte({
         preprocess: [vitePreprocess()],
         ...(dev === undefined ? {} : { compilerOptions: { dev } }),
+        // `*.async.svelte5.test.svelte` fixtures compile with
+        // `experimental.async`, which turns on Svelte 5's async runtime for
+        // the whole test file, library components included.
+        dynamicCompileOptions: ({ filename }) =>
+          filename.endsWith(".async.svelte5.test.svelte")
+            ? { experimental: { async: true } }
+            : undefined,
       }),
     ],
     resolve: {
