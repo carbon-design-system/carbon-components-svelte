@@ -1355,10 +1355,38 @@
   // `rowById` has dropped its id. It reads its row from here instead.
   /** @type {undefined | ReturnType<typeof indexRowsById>} */
   let retiredRowById;
-  $: {
-    retiredRowById = rowById;
-    rowById = indexRowsById(stableRows);
+  /** @type {undefined | ReadonlyArray<Row>} */
+  let indexedRows;
+  /** @type {ReadonlyArray<Row["id"]>} */
+  let rowIdsToRender = [];
+
+  /**
+   * Set the painted ids and the lookup the row blocks read them from in one
+   * place. With `experimental.async`, Svelte can render between two `$:`
+   * statements, so a lookup kept by a separate statement could miss ids the
+   * row blocks already iterate.
+   *
+   * A `rows` array changed without Svelte seeing it (`rows.push(row)` with
+   * no `rows = rows`) still paints its current rows on the next sort or
+   * page change, but `stableRows` missed them. Those are indexed too.
+   * @param {ReadonlyArray<Row>} painted
+   * @param {ReadonlyArray<Row>} rows `stableRows`
+   */
+  function indexRenderedRows(painted, rows) {
+    let next = rows === indexedRows ? rowById : indexRowsById(rows);
+    indexedRows = rows;
+    if (!painted.every((row) => next.get(row.id) === row)) {
+      next = indexRowsById(rows);
+      for (const row of painted) next.set(row.id, row);
+    }
+    if (next !== rowById) {
+      retiredRowById = rowById;
+      rowById = next;
+    }
+    rowIdsToRender = painted.map((row) => row.id);
   }
+
+  $: indexRenderedRows(rowsToRender, stableRows);
 
   /**
    * Both lookups are arguments so the row blocks track them.
@@ -1370,23 +1398,6 @@
   function lookUpRow(id, current, retired) {
     return current.get(id) ?? /** @type {Row} */ (retired?.get(id));
   }
-  $: rowIdsToRender = rowsToRender.map((row) => row.id);
-
-  /**
-   * A `rows` array changed without Svelte seeing it (`rows.push(row)` with
-   * no `rows = rows`) still paints its current rows on the next sort or
-   * page change, but `stableRows`, and so `rowById`, missed them. Index
-   * them rather than crash.
-   * @param {ReadonlyArray<Row>} painted
-   */
-  function indexPaintedRows(painted) {
-    if (painted.every((row) => rowById.get(row.id) === row)) return;
-    const next = indexRowsById(stableRows);
-    for (const row of painted) next.set(row.id, row);
-    rowById = next;
-  }
-
-  $: indexPaintedRows(rowsToRender);
 
   // Walk the painted window, not `rows`. Virtualized and paginated tables
   // otherwise allocate cell records for every row on each `rows`/headers
