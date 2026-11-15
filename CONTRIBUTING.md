@@ -1111,6 +1111,12 @@ bun run test:svelte3
 bun run test:svelte4
 ```
 
+#### Svelte async mode tests
+
+Apps compiled with Svelte's `experimental.async` run the library differently. Svelte can render between two `$:` statements, and a removed `{#each}` block reads its `{@const}`s once more before it's destroyed. A row that looks itself up in a map kept by another `$:` statement can get `undefined` (#5688). In a keyed `{#each}`, read what a row needs from the row itself, or set the list and its lookup in one statement.
+
+A fixture named `*.async.svelte5.test.svelte` compiles with `experimental.async`, which puts the whole test file in async mode, library components included. The collection prop contract runs every case that way. To sweep a component's existing tests in async mode, run `bun run test:async run tests/<Component>`. It also leaves `requestAnimationFrame` real under `vi.useFakeTimers()`, since async mode's `tick()` waits on a frame.
+
 ### E2E testing with Playwright
 
 E2E tests run in a real browser against HTML fixtures served by Vite. The Playwright config is in `playwright.config.ts`; the Vite config for fixtures is in `e2e/vite.config.ts`.
