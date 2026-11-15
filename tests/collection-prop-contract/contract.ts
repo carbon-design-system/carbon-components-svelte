@@ -1,7 +1,11 @@
 import type { ComponentType } from "svelte";
 
-/** How a host updates the collection in place. */
-export type Mode = "legacy" | "runes";
+/**
+ * How a host updates the collection in place. `async` is `runes` compiled
+ * with Svelte's `experimental.async`, which can render between `$:`
+ * statements and re-reads a removed `{#each}` block once before destroying it.
+ */
+export type Mode = "legacy" | "runes" | "async";
 
 export type CollectionCase = {
   /** Component name, as exported from the package. */
@@ -31,10 +35,11 @@ export type CollectionCase = {
 /** Components and props the contract skips, with the reason. Keyed `Component.prop`. */
 export type Exemptions = Record<string, string>;
 
-/** `fails` for a case that fails the same way in both modes. */
-export const inBothModes = (reason: string) => ({
+/** `fails` for a case that fails the same way in every mode. */
+export const inEveryMode = (reason: string) => ({
   legacy: reason,
   runes: reason,
+  async: reason,
 });
 
 export const key = (c: Pick<CollectionCase, "name" | "prop">) =>
