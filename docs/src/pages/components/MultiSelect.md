@@ -346,6 +346,18 @@ Set `selectTextOnFocus` to select the full filter value when the field receives 
     {id: "2", text: "Fax"}]}"
   />
 
+### Open on focus
+
+Set `openOnFocus` to `true` to open the menu when the filter input receives focus, such as on <DocKbd label="Tab" /> or when a Modal focuses it as its first field. By default only a click, typing, or <DocKbd label="ArrowDown" /> opens it, as in Carbon React. Only applies when `filterable` is `true`.
+
+Focus the multi-select moves back to its own input, from the clear button or the menu, doesn't reopen the menu, so <DocKbd label="Escape" /> keeps it closed.
+
+<MultiSelect openOnFocus filterable labelText="Contact" placeholder="Filter contact methods..."
+    items="{[{id: "0", text: "Slack"},
+    {id: "1", text: "Email"},
+    {id: "2", text: "Fax"}]}"
+  />
+
 ### Empty state
 
 When the filter matches nothing, the menu shows "No results" in place of the options. Screen readers already hear the count from `filterResultsText`, so the message is hidden from them.
@@ -418,7 +430,7 @@ Use `on:clear` to listen for the clear ("x") button that appears once there is a
 
 ### Open
 
-Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing a filter opened it), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a multi-select rendered already open.
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing a filter opened it), `"focus"` (with [`openOnFocus`](#open-on-focus)), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a multi-select rendered already open.
 
 <MultiSelect
   labelText="Contact"
