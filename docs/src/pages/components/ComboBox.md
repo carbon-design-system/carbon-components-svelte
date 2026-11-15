@@ -372,6 +372,19 @@ items={[
   {id: "2", text: "Webhook"}
   ]}  />
 
+### Open on focus
+
+Set `openOnFocus` to `true` to open the menu when the input receives focus, such as on <DocKbd label="Tab" /> or when a Modal focuses it as its first field. By default only a click, typing, or <DocKbd label="ArrowDown" /> opens it, as in Carbon React.
+
+Focus the combo box moves back to its own input, from the clear button or the menu, doesn't reopen the menu, so <DocKbd label="Escape" /> keeps it closed.
+
+<ComboBox openOnFocus labelText="Alert channel" placeholder="Select alert channel"
+items={[
+  {id: "0", text: "Slack"},
+  {id: "1", text: "Email"},
+  {id: "2", text: "Webhook"}
+  ]}  />
+
 ## Virtualization
 
 Virtualization renders only the items currently visible in the viewport, improving performance for large lists. By default, the combo box virtualizes lists with more than 100 items.
@@ -436,7 +449,7 @@ items={[
 
 ### Open
 
-Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing opened it), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a combo box rendered already open.
+Use `on:open` to know when the menu opens and why. `event.detail.trigger` is `"click"`, `"keydown"`, `"input"` (typing opened it), `"focus"` (with [`openOnFocus`](#open-on-focus)), or `"programmatic"` when `open` is set from outside, such as through `bind:open`. It fires once per open, after the menu renders, and not for a combo box rendered already open.
 
 <ComboBox
   labelText="Contact"
