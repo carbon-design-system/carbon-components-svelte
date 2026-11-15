@@ -3,23 +3,24 @@
 [lint]
 maxWarnings = 0
 
-# ESLint and typescript-eslint recommended are on by default; these add the
-# stricter checks the project enforces on top.
+# ESLint and typescript-eslint recommended are on by default as warnings,
+# which `maxWarnings = 0` fails; these add the stricter checks the project
+# enforces on top.
 [lint.rules]
 "@typescript-eslint/ban-ts-comment" = [
   "error",
   { "ts-expect-error" = false, "ts-nocheck" = false },
 ]
-"@typescript-eslint/no-explicit-any" = "error"
-"@typescript-eslint/no-unnecessary-type-constraint" = "error"
 "@typescript-eslint/no-useless-empty-export" = "error"
+"array-callback-return" = "error"
 "default-param-last" = "error"
 "dot-notation" = "error"
+"eqeqeq" = ["error", "smart"]
 "no-await-in-loop" = "error"
+"no-else-return" = "error"
 "no-empty" = ["error", { allowEmptyCatch = true }]
 "no-extra-label" = "error"
 "no-lone-blocks" = "error"
-"no-negated-condition" = "error"
 "no-param-reassign" = "error"
 "no-restricted-imports" = [
   "error",
@@ -38,6 +39,7 @@ maxWarnings = 0
 ]
 "no-sequences" = "error"
 "no-template-curly-in-string" = "error"
+"no-throw-literal" = "error"
 "no-undef-init" = "error"
 "no-unused-vars" = [
   "error",
@@ -46,19 +48,30 @@ maxWarnings = 0
 "no-useless-assignment" = "off"
 "no-useless-constructor" = "error"
 "no-useless-rename" = "error"
-"no-var" = "error"
+"object-shorthand" = "error"
 "one-var" = ["error", "never"]
 "oxc/no-accumulating-spread" = "error"
 "prefer-arrow-callback" = "error"
-"prefer-const" = "error"
 "prefer-exponentiation-operator" = "error"
+"prefer-object-has-own" = "error"
+"prefer-template" = "error"
 "require-await" = "error"
 "import/no-commonjs" = "error"
+"import/no-cycle" = "error"
+"unicorn/no-invalid-remove-event-listener" = "error"
 "unicorn/no-lonely-if" = "error"
+"unicorn/no-negated-condition" = "error"
 "unicorn/no-useless-switch-case" = "error"
 "unicorn/prefer-array-find" = "error"
+"unicorn/prefer-keyboard-event-key" = "error"
 "unicorn/prefer-node-protocol" = "error"
 "unicorn/prefer-number-properties" = "error"
+"unicorn/prefer-optional-catch-binding" = "error"
+"unicorn/prefer-string-slice" = "error"
+"vitest/no-disabled-tests" = "error"
+"vitest/no-focused-tests" = "error"
+"vitest/no-importing-vitest-globals" = "error"
+"vitest/require-awaited-expect-poll" = "error"
 
 # The steps of a browser test run one after another.
 [[lint.overrides]]
@@ -83,7 +96,6 @@ rules = { "no-restricted-imports" = [
   "error",
   { paths = [
     { name = "carbon-components-svelte", message = "Avoid the barrel import in tests; import directly (e.g. \"carbon-components-svelte/Button/Button.svelte\") to keep Vitest transforms fast." },
-    { name = "vitest", message = "Vitest functions are automatically imported." },
   ] },
 ] }
 
