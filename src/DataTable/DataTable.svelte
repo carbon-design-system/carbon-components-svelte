@@ -1333,7 +1333,7 @@
   }
 
   /**
-   * Every id the row blocks render comes from these rows, so `get` finds it.
+   * Every id a live row block renders comes from these rows, so `get` finds it.
    * @param {ReadonlyArray<Row>} rows
    * @returns {{ get(id: Row["id"]): Row } & Map<Row["id"], Row>}
    */
@@ -1348,7 +1348,28 @@
   // so iterating rows re-ran every row's and cell's props on each sort or
   // filter. Ids compare by value: a reorder only moves rows. `rowById`
   // follows `stableRows`, so a new `rows` array still refreshes every row.
-  $: rowById = indexRowsById(stableRows);
+  /** @type {ReturnType<typeof indexRowsById>} */
+  let rowById;
+  // The lookup `rowById` replaced. With `experimental.async`, a removed row's
+  // block re-reads its `{@const}`s once before it is destroyed, after
+  // `rowById` has dropped its id. It reads its row from here instead.
+  /** @type {undefined | ReturnType<typeof indexRowsById>} */
+  let retiredRowById;
+  $: {
+    retiredRowById = rowById;
+    rowById = indexRowsById(stableRows);
+  }
+
+  /**
+   * Both lookups are arguments so the row blocks track them.
+   * @param {Row["id"]} id
+   * @param {ReturnType<typeof indexRowsById>} current
+   * @param {undefined | ReturnType<typeof indexRowsById>} retired
+   * @returns {Row}
+   */
+  function lookUpRow(id, current, retired) {
+    return current.get(id) ?? /** @type {Row} */ (retired?.get(id));
+  }
   $: rowIdsToRender = rowsToRender.map((row) => row.id);
 
   /**
@@ -1794,7 +1815,7 @@
 
           <!-- Visible rows -->
           {#each rowIdsToRender as rowId, index (rowId)}
-            {@const row = rowById.get(rowId)}
+            {@const row = lookUpRow(rowId, rowById, retiredRowById)}
             {@const actualIndex = virtualData.startIndex + index}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
@@ -2084,7 +2105,7 @@
         {:else}
           <!-- Non-virtualized: render all rows normally -->
           {#each rowIdsToRender as rowId, index (rowId)}
-            {@const row = rowById.get(rowId)}
+            {@const row = lookUpRow(rowId, rowById, retiredRowById)}
             {@const isSelected = selectedRowIdsSet.has(row.id)}
             {@const isExpanded = expandedRowIdsSet.has(row.id)}
             {@const isExpandable = !nonExpandableRowIdsSet.has(row.id)}
