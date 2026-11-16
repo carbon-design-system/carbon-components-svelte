@@ -462,7 +462,7 @@ items={[
 
 ### Clear
 
-Listen for `on:clear` to know when the user activates the clear ("x") button that appears once there is a selection, whether by click or by keyboard. `event.detail` is the originating `KeyboardEvent` or `MouseEvent`. This is distinct from calling the [imperative `clear()` method](#clear-selection) directly, which does not dispatch `clear`.
+Listen for `on:clear` to know when the user activates the clear ("x") button that appears once there is a selection, whether by click or by keyboard. <DocKbd label="Escape" /> fires `clear` when it drops a selection. So does a fill from outside the field, such as a password manager or script, when the filled text matches no item. `event.detail` is the originating `KeyboardEvent` or `MouseEvent`, or the input `Event` for a fill. This is distinct from calling the [imperative `clear()` method](#clear-selection) directly, which does not dispatch `clear`.
 
 <ComboBox selectedId="1" labelText="Alert channel" placeholder="Select alert channel"
 on:clear={(e) => console.log(e.type)}
