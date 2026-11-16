@@ -42,7 +42,7 @@
    * @type {object}
    * @property {Item["id"]} selectedId
    * @property {Item} selectedItem
-   * @event {KeyboardEvent | MouseEvent} clear
+   * @event {KeyboardEvent | MouseEvent | Event} clear
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }}
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} icon
    * @slot {{ item: Item; index: number; selected: boolean; highlighted: boolean; }} iconEnd - Content at the end of each item. Replaces the checkmark on the selected item.
@@ -1303,10 +1303,16 @@
             // any old selection so that reset cannot restore its label over
             // the filled text.
             if (effectiveDisabled || readonly || inputHasFocus()) return;
+            const hadSelection = selectedId !== undefined;
             selectedId = findExactMatch(
               items,
               /** @type {HTMLInputElement} */ (event.target).value,
             )?.id;
+            // A match fires `select` reactively. Dropping a selection is a
+            // clear, like Escape and the clear button.
+            if (hadSelection && selectedId === undefined) {
+              dispatch("clear", event);
+            }
           }}
           on:input
           on:input={(event) => {

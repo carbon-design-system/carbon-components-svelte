@@ -1482,6 +1482,13 @@ describe("ComboBox", () => {
       });
     });
 
+    it("should type clear's detail to admit a plain input Event", () => {
+      type ClearEvent = ComponentEvents<ComboBoxComponent>["clear"];
+      type ClearDetail = ClearEvent extends CustomEvent<infer T> ? T : never;
+      // Chrome's autofill and scripted fills dispatch a plain `Event`.
+      expectTypeOf<Event>().toExtend<ClearDetail>();
+    });
+
     it("should support generic types with ComponentProps and ComponentEvents", () => {
       type Product = {
         id: string;
@@ -2413,18 +2420,20 @@ describe("ComboBox", () => {
       return otherField;
     }
 
+    // Chrome's autofill dispatches a plain input `Event`.
     async function fill(text: string) {
       const input = getInput();
       input.value = text;
-      await fireEvent.input(input);
-      return input;
+      const event = new Event("input", { bubbles: true });
+      await fireEvent(input, event);
+      return { input, event };
     }
 
     it("should select an exact match without opening the menu or taking focus", async () => {
       const onSelect = vi.fn();
       const otherField = renderWithOtherFieldFocused({ onSelect });
 
-      const input = await fill("united states");
+      const { input } = await fill("united states");
 
       expect(input).toHaveValue("United States");
       expect(onSelect).toHaveBeenCalledOnce();
@@ -2438,29 +2447,57 @@ describe("ComboBox", () => {
 
     it("should not open the menu or take focus when the fill matches no item", async () => {
       const onSelect = vi.fn();
-      const otherField = renderWithOtherFieldFocused({ onSelect });
+      const onClear = vi.fn();
+      const otherField = renderWithOtherFieldFocused({ onSelect, onClear });
 
       await fill("Canada");
 
       expect(onSelect).not.toHaveBeenCalled();
+      // Nothing was selected, so there is nothing to clear.
+      expect(onClear).not.toHaveBeenCalled();
       expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
       expect(otherField).toHaveFocus();
     });
 
     it("should clear the selection when the fill matches no item", async () => {
-      renderWithOtherFieldFocused({ selectedId: "US" });
+      const onSelect = vi.fn();
+      const onClear = vi.fn();
+      renderWithOtherFieldFocused({ selectedId: "US", onSelect, onClear });
 
-      const input = await fill("Canada");
+      const { input, event } = await fill("Canada");
 
       expect(input).toHaveValue("");
+      // Dropping a selection is a clear, like Escape and the clear button.
+      expect(onClear).toHaveBeenCalledOnce();
+      expect(onClear.mock.calls[0][0].type).toBe("clear");
+      expect(onClear.mock.calls[0][0].detail).toBe(event);
+      expect(onSelect).not.toHaveBeenCalled();
     });
 
     it("should keep the filled text when it matches no item and allowCustomValue is set", async () => {
-      renderWithOtherFieldFocused({ selectedId: "US", allowCustomValue: true });
+      const onClear = vi.fn();
+      renderWithOtherFieldFocused({
+        selectedId: "US",
+        allowCustomValue: true,
+        onClear,
+      });
 
-      const input = await fill("Canada");
+      const { input } = await fill("Canada");
 
       expect(input).toHaveValue("Canada");
+      expect(onClear).toHaveBeenCalledOnce();
+    });
+
+    it("should fire select, not clear, when the fill matches a different item", async () => {
+      const onSelect = vi.fn();
+      const onClear = vi.fn();
+      renderWithOtherFieldFocused({ selectedId: "US", onSelect, onClear });
+
+      await fill("United Kingdom");
+
+      expect(onClear).not.toHaveBeenCalled();
+      expect(onSelect).toHaveBeenCalledOnce();
+      expect(onSelect.mock.calls[0][0].selectedId).toBe("UK");
     });
 
     it.each(["disabled", "readonly"])(
