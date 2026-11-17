@@ -4,7 +4,7 @@ description: Copy text renders a value inline with a compact copy button beside 
 ---
 
 <script>
-  import { CopyText, DescriptionList, DescriptionListItem, Text } from "carbon-components-svelte";
+  import { CopyText, DataTable, DescriptionList, DescriptionListItem, Text } from "carbon-components-svelte";
 </script>
 
 ## Basic
@@ -20,6 +20,18 @@ Set `text` to the string to copy. Use it when the copied value differs from what
 <CopyText text="https://api.acme.io/webhooks/incoming/f8a2c91d">https://api.acme.io/…/f8a2c91d</CopyText>
 
 <CopyText text="f8a2c91d" />
+
+## Masked value
+
+Show a masked value in the slot and set `text` to the secret. The button copies the full value, and the page shows only the mask.
+
+<CopyText text="acme_live_4f9e2b7c1d8a3f9a">acme_live_••••••••3f9a</CopyText>
+
+## Monospace
+
+Use the monospace family for ids, hashes and keys. Wrap the value in `Text` with `family="mono"`, and set `tag="span"` to keep it inline.
+
+<CopyText text="7c4f2e1a9b3d"><Text tag="span" type="code-02" family="mono">7c4f2e1a9b3d</Text></CopyText>
 
 ## Inline in text
 
@@ -61,3 +73,28 @@ Place `CopyText` in a `DescriptionListItem` to make one value copyable. The valu
   <DescriptionListItem term="Webhook"><CopyText text="https://api.acme.io/webhooks/incoming/f8a2c91d">https://api.acme.io/…/f8a2c91d</CopyText></DescriptionListItem>
   <DescriptionListItem term="Region">us-east-1</DescriptionListItem>
 </DescriptionList>
+
+## Data table
+
+Render `CopyText` in the `cell` slot to make a column copyable. A long value wraps in a narrow cell, and the button stays at the end of its last line.
+
+<DataTable
+  headers={[
+    { key: "name", value: "Name" },
+    { key: "id", value: "Instance ID" },
+    { key: "region", value: "Region" },
+  ]}
+  rows={[
+    { id: "i-0a4f2e1c9b3d7e601", name: "web-01", region: "us-east-1" },
+    { id: "i-0b8c3d5e7f9a1b246", name: "web-02", region: "us-east-1" },
+    { id: "i-0c1d2e3f4a5b6c789", name: "worker-01", region: "eu-west-1" },
+  ]}
+>
+  <svelte:fragment slot="cell" let:cell>
+    {#if cell.key === "id"}
+      <CopyText><Text tag="span" type="inherit" family="mono">{cell.value}</Text></CopyText>
+    {:else}
+      {cell.value}
+    {/if}
+  </svelte:fragment>
+</DataTable>
