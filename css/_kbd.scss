@@ -16,7 +16,11 @@
     align-items: center;
     gap: $carbon--spacing-01;
     unicode-bidi: isolate;
-    vertical-align: middle;
+    // In running text, center the caps on the cap height. Their center sits
+    // 3.5px above their own baseline, and half of Plex's cap height is
+    // 0.35em. `middle` uses the x-height and sits about 1.5px low. Flex rows
+    // ignore `vertical-align`.
+    vertical-align: calc(0.35em - 3.5px);
     white-space: nowrap;
   }
 
@@ -99,6 +103,7 @@
   // `--sm`, which it overrides.
   .#{$prefix}--kbd--muted {
     gap: 0;
+    vertical-align: baseline;
   }
 
   .#{$prefix}--kbd--muted .#{$prefix}--kbd__key {
