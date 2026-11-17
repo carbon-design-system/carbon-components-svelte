@@ -21,7 +21,8 @@ export type Edge =
   | "bottom"
   | "center-x"
   | "center-y"
-  | "baseline";
+  | "baseline"
+  | "cap-center";
 
 type Scope = Page | Locator;
 
@@ -137,6 +138,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
     return {
       ascent: m.fontBoundingBoxAscent,
       descent: m.fontBoundingBoxDescent,
+      cap: ctx.measureText("H").actualBoundingBoxAscent,
       ellipsis: ctx.measureText("…").width,
     };
   };
@@ -178,6 +180,19 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
     const line = range.getClientRects()[0];
     if (!line) return null;
     return line.top + metrics(text.parentElement).ascent;
+  };
+
+  // The middle of the first line's cap height, where an icon beside the
+  // text centers. An element with no text measures its icons' ink.
+  const capCenter = (el: Element) => {
+    const text = firstText(el);
+    if (!text?.parentElement) {
+      const box = ink(el);
+      return box ? (box.top + box.bottom) / 2 : null;
+    }
+    const line = baseline(el);
+    if (line === null) return null;
+    return line - metrics(text.parentElement).cap / 2;
   };
 
   const clipped = (value: string) => value === "hidden" || value === "clip";
@@ -300,6 +315,7 @@ async function measure(roots: Element[], request: Request): Promise<Result> {
 
   const edgeOf = (el: Element, edge: Edge) => {
     if (edge === "baseline") return baseline(el);
+    if (edge === "cap-center") return capCenter(el);
     const box = usesInk(el, edge) ? ink(el) : el.getBoundingClientRect();
     if (!box) return null;
     switch (edge) {
@@ -1145,6 +1161,8 @@ async function run(scope: Scope | Locator[], request: Request) {
  * The elements share one edge, within `tolerance` (0.5px). Inline edges
  * follow each element's direction. `baseline` is the first line's text
  * baseline; on an input or select, the baseline of its value.
+ * `cap-center` is the middle of the first line's cap height, or the
+ * center of the ink of an element with no text, such as an icon button.
  *
  * `ink: true` measures the ink box: the element's visible text, by its
  * Range rects, and its icons, by their svg boxes. `ink: false` measures

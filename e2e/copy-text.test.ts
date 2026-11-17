@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { expectAligned } from "./helpers/layout";
 
 test.describe("CopyText", () => {
   test.beforeEach(async ({ page }) => {
@@ -37,6 +38,16 @@ test.describe("CopyText", () => {
       expect(failures).toEqual([]);
     });
   }
+
+  // The icon centers on the value's cap height. The lift is a whole
+  // spacing step, 0.54px past exact at 16px, so allow 1px.
+  test("centers the icon on the cap height", async ({ page }) => {
+    const sentence = page.getByTestId("sentence-ltr");
+    await expectAligned(
+      [sentence.locator(".bx--copy-text__value"), sentence.locator("svg")],
+      { edge: "cap-center", tolerance: 1 },
+    );
+  });
 
   test("describes each button with its value", async ({ page }) => {
     await expect(
