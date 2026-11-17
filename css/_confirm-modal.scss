@@ -8,7 +8,11 @@
 /// @access private
 /// @group components
 @mixin confirm-modal {
+  // `middle` centers on the x-height; the lift moves the icon to the cap
+  // height of the heading without changing the line.
   .#{$prefix}--confirm-modal__heading-icon {
+    position: relative;
+    top: -$carbon--spacing-01;
     margin-right: $carbon--spacing-03;
     vertical-align: middle;
   }
