@@ -24,7 +24,6 @@ $ai-label-sizes: (
 @mixin ai-label {
   .#{$prefix}--ai-label {
     display: inline-flex;
-    vertical-align: middle;
   }
 
   .#{$prefix}--ai-label .#{$prefix}--toggletip-button {
@@ -45,6 +44,14 @@ $ai-label-sizes: (
   }
 
   @each $size, $values in $ai-label-sizes {
+    // In running text, center the box on the cap height. The box centers its
+    // label, so its center sits 0.375 of the label's font size above its own
+    // baseline, and half of Plex's cap height is 0.35em. `middle` uses the
+    // x-height and sits about 1.5px low. Flex rows ignore `vertical-align`.
+    .#{$prefix}--ai-label--#{$size} {
+      vertical-align: calc(0.35em - #{to-rem(0.375 * nth($values, 2))});
+    }
+
     .#{$prefix}--ai-label--#{$size} .#{$prefix}--toggletip-button {
       width: to-rem(nth($values, 1));
       height: to-rem(nth($values, 1));
@@ -66,7 +73,12 @@ $ai-label-sizes: (
     position: relative;
   }
 
-  // Inline kind: text with a leading dot instead of a boxed button
+  // Inline variant: text with a leading dot instead of a boxed button. It reads
+  // as text, so it sits on the baseline. After the sizes, which it overrides.
+  .#{$prefix}--ai-label.#{$prefix}--ai-label--inline {
+    vertical-align: baseline;
+  }
+
   .#{$prefix}--ai-label--inline .#{$prefix}--toggletip-button {
     width: auto;
     height: auto;

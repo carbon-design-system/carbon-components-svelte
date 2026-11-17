@@ -25,6 +25,32 @@ test.describe("inline icons", () => {
     await expectAligned([sentence, key.last()], { edge: "baseline" });
   });
 
+  for (const size of ["mini", "2xs", "xs"]) {
+    test(`centers the AILabel box (${size})`, async ({ page }) => {
+      const sentence = page.getByTestId(`ai-label-${size}`);
+      await expectAligned(
+        [sentence, sentence.locator(".bx--toggletip-button")],
+        { edge: "cap-center", tolerance: 1 },
+      );
+    });
+  }
+
+  // Centered on the x-height, the 24px xs box makes a 24px line 1.88px
+  // taller.
+  test("keeps the line height with an xs AILabel", async ({ page }) => {
+    const height = await page
+      .getByTestId("ai-label-xs")
+      .evaluate((el) => el.getBoundingClientRect().height);
+    expect(height).toBeLessThan(25);
+  });
+
+  test("sets the inline AILabel on the baseline", async ({ page }) => {
+    const sentence = page.getByTestId("ai-label-inline");
+    await expectAligned([sentence, sentence.locator(".bx--ai-label__text")], {
+      edge: "baseline",
+    });
+  });
+
   for (const density of ["productive", "expressive"]) {
     test(`centers the Card title end icon (${density})`, async ({ page }) => {
       const card = page.getByTestId(`card-${density}`);
