@@ -1,0 +1,26 @@
+<script>
+  import Card from "carbon-components-svelte/Card/Card.svelte";
+  import CardHeader from "carbon-components-svelte/Card/CardHeader.svelte";
+  import CardTitle from "carbon-components-svelte/Card/CardTitle.svelte";
+  import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.svelte";
+  import Kbd from "carbon-components-svelte/Kbd/Kbd.svelte";
+  import Launch from "carbon-icons-svelte/lib/Launch.svelte";
+</script>
+
+<main>
+  <p data-testid="kbd">Press <Kbd shortcut="mod+k" /> to search.</p>
+  <p data-testid="kbd-sm">
+    Press <Kbd size="sm" shortcut="mod+k" /> to search.
+  </p>
+  <p data-testid="kbd-muted">
+    Press <Kbd variant="muted" shortcut="mod+k" /> to search.
+  </p>
+  {#each ["productive", "expressive"] as density}
+    <Card data-testid="card-{density}" {density}>
+      <CardHeader>
+        <CardTitle>Quarterly report<Launch slot="titleEnd" /></CardTitle>
+      </CardHeader>
+    </Card>
+  {/each}
+  <ConfirmModal open kind="warning" title="Delete Postgres 14" />
+</main>
