@@ -365,12 +365,15 @@ describe("DatePicker close event", () => {
     const calendar = await openRangeCalendar();
 
     await user.click(dayByLabel(calendar, 1));
+    expect(screen.getByLabelText("Start date")).not.toHaveValue("");
     await user.click(document.body);
     await tick();
 
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
+    // One click is an unfinished range, so leaving drops it.
+    expect(screen.getByLabelText("Start date")).toHaveValue("");
   });
 
   it('dispatches close with trigger "select" when a range is chosen', async () => {

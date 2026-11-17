@@ -1666,6 +1666,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       );
     if (!target) return;
     const selected = selectDateValue(target.dateObj);
+    halfRangePicked = isRange && self.selectedDates.length === 1;
     const changeView =
       (selected.getMonth() < self.currentMonth ||
         selected.getMonth() > self.currentMonth + config.showMonths - 1) &&
@@ -1723,6 +1724,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     self.input.value = "";
     if (self.altInput) self.altInput.value = "";
     self.selectedDates = [];
+    halfRangePicked = false;
     self.latestSelectedDateObj = undefined;
     if (toInitial) {
       self.currentYear = self._initialDate.getFullYear();
@@ -1743,6 +1745,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       return clear(notify);
     }
     setSelectedDate(date, format);
+    halfRangePicked = false;
     self.latestSelectedDateObj =
       self.selectedDates[self.selectedDates.length - 1];
     redraw();
@@ -1842,6 +1845,12 @@ export function createCalendarEngine(element, userConfig = {}) {
   // --- Open and close ---------------------------------------------------
 
   let secondFocused = false;
+  /**
+   * Whether a lone range end was picked in the calendar rather than typed.
+   * Leaving the picker drops a half range only when it was picked: one
+   * click is an unfinished gesture, but typed text is what the user meant.
+   */
+  let halfRangePicked = false;
 
   function bindOpenTriggers() {
     triggerListeners.clear();
@@ -1943,14 +1952,21 @@ export function createCalendarEngine(element, userConfig = {}) {
     );
     if (lostFocus && !ignored) {
       if (config.allowInput) {
-        self.setDate(
-          self._input.value,
-          false,
-          config.altInput ? config.altFormat : config.dateFormat,
-        );
+        if (secondInput) {
+          // Leaving doesn't say which input was edited, and applying one
+          // input's text as the whole range would drop the other end.
+          commitIfEdited(self._input);
+          commitIfEdited(secondInput);
+        } else {
+          self.setDate(
+            self._input.value,
+            false,
+            config.altInput ? config.altFormat : config.dateFormat,
+          );
+        }
       }
       close();
-      if (isRange && self.selectedDates.length === 1) clear(false);
+      if (halfRangePicked && self.selectedDates.length === 1) clear(false);
     }
   }
 
@@ -2353,22 +2369,45 @@ export function createCalendarEngine(element, userConfig = {}) {
    * Applies what was typed in an input. Range inputs each edit one end.
    *
    * @param {HTMLInputElement} input
+   * @param {boolean} [notify]
    */
-  function commitTypedValue(input) {
+  function commitTypedValue(input, notify = true) {
     const format = config.altInput ? config.altFormat : config.dateFormat;
     if (secondInput) {
       if (input === secondInput) {
-        self.setDate([self.selectedDates[0], secondInput.value], true, format);
+        self.setDate(
+          [self.selectedDates[0], secondInput.value],
+          notify,
+          format,
+        );
       } else {
-        self.setDate([self._input.value, self.selectedDates[1]], true, format);
+        self.setDate(
+          [self._input.value, self.selectedDates[1]],
+          notify,
+          format,
+        );
       }
     } else {
       self.setDate(
         input.value,
-        true,
+        notify,
         input === self.altInput ? config.altFormat : config.dateFormat,
       );
     }
+  }
+
+  /**
+   * Silently applies a range input's text when it no longer matches the
+   * end it edits. Silent as leaving the picker always was: the input's
+   * native `change` on blur reports the edit.
+   *
+   * @param {HTMLInputElement} input
+   */
+  function commitIfEdited(input) {
+    const date = self.selectedDates[input === secondInput ? 1 : 0];
+    const format = config.altInput ? config.altFormat : config.dateFormat;
+    const text = date ? self.formatDate(date, format) : "";
+    if (input.value.trimEnd() !== text) commitTypedValue(input, false);
   }
 
   /** @param {FocusEvent} event */
