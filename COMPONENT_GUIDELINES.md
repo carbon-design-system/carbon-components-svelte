@@ -81,7 +81,7 @@ Align what the eye sees: the ink of glyphs and icons, and text baselines. Elemen
 - Icons side by side have the same optical size. Draw them on the same artboard (16 px) with a similar ink extent. A letterform icon such as "Aa" that fills less of its box reads smaller than an arrow beside it.
 - Text in adjacent controls of one row shares a baseline. In a flex row with mixed type sizes, use `align-items: baseline`. Align on the baseline only when every item starts with text. An item that starts with an icon takes its baseline from the icon; align those rows to the top.
 - Text the user writes (log lines, messages, editor paragraphs, search queries) reads in its own direction on a page of the other direction. Blocks of text get `dir="auto"`. Text inputs get `unicode-bidi: plaintext`, which keeps the field's padding and icons on the page's sides.
-- Center an icon on the text beside it. A 16 px icon next to `body-compact-01` text centers in the 18 px line.
+- Center an icon on the cap height of the text beside it. A 16 px icon next to `body-compact-01` text centers in the 18 px line, which lands within 0.4 px of the cap height. Inline in running text, `vertical-align: middle` centers on the x-height instead, about 0.09 em low in IBM Plex Sans. Lift the icon with a negative `top` on a positioned element, which keeps the line box. Check `expectAligned` with `edge: "cap-center"`, and check icons whose weight sits to one side, such as Copy, on a 2x screenshot.
 - Fields in a row align to the top of their field box. A message under one field does not move its neighbors. To center a shorter control, such as a toggle, center that control; do not center the field wrappers.
 - Align numbers by place value: right-align numeric columns and use `tabular-nums`.
 - Check alignment on a 2x screenshot. Edges that should line up differ by at most 0.5 CSS px.
@@ -433,7 +433,7 @@ Complete every check before you mark a pull request ready for review.
 
 ### Visual
 
-Measure positions and sizes in the browser (`getBoundingClientRect`, computed styles). A scaled screenshot gives wrong numbers. In e2e tests, use the helpers in `e2e/helpers/layout.ts` (`expectAligned`, `expectOnePitch`, `expectTextFits`, `expectNoNestedBorders`, `expectNoPageOverflow`, `expectSingleRing`); see [E2E testing with Playwright](CONTRIBUTING.md#e2e-testing-with-playwright).
+Measure positions and sizes in the browser (`getBoundingClientRect`, computed styles). A scaled screenshot gives wrong numbers. An element box does not show where text sits. To find the text, put a zero-height `inline-block` in the line for the baseline, and use canvas `measureText("H").actualBoundingBoxAscent` for the cap height. Use `getBBox` on an icon's paths for its ink. In e2e tests, use the helpers in `e2e/helpers/layout.ts` (`expectAligned`, `expectOnePitch`, `expectTextFits`, `expectNoNestedBorders`, `expectNoPageOverflow`, `expectSingleRing`); see [E2E testing with Playwright](CONTRIBUTING.md#e2e-testing-with-playwright).
 
 | Check | Method |
 | :--- | :--- |
