@@ -227,7 +227,11 @@
     margin-top: $carbon--spacing-01;
   }
 
+  // `middle` centers on the x-height; the lift moves the icon to the cap
+  // height without changing the line.
   .#{$prefix}--card__title-end-icon {
+    position: relative;
+    top: -1px;
     display: inline-flex;
     align-items: center;
     margin-inline-start: $carbon--spacing-03;
