@@ -627,23 +627,23 @@ describe("DatePicker", () => {
     });
 
     it.each([
-      [
-        "start",
-        "Start date",
-        "01/02/2026",
-        { from: "01/02/2026", to: "03/05/2026" },
-        [new Date(2026, 0, 2), new Date(2026, 2, 5)],
-      ],
-      [
-        "end",
-        "End date",
-        "01/20/2026",
-        { from: "01/10/2026", to: "01/20/2026" },
-        [new Date(2026, 0, 10), new Date(2026, 0, 20)],
-      ],
+      {
+        end: "start",
+        label: "Start date",
+        typed: "01/02/2026",
+        dateStr: { from: "01/02/2026", to: "03/05/2026" },
+        selectedDates: [new Date(2026, 0, 2), new Date(2026, 2, 5)],
+      },
+      {
+        end: "end",
+        label: "End date",
+        typed: "01/20/2026",
+        dateStr: { from: "01/10/2026", to: "01/20/2026" },
+        selectedDates: [new Date(2026, 0, 10), new Date(2026, 0, 20)],
+      },
     ])(
-      "keeps both ends when the %s is retyped and a click lands outside",
-      async (_, label, typed, dateStr, selectedDates) => {
+      "keeps both ends when the $end is retyped and a click lands outside",
+      async ({ label, typed, dateStr, selectedDates }) => {
         const onchange = vi.fn();
         render(DatePickerRange, {
           valueFrom: "01/10/2026",
@@ -712,6 +712,41 @@ describe("DatePicker", () => {
         selectedDates: [new Date(2026, 0, 10)],
         dateStr: { from: "01/10/2026", to: "" },
       });
+    });
+
+    it("keeps a start set from code without an end when a click lands outside", async () => {
+      const onchange = vi.fn();
+      render(DatePickerRange, { valueFrom: "01/10/2026", onchange });
+      await screen.findByLabelText(/^Choose a /);
+      const start = screen.getByLabelText("Start date");
+
+      await user.click(start);
+      await user.click(document.body);
+
+      expect(start).toHaveValue("01/10/2026");
+      expect(screen.getByLabelText("End date")).toHaveValue("");
+      expect(getCalendarInstance(start).selectedDates).toEqual([
+        new Date(2026, 0, 10),
+      ]);
+      expect(onchange).not.toHaveBeenCalled();
+    });
+
+    it("keeps a typed start after a calendar click when a click lands outside", async () => {
+      render(DatePickerRange);
+      const calendar = await openCalendar("Start date");
+      const start = screen.getByLabelText("Start date");
+
+      // One click leaves an unfinished range. Typing over it replaces it.
+      await user.click(dayByLabel(calendar, 1));
+      await user.click(start);
+      await user.type(start, "01/10/2026{Enter}", selectAll(start));
+      await user.click(start);
+      await user.click(document.body);
+
+      expect(start).toHaveValue("01/10/2026");
+      expect(getCalendarInstance(start).selectedDates).toEqual([
+        new Date(2026, 0, 10),
+      ]);
     });
   });
 
