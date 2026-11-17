@@ -24,7 +24,13 @@
   // Pull the button's 24px box into the line height so it never grows the
   // text's row, and place it in the space the value reserves, a small gap
   // after the text.
+  //
+  // `middle` centers the icon on the x-height, so it hangs below the
+  // baseline and reads low. Lift it so the icon's front square, which is
+  // about cap height, sits between the cap line and the baseline. The lift
+  // is relative, so the line box and wrapping do not change.
   .#{$prefix}--copy-text .#{$prefix}--copy-btn.#{$prefix}--copy-btn--sm {
+    top: -$carbon--spacing-01;
     display: inline-flex;
     width: $carbon--spacing-06;
     height: $carbon--spacing-06;
