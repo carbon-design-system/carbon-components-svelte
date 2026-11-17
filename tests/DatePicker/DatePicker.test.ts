@@ -589,6 +589,132 @@ describe("DatePicker", () => {
     expect(fp.config.clickOpens).toBe(true);
   });
 
+  describe("leaving a range after typing", () => {
+    /** Types over the whole text, as a user who selects it first does. */
+    const selectAll = (input: HTMLElement) => {
+      assert(input instanceof HTMLInputElement);
+      return {
+        skipClick: true,
+        initialSelectionStart: 0,
+        initialSelectionEnd: input.value.length,
+      };
+    };
+
+    it("keeps both ends when the end is retyped and Tab moves to the clear button", async () => {
+      const onchange = vi.fn();
+      render(DatePickerRange, {
+        clearable: true,
+        valueFrom: "01/10/2026",
+        valueTo: "03/05/2026",
+        onchange,
+      });
+      await screen.findByLabelText(/^Choose a /);
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
+
+      await user.click(end);
+      await user.type(end, "01/20/2026", selectAll(end));
+      await user.tab();
+
+      expect(start).toHaveValue("01/10/2026");
+      expect(end).toHaveValue("01/20/2026");
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange.mock.calls[0][0].detail.dateStr).toEqual({
+        from: "01/10/2026",
+        to: "01/20/2026",
+      });
+      expect(screen.getByRole("button", { name: "Clear date" })).toHaveFocus();
+    });
+
+    it.each([
+      [
+        "start",
+        "Start date",
+        "01/02/2026",
+        { from: "01/02/2026", to: "03/05/2026" },
+        [new Date(2026, 0, 2), new Date(2026, 2, 5)],
+      ],
+      [
+        "end",
+        "End date",
+        "01/20/2026",
+        { from: "01/10/2026", to: "01/20/2026" },
+        [new Date(2026, 0, 10), new Date(2026, 0, 20)],
+      ],
+    ])(
+      "keeps both ends when the %s is retyped and a click lands outside",
+      async (_, label, typed, dateStr, selectedDates) => {
+        const onchange = vi.fn();
+        render(DatePickerRange, {
+          valueFrom: "01/10/2026",
+          valueTo: "03/05/2026",
+          onchange,
+        });
+        await screen.findByLabelText(/^Choose a /);
+        const input = screen.getByLabelText(label);
+
+        await user.click(input);
+        await user.type(input, typed, selectAll(input));
+        await user.click(document.body);
+
+        expect(screen.getByLabelText("Start date")).toHaveValue(dateStr.from);
+        expect(screen.getByLabelText("End date")).toHaveValue(dateStr.to);
+        expect(onchange).toHaveBeenCalledTimes(1);
+        expect(onchange.mock.calls[0][0].detail).toEqual({
+          selectedDates,
+          dateStr,
+        });
+      },
+    );
+
+    it("reports each end as it is typed when both are retyped before leaving", async () => {
+      const onchange = vi.fn();
+      render(DatePickerRange, {
+        clearable: true,
+        valueFrom: "01/10/2026",
+        valueTo: "03/05/2026",
+        onchange,
+      });
+      await screen.findByLabelText(/^Choose a /);
+      const start = screen.getByLabelText("Start date");
+      const end = screen.getByLabelText("End date");
+
+      await user.click(start);
+      await user.type(start, "01/02/2026", selectAll(start));
+      await user.tab();
+      await user.type(end, "01/20/2026", selectAll(end));
+      await user.tab();
+
+      expect(start).toHaveValue("01/02/2026");
+      expect(end).toHaveValue("01/20/2026");
+      expect(
+        onchange.mock.calls.map(([event]) => event.detail.dateStr),
+      ).toEqual([
+        { from: "01/02/2026", to: "03/05/2026" },
+        { from: "01/02/2026", to: "01/20/2026" },
+      ]);
+    });
+
+    it("keeps a typed start without an end and dispatches change once", async () => {
+      const onchange = vi.fn();
+      render(DatePickerRange, { onchange });
+      await screen.findByLabelText(/^Choose a /);
+      const start = screen.getByLabelText("Start date");
+
+      await user.click(start);
+      await user.type(start, "01/10/2026", { skipClick: true });
+      await user.click(document.body);
+
+      expect(start).toHaveValue("01/10/2026");
+      expect(screen.getByLabelText("End date")).toHaveValue("");
+      expect(onchange).toHaveBeenCalledTimes(1);
+      expect(onchange.mock.calls[0][0].detail).toEqual({
+        selectedDates: [new Date(2026, 0, 10)],
+        dateStr: { from: "01/10/2026", to: "" },
+      });
+    });
+  });
+
   describe("change event count", () => {
     it("dispatches change once for a calendar selection", async () => {
       const onchange = vi.fn();
