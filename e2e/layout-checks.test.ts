@@ -67,6 +67,15 @@ test("layout helpers pass good cases and name the element in bad ones", async ({
     await expect(
       expectAligned(within("aligned-ink-bad", "h3"), { edge: "inline-start" }),
     ).rejects.toThrow(/aligned-ink-off.*inline-start at .*, 2px from/);
+
+    // `cap-center` measures text by its cap height and an icon by its ink.
+    const cap = (id: string) => [within(id, ".value"), within(id, "svg")];
+    expect(
+      await expectAligned(cap("aligned-cap-good"), { edge: "cap-center" }),
+    ).toBe(2);
+    await expect(
+      expectAligned(cap("aligned-cap-bad"), { edge: "cap-center" }),
+    ).rejects.toThrow(/aligned-cap-off.*cap-center at .*, 1\.\d+px from/);
   });
 
   await test.step("expectOnePitch", async () => {

@@ -63,6 +63,16 @@
   <h3 class="padded">Overview</h3>
   <h3 class="indented off" data-testid="aligned-ink-off">Details</h3>
 </div>
+<!-- `middle` centers the icon on the x-height; the lift moves it to the
+     cap height. -->
+<p class="running" data-testid="aligned-cap-good">
+  <span class="value">Port 5432</span>
+  <span class="inline-icon lifted"><Edit /></span>
+</p>
+<p class="running" data-testid="aligned-cap-bad">
+  <span class="value">Port 5432</span>
+  <span class="inline-icon" data-testid="aligned-cap-off"><Edit /></span>
+</p>
 
 <!-- expectOnePitch -->
 <ul data-testid="pitch-good">
@@ -335,6 +345,19 @@
 {/if}
 
 <style>
+  .running {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .inline-icon {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+  }
+  .inline-icon.lifted {
+    top: -1.5px;
+  }
   .row {
     display: flex;
     align-items: flex-start;
