@@ -2,6 +2,7 @@ import {
   closeOverControls,
   findCoveredControl,
 } from "../../src/utils/tooltip-cover.js";
+import { skipDomChecks } from "./dom-checks";
 
 /** Hit-test stack `document.elementsFromPoint` returns, topmost first. */
 let stack: Element[] = [];
@@ -127,6 +128,8 @@ describe("findCoveredControl", () => {
   });
 
   test("ignores a control that holds the trigger of a portalled tooltip", () => {
+    // A clickable tile around the row's buttons is the case under test.
+    skipDomChecks("nested-interactive");
     const el = row();
     const tile = document.createElement("div");
     tile.setAttribute("role", "button");

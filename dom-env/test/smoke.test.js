@@ -1,0 +1,250 @@
+// Run with `node --test dom-env/test` (or `bun test`). Evaluates the bundle in
+// a fresh VM context, the same way the vitest environment does.
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+execFileSync(process.execPath, ["build.js"], { cwd: root, stdio: "ignore" });
+const code = fs.readFileSync(path.join(root, "dist/dom-env.js"), "utf8");
+
+function window(options = {}) {
+  const ctx = vm.createContext({
+    setTimeout,
+    clearTimeout,
+    queueMicrotask,
+    performance,
+    URL,
+    DOMException,
+    console,
+    structuredClone,
+    Blob,
+    File,
+  });
+  vm.runInContext(code, ctx, { filename: path.join(root, "dist/dom-env.js") });
+  vm.runInContext(`__domEnv.install(${JSON.stringify(options)})`, ctx);
+  // A file name, as test code has: strict mode reports only lookups made
+  // from a file outside node_modules.
+  return (src) => vm.runInContext(src, ctx, { filename: "/test/code.js" });
+}
+
+test("parses and serializes HTML, including SVG case fixes", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.innerHTML = '<p class="a">Hi <b>x</b><ul><li>1<li>2</ul><svg viewbox="0 0 1 1"><title>t</title><circle/></svg>';
+      d.innerHTML`),
+    '<p class="a">Hi <b>x</b></p><ul><li>1</li><li>2</li></ul><svg viewBox="0 0 1 1"><title>t</title><circle></circle></svg>',
+  );
+});
+
+test("matches selectors and dispatches events through the tree", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.innerHTML = '<ul><li class="x">1</li><li>2</li></ul>';
+      document.body.append(d);
+      const log = [];
+      document.addEventListener("click", (e) => log.push("capture:" + e.eventPhase), true);
+      d.addEventListener("click", (e) => log.push("bubble:" + e.eventPhase));
+      document.querySelector("ul > li.x:first-child").click();
+      [document.querySelectorAll("li:not(.x)").length, ...log].join(",")`),
+    "1,capture:1,bubble:3",
+  );
+});
+
+test("normalizes styles like jsdom", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.style.marginLeft = "0"; d.style.color = "#FFF"; d.style.maxHeight = "20rem";
+      [d.getAttribute("style"), getComputedStyle(d).maxHeight].join(" | ")`),
+    "margin-left: 0px; color: rgb(255, 255, 255); max-height: 20rem; | 320px",
+  );
+});
+
+test("forwards label clicks and toggles checkboxes", () => {
+  const run = window();
+  assert.equal(
+    run(`const label = document.createElement("label");
+      const box = document.createElement("input"); box.type = "checkbox";
+      let changes = 0; box.addEventListener("change", () => changes++);
+      label.append(box, "Agree"); document.body.append(label);
+      label.click();
+      [box.checked, changes].join(",")`),
+    "true,1",
+  );
+});
+
+test("moves focus and skips inert subtrees", () => {
+  const run = window();
+  assert.equal(
+    run(`document.body.innerHTML = '<button id="a">a</button><div inert><button id="b">b</button></div>';
+      document.getElementById("a").focus();
+      document.getElementById("b").focus();
+      document.activeElement.id`),
+    "a",
+  );
+});
+
+test("live collections index before length is read", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.innerHTML = "<input><input>";
+      const inputs = d.getElementsByTagName("input");
+      const first = inputs[0];
+      d.append(document.createElement("input"));
+      [first.localName, inputs[2]?.localName, d.children[1].localName].join(",")`),
+    "input,input,input",
+  );
+});
+
+test("simplifies calc() and resolves rem like jsdom", () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.style.marginLeft = "calc(-1 * (2rem))"; d.style.gap = "2rem"; d.style.width = "1.5rem";
+      const cs = getComputedStyle(d);
+      [d.style.marginLeft, cs.gap, cs.width, cs.marginTop].join(",")`),
+    "calc(-2rem),2rem,24px,0",
+  );
+});
+
+test("checks visibility from computed styles", () => {
+  const run = window();
+  assert.equal(
+    run(`document.body.innerHTML = '<div id="a"><b id="b">b</b></div><i id="c" style="visibility: hidden">c</i>';
+      const vis = (id, o) => document.getElementById(id).checkVisibility(o);
+      const before = [vis("b"), vis("c"), vis("c", { visibilityProperty: true })];
+      document.getElementById("a").style.display = "none";
+      [...before, vis("b"), document.createElement("p").checkVisibility()].join(",")`),
+    "true,true,false,false,false",
+  );
+});
+
+test("scrolls elements, tracks pointer capture and has fonts ready", async () => {
+  const run = window();
+  assert.equal(
+    run(`const d = document.createElement("div");
+      d.scrollTo({ top: 40 }); d.scrollBy(5, 10);
+      d.setPointerCapture(1);
+      const captured = d.hasPointerCapture(1);
+      d.releasePointerCapture(1);
+      [d.scrollLeft, d.scrollTop, captured, d.hasPointerCapture(1), document.fonts.status].join(",")`),
+    "5,50,true,false,loaded",
+  );
+  assert.equal(await run("document.fonts.ready"), run("document.fonts"));
+});
+
+test("strict mode reports members and CSS properties it doesn't implement", () => {
+  const run = window({ strict: true });
+  run(`const d = document.createElement("div");
+    d.popoverTargetElement; d.foo = 1; d.style.zoomLevel = "2";
+    d.style.setProperty("text-wrap-mode", "wrap"); d.style.setProperty("--x", "1");
+    d.__svelte = 1; d.id;
+    if (!Element.prototype.polyfilled) Element.prototype.polyfilled = () => {};`);
+  assert.equal(
+    run(`__domEnv
+      .gaps()
+      .map((gap) => gap.kind + " " + gap.name + " " + gap.at.replace(/:\\d+$/, ""))
+      .join("\\n")`),
+    [
+      "get HTMLDivElement.popoverTargetElement /test/code.js:2",
+      "set HTMLDivElement.foo /test/code.js:2",
+      "set CSSStyleDeclaration.zoomLevel /test/code.js:2",
+      "css text-wrap-mode /test/code.js:3",
+    ].join("\n"),
+  );
+});
+
+test("leak checks list what a test left on long-lived targets", () => {
+  const run = window({ leaks: true });
+  run(`const kept = () => {}, removed = () => {};
+    const mark = __domEnv.leaks.mark();
+    window.addEventListener("resize", kept);
+    document.addEventListener("keydown", removed);
+    document.removeEventListener("keydown", removed);
+    const el = document.createElement("div");
+    el.addEventListener("click", kept);
+    document.body.append(el);
+    new MutationObserver(() => {}).observe(el, { childList: true });
+    new MutationObserver(() => {}).observe(document.createElement("p"), { childList: true });
+    globalThis.mark = mark;`);
+  assert.equal(
+    run(`__domEnv.leaks
+      .since(mark, "/test/")
+      .map((leak) => leak.what + " " + leak.at.split(" <- ")[0].replace(/:\\d+$/, ""))
+      .join("\\n")`),
+    [
+      "resize listener on window /test/code.js:3",
+      "MutationObserver on div /test/code.js:9",
+    ].join("\n"),
+  );
+  assert.equal(
+    run(`el.remove(); __domEnv.leaks.since(mark, "/test/").length`),
+    1,
+  );
+});
+
+test("DOM checks find dangling id references and focus problems", () => {
+  const run = window({ checks: true });
+  assert.equal(
+    run(`document.body.innerHTML = \`
+      <button aria-controls="gone" aria-expanded="true">open</button>
+      <button aria-controls="later" aria-expanded="false">closed</button>
+      <label for="nothing">Name</label>
+      <p id="twice"></p><p id="twice"></p>
+      <div aria-hidden="true"><a href="#">in tab order</a></div>
+      <div aria-hidden="true" style="visibility: hidden"><a href="#">hidden</a></div>
+      <div role="button" tabindex="0"><button>inner</button></div>\`;
+      __domEnv.checks.run();
+      __domEnv.checks.take().map((f) => f.rule + " " + (f.id ?? f.element)).join("\\n")`),
+    [
+      "duplicate-id twice",
+      "idref gone",
+      "idref nothing",
+      'aria-hidden-focus <a href="#">',
+      "nested-interactive <button>",
+    ].join("\n"),
+  );
+});
+
+test("CSS coverage records the selectors some DOM state matched", () => {
+  const selectors = [
+    ".btn",
+    ".btn:hover::after",
+    ".btn--danger",
+    ".menu .item:focus-visible",
+    "p > em",
+  ];
+  const run = window({ cssCoverage: selectors });
+  run(`document.body.innerHTML = '<button class="btn">a</button><div class="menu"></div>';
+    __domEnv.coverage.check();
+    document.querySelector(".menu").innerHTML = '<span class="item"></span>';
+    __domEnv.coverage.check();
+    document.body.innerHTML = '';`);
+  assert.equal(
+    run(`__domEnv.coverage.result().covered.join(",")`),
+    ".btn,.btn:hover::after,.menu .item:focus-visible",
+  );
+});
+
+test("cascades rules by their most specific matching selector, lists and all", () => {
+  const run = window();
+  assert.equal(
+    run(`document.head.innerHTML = \`<style>
+        .a, #x { color: red }
+        .a.b { color: blue }
+        :is(.c, .d) { width: 5px }
+      </style>\`;
+      document.body.innerHTML = '<p id="x" class="a b"></p><p class="d"></p>';
+      const [p, q] = document.querySelectorAll("p");
+      [getComputedStyle(p).color, getComputedStyle(q).width].join(" | ")`),
+    "rgb(255, 0, 0) | 5px",
+  );
+});
