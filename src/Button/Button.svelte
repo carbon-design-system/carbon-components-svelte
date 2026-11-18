@@ -197,6 +197,7 @@
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
+  import ShortcutBinding from "../Kbd/ShortcutBinding.svelte";
   import Loading from "../Loading/Loading.svelte";
   import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import { iconTooltipPortalGaps } from "../Portal/icon-tooltip-portal-gaps.js";
@@ -214,7 +215,6 @@
   import {
     applePlatform,
     ariaKeyShortcuts,
-    keyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { resolveLinkRel } from "../utils/link-rel.js";
   import { noop } from "../utils/noop.js";
@@ -491,7 +491,6 @@
     if (dispatch("shortcut", event, { cancelable: true })) ref?.click();
   }
 
-  $: shortcutParams = { shortcut, run: runShortcut };
   $: hasShortcutHint = Boolean(shortcut) && !hasIconOnly;
   // Without an icon for the spinner to replace, it takes the keys' place
   // instead, and the hidden keys keep the button's width.
@@ -585,7 +584,6 @@
       <a
         bind:this={ref}
         use:dismiss={escapeListener}
-        use:keyboardShortcut={shortcutParams}
         use:ignoreTooltipClicks
         use:closeOverControls={{ onCover: handleTooltipCover }}
         {...buttonProps}
@@ -656,7 +654,6 @@
     <a
       bind:this={ref}
       use:dismiss={escapeListener}
-      use:keyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
       {...buttonProps}
@@ -728,7 +725,6 @@
       type="button"
       bind:this={ref}
       use:dismiss={escapeListener}
-      use:keyboardShortcut={shortcutParams}
       use:ignoreTooltipClicks
       use:closeOverControls={{ onCover: handleTooltipCover }}
       {...buttonProps}
@@ -800,7 +796,6 @@
     type="button"
     bind:this={ref}
     use:dismiss={escapeListener}
-    use:keyboardShortcut={shortcutParams}
     use:ignoreTooltipClicks
     use:closeOverControls={{ onCover: handleTooltipCover }}
     {...buttonProps}
@@ -865,6 +860,12 @@
       />
     {/if}
   </button>
+{/if}
+
+<!-- Only while a shortcut is set, so a Button without one leaves the
+     binding, and with carbon-preprocess-svelte the parser, out of the app. -->
+{#if shortcut && ref}
+  <ShortcutBinding node={ref} {shortcut} run={runShortcut} />
 {/if}
 
 {#if usePortal}
