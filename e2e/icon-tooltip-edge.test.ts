@@ -2,11 +2,13 @@ import { expect, type Locator, type Page, test } from "./helpers/host";
 
 // A portalled icon or definition tooltip at the window's edge slides back
 // inside it, and its caret still points at the trigger, 1rem or more from
-// the corner of the box.
+// the corner of the box. One left in place (`portalTooltip` unset) that
+// would run past the edge opens in the portal instead.
 const TRIGGERS = {
   Button: ".bx--btn",
   TooltipIcon: ".bx--tooltip__trigger",
   TooltipDefinition: ".bx--tooltip__trigger",
+  PasswordInput: ".bx--text-input--password__visibility__toggle",
 } as const;
 
 async function geometry(page: Page, trigger: Locator) {
@@ -34,41 +36,45 @@ async function geometry(page: Page, trigger: Locator) {
   return { content, caret, anchor, width };
 }
 
-for (const dir of ["ltr", "rtl"] as const) {
-  test(`portalled icon tooltips stay in the window (${dir})`, async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 900, height: 700 });
-    await page.goto("/icon-tooltip-edge.html");
-    await page.evaluate((dir) => {
-      document.documentElement.dir = dir;
-    }, dir);
-    await page.evaluate(() => document.fonts.ready);
+for (const [mode, query] of [
+  ["portalled", ""],
+  ["in-place", "inplace"],
+] as const)
+  for (const dir of ["ltr", "rtl"] as const) {
+    test(`${mode} icon tooltips stay in the window (${dir})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 900, height: 700 });
+      await page.goto(`/icon-tooltip-edge.html?${query}`);
+      await page.evaluate((dir) => {
+        document.documentElement.dir = dir;
+      }, dir);
+      await page.evaluate(() => document.fonts.ready);
 
-    for (const [name, selector] of Object.entries(TRIGGERS)) {
-      for (const edge of ["start", "end"]) {
-        const label = `${name} at the ${edge} edge`;
-        const trigger = page
-          .getByTestId(`${name}-${edge}`)
-          .locator(selector)
-          .first();
-        const g = await geometry(page, trigger);
-        // The slide stops 1rem short of the caret, so a box can reach
-        // past the edge by as much as that inset needs.
-        const overLeft = Math.max(0, 16 - g.caret.center);
-        const overRight = Math.max(0, g.caret.center + 16 - g.width);
-        expect
-          .soft(g.content.left, label)
-          .toBeGreaterThanOrEqual(-overLeft - 0.5);
-        expect
-          .soft(g.content.right, label)
-          .toBeLessThanOrEqual(g.width + overRight + 0.5);
-        expect
-          .soft(Math.abs(g.caret.center - g.anchor.center), label)
-          .toBeLessThan(2);
-        await trigger.blur();
-        await expect(page.locator(".bx--tooltip-portal")).toHaveCount(0);
+      for (const [name, selector] of Object.entries(TRIGGERS)) {
+        for (const edge of ["start", "end"]) {
+          const label = `${name} at the ${edge} edge`;
+          const trigger = page
+            .getByTestId(`${name}-${edge}`)
+            .locator(selector)
+            .first();
+          const g = await geometry(page, trigger);
+          // The slide stops 1rem short of the caret, so a box can reach
+          // past the edge by as much as that inset needs.
+          const overLeft = Math.max(0, 16 - g.caret.center);
+          const overRight = Math.max(0, g.caret.center + 16 - g.width);
+          expect
+            .soft(g.content.left, label)
+            .toBeGreaterThanOrEqual(-overLeft - 0.5);
+          expect
+            .soft(g.content.right, label)
+            .toBeLessThanOrEqual(g.width + overRight + 0.5);
+          expect
+            .soft(Math.abs(g.caret.center - g.anchor.center), label)
+            .toBeLessThan(2);
+          await trigger.blur();
+          await expect(page.locator(".bx--tooltip-portal")).toHaveCount(0);
+        }
       }
-    }
-  });
-}
+    });
+  }

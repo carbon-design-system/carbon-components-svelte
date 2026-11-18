@@ -17,7 +17,7 @@
   import { dismiss } from "../utils/dismiss.js";
   import { createOpenCloseDispatcher } from "../utils/dispatch-open-close.js";
   import { joinDescribedBy } from "../utils/field-status.js";
-  import { clippedBy } from "../utils/fit-align.js";
+  import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { isPointerFocus } from "../utils/focus.js";
   import { isImeComposition } from "../utils/ime-composition.js";
   import { ignoreTooltipClicks } from "../utils/tooltip-clicks.js";
@@ -120,8 +120,9 @@
   const insideModal = getContext(MODAL_CONTEXT_KEY);
 
   // Set for one open when the in-place tooltip turns out to be cut off by
-  // a box around it (a scrolling panel, a DataTable): it shows in a portal
-  // instead. Only when `portalTooltip` is left unset.
+  // a box around it (a scrolling panel, a DataTable) or the window's edge:
+  // it shows in a portal instead, which keeps it in the window. Only when
+  // `portalTooltip` is left unset.
   let portalWhenClipped = false;
   $: if (!open) portalWhenClipped = false;
 
@@ -176,7 +177,8 @@
 
   function portalIfClipped() {
     if (portalTooltip !== undefined || !inlineOpen || !tooltipRef) return;
-    if (clippedBy(tooltipRef)) portalWhenClipped = true;
+    if (clippedBy(tooltipRef) || pastWindow(tooltipRef))
+      portalWhenClipped = true;
   }
 
   $: portalOpen =
