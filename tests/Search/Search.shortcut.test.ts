@@ -83,6 +83,28 @@ describe("Search shortcut", () => {
     expect(input("expandable")).toHaveFocus();
   });
 
+  it("keeps the shortcut as the search expands and collapses", async () => {
+    render(SearchShortcut);
+    const shortcut = { key: "f", ctrlKey: true, shiftKey: true };
+
+    press(shortcut);
+    await tick();
+    await tick();
+    expect(input("expandable")).toHaveFocus();
+
+    // Leaving the empty field collapses it, and the magnifier takes the
+    // shortcut back.
+    screen.getByTestId("other").focus();
+    await tick();
+    expect(
+      screen.getByTestId("expandable").querySelector(".bx--search--expanded"),
+    ).toBeNull();
+    expect(press(shortcut).defaultPrevented).toBe(true);
+    await tick();
+    await tick();
+    expect(input("expandable")).toHaveFocus();
+  });
+
   it("opens HeaderSearch and shows the keys beside its icon", async () => {
     render(SearchShortcut);
     const header = screen.getByTestId("header");
