@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.1...v0.114.2) (2026-11-18)
+
+### Bug Fixes
+
+- **ai-label:** center the label on the cap height in running text ([a2abbf5](https://github.com/carbon-design-system/carbon-components-svelte/commit/a2abbf5a22ec890b3487078b33b87fa8a92d613b))
+- **card:** center the title end icon on the cap height ([9dae3e4](https://github.com/carbon-design-system/carbon-components-svelte/commit/9dae3e45de31b0294e9135705a6c0e7418acf945))
+- **combo-box:** fire clear when autofill drops the selection ([eb2b2fb](https://github.com/carbon-design-system/carbon-components-svelte/commit/eb2b2fbcf5b54f6ffba8de447d3e8c552825fc12))
+- **confirm-modal:** center the heading icon on the cap height ([e763167](https://github.com/carbon-design-system/carbon-components-svelte/commit/e763167d93460ca0578691ac4d7447b5d781b946))
+- **confirm-modal:** keep the heading icon's gap in right-to-left text ([14f51ea](https://github.com/carbon-design-system/carbon-components-svelte/commit/14f51eaf421cfb7871d9257bec4e07024f6e3037))
+- **copy-text:** center the icon on the cap height ([50e1545](https://github.com/carbon-design-system/carbon-components-svelte/commit/50e15454c3192e52236a2b2cd83f9793eab3bf29))
+- **data-table:** don't crash removing a row in Svelte async mode ([15d6089](https://github.com/carbon-design-system/carbon-components-svelte/commit/15d6089b9a9b29b93651de4320048ef6e40fa12d))
+- **data-table:** sort rows replaced in place in Svelte async mode ([c08eb81](https://github.com/carbon-design-system/carbon-components-svelte/commit/c08eb81f26fbc0fb1e64e085496b5db01331fbff))
+- **date-picker:** follow the field when the layout shifts ([bf81708](https://github.com/carbon-design-system/carbon-components-svelte/commit/bf8170843ac44798b6dc0a54b0a44babacf857a8))
+- **date-picker:** keep typed range dates when focus leaves the picker ([0fbc442](https://github.com/carbon-design-system/carbon-components-svelte/commit/0fbc44201a5363eb6c66d8ab7d4270144b67f54c))
+- **floating-portal:** follow the anchor when the layout shifts ([4623650](https://github.com/carbon-design-system/carbon-components-svelte/commit/4623650bf6e4f3aec99dddc584faaa5877c79bab))
+- **header-switcher:** anchor the menu to the trigger's start edge ([db050be](https://github.com/carbon-design-system/carbon-components-svelte/commit/db050beab384c23684ae778286cf93357cbef0c8))
+- **image-loader:** fetch srcset once instead of src and the candidate ([302fbcc](https://github.com/carbon-design-system/carbon-components-svelte/commit/302fbcc866fc3db7a4d19060c2e34333ce8e46a1))
+- **image-loader:** skip the loading slot for an already-cached image ([fcef8fc](https://github.com/carbon-design-system/carbon-components-svelte/commit/fcef8fcb1387dc04323c9f87d0ea4cbba2af057d))
+- **kbd:** center the key caps on the cap height in running text ([a6df7e0](https://github.com/carbon-design-system/carbon-components-svelte/commit/a6df7e0b7765aa31923d405d6de5ea17c1e362b2))
+- **list-box:** don't crash dropping a menu group in Svelte async mode ([62a6bb9](https://github.com/carbon-design-system/carbon-components-svelte/commit/62a6bb9b89421e64bb683476dc1e6855fd6e22e8))
+- **multi-select:** anchor the filterable menu to its field ([dafdf93](https://github.com/carbon-design-system/carbon-components-svelte/commit/dafdf936b299f3d5ac6d9ecbaa06414733bf192c)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
+- **profile-menu:** keep the header avatar's circle in forced colors ([cdf1d90](https://github.com/carbon-design-system/carbon-components-svelte/commit/cdf1d90da293dbbb7cd9ead9b570c5ed89040741))
+- **profile-menu:** paint item icons ButtonText in forced colors ([5cfba6d](https://github.com/carbon-design-system/carbon-components-svelte/commit/5cfba6ddfb7e81cf0d0c925b6a25057d93dcfef7))
+- **tooltip:** portal an in-place tooltip that runs past the window ([f6fd66c](https://github.com/carbon-design-system/carbon-components-svelte/commit/f6fd66c14524395a523070546b2bdc7d26f6fc35)), closes [#5704](https://github.com/carbon-design-system/carbon-components-svelte/issues/5704)
+- **ui-shell:** keep avatar initials out of profile menu item names ([b2ea454](https://github.com/carbon-design-system/carbon-components-svelte/commit/b2ea4548f52dd82642ba0552960bf882dd57f44d))
+- **ui-shell:** name the ProfileMenu and HeaderSwitcher panels as groups ([e760c38](https://github.com/carbon-design-system/carbon-components-svelte/commit/e760c3832c6a23d1511d60fa384017cd2adc97bf))
+
+### Performance
+
+- **button:** bind the shortcut only when one is set ([110f178](https://github.com/carbon-design-system/carbon-components-svelte/commit/110f17854d68c15241e2f2ad2e86a3adb396bb8c))
+- **header-search:** bind the shortcut only when one is set ([2dc95d1](https://github.com/carbon-design-system/carbon-components-svelte/commit/2dc95d1dc6a84c275d4de703f445029398f61e48))
+- **kbd:** draw named keys from a path map ([8c18c9e](https://github.com/carbon-design-system/carbon-components-svelte/commit/8c18c9ef3002f1837334047e61e0eff0b69577ae))
+- **keyboard-shortcut:** let bundlers drop the unused key maps ([4223540](https://github.com/carbon-design-system/carbon-components-svelte/commit/4223540b5208fe16bc72049cf6b445612035343c))
+- **search:** bind the shortcut only when one is set ([f72185c](https://github.com/carbon-design-system/carbon-components-svelte/commit/f72185c5e112accd0cfabbbad2398e26aa70d438))
+
 ### [0.114.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.0...v0.114.1) (2026-11-14)
 
 ### Bug Fixes
