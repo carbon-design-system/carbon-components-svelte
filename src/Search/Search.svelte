@@ -152,6 +152,7 @@
 
   import { createEventDispatcher, getContext, onMount, tick } from "svelte";
   import Kbd from "../Kbd/Kbd.svelte";
+  import ShortcutBinding from "../Kbd/ShortcutBinding.svelte";
   import { KBD_TRANSLATIONS, kbdKeys } from "../Kbd/kbd-keys.js";
   import { getKbdTranslations } from "../Kbd/kbd-translations.js";
   import Loading from "../Loading/Loading.svelte";
@@ -178,7 +179,6 @@
   import {
     applePlatform,
     ariaKeyShortcuts,
-    keyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeSearchSize } from "../utils/size-aliases.js";
@@ -212,7 +212,8 @@
     return kbdTranslations?.(id) ?? KBD_TRANSLATIONS[id];
   }
 
-  $: shortcutParams = { shortcut, run: runShortcut };
+  // The collapsed magnifier takes the shortcut, then the input.
+  $: shortcutNode = expandable && !expanded ? searchRef : ref;
   // The magnifier holds the binding while the field is collapsed, so it
   // announces the keys too.
   $: ariaShortcut = shortcut
@@ -359,7 +360,6 @@
       <button
         type="button"
         bind:this={searchRef}
-        use:keyboardShortcut={shortcutParams}
         aria-keyshortcuts={ariaShortcut}
         class:bx--search-magnifier={true}
         aria-label={labelText.trim() === ""
@@ -419,7 +419,6 @@
     <input
       use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
       bind:this={ref}
-      use:keyboardShortcut={shortcutParams}
       use:preserveFocusSelection={selectTextOnFocus && !effectiveDisabled}
       use:formReset={handleFormReset}
       bind:value
@@ -554,4 +553,10 @@
   {#if showWarn && !isFluid && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
+{/if}
+
+<!-- Only while a shortcut is set, so a field without one leaves the binding,
+     and with carbon-preprocess-svelte the parser, out of the app. -->
+{#if shortcut && shortcutNode}
+  <ShortcutBinding node={shortcutNode} {shortcut} run={runShortcut} />
 {/if}
