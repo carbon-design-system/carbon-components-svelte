@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.107.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.107.1...v0.107.2) (2026-11-18)
+
+### Bug Fixes
+
+- **multi-select:** anchor the filterable menu to its field ([c1d67da](https://github.com/carbon-design-system/carbon-components-svelte/commit/c1d67daea1c0e0208500700fa41858da17ac96a0)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
+
+  In 0.107 a filterable MultiSelect still opens its menu on focus, so as the first field in a `Modal` its menu now shows when the modal opens (before, it opened invisibly).
+
 ### [0.107.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.107.0...v0.107.1) (2026-05-02)
 
 ### Bug Fixes
