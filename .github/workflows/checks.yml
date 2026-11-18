@@ -80,6 +80,13 @@ jobs:
       - run: bunx --bun bivium check --max-unknown 0
       - run: bun fmt --check
       - run: bun lint
+      # svelte-lint keeps each component's result by content, so a run
+      # lints only the components that changed since the cache was saved.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/svelte-lint
+          key: svelte-lint-${{ github.sha }}
+          restore-keys: svelte-lint-
       - run: bun run lint:svelte
 
       - name: Build docs
