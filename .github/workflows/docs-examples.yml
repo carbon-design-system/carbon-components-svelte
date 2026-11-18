@@ -32,15 +32,6 @@ jobs:
           bun-version: canary
       - run: bun ci --ignore-scripts
       - run: bun lint docs
-      # svelte-lint keeps each component's result by content, so a run
-      # lints only the components that changed since the cache was saved.
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: node_modules/.cache/svelte-lint
-          key: svelte-lint-docs-${{ github.sha }}
-          restore-keys: |
-            svelte-lint-docs-
-            svelte-lint-
       - run: bun run lint:svelte docs
 
   typecheck:
