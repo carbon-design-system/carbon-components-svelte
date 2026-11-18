@@ -138,6 +138,7 @@
   import { createEventDispatcher, onMount, setContext, tick } from "svelte";
   import { writable } from "svelte/store";
   import Kbd from "../Kbd/Kbd.svelte";
+  import ShortcutBinding from "../Kbd/ShortcutBinding.svelte";
   import SkeletonText from "../SkeletonText/SkeletonText.svelte";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
@@ -150,7 +151,6 @@
   import {
     applePlatform,
     ariaKeyShortcuts,
-    keyboardShortcut,
   } from "../utils/keyboard-shortcut.js";
   import { moveIndex } from "../utils/move-index.js";
   import { createOptionListNavigator } from "../utils/option-list-navigator.js";
@@ -181,8 +181,6 @@
     active = true;
     ref?.focus();
   }
-
-  $: shortcutParams = { shortcut, run: runShortcut };
 
   // The closed search shows its shortcut beside the icon.
   $: hasShortcutHint = Boolean(shortcut) && !active;
@@ -469,7 +467,6 @@
   >
     <button
       bind:this={searchButtonRef}
-      use:keyboardShortcut={shortcutParams}
       type="button"
       aria-label={labelText}
       aria-expanded={active}
@@ -680,3 +677,9 @@
     </ul>
   {/if}
 </div>
+
+<!-- Only while a shortcut is set, so a field without one leaves the binding,
+     and with carbon-preprocess-svelte the parser, out of the app. -->
+{#if shortcut && searchButtonRef}
+  <ShortcutBinding node={searchButtonRef} {shortcut} run={runShortcut} />
+{/if}
