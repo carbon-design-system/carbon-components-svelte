@@ -115,6 +115,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Toggle",
       "Form",
       "FluidForm",
+      "PropertyInspector",
       "Stepper",
     ],
   },

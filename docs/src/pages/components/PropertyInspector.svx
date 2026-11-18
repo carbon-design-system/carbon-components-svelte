@@ -1,0 +1,201 @@
+---
+components: ["PropertyInspector"]
+description: Property inspectors edit the properties of the selected objects in a dense side panel, and show Mixed where the objects differ.
+---
+
+<script>
+  import { Box, PropertyInspector, Stack } from "carbon-components-svelte";
+
+  const properties = [
+    { id: "name", label: "Name", type: "text", group: "general" },
+    { id: "replicas", label: "Replicas", type: "number", group: "general", min: 0, max: 20, default: 1 },
+    { id: "public", label: "Public", type: "boolean", group: "general", default: false },
+    { id: "memory", label: "Memory", type: "number", group: "limits", row: "limits", rowLabel: "Limits", unit: "MB", min: 0, step: 64, default: 512 },
+    { id: "cpu", label: "CPU", type: "number", group: "limits", row: "limits", unit: "m", min: 0, step: 50, default: 250 },
+  ];
+
+  const groups = [
+    { id: "general", label: "General" },
+    { id: "limits", label: "Limits" },
+  ];
+
+  const services = [
+    { id: "api", name: "billing-api", replicas: 3, public: true, memory: 1024, cpu: 500 },
+    { id: "worker", name: "billing-worker", replicas: 6, public: false, memory: 512, cpu: 250 },
+  ];
+</script>
+
+## Basic
+
+Pass the `properties` to edit and the selected objects as `selection`. The inspector never changes an object. It reports each edit through `input` and `change`, and the page applies it. Reassign `selection` after an edit, since the inspector does not watch inside the objects.
+
+Select one or several shapes, then edit their fill, stroke, position, size, and opacity. With several selected, a field shows the value they share, or Mixed where they differ. Drag a label to scrub the value, or focus a field and use the arrow keys. Undo and redo use the `oldValue` and `newValue` of each `change`.
+
+<FileSource src="/framed/PropertyInspector/PropertyInspectorShapes" />
+
+## Data
+
+A property is `{ id, label, type }` plus the options of its type. `getValue(object, id)` reads a value, and defaults to `object[id]`. `idOf(object)` names an object in change events, and defaults to `object.id`.
+
+```svelte
+<PropertyInspector
+  properties={[
+    { id: "width", label: "Width", type: "number", min: 1, unit: "px", default: 100 },
+    { id: "fill", label: "Fill", type: "color", default: "#d0e2ff" },
+  ]}
+  selection={selectedShapes}
+  getValue={(shape, id) => shape.style[id]}
+  on:change={(event) => applyAndRecord(event.detail)}
+/>
+```
+
+| Property field | Use |
+| --- | --- |
+| `type` | `"text"`, `"number"`, `"boolean"`, `"toggle"`, `"select"`, `"dropdown"`, `"radio"`, `"color"`, or a name in `widgets` |
+| `group`, `row`, `rowLabel` | Put the property in a group, and join properties that share a `row` on one line |
+| `options` | The `{ value, label }` choices of `select`, `dropdown` and `radio` |
+| `min`, `max`, `step`, `unit`, `unitLabel` | Limits, the size of a key press and a drag step, the unit inside the field, and the unit as a screen reader says it |
+| `default` | The value a reset writes. A property with none is never marked modified |
+| `readOnly` | `true`, or a function that tells whether an object is read-only |
+| `appliesTo` | A function that tells whether an object has the property |
+| `lockWith` | The property whose ratio this one keeps while the row's lock is on |
+| `keywords` | Extra words the search matches |
+
+## Mixed values
+
+### Basic
+
+When the selected objects hold different values for a property, the field shows Mixed instead of any one of them. Properties whose values agree show the shared value. Editing a mixed field writes the new value to every selected object.
+
+Select one, two, or three services to see each control in both states.
+
+<FileSource src="/framed/PropertyInspector/PropertyInspectorMixed" />
+
+### Controls
+
+A Carbon field has no uniform way to say Mixed. The inspector maps each one onto what the field can do, and describes the rest to a screen reader with a hidden "Mixed" description.
+
+| Field | Mixed means | Carbon field support | What the inspector does |
+| --- | --- | --- | --- |
+| `Checkbox` | The indeterminate dash | Yes: `indeterminate` | Binds it. The first click sets every object on |
+| `Toggle` | Nothing: a switch is on or off | No | The knob rests half-way, the description says Mixed, and the first click sets every object on |
+| `Select` | No option chosen | Partly: an unset `selected` shows the first option | Selects a hidden, disabled "Mixed" option |
+| `Dropdown`, `ComboBox` | No item chosen | Yes: leave `selectedId` unset | `label` shows Mixed |
+| `RadioButtonGroup` | No radio checked | Yes: leave `selected` unset | Describes the group as Mixed, since nothing checked is also "no value" |
+| `ToggleButtonGroup`, `ContentSwitcher` | No item pressed | Yes: an empty `selected`, or `selectedIndex` of `-1` | Not used by a built-in type |
+| `MultiSelect` | Some options chosen by some objects | No: an option is checked or not | Not used by a built-in type |
+| `Slider` | No thumb position | No: the thumb always has one, and a `null` value only empties the text input | Not used by a built-in type; use a number field |
+| `TextInput`, `TextArea` | An empty field | Yes: `placeholder` | Shows Mixed as the placeholder and describes the field as Mixed |
+| `NumberInput` | An empty field | Yes: `value` of `null` with `allowEmpty`, and `placeholder` and `aria-valuetext` as rest props | Shows Mixed and sets `aria-valuetext` to Mixed |
+| Color | No one color | No field exists | A striped swatch, which forced colors keeps as `CanvasText` stripes |
+
+### Relative edits
+
+An arrow key, a page key, or a drag moves each object from its own value, so mixed values stay different. In a mixed number field, <DocKbd label="ArrowUp" /> adds one to every object, and <DocKbd label="Shift" /> + <DocKbd label="ArrowUp" /> adds ten.
+
+Typed text can also be relative. `+10` adds 10 to each object's own value, `+-10` subtracts, and `*2` or `x2` scales it. `-10` is a negative number, not a subtraction. Every result is clamped to `min` and `max` for each object.
+
+## Number fields
+
+### Scrubbing
+
+Drag a number's label toward the inline end to raise it, and the other way to lower it. Every 4 pixels is one `step`, and <DocKbd label="Shift" /> makes it 10 steps. In a right-to-left layout the inline end is the left, so the drag reverses. A drag fires `input` for each step and one `change` when it is released.
+
+### Keyboard
+
+A number field is a spin button. <DocKbd label="ArrowUp" /> and <DocKbd label="ArrowDown" /> move one step, <DocKbd label="Shift" /> makes it ten, <DocKbd label="Alt" /> a tenth, and <DocKbd label="PageUp" /> and <DocKbd label="PageDown" /> ten steps. A held key is one `change`, sent when the key is let go. `aria-valuetext` carries the value and `unitLabel`, such as "12 pixels", or Mixed.
+
+## Layout
+
+### Groups and rows
+
+Set `group` to place properties under a collapsible heading, and list the groups in `groups` to order and name them. Set `open` to `false` on a group to start it collapsed. A collapsed group builds its rows the first time it opens. Properties with no `group` render with no heading.
+
+<Box width="20rem" border="subtle">
+  <PropertyInspector
+    {properties}
+    selection={[services[0]]}
+    groups={[{ id: "general", label: "General" }, { id: "limits", label: "Limits", open: false }]}
+  />
+</Box>
+
+### Pairs and the aspect lock
+
+Properties with the same `row` share one line. Each field's own label sits inside it and is the scrub handle. A paired field has no room for its `unit`, so only the spoken value text keeps it; the row label can name the unit. Put `lockWith` on the second property of a pair, such as height with `"width"`, to show a lock button. While it is on, an edit to either value scales the other by the same ratio, in the same `change`.
+
+### Sizes
+
+Set `size` to `"xs"` for 24px rows or `"sm"`, the default, for 32px rows.
+
+<Stack gap={5} orientation="horizontal">
+  <Box width="18rem" border="subtle">
+    <PropertyInspector {properties} {groups} selection={[services[0]]} size="xs" />
+  </Box>
+  <Box width="18rem" border="subtle">
+    <PropertyInspector {properties} {groups} selection={[services[0]]} size="sm" />
+  </Box>
+</Stack>
+
+## Behavior
+
+### Reset and modified
+
+A property whose value differs from its `default` is modified. Its row gets a bar on the inline start and a reset button, which writes the default to every selected object as one `change` with `source` of `"reset"`, and returns focus to the row's field. Use `getDefault(object, id)` for a default that depends on the object.
+
+### Read-only
+
+Set `readOnly` to `true` for a property that cannot be edited. Give a function to make it depend on the object: the field is read-only when every selected object is, and an edit skips the ones that are.
+
+### Properties some objects lack
+
+A property appears when every selected object has it, which `appliesTo` decides. Set `scope` to `"any"` to show it when any object has it, and an edit reaches only those that do. Select two web services to see Domain, then add the worker to see it leave. Switch the scope to any to keep it.
+
+<FileSource src="/framed/PropertyInspector/PropertyInspectorScope" />
+
+### Search
+
+The search field filters rows by label, id, group name, and `keywords`, and opens every group while it has text. A hidden status announces how many properties remain. Bind `search` to set it, or set `hideSearch` to remove the field.
+
+## Undo
+
+Each `input` event carries the latest `newValue` for every object, so the canvas can follow a drag. Each `change` carries `oldValue` and `newValue` for every target once the edit is done: a drag, a held key, a typed value, a picked color, or a reset. Push each `change` onto a stack as one undo step. Applying every `oldValue` undoes it.
+
+```js
+function handleChange(event) {
+  const { changes, transaction, source } = event.detail;
+  undoStack.push({ changes, transaction, source });
+}
+
+function undo() {
+  const { changes } = undoStack.pop();
+  for (const { targetId, property, oldValue } of changes) {
+    write(targetId, property, oldValue);
+  }
+}
+```
+
+| Do | Why |
+| --- | --- |
+| Apply `input` to the canvas, and record `change` for undo | A drag sends dozens of `input` events and one `change`, so one drag is one undo step |
+| Find objects by `targetId` | The event is sent from a snapshot, and an object you replaced during a drag is not the `target` it holds |
+| Reassign `selection` after applying a change | The inspector does not watch inside objects, and shows what it was given |
+| Key rows by `id`, not by position | Rows stay mounted when the selection changes, so focus stays in the field |
+
+## Custom controls
+
+Add a control with `widgets`, keyed by a property `type`. It receives `property`, `state`, `id`, `name`, `size`, `mixedText`, and `readOnly`, and the functions `start(source)`, `update(edit)`, `end()` and `commit(value)`. Call `commit(value)` for a one-step edit. For a drag, call `start("input")`, then `update({ kind: "set", value })` for each value, then `end()`. A built-in `type` can be replaced the same way.
+
+`state` is `{ mixed, value, modified, readOnly }`. A custom control owns how it shows Mixed.
+
+## Accessibility
+
+The inspector is a group named by `labelText`, and each property group is a group named by its heading, at `headingLevel`. A group's heading holds a button with `aria-expanded`. A summary of the selection is a polite status, so a change of selection is announced.
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Tab" /> | Moves between fields, group headings, reset buttons, and aspect locks |
+| <DocKbd label="Enter" /> | Commits a typed value, or toggles a group when its heading is focused |
+| <DocKbd label="ArrowUp" /> / <DocKbd label="ArrowDown" /> | Steps a number. With <DocKbd label="Shift" />, ten steps |
+| <DocKbd label="Escape" /> | Puts back a typed text value |
+
+The visible row label is not read aloud: the field has the same name, or "Position X" for a pair. A text, number, or color field that is mixed has a hidden "Mixed" description, so Mixed is announced and not only drawn. Selecting other objects keeps focus in the same field.
