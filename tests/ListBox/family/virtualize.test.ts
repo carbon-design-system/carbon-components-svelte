@@ -158,6 +158,18 @@ describe.each(caseRows)("%s virtualization", (_, c) => {
     },
   );
 
+  // The window is created the first time the menu virtualizes.
+  it("windows a menu once its items pass the threshold", async () => {
+    const { rerenderField } = setup({ items: createItems(10) });
+    await user.click(field());
+    expect(screen.getAllByRole("option")).toHaveLength(10);
+
+    await rerenderField({ items: createItems(150) });
+
+    expect(screen.getAllByRole("option")).toHaveLength(11);
+    expect(menu().style.maxHeight).toBe("300px");
+  });
+
   it.each([
     [{ size: "sm", virtualize: true }, "16000px"],
     [{ size: "sm", virtualize: { itemHeight: 50 } }, "25000px"],

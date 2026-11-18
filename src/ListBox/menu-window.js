@@ -561,6 +561,29 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
 }
 
 /**
+ * The state a window resolves for a menu that doesn't virtualize: every
+ * option, under the size's maximum height. A listbox renders this until
+ * its menu first virtualizes, so one that never does creates no window.
+ *
+ * @param {ReadonlyArray<Record<string, unknown>>} items
+ * @param {"xs" | "sm" | "md" | "lg" | "xl"} [size]
+ * @returns {import("./menu-window.js").MenuWindowState}
+ */
+export function unwindowedMenuState(items, size = "md") {
+  return {
+    itemsToRender: /** @type {Record<string, unknown>[]} */ (items),
+    isVirtualized: false,
+    startIndex: 0,
+    offsetY: 0,
+    totalHeight: 0,
+    menuMaxHeight: getMenuMaxHeight(size),
+    isWindowed: false,
+    isMeasured: false,
+    isPinned: false,
+  };
+}
+
+/**
  * Call from `afterUpdate`. Schedules (via `tick`) a scroll of the newly
  * highlighted option into view.
  *
@@ -570,7 +593,8 @@ export function createMenuWindow({ getContainer, onScrollTop, onState }) {
  * @param {number} options.highlightedIndex
  * @param {number} options.prevHighlightedIndex
  * @param {HTMLElement | null | undefined} options.listRef
- * @param {ReturnType<typeof createMenuWindow>} options.menuWindow
+ * @param {ReturnType<typeof createMenuWindow> | null} options.menuWindow
+ * Only read while `shouldVirtualize` holds.
  * @returns {number} The value to store as `prevHighlightedIndex`.
  */
 export function scheduleHighlightScroll({
@@ -593,7 +617,7 @@ export function scheduleHighlightScroll({
 
   tick().then(() => {
     if (!listRef || highlightedIndex < 0) return;
-    menuWindow.scrollIntoView(highlightedIndex, "nearest");
+    menuWindow?.scrollIntoView(highlightedIndex, "nearest");
   });
 
   return highlightedIndex;

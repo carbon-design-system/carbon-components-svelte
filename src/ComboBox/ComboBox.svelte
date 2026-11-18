@@ -416,6 +416,7 @@
   import {
     createMenuWindow,
     scheduleHighlightScroll,
+    unwindowedMenuState,
   } from "../ListBox/menu-window.js";
   import VirtualWindow from "../VirtualList/VirtualWindow.svelte";
   import {
@@ -534,16 +535,21 @@
   /** @type {import("../ListBox/menu-window.js").MenuWindowState<any>} */
   let menuState;
 
-  /** @type {import("../ListBox/menu-window.js").MenuWindow<any>} */
-  const menuWindow = createMenuWindow({
-    getContainer: () => listRef,
-    onScrollTop: (scrollTop) => {
-      listScrollTop = scrollTop;
-    },
-    onState: (state) => {
-      menuState = state;
-    },
-  });
+  // Created the first time the menu virtualizes. Until then the menu renders
+  // every option and there is nothing to window or measure, so a menu that
+  // never virtualizes never creates one.
+  /** @type {null | import("../ListBox/menu-window.js").MenuWindow<any>} */
+  let menuWindow = null;
+  const createWindow = () =>
+    createMenuWindow({
+      getContainer: () => listRef,
+      onScrollTop: (scrollTop) => {
+        listScrollTop = scrollTop;
+      },
+      onState: (state) => {
+        menuState = state;
+      },
+    });
 
   const buildGroupRows = createGroupRows();
 
@@ -558,7 +564,7 @@
   onMount(() => {
     return () => {
       announceFilterResults.cancel();
-      menuWindow.destroy();
+      menuWindow?.destroy();
       loadingIndicator.cancel();
     };
   });
@@ -606,7 +612,7 @@
   function handleMenuScroll(event) {
     const target = /** @type {HTMLElement} */ (event.target);
     listScrollTop = target.scrollTop;
-    menuWindow.noteScroll(target.scrollTop);
+    menuWindow?.noteScroll(target.scrollTop);
     const detail = scrollEndTracker.observe({
       scrollTop: target.scrollTop,
       scrollHeight: target.scrollHeight,
@@ -799,7 +805,7 @@
             : -1;
         const row = toRowIndex(selectedIndex);
         // Keep the group header in view above the first option of a group.
-        menuWindow.scrollIntoView(
+        menuWindow?.scrollIntoView(
           groupRows?.itemIndexByRow[row - 1] === -1 ? row - 1 : row,
           "top",
         );
@@ -807,7 +813,7 @@
     }
     prevOpen = open;
 
-    menuWindow.sync();
+    menuWindow?.sync();
 
     if (wasJustOpened && rendered)
       /** @type {HTMLInputElement} */ (ref).focus();
@@ -825,7 +831,7 @@
         listScrollTop = resetVirtualScrollOnClose();
       }
       scrollEndTracker.reset();
-      menuWindow.reset();
+      menuWindow?.reset();
       highlightedIndex = -1;
       highlightOrigin = null;
       prevHighlightedIndex = -1;
@@ -964,18 +970,21 @@
       ? undefined
       : `${id}-${filteredItems[highlightedIndex].id}`;
 
-  $: menuState = menuWindow.update({
-    items: menuRows,
-    getKey: (row) => row.id,
-    shouldVirtualize,
-    virtualize,
-    // A header is not as tall as an option, so a grouped menu measures its
-    // rows the way a menu of wrapped options does.
-    wrapOptions: wrapOptions || grouped,
-    size: effectiveSize,
-    fluid: hasFluidMenuItems,
-    scrollTop: listScrollTop,
-  });
+  $: if (shouldVirtualize && !menuWindow) menuWindow = createWindow();
+  $: menuState = menuWindow
+    ? menuWindow.update({
+        items: menuRows,
+        getKey: (row) => row.id,
+        shouldVirtualize,
+        virtualize,
+        // A header is not as tall as an option, so a grouped menu measures its
+        // rows the way a menu of wrapped options does.
+        wrapOptions: wrapOptions || grouped,
+        size: effectiveSize,
+        fluid: hasFluidMenuItems,
+        scrollTop: listScrollTop,
+      })
+    : unwindowedMenuState(menuRows, effectiveSize);
   $: ({
     itemsToRender,
     isVirtualized,
