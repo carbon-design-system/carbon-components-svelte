@@ -86,6 +86,13 @@ export function keepCaretInset(
 export function slideIntoWindow(node: HTMLElement): { destroy(): void };
 
 /**
+ * Whether `el` reaches past an edge of the window, which no ancestor
+ * counts as clipping (see `clippedBy`). `false` when `el` has no layout
+ * (zero size), or the window has none (jsdom).
+ */
+export function pastWindow(el: Element): boolean;
+
+/**
  * The first box that cuts `el` off: an ancestor whose overflow isn't
  * `visible` on an axis where `el` reaches past its edge, counting only
  * boxes that position `el`. `null` when nothing clips it or `el` has no

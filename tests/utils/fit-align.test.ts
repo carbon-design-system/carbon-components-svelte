@@ -2,6 +2,7 @@ import {
   clippedBy,
   fitPopoverAlign,
   keepCaretInset,
+  pastWindow,
   shouldFlipAlign,
   sidePlacement,
   slideIntoWindow,
@@ -110,6 +111,38 @@ describe("windowShift", () => {
     // jsdom: the window itself has no width.
     windowWidth(0);
     expect(windowShift(box({ left: 300, width: 100 }), 12)).toBe(12);
+  });
+});
+
+describe("pastWindow", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  function windowSize(width: number, height: number) {
+    vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(
+      width,
+    );
+    vi.spyOn(document.documentElement, "clientHeight", "get").mockReturnValue(
+      height,
+    );
+  }
+
+  it("is true for a box past any edge of the window", () => {
+    windowSize(1000, 600);
+    const size = { width: 100, height: 40 };
+    expect(pastWindow(box({ left: -20, top: 100, ...size }))).toBe(true);
+    expect(pastWindow(box({ left: 950, top: 100, ...size }))).toBe(true);
+    expect(pastWindow(box({ left: 300, top: -20, ...size }))).toBe(true);
+    expect(pastWindow(box({ left: 300, top: 580, ...size }))).toBe(true);
+    expect(pastWindow(box({ left: 300, top: 100, ...size }))).toBe(false);
+  });
+
+  it("is false with no layout to measure", () => {
+    windowSize(1000, 600);
+    expect(pastWindow(box({ left: -20 }))).toBe(false);
+
+    // jsdom: the window itself has no size.
+    windowSize(0, 0);
+    expect(pastWindow(box({ left: -20, width: 100, height: 40 }))).toBe(false);
   });
 });
 

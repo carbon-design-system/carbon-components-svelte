@@ -141,7 +141,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
-  import { clippedBy } from "../utils/fit-align.js";
+  import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { formReset } from "../utils/form-reset.js";
   import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
@@ -168,8 +168,9 @@
   }));
   $: isFluid = !inline && (fluid || !!ctx?.isFluid);
   // Set for one open when the in-place tooltip turns out to be cut off by
-  // a box around it (a scrolling panel, a DataTable): it shows in a portal
-  // instead. Only when `portalTooltip` is left unset.
+  // a box around it (a scrolling panel, a DataTable) or the window's edge:
+  // it shows in a portal instead, which keeps it in the window. Only when
+  // `portalTooltip` is left unset.
   let portalWhenClipped = false;
   $: effectivePortalTooltip =
     portalTooltip === undefined
@@ -223,7 +224,8 @@
 
   function portalIfClipped() {
     if (portalTooltip !== undefined || !inlineOpen || !tooltipRef) return;
-    if (clippedBy(tooltipRef)) portalWhenClipped = true;
+    if (clippedBy(tooltipRef) || pastWindow(tooltipRef))
+      portalWhenClipped = true;
   }
 
   onMount(() => {

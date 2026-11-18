@@ -278,6 +278,27 @@ export function slideIntoWindow(node) {
   };
 }
 
+/**
+ * Whether `el` reaches past an edge of the window, which no ancestor
+ * counts as clipping (see `clippedBy`). `false` when `el` has no layout
+ * (zero size), or the window has none (jsdom).
+ * @param {Element} el
+ * @returns {boolean}
+ */
+export function pastWindow(el) {
+  const rect = el.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) return false;
+  const { clientWidth, clientHeight } = document.documentElement;
+  if (clientWidth === 0 || clientHeight === 0) return false;
+  // 1px of slack absorbs subpixel rounding at the edges.
+  return (
+    rect.left < -1 ||
+    rect.top < -1 ||
+    rect.right > clientWidth + 1 ||
+    rect.bottom > clientHeight + 1
+  );
+}
+
 /** `contain` values that include paint containment. */
 const PAINT_CONTAINMENT = /paint|content|strict/;
 

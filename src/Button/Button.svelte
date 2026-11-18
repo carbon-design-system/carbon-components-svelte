@@ -208,7 +208,7 @@
   } from "../constants/context-keys.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import { dismiss } from "../utils/dismiss.js";
-  import { clippedBy } from "../utils/fit-align.js";
+  import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { isPointerFocus } from "../utils/focus.js";
   import { formButtonSize } from "../utils/form-button-size.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -253,8 +253,9 @@
   $: hasTooltipContent =
     hasIconOnly && Boolean(iconDescription) && !showSpinner;
   // Set for one open when the in-place tooltip turns out to be cut off by
-  // a box around it (a scrolling panel, a DataTable): it shows in a portal
-  // instead. Only when `portalTooltip` is left unset.
+  // a box around it (a scrolling panel, a DataTable) or the window's edge:
+  // it shows in a portal instead, which keeps it in the window. Only when
+  // `portalTooltip` is left unset.
   let portalWhenClipped = false;
   $: effectivePortalTooltip =
     portalTooltip === undefined
@@ -308,7 +309,7 @@
       ref?.querySelector(":scope > .bx--assistive-text")
     );
     if (portalTooltip !== undefined || !inlineOpen || !tooltip) return;
-    if (clippedBy(tooltip)) portalWhenClipped = true;
+    if (clippedBy(tooltip) || pastWindow(tooltip)) portalWhenClipped = true;
   }
 
   // Back in place for the next open to measure, and closed there too:
