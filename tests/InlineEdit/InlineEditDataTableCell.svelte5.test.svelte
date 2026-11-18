@@ -32,7 +32,7 @@
   ]}
   {rows}
 >
-  <svelte:fragment slot="cell" let:row let:cell>
+  {#snippet cell({ row, cell })}
     {#if cell.key === "item"}
       <InlineEdit
         size="xs"
@@ -51,5 +51,5 @@
     {:else}
       {cell.value}
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </DataTable>

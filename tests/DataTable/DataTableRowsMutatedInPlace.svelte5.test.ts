@@ -2,4 +2,6 @@ import DataTableRowsMutatedInPlace from "./DataTableRowsMutatedInPlace.svelte5.t
 // Svelte 5 only: a runes `$state` array mutated in place, never reassigned.
 import { describeRowsMutatedInPlace } from "./rows-mutated-in-place-suite";
 
-describeRowsMutatedInPlace("a $state array", DataTableRowsMutatedInPlace);
+describeRowsMutatedInPlace("a $state array", DataTableRowsMutatedInPlace, {
+  renameShows: true,
+});

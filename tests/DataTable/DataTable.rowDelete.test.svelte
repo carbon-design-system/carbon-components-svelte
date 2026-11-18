@@ -18,7 +18,7 @@
 </script>
 
 <DataTable {headers} {rows}>
-  <svelte:fragment slot="cell" let:row let:cell>
+  {#snippet cell({ row, cell })}
     {#if cell.key === "actions"}
       <Button
         size="small"
@@ -29,5 +29,5 @@
     {:else}
       {cell.value}
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </DataTable>

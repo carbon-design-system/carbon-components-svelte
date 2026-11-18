@@ -46,13 +46,13 @@
     {page}
     {virtualize}
   >
-    <svelte:fragment slot="footerCell" let:header let:index>
+    {#snippet footerCell({ header, index })}
       {#if header.key === "port"}
         {totalPort}
       {:else if index === 0}
         Total
       {/if}
-    </svelte:fragment>
+    {/snippet}
   </DataTable>
 {:else}
   <DataTable

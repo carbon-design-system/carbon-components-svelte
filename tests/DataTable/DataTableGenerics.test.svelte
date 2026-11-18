@@ -115,8 +115,8 @@
     undefined;
   export let onProductRowExpand: ((row: ProductRow) => void) | undefined =
     undefined;
-  export let onProductSort:
-    ((e: CustomEvent<ProductSortDetail>) => void) | undefined = undefined;
+  export let onProductSort: ((event: ProductSortDetail) => void) | undefined =
+    undefined;
 </script>
 
 <DataTable
@@ -125,12 +125,12 @@
   selectable
   batchSelection
   bind:selectedRowIds
-  on:click:row--select={(e) => onRowSelect?.(e.detail.row)}
+  onrowselect={(detail) => onRowSelect?.(detail.row)}
 >
   <!-- The footer gets every visible header, empty ones included. -->
-  <svelte:fragment slot="footerCell" let:header>
+  {#snippet footerCell({ header })}
     {#if header.empty === true}{:else}{header.value}{/if}
-  </svelte:fragment>
+  {/snippet}
 </DataTable>
 
 <DataTable
@@ -139,7 +139,7 @@
   selectable
   batchSelection
   bind:selectedRowIds={numericSelectedRowIds}
-  on:click:row--select={(e) => onNumericRowSelect?.(e.detail.row)}
+  onrowselect={(detail) => onNumericRowSelect?.(detail.row)}
 />
 
 <DataTable
@@ -152,16 +152,16 @@
   batchExpansion
   bind:selectedRowIds={productSelectedRowIds}
   bind:expandedRowIds={productExpandedRowIds}
-  on:click:row={(e) => onProductRowClick?.(e.detail.row)}
-  on:click:row--expand={(e) => onProductRowExpand?.(e.detail.row)}
-  on:sort={(e) => {
-    readSortDetail(e.detail);
-    onProductSort?.(e);
+  onrowclick={(detail) => onProductRowClick?.(detail.row)}
+  onrowexpand={(detail) => onProductRowExpand?.(detail.row)}
+  onsort={(event) => {
+    readSortDetail(event);
+    onProductSort?.(event);
   }}
 >
-  <svelte:fragment slot="expandedRow" let:row>
+  {#snippet expandedRow({ row })}
     <p>Expanded content for {row.name}</p>
-  </svelte:fragment>
+  {/snippet}
 </DataTable>
 
 <DataTable

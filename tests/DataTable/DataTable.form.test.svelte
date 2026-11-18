@@ -26,8 +26,8 @@
     bind:selectedRowIds
     {headers}
     {rows}
-    on:click:row--select={onSelect}
-    on:click:header--select={onSelect}
+    onrowselect={onSelect}
+    onheaderselect={onSelect}
   />
 </form>
 <p data-testid="bound">{JSON.stringify(selectedRowIds)}</p>

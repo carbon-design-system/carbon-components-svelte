@@ -34,13 +34,13 @@
       <ToolbarSearch persistent shouldFilterRows />
     </ToolbarContent>
   </Toolbar>
-  <svelte:fragment slot="cell" let:cell let:row>
+  {#snippet cell({ cell, row })}
     {#if cell.key === "note"}
       <input data-testid="note-{row.id}" />
     {:else}
       {cell.value}
     {/if}
-  </svelte:fragment>
+  {/snippet}
 </DataTable>
 
 <span data-testid="selected-count">{selectedRowIds.length}</span>

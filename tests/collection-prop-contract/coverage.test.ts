@@ -16,8 +16,12 @@ const sourceOf = (component: string) =>
 /** Every `Component.prop` whose prop defaults to an empty array. */
 const candidates = Object.entries(sources)
   .flatMap(([path, source]) =>
-    [...source.matchAll(/export let (\w+) = \[\];/g)].map(
-      ([, prop]) => `${name(path)}.${prop}`,
+    [
+      ...source.matchAll(
+        /(?:export let (\w+) = \[\];|^\s+(\w+) = (?:\$bindable\()?\[\]\)?,$)/gm,
+      ),
+    ].map(
+      ([, legacyProp, runesProp]) => `${name(path)}.${legacyProp ?? runesProp}`,
     ),
   )
   .sort();
