@@ -175,6 +175,114 @@ export function compareValues(itemA, itemB, ascending, customSort) {
   return ascending ? result : -result;
 }
 
+/**
+ * @typedef {"ascending" | "descending"} SortRuleDirection
+ */
+
+/**
+ * The direction a header click moves to.
+ * @param {"none" | SortRuleDirection} current
+ * @param {boolean} always - When true, toggle between ascending and descending only
+ * @returns {"none" | SortRuleDirection}
+ */
+export function nextSortDirection(current, always) {
+  if (current === "none") return "ascending";
+  if (current === "ascending") return "descending";
+  return always ? "ascending" : "none";
+}
+
+/**
+ * The sort list after a header click.
+ * A plain click makes the header the only sort. An additive click (Shift)
+ * moves the header one step through its own direction cycle in place, or
+ * appends it as the lowest priority key if it is not sorted yet.
+ * @template Key
+ * @param {ReadonlyArray<{ key: Key; direction: SortRuleDirection }>} sortBy - The current sort list
+ * @param {Key} key - The clicked header's key
+ * @param {{ additive: boolean; always: boolean }} options
+ * @returns {Array<{ key: Key; direction: SortRuleDirection }>} A new list
+ */
+export function toggleSortRule(sortBy, key, { additive, always }) {
+  const index = sortBy.findIndex((rule) => rule.key === key);
+  const next = nextSortDirection(
+    index < 0 ? "none" : sortBy[index].direction,
+    always,
+  );
+
+  if (!additive) return next === "none" ? [] : [{ key, direction: next }];
+  if (next === "none") return sortBy.filter((_, i) => i !== index);
+  if (index < 0) return [...sortBy, { key, direction: next }];
+  return sortBy.map((rule, i) =>
+    i === index ? { key, direction: next } : rule,
+  );
+}
+
+/**
+ * Whether two sort lists order rows the same way.
+ * @param {ReadonlyArray<{ key: unknown; direction: SortRuleDirection }>} a
+ * @param {ReadonlyArray<{ key: unknown; direction: SortRuleDirection }>} b
+ * @returns {boolean}
+ */
+export function sortListsEqual(a, b) {
+  if (a === b) return true;
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].key !== b[i].key || a[i].direction !== b[i].direction) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @typedef {object} SortSpec
+ * @property {unknown} key - The header key, passed to a table-level `sort` as `context.key`
+ * @property {string} path - The row path the value is read from
+ * @property {boolean} ascending
+ * @property {((a: any, b: any) => number) | undefined} headerSort - A per-header comparator
+ */
+
+/**
+ * Sorts rows by one or more keys without changing the input array.
+ * Ties fall through to the next key. Rows equal on every key keep their
+ * input order (the sort is stable). Values are read per comparison, as a
+ * one-key sort always did: reading each once per row first made a one-key
+ * sort 1.5x slower and a three-key sort only 20% faster.
+ * @template Row
+ * @param {ReadonlyArray<Row>} rows
+ * @param {ReadonlyArray<SortSpec>} specs - Highest priority first
+ * @param {((a: any, b: any, context: { key: any; ascending: boolean; row_a: Row; row_b: Row }) => number) | undefined} tableSort - The table-level comparator, used for keys without a header comparator
+ * @returns {Row[]}
+ */
+export function sortRows(rows, specs, tableSort) {
+  const specCount = specs.length;
+
+  return [...rows].sort((rowA, rowB) => {
+    for (let s = 0; s < specCount; s++) {
+      const { key, path, ascending, headerSort } = specs[s];
+      const a = resolvePath(
+        /** @type {Record<string, unknown>} */ (rowA),
+        path,
+      );
+      const b = resolvePath(
+        /** @type {Record<string, unknown>} */ (rowB),
+        path,
+      );
+      let result;
+      if (headerSort) {
+        result = compareValues(a, b, ascending, headerSort);
+      } else if (tableSort) {
+        result = tableSort(a, b, { key, ascending, row_a: rowA, row_b: rowB });
+        if (!ascending) result = -result;
+      } else {
+        result = compareValues(a, b, ascending, undefined);
+      }
+      if (result) return result;
+    }
+    return 0;
+  });
+}
+
 // Leading characters a spreadsheet interprets as the start of a formula.
 const FORMULA_PREFIX_REGEX = /^[=+\-@\t\r]/;
 

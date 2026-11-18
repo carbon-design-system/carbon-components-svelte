@@ -87,6 +87,7 @@ export { default as ToolbarDensity } from "./DataTable/ToolbarDensity.svelte";
 export { default as ToolbarMenu } from "./DataTable/ToolbarMenu.svelte";
 export { default as ToolbarMenuItem } from "./DataTable/ToolbarMenuItem.svelte";
 export { default as ToolbarSearch } from "./DataTable/ToolbarSearch.svelte";
+export { default as ToolbarSortBy } from "./DataTable/ToolbarSortBy.svelte";
 export { default as DateCalendar } from "./DatePicker/DateCalendar.svelte";
 export { default as DatePicker } from "./DatePicker/DatePicker.svelte";
 export { default as DatePickerInput } from "./DatePicker/DatePickerInput.svelte";

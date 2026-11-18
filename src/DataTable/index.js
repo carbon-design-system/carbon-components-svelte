@@ -16,3 +16,4 @@ export { default as ToolbarDensity } from "./ToolbarDensity.svelte";
 export { default as ToolbarMenu } from "./ToolbarMenu.svelte";
 export { default as ToolbarMenuItem } from "./ToolbarMenuItem.svelte";
 export { default as ToolbarSearch } from "./ToolbarSearch.svelte";
+export { default as ToolbarSortBy } from "./ToolbarSortBy.svelte";

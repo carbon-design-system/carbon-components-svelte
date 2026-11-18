@@ -126,6 +126,49 @@ describe("DataTable virtualize server render", () => {
   });
 });
 
+describe("DataTable multi-column sort server render", () => {
+  const { document } = renderSSR(DataTable, {
+    id: "people",
+    sortable: true,
+    sortMode: "multiple",
+    sortBy: [
+      { key: "role", direction: "descending" },
+      { key: "name", direction: "ascending" },
+    ],
+    headers: [
+      { key: "name", value: "Name" },
+      { key: "role", value: "Role" },
+    ],
+    rows: [
+      { id: "a", name: "Ada", role: "Engineer" },
+      { id: "b", name: "Bob", role: "Designer" },
+      { id: "c", name: "Cy", role: "Engineer" },
+    ],
+  });
+
+  it("renders the rows sorted, with the priority and description", () => {
+    const cells = [...document.querySelectorAll("tbody td:first-child")];
+    expect(cells.map((cell) => cell.textContent?.trim())).toEqual([
+      "Ada",
+      "Cy",
+      "Bob",
+    ]);
+
+    const [name, role] = [...document.querySelectorAll("th")];
+    expect(role).toHaveAttribute("aria-sort", "descending");
+    expect(name).toHaveAttribute("aria-sort", "none");
+    expect(role.querySelector(".bx--table-sort__priority")).toHaveTextContent(
+      "1",
+    );
+    expect(name.querySelector(".bx--table-sort__priority")).toHaveTextContent(
+      "2",
+    );
+    expect(
+      document.getElementById("people-name-sort-description"),
+    ).toHaveTextContent("Sorted ascending, priority 2 of 2");
+  });
+});
+
 describe("TableContainer server render", () => {
   const props = { id: "sales", title: "Sales", description: "By region" };
 

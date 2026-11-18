@@ -6,7 +6,9 @@ import {
   resolvePath,
   rowsEqual,
   shouldIgnoreRowClick,
+  sortRows,
   toCsv,
+  toggleSortRule,
 } from "../../src/DataTable/data-table-utils.js";
 
 describe("shouldIgnoreRowClick", () => {
@@ -563,6 +565,98 @@ describe("compareValues", () => {
       expect(compareValues("ü", "u", true)).toBe(0);
       // But different base letters are still distinct
       expect(compareValues("ä", "z", true)).toBeLessThan(0);
+    });
+  });
+});
+
+describe("toggleSortRule", () => {
+  const rule = (key: string, direction: "ascending" | "descending") => ({
+    key,
+    direction,
+  });
+  const plain = { additive: false, always: false };
+  const additive = { additive: true, always: false };
+
+  it("makes a plain click the only sort", () => {
+    const list = [rule("a", "ascending"), rule("b", "descending")];
+    expect(toggleSortRule(list, "c", plain)).toEqual([rule("c", "ascending")]);
+    expect(toggleSortRule(list, "b", plain)).toEqual([]);
+    expect(toggleSortRule(list, "a", plain)).toEqual([rule("a", "descending")]);
+  });
+
+  it("appends, flips in place and removes on an additive click", () => {
+    let list = [rule("a", "ascending")];
+    list = toggleSortRule(list, "b", additive);
+    list = toggleSortRule(list, "c", additive);
+    expect(list.map((r) => r.key)).toEqual(["a", "b", "c"]);
+
+    list = toggleSortRule(list, "b", additive);
+    expect(list[1]).toEqual(rule("b", "descending"));
+
+    list = toggleSortRule(list, "b", additive);
+    expect(list.map((r) => r.key)).toEqual(["a", "c"]);
+  });
+
+  it("never removes with always", () => {
+    const list = [rule("a", "descending")];
+    expect(toggleSortRule(list, "a", { additive: true, always: true })).toEqual(
+      [rule("a", "ascending")],
+    );
+  });
+
+  it("does not change its input", () => {
+    const list = [rule("a", "ascending")];
+    toggleSortRule(list, "a", additive);
+    expect(list).toEqual([rule("a", "ascending")]);
+  });
+});
+
+describe("sortRows", () => {
+  const spec = (
+    path: string,
+    ascending = true,
+    headerSort?: (a: never, b: never) => number,
+  ) => ({
+    key: path,
+    path,
+    ascending,
+    headerSort,
+  });
+  const rows = [
+    { id: 1, team: "b", n: 2 },
+    { id: 2, team: "a", n: 2 },
+    { id: 3, team: "b", n: 1 },
+    { id: 4, team: "a", n: 2 },
+  ];
+
+  it("breaks ties with the next key and keeps input order on a full tie", () => {
+    const ids = (specs: ReturnType<typeof spec>[]) =>
+      sortRows(rows, specs, undefined).map((row) => row.id);
+
+    expect(ids([spec("team"), spec("n", false)])).toEqual([2, 4, 1, 3]);
+    expect(ids([spec("team", false), spec("n")])).toEqual([3, 1, 2, 4]);
+  });
+
+  it("does not change the input", () => {
+    const before = rows.map((row) => row.id);
+    sortRows(rows, [spec("n")], undefined);
+    expect(rows.map((row) => row.id)).toEqual(before);
+  });
+
+  it("applies a header comparator to its key and the table comparator to the rest", () => {
+    const tableSort = vi.fn((a: number, b: number, _context: unknown) => a - b);
+    const byTeam = (a: string, b: string) => b.localeCompare(a);
+    const sorted = sortRows(
+      rows,
+      [spec("team", true, byTeam), spec("n", false)],
+      tableSort,
+    );
+
+    expect(sorted.map((row) => row.id)).toEqual([1, 3, 2, 4]);
+    expect(tableSort).toHaveBeenCalled();
+    expect(tableSort.mock.calls[0][2]).toMatchObject({
+      key: "n",
+      ascending: false,
     });
   });
 });

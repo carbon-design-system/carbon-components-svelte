@@ -60,6 +60,63 @@ export function compareValues<T = unknown>(
   customSort?: ((a: T, b: T) => number) | false | undefined,
 ): number;
 
+export type SortRule<Key = string> = {
+  key: Key;
+  direction: "ascending" | "descending";
+};
+
+/**
+ * The direction a header click moves to.
+ * @param always When true, toggle between ascending and descending only.
+ */
+export function nextSortDirection(
+  current: "none" | "ascending" | "descending",
+  always: boolean,
+): "none" | "ascending" | "descending";
+
+/**
+ * The sort list after a header click. A plain click makes the header the only
+ * sort. An additive click (Shift) moves the header one step through its own
+ * direction cycle in place, or appends it as the lowest priority key.
+ */
+export function toggleSortRule<Key>(
+  sortBy: ReadonlyArray<SortRule<Key>>,
+  key: Key,
+  options: { additive: boolean; always: boolean },
+): SortRule<Key>[];
+
+/** Whether two sort lists order rows the same way. */
+export function sortListsEqual(
+  a: ReadonlyArray<SortRule<unknown>>,
+  b: ReadonlyArray<SortRule<unknown>>,
+): boolean;
+
+export type SortSpec = {
+  /** The header key, passed to a table-level `sort` as `context.key`. */
+  key: unknown;
+  /** The row path the value is read from. */
+  path: string;
+  ascending: boolean;
+  /** A per-header comparator. */
+  headerSort: ((a: never, b: never) => number) | undefined;
+};
+
+/**
+ * Sorts rows by one or more keys without changing the input array. Ties fall
+ * through to the next key, and rows equal on every key keep their input order.
+ */
+export function sortRows<Row>(
+  rows: ReadonlyArray<Row>,
+  specs: ReadonlyArray<SortSpec>,
+  tableSort:
+    | ((
+        a: never,
+        b: never,
+        context: { key: never; ascending: boolean; row_a: Row; row_b: Row },
+      ) => number)
+    | undefined,
+): Row[];
+
 export type ToCsvHeader<Row> = {
   /** Column key. Supports nested paths like `"contact.company"`. */
   key: string;
