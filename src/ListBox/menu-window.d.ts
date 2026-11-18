@@ -92,13 +92,23 @@ export declare function createMenuWindow<
   Item extends Record<string, unknown> = Record<string, unknown>,
 >(options: CreateMenuWindowOptions<Item>): MenuWindow<Item>;
 
+/**
+ * The state a window resolves for a menu that doesn't virtualize: every
+ * option, under the size's maximum height. A listbox renders this until its
+ * menu first virtualizes, so one that never does creates no window.
+ */
+export declare function unwindowedMenuState<
+  Item extends Record<string, unknown> = Record<string, unknown>,
+>(items: ReadonlyArray<Item>, size?: MenuWindowSize): MenuWindowState<Item>;
+
 export type ScheduleHighlightScrollOptions = {
   open: boolean;
   shouldVirtualize: boolean;
   highlightedIndex: number;
   prevHighlightedIndex: number;
   listRef: HTMLElement | null | undefined;
-  menuWindow: MenuWindow;
+  /** Only read while `shouldVirtualize` holds. */
+  menuWindow: MenuWindow | null;
 };
 
 /**

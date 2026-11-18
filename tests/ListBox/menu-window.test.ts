@@ -1,5 +1,8 @@
 import { tick } from "svelte";
-import { createMenuWindow } from "../../src/ListBox/menu-window.js";
+import {
+  createMenuWindow,
+  unwindowedMenuState,
+} from "../../src/ListBox/menu-window.js";
 import { VIRTUAL_INDEX_ATTRIBUTE } from "../../src/utils/height-measurer.js";
 import { virtualWindow } from "../../src/utils/virtual-window.js";
 import { nextFrame } from "../utils/next-frame";
@@ -289,6 +292,33 @@ describe("createMenuWindow: the visible slice", () => {
     });
     expect(fluid.totalHeight).toBe(300 * 64);
   });
+});
+
+describe("unwindowedMenuState", () => {
+  // A listbox renders it until its menu first virtualizes, then switches to
+  // the window: the two must agree for a menu that doesn't.
+  it.each([
+    ["md", false],
+    ["sm", true],
+    ["xl", false],
+  ] as const)(
+    "matches a window that doesn't virtualize (%s, wrapOptions: %s)",
+    (size, wrapOptions) => {
+      const { menu } = setup();
+      const items = buildItems(10);
+
+      expect(unwindowedMenuState(items, size)).toEqual(
+        menu.update({
+          items,
+          shouldVirtualize: false,
+          virtualize: undefined,
+          wrapOptions,
+          size,
+          scrollTop: 0,
+        }),
+      );
+    },
+  );
 });
 
 describe("createMenuWindow: leading the scroll", () => {
