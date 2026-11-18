@@ -86,3 +86,12 @@ export declare function splitGroupRuns<Row>(
   start: number,
   groupRows: GroupRows<Groupable> | null,
 ): GroupRun<Row>[];
+
+/**
+ * The rows of a menu that doesn't group, as its one run. Separate from
+ * `splitGroupRuns` so such a menu doesn't need the grouping code.
+ */
+export declare function ungroupedRuns<Row>(
+  rows: ReadonlyArray<Row>,
+  start: number,
+): GroupRun<Row>[];

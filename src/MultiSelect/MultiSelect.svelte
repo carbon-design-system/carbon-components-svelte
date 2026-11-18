@@ -463,6 +463,15 @@
   export let wrapOptions = false;
 
   /**
+   * Set to `false` to ignore each item's `group` and render one flat list.
+   * By default, the menu groups items under headers when any item has a
+   * `group`. A build-time optimizer can only remove the grouping code from
+   * a menu that sets `false`.
+   * @type {undefined | false}
+   */
+  export let grouped = undefined;
+
+  /**
    * Set to `true` to always render the menu in a portal, or `false` to
    * keep it in place. Left unset, the menu moves to a portal inside a
    * Modal, or when a box around it (`overflow` other than `visible`)
@@ -511,6 +520,7 @@
     isGroupHeader,
     orderByGroup,
     splitGroupRuns,
+    ungroupedRuns,
   } from "../ListBox/menu-groups.js";
   import {
     applyPostClearOptions,
@@ -679,7 +689,12 @@
     });
 
   const typeahead = createTypeaheadBuffer();
-  const buildGroupRows = createGroupRows();
+  /** @type {undefined | ReturnType<typeof createGroupRows>} */
+  let groupRowBuilder;
+  // Created on first use, so a menu that never groups doesn't need it.
+  /** @param {Parameters<ReturnType<typeof createGroupRows>>[0]} rows */
+  const buildGroupRows = (rows) =>
+    (groupRowBuilder ??= createGroupRows())(rows);
 
   // `openMenu(trigger)` opens a closed menu and records the cause, which
   // `syncOpenEvent` reports in `open` once the menu has rendered.
@@ -1247,13 +1262,17 @@
     }));
 
     baseOrderItems = items;
-    baseOrderPairs = orderByGroup(
-      pairs,
-      (pair) => pair.item.group,
+    /** @type {undefined | ((a: (typeof pairs)[number], b: (typeof pairs)[number]) => number)} */
+    const compare =
       sortItem === false
         ? undefined
-        : (a, b) => /** @type {number} */ (sortItem(a.item, b.item)),
-    );
+        : (a, b) => /** @type {number} */ (sortItem(a.item, b.item));
+    baseOrderPairs =
+      grouped === false
+        ? compare
+          ? pairs.sort(compare)
+          : pairs
+        : orderByGroup(pairs, (pair) => pair.item.group, compare);
     return baseOrderPairs;
   }
 
@@ -1316,7 +1335,12 @@
       // sorted by the same comparator and `Array.prototype.sort` is stable.
       return [
         ...selectAllEntries,
-        ...hoistWithinGroups(entries, (entry) => entry.checked),
+        ...(grouped === false
+          ? [
+              ...entries.filter((entry) => entry.checked),
+              ...entries.filter((entry) => !entry.checked),
+            ]
+          : hoistWithinGroups(entries, (entry) => entry.checked)),
       ];
     }
 
@@ -1548,10 +1572,10 @@
   $: itemsToUse = filterable ? filteredItems : sortedItems;
   $: scrollEndTracker.noteItemCount(itemsToUse.length);
 
-  $: grouped = items.some((item) => !!item.group);
+  $: menuGrouped = grouped !== false && items.some((item) => !!item.group);
   // Group headers render as rows of their own, so the menu window indexes
   // rows, not items. `toRowIndex` maps between the two.
-  $: groupRows = grouped && open ? buildGroupRows(itemsToUse) : null;
+  $: groupRows = menuGrouped && open ? buildGroupRows(itemsToUse) : null;
   $: menuRows = groupRows ? groupRows.rows : itemsToUse;
 
   $: if (shouldVirtualize && !menuWindow) menuWindow = createWindow();
@@ -1563,7 +1587,7 @@
         virtualize,
         // A header is not as tall as an option, so a grouped menu measures its
         // rows the way a menu of wrapped options does.
-        wrapOptions: wrapOptions || grouped,
+        wrapOptions: wrapOptions || menuGrouped,
         size: effectiveSize,
         fluid: hasFluidMenuItems,
         scrollTop: listScrollTop,
@@ -1581,11 +1605,9 @@
     isPinned,
   } = menuState);
   // Each group's rendered rows sit inside one `role="group"` element.
-  $: menuRuns = splitGroupRuns(
-    itemsToRender,
-    isVirtualized ? startIndex : 0,
-    groupRows,
-  );
+  $: menuRuns = groupRows
+    ? splitGroupRuns(itemsToRender, isVirtualized ? startIndex : 0, groupRows)
+    : ungroupedRuns(itemsToRender, isVirtualized ? startIndex : 0);
 
   $: multiSelectListBoxClass = [
     "bx--multi-select",
@@ -2111,7 +2133,7 @@
                   {@const actualIndex = groupRows
                     ? groupRows.itemIndexByRow[rowIndex]
                     : rowIndex}
-                  {#if isGroupHeader(item)}
+                  {#if groupRows && isGroupHeader(item)}
                     <!-- Hidden from assistive tech: the enclosing group is named
                          by a hidden label, which stays rendered when a virtualized
                          window leaves this header out. -->
@@ -2247,7 +2269,7 @@
                 {@const index = groupRows
                   ? groupRows.itemIndexByRow[rowIndex]
                   : rowIndex}
-                {#if isGroupHeader(item)}
+                {#if groupRows && isGroupHeader(item)}
                   <!-- Hidden from assistive tech: the enclosing group is named
                        by a hidden label, which stays rendered when a virtualized
                        window leaves this header out. -->

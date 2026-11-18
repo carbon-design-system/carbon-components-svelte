@@ -187,6 +187,21 @@ export function isGroupHeader(row) {
  */
 
 /**
+ * The rows of a menu that doesn't group, as its one run. Separate from
+ * `splitGroupRuns` so such a menu doesn't need the grouping code.
+ *
+ * @template Row
+ * @param {ReadonlyArray<Row>} rows The rendered rows.
+ * @param {number} start Row index of `rows[0]`.
+ * @returns {GroupRun<Row>[]}
+ */
+export function ungroupedRuns(rows, start) {
+  return [
+    { key: "rows", start, rows: /** @type {Row[]} */ (rows), groupIndex: -1 },
+  ];
+}
+
+/**
  * Split the rows a menu renders into runs of the same group, so each group's
  * rows can sit inside one `role="group"` element. A virtualized window can
  * start or end partway through a group; its run still gets the group.
@@ -200,16 +215,7 @@ export function isGroupHeader(row) {
  * @returns {GroupRun<Row>[]}
  */
 export function splitGroupRuns(rows, start, groupRows) {
-  if (!groupRows) {
-    return [
-      {
-        key: "rows",
-        start,
-        rows: /** @type {Row[]} */ (rows),
-        groupIndex: -1,
-      },
-    ];
-  }
+  if (!groupRows) return ungroupedRuns(rows, start);
 
   /** @type {GroupRun<Row>[]} */
   const runs = [];

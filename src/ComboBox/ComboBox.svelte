@@ -370,6 +370,15 @@
   export let wrapOptions = false;
 
   /**
+   * Set to `false` to ignore each item's `group` and render one flat list.
+   * By default, the menu groups items under headers when any item has a
+   * `group`. A build-time optimizer can only remove the grouping code from
+   * a menu that sets `false`.
+   * @type {undefined | false}
+   */
+  export let grouped = undefined;
+
+  /**
    * Set to `true` to always render the menu in a portal, or `false` to
    * keep it in place. Left unset, the menu moves to a portal inside a
    * Modal, or when a box around it (`overflow` other than `visible`)
@@ -406,6 +415,7 @@
     isGroupHeader,
     orderByGroup,
     splitGroupRuns,
+    ungroupedRuns,
   } from "../ListBox/menu-groups.js";
   import {
     applyPostClearOptions,
@@ -551,7 +561,12 @@
       },
     });
 
-  const buildGroupRows = createGroupRows();
+  /** @type {undefined | ReturnType<typeof createGroupRows>} */
+  let groupRowBuilder;
+  // Created on first use, so a menu that never groups doesn't need it.
+  /** @param {Parameters<ReturnType<typeof createGroupRows>>[0]} rows */
+  const buildGroupRows = (rows) =>
+    (groupRowBuilder ??= createGroupRows())(rows);
 
   // `openMenu(trigger)` opens a closed menu and records the cause, which
   // `syncOpenEvent` reports in `open` once the menu has rendered.
@@ -924,11 +939,13 @@
   // Portaled menus render outside the fluid wrapper, so they keep default heights.
   $: hasFluidMenuItems = isFluid && !condensed && !effectivePortalMenu;
   $: shouldVirtualize = shouldVirtualizeMenu({ items, virtualize });
-  $: grouped = items.some((item) => !!item.group);
+  $: menuGrouped = grouped !== false && items.some((item) => !!item.group);
   // Each group is contiguous: ungrouped items first, then groups in order of
   // first appearance. Highlight indexes point into this order.
-  $: orderedItems = grouped ? orderByGroup(items, (item) => item.group) : items;
-  $: hideMode = filterMode === "hide" && !shouldVirtualize && !grouped;
+  $: orderedItems = menuGrouped
+    ? orderByGroup(items, (item) => item.group)
+    : items;
+  $: hideMode = filterMode === "hide" && !shouldVirtualize && !menuGrouped;
   // The default `shouldFilterItem` keeps every item whatever is typed, so the
   // open menu reuses `orderedItems` rather than copying all of them on each
   // open, and `filterValue` stays put while typing so the list is not rebuilt
@@ -943,7 +960,7 @@
   // Group headers render as rows of their own, so the menu window indexes
   // rows, not items. `toRowIndex` maps between the two. Built from the
   // filtered items, so a group with no matches has no header.
-  $: groupRows = grouped && open ? buildGroupRows(menuItems) : null;
+  $: groupRows = menuGrouped && open ? buildGroupRows(menuItems) : null;
   $: menuRows = groupRows ? groupRows.rows : menuItems;
   $: scrollEndTracker.noteItemCount(filteredItems.length);
   // The default `shouldFilterItem` keeps every item, so only announce while a
@@ -979,7 +996,7 @@
         virtualize,
         // A header is not as tall as an option, so a grouped menu measures its
         // rows the way a menu of wrapped options does.
-        wrapOptions: wrapOptions || grouped,
+        wrapOptions: wrapOptions || menuGrouped,
         size: effectiveSize,
         fluid: hasFluidMenuItems,
         scrollTop: listScrollTop,
@@ -997,11 +1014,9 @@
     isPinned,
   } = menuState);
   // Each group's rendered rows sit inside one `role="group"` element.
-  $: menuRuns = splitGroupRuns(
-    itemsToRender,
-    isVirtualized ? startIndex : 0,
-    groupRows,
-  );
+  $: menuRuns = groupRows
+    ? splitGroupRuns(itemsToRender, isVirtualized ? startIndex : 0, groupRows)
+    : ungroupedRuns(itemsToRender, isVirtualized ? startIndex : 0);
 
   $: if (typeahead) {
     const topItem = filteredItems.find((item) => !item.disabled);
@@ -1580,7 +1595,7 @@
                   {@const actualIndex = groupRows
                     ? groupRows.itemIndexByRow[rowIndex]
                     : rowIndex}
-                  {#if isGroupHeader(item)}
+                  {#if groupRows && isGroupHeader(item)}
                     <!-- Hidden from assistive tech: the enclosing group is named
                          by a hidden label, which stays rendered when a virtualized
                          window leaves this header out. -->
@@ -1704,7 +1719,7 @@
                 {@const index = groupRows
                   ? groupRows.itemIndexByRow[rowIndex]
                   : rowIndex}
-                {#if isGroupHeader(item)}
+                {#if groupRows && isGroupHeader(item)}
                   <!-- Hidden from assistive tech: the enclosing group is named
                        by a hidden label, which stays rendered when a virtualized
                        window leaves this header out. -->
