@@ -83,34 +83,12 @@
    */
   export let ref = null;
 
-  import ArrowDown from "../icons/ArrowDown.svelte";
-  import ArrowLeft from "../icons/ArrowLeft.svelte";
-  import ArrowRight from "../icons/ArrowRight.svelte";
-  import ArrowUp from "../icons/ArrowUp.svelte";
-  import ChevronUp from "../icons/ChevronUp.svelte";
-  import MacCommand from "../icons/MacCommand.svelte";
-  import MacOption from "../icons/MacOption.svelte";
-  import MacShift from "../icons/MacShift.svelte";
-  import PageLast from "../icons/PageLast.svelte";
-  import Return from "../icons/Return.svelte";
   import { applePlatform } from "../utils/keyboard-shortcut.js";
+  import { KBD_GLYPHS } from "./kbd-glyphs.js";
   import { KBD_TRANSLATIONS, kbdKeys } from "./kbd-keys.js";
   import { getKbdTranslations } from "./kbd-translations.js";
 
   const shared = getKbdTranslations();
-
-  const ICONS = {
-    command: MacCommand,
-    option: MacOption,
-    shift: MacShift,
-    control: ChevronUp,
-    return: Return,
-    tab: PageLast,
-    arrowUp: ArrowUp,
-    arrowDown: ArrowDown,
-    arrowLeft: ArrowLeft,
-    arrowRight: ArrowRight,
-  };
 
   $: isApple = apple ?? $applePlatform;
   /** @type {(id: KbdTranslationId) => string} */
@@ -166,11 +144,18 @@
         >{#each platform.keys as key, index (index)}<kbd
             class:bx--kbd__key={true}
             aria-hidden="true"
-            >{#if key.icon}<svelte:component
-                this={ICONS[key.icon]}
+            >{#if key.icon}<svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                fill="currentColor"
+                preserveAspectRatio="xMidYMid meet"
+                width="16"
+                height="16"
+                aria-hidden="true"
                 class="bx--kbd__icon"
                 data-icon={key.icon}
-              />{:else}{key.label}{/if}</kbd
+                >{#each KBD_GLYPHS[key.icon] as d (d)}<path {d} />{/each}</svg
+              >{:else}{key.label}{/if}</kbd
           >{/each}</span
       >
     {/each}
