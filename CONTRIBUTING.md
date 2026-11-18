@@ -276,7 +276,7 @@ When you remove or rename a prop, search `e2e/fixtures/` and `docs/src/pages/fra
 
 #### Component script types
 
-`bun test:src-svelte` type-checks the components themselves, scripts and markup, and the `.js` files beside them (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)), and fails on any type error or Svelte compiler warning. Run `bun build:docs` first.
+`bun test:src-svelte` type-checks the components themselves, scripts and markup, and the `.js` files beside them (`checkJs` under `strict`, through [`tsconfig.svelte-types.json`](tsconfig.svelte-types.json)), and fails on any type error. Run `bun build:docs` first. It checks types only (`--diagnostic-sources js`), so it doesn't compile: `bun lint:svelte` reports Svelte's compiler warnings, a11y and unused CSS included, and fails on any.
 
 sveld also reads some JSDoc that TypeScript rejects, and `strict` rejects some that sveld reads. Write the form both accept:
 
@@ -834,7 +834,7 @@ For the E2E selection (`test:changed:e2e`, `test:plan`, and CI), a `css/` change
 Types and E2E:
 
 - `bun test:src-types` type-checks `src/` (uses `tsconfig.types.json`)
-- `bun test:src-svelte` type-checks `src/`'s components and `.js` files against an error baseline, and fails on any Svelte compiler warning (a11y, unused CSS); see [Component script types](#component-script-types)
+- `bun test:src-svelte` type-checks `src/`'s components and `.js` files against an error baseline; see [Component script types](#component-script-types). `bun lint:svelte` fails on any Svelte compiler warning (a11y, unused CSS)
 - `bun test:types` type-checks the `*.svelte` and `.ts` files in `tests/`, in about a second: [svelte-typecheck](https://github.com/metonym/svelte-typecheck) turns each component into TypeScript, runs `bun check` on it, and maps each error back to its `.svelte` line, as svelte-check reports it. `bun test:types:svelte3` and `bun test:types:svelte4` check the same files against Svelte 3 and 4
 - `bunx playwright test --grep "Breakpoint"` runs a focused E2E pattern (see [E2E testing](#e2e-testing-with-playwright)); `bun run test:e2e` runs the full E2E suite
 
