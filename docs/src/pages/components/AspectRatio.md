@@ -116,7 +116,7 @@ The outer element renders a `<div>` by default. Set `tag` to render a semantic e
 
 ## Usage
 
-Wrap content like tiles, images, or videos in an aspect ratio container to maintain consistent proportions across screen sizes. See [Fill](#fill) above for making that content stretch to the container.
+Wrap content like tiles, images, or videos in an aspect ratio container to maintain consistent proportions across screen sizes. See [Fill](#fill) above for making that content stretch to the container. For an image that loads, use [ImageLoader](/components/ImageLoader), which sets its ratio from `ratio`, `width` and `height`, and crops the image to fill the box with `fit` and `focalPoint`.
 
 ### Grid columns
 
