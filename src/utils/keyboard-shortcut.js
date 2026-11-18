@@ -15,9 +15,10 @@ const NON_TEXT_INPUT =
   /^(button|checkbox|radio|range|reset|submit|color|file|image)$/;
 
 // The name maps have no prototype, so a name such as "constructor" misses.
+// The pure annotations let a bundler drop a map nothing reads.
 
 /** @type {Record<string, "meta" | "ctrl" | "alt" | "shift" | "mod">} */
-const MODIFIERS = Object.assign(Object.create(null), {
+const MODIFIERS = /* @__PURE__ */ Object.assign(Object.create(null), {
   mod: "mod",
   meta: "meta",
   cmd: "meta",
@@ -33,7 +34,7 @@ const MODIFIERS = Object.assign(Object.create(null), {
 });
 
 /** @type {Record<string, string>} */
-const KEY_ALIASES = Object.assign(Object.create(null), {
+const KEY_ALIASES = /* @__PURE__ */ Object.assign(Object.create(null), {
   esc: "escape",
   return: "enter",
   space: " ",
@@ -48,7 +49,7 @@ const KEY_ALIASES = Object.assign(Object.create(null), {
 });
 
 /** @type {Record<string, string>} */
-const ARIA_KEYS = Object.assign(Object.create(null), {
+const ARIA_KEYS = /* @__PURE__ */ Object.assign(Object.create(null), {
   " ": "Space",
   escape: "Escape",
   enter: "Enter",
@@ -366,7 +367,7 @@ function isTyped(list) {
  * platform.
  * @type {import("svelte/store").Readable<boolean>}
  */
-export const applePlatform = readable(false, (set) => {
+export const applePlatform = /* @__PURE__ */ readable(false, (set) => {
   if (typeof window === "undefined") return;
   queueMicrotask(() => set(isApplePlatform()));
 });
