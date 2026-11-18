@@ -62,6 +62,29 @@ describe("Button shortcut", () => {
     expect(screen.getByTestId("clicks")).toHaveTextContent("0");
   });
 
+  it("binds a shortcut set after mount and drops it when cleared", async () => {
+    const { rerender } = render(ButtonShortcut, {
+      props: { saveShortcut: "" },
+    });
+
+    expect(press({ key: "s", ctrlKey: true }).defaultPrevented).toBe(false);
+    await rerender({ saveShortcut: "ctrl+s" });
+    expect(press({ key: "s", ctrlKey: true }).defaultPrevented).toBe(true);
+    await rerender({ saveShortcut: "" });
+    expect(press({ key: "s", ctrlKey: true }).defaultPrevented).toBe(false);
+    expect(screen.getByTestId("shortcuts")).toHaveTextContent("1");
+  });
+
+  it("follows the button when it becomes a link", async () => {
+    const { rerender } = render(ButtonShortcut);
+    await rerender({ saveHref: "#saved" });
+    expect(screen.getByTestId("save").tagName).toBe("A");
+
+    expect(press({ key: "s", ctrlKey: true }).defaultPrevented).toBe(true);
+    await tick();
+    expect(screen.getByTestId("clicks")).toHaveTextContent("1");
+  });
+
   it("doesn't answer while disabled", async () => {
     render(ButtonShortcut, { props: { disabled: true } });
 

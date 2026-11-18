@@ -4,6 +4,8 @@
 
   export let preventShortcut = false;
   export let disabled = false;
+  export let saveShortcut = "ctrl+s";
+  export let saveHref: string | undefined = undefined;
 
   let clicks = 0;
   let shortcuts = 0;
@@ -11,7 +13,8 @@
 
 <Button
   data-testid="save"
-  shortcut="ctrl+s"
+  shortcut={saveShortcut}
+  href={saveHref}
   {disabled}
   on:click={() => clicks++}
   on:shortcut={(e) => {
