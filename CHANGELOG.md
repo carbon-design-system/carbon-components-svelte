@@ -1429,6 +1429,12 @@ Each can change what your code or tests see.
 - **utils:** build the grapheme segmenter on first use ([ff121ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/ff121ef99dfbd6ff3016c3e96083006ca5dbaf75))
 - **utils:** skip `Intl.Segmenter` for Latin initials ([adb9742](https://github.com/carbon-design-system/carbon-components-svelte/commit/adb9742b4a9f85966545b54dc93fa0c2da2adb08))
 
+### [0.113.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.113.1...v0.113.2) (2026-11-18)
+
+### Bug Fixes
+
+- **multi-select:** anchor the filterable menu to its field ([24ed316](https://github.com/carbon-design-system/carbon-components-svelte/commit/24ed3166ed8de79c8292be876dacce51ff6aa8d5)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
+
 ### [0.113.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.113.0...v0.113.1) (2026-10-07)
 
 ### Bug Fixes
@@ -1940,6 +1946,12 @@ leaving room to add fields later without another breaking change. ([27952fc](htt
 - **utils:** defer overflowTitle measurement to a microtask ([3a34cd5](https://github.com/carbon-design-system/carbon-components-svelte/commit/3a34cd51f8073708cbdbb3f1c1ba0c4eb34b3721))
 - **utils:** use checkVisibility in trapFocus before computed styles ([58251e7](https://github.com/carbon-design-system/carbon-components-svelte/commit/58251e7656357f92d52db37cf7312842128cee08))
 
+### [0.112.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.2...v0.112.3) (2026-11-18)
+
+### Bug Fixes
+
+- **multi-select:** anchor the filterable menu to its field ([8f64da5](https://github.com/carbon-design-system/carbon-components-svelte/commit/8f64da5dace8470b5ba89e563ac11af87caa4bb4)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
+
 ### [0.112.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.112.1...v0.112.2) (2026-10-07)
 
 ### Bug Fixes
@@ -2021,6 +2033,12 @@ leaving room to add fields later without another breaking change. ([27952fc](htt
 - **css:** fold twenty override partials into vendored Carbon ([34b4ef8](https://github.com/carbon-design-system/carbon-components-svelte/commit/34b4ef86582daea6c0492da48c02c62332247b8c))
 - **css:** rewrite vendored tabs desktop-only, fold css/_tabs.scss in ([5cbb1a0](https://github.com/carbon-design-system/carbon-components-svelte/commit/5cbb1a02185ef8114380aba422fd5e4c013d3228))
 - **css:** theme vendored UI Shell in place, fold css/_ui-shell.scss in ([17ea554](https://github.com/carbon-design-system/carbon-components-svelte/commit/17ea55411cf66b23d228bcabddad31e487c7fcc0))
+
+### [0.111.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.3...v0.111.4) (2026-11-18)
+
+### Bug Fixes
+
+- **multi-select:** anchor the filterable menu to its field ([140c1d9](https://github.com/carbon-design-system/carbon-components-svelte/commit/140c1d9f7bd9c57e975c8490103c8746084abdb8)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
 
 ### [0.111.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.111.2...v0.111.3) (2026-10-07)
 
@@ -2425,6 +2443,12 @@ remove any manually placed checkmark cell to avoid a duplicate. ([9785256](https
 ### Performance
 
 - **data-table:** use Set for O(1) lookups for expanded rows (#3352) ([5be5d13](https://github.com/carbon-design-system/carbon-components-svelte/commit/5be5d13e98b8e5b2c0db8c7ba58707d87720e672))
+
+### [0.109.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.109.0...v0.109.1) (2026-11-18)
+
+### Bug Fixes
+
+- **multi-select:** anchor the filterable menu to its field ([78e7261](https://github.com/carbon-design-system/carbon-components-svelte/commit/78e72611ccb92e6075093b9c2d2266566d4512dc)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
 
 ### [0.109.0](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.108.0...v0.109.0) (2026-06-15)
 
@@ -2869,6 +2893,14 @@ remove any manually placed checkmark cell to avoid a duplicate. ([9785256](https
 - **multi-select:** drop per-keystroke index Map for `findIndex` (#3089) ([6ee97fa](https://github.com/carbon-design-system/carbon-components-svelte/commit/6ee97fab23b5e097ec5388b4dcac1244129f387e))
 - **toolbar-search:** avoid refiltering on unrelated updates (#3024) ([966ea54](https://github.com/carbon-design-system/carbon-components-svelte/commit/966ea5476e85851587d8cc8c8c122a12544504f3))
 - **tree-view-node:** hide collapsed nodes via CSS (#3007) ([e5c2910](https://github.com/carbon-design-system/carbon-components-svelte/commit/e5c2910f06a5ca960c76b4627a1219ff39cba70a))
+
+### [0.107.2](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.107.1...v0.107.2) (2026-11-18)
+
+### Bug Fixes
+
+- **multi-select:** anchor the filterable menu to its field ([c1d67da](https://github.com/carbon-design-system/carbon-components-svelte/commit/c1d67daea1c0e0208500700fa41858da17ac96a0)), closes [#5676](https://github.com/carbon-design-system/carbon-components-svelte/issues/5676)
+
+  In 0.107 a filterable MultiSelect still opens its menu on focus, so as the first field in a `Modal` its menu now shows when the modal opens (before, it opened invisibly).
 
 ### [0.107.1](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.107.0...v0.107.1) (2026-05-02)
 
