@@ -239,11 +239,15 @@
   // `loading` blocks clicks and sets aria-busy at once. Only the spinner, and
   // the disabled look that comes with it, wait for `loadingDelay`. With no
   // delay the spinner follows `loading` exactly, as before.
-  let showSpinner = loading;
+  // Without a delay it reads `loading` itself, not the timer's callback, so
+  // a build-time optimizer can follow it and drop the indicator an app never
+  // shows.
+  let delayedLoading = Boolean(loading);
   const loadingIndicator = createLoadingIndicator((shown) => {
-    showSpinner = shown;
+    delayedLoading = shown;
   });
   $: loadingIndicator(loading, loadingDelay);
+  $: showSpinner = loadingDelay > 0 ? delayedLoading : Boolean(loading);
   // Without an iconDescription there is nothing to show in a tooltip or
   // announce as the accessible name via the assistive-text span; skip the
   // whole tooltip apparatus and let the consumer's own aria-label/
