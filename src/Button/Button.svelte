@@ -262,7 +262,9 @@
       ? !!insideModal || portalWhenClipped
       : portalTooltip;
   $: usePortal = hasTooltipContent && !hideTooltip && effectivePortalTooltip;
-  $: hasTooltip = hasTooltipContent && !hideTooltip && !usePortal;
+  // `!effectivePortalTooltip`, not `!usePortal`: the same, but a build-time
+  // specializer can see it's false when a parent passes `portalTooltip`.
+  $: hasTooltip = hasTooltipContent && !hideTooltip && !effectivePortalTooltip;
 
   // Warm-handoff hover/focus scheduling: only one tooltip can be open at a
   // time. When another tooltip claims the active slot, this one closes

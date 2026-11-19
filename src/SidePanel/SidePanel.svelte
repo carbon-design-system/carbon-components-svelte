@@ -735,6 +735,7 @@
           iconDescription={navigationBackIconDescription}
           tooltipPosition="bottom"
           tooltipAlignment="start"
+          portalTooltip
           class="bx--side-panel__back"
           on:click={() => dispatch("back")}
         />
@@ -776,6 +777,7 @@
               iconDescription={closeIconDescription}
               tooltipPosition="bottom"
               tooltipAlignment="end"
+              portalTooltip
               class="bx--side-panel__close"
               on:click={() => close("close-button")}
             />
