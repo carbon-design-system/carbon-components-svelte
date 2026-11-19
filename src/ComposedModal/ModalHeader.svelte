@@ -74,6 +74,7 @@
         {iconDescription}
         aria-label={iconDescription}
         tooltipPosition="left"
+        portalTooltip
         on:click
         on:click={closeModal}
       >
