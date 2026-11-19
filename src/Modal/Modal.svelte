@@ -456,6 +456,7 @@
             {iconDescription}
             aria-label={iconDescription}
             tooltipPosition="left"
+            portalTooltip
             on:click={() => {
               close("close-button");
             }}
@@ -497,6 +498,7 @@
             {iconDescription}
             aria-label={iconDescription}
             tooltipPosition="left"
+            portalTooltip
             on:click={() => {
               close("close-button");
             }}
