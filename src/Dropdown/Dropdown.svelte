@@ -557,11 +557,15 @@
   // `loading` takes effect at once for `aria-busy` and the empty state. Only
   // the indicator waits for `loadingDelay`; with no delay it follows `loading`
   // exactly.
-  let showLoading = loading;
+  // Without a delay it reads `loading` itself, not the timer's callback, so
+  // a build-time optimizer can follow it and drop the indicator an app never
+  // shows.
+  let delayedLoading = Boolean(loading);
   const loadingIndicator = createLoadingIndicator((shown) => {
-    showLoading = shown;
+    delayedLoading = shown;
   });
   $: loadingIndicator(loading, loadingDelay);
+  $: showLoading = loadingDelay > 0 ? delayedLoading : Boolean(loading);
 
   $: inline = type === "inline";
   // A Dropdown that turns disabled or read-only while open closes its menu,
