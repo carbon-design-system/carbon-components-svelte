@@ -86,6 +86,8 @@ An icon-only button needs `iconDescription`, which becomes both the accessible l
   />
 </ToggleButtonGroup>
 
+Set `hideTooltip` on a `ToggleButton` to turn off its tooltip. The button keeps `iconDescription` as its accessible name.
+
 ### Custom tooltip position
 
 Set `tooltipAlign` on `ToggleButton` to control where its tooltip appears, with Popover's `align` names. It replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.
