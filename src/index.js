@@ -157,6 +157,12 @@ export { default as MenuItem } from "./Menu/MenuItem.svelte";
 export { default as MenuItemGroup } from "./Menu/MenuItemGroup.svelte";
 export { default as MenuItemRadioGroup } from "./Menu/MenuItemRadioGroup.svelte";
 export { default as MenuButton } from "./MenuButton/MenuButton.svelte";
+export { default as Mentions } from "./Mentions/Mentions.svelte";
+export {
+  formatMentionToken,
+  mentionsToPlainText,
+  parseMentionTokens,
+} from "./Mentions/mention-tokens.js";
 export { default as Meter } from "./Meter/Meter.svelte";
 export { default as Modal } from "./Modal/Modal.svelte";
 export { default as FluidMultiSelectSkeleton } from "./MultiSelect/FluidMultiSelectSkeleton.svelte";
