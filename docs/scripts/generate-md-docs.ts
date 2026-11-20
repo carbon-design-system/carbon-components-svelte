@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { markupVisitorKeys, parse, walk } from "sveast";
+import { markupVisitorKeys, parse, walk } from "svelte-ast";
 import {
   BASE_URL,
   COMPONENT_MD_SIZES_PATH,

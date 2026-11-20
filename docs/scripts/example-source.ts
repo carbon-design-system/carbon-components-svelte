@@ -1,4 +1,4 @@
-import { analyzeScopes, type Binding, parse, type Scope } from "sveast";
+import { analyzeScopes, type Binding, parse, type Scope } from "svelte-ast";
 
 type Node = {
   type: string;

@@ -5,7 +5,7 @@
  * block quotes, rather than parse it in a way a reader doesn't expect.
  */
 
-import { parse } from "sveast";
+import { parse } from "svelte-ast";
 
 export type Node = {
   type: string;
