@@ -7,6 +7,7 @@ import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
+import PeoplePicker from "carbon-components-svelte/PeoplePicker/PeoplePicker.svelte";
 import FluidPinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import FluidSearchSkeleton from "carbon-components-svelte/Search/FluidSearchSkeleton.svelte";
@@ -300,6 +301,12 @@ export const cases: FieldCase[] = [
     state: {},
   },
   {
+    name: "PeoplePicker",
+    component: PeoplePicker,
+    control: () => screen.getByRole("combobox"),
+    state: {},
+  },
+  {
     name: "Toggle",
     component: Toggle,
     control: () => screen.getByRole("switch"),
@@ -358,6 +365,7 @@ export const exempt: Exemptions = {
     SelectableTile: NOT_A_TEXT_FIELD,
     StarRating: NOT_A_TEXT_FIELD,
     StructuredList: NOT_A_TEXT_FIELD,
+    PeoplePicker: NOT_A_TEXT_FIELD,
     TagInput: NOT_A_TEXT_FIELD,
     TileGroup: NOT_A_TEXT_FIELD,
     Toggle: NOT_A_TEXT_FIELD,

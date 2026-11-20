@@ -102,6 +102,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "InlineEdit",
       "NumberInput",
       "PasswordInput",
+      "PeoplePicker",
       "PinCodeInput",
       "Slider",
       "TagInput",

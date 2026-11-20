@@ -1392,6 +1392,22 @@
     "message": "div[data-testid=\"skeleton-800\"]: spans 16px to 816px"
   },
   {
+    "fixture": "people-picker-open.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--focused > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--focused > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 4px outline div#app > div.bx--form-item.bx--people-picker > div.bx--tag-input.bx--tag-input--focused, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "people-picker.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter",
+    "message": "div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1) > div.bx--tag-input__tags.bx--tag-set > div.bx--tag-set__space.bx--stack > div.bx--tag.bx--tag--filter: 1px outline inside 2px outline div#app > form > div.bx--form-item.bx--people-picker:nth-of-type(18) > div.bx--tag-input.bx--tag-input--invalid:nth-of-type(1), both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "pin-code-input.html",
     "variant": "320",
     "check": "overflow",
