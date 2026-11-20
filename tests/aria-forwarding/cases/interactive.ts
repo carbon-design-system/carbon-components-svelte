@@ -19,6 +19,7 @@ import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
+import MergeResolver from "carbon-components-svelte/MergeResolver/MergeResolver.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
 import Modal from "carbon-components-svelte/Modal/Modal.svelte";
 import InlineNotification from "carbon-components-svelte/Notification/InlineNotification.svelte";
@@ -314,6 +315,17 @@ export const interactive: AriaEntry[] = [
     name: "MenuItem",
     render: (attrs) => render(MenuItem, { props: attrs }),
     target: () => screen.getByRole("menuitem"),
+  },
+  {
+    name: "MergeResolver",
+    render: (attrs) =>
+      render(MergeResolver, {
+        props: { base: "a\n", ours: "b\n", theirs: "c\n", ...attrs },
+      }),
+    target: ({ container }) =>
+      container.querySelector<HTMLElement>(
+        ".bx--merge-resolver",
+      ) as HTMLElement,
   },
   {
     name: "Meter",

@@ -1,0 +1,107 @@
+---
+components: ["MergeResolver"]
+description: MergeResolver reconciles two edited versions of a file against their common ancestor, so people can resolve concurrent changes to a config, a draft, or an infrastructure plan one conflict at a time.
+---
+
+<script>
+  import { MergeResolver } from "carbon-components-svelte";
+  import { tokenize } from "carbon-components-svelte/syntax";
+
+  const base = `{
+  "name": "checkout",
+  "replicas": 2,
+  "region": "us-south",
+  "timeout": "30s"
+}
+`;
+
+  const ours = `{
+  "name": "checkout",
+  "replicas": 4,
+  "region": "us-south",
+  "timeout": "45s"
+}
+`;
+
+  const theirs = `{
+  "name": "checkout",
+  "replicas": 3,
+  "region": "eu-de",
+  "timeout": "30s"
+}
+`;
+</script>
+
+## Basic
+
+Pass the common ancestor as `base` and the two edited versions as `ours` and `theirs`. The component merges them by lines (diff3): a change only one side made, or both sides made the same way, is applied for you, and a place where the two disagree is a conflict. Ours is the side being merged into, and theirs is the side being merged in.
+
+The result shows each conflict as git does, between `<<<<<<<`, `=======` and `>>>>>>>` lines, until you resolve it. Choose a side with the buttons in a conflict's row, or use the toolbar for the current conflict, which also offers both sides in either order and the base. Or edit the result directly: a conflict whose marker lines are gone counts as resolved. "Mark as resolved" unlocks once no conflict is left.
+
+Keys work anywhere in the resolver, the result included. <DocKbd label="F7" /> and <DocKbd label="Shift" />+<DocKbd label="F7" /> move to the next and previous conflict and scroll it into view in all three panes. <DocKbd label="Alt" />+<DocKbd label="O" /> accepts ours, <DocKbd label="Alt" />+<DocKbd label="T" /> theirs, <DocKbd label="Alt" />+<DocKbd label="B" /> both, and <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="B" /> both with theirs first. <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="O" /> accepts the base. After an accept, the next unresolved conflict becomes current, so a file resolves from the keyboard alone. <DocKbd label="Ctrl" />+<DocKbd label="Z" /> undoes an accept or a stretch of typing.
+
+<FileSource src="/framed/MergeResolver/MergeResolverBasic" />
+
+## Input
+
+### Three texts
+
+`base`, `ours` and `theirs` are strings. The resolver reads line endings and the final newline from them: a file that uses CRLF stays CRLF in `result`, and when only one side added or dropped the final newline, that change wins.
+
+### One file with markers
+
+Set `conflicted` to a single file with git conflict markers, such as the working copy after a failed `git merge`, when you don't have the three versions. A conflict with a `|||||||` section, as `merge.conflictStyle=diff3` writes it, also gets "Accept base"; without one, that button is disabled.
+
+<FileSource src="/framed/MergeResolver/MergeResolverMarkers" />
+
+## Layout
+
+By default the layout follows the width of the resolver: three columns (ours, the result, theirs) from 1056 pixels, ours and theirs above the result from 672 pixels, and one pane at a time with buttons to switch below that. Set `layout` to `"columns"`, `"stacked"` or `"tabs"` to choose one.
+
+Scrolling any pane moves the others to the same place by chunk, not by line number, so a conflict stays beside its counterparts even when its sides have different lengths. Code reads left to right in every language and under `dir="rtl"`; the toolbar, the titles and the order of the panes follow the page.
+
+### Stacked
+
+<MergeResolver {base} {ours} {theirs} layout="stacked" height="20rem" language="json" {tokenize} />
+
+### Tabs
+
+<MergeResolver {base} {ours} {theirs} layout="tabs" height="16rem" language="json" {tokenize} />
+
+## Syntax highlighting
+
+Set `language` and pass a `tokenize` function, such as the one from `carbon-components-svelte/syntax`, to color the code. The core doesn't import the highlighter, so a page that doesn't highlight doesn't load it, and a function you write works the same way: it takes the code and the language, and returns runs of `{ type, text }` that join back to the code. The panes are highlighted once they have painted; the result is highlighted again after each change, at once for a small file and after a short pause for a large one.
+
+Load `carbon-components-svelte/css/syntax-tokens.css` and `syntax.css` for the colors. `tokenize` has no YAML, so the Basic example wraps it with a small tokenizer.
+
+<MergeResolver {base} {ours} {theirs} language="json" {tokenize} height="18rem" />
+
+## Word marks
+
+A line changed on both sides shows its changed words underlined and marked, so `"timeout": "45s"` against `"timeout": "30s"` points at the number. A line that shares little with its counterpart, or is over 1,000 characters, gets no marks. Set `wordMarks` to `false` to turn them off.
+
+<MergeResolver {base} {ours} {theirs} wordMarks={false} height="18rem" />
+
+## Resolving
+
+`on:resolve` fires when the user chooses "Mark as resolved" and no conflict is left. `detail.text` is the final text, with the original line endings. The event is cancelable: call `preventDefault()` to keep the merge unresolved, such as when the merged file fails validation. `bind:resolved` stays `false` until a resolve goes through, and any later change to the result sets it back. `bind:result` holds the current text at all times, including the markers of unresolved conflicts, which suits saving a draft. `on:change` fires after every change with the text and the number of conflicts left.
+
+<FileSource src="/framed/MergeResolver/MergeResolverCancel" />
+
+## Navigation
+
+Set `advanceOnAccept` to `false` to stay on a conflict after accepting it. `bind:current` holds the index of the current conflict from 0 and moves with navigation and with the caret in the result. Setting it scrolls that conflict into view. The `next()`, `previous()`, `goTo()`, `accept()`, `undo()`, `redo()` and `resolve()` methods do the same as the buttons from your own controls.
+
+Each conflict is a group named by its position and state, such as "Conflict 3 of 7: accepted theirs", and every accept and every move is announced the same way, with the number of conflicts left.
+
+## Customization
+
+Every word is a prop, and the sentences are functions: `conflictText`, `statusText` and `remainingText` build the labels, the announcements and the toolbar status. Set `shortcuts` to change keys, such as `{ ours: "alt+1", theirs: "alt+2" }`; keys you leave out keep their defaults.
+
+| Do | Why |
+| --- | --- |
+| Give the resolver room: at least 1,056 pixels wide for three columns, or let it stack | Code lines are long, and panes narrower than about 40 characters hide the changes you came to review |
+| Save `result` as a draft before the merge is resolved | It keeps the markers, so a reload or another editor can pick up where the user stopped |
+| Cancel `resolve` when the merged file is invalid | The user stays on the merge and fixes the line, instead of saving broken text |
+| Pass the real common ancestor as `base` | With a guessed base, both-sides-agree changes become conflicts, and "Accept base" restores the wrong text |
+| Leave `tokenize` unset for languages it doesn't know | A wrong highlighter colors keys as keywords, which is worse than plain text |
