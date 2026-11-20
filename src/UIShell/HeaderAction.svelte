@@ -59,6 +59,12 @@
   export let tooltipAlignment = "center";
 
   /**
+   * Set to `true` to hide the tooltip of an icon-only action.
+   * The action keeps `iconDescription` as its accessible name.
+   */
+  export let hideTooltip = false;
+
+  /**
    * Obtain a reference to the button HTML element.
    * @bindable readonly
    * @type {null | HTMLButtonElement}
@@ -98,6 +104,7 @@
   let refPanel = null;
 
   $: hasIconOnly = iconDescription && !(text || $$slots.textChildren);
+  $: hasTooltip = hasIconOnly && !hideTooltip;
 
   // Only one tooltip shows at a time: hovering one header action while
   // another is focused hides the focused one's tooltip (mirrors Button).
@@ -106,7 +113,7 @@
   // pointer still on the trigger.
   const tooltip = createAnchoredTooltip({
     group: getTooltipGroup(),
-    enabled: () => !!hasIconOnly,
+    enabled: () => !!hasTooltip,
     passEscape: () => isOpen,
     dismissOnClick: false,
     enterDelayMs: () => 0,
@@ -124,7 +131,7 @@
     detachTooltip = ref ? tooltip.attach(ref) : noop;
   }
 
-  $: if (!hasIconOnly) tooltip.hide();
+  $: if (!hasTooltip) tooltip.hide();
 
   onMount(() => {
     return () => {
@@ -135,13 +142,13 @@
 
   $: buttonClass = [
     hasIconOnly && "bx--btn",
-    hasIconOnly && "bx--tooltip__trigger bx--tooltip--a11y",
-    hasIconOnly && "bx--btn--icon-only--bottom",
-    hasIconOnly && `bx--tooltip--align-${tooltipAlignment}`,
-    hasIconOnly && $tooltipHidden && "bx--tooltip--hidden",
+    hasTooltip && "bx--tooltip__trigger bx--tooltip--a11y",
+    hasTooltip && "bx--btn--icon-only--bottom",
+    hasTooltip && `bx--tooltip--align-${tooltipAlignment}`,
+    hasTooltip && $tooltipHidden && "bx--tooltip--hidden",
     // Holds the tooltip through the leave delay after the pointer leaves.
-    hasIconOnly && $tooltipOpen && "bx--tooltip--visible",
-    hasIconOnly && $tooltipInstant && "bx--tooltip--instant",
+    hasTooltip && $tooltipOpen && "bx--tooltip--visible",
+    hasTooltip && $tooltipInstant && "bx--tooltip--instant",
     $$restProps.class,
   ]
     .filter(Boolean)
