@@ -1,0 +1,232 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// IndexedList is a long list in sections under sticky headers, with an index
+/// rail of letters on the inline-end edge. The component windows the list, so
+/// a row's block size is fixed from `--ccs-indexed-list-item-size` and
+/// `--ccs-indexed-list-header-size`. The rail's letters are zones of equal
+/// height, so a pointer position maps to a letter by arithmetic, and the
+/// letters shrink to dots when the rail is shorter than they need.
+/// @access private
+/// @group components
+@mixin indexed-list {
+  .#{$prefix}--indexed-list {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 0;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--indexed-list__scroller {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow-y: auto;
+    // The window moves rows under the reader; the browser must not also
+    // correct for it.
+    overflow-anchor: none;
+    overscroll-behavior: contain;
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+  }
+
+  // The header and its item sit in one box, so a header sticks to the top
+  // until the next one reaches it and covers it.
+  .#{$prefix}--indexed-list__header {
+    position: sticky;
+    z-index: 1;
+    inset-block-start: 0;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: var(--ccs-indexed-list-header-size);
+    padding-inline: $carbon--spacing-05;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer-accent;
+    color: $text-primary;
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--indexed-list__title {
+    min-inline-size: 0;
+
+    &:focus-visible {
+      @include focus-outline("outline", (outline-offset));
+      outline-offset: 2px;
+    }
+  }
+
+  .#{$prefix}--indexed-list__item {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: var(--ccs-indexed-list-item-size);
+    padding-inline: $carbon--spacing-05;
+    overflow: hidden;
+    border-block-end: 1px solid $border-subtle;
+    color: $text-primary;
+    @include type-style("body-compact-01");
+  }
+
+  .#{$prefix}--indexed-list__index {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: $carbon--spacing-06;
+    padding-block: $carbon--spacing-03;
+    border-inline-start: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--indexed-list__index-list {
+    display: flex;
+    flex-direction: column;
+    // As tall as its letters, or as tall as the list when they don't fit.
+    block-size: calc(
+      var(--ccs-indexed-list-count) * var(--ccs-indexed-list-index-size)
+    );
+    max-block-size: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    // Without these, a drag along the rail scrolls the page and selects text.
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--indexed-list__index-item {
+    display: flex;
+    flex: 1 1 0;
+    min-block-size: 0;
+  }
+
+  .#{$prefix}--indexed-list__index-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: none;
+    color: $link-primary;
+    cursor: pointer;
+    @include type-style("label-01");
+
+    // The ring goes on the letter, which is taller than a collapsed rail's
+    // share of the height.
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible .#{$prefix}--indexed-list__index-label {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--indexed-list__index-label {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: var(--ccs-indexed-list-index-size);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--indexed-list__index-button--collapsed {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--indexed-list__index-button--current
+    .#{$prefix}--indexed-list__index-label {
+    background-color: $layer-selected;
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--indexed-list__index-button[aria-disabled="true"] {
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  // The letter under the finger, drawn beside the rail like iOS does.
+  .#{$prefix}--indexed-list__bubble {
+    position: absolute;
+    z-index: 2;
+    @include ccs-inset-inline($end: $carbon--spacing-06 + $carbon--spacing-05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-inline-size: $carbon--spacing-09;
+    block-size: $carbon--spacing-09;
+    padding-inline: $carbon--spacing-04;
+    border-radius: $carbon--spacing-09;
+    background-color: $background-inverse;
+    color: $text-inverse;
+    // Forced colors draw a transparent outline in a system color.
+    outline: 1px solid transparent;
+    pointer-events: none;
+    transform: translateY(-50%);
+    @include type-style("heading-04");
+  }
+
+  @media (forced-colors: active) {
+    // Forced colors back each run of text with a Canvas plate, and a letter
+    // is taller than the share of the rail it owns, so the plates of its
+    // neighbors would cut it. The letters take system colors themselves.
+    .#{$prefix}--indexed-list__index-label {
+      forced-color-adjust: none;
+      background-color: transparent;
+      color: ButtonText;
+    }
+
+    .#{$prefix}--indexed-list__index-button:focus-visible
+      .#{$prefix}--indexed-list__index-label {
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--indexed-list__index-button--current
+      .#{$prefix}--indexed-list__index-label {
+      background-color: transparent;
+      color: Highlight;
+      text-decoration: underline;
+    }
+
+    .#{$prefix}--indexed-list__index-button[aria-disabled="true"]
+      .#{$prefix}--indexed-list__index-label {
+      color: GrayText;
+    }
+
+    .#{$prefix}--indexed-list__header {
+      border-block-end-color: CanvasText;
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--indexed-list__index-button:not([aria-disabled="true"]):hover
+      .#{$prefix}--indexed-list__index-label {
+      background-color: $layer-hover;
+    }
+  }
+}
+
+@include exports("indexed-list") {
+  @include indexed-list;
+}

@@ -647,6 +647,20 @@ assets:
       - shell
       - media
       - media
+  indexed-list:
+    name: Indexed list
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/indexed-list.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/IndexedList
+    tags:
+      - data-display
   inline-edit:
     name: Inline edit
     status: stable
