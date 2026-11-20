@@ -1,0 +1,295 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PromptInput: the composer for an AI conversation. One surface holds the
+/// attachments, a text area that grows with the message, and a toolbar with
+/// the tools and the send button, so the focus ring, the drop target and the
+/// error state belong to the whole composer rather than to the text area.
+/// @access private
+/// @group components
+@mixin prompt-input {
+  .#{$prefix}--prompt-input {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    background-color: $field;
+    border-block-end: 1px solid $border-strong;
+  }
+
+  // The composer shows the ring, so the text area inside takes the surface
+  // and leaves its own border and ring off.
+  .#{$prefix}--prompt-input .#{$prefix}--text-area {
+    min-height: to-rem(48px);
+    border-block-end: none;
+    background-color: transparent;
+    outline: none;
+    resize: none;
+  }
+
+  .#{$prefix}--prompt-input .#{$prefix}--text-area:focus,
+  .#{$prefix}--prompt-input .#{$prefix}--text-area:active {
+    outline: none;
+  }
+
+  .#{$prefix}--prompt-input .#{$prefix}--form-item {
+    flex: none;
+  }
+
+  .#{$prefix}--prompt-input:focus-within {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--prompt-input--invalid {
+    outline: 2px solid $support-error;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--prompt-input--invalid:focus-within {
+    @include focus-outline("invalid");
+  }
+
+  .#{$prefix}--prompt-input--disabled {
+    border-block-end-color: transparent;
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--prompt-input--disabled .#{$prefix}--text-area {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--prompt-input__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--prompt-input__tools,
+  .#{$prefix}--prompt-input__end {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--prompt-input__hint {
+    @include type-style("label-01");
+
+    padding-inline: $carbon--spacing-03;
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--prompt-input__hint--over {
+    color: $text-error;
+  }
+
+  // Files dragged over the composer: a dashed ring and a label over it.
+  .#{$prefix}--prompt-input--dragging {
+    outline: 2px dashed $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--prompt-input__drop {
+    @include type-style("body-compact-01");
+
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $field;
+    color: $text-primary;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--prompt-input__send {
+    position: relative;
+    display: inline-flex;
+  }
+
+  // Waiting for the first word: a ring turns around the stop icon. It stays
+  // a stop button, so it can still be pressed. The ring is on the wrapper,
+  // since the button's own pseudo-elements draw its tooltip.
+  .#{$prefix}--prompt-input__send--waiting::after {
+    position: absolute;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    animation: prompt-input-spin 1s linear infinite;
+    border-block-start-color: $text-on-color;
+    content: "";
+    inset: to-rem(4px);
+    pointer-events: none;
+  }
+
+  @keyframes prompt-input-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .#{$prefix}--prompt-input__attachments {
+    display: flex;
+    flex-wrap: wrap;
+    padding: $carbon--spacing-03 $carbon--spacing-03 0;
+    margin: 0;
+    gap: $carbon--spacing-03;
+    list-style: none;
+  }
+
+  .#{$prefix}--prompt-input__chip {
+    @include type-style("label-01");
+
+    position: relative;
+    display: flex;
+    max-width: to-rem(256px);
+    align-items: center;
+    padding: $carbon--spacing-02 $carbon--spacing-02 $carbon--spacing-02
+      $carbon--spacing-02;
+    background-color: $layer-accent;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--prompt-input__chip--error {
+    box-shadow: inset 0 0 0 1px $support-error;
+  }
+
+  .#{$prefix}--prompt-input__thumb {
+    display: flex;
+    overflow: hidden;
+    width: $carbon--spacing-07;
+    height: $carbon--spacing-07;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    background-color: $field;
+    color: $icon-secondary;
+  }
+
+  .#{$prefix}--prompt-input__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .#{$prefix}--prompt-input__chip-text {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--prompt-input__chip-name {
+    overflow: hidden;
+    color: $text-primary;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--prompt-input__chip-meta {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--prompt-input__chip--error .#{$prefix}--prompt-input__chip-meta {
+    color: $text-error;
+  }
+
+  // The remove button is a ghost Button; it keeps its size as the name
+  // truncates.
+  .#{$prefix}--prompt-input__chip .#{$prefix}--btn {
+    flex: none;
+  }
+
+  .#{$prefix}--prompt-input__progress {
+    position: absolute;
+    overflow: hidden;
+    height: 2px;
+    background-color: $border-subtle;
+    inset-block-end: 0;
+    inset-inline: 0;
+  }
+
+  .#{$prefix}--prompt-input__progress > span {
+    display: block;
+    height: 100%;
+    background-color: $interactive;
+    transition: width $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--prompt-input__progress--indeterminate > span {
+    width: 40%;
+    animation: prompt-input-indeterminate 1.2s linear infinite;
+  }
+
+  @keyframes prompt-input-indeterminate {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(250%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--prompt-input__send--waiting::after {
+      border-color: $text-on-color;
+      animation: none;
+      border-style: dotted;
+    }
+
+    .#{$prefix}--prompt-input__progress--indeterminate > span {
+      width: 100%;
+      animation: none;
+    }
+
+    .#{$prefix}--prompt-input__progress > span {
+      transition: none;
+    }
+  }
+
+  // Forced colors drop backgrounds and box shadows: the composer gets an
+  // outline of its own, the chips an edge, the error chip a heavier one, and
+  // the progress bar the system highlight.
+  @media (forced-colors: active) {
+    .#{$prefix}--prompt-input {
+      outline: 1px solid CanvasText;
+      outline-offset: -1px;
+    }
+
+    .#{$prefix}--prompt-input:focus-within {
+      outline: 2px solid Highlight;
+    }
+
+    .#{$prefix}--prompt-input--invalid {
+      outline: 2px solid CanvasText;
+    }
+
+    .#{$prefix}--prompt-input__chip {
+      border: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--prompt-input__chip--error {
+      border-width: 2px;
+    }
+
+    .#{$prefix}--prompt-input__progress {
+      background-color: Canvas;
+      border-block-start: 1px solid CanvasText;
+    }
+
+    .#{$prefix}--prompt-input__progress > span {
+      background-color: Highlight;
+    }
+  }
+}
+
+@include exports("prompt-input") {
+  @include prompt-input;
+}
