@@ -13,6 +13,7 @@ import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
+import FileManager from "carbon-components-svelte/FileManager/FileManager.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
@@ -37,6 +38,7 @@ import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
+import { createMemoryFileSystem } from "../../../src/utils/file-system.js";
 import type { AriaEntry } from "../contract";
 import AccordionItem from "../fixtures/AccordionItem.test.svelte";
 import BreadcrumbItemFixture from "../fixtures/BreadcrumbItem.test.svelte";
@@ -436,6 +438,15 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(SelectableTileGroup, { props: { legendText: "Plans", ...attrs } }),
     target: () => screen.getByRole("group"),
+  },
+  {
+    name: "FileManager",
+    render: (attrs) =>
+      render(FileManager, {
+        props: { adapter: createMemoryFileSystem(), ...attrs },
+      }),
+    target: () =>
+      document.querySelector<HTMLElement>(".bx--file-manager") as HTMLElement,
   },
   {
     name: "SidePanel",
