@@ -697,6 +697,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/InputGroup
+  ip-address-input:
+    name: IP address input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/ip-address-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/IPAddressInput
   interstitial-screen:
     name: Interstitial screen
     status: stable
