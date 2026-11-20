@@ -1,0 +1,200 @@
+---
+components: ["JsonViewer"]
+description: A JSON viewer shows any JSON or JavaScript value as a collapsible, searchable tree, with a path and a copy button for every row, and handles values with hundreds of thousands of nodes.
+---
+
+<script>
+  import { Button, JsonViewer, Stack, Text } from "carbon-components-svelte";
+
+  const order = {
+    id: "ord_8f3a21",
+    status: "shipped",
+    paid: true,
+    discount: null,
+    total: 128.5,
+    customer: { name: "Aisha Khan", email: "aisha@acme.io", tier: "gold" },
+    items: [
+      { sku: "KB-104", name: "Keyboard", qty: 1, price: 89 },
+      { sku: "MS-220", name: "Mouse", qty: 2, price: 19.75 },
+    ],
+    tags: ["priority", "gift"],
+  };
+
+  const circular = { name: "root", children: [] };
+  circular.children.push({ name: "child", parent: circular });
+
+  const types = {
+    string: "Hello",
+    number: 42,
+    boolean: true,
+    nothing: null,
+    missing: undefined,
+    bigint: 9007199254740993n,
+    createdAt: new Date("2024-05-01T12:30:00Z"),
+    pattern: /ab+c/gi,
+    handler: function onClick() {},
+    tags: new Set(["a", "b"]),
+    limits: new Map([["rate", 100], ["burst", 20]]),
+    failure: new TypeError("Request failed"),
+    circular,
+  };
+
+  const log = {
+    message: "A very long line, repeated: " + "the quick brown fox jumps over the lazy dog. ".repeat(12),
+    short: "ok",
+  };
+
+  const users = Array.from({ length: 20000 }, (_, i) => ({
+    id: i,
+    name: `user-${i}`,
+    active: i % 2 === 0,
+    tags: ["alpha", "beta"],
+    geo: { lat: i * 0.5, lng: -i * 0.25 },
+  }));
+
+  let query = "";
+  let path = "";
+  let viewer;
+</script>
+
+## Basic
+
+Pass any JSON value to `value`. The viewer shows the root and its children, with each key, its value and the type of the value. Collapsed objects and arrays summarize what they hold, such as `{3 keys}` and `[2 items]`.
+
+<JsonViewer labelText="Order" value={order} />
+
+The tree is one tab stop. <DocKbd label="ArrowDown" /> and <DocKbd label="ArrowUp" /> move between rows, <DocKbd label="ArrowRight" /> opens a row or moves to its first child, <DocKbd label="ArrowLeft" /> closes it or moves to its parent, <DocKbd label="Home" /> and <DocKbd label="End" /> go to the ends, and typing a key name jumps to it. <DocKbd label="Enter" /> toggles the row.
+
+## Expansion
+
+### Initial depth
+
+Set `expandDepth` to choose how many levels start open. The default of `1` shows the root's children. `0` shows only the root row, and `Infinity` opens everything.
+
+<Stack gap={6}>
+  <JsonViewer labelText="expandDepth 0" value={order} expandDepth={0} height={72} />
+  <JsonViewer labelText="expandDepth 2" value={order} expandDepth={2} height={240} />
+</Stack>
+
+### Expand and collapse all
+
+The toolbar has buttons for both. To drive them from code, bind the component and call `expandAll()`, `collapseAll()` or `expandToDepth(depth)`. <DocKbd label="*" /> expands everything below the active row. `collapseAll()` keeps the root open.
+
+<Stack gap={4}>
+  <Stack gap={3} orientation="horizontal">
+    <Button size="small" kind="tertiary" on:click={() => viewer.expandToDepth(2)}>Expand to depth 2</Button>
+    <Button size="small" kind="tertiary" on:click={() => viewer.reveal(["items", 1, "price"])}>Show items[1].price</Button>
+  </Stack>
+  <JsonViewer bind:this={viewer} labelText="Order" value={order} hideLabel />
+</Stack>
+
+## Data types
+
+The value can be anything JavaScript can hold, not only what JSON allows. Each type reads in plain text, so none depends on color: strings are quoted, a BigInt ends in `n`, a date starts with `Date`, a function starts with `ƒ`, and a circular reference names the row it points back to.
+
+<JsonViewer labelText="Types" value={types} expandDepth={2} height={420} />
+
+| Value | Shown as |
+| --- | --- |
+| `Date` | `Date 2024-05-01T12:30:00.000Z`, or `Invalid Date` |
+| `Map`, `Set` | `Map {2 entries}` and `Set {2 items}`, which open to their entries |
+| `BigInt` | `9007199254740993n` |
+| `undefined`, `NaN`, `-0` | As written. `JSON.stringify` would drop or change them. |
+| Class instance | `Point {2 keys}`, with the class name |
+| `Error` | `TypeError: Request failed`, which opens to `name`, `message` and `stack` |
+| Circular reference | `[Circular → $.children[0]]`, a leaf that does not expand |
+| Property whose getter throws | `[Throws: message]` |
+
+A circular reference is only a reference to one of the row's own ancestors. An object that appears twice without looping is shown twice.
+
+### Value type labels
+
+Set `showTypes` to print each value's type after it. Use it where a screen reader or a reader without color needs to tell `"1"` from `1` at a glance. Without it, the type is still announced to assistive technology.
+
+<JsonViewer labelText="Types shown" value={order} expandDepth={2} showTypes height={300} />
+
+## Long strings
+
+A string longer than `maxStringLength` ends in an ellipsis and says how long it is. Open the row to read all of it, in rows of `maxStringLength` characters. Copying the row copies the whole string.
+
+<JsonViewer labelText="Long string" value={log} maxStringLength={80} height={200} />
+
+## Search
+
+Type in the search field to highlight every row whose key or value contains the text, ignoring case. The rows that hold a match open, and the first match scrolls into view. <DocKbd label="Enter" /> moves to the next match and <DocKbd label="Shift+Enter" /> to the previous one, wrapping at the ends. Clearing the search closes the rows it opened.
+
+Bind `query` to read or set the text. An array index is not searched as a key.
+
+<Stack gap={4}>
+  <Text>Searching for “{query}”</Text>
+  <JsonViewer labelText="Order" value={order} bind:query height={280} />
+</Stack>
+
+Set `searchShortcut` to focus the field from the keyboard, such as `"/"`. Searches stop collecting at `maxMatches` and say so with a `+`.
+
+| Do | Why |
+| --- | --- |
+| Leave `maxMatches` at its default for very large values | Opening the ancestors of every match can show more rows than the tree can scroll. |
+| Set `toolbar` to `false` and bind `query` to your own field | A page that already has a search field can drive the viewer without a second one. |
+
+## Copy and paths
+
+The path bar shows the path of the active row, and the toolbar copies the row's value. <DocKbd label="Ctrl+C" /> copies the active row's value, unless text is selected. A string copies as itself, and anything else as indented JSON. Maps, sets, errors, typed arrays and circular references copy as plain JSON.
+
+Bind `path` to read the active path. Set `pathFormat` to `"js"` for `data.items[0].name`, and `rootName` to change `data`.
+
+<Stack gap={4}>
+  <Text>Path: <code>{path}</code></Text>
+  <JsonViewer labelText="Order" value={order} expandDepth={3} pathFormat="js" rootName="order" bind:path height={320} />
+</Stack>
+
+`select`, `toggle` and `copy` events carry what happened. `select` has the `path`, its `segments`, the `type` and the `value`.
+
+## Size
+
+Set `size` to `"sm"` for 32px rows. The default `"xs"` is 24px. Set `height` to a number of pixels or any CSS length.
+
+<JsonViewer labelText="Small" value={order} size="sm" expandDepth={2} height={288} />
+
+## Large values
+
+Only the rows in view are in the page, so a value with hundreds of thousands of nodes opens at once. The viewer reads the value as rows open: it never walks the parts you do not look at. Searching and expanding everything run in short slices and keep the page responsive. Parse the JSON yourself, then pass the result.
+
+<JsonViewer labelText="20,000 users" value={users} expandDepth={2} height={320} />
+
+| Do | Why |
+| --- | --- |
+| Pass the parsed value, not the JSON text | The viewer shows structure. It does not parse. |
+| Assign `value` again after changing it | The viewer reads the value as it opens a row, and cannot see a change made inside it. |
+| Keep `nodeLimit` | A value that shares one object many times grows without end when expanded. The limit stops the walk. |
+
+A browser can only scroll so far. Firefox stops near 17 million pixels, which is 745,000 rows at `"xs"`. The viewer measures what the browser allows, and when the open rows would be taller it shows the first rows that fit and says the limit was reached. Close rows to see the rest.
+
+## Styling
+
+Colors come from Carbon's tag text colors, which keep their contrast in every theme. Set a `--ccs-json-*` custom property on an ancestor to change one. A page that loads `syntax-tokens.css` can point them at the code colors:
+
+```css
+.my-viewer {
+  --ccs-json-key: var(--cds-syntax-property-name);
+  --ccs-json-string: var(--cds-syntax-string);
+  --ccs-json-number: var(--cds-syntax-number);
+}
+```
+
+| Property | Colors |
+| --- | --- |
+| `--ccs-json-key` | Keys |
+| `--ccs-json-string` | Strings |
+| `--ccs-json-number` | Numbers and BigInts |
+| `--ccs-json-boolean` | Booleans |
+| `--ccs-json-date` | Dates and regular expressions |
+| `--ccs-json-special` | Functions, symbols and opaque objects |
+| `--ccs-json-error` | Errors and circular references |
+| `--ccs-json-muted` | `null`, `undefined` and collapsed summaries |
+
+In forced colors mode the colors drop away and the text carries each type. The active row gets an outline, and matches use the system's highlight colors.
+
+## Right to left
+
+The tree indents from the inline start, the caret turns toward the children, and <DocKbd label="ArrowLeft" /> opens a row. Keys and values stay left to right, because they are code.
