@@ -18,6 +18,7 @@ import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
 import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
 import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
+import NaturalDateInput from "carbon-components-svelte/NaturalDateInput/NaturalDateInput.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
@@ -230,6 +231,14 @@ export const forms: AriaEntry[] = [
         },
       }),
     target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "NaturalDateInput",
+    render: (attrs) =>
+      render(NaturalDateInput, {
+        props: { labelText: "Due", helperText: "Try tomorrow", ...attrs },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "NumberInput",

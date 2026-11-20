@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>natural-date-input</title>
+    <g id="natural-date-input" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="label" fill="var(--cds-text-disabled, #c6c6c6)" x="76" y="56" width="56" height="8"></rect>
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="72" width="132" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="103" width="132" height="1"></rect>
+        <rect id="typed" fill="var(--cds-text-secondary, #525252)" x="88" y="85" width="64" height="6"></rect>
+        <rect id="button" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1" fill="none" x="209.5" y="72.5" width="31" height="31"></rect>
+        <g id="calendar-icon" transform="translate(217, 80) scale(0.5)" fill="var(--cds-background-brand, #0f62fe)">
+            <path d="M26,4h-4V2h-2v2h-8V2h-2v2H6C4.9,4,4,4.9,4,6v20c0,1.1,0.9,2,2,2h20c1.1,0,2-0.9,2-2V6C28,4.9,27.1,4,26,4z M26,26H6V12h20 V26z M26,10H6V6h4v2h2V6h8v2h2V6h4V10z"></path>
+        </g>
+        <rect id="reading" fill="var(--cds-text-secondary, #525252)" x="76" y="112" width="112" height="6"></rect>
+    </g>
+</svg>
