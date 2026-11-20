@@ -540,6 +540,18 @@ assets:
     tags:
       - data-display
       - content-element
+  field-repeater:
+    name: Field repeater
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/field-repeater.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FieldRepeater
   file-uploader:
     status: stable
     framework: svelte
