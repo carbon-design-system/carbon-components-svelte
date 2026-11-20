@@ -1,0 +1,326 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `MarkdownEditor`: a `<textarea>` with a header of Write and Preview tabs
+/// and a formatting toolbar above it, and a rendered preview beside it or
+/// behind the other tab. The label, helper text, requirement and counter are
+/// the `bx--text-area__*` and `bx--form-*` ones TextArea uses.
+///
+/// The header and the text sit in one box, which draws the field's resting
+/// border and its focus ring, so a toolbar button taking focus rings the
+/// whole field as the textarea does.
+/// @access private
+/// @group components
+@mixin markdown-editor {
+  .#{$prefix}--markdown-editor {
+    // Body-01: 14px on 20px lines.
+    --ccs-markdown-editor-line-height: #{to-rem(20px)};
+    --ccs-markdown-editor-padding: #{$carbon--spacing-05};
+    --ccs-markdown-editor-height: calc(
+      var(--ccs-markdown-editor-rows, 8) *
+        var(--ccs-markdown-editor-line-height) + 2 *
+        var(--ccs-markdown-editor-padding)
+    );
+  }
+
+  .#{$prefix}--markdown-editor__wrapper {
+    @include focus-outline("reset");
+
+    position: relative;
+    inline-size: 100%;
+    border-bottom: 1px solid $border-strong;
+    background-color: $field;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    // Set by the component, not `:focus-within`: a click in the preview's
+    // text, or a toolbar button's own ring, does not ring the whole field.
+    &.#{$prefix}--markdown-editor__wrapper--focused {
+      @include focus-outline("outline");
+    }
+
+    &[data-invalid]:not(.#{$prefix}--markdown-editor__wrapper--focused) {
+      @include focus-outline("invalid");
+    }
+  }
+
+  .#{$prefix}--markdown-editor__wrapper--readonly {
+    border-bottom-color: $border-subtle;
+    background-color: transparent;
+  }
+
+  .#{$prefix}--markdown-editor__wrapper--disabled {
+    border-bottom-color: transparent;
+    cursor: not-allowed;
+  }
+
+  // The header holds the tabs at the start and the toolbar at the end, and
+  // the toolbar wraps below the tabs in a narrow editor rather than scroll,
+  // so a button's tooltip is never clipped by a scroller.
+  .#{$prefix}--markdown-editor__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $border-subtle;
+    min-block-size: $carbon--spacing-08;
+  }
+
+  .#{$prefix}--markdown-editor__tabs {
+    display: flex;
+  }
+
+  .#{$prefix}--markdown-editor__tab {
+    @include reset;
+    @include type-style("body-compact-01");
+
+    position: relative;
+    padding-inline: $carbon--spacing-05;
+    border: 0;
+    border-block-end: 2px solid transparent;
+    background: transparent;
+    color: $text-secondary;
+    cursor: pointer;
+    min-block-size: $carbon--spacing-08;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    &:focus-visible {
+      @include focus-outline("outline");
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      cursor: not-allowed;
+    }
+  }
+
+  .#{$prefix}--markdown-editor__tab--selected {
+    border-block-end-color: $border-interactive;
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--markdown-editor__tab--selected:disabled {
+    border-block-end-color: $border-disabled;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--markdown-editor__tab:hover:not(:disabled) {
+      background-color: $field-hover;
+      color: $text-primary;
+    }
+  }
+
+  .#{$prefix}--markdown-editor__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-inline: $carbon--spacing-02;
+  }
+
+  // Splitting the panes shares the width and puts a rule between them. The
+  // rule is the preview's start edge, so it moves to the other side in RTL.
+  .#{$prefix}--markdown-editor__panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .#{$prefix}--markdown-editor--split .#{$prefix}--markdown-editor__panels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .#{$prefix}--markdown-editor__panel {
+    position: relative;
+    min-inline-size: 0;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .#{$prefix}--markdown-editor__panel--write {
+    display: flex;
+  }
+
+  // The textarea draws no box of its own: the wrapper does.
+  .#{$prefix}--markdown-editor__input {
+    @include reset;
+    @include type-style("body-01");
+
+    flex: 1 1 auto;
+    padding: var(--ccs-markdown-editor-padding);
+    border: 0;
+    background: transparent;
+    color: $text-primary;
+    outline: none;
+    resize: vertical;
+    inline-size: 100%;
+    min-block-size: var(--ccs-markdown-editor-height);
+
+    &::placeholder {
+      @include placeholder-colors;
+    }
+
+    &::selection {
+      background-color: $highlight;
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      cursor: not-allowed;
+    }
+
+    &:read-only {
+      cursor: default;
+    }
+  }
+
+  .#{$prefix}--markdown-editor__wrapper[data-invalid]
+    .#{$prefix}--markdown-editor__input,
+  .#{$prefix}--markdown-editor__wrapper[data-warn]
+    .#{$prefix}--markdown-editor__input {
+    padding-inline-end: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--markdown-editor--split .#{$prefix}--markdown-editor__input {
+    block-size: var(--ccs-markdown-editor-height);
+    resize: none;
+  }
+
+  .#{$prefix}--markdown-editor__status-icon {
+    position: absolute;
+    fill: $support-error;
+    inset-block-start: $carbon--spacing-05;
+    @include ccs-inset-inline($end: $carbon--spacing-05);
+    pointer-events: none;
+  }
+
+  .#{$prefix}--markdown-editor__status-icon--warning {
+    fill: $support-warning;
+
+    // The warning glyph's exclamation mark is a cutout.
+    path[data-icon-path="inner-path"] {
+      fill: $icon-primary;
+      opacity: 1;
+    }
+  }
+
+  // The preview takes focus so the keyboard can scroll it; the field's ring
+  // marks it.
+  .#{$prefix}--markdown-editor__panel--preview {
+    padding: var(--ccs-markdown-editor-padding);
+    min-block-size: var(--ccs-markdown-editor-height);
+    outline: none;
+  }
+
+  .#{$prefix}--markdown-editor--split .#{$prefix}--markdown-editor__panel--preview {
+    overflow: auto;
+    border-inline-start: 1px solid $border-subtle;
+    block-size: var(--ccs-markdown-editor-height);
+  }
+
+  .#{$prefix}--markdown-editor__prose > :first-child {
+    margin-block-start: 0;
+  }
+
+  .#{$prefix}--markdown-editor__prose > :last-child {
+    margin-block-end: 0;
+  }
+
+  .#{$prefix}--markdown-editor__prose code {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  // A code block reads against the field, which is its own layer color.
+  .#{$prefix}--markdown-editor__prose pre {
+    background-color: $layer-accent;
+  }
+
+  .#{$prefix}--markdown-editor__prose pre:focus,
+  .#{$prefix}--markdown-editor__prose > [role="group"]:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--markdown-editor__prose > [role="group"] {
+    max-inline-size: 100%;
+    overflow-x: auto;
+  }
+
+  .#{$prefix}--markdown-editor__empty {
+    color: $text-helper;
+  }
+
+  .#{$prefix}--markdown-editor__divider {
+    display: none;
+  }
+
+  // Carbon hides `.bx--form-requirement` until a sibling selector such as
+  // `.bx--text-area__wrapper[data-invalid] ~` reveals it. The editor's box is
+  // not a `.bx--text-area__wrapper`, so it reveals the message itself: as a
+  // sibling of the box, or, in the fluid variant, inside it. The higher
+  // specificity outranks the base rule, which emits after this partial.
+  .#{$prefix}--markdown-editor__wrapper[data-invalid]
+    ~ .#{$prefix}--form-requirement,
+  .#{$prefix}--markdown-editor__wrapper[data-warn]
+    ~ .#{$prefix}--form-requirement,
+  .#{$prefix}--markdown-editor--fluid
+    .#{$prefix}--markdown-editor__wrapper
+    .#{$prefix}--form-requirement {
+    display: block;
+    overflow: visible;
+    font-weight: 400;
+    max-block-size: to-rem(200px);
+  }
+
+  .#{$prefix}--markdown-editor__wrapper[data-invalid]
+    ~ .#{$prefix}--form-requirement,
+  .#{$prefix}--markdown-editor--fluid
+    .#{$prefix}--markdown-editor__wrapper[data-invalid]
+    .#{$prefix}--form-requirement {
+    color: $text-error;
+  }
+
+  .#{$prefix}--markdown-editor--fluid
+    .#{$prefix}--markdown-editor__wrapper
+    .#{$prefix}--form-requirement {
+    margin: 0;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+  }
+
+  // Forced colors paint the selected tab's rule and the focus ring in system
+  // colors, as every field's ring: twice the resting ring, inset. The status
+  // icon and the tooltips keep their own forced-colors rules.
+  @media (forced-colors: active) {
+    .#{$prefix}--markdown-editor__tab--selected {
+      border-block-end-color: Highlight;
+    }
+
+    .#{$prefix}--markdown-editor__tab:disabled {
+      color: GrayText;
+    }
+
+    .#{$prefix}--markdown-editor__input:disabled {
+      color: GrayText;
+    }
+
+    .#{$prefix}--markdown-editor__input::selection {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--markdown-editor__wrapper.#{$prefix}--markdown-editor__wrapper--focused {
+      outline: 4px $focus-outline-style Highlight;
+      outline-offset: -4px;
+    }
+
+    .#{$prefix}--markdown-editor__status-icon {
+      fill: CanvasText;
+    }
+  }
+}
+
+@include exports("markdown-editor") {
+  @include markdown-editor;
+}

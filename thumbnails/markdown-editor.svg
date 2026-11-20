@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>markdown-editor</title>
+    <g id="markdown-editor" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="48" y="36" width="224" height="108"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="48" y="143" width="224" height="1"></rect>
+        <rect id="header-rule" fill="var(--cds-border-subtle, #c6c6c6)" x="48" y="64" width="224" height="1"></rect>
+        <rect id="tab-write" fill="var(--cds-text-primary, #161616)" x="60" y="48" width="24" height="5"></rect>
+        <rect id="tab-write-rule" fill="var(--cds-border-interactive, #0f62fe)" x="54" y="62" width="36" height="2"></rect>
+        <rect id="tab-preview" fill="var(--cds-text-secondary, #525252)" x="102" y="48" width="30" height="5"></rect>
+        <rect id="tool-bold" fill="var(--cds-icon-secondary, #525252)" x="184" y="47" width="8" height="8"></rect>
+        <rect id="tool-italic" fill="var(--cds-icon-secondary, #525252)" x="198" y="47" width="8" height="8"></rect>
+        <rect id="tool-link" fill="var(--cds-icon-secondary, #525252)" x="212" y="47" width="8" height="8"></rect>
+        <rect id="tool-list" fill="var(--cds-icon-secondary, #525252)" x="226" y="47" width="8" height="8"></rect>
+        <rect id="tool-quote" fill="var(--cds-icon-secondary, #525252)" x="240" y="47" width="8" height="8"></rect>
+        <rect id="heading" fill="var(--cds-text-primary, #161616)" x="60" y="78" width="60" height="7"></rect>
+        <rect id="line-1" fill="var(--cds-text-secondary, #525252)" x="60" y="94" width="190" height="5"></rect>
+        <rect id="bullet-1" fill="var(--cds-text-secondary, #525252)" x="64" y="109" width="4" height="4"></rect>
+        <rect id="item-1" fill="var(--cds-text-secondary, #525252)" x="76" y="108" width="84" height="5"></rect>
+        <rect id="bullet-2" fill="var(--cds-text-secondary, #525252)" x="64" y="122" width="4" height="4"></rect>
+        <rect id="item-2" fill="var(--cds-text-secondary, #525252)" x="76" y="121" width="60" height="5"></rect>
+        <rect id="caret" fill="var(--cds-background-brand, #0f62fe)" x="138" y="119" width="2" height="9"></rect>
+    </g>
+</svg>

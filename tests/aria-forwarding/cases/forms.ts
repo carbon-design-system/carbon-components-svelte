@@ -17,6 +17,7 @@ import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
 import ListBoxMenu from "carbon-components-svelte/ListBox/ListBoxMenu.svelte";
 import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.svelte";
 import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.svelte";
+import MarkdownEditor from "carbon-components-svelte/MarkdownEditor/MarkdownEditor.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
@@ -348,6 +349,14 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(TagInput, {
         props: { labelText: "Tags", helperText: "Press Enter", ...attrs },
+      }),
+    target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "MarkdownEditor",
+    render: (attrs) =>
+      render(MarkdownEditor, {
+        props: { labelText: "Notes", helperText: "Optional", ...attrs },
       }),
     target: () => screen.getByRole("textbox"),
   },
