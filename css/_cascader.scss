@@ -1,0 +1,316 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/functions";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// `Cascader`'s menu: columns of list box options, one per level. It shares
+/// the field with `Dropdown`, `ComboBox`, and `MultiSelect`, and the rows
+/// with their menus, so only the columns, the chevron, and the single-column
+/// drill-in are new here.
+///
+/// `--ccs-cascader-menu-height` caps a column. `--ccs-cascader-column-width`
+/// is the least width a column takes; columns grow to fill a wider field.
+/// @access private
+/// @group components
+@mixin cascader {
+  .#{$prefix}--cascader__menu {
+    @include box-shadow();
+
+    --ccs-cascader-menu-height: #{to-rem(220px)};
+
+    position: absolute;
+    z-index: z("dropdown");
+    top: 100%;
+    display: flex;
+    min-width: 100%;
+    max-width: calc(100vw - #{$carbon--spacing-07});
+    flex-direction: column;
+    background-color: $layer;
+    @include ccs-inset-inline($start: 0);
+
+    width: max-content;
+  }
+
+  .#{$prefix}--cascader__menu--up {
+    top: auto;
+    bottom: 100%;
+  }
+
+  .#{$prefix}--cascader__menu--portal {
+    position: static;
+    max-width: none;
+  }
+
+  .#{$prefix}--cascader__menu--drill {
+    width: 100%;
+  }
+
+  .#{$prefix}--cascader__menu--xs {
+    --ccs-cascader-menu-height: #{to-rem(132px)};
+  }
+
+  .#{$prefix}--cascader__menu--sm {
+    --ccs-cascader-menu-height: #{to-rem(176px)};
+  }
+
+  .#{$prefix}--cascader__menu--lg {
+    --ccs-cascader-menu-height: #{to-rem(264px)};
+  }
+
+  // The menu is not inside a sized list box once it is portalled, so the
+  // option heights come from the menu's own size class.
+  .#{$prefix}--cascader__menu--xs .#{$prefix}--list-box__menu-item,
+  .#{$prefix}--cascader__menu--xs .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(24px);
+  }
+
+  .#{$prefix}--cascader__menu--xs .#{$prefix}--list-box__menu-item__option {
+    padding-top: to-rem(3px);
+    padding-bottom: to-rem(3px);
+  }
+
+  .#{$prefix}--cascader__menu--sm .#{$prefix}--list-box__menu-item,
+  .#{$prefix}--cascader__menu--sm .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(32px);
+  }
+
+  .#{$prefix}--cascader__menu--sm .#{$prefix}--list-box__menu-item__option {
+    padding-top: to-rem(7px);
+    padding-bottom: to-rem(7px);
+  }
+
+  .#{$prefix}--cascader__menu--lg .#{$prefix}--list-box__menu-item,
+  .#{$prefix}--cascader__menu--lg .#{$prefix}--list-box__menu-item__option {
+    height: to-rem(48px);
+  }
+
+  .#{$prefix}--cascader__menu--lg .#{$prefix}--list-box__menu-item__option {
+    padding-top: to-rem(15px);
+    padding-bottom: to-rem(15px);
+  }
+
+  .#{$prefix}--cascader__columns {
+    display: flex;
+    overflow-x: auto;
+    flex: 1 1 auto;
+    align-items: stretch;
+  }
+
+  .#{$prefix}--cascader__column {
+    overflow-y: auto;
+    min-width: var(--ccs-cascader-column-width, #{to-rem(192px)});
+    max-height: var(--ccs-cascader-menu-height);
+    flex: 1 0 var(--ccs-cascader-column-width, #{to-rem(192px)});
+    border-inline-end: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--cascader__column:last-child {
+    border-inline-end: 0;
+  }
+
+  .#{$prefix}--cascader__menu--drill .#{$prefix}--cascader__column {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+
+  .#{$prefix}--cascader__results {
+    overflow-y: auto;
+    max-height: var(--ccs-cascader-menu-height);
+  }
+
+  // The path of open nodes stays shaded, so the way back to the field's
+  // value reads across the columns.
+  .#{$prefix}--cascader__menu
+    .#{$prefix}--list-box__menu-item[aria-expanded="true"] {
+    background-color: $layer-selected;
+  }
+
+  .#{$prefix}--cascader__menu
+    .#{$prefix}--list-box__menu-item__option {
+    padding-inline-end: 0;
+  }
+
+  .#{$prefix}--cascader__row {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+  }
+
+  .#{$prefix}--cascader__label {
+    overflow: hidden;
+    min-width: 0;
+    flex: 1 1 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--cascader__label > span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // The check mark sits in the row, before the chevron, so a chosen branch
+  // shows both.
+  .#{$prefix}--cascader__row .#{$prefix}--list-box__menu-item__selected-icon {
+    position: static;
+    flex: none;
+    margin-inline: $carbon--spacing-03 $carbon--spacing-02;
+    transform: none;
+  }
+
+  // Tying with Carbon's `.form-item.checkbox-wrapper:last-of-type`, whose
+  // 3px bottom margin would sit the checkbox above the chevron.
+  .#{$prefix}--cascader__row
+    > .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: row;
+    margin: 0;
+  }
+
+  // A 24px target (WCAG 2.5.8) around a 16px icon; the negative margin keeps
+  // the row's height and the label's position.
+  .#{$prefix}--cascader__chevron {
+    display: flex;
+    width: $carbon--spacing-06;
+    height: $carbon--spacing-06;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    margin-block: to-rem(-4px);
+    margin-inline: $carbon--spacing-02 to-rem(-4px);
+    cursor: pointer;
+  }
+
+  .#{$prefix}--cascader__chevron > svg {
+    fill: $icon-secondary;
+    transition: transform $duration--fast-01 motion(standard, productive);
+
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--cascader__chevron .#{$prefix}--loading {
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--cascader__chevron .#{$prefix}--cascader__chevron-error {
+    fill: $support-error;
+  }
+
+  .#{$prefix}--cascader__menu .#{$prefix}--list-box__menu-item[disabled] svg {
+    fill: $icon-disabled;
+  }
+
+  // The drill-in header: the way back, and where the column came from.
+  .#{$prefix}--cascader__back {
+    display: flex;
+    min-height: to-rem(40px);
+    align-items: center;
+    border-bottom: 1px solid $border-subtle;
+  }
+
+  .#{$prefix}--cascader__back-button {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: to-rem(40px);
+    flex: none;
+    align-items: center;
+    padding: 0 $carbon--spacing-05;
+    border: 0;
+    background: transparent;
+    color: $link-primary;
+    cursor: pointer;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--cascader__back-button > svg {
+    fill: currentcolor;
+
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--cascader__back-title {
+    @include type-style("heading-compact-01");
+
+    overflow: hidden;
+    min-width: 0;
+    flex: 1 1 0;
+    padding-inline-end: $carbon--spacing-05;
+    color: $text-primary;
+    text-align: end;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--cascader__back-button:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--cascader__retry {
+    @include type-style("body-compact-01");
+
+    padding: 0;
+    border: 0;
+    margin-inline-start: $carbon--spacing-03;
+    background: transparent;
+    color: $link-primary;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .#{$prefix}--cascader__retry:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--cascader__back-button:hover {
+      background-color: $layer-hover;
+    }
+  }
+
+  // The shaded path is a background, which forced colors repaint as Canvas,
+  // and a highlighted row opts out of forcing and fills with `Highlight`
+  // (see `list-box-highlight-ring`). A start edge marks the open path, and
+  // the chevron takes system colors of its own.
+  @media (forced-colors: active) {
+    .#{$prefix}--cascader__menu
+      .#{$prefix}--list-box__menu-item[aria-expanded="true"] {
+      border-inline-start: $carbon--spacing-02 solid Highlight;
+    }
+
+    .#{$prefix}--cascader__chevron > svg,
+    .#{$prefix}--cascader__back-button > svg {
+      fill: CanvasText;
+    }
+
+    .#{$prefix}--cascader__back-button,
+    .#{$prefix}--cascader__retry {
+      color: LinkText;
+    }
+
+    .#{$prefix}--cascader__menu
+      .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--cascader__chevron
+      > svg {
+      fill: HighlightText;
+    }
+
+    .#{$prefix}--cascader__menu
+      .#{$prefix}--list-box__menu-item--highlighted
+      .#{$prefix}--list-box__menu-item__selected-icon {
+      fill: HighlightText;
+    }
+  }
+}
+
+@include exports("cascader") {
+  @include cascader;
+}

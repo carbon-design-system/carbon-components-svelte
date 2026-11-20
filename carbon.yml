@@ -227,6 +227,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Carousel
+  cascader:
+    name: Cascader
+    description: A select that opens a column per level, such as region, country, city, with search across levels, many choices with mixed parents, lazy-loaded children and a one-column drill-in on narrow screens.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/cascader.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Cascader
   chat-button:
     name: Chat button
     status: stable
