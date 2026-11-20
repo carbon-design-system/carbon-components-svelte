@@ -1,0 +1,87 @@
+// Recurrence picker: the layout around the Carbon fields it is built from.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// RecurrencePicker: a stack of fields, a summary sentence and a date list
+/// @access private
+/// @group components
+@mixin recurrence-picker {
+  // A fieldset's default minimum is its content width; let it shrink instead.
+  .#{$prefix}--recurrence-picker__fieldset {
+    min-inline-size: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .#{$prefix}--recurrence-picker__stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: $carbon--spacing-05;
+  }
+
+  // The unit word sits beside the number it follows, on the field's row.
+  .#{$prefix}--recurrence-picker__interval {
+    display: flex;
+    align-items: flex-end;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--recurrence-picker__interval .#{$prefix}--form-item {
+    flex: 0 1 to-rem(160px);
+  }
+
+  .#{$prefix}--recurrence-picker__unit {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    align-items: center;
+    min-height: to-rem(40px);
+    color: $text-primary;
+  }
+
+  // Seven weekday buttons at the toggle button's full padding are wider than
+  // a phone. They share the row and wrap to a second row when it is too narrow.
+  .#{$prefix}--recurrence-picker .#{$prefix}--toggle-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-self: stretch;
+  }
+
+  .#{$prefix}--recurrence-picker .#{$prefix}--toggle-button {
+    flex: 1 0 auto;
+    padding-inline: $carbon--spacing-02;
+  }
+
+  .#{$prefix}--recurrence-picker__summary {
+    @include type-style("body-01");
+
+    padding-inline-start: $carbon--spacing-05;
+    border-inline-start: 2px solid $border-subtle;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--recurrence-picker__note {
+    @include type-style("helper-text-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--recurrence-picker__preview {
+    @include type-style("body-compact-01");
+
+    padding: 0;
+    margin: 0;
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+    list-style: none;
+  }
+}
+
+@include exports("recurrence-picker") {
+  @include recurrence-picker;
+}

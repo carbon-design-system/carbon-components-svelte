@@ -1047,6 +1047,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/RecursiveList
     tags:
       - data-display
+  recurrence-picker:
+    name: Recurrence picker
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/recurrence-picker.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/RecurrencePicker
   relative-time:
     name: Relative time
     status: stable

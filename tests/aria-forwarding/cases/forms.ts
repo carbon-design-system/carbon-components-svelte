@@ -21,6 +21,7 @@ import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
+import RecurrencePicker from "carbon-components-svelte/RecurrencePicker/RecurrencePicker.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
@@ -253,6 +254,14 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(PinCodeInput, {
         props: { labelText: "Code", helperText: "Check your email", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "RecurrencePicker",
+    render: (attrs) =>
+      render(RecurrencePicker, {
+        props: { startDate: new Date(2026, 10, 3), ...attrs },
       }),
     target: () => screen.getByRole("group"),
   },

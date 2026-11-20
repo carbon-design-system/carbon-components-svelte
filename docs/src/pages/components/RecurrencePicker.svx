@@ -1,0 +1,132 @@
+---
+components: ["RecurrencePicker"]
+description: Recurrence pickers set how an event repeats, such as every two weeks on Tuesday and Thursday, and read and write it as an iCalendar RRULE.
+---
+
+<script>
+  import { Box, Layer, RecurrencePicker, Stack } from "carbon-components-svelte";
+
+  const startDate = new Date(2026, 10, 3);
+</script>
+
+## Basic
+
+Pass the event's `startDate`. The picker reads its weekday, day of the month and date from it, and never reads the clock, so the markup is the same on a server and in a browser.
+
+<RecurrencePicker {startDate} />
+
+## Value
+
+`value` is an RFC 5545 `RRULE` without the `RRULE:` prefix, such as `FREQ=WEEKLY;INTERVAL=2;BYDAY=TU,TH`, and an empty string means the event does not repeat. `rule` is the same rule as an object, and a `change` event carries both.
+
+<FileSource src="/framed/RecurrencePicker/RecurrencePickerBindable" />
+
+## Frequency
+
+The picker offers daily, weekly, monthly and yearly. Set `frequencies` to offer fewer.
+
+<RecurrencePicker {startDate} frequencies={["WEEKLY", "MONTHLY"]} value="FREQ=WEEKLY;BYDAY=TU" />
+
+### Weekly
+
+Weekly rules show a button for each weekday, with at least one pressed. The buttons start on the locale's first day of the week, which is Sunday for `en-US`, Monday for `de` and Saturday for `ar-EG`. Set `firstDayOfWeek` to override it.
+
+An interval over one depends on where the week starts: every second week on Sunday and Monday is a different set of dates when weeks start on Sunday. The picker adds `WKST` to the rule when the week does not start on Monday, the RFC default, so every calendar that reads the rule agrees.
+
+<Stack gap={7}>
+  <RecurrencePicker {startDate} locale="en-US" value="FREQ=WEEKLY;INTERVAL=2;BYDAY=TU,TH" />
+  <RecurrencePicker {startDate} locale="de" value="FREQ=WEEKLY;INTERVAL=2;BYDAY=TU,TH" />
+</Stack>
+
+### Monthly
+
+A monthly rule offers the patterns the start date fits: its day of the month, its weekday by position ("the first Tuesday"), the same weekday as the last one when it is, and the last day of the month.
+
+<RecurrencePicker {startDate} value="FREQ=MONTHLY;BYDAY=1TU" />
+
+A rule on the 29th, 30th or 31st skips the months that do not have that day, as RFC 5545 says. Choose the last day of the month to repeat every month.
+
+## End
+
+An event can repeat forever, a number of times, or until a date. The end date uses the [DatePicker](/components/DatePicker), and the first date offered is a week after the first occurrence.
+
+<RecurrencePicker {startDate} value="FREQ=DAILY;COUNT=5" />
+
+`UNTIL` is written as a date, which suits an all-day event. For a timed event, convert it to a UTC date-time in your own code.
+
+## Summary and the next dates
+
+A sentence under the controls says what the rule means. Set `previewCount` to list the next dates under it. The dates are counted on the calendar, not in milliseconds, so a daylight saving change never moves one to a neighboring day, and a start time the clock skips keeps its time on every other day.
+
+<RecurrencePicker {startDate} previewCount={5} value="FREQ=MONTHLY;BYDAY=-1FR" />
+
+## Localization
+
+The summary, the weekday and month names, the dates and the lists in it come from `Intl` and follow `locale`. Part of the sentence is English: the sentence shapes, such as "Every 2 weeks on Tuesday and Thursday, until Dec 31, 2026", the labels, and the monthly pattern phrases such as "On the third Tuesday".
+
+| What | How to change it |
+| --- | --- |
+| Weekday and month names, dates, lists, unit words such as "weeks", number format | Set `locale`. |
+| Labels, options and the monthly pattern phrases | Pass any of them in `text`. Unset keys stay English. |
+| The sentence under the controls | Pass `summaryText(rule, context)`. `context.format` writes names, dates and lists in the locale. |
+
+<RecurrencePicker
+  {startDate}
+  locale="de"
+  value="FREQ=WEEKLY;BYDAY=TU"
+  labelText="Wiederholung"
+  hideLabel={false}
+  text={{
+    frequency: "Wiederholen",
+    doesNotRepeat: "Wiederholt sich nicht",
+    weekly: "Wöchentlich",
+    interval: "Alle",
+    weekdays: "Am",
+    ends: "Endet",
+    never: "Nie",
+  }}
+  summaryText={(rule, { format }) => `Jede Woche am ${format.list((rule.byDay ?? []).map(({ day }) => format.weekday(day)))}`}
+/>
+
+## Rules the picker cannot edit
+
+A `value` that `parseRRule` does not support is kept as given, and the picker says so until the user chooses a frequency.
+
+<RecurrencePicker {startDate} value="FREQ=MONTHLY;BYSETPOS=-1;BYDAY=MO,TU,WE,TH,FR" />
+
+## Parse and format
+
+`parseRRule(text)` returns a rule object, or `null` for text that is not a rule or uses something outside the supported subset. `formatRRule(rule)` writes it back, and `occurrences(rule, startDate, { limit })` lists the dates as local `Date`s with the start's time of day.
+
+| Supported | Not supported |
+| --- | --- |
+| `FREQ` of `DAILY`, `WEEKLY`, `MONTHLY`, `YEARLY` | `HOURLY` and finer frequencies |
+| `INTERVAL`, `COUNT`, `UNTIL` as a date or date-time (the date is kept) | `COUNT` together with `UNTIL` |
+| `BYDAY`, with `3TU` or `-1FR` on a monthly rule, or a yearly rule with `BYMONTH` | `BYDAY` on a daily rule, `BYDAY` with `BYMONTHDAY` |
+| `BYMONTHDAY`, with `-1` for the last day, and `BYMONTH` on a yearly rule | `BYSETPOS`, `BYYEARDAY`, `BYWEEKNO`, `BYHOUR`, `BYMINUTE`, `BYSECOND` |
+| `WKST` | `RDATE`, `EXDATE` and `DTSTART`, which belong to the event |
+
+A start that fits no day of the rule is not an occurrence, so a weekly rule on Thursday starting on a Tuesday begins on the Thursday.
+
+## Disabled
+
+Set `disabled` to `true` to prevent user interaction.
+
+<RecurrencePicker {startDate} disabled value="FREQ=WEEKLY;BYDAY=TU" />
+
+## Layering
+
+<Layer>
+  <Box padding={5}>
+    <RecurrencePicker {startDate} value="FREQ=DAILY" />
+  </Box>
+</Layer>
+
+## Design
+
+| Do | Why |
+| --- | --- |
+| Pass `startDate` from the event, as a `Date` built from its local year, month and day. | The weekday default, the monthly patterns and the first occurrence all come from it. |
+| Store `value` with the event, next to its start and its time zone. | An `RRULE` has no time zone; the event's does the work, and daylight saving changes keep the local time. |
+| Show `previewCount` where people confirm an event. | Seeing the actual dates catches a rule that skips a month. |
+| Pass `summaryText` and `text` when you ship in another language. | The default sentences are English only. |
