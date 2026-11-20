@@ -955,6 +955,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/PinCodeInput
+  pivot-table:
+    name: Pivot table
+    description: Groups flat records by row and column fields and shows an aggregate for every group, with subtotals, grand totals and the records behind each cell.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/pivot-table.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/PivotTable
   popover:
     status: stable
     framework: svelte

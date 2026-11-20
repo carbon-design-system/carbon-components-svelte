@@ -197,7 +197,7 @@ function stringifyCsvValue(value) {
  * @param {boolean} escapeFormulas - Whether to neutralize spreadsheet formulas
  * @returns {string} The escaped field
  */
-function escapeCsvField(field, delimiter, escapeFormulas) {
+export function escapeCsvField(field, delimiter, escapeFormulas) {
   const value =
     escapeFormulas && FORMULA_PREFIX_REGEX.test(field) ? `'${field}` : field;
 

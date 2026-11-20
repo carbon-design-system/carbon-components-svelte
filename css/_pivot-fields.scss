@@ -1,0 +1,118 @@
+// New component: no equivalent exists in carbon-components v10.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// PivotFieldList: the fields of a pivot, and the areas they are dragged to.
+/// @access private
+/// @group components
+@mixin pivot-fields {
+  .#{$prefix}--pivot-fields {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--pivot-fields__label {
+    @include type-style("heading-compact-01");
+
+    color: $text-primary;
+  }
+
+  .#{$prefix}--pivot-fields__zones {
+    display: grid;
+    gap: $carbon--spacing-04;
+    grid-template-columns: repeat(auto-fit, minmax(to-rem(192px), 1fr));
+  }
+
+  .#{$prefix}--pivot-fields__zone {
+    display: flex;
+    min-height: to-rem(96px);
+    flex-direction: column;
+    padding: $carbon--spacing-03;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--pivot-fields__zone--over {
+    border-color: $border-interactive;
+    outline: 1px solid $border-interactive;
+  }
+
+  .#{$prefix}--pivot-fields__zone-name {
+    @include type-style("heading-compact-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--pivot-fields__list {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    gap: $carbon--spacing-02;
+    list-style: none;
+  }
+
+  .#{$prefix}--pivot-fields__item {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: to-rem(32px);
+    align-items: center;
+    justify-content: space-between;
+    padding-inline-start: $carbon--spacing-04;
+    border-block-start: 2px solid transparent;
+    background-color: $layer-accent;
+    color: $text-primary;
+    cursor: grab;
+    gap: $carbon--spacing-02;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--pivot-fields__item--drop {
+    border-block-start-color: $border-interactive;
+  }
+
+  // A fill or lower opacity on the lifted item would put its text under
+  // contrast, so it takes a dashed outline.
+  .#{$prefix}--pivot-fields__item--dragging {
+    outline: 1px dashed $border-strong;
+    outline-offset: -1px;
+  }
+
+  .#{$prefix}--pivot-fields__text {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--pivot-fields__empty {
+    @include type-style("label-01");
+
+    color: $text-helper;
+  }
+
+  .#{$prefix}--pivot-fields__ghost {
+    @include type-style("body-compact-01");
+
+    position: fixed;
+    z-index: z("floating");
+    padding: $carbon--spacing-03 $carbon--spacing-04;
+    border: 1px solid $border-interactive;
+    background-color: $layer-accent;
+    color: $text-primary;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@include exports("pivot-fields") {
+  @include pivot-fields;
+}

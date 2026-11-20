@@ -109,6 +109,13 @@ export function toCsv<Row extends Record<string, unknown>>(
   options?: ToCsvOptions,
 ): string;
 
+/** Quotes and escapes a single CSV field per RFC 4180. */
+export function escapeCsvField(
+  field: string,
+  delimiter: string,
+  escapeFormulas: boolean,
+): string;
+
 type PathDepth = [never, 0, 1, 2, ...0[]];
 
 type Join<K, P> = K extends string | number
