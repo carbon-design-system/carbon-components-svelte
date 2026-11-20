@@ -869,6 +869,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/NumberInput
+  number-range-input:
+    name: Number range input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/number-range-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/NumberRangeInput
   ordered-list:
     name: Ordered list
     status: stable

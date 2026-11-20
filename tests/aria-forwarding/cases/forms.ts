@@ -19,6 +19,7 @@ import ListBoxMenuItem from "carbon-components-svelte/ListBox/ListBoxMenuItem.sv
 import ListBoxSelection from "carbon-components-svelte/ListBox/ListBoxSelection.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
+import NumberRangeInput from "carbon-components-svelte/NumberRangeInput/NumberRangeInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
@@ -247,6 +248,14 @@ export const forms: AriaEntry[] = [
       }),
     target: (result) =>
       result.container.querySelector<HTMLElement>("input") as HTMLElement,
+  },
+  {
+    name: "NumberRangeInput",
+    render: (attrs) =>
+      render(NumberRangeInput, {
+        props: { labelText: "Price", helperText: "In USD", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "PinCodeInput",
