@@ -1,0 +1,366 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A checkerboard behind a translucent color.
+/// @access private
+/// @group components
+@mixin color-picker-checkerboard {
+  background-color: $background;
+  background-image:
+    linear-gradient(45deg, $border-subtle 25%, transparent 25%),
+    linear-gradient(-45deg, $border-subtle 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, $border-subtle 75%),
+    linear-gradient(-45deg, transparent 75%, $border-subtle 75%);
+  background-position:
+    0 0,
+    0 to-rem(4px),
+    to-rem(4px) to-rem(-4px),
+    to-rem(-4px) 0;
+  background-size: to-rem(8px) to-rem(8px);
+}
+
+/// ColorPicker: a saturation and brightness area, hue and alpha sliders,
+/// text fields and swatches. The area and the sliders paint colors the
+/// user picks, not theme colors, so they keep their own colors in forced
+/// colors mode.
+///
+/// `--ccs-slider-sign` is `-1` for a mirrored track (RTL), so a
+/// gradient layer flips with `scaleX`. The thumbs position with
+/// `trackLeft()` from the same variable.
+/// @access private
+/// @group components
+@mixin color-picker {
+  .#{$prefix}--color-picker {
+    display: flex;
+    width: 100%;
+    max-width: to-rem(320px);
+    flex-direction: column;
+    // Half a thumb on the inline sides and the top, so a thumb at the end
+    // of the area or a track stays inside the picker's box.
+    padding: $carbon--spacing-03 $carbon--spacing-03 0;
+    gap: $carbon--spacing-05;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--color-picker--disabled {
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--color-picker__area {
+    position: relative;
+    height: to-rem(160px);
+    border-radius: 2px;
+    background-color: hsl(var(--ccs-color-picker-hue, 0), 100%, 50%);
+    cursor: crosshair;
+    forced-color-adjust: none;
+    touch-action: none;
+  }
+
+  .#{$prefix}--color-picker__area::before,
+  .#{$prefix}--color-picker__slider::before {
+    position: absolute;
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    transform: scaleX(var(--ccs-slider-sign, 1));
+  }
+
+  .#{$prefix}--color-picker__area::before {
+    background-image:
+      linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0)),
+      linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0));
+  }
+
+  .#{$prefix}--color-picker__slider {
+    position: relative;
+    height: to-rem(12px);
+    flex: none;
+    border-radius: to-rem(6px);
+    cursor: pointer;
+    forced-color-adjust: none;
+    touch-action: none;
+  }
+
+  // A 12px track is too thin to hit with a finger: the box that takes the
+  // press reaches 6px past it on each side.
+  .#{$prefix}--color-picker__slider::after {
+    position: absolute;
+    top: to-rem(-6px);
+    right: 0;
+    bottom: to-rem(-6px);
+    left: 0;
+    content: "";
+  }
+
+  .#{$prefix}--color-picker__slider--hue::before {
+    background-image: linear-gradient(
+      to right,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
+  }
+
+  .#{$prefix}--color-picker__slider--alpha {
+    @include color-picker-checkerboard;
+  }
+
+  .#{$prefix}--color-picker__slider--alpha::before {
+    background-image: linear-gradient(
+      to right,
+      rgba(var(--ccs-color-picker-rgb), 0),
+      rgb(var(--ccs-color-picker-rgb))
+    );
+  }
+
+  .#{$prefix}--color-picker__thumb {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    width: to-rem(16px);
+    height: to-rem(16px);
+    box-sizing: border-box;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 50%;
+    background-color: rgb(var(--ccs-color-picker-rgb));
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+    forced-color-adjust: none;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  .#{$prefix}--color-picker__slider--hue .#{$prefix}--color-picker__thumb {
+    background-color: hsl(var(--ccs-color-picker-hue, 0), 100%, 50%);
+  }
+
+  // The thumb sits on the color the user picks, so a `$focus` ring alone
+  // vanishes on blue. A `$focus-inset` halo on both sides of the ring
+  // keeps it at 3:1 on any color.
+  .#{$prefix}--color-picker__thumb:focus {
+    @include focus-outline("outline", (outline-offset));
+
+    box-shadow: 0 0 0 5px $focus-inset;
+    outline-offset: 1px;
+  }
+
+  .#{$prefix}--color-picker__area--disabled,
+  .#{$prefix}--color-picker__slider--disabled,
+  .#{$prefix}--color-picker--disabled .#{$prefix}--color-picker__preview {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--color-picker__area--readonly,
+  .#{$prefix}--color-picker__slider--readonly {
+    cursor: default;
+  }
+
+  .#{$prefix}--color-picker__row {
+    display: flex;
+    align-items: center;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--color-picker__preview {
+    @include color-picker-checkerboard;
+
+    width: to-rem(32px);
+    height: to-rem(32px);
+    flex: none;
+    overflow: hidden;
+    border: 1px solid $border-strong;
+    border-radius: 50%;
+  }
+
+  .#{$prefix}--color-picker__preview-face {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(
+      var(--ccs-color-picker-rgb),
+      var(--ccs-color-picker-alpha, 1)
+    );
+    forced-color-adjust: none;
+  }
+
+  .#{$prefix}--color-picker__sliders {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--color-picker__inputs {
+    display: flex;
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--color-picker__format {
+    width: to-rem(80px);
+    flex: none;
+  }
+
+  // "HEX" does not fit beside the chevron at the select's 16px and 48px
+  // padding.
+  .#{$prefix}--color-picker__format .#{$prefix}--select-input {
+    padding-inline: $carbon--spacing-03 $carbon--spacing-07;
+  }
+
+  .#{$prefix}--color-picker__field {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
+  .#{$prefix}--color-picker__field--wide {
+    flex-grow: 2;
+  }
+
+  // Three digits fit a quarter of the row, so the fields trade the text
+  // input's 16px side padding for 8px. A read-only number field is
+  // `type="text"`.
+  .#{$prefix}--color-picker__field .#{$prefix}--text-input,
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="number"],
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="text"] {
+    padding-inline: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="number"],
+  .#{$prefix}--color-picker__field .#{$prefix}--number input[type="text"] {
+    text-align: center;
+  }
+
+  // The read-only icon covers three digits in a quarter of the row. The
+  // fields' read-only border and the picker's state say it instead.
+  .#{$prefix}--color-picker__field .#{$prefix}--text-input__readonly-icon {
+    display: none;
+  }
+
+  .#{$prefix}--color-picker__caption {
+    @include type-style("label-01");
+
+    display: block;
+    margin-top: $carbon--spacing-02;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  .#{$prefix}--color-picker--disabled .#{$prefix}--color-picker__caption {
+    color: $text-disabled;
+  }
+
+  .#{$prefix}--color-picker__warning {
+    @include type-style("helper-text-01");
+
+    display: flex;
+    // One line is held while the color reads, so the warning does not
+    // move the swatches when it appears.
+    min-height: to-rem(16px);
+    align-items: flex-start;
+    gap: $carbon--spacing-03;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--color-picker__warning svg {
+    flex: none;
+    fill: $support-warning;
+  }
+
+  .#{$prefix}--color-picker__warning svg path:first-of-type {
+    fill: $carbon__black-100;
+    opacity: 1;
+  }
+
+  .#{$prefix}--color-picker__swatches {
+    display: grid;
+    gap: $carbon--spacing-03;
+    grid-template-columns: repeat(
+      var(--ccs-color-picker-columns, 8),
+      to-rem(24px)
+    );
+  }
+
+  .#{$prefix}--color-picker__swatch {
+    display: flex;
+    width: to-rem(24px);
+    height: to-rem(24px);
+    padding: 0;
+    border: 1px solid $border-strong;
+    border-radius: 2px;
+    background: none;
+  }
+
+  .#{$prefix}--color-picker__swatch--interactive {
+    cursor: pointer;
+  }
+
+  .#{$prefix}--color-picker__swatch:focus {
+    @include focus-outline("outline", (outline-offset));
+
+    outline-offset: to-rem(2px);
+  }
+
+  .#{$prefix}--color-picker__swatch:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .#{$prefix}--color-picker__swatch--selected {
+    border-color: $text-primary;
+    box-shadow: 0 0 0 1px $text-primary;
+  }
+
+  .#{$prefix}--color-picker__swatch-face {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    forced-color-adjust: none;
+  }
+
+  // Forced colors paint every icon `ButtonText`, which is dark on a dark
+  // swatch. The face keeps its color, so the check keeps the one that
+  // reads on it.
+  @media (forced-colors: active) {
+    .#{$prefix}--color-picker__swatch-face svg {
+      fill: currentColor;
+    }
+
+    // The thumbs keep their colors, so the ring takes the system color
+    // by hand.
+    .#{$prefix}--color-picker__thumb:focus {
+      outline-color: Highlight;
+    }
+
+    // Forced colors drop the chosen swatch's `box-shadow`, which leaves it
+    // the same 1px border as the rest.
+    .#{$prefix}--color-picker__swatch--selected {
+      border-width: 2px;
+      border-color: Highlight;
+    }
+  }
+
+  @media (any-hover: hover) {
+    // Only a swatch that can be chosen reacts. The chosen one keeps its
+    // own border, which forced colors draw in `Highlight`.
+    .#{$prefix}--color-picker__swatch--interactive:not(
+        .#{$prefix}--color-picker__swatch--selected
+      ):hover {
+      border-color: $text-primary;
+    }
+  }
+}
+
+@include exports("color-picker") {
+  @include color-picker;
+}
