@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>web-terminal</title>
+    <g id="web-terminal" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="container" fill="#161616" stroke="#525252" stroke-width="1" x="40.5" y="20.5" width="239" height="139"></rect>
+        <rect id="header" fill="#262626" x="41" y="21" width="238" height="20"></rect>
+        <rect id="title" fill="#c6c6c6" x="50" y="29" width="40" height="4"></rect>
+        <rect id="action-1" fill="#a8a8a8" x="236" y="28" width="6" height="6"></rect>
+        <rect id="action-2" fill="#a8a8a8" x="248" y="28" width="6" height="6"></rect>
+        <rect id="action-3" fill="#a8a8a8" x="260" y="28" width="6" height="6"></rect>
+        <rect id="prompt-1" fill="#a8a8a8" x="50" y="52" width="6" height="4"></rect>
+        <rect id="command-1" fill="#f4f4f4" x="62" y="52" width="68" height="4"></rect>
+        <rect id="output-1" fill="#42be65" x="50" y="68" width="90" height="4"></rect>
+        <rect id="output-2" fill="#a8a8a8" x="50" y="80" width="150" height="4"></rect>
+        <rect id="output-3" fill="#f1c21b" x="50" y="92" width="112" height="4"></rect>
+        <rect id="output-4" fill="#a8a8a8" x="50" y="104" width="136" height="4"></rect>
+        <rect id="input-row" fill="#262626" x="41" y="138" width="238" height="21"></rect>
+        <rect id="input-divider" fill="#525252" x="41" y="138" width="238" height="1"></rect>
+        <rect id="prompt-2" fill="#a8a8a8" x="50" y="146" width="6" height="4"></rect>
+        <rect id="caret" fill="#f4f4f4" x="62" y="144" width="2" height="8"></rect>
+    </g>
+</svg>

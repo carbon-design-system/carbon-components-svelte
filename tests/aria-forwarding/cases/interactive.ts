@@ -36,6 +36,7 @@ import TooltipIcon from "carbon-components-svelte/TooltipIcon/TooltipIcon.svelte
 import TreeView from "carbon-components-svelte/TreeView/TreeView.svelte";
 import Truncate from "carbon-components-svelte/Truncate/Truncate.svelte";
 import UserAvatar from "carbon-components-svelte/UserAvatar/UserAvatar.svelte";
+import WebTerminal from "carbon-components-svelte/WebTerminal/WebTerminal.svelte";
 import Add from "carbon-icons-svelte/lib/Add.svelte";
 import type { AriaEntry } from "../contract";
 import AccordionItem from "../fixtures/AccordionItem.test.svelte";
@@ -737,6 +738,12 @@ export const interactive: AriaEntry[] = [
     name: "ChatLog",
     render: (attrs) =>
       render(ChatLog, { props: { labelText: "Conversation", ...attrs } }),
+    target: () => screen.getByRole("log"),
+  },
+  {
+    name: "WebTerminal",
+    render: (attrs) =>
+      render(WebTerminal, { props: { labelText: "Shell output", ...attrs } }),
     target: () => screen.getByRole("log"),
   },
   {

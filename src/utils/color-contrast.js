@@ -67,3 +67,58 @@ export function contrastRatio(a, b) {
   );
   return (hi + 0.05) / (lo + 0.05);
 }
+
+/**
+ * Move a `#rrggbb` color toward black or white until it reads against a
+ * background, as a terminal's minimum contrast ratio does.
+ *
+ * @param {string} color
+ * @param {number} backgroundLuminance WCAG relative luminance of the
+ * background, from 0 to 1.
+ * @param {number} [minRatio=4.5]
+ * @returns {string} `color` when it already reads, otherwise the nearest
+ * lighter (on a dark background) or darker (on a light one) shade that does.
+ * Anything that is not `#rrggbb` is returned as is.
+ */
+export function ensureContrast(color, backgroundLuminance, minRatio = 4.5) {
+  const rgb = parseHex(color);
+  if (!rgb) return color;
+
+  /** @param {number} luminance */
+  const ratio = (luminance) => {
+    const [hi, lo] =
+      luminance > backgroundLuminance
+        ? [luminance, backgroundLuminance]
+        : [backgroundLuminance, luminance];
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  if (ratio(relativeLuminance(rgb)) >= minRatio) return color;
+
+  const target = backgroundLuminance < 0.18 ? 1 : 0;
+
+  // The hex a step lands on, rounded to 8 bits, since that is what is drawn.
+  /** @param {number} t */
+  const mix = (t) =>
+    toHex(
+      /** @type {[number, number, number]} */ (
+        rgb.map((channel) => channel + (target - channel) * t)
+      ),
+    );
+  /** @param {string} hex */
+  const reads = (hex) =>
+    ratio(
+      relativeLuminance(
+        /** @type {[number, number, number]} */ (parseHex(hex)),
+      ),
+    ) >= minRatio;
+
+  // Binary search for the smallest step that reads, so the hue survives.
+  let low = 0;
+  let high = 1;
+  for (let step = 0; step < 12; step++) {
+    const mid = (low + high) / 2;
+    if (reads(mix(mid))) high = mid;
+    else low = mid;
+  }
+  return mix(high);
+}
