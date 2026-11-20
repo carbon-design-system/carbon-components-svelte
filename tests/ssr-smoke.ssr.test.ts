@@ -40,6 +40,7 @@ const NEEDS_PARENT = new Set([
   "SearchMenuGroup", // SearchMenu
   "SearchMenuItem", // SearchMenu
   "SelectItem", // Select or TimePickerSelect
+  "SessionTimeoutModal", // a timer from createIdleTimer
   "Switch", // ContentSwitcher
   "SwitchPanel", // ContentSwitcher
   "Tab", // Tabs or TabsVertical
