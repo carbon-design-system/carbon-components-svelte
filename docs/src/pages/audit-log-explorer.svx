@@ -1,0 +1,56 @@
+---
+title: Audit log explorer
+layout: guide
+description: An event and audit log screen built from a query bar, a facet panel, a virtualized grid, a time range and a details panel, all editing one URL.
+---
+
+An audit log screen is one question asked three ways: a typed query, a click on a facet, and a time range. This page composes the pieces for it. The query bar, the facets, the payload tree and the time presets are drafts that are not part of the library yet, so the example imports them from their paths.
+
+## Full page
+
+One million synthetic events behind a cursor. Type `outcome:denied actor:svc-ci`, click a facet, change the time range, turn on live tail, or press Enter on a row. Everything but the open event is in the URL when the screen is given `syncUrl`, which the frame below leaves off.
+
+<FileSource src="/framed/AuditLogExplorer/AuditLogExplorer" />
+
+## One model
+
+The text of the query bar is the model. A facet is a way to edit the qualifiers in it, not a second state, and the time range and live tail sit beside it.
+
+| Control | Edits | Written to the URL as |
+| :--- | :--- | :--- |
+| Query bar | The text: free words, `"phrases"`, `-negation` and `key:value` qualifiers | `q` |
+| Facets and their chips | The qualifiers a facet can show: one positive `key:a,b` per facet | `q`, spliced in place |
+| Time range | A preset, or a custom window in UTC to the minute | `range`, or `from` and `to` |
+| Live tail | Whether new events stream in | `live=1` |
+
+A facet change rewrites only the qualifier it owns. A qualifier a facet cannot show stays in the text exactly as typed: a negation, a repeated key (which means "and" in a query and "any of" in a facet), a comparison, and a value the facet has no option for.
+
+## The source
+
+The screen asks a source for one page at a time. Nothing about the source is specific to the in-memory one.
+
+| Method | Receives | Returns |
+| :--- | :--- | :--- |
+| `query` | `q`, `filters`, `range`, `cursor`, `limit`, `signal`, `facets` | `events` (newest first), `nextCursor`, and on the first page `total` and `facets` (counts that ignore the facet's own choice) |
+| `tail` (optional) | the same query, and `onEvents` and `signal` | nothing: it calls `onEvents` with new events, oldest first, until `signal` aborts |
+
+## Keyboard
+
+| Key | Where | Action |
+| :--- | :--- | :--- |
+| `/` | Anywhere | Focus the query bar |
+| Enter | Query bar | Run the query |
+| Tab | Query, range, live tail, export, facets, grid, load more | The reading order of the screen |
+| Up, Down, Home, End, Page Up, Page Down | Grid | Move the active row. With the details open, they follow it |
+| Enter, Space | Grid | Open the active row's details, and move focus into them |
+| Escape | Details | Close them, and return to the grid on the same row |
+
+## Practices
+
+| Do | Why |
+| :--- | :--- |
+| Return `nextCursor` from the server, and send the same range back with it | A relative range moves with the clock, so a later page of "last 24 hours" would not continue the first |
+| Return `facets` only on the first page | Counts are one scan of the matches, and a page of older rows does not change them |
+| Pass the first page as `initialPage` when rendering on the server | The rows, counts and checked facets are then in the markup, and the browser asks for nothing until the state changes |
+| Cap what the list loads with `maxLoaded` | A list that holds a million objects is not a list a person reads. Ask them to narrow the query |
+| Keep live tail off a closed time range | A window that ended cannot receive new events |
