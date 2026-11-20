@@ -1320,6 +1320,22 @@
     "message": "div[data-testid=\"toast-320\"]: spans 16px to 336px"
   },
   {
+    "fixture": "onboarding-checklist-floating.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#floating-progress",
+    "message": "div#floating-progress: 1px outline inside bordered box div#floating, both on rgb(255, 255, 255)"
+  },
+  {
+    "fixture": "onboarding-checklist.html",
+    "variant": "1280-forced",
+    "check": "borders",
+    "kind": "nested edge",
+    "path": "div#setup-progress",
+    "message": "div#setup-progress: 1px outline inside bordered box div#setup, both on rgb(255, 255, 255)"
+  },
+  {
     "fixture": "pagination-fit.html",
     "variant": "320",
     "check": "overflow",

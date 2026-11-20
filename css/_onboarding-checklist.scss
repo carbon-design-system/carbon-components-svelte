@@ -1,0 +1,496 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/layout";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// OnboardingChecklist: a getting-started task list with progress, sections
+/// and an "All set" state. It sits in the page flow, or floats in the
+/// bottom corner and shrinks to a launcher. New component: Carbon v10 has
+/// none, so the markup is new (`bx--onboarding`), and it reuses the
+/// ProgressBar, Checkbox, Link and Button it renders.
+/// @access private
+/// @group components
+@mixin onboarding-checklist {
+  .#{$prefix}--onboarding-host--floating {
+    position: fixed;
+    z-index: z("floating");
+    @include ccs-inset-inline($end: $carbon--spacing-05);
+    inset-block-end: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--onboarding {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  // `display: flex` outweighs the browser's rule for `hidden`.
+  .#{$prefix}--onboarding[hidden] {
+    display: none;
+  }
+
+  .#{$prefix}--onboarding--floating {
+    width: to-rem(384px);
+    max-width: calc(100vw - #{2 * $carbon--spacing-05});
+    max-height: calc(100vh - #{2 * $carbon--spacing-05});
+    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
+  }
+
+  .#{$prefix}--onboarding__header {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: $carbon--spacing-03 $carbon--spacing-02;
+    padding-inline: $carbon--spacing-05 $carbon--spacing-03;
+  }
+
+  .#{$prefix}--onboarding__heading {
+    @include type-style("heading-compact-02");
+
+    min-width: 0;
+    // The inline padding keeps the focus ring off the letters, and the
+    // negative margin keeps the title aligned with the content below it.
+    margin: 0;
+    margin-inline-start: (-$carbon--spacing-02);
+  }
+
+  .#{$prefix}--onboarding__toggle {
+    @include type-style("heading-compact-02");
+
+    display: inline-flex;
+    max-width: 100%;
+    min-height: $carbon--spacing-07;
+    align-items: center;
+    padding: 0 $carbon--spacing-02;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    color: $text-primary;
+    column-gap: $carbon--spacing-03;
+    cursor: pointer;
+    text-align: start;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--onboarding__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--onboarding__chevron {
+    flex: none;
+    fill: currentColor;
+    transform: rotate(180deg);
+    transition: transform $duration--fast-02 motion(standard, productive);
+  }
+
+  .#{$prefix}--onboarding--collapsed .#{$prefix}--onboarding__chevron {
+    transform: rotate(0deg);
+  }
+
+  .#{$prefix}--onboarding__actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+  }
+
+  .#{$prefix}--onboarding__icon-button {
+    display: flex;
+    width: $carbon--spacing-07;
+    height: $carbon--spacing-07;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $icon-primary;
+    cursor: pointer;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    svg {
+      fill: currentColor;
+    }
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--onboarding__summary {
+    flex: none;
+    padding-block: 0 $carbon--spacing-05;
+    padding-inline: $carbon--spacing-05;
+  }
+
+  // The summary's bar sits flush with the panel's inner edge.
+  .#{$prefix}--onboarding__summary .#{$prefix}--progress-bar__label {
+    justify-content: flex-end;
+  }
+
+  // "1 of 4 complete" reads "of 4 complete 1" under `dir="rtl"` without this:
+  // the digits take the page's direction. Plaintext takes it from the first
+  // letter, so a translated count still follows its own script.
+  .#{$prefix}--onboarding__summary .#{$prefix}--progress-bar__value-text,
+  .#{$prefix}--onboarding__section-count,
+  .#{$prefix}--onboarding-launcher__progress {
+    unicode-bidi: plaintext;
+  }
+
+  .#{$prefix}--onboarding__celebrate {
+    display: flex;
+    align-items: flex-start;
+    column-gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--onboarding__celebrate-icon {
+    flex: none;
+    fill: $support-success;
+  }
+
+  .#{$prefix}--onboarding__celebrate--animate
+    .#{$prefix}--onboarding__celebrate-icon {
+    animation: onboarding-celebrate $duration--moderate-02
+      motion(entrance, expressive);
+  }
+
+  .#{$prefix}--onboarding__celebrate-title {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+  }
+
+  .#{$prefix}--onboarding__celebrate-text {
+    @include type-style("body-compact-01");
+
+    color: $text-secondary;
+  }
+
+  @keyframes onboarding-celebrate {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+  }
+
+  // The body collapses by animating its grid track to zero. The tasks stay in
+  // the DOM, so the toggle's `aria-controls` target exists, and `visibility`
+  // takes them out of the tab order and the accessibility tree once the
+  // track has closed.
+  .#{$prefix}--onboarding__body {
+    display: grid;
+    min-height: 0;
+    flex: 1 1 auto;
+    grid-template-rows: 1fr;
+    transition:
+      grid-template-rows $duration--moderate-01 motion(standard, productive),
+      visibility $duration--moderate-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--onboarding--collapsed .#{$prefix}--onboarding__body {
+    grid-template-rows: 0fr;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--onboarding__body-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--onboarding--floating .#{$prefix}--onboarding__body-inner {
+    overflow-y: auto;
+  }
+
+  .#{$prefix}--onboarding__section-heading {
+    @include type-style("heading-compact-01");
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: $carbon--spacing-04 $carbon--spacing-05 $carbon--spacing-03;
+    border-block-start: 1px solid $border-subtle;
+    margin: 0;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--onboarding__section-count {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--onboarding__tasks {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--onboarding__task {
+    display: grid;
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    border-block-start: 1px solid $border-subtle;
+    column-gap: $carbon--spacing-04;
+    grid-template-columns: $carbon--spacing-05 minmax(0, 1fr);
+  }
+
+  // The first task of a titled section sits under that section's rule.
+  .#{$prefix}--onboarding__section-heading + .#{$prefix}--onboarding__tasks
+    > .#{$prefix}--onboarding__task:first-child {
+    border-block-start: 0;
+  }
+
+  .#{$prefix}--onboarding__task-control {
+    display: flex;
+    min-height: $carbon--spacing-05;
+    align-items: center;
+    align-self: start;
+  }
+
+  // The checkbox is only the box. The task's title is its visible label.
+  .#{$prefix}--onboarding__task-control .#{$prefix}--checkbox-label {
+    min-width: $carbon--spacing-05;
+    min-height: $carbon--spacing-05;
+    padding: 0;
+  }
+
+  .#{$prefix}--onboarding__status {
+    display: flex;
+    color: $icon-secondary;
+  }
+
+  .#{$prefix}--onboarding__status svg {
+    fill: currentColor;
+  }
+
+  .#{$prefix}--onboarding__status--complete {
+    color: $support-success;
+  }
+
+  .#{$prefix}--onboarding__task-body {
+    min-width: 0;
+  }
+
+  .#{$prefix}--onboarding__task-heading {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    min-height: $carbon--spacing-05;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--onboarding__task-title {
+    color: $text-primary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--onboarding__task--complete .#{$prefix}--onboarding__task-title,
+  .#{$prefix}--onboarding__task--skipped .#{$prefix}--onboarding__task-title {
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--onboarding__optional,
+  .#{$prefix}--onboarding__skipped {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--onboarding__task-description {
+    @include type-style("body-compact-01");
+
+    margin: $carbon--spacing-02 0 0;
+    color: $text-secondary;
+    overflow-wrap: anywhere;
+  }
+
+  .#{$prefix}--onboarding__task-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-block-start: $carbon--spacing-03;
+    column-gap: $carbon--spacing-05;
+    row-gap: $carbon--spacing-03;
+  }
+
+  // Carbon's buttons reserve room for an icon at the inline end. These
+  // have none, so they take even padding, and a ghost button that opens the
+  // row hangs into the margin to align its text with the task's.
+  .#{$prefix}--onboarding__task-actions .#{$prefix}--btn {
+    padding-inline: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--onboarding__task-actions
+    > .#{$prefix}--btn--ghost:first-child {
+    margin-inline-start: (-$carbon--spacing-05);
+  }
+
+  // Narrow pages get a 48px circle with no visible text, so the launcher
+  // covers as little as a control can. A screen reader still reads the title
+  // and the progress.
+  .#{$prefix}--onboarding-launcher {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    width: $carbon--spacing-09;
+    height: $carbon--spacing-09;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    border-radius: 50%;
+    box-shadow: 0 $carbon--spacing-01 $carbon--spacing-02 $overlay;
+    color: $text-primary;
+    cursor: pointer;
+    text-align: start;
+    transition: background-color $duration--fast-01 motion(standard, productive);
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--onboarding-launcher:active {
+    background-color: $layer-active;
+  }
+
+  .#{$prefix}--onboarding-launcher__ring {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$prefix}--onboarding-launcher__track {
+    fill: none;
+    stroke: $border-subtle;
+    stroke-width: 2;
+  }
+
+  .#{$prefix}--onboarding-launcher__arc {
+    fill: none;
+    stroke: $support-success;
+    stroke-width: 2;
+    transition: stroke-dashoffset $duration--moderate-01
+      motion(standard, productive);
+  }
+
+  .#{$prefix}--onboarding-launcher__ring .#{$prefix}--onboarding-launcher__icon {
+    position: absolute;
+    fill: currentColor;
+  }
+
+  .#{$prefix}--onboarding-launcher__title {
+    @include type-style("heading-compact-01");
+  }
+
+  .#{$prefix}--onboarding-launcher__progress {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--onboarding-launcher__text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    margin: -1px;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  @include carbon--breakpoint(md) {
+    .#{$prefix}--onboarding-launcher {
+      width: auto;
+      justify-content: flex-start;
+      padding: $carbon--spacing-03 $carbon--spacing-05 $carbon--spacing-03
+        $carbon--spacing-04;
+      border-radius: 0;
+      column-gap: $carbon--spacing-04;
+    }
+
+    .#{$prefix}--onboarding-launcher__text {
+      position: static;
+      overflow: visible;
+      width: auto;
+      height: auto;
+      margin: 0;
+      clip: auto;
+      white-space: normal;
+    }
+  }
+
+  // The reveal and the collapse are the checklist's only motion. Reduced
+  // motion snaps them: the celebration icon is simply there.
+  @media (prefers-reduced-motion: reduce) {
+    .#{$prefix}--onboarding__body,
+    .#{$prefix}--onboarding--collapsed .#{$prefix}--onboarding__body,
+    .#{$prefix}--onboarding__chevron,
+    .#{$prefix}--onboarding-launcher__arc {
+      transition: none;
+    }
+
+    .#{$prefix}--onboarding__celebrate--animate
+      .#{$prefix}--onboarding__celebrate-icon {
+      animation: none;
+    }
+  }
+
+  // Forced colors drop the layer fill, so the border alone separates the
+  // panel from the page. The ring reads in system colors.
+  @media (forced-colors: active) {
+    .#{$prefix}--onboarding,
+    .#{$prefix}--onboarding-launcher {
+      border-color: CanvasText;
+    }
+
+    .#{$prefix}--onboarding-launcher__track {
+      stroke: GrayText;
+    }
+
+    .#{$prefix}--onboarding-launcher__arc {
+      stroke: Highlight;
+    }
+
+    .#{$prefix}--onboarding__celebrate-icon,
+    .#{$prefix}--onboarding__status--complete {
+      color: Highlight;
+      fill: Highlight;
+    }
+  }
+
+  .#{$prefix}--onboarding__icon-button:active {
+    background-color: $layer-active;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--onboarding__icon-button:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--onboarding-launcher:hover {
+      background-color: $layer-hover;
+    }
+  }
+}
+
+@include exports("onboarding-checklist") {
+  @include onboarding-checklist;
+}

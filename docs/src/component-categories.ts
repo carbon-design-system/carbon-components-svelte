@@ -152,6 +152,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "ShapeIndicator",
       "EmptyState",
       "FullPageError",
+      "OnboardingChecklist",
     ],
   },
   {
