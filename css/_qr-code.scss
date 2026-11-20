@@ -1,0 +1,90 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// QRCode: dark modules on a light tile in every theme.
+///
+/// Scanners read a dark symbol on a light ground. An inverted code, which a
+/// dark theme would give us by following its tokens, fails on many of them.
+/// So the tile and the modules use the palette's white and black, not theme
+/// tokens, and the tile is its own quiet zone: in Gray 100 it reads as a
+/// light card on the dark page.
+///
+/// @access private
+/// @group components
+@mixin qr-code {
+  .#{$prefix}--qr-code {
+    display: inline-flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--qr-code__symbol {
+    position: relative;
+    // Removes the line box gap under the inline SVG.
+    line-height: 0;
+    max-inline-size: 100%;
+    inline-size: fit-content;
+  }
+
+  .#{$prefix}--qr-code__svg {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    background-color: $carbon--white-0;
+    outline: 1px solid $carbon--gray-20;
+    outline-offset: -1px;
+    // Forced colors would swap the tile and modules for system colors, and a
+    // white-on-black palette inverts the code. The two fixed colors keep it
+    // scannable. The text alternative stays in system colors.
+    forced-color-adjust: none;
+  }
+
+  .#{$prefix}--qr-code__path {
+    fill: $carbon--black-100;
+  }
+
+  // Centered over the cleared modules. A grid, not a translate, so the same
+  // rule centers it in both directions.
+  .#{$prefix}--qr-code__logo {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--qr-code__logo-plate {
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    padding: 6%;
+    overflow: hidden;
+    background-color: $carbon--white-0;
+    color: $carbon--black-100;
+    forced-color-adjust: none;
+  }
+
+  .#{$prefix}--qr-code__logo-plate > * {
+    max-inline-size: 100%;
+    max-block-size: 100%;
+  }
+
+  .#{$prefix}--qr-code__alternative {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-02;
+    max-inline-size: 100%;
+  }
+
+  .#{$prefix}--qr-code__alternative-label {
+    @include type-style("label-01");
+
+    color: $text-secondary;
+  }
+}
+
+@include exports("qr-code") {
+  @include qr-code;
+}
