@@ -79,3 +79,15 @@ export const STEPPER_REPEAT_INTERVAL_MS = 50;
  * element is hidden or its animation is off.
  */
 export const COPY_FEEDBACK_FADE_MS = 110;
+
+/**
+ * Time the pointer rests on annotated text before its comments open, so a
+ * pointer crossing a page of highlights opens nothing.
+ */
+export const TEXT_ANNOTATION_OPEN_DELAY_MS = 350;
+
+/**
+ * Time after the pointer leaves annotated text or its comments before they
+ * close, so the pointer can cross the gap between the two (WCAG 1.4.13).
+ */
+export const TEXT_ANNOTATION_CLOSE_DELAY_MS = 300;
