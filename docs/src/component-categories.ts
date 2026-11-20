@@ -185,6 +185,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
     label: "Utilities",
     components: [
       "Theme",
+      "ThemeBuilder",
       "Breakpoint",
       "Portal",
       "FloatingPortal",

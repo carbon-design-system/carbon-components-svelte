@@ -1370,6 +1370,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Theme
+  theme-builder:
+    name: Theme builder
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/theme-builder.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ThemeBuilder
   theme-zone:
     name: Theme zone
     status: stable
