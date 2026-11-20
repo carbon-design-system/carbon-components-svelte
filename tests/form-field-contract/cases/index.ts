@@ -9,6 +9,7 @@ import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/Fluid
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import FluidPinCodeInputSkeleton from "carbon-components-svelte/PinCodeInput/FluidPinCodeInputSkeleton.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
+import RichTextEditor from "carbon-components-svelte/RichTextEditor/RichTextEditor.svelte";
 import FluidSearchSkeleton from "carbon-components-svelte/Search/FluidSearchSkeleton.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import FluidSelectSkeleton from "carbon-components-svelte/Select/FluidSelectSkeleton.svelte";
@@ -294,6 +295,16 @@ export const cases: FieldCase[] = [
     reset: { initial: "01/01/2023", typed: "x", events: ["input", "change"] },
   },
   {
+    name: "RichTextEditor",
+    component: RichTextEditor,
+    control: () => screen.getByRole("textbox"),
+    state: {},
+    fluid: {
+      className: "bx--rich-text-editor--fluid",
+      wrapper: ".bx--rich-text-editor__box",
+    },
+  },
+  {
     name: "TagInput",
     component: TagInput,
     control: () => screen.getByRole("textbox"),
@@ -348,6 +359,8 @@ export const exempt: Exemptions = {
     ListBoxRequiredInput:
       "a hidden validation proxy, covered by tests/ListBox/required-invalid.test.ts",
     NumberInput: "keeps its value on reset unless allowEmpty is set",
+    RichTextEditor:
+      "a contenteditable, which jsdom can't type into; covered by e2e/rich-text-editor.test.ts",
     Checkbox: NOT_A_TEXT_FIELD,
     DataTable: NOT_A_TEXT_FIELD,
     FileUploaderButton: NOT_A_TEXT_FIELD,

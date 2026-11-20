@@ -21,6 +21,7 @@ import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
 import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.svelte";
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
+import RichTextEditor from "carbon-components-svelte/RichTextEditor/RichTextEditor.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
@@ -342,6 +343,14 @@ export const forms: AriaEntry[] = [
     name: "StructuredListRow",
     render: (attrs) => render(StructuredListRow, { props: attrs }),
     target: () => screen.getByRole("row"),
+  },
+  {
+    name: "RichTextEditor",
+    render: (attrs) =>
+      render(RichTextEditor, {
+        props: { labelText: "Notes", helperText: "Optional", ...attrs },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "TagInput",
