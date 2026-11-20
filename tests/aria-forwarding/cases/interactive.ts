@@ -11,6 +11,7 @@ import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
 import CopyText from "carbon-components-svelte/CopyText/CopyText.svelte";
 import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
+import DiffViewer from "carbon-components-svelte/DiffViewer/DiffViewer.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
@@ -314,6 +315,14 @@ export const interactive: AriaEntry[] = [
     name: "MenuItem",
     render: (attrs) => render(MenuItem, { props: attrs }),
     target: () => screen.getByRole("menuitem"),
+  },
+  {
+    name: "DiffViewer",
+    render: (attrs) =>
+      render(DiffViewer, {
+        props: { oldText: "a\nb", newText: "a\nc", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "Meter",

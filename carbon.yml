@@ -479,6 +479,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/Dialog
+  diff-viewer:
+    name: Diff viewer
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/diff-viewer.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DiffViewer
   disclosure:
     name: Disclosure
     status: stable
