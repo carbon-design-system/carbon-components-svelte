@@ -81,6 +81,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ActionSet
+  address-form:
+    name: Address form
+    description: A country-aware postal address fieldset. The field order, labels, required fields and postal code validation follow the selected country.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/address-form.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/AddressForm
   aspect-ratio:
     status: stable
     framework: svelte

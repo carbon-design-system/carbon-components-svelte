@@ -345,6 +345,8 @@ export const exempt: Exemptions = {
     StarRating: NOT_AUDITED,
   },
   reset: {
+    AddressForm:
+      "its value is an object of several fields, so the contract's single text cannot drive it; tests/AddressForm/AddressForm.test.ts covers the reset",
     ListBoxRequiredInput:
       "a hidden validation proxy, covered by tests/ListBox/required-invalid.test.ts",
     NumberInput: "keeps its value on reset unless allowEmpty is set",

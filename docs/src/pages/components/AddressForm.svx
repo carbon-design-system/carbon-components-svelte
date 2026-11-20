@@ -1,0 +1,196 @@
+---
+components: ["AddressForm"]
+description: Address forms collect a postal address with the fields, labels, order and validation of the selected country.
+keywords: ["postal address", "shipping address", "billing address", "ZIP code", "postcode", "checkout"]
+---
+
+<script>
+  import { AddressForm, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Bind `value` to read the address. It holds the country code, the street address as a list of lines, and the other fields by name, so it maps onto a postal label and onto the `autocomplete` tokens a browser fills.
+
+Changing the country changes the form. The fields that the new country shares stay in place with their values, and the rest go.
+
+<FileSource src="/framed/AddressForm/AddressFormBindable" />
+
+## Countries
+
+Each country writes its address in its own order, with its own names for the fields. The form takes all of it from the country's format: which fields it has, which it requires, the pattern of its postal code, and whether the region is a list or free text.
+
+### United States
+
+The state is a list of codes. The ZIP code takes 5 or 9 digits, and city, state and ZIP code share a row.
+
+<AddressForm value={{ country: "US" }} legendText="United States" />
+
+### United Kingdom
+
+There is no state. The postal code is called a postcode, and the city a town or city.
+
+<AddressForm value={{ country: "GB" }} legendText="United Kingdom" />
+
+### Germany
+
+The PLZ comes before the city, on one row.
+
+<AddressForm value={{ country: "DE" }} legendText="Germany" />
+
+### Canada and Brazil
+
+Canada asks for a province and a postal code written as `A1A 1A1`. Brazil asks for a bairro (district) before the city, and a CEP.
+
+<Stack gap={7}>
+  <AddressForm value={{ country: "CA" }} legendText="Canada" />
+  <AddressForm value={{ country: "BR" }} legendText="Brazil" />
+</Stack>
+
+### Japan
+
+Japan writes the postal code first, then the prefecture and city, then the street, and the recipient last. Set `script` to `"latin"` for the romanized order, which starts with the recipient and ends with the postal code.
+
+<Stack gap={7}>
+  <AddressForm
+    value={{ country: "JP" }}
+    include={["name"]}
+    legendText="Japan (native)"
+  />
+  <AddressForm
+    value={{ country: "JP" }}
+    include={["name"]}
+    script="latin"
+    legendText="Japan (romanized)"
+  />
+</Stack>
+
+### Restricting countries
+
+Set `countries` to offer fewer, and `locale` to write their names in another language. The locale is never read from the browser, so the server and the browser agree.
+
+<AddressForm
+  value={{ country: "DE" }}
+  countries={["DE", "AT", "CH"]}
+  locale="de"
+  legendText="Lieferadresse"
+  labels={{
+    country: "Land",
+    line1: "Straße und Hausnummer",
+    line2: "Adresszusatz",
+    locality: "Ort",
+    postalCode: "Postleitzahl",
+  }}
+  optionalText="optional"
+  placeholder="Auswählen"
+/>
+
+## Fields
+
+### Name and company
+
+The recipient and the company are left out by default. Set `include` to add them. They sit where the country's format puts them: first in most countries, last in Japan.
+
+<AddressForm
+  value={{ country: "US" }}
+  include={["name", "organization"]}
+  legendText="Delivery address"
+/>
+
+### Street address lines
+
+Set `addressLines` to the number of street address fields, from 1 to 4. The default is 2.
+
+<AddressForm value={{ country: "US" }} addressLines={1} legendText="Delivery address" />
+
+### Required fields
+
+The format decides what is required: a region in the United States, none in the United Kingdom. Set `requiredFields` to require more, such as the recipient. A field that is not required says so in its label, which `optionalText` changes.
+
+<AddressForm
+  value={{ country: "GB" }}
+  include={["name"]}
+  requiredFields={["name"]}
+  legendText="Delivery address"
+/>
+
+## Switching countries
+
+Changing the country keeps what still fits and clears what does not.
+
+| Field | Kept when | Cleared when |
+| --- | --- | --- |
+| Street address, recipient, company | Always | Never |
+| City, district | The new country has the field | The new country does not |
+| Postal code | The new country has the field and the code fits its pattern | It does not fit, so a UK postcode does not stay in a ZIP code field |
+| Region | The new country has a list that holds it, or both countries take free text | The list does not hold it: `IL` is not a Canadian province |
+
+Focus stays on the country field, and a status message tells screen readers that the fields changed and which were cleared. Change its text with `countryChangeText`. The `countrychange` event reports the cleared fields.
+
+<FileSource src="/framed/AddressForm/AddressFormSwitching" />
+
+## Validation
+
+Each field shows its error after the person leaves it. The postal code is checked against the country's pattern and a region against its list. On leaving the postal code, it takes the form the country writes: `sw1a2aa` becomes `SW1A 2AA`, and `950141234` becomes `95014-1234`.
+
+Call `validate()` from a submit handler to show every error and move focus to the first invalid field. It returns the result, so the handler can stop the submit. Set `errorText` to change the messages.
+
+<FileSource src="/framed/AddressForm/AddressFormValidation" />
+
+## Autofill
+
+Every field carries the `autocomplete` token a browser fills: `address-line1`, `address-line2`, `address-level2` for the city, `address-level1` for the region, `postal-code` and `country`. Set `autocompletePrefix` to `"shipping"` or `"billing"` so the browser keeps the two apart.
+
+| Do | Why |
+| --- | --- |
+| Set `autocompletePrefix` when a page holds two address forms. | Without it a browser fills the second with the first. |
+| Keep the country list to the countries you ship to, with `countries`. | A browser fills the country from its saved address, and a country that is not listed cannot be filled. |
+| Give the form an `id` of its own when two share a page. | Every field's id derives from it. |
+
+The fields keep their elements when the country changes, so a browser that fills the country and then the rest finds the fields it filled still in place.
+
+## Names in a form post
+
+Set `name` to post the fields under a prefix: `shipping.country`, `shipping.line1`, `shipping.line2`, `shipping.locality`, `shipping.region` and `shipping.postalCode`.
+
+## Examples
+
+### Checkout shipping address
+
+A shipping address with a billing address that is the same by default. Both forms use their own `autocompletePrefix`, and `validate()` runs on submit.
+
+<FileSource src="/framed/AddressForm/AddressFormCheckout" />
+
+### Profile address
+
+Show the saved address as text, and switch to the form to edit it. `normalizeAddress` tidies the value, and `validateAddress` checks it, with no form on the page.
+
+<FileSource src="/framed/AddressForm/AddressFormProfile" />
+
+### Read-only formatted address
+
+`formatAddress` returns the lines of a postal label in the order and punctuation of the country: the postal code first in Japan, `CH-8001 Zürich` in Switzerland, no state in the United Kingdom. Render them in an `<address>`. Set `postal` to write the fields the country's postal service writes in capitals.
+
+<FileSource src="/framed/AddressForm/AddressFormFormatted" />
+
+## Adding countries
+
+The table holds 40 countries and a generic format for the rest: name, company, street address and city. Pass `formats` to add a country, or to correct one, with the format string of the [libaddressinput](https://github.com/google/libaddressinput) data: `%N` name, `%O` company, `%A` street address, `%D` district, `%C` city, `%S` region, `%Z` postal code and `%n` a new line. Pass `regions` for a list of regions.
+
+<AddressForm
+  value={{ country: "IS" }}
+  countries={["IS", "NO"]}
+  formats={{
+    IS: {
+      fmt: "%N%n%O%n%A%n%Z %C",
+      require: "ACZ",
+      zip: "\\d{3}",
+      zipex: "101",
+    },
+  }}
+  legendText="Iceland, from a format string"
+/>
+
+## Data and license
+
+The format table is derived from the address data of Google's [libaddressinput](https://github.com/google/libaddressinput), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The data was cut to the fields this component uses, and Japan's format was changed to add a city line, which the original lacks. `scripts/build-address-data.ts` builds the table and lists every change.

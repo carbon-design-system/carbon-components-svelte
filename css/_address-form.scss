@@ -1,0 +1,40 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// AddressForm: the fields of a country's address format on a 12-column
+/// grid. Every field sits in one flat list, in the format's order, and takes
+/// the columns `--ccs-address-form-span` names. Fields that share a line of
+/// the format add up to 12, so they share a row; the DOM order is the
+/// visual order. The form is a container, so it stacks by its own width and
+/// not the viewport's.
+/// @access private
+/// @group components
+@mixin address-form {
+  .#{$prefix}--address-form {
+    container: #{$prefix}--address-form / inline-size;
+    display: grid;
+    gap: $carbon--spacing-05;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .#{$prefix}--address-form__field {
+    grid-column: span var(--ccs-address-form-span, 12);
+    min-inline-size: 0;
+  }
+
+  // Fluid fields draw their own borders, so they sit flush.
+  .#{$prefix}--address-form.#{$prefix}--address-form--fluid {
+    gap: 0;
+  }
+
+  @container #{$prefix}--address-form (width < #{to-rem(448px)}) {
+    .#{$prefix}--address-form__field {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@include exports("address-form") {
+  @include address-form;
+}
