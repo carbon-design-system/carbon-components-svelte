@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
+import ActivityComposer from "carbon-components-svelte/ActivityFeed/ActivityComposer.svelte";
+import ActivityFeed from "carbon-components-svelte/ActivityFeed/ActivityFeed.svelte";
 import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
@@ -66,6 +68,35 @@ import TooltipDefinition from "../fixtures/TooltipDefinition.test.svelte";
 const nodes = [{ id: "docs", text: "Docs" }];
 
 export const interactive: AriaEntry[] = [
+  {
+    name: "ActivityBody",
+    exempt:
+      "text container with no role of its own; a scrollable code block is the only focusable part",
+  },
+  {
+    name: "ActivityComposer",
+    render: (attrs) => render(ActivityComposer, { props: attrs }),
+    target: ({ container }) => container.querySelector("form") as HTMLElement,
+  },
+  {
+    name: "ActivityFeed",
+    render: (attrs) =>
+      render(ActivityFeed, {
+        props: {
+          items: [
+            {
+              id: "c1",
+              kind: "comment",
+              author: { id: "ada", name: "Ada" },
+              createdAt: 0,
+              body: "Hello",
+            },
+          ],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("feed"),
+  },
   {
     name: "AILabel",
     render: (attrs) => render(AILabel, { props: attrs }),

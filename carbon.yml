@@ -81,6 +81,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ActionSet
+  activity-feed:
+    name: Activity feed
+    description: A feed of comments and system events with replies, reactions, edit in place and a composer with mentions.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/activity-feed.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ActivityFeed
   aspect-ratio:
     status: stable
     framework: svelte
