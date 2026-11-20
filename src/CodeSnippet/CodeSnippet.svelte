@@ -69,6 +69,61 @@
    */
   export let fullWidth = false;
 
+  /**
+   * Set to `true` to number the lines in a gutter. The numbers are drawn by
+   * CSS, so they are never selected, copied, or read as part of the code.
+   *
+   * NOTE: line features (`lineNumbers`, `highlightLines`, `diff`) only work
+   * with the `type="multi"` variant and `code`. They are off when the
+   * default slot is used.
+   */
+  export let lineNumbers = false;
+
+  /**
+   * Set the number of the first line, for a snippet that starts partway
+   * through a file.
+   *
+   * NOTE: this prop only works with `lineNumbers`.
+   */
+  export let lineNumberStart = 1;
+
+  /**
+   * Specify the lines to highlight, as positions in `code` starting at 1:
+   * `"2,4-6"`. The description of the highlighted lines is announced with
+   * the snippet; see `linesDescription`.
+   * @type {string | undefined}
+   */
+  export let highlightLines = undefined;
+
+  /**
+   * Set to `true` to read `code` as a diff body: a line that starts with `+`
+   * is added, `-` is removed, and any other first character is context. The
+   * first column is drawn in the gutter as a marker and is not part of the
+   * rendered text. Pass the body of a hunk, without `---`, `+++`, or `@@`
+   * lines.
+   */
+  export let diff = false;
+
+  /**
+   * Specify what the copy button copies from a `diff` snippet.
+   * `"diff"` copies `code` as written, markers included. `"result"` copies
+   * the text after the change: removed lines dropped and the marker column
+   * taken off.
+   *
+   * NOTE: this prop only works with `diff`.
+   * @type {"diff" | "result"}
+   */
+  export let diffCopy = "diff";
+
+  /**
+   * Specify the description of a kind of line that is announced with the
+   * snippet. Called for each of `"highlighted"`, `"added"`, and
+   * `"removed"` that has lines, with the lines as `[from, to]` runs.
+   * Replace it to translate.
+   * @type {(kind: "highlighted" | "added" | "removed", runs: Array<[number, number]>) => string}
+   */
+  export let linesDescription = defaultLinesDescription;
+
   /** Set to `true` to display the skeleton state */
   export let skeleton = false;
 
@@ -241,6 +296,11 @@
   import { tooltipPlacement } from "../utils/tooltip-align.js";
   import { uniqueId } from "../utils/unique-id.js";
   import CodeSnippetSkeleton from "./CodeSnippetSkeleton.svelte";
+  import {
+    buildRows,
+    copyDiffText,
+    defaultLinesDescription,
+  } from "./code-lines.js";
 
   const dispatch = createEventDispatcher();
 
@@ -329,7 +389,9 @@
    * @returns {string}
    */
   function getCopyText() {
-    if (code !== undefined) return code;
+    if (code !== undefined) {
+      return lineMode && diff ? copyDiffText(code, diffCopy) : code;
+    }
     // The inline <code> pads the slot with template spaces; trim only there.
     // Single/multi read the <pre>, where leading indentation is content.
     if (type === "inline") return inlineCodeRef?.textContent?.trim() ?? "";
@@ -451,6 +513,32 @@
     maxHeight = undefined;
     overflowY = undefined;
   }
+
+  // Line features render one element per line. The gutter and diff markers
+  // are CSS-generated, so the elements' text is the code (less a diff's
+  // marker column) and nothing but the code is selected or highlighted.
+  $: lineMode =
+    type === "multi" &&
+    typeof code === "string" &&
+    !$$slots.default &&
+    (lineNumbers || !!highlightLines || diff);
+
+  $: lines =
+    lineMode && typeof code === "string"
+      ? buildRows(code, {
+          diff,
+          numbers: lineNumbers,
+          start: lineNumberStart,
+          highlight: highlightLines,
+        })
+      : undefined;
+
+  $: linesText = lines
+    ? /** @type {const} */ (["highlighted", "added", "removed"])
+        .filter((kind) => lines.runs[kind].length > 0)
+        .map((kind) => linesDescription(kind, lines.runs[kind]))
+        .join(" ")
+    : "";
 
   function onResize() {
     measureHeight();
@@ -638,6 +726,7 @@
     class:bx--snippet--expand={expanded}
     class:bx--snippet--no-copy={hideCopyButton}
     class:bx--snippet--wraptext={wrapText}
+    class:bx--snippet--lines={lineMode}
     class:bx--snippet--single={type === "single"}
     class:bx--snippet--multi={type === "multi"}
     class:bx--snippet--disabled={disabled}
@@ -655,7 +744,9 @@
       aria-multiline={type === "multi" ? "true" : undefined}
       aria-label={ariaLabel ?? codeLabel}
       aria-labelledby={ariaLabelledBy}
-      aria-describedby={ariaDescribedBy}
+      aria-describedby={linesText
+        ? joinDescribedBy(`${id}-lines`, ariaDescribedBy)
+        : ariaDescribedBy}
       class:bx--snippet-container={true}
       class:bx--snippet-container--fade-top={showTopFade}
       class:bx--snippet-container--fade-bottom={showBottomFade}
@@ -666,8 +757,25 @@
       bind:this={containerRef}
       on:scroll={updateScrollState}
     >
-      <pre bind:this={ref}><code><slot>{code}</slot></code></pre>
+      {#if lines}
+        <pre
+          bind:this={ref}
+          style:--ccs-code-snippet-gutter="{lines.gutterChars}ch"><code
+            >{#each lines.rows as row, index (index)}<span
+              class:bx--snippet__line={true}
+              class:bx--snippet__line--highlighted={row.highlighted}
+              class:bx--snippet__line--added={row.change === "added"}
+              class:bx--snippet__line--removed={row.change === "removed"}
+              data-gutter={row.gutter || undefined}>{row.text}</span
+            >{row.eol ? "\n" : ""}{/each}</code
+          ></pre>
+      {:else}
+        <pre bind:this={ref}><code><slot>{code}</slot></code></pre>
+      {/if}
     </div>
+    {#if linesText}
+      <span id="{id}-lines" class:bx--visually-hidden={true}>{linesText}</span>
+    {/if}
     {#if !hideCopyButton}
       <CopyButton
         bind:ref={copyRef}

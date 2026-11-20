@@ -36,3 +36,115 @@
 @include exports("code-snippet-inline-disabled") {
   @include code-snippet-inline-disabled;
 }
+
+/// Line-structured snippets (`lineNumbers`, `highlightLines`, `diff`). Each
+/// line is a full-width inline block, with the line break as text beside it,
+/// not inside it: the snippet's text, selection, and accessible value are
+/// then exactly the source, which block lines with their own line breaks are
+/// not (blank lines double, or drop). Its gutter (number and diff marker) is generated content
+/// from `data-gutter`, so it is never selected, copied, or part of the
+/// code's text. The empty alternative text (`/ ""`) keeps it out of the
+/// accessibility tree where supported; the highlighted and changed lines are
+/// described once, by the snippet's `aria-describedby`.
+/// @access private
+/// @group components
+@mixin code-snippet-lines {
+  .#{$prefix}--snippet--lines pre {
+    --ccs-code-snippet-gutter: 0ch;
+    --ccs-code-snippet-bar: #{$carbon--spacing-02};
+  }
+
+  // Not wrapping, the lines span the longest one, so a line's band reaches
+  // the end of the scroll area and not just the edge of the viewport.
+  .#{$prefix}--snippet--lines:not(.#{$prefix}--snippet--wraptext) pre {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .#{$prefix}--snippet__line {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    vertical-align: top;
+    // The room for the gutter, hanging, so a wrapped line continues under
+    // its code and not under its number; and the room for the bar.
+    padding-inline-start: calc(
+      var(--ccs-code-snippet-gutter) + var(--ccs-code-snippet-bar)
+    );
+    text-indent: calc(-1 * var(--ccs-code-snippet-gutter));
+    // An empty line keeps its row.
+    min-height: to-rem(16px);
+
+    &[data-gutter]::before {
+      color: $text-secondary;
+      content: attr(data-gutter);
+      user-select: none;
+
+      // With empty alternative text the gutter is left out of the
+      // accessibility tree. A browser without it still shows the gutter.
+      @supports (content: "a" / "b") {
+        content: attr(data-gutter) / "";
+      }
+
+      // A box of the gutter's width, so the hanging indent above matches it
+      // to the pixel: the code's letter-spacing would otherwise widen the
+      // gutter's text past `ch` units.
+      display: inline-block;
+      width: var(--ccs-code-snippet-gutter);
+      text-indent: 0;
+      vertical-align: top;
+    }
+
+    // The tint: a layer of a token's color behind the text, so one rule
+    // serves every theme. It is a layer, not a background, so a token's own
+    // contrast against the text is kept.
+    &--highlighted,
+    &--added,
+    &--removed {
+      // Behind the line's text, above the snippet's background.
+      position: relative;
+      isolation: isolate;
+      padding-inline-start: var(--ccs-code-snippet-gutter);
+      border-inline-start: var(--ccs-code-snippet-bar) solid
+        var(--ccs-code-snippet-line-color);
+
+      &::after {
+        position: absolute;
+        z-index: -1;
+        background: var(--ccs-code-snippet-line-color);
+        content: "";
+        inset: 0;
+        opacity: 0.16;
+        pointer-events: none;
+      }
+    }
+
+    &--highlighted {
+      --ccs-code-snippet-line-color: #{$border-interactive};
+    }
+
+    &--added {
+      --ccs-code-snippet-line-color: #{$support-success};
+    }
+
+    &--removed {
+      --ccs-code-snippet-line-color: #{$support-error};
+    }
+  }
+
+  // Forced colors drop the tint. The bar's border and the marker's text
+  // stay, so a line is marked by more than color.
+  @media (forced-colors: active) {
+    .#{$prefix}--snippet__line {
+      &--highlighted,
+      &--added,
+      &--removed {
+        border-inline-start-color: CanvasText;
+      }
+    }
+  }
+}
+
+@include exports("code-snippet-lines") {
+  @include code-snippet-lines;
+}
