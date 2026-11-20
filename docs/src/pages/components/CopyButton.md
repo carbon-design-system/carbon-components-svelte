@@ -97,6 +97,10 @@ Set `copy` to a no-op function to disable copying.
 
 On hover or focus, the button shows a proactive tooltip with the `iconDescription`. It renders in a floating portal so it is never clipped and flips when space is tight. Press Escape to hide the tooltip, or the copy feedback, without moving the pointer or focus.
 
+Set `hideTooltip` to turn off the hover and focus tooltip. The button keeps `iconDescription` as its accessible name, and the feedback still shows after a copy.
+
+<CopyButton text="https://api.acme.io/webhooks/incoming/f8a2c91d" hideTooltip />
+
 ### Directions
 
 Set `tooltipAlign` to place the tooltip relative to the button. It takes Popover's `align` names and replaces `tooltipPosition` and `tooltipAlignment`, which still work and are deprecated.

@@ -30,6 +30,12 @@ Place the visibility toggle's tooltip with `tooltipAlign`, which takes Popover's
 
 <PasswordInput tooltipAlign="left-start" labelText="Password" placeholder="Enter password..." />
 
+### Hidden tooltip
+
+Set `hideTooltip` to turn off the visibility toggle's tooltip. The toggle keeps its accessible name.
+
+<PasswordInput hideTooltip labelText="Password" placeholder="Enter password..." />
+
 ### Toggle labels
 
 Customize the toggle button's tooltip and ARIA label text with `showPasswordLabel` and `hidePasswordLabel`.
