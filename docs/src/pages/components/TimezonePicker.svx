@@ -1,0 +1,134 @@
+---
+components: ["TimezonePicker"]
+description: Timezone pickers choose an IANA time zone from the zones the browser knows, grouped by area and labeled with the current UTC offset.
+---
+
+<script>
+  import { Box, LayoutDirection, Stack, TimezonePicker } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Create a picker with a label. The list, the names and the offsets come from the browser's own `Intl` data, so the component ships none of it. Each row shows the city, the zone's name in the UI locale and its current UTC offset. Zones are grouped by area.
+
+The field fills with the browser's time zone once the page has loaded. The server never renders it, so the server's zone cannot leak into the page.
+
+Type to search by city, offset, abbreviation or name. <DocKbd label="ArrowDown" /> opens the menu, <DocKbd label="Enter" /> picks the highlighted zone and <DocKbd label="Escape" /> closes the menu.
+
+<TimezonePicker labelText="Time zone" />
+
+## Value
+
+### Bind the value
+
+Bind `value` to read or set the zone. It holds the IANA name, such as `"Asia/Tokyo"`, and an empty string when nothing is chosen. The `change` event fires when the user chooses or clears a zone, and carries the label and what the engine knows about the zone: its offset, whether it observes daylight saving time and whether it is in daylight time now.
+
+<FileSource src="/framed/TimezonePicker/TimezoneBinding" />
+
+### Leave the field empty
+
+Set `detect` to `false` to leave the field empty until the user chooses. Setting `value` yourself also turns the browser's zone off for that field.
+
+<TimezonePicker labelText="Meeting time zone" detect={false} placeholder="Choose where the meeting is" />
+
+### Aliases
+
+Browsers spell some zones differently. Chromium lists `"Asia/Calcutta"` where Firefox and Safari list `"Asia/Kolkata"`. The picker selects the right zone for either, and the row shows the current city name, Kolkata. `value` keeps the spelling it was given until the user chooses another.
+
+<TimezonePicker labelText="Office" detect={false} value="Asia/Kolkata" />
+
+## Search
+
+The search matches the start of any word, and ignores case and accents. Offsets and abbreviations match both seasons, so "PDT" finds Los Angeles in January and "-8" finds it in July.
+
+| Type | Finds |
+| :--- | :--- |
+| `tokyo` | The city |
+| `calcutta` | A renamed city by its old name |
+| `+5:30` or `utc+0530` | Zones at that offset, in either season |
+| `-8` | Zones at UTC-08:00, which is also where Los Angeles sits in winter |
+| `pst` or `cet` | Zones that use the abbreviation. English defines abbreviations for the Americas, Europe, Africa, Australia and India |
+| `pacific time` | The zone's name in the UI locale |
+
+## Locale
+
+### Names
+
+Set `locale` to write the zone names in another language. The city is always the IANA name, which `Intl` has no translation for. The area headings and the zone names follow the locale, and the field and the open menu rename when it changes at runtime.
+
+<FileSource src="/framed/TimezonePicker/TimezoneLocale" />
+
+`locale` is never read from the browser, so the server and the first paint of the browser write the same names. To follow the user's language, set it after mount. Where the browser has no data for a locale, the names are in English.
+
+### Right to left
+
+Offsets such as "UTC+05:30" are written left to right inside a right-to-left page, so the sign stays in front of the number. Names in Arabic and Hebrew follow the page direction.
+
+<LayoutDirection dir="rtl">
+  <TimezonePicker labelText="المنطقة الزمنية" locale="ar" detect={false} value="Asia/Calcutta" />
+</LayoutDirection>
+
+## Daylight saving time
+
+Offsets are read at `date`, which defaults to now and refreshes each minute. Pass a date to show the offsets for another day, such as the day of a meeting. Los Angeles is UTC-08:00 in January and UTC-07:00 in July.
+
+<Stack gap={5}>
+  <TimezonePicker labelText="In January" detect={false} value="America/Los_Angeles" date={new Date("2026-01-15T12:00:00Z")} />
+  <TimezonePicker labelText="In July" detect={false} value="America/Los_Angeles" date={new Date("2026-07-15T12:00:00Z")} />
+</Stack>
+
+## List
+
+### Restrict the list
+
+Pass `values` to list only some zones, in your order. Zones the browser rejects are dropped. The same list is what the picker offers in a browser without `Intl.supportedValuesOf`, where the default holds only UTC and the browser's own zone.
+
+<TimezonePicker labelText="Support region" detect={false} values={["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "Europe/London", "Europe/Berlin", "Asia/Singapore", "Australia/Sydney"]} />
+
+### Area headings
+
+Set `groupText` to change a heading. It receives the IANA area and the default heading.
+
+<TimezonePicker labelText="Region" detect={false} values={["America/New_York", "America/Chicago", "Europe/London", "Europe/Berlin"]} groupText={(area, label) => area === "America" ? "North America" : label} />
+
+## Sizes
+
+Set `size` to control the field height. The default is 40px.
+
+<Stack gap={5}>
+  <TimezonePicker size="sm" labelText="Small" detect={false} />
+  <TimezonePicker labelText="Default" detect={false} />
+  <TimezonePicker size="xl" labelText="Extra large" detect={false} />
+</Stack>
+
+## States
+
+Reflect validation and interaction states.
+
+<Stack gap={5}>
+  <TimezonePicker labelText="Invalid" detect={false} invalid invalidText="Choose a time zone" />
+  <TimezonePicker labelText="Warning" detect={false} warn warnText="This zone has no daylight saving time" value="Asia/Tokyo" />
+  <TimezonePicker labelText="Disabled" detect={false} disabled value="Europe/Paris" />
+  <TimezonePicker labelText="Read-only" detect={false} readonly value="Europe/Paris" />
+</Stack>
+
+## In a form
+
+Set `name` to post the zone with a form. The visible field holds the city, so a hidden input carries the IANA name.
+
+<Box maxWidth="24rem">
+  <form on:submit|preventDefault>
+    <TimezonePicker labelText="Time zone" name="timezone" detect={false} required />
+  </form>
+</Box>
+
+## Server rendering
+
+The server renders the field with the selected city and no menu, so nothing in the list can differ between the server and the browser. The zone's name and offset exist only in the rows, which are made when the menu opens.
+
+| Do | Why |
+| :--- | :--- |
+| Leave `locale` set to the page's language | The names are the same on the server and in the browser, so hydration finds nothing to repair |
+| Read the browser's zone with `detect` rather than on the server | The server's zone is the server's, not the user's |
+| Pass `values` where the browser may be old | `Intl.supportedValuesOf` is missing before Safari 15.4 and Firefox 93 |
+| Set `date` when a row should show an offset other than today's | The offset of a zone changes twice a year |

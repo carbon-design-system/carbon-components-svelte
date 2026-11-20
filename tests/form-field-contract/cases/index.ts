@@ -22,6 +22,7 @@ import FluidTextInputSkeleton from "carbon-components-svelte/TextInput/FluidText
 import PasswordInput from "carbon-components-svelte/TextInput/PasswordInput.svelte";
 import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
+import TimezonePicker from "carbon-components-svelte/TimezonePicker/TimezonePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { Exemptions, FieldCase } from "../contract";
 import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
@@ -97,6 +98,13 @@ export const cases: FieldCase[] = [
     },
     reset: { initial: "Ada", typed: "x", events: ["input"] },
     selectOnFocus: { value: "Ada" },
+  },
+  {
+    name: "TimezonePicker",
+    component: TimezonePicker,
+    props: { values: ["Europe/Paris", "UTC"], detect: false },
+    control: () => screen.getByRole("combobox"),
+    state: {},
   },
   {
     name: "TextInput",
@@ -340,6 +348,7 @@ const NOT_AUDITED =
 export const exempt: Exemptions = {
   fluid: {},
   state: {
+    IntlPicker: "the shared base of the pickers, which each have a case",
     InputGroup: NOT_AUDITED,
     ListBox: "a wrapper with no control of its own",
     StarRating: NOT_AUDITED,
