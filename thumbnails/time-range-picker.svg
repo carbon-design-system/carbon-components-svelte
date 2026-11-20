@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>time-range-picker</title>
+    <defs>
+        <filter id="time-range-picker-shadow" filterUnits="userSpaceOnUse" x="0" y="0" width="320" height="180">
+            <feOffset dy="2" in="SourceAlpha" result="offset"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="offset" result="blur"></feGaussianBlur>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="time-range-picker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="field" fill="var(--cds-field-01, #f4f4f4)" x="76" y="28" width="168" height="32"></rect>
+        <rect id="bottom-border" fill="var(--cds-border-strong, #8d8d8d)" x="76" y="59" width="168" height="1"></rect>
+        <path id="clock" fill="var(--cds-icon-primary, #161616)" transform="translate(88, 36) scale(0.5)" d="M16 30a14 14 0 1 1 14-14 14 14 0 0 1-14 14zm0-26a12 12 0 1 0 12 12A12 12 0 0 0 16 4z M20.59 22L15 16.41V7h2v8.58l5 5.01L20.59 22z"></path>
+        <rect id="value" fill="var(--cds-text-secondary, #525252)" x="112" y="40" width="70" height="8"></rect>
+        <path id="chevron" fill="var(--cds-icon-primary, #161616)" transform="translate(218, 36) scale(0.5)" d="M16 10 26 20 24.6 21.4 16 12.8 7.4 21.4 6 20z"></path>
+        <rect id="panel-shadow" fill="black" filter="url(#time-range-picker-shadow)" x="76" y="60" width="168" height="92"></rect>
+        <rect id="panel" fill="var(--cds-layer-02, #ffffff)" x="76" y="60" width="168" height="92"></rect>
+        <rect id="selected" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="90" width="80" height="22"></rect>
+        <rect id="selected-bar" fill="var(--cds-background-brand, #0f62fe)" x="76" y="90" width="2" height="22"></rect>
+        <rect id="range-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="75" width="48" height="8"></rect>
+        <rect id="range-2" fill="var(--cds-text-secondary, #525252)" x="88" y="97" width="56" height="8"></rect>
+        <rect id="range-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="119" width="40" height="8"></rect>
+        <rect id="range-4" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="137" width="52" height="8"></rect>
+        <rect id="divider" fill="var(--cds-border-subtle, #e0e0e0)" x="156" y="60" width="1" height="92"></rect>
+        <rect id="from-label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="168" y="72" width="28" height="6"></rect>
+        <rect id="from" fill="var(--cds-field-01, #f4f4f4)" x="168" y="82" width="64" height="14"></rect>
+        <rect id="from-border" fill="var(--cds-border-strong, #8d8d8d)" x="168" y="95" width="64" height="1"></rect>
+        <rect id="to-label" fill="var(--cds-layer-accent-active, #a8a8a8)" x="168" y="104" width="20" height="6"></rect>
+        <rect id="to" fill="var(--cds-field-01, #f4f4f4)" x="168" y="114" width="64" height="14"></rect>
+        <rect id="to-border" fill="var(--cds-border-strong, #8d8d8d)" x="168" y="127" width="64" height="1"></rect>
+        <rect id="apply" fill="var(--cds-background-brand, #0f62fe)" x="196" y="134" width="36" height="12"></rect>
+    </g>
+</svg>

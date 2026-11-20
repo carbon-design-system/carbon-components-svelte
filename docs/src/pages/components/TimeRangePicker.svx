@@ -1,0 +1,168 @@
+---
+components: ["TimeRangePicker"]
+description: TimeRangePickers set the time window of a dashboard, log view or report, with quick ranges, an absolute or relative range, a time zone, and optional stepping and refresh.
+---
+
+## Basic
+
+The trigger shows the range, such as "Last 15 minutes". Bind `value` to read and set it. `value` is `{ from, to }`, and each end is an instant or an expression that is read against the clock each time it is used.
+
+<FileSource src="/framed/TimeRangePicker/TimeRangePickerBasic" />
+
+The trigger opens with <DocKbd label="Enter" />, <DocKbd label="Space" /> or <DocKbd label="↓" />. Focus lands on the current quick range, and <DocKbd label="Escape" /> closes the panel and returns focus to the trigger.
+
+## Value
+
+### Relative and absolute
+
+An end is one of:
+
+| Form | Example | Reads as |
+| --- | --- | --- |
+| Now | `now` | The moment the range is used |
+| Offset | `now-15m`, `now+1h`, `now-1d` | That long before or after now |
+| Rounded | `now/d`, `now-1d/d`, `now/w` | The start of that day, week, month or year, in the time zone. As `to`, the last millisecond of it |
+| Instant | `2026-11-06T14:00:00.000Z` | That instant |
+| Date and time | `2026-11-06 09:00` | That time on the clock of the time zone |
+
+The units are `s`, `m`, `h`, `d`, `w`, `M` (month) and `y`. A relative range stays relative in `value`, so a saved view or a shared link still means "last 15 minutes" when it is opened tomorrow. Choosing an absolute range, or stepping back from a relative one, stores instants.
+
+| Do | Why |
+| --- | --- |
+| Store `value`, not the resolved dates | A relative range resolved at save time is a different range tomorrow |
+| Call `resolveRange(value, { timeZone })` when you query | It reads `now` and the zone once, so both ends agree |
+| Query with `end` as the last instant, not the start of the next one | A rounded end is a millisecond short of the next unit, so adjacent days do not overlap |
+
+### Rolling and calendar ranges
+
+A rolling range ends now and counts back. A calendar range is whole days, weeks or months in the time zone. The two answer different questions, so each has its own name.
+
+| Range | `from` | `to` | Reads as |
+| --- | --- | --- | --- |
+| Last 24 hours | `now-24h` | `now` | Exactly 24 hours back |
+| Last 7 days | `now-7d` | `now` | This time of day, 7 calendar days back |
+| Last 168 hours | `now-168h` | `now` | Exactly 7 times 24 hours back |
+| Today | `now/d` | `now/d` | Midnight to the last millisecond of the day |
+| Yesterday | `now-1d/d` | `now-1d/d` | The whole of the day before |
+| This week | `now/w` | `now/w` | The week that holds today, from the first day of the locale's week |
+| Past 7 calendar days | `now-6d/d` | `now/d` | Six whole days and today |
+
+`s`, `m` and `h` count elapsed time. `d`, `w`, `M` and `y` move on the calendar and keep the time of day. Across a clock change, "Last 7 days" is 167 or 169 hours long, and `now-168h` is the exact length. `lastRange(7, "d")` and `calendarRange(7, "d")` write the first and last rows.
+
+### Time zones and clock changes
+
+Every calculation is made on the wall clock of the time zone, with `Intl` and no data of its own. A day is 23 hours long when clocks go forward and 25 when they go back, and "Today" and the step buttons follow that. A time that does not exist, such as 02:30 on the night clocks go forward, is read as the time after the gap (03:30). A time that happens twice is read as the first one.
+
+## Quick ranges
+
+Set `ranges` to the list the panel shows. Each range has an `id`, a `text`, a `from` and a `to`. Ranges that share a `group` sit under one heading. Choosing one applies it and closes the panel. The ranges are one tab stop: <DocKbd label="↑" /> and <DocKbd label="↓" /> move, <DocKbd label="Home" /> and <DocKbd label="End" /> jump to the ends, and <DocKbd label="Enter" /> applies.
+
+<FileSource src="/framed/TimeRangePicker/TimeRangePickerRanges" />
+
+When `value` equals a quick range, the trigger shows its `text`, so a range you add reads the way you named it.
+
+## Custom range
+
+The panel has two ways to write a range that is not in the list, and a time zone and **Apply** under both. <DocKbd label="Enter" /> in a field applies, and **Apply** does nothing while the range is invalid, so focus goes to the field to fix.
+
+### Absolute
+
+Choose a start and end day in the calendar and type the times, in 24-hour form (`09:30` or `09:30:15`). Changing the time zone keeps the same two instants and shows them on the new clock.
+
+### Relative
+
+Type an expression in **From** and **To**. Typing a whole range in **From**, such as `last 90 minutes`, `yesterday` or `now-2h to now`, fills both fields when the field is left.
+
+| Typed | Reads as |
+| --- | --- |
+| `last 90 minutes`, `past 2 hrs` | `now-90m` to `now` |
+| `today`, `yesterday` | The calendar day |
+| `this week`, `last month` | The calendar week or month. With no number, `last` is the one before |
+| `now-2h to now` | As written |
+
+## Time zone
+
+The trigger shows the time zone of an absolute range, as in "Nov 6, 09:00 – 12:30 (UTC−5)". Set `timeZone` to an IANA name, and bind it to follow the choice made in the panel. Left unset, the time zone is the browser's. `timeZones` limits the list.
+
+<FileSource src="/framed/TimeRangePicker/TimeRangePickerZone" />
+
+The list is every zone the browser knows, with the current offset in each name. Names come from the engine, and engines disagree on some (Chromium lists `Asia/Calcutta`, Safari `Asia/Kolkata`), so a stored `tz` may not be in another browser's list. The picker adds the current zone to the list, so it stays selectable.
+
+## Limits
+
+Set `min` and `max` to the earliest start and the latest end. Each is a `Date`, an ISO string or an expression, so `max="now"` blocks the future and `min="now-30d"` keeps to a retention window. Set `maxRange` and `minRange` to the longest and shortest range (`"7d"`, `"90m"`). The panel says what is wrong and keeps **Apply** from committing. The step buttons and zoom out stay disabled when their result would break a limit.
+
+<FileSource src="/framed/TimeRangePicker/TimeRangePickerLimits" />
+
+A length in days or longer is counted on the calendar, like the ranges, so `maxRange="7d"` allows "Last 7 days" in the week clocks change.
+
+## Stepping
+
+Set `stepping` to add back, forward and zoom out buttons. Back and forward move by the length of the range, so the new range starts where the old one ended. A range of whole days or months moves by that many days or months, so "Today" steps to "Yesterday" even across a 23 hour day. Zoom out doubles the range around its middle. A trailing range such as "Last 15 minutes" zooms to "Last 30 minutes" and stays relative.
+
+Set `max="now"` so forward does nothing past now: a step that would end later is moved back to end at `max`, and the button is disabled when the range already ends there.
+
+## Refresh
+
+Set `refresh` to `"button"` for a refresh button, or `"auto"` to add a "Refresh every" choice to the panel. Bind `refreshInterval` (seconds, `0` for off) to keep the choice. The `refresh` event fires on each tick with the range read again, so a relative range moves with the clock, and `refreshIntervals` sets the choices.
+
+While the tab is hidden the ticks stop. When it is shown again, one `refresh` event with `trigger: "visible"` is sent if a tick came due, and the interval starts over.
+
+## Dashboard
+
+A dashboard header usually combines stepping, `max="now"`, an interval and a query that runs on `change` and `refresh`. Both events carry `start` and `end`, so the query needs no other state.
+
+<FileSource src="/framed/TimeRangePicker/TimeRangePickerDashboard" />
+
+## URL
+
+`timeRangeToSearchParams` writes `from`, `to` and `tz`, the shape Grafana's URLs have, and `timeRangeFromSearchParams` reads them back. A relative value stays relative in the URL. `serializeTimeRange` and `parseTimeRange` use one string, such as `now-15m..now`, for a single query parameter or a form field.
+
+```svelte
+<script>
+  import {
+    TimeRangePicker,
+    timeRangeFromSearchParams,
+    timeRangeToSearchParams,
+  } from "carbon-components-svelte";
+
+  const saved = timeRangeFromSearchParams(location.search);
+  let value = saved?.value ?? { from: "now-1h", to: "now" };
+  let timeZone = saved?.timeZone;
+
+  function save() {
+    const params = timeRangeToSearchParams(value, { timeZone });
+    history.replaceState(null, "", `?${params}`);
+  }
+</script>
+
+<TimeRangePicker bind:value bind:timeZone on:change={save} />
+```
+
+The readers return `null` for text that is not a range, so a hand-edited URL does not throw. A `+` that a URL turned into a space (`now 1h`) is read as `now+1h`.
+
+## Server rendering
+
+The trigger text of a relative range needs no clock and no time zone, so it is the same on the server and in the browser. An absolute range is written in the time zone, and the browser's zone is found after mount, so set `timeZone` on the server and in the browser. Without it, the server and the first render use `"UTC"`, and the text changes once mounted. Set `now` to render the same range in tests and on the server. The locale is never read from the browser either: set `locale`.
+
+The first day of the week for `now/w` comes from the locale. Browsers with `Intl.Locale` week data use it, and others use the table the DatePicker uses. Set `weekStart` to make a shared link mean the same week everywhere.
+
+## Helpers
+
+The range functions run on the server and have no dependencies.
+
+| Function | Use |
+| --- | --- |
+| `resolveRange(value, { now, timeZone, weekStart })` | `{ start, end }` as `Date`s |
+| `validateRange(value, options)` | `{ valid }` or the `problem`, with `min`, `max`, `maxRange` and `minRange` |
+| `stepRange(value, direction, options)`, `zoomRange(value, factor, options)` | The range one length away, or widened, as a new value |
+| `formatTimeRange(value, options)`, `formatAbsoluteRange(start, end, options)` | The text the trigger shows |
+| `parseTimeRangeText(text)` | `"last 90 minutes"` as a value |
+| `serializeTimeRange`, `parseTimeRange`, `timeRangeToSearchParams`, `timeRangeFromSearchParams` | URLs and form fields |
+| `lastRange(amount, unit)`, `calendarRange(count, unit)`, `defaultTimeRanges` | Values and the default list |
+
+## Text
+
+Every string is replaceable. Set `translateWithId` to a function that returns the text for an id, or `undefined` to keep the English. Set `rangeText` to change how a range is written in the trigger, `intervalText` for the refresh choices and `appliedText` for the announcement a screen reader hears when a range is applied. The text of quick ranges comes from `ranges`.
+
+The trigger is named from `labelText` and the range, for example "Time range: Last 15 minutes". A consumer `aria-label` or `aria-labelledby` replaces that name.
