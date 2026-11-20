@@ -17,6 +17,8 @@ import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownload
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
+import Guidebanner from "carbon-components-svelte/InlineTip/Guidebanner.svelte";
+import InlineTip from "carbon-components-svelte/InlineTip/InlineTip.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
 import MenuButton from "carbon-components-svelte/MenuButton/MenuButton.svelte";
 import Meter from "carbon-components-svelte/Meter/Meter.svelte";
@@ -120,6 +122,21 @@ export const interactive: AriaEntry[] = [
     name: "Carousel",
     render: (attrs) => render(Carousel, { props: attrs }),
     target: () => screen.getByRole("region"),
+  },
+  {
+    name: "InlineTip",
+    render: (attrs) =>
+      render(InlineTip, { props: { id: "contract", title: "Tip", ...attrs } }),
+    target: () => screen.getByRole("region"),
+  },
+  {
+    name: "Guidebanner",
+    render: (attrs) =>
+      render(Guidebanner, {
+        props: { tips: [{ id: "contract", title: "Tip" }], ...attrs },
+      }),
+    target: () => screen.getByRole("region"),
+    also: ["aria-roledescription"],
   },
   {
     name: "Card",

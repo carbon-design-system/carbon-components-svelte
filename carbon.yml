@@ -685,6 +685,18 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/InlineNotification
     tags:
       - system-feedback
+  inline-tip:
+    name: Inline tip
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/inline-tip.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/InlineTip
   input-group:
     name: Input group
     status: stable
