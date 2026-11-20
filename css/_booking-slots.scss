@@ -1,0 +1,261 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// BookingSlots: an inline calendar beside the times of the chosen day, as a
+/// grid of single-choice buttons. Neither Carbon v10 nor v11 ships an
+/// appointment picker, so this is layout over the date picker's inline
+/// calendar, plus the time buttons.
+/// @access private
+/// @group components
+@mixin booking-slots {
+  // A container, so the week view opens by the component's own width and not
+  // the window's (see the end).
+  .#{$prefix}--booking-slots {
+    container: #{$prefix}--booking-slots / inline-size;
+  }
+
+  .#{$prefix}--booking-slots__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: $carbon--spacing-06;
+  }
+
+  .#{$prefix}--booking-slots__calendar {
+    min-width: 0;
+  }
+
+  .#{$prefix}--booking-slots__times {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--booking-slots__zone {
+    max-inline-size: to-rem(320px);
+  }
+
+  .#{$prefix}--booking-slots__meta {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: $carbon--spacing-05;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--booking-slots__meta p {
+    margin: 0;
+  }
+
+  .#{$prefix}--booking-slots__zone-text {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--booking-slots__message {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $carbon--spacing-04;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--booking-slots__message p {
+    margin: 0;
+  }
+
+  .#{$prefix}--booking-slots__columns {
+    display: flex;
+    flex-direction: column;
+    gap: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--booking-slots__column {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $carbon--spacing-04;
+  }
+
+  .#{$prefix}--booking-slots__heading {
+    @include type-style("heading-compact-01");
+
+    margin: 0;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--booking-slots__short-title {
+    display: none;
+  }
+
+  // The times are an even grid that takes as many columns as fit.
+  .#{$prefix}--booking-slots__slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(to-rem(80px), 1fr));
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--booking-slots__slot {
+    @include type-style("body-compact-01");
+
+    // No resting outline: forced colors paint a transparent one as a box.
+    outline: none;
+    display: inline-flex;
+    min-width: 0;
+    min-height: to-rem(40px);
+    align-items: center;
+    justify-content: center;
+    padding: $carbon--spacing-02 $carbon--spacing-03;
+    border: to-rem(1px) solid $button-tertiary;
+    margin: 0;
+    background-color: transparent;
+    color: $button-tertiary;
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+    transition: background-color $duration--fast-01 motion(standard, productive),
+      color $duration--fast-01 motion(standard, productive);
+  }
+
+  .#{$prefix}--booking-slots__slot:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--booking-slots__slot:active {
+    background-color: $button-tertiary-active;
+    color: $text-inverse;
+  }
+
+  // The chosen time fills in, which is the cue that does not rely on the
+  // border color alone.
+  .#{$prefix}--booking-slots__slot--selected {
+    border-color: $button-primary;
+    background-color: $button-primary;
+    color: $text-on-color;
+  }
+
+  .#{$prefix}--booking-slots__slot--selected:active {
+    background-color: $button-primary-active;
+    color: $text-on-color;
+  }
+
+  .#{$prefix}--booking-slots__slot:disabled {
+    border-color: $border-disabled;
+    background-color: transparent;
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--booking-slots__slot--selected:disabled {
+    border-color: $border-disabled;
+    background-color: $border-disabled;
+    color: $text-on-color-disabled;
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--booking-slots__slot:hover:not(:disabled) {
+      background-color: $button-tertiary-hover;
+      color: $text-inverse;
+    }
+
+    .#{$prefix}--booking-slots__slot--selected:hover:not(:disabled) {
+      background-color: $button-primary-hover;
+      color: $text-on-color;
+    }
+  }
+
+  // Forced colors repaint the fill, which left the chosen time looking like
+  // the rest. It takes `Highlight` and opts out of forcing, so the label
+  // keeps its pair.
+  @media (forced-colors: active) {
+    .#{$prefix}--booking-slots__slot {
+      border-color: ButtonText;
+      color: ButtonText;
+    }
+
+    .#{$prefix}--booking-slots__slot.#{$prefix}--booking-slots__slot--selected:not(:disabled) {
+      border-color: Highlight;
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .#{$prefix}--booking-slots__slot:focus {
+      outline-color: CanvasText;
+    }
+
+    .#{$prefix}--booking-slots__slot.#{$prefix}--booking-slots__slot--selected:not(:disabled):focus {
+      outline-color: HighlightText;
+    }
+
+    .#{$prefix}--booking-slots__slot:disabled {
+      border-color: GrayText;
+      color: GrayText;
+    }
+  }
+
+  // Wide enough: the calendar sits beside the times.
+  @container #{$prefix}--booking-slots (width >= #{to-rem(560px)}) {
+    .#{$prefix}--booking-slots__layout {
+      grid-template-columns: to-rem(288px) minmax(0, 1fr);
+    }
+  }
+
+  // The week view lays the seven days out as columns when there is room. In
+  // less room it shows the chosen day alone, as the day view does.
+  .#{$prefix}--booking-slots--week
+    .#{$prefix}--booking-slots__column:not(.#{$prefix}--booking-slots__column--current) {
+    display: none;
+  }
+
+  @container #{$prefix}--booking-slots (width >= #{to-rem(900px)}) {
+    .#{$prefix}--booking-slots--week .#{$prefix}--booking-slots__columns {
+      flex-direction: row;
+      gap: $carbon--spacing-03;
+    }
+
+    .#{$prefix}--booking-slots--week
+      .#{$prefix}--booking-slots__column:not(.#{$prefix}--booking-slots__column--current) {
+      display: flex;
+    }
+
+    .#{$prefix}--booking-slots--week .#{$prefix}--booking-slots__column {
+      flex: 1 1 0;
+    }
+
+    .#{$prefix}--booking-slots--week .#{$prefix}--booking-slots__slots {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .#{$prefix}--booking-slots--week .#{$prefix}--booking-slots__title {
+      display: none;
+    }
+
+    .#{$prefix}--booking-slots--week .#{$prefix}--booking-slots__short-title {
+      @include type-style("body-compact-01");
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: $text-secondary;
+    }
+
+    .#{$prefix}--booking-slots--week
+      .#{$prefix}--booking-slots__column--current
+      .#{$prefix}--booking-slots__short-title {
+      color: $text-primary;
+    }
+
+    .#{$prefix}--booking-slots--week
+      .#{$prefix}--booking-slots__message--week-hidden {
+      display: none;
+    }
+  }
+}
+
+@include exports("booking-slots") {
+  @include booking-slots;
+}
