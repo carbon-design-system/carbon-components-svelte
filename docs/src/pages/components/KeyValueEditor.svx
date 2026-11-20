@@ -1,0 +1,213 @@
+---
+components: ["KeyValueEditor"]
+description: A key value editor edits rows of keys and values, such as environment variables, HTTP headers, labels, and other metadata, with validation, secrets, paste import, and export.
+---
+
+<script>
+  import { KeyValueEditor } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Bind `rows` to read or set the rows. A row is an object with a `key` and a `value`. Each edit assigns a new array of new row objects, so the objects you pass in are never changed.
+
+Set `format` to say what the rows are. The format sets the rules for keys, the syntax of the text editor and of exports, and what a pasted block may look like. Use `toRecord` to turn rows into a plain object.
+
+<FileSource src="/framed/KeyValueEditor/KeyValueEditorEnv" />
+
+| Do | Why |
+| --- | --- |
+| Use an array of rows | Order matters, and a repeated key is a state to show, not one to lose |
+| Use `format="env"` for environment variables, `"headers"` for HTTP headers, `"plain"` for labels and metadata | Each format has its own key rules, case rules and text syntax |
+| Turn rows into an object with `toRecord` when you send them | It skips blank, disabled and stored rows, and keeps keys such as `__proto__` as plain data |
+
+## Formats
+
+### Environment variables
+
+Keys must be POSIX names: letters, numbers and underscores, and not starting with a number. Keys are case sensitive, and the text editor and export use `KEY=value` lines. Set `keyPattern` for a stricter rule, such as upper case only.
+
+### HTTP headers
+
+Keys must be HTTP field names, and `Accept` and `accept` are the same header. The text editor and export use `Name: value` lines. A repeated header is legal HTTP, so set `duplicateKeys` to `"warn"` to mark it without failing the rows.
+
+<FileSource src="/framed/KeyValueEditor/KeyValueEditorHeaders" />
+
+### Labels and metadata
+
+The `"plain"` format takes any key that has no equals sign and no space at either end. Add your own rules with `validate`, which runs after the built-in ones and returns a message for the key, the value, or both. Set `keyPattern` to `null` when `validate` owns the key rules.
+
+<FileSource src="/framed/KeyValueEditor/KeyValueEditorLabels" />
+
+## Adding rows
+
+Set `addMode` to choose how a row is added.
+
+| `addMode` | How a row is added | Use when |
+| --- | --- | --- |
+| `"button"` | An Add button adds an empty row and moves focus to its key | Rows are added now and then. The button is a named control that works with every input and assistive technology. |
+| `"ghost"` | An empty line at the end becomes a row as soon as you type in it, and a new empty line follows | Rows are added in bulk by typing, as in a request builder. |
+
+The new-row line is the same element before and after you type, so focus and the caret stay put. It has no remove or move buttons and posts nothing until it holds text. When `maxRows` is reached, the Add button is marked unavailable and the line is not offered.
+
+Add a row from code by assigning to `rows`. Set `maxRows` to cap the count.
+
+## Columns
+
+Key and value always show. Set `columns` to add more.
+
+| Column | Adds | Row field |
+| --- | --- | --- |
+| `"enabled"` | A checkbox that keeps a row without using it. Disabled rows are left out of `toRecord` and exports. | `enabled` |
+| `"secret"` | A checkbox that masks the value | `secret` |
+| `"scope"` | A select of the `scopes` you pass, such as environments | `scope` |
+| `"description"` | A text field | `description` |
+
+With scopes, the same key may appear once for each scope, and a row with an empty scope applies to all of them, so it clashes with any other row that has the same key.
+
+## Secrets
+
+A row with `secret` set shows its value as a password field with the field's own reveal button. The copy button copies the real value.
+
+A secret that was saved earlier should not come back to the page. Set `stored` on the row and leave `value` empty. The row shows a mask and a Replace button, and its value is never in the document, not even hidden. The mask has the same length for every secret, so it does not reveal the length. Replace turns the row into an empty password field and moves focus to it.
+
+<FileSource src="/framed/KeyValueEditor/KeyValueEditorStored" />
+
+The text editor leaves stored secrets out and keeps them as they are. A secret that has a value is shown in the text editor in clear text, so set `bulkEdit` to `false` where that is not acceptable.
+
+## Validation
+
+Each row is checked as you edit, with one pass over the rows, so 500 rows cost about a millisecond.
+
+A row shows its messages once focus has left it, or after a submit, not while you type. A repeated key marks every row that shares it as soon as one of them has been left.
+
+| Check | Message tells the user |
+| --- | --- |
+| A value with no key | To enter a key |
+| `keyPattern` or the format's rule | Which characters the key can use |
+| A repeated key (`duplicateKeys`) | Which key repeats, on every row that has it |
+| `maxKeyLength`, `maxValueLength` | The limit |
+| `reservedKeys`, a list or a function | That the key is reserved |
+| `validate` | Whatever you return |
+
+Replace the text of any message with `issueText`, which receives the issue and returns a string. Bind `valid` and `issues` to react to the result.
+
+Call `reportValidity()` on the component to show every message and list the rows that need attention, with a link to each. It returns `false` when a row has an error, and moves focus to the list. A form that contains the editor does the same on `submit`: the event is stopped before the form's own handlers run when a row has an error. Set `validateOnSubmit` to `false` to turn this off. Set `required` to require at least one row.
+
+## Pasting and importing
+
+Paste into a key field text that reads as several rows, and the editor offers to import it.
+
+| Pasted text | Read as |
+| --- | --- |
+| `KEY=value` lines, with `export`, `#` comments, quotes, and quoted values over several lines | `.env` |
+| `Name: value` lines, with indented continuation lines | Headers |
+| A JSON object, or a list of `{ "key", "value" }` pairs | JSON |
+
+A single word, or any text that is not one of these, pastes as usual. Pasting into a value field never imports.
+
+A prompt says how many rows are new and how many existing rows will be updated, and lists the lines that cannot be read. Pressing Import adds the rows and moves focus to the first of them. Escape cancels and returns focus to the field. A key that already exists is updated in place, and the empty row you pasted into is filled first. Set `confirmPaste` to `false` to import at once.
+
+The `paste` event is cancelable. Call `preventDefault()` to handle the text yourself. After an import, `import` reports how many rows were added, updated and skipped.
+
+The same parsers are exported for use without the component: `parseDotenv`, `parseHeaders`, `parseJson` and `parseKeyValue` return the entries and the errors, with line numbers, and `serializeDotenv`, `serializeHeaders`, `serializeJson` and `serializeKeyValue` write rows back. A value can never add a line when it is written.
+
+## Editing as text
+
+The Edit as text button swaps the rows for a text area with one `KEY=value` line (or `Name: value` for headers) for each row. Disabled rows are written as comments. Rows update while the text parses. A line that cannot be read is listed with its line number, the rows keep their last good value, and the button will not switch back until the lines are fixed. Rows keep their secret flag, scope and description when their key is unchanged. Set `bulkEdit` to `false` to remove the button.
+
+## Exporting
+
+The Export menu downloads the enabled rows. The default formats follow `format`: `.env` and JSON for environment variables, header lines and JSON for headers. Set `exportFormats` to change the list or to remove the menu, and `exportFileName` to name the file.
+
+## Reordering
+
+Each row has Move up and Move down buttons. Move a row from any field with <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="ArrowUp" /> or <DocKbd label="ArrowDown" />. Focus stays on the control you were in, a live region says where the row went, and the `move` event is cancelable. The first row's Move up and the last row's Move down are marked unavailable but stay focusable, so focus is never dropped.
+
+Removing a row moves focus to the key of the next row, then the previous one, then the Add button.
+
+## Forms
+
+Set `name` to post the rows with a native form. Each row posts as `name[0][key]`, `name[0][value]` and, for the columns that are on, `[secret]`, `[enabled]` (`1` or `0`), `[scope]` and `[description]`. A stored secret posts `[stored]` and no value, so the server keeps what it has. Use `rowsFromFormData` to read a post back into rows.
+
+A form reset puts the rows back to what they were when the editor was made.
+
+<FileSource src="/framed/KeyValueEditor/KeyValueEditorForm" />
+
+## States
+
+Set `invalid` and `invalidText` for a message about the whole editor, such as a failed save from the server. Set `warn` and `warnText` for a warning. Rows have their own messages.
+
+<KeyValueEditor
+  labelText="Labels"
+  invalid
+  invalidText="The labels could not be saved. Try again."
+  rows={[
+    { key: "tier", value: "backend" },
+    { key: "team", value: "payments" },
+  ]}
+/>
+
+### Read-only
+
+Set `readonly` to show the rows without letting users change them. The add, remove and move buttons and the text editor are removed, and copy and reveal still work.
+
+<KeyValueEditor
+  labelText="Labels"
+  readonly
+  rows={[
+    { key: "tier", value: "backend" },
+    { key: "team", value: "payments" },
+  ]}
+/>
+
+### Disabled
+
+Set `disabled` to prevent interaction. A disabled `fieldset` around the editor disables it too.
+
+<KeyValueEditor
+  labelText="Labels"
+  disabled
+  rows={[
+    { key: "tier", value: "backend" },
+    { key: "team", value: "payments" },
+  ]}
+/>
+
+## Size
+
+Set `size` to `"sm"` or `"lg"` to change the height of the fields. The default is `"md"`.
+
+<KeyValueEditor
+  labelText="Labels"
+  size="sm"
+  rows={[
+    { key: "tier", value: "backend" },
+  ]}
+/>
+
+## Direction and narrow screens
+
+Keys read left to right in any language, so a key field keeps `dir="ltr"` on a right-to-left page, while the columns still mirror. A value or a description takes the direction of its own text.
+
+Below the medium breakpoint a row stacks, and every field shows its label. From medium up the rows share one grid and a column header names the fields.
+
+## Accessibility
+
+The editor is a `fieldset` named by its label. Each row is a group named "Row 3 of 12", with its fields named Key, Value and so on. Replace the text with `rowText`.
+
+A row's buttons are one tab stop. <DocKbd label="ArrowLeft" /> and <DocKbd label="ArrowRight" /> move between them. A live region announces added, removed, moved and imported rows; replace its messages with `announceText`.
+
+| Key | Action |
+| --- | --- |
+| <DocKbd label="Tab" /> | Moves through the fields of a row, then to the row's buttons as one stop |
+| <DocKbd label="ArrowLeft" />, <DocKbd label="ArrowRight" /> | Move between a row's buttons |
+| <DocKbd label="Alt" />+<DocKbd label="Shift" />+<DocKbd label="ArrowUp" />, <DocKbd label="ArrowDown" /> | Move the row up or down, from a field |
+| <DocKbd label="Enter" /> | Activates a button, or imports the pasted rows |
+| <DocKbd label="Escape" /> | Cancels the paste prompt |
+
+A message in a row is announced when it appears, so an import that leaves many rows invalid announces each of them. The list of rows that need attention is the better place to start for a long list.
+
+## Performance
+
+Rows are keyed by an identity that follows a row through edits, so editing, moving or removing one row among 500 does not rebuild the others, and the input you are typing in is never replaced. In a production build, 500 rows render in about half a second, a keystroke takes 20 to 40 milliseconds, and a pasted 300-line `.env` is ready to import in under 100 milliseconds and in the rows in about a third of a second. Each keystroke checks every row, so the cost of a keystroke grows with the row count.
