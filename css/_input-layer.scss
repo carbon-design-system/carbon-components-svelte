@@ -1,0 +1,122 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The layer `createInputLayer` and `inputLayer` add to a native `<input>`
+/// or `<textarea>`: a copy of the field's text, drawn behind it or over it.
+/// The script copies the field's text properties and measures its box, so the
+/// rules here are only what no measurement says: the stacking, the colors,
+/// and what to do when forced colors take the glyphs.
+///
+/// - `behind` moves the field's fill to the layer (`--ccs-input-layer-fill`,
+///   `$field` by default) and makes the field's own fill transparent. The
+///   field's text stays the field's, and the layer paints what a field
+///   cannot, such as a fill or a rule under a run.
+/// - `above` is over the field and ignores the pointer. The layer's text is
+///   transparent, so a run opts in with a color. `ink: "layer"` makes the
+///   field's glyphs transparent and the layer paints them.
+///
+/// Nothing in the layer may change a glyph's width (no horizontal padding,
+/// no bold, no letter spacing), or it drifts from the field. The layer's
+/// `left` and `top` are physical because the script sets them from
+/// measurements.
+/// @access private
+/// @group components
+@mixin input-layer {
+  // A stacking context, so that the layer can sit behind the field's text
+  // and still in front of the host's own fill.
+  .#{$prefix}--input-layer-host {
+    isolation: isolate;
+  }
+
+  .#{$prefix}--input-layer {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    color: transparent;
+    forced-color-adjust: none;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--input-layer--behind {
+    z-index: -1;
+    background-color: var(--ccs-input-layer-fill, #{$field});
+  }
+
+  .#{$prefix}--input-layer--above {
+    z-index: 1;
+  }
+
+  // Built to measure a caret, and gone in two frames.
+  .#{$prefix}--input-layer--measure {
+    z-index: -1;
+    visibility: hidden;
+  }
+
+  .#{$prefix}--input-layer__box {
+    position: absolute;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  // An input centers its one line in its box.
+  .#{$prefix}--input-layer--line .#{$prefix}--input-layer__box {
+    display: flex;
+    align-items: center;
+  }
+
+  // Placed by the script, from the left edge of the box: under `dir="auto"`
+  // the line's own direction decides where it starts, and an offset in the
+  // inline axis would follow it.
+  .#{$prefix}--input-layer--line .#{$prefix}--input-layer__content {
+    position: absolute;
+    left: 0;
+    inline-size: max-content;
+    white-space: pre;
+  }
+
+  .#{$prefix}--input-layer--block .#{$prefix}--input-layer__content {
+    min-inline-size: 0;
+  }
+
+  // The field's side. These win over the field's own rules, state rules such
+  // as `:hover` included, by the doubled attribute selector.
+  .#{$prefix}--input-layer-host
+    [data-ccs-input-layer="behind"][data-ccs-input-layer] {
+    background-color: transparent;
+    // The fill moves to the layer at once, so the field's fade has nothing
+    // to fade to. Its outline still does.
+    transition-property: outline;
+  }
+
+  [data-ccs-input-layer][data-ccs-input-layer-ink="layer"] {
+    caret-color: var(--ccs-input-layer-caret, #{$text-primary});
+    color: transparent;
+  }
+
+  // Forced colors keep one color for text, so the field shows its own glyphs
+  // in the system color and the layer paints none. What stays is what a
+  // glyph's color does not carry: a rule, an underline, a border.
+  @media (forced-colors: active) {
+    [data-ccs-input-layer][data-ccs-input-layer-ink="layer"] {
+      caret-color: auto;
+      color: CanvasText;
+    }
+
+    .#{$prefix}--input-layer--ink .#{$prefix}--input-layer__content {
+      -webkit-text-fill-color: transparent;
+    }
+
+    .#{$prefix}--input-layer--behind {
+      background-color: transparent;
+    }
+  }
+}
+
+@include exports("input-layer") {
+  @include input-layer;
+}

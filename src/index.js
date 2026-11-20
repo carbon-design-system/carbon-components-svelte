@@ -336,6 +336,12 @@ export { fuzzyMatch, highlightSegments } from "./utils/fuzzy-match.js";
 export { groupChatMessages } from "./utils/group-chat-messages.js";
 export { getInitials } from "./utils/initials.js";
 export {
+  caretRect,
+  createInputLayer,
+  inputLayer,
+  rangeRects,
+} from "./utils/input-layer.js";
+export {
   formatShortcut,
   matchesShortcut,
   onShortcut,
