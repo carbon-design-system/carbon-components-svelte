@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>filter-panel</title>
+    <g id="filter-panel" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="96" y="30" width="128" height="120" fill="var(--cds-layer-01, #f4f4f4)"></rect>
+        <rect x="108" y="42" width="48" height="6" fill="var(--cds-text-primary, #161616)"></rect>
+        <g id="options">
+            <rect x="108.5" y="62.5" width="13" height="13" fill="var(--cds-background, #ffffff)" stroke="var(--cds-border-strong-01, #8d8d8d)"></rect>
+            <rect x="130" y="66" width="44" height="5" fill="var(--cds-text-secondary, #525252)"></rect>
+            <rect x="196" y="66" width="12" height="5" fill="var(--cds-border-strong-01, #8d8d8d)"></rect>
+            <rect x="108" y="86" width="14" height="14" fill="var(--cds-icon-primary, #161616)"></rect>
+            <rect x="130" y="90" width="56" height="5" fill="var(--cds-text-primary, #161616)"></rect>
+            <rect x="196" y="90" width="12" height="5" fill="var(--cds-border-strong-01, #8d8d8d)"></rect>
+            <rect x="108.5" y="110.5" width="13" height="13" fill="var(--cds-background, #ffffff)" stroke="var(--cds-border-strong-01, #8d8d8d)"></rect>
+            <rect x="130" y="114" width="36" height="5" fill="var(--cds-text-secondary, #525252)"></rect>
+            <rect x="196" y="114" width="12" height="5" fill="var(--cds-border-strong-01, #8d8d8d)"></rect>
+        </g>
+        <rect x="108" y="136" width="56" height="4" fill="var(--cds-link-primary, #0f62fe)"></rect>
+    </g>
+</svg>
