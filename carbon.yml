@@ -791,6 +791,19 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/LocalStorage
     tags:
       - input-control
+  markdown:
+    name: Markdown
+    description: Draws Markdown, such as a model's reply as it streams in, as plain elements, parsing only what is new.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/markdown.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/Markdown
   menu:
     name: Menu
     status: stable
