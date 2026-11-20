@@ -23,6 +23,7 @@ import PinCodeInput from "carbon-components-svelte/PinCodeInput/PinCodeInput.sve
 import RadioButton from "carbon-components-svelte/RadioButton/RadioButton.svelte";
 import Search from "carbon-components-svelte/Search/Search.svelte";
 import SearchMenu from "carbon-components-svelte/SearchMenu/SearchMenu.svelte";
+import SignaturePad from "carbon-components-svelte/SignaturePad/SignaturePad.svelte";
 import RangeSlider from "carbon-components-svelte/Slider/RangeSlider.svelte";
 import Slider from "carbon-components-svelte/Slider/Slider.svelte";
 import StarRating from "carbon-components-svelte/StarRating/StarRating.svelte";
@@ -253,6 +254,18 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(PinCodeInput, {
         props: { labelText: "Code", helperText: "Check your email", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "SignaturePad",
+    render: (attrs) =>
+      render(SignaturePad, {
+        props: {
+          labelText: "Signature",
+          helperText: "Sign to approve",
+          ...attrs,
+        },
       }),
     target: () => screen.getByRole("group"),
   },

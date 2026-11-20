@@ -1154,6 +1154,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/SidePanel
+  signature-pad:
+    name: Signature pad
+    description: A field that captures a signature by drawing, typing the signer's name, or uploading a picture, and returns it as SVG or PNG.
+    status: experimental
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/signature-pad.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SignaturePad
   skeleton-icon:
     name: Skeleton icon
     status: stable
