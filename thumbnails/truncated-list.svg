@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>truncated-list</title>
+    <g id="truncated-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="first-name" fill="var(--cds-icon-primary, #161616)" x="88" y="82" width="40" height="8"></rect>
+        <rect id="first-comma" fill="var(--cds-icon-primary, #161616)" x="130" y="88" width="2" height="4"></rect>
+        <rect id="second-name" fill="var(--cds-icon-primary, #161616)" x="138" y="82" width="36" height="8"></rect>
+        <rect id="conjunction" fill="var(--cds-text-disabled, #c6c6c6)" x="182" y="82" width="16" height="8"></rect>
+        <rect id="more" fill="var(--cds-background-brand, #0f62fe)" x="206" y="82" width="26" height="8"></rect>
+        <rect id="more-underline" fill="var(--cds-background-brand, #0f62fe)" x="206" y="92" width="26" height="1"></rect>
+    </g>
+</svg>

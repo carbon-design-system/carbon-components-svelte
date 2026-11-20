@@ -1,0 +1,276 @@
+---
+components: ["TruncatedList"]
+description: TruncatedList joins names or tags into one locale-correct sentence, such as "Ada Lovelace, Grace Hopper, and 3 more", and reveals the rest from a "more" button.
+---
+
+<script>
+  import { Box, Stack, Tag, Text, TruncatedList } from "carbon-components-svelte";
+
+  const assignees = [
+    "Ada Lovelace",
+    "Grace Hopper",
+    "Alan Turing",
+    "Edsger Dijkstra",
+    "Barbara Liskov",
+  ];
+
+  const reviewers = assignees.map((label) => ({
+    label,
+    href: `/people/${label.toLowerCase().replace(" ", "-")}`,
+  }));
+
+  const labels = ["bug", "regression", "accessibility", "needs-design", "good-first-issue", "docs"];
+
+  const recipients = [
+    "ada@analytical.example",
+    "grace@navy.example",
+    "alan@bletchley.example",
+    "edsger@tue.example",
+    "barbara@mit.example",
+    "margaret@nasa.example",
+  ];
+
+  const german = ["Anna Müller", "Jonas Schmidt", "Lena Fischer", "Paul Weber"];
+  const japanese = ["山田 太郎", "佐藤 花子", "鈴木 一郎", "田中 美咲"];
+  const chinese = ["王伟", "李娜", "张敏", "刘洋"];
+  const arabic = ["أحمد علي", "فاطمة حسن", "محمد خالد", "ليلى سعيد"];
+
+  const translations = {
+    de: { "more.one": "{count} weiterer", "more.other": "{count} weitere" },
+    ja: { "more.other": "他{count}件" },
+    zh: { "more.other": "另外{count}人" },
+    ar: {
+      "more.one": "{count} آخر",
+      "more.two": "{count} آخران",
+      "more.few": "{count} آخرين",
+      "more.many": "{count} آخرين",
+      "more.other": "{count} آخرين",
+    },
+  };
+  const translate = (locale) => (id) => translations[locale][id];
+
+  const thousand = Array.from({ length: 1000 }, (_, i) => `Person ${i + 1}`);
+</script>
+
+## Basic
+
+Pass `items` and the list shows the first `max` of them (3 by default), then one "more" element for the rest. The words and punctuation come from [`Intl.ListFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat), so the sentence follows the language: no separate string to translate for "and", and no hand-built comma rules.
+
+The "more" element is a button that opens a toggletip with the hidden items. Screen readers also read the hidden items in the sentence, without opening it.
+
+<Text>Assigned to <TruncatedList items={assignees} /></Text>
+
+TruncatedList shows names and tags as text in a sentence. For tags that keep their color and close button, use [TagSet](/components/TagSet). For a row of avatars with a "+N" chip, use [UserAvatarGroup](/components/UserAvatarGroup).
+
+| Use | When |
+| --- | --- |
+| TruncatedList | The people or tags read as part of a sentence, in a row, a card or a table cell |
+| [TagSet](/components/TagSet) | Each item is a `Tag` with its own color, filter or action |
+| [UserAvatarGroup](/components/UserAvatarGroup) | Each item is a face, and the count is a chip |
+| [Truncate](/components/Truncate) | One string is too long, not a list of items |
+
+## Items
+
+### Strings
+
+A string is the label.
+
+<Text><TruncatedList items={labels} max={4} /></Text>
+
+### Links
+
+An item can be `{ label, href }`. The label becomes a link, in the sentence and in the toggletip.
+
+<Text>Reviewed by <TruncatedList items={reviewers} max={2} /></Text>
+
+### Custom items
+
+Use the `item` slot to render each item yourself, in the sentence and in the toggletip. The slot gets `item`, its `label` and its `index` in `items`.
+
+<Text>
+  Labels
+  <TruncatedList items={labels} max={3}>
+    <svelte:fragment slot="item" let:label>
+      <Tag size="sm" type="gray">{label}</Tag>
+    </svelte:fragment>
+  </TruncatedList>
+</Text>
+
+## Count
+
+`max` is the number of items shown. Set `max` to `Infinity` to show every item. When `items` holds no more than `max`, the sentence reads in full and no "more" button shows.
+
+### Max
+
+<Stack gap={3}>
+  <TruncatedList items={assignees} max={1} />
+  <TruncatedList items={assignees} max={2} />
+  <TruncatedList items={assignees} max={4} />
+  <TruncatedList items={assignees} max={5} />
+</Stack>
+
+### A thousand items
+
+The sentence renders `max` items, and the toggletip builds its list the first time it opens, so the page holds three items until someone asks for the rest.
+
+<Text><TruncatedList items={thousand} max={3} /></Text>
+
+## Width
+
+### Fit
+
+Set `fit="width"` to show as many items as fit on one line, up to `max`. The list fills the line, so its width never depends on its text, and it fits again when the container resizes. Set `max` to `Infinity` to let the width alone decide.
+
+An offscreen copy of the line measures each candidate sentence, doubling the count and then halving it, so a thousand items are settled by measuring a few. The visible list is left alone while it measures.
+
+<Box maxWidth="22rem">
+  <TruncatedList items={recipients} max={Infinity} fit="width" />
+</Box>
+
+<Box maxWidth="30rem">
+  <TruncatedList items={recipients} max={Infinity} fit="width" />
+</Box>
+
+### Server rendering
+
+The server has no width, so it renders `max` items and the client fits on mount. Pass a `max` close to what fits, so the first paint is close to the fitted one. The line is one line tall in both, so the page below it does not shift.
+
+### Clipped first item
+
+The first item always shows. When it alone is wider than the line, it is clipped with an ellipsis, and the whole list moves into the element's `title`.
+
+<Box maxWidth="6rem">
+  <TruncatedList items={assignees} max={Infinity} fit="width" />
+</Box>
+
+## Overflow
+
+Set `overflow` to choose how the "more" element reveals the hidden items.
+
+### Popover
+
+The default. The "more" element is a button that opens a toggletip of the hidden items. <DocKbd label="Escape" /> closes it and keeps focus on the button. Bind `open` to read or set it.
+
+<Text><TruncatedList items={assignees} max={2} overflow="popover" /></Text>
+
+### Expand
+
+The "more" element is a button that shows every item in place, with a "Show less" button to collapse them. Bind `expanded` to read or set it. Focus moves to the button that replaces the one pressed.
+
+<Box maxWidth="22rem">
+  <TruncatedList items={assignees} max={2} overflow="expand" />
+</Box>
+
+### Title
+
+The hidden items go in the browser's tooltip. Touch and keyboard users cannot open it, so use it only where the list is a hint.
+
+<Text><TruncatedList items={assignees} max={2} overflow="title" /></Text>
+
+### None
+
+Only the count. Use it where the full list is one click away, such as the row's detail page.
+
+<Text><TruncatedList items={assignees} max={2} overflow="none" /></Text>
+
+## Joining
+
+`type` and `listStyle` are `Intl.ListFormat`'s `type` and `style`. The prop is named `listStyle` so `style` stays the element's own attribute.
+
+### Type
+
+<Stack gap={3}>
+  <TruncatedList items={assignees} max={2} type="conjunction" />
+  <TruncatedList items={assignees} max={2} type="disjunction" />
+  <TruncatedList items={assignees} max={2} type="unit" />
+</Stack>
+
+### List style
+
+<Stack gap={3}>
+  <TruncatedList items={assignees} max={2} listStyle="long" />
+  <TruncatedList items={assignees} max={2} listStyle="short" />
+  <TruncatedList items={assignees} max={2} listStyle="narrow" />
+</Stack>
+
+## Locale
+
+Set `locale` to a BCP 47 tag. It is never read from the browser, so the server and the client render the same sentence. An invalid tag falls back to `"en"`.
+
+The conjunction, separators and their order come from the locale. The text of the "more" element is yours: set `translateWithId`. Its `"more.other"` is a template with `{count}`, which shows the number in the locale's digits. A language with other plural forms adds `"more.one"`, `"more.few"` and so on; one you leave out falls back to `"more.other"`. The `"less"` id is the text of the "Show less" button.
+
+<Stack gap={3}>
+  <TruncatedList items={assignees} max={2} locale="en-GB" />
+  <TruncatedList items={german} max={2} locale="de" translateWithId={translate("de")} />
+  <TruncatedList items={japanese} max={2} locale="ja" translateWithId={translate("ja")} />
+  <TruncatedList items={chinese} max={2} locale="zh" translateWithId={translate("zh")} />
+  <TruncatedList items={arabic} max={2} locale="ar" translateWithId={translate("ar")} />
+</Stack>
+
+The list takes the direction of its locale, as RelativeTime does, and each item sits in its own `<bdi>`, so a Latin name in an Arabic sentence keeps its punctuation in place.
+
+| Locale | Notes |
+| --- | --- |
+| `en` | Serial comma: "A, B, and 3 more". `en-GB` drops it. |
+| `de` | "A, B und 3 weitere" |
+| `ja`, `zh` | No spaces: "A、B、他3件", "A、B和另外3人". With `type="conjunction"`, `ja` has no conjunction word. |
+| `ar` | Right to left. The conjunction attaches to the next word: "A وB و3 آخرين". |
+
+Names joined with `type="unit"` and `listStyle="narrow"` run together in `ja` and `zh`, with no separator, so use `"long"` for names.
+
+## Accessibility
+
+The sentence stays in the page for assistive technology. A visually hidden copy of the hidden items follows the "more" element, so a screen reader reads every item without opening anything. The "more" button's name is its visible text.
+
+| Do | Why |
+| --- | --- |
+| Keep the visible count in the button's name | Speech-input users say "click 3 more" |
+| Leave `overflow="popover"` or `"expand"` when the hidden items matter | `"title"` and `"none"` offer a sighted keyboard user nothing to press |
+| Give the list a name with `aria-label` when the sentence needs one | A label makes the element a `group`; a bare `span` cannot be named |
+| Pass `href` for items that go somewhere | A link in the sentence stays a link for a screen reader |
+
+## Examples
+
+### Assignees
+
+<Box maxWidth="28rem">
+  <Text>
+    <strong>Assigned to</strong>
+    <TruncatedList items={reviewers} max={2} />
+  </Text>
+</Box>
+
+### Tags
+
+<Box maxWidth="28rem">
+  <Text>
+    <strong>Labels</strong>
+    <TruncatedList items={labels} max={3} overflow="expand" listStyle="narrow" type="unit" />
+  </Text>
+</Box>
+
+### Recipients
+
+<Box maxWidth="28rem">
+  <Text>
+    <strong>To</strong>
+    <TruncatedList items={recipients} max={Infinity} fit="width" type="disjunction" overflow="title" />
+  </Text>
+</Box>
+
+## Formatting without the component
+
+`formatListParts(items, { max, locale, type, style, formatMore })` returns the sentence as parts, so you can render it your own way. An `item` part has its `item` and `index`, the `more` part has its `count`, and the text between is a `literal`.
+
+```js
+import { formatListParts } from "carbon-components-svelte";
+
+formatListParts(["Ada", "Grace", "Alan", "Edsger"], { max: 2, locale: "de" });
+// [
+//   { type: "item", value: "Ada", item: "Ada", index: 0 },
+//   { type: "literal", value: ", " },
+//   { type: "item", value: "Grace", item: "Grace", index: 1 },
+//   { type: "literal", value: " und " },
+//   { type: "more", value: "2 more", count: 2 },
+// ]
+```

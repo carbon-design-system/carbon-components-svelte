@@ -1,0 +1,111 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// TruncatedList: a sentence of items that ends in a "3 more" button.
+/// @access private
+/// @group components
+@mixin truncated-list {
+  // Fitting to the width: the line fills its container, so its own width
+  // never depends on its text, and a refit cannot change what it measures.
+  // A first item wider than the line is clipped with an ellipsis.
+  .#{$prefix}--truncated-list--fit {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    min-inline-size: 0;
+    inline-size: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // An offscreen copy of the line, where the fit reads the width of a
+  // sentence. It sits in the line so it takes the line's font and
+  // direction, and `contain` keeps what it lays out to itself.
+  .#{$prefix}--truncated-list__measure {
+    position: absolute;
+    contain: layout style;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: max-content;
+    pointer-events: none;
+    visibility: hidden;
+    white-space: nowrap;
+  }
+
+  // The "3 more" button, and the toggletip's button, read as links in the
+  // running text: the text's own font, the link color and an underline, so
+  // color is not the only mark.
+  .#{$prefix}--truncated-list__button,
+  .#{$prefix}--truncated-list .#{$prefix}--toggletip-button {
+    display: inline;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    color: $link-primary;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
+    text-decoration: underline;
+  }
+
+  // Both stay flex boxes, which drop the whitespace Toggletip's markup
+  // leaves inside them.
+  .#{$prefix}--truncated-list .#{$prefix}--toggletip-container {
+    align-items: baseline;
+    vertical-align: baseline;
+  }
+
+  // Links keep the text's font, too, so a line measures as it renders.
+  .#{$prefix}--truncated-list .#{$prefix}--link {
+    font: inherit;
+    letter-spacing: inherit;
+  }
+
+  .#{$prefix}--truncated-list__button:focus,
+  .#{$prefix}--truncated-list .#{$prefix}--toggletip-button:focus {
+    @include focus-outline("outline");
+  }
+
+  // The hidden items, as a list in the toggletip. A long one scrolls, and
+  // takes a tab stop (set where it overflows) so a keyboard can scroll it.
+  .#{$prefix}--truncated-list__list {
+    display: grid;
+    overflow-y: auto;
+    max-block-size: to-rem(240px);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    overscroll-behavior: contain;
+    overflow-wrap: anywhere;
+    row-gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--truncated-list__list:focus {
+    @include focus-outline("outline");
+  }
+
+  // The button's own text takes the button color in forced colors, which
+  // would drop the link color it has here.
+  @media (forced-colors: active) {
+    .#{$prefix}--truncated-list__button,
+    .#{$prefix}--truncated-list .#{$prefix}--toggletip-button {
+      color: LinkText;
+    }
+  }
+
+  // Hover only where a pointer can hover, so a tap does not leave it stuck.
+  // After the focus rules, so their outline is not erased.
+  @media (any-hover: hover) {
+    .#{$prefix}--truncated-list__button:hover,
+    .#{$prefix}--truncated-list .#{$prefix}--toggletip-button:hover {
+      color: $link-primary-hover;
+    }
+  }
+}
+
+@include exports("truncated-list") {
+  @include truncated-list;
+}
