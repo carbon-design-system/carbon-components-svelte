@@ -1,0 +1,270 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/layout/breakpoint";
+@import "carbon-components/scss/globals/scss/typography";
+
+/// DashboardGrid: widgets placed on a column grid with CSS grid. The server
+/// writes each widget's cell for every breakpoint as `--ccs-dg-<breakpoint>`
+/// (`row / column / span rows / span columns`), and the grid's columns as
+/// `--ccs-dashboard-grid-cols-<breakpoint>`, so the media queries here pick
+/// the layout and the first paint needs no script. A breakpoint that
+/// declares no cell for a widget keeps the one below. Rows have a fixed
+/// height, so a widget's content scrolls inside it.
+///
+/// A widget that is being dragged or resized keeps its grid cell as the
+/// placeholder, and its card leaves the flow and follows the pointer.
+/// @access private
+/// @group components
+@mixin dashboard-grid {
+  .#{$prefix}--dashboard-grid {
+    position: relative;
+    display: grid;
+    grid-auto-rows: var(--ccs-dashboard-grid-row-height, #{to-rem(96px)});
+    grid-template-columns: repeat(
+      var(--ccs-dashboard-grid-cols-sm, 4),
+      minmax(0, 1fr)
+    );
+    gap: var(--ccs-dashboard-grid-gap, #{$carbon--spacing-05});
+  }
+
+  .#{$prefix}--dashboard-grid__item {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    grid-area: var(--ccs-dg-sm, auto);
+  }
+
+  // Each breakpoint reads its own cell, then the one below.
+  $columns: map-get(map-get($carbon--grid-breakpoints, sm), columns);
+  $cell: var(--ccs-dg-sm, auto);
+  $grid-columns: var(--ccs-dashboard-grid-cols-sm, #{$columns});
+  @each $bp in (md, lg, xlg, max) {
+    $columns: map-get(map-get($carbon--grid-breakpoints, $bp), columns);
+    $cell: var(--ccs-dg-#{$bp}, #{$cell});
+    $grid-columns: var(--ccs-dashboard-grid-cols-#{$bp}, #{$columns});
+
+    @include carbon--breakpoint($bp) {
+      .#{$prefix}--dashboard-grid {
+        grid-template-columns: repeat(#{$grid-columns}, minmax(0, 1fr));
+      }
+
+      .#{$prefix}--dashboard-grid__item {
+        grid-area: #{$cell};
+      }
+    }
+  }
+
+  .#{$prefix}--dashboard-grid--interacting {
+    user-select: none;
+  }
+
+  // The card fills the cell. A card being dragged leaves the flow, and the
+  // component pins its size and moves it with a transform.
+  .#{$prefix}--dashboard-grid__frame {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .#{$prefix}--dashboard-grid__frame[data-lifted] {
+    position: absolute;
+    z-index: z("floating");
+    top: 0;
+    @include ccs-inset-inline($start: 0);
+    box-shadow: 0 $carbon--spacing-02 $carbon--spacing-05 $overlay;
+    outline: 2px solid $focus;
+    outline-offset: -2px;
+    will-change: transform;
+  }
+
+  // The widget's own cell shows where it will land.
+  .#{$prefix}--dashboard-grid__item--placeholder {
+    background-color: $layer-selected;
+    outline: 2px dashed $focus;
+    outline-offset: -2px;
+  }
+
+  .#{$prefix}--dashboard-grid__header {
+    display: flex;
+    min-height: $carbon--spacing-08;
+    flex: none;
+    align-items: center;
+    padding-inline: $carbon--spacing-03 $carbon--spacing-05;
+    gap: $carbon--spacing-03;
+  }
+
+  .#{$prefix}--dashboard-grid__title {
+    @include type-style("heading-compact-01");
+
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--dashboard-grid__title > * {
+    margin: 0;
+  }
+
+  .#{$prefix}--dashboard-grid__actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: $carbon--spacing-02;
+  }
+
+  // A finger on the handle drags; anywhere else in the widget it scrolls.
+  // The icon takes no pointer events, so a touch press captures the handle
+  // and not the icon inside it.
+  .#{$prefix}--dashboard-grid__handle {
+    @include button-reset($width: false, $omit: (display, cursor));
+
+    display: inline-flex;
+    width: $carbon--spacing-07;
+    height: $carbon--spacing-07;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    color: $icon-secondary;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--dashboard-grid__handle svg {
+    pointer-events: none;
+  }
+
+  .#{$prefix}--dashboard-grid__handle:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--dashboard-grid__frame[data-lifted] .#{$prefix}--dashboard-grid__handle {
+    cursor: grabbing;
+  }
+
+  .#{$prefix}--dashboard-grid__body {
+    min-width: 0;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 0 $carbon--spacing-05 $carbon--spacing-05;
+  }
+
+  .#{$prefix}--dashboard-grid__body--no-padding {
+    padding: 0;
+  }
+
+  // Strips along the end and bottom edges and a corner grip. Each takes a
+  // press for itself, and none takes space.
+  .#{$prefix}--dashboard-grid__resize {
+    position: absolute;
+    z-index: 1;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .#{$prefix}--dashboard-grid__resize--inline {
+    top: 0;
+    bottom: $carbon--spacing-05;
+    width: $carbon--spacing-03;
+    cursor: ew-resize;
+    @include ccs-inset-inline($end: 0);
+  }
+
+  .#{$prefix}--dashboard-grid__resize--block {
+    bottom: 0;
+    height: $carbon--spacing-03;
+    cursor: ns-resize;
+    @include ccs-inset-inline(0, $carbon--spacing-05);
+  }
+
+  .#{$prefix}--dashboard-grid__resize--corner {
+    bottom: 0;
+    width: $carbon--spacing-05;
+    height: $carbon--spacing-05;
+    cursor: nwse-resize;
+    @include ccs-inset-inline($end: 0);
+
+    [dir="rtl"] & {
+      cursor: ccs-dir(nwse-resize, nesw-resize);
+    }
+
+    // Two edges of a square: a corner that sits at the inline end in either
+    // direction, and shows in forced colors, where a fill would not.
+    &::after {
+      position: absolute;
+      bottom: $carbon--spacing-02;
+      width: $carbon--spacing-03;
+      height: $carbon--spacing-03;
+      border-bottom: 2px solid $icon-secondary;
+      border-inline-end: 2px solid $icon-secondary;
+      content: "";
+      @include ccs-inset-inline($end: $carbon--spacing-02);
+    }
+  }
+
+  // A finger needs larger targets than a pointer.
+  @media (pointer: coarse) {
+    .#{$prefix}--dashboard-grid__resize--inline {
+      width: $carbon--spacing-05;
+      bottom: $carbon--spacing-07;
+    }
+
+    .#{$prefix}--dashboard-grid__resize--block {
+      height: $carbon--spacing-05;
+      @include ccs-inset-inline(0, $carbon--spacing-07);
+    }
+
+    .#{$prefix}--dashboard-grid__resize--corner {
+      width: $carbon--spacing-07;
+      height: $carbon--spacing-07;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--dashboard-grid__item--placeholder {
+      background-color: Canvas;
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--dashboard-grid__frame[data-lifted] {
+      outline-color: Highlight;
+    }
+
+    .#{$prefix}--dashboard-grid__handle {
+      color: ButtonText;
+    }
+
+    .#{$prefix}--dashboard-grid__resize--corner::after {
+      border-color: ButtonText;
+    }
+  }
+
+  @media (any-hover: hover) {
+    .#{$prefix}--dashboard-grid__handle:hover {
+      background-color: $layer-hover;
+      color: $icon-primary;
+    }
+
+    .#{$prefix}--dashboard-grid__resize--inline:hover {
+      border-inline-end: 2px solid $border-interactive;
+    }
+
+    .#{$prefix}--dashboard-grid__resize--block:hover {
+      border-bottom: 2px solid $border-interactive;
+    }
+  }
+}
+
+@include exports("dashboard-grid") {
+  @include dashboard-grid;
+}

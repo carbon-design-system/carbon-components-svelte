@@ -45,6 +45,7 @@ export const COMPONENT_CATEGORIES: ComponentCategory[] = [
       "Divider",
       "Carousel",
       "Splitter",
+      "DashboardGrid",
       "LayoutDirection",
     ],
   },

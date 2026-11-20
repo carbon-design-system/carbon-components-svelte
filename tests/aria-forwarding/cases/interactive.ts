@@ -10,6 +10,7 @@ import ConfirmModal from "carbon-components-svelte/ConfirmModal/ConfirmModal.sve
 import CopyButton from "carbon-components-svelte/CopyButton/CopyButton.svelte";
 import CopyText from "carbon-components-svelte/CopyText/CopyText.svelte";
 import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
+import DashboardGrid from "carbon-components-svelte/DashboardGrid/DashboardGrid.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
@@ -48,6 +49,7 @@ import ClickableTile from "../fixtures/ClickableTile.test.svelte";
 import ComposedModal from "../fixtures/ComposedModal.test.svelte";
 import ContextMenu from "../fixtures/ContextMenu.test.svelte";
 import ContextMenuOption from "../fixtures/ContextMenuOption.test.svelte";
+import DashboardGridItem from "../fixtures/DashboardGridItem.test.svelte";
 import InterstitialScreen from "../fixtures/InterstitialScreen.test.svelte";
 import InterstitialScreenBody from "../fixtures/InterstitialScreenBody.test.svelte";
 import Link from "../fixtures/Link.test.svelte";
@@ -131,6 +133,20 @@ export const interactive: AriaEntry[] = [
     variant: "href",
     render: (attrs) => render(Card, { props: { href: "/report", ...attrs } }),
     target: () => screen.getByRole("link"),
+  },
+  {
+    name: "DashboardGrid",
+    render: (attrs) => render(DashboardGrid, { props: attrs }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "DashboardGridItem",
+    render: (attrs) => render(DashboardGridItem, { props: attrs }),
+    // The grid is a group too, so take the widget's by its id.
+    target: () =>
+      document.querySelector<HTMLElement>(
+        "[data-dashboard-grid-item]",
+      ) as HTMLElement,
   },
   {
     name: "CarouselItem",

@@ -1,0 +1,104 @@
+---
+components: ["DashboardGrid", "DashboardGridItem"]
+description: A dashboard grid lays out widgets on a column grid that the user can rearrange by dragging and resizing, by pointer, touch or keyboard.
+---
+
+## Basic
+
+Each `DashboardGridItem` is a widget. Place it with the `layout` array: an item per widget, with the widget's `id`, the cell of its first corner (`x` and `y`, counted from 0 at the inline start and the top), and its size in cells (`w` and `h`). Set `cols` to a number for a grid with that many columns at every width, and `rowHeight` and `gap` in px. A row has a fixed height, so a widget's content scrolls inside it.
+
+Drag a widget by its handle, resize it by its end edge, bottom edge or corner, or use the keyboard. Bind `layout` to keep the result. The grid never changes your array: it assigns a new one.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridBasic" />
+
+## Responsive
+
+Leave `cols` unset, or set it to an object keyed by breakpoint, and give `layouts` instead of `layout`. The columns are the Carbon grid's at each breakpoint: 4 at `sm`, 8 at `md`, and 16 from `lg` up. Give a layout for each breakpoint, or only for some. A breakpoint without one takes the layout of the nearest larger breakpoint, fitted to its columns and stacked, so a layout written for a wide screen reads well on a narrow one.
+
+A move or resize changes only the layout of the breakpoint the user sees. Resize the window to see the widgets reflow.
+
+The server writes every breakpoint's cell, and CSS media queries pick the one that applies, so the first paint is the final layout at any width. Nothing waits for the browser to measure, and nothing moves once the script has loaded.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridResponsive" />
+
+## Layout
+
+### Compaction and collisions
+
+With `compact="vertical"`, the default, every widget rests against the top or the widget above it, so no gap opens when one moves away. With `compact="none"`, a widget stays where you put it, gaps included.
+
+When a widget lands on others, `collision="push"`, the default, moves them down and out of its way. With `collision="prevent"`, the move is refused, and the placeholder stays at the last free cell. Try both below.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridCompaction" />
+
+A widget that is dropped a little onto another keeps its place until its top passes the other's top. Past that point the two swap.
+
+### Size limits and static widgets
+
+Give a layout item `minW`, `maxW`, `minH` and `maxH` to limit how far it resizes. Set `static` to `true` to pin it: it has no handle or edges, and others flow around it. A move that would land on a static widget is refused.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridLimits" />
+
+## Editing
+
+### Edit mode
+
+Set `draggable` and `resizable` to `false` to show the dashboard without the handles and edges, and bind them to a control to switch to editing.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridEditing" />
+
+### Cancel a change
+
+`layoutchange` fires once, when the user drops or resizes a widget, and only if the layout changed. Its `detail` holds the `id` of the widget, the `type` (`"move"` or `"resize"`), the `source` (`"pointer"` or `"keyboard"`), the `breakpoint`, and the new `layout` and `layouts`, in reading order. Call `preventDefault()` to refuse it. The widgets go back to where they were.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridCancel" />
+
+### Without dragging
+
+Not everyone can drag, and a long press on a touch screen is hard. The layout model is a set of pure functions, so a button can do what a drag does. `nudgeLayoutItem` moves a widget to the nearest place in a direction that changes the layout, as an arrow key does. `moveLayoutItem` and `resizeLayoutItem` take a cell and a size, and `compactLayout` settles a layout you wrote by hand.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridButtons" />
+
+## Content
+
+A widget is a card with a header and a body. The body is a [Layer](/components/Layer), so fields and tiles in it sit on the next surface. Put the grid in a `Layer` with `withBackground` so the cards stand out from the page.
+
+Only the handle and the resize edges start a drag. A press anywhere else belongs to the content, so a table, a chart or a form works as it does outside a grid. A finger on the body scrolls the page. Set `noPadding` for content with its own spacing, such as a table.
+
+Give the header content with the `header` slot in place of `titleText`, and add buttons at its inline end with the `actions` slot. A widget without `titleText` needs an `aria-label`.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridContent" />
+
+The title is a [Heading](/components/Heading), so it takes its level from the nearest `Section`. Put the grid in a `Section` below the page's heading.
+
+## Persistence
+
+Bind `layouts` to [LocalStorage](/components/LocalStorage) to keep a user's arrangement. What was stored can be out of date: a release may add a widget or drop one. `reconcileLayout` fits a stored layout to the widgets you have, keeping the places it knows, adding the ones it does not, and ignoring what is not a layout at all.
+
+The server renders the default layout, and the stored one replaces it once the browser has been read, so a returning user sees the widgets move. Hide the grid until you have read storage if that matters more than showing it at once.
+
+<FileSource src="/framed/DashboardGrid/DashboardGridPersist" />
+
+## Keyboard and screen readers
+
+Focus a widget's handle and press <DocKbd label="Enter" /> or <DocKbd label="Space" /> to pick it up. The arrow keys move it one step, <DocKbd label="Shift" /> with an arrow key resizes it by one cell, <DocKbd label="Enter" /> drops it, and <DocKbd label="Escape" /> cancels. Moving focus away also cancels. In right-to-left languages the left and right arrow keys swap, so the arrow that points to the inline end always moves toward it.
+
+A step is not always one cell. A widget compacted against the top falls back from an empty row, and one that moves onto a neighbour is pushed back by it, so the step goes on to the nearest place where the layout changes, such as past the neighbour it swaps with.
+
+A live region announces each step, for example "Moved Revenue to column 3, row 2." Columns and rows count from 1. Every announcement is a function prop, so you can translate it and set the word order: `pickedUpText`, `movedText`, `resizedText`, `droppedText`, `cancelledText` and `blockedText`. Set `handleLabelText` and `instructionsText` for the handle's name and its description.
+
+The resize edges are for pointers and touch only. They are hidden from assistive technology and take no focus, because <DocKbd label="Shift" /> with the arrow keys does the same.
+
+The grid and its widgets are `role="group"`s, and the grid takes its name from `aria-label`. The order of the widgets in the markup is the order of Tab, so list them in reading order. When you render them from the layout with a keyed `{#each}`, keep the array in reading order: the `layout` that `layoutchange` gives you is.
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Give every widget an entry in the layout, with the same `id`. | A widget with no entry has no cell. The grid does not place it for you, because the server could not render where it goes. |
+| Write the layout for your widest breakpoint and leave the narrower ones to be derived. | The derived layouts stack in reading order. Write one by hand only where stacking is wrong. |
+| Keep widgets to rows of a fixed height, and let the content scroll. | The grid never measures its content, so the layout cannot shift as data loads. |
+| Offer a way to move a widget without dragging, such as the buttons above. | Dragging needs a steady pointer, and not everyone has one. |
+| Put the grid in a `Layer` with `withBackground`. | A card is on the layer above the page, and it needs a surface to contrast with. |
+| Bind `layout` or `layouts`, and reconcile what you load. | The grid assigns new arrays and never edits yours, so it stays in step with your state. |
+| Don't make a whole widget draggable. | A press on a table, a chart or a link would start a drag instead of reaching it. |
