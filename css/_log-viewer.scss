@@ -1,0 +1,377 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/colors/colors";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// The 16 ANSI colors for one color scheme, as `--ccs-log-ansi-N`, with the
+/// text color to draw on each as `--ccs-log-ansi-on-N`.
+///
+/// Carbon v11 has no token for a text-safe yellow or orange, and its tag
+/// colors cover only some hues, so these come from the palette. The light set
+/// reads at 4.5:1 on White and Gray 10, and the dark set on Gray 80 and
+/// darker. Normal colors take the darker (light) or lighter (dark) shade and
+/// bright colors the step toward the page's own, so bright still reads.
+/// @param {String} $scheme - `light` or `dark`
+/// @access private
+/// @group components
+@mixin log-viewer-palette($scheme) {
+  $light: (
+    $carbon__gray-100,
+    $carbon__red-70,
+    $carbon__green-70,
+    $carbon__yellow-70,
+    $carbon__blue-70,
+    $carbon__magenta-70,
+    $carbon__cyan-70,
+    $carbon__gray-70,
+    $carbon__gray-60,
+    $carbon__red-60,
+    $carbon__green-60,
+    $carbon__yellow-60,
+    $carbon__blue-60,
+    $carbon__magenta-60,
+    $carbon__cyan-60,
+    $carbon__gray-100
+  );
+  $dark: (
+    $carbon__gray-40,
+    $carbon__red-40,
+    $carbon__green-40,
+    $carbon__yellow-40,
+    $carbon__blue-30,
+    $carbon__magenta-40,
+    $carbon__cyan-30,
+    $carbon__gray-20,
+    $carbon__gray-30,
+    $carbon__red-30,
+    $carbon__green-30,
+    $carbon__yellow-30,
+    $carbon__blue-20,
+    $carbon__magenta-30,
+    $carbon__cyan-20,
+    $carbon__gray-10
+  );
+  $colors: if($scheme == light, $light, $dark);
+  $on: if($scheme == light, $carbon__white-0, $carbon__gray-100);
+
+  @for $index from 1 through 16 {
+    --ccs-log-ansi-#{$index - 1}: #{nth($colors, $index)};
+    --ccs-log-ansi-on-#{$index - 1}: #{$on};
+  }
+}
+
+/// LogViewer: a virtualized log with ANSI colors, search, level filters and a
+/// follow-the-tail mode.
+/// @access private
+/// @group components
+@mixin log-viewer {
+  // The component picks the set from the page behind it: it measures its own
+  // background and adds `--dark`, so a zone of the other scheme inside a page
+  // gets its own set, and the theme sheets stay free of component tokens.
+  // Until it has measured, as on the server, the light set applies.
+  .#{$prefix}--log-viewer {
+    @include log-viewer-palette(light);
+
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    border: 1px solid $border-subtle;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  .#{$prefix}--log-viewer--dark {
+    @include log-viewer-palette(dark);
+  }
+
+  // The toolbar is DataTable's small toolbar: its items fill its height with
+  // no padding, and the search field has no border of its own, so the
+  // toolbar's border is the field's bottom edge. It wraps in a narrow viewer.
+  .#{$prefix}--log-viewer__toolbar {
+    flex: none;
+    border-block-end: 1px solid $border-subtle;
+
+    // Groups sit 16px apart; wrapped rows touch, as each fills its height.
+    .#{$prefix}--toolbar-content {
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      column-gap: $carbon--spacing-05;
+    }
+  }
+
+  // Icon buttons in a group touch, as in DataTable's toolbar.
+  .#{$prefix}--log-viewer__group {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$prefix}--log-viewer__actions {
+    margin-inline-start: auto;
+  }
+
+  // Previous and next stay focusable with no match, as toolbar buttons do,
+  // so arrow keys do not skip them. They look disabled and keep the focus
+  // ring, which Carbon's `--disabled` class removes.
+  .#{$prefix}--log-viewer__group > .#{$prefix}--btn--ghost[aria-disabled="true"] {
+    background-color: transparent;
+    color: $icon-disabled;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}--log-viewer__search {
+    position: relative;
+    min-width: to-rem(224px);
+    flex: 0 1 to-rem(320px);
+  }
+
+  // ToolbarSearch's proportions in a small toolbar: the toolbar places the
+  // magnifier 16px in, so the text starts 48px in. ToolbarSearch gets this
+  // from Search's `xl` size, which also draws a 20px close icon. The end
+  // leaves room for the clear button and the two toggles after it.
+  .#{$prefix}--log-viewer__search .#{$prefix}--search-input {
+    padding-inline-end: to-rem(96px);
+    padding-inline-start: $carbon--spacing-09;
+  }
+
+  .#{$prefix}--log-viewer__search .#{$prefix}--search-close {
+    @include ccs-inset-inline($end: $carbon--spacing-10);
+  }
+
+  .#{$prefix}--log-viewer__search-options {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    display: flex;
+    @include ccs-inset-inline($end: 0);
+  }
+
+  // The count reserves the width of its widest value for the current total,
+  // in `ch` with tabular digits, so stepping from "9 of 12" to "10 of 12"
+  // does not move the arrows after it.
+  .#{$prefix}--log-viewer__count {
+    @include type-style("label-01");
+
+    min-width: max(#{to-rem(56px)}, var(--ccs-log-count-width, 0px));
+    color: $text-secondary;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--log-viewer__body {
+    position: relative;
+    min-height: 0;
+    flex: 1 1 0;
+    overflow: hidden;
+  }
+
+  // Code reads left to right in any language, so the log keeps its direction
+  // on an RTL page and only the toolbar around it flips.
+  .#{$prefix}--log-viewer__scroller {
+    @include type-style("code-02");
+
+    overflow: auto;
+    overflow-anchor: none;
+    background-color: $layer;
+    direction: ltr;
+    overscroll-behavior: contain;
+    tab-size: 4;
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  // A whole pixel of line height, as `code-02`'s 1.43 rounds to 19.98px and
+  // the window places rows at a fixed pitch.
+  .#{$prefix}--log-viewer__line {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    align-items: flex-start;
+    background-color: $layer;
+    line-height: to-rem(20px);
+  }
+
+  .#{$prefix}--log-viewer--wrap .#{$prefix}--log-viewer__line {
+    width: 100%;
+    min-width: 0;
+  }
+
+  // The bar sits on the gutter, which fills the line's height, so a wrapped
+  // line has it beside every row. It is a shadow, which forced colors drop:
+  // the level's text is what tells the levels apart there.
+  .#{$prefix}--log-viewer__line--warn > .#{$prefix}--log-viewer__gutter {
+    box-shadow: inset 3px 0 0 $support-warning;
+  }
+
+  .#{$prefix}--log-viewer__line--error > .#{$prefix}--log-viewer__gutter {
+    box-shadow: inset 3px 0 0 $support-error;
+  }
+
+  .#{$prefix}--log-viewer__line--selected {
+    background-color: $layer-selected;
+  }
+
+  // The gutter stays put while a long line scrolls sideways beneath it. Its
+  // 16px start padding matches the search icon's inset in the toolbar, so
+  // the line numbers and the toolbar share one edge. Its columns have fixed
+  // widths in `ch`, with no tracking, which would make a value wider than
+  // its count of `ch`, so the message starts at one x on every row.
+  .#{$prefix}--log-viewer__gutter {
+    position: sticky;
+    z-index: 1;
+    left: 0;
+    display: flex;
+    flex: none;
+    align-items: flex-start;
+    align-self: stretch;
+    padding-left: $carbon--spacing-05;
+    background-color: inherit;
+    color: $text-secondary;
+    gap: $carbon--spacing-04;
+    letter-spacing: 0;
+    user-select: none;
+  }
+
+  .#{$prefix}--log-viewer__line-number {
+    width: var(--ccs-log-number-width, 4ch);
+    padding: 0;
+    border: 0;
+    margin: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: right;
+
+    &::before {
+      content: attr(data-line);
+    }
+
+    &:focus {
+      @include focus-outline("outline");
+    }
+  }
+
+  .#{$prefix}--log-viewer__line--selected .#{$prefix}--log-viewer__line-number {
+    color: $text-primary;
+    font-weight: 600;
+  }
+
+  .#{$prefix}--log-viewer__time {
+    width: 12ch;
+    flex: none;
+  }
+
+  // The level is text in the time column's style, as wide as the longest
+  // label. Warnings
+  // and errors take the primary text color; their bar carries the status
+  // color, so each status has one color and one label.
+  .#{$prefix}--log-viewer__level {
+    width: calc(var(--ccs-log-level-chars, 5) * 1ch);
+    flex: none;
+  }
+
+  .#{$prefix}--log-viewer__line--warn .#{$prefix}--log-viewer__level,
+  .#{$prefix}--log-viewer__line--error .#{$prefix}--log-viewer__level {
+    color: $text-primary;
+  }
+
+  .#{$prefix}--log-viewer__text {
+    padding: 0 $carbon--spacing-05 0 $carbon--spacing-04;
+    flex: 1 0 auto;
+    white-space: pre;
+  }
+
+  .#{$prefix}--log-viewer--wrap .#{$prefix}--log-viewer__text {
+    min-width: 0;
+    flex: 1 1 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .#{$prefix}--log-viewer__link {
+    color: $link-primary;
+    text-decoration: underline;
+  }
+
+  // The selected row's tint is darker than the layer the link color is
+  // chosen for, so a link in it takes the text color and keeps its underline.
+  .#{$prefix}--log-viewer__line--selected .#{$prefix}--log-viewer__link {
+    color: inherit;
+  }
+
+  .#{$prefix}--log-viewer__mark {
+    background-color: $highlight;
+    color: inherit;
+  }
+
+  // The current match keeps the highlight and adds a focus-colored ring, so
+  // it does not read as ANSI reverse video, which inverts the colors.
+  .#{$prefix}--log-viewer__mark--current {
+    box-shadow: inset 0 0 0 2px $focus;
+  }
+
+  .#{$prefix}--log-viewer__empty {
+    @include type-style("body-compact-01");
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    pointer-events: none;
+  }
+
+  .#{$prefix}--log-viewer__jump {
+    position: absolute;
+    right: 0;
+    bottom: $carbon--spacing-05;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+
+    .#{$prefix}--btn {
+      pointer-events: auto;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .#{$prefix}--log-viewer__mark {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+
+    .#{$prefix}--log-viewer__mark--current {
+      outline: 2px solid CanvasText;
+      text-decoration: underline;
+    }
+
+    .#{$prefix}--log-viewer__line--selected {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    .#{$prefix}--log-viewer__line-number:focus {
+      outline-color: Highlight;
+    }
+  }
+
+}
+
+@include exports("log-viewer") {
+  @include log-viewer;
+}
