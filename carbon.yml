@@ -540,6 +540,18 @@ assets:
     tags:
       - data-display
       - content-element
+  file-preview:
+    name: File preview
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/file-preview.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/FilePreview
   file-uploader:
     status: stable
     framework: svelte
