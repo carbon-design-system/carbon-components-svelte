@@ -1,35 +1,23 @@
 <script context="module">
+  import { indicesToRanges } from "../utils/text-match.js";
+
   /**
-   * Tolerate custom matchers that omit `indices` so highlighting still works.
-   * @param {{ matched?: boolean; indices?: number[] } | null | undefined} result
+   * Tolerate custom matchers that omit `indices` so highlighting still works,
+   * and accept `ranges` in place of them.
+   * @param {{ matched?: boolean; indices?: number[]; ranges?: Array<{ start: number; end: number }> } | null | undefined} result
    */
   function normalizeMatch(result) {
+    const ranges = result?.ranges ?? indicesToRanges(result?.indices);
     return {
       matched: Boolean(result?.matched),
-      indices: result?.indices ?? [],
+      // The `indices` slot prop lists every highlighted character.
+      indices:
+        result?.indices ??
+        ranges.flatMap((r) =>
+          Array.from({ length: r.end - r.start }, (_, i) => r.start + i),
+        ),
+      ranges,
     };
-  }
-
-  /** @param {string} raw */
-  function escapeHtml(raw) {
-    return raw
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  /** @param {Array<{ text: string; match: boolean }>} parts */
-  function segmentsToHtml(parts) {
-    // Build the highlighted label as one HTML string. Rendering matched and
-    // unmatched runs as separate template nodes pads the text with the
-    // whitespace Svelte inserts between siblings, which corrupts the word.
-    return parts
-      .map((part) =>
-        part.match
-          ? `<strong class="bx--search-menu-item__highlight">${escapeHtml(part.text)}</strong>`
-          : escapeHtml(part.text),
-      )
-      .join("");
   }
 </script>
 
@@ -96,8 +84,9 @@
 
   import { createEventDispatcher, getContext, onMount } from "svelte";
   import { readable } from "svelte/store";
-  import { highlightSegments } from "../utils/fuzzy-match.js";
+  import Highlight from "../Highlight/Highlight.svelte";
   import { scrollIntoViewWithin } from "../utils/scroll-into-view-within.js";
+  import { normalizeRanges, splitByRanges } from "../utils/text-match.js";
   import { uniqueId } from "../utils/unique-id.js";
 
   const dispatch = createEventDispatcher();
@@ -121,15 +110,16 @@
   $: effectiveFilter = filter ?? $groupFilter ?? $shouldFilter;
   $: matchResult = text
     ? normalizeMatch($match(text, $query))
-    : { matched: true, indices: [] };
+    : { matched: true, indices: [], ranges: [] };
   $: isFilterable = Boolean(text) && effectiveFilter && !persistent;
   $: shouldRender =
     !text || persistent || !effectiveFilter || matchResult.matched;
   $: highlighted = $highlightedId === id;
-  $: segments = text ? highlightSegments(text, matchResult.indices) : [];
-  // Only the fallback markup reads this; skip the escape/join work when the
-  // consumer renders the default slot.
-  $: labelHtml = text && !$$slots.default ? segmentsToHtml(segments) : "";
+  // Whole characters only: a range that cuts an emoji or a letter and its
+  // marks grows to cover it. The slot reads the runs; the fallback markup reads
+  // the ranges.
+  $: ranges = text ? normalizeRanges(text, matchResult.ranges) : [];
+  $: segments = text && $$slots.default ? splitByRanges(text, ranges) : [];
 
   $: inDividerGroup = group?.divider ?? false;
   $: updateRegistration(shouldRender, isFilterable, inDividerGroup);
@@ -214,7 +204,12 @@
         {segments}
       />
     {:else}
-      {@html labelHtml}
+      <Highlight
+        {text}
+        {ranges}
+        variant="bold"
+        markClass="bx--search-menu-item__highlight"
+      />
     {/if}
   </span>
   {#if iconRight}

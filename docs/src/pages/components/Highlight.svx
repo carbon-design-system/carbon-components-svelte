@@ -1,0 +1,153 @@
+---
+description: Highlight marks the part of a text that matches a search, ignoring case and accents, and builds the marks as text, never HTML.
+---
+
+<script>
+  import { Highlight, Stack } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `text` and the `query` to mark. Each word of the query is marked wherever it occurs. Case, accents and full-width forms are ignored, so `cafe` marks `Café` and `ＣＡＦＥ`. The marks are `mark` elements made from text nodes, so `text` is never read as HTML and needs no escaping.
+
+<FileSource src="/framed/Highlight/HighlightBasic" />
+
+`Highlight` adds no wrapper of its own: the text and the marks sit in the element you place it in, so that element's direction, font and truncation apply.
+
+## Matching
+
+Matching is case and diacritic insensitive, maps back to the original text, and never cuts a character in two: a match inside an emoji, or a letter and its accent, marks the whole character.
+
+| Text | Query | Marks |
+| :--- | :--- | :--- |
+| Café | cafe | Café |
+| İstanbul | istanbul | İstanbul |
+| Straße | strasse | Straße |
+| ＦＵＬＬ | full | ＦＵＬＬ |
+| مَرْحَبًا | مرحبا | مَرْحَبًا |
+
+Set `mode` to choose where a match may begin: `"substring"` anywhere (the default), `"word-start"` at the start of a word, or `"prefix"` at the start of the text. Set `caseSensitive` or `ignoreDiacritics={false}` to tell letters apart.
+
+<Stack gap={3}>
+  <div><Highlight text="Metadata and data stores" query="data" /> (substring)</div>
+  <div><Highlight text="Metadata and data stores" query="data" mode="word-start" /> (word-start)</div>
+  <div><Highlight text="Metadata and data stores" query="meta" mode="prefix" /> (prefix)</div>
+  <div><Highlight text="Café cafe" query="cafe" ignoreDiacritics={false} /> (ignoreDiacritics false)</div>
+  <div><Highlight text="Café cafe" query="Cafe" caseSensitive /> (caseSensitive)</div>
+</Stack>
+
+Pass an array as `query` to mark each entry as it is, such as a phrase that contains a space.
+
+<Highlight text="in New York and New Jersey" query={["new york"]} />
+
+To mark what another matcher found, pass `ranges` instead of `query`. `fuzzyMatchText` matches the letters of a query in order, scores the match, and returns ranges into the original text.
+
+<Stack gap={3}>
+  <div><Highlight text="Data Store for Memcache" ranges={[{ start: 0, end: 1 }, { start: 5, end: 6 }, { start: 15, end: 16 }]} /> (ranges)</div>
+</Stack>
+
+## Appearance
+
+The match is filled with the theme's `highlight` token, which follows Gray 100 and the other themes. Set `variant` to `"bold"` for heavier type with no fill, as the [SearchMenu](/components/SearchMenu) items show.
+
+<Stack gap={3}>
+  <div><Highlight text="Café au lait" query="cafe" /> (background)</div>
+  <div><Highlight text="Café au lait" query="cafe" variant="bold" /> (bold)</div>
+</Stack>
+
+Under forced colors, the match uses the `Mark` and `MarkText` system colors, so it stays readable.
+
+Override `--ccs-highlight-background` and `--ccs-highlight-color` to restyle every match inside an element.
+
+| Do | Why |
+| :--- | :--- |
+| Use `"background"` for Arabic and other cursive scripts | A heavier weight in the middle of a word breaks the joined letters; a fill does not |
+| Keep the fill to the `highlight` token | It follows themes and keeps text contrast above 4.5:1 |
+| Leave the mark with no padding or border | Padding breaks the joining of cursive letters at the edge of the mark |
+
+## Right-to-left text
+
+A match inside right-to-left text, or a Latin term inside Arabic or Hebrew text, is marked without changing the reading order: `Highlight` sets no `dir` or `unicode-bidi`, so the mark is part of the same bidirectional run as its neighbors, and the text lays out as it would unmarked. Put it in an element with the text's `dir`.
+
+<Stack gap={3}>
+  <div dir="rtl" lang="ar"><Highlight text="هذا نص عربي فيه كلمة hello في الوسط" query="hello" /></div>
+  <div dir="rtl" lang="he"><Highlight text="זהו טקסט בעברית עם המילה hello באמצע" query="hello" /></div>
+  <div dir="rtl" lang="ar"><Highlight text="مرحبا بالعالم" query="رحب" /></div>
+</Stack>
+
+## In a ComboBox
+
+Use the same matcher to filter the items and to mark them in the default slot. Bind `value` to read the typed text.
+
+<FileSource src="/framed/Highlight/HighlightComboBox" />
+
+## In a SearchMenu
+
+[SearchMenu](/components/SearchMenu) already marks the match of each item with `Highlight`. Its default matcher compares lowercase letters. A custom `match` may return `ranges` in place of `indices`, so `fuzzyMatchText` makes the menu ignore accents too.
+
+<FileSource src="/framed/Highlight/HighlightSearchMenu" />
+
+## Snippets
+
+`textSnippet` cuts a long text down to the parts around its matches. Each match keeps `context` characters on both sides, the edges move in to word boundaries, and an ellipsis marks what was cut. When several matches fit in `maxLength`, their windows are joined. It returns the snippet's `text` and the `ranges` to pass to `Highlight`.
+
+<FileSource src="/framed/Highlight/HighlightSnippet" />
+
+```js
+import { matchText, textSnippet } from "carbon-components-svelte";
+
+const { text, ranges } = textSnippet(body, matchText(body, query), {
+  maxLength: 120, // UTF-16 units, ellipses included
+  context: 24, // on each side of a match
+});
+```
+
+`maxLength` counts UTF-16 units, and a cut never splits an emoji or a letter with its accents. Text with no spaces, such as Chinese, is cut at a character boundary.
+
+## Large lists
+
+Marking each match builds a `mark` element, which costs more as the list grows. For a list of a few hundred rows this is not noticeable; for thousands, either render only the rows in view (the list boxes and `VirtualList` do) or let the browser paint the matches with the CSS Custom Highlight API and leave the DOM alone.
+
+The `highlightText` action paints the matches of `query` in the text of its element. It does nothing where the browser lacks the API, so render `Highlight` there. Matches do not cross elements, and the API paints only color, background and decoration, so there is no bold variant. Assistive technology does not see these highlights.
+
+<FileSource src="/framed/Highlight/HighlightLargeList" />
+
+To keep a long list cheap while the user types:
+
+- Compile the query once with `createTextMatcher(query)` and apply it to each item, instead of calling `matchText` per item.
+- Cap what is rendered.
+- Prefer `highlightText` past a few thousand rows.
+
+## Accessibility
+
+A `mark` is announced by some screen readers as "highlighted", which is useful in a paragraph and noisy in a list of results. Set `decorative` to render a `span` with the same look, which no screen reader announces. The text is whole either way, so the accessible name of a button or link that holds a `Highlight` is its full text. Inside an `option`, the children are presentational, so the marks are not announced there.
+
+| Do | Why |
+| :--- | :--- |
+| Set `decorative` for the marks in a long list of results | Each `mark` can be announced as "highlighted", once per row |
+| Say how many results matched in a live region | The marks do not carry the count |
+| Keep the match visible without color alone | `Mark` and `MarkText` keep it readable under forced colors, and the fill carries a 4.5:1 contrast with its text |
+| Do not rely on the highlight to carry meaning | The CSS Custom Highlight API paints are invisible to assistive technology |
+
+## Utilities
+
+The matching and snippet functions are exported for use without the component, such as to filter and rank.
+
+| Function | Use |
+| :--- | :--- |
+| `matchText(text, query, options)` | Ranges of the matches of `query` in `text` |
+| `createTextMatcher(query, options)` | The same, compiled once for a list of texts |
+| `fuzzyMatchText(text, query, options)` | The letters of `query` in order, with a score from 0 to 1 and the ranges |
+| `createFuzzyTextMatcher(query, options)` | The same, compiled once |
+| `foldText(text, options)` | The form of `text` that search compares, for a search key |
+| `textSnippet(text, ranges, options)` | A short text around the matches, with ranges into it |
+| `normalizeRanges(text, ranges)` | Clamp, sort and merge ranges, and widen them to whole characters |
+| `mergeRanges(ranges)` | Sort and join overlapping ranges |
+| `indicesToRanges(indices)` | Turn the `indices` of `fuzzyMatch` into ranges |
+| `splitByRanges(text, ranges)` | Cut a text into marked and unmarked runs |
+| `highlightText` | Action: paint matches with the CSS Custom Highlight API |
+| `supportsHighlightApi()` | Whether the browser has that API |
+
+Ranges are `{ start, end }` offsets into the original text, in UTF-16 units with `end` excluded, and always fall on character boundaries.
+
+`fuzzyMatch` and `highlightSegments` remain for matching without diacritics. `fuzzyMatch` lowercases the text before it counts positions, so for a letter such as `İ`, which lowercases to two units, its indices are shifted; `fuzzyMatchText` is not.

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/svelte";
 import SearchMenuSkeletonMenu from "carbon-components-svelte/SearchMenu/SearchMenuSkeleton.svelte";
 import { tick } from "svelte";
+import { fuzzyMatchText } from "../../src/utils/text-match.js";
 import { rect } from "../utils/rect";
 import { user } from "../utils/user";
 import SearchMenu from "./SearchMenu.test.svelte";
@@ -315,6 +316,26 @@ describe("SearchMenu", () => {
     );
     expect(highlights).toHaveLength(1);
     expect(highlights[0]).toHaveTextContent("Data");
+  });
+
+  it("highlights the ranges a matcher returns, as whole text nodes", async () => {
+    const input = await openMenu(SearchMenuMatch, {
+      match: (text: string, query: string) => {
+        const { matched, ranges } = fuzzyMatchText(text, query);
+        return { matched, ranges };
+      },
+    });
+    await user.type(input, "STORE");
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(1);
+    expect(options[0]).toHaveTextContent("Data Store");
+    expect(options[0].textContent?.trim()).toBe("Data Store");
+    const highlights = document.querySelectorAll(
+      ".bx--search-menu-item__highlight",
+    );
+    expect(highlights).toHaveLength(1);
+    expect(highlights[0].tagName).toBe("MARK");
+    expect(highlights[0]).toHaveTextContent("Store");
   });
 
   it("renders every item with a no-op matcher and no highlights", async () => {
