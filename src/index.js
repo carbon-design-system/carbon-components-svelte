@@ -148,6 +148,8 @@ export { default as ListBoxMenu } from "./ListBox/ListBoxMenu.svelte";
 export { default as ListBoxMenuIcon } from "./ListBox/ListBoxMenuIcon.svelte";
 export { default as ListBoxMenuItem } from "./ListBox/ListBoxMenuItem.svelte";
 export { default as ListBoxSelection } from "./ListBox/ListBoxSelection.svelte";
+export { default as ListDetailItem } from "./ListDetailLayout/ListDetailItem.svelte";
+export { default as ListDetailLayout } from "./ListDetailLayout/ListDetailLayout.svelte";
 export { default as ListItem } from "./ListItem/ListItem.svelte";
 export { default as Loading } from "./Loading/Loading.svelte";
 export { default as LocalStorage } from "./LocalStorage/LocalStorage.svelte";
@@ -346,6 +348,7 @@ export { linkSegments } from "./utils/link-segments.js";
 export { preserveFocusSelection } from "./utils/preserve-focus-selection.js";
 export { queryParam } from "./utils/query-param.js";
 export { rovingFocus } from "./utils/roving-focus.js";
+export { syncSelectionToUrl } from "./utils/sync-selection-to-url.js";
 export { toHierarchy } from "./utils/to-hierarchy.js";
 export { trapFocus } from "./utils/trap-focus.js";
 export {

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
+import ListDetailItem from "carbon-components-svelte/ListDetailLayout/ListDetailItem.svelte";
 import Pagination from "carbon-components-svelte/Pagination/Pagination.svelte";
 import PaginationNav from "carbon-components-svelte/PaginationNav/PaginationNav.svelte";
 import RecursiveList from "carbon-components-svelte/RecursiveList/RecursiveList.svelte";
@@ -276,6 +277,16 @@ export const navigation: AriaEntry[] = [
     name: "SkipToContent",
     render: (attrs) => render(SkipToContent, { props: attrs }),
     target: () => screen.getByRole("link"),
+  },
+  {
+    name: "ListDetailItem",
+    render: (attrs) => render(ListDetailItem, { props: { id: "1", ...attrs } }),
+    target: () => screen.getByRole("link"),
+  },
+  {
+    name: "ListDetailLayout",
+    exempt:
+      "Layout wrapper; its list and details regions are named by listLabel and detailLabel",
   },
   {
     name: "Splitter",

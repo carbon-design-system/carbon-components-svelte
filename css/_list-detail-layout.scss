@@ -1,0 +1,134 @@
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// A list beside the details of its selected item. The component renders a
+/// `Splitter` with the list as the start pane and the details as the end
+/// pane. Below the breakpoint the panes stack: one shows, the list until
+/// something is selected and then the details, and a Back button returns.
+/// The server renders both panes and these rules choose between them, so
+/// the first paint has the right layout without script. A container query
+/// reads the layout's own width; `--viewport` reads the window's instead.
+///
+/// The `Splitter` writes the start pane's `flex-basis` and, for a pixel
+/// `min`, its `min-width` inline, so the stacked list fills its row with
+/// `flex-grow` rather than a width that an inline value would beat.
+/// @access private
+/// @group components
+@mixin list-detail-layout {
+  .#{$prefix}--list-detail {
+    container: #{$prefix}--list-detail / inline-size;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+  }
+
+  // Viewport mode: no container. A container sizes itself without its
+  // content, so one in a shrink-to-fit parent collapses to nothing.
+  .#{$prefix}--list-detail--viewport {
+    container: none;
+  }
+
+  .#{$prefix}--list-detail__list {
+    min-height: 100%;
+    background-color: $layer;
+  }
+
+  .#{$prefix}--list-detail__detail {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+  }
+
+  .#{$prefix}--list-detail__bar {
+    display: none;
+    flex: none;
+    padding: $carbon--spacing-03;
+    border-block-end: 1px solid $border-subtle;
+    background-color: $layer;
+  }
+
+  // The arrow comes first, so it points at the list it returns to.
+  .#{$prefix}--list-detail__back-icon {
+    flex: none;
+    margin-inline-end: $carbon--spacing-03;
+
+    @include ccs-mirror-rtl;
+  }
+
+  .#{$prefix}--list-detail__body {
+    flex: 1 1 auto;
+    padding: $carbon--spacing-05;
+  }
+
+  // The target of focus after a selection, when the details have no
+  // heading to take it.
+  .#{$prefix}--list-detail__body:focus-visible,
+  .#{$prefix}--list-detail__body [tabindex="-1"]:focus-visible {
+    @include focus-outline("outline");
+  }
+
+  // Forced colors repaint the Splitter's line, a background, as the page's
+  // own, so it vanishes. Draw it in the text color.
+  @media (forced-colors: active) {
+    .#{$prefix}--list-detail__split > .#{$prefix}--splitter__separator::after {
+      background-color: CanvasText;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+/// The stacked layout of the roots `$root` matches.
+/// @param {String} $root
+/// @access private
+/// @group components
+@mixin list-detail-stacked($root) {
+  $panes: "#{$root} > .#{$prefix}--list-detail__split > .#{$prefix}--splitter__pane";
+
+  #{$root} > .#{$prefix}--list-detail__split > .#{$prefix}--splitter__separator {
+    display: none;
+  }
+
+  // The list fills the row while it is the only pane.
+  #{$panes}--start {
+    flex-grow: 1;
+  }
+
+  #{$panes}--end {
+    display: none;
+  }
+
+  #{$root}.#{$prefix}--list-detail--selected > .#{$prefix}--list-detail__split > .#{$prefix}--splitter__pane--start {
+    display: none;
+  }
+
+  #{$root}.#{$prefix}--list-detail--selected > .#{$prefix}--list-detail__split > .#{$prefix}--splitter__pane--end {
+    display: block;
+  }
+
+  #{$root} .#{$prefix}--list-detail__bar {
+    display: flex;
+  }
+}
+
+/// Stacks the panes below each breakpoint.
+/// @access private
+/// @group components
+@mixin list-detail-layout-stacked {
+  @each $breakpoint in (md, lg, xlg) {
+    $width: map-get(map-get($carbon--grid-breakpoints, $breakpoint), width);
+
+    @container #{$prefix}--list-detail (width < #{$width}) {
+      @include list-detail-stacked(".#{$prefix}--list-detail--#{$breakpoint}");
+    }
+
+    @media (width < #{$width}) {
+      @include list-detail-stacked(".#{$prefix}--list-detail--viewport.#{$prefix}--list-detail--#{$breakpoint}");
+    }
+  }
+}
+
+@include exports("list-detail-layout") {
+  @include list-detail-layout;
+  @include list-detail-layout-stacked;
+}
