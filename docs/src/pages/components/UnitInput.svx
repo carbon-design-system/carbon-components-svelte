@@ -1,0 +1,77 @@
+---
+components: ["UnitInput"]
+description: Unit inputs take a number with its unit, such as kilograms, a percentage or milliseconds, in the format of a locale.
+---
+
+<script>
+  import { UnitInput } from "carbon-components-svelte";
+</script>
+
+## Basic
+
+Set `unit` to a symbol or an `Intl` unit. The unit is written after the number, and the caret stays before it. `value` is a number, or `null` when the field is empty.
+
+<UnitInput labelText="Payload" unit="kg" />
+
+## Units
+
+A symbol stands for an `Intl.NumberFormat` unit: `kg`, `g`, `mg`, `lb`, `oz`, `km`, `m`, `cm`, `mm`, `mi`, `ft`, `in`, `l`, `ml`, `ms`, `s`, `min`, `h`, `d`, `B`, `KB`, `MB`, `GB`, `TB`, `%`, `°C` and `°F`. Any other unit that `Intl` knows, such as `kilometer-per-hour`, is set by its name.
+
+<FileSource src="/framed/UnitInput/UnitUnits" />
+
+`%` is a unit and not a ratio: a `value` of `5` is shown as `5%`, and not as `500%`.
+
+## Locales
+
+Set `locale` to a BCP 47 tag. The decimal mark, the grouping and the position of the unit follow it: `5 %` in German has a space.
+
+<UnitInput labelText="Rabatt" unit="%" locale="de-DE" value={12.5} />
+
+<UnitInput labelText="Poids" unit="kg" locale="fr-FR" value={1234.5} />
+
+## Fraction digits
+
+A unit field takes up to three fraction digits. Set `maximumFractionDigits` to take more or fewer, and `minimumFractionDigits` to pad the field when it is left.
+
+<UnitInput labelText="Voltage" unit="kilovolt" maximumFractionDigits={1} minimumFractionDigits={1} value={11} />
+
+## Negative numbers
+
+A field takes no minus key by default. Set `allowNegative`, or a negative `min`, to take one, as for a temperature.
+
+<UnitInput labelText="Setpoint" unit="°C" min={-40} max={85} value={-12.5} />
+
+## Min and max
+
+A number outside `min` and `max` is invalid. Set `invalidText` to say why.
+
+<UnitInput labelText="Discount" unit="%" min={0} max={100} value={140} invalidText="Enter a discount between 0 and 100." />
+
+## States
+
+Reflect validation and interaction states.
+
+### Invalid
+
+<UnitInput invalid invalidText="The payload is over the limit." labelText="Payload" unit="kg" value={2400} />
+
+### Warning
+
+<UnitInput warn warnText="This is near the limit." labelText="Payload" unit="kg" value={1950} />
+
+### Disabled
+
+<UnitInput disabled labelText="Storage" unit="GB" value={512} />
+
+### Read-only
+
+<UnitInput readonly labelText="Storage" unit="GB" value={512} />
+
+## Accessibility
+
+| Do | Why |
+| :-- | :-- |
+| Keep the unit in the text of the field | A screen reader reads `12.5 kg` with the number. |
+| Leave the hint on | "Value in kilograms" is read with the field, from `aria-describedby`, before there is a unit. Set `hintText` to translate it. |
+
+Typing, paste, Backspace across a group mark and the other edits behave as they do in [CurrencyInput](/components/CurrencyInput#editing). A `name` submits the number, not the formatted text.

@@ -2,6 +2,7 @@ import type {
   breakpointObserver,
   breakpoints,
   Button as BarrelButton,
+  createNumberFormat,
   createTheme,
   DataTable as BarrelDataTable,
   dismiss,
@@ -12,11 +13,13 @@ import type {
   getAvatarBackgroundColor,
   getInitials,
   getLayoutDirection,
+  numberFormat,
   preserveFocusSelection,
   queryParam,
   rovingFocus,
   themeScript,
   ThemeZone as BarrelThemeZone,
+  toMinorUnits,
   trapFocus,
 } from "carbon-components-svelte";
 import type { BreakpointSize } from "carbon-components-svelte/src/Breakpoint/breakpoints.js";
@@ -46,6 +49,8 @@ import type {
   FloatingPositionOptions,
   FloatingPositionResult,
 } from "carbon-components-svelte/src/utils/floating-position.js";
+import type { NumberFieldParams } from "carbon-components-svelte/src/utils/number-field.js";
+import type { NumberFormatOptions } from "carbon-components-svelte/src/utils/number-format.js";
 import type { RovingFocusOptions } from "carbon-components-svelte/src/utils/roving-focus.js";
 import {
   highlight,
@@ -113,6 +118,11 @@ type _FloatingPosition = ReturnType<typeof floatingPosition>;
 type _FloatingPositionOptions = FloatingPositionOptions;
 type _FloatingPositionResult = FloatingPositionResult;
 type _FormReset = ReturnType<typeof formReset>;
+type _CreateNumberFormat = ReturnType<typeof createNumberFormat>["format"];
+type _NumberFormat = ReturnType<typeof numberFormat>;
+type _NumberFieldParams = NumberFieldParams;
+type _NumberFormatOptions = NumberFormatOptions;
+type _ToMinorUnits = ReturnType<typeof toMinorUnits>;
 type _PreserveFocusSelection = ReturnType<typeof preserveFocusSelection>;
 type _RovingFocus = ReturnType<typeof rovingFocus>;
 type _RovingFocusOptions = RovingFocusOptions;
