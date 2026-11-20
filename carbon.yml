@@ -943,6 +943,18 @@ assets:
     tags:
       - form
       - contextual-navigation
+  duration-input:
+    name: Duration input
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/duration-input.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/DurationInput
   pin-code-input:
     name: PIN code input
     status: stable

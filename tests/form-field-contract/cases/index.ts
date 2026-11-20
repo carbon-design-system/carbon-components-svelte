@@ -26,6 +26,7 @@ import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
 import type { Exemptions, FieldCase } from "../contract";
 import CheckboxGroupField from "../fixtures/CheckboxGroupField.test.svelte";
 import DatePickerField from "../fixtures/DatePickerField.test.svelte";
+import DurationInputField from "../fixtures/DurationInputField.test.svelte";
 import InlineEditField from "../fixtures/InlineEditField.test.svelte";
 import RadioButtonGroupField from "../fixtures/RadioButtonGroupField.test.svelte";
 
@@ -240,6 +241,31 @@ export const cases: FieldCase[] = [
       component: FluidPinCodeInputSkeleton,
       className: "bx--pin-code-input--fluid__skeleton",
       field: "bx--text-input",
+    },
+  },
+  {
+    name: "DurationInput",
+    component: DurationInputField,
+    control: () => screen.getAllByRole("spinbutton"),
+    // The value is the segments' digits, `hhmmss`.
+    reset: {
+      initial: "023000",
+      typed: "1",
+      events: ["change"],
+      serverDefault: (value) => {
+        const segments = screen.getAllByRole("spinbutton");
+        assert(segments.every((s) => s instanceof HTMLInputElement));
+        [0, 2, 4].forEach((at, i) => {
+          (segments[i] as HTMLInputElement).defaultValue = value.slice(
+            at,
+            at + 2,
+          );
+        });
+      },
+    },
+    state: {
+      // The fieldset carries the description for all segments.
+      described: () => screen.getByRole("group"),
     },
   },
   {

@@ -5,6 +5,7 @@ import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import DateCalendar from "carbon-components-svelte/DatePicker/DateCalendar.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import DurationInput from "carbon-components-svelte/DurationInput/DurationInput.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import FileUploaderButton from "carbon-components-svelte/FileUploader/FileUploaderButton.svelte";
 import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/FileUploaderDropContainer.svelte";
@@ -109,6 +110,28 @@ export const forms: AriaEntry[] = [
         props: { items, labelText: "Fruit", helperText: "Pick one", ...attrs },
       }),
     target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "DurationInput",
+    render: (attrs) =>
+      render(DurationInput, {
+        props: { labelText: "Length", helperText: "Per session", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "DurationInput",
+    variant: "text",
+    render: (attrs) =>
+      render(DurationInput, {
+        props: {
+          variant: "text",
+          labelText: "Length",
+          helperText: "Per session",
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("textbox"),
   },
   {
     name: "FileUploader",
