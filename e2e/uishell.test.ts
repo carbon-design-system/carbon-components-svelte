@@ -278,3 +278,19 @@ test("a header menu title in the collapsed rail ends in an ellipsis", async ({
   await expect(text).toHaveCSS("overflow-x", "hidden");
   await expect(text).toHaveCSS("white-space", "nowrap");
 });
+
+test("a long header menu title in the side nav keeps a full-size arrow", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("/uishell.html");
+  await page.getByRole("button", { name: "Open menu" }).click();
+  const title = page.getByRole("menuitem", { name: "Side submenu" });
+  await title.locator(".bx--text-truncate--end").evaluate((node) => {
+    node.textContent = "Side submenu with a title too long for its row";
+  });
+  // The text truncates before the arrow shrinks, as in Carbon React.
+  const arrow = title.locator(".bx--header__menu-arrow");
+  const { width } = (await arrow.boundingBox()) ?? { width: 0 };
+  expect(width).toBe(16);
+});
