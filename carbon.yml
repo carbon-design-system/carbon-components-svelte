@@ -1262,6 +1262,18 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/StructuredList
+  survey-scale:
+    name: Survey scale
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/survey-scale.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/SurveyScale
   table-of-contents:
     name: Table of contents
     status: stable
