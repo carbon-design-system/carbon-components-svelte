@@ -264,9 +264,12 @@
 
   // ccs: the title's text truncates like a top-level item's, but keeps its
   // own width beside the arrow, so it shrinks only in a box narrower than
-  // it, such as a collapsed SideNav rail. There the arrow gives way first,
-  // and the text keeps room for its first letter, as the rail's links do.
+  // it, such as a collapsed SideNav rail. The text shrinks first, so a long
+  // title in the expanded SideNav keeps a full-size arrow. Below the text's
+  // minimum the arrow gives way, and the text keeps room for its first
+  // letter, as the rail's links do.
   .#{$prefix}--header__menu-title > .#{$prefix}--text-truncate--end {
+    flex-shrink: 999;
     width: auto;
     min-width: $carbon--spacing-05;
   }
