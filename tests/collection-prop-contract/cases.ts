@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/svelte";
+import AnnotatedImage from "carbon-components-svelte/AnnotatedImage/AnnotatedImage.svelte";
 import DataTable from "carbon-components-svelte/DataTable/DataTable.svelte";
 import FileUploader from "carbon-components-svelte/FileUploader/FileUploader.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
@@ -71,6 +72,20 @@ export const cases: CollectionCase[] = [
       expect(checkbox("A")).not.toBeChecked();
       await user.click(checkbox("A"));
       expect(checkbox("B")).toBeChecked();
+    },
+  },
+  {
+    name: "AnnotatedImage",
+    component: AnnotatedImage,
+    prop: "pins",
+    props: { src: "/plan.png", alt: "Plan", width: 1200, height: 800 },
+    initial: () => [{ id: "a", x: 10, y: 10, label: "Alpha" }],
+    replacement: () => [{ id: "b", x: 20, y: 20, label: "Bravo" }],
+    check: async () => {
+      expect(screen.queryByRole("button", { name: "1 Alpha" })).toBeNull();
+      const pin = screen.getByRole("button", { name: "1 Bravo" });
+      await user.click(pin);
+      expect(pin).toHaveAttribute("aria-expanded", "true");
     },
   },
   {
