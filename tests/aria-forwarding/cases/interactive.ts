@@ -13,6 +13,7 @@ import Countdown from "carbon-components-svelte/Countdown/Countdown.svelte";
 import Dialog from "carbon-components-svelte/Dialog/Dialog.svelte";
 import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
+import ErrorSummary from "carbon-components-svelte/ErrorSummary/ErrorSummary.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
@@ -209,6 +210,30 @@ export const interactive: AriaEntry[] = [
     name: "Divider",
     render: (attrs) => render(Divider, { props: attrs }),
     target: () => screen.getByRole("separator"),
+  },
+  {
+    name: "ErrorSummary",
+    render: (attrs) =>
+      render(ErrorSummary, {
+        props: {
+          errors: [{ fieldId: "name", message: "Enter a name" }],
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("group"),
+  },
+  {
+    name: "ErrorSummary",
+    variant: "without focus",
+    render: (attrs) =>
+      render(ErrorSummary, {
+        props: {
+          errors: [{ fieldId: "name", message: "Enter a name" }],
+          focusOnShow: false,
+          ...attrs,
+        },
+      }),
+    target: () => screen.getByRole("alert"),
   },
   {
     name: "ExpandableTile",

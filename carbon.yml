@@ -525,6 +525,20 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/EmptyState
+  error-summary:
+    name: Error summary
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/error-summary.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ErrorSummary
+    tags:
+      - system-feedback
   expandable-tile:
     name: Expandable tile
     status: stable
