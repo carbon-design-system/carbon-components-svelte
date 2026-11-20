@@ -215,6 +215,34 @@ Set `disabled` to `true` to disable interaction.
 
 <CodeSnippet disabled type="inline" code="rm -rf node_modules/" />
 
+## Header
+
+A multi-line snippet can have a header above its code, with a title or with tabs for several files. The header runs the snippet's full width and holds the copy button. In a right-to-left layout the header and its copy button mirror, and the code stays left to right.
+
+| Do | Why |
+| --- | --- |
+| Give each file in `files` a distinct `title` | The titles are the tabs' names and the name of the code |
+| Keep `files` to a few short titles | The tabs scroll sideways when they do not fit; a long list is better as separate snippets |
+| Keep the language for each file yourself | `files` holds only what the snippet shows; see [Syntax highlighting](#syntax-highlighting) |
+
+### Title
+
+Set `title` to show a file name above the code. It also names the code, unless you set `aria-label` or `aria-labelledby`.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetTitle" />
+
+### Files
+
+Set `files`, an array of `{ title, code }`, to show one file at a time. Each file is a tab; the code is the tab panel, named by its tab. The copy button copies the selected file. Arrow keys, <DocKbd label="Home" />, and <DocKbd label="End" /> move between the tabs and select one, and only the selected tab is in the tab order, so <DocKbd label="Tab" /> moves on to the code. Bind `selectedIndex` to read or set the selected file, or listen for `change`, which gives `{ selectedIndex, title }`. `files` takes the place of `code`. Set `filesLabel` to translate the tab list's label.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetFiles" />
+
+### Files with syntax highlighting
+
+`highlightCode` re-highlights when the selected file's text changes. Pass it the language of the selected file.
+
+<FileSource src="/framed/CodeSnippet/CodeSnippetFilesSyntax" />
+
 ## Syntax highlighting
 
 CodeSnippet does not ship a syntax highlighter. Pass the plain source to `code` so copy uses unstyled text, and color the rendered code with one of the approaches below.
