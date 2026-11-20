@@ -661,6 +661,20 @@ assets:
         url: https://svelte.carbondesignsystem.com/components/InlineEdit
     tags:
       - input-control
+  inline-suggest:
+    name: Inline suggest
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/inline-suggest.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/InlineSuggest
+    tags:
+      - input-control
   inline-loading:
     status: stable
     framework: svelte
