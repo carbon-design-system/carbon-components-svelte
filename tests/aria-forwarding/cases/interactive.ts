@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/svelte";
 import AILabel from "carbon-components-svelte/AILabel/AILabel.svelte";
 import BigNumber from "carbon-components-svelte/BigNumber/BigNumber.svelte";
+import BottomSheet from "carbon-components-svelte/BottomSheet/BottomSheet.svelte";
 import ButtonComponent from "carbon-components-svelte/Button/Button.svelte";
 import Carousel from "carbon-components-svelte/Carousel/Carousel.svelte";
 import ChatLog from "carbon-components-svelte/Chat/ChatLog.svelte";
@@ -436,6 +437,23 @@ export const interactive: AriaEntry[] = [
     render: (attrs) =>
       render(SelectableTileGroup, { props: { legendText: "Plans", ...attrs } }),
     target: () => screen.getByRole("group"),
+  },
+  {
+    name: "BottomSheet",
+    render: (attrs) =>
+      render(BottomSheet, {
+        props: { open: true, title: "Filters", ...attrs },
+      }),
+    target: () => screen.getByRole("dialog"),
+  },
+  {
+    name: "BottomSheet",
+    variant: "non-modal",
+    render: (attrs) =>
+      render(BottomSheet, {
+        props: { open: true, modal: false, title: "Nearby", ...attrs },
+      }),
+    target: () => screen.getByRole("complementary"),
   },
   {
     name: "SidePanel",

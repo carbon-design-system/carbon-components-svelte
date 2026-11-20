@@ -9,6 +9,7 @@ export { default as BadgeIndicator } from "./BadgeIndicator/BadgeIndicator.svelt
 export { default as BigNumber } from "./BigNumber/BigNumber.svelte";
 export { default as BigNumberSkeleton } from "./BigNumber/BigNumberSkeleton.svelte";
 export { default as Bleed } from "./Bleed/Bleed.svelte";
+export { default as BottomSheet } from "./BottomSheet/BottomSheet.svelte";
 export { default as Box } from "./Box/Box.svelte";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb.svelte";
 export { default as BreadcrumbItem } from "./Breadcrumb/BreadcrumbItem.svelte";
