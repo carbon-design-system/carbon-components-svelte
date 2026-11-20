@@ -22,12 +22,14 @@
   export let status = "uploading";
 
   /**
-   * Specify the size of button skeleton.
+   * Specify the size of the file item.
+   * Inherits the height of the parent `Form` size when unset,
+   * and is `"default"` (48px) outside a sized `Form`.
    * Also accepts Carbon v11's `"sm"` (`"small"`), `"md"` (`"field"`) and
    * `"lg"` (`"default"`).
-   * @type {"default" | "field" | "small" | "xs" | "sm" | "md" | "lg"}
+   * @type {"default" | "field" | "small" | "xs" | "sm" | "md" | "lg" | undefined}
    */
-  export let size = "default";
+  export let size = undefined;
 
   /**
    * Accessible label for the status icons. Forwarded to `Filename`.
@@ -69,7 +71,8 @@
    */
   export let fileSize = undefined;
 
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
+  import { FORM_SIZE_CONTEXT_KEY } from "../constants/context-keys.js";
   import { formatFileSize } from "../utils/format-file-size.js";
   import { overflowTitle } from "../utils/overflow-title.js";
   import { normalizeFileItemSize } from "../utils/size-aliases.js";
@@ -82,7 +85,23 @@
   $: fileSizeText =
     typeof fileSize === "number" ? formatFileSize(fileSize) : (fileSize ?? "");
 
-  $: effectiveSize = normalizeFileItemSize(size);
+  /**
+   * The file item size whose height matches the `Form` size. An `if`
+   * chain, so a build that knows the form size can drop the other classes.
+   * @param {undefined | "xs" | "sm" | "md" | "xl"} formSize
+   */
+  function fileItemSizeForForm(formSize) {
+    if (formSize === "xs") return "xs";
+    if (formSize === "sm") return "small";
+    if (formSize === "md") return "field";
+    return "default";
+  }
+
+  /** @type {undefined | import("svelte/store").Readable<undefined | "xs" | "sm" | "md" | "xl">} */
+  const formSize = getContext(FORM_SIZE_CONTEXT_KEY);
+
+  $: effectiveSize =
+    normalizeFileItemSize(size) ?? fileItemSizeForForm($formSize);
 </script>
 
 <span
