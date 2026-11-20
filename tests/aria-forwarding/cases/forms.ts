@@ -11,6 +11,7 @@ import FileUploaderDropContainer from "carbon-components-svelte/FileUploader/Fil
 import Filename from "carbon-components-svelte/FileUploader/Filename.svelte";
 import FormGroup from "carbon-components-svelte/FormGroup/FormGroup.svelte";
 import FormRequirement from "carbon-components-svelte/FormRequirement/FormRequirement.svelte";
+import FormulaInput from "carbon-components-svelte/FormulaInput/FormulaInput.svelte";
 import InlineEdit from "carbon-components-svelte/InlineEdit/InlineEdit.svelte";
 import InputGroup from "carbon-components-svelte/InputGroup/InputGroup.svelte";
 import ListBoxField from "carbon-components-svelte/ListBox/ListBoxField.svelte";
@@ -348,6 +349,14 @@ export const forms: AriaEntry[] = [
     render: (attrs) =>
       render(TagInput, {
         props: { labelText: "Tags", helperText: "Press Enter", ...attrs },
+      }),
+    target: () => screen.getByRole("textbox"),
+  },
+  {
+    name: "FormulaInput",
+    render: (attrs) =>
+      render(FormulaInput, {
+        props: { labelText: "Formula", helperText: "Optional", ...attrs },
       }),
     target: () => screen.getByRole("textbox"),
   },

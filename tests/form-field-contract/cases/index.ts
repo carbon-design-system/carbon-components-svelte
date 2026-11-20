@@ -4,6 +4,7 @@ import ComboBox from "carbon-components-svelte/ComboBox/ComboBox.svelte";
 import CopyInput from "carbon-components-svelte/CopyInput/CopyInput.svelte";
 import FluidCopyInputSkeleton from "carbon-components-svelte/CopyInput/FluidCopyInputSkeleton.svelte";
 import Dropdown from "carbon-components-svelte/Dropdown/Dropdown.svelte";
+import FormulaInput from "carbon-components-svelte/FormulaInput/FormulaInput.svelte";
 import MultiSelect from "carbon-components-svelte/MultiSelect/MultiSelect.svelte";
 import FluidNumberInputSkeleton from "carbon-components-svelte/NumberInput/FluidNumberInputSkeleton.svelte";
 import NumberInput from "carbon-components-svelte/NumberInput/NumberInput.svelte";
@@ -140,6 +141,17 @@ export const cases: FieldCase[] = [
       component: FluidTextAreaSkeleton,
       className: "bx--text-area--fluid__skeleton",
       field: "bx--text-area",
+    },
+  },
+  {
+    name: "FormulaInput",
+    component: FormulaInput,
+    control: () => screen.getByRole("textbox"),
+    reset: { initial: "price", typed: "x", events: ["input", "change"] },
+    state: {},
+    fluid: {
+      className: "bx--text-area--fluid",
+      wrapper: ".bx--text-area__wrapper",
     },
   },
   {

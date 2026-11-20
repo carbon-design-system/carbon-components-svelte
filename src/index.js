@@ -115,6 +115,14 @@ export { default as FormHelperText } from "./FormHelperText/FormHelperText.svelt
 export { default as FormItem } from "./FormItem/FormItem.svelte";
 export { default as FormLabel } from "./FormLabel/FormLabel.svelte";
 export { default as FormRequirement } from "./FormRequirement/FormRequirement.svelte";
+export {
+  analyzeFormula,
+  createFormulaEnv,
+} from "./FormulaInput/formula-check.js";
+export { evaluateFormula, formatResult } from "./FormulaInput/formula-eval.js";
+export { defaultFunctions } from "./FormulaInput/formula-functions.js";
+export { parseFormula } from "./FormulaInput/formula-lang.js";
+export { default as FormulaInput } from "./FormulaInput/FormulaInput.svelte";
 export { default as FullPageError } from "./FullPageError/FullPageError.svelte";
 export { default as Column } from "./Grid/Column.svelte";
 export { default as CssColumn } from "./Grid/CssColumn.svelte";
