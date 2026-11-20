@@ -95,6 +95,13 @@
   export let tooltipAlignment = "center";
 
   /**
+   * Set to `true` to hide the hover and focus tooltip.
+   * The button keeps `iconDescription` as its accessible name, and the
+   * feedback still shows after a copy.
+   */
+  export let hideTooltip = false;
+
+  /**
    * Obtain a reference to the underlying button element.
    * @type {null | HTMLButtonElement}
    */
@@ -182,6 +189,7 @@
   $: showingInlineFeedback =
     !feedbackPortalled && (feedbackOpen || copyPending);
   $: tooltipHoverActive =
+    !hideTooltip &&
     !showingInlineFeedback &&
     !dismissed &&
     (hovered || focused) &&

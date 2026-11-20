@@ -59,6 +59,12 @@
   export let tooltipAlignment = "center";
 
   /**
+   * Set to `true` to hide the tooltip of an icon-only button.
+   * The button keeps `iconDescription` as its accessible name.
+   */
+  export let hideTooltip = false;
+
+  /**
    * Obtain a reference to the HTML element.
    * @type {null | HTMLButtonElement}
    * @bindable readonly
@@ -105,7 +111,8 @@
   );
 
   $: hasIconOnly = (icon || $$slots.icon) && !$$slots.default;
-  $: hasTooltipContent = hasIconOnly && Boolean(iconDescription);
+  $: hasTooltipContent =
+    hasIconOnly && Boolean(iconDescription) && !hideTooltip;
   $: effectiveTooltipPosition =
     placedTooltipPosition ??
     ($groupOrientation === "vertical" ? "right" : "bottom");
