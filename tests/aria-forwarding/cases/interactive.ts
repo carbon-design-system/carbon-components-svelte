@@ -15,6 +15,7 @@ import Disclosure from "carbon-components-svelte/Disclosure/Disclosure.svelte";
 import Divider from "carbon-components-svelte/Divider/Divider.svelte";
 import FileDownloadItem from "carbon-components-svelte/FileUploader/FileDownloadItem.svelte";
 import FullPageError from "carbon-components-svelte/FullPageError/FullPageError.svelte";
+import ImageCompare from "carbon-components-svelte/ImageCompare/ImageCompare.svelte";
 import ImageLoader from "carbon-components-svelte/ImageLoader/ImageLoader.svelte";
 import InlineLoading from "carbon-components-svelte/InlineLoading/InlineLoading.svelte";
 import Loading from "carbon-components-svelte/Loading/Loading.svelte";
@@ -732,6 +733,15 @@ export const interactive: AriaEntry[] = [
     name: "Countdown",
     render: (attrs) => render(Countdown, { props: { seconds: 90, ...attrs } }),
     target: () => screen.getByRole("timer"),
+  },
+  {
+    // The group carries the consumer's name; the divider inside keeps its own.
+    name: "ImageCompare",
+    render: (attrs) =>
+      render(ImageCompare, {
+        props: { beforeSrc: "before.png", afterSrc: "after.png", ...attrs },
+      }),
+    target: () => screen.getByRole("group"),
   },
   {
     name: "ChatLog",
