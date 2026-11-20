@@ -68,6 +68,29 @@
   export let expanded = false;
 
   /**
+   * Set the placement of the collapsed magnifier's tooltip in floating-ui
+   * form: the side, then `start` or `end` along it, as Button's
+   * `tooltipAlign` takes. Above and below, `start` and `end` name inline
+   * sides, so they swap under `dir="rtl"`.
+   * @type {"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end"}
+   */
+  export let tooltipAlign = "top";
+
+  /**
+   * Set to `true` to always render the collapsed magnifier's tooltip in a
+   * portal, or `false` to keep it in place. Left unset, the tooltip opens
+   * in a portal inside a `Modal`, or when a box around it would cut it off.
+   * @type {boolean | undefined}
+   */
+  export let portalTooltip = undefined;
+
+  /**
+   * Set to `true` to hide the collapsed magnifier's tooltip.
+   * The magnifier keeps its accessible name.
+   */
+  export let hideTooltip = false;
+
+  /**
    * Set to `true` to use the fluid variant.
    * Inherited from the parent `FluidForm` context,
    * so it does not need to be set when used inside `FluidForm`.
@@ -169,14 +192,17 @@
   import { KBD_TRANSLATIONS, kbdKeys } from "../Kbd/kbd-keys.js";
   import { getKbdTranslations } from "../Kbd/kbd-translations.js";
   import LoadingSpinner from "../Loading/LoadingSpinner.svelte";
+  import PortalTooltip from "../Portal/PortalTooltip.svelte";
   import {
     FORM_CONTEXT_KEY,
     FORM_SIZE_CONTEXT_KEY,
+    MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
   import Close from "../icons/Close.svelte";
   import IconSearch from "../icons/IconSearch.svelte";
   import WarningAltFilled from "../icons/WarningAltFilled.svelte";
   import WarningFilled from "../icons/WarningFilled.svelte";
+  import { createAnchoredTooltip } from "../utils/anchored-tooltip.js";
   import { debounce as debounceFn } from "../utils/debounce.js";
   import { createLoadingIndicator } from "../utils/delayed-loading.js";
   import {
@@ -186,6 +212,7 @@
     resolveValidationVisibility,
   } from "../utils/field-status.js";
   import { fieldsetDisabled } from "../utils/fieldset-disabled.js";
+  import { clippedBy, pastWindow } from "../utils/fit-align.js";
   import { returnFocus } from "../utils/focus.js";
   import { formReset } from "../utils/form-reset.js";
   import { isImeComposition } from "../utils/ime-composition.js";
@@ -193,9 +220,12 @@
     applePlatform,
     ariaKeyShortcuts,
   } from "../utils/keyboard-shortcut.js";
+  import { noop } from "../utils/noop.js";
   import { preserveFocusSelection } from "../utils/preserve-focus-selection.js";
   import { normalizeSearchSize } from "../utils/size-aliases.js";
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
+  import { tooltipPlacement } from "../utils/tooltip-align.js";
+  import { getTooltipGroup } from "../utils/tooltip-group.js";
   import { uniqueId } from "../utils/unique-id.js";
   import SearchSkeleton from "./SearchSkeleton.svelte";
 
@@ -283,6 +313,52 @@
   /** @type {null | HTMLButtonElement | HTMLDivElement} */
   let searchRef = null;
   let prevExpanded = expanded;
+
+  // The collapsed magnifier is an icon-only button, so it shows its name in
+  // a tooltip, as Carbon React's does. It has the same wiring as
+  // PasswordInput's toggle.
+  $: magnifierLabel =
+    labelText.trim() === "" ? placeholder || "Open search" : labelText;
+  $: ({ position: tooltipPosition, alignment: tooltipAlignment } =
+    tooltipPlacement(tooltipAlign, "top", "center"));
+  const insideModal = getContext(MODAL_CONTEXT_KEY);
+  // Set for one open when the in-place tooltip turns out to be cut off by
+  // a box around it or the window's edge. Only when `portalTooltip` is
+  // left unset.
+  let portalWhenClipped = false;
+  $: effectivePortalTooltip =
+    portalTooltip === undefined
+      ? !!insideModal || portalWhenClipped
+      : portalTooltip;
+  /** @type {null | HTMLSpanElement} */
+  let tooltipRef = null;
+  const tooltip = createAnchoredTooltip({
+    group: getTooltipGroup(),
+    enabled: () => !effectiveDisabled && !hideTooltip,
+  });
+  const {
+    open: tooltipOpen,
+    hidden: tooltipHidden,
+    instant: tooltipInstant,
+  } = tooltip;
+  let detachTooltip = noop;
+  $: magnifierButton =
+    expandable && !expanded && !hideTooltip ? searchRef : null;
+  $: {
+    detachTooltip();
+    detachTooltip = magnifierButton ? tooltip.attach(magnifierButton) : noop;
+  }
+  $: if (effectiveDisabled || expanded || hideTooltip) tooltip.hide();
+  $: if (!$tooltipOpen) portalWhenClipped = false;
+  $: inlineTooltip = !hideTooltip && !effectivePortalTooltip;
+  $: inlineOpen = inlineTooltip && $tooltipOpen;
+  $: if (inlineOpen) tick().then(portalIfClipped);
+
+  function portalIfClipped() {
+    if (portalTooltip !== undefined || !inlineOpen || !tooltipRef) return;
+    if (clippedBy(tooltipRef) || pastWindow(tooltipRef))
+      portalWhenClipped = true;
+  }
   /** @type {null | import("../utils/debounce.js").Debounced<(searchValue: unknown) => void>} */
   let dispatchSearch = null;
 
@@ -308,6 +384,8 @@
     return () => {
       dispatchSearch?.cancel();
       loadingIndicator.cancel();
+      detachTooltip();
+      tooltip.destroy();
     };
   });
 
@@ -401,14 +479,37 @@
         bind:this={searchRef}
         aria-keyshortcuts={ariaShortcut}
         class:bx--search-magnifier={true}
-        aria-label={labelText.trim() === ""
-          ? placeholder || "Open search"
-          : labelText}
+        class:bx--tooltip__trigger={!hideTooltip}
+        class:bx--tooltip--a11y={!hideTooltip}
+        class:bx--tooltip--portal-active={!hideTooltip &&
+          effectivePortalTooltip}
+        class:bx--tooltip--top={inlineTooltip && tooltipPosition === "top"}
+        class:bx--tooltip--right={inlineTooltip && tooltipPosition === "right"}
+        class:bx--tooltip--bottom={inlineTooltip &&
+          tooltipPosition === "bottom"}
+        class:bx--tooltip--left={inlineTooltip && tooltipPosition === "left"}
+        class:bx--tooltip--align-start={inlineTooltip &&
+          tooltipAlignment === "start"}
+        class:bx--tooltip--align-center={inlineTooltip &&
+          tooltipAlignment === "center"}
+        class:bx--tooltip--align-end={inlineTooltip &&
+          tooltipAlignment === "end"}
+        class:bx--tooltip--hidden={inlineTooltip && $tooltipHidden}
+        class:bx--tooltip--visible={inlineOpen}
+        class:bx--tooltip--instant={inlineTooltip && $tooltipInstant}
+        aria-label={inlineTooltip && !effectiveDisabled
+          ? undefined
+          : magnifierLabel}
         disabled={effectiveDisabled}
         on:click={() => {
           expanded = true;
         }}
       >
+        {#if inlineTooltip && !effectiveDisabled}
+          <span bind:this={tooltipRef} class:bx--assistive-text={true}>
+            {magnifierLabel}
+          </span>
+        {/if}
         {#if showLoading}
           <span class:bx--search-magnifier-icon={true}>
             <LoadingSpinner small description={loadingDescription} />
@@ -584,6 +685,18 @@
   {#if showWarn && !isFluid && warnText}
     <div id={warnId} class:bx--form-requirement={true}>{warnText}</div>
   {/if}
+{/if}
+
+{#if expandable && !expanded && !hideTooltip && effectivePortalTooltip && !effectiveDisabled}
+  <PortalTooltip
+    anchor={magnifierButton}
+    direction={tooltipPosition === "bottom" ? "bottom" : "top"}
+    open={$tooltipOpen}
+    text={magnifierLabel}
+    on:mouseenter={tooltip.handleTooltipMouseenter}
+    on:mouseleave={tooltip.handleTooltipMouseleave}
+    on:cover={tooltip.handleTooltipCover}
+  />
 {/if}
 
 <!-- Only while a shortcut is set, so a field without one leaves the binding,
