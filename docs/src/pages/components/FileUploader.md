@@ -182,6 +182,13 @@ fields: `xs` is 24px, `sm` is 32px, and `xl` is 48px. In an `xs` form the file
 rows are 24px too. Outside a sized form, or when `size` is set on the uploader,
 the uploader's own `size` applies.
 
+A `FileUploaderItem` follows the form too: `xs` is 24px, `sm` is 32px, `md` is
+40px, and `xl` is 48px. Its own `size` takes precedence.
+
+<Form size="sm">
+  <FileUploaderItem name="README.md" status="edit" />
+</Form>
+
 <Form size="xs">
   <FileUploader
     labelTitle="Upload files"
