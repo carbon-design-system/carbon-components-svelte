@@ -1,8 +1,7 @@
 // @ts-check
 
-import { clampIndex } from "./clamp-index.js";
+import { nextIndex } from "./focus-nav.js";
 import { hasModifierKey } from "./has-modifier-key.js";
-import { moveIndex, nextEnabledIndex } from "./move-index.js";
 
 /**
  * @typedef {"horizontal" | "vertical" | "both"} RovingFocusOrientation
@@ -28,8 +27,10 @@ import { moveIndex, nextEnabledIndex } from "./move-index.js";
 /**
  * Svelte action for arrow-key roving focus inside `node`.
  * Listens for keydown on matching items and on `node` when the list holds focus.
- * Calls `onMove(index, event)`. Index math uses moveIndex, clampIndex, and
- * nextEnabledIndex. Only Home/End without Alt, Ctrl or Meta call
+ * Calls `onMove(index, event)`. The index comes from `nextIndex`, the pure
+ * key map that `createFocusNav` shares for grids, typeahead and virtualized
+ * lists; this action keeps the item-query and callback shape its users
+ * already have. Only Home/End without Alt, Ctrl or Meta call
  * `preventDefault`.
  *
  * @param {HTMLElement} node
@@ -53,39 +54,6 @@ export function rovingFocus(node, options) {
     );
   }
 
-  /**
-   * @param {HTMLElement[]} items
-   * @param {number} direction
-   */
-  function moveBy(items, direction) {
-    const index = currentOptions.getActiveIndex();
-    if (currentOptions.skipDisabled) {
-      const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
-      return nextEnabledIndex({
-        items,
-        index,
-        step: direction,
-        isDisabled,
-        wrap: currentOptions.wrap !== false,
-      });
-    }
-    return currentOptions.wrap === false
-      ? clampIndex(index, direction, items.length)
-      : moveIndex(index, direction, items.length);
-  }
-
-  /**
-   * @param {HTMLElement[]} items
-   * @param {1 | -1} direction - 1 for the first item, -1 for the last.
-   */
-  function edge(items, direction) {
-    if (!currentOptions.skipDisabled) {
-      return direction === 1 ? 0 : items.length - 1;
-    }
-    const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
-    return nextEnabledIndex({ items, index: -1, step: direction, isDisabled });
-  }
-
   /** @param {KeyboardEvent} event */
   function handleKeydown(event) {
     const target = event.target;
@@ -94,9 +62,6 @@ export function rovingFocus(node, options) {
     if (target !== node && !target.closest(currentOptions.selector)) return;
 
     const orientation = currentOptions.orientation ?? "horizontal";
-    const horizontal = orientation === "horizontal" || orientation === "both";
-    const vertical = orientation === "vertical" || orientation === "both";
-
     const items = getItems();
     if (items.length === 0) return;
     if (
@@ -107,33 +72,42 @@ export function rovingFocus(node, options) {
       return;
     }
 
-    const inline =
-      horizontal && (event.key === "ArrowLeft" || event.key === "ArrowRight");
-    // Read when the key arrives: nothing reports a `dir` change.
-    const forward =
-      inline && currentOptions.rtl?.() ? "ArrowLeft" : "ArrowRight";
-
-    let index = -1;
-    if (
-      (inline && event.key === forward) ||
-      (vertical && event.key === "ArrowDown")
-    ) {
-      index = moveBy(items, 1);
-    } else if (inline || (vertical && event.key === "ArrowUp")) {
-      index = moveBy(items, -1);
-    } else if (hasModifierKey(event)) {
+    const { key } = event;
+    const edge = key === "Home" || key === "End";
+    if (edge) {
       // Leave Ctrl/Cmd+Home/End (scroll to the top or bottom) to the browser.
-      return;
-    } else if (currentOptions.home !== false && event.key === "Home") {
+      if (hasModifierKey(event)) return;
+      if (
+        (key === "Home" ? currentOptions.home : currentOptions.end) === false
+      ) {
+        return;
+      }
       event.preventDefault();
-      index = edge(items, 1);
-    } else if (currentOptions.end !== false && event.key === "End") {
-      event.preventDefault();
-      index = edge(items, -1);
-    } else {
-      return;
     }
 
+    const isDisabled = currentOptions.isDisabled ?? defaultIsDisabled;
+    // Read when the key arrives: nothing reports a `dir` change.
+    const swap =
+      (key === "ArrowLeft" || key === "ArrowRight") &&
+      orientation !== "vertical" &&
+      currentOptions.rtl?.() === true;
+    const move = nextIndex(
+      {
+        index: edge ? -1 : currentOptions.getActiveIndex(),
+        count: items.length,
+      },
+      key,
+      {
+        orientation,
+        wrap: currentOptions.wrap !== false,
+        rtl: swap,
+        skip: currentOptions.skipDisabled
+          ? (i) => isDisabled(items[i])
+          : undefined,
+      },
+    );
+    if (!move) return;
+    const index = move.index;
     if (index < 0) return;
     currentOptions.onMove?.(index, event);
     if (currentOptions.focusOnMove) items[index]?.focus();
