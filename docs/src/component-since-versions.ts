@@ -49,6 +49,7 @@ export const COMPONENT_SINCE_VERSIONS: Record<string, string> = {
   Form: "0.2.0",
   Grid: "0.8.4",
   Heading: "0.98.0",
+  HoverCard: "0.114.0",
   IconIndicator: "0.110.0",
   ImageLoader: "0.30.0",
   InlineEdit: "0.114.0",
