@@ -1,0 +1,135 @@
+// New component: no equivalent exists in carbon-components v10, so this
+// partial is hand-written rather than ported from an upstream Sass file.
+
+@import "carbon-components/scss/globals/scss/vars";
+@import "carbon-components/scss/globals/scss/helper-mixins";
+@import "carbon-components/scss/globals/scss/typography";
+@import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
+
+/// InfiniteList: a list that grows a page at a time, with a button after
+/// the last item that loads the next page, a count above it, and a note
+/// where the list ends.
+/// @access private
+/// @group components
+@mixin infinite-list {
+  .#{$prefix}--infinite-list {
+    display: block;
+  }
+
+  // The list is its own scroll area. The scroll area takes focus so the
+  // keyboard can scroll it.
+  .#{$prefix}--infinite-list--container {
+    block-size: var(--ccs-infinite-list-height, #{to-rem(384px)});
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .#{$prefix}--infinite-list--container:focus {
+    @include focus-outline("outline");
+  }
+
+  .#{$prefix}--infinite-list__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ccs-infinite-list-gap, 0);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .#{$prefix}--infinite-list__item {
+    margin: 0;
+    padding: 0;
+  }
+
+  // Off-screen items skip layout and paint. `auto` keeps them in find in page
+  // and gives them their real size once drawn, so the estimate only holds a
+  // place for the scrollbar. Browsers without it draw every item.
+  .#{$prefix}--infinite-list--lazy .#{$prefix}--infinite-list__item {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto var(--ccs-infinite-list-item-size, #{to-rem(96px)});
+  }
+
+  // A feed's articles take focus for Page Up and Page Down.
+  .#{$prefix}--infinite-list__item:focus {
+    @include focus-outline("outline");
+  }
+
+  // Off screen until a keyboard reaches it, then a link in the flow.
+  .#{$prefix}--infinite-list__skip {
+    @include type-style("body-compact-01");
+
+    position: absolute;
+    overflow: hidden;
+    block-size: 1px;
+    inline-size: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .#{$prefix}--infinite-list__skip:focus {
+    @include focus-outline("outline");
+
+    position: static;
+    display: block;
+    overflow: visible;
+    block-size: auto;
+    inline-size: auto;
+    margin: 0;
+    padding: $carbon--spacing-03 $carbon--spacing-05;
+    clip: auto;
+    color: $link-primary;
+    white-space: normal;
+  }
+
+  .#{$prefix}--infinite-list__message,
+  .#{$prefix}--infinite-list__note {
+    @include type-style("body-compact-01");
+
+    padding: $carbon--spacing-05;
+    color: $text-secondary;
+    text-align: center;
+  }
+
+  .#{$prefix}--infinite-list__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $carbon--spacing-04;
+    padding-block: $carbon--spacing-05;
+  }
+
+  .#{$prefix}--infinite-list__count {
+    @include type-style("helper-text-01");
+
+    margin: 0;
+    color: $text-secondary;
+  }
+
+  .#{$prefix}--infinite-list__error {
+    @include type-style("body-compact-01");
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $carbon--spacing-03 $carbon--spacing-05;
+    padding: $carbon--spacing-04 $carbon--spacing-05;
+    border-inline-start: 3px solid $support-error;
+    background-color: $layer;
+    color: $text-primary;
+  }
+
+  // A target for the skip link: it takes focus, and draws nothing.
+  .#{$prefix}--infinite-list__after {
+    block-size: 0;
+    outline: none;
+  }
+}
+
+@include exports("infinite-list") {
+  @include infinite-list;
+}

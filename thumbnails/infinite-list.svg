@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320px" height="180px" viewBox="0 0 320 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>infinite-list</title>
+    <g id="infinite-list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="row-1" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="22" width="96" height="6"></rect>
+        <rect id="row-divider-1" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="38" width="168" height="1"></rect>
+        <rect id="row-2" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="46" width="120" height="6"></rect>
+        <rect id="row-divider-2" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="62" width="168" height="1"></rect>
+        <rect id="row-3" fill="var(--cds-layer-accent-active, #a8a8a8)" x="88" y="70" width="80" height="6"></rect>
+        <rect id="row-divider-3" fill="var(--cds-border-subtle, #e0e0e0)" x="76" y="86" width="168" height="1"></rect>
+        <rect id="load-more" fill="none" stroke="var(--cds-background-brand, #0f62fe)" stroke-width="1" x="116.5" y="98.5" width="87" height="26"></rect>
+        <rect id="load-more-label" fill="var(--cds-background-brand, #0f62fe)" x="137" y="108" width="46" height="6"></rect>
+        <rect id="unloaded" fill="none" stroke="var(--cds-text-disabled, #c6c6c6)" stroke-width="1" stroke-dasharray="3 2" x="76.5" y="138.5" width="167" height="26"></rect>
+    </g>
+</svg>
