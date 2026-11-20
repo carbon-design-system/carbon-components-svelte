@@ -36,6 +36,7 @@ import TextInput from "carbon-components-svelte/TextInput/TextInput.svelte";
 import TileGroup from "carbon-components-svelte/Tile/TileGroup.svelte";
 import TimePicker from "carbon-components-svelte/TimePicker/TimePicker.svelte";
 import Toggle from "carbon-components-svelte/Toggle/Toggle.svelte";
+import TokenSearch from "carbon-components-svelte/TokenSearch/TokenSearch.svelte";
 import type { AriaEntry } from "../contract";
 import DatePickerInputFixture from "../fixtures/DatePickerInput.test.svelte";
 import RadioButtonGroupFixture from "../fixtures/RadioButtonGroup.test.svelte";
@@ -370,6 +371,14 @@ export const forms: AriaEntry[] = [
   {
     name: "TimePickerSelect",
     render: (attrs) => render(TimePickerSelectFixture, { props: attrs }),
+    target: () => screen.getByRole("combobox"),
+  },
+  {
+    name: "TokenSearch",
+    render: (attrs) =>
+      render(TokenSearch, {
+        props: { labelText: "Query", helperText: "is:open", ...attrs },
+      }),
     target: () => screen.getByRole("combobox"),
   },
   {
