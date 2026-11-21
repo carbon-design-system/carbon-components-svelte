@@ -83,6 +83,10 @@
 
   .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--animate.#{$prefix}--date-picker__calendar--open {
     animation: date-picker-calendar-enter $duration--fast-02 motion(entrance, productive);
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 
   .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--inline {
