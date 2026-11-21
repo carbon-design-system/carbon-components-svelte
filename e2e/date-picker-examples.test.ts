@@ -63,7 +63,7 @@ function layoutProblems() {
   )) {
     const box = rect(calendar);
     for (const part of calendar.querySelectorAll(
-      ".bx--date-picker__month-days, .bx--date-picker__week-numbers, .bx--date-picker__weekday-row, .bx--date-picker__grid, .bx--date-picker__grid--years, .bx--date-picker__nav-button--previous, .bx--date-picker__nav-button--next",
+      ".bx--date-picker__month-days, .bx--date-picker__week-numbers, .bx--date-picker__weekday-row, .bx--date-picker__grid, .bx--date-picker__nav-button--previous, .bx--date-picker__nav-button--next",
     )) {
       const partBox = rect(part);
       if (
@@ -97,9 +97,7 @@ function layoutProblems() {
         });
       });
 
-    for (const grid of calendar.querySelectorAll(
-      ".bx--date-picker__grid, .bx--date-picker__grid--years",
-    )) {
+    for (const grid of calendar.querySelectorAll(".bx--date-picker__grid")) {
       const container = grid.parentElement;
       if (container && rect(grid).width < rect(container).width - 3) {
         problems.push(`${grid.className} does not span the calendar`);
