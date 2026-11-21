@@ -127,26 +127,12 @@ export interface CalendarInstance {
   l10n: CalendarLocale;
   input: HTMLInputElement;
   altInput?: HTMLInputElement;
-  secondInput?: HTMLInputElement;
-  element: HTMLInputElement;
   _input: HTMLInputElement;
   _positionElement: HTMLElement;
   calendarContainer: HTMLElement;
-  monthNav: HTMLElement;
-  innerContainer: HTMLElement;
-  rContainer: HTMLElement;
-  daysContainer: HTMLElement;
-  days: HTMLElement;
-  weekdayContainer: HTMLElement;
-  prevMonthNav: HTMLElement;
-  nextMonthNav: HTMLElement;
-  yearElements: HTMLInputElement[];
-  monthElements: HTMLElement[];
-  currentYearElement: HTMLInputElement;
   selectedDateElem?: HTMLElement;
   todayDateElem?: HTMLElement;
   selectedDates: Date[];
-  latestSelectedDateObj?: Date;
   currentYear: number;
   currentMonth: number;
   isOpen: boolean;
@@ -168,7 +154,6 @@ export interface CalendarInstance {
     timeless?: boolean,
   ): Date | undefined;
   formatDate(date: Date, format: string): string;
-  onMouseOver(element?: HTMLElement): void;
   now: Date;
 }
 
