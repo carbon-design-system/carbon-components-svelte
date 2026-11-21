@@ -1102,11 +1102,6 @@
       prevValueFrom = nextFrom;
       prevValueTo = nextTo;
       if (engine) engine.setDate([nextFrom, nextTo]);
-      // calendar.setDate(["", ""]) only clears the FIRST input (a range
-      // plugin quirk) — write both back explicitly and unconditionally,
-      // even when the target is "".
-      if (inputRef) inputRef.value = nextFrom;
-      if (inputRefTo) inputRefTo.value = nextTo;
       syncSelectedDatesFromCalendar();
       return;
     }
@@ -1829,7 +1824,8 @@
           prevValueFrom = $inputValueFrom;
           prevValueTo = $inputValueTo;
 
-          // workaround to remove the default range plugin separator "to"
+          // `setDate` writes the start input in `dateFormat`; write both
+          // back as given, so each input shows its bound value.
           if ($inputValueFrom !== "") {
             /** @type {HTMLInputElement} */ (inputRef).value = $inputValueFrom;
           }
