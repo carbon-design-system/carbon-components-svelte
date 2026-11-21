@@ -50,6 +50,11 @@
    * Set to `true` to follow the operating system color scheme.
    * `theme` is set from `systemThemes` on mount and on every change;
    * set `theme` yourself to override until the next system change.
+   *
+   * Set to `"fallback"` to follow the system only until the theme is set
+   * another way. With `persist`, a stored theme wins over the system, and
+   * only themes not set from the system are stored.
+   * @type {boolean | "fallback"}
    */
   export let system = false;
 
@@ -105,6 +110,7 @@
   import Select from "../Select/Select.svelte";
   import SelectItem from "../Select/SelectItem.svelte";
   import Toggle from "../Toggle/Toggle.svelte";
+  import { parseStoredValue, safeBrowserStorage } from "../utils/storage.js";
   import { withContextualTokens } from "./contextual-tokens.js";
 
   const dispatch = createEventDispatcher();
@@ -118,6 +124,19 @@
   /** @type {MediaQueryList | undefined} */
   let mql;
 
+  // With `system="fallback"`: whether the theme still comes from the system,
+  // and the last theme the system set, to tell a pick apart from it.
+  let following = true;
+  /** @type {CarbonTheme | undefined} */
+  let systemTheme;
+
+  // With `system="fallback"`, `LocalStorage` is not used: it stores the theme
+  // on mount, which would record the system theme as a pick.
+  const storage = safeBrowserStorage("localStorage");
+  /** @type {string | null} */
+  let storedItem = null;
+  let storedKey = persistKey;
+
   // Tokens set on the document, so one dropped from `tokens` can be removed.
   /** @type {Set<string>} */
   const appliedTokens = new Set();
@@ -125,9 +144,12 @@
   /** @param {{ matches: boolean }} event */
   function onSystemChange(event) {
     theme = event.matches ? systemThemes[1] : systemThemes[0];
+    systemTheme = theme;
   }
 
   function watchSystem() {
+    // Without matchMedia, the current theme stands in for the system theme.
+    systemTheme = theme;
     if (typeof window === "undefined" || !window.matchMedia) return;
     if (!mql) {
       mql = window.matchMedia("(prefers-color-scheme: dark)");
@@ -136,9 +158,33 @@
     onSystemChange(mql);
   }
 
+  /**
+   * Apply a stored item; a missing or invalid one hands the theme back to the system.
+   * @param {string | null} item
+   */
+  function restorePick(item) {
+    storedItem = item;
+    const value = item == null ? undefined : parseStoredValue(item);
+    if (typeof value === "string" && value in themes) {
+      theme = /** @type {CarbonTheme} */ (value);
+      following = false;
+    } else {
+      following = true;
+    }
+  }
+
+  /** @param {StorageEvent} event */
+  function onStorage(event) {
+    if (event.storageArea && event.storageArea !== window.localStorage) return;
+    if (event.key !== null && event.key !== persistKey) return;
+    restorePick(event.newValue);
+    if (following) watchSystem();
+  }
+
   function unwatchSystem() {
     mql?.removeEventListener("change", onSystemChange);
     mql = undefined;
+    systemTheme = undefined;
   }
 
   function fallbackTheme() {
@@ -147,8 +193,10 @@
   }
 
   function finishMount() {
+    if (system === "fallback" && persist)
+      restorePick(storage.getItem(persistKey));
     // Resolve the system theme before snapshotting so mount does not dispatch `update`.
-    if (system) watchSystem();
+    if (system === true || (system === "fallback" && following)) watchSystem();
     // A restored theme that is not valid is replaced in the next flush.
     prevTheme = persist && !(theme in themes) ? fallbackTheme() : theme;
     mounted = true;
@@ -160,7 +208,7 @@
     // With `system` and `persist`, wait for the mount flush to end so the
     // stored value is restored first. On Svelte 3/4 a second write to the
     // bound value in the same flush never reaches LocalStorage.
-    if (system && persist) {
+    if (system === true && persist) {
       tick().then(() => {
         if (!destroyed) finishMount();
       });
@@ -171,17 +219,51 @@
     return () => {
       destroyed = true;
       unwatchSystem();
+      window.removeEventListener("storage", onStorage);
     };
   });
 
+  $: fallbackPersist = mounted && system === "fallback" && persist;
+
+  $: if (mounted) {
+    window.removeEventListener("storage", onStorage);
+    if (fallbackPersist) window.addEventListener("storage", onStorage);
+  }
+
+  $: if (fallbackPersist && persistKey !== storedKey) {
+    storedKey = persistKey;
+    restorePick(storage.getItem(persistKey));
+  }
+
+  // A theme set while following, other than by the system, is a pick.
+  $: if (
+    mounted &&
+    system === "fallback" &&
+    following &&
+    systemTheme !== undefined &&
+    theme !== systemTheme
+  ) {
+    following = false;
+  }
+
   // Runs before the apply block so the resolved theme is applied in the same flush.
   $: if (mounted) {
-    if (system) {
+    if (system === true || (system === "fallback" && following)) {
       systemThemes;
       watchSystem();
     } else {
       unwatchSystem();
     }
+  }
+
+  $: if (
+    fallbackPersist &&
+    !following &&
+    theme in themes &&
+    theme !== storedItem
+  ) {
+    storage.setItem(persistKey, theme);
+    storedItem = theme;
   }
 
   // LocalStorage sets `undefined` when the key is removed or storage is
@@ -247,7 +329,7 @@
   }
 </script>
 
-{#if persist}
+{#if persist && system !== "fallback"}
   <LocalStorage bind:value={theme} key={persistKey} />
 {/if}
 

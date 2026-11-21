@@ -96,6 +96,15 @@ describe("themeScript", () => {
     ).toBe("g10");
   });
 
+  it('prefers a stored theme over the system with system: "fallback"', () => {
+    stubMatchMedia(true);
+    const options = { system: "fallback", persist: true } as const;
+    expect(run(themeScript(options))).toBe("g100");
+
+    stubStorage({ theme: "g10" });
+    expect(run(themeScript(options))).toBe("g10");
+  });
+
   it("sets tokens as custom properties, as Theme does", () => {
     run(themeScript({ tokens: { "button-primary": "#d02670" } }));
     expect(
@@ -134,6 +143,7 @@ describe("themeScript", () => {
     { persist: true },
     { persist: true, system: true },
     { system: true, systemThemes: ["g10", "g90"] as ["g10", "g90"] },
+    { persist: true, system: "fallback" as const },
   ])("resolves the same theme as Theme for %o", async (props) => {
     stubStorage({ theme: "g80" });
     stubMatchMedia(true);

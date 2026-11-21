@@ -37,11 +37,19 @@ Set `system` to `true` to follow the operating system color scheme. The theme up
 
 Set `systemThemes` to choose which theme represents light and dark; the default pairs `white` with `g100`.
 
-With `persist` also set, the system preference wins when the page loads and the stored value is updated to match. Choosing a theme from a control keeps that theme until the system preference changes again.
+With `persist` also set, the system preference wins when the page loads and the stored value is updated to match. Choosing a theme from a control keeps that theme until the system preference changes again. To keep the user's pick across loads, see [Follow the system until the user picks](#follow-the-system-until-the-user-picks).
 
 To follow the system without JavaScript, see [Follow the system with CSS only](#follow-the-system-with-css-only).
 
 <FileSource src="/framed/Theme/ThemeSystem" />
+
+## Follow the system until the user picks
+
+Set `system` to `"fallback"` to follow the system only until the user picks a theme. With `persist`, the pick is stored and wins over the system on the next load. A theme that comes from the system isn't stored, so a user who never picks keeps following the system.
+
+When the stored theme is removed in another tab, the theme follows the system again.
+
+<FileSource src="/framed/Theme/ThemeSystemFallback" />
 
 ## Apply before first paint
 
@@ -95,7 +103,7 @@ Use `Theme` with `system` and `themeScript` when you need more than White and Gr
 | :--- | :--- |
 | White and Gray 100, with no JavaScript | `<html theme="system">` |
 | Another pair, such as Gray 10 and Gray 90 | `<Theme system systemThemes={["g10", "g90"]} />` and `themeScript` |
-| To remember the user's choice | `<Theme persist system />` and `themeScript` |
+| To remember the user's choice | `<Theme persist system="fallback" />` and `themeScript` |
 | A theme control, or `update` events | `<Theme render="toggle" system />` |
 
 The `theme` prop doesn't take `"system"`. It holds the theme that the controls show, `update` reports, and `persist` stores, so it is always one of the five themes. When `Theme` mounts, it sets the `theme` attribute on `<html>` to that theme.
