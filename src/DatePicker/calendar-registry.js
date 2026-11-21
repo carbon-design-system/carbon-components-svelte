@@ -23,6 +23,32 @@ export function detachCalendar(input) {
 }
 
 /**
+ * Native `change`/`input` events the calendar dispatches itself after its
+ * `onChange`, as opposed to ones the browser fires for typed text.
+ *
+ * @type {WeakSet<Event>}
+ */
+const calendarEvents = new WeakSet();
+
+/**
+ * @template {Event} E
+ * @param {E} event
+ */
+export function markCalendarEvent(event) {
+  calendarEvents.add(event);
+  return event;
+}
+
+/**
+ * Whether the calendar, not the browser, dispatched `event`.
+ *
+ * @param {Event} event
+ */
+export function isCalendarEvent(event) {
+  return calendarEvents.has(event);
+}
+
+/**
  * The calendar attached to `input`, if any.
  *
  * @param {Element} input

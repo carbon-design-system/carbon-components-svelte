@@ -14,7 +14,11 @@ import {
   parseDate,
   yearSuffix,
 } from "./calendar-dates.js";
-import { attachCalendar, detachCalendar } from "./calendar-registry.js";
+import {
+  attachCalendar,
+  detachCalendar,
+  markCalendarEvent,
+} from "./calendar-registry.js";
 import { DAY_STATE_CLASSES, dayState } from "./day-state.js";
 
 const PREV_ARROW =
@@ -648,7 +652,9 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (event === "onChange") {
       for (const type of ["change", "input"]) {
         self.input.dispatchEvent(
-          new Event(type, { bubbles: true, cancelable: true }),
+          markCalendarEvent(
+            new Event(type, { bubbles: true, cancelable: true }),
+          ),
         );
       }
     }
