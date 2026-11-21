@@ -1,16 +1,6 @@
 import { render, screen } from "@testing-library/svelte";
 import DatePickerProps from "./DatePickerProps.test.svelte";
-
-const engineOf = (input: Element) =>
-  (
-    input as unknown as {
-      _flatpickr: {
-        config: Record<string, unknown>;
-        isOpen: boolean;
-        redraw: () => void;
-      };
-    }
-  )._flatpickr;
+import { getCalendarInstance } from "./calendar-instance";
 
 type Api = {
   open: () => void;
@@ -30,8 +20,7 @@ describe("DatePicker props for calendar options", () => {
   it("applies a prop change without rebuilding the calendar", async () => {
     const { rerender } = render(DatePickerProps, { value: "03/15/2024" });
     const input = screen.getByLabelText("Date");
-    await vi.waitFor(() => expect(engineOf(input)).toBeTruthy());
-    const engine = engineOf(input);
+    const engine = await vi.waitFor(() => getCalendarInstance(input));
     const redraw = vi.spyOn(engine, "redraw");
 
     await rerender({ value: "03/15/2024", closeOnSelect: false });
@@ -43,7 +32,7 @@ describe("DatePicker props for calendar options", () => {
   it("makes the field read-only when allowInput turns off after mount", async () => {
     const { rerender } = render(DatePickerProps, {});
     const input = screen.getByLabelText("Date");
-    await vi.waitFor(() => expect(engineOf(input)).toBeTruthy());
+    await vi.waitFor(() => getCalendarInstance(input));
     expect(input).not.toHaveAttribute("readonly");
 
     await rerender({ allowInput: false });

@@ -14,6 +14,7 @@ import {
   parseDate,
   yearSuffix,
 } from "./calendar-dates.js";
+import { attachCalendar, detachCalendar } from "./calendar-registry.js";
 import { DAY_STATE_CLASSES, dayState } from "./day-state.js";
 
 const PREV_ARROW =
@@ -2577,13 +2578,10 @@ export function createCalendarEngine(element, userConfig = {}) {
       self.altInput.parentNode?.removeChild(self.altInput);
       self.altInput = undefined;
     }
-    if (secondInput)
-      /** @type {import("./calendar.js").CalendarInput} */ (
-        secondInput
-      )._flatpickr = undefined;
+    if (secondInput) detachCalendar(secondInput);
     self.input.type = self.input._type;
     self.input.removeAttribute("readonly");
-    self.input._flatpickr = undefined;
+    detachCalendar(self.input);
     for (const key of [
       "config",
       "calendarContainer",
@@ -2615,11 +2613,8 @@ export function createCalendarEngine(element, userConfig = {}) {
     destroy();
     throw error;
   }
-  self.input._flatpickr = self;
-  if (secondInput)
-    /** @type {import("./calendar.js").CalendarInput} */ (
-      secondInput
-    )._flatpickr = self;
+  attachCalendar(self.input, self);
+  if (secondInput) attachCalendar(secondInput, self);
   triggerEvent("onReady");
   return self;
 }
