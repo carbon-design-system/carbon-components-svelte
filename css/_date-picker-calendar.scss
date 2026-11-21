@@ -148,8 +148,7 @@
     background-color: transparent;
   }
 
-  .#{$prefix}--date-picker__nav-button--previous,
-  .#{$prefix}--date-picker__nav-button--next {
+  .#{$prefix}--date-picker__nav-button {
     z-index: 3;
     display: flex;
     align-items: center;
@@ -172,8 +171,7 @@
   }
 
   // the arrows point to the inline start and end.
-  .#{$prefix}--date-picker__nav-button--previous svg,
-  .#{$prefix}--date-picker__nav-button--next svg {
+  .#{$prefix}--date-picker__nav-button svg {
     @include ccs-mirror-rtl;
   }
 
@@ -273,8 +271,7 @@
   // `:active::after` and disabled `::after` rules, which share its
   // specificity and property and must keep winning those ties.
   @media (any-hover: hover) {
-    .#{$prefix}--date-picker__nav-button--previous:hover,
-    .#{$prefix}--date-picker__nav-button--next:hover {
+    .#{$prefix}--date-picker__nav-button:hover {
       background-color: $layer-hover;
     }
 
@@ -451,7 +448,8 @@
 
   // The day states keep the day's own class: alone, a state class would
   // lose to `__day:hover` above and tie the forced-colors rules below.
-  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today {
+  .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today,
+  .#{$prefix}--date-picker__grid-cell--today:not(.#{$prefix}--date-picker__grid-cell--selected) {
     position: relative;
     color: $link-primary;
     font-weight: 600;
@@ -541,8 +539,7 @@
   }
 
   // Windows HCM fix
-  .#{$prefix}--date-picker__nav-button--previous,
-  .#{$prefix}--date-picker__nav-button--next {
+  .#{$prefix}--date-picker__nav-button {
     @include high-contrast-mode("icon-fill");
   }
 
@@ -619,24 +616,6 @@
   .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--selected {
     background-color: $background-brand;
     color: $text-on-color;
-  }
-
-  .#{$prefix}--date-picker__grid-cell--today:not(.#{$prefix}--date-picker__grid-cell--selected) {
-    position: relative;
-    color: $link-primary;
-    font-weight: 600;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: to-rem(7px);
-      left: 50%;
-      display: block;
-      width: to-rem(4px);
-      height: to-rem(4px);
-      background-color: $link-primary;
-      transform: translateX(-50%);
-    }
   }
 
   .#{$prefix}--date-picker__grid-cell--disabled {
