@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/svelte";
+import { render } from "@testing-library/svelte";
 import { positionCalendarFixed } from "../../src/DatePicker/date-picker-top-layer.js";
 import { user } from "../utils/user";
 import DatePickerHost from "./DatePickerHost.test.svelte";
@@ -48,17 +48,6 @@ describe("DatePicker in a dialog", () => {
     const calendar = await openCalendar();
 
     expect(calendar.parentElement).toBe(document.querySelector("dialog"));
-  });
-
-  it("stays open when the dialog is clicked elsewhere", async () => {
-    render(DatePickerHost, { props: { dialogSibling: true } });
-
-    const calendar = await openCalendar();
-    // `click` only: flatpickr closes on `mousedown` by itself, and the
-    // picker's own click handler is what spares the rest of the dialog.
-    await fireEvent.click(screen.getByText("Dialog text"));
-
-    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
   });
 });
 

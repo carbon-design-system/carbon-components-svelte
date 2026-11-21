@@ -494,7 +494,6 @@
     FORM_CONTEXT_KEY,
     MODAL_CONTEXT_KEY,
   } from "../constants/context-keys.js";
-  import { dismiss } from "../utils/dismiss.js";
   import { clippedBy } from "../utils/fit-align.js";
   import {
     declaredDirection,
@@ -508,7 +507,6 @@
   import { createCalendar } from "./create-calendar.js";
   import {
     getTopLayerAncestor,
-    isEventTargetInsidePortaledCalendar,
     positionCalendarFixed,
   } from "./date-picker-top-layer.js";
   import { getPropWarnings, getShortWarning } from "./unsupported-options.js";
@@ -1122,52 +1120,6 @@
   }
 
   /**
-   * Mirrors flatpickr's own `ignoredFocusElements` check so Carbon's
-   * outside-click and blur dismissal honor the option too.
-   *
-   * @param {EventTarget | null} target
-   */
-  function isIgnoredFocusElement(target) {
-    return (engine?.config.ignoredFocusElements ?? []).some((element) =>
-      element.contains(/** @type {Node} */ (target)),
-    );
-  }
-
-  /** @param {import("./calendar.js").CalendarCloseReason} trigger */
-  function dismissCalendar(trigger) {
-    if (calendarOpen && engine?.isOpen) engine.close(trigger);
-  }
-
-  /**
-   * @type {(relatedTarget: EventTarget | null) => void}
-   */
-  function blurInput(relatedTarget) {
-    if (!engine) return;
-    // No relatedTarget means focus left the document (e.g. switching browser
-    // tabs); refocusing would replay the open animation.
-    if (relatedTarget == null) return;
-    // In range mode, focus moves between the two inputs while the calendar
-    // stays open; closing here would replay the open animation on every switch.
-    if (datePickerRef?.contains(/** @type {Node} */ (relatedTarget))) return;
-    if (engine.calendarContainer.contains(/** @type {Node} */ (relatedTarget)))
-      return;
-    if (isIgnoredFocusElement(relatedTarget)) return;
-    dismissCalendar("outside-click");
-  }
-
-  /**
-   * Tabbing past the last control of the popup moves focus out of the
-   * calendar without a click, so close it as an outside dismissal. Focus
-   * moving to an input, within the calendar or to a `keepOpenFor` element
-   * keeps it open, as with an input blur.
-   *
-   * @param {FocusEvent} event
-   */
-  function handleCalendarFocusOut(event) {
-    blurInput(event.relatedTarget);
-  }
-
-  /**
    * @type {() => void}
    */
   function openCalendar() {
@@ -1357,7 +1309,6 @@
     declareRef,
     updateValue,
     handleFormReset,
-    blurInput,
     openCalendar,
     focusCalendar,
   });
@@ -1612,10 +1563,6 @@
       handleCalendarKeydown,
       { capture: true },
     );
-    engine.calendarContainer?.addEventListener(
-      "focusout",
-      handleCalendarFocusOut,
-    );
     if (engine.config.inline) {
       for (const type of BLOCKED_EVENTS) {
         engine.calendarContainer?.addEventListener(
@@ -1729,10 +1676,6 @@
       "keydown",
       handleCalendarKeydown,
       { capture: true },
-    );
-    engine.calendarContainer?.removeEventListener(
-      "focusout",
-      handleCalendarFocusOut,
     );
     for (const type of BLOCKED_EVENTS) {
       engine.calendarContainer?.removeEventListener(
@@ -1982,30 +1925,6 @@
     // turns so while open closes it.
     if (interactionBlocked && engine.isOpen) engine.close();
   }
-
-  /**
-   * Returns true when `event.target` is outside both the date-picker element
-   * and the (possibly portalled) calendar container.
-   *
-   * @param {Event} event
-   */
-  function isOutsideCalendarTarget(event) {
-    if (!calendarOpen || !engine) return false;
-    if (isIgnoredFocusElement(event.target)) return false;
-    return !isEventTargetInsidePortaledCalendar(
-      datePickerRef,
-      engine.calendarContainer,
-      event.target,
-      topLayerAncestor,
-    );
-  }
-
-  /**
-   * @type {(event: Event) => void}
-   */
-  function handleOutsideClick(event) {
-    if (isOutsideCalendarTarget(event)) dismissCalendar("outside-click");
-  }
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -2027,10 +1946,6 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     bind:this={datePickerRef}
-    use:dismiss={{
-      enabled: calendarOpen,
-      listeners: [{ type: "click", handler: handleOutsideClick }],
-    }}
     {id}
     class:bx--date-picker={true}
     class:bx--date-picker--short={short}
