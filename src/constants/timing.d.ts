@@ -77,3 +77,10 @@ export const STEPPER_REPEAT_INTERVAL_MS: 50;
  * element is hidden or its animation is off.
  */
 export const COPY_FEEDBACK_FADE_MS: 110;
+
+/**
+ * How long `Dialog` stays open while its exit motion runs, so it leaves
+ * with the same fade and slide it entered with. It matches the transition
+ * (Carbon moderate-02), and the dialog closes at once under reduced motion.
+ */
+export const DIALOG_CLOSE_MS: 240;

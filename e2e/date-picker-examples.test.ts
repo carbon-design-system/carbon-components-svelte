@@ -148,6 +148,15 @@ test.describe("DatePicker docs examples", () => {
       await page.waitForSelector("body[data-ready]");
       await openCalendar(page);
       await expect(page.locator(CALENDAR).first()).toBeVisible();
+      // A Dialog example enters with motion; measure it at rest.
+      await page.waitForFunction(
+        () =>
+          !document
+            .getAnimations()
+            .some((animation) =>
+              (animation.effect as KeyframeEffect).target?.matches("dialog"),
+            ),
+      );
 
       expect(await page.evaluate(layoutProblems)).toEqual([]);
 

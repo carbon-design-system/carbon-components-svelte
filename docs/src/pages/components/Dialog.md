@@ -18,6 +18,10 @@ When the dialog opens, focus moves into it (native modal focus trap). When it cl
 
 <FileSource src="/framed/Dialog/ModalDialog" />
 
+## Motion
+
+`Dialog` opens and closes with the motion of [Modal](/components/Modal): the backdrop fades and the dialog slides down 24px over 240 ms. A native `<dialog>` leaves the page as soon as `close()` runs, so `Dialog` keeps it open for that long on close, whether `open` is set to `false`, <DocKbd label="Escape" /> is pressed, the backdrop is clicked, or a `<form method="dialog">` is submitted. Setting `open` back to `true` during that time keeps the dialog open. The `close` event fires once the dialog has closed. With `prefers-reduced-motion: reduce`, the dialog neither moves nor waits.
+
 ## Events
 
 `Dialog` dispatches `open` once the dialog becomes visible (after `show()`/`showModal()` runs and focus moves in). Pair it with `close` — see [Closing](#closing) below — to track the dialog's full lifecycle.
