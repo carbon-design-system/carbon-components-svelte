@@ -1,0 +1,60 @@
+---
+components: ["ErrorBoundary"]
+description: ErrorBoundary catches an error thrown while part of a page renders and shows a fallback with a retry button, so the rest of the page keeps working. Requires Svelte 5.
+---
+
+## Basic
+
+ErrorBoundary requires Svelte 5. It wraps [`<svelte:boundary>`](https://svelte.dev/docs/svelte/svelte-boundary), which Svelte 3 and 4 can't compile, so the package root doesn't export it. Import it from `carbon-components-svelte/boundary`:
+
+```svelte
+<script>
+  import { ErrorBoundary } from "carbon-components-svelte/boundary";
+</script>
+
+<ErrorBoundary>
+  <Dashboard />
+</ErrorBoundary>
+```
+
+When the content throws while it renders, or in an effect, ErrorBoundary replaces it with a [Callout](/components/Callout) that names the problem and offers a retry button. The button renders the content again. In this example, select "Load report": the first request fails and the retry succeeds.
+
+ErrorBoundary doesn't catch errors thrown in event handlers or in async code that runs after the render, such as a rejected `fetch`. Catch those where they happen and keep the result in state. It doesn't catch errors while the server renders, either: an error there fails the request as it would without a boundary.
+
+<FileSource src="/framed/ErrorBoundary/ErrorBoundaryBasic" />
+
+Set `titleText`, `subtitleText` and `retryText` to translate or reword the fallback. Set `retryText` to an empty string to hide the button, for an error that retrying can't fix.
+
+## Error details
+
+An error's message can expose internals, such as a host name, a query or a file path, so the fallback doesn't show it. Set `showError` to `true` where the message is safe for the reader, such as in an internal tool.
+
+<FileSource src="/framed/ErrorBoundary/ErrorBoundaryShowError" />
+
+## Custom fallback
+
+Use the "failed" slot to replace the fallback. It receives the `error` and a `reset` function that renders the content again.
+
+<FileSource src="/framed/ErrorBoundary/ErrorBoundaryCustomFallback" />
+
+In a Svelte 5 component that uses runes, pass a snippet instead: `{#snippet failed({ error, reset })}`.
+
+## Retry
+
+`reset` creates the content again from scratch, so it loses any state the content held. The retry button calls it, and so does a "failed" slot that you write.
+
+ErrorBoundary dispatches an `error` event with `{ error, reset }` each time the content fails, including a failed retry. Use it to log the error, or to call `reset` yourself, such as after a delay. In this example, the first two requests fail.
+
+<FileSource src="/framed/ErrorBoundary/ErrorBoundaryRetry" />
+
+## Usage
+
+| Do | Why |
+| --- | --- |
+| Wrap a region that can fail on its own, such as a chart, a panel or a route. | The rest of the page keeps working. One boundary around the whole app replaces everything with the fallback. |
+| Nest boundaries around independent regions. | An error goes to the nearest boundary, so a failed widget doesn't take down its neighbors. |
+| Log the error from the `error` event. | The fallback tells the reader what happened. It doesn't tell you. |
+| Leave `showError` off for public pages. | A message can contain a host name, a query or a path. |
+| Keep the default `retryText` for errors that may be temporary, and hide the button for the rest. | A retry that always fails is noise. |
+| Catch errors in event handlers and async code yourself. | ErrorBoundary only sees errors from rendering and effects. |
+| Import from `carbon-components-svelte/boundary`, not the package root. | The root doesn't export it, so apps on Svelte 3 and 4 still compile. |
