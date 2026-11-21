@@ -623,9 +623,12 @@ const SHARED_RULES: Record<string, (lines: string[]) => number[]> = {
 
 // Same contract as KNOWN_PATCH_VIOLATIONS: exact counts that only shrink.
 // The z-index values have no `z()` layer (9000 sits on "modal" by
-// coincidence, 10000 is above the map). The element qualifiers out-rank
+// coincidence, 10000 is above the map). The DatePicker calendar's two came
+// from flatpickr: a popup at 99999 opens over the shell's 10000 panels, and
+// a static one at 999 stays under page chrome. The element qualifiers out-rank
 // `legend`/`tr` rules in the vendored base.
 const KNOWN_SHARED_VIOLATIONS: Record<string, number> = {
+  "literal z-index: _date-picker-calendar.scss": 2,
   "literal z-index: _profile-menu.scss": 1,
   "literal z-index: components/ui-shell/_ui-shell.scss": 2,
   "element-qualified class: _fluid-pin-code-input.scss": 2,
