@@ -1385,21 +1385,6 @@
     }
   }
 
-  /**
-   * flatpickr treats an empty `enable` array as "nothing is enabled", since
-   * merely having an `enable` array (even an empty one) switches it into
-   * allow-list mode, unlike `disable`, where empty is the natural "no rule"
-   * state. Resetting `enable` back to "no rule" needs `undefined`, but
-   * flatpickr's own `calendar.set("enable", undefined)` throws (its setter
-   * always calls `.slice()` on the value), so write the private backing
-   * field directly and redraw.
-   */
-  function clearCalendarEnable() {
-    /** @type {NonNullable<typeof engine>} */ (engine).config._enable =
-      undefined;
-    /** @type {NonNullable<typeof engine>} */ (engine).redraw();
-  }
-
   /** Track each prop with its own `prev*` reference, so clearing one back
    * to `[]` restores the "no rule" state exactly once. */
   function applyDisabledDates() {
@@ -1426,7 +1411,11 @@
         enabledDates,
       );
     } else if (hadOverride) {
-      clearCalendarEnable();
+      // An empty `enable` array would enable nothing; `undefined` is no rule.
+      /** @type {NonNullable<typeof engine>} */ (engine).set(
+        "enable",
+        undefined,
+      );
     }
   }
 
