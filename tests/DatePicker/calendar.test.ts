@@ -244,6 +244,24 @@ describe("createCalendarEngine", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it("never opens or closes an inline calendar, even on a pick", () => {
+    const onOpen = vi.fn();
+    const onClose = vi.fn();
+    const { instance } = create({
+      inline: true,
+      defaultDate: "2024-03-01",
+      onOpen,
+      onClose,
+    });
+
+    instance.open();
+    day(instance, 20).click();
+    instance.close();
+
+    expect(onOpen).not.toHaveBeenCalled();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("closes on Escape from the input", () => {
     const { instance, input } = create();
     instance.open();
