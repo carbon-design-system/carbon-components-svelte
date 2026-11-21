@@ -1,0 +1,45 @@
+---
+components: ["ShortcutProvider", "ShortcutHelp"]
+description: ShortcutProvider keeps an app's keyboard shortcuts in one place, with scopes for modals and panels. ShortcutHelp lists them in a sheet that opens with a question mark.
+---
+
+## Basic
+
+Wrap the app in `ShortcutProvider`. It listens for `keydown` once and runs the shortcut that matches.
+
+Register a shortcut on a control with the `shortcut` action. Put it on an element around the control, since components cannot take actions. `keys` joins modifiers and a key with `+`, and `mod` is Command on Apple platforms and Ctrl elsewhere. `label` says what the shortcut does, in the words the help sheet shows, and `onTrigger` runs when the keys are pressed. The action runs only while the element is connected, enabled, shown and not inert.
+
+Register a shortcut that belongs to no element, such as one that opens a command palette, with the `shortcuts` prop. The examples run in a frame, so click in one before you press its keys.
+
+<FileSource src="/framed/ShortcutProvider/ShortcutProviderBasic" />
+
+A shortcut without `mod` or `ctrl`, such as <DocKbd label="D" />, does not run while the user types in a text field, a select or editable content. Shortcuts with `mod` or `ctrl` do, so avoid the editing keys: <DocKbd label="⌘" />+<DocKbd label="A" />, <DocKbd label="⌘" />+<DocKbd label="C" />, <DocKbd label="⌘" />+<DocKbd label="V" />, <DocKbd label="⌘" />+<DocKbd label="X" /> and <DocKbd label="⌘" />+<DocKbd label="Z" />.
+
+When two shortcuts in one scope share their keys, the registry logs a warning and the one registered later runs. When it is removed, the earlier one runs again. A `Button`, menu item or `Search` that sets its own `shortcut` keeps working, and does not appear in the help sheet. Do not bind the same keys on both: the listener that was added first answers.
+
+## Scopes
+
+Nest a `ShortcutProvider` with a `titleText` inside a modal or a side panel to start a scope. Its shortcuts run while it is shown, and take the keys from a shortcut with the same keys outside it. Other shortcuts keep running. A scope that is hidden, inert or removed gives its keys back, so there is nothing to open or close.
+
+In the example, <DocKbd label="⌘" />+<DocKbd label="S" /> saves the draft until the profile modal opens, and saves the profile while it is open. While a modal dialog is open, a shortcut on an element outside it does not run, so a page's Save does not fire behind a dialog.
+
+<FileSource src="/framed/ShortcutProvider/ShortcutProviderScopes" />
+
+## Help sheet
+
+Place `ShortcutHelp` once inside the root provider. It is a modal that lists what works now, grouped by scope with the innermost scope first, each row a label and its keys. It leaves out a scope that is closed, a shortcut that an inner scope shadows, and one whose element is disabled or hidden.
+
+<DocKbd label="?" /> opens and closes it outside text fields, and <DocKbd label="Escape" /> closes it. Bind `open` to open it from a control. Every string is a prop: `titleText`, `generalText` for shortcuts outside a named scope, `toggleText` for the sheet's own row, `emptyText` and `iconDescription`.
+
+<FileSource src="/framed/ShortcutProvider/ShortcutHelp" />
+
+A shortcut made of one character must be able to change (WCAG 2.1.4). Set `shortcut` to remap the sheet's key, such as `"mod+/"`, or to `""` to remove it and open the sheet from a control.
+
+| Do | Why |
+| :--- | :--- |
+| Use `mod` for Command or Ctrl | One shortcut reads and works on every platform |
+| Write `label` as an action: "Save draft", "Open command palette" | The help sheet shows it as the row's text, and screen readers read it |
+| Start a nested scope for a modal or a side panel | Its shortcuts shadow the page's while it is shown, and the help sheet lists them first |
+| Keep single-key shortcuts for actions that make sense while reading | They do not run while typing in a field, but they run everywhere else |
+| Let users turn off or remap single-key shortcuts | Speech input and stray key presses fire them by accident |
+| Give each action one set of keys per scope | A duplicate logs a warning, and the later one replaces the earlier |

@@ -1141,6 +1141,19 @@ assets:
         name: Documentation
         action: link
         url: https://svelte.carbondesignsystem.com/components/ShapeIndicator
+  shortcut-provider:
+    name: Shortcut provider
+    description: Keeps an app's keyboard shortcuts in one place, with scopes for modals and panels, and a help sheet that lists them.
+    status: stable
+    type: component
+    platform: web
+    framework: svelte
+    thumbnailPath: './thumbnails/shortcut-provider.svg'
+    demoLinks:
+      - type: other
+        name: Documentation
+        action: link
+        url: https://svelte.carbondesignsystem.com/components/ShortcutProvider
   side-panel:
     name: Side panel
     description: A panel that docks to the edge of the page for details, edits or a short flow, over the content or beside it.

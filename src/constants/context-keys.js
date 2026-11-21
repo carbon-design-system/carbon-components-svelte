@@ -60,3 +60,9 @@ export const THEME_ZONE_CONTEXT_KEY = "carbon:ThemeZone";
  * to the menu's `anchor`, the trigger.
  */
 export const MENU_PLACEMENT_CONTEXT_KEY = "carbon:MenuPlacement";
+
+/**
+ * Set by `ShortcutProvider` to its scope; read by nested providers, which
+ * join the same registry, and by `ShortcutHelp`, which lists it.
+ */
+export const SHORTCUT_CONTEXT_KEY = "carbon:Shortcut";
