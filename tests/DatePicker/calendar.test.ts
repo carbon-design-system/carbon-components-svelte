@@ -1,4 +1,5 @@
 import { fireEvent } from "@testing-library/svelte";
+import { calendarOf } from "../../src/DatePicker/calendar-registry.js";
 import {
   type CalendarInstance,
   type CalendarOptions,
@@ -156,12 +157,14 @@ describe("createCalendarEngine", () => {
   it("restores the input and removes the calendar on destroy", () => {
     const { instance, input, host } = create({ static: true });
     expect(host.querySelector(".bx--date-picker__anchor")).not.toBeNull();
+    expect(calendarOf(input)).toBe(instance);
 
     instance.destroy();
 
     expect(host.querySelector(".bx--date-picker__anchor")).toBeNull();
     expect(host.querySelector(".bx--date-picker__calendar")).toBeNull();
     expect(input.parentElement).toBe(host);
+    expect(calendarOf(input)).toBeUndefined();
   });
 
   it("moves an open calendar out of the field and back with `static`", () => {

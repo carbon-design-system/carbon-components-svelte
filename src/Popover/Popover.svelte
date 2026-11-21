@@ -65,6 +65,7 @@
   export let ref = null;
 
   import { createEventDispatcher, onMount, tick } from "svelte";
+  import { calendarOf } from "../DatePicker/calendar-registry.js";
   import FloatingPortal from "../Portal/FloatingPortal.svelte";
   import { dismiss } from "../utils/dismiss.js";
   import {
@@ -264,20 +265,17 @@
       .join(" ");
   }
 
-  // A DatePicker nested in this popover may portal its flatpickr calendar to
+  // A DatePicker nested in this popover may portal its calendar to
   // `document.body` (outside `ref`), so a click on it looks like an outside
-  // click. Flatpickr stamps the input with `_flatpickr`; walk the popover's
-  // own inputs to check whether the clicked calendar belongs to one of them.
+  // click. Walk the popover's own inputs to check whether the clicked
+  // calendar belongs to one of them.
   /** @param {EventTarget | null} target */
   function isDatePickerCalendarClick(target) {
     if (!ref || !(target instanceof Element)) return false;
     const calendar = target.closest(".bx--date-picker__calendar");
     if (!calendar) return false;
     for (const input of ref.querySelectorAll("input")) {
-      if (
-        /** @type {import("../DatePicker/calendar.js").CalendarInput} */ (input)
-          ._flatpickr?.calendarContainer === calendar
-      ) {
+      if (calendarOf(input)?.calendarContainer === calendar) {
         return true;
       }
     }

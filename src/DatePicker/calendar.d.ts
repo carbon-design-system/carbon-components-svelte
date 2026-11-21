@@ -112,11 +112,6 @@ export interface CalendarOptions extends Partial<
 /** A day or grid cell, stamped with the date it shows. */
 export type DayElement = HTMLElement & { dateObj: Date };
 
-/** An input the engine is attached to. */
-export type CalendarInput = HTMLInputElement & {
-  _flatpickr?: CalendarInstance;
-};
-
 export interface CalendarInstance {
   config: Required<
     Pick<CalendarOptions, "dateFormat" | "conjunction" | "ignoredFocusElements">
