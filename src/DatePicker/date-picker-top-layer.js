@@ -82,30 +82,3 @@ function isRtl(instance) {
     resolveLayoutDirection(undefined, instance.calendarContainer) === "rtl"
   );
 }
-
-/**
- * Whether a click/focus event target is still “inside” the date picker UI when
- * the calendar is portalled into a top-layer ancestor — including the subtree
- * of that ancestor so brief hit-testing quirks during open animations do not
- * close the calendar.
- *
- * @param {HTMLElement | null | undefined} datePickerRef
- * @param {HTMLElement} calendarContainer
- * @param {EventTarget | null} target
- * @param {HTMLElement | null} [cachedTopLayer] Pre-computed ancestor; avoids a `.closest()` query per event.
- */
-export function isEventTargetInsidePortaledCalendar(
-  datePickerRef,
-  calendarContainer,
-  target,
-  cachedTopLayer,
-) {
-  if (!(target instanceof Node)) return false;
-  if (datePickerRef?.contains(target)) return true;
-  if (calendarContainer.contains(target)) return true;
-  const topLayer =
-    cachedTopLayer === undefined
-      ? getTopLayerAncestor(datePickerRef)
-      : cachedTopLayer;
-  return !!topLayer?.contains(target);
-}

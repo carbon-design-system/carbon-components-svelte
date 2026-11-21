@@ -1957,11 +1957,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       target === self.altInput ||
       target === secondInput ||
       element.contains(target);
-    const related = /** @type {FocusEvent} */ (event).relatedTarget;
-    const lostFocus =
-      !isInput &&
-      !inCalendar &&
-      !(related instanceof Node && self.calendarContainer.contains(related));
+    const lostFocus = !isInput && !inCalendar;
     const ignored = config.ignoredFocusElements.some(
       (/** @type {Node} */ node) => node.contains(target),
     );

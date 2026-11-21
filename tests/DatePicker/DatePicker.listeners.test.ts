@@ -1,7 +1,6 @@
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
 import type { CalendarInstance as Instance } from "../../src/DatePicker/calendar";
-import { flushDismiss } from "../utils/flush-dismiss";
 import { netListenerCalls } from "../utils/net-listener-calls";
 import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
@@ -93,28 +92,17 @@ describe("DatePicker window listeners", () => {
     expect(netListenerCalls(add, remove, "click")).toBe(0);
   });
 
-  it("an open calendar registers one shared click listener", async () => {
-    const add = vi.spyOn(window, "addEventListener");
-    const remove = vi.spyOn(window, "removeEventListener");
+  it("only an open calendar listens on the document for outside clicks", async () => {
+    const add = vi.spyOn(document, "addEventListener");
+    const remove = vi.spyOn(document, "removeEventListener");
 
     const instance = await openCalendarInstance();
-    await flushDismiss();
     expect(instance.isOpen).toBe(true);
-    expect(netListenerCalls(add, remove, "click")).toBe(1);
-  });
-
-  it("closing the calendar removes the click listener", async () => {
-    const add = vi.spyOn(window, "addEventListener");
-    const remove = vi.spyOn(window, "removeEventListener");
-
-    const instance = await openCalendarInstance();
-    await flushDismiss();
-    expect(netListenerCalls(add, remove, "click")).toBe(1);
+    expect(netListenerCalls(add, remove, "mousedown")).toBe(1);
 
     instance.close();
     await tick();
-    expect(instance.isOpen).toBe(false);
-    expect(netListenerCalls(add, remove, "click")).toBe(0);
+    expect(netListenerCalls(add, remove, "mousedown")).toBe(0);
   });
 });
 

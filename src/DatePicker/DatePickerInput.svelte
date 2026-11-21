@@ -126,7 +126,6 @@
     inputIds,
     updateValue,
     handleFormReset,
-    blurInput,
     openCalendar,
     focusCalendar,
     inputValue,
@@ -335,9 +334,8 @@
       on:focus
       on:focus={handleFocus}
       on:blur
-      on:blur={(event) => {
+      on:blur={() => {
         focused = false;
-        blurInput(event.relatedTarget);
       }}
       on:paste
     />

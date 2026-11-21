@@ -347,11 +347,9 @@ describe("DatePicker close event", () => {
     render(DatePickerClose, { props: { onClose, outsideButton: true } });
 
     const calendar = await openCalendar();
-    // Only the input's blur: flatpickr's own document focus handler never
-    // sees this, so the picker's blur handling has to close it.
-    await fireEvent.blur(screen.getByLabelText("Date"), {
-      relatedTarget: screen.getByRole("button", { name: "Outside" }),
-    });
+    expect(screen.getByLabelText("Date")).toHaveFocus();
+
+    screen.getByRole("button", { name: "Outside" }).focus();
     await settle();
 
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");

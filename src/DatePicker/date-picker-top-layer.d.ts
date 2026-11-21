@@ -19,10 +19,3 @@ export function positionCalendarFixed(
   instance: FixedCalendarInstance,
   customPositionElement?: HTMLElement,
 ): void;
-
-export function isEventTargetInsidePortaledCalendar(
-  datePickerRef: HTMLElement | null | undefined,
-  calendarContainer: HTMLElement,
-  target: EventTarget | null,
-  cachedTopLayer?: HTMLElement | null,
-): boolean;
