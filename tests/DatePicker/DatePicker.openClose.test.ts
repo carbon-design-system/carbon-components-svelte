@@ -4,6 +4,7 @@ import { getBoundText } from "../utils/get-bound-text";
 import { user } from "../utils/user";
 import DatePicker from "./DatePicker.test.svelte";
 import DatePickerClose from "./DatePickerClose.test.svelte";
+import DatePickerHost from "./DatePickerHost.test.svelte";
 import DatePickerOpen from "./DatePickerOpen.test.svelte";
 import {
   dayByLabel,
@@ -290,6 +291,43 @@ describe("DatePicker close event", () => {
     expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
+  });
+
+  it('reports "outside-click", not "select", when typed text is committed by an outside click', async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose, value: "03/01/2024" } });
+    const calendar = await openCalendar();
+    const input = screen.getByLabelText("Date");
+
+    await user.clear(input);
+    await user.type(input, "03/05/2024");
+    await user.click(document.body);
+    await settle();
+
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
+    expect(input).toHaveValue("03/05/2024");
+    expect(onClose.mock.calls.map((call) => call[0].detail.trigger)).toEqual([
+      "outside-click",
+    ]);
+  });
+
+  it("closes only the calendar, not an enclosing Modal, on Escape", async () => {
+    render(DatePickerHost, {
+      props: { container: "modal", portalMenu: false },
+    });
+    const input = screen.getByLabelText("Date");
+    await user.click(input);
+    const calendar = await screen.findByLabelText(/^Choose a /);
+    calendar
+      .querySelector<HTMLElement>(".bx--date-picker__day[tabindex]")
+      ?.focus();
+
+    await user.keyboard("{Escape}");
+    await settle();
+
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
+    expect(document.querySelector(".bx--modal")).toHaveClass("is-visible");
+    expect(input).toHaveFocus();
   });
 
   it('dispatches close with trigger "outside-click" when focus leaves for an outside element', async () => {
