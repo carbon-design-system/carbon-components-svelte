@@ -11,6 +11,15 @@ import { rect } from "../utils/rect";
 
 const instances: CalendarInstance[] = [];
 
+const previousButton = (instance: CalendarInstance) =>
+  instance.calendarContainer.querySelector<HTMLElement>(
+    ".bx--date-picker__nav-button--previous",
+  )!;
+const nextButton = (instance: CalendarInstance) =>
+  instance.calendarContainer.querySelector<HTMLElement>(
+    ".bx--date-picker__nav-button--next",
+  )!;
+
 function create(options: CalendarOptions = {}) {
   const host = document.createElement("div");
   const input = document.createElement("input");
@@ -99,16 +108,16 @@ describe("createCalendarEngine", () => {
       maxDate: "2024-04-30",
     });
 
-    expect(instance.prevMonthNav).toHaveClass(
+    expect(previousButton(instance)).toHaveClass(
       "bx--date-picker__nav-button--disabled",
     );
-    expect(instance.nextMonthNav).not.toHaveClass(
+    expect(nextButton(instance)).not.toHaveClass(
       "bx--date-picker__nav-button--disabled",
     );
 
     instance.changeMonth(1);
 
-    expect(instance.nextMonthNav).toHaveClass(
+    expect(nextButton(instance)).toHaveClass(
       "bx--date-picker__nav-button--disabled",
     );
   });
@@ -441,7 +450,7 @@ describe("month mode", () => {
   it("steps the year", () => {
     const { instance } = create({ mode: "month", defaultDate: "2024-03-01" });
 
-    instance.nextMonthNav.click();
+    nextButton(instance).click();
 
     expect(instance.currentYear).toBe(2025);
   });
@@ -486,7 +495,7 @@ describe("year mode", () => {
       defaultDate: "2024",
     });
 
-    instance.nextMonthNav.click();
+    nextButton(instance).click();
 
     expect(
       instance.calendarContainer.querySelector(".bx--date-picker__decade"),

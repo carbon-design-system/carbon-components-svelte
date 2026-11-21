@@ -233,10 +233,31 @@ export function createCalendarEngine(element, userConfig = {}) {
     weekNumbers: false,
   };
   self.config = config;
-  self.element = self.input = element;
+  self.input = element;
   self.isOpen = false;
   self.selectedDates = [];
   self.now = new Date();
+
+  // The calendar's parts, built by `fillContents()` and read only here.
+  /** @type {any} */ let monthNavRef;
+  /** @type {any} */ let prevMonthNavRef;
+  /** @type {any} */ let nextMonthNavRef;
+  /** @type {any} */ let bodyRef;
+  /** @type {any} */ let mainRef;
+  /** @type {any} */ let daysRef;
+  /** @type {any} The first month's day grid, or the month/quarter/year grid. */
+  let monthDaysRef;
+  /** @type {any} */ let weekdaysRef;
+  /** @type {any} */ let weekNumbersRef;
+  /** @type {any} */ let decadeRef;
+  /** @type {any} */ let announcerRef;
+  /** @type {any} */ let yearInputRef;
+  /** @type {HTMLInputElement[]} */ let yearInputs = [];
+  /** @type {HTMLElement[]} */ let monthLabels = [];
+  /** @type {Date | undefined} */ let latestSelectedDate;
+  let prevMonthHidden = false;
+  let nextMonthHidden = false;
+  /** @type {Date} */ let initialDate;
 
   // --- Config -----------------------------------------------------------
 
@@ -326,7 +347,7 @@ export function createCalendarEngine(element, userConfig = {}) {
         );
         updateValue();
       }
-      if (self.daysContainer) {
+      if (daysRef) {
         redraw();
         syncYearBounds();
       }
@@ -448,7 +469,6 @@ export function createCalendarEngine(element, userConfig = {}) {
   /** The second input of a range, when the consumer renders one. */
   /** @type {HTMLInputElement | undefined} */
   const secondInput = isRange ? config.secondInput : undefined;
-  self.secondInput = secondInput;
 
   if (config.altInput) {
     const alt = createElement(element.nodeName, element.className);
@@ -526,17 +546,17 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   const { minDate, maxDate } = config;
-  self._initialDate =
+  initialDate =
     self.selectedDates[0] ??
     (minDate && minDate.getTime() > self.now.getTime()
       ? minDate
       : maxDate && maxDate.getTime() < self.now.getTime()
         ? maxDate
         : self.now);
-  self.currentYear = self._initialDate.getFullYear();
-  self.currentMonth = self._initialDate.getMonth();
+  self.currentYear = initialDate.getFullYear();
+  self.currentMonth = initialDate.getMonth();
   if (self.selectedDates.length > 0) {
-    self.latestSelectedDateObj = self.selectedDates[0];
+    latestSelectedDate = self.selectedDates[0];
   }
 
   /** @param {Date} date @param {boolean} [timeless] */
@@ -668,21 +688,21 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   function buildMonthNav() {
     const nav = createElement("div", "bx--date-picker__month-nav");
-    self.monthNav = nav;
+    monthNavRef = nav;
     // Out of the tab order, like the year input: Tab leaves the field and
     // PageUp/PageDown change the month from the grid. Screen readers still
     // find them as labelled buttons.
-    self.prevMonthNav = createElement(
+    prevMonthNavRef = createElement(
       "button",
       "bx--date-picker__nav-button bx--date-picker__nav-button--previous",
     );
-    self.prevMonthNav.innerHTML = config.prevArrow;
-    self.nextMonthNav = createElement(
+    prevMonthNavRef.innerHTML = config.prevArrow;
+    nextMonthNavRef = createElement(
       "button",
       "bx--date-picker__nav-button bx--date-picker__nav-button--next",
     );
-    self.nextMonthNav.innerHTML = config.nextArrow;
-    for (const button of [self.prevMonthNav, self.nextMonthNav]) {
+    nextMonthNavRef.innerHTML = config.nextArrow;
+    for (const button of [prevMonthNavRef, nextMonthNavRef]) {
       button.type = "button";
       button.tabIndex = -1;
     }
@@ -692,30 +712,30 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function labelNavButtons() {
-    if (!self.prevMonthNav) return;
+    if (!prevMonthNavRef) return;
     const unit =
       pickerMode === "year" ? "decade" : isYearView ? "year" : "month";
-    self.prevMonthNav.setAttribute(
+    prevMonthNavRef.setAttribute(
       "aria-label",
       config.prevLabel ?? `Previous ${unit}`,
     );
-    self.nextMonthNav.setAttribute(
+    nextMonthNavRef.setAttribute(
       "aria-label",
       config.nextLabel ?? `Next ${unit}`,
     );
   }
 
   function buildMonths() {
-    self.monthNav.replaceChildren(self.prevMonthNav);
-    self.yearElements = [];
-    self.monthElements = [];
+    monthNavRef.replaceChildren(prevMonthNavRef);
+    yearInputs = [];
+    monthLabels = [];
     for (let i = 0; i < config.showMonths; i++) {
       const month = createElement("div", "bx--date-picker__month");
       const current = createElement("div", "bx--date-picker__heading");
       if (!isGridMode) {
         const label = createElement("span", "bx--date-picker__month-label");
         current.appendChild(label);
-        self.monthElements.push(label);
+        monthLabels.push(label);
       }
       const wrapper = createElement("div", "bx--date-picker__year");
       const year = createElement("input", "bx--date-picker__year-input");
@@ -735,18 +755,18 @@ export function createCalendarEngine(element, userConfig = {}) {
       );
       current.appendChild(wrapper);
       month.appendChild(current);
-      self.yearElements.push(year);
-      self.monthNav.appendChild(month);
+      yearInputs.push(year);
+      monthNavRef.appendChild(month);
     }
-    self.monthNav.appendChild(self.nextMonthNav);
-    self.currentYearElement = self.yearElements[0];
+    monthNavRef.appendChild(nextMonthNavRef);
+    yearInputRef = yearInputs[0];
     syncYearBounds();
     updateNavigation();
   }
 
   function syncYearBounds() {
     const { _minDate: min, _maxDate: max } = config;
-    for (const year of self.yearElements ?? []) {
+    for (const year of yearInputs ?? []) {
       if (min) year.min = String(min.getFullYear());
       else year.removeAttribute("min");
       if (max) year.max = String(max.getFullYear());
@@ -756,18 +776,18 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function updateNavigation() {
-    if (!self.monthNav) return;
-    self.yearElements.forEach(
+    if (!monthNavRef) return;
+    yearInputs.forEach(
       (/** @type {HTMLInputElement} */ year, /** @type {number} */ i) => {
         const date = new Date(self.currentYear, self.currentMonth + i, 1);
-        if (self.monthElements[i]) {
-          self.monthElements[i].textContent =
+        if (monthLabels[i]) {
+          monthLabels[i].textContent =
             config.showMonths > 1
               ? `${monthLabel(date.getMonth())} `
               : monthLabel(date.getMonth());
         }
         year.value = String(date.getFullYear());
-        const label = self.monthElements[i];
+        const label = monthLabels[i];
         const wrapper = /** @type {any} */ (year.parentNode);
         // Some locales put the year first, after which some write a word
         // the year input can't hold ("2000年1月").
@@ -819,11 +839,11 @@ export function createCalendarEngine(element, userConfig = {}) {
           ? self.currentMonth + 1 > max.getMonth()
           : self.currentYear > max.getFullYear());
     }
-    self._hidePrevMonthArrow = hidePrev;
-    self._hideNextMonthArrow = hideNext;
+    prevMonthHidden = hidePrev;
+    nextMonthHidden = hideNext;
     for (const [button, hidden] of [
-      [self.prevMonthNav, hidePrev],
-      [self.nextMonthNav, hideNext],
+      [prevMonthNavRef, hidePrev],
+      [nextMonthNavRef, hideNext],
     ]) {
       toggleClass(button, "bx--date-picker__nav-button--disabled", hidden);
       if (hidden) button.setAttribute("aria-disabled", "true");
@@ -834,7 +854,7 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   /** Puts the shown month(s), year, or decade into the live region. */
   function announceView() {
-    if (!self.viewAnnouncer) return;
+    if (!announcerRef) return;
     let text;
     if (pickerMode === "year") {
       const start = decadeStart() - 1;
@@ -851,19 +871,19 @@ export function createCalendarEngine(element, userConfig = {}) {
         return monthFirst ? `${month} ${year}` : `${year}${suffix} ${month}`;
       }).join(" – ");
     }
-    if (self.viewAnnouncer.textContent !== text) {
-      self.viewAnnouncer.textContent = text;
+    if (announcerRef.textContent !== text) {
+      announcerRef.textContent = text;
     }
   }
 
   function buildWeekdays() {
-    self.weekdayContainer ??= createElement("div", "bx--date-picker__weekdays");
+    weekdaysRef ??= createElement("div", "bx--date-picker__weekdays");
     // Each day's label already names its weekday.
-    self.weekdayContainer.setAttribute("aria-hidden", "true");
+    weekdaysRef.setAttribute("aria-hidden", "true");
     const { shorthand } = self.l10n.weekdays;
     const first = self.l10n.firstDayOfWeek;
     const labels = [...shorthand.slice(first), ...shorthand.slice(0, first)];
-    self.weekdayContainer.replaceChildren();
+    weekdaysRef.replaceChildren();
     for (let m = 0; m < config.showMonths; m++) {
       const group = createElement("div", "bx--date-picker__weekday-row");
       for (const label of labels) {
@@ -871,9 +891,9 @@ export function createCalendarEngine(element, userConfig = {}) {
           createElement("span", "bx--date-picker__weekday", label),
         );
       }
-      self.weekdayContainer.appendChild(group);
+      weekdaysRef.appendChild(group);
     }
-    return self.weekdayContainer;
+    return weekdaysRef;
   }
 
   /**
@@ -919,12 +939,12 @@ export function createCalendarEngine(element, userConfig = {}) {
       day.setAttribute("aria-current", "date");
     }
     if (
-      self.weekNumbers &&
+      weekNumbersRef &&
       config.showMonths === 1 &&
       outside !== "previous" &&
       index % 7 === 6
     ) {
-      self.weekNumbers.appendChild(
+      weekNumbersRef.appendChild(
         createElement(
           "span",
           "bx--date-picker__week-number",
@@ -1026,9 +1046,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function refreshDays() {
     self.selectedDateElem = undefined;
     const context = dayContext();
-    for (const day of self.daysContainer.querySelectorAll(
-      ".bx--date-picker__day",
-    )) {
+    for (const day of daysRef.querySelectorAll(".bx--date-picker__day")) {
       applyDayState(day, context);
     }
     if (pickerMode === "week") highlightWeek();
@@ -1091,9 +1109,9 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function buildDays() {
-    if (!self.daysContainer) return;
-    self.daysContainer.replaceChildren();
-    self.weekNumbers?.replaceChildren();
+    if (!daysRef) return;
+    daysRef.replaceChildren();
+    weekNumbersRef?.replaceChildren();
     self.selectedDateElem = undefined;
     self.todayDateElem = undefined;
     if (isGridMode) return buildGrid();
@@ -1102,8 +1120,8 @@ export function createCalendarEngine(element, userConfig = {}) {
       const date = new Date(self.currentYear, self.currentMonth + i, 1);
       fragment.appendChild(buildMonthDays(date.getFullYear(), date.getMonth()));
     }
-    self.daysContainer.appendChild(fragment);
-    self.days = self.daysContainer.firstChild;
+    daysRef.appendChild(fragment);
+    monthDaysRef = daysRef.firstChild;
     if (pickerMode === "week") highlightWeek();
     if (isRange && self.selectedDates.length === 1) previewRange();
   }
@@ -1206,10 +1224,10 @@ export function createCalendarEngine(element, userConfig = {}) {
       fragment.appendChild(cell);
     }
     container.appendChild(fragment);
-    self.daysContainer.appendChild(container);
-    self.days = container;
+    daysRef.appendChild(container);
+    monthDaysRef = container;
     if (isYear) {
-      self.yearRangeElement.textContent = `${start} - ${start + 11}`;
+      decadeRef.textContent = `${start} - ${start + 11}`;
     }
   }
 
@@ -1240,9 +1258,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (!selected) return;
     const start = weekStartOf(selected).getTime();
     const end = start + 7 * DAY_MS;
-    for (const day of self.daysContainer.querySelectorAll(
-      ".bx--date-picker__day",
-    )) {
+    for (const day of daysRef.querySelectorAll(".bx--date-picker__day")) {
       const time = day.dateObj.getTime();
       // Compare by day so a daylight-saving hour cannot drop an edge day.
       if (time >= start - DAY_MS / 2 && time < end - DAY_MS / 2) {
@@ -1259,9 +1275,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     const day = eventTarget(event).closest?.(".bx--date-picker__day");
     if (!day?.dateObj) return;
     const start = weekStartOf(day.dateObj).getTime();
-    for (const cell of self.daysContainer.querySelectorAll(
-      ".bx--date-picker__day",
-    )) {
+    for (const cell of daysRef.querySelectorAll(".bx--date-picker__day")) {
       const time = cell.dateObj.getTime();
       toggleClass(
         cell,
@@ -1272,7 +1286,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
 
   function clearWeekHover() {
-    for (const day of self.daysContainer?.querySelectorAll(
+    for (const day of daysRef?.querySelectorAll(
       ".bx--date-picker__day--in-range",
     ) ?? []) {
       day.classList.remove("bx--date-picker__day--in-range");
@@ -1296,7 +1310,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       ? /** @type {import("./calendar.js").DayElement} */ (
           hovered
         ).dateObj.getTime()
-      : firstDay(self.days).dateObj.getTime();
+      : firstDay(monthDaysRef).dateObj.getTime();
     const from = Math.min(hover, anchor);
     const to = Math.max(hover, anchor);
     let containsDisabled = false;
@@ -1309,7 +1323,7 @@ export function createCalendarEngine(element, userConfig = {}) {
         else if (t > anchor && (!maxAllowed || t < maxAllowed)) maxAllowed = t;
       }
     }
-    const cells = self.daysContainer.querySelectorAll(
+    const cells = daysRef.querySelectorAll(
       `.bx--date-picker__month-days:nth-child(-n+${config.showMonths}) .bx--date-picker__day`,
     );
     for (const cell of cells) {
@@ -1345,7 +1359,6 @@ export function createCalendarEngine(element, userConfig = {}) {
       }
     }
   }
-  self.onMouseOver = previewRange;
 
   // --- Build ------------------------------------------------------------
 
@@ -1362,7 +1375,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     const container = self.calendarContainer;
     const fragment = document.createDocumentFragment();
     fragment.appendChild(buildMonthNav());
-    self.innerContainer = createElement("div", "bx--date-picker__body");
+    bodyRef = createElement("div", "bx--date-picker__body");
     if (config.weekNumbers) {
       const wrapper = createElement("div", "bx--date-picker__week-numbers");
       wrapper.appendChild(
@@ -1372,35 +1385,34 @@ export function createCalendarEngine(element, userConfig = {}) {
           self.l10n.weekAbbreviation ?? "Wk",
         ),
       );
-      self.weekNumbers = createElement(
+      weekNumbersRef = createElement(
         "div",
         "bx--date-picker__week-number-list",
       );
-      wrapper.appendChild(self.weekNumbers);
-      self.innerContainer.appendChild(wrapper);
-      self.weekWrapper = wrapper;
+      wrapper.appendChild(weekNumbersRef);
+      bodyRef.appendChild(wrapper);
     }
-    self.rContainer = createElement("div", "bx--date-picker__main");
+    mainRef = createElement("div", "bx--date-picker__main");
     if (pickerMode === "year") {
       // The decade label stands in for the month and year inputs.
-      self.yearRangeElement = createElement("span", "bx--date-picker__decade");
-      self.monthNav
+      decadeRef = createElement("span", "bx--date-picker__decade");
+      monthNavRef
         .querySelector(".bx--date-picker__heading")
-        .replaceChildren(self.yearRangeElement);
-      self.yearElements = [];
+        .replaceChildren(decadeRef);
+      yearInputs = [];
     } else if (!isGridMode) {
-      self.rContainer.appendChild(buildWeekdays());
+      mainRef.appendChild(buildWeekdays());
     }
-    self.daysContainer = createElement("div", "bx--date-picker__days");
-    self.daysContainer.tabIndex = -1;
-    self.rContainer.appendChild(self.daysContainer);
-    self.innerContainer.appendChild(self.rContainer);
-    fragment.appendChild(self.innerContainer);
+    daysRef = createElement("div", "bx--date-picker__days");
+    daysRef.tabIndex = -1;
+    mainRef.appendChild(daysRef);
+    bodyRef.appendChild(mainRef);
+    fragment.appendChild(bodyRef);
     container.prepend(fragment);
     // Announces the month (or year, or decade) the arrows and keys move to.
-    self.viewAnnouncer = createElement("span", "bx--assistive-text");
-    self.viewAnnouncer.setAttribute("aria-live", "polite");
-    self.innerContainer.after(self.viewAnnouncer);
+    announcerRef = createElement("span", "bx--assistive-text");
+    announcerRef.setAttribute("aria-live", "polite");
+    bodyRef.after(announcerRef);
     buildDays();
     updateNavigation();
     bindContentEvents();
@@ -1517,10 +1529,7 @@ export function createCalendarEngine(element, userConfig = {}) {
    */
   function changeMonth(value, isOffset = true) {
     const delta = isOffset ? value : value - self.currentMonth;
-    if (
-      (delta < 0 && self._hidePrevMonthArrow) ||
-      (delta > 0 && self._hideNextMonthArrow)
-    ) {
+    if ((delta < 0 && prevMonthHidden) || (delta > 0 && nextMonthHidden)) {
       return;
     }
     self.currentMonth += delta;
@@ -1574,7 +1583,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function jumpToDate(jumpDate, notify) {
     const target =
       jumpDate === undefined
-        ? (self.latestSelectedDateObj ??
+        ? (latestSelectedDate ??
           (config._minDate && config._minDate > self.now
             ? config._minDate
             : config._maxDate && config._maxDate < self.now
@@ -1622,7 +1631,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   /** @param {Date} date */
   function selectDateValue(date) {
     const selected = new Date(date.getTime());
-    self.latestSelectedDateObj = selected;
+    latestSelectedDate = selected;
     if (isMultiple) {
       const index = selectedIndex(selected);
       if (index === -1) self.selectedDates.push(selected);
@@ -1727,10 +1736,10 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (self.altInput) self.altInput.value = "";
     self.selectedDates = [];
     halfRangePicked = false;
-    self.latestSelectedDateObj = undefined;
+    latestSelectedDate = undefined;
     if (toInitial) {
-      self.currentYear = self._initialDate.getFullYear();
-      self.currentMonth = self._initialDate.getMonth();
+      self.currentYear = initialDate.getFullYear();
+      self.currentMonth = initialDate.getMonth();
     }
     redraw();
     if (notify) triggerEvent("onChange");
@@ -1748,8 +1757,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     }
     setSelectedDate(date, format);
     halfRangePicked = false;
-    self.latestSelectedDateObj =
-      self.selectedDates[self.selectedDates.length - 1];
+    latestSelectedDate = self.selectedDates[self.selectedDates.length - 1];
     redraw();
     jumpToDate(undefined, notify);
     if (self.selectedDates.length === 0) clear(false);
@@ -1762,7 +1770,7 @@ export function createCalendarEngine(element, userConfig = {}) {
 
   function applyL10n() {
     self.l10n = resolveL10n();
-    if (self.weekdayContainer) buildWeekdays();
+    if (weekdaysRef) buildWeekdays();
   }
 
   /** @type {Record<string, Array<() => void>>} */
@@ -1870,7 +1878,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       });
       bindInput(secondInput, () => {
         if (self.selectedDates[1]) {
-          self.latestSelectedDateObj = self.selectedDates[1];
+          latestSelectedDate = self.selectedDates[1];
           jumpToDate(self.selectedDates[1]);
         }
         secondFocused = true;
@@ -1956,7 +1964,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       target === self.input ||
       target === self.altInput ||
       target === secondInput ||
-      self.element.contains(target);
+      element.contains(target);
     const related = /** @type {FocusEvent} */ (event).relatedTarget;
     const lostFocus =
       !isInput &&
@@ -2058,19 +2066,19 @@ export function createCalendarEngine(element, userConfig = {}) {
    */
   function isDayFocused(node) {
     return (
-      self.daysContainer !== undefined &&
+      daysRef !== undefined &&
       !node.classList.contains("bx--date-picker__day--hidden") &&
-      self.daysContainer.contains(node)
+      daysRef.contains(node)
     );
   }
 
   /** @param {HTMLElement} node */
   function isInView(node) {
     return (
-      self.daysContainer !== undefined &&
+      daysRef !== undefined &&
       !node.classList.contains("bx--date-picker__day--hidden") &&
       !node.classList.contains("bx--date-picker__day--disabled") &&
-      self.daysContainer.contains(node)
+      daysRef.contains(node)
     );
   }
 
@@ -2085,7 +2093,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     const from = delta > 0 ? 0 : config.showMonths - 1;
     const to = delta > 0 ? config.showMonths : -1;
     for (let m = from; m !== to; m += delta) {
-      const cells = self.daysContainer.children[m].querySelectorAll(
+      const cells = daysRef.children[m].querySelectorAll(
         ".bx--date-picker__day",
       );
       const start = delta > 0 ? 0 : cells.length - 1;
@@ -2132,7 +2140,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function focusDate(date) {
     const find = () =>
       /** @type {import("./calendar.js").DayElement[]} */ ([
-        ...self.daysContainer.querySelectorAll(".bx--date-picker__day"),
+        ...daysRef.querySelectorAll(".bx--date-picker__day"),
       ]).find(
         (cell) =>
           cell.dateObj.getTime() === date.getTime() &&
@@ -2140,7 +2148,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       );
     let cell = find();
     const direction =
-      date.getTime() < firstDay(self.days).dateObj.getTime() ? -1 : 1;
+      date.getTime() < firstDay(monthDaysRef).dateObj.getTime() ? -1 : 1;
     for (let i = 0; !cell && i < 13; i++) {
       changeMonth(direction);
       cell = find();
@@ -2274,17 +2282,13 @@ export function createCalendarEngine(element, userConfig = {}) {
             } else {
               focusOnDay(undefined, delta * 7);
             }
-          } else if (target === self.currentYearElement) {
+          } else if (target === yearInputRef) {
             changeYear(self.currentYear - delta);
           }
           break;
         }
         case 9:
-          if (
-            !isGridMode &&
-            self.daysContainer?.contains(target) &&
-            event.shiftKey
-          ) {
+          if (!isGridMode && daysRef?.contains(target) && event.shiftKey) {
             event.preventDefault();
             self._input.focus();
           }
@@ -2348,20 +2352,19 @@ export function createCalendarEngine(element, userConfig = {}) {
         : /** @type {Record<number, number>} */ (GRID_SHIFTS)[code];
     if (shift === undefined && code !== 13 && !page) return;
     if (code !== keyCodeOf(event) || page) event.preventDefault();
-    let cells = self.days?.children;
+    let cells = monthDaysRef?.children;
     if (!cells) return;
     let index = Array.prototype.indexOf.call(cells, document.activeElement);
     if (index === -1) {
       const target =
-        self.daysContainer.querySelector(
-          ".bx--date-picker__grid-cell--selected",
-        ) ?? cells[0];
+        daysRef.querySelector(".bx--date-picker__grid-cell--selected") ??
+        cells[0];
       target.focus();
       index = target.$i;
     }
     if (page) {
       stepView(/** @type {-1 | 1} */ (page));
-      cells = self.days?.children;
+      cells = monthDaysRef?.children;
       cells?.[index]?.focus();
     } else if (shift !== undefined) {
       // Up and down move a row: three cells, or two for quarters.
@@ -2455,7 +2458,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       changeYear(decadeStart() + direction * 10);
     } else if (isYearView) {
       const wanted = self.currentYear + direction;
-      if (!(prev ? self._hidePrevMonthArrow : self._hideNextMonthArrow)) {
+      if (!(prev ? prevMonthHidden : nextMonthHidden)) {
         changeYear(wanted);
         if (self.currentYear === wanted) buildDays();
       }
@@ -2467,13 +2470,13 @@ export function createCalendarEngine(element, userConfig = {}) {
   /** @param {MouseEvent} event */
   function onNavClick(event) {
     const target = eventTarget(event);
-    const prev = self.prevMonthNav.contains(target);
-    const next = self.nextMonthNav.contains(target);
+    const prev = prevMonthNavRef.contains(target);
+    const next = nextMonthNavRef.contains(target);
     if (prev || next) {
-      const button = prev ? self.prevMonthNav : self.nextMonthNav;
+      const button = prev ? prevMonthNavRef : nextMonthNavRef;
       if (button.hasAttribute("aria-disabled")) return;
       stepView(prev ? -1 : 1);
-    } else if (self.yearElements.includes(target)) {
+    } else if (yearInputs.includes(target)) {
       target.select();
     } else if (target.classList.contains("bx--date-picker__year-step--up")) {
       changeYear(self.currentYear + 1);
@@ -2520,7 +2523,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     bindOpenTriggers();
     if (secondInput) {
       on(self._input, "focus", () => {
-        self.latestSelectedDateObj = self.selectedDates[0];
+        latestSelectedDate = self.selectedDates[0];
         secondFocused = false;
         // Show the start's month, unless it already is: focus returns here
         // after every range pick, and a jump rebuilds the grid.
@@ -2540,18 +2543,16 @@ export function createCalendarEngine(element, userConfig = {}) {
     const on = (target, type, handler) => {
       if (target) listeners.add(target, type, handler);
     };
-    on(self.monthNav, "click", onNavClick);
-    on(self.monthNav, "keyup", onYearInput);
-    on(self.monthNav, "increment", onYearInput);
-    on(self.monthNav, "input", onYearInput);
-    on(self.daysContainer, "click", isGridMode ? selectGridCell : selectDate);
+    on(monthNavRef, "click", onNavClick);
+    on(monthNavRef, "keyup", onYearInput);
+    on(monthNavRef, "increment", onYearInput);
+    on(monthNavRef, "input", onYearInput);
+    on(daysRef, "click", isGridMode ? selectGridCell : selectDate);
     if (isRange) {
-      on(self.daysContainer, "mouseover", (event) =>
-        previewRange(eventTarget(event)),
-      );
+      on(daysRef, "mouseover", (event) => previewRange(eventTarget(event)));
     } else if (pickerMode === "week") {
-      on(self.daysContainer, "mouseover", hoverWeek);
-      on(self.daysContainer, "mouseleave", clearWeekHover);
+      on(daysRef, "mouseover", hoverWeek);
+      on(daysRef, "mouseleave", clearWeekHover);
     }
   }
 
@@ -2585,11 +2586,6 @@ export function createCalendarEngine(element, userConfig = {}) {
     for (const key of [
       "config",
       "calendarContainer",
-      "daysContainer",
-      "days",
-      "monthNav",
-      "rContainer",
-      "weekdayContainer",
       "selectedDateElem",
       "todayDateElem",
       "_input",
@@ -2597,6 +2593,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     ]) {
       self[key] = undefined;
     }
+    daysRef = monthDaysRef = monthNavRef = mainRef = weekdaysRef = undefined;
   }
   self.destroy = destroy;
 
