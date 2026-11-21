@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. This project follows [Conventional Commits](https://www.conventionalcommits.org/); run `bun scripts/release-changelog` to bump the version and prepend release notes.
 
+### [0.114.4](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.3...v0.114.4) (2026-11-21)
+
+### Bug Fixes
+
+- **date-picker:** box only a picked week's ends in forced colors ([1bc21ef](https://github.com/carbon-design-system/carbon-components-svelte/commit/1bc21efc66e33b54ebfb9ed4f132144d7a7acc9d))
+- **date-picker:** keep a selected month, quarter or year filled on hover ([cd9c250](https://github.com/carbon-design-system/carbon-components-svelte/commit/cd9c250393b7046c3d39de3d324181ea7fe35706))
+- **date-picker:** keep the calendar open when the field's label is clicked ([113083d](https://github.com/carbon-design-system/carbon-components-svelte/commit/113083da02a988afd895e7999a62fabbf8b31aec))
+- **date-picker:** skip the open animation under reduced motion ([a516722](https://github.com/carbon-design-system/carbon-components-svelte/commit/a516722c9a4f48cca127c4c557faa742a2e1cee3))
+- **file-uploader:** size a FileUploaderItem from its Form ([b45abb6](https://github.com/carbon-design-system/carbon-components-svelte/commit/b45abb6451a293daa80d20d79399213df2e92bc9))
+- **ui-shell:** keep a header menu arrow full size beside a long title ([cee0409](https://github.com/carbon-design-system/carbon-components-svelte/commit/cee0409b8a9677a769c55882eae042a80c889a98))
+
+### Performance
+
+- **button:** let builds drop the in-place tooltip a modal never shows ([aa78e40](https://github.com/carbon-design-system/carbon-components-svelte/commit/aa78e40ac1f18ffaa1650ca66501a8e0a87f5e38))
+- **composed-modal:** let builds drop the close button's in-place tooltip ([b3b1711](https://github.com/carbon-design-system/carbon-components-svelte/commit/b3b17112cb1f49c11fc75a9df98644d5284736b7))
+- let builds follow the loading indicator when there's no delay ([629fccb](https://github.com/carbon-design-system/carbon-components-svelte/commit/629fccb580c6f684e3fa16060e90b3be37b6a83a))
+
 ### [0.114.3](https://github.com/carbon-design-system/carbon-components-svelte/compare/v0.114.2...v0.114.3) (2026-11-18)
 
 ### Performance
