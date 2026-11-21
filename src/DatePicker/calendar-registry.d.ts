@@ -8,3 +8,7 @@ export function attachCalendar(
 export function detachCalendar(input: Element): void;
 
 export function calendarOf(input: Element): CalendarInstance | undefined;
+
+export function markCalendarEvent<E extends Event>(event: E): E;
+
+export function isCalendarEvent(event: Event): boolean;

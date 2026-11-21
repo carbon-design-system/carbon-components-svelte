@@ -92,6 +92,7 @@
   import { titleWhenTruncated } from "../utils/title-when-truncated.js";
   import { uniqueId } from "../utils/unique-id.js";
   import { getCalendarLocale } from "./calendar-dates.js";
+  import { isCalendarEvent } from "./calendar-registry.js";
   import {
     dateFormatToMultiplePattern,
     dateFormatToPattern,
@@ -316,6 +317,7 @@
         updateValue({
           type: "change",
           value: /** @type {HTMLInputElement} */ (event.target).value,
+          fromCalendar: isCalendarEvent(event),
         });
       }}
       on:keydown
