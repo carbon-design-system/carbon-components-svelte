@@ -25,15 +25,10 @@ const NEXT_ARROW =
 const HOOKS = [
   "onChange",
   "onClose",
-  "onDayCreate",
   "onDestroy",
-  "onKeyDown",
   "onMonthChange",
   "onOpen",
-  "onParseConfig",
-  "onPreCalendarPosition",
   "onReady",
-  "onValueUpdate",
   "onYearChange",
 ];
 
@@ -144,11 +139,6 @@ function toggleClass(element, className, force) {
   element.classList.toggle(className, !!force);
 }
 
-/** @param {unknown} value */
-function arrayify(value) {
-  return Array.isArray(value) ? value : [value];
-}
-
 /** A day a click or Enter can pick. */
 const SELECTABLE_DAY =
   ".bx--date-picker__day:not(.bx--date-picker__day--disabled):not(.bx--date-picker__day--blocked)";
@@ -188,10 +178,10 @@ function createListenerGroup() {
 }
 
 /**
- * Compact calendar engine that drives Carbon's date picker. Produces the
- * same DOM, hooks, and instance surface that flatpickr did (class names and
- * all), so Carbon's styles and `bind:calendar` consumers keep working, but
- * with the single/multiple/range/week/month/year modes built in.
+ * The calendar engine behind DatePicker. Builds the popup or inline
+ * calendar for `element` in single, multiple, range, week, month, quarter
+ * or year mode. `bind:calendar` wraps the instance it returns
+ * (calendar-api.js).
  *
  * @param {HTMLInputElement} element
  * @param {Record<string, any>} [userConfig]
@@ -454,13 +444,6 @@ export function createCalendarEngine(element, userConfig = {}) {
   if (config.showMonths < 1 || isGridMode) config.showMonths = 1;
   config.showMonths = Math.floor(config.showMonths);
 
-  for (const hook of HOOKS) {
-    config[hook] = arrayify(config[hook] || []).map(
-      (/** @type {Function} */ fn) => fn.bind(self),
-    );
-  }
-  triggerEvent("onParseConfig");
-
   // --- Inputs -----------------------------------------------------------
 
   /** @type {any} */ (element)._type = element.type;
@@ -638,8 +621,7 @@ export function createCalendarEngine(element, userConfig = {}) {
       .join(isRange ? self.l10n.rangeSeparator : config.conjunction);
   }
 
-  /** @param {boolean} [notify] */
-  function updateValue(notify = true) {
+  function updateValue() {
     if (secondInput) {
       // A range reflects each end into its own input.
       const format = config.altInput ? config.altFormat : config.dateFormat;
@@ -653,21 +635,16 @@ export function createCalendarEngine(element, userConfig = {}) {
       self.input.value = dateString(config.dateFormat);
       if (self.altInput) self.altInput.value = dateString(config.altFormat);
     }
-    if (notify) triggerEvent("onValueUpdate");
   }
 
   /**
-   * @param {string} event
-   * @param {unknown} [data]
+   * Calls the `on<Event>` option, if any, with the instance.
+   *
+   * @param {import("./calendar.js").CalendarHookName} event
    */
-  function triggerEvent(event, data) {
+  function triggerEvent(event) {
     if (self.config === undefined) return;
-    const hooks = config[event];
-    if (hooks) {
-      for (let i = 0; hooks[i] && i < hooks.length; i++) {
-        hooks[i](self.selectedDates, self.input.value, self, data);
-      }
-    }
+    config[event]?.(self);
     if (event === "onChange") {
       for (const type of ["change", "input"]) {
         self.input.dispatchEvent(
@@ -952,7 +929,6 @@ export function createCalendarEngine(element, userConfig = {}) {
         ),
       );
     }
-    triggerEvent("onDayCreate", day);
     return day;
   }
 
@@ -1761,7 +1737,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     redraw();
     jumpToDate(undefined, notify);
     if (self.selectedDates.length === 0) clear(false);
-    updateValue(notify);
+    updateValue();
     if (notify) triggerEvent("onChange");
   }
   self.setDate = setDate;
@@ -1834,8 +1810,6 @@ export function createCalendarEngine(element, userConfig = {}) {
       config[option] = value;
       if (CALLBACKS[option]) {
         for (const callback of CALLBACKS[option]) callback();
-      } else if (HOOKS.includes(option)) {
-        config[option] = arrayify(value);
       }
     }
     // Only options that change the grid redraw it; the rest change how the
@@ -1844,11 +1818,11 @@ export function createCalendarEngine(element, userConfig = {}) {
       return;
     }
     if (keys.every((key) => QUIET_OPTIONS.has(key) || TEXT_OPTIONS.has(key))) {
-      updateValue(true);
+      updateValue();
       return;
     }
     redraw();
-    updateValue(true);
+    updateValue();
   }
   self.set = set;
 
@@ -1999,7 +1973,6 @@ export function createCalendarEngine(element, userConfig = {}) {
       return void config.position(self, customPositionElement);
     }
     if (!self.calendarContainer) return;
-    triggerEvent("onPreCalendarPosition");
     const anchor = customPositionElement || self._positionElement;
     const container = self.calendarContainer;
     let height = 0;
@@ -2298,7 +2271,6 @@ export function createCalendarEngine(element, userConfig = {}) {
       }
     }
     if (isGridMode && (inCalendar || isInput)) onGridKeyDown(event);
-    if (isInput || inCalendar) triggerEvent("onKeyDown", event);
   }
 
   /**
@@ -2603,9 +2575,9 @@ export function createCalendarEngine(element, userConfig = {}) {
   try {
     build();
     bindEvents();
-    if (self.selectedDates.length || secondInput) updateValue(false);
+    if (self.selectedDates.length || secondInput) updateValue();
   } catch (error) {
-    // A consumer callback (`formatDate`, `onDayCreate`) can throw mid-build.
+    // A consumer callback, such as `formatDate`, can throw mid-build.
     // Take down what was built so the input is left as it was.
     destroy();
     throw error;

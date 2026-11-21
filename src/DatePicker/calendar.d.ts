@@ -3,25 +3,15 @@ import type { CalendarLocale } from "./calendar-dates.js";
 export type CalendarMode =
   "single" | "multiple" | "range" | "week" | "month" | "quarter" | "year";
 
-export type CalendarHook = (
-  selectedDates: Date[],
-  dateStr: string,
-  instance: CalendarInstance,
-  data?: unknown,
-) => void;
+export type CalendarHook = (instance: CalendarInstance) => void;
 
 export type CalendarHookName =
   | "onChange"
   | "onClose"
-  | "onDayCreate"
   | "onDestroy"
-  | "onKeyDown"
   | "onMonthChange"
   | "onOpen"
-  | "onParseConfig"
-  | "onPreCalendarPosition"
   | "onReady"
-  | "onValueUpdate"
   | "onYearChange";
 
 export type DateRule =
@@ -32,7 +22,7 @@ export type DateRule =
   | ((date: Date) => boolean);
 
 export interface CalendarOptions extends Partial<
-  Record<CalendarHookName, CalendarHook | CalendarHook[]>
+  Record<CalendarHookName, CalendarHook>
 > {
   allowInput?: boolean;
   allowInvalidPreload?: boolean;
