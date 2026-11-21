@@ -23,7 +23,7 @@
         "acorn": "^8.19.0",
         "bivium": "^0.4.0",
         "carbon-icons-svelte": "^13.17.0",
-        "crassus": "^0.3.1",
+        "crassus": "^0.3.2",
         "flatpickr": "4.6.13",
         "jsdom": "^30.1.3",
         "lightningcss": "^1.33.0",
@@ -247,7 +247,7 @@
 
     "colorjs.io": ["colorjs.io@0.7.1", "", {}, "sha512-LY7OHnJZxHwT5UlzNa9bbhHHDbzB6yE5+3MIPwJEQKRvSCt/T4G7epsj+9j2BExUIIfXFIJGsIXUKdfrK9Q5tA=="],
 
-    "crassus": ["crassus@0.3.1", "", { "bin": { "crassus": "cli.js" } }, "sha512-VNCBiaDK6QNNMf/UrfntqsZczRXKWsa48QEljAn19V0UiLcwMMEJzVlskRjM8E/am1vFvhorMdw7RIoU5qk/KQ=="],
+    "crassus": ["crassus@0.3.2", "", { "bin": { "crassus": "cli.js" } }, "sha512-RiDhHf9/UOlODVbrVBLSctP0tIoekTGAnERYYvqHNTVU8Rh5I8Fh4wWEZR0wrDAwGzxlwQdnAClusQsrVm51CQ=="],
 
     "css-tree": ["css-tree@3.2.1", "", { "dependencies": { "mdn-data": "2.27.1", "source-map-js": "^1.2.1" } }, "sha512-X7sjQzceUhu1u7Y/ylrRZFU2FS6LRiFVp6rKLPg23y3x3c3DOKAwuXGDp+PAGjh6CSnCjYeAul8pcT8bAl+lSA=="],
 
