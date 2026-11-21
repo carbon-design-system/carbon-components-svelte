@@ -204,7 +204,11 @@ function buildCalendar({ options, base, input, dispatch, isDayBlocked }) {
 
   const carbonHooks = {
     onChange: () => dispatch("change"),
-    onClose: () => dispatch("close"),
+    /**
+     * @param {CalendarInstance} _instance
+     * @param {import("./calendar.js").CalendarCloseReason} [reason]
+     */
+    onClose: (_instance, reason) => dispatch("close", reason),
     onOpen: () => dispatch("open"),
     onMonthChange: emitView,
     onYearChange: emitView,

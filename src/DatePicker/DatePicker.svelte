@@ -496,7 +496,6 @@
   } from "../constants/context-keys.js";
   import { dismiss } from "../utils/dismiss.js";
   import { clippedBy } from "../utils/fit-align.js";
-  import { isImeComposition } from "../utils/ime-composition.js";
   import {
     declaredDirection,
     getLayoutDirection,
@@ -742,10 +741,6 @@
   let prevSelectedDates = [...selectedDates];
   let prevMinRangeDays = minRangeDays;
   let prevMaxRangeDays = maxRangeDays;
-  // flatpickr onClose has no reason; explicit handlers set closeTrigger, else
-  // infer from session baseline. Close dispatch is deferred for range sync.
-  /** @type {"escape-key" | "outside-click" | "programmatic" | undefined} */
-  let closeTrigger;
   /** @type {string | { from: string; to: string }} */
   let dateStrAtOpen;
   /** @type {number[]} */
@@ -828,7 +823,14 @@
     };
   }
 
-  function dispatchDeferredClose() {
+  /**
+   * The calendar says why it closed, except after a pick: a changed
+   * selection is then a `select`, anything else an outside click.
+   * Deferred so range values are in sync.
+   *
+   * @param {import("./calendar.js").CalendarCloseReason} [reason]
+   */
+  function dispatchDeferredClose(reason) {
     if (!engine) return;
 
     const detail = buildCalendarDetail({ copySelectedDates: true });
@@ -837,9 +839,7 @@
     const selectionChanged =
       selectedDatesChanged(selectedDatesAtOpen, detail.selectedDates) ||
       dateStrChanged(dateStrAtOpen, detail.dateStr);
-    const trigger =
-      closeTrigger ?? (selectionChanged ? "select" : "outside-click");
-    closeTrigger = undefined;
+    const trigger = reason ?? (selectionChanged ? "select" : "outside-click");
     dispatch("close", { ...detail, trigger });
   }
 
@@ -1051,8 +1051,7 @@
       if ($readonlyAny || $disabledAny) return;
       engine.open();
     } else {
-      closeTrigger = "programmatic";
-      engine.close();
+      engine.close("programmatic");
     }
   }
 
@@ -1134,11 +1133,9 @@
     );
   }
 
-  /** @param {"escape-key" | "outside-click" | "programmatic"} trigger */
+  /** @param {import("./calendar.js").CalendarCloseReason} trigger */
   function dismissCalendar(trigger) {
-    if (!calendarOpen) return;
-    closeTrigger = trigger;
-    if (engine?.isOpen) engine.close();
+    if (calendarOpen && engine?.isOpen) engine.close(trigger);
   }
 
   /**
@@ -1530,7 +1527,6 @@
           if (event === "open") {
             calendarOpen = true;
             open = true;
-            closeTrigger = undefined;
             refreshCloseBaselineOnOpen();
             applyInitialMonth();
             portalIfClipped();
@@ -1542,7 +1538,11 @@
             }
             if (portalWhenClipped) unportal();
             clearRangePreview();
-            queueMicrotask(dispatchDeferredClose);
+            const reason =
+              /** @type {import("./calendar.js").CalendarCloseReason | undefined} */ (
+                eventDetail
+              );
+            queueMicrotask(() => dispatchDeferredClose(reason));
             return;
           }
           if (calendarUsesFixedPositioning && event === "open")
@@ -1667,9 +1667,8 @@
    * @param {KeyboardEvent} event
    */
   function handleCalendarKeydown(event) {
-    if (event.key === "Escape") handleCalendarEscape(event);
     // Space selects a day too, so it needs the same focus restore.
-    else if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Enter" || event.key === " ") {
       keepFocusAfterEnter(event);
     }
   }
@@ -1707,26 +1706,6 @@
       );
       /** @type {HTMLElement | undefined} */ (day)?.focus();
     });
-  }
-
-  /**
-   * flatpickr closes on Escape from inside the calendar before the wrapper's
-   * handler runs, and a portalled calendar never reaches the wrapper, so the
-   * close would be reported as an outside click.
-   *
-   * @param {KeyboardEvent} event
-   */
-  function handleCalendarEscape(event) {
-    // Escape that cancels an IME composition (the year input) is not a close.
-    if (!engine?.isOpen || isImeComposition(event)) return;
-    // Also keeps flatpickr's own handler from closing (and firing `onClose`)
-    // a second time, and keeps the key from reaching an enclosing Modal.
-    event.stopImmediatePropagation();
-    event.preventDefault();
-    // Focus first, as flatpickr does: focusing the input after closing would
-    // reopen it through `clickOpens`.
-    engine._input.focus();
-    dismissCalendar("escape-key");
   }
 
   function destroyCalendar() {
@@ -2022,17 +2001,6 @@
   }
 
   /**
-   * flatpickr closes on document `mousedown` before our `click` handler runs.
-   * Set `closeTrigger` in capture phase so single-mode outside dismiss is not
-   * inferred as select when selectedDates differ from the session baseline.
-   *
-   * @type {(event: Event) => void}
-   */
-  function handleOutsidePointerDown(event) {
-    if (isOutsideCalendarTarget(event)) closeTrigger = "outside-click";
-  }
-
-  /**
    * @type {(event: Event) => void}
    */
   function handleOutsideClick(event) {
@@ -2061,14 +2029,7 @@
     bind:this={datePickerRef}
     use:dismiss={{
       enabled: calendarOpen,
-      listeners: [
-        {
-          type: "pointerdown",
-          handler: handleOutsidePointerDown,
-          options: { capture: true },
-        },
-        { type: "click", handler: handleOutsideClick },
-      ],
+      listeners: [{ type: "click", handler: handleOutsideClick }],
     }}
     {id}
     class:bx--date-picker={true}
@@ -2083,14 +2044,6 @@
       datePickerType === "multiple"}
     class:bx--date-picker--range={datePickerType === "range"}
     class:bx--date-picker--inline={usesInline && $hasCalendar}
-    on:keydown={(event) => {
-      if (engine?.isOpen && event.key === "Escape") {
-        // Escape that cancels an IME composition is not a close.
-        if (isImeComposition(event)) return;
-        event.stopPropagation();
-        dismissCalendar("escape-key");
-      }
-    }}
   >
     <slot />
   </div>

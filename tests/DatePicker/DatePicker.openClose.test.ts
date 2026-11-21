@@ -375,6 +375,26 @@ describe("DatePicker close event", () => {
     expect(onClose.mock.calls[0][0].detail.trigger).toBe("outside-click");
   });
 
+  it('closes from the end input on Escape, with "escape-key", leaving focus there', async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, {
+      props: { onClose, datePickerType: "range" },
+    });
+    const calendar = await openRangeCalendar();
+    await user.tab();
+    const end = screen.getByLabelText("End date");
+    expect(end).toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    await settle();
+
+    expect(calendar).not.toHaveClass("bx--date-picker__calendar--open");
+    expect(end).toHaveFocus();
+    expect(onClose.mock.calls.map((call) => call[0].detail.trigger)).toEqual([
+      "escape-key",
+    ]);
+  });
+
   it("keeps the calendar open when focus moves between range inputs", async () => {
     const onClose = vi.fn();
     render(DatePickerClose, {
