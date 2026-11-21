@@ -2,7 +2,7 @@
 import { resolveLayoutDirection } from "../utils/inline-direction.js";
 
 /**
- * Native `<dialog>` / `[popover]` ancestors used when portalling the flatpickr
+ * Native `<dialog>` / `[popover]` ancestors used when portalling the
  * calendar with `portalMenu` so it participates in the correct top layer.
  */
 export const TOP_LAYER_ANCESTOR_SELECTOR = "dialog,[popover]";
@@ -16,17 +16,14 @@ export function getTopLayerAncestor(root) {
 }
 
 /**
- * Flatpickr `position` hook: `position: fixed` with viewport-relative coordinates.
+ * The calendar's `position` option: `position: fixed` with viewport-relative coordinates.
  * Used when the calendar is appended into a top-layer ancestor — `position: absolute`
  * would resolve against that element’s containing block and mis-place the calendar.
  *
- * @param {import("./date-picker-top-layer.js").FlatpickrTopLayerPositionInstance} instance
+ * @param {import("./date-picker-top-layer.js").FixedCalendarInstance} instance
  * @param {HTMLElement | undefined} customPositionElement
  */
-export function positionFlatpickrCalendarFixed(
-  instance,
-  customPositionElement,
-) {
+export function positionCalendarFixed(instance, customPositionElement) {
   const anchor =
     customPositionElement || instance._positionElement || instance._input;
   const calendarContainer = instance.calendarContainer;
@@ -76,7 +73,7 @@ export function positionFlatpickrCalendarFixed(
  * The calendar's `rtl` option, else its computed direction (a portalled
  * calendar carries its `LayoutDirection` as `dir`).
  *
- * @param {import("./date-picker-top-layer.js").FlatpickrTopLayerPositionInstance} instance
+ * @param {import("./date-picker-top-layer.js").FixedCalendarInstance} instance
  */
 function isRtl(instance) {
   const rtl = instance.config?.rtl;

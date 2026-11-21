@@ -1,7 +1,7 @@
 /**
- * Minimal flatpickr instance shape for {@link positionFlatpickrCalendarFixed}.
+ * The calendar fields {@link positionCalendarFixed} reads.
  */
-export interface FlatpickrTopLayerPositionInstance {
+export interface FixedCalendarInstance {
   calendarContainer: HTMLElement;
   _positionElement?: HTMLElement;
   _input?: HTMLInputElement;
@@ -15,8 +15,8 @@ export function getTopLayerAncestor(
   root: HTMLElement | null | undefined,
 ): HTMLElement | null;
 
-export function positionFlatpickrCalendarFixed(
-  instance: FlatpickrTopLayerPositionInstance,
+export function positionCalendarFixed(
+  instance: FixedCalendarInstance,
   customPositionElement?: HTMLElement,
 ): void;
 
