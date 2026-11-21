@@ -54,10 +54,12 @@ describe("any-hover media query grouping", () => {
     // Lowered from 75 to 73 when the calendar's header and stepper hover
     // blocks merged, as did its range-end and disabled-day blocks
     // (_date-picker-calendar.scss).
+    // Lowered from 73 to 72 when the calendar's month, quarter and year
+    // cells' hover rules joined the day block (_date-picker-calendar.scss).
     // Whitespace-tolerant so the count holds for expanded and compressed
     // output; the lower bound fails the test if the pattern stops matching.
     const blocks = css.match(/@media\s*\(any-hover:\s*hover\)\s*\{/g) ?? [];
     expect(blocks.length).toBeGreaterThan(0);
-    expect(blocks.length).toBeLessThanOrEqual(73);
+    expect(blocks.length).toBeLessThanOrEqual(72);
   }, 30_000);
 });
