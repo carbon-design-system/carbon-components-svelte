@@ -8,11 +8,14 @@
 @import './vendor/@carbon/elements/scss/import-once/import-once';
 @import './vendor/@carbon/elements/scss/type/font-face/mono';
 @import './vendor/@carbon/elements/scss/type/font-face/sans';
+// ccs: Plex Serif too, as v11 loads it.
+@import './vendor/@carbon/elements/scss/type/font-face/serif';
 
 @include exports('css--font-face') {
   @if not variable-exists('css--font-face') or $css--font-face == true {
     @include carbon--font-face-mono();
     @include carbon--font-face-sans();
+    @include carbon--font-face-serif();
     @if not variable-exists('css--plex') or $css--plex == false {
       @warn 'Usage of Helvetica font in `carbon-components` has been removed. IBM Plex will be emitted instead';
     }
