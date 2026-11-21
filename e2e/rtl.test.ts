@@ -694,12 +694,14 @@ test.describe("right-to-left layout", () => {
     page,
   }) => {
     // Every part with a border, margin or padding on one inline side, in a
-    // Pagination, one with a page number input, and the skeleton.
+    // Pagination, one with a page number input, and the skeleton. The
+    // selects and the page input carry their class on the field root, so
+    // match the control inside it.
     const root = "[data-testid=pagination]";
     const PAGINATION_PARTS = {
-      pageSizeSelect: `${root} .bx--select__item-count`,
-      pageSelect: `${root} .bx--select__page-number`,
-      pageInput: `${root} .bx--pagination__page-number-input`,
+      pageSizeSelect: `${root} .bx--select__item-count select`,
+      pageSelect: `${root} .bx--select__page-number select`,
+      pageInput: `${root} .bx--pagination__page-number-input input:not([type="hidden"])`,
       backward: `${root} .bx--pagination__button--backward`,
       forward: `${root} .bx--pagination__button--forward`,
       left: `${root} .bx--pagination__left`,

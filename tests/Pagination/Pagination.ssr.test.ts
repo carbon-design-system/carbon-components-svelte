@@ -12,7 +12,7 @@ describe("Pagination server render", () => {
       page: 3,
     });
 
-    const pages = document.querySelector("select.bx--select__page-number");
+    const pages = document.querySelector(".bx--select__page-number select");
     const selected = [
       ...(pages?.querySelectorAll("option[selected]") ?? []),
     ].map((option) => option.getAttribute("value"));

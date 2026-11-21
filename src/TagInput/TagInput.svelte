@@ -557,6 +557,11 @@
     setDraft("");
     rejectionText = "";
   }
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -564,6 +569,8 @@
   use:fieldsetDisabled={(value) => (inDisabledFieldset = value)}
   bind:this={rootRef}
   class:bx--form-item={true}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:keydown={handleTagKeydown}
 >
   {#if labelText || $$slots.labelChildren}
@@ -632,7 +639,7 @@
         {readonly}
         required={required && value.length === 0}
         class:bx--tag-input__input={true}
-        {...$$restProps}
+        {...controlProps}
         aria-describedby={joinDescribedBy(
           interactive && instructionsId,
           resolveStatusDescribedBy({

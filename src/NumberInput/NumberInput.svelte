@@ -18,6 +18,8 @@
 </script>
 
 <script>
+  /** @restProps {input} */
+
   /**
    * @typedef {"increment" | "decrement"} NumberInputTranslationId
    * @event {null | number} change
@@ -695,6 +697,11 @@
   }
 
   onMount(() => stopRepeat);
+
+  // A consumer class and style go on the root, so a margin moves the whole
+  // field. The other rest props go on the input. The class falls back to "",
+  // since Svelte 3 and 4 render an unset class as "undefined" on the server.
+  $: ({ class: rootClass, style: rootStyle, ...controlProps } = $$restProps);
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
@@ -705,6 +712,8 @@
   class:bx--form-item={true}
   class:bx--number-input--fluid={isFluid}
   class:bx--number-input--fluid--focus={isFluid && inputFocused}
+  class={rootClass ?? ""}
+  style={rootStyle}
   on:click
   on:mouseover
   on:mouseenter
@@ -778,7 +787,7 @@
           {min}
           {step}
           {readonly}
-          {...$$restProps}
+          {...controlProps}
           aria-describedby={joinDescribedBy(
             resolveStatusDescribedBy({
               showInvalid,
@@ -830,7 +839,7 @@
           {step}
           value={value ?? ""}
           {readonly}
-          {...$$restProps}
+          {...controlProps}
           aria-describedby={joinDescribedBy(
             resolveStatusDescribedBy({
               showInvalid,
