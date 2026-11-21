@@ -1896,8 +1896,6 @@ describe("DatePicker", () => {
         "bx--date-picker__day--disabled",
       );
 
-      // Lifting the rule goes around flatpickr's `set("enable", undefined)`,
-      // which throws.
       await rerender({ enabledDates: [] });
       await tick();
 
