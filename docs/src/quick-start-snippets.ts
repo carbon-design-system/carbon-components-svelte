@@ -55,22 +55,20 @@ ${usage}`;
 const imp = (names: string, mod: string) => `import ${names} from "${mod}";`;
 const CPS = "carbon-preprocess-svelte";
 
-export const sveltekitConfig = `// svelte.config.js
+export const sveltekitConfig = `// vite.config.js
 ${imp("adapter", "@sveltejs/adapter-static")}
-${imp("{ vitePreprocess }", "@sveltejs/vite-plugin-svelte")}
-${imp("{ optimizeImports }", CPS)}
-
-export default {
-  preprocess: [vitePreprocess(), optimizeImports()],
-  kit: { adapter: adapter() },
-};
-
-// vite.config.js
 ${imp("{ sveltekit }", "@sveltejs/kit/vite")}
-${imp("{ optimizeCss }", CPS)}
+${imp("{ vitePreprocess }", "@sveltejs/vite-plugin-svelte")}
+${imp("{ optimizeCss, optimizeImports }", CPS)}
 
 export default {
-  plugins: [sveltekit(), optimizeCss()],
+  plugins: [
+    sveltekit({
+      preprocess: [vitePreprocess(), optimizeImports()],
+      adapter: adapter(),
+    }),
+    optimizeCss(),
+  ],
 };`;
 
 export const viteConfig = `// vite.config.js
