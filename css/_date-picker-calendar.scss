@@ -522,6 +522,16 @@
     .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--disabled:hover {
       background-color: transparent;
     }
+
+    // Ahead of the month, quarter and year cells' state rules too, so a
+    // selected cell keeps its fill under the pointer, as a selected day does.
+    .#{$prefix}--date-picker__grid-cell:hover {
+      background: $layer-hover;
+    }
+
+    .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--disabled:hover {
+      background: none;
+    }
   }
 
   // Windows HCM fix
@@ -624,16 +634,6 @@
   .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--disabled {
     color: $text-disabled;
     cursor: not-allowed;
-  }
-
-  @media (any-hover: hover) {
-    .#{$prefix}--date-picker__grid-cell:hover {
-      background: $layer-hover;
-    }
-
-    .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--disabled:hover {
-      background: none;
-    }
   }
 
   // The grids are shorter than the day grid the open calendar is sized for
