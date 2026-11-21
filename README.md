@@ -203,13 +203,13 @@ The preprocessor optimizes imports from the following packages:
 ```diff
 $ vite build
 
-Optimized assets/index-Doxsm5Yz.css
-- Before: 557.37 kB
-+ After:   46.16 kB (-91.72%)
+Optimized assets/index-Djon9u-1.css
+- Before: 772.74 kB
++ After:   54.21 kB (-92.99%)
 
-dist/index.html                  0.33 kB │ gzip:  0.23 kB
-dist/assets/index-Doxsm5Yz.css  46.16 kB │ gzip:  6.12 kB
-dist/assets/index-BoBcXTHi.js   69.61 kB │ gzip: 24.35 kB
+dist/index.html                   0.33 kB │ gzip:  0.23 kB
+dist/assets/index-Djon9u-1.css   54.20 kB │ gzip:  7.63 kB
+dist/assets/index-kqXPAMjx.js   116.01 kB │ gzip: 40.38 kB
 ```
 
 > [!NOTE]
