@@ -3,7 +3,14 @@ import type { CalendarLocale } from "./calendar-dates.js";
 export type CalendarMode =
   "single" | "multiple" | "range" | "week" | "month" | "quarter" | "year";
 
-export type CalendarHook = (instance: CalendarInstance) => void;
+/** Why the calendar closed, when it was not a pick. */
+export type CalendarCloseReason =
+  "escape-key" | "outside-click" | "programmatic";
+
+export type CalendarHook = (
+  instance: CalendarInstance,
+  reason?: CalendarCloseReason,
+) => void;
 
 export type CalendarHookName =
   | "onChange"
@@ -127,7 +134,7 @@ export interface CalendarInstance {
   currentMonth: number;
   isOpen: boolean;
   open(event?: Event, positionElement?: HTMLElement): void;
-  close(): void;
+  close(reason?: CalendarCloseReason): void;
   toggle(event?: Event): void;
   clear(triggerChangeEvent?: boolean, toInitial?: boolean): void;
   destroy(): void;

@@ -645,10 +645,11 @@ export function createCalendarEngine(element, userConfig = {}) {
    * Calls the `on<Event>` option, if any, with the instance.
    *
    * @param {import("./calendar.js").CalendarHookName} event
+   * @param {import("./calendar.js").CalendarCloseReason} [reason]
    */
-  function triggerEvent(event) {
+  function triggerEvent(event, reason) {
     if (self.config === undefined) return;
-    config[event]?.(self);
+    config[event]?.(self, reason);
     if (event === "onChange") {
       for (const type of ["change", "input"]) {
         self.input.dispatchEvent(
@@ -1887,7 +1888,13 @@ export function createCalendarEngine(element, userConfig = {}) {
   }
   self.open = open;
 
-  function close() {
+  /**
+   * @param {import("./calendar.js").CalendarCloseReason} [reason] Passed to
+   *   `onClose`: an Escape or outside click the calendar handled, or the
+   *   caller's own. Unset for a pick, which the caller can tell from the
+   *   selection.
+   */
+  function close(reason) {
     // An inline calendar never opens, so it never closes either.
     if (config.inline) return;
     self.isOpen = false;
@@ -1895,7 +1902,7 @@ export function createCalendarEngine(element, userConfig = {}) {
     if (self._input) self._input.classList.remove("active");
     openListeners.clear();
     stopFollowing();
-    triggerEvent("onClose");
+    triggerEvent("onClose", reason);
   }
   self.close = close;
   self.toggle = (/** @type {Event} */ event) => {
@@ -1903,9 +1910,11 @@ export function createCalendarEngine(element, userConfig = {}) {
     open(event);
   };
 
-  function focusAndClose() {
+  /** @param {import("./calendar.js").CalendarCloseReason} [reason] */
+  function focusAndClose(reason) {
+    // Focus first: focusing the input after closing would reopen it.
     self._input.focus();
-    close();
+    close(reason);
   }
 
   /** Stops re-placing the calendar when its anchor moves. */
@@ -1971,7 +1980,7 @@ export function createCalendarEngine(element, userConfig = {}) {
           );
         }
       }
-      close();
+      close("outside-click");
       if (halfRangePicked && self.selectedDates.length === 1) clear(false);
     }
   }
@@ -2191,6 +2200,19 @@ export function createCalendarEngine(element, userConfig = {}) {
     const code = keyCodeOf(event);
     const inCalendar = self.calendarContainer.contains(target);
 
+    // Escape closes an open calendar from the calendar or its inputs, typed
+    // or not, and goes no further, so an enclosing Modal stays open.
+    if (code === 27 && self.isOpen && (isInput || inCalendar)) {
+      // Escape that cancels an IME composition is not a close.
+      if (isImeComposition(event)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      // From an input, focus stays where it is.
+      if (isInput) close("escape-key");
+      else focusAndClose("escape-key");
+      return;
+    }
+
     if (code === 13 && isInput) {
       if (allowInput) {
         commitTypedValue(target);
@@ -2217,12 +2239,6 @@ export function createCalendarEngine(element, userConfig = {}) {
           if (isGridMode || isInput || !isDayFocused(target)) break;
           event.preventDefault();
           focusByKey(target, code, event.shiftKey);
-          break;
-        case 27:
-          // Escape that cancels an IME composition is not a close.
-          if (isImeComposition(event)) break;
-          event.preventDefault();
-          focusAndClose();
           break;
         case 8:
         case 46:
