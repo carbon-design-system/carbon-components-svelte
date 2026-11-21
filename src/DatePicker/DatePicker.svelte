@@ -1067,9 +1067,6 @@
   function clear() {
     if ($readonlyAny || $disabledAny) return;
     if (engine) {
-      // The range plugin empties the end input on a timer, after `onChange`,
-      // so the `change` detail would still carry the old end date.
-      if ($range && inputRefTo) inputRefTo.value = "";
       // Fires `onChange`, which dispatches `change` like clearing by hand.
       engine.clear();
       if ($range) {
