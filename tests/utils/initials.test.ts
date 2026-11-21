@@ -45,22 +45,6 @@ describe("getInitials", () => {
     expect(getInitials("istanbul", { locale: "tr" })).toBe("İ");
   });
 
-  describe("without Intl.Segmenter", () => {
-    afterEach(() => {
-      vi.unstubAllGlobals();
-    });
-
-    it("falls back to a code point per word", async () => {
-      vi.stubGlobal("Intl", { ...Intl, Segmenter: undefined });
-      vi.resetModules();
-      const { getInitials: getInitialsFallback } =
-        await import("../../src/utils/initials.js");
-
-      expect(getInitialsFallback("John Doe")).toBe("JD");
-      expect(getInitialsFallback("😀 x")).toBe("😀X");
-    });
-  });
-
   it("reuses one segmenter per locale across calls", () => {
     const constructorSpy = vi.spyOn(Intl, "Segmenter");
 

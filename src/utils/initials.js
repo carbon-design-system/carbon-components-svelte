@@ -12,9 +12,6 @@
 /** @type {Map<string, Intl.Segmenter>} */
 const segmenters = new Map();
 
-const hasSegmenter =
-  typeof Intl !== "undefined" && typeof Intl.Segmenter === "function";
-
 const WHITESPACE = /\s+/;
 
 /**
@@ -50,14 +47,10 @@ function firstGrapheme(word, locale) {
     return word[0];
   }
 
-  if (hasSegmenter) {
-    for (const { segment } of getSegmenter(locale).segment(word)) {
-      return segment;
-    }
+  for (const { segment } of getSegmenter(locale).segment(word)) {
+    return segment;
   }
-  // Without `Intl.Segmenter`, fall back to the first code point (still
-  // better than a UTF-16 code unit, though it can split a ZWJ sequence).
-  return Array.from(word)[0];
+  return "";
 }
 
 /**

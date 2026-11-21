@@ -1,19 +1,12 @@
 // @ts-check
-// Firefox < 125 has no Intl.Segmenter; code-point iteration is still closer to
-// user-perceived length than value.length (UTF-16 code units).
 
-/** @type {Intl.Segmenter | null | undefined} */
+/** @type {Intl.Segmenter | undefined} */
 let segmenter;
 
 // The first `Intl.Segmenter` a page builds costs several milliseconds, so it
 // is created on first use rather than when this module loads.
 function getSegmenter() {
-  if (segmenter === undefined) {
-    segmenter =
-      typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
-        ? new Intl.Segmenter()
-        : null;
-  }
+  segmenter ??= new Intl.Segmenter();
   return segmenter;
 }
 
@@ -41,13 +34,9 @@ function isOneUnitPerGrapheme(value) {
  */
 export function graphemeCount(value) {
   if (isOneUnitPerGrapheme(value)) return value.length;
-  const segmenter = getSegmenter();
-  if (segmenter) {
-    let count = 0;
-    for (const _ of segmenter.segment(value)) count++;
-    return count;
-  }
-  return [...value].length;
+  let count = 0;
+  for (const _ of getSegmenter().segment(value)) count++;
+  return count;
 }
 
 /**
@@ -64,17 +53,12 @@ export function truncateGraphemes(value, max) {
   }
 
   if (isOneUnitPerGrapheme(value)) return value.slice(0, max);
-  const segmenter = getSegmenter();
-  if (segmenter) {
-    let count = 0;
-    let result = "";
-    for (const { segment } of segmenter.segment(value)) {
-      if (count >= max) break;
-      result += segment;
-      count++;
-    }
-    return result;
+  let count = 0;
+  let result = "";
+  for (const { segment } of getSegmenter().segment(value)) {
+    if (count >= max) break;
+    result += segment;
+    count++;
   }
-
-  return [...value].slice(0, max).join("");
+  return result;
 }

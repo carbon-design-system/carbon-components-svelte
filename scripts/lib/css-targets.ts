@@ -1,11 +1,13 @@
 import type { Targets } from "lightningcss";
 
-// Svelte 5 minimum browsers — https://svelte.dev/docs/svelte/browser-support
+// Baseline Widely available, pinned (#5288). Move it only in a minor
+// release, so a patch never drops a browser.
 export const BROWSERS = {
-  chrome: "87",
-  edge: "87",
-  firefox: "83",
-  safari: "14.1",
+  chrome: "124",
+  edge: "124",
+  firefox: "125",
+  safari: "17.4",
+  ios_saf: "17.4",
 } as const;
 
 /** A `major.minor.patch` version as lightningcss packs it: one byte each. */
