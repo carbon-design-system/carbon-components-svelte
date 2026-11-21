@@ -9,22 +9,22 @@
 @import "carbon-components/scss/globals/scss/typography";
 @import "carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/import-once/import-once";
 
-// Transform only: an opacity fade blended the selected day's text and fill
-// with the page mid-animation, below 4.5:1 contrast.
-@keyframes fpFadeInDown {
-  from {
-    transform: translate3d(0, -20px, 0);
-  }
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 /// DatePicker calendar: the popup or inline calendar and its day, month,
 /// quarter and year grids
 /// @access private
 /// @group components
 @mixin date-picker-calendar {
+  // Transform only: an opacity fade blended the selected day's text and
+  // fill with the page mid-animation, below 4.5:1 contrast.
+  @keyframes date-picker-calendar-enter {
+    from {
+      transform: translate3d(0, -20px, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   // The calendar takes the page's direction instead of v10's
   // `direction: ltr`, which Carbon flipped with rtlcss. In RTL the
   // weekdays, days and month grids run from the right, and the previous
@@ -82,7 +82,7 @@
   }
 
   .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--animate.#{$prefix}--date-picker__calendar--open {
-    animation: fpFadeInDown $duration--fast-02 motion(entrance, productive);
+    animation: date-picker-calendar-enter $duration--fast-02 motion(entrance, productive);
   }
 
   .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--inline {
@@ -153,7 +153,7 @@
     width: to-rem(40px);
     height: to-rem(40px);
     padding: 0;
-    line-height: 16px;
+    line-height: to-rem(16px);
     text-decoration: none;
     background: none;
     border: 0;
@@ -205,13 +205,12 @@
     background-color: $field;
     border: none;
     cursor: default;
-    // Added in when upgraded to Flatpickr 4.5.5 (#1977)
-    -moz-appearance: textfield; /* Firefox */
+    // The year steppers below replace the number input's spin buttons.
+    -moz-appearance: textfield;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
-      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-      // Added in when upgraded to Flatpickr 4.5.5 (#1977)
+      margin: 0;
       -webkit-appearance: none;
     }
 
@@ -220,30 +219,6 @@
     }
 
     &[disabled] {
-      color: $text-disabled;
-      background-color: $layer;
-      pointer-events: none;
-    }
-  }
-
-  // grouped any-hover rules for the elements above into one block
-  // (order-safe: no equal-specificity rule between the originals touched
-  // the same property on the same element)
-  @media (any-hover: hover) {
-    .#{$prefix}--date-picker__nav-button--previous:hover,
-    .#{$prefix}--date-picker__nav-button--next:hover {
-      background-color: $layer-hover;
-    }
-
-    .#{$prefix}--date-picker__heading .#{$prefix}--date-picker__month-label:hover {
-      background-color: $layer-hover;
-    }
-
-    .#{$prefix}--date-picker__year:hover {
-      background-color: $layer-hover;
-    }
-
-    .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-input[disabled]:hover {
       color: $text-disabled;
       background-color: $layer;
       pointer-events: none;
@@ -290,10 +265,29 @@
     }
   }
 
-  // grouped any-hover rules for the arrow controls into one block
-  // (order-safe: kept ahead of the :active::after rule below, which shares
-  // its specificity and property and must keep winning that tie)
+  // One block for the header's hover rules. It stays ahead of the stepper's
+  // `:active::after` and disabled `::after` rules, which share its
+  // specificity and property and must keep winning those ties.
   @media (any-hover: hover) {
+    .#{$prefix}--date-picker__nav-button--previous:hover,
+    .#{$prefix}--date-picker__nav-button--next:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--date-picker__heading .#{$prefix}--date-picker__month-label:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--date-picker__year:hover {
+      background-color: $layer-hover;
+    }
+
+    .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-input[disabled]:hover {
+      color: $text-disabled;
+      background-color: $layer;
+      pointer-events: none;
+    }
+
     .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--up:hover::after,
     .#{$prefix}--date-picker__year .#{$prefix}--date-picker__year-step--down:hover::after {
       border-top-color: $background-brand;
@@ -505,15 +499,6 @@
     background: $layer;
   }
 
-  @media (any-hover: hover) {
-    .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-end:hover {
-      @include focus-outline("outline");
-
-      color: $text-primary;
-      background: $layer;
-    }
-  }
-
   .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-end.#{$prefix}--date-picker__day--in-range.#{$prefix}--date-picker__day--selected {
     color: $text-on-color;
     background: $background-brand;
@@ -522,11 +507,20 @@
   .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--disabled {
     color: $text-disabled;
     cursor: not-allowed;
+  }
 
-    @media (any-hover: hover) {
-      &:hover {
-        background-color: transparent;
-      }
+  // Ahead of the state rules below (the selected start of a pending
+  // `minRangeDays` range), which must keep winning the disabled day's tie.
+  @media (any-hover: hover) {
+    .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--range-end:hover {
+      @include focus-outline("outline");
+
+      color: $text-primary;
+      background: $layer;
+    }
+
+    .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--disabled:hover {
+      background-color: transparent;
     }
   }
 
