@@ -1958,7 +1958,11 @@
     positionElement: anchor,
     allowInvalidPreload: keepOutOfRangeValue,
     animate,
-    ignoredFocusElements: keepOpenFor.length ? keepOpenFor : undefined,
+    // Clicks and focus anywhere in the picker, its label included, stay
+    // inside, as they do for DatePicker's own outside-click check.
+    ignoredFocusElements: datePickerRef
+      ? [datePickerRef, ...keepOpenFor]
+      : keepOpenFor,
     dayDescription,
     dayClass,
     prevLabel: previousLabelText,

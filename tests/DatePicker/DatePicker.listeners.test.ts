@@ -176,18 +176,19 @@ describe("DatePicker fixed-position reposition listeners", () => {
 describe("DatePicker range ignoredFocusElements", () => {
   it("does not share the array with other instances", async () => {
     const first = await mountRange();
-    const firstElements = first.instance.config.ignoredFocusElements;
-    expect(firstElements).toHaveLength(1);
+    const firstElements = [...first.instance.config.ignoredFocusElements];
+    expect(firstElements.length).toBeGreaterThan(0);
     first.unmount();
 
-    // flatpickr's range plugin pushes its second input into this array. A
-    // default array shared across instances keeps every unmounted range
-    // picker's input (and the detached tree it sits in) reachable forever.
+    // The calendar pushes a range's second input into this array. A default
+    // array shared across instances keeps every unmounted range picker's
+    // input (and the detached tree it sits in) reachable forever.
     const second = await mountRange();
     const secondElements = second.instance.config.ignoredFocusElements;
 
-    expect(secondElements).not.toBe(firstElements);
-    expect(secondElements).toHaveLength(1);
-    expect(secondElements).not.toContain(firstElements[0]);
+    expect(secondElements).toHaveLength(firstElements.length);
+    for (const element of firstElements) {
+      expect(secondElements).not.toContain(element);
+    }
   });
 });

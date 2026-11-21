@@ -311,6 +311,18 @@ describe("DatePicker close event", () => {
     ]);
   });
 
+  it("keeps the calendar open, without a close, when the field's label is clicked", async () => {
+    const onClose = vi.fn();
+    render(DatePickerClose, { props: { onClose } });
+    const calendar = await openCalendar();
+
+    await user.click(screen.getByText("Date"));
+    await settle();
+
+    expect(calendar).toHaveClass("bx--date-picker__calendar--open");
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
   it("closes only the calendar, not an enclosing Modal, on Escape", async () => {
     render(DatePickerHost, {
       props: { container: "modal", portalMenu: false },
