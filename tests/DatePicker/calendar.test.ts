@@ -342,6 +342,21 @@ describe("range mode", () => {
     expect(second.value).toBe("2024-03-09");
   });
 
+  it("empties both inputs before onChange when a range is cleared", () => {
+    const second = rangeInputs();
+    const values: string[][] = [];
+    const { instance, input } = create({
+      mode: "range",
+      secondInput: second,
+      defaultDate: ["2024-03-04", "2024-03-09"],
+      onChange: () => values.push([input.value, second.value]),
+    });
+
+    instance.clear();
+
+    expect(values).toEqual([["", ""]]);
+  });
+
   it("swaps the ends when the second pick is earlier", () => {
     const second = rangeInputs();
     const { instance, input } = create({

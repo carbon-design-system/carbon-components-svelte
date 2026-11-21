@@ -1710,6 +1710,7 @@ export function createCalendarEngine(element, userConfig = {}) {
   function clear(notify = true, toInitial = true) {
     self.input.value = "";
     if (self.altInput) self.altInput.value = "";
+    if (secondInput) secondInput.value = "";
     self.selectedDates = [];
     halfRangePicked = false;
     latestSelectedDate = undefined;
