@@ -45,15 +45,19 @@
     touch-action: manipulation;
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open,
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--inline {
+  .#{$prefix}--date-picker__calendar:focus {
+    outline: 0;
+  }
+
+  .#{$prefix}--date-picker__calendar--open,
+  .#{$prefix}--date-picker__calendar--inline {
     max-height: to-rem(640px);
     overflow: visible;
     visibility: inherit;
     opacity: 1;
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open {
+  .#{$prefix}--date-picker__calendar--open {
     // `top: calc(100% + 2px)` (below, on `.static`) and `margin-top`
     // net to a flush, zero-gap seam against the input above. The shared
     // `box-shadow` mixin's blur (blur 6px, offset 2px down) still bleeds
@@ -81,7 +85,7 @@
     }
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--animate.#{$prefix}--date-picker__calendar--open {
+  .#{$prefix}--date-picker__calendar--animate.#{$prefix}--date-picker__calendar--open {
     animation: date-picker-calendar-enter $duration--fast-02 motion(entrance, productive);
 
     @media (prefers-reduced-motion: reduce) {
@@ -89,7 +93,7 @@
     }
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--inline {
+  .#{$prefix}--date-picker__calendar--inline {
     position: relative;
     display: block;
     width: to-rem(288px);
@@ -98,12 +102,12 @@
     background-color: $layer;
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--static {
+  .#{$prefix}--date-picker__calendar--static {
     position: absolute;
     top: calc(100% + 2px);
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--static.#{$prefix}--date-picker__calendar--open {
+  .#{$prefix}--date-picker__calendar--static.#{$prefix}--date-picker__calendar--open {
     z-index: 999;
     display: block;
   }
@@ -124,10 +128,6 @@
     display: flex;
     width: 100%;
     justify-content: space-around;
-  }
-
-  .#{$prefix}--date-picker__calendar:focus {
-    outline: 0;
   }
 
   .#{$prefix}--date-picker__month-nav {
@@ -379,14 +379,14 @@
   // Week numbers (`weekNumbers`): a 40px column beside the grid. With week
   // numbers or `showMonths`, the calendar grows to fit every month grid plus
   // the week column, with the padding outside that content width.
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--week-numbers,
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--multi-month {
+  .#{$prefix}--date-picker__calendar--week-numbers,
+  .#{$prefix}--date-picker__calendar--multi-month {
     box-sizing: content-box;
     width: max-content;
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--week-numbers.#{$prefix}--date-picker__calendar--open,
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--multi-month.#{$prefix}--date-picker__calendar--open {
+  .#{$prefix}--date-picker__calendar--week-numbers.#{$prefix}--date-picker__calendar--open,
+  .#{$prefix}--date-picker__calendar--multi-month.#{$prefix}--date-picker__calendar--open {
     height: to-rem(324px);
   }
 
@@ -396,7 +396,7 @@
 
   // Multi-month grids only render the weeks a month needs, and flag the
   // neighbouring months' days `hidden` since the next grid shows them.
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--multi-month .#{$prefix}--date-picker__month-days {
+  .#{$prefix}--date-picker__calendar--multi-month .#{$prefix}--date-picker__month-days {
     align-content: flex-start;
   }
 
@@ -449,6 +449,8 @@
     cursor: default;
   }
 
+  // The day states keep the day's own class: alone, a state class would
+  // lose to `__day:hover` above and tie the forced-colors rules below.
   .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--today {
     position: relative;
     color: $link-primary;
@@ -533,7 +535,7 @@
       background: $layer-hover;
     }
 
-    .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--disabled:hover {
+    .#{$prefix}--date-picker__grid-cell--disabled:hover {
       background: none;
     }
   }
@@ -612,12 +614,14 @@
     }
   }
 
+  // Keeps the cell's own class to outrank `__grid-cell:hover`, as a
+  // selected day does.
   .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--selected {
     background-color: $background-brand;
     color: $text-on-color;
   }
 
-  .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--today:not(.#{$prefix}--date-picker__grid-cell--selected) {
+  .#{$prefix}--date-picker__grid-cell--today:not(.#{$prefix}--date-picker__grid-cell--selected) {
     position: relative;
     color: $link-primary;
     font-weight: 600;
@@ -635,26 +639,26 @@
     }
   }
 
-  .#{$prefix}--date-picker__grid-cell.#{$prefix}--date-picker__grid-cell--disabled {
+  .#{$prefix}--date-picker__grid-cell--disabled {
     color: $text-disabled;
     cursor: not-allowed;
   }
 
   // The grids are shorter than the day grid the open calendar is sized for
   // (21rem). Three classes out-specify that base rule.
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open.#{$prefix}--date-picker__calendar--month,
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open.#{$prefix}--date-picker__calendar--year {
+  .#{$prefix}--date-picker__calendar--open.#{$prefix}--date-picker__calendar--month,
+  .#{$prefix}--date-picker__calendar--open.#{$prefix}--date-picker__calendar--year {
     height: to-rem(224px);
   }
 
-  .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open.#{$prefix}--date-picker__calendar--quarter {
+  .#{$prefix}--date-picker__calendar--open.#{$prefix}--date-picker__calendar--quarter {
     height: to-rem(148px);
   }
 
   // A year-first locale writes a word after the year ("2000年1月"). Size the
   // year input to its four digits so the word follows it, and drop the
   // hover-only spin arrows that would otherwise sit on top of the word.
-  .#{$prefix}--date-picker__year.#{$prefix}--date-picker__year--suffixed {
+  .#{$prefix}--date-picker__year--suffixed {
     // 2px of slack: WebKit measures four digits a little wider than 4ch.
     width: calc(4ch + #{$carbon--spacing-02} + #{to-rem(2px)});
   }

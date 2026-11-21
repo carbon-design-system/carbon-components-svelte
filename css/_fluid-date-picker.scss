@@ -197,7 +197,7 @@
   // its own box, so the base flush seam already covers it correctly.
   .#{$prefix}--date-picker--fluid
     .#{$prefix}--date-picker--range
-    .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--open {
+    .#{$prefix}--date-picker__calendar--open {
     margin-top: to-rem(-1px);
   }
 
