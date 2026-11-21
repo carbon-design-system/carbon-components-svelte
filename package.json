@@ -17,6 +17,11 @@
       "svelte": "./src/syntax/index.js",
       "import": "./src/syntax/index.js"
     },
+    "./motion": {
+      "types": "./src/motion/index.d.ts",
+      "svelte": "./src/motion/index.js",
+      "import": "./src/motion/index.js"
+    },
     "./tokens": {
       "types": "./src/tokens/index.d.ts",
       "import": "./src/tokens/index.js"

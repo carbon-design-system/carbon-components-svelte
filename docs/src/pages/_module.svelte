@@ -353,6 +353,11 @@
           href="/theme-builder"
           isSelected={$isActive("/theme-builder")}
         />
+        <SideNavLink
+          text="Motion"
+          href="/motion"
+          isSelected={$isActive("/motion")}
+        />
         <SideNavDivider />
         {#each groupedNav as group, groupIndex (group.label)}
           <Text
