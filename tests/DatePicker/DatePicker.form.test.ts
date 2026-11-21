@@ -104,6 +104,27 @@ describe("DatePicker form reset", () => {
       expect(getValueTo()).toBe("");
     });
 
+    it("restores each input's default text, as server markup sets it", async () => {
+      render(DatePickerForm, {
+        props: {
+          datePickerType: "range",
+          valueFrom: "2024-03-15",
+          valueTo: "2024-03-20",
+        },
+      });
+      const start = screen.getByLabelText<HTMLInputElement>("Start date");
+      const end = screen.getByLabelText<HTMLInputElement>("End date");
+      start.defaultValue = "2024-3-5";
+      end.defaultValue = "2024-3-9";
+
+      await resetForm();
+
+      expect(start).toHaveValue("2024-3-5");
+      expect(end).toHaveValue("2024-3-9");
+      expect(getValueFrom()).toBe("2024-3-5");
+      expect(getValueTo()).toBe("2024-3-9");
+    });
+
     it("resets empty initial values back to empty on both sides", async () => {
       render(DatePickerForm, {
         props: { datePickerType: "range", valueFrom: "", valueTo: "" },
