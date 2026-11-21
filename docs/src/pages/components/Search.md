@@ -83,6 +83,8 @@ Let users turn off a single-key shortcut such as `/`, or add a modifier to it. S
 
 Enable the expandable variant to show a compact search icon that expands on focus. While collapsed, the input is marked `inert` and removed from the tab order, hiding it from assistive technology until it expands — only the search icon button is reachable. That icon renders as a `<button>`, so pressing <DocKbd label="Enter" /> opens the field without a pointer. Pressing <DocKbd label="Escape" /> clears a non-empty value first, then collapses the field on the next press.
 
+While collapsed, the search icon shows its name in a tooltip on hover and focus. The name is `labelText`, or `placeholder` when the label is empty. Set `tooltipAlign` to place it, as Button's `tooltipAlign` takes. It defaults to `"top"`. Set `hideTooltip` to hide it. The icon keeps its name for screen readers.
+
 <FileSource src="/framed/Search/SearchExpandableReactive" />
 
 ## On a layer
