@@ -723,6 +723,8 @@ Emission order is load-bearing: equal-specificity ties resolve by source order. 
 | `bun run check:css:usage` | Browser-measured "never wins" worklist (`crassus usage`), written to `.crassus/usage/report.md`. Evidence, not proof. |
 | `bun run check:css:doctor` | Checks Chrome, free disk, load and the fixture setup before a long browser run (`crassus doctor`). |
 
+The browser checks read only what a fixture renders as it loads: a popup no page opens is invisible to them. [`date-picker-calendar-states.html`](e2e/fixtures/date-picker-calendar-states.html) keeps a DatePicker calendar open in each state (range, week, month, quarter and year grids, week numbers, a year-first locale, popups). They don't yet record forced `:hover` on the calendar's cells ([metonym/crassus#11](https://github.com/metonym/crassus/issues/11)), so check a calendar hover change by hand.
+
 Tests in `tests/css/` that budget the compiled sheet, each with the number to lower when you improve it:
 
 | Test | Holds |
