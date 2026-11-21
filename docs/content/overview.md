@@ -182,7 +182,7 @@ export default {
 };
 ```
 
-On SvelteKit 2, pass the same `preprocess` in `svelte.config.js` and the adapter under `kit`.
+SvelteKit 3 reads its config from `sveltekit()` and no longer loads `svelte.config.js`. Before SvelteKit 2.62, pass the same `preprocess` in `svelte.config.js` and the adapter under `kit`.
 
 **Rollup:**
 

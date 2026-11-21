@@ -294,26 +294,24 @@ export default {
 **SvelteKit**
 
 ```js
-// svelte.config.js
-import adapter from "@sveltejs/adapter-static";
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import { optimizeImports } from "carbon-preprocess-svelte";
-
-export default {
-  preprocess: [vitePreprocess(), optimizeImports()],
-  kit: { adapter: adapter() },
-};
-```
-
-```js
 // vite.config.js
+import adapter from "@sveltejs/adapter-static";
 import { sveltekit } from "@sveltejs/kit/vite";
-import { optimizeCss } from "carbon-preprocess-svelte";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import { optimizeCss, optimizeImports } from "carbon-preprocess-svelte";
 
 export default {
-  plugins: [sveltekit(), optimizeCss()],
+  plugins: [
+    sveltekit({
+      preprocess: [vitePreprocess(), optimizeImports()],
+      adapter: adapter(),
+    }),
+    optimizeCss(),
+  ],
 };
 ```
+
+SvelteKit 3 reads its config from `sveltekit()` and no longer loads `svelte.config.js`. Before SvelteKit 2.62, pass the same `preprocess` in `svelte.config.js` and the adapter under `kit`.
 
 **Rollup**
 
