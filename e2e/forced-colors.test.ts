@@ -1487,3 +1487,24 @@ test("forced colors: the ProfileMenuHeader avatar keeps its circle", async ({
     outlineColor: system.CanvasText,
   });
 });
+
+// A picked week reads like a range: its first and last days are boxed and
+// the days between read Highlight, not seven boxes with plain text inside.
+test("forced colors: a picked week boxes only its ends", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === "webkit", "WebKit does not force colors");
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/date-picker-calendar-states.html");
+  const week = '[data-testid="week"] .bx--date-picker__day--week';
+  await expect(page.locator(week).first()).toBeVisible();
+  const system = await systemColors(page);
+  expect(await style(page, `${week}:first-child`)).toMatchObject({
+    color: system.Highlight,
+    outline: "dotted 1px",
+  });
+  const middle = await style(page, `${week}:nth-child(4)`);
+  expect(middle.color).toBe(system.Highlight);
+  expect(middle.outline).toMatch(/^none /);
+});

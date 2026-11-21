@@ -683,6 +683,15 @@
   .#{$prefix}--date-picker__day.#{$prefix}--date-picker__day--week.#{$prefix}--date-picker__day--selected:not(:first-child):not(:last-child) {
     color: $text-primary;
     background-color: $highlight;
+
+    // In forced colors too: Highlight text like the days inside a range,
+    // not a selected day's box. A transparent fill keeps the forced Canvas
+    // backplate from covering the boxed first day's edge.
+    @include high-contrast-mode {
+      color: Highlight;
+      background-color: transparent;
+      outline: none;
+    }
   }
 
   // `minRangeDays`: while a range start is pending, the start day itself can
