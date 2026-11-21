@@ -8,7 +8,7 @@
   export let tokens: ComponentProps<Theme>["tokens"] = {};
   export let persist = false;
   export let persistKey = "theme";
-  export let system = false;
+  export let system: ComponentProps<Theme>["system"] = false;
   export let systemThemes: ComponentProps<Theme>["systemThemes"] | undefined =
     undefined;
   export let onUpdate: ((detail: { theme: string }) => void) | undefined =

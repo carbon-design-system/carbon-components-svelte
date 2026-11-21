@@ -9,8 +9,11 @@ export interface ThemeScriptOptions {
   persist?: boolean;
   /** Local storage key, matching `Theme`'s `persistKey`. */
   persistKey?: string;
-  /** Pick the theme from the operating system color scheme. */
-  system?: boolean;
+  /**
+   * Pick the theme from the operating system color scheme.
+   * `"fallback"` picks from it only when no theme is stored.
+   */
+  system?: boolean | "fallback";
   /** Themes for the light and dark system color schemes. */
   systemThemes?: [light: CarbonTheme, dark: CarbonTheme];
 }
@@ -20,6 +23,7 @@ export interface ThemeScriptOptions {
  * Pass the same options as `Theme` so both resolve the same theme:
  * with `system`, the color scheme picks from `systemThemes`; otherwise
  * with `persist`, a stored theme under `persistKey` wins over `theme`.
+ * With `system: "fallback"`, a stored theme wins over the color scheme.
  * `tokens` are set as `--cds-{token}`, as `Theme` sets them.
  * Returns the script body without `<script>` tags.
  */

@@ -39,7 +39,8 @@ function renderSystem(props: Partial<ComponentProps<Theme>> = {}) {
 describe("Theme system", () => {
   let setAttribute: ReturnType<typeof vi.spyOn>;
   let setProperty: ReturnType<typeof vi.spyOn>;
-  const { setMockItem, getMockItem } = setupStorageEventMock();
+  const { setMockItem, getMockItem, dispatchStorageEvent } =
+    setupStorageEventMock();
 
   beforeEach(() => {
     setAttribute = vi.spyOn(document.documentElement, "setAttribute");
@@ -167,6 +168,82 @@ describe("Theme system", () => {
 
     expect(document.documentElement.getAttribute("theme")).toBe("g100");
     expect(getMockItem("theme")).toBe("g100");
+  });
+
+  describe('system="fallback"', () => {
+    it("follows the system without storing it", async () => {
+      const { fire } = stubMatchMedia(true);
+      renderSystem({ system: "fallback", persist: true });
+      await tick();
+      expect(document.documentElement.getAttribute("theme")).toBe("g100");
+
+      fire(false);
+      await tick();
+
+      expect(document.documentElement.getAttribute("theme")).toBe("white");
+      expect(getMockItem("theme")).toBeUndefined();
+    });
+
+    it("restores a stored pick over the system and stops following", async () => {
+      setMockItem("theme", "g10");
+      const { fire } = stubMatchMedia(true);
+      const onUpdate = vi.fn();
+      renderSystem({ system: "fallback", persist: true, onUpdate });
+      await tick();
+      expect(document.documentElement.getAttribute("theme")).toBe("g10");
+
+      fire(false);
+      await tick();
+
+      expect(document.documentElement.getAttribute("theme")).toBe("g10");
+      expect(onUpdate).not.toHaveBeenCalled();
+    });
+
+    it("stores a pick and stops following the system", async () => {
+      const { fire } = stubMatchMedia(false);
+      const { component } = renderSystem({
+        system: "fallback",
+        persist: true,
+      });
+      await tick();
+
+      component.theme = "g100";
+      await tick();
+      expect(getMockItem("theme")).toBe("g100");
+
+      fire(true);
+      fire(false);
+      await tick();
+
+      expect(document.documentElement.getAttribute("theme")).toBe("g100");
+    });
+
+    it("stops following after a pick without persist", async () => {
+      const { fire } = stubMatchMedia(false);
+      const { component } = renderSystem({ system: "fallback" });
+      await tick();
+
+      component.theme = "g90";
+      await tick();
+      fire(true);
+      await tick();
+
+      expect(document.documentElement.getAttribute("theme")).toBe("g90");
+    });
+
+    it("syncs a pick from another tab, and follows again when it is removed", async () => {
+      stubMatchMedia(true);
+      renderSystem({ system: "fallback", persist: true });
+      await tick();
+
+      dispatchStorageEvent("theme", "g10");
+      await tick();
+      expect(document.documentElement.getAttribute("theme")).toBe("g10");
+
+      dispatchStorageEvent("theme", null);
+      await tick();
+      expect(document.documentElement.getAttribute("theme")).toBe("g100");
+    });
   });
 
   it("does not watch the system when unmounted before persist settles", async () => {
