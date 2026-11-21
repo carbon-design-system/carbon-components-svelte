@@ -752,7 +752,7 @@
   /** @type {number[]} */
   let selectedDatesAtOpen = [];
 
-  /** The string flatpickr writes to the input for its current selection. */
+  /** The string the calendar writes to the input for its current selection. */
   function formatSelectedDates() {
     const { dateFormat, conjunction } =
       /** @type {NonNullable<typeof engine>} */ (engine).config;
@@ -972,7 +972,7 @@
   /**
    * While a range start is pending, whether `date` would make the range
    * shorter than `minRangeDays` or longer than `maxRangeDays`. Reads the
-   * current props on every call; flatpickr asks as it rebuilds the grid
+   * current props on every call; the calendar asks as it rebuilds the grid
    * right after the start is picked.
    *
    * @param {Date} date
@@ -992,7 +992,7 @@
 
   /**
    * Mirror the calendar's selection into `selectedDates`. The `Date`s are
-   * copies: flatpickr keeps its own, and a consumer mutating one in place
+   * copies: the calendar keeps its own, and a consumer mutating one in place
    * would change the selection without a redraw.
    */
   function syncSelectedDatesFromCalendar() {
@@ -1087,7 +1087,7 @@
   }
 
   // A form reset restores each input's DOM value without firing any event,
-  // and flatpickr's own `selectedDates` (and any `altInput` text) are
+  // and the calendar's own `selectedDates` (and any `altInput` text) are
   // untouched by the browser entirely — neither the input DOM value change
   // nor the calendar-internal state gets pushed anywhere on its own. Read
   // what the browser just put in the DOM (not a value captured at creation,
@@ -1115,10 +1115,10 @@
     }
 
     // usesDisplayFormat's altInput is the only element a native reset
-    // actually restores in that mode: a plain flatpickr-generated text
-    // input that never gets a `value` attribute or `defaultValue`, so it
-    // always resets to "". The underlying NAMED input, which flatpickr
-    // turns `type="hidden"`, is never touched by a native reset at all —
+    // actually restores in that mode: a plain text input the calendar
+    // builds, with no `value` attribute or `defaultValue`, so it always
+    // resets to "". The underlying NAMED input, which the calendar turns
+    // `type="hidden"`, is never touched by a native reset at all —
     // browsers skip hidden inputs entirely — so reading `inputRef.value`
     // here would read the stale, pre-reset text back in instead.
     const next = engine?.altInput
@@ -1211,7 +1211,7 @@
 
   /**
    * Returns `false` when there is no calendar to focus (simple mode, or a
-   * failed or pending flatpickr init).
+   * failed or pending calendar init).
    * @type {() => boolean}
    */
   function focusCalendar() {
@@ -1493,7 +1493,7 @@
       const selectionCount = engine.selectedDates.length;
       applyOptionIfChanged("minDate", minDate);
       applyOptionIfChanged("maxDate", maxDate);
-      // New bounds make flatpickr drop the selected dates they exclude and
+      // New bounds make the calendar drop the selected dates they exclude and
       // rewrite the input, without an event. A prop write is not a user
       // change, so mirror the result without dispatching `change`.
       if (engine.selectedDates.length !== selectionCount) {
@@ -1509,9 +1509,8 @@
     }
 
     // Creation is async. A second reactive run before it resolves would build
-    // another instance on the same input, and flatpickr destroys the first,
-    // leaving `calendar` pointing at a dead one. A failed init is not retried
-    // either, since every retry logs the same flatpickr error again.
+    // a second calendar on the same input. A failed init is not retried
+    // either, since every retry would log the same error again.
     if (creating) {
       pendingOptions = options;
       return;
@@ -1608,9 +1607,9 @@
     // changed in the meantime. Seeding this (rather than leaving it empty)
     // also keeps the first post-creation reactive run from treating
     // unchanged `minDate` / `maxDate` as newly changed; re-setting either
-    // triggers flatpickr's own internal `jumpToDate()` fallback (no
-    // selection means "jump to today"), which would otherwise silently
-    // yank the view away from `initialMonth`.
+    // runs the calendar's `jumpToDate()` (no selection means "jump to
+    // today"), which would otherwise silently yank the view away from
+    // `initialMonth`.
     prevAppliedOptions = {
       minDate: options.minDate,
       maxDate: options.maxDate,
@@ -1801,8 +1800,8 @@
   }
 
   /**
-   * flatpickr reads `mode` and its plugins once, at creation, so options
-   * like these need a new instance. The init block below builds it.
+   * The calendar reads `mode` once, at creation, so options like these need
+   * a new instance. The init block below builds it.
    */
   function recreateCalendar() {
     destroyCalendar();
@@ -1900,9 +1899,10 @@
       engine.calendarContainer.removeAttribute("aria-disabled");
     }
   }
-  // The range plugin writes to two inputs and has no alt input for the second.
+  // A range writes to two inputs, and the calendar has no alt input for
+  // the second.
   $: usesDisplayFormat = !!displayFormat && datePickerType !== "range";
-  // flatpickr only creates its `altInput` at init, so turning the feature on
+  // The calendar only creates its `altInput` at init, so turning the feature on
   // or off needs a new instance. A format change just repaints.
   $: if (usesDisplayFormat !== prevUsesDisplayFormat) {
     prevUsesDisplayFormat = usesDisplayFormat;

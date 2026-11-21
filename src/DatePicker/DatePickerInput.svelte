@@ -185,7 +185,7 @@
   // The "multiple"-mode ghost overlay (see below) mirrors this instead of
   // `currentValue` directly: while a calendar exists, `updateValue` only
   // pushes typed keystrokes into the shared store on "change" (blur/Enter),
-  // not "input", to avoid fighting flatpickr's own value management. That
+  // not "input", to avoid fighting the calendar's own value management. That
   // deliberate lag would otherwise leave the overlay showing stale text
   // while the (invisible) real input already has the freshly typed value.
   $: overlayValue = currentValue;
@@ -321,10 +321,11 @@
       on:keydown
       on:keydown={(event) => {
         if (!readonly && event.key === "ArrowDown" && focusCalendar()) {
-          // flatpickr only intercepts arrow keys on the input when
-          // `allowInput` is off, so it never runs its own preventDefault
-          // here; without this, moving focus into the calendar also
-          // triggers the browser's native arrow-key page scroll.
+          // The calendar only handles arrow keys on the input while it is
+          // open and `allowInput` is off, so it never runs its own
+          // preventDefault here; without this, moving focus into the
+          // calendar also triggers the browser's native arrow-key page
+          // scroll.
           event.preventDefault();
         }
       }}
