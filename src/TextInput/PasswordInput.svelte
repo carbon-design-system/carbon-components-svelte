@@ -118,6 +118,12 @@
    */
   export let portalTooltip = undefined;
 
+  /**
+   * Set to `true` to hide the visibility toggle's tooltip.
+   * The toggle keeps its accessible name.
+   */
+  export let hideTooltip = false;
+
   /** Set to `true` to select the input's text when it receives focus */
   export let selectTextOnFocus = false;
 
@@ -179,12 +185,9 @@
 
   // The position classes place the in-place tooltip and its caret. A
   // portalled one has its own, so the toggle drops them, as Button does.
-  $: inlinePosition = effectivePortalTooltip
-    ? undefined
-    : effectiveTooltipPosition;
-  $: inlineAlignment = effectivePortalTooltip
-    ? undefined
-    : effectiveTooltipAlignment;
+  $: inlineTooltip = !hideTooltip && !effectivePortalTooltip;
+  $: inlinePosition = inlineTooltip ? effectiveTooltipPosition : undefined;
+  $: inlineAlignment = inlineTooltip ? effectiveTooltipAlignment : undefined;
 
   /** @type {null | HTMLButtonElement} */
   let toggleButtonRef = null;
@@ -197,7 +200,7 @@
   // hides it until the next hover or focus.
   const tooltip = createAnchoredTooltip({
     group: getTooltipGroup(),
-    enabled: () => !effectiveDisabled,
+    enabled: () => !effectiveDisabled && !hideTooltip,
     dismissOnClick: false,
     enterDelayMs: () => 0,
   });
@@ -211,13 +214,14 @@
 
   $: {
     detachTooltip();
-    detachTooltip = toggleButtonRef ? tooltip.attach(toggleButtonRef) : noop;
+    detachTooltip =
+      toggleButtonRef && !hideTooltip ? tooltip.attach(toggleButtonRef) : noop;
   }
 
-  $: if (effectiveDisabled) tooltip.hide();
+  $: if (effectiveDisabled || hideTooltip) tooltip.hide();
 
   $: if (!$tooltipOpen) portalWhenClipped = false;
-  $: inlineOpen = !effectivePortalTooltip && $tooltipOpen;
+  $: inlineOpen = inlineTooltip && $tooltipOpen;
   // The in-place tooltip is laid out while hidden, so it measures where it
   // shows. Measured after the update, so the swap lands before paint.
   $: if (inlineOpen) tick().then(portalIfClipped);
@@ -411,9 +415,10 @@
         class:bx--btn={true}
         class:bx--btn--icon-only={true}
         class:bx--btn--disabled={effectiveDisabled}
-        class:bx--tooltip__trigger={true}
-        class:bx--tooltip--a11y={true}
-        class:bx--tooltip--portal-active={effectivePortalTooltip}
+        class:bx--tooltip__trigger={!hideTooltip}
+        class:bx--tooltip--a11y={!hideTooltip}
+        class:bx--tooltip--portal-active={!hideTooltip &&
+          effectivePortalTooltip}
         class:bx--tooltip--top={inlinePosition === "top"}
         class:bx--tooltip--right={inlinePosition === "right"}
         class:bx--tooltip--bottom={inlinePosition === "bottom"}
@@ -421,17 +426,17 @@
         class:bx--tooltip--align-start={inlineAlignment === "start"}
         class:bx--tooltip--align-center={inlineAlignment === "center"}
         class:bx--tooltip--align-end={inlineAlignment === "end"}
-        class:bx--tooltip--hidden={!effectivePortalTooltip && $tooltipHidden}
+        class:bx--tooltip--hidden={inlineTooltip && $tooltipHidden}
         class:bx--tooltip--visible={inlineOpen}
-        class:bx--tooltip--instant={!effectivePortalTooltip && $tooltipInstant}
-        aria-label={effectivePortalTooltip || effectiveDisabled
-          ? tooltipLabel
-          : undefined}
+        class:bx--tooltip--instant={inlineTooltip && $tooltipInstant}
+        aria-label={inlineTooltip && !effectiveDisabled
+          ? undefined
+          : tooltipLabel}
         on:click={() => {
           type = type === "password" ? "text" : "password";
         }}
       >
-        {#if !effectiveDisabled && !effectivePortalTooltip}
+        {#if inlineTooltip && !effectiveDisabled}
           <span bind:this={tooltipRef} class:bx--assistive-text={true}>
             {tooltipLabel}
           </span>
@@ -464,7 +469,7 @@
   </div>
 </div>
 
-{#if effectivePortalTooltip && !effectiveDisabled}
+{#if !hideTooltip && effectivePortalTooltip && !effectiveDisabled}
   <PortalTooltip
     anchor={toggleButtonRef}
     direction={effectiveTooltipPosition === "top" ? "top" : "bottom"}
